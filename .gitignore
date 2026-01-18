@@ -2,6 +2,7 @@
 build/
 **/build/
 cmake-build-*/
+temp*/
 
 # CMake
 CMakeCache.txt

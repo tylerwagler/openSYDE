@@ -1177,13 +1177,15 @@ int32_t C_SdNdeDpContentUtil::h_GetMinimalTypeAfterScaling(const C_OscNodeDataPo
    if ((orc_Min.GetType() == orc_Max.GetType()) && (orc_Min.GetArray() == orc_Max.GetArray()))
    {
       uint64_t u64_Steps;
-      float64_t f64_Min;
-      float64_t f64_Max;
+      float64_t f64_Min = 0.0;
+      float64_t f64_Max = 0.0;
       if (orc_Min.GetArray() == false)
       {
          //Scale min & max
-         Q_ASSERT(C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Min, f64_Min, 0UL) == C_NO_ERR);
-         Q_ASSERT(C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Max, f64_Max, 0UL) == C_NO_ERR);
+         //lint -e{534} return value intentionally ignored; values initialized above
+         C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Min, f64_Min, 0UL);
+         //lint -e{534} return value intentionally ignored; values initialized above
+         C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Max, f64_Max, 0UL);
          f64_Min = C_OscUtils::h_GetValueScaled(f64_Min, of64_Factor, of64_Offset);
          f64_Max = C_OscUtils::h_GetValueScaled(f64_Max, of64_Factor, of64_Offset);
          if (C_SdNdeDpContentUtil::h_GetNumberOfAvailableSteps(orc_Min, orc_Max, u64_Steps, 0) == C_NO_ERR)

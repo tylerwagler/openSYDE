@@ -184,8 +184,10 @@ void C_FlaUtiStyleSheets::mh_AppendStylesheet(const QString & orc_File, QString 
 {
    QFile c_File(orc_File);
 
-   c_File.open(QFile::ReadOnly);
-   orc_Stylesheet += QLatin1String(c_File.readAll());
+   if (c_File.open(QFile::ReadOnly))
+   {
+      orc_Stylesheet += QLatin1String(c_File.readAll());
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
