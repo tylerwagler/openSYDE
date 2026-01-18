@@ -49,7 +49,7 @@ This document outlines a phased approach to complete the migration from custom w
 ## Phase 2: C_SclString Migration to QString
 
 ### Priority: HIGH
-**Estimated Impact**: ~4,940 occurrences across codebase
+**Actual Impact**: ~25,675 occurrences across 1,912 files (updated 2026-01-18)
 **Complexity**: High (pervasive throughout entire codebase)
 **Risk**: Medium (well-understood migration pattern)
 
@@ -57,8 +57,9 @@ This document outlines a phased approach to complete the migration from custom w
 
 #### C_SclString Overview
 - **Purpose**: Borland AnsiString compatibility wrapper around `std::string`
-- **Current Usage**: 4,940+ occurrences
+- **Current Usage**: 25,675 occurrences in 1,912 files
 - **Location**: `opensyde_core/scl/C_SclString.{cpp,hpp}`
+- **Key Insight**: Already has `ToQString()` and `FromQString()` methods - Qt migration was anticipated!
 
 #### Key Functionality to Replace
 | C_SclString Method | QString Equivalent |
@@ -76,6 +77,44 @@ This document outlines a phased approach to complete the migration from custom w
 | `.StringToInt()` | `.toInt()` |
 | `.Delete(pos, len)` | `.remove(pos-1, len)` |
 | `.Insert(str, pos)` | `.insert(pos-1, str)` |
+
+### Detailed Scope Analysis (Updated 2026-01-18)
+
+#### Usage Breakdown by Module
+
+| Module/Directory | Files | Occurrences | Priority |
+|-----------------|-------|-------------|----------|
+| opensyde_core/project/ | 35+ | HIGH | CRITICAL (core data model) |
+| opensyde_core/kefex_diaglib/ | 20+ | HIGH | HIGH (legacy compatibility) |
+| opensyde_core/halc/ | 20+ | HIGH | HIGH (hardware abstraction) |
+| opensyde_core/exports/ | 20+ | HIGH | HIGH (code generation) |
+| opensyde_core/imports/ | 6+ | MEDIUM | MEDIUM |
+| opensyde_core/can_dispatcher/ | Multiple | MEDIUM | MEDIUM (protocol layer) |
+| opensyde_core/data_dealer/ | Multiple | MEDIUM | MEDIUM |
+| opensyde_tool/src/ | 158+ | 967 | LOW (GUI - after core) |
+
+#### Critical API Dependencies (Must Migrate Together)
+
+**Tier 1 - Foundation Classes:**
+1. **C_OscProject** - Member variables: `c_Author`, `c_Editor`, `c_OpenSydeVersion`, `c_Template`, `c_Version`
+2. **C_OscSystemDefinition** - Methods: `AddNode()`, `SetNodeName()`, `CheckMessageNameBus()`
+3. **C_OscNode** - Member: `c_DeviceType`
+4. **C_OscCanMessage** - Members: `c_Name`, `c_Comment` (affects hundreds per project)
+5. **C_OscSystemBus** - Name/comment fields
+
+**Tier 2 - Utility/Infrastructure:**
+6. **C_OscUtils** - 30+ public static methods (HIGH frequency, used everywhere)
+7. **C_OscLoggingHandler** - Logging is pervasive
+8. **C_Md5Checksum** - Specialized checksum operations
+9. **C_OscConfFileHandler** - Configuration file loading
+
+#### Leaf Modules (Safe to Migrate First)
+These modules use C_SclString internally but don't export it in public API:
+1. `security/` module - Already uses `std::string` in API
+2. `xml_parser/` module - Internal usage only
+3. `miniz/` module - External compression library
+4. `md5/` module - Small API surface
+5. `aes/` module - Minimal exposure
 
 ### Migration Strategy
 
@@ -114,28 +153,65 @@ This document outlines a phased approach to complete the migration from custom w
 
 ### Recommended Approach: Option A (Module-by-Module)
 
+#### 2.0 Phase 2-PREP: Utility Classes First (START HERE)
+**Target**: C_OscUtils - the most frequently called utility class
+**Rationale**: High-frequency utility class with no dependencies. Establishes patterns for the rest of the migration.
+
+**Files to migrate:**
+- `C_OscUtils.cpp/hpp` - 30+ static methods
+
+**Strategy**:
+1. Add QString overloads for all public methods (dual API)
+2. Mark C_SclString versions as deprecated
+3. Convert internal implementations to use QString
+4. Update callers incrementally over time
+
+**Example pattern:**
+```cpp
+// Before: Only C_SclString
+static bool h_CheckValidFileName(const C_SclString & orc_Name);
+
+// After: Dual API during transition
+static bool h_CheckValidFileName(const QString & orc_Name);
+[[deprecated]] static bool h_CheckValidFileName(const C_SclString & orc_Name) {
+   return h_CheckValidFileName(orc_Name.ToQString());
+}
+```
+
 #### 2.1 Phase 2A: Data Model Layer
 **Target**: Core data structures with minimal external dependencies
 
-Files to migrate (example):
-- `project/system/node/C_OscNode.cpp/hpp`
-- `project/system/C_OscSystemDefinition.cpp/hpp`
-- `data_dealer/C_OscDataDealer.cpp/hpp`
+**Files to migrate (priority order):**
+1. `project/C_OscProject.cpp/hpp` - Root configuration object
+2. `project/system/C_OscSystemBus.cpp/hpp` - Bus definitions
+3. `project/system/node/C_OscNode.cpp/hpp` - Node definitions
+4. `project/system/C_OscSystemDefinition.cpp/hpp` - System model
 
 **Strategy**:
 - Update public API signatures to `QString`
 - Convert internal `C_SclString` member variables to `QString`
 - Update all string operations to Qt equivalents
+- Must migrate together due to tight coupling
 
-#### 2.2 Phase 2B: Protocol Drivers
+#### 2.2 Phase 2B: Message Infrastructure
+**Target**: CAN message and signal definitions (high multiplicative impact)
+
+**Files to migrate:**
+- `project/system/node/can/C_OscCanMessage.cpp/hpp`
+- `project/system/node/can/C_OscCanSignal.cpp/hpp`
+- `project/system/node/can/C_OscCanMessageContainer.cpp/hpp`
+
+**Rationale**: These classes are instantiated hundreds of times per project. Migration has multiplicative benefit.
+
+#### 2.3 Phase 2C: Protocol Drivers
 **Target**: Communication protocol implementations
 
 Files to migrate (example):
 - `protocol_drivers/C_OscProtocolDriverOsy.cpp/hpp`
 - `protocol_drivers/C_OscDiagProtocolOsy.cpp/hpp`
-- `kefex_diaglib/` subdirectories
+- `kefex_diaglib/` subdirectories (legacy compatibility)
 
-#### 2.3 Phase 2C: File I/O and Parsing
+#### 2.4 Phase 2D: File I/O and Parsing
 **Target**: Import/export and file handling modules
 
 Files to migrate (example):
@@ -143,20 +219,23 @@ Files to migrate (example):
 - `exports/C_OscExport*.cpp/hpp`
 - `xml_parser/C_OscXmlParser.cpp/hpp`
 
-#### 2.4 Phase 2D: Utility and Support Modules
-**Target**: Helper classes and utilities
+#### 2.5 Phase 2E: Logging and Configuration
+**Target**: Infrastructure support modules
 
 Files to migrate:
-- `C_OscUtils.cpp/hpp`
-- `C_OscLoggingHandler.cpp/hpp`
+- `logging/C_OscLoggingHandler.cpp/hpp`
+- `conf_file_handler/C_OscConfFileHandler.cpp/hpp`
 - `scl/C_SclChecksums.cpp/hpp`
 
-#### 2.5 Phase 2E: GUI Layer
+#### 2.6 Phase 2F: GUI Layer
 **Target**: opensyde_tool GUI components (after core library complete)
+
+**Note**: GUI layer already uses 61+ instances of `ToQString()`/`FromQString()` conversions. Many areas are ready to complete the transition.
 
 Files to migrate:
 - `opensyde_tool/src/` entire tree
 - Update all UI-related string handling
+- Remove conversion calls at GUI boundaries
 
 ### Critical Considerations
 
@@ -591,6 +670,7 @@ if __name__ == '__main__':
 | Date | Version | Changes |
 |------|---------|---------|
 | 2026-01-16 | 1.0 | Initial plan created after Phase 1 completion |
+| 2026-01-18 | 1.1 | Detailed scope analysis completed. Updated impact estimate from 4,940 to 25,675 occurrences. Added module dependency analysis, critical API dependencies, and recommended migration sequence starting with C_OscUtils. |
 
 ---
 
@@ -600,8 +680,10 @@ if __name__ == '__main__':
 - Other tool projects (opensyde_cmd_line_flash_tool, opensyde_syde_coder_c, etc.) may need similar migrations
 - Plan assumes continued Windows-only support (Linux support removed in Phase 1)
 - All Qt references assume Qt 6.x (currently using Qt 6.10.1)
+- **Key Discovery**: C_SclString already has `ToQString()` and `FromQString()` methods - migration was anticipated in original design
+- **GUI Layer Status**: Already has 61+ conversion calls at boundaries - partial migration already started
 
 ---
 
-**Last Updated**: 2026-01-16
-**Status**: Phase 1 Complete, Phase 2 Ready to Begin
+**Last Updated**: 2026-01-18
+**Status**: Phase 1 Complete, Phase 2 Detailed Planning Complete, Ready to Begin Phase 2-PREP (C_OscUtils)
