@@ -364,81 +364,143 @@ void SaveStringListToFile(const QStringList& list, const QString& path) {
 
 ---
 
-## Phase 4: C_SclDynamicArray Migration to QList/QVector
+## Phase 4: C_SclDynamicArray Migration to QList
 
 ### Priority: LOW-MEDIUM
-**Estimated Impact**: ~137 occurrences
+**Actual Impact**: 689 occurrences across 213 files (updated 2026-01-18)
 **Complexity**: Low-Medium
-**Risk**: Low (already wraps QList internally!)
+**Risk**: Low (simple 1:1 API mapping, both use 0-based indexing)
+**Dependencies**: None (independent of Phase 2/3)
 
-### Current State Analysis
+### Current State Analysis (Updated 2026-01-18)
 
 #### C_SclDynamicArray Overview
 - **Purpose**: Borland DynamicArray compatibility wrapper
-- **Current Implementation**: **Already wraps QList internally!** (see line 34 of C_SclDynamicArray.hpp)
-- **Current Usage**: 137 occurrences
+- **Current Implementation**: Wraps `std::vector<T>` internally (line 42 of C_SclDynamicArray.hpp)
+- **Current Usage**: 689 occurrences in 213 files
 - **Location**: `opensyde_core/scl/C_SclDynamicArray.hpp` (header-only template)
+- **Indexing**: 0-based (same as QList - no index conversion needed!)
 
-### Key Insight
-**The wrapper already uses QList internally!** This is purely a compatibility layer for Borland-style indexing and API.
+#### Key Characteristics
+- Header-only template class
+- Wraps `std::vector<T>` (not QList as previously noted)
+- 0-based indexing throughout
+- Simple API with direct QList equivalents
 
 ### Migration Mapping
 
-| C_SclDynamicArray Method | QList/QVector Equivalent |
-|--------------------------|--------------------------|
-| `[idx]` (0-based) | `[idx]` or `.at(idx)` |
-| `.Delete(idx)` | `.removeAt(idx)` |
-| `.Insert(idx, item)` | `.insert(idx, item)` |
-| `.GetLength()` | `.size()` or `.count()` |
-| `.GetHigh()` | `.size() - 1` |
-| `.SetLength(len)` | `.resize(len)` |
-| `.IncLength(by)` | `.resize(size() + by)` |
-| `.AsQList()` | Direct use (no conversion needed) |
+| C_SclDynamicArray Method | QList Equivalent | Notes |
+|--------------------------|------------------|-------|
+| `[idx]` | `[idx]` or `.at(idx)` | Identical |
+| `.Delete(idx)` | `.removeAt(idx)` | Direct replacement |
+| `.Insert(idx, item)` | `.insert(idx, item)` | Identical signature |
+| `.GetLength()` | `.size()` | Direct replacement |
+| `.GetHigh()` | `.size() - 1` | Returns last valid index |
+| `.SetLength(len)` | `.resize(len)` | Direct replacement |
+| `.IncLength(by)` | `.resize(.size() + by)` | Need to reference container |
 
 ### Migration Strategy
 
-#### 4.1 QList vs QVector Choice
-**Use QList** in most cases:
-- Qt's recommended general-purpose container (Qt 6+)
-- Optimized for typical use cases
-- Better for non-POD types
+#### 4.1 Use QList Exclusively
+In Qt 6, `QVector` is now an alias for `QList`. Always use `QList<T>` for:
+- Consistency across codebase
+- Qt 6 recommended practice
+- No functional difference from QVector in Qt 6
 
-**Use QVector** only if:
-- Strict contiguous memory required
-- Cache locality critical for performance
-- Interfacing with C APIs requiring contiguous arrays
+#### 4.2 Replacement Patterns
 
-**Recommendation**: Default to `QList<T>` unless specific reason for `QVector<T>`
+**Type declarations:**
+```cpp
+// Before
+C_SclDynamicArray<int32_t> c_Array;
+C_SclDynamicArray<C_SomeClass> c_Objects;
 
-#### 4.2 Automated Replacement
-Since the API is simple and mapping is 1:1, this is a good candidate for automated replacement:
-
-```python
-# replacement_patterns.py
-replacements = {
-    r'C_SclDynamicArray<(.+?)>': r'QList<\1>',
-    r'\.GetLength\(\)': r'.size()',
-    r'\.GetHigh\(\)': r'.size() - 1',
-    r'\.SetLength\((.+?)\)': r'.resize(\1)',
-    r'\.IncLength\((.+?)\)': r'.resize(size() + \1)',
-    r'\.Delete\((.+?)\)': r'.removeAt(\1)',
-    # Insert and indexing remain the same
-}
+// After
+QList<int32_t> c_Array;
+QList<C_SomeClass> c_Objects;
 ```
 
-#### 4.3 Manual Verification Required
-- **GetHigh()** usage in loops: Verify correct behavior with `.size() - 1`
-- **IncLength()** with default parameter: May need explicit `size() + 1`
-- **Nested templates**: `C_SclDynamicArray<C_SclDynamicArray<T>>` → `QList<QList<T>>`
+**Method replacements:**
+```cpp
+// Before                          // After
+c_Array.GetLength()                c_Array.size()
+c_Array.GetHigh()                  (c_Array.size() - 1)  // or c_Array.size() - 1 in expressions
+c_Array.SetLength(10)              c_Array.resize(10)
+c_Array.IncLength()                c_Array.resize(c_Array.size() + 1)
+c_Array.IncLength(5)               c_Array.resize(c_Array.size() + 5)
+c_Array.Delete(idx)                c_Array.removeAt(idx)
+c_Array.Insert(idx, item)          c_Array.insert(idx, item)
+```
+
+#### 4.3 Special Cases Requiring Attention
+
+1. **GetHigh() in loop conditions:**
+   ```cpp
+   // Before - careful: GetHigh() returns 0 for empty arrays
+   for (int32_t i = 0; i <= c_Array.GetHigh(); i++)
+
+   // After - use size() instead for cleaner logic
+   for (int32_t i = 0; i < c_Array.size(); i++)
+   // Or with range-based for:
+   for (const auto& item : c_Array)
+   ```
+
+2. **IncLength() with default parameter:**
+   ```cpp
+   // Before
+   c_Array.IncLength();  // default by=1
+
+   // After - must be explicit
+   c_Array.resize(c_Array.size() + 1);
+   // Or use append for adding single element:
+   c_Array.append(T());
+   ```
+
+3. **Nested templates:**
+   ```cpp
+   // Before
+   C_SclDynamicArray<C_SclDynamicArray<int32_t>> c_2DArray;
+
+   // After
+   QList<QList<int32_t>> c_2DArray;
+   ```
+
+4. **Include statement:**
+   ```cpp
+   // Remove
+   #include "C_SclDynamicArray.hpp"
+
+   // Add (if not already present)
+   #include <QList>
+   ```
 
 ### Execution Plan
 
-1. **Create automated replacement script**
-2. **Test on small subset** of files (5-10 files)
-3. **Verify compilation and basic functionality**
-4. **Run on all remaining files**
-5. **Manual review** of complex cases (nested templates, GetHigh in loops)
-6. **Remove C_SclDynamicArray.hpp** after completion
+#### Step 1: Identify all files
+- 213 files contain C_SclDynamicArray usage
+- Primary locations: can_dispatcher/, data_dealer/, halc/, imports/, kefex_diaglib/
+
+#### Step 2: Migration order (by module)
+1. **Leaf modules first** (minimal dependencies)
+2. **Core modules** (higher impact)
+3. **Update CMakeLists** if needed for Qt dependencies
+
+#### Step 3: For each file
+1. Replace `#include "C_SclDynamicArray.hpp"` with `#include <QList>`
+2. Replace type declarations `C_SclDynamicArray<T>` → `QList<T>`
+3. Replace method calls per mapping table
+4. Handle GetHigh() loops carefully
+5. Handle IncLength() default parameter
+
+#### Step 4: Verification
+1. Compile after each module
+2. Run existing tests
+3. Manual review of GetHigh() loop conversions
+
+#### Step 5: Cleanup
+1. Remove `C_SclDynamicArray.hpp` from scl/
+2. Update any documentation referencing the class
+3. Remove from CMakeLists source lists
 
 ---
 
@@ -671,6 +733,7 @@ if __name__ == '__main__':
 |------|---------|---------|
 | 2026-01-16 | 1.0 | Initial plan created after Phase 1 completion |
 | 2026-01-18 | 1.1 | Detailed scope analysis completed. Updated impact estimate from 4,940 to 25,675 occurrences. Added module dependency analysis, critical API dependencies, and recommended migration sequence starting with C_OscUtils. |
+| 2026-01-18 | 1.2 | Updated Phase 4 with accurate metrics (689 occurrences in 213 files). Corrected internal implementation (wraps std::vector, not QList). Added detailed migration patterns and special case handling. Noted QVector is alias for QList in Qt 6. |
 
 ---
 
