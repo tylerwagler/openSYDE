@@ -89,7 +89,7 @@ void C_SdNdeDalLogJobDataSelectionTableModel::AddData(
 
          if (orc_DataElements[u32_Index].q_UseCustomName == true)
          {
-            rc_JobData.c_LoggingName = orc_DataElements[u32_Index].c_CustomName;
+            rc_JobData.c_LoggingName = orc_DataElements[u32_Index].c_CustomName.toStdString().c_str();
          }
          else
          {

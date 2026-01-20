@@ -9,6 +9,7 @@
 #define C_OSCDATALOGGERJOBADDITIONALTRIGGERPROPERTIES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QString>
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_OscNodeDataPoolListElementOptArrayId.hpp"
 
@@ -31,7 +32,7 @@ public:
    bool q_Enable;                                      ///< flag to enable additional trigger
    C_OscNodeDataPoolListElementOptArrayId c_ElementId; ///< Selected element for additional trigger
    C_OscNodeDataPoolContent c_Threshold;               ///< Selected threshold for additional trigger
-   stw::scl::C_SclString c_Operation;                  ///< Which operator to use for additional trigger threshold
+   QString c_Operation;                                 ///< Which operator to use for additional trigger threshold
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

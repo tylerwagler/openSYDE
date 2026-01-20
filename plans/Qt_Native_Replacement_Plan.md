@@ -6,6 +6,59 @@
 
 ---
 
+## Application Status Matrix
+
+This matrix tracks the completion status of each phase across all openSYDE applications/tools.
+
+### Applications Covered
+
+| Application | Directory | Core Library | Notes |
+|-------------|-----------|--------------|-------|
+| **openSYDE** | `opensyde_tool/pjt/openSYDE/` | `opensyde_tool/libs/opensyde_core/` | Main GUI tool |
+| **SYDEflash** | `opensyde_tool/pjt/SYDEflash/` | `opensyde_tool/libs/opensyde_core/` | Flash tool (shares core) |
+| **openSYDE CAN Monitor** | `opensyde_tool/pjt/openSYDE_CAN_Monitor/` | `opensyde_tool/libs/opensyde_core/` | CAN monitor (shares core) |
+| **opensyde_cmd_line_flash_tool** | `opensyde_cmd_line_flash_tool/` | `opensyde_cmd_line_flash_tool/libs/osy_core/` | CLI flash (own core copy) |
+| **opensyde_syde_coder_c** | `opensyde_syde_coder_c/` | `opensyde_syde_coder_c/libs/osy_core/` | C code generator (own core copy) |
+| **opensyde_syde_sup** | `opensyde_syde_sup/` | `opensyde_syde_sup/libs/opensyde_core/` | Service update package (own core copy) |
+| **opensyde_syde_x_gen** | `opensyde_syde_x_gen/` | `opensyde_syde_x_gen/libs/opensyde_core/` | X generator (own core copy) |
+
+### Phase Completion Matrix
+
+| Phase | Description | openSYDE | SYDEflash | CAN Monitor | cmd_line_flash | syde_coder_c | syde_sup | syde_x_gen |
+|-------|-------------|----------|-----------|-------------|----------------|--------------|----------|------------|
+| **Phase 1** | TGL Layer Elimination | ✅ | ✅ | ✅ | N/A* | N/A* | N/A* | N/A* |
+| **Phase 2** | C_SclString → QString | ⏳ | ⏳ | ⏳ | N/A* | N/A* | N/A* | N/A* |
+| **Phase 3** | C_SclStringList → QStringList | ❌ | ❌ | ❌ | N/A* | N/A* | N/A* | N/A* |
+| **Phase 4** | C_SclDynamicArray → QList | ✅ | ✅ | ✅ | N/A* | N/A* | N/A* | N/A* |
+| **Phase 5** | C_SclIniFile → QSettings | ✅ | ✅ | ✅ | N/A* | N/A* | N/A* | N/A* |
+| **Phase 6** | C_SclChecksums (Optional) | ❌ | ❌ | ❌ | N/A* | N/A* | N/A* | N/A* |
+
+*\* CLI tools use C++98 without Qt dependency - Qt-based migrations not applicable*
+
+**Legend:**
+- ✅ Complete
+- ⏳ In Progress / Planned
+- ❌ Not Started
+- N/A Not Applicable
+
+### Notes on Shared vs. Separate Core Libraries
+
+The openSYDE ecosystem has **two patterns** for core library usage:
+
+1. **Shared Core** (opensyde_tool applications):
+   - `openSYDE`, `SYDEflash`, and `openSYDE CAN Monitor` all share `opensyde_tool/libs/opensyde_core/`
+   - Changes to the core library automatically apply to all three applications
+   - These applications are marked together in the matrix
+
+2. **Separate Core Copies** (standalone CLI tools):
+   - `opensyde_cmd_line_flash_tool`, `opensyde_syde_coder_c`, `opensyde_syde_sup`, `opensyde_syde_x_gen`
+   - Each has its own copy of the core library in `libs/osy_core/` or `libs/opensyde_core/`
+   - **IMPORTANT**: These CLI tools use **C++98** and do **NOT** have Qt as a dependency
+   - Qt-specific migrations (Phases 4, 5) are **N/A** for CLI tools unless Qt is added as a dependency
+   - Only pure C++ migrations (like `std::vector` replacements) would apply without adding Qt
+
+---
+
 ## Executive Summary
 
 This document outlines a phased approach to complete the migration from custom wrapper classes to Qt native implementations. Phase 1 (TGL layer elimination) has been successfully completed. The remaining phases focus on eliminating the SCL (STW Component Library) wrapper classes that add unnecessary abstraction over standard C++ and Qt functionality.
@@ -14,10 +67,21 @@ This document outlines a phased approach to complete the migration from custom w
 
 ## Phase 1: TGL (Target Glue Layer) Elimination ✅ COMPLETE
 
-### Status: Complete
 **Files Modified**: 410+
 **Files Deleted**: 22
 **Impact**: Core infrastructure modernization
+
+### Application Status
+
+| Application | Status | Date | Notes |
+|-------------|--------|------|-------|
+| openSYDE | ✅ Complete | 2026-01-16 | TGL layer fully removed |
+| SYDEflash | ✅ Complete | 2026-01-16 | Shares opensyde_core with openSYDE |
+| openSYDE CAN Monitor | ✅ Complete | 2026-01-16 | Shares opensyde_core with openSYDE |
+| opensyde_cmd_line_flash_tool | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_coder_c | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_sup | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
+| opensyde_syde_x_gen | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
 
 ### What Was Accomplished
 
@@ -52,6 +116,18 @@ This document outlines a phased approach to complete the migration from custom w
 **Actual Impact**: ~25,675 occurrences across 1,912 files (updated 2026-01-18)
 **Complexity**: High (pervasive throughout entire codebase)
 **Risk**: Medium (well-understood migration pattern)
+
+### Application Status
+
+| Application | Status | Date | Notes |
+|-------------|--------|------|-------|
+| openSYDE | ⏳ Planned | - | Detailed planning complete, ready for Phase 2-PREP |
+| SYDEflash | ⏳ Planned | - | Shares opensyde_core with openSYDE |
+| openSYDE CAN Monitor | ⏳ Planned | - | Shares opensyde_core with openSYDE |
+| opensyde_cmd_line_flash_tool | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_coder_c | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_sup | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
+| opensyde_syde_x_gen | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
 
 ### Current State Analysis
 
@@ -271,6 +347,18 @@ Files to migrate:
 **Risk**: Low (straightforward mapping)
 **Dependency**: Should follow Phase 2 (C_SclString migration)
 
+### Application Status
+
+| Application | Status | Date | Notes |
+|-------------|--------|------|-------|
+| openSYDE | ❌ Not Started | - | Depends on Phase 2 completion |
+| SYDEflash | ❌ Not Started | - | Shares opensyde_core with openSYDE |
+| openSYDE CAN Monitor | ❌ Not Started | - | Shares opensyde_core with openSYDE |
+| opensyde_cmd_line_flash_tool | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_coder_c | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_sup | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
+| opensyde_syde_x_gen | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
+
 ### Current State Analysis
 
 #### C_SclStringList Overview
@@ -366,15 +454,23 @@ void SaveStringListToFile(const QStringList& list, const QString& path) {
 
 ## Phase 4: C_SclDynamicArray Migration to QList
 
-### Status: ✅ COMPLETE for opensyde_tool (2026-01-18)
-
 ### Priority: LOW-MEDIUM
 **Actual Impact**: 689 occurrences across 213 files (updated 2026-01-18)
-**opensyde_tool Status**: Complete - C_SclDynamicArray.hpp removed
-**Other tools**: Still use C_SclDynamicArray in their own library copies
 **Complexity**: Low-Medium
 **Risk**: Low (simple 1:1 API mapping, both use 0-based indexing)
 **Dependencies**: None (independent of Phase 2/3)
+
+### Application Status
+
+| Application | Status | Date | Notes |
+|-------------|--------|------|-------|
+| openSYDE | ✅ Complete | 2026-01-18 | C_SclDynamicArray.hpp removed from shared core |
+| SYDEflash | ✅ Complete | 2026-01-18 | Shares opensyde_core with openSYDE |
+| openSYDE CAN Monitor | ✅ Complete | 2026-01-18 | Shares opensyde_core with openSYDE |
+| opensyde_cmd_line_flash_tool | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_coder_c | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_sup | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
+| opensyde_syde_x_gen | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
 
 ### Current State Analysis (Updated 2026-01-18)
 
@@ -508,34 +604,164 @@ c_Array.Insert(idx, item)          c_Array.insert(idx, item)
 
 ---
 
-## Phase 5: C_SclIniFile API Migration (Optional)
+## Phase 5: C_SclIniFile Migration to QSettings
 
-### Priority: LOW
-**Estimated Impact**: Minimal (already uses QSettings internally)
-**Complexity**: Low
-**Risk**: Low
+### Priority: MEDIUM
+**Actual Impact**: 8 files use C_SclIniFile (6 in opensyde_tool/src, 2 in opensyde_core)
+**Complexity**: Medium (custom INI parser with comment support)
+**Risk**: Medium (need to verify comment handling and special features)
+**Selected Approach**: Option B - Migrate to direct QSettings usage
 
-### Current State
+### Application Status
 
-C_SclIniFile **already uses QSettings internally** after your Phase 1 changes. The class now provides a compatibility API over Qt's native INI handling.
+| Application | Status | Date | Notes |
+|-------------|--------|------|-------|
+| openSYDE | ✅ Complete | 2026-01-18 | C_SclIniFile now uses QSettings internally |
+| SYDEflash | ✅ Complete | 2026-01-18 | Shares opensyde_core with openSYDE |
+| openSYDE CAN Monitor | ✅ Complete | 2026-01-18 | Shares opensyde_core with openSYDE |
+| opensyde_cmd_line_flash_tool | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_coder_c | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_sup | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
+| opensyde_syde_x_gen | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
 
-### Options
+### Implementation Summary (2026-01-18)
 
-#### Option A: Keep C_SclIniFile (RECOMMENDED)
-**Rationale**:
-- Already modernized (uses QSettings internally)
-- Provides stable API for existing code
-- No significant benefit from further migration
-- Maintains API compatibility for external code
+The C_SclIniFile class has been completely rewritten to use QSettings internally while maintaining the same public API for backward compatibility:
 
-#### Option B: Migrate to Direct QSettings Usage
-**Only if**:
-- You want to expose advanced QSettings features
-- You want to reduce wrapper count to absolute minimum
-- You have time for comprehensive testing of all INI operations
+**Key Changes:**
+- Replaced custom INI parsing logic (~1100 lines) with QSettings-based implementation (~810 lines)
+- Removed C_SclIniSection and C_SclIniKey helper classes (no longer needed)
+- Internal storage now uses `std::unique_ptr<QSettings>` instead of `QList<C_SclIniSection>`
+- In-memory mode uses QTemporaryFile as backing store for QSettings
+- All public methods maintain identical signatures and behavior
+- C_OscChecksummedIniFile required NO changes (uses only public API)
 
-### Recommendation
-**Keep C_SclIniFile as-is.** It's already modernized and provides value as a stable API.
+**Breaking Changes:**
+- Comments in INI files are NO LONGER preserved (QSettings limitation)
+- ForceAppend parameter on Write methods is now ignored (QSettings handles this automatically)
+
+### Current State Analysis (Updated 2026-01-18)
+
+#### C_SclIniFile Overview
+- **Purpose**: Custom INI file parser (Borland TIniFile compatibility)
+- **Implementation**: NOW uses QSettings internally (previously custom parsing with C_SclStringList)
+- **Location**: `opensyde_core/scl/C_SclIniFile.{cpp,hpp}`
+- **Inheritance**: `C_OscChecksummedIniFile` extends `C_SclIniFile` with checksum functionality
+
+#### Files Using C_SclIniFile
+**opensyde_tool/src/ (6 files):**
+- `project_operations/C_PopCreateServiceProjDialogWidget.cpp`
+- `syde_flash/user_settings/C_UsFiler.cpp`
+- `syde_flash/user_settings/C_UsFiler.hpp`
+- `system_definition/C_SdTopologyToolbox.cpp`
+- `system_definition/node_edit/canopen_manager/C_SdNdeCoAddDeviceDialog.cpp`
+- `user_settings/C_UsFiler.cpp`
+
+**opensyde_core/ (2 files):**
+- `C_OscChecksummedIniFile.cpp` (extends C_SclIniFile)
+- `C_OscChecksummedIniFile.hpp`
+
+#### Current C_SclIniFile Public API
+| Method | QSettings Equivalent |
+|--------|---------------------|
+| `ReadString(section, key, default)` | `value(section/key, default).toString()` |
+| `ReadInteger(section, key, default)` | `value(section/key, default).toInt()` |
+| `ReadBool(section, key, default)` | `value(section/key, default).toBool()` |
+| `ReadFloat(section, key, default)` | `value(section/key, default).toDouble()` |
+| `ReadUint8/ReadUint16(...)` | `value(...).toUInt()` with cast |
+| `WriteString(section, key, value)` | `setValue(section/key, value)` |
+| `WriteInteger(section, key, value)` | `setValue(section/key, value)` |
+| `WriteBool(section, key, value)` | `setValue(section/key, value)` |
+| `WriteFloat(section, key, value)` | `setValue(section/key, value)` |
+| `EraseSection(section)` | `remove(section)` |
+| `DeleteKey(section, key)` | `remove(section/key)` |
+| `UpdateFile()` | `sync()` |
+| `SectionExists(section)` | `childGroups().contains(section)` |
+| `ValueExists(section, key)` | `contains(section/key)` |
+| `ReadSection(section, strings)` | `beginGroup(section); childKeys(); endGroup()` |
+| `ReadSectionValues(section, strings)` | Iterate keys with values |
+| `ReadSections(strings)` | `childGroups()` |
+| `GetFileAsStringList(strings)` | Custom serialization needed |
+
+#### Special Considerations
+1. **Comment Support**: C_SclIniFile preserves comments (`;` prefix). QSettings does NOT support comments - they will be lost on save.
+2. **C_OscChecksummedIniFile**: Inherits from C_SclIniFile and adds checksum functionality. Will need to be updated.
+3. **ForceAppend Parameter**: Some Write methods have `oq_ForceAppend` for performance. QSettings doesn't need this.
+4. **In-Memory Mode**: Constructor with empty filename creates memory-only INI structure.
+5. **Destructor Behavior**: Current destructor auto-saves if dirty. QSettings sync() is explicit.
+
+### Migration Strategy (Option B)
+
+#### Step 1: Create QSettings-based Replacement
+Reimplement `C_SclIniFile` to use `QSettings` internally while maintaining the same public API.
+
+**New Implementation Pattern:**
+```cpp
+class C_SclIniFile
+{
+private:
+   std::unique_ptr<QSettings> mpc_Settings;
+   QString mc_FileName;
+
+public:
+   C_SclIniFile(const C_SclString & orc_FileName) {
+      mc_FileName = orc_FileName.ToQString();
+      if (!mc_FileName.isEmpty()) {
+         mpc_Settings = std::make_unique<QSettings>(mc_FileName, QSettings::IniFormat);
+      }
+   }
+
+   C_SclString ReadString(const C_SclString & orc_Section, const C_SclString & orc_Key,
+                          const C_SclString & orc_Default) {
+      QString c_Key = orc_Section.ToQString() + "/" + orc_Key.ToQString();
+      return C_SclString::FromQString(mpc_Settings->value(c_Key, orc_Default.ToQString()).toString());
+   }
+   // ... etc
+};
+```
+
+#### Step 2: Handle C_OscChecksummedIniFile
+Update `C_OscChecksummedIniFile` to work with the new QSettings-based implementation:
+- Checksum calculation will need to iterate through QSettings structure
+- May need to expose internal QSettings for checksum access
+
+#### Step 3: Update Callers
+Review and update all 6 calling files in opensyde_tool/src/:
+- Verify they don't depend on comment preservation
+- Update any direct member access patterns
+
+#### Step 4: Testing Requirements
+1. **INI file read/write round-trip**: Verify all data types
+2. **Section operations**: Create, delete, enumerate sections
+3. **Key operations**: Create, delete, check existence
+4. **C_OscChecksummedIniFile**: Verify checksum still works
+5. **Edge cases**: Empty sections, special characters, long values
+
+#### Step 5: Cleanup
+1. Remove custom parsing code from C_SclIniFile.cpp
+2. Update includes to use `<QSettings>`
+3. Remove dependency on C_SclStringList for file I/O
+
+### Risk Mitigation
+
+#### Comment Handling
+**Issue**: QSettings doesn't preserve comments. If existing INI files have important comments, they will be lost.
+**Mitigation**:
+- Audit existing INI files for critical comments
+- If comments are important, keep custom implementation for those specific files
+- Document that comments will not be preserved
+
+#### Checksum Compatibility
+**Issue**: C_OscChecksummedIniFile calculates checksums over INI content.
+**Mitigation**:
+- Ensure checksum calculation produces same results after migration
+- Test with existing checksummed INI files
+
+### Files to Modify
+1. `scl/C_SclIniFile.hpp` - Rewrite class to use QSettings
+2. `scl/C_SclIniFile.cpp` - Replace custom parsing with QSettings calls
+3. `C_OscChecksummedIniFile.cpp` - Update checksum calculation
+4. `CMakeLists.txt` - May need to verify Qt Core is linked (should already be)
 
 ---
 
@@ -544,6 +770,18 @@ C_SclIniFile **already uses QSettings internally** after your Phase 1 changes. T
 ### Priority: VERY LOW
 **Impact**: Minimal
 **Complexity**: Low
+
+### Application Status
+
+| Application | Status | Date | Notes |
+|-------------|--------|------|-------|
+| openSYDE | ❌ Not Started | - | Optional - evaluate need |
+| SYDEflash | ❌ Not Started | - | Shares opensyde_core with openSYDE |
+| openSYDE CAN Monitor | ❌ Not Started | - | Shares opensyde_core with openSYDE |
+| opensyde_cmd_line_flash_tool | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_coder_c | ❌ Not Started | - | Has own copy in libs/osy_core/ |
+| opensyde_syde_sup | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
+| opensyde_syde_x_gen | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
 
 ### C_SclChecksums
 **Current Purpose**: Checksum calculation utilities
@@ -739,6 +977,9 @@ if __name__ == '__main__':
 | 2026-01-18 | 1.1 | Detailed scope analysis completed. Updated impact estimate from 4,940 to 25,675 occurrences. Added module dependency analysis, critical API dependencies, and recommended migration sequence starting with C_OscUtils. |
 | 2026-01-18 | 1.2 | Updated Phase 4 with accurate metrics (689 occurrences in 213 files). Corrected internal implementation (wraps std::vector, not QList). Added detailed migration patterns and special case handling. Noted QVector is alias for QList in Qt 6. |
 | 2026-01-18 | 1.3 | **Phase 4 Complete for opensyde_tool**: Removed C_SclDynamicArray.hpp, updated C_SclIniFile to use QList. Other tool projects retain their own copies. |
+| 2026-01-18 | 1.4 | **Phase 5 Updated**: Corrected current state (does NOT use QSettings). Selected Option B - migrate to QSettings. Added detailed API mapping, special considerations (comments, checksum), and step-by-step migration plan. |
+| 2026-01-18 | 1.5 | **Phase 5 Complete for opensyde_tool**: Rewrote C_SclIniFile to use QSettings internally (~810 lines vs ~1100 lines). Removed C_SclIniSection/C_SclIniKey classes. C_OscChecksummedIniFile unchanged (uses public API). Breaking: comments no longer preserved, ForceAppend ignored. |
+| 2026-01-18 | 1.6 | **Added Application Status Matrix**: Added per-application tracking for all 7 openSYDE tools. Each phase now includes an Application Status table showing completion per tool. Documented shared vs. separate core library patterns. |
 
 ---
 
@@ -754,4 +995,4 @@ if __name__ == '__main__':
 ---
 
 **Last Updated**: 2026-01-18
-**Status**: Phase 1 Complete, Phase 4 Complete (opensyde_tool), Phase 2 Detailed Planning Complete, Ready to Begin Phase 2-PREP (C_OscUtils)
+**Status**: Phase 1 Complete, Phase 4 Complete (opensyde_tool), Phase 5 Complete (opensyde_tool), Phase 2 Detailed Planning Complete, Ready to Begin Phase 2-PREP (C_OscUtils)

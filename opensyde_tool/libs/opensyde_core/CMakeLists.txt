@@ -47,7 +47,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclDateTime.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.cpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclString.cpp
@@ -67,7 +66,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclDateTime.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.hpp
 
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclString.hpp

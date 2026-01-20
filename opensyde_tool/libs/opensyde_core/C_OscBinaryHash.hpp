@@ -12,7 +12,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -26,12 +26,12 @@ namespace opensyde_core
 class C_OscBinaryHash
 {
 public:
-   static stw::scl::C_SclString h_CreateBinaryHash(void);
+   static QString h_CreateBinaryHash(void);
    static void h_SetHashBool(const bool oq_State);
    static bool h_GetHashBool(void);
 
 private:
-   static stw::scl::C_SclString mhc_BinaryHash;
+   static QString mhc_BinaryHash;
    static bool mhq_HashCompleted;
    C_OscBinaryHash();
 };

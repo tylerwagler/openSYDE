@@ -56,7 +56,8 @@ void C_OscDataLoggerJobAdditionalTriggerProperties::CalcHash(uint32_t & oru32_Ha
                                        oru32_HashValue);
    this->c_ElementId.CalcHash(oru32_HashValue);
    this->c_Threshold.CalcHash(oru32_HashValue);
+   const QByteArray c_Utf8 = this->c_Operation.toUtf8();
    stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Operation.c_str(),
-      this->c_Operation.Length(), oru32_HashValue);
+      c_Utf8.constData(),
+      static_cast<uint32_t>(c_Utf8.size()), oru32_HashValue);
 }

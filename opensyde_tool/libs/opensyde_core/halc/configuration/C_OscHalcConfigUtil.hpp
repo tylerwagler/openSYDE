@@ -11,8 +11,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 
-#include "C_SclString.hpp"
-
 #include "C_OscHalcConfig.hpp"
 #include "C_OscHalcConfigStandalone.hpp"
 

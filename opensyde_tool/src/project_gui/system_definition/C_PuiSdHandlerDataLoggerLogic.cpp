@@ -507,7 +507,7 @@ int32_t C_PuiSdHandlerDataLoggerLogic::SetDataLoggerElementProperties(const uint
                                                                       const uint32_t ou32_DataLoggerJobIndex,
                                                                       const uint32_t ou32_DataLoggerDataElementIndex,
                                                                       const bool oq_UseCustomName,
-                                                                      const stw::scl::C_SclString & orc_CustomName)
+                                                                      const QString & orc_CustomName)
 {
    int32_t s32_Retval = C_NO_ERR;
 

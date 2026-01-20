@@ -406,3 +406,105 @@ C_SclString C_Md5Checksum::GetMD5(const uint8_t * const opu8_Data, const uint32_
    }
    return c_StrMd5;
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief    Get MD5 of file (QString version)
+
+   \param[in]  orc_FilePath   absolute or relative path of file
+
+   \return
+   Calculated MD5 (empty string if there are problems)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_Md5Checksum::GetMD5Q(const QString & orc_FilePath)
+{
+   //open the file as a binary file in readonly mode, denying write access
+   std::FILE * pc_File;
+   QString c_Return;
+
+   pc_File = std::fopen(orc_FilePath.toLocal8Bit().constData(), "rb");
+   if (pc_File == NULL)
+   {
+      return "";
+   }
+
+   //the file has been successfully opened, so now get and return its checksum
+   c_Return = GetMD5Q(pc_File);
+   std::fclose(pc_File);
+   return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief    Get MD5 of file (QString version)
+
+   \param[in]  opc_File   C style file handle of file
+
+   \return
+   Calculated MD5 (empty string if there are problems)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_Md5Checksum::GetMD5Q(std::FILE * const opc_File)
+{
+   const uint32_t u32_BufferSize = 4096; //checksum the file in blocks of 4096 bytes
+   uint8_t au8_Data[u32_BufferSize];     //buffer for data read from the file
+   QString c_StrMd5;
+   C_HashState c_Hash;
+   uint8_t au8_Result[16];
+
+   if (opc_File == NULL)
+   {
+      return "";
+   }
+
+   mh_Md5Init(&c_Hash);
+
+   //checksum the file in individual blocks
+   while (true)
+   {
+      const int32_t s32_BlockSize = fread(&au8_Data[0], 1, u32_BufferSize, opc_File);
+      if (s32_BlockSize <= 0)
+      {
+         break;
+      }
+      //we have data: process it
+      mh_Md5Process(&c_Hash, &au8_Data[0], s32_BlockSize);
+   }
+
+   mh_Md5Done(&c_Hash, au8_Result);
+
+   //Convert the hexadecimal checksum to a QString
+   for (uint8_t u8_Byte = 0U; u8_Byte < 16U; u8_Byte++)
+   {
+      c_StrMd5 += QString::asprintf("%02x", au8_Result[u8_Byte]);
+   }
+   return c_StrMd5;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief    Get MD5 over data (QString version)
+
+   \param[in]  opu8_Data    data to calculate MD5 for
+   \param[in]  ou32_Length  number of bytes referenced by opu8_Data
+
+   \return
+   Calculated MD5 (empty string if there are problems)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_Md5Checksum::GetMD5Q(const uint8_t * const opu8_Data, const uint32_t ou32_Length)
+{
+   //calculate and return the checksum
+   QString c_StrMd5;
+   C_HashState c_Hash;
+   uint8_t au8_Result[16];
+
+   mh_Md5Init(&c_Hash);
+   mh_Md5Process(&c_Hash, opu8_Data, ou32_Length);
+   mh_Md5Done(&c_Hash, au8_Result);
+
+   //Convert the hexadecimal checksum to a QString
+   for (uint8_t u8_Byte = 0U; u8_Byte < 16U; u8_Byte++)
+   {
+      c_StrMd5 += QString::asprintf("%02x", au8_Result[u8_Byte]);
+   }
+   return c_StrMd5;
+}

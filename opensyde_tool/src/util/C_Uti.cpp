@@ -1102,14 +1102,14 @@ bool C_Uti::h_IsPathRelativeToDir(const QString & orc_PathIn, const QString & or
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Casting the MD5-Checksum from C_SclString to QString
+/*! \brief  Get the MD5-Checksum as QString
 
    \return  MD5-Checksum
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString C_Uti::h_GetHashValueAsQtString(void)
 {
-   return QString(stw::opensyde_core::C_OscBinaryHash::h_CreateBinaryHash().c_str());
+   return stw::opensyde_core::C_OscBinaryHash::h_CreateBinaryHash();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

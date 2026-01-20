@@ -19,6 +19,7 @@
 #define CMD5CHECKSUMHPP
 
 #include <cstdio>
+#include <QString>
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
 
@@ -34,6 +35,11 @@ public:
    static stw::scl::C_SclString GetMD5(const uint8_t * const opu8_Data, const uint32_t ou32_Length);
    static stw::scl::C_SclString GetMD5(std::FILE * const opc_File);
    static stw::scl::C_SclString GetMD5(const stw::scl::C_SclString & orc_FilePath);
+
+   // QString overloads for incremental migration (Phase 2)
+   static QString GetMD5Q(const uint8_t * const opu8_Data, const uint32_t ou32_Length);
+   static QString GetMD5Q(std::FILE * const opc_File);
+   static QString GetMD5Q(const QString & orc_FilePath);
 
 protected:
 private:

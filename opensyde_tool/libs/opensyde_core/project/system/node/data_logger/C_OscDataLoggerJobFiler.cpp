@@ -515,7 +515,7 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerProperties(
          s32_Retval = orc_XmlParser.SelectNodeChildError("operation");
          if (s32_Retval == C_NO_ERR)
          {
-            orc_Config.c_Operation = orc_XmlParser.GetNodeContent();
+            orc_Config.c_Operation = orc_XmlParser.GetNodeContent().c_str();
             Q_ASSERT(orc_XmlParser.SelectNodeParent() == "additional-trigger-properties");
          }
       }
@@ -564,7 +564,7 @@ void C_OscDataLoggerJobFiler::mh_SaveJobAdditionalTriggerProperties(
    orc_XmlParser.CreateAndSelectNodeChild("threshold");
    C_OscNodeDataPoolFiler::h_SaveDataPoolContentV1(orc_Config.c_Threshold, orc_XmlParser);
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "additional-trigger-properties");
-   orc_XmlParser.CreateNodeChild("operation", orc_Config.c_Operation);
+   orc_XmlParser.CreateNodeChild("operation", orc_Config.c_Operation.toStdString().c_str());
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
 }
 
@@ -665,7 +665,7 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElement(C_OscDataLoggerDat
       s32_Retval = orc_XmlParser.SelectNodeChildError("custom-name");
       if (s32_Retval == C_NO_ERR)
       {
-         orc_Config.c_CustomName = orc_XmlParser.GetNodeContent();
+         orc_Config.c_CustomName = orc_XmlParser.GetNodeContent().c_str();
          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "configured-data-element");
       }
    }
@@ -695,7 +695,7 @@ void C_OscDataLoggerJobFiler::mh_SaveConfiguredDataElement(const C_OscDataLogger
                                                            C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeBool("use-custom-name", orc_Config.q_UseCustomName);
-   orc_XmlParser.CreateNodeChild("custom-name", orc_Config.c_CustomName);
+   orc_XmlParser.CreateNodeChild("custom-name", orc_Config.c_CustomName.toStdString().c_str());
    orc_XmlParser.CreateAndSelectNodeChild("data-pool-element");
    h_SaveDataElementOptArrayId(orc_Config.c_ConfiguredElementId, orc_XmlParser);
    //Return

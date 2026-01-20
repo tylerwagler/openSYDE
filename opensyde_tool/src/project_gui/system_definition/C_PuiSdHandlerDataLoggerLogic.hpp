@@ -55,7 +55,7 @@ public:
                                    const uint32_t ou32_DataLoggerDataElementIndex);
    int32_t SetDataLoggerElementProperties(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataLoggerJobIndex,
                                           const uint32_t ou32_DataLoggerDataElementIndex, const bool oq_UseCustomName,
-                                          const stw::scl::C_SclString & orc_CustomName);
+                                          const QString & orc_CustomName);
 
    const std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                   C_PuiSdLastKnownHalElementId> & GetLastKnownHalcCrcs(void) const;

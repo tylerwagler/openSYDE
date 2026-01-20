@@ -90,7 +90,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::Save()
       c_NewValues.q_Enable =
          this->mpc_Ui->pc_ChkBoxAdditionalTrigger->isChecked();
       c_NewValues.c_ElementId = m_GetSelectedDataElement();
-      c_NewValues.c_Operation = m_GetOperationForCore().toStdString().c_str();
+      c_NewValues.c_Operation = m_GetOperationForCore();
       m_ApplyContentValue(c_NewValues.c_Threshold);
       C_PuiSdHandler::h_GetInstance()->SetDataLoggerAdditionalTriggerProperties(mu32_NodeIndex,
                                                                                 mu32_DataLoggerJobIndex,
@@ -151,7 +151,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::Reload()
       this->mpc_Ui->pc_ChkBoxAdditionalTrigger->setChecked(
          pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.q_Enable);
       m_InitDataElements(pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_ElementId);
-      m_SetOperation(pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_Operation.c_str());
+      m_SetOperation(pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_Operation);
       m_InitThreshold(pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_ElementId,
                       pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_Threshold);
       m_InitUnit(pc_DataLoggerJob->c_Properties.c_AdditionalTriggerProperties.c_ElementId);

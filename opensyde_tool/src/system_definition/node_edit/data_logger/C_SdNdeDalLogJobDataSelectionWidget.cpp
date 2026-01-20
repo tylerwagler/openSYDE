@@ -383,7 +383,7 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_UpdateCustomLoggingName(const uint32
    if (ou32_Index < this->mc_DataElements.size())
    {
       C_OscDataLoggerDataElementReference & rc_Data = this->mc_DataElements.at(ou32_Index);
-      rc_Data.c_CustomName = oc_Data.toStdString();
+      rc_Data.c_CustomName = oc_Data;
       rc_Data.q_UseCustomName = oq_UseCustomName;
    }
 }

@@ -21,7 +21,6 @@
 #include <deque>
 #include <QRecursiveMutex>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

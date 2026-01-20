@@ -24,7 +24,7 @@ using namespace stw::md5;
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
 bool C_OscBinaryHash::mhq_HashCompleted = false;
-stw::scl::C_SclString C_OscBinaryHash::mhc_BinaryHash = "";
+QString C_OscBinaryHash::mhc_BinaryHash;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -50,13 +50,13 @@ C_OscBinaryHash::C_OscBinaryHash(void)
    \return  void
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscBinaryHash::h_CreateBinaryHash(void)
+QString C_OscBinaryHash::h_CreateBinaryHash(void)
 {
-   const stw::scl::C_SclString c_ExePath = QCoreApplication::applicationFilePath().toStdString();
+   const QString c_ExePath = QCoreApplication::applicationFilePath();
 
    if (h_GetHashBool() == false)
    {
-      mhc_BinaryHash = stw::md5::C_Md5Checksum::GetMD5(c_ExePath).UpperCase();
+      mhc_BinaryHash = C_Md5Checksum::GetMD5Q(c_ExePath).toUpper();
       h_SetHashBool(true);
    }
    return mhc_BinaryHash;
