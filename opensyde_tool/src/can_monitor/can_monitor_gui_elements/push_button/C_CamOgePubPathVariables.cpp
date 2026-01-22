@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Button with menu for selecting path variables
@@ -54,8 +54,9 @@ C_CamOgePubPathVariables::C_CamOgePubPathVariables(QWidget * const opc_Parent) :
    this->m_AddEntry("CAN Monitor Binary", mc_PATH_VARIABLE_CAN_MONITOR_BIN);
    this->m_AddEntry("CAN Monitor Project", mc_PATH_VARIABLE_CAN_MONITOR_PROJ);
    this->m_AddHeading("System");
-   this->m_AddEntry("User Name", C_OscUtils::hc_PATH_VARIABLE_USER_NAME.c_str());
-   this->m_AddEntry("Computer Name", C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME.c_str());
+   this->m_AddEntry("User Name", C_OscUtils::hc_PATH_VARIABLE_USER_NAME);
+   this->m_AddEntry("Computer Name", C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME);
    //lint -restore
    this->m_SetMenuMinWidth(140);
 }
+

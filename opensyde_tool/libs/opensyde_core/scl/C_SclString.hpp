@@ -123,6 +123,11 @@ public:
    // So there is no ambiguity. False Positive.
    //lint -estring(1036, "*stw::scl::C_SclString::C_SclString(double)*")
    template <typename T> C_SclString(const T orc_Value);
+   
+   C_SclString(const QString & orc_Value)
+   {
+      c_String = orc_Value.toStdString();
+   }
 
    virtual ~C_SclString();
 

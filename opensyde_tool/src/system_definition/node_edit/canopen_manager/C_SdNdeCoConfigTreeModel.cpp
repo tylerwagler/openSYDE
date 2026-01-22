@@ -656,7 +656,7 @@ void C_SdNdeCoConfigTreeModel::m_InitInterfaceNodeContent(const C_OscNodeComInte
       //get bus name
       if (pc_Bus != NULL)
       {
-         c_BusName = pc_Bus->c_Name.c_str();
+         c_BusName = pc_Bus->c_Name;
          c_DisplayName = "%1 (linked to " + c_BusName + ") - CANopen Manager";
       }
    }

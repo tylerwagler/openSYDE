@@ -173,7 +173,7 @@ void C_OgeWiUtil::h_CheckAndFixDialogPositionAndSize(QPoint & orc_GlobalPosition
       osc_write_log_info("Setup main window screen",
                          static_cast<QString>("Setup main window for screen width %1, height %2").arg(
                             QApplication::primaryScreen()->geometry().width()).arg(
-                            QApplication::primaryScreen()->geometry().height()).toStdString().c_str());
+                            QApplication::primaryScreen()->geometry().height()));
    }
 }
 
@@ -558,7 +558,7 @@ QString C_OgeWiUtil::mh_GetFileName(QWidget * const opc_Parent, const QString & 
          if (c_FullFilePath != "")
          {
             // check if file name contains invalid characters
-            if (C_OscUtils::h_CheckValidFilePath(c_FullFilePath.toStdString().c_str()) == true)
+            if (C_OscUtils::h_CheckValidFilePath(c_FullFilePath) == true)
             {
                c_Retval = c_FullFilePath;
                if (opc_SelectedFilter != NULL)

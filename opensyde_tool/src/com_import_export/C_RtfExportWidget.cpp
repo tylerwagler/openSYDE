@@ -167,7 +167,7 @@ int32_t C_RtfExportWidget::GetRtfPath(C_SclString & orc_RtfPath) const
    int32_t s32_Return = C_CONFIG;
 
    // get full RTF path of widget Ui
-   orc_RtfPath = C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditRtfPath->GetPath()).toStdString().c_str();
+   orc_RtfPath = C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditRtfPath->GetPath());
 
    // check if path fulfills our path requirements
    if (C_OscUtils::h_CheckValidFilePath(orc_RtfPath) == true)
@@ -176,11 +176,11 @@ int32_t C_RtfExportWidget::GetRtfPath(C_SclString & orc_RtfPath) const
       if (QFileInfo(QFileInfo(orc_RtfPath.ToQString()).absolutePath()).isDir() == true)
       {
          // check if file name is valid
-         const C_SclString c_FileExtAct = ("." + QFileInfo(orc_RtfPath.ToQString()).suffix()).toStdString().c_str();
+         const C_SclString c_FileExtAct = ("." + QFileInfo(orc_RtfPath.ToQString()).suffix());
          if (c_FileExtAct.LowerCase() == ".rtf")
          {
             const QFileInfo c_Info(orc_RtfPath.c_str());
-            if (C_OscUtils::h_CheckValidFileName(c_Info.completeBaseName().toStdString().c_str()))
+            if (C_OscUtils::h_CheckValidFileName(c_Info.completeBaseName()))
             {
                if (QFileInfo(orc_RtfPath.ToQString()).exists() && QFileInfo(orc_RtfPath.ToQString()).isFile())
                {
@@ -221,7 +221,7 @@ int32_t C_RtfExportWidget::GetRtfPath(C_SclString & orc_RtfPath) const
 int32_t C_RtfExportWidget::GetCompanyName(C_SclString & orc_CompanyName) const
 {
    // get company name of widget Ui
-   orc_CompanyName = this->mpc_Ui->pc_EditCompany->text().toStdString().c_str();
+   orc_CompanyName = this->mpc_Ui->pc_EditCompany->text();
 
    return C_NO_ERR;
 }
@@ -242,7 +242,7 @@ int32_t C_RtfExportWidget::GetCompanyLogoPath(C_SclString & orc_CompanyLogoPath)
    int32_t s32_Return = C_CONFIG;
 
    // get company logo path
-   orc_CompanyLogoPath = this->mpc_Ui->pc_EditLogoPath->GetPath().toStdString().c_str();
+   orc_CompanyLogoPath = this->mpc_Ui->pc_EditLogoPath->GetPath();
 
    if (orc_CompanyLogoPath == "")
    {
@@ -256,13 +256,13 @@ int32_t C_RtfExportWidget::GetCompanyLogoPath(C_SclString & orc_CompanyLogoPath)
       {
          // make absolute path if necessary
          orc_CompanyLogoPath =
-            C_PuiUtil::h_GetAbsolutePathFromProject(orc_CompanyLogoPath.c_str()).toStdString().c_str();
+            C_PuiUtil::h_GetAbsolutePathFromProject(orc_CompanyLogoPath.c_str());
 
          // check if file exists
          if (QFileInfo(orc_CompanyLogoPath.ToQString()).exists() && QFileInfo(orc_CompanyLogoPath.ToQString()).isFile())
          {
             // check if file name is valid
-            const C_SclString c_FileExtAct = ("." + QFileInfo(orc_CompanyLogoPath.ToQString()).suffix()).toStdString().c_str();
+            const C_SclString c_FileExtAct = ("." + QFileInfo(orc_CompanyLogoPath.ToQString()).suffix());
             if ((c_FileExtAct.LowerCase() == ".jpg") || (c_FileExtAct.LowerCase() == ".png"))
             {
                s32_Return = C_NO_ERR;
@@ -355,8 +355,8 @@ int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_
    Q_ASSERT(c_DirDocuCreatorTmp.cdUp() == true);                      // go one directory up
    c_DocuCreatorPath = c_DirDocuCreatorTmp.absolutePath();              // get current path
    c_DocuCreatorPath += "/connectors/DocuCreator/osy_docu_creator.exe"; // add DocuCreator location
-   const C_SclString c_SclStringDocuCreatorPath = c_DocuCreatorPath.toStdString().c_str();
-   C_SclString c_SclStringDocuCreatorConfigPath = c_DirDocuCreatorTmp.absolutePath().toStdString().c_str();
+   const C_SclString c_SclStringDocuCreatorPath = c_DocuCreatorPath;
+   C_SclString c_SclStringDocuCreatorConfigPath = c_DirDocuCreatorTmp.absolutePath();
    c_SclStringDocuCreatorConfigPath += "/connectors/DocuCreator/config.xml";
 
    QString c_PathNetworkTopologyScreenshot; // to save screenshot of network topology
@@ -411,7 +411,7 @@ int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_
       {
          // could not save 'Network Topology' screenshot to disk
          this->mc_Error = "Could not save Network Topology screenshot to \"" +
-                          static_cast<C_SclString>(c_PathNetworkTopologyScreenshot.toStdString().c_str()) + "\".";
+                          static_cast<C_SclString>(c_PathNetworkTopologyScreenshot) + "\".";
          osc_write_log_error("RTF File Export", this->mc_Error);
          s32_Return = C_BUSY;
       }
@@ -430,15 +430,15 @@ int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_
 
       // Project
       c_ConfigXml.c_Title = "Project Documentation";
-      c_ConfigXml.c_Name = C_PuiProject::h_GetInstance()->GetName().toStdString().c_str();
+      c_ConfigXml.c_Name = C_PuiProject::h_GetInstance()->GetName();
       c_ConfigXml.c_Version = C_PuiProject::h_GetInstance()->c_Version;
       c_ConfigXml.c_Created =
-         static_cast<C_SclString>(c_CurrentTime.toString("dd.MM.yyyy hh:mm").toStdString().c_str());
+         static_cast<C_SclString>(c_CurrentTime.toString("dd.MM.yyyy hh:mm"));
       c_ConfigXml.c_Author = C_PuiProject::h_GetInstance()->c_Editor;
-      c_ConfigXml.c_SysDefPath = c_SysDefPathTmp.toStdString().c_str();
-      c_ConfigXml.c_DevicesIniPath = C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str();
+      c_ConfigXml.c_SysDefPath = c_SysDefPathTmp;
+      c_ConfigXml.c_DevicesIniPath = C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini");
       c_ConfigXml.c_OutputPath = orc_RtfPath;
-      c_ConfigXml.c_NetworkTopologyImage = c_PathNetworkTopologyScreenshot.toStdString().c_str();
+      c_ConfigXml.c_NetworkTopologyImage = c_PathNetworkTopologyScreenshot;
       // openSYDE
       c_ConfigXml.c_OpenSydeVersion = C_PuiProject::h_GetInstance()->c_OpenSydeVersion; // used openSYDE version not
                                                                                         // current APPLICATION_VERSION
@@ -677,7 +677,7 @@ void C_RtfExportWidget::m_RtfPathClicked(void)
 {
    QString c_Folder; // for default folder
    const C_SclString c_Tmp =
-      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditRtfPath->GetPath()).toStdString().c_str();
+      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditRtfPath->GetPath());
 
    if (QFileInfo(QFileInfo(c_Tmp.ToQString()).absolutePath()).isDir() == true)
    {
@@ -698,7 +698,7 @@ void C_RtfExportWidget::m_RtfPathClicked(void)
 
    if (c_FullRtfFilePath != "")
    {
-      this->SetRtfPath(c_FullRtfFilePath.toStdString().c_str());
+      this->SetRtfPath(c_FullRtfFilePath);
    }
 }
 
@@ -712,7 +712,7 @@ void C_RtfExportWidget::m_LogoPathClicked(void) const
    QString c_Folder; // for default folder
 
    const C_SclString c_Tmp =
-      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditLogoPath->GetPath()).toStdString().c_str();
+      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditLogoPath->GetPath());
 
    if (QFileInfo(QFileInfo(c_Tmp.ToQString()).absolutePath()).isDir() == true)
    {
@@ -728,7 +728,7 @@ void C_RtfExportWidget::m_LogoPathClicked(void) const
                                                                      c_Folder, c_Filter, "*.jpg");
    if (c_FullLogoFilePath.isEmpty() == false)
    {
-      this->SetCompanyLogoPath(c_FullLogoFilePath.toStdString().c_str());
+      this->SetCompanyLogoPath(c_FullLogoFilePath);
    }
 }
 
@@ -840,3 +840,4 @@ int32_t C_RtfExportWidget::m_CheckSettings(void) const
 
    return s32_Return;
 }
+

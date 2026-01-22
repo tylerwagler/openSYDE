@@ -66,7 +66,7 @@ uint32_t C_PuiSdHandlerBusLogic::AddBusAndSort(C_OscSystemBus & orc_OscBus, cons
    else
    {
       orc_OscBus.c_Name = C_OscUtils::h_GetUniqueName(
-         this->GetExistingBusNames(), orc_OscBus.c_Name, this->GetNameMaxCharLimit());
+         this->GetExistingBusNames(), orc_OscBus.c_Name, this->GetNameMaxCharLimit()).ToQString();
    }
    if (oq_AllowBusIdAdaption == true)
    {
@@ -225,7 +225,7 @@ bool C_PuiSdHandlerBusLogic::CheckBusNameAvailable(const C_SclString & orc_Name,
       {
          const C_OscSystemBus & rc_Bus = this->mc_CoreDefinition.c_Buses[u32_ItBus];
          //Check conflict
-         if (rc_Bus.c_Name.LowerCase() == orc_Name.LowerCase())
+         if (rc_Bus.c_Name.toLower() == orc_Name.ToQString().toLower())
          {
             q_Retval = false;
          }
@@ -2059,7 +2059,7 @@ int32_t C_PuiSdHandlerBusLogic::InsertCanMessage(const C_OscCanMessageIdentifica
          //Get unique name
          c_AdaptedMessage.c_Name = C_OscUtils::h_GetUniqueName(
             this->m_GetExistingMessageNames(orc_MessageId.u32_NodeIndex, orc_MessageId.u32_InterfaceIndex),
-            orc_Message.c_Name, this->GetNameMaxCharLimit());
+            orc_Message.c_Name, this->GetNameMaxCharLimit()).ToQString();
       }
       s32_Retval = rc_OscNode.InsertMessage(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                             orc_MessageId.u32_DatapoolIndex,
@@ -2197,7 +2197,7 @@ int32_t C_PuiSdHandlerBusLogic::InsertCanSignal(const C_OscCanMessageIdentificat
 
       //Get unique name
       c_OscAdaptedSignalCommon.c_Name = C_OscUtils::h_GetUniqueName(
-         this->m_GetExistingSignalNames(orc_MessageId), orc_OscSignalCommon.c_Name, this->GetNameMaxCharLimit());
+         this->m_GetExistingSignalNames(orc_MessageId), orc_OscSignalCommon.c_Name, this->GetNameMaxCharLimit()).ToQString();
       s32_Retval = rc_OscNode.InsertSignal(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                            orc_MessageId.u32_DatapoolIndex,
                                            orc_MessageId.q_MessageIsTx, orc_MessageId.u32_MessageIndex,
@@ -2704,7 +2704,7 @@ int32_t C_PuiSdHandlerBusLogic::MapBusNameToIndex(const QString & orc_BusName, u
       Q_ASSERT(pc_Bus != NULL);
       if (pc_Bus != NULL)
       {
-         if (orc_BusName.compare(pc_Bus->c_Name.c_str()) == 0)
+         if (orc_BusName.compare(pc_Bus->c_Name) == 0)
          {
             s32_Retval = C_NO_ERR;
             oru32_BusIndex = u32_ItBus;
@@ -2733,7 +2733,7 @@ int32_t C_PuiSdHandlerBusLogic::MapBusIndexToName(const uint32_t ou32_BusIndex, 
 
    if (pc_Bus != NULL)
    {
-      orc_BusName = pc_Bus->c_Name.c_str();
+      orc_BusName = pc_Bus->c_Name;
    }
    else
    {
@@ -3334,3 +3334,4 @@ int32_t C_PuiSdHandlerBusLogic::m_DeleteUiCanMessage(const C_OscCanMessageIdenti
    }
    return s32_Retval;
 }
+

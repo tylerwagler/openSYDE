@@ -322,7 +322,7 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
       {
          if (("." + c_BaseInfo.completeSuffix()) == mhc_FILE_EXTENSION)
          {
-            if (C_OscUtils::h_CheckValidFilePath(c_BaseInfo.absoluteFilePath().toStdString().c_str()) == true)
+            if (C_OscUtils::h_CheckValidFilePath(c_BaseInfo.absoluteFilePath()) == true)
             {
                // Check if file exists already
                QFile c_File;
@@ -1291,3 +1291,4 @@ QString C_SyvDaItPaImageRecordWidget::m_GetPathForNode(const uint32_t ou32_NodeI
    }
    return c_Retval;
 }
+

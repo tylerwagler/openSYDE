@@ -426,7 +426,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
                static_cast<QString>("The openSYDE Target Support Package device \"%1\" does not match the "
                                        "device type \"%2\" of this node").
                arg(c_DeviceName.c_str()).
-               arg(pc_Node->c_DeviceType.c_str()));
+               arg(pc_Node->c_DeviceType));
             c_Message.SetCustomMinHeight(230, 180);
             c_Message.Execute();
          }
@@ -1027,3 +1027,4 @@ void C_SdNdeDbAddNewProject::m_ApplyV2PathAdaptationToV3()
       rc_App.c_ProjectPath = c_ProjectPath.toStdString().c_str();
    }
 }
+

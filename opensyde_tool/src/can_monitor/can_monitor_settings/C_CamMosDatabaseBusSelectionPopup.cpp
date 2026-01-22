@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for bus selection for database type openSYDE system definition. (implementation)
@@ -262,7 +262,7 @@ void C_CamMosDatabaseBusSelectionPopup::m_InitComboBox(void) const
       // only show can buses
       if (c_Iter->e_Type == C_OscSystemBus::eCAN)
       {
-         this->mpc_Ui->pc_CbxBus->addItem(static_cast<QString>(c_Iter->c_Name.c_str()));
+         this->mpc_Ui->pc_CbxBus->addItem(static_cast<QString>(c_Iter->c_Name));
       }
    }
 
@@ -283,7 +283,7 @@ void C_CamMosDatabaseBusSelectionPopup::m_OnComboBoxChanged(const int32_t os32_I
       const C_OscSystemBus & rc_Bus = this->mc_Busses[s32_BusIndex];
       this->mpc_Ui->pc_LabelBusIdValue->setText(QString::number(rc_Bus.u8_BusId));
       this->mpc_Ui->pc_LabelBitrateValue->setText(QString::number(rc_Bus.u64_BitRate / 1000) + " kBit/s");
-      this->mpc_Ui->pc_LabelCommentValue->setText(rc_Bus.c_Comment.c_str());
+      this->mpc_Ui->pc_LabelCommentValue->setText(rc_Bus.c_Comment);
    }
 }
 
@@ -400,3 +400,4 @@ int32_t C_CamMosDatabaseBusSelectionPopup::m_BusIndexToComboboxIndex(const int32
 
    return s32_Return;
 }
+

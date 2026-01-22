@@ -64,7 +64,7 @@ QString C_CamUtiGeneric::h_AskUserToSaveRelativePath(QWidget * const opc_Parent,
    QString c_PathAbsolute;
 
    // Check first if path is a valid path with no unwanted characters
-   if (C_OscUtils::h_CheckValidFilePath(orc_Path.toStdString().c_str()) == false)
+   if (C_OscUtils::h_CheckValidFilePath(orc_Path) == false)
    {
       C_OgeWiUtil::h_ShowPathInvalidError(opc_Parent, orc_Path);
       c_Return = "";

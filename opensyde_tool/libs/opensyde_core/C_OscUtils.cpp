@@ -21,6 +21,8 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QCoreApplication>
+#include <QString>
+#include <QRegularExpression>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
@@ -43,11 +45,11 @@ stw::scl::C_SCLResourceStrings C_OscUtils::mhc_ResourceStrings;
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_BIN = "%{OPENSYDE_BINARY}";
-const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_PROJ = "%{OPENSYDE_PROJECT}";
-const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_DATABLOCK_PROJ = "%{PROJECT_DIR}";
-const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_USER_NAME = "%{USER_NAME}";
-const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME = "%{COMPUTER_NAME}";
+const QString C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_BIN = "%{OPENSYDE_BINARY}";
+const QString C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_PROJ = "%{OPENSYDE_PROJECT}";
+const QString C_OscUtils::hc_PATH_VARIABLE_DATABLOCK_PROJ = "%{PROJECT_DIR}";
+const QString C_OscUtils::hc_PATH_VARIABLE_USER_NAME = "%{USER_NAME}";
+const QString C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME = "%{COMPUTER_NAME}";
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
@@ -73,13 +75,13 @@ const stw::scl::C_SclString C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME = "%{COMP
    false -> violation of rules
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_CheckValidCeName(const stw::scl::C_SclString & orc_Name, const bool oq_AutomaticCeStringAdaptation,
+bool C_OscUtils::h_CheckValidCeName(const QString & orc_Name, const bool oq_AutomaticCeStringAdaptation,
                                     const uint16_t ou16_MaxLength)
 {
    char_t cn_Char;
    bool q_IsValid = true;
 
-   if (orc_Name.Length() == 0)
+   if (orc_Name.length() == 0)
    {
       q_IsValid = false;
    }
@@ -90,17 +92,17 @@ bool C_OscUtils::h_CheckValidCeName(const stw::scl::C_SclString & orc_Name, cons
       if (oq_AutomaticCeStringAdaptation == false)
       {
          // no automatic c string adaptation
-         for (u32_Index = 0; u32_Index < orc_Name.Length(); u32_Index++)
+         for (u32_Index = 0; u32_Index < orc_Name.length(); u32_Index++)
          {
             // first char of name
-            cn_Char = orc_Name.c_str()[u32_Index];
+            cn_Char = orc_Name.toStdString()[u32_Index];
             // is alphanumeric and no underscore true or a number true -> invalid name
 
             //If the value of the character is not representable as unsigned char the behavior of isalnum is
             // undefined. So be as defensive as possible:
             if ((static_cast<int8_t>(cn_Char) < 0) ||
                 (((std::isalnum(cn_Char) == 0) &&
-                  (cn_Char != '_')) || (std::isdigit(orc_Name.c_str()[0]) != 0))) //ANSI compliant check
+                  (cn_Char != '_')) || (std::isdigit(orc_Name.toStdString()[0]) != 0))) //ANSI compliant check
             {
                q_IsValid = false;
                break;
@@ -110,10 +112,10 @@ bool C_OscUtils::h_CheckValidCeName(const stw::scl::C_SclString & orc_Name, cons
       else
       {
          // automatic c string adaptation
-         for (u32_Index = 0; u32_Index < orc_Name.Length(); u32_Index++)
+         for (u32_Index = 0; u32_Index < orc_Name.length(); u32_Index++)
          {
             // fist char of name
-            cn_Char = orc_Name.c_str()[u32_Index];
+            cn_Char = orc_Name.toStdString()[u32_Index];
 
             // is alphanumeric true or no underscore and a number true -> invalid name
 
@@ -121,7 +123,7 @@ bool C_OscUtils::h_CheckValidCeName(const stw::scl::C_SclString & orc_Name, cons
             // undefined. So be as defensive as possible:
             if ((static_cast<int8_t>(cn_Char) < 0) ||
                 ((std::isalnum(cn_Char) == 0) &&
-                 ((cn_Char != '_') || (std::isdigit(orc_Name.c_str()[0]) != 0)))) //ANSI compliant check
+                 ((cn_Char != '_') || (std::isdigit(orc_Name.toStdString()[0]) != 0)))) //ANSI compliant check
             {
                q_IsValid = false;
                break;
@@ -132,7 +134,7 @@ bool C_OscUtils::h_CheckValidCeName(const stw::scl::C_SclString & orc_Name, cons
       if (q_IsValid == true)
       {
          // -> should not be longer than ou16_MaxLength characters
-         if (orc_Name.Length() > static_cast<uint32_t>(ou16_MaxLength))
+         if (orc_Name.length() > static_cast<uint32_t>(ou16_MaxLength))
          {
             q_IsValid = false;
          }
@@ -190,13 +192,13 @@ bool C_OscUtils::h_IsFloat32NearlyEqual(const float32_t & orf32_Float1, const fl
    C_NOACT   could not create folder
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscUtils::h_CreateFolderRecursively(const C_SclString & orc_Folder)
+int32_t C_OscUtils::h_CreateFolderRecursively(const QString & orc_Folder)
 {
    //lint -e{8080} //using type expected by the library for compatibility
    size_t x_CharIndex = 0U;
    int32_t s32_Return = C_NO_ERR;
 
-   const std::string c_Path = orc_Folder.c_str();
+   const std::string c_Path = orc_Folder.toStdString();
 
    do
    {
@@ -266,9 +268,9 @@ int32_t C_OscUtils::h_CreateFolderRecursively(const C_SclString & orc_Folder)
    Niceified string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_NiceifyStringForFileName(const C_SclString & orc_String)
+QString C_OscUtils::h_NiceifyStringForFileName(const QString & orc_String)
 {
-   C_SclString c_Result;
+   QString c_Result;
    bool q_Blank = true;
 
    //check fringe cases; "." and ".." have special meaning in most file systems and are no valid directory names
@@ -282,9 +284,9 @@ C_SclString C_OscUtils::h_NiceifyStringForFileName(const C_SclString & orc_Strin
    }
    else
    {
-      for (uint32_t u32_Index = 0U; u32_Index < orc_String.Length(); u32_Index++)
+      for (uint32_t u32_Index = 0U; u32_Index < orc_String.length(); u32_Index++)
       {
-         const char_t cn_Character = orc_String.c_str()[u32_Index];
+         const char_t cn_Character = orc_String.toStdString()[u32_Index];
 
          //If the value of the character is not representable as unsigned char the the behavior of isalnum is
          // undefined. So be as defensive as possible:
@@ -295,9 +297,9 @@ C_SclString C_OscUtils::h_NiceifyStringForFileName(const C_SclString & orc_Strin
               (cn_Character != ' ') && (cn_Character != '%') && (cn_Character != '&') && (cn_Character != '!') &&
               (cn_Character != '#') && (cn_Character != '+') && (cn_Character != ',') && (cn_Character != ';') &&
               (cn_Character != '=') && (cn_Character != '@') && (cn_Character != '[') && (cn_Character != ']') &&
-              (cn_Character != '^') && (cn_Character != '\'') && (cn_Character != '~')))
+              (cn_Character != '^') && (cn_Character != '\'') && (cn_Character != '~') ))
          {
-            c_Result += C_SclString::IntToStr(cn_Character);
+            c_Result += QString::number(static_cast<int>(cn_Character));
          }
          else
          {
@@ -337,32 +339,33 @@ C_SclString C_OscUtils::h_NiceifyStringForFileName(const C_SclString & orc_Strin
    Niceified string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_NiceifyStringForCeComment(const C_SclString & orc_String)
+QString C_OscUtils::h_NiceifyStringForCeComment(const QString & orc_String)
 {
-   C_SclString c_Result = orc_String;
+   QString c_Result = orc_String;
 
-   for (uint32_t u32_Index = 1U; u32_Index <= orc_String.Length(); u32_Index++)
+   for (int32_t s32_Index = 0; s32_Index < c_Result.length(); s32_Index++)
    {
-      const char_t cn_Character = c_Result[u32_Index];
-      const uint32_t u32_NextIndex = u32_Index + 1U;
+      const QChar c_Character = c_Result[s32_Index];
+      const char cn_Char = c_Character.toLatin1();
+      const int32_t s32_NextIndex = s32_Index + 1;
 
       //If the value of the character is not representable as unsigned char the the behavior of isprint is undefined.
       //So be as defensive as possible:
-      if ((static_cast<int8_t>(cn_Character) < 0) || (std::isprint(cn_Character) == 0) ||
-          (cn_Character == '@') || (cn_Character == '`'))
+      if ((static_cast<int8_t>(cn_Char) < 0) || (std::isprint(cn_Char) == 0) ||
+          (c_Character == '@') || (c_Character == '`'))
       {
-         c_Result[u32_Index] = '_';
+         c_Result[s32_Index] = '_';
       }
-      else if ((u32_Index < orc_String.Length()) && (cn_Character == '*') &&
-               (c_Result[u32_NextIndex] == '/'))
+      else if ((s32_NextIndex < c_Result.length()) && (c_Character == '*') &&
+               (c_Result[s32_NextIndex] == '/'))
       {
          //prevent adding end of C comment
-         c_Result[u32_Index] = '_';
+         c_Result[s32_Index] = '_';
       }
-      else if ((u32_Index == orc_String.Length()) && (cn_Character == '\\'))
+      else if ((s32_Index == (c_Result.length() - 1)) && (c_Character == '\\'))
       {
          //prevent continuing C++ comment
-         c_Result[u32_Index] = '_';
+         c_Result[s32_Index] = '_';
       }
       else
       {
@@ -386,10 +389,10 @@ C_SclString C_OscUtils::h_NiceifyStringForCeComment(const C_SclString & orc_Stri
    \retval   false   The string is not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_CheckValidFileName(const C_SclString & orc_String)
+bool C_OscUtils::h_CheckValidFileName(const QString & orc_String)
 {
    bool q_Return = true;
-   const C_SclString c_Temp = h_NiceifyStringForFileName(orc_String);
+   const QString c_Temp = h_NiceifyStringForFileName(orc_String);
 
    if (c_Temp != orc_String)
    {
@@ -417,27 +420,26 @@ bool C_OscUtils::h_CheckValidFileName(const C_SclString & orc_String)
    \retval   false   The string invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_CheckValidFilePath(const C_SclString & orc_String)
+bool C_OscUtils::h_CheckValidFilePath(const QString & orc_String)
 {
    bool q_Return = true;
 
-   if (orc_String.IsEmpty() == true)
+   if (orc_String.isEmpty() == true)
    {
       q_Return = false;
    }
    else
    {
       bool q_AtLeastOneOtherChar = false;
-      QList<C_SclString> c_SplitStrings;
-      orc_String.Tokenize("\\/", c_SplitStrings);
+      QStringList c_SplitStrings = orc_String.split(QRegularExpression("[\\\\/]"), Qt::SkipEmptyParts);
 
       for (int32_t s32_Index = 0U; (s32_Index < c_SplitStrings.size()) && (q_Return == true); s32_Index++)
       {
-         const C_SclString & rc_Substring = c_SplitStrings[s32_Index];
+         const QString & rc_Substring = c_SplitStrings[s32_Index];
 
          // empty sub-strings are okay here, because they result from two consecutive (back-)slashes or from
          // trailing/leading(back-)slash
-         if (rc_Substring.IsEmpty() == false)
+         if (rc_Substring.isEmpty() == false)
          {
             q_AtLeastOneOtherChar = true;
 
@@ -447,7 +449,7 @@ bool C_OscUtils::h_CheckValidFilePath(const C_SclString & orc_String)
                // skip if complete string starts with drive name or "."
                if ((s32_Index > 0) || (rc_Substring != ".")) /* . at beginning is allowed */
                {
-                  if ((rc_Substring.Length() != 2U) || (rc_Substring.SubString(2, 1) != ':')) /* drive names e.g. C: */
+                  if ((rc_Substring.length() != 2U) || (rc_Substring.mid(1, 1) != ':')) /* drive names e.g. C: */
                   {
                      q_Return = h_CheckValidFileName(rc_Substring);
                   }
@@ -564,7 +566,7 @@ C_SclString C_OscUtils::h_PosSerialNumberToString(const uint8_t * const opu8_Ser
       if (opu8_SerialNumber[0] < static_cast<uint8_t>(0x20))
       {
          //format up to and including 2019. E.g: 05.123456.1001
-         c_Result.PrintFormatted("%02X.%02X%02X%02X.%02X%02X",
+         c_Result.StringPrintFormatted("%02X.%02X%02X%02X.%02X%02X",
                                  static_cast<uint32_t>(opu8_SerialNumber[0]),
                                  static_cast<uint32_t>(opu8_SerialNumber[1]),
                                  static_cast<uint32_t>(opu8_SerialNumber[2]),
@@ -575,7 +577,7 @@ C_SclString C_OscUtils::h_PosSerialNumberToString(const uint8_t * const opu8_Ser
       else
       {
          //format from 2020. E.g: 200012345678
-         c_Result.PrintFormatted("%02X%02X%02X%02X%02X%02X",
+         c_Result.StringPrintFormatted("%02X%02X%02X%02X%02X%02X",
                                  static_cast<uint32_t>(opu8_SerialNumber[0]),
                                  static_cast<uint32_t>(opu8_SerialNumber[1]),
                                  static_cast<uint32_t>(opu8_SerialNumber[2]),
@@ -603,24 +605,24 @@ C_SclString C_OscUtils::h_PosSerialNumberToString(const uint8_t * const opu8_Ser
    \retval   empty string  if length of orc_RawSerialNumber does not match the expectations
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_FsnSerialNumberToString(const uint8_t ou8_ManufacturerFormat,
-                                                  const stw::scl::C_SclString & orc_RawSerialNumber)
+QString C_OscUtils::h_FsnSerialNumberToString(const uint8_t ou8_ManufacturerFormat,
+                                              const QString & orc_RawSerialNumber)
 {
-   C_SclString c_Result;
+   QString c_Result;
 
-   if ((orc_RawSerialNumber.Length() > 0) &&
-       (orc_RawSerialNumber.Length() <= 29))
+   if ((orc_RawSerialNumber.length() > 0) &&
+       (orc_RawSerialNumber.length() <= 29))
    {
       if (ou8_ManufacturerFormat == 0U)
       {
          // Must match exactly
-         if (orc_RawSerialNumber.Length() == 6)
+         if (orc_RawSerialNumber.length() == 6)
          {
             // STW POS format
             //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?&
             // anyway
             c_Result = C_OscUtils::h_PosSerialNumberToString(
-               reinterpret_cast<const uint8_t *>(orc_RawSerialNumber.c_str()));
+               reinterpret_cast<const uint8_t *>(orc_RawSerialNumber.toStdString().c_str())).ToQString();
          }
       }
       else
@@ -640,14 +642,14 @@ C_SclString C_OscUtils::h_FsnSerialNumberToString(const uint8_t ou8_Manufacturer
    \param[out]  orc_OutputString    File content
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscUtils::h_FileToString(const C_SclString & orc_FilePath, C_SclString & orc_OutputString)
+void C_OscUtils::h_FileToString(const QString & orc_FilePath, QString & orc_OutputString)
 {
    std::string c_Input;
    {
       //Read
       std::ifstream c_File;
 
-      c_File.open(orc_FilePath.c_str(), std::ifstream::in);
+      c_File.open(orc_FilePath.toStdString().c_str(), std::ifstream::in);
       if (c_File.is_open())
       {
          c_File.seekg(0LL, std::ios::end);
@@ -660,7 +662,7 @@ void C_OscUtils::h_FileToString(const C_SclString & orc_FilePath, C_SclString & 
       }
    }
    //Copy to output
-   orc_OutputString = c_Input.c_str();
+   orc_OutputString = QString::fromStdString(c_Input);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -723,17 +725,17 @@ C_SclString C_OscUtils::h_LoadString(const uint16_t ou16_StringIndex)
    C_RD_WR     read/write error (see log file for details)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscUtils::h_CopyFile(const C_SclString & orc_SourceFile, const C_SclString & orc_TargetFile,
-                               C_SclString * const opc_ErrorPath, C_SclString * const opc_ErrorMessage)
+int32_t C_OscUtils::h_CopyFile(const QString & orc_SourceFile, const QString & orc_TargetFile,
+                               QString * const opc_ErrorPath, QString * const opc_ErrorMessage)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_ErrorMessage = "";
+   QString c_ErrorMessage = "";
 
-   std::fstream c_Input(orc_SourceFile.c_str(), std::fstream::in | std::fstream::binary);
+   std::fstream c_Input(orc_SourceFile.toStdString().c_str(), std::fstream::in | std::fstream::binary);
    if (c_Input.fail() == true)
    {
       c_ErrorMessage = "Could not read \"" + orc_SourceFile + "\".";
-      osc_write_log_error("Copying file", c_ErrorMessage);
+      osc_write_log_error("Copying file", C_SclString::FromQString(c_ErrorMessage));
       s32_Return = C_RD_WR;
       if (opc_ErrorPath != NULL)
       {
@@ -747,11 +749,11 @@ int32_t C_OscUtils::h_CopyFile(const C_SclString & orc_SourceFile, const C_SclSt
       const std::istream_iterator<uint8_t> c_Begin(c_Input);
       const std::istream_iterator<uint8_t> c_END;
 
-      std::fstream c_Output(orc_TargetFile.c_str(), std::fstream::out | std::fstream::trunc | std::fstream::binary);
+      std::fstream c_Output(orc_TargetFile.toStdString().c_str(), std::fstream::out | std::fstream::trunc | std::fstream::binary);
       if (c_Output.fail() == true)
       {
          c_ErrorMessage = "Could not write \"" + orc_TargetFile + "\".";
-         osc_write_log_error("Copying file", c_ErrorMessage);
+         osc_write_log_error("Copying file", C_SclString::FromQString(c_ErrorMessage));
          s32_Return = C_RD_WR;
          if (opc_ErrorPath != NULL)
          {
@@ -768,7 +770,7 @@ int32_t C_OscUtils::h_CopyFile(const C_SclString & orc_SourceFile, const C_SclSt
          catch (...)
          {
             c_ErrorMessage = "Could not write stream of \"" + orc_TargetFile + "\".";
-            osc_write_log_error("Copying file", c_ErrorMessage);
+            osc_write_log_error("Copying file", C_SclString::FromQString(c_ErrorMessage));
             s32_Return = C_RD_WR;
             if (opc_ErrorPath != NULL)
             {
@@ -833,31 +835,31 @@ C_SclString C_OscUtils::h_GetCommandLineAsString(const int32_t os32_Argc, char_t
    Path without Data Block project path dependencies (might still contain placeholder variables or be relative)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_MakeIndependentOfDbProjectPath(const C_SclString & orc_DbProjectPath,
-                                                         const C_SclString & orc_OsydeProjectPath,
-                                                         const C_SclString & orc_Path)
+QString C_OscUtils::h_MakeIndependentOfDbProjectPath(const QString & orc_DbProjectPath,
+                                                     const QString & orc_OsydeProjectPath,
+                                                     const QString & orc_Path)
 {
-   C_SclString c_Return = orc_Path;
+   QString c_Return = orc_Path;
 
-   const uint32_t u32_Pos = c_Return.Pos(hc_PATH_VARIABLE_DATABLOCK_PROJ);
+   const uint32_t u32_Pos = c_Return.indexOf(hc_PATH_VARIABLE_DATABLOCK_PROJ);
 
    if (u32_Pos != 0U)
    {
-      c_Return.ReplaceAll(hc_PATH_VARIABLE_DATABLOCK_PROJ, orc_DbProjectPath);
+      c_Return.replace(hc_PATH_VARIABLE_DATABLOCK_PROJ, orc_DbProjectPath);
 
       // remove all double slashes but the first (network paths)
-      if (c_Return.Pos("//") == 1)
+      if (c_Return.indexOf("//") == 1)
       {
          c_Return = '/' + c_Return;
       }
-      c_Return.ReplaceAll("//", "/");
+      c_Return.replace("//", "/");
    }
    else
    {
       // concatenate if placeholder-resolved path would be relative
-      const C_SclString c_ResolvedPath = C_OscUtils::h_ResolvePlaceholderVariables(orc_Path, orc_OsydeProjectPath);
+      const QString c_ResolvedPath = C_OscUtils::h_ResolvePlaceholderVariables(orc_Path, orc_OsydeProjectPath);
 
-      if (QDir::isRelativePath(c_ResolvedPath.ToQString()) == true)
+      if (QDir::isRelativePath(c_ResolvedPath) == true)
       {
          //relative path
          c_Return = C_OscUtils::h_ConcatPathIfNecessary(orc_DbProjectPath, c_Return);
@@ -880,14 +882,14 @@ C_SclString C_OscUtils::h_MakeIndependentOfDbProjectPath(const C_SclString & orc
    Resolved path
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_ResolvePlaceholderVariables(const C_SclString & orc_Path,
-                                                      const C_SclString & orc_OsydeProjectPath,
-                                                      const C_SclString & orc_DbProjectPath)
+QString C_OscUtils::h_ResolvePlaceholderVariables(const QString & orc_Path,
+                                                  const QString & orc_OsydeProjectPath,
+                                                  const QString & orc_DbProjectPath)
 {
-   C_SclString c_Return = orc_Path;
+   QString c_Return = orc_Path;
 
    // first check for indicator %
-   uint32_t u32_Pos = c_Return.Pos("%");
+   uint32_t u32_Pos = c_Return.indexOf("%");
 
    if (u32_Pos != 0U)
    {
@@ -895,14 +897,14 @@ C_SclString C_OscUtils::h_ResolvePlaceholderVariables(const C_SclString & orc_Pa
       c_Return = C_OscUtils::h_ResolveProjIndependentPlaceholderVariables(c_Return);
 
       // resolve project-specific variables
-      c_Return.ReplaceAll(hc_PATH_VARIABLE_OPENSYDE_PROJ, orc_OsydeProjectPath);
+      c_Return.replace(hc_PATH_VARIABLE_OPENSYDE_PROJ, orc_OsydeProjectPath);
 
-      u32_Pos = c_Return.Pos(hc_PATH_VARIABLE_DATABLOCK_PROJ);
+      u32_Pos = c_Return.indexOf(hc_PATH_VARIABLE_DATABLOCK_PROJ);
       if (u32_Pos != 0U)
       {
-         const C_SclString c_PathWithResolvedPlaceholders =
+         const QString c_PathWithResolvedPlaceholders =
             C_OscUtils::h_ResolvePlaceholderVariables(orc_DbProjectPath, "");
-         c_Return.ReplaceAll(hc_PATH_VARIABLE_DATABLOCK_PROJ, c_PathWithResolvedPlaceholders);
+         c_Return.replace(hc_PATH_VARIABLE_DATABLOCK_PROJ, c_PathWithResolvedPlaceholders);
          // occurrences of orc_DbProjectPath in itself get replaced with ""
       }
    }
@@ -922,33 +924,33 @@ C_SclString C_OscUtils::h_ResolvePlaceholderVariables(const C_SclString & orc_Pa
    Resolved path
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_ResolveProjIndependentPlaceholderVariables(const C_SclString & orc_Path)
+QString C_OscUtils::h_ResolveProjIndependentPlaceholderVariables(const QString & orc_Path)
 {
-   C_SclString c_Return = orc_Path;
-   C_SclString c_Replacement;
+   QString c_Return = orc_Path;
+   QString c_Replacement;
 
-   uint32_t u32_Pos = c_Return.Pos(hc_PATH_VARIABLE_OPENSYDE_BIN);
+   uint32_t u32_Pos = c_Return.indexOf(hc_PATH_VARIABLE_OPENSYDE_BIN);
 
    if (u32_Pos != 0U)
    {
       const QString c_ExePath = QCoreApplication::applicationFilePath();
       const QString c_ExeDir = QFileInfo(c_ExePath).absolutePath() + "/";
-      c_Replacement = c_ExeDir.toStdString();
-      c_Return.ReplaceAll(hc_PATH_VARIABLE_OPENSYDE_BIN, c_Replacement);
+      c_Replacement = c_ExeDir;
+      c_Return.replace(hc_PATH_VARIABLE_OPENSYDE_BIN, c_Replacement);
    }
 
-   u32_Pos = c_Return.Pos(hc_PATH_VARIABLE_USER_NAME);
+   u32_Pos = c_Return.indexOf(hc_PATH_VARIABLE_USER_NAME);
    if (u32_Pos != 0U)
    {
       Q_ASSERT(stw::opensyde_core::C_OscUtils::h_GetSystemUserName(c_Replacement) == true);
-      c_Return.ReplaceAll(hc_PATH_VARIABLE_USER_NAME, c_Replacement);
+      c_Return.replace(hc_PATH_VARIABLE_USER_NAME, c_Replacement);
    }
 
-   u32_Pos = c_Return.Pos(hc_PATH_VARIABLE_COMPUTER_NAME);
+   u32_Pos = c_Return.indexOf(hc_PATH_VARIABLE_COMPUTER_NAME);
    if (u32_Pos != 0U)
    {
       Q_ASSERT(stw::opensyde_core::C_OscUtils::h_GetSystemMachineName(c_Replacement) == true);
-      c_Return.ReplaceAll(hc_PATH_VARIABLE_COMPUTER_NAME, c_Replacement);
+      c_Return.replace(hc_PATH_VARIABLE_COMPUTER_NAME, c_Replacement);
    }
 
    return c_Return;
@@ -966,20 +968,20 @@ C_SclString C_OscUtils::h_ResolveProjIndependentPlaceholderVariables(const C_Scl
    Absolute file path if input fulfills assumptions
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_ConcatPathIfNecessary(const C_SclString & orc_BaseDir,
-                                                const C_SclString & orc_RelativeOrAbsolutePath)
+QString C_OscUtils::h_ConcatPathIfNecessary(const QString & orc_BaseDir,
+                                            const QString & orc_RelativeOrAbsolutePath)
 {
-   C_SclString c_Retval;
+   QString c_Retval;
 
-   const QString c_QPath = orc_RelativeOrAbsolutePath.ToQString();
+   const QString c_QPath = orc_RelativeOrAbsolutePath;
    const QString c_QPathDir = QFileInfo(c_QPath).absolutePath() + "/";
-   const C_SclString c_Path = c_QPathDir.toStdString();
+   const QString c_Path = c_QPathDir;
 
    bool q_IsRelativePath = QDir::isRelativePath(c_QPath);
 
    //special scenario: if the path starts with "\\" or "//" is is a UNC network path
    //for our purpose we consider it an absolute path (concatting would have weird results)
-   if ((orc_RelativeOrAbsolutePath.Length() >= 2U) &&
+   if ((orc_RelativeOrAbsolutePath.length() >= 2U) &&
        (((orc_RelativeOrAbsolutePath[1] == '/') && (orc_RelativeOrAbsolutePath[2] == '/')) ||
         ((orc_RelativeOrAbsolutePath[1] == '\\') && (orc_RelativeOrAbsolutePath[2] == '\\'))))
    {
@@ -991,7 +993,7 @@ C_SclString C_OscUtils::h_ConcatPathIfNecessary(const C_SclString & orc_BaseDir,
       c_Retval = orc_BaseDir + "/" + orc_RelativeOrAbsolutePath;
 
       //replace all "\" by "/":
-      c_Retval.ReplaceAll("\\", "/");
+      c_Retval.replace("\\", "/");
    }
    else
    {
@@ -999,11 +1001,11 @@ C_SclString C_OscUtils::h_ConcatPathIfNecessary(const C_SclString & orc_BaseDir,
    }
 
    // remove all double slashes but the first (network paths)
-   if (c_Retval.Pos("//") == 1U)
+   if (c_Retval.indexOf("//") == 1U)
    {
       c_Retval = '/' + c_Retval;
    }
-   c_Retval.ReplaceAll("//", "/");
+   c_Retval.replace("//", "/");
 
    return c_Retval;
 }
@@ -1020,22 +1022,22 @@ C_SclString C_OscUtils::h_ConcatPathIfNecessary(const C_SclString & orc_BaseDir,
    Unique node name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscUtils::h_GetUniqueName(const std::map<C_SclString, bool> & orc_ExistingStrings,
-                                                  const stw::scl::C_SclString & orc_ProposedName,
-                                                  const uint32_t ou32_MaxCharLimit,
-                                                  const stw::scl::C_SclString & orc_SkipName)
+QString C_OscUtils::h_GetUniqueName(const std::map<QString, bool> & orc_ExistingStrings,
+                                    const QString & orc_ProposedName,
+                                    const uint32_t ou32_MaxCharLimit,
+                                    const QString & orc_SkipName)
 {
-   C_SclString c_Retval = orc_ProposedName;
+   QString c_Retval = orc_ProposedName;
    bool q_Conflict;
    int32_t s32_MaxDeviation;
-   C_SclString c_BaseStr;
+   QString c_BaseStr;
 
-   std::map<C_SclString, bool>::const_iterator c_ItString;
+   std::map<QString, bool>::const_iterator c_ItString;
 
    //Apply restriction
-   if ((ou32_MaxCharLimit > 0UL) && (c_Retval.Length() > ou32_MaxCharLimit))
+   if ((ou32_MaxCharLimit > 0UL) && (c_Retval.length() > ou32_MaxCharLimit))
    {
-      c_Retval = c_Retval.SubString(1UL, ou32_MaxCharLimit);
+      c_Retval = c_Retval.mid(0, ou32_MaxCharLimit);
    }
 
    do
@@ -1052,14 +1054,14 @@ stw::scl::C_SclString C_OscUtils::h_GetUniqueName(const std::map<C_SclString, bo
             s32_MaxDeviation = 1;
          }
          {
-            const C_SclString c_Appendix = '_' + C_SclString::IntToStr(s32_MaxDeviation + static_cast<int32_t>(1));
+            const QString c_Appendix = '_' + QString::number(s32_MaxDeviation + static_cast<int32_t>(1));
             c_Retval = c_BaseStr + c_Appendix;
-            if ((ou32_MaxCharLimit > 0UL) && (c_Retval.Length() > ou32_MaxCharLimit))
+            if ((ou32_MaxCharLimit > 0UL) && (c_Retval.length() > ou32_MaxCharLimit))
             {
-               const uint32_t u32_ReqLength = c_Appendix.Length();
+               const uint32_t u32_ReqLength = c_Appendix.length();
                if (u32_ReqLength < ou32_MaxCharLimit)
                {
-                  c_Retval = c_BaseStr.SubString(1UL, ou32_MaxCharLimit - c_Appendix.Length()) + c_Appendix;
+                  c_Retval = c_BaseStr.mid(0, ou32_MaxCharLimit - c_Appendix.length()) + c_Appendix;
                }
             }
          }
@@ -1077,10 +1079,10 @@ stw::scl::C_SclString C_OscUtils::h_GetUniqueName(const std::map<C_SclString, bo
    \param[out]  ors32_Number        Number at end (else -1)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscUtils::h_GetNumberAtStringEnd(const C_SclString & orc_ProposedName, C_SclString & orc_CutString,
+void C_OscUtils::h_GetNumberAtStringEnd(const QString & orc_ProposedName, QString & orc_CutString,
                                         int32_t & ors32_Number)
 {
-   C_SclString c_Number;
+   QString c_Number;
    bool q_UnderscoreDetected = false;
    bool q_NumberDetected = false;
    uint32_t u32_ItStr;
@@ -1089,7 +1091,7 @@ void C_OscUtils::h_GetNumberAtStringEnd(const C_SclString & orc_ProposedName, C_
    orc_CutString = orc_ProposedName;
    ors32_Number = -1;
 
-   for (u32_ItStr = orc_ProposedName.Length(); u32_ItStr > 0; --u32_ItStr)
+   for (u32_ItStr = orc_ProposedName.length(); u32_ItStr > 0; --u32_ItStr)
    {
       if ((orc_ProposedName[u32_ItStr] >= '0') && (orc_ProposedName[u32_ItStr] <= '9'))
       {
@@ -1109,11 +1111,11 @@ void C_OscUtils::h_GetNumberAtStringEnd(const C_SclString & orc_ProposedName, C_
    if ((q_NumberDetected == true) && (q_UnderscoreDetected == true))
    {
       //Cut string
-      orc_CutString = orc_ProposedName.SubString(1, u32_ItStr - 1);                    //Without underscore
-      c_Number = orc_ProposedName.SubString(u32_ItStr + 1, orc_ProposedName.Length()); //Without underscore
+      orc_CutString = orc_ProposedName.mid(0, u32_ItStr - 1);                    //Without underscore
+      c_Number = orc_ProposedName.mid(u32_ItStr, orc_ProposedName.length()); //Without underscore
       try
       {
-         ors32_Number = c_Number.ToInt();
+         ors32_Number = c_Number.toInt();
       }
       catch (...)
       {
@@ -1130,12 +1132,12 @@ void C_OscUtils::h_GetNumberAtStringEnd(const C_SclString & orc_ProposedName, C_
    \param[out]  ors32_Number           Number at end (else -1)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscUtils::mh_GetBaseNameAndCurrentConflictNumberFromString(const C_SclString & orc_ConflictingValue,
-                                                                  const stw::scl::C_SclString & orc_SkipName,
-                                                                  C_SclString & orc_CutString, int32_t & ors32_Number)
+void C_OscUtils::mh_GetBaseNameAndCurrentConflictNumberFromString(const QString & orc_ConflictingValue,
+                                                                  const QString & orc_SkipName,
+                                                                  QString & orc_CutString, int32_t & ors32_Number)
 {
    //Search for the SkipName if the skip name is a valid string
-   const uint32_t u32_Pos = orc_SkipName.IsEmpty() ? 0UL : orc_ConflictingValue.LastPos(orc_SkipName);
+   const uint32_t u32_Pos = orc_SkipName.isEmpty() ? 0UL : orc_ConflictingValue.lastIndexOf(orc_SkipName);
 
    if (u32_Pos == 0UL)
    {
@@ -1144,14 +1146,14 @@ void C_OscUtils::mh_GetBaseNameAndCurrentConflictNumberFromString(const C_SclStr
    }
    else
    {
-      //Hint: SubString and LastPos start counting at 1
-      const uint32_t u32_ZeroBasedpos = u32_Pos - 1UL;
+      //Hint: mid and lastIndexOf start counting at 0
+      const uint32_t u32_ZeroBasedpos = u32_Pos;
       //Extract the part of the string that may be adapted
-      const C_SclString c_StringAfterSkip = orc_ConflictingValue.SubString(
-         (u32_ZeroBasedpos + orc_SkipName.Length()) + 1UL,
-         (orc_ConflictingValue.Length() - orc_SkipName.Length()) - u32_ZeroBasedpos);
-      const C_SclString c_SkippedPart =
-         orc_ConflictingValue.SubString(1UL, u32_ZeroBasedpos + orc_SkipName.Length());
+      const QString c_StringAfterSkip = orc_ConflictingValue.mid(
+         (u32_ZeroBasedpos + orc_SkipName.length()),
+         (orc_ConflictingValue.length() - orc_SkipName.length()) - u32_ZeroBasedpos);
+      const QString c_SkippedPart =
+         orc_ConflictingValue.mid(0, u32_ZeroBasedpos + orc_SkipName.length());
       //Search remaining part for any number
       h_GetNumberAtStringEnd(c_StringAfterSkip, orc_CutString, ors32_Number);
       //Add skipped part to base string again
@@ -1163,21 +1165,21 @@ void C_OscUtils::mh_GetBaseNameAndCurrentConflictNumberFromString(const C_SclStr
 /*! \brief  Include trailing delimiter
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_IncludeTrailingDelimiter(const C_SclString& orc_Path)
+QString C_OscUtils::h_IncludeTrailingDelimiter(const QString& orc_Path)
 {
-   QString c_Path = QString(orc_Path.c_str());
+   QString c_Path = orc_Path;
    if (!c_Path.endsWith("/") && !c_Path.endsWith("\\"))
    {
       c_Path += "/";
    }
-   return c_Path.toStdString().c_str();
+   return c_Path;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Get system user name
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_GetSystemUserName(C_SclString& orc_UserName)
+bool C_OscUtils::h_GetSystemUserName(QString& orc_UserName)
 {
    QString c_User = qgetenv("USERNAME");
    if (c_User.isEmpty())
@@ -1188,7 +1190,7 @@ bool C_OscUtils::h_GetSystemUserName(C_SclString& orc_UserName)
    bool q_Return = !c_User.isEmpty();
    if (q_Return)
    {
-      orc_UserName = c_User.toStdString().c_str();
+      orc_UserName = c_User;
    }
    else
    {
@@ -1201,7 +1203,7 @@ bool C_OscUtils::h_GetSystemUserName(C_SclString& orc_UserName)
 /*! \brief  Get system machine name
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscUtils::h_GetSystemMachineName(C_SclString& orc_MachineName)
+bool C_OscUtils::h_GetSystemMachineName(QString& orc_MachineName)
 {
    QString c_Machine = qgetenv("COMPUTERNAME");
    if (c_Machine.isEmpty())
@@ -1212,7 +1214,7 @@ bool C_OscUtils::h_GetSystemMachineName(C_SclString& orc_MachineName)
    bool q_Return = !c_Machine.isEmpty();
    if (q_Return)
    {
-      orc_MachineName = c_Machine.toStdString().c_str();
+      orc_MachineName = c_Machine;
    }
    else
    {
@@ -1234,9 +1236,9 @@ void C_OscUtils::h_HandleSystemMessages(void)
 /*! \brief  Change file extension
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscUtils::h_ChangeFileExtension(const C_SclString& orc_FilePath, const C_SclString& orc_NewExtension)
+QString C_OscUtils::h_ChangeFileExtension(const QString& orc_FilePath, const QString& orc_NewExtension)
 {
-   QString c_Path = QString(orc_FilePath.c_str());
+   QString c_Path = orc_FilePath;
    int s32_LastDot = c_Path.lastIndexOf('.');
    int s32_LastSep = c_Path.lastIndexOf('/');
    int s32_LastSep2 = c_Path.lastIndexOf('\\');
@@ -1251,12 +1253,12 @@ C_SclString C_OscUtils::h_ChangeFileExtension(const C_SclString& orc_FilePath, c
        c_Path = c_Path.left(s32_LastDot);
    }
 
-   QString c_NewExt = QString(orc_NewExtension.c_str());
+   QString c_NewExt = orc_NewExtension;
    if (!c_NewExt.startsWith("."))
    {
        c_Path += ".";
    }
    c_Path += c_NewExt;
 
-   return c_Path.toStdString().c_str();
+   return c_Path;
 }

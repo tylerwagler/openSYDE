@@ -4,7 +4,8 @@
       "Bash(find:*)",
       "Bash(python replace_tglfile.py:*)",
       "Bash(ninja:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(cmake --build:*)"
     ]
   }
 }

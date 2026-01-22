@@ -18,8 +18,9 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscSystemDefinition.hpp"
+#include "C_SclString.hpp"
 
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
@@ -976,7 +977,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
             if (u32_ItBus != ou32_BusIndex)
             {
                const C_OscSystemBus & rc_CurrentBus = this->c_Buses[u32_ItBus];
-               if (rc_CheckedBus.c_Name.LowerCase() == rc_CurrentBus.c_Name.LowerCase())
+               if (rc_CheckedBus.c_Name.toLower() == rc_CurrentBus.c_Name.toLower())
                {
                   *opq_NameConflict = true;
                }
@@ -1131,7 +1132,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
                                           const C_OscCanMessage & rc_Message =
                                              rc_MessageContainer.c_TxMessages[u32_ItMessage];
                                           //Name
-                                          s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name,
+                                          s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name.ToQString(),
                                                                                  q_MessageValid, &c_MessageId);
                                           //Id
                                           if ((s32_Retval == C_NO_ERR) && (q_MessageValid == true))
@@ -1155,7 +1156,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
                                           const C_OscCanMessage & rc_Message =
                                              rc_MessageContainer.c_RxMessages[u32_ItMessage];
                                           //Name
-                                          s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name,
+                                          s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name.ToQString(),
                                                                                  q_MessageValid, &c_MessageId);
                                           //Id
                                           if ((s32_Retval == C_NO_ERR) && (q_MessageValid == true))
@@ -1273,7 +1274,7 @@ const
    C_RANGE  Bus does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::CheckMessageNameBus(const uint32_t ou32_BusIndex, const C_SclString & orc_MessageName,
+int32_t C_OscSystemDefinition::CheckMessageNameBus(const uint32_t ou32_BusIndex, const QString & orc_MessageName,
                                                    bool & orq_Valid,
                                                    const C_OscCanMessageIdentificationIndices * const opc_SkipMessage)
 const
@@ -1650,14 +1651,14 @@ void C_OscSystemDefinition::GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusI
    \param[in]      orc_MainDeviceName  Main device name (empty if none)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinition::AddNode(C_OscNode & orc_Node, const stw::scl::C_SclString & orc_SubDeviceName,
-                                    const stw::scl::C_SclString & orc_MainDeviceName)
+void C_OscSystemDefinition::AddNode(C_OscNode & orc_Node, const QString & orc_SubDeviceName,
+                                    const QString & orc_MainDeviceName)
 {
-   const stw::scl::C_SclString c_SubDeviceName =
-      orc_SubDeviceName.IsEmpty() ? orc_Node.c_DeviceType : orc_SubDeviceName;
+   const QString c_SubDeviceName =
+      orc_SubDeviceName.isEmpty() ? orc_Node.c_DeviceType : orc_SubDeviceName;
 
-   orc_Node.pc_DeviceDefinition = C_OscSystemDefinition::hc_Devices.LookForDevice(c_SubDeviceName,
-                                                                                  orc_MainDeviceName,
+   orc_Node.pc_DeviceDefinition = C_OscSystemDefinition::hc_Devices.LookForDevice(C_SclString::FromQString(c_SubDeviceName),
+                                                                                  C_SclString::FromQString(orc_MainDeviceName),
                                                                                   orc_Node.u32_SubDeviceIndex);
    Q_ASSERT(orc_Node.pc_DeviceDefinition != NULL);
    this->c_Nodes.push_back(orc_Node);
@@ -1679,8 +1680,8 @@ void C_OscSystemDefinition::AddNode(C_OscNode & orc_Node, const stw::scl::C_SclS
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinition::AddNodeSquad(std::vector<C_OscNode> & orc_Nodes,
-                                         const std::vector<stw::scl::C_SclString> & orc_SubDeviceNames,
-                                         const stw::scl::C_SclString & orc_MainDeviceName)
+                                         const std::vector<QString> & orc_SubDeviceNames,
+                                         const QString & orc_MainDeviceName)
 {
    Q_ASSERT(orc_Nodes.size() == orc_SubDeviceNames.size());
    if (orc_Nodes.size() == orc_SubDeviceNames.size())
@@ -1801,7 +1802,7 @@ int32_t C_OscSystemDefinition::DeleteNode(const uint32_t ou32_NodeIndex)
    \retval   C_RANGE    No node squad found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinition::SetNodeName(const uint32_t ou32_NodeIndex, const C_SclString & orc_NodeName)
+int32_t C_OscSystemDefinition::SetNodeName(const uint32_t ou32_NodeIndex, const QString & orc_NodeName)
 {
    int32_t s32_Return = C_RANGE;
 
@@ -1814,12 +1815,12 @@ int32_t C_OscSystemDefinition::SetNodeName(const uint32_t ou32_NodeIndex, const 
       {
          // Node is sub node of a squad. Name will be set for all sub nodes based on the new base name and the node
          // specific part
-         s32_Return = this->c_NodeSquads[u32_SquadIndex].SetBaseName(this->c_Nodes, orc_NodeName);
+         s32_Return = this->c_NodeSquads[u32_SquadIndex].SetBaseName(this->c_Nodes, C_SclString::FromQString(orc_NodeName));
       }
       else
       {
          // Normal node, simple assignment
-         this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name = orc_NodeName;
+         this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name = C_SclString::FromQString(orc_NodeName);
       }
    }
 
@@ -1994,9 +1995,11 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimit(const uint32_t ou32_NameMax
    for (uint32_t u32_ItBus = 0UL; u32_ItBus < this->c_Buses.size(); ++u32_ItBus)
    {
       C_OscSystemBus & rc_Bus = this->c_Buses[u32_ItBus];
+      C_SclString c_TmpName = C_SclString::FromQString(rc_Bus.c_Name);
       C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit, "bus-name",
-                                                                                rc_Bus.c_Name,
+                                                                                c_TmpName,
                                                                                 opc_ChangedItems);
+      rc_Bus.c_Name = c_TmpName.ToQString();
    }
 }
 
@@ -2028,7 +2031,7 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimitNodeName(const uint32_t ou32
       {
          if (c_OldName != rc_Squad.c_BaseName)
          {
-            this->SetNodeName(ou32_NodeIndex, rc_Squad.c_BaseName);
+            this->SetNodeName(ou32_NodeIndex, rc_Squad.c_BaseName.ToQString());
          }
       }
    }

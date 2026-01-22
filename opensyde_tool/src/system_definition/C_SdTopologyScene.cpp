@@ -1992,7 +1992,7 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
                   {
                      const C_OscNode rc_OscNode =
                         orc_Snapshot.c_OscNodes[u32_CurIndex];
-                     C_OscSystemDefinitionFiler::h_SplitDeviceType(rc_OscNode.c_DeviceType,
+                     C_OscSystemDefinitionFiler::h_SplitDeviceType(rc_OscNode.c_DeviceType.toStdString().c_str(),
                                                                    c_MainDeviceName,
                                                                    c_SubDeviceName);
                      c_SubDevices.emplace_back(c_SubDeviceName.c_str());
@@ -2014,7 +2014,7 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
       u32_DataIndex = C_PuiSdHandler::h_GetInstance()->AddNodeAndSort(c_OscInitialNode,
                                                                       orc_Snapshot.c_UiNodes[
                                                                          ou32_SnapshotNodeIndex],
-                                                                      c_OscInitialNode.c_DeviceType.c_str(),
+                                                                      c_OscInitialNode.c_DeviceType.toStdString().c_str(),
                                                                       "");
    }
    return u32_DataIndex;
@@ -3847,8 +3847,8 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode & orc_OscNode, const QString & 
          }
          else
          {
-            orc_OscNode.c_DeviceType = C_OscNodeSquad::h_CombineNames(
-               orc_MainDevice.toStdString().c_str(), orc_NodeType.toStdString().c_str());
+            orc_OscNode.c_DeviceType = QString(C_OscNodeSquad::h_CombineNames(
+               orc_MainDevice.toStdString().c_str(), orc_NodeType.toStdString().c_str()).c_str());
          }
          //---Init COM IF Settings (BEFORE initial datablock)
          this->m_InitNodeComIfSettings(orc_OscNode, orc_NodeType, orc_MainDevice);

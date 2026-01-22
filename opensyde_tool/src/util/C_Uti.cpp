@@ -692,7 +692,7 @@ QString C_Uti::h_GetCompleteLogFileLocation(const QString & orc_Extension)
    c_FileBaseName = c_FileBaseName.replace(13, 1, '_');
    c_FileBaseName = c_FileBaseName.replace(16, 1, '_');
    //Add file ending
-   c_FileBaseName = c_FileBaseName.replace(19, 4, orc_Extension.toStdString().c_str());
+   c_FileBaseName = c_FileBaseName.replace(19, 4, orc_Extension);
    //Final step as this step changes the format size
    c_FileBaseName = c_FileBaseName.replace(10, 1, "__");
 
@@ -923,8 +923,8 @@ QString C_Uti::h_ConvertVersionToStwStyle(const QString & orc_Version)
 //----------------------------------------------------------------------------------------------------------------------
 QString C_Uti::h_ConcatPathIfNecessary(const QString & orc_BaseDir, const QString & orc_RelativeOrAbsolutePath)
 {
-   QString c_Result = C_OscUtils::h_ConcatPathIfNecessary(orc_BaseDir.toStdString().c_str(),
-                                                          orc_RelativeOrAbsolutePath.toStdString().c_str()).ToQString();
+   QString c_Result = C_OscUtils::h_ConcatPathIfNecessary(orc_BaseDir,
+                                                          orc_RelativeOrAbsolutePath);
 
    // do some path beautifying
    if (c_Result.contains("%") == false)
@@ -951,7 +951,7 @@ QString C_Uti::h_GetUniqueNameQt(const std::map<C_SclString, bool> & orc_Existin
                                  const QString & orc_ProposedName)
 {
    const C_SclString c_Result =
-      C_OscUtils::h_GetUniqueName(orc_ExistingStrings, orc_ProposedName.toStdString().c_str(), 0UL);
+      C_OscUtils::h_GetUniqueName(orc_ExistingStrings, orc_ProposedName, 0UL);
 
    return c_Result.c_str();
 }
@@ -1169,7 +1169,7 @@ void C_Uti::h_GetAllFilePathsInFolder(const QString & orc_FolderPath, std::vecto
       }
       else if (c_File.isFile() == true)
       {
-         orc_FilePaths.emplace_back(c_Path.toStdString().c_str());
+         orc_FilePaths.emplace_back(c_Path);
       }
       else
       {

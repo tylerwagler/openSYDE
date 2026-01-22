@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Dialog for creating secure archive file (.syde_sup)
@@ -143,7 +143,7 @@ int32_t C_SyvUpPacSecureArchiveDialog::m_CheckPath(void)
    {
       s32_Return = C_RANGE;
    }
-   else if (C_OscUtils::h_CheckValidFilePath(this->GetPrivateKeyPath().toStdString().c_str()) == false)
+   else if (C_OscUtils::h_CheckValidFilePath(this->GetPrivateKeyPath()) == false)
    {
       s32_Return = C_RD_WR;
    }
@@ -289,7 +289,7 @@ void C_SyvUpPacSecureArchiveDialog::m_PrivateKeyPathClicked()
 
       if (c_FilePath != "")
       {
-         this->m_SetPrivateKeyPath(c_FilePath.toStdString().c_str());
+         this->m_SetPrivateKeyPath(c_FilePath);
       }
    }
 }

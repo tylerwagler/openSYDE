@@ -124,7 +124,7 @@ C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
             u32_SourceBusIndex = pc_Config->u32_BusIndex;
             u32_TargetBusIndex = pc_Config->u32_BusIndex;
 
-            c_SourceBusName = pc_Config->c_OsySysDef.c_Buses[u32_SourceBusIndex].c_Name;
+            c_SourceBusName = C_SclString::FromQString(pc_Config->c_OsySysDef.c_Buses[u32_SourceBusIndex].c_Name);
             c_TargetBusName = c_SourceBusName;
 
             q_SourceBusFound = true;
@@ -141,14 +141,14 @@ C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
             if (pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].u8_BusId ==
                 orc_CanAddressInformation.t_NodeIdSource.u8_Subnet)
             {
-               c_SourceBusName = pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].c_Name;
+               c_SourceBusName = C_SclString::FromQString(pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].c_Name);
                u32_SourceBusIndex = u32_BusCounter;
                q_SourceBusFound = true;
             }
             if (pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].u8_BusId ==
                 orc_CanAddressInformation.t_NodeIdTarget.u8_Subnet)
             {
-               c_TargetBusName = pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].c_Name;
+               c_TargetBusName = C_SclString::FromQString(pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].c_Name);
                u32_TargetBusIndex = u32_BusCounter;
                q_TargetBusFound = true;
             }

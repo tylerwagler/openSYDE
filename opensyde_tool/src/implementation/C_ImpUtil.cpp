@@ -530,7 +530,7 @@ int32_t C_ImpUtil::h_OpenIde(const QString & orc_IdeExeCall)
             osc_write_log_error("Open IDE",
                                 static_cast<QString>(
                                    "Could not start IDE. Reason: Most likely due to insufficient permissions or the executable "
-                                   " \"%1\" is missing.").arg(orc_IdeExeCall).toStdString().c_str());
+                                   " \"%1\" is missing.").arg(orc_IdeExeCall));
          }
       }
    }
@@ -688,7 +688,7 @@ QString C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, const
    QString c_PathAbsolute;
 
    // Check first if path is a valid path with no unwanted characters
-   if (C_OscUtils::h_CheckValidFilePath(orc_Path.toStdString().c_str()) == false)
+   if (C_OscUtils::h_CheckValidFilePath(orc_Path) == false)
    {
       C_OgeWiUtil::h_ShowPathInvalidError(opc_Parent, orc_Path);
       c_Return = "";
@@ -800,7 +800,7 @@ QStringList C_ImpUtil::h_AskUserToSaveRelativePath(QWidget * const opc_Parent, c
       // Check first if all paths are valid paths with no unwanted characters
       for (s32_Pos = 0; s32_Pos < c_Return.size(); ++s32_Pos)
       {
-         if (C_OscUtils::h_CheckValidFilePath(c_Return[s32_Pos].toStdString().c_str()) == false)
+         if (C_OscUtils::h_CheckValidFilePath(c_Return[s32_Pos]) == false)
          {
             c_InvalidPaths += "- " + c_Return[s32_Pos] + "\n";
          }
@@ -1185,7 +1185,7 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString & orc_NodeName, const Q
             {
                osc_write_log_warning("Generate Files", static_cast<QString>("Could not open file list file: \"" +
                                                                             c_FileListFile.fileName() +
-                                                                            "\"").toStdString().c_str());
+                                                                            "\""));
                // no error code because generation worked, only result file was not found
             }
             break;
@@ -1202,13 +1202,13 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString & orc_NodeName, const Q
          case 13: // eRESULT_ERASE_TARGET_FOLDER_ERROR
             c_ErrorText =
                static_cast<QString>("Could not erase pre-existing target directory \"" + orc_ExportFolder +
-                                    "\".").toStdString().c_str();
+                                    "\".");
             s32_Return = C_RD_WR;
             break;
          case 14: // eRESULT_CREATE_TARGET_FOLDER_ERROR
             c_ErrorText =
                static_cast<QString>("Could not create target directory \"" + orc_ExportFolder +
-                                    "\".").toStdString().c_str();
+                                    "\".");
             s32_Return = C_RD_WR;
             break;
          case 20: // eRESULT_INVALID_CLI_PARAMETERS
@@ -1273,7 +1273,7 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString & orc_NodeName, const Q
          c_ErrorText =
             static_cast<QString>("Could not start file generator most likely due to insufficient permissions to "
                                  "invoke this program or the executable is missing: " +
-                                 c_CodeGenFileInfo.absoluteFilePath()).toStdString().c_str();
+                                 c_CodeGenFileInfo.absoluteFilePath());
          s32_Return = C_UNKNOWN_ERR;
          break;
       case QProcess::Crashed:
@@ -1310,3 +1310,4 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString & orc_NodeName, const Q
 
    return s32_Return; //lint !e429  //no memory leak for pc_Process because of the Qt memory management
 }
+

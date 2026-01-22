@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Base class for bus specific lines (implementation)
@@ -151,7 +151,7 @@ QString C_GiLiBus::GetName(void) const
 
    if (pc_Bus != NULL)
    {
-      c_Name = pc_Bus->c_Name.c_str();
+      c_Name = pc_Bus->c_Name;
    }
 
    return c_Name;
@@ -201,7 +201,7 @@ void C_GiLiBus::LoadData(void)
    //Object name for test
    if (pc_OscBus != NULL)
    {
-      this->setObjectName(static_cast<QString>("Bus: %1").arg(pc_OscBus->c_Name.c_str()));
+      this->setObjectName(static_cast<QString>("Bus: %1").arg(pc_OscBus->c_Name));
    }
 }
 
@@ -249,9 +249,9 @@ void C_GiLiBus::GenerateHint(void)
    this->SetDefaultToolTipHeading(this->GetName());
 
    //comment
-   if (pc_Bus->c_Comment.IsEmpty() == false)
+   if (pc_Bus->c_Comment.isEmpty() == false)
    {
-      c_ToolTip = pc_Bus->c_Comment.c_str();
+      c_ToolTip = pc_Bus->c_Comment;
       c_ToolTip.append("\n\n");
    }
 

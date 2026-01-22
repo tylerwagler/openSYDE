@@ -142,30 +142,30 @@ int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const C_SclString 
             {
                stw::opensyde_core::C_OscUtils::h_GetSystemUserName(c_Tmp);
             }
-            orc_Project.c_Author = c_Tmp;
+            orc_Project.c_Author = c_Tmp.ToQString();
             c_Tmp = c_Xml.GetAttributeString("editor");
             if (c_Tmp == "")
             {
                // use author if last editor is empty (reason: prior openSYDE versions handled author as editor)
-               c_Tmp = orc_Project.c_Author;
+               c_Tmp = C_SclString::FromQString(orc_Project.c_Author);
             }
-            orc_Project.c_Editor = c_Tmp;
+            orc_Project.c_Editor = c_Tmp.ToQString();
             //Time
             {
                orc_Project.c_CreationTime =
-                  C_OscProject::h_GetTimeOfString(c_Xml.GetAttributeString("creation_time"));
+                  C_OscProject::h_GetTimeOfString(c_Xml.GetAttributeString("creation_time").ToQString());
             }
             {
                orc_Project.c_ModificationTime =
-                  C_OscProject::h_GetTimeOfString(c_Xml.GetAttributeString("modification_time"));
+                  C_OscProject::h_GetTimeOfString(c_Xml.GetAttributeString("modification_time").ToQString());
             }
-            orc_Project.c_OpenSydeVersion = c_Xml.GetAttributeString("openSYDE_version");
-            orc_Project.c_Template = c_Xml.GetAttributeString("template");
+            orc_Project.c_OpenSydeVersion = c_Xml.GetAttributeString("openSYDE_version").ToQString();
+            orc_Project.c_Template = c_Xml.GetAttributeString("template").ToQString();
             //Check Version
             if (c_Xml.SelectNodeChild("Version") == "Version")
             {
                s32_Retval = C_NO_ERR;
-               orc_Project.c_Version = c_Xml.GetNodeContent();
+               orc_Project.c_Version = c_Xml.GetNodeContent().ToQString();
                c_Xml.SelectNodeParent();
             }
             else
@@ -228,36 +228,36 @@ int32_t C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, const C_S
    if (oq_New == true)
    {
       stw::opensyde_core::C_OscUtils::h_GetSystemUserName(c_Tmp);
-      orc_Project.c_Author = c_Tmp;
+      orc_Project.c_Author = c_Tmp.ToQString();
    }
-   c_Xml.SetAttributeString("author", orc_Project.c_Author);
+   c_Xml.SetAttributeString("author", C_SclString::FromQString(orc_Project.c_Author));
 
    //editor
    stw::opensyde_core::C_OscUtils::h_GetSystemUserName(c_Tmp);
-   orc_Project.c_Editor = c_Tmp;
-   c_Xml.SetAttributeString("editor", orc_Project.c_Editor);
+   orc_Project.c_Editor = c_Tmp.ToQString();
+   c_Xml.SetAttributeString("editor", C_SclString::FromQString(orc_Project.c_Editor));
 
    //Creation
    if (oq_New == true)
    {
       orc_Project.c_CreationTime = QDateTime::currentDateTime();
    }
-   c_Xml.SetAttributeString("creation_time", C_OscProject::h_GetTimeFormatted(orc_Project.c_CreationTime));
+   c_Xml.SetAttributeString("creation_time", C_SclString::FromQString(C_OscProject::h_GetTimeFormatted(orc_Project.c_CreationTime)));
 
    //modification
    orc_Project.c_ModificationTime = QDateTime::currentDateTime();
-   c_Xml.SetAttributeString("modification_time", C_OscProject::h_GetTimeFormatted(orc_Project.c_ModificationTime));
+   c_Xml.SetAttributeString("modification_time", C_SclString::FromQString(C_OscProject::h_GetTimeFormatted(orc_Project.c_ModificationTime)));
 
    //openSYDE version
-   orc_Project.c_OpenSydeVersion = orc_OpenSydeVersion;
-   c_Xml.SetAttributeString("openSYDE_version", orc_Project.c_OpenSydeVersion);
+   orc_Project.c_OpenSydeVersion = orc_OpenSydeVersion.ToQString();
+   c_Xml.SetAttributeString("openSYDE_version", C_SclString::FromQString(orc_Project.c_OpenSydeVersion));
 
    //Template
-   c_Xml.SetAttributeString("template", orc_Project.c_Template);
+   c_Xml.SetAttributeString("template", C_SclString::FromQString(orc_Project.c_Template));
 
    //update version
    c_Xml.CreateAndSelectNodeChild("Version");
-   c_Xml.SetNodeContent(orc_Project.c_Version);
+   c_Xml.SetNodeContent(C_SclString::FromQString(orc_Project.c_Version));
    c_Xml.SelectNodeParent();
 
    s32_Return = c_Xml.SaveToFile(orc_Path);

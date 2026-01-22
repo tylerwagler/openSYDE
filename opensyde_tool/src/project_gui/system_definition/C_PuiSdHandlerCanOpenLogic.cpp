@@ -401,7 +401,7 @@ const QString C_PuiSdHandlerCanOpenLogic::GetBusNameOfConnectedDevice(const uint
          //get bus name
          if (pc_Bus != NULL)
          {
-            c_BusName = pc_Bus->c_Name.c_str();
+            c_BusName = pc_Bus->c_Name;
          }
       }
    }

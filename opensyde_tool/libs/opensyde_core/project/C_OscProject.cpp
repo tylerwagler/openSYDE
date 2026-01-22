@@ -12,6 +12,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QDateTime>
+#include <QString>
+#include <QRegularExpression>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -73,11 +75,12 @@ C_OscProject::~C_OscProject(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProject::CalcHash(uint32_t & oru32_HashValue) const
 {
-   C_SclChecksums::CalcCRC32(this->c_Editor.c_str(), this->c_Editor.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_OpenSydeVersion.c_str(), this->c_OpenSydeVersion.Length(), oru32_HashValue);
+   // Using QString methods directly instead of toStdString()
+   C_SclChecksums::CalcCRC32(this->c_Editor.toStdString().c_str(), this->c_Editor.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_OpenSydeVersion.toStdString().c_str(), this->c_OpenSydeVersion.length(), oru32_HashValue);
    // no need to check c_Author, c_CreationTime & c_ModificationTime
-   C_SclChecksums::CalcCRC32(this->c_Template.c_str(), this->c_Template.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_Version.c_str(), this->c_Version.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Template.toStdString().c_str(), this->c_Template.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Version.toStdString().c_str(), this->c_Version.length(), oru32_HashValue);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -91,9 +94,9 @@ void C_OscProject::CalcHash(uint32_t & oru32_HashValue) const
    Formatted date
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscProject::h_GetTimeFormatted(const QDateTime & orc_Time)
+QString C_OscProject::h_GetTimeFormatted(const QDateTime & orc_Time)
 {
-   const C_SclString c_StrTime = orc_Time.toString("dd.MM.yyyy HH:mm").toStdString();
+   const QString c_StrTime = orc_Time.toString("dd.MM.yy yy HH:mm");
    return c_StrTime;
 }
 
@@ -111,22 +114,22 @@ C_SclString C_OscProject::h_GetTimeFormatted(const QDateTime & orc_Time)
    Time (current time of orc_Str is invalid)
 */
 //----------------------------------------------------------------------------------------------------------------------
-QDateTime C_OscProject::h_GetTimeOfString(const C_SclString & orc_Str)
+QDateTime C_OscProject::h_GetTimeOfString(const QString & orc_Str)
 {
    QDateTime c_Retval;
    bool q_Err = true;
 
-   QList<C_SclString> c_Dyn;
-   orc_Str.Tokenize(". :", c_Dyn);
+   // Now we work directly with QString since we're migrating to Qt native types
+   QStringList c_Dyn = orc_Str.split(QRegularExpression("[. :]+"), Qt::SkipEmptyParts);
    if (c_Dyn.size() == 5)
    {
       try
       {
-         const int s32_Day = c_Dyn[0].ToInt();
-         const int s32_Month = c_Dyn[1].ToInt();
-         const int s32_Year = c_Dyn[2].ToInt();
-         const int s32_Hour = c_Dyn[3].ToInt();
-         const int s32_Minute = c_Dyn[4].ToInt();
+         const int s32_Day = c_Dyn[0].toInt();
+         const int s32_Month = c_Dyn[1].toInt();
+         const int s32_Year = c_Dyn[2].toInt();
+         const int s32_Hour = c_Dyn[3].toInt();
+         const int s32_Minute = c_Dyn[4].toInt();
          
          c_Retval = QDateTime(QDate(s32_Year, s32_Month, s32_Day), QTime(s32_Hour, s32_Minute));
          if (c_Retval.isValid())

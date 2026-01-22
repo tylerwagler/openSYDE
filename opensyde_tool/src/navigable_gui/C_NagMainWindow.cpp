@@ -613,7 +613,7 @@ void C_NagMainWindow::dropEvent(QDropEvent * const opc_Event)
              (mh_CheckMime(pc_MimeData, &c_FilePath) == true))
          {
             // Check if path is a valid path with no irregular characters
-            if (C_OscUtils::h_CheckValidFilePath(c_FilePath.toStdString().c_str()) == false)
+            if (C_OscUtils::h_CheckValidFilePath(c_FilePath) == false)
             {
                C_OgeWiUtil::h_ShowPathInvalidError(this, c_FilePath);
             }
@@ -846,7 +846,7 @@ void C_NagMainWindow::mh_GetHeadingNames(const int32_t os32_Mode, const int32_t 
             C_PuiSdHandler::h_GetInstance()->GetOscBus(ou32_Index);
          if (pc_Bus != NULL)
          {
-            orc_SubSubMode = pc_Bus->c_Name.c_str();
+            orc_SubSubMode = pc_Bus->c_Name;
          }
          else
          {
@@ -1498,3 +1498,4 @@ bool C_NagMainWindow::m_ChangeMode(const int32_t os32_Mode, const int32_t os32_S
 
    return q_Continue;
 }
+

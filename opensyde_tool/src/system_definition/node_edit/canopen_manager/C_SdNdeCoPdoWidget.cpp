@@ -187,7 +187,7 @@ void C_SdNdeCoPdoWidget::m_UpdateUi()
          // Get bus name for the link and the interface combo box
          if (pc_Bus != NULL)
          {
-            c_BusName = pc_Bus->c_Name.c_str();
+            c_BusName = pc_Bus->c_Name;
          }
 
          this->mpc_Ui->pc_LinkToBusLabel->setText(
@@ -247,7 +247,7 @@ void C_SdNdeCoPdoWidget::m_OnLinkSwitchToBusProtocolMessage(
          if (pc_Bus != NULL)
          {
             Q_EMIT (this->SigSwitchToBusProtocolMessage(rc_ComInterface.u32_BusIndex,
-                                                        static_cast<QString>(pc_Bus->c_Name.c_str()), orc_MessageId));
+                                                        pc_Bus->c_Name, orc_MessageId));
          }
       }
    }

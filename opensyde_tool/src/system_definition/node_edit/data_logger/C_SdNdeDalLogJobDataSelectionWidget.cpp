@@ -361,7 +361,7 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_OnDataChangedInModel(const QModelInd
 
    C_PuiSdHandler::h_GetInstance()->SetDataLoggerElementProperties(this->mu32_NodeIndex, this->mu32_DataLoggerJobIndex,
                                                                    orc_Index.row(), q_UseCustomName,
-                                                                   c_Data.toStdString());
+                                                                   c_Data);
 
    // Update logging name in local vector (orc_Index.row() is equal to the index in the vector)
    this->m_UpdateCustomLoggingName(orc_Index.row(), oc_Data, q_UseCustomName);

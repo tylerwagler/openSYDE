@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for main start view with use case buttons
@@ -147,7 +147,7 @@ void C_NagMainWidget::keyPressEvent(QKeyEvent * const opc_Event)
        (this->mpc_Ui->pc_LineEditVersion->isVisible() == true))
    {
       // reset version
-      this->mpc_Ui->pc_LineEditVersion->setText(C_PuiProject::h_GetInstance()->c_Version.c_str());
+      this->mpc_Ui->pc_LineEditVersion->setText(C_PuiProject::h_GetInstance()->c_Version);
       // finish editing
       this->m_OnEditFinished();
       //Don't call base and accept to properly signal a handled escape
@@ -631,11 +631,11 @@ void C_NagMainWidget::m_UpdateCurrProjInfo(void)
       //Current project
       const QString c_TooltipContent =
          static_cast<QString>("Author: %1 \nCreated: %2 \nLast Modified: %3 (by %4) \nUsed openSYDE version: %5").
-         arg(C_PuiProject::h_GetInstance()->c_Author.c_str()).
-         arg(C_PuiProject::h_GetTimeFormatted(C_PuiProject::h_GetInstance()->c_CreationTime).c_str()).
-         arg(C_PuiProject::h_GetTimeFormatted(C_PuiProject::h_GetInstance()->c_ModificationTime).c_str()).
-         arg(C_PuiProject::h_GetInstance()->c_Editor.c_str()).
-         arg(C_Uti::h_ConvertVersionToStwStyle(C_PuiProject::h_GetInstance()->c_OpenSydeVersion.c_str()));
+         arg(C_PuiProject::h_GetInstance()->c_Author).
+         arg(C_PuiProject::h_GetTimeFormatted(C_PuiProject::h_GetInstance()->c_CreationTime)).
+         arg(C_PuiProject::h_GetTimeFormatted(C_PuiProject::h_GetInstance()->c_ModificationTime)).
+         arg(C_PuiProject::h_GetInstance()->c_Editor).
+         arg(C_Uti::h_ConvertVersionToStwStyle(C_PuiProject::h_GetInstance()->c_OpenSydeVersion));
 
       this->mpc_Ui->pc_LabelCurProjName->setText(c_FontMetrics.elidedText(c_Name, Qt::ElideRight,
                                                                           this->mpc_Ui->pc_LabelCurProjName->
@@ -654,11 +654,11 @@ void C_NagMainWidget::m_UpdateCurrProjInfo(void)
                                           static_cast<QString>("New project")));
    }
    //Always use version from current project
-   this->mpc_Ui->pc_LabelVersion->setText(c_FontMetrics.elidedText(C_PuiProject::h_GetInstance()->c_Version.c_str(),
+   this->mpc_Ui->pc_LabelVersion->setText(c_FontMetrics.elidedText(C_PuiProject::h_GetInstance()->c_Version,
                                                                    Qt::ElideRight, 140));
    this->mpc_Ui->pc_LabelVersion->SetToolTipInformation("Project Version",
-                                                        C_PuiProject::h_GetInstance()->c_Version.c_str());
-   this->mpc_Ui->pc_LineEditVersion->setText(C_PuiProject::h_GetInstance()->c_Version.c_str());
+                                                        C_PuiProject::h_GetInstance()->c_Version);
+   this->mpc_Ui->pc_LineEditVersion->setText(C_PuiProject::h_GetInstance()->c_Version);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -808,7 +808,7 @@ void C_NagMainWidget::m_OnEdit(void) const
    if (C_PuiSvHandler::h_GetInstance()->GetServiceModeActive() == false)
    {
       this->mpc_Ui->pc_LabelVersion->setVisible(false);
-      this->mpc_Ui->pc_LineEditVersion->setText(C_PuiProject::h_GetInstance()->c_Version.c_str());
+      this->mpc_Ui->pc_LineEditVersion->setText(C_PuiProject::h_GetInstance()->c_Version);
       this->mpc_Ui->pc_LineEditVersion->setVisible(true);
       this->mpc_Ui->pc_LineEditVersion->selectAll();
       this->mpc_Ui->pc_LineEditVersion->setFocus();
@@ -833,7 +833,7 @@ void C_NagMainWidget::m_OnEditFinished(void)
    QFont c_Font = mc_STYLE_GUIDE_FONT_SEMIBOLD_24;
    c_Font.setPixelSize(c_Font.pointSize());
    const QFontMetrics c_FontMetrics(c_Font);
-   this->mpc_Ui->pc_LabelVersion->setText(c_FontMetrics.elidedText(C_PuiProject::h_GetInstance()->c_Version.c_str(),
+   this->mpc_Ui->pc_LabelVersion->setText(c_FontMetrics.elidedText(C_PuiProject::h_GetInstance()->c_Version,
                                                                    Qt::ElideLeft, 120));
 
    // update current project section (mainly for recent version in tooltip)
@@ -1054,3 +1054,4 @@ void C_NagMainWidget::m_SetNameStringLength()
       c_New->deleteLater();
    }
 } //lint !e429  //no memory leak because of the parent of pc_Dialog and the Qt memory management
+

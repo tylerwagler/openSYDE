@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for Database list items (implementation)
@@ -267,7 +267,7 @@ void C_CamMosDatabaseItemWidget::UpdateTooltip(void) const
       c_ToolTipContent += "\n\n";
       c_ToolTipContent +=
          static_cast<QString>("Bus: %1").arg(
-            this->mc_Busses[this->mc_Database.s32_BusIndex].c_Name.c_str());
+            this->mc_Busses[this->mc_Database.s32_BusIndex].c_Name);
    }
 
    this->mpc_Ui->pc_LabDatabase->SetToolTipInformation(static_cast<QFileInfo>(this->mc_Database.c_Name).fileName(),
@@ -844,3 +844,4 @@ bool C_CamMosDatabaseItemWidget::event(QEvent * const opc_Event)
 
    return C_OgeWiOnlyBackground::event(opc_Event);
 }
+

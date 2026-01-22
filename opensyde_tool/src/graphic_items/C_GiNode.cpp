@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Offers visualization and functionality of a node (implementation)
@@ -663,7 +663,7 @@ void C_GiNode::GenerateHint(void)
                               if (pc_Bus != NULL)
                               {
                                  c_BusName = "Linked to ";
-                                 c_BusName.append(pc_Bus->c_Name.c_str());
+                                 c_BusName.append(pc_Bus->c_Name);
                                  //Bus + Node Id Info
                                  if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
                                  {
@@ -720,7 +720,7 @@ void C_GiNode::GenerateHint(void)
                               if (pc_Bus != NULL)
                               {
                                  c_BusName = "Linked to ";
-                                 c_BusName.append(pc_Bus->c_Name.c_str());
+                                 c_BusName.append(pc_Bus->c_Name);
 
                                  q_Found = true;
                               }

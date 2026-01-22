@@ -123,7 +123,7 @@ C_SyvDcWidget::C_SyvDcWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_
          this->mpc_Ui->pc_LabelBitRate->setVisible(this->me_BusType == C_OscSystemBus::eCAN);
 
          //Update title
-         this->mpc_ParentDialog->SetTitle(pc_Bus->c_Name.c_str());
+         this->mpc_ParentDialog->SetTitle(pc_Bus->c_Name);
       }
    }
 
@@ -3141,3 +3141,4 @@ void C_SyvDcWidget::m_InformUserAfterScan(const QString & orc_Text)
    c_Message.SetCustomMinHeight(180, 180);
    c_Message.Execute();
 }
+

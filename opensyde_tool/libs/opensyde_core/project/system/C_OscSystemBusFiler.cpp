@@ -60,7 +60,7 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
    //Name
    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
-      orc_Bus.c_Name = orc_XmlParser.GetNodeContent();
+      orc_Bus.c_Name = orc_XmlParser.GetNodeContent().ToQString();
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "bus");
    }
@@ -74,7 +74,7 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus & orc_Bus, C_OscXmlParserB
    {
       if (orc_XmlParser.SelectNodeChild("comment") == "comment")
       {
-         orc_Bus.c_Comment = orc_XmlParser.GetNodeContent();
+         orc_Bus.c_Comment = orc_XmlParser.GetNodeContent().ToQString();
          //Return
          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "bus");
       }
@@ -198,11 +198,11 @@ void C_OscSystemBusFiler::h_SaveBus(const C_OscSystemBus & orc_Bus, C_OscXmlPars
 
    //Name
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("name") == "name");
-   orc_XmlParser.SetNodeContent(orc_Bus.c_Name);
+   orc_XmlParser.SetNodeContent(C_SclString::FromQString(orc_Bus.c_Name));
    //Return
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "bus");
    //Comment
-   orc_XmlParser.CreateNodeChild("comment", orc_Bus.c_Comment);
+   orc_XmlParser.CreateNodeChild("comment", C_SclString::FromQString(orc_Bus.c_Comment));
    //Type
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("type") == "type");
    orc_XmlParser.SetNodeContent(C_OscSystemFilerUtil::h_BusTypeEnumToString(orc_Bus.e_Type));

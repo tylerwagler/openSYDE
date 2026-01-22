@@ -407,7 +407,7 @@ void C_SdNdeDbProperties::InitStaticNames(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbProperties::ApplyNewData(C_OscNodeApplication & orc_Application) const
 {
-   orc_Application.c_Name = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
+   orc_Application.c_Name = this->mpc_Ui->pc_LineEditName->text();
    orc_Application.c_Comment = this->mpc_Ui->pc_CommentText->toPlainText().toStdString().c_str();
    orc_Application.e_Type = this->me_Type;
    orc_Application.u8_ProcessId = static_cast<uint8_t>(this->mpc_Ui->pc_SpinBoxProcessID->value());
@@ -670,7 +670,7 @@ QString C_SdNdeDbProperties::m_CheckName() const
       //Check Name
       bool q_DuplicateNameError = false;
       const bool q_InvalidNameError =
-         !C_OscUtils::h_CheckValidCeName(this->mpc_Ui->pc_LineEditName->text().toStdString().c_str());
+         !C_OscUtils::h_CheckValidCeName(this->mpc_Ui->pc_LineEditName->text());
 
       for (uint32_t u32_ItApplication = 0UL; u32_ItApplication < pc_Node->c_Applications.size(); ++u32_ItApplication)
       {
@@ -841,7 +841,7 @@ QString C_SdNdeDbProperties::m_CheckPath(const QString & orc_Path) const
       const QString c_ResolvedPath = C_PuiUtil::h_ResolvePlaceholderVariables(orc_Path, c_ProjectPath);
 
       // use resolve engine to check resulting path
-      if (C_OscUtils::h_CheckValidFilePath(c_ResolvedPath.toStdString().c_str()) == false)
+      if (C_OscUtils::h_CheckValidFilePath(c_ResolvedPath) == false)
       {
          c_Return = orc_Path;
          if (orc_Path != c_ResolvedPath)
@@ -1371,7 +1371,7 @@ void C_SdNdeDbProperties::m_OnFileGenerationChanged(const int32_t os32_State)
                   if (this->mpc_Ui->pc_LineEditFileGenerate->GetPath().isEmpty() == true)
                   {
                      this->mpc_Ui->pc_LineEditFileGenerate->SetPath(
-                        C_ImpUtil::h_GetDefaultGeneratedDir(this->mpc_Ui->pc_LineEditName->text().toStdString().c_str(),
+                        C_ImpUtil::h_GetDefaultGeneratedDir(this->mpc_Ui->pc_LineEditName->text(),
                                                             pc_Node->c_Properties.c_Name));
                   }
 
@@ -1420,7 +1420,7 @@ void C_SdNdeDbProperties::m_OnFileGenerationChanged(const int32_t os32_State)
             {
                // for X-App config generation: set default generation directory if empty
                this->mpc_Ui->pc_LineEditCodeGenerate->SetPath(
-                  C_ImpUtil::h_GetDefaultGeneratedDir(this->mpc_Ui->pc_LineEditName->text().toStdString().c_str(),
+                  C_ImpUtil::h_GetDefaultGeneratedDir(this->mpc_Ui->pc_LineEditName->text(),
                                                       pc_Node->c_Properties.c_Name));
             }
             this->mpc_Ui->pc_LineEditOutputFile->SetPath("x_app.syde_xcfg",
@@ -1990,3 +1990,4 @@ void C_SdNdeDbProperties::m_AskUserToSaveRelativePath(const QString & orc_Path,
       }
    }
 }
+

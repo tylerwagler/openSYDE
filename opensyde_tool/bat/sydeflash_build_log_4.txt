@@ -1,0 +1,35 @@
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem build SYDEflash application 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set PROJECT_FOLDER=..\pjt\SYDEflash 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set TEMP_FOLDER=..\temp_SYDEflash_Release 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set BUILD_TARGET=Release 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set TOOLCHAIN=../pjt/toolchain_windows.cmake 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>call build_with_cmake ..\pjt\SYDEflash ..\temp_SYDEflash_Release Release ../pjt/toolchain_windows.cmake 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem build cmake application 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem parameters 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem ..\pjt\SYDEflash Relative project folder path 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem ..\temp_SYDEflash_Release Relative temporary folder 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem Release Build target (Release/Debug) 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem ../pjt/toolchain_windows.cmake Toolchain file 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem build using cmake 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem as a side effect this will also create the required configuration files for PC-lint 
+[1/5] Automatic MOC and UIC for target SYDEflash
+[2/4] Building CXX object CMakeFiles/SYDEflash.dir/C_/Users/tyler/Dev/repos/openSYDE/opensyde_tool/src/syde_flash/util/C_FlaUti.cpp.obj
+[3/4] Building CXX object CMakeFiles/SYDEflash.dir/C_/Users/tyler/Dev/repos/openSYDE/opensyde_tool/src/util/C_Uti.cpp.obj
+[4/4] Linking CXX executable SYDEflash.exe
+[0/1] Install the project...
+-- Install configuration: "Release"
+-- Installing: C:/Users/tyler/Dev/repos/openSYDE/opensyde_tool/pjt/SYDEflash/../../result/utilities/SYDEflash/SYDEflash.exe

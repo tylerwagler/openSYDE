@@ -326,7 +326,7 @@ void C_SdBueComIfDescriptionWidget::SetNodeId(const uint32_t ou32_NodeIndex, con
                // Get bus name for the link and the interface combo box
                if (pc_Bus != NULL)
                {
-                  c_BusName = pc_Bus->c_Name.c_str();
+                  c_BusName = pc_Bus->c_Name;
                }
 
                // Check the protocols for usage
@@ -1245,12 +1245,12 @@ void C_SdBueComIfDescriptionWidget::SaveUserSettings(void) const
          if (pc_Bus != NULL)
          {
             C_UsHandler::h_GetInstance()->SetProjSdBusCommSignalOverviewColumnWidth(
-               pc_Bus->c_Name.c_str(), c_SignalValues);
+               pc_Bus->c_Name, c_SignalValues);
             C_UsHandler::h_GetInstance()->SetProjSdBusCommMessageOverviewColumnWidth(
-               pc_Bus->c_Name.c_str(), c_MessageValues);
+               pc_Bus->c_Name, c_MessageValues);
             //Set
             C_UsHandler::h_GetInstance()->SetProjSdBusSelectedMessage(
-               pc_Bus->c_Name.c_str(), e_SelectedProtocol, q_MessageSelected, c_SelectedMessageName,
+               pc_Bus->c_Name, e_SelectedProtocol, q_MessageSelected, c_SelectedMessageName,
                q_SignalSelected, c_SelectedSignalName);
          }
       }
@@ -1315,7 +1315,7 @@ void C_SdBueComIfDescriptionWidget::LoadUserSettings(void)
       const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
       if (pc_Bus != NULL)
       {
-         const C_UsCommunication c_UserSettingsBus = C_UsHandler::h_GetInstance()->GetProjSdBus(pc_Bus->c_Name.c_str());
+         const C_UsCommunication c_UserSettingsBus = C_UsHandler::h_GetInstance()->GetProjSdBus(pc_Bus->c_Name);
          if (!mq_SkipLoadUserSettings)
          {
             c_UserSettingsBus.GetLastSelectedMessage(e_SelectedProtocol, q_MessageSelected, c_SelectedMessageName,
@@ -2092,3 +2092,4 @@ void C_SdBueComIfDescriptionWidget::m_GetNodeMessageAndSignalCount(const C_OscCa
 
    oru32_MessageCount = u32_RxMessageCount + u32_TxMessageCount;
 }
+

@@ -1580,7 +1580,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetDefaultFileName(const uint32_t ou32_ViewInde
    if (pc_View != NULL)
    {
       const QString c_ViewPart1 = static_cast<QString>("View_%1_").arg(ou32_ViewIndex + 1);
-      const QString c_ViewPart1File = C_OscUtils::h_NiceifyStringForFileName(c_ViewPart1.toStdString().c_str()).ToQString();
+      const QString c_ViewPart1File = C_OscUtils::h_NiceifyStringForFileName(c_ViewPart1);
       const QString c_ViewPart2 = C_PuiSdHandler::h_AutomaticCeStringAdaptation(pc_View->GetName().ToQString());
       const QString c_DataElementFileName = mh_GetFile(orc_Id, ou32_ValidLayers);
       const QString c_ViewFileName = static_cast<QString>("%1%2").arg(c_ViewPart1File).arg(c_ViewPart2);
@@ -1631,8 +1631,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_Element != NULL)
          {
             c_Retval =
-               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(
-                                                                          pc_Element->c_Name.c_str()).ToQString());
+               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_Element->c_Name.ToQString()));
          }
          break;
       case 3UL:
@@ -1641,8 +1640,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_List != NULL)
          {
             c_Retval =
-               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(
-                                                                          pc_List->c_Name.c_str()).ToQString());
+               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_List->c_Name.ToQString()));
          }
          break;
       case 2UL:
@@ -1651,8 +1649,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_DataPool != NULL)
          {
             c_Retval =
-               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(
-                                                                          pc_DataPool->c_Name.c_str()).ToQString());
+               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_DataPool->c_Name.ToQString()));
          }
          break;
       case 1UL:
@@ -1660,8 +1657,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_Node != NULL)
          {
             c_Retval =
-               static_cast<QString>("%1").arg(C_OscUtils::h_NiceifyStringForFileName(
-                                                                         pc_Node->c_Properties.c_Name.c_str()).ToQString());
+               static_cast<QString>("%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_Node->c_Properties.c_Name.ToQString()));
          }
          break;
       default:
@@ -1723,3 +1719,5 @@ void C_SyvDaItPaWidgetNew::m_InformUserFloatRangeCheck(
       }
    }
 }
+
+

@@ -53,7 +53,7 @@ QString C_FlaUti::h_ResolvePlaceholderVariables(const QString & orc_Path)
    if (c_Return.contains("%") == true)
    {
       // replace general path variables
-      c_Return = C_OscUtils::h_ResolveProjIndependentPlaceholderVariables(c_Return.toStdString().c_str()).ToQString();
+      c_Return = C_OscUtils::h_ResolveProjIndependentPlaceholderVariables(c_Return);
 
       // resolve CAN-monitor- and project-specific variables
       if (c_Return.contains(mc_PATH_VARIABLE_SYDE_FLASH_BIN) == true)

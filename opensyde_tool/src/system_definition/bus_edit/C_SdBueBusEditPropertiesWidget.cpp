@@ -238,10 +238,10 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
       //lint -e{929} Cast required to avoid ambiguous signal of qt interface
 
       //name
-      this->mpc_Ui->pc_LineEditBusName->setText(pc_Bus->c_Name.c_str());
+      this->mpc_Ui->pc_LineEditBusName->setText(pc_Bus->c_Name);
 
       //comment
-      this->mpc_Ui->pc_TextEditComment->setText(pc_Bus->c_Comment.c_str());
+      this->mpc_Ui->pc_TextEditComment->setText(pc_Bus->c_Comment);
 
       //Bus id
       this->mpc_Ui->pc_SpinBoxBusId->setValue(static_cast<int32_t>(pc_Bus->u8_BusId));
@@ -607,18 +607,18 @@ void C_SdBueBusEditPropertiesWidget::SaveToData(void) const
       //name
       //Only accept new name if not in conflict
       if (C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(
-             this->mpc_Ui->pc_LineEditBusName->text().toStdString().c_str(), &this->mu32_BusIndex, NULL))
+             this->mpc_Ui->pc_LineEditBusName->text(), &this->mu32_BusIndex, NULL))
       {
-         c_NewBus.c_Name = this->mpc_Ui->pc_LineEditBusName->text().toStdString().c_str();
+         c_NewBus.c_Name = this->mpc_Ui->pc_LineEditBusName->text();
       }
       else
       {
          //Restore previous name
-         c_NewBus.c_Name = pc_Bus->c_Name.c_str();
+         c_NewBus.c_Name = pc_Bus->c_Name;
       }
 
       //comment
-      c_NewBus.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString().c_str();
+      c_NewBus.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText();
 
       //Bus id
       c_NewBus.u8_BusId = static_cast<uint8_t>(this->mpc_Ui->pc_SpinBoxBusId->value());
@@ -688,9 +688,9 @@ void C_SdBueBusEditPropertiesWidget::m_CheckBusName(void)
 {
    const QString c_Text = this->mpc_Ui->pc_LineEditBusName->text();
    const bool q_NameIsUnique = C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(
-      c_Text.toStdString().c_str(), &this->mu32_BusIndex, NULL);
+      c_Text, &this->mu32_BusIndex, NULL);
    const bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(
-      this->mpc_Ui->pc_LineEditBusName->text().toStdString().c_str());
+      this->mpc_Ui->pc_LineEditBusName->text());
 
    //set invalid text property
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditBusName, "Valid", q_NameIsUnique && q_NameIsValid);
@@ -788,9 +788,7 @@ void C_SdBueBusEditPropertiesWidget::m_RegisterNameChange(void)
    {
       std::vector<stw::scl::C_SclString> c_ExistingNames;
       hq_InProgress = true;
-      if (C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(this->mpc_Ui->pc_LineEditBusName->text().toStdString()
-                                                                 .
-                                                                 c_str(), &this->mu32_BusIndex,
+      if (C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(this->mpc_Ui->pc_LineEditBusName->text(), &this->mu32_BusIndex,
                                                                  &c_ExistingNames) == false)
       {
          const QString c_Description = static_cast<QString>("A bus with the name \"%1\" already exists. Choose another name.")
@@ -814,7 +812,7 @@ void C_SdBueBusEditPropertiesWidget::m_RegisterNameChange(void)
             const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(this->mu32_BusIndex);
             if (pc_Bus != NULL)
             {
-               this->mpc_Ui->pc_LineEditBusName->setText(pc_Bus->c_Name.c_str());
+               this->mpc_Ui->pc_LineEditBusName->setText(pc_Bus->c_Name);
             }
          }
       }
@@ -837,3 +835,5 @@ void C_SdBueBusEditPropertiesWidget::m_RegisterIdChange(void)
    m_RegisterChange();
    m_CheckBusId();
 }
+
+

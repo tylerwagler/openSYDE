@@ -18,7 +18,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QDateTime>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscXmlParser.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -38,16 +38,16 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const;
 
-   static stw::scl::C_SclString h_GetTimeFormatted(const QDateTime & orc_Time);
-   static QDateTime h_GetTimeOfString(const stw::scl::C_SclString & orc_Str);
+   static QString h_GetTimeFormatted(const QDateTime & orc_Time);
+   static QDateTime h_GetTimeOfString(const QString & orc_Str);
 
-   stw::scl::C_SclString c_Author;             ///< Author (person who created this project)
-   stw::scl::C_SclString c_Editor;             ///< Editor (person who last modified this project)
+   QString c_Author;             ///< Author (person who created this project)
+   QString c_Editor;             ///< Editor (person who last modified this project)
    QDateTime c_CreationTime;                   ///< Time of creation
    QDateTime c_ModificationTime;               ///< Time of last known modification
-   stw::scl::C_SclString c_OpenSydeVersion;    ///< openSYDE version used to save this project
-   stw::scl::C_SclString c_Template;           ///< Template this project is based on
-   stw::scl::C_SclString c_Version;            ///< project version
+   QString c_OpenSydeVersion;    ///< openSYDE version used to save this project
+   QString c_Template;           ///< Template this project is based on
+   QString c_Version;            ///< project version
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

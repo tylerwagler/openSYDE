@@ -1344,7 +1344,7 @@ void C_SyvUpPacNodeWidget::m_Init(void)
       this->mq_FileBased =
          pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].q_FlashloaderOpenSydeIsFileBased;
       this->mq_StwFlashloader = (pc_Node->c_Properties.e_FlashLoader == C_OscNodeProperties::eFL_STW);
-      this->mc_DeviceType = pc_Node->c_DeviceType.c_str();
+      this->mc_DeviceType = pc_Node->c_DeviceType;
 
       // Only relevant if the node has datablocks
       for (u32_DatablockCounter = 0U; u32_DatablockCounter < pc_Node->c_Applications.size(); ++u32_DatablockCounter)

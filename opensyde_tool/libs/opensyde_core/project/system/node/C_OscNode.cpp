@@ -827,7 +827,7 @@ void C_OscNode::CalcHash(uint32_t & oru32_HashValue) const
 {
    uint32_t u32_Counter;
 
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_DeviceType.c_str(), this->c_DeviceType.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_DeviceType.toStdString().c_str(), this->c_DeviceType.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_DatapoolAutoNvmStartAddress,
                                        sizeof(this->q_DatapoolAutoNvmStartAddress),
                                        oru32_HashValue);
@@ -1875,15 +1875,15 @@ void C_OscNode::CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * con
                q_CheckSize = false;
             }
 
-            for (uint32_t u32_ItList = 0;
-                 (u32_ItList < rc_CheckedDataPool.c_Lists.size()) &&
-                 ((*opq_IsErrorInListOrMessage == false) || (opc_InvalidListIndices != NULL));
-                 ++u32_ItList)
-            {
-               //Overarching checks
-               const C_OscNodeDataPoolList & rc_List = rc_CheckedDataPool.c_Lists[u32_ItList];
-               const std::map<stw::scl::C_SclString,
-                              uint32_t>::const_iterator c_ItList = c_PreviousNames.find(rc_List.c_Name.LowerCase());
+   for (uint32_t u32_ItList = 0;
+        (u32_ItList < rc_CheckedDataPool.c_Lists.size()) &&
+        ((*opq_IsErrorInListOrMessage == false) || (opc_InvalidListIndices != NULL));
+        ++u32_ItList)
+   {
+      //Overarching checks
+      const C_OscNodeDataPoolList & rc_List = rc_CheckedDataPool.c_Lists[u32_ItList];
+      const std::map<stw::scl::C_SclString,
+                     uint32_t>::const_iterator c_ItList = c_PreviousNames.find(rc_List.c_Name.LowerCase());
                if (c_ItList != c_PreviousNames.end())
                {
                   *opq_IsErrorInListOrMessage = true;
@@ -2031,13 +2031,13 @@ void C_OscNode::CheckMessageId(const uint32_t ou32_InterfaceIndex, const C_OscCa
                                           (Use-case: skip current message to avoid conflict with itself)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNode::CheckMessageName(const uint32_t ou32_InterfaceIndex, const stw::scl::C_SclString & orc_MessageName,
-                                 bool & orq_Valid, const C_OscCanProtocol::E_Type * const ope_SkipComProtocol,
-                                 const uint32_t * const opu32_SkipInterfaceIndex,
-                                 const bool * const opq_SkipMessageIsTxFlag,
-                                 const uint32_t * const opu32_SkipMessageIndex) const
-{
-   if (C_OscUtils::h_CheckValidCeName(orc_MessageName) == true)
+   void C_OscNode::CheckMessageName(const uint32_t ou32_InterfaceIndex, const QString & orc_MessageName,
+                                    bool & orq_Valid, const C_OscCanProtocol::E_Type * const ope_SkipComProtocol,
+                                    const uint32_t * const opu32_SkipInterfaceIndex,
+                                    const bool * const opq_SkipMessageIsTxFlag,
+                                    const uint32_t * const opu32_SkipMessageIndex) const
+   {
+      if (C_OscUtils::h_CheckValidCeName(orc_MessageName) == true)
    {
       std::vector<const C_OscCanMessage *> c_Messages;
       m_GetAllMessages(ou32_InterfaceIndex, c_Messages, ope_SkipComProtocol, opu32_SkipInterfaceIndex,
@@ -2049,7 +2049,7 @@ void C_OscNode::CheckMessageName(const uint32_t ou32_InterfaceIndex, const stw::
          if (pc_CurMessage != NULL)
          {
             //No skip necessary as they should be already filtered
-            if (pc_CurMessage->c_Name == orc_MessageName)
+            if (pc_CurMessage->c_Name.ToQString() == orc_MessageName)
             {
                orq_Valid = false;
             }

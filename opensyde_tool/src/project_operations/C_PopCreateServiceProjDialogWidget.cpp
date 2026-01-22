@@ -305,7 +305,7 @@ int32_t C_PopCreateServiceProjDialogWidget::m_CheckPath(void)
    {
       s32_Return = C_RANGE;
    }
-   else if (C_OscUtils::h_CheckValidFilePath(this->GetSpPath().toStdString().c_str()) == false)
+   else if (C_OscUtils::h_CheckValidFilePath(this->GetSpPath()) == false)
    {
       s32_Return = C_RD_WR;
    }
@@ -413,7 +413,7 @@ void C_PopCreateServiceProjDialogWidget::m_SpPathClicked()
 
       if (c_FilePath != "")
       {
-         this->SetSpPath(c_FilePath.toStdString().c_str());
+         this->SetSpPath(c_FilePath);
       }
    }
 }

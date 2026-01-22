@@ -67,7 +67,7 @@ int32_t C_OscNodeFilerV2::h_LoadNode(const uint16_t ou16_XmlFormatVersion, C_Osc
       //Type
       if (orc_XmlParser.SelectNodeChild("type") == "type")
       {
-         orc_Node.c_DeviceType = orc_XmlParser.GetNodeContent();
+         orc_Node.c_DeviceType = orc_XmlParser.GetNodeContent().ToQString();
          //Return
          orc_XmlParser.SelectNodeParent(); //back up to core
       }
@@ -126,7 +126,7 @@ void C_OscNodeFilerV2::h_SaveNode(const C_OscNode & orc_Node, C_OscXmlParserBase
 {
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("core") == "core");
    //Type
-   orc_XmlParser.CreateNodeChild("type", orc_Node.c_DeviceType);
+   orc_XmlParser.CreateNodeChild("type", C_SclString::FromQString(orc_Node.c_DeviceType));
    mh_SaveProperties(orc_Node.c_Properties, orc_XmlParser);
    mh_SaveApplications(orc_Node.c_Applications, orc_XmlParser);
    orc_XmlParser.CreateAndSelectNodeChild("com-protocols");

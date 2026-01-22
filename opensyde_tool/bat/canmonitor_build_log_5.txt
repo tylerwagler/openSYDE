@@ -1,0 +1,34 @@
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem build CAN Monitor application 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set PROJECT_FOLDER=..\pjt\openSYDE_CAN_Monitor 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set TEMP_FOLDER=..\temp_openSYDE_CAN_Monitor_Release 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set BUILD_TARGET=Release 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set TOOLCHAIN=../pjt/toolchain_windows.cmake 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>call build_with_cmake ..\pjt\openSYDE_CAN_Monitor ..\temp_openSYDE_CAN_Monitor_Release Release ../pjt/toolchain_windows.cmake 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem build cmake application 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem parameters 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem ..\pjt\openSYDE_CAN_Monitor Relative project folder path 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem ..\temp_openSYDE_CAN_Monitor_Release Relative temporary folder 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem Release Build target (Release/Debug) 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem ../pjt/toolchain_windows.cmake Toolchain file 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem build using cmake 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem as a side effect this will also create the required configuration files for PC-lint 
+[1/4] Automatic MOC and UIC for target openSYDE_CAN_Monitor
+[2/3] Building CXX object CMakeFiles/openSYDE_CAN_Monitor.dir/C_/Users/tyler/Dev/repos/openSYDE/opensyde_tool/src/can_monitor/util/C_CamUti.cpp.obj
+[3/3] Linking CXX executable openSYDE_CAN_Monitor.exe
+[0/1] Install the project...
+-- Install configuration: "Release"
+-- Installing: C:/Users/tyler/Dev/repos/openSYDE/opensyde_tool/pjt/openSYDE_CAN_Monitor/../../result/tool/CAN_Monitor/openSYDE_CAN_Monitor.exe

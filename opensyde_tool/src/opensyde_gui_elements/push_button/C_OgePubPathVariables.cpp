@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Button with menu for selecting path variables
@@ -97,7 +97,7 @@ void C_OgePubPathVariables::AddDatablockSection(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgePubPathVariables::m_OpenSydeExeTriggered(void)
 {
-   Q_EMIT (this->SigVariableSelected(C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_BIN.c_str()));
+   Q_EMIT (this->SigVariableSelected(C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_BIN));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -108,7 +108,7 @@ void C_OgePubPathVariables::m_OpenSydeExeTriggered(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgePubPathVariables::m_OpenSydeProjTriggered(void)
 {
-   Q_EMIT (this->SigVariableSelected(C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_PROJ.c_str()));
+   Q_EMIT (this->SigVariableSelected(C_OscUtils::hc_PATH_VARIABLE_OPENSYDE_PROJ));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -119,7 +119,7 @@ void C_OgePubPathVariables::m_OpenSydeProjTriggered(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgePubPathVariables::m_DataBlockProjTriggered(void)
 {
-   Q_EMIT (this->SigVariableSelected(C_OscUtils::hc_PATH_VARIABLE_DATABLOCK_PROJ.c_str()));
+   Q_EMIT (this->SigVariableSelected(C_OscUtils::hc_PATH_VARIABLE_DATABLOCK_PROJ));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ void C_OgePubPathVariables::m_DataBlockProjTriggered(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgePubPathVariables::m_UserNameTriggered(void)
 {
-   Q_EMIT (this->SigVariableSelected(C_OscUtils::hc_PATH_VARIABLE_USER_NAME.c_str()));
+   Q_EMIT (this->SigVariableSelected(C_OscUtils::hc_PATH_VARIABLE_USER_NAME));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -141,5 +141,6 @@ void C_OgePubPathVariables::m_UserNameTriggered(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgePubPathVariables::m_ComputerNameTriggered(void)
 {
-   Q_EMIT (this->SigVariableSelected(C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME.c_str()));
+   Q_EMIT (this->SigVariableSelected(C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME));
 }
+

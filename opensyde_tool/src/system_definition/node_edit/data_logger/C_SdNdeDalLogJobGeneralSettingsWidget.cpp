@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Creating General X-App settings
@@ -191,7 +191,7 @@ void C_SdNdeDalLogJobGeneralSettingsWidget::m_GetSupportedClientInterfaces() con
             this->mpc_Ui->pc_ComboBoxClientInterface->addItem(static_cast<QString>("%1 (linked to %2)").arg(
                                                                  c_InterfaceNames[
                                                                     u32_InterfaceNamesCounter
-                                                                 ]).arg(pc_Bus->c_Name.c_str()));
+                                                                 ]).arg(pc_Bus->c_Name));
          }
       }
       else

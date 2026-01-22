@@ -153,7 +153,7 @@ QVariant C_PopFileTableModel::data(const QModelIndex & orc_Index, const int32_t 
                   c_ProjectFileInfo.completeBaseName());
                break;
             case eVERSION:
-               c_Retval = rc_RecentProjects.c_Version.c_str();
+               c_Retval = rc_RecentProjects.c_Version;
                break;
             case ePATH:
                c_Retval = C_Uti::h_MinimizePath(static_cast<QString>(rc_RecentFilePaths), c_Font, 535, 12);
@@ -236,18 +236,18 @@ QVariant C_PopFileTableModel::data(const QModelIndex & orc_Index, const int32_t 
             }
             else
             {
-               c_CreationTime = C_OscProject::h_GetTimeFormatted(rc_RecentProject.c_CreationTime).c_str();
-               c_ModificationTime = C_OscProject::h_GetTimeFormatted(rc_RecentProject.c_ModificationTime).c_str();
+               c_CreationTime = C_OscProject::h_GetTimeFormatted(rc_RecentProject.c_CreationTime);
+               c_ModificationTime = C_OscProject::h_GetTimeFormatted(rc_RecentProject.c_ModificationTime);
             }
             c_TooltipContent =
                static_cast<QString>("Version: %1 \nAuthor: %2 \nCreated: %3 \n"
                                                            "Last modified: %4 (by %5) \nUsed openSYDE version: %6").
-               arg(rc_RecentProject.c_Version.c_str()).
-               arg(rc_RecentProject.c_Author.c_str()).
+               arg(rc_RecentProject.c_Version).
+               arg(rc_RecentProject.c_Author).
                arg(c_CreationTime).
                arg(c_ModificationTime).
-               arg(rc_RecentProject.c_Editor.c_str()).
-               arg(C_Uti::h_ConvertVersionToStwStyle(rc_RecentProject.c_OpenSydeVersion.c_str()));
+               arg(rc_RecentProject.c_Editor).
+               arg(C_Uti::h_ConvertVersionToStwStyle(rc_RecentProject.c_OpenSydeVersion));
             if (c_ProjectFileInfo.exists() == true)
             {
                const uint64_t u64_SizeByte = C_PuiProject::h_GetProjectSize(rc_RecentFilePaths);
@@ -367,3 +367,4 @@ int32_t C_PopFileTableModel::ConvertRowToFile(const int32_t & ors32_Row, QString
    }
    return s32_Retval;
 }
+

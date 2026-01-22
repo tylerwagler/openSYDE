@@ -348,7 +348,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
          {
             stw::scl::C_SclString c_SubDeviceName = "";
             stw::scl::C_SclString c_MainDeviceName = "";
-            C_OscSystemDefinitionFiler::h_SplitDeviceType(orc_Nodes[u32_NodeIndex].c_DeviceType, c_MainDeviceName,
+            C_OscSystemDefinitionFiler::h_SplitDeviceType(C_SclString::FromQString(orc_Nodes[u32_NodeIndex].c_DeviceType), c_MainDeviceName,
                                                           c_SubDeviceName);
             {
                const C_OscDeviceDefinition * const pc_Device =
@@ -360,14 +360,14 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
                   osc_write_log_error("Loading System Definition",
                                       "System Definition contains node \"" + orc_Nodes[u32_NodeIndex].c_Properties.c_Name +
                                       "\" of device type \"" +
-                                      orc_Nodes[u32_NodeIndex].c_DeviceType + "\" which is not a known device.");
+                                      C_SclString::FromQString(orc_Nodes[u32_NodeIndex].c_DeviceType) + "\" which is not a known device.");
                   if (opc_ErrorDetailsMissingDevices == NULL)
                   {
                      break;
                   }
                   else
                   {
-                     opc_ErrorDetailsMissingDevices->push_back(orc_Nodes[u32_NodeIndex].c_DeviceType);
+                     opc_ErrorDetailsMissingDevices->push_back(C_SclString::FromQString(orc_Nodes[u32_NodeIndex].c_DeviceType));
                   }
                }
                else

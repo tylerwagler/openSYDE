@@ -426,7 +426,7 @@ void C_SdNodeToNodeConnectionSetupWidget::m_InitFromData(void)
 
                if (pc_Bus != NULL)
                {
-                  QString c_Text = pc_Bus->c_Name.c_str();
+                  QString c_Text = pc_Bus->c_Name;
 
                   if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
                   {
@@ -656,3 +656,4 @@ void C_SdNodeToNodeConnectionSetupWidget::m_CheckTypeRestrictions(bool & orq_New
       }
    }
 }
+

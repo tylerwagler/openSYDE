@@ -54,8 +54,8 @@ C_FlaOgePubPathVariables::C_FlaOgePubPathVariables(QWidget * const opc_Parent) :
    //  static const is guaranteed preinitialized before main
    this->m_AddEntry("SYDEflash Binary", mc_PATH_VARIABLE_SYDE_FLASH_BIN);
    this->m_AddHeading("System");
-   this->m_AddEntry("User Name", C_OscUtils::hc_PATH_VARIABLE_USER_NAME.c_str());
-   this->m_AddEntry("Computer Name", C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME.c_str());
+   this->m_AddEntry("User Name", C_OscUtils::hc_PATH_VARIABLE_USER_NAME);
+   this->m_AddEntry("Computer Name", C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME);
    //lint -restore
    this->m_SetMenuMinWidth(140);
 }

@@ -560,7 +560,7 @@ void C_SdSearchTreeWidget::m_SearchBusContent(const C_OscSystemBus & orc_Bus, co
 {
    QString c_Name;
 
-   c_Name = orc_Bus.c_Name.c_str();
+   c_Name = orc_Bus.c_Name;
 
    if (c_Name.contains(this->mc_SearchString, Qt::CaseInsensitive) == true)
    {
@@ -778,7 +778,7 @@ void C_SdSearchTreeWidget::m_ItemClicked(void)
 
                if (pc_Bus != NULL)
                {
-                  c_Text = pc_Bus->c_Name.c_str();
+                  c_Text = pc_Bus->c_Name;
                }
             }
 
@@ -1137,3 +1137,4 @@ void C_SdSearchTreeWidget::m_SetupStartingState(void)
    this->addTopLevelItem(this->mpc_TreeItemRootHalcChannels);
    this->mpc_TreeItemRootHalcChannels->setHidden(true);
 }
+

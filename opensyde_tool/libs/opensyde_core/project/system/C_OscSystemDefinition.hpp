@@ -19,7 +19,7 @@
 #include "C_OscSystemBus.hpp"
 #include "C_OscCanMessageIdentificationIndices.hpp"
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscDeviceManager.hpp"
 #include "C_OscCanProtocol.hpp"
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
@@ -67,7 +67,7 @@ public:
    int32_t CheckMessageIdBus(const uint32_t ou32_BusIndex, const C_OscCanMessageUniqueId & orc_MessageId,
                              bool & orq_Valid,
                              const C_OscCanMessageIdentificationIndices * const opc_SkipMessage = NULL) const;
-   int32_t CheckMessageNameBus(const uint32_t ou32_BusIndex, const stw::scl::C_SclString & orc_MessageName,
+   int32_t CheckMessageNameBus(const uint32_t ou32_BusIndex, const QString & orc_MessageName,
                                bool & orq_Valid, const C_OscCanMessageIdentificationIndices * const opc_SkipMessage =
                                   NULL) const;
    int32_t CheckMessageMatch(const C_OscCanMessageIdentificationIndices & orc_MessageId1,
@@ -86,14 +86,14 @@ public:
                                     std::vector<uint32_t> & orc_InterfaceIndexes,
                                     std::vector<uint32_t> & orc_DatapoolIndexes) const;
 
-   void AddNode(C_OscNode & orc_Node, const stw::scl::C_SclString & orc_SubDeviceName = "",
-                const stw::scl::C_SclString & orc_MainDeviceName = "");
-   void AddNodeSquad(std::vector<C_OscNode> & orc_Nodes, const std::vector<stw::scl::C_SclString> & orc_SubDeviceNames,
-                     const stw::scl::C_SclString & orc_MainDeviceName);
+   void AddNode(C_OscNode & orc_Node, const QString & orc_SubDeviceName = "",
+                const QString & orc_MainDeviceName = "");
+   void AddNodeSquad(std::vector<C_OscNode> & orc_Nodes, const std::vector<QString> & orc_SubDeviceNames,
+                     const QString & orc_MainDeviceName);
 
    int32_t DeleteNode(const uint32_t ou32_NodeIndex);
 
-   int32_t SetNodeName(const uint32_t ou32_NodeIndex, const stw::scl::C_SclString & orc_NodeName);
+   int32_t SetNodeName(const uint32_t ou32_NodeIndex, const QString & orc_NodeName);
    int32_t GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex, uint32_t & oru32_NodeSquadIndex) const;
 
    static C_OscDeviceManager hc_Devices;     ///< container of device types known in the system

@@ -619,26 +619,26 @@ c_Array.Insert(idx, item)          c_Array.insert(idx, item)
 | openSYDE | ✅ Complete | 2026-01-18 | C_SclIniFile now uses QSettings internally |
 | SYDEflash | ✅ Complete | 2026-01-18 | Shares opensyde_core with openSYDE |
 | openSYDE CAN Monitor | ✅ Complete | 2026-01-18 | Shares opensyde_core with openSYDE |
-| opensyde_cmd_line_flash_tool | ❌ Not Started | - | Has own copy in libs/osy_core/ |
-| opensyde_syde_coder_c | ❌ Not Started | - | Has own copy in libs/osy_core/ |
-| opensyde_syde_sup | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
-| opensyde_syde_x_gen | ❌ Not Started | - | Has own copy in libs/opensyde_core/ |
+| opensyde_cmd_line_flash_tool | N/A | - | Has own copy in libs/osy_core/ - Qt not applicable |
+| opensyde_syde_coder_c | N/A | - | Has own copy in libs/osy_core/ - Qt not applicable |
+| opensyde_syde_sup | N/A | - | Has own copy in libs/opensyde_core/ - Qt not applicable |
+| opensyde_syde_x_gen | N/A | - | Has own copy in libs/opensyde_core/ - Qt not applicable |
 
-### Implementation Summary (2026-01-18)
+### Notes on Shared vs. Separate Core Libraries
 
-The C_SclIniFile class has been completely rewritten to use QSettings internally while maintaining the same public API for backward compatibility:
+The openSYDE ecosystem has **two patterns** for core library usage:
 
-**Key Changes:**
-- Replaced custom INI parsing logic (~1100 lines) with QSettings-based implementation (~810 lines)
-- Removed C_SclIniSection and C_SclIniKey helper classes (no longer needed)
-- Internal storage now uses `std::unique_ptr<QSettings>` instead of `QList<C_SclIniSection>`
-- In-memory mode uses QTemporaryFile as backing store for QSettings
-- All public methods maintain identical signatures and behavior
-- C_OscChecksummedIniFile required NO changes (uses only public API)
+1. **Shared Core** (opensyde_tool applications):
+   - `openSYDE`, `SYDEflash`, and `openSYDE CAN Monitor` all share `opensyde_tool/libs/opensyde_core/`
+   - Changes to the core library automatically apply to all three applications
+   - These applications are marked together in the matrix
 
-**Breaking Changes:**
-- Comments in INI files are NO LONGER preserved (QSettings limitation)
-- ForceAppend parameter on Write methods is now ignored (QSettings handles this automatically)
+2. **Separate Core Copies** (standalone CLI tools):
+   - `opensyde_cmd_line_flash_tool`, `opensyde_syde_coder_c`, `opensyde_syde_sup`, `opensyde_syde_x_gen`
+   - Each has its own copy of the core library in `libs/osy_core/` or `libs/opensyde_core/`
+   - **IMPORTANT**: These CLI tools use **C++98** and do **NOT** have Qt as a dependency
+   - Qt-specific migrations (Phases 4, 5) are **N/A** for CLI tools unless Qt is added as a dependency
+   - Only pure C++ migrations (like `std::vector` replacements) would apply without adding Qt
 
 ### Current State Analysis (Updated 2026-01-18)
 

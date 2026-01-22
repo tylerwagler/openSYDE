@@ -700,7 +700,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   //get bus name
                   if (pc_Bus != NULL)
                   {
-                     c_BusName = pc_Bus->c_Name.c_str();
+                     c_BusName = pc_Bus->c_Name;
 
                      if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
                      {
@@ -1560,7 +1560,7 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
                         rc_Interface.u32_BusIndex, this->mu32_NodeIndex, static_cast<int32_t>(os32_InterfaceIndex));
                      const QString c_Heading = "Interface: Node ID invalid";
                      c_TooltipContent = C_SdUtil::h_InitUsedIdsString(c_UsedIds,
-                                                                      pc_Bus->c_Name.c_str(),
+                                                                      pc_Bus->c_Name,
                                                                       "bus");
                      this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipAt(os32_InterfaceIndex,
                                                                              static_cast<uint32_t> (
@@ -1577,7 +1577,7 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
                         static_cast<int32_t>(os32_InterfaceIndex));
                      const QString c_Heading = "Interface: IP Address invalid";
                      c_TooltipContent = C_SdUtil::h_InitUsedIpsString(c_Ips,
-                                                                      pc_Bus->c_Name.c_str(),
+                                                                      pc_Bus->c_Name,
                                                                       "bus");
 
                      this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipAt(os32_InterfaceIndex,
@@ -1596,11 +1596,11 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(const int32_t os32_Inter
                         rc_Interface.u32_BusIndex, this->mu32_NodeIndex, static_cast<int32_t>(os32_InterfaceIndex));
                      const QString c_Heading = "Interface: Property invalid";
                      c_TooltipContent = C_SdUtil::h_InitUsedIdsString(c_UsedIds,
-                                                                      pc_Bus->c_Name.c_str(),
+                                                                      pc_Bus->c_Name,
                                                                       "bus");
                      c_TooltipContent += "\n";
                      c_TooltipContent += C_SdUtil::h_InitUsedIpsString(c_Ips,
-                                                                       pc_Bus->c_Name.c_str(),
+                                                                       pc_Bus->c_Name,
                                                                        "bus");
 
                      this->mpc_Ui->pc_TableWidgetComIfSettings->SetToolTipAt(os32_InterfaceIndex,
@@ -1729,7 +1729,7 @@ void C_SdNdeNodePropertiesWidget::m_BusBitrateClick(const uint32_t ou32_Row)
          Q_ASSERT(pc_Bus != NULL);
          if (pc_Bus != NULL)
          {
-            const QString c_BusName = pc_Bus->c_Name.c_str();
+            const QString c_BusName = pc_Bus->c_Name;
 
             this->mu32_BusIndex = u32_BusIndex;
             this->mc_BusName = c_BusName;

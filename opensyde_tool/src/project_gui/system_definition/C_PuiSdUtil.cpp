@@ -565,7 +565,7 @@ QString C_PuiSdUtil::h_GetSignalNamespace(const C_OscNodeDataPoolListElementId &
             if (((pc_Bus != NULL) && (pc_Message != NULL)) && (pc_Element != NULL))
             {
                c_Retval =
-                  static_cast<QString>("%1::%2::%3").arg(pc_Bus->c_Name.c_str()).arg(pc_Message->c_Name.c_str()).arg(
+                  static_cast<QString>("%1::%2::%3").arg(pc_Bus->c_Name).arg(pc_Message->c_Name.c_str()).arg(
                      pc_Element->c_Name.c_str());
             }
          }

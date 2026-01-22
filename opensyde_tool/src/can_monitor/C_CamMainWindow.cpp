@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Main window for project openSYDE CAN Monitor (implementation)
@@ -438,7 +438,7 @@ void C_CamMainWindow::dropEvent(QDropEvent * const opc_Event)
    if (mh_CheckMime(pc_MimeData, &c_FilePath) == true)
    {
       // Check if path is a valid path with no irregular characters
-      if (C_OscUtils::h_CheckValidFilePath(c_FilePath.toStdString().c_str()) == false)
+      if (C_OscUtils::h_CheckValidFilePath(c_FilePath) == false)
       {
          C_OgeWiUtil::h_ShowPathInvalidError(this, c_FilePath);
       }
@@ -1444,3 +1444,4 @@ void C_CamMainWindow::m_DisplayCheckMessagesDialog(const QString & orc_DatabaseP
       this->mpc_Ui->pc_GeneratorWidget->TriggerSignalReload();
    }
 }
+

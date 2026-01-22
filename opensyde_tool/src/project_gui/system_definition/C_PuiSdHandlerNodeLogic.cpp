@@ -691,7 +691,7 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
          this->m_GetExistingNodeNames(), c_Name, this->GetNameMaxCharLimit(), c_DefaultDeviceName);
    }
 
-   this->mc_CoreDefinition.AddNodeSquad(orc_OscNodes, c_NodeNames, orc_MainDevice.toStdString().c_str()); //add node and
+   this->mc_CoreDefinition.AddNodeSquad(orc_OscNodes, orc_NodeNames, orc_MainDevice); //add node and
                                                                                                           // set device
    // definition pointer
 
@@ -1264,7 +1264,7 @@ const
          const C_OscSystemBus & rc_CurBus = this->mc_CoreDefinition.c_Buses[u32_ItBusRef];
          if (u32_ItBus != u32_ItBusRef)
          {
-            if (rc_CheckedBus.c_Name.LowerCase() == rc_CurBus.c_Name.LowerCase())
+            if (rc_CheckedBus.c_Name.toLower() == rc_CurBus.c_Name.toLower())
             {
                q_ErrorDetected = true;
                break;
@@ -1276,7 +1276,7 @@ const
          q_Retval = true;
          if (opc_CriticalBusNames != NULL)
          {
-            opc_CriticalBusNames->emplace_back(rc_CheckedBus.c_Name.c_str());
+            opc_CriticalBusNames->emplace_back(rc_CheckedBus.c_Name);
          }
       }
    }
@@ -6833,3 +6833,6 @@ void C_PuiSdHandlerNodeLogic::m_SetDataPoolListElementSharedSync(const uint32_t 
       }
    }
 }
+
+
+

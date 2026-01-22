@@ -657,7 +657,7 @@ void C_NagNaviBarWidget::m_BussesChanged(void) const
    //add new nodes
    for (u32_Index = 0U; u32_Index < C_PuiSdHandler::h_GetInstance()->GetOscBusesSize(); ++u32_Index)
    {
-      c_Buses.emplace_back(C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_Index)->c_Name.c_str());
+      c_Buses.emplace_back(C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_Index)->c_Name);
    }
    //Update view
    this->mpc_Ui->pc_TreeViewBuses->SetContent(c_Buses);
@@ -678,7 +678,7 @@ void C_NagNaviBarWidget::m_BusChanged(const uint32_t ou32_BusIndex) const
    Q_ASSERT(pc_Bus != NULL);
    if (pc_Bus != NULL)
    {
-      this->mpc_Ui->pc_TreeViewBuses->UpdateItem(ou32_BusIndex, pc_Bus->c_Name.c_str());
+      this->mpc_Ui->pc_TreeViewBuses->UpdateItem(ou32_BusIndex, pc_Bus->c_Name);
    }
 
    //Trigger error check
@@ -878,7 +878,7 @@ void C_NagNaviBarWidget::m_OnClickBus(const int32_t os32_Index)
       const stw::opensyde_core::C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_Index);
       if (pc_Bus != NULL)
       {
-         Q_EMIT this->SigChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_BUSEDIT, u32_Index, pc_Bus->c_Name.c_str());
+         Q_EMIT this->SigChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_BUSEDIT, u32_Index, pc_Bus->c_Name);
       }
    }
 }
@@ -1050,3 +1050,5 @@ void C_NagNaviBarWidget::m_PbTopologyClick(void)
 
    Q_EMIT this->SigChangeMode(ms32_MODE_SYSDEF, s32_SUB_MODE, 0, c_Name);
 }
+
+

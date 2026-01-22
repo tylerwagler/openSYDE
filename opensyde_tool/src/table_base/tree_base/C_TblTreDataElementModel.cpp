@@ -719,10 +719,10 @@ void C_TblTreDataElementModel::m_InitBusSignal(const uint32_t ou32_ViewIndex,  c
          {
             //Init current node
             pc_BusItem->u32_Index = pc_View->GetOscPcData().GetBusIndex();
-            pc_BusItem->c_Name = pc_Bus->c_Name.c_str();
+            pc_BusItem->c_Name = pc_Bus->c_Name;
             pc_BusItem->q_Selectable = false;
-            pc_BusItem->c_ToolTipHeading = pc_Bus->c_Name.c_str();
-            pc_BusItem->c_ToolTipContent = pc_Bus->c_Comment.c_str();
+            pc_BusItem->c_ToolTipHeading = pc_Bus->c_Name;
+            pc_BusItem->c_ToolTipContent = pc_Bus->c_Comment;
             switch (pc_Bus->e_Type)
             {
             case C_OscSystemBus::eCAN:
@@ -2654,3 +2654,4 @@ int32_t C_TblTreDataElementModel::mh_GetCurrentNodeActiveFlags(const uint32_t ou
    }
    return s32_Retval;
 }
+

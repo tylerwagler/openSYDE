@@ -156,7 +156,7 @@ int32_t C_OscNodeFiler::h_LoadNode(C_OscNode & orc_Node, C_OscXmlParserBase & or
    //Type
    if (orc_XmlParser.SelectNodeChild("type") == "type")
    {
-      orc_Node.c_DeviceType = orc_XmlParser.GetNodeContent();
+      orc_Node.c_DeviceType = orc_XmlParser.GetNodeContent().ToQString();
       //Return
       orc_XmlParser.SelectNodeParent(); //back up to node
    }
@@ -279,7 +279,7 @@ int32_t C_OscNodeFiler::h_SaveNode(const C_OscNode & orc_Node, C_OscXmlParserBas
 
    orc_XmlParser.SetAttributeBool("datapool-auto-nvm-start-address", orc_Node.q_DatapoolAutoNvmStartAddress);
    //Type
-   orc_XmlParser.CreateNodeChild("type", orc_Node.c_DeviceType);
+   orc_XmlParser.CreateNodeChild("type", C_SclString::FromQString(orc_Node.c_DeviceType));
    mh_SaveProperties(orc_Node.c_Properties, orc_XmlParser);
    mh_SaveApplications(orc_Node.c_Applications, orc_XmlParser);
    orc_XmlParser.CreateAndSelectNodeChild("com-protocols");

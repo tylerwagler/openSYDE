@@ -576,7 +576,7 @@ void C_SdNdeDpProperties::m_OkClicked(void)
    std::vector<C_SclString> c_ExistingDatapoolNames;
 
    //Check valid name
-   if (C_OscUtils::h_CheckValidCeName(this->mpc_Ui->pc_LineEditDatapoolName->text().toStdString().c_str()) == false)
+   if (C_OscUtils::h_CheckValidCeName(this->mpc_Ui->pc_LineEditDatapoolName->text()) == false)
    {
       c_Details +=
          static_cast<QString>("Name is empty or contains invalid characters. Choose another name.");
@@ -636,8 +636,8 @@ void C_SdNdeDpProperties::m_OkClicked(void)
       {
          QString c_Version = this->mpc_Ui->pc_LineEditVersion_2->text();
          //adapt data
-         this->mpc_OscDataPool->c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text().toStdString().c_str();
-         this->mpc_OscDataPool->c_Comment = this->mpc_Ui->pc_CommentText->toPlainText().toStdString().c_str();
+         this->mpc_OscDataPool->c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text();
+         this->mpc_OscDataPool->c_Comment = this->mpc_Ui->pc_CommentText->toPlainText();
          this->mpc_OscDataPool->q_IsSafety = this->mpc_Ui->pc_CheckBoxSafety->isChecked();
          this->mpc_OscDataPool->u32_NvmSize = static_cast<uint32_t>(this->mpc_Ui->pc_SpinBoxSize->value());
          if (this->mq_DatapoolAutoNvmStartAddress == false)
@@ -949,7 +949,7 @@ void C_SdNdeDpProperties::m_UpdateSizePrediction(void) const
 void C_SdNdeDpProperties::m_CheckDatapoolName(void) const
 {
    QString c_Content;
-   const stw::scl::C_SclString c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text().toStdString().c_str();
+   const stw::scl::C_SclString c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text();
 
    //check
    bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(c_Name);
@@ -994,7 +994,7 @@ bool C_SdNdeDpProperties::m_CheckDatapoolNameNotDuplicate(std::vector<C_SclStrin
 const
 {
    bool q_NameIsValid = true;
-   const stw::scl::C_SclString c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text().toStdString().c_str();
+   const stw::scl::C_SclString c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text();
 
    if (this->ms32_DataPoolIndex >= 0)
    {
@@ -1143,7 +1143,7 @@ void C_SdNdeDpProperties::m_OnComTypeChange(void) const
 
    c_DatapoolName = C_PuiSdHandler::h_GetInstance()->GetUniqueDataPoolName(
       this->mu32_NodeIndex,
-      C_PuiSdUtil::h_ConvertProtocolTypeToDatapoolNameString(e_Type).toStdString().c_str()).ToQString();
+      C_PuiSdUtil::h_ConvertProtocolTypeToDatapoolNameString(e_Type)).ToQString();
 
    this->mpc_Ui->pc_LineEditDatapoolName->setText(c_DatapoolName);
 }
@@ -1393,3 +1393,4 @@ void C_SdNdeDpProperties::m_GetCrcVersion() const
 
    this->mpc_OscDataPool->u16_DefinitionCrcVersion = u16_CrcVersion;
 }
+

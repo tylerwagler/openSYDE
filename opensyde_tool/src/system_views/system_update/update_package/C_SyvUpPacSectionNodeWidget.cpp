@@ -1517,7 +1517,7 @@ void C_SyvUpPacSectionNodeWidget::m_InitItems(void)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
-      this->mc_DeviceType = pc_Node->c_DeviceType.c_str();
+      this->mc_DeviceType = pc_Node->c_DeviceType;
 
       Q_ASSERT(pc_Node->pc_DeviceDefinition != NULL);
       Q_ASSERT(pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size());
