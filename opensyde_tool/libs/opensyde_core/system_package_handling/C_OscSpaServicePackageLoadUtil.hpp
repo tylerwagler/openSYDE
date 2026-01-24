@@ -2,38 +2,47 @@
 /*!
    \file
    \brief       openSYDE: Service Package loading util
-   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCSPASERVICEPACKAGELOADUTIL_HPP
 #define C_OSCSPASERVICEPACKAGELOADUTIL_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
+#include <QString>
+#include <vector>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscSpaServicePackageLoadUtil
-{
+class C_OscSpaServicePackageLoadUtil {
 public:
-   static stw::scl::C_SclString h_GetUnzipPath(const stw::scl::C_SclString & orc_TargetUnzipPath);
-   static int32_t h_CheckParamsToProcessZipPackage(const stw::scl::C_SclString & orc_PackagePath,
-                                                   const stw::scl::C_SclString & orc_TargetUnzipPath,
-                                                   const stw::scl::C_SclString & orc_UseCase,
-                                                   stw::scl::C_SclString & orc_ErrorMessage);
-   static int32_t h_SearchFilesInPath(const stw::scl::C_SclString & orc_PackagePath,
-                                      const std::vector<stw::scl::C_SclString> & orc_NecessaryFiles);
+  static QString h_GetUnzipPath(const QString &orc_TargetUnzipPath);
+  static int32_t h_CheckParamsToProcessZipPackage(
+      const QString &orc_PackagePath, const QString &orc_TargetUnzipPath,
+      const QString &orc_UseCase, QString &orc_ErrorMessage);
+  static int32_t
+  h_SearchFilesInPath(const QString &orc_PackagePath,
+                      const std::vector<QString> &orc_NecessaryFiles);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

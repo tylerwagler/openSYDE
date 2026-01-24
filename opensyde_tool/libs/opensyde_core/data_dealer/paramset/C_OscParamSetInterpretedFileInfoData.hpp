@@ -12,7 +12,7 @@
 #define C_OSCPARAMSETINTERPRETEDFILEINFODATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -29,27 +29,27 @@ public:
    C_OscParamSetInterpretedFileInfoData(void);
 
    void Clear(void);
-   void AddInterpretedFileData(const stw::scl::C_SclString & orc_DateTime, const stw::scl::C_SclString & orc_Creator,
-                               const stw::scl::C_SclString & orc_ToolName,
-                               const stw::scl::C_SclString & orc_ToolVersion,
-                               const stw::scl::C_SclString & orc_ProjectName,
-                               const stw::scl::C_SclString & orc_ProjectVersion,
-                               const stw::scl::C_SclString & orc_UserComment);
+   void AddInterpretedFileData(const QString & orc_DateTime, const QString & orc_Creator,
+                               const QString & orc_ToolName,
+                               const QString & orc_ToolVersion,
+                               const QString & orc_ProjectName,
+                               const QString & orc_ProjectVersion,
+                               const QString & orc_UserComment);
 
    //Date and time of creation
-   stw::scl::C_SclString c_DateTime;
+   QString c_DateTime;
    //User who created this file
-   stw::scl::C_SclString c_Creator;
+   QString c_Creator;
    //Name of tool used for creating this param set file
-   stw::scl::C_SclString c_ToolName;
+   QString c_ToolName;
    //Version of tool used for creating this param set file
-   stw::scl::C_SclString c_ToolVersion;
+   QString c_ToolVersion;
    //Name of project used for creating this param set file
-   stw::scl::C_SclString c_ProjectName;
+   QString c_ProjectName;
    //Version of project used for creating this param set file
-   stw::scl::C_SclString c_ProjectVersion;
+   QString c_ProjectVersion;
    //Optional user comment for this param set file
-   stw::scl::C_SclString c_UserComment;
+   QString c_UserComment;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

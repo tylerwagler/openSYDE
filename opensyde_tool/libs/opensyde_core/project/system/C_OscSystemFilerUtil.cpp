@@ -25,7 +25,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::opensyde_core;
-using namespace stw::scl;
 
 using namespace stw::errors;
 
@@ -49,9 +48,9 @@ using namespace stw::errors;
    \return  string representation of oe_Type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscSystemFilerUtil::h_BusTypeEnumToString(const C_OscSystemBus::E_Type oe_Type)
+QString C_OscSystemFilerUtil::h_BusTypeEnumToString(const C_OscSystemBus::E_Type oe_Type)
 {
-   C_SclString c_Retval;
+   QString c_Retval;
 
    if (oe_Type == C_OscSystemBus::eETHERNET)
    {
@@ -75,7 +74,7 @@ C_SclString C_OscSystemFilerUtil::h_BusTypeEnumToString(const C_OscSystemBus::E_
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_BusTypeStringToEnum(const stw::scl::C_SclString & orc_Type,
+int32_t C_OscSystemFilerUtil::h_BusTypeStringToEnum(const QString & orc_Type,
                                                     C_OscSystemBus::E_Type & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -113,11 +112,11 @@ int32_t C_OscSystemFilerUtil::h_BusTypeStringToEnum(const stw::scl::C_SclString 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemFilerUtil::h_GetParserForExistingFile(C_OscXmlParser & orc_FileXmlParser,
-                                                         const C_SclString & orc_Path, const C_SclString & orc_RootNode)
+                                                         const QString & orc_Path, const QString & orc_RootNode)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       s32_Retval = orc_FileXmlParser.LoadFromFile(orc_Path);
       if (s32_Retval == C_NO_ERR)
@@ -155,14 +154,14 @@ int32_t C_OscSystemFilerUtil::h_GetParserForExistingFile(C_OscXmlParser & orc_Fi
    C_NOACT    existing file could not be deleted
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_GetParserForNewFile(C_OscXmlParser & orc_FileXmlParser, const C_SclString & orc_Path,
-                                                    const C_SclString & orc_RootNode)
+int32_t C_OscSystemFilerUtil::h_GetParserForNewFile(C_OscXmlParser & orc_FileXmlParser, const QString & orc_Path,
+                                                    const QString & orc_RootNode)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
-      if (std::remove(orc_Path.c_str()) == 0)
+      if (std::remove(orc_Path.toLocal8Bit().constData()) == 0)
       {
          s32_Retval = C_NO_ERR;
       }
@@ -188,17 +187,17 @@ int32_t C_OscSystemFilerUtil::h_GetParserForNewFile(C_OscXmlParser & orc_FileXml
    C_NOACT    folder could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_CreateFolder(const C_SclString & orc_Path)
+int32_t C_OscSystemFilerUtil::h_CreateFolder(const QString & orc_Path)
 {
    int32_t s32_Retval;
 
-   if (QFileInfo(orc_Path.ToQString()).isDir())
+   if (QFileInfo(orc_Path).isDir())
    {
       s32_Retval = C_NO_ERR;
    }
    else
    {
-      if (QDir().mkpath(orc_Path.ToQString()))
+      if (QDir().mkpath(orc_Path))
       {
          s32_Retval = C_NO_ERR;
       }
@@ -221,9 +220,9 @@ int32_t C_OscSystemFilerUtil::h_CreateFolder(const C_SclString & orc_Path)
    Item name ready for file name usage
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscSystemFilerUtil::h_PrepareItemNameForFileName(const C_SclString & orc_ItemName)
+QString C_OscSystemFilerUtil::h_PrepareItemNameForFileName(const QString & orc_ItemName)
 {
-   return C_OscUtils::h_NiceifyStringForFileName(orc_ItemName.LowerCase());
+   return C_OscUtils::h_NiceifyStringForFileName(orc_ItemName.toLower());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -236,10 +235,10 @@ C_SclString C_OscSystemFilerUtil::h_PrepareItemNameForFileName(const C_SclString
    Full, combined path
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscSystemFilerUtil::h_CombinePaths(const C_SclString & orc_BasePathName,
-                                                 const C_SclString & orc_SubFolderFileName)
+QString C_OscSystemFilerUtil::h_CombinePaths(const QString & orc_BasePathName,
+                                                 const QString & orc_SubFolderFileName)
 {
-   const C_SclString c_BasePath = C_SclString::FromQString(QFileInfo(orc_BasePathName.ToQString()).absolutePath() + "/");
+   const QString c_BasePath = QFileInfo(orc_BasePathName).absolutePath() + "/";
 
    return c_BasePath + orc_SubFolderFileName;
 }
@@ -261,17 +260,17 @@ C_SclString C_OscSystemFilerUtil::h_CombinePaths(const C_SclString & orc_BasePat
    \retval   C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const C_SclString & orc_CompleteFileAsString,
-                                                 const C_SclString & orc_CompleteFilePath,
-                                                 const C_SclString & orc_LogHeading)
+int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const QString & orc_CompleteFileAsString,
+                                                 const QString & orc_CompleteFilePath,
+                                                 const QString & orc_LogHeading)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   const C_SclString c_Folder = C_SclString::FromQString(QFileInfo(orc_CompleteFilePath.ToQString()).absolutePath() + "/");
+   const QString c_Folder = QFileInfo(orc_CompleteFilePath).absolutePath() + "/";
 
-   if (!QFileInfo(c_Folder.ToQString()).isDir())
+   if (!QFileInfo(c_Folder).isDir())
    {
-      if (!QDir().mkpath(c_Folder.ToQString()))
+      if (!QDir().mkpath(c_Folder))
       {
          osc_write_log_error(orc_LogHeading, "Could not create folder \"" + c_Folder + "\".");
          s32_Retval = C_RD_WR;
@@ -282,12 +281,12 @@ int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const C_SclString & orc_Complet
    {
       //Write (erase if file exists)
       std::ofstream c_File;
-      c_File.open(orc_CompleteFilePath.c_str(), std::ofstream::trunc);
+      c_File.open(orc_CompleteFilePath.toLocal8Bit().constData(), std::ofstream::trunc);
       if (c_File.is_open() == true)
       {
          bool q_HasFailed;
 
-         c_File.write(orc_CompleteFileAsString.c_str(), orc_CompleteFileAsString.Length());
+         c_File.write(orc_CompleteFileAsString.toLocal8Bit().constData(), orc_CompleteFileAsString.length());
          q_HasFailed = c_File.fail();
          c_File.close();
          if (q_HasFailed == true)
@@ -314,14 +313,12 @@ int32_t C_OscSystemFilerUtil::h_SaveStringToFile(const C_SclString & orc_Complet
    \param[out]  orc_SystemDefintionPath   System defintion path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemDefinition(const C_SclString & orc_ProjectPath,
-                                                                C_SclString & orc_SystemDefintionPath)
+void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemDefinition(const QString & orc_ProjectPath,
+                                                                QString & orc_SystemDefintionPath)
 {
-   const QString c_QFilePath = orc_ProjectPath.ToQString();
-   const QFileInfo c_FileInfo(c_QFilePath);
+   const QFileInfo c_FileInfo(orc_ProjectPath);
    const QString c_BaseName = c_FileInfo.completeBaseName();
-   orc_SystemDefintionPath = (c_FileInfo.absolutePath() + "/").toStdString() + "system_definition/" +
-                             (c_BaseName + ".syde_sysdef").toStdString();
+   orc_SystemDefintionPath = c_FileInfo.absolutePath() + "/system_definition/" + c_BaseName + ".syde_sysdef";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -331,14 +328,12 @@ void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemDefinition(const C_SclStrin
    \param[out]  orc_SystemViewsPath    System views path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemViews(const C_SclString & orc_ProjectPath,
-                                                           C_SclString & orc_SystemViewsPath)
+void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemViews(const QString & orc_ProjectPath,
+                                                           QString & orc_SystemViewsPath)
 {
-   const QString c_QFilePath = orc_ProjectPath.ToQString();
-   const QFileInfo c_FileInfo(c_QFilePath);
+   const QFileInfo c_FileInfo(orc_ProjectPath);
    const QString c_BaseName = c_FileInfo.completeBaseName();
-   orc_SystemViewsPath = (c_FileInfo.absolutePath() + "/").toStdString() + "system_views/" +
-                         (c_BaseName + ".syde_sysviews").toStdString();
+   orc_SystemViewsPath = c_FileInfo.absolutePath() + "/system_views/" + c_BaseName + ".syde_sysviews";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -350,10 +345,10 @@ void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemViews(const C_SclString & o
    Stringified export scaling support type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscSystemFilerUtil::h_CodeExportScalingTypeToString(
+QString C_OscSystemFilerUtil::h_CodeExportScalingTypeToString(
    const C_OscNodeCodeExportSettings::E_Scaling & ore_Scaling)
 {
-   C_SclString c_Retval;
+   QString c_Retval;
 
    switch (ore_Scaling)
    {
@@ -385,7 +380,7 @@ C_SclString C_OscSystemFilerUtil::h_CodeExportScalingTypeToString(
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemFilerUtil::h_StringToCodeExportScalingType(const C_SclString & orc_String,
+int32_t C_OscSystemFilerUtil::h_StringToCodeExportScalingType(const QString & orc_String,
                                                               C_OscNodeCodeExportSettings::E_Scaling & ore_Scaling)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -427,8 +422,8 @@ int32_t C_OscSystemFilerUtil::h_StringToCodeExportScalingType(const C_SclString 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_XmlParser,
-                                             const uint16_t ou16_ExpectedFileVersion, const C_SclString & orc_TagName,
-                                             const C_SclString & orc_UseCase)
+                                             const uint16_t ou16_ExpectedFileVersion, const QString & orc_TagName,
+                                             const QString & orc_UseCase)
 {
    int32_t s32_Retval = orc_XmlParser.SelectNodeChildError(orc_TagName);
 
@@ -438,7 +433,7 @@ int32_t C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_XmlParser,
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().toInt());
       }
       catch (...)
       {
@@ -450,7 +445,7 @@ int32_t C_OscSystemFilerUtil::h_CheckVersion(C_OscXmlParserBase & orc_XmlParser,
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info(orc_UseCase, "Value of \"" + orc_TagName + "\": " +
-                            C_SclString::IntToStr(u16_FileVersion));
+                            QString::number(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != ou16_ExpectedFileVersion)
          {

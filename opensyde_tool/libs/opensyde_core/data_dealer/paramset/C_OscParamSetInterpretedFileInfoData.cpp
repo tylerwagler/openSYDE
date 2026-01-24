@@ -65,13 +65,13 @@ void C_OscParamSetInterpretedFileInfoData::Clear(void)
    \param[in] orc_UserComment    Optional user comment for this param set file
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscParamSetInterpretedFileInfoData::AddInterpretedFileData(const stw::scl::C_SclString & orc_DateTime,
-                                                                  const stw::scl::C_SclString & orc_Creator,
-                                                                  const stw::scl::C_SclString & orc_ToolName,
-                                                                  const stw::scl::C_SclString & orc_ToolVersion,
-                                                                  const stw::scl::C_SclString & orc_ProjectName,
-                                                                  const stw::scl::C_SclString & orc_ProjectVersion,
-                                                                  const stw::scl::C_SclString & orc_UserComment)
+void C_OscParamSetInterpretedFileInfoData::AddInterpretedFileData(const QString & orc_DateTime,
+                                                                  const QString & orc_Creator,
+                                                                  const QString & orc_ToolName,
+                                                                  const QString & orc_ToolVersion,
+                                                                  const QString & orc_ProjectName,
+                                                                  const QString & orc_ProjectVersion,
+                                                                  const QString & orc_UserComment)
 {
    this->c_DateTime = orc_DateTime;
    this->c_Creator = orc_Creator;

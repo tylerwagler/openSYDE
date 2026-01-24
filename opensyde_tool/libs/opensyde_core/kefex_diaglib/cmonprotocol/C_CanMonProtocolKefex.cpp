@@ -714,7 +714,7 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                      c_Help = " " + c_Help3 + "  " + m_KfxIndexToString(mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]));
                      if (mq_Decimal == true)
                      {
-                        c_Help2 = "  VALUE: " + C_SclString::IntToStr(mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[3]));
+                        c_Help2 = "  VALUE: " + QString::number(mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[3]));
                      }
                      else
                      {

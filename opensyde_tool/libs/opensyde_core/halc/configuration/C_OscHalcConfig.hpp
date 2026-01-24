@@ -37,17 +37,17 @@ public:
    virtual void HandleFileLoadPostProcessing(void);
    int32_t SetDomainConfig(const uint32_t ou32_Index, const C_OscHalcConfigDomain & orc_Domain);
    int32_t SetDomainChannelConfig(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                  const bool oq_UseChannelIndex, const stw::scl::C_SclString & orc_Name,
-                                  const stw::scl::C_SclString & orc_Comment, const bool oq_SafetyRelevant,
+                                  const bool oq_UseChannelIndex, const QString & orc_Name,
+                                  const QString & orc_Comment, const bool oq_SafetyRelevant,
                                   const uint32_t ou32_UseCaseIndex);
    int32_t ResetDomainChannelConfig(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
                                     const bool oq_UseChannelIndex);
    int32_t ResetDomainChannelUseCase(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
                                      const bool oq_UseChannelIndex);
    int32_t SetDomainChannelConfigName(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                      const bool oq_UseChannelIndex, const stw::scl::C_SclString & orc_Name);
+                                      const bool oq_UseChannelIndex, const QString & orc_Name);
    int32_t SetDomainChannelConfigComment(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
-                                         const bool oq_UseChannelIndex, const stw::scl::C_SclString & orc_Comment);
+                                         const bool oq_UseChannelIndex, const QString & orc_Comment);
    int32_t SetDomainChannelConfigSafety(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
                                         const bool oq_UseChannelIndex, const bool oq_SafetyRelevant);
    int32_t SetDomainChannelConfigUseCase(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
@@ -67,13 +67,13 @@ public:
    int32_t SetDomainChannelParameterConfigElementEnum(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
                                                       const uint32_t ou32_ParameterIndex,
                                                       const uint32_t ou32_ElementIndex, const bool oq_UseChannelIndex,
-                                                      const stw::scl::C_SclString & orc_DisplayName);
+                                                      const QString & orc_DisplayName);
    int32_t SetDomainChannelParameterConfigElementBitmask(const uint32_t ou32_DomainIndex,
                                                          const uint32_t ou32_ChannelIndex,
                                                          const uint32_t ou32_ParameterIndex,
                                                          const uint32_t ou32_ElementIndex,
                                                          const bool oq_UseChannelIndex,
-                                                         const stw::scl::C_SclString & orc_DisplayName,
+                                                         const QString & orc_DisplayName,
                                                          const bool oq_Value);
    int32_t SetDomainChannelParameterConfigElementString(const uint32_t ou32_DomainIndex,
                                                         const uint32_t ou32_ChannelIndex,

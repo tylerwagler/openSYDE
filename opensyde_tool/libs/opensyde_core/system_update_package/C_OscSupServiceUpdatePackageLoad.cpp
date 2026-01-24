@@ -269,7 +269,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const C_SclString & o
          else
          {
             //Unknown version
-            mhc_ErrorMessage = "Unknown file version: " + stw::scl::C_SclString::IntToStr(u32_FileVersion) + ".";
+            mhc_ErrorMessage = "Unknown file version: " + stw::scl::QString::number(u32_FileVersion) + ".";
             osc_write_log_error("Processing Update Package", mhc_ErrorMessage);
             s32_Return = C_CONFIG;
          }
@@ -564,7 +564,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackNodes(const std::vector<uint8
    for (uint32_t u32_ItPackage = 0UL; (u32_ItPackage < orc_PackageFiles.size()) && (s32_Return == C_NO_ERR);
         ++u32_ItPackage)
    {
-      if (!orc_PackageFiles[u32_ItPackage].IsEmpty())
+      if (!orc_PackageFiles[u32_ItPackage].isEmpty())
       {
          const C_SclString c_FinalZipPath = orc_TargetUnzipPath + orc_PackageFiles[u32_ItPackage];
          const C_SclString c_TargetFolder = orc_NodeFoldersAbs[u32_ItPackage];
@@ -634,7 +634,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_VerifySignatures(
       {
          if (orc_ActiveNodes[u32_ItNode] == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE)
          {
-            if (orc_Signatures[u32_ItNode].IsEmpty() == false)
+            if (orc_Signatures[u32_ItNode].isEmpty() == false)
             {
                s32_Retval = mh_VerifySignature(orc_ApplicationsToWrite[u32_ItNode], c_NodeSignatureKeys[u32_ItNode],
                                                orc_Signatures[u32_ItNode], orc_AbsSydeSecureDefFileNames[u32_ItNode]);
@@ -733,7 +733,7 @@ void C_OscSupServiceUpdatePackageLoad::mh_GetDigestFiles(const C_OscSuSequences:
    {
       orc_Files.insert(orc_ApplicationsToWrite.c_FilesToWriteToNvm[u32_It]);
    }
-   if (orc_ApplicationsToWrite.c_PemFile.IsEmpty() == false)
+   if (orc_ApplicationsToWrite.c_PemFile.isEmpty() == false)
    {
       orc_Files.insert(orc_ApplicationsToWrite.c_PemFile);
    }

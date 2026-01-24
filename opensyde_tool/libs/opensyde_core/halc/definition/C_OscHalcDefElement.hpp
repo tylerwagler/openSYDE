@@ -9,7 +9,7 @@
 #define C_OSCHALCDEFELEMENT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscHalcDefContent.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -30,20 +30,20 @@ public:
    void SetType(const C_OscNodeDataPoolContent::E_Type oe_Value);
    void SetArray(const bool oq_Value);
    void SetComplexType(const C_OscHalcDefContent::E_ComplexType oe_Type);
-   int32_t AddEnumItem(const stw::scl::C_SclString & orc_DisplayName, const C_OscNodeDataPoolContent & orc_Value);
+   int32_t AddEnumItem(const QString & orc_DisplayName, const C_OscNodeDataPoolContent & orc_Value);
    void AddBitmaskItem(const C_OscHalcDefContentBitmaskItem & orc_Value);
 
    C_OscHalcDefContent::E_ComplexType GetComplexType(void) const;
    C_OscNodeDataPoolContent::E_Type GetType(void) const;
    bool GetArray(void) const;
-   const std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> > & GetEnumItems(void) const;
+   const std::vector<std::pair<QString, C_OscNodeDataPoolContent> > & GetEnumItems(void) const;
    const std::vector<C_OscHalcDefContentBitmaskItem> & GetBitmaskItems(void) const;
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
-   stw::scl::C_SclString c_Id;                    ///< Unique ID for later reference of this element
-   stw::scl::C_SclString c_Display;               ///< Name to display to user
-   stw::scl::C_SclString c_Comment;               ///< Description to display to user
+   QString c_Id;                    ///< Unique ID for later reference of this element
+   QString c_Display;               ///< Name to display to user
+   QString c_Comment;               ///< Description to display to user
    C_OscHalcDefContent c_InitialValue;            ///< Initial value of this element
    C_OscHalcDefContent c_MinValue;                ///< Minimum value of this element
    C_OscHalcDefContent c_MaxValue;                ///< Maximum value of this element

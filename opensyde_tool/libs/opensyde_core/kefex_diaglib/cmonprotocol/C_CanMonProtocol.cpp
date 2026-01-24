@@ -92,7 +92,7 @@ C_SclString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Ms
    u8_Len = (orc_Msg.u8_DLC > 8) ? static_cast<uint8_t>(8U) : orc_Msg.u8_DLC;
    if (q_Decimal == true)
    {
-      (void)c_Text.PrintFormatted("%8d; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
+      (void)c_Text = QString::asprintf("%8d; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
                                   (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC);
       for (s32_Index = 0; s32_Index < u8_Len; s32_Index++)
       {
@@ -102,7 +102,7 @@ C_SclString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Ms
    }
    else
    {
-      (void)c_Text.PrintFormatted("0x%08X; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
+      (void)c_Text = QString::asprintf("0x%08X; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
                                   (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC);
       for (s32_Index = 0; s32_Index < u8_Len; s32_Index++)
       {

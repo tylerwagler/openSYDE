@@ -90,7 +90,7 @@ int32_t C_OscImportEdsDcf::h_Import(const C_SclString & orc_FilePath, const uint
    if ((QFileInfo(orc_FilePath.ToQString()).exists() && QFileInfo(orc_FilePath.ToQString()).isFile()) == true)
    {
       bool q_Eds = true;
-      const C_SclString c_Extension = C_SclString(("." + QFileInfo(orc_FilePath.ToQString()).suffix()).toStdString()).LowerCase();
+      const C_SclString c_Extension = C_SclString(("." + QFileInfo(orc_FilePath.ToQString()).suffix()).toStdString()).toLower();
       if (c_Extension == ".eds")
       {
          q_Eds = true;
@@ -437,7 +437,7 @@ C_SclString C_OscImportEdsDcf::h_GetCoObjectValue(const C_OscCanOpenObjectData &
    }
    else
    {
-      if (orc_CoObject.c_ParameterValue.IsEmpty())
+      if (orc_CoObject.c_ParameterValue.isEmpty())
       {
          c_Retval = orc_CoObject.c_DefaultValue;
       }
@@ -937,7 +937,7 @@ int32_t C_OscImportEdsDcf::mh_LoadMessageTransmissionType(const uint32_t ou32_St
             mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
                               "the message type \"synchronous\" was converted to \"cyclic\".\n"
                               "Cycle time set default to " +
-                              C_SclString::IntToStr(
+                              QString::number(
                                  orc_Message.u32_CycleTimeMs) + "ms.", u8_ActualSubIndex, false,
                               &orc_CurMessages);
          }
@@ -1024,7 +1024,7 @@ void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou3
                orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
                mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
                                  "the message type \"CANopen type " +
-                                 C_SclString::IntToStr(
+                                 QString::number(
                                     u32_TransmissionType) + "\" was converted to \"async, manufacturer specific (254)\".",
                                  C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE, false,
                                  &orc_CurMessages);
@@ -1034,7 +1034,7 @@ void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou3
                orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
                mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
                                  "the message type \"CANopen type " +
-                                 C_SclString::IntToStr(
+                                 QString::number(
                                     u32_TransmissionType) + "\" was found which is not supported"
                                  " and cannot be changed because it is read only.",
                                  C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE, false,
@@ -1130,7 +1130,7 @@ void C_OscImportEdsDcf::mh_LoadEventTimerSection(const uint32_t ou32_StartingId,
          {
             mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Event-timer",
                               c_Reason + ", default set to: " +
-                              C_SclString::IntToStr(
+                              QString::number(
                                  orc_Message.u32_TimeoutMs) + "ms", C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER, false,
                               &orc_CurMessages);
          }
@@ -1211,7 +1211,7 @@ void C_OscImportEdsDcf::mh_LoadSrdoCyclicSection(const uint32_t ou32_StartingId,
       {
          mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Cycle-time",
                            c_Reason + ", default set to: " +
-                           C_SclString::IntToStr(
+                           QString::number(
                               orc_Message.u32_TimeoutMs) + "ms", C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_CYCLE_TIME, false,
                            &orc_CurMessages);
       }
@@ -1319,9 +1319,9 @@ void C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(const uint32_t ou32_Sta
          if ((u32_InhibitTime % 10) != 0)
          {
             mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Inhibit-time",
-                              "Inhibit time cannot \"" + stw::scl::C_SclString::IntToStr(
+                              "Inhibit time cannot \"" + stw::scl::QString::number(
                                  u32_InhibitTime * 100U) + "\" ns cannot be used, and has been rounded to \"" +
-                              stw::scl::C_SclString::IntToStr(orc_Message.u16_DelayTimeMs) + "\" ms",
+                              stw::scl::QString::number(orc_Message.u16_DelayTimeMs) + "\" ms",
                               C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_INHIBIT_TIME, false,
                               &orc_CurMessages);
          }
@@ -1442,11 +1442,11 @@ int32_t C_OscImportEdsDcf::mh_ParseSignals(const uint32_t ou32_CoMessageId, cons
                            {
                               mh_AddUserMessage(u32_CoRefId, "",
                                                 "mapping signal bit length " +
-                                                stw::scl::C_SclString::IntToStr(
+                                                stw::scl::QString::number(
                                                    u16_ExpectedLength) + " did not match to bit length from data type " +
-                                                stw::scl::C_SclString::IntToStr(
+                                                stw::scl::QString::number(
                                                    c_CurSignal.u16_ComBitLength) + ". Using bit length " +
-                                                stw::scl::C_SclString::IntToStr(c_CurSignal.u16_ComBitLength),
+                                                stw::scl::QString::number(c_CurSignal.u16_ComBitLength),
                                                 static_cast<int32_t>(u32_CoRefIdSub), false, &orc_ImportMessages);
                            }
                            u32_StartBitCounter += c_CurSignal.u16_ComBitLength;
@@ -1565,7 +1565,7 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const C_SclString & orc_CoValue, c
          }
       }
       //Lower case
-      c_LowerCaseNoWhiteSpaceNumber = c_LowerCaseNoWhiteSpaceNumber.LowerCase();
+      c_LowerCaseNoWhiteSpaceNumber = c_LowerCaseNoWhiteSpaceNumber.toLower();
       if (c_LowerCaseNoWhiteSpaceNumber.Length() > 0)
       {
          QList<C_SclString> c_Tokens;
@@ -1789,7 +1789,7 @@ void C_OscImportEdsDcf::mh_AddUserMessage(const uint32_t ou32_CoObjectId, const 
 //----------------------------------------------------------------------------------------------------------------------
 C_SclString C_OscImportEdsDcf::mh_GetNumberAsHex(const uint32_t ou32_Number)
 {
-   const C_SclString c_HexObjectIdUpperCase = C_SclString::IntToHex(ou32_Number, 1).UpperCase();
+   const C_SclString c_HexObjectIdUpperCase = C_SclString::IntToHex(ou32_Number, 1).toUpper();
 
    return c_HexObjectIdUpperCase;
 }

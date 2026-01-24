@@ -9,7 +9,7 @@
 #define C_OSCHALCDEFCHANNELUSECASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_OscHalcDefChannelAvailability.hpp"
 
@@ -30,9 +30,9 @@ public:
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
-   stw::scl::C_SclString c_Id;                                  ///< Unique ID for later reference of this use-case
-   stw::scl::C_SclString c_Display;                             ///< Name to display to user
-   stw::scl::C_SclString c_Comment;                             ///< Description to display to user
+   QString c_Id;                                  ///< Unique ID for later reference of this use-case
+   QString c_Display;                             ///< Name to display to user
+   QString c_Comment;                             ///< Description to display to user
    C_OscNodeDataPoolContent c_Value;                            ///< Internal value to use
    std::vector<C_OscHalcDefChannelAvailability> c_Availability; ///< Channel availability settings
    std::vector<uint32_t> c_DefaultChannels;                     ///< Indices of channels which use this as default

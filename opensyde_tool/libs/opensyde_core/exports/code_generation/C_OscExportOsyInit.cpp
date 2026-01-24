@@ -96,8 +96,8 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
    c_Lines.Add(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
    c_Lines.Add("*/");
    c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-   c_Lines.Add("#ifndef " + h_GetFileName().UpperCase() + "H");
-   c_Lines.Add("#define " + h_GetFileName().UpperCase() + "H");
+   c_Lines.Add("#ifndef " + h_GetFileName().toUpper() + "H");
+   c_Lines.Add("#define " + h_GetFileName().toUpper() + "H");
    c_Lines.Add("");
    c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Includes"));
    c_Lines.Add("#include \"stwtypes.h\"");
@@ -184,14 +184,14 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
             {
             case C_OscSystemBus::eCAN:
                c_Lines.Add("#define OSY_INIT_DPD_BUS_NUMBER_CAN_CHANNEL_" +
-                           C_SclString::IntToStr(u8_NumCanChannels) + "       " +
-                           C_SclString::IntToStr(rc_ComIf.u8_InterfaceNumber) + "U");
+                           QString::number(u8_NumCanChannels) + "       " +
+                           QString::number(rc_ComIf.u8_InterfaceNumber) + "U");
                u8_NumCanChannels++;
                break;
             case C_OscSystemBus::eETHERNET:
                c_Lines.Add("#define OSY_INIT_DPD_BUS_NUMBER_ETHERNET_CHANNEL_" +
-                           C_SclString::IntToStr(u8_NumEthChannels) + "  " +
-                           C_SclString::IntToStr(rc_ComIf.u8_InterfaceNumber) + "U");
+                           QString::number(u8_NumEthChannels) + "  " +
+                           QString::number(rc_ComIf.u8_InterfaceNumber) + "U");
                u8_NumEthChannels++;
                break;
             default:
@@ -201,17 +201,17 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
          }
       }
 
-      c_Lines.Add("#define OSY_INIT_DPD_NUMBER_OF_CAN_CHANNELS         " + C_SclString::IntToStr(u8_NumCanChannels) +
+      c_Lines.Add("#define OSY_INIT_DPD_NUMBER_OF_CAN_CHANNELS         " + QString::number(u8_NumCanChannels) +
                   "U");
-      c_Lines.Add("#define OSY_INIT_DPD_NUMBER_OF_ETHERNET_CHANNELS    " + C_SclString::IntToStr(u8_NumEthChannels) +
+      c_Lines.Add("#define OSY_INIT_DPD_NUMBER_OF_ETHERNET_CHANNELS    " + QString::number(u8_NumEthChannels) +
                   "U");
       c_Lines.Add("");
       c_Lines.Add("#define OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS " +
-                  C_SclString::IntToStr(orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxClients) + "U");
+                  QString::number(orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxClients) + "U");
       c_Lines.Add("#define OSY_INIT_DPD_CAN_FIFO_SIZE_TX               " +
-                  C_SclString::IntToStr(orc_Node.c_Properties.c_OpenSydeServerSettings.u16_MaxMessageBufferTx) + "U");
+                  QString::number(orc_Node.c_Properties.c_OpenSydeServerSettings.u16_MaxMessageBufferTx) + "U");
       c_Lines.Add("#define OSY_INIT_DPD_CAN_ROUTING_FIFO_SIZE_RX       " +
-                  C_SclString::IntToStr(orc_Node.c_Properties.c_OpenSydeServerSettings.u16_MaxRoutingMessageBufferRx) +
+                  QString::number(orc_Node.c_Properties.c_OpenSydeServerSettings.u16_MaxRoutingMessageBufferRx) +
                   "U");
       //get size of greatest element so we know how to set up the buffers
       //add protocol overhead for DPD and NVM access services (greatest overhead: write_memory_by_address)
@@ -229,20 +229,20 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
          u32_BufferSize = C_OscProtocolDriverOsyTpBase::hu16_OSY_MAXIMUM_SERVICE_SIZE;
       }
 
-      c_Lines.Add("#define OSY_INIT_DPD_BUF_SIZE_INSTANCE              " + C_SclString::IntToStr(u32_BufferSize) + "U");
+      c_Lines.Add("#define OSY_INIT_DPD_BUF_SIZE_INSTANCE              " + QString::number(u32_BufferSize) + "U");
       c_Lines.Add("#define OSY_INIT_DPD_MAX_NUM_CYCLIC_TRANSMISSIONS   " +
-                  C_SclString::IntToStr(orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxParallelTransmissions) +
+                  QString::number(orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxParallelTransmissions) +
                   "U");
       c_Lines.Add("");
    }
 
    c_Lines.Add("#define OSY_INIT_DPH_NUM_DATA_POOLS                 " +
-               C_SclString::IntToStr(u8_DataPoolsKnownInThisApplication) + "U");
+               QString::number(u8_DataPoolsKnownInThisApplication) + "U");
    c_Lines.Add("");
    //add the next constant even if there are no COMM protocols; just placing the define does not create an external
    // dependency
    c_Lines.Add("#define OSY_INIT_COM_NUM_PROTOCOL_CONFIGURATIONS    " +
-               C_SclString::IntToStr(u8_CommDefinitionsKnownInThisApplication) + "U");
+               QString::number(u8_CommDefinitionsKnownInThisApplication) + "U");
    c_Lines.Add("");
    c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Types"));
    c_Lines.Add("");
@@ -344,8 +344,8 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
                if (rc_ComIf.e_InterfaceType == C_OscSystemBus::eCAN)
                {
                   c_Lines.Add("   OSY_DPD_CAN_CHANNEL(ht_CanInitConfiguration" +
-                              C_SclString::IntToStr(u8_NumCanChannels) +
-                              ", OSY_INIT_DPD_BUS_NUMBER_CAN_CHANNEL_" + C_SclString::IntToStr(u8_NumCanChannels) +
+                              QString::number(u8_NumCanChannels) +
+                              ", OSY_INIT_DPD_BUS_NUMBER_CAN_CHANNEL_" + QString::number(u8_NumCanChannels) +
                               ",");
                   c_Lines.Add(
                      "                       OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS, OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS,");
@@ -357,8 +357,8 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
                else
                {
                   c_Lines.Add("   OSY_DPD_ETH_CHANNEL(ht_EthernetInitConfiguration" +
-                              C_SclString::IntToStr(u8_NumEthChannels) + ", OSY_INIT_DPD_BUS_NUMBER_ETHERNET_CHANNEL_" +
-                              C_SclString::IntToStr(u8_NumEthChannels) + ",");
+                              QString::number(u8_NumEthChannels) + ", OSY_INIT_DPD_BUS_NUMBER_ETHERNET_CHANNEL_" +
+                              QString::number(u8_NumEthChannels) + ",");
                   c_Lines.Add(
                      "                       OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS, OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS,");
                   c_Lines.Add("                       OSY_INIT_DPD_BUF_SIZE_INSTANCE)");
@@ -376,7 +376,7 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
             c_Lines.Add("   {");
             for (uint8_t u8_Channel = 0U; u8_Channel < u8_NumCanChannels; u8_Channel++)
             {
-               C_SclString c_Text = "      &ht_CanInitConfiguration" + C_SclString::IntToStr(u8_Channel);
+               C_SclString c_Text = "      &ht_CanInitConfiguration" + QString::number(u8_Channel);
                if (u8_Channel != (u8_NumCanChannels - 1))
                {
                   c_Text += ",";
@@ -393,7 +393,7 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
             c_Lines.Add("   {");
             for (uint8_t u8_Channel = 0U; u8_Channel < u8_NumEthChannels; u8_Channel++)
             {
-               C_SclString c_Text = "      &ht_EthernetInitConfiguration" + C_SclString::IntToStr(u8_Channel);
+               C_SclString c_Text = "      &ht_EthernetInitConfiguration" + QString::number(u8_Channel);
                if (u8_Channel != (u8_NumEthChannels - 1))
                {
                   c_Text += ",";
@@ -408,7 +408,7 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
               u8_Instance++)
          {
             c_Lines.Add("   OSY_DPD_CONNECTION_INSTANCE_INIT(ht_DpdConnectionInstance" +
-                        C_SclString::IntToStr(u8_Instance) + ", " + C_SclString::IntToStr(u8_Instance) + "U, " +
+                        QString::number(u8_Instance) + ", " + QString::number(u8_Instance) + "U, " +
                         "OSY_INIT_DPD_MAX_NUM_CYCLIC_TRANSMISSIONS)");
          }
          c_Lines.Add("");
@@ -418,7 +418,7 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
          for (uint8_t u8_Instance = 0U; u8_Instance < orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxClients;
               u8_Instance++)
          {
-            C_SclString c_Text = "      &ht_DpdConnectionInstance" + C_SclString::IntToStr(u8_Instance);
+            C_SclString c_Text = "      &ht_DpdConnectionInstance" + QString::number(u8_Instance);
             if (u8_Instance != (orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxClients - 1))
             {
                c_Text += ",";

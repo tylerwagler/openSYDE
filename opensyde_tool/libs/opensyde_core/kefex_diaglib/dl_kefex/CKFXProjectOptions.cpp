@@ -52,14 +52,14 @@ void C_KFXProjectMetaInfo::LoadFromINI(QSettings & orc_IniFile, const C_SclStrin
    QString c_Section = orc_Section.ToQString();
 
    c_Text.Clear();
-   c_Temp = C_SclString(orc_IniFile.value(c_Section + "/Line_" + C_SclString::IntToStr(s32_Count).ToQString(),
+   c_Temp = C_SclString(orc_IniFile.value(c_Section + "/Line_" + QString::number(s32_Count).ToQString(),
                              "").toString().toStdString());
 
    while (c_Temp.Length() > 0)
    {
       c_Text.Append(c_Temp);
       s32_Count++;
-      c_Temp = C_SclString(orc_IniFile.value(c_Section + "/Line_" + C_SclString::IntToStr(s32_Count).ToQString(),
+      c_Temp = C_SclString(orc_IniFile.value(c_Section + "/Line_" + QString::number(s32_Count).ToQString(),
                                 "").toString().toStdString());
    }
 }

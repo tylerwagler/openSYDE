@@ -15,7 +15,7 @@
 
 #include <vector>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscNodeDataPoolContent.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -44,13 +44,13 @@ public:
       eACCESS_RO  ///< Data pool list element access right read only
    };
 
-   stw::scl::C_SclString c_Name;                          ///< Element name
-   stw::scl::C_SclString c_Comment;                       ///< Element comment
+   QString c_Name;                                        ///< Element name
+   QString c_Comment;                                     ///< Element comment
    C_OscNodeDataPoolContent c_MinValue;                   ///< Minimum value(s) for complete data element
    C_OscNodeDataPoolContent c_MaxValue;                   ///< Maximum value(s) for complete data element
    float64_t f64_Factor;                                  ///< Adaptation factor for display
    float64_t f64_Offset;                                  ///< Offset factor for display
-   stw::scl::C_SclString c_Unit;                          ///< Variable unit
+   QString c_Unit;                                        ///< Variable unit
    E_Access e_Access;                                     ///< Defined access level
    bool q_InterpretAsString;                              ///< Flag if data type should be interpreted as string
    bool q_DiagEventCall;                                  ///< Flag if there is an event call

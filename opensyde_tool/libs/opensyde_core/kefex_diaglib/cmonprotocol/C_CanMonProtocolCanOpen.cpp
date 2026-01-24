@@ -103,7 +103,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
       {
          c_Text = "HB/Guard " +
                   m_GetByteAsStringFormat(static_cast<uint8_t>(orc_Msg.u32_ID - (GUARD_AREA_LOW - 1))) + " : TGL:" +
-                  C_SclString::IntToStr(orc_Msg.au8_Data[0] >> 7) + " : ST:";
+                  QString::number(orc_Msg.au8_Data[0] >> 7) + " : ST:";
          switch (orc_Msg.au8_Data[0] & 0x7FU)
          {
          case 0:

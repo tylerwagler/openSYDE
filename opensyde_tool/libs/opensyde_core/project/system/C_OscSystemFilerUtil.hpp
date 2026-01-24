@@ -29,29 +29,29 @@ namespace opensyde_core
 class C_OscSystemFilerUtil
 {
 public:
-   static stw::scl::C_SclString h_BusTypeEnumToString(const C_OscSystemBus::E_Type oe_Type);
-   static int32_t h_BusTypeStringToEnum(const stw::scl::C_SclString & orc_Type, C_OscSystemBus::E_Type & ore_Type);
-   static int32_t h_GetParserForExistingFile(C_OscXmlParser & orc_FileXmlParser, const stw::scl::C_SclString & orc_Path,
-                                             const stw::scl::C_SclString & orc_RootNode);
-   static int32_t h_GetParserForNewFile(C_OscXmlParser & orc_FileXmlParser, const stw::scl::C_SclString & orc_Path,
-                                        const stw::scl::C_SclString & orc_RootNode);
-   static int32_t h_CreateFolder(const stw::scl::C_SclString & orc_Path);
-   static stw::scl::C_SclString h_PrepareItemNameForFileName(const stw::scl::C_SclString & orc_ItemName);
-   static stw::scl::C_SclString h_CombinePaths(const stw::scl::C_SclString & orc_BasePathName,
-                                               const stw::scl::C_SclString & orc_SubFolderFileName);
-   static int32_t h_SaveStringToFile(const stw::scl::C_SclString & orc_CompleteFileAsString,
-                                     const stw::scl::C_SclString & orc_CompleteFilePath,
-                                     const stw::scl::C_SclString & orc_LogHeading);
-   static void h_AdaptProjectPathToSystemDefinition(const stw::scl::C_SclString & orc_ProjectPath,
-                                                    stw::scl::C_SclString & orc_SystemDefintionPath);
-   static void h_AdaptProjectPathToSystemViews(const stw::scl::C_SclString & orc_ProjectPath,
-                                               stw::scl::C_SclString & orc_SystemViewsPath);
-   static stw::scl::C_SclString h_CodeExportScalingTypeToString(const C_OscNodeCodeExportSettings::E_Scaling &
+   static QString h_BusTypeEnumToString(const C_OscSystemBus::E_Type oe_Type);
+   static int32_t h_BusTypeStringToEnum(const QString & orc_Type, C_OscSystemBus::E_Type & ore_Type);
+   static int32_t h_GetParserForExistingFile(C_OscXmlParser & orc_FileXmlParser, const QString & orc_Path,
+                                             const QString & orc_RootNode);
+   static int32_t h_GetParserForNewFile(C_OscXmlParser & orc_FileXmlParser, const QString & orc_Path,
+                                        const QString & orc_RootNode);
+   static int32_t h_CreateFolder(const QString & orc_Path);
+   static QString h_PrepareItemNameForFileName(const QString & orc_ItemName);
+   static QString h_CombinePaths(const QString & orc_BasePathName,
+                                               const QString & orc_SubFolderFileName);
+   static int32_t h_SaveStringToFile(const QString & orc_CompleteFileAsString,
+                                     const QString & orc_CompleteFilePath,
+                                     const QString & orc_LogHeading);
+   static void h_AdaptProjectPathToSystemDefinition(const QString & orc_ProjectPath,
+                                                    QString & orc_SystemDefintionPath);
+   static void h_AdaptProjectPathToSystemViews(const QString & orc_ProjectPath,
+                                               QString & orc_SystemViewsPath);
+   static QString h_CodeExportScalingTypeToString(const C_OscNodeCodeExportSettings::E_Scaling &
                                                                 ore_Scaling);
-   static int32_t h_StringToCodeExportScalingType(const stw::scl::C_SclString & orc_String,
+   static int32_t h_StringToCodeExportScalingType(const QString & orc_String,
                                                   C_OscNodeCodeExportSettings::E_Scaling & ore_Scaling);
    static int32_t h_CheckVersion(C_OscXmlParserBase & orc_XmlParser, const uint16_t ou16_ExpectedFileVersion,
-                                 const stw::scl::C_SclString & orc_TagName, const stw::scl::C_SclString & orc_UseCase);
+                                 const QString & orc_TagName, const QString & orc_UseCase);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

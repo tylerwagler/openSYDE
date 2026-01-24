@@ -5,7 +5,7 @@
 #include <iostream>
 #include <stdio.h>
 
-using namespace std;
+// using namespace std;  // Removed to avoid 'byte' conflict with Windows headers
 
 class AES
 {

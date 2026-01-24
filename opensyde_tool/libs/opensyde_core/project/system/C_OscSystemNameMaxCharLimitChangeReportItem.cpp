@@ -46,8 +46,8 @@ C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeRe
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeReportItem(
-   const stw::scl::C_SclString oc_Type, const stw::scl::C_SclString oc_OriginalName,
-   const stw::scl::C_SclString oc_NewName) :
+   const QString oc_Type, const QString oc_OriginalName,
+   const QString oc_NewName) :
    c_Type(oc_Type),
    c_OriginalName(oc_OriginalName),
    c_NewName(oc_NewName)
@@ -64,13 +64,13 @@ C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeRe
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(const uint32_t ou32_NameMaxCharLimit,
-                                                                               const stw::scl::C_SclString & orc_Type,
-                                                                               stw::scl::C_SclString & orc_Name,
+                                                                               const QString & orc_Type,
+                                                                               QString & orc_Name,
                                                                                std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
 {
-   if (orc_Name.Length() > ou32_NameMaxCharLimit)
+   if (static_cast<uint32_t>(orc_Name.length()) > ou32_NameMaxCharLimit)
    {
-      const stw::scl::C_SclString c_NewNameTmp = orc_Name.SubString(1UL, ou32_NameMaxCharLimit);
+      const QString c_NewNameTmp = orc_Name.left(static_cast<int>(ou32_NameMaxCharLimit));
       if (opc_ChangedItems != NULL)
       {
          const C_OscSystemNameMaxCharLimitChangeReportItem c_Entry(orc_Type, orc_Name, c_NewNameTmp);

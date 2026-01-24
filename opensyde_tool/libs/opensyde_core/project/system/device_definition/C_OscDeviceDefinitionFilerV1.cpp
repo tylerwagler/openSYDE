@@ -16,7 +16,6 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
 
 #include "C_OscDeviceDefinitionFilerV1.hpp"
 #include "C_OscXmlParser.hpp"
@@ -25,7 +24,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
-using namespace stw::scl;
 
 using namespace stw::opensyde_core;
 
@@ -132,13 +130,13 @@ void C_OscDeviceDefinitionFilerV1::mh_ParseStwFlashloaderAvailability(const C_Os
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser,
-                                             const stw::scl::C_SclString & orc_Path)
+                                             const QString & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
 
    uint32_t u32_Value;
 
-   stw::scl::C_SclString c_Text;
+   QString c_Text;
    C_OscSubDeviceDefinition c_SubDevice;
 
    c_Text = orc_Parser.SelectNodeChild("device-name");
@@ -165,7 +163,7 @@ int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceD
          {
             do
             {
-               const stw::scl::C_SclString c_Tmp = orc_Parser.GetNodeContent();
+               const QString c_Tmp = orc_Parser.GetNodeContent();
                c_SubDevice.c_OtherAcceptedNames.push_back(c_Tmp);
                c_Text = orc_Parser.SelectNodeNext("other-accepted-name");
             }
@@ -224,8 +222,8 @@ int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceD
       }
       //expand the potentially relative image path to an absolute path
       // we will need it later to open the image in the UI
-      const QString c_BasePath = QFileInfo(orc_Path.ToQString()).absolutePath() + "/";
-      orc_DeviceDefinition.c_ImagePath = C_SclString::FromQString(QDir(c_BasePath).absoluteFilePath(orc_DeviceDefinition.c_ImagePath.ToQString()));
+      const QString c_BasePath = QFileInfo(orc_Path).absolutePath() + "/";
+      orc_DeviceDefinition.c_ImagePath = QDir(c_BasePath).absoluteFilePath(orc_DeviceDefinition.c_ImagePath);
       // also store file path
       // it is needed for creating service update package (see #24474)
       orc_DeviceDefinition.c_FilePath = orc_Path;
@@ -377,7 +375,7 @@ int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceD
 
                osc_write_log_info("Loading device definition",
                                   "Due to compatibility all flashloader reset wait times set to the"
-                                  " same configuration value (" + C_SclString::IntToStr(u32_Value) +
+                                  " same configuration value (" + QString::number(u32_Value) +
                                   " ms) for XML file \"" + orc_Path + "\".");
 
                c_Text = orc_Parser.SelectNodeParent(); //back to parent ...
@@ -401,8 +399,7 @@ int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceD
                   osc_write_log_info("Loading device definition",
                                      "Default value for flashloader reset wait time "
                                      "u32_FlashloaderResetWaitTimeNoChangesCan (" +
-                                     C_SclString::IntToStr(c_SubDevice.
-                                                           u32_FlashloaderResetWaitTimeNoChangesCan) +
+                                     QString::number(c_SubDevice.u32_FlashloaderResetWaitTimeNoChangesCan) +
                                      " ms) for XML file \"" + orc_Path + "\" used.");
                }
             }
@@ -422,8 +419,7 @@ int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceD
                   osc_write_log_info("Loading device definition",
                                      "Default value for flashloader reset wait time "
                                      "u32_FlashloaderResetWaitTimeNoChangesEthernet (" +
-                                     C_SclString::IntToStr(c_SubDevice.
-                                                           u32_FlashloaderResetWaitTimeNoChangesEthernet) +
+                                     QString::number(c_SubDevice.u32_FlashloaderResetWaitTimeNoChangesEthernet) +
                                      " ms) for XML file \"" + orc_Path + "\" used.");
                }
             }
@@ -443,8 +439,7 @@ int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceD
                   osc_write_log_info("Loading device definition",
                                      "Default value for flashloader reset wait time "
                                      "u32_FlashloaderResetWaitTimeNoFundamentalChangesCan (" +
-                                     C_SclString::IntToStr(c_SubDevice.
-                                                           u32_FlashloaderResetWaitTimeNoFundamentalChangesCan) +
+                                     QString::number(c_SubDevice.u32_FlashloaderResetWaitTimeNoFundamentalChangesCan) +
                                      " ms) for XML file \"" + orc_Path + "\" used.");
                }
             }
@@ -464,8 +459,7 @@ int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceD
                   osc_write_log_info("Loading device definition",
                                      "Default value for flashloader reset wait time "
                                      "u32_FlashloaderResetWaitTimeNoFundamentalChangesEthernet (" +
-                                     C_SclString::IntToStr(c_SubDevice.
-                                                           u32_FlashloaderResetWaitTimeNoFundamentalChangesEthernet) +
+                                     QString::number(c_SubDevice.u32_FlashloaderResetWaitTimeNoFundamentalChangesEthernet) +
                                      " ms) for XML file \"" + orc_Path + "\" used.");
                }
             }
@@ -485,8 +479,7 @@ int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceD
                   osc_write_log_info("Loading device definition",
                                      "Default value for flashloader reset wait time "
                                      "u32_FlashloaderResetWaitTimeFundamentalChangesCan (" +
-                                     C_SclString::IntToStr(c_SubDevice.
-                                                           u32_FlashloaderResetWaitTimeFundamentalChangesCan) +
+                                     QString::number(c_SubDevice.u32_FlashloaderResetWaitTimeFundamentalChangesCan) +
                                      " ms) for XML file \"" + orc_Path + "\" used.");
                }
             }
@@ -506,8 +499,7 @@ int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceD
                   osc_write_log_info("Loading device definition",
                                      "Default value for flashloader reset wait time "
                                      "u32_FlashloaderResetWaitTimeFundamentalChangesEthernet (" +
-                                     C_SclString::IntToStr(c_SubDevice.
-                                                           u32_FlashloaderResetWaitTimeFundamentalChangesEthernet) +
+                                     QString::number(c_SubDevice.u32_FlashloaderResetWaitTimeFundamentalChangesEthernet) +
                                      " ms) for XML file \"" + orc_Path + "\" used.");
                }
             }

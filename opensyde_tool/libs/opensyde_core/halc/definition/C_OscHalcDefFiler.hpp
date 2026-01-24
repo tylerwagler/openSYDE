@@ -24,12 +24,12 @@ namespace opensyde_core
 class C_OscHalcDefFiler
 {
 public:
-   static int32_t h_LoadFile(C_OscHalcDefBase & orc_IoData, const stw::scl::C_SclString & orc_Path);
-   static int32_t h_SaveFile(const C_OscHalcDefBase & orc_IoData, const stw::scl::C_SclString & orc_Path);
+   static int32_t h_LoadFile(C_OscHalcDefBase & orc_IoData, const QString & orc_Path);
+   static int32_t h_SaveFile(const C_OscHalcDefBase & orc_IoData, const QString & orc_Path);
    static int32_t h_LoadData(C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_SaveData(const C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
 
-   static int32_t h_LoadAvailability(const stw::scl::C_SclString & orc_AttributeName,
+   static int32_t h_LoadAvailability(const QString & orc_AttributeName,
                                      std::vector<C_OscHalcDefChannelAvailability> & orc_Availability,
                                      const uint32_t ou32_NumChannels, const C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_CheckUseCaseValue(const C_OscHalcDefDomain & orc_IoDataDomain);
@@ -53,42 +53,42 @@ private:
                                   C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadChannelUseCases(std::vector<C_OscHalcDefChannelUseCase> & orc_ChannelUsecases,
                                          C_OscXmlParserBase & orc_XmlParser, const uint32_t ou32_NumChannels);
-   static int32_t mh_SplitAvailabilityString(const stw::scl::C_SclString & orc_AvailabilityString,
-                                             std::vector<stw::scl::C_SclString> & orc_SubElements,
+   static int32_t mh_SplitAvailabilityString(const QString & orc_AvailabilityString,
+                                             std::vector<QString> & orc_SubElements,
                                              const C_OscXmlParserBase & orc_XmlParser,
-                                             const stw::scl::C_SclString & orc_AttributeName);
-   static int32_t mh_ParseAvailabilityStringSubElements(const std::vector<stw::scl::C_SclString> & orc_SubElements,
+                                             const QString & orc_AttributeName);
+   static int32_t mh_ParseAvailabilityStringSubElements(const std::vector<QString> & orc_SubElements,
                                                         std::vector<C_OscHalcDefChannelAvailability> & orc_Availability,
                                                         const uint32_t ou32_NumChannels,
                                                         const C_OscXmlParserBase & orc_XmlParser,
-                                                        const stw::scl::C_SclString & orc_AttributeName);
+                                                        const QString & orc_AttributeName);
    static int32_t mh_CheckAvailability(const std::vector<C_OscHalcDefChannelAvailability> & orc_Availability,
                                        const C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_ConvertStringToNumber(const stw::scl::C_SclString & orc_Number, int32_t & ors32_Number,
+   static int32_t mh_ConvertStringToNumber(const QString & orc_Number, int32_t & ors32_Number,
                                            const C_OscXmlParserBase & orc_XmlParser,
-                                           const stw::scl::C_SclString & orc_AttributeName);
-   static int32_t mh_HandleNumberSection(stw::scl::C_SclString & orc_Number, std::vector<int32_t> & orc_FoundNumbers,
-                                         bool & orq_LastNumDeclaredSection, const stw::scl::C_SclString & orc_Section,
+                                           const QString & orc_AttributeName);
+   static int32_t mh_HandleNumberSection(QString & orc_Number, std::vector<int32_t> & orc_FoundNumbers,
+                                         bool & orq_LastNumDeclaredSection, const QString & orc_Section,
                                          const C_OscXmlParserBase & orc_XmlParser,
-                                         const stw::scl::C_SclString & orc_AttributeName);
+                                         const QString & orc_AttributeName);
    static int32_t mh_HandleNumberSectionEnd(const std::vector<int32_t> & orc_FoundNumbers, const bool oq_IsGroupSection,
                                             std::vector<C_OscHalcDefChannelAvailability> & orc_Availability,
                                             const uint32_t ou32_NumChannels, const C_OscXmlParserBase & orc_XmlParser,
-                                            const stw::scl::C_SclString & orc_AttributeName);
-   static stw::scl::C_SclString mh_GetAvailabilityString(
+                                            const QString & orc_AttributeName);
+   static QString mh_GetAvailabilityString(
       const std::vector<C_OscHalcDefChannelAvailability> & orc_Availability, const bool oq_OnlySaveOnce);
    static int32_t mh_SaveUseCase(const C_OscHalcDefChannelUseCase & orc_UseCase, C_OscXmlParserBase & orc_XmlParser);
-   static stw::scl::C_SclString mh_DomainCategoryEnumToString(const C_OscHalcDefDomain::E_Category oe_Category);
-   static int32_t mh_DomainCategoryStringToEnum(const stw::scl::C_SclString & orc_Category,
+   static QString mh_DomainCategoryEnumToString(const C_OscHalcDefDomain::E_Category oe_Category);
+   static int32_t mh_DomainCategoryStringToEnum(const QString & orc_Category,
                                                 C_OscHalcDefDomain::E_Category & ore_Category);
    static void mh_GetAllNames(const std::vector<C_OscHalcDefStruct> & orc_Values,
-                              std::vector<stw::scl::C_SclString> & orc_Names);
-   static int32_t mh_CheckDuplicateNames(const stw::scl::C_SclString & orc_Section,
-                                         const stw::scl::C_SclString & orc_DomainSingularName,
-                                         const std::vector<stw::scl::C_SclString> & orc_Names);
-   static stw::scl::C_SclString mh_SafetyModeToString(
+                              std::vector<QString> & orc_Names);
+   static int32_t mh_CheckDuplicateNames(const QString & orc_Section,
+                                         const QString & orc_DomainSingularName,
+                                         const std::vector<QString> & orc_Names);
+   static QString mh_SafetyModeToString(
       const C_OscHalcDefBase::E_SafetyMode & ore_NodeDataPoolElementAccess);
-   static int32_t mh_StringToSafetyMode(const stw::scl::C_SclString & orc_String,
+   static int32_t mh_StringToSafetyMode(const QString & orc_String,
                                         C_OscHalcDefBase::E_SafetyMode & ore_Type);
 };
 

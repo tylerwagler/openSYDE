@@ -8,70 +8,83 @@
    Individual strings are identified by their index.
    Most application will instance a singleton of the C_SCLResourceStrings class.
 
-   The class uses some RAM as the whole string table is copied there and is sorted by the string's indexes
-   to improve look-up performance.
+   The class uses some RAM as the whole string table is copied there and is
+   sorted by the string's indexes to improve look-up performance.
 
-   Loading string tables from file is not implemented yet but can easily be added.
+   Loading string tables from file is not implemented yet but can easily be
+   added.
 
-   \copyright   Copyright 2009 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2009 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SCLRESOURCESTRINGSHPP
 #define C_SCLRESOURCESTRINGSHPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 
-#include <string>
-#include <QList>
-#include "C_SclString.hpp"
 #include "stwtypes.hpp"
+#include <QList>
+#include <QString>
+#include <string>
 
-namespace stw
-{
-namespace scl
-{
-/* -- Defines ------------------------------------------------------------------------------------------------------- */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+namespace stw {
+namespace scl {
+/* -- Defines
+ * -------------------------------------------------------------------------------------------------------
+ */
 
-///resource string with index
-class C_SclResourceString
-{
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
+
+/// resource string with index
+class C_SclResourceString {
 public:
-   uint16_t u16_Index;
-   C_SclString c_Text;
+  uint16_t u16_Index;
+  QString c_Text;
 };
 
-///handler for resource style strings
-class C_SCLResourceStrings
-{
+/// handler for resource style strings
+class C_SCLResourceStrings {
 private:
-   QList<C_SclResourceString> mac_Strings;
-   bool mq_Dirty;
+  QList<C_SclResourceString> mac_Strings;
+  bool mq_Dirty;
 
 public:
-   C_SCLResourceStrings(void);
+  C_SCLResourceStrings(void);
 
-   C_SclString LoadStr(const uint16_t ou16_Index);
+  QString LoadStr(const uint16_t ou16_Index);
 
-   //add strings one by one ...
-   //call ::SortByIndex after you are finished
-   //Will be quite slow for bigger lists as the dynamic array needs to be resized all the time
-   void AddString(const uint16_t ou16_Index, const C_SclString & orc_Text);
-   void Clear(void);
+  // add strings one by one ...
+  // call ::SortByIndex after you are finished
+  // Will be quite slow for bigger lists as the dynamic array needs to be
+  // resized all the time
+  void AddString(const uint16_t ou16_Index, const QString &orc_Text);
+  void Clear(void);
 
-   //will implicitly call SortByIndex
-   void SetStringTable(const C_SclResourceString * const opc_Strings, const uint16_t ou16_NumStrings);
+  // will implicitly call SortByIndex
+  void SetStringTable(const C_SclResourceString *const opc_Strings,
+                      const uint16_t ou16_NumStrings);
 
-   void SortByIndex(void);
+  void SortByIndex(void);
 };
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Function Prototypes ------------------------------------------------------------------------------------------- */
+/* -- Function Prototypes
+ * -------------------------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
-}
-}
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
+} // namespace scl
+} // namespace stw
 
 #endif

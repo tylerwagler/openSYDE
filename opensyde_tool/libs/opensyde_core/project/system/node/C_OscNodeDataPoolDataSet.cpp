@@ -52,6 +52,6 @@ C_OscNodeDataPoolDataSet::C_OscNodeDataPoolDataSet(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolDataSet::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(), this->c_Comment.length(), oru32_HashValue);
 }

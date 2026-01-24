@@ -37,7 +37,7 @@ private:
 
 public:
    static int32_t h_Load(C_OscDeviceDefinition & orc_DeviceDefinition, C_OscXmlParser & orc_Parser,
-                         const stw::scl::C_SclString & orc_Path);
+                         const QString & orc_Path);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

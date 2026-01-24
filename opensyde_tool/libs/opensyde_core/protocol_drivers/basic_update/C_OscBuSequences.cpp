@@ -19,6 +19,7 @@
 #include <QThread>
 #include <QDateTime>
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclStringList.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscUpdateUtil.hpp"
 #include "C_OscBuSequences.hpp"
@@ -166,7 +167,7 @@ int32_t C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_FlashloaderRes
    {
       //not a showstopper; user can still use the "manual reset" approach
       C_SclString c_Text;
-      c_Text.PrintFormatted("Could not set the \"request programming\" flag: Failed with result %d. "
+      c_Text = QString::asprintf("Could not set the \"request programming\" flag: Failed with result %d. "
                             "You still have the chance to reset the device manually ...", s32_Return);
       m_ReportProgress(C_WARN, c_Text);
    }
@@ -183,7 +184,7 @@ int32_t C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_FlashloaderRes
       C_SclString c_Text;
       osc_write_log_warning(c_LogActivity, "Could not request an ECU reset.");
 
-      c_Text.PrintFormatted("You now have %u seconds time to turn on your target device ...",
+      c_Text = QString::asprintf("You now have %u seconds time to turn on your target device ...",
                             u32_SCAN_TIME_MS / 1000);
       m_ReportProgress(C_WARN, c_Text);
    }
@@ -203,7 +204,7 @@ int32_t C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_FlashloaderRes
       {
          osc_write_log_error(c_LogActivity,
                              "Sending broadcast to enter preprogramming session failed with result " +
-                             C_SclString::IntToStr(s32_Return));
+                             QString::number(s32_Return));
 
          s32_Return = C_COM;
       }
@@ -503,7 +504,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
          {
             const C_SclString c_Tmp =
                "Received seed in non secure mode does not match the expected value, expected: 42, got " +
-               C_SclString::IntToStr(u64_Seed);
+               QString::number(u64_Seed);
             osc_write_log_warning(c_LogActivity, c_Tmp.c_str());
          }
 
@@ -532,7 +533,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
          if (s32_Return != C_NO_ERR)
          {
             C_SclString c_Error;
-            c_Error.PrintFormatted("(Offset: 0x%08x Size: 0x%08x)", pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
+            c_Error = QString::asprintf("(Offset: 0x%08x Size: 0x%08x)", pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
                                    static_cast<uint32_t>(pc_HexDump->at_Blocks[u16_Area].au8_Data.size()));
             osc_write_log_error(c_LogActivity,  "Could not get confirmation about flash memory availability " +
                                 c_Error + "! Details: " +
@@ -600,7 +601,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
          if (s32_Return != C_NO_ERR)
          {
             C_SclString c_Error;
-            c_Error.PrintFormatted("(Offset: 0x%08X Size: 0x%08X)", pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
+            c_Error = QString::asprintf("(Offset: 0x%08X Size: 0x%08X)", pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
                                    static_cast<uint32_t>(pc_HexDump->at_Blocks[u16_Area].au8_Data.size()));
             osc_write_log_error(c_LogActivity, "Could not request download " + c_Error + "! Details: " +
                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return, u8_NumberCode));
@@ -639,7 +640,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
                if (s32_Return == C_NO_ERR)
                {
                   C_SclString c_Text;
-                  c_Text.PrintFormatted("Transferring area %02d/%02d  byte %08d/%08d",
+                  c_Text = QString::asprintf("Transferring area %02d/%02d  byte %08d/%08d",
                                         u16_Area + 1, pc_HexDump->at_Blocks.size(),
                                         s32_Size - s32_RemainingBytes, s32_Size);
                   m_ReportProgress(s32_Return, c_Text);
@@ -668,7 +669,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
          if (s32_Return == C_NO_ERR)
          {
             C_SclString c_Text;
-            c_Text.PrintFormatted("Transferring area %02d/%02d  byte %08d/%08d",
+            c_Text = QString::asprintf("Transferring area %02d/%02d  byte %08d/%08d",
                                   u16_Area + 1, pc_HexDump->at_Blocks.size(), s32_Size, s32_Size);
 
             const uint8_t u8_MAX_PERCENTAGE = 100;
@@ -782,7 +783,7 @@ int32_t C_OscBuSequences::h_ReadHexFile(const C_SclString & orc_HexFilePath, C_O
       (void)orc_HexFile.GetECUInformationBlocks(c_InfoBlocks, 0, false, false, false);
 
       osc_write_log_info(c_LogActivity, "Number of application information blocks in HEX file: " +
-                         C_SclString::IntToStr(c_InfoBlocks.size()));
+                         QString::number(c_InfoBlocks.size()));
 
       for (int32_t s32_Index = 0; s32_Index < c_InfoBlocks.size(); s32_Index++)
       {
@@ -807,7 +808,7 @@ int32_t C_OscBuSequences::h_ReadHexFile(const C_SclString & orc_HexFilePath, C_O
       {
          C_SclString c_Text;
 
-         c_Text.PrintFormatted("Signature block found at address 0x%08X.", oru32_SignatureBlockAddress);
+         c_Text = QString::asprintf("Signature block found at address 0x%08X.", oru32_SignatureBlockAddress);
          osc_write_log_info(c_LogActivity, c_Text);
       }
    }
@@ -855,15 +856,15 @@ void C_OscBuSequences::m_ReportProgress(const int32_t os32_Result, const C_SclSt
 
    if (os32_Result == C_NO_ERR)
    {
-      osc_write_log_info("Progress", orc_Information);
+      osc_write_log_info("Progress", orc_Information.ToQString());
    }
    else if (os32_Result == C_WARN)
    {
-      osc_write_log_warning("Progress", orc_Information);
+      osc_write_log_warning("Progress", orc_Information.ToQString());
    }
    else
    {
-      osc_write_log_error("Progress", orc_Information);
+      osc_write_log_error("Progress", orc_Information.ToQString());
    }
 }
 
@@ -881,16 +882,19 @@ void C_OscBuSequences::m_ReportFlashloaderInformationRead(const C_SclString & or
                                                           const C_OscComFlashloaderInformation & orc_Information)
 {
    C_SclStringList c_Text;
-   const C_SclStringList c_MoreInformation = orc_Information.FlashloaderInformationToText();
+   const QStringList c_MoreInformation = orc_Information.FlashloaderInformationToText();
 
    c_Text.Clear();
-   c_Text.Add("Device name: " + orc_DeviceName);
-   c_Text.AddStrings(&c_MoreInformation);
+   c_Text.Add(("Device name: " + orc_DeviceName).ToQString());
+   for (const QString & rc_Line : c_MoreInformation)
+   {
+      c_Text.Add(rc_Line);
+   }
 
    std::cout << "openSYDE device information read: " << "\n";
    for (uint32_t u32_Line = 0U; u32_Line < c_Text.GetCount(); u32_Line++)
    {
-      std::cout << c_Text.Strings[u32_Line].c_str() << "\n";
+      std::cout << c_Text.Strings[u32_Line].toUtf8().constData() << "\n";
       osc_write_log_info("Flashloader Info", c_Text.Strings[u32_Line]);
    }
 }

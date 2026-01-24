@@ -63,7 +63,7 @@ C_SclString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
 
    if (mq_Decimal == false)
    {
-      (void)c_Text.PrintFormatted("%08X%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
+      (void)c_Text = QString::asprintf("%08X%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
       for (j = 0; j < u8_Len; j++)
       {
          (void)c_Help.PrintFormatted(" %02X ", orc_Msg.au8_Data[j]);
@@ -76,7 +76,7 @@ C_SclString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    }
    else
    {
-      (void)c_Text.PrintFormatted("%8d%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
+      (void)c_Text = QString::asprintf("%8d%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
       for (j = 0; j < u8_Len; j++)
       {
          (void)c_Help.PrintFormatted("%3d ", orc_Msg.au8_Data[j]);

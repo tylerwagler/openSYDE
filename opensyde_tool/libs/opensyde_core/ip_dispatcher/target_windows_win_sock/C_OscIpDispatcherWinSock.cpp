@@ -288,7 +288,7 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
    else
    {
       osc_write_log_error("openSYDE IP-TP", "UDP init failed. Could not get IP addresses with error: " +
-                          C_SclString::IntToStr(u32_RetVal));
+                          QString::number(u32_RetVal));
    }
 
    delete[] pc_Addresses;
@@ -320,7 +320,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
    orc_Connection.x_Socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
    if (orc_Connection.x_Socket == m_WsInvalidSocket())
    {
-      osc_write_log_error("openSYDE IP-TP", "Error at TCP socket(): " + C_SclString::IntToStr(WSAGetLastError()) +
+      osc_write_log_error("openSYDE IP-TP", "Error at TCP socket(): " + QString::number(WSAGetLastError()) +
                           " IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
       q_Error = true;
    }
@@ -336,7 +336,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
       if (ioctlsocket(orc_Connection.x_Socket, m_WsFionBio(), &x_Mode) == SOCKET_ERROR)
       {
          osc_write_log_error("openSYDE IP-TP",
-                             "TCP socket ioctlsocket() failed. Error: " + C_SclString::IntToStr(WSAGetLastError()) +
+                             "TCP socket ioctlsocket() failed. Error: " + QString::number(WSAGetLastError()) +
                              "IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
          q_Error = true;
       }
@@ -360,7 +360,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
       //for this non-blocking TCP socket the function should immediately return with WSAEWOULDBLOCK:
       if ((x_Return == SOCKET_ERROR) && (WSAGetLastError() != WSAEWOULDBLOCK))
       {
-         osc_write_log_error("openSYDE IP-TP", "TCP connect() failed. Error: " + C_SclString::IntToStr(
+         osc_write_log_error("openSYDE IP-TP", "TCP connect() failed. Error: " + QString::number(
                                 WSAGetLastError()));
          q_Error = true;
       }
@@ -383,7 +383,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
             osc_write_log_error("openSYDE IP-TP",
                                 "TCP connect select() failed. IP-Address: " + mh_IpToText(
                                    orc_Connection.au8_IpAddress) +
-                                " Error: " + C_SclString::IntToStr(WSAGetLastError()));
+                                " Error: " + QString::number(WSAGetLastError()));
             q_Error = true;
             break;
          case 0:
@@ -409,7 +409,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
                //event caused by write (= connect finished)
                osc_write_log_info("openSYDE IP-TP",
                                   "TCP connect select() OK. IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress) +
-                                  " on client port: " + C_SclString::IntToStr(ntohs(c_SocketInfo.sin_port)));
+                                  " on client port: " + QString::number(ntohs(c_SocketInfo.sin_port)));
             }
             else
             {
@@ -422,7 +422,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
             break;
          default:
             osc_write_log_error("openSYDE IP-TP",
-                                "TCP connect select() failed. Unknown problem: " + C_SclString::IntToStr(
+                                "TCP connect select() failed. Unknown problem: " + QString::number(
                                    x_Return) + " IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
             q_Error = true;
             break;
@@ -456,7 +456,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
    orx_Socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
    if (orx_Socket == m_WsInvalidSocket())
    {
-      osc_write_log_error("openSYDE IP-TP", "Error at UDP socket(): " + C_SclString::IntToStr(WSAGetLastError()));
+      osc_write_log_error("openSYDE IP-TP", "Error at UDP socket(): " + QString::number(WSAGetLastError()));
       q_Error = true;
    }
    else
@@ -473,7 +473,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
       if (x_Return == SOCKET_ERROR)
       {
          osc_write_log_error("openSYDE IP-TP",
-                             "UDP set broadcast permission failed. Error: " + C_SclString::IntToStr(
+                             "UDP set broadcast permission failed. Error: " + QString::number(
                                 WSAGetLastError()));
          (void)closesocket(orx_Socket);
          q_Error = true;
@@ -507,7 +507,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
       if (x_Return == SOCKET_ERROR)
       {
          osc_write_log_error("openSYDE IP-TP",
-                             "UDP bind() failed. Error: " + C_SclString::IntToStr(WSAGetLastError()));
+                             "UDP bind() failed. Error: " + QString::number(WSAGetLastError()));
          q_Error = true;
       }
       else
@@ -523,7 +523,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
       u_long x_Mode = 1U;
       if (ioctlsocket(orx_Socket, m_WsFionBio(), &x_Mode) == SOCKET_ERROR)
       {
-         osc_write_log_error("openSYDE IP-TP", "TCP socket ioctlsocket() failed. Error: " + C_SclString::IntToStr(
+         osc_write_log_error("openSYDE IP-TP", "TCP socket ioctlsocket() failed. Error: " + QString::number(
                                 WSAGetLastError()));
          q_Error = true;
       }
@@ -548,7 +548,7 @@ C_SclString C_OscIpDispatcherWinSock::mh_IpToText(const uint8_t (&orau8_Ip)[4])
 {
    C_SclString c_Text;
 
-   c_Text.PrintFormatted("%d.%d.%d.%d", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
+   c_Text = QString::asprintf("%d.%d.%d.%d", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
    return c_Text;
 }
 
@@ -761,7 +761,7 @@ int32_t C_OscIpDispatcherWinSock::CloseTcp(const uint32_t ou32_Handle)
       osc_write_log_info("openSYDE IP-TP",
                          "TCP closesocket() OK. IP-Address: " +
                          mh_IpToText(this->mc_SocketsTcp[ou32_Handle].au8_IpAddress) +
-                         " on client port: " + C_SclString::IntToStr(ntohs(c_SocketInfo.sin_port)));
+                         " on client port: " + QString::number(ntohs(c_SocketInfo.sin_port)));
    }
 
    return s32_Return;
@@ -847,7 +847,7 @@ int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std:
 
                osc_write_log_error("openSYDE IP-TP",
                                    "SendTcp: Could not send TCP service. Data lost. Error: " +
-                                   C_SclString::IntToStr(x_Error) +
+                                   QString::number(x_Error) +
                                    " IP-Address: " + mh_IpToText(this->mc_SocketsTcp[ou32_Handle].au8_IpAddress));
                if ((x_Error == WSAECONNABORTED) || (x_Error == WSAECONNRESET))
                {
@@ -863,8 +863,8 @@ int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std:
             {
                osc_write_log_error("openSYDE IP-TP",
                                    "SendTcp: Could not send all data: tried: " +
-                                   C_SclString::IntToStr(orc_Data.size()) +
-                                   "sent: " + C_SclString::IntToStr(x_BytesSent));
+                                   QString::number(orc_Data.size()) +
+                                   "sent: " + QString::number(x_BytesSent));
             }
             s32_Return = C_RD_WR;
          }
@@ -945,7 +945,7 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, std::vecto
          else if (x_Return == SOCKET_ERROR)
          {
             osc_write_log_error("openSYDE IP-TP", "Could not read TCP: buffer count could not be read. Error: " +
-                                C_SclString::IntToStr(WSAGetLastError()) + " IP-Address: " +
+                                QString::number(WSAGetLastError()) + " IP-Address: " +
                                 mh_IpToText(this->mc_SocketsTcp[ou32_Handle].au8_IpAddress));
          }
          else
@@ -1153,7 +1153,7 @@ int32_t C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
             if (x_Return != x_NumToSend)
             {
                osc_write_log_error("openSYDE IP-TP",
-                                   "SendUdp sendto error: " + C_SclString::IntToStr(WSAGetLastError()));
+                                   "SendUdp sendto error: " + QString::number(WSAGetLastError()));
                s32_Return = C_RD_WR;
             }
          }
@@ -1257,8 +1257,8 @@ int32_t C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Data, uint8
                   //comm error: no data read even though it was reported by ioctl
                   osc_write_log_error("openSYDE IP-TP",
                                       "ReadUdp unexpected error: data reported as available but reading failed. Reported size: " +
-                                      C_SclString::IntToStr(
-                                         orc_Data.size()) + " Read size: " + C_SclString::IntToStr(x_Return));
+                                      QString::number(
+                                         orc_Data.size()) + " Read size: " + QString::number(x_Return));
                   s32_Return = C_RD_WR;
                }
             }

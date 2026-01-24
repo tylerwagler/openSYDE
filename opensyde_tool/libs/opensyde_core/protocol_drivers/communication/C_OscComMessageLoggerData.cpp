@@ -125,9 +125,8 @@ void C_OscComMessageLoggerData::SortSignals(void)
    Formatted timestamp
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLoggerData::h_GetTimestampAsString(const uint64_t ou64_TimeStamp)
+QString C_OscComMessageLoggerData::h_GetTimestampAsString(const uint64_t ou64_TimeStamp)
 {
-   C_SclString c_TimeStamp;
    const uint16_t u16_MicroSec = static_cast<uint16_t>(ou64_TimeStamp % 1000U);
    uint64_t u64_TimeStampTemp = ou64_TimeStamp / 1000U; // To ms
    const uint16_t u16_MilliSec = static_cast<uint16_t>(u64_TimeStampTemp % 1000U);
@@ -144,8 +143,6 @@ C_SclString C_OscComMessageLoggerData::h_GetTimestampAsString(const uint64_t ou6
    u64_TimeStampTemp /= 60U; // To hours
    u32_Hours = static_cast<uint32_t>(u64_TimeStampTemp);
 
-   c_TimeStamp.PrintFormatted("%02u:%02d:%02d.%03d.%03d",
-                              u32_Hours, u8_Min, u8_Sec, u16_MilliSec, u16_MicroSec);
-
-   return c_TimeStamp;
+   return QString::asprintf("%02u:%02d:%02d.%03d.%03d",
+                            u32_Hours, u8_Min, u8_Sec, u16_MilliSec, u16_MicroSec);
 }

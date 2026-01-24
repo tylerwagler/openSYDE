@@ -375,7 +375,7 @@ const
                else
                {
                   m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
-                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
+                                              QString::number(c_Response.size()) + ") received. Ignoring.",
                                               TGL_UTIL_FUNC_ID, au8_Ip);
                }
             }
@@ -555,7 +555,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(const C_OscProtocolSer
                else
                {
                   m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
-                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
+                                              QString::number(c_Response.size()) + ") received. Ignoring.",
                                               TGL_UTIL_FUNC_ID, orau8_ResponseIp);
                }
             }
@@ -753,7 +753,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(const C_OscPro
                else
                {
                   m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
-                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
+                                              QString::number(c_Response.size()) + ") received. Ignoring.",
                                               TGL_UTIL_FUNC_ID, orau8_ResponseIp);
                }
             }
@@ -861,7 +861,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
                else
                {
                   m_LogWarningWithHeaderAndIp("UDP response with incorrect payload size (" +
-                                              C_SclString::IntToStr(c_Response.size()) + ") received. Ignoring.",
+                                              QString::number(c_Response.size()) + ") received. Ignoring.",
                                               TGL_UTIL_FUNC_ID, au8_Ip);
                }
             }
@@ -1216,9 +1216,9 @@ void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeader(const C_SclString & orc_
                                                         const char_t * const opcn_Function) const
 {
    C_OscLoggingHandler::h_WriteLogError("openSYDE IP-TP",
-                                        "openSYDE IP-TP node " + C_SclString::IntToStr(
+                                        "openSYDE IP-TP node " + QString::number(
                                            mc_ServerId.u8_BusIdentifier) + "." +
-                                        C_SclString::IntToStr(
+                                        QString::number(
                                            mc_ServerId.u8_NodeIdentifier) + ": " + orc_Information, __FILE__,
                                         opcn_Function);
 }
@@ -1243,7 +1243,7 @@ void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeaderAndIp(const C_SclString &
 {
    C_SclString c_Text;
 
-   c_Text.PrintFormatted("[IP: %d.%d.%d.%d]: ", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
+   c_Text = QString::asprintf("[IP: %d.%d.%d.%d]: ", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
    c_Text += orc_Information;
 
    m_LogWarningWithHeader(c_Text, opcn_Function);

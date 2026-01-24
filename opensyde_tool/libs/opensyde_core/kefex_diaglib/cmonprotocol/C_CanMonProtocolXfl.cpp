@@ -493,7 +493,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                c_Help2 = " RANGE: " + m_GetValueDecHex(orc_Msg.au8_Data[4]);
                break;
             default:
-               c_Help = c_Help + "undefined_index:" + C_SclString::IntToStr(orc_Msg.au8_Data[3]);
+               c_Help = c_Help + "undefined_index:" + QString::number(orc_Msg.au8_Data[3]);
                break;
             }
             if (c_Help2 == "")
@@ -546,7 +546,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                c_Help = c_Help + "hex_record_config";
                break;
             default:
-               c_Help = c_Help + "undefined_index:" + C_SclString::IntToStr(orc_Msg.au8_Data[3]);
+               c_Help = c_Help + "undefined_index:" + QString::number(orc_Msg.au8_Data[3]);
                break;
             }
             break;
@@ -584,7 +584,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                c_Help = c_Help + "username4";
                break;
             default:
-               c_Help = c_Help + "undefined_index:" + C_SclString::IntToStr(orc_Msg.au8_Data[3]);
+               c_Help = c_Help + "undefined_index:" + QString::number(orc_Msg.au8_Data[3]);
                break;
             }
             break;
@@ -681,7 +681,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                c_Help = "";
                break;
             }
-            c_Help = "set_can_type TYPE:" + C_SclString::IntToStr(orc_Msg.au8_Data[3]);
+            c_Help = "set_can_type TYPE:" + QString::number(orc_Msg.au8_Data[3]);
             break;
          case mu8_XFL_CMD_SET_CONTROL_ID:
             if (orc_Msg.u8_DLC != 7U)
@@ -710,11 +710,11 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
             {
             case 5U:
                c_Help = "set_sec_mode_compare SEC:" + m_GetValueDecHex(orc_Msg.au8_Data[3]) +
-                        " MODE:" + C_SclString::IntToStr(orc_Msg.au8_Data[4]);
+                        " MODE:" + QString::number(orc_Msg.au8_Data[4]);
                break;
             case 6U:
                c_Help = "set_sec_mode_compare SEC:" + m_GetValueDecHex(mh_BytesToWordLowHigh(&orc_Msg.au8_Data[3])) +
-                        " MODE:" + C_SclString::IntToStr(orc_Msg.au8_Data[5]);
+                        " MODE:" + QString::number(orc_Msg.au8_Data[5]);
                break;
             default:
                c_Help = "";
@@ -728,7 +728,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                break;
             }
             c_Help = "set_timeout_factor TYPE:" +
-                     C_SclString::IntToStr(orc_Msg.au8_Data[3]) + " FAC:" + m_GetValueDecHex(orc_Msg.au8_Data[4]);
+                     QString::number(orc_Msg.au8_Data[3]) + " FAC:" + m_GetValueDecHex(orc_Msg.au8_Data[4]);
             break;
          case mu8_XFL_CMD_SET_DIVERT_PARAM:
             if (orc_Msg.u8_DLC != 8U)
@@ -767,7 +767,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                c_Help = "";
                break;
             }
-            c_Help = "set_temp_bitrate BITRATE:" + C_SclString::IntToStr(mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[3]));
+            c_Help = "set_temp_bitrate BITRATE:" + QString::number(mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[3]));
             break;
          case mu8_XFL_CMD_SET_BLOCK_START_ADDRESS:
             if (orc_Msg.u8_DLC != 8U)
@@ -1148,11 +1148,11 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
             {
             case 5U:
                c_Help = "get_sec_mode_compare SEC:" + m_GetValueDecHex(orc_Msg.au8_Data[3]) +
-                        " MODE:" + C_SclString::IntToStr(orc_Msg.au8_Data[4]);
+                        " MODE:" + QString::number(orc_Msg.au8_Data[4]);
                break;
             case 6U:
                c_Help = "get_sec_mode_compare SEC:" + m_GetValueDecHex(mh_BytesToWordLowHigh(&orc_Msg.au8_Data[3])) +
-                        " MODE:" + C_SclString::IntToStr(orc_Msg.au8_Data[5]);
+                        " MODE:" + QString::number(orc_Msg.au8_Data[5]);
                break;
             default:
                c_Help = "";
@@ -1254,7 +1254,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                c_Help2 = " ADD: " + m_GetValueDecHex(mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[4]));
                break;
             default:
-               c_Help = c_Help + "undefined_index:" + C_SclString::IntToStr(orc_Msg.au8_Data[3]);
+               c_Help = c_Help + "undefined_index:" + QString::number(orc_Msg.au8_Data[3]);
                break;
             }
             if (c_Help2 == "")
@@ -1306,7 +1306,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                          " GRA: " + m_GetValueDecHex(orc_Msg.au8_Data[5]) + "bytes";
                break;
             default:
-               c_Help = c_Help + "undefined_index:" + C_SclString::IntToStr(orc_Msg.au8_Data[3]);
+               c_Help = c_Help + "undefined_index:" + QString::number(orc_Msg.au8_Data[3]);
                break;
             }
             if (c_Help2 == "")
@@ -1352,7 +1352,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                c_Help = c_Help + "username4";
                break;
             default:
-               c_Help = c_Help + "undefined_index:" + C_SclString::IntToStr(orc_Msg.au8_Data[3]);
+               c_Help = c_Help + "undefined_index:" + QString::number(orc_Msg.au8_Data[3]);
                break;
             }
             c_Help = c_Help + " DB0: " + m_GetValueDecHex(orc_Msg.au8_Data[4]) +
@@ -1460,7 +1460,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                c_Help = "";
                break;
             }
-            c_Help = "set_can_type TYPE:" + C_SclString::IntToStr(orc_Msg.au8_Data[3]);
+            c_Help = "set_can_type TYPE:" + QString::number(orc_Msg.au8_Data[3]);
             break;
          case mu8_XFL_CMD_SET_CONTROL_ID: //set_control_id
             if (orc_Msg.u8_DLC != 7U)
@@ -1483,11 +1483,11 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
             {
             case 5U:
                c_Help = "set_sec_mode_compare SEC:" + m_GetValueDecHex(orc_Msg.au8_Data[3]) +
-                        " MODE:" + C_SclString::IntToStr(orc_Msg.au8_Data[4]);
+                        " MODE:" + QString::number(orc_Msg.au8_Data[4]);
                break;
             case 6U:
                c_Help = "set_sec_mode_compare SEC:" + m_GetValueDecHex(mh_BytesToWordLowHigh(&orc_Msg.au8_Data[3])) +
-                        " MODE:" + C_SclString::IntToStr(orc_Msg.au8_Data[5]);
+                        " MODE:" + QString::number(orc_Msg.au8_Data[5]);
                break;
             default:
                c_Help = "";
@@ -1501,7 +1501,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                break;
             }
             c_Help = "set_timeout_factor TYPE:" +
-                     C_SclString::IntToStr(orc_Msg.au8_Data[3]) + " FAC:" + m_GetValueDecHex(orc_Msg.au8_Data[4]);
+                     QString::number(orc_Msg.au8_Data[3]) + " FAC:" + m_GetValueDecHex(orc_Msg.au8_Data[4]);
             break;
          case mu8_XFL_CMD_SET_DIVERT_PARAM:
             if (orc_Msg.u8_DLC != 8U)
@@ -1761,7 +1761,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                   c_Help = "ERR: WRONG_REC_TYPE";
                   break;
                default:
-                  c_Help = "ERR: unknown error (" + C_SclString::IntToStr(orc_Msg.au8_Data[2]) + "d)";
+                  c_Help = "ERR: unknown error (" + QString::number(orc_Msg.au8_Data[2]) + "d)";
                   break;
                }
             }

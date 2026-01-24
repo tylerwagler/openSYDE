@@ -28,7 +28,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscXmlParser.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -52,8 +52,8 @@ private:
 public:
    C_OscChecksummedXml(void);
 
-   virtual int32_t LoadFromFile(const stw::scl::C_SclString & orc_FileName);
-   virtual int32_t SaveToFile(const stw::scl::C_SclString & orc_FileName);
+   virtual int32_t LoadFromFile(const QString & orc_FileName);
+   virtual int32_t SaveToFile(const QString & orc_FileName);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

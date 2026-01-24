@@ -51,11 +51,11 @@ uint16_t C_OscParamSetFilerBase::mhu16_FileVersion = 1;
    C_RANGE  File does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase::h_AddCrc(const C_SclString & orc_Path)
+int32_t C_OscParamSetFilerBase::h_AddCrc(const QString & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       C_OscChecksummedXml c_XmlParser;
       s32_Return = c_XmlParser.LoadFromFile(orc_Path);
@@ -108,7 +108,7 @@ int32_t C_OscParamSetFilerBase::h_CheckFileVersion(C_OscXmlParserBase & orc_XmlP
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().toInt());
       }
       catch (...)
       {
@@ -120,7 +120,7 @@ int32_t C_OscParamSetFilerBase::h_CheckFileVersion(C_OscXmlParserBase & orc_XmlP
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading Dataset data", "Value of \"file-version\": " +
-                            C_SclString::IntToStr(u16_FileVersion));
+                            QString::number(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != mhu16_FileVersion)
          {
@@ -157,7 +157,7 @@ void C_OscParamSetFilerBase::h_SaveFileVersion(C_OscXmlParserBase & orc_XmlParse
    {
       Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
    }
-   orc_XmlParser.SetNodeContent("0x" + C_SclString::IntToHex(C_OscParamSetFilerBase::mhu16_FileVersion, 4));
+   orc_XmlParser.SetNodeContent("0x" + QString::number(C_OscParamSetFilerBase::mhu16_FileVersion, 16).rightJustified(4, '0'));
    //Return
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-parameter-sets");
 }
@@ -312,7 +312,7 @@ C_OscParamSetFilerBase::C_OscParamSetFilerBase(void)
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase::mh_LoadNodeName(stw::scl::C_SclString & orc_Name, C_OscXmlParserBase & orc_XmlParser)
+int32_t C_OscParamSetFilerBase::mh_LoadNodeName(QString & orc_Name, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -341,7 +341,7 @@ int32_t C_OscParamSetFilerBase::mh_LoadNodeName(stw::scl::C_SclString & orc_Name
    \param[in,out] orc_XmlParser XML with specified node active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscParamSetFilerBase::mh_SaveNodeName(const stw::scl::C_SclString & orc_Name, C_OscXmlParserBase & orc_XmlParser)
+void C_OscParamSetFilerBase::mh_SaveNodeName(const QString & orc_Name, C_OscXmlParserBase & orc_XmlParser)
 {
    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
@@ -381,7 +381,7 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfos(std::vector<C_OscParamSetDa
    orc_DataPoolInfos.clear();
    if (orc_XmlParser.SelectNodeChild("datapools") == "datapools")
    {
-      C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("datapool");
+      QString c_SelectedNode = orc_XmlParser.SelectNodeChild("datapool");
 
       if (c_SelectedNode == "datapool")
       {

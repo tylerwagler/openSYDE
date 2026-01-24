@@ -9,10 +9,10 @@
 #define C_OSCSUPNODEDEFINITION_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QString>
 #include <vector>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -33,11 +33,11 @@ public:
 
    uint8_t u8_Active;
    uint32_t u32_Position;
-   std::vector<stw::scl::C_SclString> c_ApplicationFileNames; // with relative path
-   std::vector<stw::scl::C_SclString> c_NvmFileNames;         // with relative path
-   stw::scl::C_SclString c_PemFile;
+   std::vector<QString> c_ApplicationFileNames; // with relative path
+   std::vector<QString> c_NvmFileNames;         // with relative path
+   QString c_PemFile;
    uint8_t u8_SignaturePresent;
-   stw::scl::C_SclString c_SignatureFile;
+   QString c_SignatureFile;
 
    /// Node configuration flags for security state
    bool q_SendSecurityEnabledState;

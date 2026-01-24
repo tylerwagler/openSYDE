@@ -194,7 +194,7 @@ void C_OscXcoManifestFiler::h_SaveData(const C_OscXcoManifest & orc_Config, C_Os
 {
    //File version
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
-   orc_XmlParser.SetNodeContent(stw::scl::C_SclString::IntToStr(mhu16_FILE_VERSION_1));
+   orc_XmlParser.SetNodeContent(stw::scl::QString::number(mhu16_FILE_VERSION_1));
    //Return
    orc_XmlParser.SelectNodeParent();
    //Package
@@ -204,7 +204,7 @@ void C_OscXcoManifestFiler::h_SaveData(const C_OscXcoManifest & orc_Config, C_Os
    orc_XmlParser.SelectNodeParent();
    //Config
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("x-app-config") == "x-app-config");
-   orc_XmlParser.CreateNodeChild("package-version", stw::scl::C_SclString::IntToStr(mhu16_PACKAGE_VERSION_1));
+   orc_XmlParser.CreateNodeChild("package-version", stw::scl::QString::number(mhu16_PACKAGE_VERSION_1));
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("x-app-node") == "x-app-node");
    orc_XmlParser.SetAttributeString("name", orc_Config.c_NodeName);
    //Return

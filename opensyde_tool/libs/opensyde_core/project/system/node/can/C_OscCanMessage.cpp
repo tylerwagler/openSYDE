@@ -105,8 +105,8 @@ bool C_OscCanMessage::operator !=(const C_OscCanMessage & orc_Cmp) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanMessage::CalcHash(uint32_t & oru32_HashValue, const bool oq_R20Compatible) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(), this->c_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_CanId, sizeof(this->u32_CanId), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsExtended, sizeof(this->q_IsExtended), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u16_Dlc, sizeof(this->u16_Dlc), oru32_HashValue);
@@ -550,7 +550,7 @@ void C_OscCanMessage::CheckErrorSignalDetailed(const C_OscNodeDataPoolList * con
                         {
                            const C_OscNodeDataPoolListElement & rc_ListElement =
                               opc_List->c_Elements[rc_SignalData.u32_ComDataElementIndex];
-                           if (rc_CurrentElement.c_Name.LowerCase() == rc_ListElement.c_Name.LowerCase())
+                           if (rc_CurrentElement.c_Name.toLower() == rc_ListElement.c_Name.toLower())
                            {
                               *opq_NameConflict = true;
                               break;

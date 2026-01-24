@@ -184,10 +184,10 @@ bool C_OscSubDeviceDefinition::IsConnected(const C_OscSystemBus::E_Type oe_Type,
 {
    bool q_Retval = false;
 
-   const stw::scl::C_SclString c_Interface = C_OscSubDeviceDefinition::h_GetInterfaceNameLower(oe_Type,
-                                                                                               ou8_InterfaceNumber);
+   const QString c_Interface = C_OscSubDeviceDefinition::h_GetInterfaceNameLower(oe_Type,
+                                                                                 ou8_InterfaceNumber);
    {
-      const std::map<stw::scl::C_SclString, bool>::const_iterator c_It = this->c_ConnectedInterfaces.find(c_Interface);
+      const std::map<QString, bool>::const_iterator c_It = this->c_ConnectedInterfaces.find(c_Interface);
       if (c_It != this->c_ConnectedInterfaces.end())
       {
          q_Retval = c_It->second;
@@ -207,10 +207,10 @@ bool C_OscSubDeviceDefinition::IsConnected(const C_OscSystemBus::E_Type oe_Type,
    Interface name (lowercase)
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscSubDeviceDefinition::h_GetInterfaceNameLower(const C_OscSystemBus::E_Type oe_Type,
+QString C_OscSubDeviceDefinition::h_GetInterfaceNameLower(const C_OscSystemBus::E_Type oe_Type,
                                                                         const uint8_t ou8_InterfaceNumber)
 {
-   stw::scl::C_SclString c_Interface = stw::scl::C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceNumber) + 1U);
+   QString c_Interface = QString::number(static_cast<uint32_t>(ou8_InterfaceNumber) + 1U);
 
    if (oe_Type == C_OscSystemBus::eCAN)
    {

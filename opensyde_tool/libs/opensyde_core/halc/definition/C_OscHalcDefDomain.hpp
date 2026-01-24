@@ -9,7 +9,7 @@
 #define C_OSCHALCDEFDOMAIN_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscHalcDefChannelDef.hpp"
 #include "C_OscHalcDefChannelValues.hpp"
 #include "C_OscHalcDefChannelUseCase.hpp"
@@ -46,10 +46,10 @@ public:
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
-   stw::scl::C_SclString c_Id;                                ///< Unique ID for later reference of this domain
-   stw::scl::C_SclString c_Name;                              ///< Displayable plural name of domain
-   stw::scl::C_SclString c_SingularName;                      ///< Displayable singular name of domain
-   stw::scl::C_SclString c_Comment;                           ///< Description to display to user
+   QString c_Id;                                ///< Unique ID for later reference of this domain
+   QString c_Name;                              ///< Displayable plural name of domain
+   QString c_SingularName;                      ///< Displayable singular name of domain
+   QString c_Comment;                           ///< Description to display to user
    std::vector<C_OscHalcDefChannelDef> c_Channels;            ///< All available channels for this domain
    std::vector<C_OscHalcDefChannelUseCase> c_ChannelUseCases; ///< All available channel use-cases for this domain
    C_OscHalcDefChannelValues c_DomainValues;                  ///< All available values for the domain

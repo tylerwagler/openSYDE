@@ -32,21 +32,21 @@ namespace opensyde_core
 class C_OscAesFile
 {
 public:
-   static int32_t h_EncryptFile(const stw::scl::C_SclString & orc_Key, const stw::scl::C_SclString & orc_InFilePath,
-                                const stw::scl::C_SclString & orc_OutFilePath);
+   static int32_t h_EncryptFile(const QString & orc_Key, const QString & orc_InFilePath,
+                                const QString & orc_OutFilePath);
 
-   static int32_t h_DecryptFile(const stw::scl::C_SclString & orc_Key, const stw::scl::C_SclString & orc_InFilePath,
-                                const stw::scl::C_SclString & orc_OutFilePath);
+   static int32_t h_DecryptFile(const QString & orc_Key, const QString & orc_InFilePath,
+                                const QString & orc_OutFilePath);
 
-   static int32_t h_CreateEncryptedZipFile(const stw::scl::C_SclString & orc_FolderPathToZip,
-                                           const std::set<stw::scl::C_SclString> & orc_SupFiles,
-                                           const stw::scl::C_SclString & orc_PathForZipFile,
-                                           const stw::scl::C_SclString & orc_Key,
-                                           stw::scl::C_SclString * const opc_ErrorMessage);
-   static int32_t h_UnpackEncryptedZipFile(const stw::scl::C_SclString & orc_PathOfZipFile,
-                                           const stw::scl::C_SclString & orc_FolderPathToUnzip,
-                                           const stw::scl::C_SclString & orc_Key,
-                                           stw::scl::C_SclString * const opc_ErrorMessage);
+   static int32_t h_CreateEncryptedZipFile(const QString & orc_FolderPathToZip,
+                                           const std::set<QString> & orc_SupFiles,
+                                           const QString & orc_PathForZipFile,
+                                           const QString & orc_Key,
+                                           QString * const opc_ErrorMessage);
+   static int32_t h_UnpackEncryptedZipFile(const QString & orc_PathOfZipFile,
+                                           const QString & orc_FolderPathToUnzip,
+                                           const QString & orc_Key,
+                                           QString * const opc_ErrorMessage);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

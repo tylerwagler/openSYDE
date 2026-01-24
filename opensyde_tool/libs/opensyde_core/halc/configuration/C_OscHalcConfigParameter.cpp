@@ -60,5 +60,6 @@ void C_OscHalcConfigParameter::CalcHash(uint32_t & oru32_HashValue) const
 {
    c_Value.CalcHash(oru32_HashValue);
 
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   const QByteArray c_CommentBytes = this->c_Comment.toUtf8();
+   stw::scl::C_SclChecksums::CalcCRC32(c_CommentBytes.constData(), c_CommentBytes.length(), oru32_HashValue);
 }

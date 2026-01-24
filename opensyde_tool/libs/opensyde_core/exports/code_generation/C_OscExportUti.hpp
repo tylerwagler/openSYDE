@@ -9,7 +9,7 @@
 #define C_OSCEXPORTUTI_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclStringList.hpp"
+#include <QStringList>
 #include "C_OscNodeDataPool.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -24,31 +24,31 @@ namespace opensyde_core
 class C_OscExportUti
 {
 public:
-   static stw::scl::C_SclString h_GetSectionSeparator(const stw::scl::C_SclString & orc_SectionName);
-   static stw::scl::C_SclString h_GetHeaderSeparator(void);
-   static stw::scl::C_SclString h_GetCreationToolInfo(const stw::scl::C_SclString & orc_ExportToolInfo);
-   static void h_AddExternCeStart(stw::scl::C_SclStringList & orc_Data);
-   static void h_AddExternCeEnd(stw::scl::C_SclStringList & orc_Data);
-   static void h_AddProjectIdDef(stw::scl::C_SclStringList & orc_Data, const stw::scl::C_SclString & orc_MagicName,
+   static QString h_GetSectionSeparator(const QString & orc_SectionName);
+   static QString h_GetHeaderSeparator(void);
+   static QString h_GetCreationToolInfo(const QString & orc_ExportToolInfo);
+   static void h_AddExternCeStart(QStringList & orc_Data);
+   static void h_AddExternCeEnd(QStringList & orc_Data);
+   static void h_AddProjectIdDef(QStringList & orc_Data, const QString & orc_MagicName,
                                  const bool oq_HeaderFile);
-   static void h_AddProjIdFunctionPrototype(stw::scl::C_SclStringList & orc_Data,
-                                            const stw::scl::C_SclString & orc_MagicName);
-   static int32_t h_SaveToFile(stw::scl::C_SclStringList & orc_Data, const stw::scl::C_SclString & orc_Path,
-                               const stw::scl::C_SclString & orc_FileName, const bool oq_HeaderFile);
-   static void h_CollectFilePaths(std::vector<stw::scl::C_SclString> & orc_FilePaths,
-                                  const stw::scl::C_SclString & orc_Path, const stw::scl::C_SclString & orc_FileName,
+   static void h_AddProjIdFunctionPrototype(QStringList & orc_Data,
+                                            const QString & orc_MagicName);
+   static int32_t h_SaveToFile(QStringList & orc_Data, const QString & orc_Path,
+                               const QString & orc_FileName, const bool oq_HeaderFile);
+   static void h_CollectFilePaths(std::vector<QString> & orc_FilePaths,
+                                  const QString & orc_Path, const QString & orc_FileName,
                                   const bool oq_SourceCode);
 
-   static stw::scl::C_SclString h_GetTypePrefix(const C_OscNodeDataPoolContent::E_Type oe_Type, const bool oq_IsArray);
-   static stw::scl::C_SclString h_GetElementTypeAsString(const C_OscNodeDataPoolContent::E_Type oe_Type);
-   static stw::scl::C_SclString h_GetElementCeName(const stw::scl::C_SclString & orc_Name, const bool oq_IsArray,
+   static QString h_GetTypePrefix(const C_OscNodeDataPoolContent::E_Type oe_Type, const bool oq_IsArray);
+   static QString h_GetElementTypeAsString(const C_OscNodeDataPoolContent::E_Type oe_Type);
+   static QString h_GetElementCeName(const QString & orc_Name, const bool oq_IsArray,
                                                    const C_OscNodeDataPoolContent::E_Type oe_Type,
-                                                   const stw::scl::C_SclString & orc_ArrayPos = "0");
+                                                   const QString & orc_ArrayPos = "0");
 
-   static stw::scl::C_SclString h_FloatToStrGe(const float32_t of32_Value,  bool * const opq_InfOrNan = NULL);
-   static stw::scl::C_SclString h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan = NULL);
-   static bool h_CheckInfOrNan(const stw::scl::C_SclString & orc_String);
-   static void h_AddDecimalPointIfNone(stw::scl::C_SclString & orc_FloatString);
+   static QString h_FloatToStrGe(const float32_t of32_Value,  bool * const opq_InfOrNan = NULL);
+   static QString h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan = NULL);
+   static bool h_CheckInfOrNan(const QString & orc_String);
+   static void h_AddDecimalPointIfNone(QString & orc_FloatString);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

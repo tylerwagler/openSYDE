@@ -399,7 +399,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadList(C_OscParamSetInterpretedL
 void C_OscParamSetInterpretedNodeFiler::mh_SaveList(const C_OscParamSetInterpretedList & orc_List,
                                                     C_OscXmlParserBase & orc_XmlParser)
 {
-   orc_XmlParser.CreateNodeChild("name", orc_List.c_Name);
+   orc_XmlParser.CreateNodeChild("name", orc_List.c_Name.ToQString());
    C_OscParamSetInterpretedNodeFiler::mh_SaveElements(orc_List.c_Elements, orc_XmlParser);
 }
 
@@ -525,7 +525,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElement(C_OscParamSetInterpret
       s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElementType(orc_Element.c_NvmValue, orc_XmlParser);
       if ((s32_Retval == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("value") == "value"))
       {
-         C_SclString c_Error;
+         QString c_Error;
          s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(orc_Element.c_NvmValue, orc_XmlParser, true,
                                                                          &c_Error);
          if (s32_Retval != C_NO_ERR)

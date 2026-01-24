@@ -204,7 +204,7 @@ int32_t C_OscXceCreate::mh_CheckParamsToCreatePackage(const stw::scl::C_SclStrin
       for (uint32_t u32_It = 0UL; (u32_It < orc_UpdatePackageParameters.size()) && (s32_Return == C_NO_ERR); ++u32_It)
       {
          const C_OscXceUpdatePackageParameters & rc_In = orc_UpdatePackageParameters[u32_It];
-         if (rc_In.c_AuthenticationKeyPath.IsEmpty() == false)
+         if (rc_In.c_AuthenticationKeyPath.isEmpty() == false)
          {
             s32_Return = C_OscXceCreate::mh_CheckFileExists(rc_In.c_AuthenticationKeyPath);
          }
@@ -299,7 +299,7 @@ int32_t C_OscXceCreate::mh_PrepareCertFiles(const stw::scl::C_SclString & orc_Tm
       for (uint32_t u32_It = 0UL; (u32_It < orc_UpdatePackageParameters.size()) && (s32_Return == C_NO_ERR); ++u32_It)
       {
          C_OscXceUpdatePackageParameters & rc_In = orc_UpdatePackageParameters[u32_It];
-         if (rc_In.c_AuthenticationKeyPath.IsEmpty() == false)
+         if (rc_In.c_AuthenticationKeyPath.isEmpty() == false)
          {
             s32_Return = mh_CopyFile(rc_In.c_AuthenticationKeyPath, orc_TmpPath, mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER,
                                      c_ExistingPackageNames,

@@ -700,7 +700,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
          {
             // Special case: Extended request
             c_Text += "Ext";
-            c_Text += "  BlockNumber: " + C_SclString::IntToStr(opu8_ServiceData[1]);
+            c_Text += "  BlockNumber: " + QString::number(opu8_ServiceData[1]);
             // Byte 3 is reserved
             u8_FirstRawByte = ou8_ServiceSize; //everything displayed ...
          }
@@ -733,20 +733,20 @@ C_SclString C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
             c_Snr = this->mh_SerialNumberToString(&opu8_ServiceData[1]);
             c_Text += "  Std SNR POS: " + c_Snr;
 
-            c_Text += "  Ext SNR BlockNumber: " + C_SclString::IntToStr(u8_BlockNumber);
-            c_Text += "  SubNodeId: " + C_SclString::IntToStr(u8_SubNodeId);
+            c_Text += "  Ext SNR BlockNumber: " + QString::number(u8_BlockNumber);
+            c_Text += "  SubNodeId: " + QString::number(u8_SubNodeId);
             c_Text += "  UniqueId: " + C_SclString::IntToHex(u32_UniqueId, 6);
 
             if (u8_BlockNumber == 0)
             {
                // First byte reserved
-               c_Text += "  Manufacturer Format: " + C_SclString::IntToStr(opu8_ServiceData[6]);
+               c_Text += "  Manufacturer Format: " + QString::number(opu8_ServiceData[6]);
             }
             else if (u8_BlockNumber == 1)
             {
                C_SclString c_Text2;
 
-               c_Text += "  Length: " + C_SclString::IntToStr(opu8_ServiceData[5]);
+               c_Text += "  Length: " + QString::number(opu8_ServiceData[5]);
                c_Text += "  SNR FSN First sign: ";
                c_Text += static_cast<char_t>(opu8_ServiceData[6]);
 
@@ -1102,7 +1102,7 @@ C_SclString C_CanMonProtocolOpenSyde::mh_ThreeByteVersionToString(const uint8_t 
 {
    C_SclString c_Text;
 
-   c_Text.PrintFormatted("%d.%02dr%d", opu8_Version[0], opu8_Version[1], opu8_Version[2]);
+   c_Text = QString::asprintf("%d.%02dr%d", opu8_Version[0], opu8_Version[1], opu8_Version[2]);
    return c_Text;
 }
 
@@ -1445,8 +1445,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
       {
          if (ou8_PayloadSize > 2U)
          {
-            c_Text += "  SNR Manufacturer Format: " + C_SclString::IntToStr(opu8_Payload[0]);
-            c_Text += "  SNR Length: " + C_SclString::IntToStr(opu8_Payload[1]);
+            c_Text += "  SNR Manufacturer Format: " + QString::number(opu8_Payload[0]);
+            c_Text += "  SNR Length: " + QString::number(opu8_Payload[1]);
             if (opu8_Payload[0] != 0U)
             {
                c_Text += "  SNR First sign: ";
@@ -1688,8 +1688,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
       {
          if (ou8_DataSize == 2U)
          {
-            c_Text += "  BusId: " + C_SclString::IntToStr(opu8_Data[0]);
-            c_Text += "  NodeId: " + C_SclString::IntToStr(opu8_Data[1]);
+            c_Text += "  BusId: " + QString::number(opu8_Data[0]);
+            c_Text += "  NodeId: " + QString::number(opu8_Data[1]);
             u8_FirstRawByte = ou8_DataSize; //finished here ...
          }
          else
@@ -1705,8 +1705,8 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
          if (ou8_DataSize == 3U)
          {
             // Byte 0 is reserved
-            c_Text += "  BusId: " + C_SclString::IntToStr(opu8_Data[1]);
-            c_Text += "  NodeId: " + C_SclString::IntToStr(opu8_Data[2]);
+            c_Text += "  BusId: " + QString::number(opu8_Data[1]);
+            c_Text += "  NodeId: " + QString::number(opu8_Data[2]);
             u8_FirstRawByte = ou8_DataSize; //finished here ...
          }
          else
@@ -1721,9 +1721,9 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
       {
          if (ou8_DataSize == 3U)
          {
-            c_Text += "  SubNodeId: " + C_SclString::IntToStr(opu8_Data[0]);
-            c_Text += "  SNR Manufacturer Format: " + C_SclString::IntToStr(opu8_Data[1]);
-            c_Text += "  SNR Length: " + C_SclString::IntToStr(opu8_Data[2]);
+            c_Text += "  SubNodeId: " + QString::number(opu8_Data[0]);
+            c_Text += "  SNR Manufacturer Format: " + QString::number(opu8_Data[1]);
+            c_Text += "  SNR Length: " + QString::number(opu8_Data[2]);
             u8_FirstRawByte = ou8_DataSize; //finished here ...
          }
          else
@@ -1743,7 +1743,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
    case UDS_H_ROUTINE_CTRL_SET_NODEID_BY_SERIALNUMBER_EXT_11: // Similar service
    case UDS_H_ROUTINE_CTRL_SET_NODEID_BY_SERIALNUMBER_EXT_12: // Similar service
       //no details reported for now
-      c_Text = "SetNodeIdBySerialNumberExtPart" + C_SclString::IntToStr(
+      c_Text = "SetNodeIdBySerialNumberExtPart" + QString::number(
          (ou16_RoutineIdentifier - UDS_H_ROUTINE_CTRL_SET_NODEID_BY_SERIALNUMBER_EXT_1) + 1U);
 
       if (oq_IsResponse == false)
@@ -1911,7 +1911,7 @@ C_SclString C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                }
                break;
             case ISO15765_N_PCI_CF:
-               c_Text += (" CF  SN " + C_SclString::IntToStr(orc_Msg.au8_Data[0] & 0x0FU));
+               c_Text += (" CF  SN " + QString::number(orc_Msg.au8_Data[0] & 0x0FU));
                if (orc_Msg.u8_DLC < 2) //CF with no data byte does not make sense
                {
                   c_Error = "DLC too short (not >= 2)";
@@ -1984,7 +1984,7 @@ C_SclString C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                      C_SclString c_Snr;
                      uint32_t u32_SubNodeId = static_cast<uint32_t>(orc_Msg.au8_Data[1] & 0xF0U) >> 4U;
                      c_Snr = this->mh_SerialNumberToString(&orc_Msg.au8_Data[2]);
-                     c_Text += "  SubNodeId: " + C_SclString::IntToStr(u32_SubNodeId);
+                     c_Text += "  SubNodeId: " + QString::number(u32_SubNodeId);
                      c_Text += "  SNR: " + c_Snr;
                   }
                }
@@ -2004,14 +2004,14 @@ C_SclString C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                      uint32_t u32_SnrSignCounter;
                      bool q_DlcCorrect = true;
 
-                     c_Text += "  BlockNumber: " + C_SclString::IntToStr(u32_BlockNr);
-                     c_Text += "  SubNodeId: " + C_SclString::IntToStr(u32_SubNodeId);
+                     c_Text += "  BlockNumber: " + QString::number(u32_BlockNr);
+                     c_Text += "  SubNodeId: " + QString::number(u32_SubNodeId);
 
                      if ((u32_BlockNr == 0U) &&
                          (orc_Msg.u8_DLC > 4U)) // SNR must have a length of at least 1
                      {
-                        c_Text += "  SNR Manufacturer Format: " + C_SclString::IntToStr(orc_Msg.au8_Data[2]);
-                        c_Text += "  SNR Length: " + C_SclString::IntToStr(orc_Msg.au8_Data[3]);
+                        c_Text += "  SNR Manufacturer Format: " + QString::number(orc_Msg.au8_Data[2]);
+                        c_Text += "  SNR Length: " + QString::number(orc_Msg.au8_Data[3]);
                         u32_SnrSignStartIndex = 4U;
                      }
                      else if (u32_BlockNr > 0U)
@@ -2063,7 +2063,7 @@ C_SclString C_CanMonProtocolOpenSyde::MessageToString(const T_STWCAN_Msg_RX & or
                else
                {
                   //it's an OMFO (openSYDE multi-frame following)
-                  c_Text += ("O SN " + C_SclString::IntToStr(orc_Msg.au8_Data[0] & 0x0FU));
+                  c_Text += ("O SN " + QString::number(orc_Msg.au8_Data[0] & 0x0FU));
 
                   u16_NumBytes = orc_Msg.u8_DLC - 1U;
 

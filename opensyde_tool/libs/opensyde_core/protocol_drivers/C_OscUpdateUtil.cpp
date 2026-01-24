@@ -73,7 +73,7 @@ uint32_t C_OscUpdateUtil::h_GetAdaptedTransferDataTimeout(const uint32_t ou32_De
    osc_write_log_info("Update Node",
                       "Used \"transferdatatimeout\" by adding an offset for compensating a "
                       "potential high bus load: " +
-                      C_SclString::IntToStr(u32_AdaptedTime) + "ms");
+                      QString::number(u32_AdaptedTime) + "ms");
 
    return u32_AdaptedTime;
 }

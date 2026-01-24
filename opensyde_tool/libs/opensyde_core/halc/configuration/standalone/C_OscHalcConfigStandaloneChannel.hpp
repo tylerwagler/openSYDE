@@ -25,7 +25,7 @@ class C_OscHalcConfigStandaloneChannel
 public:
    C_OscHalcConfigStandaloneChannel(void);
 
-   std::vector<stw::scl::C_SclString> c_ParameterIds;
+   std::vector<QString> c_ParameterIds;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

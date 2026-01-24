@@ -60,11 +60,11 @@ C_OscHalcConfigStandaloneFiler::C_OscHalcConfigStandaloneFiler(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(C_OscHalcConfigStandalone & orc_IoData,
-                                                             const stw::scl::C_SclString & orc_Path)
+                                                             const QString & orc_Path)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading IO standalone data");
@@ -113,7 +113,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(C_OscHalcConfigStan
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(const C_OscHalcConfigStandalone & orc_IoData,
-                                                             const stw::scl::C_SclString & orc_Path)
+                                                             const QString & orc_Path)
 {
    int32_t s32_Retval = C_OscHalcConfigFiler::h_PrepareForFile(orc_Path);
 
@@ -158,7 +158,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
       orc_IoData.u32_DefinitionContentVersion = 0UL;
       try
       {
-         orc_IoData.u32_DefinitionContentVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
+         orc_IoData.u32_DefinitionContentVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().toInt());
          //Return
          orc_XmlParser.SelectNodeParent();
       }
@@ -192,7 +192,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
       // Domains
       if (orc_XmlParser.SelectNodeChild("domains") == "domains")
       {
-         stw::scl::C_SclString c_NodeDomain = orc_XmlParser.SelectNodeChild("domain");
+         QString c_NodeDomain = orc_XmlParser.SelectNodeChild("domain");
 
          while ((c_NodeDomain == "domain") && (s32_Retval == C_NO_ERR))
          {
@@ -220,7 +220,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
                // Channel Names
                if (orc_XmlParser.SelectNodeChild("channel-names") == "channel-names")
                {
-                  stw::scl::C_SclString c_NodeChannelId = orc_XmlParser.SelectNodeChild("channel-name");
+                  QString c_NodeChannelId = orc_XmlParser.SelectNodeChild("channel-name");
                   bool q_AtLeastOneChannelId = false;
 
                   while ((c_NodeChannelId == "channel-name") && (s32_Retval == C_NO_ERR))
@@ -250,7 +250,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(C_OscHalcConfigStan
                      {
                         if (orc_XmlParser.SelectNodeChild("parameter-ids") == "parameter-ids")
                         {
-                           stw::scl::C_SclString c_NodeParameterId = orc_XmlParser.SelectNodeChild("parameter-id");
+                           QString c_NodeParameterId = orc_XmlParser.SelectNodeChild("parameter-id");
                            bool q_AtLeastOneParamterId = false;
 
                            while (c_NodeParameterId == "parameter-id")
@@ -342,7 +342,7 @@ int32_t C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(const C_OscHalcConf
 
    // Device Type
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("definition-content-version") == "definition-content-version");
-   orc_XmlParser.SetNodeContent(stw::scl::C_SclString::IntToStr(orc_IoData.u32_DefinitionContentVersion));
+   orc_XmlParser.SetNodeContent(QString::number(orc_IoData.u32_DefinitionContentVersion));
    //Return
    orc_XmlParser.SelectNodeParent();
 

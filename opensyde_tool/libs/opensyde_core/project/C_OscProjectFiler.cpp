@@ -24,7 +24,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
-using namespace stw::scl;
 
 using namespace stw::errors;
 
@@ -63,8 +62,8 @@ using namespace stw::errors;
    C_RANGE    orc_Path is empty
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const C_SclString & orc_Path,
-                                  const C_SclString & orc_OpenSydeVersion)
+int32_t C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const QString & orc_Path,
+                                  const QString & orc_OpenSydeVersion)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -77,12 +76,12 @@ int32_t C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const C_SclString 
    {
       bool q_NewFile = true;
       //erase file if it already exists:
-      const QFileInfo c_FileInfo(orc_Path.ToQString());
+      const QFileInfo c_FileInfo(orc_Path);
       if (c_FileInfo.exists() && c_FileInfo.isFile())
       {
          //erase it:
          int x_Return; //lint !e970 !e8080  //using type to match library interface
-         x_Return = std::remove(orc_Path.c_str());
+         x_Return = std::remove(orc_Path.toLocal8Bit().constData());
          if (x_Return != 0)
          {
             osc_write_log_error("Saving project file", "Could not erase pre-existing file \"" + orc_Path + "\".");
@@ -120,14 +119,14 @@ int32_t C_OscProjectFiler::h_Save(C_OscProject & orc_Project, const C_SclString 
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const C_SclString & orc_Path)
+int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const QString & orc_Path)
 {
    int32_t s32_Retval;
 
-   const QFileInfo c_FileInfo(orc_Path.ToQString());
+   const QFileInfo c_FileInfo(orc_Path);
    if (c_FileInfo.exists() && c_FileInfo.isFile())
    {
-      C_SclString c_Tmp;
+      QString c_Tmp;
       //Open file
       C_OscXmlParser c_Xml;
       s32_Retval = c_Xml.LoadFromFile(orc_Path);
@@ -142,30 +141,30 @@ int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const C_SclString 
             {
                stw::opensyde_core::C_OscUtils::h_GetSystemUserName(c_Tmp);
             }
-            orc_Project.c_Author = c_Tmp.ToQString();
+            orc_Project.c_Author = c_Tmp;
             c_Tmp = c_Xml.GetAttributeString("editor");
             if (c_Tmp == "")
             {
                // use author if last editor is empty (reason: prior openSYDE versions handled author as editor)
-               c_Tmp = C_SclString::FromQString(orc_Project.c_Author);
+               c_Tmp = orc_Project.c_Author;
             }
-            orc_Project.c_Editor = c_Tmp.ToQString();
+            orc_Project.c_Editor = c_Tmp;
             //Time
             {
                orc_Project.c_CreationTime =
-                  C_OscProject::h_GetTimeOfString(c_Xml.GetAttributeString("creation_time").ToQString());
+                  C_OscProject::h_GetTimeOfString(c_Xml.GetAttributeString("creation_time"));
             }
             {
                orc_Project.c_ModificationTime =
-                  C_OscProject::h_GetTimeOfString(c_Xml.GetAttributeString("modification_time").ToQString());
+                  C_OscProject::h_GetTimeOfString(c_Xml.GetAttributeString("modification_time"));
             }
-            orc_Project.c_OpenSydeVersion = c_Xml.GetAttributeString("openSYDE_version").ToQString();
-            orc_Project.c_Template = c_Xml.GetAttributeString("template").ToQString();
+            orc_Project.c_OpenSydeVersion = c_Xml.GetAttributeString("openSYDE_version");
+            orc_Project.c_Template = c_Xml.GetAttributeString("template");
             //Check Version
             if (c_Xml.SelectNodeChild("Version") == "Version")
             {
                s32_Retval = C_NO_ERR;
-               orc_Project.c_Version = c_Xml.GetNodeContent().ToQString();
+               orc_Project.c_Version = c_Xml.GetNodeContent();
                c_Xml.SelectNodeParent();
             }
             else
@@ -212,10 +211,10 @@ int32_t C_OscProjectFiler::h_Load(C_OscProject & orc_Project, const C_SclString 
    C_NOACT    could not write to file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, const C_SclString & orc_Path,
-                                           const C_SclString & orc_OpenSydeVersion, const bool oq_New)
+int32_t C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, const QString & orc_Path,
+                                           const QString & orc_OpenSydeVersion, const bool oq_New)
 {
-   C_SclString c_Tmp;
+   QString c_Tmp;
    //Open file
    C_OscXmlParser c_Xml;
    int32_t s32_Return;
@@ -228,36 +227,36 @@ int32_t C_OscProjectFiler::mh_SaveInternal(C_OscProject & orc_Project, const C_S
    if (oq_New == true)
    {
       stw::opensyde_core::C_OscUtils::h_GetSystemUserName(c_Tmp);
-      orc_Project.c_Author = c_Tmp.ToQString();
+      orc_Project.c_Author = c_Tmp;
    }
-   c_Xml.SetAttributeString("author", C_SclString::FromQString(orc_Project.c_Author));
+   c_Xml.SetAttributeString("author", orc_Project.c_Author);
 
    //editor
    stw::opensyde_core::C_OscUtils::h_GetSystemUserName(c_Tmp);
-   orc_Project.c_Editor = c_Tmp.ToQString();
-   c_Xml.SetAttributeString("editor", C_SclString::FromQString(orc_Project.c_Editor));
+   orc_Project.c_Editor = c_Tmp;
+   c_Xml.SetAttributeString("editor", orc_Project.c_Editor);
 
    //Creation
    if (oq_New == true)
    {
       orc_Project.c_CreationTime = QDateTime::currentDateTime();
    }
-   c_Xml.SetAttributeString("creation_time", C_SclString::FromQString(C_OscProject::h_GetTimeFormatted(orc_Project.c_CreationTime)));
+   c_Xml.SetAttributeString("creation_time", C_OscProject::h_GetTimeFormatted(orc_Project.c_CreationTime));
 
    //modification
    orc_Project.c_ModificationTime = QDateTime::currentDateTime();
-   c_Xml.SetAttributeString("modification_time", C_SclString::FromQString(C_OscProject::h_GetTimeFormatted(orc_Project.c_ModificationTime)));
+   c_Xml.SetAttributeString("modification_time", C_OscProject::h_GetTimeFormatted(orc_Project.c_ModificationTime));
 
    //openSYDE version
-   orc_Project.c_OpenSydeVersion = orc_OpenSydeVersion.ToQString();
-   c_Xml.SetAttributeString("openSYDE_version", C_SclString::FromQString(orc_Project.c_OpenSydeVersion));
+   orc_Project.c_OpenSydeVersion = orc_OpenSydeVersion;
+   c_Xml.SetAttributeString("openSYDE_version", orc_Project.c_OpenSydeVersion);
 
    //Template
-   c_Xml.SetAttributeString("template", C_SclString::FromQString(orc_Project.c_Template));
+   c_Xml.SetAttributeString("template", orc_Project.c_Template);
 
    //update version
    c_Xml.CreateAndSelectNodeChild("Version");
-   c_Xml.SetNodeContent(C_SclString::FromQString(orc_Project.c_Version));
+   c_Xml.SetNodeContent(orc_Project.c_Version);
    c_Xml.SelectNodeParent();
 
    s32_Return = c_Xml.SaveToFile(orc_Path);

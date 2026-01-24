@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include "C_SclString.hpp"
+#include <QString>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -43,23 +43,23 @@ public:
                                  // file generation support
    };
 
-   static stw::scl::C_SclString h_ApplicationToString(const C_OscNodeApplication::E_Type & ore_Application);
-   static void h_StringToApplication(const stw::scl::C_SclString & orc_String, C_OscNodeApplication::E_Type & ore_Type);
+   static QString h_ApplicationToString(const C_OscNodeApplication::E_Type & ore_Application);
+   static void h_StringToApplication(const QString & orc_String, C_OscNodeApplication::E_Type & ore_Type);
 
    E_Type e_Type;                                    ///< Application type
-   stw::scl::C_SclString c_Name;                     ///< Application name
-   stw::scl::C_SclString c_Comment;                  ///< Application comment
+   QString c_Name;                     ///< Application name
+   QString c_Comment;                  ///< Application comment
    bool q_Active;                                    ///< Application active flag
    uint8_t u8_ProcessId;                             ///< Unique process ID
-   stw::scl::C_SclString c_ProjectPath;              ///< Path to data block project
+   QString c_ProjectPath;              ///< Path to data block project
                                                      //(if relative it is meant as relative to *.syde file)
-   stw::scl::C_SclString c_IdeCall;                  ///< Complete IDE command line call string
-   stw::scl::C_SclString c_CodeGeneratorPath;        ///< Path to file generator
+   QString c_IdeCall;                  ///< Complete IDE command line call string
+   QString c_CodeGeneratorPath;        ///< Path to file generator
                                                      //(if relative it is meant as relative to openSYDE.exe)
-   stw::scl::C_SclString c_GeneratePath;             ///< Path to generate sources for this application in
+   QString c_GeneratePath;             ///< Path to generate sources for this application in
                                                      //(if relative it is meant as relative to data block project)
    uint16_t u16_GenCodeVersion;                      ///< Version of structure of generated files
-   std::vector<stw::scl::C_SclString> c_ResultPaths; ///< Paths to result files of this application
+   std::vector<QString> c_ResultPaths; ///< Paths to result files of this application
                                                      //(if relative they are meant as relative to data block project)
                                                      //(vector size is either 1 or 2;
                                                      //2 only for PSI file generation, and in this case, the first one

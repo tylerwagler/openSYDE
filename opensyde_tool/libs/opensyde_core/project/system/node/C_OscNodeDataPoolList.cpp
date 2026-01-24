@@ -12,6 +12,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QString>
+
 #include "stwerrors.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_OscUtils.hpp"
@@ -21,6 +23,7 @@
 
 using namespace stw::opensyde_core;
 using namespace stw::errors;
+using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const uint32_t C_OscNodeDataPoolList::hu32_DEFAULT_NVM_SIZE = 100UL;
@@ -65,8 +68,8 @@ void C_OscNodeDataPoolList::CalcHash(uint32_t & oru32_HashValue) const
 {
    uint32_t u32_Counter;
 
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(), this->c_Name.length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(), this->c_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_NvmCrc, sizeof(this->u32_NvmCrc), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_NvmStartAddress, sizeof(this->u32_NvmStartAddress), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_NvmSize, sizeof(this->u32_NvmSize), oru32_HashValue);
@@ -200,7 +203,7 @@ void C_OscNodeDataPoolList::CheckErrorDataSet(const uint32_t & oru32_DataSetInde
             if (u32_ItDataSet != oru32_DataSetIndex)
             {
                const C_OscNodeDataPoolDataSet & rc_DataSet = this->c_DataSets[u32_ItDataSet];
-               if (rc_CurrentElement.c_Name.LowerCase() == rc_DataSet.c_Name.LowerCase())
+               if (rc_CurrentElement.c_Name.toLower() == rc_DataSet.c_Name.toLower())
                {
                   *opq_NameConflict = true;
                }
@@ -263,7 +266,7 @@ void C_OscNodeDataPoolList::CheckErrorElement(const uint32_t & oru32_ElementInde
             if (u32_ItElement != oru32_ElementIndex)
             {
                const C_OscNodeDataPoolListElement & rc_ListElement = this->c_Elements[u32_ItElement];
-               if (rc_CurrentElement.c_Name.LowerCase() == rc_ListElement.c_Name.LowerCase())
+               if (rc_CurrentElement.c_Name.toLower() == rc_ListElement.c_Name.toLower())
                {
                   *opq_NameConflict = true;
                }

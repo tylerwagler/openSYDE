@@ -26,16 +26,16 @@ class C_OscSystemNameMaxCharLimitChangeReportItem
 {
 public:
    C_OscSystemNameMaxCharLimitChangeReportItem();
-   C_OscSystemNameMaxCharLimitChangeReportItem(const stw::scl::C_SclString oc_Type,
-                                               const stw::scl::C_SclString oc_OriginalName,
-                                               const stw::scl::C_SclString oc_NewName);
+   C_OscSystemNameMaxCharLimitChangeReportItem(const QString oc_Type,
+                                               const QString oc_OriginalName,
+                                               const QString oc_NewName);
 
-   stw::scl::C_SclString c_Type;
-   stw::scl::C_SclString c_OriginalName;
-   stw::scl::C_SclString c_NewName;
+   QString c_Type;
+   QString c_OriginalName;
+   QString c_NewName;
 
    static void h_HandleNameMaxCharLimitItem(const uint32_t ou32_NameMaxCharLimit,
-                                            const stw::scl::C_SclString & orc_Type, stw::scl::C_SclString & orc_Name,
+                                            const QString & orc_Type, QString & orc_Name,
                                             std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 };
 

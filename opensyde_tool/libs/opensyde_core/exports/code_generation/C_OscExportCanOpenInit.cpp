@@ -80,8 +80,8 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    c_Data.Append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
    c_Data.Append("*/");
    c_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
-   c_Data.Append("#ifndef " + h_GetFileName().UpperCase() + "H");
-   c_Data.Append("#define " + h_GetFileName().UpperCase() + "H");
+   c_Data.Append("#ifndef " + h_GetFileName().toUpper() + "H");
+   c_Data.Append("#define " + h_GetFileName().toUpper() + "H");
    c_Data.Append("");
    c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Includes"));
    c_Data.Append("#include \"stwtypes.h\"");
@@ -92,7 +92,7 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
       const uint32_t u32_InterfaceIndex = static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]);
-      c_Data.Append("#include \"osco_man_config_can" + C_SclString::IntToStr(u32_InterfaceIndex + 1U) + ".h\"");
+      c_Data.Append("#include \"osco_man_config_can" + QString::number(u32_InterfaceIndex + 1U) + ".h\"");
    }
 
    c_Data.Append("");
@@ -104,12 +104,12 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
       const uint32_t u32_InterfaceIndex = static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]);
-      c_Data.Append("#define OSCO_MAN_CONFIG_INIT_CONFIG_INDEX_CAN" + C_SclString::IntToStr(
-                       u32_InterfaceIndex + 1U) + " (" + C_SclString::IntToStr(u32_IfIt) + "U)");
+      c_Data.Append("#define OSCO_MAN_CONFIG_INIT_CONFIG_INDEX_CAN" + QString::number(
+                       u32_InterfaceIndex + 1U) + " (" + QString::number(u32_IfIt) + "U)");
    }
 
    c_Data.Append("#define OSCO_MAN_CONFIG_INIT_NUM_CONFIGURATIONS (" +
-                 C_SclString::IntToStr(orc_Node.c_CanOpenManagers.size()) + "U)");
+                 QString::number(orc_Node.c_CanOpenManagers.size()) + "U)");
    c_Data.Append("");
 
    //put together the string for define "total number of TX PDOs"
@@ -209,7 +209,7 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
       for (uint8_t u8_IfIt = 0; u8_IfIt < orc_IfWithCanOpenMan.size(); ++u8_IfIt)
       {
          const C_SclString c_InterfaceIndex =
-            C_SclString::IntToStr(static_cast<uint32_t>(orc_IfWithCanOpenMan[u8_IfIt]) + 1U);
+            QString::number(static_cast<uint32_t>(orc_IfWithCanOpenMan[u8_IfIt]) + 1U);
          c_ProtocolConfig = "   &gt_osco_man_can" + c_InterfaceIndex + "_ProtocolConfiguration";
 
          if (u8_IfIt < static_cast<uint32_t>(orc_IfWithCanOpenMan.size() - 1U))
@@ -263,7 +263,7 @@ void C_OscExportCanOpenInit::mh_ComposeDefineNumTotal(C_SclString & orc_DefineVa
 
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
-      const C_SclString c_InterfaceIndex = C_SclString::IntToStr(
+      const C_SclString c_InterfaceIndex = QString::number(
          static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]) + 1U);
 
       orc_DefineValue += "OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_" + c_PdoType + "_" + orc_Subject;
@@ -290,7 +290,7 @@ void C_OscExportCanOpenInit::mh_ComposeDefineNumDevices(C_SclString & orc_Define
 {
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
-      const C_SclString c_InterfaceIndex = C_SclString::IntToStr(
+      const C_SclString c_InterfaceIndex = QString::number(
          static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]) + 1U);
 
       orc_DefineValue += "OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_DEVICES";

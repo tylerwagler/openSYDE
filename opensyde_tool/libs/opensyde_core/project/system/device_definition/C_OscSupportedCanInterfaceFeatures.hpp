@@ -9,7 +9,7 @@
 #define C_OSCSUPPORTEDCANINTERFACEFEATURES_H
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -25,8 +25,8 @@ class C_OscSupportedCanInterfaceFeatures
 public:
    C_OscSupportedCanInterfaceFeatures(void);
 
-   stw::scl::C_SclString c_Interface; ///< Interface name
-   bool q_SupportsCanFd;              ///< Flag if interface supports CAN-FD
+   QString c_Interface;  ///< Interface name
+   bool q_SupportsCanFd; ///< Flag if interface supports CAN-FD
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

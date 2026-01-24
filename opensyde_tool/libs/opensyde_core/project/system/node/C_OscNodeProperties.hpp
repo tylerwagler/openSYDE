@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <vector>
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscNodeStwFlashloaderSettings.hpp"
 #include "C_OscNodeComInterfaceSettings.hpp"
 #include "C_OscNodeOpenSydeServerSettings.hpp"
@@ -66,8 +66,8 @@ public:
       eFL_OPEN_SYDE ///< Flash loader protocol type openSYDE
    };
 
-   stw::scl::C_SclString c_Name;                               ///< Unique name
-   stw::scl::C_SclString c_Comment;                            ///< User comment
+   QString c_Name;                                  ///< Unique name
+   QString c_Comment;                               ///< User comment
    E_DiagnosticServerProtocol e_DiagnosticServer;              ///< Selected diagnostic server
    E_FlashLoaderProtocol e_FlashLoader;                        ///< Selected flash loader
    std::vector<C_OscNodeComInterfaceSettings> c_ComInterfaces; ///< List of all present com interfaces

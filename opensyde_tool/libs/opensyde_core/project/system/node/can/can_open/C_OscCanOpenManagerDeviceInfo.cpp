@@ -68,7 +68,7 @@ void C_OscCanOpenManagerDeviceInfo::CalcHash(uint32_t & oru32_HashValue) const
 {
    //Do not include c_ProjectEdsFilePath, mq_EdsFileContentLoaded as they are only utilities for delayed loading,
    // not parts of the data
-   C_SclChecksums::CalcCRC32(this->c_OriginalEdsFileName.c_str(), this->c_OriginalEdsFileName.Length(),
+   C_SclChecksums::CalcCRC32(this->c_OriginalEdsFileName.toUtf8().constData(), this->c_OriginalEdsFileName.length(),
                              oru32_HashValue);
    this->mc_EdsFileContent.CalcHash(oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_DeviceOptional, sizeof(this->q_DeviceOptional), oru32_HashValue);
@@ -110,13 +110,13 @@ const C_OscCanOpenObjectDictionary & C_OscCanOpenManagerDeviceInfo::GetEdsFileCo
 {
    if (this->mq_EdsFileContentLoaded == false)
    {
-      if (QFileInfo(this->c_ProjectEdsFilePath.ToQString()).exists() && QFileInfo(this->c_ProjectEdsFilePath.ToQString()).isFile())
+      if (QFileInfo(this->c_ProjectEdsFilePath).exists() && QFileInfo(this->c_ProjectEdsFilePath).isFile())
       {
-         const int32_t s32_Retval = this->mc_EdsFileContent.LoadFromFile(this->c_ProjectEdsFilePath);
+         const int32_t s32_Retval = this->mc_EdsFileContent.LoadFromFile(this->c_ProjectEdsFilePath.toStdString().c_str());
          if (s32_Retval != C_NO_ERR)
          {
             osc_write_log_error("CANopen manager device information", "Failed to load from EDS file \"" +
-                                this->c_ProjectEdsFilePath + "\" Error: \"" + this->mc_EdsFileContent.GetLastErrorText() +
+                                this->c_ProjectEdsFilePath + "\" Error: \"" + QString::fromStdString(this->mc_EdsFileContent.GetLastErrorText().toStdString()) +
                                 "\".");
             this->mc_EdsFileContent.c_OdObjects.clear();
             this->mc_EdsFileContent.c_TextFileContent.Clear();

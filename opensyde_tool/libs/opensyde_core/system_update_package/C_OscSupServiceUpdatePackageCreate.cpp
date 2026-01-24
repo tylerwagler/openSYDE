@@ -264,7 +264,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const C_SclString & 
          // guarantee a correct behavior of h_CreateTemporaryFolder
          mhc_ErrorMessage = "Could not create temporary folder \"" +
                             c_PackagePathTmp + "\" with application files.";
-         if (c_ErrorPath.IsEmpty() == false)
+         if (c_ErrorPath.isEmpty() == false)
          {
             mhc_ErrorMessage += " Issue in path: \"" + c_ErrorPath + "\"";
          }
@@ -528,7 +528,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckParamsToCreatePackage(const 
       if (ou32_ActiveBusIndex >= orc_SystemDefinition.c_Buses.size())
       {
          mhc_ErrorMessage = "Active Bus Index \"" +
-                            C_SclString::IntToStr(ou32_ActiveBusIndex) + "\" is not in System Definition.";
+                            QString::number(ou32_ActiveBusIndex) + "\" is not in System Definition.";
          osc_write_log_error("Creating Update Package", mhc_ErrorMessage);
          s32_Return = C_NOACT;
       }
@@ -645,7 +645,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_SupDefParamAdapter(const uint32_t
          {
             // strange: internal configuration error - should not happen!
             const C_SclString c_Message = "Could not find update position for active node \"" +
-                                          C_SclString::IntToStr(u32_Pos) + "\".";
+                                          QString::number(u32_Pos) + "\".";
             mhc_WarningMessages.Append(c_Message);
             osc_write_log_warning("Creating Update Package", c_Message);
             s32_Return = C_WARN;

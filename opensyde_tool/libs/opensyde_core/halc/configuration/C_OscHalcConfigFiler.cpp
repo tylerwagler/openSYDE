@@ -25,7 +25,6 @@
 #include "C_OscHalcDefStructFiler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
@@ -58,12 +57,12 @@ using namespace stw::opensyde_core;
    C_CHECKSUM  HALC configuration config version mismatch
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler::h_LoadFile(C_OscHalcConfig & orc_IoData, const C_SclString & orc_Path,
-                                         const C_SclString & orc_BasePath)
+int32_t C_OscHalcConfigFiler::h_LoadFile(C_OscHalcConfig & orc_IoData, const QString & orc_Path,
+                                         const QString & orc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading IO data");
@@ -112,9 +111,9 @@ int32_t C_OscHalcConfigFiler::h_LoadFile(C_OscHalcConfig & orc_IoData, const C_S
    C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler::h_SaveFile(const C_OscHalcConfig & orc_IoData, const C_SclString & orc_Path,
-                                         const C_SclString & orc_BasePath,
-                                         std::vector<C_SclString> * const opc_CreatedFiles)
+int32_t C_OscHalcConfigFiler::h_SaveFile(const C_OscHalcConfig & orc_IoData, const QString & orc_Path,
+                                         const QString & orc_BasePath,
+                                         std::vector<QString> * const opc_CreatedFiles)
 {
    int32_t s32_Retval = C_OscHalcConfigFiler::h_PrepareForFile(orc_Path);
 
@@ -151,7 +150,7 @@ int32_t C_OscHalcConfigFiler::h_SaveFile(const C_OscHalcConfig & orc_IoData, con
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::h_LoadData(C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
-                                         const C_SclString & orc_BasePath)
+                                         const QString & orc_BasePath)
 {
    int32_t s32_Retval = mh_LoadIoDataBase(orc_IoData, orc_XmlParser, orc_BasePath);
 
@@ -164,7 +163,7 @@ int32_t C_OscHalcConfigFiler::h_LoadData(C_OscHalcConfig & orc_IoData, C_OscXmlP
          uint16_t u16_FileVersion = 0U;
          try
          {
-            u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
+            u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().toInt());
          }
          catch (...)
          {
@@ -176,7 +175,7 @@ int32_t C_OscHalcConfigFiler::h_LoadData(C_OscHalcConfig & orc_IoData, C_OscXmlP
          if (s32_Retval == C_NO_ERR)
          {
             osc_write_log_info("Loading IO description", "Value of \"file-version\": " +
-                               C_SclString::IntToStr(u16_FileVersion));
+                               QString::number(u16_FileVersion));
             //Check file version
             if (u16_FileVersion != mhu16_FILE_VERSION_1)
             {
@@ -198,7 +197,7 @@ int32_t C_OscHalcConfigFiler::h_LoadData(C_OscHalcConfig & orc_IoData, C_OscXmlP
          uint32_t u32_RefId = 0UL;
          try
          {
-            u32_RefId = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
+            u32_RefId = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().toInt());
          }
          catch (...)
          {
@@ -211,8 +210,8 @@ int32_t C_OscHalcConfigFiler::h_LoadData(C_OscHalcConfig & orc_IoData, C_OscXmlP
             {
                orc_XmlParser.ReportErrorForNodeContentStartingWithXmlContext(
                   "mismatch between expected " +
-                  C_SclString::IntToStr(u32_RefId) +
-                  " and current " + C_SclString::IntToStr(orc_IoData.u32_ContentVersion));
+                  QString::number(u32_RefId) +
+                  " and current " + QString::number(orc_IoData.u32_ContentVersion));
                s32_Retval = C_CHECKSUM;
             }
          }
@@ -254,19 +253,19 @@ int32_t C_OscHalcConfigFiler::h_LoadData(C_OscHalcConfig & orc_IoData, C_OscXmlP
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::h_SaveData(const C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
-                                         const C_SclString & orc_BasePath,
-                                         std::vector<C_SclString> * const opc_CreatedFiles)
+                                         const QString & orc_BasePath,
+                                         std::vector<QString> * const opc_CreatedFiles)
 {
    int32_t s32_Retval;
 
    //File version
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
-   orc_XmlParser.SetNodeContent(C_SclString::IntToStr(mhu16_FILE_VERSION_1));
+   orc_XmlParser.SetNodeContent(QString::number(mhu16_FILE_VERSION_1));
    //Return
    orc_XmlParser.SelectNodeParent();
    //Content version
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("ref-content-version") == "ref-content-version");
-   orc_XmlParser.SetNodeContent(C_SclString::IntToStr(orc_IoData.u32_ContentVersion));
+   orc_XmlParser.SetNodeContent(QString::number(orc_IoData.u32_ContentVersion));
    //Return
    orc_XmlParser.SelectNodeParent();
    //IO data
@@ -305,15 +304,15 @@ int32_t C_OscHalcConfigFiler::h_SaveData(const C_OscHalcConfig & orc_IoData, C_O
    C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler::h_PrepareForFile(const C_SclString & orc_Path)
+int32_t C_OscHalcConfigFiler::h_PrepareForFile(const QString & orc_Path)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       //erase it:
       int x_Return; //lint !e970 !e8080  //using type to match library interface
-      x_Return = std::remove(orc_Path.c_str());
+      x_Return = std::remove(orc_Path.toLocal8Bit().constData());
       if (x_Return != 0)
       {
          osc_write_log_error("Saving IO data", "Could not erase pre-existing file \"" + orc_Path + "\".");
@@ -322,10 +321,10 @@ int32_t C_OscHalcConfigFiler::h_PrepareForFile(const C_SclString & orc_Path)
    }
    if (s32_Retval == C_NO_ERR)
    {
-      const C_SclString c_Folder = C_SclString::FromQString(QFileInfo(orc_Path.ToQString()).absolutePath() + "/");
-      if (!QFileInfo(c_Folder.ToQString()).isDir())
+      const QString c_Folder = QFileInfo(orc_Path).absolutePath() + "/";
+      if (!QFileInfo(c_Folder).isDir())
       {
-         if (!QDir().mkpath(c_Folder.ToQString()))
+         if (!QDir().mkpath(c_Folder))
          {
             osc_write_log_error("Saving IO data", "Could not create folder \"" + c_Folder + "\".");
             s32_Retval = C_RD_WR;
@@ -398,7 +397,7 @@ int32_t C_OscHalcConfigFiler::h_LoadIoDomain(C_OscHalcConfigDomain & orc_IoDomai
          if (s32_Retval == C_NO_ERR)
          {
             uint32_t u32_ActualCount = 0UL;
-            C_SclString c_NodeChannel = orc_XmlParser.SelectNodeChild("channel");
+            QString c_NodeChannel = orc_XmlParser.SelectNodeChild("channel");
             //Clear any existing configuration
             orc_IoDomain.c_ChannelConfigs.clear();
             if (c_NodeChannel == "channel")
@@ -425,9 +424,9 @@ int32_t C_OscHalcConfigFiler::h_LoadIoDomain(C_OscHalcConfigDomain & orc_IoDomai
             }
             if (u32_ExpectedCount != u32_ActualCount)
             {
-               C_SclString c_Tmp;
-               c_Tmp.PrintFormatted("Unexpected channel count, expected: %u, got %u", u32_ExpectedCount,
-                                    u32_ActualCount);
+               const QString c_Tmp = QString("Unexpected channel count, expected: %1, got %2")
+                                     .arg(u32_ExpectedCount)
+                                     .arg(u32_ActualCount);
                orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp);
             }
          }
@@ -463,13 +462,13 @@ C_OscHalcConfigFiler::C_OscHalcConfigFiler()
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_SaveIoDataBase(const C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
-                                                const C_SclString & orc_BasePath,
-                                                std::vector<C_SclString> * const opc_CreatedFiles)
+                                                const QString & orc_BasePath,
+                                                std::vector<QString> * const opc_CreatedFiles)
 {
    int32_t s32_Retval;
 
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("io-base-file") == "io-base-file");
-   if (orc_BasePath.IsEmpty())
+   if (orc_BasePath.isEmpty())
    {
       //To string
       s32_Retval = C_OscHalcDefFiler::h_SaveData(orc_IoData, orc_XmlParser);
@@ -480,11 +479,11 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoDataBase(const C_OscHalcDefBase & orc_IoD
    }
    else
    {
-      const C_SclString c_IoDataFileName =
-         (orc_IoData.c_OriginalFileName.IsEmpty() == false) ?
-         orc_IoData.c_OriginalFileName : static_cast<C_SclString>("halc_definition_file.xml");
-      const C_SclString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
-                                                                                  c_IoDataFileName);
+      const QString c_IoDataFileName =
+         (orc_IoData.c_OriginalFileName.isEmpty() == false) ?
+         orc_IoData.c_OriginalFileName : "halc_definition_file.xml";
+      const QString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
+                                                                              c_IoDataFileName);
       s32_Retval = C_OscHalcDefFiler::h_SaveFile(orc_IoData, c_CombinedFileName);
       if (s32_Retval != C_NO_ERR)
       {
@@ -543,7 +542,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoDomains(const C_OscHalcConfig & orc_IoDat
       {
          s32_Retval = C_CONFIG;
          osc_write_log_error("Saving IO data",
-                             "Could not find domain " + C_SclString::IntToStr(u32_ItDomain) + ".");
+                             "Could not find domain " + QString::number(u32_ItDomain) + ".");
       }
    }
    if (s32_Retval == C_NO_ERR)
@@ -599,16 +598,16 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoChannels(const std::vector<C_OscHalcConfi
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_SaveIoChannel(const C_OscHalcConfigChannel & orc_Channel,
-                                               C_OscXmlParserBase & orc_XmlParser, const C_SclString & orc_NodeName,
-                                               const C_SclString & orc_NodeParentName)
+                                               C_OscXmlParserBase & orc_XmlParser, const QString & orc_NodeName,
+                                               const QString & orc_NodeParentName)
 {
    int32_t s32_Retval;
 
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(orc_NodeName) == orc_NodeName);
    orc_XmlParser.SetAttributeBool("safety-relevant", orc_Channel.q_SafetyRelevant);
    orc_XmlParser.SetAttributeUint32("use-case-index", orc_Channel.u32_UseCaseIndex);
-   orc_XmlParser.CreateNodeChild("name", orc_Channel.c_Name.c_str());
-   orc_XmlParser.CreateNodeChild("comment", orc_Channel.c_Comment.c_str());
+   orc_XmlParser.CreateNodeChild("name", orc_Channel.c_Name);
+   orc_XmlParser.CreateNodeChild("comment", orc_Channel.c_Comment);
    s32_Retval = mh_SaveIoParameterStructs(orc_Channel.c_Parameters, orc_XmlParser, orc_NodeName);
    if (s32_Retval == C_NO_ERR)
    {
@@ -632,7 +631,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoChannel(const C_OscHalcConfigChannel & or
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_SaveIoParameterStructs(
    const std::vector<C_OscHalcConfigParameterStruct> & orc_ParameterStructs, C_OscXmlParserBase & orc_XmlParser,
-   const C_SclString & orc_NodeName)
+   const QString & orc_NodeName)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -741,7 +740,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoParameters(const std::vector<C_OscHalcCon
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_SaveIoParameter(const C_OscHalcConfigParameter & orc_Parameter,
-                                                 C_OscXmlParserBase & orc_XmlParser, const C_SclString & orc_BaseNode)
+                                                 C_OscXmlParserBase & orc_XmlParser, const QString & orc_BaseNode)
 {
    int32_t s32_Retval = C_NO_ERR;
    bool q_ValueHandled = false;
@@ -765,7 +764,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoParameter(const C_OscHalcConfigParameter 
       break;
    case C_OscHalcDefContent::eCT_STRING:
       {
-         std::string c_Tmp;
+         QString c_Tmp;
          orc_XmlParser.SetAttributeString("type", "string");
          orc_Parameter.c_Value.GetStringValue(c_Tmp);
          orc_XmlParser.SetAttributeString("value", c_Tmp);
@@ -784,9 +783,9 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoParameter(const C_OscHalcConfigParameter 
    }
    if (s32_Retval == C_NO_ERR)
    {
-      const std::vector<std::pair<stw::scl::C_SclString,
+      const std::vector<std::pair<QString,
                                   C_OscNodeDataPoolContent> > & rc_EnumItems = orc_Parameter.c_Value.GetEnumItems();
-      for (std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+      for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
               rc_EnumItems.begin();
            (c_It != rc_EnumItems.end()) && (s32_Retval == C_NO_ERR); ++c_It)
       {
@@ -811,7 +810,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoParameter(const C_OscHalcConfigParameter 
          orc_XmlParser.SetAttributeString("display", rc_BitmaskItem.c_Display);
          orc_XmlParser.SetAttributeBool("initial-apply-value-setting", rc_BitmaskItem.q_ApplyValueSetting);
          c_Mask << "0x" << &std::hex << rc_BitmaskItem.u64_Value;
-         orc_XmlParser.SetAttributeString("value", c_Mask.str().c_str());
+         orc_XmlParser.SetAttributeString("value", QString::fromStdString(c_Mask.str()));
          orc_XmlParser.CreateNodeChild("comment", rc_BitmaskItem.c_Comment);
          //Return
          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "value");
@@ -836,13 +835,13 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoParameter(const C_OscHalcConfigParameter 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_LoadIoDataBase(C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
-                                                const C_SclString & orc_BasePath)
+                                                const QString & orc_BasePath)
 {
    int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("io-base-file");
 
    if (s32_Retval == C_NO_ERR)
    {
-      if (orc_BasePath.IsEmpty())
+      if (orc_BasePath.isEmpty())
       {
          //From string
          s32_Retval = C_OscHalcDefFiler::h_LoadData(orc_IoData, orc_XmlParser);
@@ -896,7 +895,7 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoDomains(C_OscHalcConfig & orc_IoData, C_O
       if (s32_Retval == C_NO_ERR)
       {
          uint32_t u32_ActualCount = 0UL;
-         C_SclString c_NodeDomain = orc_XmlParser.SelectNodeChild("domain");
+         QString c_NodeDomain = orc_XmlParser.SelectNodeChild("domain");
          if (c_NodeDomain == "domain")
          {
             do
@@ -930,8 +929,9 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoDomains(C_OscHalcConfig & orc_IoData, C_O
          }
          if (u32_ExpectedCount != u32_ActualCount)
          {
-            C_SclString c_Tmp;
-            c_Tmp.PrintFormatted("Unexpected domain count, expected: %u, got %u", u32_ExpectedCount, u32_ActualCount);
+            const QString c_Tmp = QString("Unexpected domain count, expected: %1, got %2")
+                                  .arg(u32_ExpectedCount)
+                                  .arg(u32_ActualCount);
             orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp);
          }
       }
@@ -957,7 +957,7 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoDomains(C_OscHalcConfig & orc_IoData, C_O
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_LoadIoChannel(C_OscHalcConfigChannel & orc_IoChannel,
-                                               C_OscXmlParserBase & orc_XmlParser, const C_SclString & orc_NodeName)
+                                               C_OscXmlParserBase & orc_XmlParser, const QString & orc_NodeName)
 {
    int32_t s32_Retval = orc_XmlParser.GetAttributeBoolError("safety-relevant", orc_IoChannel.q_SafetyRelevant);
 
@@ -1006,7 +1006,7 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoChannel(C_OscHalcConfigChannel & orc_IoCh
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_LoadIoParameterStructs(
    std::vector<C_OscHalcConfigParameterStruct> & orc_ParameterStructs, C_OscXmlParserBase & orc_XmlParser,
-   const C_SclString & orc_NodeName)
+   const QString & orc_NodeName)
 {
    int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("parameter-structs");
 
@@ -1018,7 +1018,7 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoParameterStructs(
       s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedLength);
       if (s32_Retval == C_NO_ERR)
       {
-         C_SclString c_CurrentParameterNode = orc_XmlParser.SelectNodeChild("parameter-struct");
+         QString c_CurrentParameterNode = orc_XmlParser.SelectNodeChild("parameter-struct");
          //Reserve
          orc_ParameterStructs.reserve(u32_ExpectedLength);
          if (c_CurrentParameterNode == "parameter-struct")
@@ -1047,9 +1047,9 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoParameterStructs(
             if (u32_ExpectedLength != orc_ParameterStructs.size())
             {
                orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext(
-                  "length", "Content of attribute (" + C_SclString::IntToStr(u32_ExpectedLength) +
+                  "length", "Content of attribute (" + QString::number(u32_ExpectedLength) +
                   ") mismatches with the number of found parameters (" +
-                  C_SclString::IntToStr(orc_ParameterStructs.size()) + ").");
+                  QString::number(orc_ParameterStructs.size()) + ").");
                s32_Retval = C_CONFIG;
             }
          }
@@ -1116,7 +1116,7 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoParameters(std::vector<C_OscHalcConfigPar
       s32_Retval = orc_XmlParser.GetAttributeUint32Error("length", u32_ExpectedLength);
       if (s32_Retval == C_NO_ERR)
       {
-         C_SclString c_CurrentParameterNode = orc_XmlParser.SelectNodeChild("parameter");
+         QString c_CurrentParameterNode = orc_XmlParser.SelectNodeChild("parameter");
          //Reserve
          orc_Parameters.reserve(u32_ExpectedLength);
          if (c_CurrentParameterNode == "parameter")
@@ -1145,9 +1145,9 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoParameters(std::vector<C_OscHalcConfigPar
             if (u32_ExpectedLength != orc_Parameters.size())
             {
                orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext(
-                  "length", "Content of attribute (" + C_SclString::IntToStr(u32_ExpectedLength) +
+                  "length", "Content of attribute (" + QString::number(u32_ExpectedLength) +
                   ") mismatches with the number of found parameters (" +
-                  C_SclString::IntToStr(orc_Parameters.size()) + ").");
+                  QString::number(orc_Parameters.size()) + ").");
                s32_Retval = C_CONFIG;
             }
          }
@@ -1174,10 +1174,10 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoParameters(std::vector<C_OscHalcConfigPar
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_LoadIoParameter(C_OscHalcConfigParameter & orc_Parameter,
-                                                 C_OscXmlParserBase & orc_XmlParser, const C_SclString & orc_BaseName)
+                                                 C_OscXmlParserBase & orc_XmlParser, const QString & orc_BaseName)
 {
-   C_SclString c_TypeStr;
-   C_SclString c_BaseTypeStr;
+   QString c_TypeStr;
+   QString c_BaseTypeStr;
    int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("value");
 
    if (s32_Retval == C_NO_ERR)

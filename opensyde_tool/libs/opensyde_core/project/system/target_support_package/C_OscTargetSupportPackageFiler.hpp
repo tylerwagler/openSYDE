@@ -27,10 +27,10 @@ class C_OscTargetSupportPackageFiler
 {
 public:
    static int32_t h_Load(stw::opensyde_core::C_OscTargetSupportPackage & orc_TargetSupportPackage,
-                         stw::scl::C_SclString & orc_NodePath, const stw::scl::C_SclString & orc_Path);
+                         QString & orc_NodePath, const QString & orc_Path);
 
 private:
-   static int32_t mh_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage, stw::scl::C_SclString & orc_NodePath,
+   static int32_t mh_Load(C_OscTargetSupportPackage & orc_TargetSupportPackage, QString & orc_NodePath,
                           C_OscXmlParserBase & orc_XmlParser);
 };
 

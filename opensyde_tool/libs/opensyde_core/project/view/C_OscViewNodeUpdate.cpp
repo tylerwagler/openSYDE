@@ -59,22 +59,19 @@ C_OscViewNodeUpdate::C_OscViewNodeUpdate(void) :
 void C_OscViewNodeUpdate::CalcHash(uint32_t & oru32_HashValue) const
 {
    const uint32_t u32_Size = static_cast<int32_t>(this->mc_DataBlockPaths.size());
-   const stw::scl::C_SclString c_PemFile = this->mc_PemFilePath;
 
    stw::scl::C_SclChecksums::CalcCRC32(&this->me_StateDebugger, sizeof(this->me_StateDebugger), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->me_StateSecurity, sizeof(this->me_StateSecurity), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&u32_Size, sizeof(u32_Size), oru32_HashValue);
    for (uint32_t u32_It = 0; u32_It < this->mc_DataBlockPaths.size(); ++u32_It)
    {
-      const C_SclString & rc_QtData = this->mc_DataBlockPaths[u32_It];
-      const stw::scl::C_SclString c_Data = rc_QtData;
-      stw::scl::C_SclChecksums::CalcCRC32(c_Data.c_str(), c_Data.Length(), oru32_HashValue);
+      const QString & rc_QtData = this->mc_DataBlockPaths[u32_It];
+      stw::scl::C_SclChecksums::CalcCRC32(rc_QtData.toUtf8().constData(), rc_QtData.length(), oru32_HashValue);
    }
    for (uint32_t u32_It = 0; u32_It < this->mc_FileBasedPaths.size(); ++u32_It)
    {
-      const C_SclString & rc_QtData = this->mc_FileBasedPaths[u32_It];
-      const stw::scl::C_SclString c_Data = rc_QtData;
-      stw::scl::C_SclChecksums::CalcCRC32(c_Data.c_str(), c_Data.Length(), oru32_HashValue);
+      const QString & rc_QtData = this->mc_FileBasedPaths[u32_It];
+      stw::scl::C_SclChecksums::CalcCRC32(rc_QtData.toUtf8().constData(), rc_QtData.length(), oru32_HashValue);
    }
    for (uint32_t u32_It = 0; u32_It < this->mc_ParamSetPaths.size(); ++u32_It)
    {
@@ -91,7 +88,7 @@ void C_OscViewNodeUpdate::CalcHash(uint32_t & oru32_HashValue) const
    }
    stw::scl::C_SclChecksums::CalcCRC32(&u32_NodeUpdatePosition, sizeof(u32_NodeUpdatePosition), oru32_HashValue);
 
-   stw::scl::C_SclChecksums::CalcCRC32(c_PemFile.c_str(), c_PemFile.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->mc_PemFilePath.toUtf8().constData(), this->mc_PemFilePath.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->mq_SkipUpdateOfPemFile, sizeof(this->mq_SkipUpdateOfPemFile),
                                        oru32_HashValue);
 }
@@ -152,7 +149,7 @@ const std::vector<C_OscViewNodeUpdateParamInfo> & C_OscViewNodeUpdate::GetParamI
    Current application paths
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_SclString> & C_OscViewNodeUpdate::GetPaths(const E_GenericFileType oe_Type) const
+const std::vector<QString> & C_OscViewNodeUpdate::GetPaths(const E_GenericFileType oe_Type) const
 {
    return (oe_Type == eFTP_DATA_BLOCK) ? this->mc_DataBlockPaths : this->mc_FileBasedPaths;
 }
@@ -201,7 +198,7 @@ void C_OscViewNodeUpdate::SetParamInfos(const std::vector<C_OscViewNodeUpdatePar
    \param[in]  oe_Type     Selector for structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewNodeUpdate::SetPaths(const std::vector<C_SclString> & orc_Value, const E_GenericFileType oe_Type)
+void C_OscViewNodeUpdate::SetPaths(const std::vector<QString> & orc_Value, const E_GenericFileType oe_Type)
 {
    if (oe_Type == eFTP_DATA_BLOCK)
    {
@@ -249,7 +246,7 @@ void C_OscViewNodeUpdate::SetSkipUpdateOfPathsFlags(const std::vector<bool> & or
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewNodeUpdate::SetParamInfoContent(const uint32_t ou32_Index, const C_SclString & orc_FilePath,
+int32_t C_OscViewNodeUpdate::SetParamInfoContent(const uint32_t ou32_Index, const QString & orc_FilePath,
                                                  const uint32_t ou32_LastKnownCrc)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -273,7 +270,7 @@ int32_t C_OscViewNodeUpdate::SetParamInfoContent(const uint32_t ou32_Index, cons
    \param[in]  oe_Type     Selector for structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewNodeUpdate::AddPath(const C_SclString & orc_Path, const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
+void C_OscViewNodeUpdate::AddPath(const QString & orc_Path, const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
    if (oe_Type == eFTP_DATA_BLOCK)
    {
@@ -310,7 +307,7 @@ void C_OscViewNodeUpdate::AddParamInfo(const C_OscViewNodeUpdateParamInfo & orc_
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewNodeUpdate::SetPath(const uint32_t ou32_Index, const C_SclString & orc_Value,
+int32_t C_OscViewNodeUpdate::SetPath(const uint32_t ou32_Index, const QString & orc_Value,
                                      const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -476,7 +473,7 @@ int32_t C_OscViewNodeUpdate::RemovePath(const uint32_t ou32_Index, const C_OscVi
    return s32_Retval;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------0----------------------
 /*! \brief   Remove node update information parameter set information
 
    \param[in]  ou32_Index  Index to remove
@@ -521,7 +518,7 @@ int32_t C_OscViewNodeUpdate::RemoveParamInfo(const uint32_t ou32_Index)
    \param[in]  orc_Value   New path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewNodeUpdate::SetPemFilePath(const C_SclString & orc_Value)
+void C_OscViewNodeUpdate::SetPemFilePath(const QString & orc_Value)
 {
    this->mc_PemFilePath = orc_Value;
 }
@@ -534,7 +531,7 @@ void C_OscViewNodeUpdate::SetPemFilePath(const C_SclString & orc_Value)
    - Empty string if no PEM file set
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscViewNodeUpdate::GetPemFilePath(void) const
+QString C_OscViewNodeUpdate::GetPemFilePath(void) const
 {
    return this->mc_PemFilePath;
 }
@@ -637,7 +634,7 @@ void C_OscViewNodeUpdate::OnSyncNodeApplicationAdded(const uint32_t ou32_Applica
       if (u32_UpdateApplicationIndex <= this->mc_DataBlockPaths.size())
       {
          const int32_t s32_TYPE = static_cast<int32_t>(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
-         this->mc_DataBlockPaths.insert(this->mc_DataBlockPaths.begin() + u32_UpdateApplicationIndex, C_SclString());
+         this->mc_DataBlockPaths.insert(this->mc_DataBlockPaths.begin() + u32_UpdateApplicationIndex, QString());
          this->mc_SkipUpdateOfFiles[s32_TYPE].insert(
             this->mc_SkipUpdateOfFiles[s32_TYPE].begin() + u32_UpdateApplicationIndex, false);
       }
@@ -669,11 +666,10 @@ void C_OscViewNodeUpdate::OnSyncNodeApplicationMoved(const uint32_t ou32_Applica
                                                      const C_OscNodeApplication::E_Type oe_ApplicationSourceType,
                                                      const C_OscNodeApplication::E_Type oe_ApplicationTargetType)
 {
-   // Moving only affects the update configuration of the applications if both applications are not NVM HALC datablocks.
    if ((oe_ApplicationSourceType != stw::opensyde_core::C_OscNodeApplication::ePARAMETER_SET_HALC) &&
        (oe_ApplicationTargetType != stw::opensyde_core::C_OscNodeApplication::ePARAMETER_SET_HALC))
    {
-      C_SclString c_Entry;
+      QString c_Entry;
 
       bool q_Entry = false;
       const int32_t s32_TYPE = static_cast<int32_t>(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
@@ -756,7 +752,7 @@ void C_OscViewNodeUpdate::OnSyncNodeApplicationAboutToBeChangedFromParamSetHalc(
       if (ou32_ApplicationIndex <= this->mc_DataBlockPaths.size())
       {
          const int32_t s32_TYPE = static_cast<int32_t>(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
-         this->mc_DataBlockPaths.insert(this->mc_DataBlockPaths.begin() + ou32_ApplicationIndex, C_SclString());
+         this->mc_DataBlockPaths.insert(this->mc_DataBlockPaths.begin() + ou32_ApplicationIndex, QString());
          this->mc_SkipUpdateOfFiles[s32_TYPE].insert(
             this->mc_SkipUpdateOfFiles[s32_TYPE].begin() + ou32_ApplicationIndex, false);
       }

@@ -314,7 +314,7 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const C_SclStrin
 
    for (int32_t s32_Loop = 0; s32_Loop < u16_NumEntries; s32_Loop++)
    {
-      const C_SclString c_Directive = C_SclString::IntToStr(s32_Loop + 1);
+      const C_SclString c_Directive = QString::number(s32_Loop + 1);
       const C_SclString c_Index = orc_IniFile.value(c_Group + QString(c_Directive.c_str()), "").toString().toStdString().c_str();
       if (c_Index == "")
       {
@@ -442,7 +442,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
                orc_Object.c_Name = rc_Value;
                break;
             case 1:
-               orc_Object.c_Access = rc_Value.UpperCase();
+               orc_Object.c_Access = rc_Value.toUpper();
                break;
             case 2:
                try
@@ -691,7 +691,7 @@ C_OscCanOpenObjectData::C_OscCanOpenObjectData() :
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsReadable(void) const
 {
-   const C_SclString c_Help = c_Access.UpperCase();
+   const C_SclString c_Help = c_Access.toUpper();
 
    return ((c_Help  == "RO") || (c_Help == "RW") || (c_Help == "RWW") || (c_Help == "RWR") || (c_Help == "CONST"));
 }
@@ -706,7 +706,7 @@ bool C_OscCanOpenObjectData::IsReadable(void) const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsWriteable(void) const
 {
-   const C_SclString c_Help = c_Access.UpperCase();
+   const C_SclString c_Help = c_Access.toUpper();
 
    return ((c_Help == "RW") || (c_Help == "RWW") || (c_Help == "RWR") || (c_Help == "WO"));
 }
@@ -738,7 +738,7 @@ bool C_OscCanOpenObjectData::IsMappableIntoPdo() const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsMappableIntoTxPdo() const
 {
-   const C_SclString c_Help = c_Access.UpperCase();
+   const C_SclString c_Help = c_Access.toUpper();
 
    return this->IsMappableIntoPdo() &&
           ((c_Help == "RO") || (c_Help == "RW") || (c_Help == "RWR") || (c_Help == "CONST"));
@@ -756,7 +756,7 @@ bool C_OscCanOpenObjectData::IsMappableIntoTxPdo() const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsMappableIntoRxPdo() const
 {
-   const C_SclString c_Help = c_Access.UpperCase();
+   const C_SclString c_Help = c_Access.toUpper();
 
    return this->IsMappableIntoPdo() && ((c_Help == "WO") || (c_Help == "RW") || (c_Help == "RWW"));
 }

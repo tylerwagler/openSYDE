@@ -47,7 +47,7 @@ const uint16_t C_OscXappPropertiesFiler::mhu16_FILE_VERSION_1 = 1;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXappPropertiesFiler::h_LoadXappPropertiesFile(C_OscXappProperties & orc_XappProperties,
-                                                           const stw::scl::C_SclString & orc_FilePath)
+                                                           const QString & orc_FilePath)
 {
    C_OscXmlParserLog c_XmlParser;
 
@@ -131,7 +131,7 @@ int32_t C_OscXappPropertiesFiler::h_LoadXappProperties(C_OscXappProperties & orc
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(const C_OscXappProperties & orc_XappProperties,
-                                                           const stw::scl::C_SclString & orc_FilePath)
+                                                           const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath,
@@ -141,7 +141,7 @@ int32_t C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(const C_OscXappProper
    {
       //File version
       Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
-      c_XmlParser.SetNodeContent(stw::scl::C_SclString::IntToStr(mhu16_FILE_VERSION_1));
+      c_XmlParser.SetNodeContent(QString::number(mhu16_FILE_VERSION_1));
       //Return
       c_XmlParser.SelectNodeParent();
       //node
@@ -200,8 +200,8 @@ void C_OscXappPropertiesFiler::h_SaveXappProperties(const C_OscXappProperties & 
 int32_t C_OscXappPropertiesFiler::h_LoadCommInterfaceId(C_OscSystemBus::E_Type & ore_Type,
                                                         uint8_t & oru8_InterfaceNumber,
                                                         C_OscXmlParserBase & orc_XmlParser,
-                                                        const stw::scl::C_SclString & orc_ParentNodeName,
-                                                        const stw::scl::C_SclString & orc_UseCase)
+                                                        const QString & orc_ParentNodeName,
+                                                        const QString & orc_UseCase)
 {
    int32_t s32_Retval;
 
@@ -249,7 +249,7 @@ void C_OscXappPropertiesFiler::h_SaveCommInterfaceId(const C_OscSystemBus::E_Typ
    Automatically generated file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscXappPropertiesFiler::h_GetFileName(void)
+QString C_OscXappPropertiesFiler::h_GetFileName(void)
 {
    return "x_app_properties.xml";
 }

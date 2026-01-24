@@ -48,5 +48,6 @@ C_OscHalcDefChannelDef::C_OscHalcDefChannelDef(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefChannelDef::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().data(),
+                                      static_cast<uint32_t>(this->c_Name.toUtf8().size()), oru32_HashValue);
 }

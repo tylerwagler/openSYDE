@@ -11,9 +11,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
-
+#include <QString>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
 
 #include "C_OscNode.hpp"
 
@@ -32,15 +31,15 @@ public:
    C_OscNodeSquad(void);
    virtual ~C_OscNodeSquad(void);
 
-   static stw::scl::C_SclString h_CombineNames(const stw::scl::C_SclString & orc_MainDeviceName,
-                                               const stw::scl::C_SclString & orc_SubDeviceName);
-   int32_t SetBaseName(std::vector<C_OscNode> & orc_Nodes, const stw::scl::C_SclString & orc_NodeBaseName);
+   static QString h_CombineNames(const QString & orc_MainDeviceName,
+                                 const QString & orc_SubDeviceName);
+   int32_t SetBaseName(std::vector<C_OscNode> & orc_Nodes, const QString & orc_NodeBaseName);
    static bool h_CheckIsMultiDevice(const uint32_t ou32_NodeIndex,
                                     const std::vector<stw::opensyde_core::C_OscNodeSquad> & orc_AvailableGroups,
                                     uint32_t * const opu32_GroupIndex = NULL);
 
-   static const stw::scl::C_SclString hc_SEPARATOR; ///< Default separator for GUI and device type checks
-   stw::scl::C_SclString c_BaseName;                ///< Base name for all sub nodes
+   static const QString hc_SEPARATOR; ///< Default separator for GUI and device type checks
+   QString c_BaseName;                ///< Base name for all sub nodes
    std::vector<uint32_t> c_SubNodeIndexes;          ///< Indexes of all containing sub nodes in the squad
 };
 

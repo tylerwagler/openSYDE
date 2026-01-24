@@ -1,0 +1,561 @@
+================================================================================
+QString Migration Report
+================================================================================
+
+SUMMARY BY PATTERN:
+----------------------------------------
+  c_str: 149 occurrences [REVIEW]
+  PrintFormatted_Generic: 94 occurrences [REVIEW]
+  Length: 74 occurrences [REVIEW]
+  ToInt: 15 occurrences [REVIEW]
+  IntToHex: 12 occurrences [REVIEW]
+  SubString: 6 occurrences [REVIEW]
+  Delete: 5 occurrences [REVIEW]
+  Insert: 5 occurrences [REVIEW]
+  Pos: 4 occurrences [REVIEW]
+  LowerCase: 2 occurrences [SAFE]
+
+Total SAFE replacements (can auto-apply): 2
+Total REVIEW replacements (need manual check): 364
+
+SUMMARY BY FILE:
+----------------------------------------
+  imports\C_OscCanOpenObjectDictionary.cpp: 43 (0 safe, 43 review)
+  imports\C_OscCanOpenEdsDeviceInfoBlock.cpp: 34 (0 safe, 34 review)
+  imports\C_OscCanOpenEdsFileInfoBlock.cpp: 29 (0 safe, 29 review)
+  kefex_diaglib\dl_kefex\CKFXVariableBase.cpp: 24 (0 safe, 24 review)
+  protocol_drivers\communication\C_OscComMessageLoggerFileAsc.cpp: 20 (0 safe, 20 review)
+  kefex_diaglib\cmonprotocol\C_CanMonProtocolKefex.cpp: 18 (0 safe, 18 review)
+  kefex_diaglib\cmonprotocol\C_CanMonProtocolOpenSyde.cpp: 15 (0 safe, 15 review)
+  kefex_diaglib\cmonprotocol\C_CanMonProtocolXfl.cpp: 15 (0 safe, 15 review)
+  imports\C_OscImportEdsDcf.cpp: 14 (0 safe, 14 review)
+  kefex_diaglib\dl_kefex\CKFXDEFProject.cpp: 14 (0 safe, 14 review)
+  kefex_diaglib\cmonprotocol\C_CanMonProtocol.cpp: 9 (0 safe, 9 review)
+  protocol_drivers\C_OscProtocolDriverOsy.cpp: 9 (0 safe, 9 review)
+  protocol_drivers\communication\C_OscComDriverProtocol.cpp: 9 (0 safe, 9 review)
+  kefex_diaglib\cmonprotocol\C_CanMonProtocolBase.cpp: 8 (0 safe, 8 review)
+  kefex_diaglib\dl_kefex\CKFXProtocol.cpp: 8 (0 safe, 8 review)
+  kefex_diaglib\cmonprotocol\C_CanMonProtocolCanOpen.cpp: 7 (0 safe, 7 review)
+  kefex_diaglib\cmonprotocol\C_CanMonProtocolShipIpIva.cpp: 7 (0 safe, 7 review)
+  protocol_drivers\system_update\C_OscSuSequences.cpp: 7 (0 safe, 7 review)
+  security\C_OscSecurityEcdsa.cpp: 7 (0 safe, 7 review)
+  C_OscUtils.cpp: 4 (0 safe, 4 review)
+  exports\code_generation\C_OscExportOsyInit.cpp: 4 (0 safe, 4 review)
+  project\C_OscProject.cpp: 4 (0 safe, 4 review)
+  project\system\node\C_OscNodeDataPoolContent.cpp: 4 (0 safe, 4 review)
+  protocol_drivers\basic_update\C_OscBuSequences.cpp: 4 (0 safe, 4 review)
+  protocol_drivers\C_OscProtocolDriverOsyTpCan.cpp: 4 (0 safe, 4 review)
+  exports\x_certificates_package_generation\C_OscXceCreate.cpp: 3 (0 safe, 3 review)
+  md5\C_Md5Checksum.cpp: 3 (0 safe, 3 review)
+  C_OscChecksummedIniFile.cpp: 2 (0 safe, 2 review)
+  exports\code_generation\C_OscExportCanOpenConfig.cpp: 2 (0 safe, 2 review)
+  kefex_diaglib\cmonprotocol\C_CanMonProtocolL2.cpp: 2 (0 safe, 2 review)
+  kefex_diaglib\dl_kefex\CKFXVariableListBase.cpp: 2 (0 safe, 2 review)
+  kefex_diaglib\dl_kefex\CKFXVariableLists.cpp: 2 (0 safe, 2 review)
+  kefex_diaglib\dl_stwflash\CXFLFlashWrite.cpp: 2 (0 safe, 2 review)
+  project\system\C_OscSystemDefinition.cpp: 2 (2 safe, 0 review)
+  project\system\node\C_OscNodeDataPoolListElementOptArrayId.cpp: 2 (0 safe, 2 review)
+  protocol_drivers\communication\C_OscComMessageLogger.cpp: 2 (0 safe, 2 review)
+  security\C_OscSecurityPemBase.cpp: 2 (0 safe, 2 review)
+  system_update_package\C_OscSupDefinitionFiler.cpp: 2 (0 safe, 2 review)
+  data_dealer\C_OscDataDealerNvmSafe.cpp: 1 (0 safe, 1 review)
+  exports\code_generation\C_OscExportParamSet.cpp: 1 (0 safe, 1 review)
+  exports\x_certificates_package_generation\C_OscXceManifestFiler.cpp: 1 (0 safe, 1 review)
+  imports\C_OscImportRamView.cpp: 1 (0 safe, 1 review)
+  kefex_diaglib\dl_kefex\CKFXDATFile.cpp: 1 (0 safe, 1 review)
+  kefex_diaglib\dl_kefex\CKFXProjectOptions.cpp: 1 (0 safe, 1 review)
+  logging\C_OscLoggingHandler.cpp: 1 (0 safe, 1 review)
+  project\system\node\C_OscNode.cpp: 1 (0 safe, 1 review)
+  project\system\node\can\can_open\C_OscCanOpenManagerDeviceInfo.cpp: 1 (0 safe, 1 review)
+  project\view\C_OscViewFiler.cpp: 1 (0 safe, 1 review)
+  protocol_drivers\C_OscProtocolDriverOsyTpIp.cpp: 1 (0 safe, 1 review)
+  protocol_drivers\communication\C_OscComMessageLoggerFileBase.cpp: 1 (0 safe, 1 review)
+  protocol_drivers\device_config\C_OscDcBasicSequences.cpp: 1 (0 safe, 1 review)
+  security\C_OscSecurityPemDatabase.cpp: 1 (0 safe, 1 review)
+  system_update_package\C_OscSupServiceUpdatePackageBase.cpp: 1 (0 safe, 1 review)
+  system_update_package\C_OscSupServiceUpdatePackageCreate.cpp: 1 (0 safe, 1 review)
+  system_update_package\C_OscSupServiceUpdatePackageLoad.cpp: 1 (0 safe, 1 review)
+
+================================================================================
+DETAILED CHANGES (Safe patterns only):
+================================================================================
+
+project\system\C_OscSystemDefinition.cpp:
+  Line 521: .LowerCase() -> .toLower()
+  Line 521: .LowerCase() -> .toLower()
+
+================================================================================
+ITEMS REQUIRING REVIEW (Unsafe patterns):
+================================================================================
+
+C_OscChecksummedIniFile.cpp:
+  Line 84 [Length]: .Length() -> .length()
+  Line 87 [c_str]: .c_str() -> .toUtf8().constData()
+
+C_OscUtils.cpp:
+  Line 635 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 660 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 742 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 758 [c_str]: .c_str() -> .toUtf8().constData()
+
+data_dealer\C_OscDataDealerNvmSafe.cpp:
+  Line 1268 [c_str]: .c_str() -> .toUtf8().constData()
+
+exports\code_generation\C_OscExportCanOpenConfig.cpp:
+  Line 182 [IntToHex]: C_SclString::IntToHex(c_Payload[u8_It], 2) -> QString::number(c_Payload[u8_It], 16).rightJustified(2, \'0\')
+  Line 185 [Delete]: .Delete( -> .remove(
+
+exports\code_generation\C_OscExportOsyInit.cpp:
+  Line 490 [Delete]: .Delete( -> .remove(
+  Line 491 [Length]: .Length() -> .length()
+  Line 564 [Delete]: .Delete( -> .remove(
+  Line 565 [Length]: .Length() -> .length()
+
+exports\code_generation\C_OscExportParamSet.cpp:
+  Line 488 [c_str]: .c_str() -> .toUtf8().constData()
+
+exports\x_certificates_package_generation\C_OscXceCreate.cpp:
+  Line 397 [SubString]: .SubString( -> .mid(
+  Line 397 [Length]: .Length() -> .length()
+  Line 397 [Length]: .Length() -> .length()
+
+exports\x_certificates_package_generation\C_OscXceManifestFiler.cpp:
+  Line 282 [PrintFormatted_Generic]: c_Tmp.PrintFormatted( -> c_Tmp = QString::asprintf(
+
+imports\C_OscCanOpenEdsDeviceInfoBlock.cpp:
+  Line 69 [Length]: .Length() -> .length()
+  Line 69 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 70 [Length]: .Length() -> .length()
+  Line 70 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 71 [Length]: .Length() -> .length()
+  Line 71 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 72 [Length]: .Length() -> .length()
+  Line 72 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 73 [Length]: .Length() -> .length()
+  Line 73 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 74 [Length]: .Length() -> .length()
+  Line 74 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 86 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 87 [Length]: .Length() -> .length()
+  Line 116 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 118 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 120 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 121 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 133 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 134 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 136 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 141 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 142 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 143 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 186 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 186 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 190 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 190 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 226 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 226 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 266 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 266 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 306 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 306 [c_str]: .c_str() -> .toUtf8().constData()
+
+imports\C_OscCanOpenEdsFileInfoBlock.cpp:
+  Line 57 [Length]: .Length() -> .length()
+  Line 57 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 62 [Length]: .Length() -> .length()
+  Line 62 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 63 [Length]: .Length() -> .length()
+  Line 63 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 64 [Length]: .Length() -> .length()
+  Line 64 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 65 [Length]: .Length() -> .length()
+  Line 65 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 66 [Length]: .Length() -> .length()
+  Line 66 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 67 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 68 [Length]: .Length() -> .length()
+  Line 69 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 70 [Length]: .Length() -> .length()
+  Line 71 [Length]: .Length() -> .length()
+  Line 71 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 96 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 98 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 100 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 103 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 104 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 105 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 106 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 108 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 109 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 110 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 111 [c_str]: .c_str() -> .toUtf8().constData()
+
+imports\C_OscCanOpenObjectDictionary.cpp:
+  Line 155 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 156 [Length]: .Length() -> .length()
+  Line 204 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 206 [Length]: .Length() -> .length()
+  Line 211 [SubString]: .SubString( -> .mid(
+  Line 211 [ToInt]: .ToInt() -> .toInt()
+  Line 222 [Pos]: .Pos( -> .indexOf(
+  Line 222 [Length]: .Length() -> .length()
+  Line 227 [SubString]: .SubString( -> .mid(
+  Line 227 [ToInt]: .ToInt() -> .toInt()
+  Line 229 [SubString]: .SubString( -> .mid(
+  Line 229 [ToInt]: .ToInt() -> .toInt()
+  Line 312 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 318 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 318 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 331 [ToInt]: .ToInt() -> .toInt()
+  Line 346 [IntToHex]: C_SclString::IntToHex(u16_Index, 4) -> QString::number(u16_Index, 16).rightJustified(4, \'0\')
+  Line 421 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 428 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 436 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 450 [ToInt]: .ToInt() -> .toInt()
+  Line 454 [PrintFormatted_Generic]: mc_LastError.PrintFormatted( -> mc_LastError = QString::asprintf(
+  Line 463 [ToInt]: .ToInt() -> .toInt()
+  Line 467 [PrintFormatted_Generic]: mc_LastError.PrintFormatted( -> mc_LastError = QString::asprintf(
+  Line 485 [ToInt]: .ToInt() -> .toInt()
+  Line 497 [PrintFormatted_Generic]: mc_LastError.PrintFormatted( -> mc_LastError = QString::asprintf(
+  Line 499 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 507 [PrintFormatted_Generic]: mc_LastError.PrintFormatted( -> mc_LastError = QString::asprintf(
+  Line 509 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 616 [Length]: .Length() -> .length()
+  Line 616 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 620 [Length]: .Length() -> .length()
+  Line 620 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 622 [Length]: .Length() -> .length()
+  Line 622 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 623 [Length]: .Length() -> .length()
+  Line 623 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 624 [Length]: .Length() -> .length()
+  Line 624 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 625 [Length]: .Length() -> .length()
+  Line 625 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 626 [Length]: .Length() -> .length()
+  Line 626 [c_str]: .c_str() -> .toUtf8().constData()
+
+imports\C_OscImportEdsDcf.cpp:
+  Line 636 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 771 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 1551 [Length]: .Length() -> .length()
+  Line 1555 [Length]: .Length() -> .length()
+  Line 1569 [Length]: .Length() -> .length()
+  Line 1580 [Pos]: .Pos( -> .indexOf(
+  Line 1640 [Length]: .Length() -> .length()
+  Line 1644 [Length]: .Length() -> .length()
+  Line 1658 [Length]: .Length() -> .length()
+  Line 1699 [Length]: .Length() -> .length()
+  Line 1703 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 1770 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 1792 [IntToHex]: C_SclString::IntToHex(ou32_Number, 1) -> QString::number(ou32_Number, 16).rightJustified(1, \'0\')
+  Line 2141 [c_str]: .c_str() -> .toUtf8().constData()
+
+imports\C_OscImportRamView.cpp:
+  Line 350 [Length]: .Length() -> .length()
+
+kefex_diaglib\cmonprotocol\C_CanMonProtocol.cpp:
+  Line 99 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 109 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 120 [Length]: .Length() -> .length()
+  Line 122 [Length]: .Length() -> .length()
+  Line 157 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 341 [PrintFormatted_Generic]: c_Time.PrintFormatted( -> c_Time = QString::asprintf(
+  Line 347 [PrintFormatted_Generic]: c_Time.PrintFormatted( -> c_Time = QString::asprintf(
+  Line 352 [PrintFormatted_Generic]: c_Time.PrintFormatted( -> c_Time = QString::asprintf(
+  Line 355 [Insert]: .Insert( -> .insert(
+
+kefex_diaglib\cmonprotocol\C_CanMonProtocolBase.cpp:
+  Line 188 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 192 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 220 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 224 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 310 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 314 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 342 [PrintFormatted_Generic]: c_Result.PrintFormatted( -> c_Result = QString::asprintf(
+  Line 349 [PrintFormatted_Generic]: c_Result.PrintFormatted( -> c_Result = QString::asprintf(
+
+kefex_diaglib\cmonprotocol\C_CanMonProtocolCanOpen.cpp:
+  Line 292 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 314 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 343 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 354 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 473 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 482 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 535 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+
+kefex_diaglib\cmonprotocol\C_CanMonProtocolKefex.cpp:
+  Line 162 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 166 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 180 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 184 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 430 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 432 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 437 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 439 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 463 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 469 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 708 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 721 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 770 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 777 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 837 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 845 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 863 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 870 [c_str]: .c_str() -> .toUtf8().constData()
+
+kefex_diaglib\cmonprotocol\C_CanMonProtocolL2.cpp:
+  Line 69 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 82 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+
+kefex_diaglib\cmonprotocol\C_CanMonProtocolOpenSyde.cpp:
+  Line 738 [IntToHex]: C_SclString::IntToHex(u32_UniqueId, 6) -> QString::number(u32_UniqueId, 16).rightJustified(6, \'0\')
+  Line 754 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 773 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 778 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1077 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1081 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1292 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1311 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1389 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1429 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1434 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1459 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1658 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1675 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+  Line 1767 [PrintFormatted_Generic]: c_Text2.PrintFormatted( -> c_Text2 = QString::asprintf(
+
+kefex_diaglib\cmonprotocol\C_CanMonProtocolShipIpIva.cpp:
+  Line 2151 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 2155 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 2186 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 2192 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 2196 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 2211 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 2215 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+
+kefex_diaglib\cmonprotocol\C_CanMonProtocolXfl.cpp:
+  Line 322 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 329 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 879 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 913 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 918 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 1039 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 1046 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 1089 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 1124 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 1179 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 1183 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 1282 [PrintFormatted_Generic]: c_Help2.PrintFormatted( -> c_Help2 = QString::asprintf(
+  Line 1638 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 1672 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 1677 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+
+kefex_diaglib\dl_kefex\CKFXDATFile.cpp:
+  Line 159 [c_str]: .c_str() -> .toUtf8().constData()
+
+kefex_diaglib\dl_kefex\CKFXDEFProject.cpp:
+  Line 262 [ToInt]: .ToInt() -> .toInt()
+  Line 315 [ToInt]: .ToInt() -> .toInt()
+  Line 328 [ToInt]: .ToInt() -> .toInt()
+  Line 411 [Length]: .Length() -> .length()
+  Line 415 [ToInt]: .ToInt() -> .toInt()
+  Line 423 [Length]: .Length() -> .length()
+  Line 427 [ToInt]: .ToInt() -> .toInt()
+  Line 678 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 686 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 811 [Pos]: .Pos( -> .indexOf(
+  Line 811 [Delete]: .Delete( -> .remove(
+  Line 811 [Length]: .Length() -> .length()
+  Line 813 [Pos]: .Pos( -> .indexOf(
+  Line 813 [Delete]: .Delete( -> .remove(
+
+kefex_diaglib\dl_kefex\CKFXProjectOptions.cpp:
+  Line 58 [Length]: .Length() -> .length()
+
+kefex_diaglib\dl_kefex\CKFXProtocol.cpp:
+  Line 123 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 126 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 142 [Length]: .Length() -> .length()
+  Line 142 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 160 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 163 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 170 [Length]: .Length() -> .length()
+  Line 170 [c_str]: .c_str() -> .toUtf8().constData()
+
+kefex_diaglib\dl_kefex\CKFXVariableBase.cpp:
+  Line 431 [Length]: .Length() -> .length()
+  Line 435 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 439 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 775 [Length]: .Length() -> .length()
+  Line 777 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 781 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 860 [Length]: .Length() -> .length()
+  Line 860 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 877 [Length]: .Length() -> .length()
+  Line 877 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 880 [Length]: .Length() -> .length()
+  Line 880 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 1619 [IntToHex]: C_SclString::IntToHex(s64_Temp, 0) -> QString::number(s64_Temp, 16).rightJustified(0, \'0\')
+  Line 1622 [Insert]: .Insert( -> .insert(
+  Line 1622 [Length]: .Length() -> .length()
+  Line 1627 [IntToHex]: C_SclString::IntToHex(s64_Temp, 0) -> QString::number(s64_Temp, 16).rightJustified(0, \'0\')
+  Line 1630 [Insert]: .Insert( -> .insert(
+  Line 1630 [Length]: .Length() -> .length()
+  Line 1695 [IntToHex]: C_SclString::IntToHex(s64_Temp, 0) -> QString::number(s64_Temp, 16).rightJustified(0, \'0\')
+  Line 1698 [Insert]: .Insert( -> .insert(
+  Line 1698 [Length]: .Length() -> .length()
+  Line 1703 [IntToHex]: C_SclString::IntToHex(s64_Temp, 0) -> QString::number(s64_Temp, 16).rightJustified(0, \'0\')
+  Line 1706 [Insert]: .Insert( -> .insert(
+  Line 1706 [Length]: .Length() -> .length()
+
+kefex_diaglib\dl_kefex\CKFXVariableListBase.cpp:
+  Line 77 [Length]: .Length() -> .length()
+  Line 77 [c_str]: .c_str() -> .toUtf8().constData()
+
+kefex_diaglib\dl_kefex\CKFXVariableLists.cpp:
+  Line 68 [Length]: .Length() -> .length()
+  Line 68 [c_str]: .c_str() -> .toUtf8().constData()
+
+kefex_diaglib\dl_stwflash\CXFLFlashWrite.cpp:
+  Line 354 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 537 [c_str]: .c_str() -> .toUtf8().constData()
+
+logging\C_OscLoggingHandler.cpp:
+  Line 423 [c_str]: .c_str() -> .toUtf8().constData()
+
+md5\C_Md5Checksum.cpp:
+  Line 319 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 373 [PrintFormatted_Generic]: c_Str.PrintFormatted( -> c_Str = QString::asprintf(
+  Line 404 [PrintFormatted_Generic]: c_Str.PrintFormatted( -> c_Str = QString::asprintf(
+
+project\C_OscProject.cpp:
+  Line 79 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 80 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 82 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 83 [c_str]: .c_str() -> .toUtf8().constData()
+
+project\system\node\C_OscNode.cpp:
+  Line 830 [c_str]: .c_str() -> .toUtf8().constData()
+
+project\system\node\C_OscNodeDataPoolContent.cpp:
+  Line 2989 [PrintFormatted_Generic]: c_Precison.PrintFormatted( -> c_Precison = QString::asprintf(
+  Line 2990 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 3001 [PrintFormatted_Generic]: c_Precison.PrintFormatted( -> c_Precison = QString::asprintf(
+  Line 3002 [c_str]: .c_str() -> .toUtf8().constData()
+
+project\system\node\C_OscNodeDataPoolListElementOptArrayId.cpp:
+  Line 220 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 221 [Length]: .Length() -> .length()
+
+project\system\node\can\can_open\C_OscCanOpenManagerDeviceInfo.cpp:
+  Line 115 [c_str]: .c_str() -> .toUtf8().constData()
+
+project\view\C_OscViewFiler.cpp:
+  Line 189 [c_str]: .c_str() -> .toUtf8().constData()
+
+protocol_drivers\basic_update\C_OscBuSequences.cpp:
+  Line 508 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 772 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 792 [PrintFormatted_Generic]: c_Help.PrintFormatted( -> c_Help = QString::asprintf(
+  Line 855 [c_str]: .c_str() -> .toUtf8().constData()
+
+protocol_drivers\C_OscProtocolDriverOsy.cpp:
+  Line 1501 [Length]: .Length() -> .length()
+  Line 1505 [Length]: .Length() -> .length()
+  Line 1508 [Length]: .Length() -> .length()
+  Line 1509 [Length]: .Length() -> .length()
+  Line 1509 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 3586 [IntToHex]: C_SclString::IntToHex(ou8_NrCode, 2) -> QString::number(ou8_NrCode, 16).rightJustified(2, \'0\')
+  Line 4101 [IntToHex]: C_SclString::IntToHex(u8_ServiceId, 2) -> QString::number(u8_ServiceId, 16).rightJustified(2, \'0\')
+  Line 4123 [IntToHex]: C_SclString::IntToHex(orc_ReceivedService.c_Data[1], 2) -> QString::number(orc_ReceivedService.c_Data[1], 16).rightJustified(2, \'0\')
+  Line 4614 [c_str]: .c_str() -> .toUtf8().constData()
+
+protocol_drivers\C_OscProtocolDriverOsyTpCan.cpp:
+  Line 479 [PrintFormatted_Generic]: c_Tmp.PrintFormatted( -> c_Tmp = QString::asprintf(
+  Line 482 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 1567 [Length]: .Length() -> .length()
+  Line 1647 [Length]: .Length() -> .length()
+
+protocol_drivers\C_OscProtocolDriverOsyTpIp.cpp:
+  Line 1176 [IntToHex]: C_SclString::IntToHex(mc_RxState.c_ServiceHeader.u16_PayloadType, 4) -> QString::number(mc_RxState.c_ServiceHeader.u16_PayloadType, 16).rightJustified(4, \'0\')
+
+protocol_drivers\communication\C_OscComDriverProtocol.cpp:
+  Line 1522 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 1579 [PrintFormatted_Generic]: c_Tmp.PrintFormatted( -> c_Tmp = QString::asprintf(
+  Line 1580 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 1595 [PrintFormatted_Generic]: c_Tmp.PrintFormatted( -> c_Tmp = QString::asprintf(
+  Line 1596 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 2941 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 2953 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 2972 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 2982 [c_str]: .c_str() -> .toUtf8().constData()
+
+protocol_drivers\communication\C_OscComMessageLogger.cpp:
+  Line 693 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 697 [c_str]: .c_str() -> .toUtf8().constData()
+
+protocol_drivers\communication\C_OscComMessageLoggerFileAsc.cpp:
+  Line 76 [Length]: .Length() -> .length()
+  Line 76 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 106 [SubString]: .SubString( -> .mid(
+  Line 106 [Length]: .Length() -> .length()
+  Line 116 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 163 [PrintFormatted_Generic]: c_Temp.PrintFormatted( -> c_Temp = QString::asprintf(
+  Line 163 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 167 [PrintFormatted_Generic]: c_Temp.PrintFormatted( -> c_Temp = QString::asprintf(
+  Line 167 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 248 [Length]: .Length() -> .length()
+  Line 248 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 300 [Length]: .Length() -> .length()
+  Line 300 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 325 [PrintFormatted_Generic]: c_Temp.PrintFormatted( -> c_Temp = QString::asprintf(
+  Line 328 [PrintFormatted_Generic]: c_Temp.PrintFormatted( -> c_Temp = QString::asprintf(
+  Line 331 [PrintFormatted_Generic]: c_Temp.PrintFormatted( -> c_Temp = QString::asprintf(
+  Line 334 [PrintFormatted_Generic]: c_Temp.PrintFormatted( -> c_Temp = QString::asprintf(
+  Line 464 [PrintFormatted_Generic]: c_TimeStamp.PrintFormatted( -> c_TimeStamp = QString::asprintf(
+  Line 466 [PrintFormatted_Generic]: c_TimeStamp.PrintFormatted( -> c_TimeStamp = QString::asprintf(
+  Line 466 [c_str]: .c_str() -> .toUtf8().constData()
+
+protocol_drivers\communication\C_OscComMessageLoggerFileBase.cpp:
+  Line 89 [c_str]: .c_str() -> .toUtf8().constData()
+
+protocol_drivers\device_config\C_OscDcBasicSequences.cpp:
+  Line 589 [PrintFormatted_Generic]: c_ProgressLogMsg.PrintFormatted( -> c_ProgressLogMsg = QString::asprintf(
+
+protocol_drivers\system_update\C_OscSuSequences.cpp:
+  Line 539 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 545 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 698 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 987 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 1043 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 1046 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 1529 [c_str]: .c_str() -> .toUtf8().constData()
+
+security\C_OscSecurityEcdsa.cpp:
+  Line 157 [Length]: .Length() -> .length()
+  Line 158 [Length]: .Length() -> .length()
+  Line 159 [Length]: .Length() -> .length()
+  Line 165 [Length]: .Length() -> .length()
+  Line 171 [SubString]: .SubString( -> .mid(
+  Line 171 [ToInt]: .ToInt() -> .toInt()
+  Line 181 [Length]: .Length() -> .length()
+
+security\C_OscSecurityPemBase.cpp:
+  Line 125 [c_str]: .c_str() -> .toUtf8().constData()
+  Line 127 [c_str]: .c_str() -> .toUtf8().constData()
+
+security\C_OscSecurityPemDatabase.cpp:
+  Line 163 [c_str]: .c_str() -> .toUtf8().constData()
+
+system_update_package\C_OscSupDefinitionFiler.cpp:
+  Line 154 [ToInt]: .ToInt() -> .toInt()
+  Line 163 [ToInt]: .ToInt() -> .toInt()
+
+system_update_package\C_OscSupServiceUpdatePackageBase.cpp:
+  Line 319 [c_str]: .c_str() -> .toUtf8().constData()
+
+system_update_package\C_OscSupServiceUpdatePackageCreate.cpp:
+  Line 1181 [c_str]: .c_str() -> .toUtf8().constData()
+
+system_update_package\C_OscSupServiceUpdatePackageLoad.cpp:
+  Line 759 [c_str]: .c_str() -> .toUtf8().constData()

@@ -3,48 +3,60 @@
    \file
    \brief       Data class for device configuration information
 
-   \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include <cstring>
-#include "stwtypes.hpp"
 #include "C_OscDcDeviceInformation.hpp"
+#include "stwtypes.hpp"
+#include <cstring>
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::scl;
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscDcDeviceInformation::C_OscDcDeviceInformation(void) :
-   c_DeviceName(""),
-   q_DeviceNameValid(false),
-   u8_NodeId(0U),
-   q_NodeIdValid(false),
-   q_IpAddressValid(false),
-   u8_SubNodeId(0U),
-   q_SecurityActivated(false),
-   q_ExtendedInfoValid(false)
-{
-   (void)memset(&au8_IpAddress[0], 0U, sizeof(au8_IpAddress));
+C_OscDcDeviceInformation::C_OscDcDeviceInformation(void)
+    : c_DeviceName(""), q_DeviceNameValid(false), u8_NodeId(0U),
+      q_NodeIdValid(false), q_IpAddressValid(false), u8_SubNodeId(0U),
+      q_SecurityActivated(false), q_ExtendedInfoValid(false) {
+  (void)memset(&au8_IpAddress[0], 0U, sizeof(au8_IpAddress));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -53,10 +65,9 @@ C_OscDcDeviceInformation::C_OscDcDeviceInformation(void) :
    \param[in]  orc_DeviceName    New device name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDcDeviceInformation::SetDeviceName(const C_SclString & orc_DeviceName)
-{
-   this->c_DeviceName = orc_DeviceName;
-   this->q_DeviceNameValid = true;
+void C_OscDcDeviceInformation::SetDeviceName(const QString &orc_DeviceName) {
+  this->c_DeviceName = orc_DeviceName;
+  this->q_DeviceNameValid = true;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -65,10 +76,9 @@ void C_OscDcDeviceInformation::SetDeviceName(const C_SclString & orc_DeviceName)
    \param[in]  ou8_NodeId  New node id
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDcDeviceInformation::SetNodeId(const uint8_t ou8_NodeId)
-{
-   this->u8_NodeId = ou8_NodeId;
-   this->q_NodeIdValid = true;
+void C_OscDcDeviceInformation::SetNodeId(const uint8_t ou8_NodeId) {
+  this->u8_NodeId = ou8_NodeId;
+  this->q_NodeIdValid = true;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -77,10 +87,11 @@ void C_OscDcDeviceInformation::SetNodeId(const uint8_t ou8_NodeId)
    \param[in]  orau8_IpAddress   New node id
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDcDeviceInformation::SetIpAddress(const uint8_t (&orau8_IpAddress)[4])
-{
-   (void)memcpy(&this->au8_IpAddress[0], &orau8_IpAddress[0], sizeof(this->au8_IpAddress));
-   this->q_IpAddressValid = true;
+void C_OscDcDeviceInformation::SetIpAddress(
+    const uint8_t (&orau8_IpAddress)[4]) {
+  (void)memcpy(&this->au8_IpAddress[0], &orau8_IpAddress[0],
+               sizeof(this->au8_IpAddress));
+  this->q_IpAddressValid = true;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -89,9 +100,9 @@ void C_OscDcDeviceInformation::SetIpAddress(const uint8_t (&orau8_IpAddress)[4])
    \param[in]  orc_SerialNumber   New serial number
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDcDeviceInformation::SetSerialNumber(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber)
-{
-   this->c_SerialNumber = orc_SerialNumber;
+void C_OscDcDeviceInformation::SetSerialNumber(
+    const stw::opensyde_core::C_OscProtocolSerialNumber &orc_SerialNumber) {
+  this->c_SerialNumber = orc_SerialNumber;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -101,11 +112,11 @@ void C_OscDcDeviceInformation::SetSerialNumber(const stw::opensyde_core::C_OscPr
    \param[in]  oq_SecurityActivated  New security activated flag
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDcDeviceInformation::SetExtendedInfo(const uint8_t ou8_SubNodeId, const bool oq_SecurityActivated)
-{
-   this->u8_SubNodeId = ou8_SubNodeId;
-   this->q_SecurityActivated = oq_SecurityActivated;
-   this->q_ExtendedInfoValid = true;
+void C_OscDcDeviceInformation::SetExtendedInfo(
+    const uint8_t ou8_SubNodeId, const bool oq_SecurityActivated) {
+  this->u8_SubNodeId = ou8_SubNodeId;
+  this->q_SecurityActivated = oq_SecurityActivated;
+  this->q_ExtendedInfoValid = true;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -118,22 +129,20 @@ void C_OscDcDeviceInformation::SetExtendedInfo(const uint8_t ou8_SubNodeId, cons
    false    Else
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscDcDeviceInformation::IsSerialNumberIdentical(const C_OscDcDeviceInformation & orc_Cmp) const
-{
-   const bool q_Return = (this->c_SerialNumber == orc_Cmp.c_SerialNumber);
+bool C_OscDcDeviceInformation::IsSerialNumberIdentical(
+    const C_OscDcDeviceInformation &orc_Cmp) const {
+  const bool q_Return = (this->c_SerialNumber == orc_Cmp.c_SerialNumber);
 
-   return q_Return;
+  return q_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscDcDeviceOldComConfig::C_OscDcDeviceOldComConfig(void) :
-   u8_OldNodeId(0U),
-   q_OldIpAddressValid(false)
-{
-   memset(&au8_OldIpAddress, 0U, 4);
+C_OscDcDeviceOldComConfig::C_OscDcDeviceOldComConfig(void)
+    : u8_OldNodeId(0U), q_OldIpAddressValid(false) {
+  memset(&au8_OldIpAddress, 0U, 4);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -142,12 +151,13 @@ C_OscDcDeviceOldComConfig::C_OscDcDeviceOldComConfig(void) :
    \param[in]  orc_Source  instance to copy from
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscDcDeviceOldComConfig::C_OscDcDeviceOldComConfig(const C_OscDcDeviceOldComConfig & orc_Source) :
-   u8_OldNodeId(orc_Source.u8_OldNodeId),
-   q_OldIpAddressValid(orc_Source.q_OldIpAddressValid)
+C_OscDcDeviceOldComConfig::C_OscDcDeviceOldComConfig(
+    const C_OscDcDeviceOldComConfig &orc_Source)
+    : u8_OldNodeId(orc_Source.u8_OldNodeId),
+      q_OldIpAddressValid(orc_Source.q_OldIpAddressValid)
 
 {
-   memcpy(&this->au8_OldIpAddress, &orc_Source.au8_OldIpAddress, 4);
+  memcpy(&this->au8_OldIpAddress, &orc_Source.au8_OldIpAddress, 4);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -159,16 +169,15 @@ C_OscDcDeviceOldComConfig::C_OscDcDeviceOldComConfig(const C_OscDcDeviceOldComCo
    reference to new instance
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscDcDeviceOldComConfig & C_OscDcDeviceOldComConfig::operator =(const C_OscDcDeviceOldComConfig & orc_Source)
-{
-   if (this != &orc_Source)
-   {
-      this->u8_OldNodeId = orc_Source.u8_OldNodeId;
-      this->q_OldIpAddressValid = orc_Source.q_OldIpAddressValid;
-      memcpy(&this->au8_OldIpAddress, &orc_Source.au8_OldIpAddress, 4);
-   }
+C_OscDcDeviceOldComConfig &C_OscDcDeviceOldComConfig::operator=(
+    const C_OscDcDeviceOldComConfig &orc_Source) {
+  if (this != &orc_Source) {
+    this->u8_OldNodeId = orc_Source.u8_OldNodeId;
+    this->q_OldIpAddressValid = orc_Source.q_OldIpAddressValid;
+    memcpy(&this->au8_OldIpAddress, &orc_Source.au8_OldIpAddress, 4);
+  }
 
-   return (*this);
+  return (*this);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -177,24 +186,21 @@ C_OscDcDeviceOldComConfig & C_OscDcDeviceOldComConfig::operator =(const C_OscDcD
    \param[in]       ou8_OldNodeId        Old node id of node
    \param[in]       oq_OldIpAddressValid Flag if IP address is valid
    \param[in]       opu8_OldIpAddress    Optional pointer to old IP address
-                                         If pointer != NULL, q_OldIpAddressValid will be set to oq_OldIpAddressValid
-                                         If pointer == NULL, q_OldIpAddressValid will be set to false
+                                         If pointer != NULL, q_OldIpAddressValid
+   will be set to oq_OldIpAddressValid If pointer == NULL, q_OldIpAddressValid
+   will be set to false
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDcDeviceOldComConfig::SetContent(const uint8_t ou8_OldNodeId, const bool oq_OldIpAddressValid,
-                                           const uint8_t * const opu8_OldIpAddress)
-{
-   this->u8_OldNodeId = ou8_OldNodeId;
-   if (opu8_OldIpAddress != NULL)
-   {
-      this->q_OldIpAddressValid = oq_OldIpAddressValid;
-      if (this->q_OldIpAddressValid == true)
-      {
-         memcpy(&this->au8_OldIpAddress[0], opu8_OldIpAddress, 4);
-      }
-   }
-   else
-   {
-      this->q_OldIpAddressValid = false;
-   }
+void C_OscDcDeviceOldComConfig::SetContent(
+    const uint8_t ou8_OldNodeId, const bool oq_OldIpAddressValid,
+    const uint8_t *const opu8_OldIpAddress) {
+  this->u8_OldNodeId = ou8_OldNodeId;
+  if (opu8_OldIpAddress != NULL) {
+    this->q_OldIpAddressValid = oq_OldIpAddressValid;
+    if (this->q_OldIpAddressValid == true) {
+      memcpy(&this->au8_OldIpAddress[0], opu8_OldIpAddress, 4);
+    }
+  } else {
+    this->q_OldIpAddressValid = false;
+  }
 }

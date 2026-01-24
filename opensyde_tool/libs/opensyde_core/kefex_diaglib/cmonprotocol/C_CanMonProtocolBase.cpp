@@ -153,11 +153,11 @@ C_SclString C_CanMonProtocolBase::m_GetValueDecHex(const uint32_t ou32_Value) co
 
    if (mq_Decimal == true)
    {
-      (void)c_Text.PrintFormatted("%u", ou32_Value);
+      (void)c_Text = QString::asprintf("%u", ou32_Value);
    }
    else
    {
-      (void)c_Text.PrintFormatted("%X", ou32_Value);
+      (void)c_Text = QString::asprintf("%X", ou32_Value);
    }
    return c_Text;
 }

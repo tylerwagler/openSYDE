@@ -66,11 +66,11 @@ C_OscHalcDefBase::~C_OscHalcDefBase()
    \retval false Duplicate Ids found
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscHalcDefBase::CheckIdsUnique(std::vector<stw::scl::C_SclString> & orc_DuplicateIds) const
+bool C_OscHalcDefBase::CheckIdsUnique(std::vector<QString> & orc_DuplicateIds) const
 {
    bool q_Retval = true;
 
-   std::vector<stw::scl::C_SclString> c_AllIds;
+   std::vector<QString> c_AllIds;
 
    //Find all valid IDs
    for (uint32_t u32_ItDomain = 0UL; u32_ItDomain < this->GetDomainSize(); ++u32_ItDomain)
@@ -96,7 +96,7 @@ bool C_OscHalcDefBase::CheckIdsUnique(std::vector<stw::scl::C_SclString> & orc_D
       for (uint32_t u32_ItCompare2 = u32_ItCompare1; u32_ItCompare2 < c_AllIds.size(); ++u32_ItCompare2)
       {
          //Check every string, but don't compare with itself
-         const stw::scl::C_SclString & rc_Comp1 = c_AllIds[u32_ItCompare1];
+         const QString & rc_Comp1 = c_AllIds[u32_ItCompare1];
          if ((u32_ItCompare1 != u32_ItCompare2) && (rc_Comp1 == c_AllIds[u32_ItCompare2]))
          {
             bool q_AlreadyExists = false;
@@ -183,10 +183,12 @@ bool C_OscHalcDefBase::IsClear(void) const
 void C_OscHalcDefBase::CalcHash(uint32_t & oru32_HashValue) const
 {
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_ContentVersion, sizeof(this->u32_ContentVersion), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_DeviceName.c_str(), this->c_DeviceName.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_FileString.c_str(), this->c_FileString.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_OriginalFileName.c_str(),
-                                       this->c_OriginalFileName.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_DeviceName.toUtf8().data(),
+                                      static_cast<uint32_t>(this->c_DeviceName.toUtf8().size()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_FileString.toUtf8().data(),
+                                      static_cast<uint32_t>(this->c_FileString.toUtf8().size()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_OriginalFileName.toUtf8().data(),
+                                      static_cast<uint32_t>(this->c_OriginalFileName.toUtf8().size()), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_SafetyMode, sizeof(this->e_SafetyMode), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u8_NumConfigCopies, sizeof(this->u8_NumConfigCopies), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_NvmBasedConfig, sizeof(this->q_NvmBasedConfig), oru32_HashValue);
@@ -218,7 +220,7 @@ void C_OscHalcDefBase::CalcHash(uint32_t & oru32_HashValue) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefBase::mh_AggregateIds(const std::vector<C_OscHalcDefStruct> & orc_Items,
-                                       std::vector<stw::scl::C_SclString> & orc_DuplicateIds)
+                                       std::vector<QString> & orc_DuplicateIds)
 {
    for (uint32_t u32_ItItem = 0UL; u32_ItItem < orc_Items.size(); ++u32_ItItem)
    {

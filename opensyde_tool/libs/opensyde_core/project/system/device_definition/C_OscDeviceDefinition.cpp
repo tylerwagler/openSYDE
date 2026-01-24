@@ -5,32 +5,48 @@
 
    Serves as data class to hold device definition data.
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
 #include "C_OscDeviceDefinition.hpp"
-#include "C_SclString.hpp"
 
-
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscDeviceDefinition::hc_DEFAULT_COMPANY_NAME = "Sensor-Technik Wiedemann GmbH";
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
+const QString C_OscDeviceDefinition::hc_DEFAULT_COMPANY_NAME =
+    "Sensor-Technik Wiedemann GmbH";
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Constructor
@@ -38,10 +54,7 @@ const stw::scl::C_SclString C_OscDeviceDefinition::hc_DEFAULT_COMPANY_NAME = "Se
    Initialize all class elements with default values
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscDeviceDefinition::C_OscDeviceDefinition(void)
-{
-   this->Clear();
-}
+C_OscDeviceDefinition::C_OscDeviceDefinition(void) { this->Clear(); }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Clear elements
@@ -49,28 +62,27 @@ C_OscDeviceDefinition::C_OscDeviceDefinition(void)
    Sets all numeric elements to zero and all strings to ""
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDeviceDefinition::Clear(void)
-{
-   c_DeviceName = "";
-   c_DeviceNameAlias = "";
-   c_DeviceDescription = "";
-   c_ImagePath = "";
-   c_FilePath = "";
+void C_OscDeviceDefinition::Clear(void) {
+  c_DeviceName = "";
+  c_DeviceNameAlias = "";
+  c_DeviceDescription = "";
+  c_ImagePath = "";
+  c_FilePath = "";
 
-   u8_NumCanBusses = 0U;
-   u8_NumEthernetBusses = 0U;
+  u8_NumCanBusses = 0U;
+  u8_NumEthernetBusses = 0U;
 
-   c_SupportedBitrates.clear();
-   c_SupportedCanFdDataBitrates.clear();
-   c_SupportedCanFeatures.clear();
+  c_SupportedBitrates.clear();
+  c_SupportedCanFdDataBitrates.clear();
+  c_SupportedCanFeatures.clear();
 
-   u8_ManufacturerId = 0;
-   c_ManufacturerDisplayValue = C_OscDeviceDefinition::hc_DEFAULT_COMPANY_NAME;
-   c_CompanyLogoLink = "";
-   c_ProductPageLink = "";
-   c_ToolboxIcon = "";
+  u8_ManufacturerId = 0;
+  c_ManufacturerDisplayValue = C_OscDeviceDefinition::hc_DEFAULT_COMPANY_NAME;
+  c_CompanyLogoLink = "";
+  c_ProductPageLink = "";
+  c_ToolboxIcon = "";
 
-   c_SubDevices.clear();
+  c_SubDevices.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -80,17 +92,13 @@ void C_OscDeviceDefinition::Clear(void)
    String to display
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscDeviceDefinition::GetDisplayName(void) const
-{
-   stw::scl::C_SclString c_Retval;
-   if (this->c_DeviceNameAlias == "")
-   {
-      c_Retval = this->c_DeviceName;
-   }
-   else
-   {
-      c_Retval = this->c_DeviceNameAlias;
-   }
-   return c_Retval;
+QString C_OscDeviceDefinition::GetDisplayName(void) const {
+  QString c_Retval;
+  if (this->c_DeviceNameAlias == "") {
+    c_Retval = this->c_DeviceName;
+  } else {
+    c_Retval = this->c_DeviceNameAlias;
+  }
+  return c_Retval;
 }
 //----------------------------------------------------------------------------------------------------------------------

@@ -58,8 +58,8 @@ C_SclString C_OscExportCommunicationStack::h_GetFileName(const uint8_t ou8_Inter
 {
    // assemble filename
    // add Datapool name + protocol name + node index
-   const C_SclString c_Text = "comm_" + mh_GetProtocolNameByType(ore_ProtocolType).LowerCase() + "_can" +
-                              C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U);
+   const C_SclString c_Text = "comm_" + mh_GetProtocolNameByType(ore_ProtocolType).toLower() + "_can" +
+                              QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U);
 
    return c_Text;
 }
@@ -78,8 +78,8 @@ C_SclString C_OscExportCommunicationStack::h_GetFileName(const uint8_t ou8_Inter
 C_SclString C_OscExportCommunicationStack::h_GetConfigurationName(const uint8_t ou8_InterfaceIndex,
                                                                   const C_OscCanProtocol::E_Type & ore_ProtocolType)
 {
-   const C_SclString c_Name = "gt_comm_" + mh_GetProtocolNameByType(ore_ProtocolType).LowerCase() + "_can" +
-                              C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
+   const C_SclString c_Name = "gt_comm_" + mh_GetProtocolNameByType(ore_ProtocolType).toLower() + "_can" +
+                              QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
                               "_ProtocolConfiguration";
 
    return c_Name;
@@ -159,7 +159,7 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const C_SclString & or
    }
    else
    {
-      osc_write_log_error("Creating source code", "Application index " + C_SclString::IntToStr(ou16_ApplicationIndex) +
+      osc_write_log_error("Creating source code", "Application index " + QString::number(ou16_ApplicationIndex) +
                           " out of range.");
       s32_Retval = C_RANGE;
    }
@@ -182,7 +182,7 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const C_SclString & or
             osc_write_log_error("Creating source code",
                                 "Did not generate code for application \"" + c_Application.c_Name +
                                 "\" because code format version \"" +
-                                C_SclString::IntToStr(c_Application.u16_GenCodeVersion) + "\" is unknown.");
+                                QString::number(c_Application.u16_GenCodeVersion) + "\" is unknown.");
             s32_Retval = C_NOACT;
          }
       }
@@ -226,7 +226,7 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const C_SclString & or
             //calculate hash value over the current state of the Datapool and protocol definitions
             pc_ComProtocol->CalcHash(u32_HashValue);
             pc_DataPool->CalcHash(u32_HashValue);
-            const C_SclString c_ProjectId = C_SclString::IntToStr(u32_HashValue);
+            const C_SclString c_ProjectId = QString::number(u32_HashValue);
 
             // create header file
             s32_Retval = mh_CreateHeaderFile(orc_ExportToolInfo, orc_Path, c_Application, *pc_ComProtocol,
@@ -244,7 +244,7 @@ int32_t C_OscExportCommunicationStack::h_CreateSourceCode(const C_SclString & or
             osc_write_log_error("Creating source code",
                                 "No messages with signals exist for specified communication protocol " +
                                 mh_GetProtocolNameByType(
-                                   ore_Protocol) + " for interface index " + C_SclString::IntToStr(ou8_InterfaceIndex));
+                                   ore_Protocol) + " for interface index " + QString::number(ou8_InterfaceIndex));
             s32_Retval = C_CONFIG;
          }
       }
@@ -428,7 +428,7 @@ int32_t C_OscExportCommunicationStack::mh_CreateImplementationFile(const C_SclSt
       osc_write_log_error("Creating source code",
                           "Datapool does not exist for specified communication protocol" +
                           mh_GetProtocolNameByType(orc_ComProtocol.e_Type) + " with interface index " +
-                          C_SclString::IntToStr(ou8_InterfaceIndex));
+                          QString::number(ou8_InterfaceIndex));
       s32_Retval = C_CONFIG;
    }
 
@@ -459,7 +459,7 @@ void C_OscExportCommunicationStack::mh_AddHeader(const C_SclString & orc_ExportT
       orc_Data.Append("");
       orc_Data.Append("   Defines the communication configuration for protocol type " +
                       mh_GetProtocolNameByType(ore_Protocol) + " on CAN interface " +
-                      C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + ".");
+                      QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + ".");
       orc_Data.Append("");
       orc_Data.Append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
    }
@@ -475,7 +475,7 @@ void C_OscExportCommunicationStack::mh_AddHeader(const C_SclString & orc_ExportT
 
    if (oq_FileType == mhq_IS_HEADER_FILE)
    {
-      const C_SclString c_HeaderGuard = h_GetFileName(ou8_InterfaceIndex, ore_Protocol).UpperCase() + "H";
+      const C_SclString c_HeaderGuard = h_GetFileName(ou8_InterfaceIndex, ore_Protocol).toUpper() + "H";
       orc_Data.Append("#ifndef " + c_HeaderGuard);
       orc_Data.Append("#define " + c_HeaderGuard);
    }
@@ -496,7 +496,7 @@ void C_OscExportCommunicationStack::mh_AddCeIncludes(C_SclStringList & orc_Data,
                                                      const C_OscCanProtocol::E_Type & ore_Protocol,
                                                      const bool oq_NullRequired)
 {
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).LowerCase();
+   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toLower();
 
    orc_Data.Append("");
    orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Includes"));
@@ -534,7 +534,7 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
                                                   const C_SclString & orc_ProjectId, const uint16_t ou16_GenCodeVersion,
                                                   const bool oq_FileType)
 {
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).UpperCase();
+   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
    const C_SclString c_MagicName = mh_GetMagicName(orc_ProjectId, ou8_InterfaceIndex, ore_Protocol);
 
    orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Defines"));
@@ -545,29 +545,29 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
       orc_Data.Append("///Index of Tx messages");
       for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < orc_ComMessage.c_TxMessages.size(); u16_MessageIndex++)
       {
-         const C_SclString c_Name = orc_ComMessage.c_TxMessages[u16_MessageIndex].c_Name.UpperCase();
+         const C_SclString c_Name = orc_ComMessage.c_TxMessages[u16_MessageIndex].c_Name.toUpper();
          orc_Data.Append("#define COMM_" + c_ProtocolName + "_CAN" +
-                         C_SclString::IntToStr(
+                         QString::number(
                             static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_TX_MSG_INDEX_" + c_Name + " (" +
-                         C_SclString::IntToStr(u16_MessageIndex) + "U)");
+                         QString::number(u16_MessageIndex) + "U)");
       }
       orc_Data.Append("#define COMM_" + c_ProtocolName + "_CAN" +
-                      C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_TX_MSGS (" +
-                      C_SclString::IntToStr(orc_ComMessage.c_TxMessages.size()) + "U)");
+                      QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_TX_MSGS (" +
+                      QString::number(orc_ComMessage.c_TxMessages.size()) + "U)");
       orc_Data.Append("");
 
       orc_Data.Append("///Index of Rx messages");
       for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < orc_ComMessage.c_RxMessages.size(); u16_MessageIndex++)
       {
-         const C_SclString c_Name = orc_ComMessage.c_RxMessages[u16_MessageIndex].c_Name.UpperCase();
+         const C_SclString c_Name = orc_ComMessage.c_RxMessages[u16_MessageIndex].c_Name.toUpper();
          orc_Data.Append("#define COMM_" + c_ProtocolName + "_CAN" +
-                         C_SclString::IntToStr(
+                         QString::number(
                             static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_RX_MSG_INDEX_" + c_Name + " (" +
-                         C_SclString::IntToStr(u16_MessageIndex) + "U)");
+                         QString::number(u16_MessageIndex) + "U)");
       }
       orc_Data.Append("#define COMM_" + c_ProtocolName + "_CAN" +
-                      C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_RX_MSGS (" +
-                      C_SclString::IntToStr(orc_ComMessage.c_RxMessages.size()) + "U)");
+                      QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_NUMBER_OF_RX_MSGS (" +
+                      QString::number(orc_ComMessage.c_RxMessages.size()) + "U)");
       orc_Data.Append("");
 
       if (ou16_GenCodeVersion >= 2U)
@@ -580,7 +580,7 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
 
             if (rc_Message.IsMultiplexed() == true)
             {
-               const C_SclString c_Name = rc_Message.c_Name.UpperCase();
+               const C_SclString c_Name = rc_Message.c_Name.toUpper();
                std::set<uint16_t> c_MultiplexerValues;
                std::set<uint16_t>::const_iterator c_ItValue;
                uint16_t u16_ValueIndex = 0;
@@ -597,17 +597,17 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
                for (c_ItValue = c_MultiplexerValues.begin(); c_ItValue != c_MultiplexerValues.end(); ++c_ItValue)
                {
                   orc_Data.Append("#define COMM_" + c_ProtocolName + "_CAN" +
-                                  C_SclString::IntToStr(
+                                  QString::number(
                                      static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_TX_MSG_MUX_INDEX_" + c_Name +
-                                  "_VALUE_" + C_SclString::IntToStr(*c_ItValue) + " (" +
-                                  C_SclString::IntToStr(u16_ValueIndex) + "U)");
+                                  "_VALUE_" + QString::number(*c_ItValue) + " (" +
+                                  QString::number(u16_ValueIndex) + "U)");
                   u16_ValueIndex++;
                }
 
                orc_Data.Append("#define COMM_" + c_ProtocolName + "_CAN" +
-                               C_SclString::IntToStr(
+                               QString::number(
                                   static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_TX_MSG_" + c_Name + "_NUM_MUX_MSGS" +
-                               " (" +  C_SclString::IntToStr(c_MultiplexerValues.size()) + "U)");
+                               " (" +  QString::number(c_MultiplexerValues.size()) + "U)");
                orc_Data.Append("");
             }
          }
@@ -619,7 +619,7 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
 
             if (rc_Message.IsMultiplexed() == true)
             {
-               const C_SclString c_Name = rc_Message.c_Name.UpperCase();
+               const C_SclString c_Name = rc_Message.c_Name.toUpper();
                std::set<uint16_t> c_MultiplexerValues;
                std::set<uint16_t>::const_iterator c_ItValue;
                uint16_t u16_ValueIndex = 0;
@@ -636,17 +636,17 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
                for (c_ItValue = c_MultiplexerValues.begin(); c_ItValue != c_MultiplexerValues.end(); ++c_ItValue)
                {
                   orc_Data.Append("#define COMM_" + c_ProtocolName + "_CAN" +
-                                  C_SclString::IntToStr(
+                                  QString::number(
                                      static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_RX_MSG_MUX_INDEX_" + c_Name +
-                                  "_VALUE_" + C_SclString::IntToStr(*c_ItValue) + " (" +
-                                  C_SclString::IntToStr(u16_ValueIndex) + "U)");
+                                  "_VALUE_" + QString::number(*c_ItValue) + " (" +
+                                  QString::number(u16_ValueIndex) + "U)");
                   u16_ValueIndex++;
                }
 
                orc_Data.Append("#define COMM_" + c_ProtocolName + "_CAN" +
-                               C_SclString::IntToStr(
+                               QString::number(
                                   static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_RX_MSG_" + c_Name + "_NUM_MUX_MSGS" +
-                               " (" +  C_SclString::IntToStr(c_MultiplexerValues.size()) + "U)");
+                               " (" +  QString::number(c_MultiplexerValues.size()) + "U)");
                orc_Data.Append("");
             }
          }
@@ -695,7 +695,7 @@ void C_OscExportCommunicationStack::mh_AddCeModuleGlobal(C_SclStringList & orc_D
                                                          const uint32_t ou32_RxListIndex)
 {
    C_SclString c_SafeRamData;
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).UpperCase();
+   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
 
    if (oq_SafeData == true)
    {
@@ -720,14 +720,14 @@ void C_OscExportCommunicationStack::mh_AddCeModuleGlobal(C_SclStringList & orc_D
       {
          orc_Data.Append("static " + c_SafeRamData + "T_osy_com_message_status mat_StatusTx[COMM_" +
                          c_ProtocolName + "_CAN" +
-                         C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
+                         QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
                          "_NUMBER_OF_TX_MSGS];");
       }
       else
       {
          orc_Data.Append("static " + c_SafeRamData + "T_osy_com_message_status_private mat_StatusTx[COMM_" +
                          c_ProtocolName + "_CAN" +
-                         C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
+                         QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
                          "_NUMBER_OF_TX_MSGS];");
       }
    }
@@ -739,14 +739,14 @@ void C_OscExportCommunicationStack::mh_AddCeModuleGlobal(C_SclStringList & orc_D
       {
          orc_Data.Append("static " + c_SafeRamData + "T_osy_com_message_status mat_StatusRx[COMM_" +
                          c_ProtocolName + "_CAN" +
-                         C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
+                         QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
                          "_NUMBER_OF_RX_MSGS];");
       }
       else
       {
          orc_Data.Append("static " + c_SafeRamData + "T_osy_com_message_status_private mat_StatusRx[COMM_" +
                          c_ProtocolName + "_CAN" +
-                         C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
+                         QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
                          "_NUMBER_OF_RX_MSGS];");
       }
    }
@@ -760,14 +760,14 @@ void C_OscExportCommunicationStack::mh_AddCeModuleGlobal(C_SclStringList & orc_D
       if  (orc_ComMessage.c_TxMessages.size() > 0)
       {
          orc_Data.Append("static " + c_SafeRamData + "T_osy_com_message_mux_status mat_StatusMuxTxMessages[" +
-                         C_SclString::IntToStr(mh_CountMuxMessages(orc_ComMessage.c_TxMessages)) + "];");
+                         QString::number(mh_CountMuxMessages(orc_ComMessage.c_TxMessages)) + "];");
       }
 
       // Rx mux messages
       if (orc_ComMessage.c_RxMessages.size() > 0)
       {
          orc_Data.Append("static " + c_SafeRamData + "T_osy_com_message_mux_status mat_StatusMuxRxMessages[" +
-                         C_SclString::IntToStr(mh_CountMuxMessages(orc_ComMessage.c_RxMessages)) + "];");
+                         QString::number(mh_CountMuxMessages(orc_ComMessage.c_RxMessages)) + "];");
       }
    }
    orc_Data.Append("");
@@ -830,24 +830,24 @@ void C_OscExportCommunicationStack::mh_AddCeGlobalVariables(C_SclStringList & or
                                                             const bool oq_TxMessagesPresent,
                                                             const bool oq_RxMessagesPresent)
 {
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).UpperCase();
+   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
 
    orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
    orc_Data.Append("///Stack configuration");
    orc_Data.Append("const T_osy_com_protocol_configuration " +
                    h_GetConfigurationName(ou8_InterfaceIndex, ore_Protocol) + " =");
    orc_Data.Append("{");
-   orc_Data.Append("   " + C_SclString::IntToStr(ou8_InterfaceIndex) + "U,  ///< selected CAN channel");
+   orc_Data.Append("   " + QString::number(ou8_InterfaceIndex) + "U,  ///< selected CAN channel");
    orc_Data.Append("   OSY_COM_PROTOCOL_TYPE_" + c_ProtocolName + ",  ///< protocol type for this stack"
                    );
    orc_Data.Append("   {");
    orc_Data.Append("      OSY_COM_CONFIG_MAGIC,  ///< identification of valid comm configuration");
    orc_Data.Append("      OSY_COM_CONFIG_DEFINITION_VERSION,  ///< configuration version");
    orc_Data.Append("      COMM_" + c_ProtocolName + "_CAN" +
-                   C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
+                   QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
                    "_NUMBER_OF_TX_MSGS,  ///< number of Tx messages in this configuration");
    orc_Data.Append("      COMM_" + c_ProtocolName + "_CAN" +
-                   C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
+                   QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
                    "_NUMBER_OF_RX_MSGS,  ///< number of Rx messages in this configuration");
    if (oq_TxMessagesPresent == true)
    {
@@ -934,7 +934,7 @@ void C_OscExportCommunicationStack::mh_AddSignalDefinitions(C_SclStringList & or
                   c_Signals.insert(c_Signals.end(), c_NonMuxedSignals.begin(), c_NonMuxedSignals.end());
 
                   orc_Data.Append("static const T_osy_com_signal_definition mat_" + rc_Message.c_Name + "[" +
-                                  C_SclString::IntToStr(c_Signals.size()) + "] =");
+                                  QString::number(c_Signals.size()) + "] =");
                   orc_Data.Append("{");
                   // add signals
                   mh_ConvertSignalsToStrings(orc_Data, c_Signals, ou32_SignalListIndex, true);
@@ -950,8 +950,8 @@ void C_OscExportCommunicationStack::mh_AddSignalDefinitions(C_SclStringList & or
                        ++c_ItValue)
                   {
                      orc_Data.Append("static const T_osy_com_signal_definition mat_" + rc_Message.c_Name + "Value" +
-                                     C_SclString::IntToStr(c_ItValue->first) + "[" +
-                                     C_SclString::IntToStr(c_ItValue->second.size() +
+                                     QString::number(c_ItValue->first) + "[" +
+                                     QString::number(c_ItValue->second.size() +
                                                            c_NonMuxedSignals.size()) + "] =");
                      orc_Data.Append("{");
                      // add multiplexer+multiplexed signals
@@ -979,7 +979,7 @@ void C_OscExportCommunicationStack::mh_AddSignalDefinitions(C_SclStringList & or
          if (q_AddNonMux == true)
          {
             orc_Data.Append("static const T_osy_com_signal_definition mat_" + rc_Message.c_Name +
-                            "[" + C_SclString::IntToStr(rc_Message.c_Signals.size()) + "] =");
+                            "[" + QString::number(rc_Message.c_Signals.size()) + "] =");
             orc_Data.Append("{");
             mh_ConvertSignalsToStrings(orc_Data, rc_Message.c_Signals, ou32_SignalListIndex, true);
             orc_Data.Append("};");
@@ -1004,7 +1004,7 @@ void C_OscExportCommunicationStack::mh_AddMessageMuxDefinitions(C_SclStringList 
    const uint16_t u16_MessageCount = static_cast<uint16_t>(orc_Messages.size());
 
    orc_Data.Append("static const T_osy_com_message_mux_definition mat_MessagesMux" + orc_TxRxString + "[" +
-                   C_SclString::IntToStr(mh_CountMuxMessages(orc_Messages)) + "] =");
+                   QString::number(mh_CountMuxMessages(orc_Messages)) + "] =");
 
    orc_Data.Append("{");
 
@@ -1027,7 +1027,7 @@ void C_OscExportCommunicationStack::mh_AddMessageMuxDefinitions(C_SclStringList 
          // Special case: Multiplexed message without any multiplexed signals. Add dummy-mux value "0".
          if (c_MuxedSignalsPerValue.size() == 0) //no muxed signals ...
          {
-            c_Text = "   { 0U, " + C_SclString::IntToStr(1U + c_NonMuxedSignals.size()) + "U, " +
+            c_Text = "   { 0U, " + QString::number(1U + c_NonMuxedSignals.size()) + "U, " +
                      "&mat_" + rc_Message.c_Name + "[0] }";
             if (u16_MessageIndex != (u16_MessageCount - 1U))
             {
@@ -1043,9 +1043,9 @@ void C_OscExportCommunicationStack::mh_AddMessageMuxDefinitions(C_SclStringList 
             // add signal definitions to data string list
             for (c_ItValue = c_MuxedSignalsPerValue.begin(); c_ItValue != c_MuxedSignalsPerValue.end(); ++c_ItValue)
             {
-               c_Text = "   { " + C_SclString::IntToStr(c_ItValue->first) + "U, " +
-                        C_SclString::IntToStr(c_ItValue->second.size() + c_NonMuxedSignals.size()) + "U, " +
-                        "&mat_" + rc_Message.c_Name + "Value" + C_SclString::IntToStr(c_ItValue->first) + "[0] }";
+               c_Text = "   { " + QString::number(c_ItValue->first) + "U, " +
+                        QString::number(c_ItValue->second.size() + c_NonMuxedSignals.size()) + "U, " +
+                        "&mat_" + rc_Message.c_Name + "Value" + QString::number(c_ItValue->first) + "[0] }";
                if ((u16_MessageIndex != (u16_MessageCount - 1U)) ||
                    (u16_MuxCount != static_cast<uint16_t>((c_MuxedSignalsPerValue.size() - 1))))
                {
@@ -1073,7 +1073,7 @@ void C_OscExportCommunicationStack::mh_AddMessageMuxDefinitions(C_SclStringList 
          }
 
          // no mux message: add one entry
-         c_Text = "   { 0U, " + C_SclString::IntToStr(u16_NumberOfSignals) + "U, " + c_SignalTable + " }";
+         c_Text = "   { 0U, " + QString::number(u16_NumberOfSignals) + "U, " + c_SignalTable + " }";
          if (u16_MessageIndex != (u16_MessageCount - 1U))
          {
             c_Text += ",";
@@ -1102,7 +1102,7 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(C_SclStringList & o
                                                              const std::vector<C_OscCanMessage> & orc_Messages,
                                                              const uint16_t ou16_GenCodeVersion, const bool oq_Tx)
 {
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).UpperCase();
+   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
    const uint16_t u16_MessageCount = static_cast<uint16_t>(orc_Messages.size());
    C_SclString c_Text;
    C_SclString c_TxRxString;
@@ -1118,8 +1118,8 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(C_SclStringList & o
    }
 
    orc_Data.Append("static const T_osy_com_message_definition mat_Messages" + c_TxRxString + "[COMM_" +
-                   c_ProtocolName + "_CAN" + C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
-                   "_NUMBER_OF_" + c_TxRxString.UpperCase() + "_MSGS] =");
+                   c_ProtocolName + "_CAN" + QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
+                   "_NUMBER_OF_" + c_TxRxString.toUpper() + "_MSGS] =");
    orc_Data.Append("{");
 
    for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < u16_MessageCount; u16_MessageIndex++)
@@ -1160,29 +1160,29 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(C_SclStringList & o
 
       c_Text =
          "   { 0x" + C_SclString::IntToHex(static_cast<int64_t>(rc_Message.u32_CanId), 3U) + "U, " + // CAN ID
-         C_SclString::IntToStr(rc_Message.q_IsExtended) + "U, " +                                    // extended flag
-         C_SclString::IntToStr(u16_Dlc) + "U, " + c_Trigger + ", ";                                  // DLC
+         QString::number(rc_Message.q_IsExtended) + "U, " +                                    // extended flag
+         QString::number(u16_Dlc) + "U, " + c_Trigger + ", ";                                  // DLC
 
       // order of entries changed a bit since V2
       if (ou16_GenCodeVersion >= 2U)
       {
-         c_Text +=  C_SclString::IntToStr(u32_MessageCounterGap) + "U, "; //message counter gap
+         c_Text +=  QString::number(u32_MessageCounterGap) + "U, "; //message counter gap
       }
       else
       {
-         c_Text += C_SclString::IntToStr(rc_Message.c_Signals.size()) + "U, "; // signal number
+         c_Text += QString::number(rc_Message.c_Signals.size()) + "U, "; // signal number
       }
 
-      c_Text += C_SclString::IntToStr(u16_DelayTime) + "U, "; // minimum interval
+      c_Text += QString::number(u16_DelayTime) + "U, "; // minimum interval
 
       // maximum interval
       if (oq_Tx == true)
       {
-         c_Text += C_SclString::IntToStr(rc_Message.u32_CycleTimeMs) + "U, ";
+         c_Text += QString::number(rc_Message.u32_CycleTimeMs) + "U, ";
       }
       else
       {
-         c_Text += C_SclString::IntToStr(rc_Message.u32_TimeoutMs) + "U, ";
+         c_Text += QString::number(rc_Message.u32_TimeoutMs) + "U, ";
       }
 
       // order of entries changed a bit since V2
@@ -1191,11 +1191,11 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(C_SclStringList & o
          std::set<uint16_t> c_MultiplexerValues;
          rc_Message.GetMultiplexerValues(c_MultiplexerValues);
          c_Text +=
-            C_SclString::IntToStr(c_MultiplexerValues.size()) + "U, " + // number of mux messages resp. values
+            QString::number(c_MultiplexerValues.size()) + "U, " + // number of mux messages resp. values
             "&mat_StatusMux" + c_TxRxString + "Messages[" +             // pointer to first element of mux status
-            C_SclString::IntToStr(u16_MessageCountWithMuxOffset) + "], " +
+            QString::number(u16_MessageCountWithMuxOffset) + "], " +
             "&mat_MessagesMux" + c_TxRxString + "[" + // pointer to first element of mux definition
-            C_SclString::IntToStr(u16_MessageCountWithMuxOffset) + "] }";
+            QString::number(u16_MessageCountWithMuxOffset) + "] }";
 
          if (c_MultiplexerValues.size() != 0)
          {
@@ -1221,7 +1221,7 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(C_SclStringList & o
             c_SignalTable = "&mat_" + rc_Message.c_Name + "[0]";
          }
 
-         c_Text += C_SclString::IntToStr(u32_MessageCounterGap) + "U, " + //message counter gap
+         c_Text += QString::number(u32_MessageCounterGap) + "U, " + //message counter gap
                    c_SignalTable + " }";                                  // pointer to signals
       }
 
@@ -1232,7 +1232,7 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(C_SclStringList & o
 
       // add as C comment: message name plus message comment if present
       c_Text +=         ("  /// " + C_OscUtils::h_NiceifyStringForCeComment(rc_Message.c_Name));
-      if (rc_Message.c_Comment.IsEmpty() == false)
+      if (rc_Message.c_Comment.isEmpty() == false)
       {
          c_Text += (" (" + C_OscUtils::h_NiceifyStringForCeComment(rc_Message.c_Comment) + ")");
       }
@@ -1411,9 +1411,9 @@ C_SclString C_OscExportCommunicationStack::mh_GetMagicName(const C_SclString & o
                                                            const uint8_t ou8_InterfaceIndex,
                                                            const C_OscCanProtocol::E_Type & ore_Protocol)
 {
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).UpperCase();
+   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
    const C_SclString c_MagicName = "COMM_" + c_ProtocolName + "_CAN" +
-                                   C_SclString::IntToStr(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
+                                   QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
                                    "_PROJECT_ID_" + orc_ProjectId;
 
    return c_MagicName;
@@ -1441,10 +1441,10 @@ void C_OscExportCommunicationStack::mh_ConvertSignalsToStrings(C_SclStringList &
       const C_SclString c_String = mh_GetByteOrderNameByType(c_Signal.e_ComByteOrder);
       C_SclString c_Text;
 
-      c_Text = "   { " + c_String + ", " + C_SclString::IntToStr(c_Signal.u16_ComBitStart) + "U, " +
-               C_SclString::IntToStr(c_Signal.u16_ComBitLength) + "U, " +
-               C_SclString::IntToStr(ou32_SignalListIndex) + "U, " +
-               C_SclString::IntToStr(c_Signal.u32_ComDataElementIndex) + "U }";
+      c_Text = "   { " + c_String + ", " + QString::number(c_Signal.u16_ComBitStart) + "U, " +
+               QString::number(c_Signal.u16_ComBitLength) + "U, " +
+               QString::number(ou32_SignalListIndex) + "U, " +
+               QString::number(c_Signal.u32_ComDataElementIndex) + "U }";
       if ((oq_RemoveLastComma == false) || (u8_SignalIndex != (u8_SignalCount - 1U)))
       {
          c_Text += ",";

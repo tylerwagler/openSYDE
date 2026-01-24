@@ -11,7 +11,7 @@
 #ifndef C_OSCPARAMSETINTERPRETEDNODE_HPP
 #define C_OSCPARAMSETINTERPRETEDNODE_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QString>
 #include "C_OscParamSetInterpretedDataPool.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -29,7 +29,7 @@ class C_OscParamSetInterpretedNode
 public:
    C_OscParamSetInterpretedNode(void);
 
-   stw::scl::C_SclString c_Name;                              ///< Node name
+   QString c_Name;                              ///< Node name
    std::vector<C_OscParamSetInterpretedDataPool> c_DataPools; ///< Interpreted data pools, used by this parameter set
 };
 

@@ -58,19 +58,19 @@ C_OscViewFiler::C_OscViewFiler(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_Views,
-                                              const C_SclString & orc_PathSystemViews,
+                                              const QString & orc_PathSystemViews,
                                               const std::vector<C_OscNode> & orc_OscNodes)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (QFileInfo(orc_PathSystemViews.ToQString()).exists() && QFileInfo(orc_PathSystemViews.ToQString()).isFile())
+   if (QFileInfo(orc_PathSystemViews).exists() && QFileInfo(orc_PathSystemViews).isFile())
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading System Views");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_PathSystemViews);
+      s32_Retval = c_XmlParser.LoadFromFile(C_SclString(orc_PathSystemViews));
       if (s32_Retval == C_NO_ERR)
       {
-         s32_Retval = h_LoadViewsOsc(orc_Views, orc_OscNodes, c_XmlParser, orc_PathSystemViews);
+         s32_Retval = h_LoadViewsOsc(orc_Views, orc_OscNodes, c_XmlParser, C_SclString(orc_PathSystemViews));
       }
       else
       {
@@ -102,13 +102,13 @@ int32_t C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_V
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
                                        const std::vector<C_OscNode> & orc_OscNodes, C_OscXmlParserBase & orc_XmlParser,
-                                       const C_SclString & orc_BasePath)
+                                       const QString & orc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
 
    if (orc_XmlParser.SelectNodeChild("opensyde-system-views") == "opensyde-system-views")
    {
-      C_SclString c_CurrentViewNode;
+      QString c_CurrentViewNode;
       uint32_t u32_ExpectedSize = 0UL;
       const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -128,9 +128,9 @@ int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
          do
          {
             C_OscViewData c_View;
-            if (orc_BasePath.IsEmpty() == false)
+            if (orc_BasePath.isEmpty() == false)
             {
-               const C_SclString c_File =
+               const QString c_File =
                   C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, orc_XmlParser.GetNodeContent());
                s32_Retval = mh_LoadViewFileOsc(c_View, c_File, orc_OscNodes);
             }
@@ -151,10 +151,8 @@ int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
       {
          if (u32_ExpectedSize != orc_Views.size())
          {
-            C_SclString c_Tmp;
-            c_Tmp.PrintFormatted("Unexpected view count, expected: %u, got %u", u32_ExpectedSize,
-                                 static_cast<uint32_t>(orc_Views.size()));
-            osc_write_log_warning("Load file", c_Tmp.c_str());
+            QString c_Tmp = QString("Unexpected view count, expected: %1, got %2").arg(u32_ExpectedSize).arg(static_cast<uint32_t>(orc_Views.size()));
+            osc_write_log_warning("Load file", c_Tmp.toUtf8().constData());
          }
       }
       //Return
@@ -188,7 +186,7 @@ int32_t C_OscViewFiler::h_LoadViewOsc(C_OscViewData & orc_View, C_OscXmlParserBa
 
    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
-      orc_View.SetName(orc_XmlParser.GetNodeContent().c_str());
+      orc_View.SetName(orc_XmlParser.GetNodeContent().toStdString().c_str());
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-view");
    }
@@ -274,10 +272,10 @@ void C_OscViewFiler::h_SaveNodeUpdateInformation(const std::vector<C_OscViewNode
         ++u32_ItNodeActiveFlag)
    {
       const C_OscViewNodeUpdate & rc_NodeUpdateInformation = orc_NodeUpdateInformation[u32_ItNodeActiveFlag];
-      const std::vector<C_SclString> & rc_DataBlockPaths = rc_NodeUpdateInformation.GetPaths(
+      const std::vector<QString> & rc_DataBlockPaths = rc_NodeUpdateInformation.GetPaths(
          C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
       const std::vector<C_OscViewNodeUpdateParamInfo> & rc_ParamSetPaths = rc_NodeUpdateInformation.GetParamInfos();
-      const std::vector<C_SclString> & rc_FileBasedPaths = rc_NodeUpdateInformation.GetPaths(
+      const std::vector<QString> & rc_FileBasedPaths = rc_NodeUpdateInformation.GetPaths(
          C_OscViewNodeUpdate::eFTP_FILE_BASED);
       std::vector<bool> c_SkipFlags;
       const std::vector<bool> & rc_PathSkipFlags = rc_NodeUpdateInformation.GetSkipUpdateOfPathsFlags(
@@ -346,20 +344,20 @@ void C_OscViewFiler::h_SavePc(const C_OscViewPc & orc_OscPc, C_OscXmlParserBase 
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_StringToPemFileStateDebugger(const C_SclString & orc_String,
+int32_t C_OscViewFiler::h_StringToPemFileStateDebugger(const QString & orc_String,
                                                        C_OscViewNodeUpdate::E_StateDebugger & ore_State)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_String.AnsiCompare("activate") == 0)
+   if (orc_String.compare("activate") == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_DEB_ACTIVATE;
    }
-   else if (orc_String.AnsiCompare("deactivate") == 0)
+   else if (orc_String.compare("deactivate") == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_DEB_DEACTIVATE;
    }
-   else if (orc_String.AnsiCompare("no-change") == 0)
+   else if (orc_String.compare("no-change") == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_DEB_NO_CHANGE;
    }
@@ -383,20 +381,20 @@ int32_t C_OscViewFiler::h_StringToPemFileStateDebugger(const C_SclString & orc_S
    C_RANGE    String unknown
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_StringToPemFileStateSecurity(const C_SclString & orc_String,
+int32_t C_OscViewFiler::h_StringToPemFileStateSecurity(const QString & orc_String,
                                                        C_OscViewNodeUpdate::E_StateSecurity & ore_State)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_String.AnsiCompare("activate") == 0)
+   if (orc_String.compare("activate") == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_SEC_ACTIVATE;
    }
-   else if (orc_String.AnsiCompare("deactivate") == 0)
+   else if (orc_String.compare("deactivate") == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_SEC_DEACTIVATE;
    }
-   else if (orc_String.AnsiCompare("no-change") == 0)
+   else if (orc_String.compare("no-change") == 0)
    {
       ore_State = C_OscViewNodeUpdate::eST_SEC_NO_CHANGE;
    }
@@ -418,9 +416,9 @@ int32_t C_OscViewFiler::h_StringToPemFileStateSecurity(const C_SclString & orc_S
    Stringified pem file state debugger to string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscViewFiler::h_PemFileStateDebuggerToString(const C_OscViewNodeUpdate::E_StateDebugger oe_State)
+QString C_OscViewFiler::h_PemFileStateDebuggerToString(const C_OscViewNodeUpdate::E_StateDebugger oe_State)
 {
-   C_SclString c_Retval;
+   QString c_Retval;
 
    switch (oe_State)
    {
@@ -449,9 +447,9 @@ C_SclString C_OscViewFiler::h_PemFileStateDebuggerToString(const C_OscViewNodeUp
    Stringified pem file state security to string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscViewFiler::h_PemFileStateSecurityToString(const C_OscViewNodeUpdate::E_StateSecurity oe_State)
+QString C_OscViewFiler::h_PemFileStateSecurityToString(const C_OscViewNodeUpdate::E_StateSecurity oe_State)
 {
-   C_SclString c_Retval;
+   QString c_Retval;
 
    switch (oe_State)
    {
@@ -643,22 +641,22 @@ void C_OscViewFiler::mh_LoadPc(C_OscViewPc & orc_OscPc, const C_OscXmlParserBase
    \param[in,out]  orc_XmlParser       XML parser
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(std::vector<C_SclString> & orc_Paths,
-                                                       const C_SclString & orc_XmlTagBaseName,
+void C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(std::vector<QString> & orc_Paths,
+                                                       const QString & orc_XmlTagBaseName,
                                                        C_OscXmlParserBase & orc_XmlParser)
 {
-   const C_SclString c_ParentName = static_cast<C_SclString>(orc_XmlTagBaseName + "s");
-   const C_SclString c_ChildName = orc_XmlTagBaseName;
+   const QString c_ParentName = orc_XmlTagBaseName + "s";
+   const QString c_ChildName = orc_XmlTagBaseName;
 
    orc_Paths.clear();
    if (orc_XmlParser.SelectNodeChild(c_ParentName) == c_ParentName)
    {
-      C_SclString c_CurrentPathNode = orc_XmlParser.SelectNodeChild(c_ChildName);
+      QString c_CurrentPathNode = orc_XmlParser.SelectNodeChild(c_ChildName);
       if (c_CurrentPathNode == c_ChildName)
       {
          do
          {
-            const C_SclString c_Content = orc_XmlParser.GetNodeContent();
+            const QString c_Content = orc_XmlParser.GetNodeContent();
             orc_Paths.push_back(c_Content);
             //Next
             c_CurrentPathNode = orc_XmlParser.SelectNodeNext(c_ChildName);
@@ -689,7 +687,7 @@ void C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(std::vector<C_SclString> 
 int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
                                                         C_OscXmlParserBase & orc_XmlParser, const C_OscNode & orc_Node)
 {
-   std::vector<C_SclString> c_Paths;
+   std::vector<QString> c_Paths;
    std::vector<bool> c_SkipFlags;
    int32_t s32_Retval = C_NO_ERR;
 
@@ -705,7 +703,7 @@ int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & or
    //Previous format (assuming these can only be data blocks!)
    if (orc_XmlParser.SelectNodeChild("paths") == "paths")
    {
-      C_SclString c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild("path");
+      QString c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild("path");
       if (c_CurrentNodeUpdateInformationNode == "path")
       {
          do
@@ -742,7 +740,7 @@ int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & or
    else
    {
       std::vector<C_OscViewNodeUpdateParamInfo> c_ParamInfo;
-      std::vector<C_SclString> c_FileBasedPaths;
+      std::vector<QString> c_FileBasedPaths;
       std::vector<bool> c_PathSkipFlags;
       std::vector<bool> c_ParamSetSkipFlags;
       std::vector<bool> c_FileBasedSkipFlags;
@@ -814,13 +812,13 @@ void C_OscViewFiler::mh_LoadNodeUpdateInformationParam(std::vector<C_OscViewNode
    orc_Info.clear();
    if (orc_XmlParser.SelectNodeChild("param-sets") == "param-sets")
    {
-      C_SclString c_CurrentPathNode = orc_XmlParser.SelectNodeChild("param-set");
+      QString c_CurrentPathNode = orc_XmlParser.SelectNodeChild("param-set");
       if (c_CurrentPathNode == "param-set")
       {
          do
          {
             bool q_Error = false;
-            C_SclString c_Path;
+            QString c_Path;
             uint32_t u32_LastKnownCrc;
             C_OscViewNodeUpdateParamInfo c_Content;
             if (orc_XmlParser.SelectNodeChild("path") == "path")
@@ -875,7 +873,7 @@ void C_OscViewFiler::mh_LoadNodeUpdateInformationSkipUpdateOfFiles(std::vector<b
    orc_Flags.clear();
    if (orc_XmlParser.SelectNodeChild("skip-update-of-files") == "skip-update-of-files")
    {
-      C_SclString c_CurrentNodeActiveFlagNode = orc_XmlParser.SelectNodeChild("skip-update-of-file");
+      QString c_CurrentNodeActiveFlagNode = orc_XmlParser.SelectNodeChild("skip-update-of-file");
       if (c_CurrentNodeActiveFlagNode == "skip-update-of-file")
       {
          do
@@ -923,7 +921,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationPem(C_OscViewNodeUpdate & or
          s32_Retval = orc_XmlParser.SelectNodeChildError("path");
          if (s32_Retval == C_NO_ERR)
          {
-            orc_NodeUpdateInformation.SetPemFilePath(orc_XmlParser.GetNodeContent().c_str());
+            orc_NodeUpdateInformation.SetPemFilePath(orc_XmlParser.GetNodeContent());
             //Return
             Q_ASSERT(orc_XmlParser.SelectNodeParent() == "pem-file");
          }
@@ -969,7 +967,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationPemStates(C_OscViewNodeUpdat
       if (s32_Retval == C_NO_ERR)
       {
          s32_Retval = C_OscViewFiler::h_StringToPemFileStateSecurity(
-            orc_XmlParser.GetNodeContent().c_str(), e_StateSecurity);
+            orc_XmlParser.GetNodeContent(), e_StateSecurity);
          if (s32_Retval == C_NO_ERR)
          {
             //Return
@@ -982,7 +980,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationPemStates(C_OscViewNodeUpdat
          if (s32_Retval == C_NO_ERR)
          {
             s32_Retval = C_OscViewFiler::h_StringToPemFileStateDebugger(
-               orc_XmlParser.GetNodeContent().c_str(), e_StateDebugger);
+               orc_XmlParser.GetNodeContent(), e_StateDebugger);
             if (s32_Retval == C_NO_ERR)
             {
                //Return
@@ -1013,7 +1011,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationPemStates(C_OscViewNodeUpdat
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const C_SclString & orc_FilePath,
+int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const QString & orc_FilePath,
                                            const std::vector<C_OscNode> & orc_OscNodes)
 {
    C_OscXmlParser c_XmlParser;
@@ -1026,7 +1024,7 @@ int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const C_Scl
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().toInt());
       }
       catch (...)
       {
@@ -1038,7 +1036,7 @@ int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const C_Scl
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading view", "Value of \"file-version\": " +
-                            C_SclString::IntToStr(u16_FileVersion));
+                            QString::number(u16_FileVersion));
          //Check file version
          if ((u16_FileVersion != 1U) && (u16_FileVersion != 2U))
          {
@@ -1086,17 +1084,17 @@ int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const C_Scl
                                        to the "node-specific-update-information" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::mh_SaveNodeUpdateInformationPaths(const std::vector<C_SclString> & orc_Paths,
-                                                       const C_SclString & orc_XmlTagBaseName,
+void C_OscViewFiler::mh_SaveNodeUpdateInformationPaths(const std::vector<QString> & orc_Paths,
+                                                       const QString & orc_XmlTagBaseName,
                                                        C_OscXmlParserBase & orc_XmlParser)
 {
-   const C_SclString c_ParentName = static_cast<C_SclString>(orc_XmlTagBaseName + "s");
-   const C_SclString c_ChildName = orc_XmlTagBaseName;
+   const QString c_ParentName = orc_XmlTagBaseName + "s";
+   const QString c_ChildName = orc_XmlTagBaseName;
 
    orc_XmlParser.CreateAndSelectNodeChild(c_ParentName);
    for (uint32_t u32_ItPath = 0; u32_ItPath < orc_Paths.size(); ++u32_ItPath)
    {
-      const C_SclString & rc_Path = orc_Paths[u32_ItPath];
+      const QString & rc_Path = orc_Paths[u32_ItPath];
       orc_XmlParser.CreateNodeChild(c_ChildName, rc_Path);
    }
    //Return

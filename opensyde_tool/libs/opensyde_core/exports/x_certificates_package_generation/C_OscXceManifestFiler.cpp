@@ -201,7 +201,7 @@ void C_OscXceManifestFiler::h_SaveData(const C_OscXceManifest & orc_Config, C_Os
 {
    //File version
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
-   orc_XmlParser.SetNodeContent(stw::scl::C_SclString::IntToStr(mhu16_FILE_VERSION_1));
+   orc_XmlParser.SetNodeContent(stw::scl::QString::number(mhu16_FILE_VERSION_1));
    //Return
    orc_XmlParser.SelectNodeParent();
    //Package
@@ -211,7 +211,7 @@ void C_OscXceManifestFiler::h_SaveData(const C_OscXceManifest & orc_Config, C_Os
    orc_XmlParser.SelectNodeParent();
    //Config
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("x-app-security-certificates") == "x-app-security-certificates");
-   orc_XmlParser.CreateNodeChild("package-version", stw::scl::C_SclString::IntToStr(mhu16_PACKAGE_VERSION_1));
+   orc_XmlParser.CreateNodeChild("package-version", stw::scl::QString::number(mhu16_PACKAGE_VERSION_1));
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("secure-authentication") == "secure-authentication");
    orc_XmlParser.SetAttributeString("certificates-path", orc_Config.c_CertificatesPath);
    //Return

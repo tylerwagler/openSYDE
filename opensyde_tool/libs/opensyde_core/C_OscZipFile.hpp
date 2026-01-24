@@ -9,53 +9,62 @@
    Wrapper for the miniz library.
    Provides functions to zip/unzip data to/from file
 
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCZIPFILE_HPP
 #define C_OSCZIPFILE_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QString>
 #include <set>
+#include <vector>
+
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscZipFile
-{
+class C_OscZipFile {
 public:
-   static int32_t h_CreateZipFile(const stw::scl::C_SclString & orc_SourcePath,
-                                  const std::set<stw::scl::C_SclString> & orc_SupFiles,
-                                  const stw::scl::C_SclString & orc_ZipArchivePath,
-                                  stw::scl::C_SclString * const opc_ErrorText = NULL);
+  static int32_t h_CreateZipFile(const QString &orc_SourcePath,
+                                 const std::set<QString> &orc_SupFiles,
+                                 const QString &orc_ZipArchivePath,
+                                 QString *const opc_ErrorText = NULL);
 
-   static int32_t h_UnpackZipFile(const stw::scl::C_SclString & orc_SourcePath,
-                                  const stw::scl::C_SclString & orc_TargetUnzipPath,
-                                  stw::scl::C_SclString * const opc_ErrorText = NULL);
+  static int32_t h_UnpackZipFile(const QString &orc_SourcePath,
+                                 const QString &orc_TargetUnzipPath,
+                                 QString *const opc_ErrorText = NULL);
 
-   static void h_AppendFilesRelative(std::set<stw::scl::C_SclString> & orc_Set,
-                                     const std::vector<stw::scl::C_SclString> & orc_Files,
-                                     const stw::scl::C_SclString & orc_BasePath);
+  static void h_AppendFilesRelative(std::set<QString> &orc_Set,
+                                    const std::vector<QString> &orc_Files,
+                                    const QString &orc_BasePath);
 
-   static int32_t h_IsZipFile(const stw::scl::C_SclString & orc_FilePath);
+  static int32_t h_IsZipFile(const QString &orc_FilePath);
 
 private:
-   static int32_t mh_AddContentToZipFile(const stw::scl::C_SclString & orc_ZipArchivePath,
-                                         const stw::scl::C_SclString & orc_ItemName, const char_t * const opcn_Content,
-                                         const uint32_t ou32_ContentSize, const scl::C_SclString & orc_ItemType,
-                                         stw::scl::C_SclString * const opc_ErrorText = NULL);
+  static int32_t mh_AddContentToZipFile(const QString &orc_ZipArchivePath,
+                                        const QString &orc_ItemName,
+                                        const char_t *const opcn_Content,
+                                        const uint32_t ou32_ContentSize,
+                                        const QString &orc_ItemType,
+                                        QString *const opc_ErrorText = NULL);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-}
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

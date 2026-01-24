@@ -20,7 +20,7 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscNodeSquad::hc_SEPARATOR = "::";
+const QString C_OscNodeSquad::hc_SEPARATOR = "::";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -58,15 +58,15 @@ C_OscNodeSquad::~C_OscNodeSquad(void)
    Combined name, if possible
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscNodeSquad::h_CombineNames(const stw::scl::C_SclString & orc_MainDeviceName,
-                                                     const stw::scl::C_SclString & orc_SubDeviceName)
+QString C_OscNodeSquad::h_CombineNames(const QString & orc_MainDeviceName,
+                                             const QString & orc_SubDeviceName)
 {
-   stw::scl::C_SclString c_Retval;
-   if (orc_MainDeviceName.IsEmpty())
+   QString c_Retval;
+   if (orc_MainDeviceName.isEmpty())
    {
       c_Retval = orc_SubDeviceName;
    }
-   else if (orc_SubDeviceName.IsEmpty())
+   else if (orc_SubDeviceName.isEmpty())
    {
       c_Retval = orc_MainDeviceName;
    }
@@ -88,7 +88,7 @@ stw::scl::C_SclString C_OscNodeSquad::h_CombineNames(const stw::scl::C_SclString
    \retval   C_CONFIG   At least one sub node device definition is not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeSquad::SetBaseName(std::vector<C_OscNode> & orc_Nodes, const stw::scl::C_SclString & orc_NodeBaseName)
+int32_t C_OscNodeSquad::SetBaseName(std::vector<C_OscNode> & orc_Nodes, const QString & orc_NodeBaseName)
 {
    // Check the indexes first
    uint32_t u32_NodeIndexCounter;

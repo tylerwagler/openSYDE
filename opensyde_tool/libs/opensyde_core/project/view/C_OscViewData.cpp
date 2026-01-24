@@ -62,7 +62,7 @@ C_OscViewData::~C_OscViewData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscViewData::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Name.c_str(), this->mc_Name.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Name.toUtf8().constData(), this->mc_Name.length(), oru32_HashValue);
    this->mc_PcData.CalcHash(oru32_HashValue);
    for (uint32_t u32_ItUpdate = 0; u32_ItUpdate < this->mc_NodeUpdateInformation.size(); ++u32_ItUpdate)
    {
@@ -232,7 +232,7 @@ int32_t C_OscViewData::SetNodeUpdateInformation(const uint32_t ou32_NodeIndex,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewData::SetNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
-                                                    const C_SclString & orc_Value,
+                                                    const QString & orc_Value,
                                                     const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
    int32_t s32_Return = C_RANGE;
@@ -283,7 +283,7 @@ int32_t C_OscViewData::SetNodeUpdateInformationParamInfo(const uint32_t ou32_Nod
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex, const C_SclString & orc_Value)
+int32_t C_OscViewData::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex, const QString & orc_Value)
 {
    int32_t s32_Return = C_RANGE;
 
@@ -420,7 +420,7 @@ int32_t C_OscViewData::SetNodeUpdateInformationStates(const uint32_t ou32_NodeIn
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewData::SetNodeUpdateInformationParamInfoContent(const uint32_t ou32_NodeIndex,
                                                                 const uint32_t ou32_Index,
-                                                                const C_SclString & orc_FilePath,
+                                                                const QString & orc_FilePath,
                                                                 const uint32_t ou32_LastKnownCrc)
 {
    int32_t s32_Return = C_RANGE;
@@ -446,7 +446,7 @@ int32_t C_OscViewData::SetNodeUpdateInformationParamInfoContent(const uint32_t o
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::AddNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const C_SclString & orc_Value,
+int32_t C_OscViewData::AddNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const QString & orc_Value,
                                                     const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
 {
    int32_t s32_Return = C_RANGE;
@@ -496,7 +496,7 @@ int32_t C_OscViewData::AddNodeUpdateInformationParamInfo(const uint32_t ou32_Nod
    Current name
 */
 //----------------------------------------------------------------------------------------------------------------------
-const C_SclString & C_OscViewData::GetName(void) const
+const QString & C_OscViewData::GetName(void) const
 {
    return this->mc_Name;
 }
@@ -507,7 +507,7 @@ const C_SclString & C_OscViewData::GetName(void) const
    \param[in]  orc_Value   New name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::SetName(const C_SclString & orc_Value)
+void C_OscViewData::SetName(const QString & orc_Value)
 {
    this->mc_Name = orc_Value;
 }

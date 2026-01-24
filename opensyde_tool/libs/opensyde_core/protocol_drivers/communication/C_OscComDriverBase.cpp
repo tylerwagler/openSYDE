@@ -340,8 +340,8 @@ void C_OscComDriverBase::DistributeMessages(void)
             {
                //ignore invalid can message
                osc_write_log_error("Reading CAN message",
-                                   "Ignored CAN message (ID: " + C_SclString::IntToStr(
-                                      c_Msg.u32_ID) + ") due to invalid DLC (" + C_SclString::IntToStr(c_Msg.u8_DLC));
+                                   "Ignored CAN message (ID: " + QString::number(
+                                      c_Msg.u32_ID) + ") due to invalid DLC (" + QString::number(c_Msg.u8_DLC));
             }
          }
       }
@@ -499,7 +499,7 @@ int32_t C_OscComDriverBase::SendCanMessageDirect(T_STWCAN_Msg_TX & orc_Msg)
    if (s32_Return != C_NO_ERR)
    {
       osc_write_log_error("Sending CAN message", "Could not send CAN message. Error code: " +
-                          C_SclString::IntToStr(s32_Return));
+                          QString::number(s32_Return));
    }
 
    return s32_Return;

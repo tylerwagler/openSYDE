@@ -10,8 +10,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QString>
 
-#include "C_SclString.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_OscHalcDefContentBitmaskItem.hpp"
 
@@ -40,20 +40,22 @@ public:
 
    void SetComplexType(const E_ComplexType oe_Type);
    E_ComplexType GetComplexType(void) const;
-   int32_t AddEnumItem(const stw::scl::C_SclString & orc_DisplayName, const C_OscNodeDataPoolContent & orc_Value);
-   int32_t SetEnumValue(const stw::scl::C_SclString & orc_DisplayName);
-   int32_t GetEnumValue(stw::scl::C_SclString & orc_DisplayName);
-   const C_OscNodeDataPoolContent * FindEnumItem(const stw::scl::C_SclString & orc_DisplayName) const;
-   const std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> > & GetEnumItems(void) const;
+   int32_t AddEnumItem(const QString & orc_DisplayName, const C_OscNodeDataPoolContent & orc_Value);
+   int32_t SetEnumValue(const QString & orc_DisplayName);
+   int32_t GetEnumValue(QString & orc_DisplayName);
+   const C_OscNodeDataPoolContent * FindEnumItem(const QString & orc_DisplayName) const;
+   const std::vector<std::pair<QString, C_OscNodeDataPoolContent> > & GetEnumItems(void) const;
 
    void AddBitmaskItem(const C_OscHalcDefContentBitmaskItem & orc_Value);
    const std::vector<C_OscHalcDefContentBitmaskItem> & GetBitmaskItems(void) const;
-   void GetBitmaskStatusValues(std::vector<stw::scl::C_SclString> * const opc_Displays,
+   void GetBitmaskStatusValues(std::vector<QString> * const opc_Displays,
                                std::vector<bool> * const opc_Values) const;
-   int32_t GetBitmask(const stw::scl::C_SclString & orc_DisplayName, bool & orq_Value) const;
-   int32_t SetBitmask(const stw::scl::C_SclString & orc_DisplayName, const bool oq_Value);
+   int32_t GetBitmask(const QString & orc_DisplayName, bool & orq_Value) const;
+   int32_t SetBitmask(const QString & orc_DisplayName, const bool oq_Value);
 
+   int32_t SetStringValue(const QString & orc_Value);
    int32_t SetStringValue(const std::string & orc_Value);
+   int32_t GetStringValue(QString & orc_Value) const;
    int32_t GetStringValue(std::string & orc_Value) const;
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
@@ -62,7 +64,7 @@ public:
 
 private:
    E_ComplexType me_ComplexType;
-   std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> > mc_EnumItems; ///< All known enum values
+   std::vector<std::pair<QString, C_OscNodeDataPoolContent> > mc_EnumItems; ///< All known enum values
    std::vector<C_OscHalcDefContentBitmaskItem> mc_BitmaskItems;                           ///< All known bitmask values
 };
 

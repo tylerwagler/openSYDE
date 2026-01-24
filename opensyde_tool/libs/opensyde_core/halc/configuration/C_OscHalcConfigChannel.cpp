@@ -61,8 +61,12 @@ C_OscHalcConfigChannel::~C_OscHalcConfigChannel()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcConfigChannel::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   const QByteArray c_NameData = this->c_Name.toUtf8();
+   stw::scl::C_SclChecksums::CalcCRC32(c_NameData.constData(), static_cast<uint32_t>(c_NameData.size()),
+                                       oru32_HashValue);
+   const QByteArray c_CommentData = this->c_Comment.toUtf8();
+   stw::scl::C_SclChecksums::CalcCRC32(c_CommentData.constData(), static_cast<uint32_t>(c_CommentData.size()),
+                                       oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_SafetyRelevant, sizeof(this->q_SafetyRelevant), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_UseCaseIndex, sizeof(this->u32_UseCaseIndex), oru32_HashValue);
 
@@ -124,7 +128,7 @@ void C_OscHalcConfigChannel::HandleFileLoadPostProcessing(const C_OscHalcDefBase
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcConfigChannel::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
-                                                    const stw::scl::C_SclString & orc_Type,
+                                                    const QString & orc_Type,
                                                     std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
 {
    C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit, orc_Type,

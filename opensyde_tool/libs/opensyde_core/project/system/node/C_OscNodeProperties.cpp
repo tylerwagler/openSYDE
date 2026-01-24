@@ -56,7 +56,7 @@ C_OscNodeProperties::~C_OscNodeProperties(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeProperties::Initialize(void)
 {
-   c_Name = "Default Node name";
+   c_Name = QStringLiteral("Default Node name");
    c_Comment = "";
    e_DiagnosticServer = eDS_NONE;
    e_FlashLoader = eFL_NONE;
@@ -80,8 +80,12 @@ void C_OscNodeProperties::CalcHash(uint32_t & oru32_HashValue) const
 {
    uint32_t u32_Counter;
 
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   // Convert QString to C string for checksum calculation
+   const QByteArray nameBytes = this->c_Name.toLatin1();
+   const QByteArray commentBytes = this->c_Comment.toLatin1();
+
+   stw::scl::C_SclChecksums::CalcCRC32(nameBytes.constData(), nameBytes.size(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(commentBytes.constData(), commentBytes.size(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_DiagnosticServer, sizeof(this->e_DiagnosticServer), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->e_FlashLoader, sizeof(this->e_FlashLoader), oru32_HashValue);
 

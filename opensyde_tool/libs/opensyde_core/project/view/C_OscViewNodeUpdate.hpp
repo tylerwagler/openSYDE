@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
-#include "C_SclString.hpp"
+#include <QString>
 #include "stwtypes.hpp"
 #include "C_OscViewNodeUpdateParamInfo.hpp"
 #include "C_OscNodeApplication.hpp"
@@ -58,20 +58,20 @@ public:
    void ClearParamPaths(void);
    void ClearPathsAsAppropriate(const E_GenericFileType oe_Type);
    const std::vector<C_OscViewNodeUpdateParamInfo> & GetParamInfos(void) const;
-   const std::vector<stw::scl::C_SclString> & GetPaths(const E_GenericFileType oe_Type) const;
+   const std::vector<QString> & GetPaths(const E_GenericFileType oe_Type) const;
    const std::vector<bool> & GetSkipUpdateOfParamInfosFlags(void) const;
    const std::vector<bool> & GetSkipUpdateOfPathsFlags(const E_GenericFileType oe_Type) const;
    void SetParamInfos(const std::vector<C_OscViewNodeUpdateParamInfo> & orc_Value);
-   void SetPaths(const std::vector<stw::scl::C_SclString> & orc_Value, const E_GenericFileType oe_Type);
+   void SetPaths(const std::vector<QString> & orc_Value, const E_GenericFileType oe_Type);
    void SetSkipUpdateOfParamInfosFlags(const std::vector<bool> & orc_Value);
    void SetSkipUpdateOfPathsFlags(const std::vector<bool> & orc_Value, const E_GenericFileType oe_Type);
-   int32_t SetParamInfoContent(const uint32_t ou32_Index, const stw::scl::C_SclString & orc_FilePath,
+   int32_t SetParamInfoContent(const uint32_t ou32_Index, const QString & orc_FilePath,
                                const uint32_t ou32_LastKnownCrc);
 
    //Elements
-   void AddPath(const stw::scl::C_SclString & orc_Path, const E_GenericFileType oe_Type);
+   void AddPath(const QString & orc_Path, const E_GenericFileType oe_Type);
    void AddParamInfo(const C_OscViewNodeUpdateParamInfo & orc_Value);
-   int32_t SetPath(const uint32_t ou32_Index, const stw::scl::C_SclString & orc_Value, const E_GenericFileType oe_Type);
+   int32_t SetPath(const uint32_t ou32_Index, const QString & orc_Value, const E_GenericFileType oe_Type);
    int32_t SetParamInfo(const uint32_t ou32_Index, const C_OscViewNodeUpdateParamInfo & orc_Value);
    int32_t SetSkipUpdateOfPath(const uint32_t ou32_Index, const bool oq_SkipFile, const E_GenericFileType oe_Type);
    int32_t SetSkipUpdateOfParamInfo(const uint32_t ou32_Index, const bool oq_SkipFile);
@@ -79,8 +79,8 @@ public:
    int32_t RemoveParamInfo(const uint32_t ou32_Index);
 
    // PEM file
-   void SetPemFilePath(const stw::scl::C_SclString & orc_Value);
-   stw::scl::C_SclString GetPemFilePath(void) const;
+   void SetPemFilePath(const QString & orc_Value);
+   QString GetPemFilePath(void) const;
    void RemovePemFilePath(void);
    void SetSkipUpdateOfPemFile(const bool oq_Skip);
    bool GetSkipUpdateOfPemFile(void) const;
@@ -113,8 +113,8 @@ public:
    uint32_t u32_NodeUpdatePosition; // Position of node in update sequence
 
 private:
-   std::vector<stw::scl::C_SclString> mc_DataBlockPaths;
-   std::vector<stw::scl::C_SclString> mc_FileBasedPaths;
+   std::vector<QString> mc_DataBlockPaths;
+   std::vector<QString> mc_FileBasedPaths;
    std::vector<C_OscViewNodeUpdateParamInfo> mc_ParamSetPaths;
    std::vector<std::vector<bool> > mc_SkipUpdateOfFiles; // Flags for skipping an update of the associated file
    // First level has three "layers":
@@ -122,7 +122,7 @@ private:
    // 2: flags for file based paths
    // 3: flags for parameter set paths
 
-   stw::scl::C_SclString mc_PemFilePath;
+   QString mc_PemFilePath;
    bool mq_SkipUpdateOfPemFile;
 
    E_StateSecurity me_StateSecurity;

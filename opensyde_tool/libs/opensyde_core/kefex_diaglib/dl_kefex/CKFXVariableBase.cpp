@@ -1633,7 +1633,7 @@ C_SclString C_KFXVariableBase::GetTypeDependentValueString(const bool oq_Hex, co
       }
       else
       {
-         c_Help = C_SclString::IntToStr(s64_Temp);
+         c_Help = QString::number(s64_Temp);
       }
       break;
    case KFX_DATA_TYPE_FLOAT32:
@@ -1709,7 +1709,7 @@ C_SclString C_KFXVariableBase::GetTypeDependentDefaultString(const bool oq_Hex, 
       }
       else
       {
-         c_Help = C_SclString::IntToStr(s64_Temp);
+         c_Help = QString::number(s64_Temp);
       }
       break;
    case KFX_DATA_TYPE_FLOAT32:

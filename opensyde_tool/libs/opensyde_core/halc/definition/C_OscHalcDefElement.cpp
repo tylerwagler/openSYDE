@@ -102,7 +102,7 @@ void C_OscHalcDefElement::SetComplexType(const C_OscHalcDefContent::E_ComplexTyp
    C_CONFIG Content type invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefElement::AddEnumItem(const stw::scl::C_SclString & orc_DisplayName,
+int32_t C_OscHalcDefElement::AddEnumItem(const QString & orc_DisplayName,
                                          const C_OscNodeDataPoolContent & orc_Value)
 {
    int32_t s32_Retval = this->c_InitialValue.AddEnumItem(orc_DisplayName, orc_Value);
@@ -174,7 +174,7 @@ bool C_OscHalcDefElement::GetArray() const
    Enum items
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<std::pair<stw::scl::C_SclString,
+const std::vector<std::pair<QString,
                             C_OscNodeDataPoolContent> > & C_OscHalcDefElement::GetEnumItems() const
 {
    return this->c_InitialValue.GetEnumItems();
@@ -203,9 +203,12 @@ const std::vector<C_OscHalcDefContentBitmaskItem> & C_OscHalcDefElement::GetBitm
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefElement::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Id.c_str(), this->c_Id.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Display.c_str(), this->c_Display.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.c_str(), this->c_Comment.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Id.toUtf8().data(),
+                                      static_cast<uint32_t>(this->c_Id.toUtf8().size()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Display.toUtf8().data(),
+                                      static_cast<uint32_t>(this->c_Display.toUtf8().size()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().data(),
+                                      static_cast<uint32_t>(this->c_Comment.toUtf8().size()), oru32_HashValue);
 
    this->c_InitialValue.CalcHash(oru32_HashValue);
    this->c_MinValue.CalcHash(oru32_HashValue);

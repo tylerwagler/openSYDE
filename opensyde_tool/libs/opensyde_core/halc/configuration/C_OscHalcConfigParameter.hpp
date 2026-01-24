@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscHalcDefContent.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -31,7 +31,7 @@ public:
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
    C_OscHalcDefContent c_Value;     ///< Value configured by user for this parameter
-   stw::scl::C_SclString c_Comment; ///< User comment for this parameter
+   QString c_Comment; ///< User comment for this parameter
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

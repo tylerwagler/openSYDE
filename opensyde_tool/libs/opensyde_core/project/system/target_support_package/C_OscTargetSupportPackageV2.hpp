@@ -12,6 +12,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_SclString.hpp"
 #include "C_OscNodeCodeExportSettings.hpp"
+#include <QString>
+#include <QStringList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -27,15 +29,15 @@ public:
    C_OscTspApplication(void);
    bool q_IsProgrammable;                            ///< true: generate source code files for this app
    uint8_t u8_ProcessId;                             ///< process ID of application
-   stw::scl::C_SclString c_Name;                     ///< name of application
-   stw::scl::C_SclString c_Comment;                  ///< comment about application
-   stw::scl::C_SclString c_IdeCall;                  ///< invocation of IDE (binary and parameters)
+   QString c_Name;                     ///< name of application
+   QString c_Comment;                  ///< comment about application
+   QString c_IdeCall;                  ///< invocation of IDE (binary and parameters)
    bool q_IsStandardSydeCoderCe;                     ///< true: use standard SYDE Coder C; else: use c_CodeGeneratorPath
-   stw::scl::C_SclString c_CodeGeneratorPath;        ///< alternative file generator
-   stw::scl::C_SclString c_ProjectFolder;            ///< project subfolder (relative to root of template archive)
-   stw::scl::C_SclString c_GeneratePath;             ///< application file generation path (relative to projectfolder)
+   QString c_CodeGeneratorPath;        ///< alternative file generator
+   QString c_ProjectFolder;            ///< project subfolder (relative to root of template archive)
+   QString c_GeneratePath;             ///< application file generation path (relative to projectfolder)
    uint16_t u16_GenCodeVersion;                      ///< Version of structure of generated files
-   std::vector<stw::scl::C_SclString> c_ResultPaths; ///< list of output-files (relative to projectfolder)
+   QStringList c_ResultPaths; ///< list of output-files (relative to projectfolder)
    bool q_GeneratesPsiFiles;                         ///< true: generate HALC PSI file for this app
 };
 
@@ -43,8 +45,8 @@ class C_OscTargetSupportPackageV2
 {
 public:
    C_OscTargetSupportPackageV2(void);
-   stw::scl::C_SclString c_DeviceName;              ///< name of device this package it intended for
-   stw::scl::C_SclString c_Comment;                 ///< comment about this package
+   QString c_DeviceName;              ///< name of device this package it intended for
+   QString c_Comment;                 ///< comment about this package
    std::vector<C_OscTspApplication> c_Applications; ///< applications contained in template package archive
 
    uint8_t u8_ApplicationIndex; ///< Which application is Diagnostic Protocol Driver assigned to?
@@ -57,10 +59,10 @@ public:
 
    C_OscNodeCodeExportSettings c_CodeExportSettings; ///< General export settings
 
-   stw::scl::C_SclString c_TemplatePath; ///< path to template package archive
+   QString c_TemplatePath; ///< path to template package archive
 
-   stw::scl::C_SclString c_HalcDefPath; ///< path to halc definition file within template package archive
-   stw::scl::C_SclString c_HalcComment; ///< comment on halc definition file included in this package
+   QString c_HalcDefPath; ///< path to halc definition file within template package archive
+   QString c_HalcComment; ///< comment on halc definition file included in this package
 
    void Clear(void);
 };

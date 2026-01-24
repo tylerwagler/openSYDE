@@ -26,44 +26,44 @@ class C_OscXmlParserLog :
 public:
    C_OscXmlParserLog();
 
-   void SetLogHeading(const stw::scl::C_SclString & orc_Text);
+   void SetLogHeading(const QString & orc_Text);
 
    // init node system - selects second node, if available; first node is declaration
-   virtual int32_t SelectRootError(const stw::scl::C_SclString & orc_Name);
+   virtual int32_t SelectRootError(const QString & orc_Name);
 
    // select first child node (with name) of current node        (go deeper)
-   virtual int32_t SelectNodeChildError(const stw::scl::C_SclString & orc_Name);
+   virtual int32_t SelectNodeChildError(const QString & orc_Name);
 
    // get attribute values (includes error check)
-   virtual int32_t GetAttributeStringError(const stw::scl::C_SclString & orc_Name,
-                                           stw::scl::C_SclString & orc_Value) const;
-   virtual int32_t GetAttributeSint32Error(const stw::scl::C_SclString & orc_Name, int32_t & ors32_Value) const;
-   virtual int32_t GetAttributeUint32Error(const stw::scl::C_SclString & orc_Name, uint32_t & oru32_Value) const;
-   virtual int32_t GetAttributeSint64Error(const stw::scl::C_SclString & orc_Name, int64_t & ors64_Value) const;
-   virtual int32_t GetAttributeUint64Error(const stw::scl::C_SclString & orc_Name, uint64_t & oru64_Value) const;
-   virtual int32_t GetAttributeBoolError(const stw::scl::C_SclString & orc_Name, bool & orq_Value) const;
-   virtual int32_t GetAttributeFloat32Error(const stw::scl::C_SclString & orc_Name, float32_t & orf32_Value) const;
-   virtual int32_t GetAttributeFloat64Error(const stw::scl::C_SclString & orc_Name, float64_t & orf64_Value) const;
+   virtual int32_t GetAttributeStringError(const QString & orc_Name,
+                                           QString & orc_Value) const;
+   virtual int32_t GetAttributeSint32Error(const QString & orc_Name, int32_t & ors32_Value) const;
+   virtual int32_t GetAttributeUint32Error(const QString & orc_Name, uint32_t & oru32_Value) const;
+   virtual int32_t GetAttributeSint64Error(const QString & orc_Name, int64_t & ors64_Value) const;
+   virtual int32_t GetAttributeUint64Error(const QString & orc_Name, uint64_t & oru64_Value) const;
+   virtual int32_t GetAttributeBoolError(const QString & orc_Name, bool & orq_Value) const;
+   virtual int32_t GetAttributeFloat32Error(const QString & orc_Name, float32_t & orf32_Value) const;
+   virtual int32_t GetAttributeFloat64Error(const QString & orc_Name, float64_t & orf64_Value) const;
 
    //Base error reporting functions
-   virtual void ReportErrorForNodeContentAppendXmlContext(const stw::scl::C_SclString & orc_ErrorMessage)
+   virtual void ReportErrorForNodeContentAppendXmlContext(const QString & orc_ErrorMessage)
    const;
-   virtual void ReportErrorForAttributeContentAppendXmlContext(const stw::scl::C_SclString & orc_Attribute,
-                                                               const stw::scl::C_SclString & orc_ErrorMessage)
+   virtual void ReportErrorForAttributeContentAppendXmlContext(const QString & orc_Attribute,
+                                                               const QString & orc_ErrorMessage)
    const;
-   virtual void ReportErrorForNodeContentStartingWithXmlContext(const stw::scl::C_SclString & orc_ErrorMessage)
+   virtual void ReportErrorForNodeContentStartingWithXmlContext(const QString & orc_ErrorMessage)
    const;
-   virtual void ReportErrorForAttributeContentStartingWithXmlContext(const stw::scl::C_SclString & orc_Attribute,
-                                                                     const stw::scl::C_SclString & orc_ErrorMessage)
+   virtual void ReportErrorForAttributeContentStartingWithXmlContext(const QString & orc_Attribute,
+                                                                     const QString & orc_ErrorMessage)
    const;
-   virtual void ReportErrorForNodeMissing(const stw::scl::C_SclString & orc_MissingNodeName) const;
+   virtual void ReportErrorForNodeMissing(const QString & orc_MissingNodeName) const;
 
 private:
-   stw::scl::C_SclString mc_LogHeading;
+   QString mc_LogHeading;
 
-   void m_ReportErrorForRootNodeMissing(const stw::scl::C_SclString & orc_RootNodeName) const;
-   void m_ReportErrorForAttributeMissing(const stw::scl::C_SclString & orc_AttributeName) const;
-   stw::scl::C_SclString m_GetCurrentXmlLineInfoText(void) const;
+   void m_ReportErrorForRootNodeMissing(const QString & orc_RootNodeName) const;
+   void m_ReportErrorForAttributeMissing(const QString & orc_AttributeName) const;
+   QString m_GetCurrentXmlLineInfoText(void) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -51,12 +51,12 @@ C_OscHalcMagicianUtil::C_OscHalcMagicianUtil(void)
    Datapool name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetDatapoolName(const bool oq_IsSafe, const uint32_t ou32_CopyIndex)
+QString C_OscHalcMagicianUtil::h_GetDatapoolName(const bool oq_IsSafe, const uint32_t ou32_CopyIndex)
 {
-   stw::scl::C_SclString c_Retval = (oq_IsSafe == true) ? "HAL_SAFE" : "HAL_NON_SAFE";
+   QString c_Retval = (oq_IsSafe == true) ? "HAL_SAFE" : "HAL_NON_SAFE";
    if (ou32_CopyIndex > 0UL)
    {
-      c_Retval += "_COPY_" + stw::scl::C_SclString::IntToStr(ou32_CopyIndex + 1U);
+      c_Retval += "_COPY_" + QString::number(ou32_CopyIndex + 1U);
    }
    return c_Retval;
 }
@@ -71,11 +71,11 @@ stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetDatapoolName(const bool oq_IsS
    Datapool comment
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetDatapoolComment(const bool oq_IsSafe, const uint32_t ou32_CopyIndex)
+QString C_OscHalcMagicianUtil::h_GetDatapoolComment(const bool oq_IsSafe, const uint32_t ou32_CopyIndex)
 {
-   const stw::scl::C_SclString c_Info = (oq_IsSafe == true) ? "safe" : "non safe";
+   const QString c_Info = (oq_IsSafe == true) ? "safe" : "non safe";
 
-   stw::scl::C_SclString c_Retval = "Automatically generated Datapool for HAL " + c_Info + " variable storage.";
+   QString c_Retval = "Automatically generated Datapool for HAL " + c_Info + " variable storage.";
    if (ou32_CopyIndex > 0UL)
    {
       c_Retval += " This instance is a redundant copy of the original HAL datapool for backup purposes.";
@@ -92,9 +92,9 @@ stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetDatapoolComment(const bool oq_
    List name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetListName(const C_OscHalcDefDomain::E_VariableSelector oe_Type)
+QString C_OscHalcMagicianUtil::h_GetListName(const C_OscHalcDefDomain::E_VariableSelector oe_Type)
 {
-   stw::scl::C_SclString c_Retval;
+   QString c_Retval;
 
    switch (oe_Type)
    {
@@ -136,8 +136,8 @@ stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetListName(const C_OscHalcDefDom
 int32_t C_OscHalcMagicianUtil::h_GetVariableName(const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
                                                  const uint32_t ou32_ParameterIndexStruct,
                                                  const uint32_t ou32_ParameterIndexElement,
-                                                 const stw::scl::C_SclString & orc_DomainSingularName,
-                                                 stw::scl::C_SclString & orc_Name, const uint32_t ou32_CurChannel)
+                                                 const QString & orc_DomainSingularName,
+                                                 QString & orc_Name, const uint32_t ou32_CurChannel)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -178,10 +178,10 @@ int32_t C_OscHalcMagicianUtil::h_GetVariableName(const std::vector<C_OscHalcDefS
    Complete element name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscHalcMagicianUtil::h_CombineVariableName(const stw::scl::C_SclString & orc_Domain,
-                                                                   const stw::scl::C_SclString & orc_ParameterName)
+QString C_OscHalcMagicianUtil::h_CombineVariableName(const QString & orc_Domain,
+                                                                   const QString & orc_ParameterName)
 {
-   stw::scl::C_SclString c_Retval = "";
+   QString c_Retval = "";
 
    //Domain
    c_Retval += orc_Domain;
@@ -203,7 +203,7 @@ stw::scl::C_SclString C_OscHalcMagicianUtil::h_CombineVariableName(const stw::sc
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscNodeDataPoolListElement C_OscHalcMagicianUtil::h_GetChanNumVariable(
-   const stw::scl::C_SclString & orc_DomainSingularName, const bool oq_IsSafe, const uint32_t ou32_NumChannels,
+   const QString & orc_DomainSingularName, const bool oq_IsSafe, const uint32_t ou32_NumChannels,
    const bool oq_AddDataset)
 {
    C_OscNodeDataPoolListElement c_Element;
@@ -232,8 +232,8 @@ C_OscNodeDataPoolListElement C_OscHalcMagicianUtil::h_GetChanNumVariable(
    Channel number variable name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetChanNumVariableName(
-   const stw::scl::C_SclString & orc_DomainSingularName)
+QString C_OscHalcMagicianUtil::h_GetChanNumVariableName(
+   const QString & orc_DomainSingularName)
 {
    return C_OscHalcMagicianUtil::h_CombineVariableName(orc_DomainSingularName, "ChannelNumber");
 }
@@ -251,7 +251,7 @@ stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetChanNumVariableName(
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscNodeDataPoolListElement C_OscHalcMagicianUtil::h_GetUseCaseVariable(
-   const stw::scl::C_SclString & orc_DomainSingularName, const bool oq_IsSafe, const uint32_t ou32_NumChannels,
+   const QString & orc_DomainSingularName, const bool oq_IsSafe, const uint32_t ou32_NumChannels,
    const bool oq_AddDataset)
 {
    C_OscNodeDataPoolListElement c_Element;
@@ -280,8 +280,8 @@ C_OscNodeDataPoolListElement C_OscHalcMagicianUtil::h_GetUseCaseVariable(
    Use case variable name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetUseCaseVariableName(
-   const stw::scl::C_SclString & orc_DomainSingularName)
+QString C_OscHalcMagicianUtil::h_GetUseCaseVariableName(
+   const QString & orc_DomainSingularName)
 {
    return C_OscHalcMagicianUtil::h_CombineVariableName(orc_DomainSingularName, "UseCase");
 }
@@ -299,7 +299,7 @@ stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetUseCaseVariableName(
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscNodeDataPoolListElement C_OscHalcMagicianUtil::h_GetSafetyFlagVariable(
-   const stw::scl::C_SclString & orc_DomainSingularName, const bool oq_IsSafe, const uint32_t ou32_NumChannels,
+   const QString & orc_DomainSingularName, const bool oq_IsSafe, const uint32_t ou32_NumChannels,
    const bool oq_AddDataset)
 {
    const uint8_t u8_MAX_VALUE = 1U;
@@ -342,8 +342,8 @@ C_OscNodeDataPoolListElement C_OscHalcMagicianUtil::h_GetSafetyFlagVariable(
    Safety flag variable name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscHalcMagicianUtil::h_GetSafetyFlagVariableName(
-   const stw::scl::C_SclString & orc_DomainSingularName)
+QString C_OscHalcMagicianUtil::h_GetSafetyFlagVariableName(
+   const QString & orc_DomainSingularName)
 {
    return C_OscHalcMagicianUtil::h_CombineVariableName(orc_DomainSingularName, "SafetyRelevant");
 }
@@ -375,20 +375,18 @@ void C_OscHalcMagicianUtil::h_SetCommonDpElementDefaults(C_OscNodeDataPoolListEl
    Complete element name
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscHalcMagicianUtil::mh_GetElementName(const C_OscHalcDefElement & orc_Param,
-                                                               const stw::scl::C_SclString & orc_Domain,
+QString C_OscHalcMagicianUtil::mh_GetElementName(const C_OscHalcDefElement & orc_Param,
+                                                               const QString & orc_Domain,
                                                                const uint32_t ou32_CurChannel)
 {
-   stw::scl::C_SclString c_Retval = C_OscHalcMagicianUtil::h_CombineVariableName(orc_Domain, orc_Param.c_Display);
+   QString c_Retval = C_OscHalcMagicianUtil::h_CombineVariableName(orc_Domain, orc_Param.c_Display);
 
    if (orc_Param.GetComplexType() == C_OscHalcDefContent::eCT_STRING)
    {
       //First channel = Ch1
       const uint32_t u32_ChannelDisplayValue = ou32_CurChannel + 1UL;
-      std::stringstream c_Stream;
-      c_Stream << u32_ChannelDisplayValue;
       c_Retval += "_Ch";
-      c_Retval += c_Stream.str();
+      c_Retval += QString::number(u32_ChannelDisplayValue);
    }
 
    return c_Retval;

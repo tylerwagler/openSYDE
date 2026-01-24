@@ -63,13 +63,13 @@ private:
                                                 C_OscNodeDataPoolList & orc_HalcListStatus, const bool oq_IsSafe,
                                                 const C_OscHalcMagicianDatapoolListHandler & orc_DpHandler);
    static int32_t mh_GenerateVariablesForVector(const std::vector<C_OscHalcDefStruct> & orc_Definition,
-                                                const stw::scl::C_SclString & orc_DomainSingularName,
+                                                const QString & orc_DomainSingularName,
                                                 const bool oq_IsSafe,
                                                 const std::vector<uint32_t> & orc_RelevantChannels,
                                                 const bool oq_AddDataset, C_OscNodeDataPoolList & orc_List);
    static int32_t mh_GenerateVariablesForVectorElement(const std::vector<C_OscHalcDefStruct> & orc_Definition,
                                                        const uint32_t ou32_DefinitionElementIndex,
-                                                       const stw::scl::C_SclString & orc_DomainSingularName,
+                                                       const QString & orc_DomainSingularName,
                                                        const bool oq_IsSafe,
                                                        const std::vector<uint32_t> & orc_RelevantChannels,
                                                        const bool oq_AddDataset, C_OscNodeDataPoolList & orc_List);
@@ -77,7 +77,7 @@ private:
                                        const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
                                        const uint32_t ou32_ParameterIndexStruct,
                                        const uint32_t ou32_ParameterIndexElement,
-                                       const stw::scl::C_SclString & orc_DomainSingularName, const bool oq_IsSafe,
+                                       const QString & orc_DomainSingularName, const bool oq_IsSafe,
                                        const std::vector<uint32_t> & orc_RelevantChannels, const bool oq_AddDataset,
                                        C_OscNodeDataPoolList & orc_List);
    static int32_t mh_ConvertToDatapoolWithoutArray(const C_OscHalcDefContent & orc_HalcContent,
@@ -87,7 +87,7 @@ private:
    static int32_t mh_ConvertToDatapoolAndResize(const C_OscHalcDefContent & orc_HalcContent,
                                                 const uint32_t ou32_NumChannels,
                                                 C_OscNodeDataPoolContent & orc_DpContent);
-   static void mh_InitList(C_OscNodeDataPoolList & orc_List, const stw::scl::C_SclString & orc_Name,
+   static void mh_InitList(C_OscNodeDataPoolList & orc_List, const QString & orc_Name,
                            const bool oq_AddDataset = false);
    static void mh_CleanUpHalcDatapools(std::vector<C_OscNodeDataPool> & orc_Datapools);
    void m_FillEmptySpaceHalcDatapools(std::vector<C_OscNodeDataPool> & orc_Datapools) const;

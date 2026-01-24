@@ -36,7 +36,7 @@ public:
 
    void CheckChannelNameUnique(const uint32_t ou32_ChannelIndex, bool * const opq_NameConflict) const;
    int32_t CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex, bool & orq_IsLinked,
-                              std::vector<stw::scl::C_SclString> * const opc_LinkedChannelNames,
+                              std::vector<QString> * const opc_LinkedChannelNames,
                               std::vector<uint32_t> * const opc_LinkedChannelIndices,
                               const uint32_t * const opu32_UseCaseIndex) const;
    int32_t ResetChannelToDefault(const uint32_t ou32_ChannelIndex);
@@ -59,7 +59,7 @@ public:
 private:
    static void mh_AddParameters(const std::vector<C_OscHalcDefStruct> & orc_Parameters,
                                 std::vector<C_OscHalcConfigParameterStruct> & orc_ParamConfig);
-   static C_OscHalcConfigChannel mh_InitConfigFromName(const stw::scl::C_SclString & orc_Name);
+   static C_OscHalcConfigChannel mh_InitConfigFromName(const QString & orc_Name);
    C_OscHalcConfigChannel m_InitChannelConfig(const uint32_t ou32_ChannelIndex) const;
    uint32_t m_InitChannelUseCase(const uint32_t ou32_ChannelIndex) const;
    void m_InitDomainConfig(void);

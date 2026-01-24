@@ -58,9 +58,9 @@ public:
                                     C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadNodeComSignal(C_OscCanSignal & orc_NodeComSignal, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeComSignal(const C_OscCanSignal & orc_NodeComSignal, C_OscXmlParserBase & orc_XmlParser);
-   static stw::scl::C_SclString h_CommunicationProtocolToString(
+   static QString h_CommunicationProtocolToString(
       const C_OscCanProtocol::E_Type & ore_CommunicationProtocol);
-   static int32_t h_StringToCommunicationProtocol(const stw::scl::C_SclString & orc_String,
+   static int32_t h_StringToCommunicationProtocol(const QString & orc_String,
                                                   C_OscCanProtocol::E_Type & ore_Type);
 
 private:
@@ -78,21 +78,21 @@ private:
                                    C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
                                 C_OscXmlParserBase & orc_XmlParser);
-   static stw::scl::C_SclString mh_DiagnosticServerToString(
+   static QString mh_DiagnosticServerToString(
       const C_OscNodeProperties::E_DiagnosticServerProtocol & ore_DiagnosticProtocol);
-   static int32_t mh_StringToDiagnosticServer(const stw::scl::C_SclString & orc_String,
+   static int32_t mh_StringToDiagnosticServer(const QString & orc_String,
                                               C_OscNodeProperties::E_DiagnosticServerProtocol & ore_Type);
-   static stw::scl::C_SclString mh_FlashLoaderToString(
+   static QString mh_FlashLoaderToString(
       const C_OscNodeProperties::E_FlashLoaderProtocol & ore_FlashLoader);
-   static int32_t mh_StringToFlashLoader(const stw::scl::C_SclString & orc_String,
+   static int32_t mh_StringToFlashLoader(const QString & orc_String,
                                          C_OscNodeProperties::E_FlashLoaderProtocol & ore_Type);
-   static stw::scl::C_SclString mh_CommunicationByteOrderToString(
+   static QString mh_CommunicationByteOrderToString(
       const C_OscCanSignal::E_ByteOrderType & ore_CommunicationByteOrder);
-   static int32_t mh_StringToCommunicationByteOrder(const stw::scl::C_SclString & orc_String,
+   static int32_t mh_StringToCommunicationByteOrder(const QString & orc_String,
                                                     C_OscCanSignal::E_ByteOrderType & ore_Type);
-   static stw::scl::C_SclString mh_NodeComMessageTxMethodToString(
+   static QString mh_NodeComMessageTxMethodToString(
       const C_OscCanMessage::E_TxMethodType & ore_NodeComMessageTxMethod);
-   static void mh_StringToNodeComMessageTxMethod(const stw::scl::C_SclString & orc_String,
+   static void mh_StringToNodeComMessageTxMethod(const QString & orc_String,
                                                  C_OscCanMessage::E_TxMethodType & ore_Type);
 };
 

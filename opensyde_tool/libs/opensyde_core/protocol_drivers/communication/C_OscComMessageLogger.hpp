@@ -62,23 +62,23 @@ public:
 
    // openSYDE system definition handling
    virtual void SetProtocol(const stw::cmon_protocol::e_CanMonL7Protocols oe_Protocol);
-   int32_t AddOsySysDef(const stw::scl::C_SclString & orc_PathSystemDefinition,
+   int32_t AddOsySysDef(const QString & orc_PathSystemDefinition,
                         std::vector<C_OscSystemBus> & orc_Buses);
-   int32_t AddOsySysDef(const stw::scl::C_SclString & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
+   int32_t AddOsySysDef(const QString & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
                         std::vector<C_OscSystemBus> & orc_Buses);
-   virtual int32_t SetOsySysDefBus(const stw::scl::C_SclString & orc_PathSystemDefinition,
+   virtual int32_t SetOsySysDefBus(const QString & orc_PathSystemDefinition,
                                    const uint32_t ou32_BusIndex);
-   virtual int32_t GetOsySysDef(const stw::scl::C_SclString & orc_PathSystemDefinition,
+   virtual int32_t GetOsySysDef(const QString & orc_PathSystemDefinition,
                                 C_OscComMessageLoggerOsySysDefConfig & orc_SystemDefinition);
 
    // Generic database handling
-   virtual int32_t RemoveDatabase(const stw::scl::C_SclString & orc_Path);
-   virtual int32_t ActivateDatabase(const stw::scl::C_SclString & orc_Path, const bool oq_Active);
+   virtual int32_t RemoveDatabase(const QString & orc_Path);
+   virtual int32_t ActivateDatabase(const QString & orc_Path, const bool oq_Active);
 
    // Logging handling
-   virtual int32_t AddLogFileAsc(const stw::scl::C_SclString & orc_FilePath, const bool oq_HexActive,
+   virtual int32_t AddLogFileAsc(const QString & orc_FilePath, const bool oq_HexActive,
                                  const bool oq_RelativeTimeStampActive);
-   virtual int32_t RemoveLogFile(const stw::scl::C_SclString & orc_FilePath);
+   virtual int32_t RemoveLogFile(const QString & orc_FilePath);
    virtual void RemoveAllLogFiles(void);
 
    // Filter handling
@@ -103,16 +103,16 @@ protected:
    virtual bool m_CheckFilter(const stw::can::T_STWCAN_Msg_RX & orc_Msg);
 
    // CANmon based protocol interpretation
-   stw::scl::C_SclString m_GetProtocolStringHex(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
-   stw::scl::C_SclString m_GetProtocolStringDec(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   QString m_GetProtocolStringHex(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   QString m_GetProtocolStringDec(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
 
    // openSYDE system definition based interpretation
-   virtual void m_InsertOsySysDef(const stw::scl::C_SclString & orc_PathSystemDefinition,
+   virtual void m_InsertOsySysDef(const QString & orc_PathSystemDefinition,
                                   const C_OscSystemDefinition & orc_OsySysDef, const uint32_t ou32_BusIndex);
    virtual bool m_CheckSysDef(const stw::can::T_STWCAN_Msg_RX & orc_Msg);
    virtual bool m_InterpretSysDef(stw::opensyde_core::C_OscComMessageLoggerData & orc_MessageData) const;
-   stw::scl::C_SclString m_GetOsySysDefStringHex(void) const;
-   stw::scl::C_SclString m_GetOsySysDefStringDec(void) const;
+   QString m_GetOsySysDefStringHex(void) const;
+   QString m_GetOsySysDefStringDec(void) const;
 
    // Functions for integrating other CAN message interpretations
    virtual bool m_CheckInterpretation(C_OscComMessageLoggerData & orc_MessageData);
@@ -123,11 +123,11 @@ protected:
                                           const stw::opensyde_core::C_OscNodeDataPoolContent & orc_OscValue,
                                           const float64_t of64_Factor, const float64_t of64_Offset);
 
-   virtual stw::scl::C_SclString m_GetProtocolStringHexHook(void) const;
-   virtual stw::scl::C_SclString m_GetProtocolStringDecHook(void) const;
+   virtual QString m_GetProtocolStringHexHook(void) const;
+   virtual QString m_GetProtocolStringDecHook(void) const;
 
    // Generic database (for example openSYDE system definitions) activation flag register
-   std::map<stw::scl::C_SclString, bool> mc_DatabaseActiveFlags;
+   std::map<QString, bool> mc_DatabaseActiveFlags;
 
    const C_OscCanMessage * mpc_OsySysDefMessage;
    const C_OscNodeDataPoolList * mpc_OsySysDefDataPoolList;
@@ -136,7 +136,7 @@ protected:
    bool mq_Paused;
 
    // Logging
-   std::map<stw::scl::C_SclString, C_OscComMessageLoggerFileBase * const> mc_LoggingFiles;
+   std::map<QString, C_OscComMessageLoggerFileBase * const> mc_LoggingFiles;
 
 private:
    //Avoid call
@@ -167,7 +167,7 @@ private:
    C_OscComLoggerProtocols mc_ProtocolDec;
 
    // Database interpretation
-   std::map<stw::scl::C_SclString, C_OscComMessageLoggerOsySysDefConfig> mc_OsySysDefs;
+   std::map<QString, C_OscComMessageLoggerOsySysDefConfig> mc_OsySysDefs;
 
    // Filtering
    std::vector<C_OscComMessageLoggerFilter> mc_CanFilterConfig;
@@ -176,14 +176,14 @@ private:
    // Message counting
    std::vector<uint32_t> mc_MsgCounterStandardId;
    std::map<uint32_t, uint32_t> mc_MsgCounterExtendedId;
-   std::map<uint32_t, stw::scl::C_SclString> mc_EcesMessages;
+   std::map<uint32_t, QString> mc_EcesMessages;
    C_OscComAutoSupport * mpc_AutoSupportProtocol;
 
    class C_EcosMessage
    {
    public:
       uint32_t u32_CanId;
-      stw::scl::C_SclString c_MessageName;
+      QString c_MessageName;
       std::vector<uint8_t> c_MessageData;
 
       C_EcosMessage() :
@@ -195,8 +195,8 @@ private:
 
    C_EcosMessage mc_EcosMessage;
 
-   static const stw::scl::C_SclString mhc_ECES_MESSAGE_COUNTER;
-   static const stw::scl::C_SclString mhc_ECES_CHECKSUM;
+   static const QString mhc_ECES_MESSAGE_COUNTER;
+   static const QString mhc_ECES_CHECKSUM;
    static const uint32_t mhu32_ECES_MAX_MESSAGE_COUNTER;
 };
 

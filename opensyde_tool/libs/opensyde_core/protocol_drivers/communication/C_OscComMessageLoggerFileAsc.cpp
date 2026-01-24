@@ -103,7 +103,7 @@ int32_t C_OscComMessageLoggerFileAsc::OpenFile(void)
       this->mc_File.close();
    }
 
-   if (this->mc_FilePath.SubString(this->mc_FilePath.Length() - 3U, 4U).LowerCase() != ".asc")
+   if (this->mc_FilePath.SubString(this->mc_FilePath.Length() - 3U, 4U).toLower() != ".asc")
    {
       // Missing file extension
       this->mc_FilePath += ".asc";
@@ -320,7 +320,7 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
    // mh_GetDay expects 0=Sun, 1=Mon.
    c_Result += mh_GetDay(s32_DayOfWeek == 7 ? 0 : s32_DayOfWeek) + " ";
    c_Result += mh_GetMonth(c_Now.date().month() - 1) + " ";
-   c_Result += C_SclString::IntToStr(c_Now.date().day()) + " ";
+   c_Result += QString::number(c_Now.date().day()) + " ";
    // Hours
    c_Temp.PrintFormatted("%.2d", c_Now.time().hour());
    c_Result += c_Temp + ":";
@@ -333,7 +333,7 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
    // Get the milliseconds
    c_Temp.PrintFormatted("%.3u", c_Now.time().msec());
    c_Result += c_Temp + " ";
-   c_Result += C_SclString::IntToStr(c_Now.date().year());
+   c_Result += QString::number(c_Now.date().year());
 
    return c_Result;
 }

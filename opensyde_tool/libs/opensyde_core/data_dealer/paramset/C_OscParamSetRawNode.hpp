@@ -12,7 +12,7 @@
 #define C_OSCPARAMSETRAWNODE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscParamSetRawEntry.hpp"
 #include "C_OscParamSetDataPoolInfo.hpp"
 
@@ -30,7 +30,7 @@ class C_OscParamSetRawNode
 public:
    C_OscParamSetRawNode(void);
 
-   stw::scl::C_SclString c_Name;                       ///< Node name
+   QString c_Name;                       ///< Node name
    std::vector<C_OscParamSetRawEntry> c_Entries;       ///< All entries to write to this node
    std::vector<C_OscParamSetDataPoolInfo> c_DataPools; ///< Information about used data pools
 };

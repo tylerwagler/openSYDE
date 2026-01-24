@@ -1263,7 +1263,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const C_SclString & orc_P
       if (this->mc_ImageFileHandler.GetNumberOfNodes() != 1U)
       {
          C_SclString c_Error;
-         c_Error.PrintFormatted(
+         c_Error = QString::asprintf(
             "File \"%s\"  Expected: contains parameters for one device  Found: contains parameters for %u devices\n",
             orc_Path.c_str(), this->mc_ImageFileHandler.GetNumberOfNodes());
          this->mc_ImageFileHandler.ClearContent();
@@ -1359,7 +1359,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteParameterSetFile(const C_SclString &
                         //Not documented error was returned by function
                         s32_Retval = C_UNKNOWN_ERR;
                         osc_write_log_info("Parametrization", "Not documented error code " +
-                                           C_SclString::IntToStr(s32_Retval) + " was returned by NvmWrite");
+                                           QString::number(s32_Retval) + " was returned by NvmWrite");
                         break;
                      }
                      if (s32_Retval != C_NO_ERR)

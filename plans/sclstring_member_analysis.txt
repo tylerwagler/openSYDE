@@ -1,0 +1,316 @@
+================================================================================
+C_SclString Member Analysis Report
+================================================================================
+
+SUMMARY BY CATEGORY:
+----------------------------------------
+
+  PATH: 22 members - HIGH - File paths should use QString for Qt file operations
+  NAME: 23 members - HIGH - Names displayed in UI should use QString
+  COMMENT: 7 members - MEDIUM - Comments/descriptions for UI display
+  MESSAGE: 5 members - MEDIUM - Error messages and text for logging
+  FORMAT: 2 members - LOW - Units and format strings
+  VERSION: 6 members - LOW - Version strings
+  VALUE: 2 members - LOW - Generic values
+  OTHER: 26 members - REVIEW - Needs manual review
+
+  TOTAL: 93 C_SclString members found
+
+================================================================================
+SUMMARY BY CLASS (sorted by member count):
+================================================================================
+
+  C_OscCanOpenEdsFileInfoBlock: 9 members (COMMENT, OTHER, PATH, VERSION)
+  C_OscXcoBase: 7 members (MESSAGE, OTHER, PATH)
+  C_OscCanOpenEdsDeviceInfoBlock: 7 members (NAME, OTHER)
+  C_OscCanOpenObjectData: 7 members (NAME, OTHER, VALUE)
+  C_OscTspApplication: 7 members (COMMENT, NAME, PATH)
+  C_OscXceBase: 5 members (MESSAGE, OTHER, PATH)
+  C_OscTargetSupportPackageV2: 5 members (COMMENT, NAME, PATH)
+  C_OscSupServiceUpdatePackageBase: 5 members (MESSAGE, OTHER)
+  C_KFXCommParameter: 4 members (COMMENT, NAME, PATH)
+  C_OscTargetSupportPackage: 3 members (COMMENT, NAME, PATH)
+  C_OscXceUpdatePackageParameters: 2 members (OTHER, PATH)
+  C_CanMonProtocolSipAsnDescription: 2 members (FORMAT, NAME)
+  C_KFXVariableBase: 2 members (FORMAT, NAME)
+  C_OscComMessageLoggerFileBase: 2 members (NAME, PATH)
+  C_OscDataDealerNvmSafe: 1 members (PATH)
+  C_OscParamSetInterpretedList: 1 members (NAME)
+  C_OscExportCanOpenConciseEntry: 1 members (COMMENT)
+  C_OscXceCreate: 1 members (OTHER)
+  C_OscXceLoad: 1 members (OTHER)
+  C_OscXceManifest: 1 members (PATH)
+  C_OscXceManifestFiler: 1 members (PATH)
+  C_OscXcoCreate: 1 members (OTHER)
+  C_OscXcoLoad: 1 members (OTHER)
+  C_OscXcoManifest: 1 members (NAME)
+  C_OscXcoManifestFiler: 1 members (PATH)
+  C_OscCanOpenObjectDictionary: 1 members (MESSAGE)
+  C_CanMonProtocolSipPayload: 1 members (NAME)
+  C_CanMonProtocolSipAspDescription: 1 members (NAME)
+  C_CanMonProtocolSipAsaDescription: 1 members (NAME)
+  C_KFXCommConfigurationBase: 1 members (NAME)
+  C_KFXRAMNameIndex: 1 members (PATH)
+  C_KFXProjectOptions: 1 members (NAME)
+  C_KFXVariableListBase: 1 members (NAME)
+  C_KFXVariableLists: 1 members (NAME)
+  C_OscNodeDataPoolListElementOptArrayId: 1 members (NAME)
+  C_BroadcastGetDeviceInfoResults: 1 members (NAME)
+  C_OscSuSequencesNodeFileStates: 1 members (PATH)
+  C_SclIniFile: 1 members (PATH)
+  UNKNOWN: 1 members (MESSAGE)
+  C_OscSupDefinitionFiler: 1 members (VERSION)
+
+================================================================================
+CATEGORY: PATH (22 members)
+================================================================================
+
+  data_dealer\C_OscDataDealerNvmSafe.hpp:
+    Line 92: C_OscDataDealerNvmSafe::mc_ParameterSetFilePath
+
+  exports\x_certificates_package_generation\C_OscXceBase.hpp:
+    Line 38: C_OscXceBase::mhc_CERTIFICATES_FOLDER
+    Line 39: C_OscXceBase::mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER
+
+  exports\x_certificates_package_generation\C_OscXceManifest.hpp:
+    Line 31: C_OscXceManifest::c_CertificatesPath
+
+  exports\x_certificates_package_generation\C_OscXceManifestFiler.hpp:
+    Line 32: C_OscXceManifestFiler::hc_FILE_NAME
+
+  exports\x_certificates_package_generation\C_OscXceUpdatePackageParameters.hpp:
+    Line 29: C_OscXceUpdatePackageParameters::c_AuthenticationKeyPath
+
+  exports\x_config_generation\C_OscXcoBase.hpp:
+    Line 33: C_OscXcoBase::hc_XCFG_SYSDEF_FOLDER
+    Line 35: C_OscXcoBase::hc_INI_DEV_FOLDER
+
+  exports\x_config_generation\C_OscXcoManifestFiler.hpp:
+    Line 32: C_OscXcoManifestFiler::hc_FILE_NAME
+
+  imports\C_OscCanOpenEdsFileInfoBlock.hpp:
+    Line 30: C_OscCanOpenEdsFileInfoBlock::c_FileName
+
+  kefex_diaglib\dl_kefex\CKFXCommConfiguration.hpp:
+    Line 29: C_KFXCommParameter::c_INIDirective
+
+  kefex_diaglib\dl_kefex\CKFXDEFProject.hpp:
+    Line 31: C_KFXRAMNameIndex::c_FileName
+
+  project\system\target_support_package\C_OscTargetSupportPackage.hpp:
+    Line 31: C_OscTargetSupportPackage::c_TemplatePath
+
+  project\system\target_support_package\C_OscTargetSupportPackageV2.hpp:
+    Line 34: C_OscTspApplication::c_CodeGeneratorPath
+    Line 35: C_OscTspApplication::c_ProjectFolder
+    Line 36: C_OscTspApplication::c_GeneratePath
+    Line 38: C_OscTspApplication::c_ResultPaths
+    Line 60: C_OscTargetSupportPackageV2::c_TemplatePath
+    Line 62: C_OscTargetSupportPackageV2::c_HalcDefPath
+
+  protocol_drivers\communication\C_OscComMessageLoggerFileBase.hpp:
+    Line 40: C_OscComMessageLoggerFileBase::mc_FilePath
+
+  protocol_drivers\system_update\C_OscSuSequencesNodeStates.hpp:
+    Line 40: C_OscSuSequencesNodeFileStates::c_FileName
+
+  scl\C_SclIniFile.hpp:
+    Line 121: C_SclIniFile::FileName
+
+================================================================================
+CATEGORY: NAME (23 members)
+================================================================================
+
+  data_dealer\paramset\C_OscParamSetInterpretedList.hpp:
+    Line 33: C_OscParamSetInterpretedList::c_Name
+
+  exports\x_config_generation\C_OscXcoManifest.hpp:
+    Line 28: C_OscXcoManifest::c_NodeName
+
+  imports\C_OscCanOpenEdsDeviceInfoBlock.hpp:
+    Line 30: C_OscCanOpenEdsDeviceInfoBlock::c_VendorName
+    Line 32: C_OscCanOpenEdsDeviceInfoBlock::c_ProductName
+
+  imports\C_OscCanOpenObjectDictionary.hpp:
+    Line 74: C_OscCanOpenObjectData::c_Name
+
+  kefex_diaglib\cmonprotocol\C_CanMonProtocolShipIpIva.hpp:
+    Line 29: C_CanMonProtocolSipPayload::c_Name
+    Line 47: C_CanMonProtocolSipAspDescription::c_ShortName
+    Line 62: C_CanMonProtocolSipAsnDescription::c_ShortName
+    Line 81: C_CanMonProtocolSipAsaDescription::c_ShortName
+
+  kefex_diaglib\dl_kefex\CKFXCommConfiguration.hpp:
+    Line 23: C_KFXCommParameter::c_Name
+    Line 27: C_KFXCommParameter::c_DisplayName
+    Line 49: C_KFXCommConfigurationBase::mc_ProtocolName
+
+  kefex_diaglib\dl_kefex\CKFXProjectOptions.hpp:
+    Line 57: C_KFXProjectOptions::c_DeviceName
+
+  kefex_diaglib\dl_kefex\CKFXVariableBase.hpp:
+    Line 128: C_KFXVariableBase::c_Name
+
+  kefex_diaglib\dl_kefex\CKFXVariableListBase.hpp:
+    Line 45: C_KFXVariableListBase::c_ListName
+
+  kefex_diaglib\dl_kefex\CKFXVariableLists.hpp:
+    Line 47: C_KFXVariableLists::ac_DefaultNames
+
+  project\system\node\C_OscNodeDataPoolListElementOptArrayId.hpp:
+    Line 53: C_OscNodeDataPoolListElementOptArrayId::mc_HalChannelName
+
+  project\system\target_support_package\C_OscTargetSupportPackage.hpp:
+    Line 28: C_OscTargetSupportPackage::c_DeviceName
+
+  project\system\target_support_package\C_OscTargetSupportPackageV2.hpp:
+    Line 30: C_OscTspApplication::c_Name
+    Line 32: C_OscTspApplication::c_IdeCall
+    Line 46: C_OscTargetSupportPackageV2::c_DeviceName
+
+  protocol_drivers\C_OscProtocolDriverOsyTpIp.hpp:
+    Line 106: C_BroadcastGetDeviceInfoResults::c_DeviceName
+
+  protocol_drivers\communication\C_OscComMessageLoggerFileBase.hpp:
+    Line 41: C_OscComMessageLoggerFileBase::mc_ProtocolName
+
+================================================================================
+CATEGORY: COMMENT (7 members)
+================================================================================
+
+  exports\code_generation\C_OscExportCanOpenConfig.hpp:
+    Line 50: C_OscExportCanOpenConciseEntry::c_Comment
+
+  imports\C_OscCanOpenEdsFileInfoBlock.hpp:
+    Line 34: C_OscCanOpenEdsFileInfoBlock::c_Description
+
+  kefex_diaglib\dl_kefex\CKFXCommConfiguration.hpp:
+    Line 28: C_KFXCommParameter::c_Comment
+
+  project\system\target_support_package\C_OscTargetSupportPackage.hpp:
+    Line 29: C_OscTargetSupportPackage::c_Comment
+
+  project\system\target_support_package\C_OscTargetSupportPackageV2.hpp:
+    Line 31: C_OscTspApplication::c_Comment
+    Line 47: C_OscTargetSupportPackageV2::c_Comment
+    Line 63: C_OscTargetSupportPackageV2::c_HalcComment
+
+================================================================================
+CATEGORY: MESSAGE (5 members)
+================================================================================
+
+  exports\x_certificates_package_generation\C_OscXceBase.hpp:
+    Line 36: C_OscXceBase::mhc_ErrorMessage
+
+  exports\x_config_generation\C_OscXcoBase.hpp:
+    Line 40: C_OscXcoBase::mhc_ErrorMessage
+
+  imports\C_OscCanOpenObjectDictionary.hpp:
+    Line 130: C_OscCanOpenObjectDictionary::mc_LastError
+
+  scl\C_SclString.hpp:
+    Line 247: UNKNOWN::c_Text
+
+  system_update_package\C_OscSupServiceUpdatePackageBase.hpp:
+    Line 50: C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage
+
+================================================================================
+CATEGORY: FORMAT (2 members)
+================================================================================
+
+  kefex_diaglib\cmonprotocol\C_CanMonProtocolShipIpIva.hpp:
+    Line 63: C_CanMonProtocolSipAsnDescription::c_AspPrefix
+
+  kefex_diaglib\dl_kefex\CKFXVariableBase.hpp:
+    Line 129: C_KFXVariableBase::c_Unit
+
+================================================================================
+CATEGORY: VERSION (6 members)
+================================================================================
+
+  imports\C_OscCanOpenEdsFileInfoBlock.hpp:
+    Line 33: C_OscCanOpenEdsFileInfoBlock::c_EdsVersion
+    Line 35: C_OscCanOpenEdsFileInfoBlock::c_CreationTime
+    Line 36: C_OscCanOpenEdsFileInfoBlock::c_CreationDate
+    Line 38: C_OscCanOpenEdsFileInfoBlock::c_ModificationTime
+    Line 39: C_OscCanOpenEdsFileInfoBlock::c_ModificationDate
+
+  system_update_package\C_OscSupDefinitionFiler.hpp:
+    Line 41: C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF
+
+================================================================================
+CATEGORY: VALUE (2 members)
+================================================================================
+
+  imports\C_OscCanOpenObjectDictionary.hpp:
+    Line 80: C_OscCanOpenObjectData::c_DefaultValue
+    Line 81: C_OscCanOpenObjectData::c_ParameterValue
+
+================================================================================
+CATEGORY: OTHER (26 members)
+================================================================================
+
+  exports\x_certificates_package_generation\C_OscXceBase.hpp:
+    Line 30: C_OscXceBase::hc_PACKAGE_EXT
+    Line 31: C_OscXceBase::hc_PACKAGE_EXT_TMP
+
+  exports\x_certificates_package_generation\C_OscXceCreate.hpp:
+    Line 39: C_OscXceCreate::mhc_USE_CASE
+
+  exports\x_certificates_package_generation\C_OscXceLoad.hpp:
+    Line 34: C_OscXceLoad::mhc_USE_CASE
+
+  exports\x_certificates_package_generation\C_OscXceUpdatePackageParameters.hpp:
+    Line 28: C_OscXceUpdatePackageParameters::c_Password
+
+  exports\x_config_generation\C_OscXcoBase.hpp:
+    Line 30: C_OscXcoBase::hc_PACKAGE_EXT
+    Line 31: C_OscXcoBase::hc_PACKAGE_EXT_TMP
+    Line 32: C_OscXcoBase::hc_XCFG_SYSDEF
+    Line 34: C_OscXcoBase::hc_INI_DEV
+
+  exports\x_config_generation\C_OscXcoCreate.hpp:
+    Line 38: C_OscXcoCreate::mhc_USE_CASE
+
+  exports\x_config_generation\C_OscXcoLoad.hpp:
+    Line 36: C_OscXcoLoad::mhc_USE_CASE
+
+  imports\C_OscCanOpenEdsDeviceInfoBlock.hpp:
+    Line 31: C_OscCanOpenEdsDeviceInfoBlock::c_VendorNumber
+    Line 33: C_OscCanOpenEdsDeviceInfoBlock::c_ProductNumber
+    Line 34: C_OscCanOpenEdsDeviceInfoBlock::c_RevisionNumber
+    Line 35: C_OscCanOpenEdsDeviceInfoBlock::c_OrderCode
+    Line 49: C_OscCanOpenEdsDeviceInfoBlock::c_DynamicChannelsSupported
+
+  imports\C_OscCanOpenEdsFileInfoBlock.hpp:
+    Line 37: C_OscCanOpenEdsFileInfoBlock::c_CreatedBy
+    Line 40: C_OscCanOpenEdsFileInfoBlock::c_ModifiedBy
+
+  imports\C_OscCanOpenObjectDictionary.hpp:
+    Line 78: C_OscCanOpenObjectData::c_Access
+    Line 82: C_OscCanOpenObjectData::c_LowLimit
+    Line 83: C_OscCanOpenObjectData::c_HighLimit
+    Line 84: C_OscCanOpenObjectData::c_Denotation
+
+  system_update_package\C_OscSupServiceUpdatePackageBase.hpp:
+    Line 43: C_OscSupServiceUpdatePackageBase::mhc_PACKAGE_EXT
+    Line 44: C_OscSupServiceUpdatePackageBase::mhc_PACKAGE_EXT_TMP
+    Line 45: C_OscSupServiceUpdatePackageBase::mhc_SUP_SYSDEF
+    Line 46: C_OscSupServiceUpdatePackageBase::mhc_INI_DEV
+
+================================================================================
+MIGRATION RECOMMENDATIONS:
+================================================================================
+
+1. HIGH PRIORITY - Migrate these first:
+   - PATH members: Used with QFile, QDir, QFileInfo
+   - NAME members: Often displayed in Qt UI
+
+2. MEDIUM PRIORITY:
+   - COMMENT/MESSAGE: Used in logging and UI
+
+3. LOW PRIORITY:
+   - FORMAT/VERSION/VALUE: Less frequently used with Qt APIs
+
+4. Classes with many members should be migrated together
+   to avoid mixed C_SclString/QString usage in the same class.

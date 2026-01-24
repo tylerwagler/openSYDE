@@ -21,7 +21,7 @@
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscAesFile.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_Md5Checksum.hpp"
 #include "C_OscZipFile.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -73,20 +73,20 @@ using namespace std;
    C_NOACT     output could not be written
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscAesFile::h_EncryptFile(const C_SclString & orc_Key, const C_SclString & orc_InFilePath,
-                                    const C_SclString & orc_OutFilePath)
+int32_t C_OscAesFile::h_EncryptFile(const QString & orc_Key, const QString & orc_InFilePath,
+                                    const QString & orc_OutFilePath)
 
 {
    int32_t s32_Return = C_NO_ERR;
 
    //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?& anyway
-   const C_SclString c_AesKey = stw::md5::C_Md5Checksum::GetMD5(
-      reinterpret_cast<const uint8_t *>(orc_Key.c_str()), orc_Key.Length());
+   const QString c_AesKey = stw::md5::C_Md5Checksum::GetMD5Q(
+      reinterpret_cast<const uint8_t *>(orc_Key.toLocal8Bit().constData()), static_cast<uint32_t>(orc_Key.length()));
 
-   Q_ASSERT(c_AesKey.Length() == 32); //really should be 16 bytes, resp. 32 hex characters
+   Q_ASSERT(c_AesKey.length() == 32); //really should be 16 bytes, resp. 32 hex characters
 
    //check whether input file exists:
-   if (!QFileInfo(orc_InFilePath.ToQString()).exists() || !QFileInfo(orc_InFilePath.ToQString()).isFile())
+   if (!QFileInfo(orc_InFilePath).exists() || !QFileInfo(orc_InFilePath).isFile())
    {
       s32_Return = C_RD_WR;
    }
@@ -95,12 +95,12 @@ int32_t C_OscAesFile::h_EncryptFile(const C_SclString & orc_Key, const C_SclStri
       //load data from input file:
       vector<uint8_t> c_InputData;
       std::ifstream c_InputFileStream;
-      const uint32_t u32_InputFileSize = static_cast<uint32_t>(QFileInfo(orc_InFilePath.ToQString()).size());
+      const uint32_t u32_InputFileSize = static_cast<uint32_t>(QFileInfo(orc_InFilePath).size());
       const uint8_t u8_Pkcs7Size = static_cast<uint8_t>(16U - (u32_InputFileSize % 16U));
 
       c_InputData.resize(static_cast<size_t>(u32_InputFileSize) + u8_Pkcs7Size);
 
-      c_InputFileStream.open(orc_InFilePath.c_str(), std::ifstream::binary);
+      c_InputFileStream.open(orc_InFilePath.toLocal8Bit().constData(), std::ifstream::binary);
 
       if (c_InputFileStream.is_open() == false)
       {
@@ -139,8 +139,8 @@ int32_t C_OscAesFile::h_EncryptFile(const C_SclString & orc_Key, const C_SclStri
             //convert key from string to array:
             for (uint8_t u8_Index = 0U; u8_Index < 16U; u8_Index++)
             {
-               const C_SclString c_Text = "0x" + c_AesKey.SubString((static_cast<uint32_t>(u8_Index) * 2U) + 1U, 2U);
-               au8_Key[u8_Index] = static_cast<uint8_t>(c_Text.ToInt());
+               const QString c_Text = "0x" + c_AesKey.mid(static_cast<int>(u8_Index) * 2, 2);
+               au8_Key[u8_Index] = static_cast<uint8_t>(c_Text.toInt(nullptr, 16));
             }
 
             pu8_EncryptedData = c_Aes.EncryptECB(
@@ -152,7 +152,7 @@ int32_t C_OscAesFile::h_EncryptFile(const C_SclString & orc_Key, const C_SclStri
             Q_ASSERT(x_EncryptedSize == c_InputData.size());
 
             //save to output file:
-            c_OutputFileStream.open(orc_OutFilePath.c_str(), std::ofstream::binary | std::ofstream::trunc);
+            c_OutputFileStream.open(orc_OutFilePath.toLocal8Bit().constData(), std::ofstream::binary | std::ofstream::trunc);
             if (c_OutputFileStream.is_open())
             {
                //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?&
@@ -207,20 +207,20 @@ int32_t C_OscAesFile::h_EncryptFile(const C_SclString & orc_Key, const C_SclStri
    C_NOACT     output file could not be written
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscAesFile::h_DecryptFile(const C_SclString & orc_Key, const C_SclString & orc_InFilePath,
-                                    const C_SclString & orc_OutFilePath)
+int32_t C_OscAesFile::h_DecryptFile(const QString & orc_Key, const QString & orc_InFilePath,
+                                    const QString & orc_OutFilePath)
 
 {
    int32_t s32_Return = C_NO_ERR;
 
    //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?& anyway
-   const C_SclString c_AesKey = stw::md5::C_Md5Checksum::GetMD5(
-      reinterpret_cast<const uint8_t *>(orc_Key.c_str()), orc_Key.Length());
+   const QString c_AesKey = stw::md5::C_Md5Checksum::GetMD5Q(
+      reinterpret_cast<const uint8_t *>(orc_Key.toLocal8Bit().constData()), static_cast<uint32_t>(orc_Key.length()));
 
-   Q_ASSERT(c_AesKey.Length() == 32); //really should be 16 bytes, resp. 32 hex characters
+   Q_ASSERT(c_AesKey.length() == 32); //really should be 16 bytes, resp. 32 hex characters
 
    //check whether input file exists:
-   if (!QFileInfo(orc_InFilePath.ToQString()).exists() || !QFileInfo(orc_InFilePath.ToQString()).isFile())
+   if (!QFileInfo(orc_InFilePath).exists() || !QFileInfo(orc_InFilePath).isFile())
    {
       s32_Return = C_RD_WR;
    }
@@ -229,7 +229,7 @@ int32_t C_OscAesFile::h_DecryptFile(const C_SclString & orc_Key, const C_SclStri
       //load data from input file:
       vector<uint8_t> c_InputData;
       std::ifstream c_InputFileStream;
-      const uint32_t u32_InputFileSize = static_cast<uint32_t>(QFileInfo(orc_InFilePath.ToQString()).size());
+      const uint32_t u32_InputFileSize = static_cast<uint32_t>(QFileInfo(orc_InFilePath).size());
 
       //is the file correctly padded ?
       if ((u32_InputFileSize % 16U) != 0U)
@@ -238,9 +238,9 @@ int32_t C_OscAesFile::h_DecryptFile(const C_SclString & orc_Key, const C_SclStri
       }
       else
       {
-         c_InputData.resize(static_cast<size_t>(QFileInfo(orc_InFilePath.ToQString()).size()));
+         c_InputData.resize(static_cast<size_t>(QFileInfo(orc_InFilePath).size()));
 
-         c_InputFileStream.open(orc_InFilePath.c_str(), std::ifstream::binary);
+         c_InputFileStream.open(orc_InFilePath.toLocal8Bit().constData(), std::ifstream::binary);
 
          if (c_InputFileStream.is_open() == false)
          {
@@ -276,8 +276,8 @@ int32_t C_OscAesFile::h_DecryptFile(const C_SclString & orc_Key, const C_SclStri
                //convert key from string to array:
                for (uint8_t u8_Index = 0U; u8_Index < 16U; u8_Index++)
                {
-                  const C_SclString c_Text = "0x" + c_AesKey.SubString((static_cast<uint32_t>(u8_Index) * 2U) + 1U, 2U);
-                  au8_Key[u8_Index] = static_cast<uint8_t>(c_Text.ToInt());
+                  const QString c_Text = "0x" + c_AesKey.mid(static_cast<int>(u8_Index) * 2, 2);
+                  au8_Key[u8_Index] = static_cast<uint8_t>(c_Text.toInt(nullptr, 16));
                }
 
                pu8_DecryptedData = c_Aes.DecryptECB(&c_InputData[0], x_InputSize, &au8_Key[0]);
@@ -291,7 +291,7 @@ int32_t C_OscAesFile::h_DecryptFile(const C_SclString & orc_Key, const C_SclStri
                else
                {
                   //save to output file:
-                  c_OutputFileStream.open(orc_OutFilePath.c_str(), std::ofstream::binary | std::ofstream::trunc);
+                  c_OutputFileStream.open(orc_OutFilePath.toLocal8Bit().constData(), std::ofstream::binary | std::ofstream::trunc);
                   if (c_OutputFileStream.is_open())
                   {
                      //write without the PKCS#7 bytes:
@@ -340,15 +340,15 @@ int32_t C_OscAesFile::h_DecryptFile(const C_SclString & orc_Key, const C_SclStri
    C_BUSY      Problems with deleting the temporary file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscAesFile::h_CreateEncryptedZipFile(const C_SclString & orc_FolderPathToZip,
-                                               const std::set<C_SclString> & orc_SupFiles,
-                                               const C_SclString & orc_PathForZipFile, const C_SclString & orc_Key,
-                                               C_SclString * const opc_ErrorMessage)
+int32_t C_OscAesFile::h_CreateEncryptedZipFile(const QString & orc_FolderPathToZip,
+                                               const std::set<QString> & orc_SupFiles,
+                                               const QString & orc_PathForZipFile, const QString & orc_Key,
+                                               QString * const opc_ErrorMessage)
 {
    int32_t s32_Return;
 
-   const C_SclString c_ZipFileTmp = orc_PathForZipFile + static_cast<C_SclString>("_tmp");
-   C_SclString c_ErrorText;
+   const QString c_ZipFileTmp = orc_PathForZipFile + QString("_tmp");
+   QString c_ErrorText;
 
    s32_Return = C_OscZipFile::h_CreateZipFile(orc_FolderPathToZip, orc_SupFiles, c_ZipFileTmp, &c_ErrorText);
 
@@ -367,7 +367,7 @@ int32_t C_OscAesFile::h_CreateEncryptedZipFile(const C_SclString & orc_FolderPat
       }
 
       // Remove the non encrypted temporary file
-      if (std::remove(c_ZipFileTmp.c_str()) != 0)
+      if (std::remove(c_ZipFileTmp.toLocal8Bit().constData()) != 0)
       {
          if (s32_Return == C_NO_ERR)
          {
@@ -390,7 +390,7 @@ int32_t C_OscAesFile::h_CreateEncryptedZipFile(const C_SclString & orc_FolderPat
    {
       osc_write_log_error("Creating Encrypted Zip File", "Creating zip file failed with error: " +
                           C_OscLoggingHandler::h_StwError(s32_Return) +
-                          " and error text: " + c_ErrorText.c_str());
+                          " and error text: " + c_ErrorText.toLocal8Bit().constData());
 
       if (opc_ErrorMessage != NULL)
       {
@@ -424,12 +424,12 @@ int32_t C_OscAesFile::h_CreateEncryptedZipFile(const C_SclString & orc_FolderPat
    C_NOACT     output file already exists or could not be written
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscAesFile::h_UnpackEncryptedZipFile(const C_SclString & orc_PathOfZipFile,
-                                               const C_SclString & orc_FolderPathToUnzip, const C_SclString & orc_Key,
-                                               C_SclString * const opc_ErrorMessage)
+int32_t C_OscAesFile::h_UnpackEncryptedZipFile(const QString & orc_PathOfZipFile,
+                                               const QString & orc_FolderPathToUnzip, const QString & orc_Key,
+                                               QString * const opc_ErrorMessage)
 {
    int32_t s32_Return;
-   C_SclString c_ZipFileTmp = orc_PathOfZipFile + static_cast<C_SclString>("_tmp");
+   QString c_ZipFileTmp = orc_PathOfZipFile + QString("_tmp");
    bool q_TemporaryFileUsed = true;
 
    if (orc_Key != "")
@@ -446,13 +446,13 @@ int32_t C_OscAesFile::h_UnpackEncryptedZipFile(const C_SclString & orc_PathOfZip
 
    if (s32_Return == C_NO_ERR)
    {
-      C_SclString c_ErrorText;
+      QString c_ErrorText;
       s32_Return = C_OscZipFile::h_UnpackZipFile(c_ZipFileTmp, orc_FolderPathToUnzip, &c_ErrorText);
 
       if (q_TemporaryFileUsed == true)
       {
          // Remove the non encrypted temporary file
-         if (std::remove(c_ZipFileTmp.c_str()) != 0)
+         if (std::remove(c_ZipFileTmp.toLocal8Bit().constData()) != 0)
          {
             if (s32_Return == C_NO_ERR)
             {
@@ -466,7 +466,7 @@ int32_t C_OscAesFile::h_UnpackEncryptedZipFile(const C_SclString & orc_PathOfZip
       {
          osc_write_log_error("Unpacking Encrypted Zip File", "Unpacking decrypted zip file failed with error: " +
                              C_OscLoggingHandler::h_StwError(s32_Return) +
-                             " and error text: " + c_ErrorText.c_str());
+                             " and error text: " + c_ErrorText.toLocal8Bit().constData());
 
          if (opc_ErrorMessage != NULL)
          {

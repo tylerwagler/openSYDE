@@ -14,8 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include "stwtypes.hpp"
-
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -33,8 +32,8 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const;
 
-   stw::scl::C_SclString c_Name;    ///< User data set name
-   stw::scl::C_SclString c_Comment; ///< User data set comment
+   QString c_Name;    ///< User data set name
+   QString c_Comment; ///< User data set comment
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

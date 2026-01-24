@@ -29,10 +29,10 @@ public:
 
    // Load
    static int32_t h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_Views,
-                                        const stw::scl::C_SclString & orc_PathSystemViews,
+                                        const QString & orc_PathSystemViews,
                                         const std::vector<C_OscNode> & orc_OscNodes);
    static int32_t h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views, const std::vector<C_OscNode> & orc_OscNodes,
-                                 C_OscXmlParserBase & orc_XmlParser, const stw::scl::C_SclString & orc_BasePath);
+                                 C_OscXmlParserBase & orc_XmlParser, const QString & orc_BasePath);
    static int32_t h_LoadViewOsc(C_OscViewData & orc_View, stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser,
                                 const std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes);
 
@@ -44,12 +44,12 @@ public:
    static void h_SavePc(const opensyde_core::C_OscViewPc & orc_OscPc, C_OscXmlParserBase & orc_XmlParser);
 
    // Utilities
-   static int32_t h_StringToPemFileStateDebugger(const stw::scl::C_SclString & orc_String,
+   static int32_t h_StringToPemFileStateDebugger(const QString & orc_String,
                                                  C_OscViewNodeUpdate::E_StateDebugger & ore_State);
-   static int32_t h_StringToPemFileStateSecurity(const stw::scl::C_SclString & orc_String,
+   static int32_t h_StringToPemFileStateSecurity(const QString & orc_String,
                                                  C_OscViewNodeUpdate::E_StateSecurity & ore_State);
-   static stw::scl::C_SclString h_PemFileStateDebuggerToString(const C_OscViewNodeUpdate::E_StateDebugger oe_State);
-   static stw::scl::C_SclString h_PemFileStateSecurityToString(const C_OscViewNodeUpdate::E_StateSecurity oe_State);
+   static QString h_PemFileStateDebuggerToString(const C_OscViewNodeUpdate::E_StateDebugger oe_State);
+   static QString h_PemFileStateSecurityToString(const C_OscViewNodeUpdate::E_StateSecurity oe_State);
 
 private:
    // Load
@@ -58,10 +58,10 @@ private:
    static int32_t mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUpdate> & orc_NodeUpdateInformation,
                                                C_OscXmlParserBase & orc_XmlParser,
                                                const std::vector<C_OscNode> & orc_OscNodes);
-   static void mh_LoadPc(opensyde_core::C_OscViewPc & orc_OscPc, const C_OscXmlParserBase & orc_XmlParser);
-   static void mh_LoadNodeUpdateInformationPaths(std::vector<stw::scl::C_SclString> & orc_Paths,
-                                                 const stw::scl::C_SclString & orc_XmlTagBaseName,
-                                                 C_OscXmlParserBase & orc_XmlParser);
+    static void mh_LoadPc(opensyde_core::C_OscViewPc & orc_OscPc, const C_OscXmlParserBase & orc_XmlParser);
+    static void mh_LoadNodeUpdateInformationPaths(std::vector<QString> & orc_Paths,
+                                                  const QString & orc_XmlTagBaseName,
+                                                  C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
                                                   C_OscXmlParserBase & orc_XmlParser, const C_OscNode & orc_Node);
    static void mh_LoadNodeUpdateInformationParam(std::vector<C_OscViewNodeUpdateParamInfo> & orc_Info,
@@ -72,13 +72,13 @@ private:
                                                   C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadNodeUpdateInformationPemStates(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
                                                         C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadViewFileOsc(C_OscViewData & orc_View, const stw::scl::C_SclString & orc_FilePath,
+   static int32_t mh_LoadViewFileOsc(C_OscViewData & orc_View, const QString & orc_FilePath,
                                      const std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes);
 
-   // Save
-   static void mh_SaveNodeUpdateInformationPaths(const std::vector<stw::scl::C_SclString> & orc_Paths,
-                                                 const stw::scl::C_SclString & orc_XmlTagBaseName,
-                                                 C_OscXmlParserBase & orc_XmlParser);
+    // Save
+    static void mh_SaveNodeUpdateInformationPaths(const std::vector<QString> & orc_Paths,
+                                                  const QString & orc_XmlTagBaseName,
+                                                  C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveNodeUpdateInformationParamInfo(const std::vector<C_OscViewNodeUpdateParamInfo> & orc_Info,
                                                      C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveNodeUpdateInformationSkipUpdateOfFiles(const std::vector<bool> & orc_Flags,

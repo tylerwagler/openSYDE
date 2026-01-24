@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscHalcDefDomain.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -39,12 +39,12 @@ public:
    C_OscHalcDefBase(void);
    virtual ~C_OscHalcDefBase(void);
 
-   bool CheckIdsUnique(std::vector<stw::scl::C_SclString> & orc_DuplicateIds) const;
+   bool CheckIdsUnique(std::vector<QString> & orc_DuplicateIds) const;
 
    uint32_t u32_ContentVersion;
-   stw::scl::C_SclString c_DeviceName;
-   stw::scl::C_SclString c_FileString;              ///< Content of corresponding HALC definition as string
-   stw::scl::C_SclString c_OriginalFileName;        ///< Original file name of corresponding HALC definition
+   QString c_DeviceName;
+   QString c_FileString;              ///< Content of corresponding HALC definition as string
+   QString c_OriginalFileName;        ///< Original file name of corresponding HALC definition
    E_SafetyMode e_SafetyMode;                       ///< Safety mode
    uint8_t u8_NumConfigCopies;                      ///< Number of copies (starting at one)
    bool q_NvmBasedConfig;                           ///< Flag if NVM based
@@ -67,7 +67,7 @@ public:
 
 private:
    static void mh_AggregateIds(const std::vector<C_OscHalcDefStruct> & orc_Items,
-                               std::vector<stw::scl::C_SclString> & orc_DuplicateIds);
+                               std::vector<QString> & orc_DuplicateIds);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
