@@ -1,0 +1,89 @@
+================================================================================
+C_SclString to QString Migration Report
+================================================================================
+
+Total changes: 20
+Files affected: 7
+
+Changes by type:
+  declaration: 8
+  method_call: 11
+  usage: 1
+
+================================================================================
+DETAILED CHANGES BY FILE:
+================================================================================
+
+data_dealer\paramset\C_OscParamSetInterpretedNodeFiler.cpp:
+  Line 402 [method_call]:
+    - orc_XmlParser.CreateNodeChild("name", orc_List.c_Name.ToQString());
+    + orc_XmlParser.CreateNodeChild("name", orc_List.c_Name);
+
+imports\C_OscCanOpenObjectDictionary.cpp:
+  Line 616 [method_call]:
+    - C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
+    + C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.length(), oru32_HashValue);
+  Line 616 [method_call]:
+    - C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
+    + C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(), this->c_Name.length(), oru32_HashValue);
+
+imports\C_OscImportEdsDcf.cpp:
+  Line 771 [method_call]:
+    - c_Message.c_Name = orc_CoMessageMainObject.c_Name.c_str();
+    + c_Message.c_Name = orc_CoMessageMainObject.c_Name.toUtf8().constData();
+
+imports\C_OscImportRamView.cpp:
+  Line 239 [method_call]:
+    - rc_Element.c_Name = rc_ElementRamView.c_Name.ToQString();
+    + rc_Element.c_Name = rc_ElementRamView.c_Name;
+  Line 270 [method_call]:
+    - rc_Element.c_Comment = c_Comment.ToQString();
+    + rc_Element.c_Comment = c_Comment;
+
+kefex_diaglib\dl_kefex\CKFXVariableBase.cpp:
+  Line 860 [method_call]:
+    - C_SclChecksums::CalcCRC16STW(this->c_Name.c_str(),  this->c_Name.Length(), oru16_CRC);
+    + C_SclChecksums::CalcCRC16STW(this->c_Name.c_str(),  this->c_Name.length(), oru16_CRC);
+  Line 860 [method_call]:
+    - C_SclChecksums::CalcCRC16STW(this->c_Name.c_str(),  this->c_Name.Length(), oru16_CRC);
+    + C_SclChecksums::CalcCRC16STW(this->c_Name.toUtf8().constData(),  this->c_Name.length(), oru16_CRC);
+
+project\system\C_OscSystemDefinition.cpp:
+  Line 521 [method_call]:
+    - if (rc_CheckedNode.c_Properties.c_Name.LowerCase() == c_CurName.LowerCase())
+    + if (rc_CheckedNode.c_Properties.c_Name.toLower() == c_CurName.LowerCase())
+  Line 1135 [method_call]:
+    - s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name.ToQString(),
+    + s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name,
+  Line 1159 [method_call]:
+    - s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name.ToQString(),
+    + s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name,
+  Line 1823 [usage]:
+    - this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name = C_SclString::FromQString(orc_NodeName);
+    + this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name = orc_NodeName;
+
+project\system\target_support_package\C_OscTargetSupportPackageV2.hpp:
+  Line 30 [declaration]:
+    - stw::scl::C_SclString c_Name;                     ///< name of application
+    + QString c_Name;
+  Line 31 [declaration]:
+    - stw::scl::C_SclString c_Comment;                  ///< comment about application
+    + QString c_Comment;
+  Line 32 [declaration]:
+    - stw::scl::C_SclString c_IdeCall;                  ///< invocation of IDE (binary and parameters)
+    + QString c_IdeCall;
+  Line 34 [declaration]:
+    - stw::scl::C_SclString c_CodeGeneratorPath;        ///< alternative file generator
+    + QString c_CodeGeneratorPath;
+  Line 35 [declaration]:
+    - stw::scl::C_SclString c_ProjectFolder;            ///< project subfolder (relative to root of template archive)
+    + QString c_ProjectFolder;
+  Line 36 [declaration]:
+    - stw::scl::C_SclString c_GeneratePath;             ///< application file generation path (relative to projectfolder)
+    + QString c_GeneratePath;
+  Line 38 [declaration]:
+    - std::vector<stw::scl::C_SclString> c_ResultPaths; ///< list of output-files (relative to projectfolder)
+    + QStringList c_ResultPaths;
+  Line 47 [declaration]:
+    - stw::scl::C_SclString c_Comment;                 ///< comment about this package
+    + QString c_Comment;
