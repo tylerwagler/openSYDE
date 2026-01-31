@@ -1491,18 +1491,18 @@ int32_t C_OscProtocolDriverOsy::OsyReadSubNodeId(uint8_t &oru8_SubNodeId,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(
     const uint8_t (&orau8_Date)[3], const uint8_t (&orau8_Time)[3],
-    const C_SclString &orc_UserName, uint8_t *const opu8_NrCode) {
+    const QString &orc_UserName, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
   std::vector<uint8_t> c_Data;
-  C_SclString c_UserName = orc_UserName;
+  QString c_UserName = orc_UserName;
   uint8_t u8_NrErrorCode = 0U;
 
-  if (c_UserName.Length() > 20) {
-    c_UserName.SetLength(20);
+  if (c_UserName.length() > 20) {
+    c_UserName.resize(20);
   }
 
-  c_Data.resize(7U + static_cast<size_t>(c_UserName.Length()));
+  c_Data.resize(7U + static_cast<size_t>(c_UserName.length()));
   (void)std::memcpy(&c_Data[0], &orau8_Date[0], 3U);
   (void)std::memcpy(&c_Data[3], &orau8_Time[0], 3U);
   c_Data[6] = static_cast<uint8_t>(c_UserName.Length());
@@ -3583,7 +3583,7 @@ void C_OscProtocolDriverOsy::m_OsyReadDataPoolDataEventErrorReceived(
           QString::number(ou8_DataPoolIndex) +
           " List index: " + QString::number(ou16_ListIndex) +
           " Element index: " + QString::number(ou16_ElementIndex) +
-          " NRC: " + C_SclString::IntToHex(ou8_NrCode, 2) + "). Ignoring.",
+          " NRC: " + QString::number(ou8_NrCode, 16).toUpper() + "). Ignoring.",
       TGL_UTIL_FUNC_ID);
 }
 
@@ -4098,7 +4098,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncResponse(
         m_LogErrorWithHeader(
             "Asynchronous communication",
             "Unexpectedly received service response to service ID 0x" +
-                C_SclString::IntToHex(u8_ServiceId, 2) + ". Ignoring.",
+                QString::number(u8_ServiceId, 16).toUpper() + ". Ignoring.",
             TGL_UTIL_FUNC_ID);
 
         break;
@@ -4120,7 +4120,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncResponse(
         m_LogErrorWithHeader(
             "Asynchronous communication",
             "Unexpectedly received negative response to service ID 0x" +
-                C_SclString::IntToHex(orc_ReceivedService.c_Data[1], 2) +
+                QString::number(orc_ReceivedService.c_Data[1], 16).toUpper() +
                 ". Ignoring.",
             TGL_UTIL_FUNC_ID);
 
@@ -4611,7 +4611,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(
     QString c_ErrorText;
     c_ErrorText = QString::asprintf(
         "RequestFileTransfer(Path: %s, Size: %u, MaxBlockLength: %u)",
-        orc_FilePath.c_str(), ou32_FileSize, oru32_MaxBlockLength);
+        orc_FilePath.toUtf8().constData(), ou32_FileSize, oru32_MaxBlockLength);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 

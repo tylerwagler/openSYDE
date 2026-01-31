@@ -1564,7 +1564,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
 
                                        if (rc_CurrentResult.c_SerialNumber.q_FsnSerialNumber == true)
                                        {
-                                          if (rc_CurrentResult.c_SerialNumber.c_SerialNumberExt.Length() <
+                                          if (rc_CurrentResult.c_SerialNumber.c_SerialNumberExt.length() <
                                               rc_CurrentResult.c_SerialNumber.u8_SerialNumberByteLength)
                                           {
                                              // Serial number is not finished yet
@@ -1644,7 +1644,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
                    (c_ItResult->second.c_SerialNumber.u8_SerialNumberByteLength <= 29) &&
   // Check for FSN serial number ext length
                    (((c_ItResult->second.c_SerialNumber.q_FsnSerialNumber == true) &&
-                     (c_ItResult->second.c_SerialNumber.c_SerialNumberExt.Length() ==
+                     (c_ItResult->second.c_SerialNumber.c_SerialNumberExt.length() ==
                       c_ItResult->second.c_SerialNumber.u8_SerialNumberByteLength)) ||
   // Check for POS serial number length for exact 6 byte
                     ((c_ItResult->second.c_SerialNumber.q_FsnSerialNumber == false) &&
@@ -2140,9 +2140,8 @@ void C_OscProtocolDriverOsyTpCan::ClearDispatcherQueue(void)
 void C_OscProtocolDriverOsyTpCan::m_LogWarningWithHeader(const stw::scl::C_SclString & orc_Information,
                                                          const char_t * const opcn_Function) const
 {
-   C_OscLoggingHandler::h_WriteLogError("openSYDE CAN-TP", "openSYDE CAN-TP node " + C_SclString::IntToStr(
-                                           mc_ServerId.u8_BusIdentifier) + "." +
-                                        C_SclString::IntToStr(
-                                           mc_ServerId.u8_NodeIdentifier) + ": " + orc_Information, __FILE__,
+   C_OscLoggingHandler::h_WriteLogError("openSYDE CAN-TP", "openSYDE CAN-TP node " +
+                                        QString::number(mc_ServerId.u8_BusIdentifier) + "." +
+                                        QString::number(mc_ServerId.u8_NodeIdentifier) + ": " + orc_Information, __FILE__,
                                         opcn_Function);
 }

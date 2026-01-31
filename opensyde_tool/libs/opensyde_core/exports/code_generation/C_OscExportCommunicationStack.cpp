@@ -475,7 +475,7 @@ void C_OscExportCommunicationStack::mh_AddHeader(const C_SclString & orc_ExportT
 
    if (oq_FileType == mhq_IS_HEADER_FILE)
    {
-      const C_SclString c_HeaderGuard = h_GetFileName(ou8_InterfaceIndex, ore_Protocol).toUpper() + "H";
+      const C_SclString c_HeaderGuard = QString::fromUtf8(h_GetFileName(ou8_InterfaceIndex, ore_Protocol).constData()).toUpper() + "H";
       orc_Data.Append("#ifndef " + c_HeaderGuard);
       orc_Data.Append("#define " + c_HeaderGuard);
    }
@@ -534,7 +534,7 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
                                                   const C_SclString & orc_ProjectId, const uint16_t ou16_GenCodeVersion,
                                                   const bool oq_FileType)
 {
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
+   const C_SclString c_ProtocolName = QString::fromUtf8(mh_GetProtocolNameByType(ore_Protocol).constData()).toUpper();
    const C_SclString c_MagicName = mh_GetMagicName(orc_ProjectId, ou8_InterfaceIndex, ore_Protocol);
 
    orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Defines"));
@@ -545,7 +545,7 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
       orc_Data.Append("///Index of Tx messages");
       for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < orc_ComMessage.c_TxMessages.size(); u16_MessageIndex++)
       {
-         const C_SclString c_Name = orc_ComMessage.c_TxMessages[u16_MessageIndex].c_Name.toUpper();
+         const C_SclString c_Name = QString::fromUtf8(orc_ComMessage.c_TxMessages[u16_MessageIndex].c_Name.constData()).toUpper();
          orc_Data.Append("#define COMM_" + c_ProtocolName + "_CAN" +
                          QString::number(
                             static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_TX_MSG_INDEX_" + c_Name + " (" +
@@ -559,7 +559,7 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
       orc_Data.Append("///Index of Rx messages");
       for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < orc_ComMessage.c_RxMessages.size(); u16_MessageIndex++)
       {
-         const C_SclString c_Name = orc_ComMessage.c_RxMessages[u16_MessageIndex].c_Name.toUpper();
+         const C_SclString c_Name = QString::fromUtf8(orc_ComMessage.c_RxMessages[u16_MessageIndex].c_Name.constData()).toUpper();
          orc_Data.Append("#define COMM_" + c_ProtocolName + "_CAN" +
                          QString::number(
                             static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) + "_RX_MSG_INDEX_" + c_Name + " (" +
@@ -580,7 +580,7 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
 
             if (rc_Message.IsMultiplexed() == true)
             {
-               const C_SclString c_Name = rc_Message.c_Name.toUpper();
+               const C_SclString c_Name = QString::fromUtf8(rc_Message.c_Name.constData()).toUpper();
                std::set<uint16_t> c_MultiplexerValues;
                std::set<uint16_t>::const_iterator c_ItValue;
                uint16_t u16_ValueIndex = 0;
@@ -619,7 +619,7 @@ void C_OscExportCommunicationStack::mh_AddDefines(C_SclStringList & orc_Data,
 
             if (rc_Message.IsMultiplexed() == true)
             {
-               const C_SclString c_Name = rc_Message.c_Name.toUpper();
+               const C_SclString c_Name = QString::fromUtf8(rc_Message.c_Name.constData()).toUpper();
                std::set<uint16_t> c_MultiplexerValues;
                std::set<uint16_t>::const_iterator c_ItValue;
                uint16_t u16_ValueIndex = 0;
@@ -695,7 +695,7 @@ void C_OscExportCommunicationStack::mh_AddCeModuleGlobal(C_SclStringList & orc_D
                                                          const uint32_t ou32_RxListIndex)
 {
    C_SclString c_SafeRamData;
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
+   const C_SclString c_ProtocolName = QString::fromUtf8(mh_GetProtocolNameByType(ore_Protocol).constData()).toUpper();
 
    if (oq_SafeData == true)
    {
@@ -830,7 +830,7 @@ void C_OscExportCommunicationStack::mh_AddCeGlobalVariables(C_SclStringList & or
                                                             const bool oq_TxMessagesPresent,
                                                             const bool oq_RxMessagesPresent)
 {
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
+   const C_SclString c_ProtocolName = QString::fromUtf8(mh_GetProtocolNameByType(ore_Protocol).constData()).toUpper();
 
    orc_Data.Append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
    orc_Data.Append("///Stack configuration");
@@ -1102,7 +1102,7 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(C_SclStringList & o
                                                              const std::vector<C_OscCanMessage> & orc_Messages,
                                                              const uint16_t ou16_GenCodeVersion, const bool oq_Tx)
 {
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
+   const C_SclString c_ProtocolName = QString::fromUtf8(mh_GetProtocolNameByType(ore_Protocol).constData()).toUpper();
    const uint16_t u16_MessageCount = static_cast<uint16_t>(orc_Messages.size());
    C_SclString c_Text;
    C_SclString c_TxRxString;
@@ -1119,7 +1119,7 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(C_SclStringList & o
 
    orc_Data.Append("static const T_osy_com_message_definition mat_Messages" + c_TxRxString + "[COMM_" +
                    c_ProtocolName + "_CAN" + QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
-                   "_NUMBER_OF_" + c_TxRxString.toUpper() + "_MSGS] =");
+                   "_NUMBER_OF_" + QString::fromUtf8(c_TxRxString.constData()).toUpper() + "_MSGS] =");
    orc_Data.Append("{");
 
    for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < u16_MessageCount; u16_MessageIndex++)
@@ -1411,7 +1411,7 @@ C_SclString C_OscExportCommunicationStack::mh_GetMagicName(const C_SclString & o
                                                            const uint8_t ou8_InterfaceIndex,
                                                            const C_OscCanProtocol::E_Type & ore_Protocol)
 {
-   const C_SclString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
+   const C_SclString c_ProtocolName = QString::fromUtf8(mh_GetProtocolNameByType(ore_Protocol).constData()).toUpper();
    const C_SclString c_MagicName = "COMM_" + c_ProtocolName + "_CAN" +
                                    QString::number(static_cast<uint32_t>(ou8_InterfaceIndex) + 1U) +
                                    "_PROJECT_ID_" + orc_ProjectId;

@@ -166,20 +166,20 @@ void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, 
 C_SclString C_OscExportCanOpenConciseEntry::GetConciseString(void) const
 {
    const uint32_t u32_PayloadSize = static_cast<uint32_t>(this->c_Payload.size());
-   C_SclString c_Retval = "0x" + C_SclString::IntToHex(static_cast<uint8_t>(this->u16_Index), 2U).toUpper() + "U, " +
+   C_SclString c_Retval = "0x" + QString::fromUtf8(C_SclString::IntToHex(static_cast<uint8_t>(this->u16_Index), 2U).constData()).toUpper() + "U, " +
                           "0x" +
-                          C_SclString::IntToHex(static_cast<uint8_t>(this->u16_Index >> 8U), 2U).toUpper() + "U, " +
-                          "0x" + C_SclString::IntToHex(this->u8_SubIndex, 2U).toUpper() + "U, " +
-                          "0x" + C_SclString::IntToHex(u32_PayloadSize, 2U).toUpper() + "U, " +
-                          "0x" + C_SclString::IntToHex(u32_PayloadSize >> 8U, 2U).toUpper() + "U, " +
-                          "0x" + C_SclString::IntToHex(u32_PayloadSize >> 16U, 2U).toUpper() + "U, " +
+                          QString::fromUtf8(C_SclString::IntToHex(static_cast<uint8_t>(this->u16_Index >> 8U), 2U).constData()).toUpper() + "U, " +
+                          "0x" + QString::fromUtf8(C_SclString::IntToHex(this->u8_SubIndex, 2U).constData()).toUpper() + "U, " +
+                          "0x" + QString::fromUtf8(C_SclString::IntToHex(u32_PayloadSize, 2U).constData()).toUpper() + "U, " +
+                          "0x" + QString::fromUtf8(C_SclString::IntToHex(u32_PayloadSize >> 8U, 2U).constData()).toUpper() + "U, " +
+                          "0x" + QString::fromUtf8(C_SclString::IntToHex(u32_PayloadSize >> 16U, 2U).constData()).toUpper() + "U, " +
                           "0x" + C_SclString::IntToHex(u32_PayloadSize >> 24U, 2U).toUpper() + "U, ";
 
    C_SclString c_PayloadString;
 
    for (uint8_t u8_It = 0; u8_It < c_Payload.size(); ++u8_It)
    {
-      c_PayloadString += "0x" + C_SclString::IntToHex(c_Payload[u8_It], 2).toUpper() + "U, ";
+      c_PayloadString += "0x" + QString::fromUtf8(C_SclString::IntToHex(c_Payload[u8_It], 2).constData()).toUpper() + "U, ";
    }
    //remove last comma + whitespace
    c_PayloadString.Delete(c_PayloadString.lastIndexOf(", "), 2U);
@@ -198,7 +198,7 @@ C_SclString C_OscExportCanOpenConciseEntry::GetConciseString(void) const
 //----------------------------------------------------------------------------------------------------------------------
 C_SclString C_OscExportCanOpenConciseEntry::h_GetNumOfEntriesString(const uint32_t ou32_NumOfEntries)
 {
-   return "0x" + C_SclString::IntToHex(static_cast<uint8_t>(ou32_NumOfEntries), 2U).toUpper() + "U, " +
+   return "0x" + QString::fromUtf8(C_SclString::IntToHex(static_cast<uint8_t>(ou32_NumOfEntries), 2U).constData()).toUpper() + "U, " +
           "0x" + C_SclString::IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 8U), 2U).toUpper() + "U, " +
           "0x" + C_SclString::IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 16U), 2U).toUpper() + "U, " +
           "0x" + C_SclString::IntToHex(static_cast<uint8_t>(ou32_NumOfEntries >> 24U), 2U).toUpper() + "U, " +
@@ -580,7 +580,7 @@ void C_OscExportCanOpenConfig::mh_AddHeader(const C_SclString & orc_ExportToolIn
 
    if (oq_FileType == mhq_IS_HEADER_FILE)
    {
-      const C_SclString c_HeaderGuard = h_GetFileName(ou8_InterfaceIndex).toUpper() + "H";
+      const C_SclString c_HeaderGuard = QString::fromUtf8(h_GetFileName(ou8_InterfaceIndex).constData()).toUpper() + "H";
       orc_Data.Append("#ifndef " + c_HeaderGuard);
       orc_Data.Append("#define " + c_HeaderGuard);
    }

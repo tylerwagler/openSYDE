@@ -35,7 +35,7 @@ public:
    QString c_NewName;
 
    static void h_HandleNameMaxCharLimitItem(const uint32_t ou32_NameMaxCharLimit,
-                                            const QString & orc_Type, QString & orc_Name,
+                                            const QString & orc_Type, const QString & orc_Name,
                                             std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 };
 

@@ -329,7 +329,7 @@ void C_KFXCommConfigurationBase::SetParameterList(const QList<C_KFXCommParameter
    {
       mc_Values[s32_Index] = 0L;
       //make uppercase as we always compare uppercase
-      mc_Parameters[s32_Index].c_Name = mc_Parameters[s32_Index].c_Name.toUpper();
+      mc_Parameters[s32_Index].c_Name = QString::fromUtf8(mc_Parameters[s32_Index].c_Name.constData()).toUpper();
    }
 }
 
@@ -342,7 +342,7 @@ int32_t C_KFXCommConfigurationBase::GetParameterValue(const C_SclString & orc_Pa
 
    for (s32_Index = 0; s32_Index < mc_Parameters.size(); s32_Index++)
    {
-      if (mc_Parameters[s32_Index].c_Name == orc_ParameterName.toUpper())
+      if (mc_Parameters[s32_Index].c_Name == QString::fromUtf8(orc_ParameterName.constData()).toUpper())
       {
          ors64_Value = mc_Values[s32_Index];
          return C_NO_ERR;
@@ -359,7 +359,7 @@ int32_t C_KFXCommConfigurationBase::SetParameterValue(const C_SclString & orc_Pa
 
    for (s32_Index = 0; s32_Index < mc_Parameters.size(); s32_Index++)
    {
-      if (mc_Parameters[s32_Index].c_Name == orc_ParameterName.toUpper())
+      if (mc_Parameters[s32_Index].c_Name == QString::fromUtf8(orc_ParameterName.constData()).toUpper())
       {
          mc_Values[s32_Index] = os64_Value;
          return C_NO_ERR;

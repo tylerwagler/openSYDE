@@ -787,15 +787,14 @@ int32_t C_OscBuSequences::h_ReadHexFile(const C_SclString & orc_HexFilePath, C_O
 
       for (int32_t s32_Index = 0; s32_Index < c_InfoBlocks.size(); s32_Index++)
       {
-         C_SclStringList c_Lines;
-         C_SclString c_Help;
-         c_Help.PrintFormatted("%02d", s32_Index + 1);
+         QStringList c_Lines;
+         QString c_Help = QString::number(s32_Index + 1);
          osc_write_log_info(c_LogActivity, "Application information block " + c_Help);
 
          c_InfoBlocks[s32_Index].AddInfoToList(c_Lines);
-         for (uint32_t u32_Line = 0; u32_Line < c_Lines.GetCount(); u32_Line++)
+         for (uint32_t u32_Line = 0; u32_Line < c_Lines.size(); u32_Line++)
          {
-            osc_write_log_info(c_LogActivity, c_Lines.Strings[u32_Line]);
+            osc_write_log_info(c_LogActivity, c_Lines[u32_Line]);
          }
       }
 
@@ -806,9 +805,7 @@ int32_t C_OscBuSequences::h_ReadHexFile(const C_SclString & orc_HexFilePath, C_O
       }
       else
       {
-         C_SclString c_Text;
-
-         c_Text = QString::asprintf("Signature block found at address 0x%08X.", oru32_SignatureBlockAddress);
+         QString c_Text = QString::asprintf("Signature block found at address 0x%08X.", oru32_SignatureBlockAddress);
          osc_write_log_info(c_LogActivity, c_Text);
       }
    }

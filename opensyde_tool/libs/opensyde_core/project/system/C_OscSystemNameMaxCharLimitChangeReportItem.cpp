@@ -65,7 +65,7 @@ C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeRe
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(const uint32_t ou32_NameMaxCharLimit,
                                                                                const QString & orc_Type,
-                                                                               QString & orc_Name,
+                                                                               const QString & orc_Name,
                                                                                std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
 {
    if (static_cast<uint32_t>(orc_Name.length()) > ou32_NameMaxCharLimit)
@@ -75,10 +75,6 @@ void C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(c
       {
          const C_OscSystemNameMaxCharLimitChangeReportItem c_Entry(orc_Type, orc_Name, c_NewNameTmp);
          opc_ChangedItems->push_back(c_Entry);
-      }
-      else
-      {
-         orc_Name = c_NewNameTmp;
       }
    }
 }

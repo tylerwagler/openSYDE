@@ -503,7 +503,7 @@ const
             if (u32_ItNode != ou32_NodeIndex)
             {
                uint32_t u32_GroupIndex;
-               stw::scl::C_SclString c_CurName;
+               QString c_CurName;
                if (C_OscNodeSquad::h_CheckIsMultiDevice(u32_ItNode, this->c_NodeSquads, &u32_GroupIndex))
                {
                   Q_ASSERT(u32_GroupIndex < this->c_NodeSquads.size());
@@ -515,10 +515,10 @@ const
                }
                else
                {
-                  const C_OscNode & rc_CurrentNode = this->c_Nodes[u32_ItNode];
+               const C_OscNode & rc_CurrentNode = this->c_Nodes[u32_ItNode];
                   c_CurName = rc_CurrentNode.c_Properties.c_Name;
                }
-               if (rc_CheckedNode.c_Properties.c_Name.LowerCase() == c_CurName.LowerCase())
+               if (rc_CheckedNode.c_Properties.c_Name.toLower() == c_CurName.toLower())
                {
                   *opq_NameConflict = true;
                   break;
@@ -535,14 +535,14 @@ const
             Q_ASSERT(u32_GroupIndex < this->c_NodeSquads.size());
             if (u32_GroupIndex < this->c_NodeSquads.size())
             {
-               const C_OscNodeSquad & rc_Group = this->c_NodeSquads[u32_GroupIndex];
-               *opq_NameInvalid = !C_OscUtils::h_CheckValidCeName(rc_Group.c_BaseName);
+            const C_OscNodeSquad & rc_Group = this->c_NodeSquads[u32_GroupIndex];
+               *opq_NameInvalid = !C_OscUtils::h_CheckValidCeName(rc_Group.c_BaseName.toLower());
             }
          }
          else
          {
             //check for valid node name
-            *opq_NameInvalid = !C_OscUtils::h_CheckValidCeName(rc_CheckedNode.c_Properties.c_Name);
+            *opq_NameInvalid = !C_OscUtils::h_CheckValidCeName(rc_CheckedNode.c_Properties.c_Name.toLower());
          }
       }
       if (opq_NodeIdInvalid != NULL)
@@ -991,7 +991,7 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
       if (ou32_BusIndex < this->c_Buses.size())
       {
          const C_OscSystemBus & rc_CheckedBus = this->c_Buses[ou32_BusIndex];
-         *opq_NameInvalid = !C_OscUtils::h_CheckValidCeName(rc_CheckedBus.c_Name);
+         *opq_NameInvalid = !C_OscUtils::h_CheckValidCeName(rc_CheckedBus.c_Name.toLower());
       }
    }
    if (opq_IdInvalid != NULL)
@@ -1129,10 +1129,10 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
                                             ++u32_ItMessage)
                                        {
                                           c_MessageId.u32_MessageIndex = u32_ItMessage;
-                                          const C_OscCanMessage & rc_Message =
-                                             rc_MessageContainer.c_TxMessages[u32_ItMessage];
-                                          //Name
-                                          s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name.ToQString(),
+                  const C_OscCanMessage & rc_Message =
+                     rc_MessageContainer.c_TxMessages[u32_ItMessage];
+                  //Name
+                  s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name,
                                                                                  q_MessageValid, &c_MessageId);
                                           //Id
                                           if ((s32_Retval == C_NO_ERR) && (q_MessageValid == true))
@@ -1153,10 +1153,10 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
                                             (s32_Retval == C_NO_ERR);
                                             ++u32_ItMessage)
                                        {
-                                          const C_OscCanMessage & rc_Message =
-                                             rc_MessageContainer.c_RxMessages[u32_ItMessage];
-                                          //Name
-                                          s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name.ToQString(),
+                  const C_OscCanMessage & rc_Message =
+                     rc_MessageContainer.c_RxMessages[u32_ItMessage];
+                  //Name
+                  s32_Retval = this->CheckMessageNameBus(ou32_BusIndex, rc_Message.c_Name,
                                                                                  q_MessageValid, &c_MessageId);
                                           //Id
                                           if ((s32_Retval == C_NO_ERR) && (q_MessageValid == true))
@@ -1657,8 +1657,8 @@ void C_OscSystemDefinition::AddNode(C_OscNode & orc_Node, const QString & orc_Su
    const QString c_SubDeviceName =
       orc_SubDeviceName.isEmpty() ? orc_Node.c_DeviceType : orc_SubDeviceName;
 
-   orc_Node.pc_DeviceDefinition = C_OscSystemDefinition::hc_Devices.LookForDevice(C_SclString::FromQString(c_SubDeviceName),
-                                                                                  C_SclString::FromQString(orc_MainDeviceName),
+   orc_Node.pc_DeviceDefinition = C_OscSystemDefinition::hc_Devices.LookForDevice(c_SubDeviceName,
+                                                                                  orc_MainDeviceName,
                                                                                   orc_Node.u32_SubDeviceIndex);
    Q_ASSERT(orc_Node.pc_DeviceDefinition != NULL);
    this->c_Nodes.push_back(orc_Node);
@@ -1815,12 +1815,12 @@ int32_t C_OscSystemDefinition::SetNodeName(const uint32_t ou32_NodeIndex, const 
       {
          // Node is sub node of a squad. Name will be set for all sub nodes based on the new base name and the node
          // specific part
-         s32_Return = this->c_NodeSquads[u32_SquadIndex].SetBaseName(this->c_Nodes, C_SclString::FromQString(orc_NodeName));
+         s32_Return = this->c_NodeSquads[u32_SquadIndex].SetBaseName(this->c_Nodes, orc_NodeName);
       }
       else
       {
          // Normal node, simple assignment
-         this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name = C_SclString::FromQString(orc_NodeName);
+         this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name = orc_NodeName;
       }
    }
 
@@ -1992,15 +1992,15 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimit(const uint32_t ou32_NameMax
       m_HandleNameMaxCharLimitNodeName(u32_ItNode, ou32_NameMaxCharLimit, opc_ChangedItems);
       rc_Node.HandleNameMaxCharLimit(ou32_NameMaxCharLimit, opc_ChangedItems);
    }
-   for (uint32_t u32_ItBus = 0UL; u32_ItBus < this->c_Buses.size(); ++u32_ItBus)
-   {
-      C_OscSystemBus & rc_Bus = this->c_Buses[u32_ItBus];
-      C_SclString c_TmpName = C_SclString::FromQString(rc_Bus.c_Name);
-      C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit, "bus-name",
-                                                                                c_TmpName,
-                                                                                opc_ChangedItems);
-      rc_Bus.c_Name = c_TmpName.ToQString();
-   }
+      for (uint32_t u32_ItBus = 0UL; u32_ItBus < this->c_Buses.size(); ++u32_ItBus)
+      {
+         C_OscSystemBus & rc_Bus = this->c_Buses[u32_ItBus];
+         QString c_TmpName = rc_Bus.c_Name;
+         C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit, "bus-name",
+                                                                                   c_TmpName,
+                                                                                   opc_ChangedItems);
+         rc_Bus.c_Name = c_TmpName;
+      }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2019,26 +2019,28 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimitNodeName(const uint32_t ou32
    uint32_t u32_SquadIndex;
    const int32_t s32_SquadReturn = this->GetNodeSquadIndexWithNodeIndex(ou32_NodeIndex, u32_SquadIndex);
 
-   if (s32_SquadReturn == C_NO_ERR)
-   {
-      C_OscNodeSquad & rc_Squad = this->c_NodeSquads[u32_SquadIndex];
-      const stw::scl::C_SclString c_OldName = rc_Squad.c_BaseName;
-      C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit,
-                                                                                "multi-node-name",
-                                                                                rc_Squad.c_BaseName,
-                                                                                opc_ChangedItems);
-      if (opc_ChangedItems == NULL)
+      if (s32_SquadReturn == C_NO_ERR)
       {
-         if (c_OldName != rc_Squad.c_BaseName)
+         C_OscNodeSquad & rc_Squad = this->c_NodeSquads[u32_SquadIndex];
+         QString c_TempName = rc_Squad.c_BaseName;
+         C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit,
+                                                                                   "multi-node-name",
+                                                                                   c_TempName,
+                                                                                   opc_ChangedItems);
+         if (opc_ChangedItems == NULL)
          {
-            this->SetNodeName(ou32_NodeIndex, rc_Squad.c_BaseName.ToQString());
+            rc_Squad.c_BaseName = c_TempName;
+            if (c_TempName != rc_Squad.c_BaseName)
+            {
+               this->SetNodeName(ou32_NodeIndex, rc_Squad.c_BaseName);
+            }
          }
       }
-   }
    else
    {
+      const QString c_Name = this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name.toLower();
       C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit, "node-name",
-                                                                                this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name,
+                                                                                c_Name,
                                                                                 opc_ChangedItems);
    }
 }
