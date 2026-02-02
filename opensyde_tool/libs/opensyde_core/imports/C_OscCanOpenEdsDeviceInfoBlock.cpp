@@ -66,12 +66,12 @@ C_OscCanOpenEdsDeviceInfoBlock::C_OscCanOpenEdsDeviceInfoBlock() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanOpenEdsDeviceInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
 {
-   C_SclChecksums::CalcCRC32(this->c_VendorName.c_str(), this->c_VendorName.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_VendorNumber.c_str(), this->c_VendorNumber.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_ProductName.c_str(), this->c_ProductName.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_ProductNumber.c_str(), this->c_ProductNumber.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_RevisionNumber.c_str(), this->c_RevisionNumber.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_OrderCode.c_str(), this->c_OrderCode.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_VendorName.toUtf8().constData(), static_cast<uint32_t>(this->c_VendorName.length()), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_VendorNumber.toUtf8().constData(), static_cast<uint32_t>(this->c_VendorNumber.length()), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_ProductName.toUtf8().constData(), static_cast<uint32_t>(this->c_ProductName.length()), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_ProductNumber.toUtf8().constData(), static_cast<uint32_t>(this->c_ProductNumber.length()), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_RevisionNumber.toUtf8().constData(), static_cast<uint32_t>(this->c_RevisionNumber.length()), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_OrderCode.toUtf8().constData(), static_cast<uint32_t>(this->c_OrderCode.length()), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_BaudRate10, sizeof(this->q_BaudRate10), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_BaudRate20, sizeof(this->q_BaudRate20), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_BaudRate50, sizeof(this->q_BaudRate50), oru32_HashValue);
@@ -83,8 +83,8 @@ void C_OscCanOpenEdsDeviceInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
    C_SclChecksums::CalcCRC32(&this->q_SimpleBootUpMaster, sizeof(this->q_SimpleBootUpMaster), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_SimpleBootUpSlave, sizeof(this->q_SimpleBootUpSlave), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u8_Granularity, sizeof(this->u8_Granularity), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_DynamicChannelsSupported.c_str(),
-                             this->c_DynamicChannelsSupported.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_DynamicChannelsSupported.toUtf8().constData(),
+                             static_cast<uint32_t>(this->c_DynamicChannelsSupported.length()), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_GroupMessaging, sizeof(this->q_GroupMessaging), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u16_NrOfRxPdo, sizeof(this->u16_NrOfRxPdo), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u16_NrOfTxPdo, sizeof(this->u16_NrOfTxPdo), oru32_HashValue);
@@ -105,20 +105,20 @@ void C_OscCanOpenEdsDeviceInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsDeviceInfoBlock::LoadFromIni(QSettings & orc_File,
-                                                    stw::scl::C_SclString & orc_LastError)
+                                                    QString & orc_LastError)
 {
    //lint -e{8062} Kept for later error reporting
    const int32_t s32_Retval = C_NO_ERR;
-   const stw::scl::C_SclString c_SectionName = "DeviceInfo";
+   const QString c_SectionName = "DeviceInfo";
 
    orc_LastError = "";
 
-   if (orc_File.childGroups().contains(QString(c_SectionName.c_str())))
+   if (orc_File.childGroups().contains(c_SectionName))
    {
-      const QString c_Group = QString(c_SectionName.c_str()) + "/";
+      const QString c_Group = c_SectionName + "/";
       //Maybe mandatory values
-      this->c_VendorName = orc_File.value(c_Group + "VendorName", "").toString().toStdString().c_str();
-      this->c_ProductName = orc_File.value(c_Group + "ProductName", "").toString().toStdString().c_str();
+      this->c_VendorName = orc_File.value(c_Group + "VendorName", "").toString();
+      this->c_ProductName = orc_File.value(c_Group + "ProductName", "").toString();
       this->q_BaudRate10 = orc_File.value(c_Group + "BaudRate_10", false).toBool();
       this->q_BaudRate20 = orc_File.value(c_Group + "BaudRate_20", false).toBool();
       this->q_BaudRate50 = orc_File.value(c_Group + "BaudRate_50", false).toBool();
@@ -130,17 +130,17 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::LoadFromIni(QSettings & orc_File,
       this->q_SimpleBootUpMaster = orc_File.value(c_Group + "SimpleBootUpMaster", false).toBool();
       this->q_SimpleBootUpSlave = orc_File.value(c_Group + "SimpleBootUpSlave", false).toBool();
       this->u8_Granularity = static_cast<uint8_t>(orc_File.value(c_Group + "Granularity", 0).toUInt());
-      this->c_DynamicChannelsSupported = orc_File.value(c_Group + "DynamicChannelsSupported", "0").toString().toStdString().c_str();
-      this->c_RevisionNumber = orc_File.value(c_Group + "RevisionNumber", "").toString().toStdString().c_str();
+      this->c_DynamicChannelsSupported = orc_File.value(c_Group + "DynamicChannelsSupported", "0").toString();
+      this->c_RevisionNumber = orc_File.value(c_Group + "RevisionNumber", "").toString();
       //Optional
-      this->c_RevisionNumber = orc_File.value(c_Group + "RevisionNumber", "").toString().toStdString().c_str();
+      this->c_RevisionNumber = orc_File.value(c_Group + "RevisionNumber", "").toString();
       this->q_GroupMessaging = orc_File.value(c_Group + "GroupMessaging", false).toBool();
       this->u16_NrOfRxPdo = static_cast<uint16_t>(orc_File.value(c_Group + "NrOfRxPDO", 0).toUInt());
       this->u16_NrOfTxPdo = static_cast<uint16_t>(orc_File.value(c_Group + "NrOfTxPDO", 0).toUInt());
       this->q_LssSupported = orc_File.value(c_Group + "LSS_Supported", false).toBool();
-      this->c_VendorNumber = orc_File.value(c_Group + "VendorNumber", "").toString().toStdString().c_str();
-      this->c_ProductNumber = orc_File.value(c_Group + "ProductNumber", "").toString().toStdString().c_str();
-      this->c_OrderCode = orc_File.value(c_Group + "OrderCode", "").toString().toStdString().c_str();
+      this->c_VendorNumber = orc_File.value(c_Group + "VendorNumber", "").toString();
+      this->c_ProductNumber = orc_File.value(c_Group + "ProductNumber", "").toString();
+      this->c_OrderCode = orc_File.value(c_Group + "OrderCode", "").toString();
    }
 
    return s32_Retval;
@@ -176,18 +176,18 @@ uint8_t C_OscCanOpenEdsDeviceInfoBlock::GetGranularity() const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(QSettings & orc_File,
-                                                                     const stw::scl::C_SclString & orc_SectionName,
-                                                                     const stw::scl::C_SclString & orc_KeyName,
-                                                                     stw::scl::C_SclString & orc_OutputValue,
-                                                                     stw::scl::C_SclString & orc_ErrorMessage,
-                                                                     const stw::scl::C_SclString & orc_DefaultValue)
+                                                                     const QString & orc_SectionName,
+                                                                     const QString & orc_KeyName,
+                                                                     QString & orc_OutputValue,
+                                                                     QString & orc_ErrorMessage,
+                                                                     const QString & orc_DefaultValue)
 {
    int32_t s32_Retval = C_NO_ERR;
-   QString c_KeyPath = QString(orc_SectionName.c_str()) + "/" + QString(orc_KeyName.c_str());
+   QString c_KeyPath = orc_SectionName + "/" + orc_KeyName;
 
    if (orc_File.contains(c_KeyPath))
    {
-      orc_OutputValue = orc_File.value(c_KeyPath, QString(orc_DefaultValue.c_str())).toString().toStdString().c_str();
+      orc_OutputValue = orc_File.value(c_KeyPath, orc_DefaultValue).toString();
    }
    else
    {
@@ -216,14 +216,14 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadStringValueFromIniFile(QSettings &
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU8ValueFromIniFile(QSettings & orc_File,
-                                                                 const stw::scl::C_SclString & orc_SectionName,
-                                                                 const stw::scl::C_SclString & orc_KeyName,
+                                                                 const QString & orc_SectionName,
+                                                                 const QString & orc_KeyName,
                                                                  uint8_t & oru8_OutputValue,
-                                                                 stw::scl::C_SclString & orc_ErrorMessage,
+                                                                 QString & orc_ErrorMessage,
                                                                  const uint8_t ou8_DefaultValue)
 {
    int32_t s32_Retval = C_NO_ERR;
-   QString c_KeyPath = QString(orc_SectionName.c_str()) + "/" + QString(orc_KeyName.c_str());
+   QString c_KeyPath = orc_SectionName + "/" + orc_KeyName;
 
    if (orc_File.contains(c_KeyPath))
    {
@@ -256,14 +256,14 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU8ValueFromIniFile(QSettings & orc
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU16ValueFromIniFile(QSettings & orc_File,
-                                                                  const stw::scl::C_SclString & orc_SectionName,
-                                                                  const stw::scl::C_SclString & orc_KeyName,
+                                                                  const QString & orc_SectionName,
+                                                                  const QString & orc_KeyName,
                                                                   uint16_t & oru16_OutputValue,
-                                                                  stw::scl::C_SclString & orc_ErrorMessage,
+                                                                  QString & orc_ErrorMessage,
                                                                   const uint16_t ou16_DefaultValue)
 {
    int32_t s32_Retval = C_NO_ERR;
-   QString c_KeyPath = QString(orc_SectionName.c_str()) + "/" + QString(orc_KeyName.c_str());
+   QString c_KeyPath = orc_SectionName + "/" + orc_KeyName;
 
    if (orc_File.contains(c_KeyPath))
    {
@@ -296,14 +296,14 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadU16ValueFromIniFile(QSettings & or
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadBoolValueFromIniFile(QSettings & orc_File,
-                                                                   const stw::scl::C_SclString & orc_SectionName,
-                                                                   const stw::scl::C_SclString & orc_KeyName,
+                                                                   const QString & orc_SectionName,
+                                                                   const QString & orc_KeyName,
                                                                    bool & orq_OutputValue,
-                                                                   stw::scl::C_SclString & orc_ErrorMessage,
+                                                                   QString & orc_ErrorMessage,
                                                                    const bool oq_DefaultValue)
 {
    int32_t s32_Retval = C_NO_ERR;
-   QString c_KeyPath = QString(orc_SectionName.c_str()) + "/" + QString(orc_KeyName.c_str());
+   QString c_KeyPath = orc_SectionName + "/" + orc_KeyName;
 
    if (orc_File.contains(c_KeyPath))
    {
@@ -325,8 +325,8 @@ int32_t C_OscCanOpenEdsDeviceInfoBlock::h_LoadBoolValueFromIniFile(QSettings & o
    \param[in,out]  orc_ErrorMessage    Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingSectionError(const stw::scl::C_SclString & orc_SectionName,
-                                                                 stw::scl::C_SclString & orc_ErrorMessage)
+void C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingSectionError(const QString & orc_SectionName,
+                                                                 QString & orc_ErrorMessage)
 {
    orc_ErrorMessage = "Error: Could not find section \"" + orc_SectionName + "\".";
 }
@@ -339,9 +339,9 @@ void C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingSectionError(const stw::scl:
    \param[in,out]  orc_ErrorMessage    Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(const stw::scl::C_SclString & orc_SectionName,
-                                                             const stw::scl::C_SclString & orc_KeyName,
-                                                             stw::scl::C_SclString & orc_ErrorMessage)
+void C_OscCanOpenEdsDeviceInfoBlock::h_ReportMissingKeyError(const QString & orc_SectionName,
+                                                             const QString & orc_KeyName,
+                                                             QString & orc_ErrorMessage)
 {
    orc_ErrorMessage = "Error: Could not find key \"" + orc_KeyName + "\" in section \"" + orc_SectionName + "\".";
 }
