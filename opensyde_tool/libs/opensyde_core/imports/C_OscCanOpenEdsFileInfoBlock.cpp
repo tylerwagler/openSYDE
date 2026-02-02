@@ -54,21 +54,21 @@ C_OscCanOpenEdsFileInfoBlock::C_OscCanOpenEdsFileInfoBlock() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanOpenEdsFileInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_FileName.c_str(), this->c_FileName.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_FileName.toUtf8().constData(), static_cast<uint32_t>(this->c_FileName.length()), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u8_FileVersion, sizeof(this->u8_FileVersion),
                                        oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->u8_FileRevision, sizeof(this->u8_FileRevision),
                                        oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_EdsVersion.c_str(), this->c_EdsVersion.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Description.c_str(), this->c_Description.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreationTime.c_str(), this->c_CreationTime.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreationDate.c_str(), this->c_CreationDate.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreatedBy.c_str(), this->c_CreatedBy.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_ModificationTime.c_str(),
-                                       this->c_ModificationTime.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_ModificationDate.c_str(),
-                                       this->c_ModificationDate.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_ModifiedBy.c_str(), this->c_ModifiedBy.Length(), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_EdsVersion.toUtf8().constData(), static_cast<uint32_t>(this->c_EdsVersion.length()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_Description.toUtf8().constData(), static_cast<uint32_t>(this->c_Description.length()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreationTime.toUtf8().constData(), static_cast<uint32_t>(this->c_CreationTime.length()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreationDate.toUtf8().constData(), static_cast<uint32_t>(this->c_CreationDate.length()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_CreatedBy.toUtf8().constData(), static_cast<uint32_t>(this->c_CreatedBy.length()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_ModificationTime.toUtf8().constData(),
+                                       static_cast<uint32_t>(this->c_ModificationTime.length()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_ModificationDate.toUtf8().constData(),
+                                       static_cast<uint32_t>(this->c_ModificationDate.length()), oru32_HashValue);
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_ModifiedBy.toUtf8().constData(), static_cast<uint32_t>(this->c_ModifiedBy.length()), oru32_HashValue);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -85,30 +85,30 @@ void C_OscCanOpenEdsFileInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenEdsFileInfoBlock::LoadFromIni(QSettings & orc_File,
-                                                  stw::scl::C_SclString & orc_LastError)
+                                                  QString & orc_LastError)
 {
    //lint -e{8062} Kept for later error reporting
    const int32_t s32_Retval = C_NO_ERR;
-   const stw::scl::C_SclString c_SectionName = "FileInfo";
+   const QString c_SectionName = "FileInfo";
 
    orc_LastError = "";
 
-   if (orc_File.childGroups().contains(QString(c_SectionName.c_str())))
+   if (orc_File.childGroups().contains(c_SectionName))
    {
-      const QString c_Group = QString(c_SectionName.c_str()) + "/";
+      const QString c_Group = c_SectionName + "/";
       //Maybe mandatory values
-      this->c_FileName = orc_File.value(c_Group + "FileName", "").toString().toStdString().c_str();
+      this->c_FileName = orc_File.value(c_Group + "FileName", "").toString();
       this->u8_FileVersion = static_cast<uint8_t>(orc_File.value(c_Group + "FileVersion", 0).toUInt());
       this->u8_FileRevision = static_cast<uint8_t>(orc_File.value(c_Group + "FileRevision", 0).toUInt());
-      this->c_Description = orc_File.value(c_Group + "Description", "").toString().toStdString().c_str();
-      this->c_CreationTime = orc_File.value(c_Group + "CreationTime", "").toString().toStdString().c_str();
-      this->c_CreationDate = orc_File.value(c_Group + "CreationDate", "").toString().toStdString().c_str();
-      this->c_CreatedBy = orc_File.value(c_Group + "CreatedBy", "").toString().toStdString().c_str();
+      this->c_Description = orc_File.value(c_Group + "Description", "").toString();
+      this->c_CreationTime = orc_File.value(c_Group + "CreationTime", "").toString();
+      this->c_CreationDate = orc_File.value(c_Group + "CreationDate", "").toString();
+      this->c_CreatedBy = orc_File.value(c_Group + "CreatedBy", "").toString();
       //Optional values
-      this->c_EdsVersion = orc_File.value(c_Group + "EDSVersion", "3.0").toString().toStdString().c_str();
-      this->c_ModificationTime = orc_File.value(c_Group + "ModificationTime", "").toString().toStdString().c_str();
-      this->c_ModificationDate = orc_File.value(c_Group + "ModificationDate", "").toString().toStdString().c_str();
-      this->c_ModifiedBy = orc_File.value(c_Group + "ModifiedBy", "").toString().toStdString().c_str();
+      this->c_EdsVersion = orc_File.value(c_Group + "EDSVersion", "3.0").toString();
+      this->c_ModificationTime = orc_File.value(c_Group + "ModificationTime", "").toString();
+      this->c_ModificationDate = orc_File.value(c_Group + "ModificationDate", "").toString();
+      this->c_ModifiedBy = orc_File.value(c_Group + "ModifiedBy", "").toString();
    }
 
    return s32_Retval;

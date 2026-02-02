@@ -276,7 +276,7 @@ build_syde_flash_release.bat
 **File**: `opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenEdsFileInfoBlock.cpp`
 **Header**: `opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenEdsFileInfoBlock.hpp`
 **Estimated Time**: 60 minutes
-**Status**: [ ]
+**Status**: [✓]
 **Dependencies**: None (can run parallel with Task 1.2)
 
 ### Issues to Fix:
