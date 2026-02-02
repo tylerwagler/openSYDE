@@ -152,8 +152,8 @@ void C_OscCanOpenObjectDictionary::m_RememberFileHash()
 
    for (int32_t s32_Line = 0; s32_Line < this->c_TextFileContent.Strings.size(); s32_Line++)
    {
-      stw::scl::C_SclChecksums::CalcCRC32(this->c_TextFileContent.Strings[s32_Line].c_str(),
-                                          this->c_TextFileContent.Strings[s32_Line].Length(),
+      stw::scl::C_SclChecksums::CalcCRC32(this->c_TextFileContent.Strings[s32_Line].toUtf8().constData(),
+                                          this->c_TextFileContent.Strings[s32_Line].length(),
                                           this->mu32_OriginalFileHash);
    }
 }
@@ -200,15 +200,14 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
       {
          //We are only interested in the sections describing objects or objects with subobjects.
          //All other sections will be ignored.
-         const QString c_QsSectionName = c_Groups[s32_Section];
-         const C_SclString c_SectionName = c_QsSectionName.toStdString().c_str();
+         const QString c_SectionName = c_Groups[s32_Section];
 
-         if (c_SectionName.Length() == 4)
+         if (c_SectionName.length() == 4)
          {
             //Pattern: [<4 hex digits>sub<1 or 2 hex digits>, e.g. [12AB]
             try
             {
-               const uint16_t u16_Index = static_cast<uint16_t>(("0x" + c_SectionName.SubString(1, 4)).ToInt());
+               const uint16_t u16_Index = static_cast<uint16_t>(("0x" + c_SectionName.mid(0, 4)).toInt(nullptr, 16));
                //create new map entry or use existing depending on sequence of sections in EDS file
                C_OscCanOpenObject & rc_Object = c_OdObjects[u16_Index];
 
@@ -219,14 +218,14 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
                //Do not handle as an error. Malformed entry or valid section with size of 4.
             }
          }
-         else if ((c_SectionName.Length() > (4 + 3)) && (c_SectionName.Pos("sub") == 5))
+         else if ((c_SectionName.length() > (4 + 3)) && (c_SectionName.contains("sub", Qt::CaseInsensitive) && c_SectionName.indexOf("sub", Qt::CaseInsensitive) == 5))
          {
             //Pattern: [<4 hex digits>sub<1 or 2 hex digits>, e.g. [12ABsubCD]
             try
             {
-               const uint16_t u16_Index = static_cast<uint16_t>(("0x" + c_SectionName.SubString(1, 4)).ToInt());
+               const uint16_t u16_Index = static_cast<uint16_t>(("0x" + c_SectionName.mid(1, 4)).toInt(nullptr, 16));
                //1 or 2 characters:
-               const uint8_t u8_SubIndex = static_cast<uint8_t>(("0x" + c_SectionName.SubString(8, 2)).ToInt());
+               const uint8_t u8_SubIndex = static_cast<uint8_t>(("0x" + c_SectionName.mid(8, 2)).toInt(nullptr, 16));
 
                //create new map entry or use existing
                C_OscCanOpenObject & rc_Object = c_OdObjects[u16_Index];
@@ -283,7 +282,7 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
       if (s32_Return == C_NO_ERR)
       {
          //remember full original content of file
-         this->c_TextFileContent.LoadFromFile(orc_File);
+         this->c_TextFileContent.LoadFromFile(orc_File.ToQString());
          this->m_RememberFileHash();
       }
    }
@@ -309,13 +308,13 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const C_SclStrin
 {
    int32_t s32_Return = C_NO_ERR;
 
-   const QString c_Group = QString(orc_Blockname.c_str()) + "/";
+   const QString c_Group = orc_Blockname.ToQString() + "/";
    const uint16_t u16_NumEntries = static_cast<uint16_t>(orc_IniFile.value(c_Group + "SupportedObjects", 0).toUInt());
 
    for (int32_t s32_Loop = 0; s32_Loop < u16_NumEntries; s32_Loop++)
    {
-      const C_SclString c_Directive = QString::number(s32_Loop + 1);
-      const C_SclString c_Index = orc_IniFile.value(c_Group + QString(c_Directive.c_str()), "").toString().toStdString().c_str();
+      const QString c_Directive = QString::number(s32_Loop + 1);
+      const QString c_Index = orc_IniFile.value(c_Group + c_Directive, "").toString();
       if (c_Index == "")
       {
          mc_LastError = orc_Blockname + ": SupportedObjects inconsistent with object list !";
@@ -328,7 +327,7 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const C_SclStrin
          //is the index numeric as expected?
          try
          {
-            u16_Index = static_cast<uint16_t>(c_Index.ToInt());
+            u16_Index = static_cast<uint16_t>(c_Index.toUInt());
          }
          catch (...)
          {
@@ -374,7 +373,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
 
    //Use table to speed up search.
    //upper case, so we only need to do this call on the side of the file content:
-   const C_SclString ac_StringsToSearchFor[u32_NUM_STRINGS_TO_SEARCH] =
+   static const C_SclString ac_StringsToSearchFor[u32_NUM_STRINGS_TO_SEARCH] =
    {
       "PARAMETERNAME",
       "ACCESSTYPE",
@@ -418,14 +417,14 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
    orc_Object.u8_DataType = C_OscCanOpenObjectData::hu8_DATA_TYPE_DOMAIN; //optional for "DOMAIN" objects
    orc_Object.q_IsMappableIntoPdo = false;
 
-   const QString c_QsSection = QString(orc_SectionName.c_str());
+   const QString c_QsSection = orc_SectionName.ToQString();
    orc_IniFile.beginGroup(c_QsSection);
    QStringList c_Keys = orc_IniFile.allKeys();
 
    for (int32_t s32_Key = 0; s32_Key < c_Keys.size(); s32_Key++)
    {
       const QString c_QsKey = c_Keys[s32_Key];
-      const C_SclString c_KeyUpperCase = c_QsKey.toUpper().toStdString().c_str();
+      const QString c_KeyUpperCase = c_QsKey.toUpper();
 
       for (uint32_t u32_StringIndex = 0U; u32_StringIndex < u32_NUM_STRINGS_TO_SEARCH; u32_StringIndex++)
       {
@@ -433,7 +432,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
              (c_KeyUpperCase == ac_StringsToSearchFor[u32_StringIndex]))
          {
             //got one !
-            const C_SclString rc_Value = orc_IniFile.value(c_QsKey, "").toString().toStdString().c_str();
+            const QString rc_Value = orc_IniFile.value(c_QsKey, "").toString();
             aq_StringsAlreadyFound[u32_StringIndex] = true; //no need to string compare this one again
 
             switch (u32_StringIndex)
@@ -447,7 +446,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
             case 2:
                try
                {
-                  orc_Object.u8_NumSubs = static_cast<uint8_t>(rc_Value.ToInt());
+                  orc_Object.u8_NumSubs = static_cast<uint8_t>(rc_Value.toInt());
                }
                catch (...)
                {
@@ -460,7 +459,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
             case 3:
                try
                {
-                  orc_Object.u8_DataType = static_cast<uint8_t>(rc_Value.ToInt());
+                  orc_Object.u8_DataType = static_cast<uint8_t>(rc_Value.toInt());
                }
                catch (...)
                {
@@ -482,7 +481,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
             case 7:
                try
                {
-                  const int32_t s32_Value = rc_Value.ToInt();
+                  const int32_t s32_Value = rc_Value.toInt();
                   if (s32_Value == 0)
                   {
                      orc_Object.q_IsMappableIntoPdo = false;
@@ -496,7 +495,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
                      orc_Object.q_IsMappableIntoPdo = false;
                      mc_LastError.PrintFormatted(
                         "Invalid boolean value \"%s\" found in entry \"PDOMapping\" for object %04X.%02X !",
-                        rc_Value.c_str(),
+                        rc_Value.toUtf8().constData(),
                         static_cast<uint32_t>(ou16_Index),
                         static_cast<uint32_t>(ou8_SubIndex));
                      s32_Return = C_CONFIG;
@@ -506,7 +505,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
                {
                   mc_LastError.PrintFormatted(
                      "Could not parse entry \"PDOMapping\" value \"%s\" for object %04X.%02X !",
-                     rc_Value.c_str(),
+                     rc_Value.toUtf8().constData(),
                      static_cast<uint32_t>(ou16_Index),
                      static_cast<uint32_t>(ou8_SubIndex));
                   s32_Return = C_CONFIG;
@@ -613,17 +612,17 @@ uint16_t C_OscCanOpenObjectData::GetSize(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanOpenObjectData::CalcHash(uint32_t & oru32_HashValue) const
 {
-   C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(), this->c_Name.length(), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u16_Index, sizeof(this->u16_Index), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u8_SubIndex, sizeof(this->u8_SubIndex), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u8_DataType, sizeof(this->u8_DataType), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_Access.c_str(), this->c_Access.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Access.toUtf8().constData(), this->c_Access.length(), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->u8_NumSubs, sizeof(this->u8_NumSubs), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_DefaultValue.c_str(), this->c_DefaultValue.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_ParameterValue.c_str(), this->c_ParameterValue.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_LowLimit.c_str(), this->c_LowLimit.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_HighLimit.c_str(), this->c_HighLimit.Length(), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(this->c_Denotation.c_str(), this->c_Denotation.Length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_DefaultValue.toUtf8().constData(), this->c_DefaultValue.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_ParameterValue.toUtf8().constData(), this->c_ParameterValue.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_LowLimit.toUtf8().constData(), this->c_LowLimit.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_HighLimit.toUtf8().constData(), this->c_HighLimit.length(), oru32_HashValue);
+   C_SclChecksums::CalcCRC32(this->c_Denotation.toUtf8().constData(), this->c_Denotation.length(), oru32_HashValue);
    C_SclChecksums::CalcCRC32(&this->q_IsMappableIntoPdo, sizeof(this->q_IsMappableIntoPdo), oru32_HashValue);
 }
 
@@ -691,7 +690,7 @@ C_OscCanOpenObjectData::C_OscCanOpenObjectData() :
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsReadable(void) const
 {
-   const C_SclString c_Help = c_Access.toUpper();
+   const QString c_Help = c_Access;
 
    return ((c_Help  == "RO") || (c_Help == "RW") || (c_Help == "RWW") || (c_Help == "RWR") || (c_Help == "CONST"));
 }
@@ -706,7 +705,7 @@ bool C_OscCanOpenObjectData::IsReadable(void) const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsWriteable(void) const
 {
-   const C_SclString c_Help = c_Access.toUpper();
+   const QString c_Help = c_Access;
 
    return ((c_Help == "RW") || (c_Help == "RWW") || (c_Help == "RWR") || (c_Help == "WO"));
 }
@@ -738,7 +737,7 @@ bool C_OscCanOpenObjectData::IsMappableIntoPdo() const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsMappableIntoTxPdo() const
 {
-   const C_SclString c_Help = c_Access.toUpper();
+   const QString c_Help = c_Access.toUpper();
 
    return this->IsMappableIntoPdo() &&
           ((c_Help == "RO") || (c_Help == "RW") || (c_Help == "RWR") || (c_Help == "CONST"));
@@ -756,7 +755,7 @@ bool C_OscCanOpenObjectData::IsMappableIntoTxPdo() const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanOpenObjectData::IsMappableIntoRxPdo() const
 {
-   const C_SclString c_Help = c_Access.toUpper();
+   const QString c_Help = c_Access.toUpper();
 
    return this->IsMappableIntoPdo() && ((c_Help == "WO") || (c_Help == "RW") || (c_Help == "RWW"));
 }
