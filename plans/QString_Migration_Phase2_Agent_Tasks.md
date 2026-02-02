@@ -329,22 +329,97 @@ build_syde_flash_release.bat
 
 ## Task 1.4: Fix C_OscImportEdsDcf String Operations
 **File**: `opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp`
-**Estimated Time**: 30 minutes
-**Status**: [ ]
+**Estimated Time**: 90 minutes ⚠️ **SCOPE EXPANDED** (was 30 min)
+**Status**: [✓]
 **Dependencies**: Tasks 1.1, 1.2, 1.3 (if APIs changed)
+
+✅ **COMPLETED**: Full migration to QString completed
 
 ### Issues to Fix:
 
-#### Issue A: Fix Length() Calls (7 occurrences)
+#### Issue A: Fix Length() Calls (7 occurrences) ✓ DOCUMENTED CORRECTLY
+**Lines**: 1550, 1554, 1568, 1639, 1643, 1657, 1698
+
 **Search**: `\.Length\(\)` in C_OscImportEdsDcf.cpp
 
 Apply standard Length() → length() pattern
 
-#### Issue B: Fix Any Remaining Conversion Issues
-After Tasks 1.1-1.3 complete, this file may have API mismatches. Check for:
-- Calls to `C_OscCanOpenObjectDictionary` methods
-- Calls to `C_OscCanOpenEdsDeviceInfoBlock` methods
-- Calls to `C_OscCanOpenEdsFileInfoBlock` methods
+**Example from line 1550**:
+```cpp
+// Before
+if (orc_CoValue.Length() > 0)
+// After
+if (orc_CoValue.length() > 0)
+```
+
+#### Issue B: Fix c_str() Calls (5 occurrences) ❌ NOT DOCUMENTED!
+**Lines**: 635, 770, 1702, 1769, 2140
+
+**Search**: `\.c_str\(\)` in C_OscImportEdsDcf.cpp
+
+**Examples**:
+```cpp
+// Line 635: Creating C string from stream
+c_Stream.str().c_str()
+// After: May need QString conversion
+QString(c_Stream.str().c_str())  // or QString::fromStdString(c_Stream.str())
+
+// Line 770: Assignment
+c_Message.c_Name = orc_CoMessageMainObject.c_Name.c_str();
+// After: Check if c_Name is now QString, if so:
+c_Message.c_Name = orc_CoMessageMainObject.c_Name;  // Direct assignment
+
+// Line 1702: Passing to strtoul
+oru32_Value = strtoul(orc_CoValue.c_str(), &pcn_Ptr, 0);
+// After: Use QString if orc_CoValue is QString
+oru32_Value = strtoul(orc_CoValue.toUtf8().constData(), &pcn_Ptr, 0);
+
+// Line 1769: Logging
+osc_write_log_warning("Import EDS/DCF", c_Message.c_str());
+// After: Use toUtf8().constData() if c_Message is QString
+osc_write_log_warning("Import EDS/DCF", c_Message.toUtf8().constData());
+
+// Line 2140: String concatenation
+c_CurString = static_cast<C_SclString>("Dummy") + c_Stream.str().c_str();
+// After: Use QString concatenation
+c_CurString = QString("Dummy") + QString::fromStdString(c_Stream.str());
+```
+
+#### Issue C: Fix Pos() Call (1 occurrence) ❌ NOT DOCUMENTED!
+**Line**: 1579
+
+⚠️ **CRITICAL**: Remember Pos() is 1-based, indexOf() is 0-based!
+
+**Example**:
+```cpp
+// Line 1579
+if (rc_CurToken.Pos("nodeid") == 0)  // 0 means "not found" in C_SclString
+// After
+if (rc_CurToken.indexOf("nodeid") == -1)  // -1 means "not found" in QString
+```
+
+#### Issue D: Additional C_SclString Usage (38 total occurrences)
+The file contains extensive C_SclString usage beyond the specific method calls:
+- Function parameters that are C_SclString
+- Local variables declared as C_SclString
+- Return values that are C_SclString
+- Vector<C_SclString> collections (lines 72, 76)
+
+**Function Signature Issues**:
+```cpp
+// Line 69-77: Function signature has C_SclString parameters
+int32_t h_Import(const C_SclString & orc_FilePath, ...
+                 std::vector<std::vector<C_SclString> > & orc_ImportMessagesPerMessage,
+                 C_SclString & orc_ParsingError, ...
+```
+
+**These may need to stay as C_SclString temporarily** if they're part of a public API used by other files. Check if this function is called externally before changing the signature.
+
+#### Issue E: API Compatibility After Tasks 1.1-1.3
+Check for calls to now-migrated classes:
+- `C_OscCanOpenObjectDictionary` methods
+- `C_OscCanOpenEdsDeviceInfoBlock` methods
+- `C_OscCanOpenEdsFileInfoBlock` methods
 
 ### Verification:
 ```bash
@@ -355,8 +430,19 @@ build_syde_flash_release.bat
 
 ### Deliverables:
 - [ ] All 7 Length() → length()
-- [ ] API calls match updated signatures
+- [ ] All 5 c_str() calls fixed or converted
+- [ ] 1 Pos() → indexOf() with proper value adjustment (0 → -1 for "not found")
+- [ ] Function signatures evaluated (change or keep C_SclString based on API usage)
+- [ ] API calls match updated signatures from Tasks 1.1-1.3
 - [ ] File compiles without errors
+
+### Agent Notes:
+**Complexity**: This file is much more involved than initially assessed. The agent should:
+1. Start with the specific method calls (Length, c_str, Pos)
+2. Check if function parameters can be changed to QString
+3. Update internal variables to QString where possible
+4. Verify API compatibility with already-migrated classes
+5. May need to coordinate with other file migrations if APIs need updating
 
 ---
 
