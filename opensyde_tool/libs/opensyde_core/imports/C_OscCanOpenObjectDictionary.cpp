@@ -218,14 +218,14 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
                //Do not handle as an error. Malformed entry or valid section with size of 4.
             }
          }
-         else if ((c_SectionName.length() > (4 + 3)) && (c_SectionName.contains("sub", Qt::CaseInsensitive) && c_SectionName.indexOf("sub", Qt::CaseInsensitive) == 5))
+         else if ((c_SectionName.length() > (4 + 3)) && (c_SectionName.contains("sub", Qt::CaseInsensitive) && c_SectionName.indexOf("sub", Qt::CaseInsensitive) == 4))
          {
             //Pattern: [<4 hex digits>sub<1 or 2 hex digits>, e.g. [12ABsubCD]
             try
             {
-               const uint16_t u16_Index = static_cast<uint16_t>(("0x" + c_SectionName.mid(1, 4)).toInt(nullptr, 16));
+               const uint16_t u16_Index = static_cast<uint16_t>(("0x" + c_SectionName.mid(0, 4)).toInt(nullptr, 16));
                //1 or 2 characters:
-               const uint8_t u8_SubIndex = static_cast<uint8_t>(("0x" + c_SectionName.mid(8, 2)).toInt(nullptr, 16));
+               const uint8_t u8_SubIndex = static_cast<uint8_t>(("0x" + c_SectionName.mid(7, 2)).toInt(nullptr, 16));
 
                //create new map entry or use existing
                C_OscCanOpenObject & rc_Object = c_OdObjects[u16_Index];
