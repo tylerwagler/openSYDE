@@ -479,7 +479,7 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingConsecutiveFrame(const T_ST
          c_Tmp = QString::asprintf("Consecutive frame with incorrect sequence number received. Expected: %u, Received: %u",
                               static_cast<uint32_t>(mc_RxService.u8_SequenceNumber),
                               orc_CanMessage.au8_Data[0] & 0x0FU);
-         m_LogWarningWithHeader(c_Tmp.c_str(), TGL_UTIL_FUNC_ID);
+         m_LogWarningWithHeader(c_Tmp, TGL_UTIL_FUNC_ID);
          s32_Return = C_RANGE;
       }
    }
@@ -2137,7 +2137,7 @@ void C_OscProtocolDriverOsyTpCan::ClearDispatcherQueue(void)
    \param[in]     opcn_Function       function name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscProtocolDriverOsyTpCan::m_LogWarningWithHeader(const stw::scl::C_SclString & orc_Information,
+void C_OscProtocolDriverOsyTpCan::m_LogWarningWithHeader(const QString & orc_Information,
                                                          const char_t * const opcn_Function) const
 {
    C_OscLoggingHandler::h_WriteLogError("openSYDE CAN-TP", "openSYDE CAN-TP node " +

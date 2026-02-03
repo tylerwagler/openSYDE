@@ -1212,7 +1212,7 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void)
    \param[in]     opcn_Function       function name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeader(const C_SclString & orc_Information,
+void C_OscProtocolDriverOsyTpIp::m_LogWarningWithHeader(const QString & orc_Information,
                                                         const char_t * const opcn_Function) const
 {
    C_OscLoggingHandler::h_WriteLogError("openSYDE IP-TP",
