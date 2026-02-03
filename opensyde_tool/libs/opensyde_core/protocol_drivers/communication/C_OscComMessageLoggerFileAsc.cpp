@@ -160,11 +160,11 @@ void C_OscComMessageLoggerFileAsc::AddMessageToFile(const C_OscComMessageLoggerD
       // ASC specification defines a width of fixed 15 chars for CAN Id. Plus one for the space to the direction
       if (this->mq_HexActive == true)
       {
-         c_Temp.PrintFormatted("%-16s", orc_MessageData.c_CanIdHex.c_str());
+         c_Temp = QString::asprintf("%-16s", orc_MessageData.c_CanIdHex.c_str());
       }
       else
       {
-         c_Temp.PrintFormatted("%-16s", orc_MessageData.c_CanIdDec.c_str());
+         c_Temp = QString::asprintf("%-16s", orc_MessageData.c_CanIdDec.c_str());
       }
       c_LogEntry += c_Temp;
 
@@ -322,16 +322,16 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
    c_Result += mh_GetMonth(c_Now.date().month() - 1) + " ";
    c_Result += QString::number(c_Now.date().day()) + " ";
    // Hours
-   c_Temp.PrintFormatted("%.2d", c_Now.time().hour());
+   c_Temp = QString::asprintf("%.2d", c_Now.time().hour());
    c_Result += c_Temp + ":";
    // Minutes
-   c_Temp.PrintFormatted("%.2d", c_Now.time().minute());
+   c_Temp = QString::asprintf("%.2d", c_Now.time().minute());
    c_Result += c_Temp + ":";
    // Seconds
-   c_Temp.PrintFormatted("%.2d", c_Now.time().second());
+   c_Temp = QString::asprintf("%.2d", c_Now.time().second());
    c_Result += c_Temp + ".";
    // Get the milliseconds
-   c_Temp.PrintFormatted("%.3u", c_Now.time().msec());
+   c_Temp = QString::asprintf("%.3u", c_Now.time().msec());
    c_Result += c_Temp + " ";
    c_Result += QString::number(c_Now.date().year());
 
@@ -461,9 +461,9 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_AdaptTimeStamp(const uint64_t ou64_
 {
    C_SclString c_TimeStamp;
 
-   c_TimeStamp.PrintFormatted("%d.%.6d", static_cast<int32_t>(ou64_TimeStamp / 1000000ULL),
+   c_TimeStamp = QString::asprintf("%d.%.6d", static_cast<int32_t>(ou64_TimeStamp / 1000000ULL),
                               static_cast<int32_t>(ou64_TimeStamp % 1000000ULL));
-   c_TimeStamp.PrintFormatted("%9s", c_TimeStamp.c_str());
+   c_TimeStamp = QString::asprintf("%9s", c_TimeStamp.c_str());
 
    return c_TimeStamp;
 }

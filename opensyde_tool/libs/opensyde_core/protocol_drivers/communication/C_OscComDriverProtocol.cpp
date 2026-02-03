@@ -1576,7 +1576,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                      if (s32_Return != C_NO_ERR)
                      {
                         C_SclString c_Tmp;
-                        c_Tmp.PrintFormatted("Error on calculating RSA signature: %d", s32_Return);
+                        c_Tmp = QString::asprintf("Error on calculating RSA signature: %d", s32_Return);
                         osc_write_log_error("Security Access", c_Tmp.c_str());
                         s32_Return = C_CHECKSUM;
                      }
@@ -1592,7 +1592,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                            if (s32_Return != C_NO_ERR)
                            {
                               C_SclString c_Tmp;
-                              c_Tmp.PrintFormatted("Error on calculating RSA signature: %d", s32_Return);
+                              c_Tmp = QString::asprintf("Error on calculating RSA signature: %d", s32_Return);
                               osc_write_log_error("Security Access", c_Tmp.c_str());
                               s32_Return = C_CHECKSUM;
                            }

@@ -2986,7 +2986,7 @@ void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Facto
             if (oq_AllowSpecialHandling == true)
             {
                C_SclString c_Precison;
-               c_Precison.PrintFormatted("%.9g", this->GetValueF32());
+               c_Precison = QString::asprintf("%.9g", this->GetValueF32());
                c_Stream << c_Precison.c_str();
             }
             else
@@ -2998,7 +2998,7 @@ void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Facto
             if (oq_AllowSpecialHandling == true)
             {
                C_SclString c_Precison;
-               c_Precison.PrintFormatted("%.17g", this->GetValueF64());
+               c_Precison = QString::asprintf("%.17g", this->GetValueF64());
                c_Stream << c_Precison.c_str();
             }
             else

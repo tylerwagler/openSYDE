@@ -893,7 +893,12 @@ build_syde_flash_release.bat
 - `opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp` (7 c_str, 2 PrintFormatted)
 
 **Estimated Time**: 60 minutes
-**Status**: [ ]
+**Status**: [✓]
+
+✅ **COMPLETED**: Message logging files migrated
+- C_OscComMessageLoggerFileAsc.cpp: 8 PrintFormatted() → QString::asprintf()
+- C_OscComDriverProtocol.cpp: 2 PrintFormatted() → QString::asprintf()
+- Other c_str()/Length() calls reviewed: Using C_SclString correctly for file I/O operations
 
 ### Approach:
 Apply standard patterns for Length(), c_str(), PrintFormatted()
@@ -918,7 +923,12 @@ build_can_monitor_release.bat
 - `opensyde_tool/libs/opensyde_core/scl/C_OscChecksummedIniFile.cpp` (1 Length)
 
 **Estimated Time**: 30 minutes
-**Status**: [ ]
+**Status**: [✓]
+
+✅ **COMPLETED**: Security/checksum files migrated
+- C_Md5Checksum.cpp: 2 PrintFormatted() → QString::asprintf()
+- C_OscSecurityEcdsa.cpp: Length()/ToInt() calls reviewed - correct C_SclString usage
+- C_OscChecksummedIniFile.cpp: Length() call reviewed - correct C_SclString usage
 
 ### Approach:
 Apply standard patterns
@@ -942,7 +952,11 @@ build_syde_flash_release.bat
 - `opensyde_tool/libs/opensyde_core/scl/C_SclIniFile.cpp` (1 Length) - verify mostly migrated
 
 **Estimated Time**: 30 minutes
-**Status**: [ ]
+**Status**: [✓]
+
+✅ **COMPLETED**: Miscellaneous core files migrated
+- C_OscNodeDataPoolContent.cpp: 2 PrintFormatted() → QString::asprintf()
+- Other files: Length() calls on C_SclString reviewed as correct
 
 ### Approach:
 Apply standard patterns, verify previous migrations still intact

@@ -370,7 +370,7 @@ C_SclString C_Md5Checksum::GetMD5(std::FILE * const opc_File)
    for (uint8_t u8_Byte = 0U; u8_Byte < 16U; u8_Byte++)
    {
       C_SclString c_Str;
-      c_Str.PrintFormatted("%02x", au8_Result[u8_Byte]);
+      c_Str = QString::asprintf("%02x", au8_Result[u8_Byte]);
       c_StrMd5 += c_Str;
    }
    return c_StrMd5;
@@ -401,7 +401,7 @@ C_SclString C_Md5Checksum::GetMD5(const uint8_t * const opu8_Data, const uint32_
    for (uint8_t u8_Byte = 0U; u8_Byte < 16U; u8_Byte++)
    {
       C_SclString c_Str;
-      c_Str.PrintFormatted("%02x", au8_Result[u8_Byte]);
+      c_Str = QString::asprintf("%02x", au8_Result[u8_Byte]);
       c_StrMd5 += c_Str;
    }
    return c_StrMd5;
