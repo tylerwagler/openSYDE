@@ -56,15 +56,15 @@ using namespace stw::scl;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscTargetSupportPackageV2Filer::h_Load(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
-                                                 const stw::scl::C_SclString & orc_Path)
+                                                 const QString & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       C_OscXmlParser c_XmlParser;
 
-      s32_Return = c_XmlParser.LoadFromFile(orc_Path.ToQString());
+      s32_Return = c_XmlParser.LoadFromFile(orc_Path);
       if (s32_Return == C_NO_ERR)
       {
          s32_Return = mh_Load(orc_TargetSupportPackage, c_XmlParser);

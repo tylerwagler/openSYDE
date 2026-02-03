@@ -126,7 +126,7 @@ void C_SclIniFile::UpdateFile(void)
          // Need to write to a different file - use GetFileAsStringList and save manually
          C_SclStringList c_Strings;
          this->GetFileAsStringList(c_Strings);
-         c_Strings.SaveToFile(FileName);
+         c_Strings.SaveToFile(FileName.ToQString());
       }
       else
       {
@@ -673,7 +673,7 @@ void C_SclIniFile::ReadSection(const C_SclString & orc_Section, C_SclStringList 
       for (int32_t s32_Loop = 0; s32_Loop < c_Keys.size(); s32_Loop++)
       {
          opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
-            C_SclString::FromQString(c_Keys[s32_Loop]);
+            c_Keys[s32_Loop];
       }
    }
 }
@@ -718,7 +718,7 @@ void C_SclIniFile::ReadSectionValues(const C_SclString & orc_Section, C_SclStrin
          const QString c_FullKey = c_Section + "/" + c_Keys[s32_Loop];
          const QString c_Value = mpc_Settings->value(c_FullKey).toString();
          opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
-            C_SclString::FromQString(c_Keys[s32_Loop]) + "=" + C_SclString::FromQString(c_Value);
+            c_Keys[s32_Loop] + "=" + c_Value;
       }
    }
 }
@@ -755,7 +755,7 @@ void C_SclIniFile::ReadSections(C_SclStringList * const opc_Strings, const bool 
       for (int32_t s32_Loop = 0; s32_Loop < c_Groups.size(); s32_Loop++)
       {
          opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
-            C_SclString::FromQString(c_Groups[s32_Loop]);
+            c_Groups[s32_Loop];
       }
    }
 }
@@ -784,7 +784,7 @@ void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
          const QString & rc_Section = c_Groups[s32_Section];
 
          // Add section header
-         orc_Strings.Add(C_SclString::FromQString("[" + rc_Section + "]"));
+         orc_Strings.Add("[" + rc_Section + "]");
 
          // Add keys in this section
          mpc_Settings->beginGroup(rc_Section);
@@ -793,7 +793,7 @@ void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
          {
             const QString & rc_Key = c_Keys[s32_Key];
             const QString c_Value = mpc_Settings->value(rc_Key).toString();
-            orc_Strings.Add(C_SclString::FromQString(rc_Key + "=" + c_Value));
+            orc_Strings.Add(rc_Key + "=" + c_Value);
          }
          mpc_Settings->endGroup();
 

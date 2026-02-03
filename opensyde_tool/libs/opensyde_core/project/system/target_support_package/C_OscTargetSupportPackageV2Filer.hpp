@@ -12,8 +12,8 @@
 #define C_OSCTARGETSUPPORTPACKAGEV2FILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QString>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
 #include "C_OscTargetSupportPackageV2.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -30,7 +30,7 @@ class C_OscTargetSupportPackageV2Filer
 {
 public:
    static int32_t h_Load(stw::opensyde_core::C_OscTargetSupportPackageV2 & orc_TargetSupportPackage,
-                         const stw::scl::C_SclString & orc_Path);
+                         const QString & orc_Path);
 
 private:
    static int32_t mh_Load(C_OscTargetSupportPackageV2 & orc_TargetSupportPackage, C_OscXmlParserBase & orc_XmlParser);

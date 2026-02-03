@@ -1185,10 +1185,10 @@ int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolElementValue(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolFilerV2::h_SaveDataPoolElementValue(
-    const stw::scl::C_SclString &orc_NodeName,
+    const QString &orc_NodeName,
     const C_OscNodeDataPoolContent &orc_NodeDataPoolContent,
     C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.CreateAndSelectNodeChild(orc_NodeName.ToQString());
+  orc_XmlParser.CreateAndSelectNodeChild(orc_NodeName);
   if (orc_NodeDataPoolContent.GetArray() == false) {
     // Single
     switch (orc_NodeDataPoolContent.GetType()) {

@@ -292,9 +292,9 @@ int32_t C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(
     s32_Retval = orc_XmlParser.SelectNodeChildError("hal-channel-name");
   }
   if (s32_Retval == C_NO_ERR) {
-    s32_Retval = orc_XmlParser.SelectNodeChildError("custom-name");
+    s32_Retval = orc_XmlParser.SelectNodeChildError("hal-channel-name");
     if (s32_Retval == C_NO_ERR) {
-      orc_Config.c_CustomName = orc_XmlParser.GetNodeContent();
+      orc_Config.SetHalChannelName(orc_XmlParser.GetNodeContent());
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "hal-channel-name");
     }
   }
@@ -699,7 +699,7 @@ void C_OscDataLoggerJobFiler::mh_SaveConfiguredDataElement(
     const C_OscDataLoggerDataElementReference &orc_Config,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.CreateNodeChild("use-custom-name",
-                                orc_Config.GetUseCustomName());
+                                orc_Config.GetUseCustomName() ? "true" : "false");
   orc_XmlParser.CreateNodeChild("custom-name", orc_Config.GetCustomName());
   orc_XmlParser.CreateAndSelectNodeChild("data-pool-element");
   h_SaveDataElementOptArrayId(orc_Config.c_ConfiguredElementId, orc_XmlParser);

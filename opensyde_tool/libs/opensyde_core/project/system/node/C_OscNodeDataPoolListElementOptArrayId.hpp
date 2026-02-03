@@ -9,8 +9,8 @@
 #define C_OSCNODEDATAPOOLLISTELEMENTOPTARRAYID_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
 #include "C_OscNodeDataPoolListElementId.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -39,8 +39,8 @@ public:
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
-   stw::scl::C_SclString GetHalChannelName(void) const;
-   void SetHalChannelName(const stw::scl::C_SclString & orc_Value);
+   QString GetHalChannelName(void) const;
+   void SetHalChannelName(const QString & orc_Value);
 
    uint32_t GetArrayElementIndex(void) const;
    uint32_t GetArrayElementIndexOrZero(void) const;
@@ -50,7 +50,7 @@ public:
 private:
    bool mq_UseArrayElementIndex;
    uint32_t mu32_ArrayElementIndex;
-   stw::scl::C_SclString mc_HalChannelName;
+   QString mc_HalChannelName;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

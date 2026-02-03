@@ -71,17 +71,17 @@ public:
 
    static const uint8_t hu8_NUM_SUBS_WE_ARE_A_SUB      = 0xFFU;
 
-   stw::scl::C_SclString c_Name;   //object name
+   QString c_Name;   //object name
    uint16_t u16_Index;             //object index
    uint8_t u8_SubIndex;            //object subindex
    uint8_t u8_DataType;            //CANopen data type
-   stw::scl::C_SclString c_Access; //access permission ("RW", "RO", "RWW", "CONST", "WO")
+   QString c_Access; //access permission ("RW", "RO", "RWW", "CONST", "WO")
    uint8_t u8_NumSubs;             //number of sub-indexes (0xFF: we are a sub)
-   stw::scl::C_SclString c_DefaultValue;
-   stw::scl::C_SclString c_ParameterValue;
-   stw::scl::C_SclString c_LowLimit;
-   stw::scl::C_SclString c_HighLimit;
-   stw::scl::C_SclString c_Denotation;
+   QString c_DefaultValue;
+   QString c_ParameterValue;
+   QString c_LowLimit;
+   QString c_HighLimit;
+   QString c_Denotation;
    bool q_IsMappableIntoPdo;
 
    C_OscCanOpenObjectData();

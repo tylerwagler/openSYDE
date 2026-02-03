@@ -112,11 +112,11 @@ const C_OscCanOpenObjectDictionary & C_OscCanOpenManagerDeviceInfo::GetEdsFileCo
    {
       if (QFileInfo(this->c_ProjectEdsFilePath).exists() && QFileInfo(this->c_ProjectEdsFilePath).isFile())
       {
-         const int32_t s32_Retval = this->mc_EdsFileContent.LoadFromFile(this->c_ProjectEdsFilePath.toStdString().c_str());
+         const int32_t s32_Retval = this->mc_EdsFileContent.LoadFromFile(this->c_ProjectEdsFilePath.toUtf8().constData());
          if (s32_Retval != C_NO_ERR)
          {
             osc_write_log_error("CANopen manager device information", "Failed to load from EDS file \"" +
-                                this->c_ProjectEdsFilePath + "\" Error: \"" + QString::fromStdString(this->mc_EdsFileContent.GetLastErrorText().toStdString()) +
+                                this->c_ProjectEdsFilePath + "\" Error: \"" + this->mc_EdsFileContent.GetLastErrorText().ToQString() +
                                 "\".");
             this->mc_EdsFileContent.c_OdObjects.clear();
             this->mc_EdsFileContent.c_TextFileContent.Clear();

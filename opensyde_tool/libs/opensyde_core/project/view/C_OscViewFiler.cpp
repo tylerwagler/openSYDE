@@ -67,10 +67,10 @@ int32_t C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_V
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading System Views");
-      s32_Retval = c_XmlParser.LoadFromFile(C_SclString(orc_PathSystemViews));
+      s32_Retval = c_XmlParser.LoadFromFile(orc_PathSystemViews);
       if (s32_Retval == C_NO_ERR)
       {
-         s32_Retval = h_LoadViewsOsc(orc_Views, orc_OscNodes, c_XmlParser, C_SclString(orc_PathSystemViews));
+         s32_Retval = h_LoadViewsOsc(orc_Views, orc_OscNodes, c_XmlParser, orc_PathSystemViews);
       }
       else
       {

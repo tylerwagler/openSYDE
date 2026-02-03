@@ -32,6 +32,9 @@ public:
    QString c_CustomName;                                         ///< custom name to use for logging, do not use if
                                                                  // q_UseCustomName is not set
    C_OscNodeDataPoolListElementOptArrayId c_ConfiguredElementId; ///< configured element ID
+
+   bool GetUseCustomName(void) const { return this->q_UseCustomName; }
+   const QString & GetCustomName(void) const { return this->c_CustomName; }
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
