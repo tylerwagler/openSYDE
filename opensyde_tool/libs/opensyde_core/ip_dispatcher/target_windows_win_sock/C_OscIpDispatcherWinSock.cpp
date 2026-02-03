@@ -254,7 +254,7 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
             while (pc_Address != NULL)
             {
                if ((this->mc_PreferredInterfaceNames.GetCount() == 0) ||
-                   (this->mc_PreferredInterfaceNames.IndexOf(pc_Adapter->FriendlyName) != -1))
+                   (this->mc_PreferredInterfaceNames.IndexOf(QString::fromWCharArray(pc_Adapter->FriendlyName)) != -1))
                {
                   // sockaddr is the generic descriptor and sockaddr_in is IPV4 specific
                   // https://stackoverflow.com/questions/21099041/why-do-we-cast-sockaddr-in-to-sockaddr-when-calling-bind/21099196
@@ -265,12 +265,12 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
                   // a physical local interface
                   if (ntohl(c_IpAddr.S_un.S_addr) != 0x7F000001U)
                   {
-                     C_SclString c_Info;
+                     QString c_Info;
 
                      mc_LocalInterfaceIps.push_back(ntohl(c_IpAddr.S_un.S_addr)); //add to list of known interfaces
 
-                     c_Info =  "Local IP interface used with IP: " + static_cast<C_SclString>(inet_ntoa(c_IpAddr)) +
-                              ", name of adapter: \"" + pc_Adapter->FriendlyName +
+                     c_Info =  "Local IP interface used with IP: " + QString(inet_ntoa(c_IpAddr)) +
+                              ", name of adapter: \"" + QString::fromWCharArray(pc_Adapter->FriendlyName) +
                               "\"";
 
                      osc_write_log_info("openSYDE IP-TP", c_Info);
@@ -321,12 +321,12 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
    if (orc_Connection.x_Socket == m_WsInvalidSocket())
    {
       osc_write_log_error("openSYDE IP-TP", "Error at TCP socket(): " + QString::number(WSAGetLastError()) +
-                          " IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
+                          " IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress).ToQString());
       q_Error = true;
    }
    else
    {
-      osc_write_log_info("openSYDE IP-TP", "TCP socket OK IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
+      osc_write_log_info("openSYDE IP-TP", "TCP socket OK IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress).ToQString());
    }
 
    if (q_Error == false)
@@ -337,7 +337,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
       {
          osc_write_log_error("openSYDE IP-TP",
                              "TCP socket ioctlsocket() failed. Error: " + QString::number(WSAGetLastError()) +
-                             "IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
+                             "IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress).ToQString());
          q_Error = true;
       }
    }

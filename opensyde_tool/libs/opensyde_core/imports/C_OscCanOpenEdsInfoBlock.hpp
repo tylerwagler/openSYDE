@@ -31,7 +31,7 @@ public:
    C_OscCanOpenEdsDeviceInfoBlock c_DeviceInfo;
 
    void CalcHash(uint32_t & oru32_HashValue) const;
-   int32_t LoadFromFile(QSettings & orc_File, stw::scl::C_SclString & orc_LastError);
+   int32_t LoadFromFile(QSettings & orc_File, QString & orc_LastError);
 
    uint8_t GetGranularity(void) const;
 };
