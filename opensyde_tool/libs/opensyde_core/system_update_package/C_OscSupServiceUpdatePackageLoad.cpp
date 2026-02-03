@@ -128,6 +128,9 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const C_
    mh_Init();
 
    std::vector<std::vector<uint8_t> > c_NodeSignatureKeys;
+   mhc_WarningMessages.clear();
+
+   std::vector<std::vector<uint8_t> > c_NodeSignatureKeys;
    mh_GetPemFileContent(orc_NodeSignaturePemFiles,
                         c_NodeSignatureKeys);
    s32_Retval = h_ProcessPackage(orc_PackagePath, orc_TargetUnzipPath, orc_SystemDefinition, oru32_ActiveBusIndex,
@@ -205,6 +208,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const C_SclString & o
    C_SclString c_TargetUnzipPath = C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(orc_TargetUnzipPath);
 
    mh_Init();
+   mhc_WarningMessages.clear();
 
    // as a precaution of inconsistent data, clear the input container
    orc_ActiveNodes.clear();
@@ -236,7 +240,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const C_SclString & o
                                                                           orc_ActiveNodes,
                                                                           orc_NodesUpdateOrder,
                                                                           orc_ApplicationsToWrite,
-                                                                          orc_WarningMessages,
+                                                                          mhc_WarningMessages,
                                                                           orc_ErrorMessage, oq_IsZip);
          }
          else if (u32_FileVersion == 2U)

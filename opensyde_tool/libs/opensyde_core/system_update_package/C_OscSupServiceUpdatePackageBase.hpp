@@ -45,7 +45,7 @@ protected:
    static const stw::scl::C_SclString mhc_SUP_SYSDEF;
    static const stw::scl::C_SclString mhc_INI_DEV;
 
-   static stw::scl::C_SclStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
+   static stw::scl::QStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
                                                          // not available
    static stw::scl::C_SclString mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
@@ -79,7 +79,7 @@ protected:
    static int32_t mh_AddFileSectionToDigest(std::ifstream & orc_File, C_OscSecurityEcdsa & orc_Signature,
                                             const uint32_t ou32_SectionLength);
    static void mh_Init(void);
-   static void mh_GetWarningsAndErrors(stw::scl::C_SclStringList & orc_WarningMessages,
+   static void mh_GetWarningsAndErrors(stw::scl::QStringList & orc_WarningMessages,
                                        stw::scl::C_SclString & orc_ErrorMessage);
    static void mh_DigestToString(const uint8_t (&orau8_DigestBin)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH],
                                  stw::scl::C_SclString & orc_Digest);

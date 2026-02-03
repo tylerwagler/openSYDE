@@ -60,7 +60,7 @@ const C_SclString C_OscSupServiceUpdatePackageBase::mhc_INI_DEV = "devices.ini";
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-stw::scl::C_SclStringList C_OscSupServiceUpdatePackageBase::mhc_WarningMessages; // global warnings e.g. if update
+stw::scl::QStringList C_OscSupServiceUpdatePackageBase::mhc_WarningMessages; // global warnings e.g. if update
                                                                                  // position
                                                                                  // of
                                                                                  // active node is not available

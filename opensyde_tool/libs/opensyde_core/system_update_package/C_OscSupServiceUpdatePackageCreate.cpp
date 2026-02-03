@@ -646,7 +646,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_SupDefParamAdapter(const uint32_t
             // strange: internal configuration error - should not happen!
             const C_SclString c_Message = "Could not find update position for active node \"" +
                                           QString::number(u32_Pos) + "\".";
-            mhc_WarningMessages.Append(c_Message);
+            mhc_WarningMessages.append(c_Message);
             osc_write_log_warning("Creating Update Package", c_Message);
             s32_Return = C_WARN;
          }
