@@ -65,8 +65,8 @@ void C_KFXVariableLists::CalcCRCOverAllLists(uint16_t & oru16_CRC, const bool oq
 
    for (u16_Index = 0; u16_Index < this->ac_DefaultNames.size(); u16_Index++)
    {
-      C_SclChecksums::CalcCRC16STW(this->ac_DefaultNames[u16_Index].c_str(), this->ac_DefaultNames[u16_Index].Length(),
-                                   oru16_CRC);
+      C_SclChecksums::CalcCRC16STW(this->ac_DefaultNames[u16_Index].toUtf8().constData(),
+                                   static_cast<uint32_t>(this->ac_DefaultNames[u16_Index].length()), oru16_CRC);
    }
 }
 

@@ -44,7 +44,7 @@ public:
 
    uint16_t u16_CRCOverCRCsServer;                                     ///< last EEPROM value CRC over CRCs read from
                                                                        // ECU
-   QList<stw::scl::C_SclString> ac_DefaultNames; //names of default sets
+   QList<QString> ac_DefaultNames; //names of default sets
 };
 
 //---------------------------------------------------------------------------

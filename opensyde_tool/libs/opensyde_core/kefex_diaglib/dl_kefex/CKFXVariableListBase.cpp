@@ -74,7 +74,7 @@ void C_KFXVariableListBase::CalcCRCOverList(uint16_t & oru16_CRC, const bool oq_
    int32_t i;
    uint8_t au8_Data[4];
 
-   C_SclChecksums::CalcCRC16STW(this->c_ListName.c_str(),   this->c_ListName.Length(),         oru16_CRC);
+   C_SclChecksums::CalcCRC16STW(this->c_ListName.toUtf8().constData(), static_cast<uint32_t>(this->c_ListName.length()), oru16_CRC);
    C_SclChecksums::CalcCRC16STW(&this->u8_ListType,         sizeof(this->u8_ListType),         oru16_CRC);
    au8_Data[0] = static_cast<uint8_t>(this->q_CheckSummed);
    C_SclChecksums::CalcCRC16STW(&au8_Data[0],       1U,       oru16_CRC);

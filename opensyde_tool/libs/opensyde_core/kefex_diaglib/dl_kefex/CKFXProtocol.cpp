@@ -112,18 +112,18 @@ void C_KFXProtocol::m_ProtocolSend(const bool oq_OK, const T_STWCAN_Msg_TX & orc
    m_ProtocolCheckInit();
    if (mpt_DebugFileHandle != NULL)
    {
-      C_SclString c_Text;
-      C_SclString c_Help;
+      QString c_Text;
+      QString c_Help;
       C_SclString c_Time;
       int32_t i;
 
       c_Time = C_CMONProtocols::FormatTimeStamp(TGL_GetTickCountUS(), false);
       if (u8_CreateCommProtocol == 1U)
       {
-         (void)c_Text = QString::asprintf("%s Msg_Sent: MSG: %03x %d ", c_Time.c_str(), orc_Msg.u32_ID, orc_Msg.u8_DLC);
+         (void)c_Text = QString::asprintf("%s Msg_Sent: MSG: %03x %d ", c_Time.toUtf8().constData(), orc_Msg.u32_ID, orc_Msg.u8_DLC);
          for (i = 0; i < orc_Msg.u8_DLC; i++)
          {
-            (void)c_Help.PrintFormatted("%02x ", orc_Msg.au8_Data[i]);
+            (void)c_Help = QString::asprintf("%02x ", orc_Msg.au8_Data[i]);
             c_Text += c_Help;
          }
          c_Text += "\r\n    ";
@@ -139,7 +139,7 @@ void C_KFXProtocol::m_ProtocolSend(const bool oq_OK, const T_STWCAN_Msg_TX & orc
       {
          c_Text += " sent ERROR !\r\n";
       }
-      fwrite(c_Text.c_str(), 1, c_Text.Length(), mpt_DebugFileHandle);
+      fwrite(c_Text.toUtf8().constData(), 1, static_cast<size_t>(c_Text.length()), mpt_DebugFileHandle);
    }
 }
 
@@ -160,14 +160,14 @@ void C_KFXProtocol::m_ProtocolReceive(const T_STWCAN_Msg_RX & orc_Msg)
          (void)c_Text = QString::asprintf("%s Msg_Read OK: MSG: %03x %d ", c_Time.c_str(), orc_Msg.u32_ID, orc_Msg.u8_DLC);
          for (i = 0; i < orc_Msg.u8_DLC; i++)
          {
-            (void)c_Help.PrintFormatted("%02x ", orc_Msg.au8_Data[i]);
+            (void)c_Help = QString::asprintf("%02x ", orc_Msg.au8_Data[i]);
             c_Text += c_Help;
          }
          c_Text += "\r\n    ";
       }
 
       c_Text += (c_Time + " " + mc_Protocol.MessageToString(orc_Msg) + "\r\n");
-      fwrite(c_Text.c_str(), 1, c_Text.Length(), mpt_DebugFileHandle);
+      fwrite(c_Text.toUtf8().constData(), 1, static_cast<size_t>(c_Text.length()), mpt_DebugFileHandle);
    }
 }
 #endif

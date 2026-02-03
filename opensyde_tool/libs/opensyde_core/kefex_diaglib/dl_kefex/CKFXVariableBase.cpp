@@ -428,15 +428,15 @@ C_SclString C_KFXVariableBase::GetStringValue(void) const
 
 void C_KFXVariableBase::SetStringValue(const C_SclString & orc_Value)
 {
-   if (orc_Value.Length() < this->mu32_Size) //consider the '\0' -> "<"
+   if (orc_Value.length() < this->mu32_Size) //consider the '\0' -> "<"
    {
       //preset to zero to leave remainder after \0 in a clean state:
       (void)std::memset(this->pu8_Value, 0, this->mu32_Size);
-      std::sprintf(reinterpret_cast<char_t *>(this->pu8_Value), "%s", orc_Value.c_str());
+      std::sprintf(reinterpret_cast<char_t *>(this->pu8_Value), "%s", orc_Value.toUtf8().constData());
    }
    else
    {
-      (void)std::memcpy(this->pu8_Value, orc_Value.c_str(), this->mu32_Size);
+      (void)std::memcpy(this->pu8_Value, orc_Value.toUtf8().constData(), this->mu32_Size);
    }
 }
 
@@ -772,13 +772,13 @@ void C_KFXVariableBase::SetStringDefault(const C_SclString & orc_Value, const ui
    {
       pu8_Data = &this->aau8_Defaults[ou16_DefaultIndex][0];
 
-      if (orc_Value.Length() < this->mu32_Size)
+      if (orc_Value.length() < this->mu32_Size)
       {
-         std::sprintf(reinterpret_cast<char_t *>(pu8_Data), "%s", orc_Value.c_str());
+         std::sprintf(reinterpret_cast<char_t *>(pu8_Data), "%s", orc_Value.toUtf8().constData());
       }
       else
       {
-         (void)std::memcpy(pu8_Data, orc_Value.c_str(), this->mu32_Size);
+         (void)std::memcpy(pu8_Data, orc_Value.toUtf8().constData(), this->mu32_Size);
       }
    }
 }
@@ -857,7 +857,7 @@ void C_KFXVariableBase::CalcCRCOverEntry(uint16_t & oru16_CRC, const bool oq_Ski
    int32_t s32_Default;
    uint8_t u8_Index;
 
-   C_SclChecksums::CalcCRC16STW(this->c_Name.c_str(),  this->c_Name.Length(), oru16_CRC);
+   C_SclChecksums::CalcCRC16STW(this->c_Name.toUtf8().constData(), static_cast<uint32_t>(this->c_Name.length()), oru16_CRC);
    C_SclChecksums::CalcCRC16STW(&this->u32_Address,  sizeof(this->u32_Address), oru16_CRC);
    C_SclChecksums::CalcCRC16STW(&this->mu32_Size,  sizeof(this->mu32_Size), oru16_CRC);
    C_SclChecksums::CalcCRC16STW(&this->u8_Type,  sizeof(this->u8_Type), oru16_CRC);
@@ -874,11 +874,11 @@ void C_KFXVariableBase::CalcCRCOverEntry(uint16_t & oru16_CRC, const bool oq_Ski
    }
    C_SclChecksums::CalcCRC16STW(&this->s32_ScalingFactor, sizeof(this->s32_ScalingFactor), oru16_CRC);
    C_SclChecksums::CalcCRC16STW(&this->u8_ScalingDigits, sizeof(this->u8_ScalingDigits), oru16_CRC);
-   C_SclChecksums::CalcCRC16STW(this->c_Unit.c_str(), this->c_Unit.Length(), oru16_CRC);
+   C_SclChecksums::CalcCRC16STW(this->c_Unit.toUtf8().constData(), static_cast<uint32_t>(this->c_Unit.length()), oru16_CRC);
    for (u8_Index = 0U; u8_Index < KFX_DATA_MAX_NUM_LANGUAGES; u8_Index++)
    {
-      C_SclChecksums::CalcCRC16STW(this->ac_Comments[u8_Index].c_str(), this->ac_Comments[u8_Index].Length(),
-                                   oru16_CRC);
+      C_SclChecksums::CalcCRC16STW(this->ac_Comments[u8_Index].toUtf8().constData(),
+                                   static_cast<uint32_t>(this->ac_Comments[u8_Index].length()), oru16_CRC);
    }
    C_SclChecksums::CalcCRC16STW(&this->q_LocationRAM, sizeof(this->q_LocationRAM), oru16_CRC);
    C_SclChecksums::CalcCRC16STW(&this->e_DefTransmissionType, sizeof(this->e_DefTransmissionType), oru16_CRC);

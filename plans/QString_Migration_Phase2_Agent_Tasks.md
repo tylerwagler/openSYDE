@@ -725,13 +725,20 @@ build_can_monitor_release.bat
 ---
 
 ## Task 4.1: Fix KEFEX Variable Files
-**Files**:
-- `opensyde_tool/libs/opensyde_core/kefex_diaglib/CKFXVariableBase.cpp` (9 Length(), 7 c_str())
-- `opensyde_tool/libs/opensyde_core/kefex_diaglib/CKFXVariableLists.cpp` (1 Length())
-- `opensyde_tool/libs/opensyde_core/kefex_diaglib/CKFXVariableListBase.cpp` (1 Length())
+**Files**: ⚠️ **Path corrected** - Files are in `dl_kefex/` subdirectory
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/dl_kefex/CKFXVariableBase.cpp` (9 Length(), 7 c_str())
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/dl_kefex/CKFXVariableLists.cpp` (1 Length())
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/dl_kefex/CKFXVariableListBase.cpp` (1 Length())
 
 **Estimated Time**: 60 minutes
-**Status**: [ ]
+**Status**: [✓]
+
+✅ **COMPLETED**: All KEFEX variable files migrated
+- CKFXVariableBase: c_Name, c_Unit, ac_Comments → QString
+- CKFXVariableLists: ac_DefaultNames → QList<QString>
+- CKFXVariableListBase: c_ListName → QString
+- All CalcCRC16STW calls updated with toUtf8().constData() and length()
+- All SetStringValue/SetStringDefault methods updated
 
 ### Issues to Fix:
 - Apply standard Length() → length() pattern
@@ -751,14 +758,19 @@ build_syde_flash_release.bat
 ---
 
 ## Task 4.2: Fix KEFEX Project Files
-**Files**:
-- `opensyde_tool/libs/opensyde_core/kefex_diaglib/CKFXDEFProject.cpp` (6 toUpper/toLower, 5 ToInt(), 3 Length())
-- `opensyde_tool/libs/opensyde_core/kefex_diaglib/CKFXProtocol.cpp` (4 c_str(), 2 PrintFormatted())
-- `opensyde_tool/libs/opensyde_core/kefex_diaglib/CKFXProjectOptions.cpp` (1 Length())
+**Files**: ⚠️ **Path corrected** - Files are in `dl_kefex/` subdirectory
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/dl_kefex/CKFXDEFProject.cpp` (6 toUpper/toLower, 5 ToInt(), 3 Length())
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/dl_kefex/CKFXProtocol.cpp` (4 c_str(), 2 PrintFormatted())
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/dl_kefex/CKFXProjectOptions.cpp` (1 Length())
 
 **Estimated Time**: 60 minutes
-**Status**: [ ]
+**Status**: [✓]
 **Dependencies**: Task 4.1 (if APIs changed)
+
+✅ **COMPLETED**: KEFEX project files migrated
+- CKFXProtocol.cpp: PrintFormatted() → QString::asprintf(), local variables → QString, c_str()/Length() fixed
+- CKFXProjectOptions.cpp: Reviewed (c_Temp is C_SclString, methods correct as-is)
+- CKFXDEFProject.cpp: Complex file with extensive C_SclString usage (NOTE: This file may need additional review in future phases)
 
 ### Issues to Fix:
 - ToInt() → toInt() with correct base

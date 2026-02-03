@@ -125,9 +125,9 @@ public:
    C_KFXVariableBase & operator =(const C_KFXVariableBase & orc_Source);
 
    //Simple fields:
-   stw::scl::C_SclString c_Name;
-   stw::scl::C_SclString c_Unit;
-   stw::scl::C_SclString ac_Comments[KFX_DATA_MAX_NUM_LANGUAGES];
+   QString c_Name;
+   QString c_Unit;
+   QString ac_Comments[KFX_DATA_MAX_NUM_LANGUAGES];
 
    uint8_t u8_Class;     ///< matlab/simulink variable class; 0 = signal; 1 = parameter
    uint32_t u32_Address; ///< address (in EEPROM or ROM)

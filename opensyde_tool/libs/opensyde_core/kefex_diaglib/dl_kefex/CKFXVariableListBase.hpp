@@ -42,7 +42,7 @@ public:
    uint8_t u8_ListType; ///< RAM,EEPROM
    bool q_CheckSummed;
    uint32_t u32_CheckSumAddress;
-   stw::scl::C_SclString c_ListName;
+   QString c_ListName;
 
    uint64_t u64_CRCServer; ///< last EEPROM value CRC read from ECU
 
