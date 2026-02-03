@@ -798,7 +798,9 @@ build_syde_flash_release.bat
 - `opensyde_tool/libs/opensyde_core/project/system/system_update_package/C_OscSupDefinitionFiler.cpp` (2 ToInt())
 
 **Estimated Time**: 90 minutes
-**Status**: [ ]
+**Status**: [DEFERRED]
+
+⚠️ **DEFERRED**: These files use C_SclString in API signatures and XML parsing contexts. The ToInt() calls at lines 154 and 163 are on C_SclString variables returned by GetNodeContent(), so they're currently correct. Full migration requires updating XML parser return types and coordinating API changes across multiple callers. Recommend deferring to Phase 3 or dedicated refactoring sprint.
 
 ### Issues to Fix:
 
@@ -833,8 +835,10 @@ build_syde_flash_release.bat
 ## Task 4.4: Fix C_OscZipFile API
 **File**: `opensyde_tool/libs/opensyde_core/C_OscZipFile.hpp/.cpp`
 **Estimated Time**: 45 minutes
-**Status**: [ ]
+**Status**: [DEFERRED]
 **Dependencies**: Task 4.3 (related API changes)
+
+⚠️ **DEFERRED**: API signature changes for h_AppendFilesRelative() require coordinating with all callers. Related to Task 4.3 system update package work. Recommend deferring to ensure consistent API migration strategy.
 
 ### Issues to Fix:
 
