@@ -64,11 +64,11 @@ uint16_t C_OscChecksummedIniFile::m_CalcCheckSum(const bool oq_Fast)
 {
    uint32_t u32_NumSections;
    uint16_t u16_CheckSumCalc;
-   C_SclStringList c_SectionList;
-   C_SclStringList c_DirectivesValues;
+   QStringList c_SectionList;
+   QStringList c_DirectivesValues;
 
    this->ReadSections(&c_SectionList);
-   u32_NumSections = static_cast<uint16_t>(c_SectionList.GetCount());
+   u32_NumSections = static_cast<uint16_t>(c_SectionList.count());
    u16_CheckSumCalc = 58453U;
    for (uint32_t u32_Section = 0U; u32_Section < u32_NumSections; u32_Section++)
    {

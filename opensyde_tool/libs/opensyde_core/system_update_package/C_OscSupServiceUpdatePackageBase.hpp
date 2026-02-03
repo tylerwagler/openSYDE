@@ -45,29 +45,29 @@ protected:
    static const stw::scl::C_SclString mhc_SUP_SYSDEF;
    static const stw::scl::C_SclString mhc_INI_DEV;
 
-   static stw::scl::QStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
+   static QStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
                                                          // not available
-   static stw::scl::C_SclString mhc_ErrorMessage;        // description of error which caused the service update package
+   static C_SclString mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
 
    static int32_t mh_CheckCommonSecurityParameters(const std::vector<uint8_t> & orc_EncryptNodes,
-                                                   const std::vector<stw::scl::C_SclString> & orc_EncryptNodesPassword,
+                                                   const std::vector<QString> & orc_EncryptNodesPassword,
                                                    const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
-                                                   const uint32_t ou32_NumNodes, const stw::scl::C_SclString & orc_Mode,
-                                                   const stw::scl::C_SclString & orc_Function);
+                                                   const uint32_t ou32_NumNodes, const C_SclString & orc_Mode,
+                                                   const C_SclString & orc_Function);
 
    static void mh_GetSydeSecureDefFileNames(const C_OscSystemDefinition & orc_SystemDefinition,
-                                            const stw::scl::C_SclString & orc_TargetPath,
-                                            std::vector<stw::scl::C_SclString> & orc_AbsPath,
-                                            std::vector<stw::scl::C_SclString> & orc_RelPath);
+                                            const C_SclString & orc_TargetPath,
+                                            std::vector<QString> & orc_AbsPath,
+                                            std::vector<QString> & orc_RelPath);
    static void mh_GetNodeFolderNames(const C_OscSystemDefinition & orc_SystemDefinition,
-                                     const stw::scl::C_SclString & orc_TargetPath,
-                                     std::vector<stw::scl::C_SclString> & orc_AbsPath,
-                                     std::vector<stw::scl::C_SclString> & orc_RelPath);
+                                     const C_SclString & orc_TargetPath,
+                                     std::vector<QString> & orc_AbsPath,
+                                     std::vector<QString> & orc_RelPath);
    static void mh_AdaptEncryptionParameters(const std::vector<uint8_t> & orc_InEncryptNodes,
-                                            const std::vector<stw::scl::C_SclString> & orc_InEncryptNodesPassword,
+                                            const std::vector<QString> & orc_InEncryptNodesPassword,
                                             const uint32_t ou32_NodeCount, std::vector<uint8_t> & orc_OutEncryptNodes,
-                                            std::vector<stw::scl::C_SclString> & orc_OutEncryptNodesPassword);
+                                            std::vector<QString> & orc_OutEncryptNodesPassword);
    static void mh_AdaptCommonSignatureParameters(const std::vector<std::vector<uint8_t> > & orc_InNodeSignatureKeys,
                                                  const uint32_t ou32_NodeCount,
                                                  std::vector<std::vector<uint8_t> > & orc_OutNodeSignatureKeys);
@@ -79,8 +79,8 @@ protected:
    static int32_t mh_AddFileSectionToDigest(std::ifstream & orc_File, C_OscSecurityEcdsa & orc_Signature,
                                             const uint32_t ou32_SectionLength);
    static void mh_Init(void);
-   static void mh_GetWarningsAndErrors(stw::scl::QStringList & orc_WarningMessages,
-                                       stw::scl::C_SclString & orc_ErrorMessage);
+   static void mh_GetWarningsAndErrors(QStringList & orc_WarningMessages,
+                                       QString & orc_ErrorMessage);
    static void mh_DigestToString(const uint8_t (&orau8_DigestBin)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH],
                                  stw::scl::C_SclString & orc_Digest);
 };

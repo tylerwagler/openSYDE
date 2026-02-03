@@ -1,0 +1,22 @@
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem build SYDEflash application 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set PROJECT_FOLDER=..\pjt\SYDEflash 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set "PATH=C:\Qt\Tools\mingw1310_64\bin;C:\Qt\Tools\CMake_64\bin;C:\Qt\Tools\Ninja;C:\Qt\6.10.1\mingw_64;C:\SPB_Data\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\SPB_Data\bin;C:\Program Files\PowerShell\7;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Qt\5.15.2\mingw81_32\bin;C:\Qt\Tools\mingw810_32\bin;C:\Program Files\Microchip\xc8\v2.46\bin;C:\Program Files\Microchip\xc-dsc\v3.00\bin;C:\Program Files\Microchip\xc16\v2.10\bin;C:\Program Files\Microchip\xc32\v4.35\bin;C:\Program Files\dotnet;C:\Program Files\NVIDIA Corporation\NVIDIA app\NvDLISR;C:\Program Files\CMake\bin;C:\Program Files\Microchip\xc8\v3.10\bin;C:\Program Files\Microchip\xc-dsc\v3.30\bin;C:\Program Files\Git\cmd;C:\Program Files\PowerShell\7;C:\Program Files\PuTTY;C:\Program Files\Microsoft SQL Server\170\Tools\Binn;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit;C:\Program Files (x86)\Vector CANdb++ 3.1\Exec32;C:\Program Files\nodejs;C:\Program Files\GitHub CLI;C:\Users\tyler\.local\bin;C:\Users\tyler\AppData\Local\Programs\Python\Python313\Scripts;C:\Users\tyler\AppData\Local\Programs\Python\Python313;C:\Users\tyler\AppData\Local\Programs\Python\Launcher;C:\Users\tyler\AppData\Local\particle\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0;C:\WINDOWS\System32\OpenSSH;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Qt\5.15.2\mingw81_32\bin;C:\Qt\Tools\mingw810_32\bin;C:\Program Files\Git\cmd;C:\Program Files\Microchip\xc8\v2.46\bin;C:\Program Files\Microchip\xc-dsc\v3.00\bin;C:\Program Files\Microchip\xc16\v2.10\bin;C:\Program Files\Microchip\xc32\v4.35\bin;C:\Program Files (x86)\Vector CANdb++ 3.1\Exec32;C:\Program Files\PowerShell\7;C:\Program Files\WireGuard;C:\Users\tyler\AppData\Local\Microsoft\WindowsApps;C:\Users\tyler\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\tyler\AppData\Local\GitHubDesktop\bin;C:\Users\tyler\AppData\Local\Microsoft\WindowsApps;C:\Users\tyler\.dotnet\tools;C:\Users\tyler\AppData\Local\Programs\Antigravity\bin;C:\Users\tyler\AppData\Roaming\npm;C:\Qt\Tools\mingw1310_64\bin;C:\Users\tyler\AppData\Local\Microsoft\WinGet\Packages\UniversalCtags.Ctags_Microsoft.Winget.Source_8wekyb3d8bbwe\;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl" 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set TEMP_FOLDER=..\temp_SYDEflash_Release 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set BUILD_TARGET=Release 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set TOOLCHAIN=../pjt/toolchain_windows.cmake 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem Generate timestamp for log file 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set TIMESTAMP=20260203_161849 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>set TIMESTAMP=20260203_161849 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>rem Run build and save output to log 
+
+C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat>call "C:\Users\tyler\Dev\repos\openSYDE\opensyde_tool\bat\\build_with_cmake.bat" ..\pjt\SYDEflash ..\temp_SYDEflash_Release Release ../pjt/toolchain_windows.cmake  1>build_syde_flash_20260203_161849.log 2>&1 

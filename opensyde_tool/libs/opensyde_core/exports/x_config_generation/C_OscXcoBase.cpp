@@ -34,10 +34,10 @@ const C_SclString C_OscXcoBase::hc_INI_DEV_FOLDER = "device_definitions";
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-stw::scl::C_SclStringList C_OscXcoBase::mhc_WarningMessages; // global warnings e.g. if update
-                                                             // position
-                                                             // of
-                                                             // active node is not available
+QStringList C_OscXcoBase::mhc_WarningMessages; // global warnings e.g. if update
+                                               // position
+                                               // of
+                                               // active node is not available
 stw::scl::C_SclString C_OscXcoBase::mhc_ErrorMessage;        // description of error which caused
                                                              // the
                                                              // service update package to fail
@@ -64,7 +64,7 @@ C_SclString C_OscXcoBase::h_GetPackageExtension()
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscXcoBase::mh_Init()
 {
-   mhc_WarningMessages.Clear(); // clear old warning messages
+   mhc_WarningMessages.clear(); // clear old warning messages
    mhc_ErrorMessage = "";       // clear old error message
 }
 
@@ -75,7 +75,7 @@ void C_OscXcoBase::mh_Init()
    \param[in,out]  orc_ErrorMessage       Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXcoBase::mh_GetWarningsAndErrors(C_SclStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage)
+void C_OscXcoBase::mh_GetWarningsAndErrors(QStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage)
 {
    orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
    orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller

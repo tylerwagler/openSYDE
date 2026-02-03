@@ -150,8 +150,8 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParameters(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_GetSydeSecureDefFileNames(const C_OscSystemDefinition & orc_SystemDefinition,
                                                                     const C_SclString & orc_TargetPath,
-                                                                    std::vector<C_SclString> & orc_AbsPath,
-                                                                    std::vector<C_SclString> & orc_RelPath)
+                                                                    std::vector<QString> & orc_AbsPath,
+                                                                    std::vector<QString> & orc_RelPath)
 {
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
    {
@@ -177,8 +177,8 @@ void C_OscSupServiceUpdatePackageBase::mh_GetSydeSecureDefFileNames(const C_OscS
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(const C_OscSystemDefinition & orc_SystemDefinition,
                                                              const C_SclString & orc_TargetPath,
-                                                             std::vector<C_SclString> & orc_AbsPath,
-                                                             std::vector<C_SclString> & orc_RelPath)
+                                                             std::vector<QString> & orc_AbsPath,
+                                                             std::vector<QString> & orc_RelPath)
 {
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
    {
@@ -201,8 +201,8 @@ void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(const C_OscSystemDe
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_AdaptEncryptionParameters(const std::vector<uint8_t> & orc_InEncryptNodes,
-                                                                    const std::vector<C_SclString> & orc_InEncryptNodesPassword, const uint32_t ou32_NodeCount, std::vector<uint8_t> & orc_OutEncryptNodes,
-                                                                    std::vector<C_SclString> & orc_OutEncryptNodesPassword)
+                                                                    const std::vector<QString> & orc_InEncryptNodesPassword, const uint32_t ou32_NodeCount, std::vector<uint8_t> & orc_OutEncryptNodes,
+                                                                    std::vector<QString> & orc_OutEncryptNodesPassword)
 {
    orc_OutEncryptNodes = orc_InEncryptNodes;
    orc_OutEncryptNodesPassword = orc_InEncryptNodesPassword;
@@ -399,8 +399,8 @@ void C_OscSupServiceUpdatePackageBase::mh_Init()
    \param[in,out]  orc_ErrorMessage       Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupServiceUpdatePackageBase::mh_GetWarningsAndErrors(C_SclStringList & orc_WarningMessages,
-                                                               C_SclString & orc_ErrorMessage)
+void C_OscSupServiceUpdatePackageBase::mh_GetWarningsAndErrors(QStringList & orc_WarningMessages,
+                                                               QString & orc_ErrorMessage)
 {
    orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
    orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller

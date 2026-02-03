@@ -103,12 +103,12 @@ using namespace stw::diag_lib;
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
     const C_SclString &orc_ProjectPath, C_OscNodeDataPool &orc_DataPool,
-    stw::scl::C_SclStringList &orc_ImportInformation) {
+    QStringList &orc_ImportInformation) {
   stw::diag_lib::C_KFXProjectOptions c_ProjectOptions;
   stw::diag_lib::C_KFXVariableLists c_VariableLists;
   int32_t s32_Result = C_NO_ERR;
 
-  orc_ImportInformation.Clear();
+  orc_ImportInformation.clear();
 
   if ((orc_DataPool.e_Type != C_OscNodeDataPool::eDIAG) &&
       (orc_DataPool.e_Type != C_OscNodeDataPool::eNVM)) {
@@ -129,7 +129,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
                                  "If gaps are intended to be kept between "
                                  "individual lists those should be "
                                  "added manually after the import.";
-      orc_ImportInformation.Add(c_Info);
+      orc_ImportInformation.append(c_Info);
     }
 
     // set basic Datapool information:
@@ -285,7 +285,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
             const C_SclString c_Info =
                 "Variable \"" + c_List.c_Name + "." + rc_Element.c_Name +
                 "\" has an unsupported type. It was imported as uint8.";
-            orc_ImportInformation.Add(c_Info);
+            orc_ImportInformation.append(c_Info);
           }
 
           // set min and max values
@@ -301,7 +301,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
                                        rc_Element.c_Name +
                                        "\" is an array with only one entry. It "
                                        "was imported as non-array element.";
-            orc_ImportInformation.Add(c_Info);
+            orc_ImportInformation.append(c_Info);
 
             // collapse to non-array (do so after importing min/max and Dataset
             // so we get the proper data imported.
@@ -357,7 +357,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
                     rc_ElementRamView.GetStringDefault(u16_DataSetIndex) +
                     "\" without zero termination. "
                     "The final character was replaced by a zero termination.";
-                orc_ImportInformation.Add(c_Info);
+                orc_ImportInformation.append(c_Info);
 
                 rc_Element.c_DataSetValues[u16_DataSetIndex]
                     .SetValueArrS8Element(0, rc_Element.GetSizeByte() - 1);
@@ -1086,7 +1086,7 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
 void C_OscImportRamView::mh_AdaptName(
     QString &orc_Name, QString &orc_Comment,
     const QString &orc_ElementDesignator,
-    stw::scl::C_SclStringList &orc_ImportInformation) {
+    QStringList &orc_ImportInformation) {
   const int32_t s32_C_ITEM_MAX_CHAR_COUNT = 31;
   QString c_NewName = orc_Name;
 
@@ -1112,9 +1112,9 @@ void C_OscImportRamView::mh_AdaptName(
     orc_Comment += ("Original name (from import source): \"" + orc_Name + "\"");
 
     // add report:
-    orc_ImportInformation.Add("Name of " + orc_ElementDesignator + " \"" +
-                              orc_Name + "\" was changed to \"" + c_NewName +
-                              "\".");
+    orc_ImportInformation.append("Name of " + orc_ElementDesignator + " \"" +
+                                 orc_Name + "\" was changed to \"" + c_NewName +
+                                 "\".");
 
     orc_Name = c_NewName;
   }

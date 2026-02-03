@@ -15,6 +15,9 @@
  */
 #include "precomp_headers.hpp"
 
+#include <QFile>
+#include <QTextStream>
+
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
@@ -70,28 +73,37 @@ C_OscConfFileHandler::~C_OscConfFileHandler() {}
 */
 //---------------------------------------------------------------------------------------------------------------------/
 int32_t C_OscConfFileHandler::LoadSettings(const QString &orc_Path) {
-  C_SclStringList c_StringListSource;
-  C_SclStringList c_StringListWithoutComments;
+  QStringList c_StringListSource;
+  QStringList c_StringListWithoutComments;
   int32_t s32_Result = C_NO_ERR;
 
   mc_ConfigFilePath = orc_Path;
 
   try {
-    c_StringListSource.LoadFromFile(orc_Path);
+    QFile c_File(orc_Path);
+    if (c_File.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      QTextStream c_Stream(&c_File);
+      while (!c_Stream.atEnd()) {
+        c_StringListSource.append(c_Stream.readLine());
+      }
+      c_File.close();
+    } else {
+      s32_Result = C_NOACT;
+    }
   } catch (...) {
     s32_Result = C_NOACT;
   }
 
   if (s32_Result == C_NO_ERR) {
     // extract only lines without comments:
-    for (uint32_t u32_Line = 0U; u32_Line < c_StringListSource.GetCount();
+    for (uint32_t u32_Line = 0U; u32_Line < static_cast<uint32_t>(c_StringListSource.count());
          u32_Line++) {
       const QString c_Line =
-          c_StringListSource.Strings[static_cast<int>(u32_Line)].trimmed();
+          c_StringListSource.at(static_cast<int>(u32_Line)).trimmed();
 
       if ((c_Line != "") && (!c_Line.startsWith("#"))) {
-        c_StringListWithoutComments.Add(
-            c_StringListSource.Strings[static_cast<int>(u32_Line)]);
+        c_StringListWithoutComments.append(
+            c_StringListSource.at(static_cast<int>(u32_Line)));
       }
     }
 
@@ -126,11 +138,20 @@ int32_t C_OscConfFileHandler::LoadSettings(const QString &orc_Path) {
 int32_t C_OscConfFileHandler::mh_ReplaceSettings(
     const QString &orc_Path,
     const std::vector<std::pair<QString, QString>> &orc_Configs) {
-  C_SclStringList c_StringList;
+  QStringList c_StringList;
   int32_t s32_Result = C_NO_ERR;
 
   try {
-    c_StringList.LoadFromFile(orc_Path);
+    QFile c_File(orc_Path);
+    if (c_File.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      QTextStream c_Stream(&c_File);
+      while (!c_Stream.atEnd()) {
+        c_StringList.append(c_Stream.readLine());
+      }
+      c_File.close();
+    } else {
+      s32_Result = C_NOACT;
+    }
   } catch (...) {
     s32_Result = C_NOACT;
   }
@@ -144,17 +165,33 @@ int32_t C_OscConfFileHandler::mh_ReplaceSettings(
           orc_Configs[u32_Counter];
       const QString c_NewEntry =
           rc_KeyValuePair.first + "=" + rc_KeyValuePair.second;
-      const int32_t s32_Index = c_StringList.IndexOfName(rc_KeyValuePair.first);
+      // Find index of line starting with "key="
+      int32_t s32_Index = -1;
+      for (int32_t s32_Pos = 0; s32_Pos < c_StringList.count(); ++s32_Pos) {
+        if (c_StringList[s32_Pos].startsWith(rc_KeyValuePair.first + "=")) {
+          s32_Index = s32_Pos;
+          break;
+        }
+      }
 
       if (s32_Index == -1) {
-        c_StringList.Append(c_NewEntry);
+        c_StringList.append(c_NewEntry);
       } else {
-        c_StringList.Strings[s32_Index] = c_NewEntry;
+        c_StringList[s32_Index] = c_NewEntry;
       }
     }
 
     try {
-      c_StringList.SaveToFile(orc_Path);
+      QFile c_File(orc_Path);
+      if (c_File.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream c_Stream(&c_File);
+        for (const QString &rc_Line : c_StringList) {
+          c_Stream << rc_Line << "\n";
+        }
+        c_File.close();
+      } else {
+        s32_Result = C_NOACT;
+      }
     } catch (...) {
       s32_Result = C_NOACT;
     }

@@ -14,8 +14,8 @@
  */
 #include <vector>
 
-#include "C_SclStringList.hpp"
 #include <QString>
+#include <QStringList>
 
 
 /* -- Namespace
@@ -41,7 +41,7 @@ public:
 protected:
   // Function for loading concrete settings. Must return C_CONFIG in error case
   virtual int32_t m_LoadSettings(
-      const stw::scl::C_SclStringList &orc_SettingsWithoutComments) = 0;
+      const QStringList &orc_SettingsWithoutComments) = 0;
   static int32_t mh_ReplaceSettings(
       const QString &orc_Path,
       const std::vector<std::pair<QString, QString>> &orc_Configs);

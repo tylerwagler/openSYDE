@@ -2,7 +2,7 @@
 
 This directory contains comprehensive documentation for the QString migration project (replacing legacy `C_SclString` with Qt's `QString`).
 
-**Last Updated**: 2026-02-02
+**Last Updated**: 2026-02-03
 **Last Updated By**: Claude Code
 **Coordinator**: tyler
 **Questions/Blockers**: Report in task document or create GitHub issue
@@ -13,14 +13,21 @@ This directory contains comprehensive documentation for the QString migration pr
 
 | Document | Purpose | For |
 |----------|---------|-----|
-| [QString_Migration_Phase2_Agent_Tasks.md](QString_Migration_Phase2_Agent_Tasks.md) | ⭐ **WORK HERE** - Discrete tasks ready for agents | Agents |
-| [QString_Migration_Phase2_Comprehensive_Status.md](QString_Migration_Phase2_Comprehensive_Status.md) | Detailed codebase analysis & sprint planning | Coordinators |
+| [QString_Migration_Phase3_Agent_Tasks.md](QString_Migration_Phase3_Agent_Tasks.md) | ⭐ **WORK HERE** - Phase 3 discrete tasks ready for agents | Agents |
 | [QString_Migration_Master_Plan.md](QString_Migration_Master_Plan.md) | Strategic overview & progress log | Everyone |
-| [QString_Migration_Status.md](QString_Migration_Status.md) | Historical tracking & pattern summary | Reference |
+| [Phase2_Agent_Tasks.md](../01_COMPLETED/QString_Migration_Phase2_Agent_Tasks.md) | Phase 2 tasks (COMPLETED - reference only) | Reference |
+| [Phase2_Status.md](../01_COMPLETED/QString_Migration_Phase2_Comprehensive_Status.md) | Phase 2 detailed analysis (COMPLETED) | Reference |
 
 ---
 
 ## 📋 What's Changed Recently
+
+### 2026-02-03 - Plans Folder Reorganization
+- ✅ Reorganized plans folder into 00_ACTIVE, 01_COMPLETED, 02_FUTURE, 03_TOOLS
+- ✅ Phase 2 documents moved to 01_COMPLETED (reference only)
+- ✅ Phase 3 is now the PRIMARY ACTIVE WORK
+- ✅ Created comprehensive plans/README.md for navigation
+- **Updated Primary Work Document**: `QString_Migration_Phase3_Agent_Tasks.md` ⭐
 
 ### 2026-02-02 - Critical Indexing Bug Warning Added
 - ⚠️ **CRITICAL**: Added comprehensive warnings about `indexOf()` vs `Pos()` indexing differences (0-based vs 1-based)
@@ -38,7 +45,7 @@ This directory contains comprehensive documentation for the QString migration pr
 ## Quick Start for Agents
 
 ### New Agent Starting Work:
-1. **Read**: `QString_Migration_Phase2_Agent_Tasks.md` ⭐ (START HERE)
+1. **Read**: `QString_Migration_Phase3_Agent_Tasks.md` ⭐ (START HERE - CURRENT WORK)
 2. **⚠️ CRITICAL**: Review the indexing warning section (SubString/mid and Pos/indexOf differences)
 3. **Claim a task**: Find an unclaimed `[ ]` task matching your skill level
 4. **Execute**: Follow the task's specific instructions and patterns
@@ -46,9 +53,9 @@ This directory contains comprehensive documentation for the QString migration pr
 6. **Commit**: Use `/commit <task-number> <description>` skill to commit changes with proper formatting
 
 ### Project Coordinator:
-1. **Status Overview**: `QString_Migration_Phase2_Comprehensive_Status.md`
-2. **Task Assignment**: `QString_Migration_Phase2_Agent_Tasks.md`
-3. **Planning**: `QString_Migration_Master_Plan.md`
+1. **Current Tasks**: `QString_Migration_Phase3_Agent_Tasks.md` (Phase 3 - ACTIVE)
+2. **Planning**: `QString_Migration_Master_Plan.md`
+3. **Phase 2 Reference**: `../01_COMPLETED/QString_Migration_Phase2_*.md` (completed work)
 4. **Risk Tracking**: See Risk Assessment section below
 
 ---
@@ -56,56 +63,59 @@ This directory contains comprehensive documentation for the QString migration pr
 ## Document Index
 
 ### 📋 Task Execution (Agent Work)
-- **`QString_Migration_Phase2_Agent_Tasks.md`** ⭐ PRIMARY WORK DOCUMENT
-  - 23 discrete tasks ready for agent assignment
-  - Specific file paths, line numbers, and patterns
+- **`QString_Migration_Phase3_Agent_Tasks.md`** ⭐ PRIMARY WORK DOCUMENT (CURRENT)
+  - 13 discrete tasks for Phase 3 (C_SclStringList migration)
+  - Organized into 5 sprints
+  - Specific file paths and patterns
   - Verification steps for each task
-  - Estimated time per task
+  - Estimated time: 14-18 hours total
   - Clear before/after code examples
 
-### 📊 Status & Analysis
+### 📊 Phase 2 Reference (COMPLETED)
+Located in `../01_COMPLETED/`:
+- **`QString_Migration_Phase2_Agent_Tasks.md`**
+  - 23 completed Phase 2 tasks (reference for patterns)
+  - Archived for reference
+
 - **`QString_Migration_Phase2_Comprehensive_Status.md`**
-  - Detailed codebase analysis (2,010 occurrences across 179 files)
-  - What's completed vs. what remains
+  - Detailed Phase 2 codebase analysis
   - File-by-file breakdown with issue counts
   - Risk assessment and success metrics
-  - 5-sprint execution plan overview
+
+- **`QString_Migration_Phase2_Complete_Summary.md`**
+  - Phase 2 completion summary
+  - Final statistics and lessons learned
 
 - **`QString_Migration_Status.md`**
   - Historical status tracking
   - Data classes migrated
-  - Filer/handler files fixed
   - Pattern summary
 
 ### 🗺️ Strategic Planning
-- **`QString_Migration_Master_Plan.md`**
+- **`QString_Migration_Master_Plan.md`** (in 00_ACTIVE)
   - Overall phase structure (Phases 1-5)
   - Current blockers and action items
   - Migration patterns reference
   - Progress log (session-by-session)
   - File-by-file migration checklist
 
-- **`QString_Migration_Phase2B_Pending.md`**
-  - Original Phase 2B issue categorization
-  - ~84 errors breakdown (now expanded in comprehensive status)
-  - Execution order recommendations
-
-### 📖 Historical Reference
-- **`QString_Migration_Phase2A_Completion.md`** (if exists)
-  - Phase 2A completion notes
-  - Lessons learned from initial migration
-
 ---
 
 ## Document Relationships
 
 ```
-Master Plan (Strategic)
-    ├─→ Comprehensive Status (Detailed Analysis)
-    │       └─→ Agent Tasks (Executable Work) ⭐ WORK HERE
-    │
-    └─→ Status Tracking (Historical)
-            └─→ Phase 2B Pending (Historical Issues)
+plans/
+├── README.md (Navigation for all plans)
+├── 00_ACTIVE/ (CURRENT WORK)
+│   ├── QString_Migration_README.md (You are here)
+│   ├── QString_Migration_Phase3_Agent_Tasks.md ⭐ WORK HERE
+│   └── QString_Migration_Master_Plan.md (Strategic)
+├── 01_COMPLETED/ (Phase 2 - Reference)
+│   ├── QString_Migration_Phase2_Agent_Tasks.md
+│   ├── QString_Migration_Phase2_Comprehensive_Status.md
+│   └── QString_Migration_Phase2_Complete_Summary.md
+├── 02_FUTURE/ (Pending projects)
+└── 03_TOOLS/ (Automation scripts)
 ```
 
 ---
@@ -116,45 +126,50 @@ Master Plan (Strategic)
 - ✅ **Phase 1**: TGL Layer Elimination - COMPLETE
 - ✅ **Phase 4**: C_SclDynamicArray → QList - COMPLETE
 - ✅ **Phase 5**: C_SclIniFile → QSettings - COMPLETE
-- 🔄 **Phase 2**: C_SclString → QString - **40-50% COMPLETE** (current work)
-- ❌ **Phase 3**: C_SclStringList → QStringList - NOT STARTED
+- ✅ **Phase 2**: C_SclString → QString - **~85% COMPLETE** (core work done)
+- 🔄 **Phase 3**: C_SclStringList → QStringList - **IN PROGRESS** (current work)
 
-### Current Sprint Priorities
-1. **Sprint 1: EDS/DCF Import** (4 tasks, ~4-6 hours) - BLOCKING - HIGHEST PRIORITY
-2. **Sprint 2: Code Generation** (4 tasks, ~6-8 hours) - HIGH PRIORITY
-3. **Sprint 3: CAN Monitor Protocols** (3 tasks, ~4-5 hours) - MEDIUM PRIORITY
-4. **Sprint 4: KEFEX & System Update** (4 tasks, ~3-4 hours) - MEDIUM PRIORITY
-5. **Sprint 5: Miscellaneous** (4 tasks, ~2-3 hours) - CLEANUP
+### Current Sprint Priorities (Phase 3)
+1. **Sprint 1: High-Frequency C_SclStringList Files** (4 tasks, ~4-5 hours) - HIGHEST PRIORITY
+2. **Sprint 2: Remaining C_SclStringList Files** (3 tasks, ~2-3 hours) - HIGH PRIORITY
+3. **Sprint 3: Deferred Phase 2 Tasks** (2 tasks, ~3-4 hours) - MEDIUM PRIORITY (API coordination)
+4. **Sprint 4: Strategic Cleanup Planning** (3 tasks, ~2-3 hours) - PLANNING
+5. **Sprint 5: Final Verification** (3 tasks, ~2 hours) - VERIFICATION
 
-**Total Remaining Work**: 19-26 hours across 23 tasks
+**Total Remaining Work**: 14-18 hours across 13 Phase 3 tasks
 
 ---
 
 ## Key Statistics (Current State)
 
-| Metric | Value |
-|--------|-------|
-| Total C_SclString occurrences | 2,010 |
-| Files affected | 179 |
-| c_str() calls to fix | 160 (36 files) |
-| Length() calls to fix | 61 (19 files) |
-| PrintFormatted() calls to fix | 93 (17 files) |
-| ToInt() calls to fix | 12 (4 files) |
-| C_SclStringList files (Phase 3) | 45+ |
+### Phase 3 Targets
+| Metric | Count | Status |
+|--------|-------|--------|
+| C_SclStringList occurrences | 90 | 🔄 Target for Phase 3 |
+| Files with C_SclStringList | 31 | 🔄 To be migrated |
+| std::vector<C_SclString> files | 4 | 🔄 To be migrated |
+| Deferred Phase 2 tasks | 2 | 🔄 API coordination needed |
+
+### Phase 2 Status (For Reference)
+| Metric | Value | Status |
+|--------|-------|--------|
+| Total C_SclString occurrences | ~2,010 → ~300 | ✅ ~85% migrated |
+| Files affected | 179 → 131 | ✅ Core work complete |
+| QStringList already in use | 137 files | ✅ Good adoption |
 
 ---
 
 ## How Tasks Are Structured
 
-Each task in `QString_Migration_Phase2_Agent_Tasks.md` includes:
+Each task in `QString_Migration_Phase3_Agent_Tasks.md` includes:
 
-✅ **Task Number** - Unique identifier (e.g., Task 1.1)
+✅ **Task Number** - Unique identifier (e.g., Task 1.1, Task 2.1)
 ✅ **File Path** - Exact location of files to modify
 ✅ **Estimated Time** - Expected completion time
 ✅ **Status Checkbox** - `[ ]` unclaimed, `[IP-agent]` in progress, `[✓]` done
 ✅ **Dependencies** - What must be done first
 ✅ **Issues Breakdown** - Specific problems to fix (Issue A, B, C...)
-✅ **Code Patterns** - Before/after examples
+✅ **Code Patterns** - Before/after examples for C_SclStringList → QStringList
 ✅ **Verification Steps** - Build commands to verify success
 ✅ **Deliverables** - Checklist of what "done" means
 
@@ -235,9 +250,20 @@ cmd /c "rmdir /s /q result\build 2>nul"
 
 ## Common Migration Patterns
 
-All patterns are documented in detail in `QString_Migration_Phase2_Agent_Tasks.md` under "COMMON PATTERNS REFERENCE"
+### Phase 3 Patterns (C_SclStringList → QStringList)
+All patterns are documented in detail in `QString_Migration_Phase3_Agent_Tasks.md` under "COMMON MIGRATION PATTERNS"
 
-Quick reference:
+Quick reference for Phase 3:
+- `C_SclStringList` → `QStringList`
+- `.Add("item")` → `.append("item")`
+- `.Count()` → `.count()` or `.size()`
+- `.Strings[i]` → `[i]` or `.at(i)`
+- `.Delete(i)` → `.removeAt(i)`
+- `.Clear()` → `.clear()`
+- `std::vector<C_SclString>` → `std::vector<QString>`
+
+### Phase 2 Patterns (Reference)
+See `../01_COMPLETED/QString_Migration_Phase2_Agent_Tasks.md` for:
 - `Length()` → `length()`
 - `ToInt()` → `toInt()`
 - `c_str()` → `toUtf8().constData()` or eliminate
@@ -250,13 +276,13 @@ Quick reference:
 ## Agent Workflow
 
 1. **Claim Task**
-   - Edit `QString_Migration_Phase2_Agent_Tasks.md`
+   - Edit `QString_Migration_Phase3_Agent_Tasks.md`
    - Change `[ ]` to `[IN PROGRESS - YourName]`
-   - Commit: `docs: Claim Task X.Y - Brief description`
+   - Commit: `docs: Claim Phase 3 Task X.Y - Brief description`
 
 2. **Execute Task**
    - Follow task instructions exactly
-   - Use provided code patterns
+   - Use provided code patterns (C_SclStringList → QStringList)
    - Make incremental commits if helpful
 
 3. **Verify**
@@ -265,10 +291,10 @@ Quick reference:
    - Ensure task deliverables met
 
 4. **Complete Task**
-   - Edit `QString_Migration_Phase2_Agent_Tasks.md`
+   - Edit `QString_Migration_Phase3_Agent_Tasks.md`
    - Change `[IN PROGRESS - YourName]` to `[✓]`
    - Note commit hash if helpful
-   - Commit: `feat: [Task X.Y] Fix C_OscFoo string operations`
+   - Commit: `feat: [Phase 3 Task X.Y] Migrate C_SclStringList in FileX`
 
 5. **Report/Continue**
    - If blocked: Document blocker and notify coordinator
@@ -291,31 +317,33 @@ Quick reference:
 
 ---
 
-## 🎯 Success Criteria (Phase 2 Complete)
+## 🎯 Success Criteria (Phase 3 Complete)
 
 **Track completion in [QString_Migration_Master_Plan.md](QString_Migration_Master_Plan.md)**
 
 ### Code Quality
-- [ ] All 23 tasks in agent tasks document marked `[✓]`
-- [ ] Zero indexing bugs (all SubString→mid and Pos→indexOf conversions verified)
-- [ ] C_SclString occurrences reduced to near-zero (target: <100 from current 2,010)
-- [ ] All CalcHash() methods use Qt string operations
-- [ ] All PrintFormatted() converted to QString::asprintf()
+- [ ] All 13 Phase 3 tasks in agent tasks document marked `[✓]`
+- [ ] C_SclStringList occurrences reduced to near-zero (target: <10 from current 90)
+- [ ] std::vector<C_SclString> eliminated (target: 0 from current 4 files)
+- [ ] Deferred Phase 2 tasks completed (Tasks 3.1, 3.2)
+- [ ] Phase 4 cleanup strategy documented
 
 ### Build Verification
 - [ ] SYDEflash builds cleanly (exit code 0)
 - [ ] CAN Monitor builds cleanly (exit code 0)
 - [ ] Main openSYDE builds cleanly (exit code 0)
+- [ ] No regressions in Phase 2 work
 
 ### Documentation
-- [ ] Documentation updated with final statistics
+- [ ] Phase 3 completion summary created
 - [ ] Progress log updated in Master Plan
-- [ ] Known issues documented for Phase 3
+- [ ] Phase 4 agent tasks document created
+- [ ] Migration priority matrix complete
 
 ### Readiness
-- [ ] Ready to begin Phase 3 (C_SclStringList → QStringList)
+- [ ] Ready to begin Phase 4 (strategic cleanup)
 - [ ] No critical bugs reported
-- [ ] All agents released from Phase 2 work
+- [ ] All agents released from Phase 3 work
 
 **Current Status**: See [Work Status Summary](#work-status-summary) above
 
@@ -332,7 +360,7 @@ Quick reference:
 | **Runtime behavior changes** | MEDIUM | MEDIUM | Comprehensive testing of string ops | MONITORING |
 | **Build time increase** | HIGH | LOW | QString operations slightly slower | ACCEPTED |
 
-**See [QString_Migration_Phase2_Comprehensive_Status.md](QString_Migration_Phase2_Comprehensive_Status.md) for detailed risk assessment.**
+**See [Phase 2 Comprehensive Status](../01_COMPLETED/QString_Migration_Phase2_Comprehensive_Status.md) for detailed risk assessment from Phase 2.**
 
 ---
 
@@ -363,14 +391,17 @@ Quick reference:
 
 | Version | Date | Updated By | Changes |
 |---------|------|------------|---------|
+| 2.0 | 2026-02-03 | Claude Code | Major update: Plans folder reorganized; Phase 3 now active work; Updated all paths and references; Phase 2 moved to 01_COMPLETED |
 | 1.1 | 2026-02-02 | Claude Code | Added: Known Issues, Risk Assessment, Quick Links, Version History, Improved build commands with expected outputs |
 | 1.0 | 2026-02-02 | Claude Code | Initial creation with document index, navigation guide, and work status summary |
 
 ---
 
-**Document Version**: 1.1
+**Document Version**: 2.0
 **Created**: 2026-02-02
-**Last Updated**: 2026-02-02
+**Last Updated**: 2026-02-03
 **Last Updated By**: Claude Code
 
-**Primary Work Document**: `QString_Migration_Phase2_Agent_Tasks.md` ⭐
+**Primary Work Document**: `QString_Migration_Phase3_Agent_Tasks.md` ⭐
+
+**NOTE**: Phase 2 documents moved to `../01_COMPLETED/` for reference. Phase 3 is now the active work.

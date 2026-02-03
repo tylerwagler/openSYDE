@@ -18,8 +18,8 @@
 #include "CKFXVariableLists.hpp"
 #include "C_OscNodeDataPool.hpp"
 #include "C_SclString.hpp"
-#include "C_SclStringList.hpp"
 #include "stwtypes.hpp"
+#include <QStringList>
 
 
 /* -- Namespace
@@ -40,7 +40,7 @@ public:
   static int32_t h_ImportDataPoolFromRamViewDefProject(
       const stw::scl::C_SclString &orc_ProjectPath,
       C_OscNodeDataPool &orc_DataPool,
-      stw::scl::C_SclStringList &orc_ImportInformation);
+      QStringList &orc_ImportInformation);
 
 private:
   static int32_t mh_ImportElementType(
@@ -54,7 +54,7 @@ private:
       C_OscNodeDataPoolListElement &orc_Element);
   static void mh_AdaptName(QString &orc_Name, QString &orc_Comment,
                            const QString &orc_ElementDesignator,
-                           stw::scl::C_SclStringList &orc_ImportInformation);
+                           QStringList &orc_ImportInformation);
 
   static int32_t mh_LoadRamViewDefProject(
       const stw::scl::C_SclString &orc_ProjectPath,

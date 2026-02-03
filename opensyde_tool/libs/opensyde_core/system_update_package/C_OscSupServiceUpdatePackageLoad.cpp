@@ -120,7 +120,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const C_
                                                                         uint32_t & oru32_ActiveBusIndex,
                                                                         std::vector<uint8_t> & orc_ActiveNodes,
                                                                         std::vector<uint32_t> & orc_NodesUpdateOrder,
-                                                                        std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<C_SclString> & orc_DecryptNodesPassword,
+                                                                        std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<C_SclString> & orc_DecryptNodesPassword,
                                                                         const std::vector<C_SclString> & orc_NodeSignaturePemFiles)
 {
    int32_t s32_Retval;
@@ -200,7 +200,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const C_SclString & o
                                                            uint32_t & oru32_ActiveBusIndex,
                                                            vector<uint8_t> & orc_ActiveNodes,
                                                            vector<uint32_t> & orc_NodesUpdateOrder,
-                                                           vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<C_SclString> & orc_DecryptNodesPassword,
+                                                           vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<C_SclString> & orc_DecryptNodesPassword,
                                                            const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
    int32_t s32_Return;

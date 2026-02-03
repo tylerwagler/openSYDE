@@ -145,7 +145,7 @@ build_syde_flash_release.bat
 - `opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageLoad.hpp/.cpp` (2 each)
 
 **Estimated Time**: 90 minutes
-**Status**: [✓ DONE - Claude]
+**Status**: [✓ DONE - Claude-2 (completed)]
 **Priority**: HIGH - Related to deferred Task 4.3
 **Dependencies**: Consider coordinating with Task 3.1
 
@@ -188,7 +188,7 @@ build_syde_flash_release.bat
 - `opensyde_tool/libs/opensyde_core/C_OscChecksummedIniFile.cpp` (2 occurrences)
 
 **Estimated Time**: 90 minutes
-**Status**: [ ]
+**Status**: [✓ DONE - Claude-2]
 **Priority**: MEDIUM
 
 ### Issues to Fix:
@@ -218,7 +218,7 @@ build_syde_flash_release.bat
 - `opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceBase.hpp/.cpp` (2 each)
 
 **Estimated Time**: 60 minutes
-**Status**: [ ]
+**Status**: [✓ DONE - Claude-2]
 **Priority**: MEDIUM
 
 ### Verification:

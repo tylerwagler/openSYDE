@@ -121,7 +121,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const C_SclString & orc_PackagePath,
-                                                                         const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes, const std::vector<uint32_t> & orc_NodesUpdateOrder, const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage, const C_SclString & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<C_SclString> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
+                                                                         const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes, const std::vector<uint32_t> & orc_NodesUpdateOrder, const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage, const C_SclString & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<C_SclString> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
                                                                          const std::vector<C_SclString> & orc_NodeSignaturePemFiles)
 {
    int32_t s32_Retval;
@@ -216,7 +216,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const C_SclString & 
                                                             const uint32_t ou32_ActiveBusIndex,
                                                             const vector<uint8_t> & orc_ActiveNodes,
                                                             const vector<uint32_t> & orc_NodesUpdateOrder,
-                                                            const vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, C_SclStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage, const C_SclString & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<C_SclString> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
+                                                            const vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, C_SclString & orc_ErrorMessage, const C_SclString & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<C_SclString> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
                                                             const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
    int32_t s32_Return;

@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
-#include "C_SclStringList.hpp"
+#include <QStringList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -35,13 +35,13 @@ public:
    static const stw::scl::C_SclString hc_INI_DEV_FOLDER;
 
 protected:
-   static stw::scl::C_SclStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
-                                                         // not available
+   static QStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
+                                           // not available
    static stw::scl::C_SclString mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
 
    static void mh_Init(void);
-   static void mh_GetWarningsAndErrors(stw::scl::C_SclStringList & orc_WarningMessages,
+   static void mh_GetWarningsAndErrors(QStringList & orc_WarningMessages,
                                        stw::scl::C_SclString & orc_ErrorMessage);
 };
 
