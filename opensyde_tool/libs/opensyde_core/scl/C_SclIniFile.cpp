@@ -18,7 +18,6 @@
 
 #include "C_SclIniFile.hpp"
 #include "C_SclString.hpp"
-#include "C_SclStringList.hpp"
 #include "stwtypes.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
