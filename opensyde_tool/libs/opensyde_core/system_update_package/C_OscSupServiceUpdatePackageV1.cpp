@@ -296,7 +296,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
       s32_Return = C_OscSystemDefinitionFilerV2::h_SaveSystemDefinitionFile(
           orc_SystemDefinition, c_SysDefPath);
     } else {
-      std::vector<C_SclString> c_AdditionalFiles;
+      std::vector<QString> c_AdditionalFiles;
       s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
           orc_SystemDefinition, c_SysDefPath.toLocal8Bit().constData(),
           &c_AdditionalFiles);

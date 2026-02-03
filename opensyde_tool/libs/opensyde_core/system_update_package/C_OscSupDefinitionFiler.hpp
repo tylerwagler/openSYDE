@@ -42,10 +42,10 @@ public:
 
 private:
    static void mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser, const std::vector<C_OscSupNodeDefinition> & orc_Nodes,
-                            const std::vector<stw::scl::C_SclString> & orc_Files);
+                            const std::vector<QString> & orc_Files);
    static void mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, std::vector<uint8_t> & orc_ActiveNodes,
                             std::vector<uint32_t> & orc_UpdatePosition,
-                            std::vector<stw::scl::C_SclString> & orc_PackageFiles);
+                            std::vector<QString> & orc_PackageFiles);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -150,8 +150,8 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const stw::scl::C_Sc
 
       // file version
       Q_ASSERT(c_XmlParser.SelectNodeChild(mc_FILE_VERSION.ToQString()) == mc_FILE_VERSION.ToQString());
-      const stw::scl::C_SclString c_FileVersion = c_XmlParser.GetNodeContent();
-      oru32_FileVersion = static_cast<uint32_t>(c_FileVersion.ToInt());
+      const QString c_FileVersion = c_XmlParser.GetNodeContent().ToQString();
+      oru32_FileVersion = static_cast<uint32_t>(c_FileVersion.toInt());
       Q_ASSERT(c_XmlParser.SelectRoot() == mc_ROOT_NAME.ToQString()); // we shall have a valid and
       // compatible update package
 
@@ -159,8 +159,8 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const stw::scl::C_Sc
       {
          // active bus index
          Q_ASSERT(c_XmlParser.SelectNodeChild(mc_BUS_INDEX.ToQString()) == mc_BUS_INDEX.ToQString());
-         const stw::scl::C_SclString c_BusIndex = c_XmlParser.GetNodeContent();
-         oru32_ActiveBusIndex = static_cast<uint32_t>(c_BusIndex.ToInt());
+         const QString c_BusIndex = c_XmlParser.GetNodeContent().ToQString();
+         oru32_ActiveBusIndex = static_cast<uint32_t>(c_BusIndex.toInt());
 
          // get active nodes with update positions and files to flash
 
@@ -187,7 +187,7 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const stw::scl::C_Sc
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
                                            const std::vector<C_OscSupNodeDefinition> & orc_Nodes,
-                                           const std::vector<stw::scl::C_SclString> & orc_Files)
+                                           const std::vector<QString> & orc_Files)
 {
    //Nodes
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_NODES.ToQString()) == mc_NODES.ToQString());
@@ -217,7 +217,7 @@ void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
             }
             Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_NODE_UPDATE.ToQString()) == mc_NODE_UPDATE.ToQString());
 
-            orc_XmlParser.SetAttributeString(mc_NODE_FILE_ATTR.ToQString(), orc_Files[u32_Pos].ToQString());
+            orc_XmlParser.SetAttributeString(mc_NODE_FILE_ATTR.ToQString(), orc_Files[u32_Pos]);
 
             Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODE.ToQString());
             Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODES.ToQString());
@@ -245,7 +245,7 @@ void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, std::vector<uint8_t> & orc_ActiveNodes,
                                            std::vector<uint32_t> & orc_UpdatePosition,
-                                           std::vector<stw::scl::C_SclString> & orc_PackageFiles)
+                                           std::vector<QString> & orc_PackageFiles)
 {
    Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_NODES.ToQString()) == mc_NODES.ToQString());
 
@@ -256,7 +256,7 @@ void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, s
    do
    {
       // get content of node
-      stw::scl::C_SclString c_File;
+      QString c_File;
       uint32_t u32_UpdatePosition = 0U;
       const uint8_t u8_NodeActive = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32(mc_NODE_ACTIVE_ATTR.ToQString()));
       orc_ActiveNodes.push_back(u8_NodeActive);
@@ -266,7 +266,7 @@ void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, s
          u32_UpdatePosition  = static_cast<uint8_t>(
             orc_XmlParser.GetAttributeUint32(mc_NODE_POSITION_ATTR.ToQString()));
          Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_NODE_UPDATE.ToQString()) == mc_NODE_UPDATE.ToQString());
-         c_File = orc_XmlParser.GetAttributeString(mc_NODE_FILE_ATTR.ToQString());
+         c_File = orc_XmlParser.GetAttributeString(mc_NODE_FILE_ATTR.ToQString()).ToQString();
          Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODE.ToQString());
       }
       orc_UpdatePosition.push_back(u32_UpdatePosition);
