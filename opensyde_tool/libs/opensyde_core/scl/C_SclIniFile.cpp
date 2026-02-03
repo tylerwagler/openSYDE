@@ -18,6 +18,7 @@
 
 #include "C_SclIniFile.hpp"
 #include "C_SclString.hpp"
+#include "C_SclStringList.hpp"
 #include "stwtypes.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -124,9 +125,9 @@ void C_SclIniFile::UpdateFile(void)
       if (FileName.ToQString() != mpc_Settings->fileName())
       {
          // Need to write to a different file - use GetFileAsStringList and save manually
-         C_SclStringList c_Strings;
+         QStringList c_Strings;
          this->GetFileAsStringList(c_Strings);
-         c_Strings.SaveToFile(FileName.ToQString());
+         mh_WriteStringListToFile(c_Strings, FileName.ToQString());
       }
       else
       {
@@ -803,6 +804,34 @@ void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
             orc_Strings.Add("");
          }
       }
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Helper to write string list to file
+
+   Writes the content of a string list to a text file.
+   Each string in the list becomes one line in the file.
+
+   \param[in]  orc_Strings    string list to write
+   \param[in]  orc_FileName   target file path
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SclIniFile::mh_WriteStringListToFile(const QStringList & orc_Strings, const QString & orc_FileName)
+{
+   QFile c_File(orc_FileName);
+   if (c_File.open(QIODevice::WriteOnly | QIODevice::Text))
+   {
+      QTextStream c_Stream(&c_File);
+      for (const QString & rc_Line : orc_Strings)
+      {
+         c_Stream << rc_Line << "\n";
+      }
+      c_File.close();
+   }
+   else
+   {
+      throw "C_SclIniFile::mh_WriteStringListToFile failed !";
    }
 }
 

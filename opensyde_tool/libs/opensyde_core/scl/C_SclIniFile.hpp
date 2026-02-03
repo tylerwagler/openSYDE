@@ -43,7 +43,7 @@
 #include <QTemporaryFile>
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
-#include "C_SclStringList.hpp"
+// QString is used for all string operations
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -79,6 +79,9 @@ protected:
    // Helper to build section/key path for QSettings
    static QString mh_BuildKey(const C_SclString & orc_Section, const C_SclString & orc_Key);
 
+   // Helper to write string list to file
+   static void mh_WriteStringListToFile(const QStringList & orc_Strings, const QString & orc_FileName);
+
 public:
    // Constructors & Destructors
    C_SclIniFile(const C_SclString & orc_FileName);
@@ -111,12 +114,12 @@ public:
    bool SectionExists(const C_SclString & orc_Section);
    bool ValueExists(const C_SclString & orc_Section, const C_SclString & orc_Key);
 
-   void ReadSection(const C_SclString & orc_Section, C_SclStringList * const opc_Strings, const bool oq_Append = false);
-   void ReadSectionValues(const C_SclString & orc_Section, C_SclStringList * const opc_Strings,
+   void ReadSection(const C_SclString & orc_Section, QStringList * const opc_Strings, const bool oq_Append = false);
+   void ReadSectionValues(const C_SclString & orc_Section, QStringList * const opc_Strings,
                           const bool oq_Append = false);
-   void ReadSections(C_SclStringList * const opc_Strings, const bool oq_Append = false) const;
+   void ReadSections(QStringList * const opc_Strings, const bool oq_Append = false) const;
 
-   void GetFileAsStringList(C_SclStringList & orc_Strings) const;
+   void GetFileAsStringList(QStringList & orc_Strings) const;
 
    C_SclString FileName; ///< path to ini file; can be used after creation to store data in another ini file
 };
