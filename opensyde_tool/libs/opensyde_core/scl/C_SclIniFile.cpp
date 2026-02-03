@@ -649,7 +649,7 @@ bool C_SclIniFile::ValueExists(const C_SclString & orc_Section, const C_SclStrin
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSection(const C_SclString & orc_Section, C_SclStringList * const opc_Strings,
+void C_SclIniFile::ReadSection(const C_SclString & orc_Section, QStringList * const opc_Strings,
                                const bool oq_Append)
 {
    if (mpc_Settings != nullptr)
@@ -658,22 +658,22 @@ void C_SclIniFile::ReadSection(const C_SclString & orc_Section, C_SclStringList 
 
       if (oq_Append == true)
       {
-         u32_OldLength = opc_Strings->GetCount();
+         u32_OldLength = opc_Strings->count();
       }
       else
       {
          u32_OldLength = 0U;
-         opc_Strings->Clear();
+         opc_Strings->clear();
       }
 
       mpc_Settings->beginGroup(orc_Section.ToQString());
       const QStringList c_Keys = mpc_Settings->childKeys();
       mpc_Settings->endGroup();
 
-      opc_Strings->Strings.resize(static_cast<int32_t>(u32_OldLength) + c_Keys.size());
+      opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + c_Keys.size());
       for (int32_t s32_Loop = 0; s32_Loop < c_Keys.size(); s32_Loop++)
       {
-         opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
+         (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
             c_Keys[s32_Loop];
       }
    }
@@ -691,7 +691,7 @@ void C_SclIniFile::ReadSection(const C_SclString & orc_Section, C_SclStringList 
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSectionValues(const C_SclString & orc_Section, C_SclStringList * const opc_Strings,
+void C_SclIniFile::ReadSectionValues(const C_SclString & orc_Section, QStringList * const opc_Strings,
                                      const bool oq_Append)
 {
    if (mpc_Settings != nullptr)
@@ -700,12 +700,12 @@ void C_SclIniFile::ReadSectionValues(const C_SclString & orc_Section, C_SclStrin
 
       if (oq_Append == true)
       {
-         u32_OldLength = opc_Strings->GetCount();
+         u32_OldLength = opc_Strings->count();
       }
       else
       {
          u32_OldLength = 0U;
-         opc_Strings->Clear();
+         opc_Strings->clear();
       }
 
       const QString c_Section = orc_Section.ToQString();
@@ -713,12 +713,12 @@ void C_SclIniFile::ReadSectionValues(const C_SclString & orc_Section, C_SclStrin
       const QStringList c_Keys = mpc_Settings->childKeys();
       mpc_Settings->endGroup();
 
-      opc_Strings->Strings.resize(static_cast<int32_t>(u32_OldLength) + c_Keys.size());
+      opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + c_Keys.size());
       for (int32_t s32_Loop = 0; s32_Loop < c_Keys.size(); s32_Loop++)
       {
          const QString c_FullKey = c_Section + "/" + c_Keys[s32_Loop];
          const QString c_Value = mpc_Settings->value(c_FullKey).toString();
-         opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
+         (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
             c_Keys[s32_Loop] + "=" + c_Value;
       }
    }
@@ -734,7 +734,7 @@ void C_SclIniFile::ReadSectionValues(const C_SclString & orc_Section, C_SclStrin
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSections(C_SclStringList * const opc_Strings, const bool oq_Append) const
+void C_SclIniFile::ReadSections(QStringList * const opc_Strings, const bool oq_Append) const
 {
    if (mpc_Settings != nullptr)
    {
@@ -742,20 +742,20 @@ void C_SclIniFile::ReadSections(C_SclStringList * const opc_Strings, const bool 
 
       if (oq_Append == true)
       {
-         u32_OldLength = opc_Strings->GetCount();
+         u32_OldLength = opc_Strings->count();
       }
       else
       {
          u32_OldLength = 0U;
-         opc_Strings->Clear();
+         opc_Strings->clear();
       }
 
       const QStringList c_Groups = mpc_Settings->childGroups();
 
-      opc_Strings->Strings.resize(static_cast<int32_t>(u32_OldLength) + c_Groups.size());
+      opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + c_Groups.size());
       for (int32_t s32_Loop = 0; s32_Loop < c_Groups.size(); s32_Loop++)
       {
-         opc_Strings->Strings[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
+         (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
             c_Groups[s32_Loop];
       }
    }
@@ -772,9 +772,9 @@ void C_SclIniFile::ReadSections(C_SclStringList * const opc_Strings, const bool 
    \param[out]     orc_Strings    content of INI file (will be cleared before adding INI file strings)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
+void C_SclIniFile::GetFileAsStringList(QStringList & orc_Strings) const
 {
-   orc_Strings.Clear();
+   orc_Strings.clear();
 
    if (mpc_Settings != nullptr)
    {
@@ -785,7 +785,7 @@ void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
          const QString & rc_Section = c_Groups[s32_Section];
 
          // Add section header
-         orc_Strings.Add("[" + rc_Section + "]");
+         orc_Strings.append("[" + rc_Section + "]");
 
          // Add keys in this section
          mpc_Settings->beginGroup(rc_Section);
@@ -794,14 +794,14 @@ void C_SclIniFile::GetFileAsStringList(C_SclStringList & orc_Strings) const
          {
             const QString & rc_Key = c_Keys[s32_Key];
             const QString c_Value = mpc_Settings->value(rc_Key).toString();
-            orc_Strings.Add(rc_Key + "=" + c_Value);
+            orc_Strings.append(rc_Key + "=" + c_Value);
          }
          mpc_Settings->endGroup();
 
          // Add blank line after section (except for last section)
          if (s32_Section < (c_Groups.size() - 1))
          {
-            orc_Strings.Add("");
+            orc_Strings.append("");
          }
       }
    }
