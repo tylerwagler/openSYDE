@@ -120,10 +120,10 @@ void C_KFXProtocol::m_ProtocolSend(const bool oq_OK, const T_STWCAN_Msg_TX & orc
       c_Time = C_CMONProtocols::FormatTimeStamp(TGL_GetTickCountUS(), false);
       if (u8_CreateCommProtocol == 1U)
       {
-         (void)c_Text = QString::asprintf("%s Msg_Sent: MSG: %03x %d ", c_Time.toUtf8().constData(), orc_Msg.u32_ID, orc_Msg.u8_DLC);
+         c_Text = QString::asprintf("%s Msg_Sent: MSG: %03x %d ", c_Time.toUtf8().constData(), orc_Msg.u32_ID, orc_Msg.u8_DLC);
          for (i = 0; i < orc_Msg.u8_DLC; i++)
          {
-            (void)c_Help = QString::asprintf("%02x ", orc_Msg.au8_Data[i]);
+            c_Help = QString::asprintf("%02x ", orc_Msg.au8_Data[i]);
             c_Text += c_Help;
          }
          c_Text += "\r\n    ";
@@ -157,10 +157,10 @@ void C_KFXProtocol::m_ProtocolReceive(const T_STWCAN_Msg_RX & orc_Msg)
       c_Time = C_CMONProtocols::FormatTimeStamp(TGL_GetTickCountUS(), false);
       if (u8_CreateCommProtocol == 1U)
       {
-         (void)c_Text = QString::asprintf("%s Msg_Read OK: MSG: %03x %d ", c_Time.c_str(), orc_Msg.u32_ID, orc_Msg.u8_DLC);
+         c_Text = C_SclString::FromQString(QString::asprintf("%s Msg_Read OK: MSG: %03x %d ", c_Time.c_str(), orc_Msg.u32_ID, orc_Msg.u8_DLC));
          for (i = 0; i < orc_Msg.u8_DLC; i++)
          {
-            (void)c_Help = QString::asprintf("%02x ", orc_Msg.au8_Data[i]);
+            c_Help = C_SclString::FromQString(QString::asprintf("%02x ", orc_Msg.au8_Data[i]));
             c_Text += c_Help;
          }
          c_Text += "\r\n    ";

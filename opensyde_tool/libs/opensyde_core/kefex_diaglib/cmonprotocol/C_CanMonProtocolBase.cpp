@@ -153,11 +153,11 @@ C_SclString C_CanMonProtocolBase::m_GetValueDecHex(const uint32_t ou32_Value) co
 
    if (mq_Decimal == true)
    {
-      (void)c_Text = QString::asprintf("%u", ou32_Value);
+      c_Text = C_SclString::FromQString(QString::asprintf("%u", ou32_Value));
    }
    else
    {
-      (void)c_Text = QString::asprintf("%X", ou32_Value);
+      c_Text = C_SclString::FromQString(QString::asprintf("%X", ou32_Value));
    }
    return c_Text;
 }
@@ -185,11 +185,11 @@ C_SclString C_CanMonProtocolBase::m_GetWordAsStringFormat(const uint16_t ou16_Va
 
    if (mq_Decimal == true)
    {
-      (void)c_Help = QString::asprintf("%05d", ou16_Value);
+      c_Help = C_SclString::FromQString(QString::asprintf("%05d", ou16_Value));
    }
    else
    {
-      (void)c_Help = QString::asprintf(" %04X", ou16_Value);
+      c_Help = C_SclString::FromQString(QString::asprintf(" %04X", ou16_Value));
    }
    return c_Help;
 }
@@ -217,11 +217,11 @@ C_SclString C_CanMonProtocolBase::m_GetByteAsStringFormat(const uint8_t ou8_Valu
 
    if (mq_Decimal == true)
    {
-      (void)c_Help = QString::asprintf("%03d", ou8_Value);
+      c_Help = C_SclString::FromQString(QString::asprintf("%03d", ou8_Value));
    }
    else
    {
-      (void)c_Help = QString::asprintf(" %02X", ou8_Value);
+      c_Help = C_SclString::FromQString(QString::asprintf(" %02X", ou8_Value));
    }
    return c_Help;
 }
@@ -307,11 +307,11 @@ C_SclString C_CanMonProtocolKefexIva::m_KfxIndexToString(const uint16_t ou16_Ind
    {
       if (mq_Decimal == true)
       {
-         (void)c_Help = QString::asprintf("INDEX %d", ou16_Index);
+         c_Help = C_SclString::FromQString(QString::asprintf("INDEX %d", ou16_Index));
       }
       else
       {
-         (void)c_Help = QString::asprintf("INDEX %X", ou16_Index);
+         c_Help = C_SclString::FromQString(QString::asprintf("INDEX %X", ou16_Index));
       }
    }
    return c_Help;

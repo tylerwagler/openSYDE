@@ -1078,7 +1078,7 @@ const
       }
       else
       {
-         (void)c_Text2 = QString::asprintf("%c", opu8_Data[u8_Index]);
+         c_Text2 = C_SclString::FromQString(QString::asprintf("%c", opu8_Data[u8_Index]));
       }
       c_Text += c_Text2;
    }

@@ -92,21 +92,21 @@ C_SclString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Ms
    u8_Len = (orc_Msg.u8_DLC > 8) ? static_cast<uint8_t>(8U) : orc_Msg.u8_DLC;
    if (q_Decimal == true)
    {
-      (void)c_Text = QString::asprintf("%8d; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
-                                  (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC);
+      c_Text = C_SclString::FromQString(QString::asprintf("%8d; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
+                                  (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC));
       for (s32_Index = 0; s32_Index < u8_Len; s32_Index++)
       {
-         (void)c_Help = QString::asprintf("%3d; ", orc_Msg.au8_Data[s32_Index]);
+         c_Help = C_SclString::FromQString(QString::asprintf("%3d; ", orc_Msg.au8_Data[s32_Index]));
          c_Text += c_Help;
       }
    }
    else
    {
-      (void)c_Text = QString::asprintf("0x%08X; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
-                                  (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC);
+      c_Text = C_SclString::FromQString(QString::asprintf("0x%08X; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
+                                  (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC));
       for (s32_Index = 0; s32_Index < u8_Len; s32_Index++)
       {
-         (void)c_Help = QString::asprintf("0x%02X; ", orc_Msg.au8_Data[s32_Index]);
+         c_Help = C_SclString::FromQString(QString::asprintf("0x%02X; ", orc_Msg.au8_Data[s32_Index]));
          c_Text += c_Help;
       }
    }
@@ -154,7 +154,7 @@ C_SclString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX & orc_Messa
 
    c_Text = this->MessageToString(orc_Message);
    //count
-   (void)c_Help = QString::asprintf("%7d  ", ou32_Count);
+   c_Help = C_SclString::FromQString(QString::asprintf("%7d  ", ou32_Count));
    return (c_Help + c_Text);
 }
 
@@ -338,21 +338,21 @@ C_SclString C_CanMonProtocols::FormatTimeStamp(const uint64_t ou64_TimeStampUs, 
 
    if (oq_LeftFillBlanks == false)
    {
-      (void)c_Time = QString::asprintf("%013llu", ou64_TimeStampUs);
+      c_Time = C_SclString::FromQString(QString::asprintf("%013llu", ou64_TimeStampUs));
    }
    else
    {
       if (ou64_TimeStampUs >= 1000)
       {
-         (void)c_Time = QString::asprintf("%13llu", ou64_TimeStampUs);
+         c_Time = C_SclString::FromQString(QString::asprintf("%13llu", ou64_TimeStampUs));
       }
       else
       {
          //we need at least 4 characters so we don't get strings list " . 12" but "0.012"
-         (void)c_Time = QString::asprintf("         %04llu", ou64_TimeStampUs);
+         c_Time = C_SclString::FromQString(QString::asprintf("         %04llu", ou64_TimeStampUs));
       }
    }
-   (void)c_Time.Insert(".", 11);
+   c_Time.Insert(".", 11);
    return c_Time;
 }
 

@@ -2148,11 +2148,11 @@ C_SclString C_CanMonProtocolSipPayload::Decode(const uint8_t * const opu8_Data, 
       {
          if (oq_Decimal == true)
          {
-            (void)c_Help = QString::asprintf("%u", u32_Value);
+            c_Help = C_SclString::FromQString(QString::asprintf("%u", u32_Value));
          }
          else
          {
-            (void)c_Help = QString::asprintf("%X", u32_Value);
+            c_Help = C_SclString::FromQString(QString::asprintf("%X", u32_Value));
          }
          c_Text += c_Help;
       }
@@ -2183,17 +2183,17 @@ C_SclString C_CanMonProtocolSipPayload::Decode(const uint8_t * const opu8_Data, 
       {
          if (oq_Decimal == true)
          {
-            (void)c_Help = QString::asprintf("%d", s32_Value);
+            c_Help = C_SclString::FromQString(QString::asprintf("%d", s32_Value));
          }
          else
          {
             if (s32_Value < 0)
             {
-               (void)c_Help = QString::asprintf("-%X", std::abs(s32_Value));
+               c_Help = C_SclString::FromQString(QString::asprintf("-%X", std::abs(s32_Value)));
             }
             else
             {
-               (void)c_Help = QString::asprintf("%X", s32_Value);
+               c_Help = C_SclString::FromQString(QString::asprintf("%X", s32_Value));
             }
          }
          c_Text += c_Help;
@@ -2208,11 +2208,11 @@ C_SclString C_CanMonProtocolSipPayload::Decode(const uint8_t * const opu8_Data, 
       {
          if (oq_Decimal == true)
          {
-            (void)c_Help = QString::asprintf("%03d", opu8_Data[u8_Index]);
+            c_Help = C_SclString::FromQString(QString::asprintf("%03d", opu8_Data[u8_Index]));
          }
          else
          {
-            (void)c_Help = QString::asprintf(" %02X", opu8_Data[u8_Index]);
+            c_Help = C_SclString::FromQString(QString::asprintf(" %02X", opu8_Data[u8_Index]));
          }
 
          c_Text += c_Help;

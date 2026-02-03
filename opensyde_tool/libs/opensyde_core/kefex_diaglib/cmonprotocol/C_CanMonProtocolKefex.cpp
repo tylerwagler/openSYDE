@@ -159,11 +159,11 @@ C_SclString C_CanMonProtocolKefex::m_KfxIndexAndErrorToString(const char_t * con
 
    if (mq_Decimal == true)
    {
-      (void)c_Help2 = QString::asprintf("%d", ou16_Error);
+      c_Help2 = C_SclString::FromQString(QString::asprintf("%d", ou16_Error));
    }
    else
    {
-      (void)c_Help2 = QString::asprintf("%X", ou16_Error);
+      c_Help2 = C_SclString::FromQString(QString::asprintf("%X", ou16_Error));
    }
    return c_Help + c_Help2;
 }
@@ -177,11 +177,11 @@ C_SclString C_CanMonProtocolKefex::m_KfxTextAndValueToString(const char_t * cons
 
    if (mq_Decimal == true)
    {
-      (void)c_Help = QString::asprintf("%s %d", opcn_Text, ou32_Value);
+      c_Help = C_SclString::FromQString(QString::asprintf("%s %d", opcn_Text, ou32_Value));
    }
    else
    {
-      (void)c_Help = QString::asprintf("%s %X", opcn_Text, ou32_Value);
+      c_Help = C_SclString::FromQString(QString::asprintf("%s %X", opcn_Text, ou32_Value));
    }
    return c_Help;
 }
@@ -427,17 +427,17 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                              ((static_cast<uint32_t>(orc_Msg.au8_Data[6]) << 16U));
                   if (mq_Decimal == true)
                   {
-                     (void)c_Help = QString::asprintf(" IMM SEG FF REQ  %s NUM %d PAR %d",
+                     c_Help = C_SclString::FromQString(QString::asprintf(" IMM SEG FF REQ  %s NUM %d PAR %d",
                                                  m_KfxIndexToString(mh_BytesToWordLowHigh(
                                                                        &orc_Msg.au8_Data[2])).c_str(), u32_Size,
-                                                 orc_Msg.au8_Data[7]);
+                                                 orc_Msg.au8_Data[7]));
                   }
                   else
                   {
-                     (void)c_Help = QString::asprintf(" IMM SEG FF REQ  %s  NUM %X  PAR %X",
+                     c_Help = C_SclString::FromQString(QString::asprintf(" IMM SEG FF REQ  %s  NUM %X  PAR %X",
                                                  m_KfxIndexToString(mh_BytesToWordLowHigh(
                                                                        &orc_Msg.au8_Data[2])).c_str(), u32_Size,
-                                                 orc_Msg.au8_Data[7]);
+                                                 orc_Msg.au8_Data[7]));
                   }
                }
                c_Text += c_Help;
@@ -460,15 +460,15 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                   {
                      if (mq_Decimal == true)
                      {
-                        (void)c_Help = QString::asprintf(" IMM SEG CF REQ  BLK %d  DATA [%d,%d,%d,%d,%d]",
+                        c_Help = C_SclString::FromQString(QString::asprintf(" IMM SEG CF REQ  BLK %d  DATA [%d,%d,%d,%d,%d]",
                                                     orc_Msg.au8_Data[2], orc_Msg.au8_Data[3], orc_Msg.au8_Data[4],
-                                                    orc_Msg.au8_Data[5], orc_Msg.au8_Data[6], orc_Msg.au8_Data[7]);
+                                                    orc_Msg.au8_Data[5], orc_Msg.au8_Data[6], orc_Msg.au8_Data[7]));
                      }
                      else
                      {
-                        (void)c_Help = QString::asprintf(" IMM SEG CF REQ  BLK %02X  DATA [%02X,%02X,%02X,%02X,%02X]",
+                        c_Help = C_SclString::FromQString(QString::asprintf(" IMM SEG CF REQ  BLK %02X  DATA [%02X,%02X,%02X,%02X,%02X]",
                                                     orc_Msg.au8_Data[2], orc_Msg.au8_Data[3], orc_Msg.au8_Data[4],
-                                                    orc_Msg.au8_Data[5], orc_Msg.au8_Data[6], orc_Msg.au8_Data[7]);
+                                                    orc_Msg.au8_Data[5], orc_Msg.au8_Data[6], orc_Msg.au8_Data[7]));
                      }
                   }
                }
@@ -718,7 +718,7 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                      }
                      else
                      {
-                        (void)c_Help2 = QString::asprintf("  VALUE: %X", mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[3]));
+                        c_Help2 = C_SclString::FromQString(QString::asprintf("  VALUE: %X", mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[3])));
                      }
                   }
                }
@@ -767,17 +767,17 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                   {
                      if (mq_Decimal == true)
                      {
-                        (void)c_Help = QString::asprintf(" SRR SEG CF RES  BLK %d  DATA [%d,%d,%d,%d,%d,%d]",
+                        c_Help = C_SclString::FromQString(QString::asprintf(" SRR SEG CF RES  BLK %d  DATA [%d,%d,%d,%d,%d,%d]",
                                                     orc_Msg.au8_Data[1], orc_Msg.au8_Data[2],  orc_Msg.au8_Data[3],
                                                     orc_Msg.au8_Data[4], orc_Msg.au8_Data[5],  orc_Msg.au8_Data[6],
-                                                    orc_Msg.au8_Data[7]);
+                                                    orc_Msg.au8_Data[7]));
                      }
                      else
                      {
-                        (void)c_Help = QString::asprintf(" SRR SEG CF RES  BLK %02X  DATA [%02X,%02X,%02X,%02X,%02X,%02X]",
+                        c_Help = C_SclString::FromQString(QString::asprintf(" SRR SEG CF RES  BLK %02X  DATA [%02X,%02X,%02X,%02X,%02X,%02X]",
                                                     orc_Msg.au8_Data[1], orc_Msg.au8_Data[2],  orc_Msg.au8_Data[3],
                                                     orc_Msg.au8_Data[4], orc_Msg.au8_Data[5],  orc_Msg.au8_Data[6],
-                                                    orc_Msg.au8_Data[7]);
+                                                    orc_Msg.au8_Data[7]));
                      }
                   }
                }
