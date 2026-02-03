@@ -51,13 +51,13 @@ void C_KFXProjectMetaInfo::LoadFromINI(QSettings & orc_IniFile, const C_SclStrin
    int32_t s32_Count = 0;
    QString c_Section = orc_Section.ToQString();
 
-   c_Text.Clear();
+   c_Text.clear();
    c_Temp = C_SclString(orc_IniFile.value(c_Section + "/Line_" + QString::number(s32_Count).ToQString(),
                              "").toString().toStdString());
 
    while (c_Temp.Length() > 0)
    {
-      c_Text.Append(c_Temp);
+      c_Text.append(c_Temp.ToQString());
       s32_Count++;
       c_Temp = C_SclString(orc_IniFile.value(c_Section + "/Line_" + QString::number(s32_Count).ToQString(),
                                 "").toString().toStdString());
@@ -68,7 +68,7 @@ void C_KFXProjectMetaInfo::LoadFromINI(QSettings & orc_IniFile, const C_SclStrin
 
 bool C_KFXProjectMetaInfo::operator !=(C_KFXProjectMetaInfo & orc_Source)
 {
-   return (this->c_Text.GetText() != orc_Source.c_Text.GetText());
+   return (this->c_Text != orc_Source.c_Text);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

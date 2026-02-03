@@ -34,7 +34,7 @@
 #include <QElapsedTimer>
 #include <QThread>
 
-#include "C_SclStringList.hpp"
+#include <QStringList>
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
@@ -997,7 +997,7 @@ int32_t C_XFLFlashWrite::m_SetUserDefinedSectors(const QString &orc_Sectors) {
   uint16_t u16_Value2;
   C_SclString c_Help;
   C_SclString c_Help2;
-  C_SclStringList c_Strings;
+  QStringList c_Strings;
   char_t *pcn_String;
 
   for (uint32_t u32_Sector = 0;

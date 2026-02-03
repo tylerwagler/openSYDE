@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
-#include "C_SclStringList.hpp"
+#include <QStringList>
 #include <QSettings>
 #include "DiagLib_config.hpp"
 #include "CKFXVariableBase.hpp" //for KFX_DATA_MAX_NUM_LANGUAGES
@@ -37,7 +37,7 @@ public:
    //We only use one stringlist, so the user can type anything he/she wants
    //This might greatly differ between each company / type of project so
    // we'll never get finished providing more specialized fields.
-   stw::scl::C_SclStringList c_Text;
+   QStringList c_Text;
 
    C_KFXProjectMetaInfo(const C_KFXProjectMetaInfo & orc_Source);
    C_KFXProjectMetaInfo & operator = (const C_KFXProjectMetaInfo & orc_Source);

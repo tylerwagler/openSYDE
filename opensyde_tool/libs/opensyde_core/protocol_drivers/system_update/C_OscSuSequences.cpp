@@ -4253,49 +4253,49 @@ void C_OscSuSequences::h_FillDoFlashWithPemStates(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSuSequences::h_OpenSydeFlashloaderInformationToText(
-    const C_OsyDeviceInformation &orc_Info, C_SclStringList &orc_Text) {
-  const C_SclStringList c_MoreInformation =
+    const C_OsyDeviceInformation &orc_Info, QStringList &orc_Text) {
+  const QStringList c_MoreInformation =
       orc_Info.c_MoreInformation.FlashloaderInformationToText();
 
-  orc_Text.Clear();
-  orc_Text.Add("Device name: " +
+  orc_Text.clear();
+  orc_Text.append("Device name: " +
                C_SclString::FromQString(orc_Info.c_DeviceName));
-  orc_Text.Add("Number of applications: " +
+  orc_Text.append("Number of applications: " +
                QString::number(orc_Info.c_Applications.size()));
   for (uint8_t u8_Application = 0U;
        u8_Application < orc_Info.c_Applications.size(); u8_Application++) {
-    orc_Text.Add("");
-    orc_Text.Add("Application " + QString::number(u8_Application));
-    orc_Text.Add(" Name: " +
+    orc_Text.append("");
+    orc_Text.append("Application " + QString::number(u8_Application));
+    orc_Text.append(" Name: " +
                  orc_Info.c_Applications[u8_Application].c_ApplicationName);
-    orc_Text.Add(" Version: " +
+    orc_Text.append(" Version: " +
                  orc_Info.c_Applications[u8_Application].c_ApplicationVersion);
-    orc_Text.Add(" Build date: " +
+    orc_Text.append(" Build date: " +
                  orc_Info.c_Applications[u8_Application].c_BuildDate);
-    orc_Text.Add(" Build time: " +
+    orc_Text.append(" Build time: " +
                  orc_Info.c_Applications[u8_Application].c_BuildTime);
-    orc_Text.Add(
+    orc_Text.append(
         " Block start address: 0x" +
         C_SclString::IntToHex(
             static_cast<int64_t>(
                 orc_Info.c_Applications[u8_Application].u32_BlockStartAddress),
             8U));
-    orc_Text.Add(
+    orc_Text.append(
         " Block end address: 0x" +
         C_SclString::IntToHex(
             static_cast<int64_t>(
                 orc_Info.c_Applications[u8_Application].u32_BlockEndAddress),
             8U));
-    orc_Text.Add(
+    orc_Text.append(
         static_cast<C_SclString>(" Signature valid: ") +
         ((orc_Info.c_Applications[u8_Application].u8_SignatureValid == 0)
              ? "yes"
              : "no"));
-    orc_Text.Add(
+    orc_Text.append(
         " Additional information: " +
         orc_Info.c_Applications[u8_Application].c_AdditionalInformation);
   }
-  orc_Text.AddStrings(&c_MoreInformation);
+  orc_Text += c_MoreInformation;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -4312,15 +4312,15 @@ void C_OscSuSequences::h_OpenSydeFlashloaderInformationToText(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSuSequences::h_StwFlashloaderInformationToText(
-    const C_XflDeviceInformation &orc_Info, C_SclStringList &orc_Text) {
+    const C_XflDeviceInformation &orc_Info, QStringList &orc_Text) {
   C_SclString c_Line;
 
-  orc_Text.Clear();
+  orc_Text.clear();
 
   if (orc_Info.c_BasicInformation.q_DeviceIDValid == true) {
-    orc_Text.Add("Device name: " + orc_Info.c_BasicInformation.c_DeviceId);
+    orc_Text.append("Device name: " + orc_Info.c_BasicInformation.c_DeviceId);
   } else {
-    orc_Text.Add("Device name: unknown");
+    orc_Text.append("Device name: unknown");
   }
 
   if (orc_Info.c_BasicInformation.q_DeviceInfoAddressesValid == true) {
@@ -4329,15 +4329,15 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
     Q_ASSERT(orc_Info.c_BasicInformation.c_DeviceInfoAddresses.size() ==
              orc_Info.c_BasicInformation.c_DeviceInfoBlocksValid.size());
 
-    orc_Text.Add("Number of applications: " +
+    orc_Text.append("Number of applications: " +
                  QString::number(
                      orc_Info.c_BasicInformation.c_DeviceInfoAddresses.size()));
     for (uint8_t u8_Application = 0U;
          u8_Application <
          orc_Info.c_BasicInformation.c_DeviceInfoAddresses.size();
          u8_Application++) {
-      orc_Text.Add("Application " + QString::number(u8_Application));
-      orc_Text.Add(
+      orc_Text.append("Application " + QString::number(u8_Application));
+      orc_Text.append(
           " Device info address: 0x" +
           C_SclString::IntToHex(
               static_cast<int64_t>(orc_Info.c_BasicInformation
@@ -4345,10 +4345,10 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
               8));
       orc_Info.c_BasicInformation.c_DeviceInfoBlocks[u8_Application]
           .AddInfoToList(orc_Text);
-      orc_Text.Add("\n");
+      orc_Text.append("\n");
     }
   } else {
-    orc_Text.Add("Number of applications: unknown");
+    orc_Text.append("Number of applications: unknown");
   }
 
   if (orc_Info.c_BasicInformation.q_FlashloaderVersionValid == true) {
@@ -4356,7 +4356,7 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
   } else {
     c_Line = "unknown";
   }
-  orc_Text.Add("Flashloader software version: " + c_Line);
+  orc_Text.append("Flashloader software version: " + c_Line);
 
   if (orc_Info.c_BasicInformation.q_ProtocolVersionValid == true) {
     c_Line = QString::asprintf(
@@ -4376,29 +4376,29 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
   } else {
     c_Line = "unknown (< V3.00r0)";
   }
-  orc_Text.Add("Protocol version: " + c_Line);
+  orc_Text.append("Protocol version: " + c_Line);
 
   if (orc_Info.c_BasicInformation.q_EraseCountValid == true) {
     c_Line = QString::number(orc_Info.c_BasicInformation.u32_EraseCount);
   } else {
     c_Line = "unknown";
   }
-  orc_Text.Add("Flash count: " + c_Line);
+  orc_Text.append("Flash count: " + c_Line);
 
   if (orc_Info.c_BasicInformation.q_SerialNumberValid == true) {
     c_Line = orc_Info.c_BasicInformation.c_SerialNumber;
   } else {
     c_Line = "unknown";
   }
-  orc_Text.Add("Device serial number: " + c_Line);
+  orc_Text.append("Device serial number: " + c_Line);
 
   // finger print data:
   if (orc_Info.c_BasicInformation.c_AvailableFeatures.q_FingerPrint == false) {
-    orc_Text.Add("Flash fingerprint: not supported by this device");
+    orc_Text.append("Flash fingerprint: not supported by this device");
   } else {
     if (orc_Info.c_BasicInformation.c_FingerPrintData.q_SupportedIndexesValid ==
         false) {
-      orc_Text.Add("Flash fingerprint: unknown");
+      orc_Text.append("Flash fingerprint: unknown");
     } else {
       if ((orc_Info.c_BasicInformation.c_FingerPrintData.c_SupportedIndexes
                .q_ProgrammingDate == true) &&
@@ -4414,7 +4414,7 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
       } else {
         c_Line = "unknown";
       }
-      orc_Text.Add("Flash fingerprint date: " + c_Line);
+      orc_Text.append("Flash fingerprint date: " + c_Line);
 
       if ((orc_Info.c_BasicInformation.c_FingerPrintData.c_SupportedIndexes
                .q_ProgrammingTime == true) &&
@@ -4430,7 +4430,7 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
       } else {
         c_Line = "unknown";
       }
-      orc_Text.Add("Flash fingerprint time: " + c_Line);
+      orc_Text.append("Flash fingerprint time: " + c_Line);
 
       if ((orc_Info.c_BasicInformation.c_FingerPrintData.c_SupportedIndexes
                .q_UsernamePart1 == true) &&
@@ -4440,7 +4440,7 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
       } else {
         c_Line = "unknown";
       }
-      orc_Text.Add("Flash fingerprint username: " + c_Line);
+      orc_Text.append("Flash fingerprint username: " + c_Line);
 
       if ((orc_Info.c_BasicInformation.c_FingerPrintData.c_SupportedIndexes
                .q_ApplicationCheckSum == true) &&
@@ -4452,18 +4452,18 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
       } else {
         c_Line = "Flash fingerprint checksum: unknown";
       }
-      orc_Text.Add(c_Line);
+      orc_Text.append(c_Line);
     }
   }
 
-  orc_Text.Add("Flash memory information:");
+  orc_Text.append("Flash memory information:");
 
   if (orc_Info.c_BasicInformation.q_SectorCountValid == true) {
     c_Line = QString::number(orc_Info.c_BasicInformation.u16_SectorCount);
   } else {
     c_Line = "unknown";
   }
-  orc_Text.Add(" Number of flash sectors: " + c_Line);
+  orc_Text.append(" Number of flash sectors: " + c_Line);
 
   if (orc_Info.c_BasicInformation.q_FlashloaderVersionValid == true) {
     int32_t s32_Index;
@@ -4474,12 +4474,12 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
     const C_XFLFlashInformation &rc_FlashInfo =
         orc_Info.c_BasicInformation.c_FlashMappingInformation;
 
-    orc_Text.Add(" Flash memory details:");
+    orc_Text.append(" Flash memory details:");
 
     // print whole flash information data:
     // first raw information:
     if (rc_FlashInfo.c_ProtectedSectors.size() == 0) {
-      orc_Text.Add("  No protected sectors.");
+      orc_Text.append("  No protected sectors.");
     }
     for (s32_Index = 0; s32_Index < rc_FlashInfo.c_ProtectedSectors.size();
          s32_Index++) {
@@ -4487,10 +4487,10 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
           "  Protected sector: IC %03d, Sector %05d",
           rc_FlashInfo.c_ProtectedSectors[s32_Index].u8_ICIndex,
           rc_FlashInfo.c_ProtectedSectors[s32_Index].u16_SectorNumber);
-      orc_Text.Add(c_Line);
+      orc_Text.append(c_Line);
     }
 
-    orc_Text.Add("  Number of flash ICs: " +
+    orc_Text.append("  Number of flash ICs: " +
                  QString::number(rc_FlashInfo.c_ICs.size()));
 
     for (s32_Index = 0; s32_Index < rc_FlashInfo.c_ICs.size(); s32_Index++) {
@@ -4502,7 +4502,7 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
           static_cast<uint32_t>(rc_FlashInfo.c_ICs[s32_Index].c_Regions.size()),
           rc_FlashInfo.c_ICs[s32_Index].u32_SectorEraseTime,
           rc_FlashInfo.c_ICs[s32_Index].u32_ProgrammingTime);
-      orc_Text.Add(c_Line);
+      orc_Text.append(c_Line);
       for (int32_t s32_RegionIndex = 0;
            s32_RegionIndex < rc_FlashInfo.c_ICs[s32_Index].c_Regions.size();
            s32_RegionIndex++) {
@@ -4515,13 +4515,13 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
             static_cast<uint32_t>(rc_FlashInfo.c_ICs[s32_Index]
                                       .c_Regions[s32_RegionIndex]
                                       .u16_NumBlocks));
-        orc_Text.Add(c_Line);
+        orc_Text.append(c_Line);
       }
     }
 
     // then linearized information
     // match hexfile to address areas
-    orc_Text.Add("  Linear sector map:\n");
+    orc_Text.append("  Linear sector map:\n");
 
     rc_FlashInfo.ConvertToFlashSectorTable(c_SectorTable);
 
@@ -4538,7 +4538,7 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
               c_SectorTable[s32_Index - 1].u32_HighestAddress + 1,
               c_SectorTable[s32_Index].u32_LowestAddress -
                   (c_SectorTable[s32_Index - 1].u32_HighestAddress + 1));
-          orc_Text.Add(c_Line);
+          orc_Text.append(c_Line);
         }
       }
 
@@ -4556,19 +4556,19 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
           s32_Index, c_SectorTable[s32_Index].u32_LowestAddress, u32_SectorSize,
           c_SectorTable[s32_Index].u8_ICIndex,
           (c_SectorTable[s32_Index].q_IsProtected == true) ? "no" : "yes");
-      orc_Text.Add(c_Line);
+      orc_Text.append(c_Line);
     }
-    orc_Text.Add("\n");
+    orc_Text.append("\n");
     c_Line = QString::asprintf("  Total size: 0x%08X", u32_TotalSize);
-    orc_Text.Add(c_Line);
+    orc_Text.append(c_Line);
     c_Line = QString::asprintf("  Total non-protected size: 0x%08X",
                           u32_TotalSizeWriteable);
-    orc_Text.Add(c_Line);
+    orc_Text.append(c_Line);
 
     // Aliased memory
     if (rc_FlashInfo.c_Aliases.size() != 0) {
-      orc_Text.Add("\n");
-      orc_Text.Add("  Number of aliased memory regions: " +
+      orc_Text.append("\n");
+      orc_Text.append("  Number of aliased memory regions: " +
                    QString::number(rc_FlashInfo.c_Aliases.size()));
       for (s32_Index = 0; s32_Index < rc_FlashInfo.c_Aliases.size();
            s32_Index++) {
@@ -4578,26 +4578,26 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
             s32_Index, rc_FlashInfo.c_Aliases[s32_Index].u32_PhysicalAddress,
             rc_FlashInfo.c_Aliases[s32_Index].u32_AliasedAddress,
             rc_FlashInfo.c_Aliases[s32_Index].u32_Size);
-        orc_Text.Add(c_Line);
+        orc_Text.append(c_Line);
       }
     }
   } else {
-    orc_Text.Add(" Flash memory details: not available");
+    orc_Text.append(" Flash memory details: not available");
   }
 
   if (orc_Info.c_BasicInformation
           .q_ImplementationInformationHexFileInformationValid == true) {
-    orc_Text.Add(" HEX file: Maximum record length: " +
+    orc_Text.append(" HEX file: Maximum record length: " +
                  QString::number(
                      orc_Info.c_BasicInformation
                          .u8_ImplementationInformationMaxHexRecordLength));
-    orc_Text.Add(" HEX file: Granularity: " +
+    orc_Text.append(" HEX file: Granularity: " +
                  QString::number(
                      orc_Info.c_BasicInformation
                          .u8_ImplementationInformationHexRecordGranularity));
   } else {
-    orc_Text.Add(" HEX file: Maximum record length: unknown");
-    orc_Text.Add(" HEX file: Granularity: unknown");
+    orc_Text.append(" HEX file: Maximum record length: unknown");
+    orc_Text.append(" HEX file: Granularity: unknown");
   }
 }
 

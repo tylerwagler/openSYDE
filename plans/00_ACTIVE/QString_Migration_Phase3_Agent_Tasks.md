@@ -247,7 +247,7 @@ build_syde_flash_release.bat
 - `opensyde_tool/libs/opensyde_core/protocol_drivers/basic_update/C_OscBuSequences.cpp` (1 occurrence)
 
 **Estimated Time**: 60 minutes
-**Status**: [ ]
+**Status**: [✓ DONE - Claude-2]
 
 ### Issues to Fix:
 Standard C_SclStringList → QStringList migration.
@@ -270,7 +270,7 @@ build_syde_flash_release.bat
 - `opensyde_tool/libs/opensyde_core/kefex_diaglib/dl_stwflash/CXFLFlashWrite.cpp` (1 occurrence)
 
 **Estimated Time**: 45 minutes
-**Status**: [ ]
+**Status**: [✓ DONE - Claude-2]
 
 ### Verification:
 ```bash

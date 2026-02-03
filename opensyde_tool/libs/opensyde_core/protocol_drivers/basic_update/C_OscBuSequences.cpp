@@ -19,7 +19,6 @@
 #include <QThread>
 #include <QDateTime>
 #include "C_OscLoggingHandler.hpp"
-#include "C_SclStringList.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscUpdateUtil.hpp"
 #include "C_OscBuSequences.hpp"
@@ -878,20 +877,20 @@ void C_OscBuSequences::m_ReportProgress(const int32_t os32_Result, const C_SclSt
 void C_OscBuSequences::m_ReportFlashloaderInformationRead(const C_SclString & orc_DeviceName,
                                                           const C_OscComFlashloaderInformation & orc_Information)
 {
-   C_SclStringList c_Text;
+   QStringList c_Text;
    const QStringList c_MoreInformation = orc_Information.FlashloaderInformationToText();
 
-   c_Text.Clear();
-   c_Text.Add(("Device name: " + orc_DeviceName).ToQString());
+   c_Text.clear();
+   c_Text.append(("Device name: " + orc_DeviceName).ToQString());
    for (const QString & rc_Line : c_MoreInformation)
    {
-      c_Text.Add(rc_Line);
+      c_Text.append(rc_Line);
    }
 
    std::cout << "openSYDE device information read: " << "\n";
-   for (uint32_t u32_Line = 0U; u32_Line < c_Text.GetCount(); u32_Line++)
+   for (uint32_t u32_Line = 0U; u32_Line < static_cast<uint32_t>(c_Text.count()); u32_Line++)
    {
-      std::cout << c_Text.Strings[u32_Line].toUtf8().constData() << "\n";
-      osc_write_log_info("Flashloader Info", c_Text.Strings[u32_Line]);
+      std::cout << c_Text.at(u32_Line).toUtf8().constData() << "\n";
+      osc_write_log_info("Flashloader Info", c_Text.at(u32_Line));
    }
 }
