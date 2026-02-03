@@ -323,7 +323,7 @@ Create a PowerShell script to help identify C_SclStringList migration opportunit
 - `opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupDefinitionFiler.cpp`
 
 **Estimated Time**: 120 minutes
-**Status**: [ ]
+**Status**: [✓ DONE - Claude-2 (Partial - see notes)]
 **Priority**: MEDIUM
 **Dependencies**: Task 1.2 (same file area)
 
@@ -381,7 +381,7 @@ build_syde_flash_release.bat
 ## Task 3.2: Complete Task 4.4 - C_OscZipFile API
 **File**: `opensyde_tool/libs/opensyde_core/C_OscZipFile.hpp/.cpp`
 **Estimated Time**: 60 minutes
-**Status**: [ ]
+**Status**: [✓ DONE - Already migrated]
 **Priority**: MEDIUM
 **Dependencies**: Task 3.1 (related use case)
 
