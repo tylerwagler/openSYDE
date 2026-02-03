@@ -586,7 +586,7 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
         const C_SclString c_LogActivity = "NodeConfiguration";
         const C_OscProtocolDriverOsyNode c_NewServerId(0, ou8_NewNodeId);
         C_SclString c_ProgressLogMsg = "";
-        c_ProgressLogMsg.PrintFormatted(
+        c_ProgressLogMsg = QString::asprintf(
             "Configuring Node ID \"%d\" to Node with current ID \"%d\" on "
             "Interface CAN %u.",
             ou8_NewNodeId, ou8_CurrentNodeId, ou8_InterfaceIndex + 1U);

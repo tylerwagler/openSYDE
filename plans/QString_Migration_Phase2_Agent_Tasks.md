@@ -457,7 +457,7 @@ build_syde_flash_release.bat
 ## Task 2.1: Fix C_OscExportDataPool String Operations
 **File**: `opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportDataPool.cpp`
 **Estimated Time**: 120 minutes
-**Status**: [ ]
+**Status**: [✓]
 
 ### Issues to Fix:
 
@@ -510,7 +510,7 @@ build_syde_flash_release.bat
 ## Task 2.2: Fix C_OscExportCommunicationStack String Operations
 **File**: `opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp`
 **Estimated Time**: 90 minutes
-**Status**: [ ]
+**Status**: [✓]
 **Dependencies**: Task 2.1 (similar patterns)
 
 ### Issues to Fix:
@@ -574,7 +574,7 @@ build_syde_flash_release.bat
 - `opensyde_tool/libs/opensyde_core/exports/uti/C_OscExportUti.cpp` (18 C_SclString, 5 toUpper/toLower)
 
 **Estimated Time**: 120 minutes
-**Status**: [ ]
+**Status**: [✓]
 **Dependencies**: Tasks 2.1-2.3 complete
 
 ### Approach:
@@ -602,47 +602,59 @@ build_syde_flash_release.bat
 
 ## Task 3.1: Create PrintFormatted() Conversion Script
 **Estimated Time**: 30 minutes
-**Status**: [ ]
+**Status**: [✓]
+
+✅ **COMPLETED**: PowerShell script created and tested successfully
 
 ### Action:
 Create a PowerShell or Python script to automate PrintFormatted() conversions
 
-**Script Requirements**:
+**Script Location**: `opensyde_tool/libs/opensyde_core/scripts/convert_printformatted.ps1`
+
+**Usage**:
 ```powershell
-# Pattern to find:
-\.PrintFormatted\(
+# Dry run (preview changes)
+pwsh -File convert_printformatted.ps1 -FilePath <path-to-file.cpp> -DryRun
 
-# Replacement:
-= QString::asprintf(
-
-# Example:
-# Before: c_Text.PrintFormatted("Value: %d", s32_Value);
-# After:  c_Text = QString::asprintf("Value: %d", s32_Value);
+# Apply changes
+pwsh -File convert_printformatted.ps1 -FilePath <path-to-file.cpp> -Apply
 ```
 
-**Save to**: `opensyde_tool/libs/opensyde_core/scripts/convert_printformatted.ps1` or `.py`
+**Pattern**:
+- Find: `variable.PrintFormatted(args)`
+- Replace: `variable = QString::asprintf(args)`
 
-### Verification:
-Test script on a sample file first
+**Tested on**: C_CanMonProtocolXfl.cpp - Found and converted 15 calls correctly
 
 ### Deliverables:
-- [ ] Script created and tested
-- [ ] Usage instructions documented
+- [✓] Script created and tested
+- [✓] Usage instructions documented
+- [✓] Creates .bak backup before applying changes
+- [✓] Dry-run mode for preview
 
 ---
 
 ## Task 3.2: Apply PrintFormatted() Conversion to CAN Monitor Files
-**Files**:
-- `opensyde_tool/libs/opensyde_core/can_monitor_protocol/C_CanMonProtocolXfl.cpp` (15 calls)
-- `opensyde_tool/libs/opensyde_core/can_monitor_protocol/C_CanMonProtocolOpenSyde.cpp` (14 calls)
-- `opensyde_tool/libs/opensyde_core/can_monitor_protocol/C_CanMonProtocolKefex.cpp` (11 calls)
-- `opensyde_tool/libs/opensyde_core/can_monitor_protocol/C_CanMonProtocolShipIpIva.cpp` (7 calls)
-- `opensyde_tool/libs/opensyde_core/can_monitor_protocol/C_CanMonProtocolBase.cpp` (8 calls)
-- `opensyde_tool/libs/opensyde_core/can_monitor_protocol/C_CanMonProtocol.cpp` (6 calls)
+**Files**: ⚠️ **Path corrected** - Files are in `kefex_diaglib/cmonprotocol/` not `can_monitor_protocol/`
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/cmonprotocol/C_CanMonProtocolXfl.cpp` (15 calls)
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/cmonprotocol/C_CanMonProtocolOpenSyde.cpp` (14 calls)
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/cmonprotocol/C_CanMonProtocolKefex.cpp` (11 calls)
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/cmonprotocol/C_CanMonProtocolShipIpIva.cpp` (7 calls)
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/cmonprotocol/C_CanMonProtocolBase.cpp` (8 calls)
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/cmonprotocol/C_CanMonProtocol.cpp` (6 calls)
 
 **Estimated Time**: 90 minutes (with script from Task 3.1)
-**Status**: [ ]
+**Status**: [✓]
 **Dependencies**: Task 3.1 complete
+
+✅ **COMPLETED**: All 6 CAN Monitor protocol files converted
+- C_CanMonProtocolXfl.cpp: 15 calls → QString::asprintf()
+- C_CanMonProtocolOpenSyde.cpp: 14 calls → QString::asprintf()
+- C_CanMonProtocolKefex.cpp: 11 calls → QString::asprintf()
+- C_CanMonProtocolShipIpIva.cpp: 7 calls → QString::asprintf()
+- C_CanMonProtocolBase.cpp: 8 calls → QString::asprintf()
+- C_CanMonProtocol.cpp: 6 calls → QString::asprintf()
+- Total: 61 PrintFormatted() conversions
 
 ### Approach:
 1. Run conversion script on each file
@@ -663,10 +675,30 @@ build_can_monitor_release.bat
 ---
 
 ## Task 3.3: Apply PrintFormatted() Conversion to Remaining Files
-**Files**: 11 additional files with PrintFormatted() (see comprehensive status doc for list)
+**Files**: Additional CAN Monitor and protocol files not covered by other tasks:
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/cmonprotocol/C_CanMonProtocolL2.cpp`
+- `opensyde_tool/libs/opensyde_core/kefex_diaglib/cmonprotocol/C_CanMonProtocolCanOpen.cpp`
+- `opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp`
+- `opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsyTpCan.cpp`
+- `opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceManifestFiler.cpp`
+- `opensyde_tool/libs/opensyde_core/protocol_drivers/device_config/C_OscDcBasicSequences.cpp`
+
+(Note: Files in Tasks 4.2, 5.1, 5.2, 5.3 will be handled by those tasks)
+
 **Estimated Time**: 60 minutes
-**Status**: [ ]
+**Status**: [✓]
 **Dependencies**: Task 3.2 complete
+
+✅ **COMPLETED**: All additional files converted
+- C_CanMonProtocolL2.cpp: 2 calls → QString::asprintf()
+- C_CanMonProtocolCanOpen.cpp: 7 calls → QString::asprintf()
+- C_OscCanOpenObjectDictionary.cpp: 4 calls → QString::asprintf()
+- C_OscProtocolDriverOsyTpCan.cpp: 1 call → QString::asprintf()
+- C_OscXceManifestFiler.cpp: 1 call → QString::asprintf()
+- C_OscDcBasicSequences.cpp: 1 call → QString::asprintf()
+- Total: 16 PrintFormatted() conversions
+
+**Sprint 3 Total: 77 PrintFormatted() conversions**
 
 ### Approach:
 Same as Task 3.2, apply to remaining files

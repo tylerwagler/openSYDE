@@ -289,7 +289,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             {
                //expedited
                c_Help = c_Help + "INIT UPLOAD EXP RES ";
-               (void)c_Help2.PrintFormatted("%X,%02X  ", u16_Index, u16_SubIndex);
+               (void)c_Help2 = QString::asprintf("%X,%02X  ", u16_Index, u16_SubIndex);
                if ((orc_Msg.au8_Data[0] & 0x01U) == 0x01U) //size is indicated
                {
                   u32_Size = 4 - ((orc_Msg.au8_Data[0] & 0x0CU) >> 2);
@@ -311,7 +311,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             {
                //segmented
                c_Help = c_Help + "INIT UPLOAD SEG RES ";
-               (void)c_Help2.PrintFormatted("%X,%02X  ", u16_Index, u16_SubIndex);
+               (void)c_Help2 = QString::asprintf("%X,%02X  ", u16_Index, u16_SubIndex);
                u32_Size =  mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[4]);
                c_Help2 += ("Size: " + m_GetValueDecHex(u32_Size));
                c_Text = c_Help + c_Help2;
@@ -340,7 +340,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             c_Help = c_Help + "INIT DOWNLOAD RES ";
             u16_Index = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]);
             u16_SubIndex = orc_Msg.au8_Data[3];
-            (void)c_Help2.PrintFormatted("%X,%02X", u16_Index, u16_SubIndex);
+            (void)c_Help2 = QString::asprintf("%X,%02X", u16_Index, u16_SubIndex);
             c_Text = c_Help + c_Help2;
             break;
          case SCS_SEGMENT_DOWNLOAD:
@@ -351,7 +351,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             c_Help = c_Help + "ABORT ";
             u16_Index = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]);
             u16_SubIndex = orc_Msg.au8_Data[3];
-            (void)c_Help2.PrintFormatted("%X,%02X  Reason:", u16_Index, u16_SubIndex);
+            (void)c_Help2 = QString::asprintf("%X,%02X  Reason:", u16_Index, u16_SubIndex);
             for (j = 0; j < 4; j++)
             {
                c_Help2 += (m_GetByteAsStringFormat(orc_Msg.au8_Data[j + 4]) + " ");
@@ -470,7 +470,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             c_Help = c_Help + "INIT UPLOAD REQ ";
             u16_Index = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]);
             u16_SubIndex = orc_Msg.au8_Data[3];
-            (void)c_Help2.PrintFormatted("%X,%02X  ", u16_Index, u16_SubIndex);
+            (void)c_Help2 = QString::asprintf("%X,%02X  ", u16_Index, u16_SubIndex);
             c_Text = c_Help + c_Help2;
             break;
          case CCS_SEGMENT_UPLOAD:
@@ -479,7 +479,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
          case CCS_INIT_DOWNLOAD:
             u16_Index = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]);
             u16_SubIndex = orc_Msg.au8_Data[3];
-            (void)c_Help2.PrintFormatted("%X,%02X  ", u16_Index, u16_SubIndex);
+            (void)c_Help2 = QString::asprintf("%X,%02X  ", u16_Index, u16_SubIndex);
             if ((orc_Msg.au8_Data[0] & 0x02U) == 0x02U)
             {
                //expedited
@@ -532,7 +532,7 @@ C_SclString C_CanMonProtocolCanOpen::MessageToString(const T_STWCAN_Msg_RX & orc
             c_Help = c_Help + "ABORT ";
             u16_Index = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]);
             u16_SubIndex = orc_Msg.au8_Data[3];
-            (void)c_Help2.PrintFormatted("%X,%02X  Reason:", u16_Index, u16_SubIndex);
+            (void)c_Help2 = QString::asprintf("%X,%02X  Reason:", u16_Index, u16_SubIndex);
             for (j = 0; j < 4; j++)
             {
                c_Help2 += (m_GetByteAsStringFormat(orc_Msg.au8_Data[j + 4]) + " ");

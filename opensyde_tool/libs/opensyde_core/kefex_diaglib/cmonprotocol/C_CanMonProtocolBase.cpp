@@ -185,11 +185,11 @@ C_SclString C_CanMonProtocolBase::m_GetWordAsStringFormat(const uint16_t ou16_Va
 
    if (mq_Decimal == true)
    {
-      (void)c_Help.PrintFormatted("%05d", ou16_Value);
+      (void)c_Help = QString::asprintf("%05d", ou16_Value);
    }
    else
    {
-      (void)c_Help.PrintFormatted(" %04X", ou16_Value);
+      (void)c_Help = QString::asprintf(" %04X", ou16_Value);
    }
    return c_Help;
 }
@@ -217,11 +217,11 @@ C_SclString C_CanMonProtocolBase::m_GetByteAsStringFormat(const uint8_t ou8_Valu
 
    if (mq_Decimal == true)
    {
-      (void)c_Help.PrintFormatted("%03d", ou8_Value);
+      (void)c_Help = QString::asprintf("%03d", ou8_Value);
    }
    else
    {
-      (void)c_Help.PrintFormatted(" %02X", ou8_Value);
+      (void)c_Help = QString::asprintf(" %02X", ou8_Value);
    }
    return c_Help;
 }
@@ -307,11 +307,11 @@ C_SclString C_CanMonProtocolKefexIva::m_KfxIndexToString(const uint16_t ou16_Ind
    {
       if (mq_Decimal == true)
       {
-         (void)c_Help.PrintFormatted("INDEX %d", ou16_Index);
+         (void)c_Help = QString::asprintf("INDEX %d", ou16_Index);
       }
       else
       {
-         (void)c_Help.PrintFormatted("INDEX %X", ou16_Index);
+         (void)c_Help = QString::asprintf("INDEX %X", ou16_Index);
       }
    }
    return c_Help;
@@ -339,14 +339,14 @@ C_SclString C_CanMonProtocolBase::mh_SerialNumberToString(const uint8_t * const 
       if (opu8_SerialNumber[0] < static_cast<uint8_t>(0x20))
       {
          //format up to and including 2019. E.g: 05.123456.1001
-         c_Result.PrintFormatted("%02X.%02X%02X%02X.%02X%02X",
+         c_Result = QString::asprintf("%02X.%02X%02X%02X.%02X%02X",
                                  opu8_SerialNumber[0], opu8_SerialNumber[1], opu8_SerialNumber[2], opu8_SerialNumber[3],
                                  opu8_SerialNumber[4], opu8_SerialNumber[5]);
       }
       else
       {
          //format from 2020. E.g: 200012345678
-         c_Result.PrintFormatted("%02X%02X%02X%02X%02X%02X",
+         c_Result = QString::asprintf("%02X%02X%02X%02X%02X%02X",
                                  opu8_SerialNumber[0], opu8_SerialNumber[1], opu8_SerialNumber[2], opu8_SerialNumber[3],
                                  opu8_SerialNumber[4], opu8_SerialNumber[5]);
       }

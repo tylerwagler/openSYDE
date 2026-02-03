@@ -279,7 +279,7 @@ int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscX
             if (u32_ExpectedCount != u32_ActualCount)
             {
                stw::scl::C_SclString c_Tmp;
-               c_Tmp.PrintFormatted("Unexpected update package parameters count, expected: %u, got %u",
+               c_Tmp = QString::asprintf("Unexpected update package parameters count, expected: %u, got %u",
                                     u32_ExpectedCount,
                                     u32_ActualCount);
                orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp);

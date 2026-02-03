@@ -450,7 +450,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
                }
                catch (...)
                {
-                  mc_LastError.PrintFormatted("File contains non-numeric SubNumber for object %04X.%02X !",
+                  mc_LastError = QString::asprintf("File contains non-numeric SubNumber for object %04X.%02X !",
                                               static_cast<uint32_t>(ou16_Index),
                                               static_cast<uint32_t>(ou8_SubIndex));
                   s32_Return = C_CONFIG;
@@ -463,7 +463,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
                }
                catch (...)
                {
-                  mc_LastError.PrintFormatted("File contains non-numeric DataType for object %04X.%02X !",
+                  mc_LastError = QString::asprintf("File contains non-numeric DataType for object %04X.%02X !",
                                               static_cast<uint32_t>(ou16_Index),
                                               static_cast<uint32_t>(ou8_SubIndex));
                   s32_Return = C_CONFIG;
@@ -493,7 +493,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
                   else
                   {
                      orc_Object.q_IsMappableIntoPdo = false;
-                     mc_LastError.PrintFormatted(
+                     mc_LastError = QString::asprintf(
                         "Invalid boolean value \"%s\" found in entry \"PDOMapping\" for object %04X.%02X !",
                         rc_Value.toUtf8().constData(),
                         static_cast<uint32_t>(ou16_Index),
@@ -503,7 +503,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
                }
                catch (...)
                {
-                  mc_LastError.PrintFormatted(
+                  mc_LastError = QString::asprintf(
                      "Could not parse entry \"PDOMapping\" value \"%s\" for object %04X.%02X !",
                      rc_Value.toUtf8().constData(),
                      static_cast<uint32_t>(ou16_Index),

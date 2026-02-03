@@ -751,7 +751,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
                c_Text += static_cast<char_t>(opu8_ServiceData[6]);
 
                // Potential STW BCD packed in extended service
-               c_Text2.PrintFormatted("  SNR POS First signs: %02x", opu8_ServiceData[6]);
+               c_Text2 = QString::asprintf("  SNR POS First signs: %02x", opu8_ServiceData[6]);
                c_Text += c_Text2;
             }
             else
@@ -770,12 +770,12 @@ C_SclString C_CanMonProtocolOpenSyde::m_ServiceDataToText(const uint8_t * const 
                // Potential STW BCD packed in extended service
                if (u8_BlockNumber <= 3U)
                {
-                  c_Text2.PrintFormatted("  SNR POS Part: %02x%02x", opu8_ServiceData[5], opu8_ServiceData[6]);
+                  c_Text2 = QString::asprintf("  SNR POS Part: %02x%02x", opu8_ServiceData[5], opu8_ServiceData[6]);
                   c_Text += c_Text2;
                }
                else if (u8_BlockNumber == 4U)
                {
-                  c_Text2.PrintFormatted("  SNR POS Last signs: %02x", opu8_ServiceData[5]);
+                  c_Text2 = QString::asprintf("  SNR POS Last signs: %02x", opu8_ServiceData[5]);
                   c_Text += c_Text2;
                }
                else
@@ -1074,11 +1074,11 @@ const
    {
       if (std::isprint(opu8_Data[u8_Index]) == 0)
       {
-         c_Text2.PrintFormatted("[\\x%02X]", opu8_Data[u8_Index]);
+         c_Text2 = QString::asprintf("[\\x%02X]", opu8_Data[u8_Index]);
       }
       else
       {
-         (void)c_Text2.PrintFormatted("%c", opu8_Data[u8_Index]);
+         (void)c_Text2 = QString::asprintf("%c", opu8_Data[u8_Index]);
       }
       c_Text += c_Text2;
    }
@@ -1289,7 +1289,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
          else
          {
             C_SclString c_Text2;
-            c_Text2.PrintFormatted("  CERTIFICATESNR:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1],
+            c_Text2 = QString::asprintf("  CERTIFICATESNR:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1],
                                    opu8_Payload[2]);
 
             c_Text += c_Text2;
@@ -1308,7 +1308,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
          else
          {
             C_SclString c_Text2;
-            c_Text2.PrintFormatted("  CERTIFICATESNR:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1],
+            c_Text2 = QString::asprintf("  CERTIFICATESNR:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1],
                                    opu8_Payload[2]);
 
             c_Text += c_Text2;
@@ -1386,7 +1386,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
          else
          {
             C_SclString c_Text2;
-            c_Text2.PrintFormatted("  PUBLICKEY:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
+            c_Text2 = QString::asprintf("  PUBLICKEY:%02x:%02x:%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
 
             c_Text += c_Text2;
             u8_FirstRawByte = 3U; //finished here ...
@@ -1426,12 +1426,12 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
             if (opu8_Payload[0] < static_cast<uint8_t>(0x20))
             {
                //format up to and including 2019. E.g: 05.123456.1001
-               c_Text2.PrintFormatted("  SNR:%02x.%02x%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
+               c_Text2 = QString::asprintf("  SNR:%02x.%02x%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
             }
             else
             {
                //format from 2020. E.g: 200012345678
-               c_Text2.PrintFormatted("  SNR:%02x%02x%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
+               c_Text2 = QString::asprintf("  SNR:%02x%02x%02x", opu8_Payload[0], opu8_Payload[1], opu8_Payload[2]);
             }
 
             c_Text += c_Text2;
@@ -1456,7 +1456,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_DataIdentifierAndDataToText(const bool o
             {
                C_SclString c_Text2;
                // STW BCD packed in extended service
-               c_Text2.PrintFormatted("  SNR First signs: %02x", opu8_Payload[2]);
+               c_Text2 = QString::asprintf("  SNR First signs: %02x", opu8_Payload[2]);
                c_Text += c_Text2;
             }
             u8_FirstRawByte = ou8_PayloadSize; //finished here ...
@@ -1655,7 +1655,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
          if (ou8_DataSize == 3U)
          {
             C_SclString c_Text2;
-            c_Text2.PrintFormatted("  SNR POS First Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
+            c_Text2 = QString::asprintf("  SNR POS First Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
             c_Text += c_Text2;
             u8_FirstRawByte = ou8_DataSize; //finished here ...
          }
@@ -1672,7 +1672,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
          if (ou8_DataSize == 3U)
          {
             C_SclString c_Text2;
-            c_Text2.PrintFormatted("  SNR POS Last Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
+            c_Text2 = QString::asprintf("  SNR POS Last Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
             c_Text += c_Text2;
             u8_FirstRawByte = ou8_DataSize; //finished here ...
          }
@@ -1764,7 +1764,7 @@ C_SclString C_CanMonProtocolOpenSyde::m_RoutineDataToText(const uint16_t ou16_Ro
             {
                C_SclString c_Text2;
                // POS could be possible, but can not be differed. Show both possibilities
-               c_Text2.PrintFormatted("  SNR POS Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
+               c_Text2 = QString::asprintf("  SNR POS Part: %02x%02x%02x", opu8_Data[0], opu8_Data[1], opu8_Data[2]);
                c_Text += c_Text2;
             }
             u8_FirstRawByte = ou8_DataSize; //finished here ...

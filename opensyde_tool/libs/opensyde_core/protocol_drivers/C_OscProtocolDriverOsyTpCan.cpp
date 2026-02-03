@@ -476,7 +476,7 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingConsecutiveFrame(const T_ST
          C_SclString c_Tmp;
          //incorrect sequence: abort
          mc_RxService.e_Status = C_ServiceState::eIDLE;
-         c_Tmp.PrintFormatted("Consecutive frame with incorrect sequence number received. Expected: %u, Received: %u",
+         c_Tmp = QString::asprintf("Consecutive frame with incorrect sequence number received. Expected: %u, Received: %u",
                               static_cast<uint32_t>(mc_RxService.u8_SequenceNumber),
                               orc_CanMessage.au8_Data[0] & 0x0FU);
          m_LogWarningWithHeader(c_Tmp.c_str(), TGL_UTIL_FUNC_ID);
