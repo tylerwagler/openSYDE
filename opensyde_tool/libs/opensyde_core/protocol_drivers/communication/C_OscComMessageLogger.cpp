@@ -213,8 +213,6 @@ void C_OscComMessageLogger::Start(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComMessageLogger::SetProtocol(const e_CanMonL7Protocols oe_Protocol)
 {
-   QString c_ProtocolName;
-
    std::map<QString, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
 
    this->me_Protocol = oe_Protocol;
@@ -224,7 +222,7 @@ void C_OscComMessageLogger::SetProtocol(const e_CanMonL7Protocols oe_Protocol)
    // Update the protocol names of all log files
    C_SclString c_ProtocolNameScl;
    this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolNameScl);
-   QString c_ProtocolName = QString::fromUtf8(c_ProtocolNameScl.constData());
+   QString c_ProtocolName = c_ProtocolNameScl.ToQString();
    for (c_ItFile = this->mc_LoggingFiles.begin(); c_ItFile != this->mc_LoggingFiles.end(); ++c_ItFile)
    {
       c_ItFile->second->SetProtocolName(c_ProtocolName);
@@ -523,7 +521,7 @@ int32_t C_OscComMessageLogger::AddLogFileAsc(const QString & orc_FilePath, const
    QString c_ProtocolName;
 
    this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolNameScl);
-   c_ProtocolName = QString::fromUtf8(c_ProtocolNameScl.constData());
+   c_ProtocolName = c_ProtocolNameScl.ToQString();
    pc_File = new C_OscComMessageLoggerFileAsc(orc_FilePath, c_ProtocolName, oq_HexActive, oq_RelativeTimeStampActive);
    s32_Return = pc_File->OpenFile();
 
@@ -694,11 +692,11 @@ int32_t C_OscComMessageLogger::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
             if (this->m_CheckInterpretation(this->mc_HandledCanMessage) == false)
             {
                // No interpretation found, check for classical protocol interpretation
-               this->mc_HandledCanMessage.c_ProtocolTextHex = this->m_GetProtocolStringHex(orc_Msg).c_str();
+               this->mc_HandledCanMessage.c_ProtocolTextHex = this->m_GetProtocolStringHex(orc_Msg);
                if (this->mc_HandledCanMessage.c_ProtocolTextHex != "")
                {
                   // Only necessary if a protocol was found in the hex variant
-                  this->mc_HandledCanMessage.c_ProtocolTextDec = this->m_GetProtocolStringDec(orc_Msg).c_str();
+                  this->mc_HandledCanMessage.c_ProtocolTextDec = this->m_GetProtocolStringDec(orc_Msg);
                }
 
                // Message not found in any other place. Check and process for ECoS inverted message
@@ -894,7 +892,7 @@ QString C_OscComMessageLogger::m_GetProtocolStringHex(const T_STWCAN_Msg_RX & or
 
    if (this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE)
    {
-      c_Result = QString::fromUtf8(this->mc_ProtocolHex.MessageToStringProtocolOnly(orc_Msg).constData());
+      c_Result = this->mc_ProtocolHex.MessageToStringProtocolOnly(orc_Msg).ToQString();
    }
 
    return c_Result;
@@ -916,7 +914,7 @@ QString C_OscComMessageLogger::m_GetProtocolStringDec(const T_STWCAN_Msg_RX & or
 
    if (this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE)
    {
-      c_Result = QString::fromUtf8(this->mc_ProtocolDec.MessageToStringProtocolOnly(orc_Msg).constData());
+      c_Result = this->mc_ProtocolDec.MessageToStringProtocolOnly(orc_Msg).ToQString();
    }
 
    return c_Result;

@@ -1502,11 +1502,12 @@ int32_t C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(
     c_UserName.resize(20);
   }
 
-  c_Data.resize(7U + static_cast<size_t>(c_UserName.length()));
+  const QByteArray c_UserNameBytes = c_UserName.toUtf8();
+  c_Data.resize(7U + static_cast<size_t>(c_UserNameBytes.size()));
   (void)std::memcpy(&c_Data[0], &orau8_Date[0], 3U);
   (void)std::memcpy(&c_Data[3], &orau8_Time[0], 3U);
-  c_Data[6] = static_cast<uint8_t>(c_UserName.Length());
-  (void)std::memcpy(&c_Data[7], c_UserName.c_str(), c_UserName.Length());
+  c_Data[6] = static_cast<uint8_t>(c_UserNameBytes.size());
+  (void)std::memcpy(&c_Data[7], c_UserNameBytes.constData(), c_UserNameBytes.size());
 
   s32_Return = m_WriteDataByIdentifier(
       mhu16_OSY_DI_APPLICATION_SOFTWARE_FINGERPRINT, c_Data, u8_NrErrorCode);

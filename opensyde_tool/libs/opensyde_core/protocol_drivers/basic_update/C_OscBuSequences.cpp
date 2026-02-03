@@ -75,7 +75,7 @@ int32_t C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatch
                                const uint8_t ou8_NodeId)
 {
    int32_t s32_Return = C_NO_ERR;
-   const C_SclString c_LogActivity = "Initialization";
+   const QString c_LogActivity = "Initialization";
 
    m_ReportProgress(s32_Return, "Starting the initialization of CAN driver and protocol ...");
 
@@ -148,7 +148,7 @@ int32_t C_OscBuSequences::Init(stw::can::C_CanDispatcher * const opc_CanDispatch
 int32_t C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_FlashloaderResetWaitTime)
 {
    int32_t s32_Return = C_NO_ERR;
-   const C_SclString c_LogActivity = "Activate Flashloader";
+   const QString c_LogActivity = "Activate Flashloader";
    uint8_t u8_NumberCode = 0;
    const uint32_t u32_SCAN_TIME_MS = 5000U;
    uint32_t u32_WaitTime = ou32_FlashloaderResetWaitTime;
@@ -165,7 +165,7 @@ int32_t C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_FlashloaderRes
    if (s32_Return != C_NO_ERR)
    {
       //not a showstopper; user can still use the "manual reset" approach
-      C_SclString c_Text;
+      QString c_Text;
       c_Text = QString::asprintf("Could not set the \"request programming\" flag: Failed with result %d. "
                             "You still have the chance to reset the device manually ...", s32_Return);
       m_ReportProgress(C_WARN, c_Text);
@@ -180,7 +180,7 @@ int32_t C_OscBuSequences::ActivateFlashLoader(const uint32_t ou32_FlashloaderRes
    if (s32_Return != C_NO_ERR)
    {
       //also not a showstopper; user can still use the "manual reset" approach
-      C_SclString c_Text;
+      QString c_Text;
       osc_write_log_warning(c_LogActivity, "Could not request an ECU reset.");
 
       c_Text = QString::asprintf("You now have %u seconds time to turn on your target device ...",
@@ -253,7 +253,7 @@ int32_t C_OscBuSequences::ReadDeviceInformation(void)
 {
    int32_t s32_Return = C_NO_ERR;
    uint8_t u8_NumberCode;
-   C_SclString c_DeviceName;
+   QString c_DeviceName;
    C_OscComFlashloaderInformation c_Info;
 
    m_ReportProgress(s32_Return, "Starting to read the device information...");
@@ -418,7 +418,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
                                      const uint32_t ou32_TransferDataTimeout)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_LogActivity;
+   QString c_LogActivity;
    uint8_t u8_NumberCode;
    C_OscHexFile c_HexFile;
    uint32_t u32_SignatureBlockAddress = 0;
@@ -501,10 +501,10 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
 
          if (u64_Seed != 42U)
          {
-            const C_SclString c_Tmp =
+            const QString c_Tmp =
                "Received seed in non secure mode does not match the expected value, expected: 42, got " +
                QString::number(u64_Seed);
-            osc_write_log_warning(c_LogActivity, c_Tmp.c_str());
+            osc_write_log_warning(c_LogActivity, c_Tmp);
          }
 
          s32_Return = mc_OsyProtocol.OsySecurityAccessSendKey(3U, u32_KEY, &u8_NumberCode);
@@ -531,7 +531,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
             &u8_NumberCode);
          if (s32_Return != C_NO_ERR)
          {
-            C_SclString c_Error;
+            QString c_Error;
             c_Error = QString::asprintf("(Offset: 0x%08x Size: 0x%08x)", pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
                                    static_cast<uint32_t>(pc_HexDump->at_Blocks[u16_Area].au8_Data.size()));
             osc_write_log_error(c_LogActivity,  "Could not get confirmation about flash memory availability " +
@@ -550,7 +550,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
       const QTime c_Time = c_Now.time();
       uint8_t au8_Date[3];
       uint8_t au8_Time[3];
-      C_SclString c_UserName;
+      QString c_UserName;
       bool q_Return;
       au8_Date[0] = static_cast<uint8_t>(c_Date.year() % 100);
       au8_Date[1] = static_cast<uint8_t>(c_Date.month());
@@ -599,7 +599,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
                                                         u32_MaxBlockLength, &u8_NumberCode);
          if (s32_Return != C_NO_ERR)
          {
-            C_SclString c_Error;
+            QString c_Error;
             c_Error = QString::asprintf("(Offset: 0x%08X Size: 0x%08X)", pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
                                    static_cast<uint32_t>(pc_HexDump->at_Blocks[u16_Area].au8_Data.size()));
             osc_write_log_error(c_LogActivity, "Could not request download " + c_Error + "! Details: " +
@@ -638,7 +638,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
                s32_Return = mc_OsyProtocol.OsyTransferData(u8_BlockSequenceCounter, c_Data, &u8_NumberCode);
                if (s32_Return == C_NO_ERR)
                {
-                  C_SclString c_Text;
+                  QString c_Text;
                   c_Text = QString::asprintf("Transferring area %02d/%02d  byte %08d/%08d",
                                         u16_Area + 1, pc_HexDump->at_Blocks.size(),
                                         s32_Size - s32_RemainingBytes, s32_Size);
@@ -667,7 +667,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
 
          if (s32_Return == C_NO_ERR)
          {
-            C_SclString c_Text;
+            QString c_Text;
             c_Text = QString::asprintf("Transferring area %02d/%02d  byte %08d/%08d",
                                   u16_Area + 1, pc_HexDump->at_Blocks.size(), s32_Size, s32_Size);
 
@@ -727,7 +727,7 @@ int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const 
 int32_t C_OscBuSequences::ResetSystem(void)
 {
    int32_t s32_Return = C_NO_ERR;
-   const C_SclString c_LogActivity = "Reset System";
+   const QString c_LogActivity = "Reset System";
 
    m_ReportProgress(s32_Return, "Starting system reset... ");
 
@@ -766,7 +766,7 @@ int32_t C_OscBuSequences::h_ReadHexFile(const C_SclString & orc_HexFilePath, C_O
 {
    int32_t s32_Return = C_NO_ERR;
    uint32_t u32_Return;
-   const C_SclString c_LogActivity = "Read HEX File";
+   const QString c_LogActivity = "Read HEX File";
 
    u32_Return = orc_HexFile.LoadFromFile(orc_HexFilePath.c_str());
    if (u32_Return != stw::hex_file::NO_ERR)
