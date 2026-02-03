@@ -1044,7 +1044,7 @@ set(OPENSYDE_SOURCES
 )
 
 set(OPENSYDE_HEADERS
-   ${PROJECT_ROOT}/src/precompiled_headers/gui/precomp_headers.hpp
+   ${PROJECT_ROOT}/src/precompiled_headers/precomp_headers_gui.hpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieImportDataAssignment.hpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieImportedMessageVectorData.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiProgressBarUtil.hpp
@@ -2202,7 +2202,7 @@ target_include_directories(opensyde_core PRIVATE ${PROJECT_ROOT}/libs/openssl/in
 
 target_link_libraries(openSYDE PRIVATE ${OPENSYDE_LINK_LIBRARIES})
 
-target_precompile_headers(openSYDE PRIVATE ${PROJECT_ROOT}/src/precompiled_headers/gui/precomp_headers.hpp)
+target_precompile_headers(openSYDE PRIVATE ${PROJECT_ROOT}/src/precompiled_headers/precomp_headers_gui.hpp)
 
 include(GNUInstallDirs)
 

@@ -1553,14 +1553,14 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const QString & orc_CoValue, const
       //Remove whitespace and $
       for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length(); ++u32_ItChar)
       {
-         const char_t cn_Character = orc_CoValue[u32_ItChar + 1U];
+         const char_t cn_Character = orc_CoValue[u32_ItChar].toLatin1();
          if ((cn_Character == ' ') || (cn_Character == '$'))
          {
             //Skip
          }
          else
          {
-            c_LowerCaseNoWhiteSpaceNumber += orc_CoValue[u32_ItChar + 1U];
+            c_LowerCaseNoWhiteSpaceNumber += orc_CoValue[u32_ItChar];
          }
       }
       //Lower case
@@ -1641,14 +1641,14 @@ int32_t C_OscImportEdsDcf::mh_Get64IntegerValue(const QString & orc_CoValue, int
       //Remove whitespace and $
       for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length(); ++u32_ItChar)
       {
-         const char_t cn_Character = orc_CoValue[u32_ItChar + 1U];
+         const char_t cn_Character = orc_CoValue[u32_ItChar].toLatin1();
          if ((cn_Character == ' ') || (cn_Character == '$'))
          {
             //Skip
          }
          else
          {
-            c_ReducedString += orc_CoValue[u32_ItChar + 1U];
+            c_ReducedString += orc_CoValue[u32_ItChar];
          }
       }
 

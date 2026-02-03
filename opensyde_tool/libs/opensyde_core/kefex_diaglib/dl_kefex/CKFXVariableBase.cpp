@@ -428,15 +428,15 @@ C_SclString C_KFXVariableBase::GetStringValue(void) const
 
 void C_KFXVariableBase::SetStringValue(const C_SclString & orc_Value)
 {
-   if (orc_Value.length() < this->mu32_Size) //consider the '\0' -> "<"
+   if (orc_Value.Length() < this->mu32_Size) //consider the '\0' -> "<"
    {
       //preset to zero to leave remainder after \0 in a clean state:
       (void)std::memset(this->pu8_Value, 0, this->mu32_Size);
-      std::sprintf(reinterpret_cast<char_t *>(this->pu8_Value), "%s", orc_Value.toUtf8().constData());
+      std::sprintf(reinterpret_cast<char_t *>(this->pu8_Value), "%s", orc_Value.c_str());
    }
    else
    {
-      (void)std::memcpy(this->pu8_Value, orc_Value.toUtf8().constData(), this->mu32_Size);
+      (void)std::memcpy(this->pu8_Value, orc_Value.c_str(), this->mu32_Size);
    }
 }
 
@@ -772,13 +772,13 @@ void C_KFXVariableBase::SetStringDefault(const C_SclString & orc_Value, const ui
    {
       pu8_Data = &this->aau8_Defaults[ou16_DefaultIndex][0];
 
-      if (orc_Value.length() < this->mu32_Size)
+      if (orc_Value.Length() < this->mu32_Size)
       {
-         std::sprintf(reinterpret_cast<char_t *>(pu8_Data), "%s", orc_Value.toUtf8().constData());
+         std::sprintf(reinterpret_cast<char_t *>(pu8_Data), "%s", orc_Value.c_str());
       }
       else
       {
-         (void)std::memcpy(pu8_Data, orc_Value.toUtf8().constData(), this->mu32_Size);
+         (void)std::memcpy(pu8_Data, orc_Value.c_str(), this->mu32_Size);
       }
    }
 }

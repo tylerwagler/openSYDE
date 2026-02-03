@@ -52,7 +52,7 @@ void C_KFXProjectMetaInfo::LoadFromINI(QSettings & orc_IniFile, const C_SclStrin
    QString c_Section = orc_Section.ToQString();
 
    c_Text.clear();
-   c_Temp = C_SclString(orc_IniFile.value(c_Section + "/Line_" + QString::number(s32_Count).ToQString(),
+   c_Temp = C_SclString(orc_IniFile.value(c_Section + "/Line_" + QString::number(s32_Count),
                              "").toString().toStdString());
 
    while (c_Temp.Length() > 0)
