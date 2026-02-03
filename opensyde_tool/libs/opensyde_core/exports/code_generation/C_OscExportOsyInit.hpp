@@ -15,8 +15,6 @@
 #include <vector>
 
 #include "stwtypes.hpp"
-
-#include "C_SclStringList.hpp"
 #include "C_OscNode.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -31,10 +29,10 @@ namespace opensyde_core
 class C_OscExportOsyInit
 {
 public:
-   static stw::scl::C_SclString h_GetFileName(void);
-   static int32_t h_CreateSourceCode(const stw::scl::C_SclString & orc_FilePath, const C_OscNode & orc_Node,
+   static QString h_GetFileName(void);
+   static int32_t h_CreateSourceCode(const QString & orc_FilePath, const C_OscNode & orc_Node,
                                      const bool oq_RunsDpd, const uint16_t ou16_ApplicationIndex,
-                                     const stw::scl::C_SclString & orc_ExportToolInfo = "");
+                                     const QString & orc_ExportToolInfo = "");
 
    //Minimum buffer size required for DPD-services
    //greatest size for openSYDE server: WriteDataByIdentifier::SetKey

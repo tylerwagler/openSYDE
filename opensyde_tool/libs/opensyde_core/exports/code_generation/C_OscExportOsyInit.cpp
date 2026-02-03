@@ -16,8 +16,8 @@
 #include "stwerrors.hpp"
 
 
-#include "C_SclString.hpp"
-#include "C_SclStringList.hpp"
+#include "QString.hpp"
+#include "QStringList.hpp"
 #include "C_OscExportOsyInit.hpp"
 #include "C_OscExportDataPool.hpp"
 #include "C_OscExportCommunicationStack.hpp"
@@ -28,7 +28,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
-using namespace stw::scl;
+using namespace std;
 
 using namespace stw::opensyde_core;
 
@@ -50,7 +50,7 @@ using namespace stw::opensyde_core;
    \return filename
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportOsyInit::h_GetFileName(void)
+QString C_OscExportOsyInit::h_GetFileName(void)
 {
    return "osy_init";
 }
@@ -75,11 +75,11 @@ C_SclString C_OscExportOsyInit::h_GetFileName(void)
    C_RD_WR  Operation failure: cannot store files
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath, const C_OscNode & orc_Node,
+int32_t C_OscExportOsyInit::h_CreateSourceCode(const QString & orc_FilePath, const C_OscNode & orc_Node,
                                                const bool oq_RunsDpd, const uint16_t ou16_ApplicationIndex,
-                                               const C_SclString & orc_ExportToolInfo)
+                                               const QString & orc_ExportToolInfo)
 {
-   C_SclStringList c_Lines;
+   QStringList c_Lines;
    int32_t s32_Return;
    uint8_t u8_DataPoolsKnownInThisApplication = 0U;
    uint8_t u8_CommDefinitionsKnownInThisApplication = 0U;
@@ -88,35 +88,35 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
    uint32_t u32_CommProtocolCnt = 0U;
 
    //header file: quite simple (constant only as long as we always create DPD and DPH structures):
-   c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-   c_Lines.Add("/*!");
-   c_Lines.Add("   \\file");
-   c_Lines.Add("   \\brief       Application specific openSYDE initialization (Header file with interface)");
-   c_Lines.Add("");
-   c_Lines.Add(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
-   c_Lines.Add("*/");
-   c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-   c_Lines.Add("#ifndef " + h_GetFileName().toUpper() + "H");
-   c_Lines.Add("#define " + h_GetFileName().toUpper() + "H");
-   c_Lines.Add("");
-   c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Includes"));
-   c_Lines.Add("#include \"stwtypes.h\"");
+   c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+   c_Lines.append("/*!");
+   c_Lines.append("   \\file");
+   c_Lines.append("   \\brief       Application specific openSYDE initialization (Header file with interface)");
+   c_Lines.append("");
+   c_Lines.append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
+   c_Lines.append("*/");
+   c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+   c_Lines.append("#ifndef " + h_GetFileName().toUpper() + "H");
+   c_Lines.append("#define " + h_GetFileName().toUpper() + "H");
+   c_Lines.append("");
+   c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Includes"));
+   c_Lines.append("#include \"stwtypes.h\"");
    if (oq_RunsDpd == true)
    {
-      c_Lines.Add("#include \"osy_dpd_driver.h\"");
+      c_Lines.append("#include \"osy_dpd_driver.h\"");
    }
-   c_Lines.Add("#include \"osy_dpa_data_pool.h\"");
+   c_Lines.append("#include \"osy_dpa_data_pool.h\"");
    //includes for the Datapool definitions
    //adding them to this central header allows the application to just include one central file and access all data
    // pools
-   c_Lines.Add("//Header files exporting application specific Datapools:");
+   c_Lines.append("//Header files exporting application specific Datapools:");
    for (uint8_t u8_DataPool = 0U; u8_DataPool < orc_Node.c_DataPools.size(); u8_DataPool++)
    {
       if (mh_IsDpKnownToApp(u8_DataPool, ou16_ApplicationIndex, orc_Node, oq_RunsDpd) == true)
       {
-         C_SclString c_HeaderName;
+         QString c_HeaderName;
          c_HeaderName = C_OscExportDataPool::h_GetFileName(orc_Node.c_DataPools[u8_DataPool]);
-         c_Lines.Add("#include \"" + c_HeaderName + ".h\"");
+         c_Lines.append("#include \"" + c_HeaderName + ".h\"");
          u8_DataPoolsKnownInThisApplication++;
       }
    }
@@ -133,7 +133,7 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
    //only add includes if there is at least one COMM Protocol which is NOT CANopen
    if ((orc_Node.c_ComProtocols.size() > 0U) && (u32_CommProtocolCnt > 0U))
    {
-      c_Lines.Add("//Header files exporting comm stack configuration and status:");
+      c_Lines.append("//Header files exporting comm stack configuration and status:");
 
       for (uint32_t u32_ItProtocol = 0U; u32_ItProtocol < orc_Node.c_ComProtocols.size(); u32_ItProtocol++)
       {
@@ -152,10 +152,10 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
                   //at least one message defined ?
                   if (rc_Protocol.c_ComMessages[u32_ItInterface].ContainsAtLeastOneMessage() == true)
                   {
-                     const C_SclString c_HeaderName =
+                     const QString c_HeaderName =
                         C_OscExportCommunicationStack::h_GetFileName(static_cast<uint8_t>(u32_ItInterface),
                                                                      rc_Protocol.e_Type);
-                     c_Lines.Add("#include \"" + c_HeaderName + ".h\"");
+                     c_Lines.append("#include \"" + c_HeaderName + ".h\"");
                      u8_CommDefinitionsKnownInThisApplication++;
                   }
                }
@@ -164,9 +164,9 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
       }
    }
 
-   c_Lines.Add("");
+   c_Lines.append("");
    C_OscExportUti::h_AddExternCeStart(c_Lines);
-   c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Defines"));
+   c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Defines"));
 
    if (oq_RunsDpd == true)
    {
@@ -183,13 +183,13 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
             switch (rc_ComIf.e_InterfaceType)
             {
             case C_OscSystemBus::eCAN:
-               c_Lines.Add("#define OSY_INIT_DPD_BUS_NUMBER_CAN_CHANNEL_" +
+               c_Lines.append("#define OSY_INIT_DPD_BUS_NUMBER_CAN_CHANNEL_" +
                            QString::number(u8_NumCanChannels) + "       " +
                            QString::number(rc_ComIf.u8_InterfaceNumber) + "U");
                u8_NumCanChannels++;
                break;
             case C_OscSystemBus::eETHERNET:
-               c_Lines.Add("#define OSY_INIT_DPD_BUS_NUMBER_ETHERNET_CHANNEL_" +
+               c_Lines.append("#define OSY_INIT_DPD_BUS_NUMBER_ETHERNET_CHANNEL_" +
                            QString::number(u8_NumEthChannels) + "  " +
                            QString::number(rc_ComIf.u8_InterfaceNumber) + "U");
                u8_NumEthChannels++;
@@ -201,16 +201,16 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
          }
       }
 
-      c_Lines.Add("#define OSY_INIT_DPD_NUMBER_OF_CAN_CHANNELS         " + QString::number(u8_NumCanChannels) +
+      c_Lines.append("#define OSY_INIT_DPD_NUMBER_OF_CAN_CHANNELS         " + QString::number(u8_NumCanChannels) +
                   "U");
-      c_Lines.Add("#define OSY_INIT_DPD_NUMBER_OF_ETHERNET_CHANNELS    " + QString::number(u8_NumEthChannels) +
+      c_Lines.append("#define OSY_INIT_DPD_NUMBER_OF_ETHERNET_CHANNELS    " + QString::number(u8_NumEthChannels) +
                   "U");
-      c_Lines.Add("");
-      c_Lines.Add("#define OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS " +
+      c_Lines.append("");
+      c_Lines.append("#define OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS " +
                   QString::number(orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxClients) + "U");
-      c_Lines.Add("#define OSY_INIT_DPD_CAN_FIFO_SIZE_TX               " +
+      c_Lines.append("#define OSY_INIT_DPD_CAN_FIFO_SIZE_TX               " +
                   QString::number(orc_Node.c_Properties.c_OpenSydeServerSettings.u16_MaxMessageBufferTx) + "U");
-      c_Lines.Add("#define OSY_INIT_DPD_CAN_ROUTING_FIFO_SIZE_RX       " +
+      c_Lines.append("#define OSY_INIT_DPD_CAN_ROUTING_FIFO_SIZE_RX       " +
                   QString::number(orc_Node.c_Properties.c_OpenSydeServerSettings.u16_MaxRoutingMessageBufferRx) +
                   "U");
       //get size of greatest element so we know how to set up the buffers
@@ -229,47 +229,47 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
          u32_BufferSize = C_OscProtocolDriverOsyTpBase::hu16_OSY_MAXIMUM_SERVICE_SIZE;
       }
 
-      c_Lines.Add("#define OSY_INIT_DPD_BUF_SIZE_INSTANCE              " + QString::number(u32_BufferSize) + "U");
-      c_Lines.Add("#define OSY_INIT_DPD_MAX_NUM_CYCLIC_TRANSMISSIONS   " +
+      c_Lines.append("#define OSY_INIT_DPD_BUF_SIZE_INSTANCE              " + QString::number(u32_BufferSize) + "U");
+      c_Lines.append("#define OSY_INIT_DPD_MAX_NUM_CYCLIC_TRANSMISSIONS   " +
                   QString::number(orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxParallelTransmissions) +
                   "U");
-      c_Lines.Add("");
+      c_Lines.append("");
    }
 
-   c_Lines.Add("#define OSY_INIT_DPH_NUM_DATA_POOLS                 " +
+   c_Lines.append("#define OSY_INIT_DPH_NUM_DATA_POOLS                 " +
                QString::number(u8_DataPoolsKnownInThisApplication) + "U");
-   c_Lines.Add("");
+   c_Lines.append("");
    //add the next constant even if there are no COMM protocols; just placing the define does not create an external
    // dependency
-   c_Lines.Add("#define OSY_INIT_COM_NUM_PROTOCOL_CONFIGURATIONS    " +
+   c_Lines.append("#define OSY_INIT_COM_NUM_PROTOCOL_CONFIGURATIONS    " +
                QString::number(u8_CommDefinitionsKnownInThisApplication) + "U");
-   c_Lines.Add("");
-   c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Types"));
-   c_Lines.Add("");
-   c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
-   c_Lines.Add("");
-   c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Function Prototypes"));
+   c_Lines.append("");
+   c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Types"));
+   c_Lines.append("");
+   c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
+   c_Lines.append("");
+   c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Function Prototypes"));
    if (oq_RunsDpd == true)
    {
-      c_Lines.Add("extern const T_osy_dpd_data * osy_dpd_get_init_config(void);");
+      c_Lines.append("extern const T_osy_dpd_data * osy_dpd_get_init_config(void);");
    }
-   c_Lines.Add("extern const T_osy_dpa_data_pool * const * osy_dph_get_init_config(void);");
-   c_Lines.Add("extern uint8 osy_dph_get_num_data_pools(void);");
-   c_Lines.Add("");
+   c_Lines.append("extern const T_osy_dpa_data_pool * const * osy_dph_get_init_config(void);");
+   c_Lines.append("extern uint8 osy_dph_get_num_data_pools(void);");
+   c_Lines.append("");
 
    //prototypes for COMM utility functions; only place if there are COMM protocols to prevent external dependencies
    // (on type definitions)
    if ((u8_CommDefinitionsKnownInThisApplication > 0) && (u32_CommProtocolCnt > 0))
    {
-      c_Lines.Add("extern const T_osy_com_protocol_configuration * const * osy_com_get_protocol_configs(void);");
-      c_Lines.Add("extern uint8 osy_com_get_num_protocol_configs(void);");
-      c_Lines.Add("");
+      c_Lines.append("extern const T_osy_com_protocol_configuration * const * osy_com_get_protocol_configs(void);");
+      c_Lines.append("extern uint8 osy_com_get_num_protocol_configs(void);");
+      c_Lines.append("");
    }
 
-   c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Implementation"));
-   c_Lines.Add("");
+   c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Implementation"));
+   c_Lines.append("");
    C_OscExportUti::h_AddExternCeEnd(c_Lines);
-   c_Lines.Add("#endif");
+   c_Lines.append("#endif");
 
    // finally save all stuff into the file
    s32_Return = C_OscExportUti::h_SaveToFile(c_Lines, orc_FilePath, h_GetFileName(), true);
@@ -280,52 +280,52 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
       c_Lines.Clear();
 
       //constant header part:
-      c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-      c_Lines.Add("/*!");
-      c_Lines.Add("   \\file");
-      c_Lines.Add("   \\brief       Application specific openSYDE initialization (Source file with implementation)");
-      c_Lines.Add("");
-      c_Lines.Add(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
-      c_Lines.Add("*/");
-      c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-      c_Lines.Add("");
-      c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Includes"));
-      c_Lines.Add("#include <stddef.h> //for NULL");
-      c_Lines.Add("#include \"stwtypes.h\"");
-      c_Lines.Add("#include \"" + h_GetFileName() + ".h\"");
-      c_Lines.Add("#include \"osy_dpa_data_pool.h\"");
-      c_Lines.Add("");
-      c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Defines"));
-      c_Lines.Add("");
-      c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Types"));
-      c_Lines.Add("");
-      c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
-      c_Lines.Add("");
-      c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Module Global Variables"));
-      c_Lines.Add("");
-      c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Module Global Function Prototypes"));
-      c_Lines.Add("");
-      c_Lines.Add(C_OscExportUti::h_GetSectionSeparator("Implementation"));
+      c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+      c_Lines.append("/*!");
+      c_Lines.append("   \\file");
+      c_Lines.append("   \\brief       Application specific openSYDE initialization (Source file with implementation)");
+      c_Lines.append("");
+      c_Lines.append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
+      c_Lines.append("*/");
+      c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+      c_Lines.append("");
+      c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Includes"));
+      c_Lines.append("#include <stddef.h> //for NULL");
+      c_Lines.append("#include \"stwtypes.h\"");
+      c_Lines.append("#include \"" + h_GetFileName() + ".h\"");
+      c_Lines.append("#include \"osy_dpa_data_pool.h\"");
+      c_Lines.append("");
+      c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Defines"));
+      c_Lines.append("");
+      c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Types"));
+      c_Lines.append("");
+      c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
+      c_Lines.append("");
+      c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Module Global Variables"));
+      c_Lines.append("");
+      c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Module Global Function Prototypes"));
+      c_Lines.append("");
+      c_Lines.append(C_OscExportUti::h_GetSectionSeparator("Implementation"));
 
       if (oq_RunsDpd == true)
       {
-         c_Lines.Add("");
-         c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-         c_Lines.Add("/*! \\brief   Set up and provide openSYDE protocol driver configuration");
-         c_Lines.Add("");
-         c_Lines.Add("   Sets up:");
-         c_Lines.Add("   * CAN channel configuration");
-         c_Lines.Add("   * Ethernet channel configuration");
-         c_Lines.Add("   * Connection buffer definition");
-         c_Lines.Add("   * Main initialization structure");
-         c_Lines.Add("");
-         c_Lines.Add("   \\return");
-         c_Lines.Add(
+         c_Lines.append("");
+         c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+         c_Lines.append("/*! \\brief   Set up and provide openSYDE protocol driver configuration");
+         c_Lines.append("");
+         c_Lines.append("   Sets up:");
+         c_Lines.append("   * CAN channel configuration");
+         c_Lines.append("   * Ethernet channel configuration");
+         c_Lines.append("   * Connection buffer definition");
+         c_Lines.append("   * Main initialization structure");
+         c_Lines.append("");
+         c_Lines.append("   \\return");
+         c_Lines.append(
             "   pointer to configuration structure (statically available; can be used for the DPD initialization function)");
-         c_Lines.Add("*/");
-         c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-         c_Lines.Add("const T_osy_dpd_data * osy_dpd_get_init_config(void)");
-         c_Lines.Add("{");
+         c_Lines.append("*/");
+         c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+         c_Lines.append("const T_osy_dpd_data * osy_dpd_get_init_config(void)");
+         c_Lines.append("{");
 
          //channel instances
          u8_NumCanChannels = 0U;
@@ -343,189 +343,188 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
             {
                if (rc_ComIf.e_InterfaceType == C_OscSystemBus::eCAN)
                {
-                  c_Lines.Add("   OSY_DPD_CAN_CHANNEL(ht_CanInitConfiguration" +
+                  c_Lines.append("   OSY_DPD_CAN_CHANNEL(ht_CanInitConfiguration" +
                               QString::number(u8_NumCanChannels) +
                               ", OSY_INIT_DPD_BUS_NUMBER_CAN_CHANNEL_" + QString::number(u8_NumCanChannels) +
                               ",");
-                  c_Lines.Add(
+                  c_Lines.append(
                      "                       OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS, OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS,");
-                  c_Lines.Add("                       OSY_INIT_DPD_BUF_SIZE_INSTANCE,");
-                  c_Lines.Add(
+                  c_Lines.append("                       OSY_INIT_DPD_BUF_SIZE_INSTANCE,");
+                  c_Lines.append(
                      "                       OSY_INIT_DPD_CAN_ROUTING_FIFO_SIZE_RX, OSY_INIT_DPD_CAN_FIFO_SIZE_TX)");
                   u8_NumCanChannels++;
                }
                else
                {
-                  c_Lines.Add("   OSY_DPD_ETH_CHANNEL(ht_EthernetInitConfiguration" +
+                  c_Lines.append("   OSY_DPD_ETH_CHANNEL(ht_EthernetInitConfiguration" +
                               QString::number(u8_NumEthChannels) + ", OSY_INIT_DPD_BUS_NUMBER_ETHERNET_CHANNEL_" +
                               QString::number(u8_NumEthChannels) + ",");
-                  c_Lines.Add(
+                  c_Lines.append(
                      "                       OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS, OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS,");
-                  c_Lines.Add("                       OSY_INIT_DPD_BUF_SIZE_INSTANCE)");
+                  c_Lines.append("                       OSY_INIT_DPD_BUF_SIZE_INSTANCE)");
                   u8_NumEthChannels++;
                }
             }
          }
 
          //channel lists
-         c_Lines.Add("");
+         c_Lines.append("");
          if (u8_NumCanChannels > 0)
          {
-            c_Lines.Add("   static const T_osy_udc_global_cantp_init_configuration * const");
-            c_Lines.Add("      hapt_CanInitConfigurations[OSY_INIT_DPD_NUMBER_OF_CAN_CHANNELS] =");
-            c_Lines.Add("   {");
+            c_Lines.append("   static const T_osy_udc_global_cantp_init_configuration * const");
+            c_Lines.append("      hapt_CanInitConfigurations[OSY_INIT_DPD_NUMBER_OF_CAN_CHANNELS] =");
+            c_Lines.append("   {");
             for (uint8_t u8_Channel = 0U; u8_Channel < u8_NumCanChannels; u8_Channel++)
             {
-               C_SclString c_Text = "      &ht_CanInitConfiguration" + QString::number(u8_Channel);
+               QString c_Text = "      &ht_CanInitConfiguration" + QString::number(u8_Channel);
                if (u8_Channel != (u8_NumCanChannels - 1))
                {
                   c_Text += ",";
                }
-               c_Lines.Add(c_Text);
+               c_Lines.append(c_Text);
             }
-            c_Lines.Add("   };");
+            c_Lines.append("   };");
          }
-         c_Lines.Add("");
+         c_Lines.append("");
          if (u8_NumEthChannels > 0)
          {
-            c_Lines.Add("   static const T_osy_udc_global_ethertp_init_configuration * const");
-            c_Lines.Add("      hapt_EthernetInitConfigurations[OSY_INIT_DPD_NUMBER_OF_ETHERNET_CHANNELS] =");
-            c_Lines.Add("   {");
+            c_Lines.append("   static const T_osy_udc_global_ethertp_init_configuration * const");
+            c_Lines.append("      hapt_EthernetInitConfigurations[OSY_INIT_DPD_NUMBER_OF_ETHERNET_CHANNELS] =");
+            c_Lines.append("   {");
             for (uint8_t u8_Channel = 0U; u8_Channel < u8_NumEthChannels; u8_Channel++)
             {
-               C_SclString c_Text = "      &ht_EthernetInitConfiguration" + QString::number(u8_Channel);
+               QString c_Text = "      &ht_EthernetInitConfiguration" + QString::number(u8_Channel);
                if (u8_Channel != (u8_NumEthChannels - 1))
                {
                   c_Text += ",";
                }
-               c_Lines.Add(c_Text);
+               c_Lines.append(c_Text);
             }
-            c_Lines.Add("   };");
+            c_Lines.append("   };");
          }
-         c_Lines.Add("");
+         c_Lines.append("");
          //connection instances
          for (uint8_t u8_Instance = 0U; u8_Instance < orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxClients;
               u8_Instance++)
          {
-            c_Lines.Add("   OSY_DPD_CONNECTION_INSTANCE_INIT(ht_DpdConnectionInstance" +
+            c_Lines.append("   OSY_DPD_CONNECTION_INSTANCE_INIT(ht_DpdConnectionInstance" +
                         QString::number(u8_Instance) + ", " + QString::number(u8_Instance) + "U, " +
                         "OSY_INIT_DPD_MAX_NUM_CYCLIC_TRANSMISSIONS)");
          }
-         c_Lines.Add("");
-         c_Lines.Add(
+         c_Lines.append("");
+         c_Lines.append(
             "   static T_osy_dpd_connection_instance * const hapt_DpdConnections[OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS] =");
-         c_Lines.Add("   {");
+         c_Lines.append("   {");
          for (uint8_t u8_Instance = 0U; u8_Instance < orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxClients;
               u8_Instance++)
          {
-            C_SclString c_Text = "      &ht_DpdConnectionInstance" + QString::number(u8_Instance);
+            QString c_Text = "      &ht_DpdConnectionInstance" + QString::number(u8_Instance);
             if (u8_Instance != (orc_Node.c_Properties.c_OpenSydeServerSettings.u8_MaxClients - 1))
             {
                c_Text += ",";
             }
-            c_Lines.Add(c_Text);
+            c_Lines.append(c_Text);
          }
-         c_Lines.Add("   };");
-         c_Lines.Add("");
+         c_Lines.append("   };");
+         c_Lines.append("");
 
-         c_Lines.Add("   OSY_DPD_GLOBAL_DATA_INIT(ht_DpdDataInstance,");
-         c_Lines.Add("                            OSY_INIT_DPD_NUMBER_OF_CAN_CHANNELS,");
-         c_Lines.Add("                            OSY_INIT_DPD_NUMBER_OF_ETHERNET_CHANNELS,");
-         c_Lines.Add("                            OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS,");
-         c_Lines.Add("                            &hapt_DpdConnections[0],");
+         c_Lines.append("   OSY_DPD_GLOBAL_DATA_INIT(ht_DpdDataInstance,");
+         c_Lines.append("                            OSY_INIT_DPD_NUMBER_OF_CAN_CHANNELS,");
+         c_Lines.append("                            OSY_INIT_DPD_NUMBER_OF_ETHERNET_CHANNELS,");
+         c_Lines.append("                            OSY_INIT_DPD_NUMBER_OF_PARALLEL_CONNECTIONS,");
+         c_Lines.append("                            &hapt_DpdConnections[0],");
          if (u8_NumCanChannels > 0)
          {
-            c_Lines.Add("                            &hapt_CanInitConfigurations[0],");
+            c_Lines.append("                            &hapt_CanInitConfigurations[0],");
          }
          else
          {
-            c_Lines.Add("                            NULL,");
+            c_Lines.append("                            NULL,");
          }
          if (u8_NumEthChannels > 0)
          {
-            c_Lines.Add("                            &hapt_EthernetInitConfigurations[0])");
+            c_Lines.append("                            &hapt_EthernetInitConfigurations[0])");
          }
          else
          {
-            c_Lines.Add("                            NULL)");
+            c_Lines.append("                            NULL)");
          }
-         c_Lines.Add("");
-         c_Lines.Add("   return &ht_DpdDataInstance;");
-         c_Lines.Add("}");
+         c_Lines.append("");
+         c_Lines.append("   return &ht_DpdDataInstance;");
+         c_Lines.append("}");
       }
-      c_Lines.Add("");
-      c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-      c_Lines.Add("/*! \\brief   Set up and provide openSYDE Datapool handler configuration");
-      c_Lines.Add("");
-      c_Lines.Add("   Sets up:");
-      c_Lines.Add("   * initialization structure listing all Datapools in correct sequence");
-      c_Lines.Add("");
-      c_Lines.Add("   \\return");
-      c_Lines.Add(
+      c_Lines.append("");
+      c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+      c_Lines.append("/*! \\brief   Set up and provide openSYDE Datapool handler configuration");
+      c_Lines.append("");
+      c_Lines.append("   Sets up:");
+      c_Lines.append("   * initialization structure listing all Datapools in correct sequence");
+      c_Lines.append("");
+      c_Lines.append("   \\return");
+      c_Lines.append(
          "   pointer to initialization structure (statically available; can be used for the DPH initialization function)");
-      c_Lines.Add("   NULL: no Datapools defined");
-      c_Lines.Add("*/");
-      c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-      c_Lines.Add("const T_osy_dpa_data_pool * const * osy_dph_get_init_config(void)");
-      c_Lines.Add("{");
+      c_Lines.append("   NULL: no Datapools defined");
+      c_Lines.append("*/");
+      c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+      c_Lines.append("const T_osy_dpa_data_pool * const * osy_dph_get_init_config(void)");
+      c_Lines.append("{");
 
       //add table of Datapools
       if (u8_DataPoolsKnownInThisApplication == 0U)
       {
-         c_Lines.Add("   return NULL;");
+         c_Lines.append("   return NULL;");
       }
       else
       {
-         c_Lines.Add("   static const T_osy_dpa_data_pool * const hapt_Datapools[OSY_INIT_DPH_NUM_DATA_POOLS] =");
-         c_Lines.Add("   {");
+         c_Lines.append("   static const T_osy_dpa_data_pool * const hapt_Datapools[OSY_INIT_DPH_NUM_DATA_POOLS] =");
+         c_Lines.append("   {");
          for (uint8_t u8_DataPool = 0U; u8_DataPool < orc_Node.c_DataPools.size(); u8_DataPool++)
          {
             if (mh_IsDpKnownToApp(u8_DataPool, ou16_ApplicationIndex, orc_Node, oq_RunsDpd) == true)
             {
-               const C_SclString c_Text = "      &gt_" + orc_Node.c_DataPools[u8_DataPool].c_Name + "_DataPool,";
-               c_Lines.Add(c_Text);
+               const QString c_Text = "      &gt_" + orc_Node.c_DataPools[u8_DataPool].c_Name + "_DataPool,";
+               c_Lines.append(c_Text);
             }
          }
          //remove final ",":
-         c_Lines.Strings[static_cast<int32_t>(c_Lines.GetCount()) - 1].Delete(
-            c_Lines.Strings[static_cast<int32_t>(c_Lines.GetCount()) - 1].Length(), 1U);
+         c_Lines[static_cast<int32_t>(c_Lines.size()) - 1].chop(1U);
 
-         c_Lines.Add("   };");
-         c_Lines.Add("");
-         c_Lines.Add("   return &hapt_Datapools[0];");
+         c_Lines.append("   };");
+         c_Lines.append("");
+         c_Lines.append("   return &hapt_Datapools[0];");
       }
-      c_Lines.Add("}");
-      c_Lines.Add("");
-      c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-      c_Lines.Add("/*! \\brief   Get number of defined openSYDE Datapools");
-      c_Lines.Add("");
-      c_Lines.Add("   \\return");
-      c_Lines.Add("   number of openSYDE Datapools");
-      c_Lines.Add("*/");
-      c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-      c_Lines.Add("uint8 osy_dph_get_num_data_pools(void)");
-      c_Lines.Add("{");
-      c_Lines.Add("   return OSY_INIT_DPH_NUM_DATA_POOLS;");
-      c_Lines.Add("}");
+      c_Lines.append("}");
+      c_Lines.append("");
+      c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+      c_Lines.append("/*! \\brief   Get number of defined openSYDE Datapools");
+      c_Lines.append("");
+      c_Lines.append("   \\return");
+      c_Lines.append("   number of openSYDE Datapools");
+      c_Lines.append("*/");
+      c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+      c_Lines.append("uint8 osy_dph_get_num_data_pools(void)");
+      c_Lines.append("{");
+      c_Lines.append("   return OSY_INIT_DPH_NUM_DATA_POOLS;");
+      c_Lines.append("}");
 
       //only add function implementations if there is at least one COMM Protocol which is NOT CANopen
       if ((u8_CommDefinitionsKnownInThisApplication > 0) && (u32_CommProtocolCnt > 0))
       {
-         c_Lines.Add("");
-         c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-         c_Lines.Add("/*! \\brief   Set up and provide a list of openSYDE COMM protocol configurations");
-         c_Lines.Add("");
-         c_Lines.Add("   Sets up a table with pointers to all defined COMM protocol configurations");
-         c_Lines.Add("");
-         c_Lines.Add("   \\return");
-         c_Lines.Add("   pointer to table of configurations (statically available)");
-         c_Lines.Add("*/");
-         c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-         c_Lines.Add("const T_osy_com_protocol_configuration * const * osy_com_get_protocol_configs(void)");
-         c_Lines.Add("{");
-         c_Lines.Add("   static const T_osy_com_protocol_configuration * const");
-         c_Lines.Add("      hapt_CommConfigurations[OSY_INIT_COM_NUM_PROTOCOL_CONFIGURATIONS] =");
-         c_Lines.Add("   {");
+         c_Lines.append("");
+         c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+         c_Lines.append("/*! \\brief   Set up and provide a list of openSYDE COMM protocol configurations");
+         c_Lines.append("");
+         c_Lines.append("   Sets up a table with pointers to all defined COMM protocol configurations");
+         c_Lines.append("");
+         c_Lines.append("   \\return");
+         c_Lines.append("   pointer to table of configurations (statically available)");
+         c_Lines.append("*/");
+         c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+         c_Lines.append("const T_osy_com_protocol_configuration * const * osy_com_get_protocol_configs(void)");
+         c_Lines.append("{");
+         c_Lines.append("   static const T_osy_com_protocol_configuration * const");
+         c_Lines.append("      hapt_CommConfigurations[OSY_INIT_COM_NUM_PROTOCOL_CONFIGURATIONS] =");
+         c_Lines.append("   {");
 
          for (uint32_t u32_Protocol = 0U; u32_Protocol < orc_Node.c_ComProtocols.size(); u32_Protocol++)
          {
@@ -551,37 +550,36 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const C_SclString & orc_FilePath,
                      if (rc_Protocol.c_ComMessages[u8_Interface].ContainsAtLeastOneMessage() == true)
                      {
                         //finally we have a winner ...
-                        const C_SclString c_Text = "      &" + C_OscExportCommunicationStack::h_GetConfigurationName(
+                        const QString c_Text = "      &" + C_OscExportCommunicationStack::h_GetConfigurationName(
                            u8_Interface, rc_Protocol.e_Type) + ",";
 
-                        c_Lines.Add(c_Text);
+                        c_Lines.append(c_Text);
                      }
                   }
                }
             }
          }
          //remove final ",":
-         c_Lines.Strings[static_cast<int32_t>(c_Lines.GetCount()) - 1].Delete(
-            c_Lines.Strings[static_cast<int32_t>(c_Lines.GetCount()) - 1].Length(), 1U);
-         c_Lines.Add("   };");
-         c_Lines.Add("");
-         c_Lines.Add("   return &hapt_CommConfigurations[0];");
-         c_Lines.Add("}");
-         c_Lines.Add("");
-         c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-         c_Lines.Add("/*! \\brief   Get number of defined openSYDE COMM protocol configurations");
-         c_Lines.Add("");
-         c_Lines.Add(
+         c_Lines[static_cast<int32_t>(c_Lines.size()) - 1].chop(1U);
+         c_Lines.append("   };");
+         c_Lines.append("");
+         c_Lines.append("   return &hapt_CommConfigurations[0];");
+         c_Lines.append("}");
+         c_Lines.append("");
+         c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+         c_Lines.append("/*! \\brief   Get number of defined openSYDE COMM protocol configurations");
+         c_Lines.append("");
+         c_Lines.append(
             "   The returned value matches the number of elements in the table returned by osy_com_get_protocol_configs.");
-         c_Lines.Add("");
-         c_Lines.Add("   \\return");
-         c_Lines.Add("   number of openSYDE Datapools");
-         c_Lines.Add("*/");
-         c_Lines.Add(C_OscExportUti::h_GetHeaderSeparator());
-         c_Lines.Add("uint8 osy_com_get_num_protocol_configs(void)");
-         c_Lines.Add("{");
-         c_Lines.Add("   return OSY_INIT_COM_NUM_PROTOCOL_CONFIGURATIONS;");
-         c_Lines.Add("}");
+         c_Lines.append("");
+         c_Lines.append("   \\return");
+         c_Lines.append("   number of openSYDE Datapools");
+         c_Lines.append("*/");
+         c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());
+         c_Lines.append("uint8 osy_com_get_num_protocol_configs(void)");
+         c_Lines.append("{");
+         c_Lines.append("   return OSY_INIT_COM_NUM_PROTOCOL_CONFIGURATIONS;");
+         c_Lines.append("}");
       }
 
       // finally save all stuff into the file

@@ -34,7 +34,7 @@
  */
 
 using namespace stw::errors;
-using namespace stw::scl;
+using namespace std;
 
 using namespace stw::opensyde_core;
 
@@ -72,26 +72,23 @@ using namespace stw::opensyde_core;
    file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString
+QString
 C_OscExportParamSet::h_GetFileName(const C_OscNodeApplication &orc_DataBlock,
                                    const bool oq_IsSafe) {
-  C_SclString c_Retval;
+  QString c_Retval;
 
   Q_ASSERT(orc_DataBlock.c_ResultPaths.size() > 0);
 
   if (oq_IsSafe == true) {
     // first result path is always safe file
-    c_Retval = C_SclString::FromQString(
-        QFileInfo(orc_DataBlock.c_ResultPaths[0].ToQString()).fileName());
+    c_Retval = QFileInfo(orc_DataBlock.c_ResultPaths[0]).fileName();
   } else {
     // if there are two Data Blocks, the first result path is the safe file and
     // the second is the non-safe file
     if (orc_DataBlock.c_ResultPaths.size() > 1) {
-      c_Retval = C_SclString::FromQString(
-          QFileInfo(orc_DataBlock.c_ResultPaths[1].ToQString()).fileName());
+      c_Retval = QFileInfo(orc_DataBlock.c_ResultPaths[1]).fileName();
     } else {
-      c_Retval = C_SclString::FromQString(
-          QFileInfo(orc_DataBlock.c_ResultPaths[0].ToQString()).fileName());
+      c_Retval = QFileInfo(orc_DataBlock.c_ResultPaths[0]).fileName();
     }
   }
 
@@ -119,10 +116,10 @@ C_OscExportParamSet::h_GetFileName(const C_OscNodeApplication &orc_DataBlock,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportParamSet::h_CreateParameterSetImage(
-    const C_SclString &orc_Path, const C_OscNode &orc_Node,
-    const uint16_t ou16_ApplicationIndex, std::vector<C_SclString> &orc_Files,
-    const C_SclString &orc_ExportToolName,
-    const C_SclString &orc_ExportToolVersion) {
+    const QString &orc_Path, const C_OscNode &orc_Node,
+    const uint16_t ou16_ApplicationIndex, std::vector<QString> &orc_Files,
+    const QString &orc_ExportToolName,
+    const QString &orc_ExportToolVersion) {
   int32_t s32_Retval = C_NO_ERR;
 
   const C_OscNodeApplication &rc_Application =
@@ -407,11 +404,11 @@ int32_t C_OscExportParamSet::mh_FillRawEntries(
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscParamSetInterpretedFileInfoData
-C_OscExportParamSet::mh_GetFileInfo(const C_SclString &orc_ExportToolName,
-                                    const C_SclString &orc_ExportToolVersion) {
+C_OscExportParamSet::mh_GetFileInfo(const QString &orc_ExportToolName,
+                                    const QString &orc_ExportToolVersion) {
   C_OscParamSetInterpretedFileInfoData c_Info;
 
-  C_SclString c_Tmp;
+  QString c_Tmp;
 
   QDateTime c_DateTime = QDateTime::currentDateTime();
   c_Info.c_DateTime =
@@ -452,14 +449,14 @@ C_OscExportParamSet::mh_GetFileInfo(const C_SclString &orc_ExportToolName,
 int32_t C_OscExportParamSet::mh_WriteParameterSetImage(
     const C_OscParamSetRawNode &orc_RawNode,
     const C_OscParamSetInterpretedNode &orc_IntNode, const bool oq_IsSafe,
-    const C_OscNodeApplication &orc_DataBlock, const C_SclString &orc_Path,
-    std::vector<C_SclString> &orc_Files, const C_SclString &orc_ExportToolName,
-    const C_SclString &orc_ExportToolVersion) {
+    const C_OscNodeApplication &orc_DataBlock, const QString &orc_Path,
+    std::vector<QString> &orc_Files, const QString &orc_ExportToolName,
+    const QString &orc_ExportToolVersion) {
   int32_t s32_Retval;
 
-  const C_SclString c_Path =
+  const QString c_Path =
       stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(
-          orc_Path.ToQString()) +
+          orc_Path) +
       h_GetFileName(orc_DataBlock, oq_IsSafe);
   const C_OscParamSetInterpretedFileInfoData c_FileInfo =
       mh_GetFileInfo(orc_ExportToolName, orc_ExportToolVersion);
@@ -481,11 +478,11 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(
   } else {
     // Remove pre-existing files because PSI writing will else result in an
     // error
-    if (QFileInfo(c_Path.ToQString()).exists() &&
-        QFileInfo(c_Path.ToQString()).isFile()) {
+    if (QFileInfo(c_Path).exists() &&
+        QFileInfo(c_Path).isFile()) {
       int x_Return; // lint !e970 !e8080  //using type to match library
                     // interface
-      x_Return = std::remove(c_Path.c_str());
+      x_Return = std::remove(c_Path.toUtf8().constData());
       if (x_Return != 0) {
         osc_write_log_error("Creating PSI file",
                             "Could not erase pre-existing file \"" + c_Path +
@@ -509,13 +506,12 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(
     if (s32_Retval == C_NO_ERR) {
       std::vector<QString> c_TempFiles;
       C_OscExportUti::h_CollectFilePaths(
-          c_TempFiles, orc_Path.ToQString(),
-          C_OscExportParamSet::h_GetFileName(orc_DataBlock, oq_IsSafe)
-              .ToQString(),
+          c_TempFiles, orc_Path,
+          C_OscExportParamSet::h_GetFileName(orc_DataBlock, oq_IsSafe),
           false);
       for (std::vector<QString>::const_iterator c_It = c_TempFiles.begin();
            c_It != c_TempFiles.end(); ++c_It) {
-        orc_Files.push_back(C_SclString(*c_It));
+        orc_Files.push_back(QString(*c_It));
       }
     } else {
       s32_Retval = C_RD_WR;

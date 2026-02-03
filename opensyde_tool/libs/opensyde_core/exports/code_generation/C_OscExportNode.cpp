@@ -32,7 +32,7 @@
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
  */
-using namespace stw::scl;
+using namespace std;
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
@@ -100,28 +100,28 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Helper wrapper for CollectFilePaths to handle C_SclString <->
+/*! \brief   Helper wrapper for CollectFilePaths to handle QString <->
  * QString conversion
  */
 //----------------------------------------------------------------------------------------------------------------------
-static void h_CollectFilePathsWrapper(std::vector<C_SclString> &orc_Files,
-                                      const C_SclString &orc_Path,
-                                      const C_SclString &orc_FileName,
+static void h_CollectFilePathsWrapper(std::vector<QString> &orc_Files,
+                                      const QString &orc_Path,
+                                      const QString &orc_FileName,
                                       const bool oq_SourceCode) {
   std::vector<QString> c_TempFiles;
-  C_OscExportUti::h_CollectFilePaths(c_TempFiles, orc_Path.ToQString(),
-                                     orc_FileName.ToQString(), oq_SourceCode);
+  C_OscExportUti::h_CollectFilePaths(c_TempFiles, orc_Path,
+                                     orc_FileName, oq_SourceCode);
   for (std::vector<QString>::const_iterator c_It = c_TempFiles.begin();
        c_It != c_TempFiles.end(); ++c_It) {
-    orc_Files.push_back(C_SclString(*c_It));
+    orc_Files.push_back(QString(*c_It));
   }
 }
 
 int32_t C_OscExportNode::h_CreateSourceCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const C_SclString &orc_Path, std::vector<C_SclString> &orc_Files,
-    const C_SclString &orc_ExportToolName,
-    const C_SclString &orc_ExportToolVersion) {
+    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_ExportToolName,
+    const QString &orc_ExportToolVersion) {
   int32_t s32_Retval = C_NO_ERR;
 
   orc_Files.clear();
@@ -173,7 +173,7 @@ int32_t C_OscExportNode::h_CreateSourceCode(
 
   if (orc_Node.c_Applications[ou16_ApplicationIndex].e_Type ==
       C_OscNodeApplication::ePROGRAMMABLE_APPLICATION) {
-    const C_SclString c_ExportToolInfo =
+    const QString c_ExportToolInfo =
         orc_ExportToolName + " " + orc_ExportToolVersion;
 
     // export openSYDE initialization
@@ -233,8 +233,8 @@ int32_t C_OscExportNode::h_CreateSourceCode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateOsyInitCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const C_SclString &orc_Path, std::vector<C_SclString> &orc_Files,
-    const C_SclString &orc_ExportToolInfo) {
+    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_ExportToolInfo) {
   int32_t s32_Retval;
 
   bool q_CreateDpdInit;
@@ -283,8 +283,8 @@ int32_t C_OscExportNode::mh_CreateOsyInitCode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateDatapoolCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const C_SclString &orc_Path, std::vector<C_SclString> &orc_Files,
-    const C_SclString &orc_ExportToolInfo) {
+    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_ExportToolInfo) {
   int32_t s32_Retval = C_NO_ERR;
 
   // index of Datapool within this application (as there can be Datapools owned
@@ -432,8 +432,8 @@ int32_t C_OscExportNode::mh_CreateDatapoolCode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateCommStackCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const C_SclString &orc_Path, std::vector<C_SclString> &orc_Files,
-    const C_SclString &orc_ExportToolInfo) {
+    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_ExportToolInfo) {
   int32_t s32_Retval = C_NO_ERR;
 
   for (uint32_t u32_ItProtocol = 0U;
@@ -542,8 +542,8 @@ int32_t C_OscExportNode::mh_CreateCommStackCode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateHalConfigCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const C_SclString &orc_Path, std::vector<C_SclString> &orc_Files,
-    const C_SclString &orc_ExportToolInfo) {
+    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_ExportToolInfo) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_Node.c_HalcConfig.IsClear() == false) {
@@ -575,7 +575,7 @@ int32_t C_OscExportNode::mh_CreateHalConfigCode(
 
             // Handle file names
             if (s32_Retval == C_NO_ERR) {
-              const C_SclString c_FileName =
+              const QString c_FileName =
                   C_OscExportHalc::h_GetFileName(rc_HalDataPool.q_IsSafety);
 
               h_CollectFilePathsWrapper(orc_Files, orc_Path, c_FileName, true);
@@ -614,9 +614,9 @@ int32_t C_OscExportNode::mh_CreateHalConfigCode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateHalNvmData(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const C_SclString &orc_Path, std::vector<C_SclString> &orc_Files,
-    const C_SclString &orc_ExportToolName,
-    const C_SclString &orc_ExportToolVersion) {
+    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_ExportToolName,
+    const QString &orc_ExportToolVersion) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_Node.c_HalcConfig.IsClear() == false) {

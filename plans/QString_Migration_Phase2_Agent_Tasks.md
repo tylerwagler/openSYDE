@@ -538,10 +538,12 @@ build_syde_flash_release.bat
 ---
 
 ## Task 2.3: Fix C_OscExportCanOpenConfig String Operations
-**File**: `opensyde_tool/libs/opensyde_core/exports/x_config/C_OscExportCanOpenConfig.cpp`
+**File**: `opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCanOpenConfig.cpp`
 **Estimated Time**: 90 minutes
-**Status**: [ ]
+**Status**: [✓]
 **Dependencies**: Task 2.1, 2.2 (similar patterns)
+
+✅ **COMPLETED**: Full QString migration - 76 C_SclString → 123 QString occurrences
 
 ### Issues to Fix:
 

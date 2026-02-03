@@ -285,7 +285,7 @@ void C_OscExportHalc::mh_AddHeader(const QString & orc_ExportToolInfo, QStringLi
 
    if (oq_FileType == mhq_IS_HEADER_FILE)
    {
-      const QString c_HeaderGuard = h_GetFileName(oq_IsSafe).ToQString().toUpper() + "_H";
+      const QString c_HeaderGuard = h_GetFileName(oq_IsSafe).toUpper() + "_H";
 
       orc_Data.append("#ifndef " + c_HeaderGuard);
       orc_Data.append("#define " + c_HeaderGuard);

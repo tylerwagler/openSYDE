@@ -20,7 +20,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
-using namespace stw::scl;
+using namespace std;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -41,7 +41,7 @@ using namespace stw::opensyde_core;
    \return filename
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscExportCanOpenInit::h_GetFileName()
+QString C_OscExportCanOpenInit::h_GetFileName()
 {
    return "osco_man_config_init";
 }
@@ -61,56 +61,56 @@ C_SclString C_OscExportCanOpenInit::h_GetFileName()
    C_RD_WR  Operation failure: cannot store files
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FilePath, const C_OscNode & orc_Node,
+int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const QString & orc_FilePath, const C_OscNode & orc_Node,
                                                    const std::vector<uint8_t> & orc_IfWithCanOpenMan,
-                                                   const C_SclString & orc_ExportToolInfo)
+                                                   const QString & orc_ExportToolInfo)
 {
    int32_t s32_Return;
 
-   C_SclStringList c_Data;
-   C_SclString c_DefineValue;
-   C_SclString c_Subject;
+   QStringList c_Data;
+   QString c_DefineValue;
+   QString c_Subject;
 
    //header file:
-   c_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
-   c_Data.Append("/*!");
-   c_Data.Append("   \\file");
-   c_Data.Append("   \\brief       Application specific openSYDE initialization (Header file with interface)");
-   c_Data.Append("");
-   c_Data.Append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
-   c_Data.Append("*/");
-   c_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
-   c_Data.Append("#ifndef " + h_GetFileName().toUpper() + "H");
-   c_Data.Append("#define " + h_GetFileName().toUpper() + "H");
-   c_Data.Append("");
-   c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Includes"));
-   c_Data.Append("#include \"stwtypes.h\"");
-   c_Data.Append("#include \"osco_configuration.h\"");
-   c_Data.Append("");
-   c_Data.Append("//Header files exporting application specific CANopen Manager interface configurations:");
+   c_Data.append(C_OscExportUti::h_GetHeaderSeparator());
+   c_Data.append("/*!");
+   c_Data.append("   \\file");
+   c_Data.append("   \\brief       Application specific openSYDE initialization (Header file with interface)");
+   c_Data.append("");
+   c_Data.append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
+   c_Data.append("*/");
+   c_Data.append(C_OscExportUti::h_GetHeaderSeparator());
+   c_Data.append("#ifndef " + h_GetFileName().toUpper() + "H");
+   c_Data.append("#define " + h_GetFileName().toUpper() + "H");
+   c_Data.append("");
+   c_Data.append(C_OscExportUti::h_GetSectionSeparator("Includes"));
+   c_Data.append("#include \"stwtypes.h\"");
+   c_Data.append("#include \"osco_configuration.h\"");
+   c_Data.append("");
+   c_Data.append("//Header files exporting application specific CANopen Manager interface configurations:");
 
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
       const uint32_t u32_InterfaceIndex = static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]);
-      c_Data.Append("#include \"osco_man_config_can" + QString::number(u32_InterfaceIndex + 1U) + ".h\"");
+      c_Data.append("#include \"osco_man_config_can" + QString::number(u32_InterfaceIndex + 1U) + ".h\"");
    }
 
-   c_Data.Append("");
+   c_Data.append("");
    C_OscExportUti::h_AddExternCeStart(c_Data);
-   c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Defines"));
-   c_Data.Append("");
+   c_Data.append(C_OscExportUti::h_GetSectionSeparator("Defines"));
+   c_Data.append("");
 
-   c_Data.Append("//Indexes of configurations");
+   c_Data.append("//Indexes of configurations");
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
       const uint32_t u32_InterfaceIndex = static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]);
-      c_Data.Append("#define OSCO_MAN_CONFIG_INIT_CONFIG_INDEX_CAN" + QString::number(
+      c_Data.append("#define OSCO_MAN_CONFIG_INIT_CONFIG_INDEX_CAN" + QString::number(
                        u32_InterfaceIndex + 1U) + " (" + QString::number(u32_IfIt) + "U)");
    }
 
-   c_Data.Append("#define OSCO_MAN_CONFIG_INIT_NUM_CONFIGURATIONS (" +
+   c_Data.append("#define OSCO_MAN_CONFIG_INIT_NUM_CONFIGURATIONS (" +
                  QString::number(orc_Node.c_CanOpenManagers.size()) + "U)");
-   c_Data.Append("");
+   c_Data.append("");
 
    //put together the string for define "total number of TX PDOs"
    c_Subject = "PDOS";
@@ -118,16 +118,16 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    mh_ComposeDefineNumTotal(c_DefineValue, orc_IfWithCanOpenMan, true, c_Subject);
    //add comment to line
    c_DefineValue += ") //total number of all TX PDOs";
-   c_Data.Append(c_DefineValue);
+   c_Data.append(c_DefineValue);
 
    //put together the string for define "total number of RX PDOs"
    c_DefineValue = "#define OSCO_MAN_CONFIG_INIT_NUM_RX_PDOS    (";
    mh_ComposeDefineNumTotal(c_DefineValue, orc_IfWithCanOpenMan, false, c_Subject);
    //add comment to line
    c_DefineValue += ") //total number of all RX PDOs";
-   c_Data.Append(c_DefineValue);
+   c_Data.append(c_DefineValue);
 
-   c_Data.Append(
+   c_Data.append(
       "#define OSCO_MAN_CONFIG_INIT_NUM_PDOS       (OSCO_MAN_CONFIG_INIT_NUM_TX_PDOS + OSCO_MAN_CONFIG_INIT_NUM_RX_PDOS)");
 
    //put together string for define "total number of mapping in all TX PDOs"
@@ -136,16 +136,16 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    mh_ComposeDefineNumTotal(c_DefineValue, orc_IfWithCanOpenMan, true, c_Subject);
    //add comment to line
    c_DefineValue += ") //total number of mappings in all TX PDOs";
-   c_Data.Append(c_DefineValue);
+   c_Data.append(c_DefineValue);
 
    //put together string for define "total number of mapping in all RX PDOs"
    c_DefineValue = "#define OSCO_MAN_CONFIG_INIT_NUM_RX_SIGNALS (";
    mh_ComposeDefineNumTotal(c_DefineValue, orc_IfWithCanOpenMan, false, c_Subject);
    //add comment to line
    c_DefineValue += ") //total number of mappings in all RX PDOs";
-   c_Data.Append(c_DefineValue);
+   c_Data.append(c_DefineValue);
 
-   c_Data.Append(
+   c_Data.append(
       "#define OSCO_MAN_CONFIG_INIT_NUM_SIGNALS    (OSCO_MAN_CONFIG_INIT_NUM_TX_SIGNALS + OSCO_MAN_CONFIG_INIT_NUM_RX_SIGNALS)");
 
    //put together string for define "total number of devices"
@@ -153,21 +153,21 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    mh_ComposeDefineNumDevices(c_DefineValue, orc_IfWithCanOpenMan);
    //add comment to line
    c_DefineValue += ") //total number of devices in all configurations";
-   c_Data.Append(c_DefineValue);
+   c_Data.append(c_DefineValue);
 
-   c_Data.Append("");
-   c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Types"));
-   c_Data.Append("");
-   c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
-   c_Data.Append("///Stack configuration");
-   c_Data.Append("extern const T_osco_man_manager_init_configuration gt_osco_man_InitConfiguration;");
-   c_Data.Append("");
-   c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Function Prototypes"));
-   c_Data.Append("");
-   c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Implementation"));
-   c_Data.Append("");
+   c_Data.append("");
+   c_Data.append(C_OscExportUti::h_GetSectionSeparator("Types"));
+   c_Data.append("");
+   c_Data.append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
+   c_Data.append("///Stack configuration");
+   c_Data.append("extern const T_osco_man_manager_init_configuration gt_osco_man_InitConfiguration;");
+   c_Data.append("");
+   c_Data.append(C_OscExportUti::h_GetSectionSeparator("Function Prototypes"));
+   c_Data.append("");
+   c_Data.append(C_OscExportUti::h_GetSectionSeparator("Implementation"));
+   c_Data.append("");
    C_OscExportUti::h_AddExternCeEnd(c_Data);
-   c_Data.Append("#endif");
+   c_Data.append("#endif");
 
    //finally save all to file
    s32_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_FilePath, h_GetFileName(), true);
@@ -175,40 +175,40 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    if (s32_Return == C_NO_ERR)
    {
       //now for the c file:
-      C_SclString c_ProtocolConfig;
+      QString c_ProtocolConfig;
 
       c_Data.Clear();
 
-      c_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
-      c_Data.Append("/*!");
-      c_Data.Append("   \\file");
-      c_Data.Append(
+      c_Data.append(C_OscExportUti::h_GetHeaderSeparator());
+      c_Data.append("/*!");
+      c_Data.append("   \\file");
+      c_Data.append(
          "   \\brief       Application specific openSYDE CANopen Manager initialization (Source file with implementation)");
-      c_Data.Append("");
-      c_Data.Append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
-      c_Data.Append("*/");
-      c_Data.Append(C_OscExportUti::h_GetHeaderSeparator());
-      c_Data.Append("");
-      c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Includes"));
-      c_Data.Append("#include \"stwtypes.h\"");
-      c_Data.Append("#include \"osco_man_config_init.h\"");
-      c_Data.Append("");
-      c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Defines"));
-      c_Data.Append("");
-      c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Types"));
-      c_Data.Append("");
-      c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
-      c_Data.Append("///Create Datapool instance data:");
-      c_Data.Append("OSCO_MAN_CREATE_STATIC_DEFINITION_INSTANCE_DATA(mt_OscoManInstanceData)");
-      c_Data.Append("");
+      c_Data.append("");
+      c_Data.append(C_OscExportUti::h_GetCreationToolInfo(orc_ExportToolInfo));
+      c_Data.append("*/");
+      c_Data.append(C_OscExportUti::h_GetHeaderSeparator());
+      c_Data.append("");
+      c_Data.append(C_OscExportUti::h_GetSectionSeparator("Includes"));
+      c_Data.append("#include \"stwtypes.h\"");
+      c_Data.append("#include \"osco_man_config_init.h\"");
+      c_Data.append("");
+      c_Data.append(C_OscExportUti::h_GetSectionSeparator("Defines"));
+      c_Data.append("");
+      c_Data.append(C_OscExportUti::h_GetSectionSeparator("Types"));
+      c_Data.append("");
+      c_Data.append(C_OscExportUti::h_GetSectionSeparator("Global Variables"));
+      c_Data.append("///Create Datapool instance data:");
+      c_Data.append("OSCO_MAN_CREATE_STATIC_DEFINITION_INSTANCE_DATA(mt_OscoManInstanceData)");
+      c_Data.append("");
 
-      c_Data.Append(
+      c_Data.append(
          "static const T_osco_man_manager_configuration * const mapt_OscoManConfigs[OSCO_MAN_CONFIG_INIT_NUM_CONFIGURATIONS] =");
-      c_Data.Append("{");
+      c_Data.append("{");
       //generate string with ProtocolConfiguration struct for each interface
       for (uint8_t u8_IfIt = 0; u8_IfIt < orc_IfWithCanOpenMan.size(); ++u8_IfIt)
       {
-         const C_SclString c_InterfaceIndex =
+         const QString c_InterfaceIndex =
             QString::number(static_cast<uint32_t>(orc_IfWithCanOpenMan[u8_IfIt]) + 1U);
          c_ProtocolConfig = "   &gt_osco_man_can" + c_InterfaceIndex + "_ProtocolConfiguration";
 
@@ -216,24 +216,24 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
          {
             c_ProtocolConfig += ",";
          }
-         c_Data.Append(c_ProtocolConfig);
+         c_Data.append(c_ProtocolConfig);
       }
-      c_Data.Append("};");
+      c_Data.append("};");
 
       //add InitConfiguration struct
-      c_Data.Append("const T_osco_man_manager_init_configuration gt_osco_man_InitConfiguration =");
-      c_Data.Append("{");
-      c_Data.Append("   &mt_OscoManInstanceData,");
-      c_Data.Append("   OSCO_MAN_CONFIG_INIT_NUM_CONFIGURATIONS,");
-      c_Data.Append("   &mapt_OscoManConfigs[0]");
-      c_Data.Append("};");
+      c_Data.append("const T_osco_man_manager_init_configuration gt_osco_man_InitConfiguration =");
+      c_Data.append("{");
+      c_Data.append("   &mt_OscoManInstanceData,");
+      c_Data.append("   OSCO_MAN_CONFIG_INIT_NUM_CONFIGURATIONS,");
+      c_Data.append("   &mapt_OscoManConfigs[0]");
+      c_Data.append("};");
 
-      c_Data.Append("");
-      c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Module Global Variables"));
-      c_Data.Append("");
-      c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Module Global Function Prototypes"));
-      c_Data.Append("");
-      c_Data.Append(C_OscExportUti::h_GetSectionSeparator("Implementation"));
+      c_Data.append("");
+      c_Data.append(C_OscExportUti::h_GetSectionSeparator("Module Global Variables"));
+      c_Data.append("");
+      c_Data.append(C_OscExportUti::h_GetSectionSeparator("Module Global Function Prototypes"));
+      c_Data.append("");
+      c_Data.append(C_OscExportUti::h_GetSectionSeparator("Implementation"));
 
       //save all this to file
       s32_Return = C_OscExportUti::h_SaveToFile(c_Data, orc_FilePath, h_GetFileName(), false);
@@ -255,15 +255,15 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const C_SclString & orc_FileP
    \param[in]       orc_Subject            "subject" the string is composed for (can be "PDOS" or "SIGNALS")
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportCanOpenInit::mh_ComposeDefineNumTotal(C_SclString & orc_DefineValue,
+void C_OscExportCanOpenInit::mh_ComposeDefineNumTotal(QString & orc_DefineValue,
                                                       const std::vector<uint8_t> & orc_IfWithCanOpenMan,
-                                                      const bool oq_IsTx, const C_SclString & orc_Subject)
+                                                      const bool oq_IsTx, const QString & orc_Subject)
 {
-   const C_SclString c_PdoType = oq_IsTx ? "TX" : "RX";
+   const QString c_PdoType = oq_IsTx ? "TX" : "RX";
 
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
-      const C_SclString c_InterfaceIndex = QString::number(
+      const QString c_InterfaceIndex = QString::number(
          static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]) + 1U);
 
       orc_DefineValue += "OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_" + c_PdoType + "_" + orc_Subject;
@@ -285,12 +285,12 @@ void C_OscExportCanOpenInit::mh_ComposeDefineNumTotal(C_SclString & orc_DefineVa
    \param[in]       orc_IfWithCanOpenMan   vector with all interface indices, which contain a CANopen manager
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportCanOpenInit::mh_ComposeDefineNumDevices(C_SclString & orc_DefineValue,
+void C_OscExportCanOpenInit::mh_ComposeDefineNumDevices(QString & orc_DefineValue,
                                                         const std::vector<uint8_t> & orc_IfWithCanOpenMan)
 {
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {
-      const C_SclString c_InterfaceIndex = QString::number(
+      const QString c_InterfaceIndex = QString::number(
          static_cast<uint32_t>(orc_IfWithCanOpenMan[u32_IfIt]) + 1U);
 
       orc_DefineValue += "OSCO_MAN_CAN" + c_InterfaceIndex + "_NUMBER_OF_DEVICES";
