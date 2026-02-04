@@ -262,13 +262,13 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const C_SclString & 
       {
          // very strange! normally the precondition check should
          // guarantee a correct behavior of h_CreateTemporaryFolder
-         mhc_ErrorMessage = "Could not create temporary folder \"" +
+         C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "Could not create temporary folder \"" +
                             c_PackagePathTmp + "\" with application files.";
          if (c_ErrorPath.isEmpty() == false)
          {
-            mhc_ErrorMessage += " Issue in path: \"" + c_ErrorPath + "\"";
+            C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage += " Issue in path: \"" + c_ErrorPath + "\"";
          }
-         osc_write_log_error("Creating Update Package", mhc_ErrorMessage);
+         osc_write_log_error("Creating Update Package", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
          s32_Return = C_RD_WR; // redefine because we only have a few error codes
       }
 
@@ -281,7 +281,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const C_SclString & 
       s32_Return = C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(orc_SystemDefinition, mhc_SUP_SYSDEF,
                                                                             "Creating Update Package",
                                                                             c_PackagePathTmp, "", c_SupFiles,
-                                                                            mhc_ErrorMessage);
+                                                                            C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
    }
 
    // device.ini and device definition files
@@ -291,7 +291,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const C_SclString & 
                                                                                    "Creating Update Package",
                                                                                    c_PackagePathTmp, "",
                                                                                    c_SupFiles,
-                                                                                   mhc_ErrorMessage);
+                                                                                   C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
    }
 
    // * service update package file (service_update_package.syde_supdef)
@@ -316,14 +316,14 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const C_SclString & 
    {
       s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateZip("Creating Update Package", c_PackagePathTmp,
                                                                  c_TargetZipArchive, c_SupFiles,
-                                                                 mhc_ErrorMessage);
+                                                                 C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
    }
 
    // cleanup: delete temporary result folder
    if (q_TemporaryFolderCreated == true)
    {
       C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder("Creating Update Package",
-                                                            c_PackagePathTmp, s32_Return, mhc_ErrorMessage);
+                                                            c_PackagePathTmp, s32_Return, C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
    }
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
@@ -355,8 +355,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckSecurityParameters(const std
 
    if (orc_SignatureNodes.size() != orc_NodeSignatureKeys.size())
    {
-      mhc_ErrorMessage = "The container of signature nodes and signature nodes keys have not the same size.";
-      osc_write_log_error(orc_Function, mhc_ErrorMessage);
+      C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "The container of signature nodes and signature nodes keys have not the same size.";
+      osc_write_log_error(orc_Function, C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
       s32_Return = C_CHECKSUM;
    }
 
@@ -389,8 +389,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckPemFileParameters(
 
    if (orc_SignatureNodes.size() != orc_NodeSignaturePemFiles.size())
    {
-      mhc_ErrorMessage = "The container of signature nodes and signature nodes pem files have not the same size.";
-      osc_write_log_error("Create package using pem files", mhc_ErrorMessage);
+      C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "The container of signature nodes and signature nodes pem files have not the same size.";
+      osc_write_log_error("Create package using pem files", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
       s32_Return = C_CHECKSUM;
    }
 
@@ -399,8 +399,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckPemFileParameters(
       if (((orc_NodeSignaturePemFiles.size() != 0UL) && (orc_NodeSignaturePemFiles.size() != 1UL)) &&
           (orc_NodeSignaturePemFiles.size() != ou32_NumNodes))
       {
-         mhc_ErrorMessage = "The container of signature pem files and nodes have not the same size.";
-         osc_write_log_error("Create package using pem files", mhc_ErrorMessage);
+         C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "The container of signature pem files and nodes have not the same size.";
+         osc_write_log_error("Create package using pem files", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
          s32_Return = C_CHECKSUM;
       }
    }
@@ -520,16 +520,16 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckParamsToCreatePackage(const 
                                                                                   "Creating Update Package",
                                                                                   mhc_PACKAGE_EXT,
                                                                                   mhc_PACKAGE_EXT_TMP,
-                                                                                  mhc_ErrorMessage);
+                                                                                  C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
 
    // active bus index in range?
    if (s32_Return == C_NO_ERR)
    {
       if (ou32_ActiveBusIndex >= orc_SystemDefinition.c_Buses.size())
       {
-         mhc_ErrorMessage = "Active Bus Index \"" +
+         C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "Active Bus Index \"" +
                             QString::number(ou32_ActiveBusIndex) + "\" is not in System Definition.";
-         osc_write_log_error("Creating Update Package", mhc_ErrorMessage);
+         osc_write_log_error("Creating Update Package", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
          s32_Return = C_NOACT;
       }
    }
@@ -540,8 +540,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckParamsToCreatePackage(const 
       // number of nodes must match system definition
       if (orc_ActiveNodes.size() != orc_SystemDefinition.c_Nodes.size())
       {
-         mhc_ErrorMessage = "Number of nodes does match System Definition.";
-         osc_write_log_error("Creating Update Package", mhc_ErrorMessage);
+         C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "Number of nodes does match System Definition.";
+         osc_write_log_error("Creating Update Package", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
          s32_Return = C_OVERFLOW;
       }
       else
@@ -557,8 +557,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckParamsToCreatePackage(const 
          }
          if (q_Tmp == false)
          {
-            mhc_ErrorMessage = "There is no active node for update.";
-            osc_write_log_error("Creating Update Package", mhc_ErrorMessage);
+            C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "There is no active node for update.";
+            osc_write_log_error("Creating Update Package", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
             s32_Return = C_CONFIG;
          }
       }
@@ -569,8 +569,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckParamsToCreatePackage(const 
    {
       if (orc_NodesUpdateOrder.size() == 0)
       {
-         mhc_ErrorMessage = "There is no element in update order of nodes.";
-         osc_write_log_error("Creating Update Package", mhc_ErrorMessage);
+         C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "There is no element in update order of nodes.";
+         osc_write_log_error("Creating Update Package", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
          s32_Return = C_CONFIG;
       }
    }
@@ -581,8 +581,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckParamsToCreatePackage(const 
    {
       if (orc_ActiveNodes.size() != orc_ApplicationsToWrite.size())
       {
-         mhc_ErrorMessage = "The container of active nodes and update applications have not the same size.";
-         osc_write_log_error("Creating Update Package", mhc_ErrorMessage);
+         C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "The container of active nodes and update applications have not the same size.";
+         osc_write_log_error("Creating Update Package", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
          s32_Return = C_OVERFLOW;
       }
    }
@@ -677,7 +677,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_SupDefParamAdapter(const uint32_t
       if (orc_ApplicationsToWrite[u32_Pos].c_PemFile != "")
       {
          const C_SclString c_Tmp = C_SclString::FromQString(QFileInfo(orc_ApplicationsToWrite[u32_Pos].c_PemFile.ToQString()).fileName());
-         c_SupDefNodeContent.c_PemFile = c_Tmp;
+         c_SupDefNodeContent.c_PemFile = c_Tmp.ToQString();
 
          c_SupDefNodeContent.q_SendSecurityEnabledState = orc_ApplicationsToWrite[u32_Pos].q_SendSecurityEnabledState;
          c_SupDefNodeContent.q_SecurityEnabled = orc_ApplicationsToWrite[u32_Pos].q_SecurityEnabled;
@@ -734,15 +734,15 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_GetUpdatePositionOfNode(const vec
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageCreate::mh_GetSydeSecureFileNames(const C_OscSystemDefinition & orc_SystemDefinition,
                                                                    const C_SclString & orc_TargetPath,
-                                                                   std::vector<C_SclString> & orc_AbsPath,
-                                                                   std::vector<C_SclString> & orc_RelPath)
+                                                                   std::vector<QString> & orc_AbsPath,
+                                                                   std::vector<QString> & orc_RelPath)
 {
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
    {
       const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_ItNode];
-      const C_SclString c_RelFile = C_OscUtils::h_NiceifyStringForFileName(
+      const QString c_RelFile = C_OscUtils::h_NiceifyStringForFileName(
          rc_Node.c_Properties.c_Name) + ".syde_suc";
-      const C_SclString c_AbsFile = orc_TargetPath + c_RelFile;
+      const QString c_AbsFile = orc_TargetPath.ToQString() + c_RelFile;
       orc_AbsPath.push_back(c_AbsFile);
       orc_RelPath.push_back(c_RelFile);
    }
@@ -758,14 +758,14 @@ void C_OscSupServiceUpdatePackageCreate::mh_GetSydeSecureFileNames(const C_OscSy
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageCreate::mh_AppendFlashFilesToSecureFileSections(
    const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-   const std::vector<C_SclString> & orc_NodeFoldersAbs, std::vector<std::set<C_SclString> > & orc_SecureFiles)
+   const std::vector<QString> & orc_NodeFoldersAbs, std::vector<std::set<QString> > & orc_SecureFiles)
 {
    Q_ASSERT(orc_ApplicationsToWrite.size() == orc_NodeFoldersAbs.size());
    if (orc_ApplicationsToWrite.size() == orc_NodeFoldersAbs.size())
    {
       for (uint32_t u32_ItFolder = 0UL; u32_ItFolder < orc_ApplicationsToWrite.size(); ++u32_ItFolder)
       {
-         std::set<stw::scl::C_SclString> c_NodeSecFiles;
+         std::set<QString> c_NodeSecFiles;
          const C_OscSuSequences::C_DoFlash c_DoFlash = orc_ApplicationsToWrite[u32_ItFolder]; // current node
          // for service_update_package.syde_supdef we need relative paths!
          //Files
@@ -777,7 +777,7 @@ void C_OscSupServiceUpdatePackageCreate::mh_AppendFlashFilesToSecureFileSections
          //PEM file
          if (c_DoFlash.c_PemFile != "")
          {
-            std::vector<C_SclString> c_PemFiles;
+            std::vector<QString> c_PemFiles;
             c_PemFiles.push_back(c_DoFlash.c_PemFile);
             C_OscZipFile::h_AppendFilesRelative(c_NodeSecFiles, c_PemFiles, orc_NodeFoldersAbs[u32_ItFolder]);
          }
@@ -819,13 +819,13 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateDefFilesAndZipSecureFiles(
 {
    int32_t s32_Return;
 
-   vector<std::set<stw::scl::C_SclString> > c_SecFiles;
-   std::vector<stw::scl::C_SclString> c_SecPackageFilesRel;
-   std::vector<stw::scl::C_SclString> c_SecPackageFilesAbs;
-   std::vector<stw::scl::C_SclString> c_SecDefFilesRel;
-   std::vector<stw::scl::C_SclString> c_SecDefFilesAbs;
-   std::vector<stw::scl::C_SclString> c_NodeFoldersRel;
-   std::vector<stw::scl::C_SclString> c_NodeFoldersAbs;
+   vector<std::set<QString> > c_SecFiles;
+   std::vector<QString> c_SecPackageFilesRel;
+   std::vector<QString> c_SecPackageFilesAbs;
+   std::vector<QString> c_SecDefFilesRel;
+   std::vector<QString> c_SecDefFilesAbs;
+   std::vector<QString> c_NodeFoldersRel;
+   std::vector<QString> c_NodeFoldersAbs;
 
    mh_GetNodeFolderNames(orc_SystemDefinition, orc_PackagePathTmp, c_NodeFoldersAbs, c_NodeFoldersRel);
    mh_GetSydeSecureDefFileNames(orc_SystemDefinition, orc_PackagePathTmp, c_SecDefFilesAbs, c_SecDefFilesRel);
@@ -833,8 +833,15 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateDefFilesAndZipSecureFiles(
    mh_AppendFlashFilesToSecureFileSections(orc_ApplicationsToWrite,
                                            c_NodeFoldersAbs, c_SecFiles);
    // create and store 'service_update_package' file
+   // Convert QString vector to C_SclString vector for h_CreateUpdatePackageDefFile
+   std::vector<C_SclString> c_SecPackageFilesRelSCL;
+   c_SecPackageFilesRelSCL.reserve(c_SecPackageFilesRel.size());
+   for (const QString & rc_File : c_SecPackageFilesRel)
+   {
+      c_SecPackageFilesRelSCL.push_back(C_SclString::FromQString(rc_File));
+   }
    s32_Return = C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(orc_PackagePathTmp, orc_SupDefContent,
-                                                                      c_SecPackageFilesRel);
+                                                                      c_SecPackageFilesRelSCL);
    if (s32_Return == C_NO_ERR)
    {
       s32_Return = mh_HandleNodeDefCreation(orc_ActiveNodes, c_SecDefFilesAbs, c_SecDefFilesRel, orc_AddSignatureNodes,
@@ -883,10 +890,10 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateDefFilesAndZipSecureFiles(
    \retval   C_BUSY      Problems with deleting the temporary file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(const std::vector<std::set<C_SclString> > & orc_SecFiles,
-                                                              const std::vector<C_SclString> & orc_SecPackageFilesRel,
-                                                              const std::vector<C_SclString> & orc_SecPackageFilesAbs,
-                                                              const std::vector<C_SclString> & orc_NodeFoldersAbs,
+int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(const std::vector<std::set<QString> > & orc_SecFiles,
+                                                              const std::vector<QString> & orc_SecPackageFilesRel,
+                                                              const std::vector<QString> & orc_SecPackageFilesAbs,
+                                                              const std::vector<QString> & orc_NodeFoldersAbs,
                                                               const std::vector<uint8_t> & orc_ActiveNodes,
                                                               const std::vector<uint8_t> & orc_EncryptNodes,
                                                               const std::vector<C_SclString> & orc_EncryptNodesPassword,
@@ -929,17 +936,27 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(const std::vector<
          {
             if (c_EncryptNodes[u32_File] == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE)
             {
+               QString c_ErrorQt;
                s32_Return =
                   C_OscAesFile::h_CreateEncryptedZipFile(orc_NodeFoldersAbs[u32_File], orc_SecFiles[u32_File],
                                                          orc_SecPackageFilesAbs[u32_File],
-                                                         c_EncryptNodesPassword[u32_File], &mhc_ErrorMessage
+                                                         c_EncryptNodesPassword[u32_File], &c_ErrorQt
                                                          );
+               if (!c_ErrorQt.isEmpty())
+               {
+                  C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = C_SclString::FromQString(c_ErrorQt);
+               }
             }
             else
             {
+               QString c_ErrorQt;
                s32_Return =
                   C_OscZipFile::h_CreateZipFile(orc_NodeFoldersAbs[u32_File], orc_SecFiles[u32_File],
-                                                orc_SecPackageFilesAbs[u32_File], &mhc_ErrorMessage);
+                                                orc_SecPackageFilesAbs[u32_File], &c_ErrorQt);
+               if (!c_ErrorQt.isEmpty())
+               {
+                  C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = C_SclString::FromQString(c_ErrorQt);
+               }
             }
             if (s32_Return == C_NO_ERR)
             {
@@ -972,8 +989,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(const std::vector<
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(const std::vector<uint8_t> & orc_ActiveNodes,
-                                                                     const std::vector<C_SclString> & orc_SecDefFilesAbs, const std::vector<C_SclString> & orc_SecDefFilesRel, const std::vector<uint8_t> & orc_AddSignatureNodes, const uint32_t ou32_NodeCount, std::vector<C_OscSupNodeDefinition> & orc_SupDefNodes,
-                                                                     std::vector<std::set<C_SclString> > & orc_SecFiles)
+                                                                     const std::vector<QString> & orc_SecDefFilesAbs, const std::vector<QString> & orc_SecDefFilesRel, const std::vector<uint8_t> & orc_AddSignatureNodes, const uint32_t ou32_NodeCount, std::vector<C_OscSupNodeDefinition> & orc_SupDefNodes,
+                                                                     std::vector<std::set<QString> > & orc_SecFiles)
 {
    int32_t s32_Return;
 
@@ -999,14 +1016,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(const std::
          }
       }
    }
-   // Convert C_SclString vector to QString vector
-   std::vector<QString> c_SecDefFilesAbsQt;
-   c_SecDefFilesAbsQt.reserve(orc_SecDefFilesAbs.size());
-   for (const auto & c_File : orc_SecDefFilesAbs)
-   {
-      c_SecDefFilesAbsQt.push_back(c_File.ToQString());
-   }
-   s32_Return = C_OscSupNodeDefinitionFiler::h_SaveNodes(c_SecDefFilesAbsQt, orc_SupDefNodes);
+   s32_Return = C_OscSupNodeDefinitionFiler::h_SaveNodes(orc_SecDefFilesAbs, orc_SupDefNodes);
    //Add new files
    if (s32_Return == C_NO_ERR)
    {
@@ -1045,9 +1055,9 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(const std::
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleSignatureCreation(
-   const std::vector<C_SclString> & orc_NodeFoldersAbs, const std::vector<uint8_t> & orc_ActiveNodes,
+   const std::vector<QString> & orc_NodeFoldersAbs, const std::vector<uint8_t> & orc_ActiveNodes,
    const std::vector<uint8_t> & orc_AddSignatureNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
-   const uint32_t ou32_NodeCount, std::vector<std::set<C_SclString> > & orc_SecFiles)
+   const uint32_t ou32_NodeCount, std::vector<std::set<QString> > & orc_SecFiles)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1078,9 +1088,9 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleSignatureCreation(
 
                if (s32_Retval == C_NO_ERR)
                {
-                  const C_SclString c_SignatureFilePath = orc_NodeFoldersAbs[u32_File] +
+                  const QString c_SignatureFilePath = orc_NodeFoldersAbs[u32_File] +
                                                           C_OscSupSignatureFiler::h_GetSignatureFileName();
-                  s32_Retval = C_OscSupSignatureFiler::h_CreateSignatureFile(c_SignatureFilePath.ToQString(), c_Signature.ToQString());
+                  s32_Retval = C_OscSupSignatureFiler::h_CreateSignatureFile(c_SignatureFilePath, c_Signature.ToQString());
                   if (s32_Retval == C_NO_ERR)
                   {
                      orc_SecFiles[u32_File].insert(C_OscSupSignatureFiler::h_GetSignatureFileName());
@@ -1110,8 +1120,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleSignatureCreation(
    \retval   C_RANGE    Invalid EC private key (not present or length not correct)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageCreate::mh_CalcSig(const C_SclString & orc_SourcePath,
-                                                       const std::set<C_SclString> & orc_SupFiles,
+int32_t C_OscSupServiceUpdatePackageCreate::mh_CalcSig(const QString & orc_SourcePath,
+                                                       const std::set<QString> & orc_SupFiles,
                                                        const std::vector<uint8_t> & orc_Key,
                                                        C_SclString & orc_Signature)
 {
@@ -1121,7 +1131,15 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CalcSig(const C_SclString & orc_S
    {
       uint8_t au8_BinDigest[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH];
 
-      s32_Retval = C_OscSupServiceUpdatePackageBase::mh_CalcDigest(orc_SourcePath, orc_SupFiles, au8_BinDigest, false);
+      // Convert QString containers to C_SclString for base class method
+      const C_SclString c_SourcePath = C_SclString::FromQString(orc_SourcePath);
+      std::set<C_SclString> c_SupFiles;
+      for (const QString & rc_File : orc_SupFiles)
+      {
+         c_SupFiles.insert(C_SclString::FromQString(rc_File));
+      }
+
+      s32_Retval = C_OscSupServiceUpdatePackageBase::mh_CalcDigest(c_SourcePath, c_SupFiles, au8_BinDigest, false);
       if (s32_Retval == C_NO_ERR)
       {
          C_OscSecurityEcdsa::C_Ecdsa256Signature c_Signature;
@@ -1136,8 +1154,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CalcSig(const C_SclString & orc_S
             C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(au8_BinDigest, au8_PrivateKey, c_Signature, c_Error);
          if (s32_Retval != C_NO_ERR)
          {
-            mhc_ErrorMessage = c_Error;
-            osc_write_log_error("Creating Update Package", mhc_ErrorMessage);
+            C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = c_Error;
+            osc_write_log_error("Creating Update Package", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage);
          }
          else
          {
@@ -1145,7 +1163,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CalcSig(const C_SclString & orc_S
             Q_ASSERT(s32_Retval == C_NO_ERR); //the library gave us this signature; why would it not be valid ?
 
             mh_DigestToString(au8_BinDigest, c_Log);
-            osc_write_log_info("Creating Update Package", "security digest: " + c_Log);
+            osc_write_log_info("Creating Update Package", "security digest: " + c_Log.ToQString());
          }
       }
    }
@@ -1195,17 +1213,17 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_GetPemFileContent(const std::vect
             s32_Retval = c_Pem.LoadFromFile(c_NodeSignaturePemFiles[u32_ItNode].c_str(), c_Err);
             if (s32_Retval != C_NO_ERR)
             {
-               mhc_ErrorMessage = c_Err;
-               osc_write_log_error("Reading pem files", mhc_ErrorMessage);
+               C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = C_SclString::FromQString(QString::fromStdString(c_Err));
+               osc_write_log_error("Reading pem files", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage.ToQString());
             }
             else
             {
                const std::vector<uint8_t> c_PrivateKey = c_Pem.GetKeyInfo().GetPrivateKey();
                if (c_PrivateKey.size() != C_OscSecurityEcdsa::hu32_SECP256R1_PRIVATE_KEY_LENGTH)
                {
-                  mhc_ErrorMessage = "ECDSA private key not provided in pem file \"" +
+                  C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "ECDSA private key not provided in pem file \"" +
                                      c_NodeSignaturePemFiles[u32_ItNode] + "\" or provided with incorrect length";
-                  osc_write_log_error("Reading pem files", mhc_ErrorMessage);
+                  osc_write_log_error("Reading pem files", C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage.ToQString());
                   s32_Retval = C_RD_WR;
                }
                else

@@ -100,40 +100,40 @@ private:
 
    static void mh_GetSydeSecureFileNames(const C_OscSystemDefinition & orc_SystemDefinition,
                                          const stw::scl::C_SclString & orc_TargetPath,
-                                         std::vector<stw::scl::C_SclString> & orc_AbsPath,
-                                         std::vector<stw::scl::C_SclString> & orc_RelPath);
+                                         std::vector<QString> & orc_AbsPath,
+                                         std::vector<QString> & orc_RelPath);
    static void mh_AppendFlashFilesToSecureFileSections(
       const std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-      const std::vector<stw::scl::C_SclString> & orc_NodeFoldersAbs,
-      std::vector<std::set<stw::scl::C_SclString> > & orc_SecureFiles);
+      const std::vector<QString> & orc_NodeFoldersAbs,
+      std::vector<std::set<QString> > & orc_SecureFiles);
    static int32_t mh_CreateDefFilesAndZipSecureFiles(const C_OscSystemDefinition & orc_SystemDefinition,
                                                      C_OscSupDefinition & orc_SupDefContent,
                                                      const stw::scl::C_SclString & orc_PackagePathTmp,
                                                      const std::vector<uint8_t> & orc_ActiveNodes,
                                                      const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::set<stw::scl::C_SclString> & orc_SupFiles, const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<stw::scl::C_SclString> & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys);
-   static int32_t mh_CreateNodesZip(const std::vector<std::set<stw::scl::C_SclString> > & orc_SecFiles,
-                                    const std::vector<stw::scl::C_SclString> & orc_SecPackageFilesRel,
-                                    const std::vector<stw::scl::C_SclString> & orc_SecPackageFilesAbs,
-                                    const std::vector<stw::scl::C_SclString> & orc_NodeFoldersAbs,
+   static int32_t mh_CreateNodesZip(const std::vector<std::set<QString> > & orc_SecFiles,
+                                    const std::vector<QString> & orc_SecPackageFilesRel,
+                                    const std::vector<QString> & orc_SecPackageFilesAbs,
+                                    const std::vector<QString> & orc_NodeFoldersAbs,
                                     const std::vector<uint8_t> & orc_ActiveNodes,
                                     const std::vector<uint8_t> & orc_EncryptNodes,
                                     const std::vector<stw::scl::C_SclString> & orc_EncryptNodesPassword,
                                     const uint32_t ou32_NodeCount, std::set<stw::scl::C_SclString> & orc_SupFiles);
    static int32_t mh_HandleNodeDefCreation(const std::vector<uint8_t> & orc_ActiveNodes,
-                                           const std::vector<stw::scl::C_SclString> & orc_SecDefFilesAbs,
-                                           const std::vector<stw::scl::C_SclString> & orc_SecDefFilesRel,
+                                           const std::vector<QString> & orc_SecDefFilesAbs,
+                                           const std::vector<QString> & orc_SecDefFilesRel,
                                            const std::vector<uint8_t> & orc_AddSignatureNodes,
                                            const uint32_t ou32_NodeCount,
                                            std::vector<C_OscSupNodeDefinition> & orc_SupDefNodes,
-                                           std::vector<std::set<stw::scl::C_SclString> > & orc_SecFiles);
-   static int32_t mh_HandleSignatureCreation(const std::vector<stw::scl::C_SclString> & orc_NodeFoldersAbs,
+                                           std::vector<std::set<QString> > & orc_SecFiles);
+   static int32_t mh_HandleSignatureCreation(const std::vector<QString> & orc_NodeFoldersAbs,
                                              const std::vector<uint8_t> & orc_ActiveNodes,
                                              const std::vector<uint8_t> & orc_AddSignatureNodes,
                                              const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
                                              const uint32_t ou32_NodeCount,
-                                             std::vector<std::set<stw::scl::C_SclString> > & orc_SecFiles);
-   static int32_t mh_CalcSig(const stw::scl::C_SclString & orc_SourcePath,
-                             const std::set<stw::scl::C_SclString> & orc_SupFiles, const std::vector<uint8_t> & orc_Key,
+                                             std::vector<std::set<QString> > & orc_SecFiles);
+   static int32_t mh_CalcSig(const QString & orc_SourcePath,
+                             const std::set<QString> & orc_SupFiles, const std::vector<uint8_t> & orc_Key,
                              stw::scl::C_SclString & orc_Signature);
    static int32_t mh_GetPemFileContent(const std::vector<uint8_t> & orc_ActiveNodes,
                                        const std::vector<uint8_t> & orc_SignatureNodes,
