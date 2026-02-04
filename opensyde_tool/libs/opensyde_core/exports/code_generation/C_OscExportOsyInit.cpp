@@ -277,7 +277,7 @@ int32_t C_OscExportOsyInit::h_CreateSourceCode(const QString & orc_FilePath, con
    if (s32_Return == C_NO_ERR)
    {
       //now for the c file:
-      c_Lines.Clear();
+      c_Lines.clear();
 
       //constant header part:
       c_Lines.append(C_OscExportUti::h_GetHeaderSeparator());

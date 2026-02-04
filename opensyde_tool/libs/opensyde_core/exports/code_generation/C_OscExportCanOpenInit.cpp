@@ -177,7 +177,7 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const QString & orc_FilePath,
       //now for the c file:
       QString c_ProtocolConfig;
 
-      c_Data.Clear();
+      c_Data.clear();
 
       c_Data.append(C_OscExportUti::h_GetHeaderSeparator());
       c_Data.append("/*!");

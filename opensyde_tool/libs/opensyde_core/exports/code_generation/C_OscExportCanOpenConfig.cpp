@@ -419,7 +419,7 @@ int32_t C_OscExportCanOpenConfig::mh_CreateHeaderFile(const QString & orc_Export
    int32_t s32_Return;
    QStringList c_Data;
 
-   c_Data.Clear();
+   c_Data.clear();
 
    mh_AddHeader(orc_ExportInfoTool, c_Data, ou8_InterfaceIndex, mhq_IS_HEADER_FILE);
 
@@ -496,7 +496,7 @@ int32_t C_OscExportCanOpenConfig::mh_CreateImplementationFile(const QString & or
    if ((C_OscCanProtocol::h_GetComListIndex(orc_Datapool, ou8_InterfaceIndex, true, u32_TxListIndex) == C_NO_ERR) &&
        (C_OscCanProtocol::h_GetComListIndex(orc_Datapool, ou8_InterfaceIndex, false, u32_RxListIndex) == C_NO_ERR))
    {
-      c_Data.Clear();
+      c_Data.clear();
       const C_OscNodeDataPoolList rc_DatapoolTxList = orc_Datapool.c_Lists[u32_TxListIndex];
       const C_OscNodeDataPoolList rc_DatapoolRxList = orc_Datapool.c_Lists[u32_RxListIndex];
       //add documentation header
@@ -874,7 +874,7 @@ void C_OscExportCanOpenConfig::mh_AddSignalDefinitions(QStringList & orc_Data,
          if (rc_CurrentSignalList.size() > 0)
          {
             orc_Data.append("static const T_osco_man_pdo_signal_definition mat_Pdo_" +
-                            rc_CurrentMsg.c_Name + "[" + rc_CurrentSignalList.size() + "] =");
+                            rc_CurrentMsg.c_Name + "[" + QString::number(rc_CurrentSignalList.size()) + "] =");
             orc_Data.append("{");
             mh_ConvertSignalsToStrings(orc_Data, orc_DatapoolList, rc_CurrentMsg.c_Signals, ou32_SignalListIndex, true);
             orc_Data.append("};");

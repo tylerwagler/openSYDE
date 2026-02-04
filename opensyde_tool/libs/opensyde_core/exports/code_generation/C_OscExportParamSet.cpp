@@ -412,7 +412,7 @@ C_OscExportParamSet::mh_GetFileInfo(const QString &orc_ExportToolName,
 
   QDateTime c_DateTime = QDateTime::currentDateTime();
   c_Info.c_DateTime =
-      C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime);
+      QString::fromStdString(C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime));
   stw::opensyde_core::C_OscUtils::h_GetSystemUserName(c_Tmp);
   c_Info.c_Creator = c_Tmp;
   c_Info.c_ToolName = orc_ExportToolName;

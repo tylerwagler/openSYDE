@@ -659,7 +659,7 @@ void C_OscExportCommunicationStack::mh_AddDefines(QStringList & orc_Data,
          orc_Data.append("///check for correct version of structure definitions");
          orc_Data.append(
             "#if OSY_COM_CONFIG_DEFINITION_VERSION != 0x" +
-            C_OscExportCommunicationStack::h_ConvertOverallCodeVersion(ou16_GenCodeVersion).toUpper() + "U");
+            QString::number(C_OscExportCommunicationStack::h_ConvertOverallCodeVersion(ou16_GenCodeVersion), 16).toUpper() + "U");
          orc_Data.append("///if compilation fails here the openSYDE library version does not match the version of the "
                          "generated code");
          orc_Data.append("static T_osy_non_existing_type_" + orc_ProjectId + " mt_Variable;");
