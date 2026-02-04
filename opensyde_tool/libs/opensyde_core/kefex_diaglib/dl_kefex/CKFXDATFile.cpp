@@ -311,7 +311,7 @@ int32_t C_KFXDATFile::m_BufferToLists(const uint8_t * const opu8_Buffer, C_KFXVa
 
       if (oq_SingleList == true)
       {
-         if (orc_VariableLists[ou16_SingleListIndex].c_ListName.toUpper() == c_List.toUpper())
+         if (orc_VariableLists[ou16_SingleListIndex].c_ListName.UpperCase() == c_List.UpperCase())
          {
             q_Found = true;
             u16_ListIndex = ou16_SingleListIndex;
@@ -321,7 +321,7 @@ int32_t C_KFXDATFile::m_BufferToLists(const uint8_t * const opu8_Buffer, C_KFXVa
       {
          for (s32_List = 0; s32_List < orc_VariableLists.size(); s32_List++)
          {
-            if (orc_VariableLists[s32_List].c_ListName.toUpper() == c_List.toUpper())
+            if (orc_VariableLists[s32_List].c_ListName.UpperCase() == c_List.UpperCase())
             {
                q_Found = true;
                u16_ListIndex = static_cast<uint16_t>(s32_List);
@@ -351,7 +351,7 @@ int32_t C_KFXDATFile::m_BufferToLists(const uint8_t * const opu8_Buffer, C_KFXVa
             q_Found = false;
             for (s32_k = 0; s32_k < orc_VariableLists[u16_ListIndex].VariableList.size(); s32_k++)
             {
-               if (orc_VariableLists[u16_ListIndex].VariableList[s32_k].c_Name.toUpper() == c_Var.toUpper())
+               if (orc_VariableLists[u16_ListIndex].VariableList[s32_k].c_Name.UpperCase() == c_Var.UpperCase())
                {
                   q_Found = true;
                   break;

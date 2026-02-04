@@ -16,8 +16,8 @@
 #include "stwerrors.hpp"
 
 
-#include "QString.hpp"
-#include "QStringList.hpp"
+#include <QString>
+#include <QStringList>
 #include "C_OscExportOsyInit.hpp"
 #include "C_OscExportDataPool.hpp"
 #include "C_OscExportCommunicationStack.hpp"

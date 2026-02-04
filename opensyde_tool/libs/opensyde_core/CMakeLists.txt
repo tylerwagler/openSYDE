@@ -867,6 +867,6 @@ add_library(opensyde_core ${OPENSYDE_CORE_SOURCES})
 # add all include directories to library target and make public
 target_include_directories(opensyde_core PUBLIC ${OPENSYDE_CORE_INCLUDE_DIRECTORIES})
 
-target_precompile_headers(opensyde_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/precomp_headers.hpp)
+target_precompile_headers(opensyde_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/precomp_headers_core.hpp)
 
 target_link_libraries(opensyde_core PUBLIC Qt6::Core Qt6::Xml)

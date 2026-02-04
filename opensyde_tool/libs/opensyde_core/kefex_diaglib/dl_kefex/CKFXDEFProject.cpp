@@ -148,9 +148,9 @@ int32_t C_KFXDEFProject::m_LoadRAMListFromFile(const C_SclString & orc_FilePath,
    {
       pt_Entry = &orc_List.VariableList[j];
       c_Section = "VARIABLE" + QString::number(j + 1);
-      QString qs_Section = c_Section.ToQString();
+      QString qs_Section = c_Section;
 
-      pt_Entry->c_Name = C_SclString(pc_IniFile->value(qs_Section + "/NAME", "").toString().toStdString());
+      pt_Entry->c_Name = C_SclString(pc_IniFile->value(qs_Section + "/NAME", "").toString().toStdString()).ToQString();
       c_Temp = C_SclString(pc_IniFile->value(qs_Section + "/ADDRESS", "").toString().toStdString());
       pt_Entry->u32_Address = (c_Temp == "") ? 0UL : static_cast<uint32_t>(c_Temp.ToInt64());
 
@@ -177,7 +177,7 @@ int32_t C_KFXDEFProject::m_LoadRAMListFromFile(const C_SclString & orc_FilePath,
       {
          q_Ok = true;
          //not numeric -> name of type (following very old conventions) !!! -> stay compatible to old files
-         c_Temp = C_SclString(pc_IniFile->value(qs_Section + "/TYPE", "").toString().toStdString()).toUpper().trimmed();
+         c_Temp = C_SclString(pc_IniFile->value(qs_Section + "/TYPE", "").toString().toStdString()).UpperCase().trimmed();
          if (c_Temp == "BYTE")
          {
             k = KFX_DATA_TYPE_UINT8;
@@ -261,7 +261,7 @@ int32_t C_KFXDEFProject::m_LoadRAMListFromFile(const C_SclString & orc_FilePath,
       {
          pt_Entry->SetSize(static_cast<uint32_t>(c_Temp.ToInt()));
       }
-      c_Temp = C_SclString(pc_IniFile->value(qs_Section + "/LOCATIONRAM", "").toString().toStdString()).toUpper();
+      c_Temp = C_SclString(pc_IniFile->value(qs_Section + "/LOCATIONRAM", "").toString().toStdString()).UpperCase();
       if ((c_Temp == "1") || (c_Temp == "TRUE"))
       {
          pt_Entry->q_LocationRAM = true;
@@ -277,7 +277,7 @@ int32_t C_KFXDEFProject::m_LoadRAMListFromFile(const C_SclString & orc_FilePath,
       for (k = 0; k < KFX_NUM_ACCESS_GROUPS; k++)
       {
          c_Directive = "ACCESS" + QString::number(k);
-         c_Temp = C_SclString(pc_IniFile->value(qs_Section + "/" + c_Directive.ToQString(), "").toString().toStdString()).toUpper();
+         c_Temp = C_SclString(pc_IniFile->value(qs_Section + "/" + c_Directive.ToQString(), "").toString().toStdString()).UpperCase();
          if (c_Temp == "RO")
          {
             pt_Entry->au8_Access[k] = KFX_DATA_ACCESS_RO;
@@ -301,7 +301,7 @@ int32_t C_KFXDEFProject::m_LoadRAMListFromFile(const C_SclString & orc_FilePath,
             return C_RANGE;
          }
       }
-      pt_Entry->c_Unit       = C_SclString(pc_IniFile->value(qs_Section + "/UNIT", "").toString().toStdString());
+      pt_Entry->c_Unit       = C_SclString(pc_IniFile->value(qs_Section + "/UNIT", "").toString().toStdString()).ToQString();
       pt_Entry->SetNumericValue(0LL);
       pt_Entry->SetNumDefaults(orc_List.GetNumDefaults());
 
@@ -332,7 +332,7 @@ int32_t C_KFXDEFProject::m_LoadRAMListFromFile(const C_SclString & orc_FilePath,
          pt_Entry->u8_ScalingDigits = 0;
       }
 
-      pt_Entry->e_DefTransmissionType = TransTypeStringToEnum(C_SclString(pc_IniFile->value(qs_Section + "/TRANSTYPE", "").toString().toStdString()).toUpper());
+      pt_Entry->e_DefTransmissionType = TransTypeStringToEnum(C_SclString(pc_IniFile->value(qs_Section + "/TRANSTYPE", "").toString().toStdString()).UpperCase());
       try
       {
          pt_Entry->u16_DefInterval = static_cast<uint16_t>(pc_IniFile->value(qs_Section + "/TRANSTIME", "").toInt());
@@ -673,7 +673,7 @@ int32_t C_KFXDEFProject::m_FindRelatedFiles(const C_SclString & orc_Directory, c
    
    orc_Files.resize(0);
 
-   c_Dir = stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_Directory);
+   c_Dir = stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_Directory.ToQString());
    
    QDir c_QDir(QString(c_Dir.c_str()));
    QStringList c_Filter;
@@ -780,7 +780,7 @@ int32_t C_KFXDEFProject::LoadComments(const C_SclString & orc_FileName, const C_
    {
       c_Directive = "LANGNAME" + QString::number(i + 1);
       c_Section = C_SclString(pc_IniFile->value("CONFIG/" + c_Directive.ToQString(), "").toString().toStdString());
-      QString qs_Section = c_Section.ToQString();
+      QString qs_Section = c_Section;
       if ((c_Section == "") || (pc_IniFile->childGroups().contains(qs_Section) == false && pc_IniFile->value(qs_Section + "/DUMMY").isValid() == false)) // Hacky check for section existence
       {
          // QSettings doesn't support checking for empty groups easily without iterating.
@@ -816,7 +816,7 @@ int32_t C_KFXDEFProject::LoadComments(const C_SclString & orc_FileName, const C_
          q_Found = false;
          for (k = 0; k < orc_VariableLists.size(); k++)
          {
-            if (orc_VariableLists[k].c_ListName.toUpper() == c_ListName.toUpper())
+            if (orc_VariableLists[k].c_ListName.UpperCase() == c_ListName.UpperCase())
             {
                q_Found = true;
                break;
@@ -827,7 +827,7 @@ int32_t C_KFXDEFProject::LoadComments(const C_SclString & orc_FileName, const C_
             q_Found = false;
             for (l = 0; l < orc_VariableLists[k].VariableList.size(); l++)
             {
-               if (orc_VariableLists[k].VariableList[l].c_Name.toUpper() == c_VariableName.toUpper())
+               if (orc_VariableLists[k].VariableList[l].c_Name.UpperCase() == c_VariableName.UpperCase())
                {
                   q_Found = true;
                   break;
@@ -835,7 +835,7 @@ int32_t C_KFXDEFProject::LoadComments(const C_SclString & orc_FileName, const C_
             }
             if (q_Found == true)
             {
-               orc_VariableLists[k].VariableList[l].ac_Comments[i] = c_Text;
+               orc_VariableLists[k].VariableList[l].ac_Comments[i] = c_Text.ToQString();
             }
          }
       }
@@ -867,7 +867,7 @@ void C_KFXDEFProject::LoadDefaultNames(QSettings * const opc_IniFile,
    {
       orc_VariableLists.ac_DefaultNames[i] =
          C_SclString(opc_IniFile->value("DEFAULT_SETS/NAMEDEFAULT" + QString::number(i),
-                                 "DEFAULT_" + QString::number(i)).toString().toStdString());
+                                 "DEFAULT_" + QString::number(i)).toString().toStdString()).ToQString();
    }
 }
 
