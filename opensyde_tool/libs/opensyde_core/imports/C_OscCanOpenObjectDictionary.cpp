@@ -271,11 +271,11 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
 
       if (s32_Return == C_NO_ERR)
       {
-         C_SclString c_InfoError;
+         QString c_InfoError;
          s32_Return = this->c_InfoBlock.LoadFromFile(c_IniFile, c_InfoError);
          if (s32_Return != C_NO_ERR)
          {
-            this->mc_LastError = c_InfoError;
+            this->mc_LastError = C_SclString::FromQString(c_InfoError);
          }
       }
 

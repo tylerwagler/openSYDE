@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <set>
+#include <QStringList>
 
 #include "stwtypes.hpp"
 #include "C_OscXceBase.hpp"
@@ -31,8 +32,8 @@ public:
    static int32_t h_CreatePackage(const stw::scl::C_SclString & orc_PackagePath,
                                   const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
                                   const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
-                                  stw::scl::C_SclStringList & orc_WarningMessages,
-                                  stw::scl::C_SclString & orc_ErrorMessage,
+                                  QStringList & orc_WarningMessages,
+                                  QString & orc_ErrorMessage,
                                   const stw::scl::C_SclString & orc_TemporaryDirectory = "");
 
 private:
@@ -51,13 +52,13 @@ private:
    static stw::scl::C_SclString mh_GenOutFilePathPart(const stw::scl::C_SclString & orc_InPath,
                                                       const stw::scl::C_SclString & orc_TargetFolder);
    static int32_t mh_CopyFile(const stw::scl::C_SclString & orc_InPath, const stw::scl::C_SclString & orc_OutBasePath,
-                              const stw::scl::C_SclString & orc_OutFolder, std::map<scl::C_SclString,
+                              const stw::scl::C_SclString & orc_OutFolder, std::map<QString,
                                                                                     bool> & orc_ExistingFiles,
                               std::set<stw::scl::C_SclString> & orc_XcertFiles,
                               stw::scl::C_SclString * const opc_OutFilePath = NULL);
    static stw::scl::C_SclString mh_GetUniqueFileName(const stw::scl::C_SclString & orc_InPath,
                                                      const stw::scl::C_SclString & orc_OutFolder,
-                                                     std::map<scl::C_SclString,
+                                                     std::map<QString,
                                                               bool> & orc_ExistingFiles);
 };
 

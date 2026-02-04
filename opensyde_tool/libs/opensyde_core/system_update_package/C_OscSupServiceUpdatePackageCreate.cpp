@@ -654,22 +654,22 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_SupDefParamAdapter(const uint32_t
 
       // get relative application path of node
       // get applications of node
-      for (vector<C_SclString>::const_iterator c_IterAppl = orc_ApplicationsToWrite[u32_Pos].c_FilesToFlash.begin();
+      for (vector<QString>::const_iterator c_IterAppl = orc_ApplicationsToWrite[u32_Pos].c_FilesToFlash.begin();
            c_IterAppl != orc_ApplicationsToWrite[u32_Pos].c_FilesToFlash.end();
            ++c_IterAppl)
       {
          // store application file names with relative path
-         const C_SclString c_Tmp = C_SclString::FromQString(QFileInfo(c_IterAppl->ToQString()).fileName());
+         const C_SclString c_Tmp = C_SclString::FromQString(QFileInfo(*c_IterAppl).fileName());
          c_SupDefNodeContent.c_ApplicationFileNames.push_back(c_Tmp);
       }
       // get parameter sets of node
-      for (vector<C_SclString>::const_iterator c_IterParam =
+      for (vector<QString>::const_iterator c_IterParam =
               orc_ApplicationsToWrite[u32_Pos].c_FilesToWriteToNvm.begin();
            c_IterParam != orc_ApplicationsToWrite[u32_Pos].c_FilesToWriteToNvm.end();
            ++c_IterParam)
       {
          // store application file names with relative path
-         const C_SclString c_Tmp = C_SclString::FromQString(QFileInfo(c_IterParam->ToQString()).fileName());
+         const C_SclString c_Tmp = C_SclString::FromQString(QFileInfo(*c_IterParam).fileName());
          c_SupDefNodeContent.c_NvmFileNames.push_back(c_Tmp);
       }
 
@@ -913,8 +913,15 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(const std::vector<
                                                                orc_SecPackageFilesAbs.size()))))
    {
       std::vector<uint8_t> c_EncryptNodes;
-      std::vector<stw::scl::C_SclString> c_EncryptNodesPassword;
-      mh_AdaptEncryptionParameters(orc_EncryptNodes, orc_EncryptNodesPassword,
+      std::vector<QString> c_EncryptNodesPassword;
+      // Convert C_SclString vector to QString vector
+      std::vector<QString> c_EncryptNodesPasswordInput;
+      c_EncryptNodesPasswordInput.reserve(orc_EncryptNodesPassword.size());
+      for (const auto & c_Password : orc_EncryptNodesPassword)
+      {
+         c_EncryptNodesPasswordInput.push_back(c_Password.ToQString());
+      }
+      mh_AdaptEncryptionParameters(orc_EncryptNodes, c_EncryptNodesPasswordInput,
                                    ou32_NodeCount, c_EncryptNodes, c_EncryptNodesPassword);
       for (uint32_t u32_File = 0UL; (u32_File < orc_SecFiles.size()) && (s32_Return == C_NO_ERR); ++u32_File)
       {
@@ -992,7 +999,14 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(const std::
          }
       }
    }
-   s32_Return = C_OscSupNodeDefinitionFiler::h_SaveNodes(orc_SecDefFilesAbs, orc_SupDefNodes);
+   // Convert C_SclString vector to QString vector
+   std::vector<QString> c_SecDefFilesAbsQt;
+   c_SecDefFilesAbsQt.reserve(orc_SecDefFilesAbs.size());
+   for (const auto & c_File : orc_SecDefFilesAbs)
+   {
+      c_SecDefFilesAbsQt.push_back(c_File.ToQString());
+   }
+   s32_Return = C_OscSupNodeDefinitionFiler::h_SaveNodes(c_SecDefFilesAbsQt, orc_SupDefNodes);
    //Add new files
    if (s32_Return == C_NO_ERR)
    {
@@ -1066,7 +1080,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleSignatureCreation(
                {
                   const C_SclString c_SignatureFilePath = orc_NodeFoldersAbs[u32_File] +
                                                           C_OscSupSignatureFiler::h_GetSignatureFileName();
-                  s32_Retval = C_OscSupSignatureFiler::h_CreateSignatureFile(c_SignatureFilePath, c_Signature);
+                  s32_Retval = C_OscSupSignatureFiler::h_CreateSignatureFile(c_SignatureFilePath.ToQString(), c_Signature.ToQString());
                   if (s32_Retval == C_NO_ERR)
                   {
                      orc_SecFiles[u32_File].insert(C_OscSupSignatureFiler::h_GetSignatureFileName());

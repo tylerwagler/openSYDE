@@ -71,13 +71,13 @@ const stw::scl::C_SclString C_OscXceLoad::mhc_USE_CASE = "Unpacking X-Certificat
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceLoad::h_ProcessPackage(const stw::scl::C_SclString & orc_PackagePath,
                                        const stw::scl::C_SclString & orc_TargetUnzipPath,
-                                       C_OscXceManifest & orc_Manifest, stw::scl::C_SclStringList & orc_WarningMessages,
-                                       stw::scl::C_SclString & orc_ErrorMessage)
+                                       C_OscXceManifest & orc_Manifest, QStringList & orc_WarningMessages,
+                                       QString & orc_ErrorMessage)
 {
    int32_t s32_Return;
 
-   const stw::scl::C_SclString c_TargetUnzipPath = C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(
-      orc_TargetUnzipPath);
+   const stw::scl::C_SclString c_TargetUnzipPath = C_SclString::FromQString(
+      C_OscSpaServicePackageLoadUtil::h_GetUnzipPath(orc_TargetUnzipPath.ToQString()));
 
    mh_Init();
 
@@ -112,9 +112,9 @@ int32_t C_OscXceLoad::h_ProcessPackage(const stw::scl::C_SclString & orc_Package
 int32_t C_OscXceLoad::mh_CheckParamsToProcessPackage(const stw::scl::C_SclString & orc_PackagePath,
                                                      const stw::scl::C_SclString & orc_TargetUnzipPath)
 {
-   int32_t s32_Return = C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(orc_PackagePath,
-                                                                                         orc_TargetUnzipPath,
-                                                                                         mhc_USE_CASE,
+   int32_t s32_Return = C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(orc_PackagePath.ToQString(),
+                                                                                         orc_TargetUnzipPath.ToQString(),
+                                                                                         mhc_USE_CASE.ToQString(),
                                                                                          mhc_ErrorMessage);
 
    //check if all files are present
@@ -123,9 +123,9 @@ int32_t C_OscXceLoad::mh_CheckParamsToProcessPackage(const stw::scl::C_SclString
       s32_Return = mh_CheckXcertFiles(orc_TargetUnzipPath);
       if (s32_Return != C_NO_ERR)
       {
-         mhc_ErrorMessage = "Could not find necessary files within \"" + orc_TargetUnzipPath +
+         mhc_ErrorMessage = "Could not find necessary files within \"" + orc_TargetUnzipPath.ToQString() +
                             "\" for update package to be complete.";
-         osc_write_log_error(mhc_USE_CASE, mhc_ErrorMessage);
+         osc_write_log_error(mhc_USE_CASE.ToQString(), mhc_ErrorMessage);
       }
    }
    return s32_Return;
@@ -157,11 +157,11 @@ int32_t C_OscXceLoad::mh_CheckXcertFiles(const stw::scl::C_SclString & orc_Packa
 {
    int32_t s32_Return;
 
-   std::vector<stw::scl::C_SclString> c_NecessaryFilesTop; //those are the files we look for
+   std::vector<QString> c_NecessaryFilesTop; //those are the files we look for
 
-   c_NecessaryFilesTop.push_back(C_OscXceManifestFiler::hc_FILE_NAME); //".syde_pkg"
+   c_NecessaryFilesTop.push_back(C_OscXceManifestFiler::hc_FILE_NAME.ToQString()); //".syde_pkg"
 
-   s32_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath, c_NecessaryFilesTop);
+   s32_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(orc_PackagePath.ToQString(), c_NecessaryFilesTop);
 
    return s32_Return;
 }

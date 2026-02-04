@@ -82,7 +82,7 @@ const stw::scl::C_SclString C_OscXceCreate::mhc_USE_CASE = "Creating X-Certifica
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceCreate::h_CreatePackage(const stw::scl::C_SclString & orc_PackagePath,
                                         const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
-                                        const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters, stw::scl::C_SclStringList & orc_WarningMessages, stw::scl::C_SclString & orc_ErrorMessage,
+                                        const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters, QStringList & orc_WarningMessages, QString & orc_ErrorMessage,
                                         const stw::scl::C_SclString & orc_TemporaryDirectory)
 {
    int32_t s32_Return;
@@ -113,17 +113,19 @@ int32_t C_OscXceCreate::h_CreatePackage(const stw::scl::C_SclString & orc_Packag
    //   and has therefore be the first action for creating service update package
    if (s32_Return == C_NO_ERR)
    {
-      std::vector<stw::scl::C_SclString> c_AllStaticSubFolders;
-      c_AllStaticSubFolders.push_back(mhc_CERTIFICATES_FOLDER);
-      c_AllStaticSubFolders.push_back(mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER);
-      s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(orc_PackagePath,
-                                                                                     orc_TemporaryDirectory,
-                                                                                     mhc_USE_CASE,
-                                                                                     hc_PACKAGE_EXT,
-                                                                                     hc_PACKAGE_EXT_TMP,
+      std::vector<QString> c_AllStaticSubFolders;
+      c_AllStaticSubFolders.push_back(mhc_CERTIFICATES_FOLDER.ToQString());
+      c_AllStaticSubFolders.push_back(mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER.ToQString());
+      QString c_PackagePathTmpQt;
+      s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(orc_PackagePath.ToQString(),
+                                                                                     orc_TemporaryDirectory.ToQString(),
+                                                                                     mhc_USE_CASE.ToQString(),
+                                                                                     hc_PACKAGE_EXT.ToQString(),
+                                                                                     hc_PACKAGE_EXT_TMP.ToQString(),
                                                                                      c_AllStaticSubFolders,
-                                                                                     c_PackagePathTmp,
+                                                                                     c_PackagePathTmpQt,
                                                                                      mhc_ErrorMessage);
+      c_PackagePathTmp = C_SclString::FromQString(c_PackagePathTmpQt);
 
       q_TemporaryFolderCreated = true; // at least partly
    }
@@ -142,16 +144,22 @@ int32_t C_OscXceCreate::h_CreatePackage(const stw::scl::C_SclString & orc_Packag
          // very strange! normally the precondition check should
          // guarantee a correct behavior of h_SaveFile
          mhc_ErrorMessage = "Could not create temporary file \"" +
-                            c_ManifestPath + "\".";
-         osc_write_log_error(mhc_USE_CASE, mhc_ErrorMessage);
+                            c_ManifestPath.ToQString() + "\".";
+         osc_write_log_error(mhc_USE_CASE.ToQString(), mhc_ErrorMessage);
          s32_Return = C_RD_WR; // redefine because we only have a few error codes
       }
    }
    // package temporary result folder to zip file
    if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN))
    {
-      s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateZip(mhc_USE_CASE, c_PackagePathTmp,
-                                                                 c_TargetZipArchive, c_XcertFiles,
+      // Convert C_SclString set to QString set
+      std::set<QString> c_XcertFilesQt;
+      for (const auto & c_File : c_XcertFiles)
+      {
+         c_XcertFilesQt.insert(c_File.ToQString());
+      }
+      s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateZip(mhc_USE_CASE.ToQString(), c_PackagePathTmp.ToQString(),
+                                                                 c_TargetZipArchive.ToQString(), c_XcertFilesQt,
                                                                  mhc_ErrorMessage);
    }
 
@@ -159,7 +167,7 @@ int32_t C_OscXceCreate::h_CreatePackage(const stw::scl::C_SclString & orc_Packag
    if (q_TemporaryFolderCreated == true)
    {
       C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder("Creating Update Package",
-                                                            c_PackagePathTmp, s32_Return, mhc_ErrorMessage);
+                                                            c_PackagePathTmp.ToQString(), s32_Return, mhc_ErrorMessage);
    }
 
    mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
@@ -186,10 +194,10 @@ int32_t C_OscXceCreate::mh_CheckParamsToCreatePackage(const stw::scl::C_SclStrin
                                                       const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
                                                       const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters)
 {
-   int32_t s32_Return = C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath,
-                                                                                  mhc_USE_CASE,
-                                                                                  hc_PACKAGE_EXT,
-                                                                                  hc_PACKAGE_EXT_TMP,
+   int32_t s32_Return = C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath.ToQString(),
+                                                                                  mhc_USE_CASE.ToQString(),
+                                                                                  hc_PACKAGE_EXT.ToQString(),
+                                                                                  hc_PACKAGE_EXT_TMP.ToQString(),
                                                                                   mhc_ErrorMessage, false);
 
    if (s32_Return == C_NO_ERR)
@@ -204,7 +212,7 @@ int32_t C_OscXceCreate::mh_CheckParamsToCreatePackage(const stw::scl::C_SclStrin
       for (uint32_t u32_It = 0UL; (u32_It < orc_UpdatePackageParameters.size()) && (s32_Return == C_NO_ERR); ++u32_It)
       {
          const C_OscXceUpdatePackageParameters & rc_In = orc_UpdatePackageParameters[u32_It];
-         if (rc_In.c_AuthenticationKeyPath.isEmpty() == false)
+         if (rc_In.c_AuthenticationKeyPath.IsEmpty() == false)
          {
             s32_Return = C_OscXceCreate::mh_CheckFileExists(rc_In.c_AuthenticationKeyPath);
          }
@@ -229,8 +237,8 @@ int32_t C_OscXceCreate::mh_CheckFileExists(const stw::scl::C_SclString & orc_Pat
 
    if (!(QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile()))
    {
-      mhc_ErrorMessage = "File \"" + orc_Path + "\" not found.";
-      osc_write_log_error(mhc_USE_CASE, mhc_ErrorMessage);
+      mhc_ErrorMessage = "File \"" + orc_Path.ToQString() + "\" not found.";
+      osc_write_log_error(mhc_USE_CASE.ToQString(), mhc_ErrorMessage);
       s32_Return = C_NOACT;
    }
    return s32_Return;
@@ -286,7 +294,7 @@ int32_t C_OscXceCreate::mh_PrepareCertFiles(const stw::scl::C_SclString & orc_Tm
 {
    int32_t s32_Return = C_NO_ERR;
 
-   std::map<stw::scl::C_SclString, bool> c_ExistingCertNames;
+   std::map<QString, bool> c_ExistingCertNames;
 
    for (uint32_t u32_It = 0UL; (u32_It < orc_CertificatesPath.size()) && (s32_Return == C_NO_ERR); ++u32_It)
    {
@@ -295,11 +303,11 @@ int32_t C_OscXceCreate::mh_PrepareCertFiles(const stw::scl::C_SclString & orc_Tm
    }
    if (s32_Return == C_NO_ERR)
    {
-      std::map<stw::scl::C_SclString, bool> c_ExistingPackageNames;
+      std::map<QString, bool> c_ExistingPackageNames;
       for (uint32_t u32_It = 0UL; (u32_It < orc_UpdatePackageParameters.size()) && (s32_Return == C_NO_ERR); ++u32_It)
       {
          C_OscXceUpdatePackageParameters & rc_In = orc_UpdatePackageParameters[u32_It];
-         if (rc_In.c_AuthenticationKeyPath.isEmpty() == false)
+         if (rc_In.c_AuthenticationKeyPath.IsEmpty() == false)
          {
             s32_Return = mh_CopyFile(rc_In.c_AuthenticationKeyPath, orc_TmpPath, mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER,
                                      c_ExistingPackageNames,
@@ -325,7 +333,7 @@ stw::scl::C_SclString C_OscXceCreate::mh_GenOutFilePathPart(const stw::scl::C_Sc
                                                             const stw::scl::C_SclString & orc_TargetFolder)
 {
    const stw::scl::C_SclString c_FileName = C_SclString::FromQString(QFileInfo(orc_InPath.ToQString()).fileName());
-   const stw::scl::C_SclString c_Retval = stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_TargetFolder) + c_FileName;
+   const stw::scl::C_SclString c_Retval = C_SclString::FromQString(stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_TargetFolder.ToQString())) + c_FileName;
 
    return c_Retval;
 }
@@ -347,7 +355,7 @@ stw::scl::C_SclString C_OscXceCreate::mh_GenOutFilePathPart(const stw::scl::C_Sc
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceCreate::mh_CopyFile(const stw::scl::C_SclString & orc_InPath,
                                     const stw::scl::C_SclString & orc_OutBasePath,
-                                    const stw::scl::C_SclString & orc_OutFolder, std::map<stw::scl::C_SclString,
+                                    const stw::scl::C_SclString & orc_OutFolder, std::map<QString,
                                                                                           bool> & orc_ExistingFiles,
                                     std::set<stw::scl::C_SclString> & orc_XcertFiles,
                                     stw::scl::C_SclString * const opc_OutFilePath)
@@ -357,10 +365,10 @@ int32_t C_OscXceCreate::mh_CopyFile(const stw::scl::C_SclString & orc_InPath,
                                                                                 orc_OutFolder, orc_ExistingFiles);
    const stw::scl::C_SclString c_Target = orc_OutBasePath + c_OutFile;
 
-   stw::scl::C_SclString c_Error;
+   QString c_Error;
 
    orc_XcertFiles.insert(c_OutFile);
-   s32_Return = C_OscUtils::h_CopyFile(orc_InPath, c_Target, NULL, &c_Error);
+   s32_Return = C_OscUtils::h_CopyFile(orc_InPath.ToQString(), c_Target.ToQString(), NULL, &c_Error);
    //Updated after copy not before to avoid modifications of const parameters
    if (opc_OutFilePath != NULL)
    {
@@ -369,7 +377,7 @@ int32_t C_OscXceCreate::mh_CopyFile(const stw::scl::C_SclString & orc_InPath,
    if (s32_Return != C_NO_ERR)
    {
       mhc_ErrorMessage = c_Error;
-      osc_write_log_error(mhc_USE_CASE, mhc_ErrorMessage);
+      osc_write_log_error(mhc_USE_CASE.ToQString(), mhc_ErrorMessage);
       s32_Return = C_NOACT;
    }
    return s32_Return;
@@ -388,18 +396,18 @@ int32_t C_OscXceCreate::mh_CopyFile(const stw::scl::C_SclString & orc_InPath,
 //----------------------------------------------------------------------------------------------------------------------
 stw::scl::C_SclString C_OscXceCreate::mh_GetUniqueFileName(const stw::scl::C_SclString & orc_InPath,
                                                            const stw::scl::C_SclString & orc_OutFolder,
-                                                           std::map<stw::scl::C_SclString, bool> & orc_ExistingFiles)
+                                                           std::map<QString, bool> & orc_ExistingFiles)
 {
    const stw::scl::C_SclString c_Extension = C_SclString::FromQString("." + QFileInfo(orc_InPath.ToQString()).suffix());
    const stw::scl::C_SclString c_OutPart = C_OscXceCreate::mh_GenOutFilePathPart(orc_InPath,
                                                                                  orc_OutFolder);
    const stw::scl::C_SclString c_OutPartWithoutExt =
       c_OutPart.SubString(1UL, c_OutPart.Length() - c_Extension.Length());
-   const stw::scl::C_SclString c_OutFileWithoutExt = C_OscUtils::h_GetUniqueName(orc_ExistingFiles, c_OutPartWithoutExt,
-                                                                                 0UL);
+   const stw::scl::C_SclString c_OutFileWithoutExt = C_SclString::FromQString(C_OscUtils::h_GetUniqueName(orc_ExistingFiles, c_OutPartWithoutExt.ToQString(),
+                                                                                 0UL));
    const stw::scl::C_SclString c_OutFile = c_OutFileWithoutExt + c_Extension;
 
    //Store without extension to only modify base
-   orc_ExistingFiles[c_OutPartWithoutExt] = true;
+   orc_ExistingFiles[c_OutPartWithoutExt.ToQString()] = true;
    return c_OutFile;
 }

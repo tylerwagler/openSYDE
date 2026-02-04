@@ -64,7 +64,7 @@ int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const s
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading manifest data");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
+      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.ToQString());
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-update-package-manifest")
@@ -80,13 +80,13 @@ int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const s
       }
       else
       {
-         osc_write_log_error("Loading manifest data", "File \"" + orc_Path + "\" could not be opened.");
+         osc_write_log_error("Loading manifest data", "File \"" + orc_Path.ToQString() + "\" could not be opened.");
          s32_Retval = C_NOACT;
       }
    }
    else
    {
-      osc_write_log_error("Loading manifest data", "File \"" + orc_Path + "\" does not exist.");
+      osc_write_log_error("Loading manifest data", "File \"" + orc_Path.ToQString() + "\" does not exist.");
       s32_Retval = C_RANGE;
    }
    return s32_Retval;
@@ -106,7 +106,7 @@ int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const s
 int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, const stw::scl::C_SclString & orc_Path)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path.ToQString(),
                                                                     "opensyde-update-package-manifest");
 
    if (s32_Retval == C_NO_ERR)
@@ -114,7 +114,7 @@ int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, c
       //node
       C_OscXceManifestFiler::h_SaveData(orc_Config, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_Path.ToQString()) != C_NO_ERR)
       {
          osc_write_log_error("Saving manifest data", "Could not create file.");
          s32_Retval = C_CONFIG;
@@ -151,7 +151,7 @@ int32_t C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config, C_OscXm
    }
    if (s32_Retval == C_NO_ERR)
    {
-      s32_Retval = orc_XmlParser.GetAttributeStringError("types", c_Types);
+      s32_Retval = orc_XmlParser.GetAttributeStringError("types", c_Types.ToQString());
       if (s32_Retval == C_NO_ERR)
       {
          if (c_Types != "x-app-security-certificates")
@@ -177,7 +177,7 @@ int32_t C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config, C_OscXm
       }
       if (s32_Retval == C_NO_ERR)
       {
-         s32_Retval = orc_XmlParser.GetAttributeStringError("certificates-path", orc_Config.c_CertificatesPath);
+         s32_Retval = orc_XmlParser.GetAttributeStringError("certificates-path", orc_Config.c_CertificatesPath.ToQString());
          orc_XmlParser.SelectNodeParent();
       }
       if (s32_Retval == C_NO_ERR)
@@ -201,7 +201,7 @@ void C_OscXceManifestFiler::h_SaveData(const C_OscXceManifest & orc_Config, C_Os
 {
    //File version
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
-   orc_XmlParser.SetNodeContent(stw::scl::QString::number(mhu16_FILE_VERSION_1));
+   orc_XmlParser.SetNodeContent(QString::number(mhu16_FILE_VERSION_1));
    //Return
    orc_XmlParser.SelectNodeParent();
    //Package
@@ -211,9 +211,9 @@ void C_OscXceManifestFiler::h_SaveData(const C_OscXceManifest & orc_Config, C_Os
    orc_XmlParser.SelectNodeParent();
    //Config
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("x-app-security-certificates") == "x-app-security-certificates");
-   orc_XmlParser.CreateNodeChild("package-version", stw::scl::QString::number(mhu16_PACKAGE_VERSION_1));
+   orc_XmlParser.CreateNodeChild("package-version", QString::number(mhu16_PACKAGE_VERSION_1));
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("secure-authentication") == "secure-authentication");
-   orc_XmlParser.SetAttributeString("certificates-path", orc_Config.c_CertificatesPath);
+   orc_XmlParser.SetAttributeString("certificates-path", orc_Config.c_CertificatesPath.ToQString());
    //Return
    orc_XmlParser.SelectNodeParent();
    C_OscXceManifestFiler::mh_SaveUpdatePackageParameters(orc_Config.c_UpdatePackageParameters, orc_XmlParser);
@@ -282,7 +282,7 @@ int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscX
                c_Tmp = QString::asprintf("Unexpected update package parameters count, expected: %u, got %u",
                                     u32_ExpectedCount,
                                     u32_ActualCount);
-               orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp);
+               orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp.ToQString());
             }
          }
          //Return
@@ -332,11 +332,11 @@ void C_OscXceManifestFiler::mh_SaveUpdatePackageParameters(
 int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameter(C_OscXceUpdatePackageParameters & orc_Config,
                                                              const C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.GetAttributeStringError("password", orc_Config.c_Password);
+   int32_t s32_Retval = orc_XmlParser.GetAttributeStringError("password", orc_Config.c_Password.ToQString());
 
    if (s32_Retval == C_NO_ERR)
    {
-      s32_Retval = orc_XmlParser.GetAttributeStringError("authentication_key", orc_Config.c_AuthenticationKeyPath);
+      s32_Retval = orc_XmlParser.GetAttributeStringError("authentication_key", orc_Config.c_AuthenticationKeyPath.ToQString());
    }
    return s32_Retval;
 }
@@ -352,8 +352,8 @@ void C_OscXceManifestFiler::mh_SaveUpdatePackageParameter(const C_OscXceUpdatePa
                                                           C_OscXmlParserBase & orc_XmlParser)
 {
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("update-package-parameters") == "update-package-parameters");
-   orc_XmlParser.SetAttributeString("password", orc_Config.c_Password);
-   orc_XmlParser.SetAttributeString("authentication_key", orc_Config.c_AuthenticationKeyPath);
+   orc_XmlParser.SetAttributeString("password", orc_Config.c_Password.ToQString());
+   orc_XmlParser.SetAttributeString("authentication_key", orc_Config.c_AuthenticationKeyPath.ToQString());
    //Return
    orc_XmlParser.SelectNodeParent();
 }

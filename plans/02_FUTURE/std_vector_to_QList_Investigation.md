@@ -162,28 +162,35 @@ grep -r "std::vector" opensyde_tool/ --include="*.cpp" --include="*.hpp"
 
 ---
 
-## Preliminary Recommendation
+## ✅ DECISION: MIGRATE TO QLIST
 
-**Status**: PENDING INVESTIGATION
+**Status**: APPROVED - 2026-02-03
 
-**Initial Thoughts**:
-- Qt 6's QList is now essentially equivalent to std::vector in performance
-- Implicit sharing benefits are significant for large data structures
-- Project is already heavily Qt-based (Qt 6.10.1)
-- QString migration (Phase 2-3) already converting std::vector<C_SclString> → std::vector<QString>
+**Decision**: Migrate `std::vector` → `QList` throughout the codebase
 
-**Considerations**:
-1. If migrating, should we do it NOW during Phase 3?
-   - Pro: std::vector<QString> → QList<QString> could be done in same pass
-   - Con: Increases Phase 3 scope significantly
+**Rationale**:
+- Qt 6's QList is **performance-equivalent** to std::vector (verified by Qt documentation)
+- Project prioritizes Qt-native solutions (per project coordinator directive)
+- Current state shows inconsistency: 1,783 std::vector vs 105 QList/QVector (5% Qt containers)
+- Implicit sharing provides memory benefits for copy operations
+- Better Qt API integration (many Qt functions expect/return QList)
 
-2. Or defer until Phase 4/5?
-   - Pro: Allows QString migration to stabilize first
-   - Con: May require touching same files again later
+**Execution Plan**:
+1. **Phase 1**: Migrate `std::vector<QString>` → `QStringList` (493 occurrences)
+   - Combined with QString migration to avoid double-work
+   - Estimated effort: +25-35 hours
 
-3. Or reject migration entirely?
-   - Pro: std::vector is perfectly fine and widely understood
-   - Con: Inconsistency with Qt container usage
+2. **Phase 1-2**: Migrate other `std::vector<T>` → `QList<T>` (1,290 occurrences)
+   - Prioritize files already being edited
+   - Estimated effort: +40-60 hours total
+
+3. **Phase 2**: Migrate `std::map<QString, T>` → `QHash<QString, T>`
+   - Better performance for string keys
+   - Estimated effort: +15-20 hours
+
+**Total Additional Impact**: +3,000-5,000 lines reduction through Qt-native idioms
+
+**See**: [Qt_Native_Prioritization_Strategy.md](Qt_Native_Prioritization_Strategy.md) for full details
 
 ---
 
@@ -246,8 +253,13 @@ If we decide to migrate to QList, we should do it BEFORE completing these Phase 
 
 ---
 
-**Document Status**: Investigation Required
-**Priority**: TBD (Coordinate with tyler)
-**Blocker for**: Phase 3 Task 1.2, Task 3.1 (std::vector<C_SclString> migrations)
+**Document Status**: ✅ DECISION MADE - Migrate to QList
+**Priority**: HIGH - Integrate into Phase 1
+**Action**: Update Phase 1 plan to include `std::vector<QString>` → `QStringList` migration
 
-**Recommendation**: Investigate BEFORE completing Phase 3 Sprint 1 to avoid potential rework.
+**Decision**: Migrate NOW during Phase 1 QString work to avoid rework.
+
+**Next Steps**:
+1. Update Phase 1 implementation plan with QList migration tasks
+2. Create Qt-native coding standards document
+3. Begin combined QString + QList migration

@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_OscXceBase.hpp"
 #include "C_OscXceManifest.hpp"
+#include <QStringList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -27,8 +28,8 @@ class C_OscXceLoad :
 public:
    static int32_t h_ProcessPackage(const stw::scl::C_SclString & orc_PackagePath,
                                    const stw::scl::C_SclString & orc_TargetUnzipPath, C_OscXceManifest & orc_Manifest,
-                                   stw::scl::C_SclStringList & orc_WarningMessages,
-                                   stw::scl::C_SclString & orc_ErrorMessage);
+                                   QStringList & orc_WarningMessages,
+                                   QString & orc_ErrorMessage);
 
 private:
    static const stw::scl::C_SclString mhc_USE_CASE;

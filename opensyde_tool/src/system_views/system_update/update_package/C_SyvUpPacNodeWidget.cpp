@@ -1822,8 +1822,8 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(const QString & orc_PublicKeyPath, 
    QString c_FilterName;
    QString c_DefaultFilename;
    QString c_SelectedFilterName;
-   C_SclStringList c_Warnings;
-   C_SclString c_Error;
+   QStringList c_Warnings;
+   QString c_Error;
    QString c_Folder;
    QString c_FullPackagePath;
    const C_PuiSvData * const pc_ViewData = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
@@ -1895,7 +1895,7 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(const QString & orc_PublicKeyPath, 
          c_MessageResult.SetHeading("Create Security Certificate Package");
          c_MessageResult.SetDescription("Could not create security certificate package!");
          c_MessageResult.SetDetails("Error code: " + QString::number(s32_Return) + "\n" +
-                                    QString(c_Error.c_str()));
+                                    c_Error);
          c_MessageResult.SetCustomMinHeight(180, 250);
          c_MessageResult.Execute();
       }

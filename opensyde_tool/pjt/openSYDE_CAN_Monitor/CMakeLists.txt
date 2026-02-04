@@ -93,7 +93,6 @@ set (OPENSYDE_INCLUDES
    ${PROJECT_ROOT}/src/system_views/communication
    ${PROJECT_ROOT}/src/project_operations/
    ${PROJECT_ROOT}/src/util
-   ${PROJECT_ROOT}/src/precompiled_headers/can_monitor
    ${PROJECT_ROOT}/libs/flexlexer
    ${PROJECT_ROOT}/libs/dbc_driver_library/src
    ${PROJECT_ROOT}/libs/dbc_driver_library/src/Vector
@@ -323,7 +322,6 @@ set(OPENSYDE_SOURCES
 )
 
 set(OPENSYDE_HEADERS
-   ${PROJECT_ROOT}/src/precompiled_headers/can_monitor/precomp_headers.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariablesBase.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingsBase.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosBitrateWidget.hpp
@@ -762,7 +760,7 @@ target_include_directories(openSYDE_CAN_Monitor SYSTEM PRIVATE ${OPENSYDE_LIB_IN
 
 target_link_libraries(openSYDE_CAN_Monitor PRIVATE ${OPENSYDE_LINK_LIBRARIES})
 
-target_precompile_headers(openSYDE_CAN_Monitor PRIVATE ${PROJECT_ROOT}/src/precompiled_headers/can_monitor/precomp_headers.hpp)
+target_precompile_headers(openSYDE_CAN_Monitor PRIVATE ${PROJECT_ROOT}/src/precompiled_headers/precomp_headers_gui.hpp)
 
 include(GNUInstallDirs)
 

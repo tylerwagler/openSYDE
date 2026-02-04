@@ -81,7 +81,6 @@ set (OPENSYDE_INCLUDES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit
    ${PROJECT_ROOT}/src/opensyde_gui_elements/tool_button
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget
-   ${PROJECT_ROOT}/src/precompiled_headers/syde_flash
    ${PROJECT_ROOT}/src/project_operations
    ${PROJECT_ROOT}/src/syde_flash
    ${PROJECT_ROOT}/src/syde_flash/bottom_bar
@@ -275,7 +274,6 @@ set(OPENSYDE_SOURCES
 )
 
 set(OPENSYDE_HEADERS
-   ${PROJECT_ROOT}/src/precompiled_headers/syde_flash/precomp_headers.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/check_box/C_CamOgeChxSettings.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxDark.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTable.hpp
@@ -530,7 +528,7 @@ target_include_directories(SYDEflash SYSTEM PRIVATE ${OPENSYDE_LIB_INCLUDES})
 
 target_link_libraries(SYDEflash PRIVATE ${OPENSYDE_LINK_LIBRARIES})
 
-target_precompile_headers(SYDEflash PRIVATE ${PROJECT_ROOT}/src/precompiled_headers/syde_flash/precomp_headers.hpp)
+target_precompile_headers(SYDEflash PRIVATE ${PROJECT_ROOT}/src/precompiled_headers/precomp_headers_gui.hpp)
 
 include(GNUInstallDirs)
 

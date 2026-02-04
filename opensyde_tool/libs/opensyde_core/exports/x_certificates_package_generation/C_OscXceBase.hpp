@@ -33,14 +33,14 @@ public:
 protected:
    static QStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
                                            // not available
-   static stw::scl::C_SclString mhc_ErrorMessage;        // description of error which caused the service update package
+   static QString mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
    static const stw::scl::C_SclString mhc_CERTIFICATES_FOLDER;
    static const stw::scl::C_SclString mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER;
 
    static void mh_Init(void);
    static void mh_GetWarningsAndErrors(QStringList & orc_WarningMessages,
-                                       stw::scl::C_SclString & orc_ErrorMessage);
+                                       QString & orc_ErrorMessage);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

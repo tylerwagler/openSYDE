@@ -512,16 +512,27 @@ Based on git status and plans directory:
 
 ---
 
-### 10. Precompiled Headers
+### 10. Precompiled Headers ✅ **COMPLETED**
 **Priority**: Low
 **Impact**: Minimal line count, some build time
 
-**Current State**: 5 separate PCH files (354 lines total)
-- `opensyde_core/precompiled_headers/precomp_headers.hpp` (63 lines)
-- `can_monitor/precompiled_headers/precomp_headers.hpp` (87 lines)
-- `gui/precompiled_headers/precomp_headers.hpp` (89 lines)
-- `syde_flash/precompiled_headers/precomp_headers.hpp` (87 lines)
-- `test/precompiled_headers/precomp_headers.hpp` (28 lines)
+**Status**: Consolidated 5 files → 2 files (60% reduction)
+
+**Completed Actions**:
+- **Created `precomp_headers_core.hpp`**: Core library headers (STW utilities, C/STL, Qt Core)
+  - Location: `opensyde_tool/libs/opensyde_core/precompiled_headers/`
+  - Used by: `opensyde_core` library
+- **Created `precomp_headers_gui.hpp`**: GUI component headers (Qt Widgets, GUI modules, STW GUI headers)
+  - Location: `opensyde_tool/src/precompiled_headers/`
+  - Used by: `openSYDE`, `openSYDE_CAN_Monitor`, `SYDEflash`
+- **Removed 3 redundant PCH files**:
+  - `opensyde_tool/src/precompiled_headers/can_monitor/precomp_headers.hpp` (88 lines)
+  - `opensyde_tool/src/precompiled_headers/gui/precomp_headers.hpp` (90 lines)
+  - `opensyde_tool/src/precompiled_headers/syde_flash/precomp_headers.hpp` (88 lines)
+- **Removed empty directories**: `can_monitor/`, `gui/`, `syde_flash/`
+- **Updated CMakeLists.txt files** in all 3 projects to use new PCH files
+
+**Result**: 5 files → 2 files, **~96 lines removed**
 
 **Recommendation**: Consolidate to 1-2 PCH files, reduces build complexity
 
@@ -600,11 +611,14 @@ Based on git status and plans directory:
 
 | Phase | Target Lines Reduced | Cumulative Reduction |
 |-------|---------------------|---------------------|
-| Phase 1 (Quick Wins) | 8,000-12,000 | 8,000-12,000 |
-| Phase 2 (Architecture) | 25,000-35,000 | 33,000-47,000 |
-| Phase 3 (Strategic) | 15,000-25,000 | 48,000-72,000 |
+| Phase 1 (Quick Wins) | 8,000-12,000 | ~8,100-12,100 |
+| Phase 2 (Architecture) | 25,000-35,000 | 33,100-47,100 |
+| Phase 3 (Strategic) | 15,000-25,000 | 48,100-72,100 |
 
-**Total Potential Reduction**: 48,000-72,000 lines (25-38% of codebase)
+**Total Potential Reduction**: 48,100-72,100 lines (25-38% of codebase)
+
+**Completed Reductions**:
+- PCH Consolidation: ~96 lines (Section 10)
 
 **Note**: Original estimate included full KEFEX removal (31,730 lines). Revised estimate reflects that KEFEX is actively used and should only be refactored, not removed (~5,000 line reduction through consolidation).
 
@@ -679,7 +693,8 @@ Based on git status and plans directory:
 ## Success Metrics
 
 ### Quantitative
-- [ ] Total line count reduced by 25-38% (~48,000-72,000 lines)
+- [x] PCH consolidation completed (~96 lines reduced)
+- [ ] Total line count reduced by 25-38% (~48,100-72,100 lines)
 - [ ] Build time reduced by 15-25%
 - [ ] Number of classes reduced by 20-30%
 - [ ] Code duplication metrics improved by 30%+

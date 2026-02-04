@@ -778,8 +778,8 @@ int32_t C_KFXDEFProject::LoadComments(const C_SclString & orc_FileName, const C_
    for (i = 0; i < u16_NumLanguages; i++)
    {
       c_Directive = "LANGNAME" + QString::number(i + 1);
-      c_Section = C_SclString(pc_IniFile->value("CONFIG/" + c_Directive, "").toString().toStdString());
-      if ((c_Section == "") || (pc_IniFile->childGroups().contains(c_Section.ToQString()) == false && pc_IniFile->value(c_Section.ToQString() + "/DUMMY").isValid() == false)) // Hacky check for section existence
+      c_Section = pc_IniFile->value("CONFIG/" + c_Directive.ToQString(), "").toString();
+      if ((c_Section == "") || (pc_IniFile->childGroups().contains(c_Section) == false && pc_IniFile->value(c_Section + "/DUMMY").isValid() == false)) // Hacky check for section existence
       {
          // QSettings doesn't support checking for empty groups easily without iterating.
          // But if we assume well formed ini...
@@ -797,7 +797,7 @@ int32_t C_KFXDEFProject::LoadComments(const C_SclString & orc_FileName, const C_
 
 
       opc_CommentDescriptions[i] = c_Section;
-      pc_IniFile->beginGroup(c_Section.ToQString());
+      pc_IniFile->beginGroup(c_Section);
       QStringList c_Keys = pc_IniFile->childKeys();
       for (const QString & c_KeyQS : c_Keys)
       {

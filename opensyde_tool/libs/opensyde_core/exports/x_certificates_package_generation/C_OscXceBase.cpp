@@ -33,7 +33,7 @@ QStringList C_OscXceBase::mhc_WarningMessages; // global warnings e.g. if update
                                                // position
                                                // of
                                                // active node is not available
-stw::scl::C_SclString C_OscXceBase::mhc_ErrorMessage;        // description of error which caused
+QString C_OscXceBase::mhc_ErrorMessage;        // description of error which caused
                                                              // the
                                                              // service update package to fail
 const stw::scl::C_SclString C_OscXceBase::mhc_CERTIFICATES_FOLDER = "authentication_certificates";
@@ -73,7 +73,7 @@ void C_OscXceBase::mh_Init()
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscXceBase::mh_GetWarningsAndErrors(QStringList & orc_WarningMessages,
-                                           stw::scl::C_SclString & orc_ErrorMessage)
+                                           QString & orc_ErrorMessage)
 {
    orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
    orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller

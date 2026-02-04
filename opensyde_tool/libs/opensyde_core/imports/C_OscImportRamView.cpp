@@ -931,7 +931,7 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
     // report warnings from loading .ram files in any case (makes it easier to
     // locate problems for user):
     for (int32_t s32_Index = 0; s32_Index < c_Warnings.size(); s32_Index++) {
-      osc_write_log_warning("Loading RAMView project", c_Warnings[s32_Index]);
+      osc_write_log_warning("Loading RAMView project", c_Warnings[s32_Index].ToQString());
     }
     switch (s32_Return) {
     case C_NO_ERR:
