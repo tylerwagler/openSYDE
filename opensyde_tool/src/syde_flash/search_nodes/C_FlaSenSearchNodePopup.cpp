@@ -3,47 +3,66 @@
    \file
    \brief
 
-   This popup is used to scan the available nodes and to allow selection of the node to be updated.
-   It fetches the device information, mainly the Node ID in this case which is mandatory for the
-   node update.
-   Once the node is selected, the Node ID is fetched in the MainWindow and updated in the Report Widget.
+   This popup is used to scan the available nodes and to allow selection of the
+   node to be updated. It fetches the device information, mainly the Node ID in
+   this case which is mandatory for the node update. Once the node is selected,
+   the Node ID is fetched in the MainWindow and updated in the Report Widget.
 
 
-   \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "stwtypes.hpp"
 
-#include "C_OscLoggingHandler.hpp"
+
 #include "C_OgeWiCustomMessage.hpp"
+#include "C_OscLoggingHandler.hpp"
 #include "C_Uti.hpp"
+
 
 #include "C_FlaSenSearchNodePopup.hpp"
 #include "ui_C_FlaSenSearchNodePopup.h"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::errors;
 
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
-
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
@@ -53,63 +72,67 @@ using namespace stw::errors;
    \param[in,out]  orc_Parent    Reference to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_FlaSenSearchNodePopup::C_FlaSenSearchNodePopup(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_FlaSenSearchNodePopup),
-   mrc_ParentDialog(orc_Parent),
-   mpc_DcSequences(NULL)
-{
-   this->mpc_Ui->setupUi(this);
-   this->setFocusPolicy(Qt::StrongFocus); // necessary for getting ESC key press event while searching
+C_FlaSenSearchNodePopup::C_FlaSenSearchNodePopup(
+    stw::opensyde_gui_elements::C_OgePopUpDialog &orc_Parent)
+    : QWidget(&orc_Parent), mpc_Ui(new Ui::C_FlaSenSearchNodePopup),
+      mrc_ParentDialog(orc_Parent), mpc_DcSequences(NULL) {
+  this->mpc_Ui->setupUi(this);
+  this->setFocusPolicy(Qt::StrongFocus); // necessary for getting ESC key press
+                                         // event while searching
 
-   InitStaticNames();
+  InitStaticNames();
 
-   this->mpc_Ui->pc_ListWidgetConnectedNodes->SetDragDropMode(false);
+  this->mpc_Ui->pc_ListWidgetConnectedNodes->SetDragDropMode(false);
 
-   // register the widget for showing
-   this->mrc_ParentDialog.SetWidget(this);
+  // register the widget for showing
+  this->mrc_ParentDialog.SetWidget(this);
 
-   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_FlaSenSearchNodePopup::m_ApplyClicked);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_FlaSenSearchNodePopup::m_OnCancel);
-   connect(this->mpc_Ui->pc_ListWidgetConnectedNodes, &C_SyvDcConnectedNodeList::doubleClicked, this,
-           &C_FlaSenSearchNodePopup::m_ApplyClicked);
-   connect(&this->mc_Timer, &QTimer::timeout, this, &C_FlaSenSearchNodePopup::m_Timer);
+  connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
+          &C_FlaSenSearchNodePopup::m_ApplyClicked);
+  connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
+          &C_FlaSenSearchNodePopup::m_OnCancel);
+  connect(this->mpc_Ui->pc_ListWidgetConnectedNodes,
+          &C_SyvDcConnectedNodeList::doubleClicked, this,
+          &C_FlaSenSearchNodePopup::m_ApplyClicked);
+  connect(&this->mc_Timer, &QTimer::timeout, this,
+          &C_FlaSenSearchNodePopup::m_Timer);
 
-   this->mc_Timer.setInterval(25);
+  this->mc_Timer.setInterval(25);
 
-   // Progress signals: We need a signal which is emitted in the other thread.
-   // We have to register the type and use the queued connections. Auto is default, but did not work.
-   // Issue with the signal  "SigReportDevicesInfoRead" emitted from C_FlaSenDcBasicSequences::m_ReportDevicesInfoRead.
-   // Following message appears if the meta type is not registered:
-   // "QObject::connect: Cannot queue arguments of type 'std::vector<stw::opensyde_core::C_OscDcDeviceInformation>'
-   // (Make sure 'std::vector<stw::opensyde_core::C_OscDcDeviceInformation>' is registered using qRegisterMetaType().)"
+  // Progress signals: We need a signal which is emitted in the other thread.
+  // We have to register the type and use the queued connections. Auto is
+  // default, but did not work. Issue with the signal "SigReportDevicesInfoRead"
+  // emitted from C_FlaSenDcBasicSequences::m_ReportDevicesInfoRead. Following
+  // message appears if the meta type is not registered: "QObject::connect:
+  // Cannot queue arguments of type
+  // 'std::vector<stw::opensyde_core::C_OscDcDeviceInformation>' (Make sure
+  // 'std::vector<stw::opensyde_core::C_OscDcDeviceInformation>' is registered
+  // using qRegisterMetaType().)"
 
-   qRegisterMetaType<std::vector<stw::opensyde_core::C_OscDcDeviceInformation> >(
+  qRegisterMetaType<std::vector<stw::opensyde_core::C_OscDcDeviceInformation>>(
       "std::vector<stw::opensyde_core::C_OscDcDeviceInformation>");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default destructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_FlaSenSearchNodePopup::~C_FlaSenSearchNodePopup(void)
-{
-   this->m_CleanupDcSequence();
-   delete this->mpc_Ui;
+C_FlaSenSearchNodePopup::~C_FlaSenSearchNodePopup(void) {
+  this->m_CleanupDcSequence();
+  delete this->mpc_Ui;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Initialize all displayed static names
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaSenSearchNodePopup::InitStaticNames(void) const
-{
-   this->mrc_ParentDialog.SetTitle("Search Node");
-   this->mrc_ParentDialog.SetSubTitle("");
-   this->mpc_Ui->pc_LabelHeadingPreview->setText("Found Nodes");
-   this->mpc_Ui->pc_LabelScanningNodes->setText("Scanning for nodes...");
-   this->mpc_Ui->pc_PushButtonOk->setText("Apply");
-   this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
+void C_FlaSenSearchNodePopup::InitStaticNames(void) const {
+  this->mrc_ParentDialog.SetTitle("Search Node");
+  this->mrc_ParentDialog.SetSubTitle("");
+  this->mpc_Ui->pc_LabelHeadingPreview->setText("Found Nodes");
+  this->mpc_Ui->pc_LabelScanningNodes->setText("Scanning for nodes...");
+  this->mpc_Ui->pc_PushButtonOk->setText("Apply");
+  this->mpc_Ui->pc_PushButtonCancel->setText("Cancel");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -124,21 +147,18 @@ void C_FlaSenSearchNodePopup::InitStaticNames(void) const
    C_COM       could not initialize sequence, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_FlaSenSearchNodePopup::StartSearch(const QString & orc_CanDllPath, const int32_t os32_CanBitrate,
-                                             const uint32_t ou32_FlashloaderResetWaitTime)
-{
-   int32_t s32_Return = C_NO_ERR;
+int32_t C_FlaSenSearchNodePopup::StartSearch(
+    const QString &orc_CanDllPath, const int32_t os32_CanBitrate,
+    const uint32_t ou32_FlashloaderResetWaitTime) {
+  int32_t s32_Return = C_NO_ERR;
 
-   if (this->m_InitDcSequence(orc_CanDllPath, os32_CanBitrate) == C_NO_ERR)
-   {
-      this->m_ScanNodes(ou32_FlashloaderResetWaitTime);
-   }
-   else
-   {
-      s32_Return = C_COM;
-   }
+  if (this->m_InitDcSequence(orc_CanDllPath, os32_CanBitrate) == C_NO_ERR) {
+    this->m_ScanNodes(ou32_FlashloaderResetWaitTime);
+  } else {
+    s32_Return = C_COM;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -149,39 +169,31 @@ int32_t C_FlaSenSearchNodePopup::StartSearch(const QString & orc_CanDllPath, con
    \param[in,out]  opc_KeyEvent  Event identification and information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaSenSearchNodePopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
+void C_FlaSenSearchNodePopup::keyPressEvent(QKeyEvent *const opc_KeyEvent) {
+  bool q_CallOrg = true;
 
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_ApplyClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   // Handle escape key manually: do not close on escape if currently searching and make sure to reset else
-   else if (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Escape))
-   {
-      q_CallOrg = true;
-      this->m_OnCancel();
-   }
-   else
-   {
-      // no special handling for other buttons
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
+  // Handle all enter key cases manually
+  if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
+      (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return))) {
+    if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
+         (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
+        (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false)) {
+      this->m_ApplyClicked();
+    } else {
+      q_CallOrg = false;
+    }
+  }
+  // Handle escape key manually: do not close on escape if currently searching
+  // and make sure to reset else
+  else if (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Escape)) {
+    q_CallOrg = true;
+    this->m_OnCancel();
+  } else {
+    // no special handling for other buttons
+  }
+  if (q_CallOrg == true) {
+    QWidget::keyPressEvent(opc_KeyEvent);
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -195,99 +207,100 @@ void C_FlaSenSearchNodePopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
    else        error occurred, see log file for details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_FlaSenSearchNodePopup::m_InitDcSequence(const QString & orc_CanDllPath, const int32_t os32_CanBitrate)
-{
-   int32_t s32_Return;
+int32_t
+C_FlaSenSearchNodePopup::m_InitDcSequence(const QString &orc_CanDllPath,
+                                          const int32_t os32_CanBitrate) {
+  int32_t s32_Return;
 
-   if (this->mpc_DcSequences == NULL)
-   {
-      this->mpc_DcSequences = new C_FlaSenDcBasicSequences();
+  if (this->mpc_DcSequences == NULL) {
+    this->mpc_DcSequences = new C_FlaSenDcBasicSequences();
 
-      connect(mpc_DcSequences, &C_FlaSenDcBasicSequences::SigReportProgress,
-              this, &C_FlaSenSearchNodePopup::SigReportProgress);
-      connect(this->mpc_DcSequences, &stw::opensyde_gui_logic::C_FlaSenDcBasicSequences::SigReportDevicesInfoRead,
-              this, &C_FlaSenSearchNodePopup::m_DeviceInfoReceived);
-   }
+    connect(mpc_DcSequences, &C_FlaSenDcBasicSequences::SigReportProgress, this,
+            &C_FlaSenSearchNodePopup::SigReportProgress);
+    connect(this->mpc_DcSequences,
+            &stw::opensyde_gui_logic::C_FlaSenDcBasicSequences::
+                SigReportDevicesInfoRead,
+            this, &C_FlaSenSearchNodePopup::m_DeviceInfoReceived);
+  }
 
-   s32_Return = this->mpc_DcSequences->InitDcSequences(orc_CanDllPath, os32_CanBitrate);
+  s32_Return =
+      this->mpc_DcSequences->InitDcSequences(orc_CanDllPath, os32_CanBitrate);
 
-   if (s32_Return != C_NO_ERR)
-   {
-      const uint32_t u32_BITNESS = 8 * sizeof(size_t);
-      C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
-      c_Message.SetHeading("Initialization failed");
-      c_Message.SetDescription(
-         static_cast<QString>("Failed to initialize CAN interface. "
-                                                     "Make sure to use a %1-bit DLL.").arg(u32_BITNESS));
-      c_Message.SetDetails(static_cast<QString>("For details see ") +
-                           C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                            C_OscLoggingHandler::h_GetCompleteLogFileLocation()) + ".");
-      C_OscLoggingHandler::h_Flush();
-      c_Message.Execute();
-   }
+  if (s32_Return != C_NO_ERR) {
+    const uint32_t u32_BITNESS = 8 * sizeof(size_t);
+    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
+    c_Message.SetHeading("Initialization failed");
+    c_Message.SetDescription(
+        static_cast<QString>("Failed to initialize CAN interface. "
+                             "Make sure to use a %1-bit DLL.")
+            .arg(u32_BITNESS));
+    c_Message.SetDetails(
+        static_cast<QString>("For details see ") +
+        C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
+                         C_OscLoggingHandler::h_GetCompleteLogFileLocation()) +
+        ".");
+    C_OscLoggingHandler::h_Flush();
+    c_Message.Execute();
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Cleanup sequence for search node
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaSenSearchNodePopup::m_CleanupDcSequence(void)
-{
-   if (this->mpc_DcSequences != NULL)
-   {
-      disconnect(mpc_DcSequences, &C_FlaSenDcBasicSequences::SigReportProgress,
-                 this, &C_FlaSenSearchNodePopup::SigReportProgress);
-      disconnect(this->mpc_DcSequences, &stw::opensyde_gui_logic::C_FlaSenDcBasicSequences::SigReportDevicesInfoRead,
-                 this, &C_FlaSenSearchNodePopup::m_DeviceInfoReceived);
-   }
+void C_FlaSenSearchNodePopup::m_CleanupDcSequence(void) {
+  if (this->mpc_DcSequences != NULL) {
+    disconnect(mpc_DcSequences, &C_FlaSenDcBasicSequences::SigReportProgress,
+               this, &C_FlaSenSearchNodePopup::SigReportProgress);
+    disconnect(this->mpc_DcSequences,
+               &stw::opensyde_gui_logic::C_FlaSenDcBasicSequences::
+                   SigReportDevicesInfoRead,
+               this, &C_FlaSenSearchNodePopup::m_DeviceInfoReceived);
+  }
 
-   delete this->mpc_DcSequences;
-   this->mpc_DcSequences = NULL;
+  delete this->mpc_DcSequences;
+  this->mpc_DcSequences = NULL;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot of Apply button click
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaSenSearchNodePopup::m_ApplyClicked(void)
-{
-   const int32_t s32_CurrentItem = this->mpc_Ui->pc_ListWidgetConnectedNodes->selectedItems().count();
+void C_FlaSenSearchNodePopup::m_ApplyClicked(void) {
+  const int32_t s32_CurrentItem =
+      this->mpc_Ui->pc_ListWidgetConnectedNodes->selectedItems().count();
 
-   if (s32_CurrentItem > 0)
-   {
-      this->mpc_DcSequences->StartResetSystem();
-      this->mc_Timer.start();
+  if (s32_CurrentItem > 0) {
+    this->mpc_DcSequences->StartResetSystem();
+    this->mc_Timer.start();
 
-      this->mrc_ParentDialog.accept();
-   }
+    this->mrc_ParentDialog.accept();
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Slot of Cancel button click
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaSenSearchNodePopup::m_OnCancel(void)
-{
-   int32_t s32_Result;
+void C_FlaSenSearchNodePopup::m_OnCancel(void) {
+  int32_t s32_Result;
 
-   QApplication::setOverrideCursor(Qt::WaitCursor);
+  QApplication::setOverrideCursor(Qt::WaitCursor);
 
-   while (this->mpc_DcSequences->GetResults(s32_Result) == C_BUSY)
-   {
-      QApplication::processEvents(QEventLoop::AllEvents, 50);
-   }
-   this->mpc_DcSequences->StartResetSystem();
-   this->mc_Timer.start();
+  while (this->mpc_DcSequences->GetResults(s32_Result) == C_BUSY) {
+    QApplication::processEvents(QEventLoop::AllEvents, 50);
+  }
+  this->mpc_DcSequences->StartResetSystem();
+  this->mc_Timer.start();
 
-   while (this->mpc_DcSequences->GetResults(s32_Result) == C_BUSY)
-   {
-      QApplication::processEvents(QEventLoop::AllEvents, 50);
-   }
-   QApplication::restoreOverrideCursor();
+  while (this->mpc_DcSequences->GetResults(s32_Result) == C_BUSY) {
+    QApplication::processEvents(QEventLoop::AllEvents, 50);
+  }
+  QApplication::restoreOverrideCursor();
 
-   this->mrc_ParentDialog.reject();
+  this->mrc_ParentDialog.reject();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -296,115 +309,112 @@ void C_FlaSenSearchNodePopup::m_OnCancel(void)
    \param[in]  ou32_FlashloaderResetWaitTime    Flashloader reset wait time
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaSenSearchNodePopup::m_ScanNodes(const uint32_t ou32_FlashloaderResetWaitTime)
-{
-   this->mpc_Ui->pc_ListWidgetConnectedNodes->setVisible(false);
+void C_FlaSenSearchNodePopup::m_ScanNodes(
+    const uint32_t ou32_FlashloaderResetWaitTime) {
+  this->mpc_Ui->pc_ListWidgetConnectedNodes->setVisible(false);
 
-   // Disable user interaction
-   this->mpc_Ui->pc_PushButtonOk->setEnabled(false);
+  // Disable user interaction
+  this->mpc_Ui->pc_PushButtonOk->setEnabled(false);
 
-   // Start scan
-   if ((this->mpc_DcSequences->StartScanEnterFlashloader(ou32_FlashloaderResetWaitTime)) == C_NO_ERR)
-   {
-      this->mc_Timer.start();
-   }
-   else
-   {
-      Q_ASSERT(false);
-   }
+  // Start scan
+  if ((this->mpc_DcSequences->StartScanEnterFlashloader(
+          ou32_FlashloaderResetWaitTime)) == C_NO_ERR) {
+    this->mc_Timer.start();
+  } else {
+    Q_ASSERT(false);
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Reports device information read from found devices
 
-   Called by StartScanGetInfo() after it has scanned information from connected devices
+   Called by StartScanGetInfo() after it has scanned information from connected
+   devices
 
    \param[in]  orc_DeviceInfoResult    Device information results
-   \param[in]  oq_SecurityFeatureUsed  Security feature used for at least one node
+   \param[in]  oq_SecurityFeatureUsed  Security feature used for at least one
+   node
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaSenSearchNodePopup::m_DeviceInfoReceived(
-   const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
-   const bool oq_SecurityFeatureUsed)
-{
-   //SYDEflash is not able to cope with Security mechanisms and we don't want to give additional user feedback if a Node
-   // has Security activated. In the Search Node context there is no functional restriction anyway.
-   Q_UNUSED(oq_SecurityFeatureUsed)
+    const std::vector<stw::opensyde_core::C_OscDcDeviceInformation>
+        &orc_DeviceInfoResult,
+    const bool oq_SecurityFeatureUsed) {
+  // SYDEflash is not able to cope with Security mechanisms and we don't want to
+  // give additional user feedback if a Node
+  //  has Security activated. In the Search Node context there is no functional
+  //  restriction anyway.
+  Q_UNUSED(oq_SecurityFeatureUsed)
 
-   if (orc_DeviceInfoResult.size() == 0)
-   {
-      this->m_ShowErrorNoDevices();
-      this->m_OnCancel();
-   }
-   else
-   {
-      const QString c_NodeCountText = "Found Nodes (" + QString::number(
-         orc_DeviceInfoResult.size()) + ")";
+  if (orc_DeviceInfoResult.size() == 0) {
+    this->m_ShowErrorNoDevices();
+    this->m_OnCancel();
+  } else {
+    const QString c_NodeCountText =
+        "Found Nodes (" + QString::number(orc_DeviceInfoResult.size()) + ")";
 
-      this->mpc_Ui->pc_LabelHeadingPreview->setText(c_NodeCountText);
+    this->mpc_Ui->pc_LabelHeadingPreview->setText(c_NodeCountText);
 
-      this->mpc_Ui->pc_LabelScanningNodes->setVisible(false);
-      this->mpc_Ui->pc_ListWidgetConnectedNodes->setVisible(true);
+    this->mpc_Ui->pc_LabelScanningNodes->setVisible(false);
+    this->mpc_Ui->pc_ListWidgetConnectedNodes->setVisible(true);
 
-      this->mpc_Ui->pc_ListWidgetConnectedNodes->SetData(orc_DeviceInfoResult);
+    this->mpc_Ui->pc_ListWidgetConnectedNodes->SetData(orc_DeviceInfoResult);
 
-      // this function should be called after "SetData" because in "SetData" an initial
-      // width is set to the list item which needs to be modified here to fit the dialog.
-      this->mpc_Ui->pc_ListWidgetConnectedNodes->SetListItemWidth(this->mpc_Ui->pc_ListWidgetConnectedNodes->width());
+    // this function should be called after "SetData" because in "SetData" an
+    // initial width is set to the list item which needs to be modified here to
+    // fit the dialog.
+    this->mpc_Ui->pc_ListWidgetConnectedNodes->SetListItemWidth(
+        this->mpc_Ui->pc_ListWidgetConnectedNodes->width());
 
-      // select first row by default
-      this->mpc_Ui->pc_ListWidgetConnectedNodes->SelectRow(0);
-   }
+    // select first row by default
+    this->mpc_Ui->pc_ListWidgetConnectedNodes->SelectRow(0);
+  }
 
-   // Enable user interaction
-   this->mpc_Ui->pc_PushButtonOk->setEnabled(true);
-   this->mpc_Ui->pc_PushButtonCancel->setEnabled(true);
+  // Enable user interaction
+  this->mpc_Ui->pc_PushButtonOk->setEnabled(true);
+  this->mpc_Ui->pc_PushButtonCancel->setEnabled(true);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Timer function connected on timeout
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaSenSearchNodePopup::m_Timer(void)
-{
-   int32_t s32_ThreadResult = C_CONFIG;
-   int32_t s32_SequenceResult = C_UNKNOWN_ERR;
+void C_FlaSenSearchNodePopup::m_Timer(void) {
+  int32_t s32_ThreadResult = C_CONFIG;
+  int32_t s32_SequenceResult = C_UNKNOWN_ERR;
 
-   if (this->mpc_DcSequences != NULL)
-   {
-      s32_ThreadResult = this->mpc_DcSequences->GetResults(s32_SequenceResult);
-   }
+  if (this->mpc_DcSequences != NULL) {
+    s32_ThreadResult = this->mpc_DcSequences->GetResults(s32_SequenceResult);
+  }
 
-   if (s32_ThreadResult == C_NO_ERR)
-   {
-      // In the event queue could be some emitted signals from thread left.
-      // We need all information for showing the result
-      QApplication::processEvents();
+  if (s32_ThreadResult == C_NO_ERR) {
+    // In the event queue could be some emitted signals from thread left.
+    // We need all information for showing the result
+    QApplication::processEvents();
 
-      switch (this->mpc_DcSequences->GetCurrentSequence())
-      {
-      case C_FlaSenDcBasicSequences::eSCAN_ENTER_FLASHLOADER:
-         //stop FL sequence
-         this->mc_Timer.stop();
-         this->mpc_DcSequences->StartScanGetInfo();
-         this->mc_Timer.start();
-         break;
-      case C_FlaSenDcBasicSequences::eSCAN_GET_INFO:
-         //stop Scan sequence
-         this->mc_Timer.stop();
-         break;
-      case C_FlaSenDcBasicSequences::eRESET_SYSTEM:
-         //stop reset sequence
-         this->mc_Timer.stop();
-         this->m_CleanupDcSequence();
-         break;
-      //those sequences are irrelevant here
-      case C_FlaSenDcBasicSequences::eCONF_DEVICES:
-      case C_FlaSenDcBasicSequences::eNOT_ACTIVE:
-      default:
-         break;
-      }
-   }
+    switch (this->mpc_DcSequences->GetCurrentSequence()) {
+    case C_FlaSenDcBasicSequences::eSCAN_ENTER_FLASHLOADER:
+      // stop FL sequence
+      this->mc_Timer.stop();
+      this->mpc_DcSequences->StartScanGetInfo();
+      this->mc_Timer.start();
+      break;
+    case C_FlaSenDcBasicSequences::eSCAN_GET_INFO:
+      // stop Scan sequence
+      this->mc_Timer.stop();
+      break;
+    case C_FlaSenDcBasicSequences::eRESET_SYSTEM:
+      // stop reset sequence
+      this->mc_Timer.stop();
+      this->m_CleanupDcSequence();
+      break;
+    // those sequences are irrelevant here
+    case C_FlaSenDcBasicSequences::eCONF_DEVICES:
+    case C_FlaSenDcBasicSequences::eNOT_ACTIVE:
+    default:
+      break;
+    }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -412,14 +422,14 @@ void C_FlaSenSearchNodePopup::m_Timer(void)
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaSenSearchNodePopup::m_ShowErrorNoDevices(void)
-{
-   C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
+void C_FlaSenSearchNodePopup::m_ShowErrorNoDevices(void) {
+  C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
-   // Show message
-   c_Message.SetHeading("Device Configuration");
-   c_Message.SetDescription("No devices found! Check connection of connected devices and retry.");
-   c_Message.Execute();
+  // Show message
+  c_Message.SetHeading("Device Configuration");
+  c_Message.SetDescription(
+      "No devices found! Check connection of connected devices and retry.");
+  c_Message.Execute();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -429,7 +439,6 @@ void C_FlaSenSearchNodePopup::m_ShowErrorNoDevices(void)
    Node Id
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint8_t C_FlaSenSearchNodePopup::GetSelectedNodeId(void) const
-{
-   return this->mpc_Ui->pc_ListWidgetConnectedNodes->GetSelectedNodeId();
+uint8_t C_FlaSenSearchNodePopup::GetSelectedNodeId(void) const {
+  return this->mpc_Ui->pc_ListWidgetConnectedNodes->GetSelectedNodeId();
 }

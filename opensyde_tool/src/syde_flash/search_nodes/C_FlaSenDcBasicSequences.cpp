@@ -18,12 +18,12 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
-
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
  */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants
  * ---------------------------------------------------------------------------------------

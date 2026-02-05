@@ -27,6 +27,7 @@
 
 using namespace stw::scl;
 using namespace stw::errors;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants
  * ---------------------------------------------------------------------------------------
