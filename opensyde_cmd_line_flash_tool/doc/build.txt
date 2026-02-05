@@ -5,14 +5,14 @@ Content:   How to build this project
 
 Used build tools:
 ================
-MinGW 8.1.0
-CMake 3.19.2
-Ninja 1.10.0
+MinGW 13.1.0
+CMake 3.30.5
+Ninja 1.12.1
 
 Editor / IDE:
 =============
-Qt Creator 4.14.2 based on Qt 5.15.2
-Any other IDE that can handle CMakeLists.txt should be fine as well.
+Any IDE that can handle CMakeLists.txt (e.g., Qt Creator, Visual Studio Code, CLion).
+Note: This tool does not use the Qt framework - only standard C++ and opensyde_core library.
 
 How to build:
 =============

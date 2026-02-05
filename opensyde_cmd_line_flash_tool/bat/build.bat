@@ -9,11 +9,11 @@ del /s /f /q ..\temp\*.* > nul
 
 cd ..\temp
 rem set path to C,C++,resource compilers
-SET PATH=C:\Qt\Qt5.15.2\Tools\mingw810_32\bin\;%PATH%
+SET PATH=C:\Qt\Tools\mingw1310_64\bin\;%PATH%
 rem set path to cmake
-SET PATH=C:\Qt\Qt5.15.2\Tools\CMake_64\bin;%PATH%
+SET PATH=C:\Qt\Tools\CMake_64\bin;%PATH%
 rem set path to ninja
-SET PATH=C:\Qt\Qt5.15.2\Tools\ninja;%PATH%
+SET PATH=C:\Qt\Tools\Ninja;%PATH%
 
 cmake.exe ..\pjt -GNinja -DCMAKE_BUILD_TYPE=Release
 if ERRORLEVEL 1 goto done
