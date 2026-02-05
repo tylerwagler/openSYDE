@@ -25,7 +25,6 @@
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const QString C_SdNdeDalCopClipBoardHelper::mhc_CLIP_BOARD_BASE_TAG_NAME = "opensyde-data-loggers";

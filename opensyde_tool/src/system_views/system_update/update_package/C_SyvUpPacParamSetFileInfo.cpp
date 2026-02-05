@@ -20,7 +20,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const QString C_SyvUpPacParamSetFileInfo::mhc_START_HEADING_TD = "<td style=\"padding: 9px 9px 0 0;\">";

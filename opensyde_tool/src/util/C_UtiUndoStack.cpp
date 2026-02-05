@@ -14,7 +14,6 @@
 
 #include <QApplication>
 #include "C_UtiUndoStack.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

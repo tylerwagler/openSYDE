@@ -24,7 +24,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const float64_t C_GiLiLineGroup::mhf64_MAX_DIST_TO_ALIGN = 10.0;

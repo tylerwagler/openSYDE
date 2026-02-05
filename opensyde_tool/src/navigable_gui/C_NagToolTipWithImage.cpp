@@ -24,8 +24,8 @@
 #include "ui_C_NagToolTipWithImage.h"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
+using namespace stw::opensyde_gui;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 std::vector<QPointer<C_NagToolTipWithImage> > C_NagToolTipWithImage::mhc_ExistingToolTips;

@@ -15,7 +15,6 @@
 #include <QRegularExpression>
 
 #include "C_TblTreDataElementSortFilter.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

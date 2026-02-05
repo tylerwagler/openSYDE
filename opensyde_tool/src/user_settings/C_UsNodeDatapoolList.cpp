@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "C_UsNodeDatapoolList.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

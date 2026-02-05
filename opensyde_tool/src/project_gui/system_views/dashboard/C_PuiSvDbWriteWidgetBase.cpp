@@ -15,7 +15,6 @@
 #include "stwtypes.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_PuiSvDbWriteWidgetBase.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

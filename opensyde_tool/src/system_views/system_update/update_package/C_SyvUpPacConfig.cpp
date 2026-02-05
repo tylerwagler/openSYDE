@@ -11,7 +11,6 @@
 #include "precomp_headers.hpp"
 
 #include "C_SyvUpPacConfig.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

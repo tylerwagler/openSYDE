@@ -29,7 +29,6 @@
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const float64_t C_SyvUpScene::mhf64_BUS_ANIMATION_TOLERANCE = 0.001;

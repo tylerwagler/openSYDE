@@ -14,7 +14,6 @@
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoUtil.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

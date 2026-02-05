@@ -14,7 +14,6 @@
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoLeDataPoolListElementBaseCommand.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

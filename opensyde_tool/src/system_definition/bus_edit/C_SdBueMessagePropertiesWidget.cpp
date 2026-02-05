@@ -43,7 +43,6 @@ using namespace stw::opensyde_gui_elements;
 using namespace stw::errors;
 using namespace stw::scl;
 
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const int32_t ms32_TX_TYPE_INDEX_CYCLIC = 0;

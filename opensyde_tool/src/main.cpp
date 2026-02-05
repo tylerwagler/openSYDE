@@ -22,7 +22,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_SdUtil.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

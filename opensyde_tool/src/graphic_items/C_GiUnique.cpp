@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "C_GiUnique.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

@@ -26,7 +26,6 @@
 #include "C_Uti.hpp"
 #include "stwtypes.hpp"
 #include "C_TblModelAction.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

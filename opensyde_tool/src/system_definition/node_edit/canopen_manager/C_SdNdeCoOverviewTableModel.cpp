@@ -24,7 +24,6 @@
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -623,7 +622,7 @@ void C_SdNdeCoOverviewTableModel::m_FillCoInfo()
 
             c_CoInfoDevice.c_CoNodeConfig.c_CanInterfaceId = c_IterDevices->first;
             //lint -e{1946} // use of functional-style cast is fine here
-            c_CoInfoDevice.c_CoTableData.c_Node = QString(pc_DeviceNode->c_Properties.c_Name.c_str());
+            c_CoInfoDevice.c_CoTableData.c_Node = QString(pc_DeviceNode->c_Properties.c_Name);
             c_CoInfoDevice.c_CoTableData.c_Role = "Device";
             c_CoInfoDevice.c_CoTableData.c_CanOpenId = QString::number(c_IterDevices->second.u8_NodeIdValue);
             // get TPDOs and RPDOs via message container

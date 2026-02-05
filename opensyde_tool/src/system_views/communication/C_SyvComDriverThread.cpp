@@ -16,7 +16,6 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_SyvComDriverThread.hpp"
 
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------

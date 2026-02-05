@@ -31,7 +31,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const uint32_t C_SyvHandlerWidget::mhu32_USER_INPUT_FUNC_APPLY = 0U;

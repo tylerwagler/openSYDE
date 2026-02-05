@@ -50,7 +50,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::opensyde_gui_logic;
 using namespace std;
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 

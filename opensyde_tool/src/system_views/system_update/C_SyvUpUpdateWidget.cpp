@@ -39,7 +39,6 @@ using namespace stw::scl;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
 using namespace stw::opensyde_core;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants
  * ---------------------------------------------------------------------------------------
@@ -217,11 +216,9 @@ C_SyvUpUpdateWidget::~C_SyvUpUpdateWidget() {
 
     // Scene
     C_UsHandler::h_GetInstance()->SetProjSvUpdateViewZoom(
-        pc_View->GetName(),
-        this->mpc_Ui->pc_GraphicsView->GetZoomValue());
+        pc_View->GetName(), this->mpc_Ui->pc_GraphicsView->GetZoomValue());
     C_UsHandler::h_GetInstance()->SetProjSvUpdateViewPos(
-        pc_View->GetName(),
-        this->mpc_Ui->pc_GraphicsView->GetViewPos());
+        pc_View->GetName(), this->mpc_Ui->pc_GraphicsView->GetViewPos());
   }
   m_CleanUpProgressLog();
 
@@ -376,8 +373,7 @@ void C_SyvUpUpdateWidget::showEvent(QShowEvent *const opc_Event) {
   // store configuration of the view
   if (pc_View != NULL) {
     const C_UsSystemView c_UserView =
-        C_UsHandler::h_GetInstance()->GetProjSvSetupView(
-            pc_View->GetName());
+        C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName());
     int32_t s32_LastSegmentWidth =
         c_UserView.GetUpdateHorizontalSplitterVertical();
 
@@ -912,8 +908,8 @@ void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void) {
           static_cast<QString>(
               "openSYDE device information found for node with index %1")
               .arg(c_NodeIndexes[u32_Counter]));
-      this->m_UpdateReportText(static_cast<QString>("Device name: %1")
-                                   .arg(rc_Info.c_DeviceName));
+      this->m_UpdateReportText(
+          static_cast<QString>("Device name: %1").arg(rc_Info.c_DeviceName));
       this->m_UpdateReportText(
           static_cast<QString>("Number of applications: %1")
               .arg(rc_Info.c_Applications.size()));
@@ -923,18 +919,18 @@ void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void) {
         this->m_UpdateReportText(
             static_cast<QString>("Application %1")
                 .arg(static_cast<uint32_t>(u8_Application)));
-        this->m_UpdateReportText(static_cast<QString>(" Name: %1")
-                                     .arg(rc_Info.c_Applications[u8_Application]
-                                              .c_ApplicationName));
+        this->m_UpdateReportText(
+            static_cast<QString>(" Name: %1")
+                .arg(rc_Info.c_Applications[u8_Application].c_ApplicationName));
         this->m_UpdateReportText(static_cast<QString>(" Version: %1")
                                      .arg(rc_Info.c_Applications[u8_Application]
                                               .c_ApplicationVersion));
-        this->m_UpdateReportText(static_cast<QString>(" Build date: %1")
-                                     .arg(rc_Info.c_Applications[u8_Application]
-                                              .c_BuildDate));
-        this->m_UpdateReportText(static_cast<QString>(" Build time: %1")
-                                     .arg(rc_Info.c_Applications[u8_Application]
-                                              .c_BuildTime));
+        this->m_UpdateReportText(
+            static_cast<QString>(" Build date: %1")
+                .arg(rc_Info.c_Applications[u8_Application].c_BuildDate));
+        this->m_UpdateReportText(
+            static_cast<QString>(" Build time: %1")
+                .arg(rc_Info.c_Applications[u8_Application].c_BuildTime));
         this->m_UpdateReportText(
             static_cast<QString>(" Block start address: 0x%1")
                 .arg(QString::number(rc_Info.c_Applications[u8_Application]
@@ -1008,15 +1004,13 @@ void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void) {
       }
       this->m_UpdateReportText(
           static_cast<QString>("Device serial number: %1 %2")
-              .arg(rc_Info.c_MoreInformation.GetEcuSerialNumber(),
-                   c_Temp));
+              .arg(rc_Info.c_MoreInformation.GetEcuSerialNumber(), c_Temp));
       this->m_UpdateReportText(
           static_cast<QString>("Device article number: %1")
               .arg(rc_Info.c_MoreInformation.u32_EcuArticleNumber));
       this->m_UpdateReportText(
           static_cast<QString>("Device article version: %1")
-              .arg(rc_Info.c_MoreInformation.c_EcuHardwareVersionNumber
-                       ));
+              .arg(rc_Info.c_MoreInformation.c_EcuHardwareVersionNumber));
       this->m_UpdateReportText(
           static_cast<QString>("Flash fingerprint date: %1-%2-%3 (yy-mm-dd)")
               .arg(QString::number(
@@ -1047,8 +1041,7 @@ void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void) {
                        .rightJustified(2, '0')));
       this->m_UpdateReportText(
           static_cast<QString>("Flash fingerprint username: %1")
-              .arg(rc_Info.c_MoreInformation.c_FlashFingerprintUserName
-                       ));
+              .arg(rc_Info.c_MoreInformation.c_FlashFingerprintUserName));
 
       // Information about available flashloader features
       this->m_UpdateReportText(static_cast<QString>("Available features:"));
@@ -2231,7 +2224,7 @@ void C_SyvUpUpdateWidget::m_HandleNodePreconditionError(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_UpdateReportText(
     const QString &orc_NewTextPart) const {
-  osc_write_log_info("Update Node", orc_NewTextPart.toStdString());
+  osc_write_log_info("Update Node", orc_NewTextPart.toStdString().c_str());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2330,8 +2323,7 @@ void C_SyvUpUpdateWidget::m_HandleConnectionFailure(
 
     // Display message
     if (oq_SuppressMessageBox == false) {
-      const QString c_Log =
-          C_OscLoggingHandler::h_GetCompleteLogFileLocation();
+      const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
       c_Message.SetHeading("System Update");
       c_Message.SetDescription("Enter update mode failed."
@@ -2363,8 +2355,7 @@ void C_SyvUpUpdateWidget::m_HandleUpdateFailure(void) {
 
   // Display message
   {
-    const QString c_Log =
-        C_OscLoggingHandler::h_GetCompleteLogFileLocation();
+    const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
     C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
     c_Message.SetHeading("System Update");
     c_Message.SetDescription("Update failed."

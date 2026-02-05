@@ -14,9 +14,9 @@
 
 #include "C_SclChecksums.hpp"
 #include "C_PuiSdLastKnownHalElementId.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 

@@ -15,7 +15,6 @@
 #include "C_PuiSdNodeConnectionId.hpp"
 
 #include "C_SclChecksums.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

@@ -28,7 +28,6 @@
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const uint8_t C_CieDbcImportNodeAssignmentWidget::mhu8_INDEX_TRANSMIT = 0;

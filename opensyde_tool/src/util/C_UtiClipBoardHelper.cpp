@@ -15,7 +15,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include "C_UtiClipBoardHelper.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

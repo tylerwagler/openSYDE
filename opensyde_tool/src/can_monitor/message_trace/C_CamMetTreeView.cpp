@@ -31,7 +31,6 @@
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 //lint -emacro(*,Q_DECLARE_METATYPE)   //macro provided by Qt library; nothing we can do about messages

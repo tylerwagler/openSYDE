@@ -13,7 +13,6 @@
 #include <QDateTime>
 
 #include "C_PuiSvDbDataElementContent.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

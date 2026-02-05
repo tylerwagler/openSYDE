@@ -18,10 +18,8 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
-
 #include "C_PuiUtil.hpp"
 #include "C_Uti.hpp"
-
 
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OscHexFile.hpp"
@@ -33,7 +31,6 @@
 #include "C_SyvUpPacSectionNodeDatablockWidget.hpp"
 #include "ui_C_SyvUpPacSectionNodeWidget.h"
 
-
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
  */
@@ -42,7 +39,6 @@ using namespace stw::scl;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
 using namespace stw::opensyde_core;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants
  * ---------------------------------------------------------------------------------------
@@ -136,8 +132,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(
         // Nothing is to do anymore her -> Do not set q_FileIsOk to true!
       } else if (this->mq_FileBased == false) {
         C_OscHexFile *const pc_HexFile = new C_OscHexFile();
-        if (pc_HexFile->LoadFromFile(
-                c_AbsoluteFilePath.toStdString()) ==
+        if (pc_HexFile->LoadFromFile(c_AbsoluteFilePath.toStdString()) ==
             stw::hex_file::NO_ERR) {
           stw::diag_lib::C_XFLECUInformation c_FileApplicationInfo;
           const int32_t s32_Result =
@@ -146,7 +141,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(
 
           if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN)) {
             const QString c_AppDeviceType =
-                c_FileApplicationInfo.GetDeviceID().Trim().UpperCase();
+                c_FileApplicationInfo.GetDeviceID().trimmed().toUpper();
             // No check with Alias necessary due to check with real device type
             // defined with target integration
             if ((this->mq_StwFlashloader == true) ||
@@ -170,9 +165,8 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(
                       pc_Node->pc_DeviceDefinition
                           ->c_SubDevices[pc_Node->u32_SubDeviceIndex]
                           .c_OtherAcceptedNames[u32_ItName]
-                          .Trim()
-                          .UpperCase()
-                          ;
+                          .trimmed()
+                          .toUpper();
                   if (QString::compare(c_AllowedDevice, c_AppDeviceType,
                                        Qt::CaseInsensitive) == 0) {
                     q_FileIsOk = true;
@@ -297,8 +291,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::RevertFile(
         // Restore the default path
         if ((this->mu32_SectionNumber < pc_Node->c_Applications.size())) {
           QString c_Path = pc_Node->c_Applications[this->mu32_SectionNumber]
-                               .c_ResultPaths[u32_AppNumber]
-                               ;
+                               .c_ResultPaths[u32_AppNumber];
           if (pc_Node->c_Properties.q_XappSupport == true) {
             // special case: X config file is relative to generation directory
             c_Path = C_Uti::h_ConcatPathIfNecessary(
@@ -307,8 +300,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::RevertFile(
                 c_Path);
           }
           c_Path = C_PuiUtil::h_MakeIndependentOfDbProjectPath(
-              pc_Node->c_Applications[this->mu32_SectionNumber]
-                  .c_ProjectPath,
+              pc_Node->c_Applications[this->mu32_SectionNumber].c_ProjectPath,
               c_Path);
           if (this->me_Type != C_OscNodeApplication::ePARAMETER_SET_HALC) {
             // Remove the view specific path
@@ -712,8 +704,8 @@ void C_SyvUpPacSectionNodeDatablockWidget::m_InitSpecificItem(
       QString c_Path = rc_Datablock.c_ResultPaths[0U];
       if (orc_Node.c_Properties.q_XappSupport == true) {
         // special case: X config file is relative to generation directory
-        c_Path = C_Uti::h_ConcatPathIfNecessary(
-            rc_Datablock.c_GeneratePath, c_Path);
+        c_Path =
+            C_Uti::h_ConcatPathIfNecessary(rc_Datablock.c_GeneratePath, c_Path);
       }
       c_Path = C_PuiUtil::h_MakeIndependentOfDbProjectPath(
           rc_Datablock.c_ProjectPath, c_Path);

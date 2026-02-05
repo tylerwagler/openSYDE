@@ -28,7 +28,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const QColor C_CamMetTreeDelegate::mhc_HIGHLIGHT_BACKGROUND_COLOR = mc_STYLE_GUIDE_COLOR_27;

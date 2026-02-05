@@ -17,7 +17,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeUnoUtil.hpp"
 #include "C_SdUtil.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

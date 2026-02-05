@@ -15,7 +15,6 @@
 #include "C_CamProLoggingData.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_Uti.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

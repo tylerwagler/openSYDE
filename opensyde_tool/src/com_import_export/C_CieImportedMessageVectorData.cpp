@@ -13,9 +13,9 @@
 #include "precomp_headers.hpp"
 
 #include "C_CieImportedMessageVectorData.hpp"
-using namespace stw::opensyde_gui_logic;
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 

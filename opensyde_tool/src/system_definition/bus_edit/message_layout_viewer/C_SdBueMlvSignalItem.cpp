@@ -20,7 +20,6 @@
 #include "C_SdBueMlvSignalItem.hpp"
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const float64_t C_SdBueMlvSignalItem::mhf64_RESIZE_ITEM_HEIGHT = 20.0;

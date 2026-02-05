@@ -26,7 +26,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::opensyde_gui;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const QString C_NagUseCaseViewWidget::mhc_SVG_ICON_PATH = "://images/IconNavigationArrow.svg";

@@ -31,7 +31,6 @@
 
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const int32_t C_SdTopologyWidget::mhs32_WIDGET_BORDER = 12;

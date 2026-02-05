@@ -25,7 +25,6 @@
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
 using namespace stw::opensyde_core;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const int32_t C_SdSearchTreeWidget::mhs32_DATAROLE_TITLE = static_cast<int32_t>(Qt::DisplayRole);

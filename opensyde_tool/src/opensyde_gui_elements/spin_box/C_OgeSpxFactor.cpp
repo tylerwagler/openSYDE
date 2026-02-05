@@ -22,7 +22,6 @@
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const float64_t C_OgeSpxFactor::mhf64_FACTOR_MIN = std::pow(10, -ms32_DOUBLE_SPIN_BOX_DECIMAL_COUNT);
