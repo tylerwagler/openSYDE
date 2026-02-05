@@ -40,6 +40,7 @@ using namespace stw::scl;
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants
  * ---------------------------------------------------------------------------------------
@@ -935,7 +936,8 @@ C_Uti::h_ConcatPathIfNecessary(const QString &orc_BaseDir,
 QString
 C_Uti::h_GetUniqueNameQt(const std::map<QString, bool> &orc_ExistingStrings,
                          const QString &orc_ProposedName) {
-  return C_OscUtils::h_GetUniqueName(orc_ExistingStrings, orc_ProposedName, 0UL);
+  return C_OscUtils::h_GetUniqueName(orc_ExistingStrings, orc_ProposedName,
+                                     0UL);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

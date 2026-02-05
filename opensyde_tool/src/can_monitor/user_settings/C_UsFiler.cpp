@@ -19,9 +19,9 @@
 #include "C_UsFiler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-
 using namespace stw::scl;
 using namespace stw::errors;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const std::string C_UsFiler::mhc_TRACE_COL_WIDTH_IDENTIFIER = "TraceColWidths";

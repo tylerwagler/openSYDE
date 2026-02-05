@@ -5,38 +5,55 @@
 
    Handle clipboard load and save
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
+#include "C_UtiClipBoardHelper.hpp"
 #include <QApplication>
 #include <QClipboard>
-#include "C_UtiClipBoardHelper.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
+using namespace stw::opensyde_gui_logic;
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
+
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_UtiClipBoardHelper::C_UtiClipBoardHelper(void)
-{
-}
+C_UtiClipBoardHelper::C_UtiClipBoardHelper(void) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get current clipboard content
@@ -45,17 +62,15 @@ C_UtiClipBoardHelper::C_UtiClipBoardHelper(void)
    Current clip board content
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_UtiClipBoardHelper::mh_GetClipBoard(void)
-{
-   QString c_Retval;
-   QClipboard * const pc_Clipboard = QApplication::clipboard();
+QString C_UtiClipBoardHelper::mh_GetClipBoard(void) {
+  QString c_Retval;
+  QClipboard *const pc_Clipboard = QApplication::clipboard();
 
-   if (pc_Clipboard != NULL)
-   {
-      //Copy from clipboard
-      c_Retval = pc_Clipboard->text();
-   }
-   return c_Retval;
+  if (pc_Clipboard != NULL) {
+    // Copy from clipboard
+    c_Retval = pc_Clipboard->text();
+  }
+  return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -64,14 +79,12 @@ QString C_UtiClipBoardHelper::mh_GetClipBoard(void)
    \param[in] orc_Text New clipboard text
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UtiClipBoardHelper::mh_SetClipBoard(const QString & orc_Text)
-{
-   QClipboard * const pc_Clipboard = QApplication::clipboard();
+void C_UtiClipBoardHelper::mh_SetClipBoard(const QString &orc_Text) {
+  QClipboard *const pc_Clipboard = QApplication::clipboard();
 
-   if (pc_Clipboard != NULL)
-   {
-      //Copy to clipboard
-      pc_Clipboard->clear();
-      pc_Clipboard->setText(orc_Text);
-   }
+  if (pc_Clipboard != NULL) {
+    // Copy to clipboard
+    pc_Clipboard->clear();
+    pc_Clipboard->setText(orc_Text);
+  }
 }

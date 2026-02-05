@@ -22,6 +22,7 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const uint8_t C_UsHandler::mhu8_NAX_RECENT_PROJECTS = 42;

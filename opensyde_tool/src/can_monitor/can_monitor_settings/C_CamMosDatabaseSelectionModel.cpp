@@ -22,6 +22,7 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const QString C_CamMosDatabaseSelectionModel::mhc_ICON_DATABASE = "://images/IconDatabaseBlue.svg";
