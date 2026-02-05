@@ -831,7 +831,7 @@ void C_NagMainWindow::mh_GetHeadingNames(const int32_t os32_Mode, const int32_t 
             C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_Index);
          if (pc_Node != NULL)
          {
-            orc_SubSubMode = pc_Node->c_Properties.c_Name.c_str();
+            orc_SubSubMode = pc_Node->c_Properties.c_Name;
          }
          else
          {

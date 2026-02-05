@@ -434,13 +434,13 @@ void C_SdTopologyToolbox::m_FillToolboxWithDynamicNodes(const C_OscDeviceDefinit
    if (this->mpc_List != NULL)
    {
       QListWidgetItem * pc_Item;
-      this->mpc_List->addItem(orc_Device.GetDisplayName().c_str());
+      this->mpc_List->addItem(orc_Device.GetDisplayName());
       pc_Item = this->mpc_List->item(this->mpc_List->count() - 1);
       pc_Item->setData(ms32_USER_ROLE_ADDITIONAL_INFORMATION, c_DeviceName);
       // Toolbox icon
       pc_Item->setIcon(this->mc_Icon);
       // Tooltip
-      pc_Item->setData(ms32_USER_ROLE_TOOL_TIP_HEADING, orc_Device.GetDisplayName().c_str());
+      pc_Item->setData(ms32_USER_ROLE_TOOL_TIP_HEADING, orc_Device.GetDisplayName());
       pc_Item->setData(ms32_USER_ROLE_TOOL_TIP_CONTENT, c_DeviceDescription);
    }
 }
@@ -762,7 +762,7 @@ int32_t C_SdTopologyToolbox::m_DeleteUserNode(const QPoint & orc_Pos)
       // Search for the device which should be deleted
       for (c_ItDevice = c_Devices.begin(); c_ItDevice != c_Devices.end(); ++c_ItDevice)
       {
-         if ((*c_ItDevice).GetDisplayName().c_str() == pc_Item->text().toStdString())
+         if ((*c_ItDevice).GetDisplayName() == pc_Item->text().toStdString())
          {
             c_ItEraseDevice = c_ItDevice;
          }
@@ -776,7 +776,7 @@ int32_t C_SdTopologyToolbox::m_DeleteUserNode(const QPoint & orc_Pos)
          if (pc_Node != NULL)
          {
             // check if the Node to be deleted is used in Network Topology. If so, no delete!
-            if (pc_Node->c_DeviceType == (*c_ItEraseDevice).GetDisplayName().c_str())
+            if (pc_Node->c_DeviceType == (*c_ItEraseDevice).GetDisplayName())
             {
                C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
                c_Message.SetHeading("Delete User Nodes");

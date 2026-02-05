@@ -292,7 +292,7 @@ void C_GiLiBus::GenerateHint(void)
                   //Translation: 1 = Bus name, 2 = Interface, 3 = Node ID
                   c_ToolTip.append("\n");
                   c_ToolTip.append(static_cast<QString>("%1 (Interface: %2, Node ID: %3)").
-                                   arg(pc_Node->c_Properties.c_Name.c_str(), //Node
+                                   arg(pc_Node->c_Properties.c_Name, //Node
                                        C_PuiSdUtil::h_GetInterfaceName(rc_ComInterface.e_InterfaceType,
                                                                        rc_ComInterface.u8_InterfaceNumber), //Interface
                                        QString::number(rc_ComInterface.u8_NodeId)));                        //Node

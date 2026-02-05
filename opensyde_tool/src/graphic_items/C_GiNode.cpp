@@ -636,7 +636,7 @@ void C_GiNode::GenerateHint(void) {
 
         // comment
         if (pc_Node->c_Properties.c_Comment.isEmpty() == false) {
-          c_ToolTip = pc_Node->c_Properties.c_Comment.c_str();
+          c_ToolTip = pc_Node->c_Properties.c_Comment;
           c_ToolTip.append("\n\n");
         }
 
@@ -746,12 +746,12 @@ void C_GiNode::GenerateHint(void) {
 
         // Set tooltip image
         // load device picture
-        c_FileInfoDevImg.setFile(pc_Device->c_ImagePath.c_str());
+        c_FileInfoDevImg.setFile(pc_Device->c_ImagePath);
         q_FileExists = (c_FileInfoDevImg.exists() && c_FileInfoDevImg.isFile());
 
         // check if file exists
         if (q_FileExists == true) {
-          this->SetDefaultToolTipImagePath(pc_Device->c_ImagePath.c_str());
+          this->SetDefaultToolTipImagePath(pc_Device->c_ImagePath);
         } else {
           // no image available
           this->SetDefaultToolTipImagePath(
@@ -759,7 +759,7 @@ void C_GiNode::GenerateHint(void) {
         }
 
         this->SetDefaultToolTipImageCaption(
-            pc_Device->GetDisplayName().c_str());
+            pc_Device->GetDisplayName());
       }
     }
   }
@@ -1069,7 +1069,7 @@ QString C_GiNode::GetFirstSelectableFullName() const {
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ms32_Index);
 
   if (pc_Node != NULL) {
-    c_Name = pc_Node->c_Properties.c_Name.c_str();
+    c_Name = pc_Node->c_Properties.c_Name;
   }
 
   return c_Name;

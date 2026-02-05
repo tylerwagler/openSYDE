@@ -581,7 +581,7 @@ void C_NagNaviBarWidget::m_NodesChanged(void) const
             // standard node
             c_SubNodes.push_back(c_EmptySubNodeDummy);
             c_Nodes.emplace_back(C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
-                                    u32_ItNodes)->c_Properties.c_Name.c_str());
+                                    u32_ItNodes)->c_Properties.c_Name);
          }
          else
          {
@@ -897,7 +897,7 @@ void C_NagNaviBarWidget::m_OnClickNode(const int32_t os32_Index)
       if (pc_Node != NULL)
       {
          Q_EMIT this->SigChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_NODEEDIT, u32_Index,
-                                    pc_Node->c_Properties.c_Name.c_str());
+                                    pc_Node->c_Properties.c_Name);
       }
    }
 }
