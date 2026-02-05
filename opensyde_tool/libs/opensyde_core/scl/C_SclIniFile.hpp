@@ -10,7 +10,7 @@
     while only using ANSI C++ (with STL in this case).
    So cf. the documentation of the VCL TIniFile for details on most API functions.
 
-   Instead of AnsiString/UnicodeString the C_SclString class is used (which is not Unicode-capable).
+   Instead of AnsiString/UnicodeString the QString class is used (which is not Unicode-capable).
 
    This implementation uses QSettings internally for INI file handling.
 
@@ -42,7 +42,7 @@
 #include <QSettings>
 #include <QTemporaryFile>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 // QString is used for all string operations
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -77,51 +77,51 @@ protected:
    bool mq_InMemoryMode;                       ///< True if operating in memory-only mode
 
    // Helper to build section/key path for QSettings
-   static QString mh_BuildKey(const C_SclString & orc_Section, const C_SclString & orc_Key);
+   static QString mh_BuildKey(const QString & orc_Section, const QString & orc_Key);
 
    // Helper to write string list to file
    static void mh_WriteStringListToFile(const QStringList & orc_Strings, const QString & orc_FileName);
 
 public:
    // Constructors & Destructors
-   C_SclIniFile(const C_SclString & orc_FileName);
+   C_SclIniFile(const QString & orc_FileName);
    virtual ~C_SclIniFile() SCL_WILL_THROW;
 
-   C_SclString ReadString (const C_SclString & orc_Section, const C_SclString & orc_Key,
-                           const C_SclString & orc_Default);
-   int32_t   ReadInteger(const C_SclString & orc_Section, const C_SclString & orc_Key, const int32_t os32_Default);
-   bool      ReadBool   (const C_SclString & orc_Section, const C_SclString & orc_Key, const bool oq_Default);
-   float64_t ReadFloat  (const C_SclString & orc_Section, const C_SclString & orc_Key, const float64_t of64_Default);
+   QString ReadString (const QString & orc_Section, const QString & orc_Key,
+                           const QString & orc_Default);
+   int32_t   ReadInteger(const QString & orc_Section, const QString & orc_Key, const int32_t os32_Default);
+   bool      ReadBool   (const QString & orc_Section, const QString & orc_Key, const bool oq_Default);
+   float64_t ReadFloat  (const QString & orc_Section, const QString & orc_Key, const float64_t of64_Default);
 
    //convenience shortcuts for commonly used stw_types:
-   uint8_t   ReadUint8 (const C_SclString & orc_Section, const C_SclString & orc_Key, const uint8_t ou8_Default);
-   uint16_t  ReadUint16(const C_SclString & orc_Section, const C_SclString & orc_Key, const uint16_t ou16_Default);
+   uint8_t   ReadUint8 (const QString & orc_Section, const QString & orc_Key, const uint8_t ou8_Default);
+   uint16_t  ReadUint16(const QString & orc_Section, const QString & orc_Key, const uint16_t ou16_Default);
 
-   void WriteString (const C_SclString & orc_Section, const C_SclString & orc_Key, const C_SclString & orc_Value,
+   void WriteString (const QString & orc_Section, const QString & orc_Key, const QString & orc_Value,
                      const bool oq_ForceAppend = false);
-   void WriteInteger(const C_SclString & orc_Section, const C_SclString & orc_Key, const int32_t os32_Value,
+   void WriteInteger(const QString & orc_Section, const QString & orc_Key, const int32_t os32_Value,
                      const bool oq_ForceAppend = false);
-   void WriteBool   (const C_SclString & orc_Section, const C_SclString & orc_Key, const bool oq_Value,
+   void WriteBool   (const QString & orc_Section, const QString & orc_Key, const bool oq_Value,
                      const bool oq_ForceAppend = false);
-   void WriteFloat  (const C_SclString & orc_Section, const C_SclString & orc_Key, const float64_t of64_Value,
+   void WriteFloat  (const QString & orc_Section, const QString & orc_Key, const float64_t of64_Value,
                      const bool oq_ForceAppend = false);
 
-   void EraseSection(const C_SclString & orc_Section);
-   void DeleteKey(const C_SclString & orc_Section, const C_SclString & orc_Key);
+   void EraseSection(const QString & orc_Section);
+   void DeleteKey(const QString & orc_Section, const QString & orc_Key);
 
    void UpdateFile(void);
 
-   bool SectionExists(const C_SclString & orc_Section);
-   bool ValueExists(const C_SclString & orc_Section, const C_SclString & orc_Key);
+   bool SectionExists(const QString & orc_Section);
+   bool ValueExists(const QString & orc_Section, const QString & orc_Key);
 
-   void ReadSection(const C_SclString & orc_Section, QStringList * const opc_Strings, const bool oq_Append = false);
-   void ReadSectionValues(const C_SclString & orc_Section, QStringList * const opc_Strings,
+   void ReadSection(const QString & orc_Section, QStringList * const opc_Strings, const bool oq_Append = false);
+   void ReadSectionValues(const QString & orc_Section, QStringList * const opc_Strings,
                           const bool oq_Append = false);
    void ReadSections(QStringList * const opc_Strings, const bool oq_Append = false) const;
 
    void GetFileAsStringList(QStringList & orc_Strings) const;
 
-   C_SclString FileName; ///< path to ini file; can be used after creation to store data in another ini file
+   QString FileName; ///< path to ini file; can be used after creation to store data in another ini file
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

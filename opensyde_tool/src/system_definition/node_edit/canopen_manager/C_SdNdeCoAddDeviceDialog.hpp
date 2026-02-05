@@ -41,7 +41,7 @@ public:
 
    void InitStaticNames(void) const;
    int32_t GetNodeSelection(uint32_t & oru32_NodeIndex, uint32_t & oru32_InterfaceIndex, QString & orc_EdsPath) const;
-   stw::scl::C_SclString GetEdsFile(void);
+   QString GetEdsFile(void);
    static QString h_AskForCanOpenPath(QWidget * const opc_BaseWidget);
 
 protected:

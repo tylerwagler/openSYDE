@@ -48,9 +48,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.cpp
-
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclString.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclStringList.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParser.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParserLog.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscChecksummedXml.cpp
@@ -67,9 +64,6 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.hpp
-
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclString.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclStringList.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/stwerrors.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/stwerrors.h
    ${CMAKE_CURRENT_SOURCE_DIR}/stwtypes/stwtypes.hpp

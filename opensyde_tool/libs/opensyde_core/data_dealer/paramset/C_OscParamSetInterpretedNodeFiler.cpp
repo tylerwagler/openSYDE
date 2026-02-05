@@ -137,7 +137,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(
    orc_DataPools.clear();
    if (orc_XmlParser.SelectNodeChild("interpreted") == "interpreted")
    {
-      C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("datapool");
+      QString c_SelectedNode = orc_XmlParser.SelectNodeChild("datapool");
 
       if (c_SelectedNode == "datapool")
       {
@@ -282,7 +282,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadLists(std::vector<C_OscParamSe
    orc_Lists.clear();
    if (orc_XmlParser.SelectNodeChild("lists") == "lists")
    {
-      C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("list");
+      QString c_SelectedNode = orc_XmlParser.SelectNodeChild("list");
 
       if (c_SelectedNode == "list")
       {
@@ -399,7 +399,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadList(C_OscParamSetInterpretedL
 void C_OscParamSetInterpretedNodeFiler::mh_SaveList(const C_OscParamSetInterpretedList & orc_List,
                                                     C_OscXmlParserBase & orc_XmlParser)
 {
-   orc_XmlParser.CreateNodeChild("name", orc_List.c_Name.ToQString());
+   orc_XmlParser.CreateNodeChild("name", orc_List.c_Name);
    C_OscParamSetInterpretedNodeFiler::mh_SaveElements(orc_List.c_Elements, orc_XmlParser);
 }
 
@@ -426,7 +426,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElements(std::vector<C_OscPara
    orc_Elements.clear();
    if (orc_XmlParser.SelectNodeChild("elements") == "elements")
    {
-      C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("element");
+      QString c_SelectedNode = orc_XmlParser.SelectNodeChild("element");
 
       if (c_SelectedNode == "element")
       {

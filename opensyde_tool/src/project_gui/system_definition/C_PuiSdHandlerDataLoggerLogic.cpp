@@ -247,11 +247,11 @@ int32_t C_PuiSdHandlerDataLoggerLogic::SetDataLoggerEnabled(const uint32_t ou32_
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerDataLoggerLogic::SetDataLoggerProperties(const uint32_t ou32_NodeIndex,
                                                                const uint32_t ou32_DataLoggerJobIndex,
-                                                               const stw::scl::C_SclString & orc_Name,
-                                                               const stw::scl::C_SclString & orc_Comment,
+                                                               const QString & orc_Name,
+                                                               const QString & orc_Comment,
                                                                const C_OscDataLoggerJobProperties::E_UseCase oe_UseCase,
                                                                const C_OscDataLoggerJobProperties::E_LogFileFormat oe_LogFileFormat, const uint32_t ou32_MaxLogEntries, const uint32_t ou32_MaxLogDurationSec, const uint32_t ou32_LogIntervalMs, const C_OscDataLoggerJobProperties::E_LocalLogTrigger oe_LocalLogTrigger,
-                                                               const stw::scl::C_SclString & orc_LogDestinationDirectory)
+                                                               const QString & orc_LogDestinationDirectory)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1400,10 +1400,10 @@ void C_PuiSdHandlerDataLoggerLogic::m_ValidateAllRoutesForOneNode(const uint32_t
    Vector of pointers to all currently registered bus names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<stw::scl::C_SclString, bool> C_PuiSdHandlerDataLoggerLogic::mh_GetExistingDataLoggerNames(
+std::map<QString, bool> C_PuiSdHandlerDataLoggerLogic::mh_GetExistingDataLoggerNames(
    const C_OscNode & orc_Node)
 {
-   std::map<stw::scl::C_SclString, bool> c_Retval;
+   std::map<QString, bool> c_Retval;
    for (uint32_t u32_ItLogger = 0; u32_ItLogger < orc_Node.c_DataLoggerJobs.size(); ++u32_ItLogger)
    {
       c_Retval[orc_Node.c_DataLoggerJobs[u32_ItLogger].c_Properties.c_Name] = true;

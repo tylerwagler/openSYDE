@@ -281,7 +281,7 @@ int32_t C_FlaConNodeConfigPopup::m_InitDcSequence(void)
               this, &C_FlaConNodeConfigPopup::m_DeviceInfoRead);
    }
 
-   s32_Return = this->mpc_DcSequences->InitDcSequences(this->mc_CanDllPath.toStdString(), this->mu32_CurrentBitrate);
+   s32_Return = this->mpc_DcSequences->InitDcSequences(this->mc_CanDllPath, this->mu32_CurrentBitrate);
 
    if (s32_Return != C_NO_ERR)
    {
@@ -293,7 +293,7 @@ int32_t C_FlaConNodeConfigPopup::m_InitDcSequence(void)
                                                      "Make sure to use a %1-bit DLL.").arg(u32_BITNESS));
       c_Message.SetDetails(static_cast<QString>("For details see ") +
                            C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                            C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
+                                            C_OscLoggingHandler::h_GetCompleteLogFileLocation()) + ".");
       C_OscLoggingHandler::h_Flush();
       c_Message.Execute();
    }
@@ -460,7 +460,7 @@ void C_FlaConNodeConfigPopup::m_FinishConfig(const int32_t os32_SequenceResult)
       c_Message.SetDescription(m_GetErrorAsString(os32_SequenceResult));
       c_Message.SetDetails(static_cast<QString>("For details see ") +
                            C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                            C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
+                                            C_OscLoggingHandler::h_GetCompleteLogFileLocation()) + ".");
       C_OscLoggingHandler::h_Flush();
 
       //enable buttons again for retry

@@ -265,7 +265,7 @@ void C_SyvUpProgressLog::UpdateStatus(const uint32_t ou32_NodeIndex, const QStri
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpProgressLog::AddLogHyperlink(void)
 {
-   const QString c_LogFilePath = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
+   const QString c_LogFilePath = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
 
    if (this->mpc_LogHyperlink == NULL)
    {
@@ -345,7 +345,7 @@ void C_SyvUpProgressLog::m_SetHeadingVisible(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpProgressLog::m_OpenLink(void) const
 {
-   const QString c_LogFilePath = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
+   const QString c_LogFilePath = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
 
    QDesktopServices::openUrl(static_cast<QUrl>(static_cast<QString>("file:%1").arg(c_LogFilePath)));
 }
@@ -397,7 +397,7 @@ void C_SyvUpProgressLog::m_OnCustomContextMenuRequested(const QPoint & orc_Pos)
 void C_SyvUpProgressLog::m_CopyHyperLink() const
 {
    // get link location
-   const QString c_LogFilePath = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
+   const QString c_LogFilePath = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
 
    QClipboard * const pc_Clipboard = QApplication::clipboard();
 

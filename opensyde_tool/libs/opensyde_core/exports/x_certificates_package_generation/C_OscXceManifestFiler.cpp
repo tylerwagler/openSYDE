@@ -26,7 +26,7 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscXceManifestFiler::hc_FILE_NAME = "manifest.syde_pkg";
+const QString C_OscXceManifestFiler::hc_FILE_NAME = "manifest.syde_pkg";
 const uint16_t C_OscXceManifestFiler::mhu16_FILE_VERSION_1 = 1;
 const uint16_t C_OscXceManifestFiler::mhu16_PACKAGE_VERSION_1 = 1;
 
@@ -56,15 +56,15 @@ const uint16_t C_OscXceManifestFiler::mhu16_PACKAGE_VERSION_1 = 1;
                manifest file could not be loaded
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const stw::scl::C_SclString & orc_Path)
+int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const QString & orc_Path)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading manifest data");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.ToQString());
+      s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-update-package-manifest")
@@ -80,13 +80,13 @@ int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const s
       }
       else
       {
-         osc_write_log_error("Loading manifest data", "File \"" + orc_Path.ToQString() + "\" could not be opened.");
+         osc_write_log_error("Loading manifest data", "File \"" + orc_Path + "\" could not be opened.");
          s32_Retval = C_NOACT;
       }
    }
    else
    {
-      osc_write_log_error("Loading manifest data", "File \"" + orc_Path.ToQString() + "\" does not exist.");
+      osc_write_log_error("Loading manifest data", "File \"" + orc_Path + "\" does not exist.");
       s32_Retval = C_RANGE;
    }
    return s32_Retval;
@@ -103,10 +103,10 @@ int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest & orc_Config, const s
    C_CONFIG   data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, const stw::scl::C_SclString & orc_Path)
+int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, const QString & orc_Path)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path.ToQString(),
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
                                                                     "opensyde-update-package-manifest");
 
    if (s32_Retval == C_NO_ERR)
@@ -114,7 +114,7 @@ int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, c
       //node
       C_OscXceManifestFiler::h_SaveData(orc_Config, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_Path.ToQString()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR)
       {
          osc_write_log_error("Saving manifest data", "Could not create file.");
          s32_Retval = C_CONFIG;
@@ -141,7 +141,7 @@ int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest & orc_Config, c
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
-   stw::scl::C_SclString c_Types;
+   QString c_Types;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
                                                              "Loading manifest data");
 
@@ -151,7 +151,9 @@ int32_t C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config, C_OscXm
    }
    if (s32_Retval == C_NO_ERR)
    {
-      s32_Retval = orc_XmlParser.GetAttributeStringError("types", c_Types.ToQString());
+      QString c_TypesQt;
+      s32_Retval = orc_XmlParser.GetAttributeStringError("types", c_TypesQt);
+      c_Types = c_TypesQt;
       if (s32_Retval == C_NO_ERR)
       {
          if (c_Types != "x-app-security-certificates")
@@ -177,7 +179,9 @@ int32_t C_OscXceManifestFiler::h_LoadData(C_OscXceManifest & orc_Config, C_OscXm
       }
       if (s32_Retval == C_NO_ERR)
       {
-         s32_Retval = orc_XmlParser.GetAttributeStringError("certificates-path", orc_Config.c_CertificatesPath.ToQString());
+         QString c_CertPathQt;
+         s32_Retval = orc_XmlParser.GetAttributeStringError("certificates-path", c_CertPathQt);
+         orc_Config.c_CertificatesPath = c_CertPathQt;
          orc_XmlParser.SelectNodeParent();
       }
       if (s32_Retval == C_NO_ERR)
@@ -213,7 +217,7 @@ void C_OscXceManifestFiler::h_SaveData(const C_OscXceManifest & orc_Config, C_Os
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("x-app-security-certificates") == "x-app-security-certificates");
    orc_XmlParser.CreateNodeChild("package-version", QString::number(mhu16_PACKAGE_VERSION_1));
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("secure-authentication") == "secure-authentication");
-   orc_XmlParser.SetAttributeString("certificates-path", orc_Config.c_CertificatesPath.ToQString());
+   orc_XmlParser.SetAttributeString("certificates-path", orc_Config.c_CertificatesPath);
    //Return
    orc_XmlParser.SelectNodeParent();
    C_OscXceManifestFiler::mh_SaveUpdatePackageParameters(orc_Config.c_UpdatePackageParameters, orc_XmlParser);
@@ -250,7 +254,7 @@ int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscX
          if (s32_Retval == C_NO_ERR)
          {
             uint32_t u32_ActualCount = 0UL;
-            stw::scl::C_SclString c_NodeUpdatePackageParameters = orc_XmlParser.SelectNodeChild(
+            QString c_NodeUpdatePackageParameters = orc_XmlParser.SelectNodeChild(
                "update-package-parameters");
             //Clear any existing configuration
             orc_Config.clear();
@@ -278,11 +282,11 @@ int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscX
             }
             if (u32_ExpectedCount != u32_ActualCount)
             {
-               stw::scl::C_SclString c_Tmp;
+               QString c_Tmp;
                c_Tmp = QString::asprintf("Unexpected update package parameters count, expected: %u, got %u",
                                     u32_ExpectedCount,
                                     u32_ActualCount);
-               orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp.ToQString());
+               orc_XmlParser.ReportErrorForAttributeContentAppendXmlContext("length", c_Tmp);
             }
          }
          //Return
@@ -332,11 +336,15 @@ void C_OscXceManifestFiler::mh_SaveUpdatePackageParameters(
 int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameter(C_OscXceUpdatePackageParameters & orc_Config,
                                                              const C_OscXmlParserBase & orc_XmlParser)
 {
-   int32_t s32_Retval = orc_XmlParser.GetAttributeStringError("password", orc_Config.c_Password.ToQString());
+   QString c_PasswordQt;
+   int32_t s32_Retval = orc_XmlParser.GetAttributeStringError("password", c_PasswordQt);
+   orc_Config.c_Password = c_PasswordQt;
 
    if (s32_Retval == C_NO_ERR)
    {
-      s32_Retval = orc_XmlParser.GetAttributeStringError("authentication_key", orc_Config.c_AuthenticationKeyPath.ToQString());
+      QString c_AuthKeyQt;
+      s32_Retval = orc_XmlParser.GetAttributeStringError("authentication_key", c_AuthKeyQt);
+      orc_Config.c_AuthenticationKeyPath = c_AuthKeyQt;
    }
    return s32_Retval;
 }
@@ -352,8 +360,8 @@ void C_OscXceManifestFiler::mh_SaveUpdatePackageParameter(const C_OscXceUpdatePa
                                                           C_OscXmlParserBase & orc_XmlParser)
 {
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("update-package-parameters") == "update-package-parameters");
-   orc_XmlParser.SetAttributeString("password", orc_Config.c_Password.ToQString());
-   orc_XmlParser.SetAttributeString("authentication_key", orc_Config.c_AuthenticationKeyPath.ToQString());
+   orc_XmlParser.SetAttributeString("password", orc_Config.c_Password);
+   orc_XmlParser.SetAttributeString("authentication_key", orc_Config.c_AuthenticationKeyPath);
    //Return
    orc_XmlParser.SelectNodeParent();
 }

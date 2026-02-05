@@ -68,13 +68,13 @@ C_SyvUpPacPemFileInfoPopUp::C_SyvUpPacPemFileInfoPopUp(stw::opensyde_gui_element
 
    if (s32_Result == C_NO_ERR)
    {
-      c_DisplayText += c_Pem.GetMetaInfos().c_str();
+      c_DisplayText += c_Pem.GetMetaInfos();
    }
    else
    {
       //lint -e{1946} Qt interface
       c_DisplayText += QString("Error loading file %1: %2").arg(orc_Path,
-                                                                                        c_ErrorMessage.c_str());
+                                                                                        c_ErrorMessage);
    }
    this->mpc_Ui->pc_TextEditFlash_2->setText(c_DisplayText);
    this->mpc_Ui->pc_TextEditFlash_2->setReadOnly(true);

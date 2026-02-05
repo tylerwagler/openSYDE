@@ -23,7 +23,7 @@
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscXmlParserLog.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "stwerrors.hpp"
 
 
@@ -861,7 +861,7 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(
     const C_OscCanOpenObjectDictionary &rc_EdsFileContent =
         orc_Config.GetEdsFileContent();
     orc_XmlParser.CreateNodeChild(
-        "eds-file-content", rc_EdsFileContent.c_TextFileContent.GetText());
+        "eds-file-content", rc_EdsFileContent.c_TextFileContent.join("\n"));
     Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
   } else {
     if (c_CombinedPath == orc_Config.c_ProjectEdsFilePath) {
@@ -879,7 +879,7 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(
           orc_Config.GetEdsFileContent();
       // only use "\n" as separator; SaveStringToFile will add an \r anyways
       s32_Retval = C_OscSystemFilerUtil::h_SaveStringToFile(
-          rc_EdsFileContent.c_TextFileContent.GetText("\n"), c_CombinedPath,
+          rc_EdsFileContent.c_TextFileContent.join("\n"), c_CombinedPath,
           "Saving CANopen manager data");
     }
     if (opc_CreatedFiles != NULL) {

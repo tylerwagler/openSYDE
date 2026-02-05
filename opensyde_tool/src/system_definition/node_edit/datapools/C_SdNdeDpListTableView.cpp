@@ -886,7 +886,7 @@ void C_SdNdeDpListTableView::SetSelectedVariableNames(const std::vector<QString>
                for (uint32_t u32_ItVarName = 0; u32_ItVarName < orc_VariableNames.size(); ++u32_ItVarName)
                {
                   const QString & rc_VariableName = orc_VariableNames[u32_ItVarName];
-                  if (rc_VariableName.compare(rc_Element.c_Name.c_str()) == 0)
+                  if (rc_VariableName.compare(rc_Element.c_Name) == 0)
                   {
                      //Match
                      this->selectRow(u32_ItElement);
@@ -923,7 +923,7 @@ std::vector<QString> C_SdNdeDpListTableView::GetSelectedVariableNames(void) cons
          if (u32_VarIndex < pc_List->c_Elements.size())
          {
             const C_OscNodeDataPoolListElement & rc_Element = pc_List->c_Elements[u32_VarIndex];
-            c_Retval.emplace_back(rc_Element.c_Name.c_str());
+            c_Retval.emplace_back(rc_Element.c_Name);
          }
       }
    }
@@ -1430,8 +1430,8 @@ void C_SdNdeDpListTableView::m_HandleColumnStateSave(void) const
       {
          const std::vector<int32_t> c_ColumnWidths = this->m_GetColumnWidths();
          C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolListColumnSizes(
-            pc_Node->c_Properties.c_Name.c_str(), pc_NodeDataPool->c_Name.c_str(),
-            pc_NodeDataPoolList->c_Name.c_str(), c_ColumnWidths);
+            pc_Node->c_Properties.c_Name, pc_NodeDataPool->c_Name,
+            pc_NodeDataPoolList->c_Name, c_ColumnWidths);
       }
    }
 }
@@ -1458,9 +1458,9 @@ void C_SdNdeDpListTableView::m_HandleColumnStateRestore(void)
          if (((pc_Node != NULL) && (pc_NodeDataPool != NULL)) && (pc_NodeDataPoolList != NULL))
          {
             const C_UsNode c_UserNode =
-               C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
-            const C_UsNodeDatapool c_UserDataPool = c_UserNode.GetDatapool(pc_NodeDataPool->c_Name.c_str());
-            const C_UsNodeDatapoolList c_UserList = c_UserDataPool.GetOtherList(pc_NodeDataPoolList->c_Name.c_str());
+               C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
+            const C_UsNodeDatapool c_UserDataPool = c_UserNode.GetDatapool(pc_NodeDataPool->c_Name);
+            const C_UsNodeDatapoolList c_UserList = c_UserDataPool.GetOtherList(pc_NodeDataPoolList->c_Name);
             const std::vector<int32_t> & rc_ColumnWidths = c_UserList.GetColumnWidths();
             q_UserSettingsApplied = this->m_SetColumnWidths(rc_ColumnWidths);
          }

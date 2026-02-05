@@ -251,7 +251,7 @@ void C_SdNdeHalcChannelWidget::SaveUserSettings(void) const
 void C_SdNdeHalcChannelWidget::m_OnNameEdited(void)
 {
    int32_t s32_Return;
-   const stw::scl::C_SclString c_NewName = this->mpc_Ui->pc_LeName->text().toStdString().c_str();
+   const QString c_NewName = this->mpc_Ui->pc_LeName->text();
 
    // update data
    s32_Return =  C_PuiSdHandler::h_GetInstance()->SetHalcDomainChannelConfigName(mu32_NodeIndex, mu32_DomainIndex,
@@ -270,7 +270,7 @@ void C_SdNdeHalcChannelWidget::m_OnNameEdited(void)
 void C_SdNdeHalcChannelWidget::m_OnCommentEdited(void)
 {
    int32_t s32_Return;
-   const stw::scl::C_SclString c_NewComment = this->mpc_Ui->pc_TedComment->toPlainText().toStdString().c_str();
+   const QString c_NewComment = this->mpc_Ui->pc_TedComment->toPlainText();
 
    // update data
    s32_Return = C_PuiSdHandler::h_GetInstance()->SetHalcDomainChannelConfigComment(mu32_NodeIndex, mu32_DomainIndex,
@@ -432,8 +432,8 @@ void C_SdNdeHalcChannelWidget::m_SetLinkedSymbolAndChannel(const bool oq_IsLinke
 
       if ((pc_LinkedChannel != NULL) && (pc_Domain != NULL) && (u32_LinkedChannelIndex < pc_Domain->c_Channels.size()))
       {
-         c_LinkText = static_cast<QString>("%1 (%2)").arg(pc_LinkedChannel->c_Name.c_str(),
-                                                          pc_Domain->c_Channels[u32_LinkedChannelIndex].c_Name.c_str());
+         c_LinkText = static_cast<QString>("%1 (%2)").arg(pc_LinkedChannel->c_Name,
+                                                          pc_Domain->c_Channels[u32_LinkedChannelIndex].c_Name);
       }
    }
 
@@ -459,7 +459,7 @@ void C_SdNdeHalcChannelWidget::m_OnLinkedChannelClicked(const QString & orc_Link
 
    for (uint32_t u32_Counter = 0; u32_Counter < pc_Domain->c_Channels.size(); u32_Counter++)
    {
-      if (orc_LinkedChannelName.contains(pc_Domain->c_Channels.at(u32_Counter).c_Name.c_str()) == true)
+      if (orc_LinkedChannelName.contains(pc_Domain->c_Channels.at(u32_Counter).c_Name) == true)
       {
          Q_EMIT (this->SigChannelSelected(this->mu32_DomainIndex, u32_Counter, this->mq_UseChannelIndex));
       }
@@ -530,11 +530,11 @@ void C_SdNdeHalcChannelWidget::m_LoadChannelData(void)
 
          // adapt GUI elements
          this->m_HandleHalcNvmFlag();
-         this->mpc_Ui->pc_LeName->setText(pc_Channel->c_Name.c_str());
+         this->mpc_Ui->pc_LeName->setText(pc_Channel->c_Name);
          this->mpc_Ui->pc_LeName->setReadOnly(!this->mq_UseChannelIndex); // disable name editing in domain case
-         this->mpc_Ui->pc_TedComment->setText(pc_Channel->c_Comment.c_str());
+         this->mpc_Ui->pc_TedComment->setText(pc_Channel->c_Comment);
          this->mpc_Ui->pc_ChxSafety->setChecked(pc_Channel->q_SafetyRelevant);
-         this->mpc_Ui->pc_LabDomainName->setText(pc_Domain->c_SingularName.c_str());
+         this->mpc_Ui->pc_LabDomainName->setText(pc_Domain->c_SingularName);
          switch (pc_Domain->e_Category)
          {
          case C_OscHalcDefDomain::eCA_INPUT:
@@ -553,7 +553,7 @@ void C_SdNdeHalcChannelWidget::m_LoadChannelData(void)
          // handle current channel name
          if (this->mu32_ChannelIndex < pc_Domain->c_Channels.size())
          {
-            this->mpc_Ui->pc_LabChannelCurrent->setText(pc_Domain->c_Channels[this->mu32_ChannelIndex].c_Name.c_str());
+            this->mpc_Ui->pc_LabChannelCurrent->setText(pc_Domain->c_Channels[this->mu32_ChannelIndex].c_Name);
             this->mpc_Ui->pc_LabChannelCurrent->SetBackgroundColor(11);
          }
          else
@@ -587,7 +587,7 @@ void C_SdNdeHalcChannelWidget::m_LoadChannelData(void)
                   if (rc_CurrentAvail.u32_ValueIndex == this->mu32_ChannelIndex)
                   {
                      // add to combobox
-                     this->mpc_Ui->pc_CbxUseCase->addItem(rc_CurrentUseCase.c_Display.c_str());
+                     this->mpc_Ui->pc_CbxUseCase->addItem(rc_CurrentUseCase.c_Display);
 
                      // remember index
                      this->mc_CbxUseCaseIndices.push_back(u32_UseCaseCounter);
@@ -693,13 +693,11 @@ void C_SdNdeHalcChannelWidget::m_ConnectWidgets(const bool oq_Connect) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcChannelWidget::m_CheckName(const QString & orc_NewName) const
 {
-   const stw::scl::C_SclString c_NewName = orc_NewName.toStdString().c_str();
-
    //check name
    const bool q_NameIsUnique =
       C_PuiSdHandler::h_GetInstance()->CheckHalcChannelNameAvailable(mu32_NodeIndex, mu32_DomainIndex,
-                                                                     c_NewName, &mu32_ChannelIndex);
-   const bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(c_NewName);
+                                                                     orc_NewName, &mu32_ChannelIndex);
+   const bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(orc_NewName);
 
    //set invalid text property
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LeName, "Valid", (q_NameIsUnique && q_NameIsValid));
@@ -779,7 +777,7 @@ bool C_SdNdeHalcChannelWidget::m_AskUserToContinueLinkingIfNecessary(const bool 
                                                            "Linked channel %2 will lose its configuration "
                                                            "and also be set to this use case. After linking, the configuration is "
                                                            "always applied to both channels.").
-               arg(pc_UseCase->c_Display.c_str(), c_LinkedChannels);
+               arg(pc_UseCase->c_Display, c_LinkedChannels);
             c_MessageBox.SetCustomMinHeight(230, 230);
          }
          else
@@ -787,7 +785,7 @@ bool C_SdNdeHalcChannelWidget::m_AskUserToContinueLinkingIfNecessary(const bool 
             c_Description =
                static_cast<QString>("Are you sure to select the use case '%1'?\n"
                                                            "Use case of linked channel %2 will be reset to default.").
-               arg(pc_UseCase->c_Display.c_str(), c_LinkedChannels);
+               arg(pc_UseCase->c_Display, c_LinkedChannels);
             c_MessageBox.SetCustomMinHeight(200, 200);
          }
 

@@ -544,15 +544,15 @@ void C_SdNdeDpListHeaderWidget::m_UpdateUi(void)
    if ((pc_Node != NULL) && ((pc_List != NULL) && (pc_DataPool != NULL)))
    {
       // name and comment
-      const QString c_SimplifiedComment = static_cast<QString>(pc_List->c_Comment.c_str()).simplified();
+      const QString c_SimplifiedComment = pc_List->c_Comment.simplified();
 
-      this->mpc_Ui->pc_LineEditName->SetName(pc_List->c_Name.c_str());
+      this->mpc_Ui->pc_LineEditName->SetName(pc_List->c_Name);
       this->mpc_Ui->pc_LineEditName->SetCounter(pc_List->c_Elements.size());
       this->mpc_Ui->pc_LabelComment->SetCompleteText(c_SimplifiedComment);
       this->mpc_Ui->pc_LabelComment->SetToolTipInformation("Comment",
-                                                           pc_List->c_Comment.c_str());
+                                                           pc_List->c_Comment);
 
-      if (pc_List->c_Comment.IsEmpty() == true)
+      if (pc_List->c_Comment.isEmpty() == true)
       {
          this->mpc_Ui->pc_PushButtonComment->SetSvg("://images/system_definition/IconCommentAdd.svg");
       }
@@ -746,7 +746,7 @@ void C_SdNdeDpListHeaderWidget::m_OpenDataSetEdit(void)
 void C_SdNdeDpListHeaderWidget::m_CheckName(void) const
 {
    QString c_Content;
-   const stw::scl::C_SclString c_Name = this->mpc_Ui->pc_LineEditName->GetName().toStdString().c_str();
+   const QString c_Name = this->mpc_Ui->pc_LineEditName->GetName();
 
    //check
    bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(c_Name);
@@ -758,7 +758,7 @@ void C_SdNdeDpListHeaderWidget::m_CheckName(void) const
 
    if (C_PuiSdHandler::h_GetInstance()->CheckNodeDataPoolListNameAvailable(this->mu32_NodeIndex,
                                                                            this->mu32_DataPoolIndex,
-                                                                           c_Name,
+                                                                           c_Name.toStdString().c_str(),
                                                                            &this->mu32_ListIndex) == false)
    {
       q_NameIsValid = false;
@@ -878,7 +878,7 @@ void C_SdNdeDpListHeaderWidget::m_UpdateErrorToolTip(void) const
                      c_InvalidDataSetIndices[u32_ItDataSet]);
                if (pc_DataSet != NULL)
                {
-                  c_Content += static_cast<QString>("%1\n").arg(pc_DataSet->c_Name.c_str());
+                  c_Content += static_cast<QString>("%1\n").arg(pc_DataSet->c_Name);
                }
             }
             if (mu32_TOOL_TIP_MAXIMUM_ITEMS < c_InvalidDataSetIndices.size())
@@ -903,7 +903,7 @@ void C_SdNdeDpListHeaderWidget::m_UpdateErrorToolTip(void) const
                                                                              c_InvalidElementIndices[u32_ItElement]);
                if (pc_Appl != NULL)
                {
-                  c_Content += static_cast<QString>("%1\n").arg(pc_Appl->c_Name.c_str());
+                  c_Content += static_cast<QString>("%1\n").arg(pc_Appl->c_Name);
                }
             }
             if (mu32_TOOL_TIP_MAXIMUM_ITEMS < c_InvalidElementIndices.size())

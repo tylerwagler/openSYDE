@@ -5,30 +5,46 @@
 
    Class to find bus or node by string
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "C_SclString.hpp"
 #include "C_UtiFindNameHelper.hpp"
 using namespace stw::opensyde_gui_logic;
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Constructor
@@ -38,10 +54,8 @@ using namespace stw::opensyde_gui_logic;
    \param[in]     orc_Cmp   Search string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_UtiFindNameHelper::C_UtiFindNameHelper(const stw::scl::C_SclString & orc_Cmp) :
-   mc_Cmp(orc_Cmp)
-{
-}
+C_UtiFindNameHelper::C_UtiFindNameHelper(const QString &orc_Cmp)
+    : mc_Cmp(orc_Cmp) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Compare string with string
@@ -53,16 +67,13 @@ C_UtiFindNameHelper::C_UtiFindNameHelper(const stw::scl::C_SclString & orc_Cmp) 
    false: no match
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_UtiFindNameHelper::operator ()(const stw::scl::C_SclString * const opc_Cur) const
-{
-   bool q_Retval = false;
+bool C_UtiFindNameHelper::operator()(const QString *const opc_Cur) const {
+  bool q_Retval = false;
 
-   if (opc_Cur != NULL)
-   {
-      if (*opc_Cur == mc_Cmp)
-      {
-         q_Retval = true;
-      }
-   }
-   return q_Retval;
+  if (opc_Cur != NULL) {
+    if (*opc_Cur == mc_Cmp) {
+      q_Retval = true;
+    }
+  }
+  return q_Retval;
 }

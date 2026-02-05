@@ -176,8 +176,8 @@ int32_t C_OscImportEdsDcf::h_Import(const QString & orc_FilePath, const uint8_t 
          else
          {
             s32_Retval = C_RANGE;
-            orc_ParsingError = c_Dictionary.GetLastErrorText().ToQString();
-            osc_write_log_warning("Import ECS/DCF", "Could not parse file: " + c_Dictionary.GetLastErrorText().ToQString());
+            orc_ParsingError = c_Dictionary.GetLastErrorText();
+            osc_write_log_warning("Import ECS/DCF", "Could not parse file: " + c_Dictionary.GetLastErrorText());
          }
       }
    }

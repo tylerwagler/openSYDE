@@ -23,7 +23,7 @@
 #include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscIpDispatcherWinSock.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -153,7 +153,7 @@ C_OscIpDispatcherWinSock::C_OscIpDispatcherWinSock(void) :
    const int x_Result =                               //lint !e8080 !e970 //using type to match library interface
                         WSAStartup(0x0201U, &c_Data); //Request version 2.1
 
-   this->mc_PreferredInterfaceNames.Clear();
+   this->mc_PreferredInterfaceNames.clear();
 
    if (x_Result != 0)
    {
@@ -253,8 +253,8 @@ int32_t C_OscIpDispatcherWinSock::m_GetAllInstalledInterfaceIps(void)
 
             while (pc_Address != NULL)
             {
-               if ((this->mc_PreferredInterfaceNames.GetCount() == 0) ||
-                   (this->mc_PreferredInterfaceNames.IndexOf(QString::fromWCharArray(pc_Adapter->FriendlyName)) != -1))
+               if ((this->mc_PreferredInterfaceNames.count() == 0) ||
+                   (this->mc_PreferredInterfaceNames.indexOf(QString::fromWCharArray(pc_Adapter->FriendlyName)) != -1))
                {
                   // sockaddr is the generic descriptor and sockaddr_in is IPV4 specific
                   // https://stackoverflow.com/questions/21099041/why-do-we-cast-sockaddr-in-to-sockaddr-when-calling-bind/21099196
@@ -321,12 +321,12 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
    if (orc_Connection.x_Socket == m_WsInvalidSocket())
    {
       osc_write_log_error("openSYDE IP-TP", "Error at TCP socket(): " + QString::number(WSAGetLastError()) +
-                          " IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress).ToQString());
+                          " IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
       q_Error = true;
    }
    else
    {
-      osc_write_log_info("openSYDE IP-TP", "TCP socket OK IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress).ToQString());
+      osc_write_log_info("openSYDE IP-TP", "TCP socket OK IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
    }
 
    if (q_Error == false)
@@ -337,7 +337,7 @@ int32_t C_OscIpDispatcherWinSock::m_ConnectTcp(C_TcpConnection & orc_Connection)
       {
          osc_write_log_error("openSYDE IP-TP",
                              "TCP socket ioctlsocket() failed. Error: " + QString::number(WSAGetLastError()) +
-                             "IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress).ToQString());
+                             "IP-Address: " + mh_IpToText(orc_Connection.au8_IpAddress));
          q_Error = true;
       }
    }
@@ -544,9 +544,9 @@ int32_t C_OscIpDispatcherWinSock::m_ConfigureUdpSocket(const bool oq_ServerPort,
    test representation of IP
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscIpDispatcherWinSock::mh_IpToText(const uint8_t (&orau8_Ip)[4])
+QString C_OscIpDispatcherWinSock::mh_IpToText(const uint8_t (&orau8_Ip)[4])
 {
-   C_SclString c_Text;
+   QString c_Text;
 
    c_Text = QString::asprintf("%d.%d.%d.%d", orau8_Ip[0], orau8_Ip[1], orau8_Ip[2], orau8_Ip[3]);
    return c_Text;
@@ -1282,17 +1282,17 @@ int32_t C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Data, uint8
    \param[in] orc_FileLocation Log file location path and file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscIpDispatcherWinSock::LoadConfigFile(const C_SclString & orc_FileLocation)
+void C_OscIpDispatcherWinSock::LoadConfigFile(const QString & orc_FileLocation)
 {
-   if ((QFileInfo(orc_FileLocation.ToQString()).exists() && QFileInfo(orc_FileLocation.ToQString()).isFile()) == true)
+   if ((QFileInfo(orc_FileLocation).exists() && QFileInfo(orc_FileLocation).isFile()) == true)
    {
-      QSettings c_Ini(orc_FileLocation.ToQString(), QSettings::IniFormat);
-      const C_SclString c_Help = C_SclString(c_Ini.value("ETH_CONFIG/ETH_INTERFACE_NAME", "").toString().toStdString());
+      QSettings c_Ini(orc_FileLocation, QSettings::IniFormat);
+      const QString c_Help = c_Ini.value("ETH_CONFIG/ETH_INTERFACE_NAME", "").toString();
 
-      c_Help.Tokenize(",", this->mc_PreferredInterfaceNames.Strings);
+      this->mc_PreferredInterfaceNames = c_Help.split(",", Qt::SkipEmptyParts);
    }
    else
    {
-      this->mc_PreferredInterfaceNames.Clear();
+      this->mc_PreferredInterfaceNames.clear();
    }
 }

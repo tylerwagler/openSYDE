@@ -16,7 +16,6 @@
 #include "C_FlaUpSequences.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
@@ -238,27 +237,27 @@ void C_FlaUpSequences::m_ReportProgressPercentage(const uint8_t ou8_ProgressInPe
    \param[in]  orc_Information   Text information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaUpSequences::m_ReportProgress(const int32_t os32_Result, const stw::scl::C_SclString & orc_Information)
+void C_FlaUpSequences::m_ReportProgress(const int32_t os32_Result, const QString & orc_Information)
 {
    QString c_Progress;
 
    if (os32_Result == C_NO_ERR)
    {
-      c_Progress = orc_Information.c_str();
-      osc_write_log_info("Progress", c_Progress.toStdString());
+      c_Progress = orc_Information;
+      osc_write_log_info("Progress", c_Progress);
    }
    else if (os32_Result == C_WARN)
    {
       c_Progress = "Warning in step: ";
-      c_Progress += orc_Information.c_str();
-      osc_write_log_warning("Progress", c_Progress.toStdString());
+      c_Progress += orc_Information;
+      osc_write_log_warning("Progress", c_Progress);
    }
    else
    {
       c_Progress =  "Error in step: ";
-      c_Progress += orc_Information.c_str();
+      c_Progress += orc_Information;
       c_Progress += " Result: " + QString::number(os32_Result) + ". See log file for details. ";
-      osc_write_log_error("Progress", c_Progress.toStdString());
+      osc_write_log_error("Progress", c_Progress);
    }
 
    Q_EMIT (this->SigReportProgress(c_Progress));
@@ -275,32 +274,32 @@ void C_FlaUpSequences::m_ReportProgress(const int32_t os32_Result, const stw::sc
    \param[in]  orc_Information   Flashloader information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_FlaUpSequences::m_ReportFlashloaderInformationRead(const stw::scl::C_SclString & orc_DeviceName,
+void C_FlaUpSequences::m_ReportFlashloaderInformationRead(const QString & orc_DeviceName,
                                                           const stw::opensyde_core::C_OscComFlashloaderInformation & orc_Information)
 {
-   const C_SclStringList c_MoreInformation = orc_Information.FlashloaderInformationToText();
-   C_SclStringList c_Lines;
+   const QStringList c_MoreInformation = orc_Information.FlashloaderInformationToText();
+   QStringList c_Lines;
    QString c_ProgressText;
 
-   c_Lines.Clear();
-   c_Lines.Add("Device name: " + orc_DeviceName);
-   c_Lines.AddStrings(&c_MoreInformation);
+   c_Lines.clear();
+   c_Lines.append("Device name: " + orc_DeviceName);
+   c_Lines.append(c_MoreInformation);
 
    c_ProgressText += "openSYDE device information read: \n";
 
-   for (uint32_t u32_Line = 0U; u32_Line < c_Lines.GetCount(); u32_Line++)
+   for (int32_t s32_Line = 0; s32_Line < c_Lines.size(); s32_Line++)
    {
       c_ProgressText += "  ";
-      c_ProgressText += c_Lines.Strings[u32_Line].c_str();
-      if (u32_Line != (c_Lines.GetCount() - 1))
+      c_ProgressText += c_Lines.at(s32_Line);
+      if (s32_Line != (c_Lines.size() - 1))
       {
          c_ProgressText += "\n";
       }
-      osc_write_log_info("Flashloader Info", c_Lines.Strings[u32_Line]);
+      osc_write_log_info("Flashloader Info", c_Lines.at(s32_Line));
    }
 
    Q_EMIT (this->SigReportFlashloaderInformationText(c_ProgressText));
-   Q_EMIT (this->SigReportDeviceName(orc_DeviceName.c_str()));
+   Q_EMIT (this->SigReportDeviceName(orc_DeviceName));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

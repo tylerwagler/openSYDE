@@ -19,7 +19,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
-using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -87,9 +86,9 @@ void C_PuiBsLineArrow::CalcHash(uint32_t & oru32_HashValue) const
    Arrow head type as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_PuiBsLineArrow::h_ArrowHeadTypeToString(const E_ArrowHeadType & ore_Type)
+QString C_PuiBsLineArrow::h_ArrowHeadTypeToString(const E_ArrowHeadType & ore_Type)
 {
-   stw::scl::C_SclString c_Retval;
+   QString c_Retval;
    switch (ore_Type)
    {
    case eNORMAL:
@@ -124,9 +123,9 @@ stw::scl::C_SclString C_PuiBsLineArrow::h_ArrowHeadTypeToString(const E_ArrowHea
    Line type as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_PuiBsLineArrow::h_LineTypeToString(const E_LineType & ore_Type)
+QString C_PuiBsLineArrow::h_LineTypeToString(const E_LineType & ore_Type)
 {
-   stw::scl::C_SclString c_Retval;
+   QString c_Retval;
    switch (ore_Type)
    {
    case eDASH:
@@ -158,7 +157,7 @@ stw::scl::C_SclString C_PuiBsLineArrow::h_LineTypeToString(const E_LineType & or
    Arrow type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_PuiBsLineArrow::E_ArrowHeadType C_PuiBsLineArrow::h_ArrowHeadTypeFromString(const stw::scl::C_SclString & orc_Str)
+C_PuiBsLineArrow::E_ArrowHeadType C_PuiBsLineArrow::h_ArrowHeadTypeFromString(const QString & orc_Str)
 {
    C_PuiBsLineArrow::E_ArrowHeadType e_Retval;
    if (orc_Str == "normal")
@@ -197,7 +196,7 @@ C_PuiBsLineArrow::E_ArrowHeadType C_PuiBsLineArrow::h_ArrowHeadTypeFromString(co
    Line type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_PuiBsLineArrow::E_LineType C_PuiBsLineArrow::h_LineTypeFromString(const stw::scl::C_SclString & orc_Str)
+C_PuiBsLineArrow::E_LineType C_PuiBsLineArrow::h_LineTypeFromString(const QString & orc_Str)
 {
    C_PuiBsLineArrow::E_LineType e_Retval;
    if (orc_Str == "dash")

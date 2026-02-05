@@ -840,15 +840,15 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
                   if ((q_ParamSetFile == false) &&
                       (q_PemFile == false))
                   {
-                     orc_ApplicationsToWrite.c_FilesToFlash.emplace_back(c_Path.toStdString().c_str());
+                     orc_ApplicationsToWrite.c_FilesToFlash.emplace_back(c_Path.toStdString());
                   }
                   else if (q_ParamSetFile == true)
                   {
-                     orc_ApplicationsToWrite.c_FilesToWriteToNvm.emplace_back(c_Path.toStdString().c_str());
+                     orc_ApplicationsToWrite.c_FilesToWriteToNvm.emplace_back(c_Path.toStdString());
                   }
                   else
                   {
-                     orc_ApplicationsToWrite.c_PemFile = c_Path.toStdString().c_str();
+                     orc_ApplicationsToWrite.c_PemFile = c_Path.toStdString();
 
                      mh_FillDoFlashWithPemStates(pc_App, orc_ApplicationsToWrite);
                   }
@@ -872,15 +872,15 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
                   if ((q_ParamSetFile == false) &&
                       (q_PemFile == false))
                   {
-                     opc_AllApplications->c_FilesToFlash.emplace_back(c_Path.toStdString().c_str());
+                     opc_AllApplications->c_FilesToFlash.emplace_back(c_Path.toStdString());
                   }
                   else if (q_ParamSetFile == true)
                   {
-                     opc_AllApplications->c_FilesToWriteToNvm.emplace_back(c_Path.toStdString().c_str());
+                     opc_AllApplications->c_FilesToWriteToNvm.emplace_back(c_Path.toStdString());
                   }
                   else
                   {
-                     opc_AllApplications->c_PemFile = c_Path.toStdString().c_str();
+                     opc_AllApplications->c_PemFile = c_Path.toStdString();
 
                      mh_FillDoFlashWithPemStates(pc_App, *opc_AllApplications);
                   }
@@ -889,7 +889,7 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
                osc_write_log_info("Generate Update Package",
                                   c_LogEntry.arg(this->mc_NodeName,
                                                                         this->mc_SectionName,
-                                                                        c_Path).toStdString().c_str());
+                                                                        c_Path).toStdString());
             }
             else
             {
@@ -914,7 +914,7 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
                osc_write_log_info("Generate Update Package",
                                   c_LogEntry.arg(this->mc_NodeName,
                                                                         this->mc_SectionName,
-                                                                        c_Path).toStdString().c_str());
+                                                                        c_Path).toStdString());
 
                s32_Return = C_RD_WR;
             }

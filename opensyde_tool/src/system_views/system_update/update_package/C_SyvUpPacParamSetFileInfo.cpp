@@ -72,12 +72,12 @@ int32_t C_SyvUpPacParamSetFileInfo::ReadFile(void)
    C_OscParamSetHandler c_FileHandler;
 
    const int32_t s32_Retval = c_FileHandler.ReadFile(
-      this->mc_Path.toStdString().c_str(), false, true, &u16_FileCrc, &q_OptionlContentMissing);
+      this->mc_Path.toStdString(), false, true, &u16_FileCrc, &q_OptionlContentMissing);
 
    if (s32_Retval == C_NO_ERR)
    {
       this->mc_InterpretedFileInfo = c_FileHandler.GetInterpretedData();
-      this->mc_ParamInfo.SetContent(this->mc_StoragePath.toStdString().c_str(), u16_FileCrc);
+      this->mc_ParamInfo.SetContent(this->mc_StoragePath.toStdString(), u16_FileCrc);
       this->mc_ComparisonResults.clear();
       m_Comparison(q_OptionlContentMissing);
       m_ConvertToHtmlString(q_OptionlContentMissing);
@@ -137,8 +137,8 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
       const C_OscParamSetInterpretedNode & rc_InterpretedNode = this->mc_InterpretedFileInfo.c_InterpretedNodes[0UL];
       //Node
       //Node name
-      this->m_CompareString(rc_InterpretedNode.c_Name.c_str(),
-                            pc_Node->c_Properties.c_Name.c_str(), "Node name", 0UL);
+      this->m_CompareString(rc_InterpretedNode.c_Name,
+                            pc_Node->c_Properties.c_Name, "Node name", 0UL);
       for (uint32_t u32_ItInDp = 0UL; u32_ItInDp < rc_InterpretedNode.c_DataPools.size(); ++u32_ItInDp)
       {
          //Datapools
@@ -154,8 +154,8 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
                //Datapool
                q_DpMatch = true;
                //Datapool name
-               this->m_CompareString(rc_InDp.c_DataPoolInfo.c_Name.c_str(),
-                                     rc_NoDp.c_Name.c_str(), "Datapool name", 1UL);
+               this->m_CompareString(rc_InDp.c_DataPoolInfo.c_Name,
+                                     rc_NoDp.c_Name, "Datapool name", 1UL);
                rc_NoDp.CalcGeneratedDefinitionHash(u32_DpHash);
                //Datapool CRC
                this->m_CompareString(static_cast<QString>("0x%1").arg(rc_InDp.c_DataPoolInfo.u32_DataPoolCrc, 0, 16),
@@ -208,7 +208,7 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
                         //List
                         q_LiMatch = true;
                         //List name
-                        this->m_CompareString(rc_InLi.c_Name.c_str(), rc_NoLi.c_Name.c_str(),
+                        this->m_CompareString(rc_InLi.c_Name, rc_NoLi.c_Name,
                                               "List name", 2UL);
                         //List elements
                         this->m_CompareString(static_cast<QString>("%1").arg(rc_InLi.c_Elements.size()),
@@ -219,7 +219,7 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
                   }
                   if (q_LiMatch == false)
                   {
-                     this->m_DisplayNoMatch(rc_InLi.c_Name.c_str(), "List name", 2UL);
+                     this->m_DisplayNoMatch(rc_InLi.c_Name, "List name", 2UL);
                   }
                }
                break;
@@ -227,7 +227,7 @@ void C_SyvUpPacParamSetFileInfo::m_Comparison(const bool oq_OptionlContentMissin
          }
          if (q_DpMatch == false)
          {
-            this->m_DisplayNoMatch(rc_InDp.c_DataPoolInfo.c_Name.c_str(), "Datapool name", 1UL);
+            this->m_DisplayNoMatch(rc_InDp.c_DataPoolInfo.c_Name, "Datapool name", 1UL);
          }
       }
    }
@@ -255,7 +255,7 @@ void C_SyvUpPacParamSetFileInfo::m_ConvertToHtmlString(const bool oq_OptionlCont
    }
    else
    {
-      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_DateTime.c_str();
+      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_DateTime;
    }
    this->m_AddTableRow("Created:", c_Value);
    if (oq_OptionlContentMissing)
@@ -264,7 +264,7 @@ void C_SyvUpPacParamSetFileInfo::m_ConvertToHtmlString(const bool oq_OptionlCont
    }
    else
    {
-      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_Creator.c_str();
+      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_Creator;
    }
    this->m_AddTableRow("Creator:", c_Value);
    if (oq_OptionlContentMissing)
@@ -273,7 +273,7 @@ void C_SyvUpPacParamSetFileInfo::m_ConvertToHtmlString(const bool oq_OptionlCont
    }
    else
    {
-      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ToolName.c_str();
+      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ToolName;
    }
    this->m_AddTableRow("Tool name:", c_Value);
    if (oq_OptionlContentMissing)
@@ -282,7 +282,7 @@ void C_SyvUpPacParamSetFileInfo::m_ConvertToHtmlString(const bool oq_OptionlCont
    }
    else
    {
-      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ToolVersion.c_str();
+      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ToolVersion;
    }
    this->m_AddTableRow("Tool version:", c_Value);
    if (oq_OptionlContentMissing)
@@ -291,7 +291,7 @@ void C_SyvUpPacParamSetFileInfo::m_ConvertToHtmlString(const bool oq_OptionlCont
    }
    else
    {
-      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ProjectName.c_str();
+      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ProjectName;
    }
    this->m_AddTableRow("Project name:", c_Value);
    if (oq_OptionlContentMissing)
@@ -300,7 +300,7 @@ void C_SyvUpPacParamSetFileInfo::m_ConvertToHtmlString(const bool oq_OptionlCont
    }
    else
    {
-      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ProjectVersion.c_str();
+      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_ProjectVersion;
    }
    this->m_AddTableRow("Project version:", c_Value);
    if (oq_OptionlContentMissing)
@@ -309,7 +309,7 @@ void C_SyvUpPacParamSetFileInfo::m_ConvertToHtmlString(const bool oq_OptionlCont
    }
    else
    {
-      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_UserComment.c_str();
+      c_Value = this->mc_InterpretedFileInfo.c_FileInfo.c_UserComment;
    }
    this->m_AddTableRow("Comment:", c_Value);
 

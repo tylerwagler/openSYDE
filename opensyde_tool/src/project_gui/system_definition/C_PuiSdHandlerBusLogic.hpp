@@ -28,14 +28,14 @@ public:
    //Bus general
    uint32_t AddBusAndSort(stw::opensyde_core::C_OscSystemBus & orc_OscBus, const C_PuiSdBus & orc_UiBus,
                           const QString * const opc_Name = NULL, const bool oq_AllowBusIdAdaption = true);
-   std::map<stw::scl::C_SclString, bool> GetExistingBusNames(void) const;
+   std::map<QString, bool> GetExistingBusNames(void) const;
    void SetUiBus(const uint32_t ou32_Index, const C_PuiSdBus & orc_Item);
    void SetOscBus(const uint32_t ou32_Index, const stw::opensyde_core::C_OscSystemBus & orc_Item);
    const C_PuiSdBus * GetUiBus(const uint32_t & oru32_Index) const;
    const stw::opensyde_core::C_OscSystemBus * GetOscBus(const uint32_t & oru32_Index) const;
-   bool CheckBusNameAvailable(const stw::scl::C_SclString & orc_Name,
+   bool CheckBusNameAvailable(const QString & orc_Name,
                               const uint32_t * const opu32_BusIndexToSkip = NULL,
-                              std::vector<stw::scl::C_SclString> * const opc_ExistingNames = NULL) const;
+                              std::vector<QString> * const opc_ExistingNames = NULL) const;
    void RemoveBus(const uint32_t ou32_BusIndex);
    bool CheckBusConflict(const uint32_t ou32_BusIndex) const;
    int32_t CheckBusConflictDetailed(const uint32_t ou32_BusIndex, bool * const opq_NameConflict = NULL,
@@ -199,11 +199,11 @@ protected:
 
    void m_GetExistingMessageNamesProtocol(const uint32_t & oru32_NodeIndex,
                                           const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType,
-                                          const uint32_t & oru32_InterfaceIndex, std::map<stw::scl::C_SclString, bool>
+                                          const uint32_t & oru32_InterfaceIndex, std::map<QString, bool>
                                           & orc_ExistingNames) const;
-   std::map<stw::scl::C_SclString, bool> m_GetExistingMessageNames(const uint32_t & oru32_NodeIndex,
+   std::map<QString, bool> m_GetExistingMessageNames(const uint32_t & oru32_NodeIndex,
                                                                    const uint32_t & oru32_InterfaceIndex) const;
-   std::map<stw::scl::C_SclString, bool> m_GetExistingSignalNames(
+   std::map<QString, bool> m_GetExistingSignalNames(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId) const;
    C_PuiSdNodeCanProtocol * m_GetUiCanProtocol(const uint32_t & oru32_NodeIndex,
                                                const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType,

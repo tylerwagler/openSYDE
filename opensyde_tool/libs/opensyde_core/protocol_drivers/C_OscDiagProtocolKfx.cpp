@@ -16,7 +16,7 @@
 #include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscDiagProtocolKfx.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -1189,7 +1189,7 @@ int32_t C_OscDiagProtocolKfx::DataPoolReadVersion(const uint8_t ou8_DataPoolInde
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDiagProtocolKfx::DataPoolReadMetaData(const uint8_t ou8_DataPoolIndex, uint8_t (&orau8_Version)[3],
-                                                   stw::scl::C_SclString & orc_Name, uint8_t * const opu8_NrCode)
+                                                   QString & orc_Name, uint8_t * const opu8_NrCode)
 {
    // KEFEX protocol does not support reading the Datapool name
    orc_Name = "";

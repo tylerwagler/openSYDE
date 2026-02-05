@@ -39,8 +39,8 @@ public:
    static uint16_t PackIndex(const uint16_t ou16_List, const uint16_t ou16_Variable);
    static void UnpackIndex(const uint16_t ou16_Index, uint16_t * const opu16_List, uint16_t * const opu16_Variable);
 
-   const C_KFXVariableListBase * GetListByName(const stw::scl::C_SclString & orc_ListName) const;
-   C_KFXVariableListBase * GetListByName(const stw::scl::C_SclString & orc_ListName);
+   const C_KFXVariableListBase * GetListByName(const QString & orc_ListName) const;
+   C_KFXVariableListBase * GetListByName(const QString & orc_ListName);
 
    uint16_t u16_CRCOverCRCsServer;                                     ///< last EEPROM value CRC over CRCs read from
                                                                        // ECU

@@ -20,7 +20,7 @@
 #include "stwerrors.hpp"
 #include <QString>
 #include "C_OscSystemDefinition.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"

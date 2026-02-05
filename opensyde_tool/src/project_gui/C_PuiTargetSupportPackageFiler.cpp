@@ -60,13 +60,13 @@ int32_t C_PuiTargetSupportPackageFiler::h_LoadTspV3(const QString & orc_TspPath,
                                                     stw::opensyde_core::C_OscNode & orc_OscNode,
                                                     C_PuiSdNode & orc_UiNode)
 {
-   stw::scl::C_SclString c_NodePath;
+   QString c_NodePath;
    int32_t s32_Retval = C_OscTargetSupportPackageFiler::h_Load(orc_Tsp, c_NodePath, orc_TspPath.toStdString().c_str());
    if (s32_Retval == C_NO_ERR)
    {
       QString c_FolderPath;
       const QString c_ZipFilePath =
-         C_PuiTargetSupportPackageFiler::mh_GetNodeFilePath(orc_TspPath, c_NodePath.c_str());
+         C_PuiTargetSupportPackageFiler::mh_GetNodeFilePath(orc_TspPath, c_NodePath);
       if (mh_DoUnzip(c_ZipFilePath, c_FolderPath) == C_NO_ERR)
       {
          const QString c_OscXmlPath = C_PuiTargetSupportPackageFiler::mh_GetOscNodeXmlPath(c_FolderPath);
@@ -112,7 +112,7 @@ C_PuiTargetSupportPackageFiler::C_PuiTargetSupportPackageFiler()
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiTargetSupportPackageFiler::mh_DoUnzip(const QString & orc_ZipFilePath, QString & orc_FolderPath)
 {
-   stw::scl::C_SclString c_ErrorText;
+   QString c_ErrorText;
    int32_t s32_Retval;
 
    orc_FolderPath = mh_GetZipExtractFolder();
@@ -121,7 +121,7 @@ int32_t C_PuiTargetSupportPackageFiler::mh_DoUnzip(const QString & orc_ZipFilePa
    if (s32_Retval == C_NO_ERR)
    {
       s32_Retval = C_OscZipFile::h_UnpackZipFile(
-         orc_ZipFilePath.toStdString().c_str(), orc_FolderPath.toStdString().c_str(),
+         orc_ZipFilePath, orc_FolderPath,
          &c_ErrorText);
    }
    return s32_Retval;
@@ -157,8 +157,9 @@ QString C_PuiTargetSupportPackageFiler::mh_GetNodeFilePath(const QString & orc_T
 QString C_PuiTargetSupportPackageFiler::mh_GetOscNodeXmlPath(const QString & orc_NodeFolder)
 {
    const QDir c_Dir(orc_NodeFolder);
+   const QString c_FileName = C_OscNodeFiler::h_GetFileName();
 
-   return c_Dir.absoluteFilePath(C_OscNodeFiler::h_GetFileName().c_str());
+   return c_Dir.absoluteFilePath(c_FileName);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

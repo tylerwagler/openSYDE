@@ -210,7 +210,7 @@ void C_SdNdeDpListEditWidget::m_UpdateButtonTooltips(const uint32_t ou32_NodeInd
       SetToolTipInformation("Go to Next Datapool",
                             static_cast<QString>("#%1 %2 (%3)").
                             arg(C_PuiSdHandler::h_GetInstance()->GetDataPoolTypeIndex(ou32_NodeIndex, s32_Next) + 1).
-                            arg(pc_Dp->c_Name.c_str()).
+                            arg(pc_Dp->c_Name).
                             arg(C_PuiSdUtil::h_ConvertDataPoolTypeToString(pc_Dp->e_Type)));
    }
 
@@ -222,7 +222,7 @@ void C_SdNdeDpListEditWidget::m_UpdateButtonTooltips(const uint32_t ou32_NodeInd
       SetToolTipInformation("Go to Previous Datapool",
                             static_cast<QString>("#%1 %2 (%3)").
                             arg(C_PuiSdHandler::h_GetInstance()->GetDataPoolTypeIndex(ou32_NodeIndex, s32_Prev) + 1).
-                            arg(pc_Dp->c_Name.c_str()).
+                            arg(pc_Dp->c_Name).
                             arg(C_PuiSdUtil::h_ConvertDataPoolTypeToString(pc_Dp->e_Type)));
    }
 }

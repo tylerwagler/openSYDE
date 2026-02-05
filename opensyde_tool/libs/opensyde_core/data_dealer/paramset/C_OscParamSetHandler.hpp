@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscXmlParser.hpp"
 #include "C_OscParamSetInterpretedData.hpp"
 #include "C_OscParamSetRawNode.hpp"

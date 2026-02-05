@@ -1,55 +1,67 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Message data structure with additional UI/ configuration info (implementation)
+   \brief       Message data structure with additional UI/ configuration info
+   (implementation)
 
    Message data structure with additional UI/ configuration info
 
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "stwerrors.hpp"
-#include "C_SclChecksums.hpp"
 #include "C_CamProMessageData.hpp"
+#include "C_SclChecksums.hpp"
+#include "stwerrors.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::errors;
 using namespace stw::opensyde_gui_logic;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_CamProMessageData::C_CamProMessageData(void) :
-   q_ContainsValidHash(false),
-   u32_Hash(0UL),
-   q_DoCyclicTrigger(false),
-   u32_CyclicTriggerTime(100UL),
-   u32_KeyPressOffset(0UL),
-   q_IsExtended(false),
-   q_IsRtr(false),
-   u16_Dlc(0U),
-   u32_Id(0UL),
-   q_SetAutoSupportMode(false)
-{
-   //Start with 8 Bytes, initialize with zero
-   c_Bytes.resize(8U, 0U);
+C_CamProMessageData::C_CamProMessageData(void)
+    : q_ContainsValidHash(false), u32_Hash(0UL), q_DoCyclicTrigger(false),
+      u32_CyclicTriggerTime(100UL), u32_KeyPressOffset(0UL),
+      q_IsExtended(false), q_IsRtr(false), u16_Dlc(0U), u32_Id(0UL),
+      q_SetAutoSupportMode(false) {
+  // Start with 8 Bytes, initialize with zero
+  c_Bytes.resize(8U, 0U);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -57,29 +69,48 @@ C_CamProMessageData::C_CamProMessageData(void) :
 
    The hash value is a 32 bit CRC value.
 
-   \param[in,out]  oru32_HashValue  Hash value with init [in] value and result [out] value
+   \param[in,out]  oru32_HashValue  Hash value with init [in] value and result
+   [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamProMessageData::CalcHash(uint32_t & oru32_HashValue) const
-{
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_DataBaseFilePath.c_str(),
-                                       this->c_DataBaseFilePath.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.c_str(), this->c_Name.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_ContainsValidHash, sizeof(this->q_ContainsValidHash), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_Hash, sizeof(this->u32_Hash), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsExtended, sizeof(this->q_IsExtended), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsRtr, sizeof(this->q_IsRtr), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_Id, sizeof(this->u32_Id), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u16_Dlc, sizeof(this->u16_Dlc), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->c_Bytes[0UL], c_Bytes.size(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_DoCyclicTrigger, sizeof(this->q_DoCyclicTrigger), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_SetAutoSupportMode, sizeof(this->q_SetAutoSupportMode),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_CyclicTriggerTime, sizeof(this->u32_CyclicTriggerTime),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Key.c_str(), this->c_Key.Length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_KeyPressOffset, sizeof(this->u32_KeyPressOffset),
-                                       oru32_HashValue);
+void C_CamProMessageData::CalcHash(uint32_t &oru32_HashValue) const {
+  QByteArray c_Data;
+  c_Data = this->c_DataBaseFilePath.toUtf8();
+  stw::scl::C_SclChecksums::CalcCRC32(c_Data.constData(), c_Data.length(),
+                                      oru32_HashValue);
+  c_Data = this->c_Name.toUtf8();
+  stw::scl::C_SclChecksums::CalcCRC32(c_Data.constData(), c_Data.length(),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->q_ContainsValidHash,
+                                      sizeof(this->q_ContainsValidHash),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_Hash, sizeof(this->u32_Hash),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(
+      &this->q_IsExtended, sizeof(this->q_IsExtended), oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsRtr, sizeof(this->q_IsRtr),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_Id, sizeof(this->u32_Id),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->u16_Dlc, sizeof(this->u16_Dlc),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->c_Bytes[0UL], c_Bytes.size(),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->q_DoCyclicTrigger,
+                                      sizeof(this->q_DoCyclicTrigger),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->q_SetAutoSupportMode,
+                                      sizeof(this->q_SetAutoSupportMode),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_CyclicTriggerTime,
+                                      sizeof(this->u32_CyclicTriggerTime),
+                                      oru32_HashValue);
+  c_Data = this->c_Key.toUtf8();
+  stw::scl::C_SclChecksums::CalcCRC32(c_Data.constData(), c_Data.length(),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_KeyPressOffset,
+                                      sizeof(this->u32_KeyPressOffset),
+                                      oru32_HashValue);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -89,26 +120,21 @@ void C_CamProMessageData::CalcHash(uint32_t & oru32_HashValue) const
    CAN message based on current content
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::can::T_STWCAN_Msg_TX C_CamProMessageData::ToCanMessage(void) const
-{
-   stw::can::T_STWCAN_Msg_TX c_Retval;
-   c_Retval.u32_ID = this->u32_Id;
-   c_Retval.u8_Align = 0U;
-   c_Retval.u8_XTD = C_CamProMessageData::h_GetBoolValue(this->q_IsExtended);
-   c_Retval.u8_RTR = C_CamProMessageData::h_GetBoolValue(this->q_IsRtr);
-   c_Retval.u8_DLC = static_cast<uint8_t>(this->u16_Dlc);
-   for (uint8_t u8_ItByte = 0U; u8_ItByte < 8U; ++u8_ItByte)
-   {
-      if (u8_ItByte < this->u16_Dlc)
-      {
-         c_Retval.au8_Data[u8_ItByte] = this->c_Bytes[u8_ItByte];
-      }
-      else
-      {
-         c_Retval.au8_Data[u8_ItByte] = 0U;
-      }
-   }
-   return c_Retval;
+stw::can::T_STWCAN_Msg_TX C_CamProMessageData::ToCanMessage(void) const {
+  stw::can::T_STWCAN_Msg_TX c_Retval;
+  c_Retval.u32_ID = this->u32_Id;
+  c_Retval.u8_Align = 0U;
+  c_Retval.u8_XTD = C_CamProMessageData::h_GetBoolValue(this->q_IsExtended);
+  c_Retval.u8_RTR = C_CamProMessageData::h_GetBoolValue(this->q_IsRtr);
+  c_Retval.u8_DLC = static_cast<uint8_t>(this->u16_Dlc);
+  for (uint8_t u8_ItByte = 0U; u8_ItByte < 8U; ++u8_ItByte) {
+    if (u8_ItByte < this->u16_Dlc) {
+      c_Retval.au8_Data[u8_ItByte] = this->c_Bytes[u8_ItByte];
+    } else {
+      c_Retval.au8_Data[u8_ItByte] = 0U;
+    }
+  }
+  return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -119,10 +145,7 @@ stw::can::T_STWCAN_Msg_TX C_CamProMessageData::ToCanMessage(void) const
    False Is standard format
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_CamProMessageData::GetExtended(void) const
-{
-   return this->q_IsExtended;
-}
+bool C_CamProMessageData::GetExtended(void) const { return this->q_IsExtended; }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get remote transmission frame flag
@@ -132,10 +155,7 @@ bool C_CamProMessageData::GetExtended(void) const
    False Is standard frame
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_CamProMessageData::GetRtr(void) const
-{
-   return this->q_IsRtr;
-}
+bool C_CamProMessageData::GetRtr(void) const { return this->q_IsRtr; }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set message uint32_t value
@@ -144,47 +164,46 @@ bool C_CamProMessageData::GetRtr(void) const
    \param[in]  ou32_Value     New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamProMessageData::SetMessageUint32Value(const C_CamProMessageData::E_GenericUint32DataSelector oe_Selector,
-                                                const uint32_t ou32_Value)
-{
-   switch (oe_Selector)
-   {
-   case eGUIDS_ID:
-      this->u32_Id = ou32_Value;
-      break;
-   case eGUIDS_DLC:
-      this->u16_Dlc = static_cast<uint16_t>(ou32_Value);
-      break;
-   case eGUIDS_DB0:
-      this->c_Bytes[0UL] = static_cast<uint8_t>(ou32_Value);
-      break;
-   case eGUIDS_DB1:
-      this->c_Bytes[1UL] = static_cast<uint8_t>(ou32_Value);
-      break;
-   case eGUIDS_DB2:
-      this->c_Bytes[2UL] = static_cast<uint8_t>(ou32_Value);
-      break;
-   case eGUIDS_DB3:
-      this->c_Bytes[3UL] = static_cast<uint8_t>(ou32_Value);
-      break;
-   case eGUIDS_DB4:
-      this->c_Bytes[4UL] = static_cast<uint8_t>(ou32_Value);
-      break;
-   case eGUIDS_DB5:
-      this->c_Bytes[5UL] = static_cast<uint8_t>(ou32_Value);
-      break;
-   case eGUIDS_DB6:
-      this->c_Bytes[6UL] = static_cast<uint8_t>(ou32_Value);
-      break;
-   case eGUIDS_DB7:
-      this->c_Bytes[7UL] = static_cast<uint8_t>(ou32_Value);
-      break;
-   case eGUIDS_CYCLIC_TIME:
-      this->u32_CyclicTriggerTime = ou32_Value;
-      break;
-   default:
-      break;
-   }
+void C_CamProMessageData::SetMessageUint32Value(
+    const C_CamProMessageData::E_GenericUint32DataSelector oe_Selector,
+    const uint32_t ou32_Value) {
+  switch (oe_Selector) {
+  case eGUIDS_ID:
+    this->u32_Id = ou32_Value;
+    break;
+  case eGUIDS_DLC:
+    this->u16_Dlc = static_cast<uint16_t>(ou32_Value);
+    break;
+  case eGUIDS_DB0:
+    this->c_Bytes[0UL] = static_cast<uint8_t>(ou32_Value);
+    break;
+  case eGUIDS_DB1:
+    this->c_Bytes[1UL] = static_cast<uint8_t>(ou32_Value);
+    break;
+  case eGUIDS_DB2:
+    this->c_Bytes[2UL] = static_cast<uint8_t>(ou32_Value);
+    break;
+  case eGUIDS_DB3:
+    this->c_Bytes[3UL] = static_cast<uint8_t>(ou32_Value);
+    break;
+  case eGUIDS_DB4:
+    this->c_Bytes[4UL] = static_cast<uint8_t>(ou32_Value);
+    break;
+  case eGUIDS_DB5:
+    this->c_Bytes[5UL] = static_cast<uint8_t>(ou32_Value);
+    break;
+  case eGUIDS_DB6:
+    this->c_Bytes[6UL] = static_cast<uint8_t>(ou32_Value);
+    break;
+  case eGUIDS_DB7:
+    this->c_Bytes[7UL] = static_cast<uint8_t>(ou32_Value);
+    break;
+  case eGUIDS_CYCLIC_TIME:
+    this->u32_CyclicTriggerTime = ou32_Value;
+    break;
+  default:
+    break;
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -194,26 +213,25 @@ void C_CamProMessageData::SetMessageUint32Value(const C_CamProMessageData::E_Gen
    \param[in]  oq_Value       New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamProMessageData::SetMessageBoolValue(const C_CamProMessageData::E_GenericBoolDataSelector oe_Selector,
-                                              const bool oq_Value)
-{
-   switch (oe_Selector)
-   {
-   case eGBODS_RTR:
-      this->q_IsRtr = oq_Value;
-      break;
-   case eGBODS_EXTENDED:
-      this->q_IsExtended = oq_Value;
-      break;
-   case eGBODS_DO_CYCLIC:
-      this->q_DoCyclicTrigger = oq_Value;
-      break;
-   case eGBODS_AUTO_SUPPORT:
-      this->q_SetAutoSupportMode = oq_Value;
-      break;
-   default:
-      break;
-   }
+void C_CamProMessageData::SetMessageBoolValue(
+    const C_CamProMessageData::E_GenericBoolDataSelector oe_Selector,
+    const bool oq_Value) {
+  switch (oe_Selector) {
+  case eGBODS_RTR:
+    this->q_IsRtr = oq_Value;
+    break;
+  case eGBODS_EXTENDED:
+    this->q_IsExtended = oq_Value;
+    break;
+  case eGBODS_DO_CYCLIC:
+    this->q_DoCyclicTrigger = oq_Value;
+    break;
+  case eGBODS_AUTO_SUPPORT:
+    this->q_SetAutoSupportMode = oq_Value;
+    break;
+  default:
+    break;
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -223,10 +241,10 @@ void C_CamProMessageData::SetMessageBoolValue(const C_CamProMessageData::E_Gener
    \param[in]  ou32_Offset    Key trigger offset (ms)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamProMessageData::SetMessageKey(const QString & orc_Key, const uint32_t ou32_Offset)
-{
-   this->c_Key = orc_Key.toStdString().c_str();
-   this->u32_KeyPressOffset = ou32_Offset;
+void C_CamProMessageData::SetMessageKey(const QString &orc_Key,
+                                        const uint32_t ou32_Offset) {
+  this->c_Key = orc_Key.toStdString().c_str();
+  this->u32_KeyPressOffset = ou32_Offset;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -239,22 +257,18 @@ void C_CamProMessageData::SetMessageKey(const QString & orc_Key, const uint32_t 
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CamProMessageData::SetMessageDataBytes(const std::vector<uint8_t> & orc_DataBytes)
-{
-   int32_t s32_Retval = C_NO_ERR;
+int32_t C_CamProMessageData::SetMessageDataBytes(
+    const std::vector<uint8_t> &orc_DataBytes) {
+  int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_DataBytes.size() <= 8UL)
-   {
-      for (uint32_t u32_It = 0UL; u32_It < orc_DataBytes.size(); ++u32_It)
-      {
-         this->c_Bytes[u32_It] = orc_DataBytes[u32_It];
-      }
-   }
-   else
-   {
-      s32_Retval = C_RANGE;
-   }
-   return s32_Retval;
+  if (orc_DataBytes.size() <= 8UL) {
+    for (uint32_t u32_It = 0UL; u32_It < orc_DataBytes.size(); ++u32_It) {
+      this->c_Bytes[u32_It] = orc_DataBytes[u32_It];
+    }
+  } else {
+    s32_Retval = C_RANGE;
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -266,17 +280,13 @@ int32_t C_CamProMessageData::SetMessageDataBytes(const std::vector<uint8_t> & or
    U8 value
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint8_t C_CamProMessageData::h_GetBoolValue(const bool oq_Value)
-{
-   uint8_t u8_Retval;
+uint8_t C_CamProMessageData::h_GetBoolValue(const bool oq_Value) {
+  uint8_t u8_Retval;
 
-   if (oq_Value == true)
-   {
-      u8_Retval = 1;
-   }
-   else
-   {
-      u8_Retval = 0;
-   }
-   return u8_Retval;
+  if (oq_Value == true) {
+    u8_Retval = 1;
+  } else {
+    u8_Retval = 0;
+  }
+  return u8_Retval;
 }

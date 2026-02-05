@@ -14,7 +14,6 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
 #include "C_Uti.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -123,7 +122,7 @@ int32_t C_SdNdeHalcConfigImportDialog::PrepareDialog(QString & orc_ErrorDetails)
    {
       // Load the configuration only once
       s32_Return = C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(this->mc_ImportConfig,
-                                                                        this->mc_ImportFileName.toStdString().c_str());
+                                                                        this->mc_ImportFileName);
 
       if (s32_Return == C_NO_ERR)
       {
@@ -131,22 +130,21 @@ int32_t C_SdNdeHalcConfigImportDialog::PrepareDialog(QString & orc_ErrorDetails)
          {
             s32_Return = C_CHECKSUM;
             orc_ErrorDetails =
-               ("Imported Hardware configuration is not compatible to this device type.\n"
-                                       "Current device type: " + pc_Config->c_DeviceName + "\n"
-                                       "Device type of imported Hardware configuration: " +
-                                       this->mc_ImportConfig.c_DeviceType + "\n").c_str();
+               "Imported Hardware configuration is not compatible to this device type.\n"
+               "Current device type: " + pc_Config->c_DeviceName + "\n"
+               "Device type of imported Hardware configuration: " +
+               this->mc_ImportConfig.c_DeviceType + "\n";
          }
          else if (this->mc_ImportConfig.u32_DefinitionContentVersion != pc_Config->u32_ContentVersion)
          {
             s32_Return = C_CHECKSUM;
             orc_ErrorDetails =
-               ("Imported Hardware configuration version does not match the current "
-                                       "used Hardware configuration version of this node.\n"
-                                       "Current used version: " +
-                                       C_SclString::IntToStr(pc_Config->u32_ContentVersion) + "\n"
-                                       "Version of imported Hardware configuration: " +
-                                       C_SclString::IntToStr(this->mc_ImportConfig.u32_DefinitionContentVersion) +
-                                       "\n").c_str();
+               "Imported Hardware configuration version does not match the current "
+               "used Hardware configuration version of this node.\n"
+               "Current used version: " +
+               QString::number(pc_Config->u32_ContentVersion) + "\n"
+               "Version of imported Hardware configuration: " +
+               QString::number(this->mc_ImportConfig.u32_DefinitionContentVersion) + "\n";
          }
          else
          {
@@ -373,8 +371,8 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                                  q_Consistent = C_SdNdeHalcConfigImportDialog::mh_CheckConsistencyEl(rc_RefPar,
                                                                                                      rc_NewPar,
                                                                                                      orc_ErrorDetails,
-                                                                                                     pc_RefConfig->c_Name.c_str(),
-                                                                                                     rc_RefChan.c_Name.c_str(),
+                                                                                                     pc_RefConfig->c_Name,
+                                                                                                     rc_RefChan.c_Name,
                                                                                                      "");
                               }
                               for (uint32_t u32_ItParEl = 0UL;
@@ -388,8 +386,8 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                                  q_Consistent = C_SdNdeHalcConfigImportDialog::mh_CheckConsistencyEl(rc_RefParEl,
                                                                                                      rc_NewParEl,
                                                                                                      orc_ErrorDetails,
-                                                                                                     pc_RefConfig->c_Name.c_str(),
-                                                                                                     rc_RefChan.c_Name.c_str(),
+                                                                                                     pc_RefConfig->c_Name,
+                                                                                                     rc_RefChan.c_Name,
                                                                                                      " elements");
                               }
                            }
@@ -401,7 +399,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                                  QString(
                                     "Num parameter elements differ for domain %1, channel %2 (def: %3 <-> new: %4)\n")
                                  .arg(
-                                    pc_RefConfig->c_Name.c_str()).arg(rc_RefChan.c_Name.c_str()).arg(
+                                    pc_RefConfig->c_Name).arg(rc_RefChan.c_Name).arg(
                                     rc_RefChan.c_Parameters.size()).arg(
                                     rc_NewChan.c_Parameters.size());
                            }
@@ -413,7 +411,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                         //lint -e{1946} Qt interface
                         orc_ErrorDetails +=
                            QString("Num parameters differ for domain %1, channel %2 (def: %3 <-> new: %4)\n").arg(
-                              pc_RefConfig->c_Name.c_str()).arg(rc_RefChan.c_Name.c_str()).arg(
+                              pc_RefConfig->c_Name).arg(rc_RefChan.c_Name).arg(
                               rc_RefChan.c_Parameters.size()).arg(
                               rc_NewChan.c_Parameters.size());
                      }
@@ -425,7 +423,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                   //lint -e{1946} Qt interface
                   orc_ErrorDetails +=
                      QString("Num channel configurations differ for domain %1 (def: %2 <-> new: %3)\n").arg(
-                        pc_RefConfig->c_Name.c_str()).arg(pc_RefConfig->c_ChannelConfigs.size()).arg(
+                        pc_RefConfig->c_Name).arg(pc_RefConfig->c_ChannelConfigs.size()).arg(
                         rc_NewConfig.c_ChannelConfigs.size());
                }
                if (pc_RefConfig->c_Channels.size() != rc_NewConfig.c_Channels.size())
@@ -433,7 +431,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                   q_Consistent = false;
                   //lint -e{1946} Qt interface
                   orc_ErrorDetails += QString("Num channels differ for domain %1 (def: %2 <-> new: %3)\n").arg(
-                     pc_RefConfig->c_Name.c_str()).arg(pc_RefConfig->c_Channels.size()).arg(
+                     pc_RefConfig->c_Name).arg(pc_RefConfig->c_Channels.size()).arg(
                      rc_NewConfig.c_Channels.size());
                }
                //Should exist but does not, probably not stored in standalone config
@@ -442,7 +440,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                //   q_Consistent = false;
                //   orc_ErrorDetails += QString("Num channel use-cases differ for domain %1 (def: %2 <-> new:
                // %3)\n").arg(
-               //      pc_RefConfig->c_Name.c_str()).arg(pc_RefConfig->c_ChannelUseCases.size()).arg(
+               //      pc_RefConfig->c_Name).arg(pc_RefConfig->c_ChannelUseCases.size()).arg(
                //      rc_NewConfig.c_ChannelUseCases.size());
                //}
                //if (pc_RefConfig->c_ChannelValues.c_InputValues.size() !=
@@ -451,7 +449,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                //   q_Consistent = false;
                //   orc_ErrorDetails += QString("Num channel input-values differ for domain %1 (def: %2 <-> new:
                // %3)\n").arg(
-               //      pc_RefConfig->c_Name.c_str()).arg(pc_RefConfig->c_ChannelValues.c_InputValues.size()).arg(
+               //      pc_RefConfig->c_Name).arg(pc_RefConfig->c_ChannelValues.c_InputValues.size()).arg(
                //      rc_NewConfig.c_ChannelValues.c_InputValues.size());
                //}
                //if (pc_RefConfig->c_ChannelValues.c_Parameters.size() !=
@@ -460,7 +458,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                //   q_Consistent = false;
                //   orc_ErrorDetails += QString("Num channel param-values differ for domain %1 (def: %2 <-> new:
                // %3)\n").arg(
-               //      pc_RefConfig->c_Name.c_str()).arg(pc_RefConfig->c_ChannelValues.c_Parameters.size()).arg(
+               //      pc_RefConfig->c_Name).arg(pc_RefConfig->c_ChannelValues.c_Parameters.size()).arg(
                //      rc_NewConfig.c_ChannelValues.c_Parameters.size());
                //}
                //if (pc_RefConfig->c_ChannelValues.c_OutputValues.size() !=
@@ -469,7 +467,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                //   q_Consistent = false;
                //   orc_ErrorDetails +=
                //      QString("Num channel output-values differ for domain %1 (def: %2 <-> new: %3)\n").arg(
-               //         pc_RefConfig->c_Name.c_str()).arg(pc_RefConfig->c_ChannelValues.c_OutputValues.size()).arg(
+               //         pc_RefConfig->c_Name).arg(pc_RefConfig->c_ChannelValues.c_OutputValues.size()).arg(
                //         rc_NewConfig.c_ChannelValues.c_OutputValues.size());
                //}
                //if (pc_RefConfig->c_ChannelValues.c_StatusValues.size() !=
@@ -478,7 +476,7 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistency(const C_OscHalcConfig * 
                //   q_Consistent = false;
                //   orc_ErrorDetails +=
                //      QString("Num channel status-values differ for domain %1 (def: %2 <-> new: %3)\n").arg(
-               //         pc_RefConfig->c_Name.c_str()).arg(pc_RefConfig->c_ChannelValues.c_StatusValues.size()).arg(
+               //         pc_RefConfig->c_Name).arg(pc_RefConfig->c_ChannelValues.c_StatusValues.size()).arg(
                //         rc_NewConfig.c_ChannelValues.c_StatusValues.size());
                //}
             }

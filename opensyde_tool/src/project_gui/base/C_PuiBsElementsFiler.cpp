@@ -20,8 +20,6 @@
 #include "C_PuiBsElementsFiler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
-
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
@@ -152,7 +150,7 @@ int32_t C_PuiBsElementsFiler::h_LoadTextElements(std::vector<C_PuiBsTextElement>
                                                  C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("text-element");
+   QString c_SelectedNode = orc_XmlParser.SelectNodeChild("text-element").c_str();
 
    orc_TextElements.clear();
    if (c_SelectedNode == "text-element")
@@ -167,7 +165,7 @@ int32_t C_PuiBsElementsFiler::h_LoadTextElements(std::vector<C_PuiBsTextElement>
          }
 
          //Next
-         c_SelectedNode = orc_XmlParser.SelectNodeNext("text-element");
+         c_SelectedNode = orc_XmlParser.SelectNodeNext("text-element").c_str();
       }
       while (c_SelectedNode == "text-element");
       //Return
@@ -208,7 +206,7 @@ int32_t C_PuiBsElementsFiler::h_LoadBoundaries(std::vector<C_PuiBsBoundary> & or
                                                C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("boundary");
+   QString c_SelectedNode = orc_XmlParser.SelectNodeChild("boundary").c_str();
 
    orc_Boundaries.clear();
    if (c_SelectedNode == "boundary")
@@ -223,7 +221,7 @@ int32_t C_PuiBsElementsFiler::h_LoadBoundaries(std::vector<C_PuiBsBoundary> & or
          }
 
          //Next
-         c_SelectedNode = orc_XmlParser.SelectNodeNext("boundary");
+         c_SelectedNode = orc_XmlParser.SelectNodeNext("boundary").c_str();
       }
       while (c_SelectedNode == "boundary");
       //Return
@@ -264,7 +262,7 @@ void C_PuiBsElementsFiler::h_SaveBoundaries(const std::vector<C_PuiBsBoundary> &
 int32_t C_PuiBsElementsFiler::h_LoadImages(std::vector<C_PuiBsImage> & orc_Images, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("image");
+   QString c_SelectedNode = orc_XmlParser.SelectNodeChild("image").c_str();
 
    orc_Images.clear();
    if (c_SelectedNode == "image")
@@ -279,7 +277,7 @@ int32_t C_PuiBsElementsFiler::h_LoadImages(std::vector<C_PuiBsImage> & orc_Image
          }
 
          //Next
-         c_SelectedNode = orc_XmlParser.SelectNodeNext("image");
+         c_SelectedNode = orc_XmlParser.SelectNodeNext("image").c_str();
       }
       while (c_SelectedNode == "image");
       //Return
@@ -321,7 +319,7 @@ int32_t C_PuiBsElementsFiler::h_LoadLineArrows(std::vector<C_PuiBsLineArrow> & o
                                                C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_SelectedNode = orc_XmlParser.SelectNodeChild("line-arrow");
+   QString c_SelectedNode = orc_XmlParser.SelectNodeChild("line-arrow").c_str();
 
    orc_LineArrows.clear();
    if (c_SelectedNode == "line-arrow")
@@ -336,7 +334,7 @@ int32_t C_PuiBsElementsFiler::h_LoadLineArrows(std::vector<C_PuiBsLineArrow> & o
          }
 
          //Next
-         c_SelectedNode = orc_XmlParser.SelectNodeNext("line-arrow");
+         c_SelectedNode = orc_XmlParser.SelectNodeNext("line-arrow").c_str();
       }
       while (c_SelectedNode == "line-arrow");
       //Return
@@ -455,7 +453,7 @@ void C_PuiBsElementsFiler::h_SaveBoxBase(const C_PuiBsBox & orc_BoxBase,
 int32_t C_PuiBsElementsFiler::h_LoadLineBase(C_PuiBsLineBase & orc_LineBase, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_Node;
+   QString c_Node;
 
    if (orc_XmlParser.SelectNodeChild("color") == "color")
    {
@@ -488,7 +486,7 @@ int32_t C_PuiBsElementsFiler::h_LoadLineBase(C_PuiBsLineBase & orc_LineBase, C_O
    if (orc_XmlParser.SelectNodeNext("interaction-points") == "interaction-points")
    {
       //file through children:
-      c_Node = orc_XmlParser.SelectNodeChild("interaction-point");
+      c_Node = orc_XmlParser.SelectNodeChild("interaction-point").c_str();
 
       orc_LineBase.c_UiInteractionPoints.clear();
       if (c_Node == "interaction-point")
@@ -498,7 +496,7 @@ int32_t C_PuiBsElementsFiler::h_LoadLineBase(C_PuiBsLineBase & orc_LineBase, C_O
             const QPointF c_Point(orc_XmlParser.GetAttributeFloat64("x"), orc_XmlParser.GetAttributeFloat64(
                                      "y"));
             orc_LineBase.c_UiInteractionPoints.push_back(c_Point);
-            c_Node = orc_XmlParser.SelectNodeNext("interaction-point");
+            c_Node = orc_XmlParser.SelectNodeNext("interaction-point").c_str();
          }
          while (c_Node == "interaction-point");
          orc_XmlParser.SelectNodeParent(); //back up
@@ -922,7 +920,7 @@ int32_t C_PuiBsElementsFiler::mh_LoadLineArrow(C_PuiBsLineArrow & orc_LineArrow,
    orc_XmlParser.SelectNodeParent(); //back to line-arrow
    if (orc_XmlParser.SelectNodeChild("start-arrow-head-type") == "start-arrow-head-type")
    {
-      orc_LineArrow.e_StartArrowHeadType = C_PuiBsLineArrow::h_ArrowHeadTypeFromString(orc_XmlParser.GetNodeContent());
+      orc_LineArrow.e_StartArrowHeadType = C_PuiBsLineArrow::h_ArrowHeadTypeFromString(orc_XmlParser.GetNodeContent().c_str());
    }
    else
    {
@@ -931,7 +929,7 @@ int32_t C_PuiBsElementsFiler::mh_LoadLineArrow(C_PuiBsLineArrow & orc_LineArrow,
    orc_XmlParser.SelectNodeParent(); //back to line-arrow
    if (orc_XmlParser.SelectNodeChild("end-arrow-head-type") == "end-arrow-head-type")
    {
-      orc_LineArrow.e_EndArrowHeadType = C_PuiBsLineArrow::h_ArrowHeadTypeFromString(orc_XmlParser.GetNodeContent());
+      orc_LineArrow.e_EndArrowHeadType = C_PuiBsLineArrow::h_ArrowHeadTypeFromString(orc_XmlParser.GetNodeContent().c_str());
    }
    else
    {
@@ -940,7 +938,7 @@ int32_t C_PuiBsElementsFiler::mh_LoadLineArrow(C_PuiBsLineArrow & orc_LineArrow,
    orc_XmlParser.SelectNodeParent(); //back to line-arrow
    if (orc_XmlParser.SelectNodeChild("line-type") == "line-type")
    {
-      orc_LineArrow.e_LineType = C_PuiBsLineArrow::h_LineTypeFromString(orc_XmlParser.GetNodeContent());
+      orc_LineArrow.e_LineType = C_PuiBsLineArrow::h_LineTypeFromString(orc_XmlParser.GetNodeContent().c_str());
    }
    else
    {
@@ -973,13 +971,13 @@ void C_PuiBsElementsFiler::mh_SaveLineArrow(const C_PuiBsLineArrow & orc_LineArr
    h_SaveLineBase(orc_LineArrow, orc_XmlParser);
    orc_XmlParser.SelectNodeParent(); //back to "image"
    orc_XmlParser.CreateAndSelectNodeChild("start-arrow-head-type");
-   orc_XmlParser.SetNodeContent(C_PuiBsLineArrow::h_ArrowHeadTypeToString(orc_LineArrow.e_StartArrowHeadType));
+   orc_XmlParser.SetNodeContent(C_PuiBsLineArrow::h_ArrowHeadTypeToString(orc_LineArrow.e_StartArrowHeadType).toStdString().c_str());
    orc_XmlParser.SelectNodeParent(); //back to "image"
    orc_XmlParser.CreateAndSelectNodeChild("end-arrow-head-type");
-   orc_XmlParser.SetNodeContent(C_PuiBsLineArrow::h_ArrowHeadTypeToString(orc_LineArrow.e_EndArrowHeadType));
+   orc_XmlParser.SetNodeContent(C_PuiBsLineArrow::h_ArrowHeadTypeToString(orc_LineArrow.e_EndArrowHeadType).toStdString().c_str());
    orc_XmlParser.SelectNodeParent(); //back to "image"
    orc_XmlParser.CreateAndSelectNodeChild("line-type");
-   orc_XmlParser.SetNodeContent(C_PuiBsLineArrow::h_LineTypeToString(orc_LineArrow.e_LineType));
+   orc_XmlParser.SetNodeContent(C_PuiBsLineArrow::h_LineTypeToString(orc_LineArrow.e_LineType).toStdString().c_str());
    orc_XmlParser.SelectNodeParent(); //back to "image"
    orc_XmlParser.CreateAndSelectNodeChild("dark-color");
    h_SaveColor(orc_LineArrow.c_UiColorDark, orc_XmlParser);

@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscXmlParser.hpp"
 #include "C_OscParamSetDataPoolInfo.hpp"
 #include "C_OscParamSetInterpretedFileInfoData.hpp"

@@ -14,7 +14,7 @@
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolBase.hpp"
 
-#include "C_SclString.hpp"
+#include <QString>
 
 //---------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ using namespace stw::scl;
    else      -> error writing data
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocolBase::SaveParamsToIni(QSettings & orc_IniFile, const C_SclString & orc_Section)
+int32_t C_CanMonProtocolBase::SaveParamsToIni(QSettings & orc_IniFile, const QString & orc_Section)
 {
    (void)orc_IniFile;
    (void)orc_Section;
@@ -59,7 +59,7 @@ int32_t C_CanMonProtocolBase::SaveParamsToIni(QSettings & orc_IniFile, const C_S
    else      -> error reading data
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocolBase::LoadParamsFromIni(QSettings & orc_IniFile, const C_SclString & orc_Section)
+int32_t C_CanMonProtocolBase::LoadParamsFromIni(QSettings & orc_IniFile, const QString & orc_Section)
 {
    (void)orc_IniFile;
    (void)orc_Section;
@@ -147,17 +147,17 @@ uint32_t C_CanMonProtocolBase::mh_BytesToDwordHighLow(const uint8_t oau8_Bytes[4
    value in string format
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolBase::m_GetValueDecHex(const uint32_t ou32_Value) const
+QString C_CanMonProtocolBase::m_GetValueDecHex(const uint32_t ou32_Value) const
 {
-   C_SclString c_Text;
+   QString c_Text;
 
    if (mq_Decimal == true)
    {
-      c_Text = C_SclString::FromQString(QString::asprintf("%u", ou32_Value));
+      c_Text = QString::asprintf("%u", ou32_Value);
    }
    else
    {
-      c_Text = C_SclString::FromQString(QString::asprintf("%X", ou32_Value));
+      c_Text = QString::asprintf("%X", ou32_Value);
    }
    return c_Text;
 }
@@ -179,17 +179,17 @@ C_SclString C_CanMonProtocolBase::m_GetValueDecHex(const uint32_t ou32_Value) co
    value in string format
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolBase::m_GetWordAsStringFormat(const uint16_t ou16_Value) const
+QString C_CanMonProtocolBase::m_GetWordAsStringFormat(const uint16_t ou16_Value) const
 {
-   C_SclString c_Help;
+   QString c_Help;
 
    if (mq_Decimal == true)
    {
-      c_Help = C_SclString::FromQString(QString::asprintf("%05d", ou16_Value));
+      c_Help = QString::asprintf("%05d", ou16_Value);
    }
    else
    {
-      c_Help = C_SclString::FromQString(QString::asprintf(" %04X", ou16_Value));
+      c_Help = QString::asprintf(" %04X", ou16_Value);
    }
    return c_Help;
 }
@@ -211,17 +211,17 @@ C_SclString C_CanMonProtocolBase::m_GetWordAsStringFormat(const uint16_t ou16_Va
    value in string format
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolBase::m_GetByteAsStringFormat(const uint8_t ou8_Value) const
+QString C_CanMonProtocolBase::m_GetByteAsStringFormat(const uint8_t ou8_Value) const
 {
-   C_SclString c_Help;
+   QString c_Help;
 
    if (mq_Decimal == true)
    {
-      c_Help = C_SclString::FromQString(QString::asprintf("%03d", ou8_Value));
+      c_Help = QString::asprintf("%03d", ou8_Value);
    }
    else
    {
-      c_Help = C_SclString::FromQString(QString::asprintf(" %02X", ou8_Value));
+      c_Help = QString::asprintf(" %02X", ou8_Value);
    }
    return c_Help;
 }
@@ -271,17 +271,17 @@ void C_CMONProtocolKEFEX_IVA::SetVariableInfo(const stw::diag_lib::C_KFXVariable
 
 //---------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolKefexIva::m_KfxTextAndIndexToString(const char_t * const opcn_Text,
+QString C_CanMonProtocolKefexIva::m_KfxTextAndIndexToString(const char_t * const opcn_Text,
                                                                 const uint16_t ou16_Index) const
 {
-   return (static_cast<C_SclString>(opcn_Text) + " " + m_KfxIndexToString(ou16_Index));
+   return (static_cast<QString>(opcn_Text) + " " + m_KfxIndexToString(ou16_Index));
 }
 
 //---------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolKefexIva::m_KfxIndexToString(const uint16_t ou16_Index, const bool oq_IsKefexVarIndex) const
+QString C_CanMonProtocolKefexIva::m_KfxIndexToString(const uint16_t ou16_Index, const bool oq_IsKefexVarIndex) const
 {
-   C_SclString c_Help = "";
+   QString c_Help = "";
 
 #ifdef CMONPROTOCOL_ALLOW_RAMVIEW_PROJECT_MAPPING
    uint16 u16_List;
@@ -307,11 +307,11 @@ C_SclString C_CanMonProtocolKefexIva::m_KfxIndexToString(const uint16_t ou16_Ind
    {
       if (mq_Decimal == true)
       {
-         c_Help = C_SclString::FromQString(QString::asprintf("INDEX %d", ou16_Index));
+         c_Help = QString::asprintf("INDEX %d", ou16_Index);
       }
       else
       {
-         c_Help = C_SclString::FromQString(QString::asprintf("INDEX %X", ou16_Index));
+         c_Help = QString::asprintf("INDEX %X", ou16_Index);
       }
    }
    return c_Help;
@@ -330,9 +330,9 @@ C_SclString C_CanMonProtocolKefexIva::m_KfxIndexToString(const uint16_t ou16_Ind
    serial number string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolBase::mh_SerialNumberToString(const uint8_t * const opu8_SerialNumber)
+QString C_CanMonProtocolBase::mh_SerialNumberToString(const uint8_t * const opu8_SerialNumber)
 {
-   C_SclString c_Result;
+   QString c_Result;
 
    if (opu8_SerialNumber != NULL)
    {

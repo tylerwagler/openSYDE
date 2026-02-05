@@ -17,7 +17,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 

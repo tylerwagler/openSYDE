@@ -741,7 +741,7 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
 
    if (this->mpc_CanDispatcher == NULL)
    {
-      const std::string c_DllPath = this->mpc_Ui->pc_SettingsWidget->GetCanDllPath().toStdString();
+      const QString c_DllPath = this->mpc_Ui->pc_SettingsWidget->GetCanDllPath();
       this->mpc_CanDispatcher = new stw::can::C_Can();
 
       osc_write_log_info("Initialization", "CAN DLL path used: " + c_DllPath);
@@ -763,7 +763,7 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
       }
       else
       {
-         const std::string c_Bitness = QString::number(8 * sizeof(size_t)).toStdString();
+         const QString c_Bitness = QString::number(8 * sizeof(size_t));
          osc_write_log_error("Initialization",
                              "Could not load the CAN DLL! Make sure to use a " + c_Bitness + "-bit DLL.");
       }
@@ -805,7 +805,7 @@ int32_t C_FlaMainWindow::m_InitUpdateSequence(void)
                                                      "Make sure to use a %1-bit DLL.").arg(u32_BITNESS));
       c_Message.SetDetails(static_cast<QString>("For details see ") +
                            C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                            C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
+                                            C_OscLoggingHandler::h_GetCompleteLogFileLocation()) + ".");
       C_OscLoggingHandler::h_Flush();
       c_Message.Execute();
 
@@ -1109,7 +1109,7 @@ bool stw::opensyde_gui::C_FlaMainWindow::m_ShowErrorMessage(void)
                             QString::number(this->mpc_Ui->pc_GeneralPropertiesWidget->GetNodeId()) + ".");
    c_Message.SetDetails(static_cast<QString>("For details see ") +
                         C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                         C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
+                                         C_OscLoggingHandler::h_GetCompleteLogFileLocation()) + ".");
 
    if (c_Message.Execute() == C_OgeWiCustomMessage::eOK)
    {

@@ -377,7 +377,7 @@ void C_SdNdeDbViewWidget::AddHalcDefFromTsp(C_SdNdeDbAddNewProject * const opc_D
    {
       C_OscHalcConfig c_HalcConfig;
 
-      const int32_t s32_LoadResult = C_OscHalcDefFiler::h_LoadFile(c_HalcConfig, c_HalcPath.toStdString().c_str());
+      const int32_t s32_LoadResult = C_OscHalcDefFiler::h_LoadFile(c_HalcConfig, c_HalcPath);
 
       if (s32_LoadResult == C_NO_ERR)
       {

@@ -10,7 +10,7 @@
 #define C_OSCTARGETSUPPORTPACKAGEV2_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscNodeCodeExportSettings.hpp"
 #include <QString>
 #include <QStringList>

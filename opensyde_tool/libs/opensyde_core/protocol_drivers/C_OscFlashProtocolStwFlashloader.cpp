@@ -16,7 +16,7 @@
  */
 #include "precomp_headers.hpp"
 
-#include "C_SclString.hpp"
+#include <QString>
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 

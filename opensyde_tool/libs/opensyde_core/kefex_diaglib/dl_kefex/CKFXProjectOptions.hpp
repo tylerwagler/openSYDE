@@ -11,7 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include <QStringList>
 #include <QSettings>
 #include "DiagLib_config.hpp"
@@ -32,7 +32,7 @@ public:
    C_KFXProjectMetaInfo(void);
    virtual ~C_KFXProjectMetaInfo(void);
 
-   void LoadFromINI(QSettings & orc_IniFile, const stw::scl::C_SclString & orc_Section);
+   void LoadFromINI(QSettings & orc_IniFile, const QString & orc_Section);
 
    //We only use one stringlist, so the user can type anything he/she wants
    //This might greatly differ between each company / type of project so
@@ -54,8 +54,8 @@ public:
    uint16_t u16_ProjectIndex;
    uint16_t u16_ListOffset;
    uint16_t u16_DataVersion;
-   stw::scl::C_SclString c_DeviceName;
-   stw::scl::C_SclString ac_CommentDescriptions[KFX_DATA_MAX_NUM_LANGUAGES];
+   QString c_DeviceName;
+   QString ac_CommentDescriptions[KFX_DATA_MAX_NUM_LANGUAGES];
    C_KFXProjectMetaInfo c_MetaInfo;
    bool aq_UserMayWriteKDX[KFX_NUM_ACCESS_GROUPS];
 

@@ -13,7 +13,7 @@
 
 #include "stwtypes.hpp"
 #include "CXFLHexFile.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include <QList>
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ class C_OscHexFile :
 {
 public:
    int32_t GetSignatureBlockAddress(uint32_t & oru32_Address);
-   int32_t ScanDeviceIdFromHexFile(stw::scl::C_SclString & orc_DeviceId);
+   int32_t ScanDeviceIdFromHexFile(QString & orc_DeviceId);
    int32_t ScanApplicationInformationBlockFromHexFile(stw::diag_lib::C_XFLECUInformation & orc_InfoBlock);
 };
 

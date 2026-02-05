@@ -53,16 +53,16 @@ public:
    void NvmSafeClearInternalContent(void);
    int32_t NvmSafeReadParameterValues(const std::vector<C_OscNodeDataPoolListId> & orc_ListIds,
                                       uint8_t * const opu8_NrCode);
-   int32_t NvmSafeCreateCleanFileWithoutCrc(const stw::scl::C_SclString & orc_Path, const stw::opensyde_core::C_OscParamSetInterpretedFileInfoData & orc_FileInfo =
+   int32_t NvmSafeCreateCleanFileWithoutCrc(const QString & orc_Path, const stw::opensyde_core::C_OscParamSetInterpretedFileInfoData & orc_FileInfo =
                                                stw::opensyde_core::C_OscParamSetInterpretedFileInfoData());
-   int32_t NvmSafeReadFileWithoutCrc(const stw::scl::C_SclString & orc_Path);
-   int32_t NvmSafeCheckParameterFileContents(const stw::scl::C_SclString & orc_Path,
+   int32_t NvmSafeReadFileWithoutCrc(const QString & orc_Path);
+   int32_t NvmSafeCheckParameterFileContents(const QString & orc_Path,
                                              std::vector<C_OscNodeDataPoolListId> & orc_DataPoolLists);
-   int32_t NvmSafeUpdateCrcForFile(const stw::scl::C_SclString & orc_Path);
+   int32_t NvmSafeUpdateCrcForFile(const QString & orc_Path);
 
    //Write file process
-   int32_t NvmSafeReadFileWithCrc(const stw::scl::C_SclString & orc_Path);
-   int32_t NvmSafeWriteParameterSetFile(const stw::scl::C_SclString & orc_Path, int32_t & ors32_ResultDetail);
+   int32_t NvmSafeReadFileWithCrc(const QString & orc_Path);
+   int32_t NvmSafeWriteParameterSetFile(const QString & orc_Path, int32_t & ors32_ResultDetail);
 
 private:
    static void mh_CreateInterpretedList(const C_OscNodeDataPoolList & orc_List,
@@ -89,7 +89,7 @@ private:
 
    E_CreateParameterSetFileState me_CreateParameterSetWorkflowState;
    E_ParameterSetFileState me_ParameterSetFileState;
-   stw::scl::C_SclString mc_ParameterSetFilePath;
+   QString mc_ParameterSetFilePath;
    C_OscNode mc_NodeCopy;
    C_OscParamSetHandler mc_ImageFileHandler;
    std::set<C_OscNodeDataPoolListId> mc_ChangedLists;

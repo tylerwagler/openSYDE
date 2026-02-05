@@ -188,7 +188,7 @@ QVariant C_SdNdeDpListTableModel::headerData(const int32_t os32_Section, const Q
                   if (static_cast<uint32_t>(s32_DataSetIndex) < pc_List->c_DataSets.size())
                   {
                      c_Retval = static_cast<QString>("Dataset -\n") +
-                                static_cast<QString>(pc_List->c_DataSets[s32_DataSetIndex].c_Name.c_str());
+                                pc_List->c_DataSets[s32_DataSetIndex].c_Name;
                   }
                }
             }
@@ -1572,9 +1572,9 @@ QMimeData * C_SdNdeDpListTableModel::mimeData(const QModelIndexList & orc_Indice
             pc_Retval->setData(this->mimeTypes().at(0), "");
             C_SdClipBoardHelper::h_StoreDataPoolListElementsToString(c_OscElements, c_UiElements,
                                                                      pc_OscDatapool->e_Type, c_String);
-            pc_Retval->setData(this->mimeTypes().at(1), c_String.toStdString().c_str());
+            pc_Retval->setData(this->mimeTypes().at(1), c_String.toUtf8());
             C_SdClipBoardHelper::h_StoreIndicesToString(c_Rows, c_String);
-            pc_Retval->setData(this->mimeTypes().at(2), c_String.toStdString().c_str());
+            pc_Retval->setData(this->mimeTypes().at(2), c_String.toUtf8());
          }
       }
    }
@@ -2239,7 +2239,7 @@ void C_SdNdeDpListTableModel::m_FillDpListElementInfo(const uint32_t ou32_Elemen
                                                                                    u32_ItAppl]);
                   if (pc_DataSet != NULL)
                   {
-                     c_Content += static_cast<QString>("%1\n").arg(pc_DataSet->c_Name.c_str());
+                     c_Content += static_cast<QString>("%1\n").arg(pc_DataSet->c_Name);
                   }
                }
                if (mu32_TOOL_TIP_MAXIMUM_ITEMS < c_InvalidDataSetIndices.size())

@@ -33,7 +33,6 @@
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::scl;
 
 using namespace stw::opensyde_gui_logic;
 
@@ -126,8 +125,8 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
                                 .arg(s32_Minor, 2, 10, QChar('0'))
                                 .arg(s32_Revision, 2,  10, QChar('0'));
       // load actual datapool values
-      this->mpc_Ui->pc_LineEditDatapoolName->setText(this->mpc_OscDataPool->c_Name.c_str());
-      this->mpc_Ui->pc_CommentText->setText(this->mpc_OscDataPool->c_Comment.c_str());
+      this->mpc_Ui->pc_LineEditDatapoolName->setText(this->mpc_OscDataPool->c_Name);
+      this->mpc_Ui->pc_CommentText->setText(this->mpc_OscDataPool->c_Comment);
       this->mpc_Ui->pc_CheckBoxSafety->setChecked(this->mpc_OscDataPool->q_IsSafety);
 
       if ((this->mpc_OscDataPool->e_Type == C_OscNodeDataPool::eHALC) ||
@@ -289,10 +288,10 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
             if (opc_SharedDatapoolId->u32_NodeIndex != this->mu32_NodeIndex)
             {
                // Add node as namespace
-               c_Text += static_cast<QString>(pc_Node->c_Properties.c_Name.c_str()) + static_cast<QString>("::");
+               c_Text += pc_Node->c_Properties.c_Name + static_cast<QString>("::");
             }
 
-            c_Text += pc_Node->c_DataPools[opc_SharedDatapoolId->u32_DataPoolIndex].c_Name.c_str();
+            c_Text += pc_Node->c_DataPools[opc_SharedDatapoolId->u32_DataPoolIndex].c_Name;
 
             c_DatapoolGroup.push_back(c_Text);
          }
@@ -573,7 +572,7 @@ void C_SdNdeDpProperties::m_OkClicked(void)
 
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
 
-   std::vector<C_SclString> c_ExistingDatapoolNames;
+   std::vector<QString> c_ExistingDatapoolNames;
 
    //Check valid name
    if (C_OscUtils::h_CheckValidCeName(this->mpc_Ui->pc_LineEditDatapoolName->text()) == false)
@@ -596,8 +595,8 @@ void C_SdNdeDpProperties::m_OkClicked(void)
       c_Details += "Used Datapool names:\n";
       for (uint32_t u32_ItExistingName = 0UL; u32_ItExistingName < c_ExistingDatapoolNames.size(); ++u32_ItExistingName)
       {
-         const C_SclString & rc_Name = c_ExistingDatapoolNames[u32_ItExistingName];
-         c_Details += static_cast<QString>("\"%1\", ").arg(rc_Name.c_str());
+         const QString & rc_Name = c_ExistingDatapoolNames[u32_ItExistingName];
+         c_Details += static_cast<QString>("\"%1\", ").arg(rc_Name);
       }
       c_Details.chop(2); // remove last ", "
       c_Details += ".\n\n";
@@ -815,7 +814,7 @@ void C_SdNdeDpProperties::m_LoadCodeGenerationAndApplication(void) const
             const C_OscNodeApplication & rc_DataBlock = pc_Node->c_Applications[u32_ItDataBlock];
             if (rc_DataBlock.e_Type == C_OscNodeApplication::ePROGRAMMABLE_APPLICATION)
             {
-               this->mpc_Ui->pc_ComboBoxApplication->addItem(rc_DataBlock.c_Name.c_str());
+               this->mpc_Ui->pc_ComboBoxApplication->addItem(rc_DataBlock.c_Name);
                if ((this->mpc_OscDataPool->s32_RelatedDataBlockIndex >= 0) &&
                    (static_cast<uint32_t>(this->mpc_OscDataPool->s32_RelatedDataBlockIndex) == u32_ItDataBlock))
                {
@@ -826,7 +825,7 @@ void C_SdNdeDpProperties::m_LoadCodeGenerationAndApplication(void) const
             }
 
             // set read only info (relevant for HALC NVM Datapools)
-            this->mpc_Ui->pc_LabelApplicationReadOnly->setText(rc_DataBlock.c_Name.c_str());
+            this->mpc_Ui->pc_LabelApplicationReadOnly->setText(rc_DataBlock.c_Name);
          }
       }
    }
@@ -949,7 +948,7 @@ void C_SdNdeDpProperties::m_UpdateSizePrediction(void) const
 void C_SdNdeDpProperties::m_CheckDatapoolName(void) const
 {
    QString c_Content;
-   const stw::scl::C_SclString c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text();
+   const QString c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text();
 
    //check
    bool q_NameIsValid = C_OscUtils::h_CheckValidCeName(c_Name);
@@ -990,11 +989,11 @@ void C_SdNdeDpProperties::m_CheckDatapoolName(void) const
    False Name in conflict
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeDpProperties::m_CheckDatapoolNameNotDuplicate(std::vector<C_SclString> * const opc_ExistingDatapoolNames)
+bool C_SdNdeDpProperties::m_CheckDatapoolNameNotDuplicate(std::vector<QString> * const opc_ExistingDatapoolNames)
 const
 {
    bool q_NameIsValid = true;
-   const stw::scl::C_SclString c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text();
+   const QString c_Name = this->mpc_Ui->pc_LineEditDatapoolName->text();
 
    if (this->ms32_DataPoolIndex >= 0)
    {
@@ -1143,7 +1142,7 @@ void C_SdNdeDpProperties::m_OnComTypeChange(void) const
 
    c_DatapoolName = C_PuiSdHandler::h_GetInstance()->GetUniqueDataPoolName(
       this->mu32_NodeIndex,
-      C_PuiSdUtil::h_ConvertProtocolTypeToDatapoolNameString(e_Type)).ToQString();
+      C_PuiSdUtil::h_ConvertProtocolTypeToDatapoolNameString(e_Type));
 
    this->mpc_Ui->pc_LineEditDatapoolName->setText(c_DatapoolName);
 }

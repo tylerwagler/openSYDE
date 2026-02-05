@@ -134,7 +134,7 @@ private:
    static QString mh_BoolToString(const bool oq_Value);
    static QString mh_GetSignalNames(const stw::opensyde_core::C_OscCanMessage & orc_Message,
                                     const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_SignalData);
-   static QString mh_GetSignalNameForDisplay(const stw::scl::C_SclString & orc_Name);
+   static QString mh_GetSignalNameForDisplay(const QString & orc_Name);
    const stw::opensyde_core::C_OscCanOpenManagerMappableSignal * m_GetOrgSignal(const uint16_t ou16_ObjectIndex,
                                                                                 const uint8_t ou8_SubIndex)
    const;

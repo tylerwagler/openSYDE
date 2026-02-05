@@ -3,7 +3,7 @@
 
 #include "stwtypes.hpp"
 #include <QList>
-#include "C_SclString.hpp"
+#include <QString>
 #include "DiagLib_config.hpp"
 
 //---------------------------------------------------------------------------
@@ -199,8 +199,8 @@ public:
    float64_t GetFloatValue(void) const;
    void SetFloatValue(const float64_t of64_Value);
    void ClearValue(void);
-   stw::scl::C_SclString GetStringValue(void) const;
-   void SetStringValue(const stw::scl::C_SclString & orc_Value);
+   QString GetStringValue(void) const;
+   void SetStringValue(const QString & orc_Value);
    //array values:
    int64_t GetNumericValueFromArray(const uint32_t ou32_ArrayIndex) const;
    float64_t GetFloatValueFromArray(const uint32_t ou32_ArrayIndex) const;
@@ -219,8 +219,8 @@ public:
    float64_t GetFloatDefault(const uint16_t ou16_DefaultIndex = 0U) const;
    void SetFloatDefault(const float64_t of64_Value, const uint16_t ou16_DefaultIndex = 0U);
    void ClearDefault(const uint16_t ou16_DefaultIndex = 0U);
-   stw::scl::C_SclString GetStringDefault(const uint16_t ou16_DefaultIndex = 0U) const;
-   void SetStringDefault(const stw::scl::C_SclString & orc_Value, const uint16_t ou16_DefaultIndex = 0U);
+   QString GetStringDefault(const uint16_t ou16_DefaultIndex = 0U) const;
+   void SetStringDefault(const QString & orc_Value, const uint16_t ou16_DefaultIndex = 0U);
    //array defaults:
    int64_t GetNumericDefaultFromArray(const uint32_t ou32_ArrayIndex, const uint16_t ou16_DefaultIndex = 0U) const;
    float64_t GetFloatDefaultFromArray(const uint32_t ou32_ArrayIndex, const uint16_t ou16_DefaultIndex = 0U) const;
@@ -250,9 +250,9 @@ public:
    bool IsFloatType(void) const;
 
    // functions not for public use (may be dropped):
-   stw::scl::C_SclString GetTypeName(void) const;
-   stw::scl::C_SclString GetTypeDependentValueString(const bool oq_Hex, const bool oq_LeadingZeroes = false) const;
-   stw::scl::C_SclString GetTypeDependentDefaultString(const bool oq_Hex, const bool oq_LeadingZeroes = false,
+   QString GetTypeName(void) const;
+   QString GetTypeDependentValueString(const bool oq_Hex, const bool oq_LeadingZeroes = false) const;
+   QString GetTypeDependentDefaultString(const bool oq_Hex, const bool oq_LeadingZeroes = false,
                                                        const uint16_t ou16_DefaultIndex = 0U) const;
 };
 

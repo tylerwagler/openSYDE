@@ -2886,7 +2886,7 @@ void C_PuiSvData::FixInvalidRailConfig(const bool oq_PrintLog)
                                      c_ItReadItem.key().u32_NodeIndex).arg(c_ItReadItem.key().u32_DataPoolIndex).arg(
                                      c_ItReadItem.key().
                                      u32_ListIndex).arg(
-                                     c_ItReadItem.key().u32_ElementIndex).toStdString().c_str());
+                                     c_ItReadItem.key().u32_ElementIndex));
          }
          //New item at current position
          c_ItReadItem = this->mc_ReadRailAssignments.erase(c_ItReadItem);
@@ -2947,7 +2947,7 @@ void C_PuiSvData::InitFromSystemDefinition(void)
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItInfo);
          if (pc_Node != NULL)
          {
-            std::vector<stw::scl::C_SclString> c_ApplPaths;
+            std::vector<QString> c_ApplPaths;
             std::vector<C_OscViewNodeUpdateParamInfo> c_ParamInfos;
             std::vector<bool> c_ApplSkipFlags;
             C_OscViewNodeUpdate c_Info;
@@ -2968,7 +2968,7 @@ void C_PuiSvData::InitFromSystemDefinition(void)
                      c_Path = C_Uti::h_ConcatPathIfNecessary(rc_Application.c_GeneratePath.c_str(), c_Path);
                   }
                   c_ApplPaths.emplace_back(C_PuiUtil::h_MakeIndependentOfDbProjectPath(
-                                              rc_Application.c_ProjectPath.c_str(), c_Path).toStdString().c_str());
+                                              rc_Application.c_ProjectPath.c_str(), c_Path));
                }
                else
                {
@@ -2980,7 +2980,7 @@ void C_PuiSvData::InitFromSystemDefinition(void)
                      c_ParamInfo.SetContent(
                         C_PuiUtil::h_MakeIndependentOfDbProjectPath(
                            rc_Application.c_ProjectPath.c_str(),
-                           rc_Application.c_ResultPaths[u32_PathCounter].c_str()).toStdString().c_str(), 0U);
+                           rc_Application.c_ResultPaths[u32_PathCounter].c_str()), 0U);
                      c_ParamInfos.push_back(c_ParamInfo);
                   }
                }
@@ -3282,13 +3282,13 @@ std::vector<const QString *> C_PuiSvData::m_GetExistingDashboardNames(void) cons
    Vector of pointers to all currently registered dashboard names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<stw::scl::C_SclString, bool> C_PuiSvData::m_GetExistingDashboardNamesMap(void) const
+std::map<QString, bool> C_PuiSvData::m_GetExistingDashboardNamesMap(void) const
 {
-   std::map<stw::scl::C_SclString, bool> c_Retval;
+   std::map<QString, bool> c_Retval;
    for (uint32_t u32_ItDashboard = 0; u32_ItDashboard < this->mc_Dashboards.size(); ++u32_ItDashboard)
    {
       const C_PuiSvDashboard & rc_Data = this->mc_Dashboards[u32_ItDashboard];
-      c_Retval[rc_Data.GetName().toStdString().c_str()] = true;
+      c_Retval[rc_Data.GetName()] = true;
    }
    return c_Retval;
 }

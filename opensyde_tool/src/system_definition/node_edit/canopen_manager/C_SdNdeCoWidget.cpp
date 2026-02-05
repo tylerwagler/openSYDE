@@ -255,7 +255,7 @@ void C_SdNdeCoWidget::SetNode(const uint32_t ou32_NodeIndex)
       if (pc_ManagerNode != NULL)
       {
          this->mpc_Ui->pc_LinkToManagerLabel->setText(
-            C_Uti::h_GetLink(static_cast<QString>(pc_ManagerNode->c_Properties.c_Name.c_str()),
+            C_Uti::h_GetLink(static_cast<QString>(pc_ManagerNode->c_Properties.c_Name),
                              mc_STYLE_GUIDE_COLOR_6,
                              QString::number(u32_ManagerNodeIndex)));
       }
@@ -394,7 +394,7 @@ void C_SdNdeCoWidget::m_OnLinkSwitchToManager(const QString & orc_Link) const
       if (pc_ManagerNode != NULL)
       {
          Q_EMIT (this->SigSwitchToDeviceNodeInCoManager(u32_ManagerNodeIndex,
-                                                        static_cast<QString>(pc_ManagerNode->c_Properties.c_Name.c_str()),
+                                                        static_cast<QString>(pc_ManagerNode->c_Properties.c_Name),
                                                         this->mu32_NodeIndex));
       }
    }

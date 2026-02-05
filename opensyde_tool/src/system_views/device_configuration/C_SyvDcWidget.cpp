@@ -27,7 +27,7 @@
 #include "C_PuiSvHandler.hpp"
 
 
-#include "C_SclString.hpp"
+
 #include "C_PuiSdUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -570,7 +570,7 @@ void C_SyvDcWidget::m_CleanUpScan(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_ScanFinished(void)
 {
-   C_SclString c_NotTrimmedDevices = "Not trimmed device types: \n";
+   QString c_NotTrimmedDevices = "Not trimmed device types: \n";
    bool q_NotTrimmedDevicesFound = false;
 
    //evaluate results
@@ -1575,7 +1575,7 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
       else
       {
          osc_write_log_error("Reset to flashloader",
-                             "Preparation for reset failed: " + C_SclString::IntToStr(s32_Return));
+                             "Preparation for reset failed: " + QString::number(s32_Return));
       }
 
       if (s32_Return == C_NO_ERR)
@@ -1631,13 +1631,13 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
             // Error occurred
             this->mc_Timer.stop();
             osc_write_log_error("Reset to flashloader",
-                                "Reset to flashloader failed: " + C_SclString::IntToStr(s32_Return));
+                                "Reset to flashloader failed: " + QString::number(s32_Return));
          }
       }
       else
       {
          osc_write_log_error("Reset to flashloader",
-                             "Start of sending flashloader requests failed: " + C_SclString::IntToStr(s32_Return));
+                             "Start of sending flashloader requests failed: " + QString::number(s32_Return));
       }
    }
 }

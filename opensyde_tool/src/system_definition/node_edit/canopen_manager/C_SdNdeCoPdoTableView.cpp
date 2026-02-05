@@ -119,7 +119,7 @@ void C_SdNdeCoPdoTableView::LoadUserSettings(void)
 
    if (pc_Node != NULL)
    {
-      const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
+      const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
       if (this->m_SetColumnWidths(c_Node.GetCanOpenPdoOverviewColumnWidth()) == false)
       {
          m_InitColumns();
@@ -139,7 +139,7 @@ void C_SdNdeCoPdoTableView::SaveUserSettings(void) const
    if (pc_Node != NULL)
    {
       C_UsHandler::h_GetInstance()->SetProjSdNodeCanOpenPdoOverviewColumnWidth(
-         pc_Node->c_Properties.c_Name.c_str(), this->m_GetColumnWidths());
+         pc_Node->c_Properties.c_Name, this->m_GetColumnWidths());
    }
 }
 

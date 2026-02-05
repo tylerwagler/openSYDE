@@ -462,9 +462,9 @@ void C_SdNdeDalLogJobsOvTableModel::m_FillLogJobsInfo(const std::vector<std::tup
          c_Tmp.push_back(c_IconPath);
          c_LogJobInfo.c_LogJobIcon = c_Tmp;
          //Log job name
-         c_LogJobInfo.c_LogJobName = pc_Node->c_DataLoggerJobs[u32_It].c_Properties.c_Name.c_str();
+         c_LogJobInfo.c_LogJobName = pc_Node->c_DataLoggerJobs[u32_It].c_Properties.c_Name;
          //Log job comment
-         c_LogJobInfo.c_LogJobComment = pc_Node->c_DataLoggerJobs[u32_It].c_Properties.c_Comment.c_str();
+         c_LogJobInfo.c_LogJobComment = pc_Node->c_DataLoggerJobs[u32_It].c_Properties.c_Comment;
          //Log job UseCase
          switch (pc_Node->c_DataLoggerJobs[u32_It].c_Properties.e_UseCase)
          {

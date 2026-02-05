@@ -69,7 +69,7 @@ C_SdNdeHalcChannelDpPreviewPopUp::C_SdNdeHalcChannelDpPreviewPopUp(
                                                                          ou32_ChannelIndex, oq_UseChannelIndex);
       if (pc_Channel != NULL)
       {
-         this->mrc_ParentDialog.SetTitle(pc_Channel->c_Name.c_str());
+         this->mrc_ParentDialog.SetTitle(pc_Channel->c_Name);
       }
    }
    //RO
@@ -203,7 +203,7 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDpSection(const uint32_t ou32_NodeI
       orc_Text += "<tr>";
       orc_Text += "<td>" + static_cast<QString>("Datapool:") + "</td>";
       orc_Text += "<td>" +
-                  static_cast<QString>(C_OscHalcMagicianUtil::h_GetDatapoolName(pc_Channel->q_SafetyRelevant).c_str()) +
+                  C_OscHalcMagicianUtil::h_GetDatapoolName(pc_Channel->q_SafetyRelevant) +
                   "</td>";
       orc_Text += "</tr>";
       orc_Text += "<tr>";
@@ -217,7 +217,7 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDpSection(const uint32_t ou32_NodeI
       }
       if (pc_Appl != NULL)
       {
-         orc_Text += "<td>" + static_cast<QString>(pc_Appl->c_Name.c_str()) + "</td>";
+         orc_Text += "<td>" + pc_Appl->c_Name + "</td>";
       }
       else
       {
@@ -314,13 +314,13 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDeSection(const uint32_t ou32_NodeI
                ou32_DomainIndex);
             if ((pc_Domain != NULL) && (pc_DomainConfig != NULL))
             {
-               const stw::scl::C_SclString c_ListName1 = C_OscHalcMagicianUtil::h_GetListName(
+               const QString c_ListName1 = C_OscHalcMagicianUtil::h_GetListName(
                   C_OscHalcDefDomain::eVA_PARAM);
-               const stw::scl::C_SclString c_ListName2 = C_OscHalcMagicianUtil::h_GetListName(
+               const QString c_ListName2 = C_OscHalcMagicianUtil::h_GetListName(
                   C_OscHalcDefDomain::eVA_INPUT);
-               const stw::scl::C_SclString c_ListName3 = C_OscHalcMagicianUtil::h_GetListName(
+               const QString c_ListName3 = C_OscHalcMagicianUtil::h_GetListName(
                   C_OscHalcDefDomain::eVA_OUTPUT);
-               const stw::scl::C_SclString c_ListName4 = C_OscHalcMagicianUtil::h_GetListName(
+               const QString c_ListName4 = C_OscHalcMagicianUtil::h_GetListName(
                   C_OscHalcDefDomain::eVA_STATUS);
                if (oq_UseChannelIndex)
                {
@@ -403,7 +403,7 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddUseCase(const uint32_t ou32_NodeInd
       {
          const C_OscHalcDefChannelUseCase & rc_UseCase = pc_Domain->c_ChannelUseCases[pc_Channel->u32_UseCaseIndex];
          orc_Text += " (use case \'";
-         orc_Text += rc_UseCase.c_Display.c_str();
+         orc_Text += rc_UseCase.c_Display;
          orc_Text += c_UseCase;
          orc_Text += "\')";
       }
@@ -426,8 +426,8 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddUseCase(const uint32_t ou32_NodeInd
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListSection(const std::vector<C_OscHalcDefStruct> & orc_Definition,
                                                          const std::vector<uint32_t> & orc_Indices,
-                                                         const stw::scl::C_SclString & orc_ListName,
-                                                         const stw::scl::C_SclString & orc_DomainSingularName,
+                                                         const QString & orc_ListName,
+                                                         const QString & orc_DomainSingularName,
                                                          QString & orc_Text,
                                                          const stw::opensyde_core::C_OscHalcDefDomain & orc_Domain,
                                                          const stw::opensyde_core::C_OscHalcConfigDomain & orc_DomainConfig, const C_OscHalcMagicianDatapoolListHandler & orc_DpHandler,
@@ -503,13 +503,13 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListSection(const std::vector<C_Osc
 void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddElementSection(const C_OscHalcDefElement & orc_HalDefElement,
                                                             const std::vector<C_OscHalcDefStruct> & orc_Definition,
                                                             const uint32_t ou32_Index,
-                                                            const stw::scl::C_SclString & orc_DomainSingularName,
+                                                            const QString & orc_DomainSingularName,
                                                             const uint32_t ou32_ElementIndex,
                                                             const std::vector<uint32_t> & orc_RelevantChannels,
-                                                            const stw::scl::C_SclString & orc_ListName,
+                                                            const QString & orc_ListName,
                                                             bool & orq_AddedList, QString & orc_Text)
 {
-   stw::scl::C_SclString c_Name;
+   QString c_Name;
    if (orc_HalDefElement.GetComplexType() == C_OscHalcDefContent::eCT_STRING)
    {
       for (uint32_t u32_ItCh = 0UL; u32_ItCh < orc_RelevantChannels.size(); ++u32_ItCh)
@@ -542,9 +542,9 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddElementSection(const C_OscHalcDefEl
    \param[in,out]  orc_Text         Text
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListEntry(const stw::scl::C_SclString & orc_ListName, bool & orq_ListAdded,
-                                                       const stw::scl::C_SclString & orc_VarName,
-                                                       const stw::scl::C_SclString & orc_VarComment, QString & orc_Text)
+void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListEntry(const QString & orc_ListName, bool & orq_ListAdded,
+                                                       const QString & orc_VarName,
+                                                       const QString & orc_VarComment, QString & orc_Text)
 {
    const QString c_Column1TagStart = static_cast<QString>("<td style=\"padding: 0 %1 0 0px;\">").arg(
       C_SdNdeHalcChannelDpPreviewPopUp::mhs32_TABLE_SPACING);
@@ -555,15 +555,15 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListEntry(const stw::scl::C_SclStri
    orc_Text += c_Column1TagStart;
    if (orq_ListAdded == false)
    {
-      orc_Text += orc_ListName.c_str();
+      orc_Text += orc_ListName;
       orq_ListAdded = true;
    }
    orc_Text += "</td>";
    orc_Text += c_ColumnContentTagStart;
-   orc_Text += orc_VarName.c_str();
+   orc_Text += orc_VarName;
    orc_Text += "</td>";
    orc_Text += c_ColumnContentTagStart;
-   orc_Text += orc_VarComment.c_str();
+   orc_Text += orc_VarComment;
    orc_Text += "</td>";
    orc_Text += "</tr>";
 }

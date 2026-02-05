@@ -65,14 +65,14 @@ using namespace stw::opensyde_gui_logic;
    C_CHECKSUM  verify of system definition failed. Loaded ui part does not match to loaded core part
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path, uint16_t * const opu16_FileVersion,
-                                         std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices)
+int32_t C_PuiSdHandlerData::LoadFromFile(const QString & orc_Path, uint16_t * const opu16_FileVersion,
+                                         std::vector<QString> * const opc_ErrorDetailsMissingDevices)
 {
    int32_t s32_Return = C_NO_ERR;
 
    const uint16_t u16_TimerId = osc_write_log_performance_start();
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       C_OscXmlParser c_XmlParser;
       s32_Return = c_XmlParser.LoadFromFile(orc_Path);
@@ -83,7 +83,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
          //We need to use the old format to improve loading performance in compatibility mode
          s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
             mc_CoreDefinition, c_XmlParser,
-            C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str(),
+            C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini"),
             orc_Path, true, &u16_FileVersion, NULL, false, NULL, opc_ErrorDetailsMissingDevices);
          if (opu16_FileVersion != NULL)
          {
@@ -139,7 +139,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
             }
             else
             {
-               QString c_FilePath = C_PuiSdHandlerFiler::h_GetSystemDefinitionUiFilePath(orc_Path.c_str());
+               QString c_FilePath = C_PuiSdHandlerFiler::h_GetSystemDefinitionUiFilePath(orc_Path);
 
                //Load separate UI files
                s32_Return = C_PuiSdHandlerFiler::h_LoadSystemDefinitionUiFile(c_FilePath, this->mc_UiNodes,
@@ -151,21 +151,21 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
                // Loading separate shared Datapool configuration
                if (s32_Return == C_NO_ERR)
                {
-                  c_FilePath = C_PuiSdHandlerFiler::h_GetSharedDatapoolUiFilePath(orc_Path.c_str());
+                  c_FilePath = C_PuiSdHandlerFiler::h_GetSharedDatapoolUiFilePath(orc_Path);
                   s32_Return = C_PuiSdHandlerFiler::h_LoadSharedDatapoolsFile(c_FilePath, this->mc_SharedDatapools);
 
                   if (s32_Return != C_NO_ERR)
                   {
                      osc_write_log_error("Loading shared Datapool configuration UI",
                                          "Could not load shared Datapool configuration UI. Error code: " +
-                                         stw::scl::C_SclString::IntToStr(s32_Return));
+                                         QString::IntToStr(s32_Return));
                   }
                }
                else
                {
                   osc_write_log_error("Loading System Definition UI",
                                       "Could not load System Definition UI. Error code: " +
-                                      stw::scl::C_SclString::IntToStr(s32_Return));
+                                      QString::IntToStr(s32_Return));
                }
 
                if (s32_Return == C_NO_ERR)
@@ -178,7 +178,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
          else
          {
             osc_write_log_error("Loading System Definition", "Could not load System Definition. Error code: " +
-                                stw::scl::C_SclString::IntToStr(s32_Return));
+                                QString::IntToStr(s32_Return));
          }
 
          if (s32_Return == C_NO_ERR)
@@ -233,18 +233,18 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
    C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSdHandlerData::SaveToFile(const stw::scl::C_SclString & orc_Path, const bool oq_UseDeprecatedFileFormatV2,
+int32_t C_PuiSdHandlerData::SaveToFile(const QString & orc_Path, const bool oq_UseDeprecatedFileFormatV2,
                                        const bool oq_UpdateInternalState)
 {
    int32_t s32_Return = C_NO_ERR;
 
    const uint16_t u16_TimerId = osc_write_log_performance_start();
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       //erase it:
       int32_t s32_ReturnRemove;
-      s32_ReturnRemove = std::remove(orc_Path.c_str());
+      s32_ReturnRemove = std::remove(orc_Path);
       if (s32_ReturnRemove != 0)
       {
          osc_write_log_error("Saving System Definition",
@@ -293,7 +293,7 @@ int32_t C_PuiSdHandlerData::SaveToFile(const stw::scl::C_SclString & orc_Path, c
          s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(this->mc_CoreDefinition, orc_Path);
          if (s32_Return == C_NO_ERR)
          {
-            QString c_FilePath = C_PuiSdHandlerFiler::h_GetSystemDefinitionUiFilePath(orc_Path.c_str());
+            QString c_FilePath = C_PuiSdHandlerFiler::h_GetSystemDefinitionUiFilePath(orc_Path);
             //New files for UI
             s32_Return = C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(c_FilePath, this->mc_CoreDefinition,
                                                                            this->mc_UiNodes, this->mc_UiBuses,
@@ -304,7 +304,7 @@ int32_t C_PuiSdHandlerData::SaveToFile(const stw::scl::C_SclString & orc_Path, c
             // Saving shared Datapool configuration
             if (s32_Return == C_NO_ERR)
             {
-               c_FilePath = C_PuiSdHandlerFiler::h_GetSharedDatapoolUiFilePath(orc_Path.c_str());
+               c_FilePath = C_PuiSdHandlerFiler::h_GetSharedDatapoolUiFilePath(orc_Path);
                s32_Return = C_PuiSdHandlerFiler::h_SaveSharedDatapoolsFile(c_FilePath, this->mc_SharedDatapools);
 
                if (s32_Return != C_NO_ERR)
@@ -965,13 +965,13 @@ void C_PuiSdHandlerData::m_FixNameIssues(void)
    {
       C_OscNode & rc_OscNode = this->mc_CoreDefinition.c_Nodes[u32_ItNode];
       rc_OscNode.c_Properties.c_Name = C_PuiSdHandlerData::h_AutomaticCeStringAdaptation(
-         rc_OscNode.c_Properties.c_Name.c_str()).toStdString().c_str();
+         rc_OscNode.c_Properties.c_Name);
    }
    for (uint32_t u32_ItNodeGroup = 0; u32_ItNodeGroup < this->mc_CoreDefinition.c_NodeSquads.size(); ++u32_ItNodeGroup)
    {
       C_OscNodeSquad & rc_OscNodeGroup = this->mc_CoreDefinition.c_NodeSquads[u32_ItNodeGroup];
-      const QString c_Name = C_PuiSdHandlerData::h_AutomaticCeStringAdaptation(rc_OscNodeGroup.c_BaseName.c_str());
-      rc_OscNodeGroup.SetBaseName(this->mc_CoreDefinition.c_Nodes, c_Name.toStdString().c_str());
+      const QString c_Name = C_PuiSdHandlerData::h_AutomaticCeStringAdaptation(rc_OscNodeGroup.c_BaseName);
+      rc_OscNodeGroup.SetBaseName(this->mc_CoreDefinition.c_Nodes, c_Name);
    }
 }
 
@@ -1108,7 +1108,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
          "Verifying System Definition",
          static_cast<QString>("UI part does not match core part: Number of nodes (UI %1 vs. core %2).").
          arg(this->mc_UiNodes.size()).
-         arg(this->mc_CoreDefinition.c_Nodes.size()).toStdString().c_str());
+         arg(this->mc_CoreDefinition.c_Nodes.size()));
 
       s32_Return = C_CHECKSUM;
    }
@@ -1118,7 +1118,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
          "Verifying System Definition",
          static_cast<QString>("UI part does not match core part: Number of buses (UI %1 vs. core %2).").
          arg(this->mc_UiBuses.size()).
-         arg(this->mc_CoreDefinition.c_Buses.size()).toStdString().c_str());
+         arg(this->mc_CoreDefinition.c_Buses.size()));
 
       s32_Return = C_CHECKSUM;
    }
@@ -1138,9 +1138,9 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                "Verifying System Definition",
                static_cast<QString>("UI part does not match core part: Number of Datapools of node %1 "
                                     "(UI %2 vs. core %3).").
-               arg(rc_OscNode.c_Properties.c_Name.c_str()).
+               arg(rc_OscNode.c_Properties.c_Name).
                arg(rc_UiNode.c_UiDataPools.size()).
-               arg(rc_OscNode.c_DataPools.size()).toStdString().c_str());
+               arg(rc_OscNode.c_DataPools.size()));
 
             s32_Return = C_CHECKSUM;
          }
@@ -1160,10 +1160,10 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                      "Verifying System Definition",
                      static_cast<QString>("UI part does not match core part: Number of Datapool lists of "
                                           "Datapool %1::%2 (UI %3 vs. core %4).").
-                     arg(rc_OscNode.c_Properties.c_Name.c_str()).
-                     arg(rc_OscDp.c_Name.c_str()).
+                     arg(rc_OscNode.c_Properties.c_Name).
+                     arg(rc_OscDp.c_Name).
                      arg(rc_UiDp.c_DataPoolLists.size()).
-                     arg(rc_OscDp.c_Lists.size()).toStdString().c_str());
+                     arg(rc_OscDp.c_Lists.size()));
 
                   s32_Return = C_CHECKSUM;
                }
@@ -1183,11 +1183,11 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                            "Verifying System Definition",
                            static_cast<QString>("UI part does not match core part: Number of Datapool"
                                                 " list elements of list %1::%2::%3 (UI %4 vs. core %5).").
-                           arg(rc_OscNode.c_Properties.c_Name.c_str()).
-                           arg(rc_OscDp.c_Name.c_str()).
-                           arg(rc_OscList.c_Name.c_str()).
+                           arg(rc_OscNode.c_Properties.c_Name).
+                           arg(rc_OscDp.c_Name).
+                           arg(rc_OscList.c_Name).
                            arg(rc_UiList.c_DataPoolListElements.size()).
-                           arg(rc_OscList.c_Elements.size()).toStdString().c_str());
+                           arg(rc_OscList.c_Elements.size()));
 
                         s32_Return = C_CHECKSUM;
                      }
@@ -1202,9 +1202,9 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                "Verifying System Definition",
                static_cast<QString>("UI part does not match core part: Number of CAN protocols of node %1 "
                                     "(UI %2 vs. core %3).").
-               arg(rc_OscNode.c_Properties.c_Name.c_str()).
+               arg(rc_OscNode.c_Properties.c_Name).
                arg(rc_UiNode.c_UiCanProtocols.size()).
-               arg(rc_OscNode.c_ComProtocols.size()).toStdString().c_str());
+               arg(rc_OscNode.c_ComProtocols.size()));
 
             s32_Return = C_CHECKSUM;
          }
@@ -1224,9 +1224,9 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                      "Verifying System Definition",
                      static_cast<QString>("UI part does not match core part: Number of message containers"
                                           " of node %1 (UI %2 vs. core %3).").
-                     arg(rc_OscNode.c_Properties.c_Name.c_str()).
+                     arg(rc_OscNode.c_Properties.c_Name).
                      arg(rc_UiProtocol.c_ComMessages.size()).
-                     arg(rc_OscProtocol.c_ComMessages.size()).toStdString().c_str());
+                     arg(rc_OscProtocol.c_ComMessages.size()));
 
                   s32_Return = C_CHECKSUM;
                }
@@ -1245,10 +1245,10 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                            "Verifying System Definition",
                            static_cast<QString>("UI part does not match core part: Number of Tx Messages"
                                                 " of node %1.(UI %2 vs. core %3)").
-                           arg(rc_OscNode.c_Properties.c_Name.c_str()).
+                           arg(rc_OscNode.c_Properties.c_Name).
                            arg(rc_UiProtocol.c_ComMessages[u32_MsgContainer].c_TxMessages.size()).
                            arg(rc_OscProtocol.c_ComMessages[u32_MsgContainer].c_TxMessages.size()).
-                           toStdString().c_str());
+                           toStdString());
 
                         s32_Return = C_CHECKSUM;
                      }
@@ -1272,10 +1272,10 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                                  "Verifying System Definition",
                                  static_cast<QString>("UI part does not match core part: Number of Tx Signals"
                                                       " of node %1 in CAN message %2 (UI %3 vs. core %4).").
-                                 arg(rc_OscNode.c_Properties.c_Name.c_str()).
-                                 arg(rc_OscMsg.c_Name.c_str()).
+                                 arg(rc_OscNode.c_Properties.c_Name).
+                                 arg(rc_OscMsg.c_Name).
                                  arg(rc_UiMsg.c_Signals.size()).
-                                 arg(rc_OscMsg.c_Signals.size()).toStdString().c_str());
+                                 arg(rc_OscMsg.c_Signals.size()));
 
                               s32_Return = C_CHECKSUM;
                            }
@@ -1290,10 +1290,10 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                            "Verifying System Definition",
                            static_cast<QString>("UI part does not match core part: Number of Rx Messages"
                                                 " of node %1 (UI %2 vs. core %3).").
-                           arg(rc_OscNode.c_Properties.c_Name.c_str()).
+                           arg(rc_OscNode.c_Properties.c_Name).
                            arg(rc_UiProtocol.c_ComMessages[u32_MsgContainer].c_RxMessages.size()).
                            arg(rc_OscProtocol.c_ComMessages[u32_MsgContainer].c_RxMessages.size()).
-                           toStdString().c_str());
+                           toStdString());
 
                         s32_Return = C_CHECKSUM;
                      }
@@ -1317,10 +1317,10 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                                  "Verifying System Definition",
                                  static_cast<QString>("UI part does not match core part: Number of Rx Signals"
                                                       " of node %1 in CAN message %2 (UI %3 vs. core %4).").
-                                 arg(rc_OscNode.c_Properties.c_Name.c_str()).
-                                 arg(rc_OscMsg.c_Name.c_str()).
+                                 arg(rc_OscNode.c_Properties.c_Name).
+                                 arg(rc_OscMsg.c_Name).
                                  arg(rc_UiMsg.c_Signals.size()).
-                                 arg(rc_OscMsg.c_Signals.size()).toStdString().c_str());
+                                 arg(rc_OscMsg.c_Signals.size()));
 
                               s32_Return = C_CHECKSUM;
                            }

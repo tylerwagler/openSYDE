@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <fstream>
 
-#include "C_SclString.hpp"
+#include <QString>
 
 #include "C_OscComMessageLoggerFileBase.hpp"
 
@@ -31,8 +31,8 @@ class C_OscComMessageLoggerFileAsc :
    public C_OscComMessageLoggerFileBase
 {
 public:
-   C_OscComMessageLoggerFileAsc(const stw::scl::C_SclString & orc_FilePath,
-                                const stw::scl::C_SclString & orc_ProtocolName, const bool oq_HexActive,
+   C_OscComMessageLoggerFileAsc(const QString & orc_FilePath,
+                                const QString & orc_ProtocolName, const bool oq_HexActive,
                                 const bool oq_RelativeTimeStampActive);
    virtual ~C_OscComMessageLoggerFileAsc(void);
 
@@ -45,10 +45,10 @@ private:
    C_OscComMessageLoggerFileAsc & operator =(const C_OscComMessageLoggerFileAsc &);
 
    void m_WriteHeader(void);
-   static stw::scl::C_SclString mh_GetAscTimeString(void);
-   static stw::scl::C_SclString mh_GetDay(const int32_t os32_Day);
-   static stw::scl::C_SclString mh_GetMonth(const int32_t os32_Month);
-   static stw::scl::C_SclString mh_AdaptTimeStamp(const uint64_t ou64_TimeStamp);
+   static QString mh_GetAscTimeString(void);
+   static QString mh_GetDay(const int32_t os32_Day);
+   static QString mh_GetMonth(const int32_t os32_Month);
+   static QString mh_AdaptTimeStamp(const uint64_t ou64_TimeStamp);
 
    const bool mq_HexActive;
    const bool mq_RelativeTimeStampActive;

@@ -22,7 +22,7 @@
 #include "C_CanMonProtocolL2.hpp"
 #include "C_CanMonProtocolJ1939.hpp"
 #include "C_CanMonProtocolOpenSyde.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -79,28 +79,28 @@ public:
    int32_t SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol);
    e_CanMonL7Protocols GetProtocolMode(void) const;
 
-   int32_t GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, stw::scl::C_SclString & orc_Description) const;
+   int32_t GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, QString & orc_Description) const;
    bool GetProtocolHasParameters(const e_CanMonL7Protocols oe_L7Protocol) const;
 
    int32_t SetDecimalMode(const bool oq_Decimal);
    bool GetDecimalMode(void) const;
 
-   static stw::scl::C_SclString FormatTimeStamp(const uint64_t ou64_TimeStampUs, const bool oq_LeftFillBlanks = false);
+   static QString FormatTimeStamp(const uint64_t ou64_TimeStampUs, const bool oq_LeftFillBlanks = false);
 
    //for displaying on screen (will consider configured L7 protocol and decimal/hex setting):
-   stw::scl::C_SclString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
-   stw::scl::C_SclString MessageToString(const stw::can::T_STWCAN_Msg_TX & orc_Msg) const;
-   stw::scl::C_SclString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Message,
+   QString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   QString MessageToString(const stw::can::T_STWCAN_Msg_TX & orc_Msg) const;
+   QString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Message,
                                          const uint32_t ou32_Count) const;
 
    //for protocolling (e.g. to file; individual fields separated by semicolon; L2 AND L7 interpretation; always hex)
-   stw::scl::C_SclString MessageToStringLog(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
-   stw::scl::C_SclString MessageToStringLog(const stw::can::T_STWCAN_Msg_TX & orc_Msg) const;
+   QString MessageToStringLog(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   QString MessageToStringLog(const stw::can::T_STWCAN_Msg_TX & orc_Msg) const;
 
-   int32_t SaveProtocolParametersToIni(const stw::scl::C_SclString & orc_FileName,
-                                       const stw::scl::C_SclString & orc_Section) const;
-   int32_t LoadProtocolParametersFromIni(const stw::scl::C_SclString & orc_FileName,
-                                         const stw::scl::C_SclString & orc_Section) const;
+   int32_t SaveProtocolParametersToIni(const QString & orc_FileName,
+                                       const QString & orc_Section) const;
+   int32_t LoadProtocolParametersFromIni(const QString & orc_FileName,
+                                         const QString & orc_Section) const;
 
    //KEFEX protocol parameters:
 #ifdef CMONPROTOCOL_ALLOW_RAMVIEW_PROJECT_MAPPING

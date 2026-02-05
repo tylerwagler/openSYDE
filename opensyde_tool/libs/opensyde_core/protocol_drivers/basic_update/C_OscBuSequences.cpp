@@ -414,7 +414,7 @@ int32_t C_OscBuSequences::ReadDeviceInformation(void)
    else        error occured
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscBuSequences::UpdateNode(const C_SclString & orc_HexFilePath, const uint32_t ou32_RequestDownloadTimeout,
+int32_t C_OscBuSequences::UpdateNode(const QString & orc_HexFilePath, const uint32_t ou32_RequestDownloadTimeout,
                                      const uint32_t ou32_TransferDataTimeout)
 {
    int32_t s32_Return = C_NO_ERR;
@@ -761,14 +761,14 @@ int32_t C_OscBuSequences::ResetSystem(void)
    C_NOACT     No signature block found in HEX file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscBuSequences::h_ReadHexFile(const C_SclString & orc_HexFilePath, C_OscHexFile & orc_HexFile,
+int32_t C_OscBuSequences::h_ReadHexFile(const QString & orc_HexFilePath, C_OscHexFile & orc_HexFile,
                                         uint32_t & oru32_SignatureBlockAddress)
 {
    int32_t s32_Return = C_NO_ERR;
    uint32_t u32_Return;
    const QString c_LogActivity = "Read HEX File";
 
-   u32_Return = orc_HexFile.LoadFromFile(orc_HexFilePath.c_str());
+   u32_Return = orc_HexFile.LoadFromFile(orc_HexFilePath.toUtf8().constData());
    if (u32_Return != stw::hex_file::NO_ERR)
    {
       s32_Return = C_RD_WR;
@@ -846,21 +846,21 @@ void C_OscBuSequences::m_ReportProgressPercentage(const uint8_t ou8_ProgressInPe
    \param[in]  orc_Information   Text information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscBuSequences::m_ReportProgress(const int32_t os32_Result, const C_SclString & orc_Information)
+void C_OscBuSequences::m_ReportProgress(const int32_t os32_Result, const QString & orc_Information)
 {
-   std::cout << "Info: " << orc_Information.c_str() << " Result: " << os32_Result << std::endl;
+   std::cout << "Info: " << orc_Information.toUtf8().constData() << " Result: " << os32_Result << std::endl;
 
    if (os32_Result == C_NO_ERR)
    {
-      osc_write_log_info("Progress", orc_Information.ToQString());
+      osc_write_log_info("Progress", orc_Information);
    }
    else if (os32_Result == C_WARN)
    {
-      osc_write_log_warning("Progress", orc_Information.ToQString());
+      osc_write_log_warning("Progress", orc_Information);
    }
    else
    {
-      osc_write_log_error("Progress", orc_Information.ToQString());
+      osc_write_log_error("Progress", orc_Information);
    }
 }
 
@@ -874,14 +874,14 @@ void C_OscBuSequences::m_ReportProgress(const int32_t os32_Result, const C_SclSt
    \param[in]  orc_Information   Information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscBuSequences::m_ReportFlashloaderInformationRead(const C_SclString & orc_DeviceName,
+void C_OscBuSequences::m_ReportFlashloaderInformationRead(const QString & orc_DeviceName,
                                                           const C_OscComFlashloaderInformation & orc_Information)
 {
    QStringList c_Text;
    const QStringList c_MoreInformation = orc_Information.FlashloaderInformationToText();
 
    c_Text.clear();
-   c_Text.append(("Device name: " + orc_DeviceName).ToQString());
+   c_Text.append(("Device name: " + orc_DeviceName));
    for (const QString & rc_Line : c_MoreInformation)
    {
       c_Text.append(rc_Line);

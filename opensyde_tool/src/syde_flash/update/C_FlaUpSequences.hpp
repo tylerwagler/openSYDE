@@ -60,8 +60,8 @@ Q_SIGNALS:
 
 protected:
    void m_ReportProgressPercentage(const uint8_t ou8_ProgressInPercentage) override;
-   void m_ReportProgress(const int32_t os32_Result, const stw::scl::C_SclString & orc_Information) override;
-   void m_ReportFlashloaderInformationRead(const stw::scl::C_SclString & orc_DeviceName,
+   void m_ReportProgress(const int32_t os32_Result, const QString & orc_Information) override;
+   void m_ReportFlashloaderInformationRead(const QString & orc_DeviceName,
                                            const stw::opensyde_core::C_OscComFlashloaderInformation & orc_Information)
    override;
 

@@ -19,7 +19,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::opensyde_gui;
-using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const uint32_t C_SdNdeCoDeviceWidget::mhu32_INDEX_DEVICE_USE_CASE_CONFIGURATION = 0UL;

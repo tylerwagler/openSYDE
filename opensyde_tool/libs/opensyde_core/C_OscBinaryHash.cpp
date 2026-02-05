@@ -56,7 +56,7 @@ QString C_OscBinaryHash::h_CreateBinaryHash(void)
 
    if (h_GetHashBool() == false)
    {
-      mhc_BinaryHash = C_Md5Checksum::GetMD5Q(c_ExePath).toUpper();
+      mhc_BinaryHash = C_Md5Checksum::GetMD5(c_ExePath).toUpper();
       h_SetHashBool(true);
    }
    return mhc_BinaryHash;

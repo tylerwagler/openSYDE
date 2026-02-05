@@ -65,9 +65,9 @@ private:
    // For loading files
    QString mc_CurrentLoadedFile;
    QString mc_CurrentLoadedFileOrg;
-   std::vector<stw::scl::C_SclString> mc_OsySysDefs;
+   std::vector<QString> mc_OsySysDefs;
    std::vector<uint32_t> mc_OsySysDefBuses;
-   std::vector<stw::scl::C_SclString> mc_DbcFiles;
+   std::vector<QString> mc_DbcFiles;
 
    // For custom splitter resizing
    int32_t ms32_SettingsSplitterPosition;

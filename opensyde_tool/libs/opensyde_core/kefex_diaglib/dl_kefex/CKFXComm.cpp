@@ -163,21 +163,21 @@ void C_KFXCommunicationBase::GetProtocolFeatures(T_KFXProtocolFeatures * const o
    Text representation of protocol name
 */
 //-----------------------------------------------------------------------------
-C_SclString C_KFXCommunicationBase::GetProtocolName(void)
+QString C_KFXCommunicationBase::GetProtocolName(void)
 {
    return mt_Configuration.mc_ProtocolName;
 }
 
 //---------------------------------------------------------------------------
 
-int32_t C_KFXCommunicationBase::LoadConfigFromINI(QSettings * const opc_File, const C_SclString & orc_Section)
+int32_t C_KFXCommunicationBase::LoadConfigFromINI(QSettings * const opc_File, const QString & orc_Section)
 {
    return mt_Configuration.LoadConfigFromINI(*opc_File, orc_Section);
 }
 
 //---------------------------------------------------------------------------
 
-int32_t C_KFXCommunicationBase::SaveConfigToINI(QSettings * const opc_File, const C_SclString & orc_Section) const
+int32_t C_KFXCommunicationBase::SaveConfigToINI(QSettings * const opc_File, const QString & orc_Section) const
 {
    return mt_Configuration.SaveConfigToINI(*opc_File, orc_Section);
 }

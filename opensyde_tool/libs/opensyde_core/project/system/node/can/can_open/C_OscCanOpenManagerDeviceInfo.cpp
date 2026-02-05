@@ -116,10 +116,10 @@ const C_OscCanOpenObjectDictionary & C_OscCanOpenManagerDeviceInfo::GetEdsFileCo
          if (s32_Retval != C_NO_ERR)
          {
             osc_write_log_error("CANopen manager device information", "Failed to load from EDS file \"" +
-                                this->c_ProjectEdsFilePath + "\" Error: \"" + this->mc_EdsFileContent.GetLastErrorText().ToQString() +
+                                this->c_ProjectEdsFilePath + "\" Error: \"" + this->mc_EdsFileContent.GetLastErrorText() +
                                 "\".");
             this->mc_EdsFileContent.c_OdObjects.clear();
-            this->mc_EdsFileContent.c_TextFileContent.Clear();
+            this->mc_EdsFileContent.c_TextFileContent.clear();
          }
          else
          {
@@ -132,7 +132,7 @@ const C_OscCanOpenObjectDictionary & C_OscCanOpenManagerDeviceInfo::GetEdsFileCo
          osc_write_log_error("CANopen manager device information", "Failed to load from EDS file \"" +
                              this->c_ProjectEdsFilePath + "\" Error: File does not exist.");
          this->mc_EdsFileContent.c_OdObjects.clear();
-         this->mc_EdsFileContent.c_TextFileContent.Clear();
+         this->mc_EdsFileContent.c_TextFileContent.clear();
       }
       this->mq_EdsFileContentLoaded = true;
    }

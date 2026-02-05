@@ -16,7 +16,7 @@
 #include "C_CanMonProtocolJ1939.hpp"
 #include "C_CanMonProtocolOpenSyde.hpp"
 
-#include "C_SclString.hpp"
+#include <QString>
 #include <QSettings>
 
 
@@ -30,7 +30,7 @@ using namespace stw::can;
 
 //---------------------------------------------------------------------------
 
-int32_t C_CanMonProtocols::GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, C_SclString & orc_Description) const
+int32_t C_CanMonProtocols::GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, QString & orc_Description) const
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -48,7 +48,7 @@ int32_t C_CanMonProtocols::GetProtocolName(const e_CanMonL7Protocols oe_L7Protoc
 
 //---------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_TX & orc_Msg) const
+QString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_TX & orc_Msg) const
 {
    T_STWCAN_Msg_RX c_Msg;
 
@@ -63,7 +63,7 @@ C_SclString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_TX & orc_Msg) 
 
 //---------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_TX & orc_Msg) const
+QString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_TX & orc_Msg) const
 {
    T_STWCAN_Msg_RX c_Msg;
 
@@ -79,12 +79,12 @@ C_SclString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_TX & orc_Ms
 //---------------------------------------------------------------------------
 //for logging to file; the layer 2 part has a different format than the one for the screen
 // (mainly separating ";" inserted for easier parsing)
-C_SclString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Msg) const
 {
    const uint16_t u16_MAX_CHARS_RAW_DATA = 73U;
 
-   C_SclString c_Text;
-   C_SclString c_Help;
+   QString c_Text;
+   QString c_Help;
    int32_t s32_Index;
    uint8_t u8_Len;
    bool q_Decimal = GetDecimalMode();
@@ -92,21 +92,21 @@ C_SclString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Ms
    u8_Len = (orc_Msg.u8_DLC > 8) ? static_cast<uint8_t>(8U) : orc_Msg.u8_DLC;
    if (q_Decimal == true)
    {
-      c_Text = C_SclString::FromQString(QString::asprintf("%8d; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
+      c_Text = QString::asprintf("%8d; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U ? "29B" : "11B",
                                   (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC));
       for (s32_Index = 0; s32_Index < u8_Len; s32_Index++)
       {
-         c_Help = C_SclString::FromQString(QString::asprintf("%3d; ", orc_Msg.au8_Data[s32_Index]));
+         c_Help = QString::asprintf("%3d; ", orc_Msg.au8_Data[s32_Index]);
          c_Text += c_Help;
       }
    }
    else
    {
-      c_Text = C_SclString::FromQString(QString::asprintf("0x%08X; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U) ? "29B" : "11B",
+      c_Text = QString::asprintf("0x%08X; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U ? "29B" : "11B",
                                   (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC));
       for (s32_Index = 0; s32_Index < u8_Len; s32_Index++)
       {
-         c_Help = C_SclString::FromQString(QString::asprintf("0x%02X; ", orc_Msg.au8_Data[s32_Index]));
+         c_Help = QString::asprintf("0x%02X; ", orc_Msg.au8_Data[s32_Index]);
          c_Text += c_Help;
       }
    }
@@ -117,9 +117,9 @@ C_SclString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Ms
 
    if (me_ActiveProtocol != eCMON_L7_PROTOCOL_NONE)
    {
-      if (c_Text.Length() < u16_MAX_CHARS_RAW_DATA)
+      if (c_Text.length() < u16_MAX_CHARS_RAW_DATA)
       {
-         c_Text = c_Text + C_SclString::StringOfChar(' ', u16_MAX_CHARS_RAW_DATA - c_Text.Length());
+         c_Text = c_Text + QString(u16_MAX_CHARS_RAW_DATA - c_Text.length(), ' ');
       }
       c_Text += (MessageToString(orc_Msg) + ";");
    }
@@ -128,9 +128,9 @@ C_SclString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Ms
 
 //---------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
+   QString c_Text;
 
    c_Text = "";
    if (static_cast<int32_t>(me_ActiveProtocol) < gs32_KFX_CMON_NUM_PROTOCOLS)
@@ -147,14 +147,14 @@ C_SclString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) 
 
 //---------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX & orc_Message, const uint32_t ou32_Count) const
+QString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX & orc_Message, const uint32_t ou32_Count) const
 {
-   C_SclString c_Text;
-   C_SclString c_Help;
+   QString c_Text;
+   QString c_Help;
 
    c_Text = this->MessageToString(orc_Message);
    //count
-   c_Help = C_SclString::FromQString(QString::asprintf("%7d  ", ou32_Count));
+   c_Help = QString::asprintf("%7d  ", ou32_Count);
    return (c_Help + c_Text);
 }
 
@@ -249,8 +249,8 @@ int32_t C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
    C_RD_WR   -> could not write
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocols::SaveProtocolParametersToIni(const C_SclString & orc_FileName,
-                                                       const C_SclString & orc_Section)
+int32_t C_CanMonProtocols::SaveProtocolParametersToIni(const QString & orc_FileName,
+                                                       const QString & orc_Section)
 const
 {
    int32_t s32_Return;
@@ -258,7 +258,7 @@ const
 
    try
    {
-      QSettings c_IniFile(orc_FileName.ToQString(), QSettings::IniFormat);
+      QSettings c_IniFile(orc_FileName, QSettings::IniFormat);
       s32_Return = 0;
       for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++)
       {
@@ -292,20 +292,20 @@ const
    C_RD_WR   -> could not read (file does not exist)
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocols::LoadProtocolParametersFromIni(const C_SclString & orc_FileName,
-                                                         const C_SclString & orc_Section)
+int32_t C_CanMonProtocols::LoadProtocolParametersFromIni(const QString & orc_FileName,
+                                                         const QString & orc_Section)
 const
 {
    int32_t s32_Return;
    int32_t s32_Loop;
 
-   if ((QFileInfo(orc_FileName.ToQString()).exists() && QFileInfo(orc_FileName.ToQString()).isFile()) == false)
+   if ((QFileInfo(orc_FileName).exists() && QFileInfo(orc_FileName).isFile()) == false)
    {
       s32_Return = C_RD_WR;
    }
    else
    {
-      QSettings c_IniFile(orc_FileName.ToQString(), QSettings::IniFormat);
+      QSettings c_IniFile(orc_FileName, QSettings::IniFormat);
 
       s32_Return  = 0;
       for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++)
@@ -332,27 +332,27 @@ const
    Formatted timestamp ("mmmmmmmmmm.uuu").
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocols::FormatTimeStamp(const uint64_t ou64_TimeStampUs, const bool oq_LeftFillBlanks)
+QString C_CanMonProtocols::FormatTimeStamp(const uint64_t ou64_TimeStampUs, const bool oq_LeftFillBlanks)
 {
-   C_SclString c_Time;
+   QString c_Time;
 
    if (oq_LeftFillBlanks == false)
    {
-      c_Time = C_SclString::FromQString(QString::asprintf("%013llu", ou64_TimeStampUs));
+      c_Time = QString::asprintf("%013llu", ou64_TimeStampUs);
    }
    else
    {
       if (ou64_TimeStampUs >= 1000)
       {
-         c_Time = C_SclString::FromQString(QString::asprintf("%13llu", ou64_TimeStampUs));
+         c_Time = QString::asprintf("%13llu", ou64_TimeStampUs);
       }
       else
       {
          //we need at least 4 characters so we don't get strings list " . 12" but "0.012"
-         c_Time = C_SclString::FromQString(QString::asprintf("         %04llu", ou64_TimeStampUs));
+         c_Time = QString::asprintf("         %04llu", ou64_TimeStampUs);
       }
    }
-   c_Time.Insert(".", 11);
+   c_Time.insert(10, ".");
    return c_Time;
 }
 

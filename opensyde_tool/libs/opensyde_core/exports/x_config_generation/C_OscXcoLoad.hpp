@@ -25,19 +25,19 @@ class C_OscXcoLoad :
    public C_OscXcoBase
 {
 public:
-   static int32_t h_ProcessPackage(const stw::scl::C_SclString & orc_PackagePath,
-                                   const stw::scl::C_SclString & orc_TargetUnzipPath, C_OscXcoManifest & orc_Manifest,
-                                   stw::scl::C_SclString & orc_SystemDefinitionPath,
-                                   stw::scl::C_SclString & orc_DeviceDefinitionPath,
-                                   stw::scl::C_SclStringList & orc_WarningMessages,
-                                   stw::scl::C_SclString & orc_ErrorMessage);
+   static int32_t h_ProcessPackage(const QString & orc_PackagePath,
+                                   const QString & orc_TargetUnzipPath, C_OscXcoManifest & orc_Manifest,
+                                   QString & orc_SystemDefinitionPath,
+                                   QString & orc_DeviceDefinitionPath,
+                                   QStringList & orc_WarningMessages,
+                                   QString & orc_ErrorMessage);
 
 private:
-   static const stw::scl::C_SclString mhc_USE_CASE;
+   static const QString mhc_USE_CASE;
 
-   static int32_t mh_CheckParamsToProcessPackage(const stw::scl::C_SclString & orc_PackagePath,
-                                                 const stw::scl::C_SclString & orc_TargetUnzipPath);
-   static int32_t mh_CheckXcfgFiles(const stw::scl::C_SclString & orc_PackagePath);
+   static int32_t mh_CheckParamsToProcessPackage(const QString & orc_PackagePath,
+                                                 const QString & orc_TargetUnzipPath);
+   static int32_t mh_CheckXcfgFiles(const QString & orc_PackagePath);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

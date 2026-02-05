@@ -1244,7 +1244,7 @@ namespace Vector { namespace DBC {
   case 6: // signed_64_integer: DOUBLE
 #line 257 "Parser.yy"
                  { yylhs.value.as < int64_t > () = std::stod(yystack_[0].value.as < std::string > ());
-                   osc_write_log_warning("DBC parser", "Converted \"" + yystack_[0].value.as < std::string > () + "\" to int due to data type restrictions"); }
+                   osc_write_log_warning("DBC parser", "Converted \"" + QString::fromStdString(yystack_[0].value.as < std::string > ()) + "\" to int due to data type restrictions"); }
 #line 1249 "Parser.cpp"
     break;
 

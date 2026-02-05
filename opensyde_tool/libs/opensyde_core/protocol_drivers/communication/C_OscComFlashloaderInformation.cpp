@@ -18,7 +18,7 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-// #include "C_SclString.hpp"
+// #include <QString>
 #include "C_OscComFlashloaderInformation.hpp"
 
 /* -- Used Namespaces

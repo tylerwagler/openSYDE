@@ -74,7 +74,7 @@ public:
                                       const stw::opensyde_core::C_OscHalcConfigChannel & orc_Channel);
    int32_t SetHalcDomainChannelConfig(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                       const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                      const stw::scl::C_SclString & orc_Name, const stw::scl::C_SclString & orc_Comment,
+                                      const QString & orc_Name, const QString & orc_Comment,
                                       const bool oq_SafetyRelevant, const uint32_t ou32_UseCaseIndex);
    int32_t ResetHalcDomainChannelConfig(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                         const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex);
@@ -82,10 +82,10 @@ public:
                                          const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex);
    int32_t SetHalcDomainChannelConfigName(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                           const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                          const stw::scl::C_SclString & orc_Name);
+                                          const QString & orc_Name);
    int32_t SetHalcDomainChannelConfigComment(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                              const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                             const stw::scl::C_SclString & orc_Comment);
+                                             const QString & orc_Comment);
    int32_t SetHalcDomainChannelConfigSafety(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                             const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
                                             const bool oq_SafetyRelevant);
@@ -114,14 +114,14 @@ public:
                                                           const uint32_t ou32_ParameterIndex,
                                                           const uint32_t ou32_ElementIndex,
                                                           const bool oq_UseChannelIndex,
-                                                          const stw::scl::C_SclString & orc_DisplayName);
+                                                          const QString & orc_DisplayName);
    int32_t SetHalcDomainChannelParameterConfigElementBitmask(const uint32_t ou32_NodeIndex,
                                                              const uint32_t ou32_DomainIndex,
                                                              const uint32_t ou32_ChannelIndex,
                                                              const uint32_t ou32_ParameterIndex,
                                                              const uint32_t ou32_ElementIndex,
                                                              const bool oq_UseChannelIndex,
-                                                             const stw::scl::C_SclString & orc_DisplayName,
+                                                             const QString & orc_DisplayName,
                                                              const bool oq_Value);
    int32_t SetHalcDomainChannelParameterConfigElementString(const uint32_t ou32_NodeIndex,
                                                             const uint32_t ou32_DomainIndex,
@@ -166,7 +166,7 @@ public:
    int32_t HalcRemoveDatapools(const uint32_t ou32_NodeIndex, const bool oq_SuppressSyncSignal = false);
    int32_t HalcResetDataBlocks(const uint32_t ou32_NodeIndex);
    bool CheckHalcChannelNameAvailable(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
-                                      const stw::scl::C_SclString & orc_ChannelName,
+                                      const QString & orc_ChannelName,
                                       const uint32_t * const opu32_ChannelIndexToSkip = NULL) const;
    void Clear(const bool oq_TriggerSyncSignals) override;
 

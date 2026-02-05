@@ -57,7 +57,7 @@ using namespace stw::opensyde_gui_logic;
 void C_SdClipBoardHelper::h_StoreDataPool(const C_OscNodeDataPool & orc_OscContent,
                                           const C_PuiSdNodeDataPool & orc_UiContent)
 {
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
@@ -76,7 +76,7 @@ void C_SdClipBoardHelper::h_StoreDataPool(const C_OscNodeDataPool & orc_OscConte
    C_OscNodeDataPoolFiler::h_SaveDataPool(orc_OscContent, c_StringXml);
 
    c_StringXml.SaveToString(c_XmlContent);
-   mh_SetClipBoard(c_XmlContent.c_str());
+   mh_SetClipBoard(c_XmlContent);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ void C_SdClipBoardHelper::h_StoreDataPoolLists(const std::vector<C_OscNodeDataPo
                                                const std::vector<C_PuiSdNodeDataPoolList> & orc_UiContent,
                                                const C_OscNodeDataPool::E_Type & ore_Type)
 {
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
@@ -182,7 +182,7 @@ void C_SdClipBoardHelper::h_StoreDataPoolLists(const std::vector<C_OscNodeDataPo
    C_OscNodeDataPoolFiler::h_SaveDataPoolLists(orc_OscContent, c_StringXml, ore_Type);
 
    c_StringXml.SaveToString(c_XmlContent);
-   mh_SetClipBoard(c_XmlContent.c_str());
+   mh_SetClipBoard(c_XmlContent);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -317,7 +317,7 @@ void C_SdClipBoardHelper::h_StoreDataPoolListElementsToString(
    const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiContent, const C_OscNodeDataPool::E_Type oe_DatapoolType,
    QString & orc_Output)
 {
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
@@ -336,7 +336,7 @@ void C_SdClipBoardHelper::h_StoreDataPoolListElementsToString(
    C_OscNodeDataPoolFiler::h_SaveDataPoolListElements(orc_OscContent, c_StringXml, oe_DatapoolType);
 
    c_StringXml.SaveToString(c_XmlContent);
-   orc_Output = c_XmlContent.c_str();
+   orc_Output = c_XmlContent;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -417,7 +417,7 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListElementsFromString(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdClipBoardHelper::h_StoreIndicesToString(const std::vector<uint32_t> & orc_Indices, QString & orc_Output)
 {
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
@@ -430,7 +430,7 @@ void C_SdClipBoardHelper::h_StoreIndicesToString(const std::vector<uint32_t> & o
       Q_ASSERT(c_StringXml.SelectNodeParent() == "indices");
    }
    c_StringXml.SaveToString(c_XmlContent);
-   orc_Output = c_XmlContent.c_str();
+   orc_Output = c_XmlContent;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -455,7 +455,7 @@ int32_t C_SdClipBoardHelper::h_LoadIndicesFromString(std::vector<uint32_t> & orc
    {
       if (c_StringXml.SelectNodeChild("indices") == "indices")
       {
-         stw::scl::C_SclString c_Node = c_StringXml.SelectNodeChild("index");
+         QString c_Node = c_StringXml.SelectNodeChild("index");
          while (c_Node == "index")
          {
             orc_Indices.push_back(c_StringXml.GetAttributeUint32("number"));
@@ -523,7 +523,7 @@ void C_SdClipBoardHelper::h_StoreDataPoolListDataSetsToString(
    const std::vector<C_OscNodeDataPoolDataSet> & orc_OscNames,
    const std::vector<std::vector<C_OscNodeDataPoolContent> > & orc_OscDataSetValues, QString & orc_Output)
 {
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
@@ -551,7 +551,7 @@ void C_SdClipBoardHelper::h_StoreDataPoolListDataSetsToString(
    }
 
    c_StringXml.SaveToString(c_XmlContent);
-   orc_Output = c_XmlContent.c_str();
+   orc_Output = c_XmlContent;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -588,7 +588,7 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromString(
                Q_ASSERT(c_StringXml.SelectNodeParent() == "core");
                if (c_StringXml.SelectNodeChild("data-sets-2") == "data-sets-2")
                {
-                  stw::scl::C_SclString c_CurNodeDataSetValue = c_StringXml.SelectNodeChild("data-set-values");
+                  QString c_CurNodeDataSetValue = c_StringXml.SelectNodeChild("data-set-values");
 
                   if (c_CurNodeDataSetValue == "data-set-values")
                   {
@@ -598,7 +598,7 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromString(
 
                         if (s32_Retval == C_NO_ERR)
                         {
-                           stw::scl::C_SclString c_CurNodeDataSetValueValue;
+                           QString c_CurNodeDataSetValueValue;
                            //Check if index as expected (in order)
                            Q_ASSERT(c_StringXml.GetAttributeUint32("index") == orc_OscDataSetValues.size());
                            //Load content
@@ -684,7 +684,7 @@ void C_SdClipBoardHelper::h_StoreMessages(const std::vector<C_OscCanMessage> & o
 {
    QString c_String;
 
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
@@ -766,7 +766,7 @@ void C_SdClipBoardHelper::h_StoreMessages(const std::vector<C_OscCanMessage> & o
 
    //Final step
    c_StringXml.SaveToString(c_XmlContent);
-   c_String = c_XmlContent.c_str();
+   c_String = c_XmlContent;
    C_SdClipBoardHelper::mh_SetClipBoard(c_String);
 }
 
@@ -810,7 +810,7 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
                Q_ASSERT(c_StringXml.SelectNodeParent() == "core");
                if (c_StringXml.SelectNodeChild("message-common") == "message-common")
                {
-                  stw::scl::C_SclString c_CurrentNode = c_StringXml.SelectNodeChild("data-elements");
+                  QString c_CurrentNode = c_StringXml.SelectNodeChild("data-elements");
                   if (c_CurrentNode == "data-elements")
                   {
                      std::vector<C_OscNodeDataPoolListElement> c_Tmp;
@@ -870,7 +870,7 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
                                        std::vector<uint32_t>  c_OwnerNodeInterfaceIndex;
                                        std::vector<uint32_t>  c_OwnerNodeDatapoolIndex;
                                        std::vector<bool>  c_OwnerIsTxFlag;
-                                       stw::scl::C_SclString c_CurrentNode2 = c_StringXml.SelectNodeChild(
+                                       QString c_CurrentNode2 = c_StringXml.SelectNodeChild(
                                           "message-parent");
                                        if (c_CurrentNode2 == "message-parent")
                                        {
@@ -884,7 +884,7 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
                                              c_OwnerIsTxFlag.push_back(c_StringXml.GetAttributeBool("message-was-tx"));
                                              if (c_StringXml.SelectNodeChild("name") == "name")
                                              {
-                                                c_OwnerNodeName.emplace_back(c_StringXml.GetNodeContent().c_str());
+                                                c_OwnerNodeName.emplace_back(c_StringXml.GetNodeContent());
                                                 //Return
                                                 Q_ASSERT(c_StringXml.SelectNodeParent() == "message-parent");
                                              }
@@ -1009,7 +1009,7 @@ int32_t C_SdClipBoardHelper::h_LoadSignalsFromClipboard(std::vector<C_OscCanSign
 void C_SdClipBoardHelper::h_StoreMessageIndexToString(
    const std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageIds, QString & orc_Output)
 {
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
@@ -1032,7 +1032,7 @@ void C_SdClipBoardHelper::h_StoreMessageIndexToString(
 
    //Final step
    c_StringXml.SaveToString(c_XmlContent);
-   orc_Output = c_XmlContent.c_str();
+   orc_Output = c_XmlContent;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1060,7 +1060,7 @@ int32_t C_SdClipBoardHelper::h_LoadMessageIndexFromString(const QString & orc_In
       {
          if (c_StringXml.SelectNodeChild("message-ids") == "message-ids")
          {
-            stw::scl::C_SclString c_CurrentNode = c_StringXml.SelectNodeChild("message-id");
+            QString c_CurrentNode = c_StringXml.SelectNodeChild("message-id");
             while (c_CurrentNode == "message-id")
             {
                C_OscCanMessageIdentificationIndices c_MessageId;
@@ -1119,7 +1119,7 @@ void C_SdClipBoardHelper::h_StoreDataSnapShotToClipboard(const C_SdTopologyDataS
 {
    QString c_String;
 
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild("opensyde-system-definition");
@@ -1148,7 +1148,7 @@ void C_SdClipBoardHelper::h_StoreDataSnapShotToClipboard(const C_SdTopologyDataS
 
    //Final step
    c_StringXml.SaveToString(c_XmlContent);
-   c_String = c_XmlContent.c_str();
+   c_String = c_XmlContent;
    C_SdClipBoardHelper::mh_SetClipBoard(c_String);
 }
 
@@ -1254,7 +1254,7 @@ void C_SdClipBoardHelper::h_StoreHalcItemConfigToClipboard(const C_OscHalcConfig
    int32_t s32_Retval;
    QString c_String;
 
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
@@ -1265,7 +1265,7 @@ void C_SdClipBoardHelper::h_StoreHalcItemConfigToClipboard(const C_OscHalcConfig
    {
       //Final step
       c_StringXml.SaveToString(c_XmlContent);
-      c_String = c_XmlContent.c_str();
+      c_String = c_XmlContent;
       C_SdClipBoardHelper::mh_SetClipBoard(c_String);
    }
 }
@@ -1324,7 +1324,7 @@ void C_SdClipBoardHelper::mh_StoreSignalsToString(const std::vector<C_OscCanSign
                                                   const std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalCommons, const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons, const std::vector<C_PuiSdNodeCanSignal> & orc_UiSignals, const opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
                                                   QString & orc_Output)
 {
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
@@ -1350,7 +1350,7 @@ void C_SdClipBoardHelper::mh_StoreSignalsToString(const std::vector<C_OscCanSign
 
    //Final step
    c_StringXml.SaveToString(c_XmlContent);
-   orc_Output = c_XmlContent.c_str();
+   orc_Output = c_XmlContent;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

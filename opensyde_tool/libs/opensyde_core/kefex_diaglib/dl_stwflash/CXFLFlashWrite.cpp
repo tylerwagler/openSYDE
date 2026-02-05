@@ -163,7 +163,7 @@ int32_t C_XFLFlashWrite::m_GetVersionNumber(uint8_t &oru8_Version,
   uint8_t au8_Version[5];
   uint32_t u32_Version;
   int32_t s32_Return;
-  C_SclString c_Text;
+  QString c_Text;
 
   orq_SectorBasedCRCsSupported = false;
   s32_Return = GetVersionNumber(au8_Version, u8_DLC);
@@ -262,10 +262,10 @@ C_XFLFlashWrite::ExecuteWrite(const C_XFLFlashWriteParameters &orc_Params) {
   int32_t s32_Return;
   uint8_t u8_FlashloaderVersion;
   bool q_CRCsSupported = false;
-  C_SclString c_Text;
+  QString c_Text;
   uint32_t u32_StartTime;
   uint32_t u32_EndTime;
-  C_SclString c_DeviceId;
+  QString c_DeviceId;
   uint8_t
       u8_ChecksumType; // 0 = none; 1 = sector based; 2 = block based EEPROM;
                        //  3 = block based flash; 4 = deactivated by user
@@ -299,8 +299,8 @@ C_XFLFlashWrite::ExecuteWrite(const C_XFLFlashWriteParameters &orc_Params) {
 
   TRG_ReportStatus("<<<CLRALL", gu8_DL_REPORT_STATUS_TYPE_INFORMATION);
 
-  if (!(QFileInfo(orc_Params.c_HexFile.ToQString()).exists() &&
-        QFileInfo(orc_Params.c_HexFile.ToQString()).isFile())) {
+  if (!(QFileInfo(orc_Params.c_HexFile).exists() &&
+        QFileInfo(orc_Params.c_HexFile).isFile())) {
     TRG_ReportStatus(
         stw::opensyde_core::C_OscUtils::h_LoadString(STR_FDL_FILE_NOT_FOUND) +
             " (" + orc_Params.c_HexFile + ")",
@@ -351,7 +351,7 @@ C_XFLFlashWrite::ExecuteWrite(const C_XFLFlashWriteParameters &orc_Params) {
   } else {
     c_Text = QString::asprintf(
         stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_FL_PROTOCOL_VERSION)
-            .c_str(),
+            .toUtf8().constData(),
         static_cast<uint8_t>((u16_ProtocolVersion >> 12U) & 0x0FU),
         static_cast<uint8_t>((u16_ProtocolVersion >> 8U) & 0x0FU),
         static_cast<uint8_t>((u16_ProtocolVersion >> 4U) & 0x0FU),
@@ -534,7 +534,7 @@ C_XFLFlashWrite::ExecuteWrite(const C_XFLFlashWriteParameters &orc_Params) {
   u32_EndTime = c_TotalTimer.elapsed();
   c_Text = QString::asprintf(
       "%s %d s",
-      stw::opensyde_core::C_OscUtils::h_LoadString(STR_FDL_TOTAL_TIME).c_str(),
+      stw::opensyde_core::C_OscUtils::h_LoadString(STR_FDL_TOTAL_TIME).toUtf8().constData(),
       u32_EndTime / 1000U);
   m_ReportVerboseStatus(c_Text);
 
@@ -697,7 +697,7 @@ int32_t
 C_XFLFlashWrite::m_SetAutoSectors(C_HexFile &orc_HexFile,
                                   const bool oq_AllButProtected,
                                   C_XFLFlashInformation &orc_FlashInfo) {
-  C_SclString c_Text;
+  QString c_Text;
   const uint8_t *pu8_NextLine;
   uint32_t u32_StartAddress;
   uint32_t u32_EndAddress;
@@ -817,7 +817,7 @@ C_XFLFlashWrite::m_SetAutoSectors(C_HexFile &orc_HexFile,
 //----------------------------------------------------------------------------------------------------------------------
 
 int32_t C_XFLFlashWrite::m_SetSectorsToErase(
-    C_HexFile &orc_HexFile, const C_SclString &orc_DeviceId,
+    C_HexFile &orc_HexFile, const QString &orc_DeviceId,
     const C_XFLFlashWriteParameters &orc_Params,
     C_XFLFlashInformation &orc_FlashInfo, const uint16_t ou16_ProtocolVersion) {
   int32_t s32_Return;
@@ -995,8 +995,8 @@ int32_t C_XFLFlashWrite::m_SetUserDefinedSectors(const QString &orc_Sectors) {
   uint16_t u16_Index;
   uint16_t u16_Value;
   uint16_t u16_Value2;
-  C_SclString c_Help;
-  C_SclString c_Help2;
+  QString c_Help;
+  QString c_Help2;
   QStringList c_Strings;
   char_t *pcn_String;
 
@@ -1007,7 +1007,7 @@ int32_t C_XFLFlashWrite::m_SetUserDefinedSectors(const QString &orc_Sectors) {
         0U; // first set all sectors to not being erased
   }
 
-  // Code could be cleaned up by using C_SclString::Tokenize.
+  // Code could be cleaned up by using QString::Tokenize.
   // This is quite risky, however as long as we don't have dedicated test cases.
   pcn_String = new char_t[orc_Sectors.length() + 1];
   (void)memcpy(pcn_String, orc_Sectors.toUtf8().constData(),

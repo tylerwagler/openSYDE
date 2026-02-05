@@ -376,10 +376,10 @@ void C_SyvComDataDealer::m_OnReadDataPoolEventReceived(const uint8_t ou8_DataPoo
       }
       else
       {
-         stw::scl::C_SclString c_Info;
-         c_Info.PrintFormatted("C_SyvComDataDealer: incoming data with no interested widget " \
-                               "(dp: %d List: %d element: %d) !", ou8_DataPoolIndex, ou16_ListIndex,
-                               ou16_ElementIndex);
+         QString c_Info;
+         c_Info = QString("C_SyvComDataDealer: incoming data with no interested widget "
+                          "(dp: %1 List: %2 element: %3) !").arg(ou8_DataPoolIndex).arg(ou16_ListIndex).arg(
+            ou16_ElementIndex);
          osc_write_log_info("Asynchronous communication", c_Info);
       }
    }
@@ -470,10 +470,10 @@ void C_SyvComDataDealer::m_OnReadDataPoolNvmEventReceived(const uint8_t ou8_Data
       }
       else
       {
-         stw::scl::C_SclString c_Info;
-         c_Info.PrintFormatted("C_SyvComDataDealer: incoming NVM data with no interested widget " \
-                               "(dp: %d List: %d element: %d) !", ou8_DataPoolIndex, ou16_ListIndex,
-                               ou16_ElementIndex);
+         QString c_Info;
+         c_Info = QString("C_SyvComDataDealer: incoming NVM data with no interested widget "
+                          "(dp: %1 List: %2 element: %3) !").arg(ou8_DataPoolIndex).arg(ou16_ListIndex).arg(
+            ou16_ElementIndex);
          osc_write_log_info("Asynchronous communication", c_Info);
       }
    }

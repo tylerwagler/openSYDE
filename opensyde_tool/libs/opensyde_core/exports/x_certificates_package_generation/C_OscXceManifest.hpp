@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscXceUpdatePackageParameters.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,7 +28,7 @@ class C_OscXceManifest
 public:
    C_OscXceManifest();
 
-   stw::scl::C_SclString c_CertificatesPath;
+   QString c_CertificatesPath;
    std::vector<C_OscXceUpdatePackageParameters> c_UpdatePackageParameters;
 };
 

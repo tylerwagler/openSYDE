@@ -18,7 +18,7 @@
 #include "C_OscTargetSupportPackageV2Filer.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscXmlParser.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscSystemFilerUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -370,7 +370,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
                                                               C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_Text;
+   QString c_Text;
    C_OscTspApplication c_Application;
 
    // is-programmable
@@ -568,7 +568,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseApplication(C_OscTargetSupport
    // new file version
    else if ((s32_Return == C_NO_ERR) && (orc_XmlParser.SelectNodeChild("result-paths") == "result-paths"))
    {
-      C_SclString c_CurrNode = orc_XmlParser.SelectNodeChild("output-file");
+      QString c_CurrNode = orc_XmlParser.SelectNodeChild("output-file");
       if (c_CurrNode != "output-file")
       {
          osc_write_log_error("Loading target support package", "No XML node \"output-file\" found. ");
@@ -624,7 +624,7 @@ int32_t C_OscTargetSupportPackageV2Filer::mh_ParseHalcSection(C_OscTargetSupport
                                                               C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Return = C_NO_ERR;
-   C_SclString c_Text;
+   QString c_Text;
 
    c_Text = orc_XmlParser.SelectNodeChild("halc-path");
    if (c_Text != "halc-path")

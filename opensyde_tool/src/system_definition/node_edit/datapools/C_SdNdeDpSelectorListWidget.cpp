@@ -518,10 +518,10 @@ void C_SdNdeDpSelectorListWidget::AddNewDatapool(void)
          if ((q_ContinueFromSelection == true) &&
              (e_SelectionDialogResult == C_SdNdeDpSelectorAddWidget::eRAMVIEWIMPORT))
          {
-            stw::scl::C_SclStringList c_ImportInfo;
+            QStringList c_ImportInfo;
             QApplication::setOverrideCursor(Qt::WaitCursor);
             const int32_t s32_ImportResult = C_SdNdeDpImportRamView::h_ImportDataPoolFromRamViewDefProject(
-               c_RamViewProjectPath.toStdString().c_str(), c_NewDatapool, c_UiDataPool, c_ImportInfo);
+               c_RamViewProjectPath, c_NewDatapool, c_UiDataPool, c_ImportInfo);
             QApplication::restoreOverrideCursor();
 
             if (s32_ImportResult == C_NO_ERR)
@@ -577,7 +577,7 @@ void C_SdNdeDpSelectorListWidget::AddNewDatapool(void)
                   "Could not load \"" + c_RamViewProjectPath + "\".<br>" +
                   static_cast<QString>("For details see ") +
                   C_Uti::h_GetLink("log file.", mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                   C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()));
+                                   C_OscLoggingHandler::h_GetCompleteLogFileLocation()));
                C_OscLoggingHandler::h_Flush(); // update log file
                c_Message.Execute();
 
@@ -2370,7 +2370,7 @@ void C_SdNdeDpSelectorListWidget::m_UpdateItemErrorToolTip(const uint32_t ou32_I
                                  this->mu32_NodeIndex, u32_DataPoolIndex, c_InvalidListIndices[u32_ItList]);
                            if (pc_List != NULL)
                            {
-                              c_Content += static_cast<QString>("%1\n").arg(pc_List->c_Name.c_str());
+                              c_Content += static_cast<QString>("%1\n").arg(pc_List->c_Name);
                            }
                         }
                         else

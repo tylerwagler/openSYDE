@@ -101,10 +101,10 @@ void C_CanMonProtocolKefex::SetBaseId(const uint16_t ou16_BaseId)
    C_RD_WR   -> error writing data
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocolKefex::SaveParamsToIni(QSettings & orc_IniFile, const C_SclString & orc_Section)
+int32_t C_CanMonProtocolKefex::SaveParamsToIni(QSettings & orc_IniFile, const QString & orc_Section)
 {
    int32_t s32_Error = C_NO_ERR;
-   QString c_Section = orc_Section.ToQString();
+   QString c_Section = orc_Section;
 
    try
    {
@@ -133,9 +133,9 @@ int32_t C_CanMonProtocolKefex::SaveParamsToIni(QSettings & orc_IniFile, const C_
    C_RD_WR   -> error reading data
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocolKefex::LoadParamsFromIni(QSettings & orc_IniFile, const C_SclString & orc_Section)
+int32_t C_CanMonProtocolKefex::LoadParamsFromIni(QSettings & orc_IniFile, const QString & orc_Section)
 {
-   QString c_Section = orc_Section.ToQString();
+   QString c_Section = orc_Section;
 
    this->mu16_KfxBaseID     = static_cast<uint16_t>(orc_IniFile.value(c_Section + "/PP_KFX_BASE_ID",
                                                                             this->mu16_KfxBaseID).toUInt());
@@ -147,41 +147,41 @@ int32_t C_CanMonProtocolKefex::LoadParamsFromIni(QSettings & orc_IniFile, const 
 
 //---------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolKefex::m_KfxIndexAndErrorToString(const char_t * const opcn_Text, const uint16_t ou16_Index,
+QString C_CanMonProtocolKefex::m_KfxIndexAndErrorToString(const char_t * const opcn_Text, const uint16_t ou16_Index,
                                                               const uint16_t ou16_Error,
                                                               const bool oq_IsKefexVarIndex) const
 {
-   C_SclString c_Help;
-   C_SclString c_Help2;
+   QString c_Help;
+   QString c_Help2;
 
-   c_Help = static_cast<C_SclString>(" ") + opcn_Text + "  " + m_KfxIndexToString(ou16_Index, oq_IsKefexVarIndex) +
+   c_Help = static_cast<QString>(" ") + opcn_Text + "  " + m_KfxIndexToString(ou16_Index, oq_IsKefexVarIndex) +
             "  ERROR ";
 
    if (mq_Decimal == true)
    {
-      c_Help2 = C_SclString::FromQString(QString::asprintf("%d", ou16_Error));
+      c_Help2 = QString::asprintf("%d", ou16_Error);
    }
    else
    {
-      c_Help2 = C_SclString::FromQString(QString::asprintf("%X", ou16_Error));
+      c_Help2 = QString::asprintf("%X", ou16_Error);
    }
    return c_Help + c_Help2;
 }
 
 //---------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolKefex::m_KfxTextAndValueToString(const char_t * const opcn_Text,
+QString C_CanMonProtocolKefex::m_KfxTextAndValueToString(const char_t * const opcn_Text,
                                                              const uint32_t ou32_Value) const
 {
-   C_SclString c_Help;
+   QString c_Help;
 
    if (mq_Decimal == true)
    {
-      c_Help = C_SclString::FromQString(QString::asprintf("%s %d", opcn_Text, ou32_Value));
+      c_Help = QString::asprintf("%s %d", opcn_Text, ou32_Value);
    }
    else
    {
-      c_Help = C_SclString::FromQString(QString::asprintf("%s %X", opcn_Text, ou32_Value));
+      c_Help = QString::asprintf("%s %X", opcn_Text, ou32_Value);
    }
    return c_Help;
 }
@@ -196,12 +196,12 @@ C_SclString C_CanMonProtocolKefex::m_KfxTextAndValueToString(const char_t * cons
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
-   C_SclString c_Help;
-   C_SclString c_Help2;
-   C_SclString c_Help3;
+   QString c_Text;
+   QString c_Help;
+   QString c_Help2;
+   QString c_Help3;
 
    c_Text = "";
 
@@ -323,7 +323,7 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                   {
                      f64_Help = (static_cast<float64_t>(u16_UpperHyst) - 27.0);
                   }
-                  c_Help2 += C_SclString::FloatToStr(f64_Help) + "%";
+                  c_Help2 += QString::number(f64_Help) + "%";
 
                   c_Help2 = " LHYST ";
                   if (u16_LowerHyst < 30U)
@@ -334,7 +334,7 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                   {
                      f64_Help = (static_cast<float64_t>(u16_LowerHyst) - 27.0);
                   }
-                  c_Help2 += C_SclString::FloatToStr(f64_Help) + "%";
+                  c_Help2 += QString::number(f64_Help) + "%";
 
                   c_Help2 += " HBASE ";
                   switch (u16_HystBase)
@@ -427,17 +427,17 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                              ((static_cast<uint32_t>(orc_Msg.au8_Data[6]) << 16U));
                   if (mq_Decimal == true)
                   {
-                     c_Help = C_SclString::FromQString(QString::asprintf(" IMM SEG FF REQ  %s NUM %d PAR %d",
+                     c_Help = QString::asprintf(" IMM SEG FF REQ  %s NUM %d PAR %d",
                                                  m_KfxIndexToString(mh_BytesToWordLowHigh(
-                                                                       &orc_Msg.au8_Data[2])).c_str(), u32_Size,
-                                                 orc_Msg.au8_Data[7]));
+                                                                       &orc_Msg.au8_Data[2])).toUtf8().constData(), u32_Size,
+                                                 orc_Msg.au8_Data[7]);
                   }
                   else
                   {
-                     c_Help = C_SclString::FromQString(QString::asprintf(" IMM SEG FF REQ  %s  NUM %X  PAR %X",
+                     c_Help = QString::asprintf(" IMM SEG FF REQ  %s  NUM %X  PAR %X",
                                                  m_KfxIndexToString(mh_BytesToWordLowHigh(
-                                                                       &orc_Msg.au8_Data[2])).c_str(), u32_Size,
-                                                 orc_Msg.au8_Data[7]));
+                                                                       &orc_Msg.au8_Data[2])).toUtf8().constData(), u32_Size,
+                                                 orc_Msg.au8_Data[7]);
                   }
                }
                c_Text += c_Help;
@@ -460,15 +460,15 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                   {
                      if (mq_Decimal == true)
                      {
-                        c_Help = C_SclString::FromQString(QString::asprintf(" IMM SEG CF REQ  BLK %d  DATA [%d,%d,%d,%d,%d]",
+                        c_Help = QString::asprintf(" IMM SEG CF REQ  BLK %d  DATA [%d,%d,%d,%d,%d]",
                                                     orc_Msg.au8_Data[2], orc_Msg.au8_Data[3], orc_Msg.au8_Data[4],
-                                                    orc_Msg.au8_Data[5], orc_Msg.au8_Data[6], orc_Msg.au8_Data[7]));
+                                                    orc_Msg.au8_Data[5], orc_Msg.au8_Data[6], orc_Msg.au8_Data[7]);
                      }
                      else
                      {
-                        c_Help = C_SclString::FromQString(QString::asprintf(" IMM SEG CF REQ  BLK %02X  DATA [%02X,%02X,%02X,%02X,%02X]",
+                        c_Help = QString::asprintf(" IMM SEG CF REQ  BLK %02X  DATA [%02X,%02X,%02X,%02X,%02X]",
                                                     orc_Msg.au8_Data[2], orc_Msg.au8_Data[3], orc_Msg.au8_Data[4],
-                                                    orc_Msg.au8_Data[5], orc_Msg.au8_Data[6], orc_Msg.au8_Data[7]));
+                                                    orc_Msg.au8_Data[5], orc_Msg.au8_Data[6], orc_Msg.au8_Data[7]);
                      }
                   }
                }
@@ -705,7 +705,7 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                   if ((orc_Msg.au8_Data[0] & 0x80U) == 0x80U)
                   {
                      //error
-                     c_Help = m_KfxIndexAndErrorToString(c_Help3.c_str(), mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]),
+                     c_Help = m_KfxIndexAndErrorToString(c_Help3.toUtf8().constData(), mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]),
                                                          mh_BytesToWordLowHigh(&orc_Msg.au8_Data[3]));
                      c_Help2 = "";
                   }
@@ -718,7 +718,7 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                      }
                      else
                      {
-                        c_Help2 = C_SclString::FromQString(QString::asprintf("  VALUE: %X", mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[3])));
+                        c_Help2 = QString::asprintf("  VALUE: %X", mh_BytesToDwordLowHigh(&orc_Msg.au8_Data[3]));
                      }
                   }
                }
@@ -767,17 +767,17 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                   {
                      if (mq_Decimal == true)
                      {
-                        c_Help = C_SclString::FromQString(QString::asprintf(" SRR SEG CF RES  BLK %d  DATA [%d,%d,%d,%d,%d,%d]",
+                        c_Help = QString::asprintf(" SRR SEG CF RES  BLK %d  DATA [%d,%d,%d,%d,%d,%d]",
                                                     orc_Msg.au8_Data[1], orc_Msg.au8_Data[2],  orc_Msg.au8_Data[3],
                                                     orc_Msg.au8_Data[4], orc_Msg.au8_Data[5],  orc_Msg.au8_Data[6],
-                                                    orc_Msg.au8_Data[7]));
+                                                    orc_Msg.au8_Data[7]);
                      }
                      else
                      {
-                        c_Help = C_SclString::FromQString(QString::asprintf(" SRR SEG CF RES  BLK %02X  DATA [%02X,%02X,%02X,%02X,%02X,%02X]",
+                        c_Help = QString::asprintf(" SRR SEG CF RES  BLK %02X  DATA [%02X,%02X,%02X,%02X,%02X,%02X]",
                                                     orc_Msg.au8_Data[1], orc_Msg.au8_Data[2],  orc_Msg.au8_Data[3],
                                                     orc_Msg.au8_Data[4], orc_Msg.au8_Data[5],  orc_Msg.au8_Data[6],
-                                                    orc_Msg.au8_Data[7]));
+                                                    orc_Msg.au8_Data[7]);
                      }
                   }
                }
@@ -834,7 +834,7 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                   if ((orc_Msg.au8_Data[0] & 0x80U) == 0x80U)
                   {
                      //error
-                     c_Help = m_KfxIndexAndErrorToString(c_Help3.c_str(),
+                     c_Help = m_KfxIndexAndErrorToString(c_Help3.toUtf8().constData(),
                                                          mh_BytesToWordLowHigh(
                                                             &orc_Msg.au8_Data[1]),
                                                          mh_BytesToWordLowHigh(&orc_Msg.au8_Data[3]),
@@ -842,7 +842,7 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                   }
                   else
                   {
-                     c_Help = m_KfxTextAndValueToString((c_Help3 + "  INDEX").c_str(),
+                     c_Help = m_KfxTextAndValueToString((c_Help3 + "  INDEX").toUtf8().constData(),
                                                         mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]));
                      c_Help += " OK";
                   }
@@ -860,14 +860,14 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
                   if ((orc_Msg.au8_Data[0] & 0x80U) == 0x80U)
                   {
                      //error
-                     c_Help = m_KfxIndexAndErrorToString(c_Help3.c_str(),
+                     c_Help = m_KfxIndexAndErrorToString(c_Help3.toUtf8().constData(),
                                                          mh_BytesToWordLowHigh(
                                                             &orc_Msg.au8_Data[1]),
                                                          mh_BytesToWordLowHigh(&orc_Msg.au8_Data[3]));
                   }
                   else
                   {
-                     c_Help = m_KfxTextAndIndexToString(c_Help3.c_str(), mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]));
+                     c_Help = m_KfxTextAndIndexToString(c_Help3.toUtf8().constData(), mh_BytesToWordLowHigh(&orc_Msg.au8_Data[1]));
                      c_Help += " OK";
                   }
                }
@@ -1137,7 +1137,7 @@ C_SclString C_CanMonProtocolKefex::MessageToString(const T_STWCAN_Msg_RX & orc_M
    Text representation of protocol name
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolKefex::GetProtocolName(void) const
+QString C_CanMonProtocolKefex::GetProtocolName(void) const
 {
    return "STW KEFEX";
 }

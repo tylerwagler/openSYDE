@@ -408,48 +408,48 @@ void C_SdNdeDbProperties::InitStaticNames(void) const
 void C_SdNdeDbProperties::ApplyNewData(C_OscNodeApplication & orc_Application) const
 {
    orc_Application.c_Name = this->mpc_Ui->pc_LineEditName->text();
-   orc_Application.c_Comment = this->mpc_Ui->pc_CommentText->toPlainText().toStdString().c_str();
+   orc_Application.c_Comment = this->mpc_Ui->pc_CommentText->toPlainText();
    orc_Application.e_Type = this->me_Type;
    orc_Application.u8_ProcessId = static_cast<uint8_t>(this->mpc_Ui->pc_SpinBoxProcessID->value());
    switch (this->me_Type)
    {
    case C_OscNodeApplication::ePROGRAMMABLE_APPLICATION:
    case C_OscNodeApplication::eBINARY:
-      orc_Application.c_ProjectPath = this->mpc_Ui->pc_LineEditProject->GetPath().toStdString().c_str();
+      orc_Application.c_ProjectPath = this->mpc_Ui->pc_LineEditProject->GetPath();
       orc_Application.c_ResultPaths.resize(1);
-      orc_Application.c_ResultPaths[0] = this->mpc_Ui->pc_LineEditOutputFile->GetPath().toStdString().c_str();
+      orc_Application.c_ResultPaths[0] = this->mpc_Ui->pc_LineEditOutputFile->GetPath();
       break;
    case C_OscNodeApplication::ePARAMETER_SET_HALC:
-      orc_Application.c_ProjectPath = this->mpc_Ui->pc_LineEditFileGenerate->GetPath().toStdString().c_str();
+      orc_Application.c_ProjectPath = this->mpc_Ui->pc_LineEditFileGenerate->GetPath();
 
       if (this->mpc_Ui->pc_LabelSafeFileValue->text() == "")
       {
          // all non-safe
          orc_Application.c_ResultPaths.resize(1);
-         orc_Application.c_ResultPaths[0] = this->mpc_Ui->pc_LabelNonSafeFileValue->text().toStdString().c_str();
+         orc_Application.c_ResultPaths[0] = this->mpc_Ui->pc_LabelNonSafeFileValue->text();
       }
       else if (this->mpc_Ui->pc_LabelNonSafeFileValue->text() == "")
       {
          // all safe
          orc_Application.c_ResultPaths.resize(1);
-         orc_Application.c_ResultPaths[0] = this->mpc_Ui->pc_LabelSafeFileValue->text().toStdString().c_str();
+         orc_Application.c_ResultPaths[0] = this->mpc_Ui->pc_LabelSafeFileValue->text();
       }
       else
       {
          //safe and non-safe
          orc_Application.c_ResultPaths.resize(2);
-         orc_Application.c_ResultPaths[0] = this->mpc_Ui->pc_LabelSafeFileValue->text().toStdString().c_str();
-         orc_Application.c_ResultPaths[1] = this->mpc_Ui->pc_LabelNonSafeFileValue->text().toStdString().c_str();
+         orc_Application.c_ResultPaths[0] = this->mpc_Ui->pc_LabelSafeFileValue->text();
+         orc_Application.c_ResultPaths[1] = this->mpc_Ui->pc_LabelNonSafeFileValue->text();
       }
       break;
    default:
       Q_ASSERT(false);
       break;
    }
-   orc_Application.c_IdeCall = this->mpc_Ui->pc_LineEditIDE->text().toStdString().c_str();
+   orc_Application.c_IdeCall = this->mpc_Ui->pc_LineEditIDE->text();
    orc_Application.c_CodeGeneratorPath =
-      this->mpc_Ui->pc_LineEditCodeGenerator->GetPath().toStdString().c_str();
-   orc_Application.c_GeneratePath = this->mpc_Ui->pc_LineEditCodeGenerate->GetPath().toStdString().c_str();
+      this->mpc_Ui->pc_LineEditCodeGenerator->GetPath();
+   orc_Application.c_GeneratePath = this->mpc_Ui->pc_LineEditCodeGenerate->GetPath();
    switch (this->mpc_Ui->pc_ComboBoxCode->currentIndex())
    {
    case mhs32_VERSION_INDEX_V1:
@@ -684,7 +684,7 @@ QString C_SdNdeDbProperties::m_CheckName() const
          {
             const C_OscNodeApplication & rc_Application = pc_Node->c_Applications[u32_ItApplication];
             //Check name
-            if (this->mpc_Ui->pc_LineEditName->text().compare(rc_Application.c_Name.c_str()) == 0)
+            if (this->mpc_Ui->pc_LineEditName->text().compare(rc_Application.c_Name) == 0)
             {
                q_DuplicateNameError = true;
             }
@@ -1071,26 +1071,26 @@ void C_SdNdeDbProperties::m_LoadDataBlock(void)
    const C_OscNodeApplication & rc_Application = (pc_Appl != NULL) ? *pc_Appl : c_Default;
 
    //Section Name and Comment
-   this->mpc_Ui->pc_LineEditName->setText(rc_Application.c_Name.c_str());
-   this->mpc_Ui->pc_CommentText->setText(rc_Application.c_Comment.c_str());
+   this->mpc_Ui->pc_LineEditName->setText(rc_Application.c_Name);
+   this->mpc_Ui->pc_CommentText->setText(rc_Application.c_Comment);
    this->me_Type = rc_Application.e_Type;
    this->mpc_Ui->pc_CheckBoxFileGen->setChecked(rc_Application.e_Type != C_OscNodeApplication::eBINARY);
 
    //Section Content (order is relevant: first set project path and then output file and gen. source code directory)
-   this->mpc_Ui->pc_LineEditProject->SetPath(rc_Application.c_ProjectPath.c_str(),
+   this->mpc_Ui->pc_LineEditProject->SetPath(rc_Application.c_ProjectPath,
                                              C_PuiProject::h_GetInstance()->GetFolderPath());
-   this->mpc_Ui->pc_LineEditFileGenerate->SetPath(rc_Application.c_ProjectPath.c_str(),
+   this->mpc_Ui->pc_LineEditFileGenerate->SetPath(rc_Application.c_ProjectPath,
                                                   C_PuiProject::h_GetInstance()->GetFolderPath());
    const QString c_ProjectPath =
       C_PuiUtil::h_GetResolvedAbsPathFromProject(this->mpc_Ui->pc_LineEditProject->GetPath());
    this->mpc_Ui->pc_SpinBoxProcessID->setValue(rc_Application.u8_ProcessId);
    this->mpc_Ui->pc_LineEditOutputFile->SetDbProjectPath(c_ProjectPath);
    this->mpc_Ui->pc_LineEditCodeGenerate->SetDbProjectPath(c_ProjectPath);
-   this->mpc_Ui->pc_LineEditCodeGenerate->SetPath(rc_Application.c_GeneratePath.c_str(), c_ProjectPath);
+   this->mpc_Ui->pc_LineEditCodeGenerate->SetPath(rc_Application.c_GeneratePath, c_ProjectPath);
    this->m_LoadOutputFilePaths(rc_Application, c_ProjectPath);
-   this->mpc_Ui->pc_LineEditIDE->setText(rc_Application.c_IdeCall.c_str());
+   this->mpc_Ui->pc_LineEditIDE->setText(rc_Application.c_IdeCall);
    this->mpc_Ui->pc_LineEditCodeGenerator->SetDbProjectPath(c_ProjectPath);
-   this->mpc_Ui->pc_LineEditCodeGenerator->SetPath(rc_Application.c_CodeGeneratorPath.c_str(),
+   this->mpc_Ui->pc_LineEditCodeGenerator->SetPath(rc_Application.c_CodeGeneratorPath,
                                                    C_Uti::h_GetExePath());
    this->mpc_Ui->pc_LineEditIDE->SetDbProjectPath(c_ProjectPath);
    this->m_UpdatePathsRelativeToGeneratedDir(); // after setting output labels text and file generation directory!
@@ -1170,7 +1170,7 @@ void C_SdNdeDbProperties::m_LoadOutputFilePaths(const C_OscNodeApplication & orc
          {
             if (orc_Application.c_ResultPaths.size() > 0) // defensive check
             {
-               this->mpc_Ui->pc_LineEditOutputFile->SetPath(orc_Application.c_ResultPaths[0].c_str(), orc_ProjectPath);
+               this->mpc_Ui->pc_LineEditOutputFile->SetPath(orc_Application.c_ResultPaths[0], orc_ProjectPath);
             }
          }
       }
@@ -1185,21 +1185,21 @@ void C_SdNdeDbProperties::m_LoadOutputFilePaths(const C_OscNodeApplication & orc
          case C_OscHalcDefBase::eONE_LEVEL_ALL_SAFE:
             if (orc_Application.c_ResultPaths.size() > 0) // defensive check
             {
-               c_SafeFile = orc_Application.c_ResultPaths[0].c_str();
+               c_SafeFile = orc_Application.c_ResultPaths[0];
             }
             break;
          case C_OscHalcDefBase::eONE_LEVEL_ALL_NON_SAFE:
             if (orc_Application.c_ResultPaths.size() > 0) // defensive check
             {
-               c_NonSafeFile = orc_Application.c_ResultPaths[0].c_str();
+               c_NonSafeFile = orc_Application.c_ResultPaths[0];
             }
             break;
          case C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING:
          case C_OscHalcDefBase::eTWO_LEVELS_WITHOUT_DROPPING:
             if (orc_Application.c_ResultPaths.size() > 1) // defensive check
             {
-               c_SafeFile = orc_Application.c_ResultPaths[0].c_str();
-               c_NonSafeFile = orc_Application.c_ResultPaths[1].c_str();
+               c_SafeFile = orc_Application.c_ResultPaths[0];
+               c_NonSafeFile = orc_Application.c_ResultPaths[1];
             }
             break;
          default:

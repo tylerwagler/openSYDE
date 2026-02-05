@@ -878,11 +878,11 @@ void C_SdHandlerWidget::m_Export(void)
       if (q_BusConflict == true)
       {
          // display error
-         const stw::scl::C_SclString c_Message = "Bus \"" + pc_Bus->c_Name + "\" has invalid content. "
-                                                 "DBC file export cannot be performed.";
+         const QString c_Message = "Bus \"" + pc_Bus->c_Name + "\" has invalid content. "
+                                   "DBC file export cannot be performed.";
          C_OgeWiCustomMessage c_ExportWarnings(this, C_OgeWiCustomMessage::E_Type::eERROR);
          c_ExportWarnings.SetHeading("DBC file export");
-         c_ExportWarnings.SetDescription(QString(c_Message.c_str()));
+         c_ExportWarnings.SetDescription(c_Message);
          c_ExportWarnings.SetCustomMinHeight(180, 180);
          c_ExportWarnings.Execute();
       }
@@ -934,7 +934,7 @@ void C_SdHandlerWidget::m_Export(void)
                if ((pc_CanMessageContainer != NULL) && (pc_CanMessageContainer->q_IsComProtocolUsedByInterface == true))
                {
                   int32_t s32_Error = C_NO_ERR;
-                  stw::scl::C_SclStringList c_Warnings;
+                  QStringList c_Warnings;
                   const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
                   C_CieConverter::C_CieNode c_CurrentCieNode;
 
@@ -978,13 +978,12 @@ void C_SdHandlerWidget::m_Export(void)
                                                                                        ->q_IsExtended));
                            if (c_IterWithExtended == c_CanMessageIdsWithExtended.end())
                            {
-                              const stw::scl::C_SclString c_Message = "Can't export message \"" +
-                                                                      c_TxIter->c_Name + "\" in bus \"" +
-                                                                      stw::scl::C_SclString::IntToStr(this->mu32_Index)
-                                                                      +
-                                                                      "\" because message ID is not unique.";
-                              c_Warnings.Append(c_Message);
-                              osc_write_log_warning("DBC Export", c_Message);
+                              const QString c_Message = "Can't export message \"" +
+                                                        c_TxIter->c_Name + "\" in bus \"" +
+                                                        QString::number(this->mu32_Index) +
+                                                        "\" because message ID is not unique.";
+                              c_Warnings.append(c_Message);
+                              osc_write_log_warning("DBC Export", c_Message.toStdString().c_str());
                               s32_Error += C_WARN;
                            }
                         }
@@ -1025,13 +1024,13 @@ void C_SdHandlerWidget::m_Export(void)
                                                                                        ->q_IsExtended));
                            if (c_IterWithExtended == c_CanMessageIdsWithExtended.end())
                            {
-                              const stw::scl::C_SclString c_Message = "Can't export message \"" +
+                              const QString c_Message = "Can't export message \"" +
                                                                       c_RxIter->c_Name + "\" in bus \"" +
-                                                                      stw::scl::C_SclString::IntToStr(this->mu32_Index)
+                                                                      QString::number(this->mu32_Index)
                                                                       +
                                                                       "\" because message ID is not unique. Message is ignored.";
-                              c_Warnings.Append(c_Message);
-                              osc_write_log_warning("DBC Export", c_Message);
+                              c_Warnings.append(c_Message);
+                              osc_write_log_warning("DBC Export", c_Message.toStdString().c_str());
                               s32_Error += C_WARN;
                            }
                         }
@@ -1097,7 +1096,7 @@ void C_SdHandlerWidget::m_TriggerImport(void)
       Q_ASSERT((pc_Bus != NULL) && (mpc_ActBusEdit != NULL));
       if ((pc_Bus != NULL) && (mpc_ActBusEdit != NULL))
       {
-         const stw::scl::C_SclString c_BusName = pc_Bus->c_Name;
+         const QString c_BusName = pc_Bus->c_Name;
 
          const QPointer<C_OgePopUpDialog> c_PopUpDialog = m_CreateImportPopupDialog();
          C_SdBueImportCommMessagesWidget * const pc_ImportCommMessagesWidget = new C_SdBueImportCommMessagesWidget(
@@ -1176,12 +1175,9 @@ void C_SdHandlerWidget::m_RtfExport(void)
 
          c_PopUpDialog->SetSize(c_SIZE_IMPORT_REPORT);
 
-         stw::scl::C_SclString c_RtfPath = static_cast<stw::scl::C_SclString>(
-            C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfPath().toStdString().c_str());
-         stw::scl::C_SclString c_CompanyName = static_cast<stw::scl::C_SclString>(
-            C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfCompanyName().toStdString().c_str());
-         stw::scl::C_SclString c_CompanyLogoPath = static_cast<stw::scl::C_SclString>(
-            C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfCompanyLogoPath().toStdString().c_str());
+         QString c_RtfPath = C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfPath();
+         QString c_CompanyName = C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfCompanyName();
+         QString c_CompanyLogoPath = C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownRtfCompanyLogoPath();
 
          if (c_RtfPath == "")
          {
@@ -1209,18 +1205,16 @@ void C_SdHandlerWidget::m_RtfExport(void)
          {
             // save inputs as user settings
             pc_DialogExportReport->GetRtfPath(c_RtfPath);
-            C_UsHandler::h_GetInstance()->SetProjSdTopologyLastKnownRtfPath(static_cast<QString>(c_RtfPath.c_str()));
+            C_UsHandler::h_GetInstance()->SetProjSdTopologyLastKnownRtfPath(c_RtfPath);
             pc_DialogExportReport->GetCompanyName(c_CompanyName);
-            C_UsHandler::h_GetInstance()->SetProjSdTopologyLastKnownRtfCompanyName(static_cast<QString>(c_CompanyName.
-                                                                                                        c_str()));
+            C_UsHandler::h_GetInstance()->SetProjSdTopologyLastKnownRtfCompanyName(c_CompanyName);
             pc_DialogExportReport->GetCompanyLogoPath(c_CompanyLogoPath);
-            C_UsHandler::h_GetInstance()->SetProjSdTopologyLastKnownRtfCompanyLogoPath(static_cast<QString>(
-                                                                                          c_CompanyLogoPath.c_str()));
+            C_UsHandler::h_GetInstance()->SetProjSdTopologyLastKnownRtfCompanyLogoPath(c_CompanyLogoPath);
             C_UsHandler::h_GetInstance()->Save();
 
             // export to RTF file
-            stw::scl::C_SclStringList c_Warnings;
-            stw::scl::C_SclString c_Error;
+            QStringList c_Warnings;
+            QString c_Error;
             const int32_t s32_Return = pc_DialogExportReport->ExportToRtf(c_RtfPath, c_CompanyName, c_CompanyLogoPath,
                                                                           this->mpc_Topology, c_Warnings, c_Error);
             if (s32_Return == C_NO_ERR)
@@ -1228,9 +1222,9 @@ void C_SdHandlerWidget::m_RtfExport(void)
                const QString c_Details =
                   static_cast<QString>("%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.").
                   arg("File saved at ").
-                  arg(static_cast<QString>(c_RtfPath.c_str())).
+                  arg(c_RtfPath).
                   arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
-                  arg(static_cast<QString>(c_RtfPath.c_str()));
+                  arg(c_RtfPath);
                C_OgeWiCustomMessage c_MessageResult(this);
                c_MessageResult.SetHeading("RTF File Export");
                c_MessageResult.SetDescription("RTF document successfully created.");
@@ -1240,11 +1234,11 @@ void C_SdHandlerWidget::m_RtfExport(void)
             }
             else if (s32_Return == C_WARN)
             {
-               const stw::scl::C_SclString c_Details = "Warnings: \r\n" + c_Warnings.GetText();
+               const QString c_Details = "Warnings: \r\n" + c_Warnings.join("\r\n");
                C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eWARNING);
                c_MessageResult.SetHeading("RTF File Export");
                c_MessageResult.SetDescription("Warnings occurred on RTF File Export.");
-               c_MessageResult.SetDetails(QString(c_Details.c_str()));
+               c_MessageResult.SetDetails(c_Details);
                c_MessageResult.SetCustomMinHeight(180, 250);
                c_MessageResult.Execute();
             }
@@ -1253,7 +1247,7 @@ void C_SdHandlerWidget::m_RtfExport(void)
                C_OgeWiCustomMessage c_MessageResult(this, C_OgeWiCustomMessage::E_Type::eERROR);
                c_MessageResult.SetHeading("RTF File Export");
                c_MessageResult.SetDescription("RTF file export error occurred.");
-               c_MessageResult.SetDetails(QString(c_Error.c_str()));
+               c_MessageResult.SetDetails(c_Error);
                c_MessageResult.SetCustomMinHeight(180, 250);
                c_MessageResult.Execute();
             }

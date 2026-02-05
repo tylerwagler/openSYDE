@@ -12,7 +12,7 @@
 #define C_OSCCOMLOGGERPROTOCOLS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 #include "stw_can.hpp"
 
 #include "C_CanMonProtocol.hpp"
@@ -34,7 +34,7 @@ class C_OscComLoggerProtocols :
 public:
    C_OscComLoggerProtocols(void);
 
-   stw::scl::C_SclString MessageToStringProtocolOnly(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   QString MessageToStringProtocolOnly(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
 
    void AddOsySysDef(const C_OscComMessageLoggerOsySysDefConfig * const opc_SysDefConfig);
    void RemoveOsySysDef(const C_OscComMessageLoggerOsySysDefConfig * const opc_SysDefConfig);

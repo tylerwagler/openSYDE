@@ -370,10 +370,10 @@ QVariant C_SdBueJ1939AddMessagesFromCatalogTreeModel::data(const QModelIndex & o
                   //                     c_Retval = this->mc_MessageInfoList[u32_MessageIndex].c_CanId;
                   break;
                case eNAME:
-                  c_Retval = this->mc_MessageInfoList[u32_MessageIndex].c_Name.c_str();
+                  c_Retval = this->mc_MessageInfoList[u32_MessageIndex].c_Name;
                   break;
                case eCOMMENT:
-                  c_Retval = this->mc_MessageInfoList[u32_MessageIndex].c_Comment.c_str();
+                  c_Retval = this->mc_MessageInfoList[u32_MessageIndex].c_Comment;
                   break;
                case ePGN_SPN:
                // PGN / SPN contained in tree item field "c_Name" (column 0)
@@ -386,10 +386,10 @@ QVariant C_SdBueJ1939AddMessagesFromCatalogTreeModel::data(const QModelIndex & o
                switch (e_Col)
                {
                case eNAME:
-                  c_Retval = this->mc_MessageInfoList[u32_MessageIndex].c_Signals[u32_SignalIndex].c_Name.c_str();
+                  c_Retval = this->mc_MessageInfoList[u32_MessageIndex].c_Signals[u32_SignalIndex].c_Name;
                   break;
                case eCOMMENT:
-                  c_Retval = this->mc_MessageInfoList[u32_MessageIndex].c_Signals[u32_SignalIndex].c_Comment.c_str();
+                  c_Retval = this->mc_MessageInfoList[u32_MessageIndex].c_Signals[u32_SignalIndex].c_Comment;
                   break;
                case eCAN_ID:
                // not applicable for signals

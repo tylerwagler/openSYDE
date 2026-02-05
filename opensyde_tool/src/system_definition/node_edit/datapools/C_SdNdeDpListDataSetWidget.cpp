@@ -144,7 +144,7 @@ void C_SdNdeDpListDataSetWidget::InitStaticNames(void) const
 
    if (pc_List != NULL)
    {
-      mrc_Parent.SetTitle(static_cast<QString>("List %1").arg(pc_List->c_Name.c_str()));
+      mrc_Parent.SetTitle(static_cast<QString>("List %1").arg(pc_List->c_Name));
    }
    mrc_Parent.SetSubTitle(static_cast<QString>("Dataset Configuration"));
    this->mpc_Ui->pc_LabelReplacement->setText("No Dataset is declared, add any via the '+' button");

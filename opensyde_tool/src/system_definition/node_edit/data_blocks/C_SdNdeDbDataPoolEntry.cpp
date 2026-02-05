@@ -97,7 +97,7 @@ void C_SdNdeDbDataPoolEntry::m_Init(const uint32_t ou32_NodeIndex, const uint32_
    {
       QString c_Text;
 
-      c_Text = pc_Datapool->c_Name.c_str();
+      c_Text = pc_Datapool->c_Name;
       c_Text += " (";
       c_Text += C_PuiSdUtil::h_ConvertDataPoolTypeToString(pc_Datapool->e_Type);
       if (pc_Datapool->e_Type == C_OscNodeDataPool::eCOM)
@@ -109,7 +109,7 @@ void C_SdNdeDbDataPoolEntry::m_Init(const uint32_t ou32_NodeIndex, const uint32_
       }
       c_Text += ")";
       this->mpc_Ui->pc_LabelName->setText(c_Text);
-      this->SetToolTipInformation(c_Text, pc_Datapool->c_Comment.c_str());
+      this->SetToolTipInformation(c_Text, pc_Datapool->c_Comment);
 
       if ((pc_Node->pc_DeviceDefinition != NULL) &&
           (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()) &&

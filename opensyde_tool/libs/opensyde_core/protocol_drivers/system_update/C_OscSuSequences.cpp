@@ -20,7 +20,7 @@
 
 #include "C_OscSuSequences.hpp"
 #include "C_SclChecksums.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 #include <QDateTime>
@@ -362,7 +362,7 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(
     u32_Return = c_Files[u32_File]->LoadFromFile(
         orc_FilesToFlash[u32_File].toLocal8Bit().constData());
     if (u32_Return != stw::hex_file::NO_ERR) {
-      const C_SclString c_ErrorText =
+      const QString c_ErrorText =
           c_Files[u32_File]->ErrorCodeToErrorText(u32_Return);
       (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_HEX_OPEN_ERROR, C_RD_WR,
                              0U, mc_CurrentNode,
@@ -391,7 +391,7 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(
   }
 
   if (s32_Return == C_NO_ERR) {
-    C_SclString c_DeviceName;
+    QString c_DeviceName;
     uint8_t u8_NrCode;
 
     (void)m_ReportProgress(
@@ -417,13 +417,13 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(
       for (uint32_t u32_File = 0U;
            (u32_File < orc_FilesToFlash.size()) && (s32_Return == C_NO_ERR);
            u32_File++) {
-        C_SclString c_DeviceNameHexFile;
+        QString c_DeviceNameHexFile;
 
         // get device ID from hex file
         s32_Return =
             c_Files[u32_File]->ScanDeviceIdFromHexFile(c_DeviceNameHexFile);
         if (s32_Return != C_NO_ERR) {
-          C_SclString c_ErrorText = "Could not read device name from file " +
+          QString c_ErrorText = "Could not read device name from file " +
                                     orc_FilesToFlash[u32_File] + ". Reason: ";
           if (s32_Return == C_NOACT) {
             c_ErrorText += "Device name not found.";
@@ -453,7 +453,7 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(
                  (q_IsSame == false);
                  ++u32_ItName) {
               if (orc_OtherAcceptedDeviceNames[u32_ItName].trimmed().toUpper() ==
-                  c_DeviceNameHexFile.trimmed().toUpper().ToQString()) {
+                  c_DeviceNameHexFile.trimmed().toUpper()) {
                 orc_StateHexFiles[u32_File].e_NodeNameCompared =
                     eSUSEQ_STATE_NO_ERR;
                 q_IsSame = true;
@@ -461,7 +461,7 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(
             }
           }
           if (q_IsSame == false) {
-            const C_SclString c_ErrorText =
+            const QString c_ErrorText =
                 "Device names of device and HEX file " +
                 orc_FilesToFlash[u32_File] +
                 " do not match. Device reported: \"" +
@@ -507,7 +507,7 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(
         const stw::hex_file::C_HexDataDump *const pc_HexDump =
             c_Files[u32_File]->GetDataDump(u32_Return);
         if (u32_Return != stw::hex_file::NO_ERR) {
-          C_SclString c_ErrorText;
+          QString c_ErrorText;
           c_ErrorText = "Could not split up HEX file data of file " +
                         orc_FilesToFlash[u32_File] +
                         " into handy chunks. Reason: " +
@@ -531,18 +531,18 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(
                 pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
                 pc_HexDump->at_Blocks[u16_Area].au8_Data.size(), &u8_NrCode);
             if (s32_Return != C_NO_ERR) {
-              C_SclString c_ErrorText;
+              QString c_ErrorText;
               c_ErrorText = QString::asprintf(
                   "Could not get confirmation about flash memory availability. "
                   "(File: %s"
                   " Offset: 0x%08x Size: 0x%08x). Details: %s",
-                  orc_FilesToFlash[u32_File].c_str(),
+                  orc_FilesToFlash[u32_File].toUtf8().constData(),
                   pc_HexDump->at_Blocks[u16_Area].u32_AddressOffset,
                   static_cast<uint32_t>(
                       pc_HexDump->at_Blocks[u16_Area].au8_Data.size()),
                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                       s32_Return, u8_NrCode)
-                      .c_str());
+                      .toUtf8().constData());
               (void)m_ReportProgress(
                   eUPDATE_SYSTEM_OSY_NODE_CHECK_MEMORY_NOT_OK, s32_Return, 20U,
                   mc_CurrentNode, c_ErrorText);
@@ -686,7 +686,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeHex(
           u32_MaxBlockLength, &u8_NrCode);
 
       if (s32_Return != C_NO_ERR) {
-        C_SclString c_Error;
+        QString c_Error;
         c_Error = QString::asprintf(
             "Erasing flash memory for area %d failed (Offset: 0x%08X Size: "
             "0x%08X). Details: %s",
@@ -695,7 +695,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeHex(
                 orc_HexDataDump.at_Blocks[s32_Area].au8_Data.size()),
             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
                                                                      u8_NrCode)
-                .c_str());
+                .toUtf8().constData());
         (void)m_ReportProgress(
             eUPDATE_SYSTEM_OSY_NODE_FLASH_HEX_AREA_ERASE_ERROR, s32_Return,
             u8_ProgressPercentage, mc_CurrentNode, c_Error);
@@ -721,7 +721,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeHex(
           mc_CurrentNode, u32_AdaptedTransferDataTimeout);
 
       while (u32_RemainingBytes > 0U) {
-        C_SclString c_Text;
+        QString c_Text;
         c_Text = QString::asprintf(
             "Writing data for area %02d/%02d  byte %08u/%08u ...", s32_Area + 1,
             orc_HexDataDump.at_Blocks.size(), u32_AreaSize - u32_RemainingBytes,
@@ -791,7 +791,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeHex(
     if (s32_Return == C_NO_ERR) {
       // area transferred ...
       // report "final" status:
-      C_SclString c_Text;
+      QString c_Text;
       c_Text = QString::asprintf(
           "Writing data for area %02d/%02d  byte %08u/%08u ...", s32_Area + 1,
           orc_HexDataDump.at_Blocks.size(), u32_AreaSize, u32_AreaSize);
@@ -967,7 +967,7 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeFile(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
-    const C_SclString &orc_FileToFlash,
+    const QString &orc_FileToFlash,
     const uint32_t ou32_RequestDownloadTimeout,
     const uint32_t ou32_TransferDataTimeout,
     const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
@@ -984,7 +984,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
 
   (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_START, C_NO_ERR, 0U,
                          mc_CurrentNode, "Transferring file ...");
-  pc_File = std::fopen(orc_FileToFlash.c_str(), "rb");
+  pc_File = std::fopen(orc_FileToFlash.toUtf8().constData(), "rb");
   if (pc_File == NULL) {
     s32_Return = C_RD_WR;
   } else {
@@ -1015,8 +1015,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
         eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_PREPARE_START, C_NO_ERR, 0U,
         mc_CurrentNode,
         "Preparing file system for file \"" +
-            C_SclString::FromQString(
-                QFileInfo(orc_FileToFlash).fileName()) +
+                QFileInfo(orc_FileToFlash).fileName() +
             "\"...");
 
     orc_StateOtherFile.e_FileLoaded = eSUSEQ_STATE_NO_ERR;
@@ -1030,20 +1029,18 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
 
       s32_Return = this->mpc_ComDriver->SendOsyRequestFileTransfer(
           mc_CurrentNode,
-          C_SclString::FromQString(
-              QFileInfo(orc_FileToFlash).fileName()),
+              QFileInfo(orc_FileToFlash).fileName(),
           u32_TotalNumberOfBytes, u32_MaxBlockLength, &u8_NrCode);
 
       if (s32_Return != C_NO_ERR) {
-        C_SclString c_Error;
+        QString c_Error;
         c_Error = QString::asprintf(
             "Preparing file system for file \"%s\" failed. Details: %s",
-            C_SclString::FromQString(
-                QFileInfo(orc_FileToFlash).fileName())
-                .c_str(),
+                QFileInfo(orc_FileToFlash).fileName()
+                .toUtf8().constData(),
             C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
                                                                      u8_NrCode)
-                .c_str());
+                .toUtf8().constData());
         (void)m_ReportProgress(eUPDATE_SYSTEM_OSY_NODE_FLASH_FILE_PREPARE_ERROR,
                                s32_Return, 0U, mc_CurrentNode, c_Error);
 
@@ -1078,7 +1075,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
         mc_CurrentNode, u32_AdaptedTransferDataTimeout);
 
     while (u32_RemainingBytes > 0U) {
-      C_SclString c_Text;
+      QString c_Text;
       bool q_Abort;
       Q_ASSERT(u32_TotalNumberOfBytes !=
                0U); // prerequisite for function: non-empty hex file
@@ -1169,7 +1166,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
   if (s32_Return == C_NO_ERR) {
     // area transferred ...
     // report "final" status:
-    C_SclString c_Text;
+    QString c_Text;
     bool q_RejectedByTargetLayer = false;
     c_Text = QString::asprintf("Writing data byte %08u/%08u ...",
                           u32_TotalNumberOfBytes, u32_TotalNumberOfBytes);
@@ -1210,7 +1207,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
     //  "OK" or "rejected by target layer" then use that service to read string
     //  information about result
     if (orc_ProtocolFeatures.q_FileBasedTransferExitResultAvailable == true) {
-      C_SclString c_TransferExitResult;
+      QString c_TransferExitResult;
       if ((s32_Return == C_NO_ERR) || (q_RejectedByTargetLayer == true)) {
         // do not overwrite s32_Return; this function shall still fail if
         // finalize failed
@@ -1502,7 +1499,7 @@ int32_t C_OscSuSequences::m_WriteNvmOpenSyde(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::m_WritePemOpenSydeFile(
-    const stw::scl::C_SclString &orc_FileToWrite,
+    const QString &orc_FileToWrite,
     const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
     bool &orq_SetProgrammingMode,
     C_OscSuSequencesNodePemFileStates &orc_StatePemFile) {
@@ -1526,7 +1523,7 @@ int32_t C_OscSuSequences::m_WritePemOpenSydeFile(
       std::string c_ErrorMessage;
 
       s32_Return =
-          c_PemFile.LoadFromFile(orc_FileToWrite.c_str(), c_ErrorMessage);
+          c_PemFile.LoadFromFile(orc_FileToWrite.toUtf8().constData(), c_ErrorMessage);
 
       if (s32_Return == C_NO_ERR) {
         const std::vector<uint8_t> c_PubKeyDecoded =
@@ -1588,16 +1585,15 @@ int32_t C_OscSuSequences::m_WritePemOpenSydeFile(
           (void)m_ReportProgress(
               eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_EXTRACT_KEY_ERROR,
               s32_Return, 50U, mc_CurrentNode,
-              "Could not load PEM file. Details: " + c_ErrorMessage);
+              QString("Could not load PEM file. Details: ") + QString::fromStdString(c_ErrorMessage));
           s32_Return = C_WARN;
         }
       } else {
         (void)m_ReportProgress(
             eUPDATE_SYSTEM_OSY_NODE_PEM_FILE_WRITE_OPEN_FILE_ERROR, s32_Return,
             25U, mc_CurrentNode,
-            "Could not extract security key from decoded public key. "
-            "Details: " +
-                c_ErrorMessage);
+            QString("Could not extract security key from decoded public key. Details: ") +
+                QString::fromStdString(c_ErrorMessage));
         orc_StatePemFile.e_FileLoaded = eSUSEQ_STATE_ERROR;
         s32_Return = C_RD_WR;
       }
@@ -1813,7 +1809,7 @@ int32_t C_OscSuSequences::m_WriteFingerPrintOsy(void) {
   const QTime c_Time = c_Now.time();
   uint8_t au8_Date[3];
   uint8_t au8_Time[3];
-  C_SclString c_UserName;
+  QString c_UserName;
   bool q_Return;
   uint8_t u8_NrCode;
   int32_t s32_Return;
@@ -3662,10 +3658,10 @@ int32_t C_OscSuSequences::UpdateSystem(
 
               if (pc_FileState != NULL) {
                 // Save the file name
-                pc_FileState->c_FileName = C_SclString::FromQString(
+                pc_FileState->c_FileName =
                     QFileInfo(orc_ApplicationsToWrite[u16_Node]
                                   .c_FilesToFlash[u32_File])
-                        .fileName());
+                        .fileName();
               }
 
               if (!QFileInfo(orc_ApplicationsToWrite[u16_Node]
@@ -3697,10 +3693,9 @@ int32_t C_OscSuSequences::UpdateSystem(
                  u32_File++) {
               // Save the file name
               rc_State.c_StatePsiFiles[u32_File].c_FileName =
-                  C_SclString::FromQString(
                       QFileInfo(orc_ApplicationsToWrite[u16_Node]
                                     .c_FilesToWriteToNvm[u32_File])
-                          .fileName());
+                          .fileName();
 
               if (!QFileInfo(orc_ApplicationsToWrite[u16_Node]
                                  .c_FilesToWriteToNvm[u32_File])
@@ -3724,10 +3719,10 @@ int32_t C_OscSuSequences::UpdateSystem(
             }
             // PEM file
             if (orc_ApplicationsToWrite[u16_Node].c_PemFile != "") {
-              rc_State.c_StatePemFile.c_FileName = C_SclString::FromQString(
+              rc_State.c_StatePemFile.c_FileName =
                   QFileInfo(
                       orc_ApplicationsToWrite[u16_Node].c_PemFile)
-                      .fileName());
+                      .fileName();
               if (!QFileInfo(
                        orc_ApplicationsToWrite[u16_Node].c_PemFile)
                        .exists() ||
@@ -4259,7 +4254,7 @@ void C_OscSuSequences::h_OpenSydeFlashloaderInformationToText(
 
   orc_Text.clear();
   orc_Text.append("Device name: " +
-               C_SclString::FromQString(orc_Info.c_DeviceName));
+               orc_Info.c_DeviceName);
   orc_Text.append("Number of applications: " +
                QString::number(orc_Info.c_Applications.size()));
   for (uint8_t u8_Application = 0U;
@@ -4276,18 +4271,18 @@ void C_OscSuSequences::h_OpenSydeFlashloaderInformationToText(
                  orc_Info.c_Applications[u8_Application].c_BuildTime);
     orc_Text.append(
         " Block start address: 0x" +
-        C_SclString::IntToHex(
+        C_OscUtils::h_IntToHex(
             static_cast<int64_t>(
                 orc_Info.c_Applications[u8_Application].u32_BlockStartAddress),
             8U));
     orc_Text.append(
         " Block end address: 0x" +
-        C_SclString::IntToHex(
+        C_OscUtils::h_IntToHex(
             static_cast<int64_t>(
                 orc_Info.c_Applications[u8_Application].u32_BlockEndAddress),
             8U));
     orc_Text.append(
-        static_cast<C_SclString>(" Signature valid: ") +
+        static_cast<QString>(" Signature valid: ") +
         ((orc_Info.c_Applications[u8_Application].u8_SignatureValid == 0)
              ? "yes"
              : "no"));
@@ -4313,7 +4308,7 @@ void C_OscSuSequences::h_OpenSydeFlashloaderInformationToText(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSuSequences::h_StwFlashloaderInformationToText(
     const C_XflDeviceInformation &orc_Info, QStringList &orc_Text) {
-  C_SclString c_Line;
+  QString c_Line;
 
   orc_Text.clear();
 
@@ -4339,7 +4334,7 @@ void C_OscSuSequences::h_StwFlashloaderInformationToText(
       orc_Text.append("Application " + QString::number(u8_Application));
       orc_Text.append(
           " Device info address: 0x" +
-          C_SclString::IntToHex(
+          C_OscUtils::h_IntToHex(
               static_cast<int64_t>(orc_Info.c_BasicInformation
                                        .c_DeviceInfoAddresses[u8_Application]),
               8));

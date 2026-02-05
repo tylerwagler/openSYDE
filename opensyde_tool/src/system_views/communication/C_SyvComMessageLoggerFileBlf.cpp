@@ -42,8 +42,8 @@ using namespace BLF;
    \param[in]  orc_FilePath                 Path for file
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvComMessageLoggerFileBlf::C_SyvComMessageLoggerFileBlf(const stw::scl::C_SclString & orc_FilePath) :
-   C_OscComMessageLoggerFileBase(orc_FilePath, "")
+C_SyvComMessageLoggerFileBlf::C_SyvComMessageLoggerFileBlf(const QString & orc_FilePath) :
+   C_OscComMessageLoggerFileBase(orc_FilePath.toStdString().c_str(), "")
 {
 }
 
@@ -88,7 +88,7 @@ int32_t C_SyvComMessageLoggerFileBlf::OpenFile(void)
       this->mc_File.close();
    }
 
-   if (this->mc_FilePath.SubString(this->mc_FilePath.Length() - 3U, 4U).LowerCase() != ".blf")
+   if (this->mc_FilePath.right(4).toLower() != ".blf")
    {
       // Missing file extension
       this->mc_FilePath += ".blf";
@@ -98,7 +98,7 @@ int32_t C_SyvComMessageLoggerFileBlf::OpenFile(void)
 
    if (s32_Return == C_NO_ERR)
    {
-      this->mc_File.open(this->mc_FilePath.c_str(), File::OpenMode::Write);
+      this->mc_File.open(this->mc_FilePath.toStdString().c_str(), File::OpenMode::Write);
 
       if (this->mc_File.is_open() == false)
       {

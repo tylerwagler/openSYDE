@@ -22,7 +22,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
-using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -921,9 +920,9 @@ bool C_PuiSdUtil::h_CheckXappNodeReachable(const uint32_t ou32_SdNodeIndex, cons
    false Already in use
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeIndex, const C_SclString & orc_Name,
+bool C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeIndex, const QString & orc_Name,
                                                      const uint32_t * const opu32_DataLoggerJobIndexToSkip,
-                                                     std::vector<C_SclString> * const opc_ExistingNames)
+                                                     std::vector<QString> * const opc_ExistingNames)
 {
    bool q_Retval = true;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
@@ -942,9 +941,9 @@ bool C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeInd
          }
          if (q_Skip == false)
          {
-            const stw::scl::C_SclString c_CurName = pc_Node->c_DataLoggerJobs[u32_ItDataLogger].c_Properties.c_Name;
+            const QString c_CurName = pc_Node->c_DataLoggerJobs[u32_ItDataLogger].c_Properties.c_Name;
             //Check conflict
-            if (c_CurName.LowerCase() == orc_Name.LowerCase())
+            if (c_CurName.toLower() == orc_Name.toLower())
             {
                q_Retval = false;
             }

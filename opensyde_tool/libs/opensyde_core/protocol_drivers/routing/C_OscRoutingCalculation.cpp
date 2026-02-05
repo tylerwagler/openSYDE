@@ -13,7 +13,7 @@
 #include <set>
 
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 #include "C_OscRoutingCalculation.hpp"
 #include "C_OscLoggingHandler.hpp"

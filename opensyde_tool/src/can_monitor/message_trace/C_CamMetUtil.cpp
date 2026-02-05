@@ -60,7 +60,7 @@ std::vector<int32_t> C_CamMetUtil::h_GetMultiplexerOrder(
       {
          if (rc_SignalData.q_DlcError == false)
          {
-            c_Order.push_back(rc_SignalData.c_RawValueDec.ToInt());
+            c_Order.push_back(rc_SignalData.c_RawValueDec.toInt());
          }
          else
          {
@@ -94,7 +94,7 @@ int32_t C_CamMetUtil::h_GetMultiplexerValue(const std::vector<C_OscComMessageLog
       if ((rc_Sig.c_OscSignal.e_MultiplexerType == C_OscCanSignal::eMUX_MULTIPLEXER_SIGNAL) &&
           (rc_Sig.q_DlcError == false))
       {
-         s32_Value = rc_Sig.c_RawValueDec.ToInt();
+         s32_Value = rc_Sig.c_RawValueDec.toInt();
          break;
       }
    }

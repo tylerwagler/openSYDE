@@ -57,9 +57,9 @@ C_OscComLoggerProtocols::C_OscComLoggerProtocols(void) :
    Empty string in case of no matching message to the configured protocol
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComLoggerProtocols::MessageToStringProtocolOnly(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_OscComLoggerProtocols::MessageToStringProtocolOnly(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text = "";
+   QString c_Text = "";
 
    if (static_cast<int32_t>(me_ActiveProtocol) < gs32_KFX_CMON_NUM_PROTOCOLS)
    {

@@ -25,7 +25,6 @@
 #include <QDesktopServices>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
 #include "C_OgePubIconText.hpp"
 #include "C_OgePubIconEvents.hpp"
 #include "C_UsHandler.hpp"
@@ -72,11 +71,11 @@ private:
    QTimer mc_ScreenshotIconChangeTimer;
 
    void m_ShootScreenshot(void);
-   static QString mh_SaveScreenshotAs(const stw::scl::C_SclString & orc_DashboardName);
+   static QString mh_SaveScreenshotAs(const QString & orc_DashboardName);
    void m_GifTimeout(void);
    void m_ChangeToDefaultScreenshotIcon(void);
    void m_ChangeToActionScreenshotIcon(void);
-   void m_SaveScreenshot(QPixmap oc_CurrentTabPixmap, const stw::scl::C_SclString & orc_DashboardName);
+   void m_SaveScreenshot(QPixmap oc_CurrentTabPixmap, const QString & orc_DashboardName);
    void m_ShowMessageBox(QWidget * const opc_ParentWidget);
    void m_OpenScreenshotLocation(void) const;
 

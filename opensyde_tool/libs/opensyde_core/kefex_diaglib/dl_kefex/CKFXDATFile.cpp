@@ -12,7 +12,7 @@
 #include "stwerrors.hpp"
 #include "CKFXDATFile.hpp"
 #include "C_OscZipData.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 
 using namespace stw::errors;
@@ -58,7 +58,7 @@ static const uint16_t KFX_DAT_FILE_BLOCK_0101 = 0x0101U;
 
 //--------------------------------------------------------------
 
-int32_t C_KFXDATFile::LoadDATAllLists(const C_SclString & orc_FileName, const C_SclString & orc_DeviceName,
+int32_t C_KFXDATFile::LoadDATAllLists(const QString & orc_FileName, const QString & orc_DeviceName,
                                       C_KFXVariableLists & orc_VariableLists,
                                       QList<uint8_t> * const opc_ListsLoaded)
 {
@@ -90,7 +90,7 @@ void C_KFXDATFile::m_GetDWordFromBuffer(uint32_t * const opu32_Value, const uint
 //--------------------------------------------------------------
 
 //extract a string from the stream and advance stream pointer
-void C_KFXDATFile::m_GetStringFromBuffer(C_SclString & orc_String, const uint8_t ** const oppu8_Buffer)
+void C_KFXDATFile::m_GetStringFromBuffer(QString & orc_String, const uint8_t ** const oppu8_Buffer)
 {
    char_t * pcn_Buffer;
    uint16_t u16_Length;
@@ -131,7 +131,7 @@ void C_KFXDATFile::m_GetStringFromBuffer(C_SclString & orc_String, const uint8_t
    C_OVERFLOW -> could not allocate system memory
 */
 //-----------------------------------------------------------------------------
-int32_t C_KFXDATFile::LoadDATList(const C_SclString & orc_FileName, const C_SclString & orc_DeviceName,
+int32_t C_KFXDATFile::LoadDATList(const QString & orc_FileName, const QString & orc_DeviceName,
                                   C_KFXVariableLists & orc_VariableLists, const int32_t os32_ListIndex,
                                   QList<uint8_t> * const opc_ListsLoaded)
 {
@@ -144,7 +144,7 @@ int32_t C_KFXDATFile::LoadDATList(const C_SclString & orc_FileName, const C_SclS
    const uint8_t * pu8_Act;
    uint32_t u32_Required;
    uint32_t u32_UnpackedSize;
-   C_SclString c_Temp;
+   QString c_Temp;
    uint16_t u16_Version;
    uint16_t u16_NumLists;
    uint8_t au8_Buffer[sizeof(uint32_t)];
@@ -154,9 +154,9 @@ int32_t C_KFXDATFile::LoadDATList(const C_SclString & orc_FileName, const C_SclS
       return C_RANGE;
    }
 
-   s32_NumBytes = static_cast<int32_t>(QFileInfo(orc_FileName.ToQString()).size());
+   s32_NumBytes = static_cast<int32_t>(QFileInfo(orc_FileName).size());
 
-   pt_FileHandle = std::fopen(orc_FileName.c_str(), "rb");
+   pt_FileHandle = std::fopen(orc_FileName.toUtf8().constData(), "rb");
    if (pt_FileHandle == NULL)
    {
       return C_NOACT;
@@ -257,8 +257,8 @@ int32_t C_KFXDATFile::m_BufferToLists(const uint8_t * const opu8_Buffer, C_KFXVa
                                       const bool oq_SingleList, const uint16_t ou16_SingleListIndex,
                                       QList<uint8_t> * const opc_ListsLoaded)
 {
-   C_SclString c_List;
-   C_SclString c_Var;
+   QString c_List;
+   QString c_Var;
    uint16_t u16_Value;
    uint16_t u16_NumVars;
    uint16_t u16_ListIndex = 0U;
@@ -311,7 +311,7 @@ int32_t C_KFXDATFile::m_BufferToLists(const uint8_t * const opu8_Buffer, C_KFXVa
 
       if (oq_SingleList == true)
       {
-         if (orc_VariableLists[ou16_SingleListIndex].c_ListName.toUpper() == c_List.UpperCase().ToQString())
+         if (orc_VariableLists[ou16_SingleListIndex].c_ListName.toUpper() == c_List.toUpper())
          {
             q_Found = true;
             u16_ListIndex = ou16_SingleListIndex;
@@ -321,7 +321,7 @@ int32_t C_KFXDATFile::m_BufferToLists(const uint8_t * const opu8_Buffer, C_KFXVa
       {
          for (s32_List = 0; s32_List < orc_VariableLists.size(); s32_List++)
          {
-            if (orc_VariableLists[s32_List].c_ListName.toUpper() == c_List.UpperCase().ToQString())
+            if (orc_VariableLists[s32_List].c_ListName.toUpper() == c_List.toUpper())
             {
                q_Found = true;
                u16_ListIndex = static_cast<uint16_t>(s32_List);
@@ -351,7 +351,7 @@ int32_t C_KFXDATFile::m_BufferToLists(const uint8_t * const opu8_Buffer, C_KFXVa
             q_Found = false;
             for (s32_k = 0; s32_k < orc_VariableLists[u16_ListIndex].VariableList.size(); s32_k++)
             {
-               if (orc_VariableLists[u16_ListIndex].VariableList[s32_k].c_Name.toUpper() == c_Var.UpperCase().ToQString())
+               if (orc_VariableLists[u16_ListIndex].VariableList[s32_k].c_Name.toUpper() == c_Var.toUpper())
                {
                   q_Found = true;
                   break;

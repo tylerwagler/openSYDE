@@ -433,7 +433,7 @@ QList<C_CanMonProtocolSipAsaDescription> C_CanMonProtocolShipIpIva::hmc_Services
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolShipIpIva::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolShipIpIva::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
    if (hmq_ServiceTableInitialized == false)
    {
@@ -464,10 +464,10 @@ C_SclString C_CanMonProtocolShipIpIva::MessageToString(const T_STWCAN_Msg_RX & o
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolShipIpIva::m_MessageToString11Bit(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolShipIpIva::m_MessageToString11Bit(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
-   C_SclString c_Help;
+   QString c_Text;
+   QString c_Help;
    bool q_IsError;
    uint8_t u8_Service;
    uint8_t u8_Loop;
@@ -1191,9 +1191,9 @@ C_SclString C_CanMonProtocolShipIpIva::m_MessageToString11Bit(const T_STWCAN_Msg
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolShipIpIva::m_IvaGetErrorFromCode(const uint16_t ou16_ErrorCode) const
+QString C_CanMonProtocolShipIpIva::m_IvaGetErrorFromCode(const uint16_t ou16_ErrorCode) const
 {
-   C_SclString c_Error;
+   QString c_Error;
 
    switch (ou16_ErrorCode)
    {
@@ -1242,9 +1242,9 @@ C_SclString C_CanMonProtocolShipIpIva::m_IvaGetErrorFromCode(const uint16_t ou16
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolShipIpIva::m_IvaServiceIndexToString(const uint16_t ou16_ServiceIndex) const
+QString C_CanMonProtocolShipIpIva::m_IvaServiceIndexToString(const uint16_t ou16_ServiceIndex) const
 {
-   C_SclString c_Index;
+   QString c_Index;
 
    switch (ou16_ServiceIndex)
    {
@@ -1290,9 +1290,9 @@ C_SclString C_CanMonProtocolShipIpIva::m_IvaServiceIndexToString(const uint16_t 
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolShipIpIva::m_SipMessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolShipIpIva::m_SipMessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
+   QString c_Text;
    int32_t s32_Loop;
 
    uint8_t u8_TCFrameType;
@@ -1403,9 +1403,9 @@ C_SclString C_CanMonProtocolShipIpIva::m_SipMessageToString(const T_STWCAN_Msg_R
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolShipIpIva::m_Sip11MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolShipIpIva::m_Sip11MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
+   QString c_Text;
    uint8_t u8_Loop;
 
    uint8_t u8_TCFrameType;
@@ -1507,12 +1507,12 @@ C_SclString C_CanMonProtocolShipIpIva::m_Sip11MessageToString(const T_STWCAN_Msg
 //\param[in]  ou8_NumBytesInThisFrame  number of bytes in this CAN frame
 //\param[in]  oq_IsRequest             true:  service is a request   \n
 //                                     false: service is a response
-C_SclString C_CanMonProtocolShipIpIva::m_SipGetApplData(const uint8_t ou8_Byte1, const uint8_t ou8_Byte2,
+QString C_CanMonProtocolShipIpIva::m_SipGetApplData(const uint8_t ou8_Byte1, const uint8_t ou8_Byte2,
                                                         const uint8_t * const opu8_FollowingBytes,
                                                         const uint8_t ou8_NumBytesInThisFrame,
                                                         const bool oq_IsRequest) const
 {
-   C_SclString c_Text;
+   QString c_Text;
    uint8_t u8_Index;
    bool q_AERF;     //error flag
    bool q_ACLI;     //contains location information
@@ -1890,9 +1890,9 @@ C_SclString C_CanMonProtocolShipIpIva::m_SipGetApplData(const uint8_t ou8_Byte1,
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolShipIpIva::m_SipGetAppErrorFromCode(const uint8_t ou8_ErrorCode) const
+QString C_CanMonProtocolShipIpIva::m_SipGetAppErrorFromCode(const uint8_t ou8_ErrorCode) const
 {
-   C_SclString c_Error;
+   QString c_Error;
 
    switch (ou8_ErrorCode)
    {
@@ -1941,9 +1941,9 @@ C_SclString C_CanMonProtocolShipIpIva::m_SipGetAppErrorFromCode(const uint8_t ou
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolShipIpIva::m_SipGetTpErrorFromCode(const uint8_t ou8_ErrorCode) const
+QString C_CanMonProtocolShipIpIva::m_SipGetTpErrorFromCode(const uint8_t ou8_ErrorCode) const
 {
-   C_SclString c_Error;
+   QString c_Error;
 
    switch (ou8_ErrorCode)
    {
@@ -1974,9 +1974,9 @@ C_SclString C_CanMonProtocolShipIpIva::m_SipGetTpErrorFromCode(const uint8_t ou8
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolShipIpIva::m_SipGetAccessType(const uint8_t ou8_AccessType) const
+QString C_CanMonProtocolShipIpIva::m_SipGetAccessType(const uint8_t ou8_AccessType) const
 {
-   C_SclString c_Type;
+   QString c_Type;
 
    switch (ou8_AccessType)
    {
@@ -2022,10 +2022,10 @@ C_SclString C_CanMonProtocolShipIpIva::m_SipGetAccessType(const uint8_t ou8_Acce
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolShipIpIva::m_SipGetMemoryRwTypeAndIndex(const uint8_t ou8_MemType,
+QString C_CanMonProtocolShipIpIva::m_SipGetMemoryRwTypeAndIndex(const uint8_t ou8_MemType,
                                                                     const uint8_t ou8_MemIndex) const
 {
-   C_SclString c_Help;
+   QString c_Help;
 
    //memory types
    switch (ou8_MemType)
@@ -2068,10 +2068,10 @@ C_SclString C_CanMonProtocolShipIpIva::m_SipGetMemoryRwTypeAndIndex(const uint8_
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolShipIpIva::m_SipGetOdRwTypeAndIndex(const uint8_t ou8_OdType,
+QString C_CanMonProtocolShipIpIva::m_SipGetOdRwTypeAndIndex(const uint8_t ou8_OdType,
                                                                 const uint16_t ou16_VariableIndex) const
 {
-   C_SclString c_Help;
+   QString c_Help;
 
    //ID types
    switch (ou8_OdType)
@@ -2097,14 +2097,14 @@ C_SclString C_CanMonProtocolShipIpIva::m_SipGetOdRwTypeAndIndex(const uint8_t ou
    Text representation of protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolShipIpIva::GetProtocolName(void) const
+QString C_CanMonProtocolShipIpIva::GetProtocolName(void) const
 {
    return "STW SHIP-IP!/IVA";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void C_CanMonProtocolSipPayload::Set(const C_SclString & orc_Name, const uint8_t ou8_Size, const bool oq_Signed)
+void C_CanMonProtocolSipPayload::Set(const QString & orc_Name, const uint8_t ou8_Size, const bool oq_Signed)
 {
    c_Name = orc_Name;
    q_Signed = oq_Signed;
@@ -2114,10 +2114,10 @@ void C_CanMonProtocolSipPayload::Set(const C_SclString & orc_Name, const uint8_t
 //----------------------------------------------------------------------------------------------------------------------
 
 //checking for correct length is the job of the caller !
-C_SclString C_CanMonProtocolSipPayload::Decode(const uint8_t * const opu8_Data, const bool oq_Decimal) const
+QString C_CanMonProtocolSipPayload::Decode(const uint8_t * const opu8_Data, const bool oq_Decimal) const
 {
-   C_SclString c_Text = " " + c_Name + " ";
-   C_SclString c_Help;
+   QString c_Text = " " + c_Name + " ";
+   QString c_Help;
    uint32_t u32_Value;
    int32_t s32_Value;
    bool q_AddAsArray = false;
@@ -2148,11 +2148,11 @@ C_SclString C_CanMonProtocolSipPayload::Decode(const uint8_t * const opu8_Data, 
       {
          if (oq_Decimal == true)
          {
-            c_Help = C_SclString::FromQString(QString::asprintf("%u", u32_Value));
+            c_Help = QString::asprintf("%u", u32_Value);
          }
          else
          {
-            c_Help = C_SclString::FromQString(QString::asprintf("%X", u32_Value));
+            c_Help = QString::asprintf("%X", u32_Value);
          }
          c_Text += c_Help;
       }
@@ -2183,17 +2183,17 @@ C_SclString C_CanMonProtocolSipPayload::Decode(const uint8_t * const opu8_Data, 
       {
          if (oq_Decimal == true)
          {
-            c_Help = C_SclString::FromQString(QString::asprintf("%d", s32_Value));
+            c_Help = QString::asprintf("%d", s32_Value);
          }
          else
          {
             if (s32_Value < 0)
             {
-               c_Help = C_SclString::FromQString(QString::asprintf("-%X", std::abs(s32_Value)));
+               c_Help = QString::asprintf("-%X", std::abs(s32_Value));
             }
             else
             {
-               c_Help = C_SclString::FromQString(QString::asprintf("%X", s32_Value));
+               c_Help = QString::asprintf("%X", s32_Value);
             }
          }
          c_Text += c_Help;
@@ -2208,11 +2208,11 @@ C_SclString C_CanMonProtocolSipPayload::Decode(const uint8_t * const opu8_Data, 
       {
          if (oq_Decimal == true)
          {
-            c_Help = C_SclString::FromQString(QString::asprintf("%03d", opu8_Data[u8_Index]));
+            c_Help = QString::asprintf("%03d", opu8_Data[u8_Index]);
          }
          else
          {
-            c_Help = C_SclString::FromQString(QString::asprintf(" %02X", opu8_Data[u8_Index]));
+            c_Help = QString::asprintf(" %02X", opu8_Data[u8_Index]);
          }
 
          c_Text += c_Help;
@@ -2229,7 +2229,7 @@ C_SclString C_CanMonProtocolSipPayload::Decode(const uint8_t * const opu8_Data, 
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void C_CanMonProtocolSipAspDescription::Set(const C_SclString & orc_ShortName, const uint16_t ou16_Length)
+void C_CanMonProtocolSipAspDescription::Set(const QString & orc_ShortName, const uint16_t ou16_Length)
 {
    c_ShortName = orc_ShortName;
    u16_Length  = ou16_Length;
@@ -2237,8 +2237,8 @@ void C_CanMonProtocolSipAspDescription::Set(const C_SclString & orc_ShortName, c
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void C_CanMonProtocolSipAsnDescription::Set(const C_SclString & orc_ShortName, const uint8_t ou8_NumAsps,
-                                            const C_SclString & orc_AspPrefix, const uint16_t ou16_Length)
+void C_CanMonProtocolSipAsnDescription::Set(const QString & orc_ShortName, const uint8_t ou8_NumAsps,
+                                            const QString & orc_AspPrefix, const uint16_t ou16_Length)
 {
    c_ShortName = orc_ShortName;
    c_AspPrefix = orc_AspPrefix;
@@ -2737,14 +2737,14 @@ void C_CanMonProtocolShipIpIva::hm_InitServiceTable(void)
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolShipIpIva::m_SipDecodeData(
+QString C_CanMonProtocolShipIpIva::m_SipDecodeData(
    const QList<C_CanMonProtocolSipPayload> & orc_Payload, const uint8_t ou8_NumBytesInPayload,
    const uint8_t * const opu8_Payload) const
 {
    //decode opu8_Payload
    uint8_t u8_Payload;
    uint16_t u16_Offset = 0U;
-   C_SclString c_Text;
+   QString c_Text;
 
    for (u8_Payload = 0U; u8_Payload < orc_Payload.size(); u8_Payload++)
    {
@@ -2783,12 +2783,12 @@ C_SclString C_CanMonProtocolShipIpIva::m_SipDecodeData(
 //\param[in]  ou8_Asn                  service header name
 //\param[in]  ou8_Asp                  service header parameter
 //\param[out] oppc_Payload             address of pointer to payload description
-C_SclString C_CanMonProtocolShipIpIva::m_SipDecodeSfFfReadWriteHeader(const uint8_t ou8_Asa, const uint8_t ou8_Asn,
+QString C_CanMonProtocolShipIpIva::m_SipDecodeSfFfReadWriteHeader(const uint8_t ou8_Asa, const uint8_t ou8_Asn,
                                                                       const uint8_t ou8_Asp,
                                                                       QList<C_CanMonProtocolSipPayload> ** const oppc_Payload)
 const
 {
-   C_SclString c_Text;
+   QString c_Text;
    static QList<C_CanMonProtocolSipPayload> hc_Dummy; //dummy with no entries
 
    (*oppc_Payload) = &hc_Dummy;

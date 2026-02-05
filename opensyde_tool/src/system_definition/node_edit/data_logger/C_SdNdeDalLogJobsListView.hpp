@@ -14,7 +14,6 @@
 #include <QListView>
 
 #include "C_SdNdeDalLogJobsListModel.hpp"
-#include  "C_SclStringList.hpp"
 #include "C_OscDataLoggerJob.hpp"
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

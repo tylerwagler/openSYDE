@@ -23,7 +23,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
@@ -346,7 +345,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateHalcConfiguration(void)
             {
                // Report new domain
                this->mc_NewContent.append(static_cast<QString>("Domain ") +
-                                          pc_UpdatedDomain->c_Name.c_str());
+                                          pc_UpdatedDomain->c_Name);
             }
          }
       }
@@ -383,7 +382,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateHalcConfiguration(void)
             {
                // Report domain removed
                this->mc_RemovedContent.append(static_cast<QString>("Domain ") +
-                                              pc_CurrentDomain->c_Name.c_str());
+                                              pc_CurrentDomain->c_Name);
             }
          }
       }
@@ -443,7 +442,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateDomainConfiguration(const C_OscHalcConf
       {
          // Report new channel
          this->mc_NewContent.append(static_cast<QString>("Channel ") +
-                                    orc_UpdatedConfig.c_ChannelConfigs[u32_UpdatedChannelCounter].c_Name.c_str());
+                                    orc_UpdatedConfig.c_ChannelConfigs[u32_UpdatedChannelCounter].c_Name);
       }
    }
 
@@ -470,7 +469,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateDomainConfiguration(const C_OscHalcConf
       {
          // Report channel removed
          this->mc_RemovedContent.append(static_cast<QString>("Channel ") +
-                                        orc_CurrentConfig.c_ChannelConfigs[u32_CurrentChannelCounter].c_Name.c_str());
+                                        orc_CurrentConfig.c_ChannelConfigs[u32_CurrentChannelCounter].c_Name);
       }
    }
 }
@@ -493,7 +492,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateDomainConfiguration(const C_OscHalcConf
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcConfigDomain & orc_CurrentConfig,
                                                               C_OscHalcConfigDomain & orc_UpdatedConfig,
-                                                              const C_SclString & orc_PreviousDefChannelName,
+                                                              const QString & orc_PreviousDefChannelName,
                                                               const bool oq_IsDomainConfiguration,
                                                               const uint32_t ou32_CurrentChannelIndex,
                                                               const uint32_t ou32_UpdatedChannelIndex)
@@ -576,7 +575,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
          // Report channel reset to default due to missing use case
          this->mc_ResetContent.append(static_cast<QString>("Configured use case of channel %1 is not "
                                                               "available anymore and was reset to default.")
-                                      .arg(rc_UpdatedChannelConfig.c_Name.c_str()));
+                                      .arg(rc_UpdatedChannelConfig.c_Name));
       }
    }
    else
@@ -651,8 +650,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
                   // Reporting parameter structure changed
                   this->mc_ResetContent.append(static_cast<QString>("Configured parameter %1 of channel %2 is not "
                                                                        "updated due to changed configuration structure.")
-                                               .arg(rc_UpdatedParameterDef.c_Display.c_str())
-                                               .arg(rc_UpdatedChannelConfig.c_Name.c_str()));
+                                               .arg(rc_UpdatedParameterDef.c_Display)
+                                               .arg(rc_UpdatedChannelConfig.c_Name));
                }
 
                break;
@@ -663,8 +662,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
          {
             // Reporting new parameter
             this->mc_NewContent.append(static_cast<QString>("Parameter %1 of channel %2")
-                                       .arg(rc_UpdatedParameterDef.c_Display.c_str())
-                                       .arg(rc_UpdatedChannelConfig.c_Name.c_str()));
+                                       .arg(rc_UpdatedParameterDef.c_Display)
+                                       .arg(rc_UpdatedChannelConfig.c_Name));
          }
       }
 
@@ -693,8 +692,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
             // Reporting parameter removed
             this->mc_RemovedContent.append(static_cast<QString>("Parameter %1 of channel %2")
                                            .arg((*pc_CurrentParametersToCompare)[u32_CurrentDefParameterCounter].
-                                                c_Display.c_str())
-                                           .arg(rc_UpdatedChannelConfig.c_Name.c_str()));
+                                                c_Display)
+                                           .arg(rc_UpdatedChannelConfig.c_Name));
          }
       }
    }
@@ -720,7 +719,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateSubParameterConfiguration(const C_OscHa
                                                                    const bool oq_IsDomainConfiguration,
                                                                    const uint32_t ou32_UseCaseIndex,
                                                                    const C_OscHalcConfigParameterStruct & orc_CurrentParameterConfig, C_OscHalcConfigParameterStruct & orc_UpdatedParameterConfig,
-                                                                   const C_SclString & orc_ChannelName)
+                                                                   const QString & orc_ChannelName)
 {
    uint32_t u32_UpdatedDefSubParameterCounter;
    uint32_t u32_CurrentDefSubParameterCounter;
@@ -769,8 +768,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateSubParameterConfiguration(const C_OscHa
       {
          // Reporting new sub parameter
          this->mc_NewContent.append(static_cast<QString>("Parameter %1 of channel %2")
-                                    .arg(rc_UpdatedParameterDef.c_Display.c_str())
-                                    .arg(orc_ChannelName.c_str()));
+                                    .arg(rc_UpdatedParameterDef.c_Display)
+                                    .arg(orc_ChannelName));
       }
    }
 
@@ -799,8 +798,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateSubParameterConfiguration(const C_OscHa
          // Reporting sub parameter removed
          this->mc_RemovedContent.append(static_cast<QString>("Parameter %1 of channel %2")
                                         .arg(orc_CurrentParameterDef.c_StructElements[u32_CurrentDefSubParameterCounter]
-                                             .c_Display.c_str())
-                                        .arg(orc_ChannelName.c_str()));
+                                             .c_Display)
+                                        .arg(orc_ChannelName));
       }
    }
 }
@@ -824,7 +823,7 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateParameterElementConfiguration(
    const C_OscHalcDefElement & orc_CurrentParameterDef, const C_OscHalcDefElement & orc_UpdatedParameterDef,
    const bool oq_IsDomainConfiguration, const uint32_t ou32_UseCaseIndex,
    const C_OscHalcConfigParameter & orc_CurrentParameterConfig, C_OscHalcConfigParameter & orc_UpdatedParameterConfig,
-   const C_SclString & orc_ChannelName)
+   const QString & orc_ChannelName)
 {
    // Check if compatible
    // Check use case of current parameter
@@ -843,8 +842,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateParameterElementConfiguration(
       // In previous definition the parameter was not relevant for the use case but with the new definition it is
       // Nothing to update, but to report
       this->mc_NewContent.append(static_cast<QString>("Parameter %1 of channel %2 is now available for its set use case")
-                                 .arg(orc_UpdatedParameterDef.c_Display.c_str())
-                                 .arg(orc_ChannelName.c_str()));
+                                 .arg(orc_UpdatedParameterDef.c_Display)
+                                 .arg(orc_ChannelName));
    }
    else
    {
@@ -871,8 +870,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateParameterElementConfiguration(
             // Reporting parameter not updated due to changed min max values
             this->mc_ResetContent.append(static_cast<QString>("Configured parameter %1 of channel %2 is not "
                                                                  "updated due to changed range and was reset to default.")
-                                         .arg(orc_UpdatedParameterDef.c_Display.c_str())
-                                         .arg(orc_ChannelName.c_str()));
+                                         .arg(orc_UpdatedParameterDef.c_Display)
+                                         .arg(orc_ChannelName));
          }
       }
       else
@@ -880,8 +879,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateParameterElementConfiguration(
          // Reporting parameter not updated due to changed value type
          this->mc_ResetContent.append(static_cast<QString>("Configured parameter %1 of channel %2 is not "
                                                               "updated due to changed value type and was reset to default.")
-                                      .arg(orc_UpdatedParameterDef.c_Display.c_str())
-                                      .arg(orc_ChannelName.c_str()));
+                                      .arg(orc_UpdatedParameterDef.c_Display)
+                                      .arg(orc_ChannelName));
       }
    }
 }

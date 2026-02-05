@@ -12,7 +12,7 @@
 #define C_OSCSUSEQUENCESNODESTATES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscProtocolDriverOsy.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -37,7 +37,7 @@ class C_OscSuSequencesNodeFileStates
 public:
    C_OscSuSequencesNodeFileStates(void);
 
-   stw::scl::C_SclString c_FileName;
+   QString c_FileName;
 
    E_OscSuSequencesNodeState e_FileExists;
    E_OscSuSequencesNodeState e_FileLoaded;

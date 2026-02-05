@@ -46,8 +46,8 @@ public:
 
    uint64_t u64_CRCServer; ///< last EEPROM value CRC read from ECU
 
-   const C_KFXVariableBase * GetVariableByName(const stw::scl::C_SclString & orc_VariableName) const;
-   C_KFXVariableBase * GetVariableByName(const stw::scl::C_SclString & orc_VariableName);
+   const C_KFXVariableBase * GetVariableByName(const QString & orc_VariableName) const;
+   C_KFXVariableBase * GetVariableByName(const QString & orc_VariableName);
 
    QList<C_KFXVariableBase> VariableList;
 };

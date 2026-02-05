@@ -249,7 +249,7 @@ void C_SdNdeDpListsWidget::m_UpdateDpLabel(const uint32_t ou32_NodeIndex, const 
       const QString c_Text = static_cast<QString>("%1 Datapool: #%2 %3").
                              arg(C_PuiSdUtil::h_ConvertDataPoolTypeToString(pc_Dp->e_Type)).
                              arg(s32_TypeSpecificNum + 1).
-                             arg(pc_Dp->c_Name.c_str());
+                             arg(pc_Dp->c_Name);
       this->mpc_Ui->pc_LabelDataPool->setText(c_Text);
    }
 }

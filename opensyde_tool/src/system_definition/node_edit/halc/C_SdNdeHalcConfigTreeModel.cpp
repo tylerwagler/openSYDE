@@ -195,7 +195,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
          if (pc_ParameterElement != NULL)
          {
-            const std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> > & rc_EnumItems =
+            const std::vector<std::pair<QString, C_OscNodeDataPoolContent> > & rc_EnumItems =
                pc_ParameterElement->c_Value.GetEnumItems();
             uint32_t u32_Counter = 0;
 
@@ -214,14 +214,14 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                case C_OscHalcDefContent::eCT_ENUM:
                   c_Retval = "unknown";
 
-                  for (std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+                  for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
                           rc_EnumItems.begin(); c_It != rc_EnumItems.end(); ++c_It)
                   {
                      if (c_It->second == pc_ParameterElement->c_Value)
                      {
                         if (os32_Role == static_cast<int32_t>(Qt::DisplayRole))
                         {
-                           c_Retval = c_It->first.c_str();
+                           c_Retval = c_It->first;
                         }
                         else
                         {
@@ -257,7 +257,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                }
                break;
             case eDESCRIPTION:
-               c_Retval = pc_ParameterElement->c_Comment.c_str();
+               c_Retval = pc_ParameterElement->c_Comment;
                break;
             default:
                Q_ASSERT(false);
@@ -651,9 +651,9 @@ void C_SdNdeHalcConfigTreeModel::SetHalcChannelUseCase(const uint32_t ou32_Domai
          const C_OscHalcDefStruct & rc_Parameter = rc_Parameters[u32_ParamIt];
          C_TblTreItem * const pc_ParameterTreeItem = new C_TblTreItem();
 
-         pc_ParameterTreeItem->c_Name = rc_Parameter.c_Display.c_str();
+         pc_ParameterTreeItem->c_Name = rc_Parameter.c_Display;
          pc_ParameterTreeItem->c_ToolTipHeading = pc_ParameterTreeItem->c_Name;
-         pc_ParameterTreeItem->c_ToolTipContent = rc_Parameter.c_Comment.c_str();
+         pc_ParameterTreeItem->c_ToolTipContent = rc_Parameter.c_Comment;
          pc_ParameterTreeItem->u32_Index = u32_ParamIt;
 
          // check availability of parameter itself
@@ -668,9 +668,9 @@ void C_SdNdeHalcConfigTreeModel::SetHalcChannelUseCase(const uint32_t ou32_Domai
                if (this->m_CheckAvailability(rc_Element) == true)
                {
                   C_TblTreItem * const pc_Child = new C_TblTreItem();
-                  pc_Child->c_Name = rc_Element.c_Display.c_str();
+                  pc_Child->c_Name = rc_Element.c_Display;
                   pc_Child->c_ToolTipHeading = pc_Child->c_Name;
-                  pc_Child->c_ToolTipContent = rc_Element.c_Comment.c_str();
+                  pc_Child->c_ToolTipContent = rc_Element.c_Comment;
                   pc_Child->u32_Index = u32_ElementIt;
 
                   // add parameter element to tree
@@ -934,14 +934,14 @@ QStringList C_SdNdeHalcConfigTreeModel::mh_ConvertEnumsToStringList(const C_OscH
 {
    QStringList c_Return;
 
-   const std::vector<std::pair<stw::scl::C_SclString,
+   const std::vector<std::pair<QString,
                                C_OscNodeDataPoolContent> > & rc_EnumItems = orc_Value.GetEnumItems();
 
-   for (std::vector<std::pair<stw::scl::C_SclString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+   for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
            rc_EnumItems.begin();
         c_It != rc_EnumItems.end(); ++c_It)
    {
-      c_Return.append(c_It->first.c_str());
+      c_Return.append(c_It->first);
    }
 
    return c_Return;
@@ -958,13 +958,13 @@ QStringList C_SdNdeHalcConfigTreeModel::mh_ConvertEnumsToStringList(const C_OscH
 //----------------------------------------------------------------------------------------------------------------------
 QStringList C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToStringList(const C_OscHalcDefContent & orc_Value)
 {
-   std::vector<stw::scl::C_SclString> c_Display;
+   std::vector<QString> c_Display;
    QStringList c_Retval;
    orc_Value.GetBitmaskStatusValues(&c_Display, NULL);
    c_Retval.reserve(c_Display.size());
    for (uint32_t u32_It = 0UL; u32_It < c_Display.size(); ++u32_It)
    {
-      c_Retval.push_back(c_Display[u32_It].c_str());
+      c_Retval.push_back(c_Display[u32_It]);
    }
    return c_Retval;
 }
@@ -982,7 +982,7 @@ QString C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToString(const C_OscHalcDe
 {
    QString c_Display;
 
-   std::vector<stw::scl::C_SclString> c_Displays;
+   std::vector<QString> c_Displays;
    std::vector<bool> c_Values;
    orc_Value.GetBitmaskStatusValues(&c_Displays, &c_Values);
    if (c_Displays.size() == c_Values.size())
@@ -1002,7 +1002,7 @@ QString C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToString(const C_OscHalcDe
             {
                c_Display += ", ";
             }
-            c_Display += c_Displays[u32_Counter].c_str();
+            c_Display += c_Displays[u32_Counter];
          }
       }
 

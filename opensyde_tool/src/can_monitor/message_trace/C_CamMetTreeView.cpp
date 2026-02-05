@@ -1143,7 +1143,7 @@ void C_CamMetTreeView::m_AddFilter()
          {
             if (this->mc_Model.GetMessageData(s32_Row)->c_CanMsg.u8_XTD == 0)
             {
-               c_SelectedRowListMessagesCanId << this->mc_Model.GetMessageData(s32_Row)->c_CanIdDec.ToInt();
+               c_SelectedRowListMessagesCanId << this->mc_Model.GetMessageData(s32_Row)->c_CanIdDec.toInt();
             }
             else
             {

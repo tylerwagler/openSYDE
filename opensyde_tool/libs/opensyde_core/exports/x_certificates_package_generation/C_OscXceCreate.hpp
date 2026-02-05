@@ -29,35 +29,35 @@ class C_OscXceCreate :
    public C_OscXceBase
 {
 public:
-   static int32_t h_CreatePackage(const stw::scl::C_SclString & orc_PackagePath,
-                                  const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
+   static int32_t h_CreatePackage(const QString & orc_PackagePath,
+                                  const std::vector<QString> & orc_CertificatesPath,
                                   const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
                                   QStringList & orc_WarningMessages,
                                   QString & orc_ErrorMessage,
-                                  const stw::scl::C_SclString & orc_TemporaryDirectory = "");
+                                  const QString & orc_TemporaryDirectory = "");
 
 private:
-   static const stw::scl::C_SclString mhc_USE_CASE;
+   static const QString mhc_USE_CASE;
 
-   static int32_t mh_CheckParamsToCreatePackage(const stw::scl::C_SclString & orc_PackagePath,
-                                                const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
+   static int32_t mh_CheckParamsToCreatePackage(const QString & orc_PackagePath,
+                                                const std::vector<QString> & orc_CertificatesPath,
                                                 const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
-   static int32_t mh_CheckFileExists(const stw::scl::C_SclString & orc_Path);
+   static int32_t mh_CheckFileExists(const QString & orc_Path);
    static C_OscXceManifest mh_CreateManifest(
       const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
-   static int32_t mh_PrepareCertFiles(const stw::scl::C_SclString & orc_TmpPath,
-                                      const std::vector<stw::scl::C_SclString> & orc_CertificatesPath,
+   static int32_t mh_PrepareCertFiles(const QString & orc_TmpPath,
+                                      const std::vector<QString> & orc_CertificatesPath,
                                       std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
-                                      std::set<stw::scl::C_SclString> & orc_XcertFiles);
-   static stw::scl::C_SclString mh_GenOutFilePathPart(const stw::scl::C_SclString & orc_InPath,
-                                                      const stw::scl::C_SclString & orc_TargetFolder);
-   static int32_t mh_CopyFile(const stw::scl::C_SclString & orc_InPath, const stw::scl::C_SclString & orc_OutBasePath,
-                              const stw::scl::C_SclString & orc_OutFolder, std::map<QString,
+                                      std::set<QString> & orc_XcertFiles);
+   static QString mh_GenOutFilePathPart(const QString & orc_InPath,
+                                                      const QString & orc_TargetFolder);
+   static int32_t mh_CopyFile(const QString & orc_InPath, const QString & orc_OutBasePath,
+                              const QString & orc_OutFolder, std::map<QString,
                                                                                     bool> & orc_ExistingFiles,
-                              std::set<stw::scl::C_SclString> & orc_XcertFiles,
-                              stw::scl::C_SclString * const opc_OutFilePath = NULL);
-   static stw::scl::C_SclString mh_GetUniqueFileName(const stw::scl::C_SclString & orc_InPath,
-                                                     const stw::scl::C_SclString & orc_OutFolder,
+                              std::set<QString> & orc_XcertFiles,
+                              QString * const opc_OutFilePath = NULL);
+   static QString mh_GetUniqueFileName(const QString & orc_InPath,
+                                                     const QString & orc_OutFolder,
                                                      std::map<QString,
                                                               bool> & orc_ExistingFiles);
 };

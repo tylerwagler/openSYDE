@@ -25,7 +25,6 @@
 #include "C_SyvDaDashboardTabProperties.hpp"
 #include "C_SyvDaCopyPasteManager.hpp"
 #include "C_OscUtils.hpp"
-#include "C_SclString.hpp"
 #include "constants.hpp"
 #include "C_SyvDaDashboardScreenshot.hpp"
 
@@ -35,7 +34,6 @@ using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -1689,10 +1687,10 @@ void C_SyvDaDashboardSelectorTabWidget::m_SetCurrentTabNameForScreenshotFile()
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(pc_Widget->GetDashboardIndex());
          if (pc_Dashboard != NULL)
          {
-            const C_SclString c_DashboardName =
+            const QString c_DashboardName =
                C_OscUtils::h_NiceifyStringForFileName(pc_Dashboard->GetName().toStdString()).c_str();
             mpc_ScreenshotDashboardTab->setParent(this->currentWidget());
-            mpc_ScreenshotDashboardTab->setAccessibleName(c_DashboardName.c_str());
+            mpc_ScreenshotDashboardTab->setAccessibleName(c_DashboardName);
          }
       }
    }
@@ -1715,9 +1713,9 @@ void C_SyvDaDashboardSelectorTabWidget::m_GetCurrentDashboardTabName(void) const
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(pc_Widget->GetDashboardIndex());
          if (pc_Dashboard != NULL)
          {
-            const C_SclString c_DashboardName =
+            const QString c_DashboardName =
                C_OscUtils::h_NiceifyStringForFileName(pc_Dashboard->GetName().toStdString()).c_str();
-            pc_Widget->SetCurrentDashboardTabName(c_DashboardName.c_str());
+            pc_Widget->SetCurrentDashboardTabName(c_DashboardName);
          }
       }
    }

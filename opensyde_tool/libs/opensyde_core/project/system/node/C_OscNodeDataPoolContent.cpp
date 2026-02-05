@@ -26,7 +26,7 @@
 #include <limits>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscUtils.hpp"
@@ -2985,9 +2985,9 @@ void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Facto
          case C_OscNodeDataPoolContent::eFLOAT32:
             if (oq_AllowSpecialHandling == true)
             {
-               C_SclString c_Precison;
+               QString c_Precison;
                c_Precison = QString::asprintf("%.9g", this->GetValueF32());
-               c_Stream << c_Precison.c_str();
+               c_Stream << c_Precison.toUtf8().constData();
             }
             else
             {
@@ -2997,9 +2997,9 @@ void C_OscNodeDataPoolContent::GetValueAsScaledString(const float64_t of64_Facto
          case C_OscNodeDataPoolContent::eFLOAT64:
             if (oq_AllowSpecialHandling == true)
             {
-               C_SclString c_Precison;
+               QString c_Precison;
                c_Precison = QString::asprintf("%.17g", this->GetValueF64());
-               c_Stream << c_Precison.c_str();
+               c_Stream << c_Precison.toUtf8().constData();
             }
             else
             {

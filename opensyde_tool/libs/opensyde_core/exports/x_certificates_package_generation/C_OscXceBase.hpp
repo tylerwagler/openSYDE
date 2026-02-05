@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include <QStringList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -25,18 +25,18 @@ namespace opensyde_core
 class C_OscXceBase
 {
 public:
-   static stw::scl::C_SclString h_GetPackageExtension();
+   static QString h_GetPackageExtension();
 
-   static const stw::scl::C_SclString hc_PACKAGE_EXT;
-   static const stw::scl::C_SclString hc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
+   static const QString hc_PACKAGE_EXT;
+   static const QString hc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
 
 protected:
    static QStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
                                            // not available
    static QString mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
-   static const stw::scl::C_SclString mhc_CERTIFICATES_FOLDER;
-   static const stw::scl::C_SclString mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER;
+   static const QString mhc_CERTIFICATES_FOLDER;
+   static const QString mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER;
 
    static void mh_Init(void);
    static void mh_GetWarningsAndErrors(QStringList & orc_WarningMessages,

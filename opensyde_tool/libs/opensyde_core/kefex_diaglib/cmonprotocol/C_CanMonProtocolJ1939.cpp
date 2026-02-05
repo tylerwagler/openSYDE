@@ -17,7 +17,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolJ1939.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -77,8 +77,8 @@ using namespace stw::can;
 typedef struct
 {
    uint16_t u16_Value;    // PGN value, e.g. 0x0000)
-   C_SclString c_Brief;   // PGN brief text, e.g. TSC1
-   C_SclString c_Verbose; // PGN verbose text, e.g. Torque/Speed Control 1
+   QString c_Brief;   // PGN brief text, e.g. TSC1
+   QString c_Verbose; // PGN verbose text, e.g. Torque/Speed Control 1
 }T_J1939_PGN;
 
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
@@ -364,24 +364,24 @@ C_CanMonProtocolJ1939::C_CanMonProtocolJ1939(void) :
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolJ1939::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolJ1939::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
    uint8_t u8_PduFormat;
    uint8_t u8_PduSpecific;
    uint16_t u16_Pgn;
-   C_SclString c_Text;
-   C_SclString c_Pgn;
-   C_SclString c_PduSpecific;
-   C_SclString c_SourceAddress = "SA ";
-   C_SclString c_Data;
-   C_SclString c_Reason = "REASON ";
-   C_SclString c_MessageSize;
-   C_SclString c_TotalPackets = "TOTAL_PACKETS ";
-   C_SclString c_MaxPackets = "MAX_PACKETS ";
-   C_SclString t_PGNMBM = "PGN ";
-   C_SclString c_SequenceNumber = "PACKET ";
-   C_SclString c_NextPacket = "NEXT_PACKET ";
-   C_SclString c_Address = "ADDRESS ";
+   QString c_Text;
+   QString c_Pgn;
+   QString c_PduSpecific;
+   QString c_SourceAddress = "SA ";
+   QString c_Data;
+   QString c_Reason = "REASON ";
+   QString c_MessageSize;
+   QString c_TotalPackets = "TOTAL_PACKETS ";
+   QString c_MaxPackets = "MAX_PACKETS ";
+   QString t_PGNMBM = "PGN ";
+   QString c_SequenceNumber = "PACKET ";
+   QString c_NextPacket = "NEXT_PACKET ";
+   QString c_Address = "ADDRESS ";
 
    if (orc_Msg.u8_XTD == 1)
    {
@@ -653,16 +653,16 @@ C_SclString C_CanMonProtocolJ1939::MessageToString(const T_STWCAN_Msg_RX & orc_M
    Text representation of protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolJ1939::GetProtocolName(void) const
+QString C_CanMonProtocolJ1939::GetProtocolName(void) const
 {
    return "SAE J1939 06/2006";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolJ1939::m_PgnToString(const uint32_t ou32_Pgn) const
+QString C_CanMonProtocolJ1939::m_PgnToString(const uint32_t ou32_Pgn) const
 {
-   C_SclString c_Pgn = "";
+   QString c_Pgn = "";
    uint16_t u16_Pos;
    uint16_t u16_First = 0U;
    uint16_t u16_Last = static_cast<uint16_t>((sizeof(mat_Pgn) / sizeof(T_J1939_PGN)) - 1);
@@ -712,9 +712,9 @@ uint32_t C_CanMonProtocolJ1939::m_GetPgn(const uint8_t * const opu8_Data) const
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolJ1939::m_GetMessageSize(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolJ1939::m_GetMessageSize(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Size = "SIZE ";
+   QString c_Size = "SIZE ";
 
    c_Size += m_GetWordAsStringFormat(
       (static_cast<uint16_t>(static_cast<uint16_t>(orc_Msg.au8_Data[2]) << 8U)) + orc_Msg.au8_Data[1]);
@@ -724,10 +724,10 @@ C_SclString C_CanMonProtocolJ1939::m_GetMessageSize(const T_STWCAN_Msg_RX & orc_
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolJ1939::m_GetData(const T_STWCAN_Msg_RX & orc_Msg, const uint8_t ou8_StartIdx) const
+QString C_CanMonProtocolJ1939::m_GetData(const T_STWCAN_Msg_RX & orc_Msg, const uint8_t ou8_StartIdx) const
 {
    uint8_t u8_Index;
-   C_SclString c_Data = "DATA [";
+   QString c_Data = "DATA [";
 
    if ((ou8_StartIdx < 8U) && (ou8_StartIdx < orc_Msg.u8_DLC))
    {
@@ -752,11 +752,11 @@ C_SclString C_CanMonProtocolJ1939::m_GetData(const T_STWCAN_Msg_RX & orc_Msg, co
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_CanMonProtocolJ1939::m_GetName(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolJ1939::m_GetName(const T_STWCAN_Msg_RX & orc_Msg) const
 {
    uint8_t u8_Index;
    uint64_t u64_Name = 0U;
-   C_SclString c_Data = "NAME: ";
+   QString c_Data = "NAME: ";
 
    //copy the eight data bytes to the 64bit NAME
    for (u8_Index = 0U; u8_Index < orc_Msg.u8_DLC; u8_Index++)

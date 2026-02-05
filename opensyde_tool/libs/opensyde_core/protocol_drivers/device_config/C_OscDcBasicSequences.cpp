@@ -467,12 +467,13 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
 
     m_ReportProgress(s32_Return,
                      "Scan for getting devices information finished.");
-
-    return s32_Return;
   }
 
-  //----------------------------------------------------------------------------------------------------------------------
-  /*! \brief  Broadcast to reset devices
+  return s32_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Broadcast to reset devices
 
      Function to get all devices out of flashloader after calls to
      ScanEnterFlashloader() and ScanGetInfo(). The com driver is expected to be
@@ -583,9 +584,9 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
       }
       // now we can start setting the Node ID and Bitrate
       if (s32_Return == C_NO_ERR) {
-        const C_SclString c_LogActivity = "NodeConfiguration";
+        const QString c_LogActivity = "NodeConfiguration";
         const C_OscProtocolDriverOsyNode c_NewServerId(0, ou8_NewNodeId);
-        C_SclString c_ProgressLogMsg = "";
+        QString c_ProgressLogMsg = "";
         c_ProgressLogMsg = QString::asprintf(
             "Configuring Node ID \"%d\" to Node with current ID \"%d\" on "
             "Interface CAN %u.",
@@ -629,9 +630,12 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
       return s32_Return;
     }
 
-    //----------------------------------------------------------------------------------------------------------------------
-    /*! \brief  Utility function to convert device information of found devices
-       to string
+    return s32_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Utility function to convert device information of found devices
+   to string
 
        \param[in]  orc_DeviceInfoResult    Device information results
        \param[in]  oq_SecurityFeatureUsed  Security feature used for at least

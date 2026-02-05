@@ -210,7 +210,7 @@ int32_t C_FlaSenSearchNodePopup::m_InitDcSequence(const QString & orc_CanDllPath
               this, &C_FlaSenSearchNodePopup::m_DeviceInfoReceived);
    }
 
-   s32_Return = this->mpc_DcSequences->InitDcSequences(orc_CanDllPath.toStdString(), os32_CanBitrate);
+   s32_Return = this->mpc_DcSequences->InitDcSequences(orc_CanDllPath, os32_CanBitrate);
 
    if (s32_Return != C_NO_ERR)
    {
@@ -222,7 +222,7 @@ int32_t C_FlaSenSearchNodePopup::m_InitDcSequence(const QString & orc_CanDllPath
                                                      "Make sure to use a %1-bit DLL.").arg(u32_BITNESS));
       c_Message.SetDetails(static_cast<QString>("For details see ") +
                            C_Uti::h_GetLink("log file", mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                            C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) + ".");
+                                            C_OscLoggingHandler::h_GetCompleteLogFileLocation()) + ".");
       C_OscLoggingHandler::h_Flush();
       c_Message.Execute();
    }

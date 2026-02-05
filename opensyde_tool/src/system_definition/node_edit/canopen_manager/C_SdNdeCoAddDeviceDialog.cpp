@@ -34,7 +34,6 @@
 #include "C_OgeWiCustomMessage.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
@@ -99,7 +98,7 @@ C_SdNdeCoAddDeviceDialog::C_SdNdeCoAddDeviceDialog(stw::opensyde_gui_elements::C
    if (c_ComInterface.GetBusConnected() == true)
    {
       this->mu32_BusIndex = c_ComInterface.u32_BusIndex;
-      this->m_FillUpComboBox(c_ComInterface.u32_BusIndex, pc_Node->c_Properties.c_Name.ToQString());
+      this->m_FillUpComboBox(c_ComInterface.u32_BusIndex, pc_Node->c_Properties.c_Name);
    }
    else
    {
@@ -178,9 +177,9 @@ int32_t C_SdNdeCoAddDeviceDialog::GetNodeSelection(uint32_t & oru32_NodeIndex, u
    Current EDS file path
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SdNdeCoAddDeviceDialog::GetEdsFile(void)
+QString C_SdNdeCoAddDeviceDialog::GetEdsFile(void)
 {
-   return C_SclString::FromQString(C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath()));
+   return C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -468,13 +467,13 @@ void C_SdNdeCoAddDeviceDialog::m_OnLoadEds(void)
 {
    bool q_Invalid = false;
    C_OscCanOpenObjectDictionary c_CanOpenObjDictionary;
-   const C_SclString c_File =
-      C_SclString::FromQString(C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath()));
-   const QFileInfo c_FileInfo(c_File.ToQString());
+   const QString c_File =
+      C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath());
+   const QFileInfo c_FileInfo(c_File);
 
-   if (c_CanOpenObjDictionary.LoadFromFile(c_File) == C_NO_ERR)
+   if (c_CanOpenObjDictionary.LoadFromFile(c_File.toStdString().c_str()) == C_NO_ERR)
    {
-      C_SclIniFile c_IniFile(c_File);
+      stw::scl::C_SclIniFile c_IniFile(c_File);
 
       if ((c_IniFile.SectionExists("FileInfo") == true) && (c_IniFile.SectionExists("DeviceInfo") == true))
       {
@@ -492,7 +491,7 @@ void C_SdNdeCoAddDeviceDialog::m_OnLoadEds(void)
       this->mpc_Ui->pc_TedHtmlReport->setPlainText("<EDS file description>");
    }
 
-   if ((QFile::exists(c_File.ToQString()) == true) &&
+   if ((QFile::exists(c_File) == true) &&
        (C_SdNdeCoAddDeviceDialog::mhc_SUFFIX.contains(c_FileInfo.suffix())) &&
        (q_Invalid == false))
    {

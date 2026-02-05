@@ -5,31 +5,48 @@
 
    Creating widget to add PEM files in to List
 
-   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
 #include "C_SyvUpPacPemFilesWidget.hpp"
 #include "ui_C_SyvUpPacPemFilesWidget.h"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
@@ -39,44 +56,36 @@ using namespace stw::opensyde_gui_logic;
    \param[in,out] opc_Parent Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvUpPacPemFilesWidget::C_SyvUpPacPemFilesWidget(QWidget * const opc_Parent) :
-   QWidget(opc_Parent),
-   mpc_Ui(new Ui::C_SyvUpPacPemFilesWidget)
-{
-   this->mpc_Ui->setupUi(this);
+C_SyvUpPacPemFilesWidget::C_SyvUpPacPemFilesWidget(QWidget *const opc_Parent)
+    : QWidget(opc_Parent), mpc_Ui(new Ui::C_SyvUpPacPemFilesWidget) {
+  this->mpc_Ui->setupUi(this);
 
-   this->setAcceptDrops(true);
-   this->setMouseTracking(true);
+  this->setAcceptDrops(true);
+  this->setMouseTracking(true);
 
-   connect(this->mpc_Ui->pc_ListWidget, &C_SyvUpPacPemFilesListWidget::SigUpdateFileCounter, this,
-           &C_SyvUpPacPemFilesWidget::SigUpdateFileCounter);
+  connect(this->mpc_Ui->pc_ListWidget,
+          &C_SyvUpPacPemFilesListWidget::SigUpdateFileCounter, this,
+          &C_SyvUpPacPemFilesWidget::SigUpdateFileCounter);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default destructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvUpPacPemFilesWidget::~C_SyvUpPacPemFilesWidget()
-{
-   delete this->mpc_Ui;
-}
+C_SyvUpPacPemFilesWidget::~C_SyvUpPacPemFilesWidget() { delete this->mpc_Ui; }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Update PEM files widget
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacPemFilesWidget::UpdatePemFileWidget()
-{
-   if (this->mpc_Ui->pc_ListWidget->count() <= 0)
-   {
-      this->mpc_Ui->pc_GbxNoPEMFiles->setVisible(true);
-      this->mpc_Ui->pc_ListWidget->setVisible(false);
-   }
-   else
-   {
-      this->mpc_Ui->pc_GbxNoPEMFiles->setVisible(false);
-      this->mpc_Ui->pc_ListWidget->setVisible(true);
-   }
+void C_SyvUpPacPemFilesWidget::UpdatePemFileWidget() {
+  if (this->mpc_Ui->pc_ListWidget->count() <= 0) {
+    this->mpc_Ui->pc_GbxNoPEMFiles->setVisible(true);
+    this->mpc_Ui->pc_ListWidget->setVisible(false);
+  } else {
+    this->mpc_Ui->pc_GbxNoPEMFiles->setVisible(false);
+    this->mpc_Ui->pc_ListWidget->setVisible(true);
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -86,48 +95,43 @@ void C_SyvUpPacPemFilesWidget::UpdatePemFileWidget()
    int32_t   count of files in list
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvUpPacPemFilesWidget::GetFilesCount() const
-{
-   return this->mpc_Ui->pc_ListWidget->count();
+int32_t C_SyvUpPacPemFilesWidget::GetFilesCount() const {
+  return this->mpc_Ui->pc_ListWidget->count();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Saves last loaded PEM files
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacPemFilesWidget::SaveUserSettings()
-{
-   this->mpc_Ui->pc_ListWidget->SaveUserSettings();
+void C_SyvUpPacPemFilesWidget::SaveUserSettings() {
+  this->mpc_Ui->pc_ListWidget->SaveUserSettings();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Handle adding PEM file to list
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacPemFilesWidget::HandleAddPemFile()
-{
-   this->mpc_Ui->pc_ListWidget->AddFileAction();
+void C_SyvUpPacPemFilesWidget::HandleAddPemFile() {
+  this->mpc_Ui->pc_ListWidget->AddFileAction();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Handle clearing all PEM files from the list
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacPemFilesWidget::HandleClearAllPemFiles()
-{
-   this->mpc_Ui->pc_ListWidget->DeleteAllItems();
+void C_SyvUpPacPemFilesWidget::HandleClearAllPemFiles() {
+  this->mpc_Ui->pc_ListWidget->DeleteAllItems();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Get all loaded PEM file paths
 
    \return
-   std::vector<stw::scl::C_SclString>   returns vector of Pem Files
+   QStringList   returns vector of Pem Files
 */
 //----------------------------------------------------------------------------------------------------------------------
-QStringList C_SyvUpPacPemFilesWidget::GetPemFilePaths() const
-{
-   return this->mpc_Ui->pc_ListWidget->GetPemFilePaths();
+QStringList C_SyvUpPacPemFilesWidget::GetPemFilePaths() const {
+  return this->mpc_Ui->pc_ListWidget->GetPemFilePaths();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -139,9 +143,8 @@ QStringList C_SyvUpPacPemFilesWidget::GetPemFilePaths() const
    void
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacPemFilesWidget::dropEvent(QDropEvent * const opc_Event)
-{
-   this->mpc_Ui->pc_ListWidget->DropEvent(opc_Event);
+void C_SyvUpPacPemFilesWidget::dropEvent(QDropEvent *const opc_Event) {
+  this->mpc_Ui->pc_ListWidget->DropEvent(opc_Event);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -153,9 +156,9 @@ void C_SyvUpPacPemFilesWidget::dropEvent(QDropEvent * const opc_Event)
    void
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacPemFilesWidget::dragEnterEvent(QDragEnterEvent * const opc_Event)
-{
-   this->mpc_Ui->pc_ListWidget->DragEnterEvent(opc_Event);
+void C_SyvUpPacPemFilesWidget::dragEnterEvent(
+    QDragEnterEvent *const opc_Event) {
+  this->mpc_Ui->pc_ListWidget->DragEnterEvent(opc_Event);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -167,7 +170,6 @@ void C_SyvUpPacPemFilesWidget::dragEnterEvent(QDragEnterEvent * const opc_Event)
    void
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacPemFilesWidget::dragMoveEvent(QDragMoveEvent * const opc_Event)
-{
-   this->mpc_Ui->pc_ListWidget->DragMoveEvent(opc_Event);
+void C_SyvUpPacPemFilesWidget::dragMoveEvent(QDragMoveEvent *const opc_Event) {
+  this->mpc_Ui->pc_ListWidget->DragMoveEvent(opc_Event);
 }

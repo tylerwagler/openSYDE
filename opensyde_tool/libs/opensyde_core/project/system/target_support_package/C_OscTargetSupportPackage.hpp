@@ -9,7 +9,7 @@
 #define C_OSCTARGETSUPPORTPACKAGE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -25,10 +25,10 @@ class C_OscTargetSupportPackage
 {
 public:
    C_OscTargetSupportPackage();
-   stw::scl::C_SclString c_DeviceName; ///< name of device this package it intended for
-   stw::scl::C_SclString c_Comment;    ///< comment about this package
+   QString c_DeviceName; ///< name of device this package it intended for
+   QString c_Comment;    ///< comment about this package
 
-   stw::scl::C_SclString c_TemplatePath; ///< path to template package archive
+   QString c_TemplatePath; ///< path to template package archive
 
    void Clear(void);
 };

@@ -18,7 +18,6 @@
 #include "C_Uti.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
 
@@ -142,7 +141,7 @@ QVariant C_SdNdeDalLogJobsListModel::data(const QModelIndex & orc_Index, const i
 
       else if (os32_Role == static_cast<int32_t>(Qt::DisplayRole))
       {
-         c_Retval = this->mc_LogJobsList.at(orc_Index.row()).c_Name.c_str();
+         c_Retval = this->mc_LogJobsList.at(orc_Index.row()).c_Name;
       }
       else
       {

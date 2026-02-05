@@ -203,14 +203,14 @@ void C_SdNdeDbAddNewProject::AddSelectedProject(const uint32_t ou32_TspIndex, C_
       const C_OscTspApplication & rc_SelectedApp = this->mc_Package.c_Applications[ou32_TspIndex];
       const QString c_ProjectPath =
          C_Uti::h_ConcatPathIfNecessary(this->mpc_Ui->pc_LineEditCreateIn->GetPath(),
-                                        rc_SelectedApp.c_ProjectFolder.c_str());
+                                        rc_SelectedApp.c_ProjectFolder);
       orc_Application.c_Name = rc_SelectedApp.c_Name;
       orc_Application.c_Comment = rc_SelectedApp.c_Comment;
       orc_Application.c_GeneratePath = rc_SelectedApp.c_GeneratePath;
       orc_Application.c_ResultPaths = rc_SelectedApp.c_ResultPaths;
       orc_Application.u8_ProcessId = rc_SelectedApp.u8_ProcessId;
       // do not concatenate project path with syde-file path because we support relative paths here
-      orc_Application.c_ProjectPath = c_ProjectPath.toStdString().c_str();
+      orc_Application.c_ProjectPath = c_ProjectPath;
       orc_Application.c_IdeCall = rc_SelectedApp.c_IdeCall;
       orc_Application.u16_GenCodeVersion = rc_SelectedApp.u16_GenCodeVersion;
 
@@ -220,7 +220,7 @@ void C_SdNdeDbAddNewProject::AddSelectedProject(const uint32_t ou32_TspIndex, C_
       {
          orc_Application.c_GeneratePath = "";
          orc_Application.c_ProjectPath =
-            C_Uti::h_ConcatPathIfNecessary(c_ProjectPath, rc_SelectedApp.c_GeneratePath.c_str()).toStdString().c_str();
+            C_Uti::h_ConcatPathIfNecessary(c_ProjectPath, rc_SelectedApp.c_GeneratePath);
       }
 
       //do not allow to save higher value as highest known code structure version
@@ -229,7 +229,7 @@ void C_SdNdeDbAddNewProject::AddSelectedProject(const uint32_t ou32_TspIndex, C_
          orc_Application.u16_GenCodeVersion = mu16_HIGHEST_KNOWN_CODE_STRUCTURE_VERSION;
          orc_Warnings.append(static_cast<QString>("Code structure version of application %1 is unknown and "
                                                      "therefore set to most recent version %2.\n").
-                             arg(orc_Application.c_Name.c_str()).arg(mu16_HIGHEST_KNOWN_CODE_STRUCTURE_VERSION));
+                             arg(orc_Application.c_Name).arg(mu16_HIGHEST_KNOWN_CODE_STRUCTURE_VERSION));
       }
 
       //Handle default file generator flag
@@ -239,9 +239,9 @@ void C_SdNdeDbAddNewProject::AddSelectedProject(const uint32_t ou32_TspIndex, C_
       }
       else
       {
-         c_CodeGeneratorPath = rc_SelectedApp.c_CodeGeneratorPath.c_str();
+         c_CodeGeneratorPath = rc_SelectedApp.c_CodeGeneratorPath;
       }
-      orc_Application.c_CodeGeneratorPath = c_CodeGeneratorPath.toStdString().c_str();
+      orc_Application.c_CodeGeneratorPath = c_CodeGeneratorPath;
 
       // Handle file generation flags
       if (rc_SelectedApp.q_IsProgrammable == true)
@@ -288,7 +288,7 @@ void C_SdNdeDbAddNewProject::HandleCodeGenerationConfig(void) const
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SdNdeDbAddNewProject::GetHalcDefinitionFileName()
 {
-   QString c_HalcDefPath = mc_Package.c_HalcDefPath.c_str();
+   QString c_HalcDefPath = mc_Package.c_HalcDefPath;
 
    return c_HalcDefPath.remove(0, 2);
 }
@@ -302,7 +302,7 @@ QString C_SdNdeDbAddNewProject::GetHalcDefinitionFileName()
 QString C_SdNdeDbAddNewProject::GetProcessedHalcDefinitionPath(void)
 {
    const QString c_Path = this->mpc_Ui->pc_LineEditCreateIn->GetPath();
-   QString c_HalcDefPath = mc_Package.c_HalcDefPath.c_str();
+   QString c_HalcDefPath = mc_Package.c_HalcDefPath;
 
    c_HalcDefPath.remove(0, 1);
    c_HalcDefPath = c_Path + c_HalcDefPath;
@@ -409,7 +409,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
       {
          // no error on parsing TSP (see m_OnLoadTSP())
          q_ValidTsp = true;
-         stw::scl::C_SclString c_DeviceName;
+         QString c_DeviceName;
          if (this->q_IsVersion3 == false)
          {
             c_DeviceName = this->mc_Package.c_DeviceName;
@@ -425,7 +425,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
             c_Message.SetDescription(
                static_cast<QString>("The openSYDE Target Support Package device \"%1\" does not match the "
                                        "device type \"%2\" of this node").
-               arg(c_DeviceName.c_str()).
+               arg(c_DeviceName).
                arg(pc_Node->c_DeviceType));
             c_Message.SetCustomMinHeight(230, 180);
             c_Message.Execute();
@@ -511,7 +511,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
 
       if (q_Continue == true)
       {
-         if ((!this->mc_Tsp.c_TemplatePath.IsEmpty()) || (this->q_IsVersion3 == false))
+         if ((!this->mc_Tsp.c_TemplatePath.isEmpty()) || (this->q_IsVersion3 == false))
          {
             if ((c_CreateInFolder.exists() == true) &&
                 (c_CreateInFolder.entryInfoList(QDir::NoDotAndDotDot | QDir::AllEntries).count() != 0))
@@ -566,24 +566,24 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
             {
                const QFileInfo c_TspFileInfo(this->GetTspPath()); // file path -> use absoluteDir() to get directory of
                                                                   // file
-               stw::scl::C_SclString c_ErrorText;
+               QString c_ErrorText;
                QString c_Path;
 
                if (this->q_IsVersion3 == false)
                {
                   c_Path =
                      QDir::cleanPath(c_TspFileInfo.absoluteDir().absoluteFilePath(
-                                        this->mc_Package.c_TemplatePath.c_str()));
+                                        this->mc_Package.c_TemplatePath));
                }
                else
                {
                   c_Path = QDir::cleanPath(c_TspFileInfo.absoluteDir().absoluteFilePath(
-                                              this->mc_Tsp.c_TemplatePath.c_str()));
+                                              this->mc_Tsp.c_TemplatePath));
                }
                QApplication::setOverrideCursor(Qt::WaitCursor);
-               if (C_OscZipFile::h_UnpackZipFile(c_Path.toStdString().c_str(),
+               if (C_OscZipFile::h_UnpackZipFile(c_Path,
                                                  C_PuiUtil::h_GetAbsolutePathFromProject(
-                                                    this->mpc_Ui->pc_LineEditCreateIn->GetPath()).toStdString().c_str(),
+                                                    this->mpc_Ui->pc_LineEditCreateIn->GetPath()),
                                                  &c_ErrorText) == C_NO_ERR)
                {
                   this->mrc_ParentDialog.accept();
@@ -600,7 +600,7 @@ void C_SdNdeDbAddNewProject::m_OkClicked(void)
                                                                                        ->
                                                                                        GetPath())));
                   c_Message.SetCustomMinWidth(800);
-                  c_Message.SetDetails(c_ErrorText.c_str());
+                  c_Message.SetDetails(c_ErrorText);
                   c_Message.SetCustomMinHeight(230, 300);
                   QApplication::restoreOverrideCursor();
                   c_Message.Execute();
@@ -729,7 +729,7 @@ void C_SdNdeDbAddNewProject::m_OnLoadTsp(void)
    if (this->ms32_TspReadResult == C_NO_ERR)
    {
       q_IsVersion3 = true;
-      if (!this->mc_Tsp.c_TemplatePath.IsEmpty())
+      if (!this->mc_Tsp.c_TemplatePath.isEmpty())
       {
          this->mpc_Ui->pc_LabelCreateIn->setDisabled(false);
          this->mpc_Ui->pc_LineEditCreateIn->setDisabled(false);
@@ -758,7 +758,7 @@ void C_SdNdeDbAddNewProject::m_OnLoadTsp(void)
       this->mpc_Ui->pc_PushButtonCreateIn->setDisabled(false);
       this->ms32_TspReadResult = C_OscTargetSupportPackageV2Filer::h_Load(
          this->mc_Package,
-         C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditTSP->GetPath()).toStdString().c_str());
+         C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditTSP->GetPath()));
 
       if (this->ms32_TspReadResult == C_NO_ERR)
       {
@@ -791,7 +791,7 @@ void C_SdNdeDbAddNewProject::m_AddTopSection(QString & orc_Content) const
    orc_Content += "Description:";
    orc_Content += "</td>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-   orc_Content += this->mc_Package.c_Comment.c_str();
+   orc_Content += this->mc_Package.c_Comment;
    orc_Content += "</td>";
    orc_Content += "</tr>";
    orc_Content += "<tr>";
@@ -824,7 +824,7 @@ void C_SdNdeDbAddNewProject::m_AddTemplateSection(QString & orc_Content) const
       orc_Content += "Name:";
       orc_Content += "</td>";
       orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-      orc_Content += rc_Template.c_Name.c_str();
+      orc_Content += rc_Template.c_Name;
       orc_Content += "</td>";
       orc_Content += "</tr>";
       orc_Content += "<tr>";
@@ -832,7 +832,7 @@ void C_SdNdeDbAddNewProject::m_AddTemplateSection(QString & orc_Content) const
       orc_Content += "Comment:";
       orc_Content += "</td>";
       orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-      orc_Content += rc_Template.c_Comment.c_str();
+      orc_Content += rc_Template.c_Comment;
       orc_Content += "</td>";
       orc_Content += "</tr>";
       orc_Content += "</table>";
@@ -849,7 +849,7 @@ void C_SdNdeDbAddNewProject::m_AddTemplateSection(QString & orc_Content) const
       orc_Content += "HALC definition file:";
       orc_Content += "</td>";
       orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-      orc_Content += this->mc_Package.c_HalcDefPath.c_str();
+      orc_Content += this->mc_Package.c_HalcDefPath;
       orc_Content += "</td>";
       orc_Content += "</tr>";
       orc_Content += "<tr>";
@@ -857,7 +857,7 @@ void C_SdNdeDbAddNewProject::m_AddTemplateSection(QString & orc_Content) const
       orc_Content += "Comment: ";
       orc_Content += "</td>";
       orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-      orc_Content += this->mc_Package.c_HalcComment.c_str();
+      orc_Content += this->mc_Package.c_HalcComment;
       orc_Content += "</td>";
       orc_Content += "</tr>";
       orc_Content += "</table>";
@@ -887,7 +887,7 @@ void C_SdNdeDbAddNewProject::m_AddV3TopSection(QString & orc_Content) const
    orc_Content += "Device Type: ";
    orc_Content += "</td>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-   orc_Content += this->mc_Tsp.c_DeviceName.c_str();
+   orc_Content += this->mc_Tsp.c_DeviceName;
    orc_Content += "</td>";
    orc_Content += "</tr>";
    orc_Content += "<tr>";
@@ -895,7 +895,7 @@ void C_SdNdeDbAddNewProject::m_AddV3TopSection(QString & orc_Content) const
    orc_Content += "Description: ";
    orc_Content += "</td>";
    orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-   orc_Content += mc_Tsp.c_Comment.c_str();
+   orc_Content += mc_Tsp.c_Comment;
    orc_Content += "</td>";
    orc_Content += "</tr>";
    orc_Content += "</table>";
@@ -944,7 +944,7 @@ void C_SdNdeDbAddNewProject::m_AddV3TemplateSection(QString & orc_Content) const
       orc_Content += "Hardware Configuration: ";
       orc_Content += "</td>";
       orc_Content += C_SdNdeDbAddNewProject::mhc_CONTINUE_TD;
-      orc_Content += "./" + static_cast<QString>(this->mc_OscNode.c_HalcConfig.c_OriginalFileName.c_str());
+      orc_Content += "./" + this->mc_OscNode.c_HalcConfig.c_OriginalFileName;
       orc_Content += "</td>";
       orc_Content += "</tr>";
    }
@@ -964,14 +964,11 @@ void C_SdNdeDbAddNewProject::m_Init(const uint32_t ou32_NodeIndex) const
    if (pc_Node != NULL)
    {
       //Use default
-      const QString c_NodePath = C_OscUtils::h_NiceifyStringForFileName(pc_Node->c_Properties.c_Name).c_str();
+      const QString c_NodePath = C_OscUtils::h_NiceifyStringForFileName(pc_Node->c_Properties.c_Name);
       this->mpc_Ui->pc_LineEditCreateIn->SetPath(c_NodePath, C_PuiProject::h_GetInstance()->GetFolderPath());
 
       //Set Title
-      const stw::scl::C_SclString c_NodeName = pc_Node->c_Properties.c_Name;
-      const QString c_QnodeName = static_cast<QString>(c_NodeName.c_str());
-      const QString c_Title = c_QnodeName;
-      this->mrc_ParentDialog.SetTitle(c_Title);
+      this->mrc_ParentDialog.SetTitle(pc_Node->c_Properties.c_Name);
    }
 }
 
@@ -1021,10 +1018,9 @@ void C_SdNdeDbAddNewProject::m_ApplyV2PathAdaptationToV3()
    for (uint32_t u32_ItDb = 0UL; u32_ItDb < this->mc_OscNode.c_Applications.size(); ++u32_ItDb)
    {
       C_OscNodeApplication & rc_App = this->mc_OscNode.c_Applications[u32_ItDb];
-      const QString c_ProjectPath =
+      rc_App.c_ProjectPath =
          C_Uti::h_ConcatPathIfNecessary(this->mpc_Ui->pc_LineEditCreateIn->GetPath(),
-                                        rc_App.c_ProjectPath.c_str());
-      rc_App.c_ProjectPath = c_ProjectPath.toStdString().c_str();
+                                        rc_App.c_ProjectPath);
    }
 }
 

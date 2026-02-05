@@ -32,7 +32,6 @@
 #include "C_PuiProject.hpp"
 #include "C_Uti.hpp"
 #include "C_PuiUtil.hpp"
-#include "C_SclString.hpp"
 #include "C_UsHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -40,7 +39,6 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */

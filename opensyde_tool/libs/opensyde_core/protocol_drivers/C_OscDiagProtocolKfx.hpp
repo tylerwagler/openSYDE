@@ -32,7 +32,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "C_OscDiagProtocolBase.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "CKFXCommunicationKEFEX.hpp"
 #include "CKFXCommConfiguration.hpp"
 
@@ -121,7 +121,7 @@ public:
                                        uint8_t * const opu8_NrCode);
    virtual int32_t DataPoolReadMetaData(const uint8_t ou8_DataPoolIndex,
                                         uint8_t(&orau8_Version)[3],
-                                        stw::scl::C_SclString & orc_Name,
+                                        QString & orc_Name,
                                         uint8_t * const opu8_NrCode);
    virtual int32_t NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, const uint8_t ou8_ListIndex,
                                       bool & orq_ApplicationAcknowledge, uint8_t * const opu8_NrCode);

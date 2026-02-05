@@ -43,8 +43,8 @@ using namespace stw::opensyde_core;
    \param[in]  orc_ProtocolName  Name of current set protocol
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscComMessageLoggerFileBase::C_OscComMessageLoggerFileBase(const stw::scl::C_SclString & orc_FilePath,
-                                                             const C_SclString & orc_ProtocolName) :
+C_OscComMessageLoggerFileBase::C_OscComMessageLoggerFileBase(const QString & orc_FilePath,
+                                                             const QString & orc_ProtocolName) :
    mc_FilePath(orc_FilePath),
    mc_ProtocolName(orc_ProtocolName)
 {
@@ -71,10 +71,10 @@ C_OscComMessageLoggerFileBase::~C_OscComMessageLoggerFileBase(void)
 int32_t C_OscComMessageLoggerFileBase::OpenFile(void)
 {
    int32_t s32_Return = C_NO_ERR;
-   const C_SclString c_FolderPath = C_SclString::FromQString(QFileInfo(this->mc_FilePath.ToQString()).absolutePath() + "/");
+   const QString c_FolderPath = QFileInfo(this->mc_FilePath).absolutePath() + "/";
 
    // Check and create folder
-   if (!QFileInfo(c_FolderPath.ToQString()).isDir())
+   if (!QFileInfo(c_FolderPath).isDir())
    {
       s32_Return = C_OscUtils::h_CreateFolderRecursively(c_FolderPath);
 
@@ -83,10 +83,10 @@ int32_t C_OscComMessageLoggerFileBase::OpenFile(void)
          s32_Return = C_RD_WR;
       }
    }
-   else if (QFileInfo(this->mc_FilePath.ToQString()).exists() && QFileInfo(this->mc_FilePath.ToQString()).isFile())
+   else if (QFileInfo(this->mc_FilePath).exists() && QFileInfo(this->mc_FilePath).isFile())
    {
       // Delete the old file
-      if (remove(this->mc_FilePath.c_str()) != 0)
+      if (remove(this->mc_FilePath.toUtf8().constData()) != 0)
       {
          s32_Return = C_RD_WR;
       }
@@ -105,7 +105,7 @@ int32_t C_OscComMessageLoggerFileBase::OpenFile(void)
    \param[in]     orc_ProtocolName         Current protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscComMessageLoggerFileBase::SetProtocolName(const C_SclString & orc_ProtocolName)
+void C_OscComMessageLoggerFileBase::SetProtocolName(const QString & orc_ProtocolName)
 {
    this->mc_ProtocolName = orc_ProtocolName;
 }

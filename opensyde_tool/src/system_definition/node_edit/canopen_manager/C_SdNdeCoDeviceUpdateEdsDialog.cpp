@@ -1361,9 +1361,9 @@ QString C_SdNdeCoDeviceUpdateEdsDialog::mh_GetSignalNames(const C_OscCanMessage 
    Signal name for display
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_SdNdeCoDeviceUpdateEdsDialog::mh_GetSignalNameForDisplay(const stw::scl::C_SclString & orc_Name)
+QString C_SdNdeCoDeviceUpdateEdsDialog::mh_GetSignalNameForDisplay(const QString & orc_Name)
 {
-   return static_cast<QString>("\"") + orc_Name.c_str() + "\"";
+   return static_cast<QString>("\"") + orc_Name + "\"";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1441,6 +1441,6 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_InitMessageVectorNames(std::vector<C_Osc
          ((u32_ItMessage < orc_MessageIsSrdo.size()) && (orc_MessageIsSrdo[u32_ItMessage] == 1U)) ? true : false;
       rc_Message.c_Name = C_CieUtil::h_GetMessageName(orc_Node, !oq_MessageIsTxInEds, u32_ItMessage,
                                                       C_OscCanProtocol::eCAN_OPEN, NULL, q_IsSrdo,
-                                                      oru32_SrdoIndex).toStdString();
+                                                      oru32_SrdoIndex);
    }
 }

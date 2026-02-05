@@ -582,7 +582,7 @@ void C_SdNdeCoOverviewTableModel::m_FillCoInfo()
          c_CoInfoManager.c_CoTableData.c_LinkedTo = c_LinkedBusNameMgr;
 
          //lint -e{1946} // use of functional-style cast is fine here
-         c_CoInfoManager.c_CoTableData.c_Node = QString(pc_Node->c_Properties.c_Name.c_str());
+         c_CoInfoManager.c_CoTableData.c_Node = QString(pc_Node->c_Properties.c_Name);
          c_CoInfoManager.c_CoTableData.c_Role = "Manager";
          c_CoInfoManager.c_CoTableData.c_CanOpenId = QString::number(c_IterManagers->second.u8_NodeIdValue);
          // get TPDOs and RPDOs via message container

@@ -16,7 +16,7 @@
 #include <map>
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "stw_can.hpp"
 
 #include "C_OscComLoggerProtocols.hpp"

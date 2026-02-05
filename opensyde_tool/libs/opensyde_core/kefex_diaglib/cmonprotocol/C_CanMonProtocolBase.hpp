@@ -11,7 +11,7 @@
 
 #include "stwtypes.hpp"
 #include "C_CanMonProtocolTarget.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include <QSettings>
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -31,14 +31,14 @@ protected:
    bool mq_Decimal;
 
    //general:
-   stw::scl::C_SclString m_GetValueDecHex(const uint32_t ou32_Value) const;
-   stw::scl::C_SclString m_GetByteAsStringFormat(const uint8_t ou8_Value) const;
-   stw::scl::C_SclString m_GetWordAsStringFormat(const uint16_t ou16_Value) const;
+   QString m_GetValueDecHex(const uint32_t ou32_Value) const;
+   QString m_GetByteAsStringFormat(const uint8_t ou8_Value) const;
+   QString m_GetWordAsStringFormat(const uint16_t ou16_Value) const;
    static uint32_t mh_BytesToDwordLowHigh(const uint8_t oau8_Bytes[4]);
    static uint16_t mh_BytesToWordLowHigh(const uint8_t oau8_Bytes[2]);
    static uint16_t mh_BytesToWordHighLow(const uint8_t oau8_Bytes[2]);
    static uint32_t mh_BytesToDwordHighLow(const uint8_t oau8_Bytes[4]);
-   static stw::scl::C_SclString mh_SerialNumberToString(const uint8_t * const opu8_SerialNumber);
+   static QString mh_SerialNumberToString(const uint8_t * const opu8_SerialNumber);
 
 public:
    C_CanMonProtocolBase(void);
@@ -56,7 +56,7 @@ public:
       CAN message in string representation
    */
    //-----------------------------------------------------------------------------
-   virtual stw::scl::C_SclString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const = 0;
+   virtual QString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -68,13 +68,13 @@ public:
       string representation of protocol name
    */
    //-----------------------------------------------------------------------------
-   virtual stw::scl::C_SclString GetProtocolName(void) const = 0;
+   virtual QString GetProtocolName(void) const = 0;
 
    virtual void SetDecimal(const bool oq_Decimal);
 
    //overload if we have something to save (use protocol abbreviation as prefix for directives !)
-   virtual int32_t SaveParamsToIni(QSettings & orc_IniFile, const stw::scl::C_SclString & orc_Section);
-   virtual int32_t LoadParamsFromIni(QSettings & orc_IniFile, const stw::scl::C_SclString & orc_Section);
+   virtual int32_t SaveParamsToIni(QSettings & orc_IniFile, const QString & orc_Section);
+   virtual int32_t LoadParamsFromIni(QSettings & orc_IniFile, const QString & orc_Section);
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -96,8 +96,8 @@ protected:
 #endif
 
    //used by KFX and IVA:
-   stw::scl::C_SclString m_KfxIndexToString(const uint16_t ou16_Index, bool oq_IsKefexVarIndex = true) const;
-   stw::scl::C_SclString m_KfxTextAndIndexToString(const char_t * const opcn_Text, const uint16_t ou16_Index) const;
+   QString m_KfxIndexToString(const uint16_t ou16_Index, bool oq_IsKefexVarIndex = true) const;
+   QString m_KfxTextAndIndexToString(const char_t * const opcn_Text, const uint16_t ou16_Index) const;
 
 public:
    C_CanMonProtocolKefexIva(void);

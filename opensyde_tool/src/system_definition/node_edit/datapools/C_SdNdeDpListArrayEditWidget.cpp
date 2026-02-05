@@ -129,7 +129,7 @@ void C_SdNdeDpListArrayEditWidget::InitStaticNames(void) const
 
       //Translation: 1: Data element type, 2: Data element name, 3: Value type
       this->mrc_Parent.SetTitle(static_cast<QString>("%1 %2 (%3)").arg(c_Type).arg(
-                                   pc_Element->c_Name.c_str()).arg(c_EditType));
+                                   pc_Element->c_Name).arg(c_EditType));
    }
 
    this->mrc_Parent.SetSubTitle(static_cast<QString>("Array Editor"));

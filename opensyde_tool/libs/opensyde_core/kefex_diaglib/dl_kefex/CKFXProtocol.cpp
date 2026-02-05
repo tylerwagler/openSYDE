@@ -23,7 +23,7 @@
 #ifndef DIAGLIB_KEFEX_PROTOCOL_NO_LOGGING
 #include "C_CanMonProtocol.hpp"
 #endif
-#include "C_SclString.hpp"
+#include <QString>
 
 #include <QElapsedTimer>
 #include <QThread>
@@ -114,7 +114,7 @@ void C_KFXProtocol::m_ProtocolSend(const bool oq_OK, const T_STWCAN_Msg_TX & orc
    {
       QString c_Text;
       QString c_Help;
-      C_SclString c_Time;
+      QString c_Time;
       int32_t i;
 
       c_Time = C_CMONProtocols::FormatTimeStamp(TGL_GetTickCountUS(), false);
@@ -150,17 +150,17 @@ void C_KFXProtocol::m_ProtocolReceive(const T_STWCAN_Msg_RX & orc_Msg)
    m_ProtocolCheckInit();
    if (mpt_DebugFileHandle != NULL)
    {
-      C_SclString c_Text;
-      C_SclString c_Help;
-      C_SclString c_Time;
+      QString c_Text;
+      QString c_Help;
+      QString c_Time;
       int32_t i;
       c_Time = C_CMONProtocols::FormatTimeStamp(TGL_GetTickCountUS(), false);
       if (u8_CreateCommProtocol == 1U)
       {
-         c_Text = C_SclString::FromQString(QString::asprintf("%s Msg_Read OK: MSG: %03x %d ", c_Time.c_str(), orc_Msg.u32_ID, orc_Msg.u8_DLC));
+         c_Text = QString::asprintf("%s Msg_Read OK: MSG: %03x %d ", c_Time.toUtf8(.constData(), orc_Msg.u32_ID, orc_Msg.u8_DLC));
          for (i = 0; i < orc_Msg.u8_DLC; i++)
          {
-            c_Help = C_SclString::FromQString(QString::asprintf("%02x ", orc_Msg.au8_Data[i]));
+            c_Help = QString::asprintf("%02x ", orc_Msg.au8_Data[i]);
             c_Text += c_Help;
          }
          c_Text += "\r\n    ";

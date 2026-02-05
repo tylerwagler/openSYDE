@@ -80,7 +80,7 @@ int32_t C_OscAesFile::h_EncryptFile(const QString & orc_Key, const QString & orc
    int32_t s32_Return = C_NO_ERR;
 
    //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?& anyway
-   const QString c_AesKey = stw::md5::C_Md5Checksum::GetMD5Q(
+   const QString c_AesKey = stw::md5::C_Md5Checksum::GetMD5(
       reinterpret_cast<const uint8_t *>(orc_Key.toLocal8Bit().constData()), static_cast<uint32_t>(orc_Key.length()));
 
    Q_ASSERT(c_AesKey.length() == 32); //really should be 16 bytes, resp. 32 hex characters
@@ -214,7 +214,7 @@ int32_t C_OscAesFile::h_DecryptFile(const QString & orc_Key, const QString & orc
    int32_t s32_Return = C_NO_ERR;
 
    //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?& anyway
-   const QString c_AesKey = stw::md5::C_Md5Checksum::GetMD5Q(
+   const QString c_AesKey = stw::md5::C_Md5Checksum::GetMD5(
       reinterpret_cast<const uint8_t *>(orc_Key.toLocal8Bit().constData()), static_cast<uint32_t>(orc_Key.length()));
 
    Q_ASSERT(c_AesKey.length() == 32); //really should be 16 bytes, resp. 32 hex characters

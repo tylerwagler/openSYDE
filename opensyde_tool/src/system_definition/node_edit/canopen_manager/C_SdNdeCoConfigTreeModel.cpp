@@ -775,7 +775,7 @@ void C_SdNdeCoConfigTreeModel::m_InitDeviceNodeContent(const uint8_t ou8_Interfa
 
    if (pc_Node != NULL)
    {
-      orc_DeviceEntry.c_Name = pc_Node->c_Properties.c_Name.c_str();
+      orc_DeviceEntry.c_Name = pc_Node->c_Properties.c_Name;
    }
    orc_DeviceEntry.q_CheckBoxVisible = false;
    // Special case: All not selectable items shall not change the current selection of the tree
@@ -1533,14 +1533,14 @@ bool C_SdNdeCoConfigTreeModel::m_CheckIfCoManagerCanBeActivated(const uint32_t o
          const QString c_InterfaceName = C_PuiSdUtil::h_GetInterfaceName(c_ComInterface.e_InterfaceType,
                                                                          u8_ManagerIntfNumber);
 
-         const stw::scl::C_SclString c_Text = "The CANopen Manager can't be activated for this interface because there " \
-                                              "already exists a CANopen Manager on this bus with node \"" +
-                                              pc_ManagerNodeToCheck->c_Properties.c_Name +
-                                              "\" at interface \"" + c_InterfaceName.toStdString() + "\".";
+         const QString c_Text = "The CANopen Manager can't be activated for this interface because there " \
+                                "already exists a CANopen Manager on this bus with node \"" +
+                                pc_ManagerNodeToCheck->c_Properties.c_Name +
+                                "\" at interface \"" + c_InterfaceName + "\".";
 
          C_OgeWiCustomMessage c_Message(this->mpc_Parent, C_OgeWiCustomMessage::eINFORMATION);
          c_Message.SetHeading("Activate CANopen Manager");
-         c_Message.SetDescription(QString(c_Text.c_str()));
+         c_Message.SetDescription(c_Text);
          c_Message.Execute();
       }
    }

@@ -50,8 +50,8 @@ using namespace stw::opensyde_core;
    \param[in]  oq_RelativeTimeStampActive   Mode for writing CAN timestamp (relative or absolute)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscComMessageLoggerFileAsc::C_OscComMessageLoggerFileAsc(const C_SclString & orc_FilePath,
-                                                           const C_SclString & orc_ProtocolName,
+C_OscComMessageLoggerFileAsc::C_OscComMessageLoggerFileAsc(const QString & orc_FilePath,
+                                                           const QString & orc_ProtocolName,
                                                            const bool oq_HexActive,
                                                            const bool oq_RelativeTimeStampActive) :
    C_OscComMessageLoggerFileBase(orc_FilePath, orc_ProtocolName),
@@ -72,8 +72,8 @@ C_OscComMessageLoggerFileAsc::~C_OscComMessageLoggerFileAsc(void)
    {
       if (this->mc_File.is_open() == true)
       {
-         const C_SclString c_EndLine = "End TriggerBlock";
-         this->mc_File.write(c_EndLine.c_str(), c_EndLine.Length());
+         const QString c_EndLine = "End TriggerBlock";
+         this->mc_File.write(c_EndLine.toUtf8().constData(), c_EndLine.length());
          this->mc_File.close();
       }
    }
@@ -103,7 +103,7 @@ int32_t C_OscComMessageLoggerFileAsc::OpenFile(void)
       this->mc_File.close();
    }
 
-   if (this->mc_FilePath.SubString(this->mc_FilePath.Length() - 3U, 4U).toLower() != ".asc")
+   if (this->mc_FilePath.right(4).toLower() != ".asc")
    {
       // Missing file extension
       this->mc_FilePath += ".asc";
@@ -113,13 +113,13 @@ int32_t C_OscComMessageLoggerFileAsc::OpenFile(void)
 
    if (s32_Return == C_NO_ERR)
    {
-      this->mc_File.open(this->mc_FilePath.c_str(), std::ios::app);
+      this->mc_File.open(this->mc_FilePath.toUtf8().constData(), std::ios::app);
 
       // Write default header
       this->m_WriteHeader();
 
       // Check if the file was really created
-      if (!QFileInfo(this->mc_FilePath.ToQString()).exists() || !QFileInfo(this->mc_FilePath.ToQString()).isFile())
+      if (!QFileInfo(this->mc_FilePath).exists() || !QFileInfo(this->mc_FilePath).isFile())
       {
          // File was not created
          s32_Return = C_RD_WR;
@@ -140,8 +140,8 @@ void C_OscComMessageLoggerFileAsc::AddMessageToFile(const C_OscComMessageLoggerD
    if (this->mc_File.is_open() == true)
    {
       uint32_t u32_SignalCounter;
-      C_SclString c_LogEntry = "   ";
-      C_SclString c_Temp;
+      QString c_LogEntry = "   ";
+      QString c_Temp;
 
       // Timestamp
       if (this->mq_RelativeTimeStampActive == true)
@@ -160,11 +160,11 @@ void C_OscComMessageLoggerFileAsc::AddMessageToFile(const C_OscComMessageLoggerD
       // ASC specification defines a width of fixed 15 chars for CAN Id. Plus one for the space to the direction
       if (this->mq_HexActive == true)
       {
-         c_Temp = QString::asprintf("%-16s", orc_MessageData.c_CanIdHex.c_str());
+         c_Temp = QString::asprintf("%-16s", orc_MessageData.c_CanIdHex.toUtf8().constData());
       }
       else
       {
-         c_Temp = QString::asprintf("%-16s", orc_MessageData.c_CanIdDec.c_str());
+         c_Temp = QString::asprintf("%-16s", orc_MessageData.c_CanIdDec.toUtf8().constData());
       }
       c_LogEntry += c_Temp;
 
@@ -245,7 +245,7 @@ void C_OscComMessageLoggerFileAsc::AddMessageToFile(const C_OscComMessageLoggerD
          c_LogEntry += "\n";
       }
 
-      this->mc_File.write(c_LogEntry.c_str(), c_LogEntry.Length());
+      this->mc_File.write(c_LogEntry.toUtf8().constData(), c_LogEntry.length());
    }
 }
 
@@ -263,8 +263,8 @@ void C_OscComMessageLoggerFileAsc::m_WriteHeader(void)
 {
    if (this->mc_File.is_open() == true)
    {
-      C_SclString c_Header;
-      const C_SclString c_TimeString = mh_GetAscTimeString();
+      QString c_Header;
+      const QString c_TimeString = mh_GetAscTimeString();
 
       // First line is date and time
       c_Header = "date " + c_TimeString + "\n";
@@ -297,7 +297,7 @@ void C_OscComMessageLoggerFileAsc::m_WriteHeader(void)
       c_Header += "// version 7.2.0\n";
       c_Header += "Begin Triggerblock " + c_TimeString + "\n";
 
-      this->mc_File.write(c_Header.c_str(), c_Header.Length());
+      this->mc_File.write(c_Header.toUtf8().constData(), c_Header.length());
    }
 }
 
@@ -308,10 +308,10 @@ void C_OscComMessageLoggerFileAsc::m_WriteHeader(void)
    Time and date in defined format
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
+QString C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
 {
-   C_SclString c_Result;
-   C_SclString c_Temp;
+   QString c_Result;
+   QString c_Temp;
    QDateTime c_Now = QDateTime::currentDateTime();
 
    // Getting weekday
@@ -347,9 +347,9 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetAscTimeString(void)
    Weekday
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLoggerFileAsc::mh_GetDay(const int32_t os32_Day)
+QString C_OscComMessageLoggerFileAsc::mh_GetDay(const int32_t os32_Day)
 {
-   C_SclString c_Day;
+   QString c_Day;
 
    switch (os32_Day)
    {
@@ -392,9 +392,9 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetDay(const int32_t os32_Day)
    Weekday
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLoggerFileAsc::mh_GetMonth(const int32_t os32_Month)
+QString C_OscComMessageLoggerFileAsc::mh_GetMonth(const int32_t os32_Month)
 {
-   C_SclString c_Month;
+   QString c_Month;
 
    switch (os32_Month)
    {
@@ -457,13 +457,13 @@ C_SclString C_OscComMessageLoggerFileAsc::mh_GetMonth(const int32_t os32_Month)
    Adapted string
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComMessageLoggerFileAsc::mh_AdaptTimeStamp(const uint64_t ou64_TimeStamp)
+QString C_OscComMessageLoggerFileAsc::mh_AdaptTimeStamp(const uint64_t ou64_TimeStamp)
 {
-   C_SclString c_TimeStamp;
+   QString c_TimeStamp;
 
    c_TimeStamp = QString::asprintf("%d.%.6d", static_cast<int32_t>(ou64_TimeStamp / 1000000ULL),
                               static_cast<int32_t>(ou64_TimeStamp % 1000000ULL));
-   c_TimeStamp = QString::asprintf("%9s", c_TimeStamp.c_str());
+   c_TimeStamp = QString::asprintf("%9s", c_TimeStamp.toUtf8().constData());
 
    return c_TimeStamp;
 }

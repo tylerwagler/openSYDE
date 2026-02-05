@@ -26,7 +26,7 @@
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscComDriverBase.hpp"
 #include "C_OscSecurityPemDatabase.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -114,7 +114,7 @@ protected:
    virtual bool m_GetRoutingMode(C_OscRoutingCalculation::E_Mode & ore_Mode) const = 0;
    virtual uint8_t m_GetRoutingSessionId(void) const = 0;
    C_OscProtocolDriverOsy * m_GetOsyProtocol(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
-   stw::scl::C_SclString m_GetActiveNodeName(const uint32_t ou32_ActiveNodeIndex) const;
+   QString m_GetActiveNodeName(const uint32_t ou32_ActiveNodeIndex) const;
 
    int32_t m_SetNodeSessionId(const uint32_t ou32_ActiveNode, const uint8_t ou8_SessionId,
                               const bool oq_CheckForSession, uint8_t * const opu8_NrCode) const;

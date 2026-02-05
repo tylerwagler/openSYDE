@@ -98,7 +98,7 @@ C_SyvDcConnectedNodeWidget::~C_SyvDcConnectedNodeWidget(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SyvDcConnectedNodeWidget::GetPlainSerialNumberString(void) const
 {
-   return this->mc_Info.c_SerialNumber.GetSerialNumberAsPlainString().c_str();
+   return this->mc_Info.c_SerialNumber.GetSerialNumberAsPlainString();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -140,7 +140,7 @@ QString C_SyvDcConnectedNodeWidget::GetDeviceName(void) const
 
    if (this->mc_Info.q_DeviceNameValid == true)
    {
-      c_Retval = this->mc_Info.c_DeviceName.c_str();
+      c_Retval = this->mc_Info.c_DeviceName;
    }
    return c_Retval;
 }
@@ -220,7 +220,7 @@ void C_SyvDcConnectedNodeWidget::m_Init(void)
 
    if (this->mc_Info.c_SerialNumber.q_IsValid == true)
    {
-      c_Name = this->mc_Info.c_SerialNumber.GetSerialNumberAsFormattedString().c_str();
+      c_Name = this->mc_Info.c_SerialNumber.GetSerialNumberAsFormattedString();
    }
    else
    {
@@ -255,7 +255,7 @@ void C_SyvDcConnectedNodeWidget::m_Init(void)
 
    if (this->mc_Info.q_DeviceNameValid == true)
    {
-      c_Device = this->mc_Info.c_DeviceName.c_str();
+      c_Device = this->mc_Info.c_DeviceName;
    }
    else
    {

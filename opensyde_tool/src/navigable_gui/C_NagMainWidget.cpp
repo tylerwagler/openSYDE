@@ -234,7 +234,7 @@ void C_NagMainWidget::LoadInitialProject(void)
    QString c_LoadedProject;
    int32_t s32_Error = C_NO_ERR;
 
-   std::vector<stw::scl::C_SclString> c_ErrorDetailsMissingDevices;
+   std::vector<QString> c_ErrorDetailsMissingDevices;
 
    if (C_PuiProject::h_GetInstance()->PrepareLoadInitialProject() == C_CHECKSUM)
    {
@@ -278,7 +278,7 @@ void C_NagMainWidget::LoadProject(const QString & orc_FilePath)
    {
       uint16_t u16_Version = 0U;
       int32_t s32_Result;
-      std::vector<stw::scl::C_SclString> c_ErrorDetailsMissingDevices;
+      std::vector<QString> c_ErrorDetailsMissingDevices;
 
       Q_EMIT (this->SigBeforeOtherProjectLoad());
       C_PuiProject::h_GetInstance()->SetPath(orc_FilePath);
@@ -908,7 +908,7 @@ void C_NagMainWidget::m_OnIndexClicked(const QModelIndex & orc_ModelIndex)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_NagMainWidget::m_LoadConcreteProject(uint16_t * const opu16_FileVersion,
-                                               std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices)
+                                               std::vector<QString> * const opc_ErrorDetailsMissingDevices)
 {
    int32_t s32_Result = C_NO_ERR;
 
@@ -986,7 +986,7 @@ int32_t C_NagMainWidget::m_GetPassword(QString & orc_Password)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagMainWidget::m_CancelPasswordDialog(uint16_t ou16_ProjectFileVersion,
-                                             std::vector<stw::scl::C_SclString> * const opc_ErrorDetailsMissingDevices)
+                                             std::vector<QString> * const opc_ErrorDetailsMissingDevices)
 {
    int32_t s32_Result;
 

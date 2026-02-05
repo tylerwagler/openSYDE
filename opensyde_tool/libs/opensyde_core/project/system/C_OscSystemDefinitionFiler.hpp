@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscNode.hpp"
 #include "C_OscNodeFiler.hpp"
 #include "C_OscSystemBus.hpp"

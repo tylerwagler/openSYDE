@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
 
 #include <QWidget>
 

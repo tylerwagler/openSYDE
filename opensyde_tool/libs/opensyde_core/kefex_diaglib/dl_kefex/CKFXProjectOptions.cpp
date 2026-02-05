@@ -45,22 +45,22 @@ C_KFXProjectMetaInfo & C_KFXProjectMetaInfo::operator =(const C_KFXProjectMetaIn
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void C_KFXProjectMetaInfo::LoadFromINI(QSettings & orc_IniFile, const C_SclString & orc_Section)
+void C_KFXProjectMetaInfo::LoadFromINI(QSettings & orc_IniFile, const QString & orc_Section)
 {
-   C_SclString c_Temp;
+   QString c_Temp;
    int32_t s32_Count = 0;
-   QString c_Section = orc_Section.ToQString();
+   QString c_Section = orc_Section;
 
    c_Text.clear();
-   c_Temp = C_SclString(orc_IniFile.value(c_Section + "/Line_" + QString::number(s32_Count),
-                             "").toString().toStdString());
+   c_Temp = orc_IniFile.value(c_Section + "/Line_" + QString::number(s32_Count),
+                             "").toString();
 
-   while (c_Temp.Length() > 0)
+   while (c_Temp.length() > 0)
    {
-      c_Text.append(c_Temp.ToQString());
+      c_Text.append(c_Temp);
       s32_Count++;
-      c_Temp = C_SclString(orc_IniFile.value(c_Section + "/Line_" + QString::number(s32_Count),
-                                "").toString().toStdString());
+      c_Temp = orc_IniFile.value(c_Section + "/Line_" + QString::number(s32_Count),
+                                "").toString();
    }
 }
 
@@ -127,7 +127,7 @@ void C_KFXProjectOptions::LoadConfigFromIni(QSettings & orc_IniFile)
    uint8_t u8_Index;
 
    u16_MaxDesignatorLength  = static_cast<uint16_t>(orc_IniFile.value("EDIT/DESIGNATOR_MAX_LENGTH", 200U).toUInt());
-   c_DeviceName             = stw::scl::C_SclString::FromQString(orc_IniFile.value("CONFIG/DEVICENAME", "").toString());
+   c_DeviceName             = orc_IniFile.value("CONFIG/DEVICENAME", "").toString();
    u16_DataVersion          = static_cast<uint16_t>(orc_IniFile.value("CONFIG/RAMDATAVERSION", 0U).toUInt());
    u16_ListOffset           = static_cast<uint16_t>(orc_IniFile.value("CONFIG/LISTOFFSET", 0U).toUInt());
    u16_ProjectIndex         = static_cast<uint16_t>(orc_IniFile.value("CONFIG/PROJECTINDEX", 0U).toUInt());

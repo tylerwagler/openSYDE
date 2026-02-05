@@ -638,9 +638,9 @@ int32_t C_XFLActions::m_WakeupLocalIDAndSNR(const C_XFLCompanyID &orc_CompanyID,
   // wakeup OK -> get SNR(s)
   s32_Return = GetSNRExt(NULL, u8_MAX_NUM_ECUS_PER_LOCAL_ID, u8_NumFound);
   if (s32_Return != C_NO_ERR) {
-    TRG_ReportStatus(stw::opensyde_core::C_OscUtils::h_LoadString(
-                         STR_FM_ERR_RD_SNR_CDN_WAKE),
-                     gu8_DL_REPORT_STATUS_TYPE_ERROR);
+    TRG_ReportStatus(
+        stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_RD_SNR_CDN_WAKE),
+        gu8_DL_REPORT_STATUS_TYPE_ERROR);
     return s32_Return;
   }
   // SNR(s) was/were read.
@@ -708,9 +708,9 @@ int32_t C_XFLActions::DivertStreamOnOff(
                                       orc_DivertParams.u8_SelectedPosition, 0U);
     }
     if (s32_Return != C_NO_ERR) {
-      TRG_ReportStatus(stw::opensyde_core::C_OscUtils::h_LoadString(
-                           STR_FM_ERR_DIVERT_STREAM),
-                       gu8_DL_REPORT_STATUS_TYPE_ERROR);
+      TRG_ReportStatus(
+          stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_DIVERT_STREAM),
+          gu8_DL_REPORT_STATUS_TYPE_ERROR);
       return s32_Return;
     }
     TRG_ReportStatus(
@@ -723,13 +723,11 @@ int32_t C_XFLActions::DivertStreamOnOff(
          s32_Parameter < orc_DivertParams.c_Parameters.size();
          s32_Parameter++) {
       TRG_ReportStatus(
-          stw::opensyde_core::C_OscUtils::h_LoadString(
-              STR_FM_TXT_SET_PARA_PT1) +
+          stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_TXT_SET_PARA_PT1) +
               orc_DivertParams.c_Parameters[s32_Parameter].c_ParameterName +
-              stw::opensyde_core::C_OscUtils::h_LoadString(
-                  STR_FM_TXT_SET_PARA_PT2) +
-              C_SclString::IntToStr(orc_DivertParams.c_Parameters[s32_Parameter]
-                                        .u16_ParameterValue),
+              stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_TXT_SET_PARA_PT2) +
+              QString::number(orc_DivertParams.c_Parameters[s32_Parameter]
+                                  .u16_ParameterValue),
           gu8_DL_REPORT_STATUS_TYPE_INFORMATION);
       au8_Params[0] = static_cast<uint8_t>(
           orc_DivertParams.c_Parameters[s32_Parameter].u16_ParameterValue);
@@ -742,9 +740,9 @@ int32_t C_XFLActions::DivertStreamOnOff(
           orc_DivertParams.c_Parameters[s32_Parameter].u8_ParameterIndex,
           au8_Params);
       if (s32_Return != C_NO_ERR) {
-        TRG_ReportStatus(stw::opensyde_core::C_OscUtils::h_LoadString(
-                             STR_FM_ERR_SET_DIVERT_STREAM_PARA),
-                         gu8_DL_REPORT_STATUS_TYPE_ERROR);
+        TRG_ReportStatus(
+            stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_SET_DIVERT_STREAM_PARA),
+            gu8_DL_REPORT_STATUS_TYPE_ERROR);
         return s32_Return;
       }
     }
@@ -758,9 +756,9 @@ int32_t C_XFLActions::DivertStreamOnOff(
                                       orc_DivertParams.u8_SelectedPosition, 1U);
     }
     if (s32_Return != C_NO_ERR) {
-      TRG_ReportStatus(stw::opensyde_core::C_OscUtils::h_LoadString(
-                           STR_FM_ERR_DIVERT_STREAM),
-                       gu8_DL_REPORT_STATUS_TYPE_ERROR);
+      TRG_ReportStatus(
+          stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_DIVERT_STREAM),
+          gu8_DL_REPORT_STATUS_TYPE_ERROR);
       return s32_Return;
     }
     TRG_ReportStatus(
@@ -781,9 +779,9 @@ int32_t C_XFLActions::DivertStreamOnOffBBB(const bool oq_OnOff,
     // Divert Stream abschalten
     s32_Return = DivertStream(XFL_DIVERT_TARGET_BABY_B, ou8_TargetPosition, 0U);
     if (s32_Return != C_NO_ERR) {
-      TRG_ReportStatus(stw::opensyde_core::C_OscUtils::h_LoadString(
-                           STR_FM_ERR_DIVERT_STREAM),
-                       gu8_DL_REPORT_STATUS_TYPE_ERROR);
+      TRG_ReportStatus(
+          stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_DIVERT_STREAM),
+          gu8_DL_REPORT_STATUS_TYPE_ERROR);
       return s32_Return;
     }
     TRG_ReportStatus(
@@ -848,8 +846,8 @@ C_XFLActions::ReadFlashInformation(C_XFLFlashInformation &orc_Information,
 
   s32_Return = GetFlashInformationNumberOfICs(u8_NumICs);
   if (s32_Return != C_NO_ERR) {
-    orc_ErrorText = stw::opensyde_core::C_OscUtils::h_LoadString(
-        STR_FM_ERR_RD_NUM_FLASH_IC);
+    orc_ErrorText =
+        stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_RD_NUM_FLASH_IC);
     return s32_Return;
   }
   orc_Information.c_ICs.resize(u8_NumICs);
@@ -869,44 +867,44 @@ C_XFLActions::ReadFlashInformation(C_XFLFlashInformation &orc_Information,
     s32_Return =
         GetFlashInformationTotalMemorySize(u8_Index, pt_IC->u32_TotalSize);
     if (s32_Return != C_NO_ERR) {
-      orc_ErrorText = stw::opensyde_core::C_OscUtils::h_LoadString(
-                          STR_FM_ERR_RD_MEM_SIZE_IC) +
-                      QString::number(u8_Index) + "!";
+      orc_ErrorText =
+          stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_RD_MEM_SIZE_IC) +
+          QString::number(u8_Index) + "!";
       return s32_Return;
     }
 
     s32_Return =
         GetFlashInformationOffsetSector0(u8_Index, pt_IC->u32_Sector0Offset);
     if (s32_Return != C_NO_ERR) {
-      orc_ErrorText = stw::opensyde_core::C_OscUtils::h_LoadString(
-                          STR_FM_ERR_RD_SEC_OFFSET_IC) +
-                      QString::number(u8_Index) + "!";
+      orc_ErrorText =
+          stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_RD_SEC_OFFSET_IC) +
+          QString::number(u8_Index) + "!";
       return s32_Return;
     }
 
     s32_Return =
         GetFlashInformationEraseTime(u8_Index, pt_IC->u32_SectorEraseTime);
     if (s32_Return != C_NO_ERR) {
-      orc_ErrorText = stw::opensyde_core::C_OscUtils::h_LoadString(
-                          STR_FM_ERR_RD_MAX_ERASE) +
-                      QString::number(u8_Index) + "!";
+      orc_ErrorText =
+          stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_RD_MAX_ERASE) +
+          QString::number(u8_Index) + "!";
       return s32_Return;
     }
 
     s32_Return =
         GetFlashInformationWriteTime(u8_Index, pt_IC->u32_ProgrammingTime);
     if (s32_Return != C_NO_ERR) {
-      orc_ErrorText = stw::opensyde_core::C_OscUtils::h_LoadString(
-                          STR_FM_ERR_RD_MAX_PRG_TIME) +
-                      QString::number(u8_Index) + "!";
+      orc_ErrorText =
+          stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_RD_MAX_PRG_TIME) +
+          QString::number(u8_Index) + "!";
       return s32_Return;
     }
 
     s32_Return = GetFlashInformationNumberRegions(u8_Index, u8_NumRegions);
     if (s32_Return != C_NO_ERR) {
-      orc_ErrorText = stw::opensyde_core::C_OscUtils::h_LoadString(
-                          STR_FM_ERR_RD_NUM_REGIONS) +
-                      QString::number(u8_Index) + "!";
+      orc_ErrorText =
+          stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_RD_NUM_REGIONS) +
+          QString::number(u8_Index) + "!";
       return s32_Return;
     }
 
@@ -919,9 +917,9 @@ C_XFLActions::ReadFlashInformation(C_XFLFlashInformation &orc_Information,
           pt_IC->c_Regions[u8_RegionIndex].u32_BlockSize,
           pt_IC->c_Regions[u8_RegionIndex].u16_NumBlocks);
       if (s32_Return != C_NO_ERR) {
-        orc_ErrorText = stw::opensyde_core::C_OscUtils::h_LoadString(
-                            STR_FM_ERR_RD_REGION_INFO_IC) +
-                        QString::number(u8_Index) + "!";
+        orc_ErrorText =
+            stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_RD_REGION_INFO_IC) +
+            QString::number(u8_Index) + "!";
         return s32_Return;
       }
     }
@@ -1198,8 +1196,8 @@ QString C_XFLActions::XFLProtocolErrorToText(const int32_t os32_ReturnValue,
         stw::opensyde_core::C_OscUtils::h_LoadString(STR_XFL_ERR_NO_RESPONSE);
     break;
   case C_RANGE: // invalid parameter
-    c_Help = stw::opensyde_core::C_OscUtils::h_LoadString(
-        STR_XFL_ERR_INVALID_PARAMETER);
+    c_Help =
+        stw::opensyde_core::C_OscUtils::h_LoadString(STR_XFL_ERR_INVALID_PARAMETER);
     break;
   case C_NOACT: // error response
     if ((ou8_ErrorCode >= XFL_ERR_APP_DEF_ERR_MIN) &&
@@ -1207,18 +1205,17 @@ QString C_XFLActions::XFLProtocolErrorToText(const int32_t os32_ReturnValue,
       c_Help = QString::asprintf("%s %02x",
                                  stw::opensyde_core::C_OscUtils::h_LoadString(
                                      STR_FDL_ERR_ERASE_NO_CODE)
-                                     .toUtf8()
-                                     .constData(),
+                                     .toUtf8().constData(),
                                  ou8_ErrorCode);
     } else {
       switch (ou8_ErrorCode) {
       case XFL_ERR_CHECKSUM_ERR:
-        c_Help = stw::opensyde_core::C_OscUtils::h_LoadString(
-            STR_FM_ERR_TRANSMISSION_ERR);
+        c_Help =
+            stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_TRANSMISSION_ERR);
         break;
       case XFL_ERR_FLASH_PROG_ERR:
-        c_Help = stw::opensyde_core::C_OscUtils::h_LoadString(
-            STR_FM_ERR_DURING_FLASH_PROG);
+        c_Help =
+            stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_DURING_FLASH_PROG);
         break;
       case XFL_ERR_FLASH_ERASE_ERR:
         c_Help =
@@ -1229,8 +1226,8 @@ QString C_XFLActions::XFLProtocolErrorToText(const int32_t os32_ReturnValue,
             stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_BITRATE);
         break;
       case XFL_ERR_OUT_OF_RANGE_ERR:
-        c_Help = stw::opensyde_core::C_OscUtils::h_LoadString(
-            STR_FM_ERR_INVALID_PARA);
+        c_Help =
+            stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_INVALID_PARA);
         break;
       case XFL_ERR_EE_VERIFY_ERR:
         c_Help =
@@ -1241,16 +1238,16 @@ QString C_XFLActions::XFLProtocolErrorToText(const int32_t os32_ReturnValue,
             stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_EEP_READ);
         break;
       case XFL_ERR_EE_WRITE_ERR:
-        c_Help = stw::opensyde_core::C_OscUtils::h_LoadString(
-            STR_XFL_ERR_EEPROM_WRITE);
+        c_Help =
+            stw::opensyde_core::C_OscUtils::h_LoadString(STR_XFL_ERR_EEPROM_WRITE);
         break;
       case XFL_ERR_DIVERT_STREAM_COM_ERR:
-        c_Help = stw::opensyde_core::C_OscUtils::h_LoadString(
-            STR_FM_ERR_DIVERT_STREAM_TRG_GW);
+        c_Help =
+            stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_DIVERT_STREAM_TRG_GW);
         break;
       case XFL_ERR_WRONG_REC_TYPE:
-        c_Help = stw::opensyde_core::C_OscUtils::h_LoadString(
-            STR_FM_ERR_HEX_CMD_UNK);
+        c_Help =
+            stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_ERR_HEX_CMD_UNK);
         break;
       case XFL_ERR_UNDEFINED_ERROR: // no break;
       default:
@@ -1371,7 +1368,7 @@ int32_t C_XFLActions::SearchNodes(const QString &orc_CompanyID,
   uint8_t u8_Dummy;
 
   int32_t s32_IndexInTable;
-  C_SclString c_SNR;
+  QString c_SNR;
 
   s32_Return = C_XFLActions::CompIDStringToStruct(orc_CompanyID, c_CompIDIn);
   if (s32_Return != C_NO_ERR) {
@@ -1449,7 +1446,7 @@ int32_t C_XFLActions::SearchNodes(const QString &orc_CompanyID,
             //- maybe the previous wakeup only worked for part of the nodes
             //   e.g. if only some of the nodes match the used company-ID.
             //- if more than one node is present with the same local-id get_snr
-            //will most probably yield
+            // will most probably yield
             //   multiple responses as well, due to the different SNR in the
             //   data byte area (wakeup and send-comp-id can result in identical
             //   responses from different nodes, possibly
@@ -1488,10 +1485,10 @@ int32_t C_XFLActions::SearchNodes(const QString &orc_CompanyID,
             // get device IDs
             // we have to consider a number of scenarios here:
             //- If there is more than one node in wakeup now we have to do a
-            //wakeup with SNR
+            // wakeup with SNR
             //    to be sure to address a unique one.
             //- We have to read the protocol-version in order to know the syntax
-            //of the get_device_id
+            // of the get_device_id
             //    service
             for (s32_j = 0; s32_j < u8_NumSNRsFound; s32_j++) {
               if (au8_Found[s32_IdIndex] > 1) {

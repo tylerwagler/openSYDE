@@ -42,7 +42,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "C_SclIniFile.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -63,7 +63,7 @@ public:
    bool CheckCheckSum(void);
    void UpdateCheckSum(void);
 
-   C_OscChecksummedIniFile(const stw::scl::C_SclString & orc_FileName);
+   C_OscChecksummedIniFile(const QString & orc_FileName);
    virtual ~C_OscChecksummedIniFile(void);
 };
 

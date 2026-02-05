@@ -241,9 +241,9 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
       const C_PuiSdSharedDatapools & rc_SharedDatapools = C_PuiSdHandler::h_GetInstance()->GetSharedDatapoolsConst();
       uint32_t u32_SharedGroup = 0U;
 
-      this->mc_Name = pc_OscDataPool->c_Name.c_str();
+      this->mc_Name = pc_OscDataPool->c_Name;
       this->m_UpdateName();
-      this->mpc_Ui->pc_TextEditDpComment->setText(pc_OscDataPool->c_Comment.c_str());
+      this->mpc_Ui->pc_TextEditDpComment->setText(pc_OscDataPool->c_Comment);
       this->mq_StateSafety = pc_OscDataPool->q_IsSafety;
       this->mq_Shared = rc_SharedDatapools.IsSharedDatapool(this->mc_DatapoolId, &u32_SharedGroup);
 

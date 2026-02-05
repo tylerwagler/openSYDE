@@ -23,7 +23,6 @@
 #include "ui_C_SdNdeDpImportRamViewReport.h"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
@@ -55,7 +54,7 @@ using namespace stw::opensyde_gui_logic;
 C_SdNdeDpImportRamViewReport::C_SdNdeDpImportRamViewReport(C_OgePopUpDialog & orc_Parent,
                                                            const QString & orc_ProjectPath,
                                                            const C_OscNodeDataPool & orc_DataPool,
-                                                           const C_SclStringList & orc_ImportInformation) :
+                                                           const QStringList & orc_ImportInformation) :
    QWidget(&orc_Parent),
    mpc_Ui(new Ui::C_SdNdeDpImportRamViewReport),
    mrc_ParentDialog(orc_Parent)
@@ -156,7 +155,7 @@ void C_SdNdeDpImportRamViewReport::m_CancelClicked(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpImportRamViewReport::m_FillReport(const QString & orc_ProjectPath, const C_OscNodeDataPool & orc_DataPool,
-                                                const C_SclStringList & orc_ImportInformation)
+                                                const QStringList & orc_ImportInformation)
 {
    QString c_Text = "";
 
@@ -198,7 +197,7 @@ void C_SdNdeDpImportRamViewReport::m_FillReport(const QString & orc_ProjectPath,
    c_Text += "<br/>";
    c_Text += "For parsing errors, warnings and detailed information see ";
    c_Text += C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
-                              C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
+                              C_OscLoggingHandler::h_GetCompleteLogFileLocation());
    c_Text += ".";
    c_Text += "</td></tr></table>";
 
@@ -215,7 +214,7 @@ void C_SdNdeDpImportRamViewReport::m_FillReport(const QString & orc_ProjectPath,
    c_Text += static_cast<QString>("Cut to %1 (= project setting) characters").arg(
       C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit());
    c_Text += "</p>";
-   if (orc_ImportInformation.GetCount() > 0)
+   if (orc_ImportInformation.size() > 0)
    {
       c_Text += "<p><b>";
       c_Text += "Import Details";
@@ -223,10 +222,10 @@ void C_SdNdeDpImportRamViewReport::m_FillReport(const QString & orc_ProjectPath,
 
       // List with "-" as bullet points is not supported by Qt's rich text engine, so we use a table as workaround
       c_Text += "<table>";
-      for (uint32_t u32_Info = 0; u32_Info < orc_ImportInformation.GetCount(); u32_Info++)
+      for (int32_t s32_Info = 0; s32_Info < orc_ImportInformation.size(); s32_Info++)
       {
          c_Text += "<tr><td style=\"padding-right:2px\">-</td><td>";
-         c_Text += orc_ImportInformation.Strings[u32_Info].c_str();
+         c_Text += orc_ImportInformation.at(s32_Info);
          c_Text += "</td></tr>";
       }
       c_Text += "</table>";

@@ -6,7 +6,7 @@
 #include "stwtypes.hpp"
 #include "C_SclChecksums.hpp"
 
-#include "C_SclString.hpp"
+#include <QString>
 #include "CKFXVariableListBase.hpp"
 
 //**************************************************************
@@ -132,7 +132,7 @@ uint16_t C_KFXVariableListBase::GetNumDefaults(void) const
 
 //**************************************************************
 
-const C_KFXVariableBase * C_KFXVariableListBase::GetVariableByName(const C_SclString & orc_VariableName) const
+const C_KFXVariableBase * C_KFXVariableListBase::GetVariableByName(const QString & orc_VariableName) const
 {
    int32_t s32_VarIndex;
 
@@ -148,7 +148,7 @@ const C_KFXVariableBase * C_KFXVariableListBase::GetVariableByName(const C_SclSt
 
 //**************************************************************
 
-C_KFXVariableBase * C_KFXVariableListBase::GetVariableByName(const C_SclString & orc_VariableName)
+C_KFXVariableBase * C_KFXVariableListBase::GetVariableByName(const QString & orc_VariableName)
 {
    int32_t s32_VarIndex;
 

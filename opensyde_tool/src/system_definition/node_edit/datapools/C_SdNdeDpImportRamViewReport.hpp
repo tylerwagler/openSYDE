@@ -10,8 +10,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QStringList>
+
 #include "C_OgePopUpDialog.hpp"
-#include "C_SclStringList.hpp"
 #include "C_OscNodeDataPool.hpp"
 #include "C_PuiSdNodeDataPool.hpp"
 
@@ -38,7 +39,7 @@ public:
    explicit C_SdNdeDpImportRamViewReport(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                          const QString & orc_ProjectPath,
                                          const stw::opensyde_core::C_OscNodeDataPool & orc_DataPool,
-                                         const scl::C_SclStringList & orc_ImportInformation);
+                                         const QStringList & orc_ImportInformation);
    ~C_SdNdeDpImportRamViewReport(void) override;
 
    void InitStaticNames(void) const;
@@ -55,7 +56,7 @@ private:
    void m_CancelClicked(void);
 
    void m_FillReport(const QString & orc_ProjectPath, const stw::opensyde_core::C_OscNodeDataPool & orc_DataPool,
-                     const scl::C_SclStringList & orc_ImportInformation);
+                     const QStringList & orc_ImportInformation);
 
    //Avoid call
    C_SdNdeDpImportRamViewReport(const C_SdNdeDpImportRamViewReport &);

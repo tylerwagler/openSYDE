@@ -194,14 +194,14 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
          C_OscHexFile * const pc_HexFile = new C_OscHexFile();
 
          // File information
-         if (pc_HexFile->LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str()) == stw::hex_file::NO_ERR)
+         if (pc_HexFile->LoadFromFile(this->mc_AbsoluteFilePath.toStdString()) == stw::hex_file::NO_ERR)
          {
             stw::diag_lib::C_XFLECUInformation c_FileApplicationInfo;
             const int32_t s32_Result = pc_HexFile->ScanApplicationInformationBlockFromHexFile(c_FileApplicationInfo);
 
             if ((s32_Result == C_NO_ERR) || (s32_Result == C_WARN))
             {
-               this->mc_AppDeviceType = c_FileApplicationInfo.GetDeviceID().Trim().UpperCase().c_str();
+               this->mc_AppDeviceType = c_FileApplicationInfo.GetDeviceID().Trim().UpperCase();
                if (s32_Result == C_WARN)
                {
                   // Hex file has multiple application blocks so information is ambiguous
@@ -216,8 +216,8 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                else
                {
                   // Use information from hex file
-                  this->mc_ProjectName = c_FileApplicationInfo.GetProjectName().c_str();
-                  this->mc_Version = c_FileApplicationInfo.GetProjectVersion().c_str();
+                  this->mc_ProjectName = c_FileApplicationInfo.GetProjectName();
+                  this->mc_Version = c_FileApplicationInfo.GetProjectVersion();
                   if (this->mc_Version != "")
                   {
                      this->mpc_Ui->pc_LabelVersion->setText(this->mc_Version);
@@ -227,10 +227,10 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                      this->mc_Version = "NA";
                      this->mpc_Ui->pc_LabelVersion->setText("?");
                   }
-                  this->mc_Date = c_FileApplicationInfo.GetDate().c_str();
+                  this->mc_Date = c_FileApplicationInfo.GetDate();
                   // This is in format Mar 14 2015 whereas openSYDE date format is usually 14.03.2015, but we do not
                   // convert, because we want to show the "real" information like it would look like in other tools
-                  this->mc_Time = c_FileApplicationInfo.GetTime().c_str();
+                  this->mc_Time = c_FileApplicationInfo.GetTime();
                }
 
                // No check with Alias necessary due to check with real device type defined with target integration
@@ -259,7 +259,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(bool & orq_Fil
                         {
                            const QString c_AllowedDevice =
                               pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].
-                              c_OtherAcceptedNames[u32_ItName].Trim().UpperCase().c_str();
+                              c_OtherAcceptedNames[u32_ItName].Trim().UpperCase();
                            if (QString::compare(c_AllowedDevice, this->mc_AppDeviceType, Qt::CaseInsensitive) == 0)
                            {
                               q_FileIsOk = true;

@@ -72,7 +72,7 @@ void C_OscParamSetInterpretedData::AddInterpretedFileData(const C_OscParamSetInt
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscParamSetInterpretedNode * C_OscParamSetInterpretedData::GetInterpretedDataForNode(
-   const C_SclString & orc_NodeName)
+   const QString & orc_NodeName)
 const
 {
    const C_OscParamSetInterpretedNode * pc_Retval = NULL;

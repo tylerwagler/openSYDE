@@ -14,9 +14,9 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QColor>
 #include <QPointF>
+#include <QString>
 #include "stwtypes.hpp"
 #include "C_PuiBsLineBase.hpp"
-#include "C_SclString.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -59,10 +59,10 @@ public:
    E_ArrowHeadType e_EndArrowHeadType;
    E_LineType e_LineType;
 
-   static stw::scl::C_SclString h_ArrowHeadTypeToString(const E_ArrowHeadType & ore_Type);
-   static stw::scl::C_SclString h_LineTypeToString(const E_LineType & ore_Type);
-   static E_ArrowHeadType h_ArrowHeadTypeFromString(const stw::scl::C_SclString & orc_Str);
-   static E_LineType h_LineTypeFromString(const stw::scl::C_SclString & orc_Str);
+   static QString h_ArrowHeadTypeToString(const E_ArrowHeadType & ore_Type);
+   static QString h_LineTypeToString(const E_LineType & ore_Type);
+   static E_ArrowHeadType h_ArrowHeadTypeFromString(const QString & orc_Str);
+   static E_LineType h_LineTypeFromString(const QString & orc_Str);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

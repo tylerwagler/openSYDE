@@ -135,7 +135,7 @@ void C_SdNdeDalCopClipBoardHelper::mh_StoreDataloggerToClipboard(const std::vect
                                                                             C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups,
                                                                  const QString & orc_GenericTagName)
 {
-   stw::scl::C_SclString c_XmlContent;
+   QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild(orc_GenericTagName.toStdString().c_str());
@@ -143,7 +143,7 @@ void C_SdNdeDalCopClipBoardHelper::mh_StoreDataloggerToClipboard(const std::vect
    C_SdNdeDalCopClipBoardHelper::mh_StoreElementIdGroups(orc_ElementIdGroups, orc_GenericTagName, c_StringXml);
    c_StringXml.SaveToString(c_XmlContent);
 
-   mh_SetClipBoard(c_XmlContent.c_str());
+   mh_SetClipBoard(c_XmlContent);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -255,7 +255,7 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadElementIdGroups(QMap<C_OscNodeDataP
 
    if  (s32_Retval == C_NO_ERR)
    {
-      stw::scl::C_SclString c_CurrentGroupNode = orc_XmlParser.SelectNodeChild("element-id-group");
+      QString c_CurrentGroupNode = orc_XmlParser.SelectNodeChild("element-id-group");
 
       if (c_CurrentGroupNode == "element-id-group")
       {

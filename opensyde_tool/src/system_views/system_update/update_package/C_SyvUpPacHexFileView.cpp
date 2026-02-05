@@ -141,7 +141,7 @@ void C_SyvUpPacHexFileView::m_LoadInfo(void) const
    C_OscHexFile c_HexFile;
    uint32_t u32_Result;
 
-   u32_Result = c_HexFile.LoadFromFile(this->mc_AbsoluteFilePath.toStdString().c_str());
+   u32_Result = c_HexFile.LoadFromFile(this->mc_AbsoluteFilePath.toStdString());
    if (u32_Result == stw::hex_file::NO_ERR)
    {
       mh_AddFileSection(this->mc_AbsoluteFilePath, c_Text);
@@ -303,7 +303,7 @@ void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexF
       orc_Content += "Block type:";
       orc_Content += "</td>";
       orc_Content += C_SyvUpPacHexFileView::mhc_CONTINUE_TD;
-      orc_Content += rc_CurInfo.GetInfoLevelAsString().c_str();
+      orc_Content += rc_CurInfo.GetInfoLevelAsString();
       orc_Content += "</td>";
       orc_Content += "</tr>";
       orc_Content += "<tr>";
@@ -321,7 +321,7 @@ void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexF
       orc_Content += C_SyvUpPacHexFileView::mhc_CONTINUE_TD;
       if (rc_CurInfo.ContainsDeviceID() == true)
       {
-         orc_Content += rc_CurInfo.GetDeviceID().c_str();
+         orc_Content += rc_CurInfo.GetDeviceID();
       }
       else
       {
@@ -336,7 +336,7 @@ void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexF
       orc_Content += C_SyvUpPacHexFileView::mhc_CONTINUE_TD;
       if (rc_CurInfo.ContainsDateAndTime() == true)
       {
-         orc_Content += rc_CurInfo.GetDate().c_str();
+         orc_Content += rc_CurInfo.GetDate();
       }
       else
       {
@@ -351,7 +351,7 @@ void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexF
       orc_Content += C_SyvUpPacHexFileView::mhc_CONTINUE_TD;
       if (rc_CurInfo.ContainsDateAndTime() == true)
       {
-         orc_Content += rc_CurInfo.GetTime().c_str();
+         orc_Content += rc_CurInfo.GetTime();
       }
       else
       {
@@ -366,7 +366,7 @@ void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexF
       orc_Content += C_SyvUpPacHexFileView::mhc_CONTINUE_TD;
       if (rc_CurInfo.ContainsProjectName() == true)
       {
-         orc_Content += rc_CurInfo.GetProjectName().c_str();
+         orc_Content += rc_CurInfo.GetProjectName();
       }
       else
       {
@@ -381,7 +381,7 @@ void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexF
       orc_Content += C_SyvUpPacHexFileView::mhc_CONTINUE_TD;
       if (rc_CurInfo.ContainsProjectVersion() == true)
       {
-         orc_Content += rc_CurInfo.GetProjectVersion().c_str();
+         orc_Content += rc_CurInfo.GetProjectVersion();
       }
       else
       {
@@ -396,7 +396,7 @@ void C_SyvUpPacHexFileView::mh_AddApplicationInformation(C_OscHexFile & orc_HexF
       orc_Content += C_SyvUpPacHexFileView::mhc_CONTINUE_TD;
       if (rc_CurInfo.ContainsAdditionalInfo() == true)
       {
-         orc_Content += rc_CurInfo.GetAdditionalInfo().c_str();
+         orc_Content += rc_CurInfo.GetAdditionalInfo();
       }
       else
       {

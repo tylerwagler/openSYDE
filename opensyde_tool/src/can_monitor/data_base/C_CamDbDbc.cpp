@@ -89,14 +89,14 @@ void C_CamDbDbc::FindAllMessages(void)
          {
             const C_CieConverter::C_CieNodeMessage & rc_Message = rc_Node.c_RxMessages[u32_ItMessage];
             //Use first occurance
-            if (!this->mc_FoundMessagesNodes.contains(rc_Message.c_CanMessage.c_Name.c_str()))
+            if (!this->mc_FoundMessagesNodes.contains(rc_Message.c_CanMessage.c_Name))
             {
                //Id
                c_Id.q_MessageIsTx = false;
                c_Id.u32_MessageIndex = u32_ItMessage;
                c_Id.u32_Hash = C_CamGenSigUtil::h_CalcMessageHash(rc_Message.c_CanMessage);
                //Remember for future access
-               this->mc_FoundMessagesNodes.insert(rc_Message.c_CanMessage.c_Name.c_str(), c_Id);
+               this->mc_FoundMessagesNodes.insert(rc_Message.c_CanMessage.c_Name, c_Id);
             }
          }
          //Each Tx message
@@ -104,14 +104,14 @@ void C_CamDbDbc::FindAllMessages(void)
          {
             const C_CieConverter::C_CieNodeMessage & rc_Message = rc_Node.c_TxMessages[u32_ItMessage];
             //Use first occurance
-            if (!this->mc_FoundMessagesNodes.contains(rc_Message.c_CanMessage.c_Name.c_str()))
+            if (!this->mc_FoundMessagesNodes.contains(rc_Message.c_CanMessage.c_Name))
             {
                //Id
                c_Id.q_MessageIsTx = true;
                c_Id.u32_MessageIndex = u32_ItMessage;
                c_Id.u32_Hash = C_CamGenSigUtil::h_CalcMessageHash(rc_Message.c_CanMessage);
                //Remember for future access
-               this->mc_FoundMessagesNodes.insert(rc_Message.c_CanMessage.c_Name.c_str(), c_Id);
+               this->mc_FoundMessagesNodes.insert(rc_Message.c_CanMessage.c_Name, c_Id);
             }
          }
       }
@@ -120,13 +120,13 @@ void C_CamDbDbc::FindAllMessages(void)
       {
          const C_CieConverter::C_CieNodeMessage & rc_Message = this->mc_Data.c_UnmappedMessages[u32_ItMessage];
          //Use first occurance
-         if (!this->mc_FoundMessagesUnmapped.contains(rc_Message.c_CanMessage.c_Name.c_str()))
+         if (!this->mc_FoundMessagesUnmapped.contains(rc_Message.c_CanMessage.c_Name))
          {
             C_CamDbDbcUnmappedMessageId c_UnmappedId;
             c_UnmappedId.u32_Index = u32_ItMessage;
             c_UnmappedId.u32_Hash = C_CamGenSigUtil::h_CalcMessageHash(rc_Message.c_CanMessage);
             //Remember for future access
-            this->mc_FoundMessagesUnmapped.insert(rc_Message.c_CanMessage.c_Name.c_str(), c_UnmappedId);
+            this->mc_FoundMessagesUnmapped.insert(rc_Message.c_CanMessage.c_Name, c_UnmappedId);
          }
       }
       this->mq_FoundAll = true;
@@ -162,7 +162,7 @@ int32_t C_CamDbDbc::FindMessageById(const uint32_t ou32_Id, const bool oq_IsExte
          if ((rc_Message.c_CanMessage.u32_CanId == ou32_Id) && (rc_Message.c_CanMessage.q_IsExtended == oq_IsExtended))
          {
             //Found match
-            orc_Message = rc_Message.c_CanMessage.c_Name.c_str();
+            orc_Message = rc_Message.c_CanMessage.c_Name;
             s32_Retval = C_NO_ERR;
          }
       }
@@ -174,7 +174,7 @@ int32_t C_CamDbDbc::FindMessageById(const uint32_t ou32_Id, const bool oq_IsExte
          if ((rc_Message.c_CanMessage.u32_CanId == ou32_Id) && (rc_Message.c_CanMessage.q_IsExtended == oq_IsExtended))
          {
             //Found match
-            orc_Message = rc_Message.c_CanMessage.c_Name.c_str();
+            orc_Message = rc_Message.c_CanMessage.c_Name;
             s32_Retval = C_NO_ERR;
          }
       }
@@ -186,7 +186,7 @@ int32_t C_CamDbDbc::FindMessageById(const uint32_t ou32_Id, const bool oq_IsExte
       if ((rc_Message.c_CanMessage.u32_CanId == ou32_Id) && (rc_Message.c_CanMessage.q_IsExtended == oq_IsExtended))
       {
          //Found match
-         orc_Message = rc_Message.c_CanMessage.c_Name.c_str();
+         orc_Message = rc_Message.c_CanMessage.c_Name;
          s32_Retval = C_NO_ERR;
       }
    }
@@ -228,7 +228,7 @@ int32_t C_CamDbDbc::FindMessage(const QString & orc_Message)
          for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < rc_Node.c_RxMessages.size(); ++u32_ItMessage)
          {
             const C_CieConverter::C_CieNodeMessage & rc_Message = rc_Node.c_RxMessages[u32_ItMessage];
-            if (orc_Message.compare(rc_Message.c_CanMessage.c_Name.c_str()) == 0)
+            if (orc_Message.compare(rc_Message.c_CanMessage.c_Name) == 0)
             {
                //Found
                s32_Retval = C_NO_ERR;
@@ -244,7 +244,7 @@ int32_t C_CamDbDbc::FindMessage(const QString & orc_Message)
               ++u32_ItMessage)
          {
             const C_CieConverter::C_CieNodeMessage & rc_Message = rc_Node.c_TxMessages[u32_ItMessage];
-            if (orc_Message.compare(rc_Message.c_CanMessage.c_Name.c_str()) == 0)
+            if (orc_Message.compare(rc_Message.c_CanMessage.c_Name) == 0)
             {
                //Found
                s32_Retval = C_NO_ERR;
@@ -267,7 +267,7 @@ int32_t C_CamDbDbc::FindMessage(const QString & orc_Message)
          for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < this->mc_Data.c_UnmappedMessages.size(); ++u32_ItMessage)
          {
             const C_CieConverter::C_CieNodeMessage & rc_Message = this->mc_Data.c_UnmappedMessages[u32_ItMessage];
-            if (orc_Message.compare(rc_Message.c_CanMessage.c_Name.c_str()) == 0)
+            if (orc_Message.compare(rc_Message.c_CanMessage.c_Name) == 0)
             {
                C_CamDbDbcUnmappedMessageId c_UnmappedId;
                //Found
@@ -275,7 +275,7 @@ int32_t C_CamDbDbc::FindMessage(const QString & orc_Message)
                c_UnmappedId.u32_Index = u32_ItMessage;
                c_UnmappedId.u32_Hash = C_CamGenSigUtil::h_CalcMessageHash(rc_Message.c_CanMessage);
                //Id
-               this->mc_FoundMessagesUnmapped.insert(rc_Message.c_CanMessage.c_Name.c_str(), c_UnmappedId);
+               this->mc_FoundMessagesUnmapped.insert(rc_Message.c_CanMessage.c_Name, c_UnmappedId);
                break;
             }
          }

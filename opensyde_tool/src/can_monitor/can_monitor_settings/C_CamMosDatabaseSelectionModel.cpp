@@ -336,12 +336,12 @@ void C_CamMosDatabaseSelectionModel::m_CreateAndFillMessageNode(const C_OscCanMe
 
    //Init current node
    pc_MessageItem->u32_Index = 0UL;
-   pc_MessageItem->c_Name = static_cast<QString>("%1 (0x%2)").arg(orc_Message.c_Name.c_str()).
+   pc_MessageItem->c_Name = static_cast<QString>("%1 (0x%2)").arg(orc_Message.c_Name).
                             arg(static_cast<QString>("%1").arg(orc_Message.u32_CanId, 0, 16).toUpper());
 
    //Remember the original name (required by getter)
-   this->mc_MessageMap.insert(pc_MessageItem->c_Name, orc_Message.c_Name.c_str());
-   pc_MessageItem->c_ToolTipHeading = orc_Message.c_Name.c_str();
+   this->mc_MessageMap.insert(pc_MessageItem->c_Name, orc_Message.c_Name);
+   pc_MessageItem->c_ToolTipHeading = orc_Message.c_Name;
    pc_MessageItem->c_ToolTipContent = C_SdTooltipUtil::h_GetToolTipContentMessage(orc_Message);
    pc_MessageItem->c_Icon = QIcon(C_CamMosDatabaseSelectionModel::mhc_ICON_MESSAGE);
    opc_ParentItem->AddChild(pc_MessageItem);

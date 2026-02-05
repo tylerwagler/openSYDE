@@ -85,11 +85,11 @@ void C_SdNdeDalLogJobDataSelectionTableModel::AddData(
          }
 
          rc_JobData.c_Namespace =
-            (C_PuiSdUtil::h_GetNamespaceDatapoolElement(rc_ConfiguredElementOptArrayId)).toStdString().c_str();
+            C_PuiSdUtil::h_GetNamespaceDatapoolElement(rc_ConfiguredElementOptArrayId);
 
          if (orc_DataElements[u32_Index].q_UseCustomName == true)
          {
-            rc_JobData.c_LoggingName = orc_DataElements[u32_Index].c_CustomName.toStdString().c_str();
+            rc_JobData.c_LoggingName = orc_DataElements[u32_Index].c_CustomName;
          }
          else
          {
@@ -311,19 +311,19 @@ QVariant C_SdNdeDalLogJobDataSelectionTableModel::data(const QModelIndex & orc_I
             switch (e_Col)
             {
             case eDATA_ELEMENT:
-               c_Retval =  rc_Data.c_DataElementName.c_str();
+               c_Retval = rc_Data.c_DataElementName;
                break;
             case eLOCATION:
-               c_Retval =  rc_Data.c_Location.c_str();
+               c_Retval = rc_Data.c_Location;
                break;
             case eNAMESPACE:
-               c_Retval =  rc_Data.c_Namespace.c_str();
+               c_Retval = rc_Data.c_Namespace;
                break;
             case eLOGGING_NAME:
-               c_Retval =  rc_Data.c_LoggingName.c_str();
+               c_Retval = rc_Data.c_LoggingName;
                break;
             case eCOMMENT:
-               c_Retval =  rc_Data.c_Comment.c_str();
+               c_Retval = rc_Data.c_Comment;
                break;
             default:
                break;
@@ -366,8 +366,7 @@ QVariant C_SdNdeDalLogJobDataSelectionTableModel::data(const QModelIndex & orc_I
                if (static_cast<uint32_t>(u32_Index) < this->mc_LoggingDataList.size())
                {
                   const C_DalLogJobData & rc_Data = this->mc_LoggingDataList[u32_Index];
-                  const QString c_LoggingName = rc_Data.c_LoggingName.c_str();
-                  const int32_t s32_Ret = c_LoggingName.compare("[Namespace]");
+                  const int32_t s32_Ret = rc_Data.c_LoggingName.compare("[Namespace]");
                   if (s32_Ret != 0)
                   {
                      c_Font = C_Uti::h_GetFontPixel(mc_STYLE_GUIDE_FONT_SEMIBOLD_13);
@@ -491,7 +490,7 @@ bool C_SdNdeDalLogJobDataSelectionTableModel::setData(const QModelIndex & orc_In
             case eCOMMENT:
                break;
             case eLOGGING_NAME:
-               this->mc_LoggingDataList.at(u32_Index).c_LoggingName = orc_Value.toString().toStdString().c_str();
+               this->mc_LoggingDataList.at(u32_Index).c_LoggingName = orc_Value.toString();
                q_Retval = true;
                break;
             default:

@@ -165,7 +165,7 @@ void C_SdTopologyScene::AddNode(const QString & orc_NodeType, const QPointF & or
 {
    uint32_t u32_Tmp;
    const C_OscDeviceDefinition * const pc_MainDevice = C_OscSystemDefinition::hc_Devices.LookForDevice(
-      orc_NodeType.toStdString().c_str(), "", u32_Tmp);
+      orc_NodeType.toStdString(), "", u32_Tmp);
 
    if (pc_MainDevice != NULL)
    {
@@ -207,13 +207,13 @@ void C_SdTopologyScene::AddNode(const QString & orc_NodeType, const QPointF & or
 
          for (uint32_t u32_ItSubDevice = 0UL; u32_ItSubDevice < u32_SubDevicesSize; ++u32_ItSubDevice)
          {
-            const stw::scl::C_SclString & rc_Title = pc_MainDevice->c_SubDevices[u32_ItSubDevice].c_SubDeviceName;
+            const QString & rc_Title = pc_MainDevice->c_SubDevices[u32_ItSubDevice].c_SubDeviceName;
             stw::opensyde_core::C_OscNode c_OscNode;
             //Object
             this->m_InitNodeData(c_OscNode,
-                                 rc_Title.c_str(), orc_NodeType);
+                                 rc_Title, orc_NodeType);
             c_OscNodes.push_back(c_OscNode);
-            c_OscNodeNames.emplace_back(rc_Title.c_str());
+            c_OscNodeNames.emplace_back(rc_Title);
             c_UiNodes.push_back(c_UiNode);
          }
 
@@ -236,12 +236,12 @@ void C_SdTopologyScene::AddNode(const QString & orc_NodeType, const QPointF & or
           (pc_MainDevice->c_SubDevices[0].q_FlashloaderStwCan == true))
       {
          const uint8_t u8_TIMER_THRESHOLD_IN_MSEC = 100;
-         QString c_NodeName = pc_MainDevice->GetDisplayName().c_str();
+         QString c_NodeName = pc_MainDevice->GetDisplayName();
          const stw::opensyde_core::C_OscNode * const pc_OscNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
             s32_Index);
          if (pc_OscNode != NULL)
          {
-            c_NodeName = pc_OscNode->c_Properties.c_Name.c_str();
+            c_NodeName = pc_OscNode->c_Properties.c_Name;
          }
 
          QTimer::singleShot(u8_TIMER_THRESHOLD_IN_MSEC, this,
@@ -1534,7 +1534,7 @@ bool C_SdTopologyScene::m_AddOfMime(const QMimeData * const opc_MimeData, const 
          c_Text = opc_MimeData->text();
 
          // check if it is a node
-         pc_Node = C_OscSystemDefinition::hc_Devices.LookForDevice(c_Text.toStdString().c_str(), "", u32_SubDevice);
+         pc_Node = C_OscSystemDefinition::hc_Devices.LookForDevice(c_Text.toStdString(), "", u32_SubDevice);
          if (pc_Node != NULL)
          {
             e_Type = C_SdManUnoTopologyAddCommand::E_ElementType::eNODE;
@@ -1965,8 +1965,8 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
    if (q_IsMulti)
    {
       QString c_NameProposal;
-      stw::scl::C_SclString c_MainDeviceName;
-      stw::scl::C_SclString c_SubDeviceName;
+      QString c_MainDeviceName;
+      QString c_SubDeviceName;
       std::vector<QString> c_SubDevices;
       std::vector<C_OscNode> c_OscNodes;
       std::vector<C_PuiSdNode> c_UiNodes;
@@ -1977,7 +1977,7 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
          {
             if (ou32_SnapshotNodeIndex == rc_Group.c_SubNodeIndexes[u32_ItSubDevice])
             {
-               c_NameProposal = rc_Group.c_BaseName.c_str();
+               c_NameProposal = rc_Group.c_BaseName;
                c_SubDevices.reserve(rc_Group.c_SubNodeIndexes.size());
                c_OscNodes.reserve(rc_Group.c_SubNodeIndexes.size());
                c_UiNodes.reserve(rc_Group.c_SubNodeIndexes.size());
@@ -1992,10 +1992,10 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
                   {
                      const C_OscNode rc_OscNode =
                         orc_Snapshot.c_OscNodes[u32_CurIndex];
-                     C_OscSystemDefinitionFiler::h_SplitDeviceType(rc_OscNode.c_DeviceType.toStdString().c_str(),
+                     C_OscSystemDefinitionFiler::h_SplitDeviceType(rc_OscNode.c_DeviceType,
                                                                    c_MainDeviceName,
                                                                    c_SubDeviceName);
-                     c_SubDevices.emplace_back(c_SubDeviceName.c_str());
+                     c_SubDevices.emplace_back(c_SubDeviceName);
                      c_OscNodes.push_back(rc_OscNode);
                      c_UiNodes.push_back(orc_Snapshot.c_UiNodes[u32_CurIndex]);
                   }
@@ -2004,9 +2004,9 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
             }
          }
       }
-      Q_ASSERT(c_MainDeviceName.IsEmpty() == false);
+      Q_ASSERT(c_MainDeviceName.isEmpty() == false);
       u32_DataIndex = C_PuiSdHandler::h_GetInstance()->AddNodeSquadAndSort(c_OscNodes, c_UiNodes, c_SubDevices,
-                                                                           c_MainDeviceName.c_str(), c_NameProposal);
+                                                                           c_MainDeviceName, c_NameProposal);
    }
    else
    {
@@ -2014,7 +2014,7 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
       u32_DataIndex = C_PuiSdHandler::h_GetInstance()->AddNodeAndSort(c_OscInitialNode,
                                                                       orc_Snapshot.c_UiNodes[
                                                                          ou32_SnapshotNodeIndex],
-                                                                      c_OscInitialNode.c_DeviceType.toStdString().c_str(),
+                                                                      c_OscInitialNode.c_DeviceType.toStdString(),
                                                                       "");
    }
    return u32_DataIndex;
@@ -3815,7 +3815,7 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode & orc_OscNode, const QString & 
 
    orc_OscNode.pc_DeviceDefinition =
       C_OscSystemDefinition::hc_Devices.LookForDevice(
-         orc_NodeType.toStdString().c_str(), orc_MainDevice.toStdString().c_str(), u32_SubDeviceIndex);
+         orc_NodeType.toStdString(), orc_MainDevice.toStdString(), u32_SubDeviceIndex);
    orc_OscNode.u32_SubDeviceIndex = u32_SubDeviceIndex;
    Q_ASSERT(orc_OscNode.pc_DeviceDefinition != NULL);
    if (orc_OscNode.pc_DeviceDefinition != NULL)
@@ -3825,7 +3825,7 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode & orc_OscNode, const QString & 
       {
          //default name: same as device type
          orc_OscNode.c_Properties.c_Name = C_PuiSdHandler::h_AutomaticCeStringAdaptation(
-            orc_OscNode.pc_DeviceDefinition->GetDisplayName().c_str()).toStdString().c_str();
+            orc_OscNode.pc_DeviceDefinition->GetDisplayName()).toStdString();
 
          //special handling for "3rd Party" node:
          //Fix leading digit to avoid naming error after node drag&drop
@@ -3843,12 +3843,12 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode & orc_OscNode, const QString & 
 
          if (orc_MainDevice.isEmpty())
          {
-            orc_OscNode.c_DeviceType = orc_NodeType.toStdString().c_str();
+            orc_OscNode.c_DeviceType = orc_NodeType.toStdString();
          }
          else
          {
             orc_OscNode.c_DeviceType = QString(C_OscNodeSquad::h_CombineNames(
-               orc_MainDevice.toStdString().c_str(), orc_NodeType.toStdString().c_str()).c_str());
+               orc_MainDevice.toStdString(), orc_NodeType.toStdString()));
          }
          //---Init COM IF Settings (BEFORE initial datablock)
          this->m_InitNodeComIfSettings(orc_OscNode, orc_NodeType, orc_MainDevice);
@@ -3876,8 +3876,8 @@ void C_SdTopologyScene::m_InitNodeComIfSettings(C_OscNode & orc_OscNode, const Q
    //the node has not been added to the system definition yet, so the "pc_DeviceDefinition" pointer
    // was not set yet: search list of device
    const C_OscDeviceDefinition * const pc_DeviceDefinition =
-      C_OscSystemDefinition::hc_Devices.LookForDevice(orc_NodeType.toStdString().c_str(),
-                                                      orc_MainDevice.toStdString().c_str(),
+      C_OscSystemDefinition::hc_Devices.LookForDevice(orc_NodeType.toStdString(),
+                                                      orc_MainDevice.toStdString(),
                                                       u32_SubDeviceIndex);
 
    Q_ASSERT(pc_DeviceDefinition != NULL);
@@ -3950,11 +3950,11 @@ void C_SdTopologyScene::m_InitNodeComIfSettings(C_OscNode & orc_OscNode, const Q
    \param[in]      oru32_SubNodeIndex   Node Index
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool stw::opensyde_gui::C_SdTopologyScene::m_ActivateTspShortcut(const scl::C_SclString & orc_NodeName,
+bool stw::opensyde_gui::C_SdTopologyScene::m_ActivateTspShortcut(const QString & orc_NodeName,
                                                                  const uint32_t & oru32_SubNodeIndex)
 {
    const uint32_t u32_FLAG = mu32_FLAG_OPEN_PROPERTIES;
-   const QString c_SUB_NODE_TITLE = static_cast<QString>(orc_NodeName.c_str());
+   const QString c_SUB_NODE_TITLE = orc_NodeName;
 
    Q_EMIT this->SigChangeMode(ms32_MODE_SYSDEF, ms32_SUBMODE_SYSDEF_NODEEDIT, oru32_SubNodeIndex,
                               c_SUB_NODE_TITLE,  "", u32_FLAG);
@@ -3976,7 +3976,7 @@ bool stw::opensyde_gui::C_SdTopologyScene::m_ActivateTspShortcut(const scl::C_Sc
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyScene::m_AddTspForAllSubNodes(const uint32_t & oru32_SubDevicesSize,
                                                const uint32_t & oru32_OriginalOscNodeSize,
-                                               const stw::scl::C_SclString & orc_NodeName)
+                                               const QString & orc_NodeName)
 {
    const uint32_t u32_NodeSubs = oru32_OriginalOscNodeSize + oru32_SubDevicesSize;
 
@@ -4015,12 +4015,11 @@ bool C_SdTopologyScene::m_ShowShortcutTspOption(const QString & orc_NodeName,
    if ((C_UsHandler::h_GetInstance()->GetSkipTspSelection() == "") ||
        (C_UsHandler::h_GetInstance()->GetSkipTspSelection() == "Ask User"))
    {
-      const stw::scl::C_SclString c_TitleString = orc_NodeName.toStdString().c_str();
-      const stw::scl::C_SclString c_MessageBoxTitle = "Import TSP Assistance";
-      const stw::scl::C_SclString c_MessageBoxText =
+      const QString c_MessageBoxTitle = "Import TSP Assistance";
+      const QString c_MessageBoxText =
          "Do you want to import openSYDE Target Support Package file(s) to " +
-         c_TitleString  + "?";
-      const stw::scl::C_SclString c_MessageBoxDetails =
+         orc_NodeName  + "?";
+      const QString c_MessageBoxDetails =
          "With an openSYDE Target Support Package the user is able to bring "
          "an empty node (fresh placed from toolbox) to a defined default state. "
          "\nNode definition import could contain e.g.: Data Blocks configuration, Template programming project, "
@@ -4029,9 +4028,9 @@ bool C_SdTopologyScene::m_ShowShortcutTspOption(const QString & orc_NodeName,
       QGraphicsView * const pc_View = this->views().at(0);
       C_OgeWiCustomMessage c_MessageBox(pc_View, C_OgeWiCustomMessage::E_Type::eQUESTION);
 
-      c_MessageBox.SetHeading(QString(c_MessageBoxTitle.c_str()));
-      c_MessageBox.SetDescription(QString(c_MessageBoxText.c_str()));
-      c_MessageBox.SetDetails(QString(c_MessageBoxDetails.c_str()));
+      c_MessageBox.SetHeading(c_MessageBoxTitle);
+      c_MessageBox.SetDescription(c_MessageBoxText);
+      c_MessageBox.SetDetails(c_MessageBoxDetails);
       c_MessageBox.SetOkButtonText("Continue");
       c_MessageBox.SetNoButtonText("Skip");
       c_MessageBox.SetCheckboxText("Always skip TSP Import assistance");
@@ -4047,7 +4046,7 @@ bool C_SdTopologyScene::m_ShowShortcutTspOption(const QString & orc_NodeName,
       {
          q_UseShortcut = true;
 
-         m_AddTspForAllSubNodes(oru32_SubDevicesSize, oru32_OriginalOscNodeSize, orc_NodeName.toStdString().c_str());
+         m_AddTspForAllSubNodes(oru32_SubDevicesSize, oru32_OriginalOscNodeSize, orc_NodeName.toStdString());
       }
       else if (e_Output == C_OgeWiCustomMessage::eNO)
       {

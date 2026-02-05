@@ -580,7 +580,7 @@ void C_SdTopologyToolbox::m_LoadUserDeviceDefinitionPaths(const QString & orc_Pa
    if (c_FileInfo.completeSuffix().toLower().contains("ini") == true)
    {
       // load the file
-      const C_SclString c_CheckString = "User Nodes";
+      const QString c_CheckString = "User Nodes";
       std::vector<C_OscDeviceGroup> c_DeviceGroups;
       std::vector<C_OscDeviceDefinition> c_UserDevices;
       bool q_IsValidUserIni = false;
@@ -619,7 +619,7 @@ void C_SdTopologyToolbox::m_LoadUserDeviceDefinitionPaths(const QString & orc_Pa
                            orc_Path + c_ErrorDetails);
 
          osc_write_log_error("Loading from ini file",
-                             "File \"" + static_cast<C_SclString>(orc_Path.toStdString().c_str()) +
+                             "File \"" + orc_Path.toStdString() +
                              "\" contains no User Nodes.");
       }
    }
@@ -633,7 +633,7 @@ void C_SdTopologyToolbox::m_LoadUserDeviceDefinitionPaths(const QString & orc_Pa
       orc_Errors.append(
          static_cast<QString>("File type '%1' not allowed.").arg(c_FileInfo.completeSuffix()));
       osc_write_log_error("Loading file",
-                          "Wrong file suffix \"" + static_cast<stw::scl::C_SclString>(orc_Path.toStdString().c_str()) +
+                          "Wrong file suffix \"" + orc_Path.toStdString() +
                           "\".");
    }
 }
@@ -700,7 +700,7 @@ void C_SdTopologyToolbox::m_AddUserNodesToToolbox(void)
       const std::vector<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
 
       QStringList c_ToolboxItems;
-      const C_SclString c_CheckString = "User Nodes";
+      const QString c_CheckString = "User Nodes";
 
       for (int32_t s32_Counter = 0; s32_Counter < this->mpc_List->count(); ++s32_Counter)
       {

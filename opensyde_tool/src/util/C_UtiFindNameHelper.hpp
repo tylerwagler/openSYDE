@@ -5,36 +5,44 @@
 
    Class to find bus or node by string (See .cpp file for full description)
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_UTIFINDNAMEHELPE_HPP
 #define C_UTIFINDNAMEHELPE_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
+#include <QString>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_gui_logic
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_gui_logic {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_UtiFindNameHelper
-{
+class C_UtiFindNameHelper {
 public:
-   C_UtiFindNameHelper(const stw::scl::C_SclString & orc_Cmp = "");
-   bool operator ()(const stw::scl::C_SclString * const opc_Cur) const;
+  C_UtiFindNameHelper(const QString &orc_Cmp = "");
+  bool operator()(const QString *const opc_Cur) const;
 
 private:
-   const stw::scl::C_SclString mc_Cmp; ///< String to compare all items to
+  const QString mc_Cmp; ///< String to compare all items to
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-}
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_gui_logic
+} // namespace stw
 
 #endif

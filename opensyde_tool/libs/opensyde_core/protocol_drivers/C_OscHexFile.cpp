@@ -13,7 +13,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscHexFile.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "CXFLECUInformation.hpp"
 
 
@@ -69,10 +69,10 @@ int32_t C_OscHexFile::GetSignatureBlockAddress(uint32_t & oru32_Address)
    C_CONFIG     ambiguous device-IDs in hex-file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHexFile::ScanDeviceIdFromHexFile(C_SclString & orc_DeviceId)
+int32_t C_OscHexFile::ScanDeviceIdFromHexFile(QString & orc_DeviceId)
 {
    int32_t s32_Return;
-   C_SclString c_DeviceId = "";
+   QString c_DeviceId = "";
 
    QList<C_XFLECUInformation> c_InfoBlocks;
    s32_Return = this->GetECUInformationBlocks(c_InfoBlocks, 0x0U, false, false, true);
@@ -83,7 +83,7 @@ int32_t C_OscHexFile::ScanDeviceIdFromHexFile(C_SclString & orc_DeviceId)
       {
          if (c_InfoBlocks[s32_Index].ContainsDeviceID() == true)
          {
-            const C_SclString c_Help = c_InfoBlocks[s32_Index].GetDeviceID();
+            const QString c_Help = c_InfoBlocks[s32_Index].GetDeviceID();
             if (c_DeviceId == "") //no device-ID seen yet ...
             {
                c_DeviceId = c_Help;

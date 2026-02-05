@@ -43,7 +43,7 @@ static const uint16_t mu16_CHECKSUM_VERSION = 2U;
    \param[in]     orc_FileName     path to INI file
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscChecksummedIniFile::C_OscChecksummedIniFile(const C_SclString & orc_FileName) :
+C_OscChecksummedIniFile::C_OscChecksummedIniFile(const QString & orc_FileName) :
    C_SclIniFile(orc_FileName)
 {
 }
@@ -80,11 +80,11 @@ uint16_t C_OscChecksummedIniFile::m_CalcCheckSum(const bool oq_Fast)
          u32_NumDirectives = c_DirectivesValues.count();
          for (uint32_t u32_Directive = 0U; u32_Directive < u32_NumDirectives; u32_Directive++)
          {
-            const C_SclString & rc_String = c_DirectivesValues[u32_Directive];
-            for (uint32_t u32_Byte = 0U; u32_Byte < rc_String.Length(); u32_Byte++)
+            const QString & rc_String = c_DirectivesValues[u32_Directive];
+            for (uint32_t u32_Byte = 0U; u32_Byte < rc_String.length(); u32_Byte++)
             {
                uint8_t u8_Value;
-               u8_Value = static_cast<uint8_t>(rc_String.c_str()[u32_Byte]);
+               u8_Value = static_cast<uint8_t>(rc_String.toUtf8().constData()[u32_Byte]);
                u8_Value = static_cast<uint8_t>((static_cast<uint8_t>(u8_Value << 3U)) + (u8_Value >> 5U));
                C_SclChecksums::CalcCRC16STW(&u8_Value, 1U, u16_CheckSumCalc);
             }

@@ -124,7 +124,7 @@ void C_SdNdeDalLogJobsWidget::LoadUserSettings()
 
    if (pc_Node != NULL)
    {
-      const C_UsNode c_UsNode = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
+      const C_UsNode c_UsNode = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
 
       // If a valid log job index exists in user settings
       if (c_UsNode.GetSelectedDataLoggerLogJobIndex() >= 0)
@@ -159,15 +159,15 @@ void C_SdNdeDalLogJobsWidget::SaveUserSettings() const
       if (!this->mpc_Ui->pc_PbLogJobsOverview->isChecked())
       {
          C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedDataLoggerLogJobIndex(
-            pc_Node->c_Properties.c_Name.c_str(), this->mu32_CurrentLogJobIndex);
+            pc_Node->c_Properties.c_Name, this->mu32_CurrentLogJobIndex);
       }
       else
       {
          C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedDataLoggerLogJobIndex(
-            pc_Node->c_Properties.c_Name.c_str(), -1);
+            pc_Node->c_Properties.c_Name, -1);
       }
       C_UsHandler::h_GetInstance()->SetProjSdNodeIsOverviewWidgetSelected(
-         pc_Node->c_Properties.c_Name.c_str(), this->mpc_Ui->pc_PbLogJobsOverview->isChecked());
+         pc_Node->c_Properties.c_Name, this->mpc_Ui->pc_PbLogJobsOverview->isChecked());
    }
 }
 

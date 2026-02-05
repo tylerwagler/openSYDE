@@ -14,7 +14,6 @@
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiUtil.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDbWidget.hpp"
@@ -227,7 +226,7 @@ void C_SdNdeDbWidget::CheckProcessIdError(void) const
    {
       Q_ASSERT(pc_Node->CheckApplicationProcessIdValid(this->mu32_ApplicationIndex, q_Valid) == C_NO_ERR);
       c_Info =
-         C_SdUtil::h_InitUsedIdsString(c_UsedIds, pc_Node->c_Properties.c_Name.c_str(), "node");
+         C_SdUtil::h_InitUsedIdsString(c_UsedIds, pc_Node->c_Properties.c_Name, "node");
    }
    this->mpc_Ui->pc_LabErrorIcon->setVisible(!q_Valid);
    if (q_Valid == false)
@@ -271,14 +270,14 @@ void C_SdNdeDbWidget::m_LoadData(void)
    {
       this->mpc_Ui->pc_LabName->setText(static_cast<QString>("#%1 - %2").
                                         arg(this->mu32_ApplicationIndex + 1).
-                                        arg(pc_Application->c_Name.c_str()));
+                                        arg(pc_Application->c_Name));
       if (pc_Application->c_Comment == "")
       {
          this->mpc_Ui->pc_TedComment->setText("<No comment>");
       }
       else
       {
-         this->mpc_Ui->pc_TedComment->setText(pc_Application->c_Comment.c_str());
+         this->mpc_Ui->pc_TedComment->setText(pc_Application->c_Comment);
       }
 
       if (pc_Application->e_Type == C_OscNodeApplication::eBINARY)
@@ -475,8 +474,8 @@ void C_SdNdeDbWidget::m_OnOpenIdeClicked(void)
    {
       const QString c_IdeCall =
          static_cast<QString>(C_PuiUtil::h_ResolvePlaceholderVariables(
-                                 pc_Application->c_IdeCall.c_str(),
-                                 C_PuiUtil::h_GetResolvedAbsPathFromProject(pc_Application->c_ProjectPath.c_str())));
+                                 pc_Application->c_IdeCall,
+                                 C_PuiUtil::h_GetResolvedAbsPathFromProject(pc_Application->c_ProjectPath)));
 
       if (c_IdeCall == "")
       {
@@ -608,7 +607,7 @@ QString C_SdNdeDbWidget::m_GetAllAssociatedDataPoolNames(void) const
          if ((rc_DataPool.s32_RelatedDataBlockIndex >= 0) &&
              (static_cast<uint32_t>(rc_DataPool.s32_RelatedDataBlockIndex) == this->mu32_ApplicationIndex))
          {
-            c_Retval += rc_DataPool.c_Name.c_str();
+            c_Retval += rc_DataPool.c_Name;
             c_Retval += " (";
             c_Retval += C_PuiSdUtil::h_ConvertDataPoolTypeToString(rc_DataPool.e_Type);
             if (rc_DataPool.e_Type == C_OscNodeDataPool::eCOM)
@@ -652,7 +651,7 @@ QString C_SdNdeDbWidget::m_GetAllOutputFiles(void) const
             c_Retval += QString::number(u32_ItOutputFiles + 1);
          }
          c_Retval += ": ";
-         c_Retval += pc_Application->c_ResultPaths[u32_ItOutputFiles].c_str();
+         c_Retval += pc_Application->c_ResultPaths[u32_ItOutputFiles];
          c_Retval += "\n";
       }
    }

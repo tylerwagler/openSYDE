@@ -24,8 +24,6 @@
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
-
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
@@ -61,12 +59,12 @@ uint32_t C_PuiSdHandlerBusLogic::AddBusAndSort(C_OscSystemBus & orc_OscBus, cons
 
    if (opc_Name != NULL)
    {
-      orc_OscBus.c_Name = opc_Name->toStdString().c_str();
+      orc_OscBus.c_Name = *opc_Name;
    }
    else
    {
       orc_OscBus.c_Name = C_OscUtils::h_GetUniqueName(
-         this->GetExistingBusNames(), orc_OscBus.c_Name, this->GetNameMaxCharLimit()).ToQString();
+         this->GetExistingBusNames(), orc_OscBus.c_Name, this->GetNameMaxCharLimit());
    }
    if (oq_AllowBusIdAdaption == true)
    {
@@ -92,9 +90,9 @@ uint32_t C_PuiSdHandlerBusLogic::AddBusAndSort(C_OscSystemBus & orc_OscBus, cons
    Vector of pointers to all currently registered bus names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SclString, bool> C_PuiSdHandlerBusLogic::GetExistingBusNames(void) const
+std::map<QString, bool> C_PuiSdHandlerBusLogic::GetExistingBusNames(void) const
 {
-   std::map<C_SclString, bool> c_Retval;
+   std::map<QString, bool> c_Retval;
    for (uint32_t u32_ItBus = 0; u32_ItBus < this->mc_CoreDefinition.c_Buses.size(); ++u32_ItBus)
    {
       c_Retval[this->mc_CoreDefinition.c_Buses[u32_ItBus].c_Name] = true;
@@ -202,9 +200,9 @@ const C_OscSystemBus * C_PuiSdHandlerBusLogic::GetOscBus(const uint32_t & oru32_
    false Already in use
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_PuiSdHandlerBusLogic::CheckBusNameAvailable(const C_SclString & orc_Name,
+bool C_PuiSdHandlerBusLogic::CheckBusNameAvailable(const QString & orc_Name,
                                                    const uint32_t * const opu32_BusIndexToSkip,
-                                                   std::vector<stw::scl::C_SclString> * const opc_ExistingNames) const
+                                                   std::vector<QString> * const opc_ExistingNames) const
 {
    bool q_Retval = true;
 
@@ -225,7 +223,7 @@ bool C_PuiSdHandlerBusLogic::CheckBusNameAvailable(const C_SclString & orc_Name,
       {
          const C_OscSystemBus & rc_Bus = this->mc_CoreDefinition.c_Buses[u32_ItBus];
          //Check conflict
-         if (rc_Bus.c_Name.toLower() == orc_Name.ToQString().toLower())
+         if (rc_Bus.c_Name.toLower() == orc_Name.toLower())
          {
             q_Retval = false;
          }
@@ -429,7 +427,7 @@ const
                      if (q_BitrateFound == false)
                      {
                         // Bitrate not supported
-                        opc_InvalidNodesForBitRate->emplace_back(pc_Node->c_Properties.c_Name.c_str());
+                        opc_InvalidNodesForBitRate->emplace_back(pc_Node->c_Properties.c_Name);
                      }
                   }
                }
@@ -2764,7 +2762,7 @@ QString C_PuiSdHandlerBusLogic::GetCanSignalDisplayName(const C_OscCanMessageIde
 
    if ((pc_Signal != NULL) && (pc_SignalData != NULL))
    {
-      c_Retval = pc_SignalData->c_Name.c_str();
+      c_Retval = pc_SignalData->c_Name;
 
       // append multiplexer information for multiplexer signals
       if (pc_Signal->e_MultiplexerType == C_OscCanSignal::eMUX_MULTIPLEXER_SIGNAL)
@@ -2809,7 +2807,7 @@ QString C_PuiSdHandlerBusLogic::GetCanMessageDisplayName(const C_OscCanMessageId
    if (pc_MessageData != NULL)
    {
       c_Retval = static_cast<QString>("%1 (0x%2)").
-                 arg(pc_MessageData->c_Name.c_str()).
+                 arg(pc_MessageData->c_Name).
                  arg(QString::number(pc_MessageData->u32_CanId, 16).toUpper());
 
       // Add PGN for J1939 signals (not for tooltip)
@@ -2888,7 +2886,7 @@ C_PuiSdHandlerBusLogic::C_PuiSdHandlerBusLogic(QObject * const opc_Parent) :
 void C_PuiSdHandlerBusLogic::m_GetExistingMessageNamesProtocol(const uint32_t & oru32_NodeIndex,
                                                                const C_OscCanProtocol::E_Type & ore_ComType,
                                                                const uint32_t & oru32_InterfaceIndex,
-                                                               std::map<C_SclString, bool> & orc_ExistingNames)
+                                                               std::map<QString, bool> & orc_ExistingNames)
 const
 {
    const std::vector<const C_OscCanMessageContainer *> c_Container = this->GetCanProtocolMessageContainers(
@@ -2926,11 +2924,11 @@ const
    Vector of pointers to all currently registered message names contained in the specified node interface
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SclString, bool> C_PuiSdHandlerBusLogic::m_GetExistingMessageNames(const uint32_t & oru32_NodeIndex,
+std::map<QString, bool> C_PuiSdHandlerBusLogic::m_GetExistingMessageNames(const uint32_t & oru32_NodeIndex,
                                                                               const uint32_t & oru32_InterfaceIndex)
 const
 {
-   std::map<C_SclString, bool> c_ExistingNames;
+   std::map<QString, bool> c_ExistingNames;
 
    // get existing message names of all three protocols
    m_GetExistingMessageNamesProtocol(oru32_NodeIndex, C_OscCanProtocol::eLAYER2, oru32_InterfaceIndex, c_ExistingNames);
@@ -2956,10 +2954,10 @@ const
    Vector of pointers to all currently registered signal names contained in the specified message
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SclString, bool> C_PuiSdHandlerBusLogic::m_GetExistingSignalNames(
+std::map<QString, bool> C_PuiSdHandlerBusLogic::m_GetExistingSignalNames(
    const C_OscCanMessageIdentificationIndices & orc_MessageId) const
 {
-   std::map<C_SclString, bool> c_Retval;
+   std::map<QString, bool> c_Retval;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(orc_MessageId.u32_NodeIndex);
    if (pc_Node != NULL)
    {

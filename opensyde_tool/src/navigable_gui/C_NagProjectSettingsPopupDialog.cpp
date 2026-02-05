@@ -260,8 +260,8 @@ bool C_NagProjectSettingsPopupDialog::m_AskUserForModifyName(
    for (const C_OscSystemNameMaxCharLimitChangeReportItem & rc_Item : orc_ChangedItems)
    {
       const QString c_DetailEntry = static_cast<QString>("Original: %1; New: %2\n")
-                                    .arg(rc_Item.c_OriginalName.c_str())
-                                    .arg(rc_Item.c_NewName.c_str());
+                                    .arg(rc_Item.c_OriginalName)
+                                    .arg(rc_Item.c_NewName);
 
       if (rc_Item.c_Type == "node-name")
       {

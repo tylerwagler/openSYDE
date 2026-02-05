@@ -623,7 +623,7 @@ void C_SdBueCoAddSignalsModel::m_GetData(const E_Columns oe_Column, const uint32
                                  ou32_SignalIndex);
                            if (pc_Object != NULL)
                            {
-                              orc_Output = C_OscImportEdsDcf::h_GetObjectName(*pc_Object).c_str();
+                              orc_Output = C_OscImportEdsDcf::h_GetObjectName(*pc_Object);
                            }
                         }
                         break;
@@ -655,7 +655,7 @@ void C_SdBueCoAddSignalsModel::m_GetData(const E_Columns oe_Column, const uint32
                   pc_EdsDictionary->GetCanOpenObject(static_cast<uint16_t>(ou32_ObjectIndex));
                if (pc_Object != NULL)
                {
-                  orc_Output = C_OscImportEdsDcf::h_GetObjectName(*pc_Object).c_str();
+                  orc_Output = C_OscImportEdsDcf::h_GetObjectName(*pc_Object);
                }
             }
             break;

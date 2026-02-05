@@ -7,7 +7,7 @@
 #include "stwerrors.hpp"
  //tgl_assert
 #include "C_SclChecksums.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "CKFXVariableBase.hpp"
 #include "CKFXVariableLists.hpp"
 
@@ -178,7 +178,7 @@ const C_KFXVariableBase * C_KFXVariableLists::GetVariable(const uint16_t ou16_Li
 
 //**************************************************************
 
-const C_KFXVariableListBase * C_KFXVariableLists::GetListByName(const C_SclString & orc_ListName) const
+const C_KFXVariableListBase * C_KFXVariableLists::GetListByName(const QString & orc_ListName) const
 {
    int32_t s32_ListIndex;
 
@@ -194,7 +194,7 @@ const C_KFXVariableListBase * C_KFXVariableLists::GetListByName(const C_SclStrin
 
 //**************************************************************
 
-C_KFXVariableListBase * C_KFXVariableLists::GetListByName(const C_SclString & orc_ListName)
+C_KFXVariableListBase * C_KFXVariableLists::GetListByName(const QString & orc_ListName)
 {
    int32_t s32_ListIndex;
 

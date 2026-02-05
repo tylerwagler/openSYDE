@@ -4,6 +4,7 @@
 #
 # Examples:
 #   .\build.ps1                              # Build main GUI (Release)
+#   .\build.ps1 -Component Core              # Build only opensyde_core library
 #   .\build.ps1 -Component CANMonitor        # Build CAN Monitor
 #   .\build.ps1 -Component SYDEflash         # Build SYDEflash
 #   .\build.ps1 -Component All               # Build all components
@@ -11,15 +12,15 @@
 #   .\build.ps1 -BuildType Debug             # Debug build
 
 param(
-    [Parameter(Mandatory=$false)]
-    [ValidateSet("GUI", "CANMonitor", "SYDEflash", "All")]
+    [Parameter(Mandatory = $false)]
+    [ValidateSet("GUI", "Core", "CANMonitor", "SYDEflash", "All")]
     [string]$Component = "GUI",
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [ValidateSet("Release", "Debug")]
     [string]$BuildType = "Release",
 
-    [Parameter(Mandatory=$false)]
+    [Parameter(Mandatory = $false)]
     [switch]$Clean
 )
 
@@ -27,7 +28,8 @@ param(
 $ErrorActionPreference = "Stop"
 $QtPath = "C:\Qt\6.10.1\mingw_64"
 $QtToolsPath = "C:\Qt\Tools"
-$ToolchainFile = "..\pjt\toolchain_windows.cmake"
+$ScriptDir = $PSScriptRoot
+$ToolchainFile = (Resolve-Path "$ScriptDir\..\pjt\toolchain_windows.cmake").Path
 $LogsDir = "logs"
 
 # Create logs directory if it doesn't exist
@@ -35,22 +37,32 @@ if (-not (Test-Path $LogsDir)) {
     New-Item -ItemType Directory -Path $LogsDir -Force | Out-Null
 }
 
-# Build configurations
+# Build configurations (TempFolderBase will have _$BuildType appended dynamically)
 $BuildConfigs = @{
-    "GUI" = @{
-        ProjectFolder = "..\pjt\openSYDE"
-        TempFolder = "..\temp_openSYDE_$BuildType"
-        Name = "openSYDE GUI"
+    "GUI"        = @{
+        ProjectFolder  = "..\pjt\openSYDE"
+        TempFolderBase = "..\temp_openSYDE"
+        Name           = "openSYDE GUI"
+        Target         = "all"
+    }
+    "Core"       = @{
+        ProjectFolder  = "..\pjt\openSYDE"
+        TempFolderBase = "..\temp_openSYDE"
+        Name           = "opensyde_core library"
+        Target         = "opensyde_core"
+        SkipInstall    = $true
     }
     "CANMonitor" = @{
-        ProjectFolder = "..\pjt\openSYDE_CAN_Monitor"
-        TempFolder = "..\temp_openSYDE_CAN_Monitor_$BuildType"
-        Name = "CAN Monitor"
+        ProjectFolder  = "..\pjt\openSYDE_CAN_Monitor"
+        TempFolderBase = "..\temp_openSYDE_CAN_Monitor"
+        Name           = "CAN Monitor"
+        Target         = "all"
     }
-    "SYDEflash" = @{
-        ProjectFolder = "..\pjt\SYDEflash"
-        TempFolder = "..\temp_SYDEflash_$BuildType"
-        Name = "SYDEflash"
+    "SYDEflash"  = @{
+        ProjectFolder  = "..\pjt\SYDEflash"
+        TempFolderBase = "..\temp_SYDEflash"
+        Name           = "SYDEflash"
+        Target         = "all"
     }
 }
 
@@ -89,22 +101,24 @@ function Test-Prerequisites {
         exit 1
     }
 
-    Write-Host "  ✓ Qt 6.10.1 found" -ForegroundColor Green
-    Write-Host "  ✓ CMake found" -ForegroundColor Green
-    Write-Host "  ✓ MinGW found" -ForegroundColor Green
+    Write-Host "  OK - Qt 6.10.1 found" -ForegroundColor Green
+    Write-Host "  OK - CMake found" -ForegroundColor Green
+    Write-Host "  OK - MinGW found" -ForegroundColor Green
 }
 
 function Build-Component {
     param(
         [string]$ProjectFolder,
         [string]$TempFolder,
-        [string]$ComponentName
+        [string]$ComponentName,
+        [string]$Target = "all",
+        [bool]$SkipInstall = $false
     )
 
     Write-BuildHeader "Building $ComponentName ($BuildType)"
 
-    # Setup environment
-    $env:PATH = "$QtToolsPath\mingw1310_64\bin;$QtToolsPath\CMake_64\bin;$QtToolsPath\Ninja;$QtPath;$env:PATH"
+    # Setup environment (use script-scope variables)
+    $env:PATH = "$script:QtToolsPath\mingw1310_64\bin;$script:QtToolsPath\CMake_64\bin;$script:QtToolsPath\Ninja;$script:QtPath;$env:PATH"
 
     # Create temp folder if needed
     if (-not (Test-Path $TempFolder)) {
@@ -125,36 +139,40 @@ function Build-Component {
         # CMake configure (only if build.ninja doesn't exist)
         if (-not (Test-Path "build.ninja")) {
             Write-BuildStep "Running CMake configure..."
-            & cmake.exe $ProjectFolder -GNinja -DCMAKE_BUILD_TYPE=$BuildType -DCMAKE_TOOLCHAIN_FILE=$ToolchainFile
+            & cmake.exe -S $ProjectFolder -B . -GNinja "-DCMAKE_BUILD_TYPE=$BuildType" -DCMAKE_TOOLCHAIN_FILE="$script:ToolchainFile"
             if ($LASTEXITCODE -ne 0) {
                 throw "CMake configure failed with exit code $LASTEXITCODE"
             }
-        } else {
+        }
+        else {
             Write-BuildStep "Using existing CMake configuration (use -Clean to reconfigure)"
         }
 
         # Build
-        Write-BuildStep "Building with Ninja (parallel jobs: 24)..."
+        Write-BuildStep "Building target '$Target' with Ninja (parallel jobs: 24)..."
         $buildStart = Get-Date
-        & cmake.exe --build . --target all -- -j24
+        & cmake.exe --build . --target $Target -- -j24
         if ($LASTEXITCODE -ne 0) {
             throw "Build failed with exit code $LASTEXITCODE"
         }
         $buildTime = (Get-Date) - $buildStart
-        Write-Host "  ✓ Build completed in $($buildTime.TotalSeconds.ToString('F1')) seconds" -ForegroundColor Green
+        Write-Host "  OK - Build completed in $($buildTime.TotalSeconds.ToString('F1')) seconds" -ForegroundColor Green
 
-        # Install
-        Write-BuildStep "Installing binaries to result folder..."
-        & cmake.exe --build . --target install
-        if ($LASTEXITCODE -ne 0) {
-            throw "Install failed with exit code $LASTEXITCODE"
+        # Install (skip for library-only builds)
+        if (-not $SkipInstall) {
+            Write-BuildStep "Installing binaries to result folder..."
+            & cmake.exe --build . --target install
+            if ($LASTEXITCODE -ne 0) {
+                throw "Install failed with exit code $LASTEXITCODE"
+            }
         }
 
-        Write-Host "`n✓ $ComponentName build SUCCESS" -ForegroundColor Green -BackgroundColor DarkGreen
+        Write-Host "`nOK - $ComponentName build SUCCESS" -ForegroundColor Green -BackgroundColor DarkGreen
 
-    } catch {
+    }
+    catch {
         Write-BuildError $_.Exception.Message
-        Write-Host "`n✗ $ComponentName build FAILED" -ForegroundColor Red -BackgroundColor DarkRed
+        Write-Host "`nFAIL - $ComponentName build FAILED" -ForegroundColor Red -BackgroundColor DarkRed
         Pop-Location
         exit 1
     }
@@ -176,20 +194,27 @@ if ($Component -eq "All") {
 
     foreach ($comp in $components) {
         $config = $BuildConfigs[$comp]
+        $tempFolder = "$($config.TempFolderBase)_$BuildType"
         Build-Component -ProjectFolder $config.ProjectFolder `
-                       -TempFolder $config.TempFolder `
-                       -ComponentName $config.Name
+            -TempFolder $tempFolder `
+            -ComponentName $config.Name `
+            -Target $config.Target `
+            -SkipInstall ($config.SkipInstall -eq $true)
     }
 
     $totalTime = (Get-Date) - $totalStart
     Write-BuildHeader "All Components Built Successfully"
     Write-Host "Total build time: $($totalTime.TotalMinutes.ToString('F1')) minutes" -ForegroundColor Green
 
-} else {
+}
+else {
     $config = $BuildConfigs[$Component]
+    $tempFolder = "$($config.TempFolderBase)_$BuildType"
     Build-Component -ProjectFolder $config.ProjectFolder `
-                   -TempFolder $config.TempFolder `
-                   -ComponentName $config.Name
+        -TempFolder $tempFolder `
+        -ComponentName $config.Name `
+        -Target $config.Target `
+        -SkipInstall ($config.SkipInstall -eq $true)
 }
 
-Write-Host "`nBuild artifacts are in: opensyde_tool\result\" -ForegroundColor Cyan
+Write-Host "`nBuild artifacts are in: opensyde_tool\result" -ForegroundColor Cyan

@@ -21,7 +21,7 @@
 #include <iostream>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 #include "C_OscComDriverProtocol.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -1108,9 +1108,9 @@ C_OscProtocolDriverOsy * C_OscComDriverProtocol::m_GetOsyProtocol(const C_OscPro
    Node name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComDriverProtocol::m_GetActiveNodeName(const uint32_t ou32_ActiveNodeIndex) const
+QString C_OscComDriverProtocol::m_GetActiveNodeName(const uint32_t ou32_ActiveNodeIndex) const
 {
-   C_SclString c_Retval = "Unknown";
+   QString c_Retval = "Unknown";
 
    if (ou32_ActiveNodeIndex < this->mc_ActiveNodesIndexes.size())
    {
@@ -1516,10 +1516,10 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                   // Seed should be a fixed value too
                   if (u64_Seed != 42U)
                   {
-                     const C_SclString c_Tmp =
+                     const QString c_Tmp =
                         "Received seed in non secure mode does not match the expected value, expected: 42, got " +
                         QString::number(u64_Seed);
-                     osc_write_log_warning("Security Access", c_Tmp.c_str());
+                     osc_write_log_warning("Security Access", c_Tmp.toUtf8().constData());
                   }
 
                   s32_Return = opc_ExistingProtocol->OsySecurityAccessSendKey(ou8_SecurityLevel, u32_KEY, opu8_NrCode);
@@ -1575,9 +1575,9 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
 
                      if (s32_Return != C_NO_ERR)
                      {
-                        C_SclString c_Tmp;
+                        QString c_Tmp;
                         c_Tmp = QString::asprintf("Error on calculating RSA signature: %d", s32_Return);
-                        osc_write_log_error("Security Access", c_Tmp.c_str());
+                        osc_write_log_error("Security Access", c_Tmp.toUtf8().constData());
                         s32_Return = C_CHECKSUM;
                      }
                      else
@@ -1591,9 +1591,9 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                                                                                        opu8_NrCode);
                            if (s32_Return != C_NO_ERR)
                            {
-                              C_SclString c_Tmp;
+                              QString c_Tmp;
                               c_Tmp = QString::asprintf("Error on calculating RSA signature: %d", s32_Return);
-                              osc_write_log_error("Security Access", c_Tmp.c_str());
+                              osc_write_log_error("Security Access", c_Tmp.toUtf8().constData());
                               s32_Return = C_CHECKSUM;
                            }
                         }
@@ -2932,25 +2932,25 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
                s32_Retval = pc_TransportProtocol->SetDispatcher(this->mpc_CanDispatcher);
                if (s32_Retval != C_NO_ERR)
                {
-                  C_SclString c_Text = "Node \"";
+                  QString c_Text = "Node \"";
                   c_Text += this->m_GetActiveNodeName(u32_ItActiveNode);
                   c_Text += "\" - SetDispatcher - error: ";
                   c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
                   c_Text += "\nC_CONFIG   could not register with dispatcher\n"
                             "C_NOACT    could not configure Rx filter\n";
-                  osc_write_log_warning("Asynchronous communication", c_Text.c_str());
+                  osc_write_log_warning("Asynchronous communication", c_Text.toUtf8().constData());
                   s32_Retval = C_OVERFLOW;
                }
             }
             else
             {
-               C_SclString c_Text = "Node \"";
+               QString c_Text = "Node \"";
                c_Text += this->m_GetActiveNodeName(u32_ItActiveNode);
                c_Text += "\" - SetNodeIdentifiers - error: ";
                c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
                c_Text += "\nC_RANGE    client and/or server identifier out of range\n"
                          "C_NOACT    could not reconfigure Rx filters\n";
-               osc_write_log_warning("Asynchronous communication", c_Text.c_str());
+               osc_write_log_warning("Asynchronous communication", c_Text.toUtf8().constData());
                s32_Retval = C_OVERFLOW;
             }
             this->mc_TransportProtocols[u32_ItActiveNode] = pc_TransportProtocol;
@@ -2965,21 +2965,21 @@ int32_t C_OscComDriverProtocol::m_InitForCan(void)
                s32_Retval = this->mpc_CanTransportProtocolBroadcast->SetDispatcher(this->mpc_CanDispatcher);
                if (s32_Retval != C_NO_ERR)
                {
-                  C_SclString c_Text = "Broadcast - SetDispatcher - error: ";
+                  QString c_Text = "Broadcast - SetDispatcher - error: ";
                   c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
                   c_Text += "\nC_CONFIG   could not register with dispatcher\n"
                             "C_NOACT    could not configure Rx filter\n";
-                  osc_write_log_warning("Asynchronous communication", c_Text.c_str());
+                  osc_write_log_warning("Asynchronous communication", c_Text.toUtf8().constData());
                   s32_Retval = C_OVERFLOW;
                }
             }
             else
             {
-               C_SclString c_Text = "Broadcast - SetNodeIdentifiers - error: ";
+               QString c_Text = "Broadcast - SetNodeIdentifiers - error: ";
                c_Text += C_OscLoggingHandler::h_StwError(s32_Retval);
                c_Text += "\nC_RANGE    client and/or server identifier out of range\n"
                          "C_NOACT    could not reconfigure Rx filters\n";
-               osc_write_log_warning("Asynchronous communication", c_Text.c_str());
+               osc_write_log_warning("Asynchronous communication", c_Text.toUtf8().constData());
                s32_Retval = C_OVERFLOW;
             }
          }
@@ -3403,7 +3403,7 @@ int32_t C_OscComDriverProtocol::m_InitTcp(const uint8_t (&orau8_Ip)[4], uint32_t
 
       if (s32_Retval != C_NO_ERR)
       {
-         C_SclString c_Text;
+         QString c_Text;
 
          // Using the IP address of the router if IP to IP routing is used.
          // In case of no routing u32_Ip2IpRouterActiveNode equals u32_ItActiveNode

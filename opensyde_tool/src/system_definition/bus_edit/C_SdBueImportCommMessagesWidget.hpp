@@ -57,7 +57,7 @@ class C_SdBueImportCommMessagesWidget :
 
 public:
    explicit C_SdBueImportCommMessagesWidget(opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
-                                            const stw::scl::C_SclString & orc_Name);
+                                            const QString & orc_Name);
    ~C_SdBueImportCommMessagesWidget(void) override;
 
    void SetDefaultCommunicationProtocol(const opensyde_core::C_OscCanProtocol::E_Type & ore_ProtocolType);
@@ -74,7 +74,7 @@ protected:
 
 private:
    /*************Functions*****************/
-   void m_InitStaticNames(const scl::C_SclString & orc_Name) const;
+   void m_InitStaticNames(const QString & orc_Name) const;
    void m_AddPrototcolsToCombobox();
    void m_OkClicked(void);
    void m_CancelClicked(void);

@@ -26,17 +26,17 @@ class C_OscXceLoad :
    public C_OscXceBase
 {
 public:
-   static int32_t h_ProcessPackage(const stw::scl::C_SclString & orc_PackagePath,
-                                   const stw::scl::C_SclString & orc_TargetUnzipPath, C_OscXceManifest & orc_Manifest,
+   static int32_t h_ProcessPackage(const QString & orc_PackagePath,
+                                   const QString & orc_TargetUnzipPath, C_OscXceManifest & orc_Manifest,
                                    QStringList & orc_WarningMessages,
                                    QString & orc_ErrorMessage);
 
 private:
-   static const stw::scl::C_SclString mhc_USE_CASE;
+   static const QString mhc_USE_CASE;
 
-   static int32_t mh_CheckParamsToProcessPackage(const stw::scl::C_SclString & orc_PackagePath,
-                                                 const stw::scl::C_SclString & orc_TargetUnzipPath);
-   static int32_t mh_CheckXcertFiles(const stw::scl::C_SclString & orc_PackagePath);
+   static int32_t mh_CheckParamsToProcessPackage(const QString & orc_PackagePath,
+                                                 const QString & orc_TargetUnzipPath);
+   static int32_t mh_CheckXcertFiles(const QString & orc_PackagePath);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

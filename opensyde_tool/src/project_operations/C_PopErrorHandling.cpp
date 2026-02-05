@@ -57,7 +57,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 void C_PopErrorHandling::h_ProjectLoadErr(const int32_t & ors32_Err, const QString & orc_Path,
                                           QWidget * const opc_Parent, const uint16_t ou16_SystemDefinitionVersion,
-                                          const std::vector<stw::scl::C_SclString> & orc_ErrorDetailsMissingDevices)
+                                          const QStringList & orc_ErrorDetailsMissingDevices)
 {
    if (ors32_Err == C_WARN)
    {
@@ -98,10 +98,10 @@ void C_PopErrorHandling::h_ProjectLoadErr(const int32_t & ors32_Err, const QStri
          c_Details = "List of not found nodes in the toolbox:";
          for (const auto & rc_Device : orc_ErrorDetailsMissingDevices)
          {
-            if (c_UniqueDeviceNames.emplace(rc_Device.c_str()).second)
+            if (c_UniqueDeviceNames.emplace(rc_Device.toStdString()).second)
             {
                c_Details += "<br/> - ";
-               c_Details += rc_Device.c_str();
+               c_Details += rc_Device;
             }
          }
          c_Description += "<br/><br/>The project contains nodes which are not part of the toolbox.";
@@ -124,7 +124,7 @@ void C_PopErrorHandling::h_ProjectLoadErr(const int32_t & ors32_Err, const QStri
       // Show error message
       c_Details += "<br/>For more information see ";
       c_Details += C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
-                                    C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
+                                    C_OscLoggingHandler::h_GetCompleteLogFileLocation());
       c_Details += ".";
       c_Message.SetDescription(c_Description);
       c_Message.SetDetails(c_Details);
@@ -166,7 +166,7 @@ void C_PopErrorHandling::h_ProjectSaveErr(const int32_t & ors32_Err, QWidget * c
          {
             const QString c_LogLink = "For details see " +
                                       C_Uti::h_GetLink("log file.", mc_STYLE_GUIDE_COLOR_LINK,
-                                                       C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
+                                                       C_OscLoggingHandler::h_GetCompleteLogFileLocation());
             QString c_Details = "Possible reasons:<br/>- The chosen path is too long. The project might have been partially written, "
                "but will most likely be corrupt and cannot be used.<br/>- Missing write permissions on chosen directory.<br/>";
             c_Details += c_LogLink;

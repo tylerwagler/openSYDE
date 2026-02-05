@@ -43,7 +43,7 @@
 #include <QDir>
 #include <QDateTime>
 
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscUtils.hpp"
 
 #endif

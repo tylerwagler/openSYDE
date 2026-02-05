@@ -15,7 +15,6 @@
 #include "C_SdNdeDpImportRamView.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
@@ -49,10 +48,10 @@ using namespace stw::opensyde_gui_logic;
    C_RD_WR      critical problem loading project information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeDpImportRamView::h_ImportDataPoolFromRamViewDefProject(const C_SclString & orc_ProjectPath,
+int32_t C_SdNdeDpImportRamView::h_ImportDataPoolFromRamViewDefProject(const QString & orc_ProjectPath,
                                                                       C_OscNodeDataPool & orc_DataPool,
                                                                       C_PuiSdNodeDataPool & orc_GuiDataPool,
-                                                                      stw::scl::C_SclStringList & orc_ImportInformation)
+                                                                      QStringList & orc_ImportInformation)
 {
    const int32_t s32_Result = C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(orc_ProjectPath, orc_DataPool,
                                                                                         orc_ImportInformation);
@@ -70,7 +69,7 @@ int32_t C_SdNdeDpImportRamView::h_ImportDataPoolFromRamViewDefProject(const C_Sc
          for (uint32_t u32_Element = 0U; u32_Element < u32_NumElements; u32_Element++)
          {
             C_OscNodeDataPoolListElement & rc_Element = orc_DataPool.c_Lists[u32_List].c_Elements[u32_Element];
-            C_SclString c_Comment;
+            QByteArray c_CommentBytes;
 
             //Set GUI-only properties:
             //RAMView projects have a clear logic: arrays of sint8 are generally interpreted as strings
@@ -84,9 +83,10 @@ int32_t C_SdNdeDpImportRamView::h_ImportDataPoolFromRamViewDefProject(const C_Sc
             // storing the byte value as UTF8 will have the expected results in openSYDE.
             //Approach taken does not have high performance. But this is not considered an issue as importing typically
             // is a single shot procedure.
-            for (uint32_t u32_Character = 0; u32_Character < rc_Element.c_Comment.Length(); u32_Character++)
+            const QByteArray c_OriginalBytes = rc_Element.c_Comment.toLatin1();
+            for (int32_t s32_Character = 0; s32_Character < c_OriginalBytes.length(); s32_Character++)
             {
-               const uint8_t u8_CharacterValue = static_cast<uint8_t>(rc_Element.c_Comment.c_str()[u32_Character]);
+               const uint8_t u8_CharacterValue = static_cast<uint8_t>(c_OriginalBytes.at(s32_Character));
                if (u8_CharacterValue > 127U)
                {
                   //Convert to UTF8 encoding:
@@ -97,17 +97,16 @@ int32_t C_SdNdeDpImportRamView::h_ImportDataPoolFromRamViewDefProject(const C_Sc
                   uint8_t au8_Utf8Value[2];
                   au8_Utf8Value[0] = (0xC0U + ((u8_CharacterValue & 0xC0U) >> 6U));
                   au8_Utf8Value[1] = (0x80U + (u8_CharacterValue & 0x3FU));
-                  //hack unsigned values into C_SCLString:
-                  c_Comment += static_cast<char_t>(au8_Utf8Value[0]);
-                  c_Comment += static_cast<char_t>(au8_Utf8Value[1]);
+                  c_CommentBytes.append(static_cast<char>(au8_Utf8Value[0]));
+                  c_CommentBytes.append(static_cast<char>(au8_Utf8Value[1]));
                }
                else
                {
                   //plain old character ...
-                  c_Comment += static_cast<char_t>(u8_CharacterValue);
+                  c_CommentBytes.append(static_cast<char>(u8_CharacterValue));
                }
             }
-            rc_Element.c_Comment = c_Comment;
+            rc_Element.c_Comment = QString::fromUtf8(c_CommentBytes);
          }
       }
    }

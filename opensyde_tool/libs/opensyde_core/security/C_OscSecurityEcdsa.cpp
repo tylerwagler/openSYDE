@@ -76,7 +76,7 @@ C_OscSecurityEcdsa::C_Ecdsa256Signature::C_Ecdsa256Signature()
    \retval   C_CONFIG   Held data not valid; conversion failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(C_SclString & orc_Signature) const
+int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(QString & orc_Signature) const
 {
    int32_t s32_Return = C_CONFIG;
 
@@ -114,7 +114,7 @@ int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(C_SclString & or
                   for (uint32_t u32_Character = 0U; u32_Character < static_cast<uint32_t>(x_BufferSize);
                        u32_Character++)
                   {
-                     orc_Signature += C_SclString::IntToHex(pu8_OriginalBuffer[u32_Character], 2U);
+                     orc_Signature += C_OscUtils::h_IntToHex(pu8_OriginalBuffer[u32_Character], 2U);
                   }
 
                   delete[] pu8_OriginalBuffer;
@@ -146,7 +146,7 @@ int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::GetAsDerString(C_SclString & or
    \retval   C_RANGE    No valid signature in string; conversion failed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::SetFromDerString(const C_SclString & orc_Signature)
+int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::SetFromDerString(const QString & orc_Signature)
 {
    int32_t s32_Return = C_RANGE;
    //maximum size for DER encoded: 72 bytes
@@ -154,21 +154,21 @@ int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::SetFromDerString(const C_SclStr
 
    //less than 7 bytes makes no sense
    //length must be even as two characters represent
-   if ((orc_Signature.Length() > (7U * 2U)) &&
-       (orc_Signature.Length() <= (u32_MAX_LENGTH_DER_ENCODED_BYTES * 2U)) &&
-       ((orc_Signature.Length() % 2U) == 0U))
+   if ((orc_Signature.length() > (7U * 2U)) &&
+       (orc_Signature.length() <= (u32_MAX_LENGTH_DER_ENCODED_BYTES * 2U)) &&
+       ((orc_Signature.length() % 2U) == 0U))
    {
       uint8_t au8_BinarySignature[u32_MAX_LENGTH_DER_ENCODED_BYTES];
       bool q_Error = false;
 
       const uint8_t * pu8_Data = &au8_BinarySignature[0];
-      const uint8_t u8_NumBytes = static_cast<uint8_t>(orc_Signature.Length() / 2U);
+      const uint8_t u8_NumBytes = static_cast<uint8_t>(orc_Signature.length() / 2U);
       for (uint32_t u32_Byte = 0U; u32_Byte < u8_NumBytes; u32_Byte++)
       {
          try
          {
             au8_BinarySignature[u32_Byte] =
-               static_cast<uint8_t>(("0x" + orc_Signature.SubString(1U + (u32_Byte * 2U), 2U)).ToInt());
+               static_cast<uint8_t>(("0x" + orc_Signature.mid(u32_Byte * 2, 2)).toInt(nullptr, 16));
          }
          catch (...)
          {
@@ -178,7 +178,7 @@ int32_t C_OscSecurityEcdsa::C_Ecdsa256Signature::SetFromDerString(const C_SclStr
       }
       if (q_Error == false)
       {
-         ECDSA_SIG * const pc_Signature = d2i_ECDSA_SIG(NULL, &pu8_Data, orc_Signature.Length());
+         ECDSA_SIG * const pc_Signature = d2i_ECDSA_SIG(NULL, &pu8_Data, orc_Signature.length());
          if (pc_Signature != NULL)
          {
             const BIGNUM * const pc_SignatureRpart = ECDSA_SIG_get0_r(pc_Signature);
@@ -372,7 +372,7 @@ int32_t C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(const std::vec
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(const uint8_t (&orau8_Digest)[hu32_SHA256_FINAL_LENGTH],
                                                           const uint8_t(&orau8_PrivateKey)[hu32_SECP256R1_PRIVATE_KEY_LENGTH], C_Ecdsa256Signature & orc_Signature,
-                                                          stw::scl::C_SclString & orc_ErrorMessage)
+                                                          QString & orc_ErrorMessage)
 {
    int32_t s32_Return = C_RANGE;
 

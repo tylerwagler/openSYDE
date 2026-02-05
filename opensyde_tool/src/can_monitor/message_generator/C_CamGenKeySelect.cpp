@@ -184,7 +184,7 @@ void C_CamGenKeySelect::m_LoadData(void) const
 
    if (pc_Message != NULL)
    {
-      this->mpc_Ui->pc_LineEditKey->setText(pc_Message->c_Key.c_str());
+      this->mpc_Ui->pc_LineEditKey->setText(pc_Message->c_Key);
       this->mpc_Ui->pc_SpinBoxOffset->setValue(pc_Message->u32_KeyPressOffset);
    }
 }

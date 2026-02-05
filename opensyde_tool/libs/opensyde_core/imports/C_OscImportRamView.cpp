@@ -102,7 +102,7 @@ using namespace stw::diag_lib;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
-    const C_SclString &orc_ProjectPath, C_OscNodeDataPool &orc_DataPool,
+    const QString &orc_ProjectPath, C_OscNodeDataPool &orc_DataPool,
     QStringList &orc_ImportInformation) {
   stw::diag_lib::C_KFXProjectOptions c_ProjectOptions;
   stw::diag_lib::C_KFXVariableLists c_VariableLists;
@@ -123,17 +123,17 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
   if (s32_Result == C_NO_ERR) {
     // Add information to log regarding NVM addresses
     if (orc_DataPool.e_Type == C_OscNodeDataPool::eNVM) {
-      const C_SclString c_Info = "When importing RAMView EEPROM lists the "
+      const QString c_Info = "When importing RAMView EEPROM lists the "
                                  "absolute addresses after import will not "
                                  "match the addresses of the RAMView project. "
                                  "If gaps are intended to be kept between "
                                  "individual lists those should be "
                                  "added manually after the import.";
-      orc_ImportInformation.append(c_Info.ToQString());
+      orc_ImportInformation.append(c_Info);
     }
 
     // set basic Datapool information:
-    orc_DataPool.c_Name = c_ProjectOptions.c_DeviceName.ToQString();
+    orc_DataPool.c_Name = c_ProjectOptions.c_DeviceName;
     for (uint32_t u32_Line = 0U;
          u32_Line < c_ProjectOptions.c_MetaInfo.c_Text.count(); u32_Line++) {
       orc_DataPool.c_Comment +=
@@ -257,7 +257,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
             rc_Element.c_Comment = rc_ElementRamView.ac_Comments[0];
           } else {
             // more than one named set: compose:
-            C_SclString c_Comment;
+            QString c_Comment;
             for (uint8_t u8_CommentIndex = 0U;
                  u8_CommentIndex < u8_NumCommentSets; u8_CommentIndex++) {
               c_Comment +=
@@ -267,7 +267,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
                 c_Comment += "\n";
               }
             }
-            rc_Element.c_Comment = c_Comment.ToQString();
+            rc_Element.c_Comment = c_Comment;
           }
 
           // make sure the name is openSYDE compliant:
@@ -282,10 +282,10 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
           s32_TypeSetResult =
               mh_ImportElementType(rc_ElementRamView, rc_Element);
           if (s32_TypeSetResult != C_NO_ERR) {
-            const C_SclString c_Info =
+            const QString c_Info =
                 "Variable \"" + c_List.c_Name + "." + rc_Element.c_Name +
                 "\" has an unsupported type. It was imported as uint8.";
-            orc_ImportInformation.append(c_Info.ToQString());
+            orc_ImportInformation.append(c_Info);
           }
 
           // set min and max values
@@ -297,11 +297,11 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
           // report and handle collapsing arrays:
           if ((rc_ElementRamView.IsArrayType() == true) &&
               (rc_ElementRamView.GetNumberOfArrayElements() == 1)) {
-            const C_SclString c_Info = "Variable \"" + c_List.c_Name + "." +
+            const QString c_Info = "Variable \"" + c_List.c_Name + "." +
                                        rc_Element.c_Name +
                                        "\" is an array with only one entry. It "
                                        "was imported as non-array element.";
-            orc_ImportInformation.append(c_Info.ToQString());
+            orc_ImportInformation.append(c_Info);
 
             // collapse to non-array (do so after importing min/max and Dataset
             // so we get the proper data imported.
@@ -347,9 +347,9 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
                  u16_DataSetIndex < rc_ElementRamView.GetNumDefaults();
                  u16_DataSetIndex++) {
               if (rc_ElementRamView.GetStringDefault(u16_DataSetIndex)
-                      .Length() == rc_ElementRamView.GetSize()) {
+                      .length() == rc_ElementRamView.GetSize()) {
                 // filled up to the max -> patch it
-                const C_SclString c_Info =
+                const QString c_Info =
                     "Datapool element \"" + c_List.c_Name + "." +
                     rc_Element.c_Name + "\" is a string array. Dataset \"" +
                     c_List.c_DataSets[u16_DataSetIndex].c_Name +
@@ -357,7 +357,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
                     rc_ElementRamView.GetStringDefault(u16_DataSetIndex) +
                     "\" without zero termination. "
                     "The final character was replaced by a zero termination.";
-                orc_ImportInformation.append(c_Info.ToQString());
+                orc_ImportInformation.append(c_Info);
 
                 rc_Element.c_DataSetValues[u16_DataSetIndex]
                     .SetValueArrS8Element(0, rc_Element.GetSizeByte() - 1);
@@ -386,7 +386,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
     }
 
     osc_write_log_info("Loading RAMView project",
-                       "Content of project \"" + orc_ProjectPath.ToQString() +
+                       "Content of project \"" + orc_ProjectPath +
                            "\" was imported to openSYDE data structures. "
                            "Number of imported lists: " +
                            QString::number(orc_DataPool.c_Lists.size()) +
@@ -866,24 +866,22 @@ void C_OscImportRamView::mh_ImportElementDataSetValues(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
-    const stw::scl::C_SclString &orc_ProjectPath,
+    const QString &orc_ProjectPath,
     stw::diag_lib::C_KFXProjectOptions &orc_ProjectOptions,
     stw::diag_lib::C_KFXVariableLists &orc_VariableLists) {
   int32_t s32_Return = C_NO_ERR;
 
   orc_VariableLists.resize(0);
 
-  if (C_SclString(
-          ("." + QFileInfo(orc_ProjectPath.ToQString()).suffix()).toStdString())
-          .LowerCase() != ".def") {
+  if (("." + QFileInfo(orc_ProjectPath).suffix()).toLower() != ".def") {
     osc_write_log_error("Loading RAMView project",
-                        "File \"" + orc_ProjectPath.ToQString() +
+                        "File \"" + orc_ProjectPath +
                             "\" does not have the file extension \".def\".");
     s32_Return = C_RD_WR;
-  } else if ((QFileInfo(orc_ProjectPath.ToQString()).exists() &&
-              QFileInfo(orc_ProjectPath.ToQString()).isFile()) == false) {
+  } else if ((QFileInfo(orc_ProjectPath).exists() &&
+              QFileInfo(orc_ProjectPath).isFile()) == false) {
     osc_write_log_error("Loading RAMView project",
-                        "File \"" + orc_ProjectPath.ToQString() + "\" does not exist.");
+                        "File \"" + orc_ProjectPath + "\" does not exist.");
     s32_Return = C_RD_WR;
   } else {
     // everything fine so far ...
@@ -895,7 +893,7 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
 
     //.def file format:
     pc_IniFile =
-        new QSettings(orc_ProjectPath.ToQString(), QSettings::IniFormat);
+        new QSettings(orc_ProjectPath, QSettings::IniFormat);
     // Checksum check removed as QSettings does not support it directly and
     // C_OscChecksummedIniFile is deprecated.
 
@@ -905,7 +903,7 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
       orc_ProjectOptions.LoadConfigFromIni(*pc_IniFile);
       if (orc_ProjectOptions.c_DeviceName == "") {
         osc_write_log_error("Loading RAMView project",
-                            "File \"" + orc_ProjectPath.ToQString() +
+                            "File \"" + orc_ProjectPath +
                                 "\" does not seem to contain a DEVICENAME. Is "
                                 "this a proper RAMView project file ?");
         s32_Return = C_RD_WR;
@@ -919,11 +917,10 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
 
   // scan for .ram files and read them in:
   if (s32_Return == C_NO_ERR) {
-    QList<C_SclString> c_Warnings;
-    C_SclString c_ErrorText;
-    const C_SclString c_WorkDirectory =
-        (QFileInfo(orc_ProjectPath.ToQString()).absolutePath() + "/")
-            .toStdString();
+    QList<QString> c_Warnings;
+    QString c_ErrorText;
+    const QString c_WorkDirectory =
+        QFileInfo(orc_ProjectPath).absolutePath() + "/";
 
     s32_Return = C_KFXDEFProject::LoadRAMFiles(
         c_WorkDirectory, orc_ProjectOptions.c_DeviceName, orc_VariableLists,
@@ -931,7 +928,7 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
     // report warnings from loading .ram files in any case (makes it easier to
     // locate problems for user):
     for (int32_t s32_Index = 0; s32_Index < c_Warnings.size(); s32_Index++) {
-      osc_write_log_warning("Loading RAMView project", c_Warnings[s32_Index].ToQString());
+      osc_write_log_warning("Loading RAMView project", c_Warnings[s32_Index]);
     }
     switch (s32_Return) {
     case C_NO_ERR:
@@ -949,7 +946,7 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
     case C_RD_WR:
       osc_write_log_error("Loading RAMView project",
                           "Error reading or parsing .ram file. Detail: " +
-                              c_ErrorText.ToQString());
+                              c_ErrorText);
       s32_Return = C_RD_WR;
       break;
     default:
@@ -962,15 +959,15 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
 
   // load default file
   if (s32_Return == C_NO_ERR) {
-    const C_SclString c_FilePath =
-        stw::opensyde_core::C_OscUtils::h_ChangeFileExtension(orc_ProjectPath.ToQString(),
+    const QString c_FilePath =
+        stw::opensyde_core::C_OscUtils::h_ChangeFileExtension(orc_ProjectPath,
                                                               ".dat");
 
     // preset defaults to clearly defined values:
     orc_VariableLists.ClearDefaults();
 
     s32_Return = C_KFXDATFile::LoadDATAllLists(
-        stw::opensyde_core::C_OscUtils::h_ChangeFileExtension(orc_ProjectPath.ToQString(),
+        stw::opensyde_core::C_OscUtils::h_ChangeFileExtension(orc_ProjectPath,
                                                               ".dat"),
         orc_ProjectOptions.c_DeviceName, orc_VariableLists, NULL);
     switch (s32_Return) {
@@ -981,28 +978,28 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
       // nevertheless
       osc_write_log_warning(
           "Loading RAMView project",
-          ".dat file \"" + c_FilePath.ToQString() +
+          ".dat file \"" + c_FilePath +
               "\" did not contain default values for all variables.");
       s32_Return = C_NO_ERR;
       break;
     case C_NOACT:
       osc_write_log_error("Loading RAMView project",
                           "Could not load default values from .dat file \"" +
-                              c_FilePath.ToQString() +
+                              c_FilePath +
                               "\". Could not open file or file not valid.");
       s32_Return = C_RD_WR;
       break;
     case C_CONFIG:
       osc_write_log_error(
           "Loading RAMView project",
-          "Could not load default values from .dat file \"" + c_FilePath.ToQString() +
+          "Could not load default values from .dat file \"" + c_FilePath +
               "\". Unexpected file version or file is for different project.");
       s32_Return = C_RD_WR;
       break;
     default:
       osc_write_log_error("Loading RAMView project",
                           "Could not load default values from .dat file \"" +
-                              c_FilePath.ToQString() + "\". Unexpected error.");
+                              c_FilePath + "\". Unexpected error.");
       s32_Return = C_RD_WR;
       break;
     }
@@ -1010,8 +1007,8 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
 
   // load comment file
   if (s32_Return == C_NO_ERR) {
-    const C_SclString c_FilePath =
-        stw::opensyde_core::C_OscUtils::h_ChangeFileExtension(orc_ProjectPath.ToQString(),
+    const QString c_FilePath =
+        stw::opensyde_core::C_OscUtils::h_ChangeFileExtension(orc_ProjectPath,
                                                               ".rec");
 
     s32_Return = C_KFXDEFProject::LoadComments(
@@ -1023,30 +1020,30 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
       case C_CONFIG:
         osc_write_log_warning("Loading RAMView project",
                               "Could not load comments from .rec file \"" +
-                                  c_FilePath.ToQString() +
+                                  c_FilePath +
                                   "\". File is for a different project.");
         break;
       case C_NOACT:
         osc_write_log_warning("Loading RAMView project",
                               "Could not load comments from .rec file \"" +
-                                  c_FilePath.ToQString() + "\". File does not exist.");
+                                  c_FilePath + "\". File does not exist.");
         break;
       case C_RD_WR:
         osc_write_log_warning("Loading RAMView project",
                               "Could not load comments from .rec file \"" +
-                                  c_FilePath.ToQString() +
+                                  c_FilePath +
                                   "\". Invalid language name in file.");
         break;
       case C_OVERFLOW:
         osc_write_log_warning("Loading RAMView project",
                               "Could not load comments from .rec file \"" +
-                                  c_FilePath.ToQString() +
+                                  c_FilePath +
                                   "\". Too many languages in file.");
         break;
       default:
         osc_write_log_warning("Loading RAMView project",
                               "Could not load comments from .rec file \"" +
-                                  c_FilePath.ToQString() + "\". Unexpected error.");
+                                  c_FilePath + "\". Unexpected error.");
         break;
       }
       s32_Return = C_NO_ERR;

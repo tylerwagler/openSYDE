@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include <QStringList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -25,24 +25,24 @@ namespace opensyde_core
 class C_OscXcoBase
 {
 public:
-   static stw::scl::C_SclString h_GetPackageExtension();
+   static QString h_GetPackageExtension();
 
-   static const stw::scl::C_SclString hc_PACKAGE_EXT;
-   static const stw::scl::C_SclString hc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
-   static const stw::scl::C_SclString hc_XCFG_SYSDEF;
-   static const stw::scl::C_SclString hc_XCFG_SYSDEF_FOLDER;
-   static const stw::scl::C_SclString hc_INI_DEV;
-   static const stw::scl::C_SclString hc_INI_DEV_FOLDER;
+   static const QString hc_PACKAGE_EXT;
+   static const QString hc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
+   static const QString hc_XCFG_SYSDEF;
+   static const QString hc_XCFG_SYSDEF_FOLDER;
+   static const QString hc_INI_DEV;
+   static const QString hc_INI_DEV_FOLDER;
 
 protected:
    static QStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
                                            // not available
-   static stw::scl::C_SclString mhc_ErrorMessage;        // description of error which caused the service update package
+   static QString mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
 
    static void mh_Init(void);
    static void mh_GetWarningsAndErrors(QStringList & orc_WarningMessages,
-                                       stw::scl::C_SclString & orc_ErrorMessage);
+                                       QString & orc_ErrorMessage);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

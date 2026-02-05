@@ -16,7 +16,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolXfl.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "stwcompid.h"
 #include <QSettings>
 
@@ -185,10 +185,10 @@ void C_CanMonProtocolXfl::SetSendId(const uint32_t ou32_SendId)
    C_RD_WR   -> error writing data
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocolXfl::SaveParamsToIni(QSettings & orc_IniFile, const C_SclString & orc_Section)
+int32_t C_CanMonProtocolXfl::SaveParamsToIni(QSettings & orc_IniFile, const QString & orc_Section)
 {
    int32_t s32_Error = C_NO_ERR;
-   QString c_Section = orc_Section.ToQString();
+   QString c_Section = orc_Section;
 
    try
    {
@@ -215,9 +215,9 @@ int32_t C_CanMonProtocolXfl::SaveParamsToIni(QSettings & orc_IniFile, const C_Sc
    C_RD_WR   -> error reading data
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocolXfl::LoadParamsFromIni(QSettings & orc_IniFile, const C_SclString & orc_Section)
+int32_t C_CanMonProtocolXfl::LoadParamsFromIni(QSettings & orc_IniFile, const QString & orc_Section)
 {
-   QString c_Section = orc_Section.ToQString();
+   QString c_Section = orc_Section;
    this->mu32_XFLSendId = static_cast<uint32_t>(orc_IniFile.value(c_Section + "/PP_XFL_SEND_ID",
                                                                         static_cast<int32_t>(this->mu32_XFLSendId)).toUInt());
    return C_NO_ERR;
@@ -233,12 +233,12 @@ int32_t C_CanMonProtocolXfl::LoadParamsFromIni(QSettings & orc_IniFile, const C_
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
    int32_t s32_Index;
-   C_SclString c_Text;
-   C_SclString c_Help;
-   C_SclString c_Help2;
+   QString c_Text;
+   QString c_Help;
+   QString c_Help2;
    uint16_t u16_Help;
    int32_t s32_Return;
    char_t acn_CIDBuffer[6];
@@ -319,17 +319,17 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
          }
          if (mq_Decimal == true)
          {
-            c_Help = C_SclString::FromQString(QString::asprintf("ee_write_word ADD: %d DATA: [%d,%d]",
+            c_Help = QString::asprintf("ee_write_word ADD: %d DATA: [%d,%d]",
                                         mh_BytesToWordLowHigh(&orc_Msg.au8_Data[2]),
                                         mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]),
-                                        mh_BytesToWordLowHigh(&orc_Msg.au8_Data[6])));
+                                        mh_BytesToWordLowHigh(&orc_Msg.au8_Data[6]));
          }
          else
          {
-            c_Help = C_SclString::FromQString(QString::asprintf("ee_write_word ADD: %04X DATA: [%04X,%04X]",
+            c_Help = QString::asprintf("ee_write_word ADD: %04X DATA: [%04X,%04X]",
                                         mh_BytesToWordLowHigh(&orc_Msg.au8_Data[2]),
                                         mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]),
-                                        mh_BytesToWordLowHigh(&orc_Msg.au8_Data[6])));
+                                        mh_BytesToWordLowHigh(&orc_Msg.au8_Data[6]));
          }
          break;
       case mu8_XFL_CMD_GRP_GET_COMMAND:
@@ -876,7 +876,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                                                 &acn_CIDBuffer[0]);
                if (s32_Return == C_NO_ERR)
                {
-                  c_Help = C_SclString::FromQString(QString::asprintf("node_compid ID:%s", acn_CIDBuffer));
+                  c_Help = QString::asprintf("node_compid ID:%s", acn_CIDBuffer);
                }
                else
                {
@@ -910,13 +910,13 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
             }
             if (mq_Decimal == true)
             {
-               c_Help = C_SclString::FromQString(QString::asprintf("wakeup_divert_client POS:%d UID:%d", orc_Msg.au8_Data[3],
-                                           mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4])));
+               c_Help = QString::asprintf("wakeup_divert_client POS:%d UID:%d", orc_Msg.au8_Data[3],
+                                           mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]));
             }
             else
             {
-               c_Help = C_SclString::FromQString(QString::asprintf("wakeup_divert_client POS:%02X UID:%04X", orc_Msg.au8_Data[3],
-                                           mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4])));
+               c_Help = QString::asprintf("wakeup_divert_client POS:%02X UID:%04X", orc_Msg.au8_Data[3],
+                                           mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]));
             }
             break;
          case 0x09U:
@@ -1036,17 +1036,17 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
          }
          if (mq_Decimal == true)
          {
-            c_Help = C_SclString::FromQString(QString::asprintf("ee_write_word ADD: %d DATA: [%d,%d]",
+            c_Help = QString::asprintf("ee_write_word ADD: %d DATA: [%d,%d]",
                                         mh_BytesToWordLowHigh(&orc_Msg.au8_Data[2]),
                                         mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]),
-                                        mh_BytesToWordLowHigh(&orc_Msg.au8_Data[6])));
+                                        mh_BytesToWordLowHigh(&orc_Msg.au8_Data[6]));
          }
          else
          {
-            c_Help = C_SclString::FromQString(QString::asprintf("ee_write_word ADD: %04X DATA: [%04X,%04X]",
+            c_Help = QString::asprintf("ee_write_word ADD: %04X DATA: [%04X,%04X]",
                                         mh_BytesToWordLowHigh(&orc_Msg.au8_Data[2]),
                                         mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]),
-                                        mh_BytesToWordLowHigh(&orc_Msg.au8_Data[6])));
+                                        mh_BytesToWordLowHigh(&orc_Msg.au8_Data[6]));
          }
          break;
       case mu8_XFL_CMD_GRP_GET_COMMAND: //get command
@@ -1086,10 +1086,10 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                   c_Help = "";
                   break;
                }
-               c_Help = C_SclString::FromQString(QString::asprintf("get_version_number VER: %c.%c%c/%d",
+               c_Help = QString::asprintf("get_version_number VER: %c.%c%c/%d",
                                            orc_Msg.au8_Data[3], orc_Msg.au8_Data[4], orc_Msg.au8_Data[5],
                                            (static_cast<uint16_t>((static_cast<uint16_t>(orc_Msg.au8_Data[6])) << 8U)) +
-                                           orc_Msg.au8_Data[7]));
+                                           orc_Msg.au8_Data[7]);
             }
             break;
          case mu8_XFL_CMD_GET_ERASE_COUNT: //get_download_count
@@ -1121,7 +1121,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                }
                else
                {
-                  c_Help2 = C_SclString::FromQString(QString::asprintf("'%c' ", orc_Msg.au8_Data[s32_Index]));
+                  c_Help2 = QString::asprintf("'%c' ", orc_Msg.au8_Data[s32_Index]);
                }
                c_Help += c_Help2;
             }
@@ -1176,11 +1176,11 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
             }
             if (mq_Decimal == true)
             {
-               c_Help = C_SclString::FromQString(QString::asprintf("get_last_user UID:%d", mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4])));
+               c_Help = QString::asprintf("get_last_user UID:%d", mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]));
             }
             else
             {
-               c_Help = C_SclString::FromQString(QString::asprintf("get_last_user UID:%04X", mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4])));
+               c_Help = QString::asprintf("get_last_user UID:%04X", mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]));
             }
             break;
          case mu8_XFL_CMD_GET_FLASH_INFORMATION:
@@ -1279,11 +1279,11 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
             case mu8_XFL_CMD_GET_IMPLEMENTATION_INFORMATION_PROTOCOL_VERSION:
                c_Help = c_Help + "protocol_version";
                u16_Help = mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]);
-               c_Help2 = C_SclString::FromQString(QString::asprintf(" V%x.%x%xr%x",
+               c_Help2 = QString::asprintf(" V%x.%x%xr%x",
                                             static_cast<uint8_t>((u16_Help >> 12U) & 0x0FU),
                                             static_cast<uint8_t>((u16_Help >> 8U) & 0x0FU),
                                             static_cast<uint8_t>((u16_Help >> 4U) & 0x0FU),
-                                            static_cast<uint8_t>((u16_Help) & 0x0FU)));
+                                            static_cast<uint8_t>((u16_Help) & 0x0FU));
                break;
             case mu8_XFL_CMD_GET_IMPLEMENTATION_INFORMATION_SPECIAL_SERVICES:
                c_Help = c_Help + "special_services";
@@ -1635,7 +1635,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
                                                 &acn_CIDBuffer[0]);
                if (s32_Return == C_NO_ERR)
                {
-                  c_Help = C_SclString::FromQString(QString::asprintf("node_compid ID:%s", acn_CIDBuffer));
+                  c_Help = QString::asprintf("node_compid ID:%s", acn_CIDBuffer);
                }
                else
                {
@@ -1669,13 +1669,13 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
             }
             if (mq_Decimal == true)
             {
-               c_Help = C_SclString::FromQString(QString::asprintf("wakeup_divert_client POS:%d UID:%d", orc_Msg.au8_Data[3],
-                                           mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4])));
+               c_Help = QString::asprintf("wakeup_divert_client POS:%d UID:%d", orc_Msg.au8_Data[3],
+                                           mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]));
             }
             else
             {
-               c_Help = C_SclString::FromQString(QString::asprintf("wakeup_divert_client POS:%02X UID:%04X", orc_Msg.au8_Data[3],
-                                           mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4])));
+               c_Help = QString::asprintf("wakeup_divert_client POS:%02X UID:%04X", orc_Msg.au8_Data[3],
+                                           mh_BytesToWordLowHigh(&orc_Msg.au8_Data[4]));
             }
             break;
          case 0x09U: //read_flash_word
@@ -1795,7 +1795,7 @@ C_SclString C_CanMonProtocolXfl::MessageToString(const T_STWCAN_Msg_RX & orc_Msg
    Text representation of protocol name
 */
 //-----------------------------------------------------------------------------
-C_SclString C_CanMonProtocolXfl::GetProtocolName(void) const
+QString C_CanMonProtocolXfl::GetProtocolName(void) const
 {
    return "STW Flashloader";
 }

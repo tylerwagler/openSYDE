@@ -75,11 +75,7 @@
 #include <QtWidgets>
 
 // STW includes
-// Don't include those as they can sometimes change
 #include "stwtypes.hpp"
-#include "C_PuiProject.hpp"
-#include "C_PuiSdHandler.hpp"
-#include "C_SdTopologyScene.hpp"
 #include "C_SclChecksums.hpp"
 
 #endif

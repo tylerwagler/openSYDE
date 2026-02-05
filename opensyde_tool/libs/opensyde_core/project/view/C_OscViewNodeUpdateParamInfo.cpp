@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_SclChecksums.hpp"
 #include "C_OscViewNodeUpdateParamInfo.hpp"
 

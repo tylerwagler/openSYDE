@@ -1670,7 +1670,7 @@ int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(
                                            orc_BasePath, opc_CreatedFiles,
                                            orc_NodeIndicesToNameMap);
     } else {
-      // const C_SclString c_FileName =
+      // const QString c_FileName =
       // C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
       // Fix
       const QString c_FileName = "can_open_managers.xml";
@@ -1761,7 +1761,7 @@ int32_t C_OscNodeFiler::mh_SaveDataLoggers(
       // To string
       C_OscDataLoggerJobFiler::h_SaveData(orc_DataLoggerJobs, orc_XmlParser);
     } else {
-      // const C_SclString c_FileName =
+      // const QString c_FileName =
       // C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
       // Fix
       const QString c_FileName = "data_loggers.xml";

@@ -18,7 +18,7 @@
 #include "stwerrors.hpp"
 
 #include "C_OscComDriverBase.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include <chrono>
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscComAutoSupport.hpp"

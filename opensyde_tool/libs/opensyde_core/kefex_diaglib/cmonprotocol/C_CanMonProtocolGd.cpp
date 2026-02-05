@@ -16,7 +16,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolGd.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -73,7 +73,7 @@ using namespace stw::can;
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolGd::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolGd::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
    bool q_IsRequest;
    uint8_t u8_SenderSegment;
@@ -84,13 +84,13 @@ C_SclString C_CanMonProtocolGd::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    uint16_t u16_Data;
    uint16_t u16_NumberOfBytes;
    uint32_t u32_SysTime;
-   C_SclString c_Text;
-   C_SclString c_Help;
-   C_SclString c_HelpSender;
-   C_SclString c_HelpReceiver;
-   C_SclString c_HelpTime;
-   C_SclString c_HelpHystHigh;
-   C_SclString c_HelpHystLow;
+   QString c_Text;
+   QString c_Help;
+   QString c_HelpSender;
+   QString c_HelpReceiver;
+   QString c_HelpTime;
+   QString c_HelpHystHigh;
+   QString c_HelpHystLow;
 
    if ((orc_Msg.u32_ID < 0x600) || (orc_Msg.u32_ID > 0x6FFU))
    {
@@ -603,7 +603,7 @@ C_SclString C_CanMonProtocolGd::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    Text representation of protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolGd::GetProtocolName(void) const
+QString C_CanMonProtocolGd::GetProtocolName(void) const
 {
    return "WD Generic Driver";
 }

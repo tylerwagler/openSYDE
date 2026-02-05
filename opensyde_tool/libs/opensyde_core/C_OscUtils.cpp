@@ -1238,3 +1238,37 @@ QString C_OscUtils::h_ChangeFileExtension(const QString &orc_FilePath,
 
   return c_Path;
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Convert integer to hexadecimal string
+
+   Compose string from integer value data.
+   Does not insert a "0x" prefix before the data.
+
+   Example:
+   "h_IntToHex(0x123, 4)" will return "0123".
+
+   \param[in]  os64_Value    value to convert
+   \param[in]  ou32_Digits   number of digits to return (zeroes will be filled in from the left)
+
+   \return
+   Resulting hexadecimal string (uppercase)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_OscUtils::h_IntToHex(const int64_t os64_Value, const uint32_t ou32_Digits) {
+  return QString::number(os64_Value, 16).toUpper().rightJustified(static_cast<int>(ou32_Digits), '0');
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Convert unsigned integer to hexadecimal string
+
+   \param[in]  ou64_Value    value to convert
+   \param[in]  ou32_Digits   number of digits to return (zeroes will be filled in from the left)
+
+   \return
+   Resulting hexadecimal string (uppercase)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_OscUtils::h_IntToHex(const uint64_t ou64_Value, const uint32_t ou32_Digits) {
+  return QString::number(ou64_Value, 16).toUpper().rightJustified(static_cast<int>(ou32_Digits), '0');
+}

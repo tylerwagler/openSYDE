@@ -105,8 +105,8 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
             if (rc_Application.e_Type != C_OscNodeApplication::eBINARY)
             {
                C_TblTreeModelCheckableItem * const pc_ApplicationItem = new C_TblTreeModelCheckableItem();
-               const stw::scl::C_SclString c_Indentation = "\n   ";
-               stw::scl::C_SclString c_ToolTip;
+               const QString c_Indentation = "\n   ";
+               QString c_ToolTip;
                if (rc_Application.e_Type == C_OscNodeApplication::ePROGRAMMABLE_APPLICATION)
                {
                   if (rc_Node.c_Properties.q_XappSupport == true)
@@ -144,7 +144,7 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
                c_ToolTip += c_Indentation + "Generation Directory: ";
                c_ToolTip += rc_Application.c_GeneratePath;
                c_ToolTip += c_Indentation + "Structure Version: ";
-               c_ToolTip += QString::number(rc_Application.u16_GenCodeVersion).toStdString().c_str();
+               c_ToolTip += QString::number(rc_Application.u16_GenCodeVersion);
                c_ToolTip += c_Indentation + "Output File: ";
                if (rc_Application.c_ResultPaths.size() == 2)
                {
@@ -161,8 +161,8 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
                c_ToolTip += c_Indentation + "IDE Call: ";
                c_ToolTip += rc_Application.c_IdeCall;
 
-               pc_ApplicationItem->c_ToolTipHeading = rc_Application.c_Name.c_str();
-               pc_ApplicationItem->c_ToolTipContent = c_ToolTip.c_str();
+               pc_ApplicationItem->c_ToolTipHeading = rc_Application.c_Name;
+               pc_ApplicationItem->c_ToolTipContent = c_ToolTip;
 
                pc_ApplicationItem->u32_Index = u32_ApplicationCounter;
                pc_ApplicationItem->q_Enabled = true;

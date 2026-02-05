@@ -1551,7 +1551,7 @@ int32_t C_PuiSvHandler::InsertView(const uint32_t ou32_Index, const C_PuiSvData 
       if (oq_AutoAdaptName == true)
       {
          c_TmpView.SetName(C_Uti::h_GetUniqueNameQt(this->m_GetExistingViewNames(),
-                                                    c_TmpView.GetName().c_str()).toStdString().c_str());
+                                                    c_TmpView.GetName()));
       }
       this->mc_Views.insert(this->mc_Views.begin() + ou32_Index, c_TmpView);
    }
@@ -2593,7 +2593,7 @@ int32_t C_PuiSvHandler::CheckViewError(const uint32_t ou32_Index, bool * const o
             if (u32_ItView != ou32_Index)
             {
                const C_PuiSvData & rc_CurData = this->mc_Views[u32_ItView];
-               if (rc_CurData.GetName().AnsiCompare(rc_CheckedData.GetName()) == 0)
+               if (rc_CurData.GetName() == rc_CheckedData.GetName())
                {
                   c_Details.q_NameInvalid = true;
                }
@@ -3387,7 +3387,7 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
                if (q_Ok)
                {
                   osc_write_log_info("Loading views", "Value of \"file-version\": " +
-                                     stw::scl::C_SclString::IntToStr(s32_FileVersion));
+                                     QString::number(s32_FileVersion));
                   //Check file version
                   if ((s32_FileVersion != 1) && (s32_FileVersion != 2))
                   {
@@ -4513,9 +4513,9 @@ int32_t C_PuiSvHandler::m_CheckRouting(const uint32_t ou32_ViewIndex,
    Vector of pointers to all currently registered view names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<stw::scl::C_SclString, bool> C_PuiSvHandler::m_GetExistingViewNames(void) const
+std::map<QString, bool> C_PuiSvHandler::m_GetExistingViewNames(void) const
 {
-   std::map<stw::scl::C_SclString, bool> c_Retval;
+   std::map<QString, bool> c_Retval;
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_Views.size(); ++u32_ItView)
    {
       const C_PuiSvData & rc_Data = this->mc_Views[u32_ItView];

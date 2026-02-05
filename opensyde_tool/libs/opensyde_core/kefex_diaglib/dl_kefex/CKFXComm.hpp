@@ -157,11 +157,11 @@ public:
    virtual int32_t GetConfig(C_KFXCommConfiguration * const opt_Config) const;
    virtual int32_t SetConfig(const C_KFXCommConfiguration * const opt_Config);
    virtual int32_t LoadConfigFromINI(QSettings * const opc_File,
-                                     const stw::scl::C_SclString & orc_Section);
+                                     const QString & orc_Section);
    virtual int32_t SaveConfigToINI(QSettings * const opc_File,
-                                   const stw::scl::C_SclString & orc_Section) const;
+                                   const QString & orc_Section) const;
 
-   virtual stw::scl::C_SclString GetProtocolName(void);
+   virtual QString GetProtocolName(void);
    virtual void GetProtocolFeatures(T_KFXProtocolFeatures * const opt_Features);
 
    //0 = off; 1 -> RAW; 2 -> HLP
@@ -197,7 +197,7 @@ public:
    C_KFXCommunicationIV(void);
 
    virtual int32_t IV_ReadProtocolVersion(uint16_t & oru16_Version) = 0;
-   virtual int32_t IV_ReadDeviceID(stw::scl::C_SclString & orc_DeviceId) = 0;
+   virtual int32_t IV_ReadDeviceID(QString & orc_DeviceId) = 0;
    virtual int32_t IV_ReadODVersion(uint16_t & oru16_Version) = 0;
 };
 

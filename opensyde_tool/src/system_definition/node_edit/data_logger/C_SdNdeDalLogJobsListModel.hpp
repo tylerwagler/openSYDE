@@ -13,7 +13,6 @@
 #include <QWidget>
 #include <QAbstractListModel>
 
-#include "C_SclStringList.hpp"
 #include "C_OscDataLoggerJob.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -54,7 +53,7 @@ private:
    class C_DalLogJob
    {
    public:
-      stw::scl::C_SclString c_Name;
+      QString c_Name;
       bool q_Enabled;
    };
 

@@ -328,7 +328,7 @@ void C_SyvUpFileSizeInformation::LoadUserSettings(const uint32_t ou32_ViewIndex)
    if ((pc_View != NULL) &&
        (s32_Retval == C_NO_ERR))
    {
-      const C_UsSystemView c_UserView = C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName().c_str());
+      const C_UsSystemView c_UserView = C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName());
       for (uint32_t u32_ItNode = 0UL; u32_ItNode < c_NodeActiveFlags.size(); ++u32_ItNode)
       {
          QString c_Name;
@@ -385,7 +385,7 @@ void C_SyvUpFileSizeInformation::SaveUserSettings(const uint32_t ou32_ViewIndex)
                   if (C_PuiSvHandler::h_GetInstance()->CalcViewRoutingCrcIndex(ou32_ViewIndex, u32_ItNode,
                                                                                u32_Crc) == C_NO_ERR)
                   {
-                     C_UsHandler::h_GetInstance()->AddProjSvNodeUpdateDataRate(pc_View->GetName().c_str(), c_Name,
+                     C_UsHandler::h_GetInstance()->AddProjSvNodeUpdateDataRate(pc_View->GetName(), c_Name,
                                                                                u32_Crc, c_It.value());
                   }
                }

@@ -19,8 +19,9 @@
 #include "stwerrors.hpp"
 #include "C_SclChecksums.hpp"
 #include "C_OscCanOpenObjectDictionary.hpp"
-#include "C_SclString.hpp"
-#include "C_SclString.hpp"
+#include <QString>
+#include <QFile>
+#include <QTextStream>
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::scl;
@@ -32,7 +33,7 @@ using namespace stw::opensyde_core;
 class C_TextAndSize
 {
 public:
-   C_SclString c_Text;
+   QString c_Text;
    uint8_t u8_Size;
 
    bool q_IsInteger;
@@ -150,10 +151,10 @@ void C_OscCanOpenObjectDictionary::m_RememberFileHash()
 {
    this->mu32_OriginalFileHash = 0xFFFFFFFFU;
 
-   for (int32_t s32_Line = 0; s32_Line < this->c_TextFileContent.Strings.size(); s32_Line++)
+   for (int32_t s32_Line = 0; s32_Line < this->c_TextFileContent.size(); s32_Line++)
    {
-      stw::scl::C_SclChecksums::CalcCRC32(this->c_TextFileContent.Strings[s32_Line].toUtf8().constData(),
-                                          this->c_TextFileContent.Strings[s32_Line].length(),
+      stw::scl::C_SclChecksums::CalcCRC32(this->c_TextFileContent[s32_Line].toUtf8().constData(),
+                                          this->c_TextFileContent[s32_Line].length(),
                                           this->mu32_OriginalFileHash);
    }
 }
@@ -177,7 +178,7 @@ void C_OscCanOpenObjectDictionary::m_RememberFileHash()
                 use GetLastErrorText() to get details
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
+int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const QString & orc_File)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -185,13 +186,13 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
    mc_LastError = "";
    c_OdObjects.clear();
 
-   if (!(QFileInfo(orc_File.ToQString()).exists() && QFileInfo(orc_File.ToQString()).isFile()))
+   if (!(QFileInfo(orc_File).exists() && QFileInfo(orc_File).isFile()))
    {
       s32_Return = C_RANGE;
    }
    else
    {
-      QSettings c_IniFile(orc_File.ToQString(), QSettings::IniFormat);
+      QSettings c_IniFile(orc_File, QSettings::IniFormat);
 
       //go through all sections and set up c_Objects
       QStringList c_Groups = c_IniFile.childGroups();
@@ -275,14 +276,20 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
          s32_Return = this->c_InfoBlock.LoadFromFile(c_IniFile, c_InfoError);
          if (s32_Return != C_NO_ERR)
          {
-            this->mc_LastError = C_SclString::FromQString(c_InfoError);
+            this->mc_LastError = c_InfoError;
          }
       }
 
       if (s32_Return == C_NO_ERR)
       {
          //remember full original content of file
-         this->c_TextFileContent.LoadFromFile(orc_File.ToQString());
+         QFile c_FileToRead(orc_File);
+         if (c_FileToRead.open(QIODevice::ReadOnly | QIODevice::Text))
+         {
+            QTextStream c_Stream(&c_FileToRead);
+            this->c_TextFileContent = c_Stream.readAll().split('\n');
+            c_FileToRead.close();
+         }
          this->m_RememberFileHash();
       }
    }
@@ -303,12 +310,12 @@ int32_t C_OscCanOpenObjectDictionary::LoadFromFile(const C_SclString & orc_File)
    C_CONFIG    at least one referenced object does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const C_SclString & orc_Blockname,
+int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const QString & orc_Blockname,
                                                                 QSettings & orc_IniFile)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   const QString c_Group = orc_Blockname.ToQString() + "/";
+   const QString c_Group = orc_Blockname + "/";
    const uint16_t u16_NumEntries = static_cast<uint16_t>(orc_IniFile.value(c_Group + "SupportedObjects", 0).toUInt());
 
    for (int32_t s32_Loop = 0; s32_Loop < u16_NumEntries; s32_Loop++)
@@ -342,7 +349,7 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const C_SclStrin
             if (c_Object == c_OdObjects.end())
             {
                mc_LastError = orc_Blockname + ": References object 0x" +
-                              C_SclString::IntToHex(u16_Index, 4) + "which is not described in the file.";
+                              C_OscUtils::h_IntToHex(u16_Index, 4) + "which is not described in the file.";
                s32_Return = C_CONFIG;
             }
          }
@@ -366,14 +373,14 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const C_SclStrin
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
-                                                             const bool oq_IsSubIndex, const stw::scl::C_SclString & orc_SectionName,
+                                                             const bool oq_IsSubIndex, const QString & orc_SectionName,
                                                              QSettings & orc_IniFile, C_OscCanOpenObjectData & orc_Object)
 {
    const uint32_t u32_NUM_STRINGS_TO_SEARCH = 10U;
 
    //Use table to speed up search.
    //upper case, so we only need to do this call on the side of the file content:
-   static const C_SclString ac_StringsToSearchFor[u32_NUM_STRINGS_TO_SEARCH] =
+   static const QString ac_StringsToSearchFor[u32_NUM_STRINGS_TO_SEARCH] =
    {
       "PARAMETERNAME",
       "ACCESSTYPE",
@@ -417,7 +424,7 @@ int32_t C_OscCanOpenObjectDictionary::m_GetObjectDescription(const uint16_t ou16
    orc_Object.u8_DataType = C_OscCanOpenObjectData::hu8_DATA_TYPE_DOMAIN; //optional for "DOMAIN" objects
    orc_Object.q_IsMappableIntoPdo = false;
 
-   const QString c_QsSection = orc_SectionName.ToQString();
+   const QString c_QsSection = orc_SectionName;
    orc_IniFile.beginGroup(c_QsSection);
    QStringList c_Keys = orc_IniFile.allKeys();
 
@@ -640,7 +647,7 @@ void C_OscCanOpenObjectData::SetSize(const uint16_t ou16_Size)
    \param[out]  opu8_Size   size of object
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenObjectData::DataTypeToTextAndSize(C_SclString * const opc_Text, uint8_t * const opu8_Size) const
+void C_OscCanOpenObjectData::DataTypeToTextAndSize(QString * const opc_Text, uint8_t * const opu8_Size) const
 {
    if ((u8_DataType < mu8_NUM_DATA_TYPES) && (u8_DataType > hu8_DATA_TYPE_INVALID))
    {
@@ -838,7 +845,7 @@ bool C_OscCanOpenObjectData::IsStringDataType(void) const
 
 //----------------------------------------------------------------------------------------------------------------------
 
-C_SclString C_OscCanOpenObjectDictionary::GetLastErrorText(void) const
+QString C_OscCanOpenObjectDictionary::GetLastErrorText(void) const
 {
    return mc_LastError;
 }

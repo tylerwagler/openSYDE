@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <map>
 
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscXmlParser.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscSupDefinition.hpp"
@@ -28,17 +28,17 @@ namespace opensyde_core
 class C_OscSupDefinitionFiler
 {
 public:
-   static int32_t h_CreateUpdatePackageDefFile(const stw::scl::C_SclString & orc_Path,
+   static int32_t h_CreateUpdatePackageDefFile(const QString & orc_Path,
                                                const C_OscSupDefinition & orc_SupDefContent,
-                                               const std::vector<stw::scl::C_SclString> & orc_Files);
-   static int32_t h_LoadUpdatePackageDefFile(const stw::scl::C_SclString & orc_TargetUnzipPath, const bool oq_IsZip,
-                                             const stw::scl::C_SclString & orc_PackagePath,
-                                             uint32_t & oru32_FileVersion, stw::scl::C_SclString & orc_FilePackagePath,
+                                               const std::vector<QString> & orc_Files);
+   static int32_t h_LoadUpdatePackageDefFile(const QString & orc_TargetUnzipPath, const bool oq_IsZip,
+                                             const QString & orc_PackagePath,
+                                             uint32_t & oru32_FileVersion, QString & orc_FilePackagePath,
                                              uint32_t & oru32_ActiveBusIndex, std::vector<uint8_t> & orc_ActiveNodes,
                                              std::vector<uint32_t> & orc_UpdatePosition,
-                                             std::vector<stw::scl::C_SclString> & orc_PackageFiles);
+                                             std::vector<QString> & orc_PackageFiles);
 
-   static const stw::scl::C_SclString hc_PACKAGE_UPDATE_DEF;
+   static const QString hc_PACKAGE_UPDATE_DEF;
 
 private:
    static void mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser, const std::vector<C_OscSupNodeDefinition> & orc_Nodes,

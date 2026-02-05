@@ -13,7 +13,12 @@
 
 Phase 1 focuses on low-risk, high-impact consolidations combined with Qt-native container migration. These tasks build on existing work (QString migration) and tackle straightforward consolidations with minimal architectural changes.
 
-**✨ Qt-Native Enhancement**: This phase now includes migration from STL containers to Qt-native containers (`std::vector` → `QList`, `std::vector<QString>` → `QStringList`) to improve code consistency and leverage Qt 6's optimized container implementations.
+**✨ Qt-Native Enhancement**: This phase now includes comprehensive migration from STL containers to Qt-native containers:
+- **`std::vector` → `QList`**: 6,219 occurrences (including 615 `std::vector<QString>` → `QStringList`)
+- **`std::map` → `QMap`/`QHash`**: 640 occurrences (including 70 `std::map<QString, T>` → `QHash<QString, T>`)
+- **`std::set` → `QSet`**: 255 occurrences
+- **`std::pair` → `QPair`**: 131 occurrences
+This improves code consistency, reduces conversion overhead, and leverages Qt 6's optimized implementations.
 
 **Why Combine QString + QList Migration**: Doing both migrations simultaneously avoids touching the same files twice (double-work) and ensures consistent Qt-native code from the start.
 
@@ -235,11 +240,10 @@ After all migrations complete:
 
 **Rationale**: Prioritize Qt-native solutions for consistency and Qt 6 optimization
 
-**Current State**:
-- 1,783 `std::vector` occurrences in core library
-- 493 `std::vector<QString>` occurrences (inconsistent mixed STL/Qt)
-- Only 105 QList/QVector (5% Qt containers - too low)
-- 560 QStringList usages (proving Qt containers ARE already used)
+**Current State** (as of 2026-02-04):
+- 6,219 `std::vector` occurrences in tool codebase
+- 615 `std::vector<QString>` occurrences (primary targets for `QStringList`)
+- 905 `QList` already in use
 
 **Decision**: Migrate to QList for consistency, Qt integration, and implicit sharing benefits
 
@@ -550,7 +554,75 @@ TEST(ContainerMigrationTest, ImplicitSharing) {
 
 **Total Additional Reduction**: ~1,500-2,500 lines
 
-**Combined with Task 1 (QString)**: 3,140 + 2,000 = **~5,140 lines total reduction**
+**Combined with Task 1 (QString)**: 3,140 + 3,000 = **~6,140 lines total reduction**
+
+---
+
+## Task 1.6: Qt Map Migration (std::map → QMap/QHash)
+
+### ✨ NEW: Qt-Native Map Migration
+
+**Rationale**: Leverage `QHash` performance for string lookups and `QMap` for sorted collections.
+
+**Current State**:
+- 640 `std::map` occurrences in tool codebase
+- 70 `std::map<QString, T>` occurrences (primary targets for `QHash`)
+- 447 `QMap` already in use
+
+### Migration Scope
+
+#### Priority 1: std::map<QString, T> → QHash<QString, T>
+**Why Now**: High performance benefit for lookup-heavy code (e.g., configurations, message definitions).
+
+**Conversions**:
+```cpp
+// OLD (ordered, slower lookup)
+std::map<QString, C_OscSignal> mc_Signals;
+
+// NEW (unordered, faster O(1) lookup)
+QHash<QString, C_OscSignal> mc_Signals;
+```
+
+#### Priority 2: std::map<K, T> → QMap<K, T>
+**Target**: General replacement where order is important or assumed.
+
+### Implementation Steps
+
+1. **Audit Locations**: Identify maps using `QString` or `C_SclString` (to be `QString`) as keys.
+2. **Determine Order Requirements**: Check if the code relies on `std::map` sorting.
+   - Use `QMap` if sorting is required.
+   - Use `QHash` if maximum lookup speed is preferred.
+3. **Execute Migration**: Update declarations and use Qt-native methods (`.contains()`, `.value()`, `.insert()`).
+
+### Success Criteria
+- [ ] At least 70 `std::map<QString, T>` converted to `QHash`
+- [ ] Significant logic simplification using Qt map idioms
+- [ ] Performance verification for key lookup paths
+
+---
+
+## Task 1.7: Other STL Type Migration (std::set, std::pair)
+
+### ✨ NEW: Additional STL Type Migration
+
+**Rationale**: Complete the Qt-native transition for all common container types.
+
+**Current State**:
+- 255 `std::set` occurrences
+- 131 `std::pair` occurrences
+
+### Migration Scope
+
+#### Priority 1: std::set<T> → QSet<T>
+- Use `QSet` for faster lookups (hash-based) and better Qt API integration.
+- Note: `QSet` requires elements to be hashable (most Qt types are).
+
+#### Priority 2: std::pair<T1, T2> → QPair<T1, T2>
+- Mostly a consistency change for cleaner code in Qt-centric files.
+
+### Success Criteria
+- [ ] Opportunistic migration of `std::set` and `std::pair` in targeted files.
+- [ ] Consistency in container usage across the core libraries.
 
 ---
 
@@ -582,6 +654,10 @@ Most labels differ only in:
 4. **Context** (group heading, message, error, heading)
 
 ### Consolidation Strategy
+
+The goal is to move from **C++ hardcoding** to **Property-driven QSS**.
+- **Action**: Use standard `QLabel` (or a single `C_OgeLabBase`) plus dynamic Qt properties.
+- **Benefit**: 70 classes reduced to ~5-10, styled entirely in `.qss` files.
 
 #### Step 2.1: Audit Current Label Usage
 **Action**: Analyze where each label type is used
@@ -710,7 +786,14 @@ C_OgeLabMonospace {
 
 #### Step 2.4: Implement Behaviors (Qt-Native Approach PREFERRED)
 
-**✨ Qt-Native Recommendation**: Use Qt Property System + QSS for most behaviors
+**✨ Qt-Native Recommendation**: Use Qt Property System + QSS for most behaviors. This leverages the existing infrastructure in `opensyde_tool/src/util/C_UtiStyleSheets.cpp`.
+
+#### Step 2.5: Application-wide Style Management & Hot Reload (NEW)
+**Rationale**: Speed up UI development and consolidate the existing ~20 `.qss` files.
+
+1.  **Style Manager**: Enhance `C_UtiStyleSheets` to act as a central hub for all project-wide styles.
+2.  **Hot Reload**: Add `QFileSystemWatcher` to monitor `.qss` files during development.
+3.  **Variable Consolidation**: Move hardcoded colors from `Color.qss` into a more manageable system (e.g., QSS variables if supported or a central theme file).
 
 **Two Approaches Available**:
 

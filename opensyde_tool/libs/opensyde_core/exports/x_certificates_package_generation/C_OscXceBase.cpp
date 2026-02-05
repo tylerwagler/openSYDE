@@ -19,8 +19,8 @@
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscXceBase::hc_PACKAGE_EXT = ".syde_xcert";
-const stw::scl::C_SclString C_OscXceBase::hc_PACKAGE_EXT_TMP = ".syde_xcert_tmp"; // intermediate directory
+const QString C_OscXceBase::hc_PACKAGE_EXT = ".syde_xcert";
+const QString C_OscXceBase::hc_PACKAGE_EXT_TMP = ".syde_xcert_tmp"; // intermediate directory
                                                                                   // before creating zip
                                                                                   // archive
 
@@ -36,8 +36,8 @@ QStringList C_OscXceBase::mhc_WarningMessages; // global warnings e.g. if update
 QString C_OscXceBase::mhc_ErrorMessage;        // description of error which caused
                                                              // the
                                                              // service update package to fail
-const stw::scl::C_SclString C_OscXceBase::mhc_CERTIFICATES_FOLDER = "authentication_certificates";
-const stw::scl::C_SclString C_OscXceBase::mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER = "update_certificates";
+const QString C_OscXceBase::mhc_CERTIFICATES_FOLDER = "authentication_certificates";
+const QString C_OscXceBase::mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER = "update_certificates";
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -50,7 +50,7 @@ const stw::scl::C_SclString C_OscXceBase::mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER =
    service update package extension
 */
 //----------------------------------------------------------------------------------------------------------------------
-stw::scl::C_SclString C_OscXceBase::h_GetPackageExtension()
+QString C_OscXceBase::h_GetPackageExtension()
 {
    return hc_PACKAGE_EXT;
 }

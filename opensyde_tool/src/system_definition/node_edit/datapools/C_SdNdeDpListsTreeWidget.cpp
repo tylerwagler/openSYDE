@@ -171,7 +171,7 @@ void C_SdNdeDpListsTreeWidget::SetDataPool(const uint32_t & oru32_NodeIndex, con
 
    osc_write_log_performance_stop(
       u16_TimerId, static_cast<QString>("Switch list tree to Datapool %1").arg(
-         this->mu32_DataPoolIndex).toStdString().c_str());
+         this->mu32_DataPoolIndex));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1704,12 +1704,12 @@ void C_SdNdeDpListsTreeWidget::m_StoreUserSettings(void) const
             if (u32_ListIndex < pc_Datapool->c_Lists.size())
             {
                const C_OscNodeDataPoolList & rc_List = pc_Datapool->c_Lists[u32_ListIndex];
-               c_ExpandedListNames.emplace_back(rc_List.c_Name.c_str());
+               c_ExpandedListNames.emplace_back(rc_List.c_Name);
             }
          }
       }
-      C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolOpenListNames(pc_Node->c_Properties.c_Name.c_str(),
-                                                                       pc_Datapool->c_Name.c_str(),
+      C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolOpenListNames(pc_Node->c_Properties.c_Name,
+                                                                       pc_Datapool->c_Name,
                                                                        c_ExpandedListNames);
 
       //Selected items
@@ -1725,7 +1725,7 @@ void C_SdNdeDpListsTreeWidget::m_StoreUserSettings(void) const
                if (u32_ListIndex < pc_Datapool->c_Lists.size())
                {
                   const C_OscNodeDataPoolList & rc_List = pc_Datapool->c_Lists[u32_ListIndex];
-                  c_SelectedListNames.emplace_back(rc_List.c_Name.c_str());
+                  c_SelectedListNames.emplace_back(rc_List.c_Name);
                }
             }
             else
@@ -1748,7 +1748,7 @@ void C_SdNdeDpListsTreeWidget::m_StoreUserSettings(void) const
                         if (u32_ListIndex < pc_Datapool->c_Lists.size())
                         {
                            const C_OscNodeDataPoolList & rc_List = pc_Datapool->c_Lists[u32_ListIndex];
-                           c_SelectedListNames.emplace_back(rc_List.c_Name.c_str());
+                           c_SelectedListNames.emplace_back(rc_List.c_Name);
                         }
                      }
                   }
@@ -1756,11 +1756,11 @@ void C_SdNdeDpListsTreeWidget::m_StoreUserSettings(void) const
             }
          }
       }
-      C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolSelectedListNames(pc_Node->c_Properties.c_Name.c_str(),
-                                                                           pc_Datapool->c_Name.c_str(),
+      C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolSelectedListNames(pc_Node->c_Properties.c_Name,
+                                                                           pc_Datapool->c_Name,
                                                                            c_SelectedListNames);
-      C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolSelectedVariableNames(pc_Node->c_Properties.c_Name.c_str(),
-                                                                               pc_Datapool->c_Name.c_str(),
+      C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolSelectedVariableNames(pc_Node->c_Properties.c_Name,
+                                                                               pc_Datapool->c_Name,
                                                                                c_SelectedVariableNames);
    }
 }
@@ -1777,8 +1777,8 @@ void C_SdNdeDpListsTreeWidget::m_RestoreUserSettings(void)
 
    if ((pc_Node != NULL) && (pc_Datapool != NULL))
    {
-      const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
-      const C_UsNodeDatapool c_Datapool = c_Node.GetDatapool(pc_Datapool->c_Name.c_str());
+      const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
+      const C_UsNodeDatapool c_Datapool = c_Node.GetDatapool(pc_Datapool->c_Name);
       const std::vector<QString> & rc_ExpandedListNames = c_Datapool.GetExpandedListNames();
       const std::vector<QString> & rc_SelectedListNames = c_Datapool.GetSelectedListNames();
       const std::vector<QString> & rc_SelectedVariableNames = c_Datapool.GetSelectedVariableNames();
@@ -1793,7 +1793,7 @@ void C_SdNdeDpListsTreeWidget::m_RestoreUserSettings(void)
             if (u32_ListIndex < pc_Datapool->c_Lists.size())
             {
                const C_OscNodeDataPoolList & rc_List = pc_Datapool->c_Lists[u32_ListIndex];
-               const QString c_ListName = rc_List.c_Name.c_str();
+               const QString c_ListName = rc_List.c_Name;
                bool q_Expand = false;
                for (uint32_t u32_ItName = 0; u32_ItName < rc_ExpandedListNames.size(); ++u32_ItName)
                {
@@ -1821,7 +1821,7 @@ void C_SdNdeDpListsTreeWidget::m_RestoreUserSettings(void)
                if (u32_ListIndex < pc_Datapool->c_Lists.size())
                {
                   const C_OscNodeDataPoolList & rc_List = pc_Datapool->c_Lists[u32_ListIndex];
-                  const QString c_ListName = rc_List.c_Name.c_str();
+                  const QString c_ListName = rc_List.c_Name;
                   bool q_Selection = false;
                   for (uint32_t u32_ItName = 0; u32_ItName < rc_SelectedListNames.size(); ++u32_ItName)
                   {
@@ -1863,7 +1863,7 @@ void C_SdNdeDpListsTreeWidget::m_RestoreUserSettings(void)
                if (u32_ListIndex < pc_Datapool->c_Lists.size())
                {
                   const C_OscNodeDataPoolList & rc_List = pc_Datapool->c_Lists[u32_ListIndex];
-                  const QString c_ListName = rc_List.c_Name.c_str();
+                  const QString c_ListName = rc_List.c_Name;
                   bool q_Selection = false;
                   for (uint32_t u32_ItName = 0; u32_ItName < rc_SelectedListNames.size(); ++u32_ItName)
                   {

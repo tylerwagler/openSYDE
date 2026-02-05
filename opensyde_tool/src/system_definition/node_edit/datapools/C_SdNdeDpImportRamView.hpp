@@ -10,8 +10,10 @@
 #define C_SDNDEDPIMPORTRAMVIE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QString>
+#include <QStringList>
+
 #include "stwtypes.hpp"
-#include "C_SclStringList.hpp"
 #include "C_OscNodeDataPool.hpp"
 #include "C_PuiSdNodeDataPool.hpp"
 
@@ -27,10 +29,10 @@ namespace opensyde_gui_logic
 class C_SdNdeDpImportRamView
 {
 public:
-   static int32_t h_ImportDataPoolFromRamViewDefProject(const stw::scl::C_SclString & orc_ProjectPath,
+   static int32_t h_ImportDataPoolFromRamViewDefProject(const QString & orc_ProjectPath,
                                                         stw::opensyde_core::C_OscNodeDataPool & orc_DataPool,
                                                         C_PuiSdNodeDataPool & orc_GuiDataPool,
-                                                        stw::scl::C_SclStringList & orc_ImportInformation);
+                                                        QStringList & orc_ImportInformation);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

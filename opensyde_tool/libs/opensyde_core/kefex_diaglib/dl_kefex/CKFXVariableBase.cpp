@@ -8,7 +8,8 @@
 
 #include "stwtypes.hpp"
 #include "CKFXVariableBase.hpp"
-#include "C_SclString.hpp"
+#include "C_OscUtils.hpp"
+#include <QString>
 
 #include "C_SclChecksums.hpp"
 
@@ -401,9 +402,9 @@ void C_KFXVariableBase::SetNumericValue(const int64_t os64_Value)
 
 //**************************************************************
 
-C_SclString C_KFXVariableBase::GetStringValue(void) const
+QString C_KFXVariableBase::GetStringValue(void) const
 {
-   C_SclString c_Help;
+   QString c_Help;
    uint32_t u32_Len;
 
    //how many characters are used ?
@@ -426,17 +427,17 @@ C_SclString C_KFXVariableBase::GetStringValue(void) const
 
 //**************************************************************
 
-void C_KFXVariableBase::SetStringValue(const C_SclString & orc_Value)
+void C_KFXVariableBase::SetStringValue(const QString & orc_Value)
 {
-   if (orc_Value.Length() < this->mu32_Size) //consider the '\0' -> "<"
+   if (orc_Value.length() < this->mu32_Size) //consider the '\0' -> "<"
    {
       //preset to zero to leave remainder after \0 in a clean state:
       (void)std::memset(this->pu8_Value, 0, this->mu32_Size);
-      std::sprintf(reinterpret_cast<char_t *>(this->pu8_Value), "%s", orc_Value.c_str());
+      std::sprintf(reinterpret_cast<char_t *>(this->pu8_Value), "%s", orc_Value.toUtf8().constData());
    }
    else
    {
-      (void)std::memcpy(this->pu8_Value, orc_Value.c_str(), this->mu32_Size);
+      (void)std::memcpy(this->pu8_Value, orc_Value.toUtf8().constData(), this->mu32_Size);
    }
 }
 
@@ -733,9 +734,9 @@ void C_KFXVariableBase::SetFloatDefault(const float64_t of64_Value, const uint16
 
 //**************************************************************
 
-C_SclString C_KFXVariableBase::GetStringDefault(const uint16_t ou16_DefaultIndex) const
+QString C_KFXVariableBase::GetStringDefault(const uint16_t ou16_DefaultIndex) const
 {
-   C_SclString c_Help;
+   QString c_Help;
    uint32_t u32_Len;
    const uint8_t * pu8_Data;
 
@@ -764,7 +765,7 @@ C_SclString C_KFXVariableBase::GetStringDefault(const uint16_t ou16_DefaultIndex
 
 //**************************************************************
 
-void C_KFXVariableBase::SetStringDefault(const C_SclString & orc_Value, const uint16_t ou16_DefaultIndex)
+void C_KFXVariableBase::SetStringDefault(const QString & orc_Value, const uint16_t ou16_DefaultIndex)
 {
    uint8_t * pu8_Data;
 
@@ -772,13 +773,13 @@ void C_KFXVariableBase::SetStringDefault(const C_SclString & orc_Value, const ui
    {
       pu8_Data = &this->aau8_Defaults[ou16_DefaultIndex][0];
 
-      if (orc_Value.Length() < this->mu32_Size)
+      if (orc_Value.length() < this->mu32_Size)
       {
-         std::sprintf(reinterpret_cast<char_t *>(pu8_Data), "%s", orc_Value.c_str());
+         std::sprintf(reinterpret_cast<char_t *>(pu8_Data), "%s", orc_Value.toUtf8().constData());
       }
       else
       {
-         (void)std::memcpy(pu8_Data, orc_Value.c_str(), this->mu32_Size);
+         (void)std::memcpy(pu8_Data, orc_Value.toUtf8().constData(), this->mu32_Size);
       }
    }
 }
@@ -1582,21 +1583,21 @@ QList<uint8_t> & C_KFXVariableBase::GetMaxReference(void)
 
 //**************************************************************
 
-C_SclString C_KFXVariableBase::GetTypeName(void) const
+QString C_KFXVariableBase::GetTypeName(void) const
 {
    if ((this->u8_Type != KFX_DATA_TYPE_NOVAR) && (this->u8_Type != KFX_DATA_TYPE_CRC) &&
        (this->u8_Type < KFX_NUM_DATA_TYPES))
    {
-      return static_cast<C_SclString>(gatRAMParameterTypes[this->u8_Type].pcn_WrittenName);
+      return static_cast<QString>(gatRAMParameterTypes[this->u8_Type].pcn_WrittenName);
    }
    return "INVALID";
 }
 
 //**************************************************************
 
-C_SclString C_KFXVariableBase::GetTypeDependentValueString(const bool oq_Hex, const bool oq_LeadingZeroes) const
+QString C_KFXVariableBase::GetTypeDependentValueString(const bool oq_Hex, const bool oq_LeadingZeroes) const
 {
-   C_SclString c_Help;
+   QString c_Help;
    int64_t s64_Temp;
    float64_t f64_Temp;
 
@@ -1616,18 +1617,26 @@ C_SclString C_KFXVariableBase::GetTypeDependentValueString(const bool oq_Hex, co
          if (s64_Temp < 0)
          {
             s64_Temp *= -1;
-            c_Help = "-0x" + C_SclString::IntToHex(s64_Temp, 0);
+            c_Help = "-0x" + stw::opensyde_core::C_OscUtils::h_IntToHex(s64_Temp, 0U);
             if (oq_LeadingZeroes == true)
             {
-               c_Help.Insert(C_SclString::StringOfChar('0', (3 + (this->GetSize() * 2)) - c_Help.Length()), 4);
+               int s32_PadCount = static_cast<int>((3 + (this->GetSize() * 2)) - c_Help.length());
+               if (s32_PadCount > 0)
+               {
+                  c_Help.insert(4, QString(s32_PadCount, '0'));
+               }
             }
          }
          else
          {
-            c_Help = "0x" + C_SclString::IntToHex(s64_Temp, 0);
+            c_Help = "0x" + stw::opensyde_core::C_OscUtils::h_IntToHex(s64_Temp, 0U);
             if (oq_LeadingZeroes == true)
             {
-               c_Help.Insert(C_SclString::StringOfChar('0', (2 + (this->GetSize() * 2)) - c_Help.Length()), 3);
+               int s32_PadCount = static_cast<int>((2 + (this->GetSize() * 2)) - c_Help.length());
+               if (s32_PadCount > 0)
+               {
+                  c_Help.insert(3, QString(s32_PadCount, '0'));
+               }
             }
          }
       }
@@ -1639,7 +1648,7 @@ C_SclString C_KFXVariableBase::GetTypeDependentValueString(const bool oq_Hex, co
    case KFX_DATA_TYPE_FLOAT32:
    case KFX_DATA_TYPE_FLOAT64:
       f64_Temp = this->GetFloatValue();
-      c_Help = C_SclString::FloatToStr(f64_Temp, u8_ScalingDigits);
+      c_Help = QString::number(f64_Temp, 'f', u8_ScalingDigits);
       break;
    case KFX_DATA_TYPE_ASINT8:
       c_Help = this->C_KFXVariableBase::GetStringValue();
@@ -1664,10 +1673,10 @@ C_SclString C_KFXVariableBase::GetTypeDependentValueString(const bool oq_Hex, co
 
 //**************************************************************
 
-C_SclString C_KFXVariableBase::GetTypeDependentDefaultString(const bool oq_Hex, const bool oq_LeadingZeroes,
+QString C_KFXVariableBase::GetTypeDependentDefaultString(const bool oq_Hex, const bool oq_LeadingZeroes,
                                                              const uint16_t ou16_DefaultIndex) const
 {
-   C_SclString c_Help;
+   QString c_Help;
    int64_t s64_Temp;
    float64_t f64_Temp;
 
@@ -1692,18 +1701,26 @@ C_SclString C_KFXVariableBase::GetTypeDependentDefaultString(const bool oq_Hex, 
          if (s64_Temp < 0)
          {
             s64_Temp *= -1;
-            c_Help = "-0x" + C_SclString::IntToHex(s64_Temp, 0);
+            c_Help = "-0x" + stw::opensyde_core::C_OscUtils::h_IntToHex(s64_Temp, 0U);
             if (oq_LeadingZeroes == true)
             {
-               c_Help.Insert(C_SclString::StringOfChar('0', (3 + (this->GetSize() * 2)) - c_Help.Length()), 4);
+               int s32_PadCount = static_cast<int>((3 + (this->GetSize() * 2)) - c_Help.length());
+               if (s32_PadCount > 0)
+               {
+                  c_Help.insert(4, QString(s32_PadCount, '0'));
+               }
             }
          }
          else
          {
-            c_Help = "0x" + C_SclString::IntToHex(s64_Temp, 0);
+            c_Help = "0x" + stw::opensyde_core::C_OscUtils::h_IntToHex(s64_Temp, 0U);
             if (oq_LeadingZeroes == true)
             {
-               c_Help.Insert(C_SclString::StringOfChar('0', (2 + (this->GetSize() * 2)) - c_Help.Length()), 3);
+               int s32_PadCount = static_cast<int>((2 + (this->GetSize() * 2)) - c_Help.length());
+               if (s32_PadCount > 0)
+               {
+                  c_Help.insert(3, QString(s32_PadCount, '0'));
+               }
             }
          }
       }
@@ -1715,7 +1732,7 @@ C_SclString C_KFXVariableBase::GetTypeDependentDefaultString(const bool oq_Hex, 
    case KFX_DATA_TYPE_FLOAT32:
    case KFX_DATA_TYPE_FLOAT64:
       f64_Temp = this->GetFloatDefault(ou16_DefaultIndex);
-      c_Help = C_SclString::FloatToStr(f64_Temp, u8_ScalingDigits);
+      c_Help = QString::number(f64_Temp, 'f', u8_ScalingDigits);
       break;
    case KFX_DATA_TYPE_ASINT8:
       c_Help = this->C_KFXVariableBase::GetStringDefault(ou16_DefaultIndex);

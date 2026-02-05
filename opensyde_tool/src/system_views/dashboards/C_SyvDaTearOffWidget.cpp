@@ -27,14 +27,12 @@
 #include "C_PuiProject.hpp"
 #include "C_SyvDaDashboardScreenshot.hpp"
 #include "C_OscUtils.hpp"
-#include "C_SclString.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */

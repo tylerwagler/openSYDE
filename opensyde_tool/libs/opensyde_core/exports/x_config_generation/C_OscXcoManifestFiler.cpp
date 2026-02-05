@@ -26,7 +26,7 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const stw::scl::C_SclString C_OscXcoManifestFiler::hc_FILE_NAME = "manifest.syde_pkg";
+const QString C_OscXcoManifestFiler::hc_FILE_NAME = "manifest.syde_pkg";
 const uint16_t C_OscXcoManifestFiler::mhu16_FILE_VERSION_1 = 1;
 const uint16_t C_OscXcoManifestFiler::mhu16_PACKAGE_VERSION_1 = 1;
 
@@ -54,11 +54,11 @@ const uint16_t C_OscXcoManifestFiler::mhu16_PACKAGE_VERSION_1 = 1;
                manifest file could not be loaded
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoManifestFiler::h_LoadFile(C_OscXcoManifest & orc_Config, const stw::scl::C_SclString & orc_Path)
+int32_t C_OscXcoManifestFiler::h_LoadFile(C_OscXcoManifest & orc_Config, const QString & orc_Path)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (QFileInfo(orc_Path.ToQString()).exists() && QFileInfo(orc_Path.ToQString()).isFile())
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading manifest data");
@@ -101,7 +101,7 @@ int32_t C_OscXcoManifestFiler::h_LoadFile(C_OscXcoManifest & orc_Config, const s
    C_CONFIG   data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXcoManifestFiler::h_SaveFile(const C_OscXcoManifest & orc_Config, const stw::scl::C_SclString & orc_Path)
+int32_t C_OscXcoManifestFiler::h_SaveFile(const C_OscXcoManifest & orc_Config, const QString & orc_Path)
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_Path,
@@ -139,7 +139,7 @@ int32_t C_OscXcoManifestFiler::h_SaveFile(const C_OscXcoManifest & orc_Config, c
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXcoManifestFiler::h_LoadData(C_OscXcoManifest & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
-   stw::scl::C_SclString c_Types;
+   QString c_Types;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
                                                              "Loading manifest data");
 
@@ -194,7 +194,7 @@ void C_OscXcoManifestFiler::h_SaveData(const C_OscXcoManifest & orc_Config, C_Os
 {
    //File version
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
-   orc_XmlParser.SetNodeContent(stw::scl::QString::number(mhu16_FILE_VERSION_1));
+   orc_XmlParser.SetNodeContent(QString::number(mhu16_FILE_VERSION_1));
    //Return
    orc_XmlParser.SelectNodeParent();
    //Package
@@ -204,7 +204,7 @@ void C_OscXcoManifestFiler::h_SaveData(const C_OscXcoManifest & orc_Config, C_Os
    orc_XmlParser.SelectNodeParent();
    //Config
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("x-app-config") == "x-app-config");
-   orc_XmlParser.CreateNodeChild("package-version", stw::scl::QString::number(mhu16_PACKAGE_VERSION_1));
+   orc_XmlParser.CreateNodeChild("package-version", QString::number(mhu16_PACKAGE_VERSION_1));
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("x-app-node") == "x-app-node");
    orc_XmlParser.SetAttributeString("name", orc_Config.c_NodeName);
    //Return

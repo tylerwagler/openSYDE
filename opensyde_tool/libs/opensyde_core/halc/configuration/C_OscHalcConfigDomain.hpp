@@ -11,7 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_OscHalcDefBase.hpp"
 #include "C_OscHalcDefDomain.hpp"
 #include "C_OscHalcConfigChannel.hpp"

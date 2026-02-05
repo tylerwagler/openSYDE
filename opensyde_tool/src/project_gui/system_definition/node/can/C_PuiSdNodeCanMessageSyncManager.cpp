@@ -38,7 +38,6 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 
-using namespace stw::scl;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
@@ -1547,7 +1546,7 @@ const
    \param[in,out]  opq_DuplicateName   Optional output for duplicate name check result
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSdNodeCanMessageSyncManager::CheckMessageNameBus(const C_SclString & orc_MessageName, bool & orq_Valid,
+void C_PuiSdNodeCanMessageSyncManager::CheckMessageNameBus(const QString & orc_MessageName, bool & orq_Valid,
                                                            const C_OscCanMessageIdentificationIndices * const opc_SkipMessage, bool * const opq_InvalidName,
                                                            bool * const opq_DuplicateName)
 const

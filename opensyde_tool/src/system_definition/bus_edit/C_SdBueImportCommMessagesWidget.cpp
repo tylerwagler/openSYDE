@@ -21,7 +21,6 @@
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -46,7 +45,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueImportCommMessagesWidget::C_SdBueImportCommMessagesWidget(C_OgePopUpDialog & orc_Parent,
-                                                                 const C_SclString & orc_Name) :
+                                                                 const QString & orc_Name) :
    QWidget(&orc_Parent),
    mpc_Ui(new Ui::C_SdImportCommMessagesWidget),
    mrc_ParentDialog(orc_Parent),
@@ -91,11 +90,9 @@ C_SdBueImportCommMessagesWidget::~C_SdBueImportCommMessagesWidget()
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueImportCommMessagesWidget::m_InitStaticNames(const C_SclString & orc_Name) const
+void C_SdBueImportCommMessagesWidget::m_InitStaticNames(const QString & orc_Name) const
 {
-   const QString c_Title(orc_Name.c_str());
-
-   this->mrc_ParentDialog.SetTitle(c_Title);
+   this->mrc_ParentDialog.SetTitle(orc_Name);
    this->mrc_ParentDialog.SetSubTitle("Import Messages");
 
    // labels and buttons

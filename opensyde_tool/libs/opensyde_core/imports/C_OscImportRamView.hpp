@@ -17,7 +17,7 @@
 #include "CKFXProjectOptions.hpp"
 #include "CKFXVariableLists.hpp"
 #include "C_OscNodeDataPool.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "stwtypes.hpp"
 #include <QStringList>
 
@@ -38,7 +38,7 @@ namespace opensyde_core {
 class C_OscImportRamView {
 public:
   static int32_t h_ImportDataPoolFromRamViewDefProject(
-      const stw::scl::C_SclString &orc_ProjectPath,
+      const QString &orc_ProjectPath,
       C_OscNodeDataPool &orc_DataPool,
       QStringList &orc_ImportInformation);
 
@@ -57,7 +57,7 @@ private:
                            QStringList &orc_ImportInformation);
 
   static int32_t mh_LoadRamViewDefProject(
-      const stw::scl::C_SclString &orc_ProjectPath,
+      const QString &orc_ProjectPath,
       stw::diag_lib::C_KFXProjectOptions &orc_ProjectOptions,
       stw::diag_lib::C_KFXVariableLists &orc_VariableLists);
 };

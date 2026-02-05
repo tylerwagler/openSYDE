@@ -30,7 +30,7 @@ class C_OscParamSetInterpretedList
 public:
    C_OscParamSetInterpretedList(void);
 
-   stw::scl::C_SclString c_Name;                            ///< List name
+   QString c_Name;                            ///< List name
    std::vector<C_OscParamSetInterpretedElement> c_Elements; ///< Interpreted elements of this list
 };
 

@@ -5,7 +5,7 @@
 #include "stwtypes.hpp"
 #include <QList>
 #include <QSettings>
-#include "C_SclString.hpp"
+#include <QString>
 #include "DiagLib_config.hpp"
 
 //---------------------------------------------------------------------------
@@ -20,13 +20,13 @@ namespace diag_lib
 class C_KFXCommParameter
 {
 public:
-   stw::scl::C_SclString c_Name;         ///< name of parameter
+   QString c_Name;         ///< name of parameter
    int64_t s64_MinValue;                 ///< valid minimum value
    int64_t s64_MaxValue;                 ///< valid maximum value
    int64_t s64_DefaultValue;             ///< default value
-   stw::scl::C_SclString c_DisplayName;  ///< text to display in configuration dialog
-   stw::scl::C_SclString c_Comment;      ///< can for example be used for "hint"
-   stw::scl::C_SclString c_INIDirective; ///< directive for storing parameter value in an INI file
+   QString c_DisplayName;  ///< text to display in configuration dialog
+   QString c_Comment;      ///< can for example be used for "hint"
+   QString c_INIDirective; ///< directive for storing parameter value in an INI file
 
    C_KFXCommParameter(void);
 };
@@ -46,15 +46,15 @@ public:
 
    QList<C_KFXCommParameter> mc_Parameters;
    QList<int64_t> mc_Values;
-   stw::scl::C_SclString mc_ProtocolName;
+   QString mc_ProtocolName;
 
    void SetParameterList(const QList<C_KFXCommParameter> & orc_Parameters);
-   int32_t GetParameterValue(const stw::scl::C_SclString & orc_ParameterName, int64_t & ors64_Value) const;
-   int32_t SetParameterValue(const stw::scl::C_SclString & orc_ParameterName, const int64_t os64_Value);
+   int32_t GetParameterValue(const QString & orc_ParameterName, int64_t & ors64_Value) const;
+   int32_t SetParameterValue(const QString & orc_ParameterName, const int64_t os64_Value);
    void SetAllDefaults(void);
 
-   int32_t LoadConfigFromINI(QSettings & orc_File, const stw::scl::C_SclString & orc_Section);
-   int32_t SaveConfigToINI(QSettings & orc_File, const stw::scl::C_SclString & orc_Section) const;
+   int32_t LoadConfigFromINI(QSettings & orc_File, const QString & orc_Section);
+   int32_t SaveConfigToINI(QSettings & orc_File, const QString & orc_Section) const;
 };
 
 //---------------------------------------------------------------------------

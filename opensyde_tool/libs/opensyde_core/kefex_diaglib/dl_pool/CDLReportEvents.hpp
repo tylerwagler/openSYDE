@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include "DiagLib_config.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 namespace stw
 {
@@ -42,10 +42,10 @@ protected:
    //This is just for informational purposes and not necessarily exactly linear to the actual progress.
    //The return value can be used to abort an ongoing procedure (if supported by the caller).
    virtual int32_t TRG_ReportProgress(const uint16_t ou16_Progress1_1000,
-                                      const stw::scl::C_SclString & orc_AdditionalText) = 0;
+                                      const QString & orc_AdditionalText) = 0;
    //report error or warning text (e.g. log or messagebox)
    //for "type" cf. "gu8_DL_REPORT_STATUS_TYPE_..." constants
-   virtual void TRG_ReportStatus(const stw::scl::C_SclString & orc_Text, const uint8_t ou8_Type) = 0;
+   virtual void TRG_ReportStatus(const QString & orc_Text, const uint8_t ou8_Type) = 0;
 };
 }
 }

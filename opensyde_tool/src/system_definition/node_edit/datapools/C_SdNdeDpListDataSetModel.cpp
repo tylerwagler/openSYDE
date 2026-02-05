@@ -253,10 +253,10 @@ QVariant C_SdNdeDpListDataSetModel::data(const QModelIndex & orc_Index, const in
                switch (e_Col)
                {
                case eNAME:
-                  c_Retval = static_cast<QString>(rc_DataSet.c_Name.c_str());
+                  c_Retval = rc_DataSet.c_Name;
                   break;
                case eCOMMENT:
-                  c_Retval = static_cast<QString>(rc_DataSet.c_Comment.c_str());
+                  c_Retval = rc_DataSet.c_Comment;
                   break;
                default:
                   break;

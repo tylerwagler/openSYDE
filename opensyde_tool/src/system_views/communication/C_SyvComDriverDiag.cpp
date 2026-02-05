@@ -1140,7 +1140,7 @@ int32_t C_SyvComDriverDiag::PollNvmSafeReadParameterValues(const uint32_t ou32_N
 /*! \brief   Wrapping call of h_NvmSafeCreateCleanFileWithoutCrc
 
    \param[in]  ou32_NodeIndex    Node index to work with
-   \param[in]  orc_Path          Parameter file path
+   \param[in]  ororc_Path          Parameter file path
    \param[in]  orc_FileInfo      Optional general file information
 
    \return
@@ -1153,7 +1153,7 @@ int32_t C_SyvComDriverDiag::PollNvmSafeReadParameterValues(const uint32_t ou32_N
    C_RD_WR    could not write to file (e.g. missing write permissions; missing folder)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComDriverDiag::NvmSafeCreateCleanFileWithoutCrc(const uint32_t ou32_NodeIndex, const QString & orc_Path,
+int32_t C_SyvComDriverDiag::NvmSafeCreateCleanFileWithoutCrc(const uint32_t ou32_NodeIndex, const QString & ororc_Path,
                                                              const C_OscParamSetInterpretedFileInfoData & orc_FileInfo)
 const
 {
@@ -1166,11 +1166,10 @@ const
    }
    else
    {
-      const stw::scl::C_SclString c_Path = orc_Path.toStdString().c_str();
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != NULL)
       {
-         s32_Return = pc_DataDealer->NvmSafeCreateCleanFileWithoutCrc(c_Path, orc_FileInfo);
+         s32_Return = pc_DataDealer->NvmSafeCreateCleanFileWithoutCrc(orc_Path, orc_FileInfo);
       }
       else
       {
@@ -1186,7 +1185,7 @@ const
    Warning: CRC is not checked
 
    \param[in]  ou32_NodeIndex    Node index to work with
-   \param[in]  orc_Path          Parameter file path
+   \param[in]  ororc_Path          Parameter file path
 
    \return
    C_NO_ERR   data read
@@ -1197,7 +1196,7 @@ const
               specified file is present but structure is invalid (e.g. invalid XML file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComDriverDiag::NvmSafeReadFileWithoutCrc(const uint32_t ou32_NodeIndex, const QString & orc_Path) const
+int32_t C_SyvComDriverDiag::NvmSafeReadFileWithoutCrc(const uint32_t ou32_NodeIndex, const QString & ororc_Path) const
 {
    int32_t s32_Return;
    const uint32_t u32_ActiveIndex = this->m_GetActiveDiagIndex(ou32_NodeIndex);
@@ -1208,11 +1207,10 @@ int32_t C_SyvComDriverDiag::NvmSafeReadFileWithoutCrc(const uint32_t ou32_NodeIn
    }
    else
    {
-      const stw::scl::C_SclString c_Path = orc_Path.toStdString().c_str();
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != NULL)
       {
-         s32_Return = pc_DataDealer->NvmSafeReadFileWithoutCrc(c_Path);
+         s32_Return = pc_DataDealer->NvmSafeReadFileWithoutCrc(orc_Path);
       }
       else
       {
@@ -1226,7 +1224,7 @@ int32_t C_SyvComDriverDiag::NvmSafeReadFileWithoutCrc(const uint32_t ou32_NodeIn
 /*! \brief   Wrapping call of NvmSafeCheckParameterFileContents
 
    \param[in]   ou32_NodeIndex      node index to read from
-   \param[in]   orc_Path            File path
+   \param[in]   ororc_Path            File path
    \param[out]  orc_DataPoolLists   Loaded data pool lists (Always cleared at start)
 
    \return
@@ -1238,7 +1236,7 @@ int32_t C_SyvComDriverDiag::NvmSafeReadFileWithoutCrc(const uint32_t ou32_NodeIn
                or no valid pointer to the original instance of "C_OscNode" is set in "C_OscDataDealer"
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComDriverDiag::NvmSafeCheckParameterFileContents(const uint32_t ou32_NodeIndex, const QString & orc_Path,
+int32_t C_SyvComDriverDiag::NvmSafeCheckParameterFileContents(const uint32_t ou32_NodeIndex, const QString & ororc_Path,
                                                               std::vector<C_OscNodeDataPoolListId> & orc_DataPoolLists)
 {
    int32_t s32_Return;
@@ -1250,9 +1248,8 @@ int32_t C_SyvComDriverDiag::NvmSafeCheckParameterFileContents(const uint32_t ou3
    }
    else
    {
-      const stw::scl::C_SclString c_Path = orc_Path.toStdString().c_str();
       s32_Return = this->mc_DataDealers[u32_ActiveIndex]->NvmSafeCheckParameterFileContents(
-         c_Path, orc_DataPoolLists);
+         orc_Path, orc_DataPoolLists);
    }
    return s32_Return;
 }
@@ -1261,7 +1258,7 @@ int32_t C_SyvComDriverDiag::NvmSafeCheckParameterFileContents(const uint32_t ou3
 /*! \brief   Wrapping call of h_NvmSafeUpdateCrcForFile
 
    \param[in]  ou32_NodeIndex    Node index to work with
-   \param[in]  orc_Path          Parameter file path
+   \param[in]  ororc_Path          Parameter file path
 
    \return
    C_NO_ERR   CRC updated
@@ -1272,7 +1269,7 @@ int32_t C_SyvComDriverDiag::NvmSafeCheckParameterFileContents(const uint32_t ou3
               specified file is present but structure is invalid (e.g. invalid XML file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComDriverDiag::NvmSafeUpdateCrcForFile(const uint32_t ou32_NodeIndex, const QString & orc_Path) const
+int32_t C_SyvComDriverDiag::NvmSafeUpdateCrcForFile(const uint32_t ou32_NodeIndex, const QString & ororc_Path) const
 {
    int32_t s32_Return;
    const uint32_t u32_ActiveIndex = this->m_GetActiveDiagIndex(ou32_NodeIndex);
@@ -1283,11 +1280,10 @@ int32_t C_SyvComDriverDiag::NvmSafeUpdateCrcForFile(const uint32_t ou32_NodeInde
    }
    else
    {
-      const stw::scl::C_SclString c_Path = orc_Path.toStdString().c_str();
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != NULL)
       {
-         s32_Return = pc_DataDealer->NvmSafeUpdateCrcForFile(c_Path);
+         s32_Return = pc_DataDealer->NvmSafeUpdateCrcForFile(orc_Path);
       }
       else
       {
@@ -2073,10 +2069,9 @@ int32_t C_SyvComDriverDiag::m_StartDiagServers(QString & orc_ErrorDetails)
                   {
                      if ((s32_Return == C_NO_ERR) && (q_Match == false))
                      {
-                        stw::scl::C_SclString c_Error;
-                        c_Error.PrintFormatted("Datapool verify failed between client and server. Node: %s " \
-                                               "Datapool: %s", pc_Node->c_Properties.c_Name.c_str(),
-                                               pc_Node->c_DataPools[u8_DataPoolIndex].c_Name.c_str());
+                        QString c_Error;
+                        c_Error = QString("Datapool verify failed between client and server. Node: %1 Datapool: %2").arg(
+                           pc_Node->c_Properties.c_Name).arg(pc_Node->c_DataPools[u8_DataPoolIndex].c_Name);
                         osc_write_log_error("Starting diagnostics", c_Error);
                         // Datapool checksum does not match
                         s32_Retval = C_DEFAULT;
@@ -2210,11 +2205,9 @@ int32_t C_SyvComDriverDiag::m_GetAllDatapoolMetadata(const uint32_t ou32_ActiveD
                C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
             if (pc_Node != NULL)
             {
-               stw::scl::C_SclString c_Error;
-               c_Error.PrintFormatted("Datapool verify failed between client and node %s. " \
-                                      "Reason: %s",
-                                      pc_Node->c_Properties.c_Name.c_str(),
-                                      c_ErrorReason.toStdString().c_str());
+               QString c_Error;
+               c_Error = QString("Datapool verify failed between client and node %1. Reason: %2").arg(
+                  pc_Node->c_Properties.c_Name).arg(c_ErrorReason);
                osc_write_log_error("Starting diagnostics", c_Error);
 
                //Translation: 1=Node name, 2=List of Datapool names
@@ -2369,16 +2362,16 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
                            osc_write_log_info("Starting diagnostics",
                                               "No mapping for Datapool \"" + rc_Datapool.c_Name +
                                               "\" necessary"
-                                              " (Datapool index: " + C_SclString::IntToStr(u32_ItDataPool) + ").");
+                                              " (Datapool index: " + QString::number(u32_ItDataPool) + ").");
                         }
                         else
                         {
                            osc_write_log_info("Starting diagnostics",
                                               "A mapping for Datapool \"" + rc_Datapool.c_Name +
                                               "\" is necessary"
-                                              " (Datapool index on client: " + C_SclString::IntToStr(u32_ItDataPool) +
+                                              " (Datapool index on client: " + QString::number(u32_ItDataPool) +
                                               " ;Datapool index on server: " +
-                                              C_SclString::IntToStr(u32_ServerDatapoolIndex) + ").");
+                                              QString::number(u32_ServerDatapoolIndex) + ").");
                         }
                      }
                   }
@@ -2395,11 +2388,9 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
             if (s32_Return != C_NO_ERR)
             {
                // Verify failed
-               stw::scl::C_SclString c_Error;
-               c_Error.PrintFormatted("Datapool verify failed between client and node %s. " \
-                                      "Reason: %s",
-                                      pc_Node->c_Properties.c_Name.c_str(),
-                                      c_ErrorReason.toStdString().c_str());
+               QString c_Error;
+               c_Error = QString("Datapool verify failed between client and node %1. Reason: %2").arg(
+                  pc_Node->c_Properties.c_Name).arg(c_ErrorReason);
                osc_write_log_error("Starting diagnostics", c_Error);
 
                c_DataPoolErrorString += "\n   ";
@@ -2409,9 +2400,9 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
             }
             else
             {
-               stw::scl::C_SclString c_Text;
-               c_Text.PrintFormatted("Datapool verified. Node: %s " \
-                                     "Datapool: %s", pc_Node->c_Properties.c_Name.c_str(), rc_Datapool.c_Name.c_str());
+               QString c_Text;
+               c_Text = QString("Datapool verified. Node: %1 Datapool: %2").arg(pc_Node->c_Properties.c_Name).arg(
+                  rc_Datapool.c_Name);
                osc_write_log_info("Starting diagnostics", c_Text);
             }
          }
@@ -2450,7 +2441,7 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverDiag::m_GetReadDatapoolMetadata(const uint32_t ou32_ActiveDiagNodeIndex,
-                                                      const C_SclString & orc_DatapoolName,
+                                                      const QString & orc_DatapoolName,
                                                       uint32_t & oru32_ServerDatapoolIndex,
                                                       C_OscProtocolDriverOsy::C_DataPoolMetaData & orc_Metadata) const
 {

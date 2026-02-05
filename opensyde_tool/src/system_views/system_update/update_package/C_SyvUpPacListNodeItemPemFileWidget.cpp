@@ -247,17 +247,17 @@ void C_SyvUpPacListNodeItemPemFileWidget::m_LoadFileInformation(bool & orq_FileE
          case C_RANGE:
             c_Details +=
                static_cast<QString>("File could not be opened. PEM error message: %1").arg(
-                  c_ErrorMessage.c_str());
+                  c_ErrorMessage);
             break;
          case C_CONFIG:
             c_Details +=
                static_cast<QString>("Invalid file content. PEM error message: %1").arg(
-                  c_ErrorMessage.c_str());
+                  c_ErrorMessage);
             break;
          case C_CHECKSUM:
             c_Details +=
                static_cast<QString>("Could not parse modulus and exponent from key. PEM error message: %1").arg(
-                  c_ErrorMessage.c_str());
+                  c_ErrorMessage);
             break;
          case C_OVERFLOW:
             c_Details += static_cast<QString>(
@@ -267,7 +267,7 @@ void C_SyvUpPacListNodeItemPemFileWidget::m_LoadFileInformation(bool & orq_FileE
             break;
          default:
             c_Details += static_cast<QString>("Unknown reason. PEM error message: %1").arg(
-               c_ErrorMessage.c_str());
+               c_ErrorMessage);
             break;
          }
 

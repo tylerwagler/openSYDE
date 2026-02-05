@@ -30,7 +30,6 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
-using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -117,13 +116,12 @@ void C_SdNdeDalLogJobPropertiesWidget::SetNodeDataLoggerJob(const uint32_t ou32_
    this->m_DisconnectChangeTriggers();
    if (pc_Retval != NULL)
    {
-      this->mpc_Ui->pc_LineEditName->setText(pc_Retval->c_Properties.c_Name.c_str());
-      this->mpc_Ui->pc_TextEditComment->setText(pc_Retval->c_Properties.c_Comment.c_str());
+      this->mpc_Ui->pc_LineEditName->setText(pc_Retval->c_Properties.c_Name);
+      this->mpc_Ui->pc_TextEditComment->setText(pc_Retval->c_Properties.c_Comment);
       this->mpc_Ui->pc_ComboBoxLogJobUseCase->setCurrentIndex(static_cast<int32_t>(pc_Retval->c_Properties.e_UseCase));
       this->mpc_Ui->pc_ComboBoxLogFileFormat->setCurrentIndex(static_cast<int32_t>(pc_Retval->c_Properties.
                                                                                    e_LogFileFormat));
-      this->mpc_Ui->pc_LineEditLogDestination->setText(static_cast<QString>(pc_Retval->c_Properties.
-                                                                            c_LogDestinationDirectory.c_str()));
+      this->mpc_Ui->pc_LineEditLogDestination->setText(pc_Retval->c_Properties.c_LogDestinationDirectory);
       this->mpc_Ui->pc_ComboBoxLocalData->setCurrentIndex(
          static_cast<int32_t>(pc_Retval->c_Properties.e_LocalLogTrigger));
       this->mpc_Ui->pc_SpinBoxLoggingInterval->setValue(pc_Retval->c_Properties.u32_LogIntervalMs);
@@ -420,15 +418,14 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnXappSettingsChanged()
    {
       this->mc_Properties = pc_Retval->c_Properties;
 
-      this->mc_Properties.c_Name = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
-      this->mc_Properties.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString().c_str();
+      this->mc_Properties.c_Name = this->mpc_Ui->pc_LineEditName->text();
+      this->mc_Properties.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText();
       this->mc_Properties.e_UseCase =
          static_cast<C_OscDataLoggerJobProperties::E_UseCase>(this->mpc_Ui->pc_ComboBoxLogJobUseCase->currentIndex());
       this->mc_Properties.e_LogFileFormat =
          static_cast<C_OscDataLoggerJobProperties::E_LogFileFormat>(this->mpc_Ui->pc_ComboBoxLogFileFormat->
                                                                     currentIndex());
-      this->mc_Properties.c_LogDestinationDirectory =
-         this->mpc_Ui->pc_LineEditLogDestination->text().toStdString().c_str();
+      this->mc_Properties.c_LogDestinationDirectory = this->mpc_Ui->pc_LineEditLogDestination->text();
       this->mc_Properties.e_LocalLogTrigger =
          static_cast<C_OscDataLoggerJobProperties::E_LocalLogTrigger>(this->mpc_Ui->pc_ComboBoxLocalData->
                                                                       currentIndex());
@@ -449,7 +446,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnXappSettingsChanged()
 void C_SdNdeDalLogJobPropertiesWidget::m_CheckDataLoggerName()
 {
    //check
-   const C_SclString c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
+   const QString c_LogJobName = this->mpc_Ui->pc_LineEditName->text();
    const bool q_IsLogJobNameUnique = C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(this->mu32_NodeIndex, c_LogJobName,
                                                                                      &this->mu32_DataLoggerJobIndex,
                                                                                      NULL);
@@ -560,16 +557,15 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
 
    if (hq_InProgress == false)
    {
-      std::vector<stw::scl::C_SclString> c_ExistingLogJobNames;
-      const C_SclString c_LogJobName = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
+      std::vector<QString> c_ExistingLogJobNames;
+      const QString c_LogJobName = this->mpc_Ui->pc_LineEditName->text();
       hq_InProgress = true;
       if (C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(this->mu32_NodeIndex, c_LogJobName,
                                                           &this->mu32_DataLoggerJobIndex,
                                                           &c_ExistingLogJobNames) == false)
       {
          const QString c_Description =
-            static_cast<QString>("A Log Job with the name \"%1\" already exists. Choose another name.").
-            arg(c_LogJobName.c_str());
+            QString("A Log Job with the name \"%1\" already exists. Choose another name.").arg(c_LogJobName);
          QString c_Details;
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
          c_Message.SetHeading("Log Job naming");
@@ -578,8 +574,8 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
          for (uint32_t u32_ItExistingName = 0UL; u32_ItExistingName < c_ExistingLogJobNames.size();
               ++u32_ItExistingName)
          {
-            const C_SclString & rc_Name = c_ExistingLogJobNames[u32_ItExistingName];
-            c_Details.append(static_cast<QString>("\"%1\"\n").arg(rc_Name.c_str()));
+            const QString & rc_Name = c_ExistingLogJobNames[u32_ItExistingName];
+            c_Details.append(QString("\"%1\"\n").arg(rc_Name));
          }
          c_Message.SetDetails(c_Details);
          c_Message.SetCustomMinHeight(220, 350);
@@ -591,15 +587,14 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
                this->mu32_DataLoggerJobIndex);
             if (pc_Retval != NULL)
             {
-               this->mpc_Ui->pc_LineEditName->setText(pc_Retval->c_Properties.c_Name.c_str());
+               this->mpc_Ui->pc_LineEditName->setText(pc_Retval->c_Properties.c_Name);
             }
          }
       }
       else if (C_OscUtils::h_CheckValidCeName(c_LogJobName) == false)
       {
          const QString c_Description =
-            static_cast<QString>("Data Logger Job name \"%1\" is empty or contains invalid characters.").
-            arg(c_LogJobName.c_str());
+            QString("Data Logger Job name \"%1\" is empty or contains invalid characters.").arg(c_LogJobName);
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
          c_Message.SetHeading("Log Job naming");
          c_Message.SetDescription(c_Description);
@@ -612,7 +607,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
                this->mu32_DataLoggerJobIndex);
             if (pc_Retval != NULL)
             {
-               this->mpc_Ui->pc_LineEditName->setText(pc_Retval->c_Properties.c_Name.c_str());
+               this->mpc_Ui->pc_LineEditName->setText(pc_Retval->c_Properties.c_Name);
             }
          }
       }

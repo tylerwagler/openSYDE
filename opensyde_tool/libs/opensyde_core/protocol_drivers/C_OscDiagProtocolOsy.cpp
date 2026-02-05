@@ -17,7 +17,7 @@
 #include "C_OscDiagProtocolOsy.hpp"
 
 
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -547,7 +547,7 @@ int32_t C_OscDiagProtocolOsy::DataPoolReadVersion(const uint8_t ou8_DataPoolInde
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDiagProtocolOsy::DataPoolReadMetaData(const uint8_t ou8_DataPoolIndex, uint8_t (&orau8_Version)[3],
-                                                   stw::scl::C_SclString & orc_Name, uint8_t * const opu8_NrCode)
+                                                   QString & orc_Name, uint8_t * const opu8_NrCode)
 {
    int32_t s32_Retval;
    C_DataPoolMetaData c_MetaData;

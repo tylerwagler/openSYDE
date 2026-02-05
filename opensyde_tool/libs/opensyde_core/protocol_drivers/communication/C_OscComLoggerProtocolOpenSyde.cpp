@@ -97,10 +97,10 @@ void C_OscComLoggerProtocolOpenSyde::RemoveOsySysDef(const C_OscComMessageLogger
    Text interpretation of address information
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
+QString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
    const C_CanMonProtocolOpenSyde::T_CanAddressInformation & orc_CanAddressInformation) const
 {
-   C_SclString c_Text = "";
+   QString c_Text = "";
 
    std::list<const C_OscComMessageLoggerOsySysDefConfig *>::const_iterator c_ItConfig;
    bool q_ValidInterpretationFound = false;
@@ -112,8 +112,8 @@ C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
       uint32_t u32_TargetBusIndex = 0U;
       bool q_SourceBusFound = false;
       bool q_TargetBusFound = false;
-      C_SclString c_SourceBusName = "";
-      C_SclString c_TargetBusName = "";
+      QString c_SourceBusName = "";
+      QString c_TargetBusName = "";
 
       // Get the corrected bus indexes and names
       if (orc_CanAddressInformation.u8_RoutingMode == OSY_CTP_ROUTING_INACTIVE)
@@ -124,7 +124,7 @@ C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
             u32_SourceBusIndex = pc_Config->u32_BusIndex;
             u32_TargetBusIndex = pc_Config->u32_BusIndex;
 
-            c_SourceBusName = C_SclString::FromQString(pc_Config->c_OsySysDef.c_Buses[u32_SourceBusIndex].c_Name);
+            c_SourceBusName = pc_Config->c_OsySysDef.c_Buses[u32_SourceBusIndex].c_Name;
             c_TargetBusName = c_SourceBusName;
 
             q_SourceBusFound = true;
@@ -141,14 +141,14 @@ C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
             if (pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].u8_BusId ==
                 orc_CanAddressInformation.t_NodeIdSource.u8_Subnet)
             {
-               c_SourceBusName = C_SclString::FromQString(pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].c_Name);
+               c_SourceBusName = pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].c_Name;
                u32_SourceBusIndex = u32_BusCounter;
                q_SourceBusFound = true;
             }
             if (pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].u8_BusId ==
                 orc_CanAddressInformation.t_NodeIdTarget.u8_Subnet)
             {
-               c_TargetBusName = C_SclString::FromQString(pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].c_Name);
+               c_TargetBusName = pc_Config->c_OsySysDef.c_Buses[u32_BusCounter].c_Name;
                u32_TargetBusIndex = u32_BusCounter;
                q_TargetBusFound = true;
             }
@@ -166,8 +166,8 @@ C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
           (q_TargetBusFound == true))
       {
          uint32_t u32_NodeCounter;
-         C_SclString c_SourceNodeName;
-         C_SclString c_TargetNodeName;
+         QString c_SourceNodeName;
+         QString c_TargetNodeName;
          bool q_SourceNodeFound = false;
          bool q_TargetNodeFound = false;
 
@@ -291,12 +291,12 @@ C_SclString C_OscComLoggerProtocolOpenSyde::m_AddressInformationToText(
    Text interpretation of data pool data identifier
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_OscComLoggerProtocolOpenSyde::m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
+QString C_OscComLoggerProtocolOpenSyde::m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
                                                                        const bool oq_IsResponse,
                                                                        const T_CanAddressInformation & orc_CanAddressInformation)
 const
 {
-   C_SclString c_Text = "";
+   QString c_Text = "";
 
    std::list<const C_OscComMessageLoggerOsySysDefConfig *>::const_iterator c_ItConfig;
    bool q_ValidElementFound = false;

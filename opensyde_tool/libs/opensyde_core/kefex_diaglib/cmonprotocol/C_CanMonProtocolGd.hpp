@@ -13,7 +13,7 @@
 
 #include "stwtypes.hpp"
 #include "C_CanMonProtocolBase.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -28,8 +28,8 @@ class C_CanMonProtocolGd :
    public C_CanMonProtocolBase
 {
 public:
-   virtual stw::scl::C_SclString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
-   virtual stw::scl::C_SclString GetProtocolName(void) const;
+   virtual QString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
+   virtual QString GetProtocolName(void) const;
 };
 
 //----------------------------------------------------------------------------------------------------------------------

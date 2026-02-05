@@ -489,7 +489,7 @@ int32_t C_OscViewFiler::mh_LoadNodeActiveFlags(std::vector<uint8_t> & orc_NodeAc
    orc_NodeActiveFlags.clear();
    if (orc_XmlParser.SelectNodeChild("active-nodes") == "active-nodes")
    {
-      C_SclString c_CurrentNodeActiveFlagNode = orc_XmlParser.SelectNodeChild("active-node");
+      QString c_CurrentNodeActiveFlagNode = orc_XmlParser.SelectNodeChild("active-node");
       if (c_CurrentNodeActiveFlagNode == "active-node")
       {
          do
@@ -540,7 +540,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUp
    //Previous implementation
    if (orc_XmlParser.SelectNodeChild("node-update-informations") == "node-update-informations")
    {
-      C_SclString c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild("node-update-information");
+      QString c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild("node-update-information");
       if (c_CurrentNodeUpdateInformationNode == "node-update-information")
       {
          uint32_t u32_Counter = 0U;
@@ -577,7 +577,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUp
       //New implementation
       if (orc_XmlParser.SelectNodeChild("node-update-information") == "node-update-information")
       {
-         C_SclString c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild(
+         QString c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild(
             "node-specific-update-information");
          if (c_CurrentNodeUpdateInformationNode == "node-specific-update-information")
          {

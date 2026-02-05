@@ -324,7 +324,7 @@ int32_t C_CamTitleBarWidget::LoadConfig(const QString & orc_FilePath)
       c_Message.SetDescription("Failed to load project: " + orc_FilePath);
       c_Details = "For more information see ";
       c_Details += C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
-                                    C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
+                                    C_OscLoggingHandler::h_GetCompleteLogFileLocation());
       c_Details += ".";
       c_Message.SetDetails(c_Details);
 
@@ -430,8 +430,8 @@ bool C_CamTitleBarWidget::m_DoSaveToFileAction(const QString & orc_File)
    if (s32_Return != C_NO_ERR)
    {
       const QString c_Log = C_Uti::h_GetLink(
-         C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str(), mc_STYLE_GUIDE_COLOR_LINK,
-         static_cast<QString>("file:\\\\\\") + C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
+         C_OscLoggingHandler::h_GetCompleteLogFileLocation(), mc_STYLE_GUIDE_COLOR_LINK,
+         static_cast<QString>("file:\\\\\\") + C_OscLoggingHandler::h_GetCompleteLogFileLocation());
       C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
       c_Message.SetHeading("Project save");
       c_Message.SetDescription(static_cast<QString>("For more details see log file %1").arg(

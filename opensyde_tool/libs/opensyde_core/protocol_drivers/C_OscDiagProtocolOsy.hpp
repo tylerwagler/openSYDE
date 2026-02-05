@@ -25,7 +25,7 @@
 #include "stwtypes.hpp"
 #include "C_OscDiagProtocolBase.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -98,7 +98,7 @@ public:
                                        uint8_t * const opu8_NrCode);
    virtual int32_t DataPoolReadMetaData(const uint8_t ou8_DataPoolIndex,
                                         uint8_t(&orau8_Version)[3],
-                                        stw::scl::C_SclString & orc_Name,
+                                        QString & orc_Name,
                                         uint8_t * const opu8_NrCode);
    virtual int32_t DataPoolVerify(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_NumberOfDataPoolElements,
                                   const uint16_t ou16_DataPoolVersion, const uint32_t ou32_DataPoolChecksum,

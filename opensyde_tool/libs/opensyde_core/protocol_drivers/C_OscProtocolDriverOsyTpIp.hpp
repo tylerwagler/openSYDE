@@ -20,7 +20,7 @@
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 #include "C_OscIpDispatcher.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -89,8 +89,8 @@ private:
    void m_ComposeRequest(const C_OscProtocolDriverOsyService & orc_Service, std::vector<uint8_t> & orc_Request) const;
 
 protected:
-   void m_LogWarningWithHeader(const stw::scl::C_SclString & orc_Information, const char_t * const opcn_Function) const;
-   void m_LogWarningWithHeaderAndIp(const stw::scl::C_SclString & orc_Information, const char_t * const opcn_Function,
+   void m_LogWarningWithHeader(const QString & orc_Information, const char_t * const opcn_Function) const;
+   void m_LogWarningWithHeaderAndIp(const QString & orc_Information, const char_t * const opcn_Function,
                                     const uint8_t(&orau8_Ip)[4]) const;
 
 public:
@@ -103,7 +103,7 @@ public:
       uint8_t au8_IpAddress[4];                 ///< IP address of device
       C_OscProtocolDriverOsyNode c_NodeId;      ///< node ID of device
       C_OscProtocolSerialNumber c_SerialNumber; ///< serial number of device
-      stw::scl::C_SclString c_DeviceName;       ///< name of device
+      QString c_DeviceName;       ///< name of device
 
       bool operator ==(const C_BroadcastGetDeviceInfoResults & orc_Cmp) const;
       bool operator <(const C_BroadcastGetDeviceInfoResults & orc_Cmp) const;

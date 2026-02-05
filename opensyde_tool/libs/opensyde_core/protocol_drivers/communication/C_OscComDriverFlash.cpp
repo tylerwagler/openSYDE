@@ -2388,8 +2388,7 @@ int32_t C_OscComDriverFlash::SendStwWakeupLocalId(
                                                            c_CompanyId);
 
     osc_write_log_info("SendStwWakeupLocalId",
-                       "Other company id found: " +
-                           c_CompanyId.toLocal8Bit().constData());
+                       QString("Other company id found: ") + c_CompanyId);
 
     // An other company id is no error
     s32_Return = C_NO_ERR;
@@ -2437,8 +2436,7 @@ int32_t C_OscComDriverFlash::SendStwWakeupLocalSerialNumber(
           c_ReceivedCompanyId, c_CompanyId);
 
       osc_write_log_info("SendStwWakeupLocalId",
-                         "Other company id found: " +
-                             c_CompanyId.toLocal8Bit().constData());
+                         QString("Other company id found: ") + c_CompanyId);
 
       // An other company id is no error
       s32_Return = C_NO_ERR;

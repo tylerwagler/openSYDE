@@ -29,23 +29,23 @@ using namespace stw::opensyde_core;
 static const uint16_t mu16_FILE_VERSION = 1U;
 const uint8_t C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE = 1U;
 // XML node names of service update package definition
-static const stw::scl::C_SclString mc_ROOT_NAME = "opensyde-secure-update-collection-definition"; // xml root node
-static const stw::scl::C_SclString mc_FILE_VERSION = "file-version";                              // xml node
-static const stw::scl::C_SclString mc_FILES = "files";                                            // xml node
-static const stw::scl::C_SclString mc_FILE = "file";                                              // xml node
-static const stw::scl::C_SclString mc_PARAM_FILES = "param-files";                                // xml node
-static const stw::scl::C_SclString mc_PARAM_FILE = "param-file";                                  // xml node
-static const stw::scl::C_SclString mc_PEM_FILE_CONFIG = "pem-file-config";                        // xml node
-static const stw::scl::C_SclString mc_PEM_FILE = "pem-file";                                      // xml node
-static const stw::scl::C_SclString mc_PEM_FILE_CONFIG_SEC_ENAB_ATTR = "security-enabled";         // xml node
+static const QString mc_ROOT_NAME = "opensyde-secure-update-collection-definition"; // xml root node
+static const QString mc_FILE_VERSION = "file-version";                              // xml node
+static const QString mc_FILES = "files";                                            // xml node
+static const QString mc_FILE = "file";                                              // xml node
+static const QString mc_PARAM_FILES = "param-files";                                // xml node
+static const QString mc_PARAM_FILE = "param-file";                                  // xml node
+static const QString mc_PEM_FILE_CONFIG = "pem-file-config";                        // xml node
+static const QString mc_PEM_FILE = "pem-file";                                      // xml node
+static const QString mc_PEM_FILE_CONFIG_SEC_ENAB_ATTR = "security-enabled";         // xml node
                                                                                                   // attribute
-static const stw::scl::C_SclString mc_PEM_FILE_CONFIG_SEC_SEND_ATTR = "security-send";            // xml node
+static const QString mc_PEM_FILE_CONFIG_SEC_SEND_ATTR = "security-send";            // xml node
                                                                                                   // attribute
-static const stw::scl::C_SclString mc_PEM_FILE_CONFIG_DEB_ENAB_ATTR = "debugger-enabled";         // xml node attribute
-static const stw::scl::C_SclString mc_PEM_FILE_CONFIG_DEB_SEND_ATTR = "debugger-send";            // xml node attribute
-static const stw::scl::C_SclString mc_FILE_NAME_ATTR = "name";                                    // xml node attribute
-static const stw::scl::C_SclString mc_SIG_FILE = "secure-signature-file";                         // xml node
-static const stw::scl::C_SclString mc_SIG_FILE_ATTR = "name";                                     // xml node
+static const QString mc_PEM_FILE_CONFIG_DEB_ENAB_ATTR = "debugger-enabled";         // xml node attribute
+static const QString mc_PEM_FILE_CONFIG_DEB_SEND_ATTR = "debugger-send";            // xml node attribute
+static const QString mc_FILE_NAME_ATTR = "name";                                    // xml node attribute
+static const QString mc_SIG_FILE = "secure-signature-file";                         // xml node
+static const QString mc_SIG_FILE_ATTR = "name";                                     // xml node
                                                                                                   // attribute
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -190,11 +190,11 @@ int32_t C_OscSupNodeDefinitionFiler::mh_SaveNode(const QString & orc_File,
    C_OscXmlParser c_XmlParser;
 
    //Root Node
-   c_XmlParser.CreateAndSelectNodeChild(mc_ROOT_NAME.ToQString());
+   c_XmlParser.CreateAndSelectNodeChild(mc_ROOT_NAME);
    //File version
-   Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild(mc_FILE_VERSION.ToQString()) == mc_FILE_VERSION.ToQString());
-   c_XmlParser.SetNodeContent(stw::scl::QString::number(mu16_FILE_VERSION).ToQString());
-   Q_ASSERT(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME.ToQString());
+   Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild(mc_FILE_VERSION) == mc_FILE_VERSION);
+   c_XmlParser.SetNodeContent(QString::number(mu16_FILE_VERSION));
+   Q_ASSERT(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
    mh_SaveFiles(orc_Node.c_ApplicationFileNames, c_XmlParser, mc_FILES, mc_FILE);
    mh_SaveFiles(orc_Node.c_NvmFileNames, c_XmlParser, mc_PARAM_FILES, mc_PARAM_FILE);
@@ -228,30 +228,30 @@ void C_OscSupNodeDefinitionFiler::mh_LoadFilesSection(std::vector<QString> & orc
                                                       std::map<uint32_t, uint32_t> & orc_PositionMap,
                                                       const QString & orc_NodeFolderAbs,
                                                       C_OscXmlParserBase & orc_XmlParser,
-                                                      const stw::scl::C_SclString & orc_BaseNodeName,
-                                                      const stw::scl::C_SclString & orc_ElementNodeName)
+                                                      const QString & orc_BaseNodeName,
+                                                      const QString & orc_ElementNodeName)
 {
-   if (orc_XmlParser.SelectNodeChild(orc_BaseNodeName.ToQString()) == orc_BaseNodeName.ToQString())
+   if (orc_XmlParser.SelectNodeChild(orc_BaseNodeName) == orc_BaseNodeName)
    {
       QString c_SelectedNode;
       // node has applications to update
       orc_PositionMap.insert(std::pair<uint32_t, uint32_t>(ou32_NodeCounter, ou32_UpdatePos));
       // get update application paths
-      Q_ASSERT(orc_XmlParser.SelectNodeChild(orc_ElementNodeName.ToQString()) == orc_ElementNodeName.ToQString());
+      Q_ASSERT(orc_XmlParser.SelectNodeChild(orc_ElementNodeName) == orc_ElementNodeName);
 
       // go through all files
       do
       {
          // we have to take care of OS dependent path delimiters for windows '\\'
-         const QString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR.ToQString());
+         const QString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR);
          const QString c_FilePath = stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(
             orc_NodeFolderAbs) + c_XmlAttr;
          orc_Files.push_back(c_FilePath);
-         c_SelectedNode = orc_XmlParser.SelectNodeNext(orc_ElementNodeName.ToQString());
+         c_SelectedNode = orc_XmlParser.SelectNodeNext(orc_ElementNodeName);
       }
-      while (c_SelectedNode == orc_ElementNodeName.ToQString());
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_BaseNodeName.ToQString());
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME.ToQString());
+      while (c_SelectedNode == orc_ElementNodeName);
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_BaseNodeName);
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
    }
 }
 
@@ -272,13 +272,13 @@ void C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSection(C_OscSuSequences::C_Do
                                                                                                   uint32_t> & orc_PositionMap, const QString & orc_NodeFolderAbs,
                                                           C_OscXmlParserBase & orc_XmlParser)
 {
-   if (orc_XmlParser.SelectNodeChild(mc_PEM_FILE_CONFIG.ToQString()) == mc_PEM_FILE_CONFIG.ToQString())
+   if (orc_XmlParser.SelectNodeChild(mc_PEM_FILE_CONFIG) == mc_PEM_FILE_CONFIG)
    {
       // get PEM file path
-      Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_PEM_FILE.ToQString()) == mc_PEM_FILE.ToQString());
+      Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_PEM_FILE) == mc_PEM_FILE);
 
       // we have to take care of OS dependent path delimiters for windows '\\'
-      const QString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR.ToQString());
+      const QString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_FILE_NAME_ATTR);
       if (c_XmlAttr != "")
       {
          const QString c_FilePath = stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(
@@ -289,21 +289,21 @@ void C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSection(C_OscSuSequences::C_Do
          orc_PositionMap.insert(std::pair<uint32_t, uint32_t>(ou32_NodeCounter, ou32_UpdatePos));
       }
 
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_PEM_FILE_CONFIG.ToQString());
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_PEM_FILE_CONFIG);
 
       if (orc_DoFlash.c_PemFile != "")
       {
          // Only in case of a PEM file, the states are relevant
          orc_DoFlash.q_SendSecurityEnabledState =
-            orc_XmlParser.GetAttributeBool(mc_PEM_FILE_CONFIG_SEC_SEND_ATTR.ToQString(), false);
-         orc_DoFlash.q_SecurityEnabled = orc_XmlParser.GetAttributeBool(mc_PEM_FILE_CONFIG_SEC_ENAB_ATTR.ToQString(), false);
+            orc_XmlParser.GetAttributeBool(mc_PEM_FILE_CONFIG_SEC_SEND_ATTR, false);
+         orc_DoFlash.q_SecurityEnabled = orc_XmlParser.GetAttributeBool(mc_PEM_FILE_CONFIG_SEC_ENAB_ATTR, false);
 
          orc_DoFlash.q_SendDebuggerEnabledState =
-            orc_XmlParser.GetAttributeBool(mc_PEM_FILE_CONFIG_DEB_SEND_ATTR.ToQString(), false);
-         orc_DoFlash.q_DebuggerEnabled = orc_XmlParser.GetAttributeBool(mc_PEM_FILE_CONFIG_DEB_ENAB_ATTR.ToQString(), false);
+            orc_XmlParser.GetAttributeBool(mc_PEM_FILE_CONFIG_DEB_SEND_ATTR, false);
+         orc_DoFlash.q_DebuggerEnabled = orc_XmlParser.GetAttributeBool(mc_PEM_FILE_CONFIG_DEB_ENAB_ATTR, false);
       }
 
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME.ToQString());
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
    }
 }
 
@@ -318,23 +318,23 @@ void C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSection(C_OscSuSequences::C_Do
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupNodeDefinitionFiler::mh_SaveFiles(const std::vector<QString> & orc_Files,
                                                C_OscXmlParserBase & orc_XmlParser,
-                                               const stw::scl::C_SclString & orc_BaseNodeName,
-                                               const stw::scl::C_SclString & orc_ElementNodeName)
+                                               const QString & orc_BaseNodeName,
+                                               const QString & orc_ElementNodeName)
 {
    if (orc_Files.size() > 0)
    {
       //Files
-      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(orc_BaseNodeName.ToQString()) == orc_BaseNodeName.ToQString());
+      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(orc_BaseNodeName) == orc_BaseNodeName);
       for (uint32_t u32_PosFile = 0; u32_PosFile < orc_Files.size(); u32_PosFile++)
       {
          //File
-         Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(orc_ElementNodeName.ToQString()) == orc_ElementNodeName.ToQString());
-         orc_XmlParser.SetAttributeString(mc_FILE_NAME_ATTR.ToQString(), orc_Files[u32_PosFile]);
+         Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(orc_ElementNodeName) == orc_ElementNodeName);
+         orc_XmlParser.SetAttributeString(mc_FILE_NAME_ATTR, orc_Files[u32_PosFile]);
          //Return
-         Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_BaseNodeName.ToQString());
+         Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_BaseNodeName);
       }
       //Return for next node
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME.ToQString());
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
    }
 }
 
@@ -351,20 +351,20 @@ void C_OscSupNodeDefinitionFiler::mh_SavePemConfig(const C_OscSupNodeDefinition 
    if (orc_CurrentNode.c_PemFile != "")
    {
       //Files
-      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_PEM_FILE_CONFIG.ToQString()) == mc_PEM_FILE_CONFIG.ToQString());
-      orc_XmlParser.SetAttributeBool(mc_PEM_FILE_CONFIG_SEC_SEND_ATTR.ToQString(), orc_CurrentNode.q_SendSecurityEnabledState);
-      orc_XmlParser.SetAttributeBool(mc_PEM_FILE_CONFIG_SEC_ENAB_ATTR.ToQString(), orc_CurrentNode.q_SecurityEnabled);
-      orc_XmlParser.SetAttributeBool(mc_PEM_FILE_CONFIG_DEB_SEND_ATTR.ToQString(), orc_CurrentNode.q_SendDebuggerEnabledState);
-      orc_XmlParser.SetAttributeBool(mc_PEM_FILE_CONFIG_DEB_ENAB_ATTR.ToQString(), orc_CurrentNode.q_DebuggerEnabled);
+      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_PEM_FILE_CONFIG) == mc_PEM_FILE_CONFIG);
+      orc_XmlParser.SetAttributeBool(mc_PEM_FILE_CONFIG_SEC_SEND_ATTR, orc_CurrentNode.q_SendSecurityEnabledState);
+      orc_XmlParser.SetAttributeBool(mc_PEM_FILE_CONFIG_SEC_ENAB_ATTR, orc_CurrentNode.q_SecurityEnabled);
+      orc_XmlParser.SetAttributeBool(mc_PEM_FILE_CONFIG_DEB_SEND_ATTR, orc_CurrentNode.q_SendDebuggerEnabledState);
+      orc_XmlParser.SetAttributeBool(mc_PEM_FILE_CONFIG_DEB_ENAB_ATTR, orc_CurrentNode.q_DebuggerEnabled);
 
       //File
-      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_PEM_FILE.ToQString()) == mc_PEM_FILE.ToQString());
-      orc_XmlParser.SetAttributeString(mc_FILE_NAME_ATTR.ToQString(), orc_CurrentNode.c_PemFile);
+      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_PEM_FILE) == mc_PEM_FILE);
+      orc_XmlParser.SetAttributeString(mc_FILE_NAME_ATTR, orc_CurrentNode.c_PemFile);
       //Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_PEM_FILE_CONFIG.ToQString());
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_PEM_FILE_CONFIG);
 
       //Return for next node
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME.ToQString());
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
    }
 }
 
@@ -381,10 +381,10 @@ void C_OscSupNodeDefinitionFiler::mh_SaveSignatureFile(const C_OscSupNodeDefinit
    if (orc_Node.u8_SignaturePresent == hu8_ACTIVE_NODE)
    {
       //File
-      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_SIG_FILE.ToQString()) == mc_SIG_FILE.ToQString());
-      orc_XmlParser.SetAttributeString(mc_SIG_FILE_ATTR.ToQString(), orc_Node.c_SignatureFile);
+      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_SIG_FILE) == mc_SIG_FILE);
+      orc_XmlParser.SetAttributeString(mc_SIG_FILE_ATTR, orc_Node.c_SignatureFile);
       //Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME.ToQString());
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
    }
 }
 
@@ -408,14 +408,14 @@ int32_t C_OscSupNodeDefinitionFiler::mh_LoadSignatureFile(const QString & orc_No
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_XmlParser.SelectNodeChild(mc_SIG_FILE.ToQString()) == mc_SIG_FILE.ToQString())
+   if (orc_XmlParser.SelectNodeChild(mc_SIG_FILE) == mc_SIG_FILE)
    {
-      const QString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_SIG_FILE_ATTR.ToQString());
+      const QString c_XmlAttr = orc_XmlParser.GetAttributeString(mc_SIG_FILE_ATTR);
       const QString c_PackagePathTmp = stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_NodeFolderAbs) +
                                                       QFileInfo(c_XmlAttr).fileName();
       s32_Retval = C_OscSupSignatureFiler::h_LoadSignatureFile(c_PackagePathTmp, orc_Signature);
 
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME.ToQString());
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
    }
    return s32_Retval;
 }

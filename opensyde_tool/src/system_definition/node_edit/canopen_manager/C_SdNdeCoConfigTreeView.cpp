@@ -195,7 +195,7 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
    {
       uint8_t u8_InterfaceNumber;
       const C_UsNode c_UsNode =
-         C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
+         C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
       const std::map<uint8_t, C_OscCanOpenManagerInfo> c_CanOpenManagers = pc_Node->c_CanOpenManagers;
 
       for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager = c_CanOpenManagers.begin();
@@ -236,11 +236,10 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
 
                               if (pc_DeviceNode != NULL)
                               {
-                                 const std::map<std::pair<uint8_t, std::pair<uint8_t,
-                                                                             stw::scl::C_SclString> >,
+                                 const std::map<std::pair<uint8_t, std::pair<uint8_t, QString> >,
                                                 bool> c_Device = c_UsNode.GetExpandedCanOpenDevice();
                                  for (std::map<std::pair<uint8_t,
-                                                         std::pair<uint8_t, stw::scl::C_SclString> >,
+                                                         std::pair<uint8_t, QString> >,
                                                bool>::const_iterator c_ItDevice = c_Device.begin();
                                       c_ItDevice != c_Device.end();
                                       ++c_ItDevice)
@@ -294,7 +293,7 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
          for (uint32_t u32_Counter = 0; u32_Counter < C_PuiSdHandler::h_GetInstance()->GetOscNodesSize(); u32_Counter++)
          {
             const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_Counter);
-            if ((pc_DeviceNode != NULL) && (pc_DeviceNode->c_Properties.c_Name.c_str() == c_DeviceNodeName))
+            if ((pc_DeviceNode != NULL) && (pc_DeviceNode->c_Properties.c_Name == c_DeviceNodeName))
             {
                uint32_t u32_UseCaseIndex;
 
@@ -322,7 +321,7 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
    {
       std::map<uint8_t, bool> c_SaveInterface;
       std::map<uint8_t, bool> c_SaveDevices;
-      std::map<std::pair<uint8_t, std::pair<uint8_t, stw::scl::C_SclString> >, bool> c_SaveDevice;
+      std::map<std::pair<uint8_t, std::pair<uint8_t, QString> >, bool> c_SaveDevice;
 
       const std::map<uint8_t, C_OscCanOpenManagerInfo> c_CanOpenManagers = pc_Node->c_CanOpenManagers;
 
@@ -348,9 +347,9 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
                   c_ItDevices->first.u32_NodeIndex);
                if (pc_DeviceNode != NULL)
                {
-                  const std::pair<uint8_t, stw::scl::C_SclString> c_PairInterfaceId(
-                     c_ItDevices->first.u8_InterfaceNumber, pc_DeviceNode->c_Properties.c_Name.c_str());
-                  const std::pair<uint8_t, std::pair<uint8_t, stw::scl::C_SclString> > c_Pair(
+                  const std::pair<uint8_t, QString> c_PairInterfaceId(
+                     c_ItDevices->first.u8_InterfaceNumber, pc_DeviceNode->c_Properties.c_Name);
+                  const std::pair<uint8_t, std::pair<uint8_t, QString> > c_Pair(
                      c_ItManager->first, c_PairInterfaceId);
                   c_SaveDevice[c_Pair] = true;
                }
@@ -369,7 +368,7 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
       }
 
       C_UsHandler::h_GetInstance()->SetProjSdNodeExpandedCanOpenTree(
-         pc_Node->c_Properties.c_Name.c_str(), c_SaveInterface, c_SaveDevices, c_SaveDevice);
+         pc_Node->c_Properties.c_Name, c_SaveInterface, c_SaveDevices, c_SaveDevice);
 
       if (this->currentIndex().isValid() == true)
       {
@@ -391,27 +390,27 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
                                                                         u32_UseCaseIndex) == C_NO_ERR)
                {
                   C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedCanOpenDeviceUseCaseIndex(
-                     pc_Node->c_Properties.c_Name.c_str(), u32_UseCaseIndex);
+                     pc_Node->c_Properties.c_Name, u32_UseCaseIndex);
                   q_IsUseCaseSelected = true;
                   C_UsHandler::h_GetInstance()->SetProjSdNodeCanOpenSelectedUseCaseOrInterface(
-                     pc_Node->c_Properties.c_Name.c_str(), q_IsUseCaseSelected);
+                     pc_Node->c_Properties.c_Name, q_IsUseCaseSelected);
                }
 
                const C_OscNode * const pc_InterfaceIdNode =
                   C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeId.u32_NodeIndex);
 
                C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedCanOpenDevice(
-                  pc_Node->c_Properties.c_Name.c_str(), c_NodeId.u8_InterfaceNumber,
-                  pc_InterfaceIdNode->c_Properties.c_Name.c_str());
+                  pc_Node->c_Properties.c_Name, c_NodeId.u8_InterfaceNumber,
+                  pc_InterfaceIdNode->c_Properties.c_Name);
             }
 
             C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedCanOpenManager(
-               pc_Node->c_Properties.c_Name.c_str(), u8_InterfaceNumber);
+               pc_Node->c_Properties.c_Name, u8_InterfaceNumber);
 
             if (q_IsUseCaseSelected == false)
             {
                C_UsHandler::h_GetInstance()->SetProjSdNodeCanOpenSelectedUseCaseOrInterface(
-                  pc_Node->c_Properties.c_Name.c_str(), q_IsUseCaseSelected);
+                  pc_Node->c_Properties.c_Name, q_IsUseCaseSelected);
             }
 
             q_Reset = false;
@@ -419,18 +418,18 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
          else
          {
             C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedCanOpenManager(
-               pc_Node->c_Properties.c_Name.c_str(), 0);
+               pc_Node->c_Properties.c_Name, 0);
          }
 
          // reset if none is selected
          if (q_Reset == true)
          {
             C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedCanOpenDeviceUseCaseIndex(
-               pc_Node->c_Properties.c_Name.c_str(), 0);
+               pc_Node->c_Properties.c_Name, 0);
             C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedCanOpenDevice(
-               pc_Node->c_Properties.c_Name.c_str(), 0, "");
+               pc_Node->c_Properties.c_Name, 0, "");
             C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedCanOpenManager(
-               pc_Node->c_Properties.c_Name.c_str(), 0);
+               pc_Node->c_Properties.c_Name, 0);
          }
       }
    }
@@ -583,8 +582,8 @@ C_OscCanOpenManagerDeviceInfo C_SdNdeCoConfigTreeView::h_CreateNewDevice(const Q
    C_OscCanOpenManagerDeviceInfo c_Config;
    const QFileInfo c_FileInfo(orc_EdsPath);
 
-   c_Config.c_OriginalEdsFileName = QFileInfo(orc_EdsPath).fileName().toStdString();
-   c_Config.c_ProjectEdsFilePath = orc_EdsPath.toStdString();
+   c_Config.c_OriginalEdsFileName = QFileInfo(orc_EdsPath).fileName();
+   c_Config.c_ProjectEdsFilePath = orc_EdsPath;
    Q_ASSERT(c_FileInfo.exists());
    C_SdNdeCoConfigTreeView::mh_InitMappableSignals(c_Config.c_EdsFileMappableSignals, c_Config.GetEdsFileContent(),
                                                    c_FileInfo.suffix().toLower() == "eds");
@@ -755,7 +754,7 @@ void C_SdNdeCoConfigTreeView::m_OnCustomContextMenuRequested(const QPoint & orc_
             this->mpc_RemoveAction->setVisible(true);
             this->mpc_RemoveAction->setText(static_cast<QString>("Remove CANopen Device \"%1\"").arg(pc_Node->
                                                                                                          c_Properties.
-                                                                                                         c_Name.c_str()));
+                                                                                                         c_Name));
          }
          else
          {
@@ -807,7 +806,7 @@ void C_SdNdeCoConfigTreeView::m_OnAddDevice(void)
             c_Message.SetCustomMinHeight(180, 250);
             c_Message.Execute();
          }
-         else if (!(QFileInfo(pc_AddDialog->GetEdsFile().ToQString()).exists() && QFileInfo(pc_AddDialog->GetEdsFile().ToQString()).isFile()))
+         else if (!(QFileInfo(pc_AddDialog->GetEdsFile()).exists() && QFileInfo(pc_AddDialog->GetEdsFile()).isFile()))
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
             c_Message.SetHeading("EDS File");
@@ -1158,7 +1157,7 @@ void C_SdNdeCoConfigTreeView::m_OnExpanded(const QModelIndex & orc_ExpandedIndex
 void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceInfo & orc_Device)
 {
    const int32_t s32_HB_OFF_VALUE = 0;
-   const QString c_FileName = orc_Device.c_OriginalEdsFileName.UpperCase().c_str();
+   const QString c_FileName = orc_Device.c_OriginalEdsFileName.toUpper();
    const bool q_IsEds = c_FileName.endsWith(".EDS");
    const C_OscCanOpenObjectDictionary & rc_EdsFileContent = orc_Device.GetEdsFileContent();
 
@@ -1180,21 +1179,19 @@ void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceI
          C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_PRODUCER);
       if (pc_OscCanOpenObject != NULL)
       {
-         const stw::scl::C_SclString c_Value = C_OscImportEdsDcf::h_GetCoObjectValue(*pc_OscCanOpenObject, q_IsEds);
+         const QString c_Value = C_OscImportEdsDcf::h_GetCoObjectValue(*pc_OscCanOpenObject, q_IsEds);
          // in case there is an EDS entry
-         if (c_Value.IsEmpty() == false)
+         if (c_Value.isEmpty() == false)
          {
-            try
+            bool q_Ok = false;
+            // get value from EDS file
+            s32_HeartbeatProducerTimeMs = c_Value.toInt(&q_Ok);
+            if (q_Ok == false)
             {
-               // get value from EDS file
-               s32_HeartbeatProducerTimeMs = c_Value.ToInt();
-            }
-            catch (...)
-            {
-               const stw::scl::C_SclString c_Info = "Could not convert the following number: \"" +
-                                                    c_Value + "\". Switching heartbeat off.";
+               const QString c_Info = "Could not convert the following number: \"" +
+                                      c_Value + "\". Switching heartbeat off.";
                s32_HeartbeatProducerTimeMs = s32_HB_OFF_VALUE;
-               osc_write_log_warning("Read CANopen EDS Heartbeat Producer default value", c_Info);
+               osc_write_log_warning("Read CANopen EDS Heartbeat Producer default value", c_Info.toStdString().c_str());
             }
          }
       }
@@ -1244,23 +1241,21 @@ void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceI
                C_OscCanOpenObjectDictionary::hu16_OD_INDEX_HEARTBEAT_CONSUMER, 1);
          if (pc_OscCanOpenObject != NULL)
          {
-            const stw::scl::C_SclString c_Value =
+            const QString c_Value =
                C_OscImportEdsDcf::h_GetCoObjectValue(*pc_OscCanOpenObject, q_IsEds);
             // in case there is an EDS entry
-            if (c_Value.IsEmpty() == false)
+            if (c_Value.isEmpty() == false)
             {
-               try
+               bool q_Ok = false;
+               // get value from EDS file
+               s32_HeartbeatConsumerTimeMs = c_Value.toInt(&q_Ok);
+               if (q_Ok == false)
                {
-                  // get value from EDS file
-                  s32_HeartbeatConsumerTimeMs = c_Value.ToInt();
-               }
-               catch (...)
-               {
-                  const stw::scl::C_SclString c_Info = "Could not convert the following number: \"" +
-                                                       c_Value +
-                                                       "\". Switching heartbeat off.";
+                  const QString c_Info = "Could not convert the following number: \"" +
+                                         c_Value +
+                                         "\". Switching heartbeat off.";
                   s32_HeartbeatConsumerTimeMs = s32_HB_OFF_VALUE;
-                  osc_write_log_warning("CANopen EDS Heartbeat Consumer default value", c_Info);
+                  osc_write_log_warning("CANopen EDS Heartbeat Consumer default value", c_Info.toStdString().c_str());
                }
             }
          }

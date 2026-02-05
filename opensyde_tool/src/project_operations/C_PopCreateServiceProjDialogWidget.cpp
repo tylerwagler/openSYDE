@@ -25,7 +25,6 @@
 #include "C_OscUtils.hpp"
 #include "C_OgeWiUtil.hpp"
 
-#include "C_SclString.hpp"
 #include "C_SclIniFile.hpp"
 #include "C_UsFiler.hpp"
 #include "C_UsHandler.hpp"
@@ -522,7 +521,7 @@ void C_PopCreateServiceProjDialogWidget::m_SavePermissionsToUserSettings(std::ve
          const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(u32_ItView);
          if (pc_View != NULL)
          {
-            const QString c_Name = pc_View->GetName().c_str();
+            const QString c_Name = pc_View->GetName();
             C_UsHandler::h_GetInstance()->SetViewPermission(c_Name, orc_ViewConfigs[u32_ItView]);
          }
       }

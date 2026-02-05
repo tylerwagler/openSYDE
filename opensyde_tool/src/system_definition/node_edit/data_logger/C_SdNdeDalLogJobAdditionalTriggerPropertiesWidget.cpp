@@ -382,7 +382,7 @@ const
 
    if (pc_El != NULL)
    {
-      this->mpc_Ui->pc_WidgetThreshold->SetSuffix(pc_El->c_Unit.c_str());
+      this->mpc_Ui->pc_WidgetThreshold->SetSuffix(pc_El->c_Unit);
    }
 }
 

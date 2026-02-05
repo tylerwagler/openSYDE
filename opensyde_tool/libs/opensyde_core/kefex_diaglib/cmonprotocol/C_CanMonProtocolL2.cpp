@@ -17,7 +17,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolL2.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -47,10 +47,10 @@ using namespace stw::can;
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
-   C_SclString c_Help;
+   QString c_Text;
+   QString c_Help;
    char_t cn_XTD;
    char_t cn_RTR;
    int32_t j;
@@ -63,10 +63,10 @@ C_SclString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
 
    if (mq_Decimal == false)
    {
-      c_Text = C_SclString::FromQString(QString::asprintf("%08X%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC));
+      c_Text = QString::asprintf("%08X%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
       for (j = 0; j < u8_Len; j++)
       {
-         c_Help = C_SclString::FromQString(QString::asprintf(" %02X ", orc_Msg.au8_Data[j]));
+         c_Help = QString::asprintf(" %02X ", orc_Msg.au8_Data[j]);
          c_Text += c_Help;
       }
       for (; j < 8; j++)
@@ -76,10 +76,10 @@ C_SclString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    }
    else
    {
-      c_Text = C_SclString::FromQString(QString::asprintf("%8d%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC));
+      c_Text = QString::asprintf("%8d%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
       for (j = 0; j < u8_Len; j++)
       {
-         c_Help = C_SclString::FromQString(QString::asprintf("%3d ", orc_Msg.au8_Data[j]));
+         c_Help = QString::asprintf("%3d ", orc_Msg.au8_Data[j]);
          c_Text += c_Help;
       }
    }
@@ -93,7 +93,7 @@ C_SclString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg)
    Text representation of protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolL2::GetProtocolName(void) const
+QString C_CanMonProtocolL2::GetProtocolName(void) const
 {
    return "CAN Layer 2";
 }

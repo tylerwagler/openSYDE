@@ -673,7 +673,7 @@ int32_t C_PuiSdNodeDataPoolListElementIdSyncUtil::h_CheckAndHandleNewElement(
                                                                        orc_NewId.u32_ElementIndex);
          if ((pc_Node != NULL) && ((pc_Element != NULL) && (pc_Dp != NULL)))
          {
-            const std::string c_Tmp = orc_NewId.GetHalChannelName().c_str();
+            const std::string c_Tmp = orc_NewId.GetHalChannelName().toStdString();
             uint32_t u32_Hash = 0UL;
             if (pc_Node->c_HalcConfig.e_SafetyMode == C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING)
             {
@@ -686,7 +686,7 @@ int32_t C_PuiSdNodeDataPoolListElementIdSyncUtil::h_CheckAndHandleNewElement(
             stw::scl::C_SclChecksums::CalcCRC32(
                c_Tmp.c_str(), c_Tmp.length(), u32_Hash);
             orc_LastKnownHalcCrcs[orc_NewId] = C_PuiSdLastKnownHalElementId(
-               u32_Hash, pc_Dp->c_Name.c_str());
+               u32_Hash, pc_Dp->c_Name);
          }
          else
          {
@@ -776,7 +776,7 @@ void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_GetNewMapOnSyncHalc(const uint3
                            }
                            stw::scl::C_SclChecksums::CalcCRC32(
                               c_Tmp.c_str(), c_Tmp.length(), u32_Hash);
-                           c_NewId.SetHalChannelName(c_Tmp);
+                           c_NewId.SetHalChannelName(QString::fromStdString(c_Tmp));
                            for (std::map<C_OscNodeDataPoolListElementOptArrayId,
                                          C_PuiSdLastKnownHalElementId>::const_iterator c_ItCur =
                                    orc_LastKnownHalcCrcs.begin();
@@ -784,12 +784,12 @@ void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_GetNewMapOnSyncHalc(const uint3
                                 ++c_ItCur)
                            {
                               if (((c_ItCur->second.u32_Crc == u32_Hash) &&
-                                   (c_ItCur->second.c_HalDpName.compare(rc_Dp.c_Name.c_str()) == 0)) &&
+                                   (c_ItCur->second.c_HalDpName.compare(rc_Dp.c_Name) == 0)) &&
                                   ((pc_Node->c_HalcConfig.e_SafetyMode ==
                                     C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING) ||
                                    (c_ItCur->first.GetArrayElementIndexOrZero() == u32_ParameterElementIndex)))
                               {
-                                 c_NewMap[c_NewId] = C_PuiSdLastKnownHalElementId(u32_Hash, rc_Dp.c_Name.c_str());
+                                 c_NewMap[c_NewId] = C_PuiSdLastKnownHalElementId(u32_Hash, rc_Dp.c_Name);
                                  orc_MapCurToNew[c_ItCur->first] = c_NewId;
                               }
                            }

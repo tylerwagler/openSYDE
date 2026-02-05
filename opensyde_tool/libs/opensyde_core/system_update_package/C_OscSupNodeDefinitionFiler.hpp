@@ -16,7 +16,7 @@
 #include "C_OscSuSequences.hpp"
 #include "C_OscSupNodeDefinition.hpp"
 #include "C_OscXmlParser.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -48,16 +48,16 @@ private:
                                    const uint32_t ou32_UpdatePos, std::map<uint32_t,
                                                                            uint32_t> & orc_PositionMap,
                                    const QString & orc_NodeFolderAbs, C_OscXmlParserBase & orc_XmlParser,
-                                   const stw::scl::C_SclString & orc_BaseNodeName,
-                                   const stw::scl::C_SclString & orc_ElementNodeName);
+                                   const QString & orc_BaseNodeName,
+                                   const QString & orc_ElementNodeName);
    static void mh_LoadPemConfigSection(C_OscSuSequences::C_DoFlash & orc_DoFlash, const uint32_t ou32_NodeCounter,
                                        const uint32_t ou32_UpdatePos, std::map<uint32_t,
                                                                                uint32_t> & orc_PositionMap,
                                        const QString & orc_NodeFolderAbs,
                                        C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveFiles(const std::vector<QString> & orc_Files, C_OscXmlParserBase & orc_XmlParser,
-                            const stw::scl::C_SclString & orc_BaseNodeName,
-                            const stw::scl::C_SclString & orc_ElementNodeName);
+                            const QString & orc_BaseNodeName,
+                            const QString & orc_ElementNodeName);
    static void mh_SavePemConfig(const C_OscSupNodeDefinition & orc_CurrentNode, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveSignatureFile(const C_OscSupNodeDefinition & orc_Node, C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadSignatureFile(const QString & orc_NodeFolderAbs,

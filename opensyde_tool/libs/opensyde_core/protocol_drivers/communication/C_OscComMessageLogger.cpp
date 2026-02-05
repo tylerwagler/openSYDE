@@ -220,9 +220,9 @@ void C_OscComMessageLogger::SetProtocol(const e_CanMonL7Protocols oe_Protocol)
    this->mc_ProtocolDec.SetProtocolMode(oe_Protocol);
 
    // Update the protocol names of all log files
-   C_SclString c_ProtocolNameScl;
+   QString c_ProtocolNameScl;
    this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolNameScl);
-   QString c_ProtocolName = c_ProtocolNameScl.ToQString();
+   QString c_ProtocolName = c_ProtocolNameScl;
    for (c_ItFile = this->mc_LoggingFiles.begin(); c_ItFile != this->mc_LoggingFiles.end(); ++c_ItFile)
    {
       c_ItFile->second->SetProtocolName(c_ProtocolName);
@@ -517,11 +517,11 @@ int32_t C_OscComMessageLogger::AddLogFileAsc(const QString & orc_FilePath, const
 {
    int32_t s32_Return;
    C_OscComMessageLoggerFileAsc * pc_File;
-   C_SclString c_ProtocolNameScl;
+   QString c_ProtocolNameScl;
    QString c_ProtocolName;
 
    this->mc_ProtocolDec.GetProtocolName(this->me_Protocol, c_ProtocolNameScl);
-   c_ProtocolName = c_ProtocolNameScl.ToQString();
+   c_ProtocolName = c_ProtocolNameScl;
    pc_File = new C_OscComMessageLoggerFileAsc(orc_FilePath, c_ProtocolName, oq_HexActive, oq_RelativeTimeStampActive);
    s32_Return = pc_File->OpenFile();
 
@@ -892,7 +892,7 @@ QString C_OscComMessageLogger::m_GetProtocolStringHex(const T_STWCAN_Msg_RX & or
 
    if (this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE)
    {
-      c_Result = this->mc_ProtocolHex.MessageToStringProtocolOnly(orc_Msg).ToQString();
+      c_Result = this->mc_ProtocolHex.MessageToStringProtocolOnly(orc_Msg);
    }
 
    return c_Result;
@@ -914,7 +914,7 @@ QString C_OscComMessageLogger::m_GetProtocolStringDec(const T_STWCAN_Msg_RX & or
 
    if (this->me_Protocol != stw::cmon_protocol::eCMON_L7_PROTOCOL_NONE)
    {
-      c_Result = this->mc_ProtocolDec.MessageToStringProtocolOnly(orc_Msg).ToQString();
+      c_Result = this->mc_ProtocolDec.MessageToStringProtocolOnly(orc_Msg);
    }
 
    return c_Result;
@@ -1317,8 +1317,8 @@ void C_OscComMessageLogger::mh_InterpretCanSignalValue(C_OscComMessageLoggerData
          // Use the value without scaling as raw value.
          std::string c_StringValueStd;
          c_OscValue.GetValueAsScaledString(1.0, 0.0, c_StringValueStd, 0U, true, true);
-         orc_Signal.c_RawValueDec = QString::fromUtf8(c_StringValueStd.c_str());
-         orc_Signal.c_RawValueHex = QString::fromUtf8(c_StringValueStd.c_str());
+         orc_Signal.c_RawValueDec = QString::fromStdString(c_StringValueStd);
+         orc_Signal.c_RawValueHex = QString::fromStdString(c_StringValueStd);
       }
       else
       {
@@ -1329,7 +1329,7 @@ void C_OscComMessageLogger::mh_InterpretCanSignalValue(C_OscComMessageLoggerData
       // Interpreted value
       std::string c_StringValueStd;
       c_OscValue.GetValueAsScaledString(of64_Factor, of64_Offset, c_StringValueStd, 0U, true, true);
-      orc_Signal.c_Value = QString::fromUtf8(c_StringValueStd.c_str());
+      orc_Signal.c_Value = QString::fromStdString(c_StringValueStd);
    }
    else
    {

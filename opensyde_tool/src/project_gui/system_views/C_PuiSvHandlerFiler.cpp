@@ -16,7 +16,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 
-#include "C_SclString.hpp"
 #include "constants.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
 #include "C_OscViewFiler.hpp"
@@ -29,8 +28,6 @@
 #include "C_PuiSvDashboardFiler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
-
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
@@ -76,7 +73,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadViews(std::vector<C_PuiSvData> & orc_Views,
 
    if (orc_XmlParser.SelectNodeChild("opensyde-system-views") == "opensyde-system-views")
    {
-      C_SclString c_CurrentViewNode;
+      QString c_CurrentViewNode;
       uint32_t u32_ExpectedSize = 0UL;
       const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -118,10 +115,10 @@ int32_t C_PuiSvHandlerFiler::h_LoadViews(std::vector<C_PuiSvData> & orc_Views,
       {
          if (u32_ExpectedSize != orc_Views.size())
          {
-            C_SclString c_Tmp;
-            c_Tmp.PrintFormatted("Unexpected view count, expected: %u, got %zu", u32_ExpectedSize,
-                                 orc_Views.size());
-            osc_write_log_warning("Load file", c_Tmp.c_str());
+            QString c_Tmp;
+            c_Tmp = QString("Unexpected view count, expected: %1, got %2").arg(u32_ExpectedSize).arg(
+               orc_Views.size());
+            osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
          }
       }
       //Return
@@ -196,7 +193,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadReadRails(QMap<C_OscNodeDataPoolListElementId
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   C_SclString c_CurrentRailNode = orc_XmlParser.SelectNodeChild("rail-assignment");
+   QString c_CurrentRailNode = orc_XmlParser.SelectNodeChild("rail-assignment");
 
    if (c_CurrentRailNode == "rail-assignment")
    {
@@ -324,7 +321,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadDashboards(std::vector<C_PuiSvDashboard> & o
    orc_Dashboards.clear();
    if (orc_XmlParser.SelectNodeChild("dashboards") == "dashboards")
    {
-      C_SclString c_CurrentDashboardNode = orc_XmlParser.SelectNodeChild("dashboard");
+      QString c_CurrentDashboardNode = orc_XmlParser.SelectNodeChild("dashboard");
       if (c_CurrentDashboardNode == "dashboard")
       {
          do
@@ -388,7 +385,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadViewFile(C_PuiSvData & orc_View, const QStri
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading view", "Value of \"file-version\": " +
-                            C_SclString::IntToStr(u16_FileVersion));
+                            QString::number(u16_FileVersion).toStdString());
          //Check file version
          if ((u16_FileVersion != 1U) && (u16_FileVersion != 2U))
          {

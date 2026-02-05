@@ -12,7 +12,6 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
 #include "C_Uti.hpp"
 #include "C_SdCodeGenerationDialog.hpp"
 #include "ui_C_SdCodeGenerationDialog.h"
@@ -22,7 +21,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
-using namespace stw::scl;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_elements;

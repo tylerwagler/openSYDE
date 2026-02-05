@@ -30,7 +30,7 @@ class C_SyvComMessageLoggerFileBlf :
    public stw::opensyde_core::C_OscComMessageLoggerFileBase
 {
 public:
-   C_SyvComMessageLoggerFileBlf(const stw::scl::C_SclString & orc_FilePath = "");
+   C_SyvComMessageLoggerFileBlf(const QString & orc_FilePath = "");
    ~C_SyvComMessageLoggerFileBlf(void) noexcept override;
 
    int32_t OpenFile(void) override;

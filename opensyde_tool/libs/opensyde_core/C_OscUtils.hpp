@@ -107,6 +107,15 @@ public:
                                      QString &orc_CutString,
                                      int32_t &ors32_Number);
 
+  // QString helper functions (replacing QString static methods)
+  static QString h_IntToHex(const int64_t os64_Value, const uint32_t ou32_Digits);
+  static QString h_IntToHex(const uint64_t ou64_Value, const uint32_t ou32_Digits);
+  template <typename T>
+  static QString h_IntToHex(const T orc_Value, const uint32_t ou32_Digits)
+  {
+     return h_IntToHex(static_cast<int64_t>(orc_Value), ou32_Digits);
+  }
+
   // Path variables
   static const QString hc_PATH_VARIABLE_OPENSYDE_BIN;
   static const QString hc_PATH_VARIABLE_OPENSYDE_PROJ;

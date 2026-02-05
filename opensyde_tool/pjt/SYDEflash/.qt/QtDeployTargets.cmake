@@ -1,0 +1,5 @@
+set(__QT_DEPLOY_TARGET_opensyde_core_FILE C:/Users/tyler/Dev/repos/openSYDE/opensyde_tool/pjt/SYDEflash/opensyde_core/libopensyde_core.a)
+set(__QT_DEPLOY_TARGET_opensyde_core_TYPE STATIC_LIBRARY)
+set(__QT_DEPLOY_TARGET_SYDEflash_FILE C:/Users/tyler/Dev/repos/openSYDE/opensyde_tool/pjt/SYDEflash/SYDEflash.exe)
+set(__QT_DEPLOY_TARGET_SYDEflash_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_SYDEflash_RUNTIME_DLLS C:/Qt/6.10.1/mingw_64/bin/Qt6SvgWidgets.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Widgets.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Svg.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Gui.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Xml.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Core.dll)

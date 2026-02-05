@@ -17,7 +17,7 @@
 #include <QTextStream>
 
 #include "C_SclIniFile.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 #include "stwtypes.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -48,9 +48,9 @@ using namespace stw::scl;
    Combined key path for QSettings (e.g., "Section/Key")
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_SclIniFile::mh_BuildKey(const C_SclString & orc_Section, const C_SclString & orc_Key)
+QString C_SclIniFile::mh_BuildKey(const QString & orc_Section, const QString & orc_Key)
 {
-   return orc_Section.ToQString() + "/" + orc_Key.ToQString();
+   return orc_Section + "/" + orc_Key;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ QString C_SclIniFile::mh_BuildKey(const C_SclString & orc_Section, const C_SclSt
    \param[in]     orc_FileName    path to ini file
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclIniFile::C_SclIniFile(const C_SclString & orc_FileName) :
+C_SclIniFile::C_SclIniFile(const QString & orc_FileName) :
    mq_Dirty(false),
    mq_InMemoryMode(false),
    FileName(orc_FileName)
@@ -80,7 +80,7 @@ C_SclIniFile::C_SclIniFile(const C_SclString & orc_FileName) :
    else
    {
       // Normal file mode
-      mpc_Settings = std::make_unique<QSettings>(orc_FileName.ToQString(), QSettings::IniFormat);
+      mpc_Settings = std::make_unique<QSettings>(orc_FileName, QSettings::IniFormat);
    }
 }
 
@@ -113,7 +113,7 @@ C_SclIniFile::~C_SclIniFile() SCL_WILL_THROW
 //----------------------------------------------------------------------------------------------------------------------
 void C_SclIniFile::UpdateFile(void)
 {
-   if (FileName.Length() == 0U)
+   if (FileName.length() == 0U)
    {
       throw "C_SclIniFile::UpdateFile failed !";
    }
@@ -121,12 +121,12 @@ void C_SclIniFile::UpdateFile(void)
    if (mpc_Settings != nullptr)
    {
       // If FileName was changed after construction, we need to handle it
-      if (FileName.ToQString() != mpc_Settings->fileName())
+      if (FileName != mpc_Settings->fileName())
       {
          // Need to write to a different file - use GetFileAsStringList and save manually
          QStringList c_Strings;
          this->GetFileAsStringList(c_Strings);
-         mh_WriteStringListToFile(c_Strings, FileName.ToQString());
+         mh_WriteStringListToFile(c_Strings, FileName);
       }
       else
       {
@@ -161,8 +161,8 @@ void C_SclIniFile::UpdateFile(void)
    \param[in]  oq_ForceAppend  ignored in QSettings implementation
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::WriteString(const C_SclString & orc_Section, const C_SclString & orc_Key,
-                               const C_SclString & orc_Value, const bool oq_ForceAppend)
+void C_SclIniFile::WriteString(const QString & orc_Section, const QString & orc_Key,
+                               const QString & orc_Value, const bool oq_ForceAppend)
 {
    (void)oq_ForceAppend; // Not needed with QSettings
 
@@ -173,7 +173,7 @@ void C_SclIniFile::WriteString(const C_SclString & orc_Section, const C_SclStrin
 
    if (mpc_Settings != nullptr)
    {
-      mpc_Settings->setValue(mh_BuildKey(orc_Section, orc_Key), orc_Value.Trim().ToQString());
+      mpc_Settings->setValue(mh_BuildKey(orc_Section, orc_Key), orc_Value.trimmed());
       mq_Dirty = true;
    }
 }
@@ -196,7 +196,7 @@ void C_SclIniFile::WriteString(const C_SclString & orc_Section, const C_SclStrin
    \param[in]  oq_ForceAppend  ignored in QSettings implementation
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::WriteInteger(const C_SclString & orc_Section, const C_SclString & orc_Key, const int32_t os32_Value,
+void C_SclIniFile::WriteInteger(const QString & orc_Section, const QString & orc_Key, const int32_t os32_Value,
                                 const bool oq_ForceAppend)
 {
    (void)oq_ForceAppend; // Not needed with QSettings
@@ -231,7 +231,7 @@ void C_SclIniFile::WriteInteger(const C_SclString & orc_Section, const C_SclStri
    \param[in]  oq_ForceAppend  ignored in QSettings implementation
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::WriteBool(const C_SclString & orc_Section, const C_SclString & orc_Key, const bool oq_Value,
+void C_SclIniFile::WriteBool(const QString & orc_Section, const QString & orc_Key, const bool oq_Value,
                              const bool oq_ForceAppend)
 {
    (void)oq_ForceAppend; // Not needed with QSettings
@@ -267,7 +267,7 @@ void C_SclIniFile::WriteBool(const C_SclString & orc_Section, const C_SclString 
    \param[in]  oq_ForceAppend  ignored in QSettings implementation
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::WriteFloat(const C_SclString & orc_Section, const C_SclString & orc_Key, const float64_t of64_Value,
+void C_SclIniFile::WriteFloat(const QString & orc_Section, const QString & orc_Key, const float64_t of64_Value,
                               const bool oq_ForceAppend)
 {
    (void)oq_ForceAppend; // Not needed with QSettings
@@ -285,9 +285,9 @@ void C_SclIniFile::WriteFloat(const C_SclString & orc_Section, const C_SclString
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   read a C_SclString value
+/*! \brief   read a QString value
 
-   Read a C_SclString value from the ini file.
+   Read a QString value from the ini file.
    In the following cases the default will be used:
    - section not present
    - key not present
@@ -298,13 +298,13 @@ void C_SclIniFile::WriteFloat(const C_SclString & orc_Section, const C_SclString
    \param[in]     orc_Default    default value
 
    \return
-   C_SclString value from ini (or default if error)
+   QString value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_SclIniFile::ReadString(const C_SclString & orc_Section, const C_SclString & orc_Key,
-                                     const C_SclString & orc_Default)
+QString C_SclIniFile::ReadString(const QString & orc_Section, const QString & orc_Key,
+                                     const QString & orc_Default)
 {
-   C_SclString c_Result = orc_Default;
+   QString c_Result = orc_Default;
 
    if (mpc_Settings != nullptr)
    {
@@ -314,7 +314,7 @@ C_SclString C_SclIniFile::ReadString(const C_SclString & orc_Section, const C_Sc
          const QString c_Value = mpc_Settings->value(c_Key).toString();
          if (!c_Value.isEmpty())
          {
-            c_Result = C_SclString::FromQString(c_Value);
+            c_Result = c_Value;
          }
       }
    }
@@ -340,7 +340,7 @@ C_SclString C_SclIniFile::ReadString(const C_SclString & orc_Section, const C_Sc
    uint8 value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint8_t C_SclIniFile::ReadUint8(const C_SclString & orc_Section, const C_SclString & orc_Key, const uint8_t ou8_Default)
+uint8_t C_SclIniFile::ReadUint8(const QString & orc_Section, const QString & orc_Key, const uint8_t ou8_Default)
 {
    int32_t s32_Return;
 
@@ -370,7 +370,7 @@ uint8_t C_SclIniFile::ReadUint8(const C_SclString & orc_Section, const C_SclStri
    uint16 value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint16_t C_SclIniFile::ReadUint16(const C_SclString & orc_Section, const C_SclString & orc_Key,
+uint16_t C_SclIniFile::ReadUint16(const QString & orc_Section, const QString & orc_Key,
                                   const uint16_t ou16_Default)
 {
    int32_t s32_Return;
@@ -403,7 +403,7 @@ uint16_t C_SclIniFile::ReadUint16(const C_SclString & orc_Section, const C_SclSt
    int32_t value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SclIniFile::ReadInteger(const C_SclString & orc_Section, const C_SclString & orc_Key,
+int32_t C_SclIniFile::ReadInteger(const QString & orc_Section, const QString & orc_Key,
                                   const int32_t os32_Default)
 {
    int32_t s32_Return = os32_Default;
@@ -461,7 +461,7 @@ int32_t C_SclIniFile::ReadInteger(const C_SclString & orc_Section, const C_SclSt
    bool value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SclIniFile::ReadBool(const C_SclString & orc_Section, const C_SclString & orc_Key, const bool oq_Default)
+bool C_SclIniFile::ReadBool(const QString & orc_Section, const QString & orc_Key, const bool oq_Default)
 {
    return ((ReadInteger(orc_Section, orc_Key, static_cast<int32_t>(oq_Default)) == 0) ? false : true);
 }
@@ -485,7 +485,7 @@ bool C_SclIniFile::ReadBool(const C_SclString & orc_Section, const C_SclString &
    float64 value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_SclIniFile::ReadFloat(const C_SclString & orc_Section, const C_SclString & orc_Key,
+float64_t C_SclIniFile::ReadFloat(const QString & orc_Section, const QString & orc_Key,
                                   const float64_t of64_Default)
 {
    float64_t f64_Return = of64_Default;
@@ -529,11 +529,11 @@ float64_t C_SclIniFile::ReadFloat(const C_SclString & orc_Section, const C_SclSt
    \param[in]     orc_Section    ini section to erase
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::EraseSection(const C_SclString & orc_Section)
+void C_SclIniFile::EraseSection(const QString & orc_Section)
 {
    if (mpc_Settings != nullptr)
    {
-      const QString c_Section = orc_Section.ToQString();
+      const QString c_Section = orc_Section;
 
       // Check if section exists
       mpc_Settings->beginGroup(c_Section);
@@ -564,7 +564,7 @@ void C_SclIniFile::EraseSection(const C_SclString & orc_Section)
    \param[in]     orc_Key        key to erase
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::DeleteKey(const C_SclString & orc_Section, const C_SclString & orc_Key)
+void C_SclIniFile::DeleteKey(const QString & orc_Section, const QString & orc_Key)
 {
    if (mpc_Settings != nullptr)
    {
@@ -589,13 +589,13 @@ void C_SclIniFile::DeleteKey(const C_SclString & orc_Section, const C_SclString 
    false   section does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SclIniFile::SectionExists(const C_SclString & orc_Section)
+bool C_SclIniFile::SectionExists(const QString & orc_Section)
 {
    bool q_Exists = false;
 
    if (mpc_Settings != nullptr)
    {
-      const QString c_Section = orc_Section.ToQString();
+      const QString c_Section = orc_Section;
 
       // Check if section has any keys
       mpc_Settings->beginGroup(c_Section);
@@ -625,7 +625,7 @@ bool C_SclIniFile::SectionExists(const C_SclString & orc_Section)
    false   key does not exist in section
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SclIniFile::ValueExists(const C_SclString & orc_Section, const C_SclString & orc_Key)
+bool C_SclIniFile::ValueExists(const QString & orc_Section, const QString & orc_Key)
 {
    bool q_Exists = false;
 
@@ -648,7 +648,7 @@ bool C_SclIniFile::ValueExists(const C_SclString & orc_Section, const C_SclStrin
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSection(const C_SclString & orc_Section, QStringList * const opc_Strings,
+void C_SclIniFile::ReadSection(const QString & orc_Section, QStringList * const opc_Strings,
                                const bool oq_Append)
 {
    if (mpc_Settings != nullptr)
@@ -665,7 +665,7 @@ void C_SclIniFile::ReadSection(const C_SclString & orc_Section, QStringList * co
          opc_Strings->clear();
       }
 
-      mpc_Settings->beginGroup(orc_Section.ToQString());
+      mpc_Settings->beginGroup(orc_Section);
       const QStringList c_Keys = mpc_Settings->childKeys();
       mpc_Settings->endGroup();
 
@@ -690,7 +690,7 @@ void C_SclIniFile::ReadSection(const C_SclString & orc_Section, QStringList * co
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSectionValues(const C_SclString & orc_Section, QStringList * const opc_Strings,
+void C_SclIniFile::ReadSectionValues(const QString & orc_Section, QStringList * const opc_Strings,
                                      const bool oq_Append)
 {
    if (mpc_Settings != nullptr)
@@ -707,7 +707,7 @@ void C_SclIniFile::ReadSectionValues(const C_SclString & orc_Section, QStringLis
          opc_Strings->clear();
       }
 
-      const QString c_Section = orc_Section.ToQString();
+      const QString c_Section = orc_Section;
       mpc_Settings->beginGroup(c_Section);
       const QStringList c_Keys = mpc_Settings->childKeys();
       mpc_Settings->endGroup();

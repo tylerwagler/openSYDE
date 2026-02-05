@@ -184,7 +184,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
   bool q_TemporaryFolderCreated =
       false; // for cleanup at the end of this function
 
-  mhc_WarningMessages.Clear(); // clear old warning messages
+  mhc_WarningMessages.clear(); // clear old warning messages
   mhc_ErrorMessage = "";       // clear old error message
 
   set<QString> c_DeviceDefinitionFiles; // unique container to store
@@ -246,8 +246,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
             c_PackagePathTmp);
 
     osc_write_log_info("Creating Update Package",
-                       "Temporary folder path: " +
-                           c_PackagePathTmp.toLocal8Bit().constData());
+                       QString("Temporary folder path: ") + c_PackagePathTmp);
 
     // create folders and copy applications to them
     s32_Return = C_OscSuSequences::h_CreateTemporaryFolder(
@@ -395,7 +394,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
       const int32_t s32_Tmp =
           (QDir(c_PackagePathTmp).removeRecursively() ? 0 : -1);
       if (s32_Tmp != 0) {
-        const C_SclString c_Message =
+        const QString c_Message =
             "Could not delete temporary result folder \"" + c_PackagePathTmp +
             "\".";
         osc_write_log_error("Creating update package", c_Message);

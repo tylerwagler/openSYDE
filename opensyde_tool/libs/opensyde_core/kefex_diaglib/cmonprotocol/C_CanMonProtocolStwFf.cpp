@@ -16,7 +16,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CanMonProtocolStwFf.hpp"
-#include "C_SclString.hpp"
+#include <QString>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -55,9 +55,9 @@ using namespace stw::can;
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolStwFf::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
+QString C_CanMonProtocolStwFf::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
 {
-   C_SclString c_Text;
+   QString c_Text;
    bool q_IsRequest;
    uint8_t u8_NodeId;
    int32_t s32_Start;
@@ -210,9 +210,10 @@ C_SclString C_CanMonProtocolStwFf::MessageToString(const T_STWCAN_Msg_RX & orc_M
             c_Text += " !!WRONG_DLC!!";
             return c_Text;
          }
-         c_Text += (" SIZE:" + m_GetValueDecHex(orc_Msg.au8_Data[2] + (((uint16_t)orc_Msg.au8_Data[3]) << 8U)) +
-                    (((uint32_t)orc_Msg.au8_Data[4]) << 16U) +
-                    (((uint32_t)orc_Msg.au8_Data[5]) << 24U));
+         c_Text += (" SIZE:" + m_GetValueDecHex(orc_Msg.au8_Data[2] +
+                    (static_cast<uint32_t>(orc_Msg.au8_Data[3]) << 8U) +
+                    (static_cast<uint32_t>(orc_Msg.au8_Data[4]) << 16U) +
+                    (static_cast<uint32_t>(orc_Msg.au8_Data[5]) << 24U)));
          s32_Start = 6;
       }
       else
@@ -248,9 +249,9 @@ C_SclString C_CanMonProtocolStwFf::MessageToString(const T_STWCAN_Msg_RX & orc_M
       else
       {
          c_Text += (" ERROR: " + m_GetValueDecHex(orc_Msg.au8_Data[2] +
-                                                  (((uint16_t)orc_Msg.au8_Data[3]) << 8U)) +
-                    (((uint32_t)orc_Msg.au8_Data[4]) << 16U) +
-                    (((uint32_t)orc_Msg.au8_Data[5]) << 24U));
+                    (static_cast<uint32_t>(orc_Msg.au8_Data[3]) << 8U) +
+                    (static_cast<uint32_t>(orc_Msg.au8_Data[4]) << 16U) +
+                    (static_cast<uint32_t>(orc_Msg.au8_Data[5]) << 24U)));
       }
       break;
    default:
@@ -267,7 +268,7 @@ C_SclString C_CanMonProtocolStwFf::MessageToString(const T_STWCAN_Msg_RX & orc_M
    Text representation of protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclString C_CanMonProtocolStwFf::GetProtocolName(void) const
+QString C_CanMonProtocolStwFf::GetProtocolName(void) const
 {
    return "STW FF";
 }

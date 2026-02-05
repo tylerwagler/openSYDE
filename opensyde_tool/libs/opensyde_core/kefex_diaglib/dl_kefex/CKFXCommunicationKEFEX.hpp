@@ -88,7 +88,7 @@ public:
    virtual void Cycle(void);
 
    virtual int32_t LoadConfigFromINI(QSettings * const opc_File,
-                                     const stw::scl::C_SclString & orc_Section);
+                                     const QString & orc_Section);
    virtual int32_t SetConfig(const C_KFXCommConfiguration * const opt_Config);
 
    //here: 0 = off; 1 -> KFX+L2; 2 -> KFX

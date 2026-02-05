@@ -17,7 +17,6 @@
 #include "C_UsHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_SclStringList.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_CieImportDbc.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -31,7 +30,6 @@
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
 using namespace stw::opensyde_core;
-using namespace stw::scl;
 using namespace stw::errors;
 using namespace stw::opensyde_gui_logic;
 
@@ -351,8 +349,8 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_LinkClicked(const QUrl & orc_Li
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogDialog::m_LoadCatalog()
 {
-   C_SclStringList c_WarningMessages;
-   C_SclString c_ErrorMessage;
+   QStringList c_WarningMessages;
+   QString c_ErrorMessage;
    const QString c_FullFilePath = this->mc_CatalogFilePath;
 
    stw::opensyde_gui_logic::C_CieConverter::C_CieCommDefinition c_CieCommDef;
@@ -365,7 +363,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_LoadCatalog()
    QApplication::setOverrideCursor(Qt::WaitCursor); // big DBC file can take some time to load
    QApplication::processEvents();                   // update cursor
    this->ms32_ImportCatalogReturn = C_CieImportDbc::h_ImportNetwork(
-      c_FullFilePath.toStdString().c_str(),
+      c_FullFilePath,
       c_CieCommDef, c_WarningMessages, c_ErrorMessage,
       true);
 
@@ -436,7 +434,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_SetStatus() const
 
    c_StatusMessage += "For detailed information see ";
    c_StatusMessage += C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
-                                       C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
+                                       C_OscLoggingHandler::h_GetCompleteLogFileLocation());
 
    this->mpc_Ui->pc_TextBrowserStatusMessage->setText(c_StatusMessage);
 }
@@ -502,7 +500,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_ShowCatalogImportError()
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
    const QString c_LogMessage = "For detailed information see " +
                                 C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
-                                                 C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
+                                                 C_OscLoggingHandler::h_GetCompleteLogFileLocation());
 
    //Update log file
    C_OscLoggingHandler::h_Flush();

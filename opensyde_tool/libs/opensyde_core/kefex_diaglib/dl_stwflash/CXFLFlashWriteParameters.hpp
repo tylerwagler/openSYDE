@@ -30,12 +30,12 @@ namespace diag_lib {
 //        -> renamed "e_TypeOfHexFile" to "e_EraseMode" (also renamed enum
 //        values correspondingly)
 // 1.01r2 -> PR_XFLFinishedAskUserFunction replaces PR_XFLAskYesNoQuestion and
-// PR_XFLFinishedAskUserFunction 1.01r1 -> company ID is now a C_SclString (was:
+// PR_XFLFinishedAskUserFunction 1.01r1 -> company ID is now a QString (was:
 // array of uint8) 1.01r0 -> cleaned up interface; added some callbacks to
 // resolve VCL dependencies 1.00r1 -> removed q_TryWakeupTwice: never publically
 // documented; not useful; workaround for comm interface issues
 //            should be done in higher layer
-//           Replaced all AnsiStrings by C_SclString in an effort to become more
+//           Replaced all AnsiStrings by QString in an effort to become more
 //           platform independent Added status callback and instance pointer to
 //           structure (instead of ::Execute parameters)
 // 1.00r0 -> callbacks changed to regular C++ pointer along with instance

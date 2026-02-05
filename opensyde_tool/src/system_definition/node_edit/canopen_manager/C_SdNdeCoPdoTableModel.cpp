@@ -485,9 +485,9 @@ const
    c_CurrentPdo.q_Enabled = orc_Message.q_CanOpenManagerMessageActive;
 
    //lint -e{1946} // use of functional-style cast is fine here
-   c_CurrentPdo.c_Name = QString(orc_Message.c_Name.c_str());
+   c_CurrentPdo.c_Name = QString(orc_Message.c_Name);
    //lint -e{1946} // use of functional-style cast is fine here
-   c_CurrentPdo.c_Comment = QString(orc_Message.c_Comment.c_str());
+   c_CurrentPdo.c_Comment = QString(orc_Message.c_Comment);
 
    if (oe_PdoType == E_PdoType::eTX)
    {

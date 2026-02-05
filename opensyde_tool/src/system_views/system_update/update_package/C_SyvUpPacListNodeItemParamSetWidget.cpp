@@ -76,8 +76,8 @@ void C_SyvUpPacListNodeItemParamSetWidget::SetParamInfo(
    const stw::opensyde_core::C_OscViewNodeUpdateParamInfo & orc_ParamInfo)
 {
    this->mc_ParamsetInfo = orc_ParamInfo;
-   this->SetAppFile(this->mc_ParamsetInfo.GetPath().c_str(),
-                    (orc_ParamInfo.GetPath().c_str() == this->GetDefaultFilePath()));
+   this->SetAppFile(this->mc_ParamsetInfo.GetPath(),
+                    (orc_ParamInfo.GetPath() == this->GetDefaultFilePath()));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

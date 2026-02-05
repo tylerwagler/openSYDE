@@ -10,7 +10,7 @@
 #define C_OSCBUSEQUENCES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
 #include "C_CanDispatcher.hpp"
 #include "C_OscProtocolDriverOsyTpCan.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
@@ -35,19 +35,19 @@ public:
                 const uint8_t ou8_NodeId);
    int32_t ActivateFlashLoader(const uint32_t ou32_FlashloaderResetWaitTime);
    int32_t ReadDeviceInformation(void);
-   int32_t UpdateNode(const stw::scl::C_SclString & orc_HexFilePath, const uint32_t ou32_RequestDownloadTimeout,
+   int32_t UpdateNode(const QString & orc_HexFilePath, const uint32_t ou32_RequestDownloadTimeout,
                       const uint32_t ou32_TransferDataTimeout);
    int32_t ResetSystem(void);
 
-   static int32_t h_ReadHexFile(const stw::scl::C_SclString & orc_HexFilePath, C_OscHexFile & orc_HexFile,
+   static int32_t h_ReadHexFile(const QString & orc_HexFilePath, C_OscHexFile & orc_HexFile,
                                 uint32_t & oru32_SignatureBlockAddress);
 
    void PrepareForDestruction(void);
 
 protected:
    virtual void m_ReportProgressPercentage(const uint8_t ou8_ProgressInPercentage);
-   virtual void m_ReportProgress(const int32_t os32_Result, const stw::scl::C_SclString & orc_Information);
-   virtual void m_ReportFlashloaderInformationRead(const stw::scl::C_SclString & orc_DeviceName,
+   virtual void m_ReportProgress(const int32_t os32_Result, const QString & orc_Information);
+   virtual void m_ReportFlashloaderInformationRead(const QString & orc_DeviceName,
                                                    const C_OscComFlashloaderInformation & orc_Information);
 
 private:
