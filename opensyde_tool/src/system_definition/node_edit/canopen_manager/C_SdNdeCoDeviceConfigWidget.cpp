@@ -25,6 +25,7 @@
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui;
 using namespace stw::errors;
 using namespace stw::opensyde_core;

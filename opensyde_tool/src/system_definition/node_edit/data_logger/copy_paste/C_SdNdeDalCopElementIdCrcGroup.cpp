@@ -16,6 +16,7 @@
 #include "C_SdNdeDalCopElementIdCrcGroup.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */

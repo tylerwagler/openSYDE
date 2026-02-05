@@ -25,6 +25,7 @@
 #include "stwerrors.hpp"
 
 /* -- Used Namespaces
+using namespace stw::opensyde_gui_logic;
  * -----------------------------------------------------------------------------------------------
  */
 

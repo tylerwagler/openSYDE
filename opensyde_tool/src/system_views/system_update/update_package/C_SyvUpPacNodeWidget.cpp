@@ -40,6 +40,7 @@
 #include "C_UsHandler.hpp"
 
 /* -- Used Namespaces
+using namespace stw::opensyde_gui_logic;
  * -----------------------------------------------------------------------------------------------
  */
 using namespace stw::errors;

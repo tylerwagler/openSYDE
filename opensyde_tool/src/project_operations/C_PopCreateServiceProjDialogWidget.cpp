@@ -36,6 +36,7 @@
 #include "C_OgeTreeViewCheckable.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_gui_logic;
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;

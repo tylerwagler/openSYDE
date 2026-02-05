@@ -32,6 +32,7 @@
 #include "ui_C_SyvUpPacSectionNodeWidget.h"
 
 /* -- Used Namespaces
+using namespace stw::opensyde_gui_logic;
  * -----------------------------------------------------------------------------------------------
  */
 using namespace stw::errors;
