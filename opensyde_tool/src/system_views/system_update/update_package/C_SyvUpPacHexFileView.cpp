@@ -140,7 +140,7 @@ void C_SyvUpPacHexFileView::m_LoadInfo(void) const
    C_OscHexFile c_HexFile;
    uint32_t u32_Result;
 
-   u32_Result = c_HexFile.LoadFromFile(this->mc_AbsoluteFilePath.toStdString());
+   u32_Result = c_HexFile.LoadFromFile(this->mc_AbsoluteFilePath.toUtf8().constData());
    if (u32_Result == stw::hex_file::NO_ERR)
    {
       mh_AddFileSection(this->mc_AbsoluteFilePath, c_Text);

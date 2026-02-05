@@ -200,7 +200,7 @@ void C_SyvUpPacListNodeItemDatablockWidget::m_LoadFileInformation(
       C_OscHexFile *const pc_HexFile = new C_OscHexFile();
 
       // File information
-      if (pc_HexFile->LoadFromFile(this->mc_AbsoluteFilePath.toStdString()) ==
+      if (pc_HexFile->LoadFromFile(this->mc_AbsoluteFilePath.toUtf8().constData()) ==
           stw::hex_file::NO_ERR) {
         stw::diag_lib::C_XFLECUInformation c_FileApplicationInfo;
         const int32_t s32_Result =

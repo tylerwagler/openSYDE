@@ -133,7 +133,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::AdaptFile(
         // Nothing is to do anymore her -> Do not set q_FileIsOk to true!
       } else if (this->mq_FileBased == false) {
         C_OscHexFile *const pc_HexFile = new C_OscHexFile();
-        if (pc_HexFile->LoadFromFile(c_AbsoluteFilePath.toStdString()) ==
+        if (pc_HexFile->LoadFromFile(c_AbsoluteFilePath.toUtf8().constData()) ==
             stw::hex_file::NO_ERR) {
           stw::diag_lib::C_XFLECUInformation c_FileApplicationInfo;
           const int32_t s32_Result =
@@ -780,7 +780,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::m_InitSpecificItem(
           // System definition default path
           pc_ParamWidget->SetAppFile(c_DefaultPath, true);
           // Set initial param set info
-          c_ParamInfo.SetContent(c_DefaultPath.toStdString(),
+          c_ParamInfo.SetContent(c_DefaultPath,
                                  c_FileInfo.GetLastKnownCrc());
         }
         pc_ParamWidget->SetSkipOfUpdateFile(

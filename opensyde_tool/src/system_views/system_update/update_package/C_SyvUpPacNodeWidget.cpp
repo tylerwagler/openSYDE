@@ -1875,7 +1875,7 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(
           orc_Password.toStdString();
     }
     s32_Return = C_OscXceCreate::h_CreatePackage(
-        c_FullPackagePath.toStdString(), c_UsedCertificatesPath,
+        c_FullPackagePath, c_UsedCertificatesPath,
         c_UpdatePackageParameters, c_Warnings, c_Error);
     C_UsHandler::h_GetInstance()->SetLastKnownSecureCertificatePackagePath(
         c_FullPackagePath);

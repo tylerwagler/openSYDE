@@ -799,7 +799,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
         // Save package to directory
         if (oq_SaveAsFile == false) {
           s32_Return = C_OscSupServiceUpdatePackageV1::h_CreatePackage(
-              c_FullPackagePath.toStdString(), rc_SystemDefinition,
+              c_FullPackagePath, rc_SystemDefinition,
               u32_ActiveBusIndex, c_NodeActiveFlags, c_NodesUpdateOrder,
               c_ApplicationsToWrite, c_Warnings, c_Error, false, oq_SaveAsFile);
         }
@@ -809,7 +809,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
           if (oq_SecureFile == true) {
             s32_Return = C_OscSupServiceUpdatePackageCreate::
                 h_CreatePackageUsingPemFiles(
-                    c_FullPackagePath.toStdString(),
+                    c_FullPackagePath,
                     rc_SystemDefinition, u32_ActiveBusIndex, c_NodeActiveFlags,
                     c_NodesUpdateOrder, c_ApplicationsToWrite, c_Warnings,
                     c_Error, "", orc_EncryptNodes,
@@ -825,13 +825,13 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
             if ((c_SelectedFilterName.contains("Version 1",
                                                Qt::CaseInsensitive)) == true) {
               s32_Return = C_OscSupServiceUpdatePackageV1::h_CreatePackage(
-                  c_FullPackagePath.toStdString(), rc_SystemDefinition,
+                  c_FullPackagePath, rc_SystemDefinition,
                   u32_ActiveBusIndex, c_NodeActiveFlags, c_NodesUpdateOrder,
                   c_ApplicationsToWrite, c_Warnings, c_Error, false,
                   oq_SaveAsFile);
             } else {
               s32_Return = C_OscSupServiceUpdatePackageCreate::h_CreatePackage(
-                  c_FullPackagePath.toStdString(), rc_SystemDefinition,
+                  c_FullPackagePath, rc_SystemDefinition,
                   u32_ActiveBusIndex, c_NodeActiveFlags, c_NodesUpdateOrder,
                   c_ApplicationsToWrite, c_Warnings, c_Error, "",
                   orc_EncryptNodes, orc_EncryptNodesPassword);

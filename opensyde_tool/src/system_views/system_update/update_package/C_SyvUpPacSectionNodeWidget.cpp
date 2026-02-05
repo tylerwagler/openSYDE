@@ -889,7 +889,7 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
                osc_write_log_info("Generate Update Package",
                                   c_LogEntry.arg(this->mc_NodeName,
                                                                         this->mc_SectionName,
-                                                                        c_Path).toStdString());
+                                                                        c_Path));
             }
             else
             {
@@ -914,7 +914,7 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
                osc_write_log_info("Generate Update Package",
                                   c_LogEntry.arg(this->mc_NodeName,
                                                                         this->mc_SectionName,
-                                                                        c_Path).toStdString());
+                                                                        c_Path));
 
                s32_Return = C_RD_WR;
             }

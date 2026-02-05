@@ -72,12 +72,12 @@ int32_t C_SyvUpPacParamSetFileInfo::ReadFile(void)
    C_OscParamSetHandler c_FileHandler;
 
    const int32_t s32_Retval = c_FileHandler.ReadFile(
-      this->mc_Path.toStdString(), false, true, &u16_FileCrc, &q_OptionlContentMissing);
+      this->mc_Path, false, true, &u16_FileCrc, &q_OptionlContentMissing);
 
    if (s32_Retval == C_NO_ERR)
    {
       this->mc_InterpretedFileInfo = c_FileHandler.GetInterpretedData();
-      this->mc_ParamInfo.SetContent(this->mc_StoragePath.toStdString(), u16_FileCrc);
+      this->mc_ParamInfo.SetContent(this->mc_StoragePath, u16_FileCrc);
       this->mc_ComparisonResults.clear();
       m_Comparison(q_OptionlContentMissing);
       m_ConvertToHtmlString(q_OptionlContentMissing);
