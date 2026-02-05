@@ -29,11 +29,11 @@
 #include "ui_C_SyvUpPacSecurityCertificatePackageDialog.h"
 
 /* -- Used Namespaces
-using namespace stw::opensyde_gui_logic;
  * -----------------------------------------------------------------------------------------------
  */
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
@@ -612,8 +612,8 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckUpdatePath() {
 
       if (s32_Result != C_NO_ERR) {
         osc_write_log_error("Load PEM file",
-                            c_ErrorMessage + " (Path: " +
-                                this->GetPublicKeyPath().toStdString() + ")");
+                            QString::fromStdString(c_ErrorMessage) + " (Path: " +
+                                this->GetPublicKeyPath() + ")");
         s32_Return = C_CONFIG;
       } else {
         const C_OscSecurityPemKeyInfo &rc_KeyInfo = c_Pem.GetKeyInfo();
@@ -622,7 +622,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckUpdatePath() {
         if (rc_KeyInfo.GetX509CertificateData().empty()) {
           osc_write_log_error("PEM file keys",
                               "No public keys found in PEM file. (Path: " +
-                                  this->GetPublicKeyPath().toStdString() + ")");
+                                  this->GetPublicKeyPath() + ")");
           s32_Return = C_CONFIG;
         }
 
@@ -631,7 +631,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckUpdatePath() {
           osc_write_log_error("PEM file keys",
                               "File contains a private key, but should be a "
                               "public PEM file. (Path: " +
-                                  this->GetPublicKeyPath().toStdString() + ")");
+                                  this->GetPublicKeyPath() + ")");
           s32_Return = C_CONFIG;
         }
       }
@@ -694,8 +694,8 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(
 
         if (s32_Result != C_NO_ERR) {
           osc_write_log_error("Load PEM file",
-                              c_ErrorMessage +
-                                  " (Path: " + rc_CurFile.toStdString() + ")");
+                              QString::fromStdString(c_ErrorMessage) +
+                                  " (Path: " + rc_CurFile + ")");
           s32_Return = C_CONFIG;
         } else {
           const C_OscSecurityPemKeyInfo &rc_KeyInfo = c_Pem.GetKeyInfo();
@@ -704,7 +704,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(
           if (rc_KeyInfo.AreKeysAvailable(c_ErrorMessage, false) == false) {
             osc_write_log_error(
                 "PEM file keys",
-                c_ErrorMessage + " (Path: " + rc_CurFile.toStdString() + ")");
+                QString::fromStdString(c_ErrorMessage) + " (Path: " + rc_CurFile + ")");
             s32_Return = C_CONFIG;
           }
 
@@ -712,7 +712,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(
           if (rc_KeyInfo.GetPrivateKey().empty() == true) {
             osc_write_log_error("PEM file keys",
                                 "No private key available. (Path: " +
-                                    rc_CurFile.toStdString() + ")");
+                                    rc_CurFile + ")");
             s32_Return = C_CONFIG;
           }
 
@@ -729,7 +729,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(
                                 "PEM file, but not correct. "
                                 "Expected flags \"digitalSignature\" and "
                                 "\"id-kp-clientAuth\" to be set. (Path: " +
-                                    rc_CurFile.toStdString() + ")");
+                                    rc_CurFile + ")");
             s32_Return = C_CONFIG;
           } else if ((rc_Usage.q_KeyUsageDefined == false) ||
                      (rc_Usage.q_KeyUsageDigitalSignature == false) ||
@@ -743,7 +743,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(
                                   "authentication configuration. Expected "
                                   "flags \"digitalSignature\" and "
                                   "\"id-kp-clientAuth\" to be set. (Path: " +
-                                      rc_CurFile.toStdString() + ")");
+                                      rc_CurFile + ")");
           } else {
             // key usage correct or not defined
           }

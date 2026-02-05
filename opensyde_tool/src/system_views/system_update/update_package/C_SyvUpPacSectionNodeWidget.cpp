@@ -848,7 +848,7 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
                   }
                   else
                   {
-                     orc_ApplicationsToWrite.c_PemFile = c_Path.toStdString();
+                     orc_ApplicationsToWrite.c_PemFile = c_Path;
 
                      mh_FillDoFlashWithPemStates(pc_App, orc_ApplicationsToWrite);
                   }
@@ -880,7 +880,7 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
                   }
                   else
                   {
-                     opc_AllApplications->c_PemFile = c_Path.toStdString();
+                     opc_AllApplications->c_PemFile = c_Path;
 
                      mh_FillDoFlashWithPemStates(pc_App, *opc_AllApplications);
                   }

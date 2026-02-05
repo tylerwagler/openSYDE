@@ -39,10 +39,10 @@
 #include "C_UsHandler.hpp"
 
 /* -- Used Namespaces
-using namespace stw::opensyde_gui_logic;
  * -----------------------------------------------------------------------------------------------
  */
 using namespace stw::errors;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::scl;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
@@ -813,9 +813,9 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
                     rc_SystemDefinition, u32_ActiveBusIndex, c_NodeActiveFlags,
                     c_NodesUpdateOrder, c_ApplicationsToWrite, c_Warnings,
                     c_Error, "", orc_EncryptNodes,
-                    orc_EncryptNodesPassword.toVector().toStdVector(),
+                    std::vector<QString>(orc_EncryptNodesPassword.begin(), orc_EncryptNodesPassword.end()),
                     orc_AddSignatureNodes,
-                    orc_NodeSignaturePemFiles.toVector().toStdVector());
+                    std::vector<QString>(orc_NodeSignaturePemFiles.begin(), orc_NodeSignaturePemFiles.end()));
           }
           // if no pem files specified, it is a normal (unencrypted) update
           // package
@@ -834,7 +834,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
                   c_FullPackagePath, rc_SystemDefinition,
                   u32_ActiveBusIndex, c_NodeActiveFlags, c_NodesUpdateOrder,
                   c_ApplicationsToWrite, c_Warnings, c_Error, "",
-                  orc_EncryptNodes, orc_EncryptNodesPassword);
+                  orc_EncryptNodes, std::vector<QString>(orc_EncryptNodesPassword.begin(), orc_EncryptNodesPassword.end()));
             }
           }
         }

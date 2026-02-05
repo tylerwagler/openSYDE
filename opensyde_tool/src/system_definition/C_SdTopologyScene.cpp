@@ -186,7 +186,7 @@ void C_SdTopologyScene::AddNode(const QString &orc_NodeType,
   uint32_t u32_Tmp;
   const C_OscDeviceDefinition *const pc_MainDevice =
       C_OscSystemDefinition::hc_Devices.LookForDevice(
-          orc_NodeType.toStdString(), "", u32_Tmp);
+          orc_NodeType, QString(""), u32_Tmp);
 
   if (pc_MainDevice != NULL) {
     const uint32_t u32_SubDevicesSize = pc_MainDevice->c_SubDevices.size();
@@ -1511,7 +1511,7 @@ bool C_SdTopologyScene::m_AddOfMime(const QMimeData *const opc_MimeData,
 
       // check if it is a node
       pc_Node = C_OscSystemDefinition::hc_Devices.LookForDevice(
-          c_Text.toStdString(), "", u32_SubDevice);
+          c_Text, QString(""), u32_SubDevice);
       if (pc_Node != NULL) {
         e_Type = C_SdManUnoTopologyAddCommand::E_ElementType::eNODE;
       } else if (c_Text == mc_CAN_BUS) {
@@ -1957,7 +1957,7 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
         orc_Snapshot.c_OscNodes[ou32_SnapshotNodeIndex];
     u32_DataIndex = C_PuiSdHandler::h_GetInstance()->AddNodeAndSort(
         c_OscInitialNode, orc_Snapshot.c_UiNodes[ou32_SnapshotNodeIndex],
-        c_OscInitialNode.c_DeviceType.toStdString(), "");
+        c_OscInitialNode.c_DeviceType, QString(""));
   }
   return u32_DataIndex;
 }
@@ -3674,7 +3674,7 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode &orc_OscNode,
 
   orc_OscNode.pc_DeviceDefinition =
       C_OscSystemDefinition::hc_Devices.LookForDevice(
-          orc_NodeType.toStdString(), orc_MainDevice.toStdString(),
+          orc_NodeType, orc_MainDevice,
           u32_SubDeviceIndex);
   orc_OscNode.u32_SubDeviceIndex = u32_SubDeviceIndex;
   Q_ASSERT(orc_OscNode.pc_DeviceDefinition != NULL);
@@ -3686,8 +3686,7 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode &orc_OscNode,
       // default name: same as device type
       orc_OscNode.c_Properties.c_Name =
           C_PuiSdHandler::h_AutomaticCeStringAdaptation(
-              orc_OscNode.pc_DeviceDefinition->GetDisplayName())
-              .toStdString();
+              orc_OscNode.pc_DeviceDefinition->GetDisplayName());
 
       // special handling for "3rd Party" node:
       // Fix leading digit to avoid naming error after node drag&drop
@@ -3703,10 +3702,10 @@ void C_SdTopologyScene::m_InitNodeData(C_OscNode &orc_OscNode,
       }
 
       if (orc_MainDevice.isEmpty()) {
-        orc_OscNode.c_DeviceType = orc_NodeType.toStdString();
+        orc_OscNode.c_DeviceType = orc_NodeType;
       } else {
         orc_OscNode.c_DeviceType = QString(C_OscNodeSquad::h_CombineNames(
-            orc_MainDevice.toStdString(), orc_NodeType.toStdString()));
+            orc_MainDevice, orc_NodeType));
       }
       //---Init COM IF Settings (BEFORE initial datablock)
       this->m_InitNodeComIfSettings(orc_OscNode, orc_NodeType, orc_MainDevice);
@@ -3737,7 +3736,7 @@ void C_SdTopologyScene::m_InitNodeComIfSettings(
   //  was not set yet: search list of device
   const C_OscDeviceDefinition *const pc_DeviceDefinition =
       C_OscSystemDefinition::hc_Devices.LookForDevice(
-          orc_NodeType.toStdString(), orc_MainDevice.toStdString(),
+          orc_NodeType, orc_MainDevice,
           u32_SubDeviceIndex);
 
   Q_ASSERT(pc_DeviceDefinition != NULL);

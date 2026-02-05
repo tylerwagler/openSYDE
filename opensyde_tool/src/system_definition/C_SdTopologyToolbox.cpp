@@ -39,6 +39,7 @@
 
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 using namespace stw::scl;
@@ -317,7 +318,7 @@ void C_SdTopologyToolbox::m_FillToolboxDynamic(void)
       if (c_DeviceGroups[u32_ItDeviceGroup].GetGroupName() != "User Nodes")
       {
          this->mpc_List = C_SebToolboxUtil::h_AddNewList(
-            c_DeviceGroups[u32_ItDeviceGroup].GetGroupName().c_str(),
+            c_DeviceGroups[u32_ItDeviceGroup].GetGroupName(),
             this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets, this);
 
          if (this->mpc_List != NULL)
@@ -327,9 +328,9 @@ void C_SdTopologyToolbox::m_FillToolboxDynamic(void)
                if (c_Devices[u32_ItDevice].c_ManufacturerDisplayValue != "Sensor-Technik Wiedemann GmbH")
                {
                   this->mc_Icon.addPixmap(
-                     static_cast<QPixmap>(c_Devices[u32_ItDevice].c_ToolboxIcon.c_str()), QIcon::Normal);
+                     static_cast<QPixmap>(c_Devices[u32_ItDevice].c_ToolboxIcon), QIcon::Normal);
                   this->mc_Icon.addPixmap(
-                     static_cast<QPixmap>(c_Devices[u32_ItDevice].c_ToolboxIcon.c_str()), QIcon::Selected);
+                     static_cast<QPixmap>(c_Devices[u32_ItDevice].c_ToolboxIcon), QIcon::Selected);
                }
                else
                {
@@ -427,9 +428,9 @@ void C_SdTopologyToolbox::m_FillToolboxStatic(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyToolbox::m_FillToolboxWithDynamicNodes(const C_OscDeviceDefinition & orc_Device)
 {
-   const QString c_DeviceName = orc_Device.c_DeviceName.c_str();
+   const QString c_DeviceName = orc_Device.c_DeviceName;
    // Tooltip
-   const QString c_DeviceDescription = static_cast<QString>(orc_Device.c_DeviceDescription.c_str());
+   const QString c_DeviceDescription = orc_Device.c_DeviceDescription;
 
    if (this->mpc_List != NULL)
    {
@@ -483,7 +484,7 @@ void C_SdTopologyToolbox::m_ErrorHandlingUserFeedback(const QStringList & orc_Er
    QString c_Details;
    const QString c_LogLink = "For details and possible errors see " +
                              C_Uti::h_GetLink("log file.", mc_STYLE_GUIDE_COLOR_LINK,
-                                              C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
+                                              C_OscLoggingHandler::h_GetCompleteLogFileLocation());
 
    // nodes could be added (possibly with errors) -> info box with count of added nodes
    if (ors32_AddDeviceCount > 0)
@@ -595,7 +596,7 @@ void C_SdTopologyToolbox::m_LoadUserDeviceDefinitionPaths(const QString & orc_Pa
             c_UserDevices = c_DeviceGroups[u32_ItGroup].GetDevices();
             for (uint32_t u32_ItDev = 0U; u32_ItDev < c_UserDevices.size(); ++u32_ItDev)
             {
-               const QString c_Path = static_cast<QString>(c_UserDevices[u32_ItDev].c_FilePath.c_str());
+               const QString c_Path = c_UserDevices[u32_ItDev].c_FilePath;
                orc_UserDeviceDefPaths.append(c_Path);
             }
             q_IsValidUserIni = true;
@@ -618,7 +619,7 @@ void C_SdTopologyToolbox::m_LoadUserDeviceDefinitionPaths(const QString & orc_Pa
                            orc_Path + c_ErrorDetails);
 
          osc_write_log_error("Loading from ini file",
-                             "File \"" + orc_Path.toStdString() +
+                             "File \"" + orc_Path +
                              "\" contains no User Nodes.");
       }
    }
@@ -632,7 +633,7 @@ void C_SdTopologyToolbox::m_LoadUserDeviceDefinitionPaths(const QString & orc_Pa
       orc_Errors.append(
          static_cast<QString>("File type '%1' not allowed.").arg(c_FileInfo.completeSuffix()));
       osc_write_log_error("Loading file",
-                          "Wrong file suffix \"" + orc_Path.toStdString() +
+                          "Wrong file suffix \"" + orc_Path +
                           "\".");
    }
 }
@@ -725,7 +726,7 @@ void C_SdTopologyToolbox::m_AddUserNodesToToolbox(void)
       for (uint32_t u32_ItDev = 0U; u32_ItDev < c_UserDevices.size(); ++u32_ItDev)
       {
          // only add the nodes, which are not already in toolbox
-         if (c_ToolboxItems.contains(static_cast<QString>(c_UserDevices[u32_ItDev].c_DeviceName.c_str())) == false)
+         if (c_ToolboxItems.contains(c_UserDevices[u32_ItDev].c_DeviceName) == false)
          {
             this->m_FillToolboxWithDynamicNodes(c_UserDevices[u32_ItDev]);
          }

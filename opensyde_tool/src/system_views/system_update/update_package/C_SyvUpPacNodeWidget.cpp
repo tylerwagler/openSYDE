@@ -40,12 +40,12 @@
 #include "C_UsHandler.hpp"
 
 /* -- Used Namespaces
-using namespace stw::opensyde_gui_logic;
  * -----------------------------------------------------------------------------------------------
  */
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants
@@ -1870,9 +1870,9 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(
     if (oq_OptionAddSecureAuthentification) {
       c_UpdatePackageParameters.resize(1);
       c_UpdatePackageParameters.at(0).c_AuthenticationKeyPath =
-          orc_PublicKeyPath.toStdString();
+          orc_PublicKeyPath;
       c_UpdatePackageParameters.at(0).c_Password =
-          orc_Password.toStdString();
+          orc_Password;
     }
     s32_Return = C_OscXceCreate::h_CreatePackage(
         c_FullPackagePath, c_UsedCertificatesPath,

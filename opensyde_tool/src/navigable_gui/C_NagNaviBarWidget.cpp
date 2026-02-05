@@ -40,6 +40,7 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 static const int32_t ms32_MAXIMIZED_WIDTH = 290;
@@ -600,7 +601,7 @@ void C_NagNaviBarWidget::m_NodesChanged(void) const
                }
 
                c_SubNodes.push_back(c_SubNodeNames);
-               c_Nodes.emplace_back(pc_NodeSquad->c_BaseName.c_str());
+               c_Nodes.emplace_back(pc_NodeSquad->c_BaseName);
 
                // skip sub nodes in complete list (-1 because one up-count is done anyway in loop)
                u32_ChildNodeCounter += static_cast<uint32_t>(pc_NodeSquad->c_SubNodeIndexes.size()) - 1;
