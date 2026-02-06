@@ -43,7 +43,7 @@ using namespace BLF;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvComMessageLoggerFileBlf::C_SyvComMessageLoggerFileBlf(const QString & orc_FilePath) :
-   C_OscComMessageLoggerFileBase(orc_FilePath.toStdString(), "")
+   C_OscComMessageLoggerFileBase(orc_FilePath, "")
 {
 }
 

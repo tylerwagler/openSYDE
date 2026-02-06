@@ -327,7 +327,7 @@ void C_FlaUpSequences::m_ThreadFunc(void) {
     break;
   case eUPDATENODE:
     this->ms32_Result = this->UpdateNode(
-        this->mc_HexFilePath.toStdString(),
+        this->mc_HexFilePath,
         this->mu32_RequestDownloadTimeout, this->mu32_TransferDataTimeout);
     break;
   case eRESETSYSTEM:

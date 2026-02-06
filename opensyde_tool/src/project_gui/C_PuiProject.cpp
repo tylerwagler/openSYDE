@@ -281,7 +281,7 @@ bool C_PuiProject::IsPasswordNecessary(void) {
   bool q_Return = false;
 
   if (this->m_IsServiceModeProject() == true) {
-    if (C_OscZipFile::h_IsZipFile(this->GetPath().toStdString()) !=
+    if (C_OscZipFile::h_IsZipFile(this->GetPath()) !=
         C_NO_ERR) {
       // Not a zip file, so it is encrypted
       q_Return = true;
@@ -769,7 +769,7 @@ int32_t C_PuiProject::m_LoadProject(
   } else {
     // Load project file
     s32_Retval =
-        C_OscProjectFiler::h_Load(*this, this->mc_Path.toStdString());
+        C_OscProjectFiler::h_Load(*this, this->mc_Path);
     if (s32_Retval == C_NO_ERR) {
       QString c_SystemDefintionPath;
       // Try newest path
@@ -784,7 +784,7 @@ int32_t C_PuiProject::m_LoadProject(
         }
         // Load system definition
         s32_Retval = C_PuiSdHandler::h_GetInstance()->LoadFromFile(
-            c_SystemDefintionPath.toStdString(), opu16_FileVersion,
+            c_SystemDefintionPath, opu16_FileVersion,
             opc_ErrorDetailsMissingDevices);
         if (s32_Retval == C_NO_ERR) {
           QString c_SystemViewsPath;
@@ -799,7 +799,7 @@ int32_t C_PuiProject::m_LoadProject(
             }
             // Load system views
             s32_Retval = C_PuiSvHandler::h_GetInstance()->LoadFromFile(
-                c_SystemViewsPath.toStdString());
+                c_SystemViewsPath);
           }
         } else {
           if (s32_Retval == C_OVERFLOW) {
@@ -926,9 +926,8 @@ int32_t C_PuiProject::m_SaveAs(const QString &orc_FilePath,
   if (c_Directory.mkpath(".") == true) {
     C_PuiProject::h_HandlePendingEvents();
     s32_Retval = C_OscProjectFiler::h_Save(
-        *this, orc_FilePath.toStdString(),
+        *this, orc_FilePath,
         stw::opensyde_gui_logic::C_Uti::h_GetApplicationVersion(false)
-            .toStdString()
             );
     if (s32_Retval == C_NO_ERR) {
       // save system definition only if it has changed
@@ -949,7 +948,7 @@ int32_t C_PuiProject::m_SaveAs(const QString &orc_FilePath,
           // Create path (if necessary)
           if ((c_Dir.mkdir(".") == true) || (c_Dir.exists() == true)) {
             s32_Retval = C_PuiSdHandler::h_GetInstance()->SaveToFile(
-                c_SystemDefintionPath.toStdString(),
+                c_SystemDefintionPath,
                 oq_UseDeprecatedFileFormatV2, oq_UpdateInternalState);
           } else {
             s32_Retval = C_RD_WR;
@@ -974,7 +973,7 @@ int32_t C_PuiProject::m_SaveAs(const QString &orc_FilePath,
             // Create path (if necessary)
             if ((c_Dir.mkdir(".") == true) || (c_Dir.exists() == true)) {
               s32_Retval = C_PuiSvHandler::h_GetInstance()->SaveToFile(
-                  c_SystemViewsPath.toStdString(),
+                  c_SystemViewsPath,
                   oq_UseDeprecatedFileFormatV2, oq_UpdateInternalState);
             } else {
               s32_Retval = C_RD_WR;

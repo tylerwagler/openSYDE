@@ -160,7 +160,7 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
    if (s32_Return == C_NO_ERR)
    {
       // pem folder is optional -> no error handling
-      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString().c_str());
+      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
 
       s32_Return = C_OscComDriverProtocol::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst(),
                                                 u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
@@ -397,7 +397,7 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
                                                                                        m_GetActiveNodeName(
                                                                                           u32_ActiveNode)
                                                                                        )).arg(
-                  C_Uti::h_StwError(s32_Return)).toStdString().c_str());
+                  C_Uti::h_StwError(s32_Return)));
             s32_Return = C_COM;
             orc_ErrorDetails += m_GetActiveNodeName(u32_ActiveNode);
             break;
@@ -597,7 +597,7 @@ int32_t C_SyvComDriverDiag::StopCyclicTransmissions(void)
             osc_write_log_warning("Asynchronous communication",
                                   static_cast<QString>("Node \"%1\" - DataPoolStopEventDriven - warning: %2\n").
                                   arg(m_GetActiveNodeName(u32_ActiveNode)).
-                                  arg(C_Uti::h_StwError(s32_Return2)).toStdString().c_str());
+                                  arg(C_Uti::h_StwError(s32_Return2)));
             s32_Return = C_COM;
          }
       }

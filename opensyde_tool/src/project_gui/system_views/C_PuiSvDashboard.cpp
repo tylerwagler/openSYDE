@@ -65,9 +65,9 @@ C_PuiSvDashboard::C_PuiSvDashboard(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Name.toStdString(),
+   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Name.toStdString().c_str(),
                                        this->mc_Name.length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Comment.toStdString(),
+   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Comment.toStdString().c_str(),
                                        this->mc_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->mq_Active, sizeof(this->mq_Active), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->ms32_TabIndex, sizeof(this->ms32_TabIndex), oru32_HashValue);

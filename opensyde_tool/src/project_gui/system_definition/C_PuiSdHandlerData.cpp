@@ -244,7 +244,7 @@ int32_t C_PuiSdHandlerData::SaveToFile(const QString & orc_Path, const bool oq_U
    {
       //erase it:
       int32_t s32_ReturnRemove;
-      s32_ReturnRemove = std::remove(orc_Path);
+      s32_ReturnRemove = std::remove(orc_Path.toStdString().c_str());
       if (s32_ReturnRemove != 0)
       {
          osc_write_log_error("Saving System Definition",
@@ -501,7 +501,7 @@ QString C_PuiSdHandlerData::h_AutomaticCeStringAdaptation(const QString & orc_In
 
    for (int32_t s32_It = 0; s32_It < orc_Input.length(); ++s32_It)
    {
-      if (C_OscUtils::h_CheckValidCeName(orc_Input.at(s32_It).toLatin1(), true) == false)
+      if (C_OscUtils::h_CheckValidCeName(QString(orc_Input.at(s32_It)), true) == false)
       {
          c_Retval += "_";
       }
@@ -1247,8 +1247,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                                                 " of node %1.(UI %2 vs. core %3)").
                            arg(rc_OscNode.c_Properties.c_Name).
                            arg(rc_UiProtocol.c_ComMessages[u32_MsgContainer].c_TxMessages.size()).
-                           arg(rc_OscProtocol.c_ComMessages[u32_MsgContainer].c_TxMessages.size()).
-                           toStdString());
+                           arg(rc_OscProtocol.c_ComMessages[u32_MsgContainer].c_TxMessages.size()));
 
                         s32_Return = C_CHECKSUM;
                      }
@@ -1292,8 +1291,7 @@ int32_t C_PuiSdHandlerData::m_VerifyLoadedSystemDefintion(void) const
                                                 " of node %1 (UI %2 vs. core %3).").
                            arg(rc_OscNode.c_Properties.c_Name).
                            arg(rc_UiProtocol.c_ComMessages[u32_MsgContainer].c_RxMessages.size()).
-                           arg(rc_OscProtocol.c_ComMessages[u32_MsgContainer].c_RxMessages.size()).
-                           toStdString());
+                           arg(rc_OscProtocol.c_ComMessages[u32_MsgContainer].c_RxMessages.size()));
 
                         s32_Return = C_CHECKSUM;
                      }

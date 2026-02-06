@@ -215,7 +215,7 @@ int32_t C_CamProHandler::SetMessageName(const uint32_t ou32_Index,
 
   if (ou32_Index < this->mc_Messages.size()) {
     C_CamProMessageData &rc_Message = this->mc_Messages[ou32_Index];
-    rc_Message.c_Name = orc_Name.toStdString();
+    rc_Message.c_Name = orc_Name;
   } else {
     s32_Retval = C_RANGE;
   }
@@ -611,8 +611,8 @@ void C_CamProHandler::ReplaceDatabaseName(const QString &orc_PrevName,
   // Messages
   for (uint32_t u32_It = 0UL; u32_It < this->mc_Messages.size(); ++u32_It) {
     C_CamProMessageData &rc_Message = this->mc_Messages[u32_It];
-    if (rc_Message.c_DataBaseFilePath == orc_PrevName.toStdString()) {
-      rc_Message.c_DataBaseFilePath = orc_NewName.toStdString();
+    if (rc_Message.c_DataBaseFilePath == orc_PrevName) {
+      rc_Message.c_DataBaseFilePath = orc_NewName;
     }
   }
 }
@@ -974,10 +974,8 @@ int32_t C_CamProHandler::SaveToFile(const QString &orc_Path) {
     if (c_Directory.mkpath(".") == false) {
       osc_write_log_error(
           "Saving Project",
-          static_cast<QString>("Could not create folder for file \"" +
-                               c_File.absolutePath() + "\".")
-              .toStdString()
-              );
+          "Could not create folder for file \"" +
+              c_File.absolutePath() + "\".");
       s32_Return = C_COM;
     }
   }
@@ -1115,9 +1113,12 @@ void C_CamProHandler::m_CalcHash(uint32_t &oru32_HashValue) const {
 
   // settings
   // CAN DLL configuration
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->mc_CustomCanDllPath.toStdString(),
-      this->mc_CustomCanDllPath.size(), oru32_HashValue);
+  {
+    const QByteArray c_DllPathUtf8 = this->mc_CustomCanDllPath.toUtf8();
+    stw::scl::C_SclChecksums::CalcCRC32(
+        c_DllPathUtf8.constData(),
+        c_DllPathUtf8.size(), oru32_HashValue);
+  }
   stw::scl::C_SclChecksums::CalcCRC32(
       &this->me_CanDllType, sizeof(this->me_CanDllType), oru32_HashValue);
 

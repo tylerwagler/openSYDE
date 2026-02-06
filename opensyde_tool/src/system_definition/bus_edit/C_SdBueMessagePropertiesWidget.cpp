@@ -1055,10 +1055,10 @@ void C_SdBueMessagePropertiesWidget::m_OnPropertiesChanged(void)
             C_OscCanMessage::E_TxMethodType e_CurrentTxMethod;
 
             //name
-            c_MessageData.c_Name = this->mpc_Ui->pc_LineEditName->text().toStdString();
+            c_MessageData.c_Name = this->mpc_Ui->pc_LineEditName->text();
 
             //comment
-            c_MessageData.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString();
+            c_MessageData.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText();
 
             //Extended
             c_MessageData.q_IsExtended = this->mpc_Ui->pc_CheckBoxExtendedType->isChecked();
@@ -3139,7 +3139,7 @@ void C_SdBueMessagePropertiesWidget::m_CheckMessageName(void) const
 
       if (this->mpc_MessageSyncManager != NULL)
       {
-         this->mpc_MessageSyncManager->CheckMessageNameBus(c_Name.toStdString(), q_NameIsValid,
+         this->mpc_MessageSyncManager->CheckMessageNameBus(c_Name, q_NameIsValid,
                                                            &this->mc_MessageId, &q_InvalidName, &q_DuplicateName);
       }
 

@@ -206,7 +206,7 @@ int32_t C_CieUtil::h_ExportFile(
           Qt::WaitCursor);           // big DBC file can take some time to load
       QApplication::processEvents(); // update cursor
       s32_Return =
-          C_CieExportDbc::h_ExportNetwork(c_FullFilePath.toStdString(),
+          C_CieExportDbc::h_ExportNetwork(c_FullFilePath,
                                           orc_CommDef, c_Warnings, c_Error);
       QApplication::restoreOverrideCursor(); // get old cursor again
       QApplication::processEvents();         // update cursor
@@ -237,20 +237,20 @@ int32_t C_CieUtil::h_ExportFile(
               // build up additional warnings (there can be also one from export
               // itself)
               if (ou32_NumOfNodes != u32_NumOfOutputNodes) {
-                c_Warnings.Add("Number of input nodes (" +
+                c_Warnings.append("Number of input nodes (" +
                                QString::number(ou32_NumOfNodes) +
                                ") does not match number of exported nodes (" +
                                QString::number(u32_NumOfOutputNodes) + ").");
               }
               if (ou32_NumOfMessages != u32_NumOfOutputMessages) {
-                c_Warnings.Add(
+                c_Warnings.append(
                     "Number of input messages (" +
                     QString::number(ou32_NumOfMessages) +
                     ") does not match number of exported messages (" +
                     QString::number(u32_NumOfOutputMessages) + ").");
               }
               if (ou32_NumOfSignals != u32_NumOfOutputSignals) {
-                c_Warnings.Add("Number of input signals (" +
+                c_Warnings.append("Number of input signals (" +
                                QString::number(ou32_NumOfSignals) +
                                ") does not match number of exported signals (" +
                                QString::number(u32_NumOfOutputSignals) + ").");
@@ -346,9 +346,7 @@ void C_CieUtil::h_AdaptName(QString &orc_Name, QString &orc_Comment,
     orc_Comment +=
         static_cast<QString>("%2Original name (from import source): %1")
             .arg(orc_Name)
-            .arg(c_Addition)
-            .toStdString()
-            ;
+            .arg(c_Addition);
     orc_Name = c_NewName;
   }
 }
@@ -465,9 +463,7 @@ C_CieUtil::h_GetDeviceInfo(const uint32_t ou32_DeviceNodeIndex,
       C_OscEdsDcfImportMessageGroup c_InvalidOscTxMessageData;
       std::vector<std::vector<QString>> c_InvalidImportMessagesPerMessage;
       s32_Retval = C_OscImportEdsDcf::h_Import(
-          C_PuiUtil::h_GetAbsolutePathFromProject(orc_EdsPath)
-              .toStdString()
-              ,
+          C_PuiUtil::h_GetAbsolutePathFromProject(orc_EdsPath),
           rc_CurInterface.u8_NodeId, c_OscRxMessageData, c_OscTxMessageData,
           c_ImportMessagesPerMessage, c_ParsingError,
           C_OscCanProtocol::eCAN_OPEN, c_InvalidOscRxMessageData,

@@ -118,7 +118,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadViews(std::vector<C_PuiSvData> & orc_Views,
             QString c_Tmp;
             c_Tmp = QString("Unexpected view count, expected: %1, got %2").arg(u32_ExpectedSize).arg(
                orc_Views.size());
-            osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+            osc_write_log_warning("Load file", c_Tmp);
          }
       }
       //Return
@@ -162,7 +162,7 @@ int32_t C_PuiSvHandlerFiler::h_SaveViews(const std::vector<C_PuiSvData> & orc_Vi
          const QString c_CombinedFilePath = opc_BasePath->absoluteFilePath(c_FilePath);
          s32_Retval = mh_SaveViewFile(rc_View, c_CombinedFilePath);
          //Store file name
-         orc_XmlParser.SetNodeContent(c_FilePath.toStdString().c_str());
+         orc_XmlParser.SetNodeContent(c_FilePath);
       }
       else
       {
@@ -279,7 +279,7 @@ void C_PuiSvHandlerFiler::h_SaveReadRails(const QMap<C_OscNodeDataPoolListElemen
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignment");
       orc_XmlParser.CreateNodeChild("transmission-mode",
                                     C_PuiSvHandlerFiler::mh_TransmissionModeToString(
-                                       c_ReadData.e_TransmissionMode).toStdString().c_str());
+                                       c_ReadData.e_TransmissionMode));
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignments");
    }
@@ -297,7 +297,7 @@ void C_PuiSvHandlerFiler::h_SaveReadRails(const QMap<C_OscNodeDataPoolListElemen
 QString C_PuiSvHandlerFiler::h_GetViewFileName(const QString & orc_ViewName)
 {
    return ("view_" + C_OscSystemFilerUtil::h_PrepareItemNameForFileName(
-              orc_ViewName.toStdString()) +
+              orc_ViewName) +
            ".xml");
 }
 
@@ -364,7 +364,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadViewFile(C_PuiSvData & orc_View, const QStri
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
-                                                                         orc_FilePath.toStdString(),
+                                                                         orc_FilePath,
                                                                          "opensyde-view-definition");
 
    //File version
@@ -385,7 +385,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadViewFile(C_PuiSvData & orc_View, const QStri
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading view", "Value of \"file-version\": " +
-                            QString::number(u16_FileVersion).toStdString().c_str());
+                            QString::number(u16_FileVersion));
          //Check file version
          if ((u16_FileVersion != 1U) && (u16_FileVersion != 2U))
          {
@@ -746,7 +746,7 @@ void C_PuiSvHandlerFiler::mh_SaveDashboards(const std::vector<C_PuiSvDashboard> 
 int32_t C_PuiSvHandlerFiler::mh_SaveViewFile(const C_PuiSvData & orc_View, const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString(),
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath,
                                                                     "opensyde-view-definition");
 
    if (s32_Retval == C_NO_ERR)
@@ -757,7 +757,7 @@ int32_t C_PuiSvHandlerFiler::mh_SaveViewFile(const C_PuiSvData & orc_View, const
       //node
       C_PuiSvHandlerFiler::mh_SaveView(orc_View, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR)
       {
          osc_write_log_error("Saving system definition UI", "Could not create file for node.");
          s32_Retval = C_CONFIG;
@@ -798,7 +798,7 @@ void C_PuiSvHandlerFiler::mh_SaveView(const C_PuiSvData & orc_View, C_OscXmlPars
    //Return
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-view");
    orc_XmlParser.CreateNodeChild("device-config-mode", mh_DeviceConfigModeToString(
-                                    orc_View.GetDeviceConfigMode()).toStdString().c_str());
+                                    orc_View.GetDeviceConfigMode()));
    orc_XmlParser.CreateAndSelectNodeChild("update-rates");
    orc_XmlParser.SetAttributeUint32("fast", static_cast<uint32_t>(orc_View.GetUpdateRateFast()));
    orc_XmlParser.SetAttributeUint32("medium", static_cast<uint32_t>(orc_View.GetUpdateRateMedium()));
@@ -835,7 +835,7 @@ void C_PuiSvHandlerFiler::mh_SavePc(const C_OscViewPc & orc_OscPc, const C_PuiSv
 
    orc_XmlParser.CreateAndSelectNodeChild("dll-path");
    orc_XmlParser.SetAttributeSint32("type", static_cast<int32_t>(orc_PuiPc.GetCanDllType()));
-   orc_XmlParser.SetNodeContent(orc_PuiPc.GetCustomCanDllPath().toStdString().c_str());
+   orc_XmlParser.SetNodeContent(orc_PuiPc.GetCustomCanDllPath());
    //Return
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "pc");
    orc_XmlParser.CreateAndSelectNodeChild("box");

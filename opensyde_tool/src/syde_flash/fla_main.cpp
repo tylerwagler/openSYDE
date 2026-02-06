@@ -64,10 +64,9 @@ int32_t main(int32_t os32_Argc, char_t * opacn_Argv[])
       //Set up logging (FIRST)
       stw::opensyde_core::C_OscLoggingHandler::h_SetWriteToConsoleActive(false);
       stw::opensyde_core::C_OscLoggingHandler::h_SetWriteToFileActive(true, false, false, true);
-      stw::opensyde_core::C_OscLoggingHandler::h_SetCompleteLogFileLocation(c_FilePath.toStdString().c_str());
+      stw::opensyde_core::C_OscLoggingHandler::h_SetCompleteLogFileLocation(c_FilePath);
 
-      osc_write_log_info("Startup", static_cast<QString>("Starting SYDEflash tool(MD5-Checksum: " +
-                                                         c_BinaryHash + ")").toStdString().c_str());
+      osc_write_log_info("Startup", "Starting SYDEflash tool(MD5-Checksum: " + c_BinaryHash + ")");
    }
    {
       //Set stylesheet (SECOND)

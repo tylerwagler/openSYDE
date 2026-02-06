@@ -758,7 +758,7 @@ void C_SdNdeDpListHeaderWidget::m_CheckName(void) const
 
    if (C_PuiSdHandler::h_GetInstance()->CheckNodeDataPoolListNameAvailable(this->mu32_NodeIndex,
                                                                            this->mu32_DataPoolIndex,
-                                                                           c_Name.toStdString(),
+                                                                           c_Name,
                                                                            &this->mu32_ListIndex) == false)
    {
       q_NameIsValid = false;

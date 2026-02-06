@@ -158,7 +158,7 @@ C_SyvDaItPaTreeView::~C_SyvDaItPaTreeView(void) {}
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SyvDaItPaTreeView::IsEmpty(void) const {
-  return this->mc_Model.isEmpty();
+  return this->mc_Model.IsEmpty();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

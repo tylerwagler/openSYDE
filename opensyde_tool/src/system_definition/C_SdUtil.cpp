@@ -2709,8 +2709,8 @@ void C_SdUtil::mh_WriteEtherCanLogMessage(
         QString::number(opc_DevDef->u8_NumEthernetBusses) + "; " +
         QString::number(opc_NodeProperties->GetEthernetInterfaces().size());
 
-    osc_write_log_warning(c_Activity.toStdString(),
-                          c_Message.toStdString().c_str());
+    osc_write_log_warning(c_Activity,
+                          c_Message);
   }
   if (static_cast<uint32_t>(opc_DevDef->u8_NumCanBusses) !=
       static_cast<uint32_t>(opc_NodeProperties->GetCanInterfaces().size())) {
@@ -2722,8 +2722,8 @@ void C_SdUtil::mh_WriteEtherCanLogMessage(
         QString::number(opc_DevDef->u8_NumCanBusses) + "; " +
         QString::number(opc_NodeProperties->GetCanInterfaces().size());
 
-    osc_write_log_warning(c_Activity.toStdString(),
-                          c_Message.toStdString().c_str());
+    osc_write_log_warning(c_Activity,
+                          c_Message);
   }
 }
 

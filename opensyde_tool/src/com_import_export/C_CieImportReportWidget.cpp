@@ -738,7 +738,7 @@ int32_t C_CieImportReportWidget::m_GetMessageOverrideInfo(
       if ((orc_Suffix == "EDS") || (orc_Suffix == "DCF")) {
         orc_ImportMessageToFind.c_Name = C_CieUtil::h_GetMessageName(
             *pc_Node, oq_Tx, ou32_MessageIndex, this->me_ProtocolType,
-            this->mpc_NodeNameReplacement, oq_IsSrdo, oru32_SrdoIndex)
+            this->mpc_NodeNameReplacement, oq_IsSrdo, oru32_SrdoIndex);
       }
 
       // Only check other protocol matches

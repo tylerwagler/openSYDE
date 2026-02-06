@@ -196,7 +196,7 @@ int32_t C_SyvDcSequences::InitDcSequences(const uint32_t ou32_ViewIndex)
    if (s32_Return == C_NO_ERR)
    {
       // pem folder is optional -> no error handling
-      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString().c_str());
+      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
 
       s32_Return = C_OscComSequencesBase::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinition(),
                                                u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
@@ -2052,11 +2052,11 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithBroadcasts(
             }
             else
             {
-               QString c_Text;
-               c_Text.PrintFormatted("openSYDE broadcast set IP by serial number changed the IP address on"
-                                     " node with id %d on bus with id %d.",
-                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
-                                     c_ServerIdOfCurBus.u8_BusIdentifier);
+               QString c_Text = QString::asprintf(
+                  "openSYDE broadcast set IP by serial number changed the IP address on"
+                  " node with id %d on bus with id %d.",
+                  c_ServerIdOfCurBus.u8_NodeIdentifier,
+                  c_ServerIdOfCurBus.u8_BusIdentifier);
 
                osc_write_log_info("Configure Ethernet openSYDE devices", c_Text);
             }
@@ -2202,8 +2202,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                                                                          c_TemporaryProtocol, c_TpIp);
                         if (s32_Return != C_NO_ERR)
                         {
-                           QString c_Text;
-                           c_Text.PrintFormatted(
+                           QString c_Text = QString::asprintf(
                               "Could not reconnect to node with ID %d on bus with id %d. Error code: %d",
                               c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
                               c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier, s32_Return);
@@ -2221,15 +2220,15 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                            if (s32_Return != C_NO_ERR)
                            {
                               QString c_Text;
-                              c_Text.PrintFormatted("openSYDE setting preprogramming mode failed on node with ID %d on "
+                              c_Text = QString::asprintf("openSYDE setting preprogramming mode failed on node with ID %d on "
                                                     "bus with ID before setting the new node ID %d"
                                                     " %d with error: %s",
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier,
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
-                                                    C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
+                                                    qPrintable(C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                                                        s32_Return,
-                                                       u8_ErrCode));
+                                                       u8_ErrCode)));
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
                         }
@@ -2249,15 +2248,15 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                            if (s32_Return != C_NO_ERR)
                            {
                               QString c_Text;
-                              c_Text.PrintFormatted("openSYDE setting node ID for communication channel failed on node "
+                              c_Text = QString::asprintf("openSYDE setting node ID for communication channel failed on node "
                                                     "with ID %d on bus with ID when setting the new node ID %d"
                                                     " %d with error: %s",
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier,
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
-                                                    C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
+                                                    qPrintable(C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                                                        s32_Return,
-                                                       u8_ErrCode));
+                                                       u8_ErrCode)));
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
                         }
@@ -2281,15 +2280,15 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                            if (s32_Return != C_NO_ERR)
                            {
                               QString c_Text;
-                              c_Text.PrintFormatted("openSYDE setting IP address for communication channel failed on "
+                              c_Text = QString::asprintf("openSYDE setting IP address for communication channel failed on "
                                                     "node with ID %d on bus with ID after setting the new node ID %d"
                                                     " %d with error: %s",
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier,
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
-                                                    C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
+                                                    qPrintable(C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                                                        s32_Return,
-                                                       u8_ErrCode));
+                                                       u8_ErrCode)));
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
                         }
@@ -2445,7 +2444,7 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
          if (s32_Return != C_NO_ERR)
          {
             QString c_Text;
-            c_Text.PrintFormatted("Could not reconnect to node with ID %d on bus with id %d. Error code: %d",
+            c_Text = QString::asprintf("Could not reconnect to node with ID %d on bus with id %d. Error code: %d",
                                   orc_UsedServerIds[u32_DeviceCounter].u8_NodeIdentifier,
                                   orc_UsedServerIds[u32_DeviceCounter].u8_BusIdentifier, s32_Return);
             osc_write_log_error("Configure openSYDE devices", c_Text);
@@ -2459,11 +2458,11 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
          if (s32_Return != C_NO_ERR)
          {
             QString c_Text;
-            c_Text.PrintFormatted("openSYDE setting preprogramming mode failed on node with ID %d on bus with ID"
+            c_Text = QString::asprintf("openSYDE setting preprogramming mode failed on node with ID %d on bus with ID"
                                   " %d with error: %s", orc_UsedServerIds[u32_DeviceCounter].u8_NodeIdentifier,
                                   orc_UsedServerIds[u32_DeviceCounter].u8_BusIdentifier,
-                                  C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
-                                                                                           u8_NrCode));
+                                  qPrintable(C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
+                                                                                           u8_NrCode)));
             osc_write_log_error("Configure openSYDE devices", c_Text);
          }
 
@@ -3063,15 +3062,15 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
                         if (s32_Return != C_NO_ERR)
                         {
                            QString c_Text;
-                           c_Text.PrintFormatted("openSYDE setting preprogramming mode failed on node with ID %d on "
+                           c_Text = QString::asprintf("openSYDE setting preprogramming mode failed on node with ID %d on "
                                                  "bus with ID before setting the new node ID %d"
                                                  " %d with error: %s",
                                                  c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
                                                  c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier,
                                                  c_ServerIdOfCurBus.u8_NodeIdentifier,
-                                                 C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
+                                                 qPrintable(C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                                                     s32_Return,
-                                                    u8_ErrCode));
+                                                    u8_ErrCode)));
                            osc_write_log_error("Configure openSYDE devices", c_Text);
                         }
 
@@ -3090,15 +3089,15 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
                            if (s32_Return != C_NO_ERR)
                            {
                               QString c_Text;
-                              c_Text.PrintFormatted("openSYDE setting node ID for communication channel failed on node "
+                              c_Text = QString::asprintf("openSYDE setting node ID for communication channel failed on node "
                                                     "with ID %d on bus with ID when setting the new node ID %d"
                                                     " %d with error: %s",
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier,
                                                     c_ServerIdOfCurBusWithOldNodeId.u8_BusIdentifier,
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
-                                                    C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
+                                                    qPrintable(C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                                                        s32_Return,
-                                                       u8_ErrCode));
+                                                       u8_ErrCode)));
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
                         }
@@ -3712,7 +3711,7 @@ int32_t C_SyvDcSequences::m_ReadBackEth(void)
          if (s32_Return != C_NO_ERR)
          {
             QString c_Text;
-            c_Text.PrintFormatted("Could not reconnect to node with ID %d on bus with ID %d. Error code: %d",
+            c_Text = QString::asprintf("Could not reconnect to node with ID %d on bus with ID %d. Error code: %d",
                                   rc_OsyServerId.u8_NodeIdentifier,
                                   rc_OsyServerId.u8_BusIdentifier, s32_Return);
             osc_write_log_error("Configure openSYDE devices", c_Text);
@@ -3732,11 +3731,11 @@ int32_t C_SyvDcSequences::m_ReadBackEth(void)
             if (s32_Return != C_NO_ERR)
             {
                QString c_Text;
-               c_Text.PrintFormatted("openSYDE setting preprogramming mode failed on node with ID %d on bus with ID"
+               c_Text = QString::asprintf("openSYDE setting preprogramming mode failed on node with ID %d on bus with ID"
                                      " %d with error: %s", rc_OsyServerId.u8_NodeIdentifier,
                                      rc_OsyServerId.u8_BusIdentifier,
-                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
-                                                                                              u8_NrCode));
+                                     qPrintable(C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
+                                                                                              u8_NrCode)));
                osc_write_log_error("Configure openSYDE devices", c_Text);
             }
          }
@@ -3934,7 +3933,7 @@ int32_t C_SyvDcSequences::m_ReadBack(void)
                else
                {
                   QString c_Text;
-                  c_Text.PrintFormatted("STW Flashloader get serial number failed with error: %d "
+                  c_Text = QString::asprintf("STW Flashloader get serial number failed with error: %d "
                                         "(Number of nodes found : %d", s32_Return, u8_NodesFound);
                   osc_write_log_error("Read back CAN devices", c_Text);
                }

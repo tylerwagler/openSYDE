@@ -378,7 +378,7 @@ int32_t C_CieExportDbc::mh_SetMessages(
         // activating different nodes, but this is not supported in openSYDE.
         c_Message = "Setting node \"" + c_NodeName +
                     "\" as transmitter for CAN message \"" +
-                    QString(c_DbcMsgIter->second.name) + "\".";
+                    QString::fromStdString(c_DbcMsgIter->second.name) + "\".";
         osc_write_log_info("DBC file export", c_Message);
         c_DbcMsgIter->second.transmitter = c_NodeName.toStdString();
       }
@@ -507,13 +507,13 @@ int32_t C_CieExportDbc::mh_SetSignals(
             // if we have the same message, then check if message is receiver of
             // signal
             if (rc_Receiver.c_CanMessage.c_Name.compare(
-                    orc_DbcMessage.name) == 0) {
+                    QString::fromStdString(orc_DbcMessage.name)) == 0) {
               const std::vector<C_CieConverter::C_CieCanSignal> &rc_Signals =
                   rc_Receiver.c_CanMessage.c_Signals;
               for (const auto &rc_Signal : rc_Signals) {
                 // check if node with Rx messages has signal
                 if (rc_Signal.c_Element.c_Name.compare(
-                        c_DbcSignal.name) == 0) {
+                        QString::fromStdString(c_DbcSignal.name)) == 0) {
                   // receiver for signal found -> add node as receiver if not
                   // already exists
                   c_DbcSignal.receivers.insert(c_NodeName);

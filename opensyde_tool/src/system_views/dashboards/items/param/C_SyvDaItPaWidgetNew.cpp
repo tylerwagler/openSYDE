@@ -979,7 +979,7 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
             //User settings store
             C_UsHandler::h_GetInstance()->SetProjSvParamImport(pc_View->GetName(), c_File);
 
-            s32_Result = c_ParamSetHandler.ReadFile(c_File.toStdString(), true, true);
+            s32_Result = c_ParamSetHandler.ReadFile(c_File, true, true);
 
             if (s32_Result == C_NO_ERR)
             {
@@ -1299,7 +1299,7 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                      if (q_Continue == true)
                      {
                         s32_Result = c_ParamSetFileHandler.CreateCleanFileWithoutCrc(
-                           c_FileName.toStdString(), true);
+                           c_FileName, true);
                      }
                      else
                      {

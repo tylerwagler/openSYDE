@@ -1185,8 +1185,7 @@ void C_SyvDaDashboardsWidget::m_HandleConnectionResult(const int32_t os32_Result
       {
          c_MessageDetails += "<br>For more information see ";
          c_MessageDetails += C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
-                                              C_OscLoggingHandler::h_GetCompleteLogFileLocation().
-                                              c_str());
+                                              C_OscLoggingHandler::h_GetCompleteLogFileLocation());
          c_MessageDetails += ".";
       }
 

@@ -116,10 +116,10 @@ void C_SdNdeUnoDasDataPoolListDataChangeCommand::m_Change(QVariant & orc_Previou
       switch (this->me_DataChangeType)
       {
       case C_SdNdeDpUtil::eDATA_SET_NAME:
-         c_OscData.c_Name = orc_NewData.toString().toStdString();
+         c_OscData.c_Name = orc_NewData.toString();
          break;
       case C_SdNdeDpUtil::eDATA_SET_COMMENT:
-         c_OscData.c_Comment = orc_NewData.toString().toStdString();
+         c_OscData.c_Comment = orc_NewData.toString();
          break;
       default:
          break;

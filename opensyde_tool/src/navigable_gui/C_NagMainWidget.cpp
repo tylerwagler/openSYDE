@@ -263,7 +263,7 @@ void C_NagMainWidget::LoadInitialProject(void)
       //No further steps necessary
    }
 
-   C_PopErrorHandling::h_ProjectLoadErr(s32_Error, c_LoadedProject, this, u16_Version, c_ErrorDetailsMissingDevices);
+   C_PopErrorHandling::h_ProjectLoadErr(s32_Error, c_LoadedProject, this, u16_Version, QStringList(c_ErrorDetailsMissingDevices.begin(), c_ErrorDetailsMissingDevices.end()));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -285,7 +285,7 @@ void C_NagMainWidget::LoadProject(const QString & orc_FilePath)
       s32_Result = this->m_LoadConcreteProject(&u16_Version, &c_ErrorDetailsMissingDevices);
       C_PopErrorHandling::h_ProjectLoadErr(s32_Result,
                                            C_PuiProject::h_GetInstance()->GetPath(), this, u16_Version,
-                                           c_ErrorDetailsMissingDevices);
+                                           QStringList(c_ErrorDetailsMissingDevices.begin(), c_ErrorDetailsMissingDevices.end()));
 
       if (s32_Result == C_NO_ERR)
       {
@@ -315,7 +315,7 @@ void C_NagMainWidget::UpdateRecentProjects(void)
    for (QStringList::const_iterator c_ItList = c_List.begin(); c_ItList != c_List.end(); ++c_ItList)
    {
       C_OscProject c_Tmp;
-      if (C_OscProjectFiler::h_Load(c_Tmp, c_ItList->toStdString()) == C_NO_ERR)
+      if (C_OscProjectFiler::h_Load(c_Tmp, c_ItList->toStdString().c_str()) == C_NO_ERR)
       {
          c_Files.push_back(*c_ItList);
          c_Projects.push_back(c_Tmp);
@@ -425,9 +425,9 @@ void C_NagMainWidget::OnCreateServiceProj(void)
          const QString c_Details =
             static_cast<QString>("%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.").
             arg("File saved at ").
-            arg(static_cast<QString>(c_SpPath.toStdString())).
+            arg(c_SpPath).
             arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
-            arg(static_cast<QString>(c_SpPath.toStdString()));
+            arg(c_SpPath);
          c_FinishMessage.SetHeading("Create Service Project");
          c_FinishMessage.SetDescription("Service Project created successfully.");
          c_FinishMessage.SetOkButtonText("OK");
@@ -827,7 +827,7 @@ void C_NagMainWidget::m_OnEditFinished(void)
    this->mpc_Ui->pc_LineEditVersion->setVisible(false);
 
    // memorize new version
-   C_PuiProject::h_GetInstance()->c_Version = c_NewVersion.toStdString();
+   C_PuiProject::h_GetInstance()->c_Version = c_NewVersion;
 
    // display elided new version
    QFont c_Font = mc_STYLE_GUIDE_FONT_SEMIBOLD_24;

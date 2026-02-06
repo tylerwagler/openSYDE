@@ -127,7 +127,7 @@ int32_t C_CieImportDbc::h_ImportNetwork(
     // add bus information
     orc_Definition.c_Bus.c_Name = c_FileName; // file name means network name
     orc_Definition.c_Bus.c_Comment =
-        mh_ReEscapeCriticalSymbols(QString(c_DbcNetwork.comment));
+        mh_ReEscapeCriticalSymbols(QString::fromStdString(c_DbcNetwork.comment));
 
     osc_write_log_info("DBC file import",
                        "Reading node and messages with signals of network \"" +
@@ -1211,7 +1211,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(
   // attribute found?
   if (c_DbcAttributeDefaults != orc_DbcNetwork.attributeDefaults.end()) {
     mhc_DefaultSendTypeValue =
-        (c_DbcAttributeDefaults->second).stringValue;
+        QString::fromStdString((c_DbcAttributeDefaults->second).stringValue);
   } else {
     s32_Return = C_WARN;
     mhc_DefaultSendTypeValue = "OnEvent";

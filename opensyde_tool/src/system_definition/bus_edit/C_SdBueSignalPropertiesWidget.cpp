@@ -1227,10 +1227,10 @@ void C_SdBueSignalPropertiesWidget::m_ApplyNewValueFromUi(const C_SdBueSignalPro
    switch (oe_Change)
    {
    case eCHA_NAME:
-      this->mc_DataOscSignalCommon.c_Name = this->mpc_Ui->pc_LineEditName->text().trimmed().toStdString();
+      this->mc_DataOscSignalCommon.c_Name = this->mpc_Ui->pc_LineEditName->text().trimmed();
       break;
    case eCHA_COMMENT:
-      this->mc_DataOscSignalCommon.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString();
+      this->mc_DataOscSignalCommon.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText();
       break;
    case eCHA_AUTO_MIN_MAX:
       this->mc_DataUiSignalCommon.q_AutoMinMaxActive = this->mpc_Ui->pc_CheckBoxAutoMinMax->isChecked();
@@ -1274,7 +1274,7 @@ void C_SdBueSignalPropertiesWidget::m_ApplyNewValueFromUi(const C_SdBueSignalPro
                     this->mc_DataOscSignalCommon.f64_Offset);
       break;
    case eCHA_UNIT:
-      this->mc_DataOscSignalCommon.c_Unit = this->mpc_Ui->pc_LineEditUnit->text().toStdString();
+      this->mc_DataOscSignalCommon.c_Unit = this->mpc_Ui->pc_LineEditUnit->text();
       break;
    case eCHA_BYTE_ORDER:
       switch (this->mpc_Ui->pc_ComboBoxByteOrder->currentIndex())

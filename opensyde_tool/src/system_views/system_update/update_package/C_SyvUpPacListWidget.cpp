@@ -741,7 +741,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
     if (QFileInfo(c_FullPackagePath).exists() &&
         QFileInfo(c_FullPackagePath).isFile()) {
       // delete old zip archive
-      if (remove(c_FullPackagePath.toStdString()) != 0) {
+      if (remove(c_FullPackagePath.toStdString().c_str()) != 0) {
         C_OgeWiCustomMessage c_MessageResult(
             this, C_OgeWiCustomMessage::E_Type::eERROR);
         c_MessageResult.SetHeading("Create Service Update Package");

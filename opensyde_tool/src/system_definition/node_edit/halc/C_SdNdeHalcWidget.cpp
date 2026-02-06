@@ -334,7 +334,7 @@ void C_SdNdeHalcWidget::m_OnImportConfigClicked(void)
          c_MessageResult.SetCustomMinHeight(180, 250);
          c_MessageResult.Execute();
 
-         osc_write_log_error("Hardware configuration import", c_ErrorDetails.toStdString().c_str());
+         osc_write_log_error("Hardware configuration import", c_ErrorDetails);
       }
       else
       {
@@ -401,7 +401,7 @@ void C_SdNdeHalcWidget::m_OnExportConfigClicked(void)
             C_OscHalcConfigUtil::h_GetConfigStandalone(*pc_Config, c_StandaloneConfig);
 
             s32_Result = C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(c_StandaloneConfig,
-                                                                              c_FileName.toStdString().c_str());
+                                                                              c_FileName);
          }
          else
          {
@@ -639,7 +639,7 @@ void C_SdNdeHalcWidget::m_OnUpdateClicked(void)
                   c_MessageResult.SetCustomMinHeight(180, 250);
                   c_MessageResult.Execute();
 
-                  osc_write_log_error("Load HALC definition file", c_ErrorDetails.toStdString().c_str());
+                  osc_write_log_error("Load HALC definition file", c_ErrorDetails);
                }
             }
 
@@ -764,7 +764,7 @@ bool C_SdNdeHalcWidget::m_LoadHalcDefinitionFile(C_OscHalcConfig & orc_HalcConfi
    {
       // load definition directly into configuration data structure
       const int32_t s32_LoadResult =
-         C_OscHalcDefFiler::h_LoadFile(orc_HalcConfig, orc_HalcDefPath.toStdString().c_str());
+         C_OscHalcDefFiler::h_LoadFile(orc_HalcConfig, orc_HalcDefPath);
 
       // remember path for user settings
       C_UsHandler::h_GetInstance()->SetLastKnownHalcDefPath(orc_HalcDefPath);

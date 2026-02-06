@@ -996,7 +996,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
          const QString c_Text = QString("Could not open HEX file \"") +
                                               c_Path + "\" Details: " +
                                               c_HexFile.ErrorCodeToErrorText(u32_Result);
-         osc_write_log_error("Preparing Flashloader Information", c_Text.toStdString().c_str());
+         osc_write_log_error("Preparing Flashloader Information", c_Text);
       }
    }
 }

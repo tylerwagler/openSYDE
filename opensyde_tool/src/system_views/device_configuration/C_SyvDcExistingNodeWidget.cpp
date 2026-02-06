@@ -539,7 +539,7 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
 
          // Rebuild the serial number class
          // POS serial number will reversed in this function
-         c_SerialNumber.SetExtSerialNumber(c_SerialNumberString.toStdString(), u8_ManufacturerFormat);
+         c_SerialNumber.SetExtSerialNumber(c_SerialNumberString, u8_ManufacturerFormat);
          // But it is not detectable if extended or not in this function for this scenario, so overwrite the flag
          c_SerialNumber.q_ExtFormatUsed = q_ExtFormat;
 

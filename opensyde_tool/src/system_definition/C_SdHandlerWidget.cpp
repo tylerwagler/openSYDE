@@ -983,7 +983,7 @@ void C_SdHandlerWidget::m_Export(void)
                                                         QString::number(this->mu32_Index) +
                                                         "\" because message ID is not unique.";
                               c_Warnings.append(c_Message);
-                              osc_write_log_warning("DBC Export", c_Message.toStdString().c_str());
+                              osc_write_log_warning("DBC Export", c_Message);
                               s32_Error += C_WARN;
                            }
                         }
@@ -1030,7 +1030,7 @@ void C_SdHandlerWidget::m_Export(void)
                                                                       +
                                                                       "\" because message ID is not unique. Message is ignored.";
                               c_Warnings.append(c_Message);
-                              osc_write_log_warning("DBC Export", c_Message.toStdString().c_str());
+                              osc_write_log_warning("DBC Export", c_Message);
                               s32_Error += C_WARN;
                            }
                         }
@@ -1184,7 +1184,7 @@ void C_SdHandlerWidget::m_RtfExport(void)
             // get default file name with project path (if using the RTF dialog the first time)
             QString c_DefaultFilename = C_PuiProject::h_GetInstance()->GetName();
             c_DefaultFilename += ".rtf";
-            c_RtfPath = C_PuiUtil::h_GetAbsolutePathFromProject(c_DefaultFilename).toStdString();
+            c_RtfPath = C_PuiUtil::h_GetAbsolutePathFromProject(c_DefaultFilename);
          }
 
          if (c_RtfPath != "")

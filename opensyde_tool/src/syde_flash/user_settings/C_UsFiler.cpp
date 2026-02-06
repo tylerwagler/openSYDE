@@ -185,12 +185,10 @@ void C_UsFiler::mh_SaveProjectIndependentSection(
       static_cast<int32_t>(orc_UserSettings.GetPopOpenSection()));
   orc_Ini.WriteString(
       "Settings", "CustomCanDllPath",
-      orc_UserSettings.GetCustomCanDllPath().toStdString().c_str());
+      orc_UserSettings.GetCustomCanDllPath());
   orc_Ini.WriteString(
       "Settings", "CanDllType",
-      C_UsFiler::mh_GetStringFromDllType(orc_UserSettings.GetCanDllType())
-          .toStdString()
-          );
+      C_UsFiler::mh_GetStringFromDllType(orc_UserSettings.GetCanDllType()));
 
   // Values of Property widget
   orc_Ini.WriteInteger("Properties", "NodeId",
@@ -228,9 +226,7 @@ void C_UsFiler::mh_SaveProjectIndependentSection(
   }
 
   orc_Ini.WriteString("Update", "LastKnownHexFileLocation",
-                      orc_UserSettings.GetLastKnownUpdateHexFileLocation()
-                          .toStdString()
-                          );
+                      orc_UserSettings.GetLastKnownUpdateHexFileLocation());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

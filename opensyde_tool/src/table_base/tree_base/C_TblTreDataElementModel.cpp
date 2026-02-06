@@ -1492,11 +1492,11 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
           ou32_NodeIndex, ou32_DpIndex, ou32_ListIndex, oru32_Counter,
           C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT,
           ou32_RelevantChannelNumber != 1UL, ou32_ChannelArrayIndex, true);
-      c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString().c_str());
+      c_Id.SetHalChannelName(orc_HalChannelOrDomainName);
       C_TblTreDataElementModel::mh_AddHalcTreeItem(
           pc_ListItem,
           C_OscHalcMagicianUtil::h_GetChanNumVariableName(
-              orc_DomainSingularName.toStdString())
+              orc_DomainSingularName)
               ,
           c_Id, ou32_RelevantChannelNumber != 1UL, false,
           oq_ShowOnlyWriteElements, oq_ShowArrayElements,
@@ -1512,11 +1512,11 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
           ou32_NodeIndex, ou32_DpIndex, ou32_ListIndex, oru32_Counter,
           C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT,
           ou32_RelevantChannelNumber != 1UL, ou32_ChannelArrayIndex, true);
-      c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString().c_str());
+      c_Id.SetHalChannelName(orc_HalChannelOrDomainName);
       C_TblTreDataElementModel::mh_AddHalcTreeItem(
           pc_ListItem,
           C_OscHalcMagicianUtil::h_GetSafetyFlagVariableName(
-              orc_DomainSingularName.toStdString())
+              orc_DomainSingularName)
               ,
           c_Id, ou32_RelevantChannelNumber != 1UL, false,
           oq_ShowOnlyWriteElements, oq_ShowArrayElements,
@@ -1532,11 +1532,11 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
           ou32_NodeIndex, ou32_DpIndex, ou32_ListIndex, oru32_Counter,
           C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT,
           ou32_RelevantChannelNumber != 1UL, ou32_ChannelArrayIndex, true);
-      c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString().c_str());
+      c_Id.SetHalChannelName(orc_HalChannelOrDomainName);
       C_TblTreDataElementModel::mh_AddHalcTreeItem(
           pc_ListItem,
           C_OscHalcMagicianUtil::h_GetUseCaseVariableName(
-              orc_DomainSingularName.toStdString())
+              orc_DomainSingularName)
               ,
           c_Id, ou32_RelevantChannelNumber != 1UL, false,
           oq_ShowOnlyWriteElements, oq_ShowArrayElements,
@@ -1663,7 +1663,7 @@ void C_TblTreDataElementModel::mh_AddHalcItem(
           (ou32_RelevantChannelNumber != 1UL),
       ou32_ChannelArrayIndex, true);
 
-  c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString().c_str());
+  c_Id.SetHalChannelName(orc_HalChannelOrDomainName);
 
   C_TblTreDataElementModel::mh_AddHalcTreeItem(
       opc_BaseItem, orc_HalcItem.c_Display, c_Id,

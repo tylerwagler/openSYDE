@@ -1028,7 +1028,7 @@ void C_ImpUtil::mh_GetExistingApplicationHandle(
   // lint -e{909} Windows library interface
   if (Process32FirstW(pv_Snapshot, &c_Entry) != 0) {
     while (Process32NextW(pv_Snapshot, &c_Entry) != 0) {
-      if (std::wcscmp(c_Entry.szExeFile, orc_ExeName) ==
+      if (std::wcscmp(c_Entry.szExeFile, orc_ExeName.c_str()) ==
           0) // lint !e64 //Windows library interface
       {
         u32_ProcessId = c_Entry.th32ProcessID;
@@ -1169,9 +1169,9 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString &orc_NodeName,
   // call file generation exe with arguments
   osc_write_log_info("Generate Files",
                      "Calling file generator \"" +
-                         c_CodeGenFileInfo.absoluteFilePath().toStdString() +
+                         c_CodeGenFileInfo.absoluteFilePath() +
                          "\" with arguments \"" +
-                         c_Arguments.join(" ").toStdString() + "\"");
+                         c_Arguments.join(" ") + "\"");
   pc_Process->start(c_CodeGenFileInfo.absoluteFilePath(), c_Arguments);
   bool q_Tmp = pc_Process->waitForStarted();
   if (q_Tmp == true) {
@@ -1225,7 +1225,7 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString &orc_NodeName,
       case 20: // eRESULT_INVALID_CLI_PARAMETERS
         c_ErrorText =
             ("File generator could not parse command line arguments: " +
-             c_Arguments.join(" ").toStdString())
+             c_Arguments.join(" "))
                 ;
         s32_Return = C_CONFIG;
         break;

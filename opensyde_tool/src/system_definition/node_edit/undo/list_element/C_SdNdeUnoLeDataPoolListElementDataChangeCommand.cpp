@@ -123,10 +123,10 @@ void C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_Change(QVariant & orc_P
       switch (this->me_DataChangeType)
       {
       case C_SdNdeDpUtil::eELEMENT_NAME:
-         c_OscElement.c_Name = orc_NewData.toString().toStdString();
+         c_OscElement.c_Name = orc_NewData.toString();
          break;
       case C_SdNdeDpUtil::eELEMENT_COMMENT:
-         c_OscElement.c_Comment = orc_NewData.toString().toStdString();
+         c_OscElement.c_Comment = orc_NewData.toString();
          break;
       case C_SdNdeDpUtil::eELEMENT_VALUE_TYPE:
          if (orc_NewData.toInt() == 10)
@@ -246,7 +246,7 @@ void C_SdNdeUnoLeDataPoolListElementDataChangeCommand::m_Change(QVariant & orc_P
          c_OscElement.f64_Offset = orc_NewData.toDouble();
          break;
       case C_SdNdeDpUtil::eELEMENT_UNIT:
-         c_OscElement.c_Unit = orc_NewData.toString().toStdString();
+         c_OscElement.c_Unit = orc_NewData.toString();
          break;
       case C_SdNdeDpUtil::eELEMENT_DATA_SET:
          if ((this->ms32_DataSetIndex >= 0) &&

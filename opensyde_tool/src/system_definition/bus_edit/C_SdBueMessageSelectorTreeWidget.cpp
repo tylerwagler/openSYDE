@@ -2135,10 +2135,10 @@ QMimeData * C_SdBueMessageSelectorTreeWidget::mimeData(const QList<QTreeWidgetIt
          pc_Retval = new QMimeData();
          //Store message index
          C_SdClipBoardHelper::h_StoreMessageIndexToString(c_MessageIds, c_TmpString);
-         pc_Retval->setData(this->mimeTypes().at(1), c_TmpString.toStdString().c_str());
+         pc_Retval->setData(this->mimeTypes().at(1), c_TmpString.toUtf8());
          //Store signal indices
          C_SdClipBoardHelper::h_StoreIndicesToString(c_SignalIndices, c_TmpString);
-         pc_Retval->setData(this->mimeTypes().at(2), c_TmpString.toStdString().c_str());
+         pc_Retval->setData(this->mimeTypes().at(2), c_TmpString.toUtf8());
       }
    }
    return pc_Retval;

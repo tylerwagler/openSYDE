@@ -715,7 +715,7 @@ void C_NagNaviBarWidget::m_OpenCanMonitor(void)
 
    if (q_Temp == false)
    {
-      osc_write_log_error("Open openSYDE CAN Monitor Tool", c_ErrorMsg.toStdString().c_str());
+      osc_write_log_error("Open openSYDE CAN Monitor Tool", c_ErrorMsg);
 
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::eERROR,
                                         "Could not start openSYDE CAN Monitor. Reason: Most likely due to insufficient permissions or the executable is missing.");

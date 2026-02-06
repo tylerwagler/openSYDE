@@ -772,8 +772,7 @@ QVariant C_SyvDaItTaModel::data(const QModelIndex & orc_Index, const int32_t os3
                         if (C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(*pc_DataElementId) != NULL)
                         {
                            c_Retval =
-                              C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(*pc_DataElementId)->c_Name.
-                              c_str();
+                              C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(*pc_DataElementId)->c_Name;
                         }
                         break;
                      case C_SyvDaItTaModel::eVALUE:

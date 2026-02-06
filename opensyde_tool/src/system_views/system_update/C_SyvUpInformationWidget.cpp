@@ -385,7 +385,7 @@ void C_SyvUpInformationWidget::InitUpdatePackage(
               (orc_IsFileBased[u32_NodeIndex] == false)) {
             // Do the address based byte count stuff
             C_OscHexFile c_HexFile;
-            const uint32_t u32_Result = c_HexFile.LoadFromFile(rc_File);
+            const uint32_t u32_Result = c_HexFile.LoadFromFile(rc_File.toStdString().c_str());
             if (u32_Result == stw::hex_file::NO_ERR) {
               q_UseFileSize = false;
               c_Files.push_back(static_cast<uint64_t>(c_HexFile.ByteCount()));

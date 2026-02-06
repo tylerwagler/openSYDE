@@ -501,8 +501,7 @@ bool C_SyvDaChaDataItemWidget::event(QEvent * const opc_Event)
          if (C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(this->mc_DataPoolElementId) != NULL)
          {
             const QString c_Name =
-               C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(this->mc_DataPoolElementId)->c_Name.
-               c_str();
+               C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(this->mc_DataPoolElementId)->c_Name;
             if (this->mc_DataPoolElementId.GetUseArrayElementIndex())
             {
                c_ToolTipHeading = static_cast<QString>("%1[%2]").arg(c_Name).arg(

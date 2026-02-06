@@ -144,7 +144,7 @@ int32_t C_SyvUpSequences::InitUpSequences(const uint32_t ou32_ViewIndex) {
 
   if (s32_Return == C_NO_ERR) {
     // pem folder is optional -> no error handling
-    mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString().c_str());
+    mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
 
     s32_Return = C_OscComSequencesBase::Init(
         C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinition(),
@@ -252,7 +252,7 @@ int32_t C_SyvUpSequences::SyvUpCreateTemporaryFolder(
     QString c_ErrorPath;
     s32_Return = C_OscSuSequences::h_CreateTemporaryFolder(
         C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().c_Nodes,
-        this->mc_ActiveNodes, this->mc_ActiveNodes, orc_TargetPath,
+        this->mc_ActiveNodes, orc_TargetPath,
         orc_ApplicationsToWrite, &c_ErrorPath);
     orc_ErrorPath = c_ErrorPath;
   }

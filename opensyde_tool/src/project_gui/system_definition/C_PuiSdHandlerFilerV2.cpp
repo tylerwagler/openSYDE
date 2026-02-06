@@ -107,7 +107,7 @@ int32_t C_PuiSdHandlerFilerV2::h_LoadDataPools(std::vector<C_PuiSdNodeDataPool> 
          {
             const QString c_Tmp = QString("Unexpected UI Datapool count, expected: %1, got %2")
                .arg(u32_ExpectedSize).arg(orc_DataPools.size());
-            osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+            osc_write_log_warning("Load file", c_Tmp);
          }
       }
       //Return
@@ -219,7 +219,7 @@ int32_t C_PuiSdHandlerFilerV2::h_LoadDataPoolLists(std::vector<C_PuiSdNodeDataPo
       {
          const QString c_Tmp = QString("Unexpected UI list count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_DataPoolLists.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp);
       }
    }
    return s32_Retval;
@@ -322,7 +322,7 @@ int32_t C_PuiSdHandlerFilerV2::h_LoadDataPoolListElements(
       {
          const QString c_Tmp = QString("Unexpected UI data element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_DataPoolListElements.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp);
       }
    }
    return s32_RETVAL;
@@ -521,7 +521,7 @@ int32_t C_PuiSdHandlerFilerV2::h_LoadCanProtocols(std::vector<C_PuiSdNodeCanProt
          {
             const QString c_Tmp = QString("Unexpected UI protocol count, expected: %1, got %2")
                .arg(u32_ExpectedSize).arg(orc_CanProtocols.size());
-            osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+            osc_write_log_warning("Load file", c_Tmp);
          }
       }
       //Return
@@ -623,7 +623,7 @@ int32_t C_PuiSdHandlerFilerV2::h_LoadCanMessageContainers(
       {
          const QString c_Tmp = QString("Unexpected data element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_CanMessageContainers.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp);
       }
    }
    return s32_Retval;
@@ -726,7 +726,7 @@ int32_t C_PuiSdHandlerFilerV2::h_LoadCanMessages(std::vector<C_PuiSdNodeCanMessa
       {
          const QString c_Tmp = QString("Unexpected UI messages count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_CanMessages.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp);
       }
    }
    return s32_Retval;
@@ -824,7 +824,7 @@ void C_PuiSdHandlerFilerV2::h_LoadCanSignals(std::vector<C_PuiSdNodeCanSignal> &
       {
          const QString c_Tmp = QString("Unexpected data element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_CanSignals.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp);
       }
    }
 }
@@ -1075,7 +1075,7 @@ int32_t C_PuiSdHandlerFilerV2::h_LoadNodes(std::vector<C_PuiSdNode> & orc_Nodes,
       {
          const QString c_Tmp = QString("Unexpected UI nodes count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_Nodes.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp);
       }
    }
    return s32_Retval;
@@ -1166,7 +1166,7 @@ int32_t C_PuiSdHandlerFilerV2::h_LoadBuses(std::vector<C_PuiSdBus> & orc_Buses, 
       {
          const QString c_Tmp = QString("Unexpected bus count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_Buses.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp);
       }
    }
    return s32_Retval;
@@ -1258,7 +1258,7 @@ int32_t C_PuiSdHandlerFilerV2::h_LoadBusTextElements(std::vector<C_PuiSdTextElem
       {
          const QString c_Tmp = QString("Unexpected bus text element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_BusTextElements.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp);
       }
    }
    return s32_Retval;

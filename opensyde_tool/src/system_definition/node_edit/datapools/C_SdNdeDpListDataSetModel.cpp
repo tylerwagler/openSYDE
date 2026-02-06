@@ -768,9 +768,9 @@ QMimeData * C_SdNdeDpListDataSetModel::mimeData(const QModelIndexList & orc_Indi
             //Use default mime type so qt accepts these
             pc_Retval->setData(this->mimeTypes().at(0), "");
             C_SdClipBoardHelper::h_StoreDataPoolListDataSetsToString(c_OscNames, c_OscDataSetValues, c_String);
-            pc_Retval->setData(this->mimeTypes().at(1), c_String.toStdString().c_str());
+            pc_Retval->setData(this->mimeTypes().at(1), c_String.toUtf8());
             C_SdClipBoardHelper::h_StoreIndicesToString(c_Cols, c_String);
-            pc_Retval->setData(this->mimeTypes().at(2), c_String.toStdString().c_str());
+            pc_Retval->setData(this->mimeTypes().at(2), c_String.toUtf8());
          }
       }
    }
@@ -843,6 +843,6 @@ bool C_SdNdeDpListDataSetModel::CheckName(const uint32_t & oru32_Index, const QS
    return C_PuiSdHandler::h_GetInstance()->CheckNodeDataPoolListDataSetNameAvailable(this->mu32_NodeIndex,
                                                                                      this->mu32_DataPoolIndex,
                                                                                      this->mu32_ListIndex,
-                                                                                     orc_Name.toStdString(),
+                                                                                     orc_Name,
                                                                                      &oru32_Index);
 }

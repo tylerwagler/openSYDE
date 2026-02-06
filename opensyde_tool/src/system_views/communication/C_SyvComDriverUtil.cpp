@@ -116,7 +116,7 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                   {
                      *oppc_CanDispatcher = new stw::can::C_Can();
 
-                     s32_Retval = (*oppc_CanDispatcher)->DLL_Open(c_FilePath.toStdString().c_str());
+                     s32_Retval = (*oppc_CanDispatcher)->DLL_Open(c_FilePath);
                      if ((s32_Retval == C_NO_ERR) &&
                          (oq_InitCan == true))
                      {
@@ -145,7 +145,7 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                   *oppc_CanDispatcher = NULL;
                   *oppc_IpDispatcher = new C_OscIpDispatcherWinSock();
 
-                  (*oppc_IpDispatcher)->LoadConfigFile(c_EthFilePath.toStdString().c_str());
+                  (*oppc_IpDispatcher)->LoadConfigFile(c_EthFilePath);
                }
             }
             else
