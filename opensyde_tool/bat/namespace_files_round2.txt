@@ -1,0 +1,9 @@
+src/graphic_items/line_items/C_GiLiBusConnectorBase.cpp
+src/opensyde_gui_elements/widget/C_OgeWiDashboardTab.cpp
+src/project_gui/system_views/C_PuiSvDashboard.cpp
+src/project_gui/system_views/C_PuiSvDashboardFiler.cpp
+src/project_gui/system_views/C_PuiSvData.cpp
+src/project_gui/system_views/C_PuiSvHandlerFiler.cpp
+src/project_gui/system_views/C_PuiSvPc.cpp
+src/scene_base/undo/topology/C_SebUnoTopBaseManager.cpp
+src/system_views/system_update/update_package/C_SyvUpPacListWidget.cpp

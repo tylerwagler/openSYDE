@@ -151,7 +151,7 @@ function Build-Component {
         # Build
         Write-BuildStep "Building target '$Target' with Ninja (parallel jobs: 24)..."
         $buildStart = Get-Date
-        & cmake.exe --build . --target $Target -- -j64
+        & cmake.exe --build . --target $Target -- -j99
         if ($LASTEXITCODE -ne 0) {
             throw "Build failed with exit code $LASTEXITCODE"
         }

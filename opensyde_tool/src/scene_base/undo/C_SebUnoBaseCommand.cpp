@@ -16,6 +16,7 @@
 #include "C_SebScene.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_gui_logic;
 using namespace std;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
