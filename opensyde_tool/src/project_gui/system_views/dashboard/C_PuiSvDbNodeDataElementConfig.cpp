@@ -66,6 +66,6 @@ void C_PuiSvDbNodeDataElementConfig::CalcHash(uint32_t & oru32_HashValue) const
    this->c_ElementId.CalcHash(oru32_HashValue);
    this->c_ElementScaling.CalcHash(oru32_HashValue);
    this->c_DisplayFormatter.CalcHash(oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_DisplayName.toStdString().c_str(),
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_DisplayName.toStdString(),
                                        this->c_DisplayName.length(), oru32_HashValue);
 }

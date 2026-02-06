@@ -71,6 +71,6 @@ C_PuiSdLastKnownHalElementId::~C_PuiSdLastKnownHalElementId()
 void C_PuiSdLastKnownHalElementId::CalcHash(uint32_t & oru32_HashValue) const
 {
    stw::scl::C_SclChecksums::CalcCRC32(&this->u32_Crc, sizeof(this->u32_Crc), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_HalDpName.toStdString().c_str(),
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_HalDpName.toStdString(),
                                        this->c_HalDpName.length(), oru32_HashValue);
 }

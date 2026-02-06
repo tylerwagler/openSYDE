@@ -1211,7 +1211,7 @@ QString C_SyvDaPeBase::m_GetDefaultDisplayName(const C_PuiSvDbNodeDataPoolListEl
             }
             else
             {
-               const QString c_ElementName = pc_Element->c_Name.c_str();
+               const QString c_ElementName = pc_Element->c_Name;
                if (orc_Id.GetUseArrayElementIndex())
                {
                   c_Retval = static_cast<QString>("%1[%2]").arg(c_ElementName).arg(orc_Id.GetArrayElementIndex());
@@ -1250,7 +1250,7 @@ void C_SyvDaPeBase::m_OnUseDefaultScalingChange(void) const
          {
             this->mpc_Ui->pc_DoubleSpinBoxOffset->setValue(pc_Element->f64_Offset);
             this->mpc_Ui->pc_DoubleSpinBoxFactor->setValue(pc_Element->f64_Factor);
-            this->mpc_Ui->pc_LineEditUnit->setText(pc_Element->c_Unit.c_str());
+            this->mpc_Ui->pc_LineEditUnit->setText(pc_Element->c_Unit);
          }
          else
          {

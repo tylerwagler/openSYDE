@@ -24,6 +24,7 @@ using namespace stw::scl;
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -616,7 +617,7 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeAndSort(C_OscNode & orc_OscNode, const 
    const QString c_DeviceName = (orc_OscNode.pc_DeviceDefinition !=
                                      NULL) ? orc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
    const QString c_DefaultDeviceName =
-      C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName.c_str());
+      C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName);
 
    orc_OscNode.c_Properties.c_Name = C_OscUtils::h_GetUniqueName(
       this->m_GetExistingNodeNames(), orc_OscNode.c_Properties.c_Name, this->GetNameMaxCharLimit(),
@@ -681,7 +682,7 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
       const QString c_DeviceName = (rc_OscNode.pc_DeviceDefinition !=
                                         NULL) ? rc_OscNode.pc_DeviceDefinition->GetDisplayName() : "";
       const QString c_DefaultDeviceName =
-         C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName.c_str());
+         C_PuiSdHandlerNodeLogic::h_AutomaticCeStringAdaptation(c_DeviceName);
       c_Name = orc_NameProposal.isEmpty() ? c_DefaultDeviceName : orc_NameProposal;
 
       // The proposed name would be identical for all sub nodes too. The sub node specific part of the name
@@ -1216,7 +1217,7 @@ const
          q_Retval = true;
          if (opc_CriticalNodeNames != NULL)
          {
-            opc_CriticalNodeNames->emplace_back(rc_CheckedNode.c_Properties.c_Name.c_str());
+            opc_CriticalNodeNames->emplace_back(rc_CheckedNode.c_Properties.c_Name);
          }
       }
       //Datapools
@@ -1245,8 +1246,8 @@ const
             if (opc_CriticalDatapoolNamespaceNames != NULL)
             {
                const QString c_Combined =
-                  static_cast<QString>("%1::%2").arg(rc_CheckedNode.c_Properties.c_Name.c_str()).arg(
-                     rc_CheckedDatapool.c_Name.c_str());
+                  static_cast<QString>("%1::%2").arg(rc_CheckedNode.c_Properties.c_Name).arg(
+                     rc_CheckedDatapool.c_Name);
                opc_CriticalDatapoolNamespaceNames->push_back(c_Combined);
             }
          }
@@ -1304,7 +1305,7 @@ int32_t C_PuiSdHandlerNodeLogic::MapNodeNameToIndex(const QString & orc_NodeName
       Q_ASSERT(pc_Node != NULL);
       if (pc_Node != NULL)
       {
-         if (orc_NodeName.compare(pc_Node->c_Properties.c_Name.c_str()) == 0)
+         if (orc_NodeName.compare(pc_Node->c_Properties.c_Name) == 0)
          {
             s32_Retval = C_NO_ERR;
             oru32_NodeIndex = u32_ItNode;
@@ -1333,7 +1334,7 @@ int32_t C_PuiSdHandlerNodeLogic::MapNodeIndexToName(const uint32_t ou32_NodeInde
 
    if (pc_Node != NULL)
    {
-      orc_NodeName = pc_Node->c_Properties.c_Name.c_str();
+      orc_NodeName = pc_Node->c_Properties.c_Name;
    }
    else
    {

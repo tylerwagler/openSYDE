@@ -21,6 +21,7 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -101,7 +102,7 @@ C_SyvDaDashboardSceneWidget::C_SyvDaDashboardSceneWidget(const uint32_t ou32_Vie
    if (pc_View != NULL)
    {
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
-      c_ViewName = pc_View->GetName().c_str();
+      c_ViewName = pc_View->GetName();
       if (pc_Dashboard != NULL)
       {
          c_DashboardName = pc_Dashboard->GetName();
@@ -196,7 +197,7 @@ void C_SyvDaDashboardSceneWidget::Save(void)
       const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(this->mu32_DashboardIndex);
       if (pc_Dashboard != NULL)
       {
-         C_UsHandler::h_GetInstance()->SetProjSvDashboardScenePositionAndZoom(pc_View->GetName().c_str(),
+         C_UsHandler::h_GetInstance()->SetProjSvDashboardScenePositionAndZoom(pc_View->GetName(),
                                                                               pc_Dashboard->GetName(),
                                                                               this->mpc_Ui->pc_GraphicsView->GetViewPos(),
                                                                               this->mpc_Ui->pc_GraphicsView->GetZoomValue());

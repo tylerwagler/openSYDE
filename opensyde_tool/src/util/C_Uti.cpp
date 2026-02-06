@@ -565,11 +565,11 @@ QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat) {
   c_Version = "V?.\?\?r?";
 
   s32_InfoSize =
-      GetFileVersionInfoSizeA(c_FileName.toStdString().c_str(), NULL);
+      GetFileVersionInfoSizeA(c_FileName.toStdString(), NULL);
   if (s32_InfoSize != 0) {
     uint8_t *pu8_Buffer;
     pu8_Buffer = new uint8_t[static_cast<uint32_t>(s32_InfoSize)];
-    if (GetFileVersionInfoA(c_FileName.toStdString().c_str(), 0, s32_InfoSize,
+    if (GetFileVersionInfoA(c_FileName.toStdString(), 0, s32_InfoSize,
                             pu8_Buffer) != FALSE) {
       // reinterpret_cast required due to function interface
       if (VerQueryValueA(
@@ -662,7 +662,7 @@ QString C_Uti::h_GetCompleteLogFileLocation(const QString &orc_Extension) {
   QDateTime c_DateTime = QDateTime::currentDateTime();
   // Format:2017-08-29 07:32:19.123
   QString c_FileBaseName =
-      C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime).c_str();
+      C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime);
 
   // Replace invalid characters
   c_FileBaseName = c_FileBaseName.replace(4, 1, '_');

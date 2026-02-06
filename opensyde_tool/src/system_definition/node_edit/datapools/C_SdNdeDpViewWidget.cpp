@@ -226,7 +226,7 @@ void C_SdNdeDpViewWidget::SetNode(const uint32_t ou32_NodeIndex)
    {
       //User settings restores
       const C_UsNode c_UserSettingsNode = C_UsHandler::h_GetInstance()->GetProjSdNode(
-         pc_Node->c_Properties.c_Name.c_str());
+         pc_Node->c_Properties.c_Name);
       const QString c_SelectedDataPoolName = c_UserSettingsNode.GetSelectedDatapoolName();
 
       if (pc_Node->c_HalcConfig.IsClear() == false)
@@ -251,7 +251,7 @@ void C_SdNdeDpViewWidget::SetNode(const uint32_t ou32_NodeIndex)
          for (uint32_t u32_ItDataPool = 0; u32_ItDataPool < pc_Node->c_DataPools.size(); ++u32_ItDataPool)
          {
             const C_OscNodeDataPool & rc_DataPool = pc_Node->c_DataPools[u32_ItDataPool];
-            if (rc_DataPool.c_Name == c_SelectedDataPoolName.toStdString().c_str())
+            if (rc_DataPool.c_Name == c_SelectedDataPoolName.toStdString())
             {
                //Match found
                q_RestoreDataPoolSelection = true;
@@ -532,13 +532,13 @@ void C_SdNdeDpViewWidget::m_StoreToUserSettings(void) const
       {
          const C_OscNodeDataPool & rc_DataPool = pc_Node->c_DataPools[this->mu32_LastKnownDataPoolIndex];
          C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedDatapoolName(
-            pc_Node->c_Properties.c_Name.c_str(), rc_DataPool.c_Name.c_str());
+            pc_Node->c_Properties.c_Name, rc_DataPool.c_Name);
       }
       else
       {
          // In case of an invalid or not shown Datapool, reset the entry
          C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedDatapoolName(
-            pc_Node->c_Properties.c_Name.c_str(), "");
+            pc_Node->c_Properties.c_Name, "");
       }
    }
 }

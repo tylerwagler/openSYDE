@@ -219,8 +219,8 @@ void C_ImpUtil::h_ExportCode(
               q_CodeGeneratorMissing = true;
               c_ErrorMessage +=
                   "- " +
-                  static_cast<QString>(pc_Node->c_Properties.c_Name.c_str()) +
-                  ", Data Block \"" + pc_Application->c_Name.c_str() + "\"<br>";
+                  static_cast<QString>(pc_Node->c_Properties.c_Name) +
+                  ", Data Block \"" + pc_Application->c_Name + "\"<br>";
             }
           }
         }
@@ -511,7 +511,7 @@ int32_t C_ImpUtil::h_OpenIde(const QString &orc_IdeExeCall) {
       c_ExeOnly = c_ExeFile.fileName();
 
       C_ImpUtil::mh_GetExistingApplicationHandle(
-          c_ExeOnly.toStdWString().c_str(), c_Windows);
+          c_ExeOnly.toStdWString(), c_Windows);
       if (c_Windows.size() > 0) {
         for (uint32_t u32_ItWindow = 0; u32_ItWindow < c_Windows.size();
              ++u32_ItWindow) {
@@ -606,7 +606,7 @@ QString C_ImpUtil::h_GetAbsoluteGeneratedDir(
 
   // resolve path variables and make absolute
   c_Return = C_PuiUtil::h_GetResolvedAbsPathFromDbProject(
-      orc_Application.c_ProjectPath.c_str(), c_GenerateDir);
+      orc_Application.c_ProjectPath, c_GenerateDir);
 
   return c_Return;
 }
@@ -994,8 +994,8 @@ void C_ImpUtil::mh_CheckNodeDatapoolsAssignmentForExportCode(
             orq_Continue = false;
             orc_DataPoolErrorMessage +=
                 "- " +
-                static_cast<QString>(pc_Node->c_Properties.c_Name.c_str()) +
-                ", Datapool \"" + rc_DataPool.c_Name.c_str() + "\"\n";
+                static_cast<QString>(pc_Node->c_Properties.c_Name) +
+                ", Datapool \"" + rc_DataPool.c_Name + "\"\n";
           }
         }
       }
@@ -1028,7 +1028,7 @@ void C_ImpUtil::mh_GetExistingApplicationHandle(
   // lint -e{909} Windows library interface
   if (Process32FirstW(pv_Snapshot, &c_Entry) != 0) {
     while (Process32NextW(pv_Snapshot, &c_Entry) != 0) {
-      if (std::wcscmp(c_Entry.szExeFile, orc_ExeName.c_str()) ==
+      if (std::wcscmp(c_Entry.szExeFile, orc_ExeName) ==
           0) // lint !e64 //Windows library interface
       {
         u32_ProcessId = c_Entry.th32ProcessID;
@@ -1226,7 +1226,7 @@ int32_t C_ImpUtil::mh_ExecuteCodeGenerator(const QString &orc_NodeName,
         c_ErrorText =
             ("File generator could not parse command line arguments: " +
              c_Arguments.join(" ").toStdString())
-                .c_str();
+                ;
         s32_Return = C_CONFIG;
         break;
       case 30: // eRESULT_SYSTEM_DEFINITION_OPEN_ERROR

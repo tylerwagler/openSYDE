@@ -90,7 +90,7 @@ C_SyvDaPeUpdateModeNodeHeader::C_SyvDaPeUpdateModeNodeHeader(const uint32_t ou32
       this->mpc_Ui->pc_LabelListName->setText(static_cast<QString>("Node - %1").arg(pc_Node->
                                                                                                             c_Properties
                                                                                                             .
-                                                                                                            c_Name.c_str()));
+                                                                                                            c_Name));
    }
    this->UpdateCount();
 

@@ -25,6 +25,7 @@
 
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -252,7 +253,7 @@ void C_SyvComDriverDiagConnect::m_RunSetDiagnosticMode(void)
                                                                "- Failure during authenfication process<br/>"
                                                                "For more information see " +
                                         C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
-                                                         C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()) +
+                                                         C_OscLoggingHandler::h_GetCompleteLogFileLocation()) +
                                         ".";
          break;
       default:
@@ -331,13 +332,13 @@ void C_SyvComDriverDiagConnect::m_RunSetUpCyclicTransmissions(void)
 
                      // This information as title for all errors of this node
                      this->mc_ErrorMessageDetails += "Node " +
-                                                     static_cast<QString>(pc_Node->c_Properties.c_Name.c_str()) + ":\n";
+                                                     pc_Node->c_Properties.c_Name + ":\n";
 
                      if (c_ItFailedNodesElementNumber != c_FailedNodesElementNumber.end())
                      {
                         this->mc_ErrorMessageDetails +=
                            static_cast<QString>("The node %1 can handle maximum %2 transmissions. ").
-                           arg(pc_Node->c_Properties.c_Name.c_str()).
+                           arg(pc_Node->c_Properties.c_Name).
                            arg(c_FailedNodesElementNumber[rc_Id.u32_NodeIndex] - 1U);
                         this->mc_ErrorMessageDetails += static_cast<QString>("Tried to register %1 transmissions.\n"
                                                                              "To fix this adjust 'Max number of cyclic/event driven "

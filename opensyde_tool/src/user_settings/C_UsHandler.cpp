@@ -1240,7 +1240,7 @@ void C_UsHandler::AddToRecentProjects(const QString &orc_Str) {
   // Check if new -> else erase then add again (Should be at top)
   RemoveOfRecentProjects(c_Copy);
   // Add
-  this->mc_RecentProjects.prepend(c_Copy.toStdString().c_str());
+  this->mc_RecentProjects.prepend(c_Copy.toStdString());
   if (this->mc_RecentProjects.count() > C_UsHandler::mhu8_MAX_RECENT_PROJECTS) {
     this->mc_RecentProjects.pop_back();
   }

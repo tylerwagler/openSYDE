@@ -763,7 +763,7 @@ void C_SdBueMessageSelectorTreeWidget::Copy(void)
                      Q_ASSERT(pc_Node != NULL);
                      if (pc_Node != NULL)
                      {
-                        c_OwnerNodeNamePerMessage.emplace_back(pc_Node->c_Properties.c_Name.c_str());
+                        c_OwnerNodeNamePerMessage.emplace_back(pc_Node->c_Properties.c_Name);
                      }
                      c_OwnerNodeInterfaceIndexPerMessage.push_back(rc_CurMessageId.u32_InterfaceIndex);
                      c_OwnerNodeDatapoolIndexPerMessage.push_back(rc_CurMessageId.u32_DatapoolIndex);
@@ -2135,10 +2135,10 @@ QMimeData * C_SdBueMessageSelectorTreeWidget::mimeData(const QList<QTreeWidgetIt
          pc_Retval = new QMimeData();
          //Store message index
          C_SdClipBoardHelper::h_StoreMessageIndexToString(c_MessageIds, c_TmpString);
-         pc_Retval->setData(this->mimeTypes().at(1), c_TmpString.toStdString().c_str());
+         pc_Retval->setData(this->mimeTypes().at(1), c_TmpString.toStdString());
          //Store signal indices
          C_SdClipBoardHelper::h_StoreIndicesToString(c_SignalIndices, c_TmpString);
-         pc_Retval->setData(this->mimeTypes().at(2), c_TmpString.toStdString().c_str());
+         pc_Retval->setData(this->mimeTypes().at(2), c_TmpString.toStdString());
       }
    }
    return pc_Retval;

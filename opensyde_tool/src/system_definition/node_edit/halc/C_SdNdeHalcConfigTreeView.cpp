@@ -19,6 +19,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -129,7 +130,7 @@ void C_SdNdeHalcConfigTreeView::LoadUserSettings(void)
 
    if (pc_Node != NULL)
    {
-      const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
+      const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
 
       if (this->m_SetColumnWidths(c_Node.GetHalcConfigColumnWidth()) == false)
       {
@@ -150,7 +151,7 @@ void C_SdNdeHalcConfigTreeView::SaveUserSettings(void) const
 
    if (pc_Node != NULL)
    {
-      C_UsHandler::h_GetInstance()->SetProjSdNodeHalcConfigColumnWidth(pc_Node->c_Properties.c_Name.c_str(),
+      C_UsHandler::h_GetInstance()->SetProjSdNodeHalcConfigColumnWidth(pc_Node->c_Properties.c_Name,
                                                                        this->m_GetColumnWidths());
    }
 }

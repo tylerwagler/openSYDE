@@ -122,7 +122,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPools(std::vector<C_PuiSdNodeDataPool> & 
          {
             const QString c_Tmp = QString("Unexpected UI Datapool count, expected: %1, got %2")
                .arg(u32_ExpectedSize).arg(orc_DataPools.size());
-            osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+            osc_write_log_warning("Load file", c_Tmp.toStdString());
          }
       }
       //Return
@@ -234,7 +234,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPoolLists(std::vector<C_PuiSdNodeDataPool
       {
          const QString c_Tmp = QString("Unexpected UI list count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_DataPoolLists.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
    return s32_Retval;
@@ -332,7 +332,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPoolListElements(
       {
          const QString c_Tmp = QString("Unexpected UI data element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_DataPoolListElements.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
    return s32_RETVAL;
@@ -391,7 +391,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveDataPools(const std::vector<C_PuiSdNodeDataPo
             s32_Retval =
                h_SaveDataPoolFile(orc_UiDataPools[u32_ItDataPool], opc_BasePath->absoluteFilePath(c_FileName));
             //Store file name
-            orc_XmlParser.SetNodeContent(c_FileName.toStdString().c_str());
+            orc_XmlParser.SetNodeContent(c_FileName.toStdString());
             //Return
             Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pools");
          }
@@ -437,7 +437,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveDataPools(const std::vector<C_PuiSdNodeDataPo
 int32_t C_PuiSdHandlerFiler::h_SaveDataPoolFile(const C_PuiSdNodeDataPool & orc_DataPool, const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString(),
                                                                     "opensyde-dp-ui-definition");
 
    if (s32_Retval == C_NO_ERR)
@@ -448,7 +448,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveDataPoolFile(const C_PuiSdNodeDataPool & orc_
       //node
       C_PuiSdHandlerFiler::h_SaveDataPool(orc_DataPool, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString()) != C_NO_ERR)
       {
          osc_write_log_error("Saving system definition UI", "Could not create file for datapool.");
          s32_Retval = C_CONFIG;
@@ -567,7 +567,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadSharedDatapoolsFile(const QString & orc_FileP
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
-                                                                         orc_FilePath.toStdString().c_str(),
+                                                                         orc_FilePath.toStdString(),
                                                                          "opensyde-shared-datapools-ui-definition");
 
    orc_SharedDatapools.c_SharedDatapools.clear();
@@ -578,7 +578,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadSharedDatapoolsFile(const QString & orc_FileP
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().toInt());
       }
       catch (...)
       {
@@ -590,7 +590,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadSharedDatapoolsFile(const QString & orc_FileP
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading shared Datapools UI", "Value of \"file-version\": " +
-                            QString::number(u16_FileVersion).toStdString());
+                            QString::number(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != 1U)
          {
@@ -683,7 +683,7 @@ void C_PuiSdHandlerFiler::h_LoadSharedDatapoolsGroups(C_PuiSdSharedDatapools & o
       {
          const QString c_Tmp = QString("Unexpected UI shared Datapools group count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_SharedDatapools.c_SharedDatapools.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
 }
@@ -739,7 +739,7 @@ void C_PuiSdHandlerFiler::h_LoadSharedDatapoolsGroup(std::vector<C_OscNodeDataPo
       {
          const QString c_Tmp = QString("Unexpected UI shared Datapool Ids count in group, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_Group.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
 }
@@ -759,7 +759,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSharedDatapoolsFile(const QString & orc_FileP
                                                        const C_PuiSdSharedDatapools & orc_SharedDatapools)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString(),
                                                                     "opensyde-shared-datapools-ui-definition");
 
    if (s32_Retval == C_NO_ERR)
@@ -772,7 +772,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSharedDatapoolsFile(const QString & orc_FileP
       C_PuiSdHandlerFiler::h_SaveSharedDatapoolsGroups(orc_SharedDatapools, c_XmlParser);
 
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString()) != C_NO_ERR)
       {
          osc_write_log_error("Saving shared Datapools UI", "Could not create file for configuration.");
          s32_Retval = C_CONFIG;
@@ -893,7 +893,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadCanProtocols(std::vector<C_PuiSdNodeCanProtoc
          {
             const QString c_Tmp = QString("Unexpected UI protocol count, expected: %1, got %2")
                .arg(u32_ExpectedSize).arg(orc_CanProtocols.size());
-            osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+            osc_write_log_warning("Load file", c_Tmp.toStdString());
          }
       }
       //Return
@@ -995,7 +995,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadCanMessageContainers(
       {
          const QString c_Tmp = QString("Unexpected data element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_CanMessageContainers.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
    return s32_Retval;
@@ -1098,7 +1098,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadCanMessages(std::vector<C_PuiSdNodeCanMessage
       {
          const QString c_Tmp = QString("Unexpected UI messages count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_CanMessages.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
    return s32_Retval;
@@ -1213,7 +1213,7 @@ void C_PuiSdHandlerFiler::h_LoadCanSignals(std::vector<C_PuiSdNodeCanSignal> & o
       {
          const QString c_Tmp = QString("Unexpected data element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_CanSignals.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
 }
@@ -1272,7 +1272,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveCanProtocols(const std::vector<C_PuiSdNodeCan
                   h_SaveCanProtocolFile(orc_UiCanProtocols[u32_ItCanProtocol], opc_BasePath->absoluteFilePath(
                                            c_FileName));
                //Store file name
-               orc_XmlParser.SetNodeContent(c_FileName.toStdString().c_str());
+               orc_XmlParser.SetNodeContent(c_FileName.toStdString());
                //Return
                Q_ASSERT(orc_XmlParser.SelectNodeParent() == "com-protocols");
             }
@@ -1325,7 +1325,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveCanProtocolFile(const C_PuiSdNodeCanProtocol 
                                                    const QString & orc_FilePath)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString(),
                                                                     "opensyde-comm-ui-definition");
 
    if (s32_Retval == C_NO_ERR)
@@ -1336,7 +1336,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveCanProtocolFile(const C_PuiSdNodeCanProtocol 
       //node
       C_PuiSdHandlerFiler::h_SaveCanProtocol(orc_CanProtocol, c_XmlParser);
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString()) != C_NO_ERR)
       {
          osc_write_log_error("Saving system definition UI", "Could not create file for comm protocol.");
          s32_Retval = C_CONFIG;
@@ -1580,7 +1580,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadNodes(std::vector<C_PuiSdNode> & orc_Nodes, C
       {
          const QString c_Tmp = QString("Unexpected UI nodes count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_Nodes.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
    return s32_Retval;
@@ -1604,7 +1604,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadNodeFile(C_PuiSdNode & orc_Node, const QStrin
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
-                                                                         orc_FilePath.toStdString().c_str(),
+                                                                         orc_FilePath.toStdString(),
                                                                          "opensyde-node-ui-definition");
 
    //File version
@@ -1613,7 +1613,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadNodeFile(C_PuiSdNode & orc_Node, const QStrin
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().toInt());
       }
       catch (...)
       {
@@ -1625,7 +1625,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadNodeFile(C_PuiSdNode & orc_Node, const QStrin
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading UI node", "Value of \"file-version\": " +
-                            QString::number(u16_FileVersion).toStdString());
+                            QString::number(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != 1U)
          {
@@ -1749,7 +1749,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadBuses(std::vector<C_PuiSdBus> & orc_Buses, C_
       {
          const QString c_Tmp = QString("Unexpected bus count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_Buses.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
    return s32_Retval;
@@ -1834,7 +1834,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadBusTextElements(std::vector<C_PuiSdTextElemen
       {
          const QString c_Tmp = QString("Unexpected bus text element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_BusTextElements.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
    return s32_Retval;
@@ -1948,7 +1948,7 @@ void C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(const std::map<C_OscNodeDataPo
       orc_XmlParser.CreateAndSelectNodeChild("last-known-halc-crc");
       C_OscDataLoggerJobFiler::h_SaveDataElementOptArrayId(c_It->first, orc_XmlParser);
       orc_XmlParser.SetAttributeUint32("crc", c_It->second.u32_Crc);
-      orc_XmlParser.CreateNodeChild("hal-data-pool-name", c_It->second.c_HalDpName.toStdString().c_str());
+      orc_XmlParser.CreateNodeChild("hal-data-pool-name", c_It->second.c_HalDpName.toStdString());
 
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "last-known-halc-crcs");
@@ -1983,7 +1983,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(const QString & orc_Fi
                                                                                                                                                                                C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString(),
                                                                     "opensyde-system-ui-definition");
 
    if (s32_Retval == C_NO_ERR)
@@ -2003,7 +2003,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(const QString & orc_Fi
             const C_OscNode & rc_OscNode = orc_OscSystemDefinition.c_Nodes[u32_ItNode];
             const C_PuiSdNode & rc_UiNode = orc_UiNodes[u32_ItNode];
             const QString c_FolderName =
-               C_OscNodeFiler::h_GetFolderName(rc_OscNode.c_Properties.c_Name.c_str()).c_str();
+               C_OscNodeFiler::h_GetFolderName(rc_OscNode.c_Properties.c_Name);
             QDir c_Folder = c_Info.dir();
             //Change to folder
             c_Folder.cd(c_FolderName);
@@ -2014,7 +2014,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(const QString & orc_Fi
                                                        c_FileName), &c_Folder);
             //Store file name
             c_XmlParser.CreateNodeChild("node",
-                                        static_cast<QString>(c_FolderName + "/" + c_FileName).toStdString().c_str());
+                                        static_cast<QString>(c_FolderName + "/" + c_FileName).toStdString());
          }
       }
       else
@@ -2043,7 +2043,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(const QString & orc_Fi
          C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(orc_LastKnownHalcCrcs, c_XmlParser);
       }
       //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+      if (c_XmlParser.SaveToFile(orc_FilePath.toStdString()) != C_NO_ERR)
       {
          osc_write_log_error("Saving system definition ui", "Could not create file for ui part.");
          s32_Retval = C_RD_WR;
@@ -2087,7 +2087,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadSystemDefinitionUiFile(const QString & orc_Fi
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
-                                                                         orc_FilePath.toStdString().c_str(),
+                                                                         orc_FilePath.toStdString(),
                                                                          "opensyde-system-ui-definition");
 
    //File version
@@ -2096,7 +2096,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadSystemDefinitionUiFile(const QString & orc_Fi
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().toInt());
       }
       catch (...)
       {
@@ -2108,7 +2108,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadSystemDefinitionUiFile(const QString & orc_Fi
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading UI system definition", "Value of \"file-version\": " +
-                            QString::number(u16_FileVersion).toStdString());
+                            QString::number(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != 1U)
          {
@@ -2274,7 +2274,7 @@ int32_t C_PuiSdHandlerFiler::mh_LoadDatapoolFile(C_PuiSdNodeDataPool & orc_DataP
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
-                                                                         orc_FilePath.toStdString().c_str(),
+                                                                         orc_FilePath.toStdString(),
                                                                          "opensyde-dp-ui-definition");
 
    //File version
@@ -2283,7 +2283,7 @@ int32_t C_PuiSdHandlerFiler::mh_LoadDatapoolFile(C_PuiSdNodeDataPool & orc_DataP
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().toInt());
       }
       catch (...)
       {
@@ -2295,7 +2295,7 @@ int32_t C_PuiSdHandlerFiler::mh_LoadDatapoolFile(C_PuiSdNodeDataPool & orc_DataP
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading UI datapool", "Value of \"file-version\": " +
-                            QString::number(u16_FileVersion).toStdString());
+                            QString::number(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != 1U)
          {
@@ -2349,7 +2349,7 @@ int32_t C_PuiSdHandlerFiler::mh_LoadCommFile(C_PuiSdNodeCanProtocol & orc_UiCanP
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
-                                                                         orc_FilePath.toStdString().c_str(),
+                                                                         orc_FilePath.toStdString(),
                                                                          "opensyde-comm-ui-definition");
 
    //File version
@@ -2358,7 +2358,7 @@ int32_t C_PuiSdHandlerFiler::mh_LoadCommFile(C_PuiSdNodeCanProtocol & orc_UiCanP
       uint16_t u16_FileVersion = 0U;
       try
       {
-         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().ToInt());
+         u16_FileVersion = static_cast<uint16_t>(c_XmlParser.GetNodeContent().toInt());
       }
       catch (...)
       {
@@ -2370,7 +2370,7 @@ int32_t C_PuiSdHandlerFiler::mh_LoadCommFile(C_PuiSdNodeCanProtocol & orc_UiCanP
       if (s32_Retval == C_NO_ERR)
       {
          osc_write_log_info("Loading UI comm definition", "Value of \"file-version\": " +
-                            QString::number(u16_FileVersion).toStdString());
+                            QString::number(u16_FileVersion));
          //Check file version
          if (u16_FileVersion != 1U)
          {
@@ -2550,7 +2550,7 @@ int32_t C_PuiSdHandlerFiler::mh_SaveNodeFile(const C_PuiSdNode & orc_UiNode, con
                                              const QString & orc_FilePath, const QDir * const opc_BasePath)
 {
    C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString().c_str(),
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath.toStdString(),
                                                                     "opensyde-node-ui-definition");
 
    if (s32_Retval == C_NO_ERR)
@@ -2563,7 +2563,7 @@ int32_t C_PuiSdHandlerFiler::mh_SaveNodeFile(const C_PuiSdNode & orc_UiNode, con
       if (s32_Retval == C_NO_ERR)
       {
          //Don't forget to save!
-         if (c_XmlParser.SaveToFile(orc_FilePath.toStdString().c_str()) != C_NO_ERR)
+         if (c_XmlParser.SaveToFile(orc_FilePath.toStdString()) != C_NO_ERR)
          {
             osc_write_log_error("Saving system definition UI", "Could not create file for node.");
             s32_Retval = C_CONFIG;

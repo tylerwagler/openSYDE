@@ -28,6 +28,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -100,7 +101,7 @@ int32_t C_PuiSvHandlerFilerV1::h_LoadViews(std::vector<C_PuiSvData> & orc_Views,
          QString c_Tmp;
          c_Tmp = QString("Unexpected view count, expected: %1, got %2").arg(u32_ExpectedSize).arg(
             orc_Views.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
+         osc_write_log_warning("Load file", c_Tmp.toStdString());
       }
    }
 
@@ -145,7 +146,7 @@ int32_t C_PuiSvHandlerFilerV1::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
 
    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
-      orc_Dashboard.SetName(orc_XmlParser.GetNodeContent().c_str());
+      orc_Dashboard.SetName(orc_XmlParser.GetNodeContent());
       //Return
       orc_XmlParser.SelectNodeParent();
    }
@@ -159,7 +160,7 @@ int32_t C_PuiSvHandlerFilerV1::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
 
    if (orc_XmlParser.SelectNodeChild("comment") == "comment")
    {
-      orc_Dashboard.SetComment(orc_XmlParser.GetNodeContent().c_str());
+      orc_Dashboard.SetComment(orc_XmlParser.GetNodeContent());
       //Return
       orc_XmlParser.SelectNodeParent();
    }
@@ -274,8 +275,8 @@ int32_t C_PuiSvHandlerFilerV1::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
 void C_PuiSvHandlerFilerV1::h_SaveDashboard(const C_PuiSvDashboard & orc_Dashboard, C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeBool("active", orc_Dashboard.GetActive());
-   orc_XmlParser.CreateNodeChild("name", orc_Dashboard.GetName().toStdString().c_str());
-   orc_XmlParser.CreateNodeChild("comment", orc_Dashboard.GetComment().toStdString().c_str());
+   orc_XmlParser.CreateNodeChild("name", orc_Dashboard.GetName().toStdString());
+   orc_XmlParser.CreateNodeChild("comment", orc_Dashboard.GetComment().toStdString());
    mh_SaveCharts(orc_Dashboard.GetCharts(), orc_XmlParser);
    mh_SaveLabels(orc_Dashboard.GetLabels(), orc_XmlParser);
    mh_SaveParams(orc_Dashboard.GetParams(), orc_XmlParser);
@@ -340,7 +341,7 @@ int32_t C_PuiSvHandlerFilerV1::h_LoadReadRails(QMap<C_OscNodeDataPoolListElement
          }
          if (orc_XmlParser.SelectNodeChild("transmission-mode") == "transmission-mode")
          {
-            if (C_PuiSvHandlerFilerV1::mh_StringToTransmissionMode(orc_XmlParser.GetNodeContent().c_str(),
+            if (C_PuiSvHandlerFilerV1::mh_StringToTransmissionMode(orc_XmlParser.GetNodeContent(),
                                                                    c_DataConfiguration.e_TransmissionMode) != C_NO_ERR)
             {
                s32_Retval = C_CONFIG;
@@ -391,7 +392,7 @@ void C_PuiSvHandlerFilerV1::h_SaveReadRails(const QMap<C_OscNodeDataPoolListElem
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignment");
       orc_XmlParser.CreateNodeChild("transmission-mode",
                                     C_PuiSvHandlerFilerV1::mh_TransmissionModeToString(
-                                       c_ReadData.e_TransmissionMode).toStdString().c_str());
+                                       c_ReadData.e_TransmissionMode).toStdString());
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignments");
    }
@@ -703,7 +704,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadView(C_PuiSvData & orc_View, C_OscXmlParse
    }
    if (orc_XmlParser.SelectNodeChild("name") == "name")
    {
-      orc_View.SetName(orc_XmlParser.GetNodeContent().c_str());
+      orc_View.SetName(orc_XmlParser.GetNodeContent());
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-view");
    }
@@ -714,7 +715,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadView(C_PuiSvData & orc_View, C_OscXmlParse
    }
    if ((orc_XmlParser.SelectNodeChild("device-config-mode") == "device-config-mode") && (s32_Retval == C_NO_ERR))
    {
-      orc_View.SetDeviceConfigMode(mh_StringToDeviceConfigMode(orc_XmlParser.GetNodeContent().c_str()));
+      orc_View.SetDeviceConfigMode(mh_StringToDeviceConfigMode(orc_XmlParser.GetNodeContent()));
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-view");
    }
@@ -818,7 +819,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadPc(C_OscViewPc & orc_OscPc, C_PuiSvPc & or
                           true);
    if (orc_XmlParser.SelectNodeChild("dll-path") == "dll-path")
    {
-      QString c_Path = orc_XmlParser.GetNodeContent().c_str();
+      QString c_Path = orc_XmlParser.GetNodeContent();
       if (orc_XmlParser.AttributeExists("type"))
       {
          // Ignore stored type, force PEAK
@@ -983,13 +984,13 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadLabels(std::vector<C_PuiSvDbLabel> & orc_W
             s32_Retval = C_PuiSvHandlerFilerV1::mh_LoadWidgetBase(c_Box, orc_XmlParser);
             if (orc_XmlParser.SelectNodeChild("caption") == "caption")
             {
-               c_Box.c_Caption = orc_XmlParser.GetNodeContent().c_str();
+               c_Box.c_Caption = orc_XmlParser.GetNodeContent();
                //Return
                Q_ASSERT(orc_XmlParser.SelectNodeParent() == "label");
             }
             if (orc_XmlParser.SelectNodeChild("type") == "type")
             {
-               if (mh_StringToLabelType(orc_XmlParser.GetNodeContent().c_str(), c_Box.e_Type) != C_NO_ERR)
+               if (mh_StringToLabelType(orc_XmlParser.GetNodeContent(), c_Box.e_Type) != C_NO_ERR)
                {
                   s32_Retval = C_CONFIG;
                }
@@ -1247,7 +1248,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadSpinBoxes(std::vector<C_PuiSvDbSpinBox> & 
             s32_Retval = C_PuiSvHandlerFilerV1::mh_LoadWidgetBase(c_Box, orc_XmlParser);
             if (orc_XmlParser.SelectNodeChild("type") == "type")
             {
-               if (mh_StringToSpinBoxType(orc_XmlParser.GetNodeContent().c_str(), c_Box.e_Type) != C_NO_ERR)
+               if (mh_StringToSpinBoxType(orc_XmlParser.GetNodeContent(), c_Box.e_Type) != C_NO_ERR)
                {
                   s32_Retval = C_CONFIG;
                }
@@ -1392,7 +1393,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadSliders(std::vector<C_PuiSvDbSlider> & orc
             {
                if (orc_XmlParser.SelectNodeChild("type") == "type")
                {
-                  if (C_PuiSvHandlerFilerV1::mh_StringToSliderType(orc_XmlParser.GetNodeContent().c_str(),
+                  if (C_PuiSvHandlerFilerV1::mh_StringToSliderType(orc_XmlParser.GetNodeContent(),
                                                                    c_Box.e_Type) != C_NO_ERR)
                   {
                      s32_Retval = C_CONFIG;
@@ -1470,7 +1471,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadProgressBars(std::vector<C_PuiSvDbProgress
                }
                if (orc_XmlParser.SelectNodeChild("type") == "type")
                {
-                  if (C_PuiSvHandlerFilerV1::mh_StringToProgressBarType(orc_XmlParser.GetNodeContent().c_str(),
+                  if (C_PuiSvHandlerFilerV1::mh_StringToProgressBarType(orc_XmlParser.GetNodeContent(),
                                                                         c_Box.e_Type) != C_NO_ERR)
                   {
                      s32_Retval = C_CONFIG;
@@ -1486,7 +1487,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadProgressBars(std::vector<C_PuiSvDbProgress
                {
                   if (orc_XmlParser.SelectNodeChild("alignment") == "alignment")
                   {
-                     if (C_PuiSvHandlerFilerV1::mh_StringToProgressBarAlignmentType(orc_XmlParser.GetNodeContent().c_str(),
+                     if (C_PuiSvHandlerFilerV1::mh_StringToProgressBarAlignmentType(orc_XmlParser.GetNodeContent(),
                                                                                     c_Box.e_Alignment) != C_NO_ERR)
                      {
                         s32_Retval = C_CONFIG;
@@ -1548,7 +1549,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadToggles(std::vector<C_PuiSvDbToggle> & orc
             s32_Retval = C_PuiSvHandlerFilerV1::mh_LoadWidgetBase(c_Box, orc_XmlParser);
             if (orc_XmlParser.SelectNodeChild("type") == "type")
             {
-               if (mh_StringToToggleType(orc_XmlParser.GetNodeContent().c_str(), c_Box.e_Type) != C_NO_ERR)
+               if (mh_StringToToggleType(orc_XmlParser.GetNodeContent(), c_Box.e_Type) != C_NO_ERR)
                {
                   s32_Retval = C_CONFIG;
                }
@@ -1631,7 +1632,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadWidgetBase(C_PuiSvDbWidgetBase & orc_Widge
                   c_ElementConfig.c_ElementScaling.f64_Offset = orc_XmlParser.GetAttributeFloat64("offset");
                   if (orc_XmlParser.SelectNodeChild("unit") == "unit")
                   {
-                     c_ElementConfig.c_ElementScaling.c_Unit = orc_XmlParser.GetNodeContent().c_str();
+                     c_ElementConfig.c_ElementScaling.c_Unit = orc_XmlParser.GetNodeContent();
                      //Return
                      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "scaling");
                   }
@@ -1644,7 +1645,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadWidgetBase(C_PuiSvDbWidgetBase & orc_Widge
                }
                if (orc_XmlParser.SelectNodeChild("display-name") == "display-name")
                {
-                  c_ElementConfig.c_DisplayName = orc_XmlParser.GetNodeContent().c_str();
+                  c_ElementConfig.c_DisplayName = orc_XmlParser.GetNodeContent();
                   //Return
                   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pool-element");
                }
@@ -1670,7 +1671,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadWidgetBase(C_PuiSvDbWidgetBase & orc_Widge
       }
       if ((orc_XmlParser.SelectNodeChild("display-style") == "display-style") && (s32_Retval == C_NO_ERR))
       {
-         if (C_PuiSvHandlerFilerV1::mh_StringToDisplayStyle(orc_XmlParser.GetNodeContent().c_str(),
+         if (C_PuiSvHandlerFilerV1::mh_StringToDisplayStyle(orc_XmlParser.GetNodeContent(),
                                                             orc_Widget.e_DisplayStyle) != C_NO_ERR)
          {
             s32_Retval = C_CONFIG;
@@ -1719,7 +1720,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadWriteWidgetBase(C_PuiSvDbWriteWidgetBase &
 
    if (orc_XmlParser.SelectNodeChild("write-mode") == "write-mode")
    {
-      if (C_PuiSvHandlerFilerV1::mh_StringToWriteMode(orc_XmlParser.GetNodeContent().c_str(),
+      if (C_PuiSvHandlerFilerV1::mh_StringToWriteMode(orc_XmlParser.GetNodeContent(),
                                                       orc_WriteWidget.e_ElementWriteMode) != C_NO_ERR)
       {
          s32_Retval = C_CONFIG;
@@ -1763,7 +1764,7 @@ void C_PuiSvHandlerFilerV1::mh_LoadUiIndex(C_PuiSvDbNodeDataPoolListElementId & 
       orc_XmlParser.SelectNodeParent();
       if (orc_XmlParser.SelectNodeChild("source-type") == "source-type")
       {
-         C_PuiSvHandlerFilerV1::mh_StringToSourceType(orc_XmlParser.GetNodeContent().c_str(), e_SourceType);
+         C_PuiSvHandlerFilerV1::mh_StringToSourceType(orc_XmlParser.GetNodeContent(), e_SourceType);
          //Return
          orc_XmlParser.SelectNodeParent();
       }
@@ -1780,7 +1781,7 @@ void C_PuiSvHandlerFilerV1::mh_LoadUiIndex(C_PuiSvDbNodeDataPoolListElementId & 
       }
       if (orc_XmlParser.SelectNodeChild("invalid-name-placeholder") == "invalid-name-placeholder")
       {
-         c_InvalidNamePlaceholder = orc_XmlParser.GetNodeContent().c_str();
+         c_InvalidNamePlaceholder = orc_XmlParser.GetNodeContent();
          //Return
          orc_XmlParser.SelectNodeParent();
       }
@@ -2454,7 +2455,7 @@ void C_PuiSvHandlerFilerV1::mh_SaveView(const C_PuiSvData & orc_View, C_OscXmlPa
    //Return
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-view");
    orc_XmlParser.CreateNodeChild("device-config-mode", mh_DeviceConfigModeToString(
-                                    orc_View.GetDeviceConfigMode()).toStdString().c_str());
+                                    orc_View.GetDeviceConfigMode()).toStdString());
    orc_XmlParser.CreateAndSelectNodeChild("update-rates");
    orc_XmlParser.SetAttributeUint32("fast", static_cast<uint32_t>(orc_View.GetUpdateRateFast()));
    orc_XmlParser.SetAttributeUint32("medium", static_cast<uint32_t>(orc_View.GetUpdateRateMedium()));
@@ -2491,7 +2492,7 @@ void C_PuiSvHandlerFilerV1::mh_SavePc(const C_OscViewPc & orc_OscPc, const C_Pui
 
    orc_XmlParser.CreateAndSelectNodeChild("dll-path");
    orc_XmlParser.SetAttributeSint32("type", static_cast<int32_t>(orc_PuiPc.GetCanDllType()));
-   orc_XmlParser.SetNodeContent(orc_PuiPc.GetCustomCanDllPath().toStdString().c_str());
+   orc_XmlParser.SetNodeContent(orc_PuiPc.GetCustomCanDllPath().toStdString());
    //Return
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "pc");
    orc_XmlParser.CreateAndSelectNodeChild("box");
@@ -2558,8 +2559,8 @@ void C_PuiSvHandlerFilerV1::mh_SaveLabels(const std::vector<C_PuiSvDbLabel> & or
       orc_XmlParser.SetAttributeBool("show-caption", rc_Label.q_ShowCaption);
       orc_XmlParser.SetAttributeBool("show-unit", rc_Label.q_ShowUnit);
       C_PuiSvHandlerFilerV1::mh_SaveWidgetBase(rc_Label, orc_XmlParser);
-      orc_XmlParser.CreateNodeChild("caption", rc_Label.c_Caption.toStdString().c_str());
-      orc_XmlParser.CreateNodeChild("type", mh_LabelTypeToString(rc_Label.e_Type).toStdString().c_str());
+      orc_XmlParser.CreateNodeChild("caption", rc_Label.c_Caption.toStdString());
+      orc_XmlParser.CreateNodeChild("type", mh_LabelTypeToString(rc_Label.e_Type).toStdString());
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "labels");
    }
@@ -2729,7 +2730,7 @@ void C_PuiSvHandlerFilerV1::mh_SaveSpinBoxes(const std::vector<C_PuiSvDbSpinBox>
       C_PuiSvHandlerFilerV1::mh_SaveWidgetBase(rc_SpinBox, orc_XmlParser);
 
       orc_XmlParser.CreateNodeChild("type", C_PuiSvHandlerFilerV1::mh_SpinBoxTypeToString(
-                                       rc_SpinBox.e_Type).toStdString().c_str());
+                                       rc_SpinBox.e_Type).toStdString());
       orc_XmlParser.CreateAndSelectNodeChild("content");
       C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(rc_SpinBox.c_Value, orc_XmlParser);
       //Return
@@ -2795,7 +2796,7 @@ void C_PuiSvHandlerFilerV1::mh_SaveSliders(const std::vector<C_PuiSvDbSlider> & 
       orc_XmlParser.CreateAndSelectNodeChild("slider");
       C_PuiSvHandlerFilerV1::mh_SaveWidgetBase(rc_Slider, orc_XmlParser);
       orc_XmlParser.CreateNodeChild("type", C_PuiSvHandlerFilerV1::mh_SliderTypeToString(
-                                       rc_Slider.e_Type).toStdString().c_str());
+                                       rc_Slider.e_Type).toStdString());
       orc_XmlParser.SetAttributeBool("show-min-max", rc_Slider.q_ShowMinMax);
       //Deprecated
       orc_XmlParser.SetAttributeSint32("value", 0);
@@ -2823,10 +2824,10 @@ void C_PuiSvHandlerFilerV1::mh_SaveProgressBars(const std::vector<C_PuiSvDbProgr
       orc_XmlParser.CreateAndSelectNodeChild("progress-bar");
       C_PuiSvHandlerFilerV1::mh_SaveWidgetBase(rc_ProgressBar, orc_XmlParser);
       orc_XmlParser.CreateNodeChild("type", C_PuiSvHandlerFilerV1::mh_ProgressBarTypeToString(
-                                       rc_ProgressBar.e_Type).toStdString().c_str());
+                                       rc_ProgressBar.e_Type).toStdString());
       orc_XmlParser.CreateNodeChild("alignment",
                                     C_PuiSvHandlerFilerV1::mh_ProgressBarAlignmentTypeToString(
-                                       rc_ProgressBar.e_Alignment).toStdString().c_str());
+                                       rc_ProgressBar.e_Alignment).toStdString());
       orc_XmlParser.SetAttributeBool("show-min-max", rc_ProgressBar.q_ShowMinMax);
       orc_XmlParser.SetAttributeBool("show-unit", rc_ProgressBar.q_ShowUnit);
       //Return
@@ -2855,7 +2856,7 @@ void C_PuiSvHandlerFilerV1::mh_SaveToggles(const std::vector<C_PuiSvDbToggle> & 
       C_PuiSvHandlerFilerV1::mh_SaveWidgetBase(rc_Toggle, orc_XmlParser);
 
       orc_XmlParser.CreateNodeChild("type", C_PuiSvHandlerFilerV1::mh_ToggleTypeToString(
-                                       rc_Toggle.e_Type).toStdString().c_str());
+                                       rc_Toggle.e_Type).toStdString());
 
       //Content
       orc_XmlParser.SetAttributeBool("state", rc_Toggle.q_State);
@@ -2897,10 +2898,10 @@ void C_PuiSvHandlerFilerV1::mh_SaveWidgetBase(const C_PuiSvDbWidgetBase & orc_Wi
       orc_XmlParser.SetAttributeBool("use-default", rc_Scaling.q_UseDefault);
       orc_XmlParser.SetAttributeFloat64("factor", rc_Scaling.f64_Factor);
       orc_XmlParser.SetAttributeFloat64("offset", rc_Scaling.f64_Offset);
-      orc_XmlParser.CreateNodeChild("unit", rc_Scaling.c_Unit.toStdString().c_str());
+      orc_XmlParser.CreateNodeChild("unit", rc_Scaling.c_Unit.toStdString());
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pool-element");
-      orc_XmlParser.CreateNodeChild("display-name", rc_Config.c_DisplayName.toStdString().c_str());
+      orc_XmlParser.CreateNodeChild("display-name", rc_Config.c_DisplayName.toStdString());
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pool-elements");
    }
@@ -2909,7 +2910,7 @@ void C_PuiSvHandlerFilerV1::mh_SaveWidgetBase(const C_PuiSvDbWidgetBase & orc_Wi
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "base");
 
    orc_XmlParser.CreateNodeChild("display-style", C_PuiSvHandlerFilerV1::mh_DisplayStyleToString(
-                                    orc_Widget.e_DisplayStyle).toStdString().c_str());
+                                    orc_Widget.e_DisplayStyle).toStdString());
 
    {
       const C_PuiSvDbWriteWidgetBase * const pc_WriteWidget =
@@ -2934,7 +2935,7 @@ void C_PuiSvHandlerFilerV1::mh_SaveWriteWidgetBase(const C_PuiSvDbWriteWidgetBas
                                                    C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateNodeChild("write-mode", C_PuiSvHandlerFilerV1::mh_WriteModeToString(
-                                    orc_WriteWidget.e_ElementWriteMode).toStdString().c_str());
+                                    orc_WriteWidget.e_ElementWriteMode).toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2956,10 +2957,10 @@ void C_PuiSvHandlerFilerV1::mh_SaveUiIndex(const C_PuiSvDbNodeDataPoolListElemen
    //Return
    orc_XmlParser.SelectNodeParent();
    orc_XmlParser.CreateNodeChild("source-type",
-                                 C_PuiSvHandlerFilerV1::mh_SourceTypeToString(orc_Id.GetType()).toStdString().c_str());
+                                 C_PuiSvHandlerFilerV1::mh_SourceTypeToString(orc_Id.GetType()).toStdString());
    orc_XmlParser.CreateNodeChild("invalid-type-placeholder",
                                  C_OscNodeDataPoolFilerV2::h_DataPoolToString(orc_Id.GetInvalidTypePlaceholder()));
-   orc_XmlParser.CreateNodeChild("invalid-name-placeholder", orc_Id.GetInvalidNamePlaceholder().toStdString().c_str());
+   orc_XmlParser.CreateNodeChild("invalid-name-placeholder", orc_Id.GetInvalidNamePlaceholder().toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

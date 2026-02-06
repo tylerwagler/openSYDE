@@ -213,13 +213,13 @@ C_OscParamSetInterpretedFileInfoData C_SyvDaItPaImageRecordWidget::h_GetFileInfo
    {
       c_Name = qgetenv("USERNAME");
    }
-   c_Retval.c_Creator = c_Name.toStdString().c_str();
-   c_Retval.c_DateTime = QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss").toStdString().c_str();
+   c_Retval.c_Creator = c_Name;
+   c_Retval.c_DateTime = QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss");
    c_Retval.c_ToolName = "openSYDE";
-   c_Retval.c_ToolVersion = C_Uti::h_GetApplicationVersion().toStdString().c_str();
-   c_Retval.c_ProjectName = C_PuiProject::h_GetInstance()->GetName().toStdString().c_str();
+   c_Retval.c_ToolVersion = C_Uti::h_GetApplicationVersion();
+   c_Retval.c_ProjectName = C_PuiProject::h_GetInstance()->GetName();
    c_Retval.c_ProjectVersion = C_PuiProject::h_GetInstance()->c_Version;
-   c_Retval.c_UserComment = orc_Comment.toStdString().c_str();
+   c_Retval.c_UserComment = orc_Comment;
    return c_Retval;
 }
 
@@ -841,7 +841,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
                c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(1UL));
             }
             c_Text += static_cast<QString>("Node") + " - " +
-                      static_cast<QString>(pc_OscNode->c_Properties.c_Name.c_str());
+                      pc_OscNode->c_Properties.c_Name;
             if (oq_IsConfirm == true)
             {
                c_Text += "</u>";
@@ -881,7 +881,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
                         c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(2UL));
                      }
                      c_Text += static_cast<QString>("DataPool") +
-                               " - " + static_cast<QString>(pc_OscDataPool->c_Name.c_str()) + "</div>";
+                               " - " + pc_OscDataPool->c_Name + "</div>";
                   }
                }
 
@@ -897,7 +897,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
                      c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(3UL));
                   }
                   c_Text += static_cast<QString>("List") +
-                            " - " + static_cast<QString>(pc_OscList->c_Name.c_str()) + "</div>";
+                            " - " + pc_OscList->c_Name + "</div>";
                }
             }
          }
@@ -1151,7 +1151,7 @@ void C_SyvDaItPaImageRecordWidget::m_ReportError(const QString & orc_FunctionNam
 
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
-   osc_write_log_info("Write NVM parameters", c_Text.toStdString().c_str());
+   osc_write_log_info("Write NVM parameters", c_Text.toStdString());
 
    c_Message.SetDescription(static_cast<QString>("Function %1 ended with error.").arg(
                                orc_FunctionName));
@@ -1172,7 +1172,7 @@ void C_SyvDaItPaImageRecordWidget::m_ReportError(const QString & orc_FunctionNam
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaImageRecordWidget::m_ReportErrorNvmSafeReadParameterValues(const int32_t os32_ErrorCode)
 {
-   const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
+   const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
    uint8_t u8_Nrc;
    QString c_Details = "";
    QString c_Description;
@@ -1283,7 +1283,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetPathForNode(const uint32_t ou32_NodeI
          const QFileInfo c_FileInfo(orc_Path);
          const QDir c_Dir(c_FileInfo.absoluteDir());
          const QString c_NodeFileNameBase = C_OscSystemFilerUtil::h_PrepareItemNameForFileName(
-            pc_Node->c_Properties.c_Name).c_str();
+            pc_Node->c_Properties.c_Name);
          const QString c_NodeFileName = c_FileInfo.completeBaseName() + "_" + c_NodeFileNameBase + "." +
                                         c_FileInfo.suffix();
          c_Retval = c_Dir.absoluteFilePath(c_NodeFileName);

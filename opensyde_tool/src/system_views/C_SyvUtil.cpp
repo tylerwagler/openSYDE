@@ -496,7 +496,7 @@ void C_SyvUtil::h_GetViewDisplayName(const uint32_t ou32_ViewIndex, const int32_
          break;
       }
       orc_SubMode = static_cast<QString>("VIEW #%1 - %2")
-                    .arg(ou32_ViewIndex + 1).arg(pc_View->GetName().c_str());
+                    .arg(ou32_ViewIndex + 1).arg(pc_View->GetName());
    }
 }
 

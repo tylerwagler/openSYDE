@@ -585,7 +585,7 @@ void C_SdTopologyToolbox::m_LoadUserDeviceDefinitionPaths(const QString & orc_Pa
       std::vector<C_OscDeviceDefinition> c_UserDevices;
       bool q_IsValidUserIni = false;
 
-      c_UserDeviceManager.LoadFromFile(orc_Path.toStdString().c_str(), false, ps32_PtrDeviceCount);
+      c_UserDeviceManager.LoadFromFile(orc_Path.toStdString(), false, ps32_PtrDeviceCount);
       c_DeviceGroups = c_UserDeviceManager.GetDeviceGroups();
 
       // get DeviceGroups from device manager
@@ -657,7 +657,7 @@ int32_t C_SdTopologyToolbox::m_AddUserNodesToIni(const QStringList & orc_UserDev
       for (int32_t s32_ItPath = 0; s32_ItPath < orc_UserDeviceDefPaths.size(); ++s32_ItPath)
       {
          const int32_t s32_Result = C_OscSystemDefinition::hc_Devices.AddDevice(
-            orc_UserDeviceDefPaths[s32_ItPath].toStdString().c_str(),
+            orc_UserDeviceDefPaths[s32_ItPath].toStdString(),
             "User Nodes",
             "../devices/user_devices.ini");
 

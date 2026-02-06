@@ -26,6 +26,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -126,15 +127,15 @@ void C_SdNdeHalcChannelTreeModel::SetNode(const uint32_t ou32_NodeIndex)
 
             if (pc_Domain->c_Channels.empty() == false)
             {
-               pc_DomainTreeItem->c_Name = static_cast<QString>("%1 (%2)").arg(pc_Domain->c_Name.c_str())
+               pc_DomainTreeItem->c_Name = static_cast<QString>("%1 (%2)").arg(pc_Domain->c_Name)
                                            .arg(pc_Domain->c_Channels.size());
             }
             else
             {
-               pc_DomainTreeItem->c_Name = pc_Domain->c_Name.c_str();
+               pc_DomainTreeItem->c_Name = pc_Domain->c_Name;
             }
-            pc_DomainTreeItem->c_ToolTipHeading = pc_Domain->c_Name.c_str();
-            pc_DomainTreeItem->c_ToolTipContent = pc_Domain->c_DomainConfig.c_Comment.c_str();
+            pc_DomainTreeItem->c_ToolTipHeading = pc_Domain->c_Name;
+            pc_DomainTreeItem->c_ToolTipContent = pc_Domain->c_DomainConfig.c_Comment;
 
             // icon is done by CheckError()
 
@@ -156,9 +157,9 @@ void C_SdNdeHalcChannelTreeModel::SetNode(const uint32_t ou32_NodeIndex)
                   C_TblTreItem * const pc_Child = new C_TblTreItem();
                   const C_OscHalcConfigChannel & rc_ConfigChannel = pc_Domain->c_ChannelConfigs[u32_ChannelIt];
 
-                  mh_SetChannelText(pc_Child, rc_ConfigChannel.c_Name.c_str(),
-                                    pc_Domain->c_Channels[u32_ChannelIt].c_Name.c_str(),
-                                    rc_ConfigChannel.c_Comment.c_str());
+                  mh_SetChannelText(pc_Child, rc_ConfigChannel.c_Name,
+                                    pc_Domain->c_Channels[u32_ChannelIt].c_Name,
+                                    rc_ConfigChannel.c_Comment);
                   pc_Child->u32_Index = u32_ChannelIt;
 
                   // icon is done by CheckError()
@@ -220,16 +221,16 @@ void C_SdNdeHalcChannelTreeModel::UpdateChannelText(const uint32_t ou32_DomainIn
             if (ou32_ChannelIndex < pc_Domain->c_Channels.size())
             {
                // channel case
-               mh_SetChannelText(pc_ChannelItem, pc_Channel->c_Name.c_str(),
-                                 pc_Domain->c_Channels[ou32_ChannelIndex].c_Name.c_str(),
-                                 pc_Channel->c_Comment.c_str());
+               mh_SetChannelText(pc_ChannelItem, pc_Channel->c_Name,
+                                 pc_Domain->c_Channels[ou32_ChannelIndex].c_Name,
+                                 pc_Channel->c_Comment);
             }
             else
             {
                // domain case
-               pc_ChannelItem->c_Name = pc_Channel->c_Name.c_str();
-               pc_ChannelItem->c_ToolTipHeading = pc_Channel->c_Name.c_str();
-               pc_ChannelItem->c_ToolTipContent = pc_Channel->c_Comment.c_str();
+               pc_ChannelItem->c_Name = pc_Channel->c_Name;
+               pc_ChannelItem->c_ToolTipHeading = pc_Channel->c_Name;
+               pc_ChannelItem->c_ToolTipContent = pc_Channel->c_Comment;
             }
 
             // update domain and channel visualization

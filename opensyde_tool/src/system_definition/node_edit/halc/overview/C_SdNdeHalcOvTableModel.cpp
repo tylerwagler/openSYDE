@@ -21,6 +21,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -658,7 +659,7 @@ void C_SdNdeHalcOvTableModel::m_FillHalcInfo(void)
                c_Data.c_ChannelName = "-";
 
                // Domain specific part
-               c_Data.c_DomainName = static_cast<QString>(pc_Domain->c_Name.c_str());
+               c_Data.c_DomainName = static_cast<QString>(pc_Domain->c_Name);
 
                // Generic config part
                m_FillHalcInfoData(*pc_Domain, pc_Domain->c_DomainConfig, c_Data);
@@ -682,10 +683,10 @@ void C_SdNdeHalcOvTableModel::m_FillHalcInfo(void)
 
                   // Channel specific part
                   c_Config.u32_ChannelIndex = u32_ItChannel;
-                  c_Data.c_ChannelName = static_cast<QString>(pc_Domain->c_Channels[u32_ItChannel].c_Name.c_str());
+                  c_Data.c_ChannelName = static_cast<QString>(pc_Domain->c_Channels[u32_ItChannel].c_Name);
 
                   // Domain specific part
-                  c_Data.c_DomainName = static_cast<QString>(pc_Domain->c_Name.c_str());
+                  c_Data.c_DomainName = static_cast<QString>(pc_Domain->c_Name);
 
                   // Generic config part
                   m_FillHalcInfoData(*pc_Domain, pc_Domain->c_ChannelConfigs[u32_ItChannel], c_Data);
@@ -871,20 +872,20 @@ void C_SdNdeHalcOvTableModel::m_FillHalcInfoData(const C_OscHalcConfigDomain & o
    const C_OscNodeApplication * pc_Application = NULL;
    const C_OscNodeDataPool * pc_Datapool;
 
-   orc_Data.c_CustomName = static_cast<QString>(orc_Config.c_Name.c_str());
-   orc_Data.c_Comment = static_cast<QString>(orc_Config.c_Comment.c_str());
+   orc_Data.c_CustomName = static_cast<QString>(orc_Config.c_Name);
+   orc_Data.c_Comment = static_cast<QString>(orc_Config.c_Comment);
 
    if (orc_Config.u32_UseCaseIndex < orc_Domain.c_ChannelUseCases.size())
    {
       const C_OscHalcDefChannelUseCase & rc_UseCase = orc_Domain.c_ChannelUseCases[orc_Config.u32_UseCaseIndex];
-      orc_Data.c_UseCase = static_cast<QString>(rc_UseCase.c_Display.c_str());
+      orc_Data.c_UseCase = static_cast<QString>(rc_UseCase.c_Display);
    }
    else
    {
       orc_Data.c_UseCase = "-";
    }
 
-   orc_Data.c_DatapoolName = C_OscHalcMagicianUtil::h_GetDatapoolName(orc_Config.q_SafetyRelevant).c_str();
+   orc_Data.c_DatapoolName = C_OscHalcMagicianUtil::h_GetDatapoolName(orc_Config.q_SafetyRelevant);
 
    if (orc_Config.q_SafetyRelevant == true)
    {
@@ -906,7 +907,7 @@ void C_SdNdeHalcOvTableModel::m_FillHalcInfoData(const C_OscHalcConfigDomain & o
 
    if (pc_Application != NULL)
    {
-      orc_Data.c_DatablockAssignment = static_cast<QString>(pc_Application->c_Name.c_str());
+      orc_Data.c_DatablockAssignment = static_cast<QString>(pc_Application->c_Name);
    }
    else
    {

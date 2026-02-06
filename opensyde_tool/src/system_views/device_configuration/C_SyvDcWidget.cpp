@@ -635,7 +635,7 @@ void C_SyvDcWidget::m_ScanFinished(void)
       const C_OscDcDeviceInformation & rc_Device1 = this->mc_FoundDevices[u32_ItDevice1];
 
       //trim & check
-      if (rc_Device1.c_DeviceName.Trim() != rc_Device1.c_DeviceName)
+      if (rc_Device1.c_DeviceName.trimmed() != rc_Device1.c_DeviceName)
       {
          //not trimmed string found
          q_NotTrimmedDevicesFound = true;
@@ -652,7 +652,7 @@ void C_SyvDcWidget::m_ScanFinished(void)
       c_Message.SetHeading("Device Type");
       c_Message.SetDescription("Device type received from target is not trimmed. "
                                   "This could lead to visual misunderstanding while devices assignment.");
-      c_Message.SetDetails(c_NotTrimmedDevices.c_str());
+      c_Message.SetDetails(c_NotTrimmedDevices);
       c_Message.SetCustomMinHeight(230, 300);
       c_Message.Execute();
    }
@@ -1047,7 +1047,7 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
       // Serial number
       orc_Text +=
          "SN.: " +
-         static_cast<QString>(orc_Config[0].c_SerialNumber.GetSerialNumberAsFormattedString().c_str()) +
+         orc_Config[0].c_SerialNumber.GetSerialNumberAsFormattedString() +
          "<br>";
 
       if (this->mpc_DcSequences->GetNodeIndex(c_FirstServerId, u32_FirstNodeIndex) == true)
@@ -1830,7 +1830,7 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
             if (rc_Info.c_SerialNumber.q_IsValid == true)
             {
                c_Text +=
-                  static_cast<QString>(rc_Info.c_SerialNumber.GetSerialNumberAsFormattedString().c_str());
+                  rc_Info.c_SerialNumber.GetSerialNumberAsFormattedString();
             }
             else
             {
@@ -1847,9 +1847,9 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
                {
                   if (pc_Node->pc_DeviceDefinition != NULL)
                   {
-                     c_TopologyDeviceType = pc_Node->pc_DeviceDefinition->c_DeviceName.c_str();
+                     c_TopologyDeviceType = pc_Node->pc_DeviceDefinition->c_DeviceName;
                   }
-                  c_TopologyNodeName = pc_Node->c_Properties.c_Name.c_str();
+                  c_TopologyNodeName = pc_Node->c_Properties.c_Name;
                }
             }
 
@@ -1877,7 +1877,7 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
             // Read device type
             c_Text += "<tr>";
             c_Text += "<td width=\"40%\">" + static_cast<QString>("Read Type: ") +
-                      static_cast<QString>(rc_Info.c_DeviceName.c_str()) +
+                      rc_Info.c_DeviceName +
                       "</td>";
             c_Text += "</tr>";
 
@@ -1893,7 +1893,7 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
             c_Text += "<table width=\"100%\" style =\" margin-left:10px\">";
             c_Text += "<tr>";
             c_Text += "<td width=\"40%\">" + static_cast<QString>("Verification") + "</td>";
-            if (static_cast<QString>(rc_Info.c_DeviceName.c_str()) == c_TopologyDeviceType)
+            if (rc_Info.c_DeviceName == c_TopologyDeviceType)
             {
                c_Text += "<td width=\"20%\">" + static_cast<QString>("OK") + "</td>";
             }
@@ -1919,7 +1919,7 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
             //Update log file
             C_OscLoggingHandler::h_Flush();
             c_Text += static_cast<QString>("<a href=\"file:%1\"><span style=\"color: %2;\">%3</span></a>.").
-                      arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
+                      arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation()).
                       arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
                       arg("log file");
             c_Text += "<br/>";
@@ -2469,7 +2469,7 @@ void C_SyvDcWidget::m_Timer(void)
 {
    if (this->mpc_DcSequences != NULL)
    {
-      const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
+      const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
       int32_t s32_Result;
       int32_t s32_SequenceResult;
       bool q_ShowFinalErrorMessage = false;
@@ -2703,7 +2703,7 @@ void C_SyvDcWidget::m_Timer(void)
                //Update log file
                C_OscLoggingHandler::h_Flush();
                c_Text += static_cast<QString>("<a href=\"file:%1\"><span style=\"color: %2;\">%3</span></a>.").
-                         arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
+                         arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation()).
                          arg(mc_STYLESHEET_GUIDE_COLOR_LINK).
                          arg("log file");
                c_Text += "<br/>";
@@ -2919,7 +2919,7 @@ void C_SyvDcWidget::m_HandleMissingDevices(const std::vector<C_SyvDcDeviceConfig
       if (q_Found == false)
       {
          orc_ReportText += "<b>" + static_cast<QString>("SN.: %1").arg(
-            static_cast<QString>(rc_ExpectedDevice.c_SerialNumber.GetSerialNumberAsFormattedString().c_str())) +
+            rc_ExpectedDevice.c_SerialNumber.GetSerialNumberAsFormattedString()) +
                            "</b><br/>";
       }
    }

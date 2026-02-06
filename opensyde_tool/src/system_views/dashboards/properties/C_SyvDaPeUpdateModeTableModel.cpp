@@ -351,7 +351,7 @@ QVariant C_SyvDaPeUpdateModeTableModel::data(const QModelIndex & orc_Index, cons
                                                                              rc_CurId.u32_DataPoolIndex);
                if (pc_DataPool != NULL)
                {
-                  c_Retval = pc_DataPool->c_Name.c_str();
+                  c_Retval = pc_DataPool->c_Name;
                }
                break;
             case eTRANSMISSION_MODE:

@@ -26,6 +26,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -2056,7 +2057,7 @@ int32_t C_PuiSdHandlerBusLogic::InsertCanMessage(const C_OscCanMessageIdentifica
          //Get unique name
          c_AdaptedMessage.c_Name = C_OscUtils::h_GetUniqueName(
             this->m_GetExistingMessageNames(orc_MessageId.u32_NodeIndex, orc_MessageId.u32_InterfaceIndex),
-            orc_Message.c_Name, this->GetNameMaxCharLimit()).ToQString();
+            orc_Message.c_Name, this->GetNameMaxCharLimit());
       }
       s32_Retval = rc_OscNode.InsertMessage(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                             orc_MessageId.u32_DatapoolIndex,
@@ -2194,7 +2195,7 @@ int32_t C_PuiSdHandlerBusLogic::InsertCanSignal(const C_OscCanMessageIdentificat
 
       //Get unique name
       c_OscAdaptedSignalCommon.c_Name = C_OscUtils::h_GetUniqueName(
-         this->m_GetExistingSignalNames(orc_MessageId), orc_OscSignalCommon.c_Name, this->GetNameMaxCharLimit()).ToQString();
+         this->m_GetExistingSignalNames(orc_MessageId), orc_OscSignalCommon.c_Name, this->GetNameMaxCharLimit());
       s32_Retval = rc_OscNode.InsertSignal(orc_MessageId.e_ComProtocol, orc_MessageId.u32_InterfaceIndex,
                                            orc_MessageId.u32_DatapoolIndex,
                                            orc_MessageId.q_MessageIsTx, orc_MessageId.u32_MessageIndex,

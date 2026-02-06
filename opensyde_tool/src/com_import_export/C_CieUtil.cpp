@@ -175,7 +175,7 @@ int32_t C_CieUtil::h_ExportFile(
   const QString c_FilterName =
       static_cast<QString>("openSYDE DBC export") + " (*.dbc)";
   const QString c_DefaultFilename =
-      static_cast<QString>(orc_CommDef.c_Bus.c_Name.c_str()) + ".dbc";
+      static_cast<QString>(orc_CommDef.c_Bus.c_Name) + ".dbc";
   QString c_FullFilePath;
   int32_t s32_Return = C_NOACT;
 
@@ -206,7 +206,7 @@ int32_t C_CieUtil::h_ExportFile(
           Qt::WaitCursor);           // big DBC file can take some time to load
       QApplication::processEvents(); // update cursor
       s32_Return =
-          C_CieExportDbc::h_ExportNetwork(c_FullFilePath.toStdString().c_str(),
+          C_CieExportDbc::h_ExportNetwork(c_FullFilePath.toStdString(),
                                           orc_CommDef, c_Warnings, c_Error);
       QApplication::restoreOverrideCursor(); // get old cursor again
       QApplication::processEvents();         // update cursor
@@ -291,7 +291,7 @@ int32_t C_CieUtil::h_ExportFile(
         c_ExportError.SetHeading("DBC file export");
         c_ExportError.SetDescription(
             "There occurred an error on DBC file export.");
-        c_ExportError.SetDetails(c_Error.c_str());
+        c_ExportError.SetDetails(c_Error);
         c_ExportError.SetCustomMinHeight(180, 250);
         c_ExportError.Execute();
       }
@@ -345,10 +345,10 @@ void C_CieUtil::h_AdaptName(QString &orc_Name, QString &orc_Comment,
     // some more content
     orc_Comment +=
         static_cast<QString>("%2Original name (from import source): %1")
-            .arg(orc_Name.c_str())
-            .arg(c_Addition.c_str())
+            .arg(orc_Name)
+            .arg(c_Addition)
             .toStdString()
-            .c_str();
+            ;
     orc_Name = c_NewName;
   }
 }
@@ -467,12 +467,12 @@ C_CieUtil::h_GetDeviceInfo(const uint32_t ou32_DeviceNodeIndex,
       s32_Retval = C_OscImportEdsDcf::h_Import(
           C_PuiUtil::h_GetAbsolutePathFromProject(orc_EdsPath)
               .toStdString()
-              .c_str(),
+              ,
           rc_CurInterface.u8_NodeId, c_OscRxMessageData, c_OscTxMessageData,
           c_ImportMessagesPerMessage, c_ParsingError,
           C_OscCanProtocol::eCAN_OPEN, c_InvalidOscRxMessageData,
           c_InvalidOscTxMessageData, c_InvalidImportMessagesPerMessage);
-      orc_ParsingError = c_ParsingError.c_str();
+      orc_ParsingError = c_ParsingError;
       if (s32_Retval == C_NO_ERR) {
         uint8_t u8_InterfaceId;
         uint32_t u32_InterfaceIndex;
@@ -553,7 +553,7 @@ void C_CieUtil::h_ReportEdsImportError(QWidget *const opc_ParentWidget,
         static_cast<QString>(
             "%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.")
             .arg("For more information see ")
-            .arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str())
+            .arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation())
             .arg(mc_STYLESHEET_GUIDE_COLOR_LINK)
             .arg("log file"));
     c_Message.SetCustomMinHeight(180, 250);
@@ -705,7 +705,7 @@ C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex,
               "%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.")
               .arg("For possible parsing errors, warnings and detailed "
                    "information see ")
-              .arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str())
+              .arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation())
               .arg(mc_STYLESHEET_GUIDE_COLOR_LINK)
               .arg("log file"));
       c_NodesError.SetCustomMinHeight(180, 270);
@@ -717,7 +717,7 @@ C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex,
         QString c_Warnings;
         for (uint32_t u32_Pos = 0; u32_Pos < c_WarningMessages.count();
              u32_Pos++) {
-          c_Warnings += c_WarningMessages.at(u32_Pos).c_str();
+          c_Warnings += c_WarningMessages.at(u32_Pos);
           c_Warnings += "\n";
         }
         C_OgeWiCustomMessage c_ImportWarnings(
@@ -952,7 +952,7 @@ C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex,
                     .arg("For possible parsing errors, warnings and detailed "
                          "information see ")
                     .arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation()
-                             .c_str())
+                             )
                     .arg(mc_STYLESHEET_GUIDE_COLOR_LINK)
                     .arg("log file"));
             c_Message.SetCustomMinHeight(180, 270);
@@ -988,7 +988,7 @@ C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex,
                                      "style=\"color: %3;\">%4</span></a>.")
                     .arg("For more information see ")
                     .arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation()
-                             .c_str())
+                             )
                     .arg(mc_STYLESHEET_GUIDE_COLOR_LINK)
                     .arg("log file"));
             c_Message.SetCustomMinHeight(180, 250);

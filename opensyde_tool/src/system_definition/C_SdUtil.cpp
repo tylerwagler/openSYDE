@@ -166,7 +166,7 @@ C_SdUtil::h_GetNames(const std::vector<uint32_t> &orc_NodeIndices,
         if (pc_Dp != NULL) {
           // lint -e{413} //false positive; opc_DatapoolNames is checked to be
           // != NULL a few lines above
-          opc_DatapoolNames->emplace_back(pc_Dp->c_Name.c_str());
+          opc_DatapoolNames->emplace_back(pc_Dp->c_Name);
         }
       }
     }
@@ -195,7 +195,7 @@ int32_t C_SdUtil::h_GetName(const uint32_t &oru32_NodeIndex,
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(oru32_NodeIndex);
 
   if (pc_Node != NULL) {
-    orc_Name = pc_Node->c_Properties.c_Name.c_str();
+    orc_Name = pc_Node->c_Properties.c_Name;
     s32_Retval = C_NO_ERR;
   }
 
@@ -227,7 +227,7 @@ int32_t C_SdUtil::h_GetName(const uint32_t &oru32_NodeIndex,
       const C_OscNodeComInterfaceSettings &rc_ComInterface =
           pc_Node->c_Properties.c_ComInterfaces[oru32_InterfaceIndex];
       // create the shown string with the interface name
-      orc_Name = pc_Node->c_Properties.c_Name.c_str();
+      orc_Name = pc_Node->c_Properties.c_Name;
       orc_Name +=
           " (" +
           C_PuiSdUtil::h_GetInterfaceName(C_OscSystemBus::eCAN,
@@ -400,7 +400,7 @@ void C_SdUtil::h_GetErrorToolTipDataPools(
             ou32_NodeIndex, orc_Indices[u32_ItDataPool]);
     if (pc_Datapool != NULL) {
       orc_Content +=
-          static_cast<QString>("%1\n").arg(pc_Datapool->c_Name.c_str());
+          static_cast<QString>("%1\n").arg(pc_Datapool->c_Name);
     }
   }
   if (mu32_TOOL_TIP_MAXIMUM_ITEMS < orc_Indices.size()) {
@@ -1104,7 +1104,7 @@ void C_SdUtil::h_AdaptSignalToProtocolType(
           static_cast<QString>("Multiplex information removed from signal "
                                "\"%1\" because this is not supported "
                                "in ECeS/ECoS protocols.")
-              .arg(orc_OscSignalListElement.c_Name.c_str()));
+              .arg(orc_OscSignalListElement.c_Name));
       orc_Signal.e_MultiplexerType = C_OscCanSignal::eMUX_DEFAULT;
       orc_Signal.u16_MultiplexValue = 0U;
     }
@@ -1115,7 +1115,7 @@ void C_SdUtil::h_AdaptSignalToProtocolType(
         c_Info.append(static_cast<QString>(
                           "Start bit of signal \"%1\" set from %2 to 0 because "
                           "of reserved bytes in ECeS protocol.")
-                          .arg(orc_OscSignalListElement.c_Name.c_str())
+                          .arg(orc_OscSignalListElement.c_Name)
                           .arg(orc_Signal.u16_ComBitStart));
         orc_Signal.u16_ComBitStart = 0;
       }
@@ -1126,7 +1126,7 @@ void C_SdUtil::h_AdaptSignalToProtocolType(
     c_Info.append(static_cast<QString>(
                       "Start bit of signal \"%1\" set from %2 to 0 because "
                       "of CAN message limits.")
-                      .arg(orc_OscSignalListElement.c_Name.c_str())
+                      .arg(orc_OscSignalListElement.c_Name)
                       .arg(orc_Signal.u16_ComBitStart));
     orc_Signal.u16_ComBitStart = 0;
   }
@@ -1135,7 +1135,7 @@ void C_SdUtil::h_AdaptSignalToProtocolType(
     c_Info.append(static_cast<QString>(
                       "Bit length of signal \"%1\" set from %2 to %3 because "
                       "of CAN message limits.")
-                      .arg(orc_OscSignalListElement.c_Name.c_str())
+                      .arg(orc_OscSignalListElement.c_Name)
                       .arg(orc_Signal.u16_ComBitLength)
                       .arg(mu16_SIGNAL_BIT_MAX));
     orc_Signal.u16_ComBitLength = mu16_SIGNAL_BIT_MAX;
@@ -1150,7 +1150,7 @@ void C_SdUtil::h_AdaptSignalToProtocolType(
           static_cast<QString>(
               "Byte order of signal \"%1\" set from motorola to intel because "
               "of j1939 protocol restrictions.")
-              .arg(orc_OscSignalListElement.c_Name.c_str()));
+              .arg(orc_OscSignalListElement.c_Name));
       // J1939 supports only Intel byte order
       orc_Signal.e_ComByteOrder = C_OscCanSignal::eBYTE_ORDER_INTEL;
     }
@@ -1195,7 +1195,7 @@ void C_SdUtil::h_AdaptSignalToProtocolType(
       c_Info.append(static_cast<QString>(
                         "Data type of signal \"%1\" set from %2 to %3 because "
                         "of j1939 protocol restrictions.")
-                        .arg(orc_OscSignalListElement.c_Name.c_str())
+                        .arg(orc_OscSignalListElement.c_Name)
                         .arg(c_PrevType)
                         .arg(C_SdNdeDpUtil::h_ConvertContentTypeToString(
                             orc_OscSignalListElement.GetType())));
@@ -1204,7 +1204,7 @@ void C_SdUtil::h_AdaptSignalToProtocolType(
         C_SdUtil::mh_AdaptSignalMaxToUnsignedType(
             orc_OscSignalListElement.c_MaxValue, c_Info,
             orc_Signal.u16_ComBitLength,
-            orc_OscSignalListElement.c_Name.c_str());
+            orc_OscSignalListElement.c_Name);
       }
     }
   }
@@ -1605,7 +1605,7 @@ int32_t C_SdUtil::h_GetErrorToolTipNode(const uint32_t &oru32_NodeIndex,
               C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                   c_NodeIndices[u32_ItNode]);
           if (pc_Node != NULL) {
-            orc_Text += pc_Node->c_Properties.c_Name.c_str();
+            orc_Text += pc_Node->c_Properties.c_Name;
           }
           orc_Text += "\n";
         }
@@ -1652,7 +1652,7 @@ int32_t C_SdUtil::h_GetErrorToolTipNode(const uint32_t &oru32_NodeIndex,
                     c_InvalidApplicationIndices[u32_ItAppl]);
             if (pc_Appl != NULL) {
               orc_Text +=
-                  static_cast<QString>("%1\n").arg(pc_Appl->c_Name.c_str());
+                  static_cast<QString>("%1\n").arg(pc_Appl->c_Name);
             }
           }
           if (mu32_TOOL_TIP_MAXIMUM_ITEMS <
@@ -1686,7 +1686,7 @@ int32_t C_SdUtil::h_GetErrorToolTipNode(const uint32_t &oru32_NodeIndex,
                     c_InvalidDomainIndices[u32_ItDomains]);
             if (pc_Domain != NULL) {
               orc_Text +=
-                  static_cast<QString>("%1\n").arg(pc_Domain->c_Name.c_str());
+                  static_cast<QString>("%1\n").arg(pc_Domain->c_Name);
             }
           }
           if (mu32_TOOL_TIP_MAXIMUM_ITEMS < c_InvalidDomainIndices.size()) {
@@ -1826,7 +1826,7 @@ QString C_SdUtil::h_GetToolTipContentDpList(const uint32_t &oru32_NodeIndex,
   QString c_HelpString;
 
   // comment
-  c_HelpString = pc_DpList->c_Comment.c_str();
+  c_HelpString = pc_DpList->c_Comment;
   if (c_HelpString != "") {
     c_ToolTipContent.append(c_HelpString);
     c_ToolTipContent.append("\n \n");
@@ -1839,7 +1839,7 @@ QString C_SdUtil::h_GetToolTipContentDpList(const uint32_t &oru32_NodeIndex,
     c_ToolTipContent.append("No Datasets \n");
   } else if (u32_DatasetNumber == 1) {
     c_ToolTipContent.append("Dataset: ");
-    c_ToolTipContent.append(pc_DpList->c_DataSets[0].c_Name.c_str());
+    c_ToolTipContent.append(pc_DpList->c_DataSets[0].c_Name);
     c_ToolTipContent.append("\n");
   } else {
     c_ToolTipContent.append("Datasets: \n");
@@ -1847,7 +1847,7 @@ QString C_SdUtil::h_GetToolTipContentDpList(const uint32_t &oru32_NodeIndex,
       const C_OscNodeDataPoolDataSet &rc_Dataset =
           pc_DpList->c_DataSets[u32_Pos];
       c_ToolTipContent.append("  - ");
-      c_ToolTipContent.append(rc_Dataset.c_Name.c_str());
+      c_ToolTipContent.append(rc_Dataset.c_Name);
       c_ToolTipContent.append("\n");
     }
   }
@@ -1917,7 +1917,7 @@ QString C_SdUtil::h_GetToolTipContentDpListElement(
 
       // comment
       if (pc_DpListElement->c_Comment.isEmpty() == false) {
-        c_ToolTipContent = pc_DpListElement->c_Comment.c_str();
+        c_ToolTipContent = pc_DpListElement->c_Comment;
         c_ToolTipContent.append("\n\n");
       }
 
@@ -2014,7 +2014,7 @@ QString C_SdUtil::h_GetToolTipContentDpListElement(
         c_ToolTipContent.append("\n");
 
         // unit
-        c_HelpString = pc_DpListElement->c_Unit.c_str();
+        c_HelpString = pc_DpListElement->c_Unit;
         if (c_HelpString.isEmpty() == false) {
           c_ToolTipContent.append(static_cast<QString>("   ") + "Unit: ");
           c_ToolTipContent.append(c_HelpString);
@@ -2028,7 +2028,7 @@ QString C_SdUtil::h_GetToolTipContentDpListElement(
              u32_PosDataset < pc_DpList->c_DataSets.size(); u32_PosDataset++) {
           c_ToolTipContent.append(static_cast<QString>("   ") + "Dataset - ");
           c_ToolTipContent.append(
-              pc_DpList->c_DataSets[u32_PosDataset].c_Name.c_str());
+              pc_DpList->c_DataSets[u32_PosDataset].c_Name);
           c_ToolTipContent.append(": ");
           c_HelpVector.clear();
           QString c_HelpString = "";
@@ -2356,43 +2356,43 @@ QString C_SdUtil::h_GetEdsFileDetails(
 
   c_String += "[FileInfo]";
   c_String += "\nFileName=";
-  c_String += c_FileInfoBlock.c_FileName.ToQString();
+  c_String += c_FileInfoBlock.c_FileName;
   c_String += "\nFileVersion=";
   c_String += QString::number(c_FileInfoBlock.u8_FileVersion);
   c_String += "\nFileRevision=";
   c_String += QString::number(c_FileInfoBlock.u8_FileRevision);
   if (c_FileInfoBlock.c_EdsVersion != "") {
     c_String += "\nEDSVersion=";
-    c_String += c_FileInfoBlock.c_EdsVersion.ToQString();
+    c_String += c_FileInfoBlock.c_EdsVersion;
   }
   c_String += "\nDescription=";
-  c_String += c_FileInfoBlock.c_Description.ToQString();
+  c_String += c_FileInfoBlock.c_Description;
   c_String += "\nCreationTime=";
-  c_String += c_FileInfoBlock.c_CreationTime.ToQString();
+  c_String += c_FileInfoBlock.c_CreationTime;
   c_String += "\nCreationDate=";
-  c_String += c_FileInfoBlock.c_CreationDate.ToQString();
+  c_String += c_FileInfoBlock.c_CreationDate;
   c_String += "\nCreatedBy=";
-  c_String += c_FileInfoBlock.c_CreatedBy.ToQString();
+  c_String += c_FileInfoBlock.c_CreatedBy;
   c_String += "\nModificationDate=";
-  c_String += c_FileInfoBlock.c_ModificationDate.ToQString();
+  c_String += c_FileInfoBlock.c_ModificationDate;
   c_String += "\nModifiedBy=";
-  c_String += c_FileInfoBlock.c_ModifiedBy.ToQString();
+  c_String += c_FileInfoBlock.c_ModifiedBy;
 
   c_String += "\n\n[DeviceInfo]";
   c_String += "\nVendorName=";
-  c_String += c_DeviceInfoBlock.c_VendorName.ToQString();
+  c_String += c_DeviceInfoBlock.c_VendorName;
   c_String += "\nVendorNumber=";
-  c_String += c_DeviceInfoBlock.c_VendorNumber.ToQString();
+  c_String += c_DeviceInfoBlock.c_VendorNumber;
   c_String += "\nProductName=";
-  c_String += c_DeviceInfoBlock.c_ProductName.ToQString();
+  c_String += c_DeviceInfoBlock.c_ProductName;
   c_String += "\nProductNumber=";
-  c_String += c_DeviceInfoBlock.c_ProductNumber.ToQString();
+  c_String += c_DeviceInfoBlock.c_ProductNumber;
   if (c_DeviceInfoBlock.c_RevisionNumber != "") {
     c_String += "\nRevisionNumber=";
-    c_String += c_DeviceInfoBlock.c_RevisionNumber.ToQString();
+    c_String += c_DeviceInfoBlock.c_RevisionNumber;
   }
   c_String += "\nOrderCode=";
-  c_String += c_DeviceInfoBlock.c_OrderCode.ToQString();
+  c_String += c_DeviceInfoBlock.c_OrderCode;
   c_String += "\nBaudRate_10=";
   c_TrueOrFalse = c_DeviceInfoBlock.q_BaudRate10 ? "1" : "0";
   c_String += c_TrueOrFalse;
@@ -2426,7 +2426,7 @@ QString C_SdUtil::h_GetEdsFileDetails(
   c_String += "\nGranularity=";
   c_String += QString::number(c_DeviceInfoBlock.u8_Granularity);
   c_String += "\nDynamicChannelsSupported=";
-  c_String += c_DeviceInfoBlock.c_DynamicChannelsSupported.ToQString();
+  c_String += c_DeviceInfoBlock.c_DynamicChannelsSupported;
   c_String += "\nGroupMessaging=";
   c_TrueOrFalse = c_DeviceInfoBlock.q_GroupMessaging ? "1" : "0";
   c_String += c_TrueOrFalse;
@@ -2653,7 +2653,7 @@ void C_SdUtil::h_NodeIdToBeChanged(const uint32_t ou32_NodeIndex,
         c_Details.append(
             static_cast<QString>("Node : %1\nInterface : %2\nCurrent Node ID : "
                                  "%3\nNext valid Node ID : %4")
-                .arg(pc_CurrentNode->c_Properties.c_Name.c_str())
+                .arg(pc_CurrentNode->c_Properties.c_Name)
                 .arg(C_PuiSdUtil::h_GetInterfaceName(
                     pc_ComInterface->e_InterfaceType,
                     static_cast<uint8_t>(ou32_InterfaceIndex)))
@@ -2709,8 +2709,8 @@ void C_SdUtil::mh_WriteEtherCanLogMessage(
         QString::number(opc_DevDef->u8_NumEthernetBusses) + "; " +
         QString::number(opc_NodeProperties->GetEthernetInterfaces().size());
 
-    osc_write_log_warning(c_Activity.toStdString().c_str(),
-                          c_Message.toStdString().c_str());
+    osc_write_log_warning(c_Activity.toStdString(),
+                          c_Message.toStdString());
   }
   if (static_cast<uint32_t>(opc_DevDef->u8_NumCanBusses) !=
       static_cast<uint32_t>(opc_NodeProperties->GetCanInterfaces().size())) {
@@ -2722,8 +2722,8 @@ void C_SdUtil::mh_WriteEtherCanLogMessage(
         QString::number(opc_DevDef->u8_NumCanBusses) + "; " +
         QString::number(opc_NodeProperties->GetCanInterfaces().size());
 
-    osc_write_log_warning(c_Activity.toStdString().c_str(),
-                          c_Message.toStdString().c_str());
+    osc_write_log_warning(c_Activity.toStdString(),
+                          c_Message.toStdString());
   }
 }
 
@@ -2739,15 +2739,15 @@ void C_SdUtil::mh_AdaptSignalToUnsignedType(
     QStringList &orc_AdaptationInfos) {
   C_SdUtil::mh_AdaptDataElementToUnsignedType(
       orc_SignalListElement.c_MinValue, orc_AdaptationInfos, "Min value",
-      orc_SignalListElement.c_Name.c_str());
+      orc_SignalListElement.c_Name);
   C_SdUtil::mh_AdaptDataElementToUnsignedType(
       orc_SignalListElement.c_MaxValue, orc_AdaptationInfos, "Max value",
-      orc_SignalListElement.c_Name.c_str());
+      orc_SignalListElement.c_Name);
   Q_ASSERT(orc_SignalListElement.c_DataSetValues.size() > 0UL);
   if (orc_SignalListElement.c_DataSetValues.size() > 0UL) {
     C_SdUtil::mh_AdaptDataElementToUnsignedType(
         orc_SignalListElement.c_DataSetValues[0], orc_AdaptationInfos,
-        "Init value", orc_SignalListElement.c_Name.c_str());
+        "Init value", orc_SignalListElement.c_Name);
   }
 }
 

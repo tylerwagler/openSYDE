@@ -979,7 +979,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
       C_OscHexFile c_HexFile;
       uint32_t u32_Result;
 
-      u32_Result = c_HexFile.LoadFromFile(c_Path.toStdString().c_str());
+      u32_Result = c_HexFile.LoadFromFile(c_Path.toStdString());
       if (u32_Result == stw::hex_file::NO_ERR)
       {
          stw::diag_lib::C_XFLECUInformation c_FileApplicationInfo;
@@ -996,7 +996,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
          const QString c_Text = QString("Could not open HEX file \"") +
                                               c_Path + "\" Details: " +
                                               c_HexFile.ErrorCodeToErrorText(u32_Result);
-         osc_write_log_error("Preparing Flashloader Information", c_Text.toStdString().c_str());
+         osc_write_log_error("Preparing Flashloader Information", c_Text.toStdString());
       }
    }
 }

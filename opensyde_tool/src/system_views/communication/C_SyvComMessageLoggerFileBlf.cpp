@@ -43,7 +43,7 @@ using namespace BLF;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvComMessageLoggerFileBlf::C_SyvComMessageLoggerFileBlf(const QString & orc_FilePath) :
-   C_OscComMessageLoggerFileBase(orc_FilePath.toStdString().c_str(), "")
+   C_OscComMessageLoggerFileBase(orc_FilePath.toStdString(), "")
 {
 }
 
@@ -98,7 +98,7 @@ int32_t C_SyvComMessageLoggerFileBlf::OpenFile(void)
 
    if (s32_Return == C_NO_ERR)
    {
-      this->mc_File.open(this->mc_FilePath.toStdString().c_str(), File::OpenMode::Write);
+      this->mc_File.open(this->mc_FilePath.toStdString(), File::OpenMode::Write);
 
       if (this->mc_File.is_open() == false)
       {

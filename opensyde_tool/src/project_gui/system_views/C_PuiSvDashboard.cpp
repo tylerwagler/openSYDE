@@ -65,9 +65,9 @@ C_PuiSvDashboard::C_PuiSvDashboard(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Name.toStdString().c_str(),
+   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Name.toStdString(),
                                        this->mc_Name.length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Comment.toStdString().c_str(),
+   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Comment.toStdString(),
                                        this->mc_Comment.length(), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->mq_Active, sizeof(this->mq_Active), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->ms32_TabIndex, sizeof(this->ms32_TabIndex), oru32_HashValue);
@@ -2242,7 +2242,7 @@ void C_PuiSvDashboard::SyncScalingInformation(void)
                //Check with system definition
                if (pc_Element != NULL)
                {
-                  rc_Config.c_ElementScaling.c_Unit = pc_Element->c_Unit.c_str();
+                  rc_Config.c_ElementScaling.c_Unit = pc_Element->c_Unit;
                   rc_Config.c_ElementScaling.f64_Factor = pc_Element->f64_Factor;
                   rc_Config.c_ElementScaling.f64_Offset = pc_Element->f64_Offset;
                }

@@ -306,7 +306,7 @@ int32_t C_SyvComDriverDiag::SetDiagnosticMode(QString & orc_ErrorDetails)
          for (c_ItDefectNode = this->mc_DefectNodeIndices.begin(); c_ItDefectNode != this->mc_DefectNodeIndices.end();
               ++c_ItDefectNode)
          {
-            orc_ErrorDetails += "- " + static_cast<QString>(this->m_GetActiveNodeName(*c_ItDefectNode).c_str()) + "\n";
+            orc_ErrorDetails += "- " + this->m_GetActiveNodeName(*c_ItDefectNode) + "\n";
          }
       }
    }
@@ -396,10 +396,10 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
                                     "C_RD_WR    malformed protocol response\n").arg(static_cast<QString>(
                                                                                        m_GetActiveNodeName(
                                                                                           u32_ActiveNode)
-                                                                                       .c_str())).arg(
-                  C_Uti::h_StwError(s32_Return)).toStdString().c_str());
+                                                                                       )).arg(
+                  C_Uti::h_StwError(s32_Return)).toStdString());
             s32_Return = C_COM;
-            orc_ErrorDetails += m_GetActiveNodeName(u32_ActiveNode).c_str();
+            orc_ErrorDetails += m_GetActiveNodeName(u32_ActiveNode);
             break;
          }
       }
@@ -596,8 +596,8 @@ int32_t C_SyvComDriverDiag::StopCyclicTransmissions(void)
          {
             osc_write_log_warning("Asynchronous communication",
                                   static_cast<QString>("Node \"%1\" - DataPoolStopEventDriven - warning: %2\n").
-                                  arg(static_cast<QString>(m_GetActiveNodeName(u32_ActiveNode).c_str())).
-                                  arg(C_Uti::h_StwError(s32_Return2)).toStdString().c_str());
+                                  arg(m_GetActiveNodeName(u32_ActiveNode)).
+                                  arg(C_Uti::h_StwError(s32_Return2)).toStdString());
             s32_Return = C_COM;
          }
       }
@@ -2082,9 +2082,9 @@ int32_t C_SyvComDriverDiag::m_StartDiagServers(QString & orc_ErrorDetails)
                      }
                      if (s32_Retval != C_NO_ERR)
                      {
-                        orc_ErrorDetails += static_cast<QString>("- ") + pc_Node->c_Properties.c_Name.c_str() +
+                        orc_ErrorDetails += static_cast<QString>("- ") + pc_Node->c_Properties.c_Name +
                                             ", Datapool: \"" +
-                                            pc_Node->c_DataPools[u8_DataPoolIndex].c_Name.c_str() + "\"\n";
+                                            pc_Node->c_DataPools[u8_DataPoolIndex].c_Name + "\"\n";
                      }
                   }
                   */
@@ -2186,7 +2186,7 @@ int32_t C_SyvComDriverDiag::m_GetAllDatapoolMetadata(const uint32_t ou32_ActiveD
             {
                c_ErrorReason = "The read of the Datapool meta data"
                                " failed with error " +
-                               static_cast<QString>(C_OscLoggingHandler::h_StwError(s32_Return).c_str()) +
+                               C_OscLoggingHandler::h_StwError(s32_Return) +
                                " and negative response code: " + QString::number(u8_ErrorCode);
             }
          }
@@ -2195,7 +2195,7 @@ int32_t C_SyvComDriverDiag::m_GetAllDatapoolMetadata(const uint32_t ou32_ActiveD
             // Service error
             c_ErrorReason = "The read of the Datapool meta data"
                             " failed with error " +
-                            static_cast<QString>(C_OscLoggingHandler::h_StwError(s32_Return).c_str());
+                            C_OscLoggingHandler::h_StwError(s32_Return);
          }
 
          if (c_ErrorReason != "")
@@ -2212,7 +2212,7 @@ int32_t C_SyvComDriverDiag::m_GetAllDatapoolMetadata(const uint32_t ou32_ActiveD
 
                //Translation: 1=Node name, 2=List of Datapool names
                orc_ErrorDetails += static_cast<QString>("- %1: %2\n").arg(
-                  pc_Node->c_Properties.c_Name.c_str()).arg("\n   " + c_ErrorReason);
+                  pc_Node->c_Properties.c_Name).arg("\n   " + c_ErrorReason);
             }
          }
 
@@ -2309,8 +2309,8 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
                {
                   // Name does not match
                   c_ErrorReason = "The name of Datapool does not match (Client: " +
-                                  static_cast<QString>(rc_Datapool.c_Name.c_str()) +
-                                  ", Server: " + static_cast<QString>(c_ServerMetadata.c_Name.c_str()) + ").";
+                                  rc_Datapool.c_Name +
+                                  ", Server: " + c_ServerMetadata.c_Name + ").";
 
                   s32_Return = C_DEFAULT;
                }
@@ -2328,7 +2328,7 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
                                                   arg(rc_Datapool.au8_Version[2], 2, 10, QChar('0'));
 
                   // Version does not match
-                  c_ErrorReason = "The version of Datapool " + static_cast<QString>(rc_Datapool.c_Name.c_str()) +
+                  c_ErrorReason = "The version of Datapool " + rc_Datapool.c_Name +
                                   " does not match (Client: " + c_VersionClient +
                                   ", Server: " + c_VersionServer + ").";
 
@@ -2346,7 +2346,7 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
                      if (q_Match == false)
                      {
                         // Checksum does not match
-                        c_ErrorReason = "The checksum of Datapool " + static_cast<QString>(rc_Datapool.c_Name.c_str()) +
+                        c_ErrorReason = "The checksum of Datapool " + rc_Datapool.c_Name +
                                         " does not match.";
                         s32_Return = C_DEFAULT;
                      }
@@ -2380,7 +2380,7 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
             else
             {
                // Special case: Datapool with this name does not exist
-               c_ErrorReason = "The Datapool " + static_cast<QString>(rc_Datapool.c_Name.c_str()) +
+               c_ErrorReason = "The Datapool " + rc_Datapool.c_Name +
                                " does not exist on the server.";
                s32_Return = C_DEFAULT;
             }
@@ -2417,7 +2417,7 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
       {
          //Translation: 1=Node name, 2=List of Datapool names
          orc_ErrorDetails += static_cast<QString>("- %1: %2\n").arg(
-            pc_Node->c_Properties.c_Name.c_str()).arg(c_DataPoolErrorString);
+            pc_Node->c_Properties.c_Name).arg(c_DataPoolErrorString);
       }
    }
    else
@@ -2611,9 +2611,9 @@ int32_t C_SyvComDriverDiag::mh_DoDatapoolCrcVerification(const C_OscNodeDataPool
    if (s32_Return != C_NO_ERR)
    {
       // Service error
-      orc_ErrorReason = "The verify of the Datapool " + static_cast<QString>(orc_Datapool.c_Name.c_str()) +
+      orc_ErrorReason = "The verify of the Datapool " + orc_Datapool.c_Name +
                         " failed with error " +
-                        static_cast<QString>(C_OscLoggingHandler::h_StwError(s32_Return).c_str());
+                        C_OscLoggingHandler::h_StwError(s32_Return);
    }
    return s32_Return;
 }
@@ -2742,7 +2742,7 @@ void C_SyvComDriverDiag::m_GetRoutingErrorDetails(QString & orc_ErrorDetails, st
       Q_ASSERT(pc_Node != NULL);
       if (pc_Node != NULL)
       {
-         orc_ErrorDetails += static_cast<QString>("\"") + pc_Node->c_Properties.c_Name.c_str() + "\"\n";
+         orc_ErrorDetails += static_cast<QString>("\"") + pc_Node->c_Properties.c_Name + "\"\n";
       }
    }
    if (orc_ErrorActiveNodes.find(ou32_ErrorActiveNodeIndex) == orc_ErrorActiveNodes.end())
@@ -2755,7 +2755,7 @@ void C_SyvComDriverDiag::m_GetRoutingErrorDetails(QString & orc_ErrorDetails, st
       Q_ASSERT(pc_Node != NULL);
       if (pc_Node != NULL)
       {
-         orc_ErrorDetails += static_cast<QString>("\"") + pc_Node->c_Properties.c_Name.c_str() + "\"\n";
+         orc_ErrorDetails += static_cast<QString>("\"") + pc_Node->c_Properties.c_Name + "\"\n";
       }
    }
 }

@@ -243,7 +243,7 @@ void C_CamProMessageData::SetMessageBoolValue(
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProMessageData::SetMessageKey(const QString &orc_Key,
                                         const uint32_t ou32_Offset) {
-  this->c_Key = orc_Key.toStdString().c_str();
+  this->c_Key = orc_Key.toStdString();
   this->u32_KeyPressOffset = ou32_Offset;
 }
 

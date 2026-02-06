@@ -692,7 +692,7 @@ void C_SdBueUnoManager::mh_HandleLastOwnersValidation(const C_OscCanMessageIdent
                            C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_NodeIndexes[u32_ItConnectedNode]);
                         if (pc_ConnectedNode != NULL)
                         {
-                           if (rc_CurName.compare(pc_ConnectedNode->c_Properties.c_Name.c_str()) == 0)
+                           if (rc_CurName.compare(pc_ConnectedNode->c_Properties.c_Name) == 0)
                            {
                               bool q_ExactMatch = false;
                               //Match!
@@ -788,7 +788,7 @@ void C_SdBueUnoManager::mh_HandleLastOwnersValidation(const C_OscCanMessageIdent
                {
                   const QString & rc_CurName = orc_LastOwnerNodeName[u32_ItMessage][u32_ItLastOwner];
 
-                  if (rc_CurName.compare(pc_Node->c_Properties.c_Name.c_str()) == 0)
+                  if (rc_CurName.compare(pc_Node->c_Properties.c_Name) == 0)
                   {
                      bool q_ExactMatch = false;
                      const C_OscCanProtocol * const pc_Protocol =

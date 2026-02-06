@@ -365,7 +365,7 @@ void C_SdBueMlvWidget::m_UpdateMultiplexerValues(const C_OscCanMessageIdentifica
             {
                // Selection possible
                std::set<uint16_t>::const_iterator c_ItValue;
-               const QString c_SignalName = static_cast<QString>(pc_MultiplexerElement->c_Name.c_str()) +
+               const QString c_SignalName = static_cast<QString>(pc_MultiplexerElement->c_Name) +
                                             static_cast<QString>(" = ");
                QString c_SpecificEntry = "";
 

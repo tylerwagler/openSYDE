@@ -195,7 +195,7 @@ QString C_CieImportReportWidget::h_GetInitialReportPart(
   c_ReadContent += "For parsing errors, warnings and detailed information see ";
   c_ReadContent += C_Uti::h_GetLink(
       "log file", mc_STYLE_GUIDE_COLOR_LINK,
-      C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str());
+      C_OscLoggingHandler::h_GetCompleteLogFileLocation());
   c_ReadContent += ".";
 
   // Start
@@ -1003,7 +1003,7 @@ QString C_CieImportReportWidget::mh_GetMessageEntry(
             opc_NodeNameReplacement, oq_IsSrdo, oru32_SrdoIndex);
       }
     } else {
-      c_MessageName = orc_CurMessage.c_Name.c_str();
+      c_MessageName = orc_CurMessage.c_Name;
     }
 
     c_Retval += C_CieImportReportWidget::hc_HTML_TABLE_DATA_START +
@@ -1012,7 +1012,7 @@ QString C_CieImportReportWidget::mh_GetMessageEntry(
     c_Retval +=
         C_CieImportReportWidget::hc_HTML_TABLE_DATA_START +
         static_cast<QString>("%1 (0x%2)")
-            .arg(orc_CurMessage.c_Name.c_str(),
+            .arg(orc_CurMessage.c_Name,
                  QString::number(orc_CurMessage.u32_CanId, 16).toUpper()) +
         c_TableEntryEnd;
   }
@@ -1033,7 +1033,7 @@ QString C_CieImportReportWidget::mh_GetMessageEntry(
         if (u32_ItSignal > 0UL) {
           c_Tmp += c_LineBreak;
         }
-        c_Tmp += static_cast<QString>(rc_CurSignalData.c_Name.c_str());
+        c_Tmp += static_cast<QString>(rc_CurSignalData.c_Name);
       }
     }
   }

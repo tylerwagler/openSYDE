@@ -256,11 +256,11 @@ C_RtfExportWidget::GetCompanyLogoPath(QString &orc_CompanyLogoPath) const {
           orc_CompanyLogoPath.toUtf8().constData());
 
       // check if file exists
-      if (QFileInfo(orc_CompanyLogoPath.ToQString()).exists() &&
-          QFileInfo(orc_CompanyLogoPath.ToQString()).isFile()) {
+      if (QFileInfo(orc_CompanyLogoPath).exists() &&
+          QFileInfo(orc_CompanyLogoPath).isFile()) {
         // check if file name is valid
         const QString c_FileExtAct =
-            ("." + QFileInfo(orc_CompanyLogoPath.ToQString()).suffix());
+            ("." + QFileInfo(orc_CompanyLogoPath).suffix());
         if ((c_FileExtAct.toLower() == ".jpg") ||
             (c_FileExtAct.toLower() == ".png")) {
           s32_Return = C_NO_ERR;
@@ -686,8 +686,8 @@ void C_RtfExportWidget::m_RtfPathClicked(void) {
   const QString c_Tmp = C_PuiUtil::h_GetAbsolutePathFromProject(
       this->mpc_Ui->pc_EditRtfPath->GetPath());
 
-  if (QFileInfo(QFileInfo(c_Tmp.ToQString()).absolutePath()).isDir() == true) {
-    c_Folder = QFileInfo(c_Tmp.ToQString()).absolutePath() + "/";
+  if (QFileInfo(QFileInfo(c_Tmp).absolutePath()).isDir() == true) {
+    c_Folder = QFileInfo(c_Tmp).absolutePath() + "/";
   } else {
     c_Folder = C_PuiProject::h_GetInstance()->GetFolderPath();
   }
@@ -717,8 +717,8 @@ void C_RtfExportWidget::m_LogoPathClicked(void) const {
   const QString c_Tmp = C_PuiUtil::h_GetAbsolutePathFromProject(
       this->mpc_Ui->pc_EditLogoPath->GetPath());
 
-  if (QFileInfo(QFileInfo(c_Tmp.ToQString()).absolutePath()).isDir() == true) {
-    c_Folder = QFileInfo(c_Tmp.ToQString()).absolutePath() + "/";
+  if (QFileInfo(QFileInfo(c_Tmp).absolutePath()).isDir() == true) {
+    c_Folder = QFileInfo(c_Tmp).absolutePath() + "/";
   } else {
     c_Folder = C_PuiProject::h_GetInstance()->GetFolderPath();
   }

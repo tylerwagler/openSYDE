@@ -17,6 +17,7 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const QString C_TblTreDataElementItem::mhc_ADDITIONAL_64BIT_INFO = " (Not supported, 64 bit value)";

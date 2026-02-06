@@ -300,7 +300,7 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::UpdateToolTip(void)
          }
       }
 
-      this->mpc_CheckBox->SetToolTipInformation(pc_Node->c_Properties.c_Name.c_str(), c_Content);
+      this->mpc_CheckBox->SetToolTipInformation(pc_Node->c_Properties.c_Name, c_Content);
    }
 }
 
@@ -354,7 +354,7 @@ void C_SdBueNodeSelectorCheckBoxItemWidget::m_OnLinkSwitchToManager(const QStrin
       if (u32_ManagerIntfIndex < pc_ManagerNode->c_Properties.c_ComInterfaces.size())
       {
          Q_EMIT (this->SigSwitchToCoManager(u32_ManagerNodeIndex,
-                                            static_cast<QString>(pc_ManagerNode->c_Properties.c_Name.c_str()),
+                                            static_cast<QString>(pc_ManagerNode->c_Properties.c_Name),
                                             pc_ManagerNode->c_Properties.c_ComInterfaces[u32_ManagerIntfIndex].
                                             u8_InterfaceNumber));
       }

@@ -539,7 +539,7 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
 
          // Rebuild the serial number class
          // POS serial number will reversed in this function
-         c_SerialNumber.SetExtSerialNumber(c_SerialNumberString.toStdString().c_str(), u8_ManufacturerFormat);
+         c_SerialNumber.SetExtSerialNumber(c_SerialNumberString.toStdString(), u8_ManufacturerFormat);
          // But it is not detectable if extended or not in this function for this scenario, so overwrite the flag
          c_SerialNumber.q_ExtFormatUsed = q_ExtFormat;
 
@@ -646,12 +646,12 @@ int32_t C_SyvDcExistingNodeWidget::m_Init(void)
          this->mpc_Ui->pc_LabelNodeId->setText(static_cast<QString>("Node ID: <multiple>"));
       }
 
-      this->mc_DeviceName = pc_Node->pc_DeviceDefinition->c_DeviceName.c_str();
+      this->mc_DeviceName = pc_Node->pc_DeviceDefinition->c_DeviceName;
 
       //Translation: 1: Node type
       this->mpc_Ui->pc_LabelDeviceType->setText(
          static_cast<QString>("Type: %1").
-         arg(pc_Node->pc_DeviceDefinition->c_DeviceName.c_str()));
+         arg(pc_Node->pc_DeviceDefinition->c_DeviceName));
    }
    //Resize
    this->resize(this->width(), s32_HEIGHT);

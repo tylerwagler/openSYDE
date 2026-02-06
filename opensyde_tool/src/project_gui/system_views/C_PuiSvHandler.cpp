@@ -99,7 +99,7 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_UseDe
    if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       //erase it:
-      s32_Return = std::remove(orc_Path.toStdString().c_str());
+      s32_Return = std::remove(orc_Path.toStdString());
       if (s32_Return != 0)
       {
          s32_Return = C_RD_WR;
@@ -143,7 +143,7 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_UseDe
          }
          if (s32_Return == C_NO_ERR)
          {
-            s32_Return = c_XmlParser.SaveToFile(orc_Path.toStdString().c_str());
+            s32_Return = c_XmlParser.SaveToFile(orc_Path.toStdString());
             if (s32_Return != C_NO_ERR)
             {
                s32_Return = C_RD_WR;
@@ -432,7 +432,7 @@ int32_t C_PuiSvHandler::SetViewName(const uint32_t ou32_Index, const QString & o
    if (ou32_Index < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_Index];
-      rc_View.SetName(orc_Name.toStdString().c_str());
+      rc_View.SetName(orc_Name.toStdString());
    }
    else
    {
@@ -1252,7 +1252,7 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationPath(const uint32_t ou32_ViewInd
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
       s32_Retval = rc_View.SetNodeUpdateInformationPath(ou32_NodeIndex, ou32_Index,
-                                                        orc_Value.toStdString().c_str(), oe_Type);
+                                                        orc_Value.toStdString(), oe_Type);
    }
    else
    {
@@ -1312,7 +1312,7 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationPemFilePath(ou32_NodeIndex, orc_Value.toStdString().c_str());
+      s32_Retval = rc_View.SetNodeUpdateInformationPemFilePath(ou32_NodeIndex, orc_Value.toStdString());
    }
    else
    {
@@ -1473,7 +1473,7 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationParamInfoContent(const uint32_t 
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
       s32_Retval =
          rc_View.SetNodeUpdateInformationParamInfoContent(ou32_NodeIndex, ou32_Index,
-                                                          orc_FilePath.toStdString().c_str(), ou32_LastKnownCrc);
+                                                          orc_FilePath.toStdString(), ou32_LastKnownCrc);
    }
    else
    {
@@ -1615,7 +1615,7 @@ int32_t C_PuiSvHandler::AddNodeUpdateInformationPath(const uint32_t ou32_ViewInd
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.AddNodeUpdateInformationPath(ou32_NodeIndex, orc_Value.toStdString().c_str(), oe_Type);
+      s32_Retval = rc_View.AddNodeUpdateInformationPath(ou32_NodeIndex, orc_Value.toStdString(), oe_Type);
    }
    else
    {
@@ -2965,11 +2965,11 @@ int32_t C_PuiSvHandler::CalcViewRoutingCrcIndex(const uint32_t ou32_ViewIndex, c
                   if (C_PuiSdHandler::h_GetInstance()->MapBusIndexToName(pc_View->GetOscPcData().GetBusIndex(),
                                                                          c_Name) == C_NO_ERR)
                   {
-                     stw::scl::C_SclChecksums::CalcCRC32(c_Name.toStdString().c_str(), c_Name.length(), oru32_Crc);
+                     stw::scl::C_SclChecksums::CalcCRC32(c_Name.toStdString(), c_Name.length(), oru32_Crc);
                      if (C_PuiSdHandler::h_GetInstance()->MapNodeIndexToName(pc_Route->u32_TargetNodeIndex,
                                                                              c_Name) == C_NO_ERR)
                      {
-                        stw::scl::C_SclChecksums::CalcCRC32(c_Name.toStdString().c_str(), c_Name.length(), oru32_Crc);
+                        stw::scl::C_SclChecksums::CalcCRC32(c_Name.toStdString(), c_Name.length(), oru32_Crc);
 
                         for (uint32_t u32_ItRoute = 0UL;
                              (u32_ItRoute < pc_Route->c_VecRoutePoints.size()) && (s32_Retval == C_NO_ERR);
@@ -2995,7 +2995,7 @@ int32_t C_PuiSvHandler::CalcViewRoutingCrcIndex(const uint32_t ou32_ViewIndex, c
                            if (C_PuiSdHandler::h_GetInstance()->MapBusIndexToName(rc_Route.u32_InBusIndex,
                                                                                   c_Name) == C_NO_ERR)
                            {
-                              stw::scl::C_SclChecksums::CalcCRC32(c_Name.toStdString().c_str(),
+                              stw::scl::C_SclChecksums::CalcCRC32(c_Name.toStdString(),
                                                                   c_Name.length(), oru32_Crc);
                            }
                            else
@@ -3007,12 +3007,12 @@ int32_t C_PuiSvHandler::CalcViewRoutingCrcIndex(const uint32_t ou32_ViewIndex, c
                               if (C_PuiSdHandler::h_GetInstance()->MapBusIndexToName(rc_Route.u32_OutBusIndex,
                                                                                      c_Name) == C_NO_ERR)
                               {
-                                 stw::scl::C_SclChecksums::CalcCRC32(c_Name.toStdString().c_str(),
+                                 stw::scl::C_SclChecksums::CalcCRC32(c_Name.toStdString(),
                                                                      c_Name.length(), oru32_Crc);
                                  if (C_PuiSdHandler::h_GetInstance()->MapNodeIndexToName(rc_Route.u32_NodeIndex,
                                                                                          c_Name) == C_NO_ERR)
                                  {
-                                    stw::scl::C_SclChecksums::CalcCRC32(c_Name.toStdString().c_str(),
+                                    stw::scl::C_SclChecksums::CalcCRC32(c_Name.toStdString(),
                                                                         c_Name.length(), oru32_Crc);
                                  }
                                  else
@@ -3157,15 +3157,15 @@ QString C_PuiSvHandler::h_GetShortNamespace(const C_PuiSvDbNodeDataPoolListEleme
 
             if (q_IsUseCaseIndex)
             {
-               c_ElementName = C_OscHalcMagicianUtil::h_GetUseCaseVariableName(pc_Domain->c_SingularName).c_str();
+               c_ElementName = C_OscHalcMagicianUtil::h_GetUseCaseVariableName(pc_Domain->c_SingularName);
             }
             else if (q_IsChanNumIndex)
             {
-               c_ElementName = C_OscHalcMagicianUtil::h_GetChanNumVariableName(pc_Domain->c_SingularName).c_str();
+               c_ElementName = C_OscHalcMagicianUtil::h_GetChanNumVariableName(pc_Domain->c_SingularName);
             }
             else if (q_IsSafetyFlagIndex)
             {
-               c_ElementName = C_OscHalcMagicianUtil::h_GetSafetyFlagVariableName(pc_Domain->c_SingularName).c_str();
+               c_ElementName = C_OscHalcMagicianUtil::h_GetSafetyFlagVariableName(pc_Domain->c_SingularName);
             }
             else
             {
@@ -3173,19 +3173,19 @@ QString C_PuiSvHandler::h_GetShortNamespace(const C_PuiSvDbNodeDataPoolListEleme
                   C_PuiSdHandler::h_GetInstance()->GetHalcDomainFileVariableData(orc_Id.u32_NodeIndex,
                                                                                  u32_DomainIndex, e_Selector,
                                                                                  u32_ParameterIndex);
-               c_ElementName = pc_Param->c_Display.c_str();
+               c_ElementName = pc_Param->c_Display;
                if (q_UseElementIndex)
                {
                   if (u32_ParameterElementIndex < pc_Param->c_StructElements.size())
                   {
                      const C_OscHalcDefElement & rc_Param = pc_Param->c_StructElements[u32_ParameterElementIndex];
-                     c_ElementName = rc_Param.c_Display.c_str();
+                     c_ElementName = rc_Param.c_Display;
                   }
                }
             }
             c_Retval = static_cast<QString>("%1::%2::%3").
-                       arg(pc_Config->c_Name.c_str()).
-                       arg(pc_List->c_Name.c_str()).
+                       arg(pc_Config->c_Name).
+                       arg(pc_List->c_Name).
                        arg(c_ElementName);
          }
       }
@@ -3372,7 +3372,7 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading views");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.toStdString().c_str());
+      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.toStdString());
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-system-views")
@@ -3381,7 +3381,7 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
             {
                bool q_Ok;
                const int32_t s32_FileVersion =
-                  static_cast<QString>(c_XmlParser.GetNodeContent().c_str()).toInt(&q_Ok, 0);
+                  static_cast<QString>(c_XmlParser.GetNodeContent()).toInt(&q_Ok, 0);
 
                //is the file version one we know ?
                if (q_Ok)
@@ -4289,7 +4289,7 @@ const
                    (c_RouteCalcUpdate.GetState() == C_CONFIG) ||
                    (c_RouteCalcDiag.GetState() == C_CONFIG))
                {
-                  const QString c_Text = static_cast<QString>(pc_Node->c_Properties.c_Name.c_str()) +
+                  const QString c_Text = static_cast<QString>(pc_Node->c_Properties.c_Name) +
                                          " (CAN to Ethernet routing not supported)";
 
                   orc_ErrorRoutingDetails[ms32_SUBMODE_SYSVIEW_SETUP][u32_Counter] = c_Text;
@@ -4304,7 +4304,7 @@ const
 
                   if (q_RoutingCheckError == true)
                   {
-                     const QString c_Text = static_cast<QString>(pc_Node->c_Properties.c_Name.c_str()) +
+                     const QString c_Text = static_cast<QString>(pc_Node->c_Properties.c_Name) +
                                             " (Communication interface flags \"Routing\" disabled or not supported.)";
 
                      // Generic routing error independent of the functionality
@@ -4321,14 +4321,14 @@ const
                      {
                         //Update error
                         orc_ErrorRoutingDetails[ms32_SUBMODE_SYSVIEW_UPDATE][u32_Counter] =
-                           static_cast<QString>(pc_Node->c_Properties.c_Name.c_str());
+                           static_cast<QString>(pc_Node->c_Properties.c_Name);
                      }
 
                      if (q_RoutingDiagnosticError == true)
                      {
                         //Diagnostic error
                         orc_ErrorRoutingDetails[ms32_SUBMODE_SYSVIEW_DASHBOARD][u32_Counter] =
-                           static_cast<QString>(pc_Node->c_Properties.c_Name.c_str());
+                           static_cast<QString>(pc_Node->c_Properties.c_Name);
 
                         // Add the node index to the diagnostic specific errors
                         orc_NodesWithDashboardRoutingError.insert(u32_Counter);
@@ -4355,7 +4355,7 @@ const
                      // Only update or dashboard specific -> Warnings for the setup
                      if ((q_RoutingDiagnosticError == true) || (q_RoutingUpdateError == true))
                      {
-                        QString c_Text = static_cast<QString>(pc_Node->c_Properties.c_Name.c_str()) +
+                        QString c_Text = static_cast<QString>(pc_Node->c_Properties.c_Name) +
                                          " (";
 
                         if (q_RoutingUpdateError == true)

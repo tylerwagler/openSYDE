@@ -1191,7 +1191,7 @@ void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceI
                const QString c_Info = "Could not convert the following number: \"" +
                                       c_Value + "\". Switching heartbeat off.";
                s32_HeartbeatProducerTimeMs = s32_HB_OFF_VALUE;
-               osc_write_log_warning("Read CANopen EDS Heartbeat Producer default value", c_Info.toStdString().c_str());
+               osc_write_log_warning("Read CANopen EDS Heartbeat Producer default value", c_Info.toStdString());
             }
          }
       }
@@ -1255,7 +1255,7 @@ void C_SdNdeCoConfigTreeView::mh_InitNewDeviceContent(C_OscCanOpenManagerDeviceI
                                          c_Value +
                                          "\". Switching heartbeat off.";
                   s32_HeartbeatConsumerTimeMs = s32_HB_OFF_VALUE;
-                  osc_write_log_warning("CANopen EDS Heartbeat Consumer default value", c_Info.toStdString().c_str());
+                  osc_write_log_warning("CANopen EDS Heartbeat Consumer default value", c_Info.toStdString());
                }
             }
          }

@@ -577,7 +577,7 @@ QString C_SdBueSignalTableModel::m_GetMultiplexingValue(const C_OscCanMessageIde
                                                                                 u32_Multiplexer);
                if (pc_OscSignalCommon != NULL)
                {
-                  c_MultiplexerName = static_cast<QString>(pc_OscSignalCommon->c_Name.c_str());
+                  c_MultiplexerName = static_cast<QString>(pc_OscSignalCommon->c_Name);
                }
             } // if no multiplexer is found dummy-text is used
 
@@ -783,7 +783,7 @@ void C_SdBueSignalTableModel::m_FillSigInfo(void)
                QStringList c_TmpIcon;
 
                // Fill the signal data
-               c_SigData.c_MsgName = static_cast<QString>("%1 (0x%2)").arg(pc_Message->c_Name.c_str(),
+               c_SigData.c_MsgName = static_cast<QString>("%1 (0x%2)").arg(pc_Message->c_Name,
                                                                            QString::number(pc_Message->u32_CanId,
                                                                                            16).toUpper());
                c_SigData.u32_J1939Spn = pc_OscSignal->u32_J1939SuspectParameterNumber;
@@ -792,8 +792,8 @@ void C_SdBueSignalTableModel::m_FillSigInfo(void)
                   pc_OscSignal->u8_CanOpenManagerObjectDictionarySubIndex);
 
                c_SigData.c_MultiplexingValue = this->m_GetMultiplexingValue(rc_MsgId, u32_SignalCounter);
-               c_SigData.c_SigName = static_cast<QString>(pc_OscSignalCommon->c_Name.c_str());
-               c_SigData.c_Comment = static_cast<QString>(pc_OscSignalCommon->c_Comment.c_str());
+               c_SigData.c_SigName = static_cast<QString>(pc_OscSignalCommon->c_Name);
+               c_SigData.c_Comment = static_cast<QString>(pc_OscSignalCommon->c_Comment);
                c_SigData.u16_StartBit = pc_OscSignal->u16_ComBitStart;
                c_SigData.u16_BitLength = pc_OscSignal->u16_ComBitLength;
                c_SigData.c_ByteOrder = C_SdUtil::h_ConvertByteOrderToName(pc_OscSignal->e_ComByteOrder);
@@ -827,7 +827,7 @@ void C_SdBueSignalTableModel::m_FillSigInfo(void)
                   pc_OscSignalCommon->f64_Factor,
                   pc_OscSignalCommon->f64_Offset,
                   0);
-               c_SigData.c_Unit = static_cast<QString>(pc_OscSignalCommon->c_Unit.c_str());
+               c_SigData.c_Unit = static_cast<QString>(pc_OscSignalCommon->c_Unit);
 
                // The icon
                c_TmpIcon.push_back(QString::number(20));

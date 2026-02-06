@@ -248,7 +248,7 @@ void C_CieExportReportWidget::m_BuildReport(void) {
   c_CompleteLog +=
       static_cast<QString>(
           "<a href=\"file:%1\"><span style=\"color: %2;\">%3</span></a>.")
-          .arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str())
+          .arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation())
           .arg(mc_STYLESHEET_GUIDE_COLOR_LINK)
           .arg("log file");
   c_CompleteLog += "</td></tr></table>";

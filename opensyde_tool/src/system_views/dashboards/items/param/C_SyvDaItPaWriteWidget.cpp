@@ -597,7 +597,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
          if (pc_OscNode != NULL)
          {
             c_Text += "<u>" + static_cast<QString>("Node") + " - " +
-                      static_cast<QString>(pc_OscNode->c_Properties.c_Name.c_str()) + "</u>";
+                      static_cast<QString>(pc_OscNode->c_Properties.c_Name) + "</u>";
          }
       }
 
@@ -621,7 +621,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
             {
                c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(1UL));
                c_Text += static_cast<QString>("Datapool") +
-                         " - " + static_cast<QString>(pc_OscDataPool->c_Name.c_str()) + "</div>";
+                         " - " + static_cast<QString>(pc_OscDataPool->c_Name) + "</div>";
             }
          }
 
@@ -631,7 +631,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
             // Heading for list
             c_Text += static_cast<QString>("<div %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(2UL));
             c_Text += static_cast<QString>("List") + " - " +
-                      static_cast<QString>(pc_OscList->c_Name.c_str()) + "</div>";
+                      static_cast<QString>(pc_OscList->c_Name) + "</div>";
             c_Text += static_cast<QString>("<table width=\"100%\" %1>").arg(C_SyvDaItUtil::h_GetHtmlIndentStyle(3UL));
 
             for (u32_ElementCounter = 0U; u32_ElementCounter < pc_OscList->c_Elements.size(); ++u32_ElementCounter)
@@ -656,7 +656,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
                }
 
                c_ElementNumber = "#" + QString::number(u32_ElementCounter + 1U);
-               c_ElementText = pc_OscList->c_Elements[u32_ElementCounter].c_Name.c_str();
+               c_ElementText = pc_OscList->c_Elements[u32_ElementCounter].c_Name;
 
                if (oq_ShowReadValues == true)
                {
@@ -704,7 +704,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
                      c_Text += c_NvmValues[u32_ArrayCounter] + ";";
                   }
                   c_Text.chop(1); // remove last ";"
-                  c_Text += " " + static_cast<QString>(pc_OscList->c_Elements[u32_ElementCounter].c_Unit.c_str()) +
+                  c_Text += " " + static_cast<QString>(pc_OscList->c_Elements[u32_ElementCounter].c_Unit) +
                             c_SpanChangedEnd + "</td>";
                   c_Text += "</tr>";
                }
@@ -1153,11 +1153,11 @@ QString C_SyvDaItPaWriteWidget::m_GetSuspectElementReport(void) const
             C_SdNdeDpContentUtil::h_GetValuesAsScaledCombinedString(c_It->second.c_Expected,
                                                                     pc_Element->f64_Factor,
                                                                     pc_Element->f64_Offset, c_Expected, false);
-            c_Expected += static_cast<QString>(" ") + pc_Element->c_Unit.c_str();
+            c_Expected += static_cast<QString>(" ") + pc_Element->c_Unit;
             C_SdNdeDpContentUtil::h_GetValuesAsScaledCombinedString(c_It->second.c_Actual,
                                                                     pc_Element->f64_Factor,
                                                                     pc_Element->f64_Offset, c_Actual, false);
-            c_Actual += static_cast<QString>(" ") + pc_Element->c_Unit.c_str();
+            c_Actual += static_cast<QString>(" ") + pc_Element->c_Unit;
             c_Entry = static_cast<QString>("%1 written: %2, read: %3").arg(c_Namespace).arg(
                c_Expected).arg(
                c_Actual);
@@ -1207,7 +1207,7 @@ void C_SyvDaItPaWriteWidget::m_ReportError(const QString & orc_FunctionName, con
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
    osc_write_log_info("Write NVM Parameters",
-                      c_Text.toStdString().c_str());
+                      c_Text.toStdString());
 
    c_Message.SetDescription(static_cast<QString>("Function %1 ended with error.").arg(
                                orc_FunctionName));
@@ -1228,7 +1228,7 @@ void C_SyvDaItPaWriteWidget::m_ReportError(const QString & orc_FunctionName, con
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeWriteChangedValues(const int32_t os32_ErrorCode)
 {
-   const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
+   const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
    uint8_t u8_Nrc;
    QString c_Details;
    QString c_Description;
@@ -1322,7 +1322,7 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeWriteChangedValues(const int32_
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeReadValues(const int32_t os32_ErrorCode)
 {
-   const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
+   const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
    uint8_t u8_Nrc;
    QString c_Details;
    QString c_Description;
@@ -1420,7 +1420,7 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeReadValues(const int32_t os32_E
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeWriteCrcs(const int32_t os32_ErrorCode)
 {
-   const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
+   const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
    uint8_t u8_Nrc;
    QString c_Details;
    QString c_Description;
@@ -1531,7 +1531,7 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmSafeWriteCrcs(const int32_t os32_Er
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaWriteWidget::m_ReportErrorNvmNotifyOfChanges(const int32_t os32_ErrorCode)
 {
-   const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str();
+   const QString c_Log = C_OscLoggingHandler::h_GetCompleteLogFileLocation();
    uint8_t u8_Nrc;
    QString c_Details;
    QString c_Description;
@@ -1658,9 +1658,9 @@ QString C_SyvDaItPaWriteWidget::mh_GetId(const C_OscNodeDataPoolListId & orc_Id)
 
    if (((pc_Node != NULL) && (pc_DataPool != NULL)) && (pc_List != NULL))
    {
-      c_Default = static_cast<QString>("%1::%2::%3").arg(pc_Node->c_Properties.c_Name.c_str()).arg(
-         pc_DataPool->c_Name.c_str()).arg(
-         pc_List->c_Name.c_str());
+      c_Default = static_cast<QString>("%1::%2::%3").arg(pc_Node->c_Properties.c_Name).arg(
+         pc_DataPool->c_Name).arg(
+         pc_List->c_Name);
    }
    return c_Default;
 }

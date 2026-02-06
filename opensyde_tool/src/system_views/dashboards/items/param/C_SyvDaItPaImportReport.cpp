@@ -564,16 +564,16 @@ void C_SyvDaItPaImportReport::m_AppendTableEntry(QString & orc_TableContent, uin
       orc_TableContent += QString::number(oru32_TableCount);
       orc_TableContent += "</td>";
       orc_TableContent += C_SyvDaItPaImportReport::mhc_HTML_TABLE_DATA_START;
-      orc_TableContent += pc_Node->c_Properties.c_Name.c_str();
+      orc_TableContent += pc_Node->c_Properties.c_Name;
       orc_TableContent += "</td>";
       orc_TableContent += C_SyvDaItPaImportReport::mhc_HTML_TABLE_DATA_START;
-      orc_TableContent += pc_DataPool->c_Name.c_str();
+      orc_TableContent += pc_DataPool->c_Name;
       orc_TableContent += "</td>";
       orc_TableContent += C_SyvDaItPaImportReport::mhc_HTML_TABLE_DATA_START;
-      orc_TableContent += pc_List->c_Name.c_str();
+      orc_TableContent += pc_List->c_Name;
       orc_TableContent += "</td>";
       orc_TableContent += C_SyvDaItPaImportReport::mhc_HTML_TABLE_DATA_START;
-      orc_TableContent += pc_Element->c_Name.c_str();
+      orc_TableContent += pc_Element->c_Name;
       orc_TableContent += "</td>";
       if (orc_Value.isEmpty() == false)
       {
@@ -625,7 +625,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
          if (pc_Element != NULL)
          {
             c_Retval = static_cast<QString>(" - Parameter \"%1\"").arg(
-               pc_Element->c_Name.c_str());
+               pc_Element->c_Name);
          }
          break;
       case 3UL:
@@ -633,7 +633,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
             this->mrc_Id.u32_NodeIndex, this->mrc_Id.u32_DataPoolIndex, this->mrc_Id.u32_ListIndex);
          if (pc_List != NULL)
          {
-            c_Retval = static_cast<QString>(" - List \"%1\"").arg(pc_List->c_Name.c_str());
+            c_Retval = static_cast<QString>(" - List \"%1\"").arg(pc_List->c_Name);
          }
          break;
       case 2UL:
@@ -642,7 +642,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
          if (pc_DataPool != NULL)
          {
             c_Retval = static_cast<QString>(" - Datapool \"%1\"").arg(
-               pc_DataPool->c_Name.c_str());
+               pc_DataPool->c_Name);
          }
          break;
       case 1UL:
@@ -650,7 +650,7 @@ QString C_SyvDaItPaImportReport::m_GetFilter(const uint32_t ou32_Value) const
          if (pc_Node != NULL)
          {
             c_Retval = static_cast<QString>("Node \"%1\"").arg(
-               pc_Node->c_Properties.c_Name.c_str());
+               pc_Node->c_Properties.c_Name);
          }
          break;
       default:

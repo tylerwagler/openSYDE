@@ -92,10 +92,10 @@ void C_SdNdeDpUtil::h_ConvertToElementGeneric(const stw::opensyde_core::C_OscNod
    switch (ore_Type)
    {
    case eELEMENT_NAME:
-      orc_Generic = orc_OscElement.c_Name.c_str();
+      orc_Generic = orc_OscElement.c_Name;
       break;
    case eELEMENT_COMMENT:
-      orc_Generic = orc_OscElement.c_Comment.c_str();
+      orc_Generic = orc_OscElement.c_Comment;
       break;
    case eELEMENT_VALUE_TYPE:
       if (orc_OscElement.q_InterpretAsString == true)
@@ -133,7 +133,7 @@ void C_SdNdeDpUtil::h_ConvertToElementGeneric(const stw::opensyde_core::C_OscNod
       orc_Generic = orc_OscElement.f64_Offset;
       break;
    case eELEMENT_UNIT:
-      orc_Generic = orc_OscElement.c_Unit.c_str();
+      orc_Generic = orc_OscElement.c_Unit;
       break;
    case eELEMENT_DATA_SET:
       if ((ors32_DataSetIndex >= 0) &&
@@ -816,11 +816,11 @@ int32_t C_SdNdeDpUtil::h_GetSharedDatapoolGroup(const uint32_t ou32_SharedDatapo
                if (rc_DpId.u32_NodeIndex != ou32_NodeIndex)
                {
                   // Add the node name if the datapool is of an other node
-                  c_Text = static_cast<QString>(pc_Node->c_Properties.c_Name.c_str()) + "::";
+                  c_Text = static_cast<QString>(pc_Node->c_Properties.c_Name) + "::";
                }
 
                // Get the datapool name
-               c_Text += pc_Node->c_DataPools[rc_DpId.u32_DataPoolIndex].c_Name.c_str();
+               c_Text += pc_Node->c_DataPools[rc_DpId.u32_DataPoolIndex].c_Name;
 
                orc_SharedDatapoolNameGroup.push_back(c_Text);
             }

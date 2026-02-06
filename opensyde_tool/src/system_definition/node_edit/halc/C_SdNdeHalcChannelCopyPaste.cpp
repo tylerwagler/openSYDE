@@ -26,6 +26,8 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::scl;
 using namespace stw::errors;
+using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_elements;
 
@@ -188,7 +190,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckDataFromClipboard(const uint32_t ou32_
          orc_ErrorDescription +=
             static_cast<QString>("Cannot apply HALC channel configuration for device "
                                                         "type %1 to device type %2.").
-            arg(orc_HalcConfig.c_DeviceType.c_str(), pc_Config->c_DeviceName.c_str());
+            arg(orc_HalcConfig.c_DeviceType, pc_Config->c_DeviceName);
       }
       else if (orc_HalcConfig.u32_DefinitionContentVersion != pc_Config->u32_ContentVersion)
       {
@@ -385,8 +387,8 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannel(const uint32_t ou32_No
          q_Return = false;
          c_ProblemDescription =
             static_cast<QString>("Source domain %1 (%2) differs from target domain %3 (%4).").
-            arg(orc_SourceDomain.c_DomainConfig.c_Name.c_str(), orc_SourceDomain.c_Id.c_str(),
-                pc_Domain->c_Name.c_str(), pc_Domain->c_Id.c_str());
+            arg(orc_SourceDomain.c_DomainConfig.c_Name, orc_SourceDomain.c_Id,
+                pc_Domain->c_Name, pc_Domain->c_Id);
       }
 
       // check use case
@@ -416,7 +418,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannel(const uint32_t ou32_No
                   pc_Domain->c_ChannelUseCases[orc_SourceChannel.u32_UseCaseIndex];
                std::vector<C_OscHalcDefChannelAvailability>::const_iterator c_ItAvail;
 
-               c_UseCaseName = rc_UseCase.c_Display.c_str();
+               c_UseCaseName = rc_UseCase.c_Display;
 
                // search available channel indices for target channel index
                for (c_ItAvail = rc_UseCase.c_Availability.begin();
@@ -455,9 +457,9 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannel(const uint32_t ou32_No
 
          if (u32_ChannelIndex < pc_Domain->c_Channels.size())
          {
-            c_ChannelId = static_cast<QString>(" (%1)").arg(pc_Domain->c_Channels[u32_ChannelIndex].c_Name.c_str());
+            c_ChannelId = static_cast<QString>(" (%1)").arg(pc_Domain->c_Channels[u32_ChannelIndex].c_Name);
          }
-         orc_InvalidChannels += pc_Channel->c_Name.c_str();
+         orc_InvalidChannels += pc_Channel->c_Name;
          orc_InvalidChannels += c_ChannelId + ": ";
          orc_InvalidChannels += c_ProblemDescription;
          orc_InvalidChannels += "\n";
@@ -516,8 +518,8 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedDomain(const uint32_t ou32_Nod
          q_Return = false;
          c_ProblemDescription =
             static_cast<QString>("Source domain %1 (%2) differs from target domain %3 (%4).").
-            arg(orc_SourceDomain.c_DomainConfig.c_Name.c_str(), orc_SourceDomain.c_Id.c_str(),
-                pc_Domain->c_Name.c_str(), pc_Domain->c_Id.c_str());
+            arg(orc_SourceDomain.c_DomainConfig.c_Name, orc_SourceDomain.c_Id,
+                pc_Domain->c_Name, pc_Domain->c_Id);
       }
 
       // check use case
@@ -543,9 +545,9 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedDomain(const uint32_t ou32_Nod
 
          if (u32_ChannelIndex < pc_Domain->c_Channels.size())
          {
-            c_DomainId = static_cast<QString>(" (%1)").arg(pc_Domain->c_Id.c_str());
+            c_DomainId = static_cast<QString>(" (%1)").arg(pc_Domain->c_Id);
          }
-         orc_InvalidDomain += pc_Domain->c_Name.c_str();
+         orc_InvalidDomain += pc_Domain->c_Name;
          orc_InvalidDomain += c_DomainId + ": ";
          orc_InvalidDomain += c_ProblemDescription;
          orc_InvalidDomain += "\n";

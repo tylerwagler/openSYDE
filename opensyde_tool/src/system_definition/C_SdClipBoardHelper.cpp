@@ -95,7 +95,7 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPool(C_OscNodeDataPool & orc_OscContent
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(mh_GetClipBoard().toStdString().c_str());
+   c_StringXml.LoadFromString(mh_GetClipBoard().toStdString());
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {
@@ -204,7 +204,7 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolLists(std::vector<C_OscNodeDataPool
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(mh_GetClipBoard().toStdString().c_str());
+   c_StringXml.LoadFromString(mh_GetClipBoard().toStdString());
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {
@@ -358,7 +358,7 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListElementsFromString(
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(orc_Input.toStdString().c_str());
+   c_StringXml.LoadFromString(orc_Input.toStdString());
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {
@@ -449,7 +449,7 @@ int32_t C_SdClipBoardHelper::h_LoadIndicesFromString(std::vector<uint32_t> & orc
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(orc_Input.toStdString().c_str());
+   c_StringXml.LoadFromString(orc_Input.toStdString());
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {
@@ -573,7 +573,7 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromString(
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(orc_Input.toStdString().c_str());
+   c_StringXml.LoadFromString(orc_Input.toStdString());
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {
@@ -754,7 +754,7 @@ void C_SdClipBoardHelper::h_StoreMessages(const std::vector<C_OscCanMessage> & o
                c_StringXml.SetAttributeUint32("interface-index", rc_OwnerNodeInterfaceIndex[u32_ItOwner]);
                c_StringXml.SetAttributeUint32("datapool-index", rc_OwnerNodeDatapoolIndex[u32_ItOwner]);
                c_StringXml.SetAttributeBool("message-was-tx", rc_OwnerIsTxFlag[u32_ItOwner]);
-               c_StringXml.CreateNodeChild("name", rc_CurName.toStdString().c_str());
+               c_StringXml.CreateNodeChild("name", rc_CurName.toStdString());
                //Return
                Q_ASSERT(c_StringXml.SelectNodeParent() == "message-parents");
             }
@@ -795,7 +795,7 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
    const QString c_Input = C_SdClipBoardHelper::mh_GetClipBoard();
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(c_Input.toStdString().c_str());
+   c_StringXml.LoadFromString(c_Input.toStdString());
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {
@@ -1052,7 +1052,7 @@ int32_t C_SdClipBoardHelper::h_LoadMessageIndexFromString(const QString & orc_In
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(orc_Input.toStdString().c_str());
+   c_StringXml.LoadFromString(orc_Input.toStdString());
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {
@@ -1168,7 +1168,7 @@ int32_t C_SdClipBoardHelper::h_LoadDataSnapShotFromClipboard(C_SdTopologyDataSna
    const QString c_Input = C_SdClipBoardHelper::mh_GetClipBoard();
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(c_Input.toStdString().c_str());
+   c_StringXml.LoadFromString(c_Input.toStdString());
 
    if (c_StringXml.SelectRoot() == "opensyde-system-definition")
    {
@@ -1286,7 +1286,7 @@ int32_t C_SdClipBoardHelper::h_LoadHalcItemConfigFromClipboard(C_OscHalcConfigSt
    const QString c_Input = C_SdClipBoardHelper::mh_GetClipBoard();
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(c_Input.toStdString().c_str());
+   c_StringXml.LoadFromString(c_Input.toStdString());
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {
@@ -1376,7 +1376,7 @@ int32_t C_SdClipBoardHelper::mh_LoadSignalsFromString(const QString & orc_Input,
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(orc_Input.toStdString().c_str());
+   c_StringXml.LoadFromString(orc_Input.toStdString());
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {

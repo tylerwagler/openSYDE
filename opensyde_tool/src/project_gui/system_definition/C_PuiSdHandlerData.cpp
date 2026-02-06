@@ -31,6 +31,7 @@
 
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -157,14 +158,14 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const QString & orc_Path, uint16_t * co
                   {
                      osc_write_log_error("Loading shared Datapool configuration UI",
                                          "Could not load shared Datapool configuration UI. Error code: " +
-                                         QString::IntToStr(s32_Return));
+                                         QString::number(s32_Return));
                   }
                }
                else
                {
                   osc_write_log_error("Loading System Definition UI",
                                       "Could not load System Definition UI. Error code: " +
-                                      QString::IntToStr(s32_Return));
+                                      QString::number(s32_Return));
                }
 
                if (s32_Return == C_NO_ERR)
@@ -177,7 +178,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const QString & orc_Path, uint16_t * co
          else
          {
             osc_write_log_error("Loading System Definition", "Could not load System Definition. Error code: " +
-                                QString::IntToStr(s32_Return));
+                                QString::number(s32_Return));
          }
 
          if (s32_Return == C_NO_ERR)

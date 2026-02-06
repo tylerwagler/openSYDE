@@ -28,6 +28,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -182,7 +183,7 @@ void C_SyvDaChaDataItemWidget::InitWidget(const uint32_t ou32_DataPoolElementCon
             }
             else
             {
-               c_Name = pc_OscElement->c_Name.c_str();
+               c_Name = pc_OscElement->c_Name;
                if (orc_DataPoolElementId.GetUseArrayElementIndex())
                {
                   c_Name = static_cast<QString>("%1[%2]").arg(c_Name).arg(orc_DataPoolElementId.GetArrayElementIndex());

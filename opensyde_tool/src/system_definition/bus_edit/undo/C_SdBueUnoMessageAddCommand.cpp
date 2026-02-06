@@ -97,7 +97,7 @@ void C_SdBueUnoMessageAddCommand::SetInitialData(const std::vector<C_OscCanMessa
                     ++u32_ItNode)
                {
                   const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItNode);
-                  if ((pc_Node != NULL) && (pc_Node->c_Properties.c_Name == rc_CurName.toStdString().c_str()))
+                  if ((pc_Node != NULL) && (pc_Node->c_Properties.c_Name == rc_CurName.toStdString()))
                   {
                      const C_OscCanMessageContainer * const pc_Container =
                         C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainer(

@@ -55,7 +55,7 @@ C_PuiSvPc::C_PuiSvPc(void) :
 void C_PuiSvPc::CalcHash(uint32_t & oru32_HashValue) const
 {
    stw::scl::C_SclChecksums::CalcCRC32(&this->me_CanDllType, sizeof(this->me_CanDllType), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_CustomCanDllPath.toStdString().c_str(),
+   stw::scl::C_SclChecksums::CalcCRC32(this->mc_CustomCanDllPath.toStdString(),
                                        this->mc_CustomCanDllPath.length(), oru32_HashValue);
    this->mc_ConnectionData.CalcHash(oru32_HashValue);
 

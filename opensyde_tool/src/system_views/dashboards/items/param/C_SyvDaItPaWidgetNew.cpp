@@ -281,8 +281,8 @@ bool C_SyvDaItPaWidgetNew::HandleManualOperationFinished(const int32_t os32_Resu
                         if (((pc_Node != NULL) && (pc_DataPool != NULL)) && (pc_List != NULL))
                         {
                            c_ListsString += static_cast<QString>("- %1::%2::%3\n").
-                                            arg(pc_Node->c_Properties.c_Name.c_str()).
-                                            arg(pc_DataPool->c_Name.c_str()).arg(pc_List->c_Name.ToQString());
+                                            arg(pc_Node->c_Properties.c_Name).
+                                            arg(pc_DataPool->c_Name).arg(pc_List->c_Name);
                         }
                      }
                      c_MessageResult.SetHeading("Invalid List CRC");
@@ -348,7 +348,7 @@ bool C_SyvDaItPaWidgetNew::HandleManualOperationFinished(const int32_t os32_Resu
                   if (pc_Node != NULL)
                   {
                      c_Node = static_cast<QString>("Node %1").arg(
-                        pc_Node->c_Properties.c_Name.ToQString());
+                        pc_Node->c_Properties.c_Name);
                   }
                }
                switch (ou8_Nrc)
@@ -965,7 +965,7 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
 
          //User settings restore
          c_Folder = C_Uti::h_CheckAndReplaceWithExePathIfNecessary(C_UsHandler::h_GetInstance()->GetProjSvSetupView(
-                                                                      pc_View->GetName().c_str()).c_ParamImportPath);
+                                                                      pc_View->GetName()).c_ParamImportPath);
 
          c_File = C_OgeWiUtil::h_GetOpenFileName(pc_ParamWidget->GetPopUpParent(),
                                                  "Load Parameter Set File",
@@ -977,9 +977,9 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
             int32_t s32_Result;
 
             //User settings store
-            C_UsHandler::h_GetInstance()->SetProjSvParamImport(pc_View->GetName().c_str(), c_File);
+            C_UsHandler::h_GetInstance()->SetProjSvParamImport(pc_View->GetName(), c_File);
 
-            s32_Result = c_ParamSetHandler.ReadFile(c_File.toStdString().c_str(), true, true);
+            s32_Result = c_ParamSetHandler.ReadFile(c_File.toStdString(), true, true);
 
             if (s32_Result == C_NO_ERR)
             {
@@ -1069,7 +1069,7 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
                   "- Invalid content (e.g. values invalid)<br/>";
                c_Details += "For more information see ";
                c_Details += C_Uti::h_GetLink("log file", mc_STYLE_GUIDE_COLOR_LINK,
-                                             C_OscLoggingHandler::h_GetCompleteLogFileLocation().ToQString());
+                                             C_OscLoggingHandler::h_GetCompleteLogFileLocation());
                c_Details += ".";
                c_MessageResultRead.SetDetails(c_Details);
                c_MessageResultRead.SetCustomMinHeight(300, 300);
@@ -1257,7 +1257,7 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                   QString c_Folder;
                   QString c_FileName;
                   const C_UsSystemView c_View =
-                     C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName().ToQString());
+                     C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName());
 
                   //User settings restore
                   c_Folder = C_Uti::h_CheckAndReplaceWithExePathIfNecessary(c_View.c_ParamExportPath);
@@ -1287,7 +1287,7 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                      bool q_Continue = true;
 
                      //User settings store
-                     C_UsHandler::h_GetInstance()->SetProjSvParamExport(pc_View->GetName().c_str(), c_FileName);
+                     C_UsHandler::h_GetInstance()->SetProjSvParamExport(pc_View->GetName(), c_FileName);
 
                      // Remove old file
                      c_File.setFileName(c_FileName);
@@ -1299,7 +1299,7 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
                      if (q_Continue == true)
                      {
                         s32_Result = c_ParamSetFileHandler.CreateCleanFileWithoutCrc(
-                           c_FileName.toStdString().c_str(), true);
+                           c_FileName.toStdString(), true);
                      }
                      else
                      {
@@ -1383,7 +1383,7 @@ void C_SyvDaItPaWidgetNew::m_RecordElements(const std::vector<C_OscNodeDataPoolL
          const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(
             pc_ParamWidget->GetPopUpParent(), pc_ParamWidget->GetPopUpParent());
          C_SyvDaItPaImageRecordWidget * const pc_Dialog =
-            new C_SyvDaItPaImageRecordWidget(*c_New, *this->mpc_ComDriver, orc_ListIds, pc_View->GetName().ToQString());
+            new C_SyvDaItPaImageRecordWidget(*c_New, *this->mpc_ComDriver, orc_ListIds, pc_View->GetName());
 
          Q_UNUSED(pc_Dialog)
 
@@ -1581,7 +1581,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetDefaultFileName(const uint32_t ou32_ViewInde
    {
       const QString c_ViewPart1 = static_cast<QString>("View_%1_").arg(ou32_ViewIndex + 1);
       const QString c_ViewPart1File = C_OscUtils::h_NiceifyStringForFileName(c_ViewPart1);
-      const QString c_ViewPart2 = C_PuiSdHandler::h_AutomaticCeStringAdaptation(pc_View->GetName().ToQString());
+      const QString c_ViewPart2 = C_PuiSdHandler::h_AutomaticCeStringAdaptation(pc_View->GetName());
       const QString c_DataElementFileName = mh_GetFile(orc_Id, ou32_ValidLayers);
       const QString c_ViewFileName = static_cast<QString>("%1%2").arg(c_ViewPart1File).arg(c_ViewPart2);
       if (c_DataElementFileName.isEmpty() == false)
@@ -1631,7 +1631,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_Element != NULL)
          {
             c_Retval =
-               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_Element->c_Name.ToQString()));
+               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_Element->c_Name));
          }
          break;
       case 3UL:
@@ -1640,7 +1640,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_List != NULL)
          {
             c_Retval =
-               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_List->c_Name.ToQString()));
+               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_List->c_Name));
          }
          break;
       case 2UL:
@@ -1649,7 +1649,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_DataPool != NULL)
          {
             c_Retval =
-               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_DataPool->c_Name.ToQString()));
+               static_cast<QString>("_%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_DataPool->c_Name));
          }
          break;
       case 1UL:
@@ -1657,7 +1657,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
          if (pc_Node != NULL)
          {
             c_Retval =
-               static_cast<QString>("%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_Node->c_Properties.c_Name.ToQString()));
+               static_cast<QString>("%1").arg(C_OscUtils::h_NiceifyStringForFileName(pc_Node->c_Properties.c_Name));
          }
          break;
       default:

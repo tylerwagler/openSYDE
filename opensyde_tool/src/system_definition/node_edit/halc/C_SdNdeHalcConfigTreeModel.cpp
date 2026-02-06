@@ -22,9 +22,9 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
-
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -246,7 +246,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                      std::string c_String;
                      if (pc_ParameterElement->c_Value.GetStringValue(c_String) == C_NO_ERR)
                      {
-                        c_Retval = c_String.c_str();
+                        c_Retval = c_String;
                      }
                   }
                   break;
@@ -432,14 +432,14 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
 
                   if (s32_ComboBoxIndex < c_Tmp.size())
                   {
-                     const QString c_Value = c_Tmp.at(s32_ComboBoxIndex).toStdString().c_str();
+                     const QString c_Value = c_Tmp.at(s32_ComboBoxIndex).toStdString();
                      //Set value
                      if (C_PuiSdHandler::h_GetInstance()->SetHalcDomainChannelParameterConfigElementEnum(
                             this->mu32_NodeIndex,
                             this->mu32_DomainIndex,
                             this->mu32_ChannelIndex, u32_ParameterIndex, u32_ParameterElementIndex,
                             this->mq_ChannelCase,
-                            c_Value.toStdString().c_str()) == C_NO_ERR)
+                            c_Value.toStdString()) == C_NO_ERR)
                      {
                         q_Retval = true;
                         //Linked values
@@ -450,7 +450,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
                                          this->mu32_DomainIndex,
                                          c_LinkedChannels[u32_It], u32_ParameterIndex, u32_ParameterElementIndex,
                                          this->mq_ChannelCase,
-                                         c_Value.toStdString().c_str()) == C_NO_ERR);
+                                         c_Value.toStdString()) == C_NO_ERR);
                         }
                      }
                   }
@@ -472,7 +472,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
                                this->mu32_DomainIndex,
                                this->mu32_ChannelIndex, u32_ParameterIndex, u32_ParameterElementIndex,
                                this->mq_ChannelCase,
-                               c_Names.at(s32_It).toStdString().c_str(), c_Bits.at(s32_It)) == C_NO_ERR)
+                               c_Names.at(s32_It).toStdString(), c_Bits.at(s32_It)) == C_NO_ERR)
                         {
                            q_Retval = true;
                            //Linked values
@@ -484,7 +484,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
                                     this->mu32_DomainIndex,
                                     c_LinkedChannels[u32_It], u32_ParameterIndex, u32_ParameterElementIndex,
                                     this->mq_ChannelCase,
-                                    c_Names.at(s32_It).toStdString().c_str(), c_Bits.at(s32_It)) == C_NO_ERR);
+                                    c_Names.at(s32_It).toStdString(), c_Bits.at(s32_It)) == C_NO_ERR);
                            }
                         }
                      }

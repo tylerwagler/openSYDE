@@ -303,7 +303,7 @@ void C_SyvDaDashboardsWidget::SetEditMode(const bool oq_Active)
       //Show toolbox
       if ((this->mpc_Toolbox != NULL) &&
           (C_UsHandler::h_GetInstance()->GetProjSvSetupView(
-              C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex)->GetName().c_str())
+              C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex)->GetName())
            .GetDashboardToolboxMaximized() != false))
       {
          this->mpc_Toolbox->show();
@@ -639,7 +639,7 @@ void C_SyvDaDashboardsWidget::m_InitToolBox(void)
 
    if (pc_View != NULL)
    {
-      c_ViewName = pc_View->GetName().c_str();
+      c_ViewName = pc_View->GetName();
    }
    c_ViewSettings = C_UsHandler::h_GetInstance()->GetProjSvSetupView(c_ViewName);
 
@@ -732,7 +732,7 @@ void C_SyvDaDashboardsWidget::m_CleanUpToolBox(void) const
          // save position, size and state of toolbox
          c_Size.setWidth(this->mpc_Toolbox->width());
          c_Size.setHeight(this->mpc_Toolbox->GetMaximizedHeight());
-         C_UsHandler::h_GetInstance()->SetProjSvDashboardToolbox(pc_View->GetName().c_str(),
+         C_UsHandler::h_GetInstance()->SetProjSvDashboardToolbox(pc_View->GetName(),
                                                                  this->mpc_Toolbox->pos(), c_Size,
                                                                  this->mpc_Toolbox->GetMaximized());
       }

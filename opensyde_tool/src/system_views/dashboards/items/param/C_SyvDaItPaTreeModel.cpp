@@ -1435,7 +1435,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(c_Id.u32_NodeIndex);
                if (pc_Node != NULL)
                {
-                  c_Retval = pc_Node->c_Properties.c_Comment.c_str();
+                  c_Retval = pc_Node->c_Properties.c_Comment;
                }
             }
             break;
@@ -1447,7 +1447,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                   c_Id.u32_DataPoolIndex);
                if (pc_DataPool != NULL)
                {
-                  c_Retval = pc_DataPool->c_Comment.c_str();
+                  c_Retval = pc_DataPool->c_Comment;
                }
             }
             break;
@@ -1464,7 +1464,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                                                                          c_Id.u32_ListIndex);
                   if (pc_List != NULL)
                   {
-                     c_Retval = pc_List->c_Comment.c_str();
+                     c_Retval = pc_List->c_Comment;
                   }
                }
                break;
@@ -1548,7 +1548,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                               {
                                  const C_OscNodeDataPoolDataSet & rc_DataSet = pc_List->c_DataSets[u32_DataSet];
                                  c_Retval = static_cast<QString>("Dataset \"%1\"").arg(
-                                    rc_DataSet.c_Name.c_str());
+                                    rc_DataSet.c_Name);
                               }
                            }
                         }
@@ -1582,7 +1582,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                                                                                              c_Id.u32_ElementIndex);
                   if (pc_OscElement != NULL)
                   {
-                     c_Retval = pc_OscElement->c_Comment.c_str();
+                     c_Retval = pc_OscElement->c_Comment;
                   }
                }
                break;
@@ -1698,7 +1698,7 @@ QVariant C_SyvDaItPaTreeModel::data(const QModelIndex & orc_Index, const int32_t
                                                                                              c_Id.u32_ElementIndex);
                   if (pc_OscElement != NULL)
                   {
-                     c_Retval = pc_OscElement->c_Unit.c_str();
+                     c_Retval = pc_OscElement->c_Unit;
                   }
                }
                break;
@@ -3014,7 +3014,7 @@ void C_SyvDaItPaTreeModel::mh_InitAllNode(C_TblTreItem * const opc_TreeNode, con
       {
          opc_TreeNode->c_Name =
             static_cast<QString>("VIEW #%1 - %2").arg(ou32_ViewIndex + 1).arg(
-               pc_View->GetName().c_str());
+               pc_View->GetName());
       }
       //Icon
       opc_TreeNode->c_Icon = QIcon(C_SyvDaItPaTreeModel::mhc_ICON_ALL_NODE);
@@ -3050,7 +3050,7 @@ void C_SyvDaItPaTreeModel::mh_InitNode(C_TblTreItem * const opc_TreeNode, const 
             c_NodeActiveFlags);
 
          //Name
-         opc_TreeNode->c_Name = pc_NodeData->c_Properties.c_Name.c_str();
+         opc_TreeNode->c_Name = pc_NodeData->c_Properties.c_Name;
          //Icon
          opc_TreeNode->c_Icon = QIcon(C_SyvDaItPaTreeModel::mhc_ICON_NODE);
          //State
@@ -3107,7 +3107,7 @@ void C_SyvDaItPaTreeModel::mh_InitDataPool(C_TblTreItem * const opc_TreeNode, co
       if (pc_NodeDataPoolData != NULL)
       {
          //Name
-         opc_TreeNode->c_Name = pc_NodeDataPoolData->c_Name.c_str();
+         opc_TreeNode->c_Name = pc_NodeDataPoolData->c_Name;
          //Icon
          opc_TreeNode->c_Icon = QIcon(C_SyvDaItPaTreeModel::mhc_ICON_DATAPOOL);
          //State
@@ -3144,7 +3144,7 @@ void C_SyvDaItPaTreeModel::mh_InitList(C_TblTreItem * const opc_TreeNode, const 
       if (pc_ListData != NULL)
       {
          //Name
-         opc_TreeNode->c_Name = static_cast<QString>("%1 (%2)").arg(pc_ListData->c_Name.c_str()).arg(
+         opc_TreeNode->c_Name = static_cast<QString>("%1 (%2)").arg(pc_ListData->c_Name).arg(
             pc_ListData->c_Elements.size());
          //Icon
          opc_TreeNode->c_Icon = QIcon(C_SyvDaItPaTreeModel::mhc_ICON_LIST);
@@ -3185,7 +3185,7 @@ void C_SyvDaItPaTreeModel::mh_InitElement(C_TblTreItem * const opc_TreeNode, con
       {
          //Name
          opc_TreeNode->c_Name = static_cast<QString>("%1 - %2").arg(ou32_ElementIndex + 1).arg(
-            pc_ElementData->c_Name.c_str());
+            pc_ElementData->c_Name);
          //Icon
          opc_TreeNode->c_Icon = QIcon(C_SyvDaItPaTreeModel::mhc_ICON_PARAMETER);
          //State

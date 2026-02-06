@@ -18,6 +18,7 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -89,7 +90,7 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
       const C_OscNode & rc_Node = rc_Nodes.at(u32_NodeCounter);
       C_TblTreeModelCheckableItem * const pc_NodeItem = new C_TblTreeModelCheckableItem();
 
-      pc_NodeItem->c_Name = rc_Node.c_Properties.c_Name.c_str();
+      pc_NodeItem->c_Name = rc_Node.c_Properties.c_Name;
       pc_NodeItem->u32_Index = u32_NodeCounter;
 
       std::vector<C_OscNodeApplication> c_Applications = rc_Node.c_Applications;
@@ -110,17 +111,17 @@ int32_t C_SdCodeGenerationModel::Init(const std::vector<uint32_t> & orc_ElementI
                {
                   if (rc_Node.c_Properties.q_XappSupport == true)
                   {
-                     pc_ApplicationItem->c_Name = (rc_Application.c_Name + " (X.App Configuration)").c_str();
+                     pc_ApplicationItem->c_Name = (rc_Application.c_Name + " (X.App Configuration)");
                   }
                   else
                   {
                      pc_ApplicationItem->c_Name = (rc_Application.c_Name + " (Source Code; Structure Version: " +
-                                                   rc_Application.u16_GenCodeVersion + ")").c_str();
+                                                   rc_Application.u16_GenCodeVersion + ")");
                   }
                }
                else if (rc_Application.e_Type == C_OscNodeApplication::ePARAMETER_SET_HALC)
                {
-                  pc_ApplicationItem->c_Name = (rc_Application.c_Name + " (Parameter Set Image)").c_str();
+                  pc_ApplicationItem->c_Name = (rc_Application.c_Name + " (Parameter Set Image)");
                }
                else
                {

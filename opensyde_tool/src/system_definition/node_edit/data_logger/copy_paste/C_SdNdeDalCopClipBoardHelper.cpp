@@ -138,7 +138,7 @@ void C_SdNdeDalCopClipBoardHelper::mh_StoreDataloggerToClipboard(const std::vect
    QString c_XmlContent;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.CreateAndSelectNodeChild(orc_GenericTagName.toStdString().c_str());
+   c_StringXml.CreateAndSelectNodeChild(orc_GenericTagName.toStdString());
    C_OscDataLoggerJobFiler::h_SaveData(orc_Data, c_StringXml);
    C_SdNdeDalCopClipBoardHelper::mh_StoreElementIdGroups(orc_ElementIdGroups, orc_GenericTagName, c_StringXml);
    c_StringXml.SaveToString(c_XmlContent);
@@ -165,7 +165,7 @@ void C_SdNdeDalCopClipBoardHelper::mh_StoreElementIdGroups(const QMap<C_OscNodeD
    {
       C_SdNdeDalCopClipBoardHelper::mh_StoreElementIdGroup(c_It.key(), c_It.value(), orc_XmlParser);
    }
-   Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_GenericTagName.toStdString().c_str());
+   Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_GenericTagName.toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -209,9 +209,9 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadDataloggerFromClipboard(std::vector
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
 
-   c_StringXml.LoadFromString(mh_GetClipBoard().toStdString().c_str());
+   c_StringXml.LoadFromString(mh_GetClipBoard().toStdString());
 
-   if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString().c_str())
+   if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString())
    {
       s32_Retval = C_OscDataLoggerJobFiler::h_LoadData(orc_Data, c_StringXml);
       if (s32_Retval == C_NO_ERR)
@@ -274,7 +274,7 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadElementIdGroups(QMap<C_OscNodeDataP
          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "element-id-groups");
       }
       //Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_GenericTagName.toStdString().c_str());
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_GenericTagName.toStdString());
    }
    return s32_Retval;
 }

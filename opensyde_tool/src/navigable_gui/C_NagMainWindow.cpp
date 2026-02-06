@@ -108,11 +108,11 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
    // load devices so they are known to UI
    //lint -e{1938}  static const is guaranteed preinitialized before main
    stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromFile(
-      C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString().c_str(), false, NULL);
+      C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini").toStdString(), false, NULL);
 
    //lint -e{1938}  static const is guaranteed preinitialized before main
    stw::opensyde_core::C_OscSystemDefinition::hc_Devices.LoadFromFile(
-      C_Uti::h_GetAbsolutePathFromExe("../devices/user_devices.ini").toStdString().c_str(), true, NULL);
+      C_Uti::h_GetAbsolutePathFromExe("../devices/user_devices.ini").toStdString(), true, NULL);
 
    this->mpc_MainWidget = new C_NagMainWidget(this->mpc_Ui->pc_workAreaWidget);
    this->mpc_UseCaseWidget = new C_NagUseCaseViewWidget(this->mpc_Ui->pc_workAreaWidget);
@@ -1494,7 +1494,7 @@ bool C_NagMainWindow::m_ChangeMode(const int32_t os32_Mode, const int32_t os32_S
 
    osc_write_log_performance_stop(u16_TimerId, static_cast<QString>("Switch to mode %1 submode %2 index %3")
                                   .arg(this->ms32_Mode).arg(this->ms32_SubMode).arg(
-                                     this->mu32_Index).toStdString().c_str());
+                                     this->mu32_Index).toStdString());
 
    return q_Continue;
 }

@@ -334,11 +334,11 @@ void C_SdSearchTreeWidget::m_SearchNodeContent(const C_OscNode & orc_Node, const
    QString c_Name;
    QString c_DataBlockName;
 
-   c_Name = orc_Node.c_Properties.c_Name.c_str();
+   c_Name = orc_Node.c_Properties.c_Name;
 
    if (c_Name.contains(this->mc_SearchString, Qt::CaseInsensitive) == true)
    {
-      this->m_AddNodeResult(c_Name, ou32_NodeIndex, orc_Node.pc_DeviceDefinition->c_DeviceName.c_str());
+      this->m_AddNodeResult(c_Name, ou32_NodeIndex, orc_Node.pc_DeviceDefinition->c_DeviceName);
    }
 
    // search datapools and the content of the datapools
@@ -356,7 +356,7 @@ void C_SdSearchTreeWidget::m_SearchNodeContent(const C_OscNode & orc_Node, const
    // search data block / application content
    for (u32_Counter = 0U; u32_Counter < orc_Node.c_Applications.size(); ++u32_Counter)
    {
-      c_DataBlockName = orc_Node.c_Applications[u32_Counter].c_Name.c_str();
+      c_DataBlockName = orc_Node.c_Applications[u32_Counter].c_Name;
 
       if (c_DataBlockName.contains(this->mc_SearchString, Qt::CaseInsensitive) == true)
       {
@@ -379,7 +379,7 @@ void C_SdSearchTreeWidget::m_SearchDataPoolContent(const C_OscNodeDataPool & orc
    QString c_ListName;
    QString c_DataElementName;
 
-   c_DataPoolName = orc_DataPool.c_Name.c_str();
+   c_DataPoolName = orc_DataPool.c_Name;
 
    if (c_DataPoolName.contains(this->mc_SearchString, Qt::CaseInsensitive) == true)
    {
@@ -389,7 +389,7 @@ void C_SdSearchTreeWidget::m_SearchDataPoolContent(const C_OscNodeDataPool & orc
    // search datapool content
    for (u32_ListCounter = 0U; u32_ListCounter < orc_DataPool.c_Lists.size(); ++u32_ListCounter)
    {
-      c_ListName = orc_DataPool.c_Lists[u32_ListCounter].c_Name.c_str();
+      c_ListName = orc_DataPool.c_Lists[u32_ListCounter].c_Name;
 
       if (c_ListName.contains(this->mc_SearchString, Qt::CaseInsensitive) == true)
       {
@@ -403,7 +403,7 @@ void C_SdSearchTreeWidget::m_SearchDataPoolContent(const C_OscNodeDataPool & orc
            ++u32_DataElementCounter)
       {
          c_DataElementName =
-            orc_DataPool.c_Lists[u32_ListCounter].c_Elements[u32_DataElementCounter].c_Name.c_str();
+            orc_DataPool.c_Lists[u32_ListCounter].c_Elements[u32_DataElementCounter].c_Name;
 
          if (c_DataElementName.contains(this->mc_SearchString, Qt::CaseInsensitive) == true)
          {
@@ -466,7 +466,7 @@ void C_SdSearchTreeWidget::m_SearchCanProtocolContent(const C_OscCanProtocol & o
          // search the Tx messages
          for (u32_MessageCounter = 0U; u32_MessageCounter < rc_TxMessages.size(); ++u32_MessageCounter)
          {
-            c_MessageName = rc_TxMessages[u32_MessageCounter].c_Name.c_str();
+            c_MessageName = rc_TxMessages[u32_MessageCounter].c_Name;
 
             if (c_MessageName.contains(this->mc_SearchString, Qt::CaseInsensitive) == true)
             {
@@ -479,7 +479,7 @@ void C_SdSearchTreeWidget::m_SearchCanProtocolContent(const C_OscCanProtocol & o
          // search the Rx messages
          for (u32_MessageCounter = 0U; u32_MessageCounter < rc_RxMessages.size(); ++u32_MessageCounter)
          {
-            c_MessageName = rc_RxMessages[u32_MessageCounter].c_Name.c_str();
+            c_MessageName = rc_RxMessages[u32_MessageCounter].c_Name;
 
             if (c_MessageName.contains(this->mc_SearchString, Qt::CaseInsensitive) == true)
             {
@@ -513,7 +513,7 @@ void C_SdSearchTreeWidget::m_SearchHalcConfigurationContent(const stw::opensyde_
       if (pc_HalcDef != NULL)
       {
          QString c_DomainName;
-         c_DomainName = pc_HalcDef->c_Name.c_str();
+         c_DomainName = pc_HalcDef->c_Name;
 
          if (pc_HalcDef->c_Channels.size() == 0)
          {
@@ -538,8 +538,8 @@ void C_SdSearchTreeWidget::m_SearchHalcConfigurationContent(const stw::opensyde_
 
                for (u32_ChannelCounter = 0U; u32_ChannelCounter < pc_HalcDef->c_Channels.size(); ++u32_ChannelCounter)
                {
-                  const QString c_UserName = pc_HalcConf->c_ChannelConfigs[u32_ChannelCounter].c_Name.c_str();
-                  const QString c_DefName = pc_HalcDef->c_Channels[u32_ChannelCounter].c_Name.c_str();
+                  const QString c_UserName = pc_HalcConf->c_ChannelConfigs[u32_ChannelCounter].c_Name;
+                  const QString c_DefName = pc_HalcDef->c_Channels[u32_ChannelCounter].c_Name;
 
                   if ((c_UserName.contains(this->mc_SearchString, Qt::CaseInsensitive) == true) ||
                       (c_DefName.contains(this->mc_SearchString, Qt::CaseInsensitive) == true))

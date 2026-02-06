@@ -428,7 +428,7 @@ void C_SdBueMessageSignalEditWidget::GetLastSelection(bool & orq_MessageSelected
 
          if (opc_MessageName != NULL)
          {
-            *opc_MessageName = pc_Message->c_Name.c_str();
+            *opc_MessageName = pc_Message->c_Name;
          }
          if (opc_MessageId != NULL)
          {
@@ -452,11 +452,11 @@ void C_SdBueMessageSignalEditWidget::GetLastSelection(bool & orq_MessageSelected
 
          if (opc_MessageName != NULL)
          {
-            *opc_MessageName = pc_Message->c_Name.c_str();
+            *opc_MessageName = pc_Message->c_Name;
          }
          if (opc_SignalName != NULL)
          {
-            *opc_SignalName = pc_Signal->c_Name.c_str();
+            *opc_SignalName = pc_Signal->c_Name;
          }
 
          if (opc_MessageId != NULL)

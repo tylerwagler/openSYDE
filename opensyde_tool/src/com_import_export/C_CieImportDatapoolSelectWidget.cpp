@@ -24,6 +24,7 @@
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -210,7 +211,7 @@ void C_CieImportDatapoolSelectWidget::m_InitComboBox(void) const
       if (*c_It != NULL)
       {
          const C_OscNodeDataPool & rc_Datapool = **c_It;
-         this->mpc_Ui->pc_CbxDatapools->addItem(rc_Datapool.c_Name.c_str());
+         this->mpc_Ui->pc_CbxDatapools->addItem(rc_Datapool.c_Name);
       }
    }
 }

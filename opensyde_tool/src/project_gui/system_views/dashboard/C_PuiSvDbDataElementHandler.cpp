@@ -1631,7 +1631,7 @@ void C_PuiSvDbDataElementHandler::m_GetErrorDescriptionForManualOperation(const 
       C_OscLoggingHandler::h_Flush();
       orc_Details = static_cast<QString>("%1<a href=\"file:%2\"><span style=\"color: %3;\">%4</span></a>.").
                     arg("For details see ").
-                    arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()).
+                    arg(C_OscLoggingHandler::h_GetCompleteLogFileLocation()).
                     arg(stw::opensyde_gui::mc_STYLESHEET_GUIDE_COLOR_LINK).
                     arg("log file");
       break;

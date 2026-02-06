@@ -31,6 +31,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const QString mc_PATH_ROUND_BACKGROUND_IMG = ":/images/graphic_items/TransparentRoundBackground.png";

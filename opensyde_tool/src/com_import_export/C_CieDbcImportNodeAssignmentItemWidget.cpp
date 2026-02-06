@@ -19,6 +19,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -56,10 +57,10 @@ C_CieDbcImportNodeAssignmentItemWidget::C_CieDbcImportNodeAssignmentItemWidget(
    ms32_PreviousCbxIndex(0)
 {
    this->mpc_Ui->setupUi(this);
-   this->mpc_Ui->pc_LabImportNode->setText(orc_DbcNode.c_Properties.c_Name.c_str());
+   this->mpc_Ui->pc_LabImportNode->setText(orc_DbcNode.c_Properties.c_Name);
    this->mpc_Ui->pc_LabImportNode->SetToolTipInformation(
-      QString(orc_DbcNode.c_Properties.c_Name.c_str()),
-      QString(orc_DbcNode.c_Properties.c_Comment.c_str()));
+      QString(orc_DbcNode.c_Properties.c_Name),
+      QString(orc_DbcNode.c_Properties.c_Comment));
 
    this->mpc_Ui->pc_LabInfo->setText(static_cast<QString>("%1 Tx / %2 Rx").
                                      arg(orc_DbcNode.c_TxMessages.size()).arg(orc_DbcNode.c_RxMessages.size()));

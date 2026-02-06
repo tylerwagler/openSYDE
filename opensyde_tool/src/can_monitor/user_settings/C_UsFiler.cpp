@@ -445,12 +445,12 @@ void C_UsFiler::mh_LoadProjectDependentSection(C_UsHandler & orc_UserSettings, Q
 void C_UsFiler::mh_SaveColumns(QSettings & orc_Ini, const QString & orc_SectionName,
                                const std::string & orc_IdentifierBaseName, const std::vector<int32_t> & orc_Columns)
 {
-   const QString c_CountId = static_cast<QString>("%1_count").arg(orc_IdentifierBaseName.c_str());
+   const QString c_CountId = static_cast<QString>("%1_count").arg(orc_IdentifierBaseName);
 
    orc_Ini.setValue(orc_SectionName + "/" + c_CountId, static_cast<int>(orc_Columns.size()));
    for (uint32_t u32_ItCol = 0UL; u32_ItCol < orc_Columns.size(); ++u32_ItCol)
    {
-      const QString c_ItemId = static_cast<QString>("%1_%2").arg(orc_IdentifierBaseName.c_str()).arg(u32_ItCol);
+      const QString c_ItemId = static_cast<QString>("%1_%2").arg(orc_IdentifierBaseName).arg(u32_ItCol);
       orc_Ini.setValue(orc_SectionName + "/" + c_ItemId, orc_Columns[u32_ItCol]);
    }
 }
@@ -467,14 +467,14 @@ void C_UsFiler::mh_SaveColumns(QSettings & orc_Ini, const QString & orc_SectionN
 void C_UsFiler::mh_LoadColumns(QSettings & orc_Ini, const QString & orc_SectionName,
                                const std::string & orc_IdentifierBaseName, std::vector<int32_t> & orc_Columns)
 {
-   const QString c_CountId = static_cast<QString>("%1_count").arg(orc_IdentifierBaseName.c_str());
+   const QString c_CountId = static_cast<QString>("%1_count").arg(orc_IdentifierBaseName);
    const int32_t s32_Count = orc_Ini.value(orc_SectionName + "/" + c_CountId, 0).toInt();
 
    orc_Columns.clear();
    orc_Columns.reserve(s32_Count);
    for (int32_t s32_ItCol = 0L; s32_ItCol < s32_Count; ++s32_ItCol)
    {
-      const QString c_ItemId = static_cast<QString>("%1_%2").arg(orc_IdentifierBaseName.c_str()).arg(s32_ItCol);
+      const QString c_ItemId = static_cast<QString>("%1_%2").arg(orc_IdentifierBaseName).arg(s32_ItCol);
       const int32_t s32_Value = orc_Ini.value(orc_SectionName + "/" + c_ItemId, 50).toInt();
       orc_Columns.push_back(s32_Value);
    }

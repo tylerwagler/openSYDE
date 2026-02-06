@@ -30,6 +30,7 @@
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants
  * ---------------------------------------------------------------------------------------
@@ -1015,12 +1016,12 @@ int32_t C_PuiSdHandlerHalc::GetHalChannelOrDomainName(
                                               ou32_Channel);
 
   if (pc_ChannelDef != NULL) {
-    orc_Name = pc_ChannelDef->c_Name.c_str();
+    orc_Name = pc_ChannelDef->c_Name;
   } else {
     const C_OscHalcConfigDomain *const pc_Domain =
         this->GetHalcDomainConfigDataConst(ou32_NodeIndex, ou32_DomainIndex);
     if (pc_Domain != NULL) {
-      orc_Name = pc_Domain->c_SingularName.c_str();
+      orc_Name = pc_Domain->c_SingularName;
     } else {
       s32_Retval = C_RANGE;
     }
@@ -1843,7 +1844,7 @@ bool C_PuiSdHandlerHalc::CheckHalcChannelNameAvailable(
       if (q_Skip == false) {
         const C_OscHalcConfigChannel &rc_Channel =
             pc_Domain->c_ChannelConfigs[u32_ItChannel];
-        if (rc_Channel.c_Name.LowerCase() == orc_ChannelName.LowerCase()) {
+        if (rc_Channel.c_Name.toLower() == orc_ChannelName.toLower()) {
           q_Retval = false;
         }
       }

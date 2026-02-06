@@ -2961,14 +2961,14 @@ void C_PuiSvData::InitFromSystemDefinition(void)
                {
                   // Only in case of a HALC NVM Datapool the size >1 is possible
                   Q_ASSERT(rc_Application.c_ResultPaths.size() == 1);
-                  QString c_Path = rc_Application.c_ResultPaths[0U].c_str();
+                  QString c_Path = rc_Application.c_ResultPaths[0U];
                   if (pc_Node->c_Properties.q_XappSupport == true)
                   {
                      // special case: X config file is relative to generation directory
-                     c_Path = C_Uti::h_ConcatPathIfNecessary(rc_Application.c_GeneratePath.c_str(), c_Path);
+                     c_Path = C_Uti::h_ConcatPathIfNecessary(rc_Application.c_GeneratePath, c_Path);
                   }
                   c_ApplPaths.emplace_back(C_PuiUtil::h_MakeIndependentOfDbProjectPath(
-                                              rc_Application.c_ProjectPath.c_str(), c_Path));
+                                              rc_Application.c_ProjectPath, c_Path));
                }
                else
                {
@@ -2979,8 +2979,8 @@ void C_PuiSvData::InitFromSystemDefinition(void)
                      // Adaption necessary if a check of the default PSI File will be added
                      c_ParamInfo.SetContent(
                         C_PuiUtil::h_MakeIndependentOfDbProjectPath(
-                           rc_Application.c_ProjectPath.c_str(),
-                           rc_Application.c_ResultPaths[u32_PathCounter].c_str()), 0U);
+                           rc_Application.c_ProjectPath,
+                           rc_Application.c_ResultPaths[u32_PathCounter]), 0U);
                      c_ParamInfos.push_back(c_ParamInfo);
                   }
                }

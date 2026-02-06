@@ -292,25 +292,25 @@ QMimeData *C_SyvDcConnectedNodeList::mimeData(
 
         pc_Retval->setData(
             C_SyvDcConnectedNodeList::mhc_MIME_DATA,
-            pc_Widget->GetPlainSerialNumberString().toStdString().c_str());
+            pc_Widget->GetPlainSerialNumberString().toStdString());
         pc_Retval->setData(
             C_SyvDcConnectedNodeList::mhc_MIME_DATA_EXT_FORMAT,
             QString::number(static_cast<int32_t>(pc_Widget->GetExtFormat()))
                 .toStdString()
-                .c_str());
+                );
         pc_Retval->setData(
             C_SyvDcConnectedNodeList::mhc_MIME_DATA_MANUFACTURER_FORMAT,
             QString::number(
                 static_cast<int32_t>(pc_Widget->GetManufacturerFormat()))
                 .toStdString()
-                .c_str());
+                );
         pc_Retval->setData(C_SyvDcConnectedNodeList::mhc_MIME_DATA_DEVICE,
-                           pc_Widget->GetDeviceName().toStdString().c_str());
+                           pc_Widget->GetDeviceName().toStdString());
         pc_Retval->setData(C_SyvDcConnectedNodeList::mhc_MIME_DATA_DEVICE_VALID,
                            QString::number(static_cast<int32_t>(
                                                pc_Widget->GetDeviceNameValid()))
                                .toStdString()
-                               .c_str());
+                               );
 
         // Build a string to set the sub node id to node id mapping
         for (c_ItIds = c_SubNodeIdsToOldNodeIds.begin();
@@ -336,7 +336,7 @@ QMimeData *C_SyvDcConnectedNodeList::mimeData(
         pc_Retval->setData(
             C_SyvDcConnectedNodeList::
                 mhc_MIME_DATA_SUB_NODE_IDS_TO_OLD_NODE_IDS,
-            c_StringSubNodeIdsToOldNodeIds.toStdString().c_str());
+            c_StringSubNodeIdsToOldNodeIds.toStdString());
       }
     }
   }

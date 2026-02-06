@@ -2229,7 +2229,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
                                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                                                        s32_Return,
-                                                       u8_ErrCode).c_str());
+                                                       u8_ErrCode));
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
                         }
@@ -2257,7 +2257,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
                                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                                                        s32_Return,
-                                                       u8_ErrCode).c_str());
+                                                       u8_ErrCode));
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
                         }
@@ -2289,7 +2289,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
                                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                                                        s32_Return,
-                                                       u8_ErrCode).c_str());
+                                                       u8_ErrCode));
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
                         }
@@ -2463,7 +2463,7 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
                                   " %d with error: %s", orc_UsedServerIds[u32_DeviceCounter].u8_NodeIdentifier,
                                   orc_UsedServerIds[u32_DeviceCounter].u8_BusIdentifier,
                                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
-                                                                                           u8_NrCode).c_str());
+                                                                                           u8_NrCode));
             osc_write_log_error("Configure openSYDE devices", c_Text);
          }
 
@@ -3071,7 +3071,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
                                                  c_ServerIdOfCurBus.u8_NodeIdentifier,
                                                  C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                                                     s32_Return,
-                                                    u8_ErrCode).c_str());
+                                                    u8_ErrCode));
                            osc_write_log_error("Configure openSYDE devices", c_Text);
                         }
 
@@ -3098,7 +3098,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
                                                     c_ServerIdOfCurBus.u8_NodeIdentifier,
                                                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                                                        s32_Return,
-                                                       u8_ErrCode).c_str());
+                                                       u8_ErrCode));
                               osc_write_log_error("Configure openSYDE devices", c_Text);
                            }
                         }
@@ -3736,7 +3736,7 @@ int32_t C_SyvDcSequences::m_ReadBackEth(void)
                                      " %d with error: %s", rc_OsyServerId.u8_NodeIdentifier,
                                      rc_OsyServerId.u8_BusIdentifier,
                                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(s32_Return,
-                                                                                              u8_NrCode).c_str());
+                                                                                              u8_NrCode));
                osc_write_log_error("Configure openSYDE devices", c_Text);
             }
          }

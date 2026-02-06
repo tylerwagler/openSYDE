@@ -37,6 +37,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 using namespace stw::errors;
 
@@ -333,7 +334,7 @@ void C_SdNdeHalcWidget::m_OnImportConfigClicked(void)
          c_MessageResult.SetCustomMinHeight(180, 250);
          c_MessageResult.Execute();
 
-         osc_write_log_error("Hardware configuration import", c_ErrorDetails.toStdString().c_str());
+         osc_write_log_error("Hardware configuration import", c_ErrorDetails.toStdString());
       }
       else
       {
@@ -365,7 +366,7 @@ void C_SdNdeHalcWidget::m_OnExportConfigClicked(void)
 
    if (pc_Node != NULL)
    {
-      c_DefaultName = C_OscSystemFilerUtil::h_PrepareItemNameForFileName(pc_Node->c_Properties.c_Name.c_str()).c_str();
+      c_DefaultName = C_OscSystemFilerUtil::h_PrepareItemNameForFileName(pc_Node->c_Properties.c_Name);
    }
 
    c_FileName =
@@ -400,7 +401,7 @@ void C_SdNdeHalcWidget::m_OnExportConfigClicked(void)
             C_OscHalcConfigUtil::h_GetConfigStandalone(*pc_Config, c_StandaloneConfig);
 
             s32_Result = C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(c_StandaloneConfig,
-                                                                              c_FileName.toStdString().c_str());
+                                                                              c_FileName.toStdString());
          }
          else
          {
@@ -638,7 +639,7 @@ void C_SdNdeHalcWidget::m_OnUpdateClicked(void)
                   c_MessageResult.SetCustomMinHeight(180, 250);
                   c_MessageResult.Execute();
 
-                  osc_write_log_error("Load HALC definition file", c_ErrorDetails.toStdString().c_str());
+                  osc_write_log_error("Load HALC definition file", c_ErrorDetails.toStdString());
                }
             }
 
@@ -763,7 +764,7 @@ bool C_SdNdeHalcWidget::m_LoadHalcDefinitionFile(C_OscHalcConfig & orc_HalcConfi
    {
       // load definition directly into configuration data structure
       const int32_t s32_LoadResult =
-         C_OscHalcDefFiler::h_LoadFile(orc_HalcConfig, orc_HalcDefPath.toStdString().c_str());
+         C_OscHalcDefFiler::h_LoadFile(orc_HalcConfig, orc_HalcDefPath.toStdString());
 
       // remember path for user settings
       C_UsHandler::h_GetInstance()->SetLastKnownHalcDefPath(orc_HalcDefPath);
@@ -789,8 +790,8 @@ bool C_SdNdeHalcWidget::m_LoadHalcDefinitionFile(C_OscHalcConfig & orc_HalcConfi
                c_Message.SetDetails(static_cast<QString>("The selected hardware description is for nodes "
                                                             "of type: %1\n"
                                                             "The current node is of type: %2").
-                                    arg(orc_HalcConfig.c_DeviceName.c_str()).
-                                    arg(pc_Node->pc_DeviceDefinition->c_DeviceName.c_str()));
+                                    arg(orc_HalcConfig.c_DeviceName).
+                                    arg(pc_Node->pc_DeviceDefinition->c_DeviceName));
                c_Message.SetCustomMinHeight(200, 250);
                c_Message.Execute();
             }
@@ -804,7 +805,7 @@ bool C_SdNdeHalcWidget::m_LoadHalcDefinitionFile(C_OscHalcConfig & orc_HalcConfi
          c_Message.SetDescription("Error occured loading hardware description file.");
          c_Message.SetDetails(static_cast<QString>("For details see ") +
                               C_Uti::h_GetLink("log file.",  mc_STYLESHEET_GUIDE_COLOR_LINK,
-                                               C_OscLoggingHandler::h_GetCompleteLogFileLocation().c_str()));
+                                               C_OscLoggingHandler::h_GetCompleteLogFileLocation()));
          C_OscLoggingHandler::h_Flush(); // update log file
          c_Message.SetCustomMinHeight(180, 300);
          c_Message.Execute();
@@ -905,7 +906,7 @@ void C_SdNdeHalcWidget::m_UpdateDisplayedData(void) const
       }
       else
       {
-         this->mpc_Ui->pc_LabFileCurrent->setText(pc_Config->c_OriginalFileName.c_str());
+         this->mpc_Ui->pc_LabFileCurrent->setText(pc_Config->c_OriginalFileName);
       }
    }
 

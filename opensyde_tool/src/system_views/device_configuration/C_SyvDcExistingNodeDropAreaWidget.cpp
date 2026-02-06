@@ -18,6 +18,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -105,7 +106,7 @@ void C_SyvDcExistingNodeDropAreaWidget::SetContent(const bool oq_ValidSerialNumb
                                                    const stw::opensyde_core::C_OscProtocolSerialNumber & orc_PureSerialNumber, const std::map<uint8_t,
                                                                                                                                               C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds)
 {
-   const QString c_ShowedSerialNumber = orc_PureSerialNumber.GetSerialNumberAsFormattedString().c_str();
+   const QString c_ShowedSerialNumber = orc_PureSerialNumber.GetSerialNumberAsFormattedString();
 
    this->mc_PureSerialNumber = orc_PureSerialNumber;
    this->mpc_Ui->pc_LabelSerialNumber->setText(

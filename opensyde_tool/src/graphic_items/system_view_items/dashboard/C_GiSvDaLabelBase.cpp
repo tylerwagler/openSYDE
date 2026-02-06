@@ -470,12 +470,12 @@ void C_GiSvDaLabelBase::m_UpdateCaption(const C_PuiSvDbLabel & orc_Data) const
                   {
                      if (rc_CurItem.c_ElementId.GetUseArrayElementIndex())
                      {
-                        c_Caption = static_cast<QString>("%1[%2]").arg(pc_Element->c_Name.c_str()).arg(
+                        c_Caption = static_cast<QString>("%1[%2]").arg(pc_Element->c_Name).arg(
                            rc_CurItem.c_ElementId.GetArrayElementIndex());
                      }
                      else
                      {
-                        c_Caption = pc_Element->c_Name.c_str();
+                        c_Caption = pc_Element->c_Name;
                      }
                   }
                }
@@ -536,7 +536,7 @@ void C_GiSvDaLabelBase::m_UpdateStaticValue(const stw::opensyde_gui_logic::C_Pui
                }
                pc_Element->c_MinValue.GetAnyValueAsFloat64(f64_Value, u32_Index);
                c_Text = this->GetUnscaledValueInRangeAsScaledString(0.0);
-               this->mpc_LabelWidget->SetUnit(pc_Element->c_Unit.c_str());
+               this->mpc_LabelWidget->SetUnit(pc_Element->c_Unit);
             }
          }
       }

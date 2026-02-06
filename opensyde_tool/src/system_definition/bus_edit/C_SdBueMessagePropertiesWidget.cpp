@@ -379,10 +379,10 @@ void C_SdBueMessagePropertiesWidget::m_LoadFromData(void)
          const bool q_CanOpenActive = (this->me_ComProtocol == C_OscCanProtocol::eCAN_OPEN);
          uint32_t u32_UsedCylceTime;
          //Name
-         this->mpc_Ui->pc_LineEditName->setText(pc_Message->c_Name.c_str());
+         this->mpc_Ui->pc_LineEditName->setText(pc_Message->c_Name);
 
          //Comment
-         this->mpc_Ui->pc_TextEditComment->setText(pc_Message->c_Comment.c_str());
+         this->mpc_Ui->pc_TextEditComment->setText(pc_Message->c_Comment);
 
          //Extended
          if (this->me_ComProtocol == C_OscCanProtocol::eJ1939)
@@ -1055,10 +1055,10 @@ void C_SdBueMessagePropertiesWidget::m_OnPropertiesChanged(void)
             C_OscCanMessage::E_TxMethodType e_CurrentTxMethod;
 
             //name
-            c_MessageData.c_Name = this->mpc_Ui->pc_LineEditName->text().toStdString().c_str();
+            c_MessageData.c_Name = this->mpc_Ui->pc_LineEditName->text().toStdString();
 
             //comment
-            c_MessageData.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString().c_str();
+            c_MessageData.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString();
 
             //Extended
             c_MessageData.q_IsExtended = this->mpc_Ui->pc_CheckBoxExtendedType->isChecked();
@@ -1773,7 +1773,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateTxSelection(
 
          if (pc_Manager != NULL)
          {
-            c_CanOpenManagerName = pc_Manager->c_Properties.c_Name.c_str();
+            c_CanOpenManagerName = pc_Manager->c_Properties.c_Name;
          }
       }
       // End of CANopen specific preparation
@@ -1896,7 +1896,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateTxSelection(
          if (pc_Device != NULL)
          {
             this->mpc_Ui->pc_ComboBoxTransmitterNode->addItem(
-               static_cast<QString>(pc_Device->c_Properties.c_Name.c_str()) +
+               static_cast<QString>(pc_Device->c_Properties.c_Name) +
                static_cast<QString>(" (Device)"));
             this->mpc_Ui->pc_ComboBoxTransmitterNode->setCurrentIndex(0);
             q_Transmitter = true;
@@ -2091,7 +2091,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateRxAfterTxSelection(
                   if (pc_Device != NULL)
                   {
                      // Extend node name
-                     c_NodeNames[0] = static_cast<QString>(pc_Device->c_Properties.c_Name.c_str()) +
+                     c_NodeNames[0] = static_cast<QString>(pc_Device->c_Properties.c_Name) +
                                       " (Device)";
                   }
                }
@@ -3139,7 +3139,7 @@ void C_SdBueMessagePropertiesWidget::m_CheckMessageName(void) const
 
       if (this->mpc_MessageSyncManager != NULL)
       {
-         this->mpc_MessageSyncManager->CheckMessageNameBus(c_Name.toStdString().c_str(), q_NameIsValid,
+         this->mpc_MessageSyncManager->CheckMessageNameBus(c_Name.toStdString(), q_NameIsValid,
                                                            &this->mc_MessageId, &q_InvalidName, &q_DuplicateName);
       }
 

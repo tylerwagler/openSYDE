@@ -983,7 +983,7 @@ void C_SdHandlerWidget::m_Export(void)
                                                         QString::number(this->mu32_Index) +
                                                         "\" because message ID is not unique.";
                               c_Warnings.append(c_Message);
-                              osc_write_log_warning("DBC Export", c_Message.toStdString().c_str());
+                              osc_write_log_warning("DBC Export", c_Message.toStdString());
                               s32_Error += C_WARN;
                            }
                         }
@@ -1030,7 +1030,7 @@ void C_SdHandlerWidget::m_Export(void)
                                                                       +
                                                                       "\" because message ID is not unique. Message is ignored.";
                               c_Warnings.append(c_Message);
-                              osc_write_log_warning("DBC Export", c_Message.toStdString().c_str());
+                              osc_write_log_warning("DBC Export", c_Message.toStdString());
                               s32_Error += C_WARN;
                            }
                         }
@@ -1047,7 +1047,7 @@ void C_SdHandlerWidget::m_Export(void)
                      C_OgeWiCustomMessage c_ExportWarnings(this, C_OgeWiCustomMessage::E_Type::eWARNING);
                      c_ExportWarnings.SetHeading("DBC file export");
                      c_ExportWarnings.SetDescription("Warnings occurred during DBC file export.");
-                     c_ExportWarnings.SetDetails(c_Warnings.GetText().c_str());
+                     c_ExportWarnings.SetDetails(c_Warnings.join("\n"));
                      c_ExportWarnings.SetCustomMinHeight(180, 300);
                      c_ExportWarnings.Execute();
                   }
@@ -1184,7 +1184,7 @@ void C_SdHandlerWidget::m_RtfExport(void)
             // get default file name with project path (if using the RTF dialog the first time)
             QString c_DefaultFilename = C_PuiProject::h_GetInstance()->GetName();
             c_DefaultFilename += ".rtf";
-            c_RtfPath = C_PuiUtil::h_GetAbsolutePathFromProject(c_DefaultFilename).toStdString().c_str();
+            c_RtfPath = C_PuiUtil::h_GetAbsolutePathFromProject(c_DefaultFilename).toStdString();
          }
 
          if (c_RtfPath != "")

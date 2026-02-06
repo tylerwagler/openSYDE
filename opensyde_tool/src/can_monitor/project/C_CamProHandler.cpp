@@ -215,7 +215,7 @@ int32_t C_CamProHandler::SetMessageName(const uint32_t ou32_Index,
 
   if (ou32_Index < this->mc_Messages.size()) {
     C_CamProMessageData &rc_Message = this->mc_Messages[ou32_Index];
-    rc_Message.c_Name = orc_Name.toStdString().c_str();
+    rc_Message.c_Name = orc_Name.toStdString();
   } else {
     s32_Retval = C_RANGE;
   }
@@ -611,8 +611,8 @@ void C_CamProHandler::ReplaceDatabaseName(const QString &orc_PrevName,
   // Messages
   for (uint32_t u32_It = 0UL; u32_It < this->mc_Messages.size(); ++u32_It) {
     C_CamProMessageData &rc_Message = this->mc_Messages[u32_It];
-    if (rc_Message.c_DataBaseFilePath == orc_PrevName.toStdString().c_str()) {
-      rc_Message.c_DataBaseFilePath = orc_NewName.toStdString().c_str();
+    if (rc_Message.c_DataBaseFilePath == orc_PrevName.toStdString()) {
+      rc_Message.c_DataBaseFilePath = orc_NewName.toStdString();
     }
   }
 }
@@ -977,7 +977,7 @@ int32_t C_CamProHandler::SaveToFile(const QString &orc_Path) {
           static_cast<QString>("Could not create folder for file \"" +
                                c_File.absolutePath() + "\".")
               .toStdString()
-              .c_str());
+              );
       s32_Return = C_COM;
     }
   }
@@ -985,7 +985,7 @@ int32_t C_CamProHandler::SaveToFile(const QString &orc_Path) {
     if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile()) {
       // erase it:
       int32_t s32_ReturnRemove;
-      s32_ReturnRemove = std::remove(orc_Path.toStdString().c_str());
+      s32_ReturnRemove = std::remove(orc_Path.toStdString());
       if (s32_ReturnRemove != 0) {
         osc_write_log_error("Saving project",
                             "Could not erase pre-existing file \"" + orc_Path +
@@ -1116,7 +1116,7 @@ void C_CamProHandler::m_CalcHash(uint32_t &oru32_HashValue) const {
   // settings
   // CAN DLL configuration
   stw::scl::C_SclChecksums::CalcCRC32(
-      this->mc_CustomCanDllPath.toStdString().c_str(),
+      this->mc_CustomCanDllPath.toStdString(),
       this->mc_CustomCanDllPath.size(), oru32_HashValue);
   stw::scl::C_SclChecksums::CalcCRC32(
       &this->me_CanDllType, sizeof(this->me_CanDllType), oru32_HashValue);

@@ -462,7 +462,7 @@ QString C_PuiSdUtil::h_GetNamespace(const C_OscNodeDataPoolListElementId & orc_I
       // special handling for signals: instead of list better show message name
       if (pc_DataPool->e_Type == C_OscNodeDataPool::eCOM)
       {
-         QString c_ElementName = pc_Element->c_Name.c_str(); // to have an adequate default
+         QString c_ElementName = pc_Element->c_Name; // to have an adequate default
          C_OscCanMessageIdentificationIndices c_MessageId;
          uint32_t u32_SignalIndex;
 
@@ -471,23 +471,23 @@ QString C_PuiSdUtil::h_GetNamespace(const C_OscNodeDataPoolListElementId & orc_I
             const C_OscCanMessage * const pc_Message = C_PuiSdHandler::h_GetInstance()->GetCanMessage(c_MessageId);
             if (pc_Message != NULL)
             {
-               c_ElementName = static_cast<QString>("%1::%2").arg(pc_Message->c_Name.c_str()).arg(
-                  pc_Element->c_Name.c_str());
+               c_ElementName = static_cast<QString>("%1::%2").arg(pc_Message->c_Name).arg(
+                  pc_Element->c_Name);
             }
          }
          c_Retval = static_cast<QString>("%1::%2::%3").
-                    arg(pc_Node->c_Properties.c_Name.c_str()).
-                    arg(pc_DataPool->c_Name.c_str()).
+                    arg(pc_Node->c_Properties.c_Name).
+                    arg(pc_DataPool->c_Name).
                     arg(c_ElementName);
       } //lint !e438 //value of u32_SignalIndex not used; we just called the convert function to check whether the
         // parameters are valid
       else
       {
          c_Retval = static_cast<QString>("%1::%2::%3::%4").
-                    arg(pc_Node->c_Properties.c_Name.c_str()).
-                    arg(pc_DataPool->c_Name.c_str()).
-                    arg(pc_List->c_Name.c_str()).
-                    arg(pc_Element->c_Name.c_str());
+                    arg(pc_Node->c_Properties.c_Name).
+                    arg(pc_DataPool->c_Name).
+                    arg(pc_List->c_Name).
+                    arg(pc_Element->c_Name);
          // HALC extra handling not possible if only C_OscNodeDataPoolListElementId is provided
       }
    }
@@ -564,8 +564,8 @@ QString C_PuiSdUtil::h_GetSignalNamespace(const C_OscNodeDataPoolListElementId &
             if (((pc_Bus != NULL) && (pc_Message != NULL)) && (pc_Element != NULL))
             {
                c_Retval =
-                  static_cast<QString>("%1::%2::%3").arg(pc_Bus->c_Name).arg(pc_Message->c_Name.c_str()).arg(
-                     pc_Element->c_Name.c_str());
+                  static_cast<QString>("%1::%2::%3").arg(pc_Bus->c_Name).arg(pc_Message->c_Name).arg(
+                     pc_Element->c_Name);
             }
          }
       }
@@ -631,15 +631,15 @@ QString C_PuiSdUtil::h_GetHalcNamespace(const C_PuiSvDbNodeDataPoolListElementId
 
             if (q_IsUseCaseIndex)
             {
-               c_ElementName = C_OscHalcMagicianUtil::h_GetUseCaseVariableName(pc_Domain->c_SingularName).c_str();
+               c_ElementName = C_OscHalcMagicianUtil::h_GetUseCaseVariableName(pc_Domain->c_SingularName);
             }
             else if (q_IsChanNumIndex)
             {
-               c_ElementName = C_OscHalcMagicianUtil::h_GetChanNumVariableName(pc_Domain->c_SingularName).c_str();
+               c_ElementName = C_OscHalcMagicianUtil::h_GetChanNumVariableName(pc_Domain->c_SingularName);
             }
             else if (q_IsSafetyFlagIndex)
             {
-               c_ElementName = C_OscHalcMagicianUtil::h_GetSafetyFlagVariableName(pc_Domain->c_SingularName).c_str();
+               c_ElementName = C_OscHalcMagicianUtil::h_GetSafetyFlagVariableName(pc_Domain->c_SingularName);
             }
             else
             {
@@ -647,21 +647,21 @@ QString C_PuiSdUtil::h_GetHalcNamespace(const C_PuiSvDbNodeDataPoolListElementId
                   C_PuiSdHandler::h_GetInstance()->GetHalcDomainFileVariableData(orc_Id.u32_NodeIndex,
                                                                                  u32_DomainIndex, e_Selector,
                                                                                  u32_ParameterIndex);
-               c_ElementName = pc_Param->c_Display.c_str();
+               c_ElementName = pc_Param->c_Display;
                if (q_UseElementIndex)
                {
                   if (u32_ParameterElementIndex < pc_Param->c_StructElements.size())
                   {
                      const C_OscHalcDefElement & rc_Param = pc_Param->c_StructElements[u32_ParameterElementIndex];
-                     c_ElementName = rc_Param.c_Display.c_str();
+                     c_ElementName = rc_Param.c_Display;
                   }
                }
             }
             c_Retval = static_cast<QString>("%1::%2::%3::%4::%5").
-                       arg(pc_Node->c_Properties.c_Name.c_str()).
-                       arg(pc_DataPool->c_Name.c_str()).
-                       arg(pc_Config->c_Name.c_str()).
-                       arg(pc_List->c_Name.c_str()).
+                       arg(pc_Node->c_Properties.c_Name).
+                       arg(pc_DataPool->c_Name).
+                       arg(pc_Config->c_Name).
+                       arg(pc_List->c_Name).
                        arg(c_ElementName);
          }
       }
@@ -690,7 +690,7 @@ QString C_PuiSdUtil::h_GetSubNodeDeviceName(const uint32_t ou32_NodeIndex)
       if (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size())
       {
          c_Retval =
-            pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].c_SubDeviceName.c_str();
+            pc_Node->pc_DeviceDefinition->c_SubDevices[pc_Node->u32_SubDeviceIndex].c_SubDeviceName;
       }
    }
    return c_Retval;
@@ -720,7 +720,7 @@ QString C_PuiSdUtil::h_GetNodeBaseNameOrName(const uint32_t ou32_NodeIndex)
          C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(u32_NodeSquadIndex);
       if (pc_NodeSquad != NULL)
       {
-         c_Return = pc_NodeSquad->c_BaseName.c_str();
+         c_Return = pc_NodeSquad->c_BaseName;
       }
    }
    else
@@ -730,7 +730,7 @@ QString C_PuiSdUtil::h_GetNodeBaseNameOrName(const uint32_t ou32_NodeIndex)
          C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
       if (pc_Node != NULL)
       {
-         c_Return = pc_Node->c_Properties.c_Name.c_str();
+         c_Return = pc_Node->c_Properties.c_Name;
       }
    }
 

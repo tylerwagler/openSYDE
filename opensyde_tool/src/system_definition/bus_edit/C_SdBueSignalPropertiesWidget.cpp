@@ -1227,10 +1227,10 @@ void C_SdBueSignalPropertiesWidget::m_ApplyNewValueFromUi(const C_SdBueSignalPro
    switch (oe_Change)
    {
    case eCHA_NAME:
-      this->mc_DataOscSignalCommon.c_Name = this->mpc_Ui->pc_LineEditName->text().trimmed().toStdString().c_str();
+      this->mc_DataOscSignalCommon.c_Name = this->mpc_Ui->pc_LineEditName->text().trimmed().toStdString();
       break;
    case eCHA_COMMENT:
-      this->mc_DataOscSignalCommon.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString().c_str();
+      this->mc_DataOscSignalCommon.c_Comment = this->mpc_Ui->pc_TextEditComment->toPlainText().toStdString();
       break;
    case eCHA_AUTO_MIN_MAX:
       this->mc_DataUiSignalCommon.q_AutoMinMaxActive = this->mpc_Ui->pc_CheckBoxAutoMinMax->isChecked();
@@ -1274,7 +1274,7 @@ void C_SdBueSignalPropertiesWidget::m_ApplyNewValueFromUi(const C_SdBueSignalPro
                     this->mc_DataOscSignalCommon.f64_Offset);
       break;
    case eCHA_UNIT:
-      this->mc_DataOscSignalCommon.c_Unit = this->mpc_Ui->pc_LineEditUnit->text().toStdString().c_str();
+      this->mc_DataOscSignalCommon.c_Unit = this->mpc_Ui->pc_LineEditUnit->text().toStdString();
       break;
    case eCHA_BYTE_ORDER:
       switch (this->mpc_Ui->pc_ComboBoxByteOrder->currentIndex())
@@ -1730,7 +1730,7 @@ void C_SdBueSignalPropertiesWidget::m_UpdateUiForChange(const E_Change oe_Change
       //Restrictions
       this->mpc_Ui->pc_LineEditName->setMaxLength(C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit());
       //Value
-      this->mpc_Ui->pc_LineEditName->setText(this->mc_DataOscSignalCommon.c_Name.c_str());
+      this->mpc_Ui->pc_LineEditName->setText(this->mc_DataOscSignalCommon.c_Name);
       break;
    case eCHA_MUX_TYPE:
       //Restrictions
@@ -1845,12 +1845,12 @@ void C_SdBueSignalPropertiesWidget::m_UpdateUiForChange(const E_Change oe_Change
          this->mpc_Ui->pc_LineEditUnit->setEnabled(true);
       }
       //Value
-      this->mpc_Ui->pc_LineEditUnit->setText(this->mc_DataOscSignalCommon.c_Unit.c_str());
+      this->mpc_Ui->pc_LineEditUnit->setText(this->mc_DataOscSignalCommon.c_Unit);
       break;
    case eCHA_COMMENT:
       //Restrictions
       //Value
-      this->mpc_Ui->pc_TextEditComment->setText(this->mc_DataOscSignalCommon.c_Comment.c_str());
+      this->mpc_Ui->pc_TextEditComment->setText(this->mc_DataOscSignalCommon.c_Comment);
       break;
    case eCHA_MUX_VALUE:
       //Restrictions

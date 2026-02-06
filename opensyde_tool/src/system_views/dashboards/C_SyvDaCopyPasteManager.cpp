@@ -476,9 +476,9 @@ void C_SyvDaCopyPasteManager::h_AdaptCopyDataForPaste(C_PuiSvDashboard & orc_Cop
                         //Remember name
                         if ((pc_Node != NULL) && (pc_DataPool != NULL))
                         {
-                           c_Tmp = static_cast<QString>("%1::%2::%3").arg(pc_Node->c_Properties.c_Name.c_str()).arg(
-                              pc_DataPool->c_Name.c_str()).arg(
-                              pc_List->c_Name.c_str());
+                           c_Tmp = static_cast<QString>("%1::%2::%3").arg(pc_Node->c_Properties.c_Name).arg(
+                              pc_DataPool->c_Name).arg(
+                              pc_List->c_Name);
                         }
                         c_AdaptedLists.insert(c_Tmp);
                         break;

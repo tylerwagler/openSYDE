@@ -808,7 +808,7 @@ void C_SdBueMessageRxEntry::m_OnTimeoutConfigLinkClicked(void)
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
          if (pc_Node != NULL)
          {
-            c_NodeName = pc_Node->c_Properties.c_Name.c_str();
+            c_NodeName = pc_Node->c_Properties.c_Name;
             c_NodeName += ".";
          }
       }

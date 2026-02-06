@@ -827,7 +827,7 @@ void C_GiSvDaRectBaseGroup::HandleManualOperationFinished(const int32_t os32_Res
 
          osc_write_log_info("Manual operation",
                             static_cast<QString>("The C_SyvComDataDealer function ended with error code \"%1\"").arg(
-                               C_Uti::h_StwError(os32_Result)).toStdString().c_str());
+                               C_Uti::h_StwError(os32_Result)).toStdString());
          if (s32_Return == C_NO_ERR)
          {
             //Change icon
@@ -1622,7 +1622,7 @@ void C_GiSvDaRectBaseGroup::hoverMoveEvent(QGraphicsSceneHoverEvent * const opc_
             if (C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id) != NULL)
             {
                const QString c_ElementName =
-                  C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id)->c_Name.c_str();
+                  C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_Id)->c_Name;
                if (c_Id.GetUseArrayElementIndex())
                {
                   c_Heading = static_cast<QString>("%1[%2]").arg(c_ElementName).arg(c_Id.GetArrayElementIndex());
@@ -2145,12 +2145,12 @@ QString C_GiSvDaRectBaseGroup::m_GetItemsForButtonToolTip(void) const
                   //Add name
                   if (c_Id.GetUseArrayElementIndex())
                   {
-                     c_Retval += static_cast<QString>("%1[%2]").arg(pc_Element->c_Name.c_str()).arg(
+                     c_Retval += static_cast<QString>("%1[%2]").arg(pc_Element->c_Name).arg(
                         c_Id.GetArrayElementIndex());
                   }
                   else
                   {
-                     c_Retval += static_cast<QString>(pc_Element->c_Name.c_str());
+                     c_Retval += static_cast<QString>(pc_Element->c_Name);
                   }
                   c_Retval += "\n";
                }

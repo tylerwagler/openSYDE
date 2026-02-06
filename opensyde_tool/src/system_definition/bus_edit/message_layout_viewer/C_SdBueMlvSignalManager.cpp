@@ -112,7 +112,7 @@ void C_SdBueMlvSignalManager::LoadSignal(const uint32_t ou32_SignalIndex,
    if (pc_DpListElement != NULL)
    {
       // get name from datapool list element
-      this->mc_Name = pc_DpListElement->c_Name.c_str();
+      this->mc_Name = pc_DpListElement->c_Name;
 
       if ((pc_DpListElement->c_Value.GetType() == stw::opensyde_core::C_OscNodeDataPoolContent::eFLOAT32) ||
           (pc_DpListElement->c_Value.GetType() == stw::opensyde_core::C_OscNodeDataPoolContent::eFLOAT64))

@@ -178,9 +178,9 @@ void C_TblTreDataElementModel::InitSd(
     // Init current node
     pc_NodeItem->u32_Index = ou32_NodeIndex;
     pc_NodeItem->q_Selectable = false;
-    pc_NodeItem->c_Name = pc_Node->c_Properties.c_Name.c_str();
-    pc_NodeItem->c_ToolTipHeading = pc_Node->c_Properties.c_Name.c_str();
-    pc_NodeItem->c_ToolTipContent = pc_Node->c_Properties.c_Comment.c_str();
+    pc_NodeItem->c_Name = pc_Node->c_Properties.c_Name;
+    pc_NodeItem->c_ToolTipHeading = pc_Node->c_Properties.c_Name;
+    pc_NodeItem->c_ToolTipContent = pc_Node->c_Properties.c_Comment;
 
     // Data pools
     pc_NodeItem->ReserveChildrenSpace(4UL);
@@ -196,9 +196,9 @@ void C_TblTreDataElementModel::InitSd(
 
       // Init current Datapool
       pc_DataPoolItem->u32_Index = u32_ItDataPool;
-      pc_DataPoolItem->c_Name = rc_DataPool.c_Name.c_str();
-      pc_DataPoolItem->c_ToolTipHeading = rc_DataPool.c_Name.c_str();
-      pc_DataPoolItem->c_ToolTipContent = rc_DataPool.c_Comment.c_str();
+      pc_DataPoolItem->c_Name = rc_DataPool.c_Name;
+      pc_DataPoolItem->c_ToolTipHeading = rc_DataPool.c_Name;
+      pc_DataPoolItem->c_ToolTipContent = rc_DataPool.c_Comment;
       pc_DataPoolItem->c_Icon =
           QIcon(C_TblTreDataElementModel::mhc_ICON_DATAPOOL);
 
@@ -922,10 +922,10 @@ void C_TblTreDataElementModel::m_InitDatapoolElements(
           // Init current node
           pc_NodeItem->u32_Index = u32_ItNode;
           pc_NodeItem->q_Selectable = false;
-          pc_NodeItem->c_Name = pc_Node->c_Properties.c_Name.c_str();
-          pc_NodeItem->c_ToolTipHeading = pc_Node->c_Properties.c_Name.c_str();
+          pc_NodeItem->c_Name = pc_Node->c_Properties.c_Name;
+          pc_NodeItem->c_ToolTipHeading = pc_Node->c_Properties.c_Name;
           pc_NodeItem->c_ToolTipContent =
-              pc_Node->c_Properties.c_Comment.c_str();
+              pc_Node->c_Properties.c_Comment;
           // Data pools
           pc_NodeItem->ReserveChildrenSpace(4UL);
           pc_DiagItem->ReserveChildrenSpace(pc_Node->c_DataPools.size());
@@ -939,9 +939,9 @@ void C_TblTreDataElementModel::m_InitDatapoolElements(
             C_TblTreItem *const pc_DataPoolItem = new C_TblTreItem();
             // Init current Datapool
             pc_DataPoolItem->u32_Index = u32_ItDataPool;
-            pc_DataPoolItem->c_Name = rc_DataPool.c_Name.c_str();
-            pc_DataPoolItem->c_ToolTipHeading = rc_DataPool.c_Name.c_str();
-            pc_DataPoolItem->c_ToolTipContent = rc_DataPool.c_Comment.c_str();
+            pc_DataPoolItem->c_Name = rc_DataPool.c_Name;
+            pc_DataPoolItem->c_ToolTipHeading = rc_DataPool.c_Name;
+            pc_DataPoolItem->c_ToolTipContent = rc_DataPool.c_Comment;
             pc_DataPoolItem->c_Icon =
                 QIcon(C_TblTreDataElementModel::mhc_ICON_DATAPOOL);
             pc_DataPoolItem->q_Selectable = false;
@@ -988,12 +988,12 @@ void C_TblTreDataElementModel::m_InitDatapoolElements(
                     C_TblTreItem *const pc_ListItem = new C_TblTreItem();
                     // Init current node
                     pc_ListItem->u32_Index = u32_ItList;
-                    pc_ListItem->c_Name = rc_List.c_Name.c_str();
-                    pc_ListItem->c_ToolTipHeading = rc_List.c_Name.c_str();
+                    pc_ListItem->c_Name = rc_List.c_Name;
+                    pc_ListItem->c_ToolTipHeading = rc_List.c_Name;
                     // tooltip content: do not use h_GetToolTipContentDpList
                     // because we do not want so much info and consistency with
                     // superior tree items
-                    pc_ListItem->c_ToolTipContent = rc_List.c_Comment.c_str();
+                    pc_ListItem->c_ToolTipContent = rc_List.c_Comment;
                     pc_ListItem->c_Icon =
                         QIcon(C_TblTreDataElementModel::mhc_ICON_LIST);
                     pc_ListItem->q_Selectable = false;
@@ -1015,7 +1015,7 @@ void C_TblTreDataElementModel::m_InitDatapoolElements(
                       C_TblTreDataElementItem *const pc_ElementItem =
                           new C_TblTreDataElementItem(
                               false, rc_Element.GetArray(),
-                              rc_Element.c_Name.c_str(), rc_Element.GetType(),
+                              rc_Element.c_Name, rc_Element.GetType(),
                               rc_Element.e_Access, oq_IsString, c_Id);
                       const C_OscNodeDataPoolListElementId c_NodeDpListElement(
                           u32_ItNode, u32_ItDataPool, u32_ItList,
@@ -1023,7 +1023,7 @@ void C_TblTreDataElementModel::m_InitDatapoolElements(
                       // Init current node
                       pc_ElementItem->u32_Index = u32_ItElement;
                       pc_ElementItem->c_ToolTipHeading =
-                          rc_Element.c_Name.c_str();
+                          rc_Element.c_Name;
                       pc_ElementItem->c_ToolTipContent =
                           C_SdUtil::h_GetToolTipContentDpListElement(
                               c_NodeDpListElement);
@@ -1320,20 +1320,20 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfig(
       orc_DpHandler.CheckSafetyFlagVariableNecessary();
   C_TblTreItem *const pc_ChannelItem = new C_TblTreItem();
   bool q_ChannelValid = false;
-  QString c_HalChannelOrDomainName = orc_DomainDef.c_SingularName.c_str();
+  QString c_HalChannelOrDomainName = orc_DomainDef.c_SingularName;
 
   // Init current channel
   pc_ChannelItem->u32_Index = ou32_DatapoolUniqueChannelCounter;
-  pc_ChannelItem->c_Name = orc_ChannelConfig.c_Name.c_str();
+  pc_ChannelItem->c_Name = orc_ChannelConfig.c_Name;
   if (ou32_ChannelIndex < orc_DomainDef.c_Channels.size()) {
     const C_OscHalcDefChannelDef &rc_Channel =
         orc_DomainDef.c_Channels[ou32_ChannelIndex];
     pc_ChannelItem->c_Name +=
-        static_cast<QString>(" (%1)").arg(rc_Channel.c_Name.c_str());
-    c_HalChannelOrDomainName = rc_Channel.c_Name.c_str();
+        static_cast<QString>(" (%1)").arg(rc_Channel.c_Name);
+    c_HalChannelOrDomainName = rc_Channel.c_Name;
   }
-  pc_ChannelItem->c_ToolTipHeading = orc_ChannelConfig.c_Name.c_str();
-  pc_ChannelItem->c_ToolTipContent = orc_ChannelConfig.c_Comment.c_str();
+  pc_ChannelItem->c_ToolTipHeading = orc_ChannelConfig.c_Name;
+  pc_ChannelItem->c_ToolTipContent = orc_ChannelConfig.c_Comment;
   switch (orc_DomainDef.e_Category) {
   case C_OscHalcDefDomain::eCA_INPUT:
     pc_ChannelItem->c_Icon =
@@ -1365,7 +1365,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfig(
           orc_ChannelConfig.u32_UseCaseIndex, oru32_CounterParam,
           ou32_RelevantChannelNumber, q_ChanNumVarNecessary,
           q_UseCaseVarNecessary, q_SafetyFlagVarNecessary, true,
-          QString(orc_DomainDef.c_SingularName.c_str()),
+          QString(orc_DomainDef.c_SingularName),
           oq_ShowOnlyWriteElements, oq_ShowArrayElements,
           oq_ShowArrayIndexElements, oq_Show64BitValues,
           opc_AlreasyUsedElements, c_HalChannelOrDomainName);
@@ -1377,7 +1377,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfig(
           orc_ChannelConfig.u32_UseCaseIndex, oru32_CounterInput,
           ou32_RelevantChannelNumber, q_ChanNumVarNecessary,
           q_UseCaseVarNecessary, q_SafetyFlagVarNecessary, false,
-          QString(orc_DomainDef.c_SingularName.c_str()),
+          QString(orc_DomainDef.c_SingularName),
           oq_ShowOnlyWriteElements, oq_ShowArrayElements,
           oq_ShowArrayIndexElements, oq_Show64BitValues,
           opc_AlreasyUsedElements, c_HalChannelOrDomainName);
@@ -1389,7 +1389,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfig(
           orc_ChannelConfig.u32_UseCaseIndex, oru32_CounterOutput,
           ou32_RelevantChannelNumber, q_ChanNumVarNecessary,
           q_UseCaseVarNecessary, q_SafetyFlagVarNecessary, false,
-          QString(orc_DomainDef.c_SingularName.c_str()),
+          QString(orc_DomainDef.c_SingularName),
           oq_ShowOnlyWriteElements, oq_ShowArrayElements,
           oq_ShowArrayIndexElements, oq_Show64BitValues,
           opc_AlreasyUsedElements, c_HalChannelOrDomainName);
@@ -1401,7 +1401,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfig(
           orc_ChannelConfig.u32_UseCaseIndex, oru32_CounterStatus,
           ou32_RelevantChannelNumber, q_ChanNumVarNecessary,
           q_UseCaseVarNecessary, q_SafetyFlagVarNecessary, false,
-          QString(orc_DomainDef.c_SingularName.c_str()),
+          QString(orc_DomainDef.c_SingularName),
           oq_ShowOnlyWriteElements, oq_ShowArrayElements,
           oq_ShowArrayIndexElements, oq_Show64BitValues,
           opc_AlreasyUsedElements, c_HalChannelOrDomainName);
@@ -1471,9 +1471,9 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
 
   // Init current list
   pc_ListItem->u32_Index = ou32_ListIndex;
-  pc_ListItem->c_Name = orc_List.c_Name.c_str();
-  pc_ListItem->c_ToolTipHeading = orc_List.c_Name.c_str();
-  pc_ListItem->c_ToolTipContent = orc_List.c_Comment.c_str();
+  pc_ListItem->c_Name = orc_List.c_Name;
+  pc_ListItem->c_ToolTipHeading = orc_List.c_Name;
+  pc_ListItem->c_ToolTipContent = orc_List.c_Comment;
   pc_ListItem->c_Icon = QIcon(C_TblTreDataElementModel::mhc_ICON_LIST);
   pc_ListItem->q_Enabled = true;
   pc_ListItem->q_Selectable = false;
@@ -1497,7 +1497,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
           pc_ListItem,
           C_OscHalcMagicianUtil::h_GetChanNumVariableName(
               orc_DomainSingularName.toStdString())
-              .c_str(),
+              ,
           c_Id, ou32_RelevantChannelNumber != 1UL, false,
           oq_ShowOnlyWriteElements, oq_ShowArrayElements,
           oq_ShowArrayIndexElements, oq_Show64BitValues,
@@ -1517,7 +1517,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
           pc_ListItem,
           C_OscHalcMagicianUtil::h_GetSafetyFlagVariableName(
               orc_DomainSingularName.toStdString())
-              .c_str(),
+              ,
           c_Id, ou32_RelevantChannelNumber != 1UL, false,
           oq_ShowOnlyWriteElements, oq_ShowArrayElements,
           oq_ShowArrayIndexElements, oq_Show64BitValues,
@@ -1537,7 +1537,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
           pc_ListItem,
           C_OscHalcMagicianUtil::h_GetUseCaseVariableName(
               orc_DomainSingularName.toStdString())
-              .c_str(),
+              ,
           c_Id, ou32_RelevantChannelNumber != 1UL, false,
           oq_ShowOnlyWriteElements, oq_ShowArrayElements,
           oq_ShowArrayIndexElements, oq_Show64BitValues,
@@ -1666,7 +1666,7 @@ void C_TblTreDataElementModel::mh_AddHalcItem(
   c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString());
 
   C_TblTreDataElementModel::mh_AddHalcTreeItem(
-      opc_BaseItem, orc_HalcItem.c_Display.c_str(), c_Id,
+      opc_BaseItem, orc_HalcItem.c_Display, c_Id,
       (orc_HalcItem.GetComplexType() == C_OscHalcDefContent::eCT_STRING) ||
           (ou32_RelevantChannelNumber != 1UL),
       orc_HalcItem.GetComplexType() == C_OscHalcDefContent::eCT_STRING,
@@ -1854,7 +1854,7 @@ bool C_TblTreDataElementModel::mh_AddCommMessageItems(
         pc_MessageItem->u32_Index = u32_ItMessage;
         pc_MessageItem->c_Name =
             static_cast<QString>("%1 (0x%2)")
-                .arg(pc_Message->c_Name.c_str())
+                .arg(pc_Message->c_Name)
                 .arg(QString::number(pc_Message->u32_CanId, 16));
         pc_MessageItem->c_ToolTipHeading = pc_MessageItem->c_Name;
         pc_MessageItem->c_ToolTipContent =
@@ -1872,14 +1872,14 @@ bool C_TblTreDataElementModel::mh_AddCommMessageItems(
           if (pc_Element != NULL) {
             C_TblTreDataElementItem *const pc_ElementItem =
                 new C_TblTreDataElementItem(
-                    false, false, pc_Element->c_Name.c_str(),
+                    false, false, pc_Element->c_Name,
                     pc_Element->GetType(), pc_Element->e_Access, false,
                     mh_Translate(orc_MessageIds[u32_ItMessage], u32_ItSignal,
                                  oe_IdType));
             // Init current node
             pc_ElementItem->u32_Index = u32_ItSignal;
-            pc_ElementItem->c_Name = pc_Element->c_Name.c_str();
-            pc_ElementItem->c_ToolTipHeading = pc_Element->c_Name.c_str();
+            pc_ElementItem->c_Name = pc_Element->c_Name;
+            pc_ElementItem->c_ToolTipHeading = pc_Element->c_Name;
             pc_ElementItem->c_ToolTipContent =
                 C_SdUtil::h_GetToolTipContentSignal(
                     orc_MessageIds[u32_ItMessage], u32_ItSignal);
@@ -1999,7 +1999,7 @@ void C_TblTreDataElementModel::mh_CreateArrayElementNodes(
         pc_ArrayItem->c_ToolTipContent =
             static_cast<QString>("Array element %1 of \"%2\"")
                 .arg(u32_ArrayIndex)
-                .arg(orc_Element.c_Name.c_str());
+                .arg(orc_Element.c_Name);
 
         // Configure
         pc_ArrayItem->ConfigureDynamicName(
@@ -2085,10 +2085,10 @@ void C_TblTreDataElementModel::m_InitNvmList(const uint32_t ou32_ViewIndex) {
           // Init current node
           pc_NodeItem->u32_Index = u32_ItNode;
           pc_NodeItem->q_Selectable = false;
-          pc_NodeItem->c_Name = pc_Node->c_Properties.c_Name.c_str();
-          pc_NodeItem->c_ToolTipHeading = pc_Node->c_Properties.c_Name.c_str();
+          pc_NodeItem->c_Name = pc_Node->c_Properties.c_Name;
+          pc_NodeItem->c_ToolTipHeading = pc_Node->c_Properties.c_Name;
           pc_NodeItem->c_ToolTipContent =
-              pc_Node->c_Properties.c_Comment.c_str();
+              pc_Node->c_Properties.c_Comment;
           // Data pools
           pc_NodeItem->ReserveChildrenSpace(3UL);
           pc_DiagItem->ReserveChildrenSpace(pc_Node->c_DataPools.size());
@@ -2103,9 +2103,9 @@ void C_TblTreDataElementModel::m_InitNvmList(const uint32_t ou32_ViewIndex) {
             // Init current node
             pc_DataPoolItem->u32_Index = u32_ItDataPool;
             pc_DataPoolItem->q_Selectable = false;
-            pc_DataPoolItem->c_Name = rc_DataPool.c_Name.c_str();
-            pc_DataPoolItem->c_ToolTipHeading = rc_DataPool.c_Name.c_str();
-            pc_DataPoolItem->c_ToolTipContent = rc_DataPool.c_Comment.c_str();
+            pc_DataPoolItem->c_Name = rc_DataPool.c_Name;
+            pc_DataPoolItem->c_ToolTipHeading = rc_DataPool.c_Name;
+            pc_DataPoolItem->c_ToolTipContent = rc_DataPool.c_Comment;
             pc_DataPoolItem->c_Icon =
                 QIcon(C_TblTreDataElementModel::mhc_ICON_DATAPOOL);
             // Flag
@@ -2120,8 +2120,8 @@ void C_TblTreDataElementModel::m_InitNvmList(const uint32_t ou32_ViewIndex) {
               C_TblTreItem *const pc_ListItem = new C_TblTreItem();
               // Init current node
               pc_ListItem->u32_Index = u32_ItList;
-              pc_ListItem->c_Name = rc_List.c_Name.c_str();
-              pc_ListItem->c_ToolTipHeading = rc_List.c_Name.c_str();
+              pc_ListItem->c_Name = rc_List.c_Name;
+              pc_ListItem->c_ToolTipHeading = rc_List.c_Name;
               pc_ListItem->c_ToolTipContent =
                   C_SdUtil::h_GetToolTipContentDpList(
                       u32_ItNode, u32_ItDataPool, u32_ItList);

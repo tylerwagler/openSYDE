@@ -1950,7 +1950,7 @@ int32_t C_PuiSdNodeCanMessageSyncManager::GetMessageIdForMessageName(const QStri
             rc_MatchingMessageIds[0UL]);
          if (pc_Message != NULL)
          {
-            if (pc_Message->c_Name == orc_MessageName.toStdString().c_str())
+            if (pc_Message->c_Name == orc_MessageName.toStdString())
             {
                orc_MessageId = rc_MatchingMessageIds[0UL];
                s32_Retval = C_NO_ERR;

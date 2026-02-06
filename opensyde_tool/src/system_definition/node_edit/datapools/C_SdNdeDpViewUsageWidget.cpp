@@ -200,7 +200,7 @@ void C_SdNdeDpViewUsageWidget::SetUsage(const uint32_t ou32_NodeIndex, const uin
                   bool q_AdaptColor = true;
 
                   Q_ASSERT(rc_Area.c_DataPoolIndexes[0] < pc_Node->c_DataPools.size());
-                  c_UsageArea.c_ShowedString = pc_Node->c_DataPools[rc_Area.c_DataPoolIndexes[0]].c_Name.c_str();
+                  c_UsageArea.c_ShowedString = pc_Node->c_DataPools[rc_Area.c_DataPoolIndexes[0]].c_Name;
                   c_UsageArea.q_Used = true;
                   c_UsageArea.c_Color = stw::opensyde_gui_logic::C_Uti::h_ScaleColor(mc_STYLE_GUIDE_COLOR_7,
                                                                                      u32_ActualColorScale);
@@ -261,7 +261,7 @@ void C_SdNdeDpViewUsageWidget::SetUsage(const uint32_t ou32_NodeIndex, const uin
                      Q_ASSERT(rc_Area.c_DataPoolIndexes[u32_DatapoolCounter] < pc_Node->c_DataPools.size());
                      c_UsageArea.c_ShowedString =
                         c_DatapoolNames += static_cast<QString>(
-                           pc_Node->c_DataPools[rc_Area.c_DataPoolIndexes[u32_DatapoolCounter]].c_Name.c_str());
+                           pc_Node->c_DataPools[rc_Area.c_DataPoolIndexes[u32_DatapoolCounter]].c_Name);
                   }
 
                   c_UsageArea.c_ShowedString = c_DatapoolNames;

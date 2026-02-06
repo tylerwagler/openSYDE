@@ -1264,9 +1264,9 @@ void C_SdBueComIfDescriptionWidget::SaveUserSettings(void) const
          if (pc_Node != NULL)
          {
             //Set
-            C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedProtocol(pc_Node->c_Properties.c_Name.c_str(),
+            C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedProtocol(pc_Node->c_Properties.c_Name,
                                                                         e_SelectedProtocol);
-            C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedInterface(pc_Node->c_Properties.c_Name.c_str(),
+            C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedInterface(pc_Node->c_Properties.c_Name,
                                                                          this->mu32_InterfaceIndex);
 
             if (this->mc_DatapoolIndexes.size() > 0)
@@ -1280,15 +1280,15 @@ void C_SdBueComIfDescriptionWidget::SaveUserSettings(void) const
                {
                   //Set
                   C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolListSelectedMessage(
-                     pc_Node->c_Properties.c_Name.c_str(), pc_DataPool->c_Name.c_str(),
-                     pc_List->c_Name.c_str(), e_SelectedProtocol, q_MessageSelected, c_SelectedMessageName, q_SignalSelected,
+                     pc_Node->c_Properties.c_Name, pc_DataPool->c_Name,
+                     pc_List->c_Name, e_SelectedProtocol, q_MessageSelected, c_SelectedMessageName, q_SignalSelected,
                      c_SelectedSignalName);
                   C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolCommSignalOverviewColumnWidth(
-                     pc_Node->c_Properties.c_Name.c_str(), pc_DataPool->c_Name.c_str(),
-                     pc_List->c_Name.c_str(), c_SignalValues);
+                     pc_Node->c_Properties.c_Name, pc_DataPool->c_Name,
+                     pc_List->c_Name, c_SignalValues);
                   C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolCommMessageOverviewColumnWidth(
-                     pc_Node->c_Properties.c_Name.c_str(), pc_DataPool->c_Name.c_str(),
-                     pc_List->c_Name.c_str(), c_MessageValues);
+                     pc_Node->c_Properties.c_Name, pc_DataPool->c_Name,
+                     pc_List->c_Name, c_MessageValues);
                }
             }
          }
@@ -1341,7 +1341,7 @@ void C_SdBueComIfDescriptionWidget::LoadUserSettings(void)
       if (pc_Node != NULL)
       {
          const C_UsNode c_UserSettingsNode = C_UsHandler::h_GetInstance()->GetProjSdNode(
-            pc_Node->c_Properties.c_Name.c_str());
+            pc_Node->c_Properties.c_Name);
          uint32_t u32_SelectedInterface = c_UserSettingsNode.GetSelectedInterface();
          if (!mq_SkipLoadUserSettings)
          {
@@ -1371,8 +1371,8 @@ void C_SdBueComIfDescriptionWidget::LoadUserSettings(void)
                C_OscCanProtocol::E_Type e_Tmp;
 
                const C_UsNodeDatapool c_UserSettingsDataPool = c_UserSettingsNode.GetDatapool(
-                  pc_DataPool->c_Name.c_str());
-               const C_UsCommunication c_UserSettingsList = c_UserSettingsDataPool.GetCommList(pc_List->c_Name.c_str());
+                  pc_DataPool->c_Name);
+               const C_UsCommunication c_UserSettingsList = c_UserSettingsDataPool.GetCommList(pc_List->c_Name);
                if (!mq_SkipLoadUserSettings)
                {
                   c_UserSettingsList.GetLastSelectedMessage(e_Tmp, q_MessageSelected, c_SelectedMessageName,
@@ -1418,7 +1418,7 @@ void C_SdBueComIfDescriptionWidget::LoadUserSettings(void)
                      C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolListElement(c_MessageId, u32_ItSignal);
                   if (pc_OscData != NULL)
                   {
-                     if (pc_OscData->c_Name == c_SelectedSignalName.toStdString().c_str())
+                     if (pc_OscData->c_Name == c_SelectedSignalName.toStdString())
                      {
                         u32_FoundIndex = u32_ItSignal;
                         q_Found = true;

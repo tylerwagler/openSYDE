@@ -645,7 +645,7 @@ bool C_GiSvDaToggleBase::m_CheckHasValidElements(QString & orc_FirstInvalidEleme
                      if ((f64_MinScaled > 0.0) || (f64_MaxScaled < 1.0))
                      {
                         q_Retval = false;
-                        orc_FirstInvalidElementName = pc_Element->c_Name.c_str();
+                        orc_FirstInvalidElementName = pc_Element->c_Name;
                      }
                   }
                }

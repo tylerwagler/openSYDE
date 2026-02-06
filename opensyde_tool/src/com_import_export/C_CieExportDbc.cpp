@@ -142,7 +142,7 @@ int32_t C_CieExportDbc::h_ExportNetwork(
     Vector::DBC::AttributeDefinition c_DbNameAttributeType;
     c_DbNameAttribute.name = "DBName";
     c_DbNameAttribute.stringValue =
-        mh_EscapeCriticalSymbols(orc_Definition.c_Bus.c_Name).toStdString().c_str();
+        mh_EscapeCriticalSymbols(orc_Definition.c_Bus.c_Name).toStdString();
     c_DbNameAttributeType.name = "DBName";
     c_DbNameAttributeType.valueType.type =
         Vector::DBC::AttributeValueType::Type::String;
@@ -153,7 +153,7 @@ int32_t C_CieExportDbc::h_ExportNetwork(
         std::pair<std::string, Vector::DBC::AttributeDefinition>(
             c_DbName, c_DbNameAttributeType));
     c_DbcNetwork.comment =
-        mh_EscapeCriticalSymbols(orc_Definition.c_Bus.c_Comment).toStdString().c_str();
+        mh_EscapeCriticalSymbols(orc_Definition.c_Bus.c_Comment).toStdString();
 
     c_Message = "Filling up general network information, symbols and "
                 "attributes for network \"" +
@@ -182,7 +182,7 @@ int32_t C_CieExportDbc::h_ExportNetwork(
 
   // save DBC export to file
   if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN)) {
-    std::ofstream c_File(orc_File.toStdString().c_str());
+    std::ofstream c_File(orc_File.toStdString());
 
     if (c_File.is_open()) {
       c_Message = "Saving network to file ...";
@@ -284,14 +284,14 @@ int32_t C_CieExportDbc::mh_SetNodes(
           mh_NiceifyStringForDbcSymbol(c_Iter->c_Properties.c_Name);
       mhc_NodeMapping.emplace(std::pair<QString, QString>(
           c_Iter->c_Properties.c_Name, c_Niceified));
-      std::string c_Name = mh_EscapeCriticalSymbols(c_Niceified).toStdString().c_str();
+      std::string c_Name = mh_EscapeCriticalSymbols(c_Niceified).toStdString();
 
       // value
       Vector::DBC::Node
           c_Node; // store name and comment, we have no attribute values
       c_Node.name = c_Name;
       c_Node.comment =
-          mh_EscapeCriticalSymbols(c_Iter->c_Properties.c_Comment).toStdString().c_str();
+          mh_EscapeCriticalSymbols(c_Iter->c_Properties.c_Comment).toStdString();
       // store current key value entry to map
       orc_DbcNodes.emplace(
           std::pair<std::string, Vector::DBC::Node>(c_Name, c_Node));
@@ -347,14 +347,14 @@ int32_t C_CieExportDbc::mh_SetMessages(
         }
         c_DbcMessage.size = c_CanMessage.u16_Dlc;
         c_DbcMessage.comment =
-            mh_EscapeCriticalSymbols(c_CanMessage.c_Comment).toStdString().c_str();
-        c_DbcMessage.name = c_CanMessage.c_Name.toStdString().c_str();
+            mh_EscapeCriticalSymbols(c_CanMessage.c_Comment).toStdString();
+        c_DbcMessage.name = c_CanMessage.c_Name.toStdString();
         // store first transmitter for new message
         c_Message = "Setting node \"" + c_NodeName +
                     "\" as transmitter for CAN message \"" +
                     c_CanMessage.c_Name + "\".";
         osc_write_log_info("DBC file export", c_Message);
-        c_DbcMessage.transmitter = c_NodeName.toStdString().c_str();
+        c_DbcMessage.transmitter = c_NodeName.toStdString();
 
         // store signals with receivers
         c_Message = "Filling up signals and receivers for CAN Tx message \"" +
@@ -378,9 +378,9 @@ int32_t C_CieExportDbc::mh_SetMessages(
         // activating different nodes, but this is not supported in openSYDE.
         c_Message = "Setting node \"" + c_NodeName +
                     "\" as transmitter for CAN message \"" +
-                    QString(c_DbcMsgIter->second.name.c_str()) + "\".";
+                    QString(c_DbcMsgIter->second.name) + "\".";
         osc_write_log_info("DBC file export", c_Message);
-        c_DbcMsgIter->second.transmitter = c_NodeName.toStdString().c_str();
+        c_DbcMsgIter->second.transmitter = c_NodeName.toStdString();
       }
     }
     // get Rx messages of node
@@ -404,8 +404,8 @@ int32_t C_CieExportDbc::mh_SetMessages(
         }
         c_DbcMessage.size = c_CanMessage.u16_Dlc;
         c_DbcMessage.comment =
-            mh_EscapeCriticalSymbols(c_CanMessage.c_Comment).toStdString().c_str();
-        c_DbcMessage.name = c_CanMessage.c_Name.toStdString().c_str();
+            mh_EscapeCriticalSymbols(c_CanMessage.c_Comment).toStdString();
+        c_DbcMessage.name = c_CanMessage.c_Name.toStdString();
 
         // store signals with receivers
         c_Message = "Filling up signals and receivers for CAN Rx message \"" +
@@ -507,13 +507,13 @@ int32_t C_CieExportDbc::mh_SetSignals(
             // if we have the same message, then check if message is receiver of
             // signal
             if (rc_Receiver.c_CanMessage.c_Name.compare(
-                    orc_DbcMessage.name.c_str()) == 0) {
+                    orc_DbcMessage.name) == 0) {
               const std::vector<C_CieConverter::C_CieCanSignal> &rc_Signals =
                   rc_Receiver.c_CanMessage.c_Signals;
               for (const auto &rc_Signal : rc_Signals) {
                 // check if node with Rx messages has signal
                 if (rc_Signal.c_Element.c_Name.compare(
-                        c_DbcSignal.name.c_str()) == 0) {
+                        c_DbcSignal.name) == 0) {
                   // receiver for signal found -> add node as receiver if not
                   // already exists
                   c_DbcSignal.receivers.insert(c_NodeName);
@@ -554,12 +554,12 @@ int32_t C_CieExportDbc::mh_SetSignalValues(
   int32_t s32_Return = C_NO_ERR;
 
   // set name, comment, values and unit
-  orc_DbcSignal.name = orc_Element.c_Name.toStdString().c_str();
+  orc_DbcSignal.name = orc_Element.c_Name.toStdString();
   orc_DbcSignal.comment =
-      mh_EscapeCriticalSymbols(orc_Element.c_Comment).toStdString().c_str();
+      mh_EscapeCriticalSymbols(orc_Element.c_Comment).toStdString();
   orc_DbcSignal.factor = orc_Element.f64_Factor;
   orc_DbcSignal.offset = orc_Element.f64_Offset;
-  orc_DbcSignal.unit = orc_Element.c_Unit.toStdString().c_str();
+  orc_DbcSignal.unit = orc_Element.c_Unit.toStdString();
   float64_t f64_MinVal;
   C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Element.c_MinValue, f64_MinVal,
                                             0UL); // raw value
@@ -624,7 +624,7 @@ int32_t C_CieExportDbc::mh_SetSignalValues(
 
   // set initial value
   Vector::DBC::Attribute c_Attribute;
-  c_Attribute.name = mhc_SIG_INITIAL_VALUE;
+  c_Attribute.name = mhc_SIG_INITIAL_VALUE.toStdString();
 
   float64_t f64_Value;
   C_SdNdeDpContentUtil::h_GetValueAsFloat64(orc_Element.c_DataSetValues.at(0),
@@ -689,7 +689,7 @@ int32_t C_CieExportDbc::mh_SetTransmission(
   osc_write_log_info("DBC file export", c_Message);
 
   Vector::DBC::Attribute c_TransmissionMode;
-  c_TransmissionMode.name = mhc_MSG_SEND_TYPE;
+  c_TransmissionMode.name = mhc_MSG_SEND_TYPE.toStdString();
   if (C_OscCanMessage::h_IsTransmissionTypeOfCyclicType(
           orc_Message.c_CanMessage.e_TxMethod)) {
     // cyclic message -> also set cycle time
@@ -709,7 +709,7 @@ int32_t C_CieExportDbc::mh_SetTransmission(
   if (C_OscCanMessage::h_IsTransmissionTypeOfCyclicType(
           orc_Message.c_CanMessage.e_TxMethod)) {
     Vector::DBC::Attribute c_CycleTime;
-    c_CycleTime.name = mhc_MSG_CYCLE_TIME;
+    c_CycleTime.name = mhc_MSG_CYCLE_TIME.toStdString();
     int32_t s32_CycleTime = static_cast<int32_t>(
         orc_Message.c_CanMessage.u32_CycleTimeMs); // cast is OK,
     // because only expecting low cycle times of max. some seconds
@@ -887,7 +887,7 @@ void C_CieExportDbc::mh_SetAttributeDefinitions(
 
   // set global attribute definition for cycle time (default)
   Vector::DBC::AttributeDefinition c_CycleTimeAttributeDef;
-  c_CycleTimeAttributeDef.name = mhc_MSG_CYCLE_TIME;
+  c_CycleTimeAttributeDef.name = mhc_MSG_CYCLE_TIME.toStdString();
   c_CycleTimeAttributeDef.objectType =
       Vector::DBC::AttributeObjectType::Message;
   c_CycleTimeAttributeDef.valueType.type =
@@ -899,7 +899,7 @@ void C_CieExportDbc::mh_SetAttributeDefinitions(
   // set global attribute definitions for openSYDE message send types 'Cyclic'
   // and 'OnEvent'
   Vector::DBC::AttributeDefinition c_MsgSendTypeAttributeDef;
-  c_MsgSendTypeAttributeDef.name = mhc_MSG_SEND_TYPE;
+  c_MsgSendTypeAttributeDef.name = mhc_MSG_SEND_TYPE.toStdString();
   c_MsgSendTypeAttributeDef.objectType =
       Vector::DBC::AttributeObjectType::Message;
   c_MsgSendTypeAttributeDef.valueType.type =
@@ -953,7 +953,7 @@ void C_CieExportDbc::mh_SetAttributeDefinitions(
           c_NmStationName, c_NmStationAttributeDef));
 
   // set initial value
-  std::string c_SigInitialValueName = mhc_SIG_INITIAL_VALUE;
+  std::string c_SigInitialValueName = mhc_SIG_INITIAL_VALUE.toStdString();
   Vector::DBC::AttributeDefinition c_SigInitialValueAttribute;
   c_SigInitialValueAttribute.name = c_SigInitialValueName;
   c_SigInitialValueAttribute.objectType =
@@ -1011,13 +1011,13 @@ C_CieExportDbc::mh_NiceifyStringForDbcSymbol(const QString &orc_String) {
 
   // first character must not contain a digit, in this case place '_' before
   // digit.
-  if ((orc_String.length() > 0) && (std::isdigit(orc_String.toStdString().c_str()[0]) != 0)) {
+  if ((orc_String.length() > 0) && (std::isdigit(orc_String.toStdString()[0]) != 0)) {
     // first character is digit, add '_'
     c_Result = '_';
   }
 
   for (int32_t s32_Index = 0; s32_Index < orc_String.length(); s32_Index++) {
-    const char_t cn_Character = orc_String.toStdString().c_str()[s32_Index];
+    const char_t cn_Character = orc_String.toStdString()[s32_Index];
     if ((std::isalnum(cn_Character) == 0) && (cn_Character != '_')) {
       c_Result += QString::number(cn_Character);
     } else {

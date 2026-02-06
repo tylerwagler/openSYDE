@@ -127,7 +127,7 @@ int32_t C_CieImportDbc::h_ImportNetwork(
     // add bus information
     orc_Definition.c_Bus.c_Name = c_FileName; // file name means network name
     orc_Definition.c_Bus.c_Comment =
-        mh_ReEscapeCriticalSymbols(QString(c_DbcNetwork.comment.c_str()));
+        mh_ReEscapeCriticalSymbols(QString(c_DbcNetwork.comment));
 
     osc_write_log_info("DBC file import",
                        "Reading node and messages with signals of network \"" +
@@ -248,7 +248,7 @@ int32_t C_CieImportDbc::mh_ReadFile(const QString &orc_File,
     // when reading files with not supported
     //  content
     try {
-      std::ifstream c_InputFile(orc_File.toStdString().c_str());
+      std::ifstream c_InputFile(orc_File.toStdString());
       if (c_InputFile.is_open()) {
         c_InputFile >> orc_Network;
         c_InputFile.close();
@@ -1211,7 +1211,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(
   // attribute found?
   if (c_DbcAttributeDefaults != orc_DbcNetwork.attributeDefaults.end()) {
     mhc_DefaultSendTypeValue =
-        (c_DbcAttributeDefaults->second).stringValue.c_str();
+        (c_DbcAttributeDefaults->second).stringValue;
   } else {
     s32_Return = C_WARN;
     mhc_DefaultSendTypeValue = "OnEvent";

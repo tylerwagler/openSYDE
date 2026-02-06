@@ -684,7 +684,7 @@ int32_t C_PuiSdNodeDataPoolListElementIdSyncUtil::h_CheckAndHandleNewElement(
                pc_Element->CalcHashStructure(u32_Hash);
             }
             stw::scl::C_SclChecksums::CalcCRC32(
-               c_Tmp.c_str(), c_Tmp.length(), u32_Hash);
+               c_Tmp, c_Tmp.length(), u32_Hash);
             orc_LastKnownHalcCrcs[orc_NewId] = C_PuiSdLastKnownHalElementId(
                u32_Hash, pc_Dp->c_Name);
          }
@@ -775,7 +775,7 @@ void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_GetNewMapOnSyncHalc(const uint3
                               rc_El.CalcHashStructure(u32_Hash);
                            }
                            stw::scl::C_SclChecksums::CalcCRC32(
-                              c_Tmp.c_str(), c_Tmp.length(), u32_Hash);
+                              c_Tmp, c_Tmp.length(), u32_Hash);
                            c_NewId.SetHalChannelName(QString::fromStdString(c_Tmp));
                            for (std::map<C_OscNodeDataPoolListElementOptArrayId,
                                          C_PuiSdLastKnownHalElementId>::const_iterator c_ItCur =

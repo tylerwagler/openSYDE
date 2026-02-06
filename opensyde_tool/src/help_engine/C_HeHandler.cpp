@@ -60,7 +60,7 @@ void C_HeHandler::CallSpecificHelpPage(const QString & orc_ClassName)
    const QString c_PageName = orc_ClassName;
 
    //Debug helper: Which class calls this function?
-   //std::cout << c_PageName.toStdString().c_str() << &std::endl;
+   //std::cout << c_PageName.toStdString() << &std::endl;
    const QMap<QString, QString>::const_iterator c_Page = this->mc_LookUpHelpPageName.find(c_PageName);
 
    if (c_Page != this->mc_LookUpHelpPageName.end())
@@ -75,7 +75,7 @@ void C_HeHandler::CallSpecificHelpPage(const QString & orc_ClassName)
    {
       if (c_PageSearchName.compare("") == 0)
       {
-         this->mpr_HtmlHelp(GetDesktopWindow(), this->m_GetHelpLocation().toStdString().c_str(), HH_DISPLAY_TOPIC, 0);
+         this->mpr_HtmlHelp(GetDesktopWindow(), this->m_GetHelpLocation().toStdString(), HH_DISPLAY_TOPIC, 0);
       }
       else
       {
@@ -96,10 +96,10 @@ void C_HeHandler::CallSpecificHelpPage(const QString & orc_ClassName)
          c_Link.pszMsgTitle =  NULL;
          c_Link.pszWindow =    NULL;
          c_Link.fIndexOnFail = TRUE;
-         //this->mpr_HtmlHelp(GetDesktopWindow(), mh_GetHelpLocation().toStdString().c_str(), HH_DISPLAY_TOPIC, 0);
+         //this->mpr_HtmlHelp(GetDesktopWindow(), mh_GetHelpLocation().toStdString(), HH_DISPLAY_TOPIC, 0);
          //lint -e{923,1924,9091} Required by API interface
          this->mpr_HtmlHelp(GetDesktopWindow(),
-                            this->m_GetHelpLocation().toStdString().c_str(), HH_KEYWORD_LOOKUP, (DWORD_PTR) &c_Link);
+                            this->m_GetHelpLocation().toStdString(), HH_KEYWORD_LOOKUP, (DWORD_PTR) &c_Link);
          delete[] (pcn_Text);
       }
    }

@@ -171,8 +171,8 @@ void C_SyvManager::DuplicateSysView(const uint32_t ou32_Index)
       pc_ViewNew = C_PuiSvHandler::h_GetInstance()->GetView(u32_NewViewIndex);
       if (pc_ViewNew != NULL)
       {
-         C_UsHandler::h_GetInstance()->CopyProjSvSettings(pc_ViewPrev->GetName().c_str(),
-                                                          pc_ViewNew->GetName().c_str());
+         C_UsHandler::h_GetInstance()->CopyProjSvSettings(pc_ViewPrev->GetName(),
+                                                          pc_ViewNew->GetName());
       }
       //Trigger reload
       Q_EMIT this->SigReloadNaviBarSystemViewContent();
@@ -203,7 +203,7 @@ void C_SyvManager::DeleteSysView(const uint32_t ou32_Index, const int32_t os32_S
          c_Message.SetHeading("View delete");
          c_Message.SetDescription(
             static_cast<QString>("Do you really want to delete this view (%1)?")
-            .arg(pc_View->GetName().c_str()));
+            .arg(pc_View->GetName()));
          c_Message.SetOkButtonText("Delete");
          c_Message.SetNoButtonText("Keep");
          c_Message.SetCustomMinHeight(180, 180);

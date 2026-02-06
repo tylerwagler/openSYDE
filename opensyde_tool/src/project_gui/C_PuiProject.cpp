@@ -281,7 +281,7 @@ bool C_PuiProject::IsPasswordNecessary(void) {
   bool q_Return = false;
 
   if (this->m_IsServiceModeProject() == true) {
-    if (C_OscZipFile::h_IsZipFile(this->GetPath().toStdString().c_str()) !=
+    if (C_OscZipFile::h_IsZipFile(this->GetPath().toStdString()) !=
         C_NO_ERR) {
       // Not a zip file, so it is encrypted
       q_Return = true;
@@ -769,7 +769,7 @@ int32_t C_PuiProject::m_LoadProject(
   } else {
     // Load project file
     s32_Retval =
-        C_OscProjectFiler::h_Load(*this, this->mc_Path.toStdString().c_str());
+        C_OscProjectFiler::h_Load(*this, this->mc_Path.toStdString());
     if (s32_Retval == C_NO_ERR) {
       QString c_SystemDefintionPath;
       // Try newest path
@@ -784,7 +784,7 @@ int32_t C_PuiProject::m_LoadProject(
         }
         // Load system definition
         s32_Retval = C_PuiSdHandler::h_GetInstance()->LoadFromFile(
-            c_SystemDefintionPath.toStdString().c_str(), opu16_FileVersion,
+            c_SystemDefintionPath.toStdString(), opu16_FileVersion,
             opc_ErrorDetailsMissingDevices);
         if (s32_Retval == C_NO_ERR) {
           QString c_SystemViewsPath;
@@ -799,7 +799,7 @@ int32_t C_PuiProject::m_LoadProject(
             }
             // Load system views
             s32_Retval = C_PuiSvHandler::h_GetInstance()->LoadFromFile(
-                c_SystemViewsPath.toStdString().c_str());
+                c_SystemViewsPath.toStdString());
           }
         } else {
           if (s32_Retval == C_OVERFLOW) {
@@ -926,10 +926,10 @@ int32_t C_PuiProject::m_SaveAs(const QString &orc_FilePath,
   if (c_Directory.mkpath(".") == true) {
     C_PuiProject::h_HandlePendingEvents();
     s32_Retval = C_OscProjectFiler::h_Save(
-        *this, orc_FilePath.toStdString().c_str(),
+        *this, orc_FilePath.toStdString(),
         stw::opensyde_gui_logic::C_Uti::h_GetApplicationVersion(false)
             .toStdString()
-            .c_str());
+            );
     if (s32_Retval == C_NO_ERR) {
       // save system definition only if it has changed
       if ((C_PuiSdHandler::h_GetInstance()->HasHashChanged() == true) ||
@@ -949,7 +949,7 @@ int32_t C_PuiProject::m_SaveAs(const QString &orc_FilePath,
           // Create path (if necessary)
           if ((c_Dir.mkdir(".") == true) || (c_Dir.exists() == true)) {
             s32_Retval = C_PuiSdHandler::h_GetInstance()->SaveToFile(
-                c_SystemDefintionPath.toStdString().c_str(),
+                c_SystemDefintionPath.toStdString(),
                 oq_UseDeprecatedFileFormatV2, oq_UpdateInternalState);
           } else {
             s32_Retval = C_RD_WR;
@@ -974,7 +974,7 @@ int32_t C_PuiProject::m_SaveAs(const QString &orc_FilePath,
             // Create path (if necessary)
             if ((c_Dir.mkdir(".") == true) || (c_Dir.exists() == true)) {
               s32_Retval = C_PuiSvHandler::h_GetInstance()->SaveToFile(
-                  c_SystemViewsPath.toStdString().c_str(),
+                  c_SystemViewsPath.toStdString(),
                   oq_UseDeprecatedFileFormatV2, oq_UpdateInternalState);
             } else {
               s32_Retval = C_RD_WR;

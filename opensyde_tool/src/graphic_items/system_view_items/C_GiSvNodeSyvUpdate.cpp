@@ -622,13 +622,13 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
 
          // Set tooltip image
          //load device picture
-         c_FileInfoDevImg.setFile(pc_Device->c_ImagePath.c_str());
+         c_FileInfoDevImg.setFile(pc_Device->c_ImagePath);
          q_FileExists = (c_FileInfoDevImg.exists() && c_FileInfoDevImg.isFile());
 
          //check if file exists
          if (q_FileExists == true)
          {
-            this->SetDefaultToolTipImagePath(pc_Device->c_ImagePath.c_str());
+            this->SetDefaultToolTipImagePath(pc_Device->c_ImagePath);
          }
          else
          {
@@ -636,7 +636,7 @@ void C_GiSvNodeSyvUpdate::GenerateHint(void)
             this->SetDefaultToolTipImagePath("://images/system_definition/Image_Grey.svg");
          }
 
-         this->SetDefaultToolTipImageCaption(pc_Device->GetDisplayName().c_str());
+         this->SetDefaultToolTipImageCaption(pc_Device->GetDisplayName());
       }
    }
 }

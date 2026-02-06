@@ -131,7 +131,7 @@ void C_SyvClipBoardHelper::mh_StoreDashboardToClipboard(
   C_OscXmlParser c_StringXml;
 
   c_StringXml.CreateAndSelectNodeChild(
-      orc_GenericTagName.toStdString().c_str());
+      orc_GenericTagName.toStdString());
   c_StringXml.CreateAndSelectNodeChild("rail-assignments");
   C_PuiSvHandlerFiler::h_SaveReadRails(orc_Rails, c_StringXml);
   c_StringXml.SelectNodeParent();
@@ -167,7 +167,7 @@ void C_SyvClipBoardHelper::mh_StoreElementIdGroups(
                                                  orc_XmlParser);
   }
   Q_ASSERT(orc_XmlParser.SelectNodeParent() ==
-           orc_GenericTagName.toStdString().c_str());
+           orc_GenericTagName.toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -214,14 +214,14 @@ int32_t C_SyvClipBoardHelper::mh_LoadDashboardFromClipboard(
   int32_t s32_Retval = C_NO_ERR;
   C_OscXmlParser c_StringXml;
 
-  c_StringXml.LoadFromString(mh_GetClipBoard().toStdString().c_str());
+  c_StringXml.LoadFromString(mh_GetClipBoard().toStdString());
 
-  if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString().c_str()) {
+  if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString()) {
     if (c_StringXml.SelectNodeChild("gui-only") == "gui-only") {
       s32_Retval =
           C_PuiSvDashboardFiler::h_LoadDashboard(orc_Data, c_StringXml, true);
       Q_ASSERT(c_StringXml.SelectNodeParent() ==
-               orc_GenericTagName.toStdString().c_str());
+               orc_GenericTagName.toStdString());
     } else {
       s32_Retval = C_CONFIG;
     }
@@ -230,7 +230,7 @@ int32_t C_SyvClipBoardHelper::mh_LoadDashboardFromClipboard(
          "rail-assignments")) {
       s32_Retval = C_PuiSvHandlerFiler::h_LoadReadRails(orc_Rails, c_StringXml);
       Q_ASSERT(c_StringXml.SelectNodeParent() ==
-               orc_GenericTagName.toStdString().c_str());
+               orc_GenericTagName.toStdString());
     } else {
       s32_Retval = C_CONFIG;
     }
@@ -288,7 +288,7 @@ int32_t C_SyvClipBoardHelper::mh_LoadElementIdGroups(
     }
     // Return
     Q_ASSERT(orc_XmlParser.SelectNodeParent() ==
-             orc_GenericTagName.toStdString().c_str());
+             orc_GenericTagName.toStdString());
   }
   return s32_Retval;
 }

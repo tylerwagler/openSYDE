@@ -87,7 +87,7 @@ C_CieDataPoolListAdapter::h_GetStructureFromDbcFileImport(
   C_CieDataPoolListStructure c_DataStructure; // return value
 
   // get node name
-  c_DataStructure.c_NodeName = orc_CieNode.c_Properties.c_Name.c_str();
+  c_DataStructure.c_NodeName = orc_CieNode.c_Properties.c_Name;
 
   // get Tx core data
   mh_FillUpCoreStructureByDbcValues(
@@ -163,8 +163,8 @@ C_CieDataPoolListAdapter::h_GetStructureFromDcfAndEdsFileImport(
            ++u32_ItGroupedMessage) {
         const QString &rc_OneMessage =
             rc_MessagesForOneCanMessage[u32_ItGroupedMessage];
-        c_CombinedMessages += rc_OneMessage.c_str();
-        c_CombinedMessages += mc_MessageLineBreak.c_str();
+        c_CombinedMessages += rc_OneMessage;
+        c_CombinedMessages += mc_MessageLineBreak;
       }
       if (u32_ItInfoMessage < orc_OscRxMessageData.c_OscMessageData.size()) {
         c_Retval.c_Core.c_WarningMessagesPerRxMessage.push_back(
@@ -234,7 +234,7 @@ void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
         c_Tmp += c_CanMessageIter->c_Warnings.at(u32_Pos);
         c_Tmp += mc_MessageLineBreak;
       }
-      orc_WarningMessages.emplace_back(c_Tmp.c_str());
+      orc_WarningMessages.emplace_back(c_Tmp);
     } else {
       // for each message an entry is expected therefore push an empty string
       orc_WarningMessages.emplace_back("");
@@ -540,7 +540,7 @@ int32_t C_CieDataPoolListAdapter::h_ConvertToDbcImportMessage(
   c_MessageSyncManager.Init(ou32_BusIndex, oe_Type);
   C_OscCanMessageIdentificationIndices c_MessageId;
   if (c_MessageSyncManager.GetMessageIdForMessageName(
-          orc_OscCanMessage.c_Name.c_str(), c_MessageId) == C_NO_ERR) {
+          orc_OscCanMessage.c_Name, c_MessageId) == C_NO_ERR) {
     // get Signals
     for (uint32_t u32_PosSignal = 0;
          u32_PosSignal < orc_OscCanMessage.c_Signals.size(); u32_PosSignal++) {

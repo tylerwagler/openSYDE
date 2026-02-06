@@ -1454,7 +1454,7 @@ C_PuiSvDbNodeDataElementConfig C_SyvDaItTaModel::mh_GetConfigForNewItem(
    {
       c_NewConfig.c_ElementScaling.f64_Offset = pc_Element->f64_Offset;
       c_NewConfig.c_ElementScaling.f64_Factor = pc_Element->f64_Factor;
-      c_NewConfig.c_ElementScaling.c_Unit = pc_Element->c_Unit.c_str();
+      c_NewConfig.c_ElementScaling.c_Unit = pc_Element->c_Unit;
    }
 
    c_NewConfig.c_DisplayFormatter.q_IsActive = false;
@@ -1677,12 +1677,12 @@ void C_SyvDaItTaModel::m_InitMinMaxAndNameForOneRow(const C_PuiSvDbNodeDataPoolL
                if (orc_ElementId.GetUseArrayElementIndex())
                {
                   this->mc_Names[ou32_Index] = static_cast<QString>("%1[%2]").
-                                               arg(pc_OscElement->c_Name.c_str()).
+                                               arg(pc_OscElement->c_Name).
                                                arg(orc_ElementId.GetArrayElementIndex());
                }
                else
                {
-                  this->mc_Names[ou32_Index] = pc_OscElement->c_Name.c_str();
+                  this->mc_Names[ou32_Index] = pc_OscElement->c_Name;
                }
             }
          }
@@ -1692,7 +1692,7 @@ void C_SyvDaItTaModel::m_InitMinMaxAndNameForOneRow(const C_PuiSvDbNodeDataPoolL
          }
          if (orc_ElementConfig.c_ElementScaling.q_UseDefault == true)
          {
-            this->mc_Units[ou32_Index] = pc_OscElement->c_Unit.c_str();
+            this->mc_Units[ou32_Index] = pc_OscElement->c_Unit;
          }
          else
          {

@@ -117,7 +117,7 @@ QWidget * C_SyvDaItPaTreeDelegate::createEditor(QWidget * const opc_Parent, cons
                   {
                      const C_OscNodeDataPoolDataSet & rc_DataSet = pc_List->c_DataSets[u32_ItDataSet];
                      pc_ComboBox->addItem(static_cast<QString>("Dataset \"%1\"").arg(
-                                             rc_DataSet.c_Name.c_str()));
+                                             rc_DataSet.c_Name));
                   }
                   pc_Retval = pc_ComboBox;
                }

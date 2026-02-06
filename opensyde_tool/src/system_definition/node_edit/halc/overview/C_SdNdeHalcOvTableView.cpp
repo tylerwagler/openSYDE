@@ -24,6 +24,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -119,7 +120,7 @@ void C_SdNdeHalcOvTableView::LoadUserSettings(void)
 
    if (pc_Node != NULL)
    {
-      const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
+      const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
       if (this->m_SetColumnWidths(c_Node.GetHalcOverviewColumnWidth()) == false)
       {
          m_InitColumns();
@@ -138,7 +139,7 @@ void C_SdNdeHalcOvTableView::SaveUserSettings(void) const
    if (pc_Node != NULL)
    {
       C_UsHandler::h_GetInstance()->SetProjSdNodeHalcOverviewColumnWidth(
-         pc_Node->c_Properties.c_Name.c_str(), this->m_GetColumnWidths());
+         pc_Node->c_Properties.c_Name, this->m_GetColumnWidths());
    }
 }
 

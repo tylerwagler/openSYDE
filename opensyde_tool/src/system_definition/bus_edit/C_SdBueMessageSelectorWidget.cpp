@@ -451,7 +451,7 @@ void C_SdBueMessageSelectorWidget::RecheckProtocolError(void) const
                 (q_TempCoTxPdoCountInvalid == true) ||
                 (q_TempCommMinSignalCountInvalid == true))
             {
-               c_ErrorNodes += "\n" + static_cast<QString>(pc_Node->c_Properties.c_Name.c_str());
+               c_ErrorNodes += "\n" + static_cast<QString>(pc_Node->c_Properties.c_Name);
 
                if (q_TempCommMaxRxSignalCountInvalid == true)
                {

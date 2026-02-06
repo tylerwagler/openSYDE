@@ -58,7 +58,7 @@ C_PuiSvDbDataElementDisplayFormatter::~C_PuiSvDbDataElementDisplayFormatter()
 void C_PuiSvDbDataElementDisplayFormatter::CalcHash(uint32_t & oru32_HashValue) const
 {
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsActive, sizeof(this->q_IsActive), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_FormatterString.toStdString().c_str(),
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_FormatterString.toStdString(),
                                        this->c_FormatterString.length(), oru32_HashValue);
 }
 
@@ -144,7 +144,7 @@ bool C_PuiSvDbDataElementDisplayFormatter::IsFormatterCompatible(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_PuiSvDbDataElementDisplayFormatter::GetValueFormatted(const int64_t os64_Value) const
 {
-   return QString::asprintf(this->c_FormatterString.toStdString().c_str(), os64_Value);
+   return QString::asprintf(this->c_FormatterString.toStdString(), os64_Value);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -161,7 +161,7 @@ QString C_PuiSvDbDataElementDisplayFormatter::GetValueFormatted(const int64_t os
 //----------------------------------------------------------------------------------------------------------------------
 QString C_PuiSvDbDataElementDisplayFormatter::GetValueFormatted(const float64_t of64_Value) const
 {
-   return QString::asprintf(this->c_FormatterString.toStdString().c_str(), of64_Value);
+   return QString::asprintf(this->c_FormatterString.toStdString(), of64_Value);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -178,7 +178,7 @@ QString C_PuiSvDbDataElementDisplayFormatter::GetValueFormatted(const float64_t 
 //----------------------------------------------------------------------------------------------------------------------
 QString C_PuiSvDbDataElementDisplayFormatter::GetValueFormatted(const QString & orc_Value) const
 {
-   return QString::asprintf(this->c_FormatterString.toStdString().c_str(), orc_Value.toStdString().c_str());
+   return QString::asprintf(this->c_FormatterString.toStdString(), orc_Value.toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

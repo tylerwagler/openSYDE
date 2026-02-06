@@ -264,7 +264,7 @@ void C_SdNdeProgrammingOptions::m_Load(void) const
          const C_OscNodeApplication & rc_DataBlock = pc_Node->c_Applications[u32_ItDataBlock];
          if (rc_DataBlock.e_Type == C_OscNodeApplication::ePROGRAMMABLE_APPLICATION)
          {
-            this->mpc_Ui->pc_ComboBoxDPD->addItem(rc_DataBlock.c_Name.c_str());
+            this->mpc_Ui->pc_ComboBoxDPD->addItem(rc_DataBlock.c_Name);
             if ((pc_Node->c_Properties.c_OpenSydeServerSettings.s16_DpdDataBlockIndex >= 0) &&
                 (static_cast<uint32_t>(static_cast<int32_t>(pc_Node->c_Properties.c_OpenSydeServerSettings.
                                                             s16_DpdDataBlockIndex)) == u32_ItDataBlock))

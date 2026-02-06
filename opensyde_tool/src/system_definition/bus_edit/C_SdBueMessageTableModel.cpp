@@ -730,14 +730,14 @@ const
    {
       QString c_AdditionalInfo;
 
-      c_Return += static_cast<QString>(pc_Node->c_Properties.c_Name.c_str());
+      c_Return += static_cast<QString>(pc_Node->c_Properties.c_Name);
 
       // Add additional info about Datapool and/or Interface if ambiguous
       if (pc_Node->GetCanProtocolsConst(orc_CurMatchingId.e_ComProtocol).size() > 1)
       {
          // Add datapool name if datapool of this protocol type is ambiguous
          c_AdditionalInfo +=
-            pc_Node->c_DataPools.at(orc_CurMatchingId.u32_DatapoolIndex).c_Name.c_str();
+            pc_Node->c_DataPools.at(orc_CurMatchingId.u32_DatapoolIndex).c_Name;
       }
 
       // Add CAN interface name if two CAN interfaces of one node participate
@@ -1053,7 +1053,7 @@ QString C_SdBueMessageTableModel::m_GetCanOpenNode(const C_OscCanMessage & orc_M
 
    if (pc_Node != NULL)
    {
-      c_Retval = pc_Node->c_Properties.c_Name.c_str();
+      c_Retval = pc_Node->c_Properties.c_Name;
    }
    return c_Retval;
 }
@@ -1157,8 +1157,8 @@ void C_SdBueMessageTableModel::m_FillMsgInfo(void)
       {
          C_MsgTableData & rc_Data = this->mc_MsgInfoAll[u32_Counter].c_MessageData;
          // Get the data for the message
-         rc_Data.c_Name = static_cast<QString>(pc_Message->c_Name.c_str());
-         rc_Data.c_Comment = static_cast<QString>(pc_Message->c_Comment.c_str());
+         rc_Data.c_Name = static_cast<QString>(pc_Message->c_Name);
+         rc_Data.c_Comment = static_cast<QString>(pc_Message->c_Comment);
          rc_Data.c_CoIndex = m_GetCanOpenIndex(rc_Id, *pc_Message, 0);
          rc_Data.c_CoIndexEditRole = m_GetCanOpenIndex(rc_Id, *pc_Message, static_cast<int32_t>(Qt::EditRole));
 

@@ -17,6 +17,7 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -115,12 +116,12 @@ int32_t C_SdNdeHalcConfigImportModel::Init(const C_OscHalcConfig & orc_Config,
       C_SdNdeHalcConfigImportItem * const pc_DomainItem = new C_SdNdeHalcConfigImportItem();
       uint32_t u32_CurDomainCounter;
 
-      pc_DomainItem->c_Name = rc_ImpDomain.c_DomainConfig.c_Name.c_str();
+      pc_DomainItem->c_Name = rc_ImpDomain.c_DomainConfig.c_Name;
       pc_DomainItem->c_ToolTipHeading = pc_DomainItem->c_Name;
       pc_DomainItem->u32_ImportIndex = u32_ImpDomainCounter;
       if (rc_ImpDomain.c_Channels.empty() == true)
       {
-         pc_DomainItem->c_ToolTipContent = rc_ImpDomain.c_DomainConfig.c_Comment.c_str();
+         pc_DomainItem->c_ToolTipContent = rc_ImpDomain.c_DomainConfig.c_Comment;
          pc_DomainItem->c_ToolTipContent += "\n\n";
          pc_DomainItem->c_ToolTipContent += "Configuration:\n";
          pc_DomainItem->c_ToolTipContent += "   Safety Relevant Parameters: ";
@@ -160,7 +161,7 @@ int32_t C_SdNdeHalcConfigImportModel::Init(const C_OscHalcConfig & orc_Config,
 
                      pc_ChannelItem->c_Name =
                         static_cast<QString>("%1 (%2)").arg(
-                           rc_ImpChannelConfig.c_Name.c_str(), rc_ImpChannelDef.c_Name.c_str());
+                           rc_ImpChannelConfig.c_Name, rc_ImpChannelDef.c_Name);
                      pc_ChannelItem->c_ToolTipHeading = pc_ChannelItem->c_Name;
                      pc_ChannelItem->c_ToolTipContent =
                         this->m_CreateTooltipContent(u32_CurDomainCounter, u32_ImpChannelCounter);
@@ -764,7 +765,7 @@ QString C_SdNdeHalcConfigImportModel::m_CreateTooltipContent(const uint32_t ou32
          bool q_IsLinked = false;
 
          // comment
-         c_Return = rc_ImpChannelConfig.c_Comment.c_str();
+         c_Return = rc_ImpChannelConfig.c_Comment;
          c_Return += "\n\n";
 
          c_Return += "Configuration: ";
@@ -784,7 +785,7 @@ QString C_SdNdeHalcConfigImportModel::m_CreateTooltipContent(const uint32_t ou32
             const C_OscHalcDefChannelUseCase & rc_UseCase =
                pc_CurDomain->c_ChannelUseCases[rc_ImpChannelConfig.u32_UseCaseIndex];
             c_Return += "   Use Case: ";
-            c_Return += rc_UseCase.c_Display.c_str();
+            c_Return += rc_UseCase.c_Display;
             c_Return += "\n";
          }
 
@@ -809,9 +810,9 @@ QString C_SdNdeHalcConfigImportModel::m_CreateTooltipContent(const uint32_t ou32
                if ((u32_CurLinkedChannelIndex < rc_ImpDomain.c_ChannelConfigs.size()) &&
                    (u32_CurLinkedChannelIndex < pc_CurDomain->c_Channels.size()))
                {
-                  c_Return += rc_ImpDomain.c_ChannelConfigs[u32_CurLinkedChannelIndex].c_Name.c_str();
+                  c_Return += rc_ImpDomain.c_ChannelConfigs[u32_CurLinkedChannelIndex].c_Name;
                   c_Return += " (";
-                  c_Return += pc_CurDomain->c_Channels[u32_CurLinkedChannelIndex].c_Name.c_str();
+                  c_Return += pc_CurDomain->c_Channels[u32_CurLinkedChannelIndex].c_Name;
                   c_Return += ")";
                }
             }

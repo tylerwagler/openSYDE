@@ -1780,7 +1780,7 @@ bool C_SdNdeDpListTableModel::CheckName(const uint32_t ou32_Index, const QString
    return C_PuiSdHandler::h_GetInstance()->CheckNodeDataPoolListElementNameAvailable(this->mu32_NodeIndex,
                                                                                      this->mu32_DataPoolIndex,
                                                                                      this->mu32_ListIndex,
-                                                                                     orc_Name.toStdString().c_str(),
+                                                                                     orc_Name.toStdString(),
                                                                                      &ou32_Index);
 }
 

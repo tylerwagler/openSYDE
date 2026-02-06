@@ -304,7 +304,7 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
                        pc_Node->c_Applications.size());
             if (static_cast<uint32_t>(pc_OscDataPool->s32_RelatedDataBlockIndex) < pc_Node->c_Applications.size())
             {
-               c_ToolTipText += pc_Node->c_Applications[pc_OscDataPool->s32_RelatedDataBlockIndex].c_Name.c_str();
+               c_ToolTipText += pc_Node->c_Applications[pc_OscDataPool->s32_RelatedDataBlockIndex].c_Name;
             }
          }
       }

@@ -33,6 +33,7 @@
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -289,7 +290,7 @@ void C_SyvDaChaWidget::HandleManualOperationFinished(const int32_t os32_Result, 
 
          osc_write_log_info("Manual operation",
                             static_cast<QString>("The C_SyvComDataDealer function ended with error code \"%1\"").arg(
-                               C_Uti::h_StwError(os32_Result)).toStdString().c_str());
+                               C_Uti::h_StwError(os32_Result)).toStdString());
 
          if (s32_Return == C_NO_ERR)
          {
@@ -734,7 +735,7 @@ void C_SyvDaChaWidget::m_AddNewDataElement(void)
                      // Get the original scaling configuration as initialization
                      c_Scaling.f64_Factor = pc_Element->f64_Factor;
                      c_Scaling.f64_Offset = pc_Element->f64_Offset;
-                     c_Scaling.c_Unit = pc_Element->c_Unit.c_str();
+                     c_Scaling.c_Unit = pc_Element->c_Unit;
                   }
 
                   Q_ASSERT(C_PuiSvHandler::h_GetInstance()->CheckAndHandleNewElement(
@@ -973,7 +974,7 @@ void C_SyvDaChaWidget::m_CallProperties(void)
                      }
                      else
                      {
-                        c_WidgetName = pc_OscElement->c_Name.c_str();
+                        c_WidgetName = pc_OscElement->c_Name;
                      }
                   }
                }

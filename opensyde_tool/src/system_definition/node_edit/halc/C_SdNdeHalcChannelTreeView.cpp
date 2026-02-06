@@ -22,6 +22,7 @@
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -427,7 +428,7 @@ bool C_SdNdeHalcChannelTreeView::m_LoadUsChannel(uint32_t & oru32_DomainIndex, u
 
    if (pc_Node != NULL)
    {
-      const C_UsNode c_UsNode = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name.c_str());
+      const C_UsNode c_UsNode = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
       const QString c_Domain = c_UsNode.GetSelectedHalcDomainName();
       const QString c_ChannelId = c_UsNode.GetSelectedHalcChannel();
 
@@ -438,7 +439,7 @@ bool C_SdNdeHalcChannelTreeView::m_LoadUsChannel(uint32_t & oru32_DomainIndex, u
          {
             const C_OscHalcDefDomain * const pc_Domain = pc_Node->c_HalcConfig.GetDomainDefDataConst(u32_DomainIt);
 
-            if ((pc_Domain != NULL) && (pc_Domain->c_Name.c_str() == c_Domain))
+            if ((pc_Domain != NULL) && (pc_Domain->c_Name == c_Domain))
             {
                oru32_DomainIndex = u32_DomainIt;
 
@@ -451,7 +452,7 @@ bool C_SdNdeHalcChannelTreeView::m_LoadUsChannel(uint32_t & oru32_DomainIndex, u
                         C_PuiSdHandler::h_GetInstance()->GetHalcDomainFileChannelDataConst(u32_NodeIndex,
                                                                                            oru32_DomainIndex,
                                                                                            u32_ChannelIt);
-                     if ((pc_Channel != NULL) && (pc_Channel->c_Name.c_str() == c_ChannelId))
+                     if ((pc_Channel != NULL) && (pc_Channel->c_Name == c_ChannelId))
                      {
                         oru32_ChannelIndex = u32_ChannelIt;
                         q_Found = true;
@@ -496,8 +497,8 @@ void C_SdNdeHalcChannelTreeView::m_SaveUsChannel(void) const
          const C_OscHalcDefDomain * const pc_Domain = pc_Node->c_HalcConfig.GetDomainDefDataConst(u32_DomainIndex);
          if (pc_Domain != NULL)
          {
-            C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedHalcDomain(pc_Node->c_Properties.c_Name.c_str(),
-                                                                          pc_Domain->c_Name.c_str());
+            C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedHalcDomain(pc_Node->c_Properties.c_Name,
+                                                                          pc_Domain->c_Name);
             if (q_ChannelCase == true)
             {
                const C_OscHalcDefChannelDef * const pc_Channel =
@@ -506,14 +507,14 @@ void C_SdNdeHalcChannelTreeView::m_SaveUsChannel(void) const
 
                if (pc_Channel != NULL)
                {
-                  C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedHalcChannel(pc_Node->c_Properties.c_Name.c_str(),
-                                                                                 pc_Channel->c_Name.c_str());
+                  C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedHalcChannel(pc_Node->c_Properties.c_Name,
+                                                                                 pc_Channel->c_Name);
                   q_Reset = false;
                }
             }
             else
             {
-               C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedHalcChannel(pc_Node->c_Properties.c_Name.c_str(), "");
+               C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedHalcChannel(pc_Node->c_Properties.c_Name, "");
                q_Reset = false;
             }
          }
@@ -522,8 +523,8 @@ void C_SdNdeHalcChannelTreeView::m_SaveUsChannel(void) const
       // reset if none is selected
       if (q_Reset == true)
       {
-         C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedHalcDomain(pc_Node->c_Properties.c_Name.c_str(), "");
-         C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedHalcChannel(pc_Node->c_Properties.c_Name.c_str(), "");
+         C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedHalcDomain(pc_Node->c_Properties.c_Name, "");
+         C_UsHandler::h_GetInstance()->SetProjSdNodeSelectedHalcChannel(pc_Node->c_Properties.c_Name, "");
       }
    }
 }
