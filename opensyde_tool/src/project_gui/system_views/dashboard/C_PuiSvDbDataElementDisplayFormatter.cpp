@@ -58,7 +58,7 @@ C_PuiSvDbDataElementDisplayFormatter::~C_PuiSvDbDataElementDisplayFormatter()
 void C_PuiSvDbDataElementDisplayFormatter::CalcHash(uint32_t & oru32_HashValue) const
 {
    stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsActive, sizeof(this->q_IsActive), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_FormatterString.toStdString(),
+   stw::scl::C_SclChecksums::CalcCRC32(this->c_FormatterString.toStdString().c_str(),
                                        this->c_FormatterString.length(), oru32_HashValue);
 }
 
@@ -178,7 +178,7 @@ QString C_PuiSvDbDataElementDisplayFormatter::GetValueFormatted(const float64_t 
 //----------------------------------------------------------------------------------------------------------------------
 QString C_PuiSvDbDataElementDisplayFormatter::GetValueFormatted(const QString & orc_Value) const
 {
-   return QString::asprintf(this->c_FormatterString.toStdString(), orc_Value.toStdString());
+   return QString::asprintf(this->c_FormatterString.toStdString(), orc_Value.toStdString().c_str());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

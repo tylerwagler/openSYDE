@@ -182,7 +182,7 @@ QMimeData * C_NagViewListModel::mimeData(const QModelIndexList & orc_Indices) co
    {
       Q_UNUSED(orc_Indices)
       pc_Retval = new QMimeData();
-      pc_Retval->setData(this->mimeTypes().at(0), QString::number(orc_Indices.at(0).row()).toStdString());
+      pc_Retval->setData(this->mimeTypes().at(0), QString::number(orc_Indices.at(0).row()).toStdString().c_str());
    }
    return pc_Retval;
 }

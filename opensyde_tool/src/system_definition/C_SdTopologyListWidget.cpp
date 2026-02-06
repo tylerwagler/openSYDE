@@ -226,7 +226,7 @@ void C_SdTopologyListWidget::startDrag(const Qt::DropActions oc_SupportedActions
          QMimeData * const pc_MimeData = new QMimeData();
 
          pc_MimeData->setText(pc_Item->data(ms32_USER_ROLE_ADDITIONAL_INFORMATION).toString());
-         pc_MimeData->setData(C_SdTopologyListWidget::hc_GROUP_NAME, this->mc_Name.toStdString());
+         pc_MimeData->setData(C_SdTopologyListWidget::hc_GROUP_NAME, this->mc_Name.toStdString().c_str());
          c_Pix = c_SelectedItems[0]->icon().pixmap(ms32_ICON_WIDTH, ms32_ICON_HEIGHT);
          pc_Drag->setPixmap(c_Pix);
          pc_Drag->setHotSpot(c_Pix.rect().center());

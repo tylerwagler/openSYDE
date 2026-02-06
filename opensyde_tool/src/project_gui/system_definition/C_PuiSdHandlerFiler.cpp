@@ -122,7 +122,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPools(std::vector<C_PuiSdNodeDataPool> & 
          {
             const QString c_Tmp = QString("Unexpected UI Datapool count, expected: %1, got %2")
                .arg(u32_ExpectedSize).arg(orc_DataPools.size());
-            osc_write_log_warning("Load file", c_Tmp.toStdString());
+            osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
          }
       }
       //Return
@@ -234,7 +234,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPoolLists(std::vector<C_PuiSdNodeDataPool
       {
          const QString c_Tmp = QString("Unexpected UI list count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_DataPoolLists.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
    return s32_Retval;
@@ -332,7 +332,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPoolListElements(
       {
          const QString c_Tmp = QString("Unexpected UI data element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_DataPoolListElements.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
    return s32_RETVAL;
@@ -391,7 +391,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveDataPools(const std::vector<C_PuiSdNodeDataPo
             s32_Retval =
                h_SaveDataPoolFile(orc_UiDataPools[u32_ItDataPool], opc_BasePath->absoluteFilePath(c_FileName));
             //Store file name
-            orc_XmlParser.SetNodeContent(c_FileName.toStdString());
+            orc_XmlParser.SetNodeContent(c_FileName.toStdString().c_str());
             //Return
             Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pools");
          }
@@ -683,7 +683,7 @@ void C_PuiSdHandlerFiler::h_LoadSharedDatapoolsGroups(C_PuiSdSharedDatapools & o
       {
          const QString c_Tmp = QString("Unexpected UI shared Datapools group count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_SharedDatapools.c_SharedDatapools.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
 }
@@ -739,7 +739,7 @@ void C_PuiSdHandlerFiler::h_LoadSharedDatapoolsGroup(std::vector<C_OscNodeDataPo
       {
          const QString c_Tmp = QString("Unexpected UI shared Datapool Ids count in group, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_Group.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
 }
@@ -893,7 +893,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadCanProtocols(std::vector<C_PuiSdNodeCanProtoc
          {
             const QString c_Tmp = QString("Unexpected UI protocol count, expected: %1, got %2")
                .arg(u32_ExpectedSize).arg(orc_CanProtocols.size());
-            osc_write_log_warning("Load file", c_Tmp.toStdString());
+            osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
          }
       }
       //Return
@@ -995,7 +995,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadCanMessageContainers(
       {
          const QString c_Tmp = QString("Unexpected data element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_CanMessageContainers.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
    return s32_Retval;
@@ -1098,7 +1098,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadCanMessages(std::vector<C_PuiSdNodeCanMessage
       {
          const QString c_Tmp = QString("Unexpected UI messages count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_CanMessages.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
    return s32_Retval;
@@ -1213,7 +1213,7 @@ void C_PuiSdHandlerFiler::h_LoadCanSignals(std::vector<C_PuiSdNodeCanSignal> & o
       {
          const QString c_Tmp = QString("Unexpected data element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_CanSignals.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
 }
@@ -1272,7 +1272,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveCanProtocols(const std::vector<C_PuiSdNodeCan
                   h_SaveCanProtocolFile(orc_UiCanProtocols[u32_ItCanProtocol], opc_BasePath->absoluteFilePath(
                                            c_FileName));
                //Store file name
-               orc_XmlParser.SetNodeContent(c_FileName.toStdString());
+               orc_XmlParser.SetNodeContent(c_FileName.toStdString().c_str());
                //Return
                Q_ASSERT(orc_XmlParser.SelectNodeParent() == "com-protocols");
             }
@@ -1580,7 +1580,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadNodes(std::vector<C_PuiSdNode> & orc_Nodes, C
       {
          const QString c_Tmp = QString("Unexpected UI nodes count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_Nodes.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
    return s32_Retval;
@@ -1749,7 +1749,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadBuses(std::vector<C_PuiSdBus> & orc_Buses, C_
       {
          const QString c_Tmp = QString("Unexpected bus count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_Buses.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
    return s32_Retval;
@@ -1834,7 +1834,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadBusTextElements(std::vector<C_PuiSdTextElemen
       {
          const QString c_Tmp = QString("Unexpected bus text element count, expected: %1, got %2")
             .arg(u32_ExpectedSize).arg(orc_BusTextElements.size());
-         osc_write_log_warning("Load file", c_Tmp.toStdString());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
    return s32_Retval;
@@ -1948,7 +1948,7 @@ void C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(const std::map<C_OscNodeDataPo
       orc_XmlParser.CreateAndSelectNodeChild("last-known-halc-crc");
       C_OscDataLoggerJobFiler::h_SaveDataElementOptArrayId(c_It->first, orc_XmlParser);
       orc_XmlParser.SetAttributeUint32("crc", c_It->second.u32_Crc);
-      orc_XmlParser.CreateNodeChild("hal-data-pool-name", c_It->second.c_HalDpName.toStdString());
+      orc_XmlParser.CreateNodeChild("hal-data-pool-name", c_It->second.c_HalDpName.toStdString().c_str());
 
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "last-known-halc-crcs");
@@ -2014,7 +2014,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(const QString & orc_Fi
                                                        c_FileName), &c_Folder);
             //Store file name
             c_XmlParser.CreateNodeChild("node",
-                                        static_cast<QString>(c_FolderName + "/" + c_FileName).toStdString());
+                                        static_cast<QString>(c_FolderName + "/" + c_FileName).toStdString().c_str());
          }
       }
       else

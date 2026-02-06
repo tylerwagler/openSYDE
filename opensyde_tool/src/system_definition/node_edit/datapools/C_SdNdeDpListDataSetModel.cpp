@@ -768,9 +768,9 @@ QMimeData * C_SdNdeDpListDataSetModel::mimeData(const QModelIndexList & orc_Indi
             //Use default mime type so qt accepts these
             pc_Retval->setData(this->mimeTypes().at(0), "");
             C_SdClipBoardHelper::h_StoreDataPoolListDataSetsToString(c_OscNames, c_OscDataSetValues, c_String);
-            pc_Retval->setData(this->mimeTypes().at(1), c_String.toStdString());
+            pc_Retval->setData(this->mimeTypes().at(1), c_String.toStdString().c_str());
             C_SdClipBoardHelper::h_StoreIndicesToString(c_Cols, c_String);
-            pc_Retval->setData(this->mimeTypes().at(2), c_String.toStdString());
+            pc_Retval->setData(this->mimeTypes().at(2), c_String.toStdString().c_str());
          }
       }
    }

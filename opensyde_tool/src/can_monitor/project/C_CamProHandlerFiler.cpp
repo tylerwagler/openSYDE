@@ -231,7 +231,7 @@ int32_t C_CamProHandlerFiler::h_LoadMessages(
       QString c_Tmp = QString("Unexpected messages count, expected: %1, got %2")
                           .arg(u32_ExpectedSize)
                           .arg(orc_Messages.size());
-      osc_write_log_warning("Load file", c_Tmp.toStdString());
+      osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
     }
   }
   return s32_Retval;
@@ -392,7 +392,7 @@ void C_CamProHandlerFiler::h_SaveSettings(const C_CamProHandler &orc_Handler,
   orc_XmlParser.SetAttributeSint32(
       "type", static_cast<int32_t>(orc_Handler.GetCanDllType()));
   orc_XmlParser.SetNodeContent(
-      orc_Handler.GetCustomCanDllPath().toStdString());
+      orc_Handler.GetCustomCanDllPath().toStdString().c_str());
 
   // Return
   orc_XmlParser.SelectNodeParent();
@@ -534,9 +534,9 @@ void C_CamProHandlerFiler::h_SaveFilter(const C_CamProFilterData &orc_Filter,
                                         C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeBool("active", orc_Filter.q_Enabled);
   orc_XmlParser.CreateNodeChild("name",
-                                orc_Filter.c_Name.toStdString());
+                                orc_Filter.c_Name.toStdString().c_str());
   orc_XmlParser.CreateNodeChild("comment",
-                                orc_Filter.c_Comment.toStdString());
+                                orc_Filter.c_Comment.toStdString().c_str());
   orc_XmlParser.CreateAndSelectNodeChild("filter-items");
   orc_XmlParser.SetAttributeUint32("length", orc_Filter.c_FilterItems.size());
 
@@ -620,7 +620,7 @@ int32_t C_CamProHandlerFiler::h_LoadFilters(
       QString c_Tmp = QString("Unexpected filters count, expected: %1, got %2")
                           .arg(u32_ExpectedSize)
                           .arg(orc_Filters.size());
-      osc_write_log_warning("Load file", c_Tmp.toStdString());
+      osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
     }
   }
   return s32_Retval;
@@ -700,7 +700,7 @@ int32_t C_CamProHandlerFiler::h_LoadFilter(C_CamProFilterData &orc_Filter,
           QString("Unexpected filter items count, expected: %1, got %2")
               .arg(u32_ExpectedSize)
               .arg(orc_Filter.c_FilterItems.size());
-      osc_write_log_warning("Load file", c_Tmp.toStdString());
+      osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
     }
   }
   return s32_Retval;
@@ -799,7 +799,7 @@ void C_CamProHandlerFiler::h_SaveDatabase(
   orc_XmlParser.SetAttributeBool("active", orc_Database.q_Enabled);
   orc_XmlParser.SetAttributeSint32("bus-index", orc_Database.s32_BusIndex);
   orc_XmlParser.CreateNodeChild("name",
-                                orc_Database.c_Name.toStdString());
+                                orc_Database.c_Name.toStdString().c_str());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -849,7 +849,7 @@ int32_t C_CamProHandlerFiler::h_LoadDatabases(
           QString("Unexpected databases count, expected: %1, got %2")
               .arg(u32_ExpectedSize)
               .arg(orc_Databases.size());
-      osc_write_log_warning("Load file", c_Tmp.toStdString());
+      osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
     }
   }
 
@@ -914,9 +914,9 @@ void C_CamProHandlerFiler::h_SaveLoggingConfig(
           .toStdString()
           );
   orc_XmlParser.CreateNodeChild(
-      "directory", orc_LoggingData.c_Directory.toStdString());
+      "directory", orc_LoggingData.c_Directory.toStdString().c_str());
   orc_XmlParser.CreateNodeChild(
-      "file-name", orc_LoggingData.c_FileName.toStdString());
+      "file-name", orc_LoggingData.c_FileName.toStdString().c_str());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

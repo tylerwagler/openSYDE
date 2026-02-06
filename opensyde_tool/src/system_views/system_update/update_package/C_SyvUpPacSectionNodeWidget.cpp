@@ -840,11 +840,11 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
                   if ((q_ParamSetFile == false) &&
                       (q_PemFile == false))
                   {
-                     orc_ApplicationsToWrite.c_FilesToFlash.emplace_back(c_Path.toStdString());
+                     orc_ApplicationsToWrite.c_FilesToFlash.emplace_back(c_Path.toStdString().c_str());
                   }
                   else if (q_ParamSetFile == true)
                   {
-                     orc_ApplicationsToWrite.c_FilesToWriteToNvm.emplace_back(c_Path.toStdString());
+                     orc_ApplicationsToWrite.c_FilesToWriteToNvm.emplace_back(c_Path.toStdString().c_str());
                   }
                   else
                   {
@@ -872,11 +872,11 @@ int32_t C_SyvUpPacSectionNodeWidget::GetUpdatePackage(C_OscSuSequences::C_DoFlas
                   if ((q_ParamSetFile == false) &&
                       (q_PemFile == false))
                   {
-                     opc_AllApplications->c_FilesToFlash.emplace_back(c_Path.toStdString());
+                     opc_AllApplications->c_FilesToFlash.emplace_back(c_Path.toStdString().c_str());
                   }
                   else if (q_ParamSetFile == true)
                   {
-                     opc_AllApplications->c_FilesToWriteToNvm.emplace_back(c_Path.toStdString());
+                     opc_AllApplications->c_FilesToWriteToNvm.emplace_back(c_Path.toStdString().c_str());
                   }
                   else
                   {

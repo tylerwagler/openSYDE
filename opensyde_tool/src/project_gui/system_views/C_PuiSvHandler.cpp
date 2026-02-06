@@ -99,7 +99,7 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_UseDe
    if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile())
    {
       //erase it:
-      s32_Return = std::remove(orc_Path.toStdString());
+      s32_Return = std::remove(orc_Path.toStdString().c_str());
       if (s32_Return != 0)
       {
          s32_Return = C_RD_WR;
@@ -143,7 +143,7 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_UseDe
          }
          if (s32_Return == C_NO_ERR)
          {
-            s32_Return = c_XmlParser.SaveToFile(orc_Path.toStdString());
+            s32_Return = c_XmlParser.SaveToFile(orc_Path.toStdString().c_str());
             if (s32_Return != C_NO_ERR)
             {
                s32_Return = C_RD_WR;
@@ -432,7 +432,7 @@ int32_t C_PuiSvHandler::SetViewName(const uint32_t ou32_Index, const QString & o
    if (ou32_Index < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_Index];
-      rc_View.SetName(orc_Name.toStdString());
+      rc_View.SetName(orc_Name.toStdString().c_str());
    }
    else
    {
@@ -1312,7 +1312,7 @@ int32_t C_PuiSvHandler::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_
    if (ou32_ViewIndex < this->mc_Views.size())
    {
       C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      s32_Retval = rc_View.SetNodeUpdateInformationPemFilePath(ou32_NodeIndex, orc_Value.toStdString());
+      s32_Retval = rc_View.SetNodeUpdateInformationPemFilePath(ou32_NodeIndex, orc_Value.toStdString().c_str());
    }
    else
    {
@@ -3372,7 +3372,7 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading views");
-      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.toStdString());
+      s32_Retval = c_XmlParser.LoadFromFile(orc_Path.toStdString().c_str());
       if (s32_Retval == C_NO_ERR)
       {
          if (c_XmlParser.SelectRoot() == "opensyde-system-views")

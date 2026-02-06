@@ -1492,7 +1492,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
           ou32_NodeIndex, ou32_DpIndex, ou32_ListIndex, oru32_Counter,
           C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT,
           ou32_RelevantChannelNumber != 1UL, ou32_ChannelArrayIndex, true);
-      c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString());
+      c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString().c_str());
       C_TblTreDataElementModel::mh_AddHalcTreeItem(
           pc_ListItem,
           C_OscHalcMagicianUtil::h_GetChanNumVariableName(
@@ -1512,7 +1512,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
           ou32_NodeIndex, ou32_DpIndex, ou32_ListIndex, oru32_Counter,
           C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT,
           ou32_RelevantChannelNumber != 1UL, ou32_ChannelArrayIndex, true);
-      c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString());
+      c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString().c_str());
       C_TblTreDataElementModel::mh_AddHalcTreeItem(
           pc_ListItem,
           C_OscHalcMagicianUtil::h_GetSafetyFlagVariableName(
@@ -1532,7 +1532,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
           ou32_NodeIndex, ou32_DpIndex, ou32_ListIndex, oru32_Counter,
           C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT,
           ou32_RelevantChannelNumber != 1UL, ou32_ChannelArrayIndex, true);
-      c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString());
+      c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString().c_str());
       C_TblTreDataElementModel::mh_AddHalcTreeItem(
           pc_ListItem,
           C_OscHalcMagicianUtil::h_GetUseCaseVariableName(
@@ -1663,7 +1663,7 @@ void C_TblTreDataElementModel::mh_AddHalcItem(
           (ou32_RelevantChannelNumber != 1UL),
       ou32_ChannelArrayIndex, true);
 
-  c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString());
+  c_Id.SetHalChannelName(orc_HalChannelOrDomainName.toStdString().c_str());
 
   C_TblTreDataElementModel::mh_AddHalcTreeItem(
       opc_BaseItem, orc_HalcItem.c_Display, c_Id,

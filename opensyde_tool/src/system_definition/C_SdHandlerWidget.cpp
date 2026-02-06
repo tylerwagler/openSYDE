@@ -983,7 +983,7 @@ void C_SdHandlerWidget::m_Export(void)
                                                         QString::number(this->mu32_Index) +
                                                         "\" because message ID is not unique.";
                               c_Warnings.append(c_Message);
-                              osc_write_log_warning("DBC Export", c_Message.toStdString());
+                              osc_write_log_warning("DBC Export", c_Message.toStdString().c_str());
                               s32_Error += C_WARN;
                            }
                         }
@@ -1030,7 +1030,7 @@ void C_SdHandlerWidget::m_Export(void)
                                                                       +
                                                                       "\" because message ID is not unique. Message is ignored.";
                               c_Warnings.append(c_Message);
-                              osc_write_log_warning("DBC Export", c_Message.toStdString());
+                              osc_write_log_warning("DBC Export", c_Message.toStdString().c_str());
                               s32_Error += C_WARN;
                            }
                         }

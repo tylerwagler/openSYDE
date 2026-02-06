@@ -144,7 +144,7 @@ int32_t C_SyvUpSequences::InitUpSequences(const uint32_t ou32_ViewIndex) {
 
   if (s32_Return == C_NO_ERR) {
     // pem folder is optional -> no error handling
-    mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
+    mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString().c_str());
 
     s32_Return = C_OscComSequencesBase::Init(
         C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinition(),

@@ -255,7 +255,7 @@ void C_CamMetWidget::AddDatabaseOsySysDef(const QString & orc_PathSystemDefiniti
    }
    else
    {
-      s32_Return = this->mpc_Ui->pc_TraceView->StartAddOsySysDef(orc_PathSystemDefinition.toStdString());
+      s32_Return = this->mpc_Ui->pc_TraceView->StartAddOsySysDef(orc_PathSystemDefinition.toStdString().c_str());
    }
 
    if (s32_Return == C_NO_ERR)
@@ -273,7 +273,7 @@ void C_CamMetWidget::AddDatabaseOsySysDef(const QString & orc_PathSystemDefiniti
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetWidget::AddDatabaseDbc(const QString & orc_PathDbc)
 {
-   const int32_t s32_Return = this->mpc_Ui->pc_TraceView->StartAddDbcFile(orc_PathDbc.toStdString());
+   const int32_t s32_Return = this->mpc_Ui->pc_TraceView->StartAddDbcFile(orc_PathDbc.toStdString().c_str());
 
    if (s32_Return == C_NO_ERR)
    {
@@ -292,7 +292,7 @@ void C_CamMetWidget::AddDatabaseDbc(const QString & orc_PathDbc)
 void C_CamMetWidget::RemoveDatabase(const QString & orc_PathDatabase, const QString & orc_OrgPath)
 {
    Q_UNUSED(orc_OrgPath)
-   this->mpc_Ui->pc_TraceView->RemoveDatabase(orc_PathDatabase.toStdString());
+   this->mpc_Ui->pc_TraceView->RemoveDatabase(orc_PathDatabase.toStdString().c_str());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -360,7 +360,7 @@ void C_CamMetWidget::AddLogFileAsc(const QString & orc_FilePath)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetWidget::AddLogFileBlf(const QString & orc_FilePath)
 {
-   const int32_t s32_Result = this->mpc_Ui->pc_TraceView->AddLogFileBlf(orc_FilePath.toStdString());
+   const int32_t s32_Result = this->mpc_Ui->pc_TraceView->AddLogFileBlf(orc_FilePath.toStdString().c_str());
 
    Q_EMIT (this->SigLogFileAddResult(s32_Result));
 }

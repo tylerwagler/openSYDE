@@ -1151,7 +1151,7 @@ void C_SyvDaItPaImageRecordWidget::m_ReportError(const QString & orc_FunctionNam
 
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
-   osc_write_log_info("Write NVM parameters", c_Text.toStdString());
+   osc_write_log_info("Write NVM parameters", c_Text.toStdString().c_str());
 
    c_Message.SetDescription(static_cast<QString>("Function %1 ended with error.").arg(
                                orc_FunctionName));

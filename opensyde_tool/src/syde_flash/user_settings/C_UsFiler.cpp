@@ -88,7 +88,7 @@ int32_t C_UsFiler::h_Save(const C_UsHandler &orc_UserSettings,
     }
     try {
       // Parse ini
-      C_SclIniFile c_Ini(orc_Path.toStdString());
+      C_SclIniFile c_Ini(orc_Path.toStdString().c_str());
       mh_SaveProjectIndependentSection(orc_UserSettings, c_Ini);
     } catch (...) {
       s32_Retval = C_NOACT;
@@ -119,7 +119,7 @@ int32_t C_UsFiler::h_Load(C_UsHandler &orc_UserSettings,
 
   if (orc_Path.compare("") != 0) {
     try {
-      C_SclIniFile c_Ini(orc_Path.toStdString());
+      C_SclIniFile c_Ini(orc_Path.toStdString().c_str());
       s32_Retval = C_NO_ERR;
 
       orc_UserSettings.SetDefault();
@@ -185,7 +185,7 @@ void C_UsFiler::mh_SaveProjectIndependentSection(
       static_cast<int32_t>(orc_UserSettings.GetPopOpenSection()));
   orc_Ini.WriteString(
       "Settings", "CustomCanDllPath",
-      orc_UserSettings.GetCustomCanDllPath().toStdString());
+      orc_UserSettings.GetCustomCanDllPath().toStdString().c_str());
   orc_Ini.WriteString(
       "Settings", "CanDllType",
       C_UsFiler::mh_GetStringFromDllType(orc_UserSettings.GetCanDllType())

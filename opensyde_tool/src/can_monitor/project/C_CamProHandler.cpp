@@ -985,7 +985,7 @@ int32_t C_CamProHandler::SaveToFile(const QString &orc_Path) {
     if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile()) {
       // erase it:
       int32_t s32_ReturnRemove;
-      s32_ReturnRemove = std::remove(orc_Path.toStdString());
+      s32_ReturnRemove = std::remove(orc_Path.toStdString().c_str());
       if (s32_ReturnRemove != 0) {
         osc_write_log_error("Saving project",
                             "Could not erase pre-existing file \"" + orc_Path +

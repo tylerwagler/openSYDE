@@ -182,7 +182,7 @@ int32_t C_CieExportDbc::h_ExportNetwork(
 
   // save DBC export to file
   if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN)) {
-    std::ofstream c_File(orc_File.toStdString());
+    std::ofstream c_File(orc_File.toStdString().c_str());
 
     if (c_File.is_open()) {
       c_Message = "Saving network to file ...";

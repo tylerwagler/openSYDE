@@ -827,7 +827,7 @@ void C_GiSvDaRectBaseGroup::HandleManualOperationFinished(const int32_t os32_Res
 
          osc_write_log_info("Manual operation",
                             static_cast<QString>("The C_SyvComDataDealer function ended with error code \"%1\"").arg(
-                               C_Uti::h_StwError(os32_Result)).toStdString());
+                               C_Uti::h_StwError(os32_Result)).toStdString().c_str());
          if (s32_Return == C_NO_ERR)
          {
             //Change icon

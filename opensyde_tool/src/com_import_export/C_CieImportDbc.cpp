@@ -248,7 +248,7 @@ int32_t C_CieImportDbc::mh_ReadFile(const QString &orc_File,
     // when reading files with not supported
     //  content
     try {
-      std::ifstream c_InputFile(orc_File.toStdString());
+      std::ifstream c_InputFile(orc_File.toStdString().c_str());
       if (c_InputFile.is_open()) {
         c_InputFile >> orc_Network;
         c_InputFile.close();
@@ -1190,7 +1190,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(
 
   // search Send Type
   const auto c_DbcAttributeDefinition =
-      orc_DbcNetwork.attributeDefinitions.find(mhc_SEND_TYPE.toStdString());
+      orc_DbcNetwork.attributeDefinitions.find(mhc_SEND_TYPE.toStdString().c_str());
 
   // attribute found?
   if (c_DbcAttributeDefinition != orc_DbcNetwork.attributeDefinitions.end()) {
@@ -1206,7 +1206,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(
 
   // search default send type
   const auto c_DbcAttributeDefaults =
-      orc_DbcNetwork.attributeDefaults.find(mhc_SEND_TYPE.toStdString());
+      orc_DbcNetwork.attributeDefaults.find(mhc_SEND_TYPE.toStdString().c_str());
 
   // attribute found?
   if (c_DbcAttributeDefaults != orc_DbcNetwork.attributeDefaults.end()) {
@@ -1229,7 +1229,7 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(
 
   // search default initial value
   const auto c_DbcAttributeDefaultsInit =
-      orc_DbcNetwork.attributeDefaults.find(mhc_INITIAL_VALUE.toStdString());
+      orc_DbcNetwork.attributeDefaults.find(mhc_INITIAL_VALUE.toStdString().c_str());
 
   // attribute found?
   mhq_DefaultValueDefined = false;

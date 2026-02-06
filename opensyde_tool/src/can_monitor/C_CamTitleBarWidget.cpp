@@ -312,7 +312,7 @@ int32_t C_CamTitleBarWidget::LoadConfig(const QString & orc_FilePath)
    int32_t s32_Return;
 
    QApplication::setOverrideCursor(Qt::WaitCursor);
-   s32_Return = C_CamProHandler::h_GetInstance()->LoadFromFile(orc_FilePath.toStdString());
+   s32_Return = C_CamProHandler::h_GetInstance()->LoadFromFile(orc_FilePath.toStdString().c_str());
    QApplication::restoreOverrideCursor();
 
    if (s32_Return != C_NO_ERR)
@@ -424,7 +424,7 @@ bool C_CamTitleBarWidget::m_DoSaveToFileAction(const QString & orc_File)
    int32_t s32_Return;
 
    QApplication::setOverrideCursor(Qt::WaitCursor);
-   s32_Return = C_CamProHandler::h_GetInstance()->SaveToFile(orc_File.toStdString());
+   s32_Return = C_CamProHandler::h_GetInstance()->SaveToFile(orc_File.toStdString().c_str());
    QApplication::restoreOverrideCursor();
 
    if (s32_Return != C_NO_ERR)

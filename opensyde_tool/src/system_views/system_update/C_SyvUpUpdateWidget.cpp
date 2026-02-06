@@ -2224,7 +2224,7 @@ void C_SyvUpUpdateWidget::m_HandleNodePreconditionError(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_UpdateReportText(
     const QString &orc_NewTextPart) const {
-  osc_write_log_info("Update Node", orc_NewTextPart.toStdString());
+  osc_write_log_info("Update Node", orc_NewTextPart.toStdString().c_str());
 }
 
 //----------------------------------------------------------------------------------------------------------------------

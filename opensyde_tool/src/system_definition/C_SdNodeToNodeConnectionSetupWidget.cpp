@@ -511,7 +511,7 @@ void C_SdNodeToNodeConnectionSetupWidget::m_HandleTypeChange(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNodeToNodeConnectionSetupWidget::m_OnBusNameChange(const QString & orc_Value) const
 {
-   const bool q_Valid = C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(orc_Value.toStdString());
+   const bool q_Valid = C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(orc_Value.toStdString().c_str());
 
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditBusName, "Valid", q_Valid);
 }
