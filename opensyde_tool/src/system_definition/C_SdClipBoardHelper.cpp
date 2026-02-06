@@ -31,6 +31,7 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_gui_logic;
 using namespace stw::errors;
 
 
