@@ -68,8 +68,8 @@ if not exist build.ninja (
 )
 
 rem perform actual build
-echo [STEP 2/3] Building with Ninja (parallel jobs: 24)...
-cmake.exe --build . --target all -- -j24
+echo [STEP 2/3] Building with Ninja (parallel jobs: 64)...
+cmake.exe --build . --target all -- -j64
 if ERRORLEVEL 1 (
     echo ERROR: Build failed
     cd ..\bat
