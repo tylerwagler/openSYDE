@@ -92,7 +92,8 @@
       "Bash(Select-String -Pattern \"SUCCESS|FAILED|error:\")",
       "Bash(Select-Object -Last 20)",
       "Bash(for file in system_definition/C_SdTopologyScene.cpp system_views/system_update/update_package/C_SyvUpPacNodeWidget.cpp system_views/system_update/C_SyvUpUpdateWidget.cpp system_views/system_update/update_package/C_SyvUpPacListWidget.cpp)",
-      "Bash(do sed -i 's/\\\\.c_str\\(\\)//g' \"$file\")"
+      "Bash(do sed -i 's/\\\\.c_str\\(\\)//g' \"$file\")",
+      "Bash(do head -30 \"$file\")"
     ]
   }
 }
