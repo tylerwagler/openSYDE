@@ -1,9 +1,0 @@
-src/graphic_items/base_items/C_GiBiArrow.cpp
-src/graphic_items/base_items/C_GiBiBoundary.cpp
-src/graphic_items/base_items/C_GiBiImageGroup.cpp
-src/graphic_items/base_items/C_GiBiTextElement.cpp
-src/graphic_items/system_definition_items/C_GiSdArrow.cpp
-src/graphic_items/system_definition_items/C_GiSdBoundary.cpp
-src/project_gui/base/C_PuiBsElements.cpp
-src/project_gui/base/C_PuiBsLineArrow.cpp
-src/system_views/system_update/update_package/C_SyvUpPacListWidget.cpp

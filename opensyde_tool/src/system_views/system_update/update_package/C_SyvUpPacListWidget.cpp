@@ -37,6 +37,7 @@
 #include "C_SyvUpPacConfig.hpp"
 #include "C_SyvUpPacConfigFiler.hpp"
 #include "C_UsHandler.hpp"
+#include "C_Uti.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------

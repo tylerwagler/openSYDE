@@ -1,7 +1,0 @@
-src/project_gui/base/C_PuiBsLineArrow.cpp
-src/system_views/communication/C_SyvComDriverDiag.cpp
-src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArDelegate.cpp
-src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArModel.cpp
-src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArView.cpp
-src/system_views/dashboards/items/param/array_editor/C_SyvDaItPaArWidget.cpp
-src/system_views/system_update/update_package/C_SyvUpPacListWidget.cpp

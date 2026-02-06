@@ -1169,7 +1169,7 @@ const
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != NULL)
       {
-         s32_Return = pc_DataDealer->NvmSafeCreateCleanFileWithoutCrc(orc_Path, orc_FileInfo);
+         s32_Return = pc_DataDealer->NvmSafeCreateCleanFileWithoutCrc(ororc_Path, orc_FileInfo);
       }
       else
       {
@@ -1210,7 +1210,7 @@ int32_t C_SyvComDriverDiag::NvmSafeReadFileWithoutCrc(const uint32_t ou32_NodeIn
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != NULL)
       {
-         s32_Return = pc_DataDealer->NvmSafeReadFileWithoutCrc(orc_Path);
+         s32_Return = pc_DataDealer->NvmSafeReadFileWithoutCrc(ororc_Path);
       }
       else
       {
@@ -1249,7 +1249,7 @@ int32_t C_SyvComDriverDiag::NvmSafeCheckParameterFileContents(const uint32_t ou3
    else
    {
       s32_Return = this->mc_DataDealers[u32_ActiveIndex]->NvmSafeCheckParameterFileContents(
-         orc_Path, orc_DataPoolLists);
+         ororc_Path, orc_DataPoolLists);
    }
    return s32_Return;
 }
@@ -1283,7 +1283,7 @@ int32_t C_SyvComDriverDiag::NvmSafeUpdateCrcForFile(const uint32_t ou32_NodeInde
       C_SyvComDataDealer * const pc_DataDealer = mc_DataDealers[u32_ActiveIndex];
       if (pc_DataDealer != NULL)
       {
-         s32_Return = pc_DataDealer->NvmSafeUpdateCrcForFile(orc_Path);
+         s32_Return = pc_DataDealer->NvmSafeUpdateCrcForFile(ororc_Path);
       }
       else
       {

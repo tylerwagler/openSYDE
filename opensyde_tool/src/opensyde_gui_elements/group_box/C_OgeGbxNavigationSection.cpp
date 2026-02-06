@@ -16,6 +16,7 @@
 #include "C_OgeGbxNavigationSection.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */

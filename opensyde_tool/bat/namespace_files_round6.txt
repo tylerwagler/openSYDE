@@ -1,9 +1,0 @@
-src/graphic_items/system_view_items/dashboard/C_GiSvDaSpinBoxBase.cpp
-src/opensyde_gui_elements/label/C_OgeLabAdaptiveSize.cpp
-src/opensyde_gui_elements/label/C_OgeLabDashboardLabelValue.cpp
-src/project_gui/base/C_PuiBsLineArrow.cpp
-src/project_gui/system_views/dashboard/C_PuiSvDbSlider.cpp
-src/project_gui/system_views/dashboard/C_PuiSvDbSpinBox.cpp
-src/system_views/dashboards/items/C_SyvDaItDashboardSliderWidget.cpp
-src/system_views/dashboards/items/C_SyvDaItUtil.cpp
-src/system_views/system_update/update_package/C_SyvUpPacListWidget.cpp
