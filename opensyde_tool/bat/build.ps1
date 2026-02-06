@@ -1,15 +1,16 @@
 # openSYDE Build Script (PowerShell)
-# This script provides a unified way to build all openSYDE components
-# Usage: .\build.ps1 [-Component <name>] [-BuildType <Release|Debug>] [-Clean]
+# Unified build script for all openSYDE components with Qt deployment.
+#
+# Usage: .\build.ps1 [-Component <name>] [-BuildType <Release|Debug>] [-Clean] [-SkipDeploy]
 #
 # Examples:
-#   .\build.ps1                              # Build main GUI (Release)
-#   .\build.ps1 -Component Core              # Build only opensyde_core library
+#   .\build.ps1                              # Build main GUI (Release) + deploy Qt DLLs
 #   .\build.ps1 -Component CANMonitor        # Build CAN Monitor
 #   .\build.ps1 -Component SYDEflash         # Build SYDEflash
 #   .\build.ps1 -Component All               # Build all components
 #   .\build.ps1 -Clean                       # Clean and rebuild
 #   .\build.ps1 -BuildType Debug             # Debug build
+#   .\build.ps1 -SkipDeploy                  # Build without deploying Qt DLLs
 
 param(
     [Parameter(Mandatory = $false)]
@@ -21,52 +22,59 @@ param(
     [string]$BuildType = "Release",
 
     [Parameter(Mandatory = $false)]
-    [switch]$Clean
+    [switch]$Clean,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$SkipDeploy
 )
 
 # Configuration
 $ErrorActionPreference = "Stop"
 $QtPath = "C:\Qt\6.10.1\mingw_64"
 $QtToolsPath = "C:\Qt\Tools"
+$WinDeployQt = "$QtPath\bin\windeployqt6.exe"
 $ScriptDir = $PSScriptRoot
 $ToolchainFile = (Resolve-Path "$ScriptDir\..\pjt\toolchain_windows.cmake").Path
-$LogsDir = "logs"
+$ResultDir = (Resolve-Path "$ScriptDir\..\result").Path
 
-# Create logs directory if it doesn't exist
-if (-not (Test-Path $LogsDir)) {
-    New-Item -ItemType Directory -Path $LogsDir -Force | Out-Null
-}
-
-# Build configurations (TempFolderBase will have _$BuildType appended dynamically)
+# Build configurations
 $BuildConfigs = @{
     "GUI"        = @{
-        ProjectFolder  = "..\pjt\openSYDE"
+        ProjectFolder = "..\pjt\openSYDE"
         TempFolderBase = "..\temp_openSYDE"
-        Name           = "openSYDE GUI"
-        Target         = "all"
+        Name          = "openSYDE GUI"
+        Target        = "all"
+        ExeName       = "openSYDE.exe"
+        InstallDir    = "result\tool"
     }
     "Core"       = @{
-        ProjectFolder  = "..\pjt\openSYDE"
+        ProjectFolder = "..\pjt\openSYDE"
         TempFolderBase = "..\temp_openSYDE"
-        Name           = "opensyde_core library"
-        Target         = "opensyde_core"
-        SkipInstall    = $true
+        Name          = "opensyde_core library"
+        Target        = "opensyde_core"
+        SkipInstall   = $true
+        SkipDeploy    = $true
     }
     "CANMonitor" = @{
-        ProjectFolder  = "..\pjt\openSYDE_CAN_Monitor"
+        ProjectFolder = "..\pjt\openSYDE_CAN_Monitor"
         TempFolderBase = "..\temp_openSYDE_CAN_Monitor"
-        Name           = "CAN Monitor"
-        Target         = "all"
+        Name          = "CAN Monitor"
+        Target        = "all"
+        ExeName       = "openSYDE_CAN_Monitor.exe"
+        InstallDir    = "result\tool\CAN_Monitor"
     }
     "SYDEflash"  = @{
-        ProjectFolder  = "..\pjt\SYDEflash"
+        ProjectFolder = "..\pjt\SYDEflash"
         TempFolderBase = "..\temp_SYDEflash"
-        Name           = "SYDEflash"
-        Target         = "all"
+        Name          = "SYDEflash"
+        Target        = "all"
+        ExeName       = "SYDEflash.exe"
+        InstallDir    = "result\utilities\SYDEflash"
     }
 }
 
-# Functions
+# ---- Helper Functions ----
+
 function Write-BuildHeader {
     param([string]$Message)
     Write-Host "`n========================================" -ForegroundColor Cyan
@@ -87,23 +95,70 @@ function Write-BuildError {
 function Test-Prerequisites {
     Write-BuildStep "Checking prerequisites..."
 
-    # Check Qt installation
     if (-not (Test-Path $QtPath)) {
         Write-BuildError "Qt 6.10.1 MinGW not found at: $QtPath"
         Write-Host "Please install Qt 6.10.1 with MinGW 64-bit component" -ForegroundColor Yellow
         exit 1
     }
 
-    # Check Qt Tools
     if (-not (Test-Path "$QtToolsPath\CMake_64\bin\cmake.exe")) {
-        Write-BuildError "CMake not found at: $QtToolsPath\CMake_64"
-        Write-Host "Please install Qt Tools (CMake, Ninja, MinGW)" -ForegroundColor Yellow
+        Write-BuildError "CMake not found at: $QtToolsPath\CMake_64\bin\cmake.exe"
         exit 1
     }
 
-    Write-Host "  OK - Qt 6.10.1 found" -ForegroundColor Green
-    Write-Host "  OK - CMake found" -ForegroundColor Green
-    Write-Host "  OK - MinGW found" -ForegroundColor Green
+    if (-not (Test-Path "$QtToolsPath\Ninja\ninja.exe")) {
+        Write-BuildError "Ninja not found at: $QtToolsPath\Ninja\ninja.exe"
+        exit 1
+    }
+
+    if (-not (Test-Path "$QtToolsPath\mingw1310_64\bin\g++.exe")) {
+        Write-BuildError "MinGW 13.1.0 not found at: $QtToolsPath\mingw1310_64"
+        exit 1
+    }
+
+    if (-not $SkipDeploy -and -not (Test-Path $WinDeployQt)) {
+        Write-BuildError "windeployqt6 not found at: $WinDeployQt"
+        exit 1
+    }
+
+    Write-Host "  Qt 6.10.1  : $QtPath" -ForegroundColor DarkGray
+    Write-Host "  CMake      : $QtToolsPath\CMake_64\bin\cmake.exe" -ForegroundColor DarkGray
+    Write-Host "  Ninja      : $QtToolsPath\Ninja\ninja.exe" -ForegroundColor DarkGray
+    Write-Host "  MinGW      : $QtToolsPath\mingw1310_64" -ForegroundColor DarkGray
+    Write-Host "  windeployqt: $WinDeployQt" -ForegroundColor DarkGray
+    Write-Host ""
+}
+
+function Deploy-QtDlls {
+    param(
+        [string]$ExePath,
+        [string]$ComponentName
+    )
+
+    Write-BuildStep "Deploying Qt DLLs for $ComponentName..."
+
+    if (-not (Test-Path $ExePath)) {
+        Write-BuildError "Executable not found: $ExePath"
+        throw "Cannot deploy: executable not found at $ExePath"
+    }
+
+    $deployDir = Split-Path $ExePath -Parent
+
+    # windeployqt needs MinGW in PATH to find gcc runtime DLLs
+    $env:PATH = "$script:QtToolsPath\mingw1310_64\bin;$script:QtPath\bin;$env:PATH"
+
+    & $script:WinDeployQt `
+        --dir $deployDir `
+        --no-translations `
+        --no-system-d3d-compiler `
+        --no-opengl-sw `
+        $ExePath
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "windeployqt failed for $ExePath with exit code $LASTEXITCODE"
+    }
+
+    Write-Host "  Deployed to: $deployDir" -ForegroundColor DarkGray
 }
 
 function Build-Component {
@@ -112,13 +167,16 @@ function Build-Component {
         [string]$TempFolder,
         [string]$ComponentName,
         [string]$Target = "all",
-        [bool]$SkipInstall = $false
+        [bool]$SkipInstallStep = $false,
+        [bool]$SkipDeployStep = $false,
+        [string]$ExeName = "",
+        [string]$InstallDir = ""
     )
 
     Write-BuildHeader "Building $ComponentName ($BuildType)"
 
-    # Setup environment (use script-scope variables)
-    $env:PATH = "$script:QtToolsPath\mingw1310_64\bin;$script:QtToolsPath\CMake_64\bin;$script:QtToolsPath\Ninja;$script:QtPath;$env:PATH"
+    # Setup environment
+    $env:PATH = "$script:QtToolsPath\mingw1310_64\bin;$script:QtToolsPath\CMake_64\bin;$script:QtToolsPath\Ninja;$script:QtPath\bin;$env:PATH"
 
     # Create temp folder if needed
     if (-not (Test-Path $TempFolder)) {
@@ -132,59 +190,70 @@ function Build-Component {
         Remove-Item "$TempFolder\*" -Recurse -Force
     }
 
-    # Change to temp folder
     Push-Location $TempFolder
 
     try {
-        # CMake configure (only if build.ninja doesn't exist)
+        # Step 1: CMake configure
         if (-not (Test-Path "build.ninja")) {
-            Write-BuildStep "Running CMake configure..."
+            Write-BuildStep "Step 1/3 - CMake configure..."
             & cmake.exe -S $ProjectFolder -B . -GNinja "-DCMAKE_BUILD_TYPE=$BuildType" -DCMAKE_TOOLCHAIN_FILE="$script:ToolchainFile"
             if ($LASTEXITCODE -ne 0) {
                 throw "CMake configure failed with exit code $LASTEXITCODE"
             }
         }
         else {
-            Write-BuildStep "Using existing CMake configuration (use -Clean to reconfigure)"
+            Write-BuildStep "Step 1/3 - Using existing CMake configuration (use -Clean to reconfigure)"
         }
 
-        # Build
-        Write-BuildStep "Building target '$Target' with Ninja (parallel jobs: 24)..."
+        # Step 2: Build
+        Write-BuildStep "Step 2/3 - Building target '$Target' (parallel jobs: 8)..."
         $buildStart = Get-Date
-        & cmake.exe --build . --target $Target -- -j99
+        & cmake.exe --build . --target $Target -- -j8
         if ($LASTEXITCODE -ne 0) {
             throw "Build failed with exit code $LASTEXITCODE"
         }
         $buildTime = (Get-Date) - $buildStart
-        Write-Host "  OK - Build completed in $($buildTime.TotalSeconds.ToString('F1')) seconds" -ForegroundColor Green
+        Write-Host "  Build completed in $($buildTime.TotalSeconds.ToString('F1'))s" -ForegroundColor DarkGray
 
-        # Install (skip for library-only builds)
-        if (-not $SkipInstall) {
-            Write-BuildStep "Installing binaries to result folder..."
+        # Step 3: Install
+        if (-not $SkipInstallStep) {
+            Write-BuildStep "Step 3/3 - Installing to result folder..."
             & cmake.exe --build . --target install
             if ($LASTEXITCODE -ne 0) {
                 throw "Install failed with exit code $LASTEXITCODE"
             }
         }
+        else {
+            Write-BuildStep "Step 3/3 - Install skipped (library-only build)"
+        }
 
-        Write-Host "`nOK - $ComponentName build SUCCESS" -ForegroundColor Green -BackgroundColor DarkGreen
+        Write-Host "`n  $ComponentName build SUCCESS" -ForegroundColor Green -BackgroundColor DarkGreen
 
     }
     catch {
         Write-BuildError $_.Exception.Message
-        Write-Host "`nFAIL - $ComponentName build FAILED" -ForegroundColor Red -BackgroundColor DarkRed
+        Write-Host "`n  $ComponentName build FAILED" -ForegroundColor Red -BackgroundColor DarkRed
         Pop-Location
         exit 1
     }
 
     Pop-Location
+
+    # Deploy Qt DLLs
+    if (-not $SkipDeployStep -and -not $script:SkipDeploy -and $ExeName -ne "" -and $InstallDir -ne "") {
+        $exeFullPath = Join-Path $ScriptDir "..\$InstallDir\$ExeName"
+        $exeFullPath = [System.IO.Path]::GetFullPath($exeFullPath)
+        Deploy-QtDlls -ExePath $exeFullPath -ComponentName $ComponentName
+    }
 }
 
-# Main execution
+# ---- Main ----
+
 Write-BuildHeader "openSYDE Build System"
-Write-Host "Component:  $Component" -ForegroundColor White
-Write-Host "Build Type: $BuildType" -ForegroundColor White
-Write-Host "Clean:      $Clean" -ForegroundColor White
+Write-Host "  Component : $Component" -ForegroundColor White
+Write-Host "  Build Type: $BuildType" -ForegroundColor White
+Write-Host "  Clean     : $Clean" -ForegroundColor White
+Write-Host "  Deploy Qt : $(-not $SkipDeploy)" -ForegroundColor White
 
 Test-Prerequisites
 
@@ -199,13 +268,15 @@ if ($Component -eq "All") {
             -TempFolder $tempFolder `
             -ComponentName $config.Name `
             -Target $config.Target `
-            -SkipInstall ($config.SkipInstall -eq $true)
+            -SkipInstallStep ($config.SkipInstall -eq $true) `
+            -SkipDeployStep ($config.SkipDeploy -eq $true) `
+            -ExeName $config.ExeName `
+            -InstallDir $config.InstallDir
     }
 
     $totalTime = (Get-Date) - $totalStart
     Write-BuildHeader "All Components Built Successfully"
-    Write-Host "Total build time: $($totalTime.TotalMinutes.ToString('F1')) minutes" -ForegroundColor Green
-
+    Write-Host "Total time: $($totalTime.TotalMinutes.ToString('F1')) minutes" -ForegroundColor Green
 }
 else {
     $config = $BuildConfigs[$Component]
@@ -214,7 +285,10 @@ else {
         -TempFolder $tempFolder `
         -ComponentName $config.Name `
         -Target $config.Target `
-        -SkipInstall ($config.SkipInstall -eq $true)
+        -SkipInstallStep ($config.SkipInstall -eq $true) `
+        -SkipDeployStep ($config.SkipDeploy -eq $true) `
+        -ExeName $config.ExeName `
+        -InstallDir $config.InstallDir
 }
 
-Write-Host "`nBuild artifacts are in: opensyde_tool\result" -ForegroundColor Cyan
+Write-Host "`nBuild artifacts: opensyde_tool\result\" -ForegroundColor Cyan

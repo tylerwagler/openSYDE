@@ -10,14 +10,12 @@ openSYDE is an open-source software development environment by STW (Sensor-Techn
 
 All builds use **CMake** with **Ninja** generator and **MinGW 13.1.0** compiler.
 
-### Quick Start (For Agents/Automation)
-
-**Recommended: PowerShell script** (better error handling, works in all shells)
+### Quick Start
 
 ```powershell
 cd opensyde_tool/bat
 
-# Build main GUI application
+# Build main GUI application (includes Qt DLL deployment)
 .\build.ps1
 
 # Build CAN Monitor
@@ -34,20 +32,9 @@ cd opensyde_tool/bat
 
 # Debug build
 .\build.ps1 -BuildType Debug
-```
 
-**Alternative: Batch files**
-
-```batch
-cd opensyde_tool\bat
-
-# Build all components
-build_all.bat
-
-# Or build individual components
-build_release.bat              # Main GUI (openSYDE)
-build_can_monitor_release.bat  # CAN Monitor
-build_syde_flash_release.bat   # SYDEflash
+# Build without deploying Qt DLLs
+.\build.ps1 -SkipDeploy
 ```
 
 ### Prerequisites
@@ -78,25 +65,26 @@ The build system follows these steps:
    - To reconfigure: Delete temp folder or use `build.ps1 -Clean`
 
 2. **Build** (Ninja): Compiles source code
-   - Uses 24 parallel jobs (`-j24`)
+   - Uses 8 parallel jobs (`-j8`)
    - Build directory: `opensyde_tool/temp_<Component>_<BuildType>/`
 
 3. **Install** (CMake): Copies binaries to result folder
-   - Output: `opensyde_tool/result/`
-   - Executables:
-     - `openSYDE.exe` (main GUI)
-     - `openSYDE_CAN_Monitor.exe`
-     - `SYDEflash.exe`
+
+4. **Deploy** (windeployqt6): Copies required Qt DLLs and plugins alongside each executable
+   - Each executable's folder becomes self-contained and runnable
+   - Skip with `-SkipDeploy` if only checking compilation
 
 ### Build Outputs
 
 All build artifacts go to: **`opensyde_tool/result/`**
 
-| Component | Executable | Purpose |
-|-----------|------------|---------|
-| openSYDE GUI | `openSYDE.exe` | Main system definition tool |
-| CAN Monitor | `openSYDE_CAN_Monitor.exe` | CAN message monitoring |
-| SYDEflash | `SYDEflash.exe` | Firmware flashing tool |
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| openSYDE GUI | `result/tool/openSYDE.exe` | Main system definition tool |
+| CAN Monitor | `result/tool/CAN_Monitor/openSYDE_CAN_Monitor.exe` | CAN message monitoring |
+| SYDEflash | `result/utilities/SYDEflash/SYDEflash.exe` | Firmware flashing tool |
+
+Each folder also contains the Qt DLLs and plugins needed to run the executable.
 
 ### Troubleshooting Builds
 
@@ -105,18 +93,17 @@ All build artifacts go to: **`opensyde_tool/result/`**
 **Symptom:** `CMake Error: ...` during configure step
 
 **Solutions:**
-1. Delete temp folder and rebuild:
-   ```batch
-   rmdir /S /Q opensyde_tool\temp_openSYDE_Release
+1. Clean rebuild:
+   ```powershell
    cd opensyde_tool\bat
-   build_release.bat
+   .\build.ps1 -Clean
    ```
 
 2. Verify Qt installation paths exist:
-   ```batch
-   dir C:\Qt\6.10.1\mingw_64
-   dir C:\Qt\Tools\CMake_64\bin\cmake.exe
-   dir C:\Qt\Tools\Ninja\ninja.exe
+   ```powershell
+   Test-Path C:\Qt\6.10.1\mingw_64
+   Test-Path C:\Qt\Tools\CMake_64\bin\cmake.exe
+   Test-Path C:\Qt\Tools\Ninja\ninja.exe
    ```
 
 #### Compilation Errors
@@ -135,87 +122,23 @@ All build artifacts go to: **`opensyde_tool/result/`**
 
 **Not a build system issue** - these are code-level problems being addressed in Phase 1.
 
-#### Build Script Issues
-
-**Symptom:** `'build_with_cmake' is not recognized as an internal or external command`
-
-**Solution:** Use PowerShell script instead:
-```powershell
-.\build.ps1 -Component <name>
-```
-
-Or run cmake commands directly (see `opensyde_tool/bat/BUILD_README.md` for details).
-
-### Build Times
-
-Approximate build times (24 parallel jobs, modern hardware):
-
-- Main GUI: 3-5 minutes
-- CAN Monitor: 2-3 minutes
-- SYDEflash: 2-3 minutes
-- **All components**: 7-11 minutes (clean build)
-
 ### For AI Agents
 
-**Always use the PowerShell script** for automated builds:
-
 ```powershell
-# Recommended approach for agents
 cd opensyde_tool/bat
-
-# Build with error handling
-try {
-    .\build.ps1 -Component All
-    Write-Host "Build succeeded"
-} catch {
-    Write-Host "Build failed: $_"
-    exit 1
-}
+.\build.ps1 -Component All
 ```
 
-**Why PowerShell?**
-- ✅ Better error checking and reporting
-- ✅ Colored output for parsing
-- ✅ Prerequisite validation (checks Qt paths)
-- ✅ Works in Git Bash (via `pwsh`)
-- ✅ Clear step-by-step progress
-- ✅ Returns proper exit codes
-
-**Batch files** work but have limitations:
-- Less error information
-- Harder to debug
-- May not work in Git Bash
+The script validates prerequisites, builds, installs, and deploys Qt DLLs automatically. Use `-SkipDeploy` when you only need to verify compilation.
 
 ### Build Script Reference
 
-| Script | Purpose | Usage |
-|--------|---------|-------|
-| **`build.ps1`** | **PowerShell build (recommended)** | `.\build.ps1 -Component <name>` |
-| `build_all.bat` | Build all components | `build_all.bat [Release\|Debug]` |
-| `build_with_cmake.bat` | Core build logic (called by others) | Internal use |
-| `build_release.bat` | Build main GUI | `build_release.bat` |
-| `build_can_monitor_release.bat` | Build CAN Monitor | `build_can_monitor_release.bat` |
-| `build_syde_flash_release.bat` | Build SYDEflash | `build_syde_flash_release.bat` |
-
-📖 **Detailed documentation**: See `opensyde_tool/bat/BUILD_README.md`
-
-### Advanced Build Options
-
-**Clean build (reconfigure CMake):**
-```powershell
-.\build.ps1 -Clean
-```
-
-**Debug build:**
-```powershell
-.\build.ps1 -BuildType Debug
-```
-
-**Change parallel jobs** (edit `build_with_cmake.bat` line 31):
-```batch
-cmake.exe --build . --target all -- -j24
-```
-Change `-j24` to desired number (typically CPU cores × 2).
+| Parameter | Values | Default | Description |
+|-----------|--------|---------|-------------|
+| `-Component` | `GUI`, `Core`, `CANMonitor`, `SYDEflash`, `All` | `GUI` | What to build |
+| `-BuildType` | `Release`, `Debug` | `Release` | Build configuration |
+| `-Clean` | switch | off | Delete temp folder and reconfigure CMake |
+| `-SkipDeploy` | switch | off | Skip windeployqt Qt DLL deployment |
 
 ### Common Build Errors Summary
 
