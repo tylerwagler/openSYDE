@@ -27,6 +27,7 @@
 #include <QPoint>
 #include <QSize>
 #include <QString>
+#include <QStringList>
 #include <QVector>
 
 
@@ -117,9 +118,9 @@ public:
   C_UsNode GetProjSdNode(const QString &orc_NodeName) const;
   C_UsCommunication GetProjSdBus(const QString &orc_BusName) const;
   C_UsSystemView GetProjSvSetupView(const QString &orc_ViewName) const;
-  const QList<QString> GetProjSdNodeKeysInternal(void) const;
-  const QList<QString> GetProjSdBusKeysInternal(void) const;
-  const QList<QString> GetProjSvSetupViewKeysInternal(void) const;
+  const QStringList GetProjSdNodeKeysInternal(void) const;
+  const QStringList GetProjSdBusKeysInternal(void) const;
+  const QStringList GetProjSvSetupViewKeysInternal(void) const;
   void GetProjLastScreenMode(int32_t &ors32_SysDefSubMode,
                              uint32_t &oru32_SysDefIndex,
                              uint32_t &oru32_SysDefFlag,
@@ -200,14 +201,14 @@ public:
                                       const uint32_t ou32_SelectedInterface);
   void SetProjSdNodeDatapoolOpenListNames(const QString &orc_NodeName,
                                           const QString &orc_DatapoolName,
-                                          const std::vector<QString> &orc_New);
+                                          const QStringList &orc_New);
   void
   SetProjSdNodeDatapoolSelectedListNames(const QString &orc_NodeName,
                                          const QString &orc_DatapoolName,
-                                         const std::vector<QString> &orc_New);
+                                         const QStringList &orc_New);
   void SetProjSdNodeDatapoolSelectedVariableNames(
       const QString &orc_NodeName, const QString &orc_DatapoolName,
-      const std::vector<QString> &orc_New);
+      const QStringList &orc_New);
   void SetProjSdNodeDatapoolCommMessageOverviewColumnWidth(
       const QString &orc_NodeName, const QString &orc_DatapoolName,
       const QString &orc_ListName, const std::vector<int32_t> &orc_Value);

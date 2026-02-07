@@ -12,6 +12,7 @@
 #include <vector>
 
 #include <QString>
+#include <QStringList>
 #include "C_OscHalcDefBase.hpp"
 #include "C_OscHalcDefDomain.hpp"
 #include "C_OscHalcConfigChannel.hpp"
@@ -36,7 +37,7 @@ public:
 
    void CheckChannelNameUnique(const uint32_t ou32_ChannelIndex, bool * const opq_NameConflict) const;
    int32_t CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex, bool & orq_IsLinked,
-                              std::vector<QString> * const opc_LinkedChannelNames,
+                              QStringList * const opc_LinkedChannelNames,
                               std::vector<uint32_t> * const opc_LinkedChannelIndices,
                               const uint32_t * const opu32_UseCaseIndex) const;
    int32_t ResetChannelToDefault(const uint32_t ou32_ChannelIndex);

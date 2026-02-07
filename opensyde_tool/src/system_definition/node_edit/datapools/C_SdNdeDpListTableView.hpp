@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QStringList>
 #include <QUndoStack>
 #include "stwtypes.hpp"
 #include "C_TblViewScroll.hpp"
@@ -66,8 +67,8 @@ public:
    bool IsSelected(void) const;
    void UpdateSelectionForNewDataSetColumn(const int32_t os32_DataSetColumn);
    void Reset(void);
-   void SetSelectedVariableNames(const std::vector<QString> & orc_VariableNames);
-   std::vector<QString> GetSelectedVariableNames(void) const;
+   void SetSelectedVariableNames(const QStringList & orc_VariableNames);
+   QStringList GetSelectedVariableNames(void) const;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

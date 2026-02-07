@@ -100,7 +100,7 @@ QString C_OscSupServiceUpdatePackageBase::h_GetPackageExtension()
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParameters(
-   const std::vector<uint8_t> & orc_EncryptNodes, const std::vector<QString> & orc_EncryptNodesPassword,
+   const std::vector<uint8_t> & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword,
    const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys, const uint32_t ou32_NumNodes,
    const QString & orc_Mode, const QString & orc_Function)
 {
@@ -150,8 +150,8 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParameters(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_GetSydeSecureDefFileNames(const C_OscSystemDefinition & orc_SystemDefinition,
                                                                     const QString & orc_TargetPath,
-                                                                    std::vector<QString> & orc_AbsPath,
-                                                                    std::vector<QString> & orc_RelPath)
+                                                                    QStringList & orc_AbsPath,
+                                                                    QStringList & orc_RelPath)
 {
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
    {
@@ -177,8 +177,8 @@ void C_OscSupServiceUpdatePackageBase::mh_GetSydeSecureDefFileNames(const C_OscS
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(const C_OscSystemDefinition & orc_SystemDefinition,
                                                              const QString & orc_TargetPath,
-                                                             std::vector<QString> & orc_AbsPath,
-                                                             std::vector<QString> & orc_RelPath)
+                                                             QStringList & orc_AbsPath,
+                                                             QStringList & orc_RelPath)
 {
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
    {
@@ -201,8 +201,8 @@ void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(const C_OscSystemDe
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_AdaptEncryptionParameters(const std::vector<uint8_t> & orc_InEncryptNodes,
-                                                                    const std::vector<QString> & orc_InEncryptNodesPassword, const uint32_t ou32_NodeCount, std::vector<uint8_t> & orc_OutEncryptNodes,
-                                                                    std::vector<QString> & orc_OutEncryptNodesPassword)
+                                                                    const QStringList & orc_InEncryptNodesPassword, const uint32_t ou32_NodeCount, std::vector<uint8_t> & orc_OutEncryptNodes,
+                                                                    QStringList & orc_OutEncryptNodesPassword)
 {
    orc_OutEncryptNodes = orc_InEncryptNodes;
    orc_OutEncryptNodesPassword = orc_InEncryptNodesPassword;

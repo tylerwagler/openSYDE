@@ -120,7 +120,7 @@ private:
       const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement>
           &orc_OscAllSignalData,
       const std::vector<uint8_t> &orc_MessageIsSrdo,
-      const std::vector<QString> &orc_InfoMessagesPerMessage,
+      const QStringList &orc_InfoMessagesPerMessage,
       const std::vector<std::pair<int32_t, int32_t>>
           &orc_MessageOverrideIndices,
       const uint32_t ou32_NodeIndex, const bool oq_IsTx,

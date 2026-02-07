@@ -745,7 +745,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                                    std::vector<QString> & orc_ScaledValues,
+                                                    QStringList & orc_ScaledValues,
                                                     std::vector<float64_t> & orc_UnscaledValues)
 {
    int32_t s32_Return = C_RANGE;
@@ -1794,7 +1794,7 @@ QString C_PuiSvDbDataElementHandler::C_DpElementConfig::GetSingleValueContentFor
    Formatted and scaled strings
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<QString> C_PuiSvDbDataElementHandler::C_DpElementConfig::GetValuesContentFormatted(
+QStringList C_PuiSvDbDataElementHandler::C_DpElementConfig::GetValuesContentFormatted(
    const C_PuiSvDbDataElementContent & orc_Value, std::vector<float64_t> & orc_UnscaledValueAsFloat)
 const
 {

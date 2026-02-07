@@ -12,6 +12,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QStringList>
+
 #include "stwerrors.hpp"
 #include "C_OscXceLoad.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -157,7 +159,7 @@ int32_t C_OscXceLoad::mh_CheckXcertFiles(const QString & orc_PackagePath)
 {
    int32_t s32_Return;
 
-   std::vector<QString> c_NecessaryFilesTop; //those are the files we look for
+   QStringList c_NecessaryFilesTop; //those are the files we look for
 
    c_NecessaryFilesTop.push_back(C_OscXceManifestFiler::hc_FILE_NAME); //".syde_pkg"
 

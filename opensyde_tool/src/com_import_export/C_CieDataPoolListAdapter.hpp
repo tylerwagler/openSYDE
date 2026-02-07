@@ -52,7 +52,7 @@ public:
           &orc_OscRxMessageData,
       const stw::opensyde_core::C_OscEdsDcfImportMessageGroup
           &orc_OscTxMessageData,
-      const std::vector<std::vector<QString>> &orc_InfoMessagesPerMessage);
+      const QList<QStringList> &orc_InfoMessagesPerMessage);
   static void h_AssignNode(
       const stw::opensyde_core::C_OscCanInterfaceId &orc_Id,
       std::vector<stw::opensyde_core::C_OscCanMessage> &orc_OscMessageData);
@@ -88,7 +88,7 @@ private:
       std::vector<stw::opensyde_core::C_OscCanMessage> &orc_CanMessages,
       std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement>
           &orc_CanSignalData,
-      std::vector<QString> &orc_WarningMessages);
+      QStringList &orc_WarningMessages);
 };
 
 /* -- Extern Global Variables

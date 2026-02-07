@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QButtonGroup>
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_SdBueMessageRxEntry.hpp"
 #include "C_PuiSdNodeCanMessage.hpp"
@@ -41,7 +42,7 @@ public:
    ~C_SdBueMessageRxList(void) override;
 
    void InitStaticNames(void) const;
-   void AddNodes(const std::vector<QString> & orc_EntryNames, const std::vector<QString> & orc_EntryDatapoolNames,
+   void AddNodes(const QStringList & orc_EntryNames, const QStringList & orc_EntryDatapoolNames,
                  const std::vector<uint32_t> & orc_NodeIndexes, const std::vector<uint32_t> & orc_InterfaceIndexes,
                  const std::vector<uint32_t> & orc_DatapoolIndexes,
                  const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage::E_RxTimeoutMode> & orc_ReceiveTimeoutModes, const std::vector<uint32_t> & orc_ReceiveTimeoutValues, const bool oq_ReadOnly, const QString & orc_SpecificTooltip);

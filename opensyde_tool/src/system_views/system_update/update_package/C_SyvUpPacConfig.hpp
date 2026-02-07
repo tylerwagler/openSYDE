@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
+#include <QStringList>
 #include <vector>
 
 #include "C_OscViewNodeUpdate.hpp"
@@ -46,8 +47,8 @@ public:
    QString c_DeviceType; // Device type as identificator
 
    std::vector<C_SyvUpPacConfigNodeApp> c_AppConfigs;
-   std::vector<QString> c_ParamSetConfigs;
-   std::vector<QString> c_FileConfigs;
+   QStringList c_ParamSetConfigs;
+   QStringList c_FileConfigs;
 
    QString c_PemFilePath;
 

@@ -219,7 +219,7 @@ void C_SdTopologyScene::AddNode(const QString &orc_NodeType,
           c_OscNode, c_UiNode, orc_NodeType, "");
     } else {
       std::vector<stw::opensyde_core::C_OscNode> c_OscNodes;
-      std::vector<QString> c_OscNodeNames;
+      QStringList c_OscNodeNames;
       std::vector<stw::opensyde_gui_logic::C_PuiSdNode> c_UiNodes;
 
       for (uint32_t u32_ItSubDevice = 0UL; u32_ItSubDevice < u32_SubDevicesSize;
@@ -230,7 +230,7 @@ void C_SdTopologyScene::AddNode(const QString &orc_NodeType,
         // Object
         this->m_InitNodeData(c_OscNode, rc_Title, orc_NodeType);
         c_OscNodes.push_back(c_OscNode);
-        c_OscNodeNames.emplace_back(rc_Title);
+        c_OscNodeNames.append(rc_Title);
         c_UiNodes.push_back(c_UiNode);
       }
 
@@ -1911,7 +1911,7 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
     QString c_NameProposal;
     QString c_MainDeviceName;
     QString c_SubDeviceName;
-    std::vector<QString> c_SubDevices;
+    QStringList c_SubDevices;
     std::vector<C_OscNode> c_OscNodes;
     std::vector<C_PuiSdNode> c_UiNodes;
     for (uint32_t u32_ItGroup = 0UL;
@@ -1940,7 +1940,7 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
                   orc_Snapshot.c_OscNodes[u32_CurIndex];
               C_OscSystemDefinitionFiler::h_SplitDeviceType(
                   rc_OscNode.c_DeviceType, c_MainDeviceName, c_SubDeviceName);
-              c_SubDevices.emplace_back(c_SubDeviceName);
+              c_SubDevices.append(c_SubDeviceName);
               c_OscNodes.push_back(rc_OscNode);
               c_UiNodes.push_back(orc_Snapshot.c_UiNodes[u32_CurIndex]);
             }

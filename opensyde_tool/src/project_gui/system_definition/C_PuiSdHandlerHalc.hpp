@@ -9,6 +9,7 @@
 #define C_PUISDHANDLERHALC_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include "C_PuiSdHandlerNodeLogic.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -144,7 +145,7 @@ public:
    int32_t IsHalcClear(const uint32_t ou32_NodeIndex, bool & orq_IsClear);
    int32_t CheckHalcDomainChannelLinked(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                         const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                        bool & orq_IsLinked, std::vector<QString> * const
+                                        bool & orq_IsLinked, QStringList * const
                                         opc_LinkedChannelNames = NULL, std::vector<uint32_t> * const
                                         opc_LinkedChannelIndices = NULL,
                                         const uint32_t * const opu32_UseCaseIndex = NULL) const;

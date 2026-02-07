@@ -17,6 +17,7 @@
 #include <QDrag>
 #include <QDragMoveEvent>
 #include <QScrollBar>
+#include <QStringList>
 
 #include "C_SdNdeDpListsTreeWidget.hpp"
 #include "stwerrors.hpp"
@@ -1690,9 +1691,9 @@ void C_SdNdeDpListsTreeWidget::m_StoreUserSettings(void) const
 
    if ((pc_Node != NULL) && (pc_Datapool != NULL))
    {
-      std::vector<QString> c_ExpandedListNames;
-      std::vector<QString> c_SelectedListNames;
-      std::vector<QString> c_SelectedVariableNames;
+      QStringList c_ExpandedListNames;
+      QStringList c_SelectedListNames;
+      QStringList c_SelectedVariableNames;
 
       //Expanded items
       for (int32_t s32_It = 0; s32_It < this->topLevelItemCount(); ++s32_It)
@@ -1704,7 +1705,7 @@ void C_SdNdeDpListsTreeWidget::m_StoreUserSettings(void) const
             if (u32_ListIndex < pc_Datapool->c_Lists.size())
             {
                const C_OscNodeDataPoolList & rc_List = pc_Datapool->c_Lists[u32_ListIndex];
-               c_ExpandedListNames.emplace_back(rc_List.c_Name);
+               c_ExpandedListNames.append(rc_List.c_Name);
             }
          }
       }
@@ -1725,7 +1726,7 @@ void C_SdNdeDpListsTreeWidget::m_StoreUserSettings(void) const
                if (u32_ListIndex < pc_Datapool->c_Lists.size())
                {
                   const C_OscNodeDataPoolList & rc_List = pc_Datapool->c_Lists[u32_ListIndex];
-                  c_SelectedListNames.emplace_back(rc_List.c_Name);
+                  c_SelectedListNames.append(rc_List.c_Name);
                }
             }
             else
@@ -1740,7 +1741,7 @@ void C_SdNdeDpListsTreeWidget::m_StoreUserSettings(void) const
                   //Check table selection
                   if (pc_Table != NULL)
                   {
-                     const std::vector<QString> c_CurSelectedVariableNames = pc_Table->GetSelectedVariableNames();
+                     const QStringList c_CurSelectedVariableNames = pc_Table->GetSelectedVariableNames();
                      if (c_CurSelectedVariableNames.size() > 0)
                      {
                         const uint32_t u32_ListIndex = static_cast<uint32_t>(s32_It);
@@ -1748,7 +1749,7 @@ void C_SdNdeDpListsTreeWidget::m_StoreUserSettings(void) const
                         if (u32_ListIndex < pc_Datapool->c_Lists.size())
                         {
                            const C_OscNodeDataPoolList & rc_List = pc_Datapool->c_Lists[u32_ListIndex];
-                           c_SelectedListNames.emplace_back(rc_List.c_Name);
+                           c_SelectedListNames.append(rc_List.c_Name);
                         }
                      }
                   }
@@ -1779,9 +1780,9 @@ void C_SdNdeDpListsTreeWidget::m_RestoreUserSettings(void)
    {
       const C_UsNode c_Node = C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
       const C_UsNodeDatapool c_Datapool = c_Node.GetDatapool(pc_Datapool->c_Name);
-      const std::vector<QString> & rc_ExpandedListNames = c_Datapool.GetExpandedListNames();
-      const std::vector<QString> & rc_SelectedListNames = c_Datapool.GetSelectedListNames();
-      const std::vector<QString> & rc_SelectedVariableNames = c_Datapool.GetSelectedVariableNames();
+      const QStringList & rc_ExpandedListNames = c_Datapool.GetExpandedListNames();
+      const QStringList & rc_SelectedListNames = c_Datapool.GetSelectedListNames();
+      const QStringList & rc_SelectedVariableNames = c_Datapool.GetSelectedVariableNames();
 
       //Expanded items
       for (int32_t s32_It = 0; s32_It < this->topLevelItemCount(); ++s32_It)

@@ -67,7 +67,7 @@ static const QString mc_NODE_FILE_ATTR = "file";                      // xml nod
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const QString & orc_Path,
                                                               const C_OscSupDefinition & orc_SupDefContent,
-                                                              const std::vector<QString> & orc_Files)
+                                                              const QStringList & orc_Files)
 {
    const QString c_FileName =
       stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_Path) + hc_PACKAGE_UPDATE_DEF;
@@ -85,7 +85,7 @@ int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const QString & or
    Q_ASSERT(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
    // Convert QString vector to QString vector
-   std::vector<QString> c_FilesQt;
+   QStringList c_FilesQt;
    c_FilesQt.reserve(orc_Files.size());
    for (const QString & rc_File : orc_Files)
    {
@@ -136,7 +136,7 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const QString & orc_
                                                             uint32_t & oru32_ActiveBusIndex,
                                                             std::vector<uint8_t> & orc_ActiveNodes,
                                                             std::vector<uint32_t> & orc_UpdatePosition,
-                                                            std::vector<QString> & orc_PackageFiles)
+                                                            QStringList & orc_PackageFiles)
 {
    int32_t s32_Retval;
    C_OscXmlParser c_XmlParser;
@@ -196,7 +196,7 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const QString & orc_
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
                                            const std::vector<C_OscSupNodeDefinition> & orc_Nodes,
-                                           const std::vector<QString> & orc_Files)
+                                           const QStringList & orc_Files)
 {
    //Nodes
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_NODES) == mc_NODES);
@@ -254,7 +254,7 @@ void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, std::vector<uint8_t> & orc_ActiveNodes,
                                            std::vector<uint32_t> & orc_UpdatePosition,
-                                           std::vector<QString> & orc_PackageFiles)
+                                           QStringList & orc_PackageFiles)
 {
    Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_NODES) == mc_NODES);
 

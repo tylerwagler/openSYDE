@@ -12,6 +12,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QStringList>
+
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscXcoCreate.hpp"
@@ -108,7 +110,7 @@ int32_t C_OscXcoCreate::h_CreatePackage(const QString & orc_PackagePath,
 
    if (s32_Return == C_NO_ERR)
    {
-      std::vector<QString> c_AllStaticSubFolders;
+      QStringList c_AllStaticSubFolders;
       c_AllStaticSubFolders.push_back(hc_XCFG_SYSDEF_FOLDER);
       c_AllStaticSubFolders.push_back(hc_INI_DEV_FOLDER);
       s32_Return = C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(orc_PackagePath,

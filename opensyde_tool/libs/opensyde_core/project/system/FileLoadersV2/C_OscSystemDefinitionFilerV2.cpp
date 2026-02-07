@@ -90,7 +90,7 @@ int32_t C_OscSystemDefinitionFilerV2::h_LoadSystemDefinitionFile(
     const QString &orc_PathSystemDefinition,
     const QString &orc_PathDeviceDefinitions,
     const bool oq_UseDeviceDefinitions,
-    std::vector<QString> *const opc_ErrorDetailsMissingDevices) {
+    QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (QFileInfo(orc_PathSystemDefinition).exists() &&
@@ -257,7 +257,7 @@ int32_t C_OscSystemDefinitionFilerV2::h_LoadNodes(
     C_OscXmlParserBase &orc_XmlParser,
     const C_OscDeviceManager &orc_DeviceDefinitions,
     const bool oq_UseDeviceDefinitions,
-    std::vector<QString> *const opc_ErrorDetailsMissingDevices)
+    QStringList *const opc_ErrorDetailsMissingDevices)
 
 {
   int32_t s32_Retval = C_NO_ERR;
@@ -467,7 +467,7 @@ int32_t C_OscSystemDefinitionFilerV2::h_LoadSystemDefinition(
     C_OscSystemDefinition &orc_SystemDefinition,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_PathDeviceDefinitions,
     const bool oq_UseDeviceDefinitions,
-    std::vector<QString> *const opc_ErrorDetailsMissingDevices) {
+    QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval = C_NO_ERR;
 
   // do we need to load the device definitions ?

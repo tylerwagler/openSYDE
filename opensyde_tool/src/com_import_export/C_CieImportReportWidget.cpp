@@ -897,7 +897,7 @@ int32_t C_CieImportReportWidget::mh_GetMessageEntries(
     const std::vector<C_OscCanMessage> &orc_OscMessageData,
     const std::vector<C_OscNodeDataPoolListElement> &orc_OscAllSignalData,
     const std::vector<uint8_t> &orc_MessageIsSrdo,
-    const std::vector<QString> &orc_InfoMessagesPerMessage,
+    const QStringList &orc_InfoMessagesPerMessage,
     const std::vector<std::pair<int32_t, int32_t>> &orc_MessageOverrideIndices,
     const uint32_t ou32_NodeIndex, const bool oq_IsTx,
     const QString &orc_Suffix, const C_OscCanProtocol::E_Type oe_ProtocolType,

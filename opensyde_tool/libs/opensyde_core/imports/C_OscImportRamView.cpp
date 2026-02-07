@@ -14,6 +14,7 @@
  */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
+#include <QStringList>
 
 #include "CKFXDATFile.hpp"
 #include "CKFXDEFProject.hpp"
@@ -917,7 +918,7 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
 
   // scan for .ram files and read them in:
   if (s32_Return == C_NO_ERR) {
-    QList<QString> c_Warnings;
+    QStringList c_Warnings;
     QString c_ErrorText;
     const QString c_WorkDirectory =
         QFileInfo(orc_ProjectPath).absolutePath() + "/";

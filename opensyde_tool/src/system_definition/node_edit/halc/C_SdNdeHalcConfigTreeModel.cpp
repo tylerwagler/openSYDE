@@ -957,14 +957,8 @@ QStringList C_SdNdeHalcConfigTreeModel::mh_ConvertEnumsToStringList(const C_OscH
 //----------------------------------------------------------------------------------------------------------------------
 QStringList C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToStringList(const C_OscHalcDefContent & orc_Value)
 {
-   std::vector<QString> c_Display;
    QStringList c_Retval;
-   orc_Value.GetBitmaskStatusValues(&c_Display, NULL);
-   c_Retval.reserve(c_Display.size());
-   for (uint32_t u32_It = 0UL; u32_It < c_Display.size(); ++u32_It)
-   {
-      c_Retval.push_back(c_Display[u32_It]);
-   }
+   orc_Value.GetBitmaskStatusValues(&c_Retval, NULL);
    return c_Retval;
 }
 
@@ -981,7 +975,7 @@ QString C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToString(const C_OscHalcDe
 {
    QString c_Display;
 
-   std::vector<QString> c_Displays;
+   QStringList c_Displays;
    std::vector<bool> c_Values;
    orc_Value.GetBitmaskStatusValues(&c_Displays, &c_Values);
    if (c_Displays.size() == c_Values.size())

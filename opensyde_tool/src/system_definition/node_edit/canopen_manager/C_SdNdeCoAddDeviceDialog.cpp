@@ -339,7 +339,7 @@ void C_SdNdeCoAddDeviceDialog::m_LoadPicture(const QFileInfo oc_FileInfo)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoAddDeviceDialog::m_FillUpComboBox(const uint32_t ou32_BusIndex, const QString oc_NodeName)
 {
-   std::vector<QString> c_NotExistNames;
+   QStringList c_NotExistNames;
    std::vector<uint32_t> c_NotExistNodeIndexes;
    std::vector<uint32_t> c_NotExistInterfaceIndexes;
    // get node and interface names
@@ -384,7 +384,7 @@ void C_SdNdeCoAddDeviceDialog::m_FillUpComboBox(const uint32_t ou32_BusIndex, co
    Q_ASSERT(C_SdUtil::h_GetNames(c_NotExistNodeIndexes, c_NotExistInterfaceIndexes, c_NotExistNames,
                                    false) == C_NO_ERR);
 
-   for (std::vector<QString>::const_iterator c_NodeIt = c_NotExistNames.begin();
+   for (QStringList::const_iterator c_NodeIt = c_NotExistNames.begin();
         c_NodeIt != c_NotExistNames.end(); ++c_NodeIt)
    {
       if (oc_NodeName.compare(*c_NodeIt) != 0)

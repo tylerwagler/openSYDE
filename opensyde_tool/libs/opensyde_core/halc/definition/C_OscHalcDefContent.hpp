@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <QString>
+#include <QStringList>
 
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_OscHalcDefContentBitmaskItem.hpp"
@@ -48,7 +49,7 @@ public:
 
    void AddBitmaskItem(const C_OscHalcDefContentBitmaskItem & orc_Value);
    const std::vector<C_OscHalcDefContentBitmaskItem> & GetBitmaskItems(void) const;
-   void GetBitmaskStatusValues(std::vector<QString> * const opc_Displays,
+   void GetBitmaskStatusValues(QStringList * const opc_Displays,
                                std::vector<bool> * const opc_Values) const;
    int32_t GetBitmask(const QString & orc_DisplayName, bool & orq_Value) const;
    int32_t SetBitmask(const QString & orc_DisplayName, const bool oq_Value);

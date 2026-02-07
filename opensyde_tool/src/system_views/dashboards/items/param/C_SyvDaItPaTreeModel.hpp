@@ -12,6 +12,7 @@
 #define C_SYVDAITPATREEMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include "C_TblTreItem.hpp"
 #include "C_TblTreModel.hpp"
 #include "C_PuiSvDbDataElementHandler.hpp"
@@ -59,7 +60,7 @@ public:
    void ClearEcuValues(void);
    void ApplyEcuValues(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
                        std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
-                       std::vector<QString> & orc_InvalidValues, std::vector<QString> & orc_NewValues);
+                       QStringList & orc_InvalidValues, QStringList & orc_NewValues);
    bool CheckRange(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
                    const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds2) const;
    bool CheckAllListsRead(void) const;
@@ -106,7 +107,7 @@ public:
    const;
 
    static void h_AdaptFloatRangeOfValueAndAppendResults(stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
-                                                        const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_DescriptionId, std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, std::vector<QString> & orc_InvalidValues, std::vector<QString> & orc_NewValues);
+                                                        const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_DescriptionId, std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, QStringList & orc_InvalidValues, QStringList & orc_NewValues);
    static void h_AdaptFloatRangeOfValue(stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
                                         const stw::opensyde_core::C_OscNodeDataPoolListElement & orc_Description);
    static void h_FixInvalidFloatValue(float64_t & orf64_Value);
@@ -118,7 +119,7 @@ private:
    bool mq_Connected;
    bool mq_SaveLoadActive;
    bool mq_ActionActive;
-   std::vector<std::vector<QString> > mc_EcuValuesString;
+   QList<QStringList> mc_EcuValuesString;
    std::vector<bool> mc_EcuValuesReadStatus;
    std::vector<bool> mc_EcuCrcValidStatus;
    std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> mc_EcuValues;

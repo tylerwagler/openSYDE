@@ -52,7 +52,7 @@ public:
    void ConfigureContextMenu(C_SyvDaContextMenuManager * const opc_ContextMenuManager, const bool oq_Active) override;
 
    int32_t GetLastValueUnscaled(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<float64_t> & orc_Values,
-                                std::vector<QString> & orc_DisplayValues);
+                                QStringList & orc_DisplayValues);
 
    const stw::opensyde_gui_logic::C_PuiSvDbTable * GetTableItem(void) const;
    int32_t SetTableItem(const stw::opensyde_gui_logic::C_PuiSvDbTable & orc_Content) const;

@@ -149,7 +149,7 @@ const std::vector<C_OscViewNodeUpdateParamInfo> & C_OscViewNodeUpdate::GetParamI
    Current application paths
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<QString> & C_OscViewNodeUpdate::GetPaths(const E_GenericFileType oe_Type) const
+const QStringList & C_OscViewNodeUpdate::GetPaths(const E_GenericFileType oe_Type) const
 {
    return (oe_Type == eFTP_DATA_BLOCK) ? this->mc_DataBlockPaths : this->mc_FileBasedPaths;
 }
@@ -198,7 +198,7 @@ void C_OscViewNodeUpdate::SetParamInfos(const std::vector<C_OscViewNodeUpdatePar
    \param[in]  oe_Type     Selector for structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewNodeUpdate::SetPaths(const std::vector<QString> & orc_Value, const E_GenericFileType oe_Type)
+void C_OscViewNodeUpdate::SetPaths(const QStringList & orc_Value, const E_GenericFileType oe_Type)
 {
    if (oe_Type == eFTP_DATA_BLOCK)
    {

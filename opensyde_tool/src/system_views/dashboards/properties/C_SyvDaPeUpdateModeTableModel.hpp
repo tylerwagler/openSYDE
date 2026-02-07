@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_PuiSvReadDataConfiguration.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
@@ -75,7 +76,7 @@ Q_SIGNALS:
 private:
    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_UniqueDataElementIds;
    std::vector<stw::opensyde_gui_logic::C_PuiSvReadDataConfiguration> mc_DataElementConfigurations;
-   std::vector<QString> mc_Usage;
+   QStringList mc_Usage;
    const uint32_t mu32_ViewIndex;
 
    void m_Init(const uint32_t ou32_NodeIndex);

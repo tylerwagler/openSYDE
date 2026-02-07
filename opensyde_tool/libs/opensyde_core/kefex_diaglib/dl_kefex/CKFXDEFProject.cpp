@@ -379,8 +379,8 @@ void C_KFXDEFProject::m_VarStringsToMinMax(const QString & orc_Min, const QStrin
    QString c_Min = orc_Min;
    QString c_Max = orc_Max;
 
-   QList<QString> c_TokensMin;
-   QList<QString> c_TokensMax;
+   QStringList c_TokensMin;
+   QStringList c_TokensMax;
    uint32_t u32_Index;
    U_Union64 u_Val64;
    uint8_t u8_Value;
@@ -525,7 +525,7 @@ E_TransmissionType C_KFXDEFProject::TransTypeStringToEnum(const QString & orc_Te
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_KFXDEFProject::LoadRAMFiles(const QString & orc_Directory, const QString & orc_DeviceName,
                                       C_KFXVariableLists & orc_Lists, QString & orc_ErrorText,
-                                      QList<QString> & orc_Warnings)
+                                      QStringList & orc_Warnings)
 {
    int32_t s32_Return;
    int32_t s32_Index;
@@ -664,7 +664,7 @@ int32_t C_KFXDEFProject::m_SortRAMLists(QList<C_KFXRAMNameIndex> & orc_Files, QS
 //**************************************************************.FE*
 int32_t C_KFXDEFProject::m_FindRelatedFiles(const QString & orc_Directory, const QString & orc_DeviceName,
                                             QList<C_KFXRAMNameIndex> & orc_Files,
-                                            QList<QString> & orc_Warnings)
+                                            QStringList & orc_Warnings)
 {
    QString c_Device;
    QString c_Dir;

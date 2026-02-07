@@ -9,6 +9,7 @@
 #define C_OSCCANOPENMANAGERFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include "C_OscXmlParser.hpp"
 #include "C_OscCanOpenManagerInfo.hpp"
 
@@ -30,13 +31,13 @@ public:
                              const QString & orc_Path, const QString & orc_BasePath);
    static int32_t h_SaveFile(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
                              const QString & orc_Path, const QString & orc_BasePath,
-                             std::vector<QString> * const opc_CreatedFiles, const std::map<uint32_t,
+                             QStringList * const opc_CreatedFiles, const std::map<uint32_t,
                                                                                            QString> & orc_NodeIndicesToNameMap);
    static int32_t h_LoadData(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
                              C_OscXmlParserBase & orc_XmlParser, const QString & orc_BasePath);
    static int32_t h_SaveData(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
                              C_OscXmlParserBase & orc_XmlParser, const QString & orc_BasePath,
-                             std::vector<QString> * const opc_CreatedFiles, const std::map<uint32_t,
+                             QStringList * const opc_CreatedFiles, const std::map<uint32_t,
                                                                                            QString> & orc_NodeIndicesToNameMap);
 
 private:
@@ -46,7 +47,7 @@ private:
                                      const QString & orc_BasePath);
    static int32_t mh_SaveManagerData(const C_OscCanOpenManagerInfo & orc_Config, C_OscXmlParserBase & orc_XmlParser,
                                      const QString & orc_BasePath,
-                                     std::vector<QString> * const opc_CreatedFiles,
+                                     QStringList * const opc_CreatedFiles,
                                      const std::map<uint32_t,
                                                     QString> & orc_NodeIndicesToNameMap);
    static int32_t mh_LoadManagerProperties(C_OscCanOpenManagerInfo & orc_Config, C_OscXmlParserBase & orc_XmlParser);
@@ -63,7 +64,7 @@ private:
                                                           C_OscCanOpenManagerDeviceInfo> & orc_Config,
                                            C_OscXmlParserBase & orc_XmlParser,
                                            const QString & orc_BasePath,
-                                           std::vector<QString> * const opc_CreatedFiles,
+                                           QStringList * const opc_CreatedFiles,
                                            const std::map<uint32_t,
                                                           QString> & orc_NodeIndicesToNameMap);
    static int32_t mh_LoadManagerSubDevice(C_OscCanOpenManagerDeviceInfo & orc_Config,
@@ -72,7 +73,7 @@ private:
    static int32_t mh_SaveManagerSubDevice(const C_OscCanOpenManagerDeviceInfo & orc_Config,
                                           C_OscXmlParserBase & orc_XmlParser,
                                           const QString & orc_BasePath,
-                                          std::vector<QString> * const opc_CreatedFiles,
+                                          QStringList * const opc_CreatedFiles,
                                           const QString & orc_NodeName,
                                           const uint8_t ou8_InterfaceNumber);
    static int32_t mh_LoadManagerSubDeviceEdsPart(C_OscCanOpenManagerDeviceInfo & orc_Config,
@@ -81,7 +82,7 @@ private:
    static int32_t mh_SaveManagerSubDeviceEdsPart(const C_OscCanOpenManagerDeviceInfo & orc_Config,
                                                  C_OscXmlParserBase & orc_XmlParser,
                                                  const QString & orc_BasePath,
-                                                 std::vector<QString> * const opc_CreatedFiles,
+                                                 QStringList * const opc_CreatedFiles,
                                                  const QString & orc_NodeName,
                                                  const uint8_t ou8_InterfaceNumber);
    static int32_t mh_LoadManagerMappedSignals(std::vector< C_OscCanOpenManagerMappableSignal > & orc_Config,

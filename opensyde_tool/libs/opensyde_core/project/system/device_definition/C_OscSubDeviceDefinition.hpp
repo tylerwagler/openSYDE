@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <map>
 #include <QString>
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_OscSystemBus.hpp"
 
@@ -41,7 +42,7 @@ public:
 
    std::map<QString, bool> c_ConnectedInterfaces;
 
-   std::vector<QString> c_OtherAcceptedNames; ///< Other compatible names for this device
+   QStringList c_OtherAcceptedNames; ///< Other compatible names for this device
 
    ///is programming supported enabled?
    bool q_ProgrammingSupport;

@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QMap>
+#include <QStringList>
 #include "C_CieConverter.hpp"
 #include "C_CamDbDbcMessageId.hpp"
 #include "C_CamDbDbcUnmappedMessageId.hpp"
@@ -39,7 +40,7 @@ public:
    int32_t FindMessage(const QString & orc_Message);
 
    bool GetActive(void) const;
-   const std::vector<QString> GetFoundMessages(void) const;
+   const QStringList GetFoundMessages(void) const;
    const C_CieConverter::C_CieCanMessage * GetDbcMessage(const QString & orc_Message, const bool oq_UseHash,
                                                          const uint32_t ou32_Hash) const;
    bool CheckHashForMessage(const QString & orc_Message, const uint32_t ou32_Hash) const;

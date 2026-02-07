@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QMap>
+#include <QStringList>
 
 #include "C_PuiSdHandlerData.hpp"
 #include "C_OscNodeDataPoolListElementId.hpp"
@@ -37,7 +38,7 @@ public:
    //Node general
    bool CheckNodeNameAvailable(const QString & orc_Name,
                                const uint32_t * const opu32_NodeIndexToSkip = NULL,
-                               std::vector<QString> * const opc_ExistingNames = NULL) const;
+                               QStringList * const opc_ExistingNames = NULL) const;
    void SetOscNodeEthernetConfiguration(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
                                         const std::vector<int32_t> & orc_Ip, const std::vector<int32_t> & orc_NetMask,
                                         const std::vector<int32_t> & orc_DefaultGateway);
@@ -65,7 +66,7 @@ public:
                            const QString & orc_SubDeviceName, const QString & orc_MainDevice);
    uint32_t AddNodeSquadAndSort(std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes,
                                 const std::vector<C_PuiSdNode> & orc_UiNodes,
-                                const std::vector<QString> & orc_NodeNames, const QString & orc_MainDevice,
+                                const QStringList & orc_NodeNames, const QString & orc_MainDevice,
                                 const QString & orc_NameProposal = "");
    void RemoveNode(const uint32_t ou32_NodeIndex);
    bool CheckNodeConflict(const uint32_t & oru32_NodeIndex);
@@ -78,9 +79,9 @@ public:
    std::vector<uint32_t> GetAllNodeGroupIndicesUsingNodeIndex(const uint32_t ou32_NodeIndex) const;
    int32_t GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex, uint32_t & oru32_NodeSquadIndex) const;
    void GetNodeToNodeSquadMapping(std::vector<int32_t> & orc_Mapping);
-   bool CheckCriticalNameConflict(std::vector<QString> * const opc_CriticalNodeNames,
-                                  std::vector<QString> * const opc_CriticalBusNames,
-                                  std::vector<QString> * const opc_CriticalDatapoolNamespaceNames) const;
+   bool CheckCriticalNameConflict(QStringList * const opc_CriticalNodeNames,
+                                  QStringList * const opc_CriticalBusNames,
+                                  QStringList * const opc_CriticalDatapoolNamespaceNames) const;
    int32_t MapNodeNameToIndex(const QString & orc_NodeName, uint32_t & oru32_NodeIndex) const;
    int32_t MapNodeIndexToName(const uint32_t ou32_NodeIndex, QString & orc_NodeName) const;
    bool HasNodeAnAvailableFlashloader(const uint32_t ou32_NodeIndex) const;
@@ -131,7 +132,7 @@ public:
    int32_t GetDataPoolCount(const uint32_t ou32_NodeIndex,
                             const stw::opensyde_core::C_OscNodeDataPool::E_Type oe_DataPoolType) const;
    bool CheckNodeDataPoolNameAvailable(const uint32_t & oru32_NodeIndex, const QString & orc_Name,
-                                       const uint32_t * const opu32_DataPoolIndexToSkip = NULL, std::vector<QString> * const opc_ExistingDatapoolNames =
+                                       const uint32_t * const opu32_DataPoolIndexToSkip = NULL, QStringList * const opc_ExistingDatapoolNames =
                                           NULL) const;
    C_PuiSdSharedDatapools & GetSharedDatapools(void);
    const C_PuiSdSharedDatapools & GetSharedDatapoolsConst(void) const;

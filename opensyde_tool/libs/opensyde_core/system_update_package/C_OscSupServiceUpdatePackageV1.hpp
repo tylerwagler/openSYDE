@@ -71,8 +71,8 @@ protected:
   public:
     uint8_t u8_Active;
     uint32_t u32_Position;
-    std::vector<QString> c_ApplicationFileNames; // with relative path
-    std::vector<QString> c_NvmFileNames;         // with relative path
+    QStringList c_ApplicationFileNames; // with relative path
+    QStringList c_NvmFileNames;         // with relative path
     QString c_PemFile;
 
     /// Node configuration flags for security state
@@ -134,7 +134,7 @@ protected:
   static int32_t mh_SetNodesUpdateOrder(
       const std::map<uint32_t, uint32_t> &orc_UpdateOrderByNodes,
       std::vector<uint32_t> &orc_NodesUpdateOrder);
-  static void mh_LoadFilesSection(std::vector<QString> &orc_Files,
+  static void mh_LoadFilesSection(QStringList &orc_Files,
                                   const uint32_t ou32_NodeCounter,
                                   const uint32_t ou32_UpdatePos,
                                   std::map<uint32_t, uint32_t> &orc_PositionMap,
@@ -147,7 +147,7 @@ protected:
       const uint32_t ou32_UpdatePos,
       std::map<uint32_t, uint32_t> &orc_PositionMap,
       const QString &orc_TargetUnzipPath, C_OscXmlParserBase &orc_XmlParser);
-  static void mh_SaveFiles(const std::vector<QString> &orc_Files,
+  static void mh_SaveFiles(const QStringList &orc_Files,
                            C_OscXmlParserBase &orc_XmlParser,
                            const QString &orc_BaseNodeName,
                            const QString &orc_ElementNodeName);

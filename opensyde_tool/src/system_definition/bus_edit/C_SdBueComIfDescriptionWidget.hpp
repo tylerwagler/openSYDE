@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QWidget>
+#include <QStringList>
 
 #include "stwtypes.hpp"
 
@@ -160,8 +161,8 @@ private:
    // 2nd layer is matching to the combo box entries
 
    // Information for the interface combo box in node mode
-   std::vector<QString> mc_InterfaceNames;
-   std::vector<QString> mc_BusNames;
+   QStringList mc_InterfaceNames;
+   QStringList mc_BusNames;
    std::vector<uint32_t> mc_BusIndexes;
    // First layer is for protocols
    // In case of node mode second layer is for interface

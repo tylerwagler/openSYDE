@@ -9,6 +9,8 @@
 #define C_NAGTOPTREEMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
+
 #include "C_TblTreModel.hpp"
 #include "C_TblTreItem.hpp"
 
@@ -33,8 +35,8 @@ public:
                     static_cast<int32_t>(Qt::DisplayRole)) const override;
 
    void SetTypeNode(const bool oq_IsNode);
-   void SetContent(const std::vector<QString> & orc_Content,
-                   const std::vector<std::vector<QString> > & orc_SubContent = std::vector<std::vector<QString> >());
+   void SetContent(const QStringList & orc_Content,
+                   const QList<QStringList> & orc_SubContent = QList<QStringList>());
    void SetError(const std::vector<bool> & orc_Error);
    void UpdateItem(const uint32_t ou32_Index, const QString & orc_Content);
    void Clear(void);

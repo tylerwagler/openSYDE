@@ -915,8 +915,8 @@ void C_SyvDaItPaTreeView::m_HandleActionApply(
       c_ListIds = this->mc_Model.GetListIdsForId(orc_Id, ou32_ValidLayers);
 
   std::vector<C_OscNodeDataPoolListElementId> c_InvalidValueIds;
-  std::vector<QString> c_InvalidValues;
-  std::vector<QString> c_NewValues;
+  QStringList c_InvalidValues;
+  QStringList c_NewValues;
 
   // Force change of focus
   this->setCurrentIndex(this->mc_Model.index(0, 0));

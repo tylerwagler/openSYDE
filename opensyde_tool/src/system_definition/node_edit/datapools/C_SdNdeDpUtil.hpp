@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <QItemSelection>
+#include <QStringList>
 #include <QPainter>
 #include <QWidget>
 #include <QAbstractItemModel>
@@ -116,7 +117,7 @@ public:
    static int32_t h_GetSharedDatapoolGroup(const uint32_t ou32_SharedDatapoolGroup,
                                            const stw::opensyde_core::C_OscNodeDataPoolId & orc_BaseDatapoolId,
                                            const uint32_t ou32_NodeIndex,
-                                           std::vector<QString> & orc_SharedDatapoolNameGroup);
+                                           QStringList & orc_SharedDatapoolNameGroup);
    static int32_t h_GetNextDiagOrNvmDpIndex(const uint32_t ou32_NodeIndex, const uint32_t ou32_DatapoolIndex,
                                             const bool oq_Forwards);
 

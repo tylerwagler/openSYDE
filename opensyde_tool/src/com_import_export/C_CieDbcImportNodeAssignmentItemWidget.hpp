@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QStringList>
 
 #include "C_CieConverter.hpp"
 
@@ -43,7 +44,7 @@ class C_CieDbcImportNodeAssignmentItemWidget :
 public:
    explicit C_CieDbcImportNodeAssignmentItemWidget(
       const stw::opensyde_gui_logic::C_CieConverter::C_CieNode & orc_DbcNode,
-      const std::vector<QString> & orc_OsyNodeNames, const std::vector<uint32_t> & orc_NodeIndexes,
+      const QStringList & orc_OsyNodeNames, const std::vector<uint32_t> & orc_NodeIndexes,
       const std::vector<uint32_t> & orc_InterfaceIndexes, QWidget * const opc_Parent = NULL);
    ~C_CieDbcImportNodeAssignmentItemWidget(void) override;
 

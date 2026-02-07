@@ -11,6 +11,7 @@
 #include "precomp_headers.hpp"
 
 #include <QFileInfo>
+#include <QStringList>
 
 #include "stwerrors.hpp"
 
@@ -213,7 +214,7 @@ void C_CieDcfEdsImportNodeSelectWidget::m_CancelClicked(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieDcfEdsImportNodeSelectWidget::m_FillUpComboBox(const uint32_t ou32_BusIndex)
 {
-   std::vector<QString> c_Names;
+   QStringList c_Names;
 
    // cleanup
    this->mpc_Ui->pc_CbxNode->clear();
@@ -225,7 +226,7 @@ void C_CieDcfEdsImportNodeSelectWidget::m_FillUpComboBox(const uint32_t ou32_Bus
 
    Q_ASSERT(C_SdUtil::h_GetNames(this->mc_NodeIndexes, this->mc_InterfaceIndexes, c_Names, false) == C_NO_ERR);
 
-   for (std::vector<QString>::const_iterator c_NodeIt = c_Names.begin(); c_NodeIt != c_Names.end(); ++c_NodeIt)
+   for (QStringList::const_iterator c_NodeIt = c_Names.begin(); c_NodeIt != c_Names.end(); ++c_NodeIt)
    {
       this->mpc_Ui->pc_CbxNode->addItem(*c_NodeIt);
    }

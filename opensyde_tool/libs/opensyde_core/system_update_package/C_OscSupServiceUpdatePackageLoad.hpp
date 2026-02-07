@@ -17,6 +17,7 @@
 
 #include "stwtypes.hpp"
 #include <QString>
+#include <QStringList>
 #include "C_OscXmlParser.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscSecurityEcdsa.hpp"
@@ -48,7 +49,7 @@ public:
                                                 QStringList & orc_WarningMessages,
                                                 QString & orc_ErrorMessage, const bool oq_IsZip,
                                                 const std::vector<uint8_t> & orc_DecryptNodes = std::vector<uint8_t>(),
-                                                const std::vector<QString> & orc_DecryptNodesPassword = std::vector<QString>(), const std::vector<QString> & orc_NodeSignaturePemFiles = std::vector<QString>());
+                                                const QStringList & orc_DecryptNodesPassword = QStringList(), const QStringList & orc_NodeSignaturePemFiles = QStringList());
 
    static int32_t h_ProcessPackage(const QString & orc_PackagePath,
                                    const QString & orc_TargetUnzipPath,
@@ -58,7 +59,7 @@ public:
                                    QStringList & orc_WarningMessages,
                                    QString & orc_ErrorMessage, const bool oq_IsZip,
                                    const std::vector<uint8_t> & orc_DecryptNodes = std::vector<uint8_t>(),
-                                   const std::vector<QString> & orc_DecryptNodesPassword = std::vector<QString>(), const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys = std::vector<std::vector<uint8_t> >());
+                                   const QStringList & orc_DecryptNodesPassword = QStringList(), const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys = std::vector<std::vector<uint8_t> >());
 
 private:
    static int32_t mh_CheckSupFiles(const QString & orc_PackagePath);
@@ -70,26 +71,26 @@ private:
                                                         uint32_t> & orc_UpdateOrderByNodes,
                                          std::vector<uint32_t> & orc_NodesUpdateOrder);
    static int32_t mh_UnpackAndLoadNodes(const C_OscSystemDefinition & orc_SystemDefinition,
-                                        const std::vector<QString> & orc_PackageFiles,
+                                        const QStringList & orc_PackageFiles,
                                         const QString & orc_TargetUnzipPath,
                                         const std::vector<uint8_t> & orc_ActiveNodes,
                                         const std::vector<uint32_t> & orc_UpdatePosition,
                                         std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                         std::vector<uint32_t> & orc_NodesUpdateOrder,
                                         const std::vector<uint8_t> & orc_DecryptNodes,
-                                        const std::vector<QString> & orc_DecryptNodesPassword,
+                                        const QStringList & orc_DecryptNodesPassword,
                                         const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys);
    static int32_t mh_UnpackNodes(const std::vector<uint8_t> & orc_DecryptNodes,
-                                 const std::vector<QString> & orc_DecryptNodesPassword,
+                                 const QStringList & orc_DecryptNodesPassword,
                                  const uint32_t ou32_NodeCount,
-                                 const std::vector<QString> & orc_PackageFiles,
+                                 const QStringList & orc_PackageFiles,
                                  const QString & orc_TargetUnzipPath,
-                                 const std::vector<QString> & orc_NodeFoldersAbs);
+                                 const QStringList & orc_NodeFoldersAbs);
    static int32_t mh_VerifySignatures(const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                       const std::vector<uint8_t> & orc_ActiveNodes,
                                       const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
-                                      const std::vector<QString> & orc_Signatures,
-                                      const std::vector<QString> & orc_AbsSydeSecureDefFileNames);
+                                      const QStringList & orc_Signatures,
+                                      const QStringList & orc_AbsSydeSecureDefFileNames);
    static int32_t mh_VerifySignature(const C_OscSuSequences::C_DoFlash & orc_ApplicationsToWrite,
                                      const std::vector<uint8_t> & orc_NodeSignatureKeys,
                                      const QString & orc_Signature,
@@ -97,7 +98,7 @@ private:
    static void mh_GetDigestFiles(const C_OscSuSequences::C_DoFlash & orc_ApplicationsToWrite,
                                  const QString & orc_AbsSydeSecureDefFileName,
                                  std::set<QString> & orc_Files);
-   static void mh_GetPemFileContent(const std::vector<QString> & orc_NodeSignaturePemFiles,
+   static void mh_GetPemFileContent(const QStringList & orc_NodeSignaturePemFiles,
                                     std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys);
 };
 

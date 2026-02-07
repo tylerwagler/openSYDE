@@ -317,7 +317,7 @@ void C_UsSystemView::SetNodeSectionsExpanded(const QString & orc_NodeName, const
    View nodes keys internal structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<QString> C_UsSystemView::GetViewNodesKeysInternal(void) const
+const QStringList C_UsSystemView::GetViewNodesKeysInternal(void) const
 {
    return this->mc_Nodes.keys();
 }
@@ -452,7 +452,7 @@ C_UsSystemViewDashboard C_UsSystemView::GetDashboardSettings(const QString & orc
    Dashboard keys internal structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<QString> C_UsSystemView::GetDashboardKeysInternal(void) const
+const QStringList C_UsSystemView::GetDashboardKeysInternal(void) const
 {
    return this->mc_Dashboards.keys();
 }

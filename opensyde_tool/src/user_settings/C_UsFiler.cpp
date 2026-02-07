@@ -242,7 +242,7 @@ void C_UsFiler::mh_SaveNode(QSettings &orc_Ini, const QString &orc_SectionName,
   const QString c_DataLoggerOverviewWidgetSelected =
       static_cast<QString>("%1Selected_DataLogger_LogJob_Overview")
           .arg(orc_NodeIdBase);
-  const QList<QString> c_DatapoolKeyList = orc_Node.GetDatapoolKeysInternal();
+  const QStringList c_DatapoolKeyList = orc_Node.GetDatapoolKeysInternal();
   int32_t s32_ItDatapool = 0;
 
   // Name
@@ -366,7 +366,7 @@ void C_UsFiler::mh_SaveNode(QSettings &orc_Ini, const QString &orc_SectionName,
   // Datapool count
   orc_Ini.setValue(orc_SectionName + "/" + c_NodeIdDatapoolCount,
                    static_cast<int>(c_DatapoolKeyList.size()));
-  for (QList<QString>::const_iterator c_ItDatapoolKey =
+  for (QStringList::const_iterator c_ItDatapoolKey =
            c_DatapoolKeyList.begin();
        c_ItDatapoolKey != c_DatapoolKeyList.end(); ++c_ItDatapoolKey) {
     const QString c_DatapoolIdBase = static_cast<QString>("%1Datapool%2")
@@ -467,15 +467,15 @@ void C_UsFiler::mh_SaveDatapool(QSettings &orc_Ini,
   int32_t s32_ItList = 0;
   const QString c_DatapoolIdName =
       static_cast<QString>("%1Name").arg(orc_DatapoolIdBase);
-  const std::vector<QString> &rc_ExpandedListNames =
+  const QStringList &rc_ExpandedListNames =
       orc_Datapool.GetExpandedListNames();
-  const std::vector<QString> &rc_SelectedListNames =
+  const QStringList &rc_SelectedListNames =
       orc_Datapool.GetSelectedListNames();
-  const std::vector<QString> &rc_SelectedVariableNames =
+  const QStringList &rc_SelectedVariableNames =
       orc_Datapool.GetSelectedVariableNames();
-  const QList<QString> c_Interfaces =
+  const QStringList c_Interfaces =
       orc_Datapool.GetInterfaceSettingsKeysInternal();
-  const QList<QString> &rc_Lists = orc_Datapool.GetListSettingsKeysInternal();
+  const QStringList &rc_Lists = orc_Datapool.GetListSettingsKeysInternal();
   const QString c_DatapoolIdExpandedListNameCount =
       static_cast<QString>("%1ExpandedListName_count").arg(orc_DatapoolIdBase);
   const QString c_DatapoolIdSelectedListNameCount =
@@ -546,7 +546,7 @@ void C_UsFiler::mh_SaveDatapool(QSettings &orc_Ini,
   orc_Ini.setValue(orc_SectionName + "/" + c_DatapoolIdInterfaceCount,
                    static_cast<int>(c_Interfaces.size()));
 
-  for (QList<QString>::const_iterator c_ItBusKey = c_Interfaces.begin();
+  for (QStringList::const_iterator c_ItBusKey = c_Interfaces.begin();
        c_ItBusKey != c_Interfaces.end(); ++c_ItBusKey) {
     const QString c_BusIdBase = static_cast<QString>("%1Interface%2")
                                     .arg(orc_DatapoolIdBase)
@@ -562,7 +562,7 @@ void C_UsFiler::mh_SaveDatapool(QSettings &orc_Ini,
   orc_Ini.setValue(orc_SectionName + "/" + c_DatapoolIdListCount,
                    static_cast<int>(rc_Lists.size()));
 
-  for (QList<QString>::const_iterator c_ItListKey = rc_Lists.begin();
+  for (QStringList::const_iterator c_ItListKey = rc_Lists.begin();
        c_ItListKey != rc_Lists.end(); ++c_ItListKey) {
     const QString c_ListIdBase = static_cast<QString>("%1List%2")
                                      .arg(orc_DatapoolIdBase)
@@ -676,9 +676,9 @@ void C_UsFiler::mh_SaveView(QSettings &orc_Ini, const QString &orc_SectionName,
       static_cast<QString>("%1_selected_tab_index").arg(orc_ViewIdBase);
   const QString c_ViewIdDashboardCount =
       static_cast<QString>("%1Dashboard_count").arg(orc_ViewIdBase);
-  const QList<QString> &rc_DashboardKeyList =
+  const QStringList &rc_DashboardKeyList =
       orc_View.GetDashboardKeysInternal();
-  const QList<QString> &rc_NodesKeyList = orc_View.GetViewNodesKeysInternal();
+  const QStringList &rc_NodesKeyList = orc_View.GetViewNodesKeysInternal();
   const QString c_ViewIdSetupPermission =
       static_cast<QString>("%1_setup_permission").arg(orc_ViewIdBase);
   const QString c_ViewIdUpdatePermission =
@@ -753,7 +753,7 @@ void C_UsFiler::mh_SaveView(QSettings &orc_Ini, const QString &orc_SectionName,
   orc_Ini.setValue(orc_SectionName + "/" + c_ViewIdNodesCount,
                    static_cast<int>(rc_NodesKeyList.size()));
   s32_Iterator = 0;
-  for (QList<QString>::const_iterator c_ItNodesKey = rc_NodesKeyList.begin();
+  for (QStringList::const_iterator c_ItNodesKey = rc_NodesKeyList.begin();
        c_ItNodesKey != rc_NodesKeyList.end(); ++c_ItNodesKey) {
     const QString c_NodeIdBase =
         static_cast<QString>("%1Node%2").arg(orc_ViewIdBase).arg(s32_Iterator);
@@ -787,7 +787,7 @@ void C_UsFiler::mh_SaveView(QSettings &orc_Ini, const QString &orc_SectionName,
   orc_Ini.setValue(orc_SectionName + "/" + c_ViewIdDashboardCount,
                    static_cast<int>(rc_DashboardKeyList.size()));
   s32_Iterator = 0;
-  for (QList<QString>::const_iterator c_ItDashboardKey =
+  for (QStringList::const_iterator c_ItDashboardKey =
            rc_DashboardKeyList.begin();
        c_ItDashboardKey != rc_DashboardKeyList.end(); ++c_ItDashboardKey) {
     const QString c_DashboardIdBase = static_cast<QString>("%1Dashboard%2")
@@ -1164,11 +1164,11 @@ void C_UsFiler::mh_SaveProjectDependentSection(
     int32_t s32_ItBus = 0;
     int32_t s32_ItNode = 0;
     int32_t s32_ItView = 0;
-    const QList<QString> c_BusKeyList =
+    const QStringList c_BusKeyList =
         orc_UserSettings.GetProjSdBusKeysInternal();
-    const QList<QString> c_NodeKeyList =
+    const QStringList c_NodeKeyList =
         orc_UserSettings.GetProjSdNodeKeysInternal();
-    const QList<QString> c_ViewKeyList =
+    const QStringList c_ViewKeyList =
         orc_UserSettings.GetProjSvSetupViewKeysInternal();
     int32_t s32_SysDefSubMode;
     uint32_t u32_SysDefIndex;
@@ -1292,7 +1292,7 @@ void C_UsFiler::mh_SaveProjectDependentSection(
     orc_Ini.setValue(orc_ActiveProject + "/ProjSdNode_count",
                      static_cast<int>(c_NodeKeyList.size()));
 
-    for (QList<QString>::const_iterator c_ItNodeKey = c_NodeKeyList.begin();
+    for (QStringList::const_iterator c_ItNodeKey = c_NodeKeyList.begin();
          c_ItNodeKey != c_NodeKeyList.end(); ++c_ItNodeKey) {
       const QString c_NodeIdBase =
           static_cast<QString>("SdNode%1").arg(s32_ItNode);
@@ -1307,7 +1307,7 @@ void C_UsFiler::mh_SaveProjectDependentSection(
     orc_Ini.setValue(orc_ActiveProject + "/ProjSdBus_count",
                      static_cast<int>(c_BusKeyList.size()));
 
-    for (QList<QString>::const_iterator c_ItBusKey = c_BusKeyList.begin();
+    for (QStringList::const_iterator c_ItBusKey = c_BusKeyList.begin();
          c_ItBusKey != c_BusKeyList.end(); ++c_ItBusKey) {
       const QString c_BusIdBase =
           static_cast<QString>("SdBus%1").arg(s32_ItBus);
@@ -1323,7 +1323,7 @@ void C_UsFiler::mh_SaveProjectDependentSection(
     orc_Ini.setValue(orc_ActiveProject + "/ProjSvSetupView_count",
                      static_cast<int>(c_ViewKeyList.size()));
 
-    for (QList<QString>::const_iterator c_ItViewKey = c_ViewKeyList.begin();
+    for (QStringList::const_iterator c_ItViewKey = c_ViewKeyList.begin();
          c_ItViewKey != c_ViewKeyList.end(); ++c_ItViewKey) {
       const QString c_ViewIdBase =
           static_cast<QString>("SvSetupView%1").arg(s32_ItView);
@@ -1770,9 +1770,9 @@ void C_UsFiler::mh_LoadDatapool(QSettings &orc_Ini,
         static_cast<QString>("%1Lists_count").arg(orc_DatapoolIdBase);
     const QString c_DatapoolIdInterfaceCount =
         static_cast<QString>("%1Interface_count").arg(orc_DatapoolIdBase);
-    std::vector<QString> c_ExpandedListNames;
-    std::vector<QString> c_SelectedListNames;
-    std::vector<QString> c_SelectedVariableNames;
+    QStringList c_ExpandedListNames;
+    QStringList c_SelectedListNames;
+    QStringList c_SelectedVariableNames;
     const int32_t s32_ExpandedListNameCount =
         orc_Ini
             .value(orc_SectionName + "/" + c_DatapoolIdExpandedListNameCount, 0)

@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QString>
+#include <QStringList>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -59,7 +60,7 @@ public:
    QString c_GeneratePath;             ///< Path to generate sources for this application in
                                                      //(if relative it is meant as relative to data block project)
    uint16_t u16_GenCodeVersion;                      ///< Version of structure of generated files
-   std::vector<QString> c_ResultPaths; ///< Paths to result files of this application
+   QStringList c_ResultPaths; ///< Paths to result files of this application
                                                      //(if relative they are meant as relative to data block project)
                                                      //(vector size is either 1 or 2;
                                                      //2 only for PSI file generation, and in this case, the first one

@@ -1403,7 +1403,7 @@ int32_t C_PuiSdHandlerHalc::IsHalcClear(const uint32_t ou32_NodeIndex,
 int32_t C_PuiSdHandlerHalc::CheckHalcDomainChannelLinked(
     const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
     const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-    bool &orq_IsLinked, std::vector<QString> *const opc_LinkedChannelNames,
+    bool &orq_IsLinked, QStringList *const opc_LinkedChannelNames,
     std::vector<uint32_t> *const opc_LinkedChannelIndices,
     const uint32_t *const opu32_UseCaseIndex) const {
   int32_t s32_Retval = C_RANGE;
@@ -1411,17 +1411,9 @@ int32_t C_PuiSdHandlerHalc::CheckHalcDomainChannelLinked(
       this->GetHalcDomainConfigDataConst(ou32_NodeIndex, ou32_DomainIndex);
 
   if (pc_Domain != NULL) {
-    std::vector<QString> c_LinkedChannelNames;
     s32_Retval = pc_Domain->CheckChannelLinked(
         ou32_ChannelIndex, oq_UseChannelIndex, orq_IsLinked,
-        &c_LinkedChannelNames, opc_LinkedChannelIndices, opu32_UseCaseIndex);
-    if (opc_LinkedChannelNames != NULL) {
-      for (std::vector<QString>::const_iterator c_ItNames =
-               c_LinkedChannelNames.begin();
-           c_ItNames != c_LinkedChannelNames.end(); ++c_ItNames) {
-        opc_LinkedChannelNames->emplace_back(*c_ItNames);
-      }
-    }
+        opc_LinkedChannelNames, opc_LinkedChannelIndices, opu32_UseCaseIndex);
   }
 
   return s32_Retval;

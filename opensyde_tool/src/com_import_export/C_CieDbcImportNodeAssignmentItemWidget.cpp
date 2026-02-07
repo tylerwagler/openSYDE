@@ -46,7 +46,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_CieDbcImportNodeAssignmentItemWidget::C_CieDbcImportNodeAssignmentItemWidget(
-   const C_CieConverter::C_CieNode & orc_DbcNode, const std::vector<QString> & orc_OsyNodeNames,
+   const C_CieConverter::C_CieNode & orc_DbcNode, const QStringList & orc_OsyNodeNames,
    const std::vector<uint32_t> & orc_NodeIndexes, const std::vector<uint32_t> & orc_InterfaceIndexes,
    QWidget * const opc_Parent) :
    QWidget(opc_Parent),
@@ -67,7 +67,7 @@ C_CieDbcImportNodeAssignmentItemWidget::C_CieDbcImportNodeAssignmentItemWidget(
 
    // fill combobox with all connected topology nodes
    this->mpc_Ui->pc_CbxOsyNodes->addItem("<ignore>");
-   for (std::vector<QString>::const_iterator c_It = orc_OsyNodeNames.begin(); c_It != orc_OsyNodeNames.end(); ++c_It)
+   for (QStringList::const_iterator c_It = orc_OsyNodeNames.begin(); c_It != orc_OsyNodeNames.end(); ++c_It)
    {
       this->mpc_Ui->pc_CbxOsyNodes->addItem(*c_It);
    }

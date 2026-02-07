@@ -132,7 +132,7 @@ int32_t C_OscCanOpenManagerFiler::h_LoadFile(
 int32_t C_OscCanOpenManagerFiler::h_SaveFile(
     const std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
     const QString &orc_Path, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles,
+    QStringList *const opc_CreatedFiles,
     const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   C_OscXmlParser c_XmlParser;
   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
@@ -237,7 +237,7 @@ int32_t C_OscCanOpenManagerFiler::h_LoadData(
 int32_t C_OscCanOpenManagerFiler::h_SaveData(
     const std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles,
+    QStringList *const opc_CreatedFiles,
     const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -315,7 +315,7 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerData(
 int32_t C_OscCanOpenManagerFiler::mh_SaveManagerData(
     const C_OscCanOpenManagerInfo &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles,
+    QStringList *const opc_CreatedFiles,
     const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   C_OscCanOpenManagerFiler::mh_SaveManagerProperties(orc_Config, orc_XmlParser);
   return C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(
@@ -587,7 +587,7 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(
     const std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>
         &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles,
+    QStringList *const opc_CreatedFiles,
     const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -725,7 +725,7 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDevice(
 int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevice(
     const C_OscCanOpenManagerDeviceInfo &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles, const QString &orc_NodeName,
+    QStringList *const opc_CreatedFiles, const QString &orc_NodeName,
     const uint8_t ou8_InterfaceNumber) {
   int32_t s32_Retval;
 
@@ -841,7 +841,7 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDeviceEdsPart(
 int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(
     const C_OscCanOpenManagerDeviceInfo &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles, const QString &orc_NodeName,
+    QStringList *const opc_CreatedFiles, const QString &orc_NodeName,
     const uint8_t ou8_InterfaceNumber) {
   int32_t s32_Retval = C_NO_ERR;
   const QString c_ItemPrefixUnprepared =

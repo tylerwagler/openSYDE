@@ -9,6 +9,7 @@
 #define C_SDNDEHALCCHANNELWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include <QWidget>
 
 #include "stwtypes.hpp"
@@ -83,8 +84,8 @@ private:
    void m_ConnectWidgets(const bool oq_Connect) const;
    void m_CheckName(const QString & orc_NewName) const;
    bool m_AskUserToContinueLinkingIfNecessary(const bool oq_IsLinkedOld, const bool oq_IsLinkedNew,
-                                              const std::vector<QString> & orc_LinkedChannelNamesOld, const
-                                              std::vector<QString> & orc_LinkedChannelNamesNew,
+                                              const QStringList & orc_LinkedChannelNamesOld, const
+                                              QStringList & orc_LinkedChannelNamesNew,
                                               const uint32_t ou32_NewUseCaseIndex);
 };
 

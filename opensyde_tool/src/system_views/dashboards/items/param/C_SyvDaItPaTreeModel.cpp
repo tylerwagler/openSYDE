@@ -250,8 +250,8 @@ void C_SyvDaItPaTreeModel::ClearEcuValues(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeModel::ApplyEcuValues(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds,
                                           std::vector<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
-                                          std::vector<QString> & orc_InvalidValues,
-                                          std::vector<QString> & orc_NewValues)
+                                          QStringList & orc_InvalidValues,
+                                          QStringList & orc_NewValues)
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
@@ -992,7 +992,7 @@ void C_SyvDaItPaTreeModel::UpdateEcuValues(void)
                      //Just check
                      if (pc_OscElement != NULL)
                      {
-                        std::vector<QString> & rc_ValueStrings = this->mc_EcuValuesString[u32_Index];
+                        QStringList & rc_ValueStrings = this->mc_EcuValuesString[u32_Index];
                         this->mc_EcuValues[u32_Index] = c_Content;
                         //Handle string
                         if ((pc_OscElement->q_InterpretAsString == true) && (rc_ValueStrings.size() > 0UL))
@@ -1177,7 +1177,7 @@ void C_SyvDaItPaTreeModel::Init(C_PuiSvDbDataElementHandler * const opc_DataWidg
                //Handle ECU values
                if (pc_OscElement != NULL)
                {
-                  std::vector<QString> c_Entry;
+                  QStringList c_Entry;
                   if (pc_OscElement->q_InterpretAsString == true)
                   {
                      c_Entry.push_back(C_SyvDaItPaTreeModel::mhc_ECU_VALUE_INIT_STRING);
@@ -2911,8 +2911,8 @@ const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeModel::h_AdaptFloatRangeOfValueAndAppendResults(C_OscNodeDataPoolContent & orc_Content,
-                                                                    const C_OscNodeDataPoolListElementId & orc_DescriptionId, std::vector<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, std::vector<QString> & orc_InvalidValues,
-                                                                    std::vector<QString> & orc_NewValues)
+                                                                    const C_OscNodeDataPoolListElementId & orc_DescriptionId, std::vector<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, QStringList & orc_InvalidValues,
+                                                                    QStringList & orc_NewValues)
 {
    const C_OscNodeDataPoolListElement * const pc_Element =
       C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(orc_DescriptionId);

@@ -12,6 +12,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QStringList>
 #include <QWidget>
 
 #include "stwtypes.hpp"
@@ -88,10 +89,10 @@ private:
    void m_OnClear(void);
    void m_OnIndexClicked(const QModelIndex & orc_ModelIndex);
    int32_t m_LoadConcreteProject(uint16_t * const opu16_FileVersion,
-                                 std::vector<QString> * const opc_ErrorDetailsMissingDevices);
+                                 QStringList * const opc_ErrorDetailsMissingDevices);
    int32_t m_GetPassword(QString & orc_Password);
    void m_CancelPasswordDialog(uint16_t ou16_ProjectFileVersion,
-                               std::vector<QString> * const opc_ErrorDetailsMissingDevices);
+                               QStringList * const opc_ErrorDetailsMissingDevices);
    void m_SetNameStringLength(void);
 
    Ui::C_NagMainWidget * mpc_Ui;

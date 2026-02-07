@@ -818,9 +818,9 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
                     rc_SystemDefinition, u32_ActiveBusIndex, c_NodeActiveFlags,
                     c_NodesUpdateOrder, c_ApplicationsToWrite, c_Warnings,
                     c_Error, "", orc_EncryptNodes,
-                    std::vector<QString>(orc_EncryptNodesPassword.begin(), orc_EncryptNodesPassword.end()),
+                    orc_EncryptNodesPassword,
                     orc_AddSignatureNodes,
-                    std::vector<QString>(orc_NodeSignaturePemFiles.begin(), orc_NodeSignaturePemFiles.end()));
+                    orc_NodeSignaturePemFiles);
           }
           // if no pem files specified, it is a normal (unencrypted) update
           // package
@@ -839,7 +839,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
                   c_FullPackagePath, rc_SystemDefinition,
                   u32_ActiveBusIndex, c_NodeActiveFlags, c_NodesUpdateOrder,
                   c_ApplicationsToWrite, c_Warnings, c_Error, "",
-                  orc_EncryptNodes, std::vector<QString>(orc_EncryptNodesPassword.begin(), orc_EncryptNodesPassword.end()));
+                  orc_EncryptNodes, orc_EncryptNodesPassword);
             }
           }
         }

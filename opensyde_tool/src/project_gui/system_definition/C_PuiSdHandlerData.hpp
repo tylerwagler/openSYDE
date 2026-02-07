@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
+#include <QStringList>
 #include "stwtypes.hpp"
 
 #include "C_PuiSdBus.hpp"
@@ -37,7 +38,7 @@ class C_PuiSdHandlerData :
 
 public:
    int32_t LoadFromFile(const QString & orc_Path, uint16_t * const opu16_FileVersion,
-                        std::vector<QString> * const opc_ErrorDetailsMissingDevices);
+                        QStringList * const opc_ErrorDetailsMissingDevices);
    int32_t SaveToFile(const QString & orc_Path, const bool oq_UseDeprecatedFileFormatV2,
                       const bool oq_UpdateInternalState = true);
    bool HasHashChanged(void) const;

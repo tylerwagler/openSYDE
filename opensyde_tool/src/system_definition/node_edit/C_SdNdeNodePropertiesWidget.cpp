@@ -1393,7 +1393,7 @@ void C_SdNdeNodePropertiesWidget::m_RegisterNameChange(void) {
   static bool hq_InProgress = false;
 
   if (hq_InProgress == false) {
-    std::vector<QString> c_ExistingNames;
+    QStringList c_ExistingNames;
     hq_InProgress = true;
 
     if (C_PuiSdHandler::h_GetInstance()->CheckNodeNameAvailable(

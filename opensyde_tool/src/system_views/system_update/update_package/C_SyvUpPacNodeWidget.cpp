@@ -1612,12 +1612,12 @@ bool C_SyvUpPacNodeWidget::m_CheckFileAlreadyContained(
   if ((pc_Node != NULL) && (pc_View != NULL)) {
     const QString c_AbsoluteFile =
         C_PuiUtil::h_GetResolvedAbsPathFromProject(orc_File);
-    std::vector<QString> c_Paths;
+    QStringList c_Paths;
 
     // compare with existing data block files
     c_Paths = pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex)
                   ->GetPaths(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
-    for (std::vector<QString>::const_iterator c_It = c_Paths.begin();
+    for (QStringList::const_iterator c_It = c_Paths.begin();
          c_It != c_Paths.end(); ++c_It) {
       if ((c_AbsoluteFile ==
            C_PuiUtil::h_GetResolvedAbsPathFromProject(*c_It)) ||
@@ -1634,7 +1634,7 @@ bool C_SyvUpPacNodeWidget::m_CheckFileAlreadyContained(
     if (q_Retval == false) {
       c_Paths = pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex)
                     ->GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
-      for (std::vector<QString>::const_iterator c_It = c_Paths.begin();
+      for (QStringList::const_iterator c_It = c_Paths.begin();
            c_It != c_Paths.end(); ++c_It) {
         // variables resolve not necessary
         if ((c_AbsoluteFile ==
@@ -1685,11 +1685,11 @@ void C_SyvUpPacNodeWidget::m_CheckForMultipleSecurityCertificatePackages(
     if ((pc_Node != NULL) && (pc_View != NULL)) {
       // check only file based files as it is very unlikely to have data blocks
       // with security certificate packages
-      const std::vector<QString> c_Paths =
+      const QStringList c_Paths =
           pc_View->GetNodeUpdateInformation(this->mu32_NodeIndex)
               ->GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
 
-      for (std::vector<QString>::const_iterator c_It = c_Paths.begin();
+      for (QStringList::const_iterator c_It = c_Paths.begin();
            c_It != c_Paths.end(); ++c_It) {
         if (("." + static_cast<QFileInfo>(*c_It).suffix().toLower()) ==
             C_OscXceBase::h_GetPackageExtension()) {
@@ -1861,7 +1861,7 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(
   if (!c_FullPackagePath.isEmpty()) {
     int32_t s32_Return;
     std::vector<C_OscXceUpdatePackageParameters> c_UpdatePackageParameters;
-    std::vector<QString> c_UsedCertificatesPath;
+    QStringList c_UsedCertificatesPath;
     if (oq_OptionAddPemFiles) {
       for (const auto &path : orc_CertificatesPath) {
         c_UsedCertificatesPath.push_back(path);

@@ -15,6 +15,7 @@
 #include <QFileInfo>
 #include <QFileDialog>
 #include <QDateTime>
+#include <QStringList>
 
 #include "stwerrors.hpp"
 
@@ -302,7 +303,7 @@ void C_SyvDaItPaImageRecordWidget::m_ReadClicked(void)
 {
    if (this->mc_FilePath.compare("") != 0)
    {
-      std::vector<QString> c_ConflictedFiles;
+      QStringList c_ConflictedFiles;
       const QFileInfo c_BaseInfo(this->mc_FilePath);
       //Check conflicted files with automated file creation
       if (this->mc_AllNodeIndexes.size() > 1UL)

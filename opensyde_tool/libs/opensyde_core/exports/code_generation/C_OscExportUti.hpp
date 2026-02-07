@@ -35,7 +35,7 @@ public:
                                             const QString & orc_MagicName);
    static int32_t h_SaveToFile(QStringList & orc_Data, const QString & orc_Path,
                                const QString & orc_FileName, const bool oq_HeaderFile);
-   static void h_CollectFilePaths(std::vector<QString> & orc_FilePaths,
+   static void h_CollectFilePaths(QStringList & orc_FilePaths,
                                   const QString & orc_Path, const QString & orc_FileName,
                                   const bool oq_SourceCode);
 

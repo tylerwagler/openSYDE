@@ -207,7 +207,7 @@ void C_SdNdeDbAddNewProject::AddSelectedProject(const uint32_t ou32_TspIndex, C_
       orc_Application.c_Name = rc_SelectedApp.c_Name;
       orc_Application.c_Comment = rc_SelectedApp.c_Comment;
       orc_Application.c_GeneratePath = rc_SelectedApp.c_GeneratePath;
-      orc_Application.c_ResultPaths = std::vector<QString>(rc_SelectedApp.c_ResultPaths.begin(), rc_SelectedApp.c_ResultPaths.end());
+      orc_Application.c_ResultPaths = rc_SelectedApp.c_ResultPaths;
       orc_Application.u8_ProcessId = rc_SelectedApp.u8_ProcessId;
       // do not concatenate project path with syde-file path because we support relative paths here
       orc_Application.c_ProjectPath = c_ProjectPath;

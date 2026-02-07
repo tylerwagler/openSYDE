@@ -2,6 +2,7 @@
 #define CKFXVARIABLELISTSHPP
 
 #include "stwtypes.hpp"
+#include <QStringList>
 #include "CKFXVariableListBase.hpp"
 #include "DiagLib_config.hpp"
 
@@ -44,7 +45,7 @@ public:
 
    uint16_t u16_CRCOverCRCsServer;                                     ///< last EEPROM value CRC over CRCs read from
                                                                        // ECU
-   QList<QString> ac_DefaultNames; //names of default sets
+   QStringList ac_DefaultNames; //names of default sets
 };
 
 //---------------------------------------------------------------------------

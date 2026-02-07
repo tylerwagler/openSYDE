@@ -72,7 +72,7 @@ static const QString mc_SIG_FILE_ATTR = "name";                                 
    \retval   C_CONFIG   Input invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const std::vector<QString> & orc_Files,
+int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const QStringList & orc_Files,
                                                  const std::vector<C_OscSupNodeDefinition> & orc_Nodes)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -112,13 +112,13 @@ int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const std::vector<QString> & or
    \retval   C_RD_WR    read/write error (see log file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const std::vector<QString> & orc_Files,
-                                                 const std::vector<QString> & orc_NodeFoldersAbs,
+int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const QStringList & orc_Files,
+                                                 const QStringList & orc_NodeFoldersAbs,
                                                  const std::vector<uint8_t> & orc_ActiveNodes,
                                                  std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                                  std::map<uint32_t, uint32_t> & orc_UpdateOrderByNodes,
                                                  const std::vector<uint32_t> & orc_UpdatePosition,
-                                                 std::vector<QString> & orc_Signatures)
+                                                 QStringList & orc_Signatures)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -223,7 +223,7 @@ int32_t C_OscSupNodeDefinitionFiler::mh_SaveNode(const QString & orc_File,
    \param[in]      orc_ElementNodeName    XML node name to use on item level
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupNodeDefinitionFiler::mh_LoadFilesSection(std::vector<QString> & orc_Files,
+void C_OscSupNodeDefinitionFiler::mh_LoadFilesSection(QStringList & orc_Files,
                                                       const uint32_t ou32_NodeCounter, const uint32_t ou32_UpdatePos,
                                                       std::map<uint32_t, uint32_t> & orc_PositionMap,
                                                       const QString & orc_NodeFolderAbs,
@@ -316,7 +316,7 @@ void C_OscSupNodeDefinitionFiler::mh_LoadPemConfigSection(C_OscSuSequences::C_Do
    \param[in]      orc_ElementNodeName    XML node name to use on item level
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupNodeDefinitionFiler::mh_SaveFiles(const std::vector<QString> & orc_Files,
+void C_OscSupNodeDefinitionFiler::mh_SaveFiles(const QStringList & orc_Files,
                                                C_OscXmlParserBase & orc_XmlParser,
                                                const QString & orc_BaseNodeName,
                                                const QString & orc_ElementNodeName)

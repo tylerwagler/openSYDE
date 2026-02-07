@@ -103,7 +103,7 @@ C_PopFileTableView::C_PopFileTableView(QWidget * const opc_Parent) :
    \param[in]  orc_RecentProjects   Recent projects
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PopFileTableView::UpdateData(const std::vector<QString> & orc_RecentFilePaths,
+void C_PopFileTableView::UpdateData(const QStringList & orc_RecentFilePaths,
                                     const std::vector<stw::opensyde_core::C_OscProject> & orc_RecentProjects)
 {
    this->mc_Model.UpdateData(orc_RecentFilePaths, orc_RecentProjects);

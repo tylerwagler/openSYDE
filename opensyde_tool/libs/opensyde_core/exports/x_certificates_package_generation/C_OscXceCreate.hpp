@@ -30,7 +30,7 @@ class C_OscXceCreate :
 {
 public:
    static int32_t h_CreatePackage(const QString & orc_PackagePath,
-                                  const std::vector<QString> & orc_CertificatesPath,
+                                  const QStringList & orc_CertificatesPath,
                                   const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
                                   QStringList & orc_WarningMessages,
                                   QString & orc_ErrorMessage,
@@ -40,13 +40,13 @@ private:
    static const QString mhc_USE_CASE;
 
    static int32_t mh_CheckParamsToCreatePackage(const QString & orc_PackagePath,
-                                                const std::vector<QString> & orc_CertificatesPath,
+                                                const QStringList & orc_CertificatesPath,
                                                 const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
    static int32_t mh_CheckFileExists(const QString & orc_Path);
    static C_OscXceManifest mh_CreateManifest(
       const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
    static int32_t mh_PrepareCertFiles(const QString & orc_TmpPath,
-                                      const std::vector<QString> & orc_CertificatesPath,
+                                      const QStringList & orc_CertificatesPath,
                                       std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
                                       std::set<QString> & orc_XcertFiles);
    static QString mh_GenOutFilePathPart(const QString & orc_InPath,

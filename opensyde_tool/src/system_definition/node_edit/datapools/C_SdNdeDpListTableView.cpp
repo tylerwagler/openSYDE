@@ -867,7 +867,7 @@ void C_SdNdeDpListTableView::Reset(void)
    \param[in]  orc_VariableNames    New selected variable names
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListTableView::SetSelectedVariableNames(const std::vector<QString> & orc_VariableNames)
+void C_SdNdeDpListTableView::SetSelectedVariableNames(const QStringList & orc_VariableNames)
 {
    if (this->mpc_ModelViewManager != NULL)
    {
@@ -908,9 +908,9 @@ void C_SdNdeDpListTableView::SetSelectedVariableNames(const std::vector<QString>
    Current selected variable names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<QString> C_SdNdeDpListTableView::GetSelectedVariableNames(void) const
+QStringList C_SdNdeDpListTableView::GetSelectedVariableNames(void) const
 {
-   std::vector<QString> c_Retval;
+   QStringList c_Retval;
    const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
       this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
    if (pc_List != NULL)
@@ -923,7 +923,7 @@ std::vector<QString> C_SdNdeDpListTableView::GetSelectedVariableNames(void) cons
          if (u32_VarIndex < pc_List->c_Elements.size())
          {
             const C_OscNodeDataPoolListElement & rc_Element = pc_List->c_Elements[u32_VarIndex];
-            c_Retval.emplace_back(rc_Element.c_Name);
+            c_Retval.append(rc_Element.c_Name);
          }
       }
    }

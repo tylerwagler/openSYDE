@@ -267,7 +267,7 @@ int32_t C_UsHandler::GetTransferDataTimeout(void) const {
 /*! \brief  Set last known Update Hex File Paths
 
    \return
-   std::vector<QString>
+   QStringList
 */
 //----------------------------------------------------------------------------------------------------------------------
 QStringList C_UsHandler::GetLastKnownUpdateHexFilePaths() const {
@@ -278,7 +278,7 @@ QStringList C_UsHandler::GetLastKnownUpdateHexFilePaths() const {
 /*! \brief  Set last known Update Hex File Paths as relative or absolute
 
    \return
-   std::vector<QString>
+   QStringList
 */
 //----------------------------------------------------------------------------------------------------------------------
 QStringList C_UsHandler::GetHexFilePathsAsRelativeOrAbsolute() const {

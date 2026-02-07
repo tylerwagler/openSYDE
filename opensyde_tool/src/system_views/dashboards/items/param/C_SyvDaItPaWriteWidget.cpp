@@ -637,7 +637,7 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
             for (u32_ElementCounter = 0U; u32_ElementCounter < pc_OscList->c_Elements.size(); ++u32_ElementCounter)
             {
                const C_OscNodeDataPoolListElement * pc_OscElement;
-               std::vector<QString> c_NvmValues;
+               QStringList c_NvmValues;
                QString c_ElementNumber;
                QString c_ElementText;
                QString c_SpanChangedStart = "";

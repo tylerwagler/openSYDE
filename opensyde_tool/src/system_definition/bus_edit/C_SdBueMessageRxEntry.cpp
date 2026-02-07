@@ -137,7 +137,7 @@ void C_SdBueMessageRxEntry::Init(const QString & orc_EntryName, const uint32_t o
                                  const std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> & orc_ReceiveTimeoutModes,
                                  const std::vector<uint32_t> & orc_ReceiveTimeoutValues,
                                  const std::vector<uint32_t> & orc_DatapoolIndexes,
-                                 const std::vector<QString> & orc_DatapoolNames, const bool oq_NodeLayer,
+                                 const QStringList & orc_DatapoolNames, const bool oq_NodeLayer,
                                  const bool oq_ReadOnly)
 {
    const uint32_t u32_NumEntries = orc_DatapoolIndexes.size();
@@ -192,7 +192,7 @@ void C_SdBueMessageRxEntry::Init(const QString & orc_EntryName, const uint32_t o
       for (u32_ItEntry = 0U; u32_ItEntry < orc_DatapoolIndexes.size(); ++u32_ItEntry)
       {
          std::vector<uint32_t> c_NodeDatapoolIndexes;
-         std::vector<QString> c_NodeDatapoolNames;
+         QStringList c_NodeDatapoolNames;
          std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_ReceiveTimeoutModes;
          std::vector<uint32_t> c_ReceiveTimeoutValues;
          C_SdBueMessageRxEntry * const pc_Entry = new C_SdBueMessageRxEntry(this);

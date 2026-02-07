@@ -227,7 +227,7 @@ void C_SyvDaItTaModel::UpdateValue(void)
             if (pc_TableWidget->GetDataPoolElementIndex(u32_ItElement, c_Id) == C_NO_ERR)
             {
                std::vector<float64_t> c_UnscaledValues;
-               std::vector<QString> c_ScaledDisplayValues;
+               QStringList c_ScaledDisplayValues;
                if ((pc_TableWidget->GetLastValueUnscaled(u32_ItElement, c_UnscaledValues,
                                                          c_ScaledDisplayValues) == C_NO_ERR) &&
                    (c_UnscaledValues.size() > 0))
@@ -1709,7 +1709,7 @@ void C_SyvDaItTaModel::m_InitMinMaxAndNameForOneRow(const C_PuiSvDbNodeDataPoolL
       this->mc_InterpretAsStringFlags[ou32_Index] = false;
       this->mc_UnscaledMaxValues[ou32_Index] = c_Empty;
       this->mc_UnscaledMinValues[ou32_Index] = c_Empty;
-      this->mc_ScaledDisplayDataValues[ou32_Index] = std::vector<QString>();
+      this->mc_ScaledDisplayDataValues[ou32_Index] = QStringList();
       this->mc_UnscaledLastDataValues[ou32_Index] = c_Empty;
       this->mc_ArrayItemIndex[ou32_Index] = 0UL;
    }
@@ -1773,7 +1773,7 @@ void C_SyvDaItTaModel::m_InitStartValueForOneRow(const C_PuiSvDbNodeDataElementC
    C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_FullyUsefulAndTotallyNecessaryVariable;
    C_OscNodeDataPoolContent c_Val = orc_OscElement.c_MinValue;
    std::vector<float64_t> c_Values;
-   std::vector<QString> c_Formatted;
+   QStringList c_Formatted;
    C_PuiSvDbDataElementDisplayFormatterConfig c_Formatter;
    //Formatter
    c_Formatter.SetDisplayFormatter(orc_ElementConfig.c_DisplayFormatter);
@@ -1813,7 +1813,7 @@ void C_SyvDaItTaModel::m_AddAndInitMinMaxAndNameForItem(const uint32_t ou32_Inde
       {
          //Reserve
          this->mc_ScaledDisplayDataValues.insert(this->mc_ScaledDisplayDataValues.begin() + ou32_Index,
-                                                 std::vector<QString>());
+                                                 QStringList());
          this->mc_UnscaledLastDataValues.insert(this->mc_UnscaledLastDataValues.begin() + ou32_Index,
                                                 std::vector<float64_t>());
          this->mc_UnscaledMaxValues.insert(this->mc_UnscaledMaxValues.begin() + ou32_Index, std::vector<float64_t>());

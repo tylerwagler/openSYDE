@@ -1417,7 +1417,7 @@ int32_t C_SdNdeDpContentUtil::h_SimpleConvertFromVariant(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpContentUtil::h_GetValuesAsScaledString(
     const C_OscNodeDataPoolContent &orc_Content, const float64_t of64_Factor,
-    const float64_t of64_Offset, std::vector<QString> &orc_Output,
+    const float64_t of64_Offset, QStringList &orc_Output,
     const bool oq_AllowRangeAdaptation) {
   if (orc_Content.GetArray() == false) {
     QString c_Tmp;
@@ -1452,7 +1452,7 @@ void C_SdNdeDpContentUtil::h_GetValuesAsScaledCombinedString(
     const C_OscNodeDataPoolContent &orc_Content, const float64_t of64_Factor,
     const float64_t of64_Offset, QString &orc_Output,
     const bool oq_AllowRangeAdaptation) {
-  std::vector<QString> c_Output;
+  QStringList c_Output;
   C_SdNdeDpContentUtil::h_GetValuesAsScaledString(
       orc_Content, of64_Factor, of64_Offset, c_Output, oq_AllowRangeAdaptation);
   orc_Output = C_SdNdeDpContentUtil::h_CombineString(c_Output);
@@ -1468,7 +1468,7 @@ void C_SdNdeDpContentUtil::h_GetValuesAsScaledCombinedString(
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString
-C_SdNdeDpContentUtil::h_CombineString(const std::vector<QString> &orc_Input) {
+C_SdNdeDpContentUtil::h_CombineString(const QStringList &orc_Input) {
   QString c_Retval = "";
 
   for (uint32_t u32_It = 0; u32_It < orc_Input.size(); ++u32_It) {

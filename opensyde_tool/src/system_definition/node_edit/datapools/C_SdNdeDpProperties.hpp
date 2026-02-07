@@ -10,6 +10,7 @@
 #define C_SDNDEDPPROPERTIES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include <QWidget>
 
 #include "stwtypes.hpp"
@@ -79,7 +80,7 @@ private:
    void m_SpinBoxSizeChanged(const int32_t os32_Value) const;
    void m_UpdateSizePrediction(void) const;
    void m_CheckDatapoolName(void) const;
-   bool m_CheckDatapoolNameNotDuplicate(std::vector<QString> * const opc_ExistingDatapoolNames) const;
+   bool m_CheckDatapoolNameNotDuplicate(QStringList * const opc_ExistingDatapoolNames) const;
    void m_InitSpinBox(void) const;
    void m_InitComboBoxProtocols(const bool oq_NewDatapool, const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ComProtocolType =
                                    stw::opensyde_core::C_OscCanProtocol::eLAYER2) const;

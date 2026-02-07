@@ -9,6 +9,7 @@
 #define C_OSCHALCDEFFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include "C_OscHalcDef.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -54,10 +55,10 @@ private:
    static int32_t mh_LoadChannelUseCases(std::vector<C_OscHalcDefChannelUseCase> & orc_ChannelUsecases,
                                          C_OscXmlParserBase & orc_XmlParser, const uint32_t ou32_NumChannels);
    static int32_t mh_SplitAvailabilityString(const QString & orc_AvailabilityString,
-                                             std::vector<QString> & orc_SubElements,
+                                             QStringList & orc_SubElements,
                                              const C_OscXmlParserBase & orc_XmlParser,
                                              const QString & orc_AttributeName);
-   static int32_t mh_ParseAvailabilityStringSubElements(const std::vector<QString> & orc_SubElements,
+   static int32_t mh_ParseAvailabilityStringSubElements(const QStringList & orc_SubElements,
                                                         std::vector<C_OscHalcDefChannelAvailability> & orc_Availability,
                                                         const uint32_t ou32_NumChannels,
                                                         const C_OscXmlParserBase & orc_XmlParser,
@@ -82,10 +83,10 @@ private:
    static int32_t mh_DomainCategoryStringToEnum(const QString & orc_Category,
                                                 C_OscHalcDefDomain::E_Category & ore_Category);
    static void mh_GetAllNames(const std::vector<C_OscHalcDefStruct> & orc_Values,
-                              std::vector<QString> & orc_Names);
+                              QStringList & orc_Names);
    static int32_t mh_CheckDuplicateNames(const QString & orc_Section,
                                          const QString & orc_DomainSingularName,
-                                         const std::vector<QString> & orc_Names);
+                                         const QStringList & orc_Names);
    static QString mh_SafetyModeToString(
       const C_OscHalcDefBase::E_SafetyMode & ore_NodeDataPoolElementAccess);
    static int32_t mh_StringToSafetyMode(const QString & orc_String,

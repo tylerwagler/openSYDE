@@ -205,7 +205,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(
     const QString &orc_PackagePath, const QString &orc_TemporaryDirectory,
     const QString &orc_UseCase, const QString &orc_PackageExtension,
     const QString &orc_TemporaryPackageExtension,
-    const std::vector<QString> &orc_AllStaticSubFolders,
+    const QStringList &orc_AllStaticSubFolders,
     QString &orc_UsedTempPath, QString &orc_ErrorMessage) {
   int32_t s32_Return = C_NO_ERR;
 
@@ -270,7 +270,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(
   // take current system definition of view (is required) and store to file
   const QString c_SysDefPath = orc_UsedTempPath + orc_SystemDefinitionFileName;
 
-  std::vector<QString> c_AdditionalFiles;
+  QStringList c_AdditionalFiles;
   int32_t s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
       orc_SystemDefinition, c_SysDefPath, &c_AdditionalFiles);
   if (s32_Return == C_NO_ERR) {

@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QStringList>
 #include <QWidget>
 #include <QTreeWidgetItem>
 #include <QUndoStack>
@@ -64,8 +65,8 @@ public:
    void SelectDataElement(const int32_t os32_DataElementIndex) const;
    bool IsSelected(void) const;
    void Reset(void);
-   void SetSelectedVariableNames(const std::vector<QString> & orc_VariableNames) const;
-   std::vector<QString> GetSelectedVariableNames(void) const;
+   void SetSelectedVariableNames(const QStringList & orc_VariableNames) const;
+   QStringList GetSelectedVariableNames(void) const;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

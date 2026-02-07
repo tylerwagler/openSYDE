@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <QMap>
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 
@@ -582,7 +583,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpda
       QString c_CurrentNodeUpdateInformationNode = orc_XmlParser.SelectNodeChild("path");
       if (c_CurrentNodeUpdateInformationNode == "path")
       {
-         std::vector<QString> c_Paths;
+         QStringList c_Paths;
          std::vector<bool> c_PathsSkipFlags;
          do
          {
@@ -595,7 +596,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpda
          // Adapt size for skip flags for compatibility
          c_PathsSkipFlags.resize(orc_Node.c_Applications.size(), false);
 
-         if (orc_Node.c_Applications.size() == c_Paths.size())
+         if (orc_Node.c_Applications.size() == static_cast<uint32_t>(c_Paths.size()))
          {
             //matching size
             orc_NodeUpdateInformation.SetPaths(c_Paths, C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
@@ -605,7 +606,10 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpda
          {
             //invalid size
             c_Paths.clear();
-            c_Paths.resize(orc_Node.c_Applications.size(), "");
+            for (uint32_t u32_It = 0UL; u32_It < orc_Node.c_Applications.size(); ++u32_It)
+            {
+               c_Paths.push_back("");
+            }
             orc_NodeUpdateInformation.SetPaths(c_Paths, C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
             orc_NodeUpdateInformation.SetSkipUpdateOfPathsFlags(c_PathsSkipFlags, C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
          }
@@ -2398,15 +2402,15 @@ void C_PuiSvHandlerFilerV1::mh_SaveNodeUpdateInformation(
         ++u32_ItNodeActiveFlag)
    {
       const C_OscViewNodeUpdate & rc_NodeUpdateInformation = orc_NodeUpdateInformation[u32_ItNodeActiveFlag];
-      const std::vector<QString> & rc_ApplicationPaths = rc_NodeUpdateInformation.GetPaths(
+      const QStringList & c_ApplicationPaths = rc_NodeUpdateInformation.GetPaths(
          C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
       orc_XmlParser.CreateAndSelectNodeChild("node-specific-update-information");
       orc_XmlParser.SetAttributeUint32("position", rc_NodeUpdateInformation.u32_NodeUpdatePosition);
       orc_XmlParser.CreateAndSelectNodeChild("paths");
-      for (uint32_t u32_ItApplicationPath = 0; u32_ItApplicationPath < rc_ApplicationPaths.size();
+      for (uint32_t u32_ItApplicationPath = 0; u32_ItApplicationPath < static_cast<uint32_t>(c_ApplicationPaths.size());
            ++u32_ItApplicationPath)
       {
-         orc_XmlParser.CreateNodeChild("path", rc_ApplicationPaths[u32_ItApplicationPath]);
+         orc_XmlParser.CreateNodeChild("path", c_ApplicationPaths[u32_ItApplicationPath]);
       }
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node-specific-update-information");

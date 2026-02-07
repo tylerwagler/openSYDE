@@ -12,6 +12,7 @@
 #define C_OSCEXPORTPARAMSET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include "C_OscNode.hpp"
 #include "C_OscParamSetHandler.hpp"
 
@@ -30,7 +31,7 @@ public:
    static QString h_GetFileName(const C_OscNodeApplication & orc_DataBlock, const bool oq_IsSafe);
    static int32_t h_CreateParameterSetImage(const QString & orc_Path, const C_OscNode & orc_Node,
                                             const uint16_t ou16_ApplicationIndex,
-                                            std::vector<QString> & orc_Files,
+                                            QStringList & orc_Files,
                                             const QString & orc_ExportToolName = "",
                                             const QString & orc_ExportToolVersion = "");
 
@@ -49,7 +50,7 @@ protected:
                                             const C_OscParamSetInterpretedNode & orc_IntNode, const bool oq_IsSafe,
                                             const C_OscNodeApplication & orc_DataBlock,
                                             const QString & orc_Path,
-                                            std::vector<QString> & orc_Files,
+                                            QStringList & orc_Files,
                                             const QString & orc_ExportToolName,
                                             const QString & orc_ExportToolVersion);
 

@@ -15,6 +15,7 @@
 #include <QString>
 #include <QMap>
 #include <QPoint>
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_UsSystemViewDashboard.hpp"
 #include "C_UsSystemViewNode.hpp"
@@ -56,7 +57,7 @@ public:
    void SetUpdateEmptyOptionalSectionsVisible(const bool oq_Visible);
    C_UsSystemViewNode GetSvNode(const QString & orc_NodeName) const;
    void SetNodeSectionsExpanded(const QString & orc_NodeName, const QVector<bool> & orc_ExpandedFlags);
-   const QList<QString> GetViewNodesKeysInternal(void) const;
+   const QStringList GetViewNodesKeysInternal(void) const;
 
    // Navigation
    void SetNavigationExpandedStatus(const bool oq_NavigationExpandedStatus);
@@ -70,7 +71,7 @@ public:
    void SetProjSvDashboardScenePositionAndZoom(const QString & orc_DashboardName, const QPoint & orc_Position,
                                                const int32_t os32_Zoom);
    C_UsSystemViewDashboard GetDashboardSettings(const QString & orc_DashboardName) const;
-   const QList<QString> GetDashboardKeysInternal(void) const;
+   const QStringList GetDashboardKeysInternal(void) const;
    QPoint GetDashboardToolboxPos(void) const;
    void SetDashboardToolboxPos(const QPoint & orc_Value);
    QSize GetDashboardToolboxSize(void) const;

@@ -71,12 +71,12 @@ public:
     C_DoFlash(void);
 
     /// list of files to flash (keep size to 0 to not flash any files)
-    std::vector<QString> c_FilesToFlash;
+    QStringList c_FilesToFlash;
     /// list of parameter files to write to NVM (keep size to 0 to not write any
     /// files)
-    std::vector<QString> c_FilesToWriteToNvm;
+    QStringList c_FilesToWriteToNvm;
     /// optional list of names to allow (other than the device name itself)
-    std::vector<QString> c_OtherAcceptedDeviceNames;
+    QStringList c_OtherAcceptedDeviceNames;
 
     /// optional PEM file (empty string for no PEM file)
     QString c_PemFile;
@@ -344,8 +344,8 @@ private:
   std::vector<C_OscSuSequencesNodeUpdateStates> mc_UpdateStatesNodes;
 
   int32_t m_FlashNodeOpenSydeHex(
-      const std::vector<QString> &orc_FilesToFlash,
-      const std::vector<QString> &orc_OtherAcceptedDeviceNames,
+      const QStringList &orc_FilesToFlash,
+      const QStringList &orc_OtherAcceptedDeviceNames,
       const uint32_t ou32_RequestDownloadTimeout,
       const uint32_t ou32_TransferDataTimeout, bool &orq_SetProgrammingMode,
       std::vector<C_OscSuSequencesNodeHexFileStates> &orc_StateHexFiles);
@@ -356,7 +356,7 @@ private:
       const uint32_t ou32_TransferDataTimeout,
       C_OscSuSequencesNodeHexFileStates &orc_StateHexFile);
   int32_t m_FlashNodeOpenSydeFile(
-      const std::vector<QString> &orc_FilesToFlash,
+      const QStringList &orc_FilesToFlash,
       const uint32_t ou32_RequestDownloadTimeout,
       const uint32_t ou32_TransferDataTimeout,
       const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
@@ -369,7 +369,7 @@ private:
       const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
       C_OscSuSequencesNodeOtherFileStates &orc_StateOtherFile);
   int32_t m_WriteNvmOpenSyde(
-      const std::vector<QString> &orc_FilesToWrite,
+      const QStringList &orc_FilesToWrite,
       const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
       const bool oq_SetProgrammingMode,
       std::vector<C_OscSuSequencesNodePsiFileStates> &orc_StatePsiFiles);
@@ -387,7 +387,7 @@ private:
   int32_t m_WriteFingerPrintOsy(void);
 
   int32_t m_FlashNodeXfl(
-      const std::vector<QString> &orc_FilesToFlash,
+      const QStringList &orc_FilesToFlash,
       std::vector<C_OscSuSequencesNodeStwFlHexFileStates> &orc_StateHexFiles);
 
   int32_t m_ReadDeviceInformationOpenSyde(

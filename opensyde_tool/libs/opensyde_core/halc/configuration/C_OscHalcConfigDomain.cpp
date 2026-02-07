@@ -150,7 +150,7 @@ void C_OscHalcConfigDomain::CheckChannelNameUnique(const uint32_t ou32_ChannelIn
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
                                                   bool & orq_IsLinked,
-                                                  std::vector<QString> * const opc_LinkedChannelNames,
+                                                  QStringList * const opc_LinkedChannelNames,
                                                   std::vector<uint32_t> * const opc_LinkedChannelIndices,
                                                   const uint32_t * const opu32_UseCaseIndex) const
 {

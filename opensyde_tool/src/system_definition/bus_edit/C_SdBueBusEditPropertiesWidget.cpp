@@ -299,7 +299,7 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
          {
             QString c_Content;
             const QString c_Heading = "Selected bitrate not supported by following connected nodes:";
-            std::vector<QString> c_InvalidNodesForBitRate;
+            QStringList c_InvalidNodesForBitRate;
             C_PuiSdHandler::h_GetInstance()->CheckBusConflictDetailed(this->mu32_BusIndex, NULL, NULL, NULL,
                                                                       &c_InvalidNodesForBitRate, NULL);
             for (uint32_t u32_ItNode = 0UL; (u32_ItNode < c_InvalidNodesForBitRate.size()) &&
@@ -352,7 +352,7 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
                {
                   QString c_Content;
                   const QString c_Heading = "Selected bitrate not supported by following connected nodes:";
-                  std::vector<QString> c_InvalidNodesForCanFdBitRate;
+                  QStringList c_InvalidNodesForCanFdBitRate;
                   C_PuiSdHandler::h_GetInstance()->CheckBusConflictDetailed(this->mu32_BusIndex, NULL, NULL, NULL,
                                                                             &c_InvalidNodesForCanFdBitRate, NULL);
                   for (uint32_t u32_ItNode = 0UL; (u32_ItNode < c_InvalidNodesForCanFdBitRate.size()) &&
@@ -785,7 +785,7 @@ void C_SdBueBusEditPropertiesWidget::m_RegisterNameChange(void)
 
    if (hq_InProgress == false)
    {
-      std::vector<QString> c_ExistingNames;
+      QStringList c_ExistingNames;
       hq_InProgress = true;
       if (C_PuiSdHandler::h_GetInstance()->CheckBusNameAvailable(this->mpc_Ui->pc_LineEditBusName->text(), &this->mu32_BusIndex,
                                                                  &c_ExistingNames) == false)

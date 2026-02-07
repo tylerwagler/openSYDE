@@ -32,8 +32,8 @@ public:
 
    void SetTypeNode(const bool oq_IsNode);
    void SetSelectedIndexAndScroll(const int32_t os32_Selected);
-   void SetContent(const std::vector<QString> & orc_Content,
-                   const std::vector<std::vector<QString> > & orc_SubContent = std::vector<std::vector<QString> >());
+   void SetContent(const QStringList & orc_Content,
+                   const QList<QStringList> & orc_SubContent = QList<QStringList>());
    void SetError(const std::vector<bool> & orc_Error);
    void UpdateItem(const uint32_t ou32_Index, const QString & orc_Content);
 

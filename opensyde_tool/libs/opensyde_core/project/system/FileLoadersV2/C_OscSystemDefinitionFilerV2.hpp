@@ -15,6 +15,7 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QStringList>
 #include "C_OscNode.hpp"
 #include "C_OscNodeFilerV2.hpp"
 #include "C_OscSystemBus.hpp"
@@ -44,7 +45,7 @@ public:
       const QString &orc_PathSystemDefinition,
       const QString &orc_PathDeviceDefinitions,
       const bool oq_UseDeviceDefinitions = true,
-      std::vector<QString> *const opc_ErrorDetailsMissingDevices = NULL);
+      QStringList *const opc_ErrorDetailsMissingDevices = NULL);
   static int32_t
   h_SaveSystemDefinitionFile(const C_OscSystemDefinition &orc_SystemDefinition,
                              const QString &orc_Path);
@@ -60,7 +61,7 @@ public:
       C_OscXmlParserBase &orc_XmlParser,
       const C_OscDeviceManager &orc_DeviceDefinitions,
       const bool oq_UseDeviceDefinitions = true,
-      std::vector<QString> *const opc_ErrorDetailsMissingDevices = NULL);
+      QStringList *const opc_ErrorDetailsMissingDevices = NULL);
   static int32_t h_LoadBuses(std::vector<C_OscSystemBus> &orc_Buses,
                              C_OscXmlParserBase &orc_XmlParser);
   static void h_SaveNodes(const std::vector<C_OscNode> &orc_Nodes,
@@ -72,7 +73,7 @@ public:
       C_OscXmlParserBase &orc_XmlParser,
       const QString &orc_PathDeviceDefinitions,
       const bool oq_UseDeviceDefinitions = true,
-      std::vector<QString> *const opc_ErrorDetailsMissingDevices = NULL);
+      QStringList *const opc_ErrorDetailsMissingDevices = NULL);
   static void
   h_SaveSystemDefinition(const C_OscSystemDefinition &orc_SystemDefinition,
                          C_OscXmlParserBase &orc_XmlParser);

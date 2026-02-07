@@ -234,7 +234,7 @@ void C_NagMainWidget::LoadInitialProject(void)
    QString c_LoadedProject;
    int32_t s32_Error = C_NO_ERR;
 
-   std::vector<QString> c_ErrorDetailsMissingDevices;
+   QStringList c_ErrorDetailsMissingDevices;
 
    if (C_PuiProject::h_GetInstance()->PrepareLoadInitialProject() == C_CHECKSUM)
    {
@@ -278,14 +278,14 @@ void C_NagMainWidget::LoadProject(const QString & orc_FilePath)
    {
       uint16_t u16_Version = 0U;
       int32_t s32_Result;
-      std::vector<QString> c_ErrorDetailsMissingDevices;
+      QStringList c_ErrorDetailsMissingDevices;
 
       Q_EMIT (this->SigBeforeOtherProjectLoad());
       C_PuiProject::h_GetInstance()->SetPath(orc_FilePath);
       s32_Result = this->m_LoadConcreteProject(&u16_Version, &c_ErrorDetailsMissingDevices);
       C_PopErrorHandling::h_ProjectLoadErr(s32_Result,
                                            C_PuiProject::h_GetInstance()->GetPath(), this, u16_Version,
-                                           QStringList(c_ErrorDetailsMissingDevices.begin(), c_ErrorDetailsMissingDevices.end()));
+                                           c_ErrorDetailsMissingDevices);
 
       if (s32_Result == C_NO_ERR)
       {
@@ -309,7 +309,7 @@ void C_NagMainWidget::LoadProject(const QString & orc_FilePath)
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagMainWidget::UpdateRecentProjects(void)
 {
-   std::vector<QString> c_Files;
+   QStringList c_Files;
    std::vector<C_OscProject> c_Projects;
    const QStringList c_List = C_UsHandler::h_GetInstance()->GetRecentProjects();
    for (QStringList::const_iterator c_ItList = c_List.begin(); c_ItList != c_List.end(); ++c_ItList)
@@ -908,7 +908,7 @@ void C_NagMainWidget::m_OnIndexClicked(const QModelIndex & orc_ModelIndex)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_NagMainWidget::m_LoadConcreteProject(uint16_t * const opu16_FileVersion,
-                                               std::vector<QString> * const opc_ErrorDetailsMissingDevices)
+                                               QStringList * const opc_ErrorDetailsMissingDevices)
 {
    int32_t s32_Result = C_NO_ERR;
 
@@ -986,7 +986,7 @@ int32_t C_NagMainWidget::m_GetPassword(QString & orc_Password)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagMainWidget::m_CancelPasswordDialog(uint16_t ou16_ProjectFileVersion,
-                                             std::vector<QString> * const opc_ErrorDetailsMissingDevices)
+                                             QStringList * const opc_ErrorDetailsMissingDevices)
 {
    int32_t s32_Result;
 

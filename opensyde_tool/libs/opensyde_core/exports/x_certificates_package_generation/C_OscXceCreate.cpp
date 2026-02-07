@@ -81,7 +81,7 @@ const QString C_OscXceCreate::mhc_USE_CASE = "Creating X-Certificates Package";
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceCreate::h_CreatePackage(const QString & orc_PackagePath,
-                                        const std::vector<QString> & orc_CertificatesPath,
+                                        const QStringList & orc_CertificatesPath,
                                         const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters, QStringList & orc_WarningMessages, QString & orc_ErrorMessage,
                                         const QString & orc_TemporaryDirectory)
 {
@@ -113,7 +113,7 @@ int32_t C_OscXceCreate::h_CreatePackage(const QString & orc_PackagePath,
    //   and has therefore be the first action for creating service update package
    if (s32_Return == C_NO_ERR)
    {
-      std::vector<QString> c_AllStaticSubFolders;
+      QStringList c_AllStaticSubFolders;
       c_AllStaticSubFolders.push_back(mhc_CERTIFICATES_FOLDER);
       c_AllStaticSubFolders.push_back(mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER);
       QString c_PackagePathTmpQt;
@@ -191,7 +191,7 @@ int32_t C_OscXceCreate::h_CreatePackage(const QString & orc_PackagePath,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceCreate::mh_CheckParamsToCreatePackage(const QString & orc_PackagePath,
-                                                      const std::vector<QString> & orc_CertificatesPath,
+                                                      const QStringList & orc_CertificatesPath,
                                                       const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters)
 {
    int32_t s32_Return = C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath,
@@ -288,7 +288,7 @@ C_OscXceManifest C_OscXceCreate::mh_CreateManifest(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceCreate::mh_PrepareCertFiles(const QString & orc_TmpPath,
-                                            const std::vector<QString> & orc_CertificatesPath,
+                                            const QStringList & orc_CertificatesPath,
                                             std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
                                             std::set<QString> & orc_XcertFiles)
 {

@@ -9,6 +9,7 @@
 #define C_OSCHALCCONFIGFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscHalcConfig.hpp"
@@ -30,12 +31,12 @@ public:
                              const QString & orc_BasePath);
    static int32_t h_SaveFile(const C_OscHalcConfig & orc_IoData, const QString & orc_Path,
                              const QString & orc_BasePath,
-                             std::vector<QString> * const opc_CreatedFiles);
+                             QStringList * const opc_CreatedFiles);
    static int32_t h_LoadData(C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
                              const QString & orc_BasePath);
    static int32_t h_SaveData(const C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
                              const QString & orc_BasePath,
-                             std::vector<QString> * const opc_CreatedFiles);
+                             QStringList * const opc_CreatedFiles);
 
    static int32_t h_PrepareForFile(const QString & orc_Path);
 
@@ -49,7 +50,7 @@ private:
 
    static int32_t mh_SaveIoDataBase(const C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
                                     const QString & orc_BasePath,
-                                    std::vector<QString> * const opc_CreatedFiles);
+                                    QStringList * const opc_CreatedFiles);
    static int32_t mh_SaveIoDomains(const C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_SaveIoChannels(const std::vector<C_OscHalcConfigChannel> & orc_Channels,
                                     C_OscXmlParserBase & orc_XmlParser);

@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 #include <QString>
+#include <QStringList>
 #include "C_OscNode.hpp"
 #include "C_OscNodeFiler.hpp"
 #include "C_OscSystemBus.hpp"
@@ -41,10 +42,10 @@ public:
                                              const std::vector<uint8_t> * const opc_NodesToLoad = NULL,
                                              const bool oq_SkipContent = false,
                                              const QString * const opc_ExpectedNodeName = NULL,
-                                             std::vector<QString> * const opc_ErrorDetailsMissingDevices = NULL);
+                                             QStringList * const opc_ErrorDetailsMissingDevices = NULL);
    static int32_t h_SaveSystemDefinitionFile(const C_OscSystemDefinition & orc_SystemDefinition,
                                              const QString & orc_Path,
-                                             std::vector<QString> * const opc_CreatedFiles = NULL);
+                                             QStringList * const opc_CreatedFiles = NULL);
    static int32_t h_LoadNodes(std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
                               const C_OscDeviceManager & orc_DeviceDefinitions,
                               const QString & orc_BasePath, const bool oq_UseDeviceDefinitions = true,
@@ -52,11 +53,11 @@ public:
                               const std::vector<uint8_t> * const opc_NodesToLoad = NULL,
                               const bool oq_SkipContent = false,
                               const QString * const opc_ExpectedNodeName = NULL,
-                              std::vector<QString> * const opc_ErrorDetailsMissingDevices = NULL);
+                              QStringList * const opc_ErrorDetailsMissingDevices = NULL);
    static int32_t h_LoadBuses(std::vector<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_SaveNodes(const std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
                               const QString & orc_BasePath,
-                              std::vector<QString> * const opc_CreatedFiles);
+                              QStringList * const opc_CreatedFiles);
    static void h_SaveBuses(const std::vector<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadSystemDefinition(C_OscSystemDefinition & orc_SystemDefinition,
                                          C_OscXmlParserBase & orc_XmlParser,
@@ -67,10 +68,10 @@ public:
                                          const std::vector<uint8_t> * const opc_NodesToLoad = NULL,
                                          const bool oq_SkipContent = false,
                                          const QString * const opc_ExpectedNodeName = NULL,
-                                         std::vector<QString> * const opc_ErrorDetailsMissingDevices = NULL);
+                                         QStringList * const opc_ErrorDetailsMissingDevices = NULL);
    static int32_t h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
                                          C_OscXmlParserBase & orc_XmlParser, const QString & orc_BasePath,
-                                         std::vector<QString> * const opc_CreatedFiles);
+                                         QStringList * const opc_CreatedFiles);
 
    static void h_SplitDeviceType(const QString & orc_CompleteType, QString & orc_MainType,
                                  QString & orc_SubType);

@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <array>
+#include <QStringList>
 
 #include "C_OgeTreeViewToolTipBase.hpp"
 #include "C_TblTreDataElementSortFilter.hpp"
@@ -58,9 +59,9 @@ protected:
 private:
    stw::opensyde_gui_logic::C_CamMosDatabaseSelectionModel mc_Model;
    stw::opensyde_gui_logic::C_TblTreDataElementSortFilter mc_SortModel;
-   static std::vector<QString> mhc_LastKnownExpandedTopLevelItems;
+   static QStringList mhc_LastKnownExpandedTopLevelItems;
 
-   void m_AppendExpandedIndices(std::vector<QString> & orc_FoundItems);
+   void m_AppendExpandedIndices(QStringList & orc_FoundItems);
    void m_RestoreExpandedIndices(void);
    QModelIndex m_ManualMapFromSource(const QModelIndex & orc_Index) const;
 };

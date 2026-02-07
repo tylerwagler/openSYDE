@@ -563,10 +563,10 @@ void C_NagNaviBarWidget::m_NodesChanged(void) const
    uint32_t u32_ChildNodeCounter = 0;
    uint32_t u32_ParentNodeCounter = 0;
 
-   std::vector<QString> c_Nodes;
-   std::vector<std::vector<QString> > c_SubNodes;
+   QStringList c_Nodes;
+   QList<QStringList> c_SubNodes;
    std::vector<int32_t> c_NodeListWithSquads;
-   const std::vector<QString> c_EmptySubNodeDummy; // dummy necessary for correspondence of nodes and sub-nodes
+   const QStringList c_EmptySubNodeDummy; // dummy necessary for correspondence of nodes and sub-nodes
 
    // get node indices
    C_PuiSdHandler::h_GetInstance()->GetNodeToNodeSquadMapping(c_NodeListWithSquads);
@@ -581,7 +581,7 @@ void C_NagNaviBarWidget::m_NodesChanged(void) const
          {
             // standard node
             c_SubNodes.push_back(c_EmptySubNodeDummy);
-            c_Nodes.emplace_back(C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
+            c_Nodes.append(C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                                     u32_ItNodes)->c_Properties.c_Name);
          }
          else
@@ -591,7 +591,7 @@ void C_NagNaviBarWidget::m_NodesChanged(void) const
                C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(c_NodeListWithSquads[u32_ItNodes]);
             if (pc_NodeSquad != NULL)
             {
-               std::vector<QString> c_SubNodeNames;
+               QStringList c_SubNodeNames;
 
                for (uint32_t u32_ItSubNodes = 0; u32_ItSubNodes < pc_NodeSquad->c_SubNodeIndexes.size();
                     u32_ItSubNodes++)
@@ -601,7 +601,7 @@ void C_NagNaviBarWidget::m_NodesChanged(void) const
                }
 
                c_SubNodes.push_back(c_SubNodeNames);
-               c_Nodes.emplace_back(pc_NodeSquad->c_BaseName);
+               c_Nodes.append(pc_NodeSquad->c_BaseName);
 
                // skip sub nodes in complete list (-1 because one up-count is done anyway in loop)
                u32_ChildNodeCounter += static_cast<uint32_t>(pc_NodeSquad->c_SubNodeIndexes.size()) - 1;
@@ -647,7 +647,7 @@ void C_NagNaviBarWidget::m_BussesChanged(void) const
 {
    uint32_t u32_Index;
 
-   std::vector<QString> c_Buses;
+   QStringList c_Buses;
 
    //Update bus count
    this->mpc_Ui->pc_LabelBuses->setText(static_cast<QString>("Buses (%1)").
@@ -657,7 +657,7 @@ void C_NagNaviBarWidget::m_BussesChanged(void) const
    //add new nodes
    for (u32_Index = 0U; u32_Index < C_PuiSdHandler::h_GetInstance()->GetOscBusesSize(); ++u32_Index)
    {
-      c_Buses.emplace_back(C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_Index)->c_Name);
+      c_Buses.append(C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_Index)->c_Name);
    }
    //Update view
    this->mpc_Ui->pc_TreeViewBuses->SetContent(c_Buses);

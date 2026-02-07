@@ -105,7 +105,7 @@ void C_SdBueNodeSelectorWidget::SetBusId(const uint32_t ou32_BusIndex)
 {
    std::vector<uint32_t> c_NodeIndexes;
    std::vector<uint32_t> c_InterfaceIndexes;
-   std::vector<QString> c_NodeNames;
+   QStringList c_NodeNames;
 
    // save the bus index
    this->mu32_BusIndex = ou32_BusIndex;

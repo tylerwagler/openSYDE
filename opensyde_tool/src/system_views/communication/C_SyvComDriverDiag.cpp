@@ -346,7 +346,7 @@ int32_t C_SyvComDriverDiag::SetDiagnosticMode(QString & orc_ErrorDetails)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
-                                                     std::vector<C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, std::vector<QString> & orc_FailedIdErrorDetails, std::map<uint32_t,
+                                                     std::vector<C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, QStringList & orc_FailedIdErrorDetails, std::map<uint32_t,
                                                                                                                                                                                     uint32_t> & orc_FailedNodesElementNumber, std::map<uint32_t,
                                                                                                                                                                                                                                        uint32_t> & orc_NodesElementNumber)
 {

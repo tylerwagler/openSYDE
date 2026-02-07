@@ -378,7 +378,7 @@ void C_SdNdeDpSelectorAddWidget::m_OnSharedDataPoolChanged(void) const
        (rc_SharedDatapools.IsSharedDatapool(c_SelectedDatapoolId, &u32_SharedGroup) == true))
    {
       // Datapool is already shared
-      std::vector<QString> c_SharedDatapoolGroup;
+      QStringList c_SharedDatapoolGroup;
       uint32_t u32_DatapoolCounter;
 
       Q_ASSERT(C_SdNdeDpUtil::h_GetSharedDatapoolGroup(u32_SharedGroup, c_SelectedDatapoolId,

@@ -93,8 +93,8 @@ void C_SdBueMessageRxList::InitStaticNames(void) const
    \param[in] orc_SpecificTooltip            Text for showing a specific tool tip (Empty string for no change)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMessageRxList::AddNodes(const std::vector<QString> & orc_EntryNames,
-                                    const std::vector<QString> & orc_EntryDatapoolNames,
+void C_SdBueMessageRxList::AddNodes(const QStringList & orc_EntryNames,
+                                    const QStringList & orc_EntryDatapoolNames,
                                     const std::vector<uint32_t> & orc_NodeIndexes,
                                     const std::vector<uint32_t> & orc_InterfaceIndexes,
                                     const std::vector<uint32_t> & orc_DatapoolIndexes,
@@ -113,7 +113,7 @@ void C_SdBueMessageRxList::AddNodes(const std::vector<QString> & orc_EntryNames,
    {
       uint32_t u32_MinSize = 0UL;
       std::vector<uint32_t> c_NodeDatapoolIndexes;
-      std::vector<QString> c_NodeDatapoolNames;
+      QStringList c_NodeDatapoolNames;
       std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_ReceiveTimeoutModes;
       std::vector<uint32_t> c_ReceiveTimeoutValues;
 

@@ -100,7 +100,7 @@ void C_PuiSdHandlerNodeLogic::ApplyNameMaxCharLimit(const uint32_t ou32_NameMaxC
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PuiSdHandlerNodeLogic::CheckNodeNameAvailable(const QString & orc_Name,
                                                      const uint32_t * const opu32_NodeIndexToSkip,
-                                                     std::vector<QString> * const opc_ExistingNames) const
+                                                     QStringList * const opc_ExistingNames) const
 {
    bool q_Retval = true;
 
@@ -655,20 +655,20 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeAndSort(C_OscNode & orc_OscNode, const 
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & orc_OscNodes,
                                                       const std::vector<C_PuiSdNode> & orc_UiNodes,
-                                                      const std::vector<QString> & orc_NodeNames,
+                                                      const QStringList & orc_NodeNames,
                                                       const QString & orc_MainDevice, const QString & orc_NameProposal)
 {
    const uint32_t u32_NodeIndex = mc_CoreDefinition.c_Nodes.size();
    const uint32_t u32_NodeSquadIndex = mc_CoreDefinition.c_NodeSquads.size();
 
-   std::vector<QString> c_NodeNames;
+   QStringList c_NodeNames;
    QString c_Name;
    uint32_t u32_NodeCounter;
 
    c_NodeNames.reserve(orc_NodeNames.size());
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_NodeNames.size(); ++u32_ItNode)
    {
-      c_NodeNames.emplace_back(orc_NodeNames[u32_ItNode]);
+      c_NodeNames.append(orc_NodeNames[u32_ItNode]);
    }
 
    Q_ASSERT(orc_OscNodes.size() > 0);
@@ -692,7 +692,7 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
    }
 
    this->mc_CoreDefinition.AddNodeSquad(orc_OscNodes, orc_NodeNames, orc_MainDevice); //add node and
-                                                                                                          // set device
+                                                                                      // set device
    // definition pointer
 
    Q_ASSERT(u32_NodeSquadIndex < mc_CoreDefinition.c_NodeSquads.size());
@@ -1187,9 +1187,9 @@ void C_PuiSdHandlerNodeLogic::GetNodeToNodeSquadMapping(std::vector<int32_t> & o
    False No critical name conflict detected
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_PuiSdHandlerNodeLogic::CheckCriticalNameConflict(std::vector<QString> * const opc_CriticalNodeNames,
-                                                        std::vector<QString> * const opc_CriticalBusNames,
-                                                        std::vector<QString> * const opc_CriticalDatapoolNamespaceNames)
+bool C_PuiSdHandlerNodeLogic::CheckCriticalNameConflict(QStringList * const opc_CriticalNodeNames,
+                                                        QStringList * const opc_CriticalBusNames,
+                                                        QStringList * const opc_CriticalDatapoolNamespaceNames)
 const
 {
    bool q_Retval = false;
@@ -1217,7 +1217,7 @@ const
          q_Retval = true;
          if (opc_CriticalNodeNames != NULL)
          {
-            opc_CriticalNodeNames->emplace_back(rc_CheckedNode.c_Properties.c_Name);
+            opc_CriticalNodeNames->append(rc_CheckedNode.c_Properties.c_Name);
          }
       }
       //Datapools
@@ -1276,7 +1276,7 @@ const
          q_Retval = true;
          if (opc_CriticalBusNames != NULL)
          {
-            opc_CriticalBusNames->emplace_back(rc_CheckedBus.c_Name);
+            opc_CriticalBusNames->append(rc_CheckedBus.c_Name);
          }
       }
    }
@@ -2204,7 +2204,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetDataPoolCount(const uint32_t ou32_NodeIndex,
 bool C_PuiSdHandlerNodeLogic::CheckNodeDataPoolNameAvailable(const uint32_t & oru32_NodeIndex,
                                                              const QString & orc_Name,
                                                              const uint32_t * const opu32_DataPoolIndexToSkip,
-                                                             std::vector<QString> * const opc_ExistingDatapoolNames)
+                                                             QStringList * const opc_ExistingDatapoolNames)
 const
 {
    bool q_Retval = true;

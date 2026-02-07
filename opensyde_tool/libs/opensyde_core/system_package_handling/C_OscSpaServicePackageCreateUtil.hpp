@@ -14,8 +14,8 @@
  */
 #include "C_OscSystemDefinition.hpp"
 #include <QString>
+#include <QStringList>
 #include <set>
-#include <vector>
 
 
 /* -- Namespace
@@ -49,7 +49,7 @@ public:
       const QString &orc_PackagePath, const QString &orc_TemporaryDirectory,
       const QString &orc_UseCase, const QString &orc_PackageExtension,
       const QString &orc_TemporaryPackageExtension,
-      const std::vector<QString> &orc_AllStaticSubFolders,
+      const QStringList &orc_AllStaticSubFolders,
       QString &orc_UsedTempPath, QString &orc_ErrorMessage);
   static int32_t h_SaveSystemDefinition(
       const C_OscSystemDefinition &orc_SystemDefinition,

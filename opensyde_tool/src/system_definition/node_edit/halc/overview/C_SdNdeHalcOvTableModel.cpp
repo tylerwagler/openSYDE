@@ -718,23 +718,23 @@ void C_SdNdeHalcOvTableModel::m_FillHalcInfoLinked(const uint32_t ou32_DomainInd
 {
    bool q_Tmp;
 
-   std::vector<QString> c_LinkedChannelNames;
+   QStringList c_LinkedChannelNames;
 
    C_PuiSdHandler::h_GetInstance()->CheckHalcDomainChannelLinked(this->mu32_NodeIndex,
                                                                  ou32_DomainIndex, ou32_ChannelIndex,
                                                                  oq_UseChannelIndex,
                                                                  q_Tmp, &c_LinkedChannelNames);
 
-   if (c_LinkedChannelNames.size() > 0UL)
+   if (c_LinkedChannelNames.size() > 0)
    {
       QStringList c_Tmp;
-      for (uint32_t u32_ItLi = 0UL; u32_ItLi < c_LinkedChannelNames.size(); ++u32_ItLi)
+      for (int32_t s32_ItLi = 0; s32_ItLi < c_LinkedChannelNames.size(); ++s32_ItLi)
       {
          if (c_Tmp.isEmpty() == false)
          {
             c_Tmp += ", ";
          }
-         c_Tmp += c_LinkedChannelNames[u32_ItLi];
+         c_Tmp += c_LinkedChannelNames[s32_ItLi];
       }
       orc_Data.c_LinkedWith = c_Tmp;
    }

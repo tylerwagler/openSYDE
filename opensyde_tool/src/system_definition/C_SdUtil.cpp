@@ -103,10 +103,10 @@ C_SdUtil::C_SdUtil(void) {}
 int32_t
 C_SdUtil::h_GetNames(const std::vector<uint32_t> &orc_NodeIndices,
                      const std::vector<uint32_t> &orc_InterfaceIndices,
-                     std::vector<QString> &orc_Names,
+                     QStringList &orc_Names,
                      const bool oq_NameWithInterfaceAlways,
                      const std::vector<uint32_t> *const opc_DatapoolIndices,
-                     std::vector<QString> *const opc_DatapoolNames) {
+                     QStringList *const opc_DatapoolNames) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_NodeIndices.size() == orc_InterfaceIndices.size()) {
@@ -166,7 +166,7 @@ C_SdUtil::h_GetNames(const std::vector<uint32_t> &orc_NodeIndices,
         if (pc_Dp != NULL) {
           // lint -e{413} //false positive; opc_DatapoolNames is checked to be
           // != NULL a few lines above
-          opc_DatapoolNames->emplace_back(pc_Dp->c_Name);
+          opc_DatapoolNames->append(pc_Dp->c_Name);
         }
       }
     }
@@ -1755,7 +1755,7 @@ void C_SdUtil::h_GetErrorToolTipBus(const uint32_t &oru32_BusIndex,
   bool q_NameEmpty;
   bool q_IdInvalid;
 
-  std::vector<QString> c_InvalidNodesForBitRate;
+  QStringList c_InvalidNodesForBitRate;
   std::vector<stw::opensyde_core::C_OscCanProtocol::E_Type> c_InvalidProtocols;
   C_PuiSdHandler::h_GetInstance()->CheckBusConflictDetailed(
       oru32_BusIndex, &q_NameConflict, &q_NameEmpty, &q_IdInvalid,
@@ -1913,7 +1913,7 @@ QString C_SdUtil::h_GetToolTipContentDpListElement(
       c_ToolTipContent = h_GetToolTipContentSignal(c_MessageId, u32_SignalIndex,
                                                    orc_AdditionalInformation);
     } else {
-      std::vector<QString> c_HelpVector;
+      QStringList c_HelpVector;
 
       // comment
       if (pc_DpListElement->c_Comment.isEmpty() == false) {

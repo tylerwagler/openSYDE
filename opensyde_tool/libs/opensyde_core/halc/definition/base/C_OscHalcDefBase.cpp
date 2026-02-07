@@ -66,11 +66,11 @@ C_OscHalcDefBase::~C_OscHalcDefBase()
    \retval false Duplicate Ids found
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscHalcDefBase::CheckIdsUnique(std::vector<QString> & orc_DuplicateIds) const
+bool C_OscHalcDefBase::CheckIdsUnique(QStringList & orc_DuplicateIds) const
 {
    bool q_Retval = true;
 
-   std::vector<QString> c_AllIds;
+   QStringList c_AllIds;
 
    //Find all valid IDs
    for (uint32_t u32_ItDomain = 0UL; u32_ItDomain < this->GetDomainSize(); ++u32_ItDomain)
@@ -220,7 +220,7 @@ void C_OscHalcDefBase::CalcHash(uint32_t & oru32_HashValue) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefBase::mh_AggregateIds(const std::vector<C_OscHalcDefStruct> & orc_Items,
-                                       std::vector<QString> & orc_DuplicateIds)
+                                       QStringList & orc_DuplicateIds)
 {
    for (uint32_t u32_ItItem = 0UL; u32_ItItem < orc_Items.size(); ++u32_ItItem)
    {

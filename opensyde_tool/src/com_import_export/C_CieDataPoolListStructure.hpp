@@ -14,6 +14,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
+#include <QStringList>
 #include "C_PuiSdNodeCanMessage.hpp"
 #include "C_PuiSdNodeDataPoolListElement.hpp"
 #include "C_OscCanMessage.hpp"
@@ -40,8 +41,8 @@ public:
    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> c_OscRxSignalData;
    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> c_OscTxSignalData;
    // warning messages for each message element
-   std::vector<QString> c_WarningMessagesPerRxMessage; // empty string means there is no warning message
-   std::vector<QString> c_WarningMessagesPerTxMessage; // empty string means there is no warning message
+   QStringList c_WarningMessagesPerRxMessage; // empty string means there is no warning message
+   QStringList c_WarningMessagesPerTxMessage; // empty string means there is no warning message
 };
 
 class C_CieDataPoolListStructure

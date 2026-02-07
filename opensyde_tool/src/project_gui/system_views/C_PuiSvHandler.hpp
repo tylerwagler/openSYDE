@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <QObject>
+#include <QStringList>
 #include "C_OscNode.hpp"
 #include "C_PuiSvData.hpp"
 #include "C_PuiSdLastKnownHalElementId.hpp"
@@ -196,7 +197,7 @@ public:
    int32_t CheckViewError(const uint32_t ou32_Index, bool * const opq_NameInvalid, bool * const opq_PcNotConnected,
                           bool * const opq_RoutingInvalid, bool * const opq_RoutingUpdateInvalid,
                           bool * const opq_RoutingDashboardInvalid, bool * const opq_SysDefInvalid,
-                          bool * const opq_NoNodesActive, std::vector<QString> * const opc_RoutingErrorDetails,
+                          bool * const opq_NoNodesActive, QStringList * const opc_RoutingErrorDetails,
                           QString * const opc_SetupRoutingWarningDetails);
    int32_t CheckViewReconnectNecessary(const uint32_t ou32_ViewIndex, bool & orq_ReconnectNecessary);
    int32_t CheckViewNodeDashboardRoutingError(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
@@ -311,7 +312,7 @@ private:
                                                                                                            QString> > & orc_ErrorRoutingDetails, std::set<uint32_t> & orc_NodesWithDashboardRoutingError, std::set<uint32_t> & orc_NodesRelevantForDashboardRouting)
    const;
    int32_t m_CheckRouting(const uint32_t ou32_ViewIndex, const std::vector<uint8_t> & orc_CheckedNodeActiveFlags,
-                          QString & orc_SetupWarningMessage, std::vector<QString> & orc_ErrorMessages,
+                          QString & orc_SetupWarningMessage, QStringList & orc_ErrorMessages,
                           std::set<uint32_t> & orc_NodesWithDashboardRoutingError,
                           std::set<uint32_t> & orc_NodesRelevantForDashboardRouting) const;
    std::map<QString, bool> m_GetExistingViewNames(void) const;
@@ -336,7 +337,7 @@ private:
       bool q_SysDefInvalid;
       bool q_NoNodesActive;
       QString c_RoutingSetupWarningMessage;
-      std::vector<QString> c_RoutingErrorMessages;
+      QStringList c_RoutingErrorMessages;
       std::vector<uint8_t> c_ResultingNodeActiveStatus;
       std::set<uint32_t> c_ResultNodesWithDashboardRoutingError;
       std::set<uint32_t> c_ResultNodesRelevantForDashboardRouting;
@@ -344,7 +345,7 @@ private:
       void GetResults(bool * const opq_NameInvalid, bool * const opq_PcNotConnected, bool * const opq_RoutingInvalid,
                       bool * const opq_RoutingUpdateInvalid, bool * const opq_RoutingDashboardInvalid,
                       bool * const opq_SysDefInvalid, bool * const opq_NoNodesActive,
-                      std::vector<QString> * const opc_RoutingErrorDetails,
+                      QStringList * const opc_RoutingErrorDetails,
                       QString * const opc_SetupRoutingWarningDetails) const;
    };
 

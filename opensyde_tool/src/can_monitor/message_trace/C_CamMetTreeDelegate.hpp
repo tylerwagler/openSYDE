@@ -15,6 +15,7 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QSvgRenderer>
+#include <QStringList>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -65,7 +66,7 @@ private:
                                  const QModelIndex & orc_Index, const bool oq_Selected);
    static std::vector<int32_t> mh_GetChildColWidths(const bool oq_IsThirdLayer);
    static std::vector<QFlags<Qt::AlignmentFlag> > mh_GetTopAlignmentFlags(void);
-   static std::vector<QString> mh_GetTopSpaces(void);
+   static QStringList mh_GetTopSpaces(void);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

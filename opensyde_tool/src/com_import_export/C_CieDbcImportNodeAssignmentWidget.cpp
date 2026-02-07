@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_CieDbcImportNodeAssignmentWidget.hpp"
@@ -318,7 +319,7 @@ void C_CieDbcImportNodeAssignmentWidget::m_InitNodes(const uint32_t ou32_BusInde
 {
    const bool q_UnmappedMessagesFound = (orc_CieCommDef.c_UnmappedMessages.size() > 0);
 
-   std::vector<QString> c_NodeNames;
+   QStringList c_NodeNames;
 
    C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(ou32_BusIndex,
                                                                                       this->mc_NodeIndexes,
@@ -361,7 +362,7 @@ void C_CieDbcImportNodeAssignmentWidget::m_InitNodes(const uint32_t ou32_BusInde
 
       // fill combobox with all connected topology nodes
       this->mpc_Ui->pc_CbxAssignee->addItem("<ignore>");
-      for (std::vector<QString>::const_iterator c_It = c_NodeNames.begin(); c_It != c_NodeNames.end(); ++c_It)
+      for (QStringList::const_iterator c_It = c_NodeNames.begin(); c_It != c_NodeNames.end(); ++c_It)
       {
          this->mpc_Ui->pc_CbxAssignee->addItem(*c_It);
       }

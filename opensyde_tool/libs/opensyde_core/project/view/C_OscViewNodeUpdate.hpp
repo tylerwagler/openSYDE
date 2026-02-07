@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <QString>
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_OscViewNodeUpdateParamInfo.hpp"
 #include "C_OscNodeApplication.hpp"
@@ -58,11 +59,11 @@ public:
    void ClearParamPaths(void);
    void ClearPathsAsAppropriate(const E_GenericFileType oe_Type);
    const std::vector<C_OscViewNodeUpdateParamInfo> & GetParamInfos(void) const;
-   const std::vector<QString> & GetPaths(const E_GenericFileType oe_Type) const;
+   const QStringList & GetPaths(const E_GenericFileType oe_Type) const;
    const std::vector<bool> & GetSkipUpdateOfParamInfosFlags(void) const;
    const std::vector<bool> & GetSkipUpdateOfPathsFlags(const E_GenericFileType oe_Type) const;
    void SetParamInfos(const std::vector<C_OscViewNodeUpdateParamInfo> & orc_Value);
-   void SetPaths(const std::vector<QString> & orc_Value, const E_GenericFileType oe_Type);
+   void SetPaths(const QStringList & orc_Value, const E_GenericFileType oe_Type);
    void SetSkipUpdateOfParamInfosFlags(const std::vector<bool> & orc_Value);
    void SetSkipUpdateOfPathsFlags(const std::vector<bool> & orc_Value, const E_GenericFileType oe_Type);
    int32_t SetParamInfoContent(const uint32_t ou32_Index, const QString & orc_FilePath,
@@ -113,8 +114,8 @@ public:
    uint32_t u32_NodeUpdatePosition; // Position of node in update sequence
 
 private:
-   std::vector<QString> mc_DataBlockPaths;
-   std::vector<QString> mc_FileBasedPaths;
+   QStringList mc_DataBlockPaths;
+   QStringList mc_FileBasedPaths;
    std::vector<C_OscViewNodeUpdateParamInfo> mc_ParamSetPaths;
    std::vector<std::vector<bool> > mc_SkipUpdateOfFiles; // Flags for skipping an update of the associated file
    // First level has three "layers":

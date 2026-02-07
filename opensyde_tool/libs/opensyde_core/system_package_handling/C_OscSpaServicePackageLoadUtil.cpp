@@ -164,7 +164,7 @@ int32_t C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(
     const QString &orc_PackagePath,
-    const std::vector<QString> &orc_NecessaryFiles) {
+    const QStringList &orc_NecessaryFiles) {
   int32_t s32_Return = C_NO_ERR;
 
   QString c_PackagePath =

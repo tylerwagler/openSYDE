@@ -14,6 +14,7 @@
 
 #include <QMap>
 #include <QDir>
+#include <QStringList>
 #include "C_Uti.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -2947,7 +2948,7 @@ void C_PuiSvData::InitFromSystemDefinition(void)
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItInfo);
          if (pc_Node != NULL)
          {
-            std::vector<QString> c_ApplPaths;
+            QStringList c_ApplPaths;
             std::vector<C_OscViewNodeUpdateParamInfo> c_ParamInfos;
             std::vector<bool> c_ApplSkipFlags;
             C_OscViewNodeUpdate c_Info;
@@ -2967,8 +2968,8 @@ void C_PuiSvData::InitFromSystemDefinition(void)
                      // special case: X config file is relative to generation directory
                      c_Path = C_Uti::h_ConcatPathIfNecessary(rc_Application.c_GeneratePath, c_Path);
                   }
-                  c_ApplPaths.emplace_back(C_PuiUtil::h_MakeIndependentOfDbProjectPath(
-                                              rc_Application.c_ProjectPath, c_Path));
+                  c_ApplPaths.append(C_PuiUtil::h_MakeIndependentOfDbProjectPath(
+                                        rc_Application.c_ProjectPath, c_Path));
                }
                else
                {

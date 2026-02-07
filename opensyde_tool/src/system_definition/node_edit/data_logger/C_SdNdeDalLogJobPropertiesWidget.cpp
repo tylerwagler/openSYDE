@@ -557,7 +557,7 @@ void C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished()
 
    if (hq_InProgress == false)
    {
-      std::vector<QString> c_ExistingLogJobNames;
+      QStringList c_ExistingLogJobNames;
       const QString c_LogJobName = this->mpc_Ui->pc_LineEditName->text();
       hq_InProgress = true;
       if (C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(this->mu32_NodeIndex, c_LogJobName,

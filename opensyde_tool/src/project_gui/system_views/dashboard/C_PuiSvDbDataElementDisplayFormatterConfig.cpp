@@ -201,11 +201,11 @@ QString C_PuiSvDbDataElementDisplayFormatterConfig::GetSingleValueContentFormatt
    Formatted and scaled strings
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<QString> C_PuiSvDbDataElementDisplayFormatterConfig::GetValuesContentFormatted(
+QStringList C_PuiSvDbDataElementDisplayFormatterConfig::GetValuesContentFormatted(
    const C_PuiSvDbDataElementContent & orc_Value, const C_PuiSvDbDataElementScaling & orc_Scaling,
    std::vector<float64_t> & orc_UnscaledValueAsFloat) const
 {
-   std::vector<QString> c_Return;
+   QStringList c_Return;
 
    orc_UnscaledValueAsFloat.clear();
 

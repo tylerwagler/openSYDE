@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QStringList>
 #include "stwtypes.hpp"
 
 #include "C_SyvComDriverDiag.hpp"
@@ -118,7 +119,7 @@ private:
 
    void m_InformUserFloatRangeCheck(
       const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
-      const std::vector<QString> & orc_InvalidValues, const std::vector<QString> & orc_NewValues) const;
+      const QStringList & orc_InvalidValues, const QStringList & orc_NewValues) const;
 
    Ui::C_SyvDaItPaWidgetNew * mpc_Ui;
    const uint32_t mu32_ViewIndex;

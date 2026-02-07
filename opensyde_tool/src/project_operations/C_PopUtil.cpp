@@ -12,6 +12,7 @@
 
 #include <QApplication>
 #include <QFileInfo>
+#include <QStringList>
 
 #include "C_PopErrorHandling.hpp"
 #include "C_PopUtil.hpp"
@@ -162,9 +163,9 @@ bool C_PopUtil::h_AskUserToContinue(QWidget * const opc_Parent, const bool oq_Al
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PopUtil::h_CheckCriticalNamingConflict(QWidget * const opc_Parent, const bool oq_DisableActiveWaitCursor)
 {
-   std::vector<QString> c_CriticalNodeNames;
-   std::vector<QString> c_CriticalBusNames;
-   std::vector<QString> c_CriticalDatapoolNamespaceNames;
+   QStringList c_CriticalNodeNames;
+   QStringList c_CriticalBusNames;
+   QStringList c_CriticalDatapoolNamespaceNames;
    const bool q_Retval = C_PuiSdHandler::h_GetInstance()->CheckCriticalNameConflict(&c_CriticalNodeNames,
                                                                                     &c_CriticalBusNames,
                                                                                     &c_CriticalDatapoolNamespaceNames);

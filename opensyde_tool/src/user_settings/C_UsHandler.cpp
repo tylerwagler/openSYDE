@@ -711,7 +711,7 @@ QString C_UsHandler::GetLastKnownAddPemFilePath() const {
 /*! \brief  Set last known Update Pem  File Paths
 
    \return
-   std::vector<QString>
+   QStringList
 */
 //----------------------------------------------------------------------------------------------------------------------
 QStringList C_UsHandler::GetLastKnownUpdatePemFilePaths() const {
@@ -871,7 +871,7 @@ C_UsHandler::GetProjSvSetupView(const QString &orc_ViewName) const {
    Project system definition node keys internal structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<QString> C_UsHandler::GetProjSdNodeKeysInternal(void) const {
+const QStringList C_UsHandler::GetProjSdNodeKeysInternal(void) const {
   return this->mc_ProjSdNode.keys();
 }
 
@@ -882,7 +882,7 @@ const QList<QString> C_UsHandler::GetProjSdNodeKeysInternal(void) const {
    Project system definition bus keys internal structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<QString> C_UsHandler::GetProjSdBusKeysInternal(void) const {
+const QStringList C_UsHandler::GetProjSdBusKeysInternal(void) const {
   return this->mc_ProjSdBus.keys();
 }
 
@@ -893,7 +893,7 @@ const QList<QString> C_UsHandler::GetProjSdBusKeysInternal(void) const {
    Project system view setup view keys internal structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<QString> C_UsHandler::GetProjSvSetupViewKeysInternal(void) const {
+const QStringList C_UsHandler::GetProjSvSetupViewKeysInternal(void) const {
   return this->mc_ProjSvSetupView.keys();
 }
 
@@ -1635,7 +1635,7 @@ void C_UsHandler::SetProjSdNodeSelectedInterface(
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdNodeDatapoolOpenListNames(
     const QString &orc_NodeName, const QString &orc_DatapoolName,
-    const std::vector<QString> &orc_New) {
+    const QStringList &orc_New) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -1660,7 +1660,7 @@ void C_UsHandler::SetProjSdNodeDatapoolOpenListNames(
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdNodeDatapoolSelectedListNames(
     const QString &orc_NodeName, const QString &orc_DatapoolName,
-    const std::vector<QString> &orc_New) {
+    const QStringList &orc_New) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -1685,7 +1685,7 @@ void C_UsHandler::SetProjSdNodeDatapoolSelectedListNames(
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdNodeDatapoolSelectedVariableNames(
     const QString &orc_NodeName, const QString &orc_DatapoolName,
-    const std::vector<QString> &orc_New) {
+    const QStringList &orc_New) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item

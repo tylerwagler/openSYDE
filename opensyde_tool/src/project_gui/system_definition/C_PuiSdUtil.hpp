@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <QString>
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_OscNodeSquad.hpp"
 #include "C_OscSystemBus.hpp"
@@ -74,7 +75,7 @@ public:
    static bool h_CheckXappNodeReachable(const uint32_t ou32_SdNodeIndex, const uint32_t ou32_TargetNodeIndex);
    static bool h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeIndex, const QString & orc_Name,
                                                   const uint32_t * const opu32_DataLoggerJobIndexToSkip,
-                                                  std::vector<QString> * const opc_ExistingNames = NULL);
+                                                  QStringList * const opc_ExistingNames = NULL);
 
 private:
    C_PuiSdUtil(void);

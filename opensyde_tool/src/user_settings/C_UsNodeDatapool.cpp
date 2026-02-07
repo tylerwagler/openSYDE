@@ -44,7 +44,7 @@ C_UsNodeDatapool::C_UsNodeDatapool(void)
    Current system definition node datapool expanded list names
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<QString> & C_UsNodeDatapool::GetExpandedListNames(void) const
+const QStringList & C_UsNodeDatapool::GetExpandedListNames(void) const
 {
    return this->mc_ExpandedListNames;
 }
@@ -55,7 +55,7 @@ const std::vector<QString> & C_UsNodeDatapool::GetExpandedListNames(void) const
    \param[in]  orc_Value   New system definition node datapool expanded list names
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsNodeDatapool::SetExpandedListNames(const std::vector<QString> & orc_Value)
+void C_UsNodeDatapool::SetExpandedListNames(const QStringList & orc_Value)
 {
    this->mc_ExpandedListNames = orc_Value;
 }
@@ -67,7 +67,7 @@ void C_UsNodeDatapool::SetExpandedListNames(const std::vector<QString> & orc_Val
    Current system definition node datapool selected list names
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<QString> & C_UsNodeDatapool::GetSelectedListNames() const
+const QStringList & C_UsNodeDatapool::GetSelectedListNames() const
 {
    return this->mc_SelectedListNames;
 }
@@ -78,7 +78,7 @@ const std::vector<QString> & C_UsNodeDatapool::GetSelectedListNames() const
    \param[in]  orc_Value   New system definition node datapool selected list names
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsNodeDatapool::SetSelectedListNames(const std::vector<QString> & orc_Value)
+void C_UsNodeDatapool::SetSelectedListNames(const QStringList & orc_Value)
 {
    this->mc_SelectedListNames = orc_Value;
 }
@@ -90,7 +90,7 @@ void C_UsNodeDatapool::SetSelectedListNames(const std::vector<QString> & orc_Val
    Current system definition node datapool selected variable names
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<QString> & C_UsNodeDatapool::GetSelectedVariableNames(void) const
+const QStringList & C_UsNodeDatapool::GetSelectedVariableNames(void) const
 {
    return this->mc_SelectedVariableNames;
 }
@@ -101,7 +101,7 @@ const std::vector<QString> & C_UsNodeDatapool::GetSelectedVariableNames(void) co
    \param[in]  orc_Value   New system definition node datapool selected variable names
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsNodeDatapool::SetSelectedVariableNames(const std::vector<QString> & orc_Value)
+void C_UsNodeDatapool::SetSelectedVariableNames(const QStringList & orc_Value)
 {
    this->mc_SelectedVariableNames = orc_Value;
 }
@@ -113,7 +113,7 @@ void C_UsNodeDatapool::SetSelectedVariableNames(const std::vector<QString> & orc
    Interface settings keys internal structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<QString> C_UsNodeDatapool::GetInterfaceSettingsKeysInternal(void) const
+const QStringList C_UsNodeDatapool::GetInterfaceSettingsKeysInternal(void) const
 {
    return this->mc_InterfaceSettings.keys();
 }
@@ -218,7 +218,7 @@ void C_UsNodeDatapool::SetListSelectedMessage(const QString & orc_ListName,
    List settings keys internal structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<QString> C_UsNodeDatapool::GetListSettingsKeysInternal() const
+const QStringList C_UsNodeDatapool::GetListSettingsKeysInternal() const
 {
    return this->mc_ListSettings.keys();
 }

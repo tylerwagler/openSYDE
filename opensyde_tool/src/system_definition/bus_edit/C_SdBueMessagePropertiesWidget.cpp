@@ -1312,7 +1312,7 @@ void C_SdBueMessagePropertiesWidget::m_OnTxChangedReloadDatapools(void)
    if (s32_CurrentNodeIndex >= 0)
    {
       uint32_t u32_MappedDatapoolNamesCounter;
-      const std::vector<QString> & rc_MappingDatapoolNames = this->mc_DatapoolNamesTxSelection[s32_CurrentNodeIndex];
+      const QStringList & rc_MappingDatapoolNames = this->mc_DatapoolNamesTxSelection[s32_CurrentNodeIndex];
 
       // Add all to this node index associated Datapool names to the combo box
       for (u32_MappedDatapoolNamesCounter = 0U; u32_MappedDatapoolNamesCounter < rc_MappingDatapoolNames.size();
@@ -1746,8 +1746,8 @@ void C_SdBueMessagePropertiesWidget::m_UpdateTxSelection(
 {
    bool q_Transmitter = false;
 
-   std::vector<QString> c_NodeNames;
-   std::vector<QString> c_DatapoolNames;
+   QStringList c_NodeNames;
+   QStringList c_DatapoolNames;
 
    // fill combo box
    this->mpc_Ui->pc_ComboBoxTransmitterNode->clear();
@@ -1760,7 +1760,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateTxSelection(
                             false, &this->mc_BusDatapoolIndexes, &c_DatapoolNames) == C_NO_ERR)
    {
       std::vector<uint32_t> c_MappingDatapools;
-      std::vector<QString> c_MappingDatapoolNames;
+      QStringList c_MappingDatapoolNames;
 
       // CANopen specific preparation
       const bool q_CanOpenActive = (this->me_ComProtocol == C_OscCanProtocol::eCAN_OPEN);
@@ -1840,7 +1840,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateTxSelection(
                   uint32_t u32_ComboBoxNodeIndex = 0U;
                   uint32_t u32_ComboBoxDatapoolIndex = 0U;
                   uint32_t u32_CounterDatapoolIndex;
-                  const std::vector<QString> * pc_MappedDatapoolNames;
+                  const QStringList * pc_MappedDatapoolNames;
 
                   // Get the indexes of the combo boxes
                   m_GetComboBoxIndexesByVectorIndex(u32_ItNode, u32_ComboBoxNodeIndex, u32_ComboBoxDatapoolIndex);
@@ -1914,8 +1914,8 @@ void C_SdBueMessagePropertiesWidget::m_UpdateRxAfterTxSelection(
    std::vector<uint32_t> c_NodeIndexes;
    std::vector<uint32_t> c_InterfaceIndexes;
    std::vector<uint32_t> c_DatapoolIndexes;
-   std::vector<QString> c_NodeNames;
-   std::vector<QString> c_DatapoolNames;
+   QStringList c_NodeNames;
+   QStringList c_DatapoolNames;
    bool q_TxSelected = false;
    const bool q_CanOpenActive = (this->me_ComProtocol == C_OscCanProtocol::eCAN_OPEN);
 
@@ -1987,12 +1987,12 @@ void C_SdBueMessagePropertiesWidget::m_UpdateRxAfterTxSelection(
       if ((s32_CurrentNodeIndex >= 0) &&
           (q_CanOpenActive == false))
       {
-         std::vector<QString>::iterator c_ItName;
-         std::vector<std::vector<QString>::iterator> c_NamesToDelete;
+         QStringList::iterator c_ItName;
+         QList<QStringList::iterator> c_NamesToDelete;
          std::vector<uint32_t> c_RxNodeIndexes;
          std::vector<uint32_t> c_RxInterfaceIndexes;
          std::vector<uint32_t> c_RxDatapoolIndexes;
-         std::vector<QString> c_RxDatapoolNames;
+         QStringList c_RxDatapoolNames;
          std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_RxReceiveTimeoutModes;
          std::vector<uint32_t> c_RxReceiveTimeoutValues;
          const std::vector<uint32_t> * pc_MappedDatapools;
@@ -2352,8 +2352,8 @@ void C_SdBueMessagePropertiesWidget::m_NodeModeDirectionChanged(const bool oq_Di
       {
          std::vector<uint32_t> c_NodeIndexes;
          std::vector<uint32_t> c_InterfaceIndexes;
-         std::vector<QString> c_NodeNames;
-         std::vector<QString> c_DatapoolNames;
+         QStringList c_NodeNames;
+         QStringList c_DatapoolNames;
 
          // Working in single node mode always with same node and interface index
          c_NodeIndexes.resize(this->mc_NodeDatapoolIndexes.size(), this->mu32_NodeIndex);

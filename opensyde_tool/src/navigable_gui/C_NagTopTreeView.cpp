@@ -89,8 +89,8 @@ void C_NagTopTreeView::SetSelectedIndexAndScroll(const int32_t os32_Selected)
    \param[in]  orc_SubContent    List of sub content names (corresponding to list of content names; or empty if none)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_NagTopTreeView::SetContent(const std::vector<QString> & orc_Content,
-                                  const std::vector<std::vector<QString> > & orc_SubContent)
+void C_NagTopTreeView::SetContent(const QStringList & orc_Content,
+                                  const QList<QStringList> & orc_SubContent)
 {
    this->mc_Model.SetContent(orc_Content, orc_SubContent);
 }

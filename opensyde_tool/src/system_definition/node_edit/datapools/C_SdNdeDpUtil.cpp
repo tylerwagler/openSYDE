@@ -785,7 +785,7 @@ int32_t C_SdNdeDpUtil::h_GetTableSize(const uint32_t ou32_NodeIndex, const uint3
 int32_t C_SdNdeDpUtil::h_GetSharedDatapoolGroup(const uint32_t ou32_SharedDatapoolGroup,
                                                 const C_OscNodeDataPoolId & orc_BaseDatapoolId,
                                                 const uint32_t ou32_NodeIndex,
-                                                std::vector<QString> & orc_SharedDatapoolNameGroup)
+                                                QStringList & orc_SharedDatapoolNameGroup)
 {
    int32_t s32_Return = C_RANGE;
    const C_PuiSdSharedDatapools & rc_SharedDatapools = C_PuiSdHandler::h_GetInstance()->GetSharedDatapoolsConst();

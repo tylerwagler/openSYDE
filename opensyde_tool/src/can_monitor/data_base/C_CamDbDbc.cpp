@@ -303,19 +303,19 @@ bool C_CamDbDbc::GetActive(void) const
    All found messages
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<QString> C_CamDbDbc::GetFoundMessages(void) const
+const QStringList C_CamDbDbc::GetFoundMessages(void) const
 {
-   std::vector<QString> c_Retval;
-   QList<QString> c_Keys = this->mc_FoundMessagesNodes.keys();
+   QStringList c_Retval;
+   QStringList c_Keys = this->mc_FoundMessagesNodes.keys();
    //Nodes
    c_Retval.reserve(static_cast<uint>(this->mc_FoundMessagesNodes.size() + this->mc_FoundMessagesUnmapped.size()));
-   for (QList<QString>::const_iterator c_It = c_Keys.cbegin(); c_It != c_Keys.cend(); ++c_It)
+   for (QStringList::const_iterator c_It = c_Keys.cbegin(); c_It != c_Keys.cend(); ++c_It)
    {
       c_Retval.push_back(*c_It);
    }
    //Unmapped
    c_Keys = this->mc_FoundMessagesUnmapped.keys();
-   for (QList<QString>::const_iterator c_It = c_Keys.cbegin(); c_It != c_Keys.cend(); ++c_It)
+   for (QStringList::const_iterator c_It = c_Keys.cbegin(); c_It != c_Keys.cend(); ++c_It)
    {
       c_Retval.push_back(*c_It);
    }

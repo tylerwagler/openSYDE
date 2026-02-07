@@ -120,8 +120,8 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackageUsingPemFiles(const QS
                                                                         uint32_t & oru32_ActiveBusIndex,
                                                                         std::vector<uint8_t> & orc_ActiveNodes,
                                                                         std::vector<uint32_t> & orc_NodesUpdateOrder,
-                                                                        std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, QString & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<QString> & orc_DecryptNodesPassword,
-                                                                        const std::vector<QString> & orc_NodeSignaturePemFiles)
+                                                                        std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, QString & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const QStringList & orc_DecryptNodesPassword,
+                                                                        const QStringList & orc_NodeSignaturePemFiles)
 {
    int32_t s32_Retval;
 
@@ -198,7 +198,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const QString & orc_P
                                                            uint32_t & oru32_ActiveBusIndex,
                                                            vector<uint8_t> & orc_ActiveNodes,
                                                            vector<uint32_t> & orc_NodesUpdateOrder,
-                                                           vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, QString & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<QString> & orc_DecryptNodesPassword,
+                                                           vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, QString & orc_ErrorMessage, const bool oq_IsZip, const std::vector<uint8_t> & orc_DecryptNodes, const QStringList & orc_DecryptNodesPassword,
                                                            const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
    int32_t s32_Return;
@@ -220,7 +220,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(const QString & orc_P
    {
       uint32_t u32_FileVersion;
       QString c_FilePackagePath;
-      std::vector<QString> c_PackageFiles;
+      QStringList c_PackageFiles;
       std::vector<uint32_t> c_UpdatePosition;
 
       s32_Return = C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(c_TargetUnzipPath, oq_IsZip, orc_PackagePath,
@@ -336,7 +336,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_CheckSupFiles(const QString & orc_P
 {
    int32_t s32_Return;
 
-   std::vector<QString> c_NecessaryFiles; //those are the files we look for
+   QStringList c_NecessaryFiles; //those are the files we look for
 
    c_NecessaryFiles.push_back(C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF); //".syde_supdef"
    c_NecessaryFiles.push_back(mhc_SUP_SYSDEF);                                 //".syde_sysdef"
@@ -475,11 +475,11 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_SetNodesUpdateOrder(const map<uint3
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackAndLoadNodes(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                                const std::vector<QString> & orc_PackageFiles,
+                                                                const QStringList & orc_PackageFiles,
                                                                 const QString & orc_TargetUnzipPath,
                                                                 const std::vector<uint8_t> & orc_ActiveNodes,
                                                                 const std::vector<uint32_t> & orc_UpdatePosition,
-                                                                std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::vector<uint32_t> & orc_NodesUpdateOrder, const std::vector<uint8_t> & orc_DecryptNodes, const std::vector<QString> & orc_DecryptNodesPassword,
+                                                                std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::vector<uint32_t> & orc_NodesUpdateOrder, const std::vector<uint8_t> & orc_DecryptNodes, const QStringList & orc_DecryptNodesPassword,
                                                                 const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
    int32_t s32_Return = mh_CheckCommonSecurityParameters(orc_DecryptNodes, orc_DecryptNodesPassword,
@@ -489,8 +489,8 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackAndLoadNodes(const C_OscSyste
 
    if (s32_Return == C_NO_ERR)
    {
-      std::vector<QString> c_NodeFoldersRel;
-      std::vector<QString> c_NodeFoldersAbs;
+      QStringList c_NodeFoldersRel;
+      QStringList c_NodeFoldersAbs;
 
       mh_GetNodeFolderNames(orc_SystemDefinition, orc_TargetUnzipPath, c_NodeFoldersAbs, c_NodeFoldersRel);
 
@@ -503,9 +503,9 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackAndLoadNodes(const C_OscSyste
       {
          std::map<uint32_t, uint32_t> c_UpdateOrderByNodes; // to store node update positions which are represented by
                                                             // index at
-         std::vector<QString> c_RelFiles;
-         std::vector<QString> c_AbsFiles;
-         std::vector<QString> c_Signatures;
+         QStringList c_RelFiles;
+         QStringList c_AbsFiles;
+         QStringList c_Signatures;
          mh_GetSydeSecureDefFileNames(orc_SystemDefinition,
                                       orc_TargetUnzipPath, c_AbsFiles, c_RelFiles);
          s32_Return = C_OscSupNodeDefinitionFiler::h_LoadNodes(c_AbsFiles, c_NodeFoldersAbs, orc_ActiveNodes,
@@ -551,16 +551,16 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackAndLoadNodes(const C_OscSyste
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackNodes(const std::vector<uint8_t> & orc_DecryptNodes,
-                                                         const std::vector<QString> & orc_DecryptNodesPassword,
+                                                         const QStringList & orc_DecryptNodesPassword,
                                                          const uint32_t ou32_NodeCount,
-                                                         const std::vector<QString> & orc_PackageFiles,
+                                                         const QStringList & orc_PackageFiles,
                                                          const QString & orc_TargetUnzipPath,
-                                                         const std::vector<QString> & orc_NodeFoldersAbs)
+                                                         const QStringList & orc_NodeFoldersAbs)
 {
    int32_t s32_Return = C_NO_ERR;
 
    std::vector<uint8_t> c_DecryptNodes;
-   std::vector<QString> c_DecryptNodesPassword;
+   QStringList c_DecryptNodesPassword;
    mh_AdaptEncryptionParameters(orc_DecryptNodes, orc_DecryptNodesPassword,
                                 ou32_NodeCount, c_DecryptNodes, c_DecryptNodesPassword);
    for (uint32_t u32_ItPackage = 0UL; (u32_ItPackage < orc_PackageFiles.size()) && (s32_Return == C_NO_ERR);
@@ -614,7 +614,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackNodes(const std::vector<uint8
 int32_t C_OscSupServiceUpdatePackageLoad::mh_VerifySignatures(
    const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
    const std::vector<uint8_t> & orc_ActiveNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
-   const std::vector<QString> & orc_Signatures, const std::vector<QString> & orc_AbsSydeSecureDefFileNames)
+   const QStringList & orc_Signatures, const QStringList & orc_AbsSydeSecureDefFileNames)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -749,7 +749,7 @@ void C_OscSupServiceUpdatePackageLoad::mh_GetDigestFiles(const C_OscSuSequences:
    \param[in,out]  orc_NodeSignatureKeys        Node signature keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupServiceUpdatePackageLoad::mh_GetPemFileContent(const std::vector<QString> & orc_NodeSignaturePemFiles,
+void C_OscSupServiceUpdatePackageLoad::mh_GetPemFileContent(const QStringList & orc_NodeSignaturePemFiles,
                                                             std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
 {
    orc_NodeSignatureKeys.reserve(orc_NodeSignaturePemFiles.size());

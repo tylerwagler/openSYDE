@@ -16,6 +16,7 @@
 #include <QWidget>
 #include <QIcon>
 #include <vector>
+#include <QStringList>
 
 #include "stwtypes.hpp"
 
@@ -47,7 +48,7 @@ public:
    explicit C_SdBueNodeSelectorCheckBoxListWidget(QWidget * const opc_Parent = NULL);
    ~C_SdBueNodeSelectorCheckBoxListWidget() override;
 
-   void AddNodes(const std::vector<QString> & orc_Names, const std::vector<uint32_t> & orc_Indexes,
+   void AddNodes(const QStringList & orc_Names, const std::vector<uint32_t> & orc_Indexes,
                  const std::vector<uint32_t> & orc_SubIndexes);
    void CheckNodes(const std::vector<uint32_t> & orc_Indexes, const std::vector<uint32_t> & orc_SubIndexes) const;
    void CheckSpecificNode(const uint32_t ou32_Index, const uint32_t ou32_SubIndex, const bool oq_Checked) const;

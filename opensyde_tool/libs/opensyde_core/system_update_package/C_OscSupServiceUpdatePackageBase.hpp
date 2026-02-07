@@ -17,6 +17,7 @@
 
 #include "stwtypes.hpp"
 #include <QString>
+#include <QStringList>
 #include "C_OscXmlParser.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscSecurityEcdsa.hpp"
@@ -51,23 +52,23 @@ protected:
                                                          // to fail
 
    static int32_t mh_CheckCommonSecurityParameters(const std::vector<uint8_t> & orc_EncryptNodes,
-                                                   const std::vector<QString> & orc_EncryptNodesPassword,
+                                                   const QStringList & orc_EncryptNodesPassword,
                                                    const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
                                                    const uint32_t ou32_NumNodes, const QString & orc_Mode,
                                                    const QString & orc_Function);
 
    static void mh_GetSydeSecureDefFileNames(const C_OscSystemDefinition & orc_SystemDefinition,
                                             const QString & orc_TargetPath,
-                                            std::vector<QString> & orc_AbsPath,
-                                            std::vector<QString> & orc_RelPath);
+                                            QStringList & orc_AbsPath,
+                                            QStringList & orc_RelPath);
    static void mh_GetNodeFolderNames(const C_OscSystemDefinition & orc_SystemDefinition,
                                      const QString & orc_TargetPath,
-                                     std::vector<QString> & orc_AbsPath,
-                                     std::vector<QString> & orc_RelPath);
+                                     QStringList & orc_AbsPath,
+                                     QStringList & orc_RelPath);
    static void mh_AdaptEncryptionParameters(const std::vector<uint8_t> & orc_InEncryptNodes,
-                                            const std::vector<QString> & orc_InEncryptNodesPassword,
+                                            const QStringList & orc_InEncryptNodesPassword,
                                             const uint32_t ou32_NodeCount, std::vector<uint8_t> & orc_OutEncryptNodes,
-                                            std::vector<QString> & orc_OutEncryptNodesPassword);
+                                            QStringList & orc_OutEncryptNodesPassword);
    static void mh_AdaptCommonSignatureParameters(const std::vector<std::vector<uint8_t> > & orc_InNodeSignatureKeys,
                                                  const uint32_t ou32_NodeCount,
                                                  std::vector<std::vector<uint8_t> > & orc_OutNodeSignatureKeys);

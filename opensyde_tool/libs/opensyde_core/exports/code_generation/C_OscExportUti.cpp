@@ -226,7 +226,7 @@ int32_t C_OscExportUti::h_SaveToFile(QStringList & orc_Data, const QString & orc
    \param[in]      oq_SourceCode    Flag if source code (.c and .h) or parameter set image (.syde_psi)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_CollectFilePaths(std::vector<QString> & orc_FilePaths, const QString & orc_Path,
+void C_OscExportUti::h_CollectFilePaths(QStringList & orc_FilePaths, const QString & orc_Path,
                                         const QString & orc_FileName, const bool oq_SourceCode)
 {
    QString c_FileName;

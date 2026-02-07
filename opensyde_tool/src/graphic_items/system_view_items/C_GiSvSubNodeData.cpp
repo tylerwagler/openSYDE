@@ -923,10 +923,10 @@ void C_GiSvSubNodeData::m_InitPackageData(const C_OscNode & orc_Node, const C_Os
       {
          uint32_t u32_ItApplication;
          uint32_t u32_ItApplicationPath = 0U;
-         std::vector<QString> c_FinalApplicationPaths;
-         const std::vector<QString> & rc_ApplicationPaths = orc_UpdateInformation.GetPaths(
+         QStringList c_FinalApplicationPaths;
+         const QStringList & c_ApplicationPaths = orc_UpdateInformation.GetPaths(
             C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
-         c_FinalApplicationPaths.reserve(rc_ApplicationPaths.size());
+         c_FinalApplicationPaths.reserve(c_ApplicationPaths.size());
 
          for (u32_ItApplication = 0U; u32_ItApplication < orc_Node.c_Applications.size();
               ++u32_ItApplication)
@@ -936,7 +936,7 @@ void C_GiSvSubNodeData::m_InitPackageData(const C_OscNode & orc_Node, const C_Os
             // The HALC NVM param files files will be handled with the other param files
             if (rc_Application.e_Type != C_OscNodeApplication::ePARAMETER_SET_HALC)
             {
-               const QString & rc_ViewApplicationPath = rc_ApplicationPaths[u32_ItApplicationPath];
+               const QString & rc_ViewApplicationPath = c_ApplicationPaths[u32_ItApplicationPath];
                if (rc_ViewApplicationPath.compare("") == 0)
                {
                   // In not NVM HALC case, only 1 path for each datablock exists
@@ -968,7 +968,7 @@ void C_GiSvSubNodeData::m_InitPackageData(const C_OscNode & orc_Node, const C_Os
    \param[in]  orc_FinalFilePaths   Final file paths
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vector<QString> & orc_FinalFilePaths)
+void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const QStringList & orc_FinalFilePaths)
 {
    this->mc_HexFileInfos.reserve(orc_FinalFilePaths.size());
    this->mc_HexAppInfoAmbiguous.reserve(orc_FinalFilePaths.size());
@@ -1010,7 +1010,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const std::vec
 void C_GiSvSubNodeData::m_InitPackageDataForOtherFiles(const C_OscViewNodeUpdate & orc_UpdateInformation)
 {
    const std::vector<C_OscViewNodeUpdateParamInfo> & rc_ParamInfo = orc_UpdateInformation.GetParamInfos();
-   const std::vector<QString> & rc_Files =
+   const QStringList & c_Files =
       orc_UpdateInformation.GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
 
    //Handle param files
@@ -1018,14 +1018,14 @@ void C_GiSvSubNodeData::m_InitPackageDataForOtherFiles(const C_OscViewNodeUpdate
    for (uint32_t u32_ItParamFile = 0; u32_ItParamFile < rc_ParamInfo.size(); ++u32_ItParamFile)
    {
       const C_OscViewNodeUpdateParamInfo & rc_CurParamInfo = rc_ParamInfo[u32_ItParamFile];
-      this->mc_ParamFileInfos.emplace_back(rc_CurParamInfo.GetPath());
+      this->mc_ParamFileInfos.append(rc_CurParamInfo.GetPath());
    }
 
    //Handle files
-   this->mc_FileInfos.reserve(rc_Files.size());
-   for (uint32_t u32_ItFile = 0; u32_ItFile < rc_Files.size(); ++u32_ItFile)
+   this->mc_FileInfos.reserve(c_Files.size());
+   for (uint32_t u32_ItFile = 0; u32_ItFile < static_cast<uint32_t>(c_Files.size()); ++u32_ItFile)
    {
-      this->mc_FileInfos.emplace_back(rc_Files[u32_ItFile]);
+      this->mc_FileInfos.append(c_Files[u32_ItFile]);
    }
 
    // Handle PEM file

@@ -166,7 +166,7 @@ private:
 
   void m_GrayOutTimer(void);
   static int32_t mh_GetTransparencyStep(const uint32_t ou32_DiffTime);
-  static std::vector<QStringList>
+  static QList<QStringList>
   mh_GetCount(const C_CamMetTreeLoggerData &orc_Message);
   static void mh_ResizeIfNecessary(QString &orc_Str,
                                    const int32_t os32_MaxLength);

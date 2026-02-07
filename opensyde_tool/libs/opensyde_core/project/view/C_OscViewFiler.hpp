@@ -59,7 +59,7 @@ private:
                                                C_OscXmlParserBase & orc_XmlParser,
                                                const std::vector<C_OscNode> & orc_OscNodes);
     static void mh_LoadPc(opensyde_core::C_OscViewPc & orc_OscPc, const C_OscXmlParserBase & orc_XmlParser);
-    static void mh_LoadNodeUpdateInformationPaths(std::vector<QString> & orc_Paths,
+    static void mh_LoadNodeUpdateInformationPaths(QStringList & orc_Paths,
                                                   const QString & orc_XmlTagBaseName,
                                                   C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
@@ -76,7 +76,7 @@ private:
                                      const std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes);
 
     // Save
-    static void mh_SaveNodeUpdateInformationPaths(const std::vector<QString> & orc_Paths,
+    static void mh_SaveNodeUpdateInformationPaths(const QStringList & orc_Paths,
                                                   const QString & orc_XmlTagBaseName,
                                                   C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveNodeUpdateInformationParamInfo(const std::vector<C_OscViewNodeUpdateParamInfo> & orc_Info,

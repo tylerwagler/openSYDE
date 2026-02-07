@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_TblModelAction.hpp"
 #include <QIcon>
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_PuiSvDbTable.hpp"
 #include "C_PuiSvDbWidgetBase.hpp"
@@ -91,13 +92,13 @@ private:
    stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId mc_AddDataPoolElementId;
    std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> mc_RemovedDataPoolElementIds;
    stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const mpc_Data;
-   std::vector<std::vector<QString> > mc_ScaledDisplayDataValues;
+   QList<QStringList> mc_ScaledDisplayDataValues;
    std::vector<std::vector<float64_t> > mc_UnscaledLastDataValues;
    std::vector<std::vector<float64_t> > mc_UnscaledMinValues;
    std::vector<std::vector<float64_t> > mc_UnscaledMaxValues;
    std::vector<uint32_t> mc_ArrayItemIndex;
-   std::vector<QString> mc_Names;
-   std::vector<QString> mc_Units;
+   QStringList mc_Names;
+   QStringList mc_Units;
    std::vector<int32_t> mc_Transparency;
    std::vector<bool> mc_InterpretAsStringFlags;
    std::vector<bool> mc_ShowPercentage;

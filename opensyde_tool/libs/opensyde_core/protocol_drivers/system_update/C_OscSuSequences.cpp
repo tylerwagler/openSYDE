@@ -333,8 +333,8 @@ int32_t C_OscSuSequences::m_XflReportProgress(const uint8_t ou8_Progress,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(
-    const std::vector<QString> &orc_FilesToFlash,
-    const std::vector<QString> &orc_OtherAcceptedDeviceNames,
+    const QStringList &orc_FilesToFlash,
+    const QStringList &orc_OtherAcceptedDeviceNames,
     const uint32_t ou32_RequestDownloadTimeout,
     const uint32_t ou32_TransferDataTimeout, bool &orq_SetProgrammingMode,
     std::vector<C_OscSuSequencesNodeHexFileStates> &orc_StateHexFiles) {
@@ -884,7 +884,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeHex(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::m_FlashNodeOpenSydeFile(
-    const std::vector<QString> &orc_FilesToFlash,
+    const QStringList &orc_FilesToFlash,
     const uint32_t ou32_RequestDownloadTimeout,
     const uint32_t ou32_TransferDataTimeout,
     const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
@@ -1301,7 +1301,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::m_WriteNvmOpenSyde(
-    const std::vector<QString> &orc_FilesToWrite,
+    const QStringList &orc_FilesToWrite,
     const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
     const bool oq_SetProgrammingMode,
     std::vector<C_OscSuSequencesNodePsiFileStates> &orc_StatePsiFiles) {
@@ -1870,7 +1870,7 @@ int32_t C_OscSuSequences::m_WriteFingerPrintOsy(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::m_FlashNodeXfl(
-    const std::vector<QString> &orc_FilesToFlash,
+    const QStringList &orc_FilesToFlash,
     std::vector<C_OscSuSequencesNodeStwFlHexFileStates> &orc_StateHexFiles) {
   int32_t s32_Return = C_NO_ERR;
 
@@ -2247,7 +2247,7 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(
   int32_t s32_Return = C_NO_ERR;
 
   std::vector<C_DoFlash> c_NodesToFlashNewPaths = orc_ApplicationsToWrite;
-  std::vector<QString> c_NodeTargetPaths;
+  QStringList c_NodeTargetPaths;
 
   const QChar cn_LastCharacter = orc_TargetPath.isEmpty() ? QChar() : orc_TargetPath[orc_TargetPath.length() - 1];
 
@@ -2336,7 +2336,7 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(
                 .pc_DeviceDefinition
                 ->c_SubDevices[orc_Nodes[u16_Node].u32_SubDeviceIndex]
                 .q_FlashloaderOpenSydeIsFileBased == true) {
-          std::vector<QString> c_Files =
+          QStringList c_Files =
               orc_ApplicationsToWrite[u16_Node].c_FilesToFlash;
           // convert all file names to lower case to detect conflicts in the
           // file system also: remove paths

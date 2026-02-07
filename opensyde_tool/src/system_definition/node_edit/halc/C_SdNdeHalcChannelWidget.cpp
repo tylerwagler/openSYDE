@@ -343,8 +343,8 @@ void C_SdNdeHalcChannelWidget::m_OnUseCaseChanged(const int32_t os32_NewIndex)
       {
          bool q_IsLinkedOld;
          bool q_IsLinkedNew;
-         std::vector<QString> c_LinkedChannelNamesOld;
-         std::vector<QString> c_LinkedChannelNamesNew;
+         QStringList c_LinkedChannelNamesOld;
+         QStringList c_LinkedChannelNamesNew;
          std::vector<uint32_t> c_LinkedChannelIndicesOld;
          std::vector<uint32_t> c_LinkedChannelIndicesNew;
          int32_t s32_Result;
@@ -739,8 +739,8 @@ void C_SdNdeHalcChannelWidget::m_CheckName(const QString & orc_NewName) const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SdNdeHalcChannelWidget::m_AskUserToContinueLinkingIfNecessary(const bool oq_IsLinkedOld,
                                                                      const bool oq_IsLinkedNew,
-                                                                     const std::vector<QString> & orc_LinkedChannelNamesOld, const
-                                                                     std::vector<QString> & orc_LinkedChannelNamesNew,
+                                                                     const QStringList & orc_LinkedChannelNamesOld, const
+                                                                     QStringList & orc_LinkedChannelNamesNew,
                                                                      const uint32_t ou32_NewUseCaseIndex)
 {
    bool q_Continue = true;
@@ -754,13 +754,13 @@ bool C_SdNdeHalcChannelWidget::m_AskUserToContinueLinkingIfNecessary(const bool 
                                                                        ou32_NewUseCaseIndex);
       if (pc_UseCase != NULL)
       {
-         const std::vector<QString> & rc_LinkedChannelNames =
+         const QStringList & rc_LinkedChannelNames =
             (oq_IsLinkedNew == true) ? orc_LinkedChannelNamesNew : orc_LinkedChannelNamesOld;
          C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
          QString c_Description;
          QString c_LinkedChannels = "";
 
-         for (std::vector<QString>::const_iterator c_ItLinkedNames = rc_LinkedChannelNames.begin();
+         for (QStringList::const_iterator c_ItLinkedNames = rc_LinkedChannelNames.begin();
               c_ItLinkedNames != rc_LinkedChannelNames.end(); ++c_ItLinkedNames)
          {
             if (c_ItLinkedNames != rc_LinkedChannelNames.begin())

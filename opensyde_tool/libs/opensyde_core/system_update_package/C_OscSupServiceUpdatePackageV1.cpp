@@ -276,7 +276,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
             c_SupFiles, c_DoFlash.c_FilesToWriteToNvm, c_PackagePathTmp);
         // PEM file
         if (c_DoFlash.c_PemFile != "") {
-          std::vector<QString> c_PemFiles;
+          QStringList c_PemFiles;
           c_PemFiles.push_back(c_DoFlash.c_PemFile);
           C_OscZipFile::h_AppendFilesRelative(c_SupFiles, c_PemFiles,
                                               c_PackagePathTmp);
@@ -295,7 +295,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
       s32_Return = C_OscSystemDefinitionFilerV2::h_SaveSystemDefinitionFile(
           orc_SystemDefinition, c_SysDefPath);
     } else {
-      std::vector<QString> c_AdditionalFiles;
+      QStringList c_AdditionalFiles;
       s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
           orc_SystemDefinition, c_SysDefPath.toLocal8Bit().constData(),
           &c_AdditionalFiles);
@@ -736,7 +736,7 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_CheckSupFiles(
     const QString &orc_PackagePath) {
   int32_t s32_Return = C_NO_ERR;
 
-  vector<QString> c_NecessaryFiles; // those are the files we look for
+  QStringList c_NecessaryFiles; // those are the files we look for
 
   c_NecessaryFiles.push_back(mc_PACKAGE_UPDATE_DEF); //".syde_supdef"
   c_NecessaryFiles.push_back(mc_SUP_SYSDEF);         //".syde_sysdef"
@@ -1285,7 +1285,7 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_SetNodesUpdateOrder(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageV1::mh_LoadFilesSection(
-    std::vector<QString> &orc_Files, const uint32_t ou32_NodeCounter,
+    QStringList &orc_Files, const uint32_t ou32_NodeCounter,
     const uint32_t ou32_UpdatePos,
     std::map<uint32_t, uint32_t> &orc_PositionMap,
     const QString &orc_TargetUnzipPath, C_OscXmlParserBase &orc_XmlParser,
@@ -1394,7 +1394,7 @@ void C_OscSupServiceUpdatePackageV1::mh_LoadPemConfigSection(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageV1::mh_SaveFiles(
-    const std::vector<QString> &orc_Files, C_OscXmlParserBase &orc_XmlParser,
+    const QStringList &orc_Files, C_OscXmlParserBase &orc_XmlParser,
     const QString &orc_BaseNodeName, const QString &orc_ElementNodeName) {
   if (orc_Files.size() > 0) {
     // Files

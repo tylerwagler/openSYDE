@@ -317,7 +317,7 @@ void C_SdNdeDpSelectorItemWidget::UpdateData(void)
       // Share state
       if (this->mq_Shared == true)
       {
-         std::vector<QString> c_SharedDatapoolGroup;
+         QStringList c_SharedDatapoolGroup;
          uint32_t u32_DatapoolCounter;
 
          c_ToolTipText += "Share configuration with:\n";

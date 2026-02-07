@@ -144,7 +144,7 @@ void C_SdBueUnoManager::DoAddMessage(const C_OscCanMessageIdentificationIndices 
    pc_UndoCommand->SetInitialData(c_Messages, std::vector<std::vector<C_OscNodeDataPoolListElement> >(),
                                   std::vector<std::vector<C_PuiSdNodeDataPoolListElement> >(),
                                   std::vector<C_PuiSdNodeCanMessage>(),
-                                  std::vector<std::vector<QString> >(),
+                                  QList<QStringList>(),
                                   std::vector<std::vector<uint32_t> >(), std::vector<std::vector<uint32_t> >(),
                                   std::vector<std::vector<bool> >());
 
@@ -170,7 +170,7 @@ void C_SdBueUnoManager::DoAddMessage(const C_OscCanMessageIdentificationIndices 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoManager::DoPasteMessages(const C_OscCanMessageIdentificationIndices & orc_MessageId,
                                         const std::vector<C_OscCanMessage> & orc_Messages,
-                                        const std::vector<std::vector<C_OscNodeDataPoolListElement> > & orc_OscSignalCommons, const std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons, const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages, const std::vector<std::vector<QString> > & orc_OwnerNodeName, const std::vector<std::vector<uint32_t> > & orc_OwnerNodeInterfaceIndex, const std::vector<std::vector<uint32_t> > & orc_OwnerNodeDatapoolIndex, const std::vector<std::vector<bool> > & orc_OwnerIsTxFlag, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager, QTreeWidget * const opc_MessageTreeWidget,
+                                        const std::vector<std::vector<C_OscNodeDataPoolListElement> > & orc_OscSignalCommons, const std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons, const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages, const QList<QStringList> & orc_OwnerNodeName, const std::vector<std::vector<uint32_t> > & orc_OwnerNodeInterfaceIndex, const std::vector<std::vector<uint32_t> > & orc_OwnerNodeDatapoolIndex, const std::vector<std::vector<bool> > & orc_OwnerIsTxFlag, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager, QTreeWidget * const opc_MessageTreeWidget,
                                         std::vector<C_OscCanMessageIdentificationIndices> & orc_NewIds)
 {
    //Check if consistent size
@@ -183,7 +183,7 @@ void C_SdBueUnoManager::DoPasteMessages(const C_OscCanMessageIdentificationIndic
       if (orc_Messages.size() > 0)
       {
          std::vector<C_OscCanMessageIdentificationIndices > c_Ids;
-         std::vector<std::vector<QString> > c_OwnerNodeName;
+         QList<QStringList> c_OwnerNodeName;
          std::vector<std::vector<uint32_t> > c_OwnerNodeInterfaceIndex;
          std::vector<std::vector<uint32_t> > c_OwnerNodeDatapoolIndex;
          std::vector<std::vector<bool> > c_OwnerIsTxFlag;
@@ -621,8 +621,8 @@ void C_SdBueUnoManager::mh_PatchMessageId(const C_PuiSdNodeCanMessageSyncManager
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoManager::mh_HandleLastOwnersValidation(const C_OscCanMessageIdentificationIndices & orc_MessageId,
-                                                      const std::vector<std::vector<QString> > & orc_LastOwnerNodeName,
-                                                      const std::vector<std::vector<uint32_t> > & orc_LastOwnerNodeInterfaceIndex, const std::vector<std::vector<uint32_t> > & orc_LastOwnerNodeDatapoolIndex, const std::vector<std::vector<bool> > & orc_LastOwnerIsTxFlag, std::vector<std::vector<QString> > & orc_NewOwnerNodeName, std::vector<std::vector<uint32_t> > & orc_NewOwnerNodeInterfaceIndex, std::vector<std::vector<uint32_t> > & orc_NewOwnerNodeDatapoolIndex,
+                                                      const QList<QStringList> & orc_LastOwnerNodeName,
+                                                      const std::vector<std::vector<uint32_t> > & orc_LastOwnerNodeInterfaceIndex, const std::vector<std::vector<uint32_t> > & orc_LastOwnerNodeDatapoolIndex, const std::vector<std::vector<bool> > & orc_LastOwnerIsTxFlag, QList<QStringList> & orc_NewOwnerNodeName, std::vector<std::vector<uint32_t> > & orc_NewOwnerNodeInterfaceIndex, std::vector<std::vector<uint32_t> > & orc_NewOwnerNodeDatapoolIndex,
                                                       std::vector<std::vector<bool> > & orc_NewOwnerIsTxFlag)
 {
    //Confirm connected to bus state part 1 (container)
@@ -668,7 +668,7 @@ void C_SdBueUnoManager::mh_HandleLastOwnersValidation(const C_OscCanMessageIdent
                //Confirm last owners still valid
                for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < orc_LastOwnerNodeName.size(); ++u32_ItMessage)
                {
-                  std::vector<QString> c_NewOwnerNodeName;
+                  QStringList c_NewOwnerNodeName;
                   std::vector<uint32_t> c_NewOwnerNodeInterfaceIndex;
                   std::vector<uint32_t> c_NewOwnerNodeDatapoolIndex;
                   std::vector<bool> c_NewOwnerIsTxFlag;
@@ -772,7 +772,7 @@ void C_SdBueUnoManager::mh_HandleLastOwnersValidation(const C_OscCanMessageIdent
             //Confirm last owners still valid
             for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < orc_LastOwnerNodeName.size(); ++u32_ItMessage)
             {
-               std::vector<QString> c_NewOwnerNodeName;
+               QStringList c_NewOwnerNodeName;
                std::vector<uint32_t> c_NewOwnerNodeInterfaceIndex;
                std::vector<uint32_t> c_NewOwnerNodeDatapoolIndex;
                std::vector<bool> c_NewOwnerIsTxFlag;

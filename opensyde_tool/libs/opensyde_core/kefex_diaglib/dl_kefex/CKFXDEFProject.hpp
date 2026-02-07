@@ -15,6 +15,7 @@
 #include "stwtypes.hpp"
 #include "CKFXVariableLists.hpp"
 #include <QString>
+#include <QStringList>
 #include <QSettings>
 #include "DiagLib_config.hpp"
 
@@ -50,7 +51,7 @@ private:
    static int32_t m_FindRelatedFiles(const QString & orc_Directory,
                                      const QString & orc_DeviceName,
                                      QList<C_KFXRAMNameIndex> & orc_Files,
-                                     QList<QString> & orc_Warnings);
+                                     QStringList & orc_Warnings);
 
    static void m_VarStringsToMinMax(const QString & orc_Min, const QString & orc_Max,
                                     C_KFXVariableBase & orc_Variable);
@@ -60,7 +61,7 @@ public:
    static int32_t LoadRAMFiles(const QString & orc_Directory,
                                const QString & orc_DeviceName, C_KFXVariableLists & orc_Lists,
                                QString & orc_ErrorText,
-                               QList<QString> & orc_Warnings);
+                               QStringList & orc_Warnings);
 
    static int32_t LoadComments(const QString & orc_FileName, const QString & orc_DeviceName,
                                C_KFXVariableLists & orc_VariableLists,

@@ -15,6 +15,8 @@
 #include "C_SdNdeDalLogJobGeneralSettingsWidget.hpp"
 #include "ui_C_SdNdeDalLogJobGeneralSettingsWidget.h"
 
+#include <QStringList>
+
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSdUtil.hpp"
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -161,7 +163,7 @@ void C_SdNdeDalLogJobGeneralSettingsWidget::m_GetSupportedClientInterfaces() con
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
    const C_OscDeviceDefinition * const pc_DevDef = pc_Node->pc_DeviceDefinition;
 
-   std::vector<QString> c_InterfaceNames;
+   QStringList c_InterfaceNames;
    QString c_InterfaceName;
 
    for (uint8_t u8_Iterator = 0; u8_Iterator < pc_DevDef->u8_NumCanBusses; ++u8_Iterator)

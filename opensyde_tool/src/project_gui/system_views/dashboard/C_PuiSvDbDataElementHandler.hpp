@@ -15,6 +15,7 @@
 #include <QVector>
 #include <QList>
 #include <QMap>
+#include <QStringList>
 
 #include "stwtypes.hpp"
 
@@ -85,7 +86,7 @@ protected:
                                   float64_t * const opf64_UnscaledValueAsFloat,
                                   float64_t * const opf64_ScaledValueAsFloat);
    virtual int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                  std::vector<QString> & orc_ScaledValues, std::vector<float64_t> & orc_UnscaledValues);
+                                  QStringList & orc_ScaledValues, std::vector<float64_t> & orc_UnscaledValues);
 
    virtual int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<float64_t> & orc_Values,
                                   const bool oq_UseScaling);
@@ -133,8 +134,8 @@ private:
       QString GetSingleValueContentFormatted(const C_PuiSvDbDataElementContent & orc_Value, const uint32_t ou32_Index,
                                              float64_t * const opf64_UnscaledValueAsFloat,
                                              float64_t * const opf64_ScaledValueAsFloat = NULL) const;
-      std::vector<QString> GetValuesContentFormatted(const C_PuiSvDbDataElementContent & orc_Value,
-                                                     std::vector<float64_t> & orc_UnscaledValueAsFloat) const;
+      QStringList GetValuesContentFormatted(const C_PuiSvDbDataElementContent & orc_Value,
+                                           std::vector<float64_t> & orc_UnscaledValueAsFloat) const;
 
       C_PuiSvDbDataElementScaling c_Scaling;
       C_PuiSvDbDataElementDisplayFormatterConfig c_FormatterConfig;

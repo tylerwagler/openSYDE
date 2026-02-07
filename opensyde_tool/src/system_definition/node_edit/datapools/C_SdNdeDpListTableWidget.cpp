@@ -284,7 +284,7 @@ void C_SdNdeDpListTableWidget::Reset(void)
    \param[in] orc_VariableNames New selected variable names
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListTableWidget::SetSelectedVariableNames(const std::vector<QString> & orc_VariableNames) const
+void C_SdNdeDpListTableWidget::SetSelectedVariableNames(const QStringList & orc_VariableNames) const
 {
    this->mpc_Ui->pc_TableView->SetSelectedVariableNames(orc_VariableNames);
 }
@@ -296,7 +296,7 @@ void C_SdNdeDpListTableWidget::SetSelectedVariableNames(const std::vector<QStrin
    Current selected variable names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<QString> C_SdNdeDpListTableWidget::GetSelectedVariableNames(void) const
+QStringList C_SdNdeDpListTableWidget::GetSelectedVariableNames(void) const
 {
    return this->mpc_Ui->pc_TableView->GetSelectedVariableNames();
 }

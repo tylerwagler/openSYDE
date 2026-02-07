@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_OscProject.hpp"
 
@@ -37,7 +38,7 @@ public:
    };
 
    explicit C_PopFileTableModel(QObject * const opc_Parent = NULL);
-   void UpdateData(const std::vector<QString> & orc_RecentFilePaths,
+   void UpdateData(const QStringList & orc_RecentFilePaths,
                    const std::vector<stw::opensyde_core::C_OscProject> & orc_RecentProjects);
 
    int32_t rowCount(const QModelIndex & orc_Parent = QModelIndex()) const override;
@@ -50,7 +51,7 @@ public:
    int32_t ConvertRowToFile(const int32_t & ors32_Row, QString & orc_FilePath) const;
 
 private:
-   std::vector<QString> mc_RecentFilePaths;
+   QStringList mc_RecentFilePaths;
    std::vector<stw::opensyde_core::C_OscProject> mc_RecentProjects;
 };
 

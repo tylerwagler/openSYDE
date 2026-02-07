@@ -680,7 +680,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::m_InitSpecificItem(
         orc_Node.c_Applications[this->mu32_SectionNumber];
 
     if (rc_Datablock.e_Type != C_OscNodeApplication::ePARAMETER_SET_HALC) {
-      const std::vector<QString> &c_ViewDatablockPaths =
+      const QStringList &c_ViewDatablockPaths =
           orc_UpdateInfo.GetPaths(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
       std::vector<bool> c_ViewDatablockSkipFlags =
           orc_UpdateInfo.GetSkipUpdateOfPathsFlags(

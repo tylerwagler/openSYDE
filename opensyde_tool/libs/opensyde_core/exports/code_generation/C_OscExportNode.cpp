@@ -104,14 +104,14 @@ using namespace stw::opensyde_core;
  * QString conversion
  */
 //----------------------------------------------------------------------------------------------------------------------
-static void h_CollectFilePathsWrapper(std::vector<QString> &orc_Files,
+static void h_CollectFilePathsWrapper(QStringList &orc_Files,
                                       const QString &orc_Path,
                                       const QString &orc_FileName,
                                       const bool oq_SourceCode) {
-  std::vector<QString> c_TempFiles;
+  QStringList c_TempFiles;
   C_OscExportUti::h_CollectFilePaths(c_TempFiles, orc_Path,
                                      orc_FileName, oq_SourceCode);
-  for (std::vector<QString>::const_iterator c_It = c_TempFiles.begin();
+  for (QStringList::const_iterator c_It = c_TempFiles.begin();
        c_It != c_TempFiles.end(); ++c_It) {
     orc_Files.push_back(QString(*c_It));
   }
@@ -119,7 +119,7 @@ static void h_CollectFilePathsWrapper(std::vector<QString> &orc_Files,
 
 int32_t C_OscExportNode::h_CreateSourceCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_Path, QStringList &orc_Files,
     const QString &orc_ExportToolName,
     const QString &orc_ExportToolVersion) {
   int32_t s32_Retval = C_NO_ERR;
@@ -233,7 +233,7 @@ int32_t C_OscExportNode::h_CreateSourceCode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateOsyInitCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_Path, QStringList &orc_Files,
     const QString &orc_ExportToolInfo) {
   int32_t s32_Retval;
 
@@ -283,7 +283,7 @@ int32_t C_OscExportNode::mh_CreateOsyInitCode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateDatapoolCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_Path, QStringList &orc_Files,
     const QString &orc_ExportToolInfo) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -432,7 +432,7 @@ int32_t C_OscExportNode::mh_CreateDatapoolCode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateCommStackCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_Path, QStringList &orc_Files,
     const QString &orc_ExportToolInfo) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -542,7 +542,7 @@ int32_t C_OscExportNode::mh_CreateCommStackCode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateHalConfigCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_Path, QStringList &orc_Files,
     const QString &orc_ExportToolInfo) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -614,7 +614,7 @@ int32_t C_OscExportNode::mh_CreateHalConfigCode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_CreateHalNvmData(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
-    const QString &orc_Path, std::vector<QString> &orc_Files,
+    const QString &orc_Path, QStringList &orc_Files,
     const QString &orc_ExportToolName,
     const QString &orc_ExportToolVersion) {
   int32_t s32_Retval = C_NO_ERR;

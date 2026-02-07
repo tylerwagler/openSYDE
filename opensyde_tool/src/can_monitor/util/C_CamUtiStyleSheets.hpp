@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
+#include <QStringList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -47,17 +48,17 @@ private:
       const QColor c_Color;
    };
 
-   static const std::vector<QString> mhc_SCROLL_AREA_ELEMENTS;
+   static const QStringList mhc_SCROLL_AREA_ELEMENTS;
    static const std::vector<C_PropertyValueColorConfig> mhc_SCROLL_AREA_PROPERTIES;
-   static const std::vector<QString> mhc_SCROLL_BAR_ELEMENTS_BRIGHT;
+   static const QStringList mhc_SCROLL_BAR_ELEMENTS_BRIGHT;
    static const std::vector<C_PropertyValueColorConfig> mhc_SCROLL_BAR_PROPERTIES_BRIGHT;
-   static const std::vector<QString> mhc_SCROLL_BAR_ELEMENTS_DARK;
+   static const QStringList mhc_SCROLL_BAR_ELEMENTS_DARK;
    static const std::vector<C_PropertyValueColorConfig> mhc_SCROLL_BAR_PROPERTIES_DARK;
 
    static void mh_AppendStylesheet(const QString & orc_File, QString & orc_Stylesheet);
    static void mh_AppendDynamicStylesheet(QString & orc_Stylesheet);
    static void mh_AppendScrollBarStyleSheets(QString & orc_Stylesheet);
-   static void mh_AppendScrollBarStyleSheet(const std::vector<QString> & orc_ScrollBarElements,
+   static void mh_AppendScrollBarStyleSheet(const QStringList & orc_ScrollBarElements,
                                             const std::vector<C_PropertyValueColorConfig> & orc_ScrollBarProperties,
                                             QString & orc_Stylesheet);
 };

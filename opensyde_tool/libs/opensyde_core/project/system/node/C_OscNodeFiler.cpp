@@ -235,7 +235,7 @@ int32_t C_OscNodeFiler::h_LoadNode(C_OscNode &orc_Node,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::h_SaveNodeFile(
     const C_OscNode &orc_Node, const QString &orc_FilePath,
-    std::vector<QString> *const opc_CreatedFiles,
+    QStringList *const opc_CreatedFiles,
     const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   C_OscXmlParser c_XmlParser;
   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
@@ -287,7 +287,7 @@ int32_t C_OscNodeFiler::h_SaveNodeFile(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::h_SaveNode(
     const C_OscNode &orc_Node, C_OscXmlParserBase &orc_XmlParser,
-    const QString &orc_BasePath, std::vector<QString> *const opc_CreatedFiles,
+    const QString &orc_BasePath, QStringList *const opc_CreatedFiles,
     const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   int32_t s32_Retval;
 
@@ -431,7 +431,7 @@ int32_t C_OscNodeFiler::h_SaveNodeComProtocols(
     const std::vector<C_OscCanProtocol> &orc_NodeComProtocols,
     const std::vector<C_OscNodeDataPool> &orc_NodeDataPools,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles) {
+    QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
 
   orc_XmlParser.SetAttributeUint32(
@@ -1472,7 +1472,7 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode &orc_Node,
 int32_t C_OscNodeFiler::mh_SaveDataPools(
     const std::vector<C_OscNodeDataPool> &orc_NodeDataPools,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles) {
+    QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
 
   orc_XmlParser.CreateAndSelectNodeChild("data-pools");
@@ -1564,7 +1564,7 @@ int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig &orc_HalcConfig,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_SaveHalc(
     const C_OscHalcConfig &orc_HalcConfig, C_OscXmlParserBase &orc_XmlParser,
-    const QString &orc_BasePath, std::vector<QString> *const opc_CreatedFiles) {
+    const QString &orc_BasePath, QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (!orc_HalcConfig.c_FileString.isEmpty()) {
@@ -1658,7 +1658,7 @@ int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(
 int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(
     const std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_CanOpenManagers,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles,
+    QStringList *const opc_CreatedFiles,
     const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -1752,7 +1752,7 @@ int32_t C_OscNodeFiler::mh_LoadDataLoggers(
 int32_t C_OscNodeFiler::mh_SaveDataLoggers(
     const std::vector<C_OscDataLoggerJob> &orc_DataLoggerJobs,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles) {
+    QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_DataLoggerJobs.size() > 0) {
@@ -1840,7 +1840,7 @@ int32_t C_OscNodeFiler::mh_LoadXappProperties(C_OscXappProperties &orc_Config,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_SaveXappProperties(
     const C_OscNode &orc_Config, C_OscXmlParserBase &orc_XmlParser,
-    const QString &orc_BasePath, std::vector<QString> *const opc_CreatedFiles) {
+    const QString &orc_BasePath, QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_Config.c_Properties.q_XappSupport) {

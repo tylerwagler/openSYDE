@@ -227,7 +227,7 @@ void C_CamMosDatabaseSelectionModel::m_Init(void)
    {
       if (c_ItDbc->GetActive())
       {
-         const std::vector<QString> c_Messages = c_ItDbc->GetFoundMessages();
+         const QStringList c_Messages = c_ItDbc->GetFoundMessages();
          //Database
          C_TblTreItem * const pc_DatabaseItem = this->m_CreateAndFillDatabaseNode(
             c_ItDbc.key(), this->mpc_InvisibleRootItem);
@@ -242,7 +242,7 @@ void C_CamMosDatabaseSelectionModel::m_Init(void)
             //Reserve
             pc_DatabaseItem->ReserveChildrenSpace(c_Messages.size());
             //Each message
-            for (std::vector<QString>::const_iterator c_ItMessage = c_Messages.begin();
+            for (QStringList::const_iterator c_ItMessage = c_Messages.begin();
                  c_ItMessage != c_Messages.end(); ++c_ItMessage)
             {
                const C_CieConverter::C_CieCanMessage * const pc_Message =

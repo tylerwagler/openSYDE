@@ -216,7 +216,7 @@ int32_t C_PuiProject::SaveCurrentProjectForServiceMode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiProject::Load(
     uint16_t *const opu16_FileVersion,
-    std::vector<QString> *const opc_ErrorDetailsMissingDevices) {
+    QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval;
 
   QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -509,7 +509,7 @@ int32_t C_PuiProject::PrepareLoadInitialProject(void) {
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiProject::LoadInitialProject(
     uint16_t *const opu16_FileVersion, QString &orc_LoadedProject,
-    std::vector<QString> *const opc_ErrorDetailsMissingDevices) {
+    QStringList *const opc_ErrorDetailsMissingDevices) {
   // Load it
   const int32_t s32_Error =
       this->Load(opu16_FileVersion, opc_ErrorDetailsMissingDevices);
@@ -710,16 +710,10 @@ int32_t C_PuiProject::m_SaveServiceModeProject(const QString &orc_FilePath,
 
     C_Uti::h_GetAllFilePathsInFolder(c_TemporaryPath, c_AllFilesAbsolute);
 
-    std::vector<QString> c_AllFilesAbsoluteLegacy;
-    c_AllFilesAbsoluteLegacy.reserve(c_AllFilesAbsolute.size());
-    for (const QString &c_File : c_AllFilesAbsolute) {
-      c_AllFilesAbsoluteLegacy.emplace_back(c_File);
-    }
-
     {
       std::set<QString> c_AllFilesRelative;
       C_OscZipFile::h_AppendFilesRelative(
-          c_AllFilesRelative, c_AllFilesAbsoluteLegacy,
+          c_AllFilesRelative, c_AllFilesAbsolute,
           c_TemporaryPath);
 
       // Create the encrypted zip file
@@ -760,7 +754,7 @@ int32_t C_PuiProject::m_SaveServiceModeProject(const QString &orc_FilePath,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiProject::m_LoadProject(
     uint16_t *const opu16_FileVersion,
-    std::vector<QString> *const opc_ErrorDetailsMissingDevices) {
+    QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval;
 
   if (this->mc_Path.compare("") == 0) {
@@ -840,7 +834,7 @@ int32_t C_PuiProject::m_LoadProject(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiProject::m_LoadServiceModeProject(
     const QString &orc_Password, uint16_t *const opu16_FileVersion,
-    std::vector<QString> *const opc_ErrorDetailsMissingDevices) {
+    QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval;
   const QString c_OriginalPath = this->GetPath();
   const QFileInfo c_FileInfo(this->GetPath());

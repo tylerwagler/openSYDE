@@ -13,7 +13,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include <QString>
-#include <vector>
+#include <QStringList>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ public:
       const QString &orc_UseCase, QString &orc_ErrorMessage);
   static int32_t
   h_SearchFilesInPath(const QString &orc_PackagePath,
-                      const std::vector<QString> &orc_NecessaryFiles);
+                      const QStringList &orc_NecessaryFiles);
 };
 
 /* -- Extern Global Variables

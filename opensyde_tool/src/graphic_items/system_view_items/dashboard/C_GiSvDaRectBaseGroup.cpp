@@ -1099,7 +1099,7 @@ int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPool
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                              std::vector<QString> & orc_ScaledValues,
+                                              QStringList & orc_ScaledValues,
                                               std::vector<float64_t> & orc_UnscaledValues)
 {
    C_PuiSvDbNodeDataPoolListElementId c_Id;

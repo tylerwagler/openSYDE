@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
+#include <QStringList>
 
 #include "C_OscCanMessage.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
@@ -33,20 +34,20 @@ public:
                                   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData,
                                   const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessageData,
                                   const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
-                                  const std::vector<QString> * const opc_WarningMessagesPerMessage = NULL);
+                                  const QStringList * const opc_WarningMessagesPerMessage = NULL);
 
    std::vector<stw::opensyde_core::C_OscCanMessage> c_OscMessageData;
    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> c_OscSignalData;
    std::vector<C_PuiSdNodeCanMessage> c_UiMessageData;
    std::vector<C_PuiSdNodeDataPoolListElement> c_UiSignalData;
-   std::vector<QString> c_WarningMessagesPerMessage;
+   QStringList c_WarningMessagesPerMessage;
 
    void Clear(void);
    void WriteBack(std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData,
                   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData,
                   std::vector<C_PuiSdNodeCanMessage> & orc_UiMessageData,
                   std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
-                  std::vector<QString> & orc_WarningMessagesPerMessage) const;
+                  QStringList & orc_WarningMessagesPerMessage) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

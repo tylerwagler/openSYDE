@@ -202,7 +202,7 @@ const C_OscSystemBus * C_PuiSdHandlerBusLogic::GetOscBus(const uint32_t & oru32_
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PuiSdHandlerBusLogic::CheckBusNameAvailable(const QString & orc_Name,
                                                    const uint32_t * const opu32_BusIndexToSkip,
-                                                   std::vector<QString> * const opc_ExistingNames) const
+                                                   QStringList * const opc_ExistingNames) const
 {
    bool q_Retval = true;
 
@@ -301,7 +301,7 @@ bool C_PuiSdHandlerBusLogic::CheckBusConflict(const uint32_t ou32_BusIndex) cons
    {
       bool q_NameEmpty;
 
-      std::vector<QString> c_InvalidNodesForBitRate;
+      QStringList c_InvalidNodesForBitRate;
       std::vector<C_OscCanProtocol::E_Type> c_InvalidProtocols;
 
       //Do all checks
@@ -373,7 +373,7 @@ bool C_PuiSdHandlerBusLogic::CheckBusConflict(const uint32_t ou32_BusIndex) cons
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerBusLogic::CheckBusConflictDetailed(const uint32_t ou32_BusIndex, bool * const opq_NameConflict,
                                                          bool * const opq_NameEmpty, bool * const opq_IdInvalid,
-                                                         std::vector<QString> * const opc_InvalidNodesForBitRate,
+                                                         QStringList * const opc_InvalidNodesForBitRate,
                                                          std::vector<C_OscCanProtocol::E_Type> * const opc_InvalidProtocols)
 const
 {
@@ -427,7 +427,7 @@ const
                      if (q_BitrateFound == false)
                      {
                         // Bitrate not supported
-                        opc_InvalidNodesForBitRate->emplace_back(pc_Node->c_Properties.c_Name);
+                        opc_InvalidNodesForBitRate->append(pc_Node->c_Properties.c_Name);
                      }
                   }
                }

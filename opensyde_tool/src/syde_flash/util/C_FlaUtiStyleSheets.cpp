@@ -31,7 +31,7 @@ using namespace stw::opensyde_gui_logic;
  * ---------------------------------------------------------------------------------------
  */
 // Configuration for dynamic transparency color configuration of elements
-const std::vector<QString> C_FlaUtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
+const QStringList C_FlaUtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
     {"stw--opensyde_gui_elements--C_OgeTebMessageDetails",
      "stw--opensyde_gui--C_SyvDcConnectedNodeList"});
 const std::vector<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
@@ -39,11 +39,11 @@ const std::vector<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
         {C_FlaUtiStyleSheets::C_PropertyValueColorConfig(
             "", "background-color", static_cast<QColor>(Qt::transparent))});
 
-const std::vector<QString>
+const QStringList
     C_FlaUtiStyleSheets::mhc_SCROLL_BAR_SETTINGS_DARK_BLUE(
         {"stw--opensyde_gui_elements--C_FlaOgeTebProgressLog QScrollBar"});
 
-const std::vector<QString> C_FlaUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
+const QStringList C_FlaUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
     {"stw--opensyde_gui_elements--C_OgeTebMessageDetails QScrollBar",
      "stw--opensyde_gui_elements--C_OgeTransparentScrollArea QScrollBar",
      "stw--opensyde_gui--C_SyvDcConnectedNodeList QScrollBar"});
@@ -101,7 +101,7 @@ const std::vector<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
              "::add-page", "border-color", mc_STYLE_GUIDE_COLOR_11),
          C_FlaUtiStyleSheets::C_PropertyValueColorConfig(
              "::sub-page", "border-color", mc_STYLE_GUIDE_COLOR_11)});
-const std::vector<QString> C_FlaUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_DARK({
+const QStringList C_FlaUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_DARK({
     // insert dark scroll bar here
 });
 const std::vector<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
@@ -264,7 +264,7 @@ void C_FlaUtiStyleSheets::mh_AppendScrollBarStyleSheets(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaUtiStyleSheets::mh_AppendScrollBarStyleSheet(
-    const std::vector<QString> &orc_ScrollBarElements,
+    const QStringList &orc_ScrollBarElements,
     const std::vector<C_PropertyValueColorConfig> &orc_ScrollBarProperties,
     QString &orc_Stylesheet) {
   if ((orc_ScrollBarElements.size() > 0) &&

@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
+#include <QStringList>
 #include <set>
 
 #include "stwtypes.hpp"
@@ -51,7 +52,7 @@ public:
 
    int32_t SetDiagnosticMode(QString & orc_ErrorDetails);
    int32_t SetUpCyclicTransmissions(QString & orc_ErrorDetails,
-                                    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, std::vector<QString> & orc_FailedIdErrorDetails, std::map<uint32_t, uint32_t> & orc_FailedNodesElementNumber, std::map<uint32_t, uint32_t> & orc_NodesElementNumber);
+                                    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, QStringList & orc_FailedIdErrorDetails, std::map<uint32_t, uint32_t> & orc_FailedNodesElementNumber, std::map<uint32_t, uint32_t> & orc_NodesElementNumber);
    int32_t StopCyclicTransmissions(void);
    int32_t StopDiagnosisServer(void);
 

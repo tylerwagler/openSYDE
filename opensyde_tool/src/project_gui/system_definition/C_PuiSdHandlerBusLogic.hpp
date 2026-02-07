@@ -9,6 +9,7 @@
 #define C_PUISDHANDLERBUSLOGIC_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include "C_PuiSdHandlerHalc.hpp"
 #include "C_PuiSdNodeInterfaceAutomaticProperties.hpp"
 
@@ -35,12 +36,12 @@ public:
    const stw::opensyde_core::C_OscSystemBus * GetOscBus(const uint32_t & oru32_Index) const;
    bool CheckBusNameAvailable(const QString & orc_Name,
                               const uint32_t * const opu32_BusIndexToSkip = NULL,
-                              std::vector<QString> * const opc_ExistingNames = NULL) const;
+                              QStringList * const opc_ExistingNames = NULL) const;
    void RemoveBus(const uint32_t ou32_BusIndex);
    bool CheckBusConflict(const uint32_t ou32_BusIndex) const;
    int32_t CheckBusConflictDetailed(const uint32_t ou32_BusIndex, bool * const opq_NameConflict = NULL,
                                     bool * const opq_NameEmpty = NULL, bool * const opq_IdInvalid = NULL,
-                                    std::vector<QString> * const opc_InvalidNodesForBitRate = NULL, std::vector<stw::opensyde_core::C_OscCanProtocol::E_Type> * const opc_InvalidProtocols =
+                                    QStringList * const opc_InvalidNodesForBitRate = NULL, std::vector<stw::opensyde_core::C_OscCanProtocol::E_Type> * const opc_InvalidProtocols =
                                        NULL) const;
    uint32_t GetOscBusesSize(void) const;
    int32_t SetAutomaticBusRoutingSettings(const uint32_t ou32_BusIndex);

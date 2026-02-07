@@ -842,7 +842,7 @@ QVariant C_CamMetTreeModel::data(const QModelIndex &orc_Index,
         if (pc_CurMessage != NULL) {
           if ((os32_Role == ms32_USER_ROLE_TABLE_ALL_STRINGS_DYNAMIC_COL_1) ||
               (os32_Role == ms32_USER_ROLE_TABLE_ALL_STRINGS_DYNAMIC_COL_2)) {
-            const std::vector<QStringList> c_ColWidths =
+            const QList<QStringList> c_ColWidths =
                 mh_GetCount(*pc_CurMessage);
             if (c_ColWidths.size() == 2) {
               if (os32_Role == ms32_USER_ROLE_TABLE_ALL_STRINGS_DYNAMIC_COL_1) {
@@ -2029,9 +2029,9 @@ C_CamMetTreeModel::mh_GetTransparencyStep(const uint32_t ou32_DiffTime) {
    List of strings
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<QStringList>
+QList<QStringList>
 C_CamMetTreeModel::mh_GetCount(const C_CamMetTreeLoggerData &orc_Message) {
-  std::vector<QStringList> c_Retval;
+  QList<QStringList> c_Retval;
   QStringList c_W1;
   QStringList c_W2;
   // Handle three sizes

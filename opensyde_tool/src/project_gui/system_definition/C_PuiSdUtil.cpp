@@ -922,7 +922,7 @@ bool C_PuiSdUtil::h_CheckXappNodeReachable(const uint32_t ou32_SdNodeIndex, cons
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PuiSdUtil::h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeIndex, const QString & orc_Name,
                                                      const uint32_t * const opu32_DataLoggerJobIndexToSkip,
-                                                     std::vector<QString> * const opc_ExistingNames)
+                                                     QStringList * const opc_ExistingNames)
 {
    bool q_Retval = true;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);

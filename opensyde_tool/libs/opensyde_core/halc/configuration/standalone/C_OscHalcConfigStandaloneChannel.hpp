@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
+#include <QStringList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -25,7 +26,7 @@ class C_OscHalcConfigStandaloneChannel
 public:
    C_OscHalcConfigStandaloneChannel(void);
 
-   std::vector<QString> c_ParameterIds;
+   QStringList c_ParameterIds;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -70,11 +70,11 @@ using namespace stw::opensyde_core;
 int32_t C_OscImportEdsDcf::h_Import(const QString & orc_FilePath, const uint8_t ou8_NodeId,
                                     C_OscEdsDcfImportMessageGroup & orc_AllRxMessageData,
                                     C_OscEdsDcfImportMessageGroup & orc_AllTxMessageData,
-                                    std::vector<std::vector<QString> > & orc_ImportMessagesPerMessage,
+                                    QList<QStringList> & orc_ImportMessagesPerMessage,
                                     QString & orc_ParsingError, const C_OscCanProtocol::E_Type oe_ImportForProtocol,
                                     C_OscEdsDcfImportMessageGroup & orc_AllInvalidRxMessageData,
                                     C_OscEdsDcfImportMessageGroup & orc_AllInvalidTxMessageData,
-                                    std::vector<std::vector<QString> > & orc_InvalidImportMessagesPerMessage)
+                                    QList<QStringList> & orc_InvalidImportMessagesPerMessage)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -524,11 +524,11 @@ int32_t C_OscImportEdsDcf::mh_ParseMessages(const uint32_t ou32_StartingId, cons
                                             const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
                                             const std::vector<uint32_t> & orc_Dummies,
                                             C_OscEdsDcfImportMessageGroup & orc_AllMessageData, const bool oq_IsEds,
-                                            std::vector<std::vector<QString> > & orc_ImportMessages,
+                                            QList<QStringList> & orc_ImportMessages,
                                             const bool oq_IsTx, const bool oq_RestrictForCanOpenUsage,
                                             const bool oq_ImportSrdoUseCase,
                                             C_OscEdsDcfImportMessageGroup & orc_AllInvalidMessageData,
-                                            std::vector<std::vector<QString> > & orc_InvalidImportMessages)
+                                            QList<QStringList> & orc_InvalidImportMessages)
 {
    int32_t s32_Retval = C_NO_ERR;
    const uint16_t u16_EndIdOffset = oq_ImportSrdoUseCase ? 0x40U : 0x200U;
@@ -749,20 +749,20 @@ int32_t C_OscImportEdsDcf::mh_ParseMessageContent(const uint32_t ou32_StartingId
                                                   const std::vector<uint32_t> & orc_Dummies,
                                                   C_OscEdsDcfImportMessageGroup & orc_AllMessageData,
                                                   const bool oq_IsEds,
-                                                  std::vector<std::vector<QString> > & orc_ImportMessages,
+                                                  QList<QStringList> & orc_ImportMessages,
                                                   const bool oq_IsTx, const bool oq_RestrictForCanOpenUsage,
                                                   const bool oq_ImportSrdoUseCase,
                                                   const C_OscCanOpenObjectData & orc_CoMessageMainObject,
                                                   const uint32_t ou32_ItMessage, const uint32_t ou32_CobId,
                                                   C_OscEdsDcfImportMessageGroup & orc_AllInvalidMessageData,
-                                                  std::vector<std::vector<QString> > & orc_InvalidImportMessages,
+                                                  QList<QStringList> & orc_InvalidImportMessages,
                                                   const bool oq_CobIdIncludesNodeId)
 {
    const uint16_t u16_MappingOffset = oq_ImportSrdoUseCase ? 0x80U : 0x200U;
    int32_t s32_Retval = C_NO_ERR;
    bool q_AddToSkippedMessages = false;
 
-   std::vector<QString> c_CurMessages;
+   QStringList c_CurMessages;
    C_OscCanMessage c_Message;
    //Name
    if (oq_IsEds)
@@ -914,7 +914,7 @@ int32_t C_OscImportEdsDcf::mh_ParseMessageContent(const uint32_t ou32_StartingId
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscImportEdsDcf::mh_LoadMessageTransmissionType(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
                                                           const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                                   C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_ImportSrdoUseCase, std::vector<QString> & orc_CurMessages,
+                                                                                                   C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_ImportSrdoUseCase, QStringList & orc_CurMessages,
                                                           C_OscCanMessage & orc_Message)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -986,7 +986,7 @@ void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou3
                                                               const std::map<uint16_t,
                                                                              C_OscCanOpenObject> & orc_CoObjects,
                                                               const bool oq_IsEds, bool & orq_AddToSkippedMessages,
-                                                              std::vector<QString> & orc_CurMessages,
+                                                              QStringList & orc_CurMessages,
                                                               C_OscCanMessage & orc_Message)
 {
    const C_OscCanOpenObjectData * const pc_CoMessageTransTypeObject =
@@ -1077,7 +1077,7 @@ void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou3
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscImportEdsDcf::mh_LoadEventTimerSection(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
                                                  const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                          C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_IsTx, std::vector<QString> & orc_CurMessages,
+                                                                                          C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_IsTx, QStringList & orc_CurMessages,
                                                  C_OscCanMessage & orc_Message)
 {
    if (oq_IsTx == false)
@@ -1159,7 +1159,7 @@ void C_OscImportEdsDcf::mh_LoadEventTimerSection(const uint32_t ou32_StartingId,
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscImportEdsDcf::mh_LoadSrdoCyclicSection(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
                                                  const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                          C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, std::vector<QString> & orc_CurMessages,
+                                                                                          C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, QStringList & orc_CurMessages,
                                                  C_OscCanMessage & orc_Message)
 {
    bool q_UseDefault = false;
@@ -1299,7 +1299,7 @@ void C_OscImportEdsDcf::mh_LoadEventTimerSectionCanOpen(const uint32_t ou32_Star
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
                                                          const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                                  C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, std::vector<QString> & orc_CurMessages,
+                                                                                                  C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, QStringList & orc_CurMessages,
                                                          C_OscCanMessage & orc_Message)
 {
    const C_OscCanOpenObjectData * const pc_CoMessageInhibitTimeObject =
@@ -1369,7 +1369,7 @@ int32_t C_OscImportEdsDcf::mh_ParseSignals(const uint32_t ou32_CoMessageId, cons
                                            std::vector<uint8_t> & orc_SignalDefaultMinMaxValuesUsed,
                                            const bool oq_IsEds, const bool oq_RestrictForCanOpenUsage,
                                            const bool oq_ImportSrdoUseCase,
-                                           std::vector<QString> & orc_ImportMessages)
+                                           QStringList & orc_ImportMessages)
 {
    int32_t s32_Retval = C_NO_ERR;
    //PDO mapping parameter
@@ -1735,7 +1735,7 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValueSimple(const QString & orc_CoValue,
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscImportEdsDcf::mh_AddUserMessage(const uint32_t ou32_CoObjectId, const QString & orc_CoSectionName,
                                           const QString & orc_ErrorMessage, const int32_t os32_CoSubSectionId,
-                                          const bool oq_IsError, std::vector<QString> * const opc_ImportMessages)
+                                          const bool oq_IsError, QStringList * const opc_ImportMessages)
 {
    QString c_Message;
 

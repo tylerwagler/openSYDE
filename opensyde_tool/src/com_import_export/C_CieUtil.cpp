@@ -15,6 +15,7 @@
 #include "precomp_headers.hpp"
 
 #include <QApplication>
+#include <QStringList>
 
 #include "C_CieUtil.hpp"
 #include "stwerrors.hpp"
@@ -458,10 +459,10 @@ C_CieUtil::h_GetDeviceInfo(const uint32_t ou32_DeviceNodeIndex,
       QString c_ParsingError;
       C_OscEdsDcfImportMessageGroup c_OscRxMessageData;
       C_OscEdsDcfImportMessageGroup c_OscTxMessageData;
-      std::vector<std::vector<QString>> c_ImportMessagesPerMessage;
+      QList<QStringList> c_ImportMessagesPerMessage;
       C_OscEdsDcfImportMessageGroup c_InvalidOscRxMessageData;
       C_OscEdsDcfImportMessageGroup c_InvalidOscTxMessageData;
-      std::vector<std::vector<QString>> c_InvalidImportMessagesPerMessage;
+      QList<QStringList> c_InvalidImportMessagesPerMessage;
       s32_Retval = C_OscImportEdsDcf::h_Import(
           C_PuiUtil::h_GetAbsolutePathFromProject(orc_EdsPath),
           rc_CurInterface.u8_NodeId, c_OscRxMessageData, c_OscTxMessageData,
@@ -889,10 +890,10 @@ C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex,
         QString c_ParsingError;
         C_OscEdsDcfImportMessageGroup c_OscRxMessageData;
         C_OscEdsDcfImportMessageGroup c_OscTxMessageData;
-        std::vector<std::vector<QString>> c_ImportMessagesPerMessage;
+        QList<QStringList> c_ImportMessagesPerMessage;
         C_OscEdsDcfImportMessageGroup c_InvalidOscRxMessageData;
         C_OscEdsDcfImportMessageGroup c_InvalidOscTxMessageData;
-        std::vector<std::vector<QString>> c_InvalidImportMessagesPerMessage;
+        QList<QStringList> c_InvalidImportMessagesPerMessage;
         const int32_t s32_ImportResult = C_OscImportEdsDcf::h_Import(
             orc_FullFilePath.toUtf8().constData(), rc_CurInterface.u8_NodeId,
             c_OscRxMessageData, c_OscTxMessageData, c_ImportMessagesPerMessage,

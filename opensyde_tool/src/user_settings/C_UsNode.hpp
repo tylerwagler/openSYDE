@@ -19,6 +19,7 @@
 #include "C_UsNodeDatapool.hpp"
 #include <QMap>
 #include <QString>
+#include <QStringList>
 
 
 /* -- Namespace
@@ -39,7 +40,7 @@ public:
   C_UsNode(void);
 
   C_UsNodeDatapool GetDatapool(const QString &orc_DatapoolName) const;
-  const QList<QString> GetDatapoolKeysInternal(void) const;
+  const QStringList GetDatapoolKeysInternal(void) const;
   QString GetSelectedDatapoolName(void) const;
   stw::opensyde_core::C_OscCanProtocol::E_Type GetSelectedProtocol(void) const;
   uint32_t GetSelectedInterface(void) const;
@@ -66,11 +67,11 @@ public:
       const stw::opensyde_core::C_OscCanProtocol::E_Type oe_Protocol);
   void SetSelectedInterface(const uint32_t ou32_InterfaceIndex);
   void SetDatapoolOpenListNames(const QString &orc_DatapoolName,
-                                const std::vector<QString> &orc_New);
+                                const QStringList &orc_New);
   void SetDatapoolSelectedListNames(const QString &orc_DatapoolName,
-                                    const std::vector<QString> &orc_New);
+                                    const QStringList &orc_New);
   void SetDatapoolSelectedVariableNames(const QString &orc_DatapoolName,
-                                        const std::vector<QString> &orc_New);
+                                        const QStringList &orc_New);
   void SetDatapoolCommMessageOverviewColumnWidth(
       const QString &orc_DatapoolName, const QString &orc_ListName,
       const std::vector<int32_t> &orc_Value);

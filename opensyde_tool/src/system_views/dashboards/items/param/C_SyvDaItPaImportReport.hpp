@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QStringList>
 #include "C_OgePopUpDialog.hpp"
 #include "C_OscParamSetInterpretedNode.hpp"
 #include "C_OscNodeDataPoolListElementId.hpp"
@@ -48,7 +49,7 @@ public:
    void GetOutput(std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_OutputListIds,
                   std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_OutputContent) const;
    void GetFloatRangeCheckResults(std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
-                                  std::vector<QString> & orc_InvalidValues, std::vector<QString> & orc_NewValues) const;
+                                  QStringList & orc_InvalidValues, QStringList & orc_NewValues) const;
 
 protected:
    void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
@@ -69,8 +70,8 @@ private:
    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_OutputListIds;
    std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> mc_OutputContent;
    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_FloatRangeCheckInvalidValueIds;
-   std::vector<QString> mc_FloatRangeCheckInvalidValues;
-   std::vector<QString> mc_FloatRangeCheckNewValues;
+   QStringList mc_FloatRangeCheckInvalidValues;
+   QStringList mc_FloatRangeCheckNewValues;
    static const QString mhc_HTML_TABLE_HEADER_START;
    static const QString mhc_HTML_TABLE_DATA_START;
 

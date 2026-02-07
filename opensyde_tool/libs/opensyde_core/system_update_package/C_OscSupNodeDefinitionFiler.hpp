@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
+#include <QStringList>
 #include <map>
 #include <vector>
 
@@ -30,21 +31,21 @@ namespace opensyde_core
 class C_OscSupNodeDefinitionFiler
 {
 public:
-   static int32_t h_SaveNodes(const std::vector<QString> & orc_Files,
+   static int32_t h_SaveNodes(const QStringList & orc_Files,
                               const std::vector<C_OscSupNodeDefinition> & orc_Nodes);
-   static int32_t h_LoadNodes(const std::vector<QString> & orc_Files,
-                              const std::vector<QString> & orc_NodeFoldersAbs,
+   static int32_t h_LoadNodes(const QStringList & orc_Files,
+                              const QStringList & orc_NodeFoldersAbs,
                               const std::vector<uint8_t> & orc_ActiveNodes,
                               std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                               std::map<uint32_t, uint32_t> & orc_UpdateOrderByNodes,
                               const std::vector<uint32_t> & orc_UpdatePosition,
-                              std::vector<QString> & orc_Signatures);
+                              QStringList & orc_Signatures);
 
    static const uint8_t hu8_ACTIVE_NODE;
 
 private:
    static int32_t mh_SaveNode(const QString & orc_File, const C_OscSupNodeDefinition & orc_Node);
-   static void mh_LoadFilesSection(std::vector<QString> & orc_Files, const uint32_t ou32_NodeCounter,
+   static void mh_LoadFilesSection(QStringList & orc_Files, const uint32_t ou32_NodeCounter,
                                    const uint32_t ou32_UpdatePos, std::map<uint32_t,
                                                                            uint32_t> & orc_PositionMap,
                                    const QString & orc_NodeFolderAbs, C_OscXmlParserBase & orc_XmlParser,
@@ -55,7 +56,7 @@ private:
                                                                                uint32_t> & orc_PositionMap,
                                        const QString & orc_NodeFolderAbs,
                                        C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveFiles(const std::vector<QString> & orc_Files, C_OscXmlParserBase & orc_XmlParser,
+   static void mh_SaveFiles(const QStringList & orc_Files, C_OscXmlParserBase & orc_XmlParser,
                             const QString & orc_BaseNodeName,
                             const QString & orc_ElementNodeName);
    static void mh_SavePemConfig(const C_OscSupNodeDefinition & orc_CurrentNode, C_OscXmlParserBase & orc_XmlParser);

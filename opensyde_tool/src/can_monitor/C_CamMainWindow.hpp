@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QMainWindow>
 #include <QMimeData>
+#include <QStringList>
 
 #include "C_CamComDriverBase.hpp"
 
@@ -65,9 +66,9 @@ private:
    // For loading files
    QString mc_CurrentLoadedFile;
    QString mc_CurrentLoadedFileOrg;
-   std::vector<QString> mc_OsySysDefs;
+   QStringList mc_OsySysDefs;
    std::vector<uint32_t> mc_OsySysDefBuses;
-   std::vector<QString> mc_DbcFiles;
+   QStringList mc_DbcFiles;
 
    // For custom splitter resizing
    int32_t ms32_SettingsSplitterPosition;

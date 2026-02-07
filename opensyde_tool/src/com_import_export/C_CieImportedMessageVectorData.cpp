@@ -52,7 +52,7 @@ C_CieImportedMessageVectorData::C_CieImportedMessageVectorData(
    const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData,
    const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessageData,
    const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
-   const std::vector<QString> * const opc_WarningMessagesPerMessage) :
+   const QStringList * const opc_WarningMessagesPerMessage) :
    c_OscMessageData(orc_OscMessageData),
    c_OscSignalData(orc_OscSignalData),
    c_UiMessageData(orc_UiMessageData),
@@ -89,7 +89,7 @@ void C_CieImportedMessageVectorData::Clear()
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieImportedMessageVectorData::WriteBack(std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData,
                                                std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData, std::vector<C_PuiSdNodeCanMessage> & orc_UiMessageData, std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
-                                               std::vector<QString> & orc_WarningMessagesPerMessage) const
+                                               QStringList & orc_WarningMessagesPerMessage) const
 {
    orc_OscMessageData = c_OscMessageData;
    orc_OscSignalData = c_OscSignalData;

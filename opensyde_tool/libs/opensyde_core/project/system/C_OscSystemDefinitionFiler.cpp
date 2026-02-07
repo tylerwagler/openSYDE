@@ -114,7 +114,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
     const bool oq_UseDeviceDefinitions, uint16_t *const opu16_ReadFileVersion,
     const std::vector<uint8_t> *const opc_NodesToLoad,
     const bool oq_SkipContent, const QString *const opc_ExpectedNodeName,
-    std::vector<QString> *const opc_ErrorDetailsMissingDevices) {
+    QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (QFileInfo(orc_PathSystemDefinition).exists() &&
@@ -164,7 +164,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
     const C_OscSystemDefinition &orc_SystemDefinition, const QString &orc_Path,
-    std::vector<QString> *const opc_CreatedFiles) {
+    QStringList *const opc_CreatedFiles) {
   int32_t s32_Return = C_NO_ERR;
 
   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile()) {
@@ -249,7 +249,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(
     const bool oq_UseFileInterface,
     const std::vector<uint8_t> *const opc_NodesToLoad,
     const bool oq_SkipContent, const QString *const opc_ExpectedNodeName,
-    std::vector<QString> *const opc_ErrorDetailsMissingDevices)
+    QStringList *const opc_ErrorDetailsMissingDevices)
 
 {
   int32_t s32_Retval = C_NO_ERR;
@@ -475,7 +475,7 @@ C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> &orc_Buses,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemDefinitionFiler::h_SaveNodes(
     const std::vector<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser,
-    const QString &orc_BasePath, std::vector<QString> *const opc_CreatedFiles) {
+    const QString &orc_BasePath, QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
   const std::map<uint32_t, QString> c_NodeIndicesToNameMap =
       C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(orc_Nodes);
@@ -493,7 +493,7 @@ int32_t C_OscSystemDefinitionFiler::h_SaveNodes(
           C_OscNodeFiler::h_SaveNode(rc_Node, orc_XmlParser, orc_BasePath,
                                      opc_CreatedFiles, c_NodeIndicesToNameMap);
     } else {
-      std::vector<QString> c_CreatedFiles;
+      QStringList c_CreatedFiles;
       const QString c_FolderName =
           C_OscNodeFiler::h_GetFolderName(rc_Node.c_Properties.c_Name);
       const QString c_FileName =
@@ -598,7 +598,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
     uint16_t *const opu16_ReadFileVersion,
     const std::vector<uint8_t> *const opc_NodesToLoad,
     const bool oq_SkipContent, const QString *const opc_ExpectedNodeName,
-    std::vector<QString> *const opc_ErrorDetailsMissingDevices) {
+    QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval = C_NO_ERR;
 
   // do we need to load the device definitions ?
@@ -750,7 +750,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
 int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinition(
     const C_OscSystemDefinition &orc_SystemDefinition,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    std::vector<QString> *const opc_CreatedFiles) {
+    QStringList *const opc_CreatedFiles) {
   int32_t s32_Return;
 
   orc_XmlParser.CreateNodeChild("opensyde-system-definition");

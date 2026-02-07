@@ -272,10 +272,10 @@ void C_OscViewFiler::h_SaveNodeUpdateInformation(const std::vector<C_OscViewNode
         ++u32_ItNodeActiveFlag)
    {
       const C_OscViewNodeUpdate & rc_NodeUpdateInformation = orc_NodeUpdateInformation[u32_ItNodeActiveFlag];
-      const std::vector<QString> & rc_DataBlockPaths = rc_NodeUpdateInformation.GetPaths(
+      const QStringList & rc_DataBlockPaths = rc_NodeUpdateInformation.GetPaths(
          C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
       const std::vector<C_OscViewNodeUpdateParamInfo> & rc_ParamSetPaths = rc_NodeUpdateInformation.GetParamInfos();
-      const std::vector<QString> & rc_FileBasedPaths = rc_NodeUpdateInformation.GetPaths(
+      const QStringList & rc_FileBasedPaths = rc_NodeUpdateInformation.GetPaths(
          C_OscViewNodeUpdate::eFTP_FILE_BASED);
       std::vector<bool> c_SkipFlags;
       const std::vector<bool> & rc_PathSkipFlags = rc_NodeUpdateInformation.GetSkipUpdateOfPathsFlags(
@@ -641,7 +641,7 @@ void C_OscViewFiler::mh_LoadPc(C_OscViewPc & orc_OscPc, const C_OscXmlParserBase
    \param[in,out]  orc_XmlParser       XML parser
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(std::vector<QString> & orc_Paths,
+void C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(QStringList & orc_Paths,
                                                        const QString & orc_XmlTagBaseName,
                                                        C_OscXmlParserBase & orc_XmlParser)
 {
@@ -687,7 +687,7 @@ void C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(std::vector<QString> & or
 int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & orc_NodeUpdateInformation,
                                                         C_OscXmlParserBase & orc_XmlParser, const C_OscNode & orc_Node)
 {
-   std::vector<QString> c_Paths;
+   QStringList c_Paths;
    std::vector<bool> c_SkipFlags;
    int32_t s32_Retval = C_NO_ERR;
 
@@ -740,7 +740,7 @@ int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & or
    else
    {
       std::vector<C_OscViewNodeUpdateParamInfo> c_ParamInfo;
-      std::vector<QString> c_FileBasedPaths;
+      QStringList c_FileBasedPaths;
       std::vector<bool> c_PathSkipFlags;
       std::vector<bool> c_ParamSetSkipFlags;
       std::vector<bool> c_FileBasedSkipFlags;
@@ -1084,7 +1084,7 @@ int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const QStri
                                        to the "node-specific-update-information" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::mh_SaveNodeUpdateInformationPaths(const std::vector<QString> & orc_Paths,
+void C_OscViewFiler::mh_SaveNodeUpdateInformationPaths(const QStringList & orc_Paths,
                                                        const QString & orc_XmlTagBaseName,
                                                        C_OscXmlParserBase & orc_XmlParser)
 {

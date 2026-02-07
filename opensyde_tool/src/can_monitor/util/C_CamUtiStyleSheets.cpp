@@ -23,7 +23,7 @@ using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 // Configuration for dynamic transparency color configuration of elements
-const std::vector<QString> C_CamUtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
+const QStringList C_CamUtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
 {
 }
    );
@@ -33,7 +33,7 @@ const std::vector<C_CamUtiStyleSheets::C_PropertyValueColorConfig> C_CamUtiStyle
 }
    );
 
-const std::vector<QString> C_CamUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
+const QStringList C_CamUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
 {
    "stw--opensyde_gui--C_CamGenTableView QScrollBar",
    "stw--opensyde_gui--C_CamGenSigTableView QScrollBar",
@@ -64,7 +64,7 @@ const std::vector<C_CamUtiStyleSheets::C_PropertyValueColorConfig> C_CamUtiStyle
    C_CamUtiStyleSheets::C_PropertyValueColorConfig("::sub-page", "border-color", mc_STYLE_GUIDE_COLOR_11)
 }
    );
-const std::vector<QString> C_CamUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_DARK(
+const QStringList C_CamUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_DARK(
 {
    // insert dark scroll bar here
 }
@@ -198,7 +198,7 @@ void C_CamUtiStyleSheets::mh_AppendScrollBarStyleSheets(QString & orc_Stylesheet
    \param[in,out] orc_Stylesheet          Dynamic stylesheet document
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamUtiStyleSheets::mh_AppendScrollBarStyleSheet(const std::vector<QString> & orc_ScrollBarElements,
+void C_CamUtiStyleSheets::mh_AppendScrollBarStyleSheet(const QStringList & orc_ScrollBarElements,
                                                        const std::vector<C_PropertyValueColorConfig> & orc_ScrollBarProperties,
                                                        QString & orc_Stylesheet)
 {

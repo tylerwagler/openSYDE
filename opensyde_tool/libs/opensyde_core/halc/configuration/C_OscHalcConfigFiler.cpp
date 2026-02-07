@@ -113,7 +113,7 @@ int32_t C_OscHalcConfigFiler::h_LoadFile(C_OscHalcConfig & orc_IoData, const QSt
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::h_SaveFile(const C_OscHalcConfig & orc_IoData, const QString & orc_Path,
                                          const QString & orc_BasePath,
-                                         std::vector<QString> * const opc_CreatedFiles)
+                                         QStringList * const opc_CreatedFiles)
 {
    int32_t s32_Retval = C_OscHalcConfigFiler::h_PrepareForFile(orc_Path);
 
@@ -254,7 +254,7 @@ int32_t C_OscHalcConfigFiler::h_LoadData(C_OscHalcConfig & orc_IoData, C_OscXmlP
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::h_SaveData(const C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
                                          const QString & orc_BasePath,
-                                         std::vector<QString> * const opc_CreatedFiles)
+                                         QStringList * const opc_CreatedFiles)
 {
    int32_t s32_Retval;
 
@@ -463,7 +463,7 @@ C_OscHalcConfigFiler::C_OscHalcConfigFiler()
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_SaveIoDataBase(const C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser,
                                                 const QString & orc_BasePath,
-                                                std::vector<QString> * const opc_CreatedFiles)
+                                                QStringList * const opc_CreatedFiles)
 {
    int32_t s32_Retval;
 

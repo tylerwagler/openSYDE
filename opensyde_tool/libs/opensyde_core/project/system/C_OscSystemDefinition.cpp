@@ -1680,7 +1680,7 @@ void C_OscSystemDefinition::AddNode(C_OscNode & orc_Node, const QString & orc_Su
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinition::AddNodeSquad(std::vector<C_OscNode> & orc_Nodes,
-                                         const std::vector<QString> & orc_SubDeviceNames,
+                                         const QStringList & orc_SubDeviceNames,
                                          const QString & orc_MainDeviceName)
 {
    Q_ASSERT(orc_Nodes.size() == orc_SubDeviceNames.size());

@@ -9,6 +9,7 @@
 #define C_GISVSUBNODEDATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_OscHexFile.hpp"
 #include "C_SyvUtil.hpp"
@@ -92,7 +93,7 @@ private:
 
    void m_InitPackageData(const stw::opensyde_core::C_OscNode & orc_Node,
                           const stw::opensyde_core::C_OscViewNodeUpdate & orc_UpdateInformation);
-   void m_InitPackageDataForApplicationsFromFiles(const std::vector<QString> & orc_FinalFilePaths);
+   void m_InitPackageDataForApplicationsFromFiles(const QStringList & orc_FinalFilePaths);
    void m_InitPackageDataForOtherFiles(const stw::opensyde_core::C_OscViewNodeUpdate & orc_UpdateInformation);
    void m_InitStatusFromPackage(const stw::opensyde_gui_logic::C_SyvUpDeviceInfo & orc_DeviceApplicationInfos,
                                 const stw::opensyde_core::C_OscNode & orc_Node);
@@ -111,8 +112,8 @@ private:
 
    bool mq_AnyDatablockFound;
    std::vector<stw::diag_lib::C_XFLECUInformation> mc_HexFileInfos;
-   std::vector<QString> mc_ParamFileInfos;
-   std::vector<QString> mc_FileInfos;
+   QStringList mc_ParamFileInfos;
+   QStringList mc_FileInfos;
    QString mc_PemFileInfo;
    std::vector<bool> mc_HexAppInfoAmbiguous;
    stw::opensyde_gui_logic::C_SyvUpDeviceInfo mc_DeviceInfo;

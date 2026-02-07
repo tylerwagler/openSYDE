@@ -89,7 +89,7 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
 {
    bool q_IsShared;
 
-   std::vector<QString> c_DatapoolGroup;
+   QStringList c_DatapoolGroup;
 
    // init UI
    mpc_Ui->setupUi(this);
@@ -572,7 +572,7 @@ void C_SdNdeDpProperties::m_OkClicked(void)
 
    C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
 
-   std::vector<QString> c_ExistingDatapoolNames;
+   QStringList c_ExistingDatapoolNames;
 
    //Check valid name
    if (C_OscUtils::h_CheckValidCeName(this->mpc_Ui->pc_LineEditDatapoolName->text()) == false)
@@ -989,7 +989,7 @@ void C_SdNdeDpProperties::m_CheckDatapoolName(void) const
    False Name in conflict
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeDpProperties::m_CheckDatapoolNameNotDuplicate(std::vector<QString> * const opc_ExistingDatapoolNames)
+bool C_SdNdeDpProperties::m_CheckDatapoolNameNotDuplicate(QStringList * const opc_ExistingDatapoolNames)
 const
 {
    bool q_NameIsValid = true;

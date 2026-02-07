@@ -23,7 +23,7 @@ using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-std::vector<QString> C_CamMosDatabaseSelectionView::mhc_LastKnownExpandedTopLevelItems;
+QStringList C_CamMosDatabaseSelectionView::mhc_LastKnownExpandedTopLevelItems;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -136,7 +136,7 @@ bool C_CamMosDatabaseSelectionView::IsEmpty(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosDatabaseSelectionView::SaveExpandedIndices(void)
 {
-   std::vector<QString> c_FoundItems;
+   QStringList c_FoundItems;
 
    m_AppendExpandedIndices(c_FoundItems);
 
@@ -188,7 +188,7 @@ void C_CamMosDatabaseSelectionView::selectionChanged(const QItemSelection & orc_
    \param[in,out] orc_FoundItems All expanded items
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMosDatabaseSelectionView::m_AppendExpandedIndices(std::vector<QString> & orc_FoundItems)
+void C_CamMosDatabaseSelectionView::m_AppendExpandedIndices(QStringList & orc_FoundItems)
 {
    orc_FoundItems.clear();
    for (int32_t s32_ItChild = 0; s32_ItChild < this->mc_Model.rowCount(); ++s32_ItChild)

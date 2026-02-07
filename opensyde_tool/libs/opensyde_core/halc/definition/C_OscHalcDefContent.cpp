@@ -312,7 +312,7 @@ const std::vector<C_OscHalcDefContentBitmaskItem> & C_OscHalcDefContent::GetBitm
    \param[in,out]  opc_Values    Values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefContent::GetBitmaskStatusValues(std::vector<QString> * const opc_Displays,
+void C_OscHalcDefContent::GetBitmaskStatusValues(QStringList * const opc_Displays,
                                                  std::vector<bool> * const opc_Values) const
 {
    if (opc_Displays != NULL)

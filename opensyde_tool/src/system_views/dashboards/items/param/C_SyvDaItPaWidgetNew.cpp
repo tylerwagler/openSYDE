@@ -985,8 +985,8 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
             {
                const C_OscParamSetInterpretedData & rc_Data = c_ParamSetHandler.GetInterpretedData();
                std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> c_FloatRangeCheckInvalidValueIds;
-               std::vector<QString> c_FloatRangeCheckInvalidValues;
-               std::vector<QString> c_FloatRangeCheckNewValues;
+               QStringList c_FloatRangeCheckInvalidValues;
+               QStringList c_FloatRangeCheckNewValues;
 
                const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(
                   pc_ParamWidget->GetPopUpParent(), pc_ParamWidget->GetPopUpParent());
@@ -1686,7 +1686,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaWidgetNew::m_InformUserFloatRangeCheck(
    const std::vector<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
-   const std::vector<QString> & orc_InvalidValues, const std::vector<QString> & orc_NewValues) const
+   const QStringList & orc_InvalidValues, const QStringList & orc_NewValues) const
 {
    Q_ASSERT((orc_InvalidValueIds.size() == orc_InvalidValues.size()) &&
               (orc_InvalidValueIds.size() == orc_NewValues.size()));

@@ -2564,7 +2564,7 @@ int32_t C_PuiSvHandler::CheckViewError(const uint32_t ou32_Index, bool * const o
                                        bool * const opq_PcNotConnected, bool * const opq_RoutingInvalid,
                                        bool * const opq_RoutingUpdateInvalid, bool * const opq_RoutingDashboardInvalid,
                                        bool * const opq_SysDefInvalid, bool * const opq_NoNodesActive,
-                                       std::vector<QString> * const opc_RoutingErrorDetails,
+                                       QStringList * const opc_RoutingErrorDetails,
                                        QString * const opc_SetupRoutingWarningDetails)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -2578,7 +2578,7 @@ int32_t C_PuiSvHandler::CheckViewError(const uint32_t ou32_Index, bool * const o
       {
          const C_PuiSvData & rc_CheckedData = this->mc_Views[ou32_Index];
          C_PuiSvViewErrorDetails c_Details;
-         std::vector<QString> c_ErrorMessages;
+         QStringList c_ErrorMessages;
          std::set<uint32_t> c_NodesWithDashboardRoutingError;
          std::set<uint32_t> c_NodesRelevantForDashboardRouting;
          QString c_SetupWarningMessage;
@@ -4423,7 +4423,7 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandler::m_CheckRouting(const uint32_t ou32_ViewIndex,
                                        const std::vector<uint8_t> & orc_CheckedNodeActiveFlags,
-                                       QString & orc_SetupWarningMessage, std::vector<QString> & orc_ErrorMessages,
+                                       QString & orc_SetupWarningMessage, QStringList & orc_ErrorMessages,
                                        std::set<uint32_t> & orc_NodesWithDashboardRoutingError,
                                        std::set<uint32_t> & orc_NodesRelevantForDashboardRouting) const
 {
@@ -4543,7 +4543,7 @@ void C_PuiSvHandler::C_PuiSvViewErrorDetails::GetResults(bool * const opq_NameIn
                                                          bool * const opq_RoutingUpdateInvalid,
                                                          bool * const opq_RoutingDashboardInvalid,
                                                          bool * const opq_SysDefInvalid, bool * const opq_NoNodesActive,
-                                                         std::vector<QString> * const opc_RoutingErrorDetails,
+                                                         QStringList * const opc_RoutingErrorDetails,
                                                          QString * const opc_SetupRoutingWarningDetails) const
 {
    if (opq_NameInvalid != NULL)

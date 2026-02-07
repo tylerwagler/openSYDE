@@ -17,8 +17,8 @@
 #define C_OSCZIPFILE_HPP
 
 #include <QString>
+#include <QStringList>
 #include <set>
-#include <vector>
 
 #include "stwtypes.hpp"
 
@@ -47,7 +47,7 @@ public:
                                  QString *const opc_ErrorText = NULL);
 
   static void h_AppendFilesRelative(std::set<QString> &orc_Set,
-                                    const std::vector<QString> &orc_Files,
+                                    const QStringList &orc_Files,
                                     const QString &orc_BasePath);
 
   static int32_t h_IsZipFile(const QString &orc_FilePath);

@@ -12,6 +12,7 @@
 #define C_SDNDEDPCONTENTUTIL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include <QVariant>
 #include "stwtypes.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
@@ -67,11 +68,11 @@ public:
                                              stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content);
    static void h_GetValuesAsScaledString(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
                                          const float64_t of64_Factor, const float64_t of64_Offset,
-                                         std::vector<QString> & orc_Output, const bool oq_AllowRangeAdaptation = true);
+                                         QStringList & orc_Output, const bool oq_AllowRangeAdaptation = true);
    static void h_GetValuesAsScaledCombinedString(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
                                                  const float64_t of64_Factor, const float64_t of64_Offset,
                                                  QString & orc_Output, const bool oq_AllowRangeAdaptation = true);
-   static QString h_CombineString(const std::vector<QString> & orc_Input);
+   static QString h_CombineString(const QStringList & orc_Input);
    static void h_GetValueAsScaledString(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
                                         const float64_t of64_Factor, const float64_t of64_Offset, QString & orc_Output,
                                         const uint32_t ou32_Index, const bool oq_AllowRangeAdaptation = true);

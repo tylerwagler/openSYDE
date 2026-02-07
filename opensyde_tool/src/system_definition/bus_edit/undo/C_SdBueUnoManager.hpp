@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QTreeWidget>
+#include <QStringList>
 #include "C_UtiUndoStack.hpp"
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
 #include "C_OscCanOpenManagerMappableSignal.hpp"
@@ -49,7 +50,7 @@ public:
                         vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> > & orc_OscSignalCommons,
                         const std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons,
                         const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages,
-                        const std::vector<std::vector<QString> > & orc_OwnerNodeName,
+                        const QList<QStringList> & orc_OwnerNodeName,
                         const std::vector<std::vector<uint32_t> > & orc_OwnerNodeInterfaceIndex,
                         const std::vector<std::vector<uint32_t> > & orc_OwnerNodeDatapoolIndex,
                         const std::vector<std::vector<bool> > & orc_OwnerIsTxFlag,
@@ -99,11 +100,11 @@ private:
 
    static void mh_HandleLastOwnersValidation(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-      const std::vector<std::vector<QString> > & orc_LastOwnerNodeName,
+      const QList<QStringList> & orc_LastOwnerNodeName,
       const std::vector<std::vector<uint32_t> > & orc_LastOwnerNodeInterfaceIndex,
       const std::vector<std::vector<uint32_t> > & orc_LastOwnerNodeDatapoolIndex,
       const std::vector<std::vector<bool> > & orc_LastOwnerIsTxFlag,
-      std::vector<std::vector<QString> > & orc_NewOwnerNodeName,
+      QList<QStringList> & orc_NewOwnerNodeName,
       std::vector<std::vector<uint32_t> > & orc_NewOwnerNodeInterfaceIndex,
       std::vector<std::vector<uint32_t> > & orc_NewOwnerNodeDatapoolIndex,
       std::vector<std::vector<bool> > & orc_NewOwnerIsTxFlag);

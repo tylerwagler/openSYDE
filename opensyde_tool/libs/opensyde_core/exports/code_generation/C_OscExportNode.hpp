@@ -12,6 +12,7 @@
 #define C_OSCEXPORTNODE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_OscNode.hpp"
 
@@ -29,30 +30,30 @@ class C_OscExportNode
 public:
    static int32_t h_CreateSourceCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
                                      const QString & orc_Path,
-                                     std::vector<QString> & orc_Files,
+                                     QStringList & orc_Files,
                                      const QString & orc_ExportToolName = "",
                                      const QString & orc_ExportToolVersion = "");
 
 protected:
    static int32_t mh_CreateOsyInitCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
                                        const QString & orc_Path,
-                                       std::vector<QString> & orc_Files,
+                                       QStringList & orc_Files,
                                        const QString & orc_ExportToolInfo = "");
    static int32_t mh_CreateDatapoolCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
                                         const QString & orc_Path,
-                                        std::vector<QString> & orc_Files,
+                                        QStringList & orc_Files,
                                         const QString & orc_ExportToolInfo = "");
    static int32_t mh_CreateCommStackCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
                                          const QString & orc_Path,
-                                         std::vector<QString> & orc_Files,
+                                         QStringList & orc_Files,
                                          const QString & orc_ExportToolInfo = "");
    static int32_t mh_CreateHalConfigCode(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
                                          const QString & orc_Path,
-                                         std::vector<QString> & orc_Files,
+                                         QStringList & orc_Files,
                                          const QString & orc_ExportToolInfo = "");
    static int32_t mh_CreateHalNvmData(const C_OscNode & orc_Node, const uint16_t ou16_ApplicationIndex,
                                       const QString & orc_Path,
-                                      std::vector<QString> & orc_Files,
+                                      QStringList & orc_Files,
                                       const QString & orc_ExportToolName,
                                       const QString & orc_ExportToolVersion);
 

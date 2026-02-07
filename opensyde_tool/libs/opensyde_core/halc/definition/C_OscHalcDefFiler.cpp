@@ -385,7 +385,7 @@ int32_t C_OscHalcDefFiler::h_LoadAvailability(const QString & orc_AttributeName,
 
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<QString> c_SubElements;
+      QStringList c_SubElements;
       s32_Retval = C_OscHalcDefFiler::mh_SplitAvailabilityString(c_AvailabilityString, c_SubElements,
                                                                  orc_XmlParser, orc_AttributeName);
 
@@ -464,7 +464,7 @@ int32_t C_OscHalcDefFiler::h_CheckDomainDisplayNames(const C_OscHalcDefDomain & 
 {
    int32_t s32_Retval;
 
-   std::vector<QString> c_Names;
+   QStringList c_Names;
 
    C_OscHalcDefFiler::mh_GetAllNames(orc_IoDataDomain.c_ChannelValues.c_Parameters, c_Names);
    C_OscHalcDefFiler::mh_GetAllNames(orc_IoDataDomain.c_DomainValues.c_Parameters, c_Names);
@@ -1306,7 +1306,7 @@ int32_t C_OscHalcDefFiler::mh_LoadChannelUseCases(std::vector<C_OscHalcDefChanne
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcDefFiler::mh_SplitAvailabilityString(const QString & orc_AvailabilityString,
-                                                      std::vector<QString> & orc_SubElements,
+                                                      QStringList & orc_SubElements,
                                                       const C_OscXmlParserBase & orc_XmlParser,
                                                       const QString & orc_AttributeName)
 {
@@ -1406,7 +1406,7 @@ int32_t C_OscHalcDefFiler::mh_SplitAvailabilityString(const QString & orc_Availa
    C_CONFIG    string invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefFiler::mh_ParseAvailabilityStringSubElements(const std::vector<QString> & orc_SubElements,
+int32_t C_OscHalcDefFiler::mh_ParseAvailabilityStringSubElements(const QStringList & orc_SubElements,
                                                                  std::vector<C_OscHalcDefChannelAvailability> & orc_Availability, const uint32_t ou32_NumChannels, const C_OscXmlParserBase & orc_XmlParser,
                                                                  const QString & orc_AttributeName)
 {
@@ -1904,7 +1904,7 @@ int32_t C_OscHalcDefFiler::mh_DomainCategoryStringToEnum(const QString & orc_Cat
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefFiler::mh_GetAllNames(const std::vector<C_OscHalcDefStruct> & orc_Values,
-                                       std::vector<QString> & orc_Names)
+                                       QStringList & orc_Names)
 {
    for (uint32_t u32_ItVal = 0UL; u32_ItVal < orc_Values.size(); ++u32_ItVal)
    {
@@ -1935,7 +1935,7 @@ void C_OscHalcDefFiler::mh_GetAllNames(const std::vector<C_OscHalcDefStruct> & o
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcDefFiler::mh_CheckDuplicateNames(const QString & orc_Section,
                                                   const QString & orc_DomainSingularName,
-                                                  const std::vector<QString> & orc_Names)
+                                                  const QStringList & orc_Names)
 {
    int32_t s32_Retval = C_NO_ERR;
 

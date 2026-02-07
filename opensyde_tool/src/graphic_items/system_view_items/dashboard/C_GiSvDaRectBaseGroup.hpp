@@ -114,7 +114,7 @@ protected:
    int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, QString & orc_ScaledValue,
                           float64_t * const opf64_UnscaledValueAsFloat,
                           float64_t * const opf64_ScaledValueAsFloat) override;
-   int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<QString> & orc_ScaledValues,
+   int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, QStringList & orc_ScaledValues,
                           std::vector<float64_t> & orc_UnscaledValues) override;
 
    int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<float64_t> & orc_Values,

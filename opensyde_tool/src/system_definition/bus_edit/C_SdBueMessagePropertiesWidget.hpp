@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QWidget>
+#include <QStringList>
 #include "stwtypes.hpp"
 #include "C_OscCanMessageIdentificationIndices.hpp"
 #include "C_OscCanMessage.hpp"
@@ -87,7 +88,7 @@ private:
    // Datapool combo box and the saved index is the index of the three vectors
    std::vector<std::vector<uint32_t> > mc_MappingTxSelection;
    // Same relation like in mc_MappingTxSelection but with the names of the associated Datapool names
-   std::vector<std::vector<QString> > mc_DatapoolNamesTxSelection;
+   QList<QStringList> mc_DatapoolNamesTxSelection;
 
    bool mq_InternalRxChange;
 

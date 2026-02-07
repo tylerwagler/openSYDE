@@ -13,6 +13,7 @@
 
 #include "stwtypes.hpp"
 #include <QString>
+#include <QStringList>
 #include "C_OscHalcDefDomain.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -39,7 +40,7 @@ public:
    C_OscHalcDefBase(void);
    virtual ~C_OscHalcDefBase(void);
 
-   bool CheckIdsUnique(std::vector<QString> & orc_DuplicateIds) const;
+   bool CheckIdsUnique(QStringList & orc_DuplicateIds) const;
 
    uint32_t u32_ContentVersion;
    QString c_DeviceName;
@@ -67,7 +68,7 @@ public:
 
 private:
    static void mh_AggregateIds(const std::vector<C_OscHalcDefStruct> & orc_Items,
-                               std::vector<QString> & orc_DuplicateIds);
+                               QStringList & orc_DuplicateIds);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

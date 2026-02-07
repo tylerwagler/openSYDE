@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <QString>
+#include <QStringList>
 #include <QModelIndexList>
 #include "stwtypes.hpp"
 #include "C_OscNodeDataPool.hpp"
@@ -86,7 +87,7 @@ public:
                                                   C_OscNodeDataPoolListElement> > & orc_OscSignalCommons,
                                const std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons,
                                const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages,
-                               const std::vector<std::vector<QString> > & orc_OwnerNodeName,
+                               const QList<QStringList> & orc_OwnerNodeName,
                                const std::vector<std::vector<uint32_t> > & orc_OwnerNodeInterfaceIndex,
                                const std::vector<std::vector<uint32_t> > & orc_OwnerNodeDatapoolIndex,
                                const std::vector<std::vector<bool> > & orc_OwnerIsTxFlag,
@@ -97,7 +98,7 @@ public:
                                  vector<std::vector<
                                            C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons,
                                  std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages,
-                                 std::vector<std::vector<QString> > & orc_OwnerNodeName,
+                                 QList<QStringList> & orc_OwnerNodeName,
                                  std::vector<std::vector<uint32_t> > & orc_OwnerNodeInterfaceIndex,
                                  std::vector<std::vector<uint32_t> > & orc_OwnerNodeDatapoolIndex,
                                  std::vector<std::vector<bool> > & orc_OwnerIsTxFlag);

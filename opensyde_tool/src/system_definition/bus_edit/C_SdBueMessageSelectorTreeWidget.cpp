@@ -711,7 +711,7 @@ void C_SdBueMessageSelectorTreeWidget::Copy(void)
          std::vector<std::vector<C_OscNodeDataPoolListElement> > c_OscSignalCommons;
          std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > c_UiSignalCommons;
          std::vector<C_PuiSdNodeCanMessage> c_UiMessages;
-         std::vector<std::vector<QString> > c_OwnerNodeName;
+         QList<QStringList> c_OwnerNodeName;
          std::vector<std::vector<uint32_t> > c_OwnerNodeInterfaceIndex;
          std::vector<std::vector<uint32_t> > c_OwnerNodeDatapoolIndex;
          std::vector<std::vector<bool> > c_OwnerIsTxFlag;
@@ -732,7 +732,7 @@ void C_SdBueMessageSelectorTreeWidget::Copy(void)
                Q_ASSERT(u32_MessageIndex < this->mc_UniqueMessageIds.size());
                if (u32_MessageIndex < this->mc_UniqueMessageIds.size())
                {
-                  std::vector<QString> c_OwnerNodeNamePerMessage;
+                  QStringList c_OwnerNodeNamePerMessage;
                   std::vector<uint32_t> c_OwnerNodeInterfaceIndexPerMessage;
                   std::vector<uint32_t> c_OwnerNodeDatapoolIndexPerMessage;
 
@@ -763,7 +763,7 @@ void C_SdBueMessageSelectorTreeWidget::Copy(void)
                      Q_ASSERT(pc_Node != NULL);
                      if (pc_Node != NULL)
                      {
-                        c_OwnerNodeNamePerMessage.emplace_back(pc_Node->c_Properties.c_Name);
+                        c_OwnerNodeNamePerMessage.append(pc_Node->c_Properties.c_Name);
                      }
                      c_OwnerNodeInterfaceIndexPerMessage.push_back(rc_CurMessageId.u32_InterfaceIndex);
                      c_OwnerNodeDatapoolIndexPerMessage.push_back(rc_CurMessageId.u32_DatapoolIndex);
@@ -1022,7 +1022,7 @@ void C_SdBueMessageSelectorTreeWidget::Paste(void)
          std::vector<std::vector<C_OscNodeDataPoolListElement> > c_OscMsgSignalCommons;
          std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > c_UiMsgSignalCommons;
          std::vector<C_PuiSdNodeCanMessage> c_UiMessages;
-         std::vector<std::vector<QString> > c_OwnerNodeName;
+         QList<QStringList> c_OwnerNodeName;
          std::vector<std::vector<uint32_t> > c_OwnerNodeInterfaceIndex;
          std::vector<std::vector<uint32_t> > c_OwnerNodeDatapoolIndex;
          std::vector<std::vector<bool> > c_OwnerIsTxFlag;

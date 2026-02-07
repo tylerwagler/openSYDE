@@ -79,7 +79,7 @@ C_UsNodeDatapool C_UsNode::GetDatapool(const QString &orc_DatapoolName) const {
    Datapool keys internal structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<QString> C_UsNode::GetDatapoolKeysInternal(void) const {
+const QStringList C_UsNode::GetDatapoolKeysInternal(void) const {
   return this->mc_Datapools.keys();
 }
 
@@ -338,7 +338,7 @@ void C_UsNode::SetSelectedInterface(const uint32_t ou32_InterfaceIndex) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetDatapoolOpenListNames(const QString &orc_DatapoolName,
-                                        const std::vector<QString> &orc_New) {
+                                        const QStringList &orc_New) {
   if (this->mc_Datapools.contains(orc_DatapoolName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -360,7 +360,7 @@ void C_UsNode::SetDatapoolOpenListNames(const QString &orc_DatapoolName,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetDatapoolSelectedListNames(
-    const QString &orc_DatapoolName, const std::vector<QString> &orc_New) {
+    const QString &orc_DatapoolName, const QStringList &orc_New) {
   if (this->mc_Datapools.contains(orc_DatapoolName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -382,7 +382,7 @@ void C_UsNode::SetDatapoolSelectedListNames(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetDatapoolSelectedVariableNames(
-    const QString &orc_DatapoolName, const std::vector<QString> &orc_New) {
+    const QString &orc_DatapoolName, const QStringList &orc_New) {
   if (this->mc_Datapools.contains(orc_DatapoolName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item

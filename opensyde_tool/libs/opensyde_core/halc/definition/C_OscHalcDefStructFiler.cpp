@@ -1448,7 +1448,7 @@ int32_t C_OscHalcDefStructFiler::mh_ParseAttributeAvailability(std::vector<uint3
    }
    else
    {
-      QList<QString> c_SplittedString = orc_AttributeContent.split(",");
+      QStringList c_SplittedString = orc_AttributeContent.split(",");
       for (int32_t s32_ItSplit = 0L; s32_ItSplit < c_SplittedString.size(); ++s32_ItSplit)
       {
          const QString c_CurSplit = c_SplittedString[s32_ItSplit].trimmed();

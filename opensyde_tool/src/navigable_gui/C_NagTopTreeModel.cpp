@@ -124,8 +124,8 @@ void C_NagTopTreeModel::SetTypeNode(const bool oq_IsNode)
    \param[in]  orc_SubContent    List of sub content names (corresponding to list of content names; or empty if none)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_NagTopTreeModel::SetContent(const std::vector<QString> & orc_Content,
-                                   const std::vector<std::vector<QString> > & orc_SubContent)
+void C_NagTopTreeModel::SetContent(const QStringList & orc_Content,
+                                   const QList<QStringList> & orc_SubContent)
 {
    uint32_t u32_FlatIndex = 0;
 
@@ -153,8 +153,8 @@ void C_NagTopTreeModel::SetContent(const std::vector<QString> & orc_Content,
       pc_Parent->c_Icon = this->m_GetPlaceholderIcon();
 
       // collect subitems
-      const std::vector<QString> & rc_CurSubContent =
-         orc_SubContent.empty() ? std::vector<QString>() : orc_SubContent[u32_ContIt];
+      const QStringList & rc_CurSubContent =
+         orc_SubContent.empty() ? QStringList() : orc_SubContent[u32_ContIt];
       for (uint32_t u32_SubIt = 0; u32_SubIt < rc_CurSubContent.size(); u32_SubIt++)
       {
          // create child

@@ -14,6 +14,7 @@
 
 #include "C_Uti.hpp"
 #include <QDateTime>
+#include <QStringList>
 
 #include "stwerrors.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -282,7 +283,7 @@ void C_SyvComDriverDiagConnect::m_RunSetUpCyclicTransmissions(void)
    {
       QString c_ErrorDetails;
       std::vector<C_OscNodeDataPoolListElementId> c_FailedIdRegisters;
-      std::vector<QString> c_FailedIdErrorDetails;
+      QStringList c_FailedIdErrorDetails;
       std::map<uint32_t, uint32_t> c_FailedNodesElementNumber;
       std::map<uint32_t, uint32_t> c_NodesElementNumber;
 

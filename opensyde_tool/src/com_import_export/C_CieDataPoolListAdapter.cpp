@@ -122,7 +122,7 @@ C_CieDataPoolListStructure
 C_CieDataPoolListAdapter::h_GetStructureFromDcfAndEdsFileImport(
     const C_OscEdsDcfImportMessageGroup &orc_OscRxMessageData,
     const C_OscEdsDcfImportMessageGroup &orc_OscTxMessageData,
-    const std::vector<std::vector<QString>> &orc_InfoMessagesPerMessage) {
+    const QList<QStringList> &orc_InfoMessagesPerMessage) {
   C_CieDataPoolListStructure c_Retval;
 
   // Copy
@@ -156,7 +156,7 @@ C_CieDataPoolListAdapter::h_GetStructureFromDcfAndEdsFileImport(
          u32_ItInfoMessage < orc_InfoMessagesPerMessage.size();
          ++u32_ItInfoMessage) {
       QString c_CombinedMessages;
-      const std::vector<QString> &rc_MessagesForOneCanMessage =
+      const QStringList &rc_MessagesForOneCanMessage =
           orc_InfoMessagesPerMessage[u32_ItInfoMessage];
       for (uint32_t u32_ItGroupedMessage = 0;
            u32_ItGroupedMessage < rc_MessagesForOneCanMessage.size();
@@ -217,7 +217,7 @@ void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
     const std::vector<C_CieConverter::C_CieNodeMessage> &orc_CieNodeMessages,
     std::vector<C_OscCanMessage> &orc_CanMessages,
     std::vector<C_OscNodeDataPoolListElement> &orc_CanSignalData,
-    std::vector<QString> &orc_WarningMessages) {
+    QStringList &orc_WarningMessages) {
   uint32_t u32_SignalIndex =
       0; // signal index for serialized signal data structure
 
@@ -234,10 +234,10 @@ void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
         c_Tmp += c_CanMessageIter->c_Warnings.at(u32_Pos);
         c_Tmp += mc_MessageLineBreak;
       }
-      orc_WarningMessages.emplace_back(c_Tmp);
+      orc_WarningMessages.append(c_Tmp);
     } else {
       // for each message an entry is expected therefore push an empty string
-      orc_WarningMessages.emplace_back("");
+      orc_WarningMessages.append("");
     }
 
     // get CAN message content

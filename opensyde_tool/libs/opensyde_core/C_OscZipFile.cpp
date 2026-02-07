@@ -325,7 +325,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const QString &orc_SourcePath,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscZipFile::h_AppendFilesRelative(std::set<QString> &orc_Set,
-                                         const std::vector<QString> &orc_Files,
+                                         const QStringList &orc_Files,
                                          const QString &orc_BasePath) {
   for (uint32_t u32_PosFilesToFlash = 0; u32_PosFilesToFlash < orc_Files.size();
        u32_PosFilesToFlash++) {

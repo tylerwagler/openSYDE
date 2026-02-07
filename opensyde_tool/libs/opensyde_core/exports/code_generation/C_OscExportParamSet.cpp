@@ -117,7 +117,7 @@ C_OscExportParamSet::h_GetFileName(const C_OscNodeApplication &orc_DataBlock,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportParamSet::h_CreateParameterSetImage(
     const QString &orc_Path, const C_OscNode &orc_Node,
-    const uint16_t ou16_ApplicationIndex, std::vector<QString> &orc_Files,
+    const uint16_t ou16_ApplicationIndex, QStringList &orc_Files,
     const QString &orc_ExportToolName,
     const QString &orc_ExportToolVersion) {
   int32_t s32_Retval = C_NO_ERR;
@@ -450,7 +450,7 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(
     const C_OscParamSetRawNode &orc_RawNode,
     const C_OscParamSetInterpretedNode &orc_IntNode, const bool oq_IsSafe,
     const C_OscNodeApplication &orc_DataBlock, const QString &orc_Path,
-    std::vector<QString> &orc_Files, const QString &orc_ExportToolName,
+    QStringList &orc_Files, const QString &orc_ExportToolName,
     const QString &orc_ExportToolVersion) {
   int32_t s32_Retval;
 
@@ -504,12 +504,12 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(
 
     // Handle file names
     if (s32_Retval == C_NO_ERR) {
-      std::vector<QString> c_TempFiles;
+      QStringList c_TempFiles;
       C_OscExportUti::h_CollectFilePaths(
           c_TempFiles, orc_Path,
           C_OscExportParamSet::h_GetFileName(orc_DataBlock, oq_IsSafe),
           false);
-      for (std::vector<QString>::const_iterator c_It = c_TempFiles.begin();
+      for (QStringList::const_iterator c_It = c_TempFiles.begin();
            c_It != c_TempFiles.end(); ++c_It) {
         orc_Files.push_back(QString(*c_It));
       }

@@ -80,7 +80,7 @@ C_SdBueNodeSelectorCheckBoxListWidget::~C_SdBueNodeSelectorCheckBoxListWidget()
    \param[in]     orc_SubIndexes  Sub Indexes of Nodes
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueNodeSelectorCheckBoxListWidget::AddNodes(const std::vector<QString> & orc_Names,
+void C_SdBueNodeSelectorCheckBoxListWidget::AddNodes(const QStringList & orc_Names,
                                                      const std::vector<uint32_t> & orc_Indexes,
                                                      const std::vector<uint32_t> & orc_SubIndexes)
 {

@@ -222,7 +222,7 @@ bool C_CamMetTreeDelegate::mh_PaintChildCell(QPainter * const opc_Painter, const
       //Handle manually
       const QStringList c_StringParts = orc_Index.data(ms32_USER_ROLE_STRING_PARTS).toStringList();
       const std::vector<int32_t> c_ColSizes = mh_GetChildColWidths(orc_Index.parent().parent().isValid());
-      const std::vector<QString> c_Spaces = C_CamMetTreeDelegate::mh_GetTopSpaces();
+      const QStringList c_Spaces = C_CamMetTreeDelegate::mh_GetTopSpaces();
       const std::vector<QFlags<Qt::AlignmentFlag> > c_Alignments = C_CamMetTreeDelegate::mh_GetTopAlignmentFlags();
       QRect c_CellRectAdapted;
 
@@ -360,12 +360,12 @@ std::vector<QFlags<Qt::AlignmentFlag> > C_CamMetTreeDelegate::mh_GetTopAlignment
    Spaces between top items
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<QString> C_CamMetTreeDelegate::mh_GetTopSpaces(void)
+QStringList C_CamMetTreeDelegate::mh_GetTopSpaces(void)
 {
-   std::vector<QString> c_Retval;
-   c_Retval.emplace_back("");
-   c_Retval.emplace_back(" ");
-   c_Retval.emplace_back("");
-   c_Retval.emplace_back(" (raw)              ");
+   QStringList c_Retval;
+   c_Retval.append("");
+   c_Retval.append(" ");
+   c_Retval.append("");
+   c_Retval.append(" (raw)              ");
    return c_Retval;
 }

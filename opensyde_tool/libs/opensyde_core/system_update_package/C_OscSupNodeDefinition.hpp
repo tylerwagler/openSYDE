@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
-#include <vector>
+#include <QStringList>
 
 #include "stwtypes.hpp"
 
@@ -33,8 +33,8 @@ public:
 
    uint8_t u8_Active;
    uint32_t u32_Position;
-   std::vector<QString> c_ApplicationFileNames; // with relative path
-   std::vector<QString> c_NvmFileNames;         // with relative path
+   QStringList c_ApplicationFileNames; // with relative path
+   QStringList c_NvmFileNames;         // with relative path
    QString c_PemFile;
    uint8_t u8_SignaturePresent;
    QString c_SignatureFile;

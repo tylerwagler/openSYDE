@@ -12,6 +12,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QStringList>
+
 #include "C_SdUtil.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
@@ -71,7 +73,7 @@ bool C_SyvUtil::h_GetViewStatusLabelInfo(const uint32_t ou32_ViewIndex, const in
    bool q_SysDefInvalid;
    bool q_NoActiveNodes;
 
-   std::vector<QString> c_RoutingErrorText;
+   QStringList c_RoutingErrorText;
    QString c_SetupRoutingWarningText;
    int32_t s32_Return;
 

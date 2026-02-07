@@ -66,7 +66,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerData::LoadFromFile(const QString & orc_Path, uint16_t * const opu16_FileVersion,
-                                         std::vector<QString> * const opc_ErrorDetailsMissingDevices)
+                                         QStringList * const opc_ErrorDetailsMissingDevices)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -84,7 +84,8 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const QString & orc_Path, uint16_t * co
          s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
             mc_CoreDefinition, c_XmlParser,
             C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini"),
-            orc_Path, true, &u16_FileVersion, NULL, false, NULL, opc_ErrorDetailsMissingDevices);
+            orc_Path, true, &u16_FileVersion, NULL, false, NULL,
+            opc_ErrorDetailsMissingDevices);
          if (opu16_FileVersion != NULL)
          {
             *opu16_FileVersion = u16_FileVersion;

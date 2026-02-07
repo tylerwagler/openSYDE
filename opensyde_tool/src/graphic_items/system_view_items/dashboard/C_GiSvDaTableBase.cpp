@@ -567,7 +567,7 @@ void C_GiSvDaTableBase::ConfigureContextMenu(C_SyvDaContextMenuManager * const o
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiSvDaTableBase::GetLastValueUnscaled(const uint32_t ou32_WidgetDataPoolElementIndex,
                                                 std::vector<float64_t> & orc_Values,
-                                                std::vector<QString> & orc_DisplayValues)
+                                                QStringList & orc_DisplayValues)
 {
    uint32_t u32_InternalIndex;
    int32_t s32_Retval = this->m_MapDataElementIndexToInternalElementIndex(ou32_WidgetDataPoolElementIndex,

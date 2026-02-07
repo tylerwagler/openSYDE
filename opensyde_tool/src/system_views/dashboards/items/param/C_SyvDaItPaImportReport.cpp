@@ -128,8 +128,8 @@ void C_SyvDaItPaImportReport::GetOutput(std::vector<C_OscNodeDataPoolListElement
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaImportReport::GetFloatRangeCheckResults(
-   std::vector<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, std::vector<QString> & orc_InvalidValues,
-   std::vector<QString> & orc_NewValues) const
+   std::vector<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, QStringList & orc_InvalidValues,
+   QStringList & orc_NewValues) const
 {
    orc_InvalidValueIds = this->mc_FloatRangeCheckInvalidValueIds;
    orc_InvalidValues = this->mc_FloatRangeCheckInvalidValues;

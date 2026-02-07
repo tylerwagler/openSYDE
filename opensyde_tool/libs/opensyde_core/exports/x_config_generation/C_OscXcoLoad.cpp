@@ -15,6 +15,8 @@
  */
 #include "precomp_headers.hpp"
 
+#include <QStringList>
+
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSpaServicePackageLoadUtil.hpp"
 #include "C_OscXcoLoad.hpp"
@@ -208,10 +210,10 @@ int32_t C_OscXcoLoad::mh_CheckParamsToProcessPackage(
 int32_t C_OscXcoLoad::mh_CheckXcfgFiles(const QString &orc_PackagePath) {
   int32_t s32_Return;
 
-  std::vector<QString> c_NecessaryFilesTop; // those are the files we look for
-  std::vector<QString> c_NecessaryFilesSysDef; // those are the files we look
+  QStringList c_NecessaryFilesTop; // those are the files we look for
+  QStringList c_NecessaryFilesSysDef; // those are the files we look
                                                // for
-  std::vector<QString> c_NecessaryFilesDevDef; // those are the files we look
+  QStringList c_NecessaryFilesDevDef; // those are the files we look
                                                // for
 
   c_NecessaryFilesTop.push_back(

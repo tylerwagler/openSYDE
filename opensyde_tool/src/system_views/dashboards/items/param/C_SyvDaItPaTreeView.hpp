@@ -12,6 +12,7 @@
 #define C_SYVDAITPATREEVIEW_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QStringList>
 #include "C_PuiSvDbParam.hpp"
 #include "C_SyvDaItPaTreeModel.hpp"
 #include "C_SyvDaItPaTreeDelegate.hpp"
@@ -89,7 +90,7 @@ Q_SIGNALS:
    void SigActionRemove(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
    void SigInformUserFloatRangeCheck(
       const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
-      const std::vector<QString> & orc_InvalidValues, const std::vector<QString> & orc_NewValues);
+      const QStringList & orc_InvalidValues, const QStringList & orc_NewValues);
 
 protected:
    void keyPressEvent(QKeyEvent * const opc_Event) override;

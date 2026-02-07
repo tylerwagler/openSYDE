@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <QString>
+#include <QStringList>
 #include <QIcon>
 #include <QLabel>
 #include <QComboBox>
@@ -40,10 +41,10 @@ class C_SdUtil
 public:
    C_SdUtil(void);
    static int32_t h_GetNames(const std::vector<uint32_t> & orc_NodeIndices,
-                             const std::vector<uint32_t> & orc_InterfaceIndices, std::vector<QString> & orc_Names,
+                             const std::vector<uint32_t> & orc_InterfaceIndices, QStringList & orc_Names,
                              const bool oq_NameWithInterfaceAlways,
                              const std::vector<uint32_t> * const opc_DatapoolIndices = NULL,
-                             std::vector<QString> * const opc_DatapoolNames = NULL);
+                             QStringList * const opc_DatapoolNames = NULL);
    static int32_t h_GetName(const uint32_t & oru32_NodeIndex, QString & orc_Name);
    static int32_t h_GetName(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_InterfaceIndex,
                             QString & orc_Name);
