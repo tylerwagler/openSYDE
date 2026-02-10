@@ -192,7 +192,7 @@ C_CieDataPoolListAdapter::h_GetStructureFromDcfAndEdsFileImport(
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieDataPoolListAdapter::h_AssignNode(
     const C_OscCanInterfaceId &orc_Id,
-    std::vector<C_OscCanMessage> &orc_OscMessageData) {
+    QList<C_OscCanMessage> &orc_OscMessageData) {
   for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < orc_OscMessageData.size();
        ++u32_ItMessage) {
     C_OscCanMessage &rc_Message = orc_OscMessageData[u32_ItMessage];
@@ -214,15 +214,15 @@ void C_CieDataPoolListAdapter::h_AssignNode(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
-    const std::vector<C_CieConverter::C_CieNodeMessage> &orc_CieNodeMessages,
-    std::vector<C_OscCanMessage> &orc_CanMessages,
-    std::vector<C_OscNodeDataPoolListElement> &orc_CanSignalData,
+    const QList<C_CieConverter::C_CieNodeMessage> &orc_CieNodeMessages,
+    QList<C_OscCanMessage> &orc_CanMessages,
+    QList<C_OscNodeDataPoolListElement> &orc_CanSignalData,
     QStringList &orc_WarningMessages) {
   uint32_t u32_SignalIndex =
       0; // signal index for serialized signal data structure
 
   // fill up can messages
-  std::vector<C_CieConverter::C_CieNodeMessage>::const_iterator
+  QList<C_CieConverter::C_CieNodeMessage>::const_iterator
       c_CanMessageIter;
   for (c_CanMessageIter = orc_CieNodeMessages.begin();
        c_CanMessageIter != orc_CieNodeMessages.end(); ++c_CanMessageIter) {
@@ -259,7 +259,7 @@ void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
     }
 
     // fill up signals
-    std::vector<C_CieConverter::C_CieCanSignal>::const_iterator
+    QList<C_CieConverter::C_CieCanSignal>::const_iterator
         c_CanMessageSignalsIter;
     for (c_CanMessageSignalsIter =
              c_CanMessageIter->c_CanMessage.c_Signals.begin();
@@ -339,8 +339,8 @@ void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
 void C_CieDataPoolListAdapter::mh_FillUpUiStructure(
     C_CieDataPoolListStructure &orc_DataPoolListStructure,
     const bool oq_ActivateAutoMinMaxForSignals,
-    const std::vector<uint8_t> *const opc_RxSignalDefaultMinMaxValuesUsed,
-    const std::vector<uint8_t> *const opc_TxSignalDefaultMinMaxValuesUsed) {
+    const QByteArray *const opc_RxSignalDefaultMinMaxValuesUsed,
+    const QByteArray *const opc_TxSignalDefaultMinMaxValuesUsed) {
   C_PuiSdNodeDataPoolListElement c_DefaultUiSignal;
   uint32_t u32_SignalCounter = 0U;
   const uint8_t *pu8_DefaultMinMaxValuesUsed = NULL;
@@ -356,7 +356,7 @@ void C_CieDataPoolListAdapter::mh_FillUpUiStructure(
   // Rx messages
   orc_DataPoolListStructure.c_Ui.c_UiRxMessageData.reserve(
       orc_DataPoolListStructure.c_Core.c_OscRxMessageData.size());
-  std::vector<C_OscCanMessage>::const_iterator c_MessageIter;
+  QList<C_OscCanMessage>::const_iterator c_MessageIter;
   for (c_MessageIter =
            orc_DataPoolListStructure.c_Core.c_OscRxMessageData.begin();
        c_MessageIter !=
@@ -396,7 +396,7 @@ void C_CieDataPoolListAdapter::mh_FillUpUiStructure(
 
     if (opc_RxSignalDefaultMinMaxValuesUsed != NULL) {
       pu8_DefaultMinMaxValuesUsed =
-          &(*opc_RxSignalDefaultMinMaxValuesUsed)[u32_SignalCounter];
+          reinterpret_cast<const uint8_t*>(opc_RxSignalDefaultMinMaxValuesUsed->constData() + u32_SignalCounter);
     }
 
     mh_FillUpUiStructureForSignals(*c_MessageIter, false, c_DefaultUiSignal,
@@ -437,7 +437,7 @@ void C_CieDataPoolListAdapter::mh_FillUpUiStructure(
 
     if (opc_TxSignalDefaultMinMaxValuesUsed != NULL) {
       pu8_DefaultMinMaxValuesUsed =
-          &(*opc_TxSignalDefaultMinMaxValuesUsed)[u32_SignalCounter];
+          reinterpret_cast<const uint8_t*>(opc_TxSignalDefaultMinMaxValuesUsed->constData() + u32_SignalCounter);
     }
 
     mh_FillUpUiStructureForSignals(*c_MessageIter, true, c_DefaultUiSignal,

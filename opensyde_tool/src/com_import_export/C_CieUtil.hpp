@@ -13,6 +13,7 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QList>
 #include <QWidget>
 
 #include "C_CieConverter.hpp"
@@ -40,8 +41,8 @@ public:
   static int32_t h_ImportFile(
       const uint32_t ou32_BusIndex,
       const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
-      QWidget *const opc_Parent, std::vector<uint32_t> &orc_NodeIndexes,
-      std::vector<uint32_t> &orc_InterfaceIndexes);
+      QWidget *const opc_Parent, QList<uint32_t> &orc_NodeIndexes,
+      QList<uint32_t> &orc_InterfaceIndexes);
   static int32_t h_ExportFile(
       const stw::opensyde_gui_logic::C_CieConverter::C_CieCommDefinition
           &orc_CommDef,
@@ -50,12 +51,12 @@ public:
   static void h_AdaptName(QString &orc_Name, QString &orc_Comment,
                           const bool oq_AlwaysAppendNameInComment);
   static void h_AdaptImportMessages(
-      std::vector<stw::opensyde_gui::C_CieImportDataAssignment>
+      QList<stw::opensyde_gui::C_CieImportDataAssignment>
           &orc_ImportDataAssignment,
       const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
       const bool oq_AlwaysAppendNameInComment);
   static void h_InsertMessages(
-      const std::vector<stw::opensyde_gui::C_CieImportDataAssignment>
+      const QList<stw::opensyde_gui::C_CieImportDataAssignment>
           &orc_ImportDataAssignment,
       const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
       const bool oq_UniqueAddRequested);
@@ -78,7 +79,7 @@ public:
       const QString *const opc_NodeNameReplacement, const bool oq_IsSrdo,
       uint32_t &oru32_SrdoIndex);
   static bool h_GetIsSrdoFromMessageIsSrdoVector(
-      const std::vector<uint8_t> &orc_MessageIsSrdo,
+      const QByteArray &orc_MessageIsSrdo,
       const uint32_t ou32_MessageIndex);
 
 private:
@@ -86,20 +87,20 @@ private:
       const uint32_t ou32_BusIndex,
       const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
       const QString &orc_FullFilePath, QWidget *const opc_Parent,
-      std::vector<uint32_t> &orc_NodeIndexes,
-      std::vector<uint32_t> &orc_InterfaceIndexes);
+      QList<uint32_t> &orc_NodeIndexes,
+      QList<uint32_t> &orc_InterfaceIndexes);
   static int32_t mh_ImportDcfEdsFile(
       const uint32_t ou32_BusIndex,
       const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
       const QString &orc_FullFilePath, QWidget *const opc_Parent,
-      std::vector<uint32_t> &orc_NodeIndexes,
-      std::vector<uint32_t> &orc_InterfaceIndexes);
+      QList<uint32_t> &orc_NodeIndexes,
+      QList<uint32_t> &orc_InterfaceIndexes);
   static void
-  mh_AdaptMessageNames(std::vector<stw::opensyde_gui::C_CieImportDataAssignment>
+  mh_AdaptMessageNames(QList<stw::opensyde_gui::C_CieImportDataAssignment>
                            &orc_ImportDataAssignment,
                        const bool oq_AlwaysAppendNameInComment);
   static void mh_AdaptMessagesToProtocolType(
-      std::vector<stw::opensyde_gui::C_CieImportDataAssignment>
+      QList<stw::opensyde_gui::C_CieImportDataAssignment>
           &orc_ImportDataAssignment,
       const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType);
   static int32_t mh_InsertMessages(
@@ -108,15 +109,15 @@ private:
       const uint32_t ou32_InterfaceIndex,
       const uint32_t ou32_DatapoolIndexForNewContent,
       const bool oq_MessagesAreTx,
-      const std::vector<stw::opensyde_core::C_OscCanMessage>
+      const QList<stw::opensyde_core::C_OscCanMessage>
           &orc_OscMessageData,
-      const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage>
+      const QList<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage>
           &orc_UiMessageData,
-      const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement>
+      const QList<stw::opensyde_core::C_OscNodeDataPoolListElement>
           &orc_OscSignalData,
-      const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement>
+      const QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement>
           &orc_UiSignalData,
-      const std::vector<std::pair<int32_t, int32_t>>
+      const QList<std::pair<int32_t, int32_t>>
           &orc_MessageOverrideIndices,
       const bool oq_UniqueAddRequested);
   static QString mh_ConstructMessageName(const QString &orc_Nodename,

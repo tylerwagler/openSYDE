@@ -94,8 +94,8 @@ C_CieImportReportWidget::C_CieImportReportWidget(
     C_OgePopUpDialog &orc_Parent, const QString &orc_FilePath,
     const uint32_t ou32_BusIndex,
     const C_OscCanProtocol::E_Type oe_ProtocolType,
-    const std::vector<C_CieImportDataAssignment> &orc_ImportDataAssigned,
-    const std::vector<C_CieImportDataAssignment> &orc_SkippedImportDataAssigned,
+    const QList<C_CieImportDataAssignment> &orc_ImportDataAssigned,
+    const QList<C_CieImportDataAssignment> &orc_SkippedImportDataAssigned,
     const QString *const opc_NodeNameReplacement, const bool oq_IsCanOpen,
     const bool oq_UniqueAddRequested)
     : QWidget(&orc_Parent), mpc_Ui(new Ui::C_CieImportReportWidget),
@@ -168,7 +168,7 @@ void C_CieImportReportWidget::InitStaticNames(void) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString C_CieImportReportWidget::h_GetInitialReportPart(
-    const std::vector<C_CieImportDataAssignment> &orc_ImportDataAssignment,
+    const QList<C_CieImportDataAssignment> &orc_ImportDataAssignment,
     const QString &orc_ImportedFilePath, const bool oq_IsCanOpenCase,
     const bool oq_AddMessageAdaptationInfo) {
   const QFileInfo c_FileInfo(orc_ImportedFilePath);
@@ -254,7 +254,7 @@ QString C_CieImportReportWidget::h_GetInitialReportPart(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieImportReportWidget::h_GetMessageTableContent(
     QString &orc_ImportTable, const QString &orc_Suffix,
-    std::vector<C_CieImportDataAssignment> &orc_ImportDataAssignment,
+    QList<C_CieImportDataAssignment> &orc_ImportDataAssignment,
     const C_OscCanProtocol::E_Type oe_ProtocolType,
     const QString *const opc_NodeNameReplacement, const QString &orc_Heading,
     const bool oq_ReplaceMessageNames) {
@@ -520,7 +520,7 @@ int32_t C_CieImportReportWidget::m_ShowReport(const QString &orc_Suffix,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieImportReportWidget::m_CheckMessages(
-    const std::vector<C_CieImportDataAssignment> &orc_ImportDataAssignment)
+    const QList<C_CieImportDataAssignment> &orc_ImportDataAssignment)
     const {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -637,7 +637,7 @@ int32_t C_CieImportReportWidget::m_CheckMessages(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieImportReportWidget::m_CheckMessageMatches(
     const QString &orc_Suffix,
-    std::vector<C_CieImportDataAssignment> &orc_ImportDataAssignment) {
+    QList<C_CieImportDataAssignment> &orc_ImportDataAssignment) {
   int32_t s32_Retval = C_NO_ERR;
 
   // Each imported node
@@ -652,7 +652,7 @@ int32_t C_CieImportReportWidget::m_CheckMessageMatches(
     rc_CurData.c_RxMessageOverrideIndices.clear();
     rc_CurData.c_TxMessageOverrideIndices.clear();
 
-    std::vector<stw::opensyde_core::C_OscCanMessage>::iterator
+    QList<stw::opensyde_core::C_OscCanMessage>::iterator
         c_ImportMessageIt;
     std::pair<int32_t, int32_t> c_OverrideInfo;
     // Check every Tx message of import file
@@ -743,9 +743,9 @@ int32_t C_CieImportReportWidget::m_GetMessageOverrideInfo(
 
       // Only check other protocol matches
       if (this->me_ProtocolType != C_OscCanProtocol::eCAN_OPEN) {
-        std::vector<const C_OscCanProtocol *> c_Protocols =
+        QList<const C_OscCanProtocol *> c_Protocols =
             pc_Node->GetCanProtocolsConst(this->me_ProtocolType);
-        std::vector<const C_OscCanProtocol *>::const_iterator c_ProtocolIt;
+        QList<const C_OscCanProtocol *>::const_iterator c_ProtocolIt;
 
         // Iterate Protocols (resp. Datapools)
         for (c_ProtocolIt = c_Protocols.begin();
@@ -755,7 +755,7 @@ int32_t C_CieImportReportWidget::m_GetMessageOverrideInfo(
             if (ou32_OsyInterfaceIndex < pc_Protocol->c_ComMessages.size()) {
               const C_OscCanMessageContainer &rc_MessageContainer =
                   pc_Protocol->c_ComMessages[ou32_OsyInterfaceIndex];
-              const std::vector<C_OscCanMessage> &rc_Messages =
+              const QList<C_OscCanMessage> &rc_Messages =
                   rc_MessageContainer.GetMessagesConst(oq_Tx);
 
               // Check all existing messages for a match (CAN Id and Name)
@@ -807,11 +807,11 @@ int32_t C_CieImportReportWidget::m_GetMessageOverrideInfo(
 void C_CieImportReportWidget::mh_GetTableWithMessageEntries(
     int32_t &ors32_Retval, QString &orc_ImportTable,
     uint32_t &oru32_MessageCount, const QString &orc_Suffix,
-    std::vector<C_CieImportDataAssignment> &orc_ImportDataAssignment,
+    QList<C_CieImportDataAssignment> &orc_ImportDataAssignment,
     const C_OscCanProtocol::E_Type oe_ProtocolType,
     const QString *const opc_NodeNameReplacement,
     const bool oq_ReplaceMessageNames) {
-  std::vector<C_OscCanMessage>
+  QList<C_OscCanMessage>
       c_MessagesList; // for listing every message only once
 
   // Each imported node
@@ -893,12 +893,12 @@ void C_CieImportReportWidget::m_InsertMessages(void) const {
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieImportReportWidget::mh_GetMessageEntries(
     uint32_t &oru32_EntryCount, uint32_t &oru32_NewEntryCount,
-    QString &orc_TableEntries, std::vector<C_OscCanMessage> &orc_MessageList,
-    const std::vector<C_OscCanMessage> &orc_OscMessageData,
-    const std::vector<C_OscNodeDataPoolListElement> &orc_OscAllSignalData,
-    const std::vector<uint8_t> &orc_MessageIsSrdo,
+    QString &orc_TableEntries, QList<C_OscCanMessage> &orc_MessageList,
+    const QList<C_OscCanMessage> &orc_OscMessageData,
+    const QList<C_OscNodeDataPoolListElement> &orc_OscAllSignalData,
+    const QByteArray &orc_MessageIsSrdo,
     const QStringList &orc_InfoMessagesPerMessage,
-    const std::vector<std::pair<int32_t, int32_t>> &orc_MessageOverrideIndices,
+    const QList<std::pair<int32_t, int32_t>> &orc_MessageOverrideIndices,
     const uint32_t ou32_NodeIndex, const bool oq_IsTx,
     const QString &orc_Suffix, const C_OscCanProtocol::E_Type oe_ProtocolType,
     const QString *const opc_NodeNameReplacement,
@@ -916,7 +916,7 @@ int32_t C_CieImportReportWidget::mh_GetMessageEntries(
          u32_ItMessage < orc_MessageOverrideIndices.size(); ++u32_ItMessage) {
       bool q_AddToTable = true;
       // check if message is already in table
-      for (std::vector<C_OscCanMessage>::const_iterator c_MessIt =
+      for (QList<C_OscCanMessage>::const_iterator c_MessIt =
                orc_MessageList.begin();
            c_MessIt != orc_MessageList.end(); ++c_MessIt) {
         const C_OscCanMessage &rc_Message = *c_MessIt;
@@ -977,7 +977,7 @@ int32_t C_CieImportReportWidget::mh_GetMessageEntries(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_CieImportReportWidget::mh_GetMessageEntry(
     const uint32_t ou32_Index, const C_OscCanMessage &orc_CurMessage,
-    const std::vector<C_OscNodeDataPoolListElement> &orc_OscAllSignalData,
+    const QList<C_OscNodeDataPoolListElement> &orc_OscAllSignalData,
     const QString &orc_InfoMessages, const uint32_t ou32_NodeIndex,
     const bool oq_IsTx, const bool oq_IsSrdo, const uint32_t ou32_MessageIndex,
     const QString &orc_Suffix, const C_OscCanProtocol::E_Type oe_ProtocolType,

@@ -145,7 +145,7 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
    uint32_t u32_ActiveNodeCounter;
    bool q_NodeDiagRoutingError = false;
 
-   std::vector<uint8_t> c_ActiveNodes;
+   QByteArray c_ActiveNodes;
 
    s32_Return = C_SyvComDriverUtil::h_GetOscComDriverParamFromView(this->mu32_ViewIndex, u32_ActiveBusIndex,
                                                                    c_ActiveNodes, &this->mpc_CanDllDispatcher,
@@ -346,7 +346,7 @@ int32_t C_SyvComDriverDiag::SetDiagnosticMode(QString & orc_ErrorDetails)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
-                                                     std::vector<C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, QStringList & orc_FailedIdErrorDetails, std::map<uint32_t,
+                                                     QList<C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, QStringList & orc_FailedIdErrorDetails, std::map<uint32_t,
                                                                                                                                                                                     uint32_t> & orc_FailedNodesElementNumber, std::map<uint32_t,
                                                                                                                                                                                                                                        uint32_t> & orc_NodesElementNumber)
 {
@@ -452,7 +452,7 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
             else if (c_It.value().e_TransmissionMode == C_PuiSvReadDataConfiguration::eTM_ON_CHANGE)
             {
                //convert the type dependent threshold to a uint32_t representation
-               std::vector<uint8_t> c_Threshold;
+               QByteArray c_Threshold;
                uint32_t u32_Threshold;
                c_It.value().c_ChangeThreshold.GetValueAsLittleEndianBlob(c_Threshold);
                //defensive measure: as element may only be up to 32bit the threshold may also not be > 32bit
@@ -884,7 +884,7 @@ int32_t C_SyvComDriverDiag::PollNvmReadList(const uint32_t ou32_NodeIndex, const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverDiag::PollSafeNvmWriteChangedElements(const uint32_t ou32_NodeIndex,
-                                                            const std::vector<C_OscNodeDataPoolListId> & orc_ListIds)
+                                                            const QList<C_OscNodeDataPoolListId> & orc_ListIds)
 {
    int32_t s32_Return;
    const uint32_t u32_ActiveIndex = this->m_GetActiveDiagIndex(ou32_NodeIndex);
@@ -910,7 +910,7 @@ int32_t C_SyvComDriverDiag::PollSafeNvmWriteChangedElements(const uint32_t ou32_
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverDiag::GetPollSafeNvmWriteChangedElementsOutput(
-   std::vector<C_OscNodeDataPoolListElementId> & orc_ChangedElements) const
+   QList<C_OscNodeDataPoolListElementId> & orc_ChangedElements) const
 {
    return this->mc_PollingThread.GetNvmSafeWriteChangedValuesOutput(orc_ChangedElements);
 }
@@ -1119,7 +1119,7 @@ int32_t C_SyvComDriverDiag::NvmSafeClearInternalContent(const uint32_t ou32_Node
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverDiag::PollNvmSafeReadParameterValues(const uint32_t ou32_NodeIndex,
-                                                           const std::vector<C_OscNodeDataPoolListId> & orc_ListIds)
+                                                           const QList<C_OscNodeDataPoolListId> & orc_ListIds)
 {
    int32_t s32_Return;
    const uint32_t u32_ActiveIndex = this->m_GetActiveDiagIndex(ou32_NodeIndex);
@@ -1237,7 +1237,7 @@ int32_t C_SyvComDriverDiag::NvmSafeReadFileWithoutCrc(const uint32_t ou32_NodeIn
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverDiag::NvmSafeCheckParameterFileContents(const uint32_t ou32_NodeIndex, const QString & ororc_Path,
-                                                              std::vector<C_OscNodeDataPoolListId> & orc_DataPoolLists)
+                                                              QList<C_OscNodeDataPoolListId> & orc_DataPoolLists)
 {
    int32_t s32_Return;
    const uint32_t u32_ActiveIndex = this->m_GetActiveDiagIndex(ou32_NodeIndex);
@@ -1300,7 +1300,7 @@ int32_t C_SyvComDriverDiag::NvmSafeUpdateCrcForFile(const uint32_t ou32_NodeInde
    Reference to vector with all data dealer
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_SyvComDataDealer *> & C_SyvComDriverDiag::GetAllDataDealer(void) const
+const QList<C_SyvComDataDealer *> & C_SyvComDriverDiag::GetAllDataDealer(void) const
 {
    return this->mc_DataDealers;
 }

@@ -133,7 +133,7 @@ int32_t C_SyvUpSequences::InitUpSequences(const uint32_t ou32_ViewIndex) {
   int32_t s32_Return;
   uint32_t u32_ActiveBusIndex;
 
-  std::vector<uint8_t> c_ActiveNodes;
+  QByteArray c_ActiveNodes;
 
   this->mu32_ViewIndex = ou32_ViewIndex;
 
@@ -146,6 +146,7 @@ int32_t C_SyvUpSequences::InitUpSequences(const uint32_t ou32_ViewIndex) {
     // pem folder is optional -> no error handling
     mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
 
+    // Convert QByteArray to std::vector for core library API
     s32_Return = C_OscComSequencesBase::Init(
         C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinition(),
         u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
@@ -242,7 +243,7 @@ void C_SyvUpSequences::CloseDispatcher(void) {
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvUpSequences::SyvUpCreateTemporaryFolder(
     const QString &orc_TargetPath,
-    std::vector<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+    QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
     QString &orc_ErrorPath) const {
   const C_PuiSvData *const pc_View =
       C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
@@ -330,8 +331,8 @@ C_SyvUpSequences::GetLastUpdatePosition(uint32_t &oru32_NodeIndex,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpSequences::GetOsyDeviceInformation(
-    std::vector<uint32_t> &orc_OsyNodeIndexes,
-    std::vector<C_OscSuSequences::C_OsyDeviceInformation>
+    QList<uint32_t> &orc_OsyNodeIndexes,
+    QList<C_OscSuSequences::C_OsyDeviceInformation>
         &orc_OsyDeviceInformation) {
   QMutexLocker c_Locker(this->mpc_Lock);
 
@@ -358,8 +359,8 @@ void C_SyvUpSequences::GetOsyDeviceInformation(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpSequences::GetXflDeviceInformation(
-    std::vector<uint32_t> &orc_XflNodeIndexes,
-    std::vector<C_OscSuSequences::C_XflDeviceInformation>
+    QList<uint32_t> &orc_XflNodeIndexes,
+    QList<C_OscSuSequences::C_XflDeviceInformation>
         &orc_XflDeviceInformation) {
   QMutexLocker c_Locker(this->mpc_Lock);
 
@@ -827,8 +828,8 @@ int32_t C_SyvUpSequences::StartReadDeviceInformation(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvUpSequences::StartUpdateSystem(
-    const std::vector<C_DoFlash> &orc_ApplicationsToWrite,
-    const std::vector<uint32_t> &orc_NodesOrder) {
+    const QList<C_DoFlash> &orc_ApplicationsToWrite,
+    const QList<uint32_t> &orc_NodesOrder) {
   int32_t s32_Return = C_NO_ERR;
 
   if (this->mpc_Thread->isRunning() == true) {
@@ -891,7 +892,7 @@ void C_SyvUpSequences::AbortCurrentProgress(void) { this->mq_AbortFlag = true; }
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvUpSequences::GetConnectStates(
-    std::vector<C_OscSuSequencesNodeConnectStates> &orc_ConnectStatesNodes)
+    QList<C_OscSuSequencesNodeConnectStates> &orc_ConnectStatesNodes)
     const {
   int32_t s32_Return = C_NO_ERR;
 
@@ -919,7 +920,7 @@ int32_t C_SyvUpSequences::GetConnectStates(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvUpSequences::GetUpdateStates(
-    std::vector<C_OscSuSequencesNodeUpdateStates> &orc_UpdateStatesNodes)
+    QList<C_OscSuSequencesNodeUpdateStates> &orc_UpdateStatesNodes)
     const {
   int32_t s32_Return = C_NO_ERR;
 

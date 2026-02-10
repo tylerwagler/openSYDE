@@ -757,7 +757,7 @@ void C_SyvDcWidget::m_StartConfigProper(void)
    {
       int32_t s32_Result = C_NO_ERR;
 
-      std::vector<C_SyvDcDeviceConfiguation> c_Configs =
+      QList<C_SyvDcDeviceConfiguation> c_Configs =
          this->mpc_Ui->pc_ListWidgetExistingNodesAssignment->GetConfigs();
       //Prepare
       this->mc_OpenSydeDeviceConfigurations.clear();
@@ -922,7 +922,7 @@ void C_SyvDcWidget::m_ShowConfigResult(void)
    uint32_t u32_ConfigCounter;
    QString c_Text;
 
-   std::vector<std::vector<C_SyvDcDeviceConfiguation> > c_SortedOpenSydeDeviceInfos;
+   QList<QList<C_SyvDcDeviceConfiguation> > c_SortedOpenSydeDeviceInfos;
 
    // In the event queue could be some emitted signals from thread left.
    // We need all information for showing the configuration result
@@ -953,7 +953,7 @@ void C_SyvDcWidget::m_ShowConfigResult(void)
       if (q_SameSnr == false)
       {
          // A new group or a normal node
-         std::vector<C_SyvDcDeviceConfiguation> c_NewGroup;
+         QList<C_SyvDcDeviceConfiguation> c_NewGroup;
          c_NewGroup.push_back(rc_Info);
          c_SortedOpenSydeDeviceInfos.push_back(c_NewGroup);
       }
@@ -966,7 +966,7 @@ void C_SyvDcWidget::m_ShowConfigResult(void)
    for (u32_ConfigCounter = 0U; u32_ConfigCounter < this->mc_StwFlashloaderDeviceConfigurations.size();
         ++u32_ConfigCounter)
    {
-      std::vector<C_SyvDcDeviceConfiguation> c_StwNode;
+      QList<C_SyvDcDeviceConfiguation> c_StwNode;
       c_StwNode.push_back(this->mc_StwFlashloaderDeviceConfigurations[u32_ConfigCounter]);
 
       this->m_ShowConfigInfoOfDevice(c_StwNode,
@@ -1025,7 +1025,7 @@ void C_SyvDcWidget::m_BackToScan(void)
    \param[in,out]  orc_Text   Detailed output parameter description
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConfiguation> & orc_Config,
+void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const QList<C_SyvDcDeviceConfiguation> & orc_Config,
                                              const uint32_t ou32_DeviceMaxCount, const uint32_t ou32_DeviceCounter,
                                              QString & orc_Text)
 {
@@ -1053,9 +1053,9 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
       if (this->mpc_DcSequences->GetNodeIndex(c_FirstServerId, u32_FirstNodeIndex) == true)
       {
          const C_OscNode * const pc_FirstNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_FirstNodeIndex);
-         std::vector<uint32_t> c_SubNodeIndexes;
-         std::vector<const C_OscNode *> c_SubNodes;
-         std::vector<C_OscProtocolDriverOsyNode> c_ServerIds;
+         QList<uint32_t> c_SubNodeIndexes;
+         QList<const C_OscNode *> c_SubNodes;
+         QList<C_OscProtocolDriverOsyNode> c_ServerIds;
          uint32_t u32_SubNodeCounter;
          bool q_NodeSquad = false;
 
@@ -1105,8 +1105,8 @@ void C_SyvDcWidget::m_ShowConfigInfoOfDevice(const std::vector<C_SyvDcDeviceConf
          {
             uint32_t u32_IntfCounter;
             uint32_t u32_CommunicationIntf = 0U;
-            std::vector<uint32_t> c_CanCounters;
-            std::vector<uint32_t> c_EthCounters;
+            QList<uint32_t> c_CanCounters;
+            QList<uint32_t> c_EthCounters;
 
             c_CanCounters.resize(c_SubNodes.size(), 0U);
             c_EthCounters.resize(c_SubNodes.size(), 0U);
@@ -1481,9 +1481,9 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
       int32_t s32_Return;
       bool q_Manual = false;
       uint32_t u32_NewBitrate;
-      std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> c_OsyNodes;
-      std::vector<bool> c_OsyNodesSnrExtFormat;
-      std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> c_StwNodes;
+      QList<stw::opensyde_core::C_OscProtocolDriverOsyNode> c_OsyNodes;
+      QList<bool> c_OsyNodesSnrExtFormat;
+      QList<stw::opensyde_core::C_OscProtocolDriverOsyNode> c_StwNodes;
       const QString c_Details = "Your system uses at least one node with the STW Flashloader \n"
                                                        "and the bitrate of the CAN bus has changed. \n"
                                                        "In this case the reset cannot be performed automatically.";
@@ -1658,9 +1658,9 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
    C_CONFIG    No dispatcher installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcWidget::m_GetRelevantConfigInfo(std::vector<C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
-                                               std::vector<bool> & orc_OpenSydeSnrExtFormat,
-                                               std::vector<C_OscProtocolDriverOsyNode> & orc_StwIds,
+int32_t C_SyvDcWidget::m_GetRelevantConfigInfo(QList<C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
+                                               QList<bool> & orc_OpenSydeSnrExtFormat,
+                                               QList<C_OscProtocolDriverOsyNode> & orc_StwIds,
                                                uint32_t & oru32_Bitrate)
 {
    uint32_t u32_Counter;
@@ -1791,7 +1791,7 @@ void C_SyvDcWidget::m_ShowReadInfo(const int32_t os32_ActualResult)
 {
    if (this->mpc_DcSequences != NULL)
    {
-      std::vector<C_OscDcDeviceInformation> c_DeviceInfos;
+      QList<C_OscDcDeviceInformation> c_DeviceInfos;
       const int32_t s32_Return = this->mpc_DcSequences->GetDeviceInfosResult(c_DeviceInfos);
       QString c_Text;
 
@@ -2024,7 +2024,7 @@ void C_SyvDcWidget::m_UpdateStateOfOpenSydeConfig(const uint32_t ou32_Step, cons
 {
    const C_OscProtocolDriverOsyNode c_Server(ou8_BusIdentifier, ou8_NodeIdentifier);
 
-   QMap<stw::opensyde_core::C_OscProtocolDriverOsyNode, std::vector<C_ServerConfStepResult> >::iterator c_ItServer;
+   QMap<stw::opensyde_core::C_OscProtocolDriverOsyNode, QList<C_ServerConfStepResult> >::iterator c_ItServer;
    const C_ServerConfStepResult c_Result(ou32_Step, ou8_InterfaceType, ou8_InterfaceNumber, os32_Result);
 
    c_ItServer = this->mc_ServerStates.find(c_Server);
@@ -2035,7 +2035,7 @@ void C_SyvDcWidget::m_UpdateStateOfOpenSydeConfig(const uint32_t ou32_Step, cons
    }
    else
    {
-      std::vector<C_ServerConfStepResult> c_VecResults;
+      QList<C_ServerConfStepResult> c_VecResults;
       c_VecResults.push_back(c_Result);
 
       this->mc_ServerStates.insert(c_Server, c_VecResults);
@@ -2069,14 +2069,14 @@ QString C_SyvDcWidget::m_GetStateStringOfServerStep(const uint32_t ou32_Step,
    QString c_Text = static_cast<QString>("<b>Skipped</b> (error occurred during process)");
 
    QMap<stw::opensyde_core::C_OscProtocolDriverOsyNode,
-        std::vector<C_ServerConfStepResult> >::const_iterator c_ItServer;
+        QList<C_ServerConfStepResult> >::const_iterator c_ItServer;
 
    c_ItServer = this->mc_ServerStates.find(orc_Server);
 
    if (c_ItServer != this->mc_ServerStates.end())
    {
       uint32_t u32_StateCounter;
-      const std::vector<C_ServerConfStepResult> & rc_States = c_ItServer.value();
+      const QList<C_ServerConfStepResult> & rc_States = c_ItServer.value();
 
       for (u32_StateCounter = 0U; u32_StateCounter < rc_States.size(); ++u32_StateCounter)
       {
@@ -2223,14 +2223,14 @@ void C_SyvDcWidget::m_InitBitRateComboBox(void)
 
    if (pc_View != NULL)
    {
-      std::vector<uint32_t> c_ConnectedNodes;
-      std::vector<uint32_t> c_ConnectedInterfaces;
-      std::vector<uint32_t> c_SupportedBitrates;
+      QList<uint32_t> c_ConnectedNodes;
+      QList<uint32_t> c_ConnectedInterfaces;
+      QList<uint32_t> c_SupportedBitrates;
       uint32_t u32_BitrateCounter;
       const uint32_t u32_CurrentSetBitrate = pc_View->GetDeviceConfigSelectedBitRate();
       const QString c_CurrentSetBitrate = this->m_GetComboBoxString(u32_CurrentSetBitrate);
       bool q_CurrentSetBitrateFound = false;
-      std::vector<uint8_t> c_ActiveNodes = pc_View->GetNodeActiveFlags();
+      const QByteArray c_ActiveNodes = pc_View->GetNodeActiveFlags();
       uint32_t u32_ActiveNodeIndex;
 
       C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(this->mu32_BusIndex,
@@ -2242,7 +2242,7 @@ void C_SyvDcWidget::m_InitBitRateComboBox(void)
       {
          if (c_ActiveNodes[u32_ActiveNodeIndex] == 0U)
          {
-            std::vector<uint32_t>::iterator c_ItNode;
+            QList<uint32_t>::iterator c_ItNode;
             for (c_ItNode = c_ConnectedNodes.begin(); c_ItNode != c_ConnectedNodes.end(); ++c_ItNode)
             {
                if (u32_ActiveNodeIndex == (*c_ItNode))
@@ -2555,7 +2555,7 @@ void C_SyvDcWidget::m_Timer(void)
          case eSCANCANGETINFOFROMSTWFLASHLOADERDEVICES:
             if (s32_SequenceResult == C_NO_ERR)
             {
-               std::vector<C_OscDcDeviceInformation> c_DeviceInfo;
+               QList<C_OscDcDeviceInformation> c_DeviceInfo;
                this->mpc_DcSequences->GetDeviceInfosResult(c_DeviceInfo);
 
                this->mc_FoundDevices.reserve(this->mc_FoundDevices.size() + c_DeviceInfo.size());
@@ -2609,7 +2609,7 @@ void C_SyvDcWidget::m_Timer(void)
          case eSCANETHGETINFOFROMOPENSYDEDEVICES: // Same data handling
             if (s32_SequenceResult == C_NO_ERR)
             {
-               std::vector<C_OscDcDeviceInformation> c_DeviceInfo;
+               QList<C_OscDcDeviceInformation> c_DeviceInfo;
                this->mpc_DcSequences->GetDeviceInfosResult(c_DeviceInfo);
                this->mpc_DcSequences->GetSecurityFeatureUsageResult(this->mq_SecurityFeatureUsed);
 
@@ -2899,8 +2899,8 @@ void C_SyvDcWidget::m_HandleDeviceVerificationStart(void)
    \param[in,out]  orc_ReportText         Report text to append to
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDcWidget::m_HandleMissingDevices(const std::vector<C_SyvDcDeviceConfiguation> & orc_AllDeviceInfos,
-                                           const std::vector<C_OscDcDeviceInformation> & orc_FoundDeviceInfos,
+void C_SyvDcWidget::m_HandleMissingDevices(const QList<C_SyvDcDeviceConfiguation> & orc_AllDeviceInfos,
+                                           const QList<C_OscDcDeviceInformation> & orc_FoundDeviceInfos,
                                            QString & orc_ReportText) const
 {
    for (uint32_t u32_ItExpected = 0; u32_ItExpected < orc_AllDeviceInfos.size(); ++u32_ItExpected)
@@ -2973,8 +2973,8 @@ void C_SyvDcWidget::m_DoCompleteDisconnect(void)
             bool q_Osy = false;
             bool q_Stw = false;
             bool q_StartedAnything = false;
-            std::vector<uint32_t> c_NodeIndexes;
-            std::vector<uint32_t> c_InterfaceIndexes;
+            QList<uint32_t> c_NodeIndexes;
+            QList<uint32_t> c_InterfaceIndexes;
             int32_t s32_Result;
             C_OgeWiCustomMessage c_Message(this);
             QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -2998,7 +2998,7 @@ void C_SyvDcWidget::m_DoCompleteDisconnect(void)
             for (uint32_t u32_ItNode = 0; u32_ItNode < c_NodeIndexes.size(); ++u32_ItNode)
             {
                //Check if node active
-               const std::vector<uint8_t> & rc_ActiveNodes = pc_View->GetNodeActiveFlags();
+               const QByteArray & rc_ActiveNodes = pc_View->GetNodeActiveFlags();
                if ((c_NodeIndexes[u32_ItNode] < rc_ActiveNodes.size()) && (rc_ActiveNodes[u32_ItNode] == 1U))
                {
                   const C_OscNode * const pc_Node =

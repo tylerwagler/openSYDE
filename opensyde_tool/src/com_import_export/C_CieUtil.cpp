@@ -100,8 +100,8 @@ C_CieUtil::C_CieUtil(void) {}
 int32_t C_CieUtil::h_ImportFile(const uint32_t ou32_BusIndex,
                                 const C_OscCanProtocol::E_Type oe_ProtocolType,
                                 QWidget *const opc_Parent,
-                                std::vector<uint32_t> &orc_NodeIndexes,
-                                std::vector<uint32_t> &orc_InterfaceIndexes) {
+                                QList<uint32_t> &orc_NodeIndexes,
+                                QList<uint32_t> &orc_InterfaceIndexes) {
   // Load user settings value
   QString c_Folder =
       C_UsHandler::h_GetInstance()->GetProjSdTopologyLastKnownImportPath();
@@ -361,7 +361,7 @@ void C_CieUtil::h_AdaptName(QString &orc_Name, QString &orc_Comment,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieUtil::h_AdaptImportMessages(
-    std::vector<C_CieImportDataAssignment> &orc_ImportDataAssignment,
+    QList<C_CieImportDataAssignment> &orc_ImportDataAssignment,
     const C_OscCanProtocol::E_Type oe_ProtocolType,
     const bool oq_AlwaysAppendNameInComment) {
   mh_AdaptMessagesToProtocolType(orc_ImportDataAssignment, oe_ProtocolType);
@@ -377,7 +377,7 @@ void C_CieUtil::h_AdaptImportMessages(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieUtil::h_InsertMessages(
-    const std::vector<C_CieImportDataAssignment> &orc_ImportDataAssignment,
+    const QList<C_CieImportDataAssignment> &orc_ImportDataAssignment,
     const C_OscCanProtocol::E_Type oe_ProtocolType,
     const bool oq_UniqueAddRequested) {
   // Each imported node
@@ -633,7 +633,7 @@ C_CieUtil::h_GetMessageName(const C_OscNode &orc_Node, const bool oq_IsTx,
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_CieUtil::h_GetIsSrdoFromMessageIsSrdoVector(
-    const std::vector<uint8_t> &orc_MessageIsSrdo,
+    const QByteArray &orc_MessageIsSrdo,
     const uint32_t ou32_MessageIndex) {
   bool q_IsSrdo;
 
@@ -668,8 +668,8 @@ C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex,
                             const C_OscCanProtocol::E_Type oe_ProtocolType,
                             const QString &orc_FullFilePath,
                             QWidget *const opc_Parent,
-                            std::vector<uint32_t> &orc_NodeIndexes,
-                            std::vector<uint32_t> &orc_InterfaceIndexes) {
+                            QList<uint32_t> &orc_NodeIndexes,
+                            QList<uint32_t> &orc_InterfaceIndexes) {
   int32_t s32_Return = C_NOACT;
   int32_t s32_ImportReturn;
 
@@ -741,10 +741,10 @@ C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex,
       // display node assignment popup
       if (c_PopUpDialogNodeAssignment->exec() ==
           static_cast<int32_t>(QDialog::Accepted)) {
-        const std::vector<C_CieDbcOsyNodeAssignment> c_DbcNodeAssignment =
+        const QList<C_CieDbcOsyNodeAssignment> c_DbcNodeAssignment =
             pc_DialogNodeSelection->GetNodeAssignments();
-        std::vector<C_CieDbcOsyNodeAssignment>::const_iterator c_It;
-        std::vector<C_CieImportDataAssignment> c_NodeAssignmentsConverted;
+        QList<C_CieDbcOsyNodeAssignment>::const_iterator c_It;
+        QList<C_CieImportDataAssignment> c_NodeAssignmentsConverted;
 
         for (c_It = c_DbcNodeAssignment.begin();
              c_It != c_DbcNodeAssignment.end(); ++c_It) {
@@ -776,7 +776,7 @@ C_CieUtil::mh_ImportDbcFile(const uint32_t ou32_BusIndex,
           c_NodeAssignmentsConverted.push_back(c_NodeAssignmentConverted);
         }
 
-        const std::vector<C_CieImportDataAssignment>
+        const QList<C_CieImportDataAssignment>
             c_SkippedImportDataAssigned;
         // create message report for user
         const QPointer<C_OgePopUpDialog> c_PopUpDialogReportDialog =
@@ -852,8 +852,8 @@ C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex,
                                const C_OscCanProtocol::E_Type oe_ProtocolType,
                                const QString &orc_FullFilePath,
                                QWidget *const opc_Parent,
-                               std::vector<uint32_t> &orc_NodeIndexes,
-                               std::vector<uint32_t> &orc_InterfaceIndexes) {
+                               QList<uint32_t> &orc_NodeIndexes,
+                               QList<uint32_t> &orc_InterfaceIndexes) {
   int32_t s32_Return = C_NOACT;
 
   // create node selection popup
@@ -911,10 +911,10 @@ C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex,
                0UL) ||
               (c_NodeAssignment.c_ImportData.c_Core.c_OscTxMessageData.size() >
                0UL)) {
-            std::vector<C_CieImportDataAssignment> c_NodeAssignmentVector;
+            QList<C_CieImportDataAssignment> c_NodeAssignmentVector;
             c_NodeAssignmentVector.push_back(c_NodeAssignment);
 
-            const std::vector<C_CieImportDataAssignment>
+            const QList<C_CieImportDataAssignment>
                 c_SkippedImportDataAssigned;
 
             const QPointer<C_OgePopUpDialog> c_New =
@@ -1019,7 +1019,7 @@ C_CieUtil::mh_ImportDcfEdsFile(const uint32_t ou32_BusIndex,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieUtil::mh_AdaptMessageNames(
-    std::vector<C_CieImportDataAssignment> &orc_ImportDataAssignment,
+    QList<C_CieImportDataAssignment> &orc_ImportDataAssignment,
     const bool oq_AlwaysAppendNameInComment) {
   // Each imported node
   for (uint32_t u32_ItNodes = 0; u32_ItNodes < orc_ImportDataAssignment.size();
@@ -1073,7 +1073,7 @@ void C_CieUtil::mh_AdaptMessageNames(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieUtil::mh_AdaptMessagesToProtocolType(
-    std::vector<C_CieImportDataAssignment> &orc_ImportDataAssignment,
+    QList<C_CieImportDataAssignment> &orc_ImportDataAssignment,
     const C_OscCanProtocol::E_Type oe_ProtocolType) {
   // Each imported node
   for (uint32_t u32_ItNodes = 0; u32_ItNodes < orc_ImportDataAssignment.size();
@@ -1093,7 +1093,7 @@ void C_CieUtil::mh_AdaptMessagesToProtocolType(
           rc_CurData.c_ImportData.c_Core.c_OscRxMessageData[u32_ItMessage];
       C_PuiSdNodeCanMessage &rc_CurUiMessage =
           rc_CurData.c_ImportData.c_Ui.c_UiRxMessageData[u32_ItMessage];
-      std::vector<C_OscNodeDataPoolListElement> &rc_SignalListElements =
+      QList<C_OscNodeDataPoolListElement> &rc_SignalListElements =
           rc_CurData.c_ImportData.c_Core.c_OscRxSignalData;
       C_SdUtil::h_AdaptMessageToProtocolType(
           rc_CurMessage, rc_CurUiMessage, rc_SignalListElements,
@@ -1118,7 +1118,7 @@ void C_CieUtil::mh_AdaptMessagesToProtocolType(
           rc_CurData.c_ImportData.c_Core.c_OscTxMessageData[u32_ItMessage];
       C_PuiSdNodeCanMessage &rc_CurUiMessage =
           rc_CurData.c_ImportData.c_Ui.c_UiTxMessageData[u32_ItMessage];
-      std::vector<C_OscNodeDataPoolListElement> &rc_SignalListElements =
+      QList<C_OscNodeDataPoolListElement> &rc_SignalListElements =
           rc_CurData.c_ImportData.c_Core.c_OscTxSignalData;
       C_SdUtil::h_AdaptMessageToProtocolType(
           rc_CurMessage, rc_CurUiMessage, rc_SignalListElements,
@@ -1158,11 +1158,11 @@ int32_t C_CieUtil::mh_InsertMessages(
     const uint32_t ou32_NodeIndex, const C_OscCanProtocol::E_Type oe_Type,
     const uint32_t ou32_InterfaceIndex,
     const uint32_t ou32_DatapoolIndexForNewContent, const bool oq_MessagesAreTx,
-    const std::vector<C_OscCanMessage> &orc_OscMessageData,
-    const std::vector<C_PuiSdNodeCanMessage> &orc_UiMessageData,
-    const std::vector<C_OscNodeDataPoolListElement> &orc_OscSignalData,
-    const std::vector<C_PuiSdNodeDataPoolListElement> &orc_UiSignalData,
-    const std::vector<std::pair<int32_t, int32_t>> &orc_MessageOverrideIndices,
+    const QList<C_OscCanMessage> &orc_OscMessageData,
+    const QList<C_PuiSdNodeCanMessage> &orc_UiMessageData,
+    const QList<C_OscNodeDataPoolListElement> &orc_OscSignalData,
+    const QList<C_PuiSdNodeDataPoolListElement> &orc_UiSignalData,
+    const QList<std::pair<int32_t, int32_t>> &orc_MessageOverrideIndices,
     const bool oq_UniqueAddRequested) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -1191,8 +1191,8 @@ int32_t C_CieUtil::mh_InsertMessages(
       const C_OscCanMessage &rc_CurMessage = orc_OscMessageData[u32_ItMessage];
       const C_PuiSdNodeCanMessage &rc_UiMessage =
           orc_UiMessageData[u32_ItMessage];
-      std::vector<C_OscNodeDataPoolListElement> c_CurOscSignalCommons;
-      std::vector<C_PuiSdNodeDataPoolListElement> c_CurUiSignalCommons;
+      QList<C_OscNodeDataPoolListElement> c_CurOscSignalCommons;
+      QList<C_PuiSdNodeDataPoolListElement> c_CurUiSignalCommons;
 
       c_CurOscSignalCommons.reserve(rc_CurMessage.c_Signals.size());
       c_CurUiSignalCommons.reserve(rc_CurMessage.c_Signals.size());

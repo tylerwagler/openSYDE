@@ -12,6 +12,7 @@
 #include <QStringList>
 #include <QWidget>
 #include <QFileInfo>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_OscNode.hpp"
@@ -112,14 +113,14 @@ private:
    void m_HandleSignalChangesForAdaptedMessageVector(
       stw::opensyde_gui_logic::C_CieImportedMessageVectorData & orc_AdaptedMessages);
    static void mh_AddNewMessage(const stw::opensyde_core::C_OscCanMessage & orc_ImportedOscMessageData,
-                                const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_ImportedOscSignalData, const stw::opensyde_gui_logic::C_PuiSdNodeCanMessage & orc_ImportedUiMessageData, const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_ImportedUiSignalData, const QString & orc_ImportedWarningMessages, std::vector<stw::opensyde_core::C_OscCanMessage> & orc_NewOscMessageData, std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_NewOscSignalData, std::vector<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage> & orc_NewUiMessageData, std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_NewUiSignalData, QStringList & orc_NewWarningMessagesPerMessage);
+                                const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_ImportedOscSignalData, const stw::opensyde_gui_logic::C_PuiSdNodeCanMessage & orc_ImportedUiMessageData, const QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_ImportedUiSignalData, const QString & orc_ImportedWarningMessages, QList<stw::opensyde_core::C_OscCanMessage> & orc_NewOscMessageData, QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_NewOscSignalData, QList<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage> & orc_NewUiMessageData, QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_NewUiSignalData, QStringList & orc_NewWarningMessagesPerMessage);
    static void mh_AddAdaptedMessage(const stw::opensyde_core::C_OscCanOpenManagerDeviceInfo & orc_NewConfig,
                                     const stw::opensyde_core::C_OscCanMessage & orc_ExistingOscMessage,
                                     const stw::opensyde_gui_logic::C_PuiSdNodeCanMessage & orc_ExistingUiMessage,
-                                    const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_ExistingOscSignalData, const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_ExistingUiSignalData, const stw::opensyde_core::C_OscCanMessage & orc_ImportedOscMessageData, const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_ImportedOscSignalData, const stw::opensyde_gui_logic::C_PuiSdNodeCanMessage & orc_ImportedUiMessageData, const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_ImportedUiSignalData, const QString & orc_ImportedWarningMessages, std::vector<stw::opensyde_core::C_OscCanMessage> & orc_AdaptedOscMessageData, std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_AdaptedOscSignalData, std::vector<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage> & orc_AdaptedUiMessageData, std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_AdaptedUiSignalData, QStringList & orc_AdaptedWarningMessagesPerMessage, const bool oq_MessageIsTxInEds);
+                                    const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_ExistingOscSignalData, const QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_ExistingUiSignalData, const stw::opensyde_core::C_OscCanMessage & orc_ImportedOscMessageData, const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_ImportedOscSignalData, const stw::opensyde_gui_logic::C_PuiSdNodeCanMessage & orc_ImportedUiMessageData, const QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_ImportedUiSignalData, const QString & orc_ImportedWarningMessages, QList<stw::opensyde_core::C_OscCanMessage> & orc_AdaptedOscMessageData, QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_AdaptedOscSignalData, QList<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage> & orc_AdaptedUiMessageData, QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_AdaptedUiSignalData, QStringList & orc_AdaptedWarningMessagesPerMessage, const bool oq_MessageIsTxInEds);
    static void mh_TransferMessageSignals(const stw::opensyde_core::C_OscCanMessage & orc_SourceOscMessage,
                                          const stw::opensyde_gui_logic::C_PuiSdNodeCanMessage & orc_SourceUiMessage,
-                                         const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_SourceOscSignalData, const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_SourceUiSignalData, stw::opensyde_core::C_OscCanMessage & orc_TargetOscMessageData, stw::opensyde_gui_logic::C_PuiSdNodeCanMessage & orc_TargetUiMessageData, std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_TargetOscSignalData, std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_TargetUiSignalData);
+                                         const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_SourceOscSignalData, const QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_SourceUiSignalData, stw::opensyde_core::C_OscCanMessage & orc_TargetOscMessageData, stw::opensyde_gui_logic::C_PuiSdNodeCanMessage & orc_TargetUiMessageData, QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_TargetOscSignalData, QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_TargetUiSignalData);
    stw::opensyde_core::C_OscCanOpenManagerDeviceInfo m_AdaptConfig(
       const stw::opensyde_core::C_OscCanOpenManagerDeviceInfo & orc_NewConfig) const;
    static void mh_AdaptMessageProperties(const stw::opensyde_core::C_OscCanOpenManagerDeviceInfo & orc_NewConfig,
@@ -134,14 +135,14 @@ private:
    int32_t m_GetDataPoolIndex(void) const;
    static QString mh_BoolToString(const bool oq_Value);
    static QString mh_GetSignalNames(const stw::opensyde_core::C_OscCanMessage & orc_Message,
-                                    const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_SignalData);
+                                    const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_SignalData);
    static QString mh_GetSignalNameForDisplay(const QString & orc_Name);
    const stw::opensyde_core::C_OscCanOpenManagerMappableSignal * m_GetOrgSignal(const uint16_t ou16_ObjectIndex,
                                                                                 const uint8_t ou8_SubIndex)
    const;
    void m_InitMessageNames(C_CieImportDataAssignment & orc_Messages) const;
-   static void mh_InitMessageVectorNames(std::vector<stw::opensyde_core::C_OscCanMessage> & orc_Messages,
-                                         std::vector<uint8_t> & orc_MessageIsSrdo,
+   static void mh_InitMessageVectorNames(QList<stw::opensyde_core::C_OscCanMessage> & orc_Messages,
+                                         const QByteArray & orc_MessageIsSrdo,
                                          const stw::opensyde_core::C_OscNode & orc_Node, const bool oq_MessageIsTxInEds,
                                          uint32_t & oru32_SrdoIndex);
 

@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 
 #include "C_SdUtil.hpp"
@@ -134,8 +135,8 @@ C_SdNdeCoDeviceUpdateEdsDialog::~C_SdNdeCoDeviceUpdateEdsDialog(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoDeviceUpdateEdsDialog::DoApplyData(void) const
 {
-   const std::vector<C_CieImportDataAssignment> c_NewNodeAssignmentVector = {this->mc_NewNodeAssignment};
-   const std::vector<C_CieImportDataAssignment> c_AdaptedNodeAssignmentVector = {this->mc_AdaptedNodeAssignment};
+   const QList<C_CieImportDataAssignment> c_NewNodeAssignmentVector = {this->mc_NewNodeAssignment};
+   const QList<C_CieImportDataAssignment> c_AdaptedNodeAssignmentVector = {this->mc_AdaptedNodeAssignment};
    const C_OscCanOpenManagerDeviceInfo c_AdaptedConfig = this->m_AdaptConfig(this->mc_NewConfig);
 
    Q_ASSERT(C_PuiSdHandler::h_GetInstance()->ReplaceCanOpenManagerDevice(this->mu32_ManagerNodeIndex,
@@ -261,7 +262,7 @@ void C_SdNdeCoDeviceUpdateEdsDialog::m_SetCommonDefaultData(C_CieImportDataAssig
 void C_SdNdeCoDeviceUpdateEdsDialog::m_ShowReport()
 {
    const QFileInfo c_FileInfo(this->mc_FilePath);
-   const std::vector<C_CieImportDataAssignment> c_NodeAssignmentVector = {this->mc_ImportedNodeAssignment};
+   const QList<C_CieImportDataAssignment> c_NodeAssignmentVector = {this->mc_ImportedNodeAssignment};
 
    QString c_Report = C_CieImportReportWidget::h_GetInitialReportPart(c_NodeAssignmentVector, this->mc_FilePath,
                                                                       true,
@@ -294,7 +295,7 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_AddToReport(const QString & orc_Heading,
 {
    QString c_TableContent;
 
-   std::vector<C_CieImportDataAssignment> c_DataVector = {orc_Data};
+   QList<C_CieImportDataAssignment> c_DataVector = {orc_Data};
    if (C_CieImportReportWidget::h_GetMessageTableContent(c_TableContent, orc_FileInfo.
                                                          completeSuffix(), c_DataVector,
                                                          C_OscCanProtocol::eCAN_OPEN, NULL, orc_Heading,
@@ -842,7 +843,7 @@ void C_SdNdeCoDeviceUpdateEdsDialog::m_HandleSignalChangesForAdaptedMessageVecto
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoDeviceUpdateEdsDialog::mh_AddNewMessage(const C_OscCanMessage & orc_ImportedOscMessageData,
-                                                      const std::vector<C_OscNodeDataPoolListElement> & orc_ImportedOscSignalData, const C_PuiSdNodeCanMessage & orc_ImportedUiMessageData, const std::vector<C_PuiSdNodeDataPoolListElement> & orc_ImportedUiSignalData, const QString & orc_ImportedWarningMessages, std::vector<C_OscCanMessage> & orc_NewOscMessageData, std::vector<C_OscNodeDataPoolListElement> & orc_NewOscSignalData, std::vector<C_PuiSdNodeCanMessage> & orc_NewUiMessageData, std::vector<C_PuiSdNodeDataPoolListElement> & orc_NewUiSignalData,
+                                                      const QList<C_OscNodeDataPoolListElement> & orc_ImportedOscSignalData, const C_PuiSdNodeCanMessage & orc_ImportedUiMessageData, const QList<C_PuiSdNodeDataPoolListElement> & orc_ImportedUiSignalData, const QString & orc_ImportedWarningMessages, QList<C_OscCanMessage> & orc_NewOscMessageData, QList<C_OscNodeDataPoolListElement> & orc_NewOscSignalData, QList<C_PuiSdNodeCanMessage> & orc_NewUiMessageData, QList<C_PuiSdNodeDataPoolListElement> & orc_NewUiSignalData,
                                                       QStringList & orc_NewWarningMessagesPerMessage)
 {
    C_OscCanMessage c_NewOscMessage = orc_ImportedOscMessageData;
@@ -895,7 +896,7 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_AddNewMessage(const C_OscCanMessage & or
 void C_SdNdeCoDeviceUpdateEdsDialog::mh_AddAdaptedMessage(const C_OscCanOpenManagerDeviceInfo & orc_NewConfig,
                                                           const C_OscCanMessage & orc_ExistingOscMessage,
                                                           const C_PuiSdNodeCanMessage & orc_ExistingUiMessage,
-                                                          const std::vector<C_OscNodeDataPoolListElement> & orc_ExistingOscSignalData, const std::vector<C_PuiSdNodeDataPoolListElement> & orc_ExistingUiSignalData, const C_OscCanMessage & orc_ImportedOscMessageData, const std::vector<C_OscNodeDataPoolListElement> & orc_ImportedOscSignalData, const C_PuiSdNodeCanMessage & orc_ImportedUiMessageData, const std::vector<C_PuiSdNodeDataPoolListElement> & orc_ImportedUiSignalData, const QString & orc_ImportedWarningMessages, std::vector<C_OscCanMessage> & orc_AdaptedOscMessageData, std::vector<C_OscNodeDataPoolListElement> & orc_AdaptedOscSignalData, std::vector<C_PuiSdNodeCanMessage> & orc_AdaptedUiMessageData, std::vector<C_PuiSdNodeDataPoolListElement> & orc_AdaptedUiSignalData, QStringList & orc_AdaptedWarningMessagesPerMessage,
+                                                          const QList<C_OscNodeDataPoolListElement> & orc_ExistingOscSignalData, const QList<C_PuiSdNodeDataPoolListElement> & orc_ExistingUiSignalData, const C_OscCanMessage & orc_ImportedOscMessageData, const QList<C_OscNodeDataPoolListElement> & orc_ImportedOscSignalData, const C_PuiSdNodeCanMessage & orc_ImportedUiMessageData, const QList<C_PuiSdNodeDataPoolListElement> & orc_ImportedUiSignalData, const QString & orc_ImportedWarningMessages, QList<C_OscCanMessage> & orc_AdaptedOscMessageData, QList<C_OscNodeDataPoolListElement> & orc_AdaptedOscSignalData, QList<C_PuiSdNodeCanMessage> & orc_AdaptedUiMessageData, QList<C_PuiSdNodeDataPoolListElement> & orc_AdaptedUiSignalData, QStringList & orc_AdaptedWarningMessagesPerMessage,
                                                           const bool oq_MessageIsTxInEds)
 {
    QString c_WarningMessages = orc_ImportedWarningMessages;
@@ -954,8 +955,8 @@ void C_SdNdeCoDeviceUpdateEdsDialog::mh_AddAdaptedMessage(const C_OscCanOpenMana
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoDeviceUpdateEdsDialog::mh_TransferMessageSignals(const C_OscCanMessage & orc_SourceOscMessage,
                                                                const C_PuiSdNodeCanMessage & orc_SourceUiMessage,
-                                                               const std::vector<C_OscNodeDataPoolListElement> & orc_SourceOscSignalData, const std::vector<C_PuiSdNodeDataPoolListElement> & orc_SourceUiSignalData, C_OscCanMessage & orc_TargetOscMessageData, C_PuiSdNodeCanMessage & orc_TargetUiMessageData, std::vector<C_OscNodeDataPoolListElement> & orc_TargetOscSignalData,
-                                                               std::vector<C_PuiSdNodeDataPoolListElement> & orc_TargetUiSignalData)
+                                                               const QList<C_OscNodeDataPoolListElement> & orc_SourceOscSignalData, const QList<C_PuiSdNodeDataPoolListElement> & orc_SourceUiSignalData, C_OscCanMessage & orc_TargetOscMessageData, C_PuiSdNodeCanMessage & orc_TargetUiMessageData, QList<C_OscNodeDataPoolListElement> & orc_TargetOscSignalData,
+                                                               QList<C_PuiSdNodeDataPoolListElement> & orc_TargetUiSignalData)
 {
    const uint32_t u32_SignalOffset = orc_TargetOscSignalData.size();
 
@@ -1331,7 +1332,7 @@ QString C_SdNdeCoDeviceUpdateEdsDialog::mh_BoolToString(const bool oq_Value)
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SdNdeCoDeviceUpdateEdsDialog::mh_GetSignalNames(const C_OscCanMessage & orc_Message,
-                                                          const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData)
+                                                          const QList<C_OscNodeDataPoolListElement> & orc_SignalData)
 {
    QString c_Retval;
 
@@ -1428,13 +1429,13 @@ void C_SdNdeCoDeviceUpdateEdsDialog::m_InitMessageNames(C_CieImportDataAssignmen
    \param[in,out]  oru32_SrdoIndex        SRDO index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeCoDeviceUpdateEdsDialog::mh_InitMessageVectorNames(std::vector<C_OscCanMessage> & orc_Messages,
-                                                               std::vector<uint8_t> & orc_MessageIsSrdo,
+void C_SdNdeCoDeviceUpdateEdsDialog::mh_InitMessageVectorNames(QList<C_OscCanMessage> & orc_Messages,
+                                                               const QByteArray & orc_MessageIsSrdo,
                                                                const C_OscNode & orc_Node,
                                                                const bool oq_MessageIsTxInEds,
                                                                uint32_t & oru32_SrdoIndex)
 {
-   for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < orc_Messages.size(); ++u32_ItMessage)
+   for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < static_cast<uint32_t>(orc_Messages.size()); ++u32_ItMessage)
    {
       C_OscCanMessage & rc_Message = orc_Messages[u32_ItMessage];
       const bool q_IsSrdo =

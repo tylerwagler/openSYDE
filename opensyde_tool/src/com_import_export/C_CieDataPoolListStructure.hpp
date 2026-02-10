@@ -13,6 +13,7 @@
 #define C_CIEDATAPOOLLISTSTRUCTURE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include <QStringList>
 #include "C_PuiSdNodeCanMessage.hpp"
@@ -34,12 +35,12 @@ class C_CieDataPoolListCoreStructure
 {
 public:
    // containers for openSYDE core data pool list structure
-   std::vector<stw::opensyde_core::C_OscCanMessage> c_OscRxMessageData;
-   std::vector<stw::opensyde_core::C_OscCanMessage> c_OscTxMessageData;
-   std::vector<uint8_t> c_EdsOscRxMessageIsSrdo;
-   std::vector<uint8_t> c_EdsOscTxMessageIsSrdo;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> c_OscRxSignalData;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> c_OscTxSignalData;
+   QList<stw::opensyde_core::C_OscCanMessage> c_OscRxMessageData;
+   QList<stw::opensyde_core::C_OscCanMessage> c_OscTxMessageData;
+   QByteArray c_EdsOscRxMessageIsSrdo;
+   QByteArray c_EdsOscTxMessageIsSrdo;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElement> c_OscRxSignalData;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElement> c_OscTxSignalData;
    // warning messages for each message element
    QStringList c_WarningMessagesPerRxMessage; // empty string means there is no warning message
    QStringList c_WarningMessagesPerTxMessage; // empty string means there is no warning message
@@ -56,10 +57,10 @@ public:
    {
    public:
       // containers for openSYDE Ui data pool list structure
-      std::vector<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage> c_UiRxMessageData;
-      std::vector<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage> c_UiTxMessageData;
-      std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> c_UiRxSignalData;
-      std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> c_UiTxSignalData;
+      QList<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage> c_UiRxMessageData;
+      QList<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage> c_UiTxMessageData;
+      QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> c_UiRxSignalData;
+      QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> c_UiTxSignalData;
    };
 
    C_Ui c_Ui;

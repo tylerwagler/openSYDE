@@ -451,7 +451,7 @@ void C_SyvDaChaPlotHandlerWidget::SetData(const C_PuiSvDbTabChart & orc_Data, co
       }
       else
       {
-         std::vector<uint8_t> c_NodeActiveFlags;
+         QByteArray c_NodeActiveFlags;
          const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
             ou32_ViewIndex,
             c_NodeActiveFlags);
@@ -1255,7 +1255,7 @@ void C_SyvDaChaPlotHandlerWidget::RefreshColors(void)
       QColor c_Color;
 
       this->mc_Data.c_DataPoolElementsColorIndex[u32_Counter] = this->m_GetNextNotUsedColor();
-      c_Color = mhac_DATA_COLORS[this->mc_Data.c_DataPoolElementsColorIndex[u32_Counter]];
+      c_Color = mhac_DATA_COLORS[static_cast<uint8_t>(this->mc_Data.c_DataPoolElementsColorIndex[u32_Counter])];
 
       this->mpc_Ui->pc_ChartSelectorWidget->UpdateDataSerieColor(static_cast<uint32_t>(u32_Counter), c_Color);
       if (u32_Counter < static_cast<uint32_t>(this->mpc_Ui->pc_Plot->graphCount()))
@@ -1359,7 +1359,7 @@ void C_SyvDaChaPlotHandlerWidget::m_AddGraph(const uint32_t ou32_DataPoolElement
                                              const QString & orc_ToolTipErrorText)
 {
    // Color selection
-   const QColor c_Color = mhac_DATA_COLORS[this->mc_Data.c_DataPoolElementsColorIndex[ou32_DataPoolElementConfigIndex]];
+   const QColor c_Color = mhac_DATA_COLORS[static_cast<uint8_t>(this->mc_Data.c_DataPoolElementsColorIndex[ou32_DataPoolElementConfigIndex])];
    const int32_t s32_GraphNumber = this->mpc_Ui->pc_Plot->graphCount();
    QCPAxisRect * const pc_AxisRect = this->mpc_Ui->pc_Plot->axisRect();
    QCPAxis * pc_VerticalAxis = NULL;
@@ -1937,7 +1937,7 @@ void C_SyvDaChaPlotHandlerWidget::m_SetColorUnused(const uint8_t ou8_Index)
 {
    uint32_t u32_ColorCounter;
 
-   std::vector<std::array<bool, mhu8_COUNT_COLORS> >::reverse_iterator c_ItSection;
+   QList<std::array<bool, mhu8_COUNT_COLORS> >::reverse_iterator c_ItSection;
 
    // Search the color to reset the flag
    // Search the sections from behind to reduce the number of sections if possible
@@ -3229,7 +3229,7 @@ void C_SyvDaChaPlotHandlerWidget::m_ShowSamplePoints(const bool oq_ShowSamplePoi
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::m_LoadState(const bool oq_IsPaused, const bool orq_AreSamplePointsShown,
-                                              const std::vector<std::array<float64_t, 4> > & orc_ScreenState)
+                                              const QList<std::array<float64_t, 4> > & orc_ScreenState)
 {
    uint32_t u32_ScreenStateCounter;
 
@@ -3277,7 +3277,7 @@ void C_SyvDaChaPlotHandlerWidget::m_LoadState(const bool oq_IsPaused, const bool
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::m_SaveState(bool & orq_IsPaused, int32_t & ors32_SplitterLeftWidth,
-                                              bool & orq_AreSamplePointsShown, std::vector<std::array<float64_t, 4> > &
+                                              bool & orq_AreSamplePointsShown, QList<std::array<float64_t, 4> > &
                                               orc_ScreenState)
 {
    int32_t s32_VerticalAxisCounter;

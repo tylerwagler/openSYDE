@@ -2202,6 +2202,11 @@ target_include_directories(opensyde_core PRIVATE ${PROJECT_ROOT}/libs/openssl/in
 
 target_link_libraries(openSYDE PRIVATE ${OPENSYDE_LINK_LIBRARIES})
 
+# Workaround for Qt 6.10.1 + MinGW debug build multiple definition errors
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+   target_link_options(openSYDE PRIVATE "-Wl,--allow-multiple-definition")
+endif()
+
 target_precompile_headers(openSYDE PRIVATE ${PROJECT_ROOT}/src/precompiled_headers/precomp_headers_gui.hpp)
 
 include(GNUInstallDirs)

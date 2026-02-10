@@ -193,9 +193,9 @@ uint32_t C_SyvDcExistingNodeList::GetAssignmentCount(void) const
    Current all configs
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_SyvDcDeviceConfiguation> C_SyvDcExistingNodeList::GetConfigs(void) const
+QList<C_SyvDcDeviceConfiguation> C_SyvDcExistingNodeList::GetConfigs(void) const
 {
-   std::vector<C_SyvDcDeviceConfiguation> c_Retval;
+   QList<C_SyvDcDeviceConfiguation> c_Retval;
    for (int32_t s32_It = 0; s32_It < this->count(); ++s32_It)
    {
       const C_SyvDcExistingNodeWidget * const pc_Widget =
@@ -266,7 +266,7 @@ int32_t C_SyvDcExistingNodeList::m_Init(void)
    //No point if PC not connected
    if ((pc_View != NULL) && (pc_View->GetOscPcData().GetConnected() == true))
    {
-      const std::vector<uint8_t> & rc_NodeActiveFlags = pc_View->GetNodeActiveFlags();
+      const QByteArray & rc_NodeActiveFlags = pc_View->GetNodeActiveFlags();
       for (uint32_t u32_ItNode = 0; u32_ItNode < rc_NodeActiveFlags.size(); ++u32_ItNode)
       {
          //Active
@@ -274,7 +274,7 @@ int32_t C_SyvDcExistingNodeList::m_Init(void)
          {
             uint32_t u32_SquadIndex;
             const C_OscNodeSquad * pc_Squad = NULL;
-            std::vector<uint32_t> c_RelevantNodeIndexes;
+            QList<uint32_t> c_RelevantNodeIndexes;
             std::set<uint32_t> c_FirstSubNodeConnectedInterfaces;
             uint32_t u32_SubNodeCounter;
             bool q_AllSubNodesAvailable = true;

@@ -55,7 +55,7 @@ public:
       const QList<QStringList> &orc_InfoMessagesPerMessage);
   static void h_AssignNode(
       const stw::opensyde_core::C_OscCanInterfaceId &orc_Id,
-      std::vector<stw::opensyde_core::C_OscCanMessage> &orc_OscMessageData);
+      QList<stw::opensyde_core::C_OscCanMessage> &orc_OscMessageData);
 
   // to convert openSYDE data structures to DBC data structures
   static int32_t h_ConvertToDbcImportMessage(
@@ -70,9 +70,9 @@ private:
   static void mh_FillUpUiStructure(
       C_CieDataPoolListStructure &orc_DataPoolListStructure,
       const bool oq_ActivateAutoMinMaxForSignals,
-      const std::vector<uint8_t> *const opc_RxSignalDefaultMinMaxValuesUsed =
+      const QByteArray *const opc_RxSignalDefaultMinMaxValuesUsed =
           NULL,
-      const std::vector<uint8_t> *const opc_TxSignalDefaultMinMaxValuesUsed =
+      const QByteArray *const opc_TxSignalDefaultMinMaxValuesUsed =
           NULL);
   static void mh_FillUpUiStructureForSignals(
       const stw::opensyde_core::C_OscCanMessage &orc_Message,
@@ -82,11 +82,11 @@ private:
       const uint8_t *const opu8_SignalDefaultMinMaxValuesUsed);
 
   static void mh_FillUpCoreStructureByDbcValues(
-      const std::vector<
+      const QList<
           stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage>
           &orc_CieNodeMessages,
-      std::vector<stw::opensyde_core::C_OscCanMessage> &orc_CanMessages,
-      std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement>
+      QList<stw::opensyde_core::C_OscCanMessage> &orc_CanMessages,
+      QList<stw::opensyde_core::C_OscNodeDataPoolListElement>
           &orc_CanSignalData,
       QStringList &orc_WarningMessages);
 };

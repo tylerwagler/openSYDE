@@ -265,7 +265,7 @@ bool C_PuiSvHandler::GetServiceModeActive(void) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandler::GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32_ViewIndex,
-                                                             std::vector<uint8_t> & orc_ActiveFlags,
+                                                             QByteArray & orc_ActiveFlags,
                                                              const bool oq_IncludeRoutingResults)
 {
    int32_t s32_Return = C_RANGE;
@@ -277,7 +277,7 @@ int32_t C_PuiSvHandler::GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32
       const uint32_t u32_Hash = this->GetViewHash(ou32_ViewIndex);
       const QPair<uint32_t, bool> c_HashRef(u32_Hash, oq_IncludeRoutingResults);
       const QMap<QPair<uint32_t, bool>,
-                 std::vector<uint8_t> >::const_iterator c_It =
+                 QByteArray>::const_iterator c_It =
          this->mc_PreviousNodeActiveFlagsWithSquadAdaptionsResults.find(c_HashRef);
 
       s32_Return = C_NO_ERR;
@@ -303,9 +303,10 @@ int32_t C_PuiSvHandler::GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32
             {
                uint32_t u32_SubNodeCounter;
                bool q_AtLeastOneSubNodeActive = false;
-               std::vector<uint8_t> c_SubNodeActiveFlags;
+               QByteArray c_SubNodeActiveFlags;
 
-               c_SubNodeActiveFlags.resize(pc_Squad->c_SubNodeIndexes.size(), 0U);
+               c_SubNodeActiveFlags.resize(pc_Squad->c_SubNodeIndexes.size());
+               c_SubNodeActiveFlags.fill(static_cast<char>(0U));
 
                // Check each sub node
                for (u32_SubNodeCounter = 0U; u32_SubNodeCounter < pc_Squad->c_SubNodeIndexes.size();
@@ -314,7 +315,7 @@ int32_t C_PuiSvHandler::GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32
                   const uint32_t u32_NodeIndex = pc_Squad->c_SubNodeIndexes[u32_SubNodeCounter];
 
                   // Check only necessary if node is active in the first place
-                  if (orc_ActiveFlags[u32_NodeIndex] != 0U)
+                  if (static_cast<uint8_t>(orc_ActiveFlags[u32_NodeIndex]) != 0U)
                   {
                      const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_NodeIndex);
                      Q_ASSERT(pc_Node != NULL);
@@ -351,7 +352,7 @@ int32_t C_PuiSvHandler::GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32
                                  (pc_BestRoute->c_VecRoutePoints.size() == 0))))
                            {
                               // Valid route found
-                              c_SubNodeActiveFlags[u32_SubNodeCounter] = 1U;
+                              c_SubNodeActiveFlags[u32_SubNodeCounter] = static_cast<char>(1U);
                               q_AtLeastOneSubNodeActive = true;
                            }
                         }
@@ -1183,7 +1184,7 @@ int32_t C_PuiSvHandler::SetViewReadRailAssignment(const uint32_t ou32_ViewIndex,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandler::SetNodeUpdateInformation(const uint32_t ou32_ViewIndex,
-                                                 const std::vector<C_OscViewNodeUpdate> & orc_NodeUpdateInformation)
+                                                 const QList<C_OscViewNodeUpdate> & orc_NodeUpdateInformation)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -2582,7 +2583,7 @@ int32_t C_PuiSvHandler::CheckViewError(const uint32_t ou32_Index, bool * const o
          std::set<uint32_t> c_NodesWithDashboardRoutingError;
          std::set<uint32_t> c_NodesRelevantForDashboardRouting;
          QString c_SetupWarningMessage;
-         std::vector<uint8_t> c_NodeActiveFlags;
+         QByteArray c_NodeActiveFlags;
 
          // Get the adapted node active flags in which the not reachable sub nodes of squads are deactivated
          this->GetNodeActiveFlagsWithSquadAdaptions(ou32_Index, c_NodeActiveFlags);
@@ -2650,6 +2651,7 @@ int32_t C_PuiSvHandler::CheckViewError(const uint32_t ou32_Index, bool * const o
                break;
             }
          }
+         // Get node active flags (already QByteArray)
          c_Details.c_ResultingNodeActiveStatus = rc_CheckedData.GetNodeActiveFlags();
 
          //Return error details
@@ -3208,8 +3210,8 @@ bool C_PuiSvHandler::CheckBusDisabled(const uint32_t ou32_ViewIndex, const uint3
 {
    bool q_Disabled = true;
 
-   std::vector<uint32_t> c_NodeIndexes;
-   std::vector<uint32_t> c_InterfaceIndexes;
+   QList<uint32_t> c_NodeIndexes;
+   QList<uint32_t> c_InterfaceIndexes;
    C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(ou32_BusIndex, c_NodeIndexes,
                                                                                       c_InterfaceIndexes);
    if (c_NodeIndexes.size() == c_InterfaceIndexes.size())
@@ -3217,7 +3219,7 @@ bool C_PuiSvHandler::CheckBusDisabled(const uint32_t ou32_ViewIndex, const uint3
       const C_PuiSvData * const pc_View = this->GetView(ou32_ViewIndex);
       if (pc_View != NULL)
       {
-         const std::vector<uint8_t> & rc_Nodes = pc_View->GetNodeActiveFlags();
+         const QByteArray & rc_Nodes = pc_View->GetNodeActiveFlags();
          for (uint32_t u32_ItNode = 0; u32_ItNode < c_NodeIndexes.size(); ++u32_ItNode)
          {
             if (c_NodeIndexes[u32_ItNode] < rc_Nodes.size())
@@ -3364,7 +3366,7 @@ void C_PuiSvHandler::h_Destroy(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
-                                       const std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes)
+                                       const QList<stw::opensyde_core::C_OscNode> & orc_OscNodes)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -4247,9 +4249,9 @@ void C_PuiSvHandler::m_FixDashboardWriteContentType()
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandler::m_CheckRoutingDetails(const uint32_t ou32_ViewIndex,
-                                              const std::vector<uint8_t> & orc_CheckedNodeActiveFlags,
+                                              const QByteArray & orc_CheckedNodeActiveFlags,
                                               std::map<uint32_t, QString> & orc_SetupWarningRoutingDetails,
-                                              std::vector<std::map<uint32_t, QString> > & orc_ErrorRoutingDetails,
+                                              QList<std::map<uint32_t, QString> > & orc_ErrorRoutingDetails,
                                               std::set<uint32_t> & orc_NodesWithDashboardRoutingError,
                                               std::set<uint32_t> & orc_NodesRelevantForDashboardRouting)
 const
@@ -4266,7 +4268,7 @@ const
       // check connection state of all active nodes
       for (u32_Counter = 0U; u32_Counter < orc_CheckedNodeActiveFlags.size(); ++u32_Counter)
       {
-         if (orc_CheckedNodeActiveFlags[u32_Counter] == 1)
+         if (static_cast<uint8_t>(orc_CheckedNodeActiveFlags[u32_Counter]) == 1)
          {
             const stw::opensyde_core::C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                u32_Counter);
@@ -4337,7 +4339,7 @@ const
                      {
                         // No diagnostic error
                         uint32_t u32_RoutePointCounter;
-                        const std::vector<C_OscRoutingRoutePoint> & rc_RoutePoints =
+                        const QList<C_OscRoutingRoutePoint> & rc_RoutePoints =
                            c_RouteCalcDiag.GetBestRoute()->c_VecRoutePoints;
 
                         // Add the target node as relevant for dashboard communication
@@ -4422,13 +4424,13 @@ const
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandler::m_CheckRouting(const uint32_t ou32_ViewIndex,
-                                       const std::vector<uint8_t> & orc_CheckedNodeActiveFlags,
+                                       const QByteArray & orc_CheckedNodeActiveFlags,
                                        QString & orc_SetupWarningMessage, QStringList & orc_ErrorMessages,
                                        std::set<uint32_t> & orc_NodesWithDashboardRoutingError,
                                        std::set<uint32_t> & orc_NodesRelevantForDashboardRouting) const
 {
    std::map<uint32_t, QString> c_SetupWarningDetails;
-   std::vector<std::map<uint32_t, QString> > c_ErrorDetails;
+   QList<std::map<uint32_t, QString> > c_ErrorDetails;
    const int32_t s32_Retval = this->m_CheckRoutingDetails(ou32_ViewIndex, orc_CheckedNodeActiveFlags,
                                                           c_SetupWarningDetails, c_ErrorDetails,
                                                           orc_NodesWithDashboardRoutingError,

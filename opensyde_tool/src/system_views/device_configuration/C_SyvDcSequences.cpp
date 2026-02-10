@@ -185,7 +185,7 @@ int32_t C_SyvDcSequences::InitDcSequences(const uint32_t ou32_ViewIndex)
    int32_t s32_Return;
    uint32_t u32_ActiveBusIndex;
 
-   std::vector<uint8_t> c_ActiveNodes;
+   QByteArray c_ActiveNodes;
 
    // No CAN initialization due to initialization in the sequences itself and ignore update routing errors
    s32_Return = C_SyvComDriverUtil::h_GetOscComDriverParamFromView(ou32_ViewIndex, u32_ActiveBusIndex, c_ActiveNodes,
@@ -234,7 +234,7 @@ int32_t C_SyvDcSequences::FillDeviceConfig(C_SyvDcDeviceConfiguation & orc_Confi
       uint32_t u32_NodeIndex;
 
       s32_Return = C_CONFIG;
-      c_ServerId.u8_NodeIdentifier = orc_Config.c_NodeIds[0];
+      c_ServerId.u8_NodeIdentifier = static_cast<uint8_t>(orc_Config.c_NodeIds[0]);
 
       if (this->mpc_ComDriver->GetNodeIndex(c_ServerId, u32_NodeIndex) == true)
       {
@@ -253,7 +253,7 @@ int32_t C_SyvDcSequences::FillDeviceConfig(C_SyvDcDeviceConfiguation & orc_Confi
                uint32_t u32_InterfaceCounter;
 
                // Configuration of the used bus associated to the set node id
-               orc_Config.c_BusIds.push_back(c_ServerId.u8_BusIdentifier);
+               orc_Config.c_BusIds.append(static_cast<char>(c_ServerId.u8_BusIdentifier));
                if (pc_UsedBus->e_Type == C_OscSystemBus::eCAN)
                {
                   orc_Config.c_CanBitrates.push_back(static_cast<uint32_t>(pc_UsedBus->u64_BitRate));
@@ -298,8 +298,8 @@ int32_t C_SyvDcSequences::FillDeviceConfig(C_SyvDcDeviceConfiguation & orc_Confi
 
                      if (pc_OtherBus != NULL)
                      {
-                        orc_Config.c_NodeIds.push_back(rc_ComInterface.u8_NodeId);
-                        orc_Config.c_BusIds.push_back(pc_OtherBus->u8_BusId);
+                        orc_Config.c_NodeIds.append(static_cast<char>(rc_ComInterface.u8_NodeId));
+                        orc_Config.c_BusIds.append(static_cast<char>(pc_OtherBus->u8_BusId));
 
                         if (pc_OtherBus->e_Type == C_OscSystemBus::eCAN)
                         {
@@ -326,7 +326,7 @@ int32_t C_SyvDcSequences::FillDeviceConfig(C_SyvDcDeviceConfiguation & orc_Confi
                if (pc_UsedBus->e_Type == C_OscSystemBus::eCAN)
                {
                   // STW Flashloader can only be configured on the current used interface
-                  orc_Config.c_BusIds.push_back(0);
+                  orc_Config.c_BusIds.append(static_cast<char>(0));
                   orc_Config.c_CanBitrates.push_back(static_cast<uint32_t>(pc_UsedBus->u64_BitRate));
                }
                else
@@ -529,7 +529,7 @@ int32_t C_SyvDcSequences::ScanEthGetInfoFromOpenSydeDevices(void)
    C_CONFIG    no com driver installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::CheckOpenSydeDevicesConfig(const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfig)
+int32_t C_SyvDcSequences::CheckOpenSydeDevicesConfig(const QList<C_SyvDcDeviceConfiguation> & orc_DeviceConfig)
 const
 {
    return this->m_CheckConfOpenSydeDevices(orc_DeviceConfig);
@@ -552,7 +552,7 @@ const
    C_BUSY     previously started sequence still going on
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::ConfCanStwFlashloaderDevices(const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfig)
+int32_t C_SyvDcSequences::ConfCanStwFlashloaderDevices(const QList<C_SyvDcDeviceConfiguation> & orc_DeviceConfig)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -591,7 +591,7 @@ int32_t C_SyvDcSequences::ConfCanStwFlashloaderDevices(const std::vector<C_SyvDc
    C_BUSY     previously started sequence still going on
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::ConfCanOpenSydeDevices(const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfig,
+int32_t C_SyvDcSequences::ConfCanOpenSydeDevices(const QList<C_SyvDcDeviceConfiguation> & orc_DeviceConfig,
                                                  const bool oq_ConfigureAllInterfaces,
                                                  const bool oq_SecurityFeatureUsed)
 {
@@ -627,7 +627,7 @@ int32_t C_SyvDcSequences::ConfCanOpenSydeDevices(const std::vector<C_SyvDcDevice
    C_BUSY     previously started sequence still going on
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::ConfEthOpenSydeDevices(const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfig,
+int32_t C_SyvDcSequences::ConfEthOpenSydeDevices(const QList<C_SyvDcDeviceConfiguation> & orc_DeviceConfig,
                                                  const bool oq_ConfigureAllInterfaces,
                                                  const bool oq_SecurityFeatureUsed)
 {
@@ -842,9 +842,9 @@ int32_t C_SyvDcSequences::InitCanAndSetCanBitrate(const uint32_t ou32_Bitrate)
    C_BUSY     previously started sequence still going on
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::ReadBackCan(const std::vector<C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
-                                      const std::vector<bool> & orc_OpenSydeSnrExtFormat,
-                                      const std::vector<C_OscProtocolDriverOsyNode> & orc_StwIds)
+int32_t C_SyvDcSequences::ReadBackCan(const QList<C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
+                                      const QList<bool> & orc_OpenSydeSnrExtFormat,
+                                      const QList<C_OscProtocolDriverOsyNode> & orc_StwIds)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -880,8 +880,8 @@ int32_t C_SyvDcSequences::ReadBackCan(const std::vector<C_OscProtocolDriverOsyNo
    C_BUSY     previously started sequence still going on
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::ReadBackEth(const std::vector<C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
-                                      const std::vector<bool> & orc_OpenSydeSnrExtFormat)
+int32_t C_SyvDcSequences::ReadBackEth(const QList<C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
+                                      const QList<bool> & orc_OpenSydeSnrExtFormat)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -963,7 +963,7 @@ bool C_SyvDcSequences::GetCanInitializationResult(void) const
    C_BUSY         previously started polled communication still going on
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDcSequences::GetDeviceInfosResult(std::vector<C_OscDcDeviceInformation> & orc_DeviceInfo) const
+int32_t C_SyvDcSequences::GetDeviceInfosResult(QList<C_OscDcDeviceInformation> & orc_DeviceInfo) const
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -1582,8 +1582,8 @@ int32_t C_SyvDcSequences::m_RunScanCanGetInfoFromOpenSydeDevices(void)
 
    if (this->mpc_ComDriver != NULL)
    {
-      std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults> c_ReadSnResult;
-      std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberExtendedResults> c_ReadSnResultExt;
+      QList<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults> c_ReadSnResult;
+      QList<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberExtendedResults> c_ReadSnResultExt;
 
       // * broadcast: "ReadSerialNumber"
       s32_Return = this->mpc_ComDriver->SendOsyCanBroadcastReadSerialNumber(c_ReadSnResult,
@@ -1593,7 +1593,7 @@ int32_t C_SyvDcSequences::m_RunScanCanGetInfoFromOpenSydeDevices(void)
       {
          uint32_t u32_ResultCounter;
 
-         std::vector<uint32_t> c_UniqueIdIndices;
+         QList<uint32_t> c_UniqueIdIndices;
          uint32_t u32_UniqueIdIndicesCounter;
 
          osc_write_log_info("Scan CAN get info from openSYDE devices",
@@ -1773,8 +1773,8 @@ int32_t C_SyvDcSequences::m_RunScanEthGetInfoFromOpenSydeDevices(void)
 
       if (s32_Return == C_NO_ERR)
       {
-         std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults> c_ReadDeviceInfoResults;
-         std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults>
+         QList<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults> c_ReadDeviceInfoResults;
+         QList<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults>
          c_ReadDeviceInfoExtendedResults;
 
          //wait the minimum wait time (all nodes should now be in the default session of the flashloader)
@@ -1939,7 +1939,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevices(void)
    if (this->mpc_ComDriver != NULL)
    {
       // Vector with server ids of all configured nodes and its connected and actual used bus
-      std::vector<C_OscProtocolDriverOsyNode> c_UsedServerIds;
+      QList<C_OscProtocolDriverOsyNode> c_UsedServerIds;
 
       osc_write_log_info("Configure Ethernet openSYDE devices", "Sequence started");
 
@@ -1992,7 +1992,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevices(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithBroadcasts(
-   std::vector<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
+   QList<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -2011,12 +2011,12 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithBroadcasts(
 
       for (u32_InterfaceCounter = 0U; u32_InterfaceCounter < rc_CurConfig.c_BusIds.size(); ++u32_InterfaceCounter)
       {
-         if (rc_CurConfig.c_BusIds[u32_InterfaceCounter] == c_ServerIdOfCurBus.u8_BusIdentifier)
+         if (static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter]) == c_ServerIdOfCurBus.u8_BusIdentifier)
          {
             uint8_t au8_ResponseIp[4];
             uint8_t u8_CommError;
             uint32_t u32_NodeIndex;
-            c_ServerIdOfCurBus.u8_NodeIdentifier = rc_CurConfig.c_NodeIds[u32_InterfaceCounter];
+            c_ServerIdOfCurBus.u8_NodeIdentifier = static_cast<uint8_t>(rc_CurConfig.c_NodeIds[u32_InterfaceCounter]);
             orc_UsedServerIds.push_back(c_ServerIdOfCurBus);
 
             if (rc_CurConfig.c_SerialNumber.q_ExtFormatUsed == false)
@@ -2080,7 +2080,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithBroadcasts(
                         rc_InterfaceSettings.u32_BusIndex);
 
                      if ((pc_Bus != NULL) &&
-                         (pc_Bus->u8_BusId == rc_CurConfig.c_BusIds[u32_InterfaceCounter]) &&
+                         (pc_Bus->u8_BusId == static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter])) &&
                          (rc_InterfaceSettings.GetBusConnected() == true))
                      {
                         this->m_RunConfOpenSydeDevicesState(hu32_SETNODEID, s32_Return, c_ServerIdOfCurBus,
@@ -2126,7 +2126,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithBroadcasts(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
-   std::vector<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
+   QList<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
 {
    int32_t s32_Return = C_NO_ERR;
    uint32_t u32_DeviceCounter;
@@ -2148,10 +2148,10 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
 
       for (u32_InterfaceCounter = 0U; u32_InterfaceCounter < rc_CurConfig.c_BusIds.size(); ++u32_InterfaceCounter)
       {
-         if (rc_CurConfig.c_BusIds[u32_InterfaceCounter] == c_ServerIdOfCurBus.u8_BusIdentifier)
+         if (static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter]) == c_ServerIdOfCurBus.u8_BusIdentifier)
          {
             uint32_t u32_NodeIndex;
-            c_ServerIdOfCurBus.u8_NodeIdentifier = rc_CurConfig.c_NodeIds[u32_InterfaceCounter];
+            c_ServerIdOfCurBus.u8_NodeIdentifier = static_cast<uint8_t>(rc_CurConfig.c_NodeIds[u32_InterfaceCounter]);
             c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier = rc_CurConfig.c_OldComConfig.u8_OldNodeId;
 
             if (this->mpc_ComDriver->GetNodeIndex(c_ServerIdOfCurBus, u32_NodeIndex) == true)
@@ -2175,7 +2175,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
                         rc_InterfaceSettings.u32_BusIndex);
 
                      if ((pc_Bus != NULL) &&
-                         (pc_Bus->u8_BusId == rc_CurConfig.c_BusIds[u32_InterfaceCounter]) &&
+                         (pc_Bus->u8_BusId == static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter])) &&
                          (rc_InterfaceSettings.GetBusConnected() == true))
                      {
                         uint8_t u8_ErrCode;
@@ -2341,7 +2341,7 @@ int32_t C_SyvDcSequences::m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
-                                           std::vector<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
+                                           QList<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
 {
    int32_t s32_Return;
    uint32_t u32_DeviceCounter;
@@ -2651,12 +2651,12 @@ int32_t C_SyvDcSequences::m_RunConfCanStwFlashloaderDevices(void)
                c_ServerId.u8_NodeIdentifier = u8_LocalId;
 
                // ** perform "SetLocalId(newnodeid)"
-               s32_Return = this->mpc_ComDriver->SendStwSetLocalId(c_ServerId, rc_CurConfig.c_NodeIds[0]);
+               s32_Return = this->mpc_ComDriver->SendStwSetLocalId(c_ServerId, static_cast<uint8_t>(rc_CurConfig.c_NodeIds[0]));
 
                // Send state with new node id
                this->m_RunConfCanStwFlashloaderDevicesState(hu32_SETNODEID, s32_Return,
                                                             C_OscProtocolDriverOsyNode(c_ServerId.u8_BusIdentifier,
-                                                                                       rc_CurConfig.c_NodeIds[0]));
+                                                                                       static_cast<uint8_t>(rc_CurConfig.c_NodeIds[0])));
 
                if (s32_Return != C_NO_ERR)
                {
@@ -2812,7 +2812,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevices(void)
    if (this->mpc_ComDriver != NULL)
    {
       // Vector with server ids of all configured nodes and its connected and actual used bus
-      std::vector<C_OscProtocolDriverOsyNode> c_UsedServerIds;
+      QList<C_OscProtocolDriverOsyNode> c_UsedServerIds;
 
       osc_write_log_info("Configure CAN openSYDE devices", "Sequence started");
 
@@ -2869,7 +2869,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevices(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithBroadcasts(
-   std::vector<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
+   QList<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
 {
    int32_t s32_Return;
 
@@ -2898,12 +2898,12 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithBroadcasts(
 
          for (u32_InterfaceCounter = 0U; u32_InterfaceCounter < rc_CurConfig.c_BusIds.size(); ++u32_InterfaceCounter)
          {
-            if (rc_CurConfig.c_BusIds[u32_InterfaceCounter] == c_ServerIdOfCurBus.u8_BusIdentifier)
+            if (static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter]) == c_ServerIdOfCurBus.u8_BusIdentifier)
             {
                uint32_t u32_NodeIndex;
                bool q_InterfaceFound = false;
 
-               c_ServerIdOfCurBus.u8_NodeIdentifier = rc_CurConfig.c_NodeIds[u32_InterfaceCounter];
+               c_ServerIdOfCurBus.u8_NodeIdentifier = static_cast<uint8_t>(rc_CurConfig.c_NodeIds[u32_InterfaceCounter]);
 
                if (this->GetNodeIndex(c_ServerIdOfCurBus, u32_NodeIndex) == true)
                {
@@ -2940,7 +2940,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithBroadcasts(
                            rc_ComInterface.u32_BusIndex);
 
                         if ((pc_Bus != NULL) &&
-                            (pc_Bus->u8_BusId == rc_CurConfig.c_BusIds[u32_InterfaceCounter]) &&
+                            (pc_Bus->u8_BusId == static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter])) &&
                             (rc_ComInterface.GetBusConnected() == true))
                         {
                            // Configuration function for CAN, so the interface is type CAN for sure
@@ -3002,7 +3002,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithBroadcasts(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
-   std::vector<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
+   QList<C_OscProtocolDriverOsyNode> & orc_UsedServerIds)
 {
    int32_t s32_Return = C_NO_ERR;
    uint32_t u32_DeviceCounter;
@@ -3022,12 +3022,12 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
 
       for (u32_InterfaceCounter = 0U; u32_InterfaceCounter < rc_CurConfig.c_BusIds.size(); ++u32_InterfaceCounter)
       {
-         if (rc_CurConfig.c_BusIds[u32_InterfaceCounter] == c_ServerIdOfCurBus.u8_BusIdentifier)
+         if (static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter]) == c_ServerIdOfCurBus.u8_BusIdentifier)
          {
             uint32_t u32_NodeIndex;
             bool q_InterfaceFound = false;
 
-            c_ServerIdOfCurBus.u8_NodeIdentifier = rc_CurConfig.c_NodeIds[u32_InterfaceCounter];
+            c_ServerIdOfCurBus.u8_NodeIdentifier = static_cast<uint8_t>(rc_CurConfig.c_NodeIds[u32_InterfaceCounter]);
             c_ServerIdOfCurBusWithOldNodeId.u8_NodeIdentifier = rc_CurConfig.c_OldComConfig.u8_OldNodeId;
 
             if (this->GetNodeIndex(c_ServerIdOfCurBus, u32_NodeIndex) == true)
@@ -3051,7 +3051,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
                         rc_ComInterface.u32_BusIndex);
 
                      if ((pc_Bus != NULL) &&
-                         (pc_Bus->u8_BusId == rc_CurConfig.c_BusIds[u32_InterfaceCounter]) &&
+                         (pc_Bus->u8_BusId == static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter])) &&
                          (rc_ComInterface.GetBusConnected() == true))
                      {
                         uint8_t u8_ErrCode;
@@ -3136,7 +3136,7 @@ int32_t C_SyvDcSequences::m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvDcSequences::m_CheckConfOpenSydeDevices(
-   const std::vector<C_SyvDcDeviceConfiguation> & orc_DeviceConfiguration) const
+   const QList<C_SyvDcDeviceConfiguation> & orc_DeviceConfiguration) const
 {
    int32_t s32_Return = C_CONFIG;
 
@@ -3170,17 +3170,17 @@ int32_t C_SyvDcSequences::m_CheckConfOpenSydeDevices(
                bool q_StopLoop = false;
 
                // Check the ids
-               if ((rc_CurConfig.c_BusIds[u32_InterfaceCounter] > C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) &&
-                   (rc_CurConfig.c_NodeIds[u32_InterfaceCounter] >= C_OscProtocolDriverOsyNode::mhu8_MAX_NODE))
+               if ((static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter]) > C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) &&
+                   (static_cast<uint8_t>(rc_CurConfig.c_NodeIds[u32_InterfaceCounter]) >= C_OscProtocolDriverOsyNode::mhu8_MAX_NODE))
                {
                   osc_write_log_error("Configure openSYDE devices",
                                       "device configuration is invalid: bus ID or node ID out of range.");
                   q_InvalidNodeId = true;
                   q_StopLoop = true;
                }
-               else if (rc_CurConfig.c_BusIds[u32_InterfaceCounter] == c_ServerIdOfCurBus.u8_BusIdentifier)
+               else if (static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter]) == c_ServerIdOfCurBus.u8_BusIdentifier)
                {
-                  c_ServerIdOfCurBus.u8_NodeIdentifier = rc_CurConfig.c_NodeIds[u32_InterfaceCounter];
+                  c_ServerIdOfCurBus.u8_NodeIdentifier = static_cast<uint8_t>(rc_CurConfig.c_NodeIds[u32_InterfaceCounter]);
                   q_Found = true;
                   q_StopLoop = true;
                }
@@ -3229,7 +3229,7 @@ int32_t C_SyvDcSequences::m_CheckConfOpenSydeDevices(
                                 ++u32_InterfaceCounter)
                            {
                               // Check the bus id
-                              if (rc_CurConfig.c_BusIds[u32_InterfaceCounter] == pc_OtherBus->u8_BusId)
+                              if (static_cast<uint8_t>(rc_CurConfig.c_BusIds[u32_InterfaceCounter]) == pc_OtherBus->u8_BusId)
                               {
                                  q_Found = true;
                                  break;
@@ -3327,7 +3327,7 @@ int32_t C_SyvDcSequences::m_SetCanOpenSydeBitrate(const C_OscProtocolDriverOsyNo
 
                // If a node is connected at least two times with the same bus,
                // the configuration will be handled by the interface loop
-               c_InsertResult = c_FinishedBusIds.insert(orc_DeviceConfig.c_BusIds[u32_BusCounter]);
+               c_InsertResult = c_FinishedBusIds.insert(static_cast<uint8_t>(orc_DeviceConfig.c_BusIds[u32_BusCounter]));
 
                //was the element inserted (or already present) ?
                if (c_InsertResult.second == true)
@@ -3345,7 +3345,7 @@ int32_t C_SyvDcSequences::m_SetCanOpenSydeBitrate(const C_OscProtocolDriverOsyNo
                         rc_InterfaceSettings.u32_BusIndex);
 
                      if ((pc_Bus != NULL) &&
-                         (pc_Bus->u8_BusId == orc_DeviceConfig.c_BusIds[u32_BusCounter]) &&
+                         (pc_Bus->u8_BusId == static_cast<uint8_t>(orc_DeviceConfig.c_BusIds[u32_BusCounter])) &&
                          (rc_InterfaceSettings.GetBusConnected() == true) &&
                          (rc_InterfaceSettings.e_InterfaceType == C_OscSystemBus::eCAN))
                      {
@@ -3459,7 +3459,7 @@ int32_t C_SyvDcSequences::m_SetEthOpenSydeIpAddress(const C_OscProtocolDriverOsy
                      rc_InterfaceSettings.u32_BusIndex);
 
                   if ((pc_Bus != NULL) &&
-                      (pc_Bus->u8_BusId == orc_DeviceConfig.c_BusIds[u32_BusCounter]) &&
+                      (pc_Bus->u8_BusId == static_cast<uint8_t>(orc_DeviceConfig.c_BusIds[u32_BusCounter])) &&
                       (rc_InterfaceSettings.GetBusConnected() == true) &&
                       (rc_InterfaceSettings.e_InterfaceType == C_OscSystemBus::eETHERNET))
                   {
@@ -3557,15 +3557,15 @@ int32_t C_SyvDcSequences::m_SetOpenSydeNodeIds(const C_OscProtocolDriverOsyNode 
                      rc_InterfaceSettings.u32_BusIndex);
 
                   if ((pc_Bus != NULL) &&
-                      (pc_Bus->u8_BusId == orc_DeviceConfig.c_BusIds[u32_BusCounter]) &&
+                      (pc_Bus->u8_BusId == static_cast<uint8_t>(orc_DeviceConfig.c_BusIds[u32_BusCounter])) &&
                       (rc_InterfaceSettings.GetBusConnected() == true))
                   {
                      //only if another interface than the one we are connected to ...
-                     if ((orc_DeviceConfig.c_BusIds[u32_BusCounter] != orc_ServerId.u8_BusIdentifier) ||
-                         (orc_DeviceConfig.c_NodeIds[u32_BusCounter] != orc_ServerId.u8_NodeIdentifier))
+                     if ((static_cast<uint8_t>(orc_DeviceConfig.c_BusIds[u32_BusCounter]) != orc_ServerId.u8_BusIdentifier) ||
+                         (static_cast<uint8_t>(orc_DeviceConfig.c_NodeIds[u32_BusCounter]) != orc_ServerId.u8_NodeIdentifier))
                      {
-                        const C_OscProtocolDriverOsyNode c_NewId(orc_DeviceConfig.c_BusIds[u32_BusCounter],
-                                                                 orc_DeviceConfig.c_NodeIds[u32_BusCounter]);
+                        const C_OscProtocolDriverOsyNode c_NewId(static_cast<uint8_t>(orc_DeviceConfig.c_BusIds[u32_BusCounter]),
+                                                                 static_cast<uint8_t>(orc_DeviceConfig.c_NodeIds[u32_BusCounter]));
 
                         s32_Return = this->mpc_ComDriver->SendOsySetNodeIdForChannel(
                            orc_ServerId, static_cast<uint8_t>(rc_InterfaceSettings.e_InterfaceType),
