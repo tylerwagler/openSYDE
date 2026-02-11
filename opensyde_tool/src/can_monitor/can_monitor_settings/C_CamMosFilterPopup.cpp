@@ -614,7 +614,7 @@ void C_CamMosFilterPopup::m_OnOk(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosFilterPopup::m_OnAddFilterItem(void) const
 {
-   std::vector<uint32_t> c_IndexVector;
+   QList<uint32_t> c_IndexVector;
    uint32_t u32_NewIndex;
 
    // add new row in model
@@ -650,7 +650,7 @@ void C_CamMosFilterPopup::m_OnAddFilterItem(void) const
 void C_CamMosFilterPopup::m_OnAddFilterItemFromContextmenu(const int32_t os32_CanMsgId, const uint8_t ou8_CanMsgXtd,
                                                            const bool oq_IsLastItemInList)
 {
-   std::vector<uint32_t> c_IndexVector;
+   QList<uint32_t> c_IndexVector;
    uint32_t u32_NewIndex;
 
    // add new row in model
@@ -694,7 +694,7 @@ void C_CamMosFilterPopup::m_OnIndexClicked(const QModelIndex & orc_NewIndex) con
    // distinguish remove clicked from rest
    if (s32_Column == C_CamMosFilterTableModel::h_EnumToColumn(C_CamMosFilterTableModel::eREMOVE))
    {
-      std::vector<uint32_t> c_IndexToDelete;
+      QList<uint32_t> c_IndexToDelete;
       c_IndexToDelete.push_back(s32_Row);
       this->mpc_TableModel->DeleteSelectedItems(c_IndexToDelete);
 
@@ -968,7 +968,7 @@ void C_CamMosFilterPopup::m_OnAddFromDatabase(void)
    if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
       // Get selected data element
-      const std::vector<std::array<QString, 2> > c_SelectedItems = pc_Dialog->GetSelectedDataElements();
+      const QList<std::array<QString, 2> > c_SelectedItems = pc_Dialog->GetSelectedDataElements();
       // Database file: c_SelectedItems[0][0]  and Message name: c_SelectedItems[0][1]
 
       // we used single-selection, just to make sure:

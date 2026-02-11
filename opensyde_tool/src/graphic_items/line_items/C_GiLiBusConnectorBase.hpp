@@ -12,6 +12,8 @@
 #define C_GILIBUSCONNECTORBASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
+
 #include "C_GiLiLineGroup.hpp"
 #include "C_GiBiCustomToolTip.hpp"
 #include "C_GiUnique.hpp"
@@ -44,13 +46,13 @@ public:
    C_GiLiBusConnectorBase(const uint64_t & oru64_Id, const QPointF & orc_TriggerPos,
                           const C_GiLiBus * const opc_BusItem, const bool oq_MiddleLine = false,
                           QGraphicsItem * const opc_Parent = NULL);
-   C_GiLiBusConnectorBase(const uint64_t & oru64_Id, const std::vector<QPointF> & orc_InteractionPoints,
+   C_GiLiBusConnectorBase(const uint64_t & oru64_Id, const QList<QPointF> & orc_InteractionPoints,
                           const C_GiLiBus * const opc_BusItem, const bool oq_MiddleLine = false,
                           QGraphicsItem * const opc_Parent = NULL);
    ~C_GiLiBusConnectorBase(void) override;
    QPointF GetPos(void) const override;
-   std::vector<QPointF> GetPointsScenePos(void) const;
-   virtual void SetPoints(const std::vector<QPointF> & orc_ScenePos);
+   QList<QPointF> GetPointsScenePos(void) const;
+   virtual void SetPoints(const QList<QPointF> & orc_ScenePos);
    const C_GiLiBus * GetBusItem(void) const;
    const C_GiBiConnectableItem * GetGenericPositionItem(void) const;
    void RestoreZetOrder(void);
@@ -126,7 +128,7 @@ private:
    C_GiLiBusConnectorBase & operator =(const C_GiLiBusConnectorBase &) &; //lint !e1511 //we want to hide the base func.
 
    const C_GiLiBus * mpc_BusItem; ///< Bus item this connection is connected to
-   std::vector<QPointF> mc_LastKnownBusScenePoints;
+   QList<QPointF> mc_LastKnownBusScenePoints;
 
    bool m_CheckAnyRelevantBusPointChanged(void) const;
    bool m_CheckOnlyOneBusPointMoved(void) const;

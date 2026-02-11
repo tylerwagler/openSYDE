@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QSortFilterProxyModel>
 #include <QScrollBar>
+#include <QList>
 #include "C_TblViewScroll.hpp"
 #include "C_SdNdeDalLogJobsOvTableModel.hpp"
 #include "C_SdNdeDalLogJobOvDelegate.hpp"
@@ -32,7 +33,7 @@ class C_SdNdeDalLogJobsOvTableView :
 public:
    C_SdNdeDalLogJobsOvTableView(QWidget * const opc_Parent = NULL);
    ~C_SdNdeDalLogJobsOvTableView(void) override;
-   void UpdateData(const std::vector<std::tuple<uint32_t, uint32_t,
+   void UpdateData(const QList<std::tuple<uint32_t, uint32_t,
                                                 uint32_t> > & orc_AllLoggerJobElementsLocationCount);
    int32_t GetCountRows(void) const;
    void SetNodeIndex(const uint32_t ou32_NodeIndex);

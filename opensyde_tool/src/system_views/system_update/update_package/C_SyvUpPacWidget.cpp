@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for showing the update package UI
@@ -296,8 +296,8 @@ void C_SyvUpPacWidget::SetDisconnected(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacWidget::UpdateDeviceInformation(
-    const std::vector<uint32_t> &orc_NodeIndexes,
-    const std::vector<C_SyvUpDeviceInfo> &orc_DeviceInformation) const {
+    const QList<uint32_t> &orc_NodeIndexes,
+    const QList<C_SyvUpDeviceInfo> &orc_DeviceInformation) const {
   this->mpc_Ui->pc_ListWidget->UpdateDeviceInformation(orc_NodeIndexes,
                                                        orc_DeviceInformation);
 }
@@ -349,10 +349,10 @@ void C_SyvUpPacWidget::SetNodeProgress(const uint32_t ou32_NodeIndex,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvUpPacWidget::GetUpdatePackage(
-    std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
+    QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
         &orc_ApplicationsToWrite,
-    std::vector<uint32_t> &orc_NodesOrder,
-    std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> *const
+    QList<uint32_t> &orc_NodesOrder,
+    QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> *const
         opc_AllApplications) const {
   return this->mpc_Ui->pc_ListWidget->GetUpdatePackage(
       orc_ApplicationsToWrite, orc_NodesOrder, opc_AllApplications);
@@ -454,7 +454,7 @@ void C_SyvUpPacWidget::m_ButtonCreatePackage(void) {
           true) {
         // 1 indicates secure archive file for secure update.
         // 0 Indicates normal archive file.
-        const std::vector<uint8_t> c_EncryptNodes = {q_SecureFile};
+        const QByteArray c_EncryptNodes = QByteArray(1, static_cast<char>(q_SecureFile));
         const QStringList c_EncryptNodesPassword = {c_Password};
         const QStringList c_PemFilePath = {c_PrivateKeyPath};
         this->mpc_Ui->pc_ListWidget->CreateServiceUpdatePackage(

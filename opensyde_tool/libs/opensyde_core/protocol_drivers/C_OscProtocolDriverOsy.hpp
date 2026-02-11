@@ -24,10 +24,10 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QByteArray>
 #include <QRecursiveMutex>
 #include <QString>
 #include <map>
-#include <vector>
 
 
 #include "C_OscProtocolDriverOsyTpBase.hpp"
@@ -92,16 +92,16 @@ private:
       const uint8_t ou8_ExpectedServiceId, const uint16_t ou16_ExpectedSize,
       C_OscProtocolDriverOsyService &orc_Service, uint8_t &oru8_NrCode,
       const bool oq_ExactSizeExpected = true,
-      const std::vector<uint8_t> *const opc_ExpectedErrData = NULL);
+      const QByteArray *const opc_ExpectedErrData = NULL);
   int32_t m_ReadDataByIdentifier(const uint16_t ou16_Identifier,
                                  const uint16_t ou16_ExpectedPayloadSize,
                                  const bool oq_ExactSizeExpected,
-                                 std::vector<uint8_t> &orc_ReadData,
+                                 QByteArray &orc_ReadData,
                                  uint8_t &oru8_NrCode);
   int32_t m_ReadStringDataIdentifier(const uint16_t ou16_DataIdentifier,
                                      QString &orc_String, uint8_t &oru8_NrCode);
   int32_t m_WriteDataByIdentifier(const uint16_t ou16_Identifier,
-                                  const std::vector<uint8_t> &orc_WriteData,
+                                  const QByteArray &orc_WriteData,
                                   uint8_t &oru8_NrCode);
   int32_t m_PackDataPoolIdentifier(const uint8_t ou8_DataPoolIndex,
                                    const uint16_t ou16_ListIndex,
@@ -113,17 +113,17 @@ private:
                                   uint16_t &oru16_ElementIndex) const;
   int32_t m_RoutineControl(const uint16_t ou16_RoutineIdentifier,
                            const uint8_t ou8_SubFunction,
-                           const std::vector<uint8_t> &orc_SendData,
+                           const QByteArray &orc_SendData,
                            const uint16_t ou16_ExpectedPayloadSize,
                            const bool oq_ExactSizeExpected,
-                           std::vector<uint8_t> &orc_ReadData,
+                           QByteArray &orc_ReadData,
                            uint8_t &oru8_NrCode,
                            const bool oq_CanTransferWithoutFlowControl = false);
   int32_t m_SecurityAccess(const uint8_t ou8_SubFunction,
-                           const std::vector<uint8_t> &orc_SendData,
+                           const QByteArray &orc_SendData,
                            const uint16_t ou16_SendPayloadSize,
                            const uint16_t ou16_ExpectedPayloadSize,
-                           std::vector<uint8_t> &orc_ReadData,
+                           QByteArray &orc_ReadData,
                            uint8_t &oru8_NrCode);
 
   int32_t m_HandleAsyncResponse(
@@ -142,7 +142,7 @@ private:
 
   static void
   mh_ConvertVariableToNecessaryBytes(const uint32_t ou32_Variable,
-                                     std::vector<uint8_t> &orc_Bytes);
+                                     QByteArray &orc_Bytes);
 
   // service IDs:
   static const uint8_t mhu8_OSY_SI_DIAGNOSTIC_SESSION_CONTROL = 0x10U;
@@ -240,7 +240,7 @@ protected:
 
   virtual void m_OsyReadDataPoolDataEventReceived(
       const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-      const uint16_t ou16_ElementIndex, const std::vector<uint8_t> &orc_Value);
+      const uint16_t ou16_ElementIndex, const QByteArray &orc_Value);
   virtual void m_OsyReadDataPoolDataEventErrorReceived(
       const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
       const uint16_t ou16_ElementIndex, const uint8_t ou8_NrCode);
@@ -441,12 +441,12 @@ public:
   int32_t OsyReadDataPoolData(const uint8_t ou8_DataPoolIndex,
                               const uint16_t ou16_ListIndex,
                               const uint16_t ou16_ElementIndex,
-                              std::vector<uint8_t> &orc_ReadData,
+                              QByteArray &orc_ReadData,
                               uint8_t *const opu8_NrCode = NULL);
   int32_t OsyWriteDataPoolData(const uint8_t ou8_DataPoolIndex,
                                const uint16_t ou16_ListIndex,
                                const uint16_t ou16_ElementIndex,
-                               const std::vector<uint8_t> &orc_DataToWrite,
+                               const QByteArray &orc_DataToWrite,
                                uint8_t *const opu8_NrCode = NULL);
   int32_t OsyWriteDataPoolEventDataRate(const uint8_t ou8_TransmissionRail,
                                         const uint16_t ou16_DataRate,
@@ -471,10 +471,10 @@ public:
                             bool &orq_Match, uint8_t *const opu8_NrCode = NULL);
   // NVM access:
   int32_t OsyReadMemoryByAddress(const uint32_t ou32_MemoryAddress,
-                                 std::vector<uint8_t> &orc_DataRecord,
+                                 QByteArray &orc_DataRecord,
                                  uint8_t *const opu8_NrCode = NULL);
   int32_t OsyWriteMemoryByAddress(const uint32_t ou32_MemoryAddress,
-                                  const std::vector<uint8_t> &orc_DataRecord,
+                                  const QByteArray &orc_DataRecord,
                                   uint8_t *const opu8_NrCode = NULL);
   int32_t OsyNotifyNvmDataChanges(const uint8_t ou8_DataPoolIndex,
                                   const uint8_t ou8_ListIndex,
@@ -498,7 +498,7 @@ public:
                                    const uint32_t ou32_Key,
                                    uint8_t *const opu8_NrCode = NULL);
   int32_t OsySecurityAccessSendKey(const uint8_t ou8_SecurityLevel,
-                                   const std::vector<uint8_t> &orc_Key,
+                                   const QByteArray &orc_Key,
                                    uint8_t *const opu8_NrCode = NULL);
   int32_t OsyRequestDownload(const uint32_t ou32_StartAddress,
                              const uint32_t ou32_Size,
@@ -509,7 +509,7 @@ public:
                                  uint32_t &oru32_MaxBlockLength,
                                  uint8_t *const opu8_NrCode = NULL);
   int32_t OsyTransferData(const uint8_t ou8_BlockSequenceCounter,
-                          const std::vector<uint8_t> &orc_Data,
+                          const QByteArray &orc_Data,
                           uint8_t *const opu8_NrCode = NULL);
   int32_t
   OsyRequestTransferExitAddressBased(const bool oq_SendSignatureBlockAddress,
@@ -524,15 +524,15 @@ public:
                          uint8_t *const opu8_NrCode = NULL);
 
   // Security
-  int32_t OsyReadCertificateSerialNumber(std::vector<uint8_t> &orc_SerialNumber,
+  int32_t OsyReadCertificateSerialNumber(QByteArray &orc_SerialNumber,
                                          uint8_t *const opu8_NrCode = NULL);
   int32_t
-  OsyReadCertificateSerialNumberL7(std::vector<uint8_t> &orc_SerialNumber,
+  OsyReadCertificateSerialNumberL7(QByteArray &orc_SerialNumber,
                                    uint8_t *const opu8_NrCode = NULL);
   int32_t
-  OsyWriteSecurityKey(const std::vector<uint8_t> &orc_PublicKeyModulus,
-                      const std::vector<uint8_t> &orc_PublicKeyExponent,
-                      const std::vector<uint8_t> &orc_CertificateSerialNumber,
+  OsyWriteSecurityKey(const QByteArray &orc_PublicKeyModulus,
+                      const QByteArray &orc_PublicKeyExponent,
+                      const QByteArray &orc_CertificateSerialNumber,
                       uint8_t *const opu8_NrCode = NULL);
   int32_t OsyReadSecurityActivation(bool &orq_SecurityOn,
                                     uint8_t &oru8_SecurityAlgorithm,

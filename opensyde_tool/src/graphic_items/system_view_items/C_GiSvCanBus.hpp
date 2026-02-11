@@ -28,7 +28,7 @@ class C_GiSvCanBus :
 {
 public:
    C_GiSvCanBus(const uint32_t ou32_ViewIndex, const int32_t & ors32_Index, const uint64_t & oru64_Id,
-                C_GiTextElementBus * const opc_TextElementName, const std::vector<QPointF> * const opc_Points = NULL,
+                C_GiTextElementBus * const opc_TextElementName, const QList<QPointF> * const opc_Points = NULL,
                 QGraphicsItem * const opc_Parent = NULL);
    void CheckBusForChanges(void) override;
 

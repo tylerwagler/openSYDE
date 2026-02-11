@@ -99,16 +99,16 @@ void C_CamMosDatabaseSelectionView::Search(const QString & orc_Text)
    Current selected data elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<std::array<QString, 2> > C_CamMosDatabaseSelectionView::GetSelectedDataElements(void) const
+QList<std::array<QString, 2> > C_CamMosDatabaseSelectionView::GetSelectedDataElements(void) const
 {
-   std::vector< std::array<QString, 2> > c_Retval;
+   QList<std::array<QString, 2> > c_Retval;
    const QModelIndexList c_List = this->selectedIndexes();
 
    for (QModelIndexList::const_iterator c_It = c_List.begin(); c_It != c_List.end(); ++c_It)
    {
-      const std::vector<std::array<QString, 2> > c_SubContent = this->mc_Model.GetDataElements(this->mc_SortModel.mapToSource(
+      const QList<std::array<QString, 2> > c_SubContent = this->mc_Model.GetDataElements(this->mc_SortModel.mapToSource(
                                                                                                   *c_It));
-      for (std::vector<std::array<QString, 2> >::const_iterator c_ItSubContent = c_SubContent.begin();
+      for (QList<std::array<QString, 2> >::const_iterator c_ItSubContent = c_SubContent.begin();
            c_ItSubContent != c_SubContent.end(); ++c_ItSubContent)
       {
          c_Retval.push_back(*c_ItSubContent);

@@ -124,7 +124,7 @@ const C_OscNodeDataPoolListElement * C_OscHalcMagicianDatapoolListHandler::GetLi
 
    if ((s32_Result == C_NO_ERR) && (u32_Index < orc_List.c_Elements.size()))
    {
-      pc_Retval = &orc_List.c_Elements[static_cast<std::vector<C_OscNodeDataPoolListElement>::size_type>(u32_Index)];
+      pc_Retval = &orc_List.c_Elements[static_cast<QList<C_OscNodeDataPoolListElement>::size_type>(u32_Index)];
    }
 
    if ((s32_Result == C_NO_ERR) &&
@@ -312,7 +312,7 @@ const C_OscNodeDataPoolListElement * C_OscHalcMagicianDatapoolListHandler::GetSa
 */
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_OscHalcMagicianDatapoolListHandler::CountRelevantItems(
-   const std::vector<C_OscHalcConfigChannel> & orc_Channels, const C_OscHalcConfigChannel & orc_DomainConfig) const
+   const QList<C_OscHalcConfigChannel> & orc_Channels, const C_OscHalcConfigChannel & orc_DomainConfig) const
 {
    uint32_t u32_Retval = 0UL;
 
@@ -375,10 +375,10 @@ uint32_t C_OscHalcMagicianDatapoolListHandler::CountRelevantItems(
    Relevant channels
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_OscHalcMagicianDatapoolListHandler::GetRelevantChannels(
-   const std::vector<C_OscHalcConfigChannel> & orc_Channels, const C_OscHalcConfigChannel & orc_DomainConfig) const
+QList<uint32_t> C_OscHalcMagicianDatapoolListHandler::GetRelevantChannels(
+   const QList<C_OscHalcConfigChannel> & orc_Channels, const C_OscHalcConfigChannel & orc_DomainConfig) const
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
 
    if (orc_Channels.size() == 0UL)
    {
@@ -447,7 +447,7 @@ std::vector<uint32_t> C_OscHalcMagicianDatapoolListHandler::GetRelevantChannels(
    Number of elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint32_t C_OscHalcMagicianDatapoolListHandler::h_CountElements(const std::vector<C_OscHalcDefStruct> & orc_Structs,
+uint32_t C_OscHalcMagicianDatapoolListHandler::h_CountElements(const QList<C_OscHalcDefStruct> & orc_Structs,
                                                                const uint32_t ou32_NumChannelsInDatapool)
 {
    uint32_t u32_Retval = 0UL;
@@ -736,7 +736,7 @@ const
          //Current domain
          if ((pc_CurrentDomainDef != NULL) && (pc_CurrentDomainConfig != NULL))
          {
-            const std::vector<uint32_t> c_RelevantChannels = this->GetRelevantChannels(
+            const QList<uint32_t> c_RelevantChannels = this->GetRelevantChannels(
                pc_CurrentDomainConfig->c_ChannelConfigs, pc_CurrentDomainConfig->c_DomainConfig);
             if (c_RelevantChannels.size() > 0UL)
             {
@@ -890,8 +890,8 @@ const
 int32_t C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(const uint32_t ou32_Index,
                                                                     const uint32_t ou32_ElementIndex,
                                                                     const uint32_t ou32_CurChannel,
-                                                                    const std::vector<C_OscHalcDefStruct> & orc_Values,
-                                                                    const std::vector<uint32_t> & orc_RelevantChannels,
+                                                                    const QList<C_OscHalcDefStruct> & orc_Values,
+                                                                    const QList<uint32_t> & orc_RelevantChannels,
                                                                     uint32_t & oru32_ListIndex)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -952,7 +952,7 @@ int32_t C_OscHalcMagicianDatapoolListHandler::mh_GetSubElementIndex(const uint32
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcMagicianDatapoolListHandler::mh_GetSubDefElementIndex(const C_OscHalcDefElement & orc_DefElement,
                                                                     const uint32_t ou32_CurChannel,
-                                                                    const std::vector<uint32_t> & orc_RelevantChannels,
+                                                                    const QList<uint32_t> & orc_RelevantChannels,
                                                                     uint32_t & oru32_ListIndex)
 {
    if (orc_DefElement.GetComplexType() == C_OscHalcDefContent::eCT_STRING)

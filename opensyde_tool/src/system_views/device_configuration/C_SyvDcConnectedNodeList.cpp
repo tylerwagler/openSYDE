@@ -111,7 +111,7 @@ C_SyvDcConnectedNodeList::C_SyvDcConnectedNodeList(QWidget *const opc_Parent)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcConnectedNodeList::SetData(
-    const std::vector<C_OscDcDeviceInformation> &orc_Infos) {
+    const QList<C_OscDcDeviceInformation> &orc_Infos) {
   this->mc_Data = orc_Infos;
   m_Init();
 }
@@ -347,8 +347,8 @@ QMimeData *C_SyvDcConnectedNodeList::mimeData(
 void C_SyvDcConnectedNodeList::m_Init(void) {
   uint32_t u32_ItData;
 
-  std::vector<C_OscDcDeviceInformation> c_DataUnique;
-  std::vector<std::map<uint8_t, C_OscDcDeviceOldComConfig>>
+  QList<C_OscDcDeviceInformation> c_DataUnique;
+  QList<std::map<uint8_t, C_OscDcDeviceOldComConfig>>
       c_DataUniqueSubNodeIdsToOldNodeIds;
 
   // Init/Reinit UI

@@ -14,6 +14,7 @@
 
 #include <QString>
 #include <vector>
+#include <QList>
 
 #include "C_OscComDriverProtocol.hpp"
 #include "C_OscComFlashloaderInformation.hpp"
@@ -61,7 +62,7 @@ public:
 
   virtual int32_t Init(const C_OscSystemDefinition &orc_SystemDefinition,
                        const uint32_t ou32_ActiveBusIndex,
-                       const std::vector<uint8_t> &orc_ActiveNodes,
+                       const QByteArray &orc_ActiveNodes,
                        stw::can::C_CanDispatcher *const opc_CanDispatcher,
                        C_OscIpDispatcher *const opc_IpDispatcher,
                        C_OscSecurityPemDatabase *const opc_SecurityPemDb);
@@ -96,10 +97,10 @@ public:
   int32_t SendOsyCanBroadcastEnterPreProgrammingSession(void) const;
   int32_t SendOsyCanBroadcastEnterDefaultSession(void) const;
   int32_t SendOsyCanBroadcastReadSerialNumber(
-      std::vector<
+      QList<
           C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults>
           &orc_Responses,
-      std::vector<C_OscProtocolDriverOsyTpCan::
+      QList<C_OscProtocolDriverOsyTpCan::
                       C_BroadcastReadEcuSerialNumberExtendedResults>
           &orc_ExtendedResponses) const;
   int32_t SendOsyCanBroadcastSetNodeIdBySerialNumber(
@@ -112,9 +113,9 @@ public:
       const C_OscProtocolDriverOsyNode &orc_NewNodeId,
       uint8_t *const opu8_NrCode = NULL) const;
   int32_t SendOsyEthBroadcastGetDeviceInformation(
-      std::vector<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults>
+      QList<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults>
           &orc_ReadDeviceInfoResults,
-      std::vector<
+      QList<
           C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults>
           &orc_ReadDeviceInfoExtendedResults) const;
   int32_t SendOsyEthBroadcastSetIpAddress(
@@ -148,7 +149,7 @@ public:
       uint8_t *const opu8_NrCode = NULL) const;
   int32_t SendOsyReadAllFlashBlockData(
       const C_OscProtocolDriverOsyNode &orc_ServerId,
-      std::vector<C_OscProtocolDriverOsy::C_FlashBlockInfo> &orc_BlockInfo,
+      QList<C_OscProtocolDriverOsy::C_FlashBlockInfo> &orc_BlockInfo,
       uint8_t *const opu8_NrCode = NULL) const;
   int32_t SendOsyReadInformationFromFlashloader(
       const C_OscProtocolDriverOsyNode &orc_ServerId,
@@ -174,7 +175,7 @@ public:
 
   int32_t SendOsyTransferData(const C_OscProtocolDriverOsyNode &orc_ServerId,
                               const uint8_t ou8_BlockSequenceCounter,
-                              const std::vector<uint8_t> &orc_Data,
+                              const QByteArray &orc_Data,
                               uint8_t *const opu8_NrCode = NULL) const;
   int32_t SendOsyRequestTransferExitAddressBased(
       const C_OscProtocolDriverOsyNode &orc_ServerId,
@@ -243,17 +244,17 @@ public:
 
   int32_t SendOsyReadCertificateSerialNumber(
       const C_OscProtocolDriverOsyNode &orc_ServerId,
-      std::vector<uint8_t> &orc_SerialNumber,
+      QByteArray &orc_SerialNumber,
       uint8_t *const opu8_NrCode = NULL) const;
   int32_t SendOsyReadCertificateSerialNumberL7(
       const C_OscProtocolDriverOsyNode &orc_ServerId,
-      std::vector<uint8_t> &orc_SerialNumber,
+      QByteArray &orc_SerialNumber,
       uint8_t *const opu8_NrCode = NULL) const;
   int32_t SendOsyWriteSecurityKey(
       const C_OscProtocolDriverOsyNode &orc_ServerId,
-      const std::vector<uint8_t> &orc_PublicKeyModulus,
-      const std::vector<uint8_t> &orc_PublicKeyExponent,
-      const std::vector<uint8_t> &orc_CertificateSerialNumber,
+      const QByteArray &orc_PublicKeyModulus,
+      const QByteArray &orc_PublicKeyExponent,
+      const QByteArray &orc_CertificateSerialNumber,
       uint8_t *const opu8_NrCode = NULL) const;
   int32_t SendOsyReadSecurityActivation(
       const C_OscProtocolDriverOsyNode &orc_ServerId, bool &orq_SecurityOn,
@@ -358,7 +359,7 @@ private:
   static void mh_HandleWaitTime(void *const opv_Instance);
   void m_HandleWaitTime(void);
 
-  std::vector<C_OscFlashProtocolStwFlashloader *> mc_StwFlashProtocols;
+  QList<C_OscFlashProtocolStwFlashloader *> mc_StwFlashProtocols;
   stw::diag_lib::C_XFLCompanyID mc_CompanyId;
 
   const bool mq_RoutingActive;

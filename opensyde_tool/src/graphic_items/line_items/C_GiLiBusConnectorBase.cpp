@@ -65,7 +65,7 @@ C_GiLiBusConnectorBase::C_GiLiBusConnectorBase(const uint64_t & oru64_Id, const 
    mq_InAir(false),
    mpc_BusItem(NULL)
 {
-   std::vector<QPointF> c_Points;
+   QList<QPointF> c_Points;
    c_Points.push_back(orc_TriggerPos);
    c_Points.push_back(orc_TriggerPos);
    this->m_Init(c_Points);
@@ -89,7 +89,7 @@ C_GiLiBusConnectorBase::C_GiLiBusConnectorBase(const uint64_t & oru64_Id, const 
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_GiLiBusConnectorBase::C_GiLiBusConnectorBase(const uint64_t & oru64_Id,
-                                               const std::vector<QPointF> & orc_InteractionPoints,
+                                               const QList<QPointF> & orc_InteractionPoints,
                                                const C_GiLiBus * const opc_BusItem, const bool oq_MiddleLine,
                                                QGraphicsItem * const opc_Parent) :
    C_GiLiLineGroup(NULL, oq_MiddleLine, opc_Parent),
@@ -107,12 +107,12 @@ C_GiLiBusConnectorBase::C_GiLiBusConnectorBase(const uint64_t & oru64_Id,
    mq_InAir(false),
    mpc_BusItem(NULL)
 {
-   std::vector<QPointF> c_SaveVec = orc_InteractionPoints;
+   QList<QPointF> c_SaveVec = orc_InteractionPoints;
    // Minimum two points are necessary. If vector has not enough points, add two points.
    if (c_SaveVec.size() < 2)
    {
-      c_SaveVec.emplace_back(QPointF(0.0, 0.0));
-      c_SaveVec.emplace_back(QPointF(0.0, 0.0));
+      c_SaveVec.emplaceBack(QPointF(0.0, 0.0));
+      c_SaveVec.emplaceBack(QPointF(0.0, 0.0));
    }
    this->m_Init(c_SaveVec);
 
@@ -169,9 +169,9 @@ QPointF C_GiLiBusConnectorBase::GetPos(void) const
    All points
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<QPointF> C_GiLiBusConnectorBase::GetPointsScenePos(void) const
+QList<QPointF> C_GiLiBusConnectorBase::GetPointsScenePos(void) const
 {
-   std::vector<QPointF> c_Retval;
+   QList<QPointF> c_Retval;
    const QVector<C_GiLiLineConnection *> c_Lines = this->GetLines();
    const C_GiLiLineConnection * pc_CurConn = NULL;
    for (QVector<C_GiLiLineConnection *>::const_iterator pc_ItLine = c_Lines.begin(); pc_ItLine != c_Lines.end();
@@ -193,12 +193,12 @@ std::vector<QPointF> C_GiLiBusConnectorBase::GetPointsScenePos(void) const
    \param[in] orc_ScenePos New point position set
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiBusConnectorBase::SetPoints(const std::vector<QPointF> & orc_ScenePos)
+void C_GiLiBusConnectorBase::SetPoints(const QList<QPointF> & orc_ScenePos)
 {
    int32_t s32_Index = 0;
 
    this->mpc_LastKnownGenericPositionItem = NULL;
-   for (std::vector<QPointF>::const_iterator c_ItScenePos = orc_ScenePos.begin(); c_ItScenePos != orc_ScenePos.end();
+   for (QList<QPointF>::const_iterator c_ItScenePos = orc_ScenePos.begin(); c_ItScenePos != orc_ScenePos.end();
         ++c_ItScenePos)
    {
       UpdatePoint(s32_Index, *c_ItScenePos);

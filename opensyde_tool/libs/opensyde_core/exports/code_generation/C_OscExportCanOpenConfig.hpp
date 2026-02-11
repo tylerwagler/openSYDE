@@ -11,6 +11,7 @@
 #define C_OSCEXPORTCANOPENCONFIG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscNode.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -27,10 +28,10 @@ class C_OscExportCanOpenConciseEntry
 public:
    C_OscExportCanOpenConciseEntry(void);
    C_OscExportCanOpenConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
-                                  const std::vector<uint8_t> & orc_Payload, const QString & orc_Comment);
+                                  const QByteArray & orc_Payload, const QString & orc_Comment);
    virtual ~C_OscExportCanOpenConciseEntry(void);
 
-   void SetConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex, const std::vector<uint8_t> & orc_Payload,
+   void SetConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex, const QByteArray & orc_Payload,
                         const QString & orc_Comment);
    void SetConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex, const uint8_t ou8_Value,
                         const QString & orc_Comment);
@@ -41,11 +42,11 @@ public:
 
    QString GetConciseString(void) const;
    static QString h_GetNumOfEntriesString(const uint32_t ou32_NumOfEntries);
-   static uint32_t h_GetConciseArraySize(std::vector<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries);
+   static uint32_t h_GetConciseArraySize(QList<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries);
 
    uint16_t u16_Index;
    uint8_t u8_SubIndex;
-   std::vector<uint8_t> c_Payload;
+   QByteArray c_Payload;
    QString c_Comment;
 };
 
@@ -93,26 +94,26 @@ protected:
    static void mh_AddSignalDefinitions(QStringList & orc_Data,
                                        const C_OscNodeDataPoolList & orc_DatapoolList,
                                        const uint32_t ou32_SignalListIndex,
-                                       const std::vector<C_OscCanMessage> & orc_Messages);
+                                       const QList<C_OscCanMessage> & orc_Messages);
    static void mh_AddPdoDefinitions(QStringList & orc_Data,
-                                    const std::vector<C_OscCanMessage> & orc_Messages, const uint8_t ou8_InterfaceIndex,
+                                    const QList<C_OscCanMessage> & orc_Messages, const uint8_t ou8_InterfaceIndex,
                                     const bool oq_IsTx, const bool oq_RemoveLastComma);
-   static std::vector<uint32_t> mh_AddDeviceSpecificConciseData(QStringList & orc_Data,
+   static QList<uint32_t> mh_AddDeviceSpecificConciseData(QStringList & orc_Data,
                                                                 const C_OscNode & orc_Node,
                                                                 const C_OscCanMessageContainer & orc_MsgContainer,
                                                                 const uint8_t ou8_InterfaceIndex);
-   static void mh_AddDeviceSettings(QStringList & orc_Data, const std::vector<uint32_t> & orc_ConcSizes,
+   static void mh_AddDeviceSettings(QStringList & orc_Data, const QList<uint32_t> & orc_ConcSizes,
                                     const C_OscCanOpenManagerInfo & orc_ManInfo, const uint8_t ou8_InterfaceIndex,
                                     const uint16_t ou16_GenCodeVersion);
    static void mh_AddManagerConfig(QStringList & orc_Data, const QString & orc_DatapoolName,
                                    const C_OscCanOpenManagerInfo & orc_ManInfo, const uint32_t ou32_ManInstance,
                                    const uint8_t ou8_InterfaceIndex, const bool oq_TxExists, const bool oq_RxExists,
                                    const bool oq_ReferenceDataPool, const uint16_t ou16_GenCodeVersion);
-   static void mh_CollectDeviceSpecificConciseData(std::vector<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries,
+   static void mh_CollectDeviceSpecificConciseData(QList<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries,
                                                    const C_OscCanOpenManagerDeviceInfo & orc_DeviceInfo,
                                                    const uint8_t ou8_ManagerId, const uint32_t ou32_CyclePeriod,
                                                    const uint32_t ou32_WindowLength);
-   static void mh_CollectPdoConciseData(std::vector<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries,
+   static void mh_CollectPdoConciseData(QList<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries,
                                         const C_OscCanOpenManagerDeviceInfo & orc_DeviceInfo,
                                         const uint32_t ou32_NodeIndex,
                                         const C_OscCanMessageContainer & orc_MsgContainer, const bool oq_IsTx);
@@ -123,7 +124,7 @@ protected:
                                   const bool oq_ReferenceDataPool);
    static void mh_ConvertSignalsToStrings(QStringList & orc_Data,
                                           const C_OscNodeDataPoolList & orc_DatapoolList,
-                                          const std::vector<C_OscCanSignal> & orc_Signals,
+                                          const QList<C_OscCanSignal> & orc_Signals,
                                           const uint32_t ou32_SignalListIndex, const bool oq_RemoveLastComma);
    static QString mh_GetMagicName(const QString & orc_ProjectId,
                                                 const uint8_t ou8_InterfaceIndex);

@@ -20,6 +20,7 @@
 #include "stwtypes.hpp"
 #include <QString>
 #include <QWidget>
+#include <QList>
 #include <windows.h>
 
 
@@ -42,10 +43,10 @@ public:
 
   static void h_ExportCodeAll(QWidget *const opc_Parent);
   static void
-  h_ExportCode(const std::vector<uint32_t> &orc_NodeIndices,
-               const std::vector<std::vector<uint32_t>> &orc_AppIndicesPerNode,
+  h_ExportCode(const QList<uint32_t> &orc_NodeIndices,
+               const QList<QList<uint32_t>> &orc_AppIndicesPerNode,
                QWidget *const opc_Parent);
-  static void h_ExportCodeNodes(const std::vector<uint32_t> &orc_NodeIndices,
+  static void h_ExportCodeNodes(const QList<uint32_t> &orc_NodeIndices,
                                 QWidget *const opc_Parent);
   static int32_t h_OpenIde(const QString &orc_IdeExeCall);
   static QString h_GetSydeCoderCePath(void);
@@ -76,12 +77,12 @@ private:
   };
 
   static bool mh_CheckDatapoolsAssignmentForExportCode(
-      const std::vector<uint32_t> &orc_NodeIndices, QWidget *const opc_Parent);
+      const QList<uint32_t> &orc_NodeIndices, QWidget *const opc_Parent);
   static void mh_CheckNodeDatapoolsAssignmentForExportCode(
       const uint32_t ou32_NodeIndex, bool &orq_Continue,
       QString &orc_DataPoolErrorMessage);
   static void mh_GetExistingApplicationHandle(const std::wstring &orc_ExeName,
-                                              std::vector<HWND> &orc_Windows);
+                                              QList<HWND> &orc_Windows);
   static int32_t mh_ExecuteCodeGenerator(const QString &orc_NodeName,
                                          const QString &orc_AppName,
                                          const QString &orc_ExportFolder,
@@ -90,8 +91,8 @@ private:
                                          const bool &orq_Erase);
   static int32_t mh_ExportCodeNode(
       const uint32_t ou32_NodeIndex,
-      const std::vector<uint32_t> &orc_AppIndices,
-      std::vector<
+      const QList<uint32_t> &orc_AppIndices,
+      QList<
           stw::opensyde_gui::C_ImpCodeGenerationReportWidget::C_ReportData>
           &orc_ExportInfo,
       const bool &orq_Erase);

@@ -12,6 +12,7 @@
 #define C_SYVDCEXISTINGNODELIST_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QListWidget>
 #include "stwtypes.hpp"
 #include "C_SyvDcSequences.hpp"
@@ -43,7 +44,7 @@ public:
                                const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber) const;
    uint32_t GetCommunicatingNodeCount(void) const;
    uint32_t GetAssignmentCount(void) const;
-   std::vector<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> GetConfigs(void) const;
+   QList<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> GetConfigs(void) const;
 
    void StartDrag(const QString & orc_DeviceName, const bool oq_DeviceNameValid) const;
    void StopDrag(void) const;

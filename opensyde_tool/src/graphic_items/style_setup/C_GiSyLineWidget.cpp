@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for bus style setup to customize bus optics
@@ -364,7 +364,7 @@ void C_GiSyLineWidget::m_UpdatePreview(void)
    const QSize c_ViewSize = C_GiSyBaseWidget::h_GetSceneViewSize();
    const float64_t f64_PLACEMENT_OFFSET = 25.0;
 
-   std::vector<QPointF> c_Points;
+   QList<QPointF> c_Points;
 
    // clear old scene
    this->mpc_ParentDialog->GetPreviewScene()->clear();

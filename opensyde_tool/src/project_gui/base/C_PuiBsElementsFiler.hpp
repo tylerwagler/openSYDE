@@ -12,6 +12,7 @@
 #define C_PUIBSELEMENTSFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_PuiBsElements.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -32,21 +33,21 @@ public:
                                      stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveBaseElements(const C_PuiBsElements & orc_Elements,
                                   stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadTextElements(std::vector<C_PuiBsTextElement> & orc_TextElements,
+   static int32_t h_LoadTextElements(QList<C_PuiBsTextElement> & orc_TextElements,
                                      stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveTextElements(const std::vector<C_PuiBsTextElement> & orc_TextElements,
+   static void h_SaveTextElements(const QList<C_PuiBsTextElement> & orc_TextElements,
                                   stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadBoundaries(std::vector<C_PuiBsBoundary> & orc_Boundaries,
+   static int32_t h_LoadBoundaries(QList<C_PuiBsBoundary> & orc_Boundaries,
                                    stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveBoundaries(const std::vector<C_PuiBsBoundary> & orc_Boundaries,
+   static void h_SaveBoundaries(const QList<C_PuiBsBoundary> & orc_Boundaries,
                                 stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadImages(std::vector<C_PuiBsImage> & orc_Images,
+   static int32_t h_LoadImages(QList<C_PuiBsImage> & orc_Images,
                                stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveImages(const std::vector<C_PuiBsImage> & orc_Images,
+   static void h_SaveImages(const QList<C_PuiBsImage> & orc_Images,
                             stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadLineArrows(std::vector<C_PuiBsLineArrow> & orc_LineArrows,
+   static int32_t h_LoadLineArrows(QList<C_PuiBsLineArrow> & orc_LineArrows,
                                    stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveLineArrows(const std::vector<C_PuiBsLineArrow> & orc_LineArrows,
+   static void h_SaveLineArrows(const QList<C_PuiBsLineArrow> & orc_LineArrows,
                                 stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadBoxBase(C_PuiBsBox & orc_BoxBase, stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveBoxBase(const C_PuiBsBox & orc_BoxBase, stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);

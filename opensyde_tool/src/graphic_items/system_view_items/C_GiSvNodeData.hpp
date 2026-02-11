@@ -9,6 +9,9 @@
 #define C_GISVNODEDATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QByteArray>
+#include <QList>
+
 #include "stwtypes.hpp"
 #include "C_GiSvSubNodeData.hpp"
 
@@ -29,11 +32,11 @@ public:
    public:
       void Clear(void);
 
-      std::vector<uint32_t> c_NvmWriteError;
-      std::vector<uint32_t> c_PemWriteError;
-      std::vector<uint32_t> c_DebuggerEnableError;
-      std::vector<uint32_t> c_DebuggerDisableError;
-      std::vector<uint32_t> c_EthToEthError;
+      QList<uint32_t> c_NvmWriteError;
+      QList<uint32_t> c_PemWriteError;
+      QList<uint32_t> c_DebuggerEnableError;
+      QList<uint32_t> c_DebuggerDisableError;
+      QList<uint32_t> c_EthToEthError;
    };
 
    C_GiSvNodeData();
@@ -46,9 +49,9 @@ public:
    void SetNodeUpdateInProgress(const bool oq_Active, const bool oq_Aborted, const uint32_t ou32_FailedApplicationIndex,
                                 const uint32_t ou32_UpdatedNodeIndex, const uint32_t ou32_CurrentNodeIndex);
    void SetErrorState(const uint32_t ou32_NodeIndex);
-   void SetNodeConnectStates(const std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
+   void SetNodeConnectStates(const QList<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
                              const C_GiSvNodeDataPreconditionErrors & orc_NodePreconditionErrors);
-   void SetNodeUpdateStates(const std::vector<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> & orc_NodeStates);
+   void SetNodeUpdateStates(const QList<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> & orc_NodeStates);
    void UpdateInitialPackageStatus(const stw::opensyde_gui_logic::C_SyvUpDeviceInfo & orc_DeviceApplicationInfos,
                                    const uint32_t ou32_NodeIndex);
 
@@ -90,11 +93,11 @@ private:
    bool mq_IsConnected;
    bool mq_UpdateInProgress;
 
-   std::vector<C_GiSvSubNodeData> mc_SubNodes;
-   std::vector<uint8_t> mc_SubNodesActiveFlags;
+   QList<C_GiSvSubNodeData> mc_SubNodes;
+   QByteArray mc_SubNodesActiveFlags;
 
    uint32_t m_GetCorrespondingSubNodeIndex(const uint32_t ou32_NodeIndex) const;
-   static bool mh_IsPreconditionErrorSet(const std::vector<uint32_t> & orc_ErrorIndexes,
+   static bool mh_IsPreconditionErrorSet(const QList<uint32_t> & orc_ErrorIndexes,
                                          const uint32_t ou32_CurrentNodeIndex);
 };
 

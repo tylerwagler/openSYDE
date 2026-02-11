@@ -51,7 +51,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_GiLiBus::C_GiLiBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                      C_GiTextElementBus * const opc_TextElementName, const bool oq_DoErrorCheck,
-                     const std::vector<QPointF> * const opc_Points, const bool & orq_MiddleLine,
+                     const QList<QPointF> * const opc_Points, const bool & orq_MiddleLine,
                      QGraphicsItem * const opc_Parent) :
    C_GiLiLineGroup(opc_Points, orq_MiddleLine, opc_Parent),
    C_PuiSdDataElement(ors32_Index, C_PuiSdDataElement::eBUS),
@@ -75,8 +75,8 @@ C_GiLiBus::C_GiLiBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
          //Safety first
          if (c_UiBus.c_UiInteractionPoints.size() < 2)
          {
-            c_UiBus.c_UiInteractionPoints.emplace_back(QPointF(0.0, 0.0));
-            c_UiBus.c_UiInteractionPoints.emplace_back(QPointF(25.0, 25.0));
+            c_UiBus.c_UiInteractionPoints.emplaceBack(QPointF(0.0, 0.0));
+            c_UiBus.c_UiInteractionPoints.emplaceBack(QPointF(25.0, 25.0));
          }
          m_Init(c_UiBus.c_UiInteractionPoints);
          C_PuiSdHandler::h_GetInstance()->SetUiBus(ms32_Index, c_UiBus);

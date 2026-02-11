@@ -182,13 +182,13 @@ void C_SyvDaItPaTreeModel::SetActionActive(const bool oq_Active)
    \param[in]  orc_ListIds    List IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaTreeModel::DeleteSpecified(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds)
+void C_SyvDaItPaTreeModel::DeleteSpecified(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds)
 {
    C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
 
    if (pc_ParamWidget != NULL)
    {
-      std::vector<C_OscNodeDataPoolListId> c_ListIds;
+      QList<C_OscNodeDataPoolListId> c_ListIds;
       for (uint32_t u32_ItList = 0UL; u32_ItList < orc_ListIds.size(); ++u32_ItList)
       {
          const C_OscNodeDataPoolListElementId & rc_CurId = orc_ListIds[u32_ItList];
@@ -248,8 +248,8 @@ void C_SyvDaItPaTreeModel::ClearEcuValues(void)
    \param[in,out]  orc_NewValues          New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaTreeModel::ApplyEcuValues(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds,
-                                          std::vector<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
+void C_SyvDaItPaTreeModel::ApplyEcuValues(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds,
+                                          QList<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
                                           QStringList & orc_InvalidValues,
                                           QStringList & orc_NewValues)
 {
@@ -332,8 +332,8 @@ void C_SyvDaItPaTreeModel::ApplyEcuValues(const std::vector<C_OscNodeDataPoolLis
    False Not in range
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SyvDaItPaTreeModel::CheckRange(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds,
-                                      const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds2)
+bool C_SyvDaItPaTreeModel::CheckRange(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds,
+                                      const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds2)
 const
 {
    bool q_Retval = true;
@@ -441,7 +441,7 @@ bool C_SyvDaItPaTreeModel::CheckAllListsRead(void) const
    \param[in]  orc_ListIds    List IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaTreeModel::PrepareChangedValues(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds) const
+void C_SyvDaItPaTreeModel::PrepareChangedValues(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds) const
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
@@ -510,7 +510,7 @@ void C_SyvDaItPaTreeModel::PrepareChangedValues(const std::vector<C_OscNodeDataP
    \param[in]  orc_ListIds    List IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaTreeModel::RemoveValuesChangedFlag(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds)
+void C_SyvDaItPaTreeModel::RemoveValuesChangedFlag(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds)
 const
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
@@ -575,7 +575,7 @@ QModelIndexList C_SyvDaItPaTreeModel::GetAllAvailableIndixesForOneColumn(void) c
 
    if (this->mpc_InvisibleRootItem != NULL)
    {
-      for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItAll = this->mpc_InvisibleRootItem->c_Children.begin();
+      for (QList<C_TblTreSimpleItem *>::const_iterator c_ItAll = this->mpc_InvisibleRootItem->c_Children.begin();
            c_ItAll != this->mpc_InvisibleRootItem->c_Children.end(); ++c_ItAll)
       {
          //Top level
@@ -584,7 +584,7 @@ QModelIndexList C_SyvDaItPaTreeModel::GetAllAvailableIndixesForOneColumn(void) c
          {
             uint32_t u32_ItNode = 0UL;
             const QModelIndex c_AllBase = this->index(0, 0);
-            for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItNode = pc_AllNode->c_Children.begin();
+            for (QList<C_TblTreSimpleItem *>::const_iterator c_ItNode = pc_AllNode->c_Children.begin();
                  c_ItNode != pc_AllNode->c_Children.end(); ++c_ItNode)
             {
                //Node level
@@ -593,7 +593,7 @@ QModelIndexList C_SyvDaItPaTreeModel::GetAllAvailableIndixesForOneColumn(void) c
                {
                   uint32_t u32_ItDp = 0UL;
                   const QModelIndex c_Node = this->index(static_cast<int32_t>(u32_ItNode), 0, c_AllBase);
-                  for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItDp = pc_Node->c_Children.begin();
+                  for (QList<C_TblTreSimpleItem *>::const_iterator c_ItDp = pc_Node->c_Children.begin();
                        c_ItDp != pc_Node->c_Children.end(); ++c_ItDp)
                   {
                      //Data pool level
@@ -602,7 +602,7 @@ QModelIndexList C_SyvDaItPaTreeModel::GetAllAvailableIndixesForOneColumn(void) c
                      {
                         uint32_t u32_ItLi = 0UL;
                         const QModelIndex c_Dp = this->index(static_cast<int32_t>(u32_ItDp), 0, c_Node);
-                        for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItLi = pc_Dp->c_Children.begin();
+                        for (QList<C_TblTreSimpleItem *>::const_iterator c_ItLi = pc_Dp->c_Children.begin();
                              c_ItLi != pc_Dp->c_Children.end(); ++c_ItLi)
                         {
                            //List level
@@ -654,7 +654,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
    if ((oru32_ValidLayers <= 4UL) && (this->mpc_InvisibleRootItem != NULL))
    {
       uint32_t u32_ItAll = 0UL;
-      for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItAll = this->mpc_InvisibleRootItem->c_Children.begin();
+      for (QList<C_TblTreSimpleItem *>::const_iterator c_ItAll = this->mpc_InvisibleRootItem->c_Children.begin();
            c_ItAll != this->mpc_InvisibleRootItem->c_Children.end(); ++c_ItAll)
       {
          //Top level
@@ -670,7 +670,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
             else
             {
                uint32_t u32_ItNode = 0UL;
-               for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItNode = pc_AllNode->c_Children.begin();
+               for (QList<C_TblTreSimpleItem *>::const_iterator c_ItNode = pc_AllNode->c_Children.begin();
                     c_ItNode != pc_AllNode->c_Children.end(); ++c_ItNode)
                {
                   //Node level
@@ -686,7 +686,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
                      else
                      {
                         uint32_t u32_ItDp = 0UL;
-                        for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItDp = pc_Node->c_Children.begin();
+                        for (QList<C_TblTreSimpleItem *>::const_iterator c_ItDp = pc_Node->c_Children.begin();
                              c_ItDp != pc_Node->c_Children.end(); ++c_ItDp)
                         {
                            //Datapool level
@@ -702,7 +702,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
                               else
                               {
                                  uint32_t u32_ItLi = 0UL;
-                                 for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItLi =
+                                 for (QList<C_TblTreSimpleItem *>::const_iterator c_ItLi =
                                          pc_Dp->c_Children.begin();
                                       c_ItLi != pc_Dp->c_Children.end(); ++c_ItLi)
                                  {
@@ -720,7 +720,7 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
                                        else
                                        {
                                           uint32_t u32_ItEl = 0UL;
-                                          for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItEl =
+                                          for (QList<C_TblTreSimpleItem *>::const_iterator c_ItEl =
                                                   pc_Li->c_Children.begin();
                                                c_ItEl != pc_Li->c_Children.end(); ++c_ItEl)
                                           {
@@ -764,9 +764,9 @@ QModelIndex C_SyvDaItPaTreeModel::GetIndexForItem(const C_OscNodeDataPoolListEle
    All list IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetAllListIds(void) const
+QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetAllListIds(void) const
 {
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> c_Retval;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> c_Retval;
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
@@ -800,7 +800,7 @@ std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeM
    False Not read
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SyvDaItPaTreeModel::CheckListsRead(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds) const
+bool C_SyvDaItPaTreeModel::CheckListsRead(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds) const
 {
    bool q_Retval = true;
 
@@ -844,10 +844,10 @@ bool C_SyvDaItPaTreeModel::CheckListsRead(const std::vector<C_OscNodeDataPoolLis
    All changed list IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetChangedListElementIds(void)
+QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetChangedListElementIds(void)
 const
 {
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> c_Retval;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> c_Retval;
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
@@ -904,9 +904,9 @@ const
    All invalid list IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscNodeDataPoolListId> C_SyvDaItPaTreeModel::GetInvalidListIds(void) const
+QList<C_OscNodeDataPoolListId> C_SyvDaItPaTreeModel::GetInvalidListIds(void) const
 {
-   std::vector<C_OscNodeDataPoolListId> c_Retval;
+   QList<C_OscNodeDataPoolListId> c_Retval;
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
@@ -1053,7 +1053,7 @@ void C_SyvDaItPaTreeModel::SetCrcStatus(const C_OscNodeDataPoolListId & orc_List
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeModel::GetListSetValues(const C_OscNodeDataPoolListElementId & orc_ListId,
-                                            std::vector<C_OscNodeDataPoolContent> & orc_ListValues) const
+                                            QList<C_OscNodeDataPoolContent> & orc_ListValues) const
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
 
@@ -2691,7 +2691,7 @@ uint32_t C_SyvDaItPaTreeModel::GetParamIndexId(const C_OscNodeDataPoolListElemen
    \param[in]      orc_ListId    New list ID
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaTreeModel::h_AppendOnlyUniqueListId(std::vector<C_OscNodeDataPoolListElementId> & orc_Vec,
+void C_SyvDaItPaTreeModel::h_AppendOnlyUniqueListId(QList<C_OscNodeDataPoolListElementId> & orc_Vec,
                                                     const C_OscNodeDataPoolListElementId & orc_ListId)
 {
    bool q_Found = false;
@@ -2765,12 +2765,12 @@ QString C_SyvDaItPaTreeModel::h_GetSelectedItemTypeTemplate(const QModelIndex & 
    All list IDs for the specified item
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetListIdsForId(
+QList<C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetListIdsForId(
    const C_OscNodeDataPoolListElementId & orc_Id, const uint32_t ou32_ValidLayers) const
 {
    C_OscNodeDataPoolListElementId c_IdCopy = orc_Id;
 
-   std::vector<C_OscNodeDataPoolListElementId> c_Retval;
+   QList<C_OscNodeDataPoolListElementId> c_Retval;
 
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<const C_GiSvDaParam * const>(this->mpc_DataWidget);
    switch (ou32_ValidLayers)
@@ -2864,12 +2864,12 @@ std::vector<C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetListIdsForI
    All element IDs for the specified item
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetElementIdsForId(
+QList<C_OscNodeDataPoolListElementId> C_SyvDaItPaTreeModel::GetElementIdsForId(
    const C_OscNodeDataPoolListElementId & orc_Id, const uint32_t ou32_ValidLayers)
 const
 {
-   std::vector<C_OscNodeDataPoolListElementId> c_Retval;
-   const std::vector<C_OscNodeDataPoolListElementId> c_Tmp = GetListIdsForId(orc_Id, ou32_ValidLayers);
+   QList<C_OscNodeDataPoolListElementId> c_Retval;
+   const QList<C_OscNodeDataPoolListElementId> c_Tmp = GetListIdsForId(orc_Id, ou32_ValidLayers);
    for (uint32_t u32_ItList = 0UL; u32_ItList < c_Tmp.size(); ++u32_ItList)
    {
       const C_OscNodeDataPoolListElementId & rc_ListId = c_Tmp[u32_ItList];
@@ -2911,7 +2911,7 @@ const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeModel::h_AdaptFloatRangeOfValueAndAppendResults(C_OscNodeDataPoolContent & orc_Content,
-                                                                    const C_OscNodeDataPoolListElementId & orc_DescriptionId, std::vector<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, QStringList & orc_InvalidValues,
+                                                                    const C_OscNodeDataPoolListElementId & orc_DescriptionId, QList<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, QStringList & orc_InvalidValues,
                                                                     QStringList & orc_NewValues)
 {
    const C_OscNodeDataPoolListElement * const pc_Element =
@@ -2920,7 +2920,7 @@ void C_SyvDaItPaTreeModel::h_AdaptFloatRangeOfValueAndAppendResults(C_OscNodeDat
    if (pc_Element != NULL)
    {
       bool q_WasChanged = false;
-      std::vector<float64_t> c_Values;
+      QList<float64_t> c_Values;
       C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_Content, c_Values);
       for (uint32_t u32_ItVal = 0UL; u32_ItVal < c_Values.size(); ++u32_ItVal)
       {
@@ -2962,7 +2962,7 @@ void C_SyvDaItPaTreeModel::h_AdaptFloatRangeOfValueAndAppendResults(C_OscNodeDat
 void C_SyvDaItPaTreeModel::h_AdaptFloatRangeOfValue(C_OscNodeDataPoolContent & orc_Content,
                                                     const C_OscNodeDataPoolListElement & orc_Description)
 {
-   std::vector<float64_t> c_Values;
+   QList<float64_t> c_Values;
    C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_Content, c_Values);
    for (uint32_t u32_ItVal = 0UL; u32_ItVal < c_Values.size(); ++u32_ItVal)
    {
@@ -3044,7 +3044,7 @@ void C_SyvDaItPaTreeModel::mh_InitNode(C_TblTreItem * const opc_TreeNode, const 
       Q_ASSERT(pc_NodeData != NULL);
       if (pc_NodeData != NULL)
       {
-         std::vector<uint8_t> c_NodeActiveFlags;
+         QByteArray c_NodeActiveFlags;
          const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
             ou32_ViewIndex,
             c_NodeActiveFlags);
@@ -3509,7 +3509,7 @@ bool C_SyvDaItPaTreeModel::m_GetListIndex(const C_OscNodeDataPoolListElementId &
    if (this->mpc_InvisibleRootItem != NULL)
    {
       //Node
-      for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItAll = this->mpc_InvisibleRootItem->c_Children.begin();
+      for (QList<C_TblTreSimpleItem *>::const_iterator c_ItAll = this->mpc_InvisibleRootItem->c_Children.begin();
            (c_ItAll != this->mpc_InvisibleRootItem->c_Children.end()) && (q_Found == false);
            ++c_ItAll)
       {
@@ -3517,21 +3517,21 @@ bool C_SyvDaItPaTreeModel::m_GetListIndex(const C_OscNodeDataPoolListElementId &
          if (pc_AllNode != NULL)
          {
             //Node
-            for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItNode = pc_AllNode->c_Children.begin();
+            for (QList<C_TblTreSimpleItem *>::const_iterator c_ItNode = pc_AllNode->c_Children.begin();
                  (c_ItNode != pc_AllNode->c_Children.end()) && (q_Found == false); ++c_ItNode)
             {
                const C_TblTreItem * const pc_Node = dynamic_cast<const C_TblTreItem * const>(*c_ItNode);
                if (pc_Node != NULL)
                {
                   //Datapool
-                  for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItDp = pc_Node->c_Children.begin();
+                  for (QList<C_TblTreSimpleItem *>::const_iterator c_ItDp = pc_Node->c_Children.begin();
                        (c_ItDp != pc_Node->c_Children.end()) && (q_Found == false); ++c_ItDp)
                   {
                      const C_TblTreItem * const pc_Dp = dynamic_cast<const C_TblTreItem * const>(*c_ItDp);
                      if (pc_Dp != NULL)
                      {
                         //List
-                        for (std::vector<C_TblTreSimpleItem *>::const_iterator c_ItList = pc_Dp->c_Children.begin();
+                        for (QList<C_TblTreSimpleItem *>::const_iterator c_ItList = pc_Dp->c_Children.begin();
                              (c_ItList != pc_Dp->c_Children.end()) && (q_Found == false);
                              ++c_ItList)
                         {

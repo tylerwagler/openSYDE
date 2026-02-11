@@ -103,7 +103,7 @@ void C_OscSecurityPemKeyInfo::Clear()
    Priv key text decoded
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint8_t> & C_OscSecurityPemKeyInfo::GetPrivateKey() const
+const QByteArray & C_OscSecurityPemKeyInfo::GetPrivateKey() const
 {
    return this->mc_PrivateKey;
 }
@@ -118,7 +118,7 @@ const std::vector<uint8_t> & C_OscSecurityPemKeyInfo::GetPrivateKey() const
    Certificate data
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint8_t> & C_OscSecurityPemKeyInfo::GetX509CertificateData() const
+const QByteArray & C_OscSecurityPemKeyInfo::GetX509CertificateData() const
 {
    return this->mc_X509CertificateData;
 }
@@ -132,7 +132,7 @@ const std::vector<uint8_t> & C_OscSecurityPemKeyInfo::GetX509CertificateData() c
    Certificate serial number
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint8_t> & C_OscSecurityPemKeyInfo::GetCertificateSerialNumber() const
+const QByteArray & C_OscSecurityPemKeyInfo::GetCertificateSerialNumber() const
 {
    return this->mc_CertificateSerialNumber;
 }
@@ -208,7 +208,7 @@ bool C_OscSecurityPemKeyInfo::AreKeysAvailable(std::string & orc_ErrorMessage, c
    \param[in]  orc_Value   Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSecurityPemKeyInfo::SetPrivateKey(const std::vector<uint8_t> & orc_Value)
+void C_OscSecurityPemKeyInfo::SetPrivateKey(const QByteArray & orc_Value)
 {
    this->mc_PrivateKey = orc_Value;
 }
@@ -227,7 +227,7 @@ void C_OscSecurityPemKeyInfo::SetPrivateKey(const std::vector<uint8_t> & orc_Val
    \param[in]  orc_Value   Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSecurityPemKeyInfo::SetX509CertificateData(const std::vector<uint8_t> & orc_Value)
+void C_OscSecurityPemKeyInfo::SetX509CertificateData(const QByteArray & orc_Value)
 {
    this->mc_X509CertificateData = orc_Value;
 }
@@ -240,7 +240,7 @@ void C_OscSecurityPemKeyInfo::SetX509CertificateData(const std::vector<uint8_t> 
    \param[in]  orc_Value   Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSecurityPemKeyInfo::SetCertificateSerialNumber(const std::vector<uint8_t> & orc_Value)
+void C_OscSecurityPemKeyInfo::SetCertificateSerialNumber(const QByteArray & orc_Value)
 {
    this->mc_CertificateSerialNumber = orc_Value;
 }

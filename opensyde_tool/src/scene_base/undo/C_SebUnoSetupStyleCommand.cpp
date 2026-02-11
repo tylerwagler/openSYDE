@@ -44,7 +44,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoSetupStyleCommand::C_SebUnoSetupStyleCommand(QGraphicsScene * const opc_Scene,
-                                                     const std::vector<uint64_t> & orc_Ids, const bool oq_DarkMode,
+                                                     const QList<uint64_t> & orc_Ids, const bool oq_DarkMode,
                                                      QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, "Change drawing element(s) style", opc_Parent),
    mpc_PreviousState(new C_PuiBsElements()),
@@ -71,7 +71,7 @@ C_SebUnoSetupStyleCommand::~C_SebUnoSetupStyleCommand(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoSetupStyleCommand::InitPrevious(void)
 {
-   const std::vector<QGraphicsItem *> c_Items = m_GetSceneItems();
+   const QList<QGraphicsItem *> c_Items = m_GetSceneItems();
 
    m_CreateMapAndSaveState(c_Items, this->mc_MapIdToTypeAndIndexPrevious, this->mpc_PreviousState);
 }
@@ -82,7 +82,7 @@ void C_SebUnoSetupStyleCommand::InitPrevious(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoSetupStyleCommand::InitNext(void)
 {
-   const std::vector<QGraphicsItem *> c_Items = m_GetSceneItems();
+   const QList<QGraphicsItem *> c_Items = m_GetSceneItems();
 
    m_CreateMapAndSaveState(c_Items, this->mc_MapIdToTypeAndIndexNext, this->mpc_NextState);
 }
@@ -119,10 +119,10 @@ void C_SebUnoSetupStyleCommand::m_Restore(const QMap<uint64_t, C_PuiBsTemporaryD
 {
    if (opc_Snapshot != NULL)
    {
-      std::vector<QGraphicsItem *> c_Items = m_GetSceneItems();
+      QList<QGraphicsItem *> c_Items = m_GetSceneItems();
       QMap<uint64_t, C_PuiBsTemporaryDataId>::const_iterator c_Entry;
 
-      for (std::vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end();
+      for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end();
            ++c_ItItem)
       {
          C_GiBiArrow * pc_Arrow;
@@ -209,7 +209,7 @@ void C_SebUnoSetupStyleCommand::m_Restore(const QMap<uint64_t, C_PuiBsTemporaryD
    \param[in,out] opc_Snapshot Preserved state data
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraphicsItem *> & orc_Items, QMap<uint64_t,
+void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const QList<QGraphicsItem *> & orc_Items, QMap<uint64_t,
                                                                                                              C_PuiBsTemporaryDataId> & orc_Map,
                                                         C_PuiBsElements * const opc_Snapshot) const
 {
@@ -220,7 +220,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
       C_GiBiTextElement * pc_TextElement;
       uint32_t u32_Index;
 
-      for (std::vector<QGraphicsItem *>::const_iterator c_ItItem = orc_Items.begin(); c_ItItem != orc_Items.end();
+      for (QList<QGraphicsItem *>::const_iterator c_ItItem = orc_Items.begin(); c_ItItem != orc_Items.end();
            ++c_ItItem)
       {
          //Line arrow
@@ -232,7 +232,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
             orc_Map.insert(pc_Arrow->GetId(),
                            C_PuiBsTemporaryDataId(static_cast<int32_t>(C_PuiSdDataElement::eLINE_ARROW),
                                                   u32_Index));
-            opc_Snapshot->c_LineArrows.resize(static_cast<std::vector<C_PuiBsLineArrow>::size_type>(u32_Index + 1UL));
+            opc_Snapshot->c_LineArrows.resize(static_cast<QList<C_PuiBsLineArrow>::size_type>(u32_Index + 1UL));
             //Content
             {
                C_PuiBsLineArrow & rc_UiArrow = opc_Snapshot->c_LineArrows[u32_Index];
@@ -252,7 +252,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
             orc_Map.insert(pc_Boundary->GetId(),
                            C_PuiBsTemporaryDataId(static_cast<int32_t>(C_PuiSdDataElement::eBOUNDARY),
                                                   u32_Index));
-            opc_Snapshot->c_Boundaries.resize(static_cast<std::vector<C_PuiBsBoundary>::size_type>(u32_Index + 1UL));
+            opc_Snapshot->c_Boundaries.resize(static_cast<QList<C_PuiBsBoundary>::size_type>(u32_Index + 1UL));
             //Content
             {
                C_PuiBsBoundary & rc_UiBoundary = opc_Snapshot->c_Boundaries[u32_Index];
@@ -278,7 +278,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
             orc_Map.insert(pc_TextElement->GetId(),
                            C_PuiBsTemporaryDataId(static_cast<int32_t>(C_PuiSdDataElement::eTEXT_ELEMENT),
                                                   u32_Index));
-            opc_Snapshot->c_TextElements.resize(static_cast<std::vector<C_PuiBsTextElement>::size_type>(u32_Index +
+            opc_Snapshot->c_TextElements.resize(static_cast<QList<C_PuiBsTextElement>::size_type>(u32_Index +
                                                                                                         1UL));
             //Content
             {

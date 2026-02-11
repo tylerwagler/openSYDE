@@ -47,7 +47,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyAddSnapshotCommand::C_SdManUnoTopologyAddSnapshotCommand(QGraphicsScene * const opc_Scene,
                                                                            const C_SdTopologyDataSnapshot & orc_InitialSnapshotData,
-                                                                           const std::vector<uint64_t> & orc_Ids, const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue,
+                                                                           const QList<uint64_t> & orc_Ids, const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue,
                                                                            QUndoCommand * const opc_Parent) :
    C_SdManUnoTopologyAddBaseCommand(opc_Scene, orc_Ids, "Paste drawing element(s)",
                                     opc_Parent, orc_InitialSnapshotData)
@@ -78,7 +78,7 @@ void C_SdManUnoTopologyAddSnapshotCommand::m_AddNew(void)
    {
       QMap<C_PuiBsTemporaryDataId, uint64_t> c_IdMap;
       const C_SdTopologyDataSnapshot c_InitialData = this->GetDataBackup();
-      const std::vector<uint64_t> c_AllIds = this->m_GetIds();
+      const QList<uint64_t> c_AllIds = this->m_GetIds();
       const uint32_t u32_ItemCount = c_InitialData.Count();
       if (u32_ItemCount <= c_AllIds.size())
       {

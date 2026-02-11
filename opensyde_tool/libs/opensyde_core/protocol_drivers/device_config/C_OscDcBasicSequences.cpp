@@ -21,6 +21,7 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 #include <QElapsedTimer>
+#include <QList>
 #include <QThread>
 
 /* -- Used Namespaces
@@ -158,7 +159,7 @@ int32_t C_OscDcBasicSequences::ScanEnterFlashloader(
   const uint32_t u32_SCAN_TIME_MS = 5000U;
   uint32_t u32_WaitTime = ou32_FlashloaderResetWaitTime;
 
-  std::vector<C_OscProtocolDriverOsyTpCan::C_BroadcastRequestProgrammingResults>
+  QList<C_OscProtocolDriverOsyTpCan::C_BroadcastRequestProgrammingResults>
       c_Results;
 
   m_ReportProgress(s32_Return,
@@ -273,10 +274,10 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
   int32_t s32_Return = C_NO_ERR;
   const QString c_LogActivity = "Scan Device Info";
 
-  std::vector<
+  QList<
       C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults>
       c_ReadSnResult;
-  std::vector<C_OscProtocolDriverOsyTpCan::
+  QList<C_OscProtocolDriverOsyTpCan::
                   C_BroadcastReadEcuSerialNumberExtendedResults>
       c_ReadSnResultExt;
 
@@ -296,8 +297,8 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
   {
     uint32_t u32_ResultCounter;
 
-    std::vector<uint32_t> c_UniqueIdIndices;
-    std::vector<C_OscDcDeviceInformation> c_DeviceInfoResult;
+    QList<uint32_t> c_UniqueIdIndices;
+    QList<C_OscDcDeviceInformation> c_DeviceInfoResult;
     bool q_SecurityFeatureUsed = false;
 
     osc_write_log_info("Scan CAN for openSYDE devices",
@@ -646,7 +647,7 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
     */
     //----------------------------------------------------------------------------------------------------------------------
     QString C_OscDcBasicSequences::h_DevicesInfoToString(
-        const std::vector<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
+        const QList<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
         const bool oq_SecurityFeatureUsed) {
       QString c_Information;
 
@@ -749,7 +750,7 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
     */
     //----------------------------------------------------------------------------------------------------------------------
     void C_OscDcBasicSequences::m_ReportDevicesInfoRead(
-        const std::vector<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
+        const QList<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
         const bool oq_SecurityFeatureUsed) {
       std::cout << h_DevicesInfoToString(orc_DeviceInfoResult,
                                          oq_SecurityFeatureUsed)

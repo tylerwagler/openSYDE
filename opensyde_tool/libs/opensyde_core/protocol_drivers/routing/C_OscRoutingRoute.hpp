@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -55,7 +56,7 @@ public:
 
    uint32_t u32_TargetNodeIndex;
 
-   std::vector<C_OscRoutingRoutePoint> c_VecRoutePoints;
+   QList<C_OscRoutingRoutePoint> c_VecRoutePoints;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

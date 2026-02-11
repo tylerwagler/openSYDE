@@ -18,6 +18,7 @@
 #include "C_CieConverter.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
 #include "stwtypes.hpp"
+#include <QList>
 #include <QString>
 #include <QStringList>
 
@@ -64,7 +65,7 @@ private:
   static int32_t mh_ConvertAndAddMessage(
       const Vector::DBC::Network &orc_DbcNetwork,
       const Vector::DBC::Message &orc_DbcMessage,
-      std::vector<C_CieConverter::C_CieNodeMessage> &orc_Messages);
+      QList<C_CieConverter::C_CieNodeMessage> &orc_Messages);
   static int32_t mh_GetSignal(const Vector::DBC::Network &orc_DbcNetwork,
                               const Vector::DBC::Signal &orc_DbcSignal,
                               bool &orq_SignalAdapted,

@@ -93,7 +93,7 @@ void C_SdCodeGenerationDialog::InitStaticNames(void) const
    \param[in]  orc_NodesIndices  Nodes indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdCodeGenerationDialog::PrepareDialog(const std::vector<uint32_t> & orc_NodesIndices)
+void C_SdCodeGenerationDialog::PrepareDialog(const QList<uint32_t> & orc_NodesIndices)
 {
    if (!orc_NodesIndices.empty())
    {
@@ -109,8 +109,8 @@ void C_SdCodeGenerationDialog::PrepareDialog(const std::vector<uint32_t> & orc_N
    \param[out]  orc_AppIndicesPerNode   Vector of vectors of application indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdCodeGenerationDialog::GetCheckedItems(std::vector<uint32_t> & orc_NodeIndices,
-                                               std::vector<std::vector<uint32_t> > & orc_AppIndicesPerNode) const
+void C_SdCodeGenerationDialog::GetCheckedItems(QList<uint32_t> & orc_NodeIndices,
+                                               QList<QList<uint32_t> > & orc_AppIndicesPerNode) const
 {
    this->mpc_Ui->pc_TreeView->GetCheckedItems(&this->mc_Model, orc_NodeIndices, orc_AppIndicesPerNode);
 }

@@ -12,6 +12,8 @@
 #define C_PUISVDBTABCHART_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QByteArray>
+#include <QList>
 #include "C_PuiSvDbWidgetBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -46,15 +48,15 @@ public:
    bool IsReadElement(void) const override;
    int32_t RemoveElement(const uint32_t & oru32_Index) override;
 
-   std::vector<bool> c_DataPoolElementsActive;
-   std::vector<uint8_t> c_DataPoolElementsColorIndex;
+   QList<bool> c_DataPoolElementsActive;
+   QByteArray c_DataPoolElementsColorIndex;
    int32_t s32_SplitterLeftWidth;
    E_SettingZoomMode e_SettingZoomMode;
    E_SettingVerticalAxisMode e_SettingVerticalAxisMode;
    bool q_IsZoomModeActive;
    bool q_IsPaused;
    bool q_AreSamplePointsShown;
-   std::vector<std::array<float64_t, 4> > c_VisibleScreen; ///< Store range values for visible screen for
+   QList<std::array<float64_t, 4> > c_VisibleScreen; ///< Store range values for visible screen for
    // each
    // axis
 };

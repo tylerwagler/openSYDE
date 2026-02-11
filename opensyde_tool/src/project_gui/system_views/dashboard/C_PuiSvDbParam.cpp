@@ -71,7 +71,7 @@ void C_PuiSvDbParam::CalcHash(uint32_t & oru32_HashValue) const
 
    for (u32_Counter = 0U; u32_Counter < this->c_ColWidth.size(); ++u32_Counter)
    {
-      const std::vector<int32_t> & rc_ColWidths = this->c_ColWidth[u32_Counter];
+      const QList<int32_t> & rc_ColWidths = this->c_ColWidth[u32_Counter];
       for (uint32_t u32_Col = 0U; u32_Col < rc_ColWidths.size(); ++u32_Col)
       {
          const int32_t & rs32_Value = rc_ColWidths[u32_Col];

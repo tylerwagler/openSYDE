@@ -71,7 +71,7 @@ C_CamProHandler C_CamProHandler::mhc_Instance;
    All user configured messages
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_CamProMessageData> &
+const QList<C_CamProMessageData> &
 C_CamProHandler::GetMessages(void) const {
   return this->mc_Messages;
 }
@@ -150,7 +150,7 @@ C_CamProHandler::E_CanDllType C_CamProHandler::GetCanDllType() const {
    All configured filters.
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_CamProFilterData> &C_CamProHandler::GetFilters() const {
+const QList<C_CamProFilterData> &C_CamProHandler::GetFilters() const {
   return this->mc_Filters;
 }
 
@@ -172,7 +172,7 @@ const bool &C_CamProHandler::GetFilterWidgetEnabled() const {
    All configured databases.
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_CamProDatabaseData> &C_CamProHandler::GetDatabases() const {
+const QList<C_CamProDatabaseData> &C_CamProHandler::GetDatabases() const {
   return this->mc_Databases;
 }
 
@@ -194,7 +194,7 @@ const C_CamProLoggingData &C_CamProHandler::GetLoggingData() const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProHandler::SetMessages(
-    const std::vector<C_CamProMessageData> &orc_Messages) {
+    const QList<C_CamProMessageData> &orc_Messages) {
   this->mc_Messages = orc_Messages;
 }
 
@@ -364,7 +364,7 @@ void C_CamProHandler::SetCanDllType(const E_CanDllType oe_CanDllType) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProHandler::SetFilters(
-    const std::vector<C_CamProFilterData> &orc_Filters) {
+    const QList<C_CamProFilterData> &orc_Filters) {
   this->mc_Filters = orc_Filters;
 }
 
@@ -421,7 +421,7 @@ void C_CamProHandler::SetFilterWidgetEnabled(const bool oq_Enable) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProHandler::SetDatabases(
-    const std::vector<C_CamProDatabaseData> &orc_Databases) {
+    const QList<C_CamProDatabaseData> &orc_Databases) {
   this->mc_Databases = orc_Databases;
 }
 
@@ -723,7 +723,7 @@ int32_t C_CamProHandler::DeleteDatabase(const uint32_t ou32_Index) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProHandler::GetAllMessagesFromDatabase(
     const QString &orc_File, QStringList *const opc_CompleteMessageNames,
-    std::vector<uint32_t> *const opc_MessageIndices) const {
+    QList<uint32_t> *const opc_MessageIndices) const {
   for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < this->mc_Messages.size();
        ++u32_ItMessage) {
     const C_CamProMessageData &rc_Message = this->mc_Messages[u32_ItMessage];
@@ -752,9 +752,9 @@ void C_CamProHandler::GetAllMessagesFromDatabase(
    Invalid messages from database
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t>
+QList<uint32_t>
 C_CamProHandler::GetInvalidMessagesFromDatabase(const QString &orc_File) const {
-  std::vector<uint32_t> c_Retval;
+  QList<uint32_t> c_Retval;
   for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < this->mc_Messages.size();
        ++u32_ItMessage) {
     const C_CamProMessageData &rc_Message = this->mc_Messages[u32_ItMessage];
@@ -787,9 +787,9 @@ C_CamProHandler::GetInvalidMessagesFromDatabase(const QString &orc_File) const {
    Invalid messages with no database
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t>
+QList<uint32_t>
 C_CamProHandler::GetInvalidMessagesWithNoDatabase(void) const {
-  std::vector<uint32_t> c_Retval;
+  QList<uint32_t> c_Retval;
   for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < this->mc_Messages.size();
        ++u32_ItMessage) {
     const C_CamProMessageData &rc_Message = this->mc_Messages[u32_ItMessage];
@@ -828,7 +828,7 @@ C_CamProHandler::GetInvalidMessagesWithNoDatabase(void) const {
 bool C_CamProHandler::CheckFilterNameAvailable(const QString &orc_Name) const {
   bool q_Retval = true;
 
-  std::vector<C_CamProFilterData>::const_iterator c_It;
+  QList<C_CamProFilterData>::const_iterator c_It;
   for (c_It = this->mc_Filters.begin(); c_It != this->mc_Filters.end();
        ++c_It) {
     const C_CamProFilterData &rc_CurrentFilter = *c_It;

@@ -12,7 +12,7 @@
 #define C_PUISDNODECANMESSAGESYNCMANAGER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include <QObject>
 #include <QString>
 #include "stwtypes.hpp"
@@ -43,15 +43,15 @@ public:
    void Init(const uint32_t & oru32_BusIndex, const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComProtocol);
    void Init(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_InterfaceIndex,
              const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComProtocol);
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> GetUniqueMessages(void) const;
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> GetUniqueMessages(void) const;
    uint32_t GetUniqueMessageCount(const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ComProtocol,
                                   uint32_t * const opu32_SignalCount = NULL) const;
    stw::opensyde_core::C_OscCanProtocol::E_Type GetCurrentComProtocol(void) const;
    static void h_GetConnectedAndActiveInterfaces(const uint32_t ou32_BusIndex,
                                                  const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComProtocol,
-                                                 std::vector<uint32_t> & orc_NodeIndexes,
-                                                 std::vector<uint32_t> & orc_InterfaceIndexes,
-                                                 std::vector<uint32_t> & orc_DatapoolIndexes);
+                                                 QList<uint32_t> & orc_NodeIndexes,
+                                                 QList<uint32_t> & orc_InterfaceIndexes,
+                                                 QList<uint32_t> & orc_DatapoolIndexes);
 
    //Wrapped functions
    //Can protocol set
@@ -84,13 +84,13 @@ public:
                          const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType,
                          const uint32_t & oru32_InterfaceIndex, const uint32_t & oru32_DatapoolIndex,
                          const bool & orq_MessageIsTx, const stw::opensyde_core::C_OscCanMessage & orc_Message,
-                         const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
-                         const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                         const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
+                         const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
                          const C_PuiSdNodeCanMessage & orc_UiMessage, uint32_t & oru32_MessageIndex);
    int32_t InsertCanMessage(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                             const stw::opensyde_core::C_OscCanMessage & orc_Message,
-                            const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
-                            const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                            const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
+                            const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
                             const C_PuiSdNodeCanMessage & orc_UiMessage);
    int32_t DeleteCanMessage(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
    int32_t ChangeCanMessageTx(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
@@ -114,7 +114,7 @@ public:
                            const C_PuiSdNodeCanSignal & orc_UiSignal) const;
    int32_t DeleteCanSignal(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                            const uint32_t & oru32_SignalIndex) const;
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> GetMatchingMessageVector(
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> GetMatchingMessageVector(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId) const;
 
    void ReplaceMessageIdWithMatchingId(stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId) const;
@@ -148,71 +148,71 @@ private:
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId) const;
    void m_RegisterIfNecessary(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
    static bool mh_CheckIfAlreadyExisting(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-                                         const std::vector<std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_Input);
+                                         const QList<QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_Input);
    static void mh_RegisterIfNecessary(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-                                      std::vector<std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_Output, std::vector<uint64_t> * const opc_OutputUniqueIds, std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_CriticalMessageMatches);
+                                      QList<QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_Output, QList<uint64_t> * const opc_OutputUniqueIds, QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_CriticalMessageMatches);
    void m_RemoveAndUpdateIndices(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                                  const bool oq_AllowDelete);
    static void mh_RemoveAndUpdateIndices(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-                                         std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageIds);
+                                         QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageIds);
    static int32_t mh_GetNodeIndexesMatchingForMessage(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-      std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MatchingMessageIds,
-      std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_CriticalMessageMatches);
+      QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MatchingMessageIds,
+      QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_CriticalMessageMatches);
    int32_t m_DeleteCanMessage(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                               const bool oq_AllowDelete);
    void m_UpdateIndicesToNewCanMessage(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
    static void mh_UpdateIndicesToNewCanMessage(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-      std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageIds);
+      QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageIds);
    void m_UpdateIndicesToCanMessageDirectionChange(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
    static void mh_UpdateIndicesToCanMessageDirectionChange(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-      std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageIds);
+      QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageIds);
    static void mh_Init(const uint32_t & oru32_BusIndex,
                        const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComProtocol,
-                       std::vector<std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_Output,
-                       std::vector<uint64_t> * const opc_OutputUniqueIds,
-                       std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_CriticalMessageMatches);
+                       QList<QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_Output,
+                       QList<uint64_t> * const opc_OutputUniqueIds,
+                       QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_CriticalMessageMatches);
    static void mh_Init(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_InterfaceIndex,
                        const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComProtocol,
-                       std::vector<std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_Output,
-                       std::vector<uint64_t> * const opc_OutputUniqueIds,
-                       std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_CriticalMessageMatches);
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> m_GetAllUniqueMessages(void) const;
-   static std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mh_GetUniqueMessages(
-      const std::vector<std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_Input,
+                       QList<QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_Output,
+                       QList<uint64_t> * const opc_OutputUniqueIds,
+                       QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_CriticalMessageMatches);
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> m_GetAllUniqueMessages(void) const;
+   static QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mh_GetUniqueMessages(
+      const QList<QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_Input,
       const bool oq_CheckForMessageActiveFlag = false);
-   static void mh_Append(const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_Input,
-                         std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_Output);
+   static void mh_Append(const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_Input,
+                         QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_Output);
    static void mh_HandleMessageComparison(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageIdReference,
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageIdNew,
-      std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_MatchingMessageIds,
-      std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_CriticalMessageMatches,
+      QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_MatchingMessageIds,
+      QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> * const opc_CriticalMessageMatches,
       bool * const opq_CriticalMatchFoundSecondTime, bool * const opq_CriticalMatchFound);
    bool m_RecheckCriticalMessage(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
    uint64_t m_GetNewUniqueId(void) const;
-   static uint64_t mh_GetNewUniqueId(const std::vector<uint64_t> & orc_ExistingUniqueIds);
+   static uint64_t mh_GetNewUniqueId(const QList<uint64_t> & orc_ExistingUniqueIds);
    void m_ReportCanOpenUsage(const QString & orc_Function) const;
    static void mh_ReportCanOpenUsage(const stw::opensyde_core::C_OscCanProtocol::E_Type oe_Type,
                                      const QString & orc_Function);
 
    bool mq_SingleNodeMode;
    uint32_t mu32_BusIndex; // In Bus mode
-   std::vector<std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > mc_MessageMatches;
+   QList<QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > mc_MessageMatches;
    ///< Level 1: Different messages
    ///< Level 2: Matching message ids (Which IDs correlate to the same message)
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mc_CriticalMessageMatches;
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mc_CriticalMessageMatches;
    ///<Problematic messages (Match but different Tx)
-   std::vector<std::vector<std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > >
+   QList<QList<QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > >
    mc_MessageMatchesForOtherProtocols; ///< Level 1: Different Protocols
    ///< Level 2: Different messages
    ///< Level 3: Matching message ids (Which IDs correlate to the same message)
-   std::vector<stw::opensyde_core::C_OscCanProtocol::E_Type> mc_OtherProtocols;
+   QList<stw::opensyde_core::C_OscCanProtocol::E_Type> mc_OtherProtocols;
    stw::opensyde_core::C_OscCanProtocol::E_Type me_Protocol; ///< Current protocol
-   std::vector<uint64_t> mc_MessageMatchUniqueIds;           ///< Unique Ids for Matching message ids (current protocol)
+   QList<uint64_t> mc_MessageMatchUniqueIds;           ///< Unique Ids for Matching message ids (current protocol)
    ///< Should always be in sync with mc_MessageMatches
 };
 

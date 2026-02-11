@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoDataPoolListDeleteCommand.hpp"
@@ -43,7 +44,7 @@ using namespace stw::opensyde_gui_logic;
 C_SdNdeUnoDataPoolListDeleteCommand::C_SdNdeUnoDataPoolListDeleteCommand(const uint32_t & oru32_NodeIndex,
                                                                          const uint32_t & oru32_DataPoolIndex,
                                                                          stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                                                                         const std::vector<uint32_t> & orc_Indices,
+                                                                         const QList<uint32_t> & orc_Indices,
                                                                          QUndoCommand * const opc_Parent) :
    C_SdNdeUnoDataPoolListAddDeleteBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex,
                                               opc_DataPoolListsTreeWidget, orc_Indices,

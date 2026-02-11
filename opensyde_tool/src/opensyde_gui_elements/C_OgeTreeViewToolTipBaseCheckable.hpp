@@ -14,6 +14,7 @@
 
 #include <QModelIndex>
 #include <QVector>
+#include <QList>
 
 #include "C_OgeTreeViewToolTipBase.hpp"
 #include "C_TblTreeModelCheckable.hpp"
@@ -38,10 +39,10 @@ public:
    ~C_OgeTreeViewToolTipBaseCheckable(void) override;
 
    void Init(stw::opensyde_gui_logic::C_TblTreeModelCheckable * const opc_Model,
-             const std::vector<uint32_t> & orc_ElementIndices);
+             const QList<uint32_t> & orc_ElementIndices);
    void GetCheckedItems(const stw::opensyde_gui_logic::C_TblTreeModelCheckable * const opc_Model,
-                        std::vector<uint32_t> & orc_ElementIndices,
-                        std::vector<std::vector<uint32_t> > & orc_ChildIndicesPerElement) const;
+                        QList<uint32_t> & orc_ElementIndices,
+                        QList<QList<uint32_t> > & orc_ChildIndicesPerElement) const;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

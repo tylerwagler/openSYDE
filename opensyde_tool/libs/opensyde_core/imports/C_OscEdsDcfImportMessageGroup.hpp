@@ -9,6 +9,7 @@
 #define C_OSCEDSDCFIMPORTMESSAGEGROUP_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscCanMessage.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
@@ -27,10 +28,10 @@ class C_OscEdsDcfImportMessageGroup
 public:
    C_OscEdsDcfImportMessageGroup();
 
-   std::vector<C_OscCanMessage> c_OscMessageData;
-   std::vector<C_OscNodeDataPoolListElement> c_OscSignalData;
-   std::vector<uint8_t> c_SignalDefaultMinMaxValuesUsed;
-   std::vector<uint8_t> c_MessageIsSrdo;
+   QList<C_OscCanMessage> c_OscMessageData;
+   QList<C_OscNodeDataPoolListElement> c_OscSignalData;
+   QByteArray c_SignalDefaultMinMaxValuesUsed;
+   QByteArray c_MessageIsSrdo;
 
    void Clear(void);
 };

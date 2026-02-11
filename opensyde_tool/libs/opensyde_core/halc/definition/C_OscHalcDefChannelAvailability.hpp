@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -30,7 +31,7 @@ public:
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
    uint32_t u32_ValueIndex;                 ///< Channel index corresponding to this availability
-   std::vector<uint32_t> c_DependentValues; ///< Optional other channel indices which are also linked to this
+   QList<uint32_t> c_DependentValues; ///< Optional other channel indices which are also linked to this
    // setting
 };
 

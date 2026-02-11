@@ -205,7 +205,7 @@ void C_GiSvNodeSyvUpdate::SetNodeError(const uint32_t ou32_NodeIndex)
    \param[in]       orc_NodePreconditionErrors     Node precondition error states
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvNodeSyvUpdate::SetNodeConnectStates(const std::vector<C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
+void C_GiSvNodeSyvUpdate::SetNodeConnectStates(const QList<C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
                                                const C_GiSvNodeData::C_GiSvNodeDataPreconditionErrors & orc_NodePreconditionErrors)
 {
    this->mc_NodeData.SetNodeConnectStates(orc_NodeStates, orc_NodePreconditionErrors);
@@ -218,7 +218,7 @@ void C_GiSvNodeSyvUpdate::SetNodeConnectStates(const std::vector<C_OscSuSequence
    \param[in]       orc_NodeStates     Node connect states
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvNodeSyvUpdate::SetNodeUpdateStates(const std::vector<C_OscSuSequencesNodeUpdateStates> & orc_NodeStates)
+void C_GiSvNodeSyvUpdate::SetNodeUpdateStates(const QList<C_OscSuSequencesNodeUpdateStates> & orc_NodeStates)
 {
    this->mc_NodeData.SetNodeUpdateStates(orc_NodeStates);
    this->m_RefreshDialog();
@@ -254,7 +254,7 @@ void C_GiSvNodeSyvUpdate::ShowInfo(void)
       //Check if valid infos
       if (this->mc_NodeData.IsThereAnyHexFileInformation())
       {
-         const std::vector<uint32_t> c_NodeIndices =
+         const QList<uint32_t> c_NodeIndices =
             C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
                static_cast<uint32_t>(this->ms32_Index));
          this->mpc_InfoDialog->CopyDiscardedStatus(this->mc_NodeData);
@@ -336,24 +336,24 @@ bool C_GiSvNodeSyvUpdate::HasNoResponseAndIsActive(void) const
    All active STW device indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_GiSvNodeSyvUpdate::GetAllActiveStwDeviceIndices() const
+QList<uint32_t> C_GiSvNodeSyvUpdate::GetAllActiveStwDeviceIndices() const
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    if (this->ms32_Index >= 0)
    {
-      std::vector<uint8_t> c_NodeActiveFlags;
+      QByteArray c_NodeActiveFlags;
       const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
          this->mu32_ViewIndex,
          c_NodeActiveFlags);
 
       if (s32_Retval == C_NO_ERR)
       {
-         const std::vector<uint32_t> c_NodeIndices =
+         const QList<uint32_t> c_NodeIndices =
             C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
                static_cast<uint32_t>(this->ms32_Index));
          for (uint32_t u32_ItNode = 0UL; u32_ItNode < c_NodeIndices.size(); ++u32_ItNode)
          {
-            if (c_NodeActiveFlags[c_NodeIndices[u32_ItNode]] == 1U)
+            if (static_cast<uint8_t>(c_NodeActiveFlags[c_NodeIndices[u32_ItNode]]) == 1U)
             {
                if (this->mc_NodeData.GetStwDeviceInfoByNodeIndex(c_NodeIndices[u32_ItNode]))
                {

@@ -40,7 +40,7 @@ public:
    {
    }
 
-   std::vector<uint8_t> c_Data;
+   QByteArray c_Data;
    bool q_CanTransferWithoutFlowControl; // Flag if service shall use openSYDE Multi Frame transfer
 };
 

@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QThread>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_SyvComDataDealer.hpp"
 
@@ -56,7 +57,7 @@ private:
    void m_SetRunParams(const E_Service oe_Service, stw::opensyde_gui_logic::C_SyvComDataDealer & orc_Dealer,
                        const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex);
    void m_SetRunParams(const E_Service oe_Service, stw::opensyde_gui_logic::C_SyvComDataDealer & orc_Dealer,
-                       const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
+                       const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
    void m_SetRunParams(const E_Service oe_Service, stw::opensyde_gui_logic::C_SyvComDataDealer & orc_Dealer);
 
    //service execution parameters:
@@ -68,9 +69,9 @@ private:
    uint16_t mu16_ElementIndex;
    stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * mpc_DashboardWidget;
    const stw::opensyde_core::C_OscNode * mpc_ParamNodeValues;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListId>  mc_ListIds;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListId>  mc_ListIds;
    // Output
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_ChangedElements;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_ChangedElements;
    bool mq_ApplicationAcknowledge;
    //service execution result:
    int32_t ms32_Result;
@@ -96,9 +97,9 @@ public:
    int32_t StartNvmReadList(stw::opensyde_gui_logic::C_SyvComDataDealer & orc_Dealer, const uint8_t ou8_DataPoolIndex,
                             const uint16_t ou16_ListIndex);
    int32_t StartNvmSafeWriteChangedValues(stw::opensyde_gui_logic::C_SyvComDataDealer & orc_Dealer,
-                                          const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
+                                          const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
    int32_t GetNvmSafeWriteChangedValuesOutput(
-      std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedElements) const;
+      QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedElements) const;
    int32_t StartNvmSafeReadValues(stw::opensyde_gui_logic::C_SyvComDataDealer & orc_Dealer);
    int32_t GetNvmSafeReadValuesOutput(const stw::opensyde_core::C_OscNode * & orpc_ParamNodeValues) const;
    int32_t StartNvmSafeWriteCrcs(stw::opensyde_gui_logic::C_SyvComDataDealer & orc_Dealer);
@@ -106,7 +107,7 @@ public:
                                    const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex);
    int32_t GetNvmNotifyOfChangesOutput(bool & orq_ApplicationAcknowledge) const;
    int32_t StartNvmSafeReadParameterValues(stw::opensyde_gui_logic::C_SyvComDataDealer & orc_Dealer,
-                                           const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
+                                           const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
 
    int32_t GetResults(int32_t & ors32_Result) const;
    int32_t GetNegativeResponseCode(uint8_t & oru8_Nrc) const;

@@ -12,8 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include <vector>
-
 #include "stwtypes.hpp"
 
 #include "C_SebUnoBaseManager.hpp"
@@ -98,7 +96,7 @@ void C_SebUnoBaseManager::RegisterMove(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoBaseManager::DoMove(const QList<QGraphicsItem *> & orc_Items, const QPointF & orc_PositionDifference)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
 
    if (this->mpc_MoveCommandGroup == NULL)
    {
@@ -134,7 +132,7 @@ void C_SebUnoBaseManager::RegisterResizeLine(const QList<QGraphicsItem *> & orc_
                                              const int32_t & ors32_InteractionPointId,
                                              const QPointF & orc_PositionDifference)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    C_SebUnoTopResizeLineCommand * pc_ResizeCommand;
 
    mh_MapItemToId(orc_Items, c_Ids);
@@ -158,7 +156,7 @@ void C_SebUnoBaseManager::RegisterResizeRectangle(const QList<QGraphicsItem *> &
                                                   const QSizeF & orc_OldSize, const QPointF & orc_NewPos,
                                                   const QSizeF & orc_NewSize)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    C_SebUnoResizeRectangleCommand * pc_ResizeCommand;
 
    mh_MapItemToId(orc_Items, c_Ids);
@@ -178,7 +176,7 @@ void C_SebUnoBaseManager::RegisterResizeRectangle(const QList<QGraphicsItem *> &
 void C_SebUnoBaseManager::RegisterCompleteMoveStep(const QList<QGraphicsItem *> & orc_Items,
                                                    const QPointF & orc_PositionDifference)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    C_SebUnoMoveCommand * pc_MoveCommand;
 
    mh_MapItemToId(orc_Items, c_Ids);
@@ -199,7 +197,7 @@ void C_SebUnoBaseManager::RegisterCompleteMoveStep(const QList<QGraphicsItem *> 
 void C_SebUnoBaseManager::RegisterMoveSubLine(const QList<QGraphicsItem *> & orc_Items,
                                               const QPointF & orc_PositionDifference, const int32_t & ors32_SubLineId)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    C_SebUnoMoveSubLineCommand * pc_MoveCommand;
 
    mh_MapItemToId(orc_Items, c_Ids);
@@ -219,7 +217,7 @@ void C_SebUnoBaseManager::RegisterMoveSubLine(const QList<QGraphicsItem *> & orc
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoBaseManager::DoBendLine(const C_GiLiLineGroup * const opc_Line, const QPointF & orc_ScenePos)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    uint64_t u64_Id;
    C_SebUnoAddBendPointCommand * pc_AddCommand;
 
@@ -239,7 +237,7 @@ void C_SebUnoBaseManager::DoBendLine(const C_GiLiLineGroup * const opc_Line, con
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoBaseManager::DoRemoveBendLine(const C_GiLiLineGroup * const opc_Line, const QPointF & orc_ScenePos)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    uint64_t u64_Id;
    C_SebUnoRemoveBendPointCommand * pc_RemoveCommand;
 
@@ -261,7 +259,7 @@ void C_SebUnoBaseManager::DoRemoveBendLine(const C_GiLiLineGroup * const opc_Lin
 void C_SebUnoBaseManager::DoAlign(const QList<QGraphicsItem *> & orc_Items, const QGraphicsItem * const opc_AlignItem,
                                   const E_Alignment & ore_Alignment)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    C_SebUnoAlignCommand * pc_AlignCommand;
    uint64_t u64_AlignId;
 
@@ -283,8 +281,8 @@ void C_SebUnoBaseManager::AdaptZetOrder(const QList<QGraphicsItem *> & orc_Selec
                                         const QList<QGraphicsItem *> & orc_Items, const bool oq_BringToFront)
 {
    QMap<QGraphicsItem *, float64_t> c_Changes;
-   vector<uint64_t> c_Ids;
-   vector<float64_t> c_Values;
+   QList<uint64_t> c_Ids;
+   QList<float64_t> c_Values;
    QList<QGraphicsItem *> c_List;
    C_SebUnoZetOrderCommand * pc_ZetOrderCommand;
 
@@ -312,7 +310,7 @@ void C_SebUnoBaseManager::AdaptZetOrder(const QList<QGraphicsItem *> & orc_Selec
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoBaseManager::SaveStyleInformation(const QList<QGraphicsItem *> & orc_Items, const bool oq_DarkMode)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    if (this->mpc_StyleCommand != NULL)
    {
       delete (this->mpc_StyleCommand);
@@ -346,9 +344,9 @@ void C_SebUnoBaseManager::RegisterStyleChange(void)
    \param[out] orc_Ids   Unique IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SebUnoBaseManager::mh_MapItemToId(const QList<QGraphicsItem *> & orc_Items, vector<uint64_t> & orc_Ids)
+void C_SebUnoBaseManager::mh_MapItemToId(const QList<QGraphicsItem *> & orc_Items, QList<uint64_t> & orc_Ids)
 {
-   vector<uint64_t> c_DuplicateIds;
+   QList<uint64_t> c_DuplicateIds;
    uint32_t u32_ItItem = 0;
 
    //Get ID for each item
@@ -410,7 +408,7 @@ void C_SebUnoBaseManager::mh_MapItemToId(const QGraphicsItem * const opc_Item, u
    Valid pointer to new style command
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SebUnoSetupStyleCommand * C_SebUnoBaseManager::m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items,
+C_SebUnoSetupStyleCommand * C_SebUnoBaseManager::m_GetNewStyleCommand(const QList<uint64_t> & orc_Items,
                                                                       const bool oq_DarkMode)
 {
    return new C_SebUnoSetupStyleCommand(this->mpc_Scene, orc_Items, oq_DarkMode);

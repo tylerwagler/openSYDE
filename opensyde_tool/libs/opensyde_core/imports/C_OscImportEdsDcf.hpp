@@ -12,6 +12,7 @@
 #define C_OSCIMPORTEDSDCF_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "stwtypes.hpp"
 #include <QString>
 #include <QStringList>
@@ -58,13 +59,13 @@ private:
    static const C_OscCanOpenObjectData * mh_GetCoObject(const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
                                                         const uint32_t ou32_Id, const int32_t os32_SubIndex);
    static int32_t mh_ParseMessages(const uint32_t ou32_StartingId, const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                                            C_OscCanOpenObject> & orc_CoObjects, const std::vector<uint32_t> & orc_Dummies, C_OscEdsDcfImportMessageGroup & orc_AllMessageData, const bool oq_IsEds, QList<QStringList> & orc_ImportMessages, const bool oq_IsTx, const bool oq_RestrictForCanOpenUsage, const bool oq_ImportSrdoUseCase, C_OscEdsDcfImportMessageGroup & orc_AllInvalidMessageData, QList<QStringList> & orc_InvalidImportMessages);
+                                                                                                            C_OscCanOpenObject> & orc_CoObjects, const QList<uint32_t> & orc_Dummies, C_OscEdsDcfImportMessageGroup & orc_AllMessageData, const bool oq_IsEds, QList<QStringList> & orc_ImportMessages, const bool oq_IsTx, const bool oq_RestrictForCanOpenUsage, const bool oq_ImportSrdoUseCase, C_OscEdsDcfImportMessageGroup & orc_AllInvalidMessageData, QList<QStringList> & orc_InvalidImportMessages);
    static int32_t mh_DoesInformationDirectionMatchToParsedMessages(const uint32_t ou32_StartingId,
                                                                    const uint8_t ou8_NodeId, const std::map<uint16_t,
                                                                                                             C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_IsTx, const uint32_t ou32_MessageIndex, bool & orq_Matches);
    static int32_t mh_ParseMessageContent(const uint32_t ou32_StartingId, const uint8_t ou8_NodeId,
                                          const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
-                                         const std::vector<uint32_t> & orc_Dummies,
+                                         const QList<uint32_t> & orc_Dummies,
                                          C_OscEdsDcfImportMessageGroup & orc_AllMessageData, const bool oq_IsEds,
                                          QList<QStringList> & orc_ImportMessages,
                                          const bool oq_IsTx, const bool oq_RestrictForCanOpenUsage,
@@ -100,9 +101,9 @@ private:
    static int32_t mh_ParseSignals(const uint32_t ou32_CoMessageId, const uint16_t ou16_MappingOffset,
                                   const uint8_t ou8_NodeId, const std::map<uint16_t,
                                                                            C_OscCanOpenObject> & orc_CoObjects,
-                                  const std::vector<uint32_t> & orc_Dummies, C_OscCanMessage & orc_OscMessageData,
-                                  std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalData,
-                                  std::vector<uint8_t> & orc_SignalDefaultMinMaxValuesUsed, const bool oq_IsEds,
+                                  const QList<uint32_t> & orc_Dummies, C_OscCanMessage & orc_OscMessageData,
+                                  QList<C_OscNodeDataPoolListElement> & orc_OscSignalData,
+                                  QByteArray & orc_SignalDefaultMinMaxValuesUsed, const bool oq_IsEds,
                                   const bool oq_RestrictForCanOpenUsage, const bool oq_ImportSrdoUseCase,
                                   QStringList & orc_ImportMessages);
    static int32_t mh_GetIntegerValue(const QString & orc_CoValue, const uint8_t ou8_NodeId,
@@ -118,7 +119,7 @@ private:
    static int32_t mh_CalcMinMaxInit(const C_OscCanOpenObjectData * const opc_CoSignalObject,
                                     C_OscNodeDataPoolListElement & orc_Element, const uint16_t ou16_NumberBits,
                                     const bool oq_IsEds, bool & orq_DefaultMinMax);
-   static void mh_LoadDummies(const QString & orc_FilePath, std::vector<uint32_t> & orc_Dummies);
+   static void mh_LoadDummies(const QString & orc_FilePath, QList<uint32_t> & orc_Dummies);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

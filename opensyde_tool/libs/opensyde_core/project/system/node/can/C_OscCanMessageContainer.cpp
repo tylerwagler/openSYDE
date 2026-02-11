@@ -103,7 +103,7 @@ void C_OscCanMessageContainer::CalcHash(uint32_t &oru32_HashValue) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanMessageContainer::ReCalcDataElementIndices(void) {
-  std::vector<C_OscCanMessage> *pc_ComMessages;
+  QList<C_OscCanMessage> *pc_ComMessages;
 
   for (uint8_t u8_Toggle = 0; u8_Toggle < 2; ++u8_Toggle) {
     uint32_t u32_ListSignalIndex = 0;
@@ -140,7 +140,7 @@ uint32_t C_OscCanMessageContainer::GetMessageSignalDataStartIndex(
     const bool &orq_IsTx, const uint32_t &oru32_MessageIndex) const {
   uint32_t u32_Retval = 0;
 
-  const std::vector<C_OscCanMessage> &rc_ComMessages =
+  const QList<C_OscCanMessage> &rc_ComMessages =
       this->GetMessagesConst(orq_IsTx);
 
   // Check consistency
@@ -167,7 +167,7 @@ uint32_t C_OscCanMessageContainer::GetMessageSignalDataStartIndex(
    Either tx or rx list (as requested)
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_OscCanMessage> &
+const QList<C_OscCanMessage> &
 C_OscCanMessageContainer::GetMessagesConst(const bool &orq_IsTx) const {
   return (orq_IsTx == true) ? this->c_TxMessages : this->c_RxMessages;
 }
@@ -182,7 +182,7 @@ C_OscCanMessageContainer::GetMessagesConst(const bool &orq_IsTx) const {
    Either tx or rx list (as requested)
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscCanMessage> &
+QList<C_OscCanMessage> &
 C_OscCanMessageContainer::GetMessages(const bool &orq_IsTx) {
   return (orq_IsTx == true) ? this->c_TxMessages : this->c_RxMessages;
 }
@@ -235,7 +235,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(
     const bool oq_CanMessageSignalGapsValid,
     const bool oq_ByteAlignmentRequired, const bool oq_SignalsRequired,
     const bool oq_CanOpenPdoSyncValid) const {
-  const std::vector<C_OscCanMessage> &rc_Messages =
+  const QList<C_OscCanMessage> &rc_Messages =
       this->GetMessagesConst(orq_IsTx);
 
   if (oru32_MessageIndex < rc_Messages.size()) {
@@ -470,8 +470,8 @@ bool C_OscCanMessageContainer::CheckLocalError(
     const bool oq_CanMessageSignalGapsValid,
     const bool oq_ByteAlignmentRequired, const bool oq_SignalsRequired,
     const bool oq_CanOpenPdoSyncValid,
-    std::vector<uint32_t> *const opc_InvalidTxMessages,
-    std::vector<uint32_t> *const opc_InvalidRxMessages) const {
+    QList<uint32_t> *const opc_InvalidTxMessages,
+    QList<uint32_t> *const opc_InvalidRxMessages) const {
   bool q_Error = false;
 
   for (uint32_t u32_ItMessage = 0;
@@ -650,7 +650,7 @@ void C_OscCanMessageContainer::HandleNameMaxCharLimit(
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscCanMessageContainer::mh_CheckMinSignalErrorPerVector(
-    const std::vector<C_OscCanMessage> &orc_Messages) {
+    const QList<C_OscCanMessage> &orc_Messages) {
   bool q_Retval = false;
   bool q_SignalsPresent = false;
 

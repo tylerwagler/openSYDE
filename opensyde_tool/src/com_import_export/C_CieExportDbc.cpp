@@ -269,12 +269,12 @@ C_CieExportDbc::h_GetExportStatistic(C_ExportStatistic &orc_ExportStatistic) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieExportDbc::mh_SetNodes(
-    const std::vector<C_CieConverter::C_CieNode> &orc_CieNodes,
+    const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
     std::map<std::string, Vector::DBC::Node> &orc_DbcNodes) {
   int32_t s32_Return = C_NO_ERR;
 
   if (orc_CieNodes.size() > 0) {
-    std::vector<C_CieConverter::C_CieNode>::const_iterator c_Iter;
+    QList<C_CieConverter::C_CieNode>::const_iterator c_Iter;
     for (c_Iter = orc_CieNodes.begin(); c_Iter != orc_CieNodes.end();
          ++c_Iter) {
       // key
@@ -318,17 +318,17 @@ int32_t C_CieExportDbc::mh_SetNodes(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieExportDbc::mh_SetMessages(
-    const std::vector<C_CieConverter::C_CieNode> &orc_CieNodes,
+    const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
     std::map<uint32_t, Vector::DBC::Message> &orc_DbcMessages) {
   QString c_Message;
 
-  std::vector<C_CieConverter::C_CieNode>::const_iterator c_Iter;
+  QList<C_CieConverter::C_CieNode>::const_iterator c_Iter;
   for (c_Iter = orc_CieNodes.begin(); c_Iter != orc_CieNodes.end(); ++c_Iter) {
     const QString c_NodeName =
         mh_NiceifyStringForDbcSymbol(c_Iter->c_Properties.c_Name);
 
     // get Tx messages of node
-    std::vector<C_CieConverter::C_CieNodeMessage>::const_iterator c_MsgIter;
+    QList<C_CieConverter::C_CieNodeMessage>::const_iterator c_MsgIter;
     for (c_MsgIter = c_Iter->c_TxMessages.begin();
          c_MsgIter != c_Iter->c_TxMessages.end(); ++c_MsgIter) {
       const C_CieConverter::C_CieCanMessage c_CanMessage =
@@ -447,8 +447,8 @@ int32_t C_CieExportDbc::mh_SetMessages(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieExportDbc::mh_SetSignals(
-    const std::vector<C_CieConverter::C_CieCanSignal> &orc_CieSignals,
-    const std::vector<C_CieConverter::C_CieNode> &orc_CieNodes,
+    const QList<C_CieConverter::C_CieCanSignal> &orc_CieSignals,
+    const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
     Vector::DBC::Message &orc_DbcMessage) {
   int32_t s32_Return = C_NO_ERR;
 
@@ -508,7 +508,7 @@ int32_t C_CieExportDbc::mh_SetSignals(
             // signal
             if (rc_Receiver.c_CanMessage.c_Name.compare(
                     QString::fromStdString(orc_DbcMessage.name)) == 0) {
-              const std::vector<C_CieConverter::C_CieCanSignal> &rc_Signals =
+              const QList<C_CieConverter::C_CieCanSignal> &rc_Signals =
                   rc_Receiver.c_CanMessage.c_Signals;
               for (const auto &rc_Signal : rc_Signals) {
                 // check if node with Rx messages has signal

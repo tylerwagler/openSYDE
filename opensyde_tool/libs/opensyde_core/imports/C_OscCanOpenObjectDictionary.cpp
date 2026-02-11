@@ -1348,7 +1348,7 @@ bool C_OscCanOpenObjectDictionary::CheckObjectPresentByIndex(const uint16_t ou16
    \param[in,out]  orc_SubIndices   Sub indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenObjectDictionary::GetMappableObjects(std::map<uint32_t, std::vector<uint32_t> > & orc_SubIndices)
+void C_OscCanOpenObjectDictionary::GetMappableObjects(std::map<uint32_t, QList<uint32_t> > & orc_SubIndices)
 const
 {
    for (std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element = this->c_OdObjects.begin();

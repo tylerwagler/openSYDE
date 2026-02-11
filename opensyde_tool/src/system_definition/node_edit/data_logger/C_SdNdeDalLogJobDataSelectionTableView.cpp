@@ -11,6 +11,7 @@
 #include <QScrollBar>
 #include <QStandardItemModel>
 #include <QHeaderView>
+#include <QList>
 
 #include "precomp_headers.hpp"
 #include "stwtypes.hpp"
@@ -121,7 +122,7 @@ C_SdNdeDalLogJobDataSelectionTableView::~C_SdNdeDalLogJobDataSelectionTableView(
    \param[in]  orc_Values  Values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobDataSelectionTableView::LoadUserSettings(const std::vector<int32_t> & orc_Values)
+void C_SdNdeDalLogJobDataSelectionTableView::LoadUserSettings(const QList<int32_t> & orc_Values)
 {
    if (this->m_SetColumnWidths(orc_Values) == false)
    {
@@ -135,7 +136,7 @@ void C_SdNdeDalLogJobDataSelectionTableView::LoadUserSettings(const std::vector<
    \param[in,out]  orc_Values    Values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobDataSelectionTableView::SaveUserSettings(std::vector<int32_t> & orc_Values) const
+void C_SdNdeDalLogJobDataSelectionTableView::SaveUserSettings(QList<int32_t> & orc_Values) const
 {
    const std::map<C_SdNdeDalLogJobDataSelectionTableModel::E_Columns,
                   uint32_t> c_DefaultColumnWidths = C_SdNdeDalLogJobDataSelectionTableView::mh_GetDefaultColumnWidths();
@@ -190,7 +191,7 @@ void C_SdNdeDalLogJobDataSelectionTableView::Search(const QString & orc_Text)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobDataSelectionTableView::UpdateData(
-   const std::vector<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
+   const QList<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
    const uint32_t ou32_NodeIndex)
 {
    this->mc_Model.UpdateData(orc_DataElements, ou32_NodeIndex);
@@ -208,7 +209,7 @@ void C_SdNdeDalLogJobDataSelectionTableView::UpdateData(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobDataSelectionTableView::AddData(
-   const std::vector<C_OscDataLoggerDataElementReference> & orc_DataElements, const uint32_t ou32_NodeIndex)
+   const QList<C_OscDataLoggerDataElementReference> & orc_DataElements, const uint32_t ou32_NodeIndex)
 {
    this->mc_Model.AddData(orc_DataElements, ou32_NodeIndex);
 
@@ -271,13 +272,13 @@ void C_SdNdeDalLogJobDataSelectionTableView::keyPressEvent(QKeyEvent * const opc
  *  \param[in, out]  orc_SelectedIndices    Selected elements filled up in this vector
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobDataSelectionTableView::GetSelectedElements(std::vector<uint32_t> & orc_SelectedIndices) const
+void C_SdNdeDalLogJobDataSelectionTableView::GetSelectedElements(QList<uint32_t> & orc_SelectedIndices) const
 {
    // Convert the selected indexes to original values
    const QModelIndexList c_IndexList = this->m_MapModelIndices(this->selectedIndexes());
 
    // Convert the redundant index values to unique ones
-   const std::vector<uint32_t> c_SelectedItems = C_SdNdeDpUtil::h_ConvertVector(c_IndexList);
+   const QList<uint32_t> c_SelectedItems = C_SdNdeDpUtil::h_ConvertVector(c_IndexList);
 
    // Sort to descending order (optimal for deleting elements from the vector)
    orc_SelectedIndices = C_Uti::h_UniquifyAndSortDescending(c_SelectedItems);
@@ -313,7 +314,7 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobDataSelectionTableView::DeleteSelectedElements()
 {
-   std::vector<uint32_t> c_SelectedIndices;
+   QList<uint32_t> c_SelectedIndices;
    this->GetSelectedElements(c_SelectedIndices);
 
    this->mc_Model.DoRemoveRows(c_SelectedIndices);

@@ -95,7 +95,7 @@ C_CamOgePubSettingsAdd * C_CamOgeWiSettingsBase::mh_GetButton(const QPair<C_CamM
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamOgeWiSettingsBase::m_PrepareMove() const
 {
-   for (std::vector<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
+   for (QList<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
                           opensyde_gui_elements::C_CamOgePubSettingsAdd *> >::const_iterator c_ItPair =
            this->mc_Settings.cbegin();
         c_ItPair != this->mc_Settings.cend(); ++c_ItPair)
@@ -163,7 +163,7 @@ void C_CamOgeWiSettingsBase::m_ShowAnyPopup(const bool oq_Checked)
 {
    if (oq_Checked == true)
    {
-      for (std::vector<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
+      for (QList<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
                              opensyde_gui_elements::C_CamOgePubSettingsAdd *> >::const_iterator c_ItPair =
               this->mc_Settings.cbegin();
            c_ItPair != this->mc_Settings.cend(); ++c_ItPair)
@@ -181,7 +181,7 @@ void C_CamOgeWiSettingsBase::m_ShowAnyPopup(const bool oq_Checked)
    }
    else
    {
-      for (std::vector<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
+      for (QList<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
                              opensyde_gui_elements::C_CamOgePubSettingsAdd *> >::const_iterator c_ItPair =
               this->mc_Settings.cbegin();
            c_ItPair != this->mc_Settings.cend(); ++c_ItPair)

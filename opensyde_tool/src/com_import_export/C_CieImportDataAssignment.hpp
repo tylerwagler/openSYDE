@@ -9,6 +9,7 @@
 #define C_CIEIMPORTDATAASSIGNMENT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_CieDataPoolListStructure.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -31,8 +32,8 @@ public:
    // message override indices:
    // pair of Datapool index (in node) and message index (in Message Containers Tx/Rx messages)
    // negative means no match found resp. nothing to override resp. add new
-   std::vector< std::pair<int32_t, int32_t> > c_RxMessageOverrideIndices;
-   std::vector< std::pair<int32_t, int32_t> > c_TxMessageOverrideIndices;
+   QList< std::pair<int32_t, int32_t> > c_RxMessageOverrideIndices;
+   QList< std::pair<int32_t, int32_t> > c_TxMessageOverrideIndices;
    int32_t s32_DatapoolIndexForNew;
    uint32_t u32_NewMessageCount;
 

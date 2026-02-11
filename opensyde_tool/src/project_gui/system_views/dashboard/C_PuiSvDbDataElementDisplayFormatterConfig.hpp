@@ -9,6 +9,7 @@
 #define C_PUISVDBDATAELEMENTDISPLAYFORMATTERCONFIG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include "C_PuiSvDbDataElementDisplayFormatter.hpp"
 
@@ -36,7 +37,7 @@ public:
                                           float64_t * const opf64_ScaledValueAsFloat = NULL) const;
    QStringList GetValuesContentFormatted(const C_PuiSvDbDataElementContent & orc_Value,
                                         const C_PuiSvDbDataElementScaling & orc_Scaling,
-                                        std::vector<float64_t> & orc_UnscaledValueAsFloat) const;
+                                        QList<float64_t> & orc_UnscaledValueAsFloat) const;
 
    bool q_IsValid;
    E_TypeCategory e_TypeCategory;

@@ -1050,10 +1050,10 @@ int32_t C_OscHalcConfig::SetDomainChannelParameterConfigElementString(const uint
 int32_t C_OscHalcConfig::GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_DomainIndex,
                                                               const uint32_t ou32_ChannelIndex,
                                                               const bool oq_UseChannelIndex,
-                                                              std::vector<uint32_t> * const opc_ParameterIndices,
-                                                              std::vector<uint32_t> * const opc_InputIndices,
-                                                              std::vector<uint32_t> * const opc_OutputIndices,
-                                                              std::vector<uint32_t> * const opc_StatusIndices) const
+                                                              QList<uint32_t> * const opc_ParameterIndices,
+                                                              QList<uint32_t> * const opc_InputIndices,
+                                                              QList<uint32_t> * const opc_OutputIndices,
+                                                              QList<uint32_t> * const opc_StatusIndices) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1078,7 +1078,7 @@ int32_t C_OscHalcConfig::GetRelevantIndicesForSelectedUseCase(const uint32_t ou3
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcConfig::CheckConfigValid(bool * const opq_DomainsInvalid,
-                                       std::vector<uint32_t> * const opc_InvalidDomainIndices) const
+                                       QList<uint32_t> * const opc_InvalidDomainIndices) const
 {
    if (opq_DomainsInvalid != NULL)
    {
@@ -1116,7 +1116,7 @@ void C_OscHalcConfig::CheckConfigValid(bool * const opq_DomainsInvalid,
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcConfig::CheckDomainConfigValid(const uint32_t ou32_DomainIndex, bool * const opq_DomainInvalid,
                                              bool * const opq_ChannelsInvalid,
-                                             std::vector<uint32_t> * const opc_InvalidChannelIndices) const
+                                             QList<uint32_t> * const opc_InvalidChannelIndices) const
 {
    if (ou32_DomainIndex < this->mc_Domains.size())
    {

@@ -55,7 +55,7 @@ C_OscNodeSquadFiler::C_OscNodeSquadFiler()
    C_CONFIG   content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeSquadFiler::h_LoadNodeGroups(std::vector<C_OscNodeSquad> & orc_NodeGroups,
+int32_t C_OscNodeSquadFiler::h_LoadNodeGroups(QList<C_OscNodeSquad> & orc_NodeGroups,
                                               C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -186,7 +186,7 @@ int32_t C_OscNodeSquadFiler::h_LoadNodeGroup(C_OscNodeSquad & orc_NodeGroup, C_O
    \param[in,out]  orc_XmlParser    XML parser
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeSquadFiler::h_SaveNodeGroups(const std::vector<C_OscNodeSquad> & orc_NodeGroups,
+void C_OscNodeSquadFiler::h_SaveNodeGroups(const QList<C_OscNodeSquad> & orc_NodeGroups,
                                            C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("node-groups");

@@ -9,6 +9,7 @@
 #define C_SDBUEJ1939ADDMESSAGESFROMCATALOGTREEVIEW_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OgeTreeViewToolTipBase.hpp"
 #include "C_TblTreMultiColumnLeafSortFilter.hpp"
 #include "C_SdBueJ1939AddMessagesFromCatalogTreeModel.hpp"
@@ -43,10 +44,10 @@ public:
    C_SdBueJ1939AddMessagesFromCatalogTreeView(QWidget * const opc_Parent = NULL);
    bool IsEmpty(void) const;
    void Search(const QString & orc_Text);
-   void UpdateData(const std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_MessagesImported);
+   void UpdateData(const QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_MessagesImported);
    void SelectAllMessages();
    void UnSelectAllMessages(void);
-   std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> GetSelectedMessages(void) const;
+   QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> GetSelectedMessages(void) const;
    bool HasVisibleData(void) const;
 
    //The signals keyword is necessary for Qt signal slot functionality

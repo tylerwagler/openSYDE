@@ -48,9 +48,9 @@ using namespace std;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyChangeInterfaceCommand::C_SdManUnoTopologyChangeInterfaceCommand(QGraphicsScene * const opc_Scene,
-                                                                                   const std::vector<uint64_t> & orc_Ids, const uint8_t & oru8_PreviousInterface, const uint8_t & oru8_NewInterface,
-                                                                                   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_PreviousProperties,
-                                                                                   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties,
+                                                                                   const QList<uint64_t> & orc_Ids, const uint8_t & oru8_PreviousInterface, const uint8_t & oru8_NewInterface,
+                                                                                   const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_PreviousProperties,
+                                                                                   const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties,
                                                                                    QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, "Change interface of bus connection(s)", opc_Parent),
    mu8_PreviousInterface(oru8_PreviousInterface),
@@ -96,12 +96,12 @@ void C_SdManUnoTopologyChangeInterfaceCommand::redo(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManUnoTopologyChangeInterfaceCommand::m_ChangeInterface(const uint8_t & oru8_NewInterface,
-                                                                 const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
+                                                                 const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 const
 {
-   const vector<QGraphicsItem *> c_Items = m_GetSceneItems();
+   const QList<QGraphicsItem *> c_Items = m_GetSceneItems();
 
-   for (vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
+   for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       C_GiLiBusConnector * const pc_CurConn = dynamic_cast<C_GiLiBusConnector *>(*c_ItItem);
       if (pc_CurConn != NULL)

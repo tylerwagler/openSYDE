@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QObject>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_SdNdeDpListDataSetModel.hpp"
 #include "C_SdNdeDpListArrayEditModel.hpp"
@@ -106,12 +107,12 @@ Q_SIGNALS:
                               const uint32_t & oru32_ListIndex);
 
 private:
-   std::vector<stw::opensyde_gui::C_SdNdeDpListDataSetView *> mc_DataSetViews;
-   std::vector<C_SdNdeDpListDataSetModel *> mc_DataSetModels;
-   std::vector<stw::opensyde_gui::C_SdNdeDpListArrayEditView *> mc_ArrayEditViews;
-   std::vector<C_SdNdeDpListArrayEditModel *> mc_ArrayEditModels;
-   std::vector<stw::opensyde_gui::C_SdNdeDpListTableView *> mc_ElementViews;
-   std::vector<C_SdNdeDpListTableModel *> mc_ElementModels;
+   QList<stw::opensyde_gui::C_SdNdeDpListDataSetView *> mc_DataSetViews;
+   QList<C_SdNdeDpListDataSetModel *> mc_DataSetModels;
+   QList<stw::opensyde_gui::C_SdNdeDpListArrayEditView *> mc_ArrayEditViews;
+   QList<C_SdNdeDpListArrayEditModel *> mc_ArrayEditModels;
+   QList<stw::opensyde_gui::C_SdNdeDpListTableView *> mc_ElementViews;
+   QList<C_SdNdeDpListTableModel *> mc_ElementModels;
 
    void m_OnDataSetErrorChangePossible(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                        const uint32_t & oru32_DataPoolListIndex);

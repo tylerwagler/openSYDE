@@ -12,6 +12,7 @@
 #define C_OSCPARAMSETRAWNODE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include "C_OscParamSetRawEntry.hpp"
 #include "C_OscParamSetDataPoolInfo.hpp"
@@ -31,8 +32,8 @@ public:
    C_OscParamSetRawNode(void);
 
    QString c_Name;                       ///< Node name
-   std::vector<C_OscParamSetRawEntry> c_Entries;       ///< All entries to write to this node
-   std::vector<C_OscParamSetDataPoolInfo> c_DataPools; ///< Information about used data pools
+   QList<C_OscParamSetRawEntry> c_Entries;       ///< All entries to write to this node
+   QList<C_OscParamSetDataPoolInfo> c_DataPools; ///< Information about used data pools
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

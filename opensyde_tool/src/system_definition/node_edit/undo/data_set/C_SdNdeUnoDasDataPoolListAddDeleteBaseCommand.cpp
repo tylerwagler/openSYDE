@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -51,7 +52,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand(
    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex,
-   C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const std::vector<uint32_t> & orc_Indices,
+   C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const QList<uint32_t> & orc_Indices,
    const QString & orc_Text, QUndoCommand * const opc_Parent) :
    C_SdNdeUnoDasDataPoolListBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex, oru32_DataPoolListIndex,
                                         opc_DataPoolListModelViewManager,
@@ -93,8 +94,8 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Add(void)
          }
          for (uint32_t u32_Index = 0; u32_Index < this->mc_Indices.size(); ++u32_Index)
          {
-            std::vector<stw::opensyde_core::C_OscNodeDataPoolDataSet> c_OscNames;
-            std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> > c_OscDataSetValues;
+            QList<stw::opensyde_core::C_OscNodeDataPoolDataSet> c_OscNames;
+            QList<QList<stw::opensyde_core::C_OscNodeDataPoolContent> > c_OscDataSetValues;
             c_OscNames.push_back(this->mc_OscNames[u32_Index]);
             c_OscDataSetValues.push_back(this->mc_OscDataSetValues[u32_Index]);
             pc_DataSetModel->DoInsertColumns(c_OscNames, c_OscDataSetValues,
@@ -207,7 +208,7 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_Delete(void)
    \param[in] orc_Value Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_SetIndices(const std::vector<uint32_t> & orc_Value)
+void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_SetIndices(const QList<uint32_t> & orc_Value)
 {
    mc_Indices = orc_Value;
 }
@@ -220,8 +221,8 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_SetIndices(const std::vect
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_SetInitialData(
-   const std::vector<C_OscNodeDataPoolDataSet> & orc_OscNames,
-   const std::vector<std::vector<C_OscNodeDataPoolContent> > & orc_OscDataSetValues)
+   const QList<C_OscNodeDataPoolDataSet> & orc_OscNames,
+   const QList<QList<C_OscNodeDataPoolContent> > & orc_OscDataSetValues)
 {
    this->mc_OscNames = orc_OscNames;
    this->mc_OscDataSetValues = orc_OscDataSetValues;
@@ -233,7 +234,7 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_SetInitialData(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_SortDescending(void)
 {
-   C_SdUtil::h_SortIndicesDescendingAndSync<C_OscNodeDataPoolDataSet, std::vector<C_OscNodeDataPoolContent> >(
+   C_SdUtil::h_SortIndicesDescendingAndSync<C_OscNodeDataPoolDataSet, QList<C_OscNodeDataPoolContent> >(
       this->mc_Indices, this->mc_OscNames, this->mc_OscDataSetValues);
 }
 
@@ -243,6 +244,6 @@ void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_SortDescending(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand::m_SortAscending(void)
 {
-   C_SdUtil::h_SortIndicesAscendingAndSync<C_OscNodeDataPoolDataSet, std::vector<C_OscNodeDataPoolContent> >(
+   C_SdUtil::h_SortIndicesAscendingAndSync<C_OscNodeDataPoolDataSet, QList<C_OscNodeDataPoolContent> >(
       this->mc_Indices, this->mc_OscNames, this->mc_OscDataSetValues);
 }

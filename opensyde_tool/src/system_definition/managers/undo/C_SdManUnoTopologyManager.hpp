@@ -54,39 +54,39 @@ public:
    void DoAddBusConnector(const uint64_t & oru64_UniqueId, const QPointF & orc_NewPos,
                           const QGraphicsItem * const opc_Node, const QGraphicsItem * const opc_Bus,
                           const uint8_t & oru8_InterfaceNumber,
-                          const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
-   void DoAddNodeToNodeConnectionAndCreateNewBus(const std::vector<uint64_t> & orc_FourUniqueIds,
+                          const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+   void DoAddNodeToNodeConnectionAndCreateNewBus(const QList<uint64_t> & orc_FourUniqueIds,
                                                  const stw::opensyde_core::C_OscSystemBus::E_Type & ore_BusType,
                                                  const QString & orc_BusName, const QPointF & orc_BusPosition,
                                                  const uint64_t & oru64_Node1UniqueId,
                                                  const uint64_t & oru64_Node2UniqueId,
                                                  const uint8_t & oru8_Node1InterfaceNumber,
                                                  const uint8_t & oru8_Node2InterfaceNumber,
-                                                 const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node1Properties, const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node2Properties);
-   void DoAddNodeToNodeConnectionUsingExistingBus(const std::vector<uint64_t> & orc_TwoUniqueIds,
+                                                 const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node1Properties, const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node2Properties);
+   void DoAddNodeToNodeConnectionUsingExistingBus(const QList<uint64_t> & orc_TwoUniqueIds,
                                                   const uint64_t & oru64_BusUniqueId, const QPointF & orc_Node1Position,
                                                   const uint64_t & oru64_Node1UniqueId,
                                                   const uint8_t & oru8_Node1InterfaceNumber,
-                                                  const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node1Properties);
-   void DoAddSnapshot(const std::vector<uint64_t> & orc_UniqueIds, const C_SdTopologyDataSnapshot & orc_Snapshot,
+                                                  const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node1Properties);
+   void DoAddSnapshot(const QList<uint64_t> & orc_UniqueIds, const C_SdTopologyDataSnapshot & orc_Snapshot,
                       const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue);
    void DoReconnectNode(const stw::opensyde_gui::C_GiLiBusConnector * const opc_BusConnector,
                         const stw::opensyde_gui::C_GiNode * const opc_StartingNode,
                         const stw::opensyde_gui::C_GiNode * const opc_LastNode, const QPointF & orc_ConnectionPos,
                         const int32_t & ors32_Interface,
-                        const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+                        const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    void DoReconnectBus(const stw::opensyde_gui::C_GiLiBusConnector * const opc_BusConnector,
                        const stw::opensyde_gui::C_GiLiBus * const opc_StartingBus,
                        const stw::opensyde_gui::C_GiLiBus * const opc_LastBus, const QPointF & orc_ConnectionPos,
                        const int32_t & ors32_Interface,
-                       const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+                       const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    void DoChangeInterface(const stw::opensyde_gui::C_GiLiBusConnector * const opc_BusConnector,
                           const uint8_t & oru8_PreviousInterfaceNumber, const uint8_t & oru8_NewInterfaceNumber,
-                          const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_PreviousProperties,
-                          const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties);
+                          const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_PreviousProperties,
+                          const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties);
 
 protected:
-   C_SebUnoSetupStyleCommand * m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items,
+   C_SebUnoSetupStyleCommand * m_GetNewStyleCommand(const QList<uint64_t> & orc_Items,
                                                     const bool oq_DarkMode) override;
 
 private:

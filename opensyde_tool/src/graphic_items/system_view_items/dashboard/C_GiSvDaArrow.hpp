@@ -31,7 +31,7 @@ class C_GiSvDaArrow :
 public:
    C_GiSvDaArrow(const uint32_t & oru32_ViewIndex, const uint32_t & oru32_DashboardIndex,
                  const int32_t & ors32_DataIndex, const uint64_t & oru64_Id,
-                 const std::vector<QPointF> * const opc_Points = NULL, QGraphicsItem * const opc_Parent = NULL);
+                 const QList<QPointF> * const opc_Points = NULL, QGraphicsItem * const opc_Parent = NULL);
    void LoadData(void) override;
    void UpdateData(void) override;
    void DeleteData(void) override;

@@ -44,9 +44,9 @@ using namespace std;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoTopBusConnectorMoveCommand::C_SebUnoTopBusConnectorMoveCommand(QGraphicsScene * const opc_Scene,
-                                                                       const vector<uint64_t> & orc_Ids,
-                                                                       const vector<QPointF> & orc_InitialPoints,
-                                                                       const vector<QPointF> & orc_FinalPoints,
+                                                                       const QList<uint64_t> & orc_Ids,
+                                                                       const QList<QPointF> & orc_InitialPoints,
+                                                                       const QList<QPointF> & orc_FinalPoints,
                                                                        QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, "Bus connector position change", opc_Parent),
    mc_Initial(orc_InitialPoints),
@@ -83,9 +83,9 @@ C_SebUnoTopBusConnectorMoveCommand::~C_SebUnoTopBusConnectorMoveCommand(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoTopBusConnectorMoveCommand::undo(void)
 {
-   const vector<QGraphicsItem *> c_Items = m_GetSceneItems();
+   const auto c_Items = m_GetSceneItems();
 
-   for (vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
+   for (auto c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       C_GiLiBusConnectorBase * const pc_BusConn = dynamic_cast<C_GiLiBusConnectorBase *>(*c_ItItem);
       if (pc_BusConn != NULL)
@@ -102,9 +102,9 @@ void C_SebUnoTopBusConnectorMoveCommand::undo(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoTopBusConnectorMoveCommand::redo(void)
 {
-   const vector<QGraphicsItem *> c_Items = m_GetSceneItems();
+   const auto c_Items = m_GetSceneItems();
 
-   for (vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
+   for (auto c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
       C_GiLiBusConnectorBase * const pc_BusConn = dynamic_cast<C_GiLiBusConnectorBase *>(*c_ItItem);
       if (pc_BusConn != NULL)

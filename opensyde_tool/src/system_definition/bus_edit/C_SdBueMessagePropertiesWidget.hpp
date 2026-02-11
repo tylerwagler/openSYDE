@@ -13,6 +13,7 @@
 
 #include <QWidget>
 #include <QStringList>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscCanMessageIdentificationIndices.hpp"
 #include "C_OscCanMessage.hpp"
@@ -47,7 +48,7 @@ public:
    void SetMessageId(const bool oq_IsValid,
                      const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
    void SetNodeId(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-                  const std::vector<uint32_t> & orc_DatapoolIndexes);
+                  const QList<uint32_t> & orc_DatapoolIndexes);
    void SetBusId(const uint32_t ou32_BusIndex);
    void OnConnectionChange(void);
    void SetComProtocol(const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_Value);
@@ -58,7 +59,7 @@ public:
    void ConnectAllChanges(void) const;
    void DisconnectAllChanges(void) const;
 
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> GetMatchingMessageIds(void) const;
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> GetMatchingMessageIds(void) const;
 
 private:
    //Avoid call
@@ -73,20 +74,20 @@ private:
    uint32_t mu32_BusIndex;                       // Used by bus mode
    uint32_t mu32_NodeIndex;                      // Used by node mode
    uint32_t mu32_InterfaceIndex;                 // Used by node mode
-   std::vector<uint32_t> mc_NodeDatapoolIndexes; // Used by node mode
+   QList<uint32_t> mc_NodeDatapoolIndexes; // Used by node mode
    bool mq_ModeSingleNode;
 
    // Used by bus mode
    // All vectors have a 1:1 mapping and must have the same size
-   std::vector<uint32_t> mc_BusNodeIndexes;
-   std::vector<uint32_t> mc_BusInterfaceIndexes;
-   std::vector<uint32_t> mc_BusDatapoolIndexes;
+   QList<uint32_t> mc_BusNodeIndexes;
+   QList<uint32_t> mc_BusInterfaceIndexes;
+   QList<uint32_t> mc_BusDatapoolIndexes;
 
    // Mapping from the indexes of the combo boxes of node and Datapool to the vector index of mc_NodeIndexes,
    // mc_InterfaceIndexes and mc_DatapoolIndexes
    // The outer vector equals the index of the node combo box and the inner vector equals the index of the
    // Datapool combo box and the saved index is the index of the three vectors
-   std::vector<std::vector<uint32_t> > mc_MappingTxSelection;
+   QList<QList<uint32_t> > mc_MappingTxSelection;
    // Same relation like in mc_MappingTxSelection but with the names of the associated Datapool names
    QList<QStringList> mc_DatapoolNamesTxSelection;
 
@@ -141,9 +142,9 @@ private:
    void m_SetNodeModeReceiveVisible(const bool oq_Visible) const;
    void m_ReloadNodes(void);
    void m_UpdateTxSelection(
-      const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MatchingMessageIds);
+      const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MatchingMessageIds);
    void m_UpdateRxAfterTxSelection(
-      const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MatchingMessageIds,
+      const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MatchingMessageIds,
       const bool oq_SkipDisconnect = false);
    void m_HandleCriticalMessagesAndRx(const bool oq_UpdateRx, const bool oq_HandleSignals = true);
    int32_t m_GetVectorIndexOfComboBoxSelection(void) const;

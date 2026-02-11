@@ -64,7 +64,7 @@ void C_PuiSvDbTabChart::CalcHash(uint32_t & oru32_HashValue) const
    }
    for (uint32_t u32_ItActive = 0; u32_ItActive < this->c_DataPoolElementsColorIndex.size(); ++u32_ItActive)
    {
-      const uint8_t u8_Data = this->c_DataPoolElementsColorIndex[u32_ItActive];
+      const uint8_t u8_Data = static_cast<uint8_t>(this->c_DataPoolElementsColorIndex[u32_ItActive]);
       stw::scl::C_SclChecksums::CalcCRC32(&u8_Data, sizeof(u8_Data), oru32_HashValue);
    }
    for (uint32_t u32_ItOuter = 0; u32_ItOuter < this->c_VisibleScreen.size(); ++u32_ItOuter)
@@ -130,7 +130,7 @@ int32_t C_PuiSvDbTabChart::RemoveElement(const uint32_t & oru32_Index)
 
       if (oru32_Index < this->c_DataPoolElementsColorIndex.size())
       {
-         this->c_DataPoolElementsColorIndex.erase(this->c_DataPoolElementsColorIndex.begin() + oru32_Index);
+         this->c_DataPoolElementsColorIndex.remove(oru32_Index, 1);
       }
       else
       {

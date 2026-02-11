@@ -12,6 +12,7 @@
 #define C_SYVDAITPATREEVIEW_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include "C_PuiSvDbParam.hpp"
 #include "C_SyvDaItPaTreeModel.hpp"
@@ -41,11 +42,11 @@ public:
    bool IsEmpty(void) const;
    void ClearEcuValues(void);
    void ReloadSetValues(void);
-   bool CheckRange(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
-                   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds2) const;
+   bool CheckRange(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
+                   const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds2) const;
    bool CheckAllListsRead(void) const;
-   void PrepareChangedValues(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds) const;
-   void RemoveValuesChangedFlag(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds)
+   void PrepareChangedValues(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds) const;
+   void RemoveValuesChangedFlag(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds)
    const;
    void SetDark(const bool oq_Value);
    void SetEditMode(const bool oq_EditMode);
@@ -57,20 +58,20 @@ public:
    uint32_t GetSelectedItemCount(void) const;
    void Init(stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const opc_DataWidget);
    void UpdateEcuValues(void);
-   std::vector<int32_t> GetCurrentColumnWidths(void) const;
-   std::vector<int32_t> GetCurrentColumnPositionIndices(void) const;
-   void DeleteSpecified(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
-   void SetColumnPositionIndices(const std::vector<int32_t> & orc_NewColPositionIndices);
-   void SetColumnWidth(const std::vector<int32_t> & orc_NewColWidths);
-   bool CheckListsRead(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds) const;
-   std::vector<stw::opensyde_gui_logic::C_PuiSvDbExpandedTreeIndex> GetAllExpandedTreeItems(void) const;
-   void SetAllExpandedTreeItems(const std::vector<stw::opensyde_gui_logic::C_PuiSvDbExpandedTreeIndex> & orc_Items);
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetAllListIds(void) const;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetChangedListElementIds(void) const;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> GetInvalidListIds(void) const;
+   QList<int32_t> GetCurrentColumnWidths(void) const;
+   QList<int32_t> GetCurrentColumnPositionIndices(void) const;
+   void DeleteSpecified(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+   void SetColumnPositionIndices(const QList<int32_t> & orc_NewColPositionIndices);
+   void SetColumnWidth(const QList<int32_t> & orc_NewColWidths);
+   bool CheckListsRead(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds) const;
+   QList<stw::opensyde_gui_logic::C_PuiSvDbExpandedTreeIndex> GetAllExpandedTreeItems(void) const;
+   void SetAllExpandedTreeItems(const QList<stw::opensyde_gui_logic::C_PuiSvDbExpandedTreeIndex> & orc_Items);
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetAllListIds(void) const;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetChangedListElementIds(void) const;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListId> GetInvalidListIds(void) const;
    void SetCrcStatus(const stw::opensyde_core::C_OscNodeDataPoolListId & orc_ListId, const bool oq_Status);
    void GetListSetValues(const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_ListId,
-                         std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_ListValues) const;
+                         QList<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_ListValues) const;
    void HideToolTip(void);
 
    //The signals keyword is necessary for Qt signal slot functionality
@@ -78,18 +79,18 @@ public:
 
 Q_SIGNALS:
    //lint -restore
-   void SigActionRead(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
-   void SigActionWrite(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
-   void SigActionLoad(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ElementIds,
+   void SigActionRead(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+   void SigActionWrite(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+   void SigActionLoad(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ElementIds,
                       const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                       const uint32_t ou32_ValidLayers);
-   void SigActionSave(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
+   void SigActionSave(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
                       const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                       const uint32_t ou32_ValidLayers);
-   void SigActionRecord(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
-   void SigActionRemove(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+   void SigActionRecord(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+   void SigActionRemove(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
    void SigInformUserFloatRangeCheck(
-      const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
+      const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
       const QStringList & orc_InvalidValues, const QStringList & orc_NewValues);
 
 protected:
@@ -108,7 +109,7 @@ private:
 
    void m_OnVerticalScrollBarChange(const int32_t os32_NewScrollBarValue);
    void m_HandleChange(void);
-   bool m_ColumnsSortedAsExpected(const std::vector<int32_t> & orc_NewColPositionIndices) const;
+   bool m_ColumnsSortedAsExpected(const QList<int32_t> & orc_NewColPositionIndices) const;
    void m_HandleLinkClicked(const QModelIndex & orc_Index);
    void m_HandleActionRead(const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                            const uint32_t ou32_ValidLayers);

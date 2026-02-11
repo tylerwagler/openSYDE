@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QWidget>
+#include <QList>
 #include "C_OscCanMessageIdentificationIndices.hpp"
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
 
@@ -48,7 +49,7 @@ public:
                             const uint32_t & oru32_SignalIndex) const;
    void Hide(void);
    void SetNodeId(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-                  const std::vector<uint32_t> & orc_DatapoolIndexes) const;
+                  const QList<uint32_t> & orc_DatapoolIndexes) const;
    void SetBusId(const uint32_t ou32_BusIndex) const;
    void OnConnectionChange(void) const;
    void OnNodeDisconnected(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex);

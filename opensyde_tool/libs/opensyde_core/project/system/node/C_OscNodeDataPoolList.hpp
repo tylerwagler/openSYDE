@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <iostream>
 #include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 #include <QString>
 #include "C_OscNodeDataPoolListElement.hpp"
@@ -45,17 +46,17 @@ public:
    void CheckErrorElement(const uint32_t & oru32_ElementIndex, bool * const opq_NameConflict,
                           bool * const opq_NameInvalid, bool * const opq_MinOverMax,
                           bool * const opq_DataSetValueInvalid,
-                          std::vector<uint32_t> * const opc_InvalidDataSetIndices) const;
+                          QList<uint32_t> * const opc_InvalidDataSetIndices) const;
    void CheckErrorDataSetValue(const uint32_t & oru32_ElementIndex, const uint32_t & oru32_DataSetIndex,
                                bool * const opq_ValueBelowMin, bool * const opq_ValueOverMax,
                                const uint32_t * const opu32_ArrayIndex) const;
    void HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
                                std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 
-   int32_t SetCrcFromBigEndianBlob(const std::vector<uint8_t> & orc_Data);
-   int32_t SetCrcFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data);
-   void GetCrcAsBigEndianBlob(std::vector<uint8_t> & orc_Data) const;
-   void GetCrcAsLittleEndianBlob(std::vector<uint8_t> & orc_Data) const;
+   int32_t SetCrcFromBigEndianBlob(const QByteArray & orc_Data);
+   int32_t SetCrcFromLittleEndianBlob(const QByteArray & orc_Data);
+   void GetCrcAsBigEndianBlob(QByteArray & orc_Data) const;
+   void GetCrcAsLittleEndianBlob(QByteArray & orc_Data) const;
 
    QString c_Name;                                       ///< User data list name
    QString c_Comment;                                    ///< User data list comment
@@ -64,8 +65,8 @@ public:
    uint32_t u32_NvmStartAddress;                         ///< NvM start address of data list
    uint32_t u32_NvmSize;                                 ///< NvM size of data list
    static const uint32_t hu32_DEFAULT_NVM_SIZE;          ///< Default NvM size of data list
-   std::vector<C_OscNodeDataPoolListElement> c_Elements; ///< List variables
-   std::vector<C_OscNodeDataPoolDataSet> c_DataSets;     ///< Data sets
+   QList<C_OscNodeDataPoolListElement> c_Elements; ///< List variables
+   QList<C_OscNodeDataPoolDataSet> c_DataSets;     ///< Data sets
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

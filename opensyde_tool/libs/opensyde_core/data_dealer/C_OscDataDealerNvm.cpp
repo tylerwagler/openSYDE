@@ -92,7 +92,7 @@ uint16_t C_OscDataDealerNvm::NvmCalcCrc(const C_OscNodeDataPoolList & orc_List) 
       for (u32_Counter = 0U; u32_Counter < orc_List.c_Elements.size(); ++u32_Counter)
       {
          const C_OscNodeDataPoolListElement * const pc_Element = &orc_List.c_Elements[u32_Counter];
-         std::vector<uint8_t> c_Data;
+         QByteArray c_Data;
 
          //convert to native endianness depending on the type ...
          //no possible problem we did not check for already ...
@@ -104,7 +104,7 @@ uint16_t C_OscDataDealerNvm::NvmCalcCrc(const C_OscNodeDataPoolList & orc_List) 
          {
             pc_Element->c_NvmValue.GetValueAsLittleEndianBlob(c_Data);
          }
-         stw::scl::C_SclChecksums::CalcCRC16(&c_Data[0], static_cast<uint32_t>(c_Data.size()), u16_Crc);
+         stw::scl::C_SclChecksums::CalcCRC16(reinterpret_cast<uint8_t*>(c_Data.data()), static_cast<uint32_t>(c_Data.size()), u16_Crc);
       }
    }
 
@@ -147,7 +147,7 @@ int32_t C_OscDataDealerNvm::NvmReadList(const uint32_t ou32_DataPoolIndex, const
    else if ((this->mpc_Node->c_DataPools.size() > ou32_DataPoolIndex) &&
             (this->mpc_Node->c_DataPools[ou32_DataPoolIndex].c_Lists.size() > ou32_ListIndex))
    {
-      std::vector<uint8_t> c_Values;
+      QByteArray c_Values;
       C_OscNodeDataPoolList & rc_List = this->mpc_Node->c_DataPools[ou32_DataPoolIndex].c_Lists[ou32_ListIndex];
 
       s32_Return = this->m_NvmReadListRaw(rc_List, c_Values, opu8_NrCode);
@@ -221,7 +221,7 @@ int32_t C_OscDataDealerNvm::NvmNotifyOfChanges(const uint8_t ou8_DataPoolIndex, 
    C_COM      expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvm::m_NvmReadListRaw(const C_OscNodeDataPoolList & orc_List, std::vector<uint8_t> & orc_Values,
+int32_t C_OscDataDealerNvm::m_NvmReadListRaw(const C_OscNodeDataPoolList & orc_List, QByteArray & orc_Values,
                                              uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return;
@@ -264,7 +264,7 @@ int32_t C_OscDataDealerNvm::m_NvmReadListRaw(const C_OscNodeDataPoolList & orc_L
    C_CHECKSUM  Checksum of read datapool list is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvm::m_SaveDumpToList(const std::vector<uint8_t> & orc_Values,
+int32_t C_OscDataDealerNvm::m_SaveDumpToList(const QByteArray & orc_Values,
                                              C_OscNodeDataPoolList & orc_List) const
 {
    int32_t s32_Return = this->m_SaveDumpValuesToListValues(orc_Values, orc_List);
@@ -274,12 +274,12 @@ int32_t C_OscDataDealerNvm::m_SaveDumpToList(const std::vector<uint8_t> & orc_Va
       if (orc_Values.size() >= 2)
       {
          // Update CRC
-         std::vector<uint8_t> c_CrcData;
+         QByteArray c_CrcData;
          uint16_t u16_CalcCrc;
 
          c_CrcData.resize(2);
          // TODO: KEFEX position of CRC can be different
-         (void)std::memcpy(&c_CrcData[0], &orc_Values[0], 2);
+         (void)std::memcpy(reinterpret_cast<uint8_t*>(c_CrcData.data()), orc_Values.data(), 2);
 
          if (this->mpc_DiagProtocol->GetEndianness() == C_OscDiagProtocolBase::mhu8_ENDIANNESS_BIG)
          {
@@ -320,7 +320,7 @@ int32_t C_OscDataDealerNvm::m_SaveDumpToList(const std::vector<uint8_t> & orc_Va
    C_RD_WR     Datapool element size configuration does not match with count of read bytes
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataDealerNvm::m_SaveDumpValuesToListValues(const std::vector<uint8_t> & orc_Values,
+int32_t C_OscDataDealerNvm::m_SaveDumpValuesToListValues(const QByteArray & orc_Values,
                                                          C_OscNodeDataPoolList & orc_List) const
 {
    int32_t s32_Return = C_NO_ERR;
@@ -335,11 +335,11 @@ int32_t C_OscDataDealerNvm::m_SaveDumpValuesToListValues(const std::vector<uint8
 
       if (orc_Values.size() >= (static_cast<size_t>(u32_Index) + u32_SizeElement))
       {
-         std::vector<uint8_t> c_ElementData;
+         QByteArray c_ElementData;
 
          // Get the relevant data for this element
          c_ElementData.resize(u32_SizeElement);
-         (void)std::memcpy(&c_ElementData[0], &orc_Values[u32_Index], u32_SizeElement);
+         (void)std::memcpy(reinterpret_cast<uint8_t*>(c_ElementData.data()), orc_Values.data() + u32_Index, u32_SizeElement);
 
          //we have data
          //convert to native endianness depending on the type ...

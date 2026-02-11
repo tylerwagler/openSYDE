@@ -12,6 +12,7 @@
 #define C_SYVDCEXISTINGNODEWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include <QListWidgetItem>
 #include "stwtypes.hpp"
@@ -49,7 +50,7 @@ public:
    const;
    void DisconnectSerialNumber(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber) const;
    bool IsAssigned(void) const;
-   void AppendDeviceConfig(std::vector<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_Configs) const;
+   void AppendDeviceConfig(QList<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_Configs) const;
 
    void StartDrag(const QString & orc_DeviceName, const bool oq_DeviceNameValid) const;
    void StopDrag(void) const;
@@ -90,7 +91,7 @@ private:
    static void mh_AppendDeviceConfigForNode(const uint32_t ou32_NodeIndex, const uint32_t ou32_ConnectedBusIndex,
                                             stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation oc_NodeConfig,
                                             const std::map<uint8_t,
-                                                           stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds, std::vector<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_Configs);
+                                                           stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds, QList<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_Configs);
 
    //Avoid call
    C_SyvDcExistingNodeWidget(const C_SyvDcExistingNodeWidget &);

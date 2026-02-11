@@ -17,6 +17,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 
+#include <QList>
 #include "C_OscDeviceDefinition.hpp"
 #include <QSettings>
 #include <QString>
@@ -50,11 +51,11 @@ public:
   void SetGroupName(const QString &orc_GroupName);
   QString GetGroupName(void) const;
 
-  const std::vector<C_OscDeviceDefinition> &GetDevices(void) const;
+  const QList<C_OscDeviceDefinition> &GetDevices(void) const;
 
 private:
   QString mc_GroupName; ///< Group name
-  std::vector<C_OscDeviceDefinition>
+  QList<C_OscDeviceDefinition>
       mc_Devices; ///< All devices belonging to this group
 };
 

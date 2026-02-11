@@ -9,6 +9,7 @@
 #define C_PUISDHANDLERNODELOGIC_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QMap>
 #include <QStringList>
 
@@ -40,8 +41,8 @@ public:
                                const uint32_t * const opu32_NodeIndexToSkip = NULL,
                                QStringList * const opc_ExistingNames = NULL) const;
    void SetOscNodeEthernetConfiguration(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-                                        const std::vector<int32_t> & orc_Ip, const std::vector<int32_t> & orc_NetMask,
-                                        const std::vector<int32_t> & orc_DefaultGateway);
+                                        const QList<int32_t> & orc_Ip, const QList<int32_t> & orc_NetMask,
+                                        const QList<int32_t> & orc_DefaultGateway);
    const C_PuiSdNode * GetUiNode(const uint32_t & oru32_Index) const;
    const stw::opensyde_core::C_OscNode * GetOscNodeConst(const uint32_t & oru32_Index) const;
    const stw::opensyde_core::C_OscNodeSquad * GetOscNodeSquadConst(const uint32_t & oru32_Index) const;
@@ -60,25 +61,25 @@ public:
    void SetOscNodePropertiesDetailed(const uint32_t ou32_NodeIndex, const QString & orc_Name,
                                      const QString & orc_Comment, const stw::opensyde_core::C_OscNodeProperties::E_DiagnosticServerProtocol
                                      oe_DiagnosticServer,
-                                     const stw::opensyde_core::C_OscNodeProperties::E_FlashLoaderProtocol oe_FlashLoader, const std::vector<uint8_t> & orc_NodeIds, const std::vector<bool> & orc_UpdateFlags, const std::vector<bool> & orc_RoutingFlags, const std::vector<bool> & orc_DiagnosisFlags);
+                                     const stw::opensyde_core::C_OscNodeProperties::E_FlashLoaderProtocol oe_FlashLoader, const QByteArray & orc_NodeIds, const QList<bool> & orc_UpdateFlags, const QList<bool> & orc_RoutingFlags, const QList<bool> & orc_DiagnosisFlags);
    void SetUiNodeBox(const uint32_t ou32_NodeIndex, const C_PuiBsBox & orc_Box);
    uint32_t AddNodeAndSort(stw::opensyde_core::C_OscNode & orc_OscNode, const C_PuiSdNode & orc_UiNode,
                            const QString & orc_SubDeviceName, const QString & orc_MainDevice);
-   uint32_t AddNodeSquadAndSort(std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes,
-                                const std::vector<C_PuiSdNode> & orc_UiNodes,
+   uint32_t AddNodeSquadAndSort(QList<stw::opensyde_core::C_OscNode> & orc_OscNodes,
+                                const QList<C_PuiSdNode> & orc_UiNodes,
                                 const QStringList & orc_NodeNames, const QString & orc_MainDevice,
                                 const QString & orc_NameProposal = "");
    void RemoveNode(const uint32_t ou32_NodeIndex);
    bool CheckNodeConflict(const uint32_t & oru32_NodeIndex);
-   void GetSupportedCanBitrates(const std::vector<uint32_t> & orc_Nodes, std::vector<uint32_t> & orc_Bitrates) const;
-   void GetSupportedCanFdBitrates(const std::vector<uint32_t> & orc_Nodes, std::vector<uint32_t> & orc_Bitrates) const;
-   bool NodeSupportsCanFd(const std::vector<uint32_t> & orc_Nodes,
-                          const std::vector<uint32_t> & orc_InterfaceIndexes) const;
+   void GetSupportedCanBitrates(const QList<uint32_t> & orc_Nodes, QList<uint32_t> & orc_Bitrates) const;
+   void GetSupportedCanFdBitrates(const QList<uint32_t> & orc_Nodes, QList<uint32_t> & orc_Bitrates) const;
+   bool NodeSupportsCanFd(const QList<uint32_t> & orc_Nodes,
+                          const QList<uint32_t> & orc_InterfaceIndexes) const;
    uint32_t GetOscNodesSize(void) const;
    uint32_t GetOscNodeSquadsSize(void) const;
-   std::vector<uint32_t> GetAllNodeGroupIndicesUsingNodeIndex(const uint32_t ou32_NodeIndex) const;
+   QList<uint32_t> GetAllNodeGroupIndicesUsingNodeIndex(const uint32_t ou32_NodeIndex) const;
    int32_t GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex, uint32_t & oru32_NodeSquadIndex) const;
-   void GetNodeToNodeSquadMapping(std::vector<int32_t> & orc_Mapping);
+   void GetNodeToNodeSquadMapping(QList<int32_t> & orc_Mapping);
    bool CheckCriticalNameConflict(QStringList * const opc_CriticalNodeNames,
                                   QStringList * const opc_CriticalBusNames,
                                   QStringList * const opc_CriticalDatapoolNamespaceNames) const;
@@ -148,13 +149,13 @@ public:
       uint32_t u32_StartAddress;
       uint32_t u32_Size;
       bool q_InRange;
-      std::vector<uint32_t> c_DataPoolIndexes;
+      QList<uint32_t> c_DataPoolIndexes;
    };
 
    bool CheckNodeNvmDataPoolsSizeConflict(const uint32_t ou32_NodeIndex, bool * const opq_SizeConflict = NULL,
                                           bool * const opq_OverlapConflict = NULL) const;
    int32_t GetNodeNvmDataPoolAreas(const uint32_t ou32_NodeIndex,
-                                   std::vector<C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas) const;
+                                   QList<C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas) const;
 
    //Data block
    int32_t AddApplication(const uint32_t ou32_NodeIndex, stw::opensyde_core::C_OscNodeApplication & orc_OscContent);
@@ -174,9 +175,9 @@ public:
    int32_t GetNextProgrammableApplicationIndex(const uint32_t ou32_NodeIndex, int32_t & ors32_ApplicationIndex) const;
    int32_t CheckApplicationName(const uint32_t ou32_NodeIndex, const QString & orc_ApplicationName,
                                 bool & orq_Valid, const uint32_t * const opu32_SkipApplication = NULL) const;
-   std::vector<const stw::opensyde_core::C_OscNodeApplication *> GetProgrammableApplications(
+   QList<const stw::opensyde_core::C_OscNodeApplication *> GetProgrammableApplications(
       const uint32_t ou32_NodeIndex) const;
-   std::vector<uint32_t> GetFileGenAppIndices(const uint32_t ou32_NodeIndex) const;
+   QList<uint32_t> GetFileGenAppIndices(const uint32_t ou32_NodeIndex) const;
 
    //Datapool list
    int32_t InsertDataPoolList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
@@ -210,7 +211,7 @@ public:
                                   const uint32_t & oru32_DataPoolListIndex,
                                   const uint32_t & oru32_DataPoolListDataSetIndex,
                                   stw::opensyde_core::C_OscNodeDataPoolDataSet & orc_OscName,
-                                  std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_OscValues)
+                                  QList<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_OscValues)
    const;
    const stw::opensyde_core::C_OscNodeDataPoolDataSet * GetOscDataPoolListDataSet(const uint32_t & oru32_NodeIndex,
                                                                                   const uint32_t & oru32_DataPoolIndex,
@@ -225,7 +226,7 @@ public:
                                      const uint32_t & oru32_DataPoolListIndex,
                                      const uint32_t & oru32_DataPoolListDataSetIndex,
                                      const stw::opensyde_core::C_OscNodeDataPoolDataSet & orc_OscName,
-                                     const std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_OscValues,
+                                     const QList<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_OscValues,
                                      const bool oq_HandleSharedDatapools = true);
    int32_t RemoveDataPoolListDataSet(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                      const uint32_t & oru32_DataPoolListIndex,
@@ -365,12 +366,12 @@ private:
 
    // NVM base Datapool helper functions
    static void mh_GetNodeNvmDataPoolAreas(const stw::opensyde_core::C_OscNode & orc_Node,
-                                          std::vector<C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas);
+                                          QList<C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas);
    static void mh_AddAndAdaptNvmDataPoolArea(C_PuiSdHandlerNodeLogicNvmArea & orc_CurrentArea,
-                                             std::vector<C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas);
+                                             QList<C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas);
    static void mh_MergeNvmDataPoolAreas(const C_PuiSdHandlerNodeLogicNvmArea & orc_AreaToAdd,
                                         C_PuiSdHandlerNodeLogicNvmArea & orc_AreaToMerge);
-   void m_SetOscNodeIds(const uint32_t ou32_NodeIndex, const std::vector<uint8_t> & orc_NodeIds);
+   void m_SetOscNodeIds(const uint32_t ou32_NodeIndex, const QByteArray & orc_NodeIds);
    void m_SetOscNodeId(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex, const uint8_t ou8_NodeId);
    void m_SetDataPoolListSharedSync(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                     const uint32_t & oru32_DataPoolListIndex,

@@ -689,7 +689,7 @@ int32_t C_SyvComMessageMonitor::GetResults(int32_t &ors32_Result) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComMessageMonitor::GetResultBusses(
-    std::vector<C_OscSystemBus> &orc_Busses) const {
+    QList<C_OscSystemBus> &orc_Busses) const {
   int32_t s32_Return = C_NO_ERR;
 
   if (this->mpc_LoadingThread->isRunning() == true) {

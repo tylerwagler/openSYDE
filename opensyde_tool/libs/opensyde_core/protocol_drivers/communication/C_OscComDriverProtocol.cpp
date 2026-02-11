@@ -19,6 +19,7 @@
 
 #include <limits>
 #include <iostream>
+#include <QList>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include <QString>
@@ -131,7 +132,7 @@ C_OscComDriverProtocol::~C_OscComDriverProtocol(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscComDriverProtocol::Init(const C_OscSystemDefinition & orc_SystemDefinition,
-                                     const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes,
+                                     const uint32_t ou32_ActiveBusIndex, const QByteArray & orc_ActiveNodes,
                                      C_CanDispatcher * const opc_CanDispatcher,
                                      C_OscIpDispatcher * const opc_IpDispatcher,
                                      C_OscSecurityPemDatabase * const opc_SecurityPemDb)
@@ -305,7 +306,7 @@ const
    C_COM       Error of service
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::SendTesterPresent(const std::vector<uint32_t> & orc_ActiveNodes)
+int32_t C_OscComDriverProtocol::SendTesterPresent(const QList<uint32_t> & orc_ActiveNodes)
 const
 {
    int32_t s32_Return = C_CONFIG;
@@ -1274,7 +1275,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSessionId(C_OscProtocolDriverOsy * cons
 int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const uint8_t ou8_SessionId, const bool oq_CheckForSession,
                                                     std::set<uint32_t> & orc_DefectNodeIndices) const
 {
-   std::vector<uint32_t> c_AllActiveNodes;
+   QList<uint32_t> c_AllActiveNodes;
    uint32_t u32_Counter;
 
    c_AllActiveNodes.resize(this->mc_ActiveNodesIndexes.size());
@@ -1306,7 +1307,7 @@ int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const uint8_t ou8_SessionId,
                or at least one node was registered in orc_DefectNodeIndices
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const std::vector<uint32_t> & orc_ActiveNodes,
+int32_t C_OscComDriverProtocol::m_SetNodesSessionId(const QList<uint32_t> & orc_ActiveNodes,
                                                     const uint8_t ou8_SessionId, const bool oq_CheckForSession,
                                                     std::set<uint32_t> & orc_DefectNodeIndices) const
 {
@@ -1539,7 +1540,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
                   else
                   {
                      //we need the server's certificate snr to look up the correct key
-                     std::vector<uint8_t> c_CertSnr;
+                     QByteArray c_CertSnr;
                      s32_Return = opc_ExistingProtocol->OsyReadCertificateSerialNumber(c_CertSnr, opu8_NrCode);
 
                      if (s32_Return == C_NO_ERR)
@@ -1552,9 +1553,9 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
 
                   if (pc_PemKeyInfo != NULL)
                   {
-                     std::vector<uint8_t> c_Signature;
-                     std::vector<uint8_t> c_RandomValue;
-                     std::vector<uint8_t> c_PrivKey;
+                     QByteArray c_Signature;
+                     QByteArray c_RandomValue;
+                     QByteArray c_PrivKey;
                      c_Signature.resize(128, 0U);
                      c_RandomValue.resize(8, 0U);
 
@@ -1656,7 +1657,7 @@ int32_t C_OscComDriverProtocol::m_SetNodeSecurityAccess(C_OscProtocolDriverOsy *
 int32_t C_OscComDriverProtocol::m_SetNodesSecurityAccess(const uint8_t ou8_SecurityLevel,
                                                          std::set<uint32_t> & orc_ErrorActiveNodes) const
 {
-   std::vector<uint32_t> c_AllActiveNodes;
+   QList<uint32_t> c_AllActiveNodes;
    uint32_t u32_Counter;
 
    c_AllActiveNodes.resize(this->mc_ActiveNodesIndexes.size());
@@ -1685,7 +1686,7 @@ int32_t C_OscComDriverProtocol::m_SetNodesSecurityAccess(const uint8_t ou8_Secur
                Detailed error codes are logged with opu8_NrCode
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscComDriverProtocol::m_SetNodesSecurityAccess(const std::vector<uint32_t> & orc_ActiveNodes,
+int32_t C_OscComDriverProtocol::m_SetNodesSecurityAccess(const QList<uint32_t> & orc_ActiveNodes,
                                                          const uint8_t ou8_SecurityLevel,
                                                          std::set<uint32_t> & orc_ErrorActiveNodes) const
 {
@@ -2426,7 +2427,7 @@ void C_OscComDriverProtocol::m_StopRoutingOfActiveNodes(void)
       int32_t s32_LastRouteHop = 0U;
       int32_t s32_RouteHopCounter;
 
-      std::vector<int32_t> c_ActiveOsyTargetNodes;
+      QList<int32_t> c_ActiveOsyTargetNodes;
 
       c_ActiveOsyTargetNodes.resize(this->mc_ActiveNodesIndexes.size(), -1);
 
@@ -2833,7 +2834,7 @@ int32_t C_OscComDriverProtocol::m_InitServerIds(void)
                const C_OscNode * const pc_Node =
                   &this->mpc_SysDef->c_Nodes[this->mc_ActiveNodesIndexes[u32_ItActiveNode]];
 
-               const std::vector<C_OscNodeComInterfaceSettings> & rc_ComInterfaces =
+               const QList<C_OscNodeComInterfaceSettings> & rc_ComInterfaces =
                   pc_Node->c_Properties.c_ComInterfaces;
                bool q_Found = false;
                C_OscProtocolDriverOsyNode c_NewServerId;
@@ -3018,7 +3019,7 @@ int32_t C_OscComDriverProtocol::m_InitForEthernet(void)
    if (this->mc_ServerIds.size() == this->mu32_ActiveNodeCount)
    {
       C_OscProtocolDriverOsyTpIp * pc_TransportProtocol;
-      std::vector<uint32_t> c_IpDispatcherHandles;
+      QList<uint32_t> c_IpDispatcherHandles;
 
       //Dispatcher
       c_IpDispatcherHandles.resize(this->mu32_ActiveNodeCount, 0U);

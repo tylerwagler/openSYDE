@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -55,7 +56,7 @@ C_SdNdeUnoLeDataPoolListElementPasteCommand::C_SdNdeUnoLeDataPoolListElementPast
    C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, QUndoCommand * const opc_Parent) :
    C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex, oru32_DataPoolListIndex,
                                                        opc_DataPoolListModelViewManager,
-                                                       std::vector<uint32_t>(),
+                                                       QList<uint32_t>(),
                                                        "Paste List element", opc_Parent)
 {
 }
@@ -72,8 +73,8 @@ C_SdNdeUnoLeDataPoolListElementPasteCommand::C_SdNdeUnoLeDataPoolListElementPast
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SdNdeUnoLeDataPoolListElementPasteCommand::InitialSetup(const uint32_t & oru32_FirstIndex)
 {
-   std::vector<C_OscNodeDataPoolListElement> c_OscContent;
-   std::vector<C_PuiSdNodeDataPoolListElement> c_UiContent;
+   QList<C_OscNodeDataPoolListElement> c_OscContent;
+   QList<C_PuiSdNodeDataPoolListElement> c_UiContent;
    bool q_Retval =
       (C_SdClipBoardHelper::h_LoadToDataPoolListElementsFromClipBoard(c_OscContent, c_UiContent) == C_NO_ERR);
 
@@ -91,7 +92,7 @@ bool C_SdNdeUnoLeDataPoolListElementPasteCommand::InitialSetup(const uint32_t & 
                 C_OscNode::hu32_MAX_NUMBER_OF_ELEMENTS_PER_LIST);
             if (q_Retval == true)
             {
-               std::vector<uint32_t> c_Indices;
+               QList<uint32_t> c_Indices;
 
                c_Indices.reserve(c_OscContent.size());
                q_Retval = (c_OscContent.size() == c_UiContent.size());

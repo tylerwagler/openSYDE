@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QAbstractTableModel>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_PuiSdNodeDataPoolList.hpp"
@@ -60,8 +61,8 @@ public:
    Qt::DropActions supportedDropActions(void) const override;
 
    // Add data:
-   void DoInsertColumns(const std::vector<stw::opensyde_core::C_OscNodeDataPoolDataSet> & orc_OscNames,
-                        const std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> > & orc_OscDataSetValues, const uint32_t & oru32_Row);
+   void DoInsertColumns(const QList<stw::opensyde_core::C_OscNodeDataPoolDataSet> & orc_OscNames,
+                        const QList<QList<stw::opensyde_core::C_OscNodeDataPoolContent> > & orc_OscDataSetValues, const uint32_t & oru32_Row);
    bool insertColumns(const int32_t os32_Column, const int32_t os32_Count,
                       const QModelIndex & orc_Parent = QModelIndex()) override;
 
@@ -102,8 +103,8 @@ private:
    uint32_t mu32_NodeIndex;
    uint32_t mu32_DataPoolIndex;
    uint32_t mu32_ListIndex;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolDataSet> mc_OscNames;
-   std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> > mc_OscDataSetValues;
+   QList<stw::opensyde_core::C_OscNodeDataPoolDataSet> mc_OscNames;
+   QList<QList<stw::opensyde_core::C_OscNodeDataPoolContent> > mc_OscDataSetValues;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

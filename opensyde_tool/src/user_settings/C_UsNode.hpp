@@ -20,6 +20,7 @@
 #include <QMap>
 #include <QString>
 #include <QStringList>
+#include <QList>
 
 
 /* -- Namespace
@@ -44,8 +45,8 @@ public:
   QString GetSelectedDatapoolName(void) const;
   stw::opensyde_core::C_OscCanProtocol::E_Type GetSelectedProtocol(void) const;
   uint32_t GetSelectedInterface(void) const;
-  const std::vector<int32_t> &GetCanOpenOverviewColumnWidth(void) const;
-  const std::vector<int32_t> &GetCanOpenPdoOverviewColumnWidth(void) const;
+  const QList<int32_t> &GetCanOpenOverviewColumnWidth(void) const;
+  const QList<int32_t> &GetCanOpenPdoOverviewColumnWidth(void) const;
   uint8_t GetSelectedCanOpenManager(void) const;
   uint8_t GetSelectedCanOpenDeviceInterfaceNumber(void) const;
   QString GetSelectedCanOpenDeviceNodeName(void) const;
@@ -55,8 +56,8 @@ public:
   std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
   GetExpandedCanOpenDevice(void) const;
   bool GetCanOpenSelectedUseCaseOrInterface(void) const;
-  const std::vector<int32_t> &GetHalcOverviewColumnWidth(void) const;
-  const std::vector<int32_t> &GetHalcConfigColumnWidth(void) const;
+  const QList<int32_t> &GetHalcOverviewColumnWidth(void) const;
+  const QList<int32_t> &GetHalcConfigColumnWidth(void) const;
   QString GetSelectedHalcDomainName(void) const;
   QString GetSelectedHalcChannel(void) const;
   int32_t GetSelectedDataLoggerLogJobIndex(void) const;
@@ -74,10 +75,10 @@ public:
                                         const QStringList &orc_New);
   void SetDatapoolCommMessageOverviewColumnWidth(
       const QString &orc_DatapoolName, const QString &orc_ListName,
-      const std::vector<int32_t> &orc_Value);
+      const QList<int32_t> &orc_Value);
   void SetDatapoolCommSignalOverviewColumnWidth(
       const QString &orc_DatapoolName, const QString &orc_ListName,
-      const std::vector<int32_t> &orc_Value);
+      const QList<int32_t> &orc_Value);
   void SetDatapoolListSelectedMessage(
       const QString &orc_DatapoolName, const QString &orc_ListName,
       const stw::opensyde_core::C_OscCanProtocol::E_Type oe_SelectedProtocol,
@@ -85,9 +86,9 @@ public:
       const bool oq_SignalSelected, const QString &orc_SelectedSignalName);
   void SetDatapoolListColumnSizes(const QString &orc_DatapoolName,
                                   const QString &orc_ListName,
-                                  const std::vector<int32_t> &orc_ColumnWidths);
-  void SetCanOpenOverviewColumnWidth(const std::vector<int32_t> &orc_Value);
-  void SetCanOpenPdoOverviewColumnWidth(const std::vector<int32_t> &orc_Value);
+                                  const QList<int32_t> &orc_ColumnWidths);
+  void SetCanOpenOverviewColumnWidth(const QList<int32_t> &orc_Value);
+  void SetCanOpenPdoOverviewColumnWidth(const QList<int32_t> &orc_Value);
   void SetSelectedCanOpenManager(const uint8_t &oru8_Value);
   void SetSelectedCanOpenDevice(const uint8_t &oru8_Number,
                                 const QString &orc_Value);
@@ -98,16 +99,16 @@ public:
       const std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
           &orc_Device);
   void SetCanOpenSelectedUseCaseOrInterface(const bool orq_IsUseCaseSelected);
-  void SetHalcOverviewColumnWidth(const std::vector<int32_t> &orc_Value);
-  void SetHalcConfigColumnWidth(const std::vector<int32_t> &orc_Value);
+  void SetHalcOverviewColumnWidth(const QList<int32_t> &orc_Value);
+  void SetHalcConfigColumnWidth(const QList<int32_t> &orc_Value);
   void SetSelectedHalcDomain(const QString &orc_Value);
   void SetSelectedHalcChannel(const QString &orc_Value);
   void SetSelectedDataLoggerLogJobIndex(const int32_t os32_Value);
   void SetIsOverviewWidgetSelected(const bool oq_IsOverviewWidgetSelected);
 
 private:
-  std::vector<int32_t> mc_CanOpenOverviewColumnWidth;
-  std::vector<int32_t> mc_CanOpenPdoOverviewColumnWidth;
+  QList<int32_t> mc_CanOpenOverviewColumnWidth;
+  QList<int32_t> mc_CanOpenPdoOverviewColumnWidth;
   uint8_t mu8_CanOpenManager;
   uint8_t mu8_DeviceInterfaceNumber;
   QString mc_CanOpenNodeName;
@@ -117,8 +118,8 @@ private:
   std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
       mc_CanOpenExpandedDevice;
   bool mq_IsUseCaseIndexSelected;
-  std::vector<int32_t> mc_HalcOverviewColumnWidth;
-  std::vector<int32_t> mc_HalcConfigColumnWidth;
+  QList<int32_t> mc_HalcOverviewColumnWidth;
+  QList<int32_t> mc_HalcConfigColumnWidth;
   QString mc_SelectedDataPoolName;
   QString mc_SelectedHalcDomainName;
   QString mc_SelectedHalcChannelId;

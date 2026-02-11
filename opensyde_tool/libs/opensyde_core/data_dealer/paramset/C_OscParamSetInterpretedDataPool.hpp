@@ -12,6 +12,7 @@
 #define C_OSCPARAMSETINTERPRETEDDATAPOOL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscParamSetDataPoolInfo.hpp"
 #include "C_OscParamSetInterpretedList.hpp"
 
@@ -31,7 +32,7 @@ public:
    C_OscParamSetInterpretedDataPool(void);
 
    C_OscParamSetDataPoolInfo c_DataPoolInfo;
-   std::vector<C_OscParamSetInterpretedList> c_Lists; ///< Interpreted lists of this datapool
+   QList<C_OscParamSetInterpretedList> c_Lists; ///< Interpreted lists of this datapool
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

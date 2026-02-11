@@ -12,7 +12,7 @@
 #define C_SDBUEUNOMESSAGEBASECOMMAND_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include <QString>
 #include <QUndoCommand>
 #include "C_SdBueMessageSelectorTreeWidget.hpp"
@@ -33,13 +33,13 @@ class C_SdBueUnoMessageBaseCommand :
 {
 public:
    C_SdBueUnoMessageBaseCommand(
-      const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
+      const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
       stw::opensyde_gui::C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget,
       const QString & orc_Text = "", QUndoCommand * const opc_Parent = NULL);
 
 protected:
-   std::vector<uint64_t> mc_UniqueId;
+   QList<uint64_t> mc_UniqueId;
    C_PuiSdNodeCanMessageSyncManager * const mpc_MessageSyncManager;
    stw::opensyde_gui::C_SdBueMessageSelectorTreeWidget * const mpc_MessageTreeWidget;
 

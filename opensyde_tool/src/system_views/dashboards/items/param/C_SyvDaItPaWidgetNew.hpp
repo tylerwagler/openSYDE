@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QStringList>
+#include <QList>
 #include "stwtypes.hpp"
 
 #include "C_SyvComDriverDiag.hpp"
@@ -56,12 +57,12 @@ public:
 
    QString GetSelectedItemTypeTemplate(void) const;
    uint32_t GetSelectedItemCount(void) const;
-   std::vector<int32_t> GetCurrentColumnWidths(void) const;
-   std::vector<int32_t> GetCurrentColumnPositionIndices(void) const;
-   void SetColumnWidth(const std::vector<int32_t> & orc_NewColWidths) const;
-   void SetColumnPositionIndices(const std::vector<int32_t> & orc_NewColPositionIndices) const;
-   std::vector<stw::opensyde_gui_logic::C_PuiSvDbExpandedTreeIndex> GetAllExpandedTreeItems(void) const;
-   void SetAllExpandedTreeItems(const std::vector<stw::opensyde_gui_logic::C_PuiSvDbExpandedTreeIndex> & orc_Items)
+   QList<int32_t> GetCurrentColumnWidths(void) const;
+   QList<int32_t> GetCurrentColumnPositionIndices(void) const;
+   void SetColumnWidth(const QList<int32_t> & orc_NewColWidths) const;
+   void SetColumnPositionIndices(const QList<int32_t> & orc_NewColPositionIndices) const;
+   QList<stw::opensyde_gui_logic::C_PuiSvDbExpandedTreeIndex> GetAllExpandedTreeItems(void) const;
+   void SetAllExpandedTreeItems(const QList<stw::opensyde_gui_logic::C_PuiSvDbExpandedTreeIndex> & orc_Items)
    const;
 
    void SetEditMode(const bool oq_EditMode, const bool oq_EditContentMode);
@@ -85,30 +86,30 @@ private:
    C_SyvDaItPaWidgetNew & operator =(const C_SyvDaItPaWidgetNew &) &;
 
    void m_ReadElements(void);
-   void m_WriteElements(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedIds);
-   void m_LoadElements(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ElementIds,
+   void m_WriteElements(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedIds);
+   void m_LoadElements(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ElementIds,
                        const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                        const uint32_t ou32_ValidLayers) const;
-   void m_SaveElements(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
+   void m_SaveElements(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
                        const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                        const uint32_t ou32_ValidLayers) const;
-   void m_RecordElements(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+   void m_RecordElements(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
 
-   int32_t m_GetDataFromImport(const std::vector<stw::opensyde_core::C_OscParamSetInterpretedNode> & orc_NewData,
-                               std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_FoundIds,
-                               std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_FoundContent);
+   int32_t m_GetDataFromImport(const QList<stw::opensyde_core::C_OscParamSetInterpretedNode> & orc_NewData,
+                               QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_FoundIds,
+                               QList<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_FoundContent);
 
    void m_UpdateButtons(void);
    void m_UpdateButtonToolTips(void) const;
 
    void m_HandleTreeInitAction(void);
 
-   void m_HandleTreeReadAction(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
-   void m_HandleTreeWriteAction(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+   void m_HandleTreeReadAction(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+   void m_HandleTreeWriteAction(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
 
    void m_HandleWriteProcessTrigger(
-      const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
-   void m_HandleRemoveTrigger(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+      const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+   void m_HandleRemoveTrigger(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
 
    void m_UpdateReadAllowedFlag(const bool oq_NewValue);
    static QString mh_GetDefaultFileName(const uint32_t ou32_ViewIndex,
@@ -118,7 +119,7 @@ private:
                              const uint32_t ou32_Value);
 
    void m_InformUserFloatRangeCheck(
-      const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
+      const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
       const QStringList & orc_InvalidValues, const QStringList & orc_NewValues) const;
 
    Ui::C_SyvDaItPaWidgetNew * mpc_Ui;
@@ -132,9 +133,9 @@ private:
    bool mq_WriteActive;
    bool mq_Editable;
    bool mq_ReadAllowed;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_ListsWithCrcError;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_ListIds;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_ElementsToWriteAfterRead;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_ListsWithCrcError;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_ListIds;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_ElementsToWriteAfterRead;
    uint32_t mu32_ListCounter;
 
    static const QString mhc_FILE_EXTENSION_PARAMSET;

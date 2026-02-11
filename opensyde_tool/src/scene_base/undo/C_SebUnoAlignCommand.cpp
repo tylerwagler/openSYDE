@@ -45,7 +45,7 @@ using namespace stw::opensyde_gui_logic;
    \param[in,out] opc_Parent            Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SebUnoAlignCommand::C_SebUnoAlignCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+C_SebUnoAlignCommand::C_SebUnoAlignCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                            const uint64_t & oru64_GuidelineItemId, const E_Alignment & ore_Alignment,
                                            QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, "Align drawing elements", opc_Parent)
@@ -97,7 +97,7 @@ void C_SebUnoAlignCommand::m_Align(const uint64_t & oru64_GuidelineItemId, const
    //Is there a guideline object
    if (pc_GuidelineItem != NULL)
    {
-      vector<QGraphicsItem *> c_SelectedItems = this->m_GetSceneItems();
+      auto c_SelectedItems = this->m_GetSceneItems();
       //Are there more than one objects to align
       if (c_SelectedItems.size() > 1)
       {
@@ -157,7 +157,7 @@ void C_SebUnoAlignCommand::m_Align(const uint64_t & oru64_GuidelineItemId, const
                   pc_UniqueItem = dynamic_cast<C_GiUnique *>(pc_CurItem);
                   if (pc_UniqueItem != NULL)
                   {
-                     const std::vector<uint64_t> c_Vec(1, pc_UniqueItem->GetId());
+                     const QList<uint64_t> c_Vec(1, pc_UniqueItem->GetId());
                      new C_SebUnoMoveCommand(this->mpc_Scene, c_Vec, c_Difference, this);
                   }
                }

@@ -216,7 +216,7 @@ int32_t C_OscDeviceManager::AddDevice(const QString &orc_DeviceDefinitionFile,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDeviceManager::ChangeDevices(
-    std::vector<C_OscDeviceDefinition> &orc_Devices,
+    QList<C_OscDeviceDefinition> &orc_Devices,
     const QString &orc_DeviceGroup, const QString &orc_IniFile) {
   int32_t s32_Return = C_CONFIG;
 
@@ -287,7 +287,7 @@ int32_t C_OscDeviceManager::ChangeDevices(
    copy of all device groups owned by this class
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscDeviceGroup> C_OscDeviceManager::GetDeviceGroups(void) const {
+QList<C_OscDeviceGroup> C_OscDeviceManager::GetDeviceGroups(void) const {
   return this->mc_DeviceGroups;
 }
 

@@ -459,7 +459,7 @@ int32_t C_CieImportDbc::mh_PrepareMessage(
 int32_t C_CieImportDbc::mh_ConvertAndAddMessage(
     const Vector::DBC::Network &orc_DbcNetwork,
     const Vector::DBC::Message &orc_DbcMessage,
-    std::vector<C_CieConverter::C_CieNodeMessage> &orc_Messages) {
+    QList<C_CieConverter::C_CieNodeMessage> &orc_Messages) {
   int32_t s32_Return = C_WARN;
 
   C_CieConverter::C_CieNodeMessage c_Message;

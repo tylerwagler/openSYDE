@@ -144,7 +144,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::InitStaticNames(void) const
    Messages
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_CieConverter::C_CieNodeMessage> C_SdBueJ1939AddMessagesFromCatalogDialog::GetMessagesImportedFromCatalog()
+QList<C_CieConverter::C_CieNodeMessage> C_SdBueJ1939AddMessagesFromCatalogDialog::GetMessagesImportedFromCatalog()
 const
 {
    return this->mc_MessagesImportedFromCatalog;
@@ -249,7 +249,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_OnModeChanged()
       // Filter J1939 specific messages
       if (this->me_Mode == E_MessageMode::eJ1939_SPECIFIC)
       {
-         std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> c_FilteredMessages;
+         QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> c_FilteredMessages;
          this->m_FilterJ1939SpecificMessages(c_FilteredMessages);
          this->mpc_Ui->pc_TreeView->UpdateData(c_FilteredMessages);
       }
@@ -321,7 +321,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_RemoveDuplicateMessages()
 
    {
       std::sort(this->mc_MessagesImportedFromCatalog.begin(), this->mc_MessagesImportedFromCatalog.end());
-      const std::vector<C_CieConverter::C_CieNodeMessage>::const_iterator c_Last = std::unique(
+      const QList<C_CieConverter::C_CieNodeMessage>::const_iterator c_Last = std::unique(
          this->mc_MessagesImportedFromCatalog.begin(), this->mc_MessagesImportedFromCatalog.end());
       this->mc_MessagesImportedFromCatalog.erase(c_Last, this->mc_MessagesImportedFromCatalog.end());
    }
@@ -587,7 +587,7 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_ProcessCatalogPath(const bool o
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogDialog::m_FilterJ1939SpecificMessages(
-   std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_FilteredMessages)
+   QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_FilteredMessages)
 {
    if (this->mc_MessagesImportedFromCatalog.size() > 0)
    {

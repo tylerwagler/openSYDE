@@ -86,9 +86,9 @@ protected:
                                   float64_t * const opf64_UnscaledValueAsFloat,
                                   float64_t * const opf64_ScaledValueAsFloat);
    virtual int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                  QStringList & orc_ScaledValues, std::vector<float64_t> & orc_UnscaledValues);
+                                  QStringList & orc_ScaledValues, QList<float64_t> & orc_UnscaledValues);
 
-   virtual int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<float64_t> & orc_Values,
+   virtual int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, QList<float64_t> & orc_Values,
                                   const bool oq_UseScaling);
    int32_t m_GetAllValues(const uint32_t ou32_WidgetDataPoolElementIndex, QString & orc_ScaledFormattedLastValue,
                           QVector<float64_t> & orc_ScaledValues, QVector<qint64> & orc_Timestamps);
@@ -119,7 +119,7 @@ protected:
                                                 int32_t & ors32_TextHeight) const;
 
    const QMap<C_PuiSvDbNodeDataPoolListElementId, uint32_t> & m_GetMappingDpElementToDataSerie(void) const;
-   void m_GetAllRegisteredElements(std::vector<C_PuiSvDbNodeDataPoolListElementId> & orc_RegisteredElements) const;
+   void m_GetAllRegisteredElements(QList<C_PuiSvDbNodeDataPoolListElementId> & orc_RegisteredElements) const;
 
    const bool mq_ReadItem;
 
@@ -135,7 +135,7 @@ private:
                                              float64_t * const opf64_UnscaledValueAsFloat,
                                              float64_t * const opf64_ScaledValueAsFloat = NULL) const;
       QStringList GetValuesContentFormatted(const C_PuiSvDbDataElementContent & orc_Value,
-                                           std::vector<float64_t> & orc_UnscaledValueAsFloat) const;
+                                           QList<float64_t> & orc_UnscaledValueAsFloat) const;
 
       C_PuiSvDbDataElementScaling c_Scaling;
       C_PuiSvDbDataElementDisplayFormatterConfig c_FormatterConfig;
@@ -153,17 +153,17 @@ private:
         C_DpElementConfig> mc_MappingDpElementToConfig; ///< Configured Scaling
    ///< configuration for
    ///< each data element
-   std::vector<C_DpElementConfig> mc_UsedConfig; ///< Scaling configuration and initialized display formatter for
+   QList<C_DpElementConfig> mc_UsedConfig; ///< Scaling configuration and initialized display formatter for
    ///< real calculation
-   std::vector<uint32_t> mc_DataPoolElementTimeoutsMs; ///< Timouts for each data
+   QList<uint32_t> mc_DataPoolElementTimeoutsMs; ///< Timouts for each data
    ///< element
-   std::vector<qint64> mc_LastDataPoolElementTimeStampsMs; ///< Time stamp of last received
+   QList<qint64> mc_LastDataPoolElementTimeStampsMs; ///< Time stamp of last received
    ///< data
-   std::vector<bool> mc_LastDataPoolElementTimeStampsValid; ///< Valid flags for time stamp
+   QList<bool> mc_LastDataPoolElementTimeStampsValid; ///< Valid flags for time stamp
    ///< of last received data
-   std::vector<bool> mc_DataPoolElementValid; ///< Valid flags for each data
+   QList<bool> mc_DataPoolElementValid; ///< Valid flags for each data
    ///< element
-   std::vector<std::vector<
+   QList<QList<
                   stw::opensyde_core::C_OscNodeDataPoolContent::E_Type> > mc_MinimumType; ///< Minimal required type
    ///< after scaling
 

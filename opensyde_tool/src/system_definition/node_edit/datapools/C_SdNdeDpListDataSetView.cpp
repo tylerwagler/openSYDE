@@ -16,6 +16,7 @@
 #include <QHeaderView>
 #include <QMimeData>
 #include <QDrag>
+#include <QList>
 #include "C_SdNdeDpListDataSetView.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -194,12 +195,12 @@ bool C_SdNdeDpListDataSetView::Equals(const uint32_t & oru32_NodeIndex, const ui
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListDataSetView::Copy(void) const
 {
-   std::vector<uint32_t> c_SelectedIndices = m_GetSelectedIndices();
+   QList<uint32_t> c_SelectedIndices = m_GetSelectedIndices();
 
    if (c_SelectedIndices.size() > 0)
    {
-      std::vector<C_OscNodeDataPoolDataSet> c_OscNames;
-      std::vector<std::vector<C_OscNodeDataPoolContent> > c_OscDataSetValues;
+      QList<C_OscNodeDataPoolDataSet> c_OscNames;
+      QList<QList<C_OscNodeDataPoolContent> > c_OscDataSetValues;
 
       c_OscNames.resize(c_SelectedIndices.size());
       c_OscDataSetValues.resize(c_SelectedIndices.size());
@@ -251,7 +252,7 @@ void C_SdNdeDpListDataSetView::Paste(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListDataSetView::Delete(void)
 {
-   const std::vector<uint32_t> c_SelectedIndices = m_GetSelectedIndices();
+   const QList<uint32_t> c_SelectedIndices = m_GetSelectedIndices();
 
    if (c_SelectedIndices.size() > 0)
    {
@@ -269,7 +270,7 @@ void C_SdNdeDpListDataSetView::Delete(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListDataSetView::Insert(const bool & orq_SetFocus)
 {
-   std::vector<uint32_t> c_Indices;
+   QList<uint32_t> c_Indices;
    const uint32_t u32_Index = m_GetOneAfterHighestSelected();
    c_Indices.push_back(u32_Index);
 
@@ -292,8 +293,8 @@ void C_SdNdeDpListDataSetView::DoMoveLeft(void)
    {
       bool q_AllowMove = true;
 
-      std::vector<uint32_t> c_TargetIndices;
-      std::vector<uint32_t> c_SourceIndices = m_GetSelectedIndices();
+      QList<uint32_t> c_TargetIndices;
+      QList<uint32_t> c_SourceIndices = m_GetSelectedIndices();
       c_TargetIndices.resize(c_SourceIndices.size());
 
       //Sort to have "correct" move order
@@ -330,8 +331,8 @@ void C_SdNdeDpListDataSetView::DoMoveRight(void)
       {
          bool q_AllowMove = true;
 
-         std::vector<uint32_t> c_TargetIndices;
-         std::vector<uint32_t> c_SourceIndices = m_GetSelectedIndices();
+         QList<uint32_t> c_TargetIndices;
+         QList<uint32_t> c_SourceIndices = m_GetSelectedIndices();
          const uint32_t u32_LastIndex =
             static_cast<uint32_t>(this->mpc_ModelViewManager->GetDataSetModel(this->mu32_NodeIndex,
                                                                               this->
@@ -449,17 +450,17 @@ void C_SdNdeDpListDataSetView::dropEvent(QDropEvent * const opc_Event)
                   if ((pc_MimeData->hasFormat(pc_Model->mimeTypes().at(1)) == true) &&
                       (pc_MimeData->hasFormat(pc_Model->mimeTypes().at(2)) == true))
                   {
-                     std::vector<C_OscNodeDataPoolDataSet> c_OscNames;
-                     std::vector<std::vector<C_OscNodeDataPoolContent> > c_OscDataSetValues;
+                     QList<C_OscNodeDataPoolDataSet> c_OscNames;
+                     QList<QList<C_OscNodeDataPoolContent> > c_OscDataSetValues;
                      const QString c_Content = pc_MimeData->data(pc_Model->mimeTypes().at(1));
                      //Insert indices
                      if (C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromString(c_OscNames, c_OscDataSetValues,
                                                                                      c_Content) == C_NO_ERR)
                      {
-                        std::vector<uint32_t> c_SourceIndices;
+                        QList<uint32_t> c_SourceIndices;
                         uint32_t u32_TargetCol;
                         const QString c_IndicesString = pc_MimeData->data(pc_Model->mimeTypes().at(2));
-                        std::vector<uint32_t> c_NewIndices;
+                        QList<uint32_t> c_NewIndices;
                         const QModelIndex c_Index = this->indexAt(opc_Event->pos());
                         //Target row
                         if (c_Index.isValid())
@@ -566,7 +567,7 @@ void C_SdNdeDpListDataSetView::leaveEvent(QEvent * const opc_Event)
 void C_SdNdeDpListDataSetView::selectionChanged(const QItemSelection & orc_Selected,
                                                 const QItemSelection & orc_Deselected)
 {
-   std::vector<uint32_t> c_SelectedIndices;
+   QList<uint32_t> c_SelectedIndices;
    C_TblViewScroll::selectionChanged(orc_Selected, orc_Deselected);
 
    c_SelectedIndices = C_SdNdeDpUtil::h_ConvertVector(this->selectedIndexes(), false);
@@ -586,7 +587,7 @@ void C_SdNdeDpListDataSetView::selectionChanged(const QItemSelection & orc_Selec
 void C_SdNdeDpListDataSetView::startDrag(const Qt::DropActions oc_SupportedActions)
 {
    const QModelIndexList c_SelectedItems = this->selectedIndexes();
-   const std::vector<uint32_t> c_ReallySelectedItems = this->m_GetSelectedIndices();
+   const QList<uint32_t> c_ReallySelectedItems = this->m_GetSelectedIndices();
 
    if (c_ReallySelectedItems.size() > 0)
    {
@@ -604,9 +605,9 @@ void C_SdNdeDpListDataSetView::startDrag(const Qt::DropActions oc_SupportedActio
    \param[in] orc_Indices Indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListDataSetView::m_DeleteIndices(const std::vector<uint32_t> & orc_Indices)
+void C_SdNdeDpListDataSetView::m_DeleteIndices(const QList<uint32_t> & orc_Indices)
 {
-   std::vector<uint32_t> c_Indices = orc_Indices;
+   QList<uint32_t> c_Indices = orc_Indices;
    C_Uti::h_Uniqueify(c_Indices);
    this->mc_UndoManager.DoDeleteElements(this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex,
                                          this->mpc_ModelViewManager,
@@ -620,8 +621,8 @@ void C_SdNdeDpListDataSetView::m_DeleteIndices(const std::vector<uint32_t> & orc
    \param[in] orc_TargetIndices Target index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListDataSetView::m_Move(const std::vector<uint32_t> & orc_SourceIndices,
-                                      const std::vector<uint32_t> & orc_TargetIndices)
+void C_SdNdeDpListDataSetView::m_Move(const QList<uint32_t> & orc_SourceIndices,
+                                      const QList<uint32_t> & orc_TargetIndices)
 {
    this->mc_UndoManager.DoMoveElements(this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex,
                                        this->mpc_ModelViewManager,
@@ -634,9 +635,9 @@ void C_SdNdeDpListDataSetView::m_Move(const std::vector<uint32_t> & orc_SourceIn
    Selected indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SdNdeDpListDataSetView::m_GetSelectedIndices(void) const
+QList<uint32_t> C_SdNdeDpListDataSetView::m_GetSelectedIndices(void) const
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    QModelIndexList c_SelectedItems = this->selectedIndexes();
 
    c_Retval.reserve(c_SelectedItems.size());
@@ -656,7 +657,7 @@ std::vector<uint32_t> C_SdNdeDpListDataSetView::m_GetSelectedIndices(void) const
    \param[in] orc_SelectedIndices Selected indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListDataSetView::m_CheckActions(const std::vector<uint32_t> & orc_SelectedIndices)
+void C_SdNdeDpListDataSetView::m_CheckActions(const QList<uint32_t> & orc_SelectedIndices)
 {
    if (orc_SelectedIndices.size() > 0)
    {
@@ -752,7 +753,7 @@ void C_SdNdeDpListDataSetView::m_UpdateCornerButton(void)
 uint32_t C_SdNdeDpListDataSetView::m_GetOneAfterHighestSelected(void)
 {
    uint32_t u32_Retval = 0;
-   const std::vector<uint32_t> c_SelectedItems = this->m_GetSelectedIndices();
+   const QList<uint32_t> c_SelectedItems = this->m_GetSelectedIndices();
 
    if (c_SelectedItems.size() > 0)
    {

@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -281,8 +282,8 @@ void C_SdNdeHalcConfigImportDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcConfigImportDialog::m_OkClicked(void)
 {
-   std::vector<uint32_t> c_DomainIndices;
-   std::vector<std::vector<uint32_t> > c_MissingChannelIndices;
+   QList<uint32_t> c_DomainIndices;
+   QList<QList<uint32_t> > c_MissingChannelIndices;
 
    if (this->mpc_Ui->pc_TreeView->IsSelectionOfLinkedChannelsValid(c_DomainIndices, c_MissingChannelIndices) == false)
    {

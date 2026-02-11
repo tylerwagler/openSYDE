@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
@@ -38,12 +39,12 @@ class C_SdNdeDbSelectDataPools :
 
 public:
    explicit C_SdNdeDbSelectDataPools(const uint32_t ou32_NodeIndex, const int32_t os32_SkipApplicationIndex,
-                                     const std::vector<uint32_t> & orc_UsedDataPoolIndicesIndex,
+                                     const QList<uint32_t> & orc_UsedDataPoolIndicesIndex,
                                      stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent);
    ~C_SdNdeDbSelectDataPools(void) override;
 
    void InitStaticNames(void) const;
-   std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> GetSelectedDataPools(void) const;
+   QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> GetSelectedDataPools(void) const;
 
 protected:
    void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
@@ -53,7 +54,7 @@ private:
    //lint -e{1725} Only problematic if copy or assignment is allowed
    stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    const uint32_t mu32_NodeIndex;
-   const std::vector<uint32_t> mc_UsedDataPoolIndices;
+   const QList<uint32_t> mc_UsedDataPoolIndices;
 
    void m_OkClicked(void);
    void m_CancelClicked(void);

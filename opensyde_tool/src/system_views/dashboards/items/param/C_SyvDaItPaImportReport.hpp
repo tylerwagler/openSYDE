@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QStringList>
+#include <QList>
 #include "C_OgePopUpDialog.hpp"
 #include "C_OscParamSetInterpretedNode.hpp"
 #include "C_OscNodeDataPoolListElementId.hpp"
@@ -39,16 +40,16 @@ class C_SyvDaItPaImportReport :
 
 public:
    explicit C_SyvDaItPaImportReport(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
-                                    const std::vector<stw::opensyde_core::C_OscParamSetInterpretedNode> & orc_Data,
-                                    const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ElementIds,
+                                    const QList<stw::opensyde_core::C_OscParamSetInterpretedNode> & orc_Data,
+                                    const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ElementIds,
                                     const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                                     const uint32_t ou32_ValidLayers, const QString & orc_Path);
    ~C_SyvDaItPaImportReport(void) override;
 
    void InitStaticNames(void) const;
-   void GetOutput(std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_OutputListIds,
-                  std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_OutputContent) const;
-   void GetFloatRangeCheckResults(std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
+   void GetOutput(QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_OutputListIds,
+                  QList<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_OutputContent) const;
+   void GetFloatRangeCheckResults(QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
                                   QStringList & orc_InvalidValues, QStringList & orc_NewValues) const;
 
 protected:
@@ -59,17 +60,17 @@ private:
    //lint -e{1725} Only problematic if copy or assignment is allowed
    stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    //lint -e{1725} Only problematic if copy or assignment is allowed
-   const std::vector<stw::opensyde_core::C_OscParamSetInterpretedNode> & mrc_Data;
+   const QList<stw::opensyde_core::C_OscParamSetInterpretedNode> & mrc_Data;
    //lint -e{1725} Only problematic if copy or assignment is allowed
-   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & mrc_ElementIds;
+   const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & mrc_ElementIds;
    //lint -e{1725} Only problematic if copy or assignment is allowed
    const QString & mrc_Path;
    //lint -e{1725} Only problematic if copy or assignment is allowed
    const stw::opensyde_core::C_OscNodeDataPoolListElementId & mrc_Id;
    const uint32_t mu32_ValidLayers;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_OutputListIds;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> mc_OutputContent;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_FloatRangeCheckInvalidValueIds;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_OutputListIds;
+   QList<stw::opensyde_core::C_OscNodeDataPoolContent> mc_OutputContent;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_FloatRangeCheckInvalidValueIds;
    QStringList mc_FloatRangeCheckInvalidValues;
    QStringList mc_FloatRangeCheckNewValues;
    static const QString mhc_HTML_TABLE_HEADER_START;

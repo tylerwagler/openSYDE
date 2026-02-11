@@ -12,7 +12,7 @@
 #define C_PUISVDASHBOARD_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include <set>
 #include <QString>
 #include "C_PuiSvDbChart.hpp"
@@ -61,39 +61,39 @@ public:
    void SetActive(const bool oq_Value);
    int32_t GetTabIndex(void) const;
    void SetTabIndex(const int32_t os32_Value);
-   const std::vector<C_PuiSvDbChart> & GetCharts(void) const;
-   void SetCharts(const std::vector<C_PuiSvDbChart> & orc_Value);
+   const QList<C_PuiSvDbChart> & GetCharts(void) const;
+   void SetCharts(const QList<C_PuiSvDbChart> & orc_Value);
    const C_PuiSvDbTabChart & GetTabChart(void) const;
    void SetTabChart(const C_PuiSvDbTabChart & orc_Value);
    const C_PuiSvDbChart * GetChart(const uint32_t ou32_Index) const;
-   const std::vector<C_PuiSvDbLabel> & GetLabels(void) const;
-   void SetLabels(const std::vector<C_PuiSvDbLabel> & orc_Value);
+   const QList<C_PuiSvDbLabel> & GetLabels(void) const;
+   void SetLabels(const QList<C_PuiSvDbLabel> & orc_Value);
    const C_PuiSvDbLabel * GetLabel(const uint32_t ou32_Index) const;
-   const std::vector<C_PuiSvDbParam> & GetParams(void) const;
-   void SetParams(const std::vector<C_PuiSvDbParam> & orc_Value);
+   const QList<C_PuiSvDbParam> & GetParams(void) const;
+   void SetParams(const QList<C_PuiSvDbParam> & orc_Value);
    const C_PuiSvDbParam * GetParam(const uint32_t ou32_Index) const;
-   const std::vector<C_PuiSvDbPieChart> & GetPieCharts(void) const;
-   void SetPieCharts(const std::vector<C_PuiSvDbPieChart> & orc_Value);
+   const QList<C_PuiSvDbPieChart> & GetPieCharts(void) const;
+   void SetPieCharts(const QList<C_PuiSvDbPieChart> & orc_Value);
    const C_PuiSvDbPieChart * GetPieChart(const uint32_t ou32_Index) const;
-   const std::vector<C_PuiSvDbSpinBox> & GetSpinBoxes(void) const;
-   void SetSpinBoxes(const std::vector<C_PuiSvDbSpinBox> & orc_Value);
+   const QList<C_PuiSvDbSpinBox> & GetSpinBoxes(void) const;
+   void SetSpinBoxes(const QList<C_PuiSvDbSpinBox> & orc_Value);
    const C_PuiSvDbSpinBox * GetSpinBox(const uint32_t ou32_Index) const;
-   const std::vector<C_PuiSvDbSlider> & GetSliders(void) const;
-   void SetSliders(const std::vector<C_PuiSvDbSlider> & orc_Value);
+   const QList<C_PuiSvDbSlider> & GetSliders(void) const;
+   void SetSliders(const QList<C_PuiSvDbSlider> & orc_Value);
    const C_PuiSvDbSlider * GetSlider(const uint32_t ou32_Index) const;
-   const std::vector<C_PuiSvDbProgressBar> & GetProgressBars(void) const;
-   void SetProgressBars(const std::vector<C_PuiSvDbProgressBar> & orc_Value);
+   const QList<C_PuiSvDbProgressBar> & GetProgressBars(void) const;
+   void SetProgressBars(const QList<C_PuiSvDbProgressBar> & orc_Value);
    const C_PuiSvDbProgressBar * GetProgressBar(const uint32_t ou32_Index) const;
-   const std::vector<C_PuiSvDbTable> & GetTables(void) const;
-   void SetTables(const std::vector<C_PuiSvDbTable> & orc_Value);
+   const QList<C_PuiSvDbTable> & GetTables(void) const;
+   void SetTables(const QList<C_PuiSvDbTable> & orc_Value);
    const C_PuiSvDbTable * GetTable(const uint32_t ou32_Index) const;
-   const std::vector<C_PuiSvDbToggle> & GetToggles(void) const;
-   void SetToggles(const std::vector<C_PuiSvDbToggle> & orc_Value);
+   const QList<C_PuiSvDbToggle> & GetToggles(void) const;
+   void SetToggles(const QList<C_PuiSvDbToggle> & orc_Value);
    const C_PuiSvDbToggle * GetToggle(const uint32_t ou32_Index) const;
 
    const C_PuiSvDbWidgetBase * GetWidgetBase(const C_PuiSvDbDataElement::E_Type oe_Type,
                                              const uint32_t ou32_Index) const;
-   void GetAllWidgetItems(std::vector<const C_PuiSvDbWidgetBase *> & orc_Output) const;
+   void GetAllWidgetItems(QList<const C_PuiSvDbWidgetBase *> & orc_Output) const;
    void GetAllRegisteredDashboardElements(std::set<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_Ids) const;
    void GetAllRegisteredDashboardElementsGuiId(std::set<C_PuiSvDbNodeDataPoolListElementId> & orc_Ids) const;
 
@@ -199,7 +199,7 @@ public:
 
    //Util
    bool DiscardInvalidIndices(void);
-   void HandleCompatibilityChart(std::vector<C_PuiSvDashboard> & orc_NewCharts);
+   void HandleCompatibilityChart(QList<C_PuiSvDashboard> & orc_NewCharts);
    void FixDashboardWriteContentType();
    static C_PuiSvDbDataElement::E_Type h_GetWidgetType(const C_PuiSvDbWidgetBase * const opc_Box);
 
@@ -208,15 +208,15 @@ public:
    uint32_t Count(void) const override;
 
 protected:
-   std::vector<C_PuiSvDbChart> mc_Charts; // deprecated but needed for loading old projects
-   std::vector<C_PuiSvDbLabel> mc_Labels;
-   std::vector<C_PuiSvDbPieChart> mc_PieCharts;
-   std::vector<C_PuiSvDbProgressBar> mc_ProgressBars;
-   std::vector<C_PuiSvDbSpinBox> mc_SpinBoxes;
-   std::vector<C_PuiSvDbSlider> mc_Sliders;
-   std::vector<C_PuiSvDbTable> mc_Tables;
-   std::vector<C_PuiSvDbToggle> mc_Toggles;
-   std::vector<C_PuiSvDbParam> mc_ParamWidgets;
+   QList<C_PuiSvDbChart> mc_Charts; // deprecated but needed for loading old projects
+   QList<C_PuiSvDbLabel> mc_Labels;
+   QList<C_PuiSvDbPieChart> mc_PieCharts;
+   QList<C_PuiSvDbProgressBar> mc_ProgressBars;
+   QList<C_PuiSvDbSpinBox> mc_SpinBoxes;
+   QList<C_PuiSvDbSlider> mc_Sliders;
+   QList<C_PuiSvDbTable> mc_Tables;
+   QList<C_PuiSvDbToggle> mc_Toggles;
+   QList<C_PuiSvDbParam> mc_ParamWidgets;
    C_PuiSvDbTabChart mc_TabChart;
 
 private:
@@ -226,7 +226,7 @@ private:
    int32_t ms32_TabIndex;
    E_TabType me_Type;
 
-   void m_GetAllWidgetItems(std::vector<C_PuiSvDbWidgetBase *> & orc_Output);
+   void m_GetAllWidgetItems(QList<C_PuiSvDbWidgetBase *> & orc_Output);
    static void mh_MarkInvalid(C_PuiSvDbNodeDataPoolListElementId & orc_DataElementId);
    static uint32_t mh_GetBestIndexForNewItem(const C_PuiSvDbParam & orc_ParamWidget,
                                              const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_NewId,

@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
+#include <QList>
 
 #include "C_OgeTreeViewToolTipBase.hpp"
 
@@ -39,10 +40,10 @@ public:
    int32_t Init(const stw::opensyde_core::C_OscHalcConfig & orc_Config,
                 const stw::opensyde_core::C_OscHalcConfigStandalone & orc_ImportConfig);
    void GetAdaptedConfiguration(stw::opensyde_core::C_OscHalcConfig & orc_AdaptedConfig);
-   bool IsSelectionOfLinkedChannelsValid(std::vector<uint32_t> & orc_DomainIndices,
-                                         std::vector<std::vector<uint32_t> > & orc_MissingChannelIndices);
-   void CheckChannels(const std::vector<uint32_t> & orc_DomainIndices,
-                      const std::vector<std::vector<uint32_t> > & orc_ChannelIndices);
+   bool IsSelectionOfLinkedChannelsValid(QList<uint32_t> & orc_DomainIndices,
+                                         QList<QList<uint32_t> > & orc_MissingChannelIndices);
+   void CheckChannels(const QList<uint32_t> & orc_DomainIndices,
+                      const QList<QList<uint32_t> > & orc_ChannelIndices);
 
 private:
    stw::opensyde_gui_logic::C_SdNdeHalcConfigImportModel mc_Model;

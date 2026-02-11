@@ -90,16 +90,16 @@ public:
 
    virtual int32_t Cycle(void);
    virtual int32_t DataPoolReadNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                       const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
+                                       const uint16_t ou16_ElementIndex, QByteArray & orc_ReadData,
                                        uint8_t * const opu8_NrCode);
    virtual int32_t DataPoolReadArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                     const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
+                                     const uint16_t ou16_ElementIndex, QByteArray & orc_ReadData,
                                      uint8_t * const opu8_NrCode);
    virtual int32_t DataPoolWriteNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                        const uint16_t ou16_ElementIndex, const std::vector<uint8_t> & orc_DataToWrite,
+                                        const uint16_t ou16_ElementIndex, const QByteArray & orc_DataToWrite,
                                         uint8_t * const opu8_NrCode);
    virtual int32_t DataPoolWriteArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                      const uint16_t ou16_ElementIndex, const std::vector<uint8_t> & orc_DataToWrite,
+                                      const uint16_t ou16_ElementIndex, const QByteArray & orc_DataToWrite,
                                       uint8_t * const opu8_NrCode);
    virtual int32_t DataPoolSetEventDataRate(const uint8_t ou8_Rail, const uint16_t ou16_IntervalMs);
    virtual int32_t DataPoolReadCyclic(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
@@ -109,10 +109,10 @@ public:
                                             const uint16_t ou16_ElementIndex, const uint8_t ou8_Rail,
                                             const uint32_t ou32_Threshold, uint8_t * const opu8_NrCode);
    virtual int32_t DataPoolStopEventDriven(void);
-   virtual int32_t NvmRead(const uint32_t ou32_MemoryAddress, std::vector<uint8_t> & orc_DataRecord,
+   virtual int32_t NvmRead(const uint32_t ou32_MemoryAddress, QByteArray & orc_DataRecord,
                            uint8_t * const opu8_NrCode);
    virtual int32_t NvmWriteStartTransaction(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_NvmAccessCount);
-   virtual int32_t NvmWrite(const uint32_t ou32_MemoryAddress, const std::vector<uint8_t> & orc_DataRecord,
+   virtual int32_t NvmWrite(const uint32_t ou32_MemoryAddress, const QByteArray & orc_DataRecord,
                             uint8_t * const opu8_NrCode);
    virtual int32_t NvmWriteFinalizeTransaction(void);
 

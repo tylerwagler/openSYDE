@@ -88,7 +88,7 @@ QString C_OscNodeSquad::h_CombineNames(const QString & orc_MainDeviceName,
    \retval   C_CONFIG   At least one sub node device definition is not valid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeSquad::SetBaseName(std::vector<C_OscNode> & orc_Nodes, const QString & orc_NodeBaseName)
+int32_t C_OscNodeSquad::SetBaseName(QList<C_OscNode> & orc_Nodes, const QString & orc_NodeBaseName)
 {
    // Check the indexes first
    uint32_t u32_NodeIndexCounter;
@@ -150,7 +150,7 @@ int32_t C_OscNodeSquad::SetBaseName(std::vector<C_OscNode> & orc_Nodes, const QS
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscNodeSquad::h_CheckIsMultiDevice(const uint32_t ou32_NodeIndex,
-                                          const std::vector<C_OscNodeSquad> & orc_AvailableGroups,
+                                          const QList<C_OscNodeSquad> & orc_AvailableGroups,
                                           uint32_t * const opu32_GroupIndex)
 {
    bool q_Retval = false;

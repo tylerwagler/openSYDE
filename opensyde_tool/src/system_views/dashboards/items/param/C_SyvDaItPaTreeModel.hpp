@@ -12,6 +12,7 @@
 #define C_SYVDAITPATREEMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include "C_TblTreItem.hpp"
 #include "C_TblTreModel.hpp"
@@ -56,30 +57,30 @@ public:
    void SetConnected(const bool oq_Connected);
    void SetLoadSaveActive(const bool oq_Active);
    void SetActionActive(const bool oq_Active);
-   void DeleteSpecified(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
+   void DeleteSpecified(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds);
    void ClearEcuValues(void);
-   void ApplyEcuValues(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
-                       std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
+   void ApplyEcuValues(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
+                       QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
                        QStringList & orc_InvalidValues, QStringList & orc_NewValues);
-   bool CheckRange(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
-                   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds2) const;
+   bool CheckRange(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds,
+                   const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds2) const;
    bool CheckAllListsRead(void) const;
-   void PrepareChangedValues(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds) const;
-   void RemoveValuesChangedFlag(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds)
+   void PrepareChangedValues(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds) const;
+   void RemoveValuesChangedFlag(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds)
    const;
 
    QModelIndexList GetAllAvailableIndixesForOneColumn(void) const;
    QModelIndex GetIndexForItem(const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                                const uint32_t & oru32_ValidLayers) const;
    void Init(stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const opc_DataWidget);
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetAllListIds(void) const;
-   bool CheckListsRead(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds) const;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetChangedListElementIds(void) const;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> GetInvalidListIds(void) const;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetAllListIds(void) const;
+   bool CheckListsRead(const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListIds) const;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetChangedListElementIds(void) const;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListId> GetInvalidListIds(void) const;
    void UpdateEcuValues(void);
    void SetCrcStatus(const stw::opensyde_core::C_OscNodeDataPoolListId & orc_ListId, const bool oq_Status);
    void GetListSetValues(const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_ListId,
-                         std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_ListValues) const;
+                         QList<stw::opensyde_core::C_OscNodeDataPoolContent> & orc_ListValues) const;
 
    // Header:
    QVariant headerData(const int32_t os32_Section, const Qt::Orientation oe_Orientation, const int32_t os32_Role =
@@ -96,18 +97,18 @@ public:
    static void h_DecodeIndex(const QModelIndex & orc_Index, stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                              uint32_t & oru32_ValidLayers);
    uint32_t GetParamIndexId(const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id) const;
-   static void h_AppendOnlyUniqueListId(std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_Vec,
+   static void h_AppendOnlyUniqueListId(QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_Vec,
                                         const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_ListId);
    static QString h_GetSelectedItemTypeTemplate(const QModelIndex & orc_Index);
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetListIdsForId(
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetListIdsForId(
       const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id, const uint32_t ou32_ValidLayers)
    const;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetElementIdsForId(
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetElementIdsForId(
       const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id, const uint32_t ou32_ValidLayers)
    const;
 
    static void h_AdaptFloatRangeOfValueAndAppendResults(stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
-                                                        const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_DescriptionId, std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, QStringList & orc_InvalidValues, QStringList & orc_NewValues);
+                                                        const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_DescriptionId, QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, QStringList & orc_InvalidValues, QStringList & orc_NewValues);
    static void h_AdaptFloatRangeOfValue(stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
                                         const stw::opensyde_core::C_OscNodeDataPoolListElement & orc_Description);
    static void h_FixInvalidFloatValue(float64_t & orf64_Value);
@@ -120,9 +121,9 @@ private:
    bool mq_SaveLoadActive;
    bool mq_ActionActive;
    QList<QStringList> mc_EcuValuesString;
-   std::vector<bool> mc_EcuValuesReadStatus;
-   std::vector<bool> mc_EcuCrcValidStatus;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> mc_EcuValues;
+   QList<bool> mc_EcuValuesReadStatus;
+   QList<bool> mc_EcuCrcValidStatus;
+   QList<stw::opensyde_core::C_OscNodeDataPoolContent> mc_EcuValues;
 
    static const QString mhc_ICON_ALL_NODE;
    static const QString mhc_ICON_NODE;

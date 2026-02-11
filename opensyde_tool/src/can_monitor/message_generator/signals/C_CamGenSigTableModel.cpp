@@ -1060,7 +1060,7 @@ C_CamGenSigTableModel::m_GetSignalInterpretedDbc(
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscNodeDataPoolContent C_CamGenSigTableModel::mh_DecodeRawToContentDbc(
-    const std::vector<uint8_t> &orc_Raw,
+    const QByteArray &orc_Raw,
     const C_CieConverter::C_CieCanSignal &orc_Signal) {
   const C_OscCanSignal c_Signal =
       C_CamGenSigUtil::h_ConvertDbcToOsy(orc_Signal);
@@ -1142,7 +1142,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(
             C_CamProHandler::h_GetInstance()->GetMessageConst(
                 this->mu32_MessageIndex);
         if (pc_Message != NULL) {
-          const std::vector<uint8_t> c_RawData =
+          const QByteArray c_RawData =
               C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
           const C_OscNodeDataPoolContent c_ConvertedContent =
               C_CamGenSigUtil::h_DecodeRawToContentSignal(
@@ -1178,7 +1178,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(
               C_CamProHandler::h_GetInstance()->GetMessageConst(
                   this->mu32_MessageIndex);
           if (pc_Message != NULL) {
-            const std::vector<uint8_t> c_RawData =
+            const QByteArray c_RawData =
                 C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
             const C_OscNodeDataPoolContent c_ConvertedContent =
                 C_CamGenSigTableModel::mh_DecodeRawToContentDbc(c_RawData,
@@ -1218,7 +1218,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(
             C_CamProHandler::h_GetInstance()->GetMessageConst(
                 this->mu32_MessageIndex);
         if (pc_Message != NULL) {
-          const std::vector<uint8_t> c_Data =
+          const QByteArray c_Data =
               C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
           // Get current state
           if (C_CamGenSigUtil::h_GetBit(pc_OsySignal->u16_ComBitStart,
@@ -1248,7 +1248,7 @@ QVariant C_CamGenSigTableModel::m_HandleColRawInterpreted(
               C_CamProHandler::h_GetInstance()->GetMessageConst(
                   this->mu32_MessageIndex);
           if (pc_Message != NULL) {
-            const std::vector<uint8_t> c_Data =
+            const QByteArray c_Data =
                 C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
             // Get current state
             if (C_CamGenSigUtil::h_GetBit(pc_DbcSignal->u16_ComBitStart,
@@ -1365,7 +1365,7 @@ QVariant C_CamGenSigTableModel::m_HandleColPhysicalInterpreted(
             C_CamProHandler::h_GetInstance()->GetMessageConst(
                 this->mu32_MessageIndex);
         if (pc_Message != NULL) {
-          const std::vector<uint8_t> c_RawData =
+          const QByteArray c_RawData =
               C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
           const C_OscNodeDataPoolContent c_ConvertedContent =
               C_CamGenSigUtil::h_DecodeRawToContentSignal(
@@ -1392,7 +1392,7 @@ QVariant C_CamGenSigTableModel::m_HandleColPhysicalInterpreted(
             C_CamProHandler::h_GetInstance()->GetMessageConst(
                 this->mu32_MessageIndex);
         if (pc_Message != NULL) {
-          const std::vector<uint8_t> c_RawData =
+          const QByteArray c_RawData =
               C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
           const C_OscNodeDataPoolContent c_ConvertedContent =
               C_CamGenSigTableModel::mh_DecodeRawToContentDbc(c_RawData,
@@ -1700,15 +1700,21 @@ int32_t C_CamGenSigTableModel::m_SetSignalFromOsyValue(
           this->mu32_MessageIndex);
 
   if (pc_Message != NULL) {
-    // Get raw as vector
-    std::vector<uint8_t> c_RawData =
+    // Get raw as QByteArray
+    QByteArray c_RawData =
         C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
     // Encode new data
     C_CamGenSigUtil::h_DecodeSignalValueToRaw(c_RawData, orc_OsySignal,
                                               orc_Value);
+    // Convert to vector for project interface (out of scope for Phase B-B2)
+    std::vector<uint8_t> c_VecData;
+    c_VecData.reserve(c_RawData.size());
+    for (int32_t s32_Idx = 0; s32_Idx < c_RawData.size(); ++s32_Idx) {
+      c_VecData.push_back(static_cast<uint8_t>(c_RawData[s32_Idx]));
+    }
     // Write new values
     s32_Retval = C_CamProHandler::h_GetInstance()->SetMessageDataBytes(
-        this->mu32_MessageIndex, c_RawData);
+        this->mu32_MessageIndex, c_VecData);
   } else {
     s32_Retval = C_RANGE;
   }
@@ -1964,7 +1970,7 @@ uint16_t C_CamGenSigTableModel::m_GetMultiplexerValue(
           this->mu32_MessageIndex);
 
   if (pc_Message != NULL) {
-    const std::vector<uint8_t> c_RawData =
+    const QByteArray c_RawData =
         C_CamGenSigUtil::h_ConvertRawDataFormat(*pc_Message);
 
     if (opc_OsyMessage != NULL) {
@@ -2087,7 +2093,7 @@ C_CamGenSigTableModel::m_TranslateRowToIndex(const int32_t os32_Row) const {
       const uint16_t u16_MuxValue =
           C_CamGenSigTableModel::m_GetMultiplexerValue(pc_OsyMessage,
                                                        pc_DbcMessage);
-      std::vector<uint16_t> c_StartBits =
+      QList<uint16_t> c_StartBits =
           C_CamGenSigTableModel::mh_GetStartBits(pc_OsyMessage, pc_DbcMessage,
                                                  u16_MuxValue);
       // Sort
@@ -2146,11 +2152,11 @@ C_CamGenSigTableModel::m_TranslateRowToIndex(const int32_t os32_Row) const {
    Start bit locations for the current mux value
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint16_t> C_CamGenSigTableModel::mh_GetStartBits(
+QList<uint16_t> C_CamGenSigTableModel::mh_GetStartBits(
     const C_OscCanMessage *const opc_OsyMessage,
     const C_CieConverter::C_CieCanMessage *const opc_DbcMessage,
     const uint16_t ou16_MuxValue) {
-  std::vector<uint16_t> c_Retval;
+  QList<uint16_t> c_Retval;
   if (opc_OsyMessage != NULL) {
     for (uint32_t u32_ItSig = 0UL; u32_ItSig < opc_OsyMessage->c_Signals.size();
          ++u32_ItSig) {

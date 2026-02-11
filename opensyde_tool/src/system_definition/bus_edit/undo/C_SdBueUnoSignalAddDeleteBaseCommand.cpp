@@ -54,10 +54,10 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueUnoSignalAddDeleteBaseCommand::C_SdBueUnoSignalAddDeleteBaseCommand(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageId,
-   const std::vector<uint32_t> & orc_SignalIndex, const std::vector<uint16_t> & orc_StartBit,
-   const std::vector<C_OscCanSignal::E_MultiplexerType> & orc_MultiplexerType,
-   const std::vector<uint16_t> & orc_MultiplexerValue, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MessageId,
+   const QList<uint32_t> & orc_SignalIndex, const QList<uint16_t> & orc_StartBit,
+   const QList<C_OscCanSignal::E_MultiplexerType> & orc_MultiplexerType,
+   const QList<uint16_t> & orc_MultiplexerValue, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
    C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget, const QString & orc_Text,
    QUndoCommand * const opc_Parent) :
    C_SdBueUnoMessageBaseCommand(orc_MessageId, opc_MessageSyncManager, opc_MessageTreeWidget, orc_Text, opc_Parent),
@@ -302,12 +302,12 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Remove(void)
       for (uint32_t u32_ItStep = this->mc_UniqueId.size(); u32_ItStep > 0UL; --u32_ItStep)
       {
          Q_ASSERT(this->mpc_MessageSyncManager->DeleteCanSignal(this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
-                                                                     this->mc_UniqueId[static_cast<std::vector<uint64_t>
+                                                                     this->mc_UniqueId[static_cast<QList<uint64_t>
                                                                                                    ::
                                                                                                    size_type>(u32_ItStep
                                                                                                               -
                                                                                                               1UL)]),
-                                                                  this->mc_SignalIndex[static_cast<std::vector<uint32_t>
+                                                                  this->mc_SignalIndex[static_cast<QList<uint32_t>
                                                                                                    ::
                                                                                                    size_type>(u32_ItStep
                                                                                                               -
@@ -316,10 +316,10 @@ void C_SdBueUnoSignalAddDeleteBaseCommand::m_Remove(void)
          if (this->mpc_MessageTreeWidget != NULL)
          {
             this->mpc_MessageTreeWidget->InternalDeleteSignal(this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
-                                                                 this->mc_UniqueId[static_cast<std::vector<uint64_t>::
+                                                                 this->mc_UniqueId[static_cast<QList<uint64_t>::
                                                                                                size_type>(u32_ItStep -
                                                                                                           1UL)]),
-                                                              this->mc_SignalIndex[static_cast<std::vector<uint32_t>::
+                                                              this->mc_SignalIndex[static_cast<QList<uint32_t>::
                                                                                                size_type>(u32_ItStep -
                                                                                                           1UL)]);
          }

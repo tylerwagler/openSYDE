@@ -8,6 +8,7 @@
 #ifndef C_OSCHALCMAGICIANUTIL_HPP
 #define C_OSCHALCMAGICIANUTIL_HPP
 
+#include <QList>
 #include <QString>
 #include "C_OscHalcConfigDomain.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
@@ -29,7 +30,7 @@ public:
    static QString h_GetDatapoolName(const bool oq_IsSafe, const uint32_t ou32_CopyIndex = 0UL);
    static QString h_GetDatapoolComment(const bool oq_IsSafe, const uint32_t ou32_CopyIndex = 0UL);
    static QString h_GetListName(const C_OscHalcDefDomain::E_VariableSelector oe_Type);
-   static int32_t h_GetVariableName(const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
+   static int32_t h_GetVariableName(const QList<C_OscHalcDefStruct> & orc_DefinitionArray,
                                     const uint32_t ou32_ParameterIndexStruct, const uint32_t ou32_ParameterIndexElement,
                                     const QString & orc_DomainSingularName,
                                     QString & orc_Name, const uint32_t ou32_CurChannel = 0UL);

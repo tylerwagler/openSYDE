@@ -24,7 +24,7 @@ using namespace stw::opensyde_core;
 using namespace stw::errors;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const std::vector<C_OscCanProtocol::E_Type> C_OscCanProtocol::hc_ALL_PROTOCOLS = C_OscCanProtocol::mh_GetAllProtocols();
+const QList<C_OscCanProtocol::E_Type> C_OscCanProtocol::hc_ALL_PROTOCOLS = C_OscCanProtocol::mh_GetAllProtocols();
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -83,7 +83,7 @@ void C_OscCanProtocol::CalcHash(uint32_t & oru32_HashValue) const
 int32_t C_OscCanProtocol::GetAllSignalsForMessage(const C_OscNodeDataPool & orc_DataPool,
                                                   const uint32_t ou32_InterfaceIndex, const uint32_t ou32_MessageIndex,
                                                   const bool oq_IsTx,
-                                                  std::vector<const C_OscNodeDataPoolListElement *> & orc_Signals) const
+                                                  QList<const C_OscNodeDataPoolListElement *> & orc_Signals) const
 {
    const C_OscNodeDataPoolList * const pc_List = h_GetComListConst(orc_DataPool, ou32_InterfaceIndex, oq_IsTx);
    int32_t s32_Retval = C_NO_ERR;
@@ -95,7 +95,7 @@ int32_t C_OscCanProtocol::GetAllSignalsForMessage(const C_OscNodeDataPool & orc_
       if (ou32_InterfaceIndex < this->c_ComMessages.size())
       {
          const C_OscCanMessageContainer & rc_ComMessageContainer = this->c_ComMessages[ou32_InterfaceIndex];
-         const std::vector<C_OscCanMessage> & rc_ComMessages = rc_ComMessageContainer.GetMessagesConst(oq_IsTx);
+         const QList<C_OscCanMessage> & rc_ComMessages = rc_ComMessageContainer.GetMessagesConst(oq_IsTx);
          //Check consistency
          if (ou32_MessageIndex < rc_ComMessages.size())
          {
@@ -299,7 +299,7 @@ const C_OscNodeDataPoolListElement * C_OscCanProtocol::GetComListElementConst(co
    if ((pc_List != NULL) && (ou32_InterfaceIndex < this->c_ComMessages.size()))
    {
       const C_OscCanMessageContainer & rc_MessageContainer = this->c_ComMessages[ou32_InterfaceIndex];
-      const std::vector<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessagesConst(oq_IsTx);
+      const QList<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessagesConst(oq_IsTx);
       if (ou32_MessageIndex < rc_Messages.size())
       {
          const C_OscCanMessage & rc_Message = rc_Messages[ou32_MessageIndex];
@@ -342,7 +342,7 @@ C_OscNodeDataPoolListElement * C_OscCanProtocol::GetComListElement(C_OscNodeData
    if ((pc_List != NULL) && (ou32_InterfaceIndex < this->c_ComMessages.size()))
    {
       const C_OscCanMessageContainer & rc_MessageContainer = this->c_ComMessages[ou32_InterfaceIndex];
-      const std::vector<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessagesConst(oq_IsTx);
+      const QList<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessagesConst(oq_IsTx);
       if (ou32_MessageIndex < rc_Messages.size())
       {
          const C_OscCanMessage & rc_Message = rc_Messages[ou32_MessageIndex];
@@ -530,9 +530,9 @@ bool C_OscCanProtocol::h_GetCanMessageSignalsRequired(const E_Type oe_Type)
    All protocols
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscCanProtocol::E_Type> C_OscCanProtocol::mh_GetAllProtocols()
+QList<C_OscCanProtocol::E_Type> C_OscCanProtocol::mh_GetAllProtocols()
 {
-   std::vector<C_OscCanProtocol::E_Type> c_Retval;
+   QList<C_OscCanProtocol::E_Type> c_Retval;
    c_Retval.push_back(eLAYER2);
    c_Retval.push_back(eCAN_OPEN_SAFETY);
    c_Retval.push_back(eECES);

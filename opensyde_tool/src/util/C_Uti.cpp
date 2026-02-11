@@ -74,8 +74,8 @@ using namespace stw::opensyde_gui_logic;
    \param[in]  orc_Indices    Input to uniqueify
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_Uti::h_Uniqueify(std::vector<uint32_t> &orc_Indices) {
-  std::vector<uint32_t>::const_iterator c_Last;
+void C_Uti::h_Uniqueify(QList<uint32_t> &orc_Indices) {
+  QList<uint32_t>::const_iterator c_Last;
   std::sort(orc_Indices.begin(), orc_Indices.end());
 
   c_Last = std::unique(orc_Indices.begin(), orc_Indices.end());
@@ -93,16 +93,16 @@ void C_Uti::h_Uniqueify(std::vector<uint32_t> &orc_Indices) {
    Input as contiguous sections
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<std::vector<uint32_t>> C_Uti::h_GetContiguousSectionsAscending(
-    const std::vector<uint32_t> &orc_Indices) {
-  std::vector<std::vector<uint32_t>> c_Retval;
-  std::vector<uint32_t> c_InProgress;
-  std::vector<uint32_t> c_Copy = orc_Indices;
+QList<QList<uint32_t>> C_Uti::h_GetContiguousSectionsAscending(
+    const QList<uint32_t> &orc_Indices) {
+  QList<QList<uint32_t>> c_Retval;
+  QList<uint32_t> c_InProgress;
+  QList<uint32_t> c_Copy = orc_Indices;
   C_Uti::h_Uniqueify(c_Copy);
   for (uint32_t u32_It = 0UL; u32_It < c_Copy.size(); ++u32_It) {
     if (c_InProgress.size() > 0UL) {
       if (c_Copy[u32_It] ==
-          (c_InProgress[static_cast<std::vector<uint32_t>::size_type>(
+          (c_InProgress[static_cast<QList<uint32_t>::size_type>(
                c_InProgress.size() - 1UL)] +
            1UL)) {
         // Contiguous
@@ -296,9 +296,9 @@ QString C_Uti::h_GetStringFromDouble(const float64_t of64_Value) {
    Items uniquified and sorted ascending
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t>
-C_Uti::h_UniquifyAndSortAscending(const std::vector<uint32_t> &orc_Items) {
-  std::vector<uint32_t> c_Retval = orc_Items;
+QList<uint32_t>
+C_Uti::h_UniquifyAndSortAscending(const QList<uint32_t> &orc_Items) {
+  QList<uint32_t> c_Retval = orc_Items;
   h_Uniqueify(c_Retval);
   return c_Retval;
 }
@@ -314,10 +314,10 @@ C_Uti::h_UniquifyAndSortAscending(const std::vector<uint32_t> &orc_Items) {
    Items uniquified and sorted descending
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t>
-C_Uti::h_UniquifyAndSortDescending(const std::vector<uint32_t> &orc_Items) {
-  std::vector<uint32_t> c_Retval;
-  std::vector<uint32_t> c_Ascending = h_UniquifyAndSortAscending(orc_Items);
+QList<uint32_t>
+C_Uti::h_UniquifyAndSortDescending(const QList<uint32_t> &orc_Items) {
+  QList<uint32_t> c_Retval;
+  QList<uint32_t> c_Ascending = h_UniquifyAndSortAscending(orc_Items);
 
   // Reverse order
   c_Retval.reserve(c_Ascending.size());
@@ -971,9 +971,9 @@ C_Uti::h_GetUniqueNameQt(const std::map<QString, bool> &orc_ExistingStrings,
    Ascending sorted index map
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_Uti::h_CreateAscendingIndexMap(
-    const std::vector<uint32_t> &orc_UnsortedIndices) {
-  std::vector<int32_t> c_IndexMap;
+QList<int32_t> C_Uti::h_CreateAscendingIndexMap(
+    const QList<uint32_t> &orc_UnsortedIndices) {
+  QList<int32_t> c_IndexMap;
   c_IndexMap.resize(orc_UnsortedIndices.size(), -1);
   for (uint32_t u32_Index = 0; u32_Index < orc_UnsortedIndices.size();
        ++u32_Index) {
@@ -996,7 +996,7 @@ std::vector<int32_t> C_Uti::h_CreateAscendingIndexMap(
    false: Unsorted
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_Uti::h_CheckSortedAscending(const std::vector<uint32_t> &orc_Indices) {
+bool C_Uti::h_CheckSortedAscending(const QList<uint32_t> &orc_Indices) {
   bool q_Retval = true;
 
   if (orc_Indices.size() > 1) {
@@ -1168,16 +1168,16 @@ void C_Uti::h_GetAllFilePathsInFolder(const QString &orc_FolderPath,
 */
 //----------------------------------------------------------------------------------------------------------------------
 template <typename T>
-void C_Uti::h_SortIndicesAscendingAndSync(std::vector<uint32_t> &orc_IndicesTmp,
-                                          std::vector<T> &orc_SyncContent) {
+void C_Uti::h_SortIndicesAscendingAndSync(QList<uint32_t> &orc_IndicesTmp,
+                                          QList<T> &orc_SyncContent) {
   if (C_Uti::h_CheckSortedAscending(orc_IndicesTmp) == false) {
-    std::vector<uint32_t> c_IndicesTmp;
+    QList<uint32_t> c_IndicesTmp;
     // lint -e{8080} //template naming not correctly handled by naming
     // convention checker
-    std::vector<T> c_SyncContentTmp;
+    QList<T> c_SyncContentTmp;
     // Step 1: Fill new vector in sorted order with which element should be
     // copied to which position
-    const std::vector<int32_t> c_IndexMap =
+    const QList<int32_t> c_IndexMap =
         C_Uti::h_CreateAscendingIndexMap(orc_IndicesTmp);
     // Step 2: Copy existing elements to new structures according to plan
     c_IndicesTmp.reserve(orc_IndicesTmp.size());
@@ -1204,8 +1204,8 @@ void C_Uti::h_SortIndicesAscendingAndSync(std::vector<uint32_t> &orc_IndicesTmp,
 // split of declaration and implementation lint
 // -esym(754,stw::opensyde_gui_logic::C_Uti::h_SortIndicesAscendingAndSync*)
 template void C_Uti::h_SortIndicesAscendingAndSync<uint32_t>(
-    std::vector<uint32_t> &orc_IndicesTmp,
-    std::vector<uint32_t> &orc_SyncContent);
+    QList<uint32_t> &orc_IndicesTmp,
+    QList<uint32_t> &orc_SyncContent);
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor

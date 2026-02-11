@@ -67,7 +67,7 @@ const QString C_SyvDaItPaImageRecordWidget::mhc_FILE_EXTENSION = ".syde_psi";
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaItPaImageRecordWidget::C_SyvDaItPaImageRecordWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                            C_SyvComDriverDiag & orc_ComDriver,
-                                                           const std::vector<C_OscNodeDataPoolListElementId > & orc_ListItemIds,
+                                                           const QList<C_OscNodeDataPoolListElementId > & orc_ListItemIds,
                                                            const QString & orc_ViewName) :
    QWidget(&orc_Parent),
    mpc_Ui(new Ui::C_SyvDaItPaImageRecordWidget),
@@ -738,7 +738,7 @@ int32_t C_SyvDaItPaImageRecordWidget::m_ReadBackElementsOfNodeFromFile(void)
 
    if (s32_Return == C_NO_ERR)
    {
-      std::vector<std::vector<C_OscNodeDataPoolListId> > c_DataPoolListsForEachNode;
+      QList<QList<C_OscNodeDataPoolListId> > c_DataPoolListsForEachNode;
       c_DataPoolListsForEachNode.resize(this->mc_AllNodeIndexes.size());
 
       for (u32_Counter = 0U; u32_Counter < this->mc_AllNodeIndexes.size(); ++u32_Counter)
@@ -804,7 +804,7 @@ int32_t C_SyvDaItPaImageRecordWidget::m_ReadBackElementsOfNodeFromFile(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
-   const std::vector<std::vector<C_OscNodeDataPoolListId> > & orc_DataPoolListsForEachNode,
+   const QList<QList<C_OscNodeDataPoolListId> > & orc_DataPoolListsForEachNode,
    const bool oq_IsConfirm) const
 {
    std::list<QString> c_NodeText;
@@ -930,7 +930,7 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaImageRecordWidget::m_PrepareConfirmStep(
-   const std::vector<std::vector<C_OscNodeDataPoolListId> > & orc_DataPoolListsForEachNode)
+   const QList<QList<C_OscNodeDataPoolListId> > & orc_DataPoolListsForEachNode)
 {
    const QString c_TextConfirm = this->m_GetTextForStep(orc_DataPoolListsForEachNode, true);
 

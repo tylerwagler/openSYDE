@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include <QString>
 #include "stwtypes.hpp"
 
@@ -33,14 +34,14 @@ public:
 
    static QString h_CombineNames(const QString & orc_MainDeviceName,
                                  const QString & orc_SubDeviceName);
-   int32_t SetBaseName(std::vector<C_OscNode> & orc_Nodes, const QString & orc_NodeBaseName);
+   int32_t SetBaseName(QList<C_OscNode> & orc_Nodes, const QString & orc_NodeBaseName);
    static bool h_CheckIsMultiDevice(const uint32_t ou32_NodeIndex,
-                                    const std::vector<stw::opensyde_core::C_OscNodeSquad> & orc_AvailableGroups,
+                                    const QList<stw::opensyde_core::C_OscNodeSquad> & orc_AvailableGroups,
                                     uint32_t * const opu32_GroupIndex = NULL);
 
    static const QString hc_SEPARATOR; ///< Default separator for GUI and device type checks
    QString c_BaseName;                ///< Base name for all sub nodes
-   std::vector<uint32_t> c_SubNodeIndexes;          ///< Indexes of all containing sub nodes in the squad
+   QList<uint32_t> c_SubNodeIndexes;          ///< Indexes of all containing sub nodes in the squad
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

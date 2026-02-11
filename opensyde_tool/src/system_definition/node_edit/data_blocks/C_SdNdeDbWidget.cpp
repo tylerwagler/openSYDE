@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "C_Uti.hpp"
 #include "C_PuiSdUtil.hpp"
@@ -218,7 +219,7 @@ void C_SdNdeDbWidget::CheckProcessIdError(void) const
 {
    QString c_Info;
    bool q_Valid = false;
-   const std::vector<uint32_t> c_UsedIds = C_SdUtil::h_GetUsedProcessIdsForApplicationUniqueAndSortedAscending(
+   const QList<uint32_t> c_UsedIds = C_SdUtil::h_GetUsedProcessIdsForApplicationUniqueAndSortedAscending(
       this->mu32_NodeIndex, this->mu32_ApplicationIndex);
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 

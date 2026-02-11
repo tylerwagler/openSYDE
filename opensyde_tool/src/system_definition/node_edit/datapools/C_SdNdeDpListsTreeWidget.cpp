@@ -18,6 +18,7 @@
 #include <QDragMoveEvent>
 #include <QScrollBar>
 #include <QStringList>
+#include <QList>
 
 #include "C_SdNdeDpListsTreeWidget.hpp"
 #include "stwerrors.hpp"
@@ -283,9 +284,9 @@ void C_SdNdeDpListsTreeWidget::Copy(void) const
          this->mu32_DataPoolIndex);
       if (pc_DataPool != NULL)
       {
-         std::vector<C_OscNodeDataPoolList> c_OscContentVec;
-         std::vector<C_PuiSdNodeDataPoolList> c_UiContentVec;
-         std::vector<uint32_t> c_SelectedIndices = m_GetSelectedIndices();
+         QList<C_OscNodeDataPoolList> c_OscContentVec;
+         QList<C_PuiSdNodeDataPoolList> c_UiContentVec;
+         QList<uint32_t> c_SelectedIndices = m_GetSelectedIndices();
 
          //Sort to have "correct" copy order
          C_SdUtil::h_SortIndicesAscending(c_SelectedIndices);
@@ -358,7 +359,7 @@ void C_SdNdeDpListsTreeWidget::Delete(void)
    }
    else
    {
-      const std::vector<uint32_t> c_Indices = m_GetSelectedIndices();
+      const QList<uint32_t> c_Indices = m_GetSelectedIndices();
       this->mc_UndoManager.DoDeleteList(this->mu32_NodeIndex, this->mu32_DataPoolIndex, this,
                                         c_Indices);
    }
@@ -391,7 +392,7 @@ void C_SdNdeDpListsTreeWidget::Insert(const bool & orq_SetFocus)
    {
       if (this->mq_AllowAdd == true)
       {
-         std::vector<uint32_t> c_Indices;
+         QList<uint32_t> c_Indices;
          const uint32_t u32_TargetIndex = m_GetOneAfterHighestSelected();
          c_Indices.push_back(u32_TargetIndex);
 
@@ -444,8 +445,8 @@ void C_SdNdeDpListsTreeWidget::DoMoveUp(void)
       {
          bool q_AllowMove = true;
 
-         std::vector<uint32_t> c_TargetIndices;
-         std::vector<uint32_t> c_SourceIndices = m_GetSelectedIndices();
+         QList<uint32_t> c_TargetIndices;
+         QList<uint32_t> c_SourceIndices = m_GetSelectedIndices();
          c_TargetIndices.resize(c_SourceIndices.size());
 
          //Sort to have "correct" move order
@@ -489,8 +490,8 @@ void C_SdNdeDpListsTreeWidget::DoMoveDown(void)
       {
          bool q_AllowMove = true;
 
-         std::vector<uint32_t> c_TargetIndices;
-         std::vector<uint32_t> c_SourceIndices = m_GetSelectedIndices();
+         QList<uint32_t> c_TargetIndices;
+         QList<uint32_t> c_SourceIndices = m_GetSelectedIndices();
          const uint32_t u32_LastIndex = static_cast<uint32_t>(this->topLevelItemCount() - 1);
          c_TargetIndices.resize(c_SourceIndices.size());
 
@@ -531,7 +532,7 @@ void C_SdNdeDpListsTreeWidget::Edit(void) const
    }
    else
    {
-      const std::vector<uint32_t> c_Selection = m_GetSelectedIndices();
+      const QList<uint32_t> c_Selection = m_GetSelectedIndices();
       if (c_Selection.size() == 1)
       {
          const QModelIndex c_Index = this->model()->index(c_Selection[0], 0);
@@ -574,7 +575,7 @@ void C_SdNdeDpListsTreeWidget::PopUp(void) const
    }
    else
    {
-      const std::vector<uint32_t> c_Selection = m_GetSelectedIndices();
+      const QList<uint32_t> c_Selection = m_GetSelectedIndices();
       if (c_Selection.size() == 1)
       {
          const QModelIndex c_Index = this->model()->index(c_Selection[0], 0);
@@ -717,8 +718,8 @@ void C_SdNdeDpListsTreeWidget::dropEvent(QDropEvent * const opc_Event)
 
       if (q_AllowedMoveAction == true)
       {
-         const std::vector<uint32_t> c_SelectedIndices = this->m_GetSelectedIndices();
-         std::vector<uint32_t> c_TargetIndices;
+         const QList<uint32_t> c_SelectedIndices = this->m_GetSelectedIndices();
+         QList<uint32_t> c_TargetIndices;
          int32_t s32_TargetRow = static_cast<int32_t>(this->indexAt(opc_Event->pos()).row());
          mh_AdaptDropTargetIndex(c_SelectedIndices, e_DropIndicator, s32_TargetRow);
          c_TargetIndices.resize(c_SelectedIndices.size());
@@ -1096,8 +1097,8 @@ void C_SdNdeDpListsTreeWidget::m_InitialItemConfigure(QTreeWidgetItem * const op
    \param[in]  orc_TargetIndices  Target index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListsTreeWidget::m_Move(const std::vector<uint32_t> & orc_SourceIndices,
-                                      const std::vector<uint32_t> & orc_TargetIndices)
+void C_SdNdeDpListsTreeWidget::m_Move(const QList<uint32_t> & orc_SourceIndices,
+                                      const QList<uint32_t> & orc_TargetIndices)
 {
    const uint16_t u16_TimerId = osc_write_log_performance_start();
 
@@ -1299,9 +1300,9 @@ void C_SdNdeDpListsTreeWidget::m_HandleTableSelection(const uint32_t & oru32_Lis
    Selected indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SdNdeDpListsTreeWidget::m_GetSelectedIndices(void) const
+QList<uint32_t> C_SdNdeDpListsTreeWidget::m_GetSelectedIndices(void) const
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    const QList<QTreeWidgetItem *> c_SelectedItems = this->selectedItems();
 
    for (QList<QTreeWidgetItem *>::const_iterator c_ItSelectedItem = c_SelectedItems.begin();
@@ -1344,7 +1345,7 @@ void C_SdNdeDpListsTreeWidget::m_OnButtonChange(const bool & orq_AddActive, cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListsTreeWidget::m_CheckActions(void)
 {
-   const std::vector<uint32_t> c_SelectedIndices = m_GetSelectedIndices();
+   const QList<uint32_t> c_SelectedIndices = m_GetSelectedIndices();
 
    if (c_SelectedIndices.size() > 0)
    {
@@ -1502,7 +1503,7 @@ QTreeWidgetItem * C_SdNdeDpListsTreeWidget::m_GetActiveTableTreeWidget(const boo
    \param[in,out]  ors32_TargetPosition         Target position (Requirement: valid initialization)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListsTreeWidget::mh_AdaptDropTargetIndex(const std::vector<uint32_t> & orc_SelectedIndices,
+void C_SdNdeDpListsTreeWidget::mh_AdaptDropTargetIndex(const QList<uint32_t> & orc_SelectedIndices,
                                                        const QAbstractItemView::DropIndicatorPosition & ore_DropIndicatorPosition,
                                                        int32_t & ors32_TargetPosition)
 {
@@ -1601,7 +1602,7 @@ void C_SdNdeDpListsTreeWidget::m_ScrollBarRangeChanged(const int32_t os32_Min, c
 uint32_t C_SdNdeDpListsTreeWidget::m_GetOneAfterHighestSelected(void) const
 {
    uint32_t u32_Retval = 0;
-   const std::vector<uint32_t> c_SelectedItems = this->m_GetSelectedIndices();
+   const QList<uint32_t> c_SelectedItems = this->m_GetSelectedIndices();
 
    if (c_SelectedItems.size() > 0)
    {

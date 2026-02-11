@@ -155,9 +155,9 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeNameAvailable(const QString & orc_Name,
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerNodeLogic::SetOscNodeEthernetConfiguration(const uint32_t ou32_NodeIndex,
                                                               const uint32_t ou32_InterfaceIndex,
-                                                              const std::vector<int32_t> & orc_Ip,
-                                                              const std::vector<int32_t> & orc_NetMask,
-                                                              const std::vector<int32_t> & orc_DefaultGateway)
+                                                              const QList<int32_t> & orc_Ip,
+                                                              const QList<int32_t> & orc_NetMask,
+                                                              const QList<int32_t> & orc_DefaultGateway)
 {
    if (((orc_Ip.size() == 4UL) && (orc_NetMask.size() == 4UL)) && (orc_DefaultGateway.size() == 4UL))
    {
@@ -541,10 +541,10 @@ void C_PuiSdHandlerNodeLogic::SetOscNodeProperties(const uint32_t ou32_NodeIndex
 void C_PuiSdHandlerNodeLogic::SetOscNodePropertiesDetailed(const uint32_t ou32_NodeIndex, const QString & orc_Name,
                                                            const QString & orc_Comment, const C_OscNodeProperties::E_DiagnosticServerProtocol
                                                            oe_DiagnosticServer, const C_OscNodeProperties::E_FlashLoaderProtocol
-                                                           oe_FlashLoader, const std::vector<uint8_t> & orc_NodeIds,
-                                                           const std::vector<bool> & orc_UpdateFlags,
-                                                           const std::vector<bool> & orc_RoutingFlags,
-                                                           const std::vector<bool> & orc_DiagnosisFlags)
+                                                           oe_FlashLoader, const QByteArray & orc_NodeIds,
+                                                           const QList<bool> & orc_UpdateFlags,
+                                                           const QList<bool> & orc_RoutingFlags,
+                                                           const QList<bool> & orc_DiagnosisFlags)
 {
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
@@ -653,8 +653,8 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeAndSort(C_OscNode & orc_OscNode, const 
    Index of first node of node squad (0 -> first node)
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & orc_OscNodes,
-                                                      const std::vector<C_PuiSdNode> & orc_UiNodes,
+uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(QList<C_OscNode> & orc_OscNodes,
+                                                      const QList<C_PuiSdNode> & orc_UiNodes,
                                                       const QStringList & orc_NodeNames,
                                                       const QString & orc_MainDevice, const QString & orc_NameProposal)
 {
@@ -700,7 +700,14 @@ uint32_t C_PuiSdHandlerNodeLogic::AddNodeSquadAndSort(std::vector<C_OscNode> & o
                                                                         c_Name);
 
    //insert UI part at same position as OSC part:
-   this->mc_UiNodes.insert(mc_UiNodes.begin() + u32_NodeIndex, orc_UiNodes.begin(), orc_UiNodes.end());
+   {
+      uint32_t u32_InsertIndex = u32_NodeIndex;
+      for (const C_PuiSdNode & rc_UiNode : orc_UiNodes)
+      {
+         this->mc_UiNodes.insert(static_cast<int32_t>(u32_InsertIndex), rc_UiNode);
+         ++u32_InsertIndex;
+      }
+   }
 
    //signal "node change"
    Q_EMIT (this->SigNodesChanged());
@@ -728,7 +735,7 @@ void C_PuiSdHandlerNodeLogic::RemoveNode(const uint32_t ou32_NodeIndex)
 {
    int32_t s32_NodeIndexCounter;
 
-   const std::vector<uint32_t> c_AllNodeIndexToRemove = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
+   const QList<uint32_t> c_AllNodeIndexToRemove = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
 
    // Start with the last index due to the highest index. Avoiding problems with deleting and changing orders for
    // the other node index
@@ -872,8 +879,8 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeConflict(const uint32_t & oru32_NodeIndex
    \param[out]  orc_Bitrates  Result vector with all supported CAN bitrates
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSdHandlerNodeLogic::GetSupportedCanBitrates(const std::vector<uint32_t> & orc_Nodes,
-                                                      std::vector<uint32_t> & orc_Bitrates) const
+void C_PuiSdHandlerNodeLogic::GetSupportedCanBitrates(const QList<uint32_t> & orc_Nodes,
+                                                      QList<uint32_t> & orc_Bitrates) const
 {
    uint32_t u32_NodeCounter;
 
@@ -894,7 +901,7 @@ void C_PuiSdHandlerNodeLogic::GetSupportedCanBitrates(const std::vector<uint32_t
       if (pc_Node != NULL)
       {
          uint32_t u32_SupportedBitrateCounter;
-         std::vector<uint32_t> c_TempBitrates;
+         QList<uint32_t> c_TempBitrates;
 
          Q_ASSERT(pc_Node->pc_DeviceDefinition != NULL);
 
@@ -944,8 +951,8 @@ void C_PuiSdHandlerNodeLogic::GetSupportedCanBitrates(const std::vector<uint32_t
    \param[out]  orc_Bitrates  Result vector with all supported CAN FD bitrates
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSdHandlerNodeLogic::GetSupportedCanFdBitrates(const std::vector<uint32_t> & orc_Nodes,
-                                                        std::vector<uint32_t> & orc_Bitrates) const
+void C_PuiSdHandlerNodeLogic::GetSupportedCanFdBitrates(const QList<uint32_t> & orc_Nodes,
+                                                        QList<uint32_t> & orc_Bitrates) const
 {
    uint32_t u32_NodeCounter;
 
@@ -965,7 +972,7 @@ void C_PuiSdHandlerNodeLogic::GetSupportedCanFdBitrates(const std::vector<uint32
       if (pc_Node != NULL)
       {
          uint32_t u32_SupportedBitrateCounter;
-         std::vector<uint32_t> c_TempBitrates;
+         QList<uint32_t> c_TempBitrates;
 
          Q_ASSERT(pc_Node->pc_DeviceDefinition != NULL);
 
@@ -1017,8 +1024,8 @@ void C_PuiSdHandlerNodeLogic::GetSupportedCanFdBitrates(const std::vector<uint32
    False If any of nodes doesn't supports CANFD
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_PuiSdHandlerNodeLogic::NodeSupportsCanFd(const std::vector<uint32_t> & orc_Nodes,
-                                                const std::vector<uint32_t> & orc_InterfaceIndexes) const
+bool C_PuiSdHandlerNodeLogic::NodeSupportsCanFd(const QList<uint32_t> & orc_Nodes,
+                                                const QList<uint32_t> & orc_InterfaceIndexes) const
 {
    bool q_IsNodeSupportsCanFd = true;
 
@@ -1096,9 +1103,9 @@ uint32_t C_PuiSdHandlerNodeLogic::GetOscNodeSquadsSize(void) const
    All node group indices using node index
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_PuiSdHandlerNodeLogic::GetAllNodeGroupIndicesUsingNodeIndex(const uint32_t ou32_NodeIndex) const
+QList<uint32_t> C_PuiSdHandlerNodeLogic::GetAllNodeGroupIndicesUsingNodeIndex(const uint32_t ou32_NodeIndex) const
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    bool q_Found = false;
    for (uint32_t u32_ItGroup = 0UL; u32_ItGroup < this->mc_CoreDefinition.c_NodeSquads.size(); ++u32_ItGroup)
    {
@@ -1153,7 +1160,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetNodeSquadIndexWithNodeIndex(const uint32_t o
    \param[out]  orc_Mapping   Vector with mapping
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSdHandlerNodeLogic::GetNodeToNodeSquadMapping(std::vector<int32_t> & orc_Mapping)
+void C_PuiSdHandlerNodeLogic::GetNodeToNodeSquadMapping(QList<int32_t> & orc_Mapping)
 {
    uint32_t u32_NodeCounter;
 
@@ -1403,7 +1410,7 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeIndexAssociatedWithAnotherNodeIndex(const
 {
    bool q_Retval = false;
 
-   const std::vector<uint32_t> c_NodeIndices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_FirstNodeIndex);
+   const QList<uint32_t> c_NodeIndices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_FirstNodeIndex);
 
    for (uint32_t u32_ItDevice = 0UL; u32_ItDevice < c_NodeIndices.size(); ++u32_ItDevice)
    {
@@ -2368,7 +2375,7 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeNvmDataPoolsSizeConflict(const uint32_t o
    if ((pc_Node != NULL) && (pc_Node->pc_DeviceDefinition != NULL) &&
        (pc_Node->u32_SubDeviceIndex < pc_Node->pc_DeviceDefinition->c_SubDevices.size()))
    {
-      std::vector<C_PuiSdHandlerNodeLogicNvmArea> c_Areas;
+      QList<C_PuiSdHandlerNodeLogicNvmArea> c_Areas;
       if (this->GetNodeNvmDataPoolAreas(ou32_NodeIndex, c_Areas) == C_NO_ERR)
       {
          uint32_t u32_Counter;
@@ -2443,7 +2450,7 @@ bool C_PuiSdHandlerNodeLogic::CheckNodeNvmDataPoolsSizeConflict(const uint32_t o
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerNodeLogic::GetNodeNvmDataPoolAreas(const uint32_t ou32_NodeIndex,
-                                                         std::vector<C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas)
+                                                         QList<C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas)
 const
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -2907,10 +2914,10 @@ int32_t C_PuiSdHandlerNodeLogic::CheckApplicationName(const uint32_t ou32_NodeIn
    All known programmable applications for this node (empty if index invalid)
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<const C_OscNodeApplication *> C_PuiSdHandlerNodeLogic::GetProgrammableApplications(
+QList<const C_OscNodeApplication *> C_PuiSdHandlerNodeLogic::GetProgrammableApplications(
    const uint32_t ou32_NodeIndex) const
 {
-   std::vector<const C_OscNodeApplication *> c_Retval;
+   QList<const C_OscNodeApplication *> c_Retval;
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       const C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
@@ -2935,9 +2942,9 @@ std::vector<const C_OscNodeApplication *> C_PuiSdHandlerNodeLogic::GetProgrammab
    All known file generation Data Blocks for this node (empty if index invalid)
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_PuiSdHandlerNodeLogic::GetFileGenAppIndices(const uint32_t ou32_NodeIndex) const
+QList<uint32_t> C_PuiSdHandlerNodeLogic::GetFileGenAppIndices(const uint32_t ou32_NodeIndex) const
 {
-   std::vector<uint32_t> c_Return;
+   QList<uint32_t> c_Return;
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       const C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
@@ -3025,7 +3032,7 @@ int32_t C_PuiSdHandlerNodeLogic::InsertDataPoolList(const uint32_t & oru32_NodeI
             // Handle shared Datapools
             if (oq_HandleSharedDatapools == true)
             {
-               std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+               QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                         c_SharedDatapools) == true)
@@ -3111,7 +3118,7 @@ int32_t C_PuiSdHandlerNodeLogic::RemoveDataPoolList(const uint32_t & oru32_NodeI
             // Handle shared Datapools
             if (oq_HandleSharedDatapools == true)
             {
-               std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+               QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                         c_SharedDatapools) == true)
@@ -3283,7 +3290,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetDataPoolListName(const uint32_t & oru32_Node
             // Handle shared Datapools
             if (oq_HandleSharedDatapools == true)
             {
-               std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+               QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                         c_SharedDatapools) == true)
@@ -3368,7 +3375,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetDataPoolListComment(const uint32_t & oru32_N
             // Handle shared Datapools
             if (oq_HandleSharedDatapools == true)
             {
-               std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+               QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                         c_SharedDatapools) == true)
@@ -3453,7 +3460,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetDataPoolListNvmSize(const uint32_t & oru32_N
             // Handle shared Datapools
             if (oq_HandleSharedDatapools == true)
             {
-               std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+               QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                         c_SharedDatapools) == true)
@@ -3627,7 +3634,7 @@ int32_t C_PuiSdHandlerNodeLogic::GetDataPoolListDataSet(const uint32_t & oru32_N
                                                         const uint32_t & oru32_DataPoolListIndex,
                                                         const uint32_t & oru32_DataPoolListDataSetIndex,
                                                         C_OscNodeDataPoolDataSet & orc_OscName,
-                                                        std::vector<C_OscNodeDataPoolContent> & orc_OscValues) const
+                                                        QList<C_OscNodeDataPoolContent> & orc_OscValues) const
 {
    int32_t s32_Retval = C_NO_ERR;
    const C_OscNodeDataPoolList * const pc_OscList = GetOscDataPoolList(oru32_NodeIndex,
@@ -3747,7 +3754,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetOscNodeDataPoolDataSet(const uint32_t & oru3
                // Handle shared Datapools
                if (oq_HandleSharedDatapools == true)
                {
-                  std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+                  QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                   if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                            c_SharedDatapools) == true)
@@ -3812,7 +3819,7 @@ int32_t C_PuiSdHandlerNodeLogic::InsertDataPoolListDataSet(const uint32_t & oru3
                                                            const uint32_t & oru32_DataPoolListIndex,
                                                            const uint32_t & oru32_DataPoolListDataSetIndex,
                                                            const C_OscNodeDataPoolDataSet & orc_OscName,
-                                                           const std::vector<C_OscNodeDataPoolContent> & orc_OscValues,
+                                                           const QList<C_OscNodeDataPoolContent> & orc_OscValues,
                                                            const bool oq_HandleSharedDatapools)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -3877,7 +3884,7 @@ int32_t C_PuiSdHandlerNodeLogic::InsertDataPoolListDataSet(const uint32_t & oru3
             // Handle shared Datapools
             if (oq_HandleSharedDatapools == true)
             {
-               std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+               QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                         c_SharedDatapools) == true)
@@ -3984,7 +3991,7 @@ int32_t C_PuiSdHandlerNodeLogic::RemoveDataPoolListDataSet(const uint32_t & oru3
             // Handle shared Datapools
             if (oq_HandleSharedDatapools == true)
             {
-               std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+               QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                         c_SharedDatapools) == true)
@@ -4105,7 +4112,7 @@ int32_t C_PuiSdHandlerNodeLogic::MoveDataPoolListDataSet(const uint32_t & oru32_
             // Handle shared Datapools
             if (oq_HandleSharedDatapools == true)
             {
-               std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+               QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                         c_SharedDatapools) == true)
@@ -4256,7 +4263,7 @@ int32_t C_PuiSdHandlerNodeLogic::MoveDataPoolList(const uint32_t & oru32_NodeInd
             // Handle shared Datapools
             if (oq_HandleSharedDatapools == true)
             {
-               std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+               QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                         c_SharedDatapools) == true)
@@ -4433,11 +4440,11 @@ int32_t C_PuiSdHandlerNodeLogic::ReserveDataPoolListElements(const uint32_t & or
             C_OscNodeDataPoolList & rc_OscList = rc_OscDataPool.c_Lists[oru32_DataPoolListIndex];
             //Reserve
             rc_UiList.c_DataPoolListElements.reserve(
-               static_cast<std::vector<C_OscNodeDataPoolListElement>::size_type>(
+               static_cast<QList<C_OscNodeDataPoolListElement>::size_type>(
                   rc_UiList.c_DataPoolListElements.size() +
                   oru32_AdditionalElements));
             rc_OscList.c_Elements.reserve(
-               static_cast<std::vector<C_PuiSdNodeDataPoolListElement>::size_type>(rc_OscList
+               static_cast<QList<C_PuiSdNodeDataPoolListElement>::size_type>(rc_OscList
                                                                                    .
                                                                                    c_Elements
                                                                                    .size() +
@@ -4446,7 +4453,7 @@ int32_t C_PuiSdHandlerNodeLogic::ReserveDataPoolListElements(const uint32_t & or
             // Handle shared Datapools
             if (oq_HandleSharedDatapools == true)
             {
-               std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+               QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                         c_SharedDatapools) == true)
@@ -4565,7 +4572,7 @@ int32_t C_PuiSdHandlerNodeLogic::InsertDataPoolListElement(const uint32_t & oru3
                // Handle shared Datapools
                if (oq_HandleSharedDatapools == true)
                {
-                  std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+                  QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                   if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                            c_SharedDatapools) == true)
@@ -4669,7 +4676,7 @@ int32_t C_PuiSdHandlerNodeLogic::RemoveDataPoolListElement(const uint32_t & oru3
                // Handle shared Datapools
                if (oq_HandleSharedDatapools == true)
                {
-                  std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+                  QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                   if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                            c_SharedDatapools) == true)
@@ -5044,7 +5051,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetDataPoolListElementMinArray(const uint32_t &
                   // Handle shared Datapools
                   if (oq_HandleSharedDatapools == true)
                   {
-                     std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+                     QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                      if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                               c_SharedDatapools) == true)
@@ -5185,7 +5192,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetDataPoolListElementMaxArray(const uint32_t &
                   // Handle shared Datapools
                   if (oq_HandleSharedDatapools == true)
                   {
-                     std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+                     QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                      if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                               c_SharedDatapools) == true)
@@ -5331,7 +5338,7 @@ int32_t C_PuiSdHandlerNodeLogic::SetDataPoolListElementDataSetArray(const uint32
                      // Handle shared Datapools
                      if (oq_HandleSharedDatapools == true)
                      {
-                        std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+                        QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                         if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                                  c_SharedDatapools) == true)
@@ -5672,7 +5679,7 @@ int32_t C_PuiSdHandlerNodeLogic::MoveDataPoolListElement(const uint32_t & oru32_
                // Handle shared Datapools
                if (oq_HandleSharedDatapools == true)
                {
-                  std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+                  QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
                   if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                                            c_SharedDatapools) == true)
@@ -6382,7 +6389,7 @@ void C_PuiSdHandlerNodeLogic::m_CleanUpComDataPool(const uint32_t & oru32_NodeIn
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerNodeLogic::mh_GetNodeNvmDataPoolAreas(const C_OscNode & orc_Node,
-                                                         std::vector<C_PuiSdHandlerNodeLogic::C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas)
+                                                         QList<C_PuiSdHandlerNodeLogic::C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas)
 {
    const uint32_t u32_NvmSize =
       orc_Node.pc_DeviceDefinition->c_SubDevices[orc_Node.u32_SubDeviceIndex].u32_UserEepromSizeBytes;
@@ -6500,7 +6507,7 @@ void C_PuiSdHandlerNodeLogic::mh_GetNodeNvmDataPoolAreas(const C_OscNode & orc_N
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerNodeLogic::mh_AddAndAdaptNvmDataPoolArea(
    C_PuiSdHandlerNodeLogic::C_PuiSdHandlerNodeLogicNvmArea & orc_CurrentArea,
-   std::vector<C_PuiSdHandlerNodeLogic::C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas)
+   QList<C_PuiSdHandlerNodeLogic::C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas)
 {
    uint32_t u32_AreaCounter;
    bool q_OverlapDetected = false;
@@ -6637,7 +6644,7 @@ void C_PuiSdHandlerNodeLogic::mh_MergeNvmDataPoolAreas(
    \param[in]  orc_NodeIds       Node ids
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSdHandlerNodeLogic::m_SetOscNodeIds(const uint32_t ou32_NodeIndex, const std::vector<uint8_t> & orc_NodeIds)
+void C_PuiSdHandlerNodeLogic::m_SetOscNodeIds(const uint32_t ou32_NodeIndex, const QByteArray & orc_NodeIds)
 {
    Q_ASSERT(ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size());
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
@@ -6647,7 +6654,7 @@ void C_PuiSdHandlerNodeLogic::m_SetOscNodeIds(const uint32_t ou32_NodeIndex, con
            (u32_ItInt < rc_OscNode.c_Properties.c_ComInterfaces.size()) && (u32_ItInt < orc_NodeIds.size());
            ++u32_ItInt)
       {
-         m_SetOscNodeId(ou32_NodeIndex, u32_ItInt, orc_NodeIds[u32_ItInt]);
+         m_SetOscNodeId(ou32_NodeIndex, u32_ItInt, static_cast<uint8_t>(orc_NodeIds[u32_ItInt]));
       }
    }
 }
@@ -6693,7 +6700,7 @@ void C_PuiSdHandlerNodeLogic::m_SetDataPoolListSharedSync(const uint32_t & oru32
                                                           const C_OscNodeDataPoolList & orc_OscContent,
                                                           const C_PuiSdNodeDataPoolList & orc_UiContent)
 {
-   std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+   QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
    if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                             c_SharedDatapools) == true)
@@ -6754,7 +6761,7 @@ void C_PuiSdHandlerNodeLogic::m_SetDataPoolListNvmCrcSharedSync(const uint32_t &
                                                                 const uint32_t & oru32_DataPoolListIndex,
                                                                 const bool oq_Value)
 {
-   std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+   QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
    if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                             c_SharedDatapools) == true)
@@ -6792,7 +6799,7 @@ void C_PuiSdHandlerNodeLogic::m_SetDataPoolListElementSharedSync(const uint32_t 
                                                                  const C_OscNodeDataPoolListElement & orc_OscContent,
                                                                  const C_PuiSdNodeDataPoolListElement & orc_UiContent)
 {
-   std::vector<C_OscNodeDataPoolId> c_SharedDatapools;
+   QList<C_OscNodeDataPoolId> c_SharedDatapools;
 
    if (this->mc_SharedDatapools.IsSharedAndGetDatapoolGroup(oru32_NodeIndex, oru32_DataPoolIndex,
                                                             c_SharedDatapools) == true)

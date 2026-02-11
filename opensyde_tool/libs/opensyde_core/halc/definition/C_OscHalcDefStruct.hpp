@@ -9,6 +9,7 @@
 #define C_OSCHALCDEFSTRUCT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscHalcDefElement.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -29,7 +30,7 @@ public:
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
-   std::vector<C_OscHalcDefElement> c_StructElements; ///< Optional data elements of this struct
+   QList<C_OscHalcDefElement> c_StructElements; ///< Optional data elements of this struct
    // If these are zero: assume plain type
    // If these are non-zero: assume struct type (don't use initial, min and max value in this case)
 };

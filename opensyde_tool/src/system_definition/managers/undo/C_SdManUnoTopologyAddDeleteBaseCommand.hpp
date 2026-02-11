@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include <QMap>
 #include <QObject>
 #include "C_GiNode.hpp"
@@ -38,7 +39,7 @@ class C_SdManUnoTopologyAddDeleteBaseCommand :
    Q_OBJECT
 
 public:
-   C_SdManUnoTopologyAddDeleteBaseCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SdManUnoTopologyAddDeleteBaseCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                           const QString & orc_Text, QUndoCommand * const opc_Parent = NULL, const C_SdTopologyDataSnapshot & orc_InitialSnapshotData =
                                              C_SdTopologyDataSnapshot());
    ~C_SdManUnoTopologyAddDeleteBaseCommand(void) override;

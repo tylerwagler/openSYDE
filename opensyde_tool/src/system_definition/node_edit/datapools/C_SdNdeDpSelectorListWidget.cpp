@@ -12,6 +12,7 @@
 
 #include <QPainter>
 #include <QApplication>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -225,7 +226,7 @@ bool C_SdNdeDpSelectorListWidget::SetActualDataPoolConflict(const int32_t os32_D
 
    C_OscNodeDataPoolId c_ActiveDatapool;
 
-   std::vector<C_OscNodeDataPoolId> c_ChangedDatapools;
+   QList<C_OscNodeDataPoolId> c_ChangedDatapools;
 
    // Search the active Widget
    if (os32_DataPoolWidgetIndex < this->mc_DpItems.size())
@@ -313,7 +314,7 @@ void C_SdNdeDpSelectorListWidget::UpdateActualDataPool(void)
       const C_PuiSdSharedDatapools & rc_SharedDatapools = C_PuiSdHandler::h_GetInstance()->GetSharedDatapoolsConst();
 
       C_OscNodeDataPoolId c_ActiveDatapool;
-      std::vector<C_OscNodeDataPoolId> c_SharedDatapoolGroup;
+      QList<C_OscNodeDataPoolId> c_SharedDatapoolGroup;
 
       // Get the selected Datapool
       c_ActiveDatapool = pc_WidgetItem->GetDatapoolId();
@@ -440,7 +441,7 @@ const
 
    if (q_IsShared == true)
    {
-      std::vector<C_OscNodeDataPoolId> c_Group;
+      QList<C_OscNodeDataPoolId> c_Group;
       const C_OscNodeDataPool * const pc_AdaptedDatapool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
          orc_AdaptedDatapool.u32_NodeIndex,
          orc_AdaptedDatapool.u32_DataPoolIndex);
@@ -624,7 +625,7 @@ void C_SdNdeDpSelectorListWidget::AddNewDatapool(void)
             {
                // Get a potential start address
                uint32_t u32_AreaCounter;
-               std::vector<C_PuiSdHandler::C_PuiSdHandlerNodeLogicNvmArea> c_NvmAreas;
+               QList<C_PuiSdHandler::C_PuiSdHandlerNodeLogicNvmArea> c_NvmAreas;
                Q_ASSERT(C_PuiSdHandler::h_GetInstance()->GetNodeNvmDataPoolAreas(this->mu32_NodeIndex,
                                                                                    c_NvmAreas) == C_NO_ERR);
 
@@ -786,7 +787,7 @@ void C_SdNdeDpSelectorListWidget::Paste(void)
    false  No conflict found
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeDpSelectorListWidget::CheckDataPoolsForConflict(std::vector<uint32_t> * const opc_InvalidDatapoolIndices)
+bool C_SdNdeDpSelectorListWidget::CheckDataPoolsForConflict(QList<uint32_t> * const opc_InvalidDatapoolIndices)
 const
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
@@ -2318,7 +2319,7 @@ void C_SdNdeDpSelectorListWidget::m_UpdateItemErrorToolTip(const uint32_t ou32_I
             bool q_IsErrorInListOrMessage;
             bool q_TooFewListsOrElementsError;
             bool q_TooManyListsOrElementsError;
-            std::vector<uint32_t> c_InvalidListIndices;
+            QList<uint32_t> c_InvalidListIndices;
             pc_Node->CheckErrorDataPool(u32_DataPoolIndex, &q_NameConflict, &q_NameInvalid,
                                         &q_IsErrorInListOrMessage, &q_TooFewListsOrElementsError,
                                         &q_TooManyListsOrElementsError,

@@ -10,7 +10,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include <vector>
 #include <QKeyEvent>
 
 #include "stwtypes.hpp"
@@ -309,8 +308,8 @@ void C_SdSearchTreeWidget::focusOutEvent(QFocusEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdSearchTreeWidget::m_StartSearch(void)
 {
-   const std::vector<C_OscNode> & rc_Nodes = C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().c_Nodes;
-   const std::vector<C_OscSystemBus> & rc_Busses =
+   const QList<C_OscNode> & rc_Nodes = C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().c_Nodes;
+   const QList<C_OscSystemBus> & rc_Busses =
       C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().c_Buses;
    uint32_t u32_Counter;
 
@@ -453,9 +452,9 @@ void C_SdSearchTreeWidget::m_SearchCanProtocolContent(const C_OscCanProtocol & o
            u32_MessageContainerCounter < orc_CanProtocol.c_ComMessages.size();
            ++u32_MessageContainerCounter)
       {
-         const std::vector<C_OscCanMessage> & rc_TxMessages =
+         const QList<C_OscCanMessage> & rc_TxMessages =
             orc_CanProtocol.c_ComMessages[u32_MessageContainerCounter].c_TxMessages;
-         const std::vector<C_OscCanMessage> & rc_RxMessages =
+         const QList<C_OscCanMessage> & rc_RxMessages =
             orc_CanProtocol.c_ComMessages[u32_MessageContainerCounter].c_RxMessages;
          const int32_t s32_ListIndexTx =
             C_OscCanProtocol::h_GetListIndex(*pc_DataPool, u32_MessageContainerCounter, true);

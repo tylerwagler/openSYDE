@@ -146,7 +146,7 @@ bool C_SdBueJ1939AddMessagesFromCatalogTreeView::IsEmpty() const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogTreeView::UpdateData(
-   const std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_MessagesImported)
+   const QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_MessagesImported)
 {
    this->sortByColumn(C_SdBueJ1939AddMessagesFromCatalogTreeModel::h_EnumToColumn(
                          C_SdBueJ1939AddMessagesFromCatalogTreeModel::ePGN_SPN),
@@ -323,10 +323,10 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeView::Search(const QString & orc_Text
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_CieConverter::C_CieNodeMessage> C_SdBueJ1939AddMessagesFromCatalogTreeView::GetSelectedMessages(void)
+QList<C_CieConverter::C_CieNodeMessage> C_SdBueJ1939AddMessagesFromCatalogTreeView::GetSelectedMessages(void)
 const
 {
-   std::vector<C_CieConverter::C_CieNodeMessage> c_RetVal;
+   QList<C_CieConverter::C_CieNodeMessage> c_RetVal;
 
    const uint32_t u32_SelectedMessageCount = this->mc_Model.GetCheckedItemCount();
 

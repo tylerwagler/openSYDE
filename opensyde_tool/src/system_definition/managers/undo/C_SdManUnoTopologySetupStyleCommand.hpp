@@ -12,6 +12,7 @@
 #define C_SDMANUNOTOPOLOGYSETUPSTYLECOMMAND_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_SebUnoSetupStyleCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -27,14 +28,14 @@ class C_SdManUnoTopologySetupStyleCommand :
    public C_SebUnoSetupStyleCommand
 {
 public:
-   C_SdManUnoTopologySetupStyleCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SdManUnoTopologySetupStyleCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                        const bool oq_DarkMode, QUndoCommand * const opc_Parent = NULL);
    ~C_SdManUnoTopologySetupStyleCommand(void) override;
 
 protected:
    void m_Restore(const QMap<uint64_t, C_PuiBsTemporaryDataId> & orc_MapIdToTypeAndIndex,
                   const C_PuiBsElements * const opc_Snapshot) override;
-   void m_CreateMapAndSaveState(const std::vector<QGraphicsItem *> & orc_Items, QMap<uint64_t,
+   void m_CreateMapAndSaveState(const QList<QGraphicsItem *> & orc_Items, QMap<uint64_t,
                                                                                      C_PuiBsTemporaryDataId> & orc_Map,
                                 C_PuiBsElements * const opc_Snapshot) const override;
 

@@ -148,7 +148,7 @@ C_SdBueMessageSelectorWidget::~C_SdBueMessageSelectorWidget()
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageSelectorWidget::SetNodeId(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-                                             const std::vector<uint32_t> & orc_DatapoolIndexes)
+                                             const QList<uint32_t> & orc_DatapoolIndexes)
 {
    this->mq_ModeSingleNode = true;
    this->mu32_NodeIndex = ou32_NodeIndex;
@@ -417,8 +417,8 @@ void C_SdBueMessageSelectorWidget::RecheckProtocolError(void) const
    }
    else
    {
-      std::vector<uint32_t> c_NodeIndexes;
-      std::vector<uint32_t> c_InterfaceIndexes;
+      QList<uint32_t> c_NodeIndexes;
+      QList<uint32_t> c_InterfaceIndexes;
       C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(this->mu32_BusIndex,
                                                                                          c_NodeIndexes,
                                                                                          c_InterfaceIndexes);

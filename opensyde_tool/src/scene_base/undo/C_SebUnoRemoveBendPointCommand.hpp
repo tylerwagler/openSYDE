@@ -28,7 +28,7 @@ class C_SebUnoRemoveBendPointCommand :
    public C_SebUnoBendPointBaseCommand
 {
 public:
-   C_SebUnoRemoveBendPointCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SebUnoRemoveBendPointCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                   const QPointF & orc_ScenePosition, QUndoCommand * const opc_Parent = NULL);
    ~C_SebUnoRemoveBendPointCommand(void) override;
    void undo(void) override;

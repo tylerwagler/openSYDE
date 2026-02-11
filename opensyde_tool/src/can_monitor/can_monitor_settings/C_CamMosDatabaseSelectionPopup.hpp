@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <array>
+#include <QList>
 #include <QWidget>
 #include "stwtypes.hpp"
 #include "C_OgeContextMenu.hpp"
@@ -44,7 +45,7 @@ public:
 
    void InitStaticNames(void) const;
    void SaveUserSettings(void) const;
-   std::vector<std::array<QString, 2> > GetSelectedDataElements(void) const;
+   QList<std::array<QString, 2> > GetSelectedDataElements(void) const;
 
 protected:
    void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;

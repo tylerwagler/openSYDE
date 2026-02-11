@@ -12,6 +12,7 @@
 #define C_OSCPARAMSETINTERPRETEDDATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscParamSetInterpretedNode.hpp"
 #include "C_OscParamSetInterpretedFileInfoData.hpp"
 
@@ -35,7 +36,7 @@ public:
 
    C_OscParamSetInterpretedFileInfoData c_FileInfo;
    //Interpreted file content
-   std::vector<C_OscParamSetInterpretedNode> c_InterpretedNodes;
+   QList<C_OscParamSetInterpretedNode> c_InterpretedNodes;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

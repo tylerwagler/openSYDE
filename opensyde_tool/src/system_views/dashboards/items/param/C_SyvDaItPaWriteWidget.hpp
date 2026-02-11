@@ -15,7 +15,7 @@
 
 #include <QWidget>
 #include <QTimer>
-#include <vector>
+#include <QList>
 #include <set>
 
 #include "stwtypes.hpp"
@@ -58,8 +58,8 @@ public:
 
    explicit C_SyvDaItPaWriteWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                    stw::opensyde_gui_logic::C_SyvComDriverDiag & orc_ComDriver,
-                                   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedElements,
-                                   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_InvalidLists);
+                                   const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedElements,
+                                   const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_InvalidLists);
    ~C_SyvDaItPaWriteWidget() override;
 
    void InitText(void);
@@ -77,8 +77,8 @@ private:
    C_SyvDaItPaWriteWidget & operator =(const C_SyvDaItPaWriteWidget &) &;
 
    void m_StartWriteChangedElements(
-      const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedElements,
-      const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_InvalidLists);
+      const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedElements,
+      const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_InvalidLists);
    void m_PrepareForWrite(void);
    void m_WriteChangedElementsOfNode(void);
    void m_ReadBackElementsOfNode(void);
@@ -120,14 +120,14 @@ private:
    std::map<stw::opensyde_core::C_OscNodeDataPoolListElementId,
             stw::opensyde_gui_logic::C_SyvDaItPaValuePairs> mc_AllAffectedValues;
 
-   std::vector<uint32_t> mc_AllNodeIndexes;
-   std::vector<const stw::opensyde_core::C_OscNode *> mc_ReadNodeValues;
+   QList<uint32_t> mc_AllNodeIndexes;
+   QList<const stw::opensyde_core::C_OscNode *> mc_ReadNodeValues;
    std::set<stw::opensyde_core::C_OscNodeDataPoolListId> mc_RelevantLists;
-   std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> > mc_InvalidListsForEachNode;
-   std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> > mc_ChangedElementsForEachNode;
+   QList<QList<stw::opensyde_core::C_OscNodeDataPoolListId> > mc_InvalidListsForEachNode;
+   QList<QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> > mc_ChangedElementsForEachNode;
 
    std::set<stw::opensyde_core::C_OscNodeDataPoolListId>::const_iterator mc_NotificationIterator;
-   std::vector<bool> mc_NotificationResult;
+   QList<bool> mc_NotificationResult;
 
    QTimer mc_Timer;
    E_Step me_Step;

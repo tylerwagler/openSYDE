@@ -15,7 +15,6 @@
 
 #include <QPointF>
 #include <QColor>
-#include <vector>
 #include "stwtypes.hpp"
 #include "C_PuiBsLineBase.hpp"
 

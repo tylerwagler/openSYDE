@@ -64,7 +64,7 @@ void C_SyvDaUnoManager::DoDelete(const QList<QGraphicsItem *> & orc_Items)
 {
    if (orc_Items.size() > 0)
    {
-      std::vector<uint64_t> c_Ids;
+      QList<uint64_t> c_Ids;
       C_SyvDaUnoDeleteCommand * pc_DeleteCommand;
 
       mh_MapItemToId(orc_Items, c_Ids);
@@ -89,7 +89,7 @@ void C_SyvDaUnoManager::DoAddGeneric(const C_PuiSvDbDataElement::E_Type & ore_Ty
                                      const QPointF & orc_NewPos, const float64_t of64_ZetValue,
                                      const bool & orq_DarkModeDefault, const QString & orc_AdditionalInformation)
 {
-   std::vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    C_SyvDaUnoAddCommand * pc_AddCommand;
 
    c_Ids.push_back(oru64_UniqueId);
@@ -109,7 +109,7 @@ void C_SyvDaUnoManager::DoAddGeneric(const C_PuiSvDbDataElement::E_Type & ore_Ty
    \param[in] of64_HighestUsedZetValue Highest used Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaUnoManager::DoAddSnapshot(const std::vector<uint64_t> & orc_UniqueIds,
+void C_SyvDaUnoManager::DoAddSnapshot(const QList<uint64_t> & orc_UniqueIds,
                                       const C_SyvDaDashboardSnapshot & orc_Snapshot,
                                       const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                                                  C_PuiSvReadDataConfiguration> & orc_RestoredRails,

@@ -20,6 +20,7 @@
 #include <QDomElement>
 #include <QString>
 #include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -138,7 +139,7 @@ public:
    virtual void ReportErrorForNodeMissing(const QString & orc_MissingNodeName) const;
 
    // get all attributes
-   std::vector<C_OscXmlAttribute> GetAttributes(void) const;
+   QList<C_OscXmlAttribute> GetAttributes(void) const;
 };
 
 //----------------------------------------------------------------------------------------------------------------------

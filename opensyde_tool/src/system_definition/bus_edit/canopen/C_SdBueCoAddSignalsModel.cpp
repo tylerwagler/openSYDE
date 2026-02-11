@@ -118,7 +118,7 @@ const
 
       if (c_ItItem != c_ItObject->second.cend())
       {
-         const std::vector<C_OscCanOpenManagerMappableSignal> * const pc_MappableSignals = this->m_GetMappableSignals();
+         const QList<C_OscCanOpenManagerMappableSignal> * const pc_MappableSignals = this->m_GetMappableSignals();
          if ((pc_MappableSignals != NULL) && (c_ItItem->second < pc_MappableSignals->size()))
          {
             pc_Retval = &(*pc_MappableSignals)[c_ItItem->second];
@@ -138,10 +138,10 @@ const
    Unique indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<uint32_t, std::vector<uint32_t> > C_SdBueCoAddSignalsModel::h_GetUniqueIndices(
+std::map<uint32_t, QList<uint32_t> > C_SdBueCoAddSignalsModel::h_GetUniqueIndices(
    const QModelIndexList & orc_ModelIndices)
 {
-   std::map<uint32_t, std::vector<uint32_t> > c_Retval;
+   std::map<uint32_t, QList<uint32_t> > c_Retval;
    for (QModelIndexList::ConstIterator c_It = orc_ModelIndices.cbegin(); c_It != orc_ModelIndices.cend(); ++c_It)
    {
       uint32_t u32_ObjectIndex;
@@ -151,7 +151,7 @@ std::map<uint32_t, std::vector<uint32_t> > C_SdBueCoAddSignalsModel::h_GetUnique
       Q_ASSERT(q_IsSignal == true);
       c_Retval[u32_ObjectIndex].push_back(u32_SignalIndex);
    }
-   for (std::map<uint32_t, std::vector<uint32_t> >::iterator c_It = c_Retval.begin();
+   for (std::map<uint32_t, QList<uint32_t> >::iterator c_It = c_Retval.begin();
         c_It != c_Retval.end(); ++c_It)
    {
       C_Uti::h_Uniqueify(c_It->second);
@@ -376,7 +376,7 @@ void C_SdBueCoAddSignalsModel::m_Init(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueCoAddSignalsModel::m_InitObjectMap()
 {
-   const std::vector<C_OscCanOpenManagerMappableSignal> * const pc_MappableSignals = this->m_GetMappableSignals();
+   const QList<C_OscCanOpenManagerMappableSignal> * const pc_MappableSignals = this->m_GetMappableSignals();
    const C_OscCanOpenObjectDictionary * const pc_EdsDictionary = this->m_GetEdsDictionary();
 
    this->mc_MapObjectIndexToVectorIndex.clear();
@@ -596,7 +596,7 @@ void C_SdBueCoAddSignalsModel::m_GetData(const E_Columns oe_Column, const uint32
             Q_ASSERT(c_ItItem != c_ItObject->second.cend());
             if (c_ItItem != c_ItObject->second.cend())
             {
-               const std::vector<C_OscCanOpenManagerMappableSignal> * const pc_MappableSignals =
+               const QList<C_OscCanOpenManagerMappableSignal> * const pc_MappableSignals =
                   this->m_GetMappableSignals();
 
                Q_ASSERT(pc_MappableSignals != NULL);
@@ -703,9 +703,9 @@ const C_OscCanOpenObjectDictionary * C_SdBueCoAddSignalsModel::m_GetEdsDictionar
    Else Mappable signals
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_OscCanOpenManagerMappableSignal> * C_SdBueCoAddSignalsModel::m_GetMappableSignals() const
+const QList<C_OscCanOpenManagerMappableSignal> * C_SdBueCoAddSignalsModel::m_GetMappableSignals() const
 {
-   const std::vector<C_OscCanOpenManagerMappableSignal> * pc_Retval = NULL;
+   const QList<C_OscCanOpenManagerMappableSignal> * pc_Retval = NULL;
 
    const C_OscCanOpenManagerDeviceInfo * const pc_Device = this->m_GetDeviceInfo();
 

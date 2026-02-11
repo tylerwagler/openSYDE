@@ -1198,7 +1198,7 @@ int32_t C_PuiSdHandlerCanOpenLogic::m_DeleteAllCanOpenManagerDevices(const uint3
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
       {
          //Delete items (handle DP)
-         std::vector<C_OscCanInterfaceId> c_Items;
+         QList<C_OscCanInterfaceId> c_Items;
          c_Items.reserve(c_ItManager->second.c_CanOpenDevices.size());
          for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
                  c_ItManager->second.c_CanOpenDevices.begin();
@@ -1242,7 +1242,7 @@ int32_t C_PuiSdHandlerCanOpenLogic::m_DeleteAllCanOpenManagerDevices(const uint3
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerCanOpenLogic::m_DeleteCanOpenManagerMessageVectors(
    const C_OscCanMessageIdentificationIndices & orc_MessageIdBase, const bool oq_VectorIsTx,
-   const std::vector<C_OscCanMessage> & orc_MessageVector, const C_OscCanInterfaceId & orc_DeviceId)
+   const QList<C_OscCanMessage> & orc_MessageVector, const C_OscCanInterfaceId & orc_DeviceId)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1454,7 +1454,7 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleSyncNodeAddedForCanOpenMessages(const u
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerCanOpenLogic::mh_HandleSyncNodeAddedForCanOpenMessages(const uint32_t ou32_Index,
-                                                                          std::vector<C_OscCanMessage> & orc_Messages)
+                                                                          QList<C_OscCanMessage> & orc_Messages)
 {
    for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < orc_Messages.size(); ++u32_ItMessage)
    {
@@ -1568,7 +1568,7 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleSyncNodeAboutToBeDeletedForCanOpenMessa
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerCanOpenLogic::mh_HandleSyncNodeAboutToBeDeletedForCanOpenMessages(const uint32_t ou32_Index,
-                                                                                     std::vector<C_OscCanMessage> & orc_Messages)
+                                                                                     QList<C_OscCanMessage> & orc_Messages)
 {
    for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < orc_Messages.size();)
    {
@@ -1753,7 +1753,7 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleChangeConnectionForCanOpenDeviceMessage
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerCanOpenLogic::mh_HandleChangeConnectionForCanOpenDeviceMessages(const uint32_t ou32_NodeIndex,
                                                                                    const C_PuiSdNodeConnectionId & orc_PrevId, const uint8_t ou8_NewInterface,
-                                                                                   std::vector<C_OscCanMessage> & orc_Messages)
+                                                                                   QList<C_OscCanMessage> & orc_Messages)
 {
    for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < orc_Messages.size();)
    {
@@ -2301,7 +2301,7 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleNodeIdChangeForCanOpenMessages(const ui
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerCanOpenLogic::mh_HandleNodeIdChangeForCanOpenMessages(const C_OscCanInterfaceId & orc_DeviceId,
                                                                          const uint8_t ou8_NewNodeId,
-                                                                         std::vector<C_OscCanMessage> & orc_Messages)
+                                                                         QList<C_OscCanMessage> & orc_Messages)
 {
    for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < orc_Messages.size(); ++u32_ItMessage)
    {
@@ -2386,8 +2386,8 @@ void C_PuiSdHandlerCanOpenLogic::m_HandlePdoSyncChangeForCanOpenMessages(const u
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerCanOpenLogic::mh_HandlePdoSyncChangeForCanOpenMessages(const uint32_t ou32_PdoSyncPeriodMs,
-                                                                          std::vector<C_OscCanMessage> & orc_Messages,
-                                                                          const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages)
+                                                                          QList<C_OscCanMessage> & orc_Messages,
+                                                                          const QList<C_PuiSdNodeCanMessage> & orc_UiMessages)
 {
    Q_ASSERT(orc_Messages.size() == orc_UiMessages.size());
    if (orc_Messages.size() == orc_UiMessages.size())

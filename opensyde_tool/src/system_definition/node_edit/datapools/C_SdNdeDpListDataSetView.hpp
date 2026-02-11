@@ -15,6 +15,7 @@
 
 #include <QUndoStack>
 #include <QLabel>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_TblViewScroll.hpp"
 #include "C_PuiSdNodeDataPoolList.hpp"
@@ -87,10 +88,10 @@ private:
    bool mq_AllowMoveLeft;
    bool mq_AllowMoveRight;
 
-   void m_DeleteIndices(const std::vector<uint32_t> & orc_Indices);
-   void m_Move(const std::vector<uint32_t> & orc_SourceIndices, const std::vector<uint32_t> & orc_TargetIndices);
-   std::vector<uint32_t> m_GetSelectedIndices(void) const;
-   void m_CheckActions(const std::vector<uint32_t> & orc_SelectedIndices);
+   void m_DeleteIndices(const QList<uint32_t> & orc_Indices);
+   void m_Move(const QList<uint32_t> & orc_SourceIndices, const QList<uint32_t> & orc_TargetIndices);
+   QList<uint32_t> m_GetSelectedIndices(void) const;
+   void m_CheckActions(const QList<uint32_t> & orc_SelectedIndices);
    void m_UpdateModelView(void);
    void m_UpdateCornerButton(void);
    uint32_t m_GetOneAfterHighestSelected(void);

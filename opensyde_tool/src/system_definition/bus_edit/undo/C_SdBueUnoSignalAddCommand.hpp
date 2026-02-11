@@ -12,6 +12,7 @@
 #define C_SDBUEUNOSIGNALADDCOMMAND_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_SdBueUnoSignalAddDeleteBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,19 +29,19 @@ class C_SdBueUnoSignalAddCommand :
 {
 public:
    C_SdBueUnoSignalAddCommand(
-      const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
-      const std::vector<uint32_t> & orc_SignalIndex, const std::vector<uint16_t> & orc_StartBit,
-      const std::vector<stw::opensyde_core::C_OscCanSignal::E_MultiplexerType> & orc_MultiplexerType,
-      const std::vector<uint16_t> & orc_MultiplexerValue,
+      const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
+      const QList<uint32_t> & orc_SignalIndex, const QList<uint16_t> & orc_StartBit,
+      const QList<stw::opensyde_core::C_OscCanSignal::E_MultiplexerType> & orc_MultiplexerType,
+      const QList<uint16_t> & orc_MultiplexerValue,
       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
       stw::opensyde_gui::C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget,
       const QString & orc_Text);
 
-   void SetInitialData(const std::vector<stw::opensyde_core::C_OscCanSignal> & orc_Signal,
-                       const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalCommon,
-                       const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommon,
-                       const std::vector<C_PuiSdNodeCanSignal> & orc_UiSignal,
-                       const std::vector<stw::opensyde_core::C_OscCanProtocol::E_Type> & orc_ProtocolType);
+   void SetInitialData(const QList<stw::opensyde_core::C_OscCanSignal> & orc_Signal,
+                       const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalCommon,
+                       const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommon,
+                       const QList<C_PuiSdNodeCanSignal> & orc_UiSignal,
+                       const QList<stw::opensyde_core::C_OscCanProtocol::E_Type> & orc_ProtocolType);
 
    void redo(void) override;
    void undo(void) override;

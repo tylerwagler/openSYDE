@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include "C_SdManUnoTopologyAddDeleteBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,7 +29,7 @@ class C_SdManUnoTopologyDeleteCommand :
    public C_SdManUnoTopologyAddDeleteBaseCommand
 {
 public:
-   C_SdManUnoTopologyDeleteCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SdManUnoTopologyDeleteCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                    QUndoCommand * const opc_Parent = NULL);
    ~C_SdManUnoTopologyDeleteCommand(void) override;
    void undo(void) override;

@@ -12,6 +12,7 @@
 #define C_PUISVHANDLER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <vector>
 #include <QObject>
 #include <QStringList>
@@ -46,7 +47,7 @@ public:
    const std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                   C_PuiSdLastKnownHalElementId> & GetLastKnownHalcCrcs(void) const;
    bool GetServiceModeActive(void) const;
-   int32_t GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32_ViewIndex, std::vector<uint8_t> & orc_ActiveFlags,
+   int32_t GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32_ViewIndex, QByteArray & orc_ActiveFlags,
                                                 const bool oq_IncludeRoutingResults = true);
 
    //Set
@@ -94,7 +95,7 @@ public:
                                      const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                                      const C_PuiSvReadDataConfiguration & orc_Config);
    int32_t SetNodeUpdateInformation(const uint32_t ou32_ViewIndex,
-                                    const std::vector<stw::opensyde_core::C_OscViewNodeUpdate> & orc_NodeUpdateInformation);
+                                    const QList<stw::opensyde_core::C_OscViewNodeUpdate> & orc_NodeUpdateInformation);
    int32_t SetNodeUpdateInformation(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
                                     const stw::opensyde_core::C_OscViewNodeUpdate & orc_NodeUpdateInformation);
    int32_t SetNodeUpdateInformationPath(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
@@ -227,9 +228,9 @@ public:
    static void h_Destroy(void);
 
 protected:
-   std::vector<C_PuiSvData> mc_Views;
+   QList<C_PuiSvData> mc_Views;
 
-   int32_t m_LoadFromFile(const QString & orc_Path, const std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes);
+   int32_t m_LoadFromFile(const QString & orc_Path, const QList<stw::opensyde_core::C_OscNode> & orc_OscNodes);
    void m_AddLastKnownHalcCrc(const stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId & orc_Id,
                               const C_PuiSdLastKnownHalElementId & orc_Crc);
 
@@ -306,20 +307,20 @@ private:
    void m_FixInvalidRailConfig(void);
    void m_HandleCompatibilityChart(void);
    void m_FixDashboardWriteContentType(void);
-   int32_t m_CheckRoutingDetails(const uint32_t ou32_ViewIndex, const std::vector<uint8_t> & orc_CheckedNodeActiveFlags,
+   int32_t m_CheckRoutingDetails(const uint32_t ou32_ViewIndex, const QByteArray & orc_CheckedNodeActiveFlags,
                                  std::map<uint32_t,
-                                          QString> & orc_SetupWarningRoutingDetails, std::vector< std::map<uint32_t,
+                                          QString> & orc_SetupWarningRoutingDetails, QList< std::map<uint32_t,
                                                                                                            QString> > & orc_ErrorRoutingDetails, std::set<uint32_t> & orc_NodesWithDashboardRoutingError, std::set<uint32_t> & orc_NodesRelevantForDashboardRouting)
    const;
-   int32_t m_CheckRouting(const uint32_t ou32_ViewIndex, const std::vector<uint8_t> & orc_CheckedNodeActiveFlags,
+   int32_t m_CheckRouting(const uint32_t ou32_ViewIndex, const QByteArray & orc_CheckedNodeActiveFlags,
                           QString & orc_SetupWarningMessage, QStringList & orc_ErrorMessages,
                           std::set<uint32_t> & orc_NodesWithDashboardRoutingError,
                           std::set<uint32_t> & orc_NodesRelevantForDashboardRouting) const;
    std::map<QString, bool> m_GetExistingViewNames(void) const;
 
    static C_PuiSvHandler * mhpc_Singleton;
-   std::vector<bool> mc_SdNodeErrors;
-   std::vector<bool> mc_SdBusErrors;
+   QList<bool> mc_SdNodeErrors;
+   QList<bool> mc_SdBusErrors;
    uint32_t mu32_CalculatedHashSystemViews;
    uint32_t mu32_PreviousSystemDefintionHash;
 
@@ -338,7 +339,7 @@ private:
       bool q_NoNodesActive;
       QString c_RoutingSetupWarningMessage;
       QStringList c_RoutingErrorMessages;
-      std::vector<uint8_t> c_ResultingNodeActiveStatus;
+      QByteArray c_ResultingNodeActiveStatus;
       std::set<uint32_t> c_ResultNodesWithDashboardRoutingError;
       std::set<uint32_t> c_ResultNodesRelevantForDashboardRouting;
 
@@ -350,7 +351,7 @@ private:
    };
 
    QMap<uint32_t, C_PuiSvViewErrorDetails> mc_PreviousErrorCheckResults;
-   QMap<QPair<uint32_t, bool>, std::vector<uint8_t> > mc_PreviousNodeActiveFlagsWithSquadAdaptionsResults;
+   QMap<QPair<uint32_t, bool>, QByteArray> mc_PreviousNodeActiveFlagsWithSquadAdaptionsResults;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -242,7 +242,7 @@ void C_PuiSvDashboard::SetTabIndex(const int32_t os32_Value)
    Current widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSvDbChart> & C_PuiSvDashboard::GetCharts(void) const
+const QList<C_PuiSvDbChart> & C_PuiSvDashboard::GetCharts(void) const
 {
    return this->mc_Charts;
 }
@@ -253,7 +253,7 @@ const std::vector<C_PuiSvDbChart> & C_PuiSvDashboard::GetCharts(void) const
    \param[in]  orc_Value   New widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::SetCharts(const std::vector<C_PuiSvDbChart> & orc_Value)
+void C_PuiSvDashboard::SetCharts(const QList<C_PuiSvDbChart> & orc_Value)
 {
    this->mc_Charts = orc_Value;
 }
@@ -309,7 +309,7 @@ const C_PuiSvDbChart * C_PuiSvDashboard::GetChart(const uint32_t ou32_Index) con
    Current widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSvDbLabel> & C_PuiSvDashboard::GetLabels(void) const
+const QList<C_PuiSvDbLabel> & C_PuiSvDashboard::GetLabels(void) const
 {
    return this->mc_Labels;
 }
@@ -320,7 +320,7 @@ const std::vector<C_PuiSvDbLabel> & C_PuiSvDashboard::GetLabels(void) const
    \param[in]  orc_Value   New widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::SetLabels(const std::vector<C_PuiSvDbLabel> & orc_Value)
+void C_PuiSvDashboard::SetLabels(const QList<C_PuiSvDbLabel> & orc_Value)
 {
    this->mc_Labels = orc_Value;
 }
@@ -353,7 +353,7 @@ const C_PuiSvDbLabel * C_PuiSvDashboard::GetLabel(const uint32_t ou32_Index) con
    Current widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSvDbParam> & C_PuiSvDashboard::GetParams(void) const
+const QList<C_PuiSvDbParam> & C_PuiSvDashboard::GetParams(void) const
 {
    return this->mc_ParamWidgets;
 }
@@ -364,7 +364,7 @@ const std::vector<C_PuiSvDbParam> & C_PuiSvDashboard::GetParams(void) const
    \param[in]  orc_Value   New widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::SetParams(const std::vector<C_PuiSvDbParam> & orc_Value)
+void C_PuiSvDashboard::SetParams(const QList<C_PuiSvDbParam> & orc_Value)
 {
    this->mc_ParamWidgets = orc_Value;
 }
@@ -397,7 +397,7 @@ const C_PuiSvDbParam * C_PuiSvDashboard::GetParam(const uint32_t ou32_Index) con
    Current widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSvDbPieChart> & C_PuiSvDashboard::GetPieCharts(void) const
+const QList<C_PuiSvDbPieChart> & C_PuiSvDashboard::GetPieCharts(void) const
 {
    return this->mc_PieCharts;
 }
@@ -408,7 +408,7 @@ const std::vector<C_PuiSvDbPieChart> & C_PuiSvDashboard::GetPieCharts(void) cons
    \param[in]  orc_Value   New widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::SetPieCharts(const std::vector<C_PuiSvDbPieChart> & orc_Value)
+void C_PuiSvDashboard::SetPieCharts(const QList<C_PuiSvDbPieChart> & orc_Value)
 {
    this->mc_PieCharts = orc_Value;
 }
@@ -441,7 +441,7 @@ const C_PuiSvDbPieChart * C_PuiSvDashboard::GetPieChart(const uint32_t ou32_Inde
    Current widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSvDbSpinBox> & C_PuiSvDashboard::GetSpinBoxes(void) const
+const QList<C_PuiSvDbSpinBox> & C_PuiSvDashboard::GetSpinBoxes(void) const
 {
    return this->mc_SpinBoxes;
 }
@@ -452,7 +452,7 @@ const std::vector<C_PuiSvDbSpinBox> & C_PuiSvDashboard::GetSpinBoxes(void) const
    \param[in]  orc_Value   New widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::SetSpinBoxes(const std::vector<C_PuiSvDbSpinBox> & orc_Value)
+void C_PuiSvDashboard::SetSpinBoxes(const QList<C_PuiSvDbSpinBox> & orc_Value)
 {
    this->mc_SpinBoxes = orc_Value;
 }
@@ -485,7 +485,7 @@ const C_PuiSvDbSpinBox * C_PuiSvDashboard::GetSpinBox(const uint32_t ou32_Index)
    Current widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSvDbSlider> & C_PuiSvDashboard::GetSliders(void) const
+const QList<C_PuiSvDbSlider> & C_PuiSvDashboard::GetSliders(void) const
 {
    return this->mc_Sliders;
 }
@@ -496,7 +496,7 @@ const std::vector<C_PuiSvDbSlider> & C_PuiSvDashboard::GetSliders(void) const
    \param[in]  orc_Value   New widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::SetSliders(const std::vector<C_PuiSvDbSlider> & orc_Value)
+void C_PuiSvDashboard::SetSliders(const QList<C_PuiSvDbSlider> & orc_Value)
 {
    this->mc_Sliders = orc_Value;
 }
@@ -529,7 +529,7 @@ const C_PuiSvDbSlider * C_PuiSvDashboard::GetSlider(const uint32_t ou32_Index) c
    Current widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSvDbProgressBar> & C_PuiSvDashboard::GetProgressBars(void) const
+const QList<C_PuiSvDbProgressBar> & C_PuiSvDashboard::GetProgressBars(void) const
 {
    return this->mc_ProgressBars;
 }
@@ -540,7 +540,7 @@ const std::vector<C_PuiSvDbProgressBar> & C_PuiSvDashboard::GetProgressBars(void
    \param[in]  orc_Value   New widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::SetProgressBars(const std::vector<C_PuiSvDbProgressBar> & orc_Value)
+void C_PuiSvDashboard::SetProgressBars(const QList<C_PuiSvDbProgressBar> & orc_Value)
 {
    this->mc_ProgressBars = orc_Value;
 }
@@ -573,7 +573,7 @@ const C_PuiSvDbProgressBar * C_PuiSvDashboard::GetProgressBar(const uint32_t ou3
    Current widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSvDbTable> & C_PuiSvDashboard::GetTables(void) const
+const QList<C_PuiSvDbTable> & C_PuiSvDashboard::GetTables(void) const
 {
    return this->mc_Tables;
 }
@@ -584,7 +584,7 @@ const std::vector<C_PuiSvDbTable> & C_PuiSvDashboard::GetTables(void) const
    \param[in]  orc_Value   New widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::SetTables(const std::vector<C_PuiSvDbTable> & orc_Value)
+void C_PuiSvDashboard::SetTables(const QList<C_PuiSvDbTable> & orc_Value)
 {
    this->mc_Tables = orc_Value;
 }
@@ -617,7 +617,7 @@ const C_PuiSvDbTable * C_PuiSvDashboard::GetTable(const uint32_t ou32_Index) con
    Current widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSvDbToggle> & C_PuiSvDashboard::GetToggles(void) const
+const QList<C_PuiSvDbToggle> & C_PuiSvDashboard::GetToggles(void) const
 {
    return this->mc_Toggles;
 }
@@ -628,7 +628,7 @@ const std::vector<C_PuiSvDbToggle> & C_PuiSvDashboard::GetToggles(void) const
    \param[in]  orc_Value   New widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::SetToggles(const std::vector<C_PuiSvDbToggle> & orc_Value)
+void C_PuiSvDashboard::SetToggles(const QList<C_PuiSvDbToggle> & orc_Value)
 {
    this->mc_Toggles = orc_Value;
 }
@@ -744,7 +744,7 @@ const C_PuiSvDbWidgetBase * C_PuiSvDashboard::GetWidgetBase(const C_PuiSvDbDataE
    \param[in,out]  orc_Output    Output
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::GetAllWidgetItems(std::vector<const C_PuiSvDbWidgetBase *> & orc_Output) const
+void C_PuiSvDashboard::GetAllWidgetItems(QList<const C_PuiSvDbWidgetBase *> & orc_Output) const
 {
    const uint32_t u32_Size = this->mc_Charts.size() + this->mc_Labels.size() + this->mc_PieCharts.size() +
                              this->mc_ProgressBars.size() + this->mc_SpinBoxes.size() + this->mc_Sliders.size() +
@@ -799,7 +799,7 @@ void C_PuiSvDashboard::GetAllWidgetItems(std::vector<const C_PuiSvDbWidgetBase *
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::GetAllRegisteredDashboardElements(std::set<C_OscNodeDataPoolListElementId> & orc_Ids) const
 {
-   std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<const C_PuiSvDbWidgetBase *> c_Widgets;
    uint32_t u32_WidgetCounter;
 
    this->GetAllWidgetItems(c_Widgets);
@@ -825,7 +825,7 @@ void C_PuiSvDashboard::GetAllRegisteredDashboardElements(std::set<C_OscNodeDataP
 void C_PuiSvDashboard::GetAllRegisteredDashboardElementsGuiId(std::set<C_PuiSvDbNodeDataPoolListElementId> & orc_Ids)
 const
 {
-   std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<const C_PuiSvDbWidgetBase *> c_Widgets;
    uint32_t u32_WidgetCounter;
 
    this->GetAllWidgetItems(c_Widgets);
@@ -1047,7 +1047,7 @@ int32_t C_PuiSvDashboard::SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWi
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::OnSyncNodeAdded(const uint32_t ou32_Index)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1083,7 +1083,7 @@ void C_PuiSvDashboard::OnSyncNodeAdded(const uint32_t ou32_Index)
 void C_PuiSvDashboard::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_OscNodeDataPoolListElementOptArrayId,
                                                                                 C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1116,7 +1116,7 @@ void C_PuiSvDashboard::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::OnSyncNodeAboutToBeDeleted(const uint32_t ou32_Index, const bool oq_OnlyMarkInvalid)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1152,7 +1152,7 @@ void C_PuiSvDashboard::OnSyncNodeAboutToBeDeleted(const uint32_t ou32_Index, con
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::OnSyncNodeDataPoolAdded(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1189,7 +1189,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolAdded(const uint32_t ou32_NodeIndex, co
 void C_PuiSvDashboard::OnSyncNodeDataPoolMoved(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolSourceIndex,
                                                const uint32_t ou32_DataPoolTargetIndex)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1227,7 +1227,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolMoved(const uint32_t ou32_NodeIndex, co
 void C_PuiSvDashboard::OnSyncNodeDataPoolAboutToBeDeleted(const uint32_t ou32_NodeIndex,
                                                           const uint32_t ou32_DataPoolIndex)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1265,7 +1265,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolAboutToBeDeleted(const uint32_t ou32_No
 void C_PuiSvDashboard::OnSyncNodeDataPoolListAdded(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex,
                                                    const uint32_t ou32_ListIndex)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1305,7 +1305,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListMoved(const uint32_t ou32_NodeIndex
                                                    const uint32_t ou32_ListSourceIndex,
                                                    const uint32_t ou32_ListTargetIndex)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1345,7 +1345,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListAboutToBeDeleted(const uint32_t ou3
                                                               const uint32_t ou32_DataPoolIndex,
                                                               const uint32_t ou32_ListIndex)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1557,7 +1557,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementAdded(const uint32_t ou32_No
                                                           const uint32_t ou32_ListIndex,
                                                           const uint32_t ou32_ElementIndex)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1601,7 +1601,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementMoved(const uint32_t ou32_No
                                                           const uint32_t ou32_ElementSourceIndex,
                                                           const uint32_t ou32_ElementTargetIndex)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -1697,7 +1697,7 @@ bool C_PuiSvDashboard::OnSyncElementTypeOrArrayChanged(const uint32_t ou32_NodeI
 {
    bool q_Retval = false;
 
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
 
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
@@ -1865,7 +1865,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementAccessChanged(const uint32_t
                                                                   const uint32_t ou32_ElementIndex,
                                                                   const C_OscNodeDataPoolListElement::E_Access oe_Access)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
 
    //Only critical if RO
@@ -1917,7 +1917,7 @@ void C_PuiSvDashboard::OnSyncNodeDataPoolListElementAboutToBeDeleted(const uint3
                                                                      const uint32_t ou32_ListIndex,
                                                                      const uint32_t ou32_ElementIndex)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -2222,7 +2222,7 @@ void C_PuiSvDashboard::h_OnSyncNodeDataPoolListElementAboutToBeDeleted(
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::SyncScalingInformation(void)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<C_PuiSvDbWidgetBase *> c_Widgets;
    this->m_GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -2597,7 +2597,7 @@ int32_t C_PuiSvDashboard::AddParamNewDataPoolElement(const uint32_t ou32_ParamWi
          for (uint32_t u32_ItRelevantLayer = 0UL; u32_ItRelevantLayer < 3UL; ++u32_ItRelevantLayer)
          {
             bool q_Found = false;
-            for (std::vector<C_PuiSvDbExpandedTreeIndex>::const_iterator c_ExistingItems =
+            for (QList<C_PuiSvDbExpandedTreeIndex>::const_iterator c_ExistingItems =
                     rc_ParamWidget.c_ExpandedItems.begin();
                  (c_ExistingItems != rc_ParamWidget.c_ExpandedItems.end()) && (q_Found == false); ++c_ExistingItems)
             {
@@ -2660,7 +2660,7 @@ int32_t C_PuiSvDashboard::AddParamNewDataPoolElement(const uint32_t ou32_ParamWi
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::RemoveAllReferencesToElementId(const C_PuiSvDbNodeDataPoolListElementId & orc_DataElementId)
 {
-   std::vector<C_PuiSvDbWidgetBase *> c_AllWidgets;
+   QList<C_PuiSvDbWidgetBase *> c_AllWidgets;
    m_GetAllWidgetItems(c_AllWidgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_AllWidgets.size(); ++u32_ItWidget)
    {
@@ -2803,7 +2803,7 @@ void C_PuiSvDashboard::CheckError(bool * const opq_InvalidDataElements, bool * c
 {
    if ((opq_InvalidDataElements != NULL) || (opq_MissingDataElements != NULL))
    {
-      std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+      QList<const C_PuiSvDbWidgetBase *> c_Widgets;
       if (opq_MissingDataElements != NULL)
       {
          *opq_MissingDataElements = false;
@@ -2814,14 +2814,14 @@ void C_PuiSvDashboard::CheckError(bool * const opq_InvalidDataElements, bool * c
       }
       this->GetAllWidgetItems(c_Widgets);
       //For all widgets
-      for (std::vector<const C_PuiSvDbWidgetBase *>::const_iterator c_ItWidget = c_Widgets.begin();
+      for (QList<const C_PuiSvDbWidgetBase *>::const_iterator c_ItWidget = c_Widgets.begin();
            c_ItWidget != c_Widgets.end(); ++c_ItWidget)
       {
          const C_PuiSvDbWidgetBase * const pc_Widget = *c_ItWidget;
          if (pc_Widget != NULL)
          {
             //For all data elements
-            for (std::vector<C_PuiSvDbNodeDataElementConfig>::const_iterator c_ItConfig =
+            for (QList<C_PuiSvDbNodeDataElementConfig>::const_iterator c_ItConfig =
                     pc_Widget->c_DataPoolElementsConfig.begin();
                  c_ItConfig != pc_Widget->c_DataPoolElementsConfig.end(); ++c_ItConfig)
             {
@@ -2894,7 +2894,7 @@ bool C_PuiSvDashboard::DiscardInvalidIndices(void)
 {
    bool q_Retval = false;
 
-   std::vector<C_PuiSvDbWidgetBase *> c_AllWidgets;
+   QList<C_PuiSvDbWidgetBase *> c_AllWidgets;
    m_GetAllWidgetItems(c_AllWidgets);
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_AllWidgets.size(); ++u32_ItWidget)
    {
@@ -2951,7 +2951,7 @@ bool C_PuiSvDashboard::DiscardInvalidIndices(void)
    \param[in,out]  orc_NewCharts    New charts
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::HandleCompatibilityChart(std::vector<C_PuiSvDashboard> & orc_NewCharts)
+void C_PuiSvDashboard::HandleCompatibilityChart(QList<C_PuiSvDashboard> & orc_NewCharts)
 {
    uint32_t u32_Counter = 0;
 
@@ -2978,7 +2978,7 @@ void C_PuiSvDashboard::HandleCompatibilityChart(std::vector<C_PuiSvDashboard> & 
       for (u8_ColorCounter = 0U; u8_ColorCounter < c_NewChart.c_DataPoolElementsActive.size(); ++u8_ColorCounter)
       {
          // Color index is necessary now but does not exist for the old chart
-         c_NewChart.c_DataPoolElementsColorIndex.push_back(u8_ColorCounter);
+         c_NewChart.c_DataPoolElementsColorIndex.append(static_cast<char>(u8_ColorCounter));
       }
       //New dashboard
       c_NewDashboard.SetTabChart(c_NewChart);
@@ -3136,7 +3136,7 @@ uint32_t C_PuiSvDashboard::Count(void) const
    \param[in,out]  orc_Output    Output
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::m_GetAllWidgetItems(std::vector<C_PuiSvDbWidgetBase *> & orc_Output)
+void C_PuiSvDashboard::m_GetAllWidgetItems(QList<C_PuiSvDbWidgetBase *> & orc_Output)
 {
    const uint32_t u32_Size = this->mc_Charts.size() + this->mc_Labels.size() + this->mc_PieCharts.size() +
                              this->mc_ProgressBars.size() + this->mc_SpinBoxes.size() + this->mc_Sliders.size() +
@@ -3278,7 +3278,7 @@ void C_PuiSvDashboard::m_SyncCleanUpParams(void)
             ++u32_ItElement;
          }
       }
-      for (std::vector<C_PuiSvDbExpandedTreeIndex>::iterator c_ItDataPoolElements = rc_Param.c_ExpandedItems.begin();
+      for (QList<C_PuiSvDbExpandedTreeIndex>::iterator c_ItDataPoolElements = rc_Param.c_ExpandedItems.begin();
            c_ItDataPoolElements != rc_Param.c_ExpandedItems.end();)
       {
          const C_PuiSvDbExpandedTreeIndex & rc_Config = *c_ItDataPoolElements;

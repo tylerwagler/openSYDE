@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QIcon>
+#include <QList>
 
 #include "precomp_headers.hpp"
 
@@ -79,10 +80,10 @@ void C_SdNdeDalLogJobsListModel::UpdateData(const uint32_t ou32_NodeIndex)
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobsListModel::DoRemoveRows(const std::vector<uint32_t> & orc_DataLoggerJobIndices)
+void C_SdNdeDalLogJobsListModel::DoRemoveRows(const QList<uint32_t> & orc_DataLoggerJobIndices)
 {
    // Save the selected indexes in reverse order to avoid errors on deletion
-   const std::vector<uint32_t> c_DataLoggerJobIndicesSortedDescending = C_Uti::h_UniquifyAndSortDescending(
+   const QList<uint32_t> c_DataLoggerJobIndicesSortedDescending = C_Uti::h_UniquifyAndSortDescending(
       orc_DataLoggerJobIndices);
 
    if (orc_DataLoggerJobIndices.size() > 0L)
@@ -174,11 +175,11 @@ bool C_SdNdeDalLogJobsListModel::setData(const QModelIndex & orc_Index, const QV
       {
          if (orc_Value == static_cast<int32_t>(Qt::Checked))
          {
-            this->mc_LogJobsList.at(orc_Index.row()).q_Enabled = true;
+            this->mc_LogJobsList[orc_Index.row()].q_Enabled = true;
          }
          else
          {
-            this->mc_LogJobsList.at(orc_Index.row()).q_Enabled = false;
+            this->mc_LogJobsList[orc_Index.row()].q_Enabled = false;
          }
 
          q_Retval = true;

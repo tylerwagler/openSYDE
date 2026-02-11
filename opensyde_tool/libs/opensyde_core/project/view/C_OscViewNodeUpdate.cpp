@@ -135,7 +135,7 @@ void C_OscViewNodeUpdate::ClearPathsAsAppropriate(const C_OscViewNodeUpdate::E_G
    Current parameter set paths
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_OscViewNodeUpdateParamInfo> & C_OscViewNodeUpdate::GetParamInfos(void) const
+const QList<C_OscViewNodeUpdateParamInfo> & C_OscViewNodeUpdate::GetParamInfos(void) const
 {
    return this->mc_ParamSetPaths;
 }
@@ -161,7 +161,7 @@ const QStringList & C_OscViewNodeUpdate::GetPaths(const E_GenericFileType oe_Typ
    Current application skip flags
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<bool> & C_OscViewNodeUpdate::GetSkipUpdateOfParamInfosFlags(void) const
+const QList<bool> & C_OscViewNodeUpdate::GetSkipUpdateOfParamInfosFlags(void) const
 {
    return this->mc_SkipUpdateOfFiles[mhs32_PARAMETER_SET_INDEX];
 }
@@ -175,7 +175,7 @@ const std::vector<bool> & C_OscViewNodeUpdate::GetSkipUpdateOfParamInfosFlags(vo
    Current application skip flags
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<bool> & C_OscViewNodeUpdate::GetSkipUpdateOfPathsFlags(const E_GenericFileType oe_Type) const
+const QList<bool> & C_OscViewNodeUpdate::GetSkipUpdateOfPathsFlags(const E_GenericFileType oe_Type) const
 {
    return this->mc_SkipUpdateOfFiles[static_cast<int32_t>(oe_Type)];
 }
@@ -186,7 +186,7 @@ const std::vector<bool> & C_OscViewNodeUpdate::GetSkipUpdateOfPathsFlags(const E
    \param[in]  orc_Value   New parameter set paths
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewNodeUpdate::SetParamInfos(const std::vector<C_OscViewNodeUpdateParamInfo> & orc_Value)
+void C_OscViewNodeUpdate::SetParamInfos(const QList<C_OscViewNodeUpdateParamInfo> & orc_Value)
 {
    this->mc_ParamSetPaths = orc_Value;
 }
@@ -216,7 +216,7 @@ void C_OscViewNodeUpdate::SetPaths(const QStringList & orc_Value, const E_Generi
    \param[in]  orc_Value   New parameter set skip flags
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewNodeUpdate::SetSkipUpdateOfParamInfosFlags(const std::vector<bool> & orc_Value)
+void C_OscViewNodeUpdate::SetSkipUpdateOfParamInfosFlags(const QList<bool> & orc_Value)
 {
    this->mc_SkipUpdateOfFiles[mhs32_PARAMETER_SET_INDEX] = orc_Value;
 }
@@ -228,7 +228,7 @@ void C_OscViewNodeUpdate::SetSkipUpdateOfParamInfosFlags(const std::vector<bool>
    \param[in]  oe_Type     Selector for structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewNodeUpdate::SetSkipUpdateOfPathsFlags(const std::vector<bool> & orc_Value,
+void C_OscViewNodeUpdate::SetSkipUpdateOfPathsFlags(const QList<bool> & orc_Value,
                                                     const E_GenericFileType oe_Type)
 {
    this->mc_SkipUpdateOfFiles[static_cast<int32_t>(oe_Type)] = orc_Value;
@@ -614,7 +614,7 @@ void C_OscViewNodeUpdate::GetStates(C_OscViewNodeUpdate::E_StateSecurity & ore_S
 void C_OscViewNodeUpdate::OnSyncNodeApplicationAdded(const uint32_t ou32_ApplicationIndex,
                                                      const C_OscNodeApplication::E_Type oe_ApplicationType,
                                                      const uint32_t ou32_NumDataBlockPaths,
-                                                     const std::vector<C_OscNodeApplication> & orc_AllApplications)
+                                                     const QList<C_OscNodeApplication> & orc_AllApplications)
 {
    if (oe_ApplicationType != stw::opensyde_core::C_OscNodeApplication::ePARAMETER_SET_HALC)
    {
@@ -769,7 +769,7 @@ void C_OscViewNodeUpdate::OnSyncNodeApplicationAboutToBeChangedFromParamSetHalc(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscViewNodeUpdate::OnSyncNodeApplicationChangedToParamSetHalc(const uint32_t ou32_ApplicationIndex,
                                                                      const C_OscNodeApplication::E_Type oe_ApplicationType, const uint32_t ou32_NumDataBlockPaths,
-                                                                     const std::vector<C_OscNodeApplication> & orc_AllApplications)
+                                                                     const QList<C_OscNodeApplication> & orc_AllApplications)
 {
    Q_ASSERT(oe_ApplicationType == stw::opensyde_core::C_OscNodeApplication::ePARAMETER_SET_HALC);
    if (oe_ApplicationType == stw::opensyde_core::C_OscNodeApplication::ePARAMETER_SET_HALC)
@@ -843,7 +843,7 @@ void C_OscViewNodeUpdate::OnSyncNodeApplicationResultPathSizeChanged(
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscViewNodeUpdate::mh_CheckApplicationsContainParamTypeBeforeIndex(
-   const std::vector<C_OscNodeApplication> & orc_AllApplications, const uint32_t ou32_ApplicationIndex)
+   const QList<C_OscNodeApplication> & orc_AllApplications, const uint32_t ou32_ApplicationIndex)
 {
    bool q_Retval = false;
 

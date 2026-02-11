@@ -39,7 +39,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaUnoDeleteCommand::C_SyvDaUnoDeleteCommand(QGraphicsScene * const opc_Scene,
-                                                 const std::vector<uint64_t> & orc_Ids,
+                                                 const QList<uint64_t> & orc_Ids,
                                                  QUndoCommand * const opc_Parent) :
    C_SyvDaUnoAddDeleteBaseCommand(opc_Scene, orc_Ids, "Delete drawing element(s)", opc_Parent)
 {

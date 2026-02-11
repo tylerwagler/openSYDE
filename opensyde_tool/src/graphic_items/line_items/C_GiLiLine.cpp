@@ -53,7 +53,7 @@ const uint8_t C_GiLiLine::mhu8_ANIMATION_STEP_COUNT = 60;
    \param[in,out] opc_Parent     Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiLiLine::C_GiLiLine(const std::vector<QPointF> * const opc_Points, const bool & orq_MiddleLine,
+C_GiLiLine::C_GiLiLine(const QList<QPointF> * const opc_Points, const bool & orq_MiddleLine,
                        QGraphicsItem * const opc_Parent) :
    C_GiBiConnectableItem(),
    QGraphicsPathItem(opc_Parent),
@@ -113,7 +113,7 @@ C_GiLiLine::~C_GiLiLine()
    \param[in] orc_Points Initial points
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiLine::Init(const std::vector<QPointF> & orc_Points)
+void C_GiLiLine::Init(const QList<QPointF> & orc_Points)
 {
    QPointF c_AdaptedScenePos;
 

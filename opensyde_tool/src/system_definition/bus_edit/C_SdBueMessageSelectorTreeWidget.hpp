@@ -13,6 +13,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QItemSelection>
+#include <QList>
+#include <QByteArray>
 
 #include "stwtypes.hpp"
 #include "C_CieConverter.hpp"
@@ -45,7 +47,7 @@ public:
    QSize sizeHint(void) const override;
 
    void SetNodeId(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-                  const std::vector<uint32_t> & orc_DatapoolIndexes);
+                  const QList<uint32_t> & orc_DatapoolIndexes);
    void SetBusId(const uint32_t ou32_BusIndex);
    void SetProtocolType(const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_Value);
    void DeselectAllItems(void);
@@ -97,7 +99,7 @@ public:
    bool CheckIfAnyNodeConnected(void) const;
    void SelectMessage(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                       const bool oq_BlockSignal = true);
-   void SelectMessages(const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageIds);
+   void SelectMessages(const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageIds);
    void SelectSignal(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                      const uint32_t & oru32_SignalIndex, const bool oq_BlockSignal = true);
    int32_t GetLevelOfPos(const QPoint & orc_Pos) const;
@@ -176,23 +178,23 @@ private:
                                   const uint16_t ou16_SignalSize,
                                   const stw::opensyde_core::C_OscCanSignal::E_ByteOrderType oe_Type);
    bool m_GetHighestSelected(QModelIndex & orc_Index) const;
-   std::vector<C_CieImportDataAssignment> m_GetJ1939DefaultNodeAssignment(
+   QList<C_CieImportDataAssignment> m_GetJ1939DefaultNodeAssignment(
       const stw::opensyde_gui_logic::C_CieConverter::C_CieNode & orc_NodeInfo) const;
 
    stw::opensyde_gui_logic::C_SdBueUnoManager * mpc_UndoManager;
    stw::opensyde_gui_logic::C_PuiSdNodeCanMessageSyncManager * mpc_MessageSyncManager;
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mc_UniqueMessageIds;
-   std::vector<uint8_t> mc_CoUniqueMessagesPdoMappingRo;
-   std::vector<std::vector<uint32_t> > mc_UniqueMessageIdsSignalsOrder;
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mc_SelectedMessageIds;
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mc_ExpandedMessageIds;
-   std::vector<std::vector<uint32_t> > mc_SelectedSignals;
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mc_UniqueMessageIds;
+   QByteArray mc_CoUniqueMessagesPdoMappingRo;
+   QList<QList<uint32_t> > mc_UniqueMessageIdsSignalsOrder;
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mc_SelectedMessageIds;
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mc_ExpandedMessageIds;
+   QList<QList<uint32_t> > mc_SelectedSignals;
    stw::opensyde_gui_logic::C_SdBueMessageSelectorTreeDelegate mc_Delegate;
    bool mq_StopSigSelectionChanged;
    bool mq_ModeSingleNode;
    uint32_t mu32_NodeIndex;                  // Used by node mode
    uint32_t mu32_InterfaceIndex;             // Used by node mode
-   std::vector<uint32_t> mc_DatapoolIndexes; // Used by node mode
+   QList<uint32_t> mc_DatapoolIndexes; // Used by node mode
    uint32_t mu32_BusIndex;                   // Used by bus mode
    stw::opensyde_core::C_OscCanProtocol::E_Type me_ProtocolType;
    bool mq_NoSelectionUpdate;

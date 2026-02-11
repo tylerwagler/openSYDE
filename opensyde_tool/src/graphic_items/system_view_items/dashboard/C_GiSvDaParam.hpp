@@ -63,7 +63,7 @@ public:
    int32_t SetParamItem(const stw::opensyde_gui_logic::C_PuiSvDbParam & orc_Content) const;
    int32_t AddParamItemDataElement(const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                                    const stw::opensyde_core::C_OscNodeDataPoolContent * const opc_Content);
-   int32_t DeleteLists(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
+   int32_t DeleteLists(const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
    QWidget * GetPopUpParent(void) const;
 
    //The signals keyword is necessary for Qt signal slot functionality

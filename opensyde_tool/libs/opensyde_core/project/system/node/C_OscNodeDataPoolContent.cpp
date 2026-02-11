@@ -118,7 +118,7 @@ void C_OscNodeDataPoolContent::CalcHash(uint32_t & oru32_HashValue) const
 {
    stw::scl::C_SclChecksums::CalcCRC32(&this->me_Type, sizeof(this->me_Type), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->mq_Array, sizeof(this->mq_Array), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mc_Data[0], static_cast<uint32_t>(this->mc_Data.size()),
+   stw::scl::C_SclChecksums::CalcCRC32(reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_Data.data())), static_cast<uint32_t>(this->mc_Data.size()),
                                        oru32_HashValue);
 }
 
@@ -191,7 +191,7 @@ void C_OscNodeDataPoolContent::CalcHashElement(uint32_t & oru32_HashValue, const
    else
    {
       //Just one element
-      stw::scl::C_SclChecksums::CalcCRC32(&this->mc_Data[0], static_cast<uint32_t>(this->mc_Data.size()),
+      stw::scl::C_SclChecksums::CalcCRC32(reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_Data.data())), static_cast<uint32_t>(this->mc_Data.size()),
                                           oru32_HashValue);
    }
 }
@@ -229,7 +229,7 @@ template <typename T> void C_OscNodeDataPoolContent::m_SetValue(const T & orc_Va
       {
          QMutexLocker c_Lock(&mc_CriticalSection);
          //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
-         (void)std::memcpy(&this->mc_Data[0], &orc_Value, sizeof(orc_Value));
+         (void)std::memcpy(reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_Data.data())), &orc_Value, sizeof(orc_Value));
       }
       else
       {
@@ -261,7 +261,7 @@ template <typename T> void C_OscNodeDataPoolContent::m_GetValue(const E_Type oe_
       {
          QMutexLocker c_Lock(&mc_CriticalSection);
          //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
-         (void)std::memcpy(&orc_Value, &this->mc_Data[0], sizeof(orc_Value));
+         (void)std::memcpy(&orc_Value, reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_Data.data())), sizeof(orc_Value));
       }
       else
       {
@@ -642,7 +642,7 @@ float64_t C_OscNodeDataPoolContent::GetValueF64(void) const
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU8(const std::vector<uint8_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrU8(const QByteArray & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eUINT8);
 }
@@ -667,9 +667,9 @@ void C_OscNodeDataPoolContent::SetValueArrU8Element(const uint8_t ou8_Value, con
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint8_t> C_OscNodeDataPoolContent::GetValueArrU8(void) const
+const QByteArray C_OscNodeDataPoolContent::GetValueArrU8(void) const
 {
-   std::vector<uint8_t> c_RetVal;
+   QByteArray c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eUINT8, c_RetVal);
    return c_RetVal;
@@ -699,7 +699,7 @@ uint8_t C_OscNodeDataPoolContent::GetValueArrU8Element(const uint32_t ou32_Index
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU16(const std::vector<uint16_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrU16(const QList<uint16_t> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eUINT16);
 }
@@ -724,9 +724,9 @@ void C_OscNodeDataPoolContent::SetValueArrU16Element(const uint16_t ou16_Value, 
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint16_t> C_OscNodeDataPoolContent::GetValueArrU16(void) const
+const QList<uint16_t> C_OscNodeDataPoolContent::GetValueArrU16(void) const
 {
-   std::vector<uint16_t> c_RetVal;
+   QList<uint16_t> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eUINT16, c_RetVal);
    return c_RetVal;
@@ -769,7 +769,7 @@ template <typename T> void C_OscNodeDataPoolContent::m_SetValueArray(const T & o
          QMutexLocker c_Lock(&mc_CriticalSection);
          mc_Data.resize(orc_Value.size() * sizeof(orc_Value[0]));
          //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
-         (void)std::memcpy(&this->mc_Data[0], &orc_Value[0], this->mc_Data.size());
+         (void)std::memcpy(reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_Data.data())), orc_Value.constData(), this->mc_Data.size());
       }
       else
       {
@@ -809,7 +809,7 @@ template <typename T> void C_OscNodeDataPoolContent::m_SetValueArrayElement(cons
             QMutexLocker c_Lock(&mc_CriticalSection);
             //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
             //lint -e{9114} //range of parameter is safe for sizeof result to fit in
-            (void)std::memcpy(&this->mc_Data[ou32_Index * (sizeof(orc_Value))], &orc_Value, sizeof(orc_Value));
+            (void)std::memcpy(this->mc_Data.data() + ou32_Index * (sizeof(orc_Value)), &orc_Value, sizeof(orc_Value));
          }
          else
          {
@@ -846,7 +846,7 @@ template <typename T> void C_OscNodeDataPoolContent::m_GetValueArray(const E_Typ
          QMutexLocker c_Lock(&mc_CriticalSection);
          orc_Result.resize(this->mc_Data.size() / sizeof(orc_Result[0]));
          //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
-         (void)std::memcpy(&orc_Result[0], &this->mc_Data[0], this->mc_Data.size());
+         (void)std::memcpy(&orc_Result[0], reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_Data.data())), this->mc_Data.size());
       }
       else
       {
@@ -886,7 +886,7 @@ template <typename T> void C_OscNodeDataPoolContent::m_GetValueArrayElement(cons
             QMutexLocker c_Lock(&mc_CriticalSection);
             //lint -e{9110} //we do not really use the bit representation; mc_Data is just our "BLOB" storage
             //lint -e{9114} //range of parameter is safe for sizeof result to fit in
-            (void)std::memcpy(&orc_Result, &this->mc_Data[ou32_Index * sizeof(orc_Result)], sizeof(orc_Result));
+            (void)std::memcpy(&orc_Result, this->mc_Data.data() + ou32_Index * sizeof(orc_Result), sizeof(orc_Result));
          }
          else
          {
@@ -910,7 +910,7 @@ template <typename T> void C_OscNodeDataPoolContent::m_GetValueArrayElement(cons
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU32(const std::vector<uint32_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrU32(const QList<uint32_t> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eUINT32);
 }
@@ -935,9 +935,9 @@ void C_OscNodeDataPoolContent::SetValueArrU32Element(const uint32_t ou32_Value, 
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint32_t> C_OscNodeDataPoolContent::GetValueArrU32(void) const
+const QList<uint32_t> C_OscNodeDataPoolContent::GetValueArrU32(void) const
 {
-   std::vector<uint32_t> c_RetVal;
+   QList<uint32_t> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eUINT32, c_RetVal);
    return c_RetVal;
@@ -967,7 +967,7 @@ uint32_t C_OscNodeDataPoolContent::GetValueArrU32Element(const uint32_t ou32_Ind
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU64(const std::vector<uint64_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrU64(const QList<uint64_t> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eUINT64);
 }
@@ -992,9 +992,9 @@ void C_OscNodeDataPoolContent::SetValueArrU64Element(const uint64_t ou64_Value, 
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint64_t> C_OscNodeDataPoolContent::GetValueArrU64(void) const
+const QList<uint64_t> C_OscNodeDataPoolContent::GetValueArrU64(void) const
 {
-   std::vector<uint64_t> c_RetVal;
+   QList<uint64_t> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eUINT64, c_RetVal);
    return c_RetVal;
@@ -1024,7 +1024,7 @@ uint64_t C_OscNodeDataPoolContent::GetValueArrU64Element(const uint32_t ou32_Ind
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS8(const std::vector<int8_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrS8(const QList<int8_t> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eSINT8);
 }
@@ -1049,9 +1049,9 @@ void C_OscNodeDataPoolContent::SetValueArrS8Element(const int8_t os8_Value, cons
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int8_t> C_OscNodeDataPoolContent::GetValueArrS8(void) const
+const QList<int8_t> C_OscNodeDataPoolContent::GetValueArrS8(void) const
 {
-   std::vector<int8_t> c_RetVal;
+   QList<int8_t> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eSINT8, c_RetVal);
    return c_RetVal;
@@ -1081,7 +1081,7 @@ int8_t C_OscNodeDataPoolContent::GetValueArrS8Element(const uint32_t ou32_Index)
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS16(const std::vector<int16_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrS16(const QList<int16_t> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eSINT16);
 }
@@ -1106,9 +1106,9 @@ void C_OscNodeDataPoolContent::SetValueArrS16Element(const int16_t os16_Value, c
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int16_t> C_OscNodeDataPoolContent::GetValueArrS16(void) const
+const QList<int16_t> C_OscNodeDataPoolContent::GetValueArrS16(void) const
 {
-   std::vector<int16_t> c_RetVal;
+   QList<int16_t> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eSINT16, c_RetVal);
    return c_RetVal;
@@ -1138,7 +1138,7 @@ int16_t C_OscNodeDataPoolContent::GetValueArrS16Element(const uint32_t ou32_Inde
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS32(const std::vector<int32_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrS32(const QList<int32_t> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eSINT32);
 }
@@ -1163,9 +1163,9 @@ void C_OscNodeDataPoolContent::SetValueArrS32Element(const int32_t os32_Value, c
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> C_OscNodeDataPoolContent::GetValueArrS32(void) const
+const QList<int32_t> C_OscNodeDataPoolContent::GetValueArrS32(void) const
 {
-   std::vector<int32_t> c_RetVal;
+   QList<int32_t> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eSINT32, c_RetVal);
    return c_RetVal;
@@ -1195,7 +1195,7 @@ int32_t C_OscNodeDataPoolContent::GetValueArrS32Element(const uint32_t ou32_Inde
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS64(const std::vector<int64_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrS64(const QList<int64_t> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eSINT64);
 }
@@ -1220,9 +1220,9 @@ void C_OscNodeDataPoolContent::SetValueArrS64Element(const int64_t os64_Value, c
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int64_t> C_OscNodeDataPoolContent::GetValueArrS64(void) const
+const QList<int64_t> C_OscNodeDataPoolContent::GetValueArrS64(void) const
 {
-   std::vector<int64_t> c_RetVal;
+   QList<int64_t> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eSINT64, c_RetVal);
    return c_RetVal;
@@ -1252,7 +1252,7 @@ int64_t C_OscNodeDataPoolContent::GetValueArrS64Element(const uint32_t ou32_Inde
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrF32(const std::vector<float32_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrF32(const QList<float32_t> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eFLOAT32);
 }
@@ -1277,9 +1277,9 @@ void C_OscNodeDataPoolContent::SetValueArrF32Element(const float32_t of32_Value,
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<float32_t> C_OscNodeDataPoolContent::GetValueArrF32(void) const
+const QList<float32_t> C_OscNodeDataPoolContent::GetValueArrF32(void) const
 {
-   std::vector<float32_t> c_RetVal;
+   QList<float32_t> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eFLOAT32, c_RetVal);
    return c_RetVal;
@@ -1309,7 +1309,7 @@ float32_t C_OscNodeDataPoolContent::GetValueArrF32Element(const uint32_t ou32_In
    \param[in]  orc_Value   New values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrF64(const std::vector<float64_t> & orc_Value)
+void C_OscNodeDataPoolContent::SetValueArrF64(const QList<float64_t> & orc_Value)
 {
    m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eFLOAT64);
 }
@@ -1334,9 +1334,9 @@ void C_OscNodeDataPoolContent::SetValueArrF64Element(const float64_t of64_Value,
    Type mismatch: Exception C_CONFIG
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<float64_t> C_OscNodeDataPoolContent::GetValueArrF64(void) const
+const QList<float64_t> C_OscNodeDataPoolContent::GetValueArrF64(void) const
 {
-   std::vector<float64_t> c_RetVal;
+   QList<float64_t> c_RetVal;
 
    m_GetValueArray(C_OscNodeDataPoolContent::eFLOAT64, c_RetVal);
    return c_RetVal;
@@ -3089,7 +3089,7 @@ void C_OscNodeDataPoolContent::GetAnyValueAsFloat64(float64_t & orf64_Output, co
    Pointer to the vector with the const value data of the content
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint8_t> * stw::opensyde_core::C_OscNodeDataPoolContent::GetDataAccessConst(
+const QByteArray * stw::opensyde_core::C_OscNodeDataPoolContent::GetDataAccessConst(
    QRecursiveMutex ** const oppc_CriticalSection) const
 {
    if (oppc_CriticalSection != NULL)
@@ -3111,7 +3111,7 @@ const std::vector<uint8_t> * stw::opensyde_core::C_OscNodeDataPoolContent::GetDa
    Pointer to the vector with the value data of the content
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint8_t> * stw::opensyde_core::C_OscNodeDataPoolContent::GetDataAccess(
+QByteArray * stw::opensyde_core::C_OscNodeDataPoolContent::GetDataAccess(
    QRecursiveMutex ** const oppc_CriticalSection)
 {
    if (oppc_CriticalSection != NULL)
@@ -3366,7 +3366,7 @@ void C_OscNodeDataPoolContent::m_GetBaseTypeArray(const uint32_t & oru32_Index, 
    C_CONFIG   size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<uint8_t> & orc_Data)
+int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const QByteArray & orc_Data)
 {
    int32_t s32_Return = C_NO_ERR;
    //using unions is not nice but more portable than reinterpret_casting
@@ -3403,10 +3403,10 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
             this->SetValueU16(static_cast<uint16_t>((static_cast<uint16_t>(orc_Data[0]) << 8U)) + orc_Data[1]);
             break;
          case eUINT32: ///< Data type unsigned 32 bit integer
-            this->SetValueU32(mh_BinaryToUnsignedInt32Big(&orc_Data[0]));
+            this->SetValueU32(mh_BinaryToUnsignedInt32Big(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()))));
             break;
          case eUINT64: ///< Data type unsigned 64 bit integer
-            this->SetValueU64(mh_BinaryToUnsignedInt64Big(&orc_Data[0]));
+            this->SetValueU64(mh_BinaryToUnsignedInt64Big(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()))));
             break;
          case eSINT8: ///< Data type signed 8 bit integer
             this->SetValueS8(orc_Data[0]);
@@ -3416,19 +3416,19 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
                static_cast<int16_t>(static_cast<uint16_t>((static_cast<uint16_t>(orc_Data[0]) << 8U))) + orc_Data[1]);
             break;
          case eSINT32: ///< Data type signed 32 bit integer
-            this->SetValueS32(static_cast<int32_t>(mh_BinaryToUnsignedInt32Big(&orc_Data[0])));
+            this->SetValueS32(static_cast<int32_t>(mh_BinaryToUnsignedInt32Big(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())))));
             break;
          case eSINT64: ///< Data type signed 64 bit integer
-            this->SetValueS64(static_cast<int64_t>(mh_BinaryToUnsignedInt64Big(&orc_Data[0])));
+            this->SetValueS64(static_cast<int64_t>(mh_BinaryToUnsignedInt64Big(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())))));
             break;
          case eFLOAT32: ///< Data type 32 bit floating point
             U_Union32 u_Value32;
-            u_Value32.u32_Value = mh_BinaryToUnsignedInt32Big(&orc_Data[0]);
+            u_Value32.u32_Value = mh_BinaryToUnsignedInt32Big(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
             this->SetValueF32(u_Value32.f32_Value);
             break;
          case eFLOAT64: ///< Data type 64 bit floating point
             U_Union64 u_Value64;
-            u_Value64.u64_Value = mh_BinaryToUnsignedInt64Big(&orc_Data[0]);
+            u_Value64.u64_Value = mh_BinaryToUnsignedInt64Big(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
             this->SetValueF64(u_Value64.f64_Value);
             break;
          default:
@@ -3440,15 +3440,15 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
          //array type
          //we set up the array here and assign in one go to ensure data consistency
          uint32_t u32_ArrayIndex;
-         std::vector<uint16_t> c_Data16;
-         std::vector<uint32_t> c_Data32;
-         std::vector<uint64_t> c_Data64;
-         std::vector<int8_t> c_DataS8;
-         std::vector<int16_t> c_DataS16;
-         std::vector<int32_t> c_DataS32;
-         std::vector<int64_t> c_DataS64;
-         std::vector<float32_t> c_DataF32;
-         std::vector<float64_t> c_DataF64;
+         QList<uint16_t> c_Data16;
+         QList<uint32_t> c_Data32;
+         QList<uint64_t> c_Data64;
+         QList<int8_t> c_DataS8;
+         QList<int16_t> c_DataS16;
+         QList<int32_t> c_DataS32;
+         QList<int64_t> c_DataS64;
+         QList<float32_t> c_DataF32;
+         QList<float64_t> c_DataF64;
          switch (this->me_Type)
          {
          case eUINT8:
@@ -3470,7 +3470,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
                c_Data32[u32_ArrayIndex] = mh_BinaryToUnsignedInt32Big(
-                  &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 4U]);
+                  reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 4U));
             }
             this->SetValueArrU32(c_Data32);
             break;
@@ -3479,13 +3479,13 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
                c_Data64[u32_ArrayIndex] = mh_BinaryToUnsignedInt64Big(
-                  &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 8U]);
+                  reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 8U));
             }
             this->SetValueArrU64(c_Data64);
             break;
          case eSINT8: ///< Data type signed 8 bit integer
             c_DataS8.resize(orc_Data.size());
-            (void)std::memcpy(&c_DataS8[0], &orc_Data[0], orc_Data.size());
+            (void)std::memcpy(reinterpret_cast<uint8_t*>(c_DataS8.data()), reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())), orc_Data.size());
             this->SetValueArrS8(c_DataS8);
             break;
          case eSINT16: ///< Data type signed 16 bit integer
@@ -3505,8 +3505,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
                c_DataS32[u32_ArrayIndex] =
-                  static_cast<int32_t>(mh_BinaryToUnsignedInt32Big(&orc_Data[static_cast<size_t>(u32_ArrayIndex) *
-                                                                             4U]));
+                  static_cast<int32_t>(mh_BinaryToUnsignedInt32Big(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data() + static_cast<size_t>(u32_ArrayIndex) * 4U))));
             }
             this->SetValueArrS32(c_DataS32);
             break;
@@ -3515,8 +3514,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
                c_DataS64[u32_ArrayIndex] =
-                  static_cast<int64_t>(mh_BinaryToUnsignedInt64Big(&orc_Data[static_cast<size_t>(u32_ArrayIndex) *
-                                                                             8U]));
+                  static_cast<int64_t>(mh_BinaryToUnsignedInt64Big(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data() + static_cast<size_t>(u32_ArrayIndex) * 8U))));
             }
             this->SetValueArrS64(c_DataS64);
             break;
@@ -3525,7 +3523,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
             c_DataF32.resize(orc_Data.size() / 4);
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
-               u_Value32.u32_Value = mh_BinaryToUnsignedInt32Big(&orc_Data[static_cast<size_t>(u32_ArrayIndex) * 4U]);
+               u_Value32.u32_Value = mh_BinaryToUnsignedInt32Big(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 4U));
                c_DataF32[u32_ArrayIndex] = u_Value32.f32_Value;
             }
             this->SetValueArrF32(c_DataF32);
@@ -3535,7 +3533,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
             c_DataF64.resize(orc_Data.size() / 8);
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
-               u_Value64.u64_Value = mh_BinaryToUnsignedInt64Big(&orc_Data[static_cast<size_t>(u32_ArrayIndex) * 8U]);
+               u_Value64.u64_Value = mh_BinaryToUnsignedInt64Big(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 8U));
                c_DataF64[u32_ArrayIndex] = u_Value64.f64_Value;
             }
             this->SetValueArrF64(c_DataF64);
@@ -3561,7 +3559,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromBigEndianBlob(const std::vector<ui
    C_CONFIG   size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data)
+int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const QByteArray & orc_Data)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -3599,10 +3597,10 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
             this->SetValueU16(static_cast<uint16_t>((static_cast<uint16_t>(orc_Data[1]) << 8U)) + orc_Data[0]);
             break;
          case eUINT32: ///< Data type unsigned 32 bit integer
-            this->SetValueU32(mh_BinaryToUnsignedInt32Little(&orc_Data[0]));
+            this->SetValueU32(mh_BinaryToUnsignedInt32Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()))));
             break;
          case eUINT64: ///< Data type unsigned 64 bit integer
-            this->SetValueU64(mh_BinaryToUnsignedInt64Little(&orc_Data[0]));
+            this->SetValueU64(mh_BinaryToUnsignedInt64Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()))));
             break;
          case eSINT8: ///< Data type signed 8 bit integer
             this->SetValueS8(orc_Data[0]);
@@ -3612,19 +3610,19 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
                                                    orc_Data[0]));
             break;
          case eSINT32: ///< Data type signed 32 bit integer
-            this->SetValueS32(static_cast<int32_t>(mh_BinaryToUnsignedInt32Little(&orc_Data[0])));
+            this->SetValueS32(static_cast<int32_t>(mh_BinaryToUnsignedInt32Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())))));
             break;
          case eSINT64: ///< Data type signed 64 bit integer
-            this->SetValueS64(static_cast<int64_t>(mh_BinaryToUnsignedInt64Little(&orc_Data[0])));
+            this->SetValueS64(static_cast<int64_t>(mh_BinaryToUnsignedInt64Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())))));
             break;
          case eFLOAT32: ///< Data type 32 bit floating point
             U_Union32 u_Value32;
-            u_Value32.u32_Value = mh_BinaryToUnsignedInt32Little(&orc_Data[0]);
+            u_Value32.u32_Value = mh_BinaryToUnsignedInt32Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
             this->SetValueF32(u_Value32.f32_Value);
             break;
          case eFLOAT64: ///< Data type 64 bit floating point
             U_Union64 u_Value64;
-            u_Value64.u64_Value = mh_BinaryToUnsignedInt64Little(&orc_Data[0]);
+            u_Value64.u64_Value = mh_BinaryToUnsignedInt64Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
             this->SetValueF64(u_Value64.f64_Value);
             break;
          default:
@@ -3636,15 +3634,15 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
          //array type
          //we set up the array here and assign in one go to ensure data consistency
          uint32_t u32_ArrayIndex;
-         std::vector<uint16_t> c_Data16;
-         std::vector<uint32_t> c_Data32;
-         std::vector<uint64_t> c_Data64;
-         std::vector<int8_t> c_DataS8;
-         std::vector<int16_t> c_DataS16;
-         std::vector<int32_t> c_DataS32;
-         std::vector<int64_t> c_DataS64;
-         std::vector<float32_t> c_DataF32;
-         std::vector<float64_t> c_DataF64;
+         QList<uint16_t> c_Data16;
+         QList<uint32_t> c_Data32;
+         QList<uint64_t> c_Data64;
+         QList<int8_t> c_DataS8;
+         QList<int16_t> c_DataS16;
+         QList<int32_t> c_DataS32;
+         QList<int64_t> c_DataS64;
+         QList<float32_t> c_DataF32;
+         QList<float64_t> c_DataF64;
          switch (this->me_Type)
          {
          case eUINT8:
@@ -3666,7 +3664,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
                c_Data32[u32_ArrayIndex] =
-                  mh_BinaryToUnsignedInt32Little(&orc_Data[static_cast<size_t>(u32_ArrayIndex) * 4U]);
+                  mh_BinaryToUnsignedInt32Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 4U));
             }
             this->SetValueArrU32(c_Data32);
             break;
@@ -3675,13 +3673,13 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
                c_Data64[u32_ArrayIndex] =
-                  mh_BinaryToUnsignedInt64Little(&orc_Data[static_cast<size_t>(u32_ArrayIndex) * 8U]);
+                  mh_BinaryToUnsignedInt64Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 8U));
             }
             this->SetValueArrU64(c_Data64);
             break;
          case eSINT8: ///< Data type signed 8 bit integer
             c_DataS8.resize(orc_Data.size());
-            (void)std::memcpy(&c_DataS8[0], &orc_Data[0], orc_Data.size());
+            (void)std::memcpy(reinterpret_cast<uint8_t*>(c_DataS8.data()), reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())), orc_Data.size());
             this->SetValueArrS8(c_DataS8);
             break;
          case eSINT16: ///< Data type signed 16 bit integer
@@ -3702,8 +3700,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
                c_DataS32[u32_ArrayIndex] =
-                  static_cast<int32_t>(mh_BinaryToUnsignedInt32Little(&orc_Data[static_cast<size_t>(u32_ArrayIndex) *
-                                                                                4U]));
+                  static_cast<int32_t>(mh_BinaryToUnsignedInt32Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data() + static_cast<size_t>(u32_ArrayIndex) * 4U))));
             }
             this->SetValueArrS32(c_DataS32);
             break;
@@ -3712,8 +3709,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
                c_DataS64[u32_ArrayIndex] =
-                  static_cast<int64_t>(mh_BinaryToUnsignedInt64Little(&orc_Data[static_cast<size_t>(u32_ArrayIndex) *
-                                                                                8U]));
+                  static_cast<int64_t>(mh_BinaryToUnsignedInt64Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data() + static_cast<size_t>(u32_ArrayIndex) * 8U))));
             }
             this->SetValueArrS64(c_DataS64);
             break;
@@ -3723,7 +3719,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
                u_Value32.u32_Value =
-                  mh_BinaryToUnsignedInt32Little(&orc_Data[static_cast<size_t>(u32_ArrayIndex) * 4U]);
+                  mh_BinaryToUnsignedInt32Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 4U));
                c_DataF32[u32_ArrayIndex] = u_Value32.f32_Value;
             }
             this->SetValueArrF32(c_DataF32);
@@ -3734,7 +3730,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
             for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
             {
                u_Value64.u64_Value =
-                  mh_BinaryToUnsignedInt64Little(&orc_Data[static_cast<size_t>(u32_ArrayIndex) * 8U]);
+                  mh_BinaryToUnsignedInt64Little(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 8U));
                c_DataF64[u32_ArrayIndex] = u_Value64.f64_Value;
             }
             this->SetValueArrF64(c_DataF64);
@@ -3756,7 +3752,7 @@ int32_t C_OscNodeDataPoolContent::SetValueFromLittleEndianBlob(const std::vector
    \param[out]  orc_Data   data to set
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & orc_Data) const
+void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(QByteArray & orc_Data) const
 {
    //using unions is not nice but more portable than reinterpret_casting
    //lint -e{9018}  //cf. comment above
@@ -3793,10 +3789,10 @@ void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & or
          orc_Data[1] = static_cast<uint8_t>(u16_Value);
          break;
       case eUINT32: ///< Data type unsigned 32 bit integer
-         mh_UnsignedInt32ToBinaryBig(this->GetValueU32(), &orc_Data[0]);
+         mh_UnsignedInt32ToBinaryBig(this->GetValueU32(), reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       case eUINT64: ///< Data type unsigned 64 bit integer
-         mh_UnsignedInt64ToBinaryBig(this->GetValueU64(), &orc_Data[0]);
+         mh_UnsignedInt64ToBinaryBig(this->GetValueU64(), reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       case eSINT8: ///< Data type signed 8 bit integer
          orc_Data[0] = this->GetValueS8();
@@ -3807,18 +3803,18 @@ void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & or
          orc_Data[1] = static_cast<uint8_t>(u16_Value);
          break;
       case eSINT32: ///< Data type signed 32 bit integer
-         mh_UnsignedInt32ToBinaryBig(static_cast<uint32_t>(this->GetValueS32()), &orc_Data[0]);
+         mh_UnsignedInt32ToBinaryBig(static_cast<uint32_t>(this->GetValueS32()), reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       case eSINT64: ///< Data type signed 64 bit integer
-         mh_UnsignedInt64ToBinaryBig(static_cast<uint64_t>(this->GetValueS64()), &orc_Data[0]);
+         mh_UnsignedInt64ToBinaryBig(static_cast<uint64_t>(this->GetValueS64()), reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       case eFLOAT32: ///< Data type 32 bit floating point
          u_Value32.f32_Value = this->GetValueF32();
-         mh_UnsignedInt32ToBinaryBig(u_Value32.u32_Value, &orc_Data[0]);
+         mh_UnsignedInt32ToBinaryBig(u_Value32.u32_Value, reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       case eFLOAT64: ///< Data type 64 bit floating point
          u_Value64.f64_Value = this->GetValueF64();
-         mh_UnsignedInt64ToBinaryBig(u_Value64.u64_Value, &orc_Data[0]);
+         mh_UnsignedInt64ToBinaryBig(u_Value64.u64_Value, reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       default:
          break;
@@ -3829,15 +3825,15 @@ void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & or
       //array type
       //we set up the array here and assign in one go to ensure data consistency
       uint32_t u32_ArrayIndex;
-      std::vector<uint16_t> c_Data16;
-      std::vector<uint32_t> c_Data32;
-      std::vector<uint64_t> c_Data64;
-      std::vector<int8_t> c_DataS8;
-      std::vector<int16_t> c_DataS16;
-      std::vector<int32_t> c_DataS32;
-      std::vector<int64_t> c_DataS64;
-      std::vector<float32_t> c_DataF32;
-      std::vector<float64_t> c_DataF64;
+      QList<uint16_t> c_Data16;
+      QList<uint32_t> c_Data32;
+      QList<uint64_t> c_Data64;
+      QList<int8_t> c_DataS8;
+      QList<int16_t> c_DataS16;
+      QList<int32_t> c_DataS32;
+      QList<int64_t> c_DataS64;
+      QList<float32_t> c_DataF32;
+      QList<float64_t> c_DataF64;
       switch (this->me_Type)
       {
       case eUINT8:
@@ -3855,19 +3851,19 @@ void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & or
          c_Data32 = this->GetValueArrU32();
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
-            mh_UnsignedInt32ToBinaryBig(c_Data32[u32_ArrayIndex], &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 4U]);
+            mh_UnsignedInt32ToBinaryBig(c_Data32[u32_ArrayIndex], reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 4U));
          }
          break;
       case eUINT64: ///< Data type unsigned 64 bit integer
          c_Data64 = this->GetValueArrU64();
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
-            mh_UnsignedInt64ToBinaryBig(c_Data64[u32_ArrayIndex], &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 8U]);
+            mh_UnsignedInt64ToBinaryBig(c_Data64[u32_ArrayIndex], reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 8U));
          }
          break;
       case eSINT8: ///< Data type signed 8 bit integer
          c_DataS8 = this->GetValueArrS8();
-         (void)std::memcpy(&orc_Data[0], &c_DataS8[0], orc_Data.size());
+         (void)std::memcpy(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())), reinterpret_cast<uint8_t*>(c_DataS8.data()), orc_Data.size());
          break;
       case eSINT16: ///< Data type signed 16 bit integer
          c_DataS16 = this->GetValueArrS16();
@@ -3884,7 +3880,7 @@ void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & or
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
             mh_UnsignedInt32ToBinaryBig(static_cast<uint32_t>(c_DataS32[u32_ArrayIndex]),
-                                        &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 4U]);
+                                        reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 4U));
          }
          break;
       case eSINT64: ///< Data type unsigned 64 bit integer
@@ -3892,7 +3888,7 @@ void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & or
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
             mh_UnsignedInt64ToBinaryBig(static_cast<uint64_t>(c_DataS64[u32_ArrayIndex]),
-                                        &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 8U]);
+                                        reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 8U));
          }
          break;
       case eFLOAT32: ///< Data type 32 bit floating point
@@ -3901,7 +3897,7 @@ void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & or
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
             u_Value32.f32_Value = c_DataF32[u32_ArrayIndex];
-            mh_UnsignedInt32ToBinaryBig(u_Value32.u32_Value, &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 4U]);
+            mh_UnsignedInt32ToBinaryBig(u_Value32.u32_Value, reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 4U));
          }
          break;
       case eFLOAT64: ///< Data type 64 bit floating point
@@ -3910,7 +3906,7 @@ void C_OscNodeDataPoolContent::GetValueAsBigEndianBlob(std::vector<uint8_t> & or
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
             u_Value64.f64_Value = c_DataF64[u32_ArrayIndex];
-            mh_UnsignedInt64ToBinaryBig(u_Value64.u64_Value, &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 8U]);
+            mh_UnsignedInt64ToBinaryBig(u_Value64.u64_Value, reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 8U));
          }
          break;
       default:
@@ -4076,7 +4072,7 @@ void C_OscNodeDataPoolContent::mh_UnsignedInt32ToBinaryLittle(const uint32_t ou3
    \param[out]  orc_Data   data to set
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> & orc_Data) const
+void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(QByteArray & orc_Data) const
 {
    //using unions is not nice but more portable than reinterpret_casting
    //lint -e{9018}  //cf. comment above
@@ -4113,10 +4109,10 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
          orc_Data[0] = static_cast<uint8_t>(u16_Value);
          break;
       case eUINT32: ///< Data type unsigned 32 bit integer
-         mh_UnsignedInt32ToBinaryLittle(this->GetValueU32(), &orc_Data[0]);
+         mh_UnsignedInt32ToBinaryLittle(this->GetValueU32(), reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       case eUINT64: ///< Data type unsigned 64 bit integer
-         mh_UnsignedInt64ToBinaryLittle(this->GetValueU64(), &orc_Data[0]);
+         mh_UnsignedInt64ToBinaryLittle(this->GetValueU64(), reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       case eSINT8: ///< Data type signed 8 bit integer
          orc_Data[0] = this->GetValueS8();
@@ -4127,18 +4123,18 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
          orc_Data[0] = static_cast<uint8_t>(u16_Value);
          break;
       case eSINT32: ///< Data type signed 32 bit integer
-         mh_UnsignedInt32ToBinaryLittle(static_cast<uint32_t>(this->GetValueS32()), &orc_Data[0]);
+         mh_UnsignedInt32ToBinaryLittle(static_cast<uint32_t>(this->GetValueS32()), reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       case eSINT64: ///< Data type signed 64 bit integer
-         mh_UnsignedInt64ToBinaryLittle(static_cast<uint64_t>(this->GetValueS64()), &orc_Data[0]);
+         mh_UnsignedInt64ToBinaryLittle(static_cast<uint64_t>(this->GetValueS64()), reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       case eFLOAT32: ///< Data type 32 bit floating point
          u_Value32.f32_Value = this->GetValueF32();
-         mh_UnsignedInt32ToBinaryLittle(u_Value32.u32_Value, &orc_Data[0]);
+         mh_UnsignedInt32ToBinaryLittle(u_Value32.u32_Value, reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       case eFLOAT64: ///< Data type 64 bit floating point
          u_Value64.f64_Value = this->GetValueF64();
-         mh_UnsignedInt64ToBinaryLittle(u_Value64.u64_Value, &orc_Data[0]);
+         mh_UnsignedInt64ToBinaryLittle(u_Value64.u64_Value, reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())));
          break;
       default:
          break;
@@ -4149,15 +4145,15 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
       //array type
       //we set up the array here and assign in one go to ensure data consistency
       uint32_t u32_ArrayIndex;
-      std::vector<uint16_t> c_Data16;
-      std::vector<uint32_t> c_Data32;
-      std::vector<uint64_t> c_Data64;
-      std::vector<int8_t> c_DataS8;
-      std::vector<int16_t> c_DataS16;
-      std::vector<int32_t> c_DataS32;
-      std::vector<int64_t> c_DataS64;
-      std::vector<float32_t> c_DataF32;
-      std::vector<float64_t> c_DataF64;
+      QList<uint16_t> c_Data16;
+      QList<uint32_t> c_Data32;
+      QList<uint64_t> c_Data64;
+      QList<int8_t> c_DataS8;
+      QList<int16_t> c_DataS16;
+      QList<int32_t> c_DataS32;
+      QList<int64_t> c_DataS64;
+      QList<float32_t> c_DataF32;
+      QList<float64_t> c_DataF64;
       switch (this->me_Type)
       {
       case eUINT8:
@@ -4177,7 +4173,7 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
             mh_UnsignedInt32ToBinaryLittle(c_Data32[u32_ArrayIndex],
-                                           &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 4U]);
+                                           reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 4U));
          }
          break;
       case eUINT64: ///< Data type unsigned 64 bit integer
@@ -4185,12 +4181,12 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
             mh_UnsignedInt64ToBinaryLittle(c_Data64[u32_ArrayIndex],
-                                           &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 8U]);
+                                           reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 8U));
          }
          break;
       case eSINT8: ///< Data type signed 8 bit integer
          c_DataS8 = this->GetValueArrS8();
-         (void)std::memcpy(&orc_Data[0], &c_DataS8[0], orc_Data.size());
+         (void)std::memcpy(reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data())), reinterpret_cast<uint8_t*>(c_DataS8.data()), orc_Data.size());
          break;
       case eSINT16: ///< Data type signed 16 bit integer
          c_DataS16 = this->GetValueArrS16();
@@ -4207,7 +4203,7 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
             mh_UnsignedInt32ToBinaryLittle(static_cast<uint32_t>(c_DataS32[u32_ArrayIndex]),
-                                           &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 4U]);
+                                           reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 4U));
          }
          break;
       case eSINT64: ///< Data type signed 64 bit integer
@@ -4215,7 +4211,7 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
             mh_UnsignedInt64ToBinaryLittle(static_cast<uint64_t>(c_DataS64[u32_ArrayIndex]),
-                                           &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 8U]);
+                                           reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 8U));
          }
          break;
       case eFLOAT32: ///< Data type 32 bit floating point
@@ -4224,7 +4220,7 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
             u_Value32.f32_Value = c_DataF32[u32_ArrayIndex];
-            mh_UnsignedInt32ToBinaryLittle(u_Value32.u32_Value, &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 4U]);
+            mh_UnsignedInt32ToBinaryLittle(u_Value32.u32_Value, reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 4U));
          }
          break;
       case eFLOAT64: ///< Data type 64 bit floating point
@@ -4233,7 +4229,7 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(std::vector<uint8_t> &
          for (u32_ArrayIndex = 0U; u32_ArrayIndex < this->GetArraySize(); u32_ArrayIndex++)
          {
             u_Value64.f64_Value = c_DataF64[u32_ArrayIndex];
-            mh_UnsignedInt64ToBinaryLittle(u_Value64.u64_Value, &orc_Data[static_cast<size_t>(u32_ArrayIndex) * 8U]);
+            mh_UnsignedInt64ToBinaryLittle(u_Value64.u64_Value, reinterpret_cast<uint8_t*>(const_cast<char*>(orc_Data.data()) + static_cast<size_t>(u32_ArrayIndex) * 8U));
          }
          break;
       default:

@@ -10,6 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include "stwerrors.hpp"
+#include <QList>
 #include "C_UsHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -559,7 +560,7 @@ void C_SdNdeDbViewWidget::m_OnDelete(const uint32_t ou32_NodeIndex, const uint32
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbViewWidget::m_DeleteAllDatablocks(const uint32_t ou32_NodeIndex,
-                                                const std::vector<C_OscNodeApplication> & orc_Applications)
+                                                const QList<C_OscNodeApplication> & orc_Applications)
 {
    Q_ASSERT(this->mu32_NodeIndex == ou32_NodeIndex);
    while (orc_Applications.size() > 0)
@@ -595,7 +596,7 @@ void C_SdNdeDbViewWidget::m_UpdateCount(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbViewWidget::m_ProgrammingOptions(void) const
 {
-   const std::vector<const C_OscNodeApplication *> c_ProgrammableApplications =
+   const QList<const C_OscNodeApplication *> c_ProgrammableApplications =
       C_PuiSdHandler::h_GetInstance()->GetProgrammableApplications(this->mu32_NodeIndex);
 
    if (c_ProgrammableApplications.size() > 0)

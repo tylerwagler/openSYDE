@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QGraphicsItemGroup>
+#include <QList>
 #include <QTimer>
 
 #include "stwtypes.hpp"
@@ -39,7 +40,7 @@ class C_GiLiLineGroup :
    Q_OBJECT
 
 public:
-   C_GiLiLineGroup(const std::vector<QPointF> * const opc_Points = NULL, const bool & orq_MiddleLine = false,
+   C_GiLiLineGroup(const QList<QPointF> * const opc_Points = NULL, const bool & orq_MiddleLine = false,
                    QGraphicsItem * const opc_Parent = NULL);
    ~C_GiLiLineGroup(void) override;
 
@@ -108,7 +109,7 @@ protected:
 
    void m_LoadBasicData(const stw::opensyde_gui_logic::C_PuiBsLineBase & orc_Data);
    void m_UpdateBasicData(stw::opensyde_gui_logic::C_PuiBsLineBase & orc_Data) const;
-   void m_Init(const std::vector<QPointF> & orc_Points);
+   void m_Init(const QList<QPointF> & orc_Points);
 
    QVariant itemChange(const GraphicsItemChange oe_Change, const QVariant & orc_Value) override;
    void mousePressEvent(QGraphicsSceneMouseEvent * const opc_Event) override;

@@ -14,6 +14,7 @@
 
 #include <QMimeData>
 #include <QIcon>
+#include <QList>
 
 #include "C_SdNdeDpContentUtil.hpp"
 #include "C_SdNdeDpListTableModel.hpp"
@@ -1140,11 +1141,11 @@ Qt::DropActions C_SdNdeDpListTableModel::supportedDropActions(void) const
    Continuous sections of new elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<std::vector<uint32_t> > C_SdNdeDpListTableModel::DoInsertRows(
-   const std::vector<C_OscNodeDataPoolListElement> & orc_OscInsertedElements,
-   const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiInsertedElements, const std::vector<uint32_t> & orc_Rows)
+QList<QList<uint32_t> > C_SdNdeDpListTableModel::DoInsertRows(
+   const QList<C_OscNodeDataPoolListElement> & orc_OscInsertedElements,
+   const QList<C_PuiSdNodeDataPoolListElement> & orc_UiInsertedElements, const QList<uint32_t> & orc_Rows)
 {
-   std::vector<std::vector<uint32_t> > c_Retval;
+   QList<QList<uint32_t> > c_Retval;
 
    if ((orc_OscInsertedElements.size() == orc_UiInsertedElements.size()) &&
        (orc_OscInsertedElements.size() == orc_Rows.size()))
@@ -1157,11 +1158,11 @@ std::vector<std::vector<uint32_t> > C_SdNdeDpListTableModel::DoInsertRows(
                                                                    orc_OscInsertedElements.size());
       for (uint32_t u32_ItSection = 0UL; u32_ItSection < c_Retval.size(); ++u32_ItSection)
       {
-         const std::vector<uint32_t> & rc_Section = c_Retval[u32_ItSection];
+         const QList<uint32_t> & rc_Section = c_Retval[u32_ItSection];
          if (rc_Section.size() > 0UL)
          {
             this->beginInsertRows(QModelIndex(), rc_Section[0UL],
-                                  rc_Section[static_cast<std::vector<uint32_t>::size_type>(rc_Section.size() - 1UL)]);
+                                  rc_Section[static_cast<QList<uint32_t>::size_type>(rc_Section.size() - 1UL)]);
             for (uint32_t u32_ItItem = 0UL; u32_ItItem < rc_Section.size(); ++u32_ItItem)
             {
                C_PuiSdHandler::h_GetInstance()->InsertDataPoolListElement(this->mu32_NodeIndex,
@@ -1215,25 +1216,25 @@ bool C_SdNdeDpListTableModel::insertColumns(const int32_t os32_Col, const int32_
    \param[in]  orc_Rows    Row indices (Expected: unique, ascending)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListTableModel::DoRemoveRows(const std::vector<uint32_t> & orc_Rows)
+void C_SdNdeDpListTableModel::DoRemoveRows(const QList<uint32_t> & orc_Rows)
 {
-   const std::vector<std::vector<uint32_t> > c_ContiguousSections = C_Uti::h_GetContiguousSectionsAscending(orc_Rows);
+   const QList<QList<uint32_t> > c_ContiguousSections = C_Uti::h_GetContiguousSectionsAscending(orc_Rows);
 
    //Start deleting from back (easier to keep indices valid)
    for (uint32_t u32_ItSection = c_ContiguousSections.size(); u32_ItSection > 0UL; --u32_ItSection)
    {
-      const std::vector<uint32_t> & rc_Section =
-         c_ContiguousSections[static_cast<std::vector<uint32_t>::size_type>(u32_ItSection - 1UL)];
+      const QList<uint32_t> & rc_Section =
+         c_ContiguousSections[static_cast<QList<uint32_t>::size_type>(u32_ItSection - 1UL)];
       if (rc_Section.size() > 0UL)
       {
          this->beginRemoveRows(QModelIndex(), rc_Section[0UL],
-                               rc_Section[static_cast<std::vector<uint32_t>::size_type>(rc_Section.size() - 1UL)]);
+                               rc_Section[static_cast<QList<uint32_t>::size_type>(rc_Section.size() - 1UL)]);
          for (uint32_t u32_ItItem = rc_Section.size(); u32_ItItem > 0UL; --u32_ItItem)
          {
             Q_ASSERT(C_PuiSdHandler::h_GetInstance()->RemoveDataPoolListElement(this->mu32_NodeIndex,
                                                                                   this->mu32_DataPoolIndex,
                                                                                   this->mu32_ListIndex,
-                                                                                  rc_Section[static_cast<std::vector<uint32_t>
+                                                                                  rc_Section[static_cast<QList<uint32_t>
                                                                                                          ::size_type>(
                                                                                                 u32_ItItem - 1UL)]) ==
                        C_NO_ERR);
@@ -1289,14 +1290,14 @@ bool C_SdNdeDpListTableModel::removeColumns(const int32_t os32_Col, const int32_
                                     "move down" -> orc_TargetIndices + 1
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListTableModel::DoMoveRows(const std::vector<uint32_t> & orc_SelectedIndices,
-                                         const std::vector<uint32_t> & orc_TargetIndices)
+void C_SdNdeDpListTableModel::DoMoveRows(const QList<uint32_t> & orc_SelectedIndices,
+                                         const QList<uint32_t> & orc_TargetIndices)
 {
    if (orc_SelectedIndices.size() == orc_TargetIndices.size())
    {
-      std::vector<uint32_t> c_SelectedIndicesCopy = orc_SelectedIndices;
-      std::vector<uint32_t> c_TargetIndicesCopy = orc_TargetIndices;
-      std::vector<std::vector<uint32_t> > c_ContiguousSections;
+      QList<uint32_t> c_SelectedIndicesCopy = orc_SelectedIndices;
+      QList<uint32_t> c_TargetIndicesCopy = orc_TargetIndices;
+      QList<QList<uint32_t> > c_ContiguousSections;
       uint32_t u32_TargetAccessIndex = 0UL;
 
       //Step 1 sort (so the next step can assume the contiguous selection has the same order!
@@ -1308,7 +1309,7 @@ void C_SdNdeDpListTableModel::DoMoveRows(const std::vector<uint32_t> & orc_Selec
       //Step 3: move
       for (uint32_t u32_ItSection = 0UL; u32_ItSection < c_ContiguousSections.size(); ++u32_ItSection)
       {
-         const std::vector<uint32_t> & rc_Section = c_ContiguousSections[u32_ItSection];
+         const QList<uint32_t> & rc_Section = c_ContiguousSections[u32_ItSection];
          if (rc_Section.size() > 0UL)
          {
             uint32_t u32_TargetIndex = c_TargetIndicesCopy[u32_TargetAccessIndex];
@@ -1323,7 +1324,7 @@ void C_SdNdeDpListTableModel::DoMoveRows(const std::vector<uint32_t> & orc_Selec
                u32_TargetIndexParam = u32_TargetIndex - 1UL;
             }
             this->beginMoveRows(QModelIndex(), rc_Section[0UL],
-                                rc_Section[static_cast<std::vector<uint32_t>::size_type>(rc_Section.size() - 1UL)],
+                                rc_Section[static_cast<QList<uint32_t>::size_type>(rc_Section.size() - 1UL)],
                                 QModelIndex(), u32_TargetIndex);
             this->m_MoveItems(rc_Section, u32_TargetIndexParam);
             this->endMoveRows();
@@ -1551,10 +1552,10 @@ QMimeData * C_SdNdeDpListTableModel::mimeData(const QModelIndexList & orc_Indice
             this->mu32_NodeIndex, this->mu32_DataPoolIndex);
          if (((pc_UiList != NULL) && (pc_OscList != NULL)) && (pc_OscDatapool != NULL))
          {
-            std::vector<uint32_t> c_Rows = C_SdNdeDpUtil::h_ConvertVector(orc_Indices, true);
+            QList<uint32_t> c_Rows = C_SdNdeDpUtil::h_ConvertVector(orc_Indices, true);
             QString c_String;
-            std::vector<C_OscNodeDataPoolListElement> c_OscElements;
-            std::vector<C_PuiSdNodeDataPoolListElement> c_UiElements;
+            QList<C_OscNodeDataPoolListElement> c_OscElements;
+            QList<C_PuiSdNodeDataPoolListElement> c_UiElements;
             //Convert indices to unique rows
             C_Uti::h_Uniqueify(c_Rows);
             //Reserve
@@ -1886,7 +1887,7 @@ void C_SdNdeDpListTableModel::m_FillDpListElementInfo(const uint32_t ou32_Elemen
       bool q_DataSetInvalid = false;
       C_OscNodeDataPool::E_Type e_DataPoolType;
 
-      std::vector<uint32_t> c_InvalidDataSetIndices;
+      QList<uint32_t> c_InvalidDataSetIndices;
       const C_OscNodeDataPoolList & rc_List = pc_Datapool->c_Lists[this->mu32_ListIndex];
 
       // Reset error icon
@@ -2357,12 +2358,12 @@ void C_SdNdeDpListTableModel::m_OnErrorChange(void)
    \param[in]  ou32_TargetIndex        Target index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListTableModel::m_MoveItems(const std::vector<uint32_t> & orc_ContiguousIndices,
+void C_SdNdeDpListTableModel::m_MoveItems(const QList<uint32_t> & orc_ContiguousIndices,
                                           const uint32_t ou32_TargetIndex) const
 {
    if (orc_ContiguousIndices.size() > 0UL)
    {
-      std::vector<uint32_t> c_ContiguousIndicesCopy = orc_ContiguousIndices;
+      QList<uint32_t> c_ContiguousIndicesCopy = orc_ContiguousIndices;
       bool q_Forward;
       if (c_ContiguousIndicesCopy[0UL] < ou32_TargetIndex)
       {

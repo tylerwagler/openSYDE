@@ -39,7 +39,7 @@ using namespace stw::opensyde_gui_logic;
    \param[in,out] opc_Parent             Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SebUnoMoveCommand::C_SebUnoMoveCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+C_SebUnoMoveCommand::C_SebUnoMoveCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                          const QPointF & orc_PositionDifference, QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, "Move drawing element(s)", opc_Parent),
    mc_PositionDifference(orc_PositionDifference)
@@ -62,7 +62,7 @@ C_SebUnoMoveCommand::~C_SebUnoMoveCommand(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoMoveCommand::undo(void)
 {
-   vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
+   auto c_Items = this->m_GetSceneItems();
    for (uint32_t u32_ItId = 0; u32_ItId < c_Items.size(); ++u32_ItId)
    {
       m_UndoSingle(c_Items[u32_ItId]);
@@ -76,7 +76,7 @@ void C_SebUnoMoveCommand::undo(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoMoveCommand::redo(void)
 {
-   vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
+   auto c_Items = this->m_GetSceneItems();
    for (uint32_t u32_ItId = 0; u32_ItId < c_Items.size(); ++u32_ItId)
    {
       m_RedoSingle(c_Items[u32_ItId]);

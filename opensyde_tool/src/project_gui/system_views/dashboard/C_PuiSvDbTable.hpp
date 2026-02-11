@@ -12,6 +12,7 @@
 #define C_PUISVDBTABLE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_PuiSvDbWidgetBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -32,7 +33,7 @@ public:
    void CalcHash(uint32_t & oru32_HashValue) const override;
    bool IsReadElement(void) const override;
 
-   std::vector<int32_t> c_ColumnWidth;
+   QList<int32_t> c_ColumnWidth;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

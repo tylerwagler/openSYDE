@@ -108,7 +108,7 @@ public:
 
   int32_t GetResults(int32_t &ors32_Result) const;
   int32_t GetResultBusses(
-      std::vector<stw::opensyde_core::C_OscSystemBus> &orc_Busses) const;
+      QList<stw::opensyde_core::C_OscSystemBus> &orc_Busses) const;
 
 protected:
   int32_t
@@ -161,7 +161,7 @@ private:
   uint32_t mu32_BusIndex;
 
   // Loading execution result
-  std::vector<stw::opensyde_core::C_OscSystemBus> mc_Busses;
+  QList<stw::opensyde_core::C_OscSystemBus> mc_Busses;
   int32_t ms32_Result;
 
   // It is mutable because of the constness of the getter functions. Without the

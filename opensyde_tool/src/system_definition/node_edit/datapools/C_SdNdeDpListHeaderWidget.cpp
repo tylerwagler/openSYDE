@@ -16,6 +16,7 @@
 
 #include <QApplication>
 #include <QPointer>
+#include <QList>
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_SdNdeDpListHeaderWidget.hpp"
@@ -817,8 +818,8 @@ void C_SdNdeDpListHeaderWidget::m_UpdateErrorToolTip(void) const
       bool q_OutOfDataPool = false;
       bool q_ElementsInvalid = false;
 
-      std::vector<uint32_t> c_InvalidDataSetIndices;
-      std::vector<uint32_t> c_InvalidElementIndices;
+      QList<uint32_t> c_InvalidDataSetIndices;
+      QList<uint32_t> c_InvalidElementIndices;
       if ((pc_DataPool->e_Type == stw::opensyde_core::C_OscNodeDataPool::E_Type::eNVM) ||
           (pc_DataPool->e_Type == stw::opensyde_core::C_OscNodeDataPool::E_Type::eHALC_NVM))
       {

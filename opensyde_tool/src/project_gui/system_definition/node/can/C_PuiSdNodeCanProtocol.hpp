@@ -12,7 +12,7 @@
 #define C_PUISDNODECANPROTOCOL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include "C_PuiSdNodeCanMessageContainer.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -31,7 +31,7 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const;
 
-   std::vector<C_PuiSdNodeCanMessageContainer> c_ComMessages;
+   QList<C_PuiSdNodeCanMessageContainer> c_ComMessages;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

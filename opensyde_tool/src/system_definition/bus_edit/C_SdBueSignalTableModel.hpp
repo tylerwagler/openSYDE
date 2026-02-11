@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscCanMessageIdentificationIndices.hpp"
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
@@ -103,7 +104,7 @@ private:
       C_SigTableData c_SignalData;
    };
 
-   std::vector<C_SigTableConfig> mc_SigInfoAll;
+   QList<C_SigTableConfig> mc_SigInfoAll;
 
    C_PuiSdNodeCanMessageSyncManager * mpc_SyncManager;
 

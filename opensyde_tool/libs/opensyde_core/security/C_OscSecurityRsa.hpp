@@ -27,11 +27,11 @@ class C_OscSecurityRsa
 public:
    C_OscSecurityRsa();
 
-   static int32_t h_SignSignature(const std::vector<uint8_t> & orc_PrivateKey, const std::vector<uint8_t> & orc_Message,
-                                  std::vector<uint8_t> & orc_EncryptedMessage);
-   static int32_t h_VerifySignature(const std::vector<uint8_t> & orc_PublicKey,
-                                    const std::vector<uint8_t> & orc_Message,
-                                    const std::vector<uint8_t> & orc_EncryptedMessage, bool & orq_Valid);
+   static int32_t h_SignSignature(const QByteArray & orc_PrivateKey, const QByteArray & orc_Message,
+                                  QByteArray & orc_EncryptedMessage);
+   static int32_t h_VerifySignature(const QByteArray & orc_PublicKey,
+                                    const QByteArray & orc_Message,
+                                    const QByteArray & orc_EncryptedMessage, bool & orq_Valid);
 
 private:
    static const uint32_t mhu32_DEFAULT_BUFFER_SIZE;

@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoDasDataPoolListDeleteCommand.hpp"
@@ -45,7 +46,7 @@ C_SdNdeUnoDasDataPoolListDeleteCommand::C_SdNdeUnoDasDataPoolListDeleteCommand(c
                                                                                const uint32_t & oru32_DataPoolIndex,
                                                                                const uint32_t & oru32_DataPoolListIndex,
                                                                                C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                                                               const std::vector<uint32_t> & orc_Indices,
+                                                                               const QList<uint32_t> & orc_Indices,
                                                                                QUndoCommand * const opc_Parent) :
    C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex, oru32_DataPoolListIndex,
                                                  opc_DataPoolListModelViewManager,

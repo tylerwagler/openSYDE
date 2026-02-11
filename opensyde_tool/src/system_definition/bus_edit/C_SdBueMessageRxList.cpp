@@ -95,11 +95,11 @@ void C_SdBueMessageRxList::InitStaticNames(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageRxList::AddNodes(const QStringList & orc_EntryNames,
                                     const QStringList & orc_EntryDatapoolNames,
-                                    const std::vector<uint32_t> & orc_NodeIndexes,
-                                    const std::vector<uint32_t> & orc_InterfaceIndexes,
-                                    const std::vector<uint32_t> & orc_DatapoolIndexes,
-                                    const std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> & orc_ReceiveTimeoutModes,
-                                    const std::vector<uint32_t> & orc_ReceiveTimeoutValues, const bool oq_ReadOnly,
+                                    const QList<uint32_t> & orc_NodeIndexes,
+                                    const QList<uint32_t> & orc_InterfaceIndexes,
+                                    const QList<uint32_t> & orc_DatapoolIndexes,
+                                    const QList<C_PuiSdNodeCanMessage::E_RxTimeoutMode> & orc_ReceiveTimeoutModes,
+                                    const QList<uint32_t> & orc_ReceiveTimeoutValues, const bool oq_ReadOnly,
                                     const QString & orc_SpecificTooltip)
 {
    Clear();
@@ -112,10 +112,10 @@ void C_SdBueMessageRxList::AddNodes(const QStringList & orc_EntryNames,
        (orc_EntryNames.size() == orc_DatapoolIndexes.size()))
    {
       uint32_t u32_MinSize = 0UL;
-      std::vector<uint32_t> c_NodeDatapoolIndexes;
+      QList<uint32_t> c_NodeDatapoolIndexes;
       QStringList c_NodeDatapoolNames;
-      std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_ReceiveTimeoutModes;
-      std::vector<uint32_t> c_ReceiveTimeoutValues;
+      QList<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_ReceiveTimeoutModes;
+      QList<uint32_t> c_ReceiveTimeoutValues;
 
       this->mc_Entries.reserve(orc_EntryNames.size());
       for (uint32_t u32_ItEntry = 0; u32_ItEntry < orc_EntryNames.size(); ++u32_ItEntry)
@@ -250,9 +250,9 @@ void C_SdBueMessageRxList::SetRxTimeoutConfigurationReadOnly(const bool oq_Timeo
    \param[in] orc_DatapoolIndexes  Datapool Indexes (ID)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMessageRxList::CheckNodes(const std::vector<uint32_t> & orc_NodeIndexes,
-                                      const std::vector<uint32_t> & orc_InterfaceIndexes,
-                                      const std::vector<uint32_t> & orc_DatapoolIndexes) const
+void C_SdBueMessageRxList::CheckNodes(const QList<uint32_t> & orc_NodeIndexes,
+                                      const QList<uint32_t> & orc_InterfaceIndexes,
+                                      const QList<uint32_t> & orc_DatapoolIndexes) const
 {
    if ((orc_NodeIndexes.size() == orc_InterfaceIndexes.size()) &&
        (orc_NodeIndexes.size() == orc_DatapoolIndexes.size()))

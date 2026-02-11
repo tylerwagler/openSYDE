@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Creates a dialog to configure a Node with an Node ID and a
@@ -115,8 +115,8 @@ C_FlaConNodeConfigPopup::C_FlaConNodeConfigPopup(
   // We need a signal which is emitted in the other thread
   // We have to register the type and use the queued connections. Auto is
   // default, but did not work.
-  qRegisterMetaType<std::vector<stw::opensyde_core::C_OscDcDeviceInformation>>(
-      "std::vector<stw::opensyde_core::C_OscDcDeviceInformation>");
+  qRegisterMetaType<QList<stw::opensyde_core::C_OscDcDeviceInformation>>(
+      "QList<stw::opensyde_core::C_OscDcDeviceInformation>");
 
   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
           &C_FlaConNodeConfigPopup::m_OkClicked);
@@ -517,7 +517,7 @@ void C_FlaConNodeConfigPopup::m_FinishConfig(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaConNodeConfigPopup::m_DeviceInfoRead(
-    const std::vector<stw::opensyde_core::C_OscDcDeviceInformation>
+    const QList<stw::opensyde_core::C_OscDcDeviceInformation>
         &orc_DeviceInfoResult,
     const bool oq_SecurityFeatureUsed) {
   // SYDEflash is not able to cope with Security mechanisms and we don't want to

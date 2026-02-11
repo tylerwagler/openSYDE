@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <set>
 
+#include <QList>
 #include <QString>
 #include "stwtypes.hpp"
 #include "C_OscCanSignal.hpp"
@@ -66,7 +67,7 @@ public:
    bool IsTransmissionTypeOfCyclicType(void) const;
    static bool h_IsTransmissionTypeOfCyclicType(const E_TxMethodType oe_Type);
    bool IsMultiplexed(uint32_t * const opu32_MultiplexerIndex = NULL) const;
-   static bool h_ContainsMultiplexer(const std::vector<C_OscCanSignal> & orc_Signals,
+   static bool h_ContainsMultiplexer(const QList<C_OscCanSignal> & orc_Signals,
                                      uint32_t * const opu32_MultiplexerIndex = NULL);
    void GetMultiplexerValues(std::set<uint16_t> & orc_Values) const;
 
@@ -86,7 +87,7 @@ public:
    ///< ONLY used if tx method is eTX_METHOD_ON_CHANGE
    uint32_t u32_TimeoutMs; ///< Maximum time between reception of two messages.
    ///< Format is in milli seconds. If value is set to 0, monitoring is disabled.
-   std::vector<C_OscCanSignal> c_Signals; ///< Communication signals
+   QList<C_OscCanSignal> c_Signals; ///< Communication signals
 
    C_OscCanInterfaceId c_CanOpenManagerOwnerNodeIndex; ///< CANopen manager specific information about
    ///< owner node:
@@ -104,7 +105,7 @@ public:
    ///< about type eTX_METHOD_CAN_OPEN_TYPE_1_TO_240
 
 private:
-   std::vector<uint32_t> m_GetSignalHashes(const C_OscNodeDataPoolList * const opc_List,
+   QList<uint32_t> m_GetSignalHashes(const C_OscNodeDataPoolList * const opc_List,
                                            const uint32_t & oru32_SignalIndex) const;
 };
 

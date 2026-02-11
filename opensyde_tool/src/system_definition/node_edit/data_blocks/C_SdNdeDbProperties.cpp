@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <QFileDialog>
+#include <QList>
 
 
 #include "stwerrors.hpp"
@@ -722,7 +723,7 @@ QString C_SdNdeDbProperties::m_CheckId(void) const
    {
       //Check ID
       bool q_ProcessIdError = false;
-      std::vector<uint32_t> c_UsedProcessIds;
+      QList<uint32_t> c_UsedProcessIds;
       for (uint32_t u32_ItApplication = 0UL; u32_ItApplication < pc_Node->c_Applications.size(); ++u32_ItApplication)
       {
          //Avoid conflict with itself
@@ -760,7 +761,7 @@ QString C_SdNdeDbProperties::m_CheckId(void) const
                c_Ids += static_cast<QString>("%1,").arg(c_UsedProcessIds[u32_ItId]);
             }
             c_Ids +=
-               QString::number(c_UsedProcessIds[static_cast<std::vector<uint32_t>::size_type>(c_UsedProcessIds.size() -
+               QString::number(c_UsedProcessIds[static_cast<QList<uint32_t>::size_type>(c_UsedProcessIds.size() -
                                                                                               1UL)]);
             c_Return += static_cast<QString>("Already used Process IDs: %1").arg(c_Ids);
          }
@@ -1752,7 +1753,7 @@ void C_SdNdeDbProperties::m_OnProcessIdChanged(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbProperties::m_CleanUpDataPoolWidgets(void)
 {
-   for (std::vector<C_SdNdeDbDataPoolEntry *>::const_iterator c_It = this->mc_DataPoolWidgets.begin();
+   for (QList<C_SdNdeDbDataPoolEntry *>::const_iterator c_It = this->mc_DataPoolWidgets.begin();
         c_It != this->mc_DataPoolWidgets.end(); ++c_It)
    {
       C_SdNdeDbDataPoolEntry * const pc_Entry = *c_It;
@@ -1873,7 +1874,7 @@ void C_SdNdeDbProperties::m_InitDataPoolsSection(void)
 void C_SdNdeDbProperties::m_HandleAddDataPools(void)
 {
    const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
-   const std::vector<uint32_t> c_SelectedDatapools(this->mc_SelectedDataPools.begin(),
+   const QList<uint32_t> c_SelectedDatapools(this->mc_SelectedDataPools.begin(),
                                                    this->mc_SelectedDataPools.end());
    const C_SdNdeDbSelectDataPools * const pc_Dialog = new C_SdNdeDbSelectDataPools(this->mu32_NodeIndex,
                                                                                    this->ms32_ApplicationIndex,
@@ -1884,7 +1885,7 @@ void C_SdNdeDbProperties::m_HandleAddDataPools(void)
 
    if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> c_SelectedDataPools = pc_Dialog->GetSelectedDataPools();
+      const QList<C_PuiSvDbNodeDataPoolListElementId> c_SelectedDataPools = pc_Dialog->GetSelectedDataPools();
       for (uint32_t u32_It = 0UL; u32_It < c_SelectedDataPools.size(); ++u32_It)
       {
          const C_PuiSvDbNodeDataPoolListElementId & rc_CurItem = c_SelectedDataPools[u32_It];
@@ -1941,7 +1942,7 @@ void C_SdNdeDbProperties::m_HandleDeleteDataPool(C_SdNdeDbDataPoolEntry * const 
             break;
          }
       }
-      for (std::vector<C_SdNdeDbDataPoolEntry *>::iterator c_It = this->mc_DataPoolWidgets.begin();
+      for (QList<C_SdNdeDbDataPoolEntry *>::iterator c_It = this->mc_DataPoolWidgets.begin();
            c_It != this->mc_DataPoolWidgets.end(); ++c_It)
       {
          if (*c_It == opc_Source)

@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QPointer>
+#include <QList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -61,7 +62,7 @@ private:
    C_NagToolTipWithImage & operator =(const C_NagToolTipWithImage &) &;
 
    Ui::C_NagToolTipWithImage * mpc_Ui;
-   static std::vector<QPointer<C_NagToolTipWithImage> > mhc_ExistingToolTips; ///< All known existing tooltips
+   static QList<QPointer<C_NagToolTipWithImage> > mhc_ExistingToolTips; ///< All known existing tooltips
 
    static const uint16_t mhu16_IMAGE_WIDTH;
    static const QString mhc_DEFAULT_IMAGE;

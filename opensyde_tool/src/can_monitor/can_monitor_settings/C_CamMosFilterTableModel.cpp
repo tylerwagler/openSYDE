@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Model component for filter item table (implementation)
@@ -315,7 +315,7 @@ QVariant C_CamMosFilterTableModel::data(const QModelIndex & orc_Index, const int
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175}  nothing needs to be done here
-void C_CamMosFilterTableModel::CopySelectedItems(const std::vector<uint32_t> & orc_SelectedIndices) const
+void C_CamMosFilterTableModel::CopySelectedItems(const QList<uint32_t> & orc_SelectedIndices) const
 {
    // nothing needs to be done here
    Q_UNUSED(orc_SelectedIndices)
@@ -680,9 +680,9 @@ uint32_t C_CamMosFilterTableModel::m_AddNewItem(const uint32_t ou32_SelectedInde
    Indices of new items
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_CamMosFilterTableModel::m_PasteItems(const uint32_t ou32_SelectedIndex)
+QList<uint32_t> C_CamMosFilterTableModel::m_PasteItems(const uint32_t ou32_SelectedIndex)
 {
-   const std::vector<uint32_t> c_Retval;
+   const QList<uint32_t> c_Retval;
 
    // nothing needs to be done here
    Q_UNUSED(ou32_SelectedIndex)

@@ -12,6 +12,7 @@
 
 #include <QWidget>
 #include <QListView>
+#include <QList>
 
 #include "C_SdNdeDalLogJobsListModel.hpp"
 #include "C_OscDataLoggerJob.hpp"
@@ -44,7 +45,7 @@ public:
    void LoadLogJobs(const uint32_t ou32_NodeIndex);
    void SetSelection(const E_LogJobSelection & ore_Selection, const uint32_t ou32_LogJobIndex = 0);
    void LoadSelectedLogJob(const uint32_t ou32_LogJobIndex);
-   void DeleteLogJobs(const std::vector<uint32_t> & orc_DataLoggerJobIndices);
+   void DeleteLogJobs(const QList<uint32_t> & orc_DataLoggerJobIndices);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

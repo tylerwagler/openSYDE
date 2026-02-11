@@ -162,8 +162,8 @@ void C_SyvUpScene::SetUpdating(const bool oq_Active) const
    \param[in]  orc_DeviceInformation   Device info
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpScene::UpdateDeviceInformation(const std::vector<uint32_t> & orc_NodeIndexes,
-                                           const std::vector<C_SyvUpDeviceInfo> & orc_DeviceInformation) const
+void C_SyvUpScene::UpdateDeviceInformation(const QList<uint32_t> & orc_NodeIndexes,
+                                           const QList<C_SyvUpDeviceInfo> & orc_DeviceInformation) const
 {
    Q_ASSERT(orc_NodeIndexes.size() == orc_DeviceInformation.size());
    if (orc_NodeIndexes.size() == orc_DeviceInformation.size())
@@ -421,11 +421,11 @@ void C_SyvUpScene::SetNodeError(const uint32_t ou32_NodeIndex) const
    All none third party node indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SyvUpScene::GetActiveNoneThirdPartyNodeIndices(void) const
+QList<uint32_t> C_SyvUpScene::GetActiveNoneThirdPartyNodeIndices(void) const
 {
    const QList<QGraphicsItem *> c_Items = this->items();
 
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
 
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
    {
@@ -438,8 +438,8 @@ std::vector<uint32_t> C_SyvUpScene::GetActiveNoneThirdPartyNodeIndices(void) con
          if ((((pc_Node != NULL) && (pc_Node->GetIndex() >= 0)) && (pc_Node->IsActiveInView() == true)) &&
              (pc_Node->HasNodeAnAvailableFlashloader() == true))
          {
-            const std::vector<uint32_t> c_AllCurrent = pc_Node->GetAllActiveStwDeviceIndices();
-            for (std::vector<uint32_t>::const_iterator c_It = c_AllCurrent.cbegin(); c_It != c_AllCurrent.end(); ++c_It)
+            const QList<uint32_t> c_AllCurrent = pc_Node->GetAllActiveStwDeviceIndices();
+            for (QList<uint32_t>::const_iterator c_It = c_AllCurrent.cbegin(); c_It != c_AllCurrent.end(); ++c_It)
             {
                c_Retval.push_back(*c_It);
             }
@@ -482,7 +482,7 @@ void C_SyvUpScene::CheckUpdateDisabledState(void) const
    \param[in]       orc_NodePreconditionErrors     Node precondition error states
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpScene::SetNodeConnectStates(const std::vector<C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
+void C_SyvUpScene::SetNodeConnectStates(const QList<C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
                                         const C_GiSvNodeData::C_GiSvNodeDataPreconditionErrors & orc_NodePreconditionErrors)
 {
    const QList<QGraphicsItem *> c_Items = this->items();
@@ -509,7 +509,7 @@ void C_SyvUpScene::SetNodeConnectStates(const std::vector<C_OscSuSequencesNodeCo
    \param[in]       orc_NodeStates     Node connect states
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpScene::SetNodeUpdateStates(const std::vector<C_OscSuSequencesNodeUpdateStates> & orc_NodeStates)
+void C_SyvUpScene::SetNodeUpdateStates(const QList<C_OscSuSequencesNodeUpdateStates> & orc_NodeStates)
 {
    const QList<QGraphicsItem *> c_Items = this->items();
 
@@ -759,7 +759,7 @@ bool C_SyvUpScene::m_IsLastBusConnectorInProgressAnimationToNode(const C_PuiSdNo
       {
          //Search for last bus before the target node
          const C_OscRoutingRoutePoint & rc_LastHop =
-            orc_Route.c_VecRoutePoints[static_cast<std::vector< C_OscRoutingRoutePoint>::size_type >
+            orc_Route.c_VecRoutePoints[static_cast<QList<C_OscRoutingRoutePoint>::size_type >
                                        (orc_Route.c_VecRoutePoints.size() - 1UL)];
          u32_BusIndexToSearchFor = rc_LastHop.u32_OutBusIndex;
       }
@@ -826,15 +826,15 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
       //buses.size()-1: Bus to node index
       //Default (if buses size > 1): bus to node, node to bus+1 -> Routing
       //Animated buses
-      std::vector<uint32_t> c_Busses;
+      QList<uint32_t> c_Busses;
       //Segments of buses (always double the bus count)
-      std::vector<QPointF> c_BusSegments;
+      QList<QPointF> c_BusSegments;
       //Other
-      const std::vector<QPointF> & rc_PcConnectionPoints =
+      const QList<QPointF> & rc_PcConnectionPoints =
          pc_View->GetPuiPcData().GetConnectionData().c_UiInteractionPoints;
       //Reserve
-      c_Busses.reserve(static_cast<std::vector<uint32_t>::size_type>(pc_Route->c_VecRoutePoints.size() + 1UL));
-      c_BusSegments.reserve(static_cast<std::vector<QPointF>::size_type>((pc_Route->c_VecRoutePoints.size() + 1UL) *
+      c_Busses.reserve(static_cast<QList<uint32_t>::size_type>(pc_Route->c_VecRoutePoints.size() + 1UL));
+      c_BusSegments.reserve(static_cast<QList<QPointF>::size_type>((pc_Route->c_VecRoutePoints.size() + 1UL) *
                                                                          2UL));
       //Add PC bus
       c_Busses.push_back(pc_View->GetOscPcData().GetBusIndex());
@@ -847,7 +847,7 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
       //Handle first point
       if (rc_PcConnectionPoints.size() > 0UL)
       {
-         c_BusSegments.push_back(rc_PcConnectionPoints[static_cast<std::vector< QPointF>::size_type >
+         c_BusSegments.push_back(rc_PcConnectionPoints[static_cast<QList<QPointF>::size_type >
                                                        (rc_PcConnectionPoints.size() - 1UL)]);
          //Handle intermediate points
          for (uint32_t u32_ItRoute = 0; u32_ItRoute < pc_Route->c_VecRoutePoints.size(); ++u32_ItRoute)
@@ -859,21 +859,21 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
                rc_Point.u32_NodeIndex, rc_Point.u8_OutInterfaceNumber, rc_Point.e_OutInterfaceType);
             if ((pc_InConnection != NULL) && (pc_OutConnection != NULL))
             {
-               const std::vector<QPointF> & rc_InConnectionPoints =
+               const QList<QPointF> & rc_InConnectionPoints =
                   pc_InConnection->c_UiNodeConnectionInteractionPoints;
-               const std::vector<QPointF> & rc_OutConnectionPoints =
+               const QList<QPointF> & rc_OutConnectionPoints =
                   pc_OutConnection->c_UiNodeConnectionInteractionPoints;
                //Add bis interaction points
                //In FIRST
                if (rc_InConnectionPoints.size() > 0UL)
                {
-                  c_BusSegments.push_back(rc_InConnectionPoints[static_cast<std::vector< QPointF>::size_type >
+                  c_BusSegments.push_back(rc_InConnectionPoints[static_cast<QList<QPointF>::size_type >
                                                                 (rc_InConnectionPoints.size() - 1UL)]);
                }
                //Out
                if (rc_OutConnectionPoints.size() > 0UL)
                {
-                  c_BusSegments.push_back(rc_OutConnectionPoints[static_cast<std::vector< QPointF>::size_type >
+                  c_BusSegments.push_back(rc_OutConnectionPoints[static_cast<QList<QPointF>::size_type >
                                                                  (rc_OutConnectionPoints.size() - 1UL)]);
                }
             }
@@ -886,7 +886,7 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
             const C_OscNodeComInterfaceSettings & rc_Interface =
                pc_OscNode->c_Properties.c_ComInterfaces[u32_ItInterface];
             if ((rc_Interface.GetBusConnected() == true) &&
-                (c_Busses[static_cast<std::vector< uint32_t>::size_type > (c_Busses.size() - 1UL)] ==
+                (c_Busses[static_cast<QList<uint32_t>::size_type > (c_Busses.size() - 1UL)] ==
                  rc_Interface.u32_BusIndex))
             {
                const C_PuiSdNodeConnection * const pc_UiConnectionData =
@@ -894,11 +894,11 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
                                                                    rc_Interface.e_InterfaceType);
                if (pc_UiConnectionData != NULL)
                {
-                  const std::vector<QPointF> & rc_ConnectionPoints =
+                  const QList<QPointF> & rc_ConnectionPoints =
                      pc_UiConnectionData->c_UiNodeConnectionInteractionPoints;
                   if (rc_ConnectionPoints.size() > 0UL)
                   {
-                     c_BusSegments.push_back(rc_ConnectionPoints[static_cast<std::vector< QPointF>::size_type >
+                     c_BusSegments.push_back(rc_ConnectionPoints[static_cast<QList<QPointF>::size_type >
                                                                  (rc_ConnectionPoints.size() - 1UL)]);
                   }
                   break;
@@ -914,9 +914,9 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
                {
                   QPolygonF c_AnimatedPoints;
                   bool q_Inverse;
-                  const QPointF & rc_StartPoint = c_BusSegments[static_cast<std::vector< QPointF>::size_type >
+                  const QPointF & rc_StartPoint = c_BusSegments[static_cast<QList<QPointF>::size_type >
                                                                 (u32_ItBus * 2UL)];
-                  const QPointF & rc_EndPoint = c_BusSegments[static_cast<std::vector< QPointF>::size_type >
+                  const QPointF & rc_EndPoint = c_BusSegments[static_cast<QList<QPointF>::size_type >
                                                               ((u32_ItBus * 2UL) + 1UL)];
 
                   if (mh_GetAnimationPath(rc_StartPoint, rc_EndPoint, pc_Bus->c_UiInteractionPoints, c_AnimatedPoints,
@@ -993,7 +993,7 @@ int32_t C_SyvUpScene::m_StartProgressAnimationBusses(const C_SyvRoRouteCalculati
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvUpScene::mh_GetAnimationPath(const QPointF & orc_PointStart, const QPointF & orc_PointEnd,
-                                          const std::vector<QPointF> & orc_UiInteractionPoints, QPolygonF & orc_Path,
+                                          const QList<QPointF> & orc_UiInteractionPoints, QPolygonF & orc_Path,
                                           bool & orq_Inverse)
 {
    int32_t s32_Retval;
@@ -1009,7 +1009,7 @@ int32_t C_SyvUpScene::mh_GetAnimationPath(const QPointF & orc_PointStart, const 
    {
       const QPointF & rc_LineStart = orc_UiInteractionPoints[u32_ItBusConnection];
       const QPointF & rc_LineEnd =
-         orc_UiInteractionPoints[static_cast<std::vector< QPointF>::size_type > (u32_ItBusConnection + 1UL)];
+         orc_UiInteractionPoints[static_cast<QList<QPointF>::size_type > (u32_ItBusConnection + 1UL)];
       float64_t f64_Dist1;
       float64_t f64_Dist2;
       C_GiBiConnectableItem::h_DistToLine(rc_LineStart, rc_LineEnd, orc_PointStart, &f64_Dist1);

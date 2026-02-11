@@ -13,6 +13,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -54,14 +55,14 @@ public:
    void DiscardApplicationStatus(const uint32_t ou32_NodeIndex) const;
    void SetUpdateFinished(void) const;
    void SetDisconnected(void);
-   void UpdateDeviceInformation(const std::vector<uint32_t> & orc_NodeIndexes,
-                                const std::vector<stw::opensyde_gui_logic::C_SyvUpDeviceInfo> & orc_DeviceInformation)
+   void UpdateDeviceInformation(const QList<uint32_t> & orc_NodeIndexes,
+                                const QList<stw::opensyde_gui_logic::C_SyvUpDeviceInfo> & orc_DeviceInformation)
    const;
    void DisableUpdatePackage(void);
    void SetNodeProgress(const uint32_t ou32_NodeIndex, const uint8_t ou8_Progress) const;
 
-   int32_t GetUpdatePackage(std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-                            std::vector<uint32_t> & orc_NodesOrder, std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> * const opc_AllApplications =
+   int32_t GetUpdatePackage(QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+                            QList<uint32_t> & orc_NodesOrder, QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> * const opc_AllApplications =
                                NULL) const;
 
    //The signals keyword is necessary for Qt signal slot functionality

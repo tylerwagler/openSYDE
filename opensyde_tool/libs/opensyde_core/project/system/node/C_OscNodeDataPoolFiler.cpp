@@ -603,7 +603,7 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolElement(const C_OscNodeDataPoolListEl
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolLists(std::vector<C_OscNodeDataPoolList> & orc_NodeDataPoolLists,
+int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolLists(QList<C_OscNodeDataPoolList> & orc_NodeDataPoolLists,
                                                     C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -671,7 +671,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolLists(std::vector<C_OscNodeDataPoo
    \param[in]      oe_DatapoolType        Datapool type
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolLists(const std::vector<C_OscNodeDataPoolList> & orc_NodeDataPoolLists,
+void C_OscNodeDataPoolFiler::h_SaveDataPoolLists(const QList<C_OscNodeDataPoolList> & orc_NodeDataPoolLists,
                                                  C_OscXmlParserBase & orc_XmlParser,
                                                  const C_OscNodeDataPool::E_Type oe_DatapoolType)
 {
@@ -701,7 +701,7 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolLists(const std::vector<C_OscNodeData
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(
-   std::vector<C_OscNodeDataPoolListElement> & orc_NodeDataPoolListElements, C_OscXmlParserBase & orc_XmlParser)
+   QList<C_OscNodeDataPoolListElement> & orc_NodeDataPoolListElements, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
    QString c_CurNodeDataElement;
@@ -767,7 +767,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolFiler::h_SaveDataPoolListElements(
-   const std::vector<C_OscNodeDataPoolListElement> & orc_NodeDataPoolListElements, C_OscXmlParserBase & orc_XmlParser,
+   const QList<C_OscNodeDataPoolListElement> & orc_NodeDataPoolListElements, C_OscXmlParserBase & orc_XmlParser,
    const C_OscNodeDataPool::E_Type oe_DatapoolType)
 {
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_NodeDataPoolListElements.size()));
@@ -800,7 +800,7 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolListElements(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElementDataSetValues(const C_OscNodeDataPoolContent & orc_ContentType,
-                                                                       std::vector<C_OscNodeDataPoolContent> & orc_NodeDataPoolListElementDataSetValues,
+                                                                       QList<C_OscNodeDataPoolContent> & orc_NodeDataPoolListElementDataSetValues,
                                                                        C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -842,7 +842,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElementDataSetValues(const C_O
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolFiler::h_SaveDataPoolListElementDataSetValues(
-   const std::vector<C_OscNodeDataPoolContent> & orc_NodeDataPoolListElementDataSetValues,
+   const QList<C_OscNodeDataPoolContent> & orc_NodeDataPoolListElementDataSetValues,
    C_OscXmlParserBase & orc_XmlParser)
 {
    //Data set values
@@ -870,7 +870,7 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolListElementDataSetValues(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(
-   std::vector<C_OscNodeDataPoolDataSet> & orc_NodeDataPoolListDataSets, C_OscXmlParserBase & orc_XmlParser)
+   QList<C_OscNodeDataPoolDataSet> & orc_NodeDataPoolListDataSets, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
    QString c_CurNodeDataSet = orc_XmlParser.SelectNodeChild("data-set");
@@ -929,7 +929,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolFiler::h_SaveDataPoolListDataSets(
-   const std::vector<C_OscNodeDataPoolDataSet> & orc_NodeDataPoolListDataSets, C_OscXmlParserBase & orc_XmlParser)
+   const QList<C_OscNodeDataPoolDataSet> & orc_NodeDataPoolListDataSets, C_OscXmlParserBase & orc_XmlParser)
 {
    for (uint32_t u32_ItDataSet = 0; u32_ItDataSet < orc_NodeDataPoolListDataSets.size(); ++u32_ItDataSet)
    {

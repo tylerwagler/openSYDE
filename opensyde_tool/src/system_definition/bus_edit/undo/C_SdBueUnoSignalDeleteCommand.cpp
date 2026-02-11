@@ -43,12 +43,12 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueUnoSignalDeleteCommand::C_SdBueUnoSignalDeleteCommand(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageId,
-   const std::vector<uint32_t> & orc_SignalIndex, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MessageId,
+   const QList<uint32_t> & orc_SignalIndex, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
    C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget, QUndoCommand * const opc_Parent) :
-   C_SdBueUnoSignalAddDeleteBaseCommand(orc_MessageId, orc_SignalIndex, std::vector<uint16_t>(),
-                                        std::vector<stw::opensyde_core::C_OscCanSignal::E_MultiplexerType>(),
-                                        std::vector<uint16_t>(),
+   C_SdBueUnoSignalAddDeleteBaseCommand(orc_MessageId, orc_SignalIndex, QList<uint16_t>(),
+                                        QList<stw::opensyde_core::C_OscCanSignal::E_MultiplexerType>(),
+                                        QList<uint16_t>(),
                                         opc_MessageSyncManager,
                                         opc_MessageTreeWidget,
                                         "Delete Signal",

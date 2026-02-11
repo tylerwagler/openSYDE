@@ -100,8 +100,8 @@ QString C_OscSupServiceUpdatePackageBase::h_GetPackageExtension()
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParameters(
-   const std::vector<uint8_t> & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword,
-   const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys, const uint32_t ou32_NumNodes,
+   const QByteArray & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword,
+   const QList<QByteArray > & orc_NodeSignatureKeys, const uint32_t ou32_NumNodes,
    const QString & orc_Mode, const QString & orc_Function)
 {
    int32_t s32_Return = C_NO_ERR;
@@ -200,8 +200,8 @@ void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(const C_OscSystemDe
    \param[in,out]  orc_OutEncryptNodesPassword  Out encrypt nodes password
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupServiceUpdatePackageBase::mh_AdaptEncryptionParameters(const std::vector<uint8_t> & orc_InEncryptNodes,
-                                                                    const QStringList & orc_InEncryptNodesPassword, const uint32_t ou32_NodeCount, std::vector<uint8_t> & orc_OutEncryptNodes,
+void C_OscSupServiceUpdatePackageBase::mh_AdaptEncryptionParameters(const QByteArray & orc_InEncryptNodes,
+                                                                    const QStringList & orc_InEncryptNodesPassword, const uint32_t ou32_NodeCount, QByteArray & orc_OutEncryptNodes,
                                                                     QStringList & orc_OutEncryptNodesPassword)
 {
    orc_OutEncryptNodes = orc_InEncryptNodes;
@@ -233,14 +233,14 @@ void C_OscSupServiceUpdatePackageBase::mh_AdaptEncryptionParameters(const std::v
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_AdaptCommonSignatureParameters(
-   const std::vector<std::vector<uint8_t> > & orc_InNodeSignatureKeys, const uint32_t ou32_NodeCount,
-   std::vector<std::vector<uint8_t> > & orc_OutNodeSignatureKeys)
+   const QList<QByteArray > & orc_InNodeSignatureKeys, const uint32_t ou32_NodeCount,
+   QList<QByteArray > & orc_OutNodeSignatureKeys)
 {
    orc_OutNodeSignatureKeys = orc_InNodeSignatureKeys;
    if (orc_OutNodeSignatureKeys.size() == 0UL)
    {
       //Default
-      orc_OutNodeSignatureKeys.resize(ou32_NodeCount, std::vector<uint8_t>());
+      orc_OutNodeSignatureKeys.resize(ou32_NodeCount, QByteArray());
    }
    else if (orc_OutNodeSignatureKeys.size() == 1UL)
    {
@@ -365,10 +365,10 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(ifstream & o
    //read file content
    bool q_HasFailed;
 
-   std::vector<uint8_t> c_InputData;
+   QByteArray c_InputData;
    c_InputData.resize(static_cast<size_t>(ou32_SectionLength));
    //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?& anyway
-   orc_File.read(reinterpret_cast<char_t *>(&c_InputData[0]), c_InputData.size());
+   orc_File.read(reinterpret_cast<char_t *>(reinterpret_cast<uint8_t*>(c_InputData.data())), c_InputData.size());
    //check for error
    q_HasFailed = orc_File.fail();
    if (q_HasFailed == true)
@@ -377,7 +377,7 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(ifstream & o
    }
    else
    {
-      s32_Retval = orc_Signature.Sha256Update(&c_InputData[0], static_cast<uint32_t>(c_InputData.size()));
+      s32_Retval = orc_Signature.Sha256Update(reinterpret_cast<uint8_t*>(c_InputData.data()), static_cast<uint32_t>(c_InputData.size()));
    }
    return s32_Retval;
 }

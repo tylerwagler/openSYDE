@@ -310,7 +310,7 @@ void C_NagMainWidget::LoadProject(const QString & orc_FilePath)
 void C_NagMainWidget::UpdateRecentProjects(void)
 {
    QStringList c_Files;
-   std::vector<C_OscProject> c_Projects;
+   QList<C_OscProject> c_Projects;
    const QStringList c_List = C_UsHandler::h_GetInstance()->GetRecentProjects();
    for (QStringList::const_iterator c_ItList = c_List.begin(); c_ItList != c_List.end(); ++c_ItList)
    {
@@ -399,7 +399,7 @@ void C_NagMainWidget::OnCreateServiceProj(void)
    c_New->SetSize(c_SIZE);
 
    // get views for tree visualization of the project permissions
-   std::vector<uint32_t> c_ViewIndices;
+   QList<uint32_t> c_ViewIndices;
    c_ViewIndices.reserve(C_PuiSvHandler::h_GetInstance()->GetViewCount());
    for (uint32_t u32_ItView = 0; u32_ItView < C_PuiSvHandler::h_GetInstance()->GetViewCount(); ++u32_ItView)
    {

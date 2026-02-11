@@ -4,6 +4,7 @@
 #include "stwtypes.hpp"
 #include <QList>
 #include <QString>
+#include <vector>
 #include "DiagLib_config.hpp"
 
 //---------------------------------------------------------------------------
@@ -114,8 +115,8 @@ private:
 
    uint8_t m_GetEntryTypeByArrayType(void) const;
 
-   QList<uint8_t> mc_MinValue;
-   QList<uint8_t> mc_MaxValue;
+   QByteArray mc_MinValue;
+   QByteArray mc_MaxValue;
 
 public:
    C_KFXVariableBase(void);
@@ -155,12 +156,12 @@ public:
    void SetNumericMinInArray(const uint32_t ou32_ArrayIndex, const int64_t os64_Min);
    void SetNumericMaxInArray(const uint32_t ou32_ArrayIndex, const int64_t os64_Max);
    //direct access to min/max array:
-   const QList<uint8_t> & GetMinReference(void) const;
-   const QList<uint8_t> & GetMaxReference(void) const;
-   QList<uint8_t> & GetMinReference(void);
-   QList<uint8_t> & GetMaxReference(void);
+   const QByteArray & GetMinReference(void) const;
+   const QByteArray & GetMaxReference(void) const;
+   QByteArray & GetMinReference(void);
+   QByteArray & GetMaxReference(void);
 
-   QList<QList<uint8_t> > aau8_Defaults;
+   QList<QByteArray > aau8_Defaults;
 
    uint8_t u8_ScalingDigits;
    int32_t s32_ScalingFactor;

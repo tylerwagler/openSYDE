@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -53,7 +54,7 @@ C_SdNdeUnoDataPoolListPasteCommand::C_SdNdeUnoDataPoolListPasteCommand(const uin
                                                                        stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
                                                                        QUndoCommand * const opc_Parent) :
    C_SdNdeUnoDataPoolListAddDeleteBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex,
-                                              opc_DataPoolListsTreeWidget, std::vector<uint32_t>(),
+                                              opc_DataPoolListsTreeWidget, QList<uint32_t>(),
                                               "Paste List", opc_Parent)
 {
 }
@@ -70,8 +71,8 @@ C_SdNdeUnoDataPoolListPasteCommand::C_SdNdeUnoDataPoolListPasteCommand(const uin
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SdNdeUnoDataPoolListPasteCommand::InitialSetup(const uint32_t & oru32_FirstIndex)
 {
-   std::vector<C_OscNodeDataPoolList> c_OscContent;
-   std::vector<C_PuiSdNodeDataPoolList> c_UiContent;
+   QList<C_OscNodeDataPoolList> c_OscContent;
+   QList<C_PuiSdNodeDataPoolList> c_UiContent;
    C_OscNodeDataPool::E_Type e_Type;
    bool q_Retval =
       (C_SdClipBoardHelper::h_LoadToDataPoolLists(c_OscContent, c_UiContent, e_Type) == C_NO_ERR);
@@ -93,7 +94,7 @@ bool C_SdNdeUnoDataPoolListPasteCommand::InitialSetup(const uint32_t & oru32_Fir
                    C_OscNode::hu32_MAX_NUMBER_OF_LISTS_PER_DATA_POOL);
                if (q_Retval == true)
                {
-                  std::vector<uint32_t> c_Indices;
+                  QList<uint32_t> c_Indices;
                   for (uint32_t u32_NewIndices = 0; u32_NewIndices < c_OscContent.size(); ++u32_NewIndices)
                   {
                      c_Indices.push_back(oru32_FirstIndex + u32_NewIndices);

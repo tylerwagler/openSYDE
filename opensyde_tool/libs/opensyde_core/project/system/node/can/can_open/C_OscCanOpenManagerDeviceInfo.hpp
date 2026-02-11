@@ -9,6 +9,7 @@
 #define C_OSCCANOPENMANAGERDEVICEINFO_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include "stwtypes.hpp"
 #include "C_OscCanOpenObjectDictionary.hpp"
@@ -44,7 +45,7 @@ public:
  
     QString c_OriginalEdsFileName; ///< File name of original EDS file
 
-   std::vector<C_OscCanOpenManagerMappableSignal> c_EdsFileMappableSignals; ///< All parsed and valid mappable signals
+   QList<C_OscCanOpenManagerMappableSignal> c_EdsFileMappableSignals; ///< All parsed and valid mappable signals
    bool q_DeviceOptional;                                                   ///< Flag for CANopen manager to consider
    ///< this device
    ///< optional

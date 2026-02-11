@@ -124,7 +124,7 @@ uint32_t C_UsNode::GetSelectedInterface(void) const {
    CANopen overview column width
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> &
+const QList<int32_t> &
 C_UsNode::GetCanOpenOverviewColumnWidth(void) const {
   return this->mc_CanOpenOverviewColumnWidth;
 }
@@ -136,7 +136,7 @@ C_UsNode::GetCanOpenOverviewColumnWidth(void) const {
    CANopen PDO overview column width
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> &
+const QList<int32_t> &
 C_UsNode::GetCanOpenPdoOverviewColumnWidth(void) const {
   return this->mc_CanOpenPdoOverviewColumnWidth;
 }
@@ -238,7 +238,7 @@ bool C_UsNode::GetCanOpenSelectedUseCaseOrInterface(void) const {
    Halc overview column width
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> &C_UsNode::GetHalcOverviewColumnWidth(void) const {
+const QList<int32_t> &C_UsNode::GetHalcOverviewColumnWidth(void) const {
   return this->mc_HalcOverviewColumnWidth;
 }
 
@@ -249,7 +249,7 @@ const std::vector<int32_t> &C_UsNode::GetHalcOverviewColumnWidth(void) const {
    widths of parameter configuration table columns
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> &C_UsNode::GetHalcConfigColumnWidth() const {
+const QList<int32_t> &C_UsNode::GetHalcConfigColumnWidth() const {
   return this->mc_HalcConfigColumnWidth;
 }
 
@@ -405,7 +405,7 @@ void C_UsNode::SetDatapoolSelectedVariableNames(
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetDatapoolCommMessageOverviewColumnWidth(
     const QString &orc_DatapoolName, const QString &orc_ListName,
-    const std::vector<int32_t> &orc_Value) {
+    const QList<int32_t> &orc_Value) {
   if (this->mc_Datapools.contains(orc_DatapoolName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -428,7 +428,7 @@ void C_UsNode::SetDatapoolCommMessageOverviewColumnWidth(
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetDatapoolCommSignalOverviewColumnWidth(
     const QString &orc_DatapoolName, const QString &orc_ListName,
-    const std::vector<int32_t> &orc_Value) {
+    const QList<int32_t> &orc_Value) {
   if (this->mc_Datapools.contains(orc_DatapoolName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -487,7 +487,7 @@ void C_UsNode::SetDatapoolListSelectedMessage(
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetDatapoolListColumnSizes(
     const QString &orc_DatapoolName, const QString &orc_ListName,
-    const std::vector<int32_t> &orc_ColumnWidths) {
+    const QList<int32_t> &orc_ColumnWidths) {
   if (this->mc_Datapools.contains(orc_DatapoolName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -507,7 +507,7 @@ void C_UsNode::SetDatapoolListColumnSizes(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetCanOpenOverviewColumnWidth(
-    const std::vector<int32_t> &orc_Value) {
+    const QList<int32_t> &orc_Value) {
   this->mc_CanOpenOverviewColumnWidth = orc_Value;
 }
 
@@ -518,7 +518,7 @@ void C_UsNode::SetCanOpenOverviewColumnWidth(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetCanOpenPdoOverviewColumnWidth(
-    const std::vector<int32_t> &orc_Value) {
+    const QList<int32_t> &orc_Value) {
   this->mc_CanOpenPdoOverviewColumnWidth = orc_Value;
 }
 
@@ -608,7 +608,7 @@ void C_UsNode::SetCanOpenSelectedUseCaseOrInterface(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetHalcOverviewColumnWidth(
-    const std::vector<int32_t> &orc_Value) {
+    const QList<int32_t> &orc_Value) {
   this->mc_HalcOverviewColumnWidth = orc_Value;
 }
 
@@ -618,7 +618,7 @@ void C_UsNode::SetHalcOverviewColumnWidth(
    \param[in]  orc_Value   Column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsNode::SetHalcConfigColumnWidth(const std::vector<int32_t> &orc_Value) {
+void C_UsNode::SetHalcConfigColumnWidth(const QList<int32_t> &orc_Value) {
   this->mc_HalcConfigColumnWidth = orc_Value;
 }
 

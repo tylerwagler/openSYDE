@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QStringList>
+#include <QList>
 #include "C_SdBueUnoMessageAddDeleteBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -29,15 +30,15 @@ class C_SdBueUnoMessageAddCommand :
 {
 public:
    C_SdBueUnoMessageAddCommand(
-      const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
+      const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
       stw::opensyde_gui::C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget,
       const QString & orc_Text);
 
-   void SetInitialData(const std::vector<stw::opensyde_core::C_OscCanMessage > & orc_Message,
-                       const std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> > & orc_OscSignalCommons, const std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons, const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages, const QList<QStringList> & orc_OwnerNodeName, const std::vector<std::vector<uint32_t> > & orc_OwnerNodeInterfaceIndex, const std::vector<std::vector<uint32_t> > & orc_OwnerNodeDatapoolIndex, const std::vector<std::vector<bool> > & orc_OwnerIsTxFlag);
+   void SetInitialData(const QList<stw::opensyde_core::C_OscCanMessage > & orc_Message,
+                       const QList<QList<stw::opensyde_core::C_OscNodeDataPoolListElement> > & orc_OscSignalCommons, const QList<QList<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons, const QList<C_PuiSdNodeCanMessage> & orc_UiMessages, const QList<QStringList> & orc_OwnerNodeName, const QList<QList<uint32_t> > & orc_OwnerNodeInterfaceIndex, const QList<QList<uint32_t> > & orc_OwnerNodeDatapoolIndex, const QList<QList<bool> > & orc_OwnerIsTxFlag);
 
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> GetLastMessageIds(void) const;
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> GetLastMessageIds(void) const;
 
    void redo(void) override;
    void undo(void) override;

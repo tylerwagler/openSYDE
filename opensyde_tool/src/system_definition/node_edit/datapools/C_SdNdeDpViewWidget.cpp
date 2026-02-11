@@ -14,6 +14,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_SdNdeDpViewWidget.hpp"
+#include <QList>
 
 #include "ui_C_SdNdeDpViewWidget.h"
 
@@ -578,7 +579,7 @@ void C_SdNdeDpViewWidget::m_DpUpdateUsageView(void)
             {
                uint32_t u32_Percentage;
                uint32_t u32_SumNvmSize = 0;
-               std::vector<C_PuiSdHandler::C_PuiSdHandlerNodeLogicNvmArea> c_Areas;
+               QList<C_PuiSdHandler::C_PuiSdHandlerNodeLogicNvmArea> c_Areas;
                QString c_LabelTooltip = static_cast<QString>("%1% ") + "reserved by Datapools" +
                                         static_cast<QString>(
                   " (%2 / %3)");

@@ -12,6 +12,7 @@
 #define C_CAMPROHANDLERFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_CamProHandler.hpp"
@@ -31,11 +32,11 @@ public:
    static void h_Save(const C_CamProHandler & orc_Handler, stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_Load(C_CamProHandler & orc_Handler, stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
 
-   static void h_SaveMessages(const std::vector<C_CamProMessageData> & orc_Messages,
+   static void h_SaveMessages(const QList<C_CamProMessageData> & orc_Messages,
                               stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveMessage(const C_CamProMessageData & orc_Message,
                              stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadMessages(std::vector<C_CamProMessageData> & orc_Messages,
+   static int32_t h_LoadMessages(QList<C_CamProMessageData> & orc_Messages,
                                  stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadMessage(C_CamProMessageData & orc_Message,
                                 stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
@@ -44,23 +45,23 @@ public:
                               stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadSettings(C_CamProHandler & orc_Handler, stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
 
-   static void h_SaveFilters(const std::vector<C_CamProFilterData> & orc_Filters,
+   static void h_SaveFilters(const QList<C_CamProFilterData> & orc_Filters,
                              stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveFilter(const C_CamProFilterData & orc_Filter,
                             stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveFilterItem(const C_CamProFilterItemData & orc_FilterItem,
                                 stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadFilters(std::vector<C_CamProFilterData> & orc_Filters,
+   static int32_t h_LoadFilters(QList<C_CamProFilterData> & orc_Filters,
                                 stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadFilter(C_CamProFilterData & orc_Filter, stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadFilterItem(C_CamProFilterItemData & orc_FilterItem,
                                    const stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
 
-   static void h_SaveDatabases(const std::vector<C_CamProDatabaseData> & orc_Databases,
+   static void h_SaveDatabases(const QList<C_CamProDatabaseData> & orc_Databases,
                                stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveDatabase(const C_CamProDatabaseData & orc_Database,
                               stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadDatabases(std::vector<C_CamProDatabaseData> & orc_Databases,
+   static int32_t h_LoadDatabases(QList<C_CamProDatabaseData> & orc_Databases,
                                   stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadDatabase(C_CamProDatabaseData & orc_Database,
                                  stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);

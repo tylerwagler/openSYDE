@@ -315,9 +315,9 @@ void C_TblViewToolTipBase::m_HideToolTip(void)
    Column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_TblViewToolTipBase::m_GetColumnWidths(void) const
+QList<int32_t> C_TblViewToolTipBase::m_GetColumnWidths(void) const
 {
-   std::vector<int32_t> c_ColumnWidths;
+   QList<int32_t> c_ColumnWidths;
    c_ColumnWidths.reserve(this->model()->columnCount());
    for (int32_t s32_ItColumn = 0; s32_ItColumn < this->model()->columnCount(); ++s32_ItColumn)
    {
@@ -335,7 +335,7 @@ std::vector<int32_t> C_TblViewToolTipBase::m_GetColumnWidths(void) const
    \retval   false  Were not set
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_TblViewToolTipBase::m_SetColumnWidths(const std::vector<int32_t> & orc_ColumnWidths)
+bool C_TblViewToolTipBase::m_SetColumnWidths(const QList<int32_t> & orc_ColumnWidths)
 {
    bool q_Retval = false;
 

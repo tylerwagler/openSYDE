@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Utility class to copy a message and its detected signals to the clipboard as text (implementation)
@@ -59,7 +59,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetClipBoardHelper::h_StoreCanMessages(const bool oq_DisplayAsHex, const bool oq_DisplayTimestampRelative,
                                                  const bool oq_DisplayTimestampAbsoluteTimeOfDay,
-                                                 const std::vector<C_CamMetClipBoardHelperCanMessageData> & orc_MessageData)
+                                                 const QList<C_CamMetClipBoardHelperCanMessageData> & orc_MessageData)
 {
    const int32_t s32_WIDTH_INITIAL = 4;
    const int32_t s32_WIDTH_TIME = 25;
@@ -182,7 +182,7 @@ void C_CamMetClipBoardHelper::mh_AddMessage(QString & orc_Text, const C_OscComMe
                                             const int32_t os32_WidthId, const int32_t os32_WidthName,
                                             const int32_t os32_WidthDir, const int32_t os32_WidthDlc,
                                             const int32_t os32_WidthData, const int32_t os32_WidthCounter,
-                                            const std::vector<int32_t> & orc_ExpandedIndices)
+                                            const QList<int32_t> & orc_ExpandedIndices)
 {
    QString c_Line;
    int32_t s32_LineLength;
@@ -334,15 +334,15 @@ void C_CamMetClipBoardHelper::mh_AddMessage(QString & orc_Text, const C_OscComMe
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetClipBoardHelper::mh_AddCanSignals(const int32_t os32_LineWidthInitial, const bool oq_DisplayAsHex,
-                                               const std::vector<C_OscComMessageLoggerDataSignal> & orc_Signals,
-                                               const std::vector<int32_t> & orc_ExpandedSignalIndices,
+                                               const QList<C_OscComMessageLoggerDataSignal> & orc_Signals,
+                                               const QList<int32_t> & orc_ExpandedSignalIndices,
                                                QString & orc_CompleteString)
 {
    uint32_t u32_MultiplexerCounter = 0UL;
 
    //Determine order
-   std::vector<uint32_t> c_RelevantSignalsOrder;
-   const std::vector<int32_t> c_MultiplexerOrder = C_CamMetUtil::h_GetMultiplexerOrder(orc_Signals);
+   QList<uint32_t> c_RelevantSignalsOrder;
+   const QList<int32_t> c_MultiplexerOrder = C_CamMetUtil::h_GetMultiplexerOrder(orc_Signals);
 
    //Multiplexer
    for (uint32_t u32_Order = 0U; u32_Order < c_MultiplexerOrder.size(); ++u32_Order)

@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
 #include <QVBoxLayout>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_SdTopologyListWidget.hpp"
 #include "C_OgeFraSeparator.hpp"
@@ -38,7 +39,7 @@ public:
                                                                           QVBoxLayout * const opc_Layout,
                                                                           QWidget * const opc_Parent,
                                                                           const bool oq_AddSpacerBefore);
-   static std::vector<stw::opensyde_gui_elements::C_OgePubIconOnly *> h_AddNewUserHeading(const QString & orc_Name,
+   static QList<stw::opensyde_gui_elements::C_OgePubIconOnly *> h_AddNewUserHeading(const QString & orc_Name,
                                                                                           QVBoxLayout * const opc_Layout, QWidget * const opc_Parent);
    static void h_InitFreeElements(QListWidget * const opc_ListWidget);
    static void h_AddElementToList(QListWidget * const opc_ListWidget, const QString & orc_Text,

@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QFrame>
 #include <QFont>
+#include <QList>
 #include "precomp_headers.hpp"
 #include "constants.hpp"
 #include "stwerrors.hpp"
@@ -301,7 +302,7 @@ void C_SdNdeDalLogJobsWidget::m_OnCopyLogJob()
       const QModelIndexList c_SelectedIndexes = this->mpc_Ui->pc_JobsListView->selectionModel()->selectedIndexes();
       if (c_SelectedIndexes.size() > 0L)
       {
-         std::vector<C_OscDataLoggerJob> c_Data;
+         QList<C_OscDataLoggerJob> c_Data;
          for (QModelIndexList::ConstIterator c_It = c_SelectedIndexes.cbegin(); c_It != c_SelectedIndexes.cend();
               ++c_It)
          {
@@ -325,7 +326,7 @@ void C_SdNdeDalLogJobsWidget::m_OnCopyLogJob()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobsWidget::m_OnPasteLogJob()
 {
-   std::vector<C_OscDataLoggerJob> c_Data;
+   QList<C_OscDataLoggerJob> c_Data;
    if (C_SdNdeDalCopClipBoardHelper::h_LoadDataloggerFromClipboardRemoveInvalidIdsAndReportChanges(
           mu32_NodeIndex,
           c_Data,
@@ -362,7 +363,7 @@ void C_SdNdeDalLogJobsWidget::m_OnDeleteLogJob()
 
       if (c_SelectedIndexes.size() > 0L)
       {
-         std::vector<uint32_t> c_SelectedItems;
+         QList<uint32_t> c_SelectedItems;
          for (QModelIndexList::ConstIterator c_It = c_SelectedIndexes.cbegin(); c_It != c_SelectedIndexes.cend();
               ++c_It)
          {

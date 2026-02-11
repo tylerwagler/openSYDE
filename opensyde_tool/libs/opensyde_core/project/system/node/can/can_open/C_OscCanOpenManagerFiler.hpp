@@ -9,6 +9,7 @@
 #define C_OSCCANOPENMANAGERFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include "C_OscXmlParser.hpp"
 #include "C_OscCanOpenManagerInfo.hpp"
@@ -85,9 +86,9 @@ private:
                                                  QStringList * const opc_CreatedFiles,
                                                  const QString & orc_NodeName,
                                                  const uint8_t ou8_InterfaceNumber);
-   static int32_t mh_LoadManagerMappedSignals(std::vector< C_OscCanOpenManagerMappableSignal > & orc_Config,
+   static int32_t mh_LoadManagerMappedSignals(QList< C_OscCanOpenManagerMappableSignal > & orc_Config,
                                               C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveManagerMappedSignals(const std::vector<C_OscCanOpenManagerMappableSignal> & orc_Config,
+   static void mh_SaveManagerMappedSignals(const QList<C_OscCanOpenManagerMappableSignal> & orc_Config,
                                            C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadManagerMappedSignal(C_OscCanOpenManagerMappableSignal & orc_Config,
                                              C_OscXmlParserBase & orc_XmlParser);

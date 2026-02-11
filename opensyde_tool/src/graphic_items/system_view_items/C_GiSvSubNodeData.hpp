@@ -9,6 +9,7 @@
 #define C_GISVSUBNODEDATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include "stwtypes.hpp"
 #include "C_OscHexFile.hpp"
@@ -111,11 +112,11 @@ private:
    uint32_t mu32_FailedApplicationIndex;
 
    bool mq_AnyDatablockFound;
-   std::vector<stw::diag_lib::C_XFLECUInformation> mc_HexFileInfos;
+   QList<stw::diag_lib::C_XFLECUInformation> mc_HexFileInfos;
    QStringList mc_ParamFileInfos;
    QStringList mc_FileInfos;
    QString mc_PemFileInfo;
-   std::vector<bool> mc_HexAppInfoAmbiguous;
+   QList<bool> mc_HexAppInfoAmbiguous;
    stw::opensyde_gui_logic::C_SyvUpDeviceInfo mc_DeviceInfo;
 
    // Precondition check errors

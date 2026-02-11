@@ -105,7 +105,7 @@ void C_SdManTopologyBusConnectorReconnectManager::ContextMenuAboutToClose(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManTopologyBusConnectorReconnectManager::ContextMenuAccepted(const int32_t & ors32_Interface,
-                                                                      const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
+                                                                      const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
    this->ms32_NewInterface = ors32_Interface;
    this->mc_Properties = orc_Properties;

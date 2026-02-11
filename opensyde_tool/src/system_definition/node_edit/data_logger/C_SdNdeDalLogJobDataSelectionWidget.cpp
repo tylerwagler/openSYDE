@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 #include "stwerrors.hpp"
 
 #include "C_SdNdeDalLogJobDataSelectionWidget.hpp"
@@ -192,8 +193,8 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_AddClicked()
    // Save the selected data elements to system definition
    if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
-      std::vector<stw::opensyde_core::C_OscDataLoggerDataElementReference> c_SelectedDataElements;
-      std::vector<C_PuiSvDbNodeDataPoolListElementId> c_DataElements = pc_Dialog->GetSelectedDataElements();
+      QList<stw::opensyde_core::C_OscDataLoggerDataElementReference> c_SelectedDataElements;
+      QList<C_PuiSvDbNodeDataPoolListElementId> c_DataElements = pc_Dialog->GetSelectedDataElements();
 
       //Cursor
       QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -382,7 +383,7 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_UpdateCustomLoggingName(const uint32
    // update the custom logging name
    if (ou32_Index < this->mc_DataElements.size())
    {
-      C_OscDataLoggerDataElementReference & rc_Data = this->mc_DataElements.at(ou32_Index);
+      C_OscDataLoggerDataElementReference & rc_Data = this->mc_DataElements[ou32_Index];
       rc_Data.c_CustomName = oc_Data;
       rc_Data.q_UseCustomName = oq_UseCustomName;
    }
@@ -435,7 +436,7 @@ void C_SdNdeDalLogJobDataSelectionWidget::m_OnCustomContextMenuRequested(const Q
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobDataSelectionWidget::m_DeleteSelectedDataElements(void)
 {
-   std::vector<uint32_t> c_SelectedIndices;
+   QList<uint32_t> c_SelectedIndices;
 
    // Get the selected elements from the model (original indexes irrespective of sort order are fetched)
    this->mpc_Ui->pc_TableView->GetSelectedElements(c_SelectedIndices);

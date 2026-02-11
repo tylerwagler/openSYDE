@@ -63,7 +63,7 @@ C_PopFileTableModel::C_PopFileTableModel(QObject * const opc_Parent) :
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PopFileTableModel::UpdateData(const QStringList & orc_RecentFilePaths,
-                                     const std::vector<C_OscProject> & orc_RecentProjects)
+                                     const QList<C_OscProject> & orc_RecentProjects)
 {
    Q_ASSERT(orc_RecentFilePaths.size() == orc_RecentProjects.size());
    if (orc_RecentFilePaths.size() == orc_RecentProjects.size())

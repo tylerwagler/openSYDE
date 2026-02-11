@@ -9,6 +9,7 @@
 #define C_PUISDHANDLERDATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QObject>
 #include <QStringList>
 #include "stwtypes.hpp"
@@ -52,14 +53,14 @@ public:
    static QString h_AutomaticCeStringAdaptation(const QString & orc_Input);
 
    C_PuiBsElements c_Elements;
-   std::vector<C_PuiSdTextElementBus> c_BusTextElements; ///< UI information for bus text elements
+   QList<C_PuiSdTextElementBus> c_BusTextElements; ///< UI information for bus text elements
 
 protected:
    stw::opensyde_core::C_OscSystemDefinition mc_CoreDefinition; ///< Core part of system definition data
 
-   std::vector<C_PuiSdNode> mc_UiNodes; ///< UI information for nodes (should always stay synchronous with
+   QList<C_PuiSdNode> mc_UiNodes; ///< UI information for nodes (should always stay synchronous with
    ///< core arrays)
-   std::vector<C_PuiSdBus> mc_UiBuses; ///< UI information for buses (should always stay synchronous with
+   QList<C_PuiSdBus> mc_UiBuses; ///< UI information for buses (should always stay synchronous with
    ///< core arrays)
 
    C_PuiSdSharedDatapools mc_SharedDatapools; ///< UI information for shared datapools

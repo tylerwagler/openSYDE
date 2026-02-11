@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include <QWidget>
 #include <QTimer>
 
@@ -95,7 +96,7 @@ private:
    void m_StartConfigProper(void);
    void m_ShowConfigResult(void);
    void m_BackToScan(void);
-   void m_ShowConfigInfoOfDevice(const std::vector<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_Config,
+   void m_ShowConfigInfoOfDevice(const QList<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_Config,
                                  const uint32_t ou32_DeviceMaxCount, const uint32_t ou32_DeviceCounter,
                                  QString & orc_Text);
    void m_ShowConfigInfoOfCanInterface(const stw::opensyde_core::C_OscNodeComInterfaceSettings & orc_IntfSetting,
@@ -111,9 +112,9 @@ private:
                                     const QString & orc_SubNodeName, QString & orc_Text, const bool oq_BusConnected,
                                     const bool oq_Configured);
    void m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate);
-   int32_t m_GetRelevantConfigInfo(std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
-                                   std::vector<bool> & orc_OpenSydeSnrExtFormat,
-                                   std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_StwIds,
+   int32_t m_GetRelevantConfigInfo(QList<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_OpenSydeIds,
+                                   QList<bool> & orc_OpenSydeSnrExtFormat,
+                                   QList<stw::opensyde_core::C_OscProtocolDriverOsyNode> & orc_StwIds,
                                    uint32_t & oru32_Bitrate);
    void m_ResetNetwork(const bool oq_ToFlashloader);
    void m_ShowReadInfo(const int32_t os32_ActualResult);
@@ -164,8 +165,8 @@ private:
    void m_HandleDeviceVerificationStart(void);
 
    void m_HandleMissingDevices(
-      const std::vector<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_AllDeviceInfos,
-      const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_FoundDeviceInfos,
+      const QList<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_AllDeviceInfos,
+      const QList<stw::opensyde_core::C_OscDcDeviceInformation> & orc_FoundDeviceInfos,
       QString & orc_ReportText) const;
 
    bool m_AreAllInterfacesToConfigure(void) const;
@@ -189,16 +190,16 @@ private:
    uint64_t mu64_BitRate;
    bool mq_DisconnectNecessary;
    stw::opensyde_core::C_OscSystemBus::E_Type me_BusType;
-   std::vector<stw::opensyde_core::C_OscDcDeviceInformation> mc_FoundDevices;
+   QList<stw::opensyde_core::C_OscDcDeviceInformation> mc_FoundDevices;
    bool mq_SecurityFeatureUsed;
 
    QTimer mc_Timer;
    E_Step me_Step;
    QString mc_ReportText;
-   QMap<stw::opensyde_core::C_OscProtocolDriverOsyNode, std::vector<C_ServerConfStepResult> > mc_ServerStates;
+   QMap<stw::opensyde_core::C_OscProtocolDriverOsyNode, QList<C_ServerConfStepResult> > mc_ServerStates;
 
-   std::vector<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> mc_StwFlashloaderDeviceConfigurations;
-   std::vector<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> mc_OpenSydeDeviceConfigurations;
+   QList<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> mc_StwFlashloaderDeviceConfigurations;
+   QList<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> mc_OpenSydeDeviceConfigurations;
 
    static const int32_t mhs32_INDEX_CONFIGURATION_ALL_CONNECTED_INTERFACES;
    static const int32_t mhs32_INDEX_CONFIGURATION_ONLY_USED_INTERFACES;

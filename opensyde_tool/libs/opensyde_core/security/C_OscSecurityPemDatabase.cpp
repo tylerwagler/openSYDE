@@ -18,6 +18,7 @@
 #include "precomp_headers.hpp"
 #include <QDir>
 #include <QFileInfo>
+#include <QList>
 
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSecurityPem.hpp"
@@ -85,14 +86,14 @@ uint32_t C_OscSecurityPemDatabase::GetSizeOfDatabase() const {
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscSecurityPemKeyInfo *
 C_OscSecurityPemDatabase::GetPemFileBySerialNumber(
-    const std::vector<uint8_t> &orc_SerialNumber) const {
+    const QByteArray &orc_SerialNumber) const {
   const C_OscSecurityPemKeyInfo *pc_Retval = NULL;
 
   for (uint32_t u32_ItFile = 0UL; u32_ItFile < this->mc_StoredPemFiles.size();
        ++u32_ItFile) {
     const C_OscSecurityPemKeyInfo &rc_KeyFile =
         this->mc_StoredPemFiles[u32_ItFile];
-    const std::vector<uint8_t> &rc_CurSerialNumber =
+    const QByteArray &rc_CurSerialNumber =
         rc_KeyFile.GetCertificateSerialNumber();
     if (rc_CurSerialNumber.size() == orc_SerialNumber.size()) {
       bool q_Matches = true;
@@ -181,7 +182,7 @@ C_OscSecurityPemDatabase::ParseFolder(const std::string &orc_FolderPath) {
   this->mc_StoredPemFiles.clear();
 
   if (QFileInfo(QString::fromStdString(c_FolderPathWithDelimiter)).isDir()) {
-    const std::vector<std::string> c_Files =
+    const QList<std::string> c_Files =
         C_OscSecurityPemDatabase::mh_GetPemFiles(c_FolderPathWithDelimiter);
     for (uint32_t u32_It = 0UL; u32_It < c_Files.size(); ++u32_It) {
       const std::string c_CurFolderPath = c_Files[u32_It];
@@ -288,9 +289,9 @@ C_OscSecurityPemDatabase::m_TryAddKey(const C_OscSecurityPemKeyInfo &orc_NewKey,
    PEM files
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<std::string>
+QList<std::string>
 C_OscSecurityPemDatabase::mh_GetPemFiles(const std::string &orc_FolderPath) {
-  std::vector<std::string> c_Retval;
+  QList<std::string> c_Retval;
 
   QDir c_QDir(QString::fromStdString(orc_FolderPath));
   QStringList c_Filter;

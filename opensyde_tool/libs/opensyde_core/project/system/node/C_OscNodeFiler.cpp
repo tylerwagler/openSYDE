@@ -350,8 +350,8 @@ int32_t C_OscNodeFiler::h_SaveNode(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::h_LoadNodeComProtocols(
-    std::vector<C_OscCanProtocol> &orc_NodeComProtocols,
-    const std::vector<C_OscNodeDataPool> &orc_NodeDataPools,
+    QList<C_OscCanProtocol> &orc_NodeComProtocols,
+    const QList<C_OscNodeDataPool> &orc_NodeDataPools,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -428,8 +428,8 @@ int32_t C_OscNodeFiler::h_LoadNodeComProtocols(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::h_SaveNodeComProtocols(
-    const std::vector<C_OscCanProtocol> &orc_NodeComProtocols,
-    const std::vector<C_OscNodeDataPool> &orc_NodeDataPools,
+    const QList<C_OscCanProtocol> &orc_NodeComProtocols,
+    const QList<C_OscNodeDataPool> &orc_NodeDataPools,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
     QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
@@ -887,7 +887,7 @@ void C_OscNodeFiler::mh_SaveStwFlashloaderOptions(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_LoadComInterface(
-    std::vector<C_OscNodeComInterfaceSettings> &orc_ComInterfaces,
+    QList<C_OscNodeComInterfaceSettings> &orc_ComInterfaces,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_CurNode = orc_XmlParser.SelectNodeChild("communication-interface");
@@ -1017,7 +1017,7 @@ int32_t C_OscNodeFiler::mh_LoadComInterface(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeFiler::mh_SaveComInterface(
-    const std::vector<C_OscNodeComInterfaceSettings> &orc_ComInterfaces,
+    const QList<C_OscNodeComInterfaceSettings> &orc_ComInterfaces,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.CreateAndSelectNodeChild("communication-interfaces");
   for (uint32_t u32_ItComInterface = 0;
@@ -1111,7 +1111,7 @@ void C_OscNodeFiler::mh_SaveComInterface(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_LoadApplications(
-    std::vector<C_OscNodeApplication> &orc_NodeApplications,
+    QList<C_OscNodeApplication> &orc_NodeApplications,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -1320,7 +1320,7 @@ int32_t C_OscNodeFiler::mh_LoadApplications(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeFiler::mh_SaveApplications(
-    const std::vector<C_OscNodeApplication> &orc_NodeApplications,
+    const QList<C_OscNodeApplication> &orc_NodeApplications,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.CreateAndSelectNodeChild("applications");
   orc_XmlParser.SetAttributeUint32(
@@ -1470,7 +1470,7 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode &orc_Node,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_SaveDataPools(
-    const std::vector<C_OscNodeDataPool> &orc_NodeDataPools,
+    const QList<C_OscNodeDataPool> &orc_NodeDataPools,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
     QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
@@ -1709,7 +1709,7 @@ int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_LoadDataLoggers(
-    std::vector<C_OscDataLoggerJob> &orc_DataLoggerJobs,
+    QList<C_OscDataLoggerJob> &orc_DataLoggerJobs,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -1750,7 +1750,7 @@ int32_t C_OscNodeFiler::mh_LoadDataLoggers(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_SaveDataLoggers(
-    const std::vector<C_OscDataLoggerJob> &orc_DataLoggerJobs,
+    const QList<C_OscDataLoggerJob> &orc_DataLoggerJobs,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
     QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;

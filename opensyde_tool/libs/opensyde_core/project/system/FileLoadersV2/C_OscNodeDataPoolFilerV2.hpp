@@ -16,6 +16,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 
+#include <QList>
 #include "C_OscNodeDataPool.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -49,16 +50,16 @@ public:
       C_OscXmlParserBase &orc_XmlParser);
   static int32_t
   h_LoadDataPoolLists(const uint16_t ou16_XmlFormatVersion,
-                      std::vector<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
+                      QList<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
                       C_OscXmlParserBase &orc_XmlParser);
   static int32_t h_LoadDataPoolListElements(
       const uint16_t ou16_XmlFormatVersion,
-      std::vector<C_OscNodeDataPoolListElement> &orc_NodeDataPoolListElements,
+      QList<C_OscNodeDataPoolListElement> &orc_NodeDataPoolListElements,
       C_OscXmlParserBase &orc_XmlParser);
   static int32_t h_LoadDataPoolListElementDataSetValues(
       const uint16_t ou16_XmlFormatVersion,
       const C_OscNodeDataPoolContent &orc_ContType,
-      std::vector<C_OscNodeDataPoolContent>
+      QList<C_OscNodeDataPoolContent>
           &orc_NodeDataPoolListElementDataSetValues,
       C_OscXmlParserBase &orc_XmlParser);
   static int32_t
@@ -81,21 +82,21 @@ public:
       const C_OscNodeDataPoolListElement &orc_NodeDataPoolListElement,
       C_OscXmlParserBase &orc_XmlParser);
   static void h_SaveDataPoolLists(
-      const std::vector<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
+      const QList<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
       C_OscXmlParserBase &orc_XmlParser);
   static void
-  h_SaveDataPoolListElements(const std::vector<C_OscNodeDataPoolListElement>
+  h_SaveDataPoolListElements(const QList<C_OscNodeDataPoolListElement>
                                  &orc_NodeDataPoolListElements,
                              C_OscXmlParserBase &orc_XmlParser);
   static void h_SaveDataPoolListElementDataSetValues(
-      const std::vector<C_OscNodeDataPoolContent>
+      const QList<C_OscNodeDataPoolContent>
           &orc_NodeDataPoolListElementDataSetValues,
       C_OscXmlParserBase &orc_XmlParser);
   static int32_t h_LoadDataPoolListDataSets(
-      std::vector<C_OscNodeDataPoolDataSet> &orc_NodeDataPoolListDataSets,
+      QList<C_OscNodeDataPoolDataSet> &orc_NodeDataPoolListDataSets,
       C_OscXmlParserBase &orc_XmlParser);
   static void h_SaveDataPoolListDataSets(
-      const std::vector<C_OscNodeDataPoolDataSet> &orc_NodeDataPoolListDataSets,
+      const QList<C_OscNodeDataPoolDataSet> &orc_NodeDataPoolListDataSets,
       C_OscXmlParserBase &orc_XmlParser);
   static QString
   h_DataPoolToString(const C_OscNodeDataPool::E_Type &ore_DataPool);

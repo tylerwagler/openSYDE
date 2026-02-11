@@ -12,6 +12,7 @@
 #define C_CAMGENTABLEVIEW_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QSortFilterProxyModel>
 #include "C_OgePubIconOnly.hpp"
 #include "C_OgeContextMenu.hpp"
@@ -46,13 +47,13 @@ public:
    void MoveMessageUp(void);
    void MoveMessageDown(void);
 
-   void SetCurrentColumnWidths(const std::vector<int32_t> & orc_ColumnWidths);
-   std::vector<int32_t> GetCurrentColumnWidths(void) const;
+   void SetCurrentColumnWidths(const QList<int32_t> & orc_ColumnWidths);
+   QList<int32_t> GetCurrentColumnWidths(void) const;
 
    void SaveUserSettings(void) const;
    void LoadUserSettings(void);
 
-   void RemoveMessagesForFile(const QString & orc_File, const std::vector<uint32_t> * const opc_Indices);
+   void RemoveMessagesForFile(const QString & orc_File, const QList<uint32_t> * const opc_Indices);
    void SetCommunicationStarted(const bool oq_Active);
    void SetCyclicActive(const bool oq_Active);
    void UpdateMessageData(const uint32_t ou32_MessageIndex);
@@ -94,19 +95,19 @@ private:
    QAction * mpc_ActionDelete;
    stw::opensyde_gui_elements::C_OgePubIconOnly * mpc_PushButtonScrollTop;
 
-   std::vector<uint32_t> m_GetSelectedRows(void) const;
+   QList<uint32_t> m_GetSelectedRows(void) const;
    void m_SetupContextMenu(void);
    void m_OnCustomContextMenuRequested(const QPoint & orc_Pos);
-   void m_SelectRange(const std::vector<uint32_t> & orc_Items);
+   void m_SelectRange(const QList<uint32_t> & orc_Items);
    void m_SelectAndScrollToRow(const uint32_t ou32_Row);
    void m_RepositionButtons(void);
    void m_HandleLinkClicked(const QModelIndex & orc_Index);
-   void m_StopCyclicCommunication(const std::vector<uint32_t> & orc_Items);
+   void m_StopCyclicCommunication(const QList<uint32_t> & orc_Items);
    void m_ModelRegisterCyclicMessage(const uint32_t ou32_MessageIndex, const bool oq_Active);
-   void m_AddMessageFromDatabase(const std::vector<std::array<QString, 2> > & orc_NewItems);
-   void m_HandleNewItemScrollingAndSelection(const std::vector<uint32_t> & orc_Indices);
-   static std::vector<int32_t> mh_ConvertVector(const std::vector<uint32_t> & orc_Input);
-   void m_SetSelectedMessages(const std::vector<int32_t> & orc_SelectedIndices);
+   void m_AddMessageFromDatabase(const QList<std::array<QString, 2> > & orc_NewItems);
+   void m_HandleNewItemScrollingAndSelection(const QList<uint32_t> & orc_Indices);
+   static QList<int32_t> mh_ConvertVector(const QList<uint32_t> & orc_Input);
+   void m_SetSelectedMessages(const QList<int32_t> & orc_SelectedIndices);
    void m_SelectRow(const int32_t os32_Row, const QItemSelectionModel::SelectionFlags & orc_Flags);
    void m_HandleCheckChange(const QModelIndex & orc_Index);
    void m_RegisterAllCyclicMessages(void);

@@ -16,6 +16,7 @@
 #include <QCheckBox>
 #include <QFileInfo>
 #include <QSpinBox>
+#include <QList>
 
 
 #include "C_OscUtils.hpp"
@@ -1071,10 +1072,10 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void) {
         QString c_Comment;
         C_OscNodeProperties::E_DiagnosticServerProtocol e_DiagnosticServer;
         C_OscNodeProperties::E_FlashLoaderProtocol e_FlashLoader;
-        std::vector<uint8_t> c_NodeIds;
-        std::vector<bool> c_UpdateFlags;
-        std::vector<bool> c_RoutingFlags;
-        std::vector<bool> c_DiagnosisFlags;
+        QByteArray c_NodeIds;
+        QList<bool> c_UpdateFlags;
+        QList<bool> c_RoutingFlags;
+        QList<bool> c_DiagnosisFlags;
         const int32_t s32_COL_NODE_ID =
             static_cast<int32_t>(C_SdNdeComIfSettingsTableDelegate::eNODEID);
         const int32_t s32_COL_UPDATE =
@@ -1149,11 +1150,11 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void) {
               pc_DevDef->c_SubDevices[u32_SubDeviceIndex].IsDiagnosisAvailable(
                   rc_CurInterface.e_InterfaceType);
           // node id
-          c_NodeIds.push_back(
-              static_cast<uint8_t>((this->mpc_Ui->pc_TableWidgetComIfSettings
+          c_NodeIds.append(
+              static_cast<char>(this->mpc_Ui->pc_TableWidgetComIfSettings
                                         ->item(u16_ComIfCnt, s32_COL_NODE_ID)
                                         ->text()
-                                        .toInt())));
+                                        .toInt()));
 
           // update
           if (q_IsUpdateAvailable == true) {
@@ -1503,7 +1504,7 @@ void C_SdNdeNodePropertiesWidget::m_CheckComInterface(
               ->text();
       // convert string into vector for core logic
       const QStringList c_IpBytesTmp = c_Ip.split('.');
-      std::vector<int32_t> c_IpBytes;
+      QList<int32_t> c_IpBytes;
       for (int32_t s32_It = 0; s32_It < c_IpBytesTmp.size(); ++s32_It) {
         c_IpBytes.push_back(static_cast<int32_t>(c_IpBytesTmp[s32_It].toInt()));
       }
@@ -1537,7 +1538,7 @@ void C_SdNdeNodePropertiesWidget::m_CheckComInterface(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeNodePropertiesWidget::m_GetInterfaceStatus(
     const uint32_t ou32_NodeIndex, const int32_t os32_InterfaceIndex,
-    const uint8_t ou8_NodeId, const std::vector<int32_t> &orc_Ip,
+    const uint8_t ou8_NodeId, const QList<int32_t> &orc_Ip,
     bool &orq_IdValid, bool &orq_IpValid) const {
   // check if node id is valid
   orq_IdValid = C_PuiSdHandler::h_GetInstance()
@@ -1633,7 +1634,7 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(
             // only ids are conflicting
             if ((oq_IdValid == false) && (oq_IpValid == true)) {
               q_ShowIcon = true;
-              const std::vector<uint32_t> c_UsedIds =
+              const QList<uint32_t> c_UsedIds =
                   C_SdUtil::h_GetUsedNodeIdsForBusUniqueAndSortedAscending(
                       rc_Interface.u32_BusIndex, this->mu32_NodeIndex,
                       static_cast<int32_t>(os32_InterfaceIndex));
@@ -1649,7 +1650,7 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(
             // only ips are conflicting
             else if ((oq_IpValid == false) && (oq_IdValid == true)) {
               q_ShowIcon = true;
-              const std::vector<std::vector<uint8_t>> c_Ips =
+              const QList<QByteArray> c_Ips =
                   C_SdUtil::h_GetAllUsedIpAddressesForBus(
                       rc_Interface.u32_BusIndex, this->mu32_NodeIndex,
                       static_cast<int32_t>(os32_InterfaceIndex));
@@ -1666,11 +1667,11 @@ void C_SdNdeNodePropertiesWidget::m_HandleErrorFeedback(
             // both id and ip are conflicting
             else if ((oq_IdValid == false) && (oq_IpValid == false)) {
               q_ShowIcon = true;
-              const std::vector<uint32_t> c_UsedIds =
+              const QList<uint32_t> c_UsedIds =
                   C_SdUtil::h_GetUsedNodeIdsForBusUniqueAndSortedAscending(
                       rc_Interface.u32_BusIndex, this->mu32_NodeIndex,
                       static_cast<int32_t>(os32_InterfaceIndex));
-              const std::vector<std::vector<uint8_t>> c_Ips =
+              const QList<QByteArray> c_Ips =
                   C_SdUtil::h_GetAllUsedIpAddressesForBus(
                       rc_Interface.u32_BusIndex, this->mu32_NodeIndex,
                       static_cast<int32_t>(os32_InterfaceIndex));
@@ -1795,7 +1796,7 @@ void C_SdNdeNodePropertiesWidget::m_BusBitrateClick(const uint32_t ou32_Row) {
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
   const C_OscNodeProperties c_Prop = pc_Node->c_Properties;
 
-  const std::vector<C_OscNodeComInterfaceSettings> &rc_ComInterfaces =
+  const QList<C_OscNodeComInterfaceSettings> &rc_ComInterfaces =
       c_Prop.c_ComInterfaces;
 
   if (ou32_Row < rc_ComInterfaces.size()) {

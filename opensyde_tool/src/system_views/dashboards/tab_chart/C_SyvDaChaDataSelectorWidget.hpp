@@ -15,8 +15,7 @@
 #include <QWidget>
 #include <QSpacerItem>
 #include <QColor>
-#include <vector>
-
+#include <QList>
 #include "stwtypes.hpp"
 
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
@@ -87,7 +86,7 @@ private:
    QSpacerItem * mpc_Spacer;
    uint32_t mu32_ViewIndex;
 
-   std::vector<C_SyvDaChaDataItemWidget *> mc_DataPoolElementsDataItemWidgets;
+   QList<C_SyvDaChaDataItemWidget *> mc_DataPoolElementsDataItemWidgets;
 
    uint32_t mu32_CurrentSelectedIndex;
    C_SyvDaChaDataItemWidget::E_MeasurementValueState me_MeasurementValueState;

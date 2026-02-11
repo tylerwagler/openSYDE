@@ -68,7 +68,7 @@ void C_PuiSdNodeCanMessageContainer::CalcHash(uint32_t & oru32_HashValue) const
    Either tx or rx list (as requested)
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSdNodeCanMessage> & C_PuiSdNodeCanMessageContainer::GetMessagesConst(const bool & orq_IsTx) const
+const QList<C_PuiSdNodeCanMessage> & C_PuiSdNodeCanMessageContainer::GetMessagesConst(const bool & orq_IsTx) const
 {
    return (orq_IsTx == true) ? this->c_TxMessages : this->c_RxMessages;
 }
@@ -82,7 +82,7 @@ const std::vector<C_PuiSdNodeCanMessage> & C_PuiSdNodeCanMessageContainer::GetMe
    Either tx or rx list (as requested)
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_PuiSdNodeCanMessage> & C_PuiSdNodeCanMessageContainer::GetMessages(const bool & orq_IsTx)
+QList<C_PuiSdNodeCanMessage> & C_PuiSdNodeCanMessageContainer::GetMessages(const bool & orq_IsTx)
 {
    return (orq_IsTx == true) ? this->c_TxMessages : this->c_RxMessages;
 }

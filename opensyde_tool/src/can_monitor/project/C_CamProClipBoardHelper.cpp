@@ -59,7 +59,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProClipBoardHelper::h_SaveMessages(
-    const std::vector<C_CamProMessageData> &orc_Messages) {
+    const QList<C_CamProMessageData> &orc_Messages) {
   C_OscXmlParser c_Parser;
 
   mh_GetNewParser(c_Parser);
@@ -78,7 +78,7 @@ void C_CamProClipBoardHelper::h_SaveMessages(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CamProClipBoardHelper::h_LoadMessages(
-    std::vector<C_CamProMessageData> &orc_Messages) {
+    QList<C_CamProMessageData> &orc_Messages) {
   int32_t s32_Retval;
   C_OscXmlParser c_Parser;
 

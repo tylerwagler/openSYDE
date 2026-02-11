@@ -9,6 +9,7 @@
 #define C_PUISDHANDLERHALC_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include "C_PuiSdHandlerNodeLogic.hpp"
 
@@ -146,7 +147,7 @@ public:
    int32_t CheckHalcDomainChannelLinked(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                         const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
                                         bool & orq_IsLinked, QStringList * const
-                                        opc_LinkedChannelNames = NULL, std::vector<uint32_t> * const
+                                        opc_LinkedChannelNames = NULL, QList<uint32_t> * const
                                         opc_LinkedChannelIndices = NULL,
                                         const uint32_t * const opu32_UseCaseIndex = NULL) const;
    int32_t SetHalcDomainChannelConfigOfLinkedChannels(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
@@ -158,10 +159,10 @@ public:
                                        bool & orq_HasError) const;
    int32_t GetHalcRelevantIndicesForSelectedUseCase(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
                                                     const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                                    std::vector<uint32_t> * const opc_ParameterIndices,
-                                                    std::vector<uint32_t> * const opc_InputIndices,
-                                                    std::vector<uint32_t> * const opc_OutputIndices,
-                                                    std::vector<uint32_t> * const opc_StatusIndices)
+                                                    QList<uint32_t> * const opc_ParameterIndices,
+                                                    QList<uint32_t> * const opc_InputIndices,
+                                                    QList<uint32_t> * const opc_OutputIndices,
+                                                    QList<uint32_t> * const opc_StatusIndices)
    const;
    int32_t HalcGenerateDatapools(const uint32_t ou32_NodeIndex);
    int32_t HalcRemoveDatapools(const uint32_t ou32_NodeIndex, const bool oq_SuppressSyncSignal = false);
@@ -182,7 +183,7 @@ private:
    std::map<uint32_t, uint32_t> mc_PreviousHashes; // key: node index, value: previous hash
    // value
 
-   static int32_t mh_GetIndexInVector(const std::vector<stw::opensyde_core::C_OscHalcDefStruct> & orc_Structs,
+   static int32_t mh_GetIndexInVector(const QList<stw::opensyde_core::C_OscHalcDefStruct> & orc_Structs,
                                       const uint32_t ou32_StartingIndex, const uint32_t ou32_TargetIndex,
                                       uint32_t & oru32_ParameterIndex, bool & orq_UseElementIndex,
                                       uint32_t & oru32_ParameterElementIndex,

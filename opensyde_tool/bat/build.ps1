@@ -4,7 +4,7 @@
 # Usage: .\build.ps1 [-Component <name>] [-BuildType <Release|Debug>] [-Clean] [-SkipDeploy]
 #
 # Examples:
-#   .\build.ps1                              # Build main GUI (Release) + deploy Qt DLLs
+#   .\build.ps1                              # Build main GUI (Debug) + deploy Qt DLLs
 #   .\build.ps1 -Component CANMonitor        # Build CAN Monitor
 #   .\build.ps1 -Component SYDEflash         # Build SYDEflash
 #   .\build.ps1 -Component All               # Build all components

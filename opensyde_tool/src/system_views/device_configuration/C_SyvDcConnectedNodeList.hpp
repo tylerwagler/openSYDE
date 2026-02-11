@@ -12,7 +12,7 @@
 #define C_SYVDCCONNECTEDNODELIST_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include <QListWidget>
 #include "stwtypes.hpp"
 #include "C_OscDcDeviceInformation.hpp"
@@ -34,7 +34,7 @@ class C_SyvDcConnectedNodeList :
 public:
    C_SyvDcConnectedNodeList(QWidget * const opc_Parent = NULL);
 
-   void SetData(const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_Infos);
+   void SetData(const QList<stw::opensyde_core::C_OscDcDeviceInformation> & orc_Infos);
    void EnableSerialNumber(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber) const;
    void DisableSerialNumber(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber) const;
 
@@ -57,7 +57,7 @@ protected:
 
 private:
    bool mq_GridSizeSet;
-   std::vector<stw::opensyde_core::C_OscDcDeviceInformation> mc_Data;
+   QList<stw::opensyde_core::C_OscDcDeviceInformation> mc_Data;
    static const QString mhc_MIME_DATA;
    static const QString mhc_MIME_DATA_EXT_FORMAT;
    static const QString mhc_MIME_DATA_MANUFACTURER_FORMAT;

@@ -17,10 +17,10 @@
  */
 #include <QAbstractItemModel>
 #include <QColor>
+#include <QList>
 #include <QMap>
 #include <QPixmap>
 #include <QTimer>
-#include <vector>
 
 #include "C_CamMetTreeLoggerData.hpp"
 #include "C_TblTreSimpleModel.hpp"
@@ -64,7 +64,7 @@ public:
 
   // Access
   void ActionClearData(void);
-  std::vector<int32_t>
+  QList<int32_t>
   AddRows(const std::list<C_CamMetTreeLoggerData> &orc_Data);
   void SetSelection(const int32_t os32_SelectedParentRow,
                     const int32_t os32_SelectedChildIndex);
@@ -78,7 +78,7 @@ public:
   bool GetDisplayTimestampAbsoluteTimeOfDay(void) const;
   void SetTraceBufferSize(const uint32_t ou32_Value);
 
-  std::vector<C_CamMetTreeLoggerData *> GetAllMessagesForProtocolChange(void);
+  QList<C_CamMetTreeLoggerData *> GetAllMessagesForProtocolChange(void);
   void SignalProtocolChange(void);
 
   QVariant headerData(const int32_t os32_Section,
@@ -125,12 +125,12 @@ private:
   // communication
   QMap<QString, C_CamMetTreeLoggerData> mc_UniqueMessages;
   QMap<QString, QString> mc_UniqueMessagesOrdering;
-  std::vector<C_CamMetTreeLoggerData> mc_DataBase;
+  QList<C_CamMetTreeLoggerData> mc_DataBase;
   bool mq_DataUnlocked;
   uint32_t mu32_OldestItemIndex;
   int32_t ms32_SelectedParentRow;
   std::set<uint16_t> mc_SelectedChildBytes;
-  std::vector<QColor> mc_FontTransparcencyColors;
+  QList<QColor> mc_FontTransparcencyColors;
   QTimer mc_GrayOutTimer;
   bool mq_GrayOutPause;
   uint32_t mu32_GrayOutPauseTimeStamp;
@@ -152,7 +152,7 @@ private:
 
   void m_AdaptTraceBufferSize(void);
 
-  std::vector<int32_t>
+  QList<int32_t>
   m_AddRowsContinuousMode(const std::list<C_CamMetTreeLoggerData> &orc_Data);
   void m_AddRowsUnique(const std::list<C_CamMetTreeLoggerData> &orc_Data);
   void m_HandleNewUniqueMessageForExistingUniqueMessage(
@@ -184,7 +184,7 @@ private:
       const stw::opensyde_core::C_OscComMessageLoggerDataSignal &orc_SignalData,
       const QString &orc_SearchString) const;
   void m_GetMultiplexedMsgSignalRow(
-      const std::vector<stw::opensyde_core::C_OscComMessageLoggerDataSignal>
+      const QList<stw::opensyde_core::C_OscComMessageLoggerDataSignal>
           &orc_Signals,
       const uint32_t ou32_SignalIndexToCheck, int32_t &ors32_SignalRow,
       int32_t &ors32_MultiplexedSignalRow) const;
@@ -202,21 +202,21 @@ private:
           &orc_StoredGrayOutInformation,
       const bool oq_UpdateDataTimeStamp, const uint32_t ou32_PrevMsgTimeStamp);
   static bool mh_CheckForFixByInsertingNewChild(
-      const std::vector<uint32_t> &orc_ExpectedVec,
-      const std::vector<uint32_t> &orc_CurrentVec, uint32_t &oru32_InsertAt,
+      const QList<uint32_t> &orc_ExpectedVec,
+      const QList<uint32_t> &orc_CurrentVec, uint32_t &oru32_InsertAt,
       uint32_t &oru32_InsertNum);
   static void mh_CopyMessageWhileKeepingUniqueSignals(
       C_CamMetTreeLoggerData &orc_PreviousMessage,
       const C_CamMetTreeLoggerData &orc_NewMessage,
       const int32_t os32_MuxValue);
   static uint32_t mh_TranslateTreeRowsToSignalIndex(
-      const std::vector<stw::opensyde_core::C_OscComMessageLoggerDataSignal>
+      const QList<stw::opensyde_core::C_OscComMessageLoggerDataSignal>
           &orc_Signals,
       const int32_t os32_SignalIndex, const int32_t os32_SignalIndexL2 = -1);
 
   static bool mh_IsMessageMultiplexed(const C_CamMetTreeLoggerData &orc_Data);
   static void mh_SortMultiplexedSignals(
-      std::vector<stw::opensyde_core::C_OscComMessageLoggerDataSignal>
+      QList<stw::opensyde_core::C_OscComMessageLoggerDataSignal>
           &orc_Signals);
 
   bool m_IsStatusValid(const C_CamMetTreeLoggerData &orc_CurrentMessage) const;

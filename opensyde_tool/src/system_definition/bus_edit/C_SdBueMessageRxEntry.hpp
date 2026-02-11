@@ -16,6 +16,7 @@
 #include <QWidget>
 #include <QRadioButton>
 #include <QStringList>
+#include <QList>
 #include "stwtypes.hpp"
 
 #include "C_PuiSdNodeCanMessage.hpp"
@@ -44,7 +45,7 @@ public:
 
    void InitStaticNames(void) const;
    void Init(const QString & orc_EntryName, const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-             const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage::E_RxTimeoutMode> & orc_ReceiveTimeoutModes, const std::vector<uint32_t> & orc_ReceiveTimeoutValues, const std::vector<uint32_t> & orc_DatapoolIndexes, const QStringList & orc_DatapoolNames, const bool oq_NodeLayer, const bool oq_ReadOnly);
+             const QList<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage::E_RxTimeoutMode> & orc_ReceiveTimeoutModes, const QList<uint32_t> & orc_ReceiveTimeoutValues, const QList<uint32_t> & orc_DatapoolIndexes, const QStringList & orc_DatapoolNames, const bool oq_NodeLayer, const bool oq_ReadOnly);
    void SetLastKnownCycleTimeValue(const uint32_t ou32_Value);
    void SetRxTimeoutPreconditions(const bool oq_TxMethodOnEvent, const bool oq_DisableOptionPossible);
    void SetRxTimeoutConfigurationReadOnly(const bool oq_TimeoutConfigurationReadOnly);
@@ -103,7 +104,7 @@ private:
    uint32_t mu32_ReceiveTimeoutValue;
 
    // If entry has sub items (mq_HasChildren == true)
-   std::vector<C_SdBueMessageRxEntry *> mc_Entries;
+   QList<C_SdBueMessageRxEntry *> mc_Entries;
 
    bool mq_TxMethodOnEvent;
    bool mq_DisableOptionPossible;

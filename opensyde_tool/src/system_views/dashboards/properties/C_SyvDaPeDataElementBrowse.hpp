@@ -12,6 +12,7 @@
 #define C_SYVDAPEDATAELEMENTBROWSE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include "C_OgePopUpDialog.hpp"
 #include "C_TblTreDataElementModel.hpp"
@@ -42,14 +43,14 @@ public:
                                        const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
                                        const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
                                        const bool oq_ShowNvmLists,
-                                       const std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements =
+                                       const QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements =
                                           NULL, const bool oq_UseInSysViews = true,
                                        const uint32_t ou32_SdDataLoggerUseCaseNodeIndex = 0UL);
    ~C_SyvDaPeDataElementBrowse(void) override;
 
    void InitStaticNames(void) const;
    void SaveUserSettings(void) const;
-   std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> GetSelectedDataElements(void) const;
+   QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> GetSelectedDataElements(void) const;
    void PrepareCleanUp(void);
 
 protected:
@@ -71,7 +72,7 @@ private:
    bool mq_ShowArrayElements;
    bool mq_ShowArrayIndexElements;
    bool mq_Show64BitValues;
-   const std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> * mpc_AlreasyUsedElements;
+   const QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> * mpc_AlreasyUsedElements;
 
    void m_OkClicked(void);
    void m_HandleHiding(void) const;

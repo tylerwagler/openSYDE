@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -46,7 +47,7 @@ const QString C_SdNdeDalCopClipBoardHelper::mhc_CLIP_BOARD_BASE_TAG_NAME = "open
    \param[in]  orc_Data    Data
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalCopClipBoardHelper::h_StoreDataloggerToClipboard(const std::vector<C_OscDataLoggerJob> & orc_Data)
+void C_SdNdeDalCopClipBoardHelper::h_StoreDataloggerToClipboard(const QList<C_OscDataLoggerJob> & orc_Data)
 {
    const QMap<C_OscNodeDataPoolListElementOptArrayId,
               C_SdNdeDalCopElementIdCrcGroup> c_ElementIdGroups = mh_FillElementIdGroups(orc_Data);
@@ -67,7 +68,7 @@ void C_SdNdeDalCopClipBoardHelper::h_StoreDataloggerToClipboard(const std::vecto
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdNdeDalCopClipBoardHelper::h_LoadDataloggerFromClipboardAndRemoveInvalidIds(const uint32_t ou32_NodeIndex,
-                                                                                       std::vector<C_OscDataLoggerJob> & orc_Data,
+                                                                                       QList<C_OscDataLoggerJob> & orc_Data,
                                                                                        bool & orq_IdsChanged)
 {
    QMap<C_OscNodeDataPoolListElementOptArrayId,
@@ -94,7 +95,7 @@ int32_t C_SdNdeDalCopClipBoardHelper::h_LoadDataloggerFromClipboardAndRemoveInva
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdNdeDalCopClipBoardHelper::h_LoadDataloggerFromClipboardRemoveInvalidIdsAndReportChanges(
-   const uint32_t ou32_NodeIndex, std::vector<C_OscDataLoggerJob> & orc_Data, QWidget * const opc_Parent)
+   const uint32_t ou32_NodeIndex, QList<C_OscDataLoggerJob> & orc_Data, QWidget * const opc_Parent)
 {
    bool q_IdsChanged;
    const int32_t s32_Retval = h_LoadDataloggerFromClipboardAndRemoveInvalidIds(ou32_NodeIndex, orc_Data, q_IdsChanged);
@@ -130,7 +131,7 @@ C_SdNdeDalCopClipBoardHelper::C_SdNdeDalCopClipBoardHelper() :
    \param[in]  orc_GenericTagName   Generic content tag name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalCopClipBoardHelper::mh_StoreDataloggerToClipboard(const std::vector<C_OscDataLoggerJob> & orc_Data,
+void C_SdNdeDalCopClipBoardHelper::mh_StoreDataloggerToClipboard(const QList<C_OscDataLoggerJob> & orc_Data,
                                                                  const QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                             C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups,
                                                                  const QString & orc_GenericTagName)
@@ -201,7 +202,7 @@ void C_SdNdeDalCopClipBoardHelper::mh_StoreElementIdGroup(const C_OscNodeDataPoo
    C_CONFIG Clipboard invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadDataloggerFromClipboard(std::vector<C_OscDataLoggerJob> & orc_Data,
+int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadDataloggerFromClipboard(QList<C_OscDataLoggerJob> & orc_Data,
                                                                      QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                           C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups,
                                                                      const QString & orc_GenericTagName)
@@ -328,7 +329,7 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadElementIdGroup(C_OscNodeDataPoolLis
 //----------------------------------------------------------------------------------------------------------------------
 QMap<C_OscNodeDataPoolListElementOptArrayId,
      C_SdNdeDalCopElementIdCrcGroup> C_SdNdeDalCopClipBoardHelper::mh_FillElementIdGroups(
-   const std::vector<C_OscDataLoggerJob> & orc_Data)
+   const QList<C_OscDataLoggerJob> & orc_Data)
 {
    QMap<C_OscNodeDataPoolListElementOptArrayId,
         C_SdNdeDalCopElementIdCrcGroup> c_Retval;
@@ -354,7 +355,7 @@ QMap<C_OscNodeDataPoolListElementOptArrayId,
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::set<C_OscNodeDataPoolListElementOptArrayId> C_SdNdeDalCopClipBoardHelper::mh_GetAllIds(
-   const std::vector<C_OscDataLoggerJob> & orc_Data)
+   const QList<C_OscDataLoggerJob> & orc_Data)
 {
    std::set<C_OscNodeDataPoolListElementOptArrayId> c_Retval;
    for (uint32_t u32_ItLogger = 0UL; u32_ItLogger < orc_Data.size(); ++u32_ItLogger)
@@ -394,7 +395,7 @@ void C_SdNdeDalCopClipBoardHelper::mh_GetAllIds(const C_OscDataLoggerJob & orc_D
    \retval   C_CONFIG   At least one missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeDalCopClipBoardHelper::mh_ValidateIds(const std::vector<C_OscDataLoggerJob> & orc_Data,
+int32_t C_SdNdeDalCopClipBoardHelper::mh_ValidateIds(const QList<C_OscDataLoggerJob> & orc_Data,
                                                      const QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                 C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups)
 {
@@ -427,7 +428,7 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_ValidateIds(const std::vector<C_OscData
    \retval   False   Nothing changed
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeDalCopClipBoardHelper::mh_ValidateCrcs(std::vector<C_OscDataLoggerJob> & orc_Data,
+bool C_SdNdeDalCopClipBoardHelper::mh_ValidateCrcs(QList<C_OscDataLoggerJob> & orc_Data,
                                                    const QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                               C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups)
 {
@@ -453,7 +454,7 @@ bool C_SdNdeDalCopClipBoardHelper::mh_ValidateCrcs(std::vector<C_OscDataLoggerJo
    \param[in]      orc_Id     Id
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalCopClipBoardHelper::mh_RemoveAllReferencesToElementId(std::vector<C_OscDataLoggerJob> & orc_Data,
+void C_SdNdeDalCopClipBoardHelper::mh_RemoveAllReferencesToElementId(QList<C_OscDataLoggerJob> & orc_Data,
                                                                      const C_OscNodeDataPoolListElementOptArrayId & orc_Id)
 {
    for (uint32_t u32_It = 0UL; u32_It < orc_Data.size(); ++u32_It)
@@ -501,7 +502,7 @@ void C_SdNdeDalCopClipBoardHelper::mh_RemoveAllReferencesToElementId(C_OscDataLo
    C_CONFIG Clipboard invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadDataloggerFromClipboard(std::vector<C_OscDataLoggerJob> & orc_Data,
+int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadDataloggerFromClipboard(QList<C_OscDataLoggerJob> & orc_Data,
                                                                      QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                           C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups)
 {

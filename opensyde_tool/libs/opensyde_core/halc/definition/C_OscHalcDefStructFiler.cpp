@@ -63,9 +63,9 @@ const QString C_OscHalcDefStructFiler::mhc_TRUE = "TRUE";
    C_CONFIG    IO definition content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::h_LoadStructs(std::vector<C_OscHalcDefStruct> & orc_Structs,
+int32_t C_OscHalcDefStructFiler::h_LoadStructs(QList<C_OscHalcDefStruct> & orc_Structs,
                                                C_OscXmlParserBase & orc_XmlParser,
-                                               const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                               const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                                const QString & orc_CurrentNodeName,
                                                const QString & orc_SectionNodeName,
                                                const QString & orc_GroupNodeName,
@@ -132,8 +132,8 @@ int32_t C_OscHalcDefStructFiler::h_LoadStructs(std::vector<C_OscHalcDefStruct> &
    C_CONFIG   data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::h_SaveStructs(const std::vector<C_OscHalcDefStruct> & orc_Structs,
-                                               const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+int32_t C_OscHalcDefStructFiler::h_SaveStructs(const QList<C_OscHalcDefStruct> & orc_Structs,
+                                               const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                                C_OscXmlParserBase & orc_XmlParser,
                                                const QString & orc_CurrentNodeName,
                                                const QString & orc_SectionNodeName,
@@ -957,7 +957,7 @@ C_OscHalcDefStructFiler::C_OscHalcDefStructFiler(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcDefStructFiler::mh_LoadStruct(C_OscHalcDefStruct & orc_Struct, C_OscXmlParserBase & orc_XmlParser,
-                                               const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                               const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                                const QString & orc_GroupNodeName,
                                                const QString & orc_SingleNodeName, const bool oq_RequireId,
                                                const uint32_t ou32_DomainNameLength)
@@ -1074,7 +1074,7 @@ int32_t C_OscHalcDefStructFiler::mh_LoadStruct(C_OscHalcDefStruct & orc_Struct, 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcDefStructFiler::mh_SaveStruct(const C_OscHalcDefStruct & orc_Struct,
-                                               const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                               const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                                C_OscXmlParserBase & orc_XmlParser,
                                                const QString & orc_GroupNodeName,
                                                const QString & orc_SingleNodeName)
@@ -1132,8 +1132,8 @@ int32_t C_OscHalcDefStructFiler::mh_SaveStruct(const C_OscHalcDefStruct & orc_St
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcDefStructFiler::mh_LoadDataElement(C_OscHalcDefElement & orc_Element,
                                                     C_OscXmlParserBase & orc_XmlParser,
-                                                    const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
-                                                    const std::vector<uint32_t> & orc_BaseAvailability,
+                                                    const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                                    const QList<uint32_t> & orc_BaseAvailability,
                                                     const QString & orc_SingleNodeName, const bool oq_RequireId,
                                                     const uint32_t ou32_DomainNameLength)
 {
@@ -1315,7 +1315,7 @@ int32_t C_OscHalcDefStructFiler::mh_LoadDataElement(C_OscHalcDefElement & orc_El
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcDefStructFiler::mh_SaveDataElement(const C_OscHalcDefElement & orc_Element,
-                                                    const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                                    const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                                     C_OscXmlParserBase & orc_XmlParser,
                                                     const QString & orc_SingleNodeName)
 {
@@ -1337,7 +1337,7 @@ int32_t C_OscHalcDefStructFiler::mh_SaveDataElement(const C_OscHalcDefElement & 
    {
    case C_OscHalcDefContent::eCT_BIT_MASK:
       {
-         const std::vector<C_OscHalcDefContentBitmaskItem> & rc_BitmaskItems = orc_Element.GetBitmaskItems();
+         const QList<C_OscHalcDefContentBitmaskItem> & rc_BitmaskItems = orc_Element.GetBitmaskItems();
          orc_XmlParser.SetAttributeString("type", "bitmask");
          orc_XmlParser.SetAttributeString("base-type", c_BaseType);
          //Items
@@ -1358,12 +1358,12 @@ int32_t C_OscHalcDefStructFiler::mh_SaveDataElement(const C_OscHalcDefElement & 
       break;
    case C_OscHalcDefContent::eCT_ENUM:
       {
-         const std::vector<std::pair<QString,
+         const QList<std::pair<QString,
                                      C_OscNodeDataPoolContent> > & rc_EnumItems = orc_Element.GetEnumItems();
          orc_XmlParser.SetAttributeString("type", "enum");
          orc_XmlParser.SetAttributeString("base-type", c_BaseType);
          //Items
-         for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+         for (QList<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
                  rc_EnumItems.begin();
               (c_It != rc_EnumItems.end()) && (s32_Retval == C_NO_ERR); ++c_It)
          {
@@ -1432,9 +1432,9 @@ int32_t C_OscHalcDefStructFiler::mh_SaveDataElement(const C_OscHalcDefElement & 
    C_CONFIG    string invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::mh_ParseAttributeAvailability(std::vector<uint32_t> & orc_Availability,
+int32_t C_OscHalcDefStructFiler::mh_ParseAttributeAvailability(QList<uint32_t> & orc_Availability,
                                                                const QString & orc_AttributeContent,
-                                                               const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                                               const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                                                const C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1486,8 +1486,8 @@ int32_t C_OscHalcDefStructFiler::mh_ParseAttributeAvailability(std::vector<uint3
    Availability string
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::mh_GetAvailabilityString(const std::vector<uint32_t> & orc_Availability,
-                                                          const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+int32_t C_OscHalcDefStructFiler::mh_GetAvailabilityString(const QList<uint32_t> & orc_Availability,
+                                                          const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                                           QString & orc_Output)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1671,8 +1671,8 @@ bool C_OscHalcDefStructFiler::mh_CheckInitialBitmaskContentValid(const C_OscHalc
       QString c_Is = "invalid";
       QString c_Should = "invalid";
       C_OscHalcDefContent c_Copy = orc_Content;
-      const std::vector<C_OscHalcDefContentBitmaskItem> & rc_Bitmasks = c_Copy.GetBitmaskItems();
-      for (std::vector<C_OscHalcDefContentBitmaskItem>::const_iterator c_ItBitmask = rc_Bitmasks.begin();
+      const QList<C_OscHalcDefContentBitmaskItem> & rc_Bitmasks = c_Copy.GetBitmaskItems();
+      for (QList<C_OscHalcDefContentBitmaskItem>::const_iterator c_ItBitmask = rc_Bitmasks.begin();
            c_ItBitmask != rc_Bitmasks.end(); ++c_ItBitmask)
       {
          c_Copy.SetBitmask(c_ItBitmask->c_Display, c_ItBitmask->q_ApplyValueSetting);
@@ -1751,9 +1751,9 @@ void C_OscHalcDefStructFiler::mh_HandleEnumMinMax(C_OscHalcDefElement & orc_Elem
 {
    if (orc_Element.GetComplexType() == C_OscHalcDefContent::eCT_ENUM)
    {
-      const std::vector<std::pair<QString,
+      const QList<std::pair<QString,
                                   C_OscNodeDataPoolContent> > & rc_Enums = orc_Element.c_InitialValue.GetEnumItems();
-      for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+      for (QList<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
               rc_Enums.begin();
            c_It != rc_Enums.end(); ++c_It)
       {

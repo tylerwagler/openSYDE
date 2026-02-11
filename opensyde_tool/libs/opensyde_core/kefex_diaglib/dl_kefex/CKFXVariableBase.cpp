@@ -10,6 +10,7 @@
 #include "CKFXVariableBase.hpp"
 #include "C_OscUtils.hpp"
 #include <QString>
+#include <vector>
 
 #include "C_SclChecksums.hpp"
 
@@ -447,7 +448,7 @@ void C_KFXVariableBase::CopyDefaultToValue(const uint16_t ou16_DefaultIndex)
 {
    if (ou16_DefaultIndex < static_cast<uint16_t>(aau8_Defaults.size()))
    {
-      (void)std::memcpy(this->pu8_Value, &this->aau8_Defaults[ou16_DefaultIndex][0], this->mu32_Size);
+      (void)std::memcpy(this->pu8_Value, reinterpret_cast<const uint8_t*>(this->aau8_Defaults[ou16_DefaultIndex].constData()), this->mu32_Size);
    }
 }
 
@@ -457,7 +458,7 @@ void C_KFXVariableBase::CopyValueToDefault(const uint16_t ou16_DefaultIndex)
 {
    if (ou16_DefaultIndex < static_cast<uint16_t>(aau8_Defaults.size()))
    {
-      (void)std::memcpy(&this->aau8_Defaults[ou16_DefaultIndex][0], this->pu8_Value, this->mu32_Size);
+      (void)std::memcpy(reinterpret_cast<uint8_t*>(const_cast<char*>(this->aau8_Defaults[ou16_DefaultIndex].data())), this->pu8_Value, this->mu32_Size);
    }
 }
 
@@ -469,7 +470,7 @@ bool C_KFXVariableBase::DefaultMatchesValue(const uint16_t ou16_DefaultIndex) co
 
    if (ou16_DefaultIndex < static_cast<uint16_t>(aau8_Defaults.size()))
    {
-      s32_Return = std::memcmp(this->pu8_Value, &this->aau8_Defaults[ou16_DefaultIndex][0], this->mu32_Size);
+      s32_Return = std::memcmp(this->pu8_Value, reinterpret_cast<const uint8_t*>(this->aau8_Defaults[ou16_DefaultIndex].constData()), this->mu32_Size);
    }
    else
    {
@@ -496,7 +497,7 @@ void C_KFXVariableBase::ClearDefault(const uint16_t ou16_DefaultIndex)
 {
    if (ou16_DefaultIndex < static_cast<uint16_t>(aau8_Defaults.size()))
    {
-      (void)std::memset(&this->aau8_Defaults[ou16_DefaultIndex][0], 0, this->mu32_Size);
+      (void)std::memset(reinterpret_cast<uint8_t*>(const_cast<char*>(this->aau8_Defaults[ou16_DefaultIndex].data())), 0, this->mu32_Size);
    }
 }
 
@@ -669,7 +670,7 @@ int64_t C_KFXVariableBase::GetNumericDefault(const uint16_t ou16_DefaultIndex) c
       return 0;
    }
 
-   return C_KFXVariableBase::mh_GetNumericData(this->u8_Type, &this->aau8_Defaults[ou16_DefaultIndex][0]);
+   return C_KFXVariableBase::mh_GetNumericData(this->u8_Type, reinterpret_cast<const uint8_t*>(this->aau8_Defaults[ou16_DefaultIndex].constData()));
 }
 
 //-----------------------------------------------------------------------------
@@ -687,7 +688,7 @@ void C_KFXVariableBase::SetNumericDefault(const int64_t os64_Value, const uint16
 {
    if (ou16_DefaultIndex < static_cast<uint16_t>(this->aau8_Defaults.size()))
    {
-      C_KFXVariableBase::mh_SetNumericData(this->mu32_Size, &this->aau8_Defaults[ou16_DefaultIndex][0], os64_Value);
+      C_KFXVariableBase::mh_SetNumericData(this->mu32_Size, reinterpret_cast<uint8_t*>(const_cast<char*>(this->aau8_Defaults[ou16_DefaultIndex].data())), os64_Value);
    }
 }
 
@@ -710,7 +711,7 @@ float64_t C_KFXVariableBase::GetFloatDefault(const uint16_t ou16_DefaultIndex) c
       return 0.0;
    }
 
-   return C_KFXVariableBase::mh_GetFloatData(this->u8_Type, &this->aau8_Defaults[ou16_DefaultIndex][0]);
+   return C_KFXVariableBase::mh_GetFloatData(this->u8_Type, reinterpret_cast<const uint8_t*>(this->aau8_Defaults[ou16_DefaultIndex].constData()));
 }
 
 //-----------------------------------------------------------------------------
@@ -728,7 +729,7 @@ void C_KFXVariableBase::SetFloatDefault(const float64_t of64_Value, const uint16
 {
    if (ou16_DefaultIndex < static_cast<uint16_t>(this->aau8_Defaults.size()))
    {
-      C_KFXVariableBase::mh_SetFloatData(this->u8_Type, &this->aau8_Defaults[ou16_DefaultIndex][0], of64_Value);
+      C_KFXVariableBase::mh_SetFloatData(this->u8_Type, reinterpret_cast<uint8_t*>(const_cast<char*>(this->aau8_Defaults[ou16_DefaultIndex].data())), of64_Value);
    }
 }
 
@@ -744,7 +745,7 @@ QString C_KFXVariableBase::GetStringDefault(const uint16_t ou16_DefaultIndex) co
    {
       return "";
    }
-   pu8_Data = &this->aau8_Defaults[ou16_DefaultIndex][0];
+   pu8_Data = reinterpret_cast<const uint8_t*>(this->aau8_Defaults[ou16_DefaultIndex].constData());
 
    //how many characters are used ?
    for (u32_Len = 0U; u32_Len < this->mu32_Size; u32_Len++)
@@ -771,7 +772,7 @@ void C_KFXVariableBase::SetStringDefault(const QString & orc_Value, const uint16
 
    if (ou16_DefaultIndex < static_cast<uint16_t>(this->aau8_Defaults.size()))
    {
-      pu8_Data = &this->aau8_Defaults[ou16_DefaultIndex][0];
+      pu8_Data = reinterpret_cast<uint8_t*>(const_cast<char*>(this->aau8_Defaults[ou16_DefaultIndex].data()));
 
       if (orc_Value.length() < this->mu32_Size)
       {
@@ -862,12 +863,12 @@ void C_KFXVariableBase::CalcCRCOverEntry(uint16_t & oru16_CRC, const bool oq_Ski
    C_SclChecksums::CalcCRC16STW(&this->u32_Address,  sizeof(this->u32_Address), oru16_CRC);
    C_SclChecksums::CalcCRC16STW(&this->mu32_Size,  sizeof(this->mu32_Size), oru16_CRC);
    C_SclChecksums::CalcCRC16STW(&this->u8_Type,  sizeof(this->u8_Type), oru16_CRC);
-   C_SclChecksums::CalcCRC16STW(&this->mc_MinValue[0], this->mu32_Size, oru16_CRC);
-   C_SclChecksums::CalcCRC16STW(&this->mc_MaxValue[0], this->mu32_Size, oru16_CRC);
+   C_SclChecksums::CalcCRC16STW(reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_MinValue.data())), this->mu32_Size, oru16_CRC);
+   C_SclChecksums::CalcCRC16STW(reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_MaxValue.data())), this->mu32_Size, oru16_CRC);
    C_SclChecksums::CalcCRC16STW(&this->au8_Access[0],  sizeof(this->au8_Access), oru16_CRC);
    for (s32_Default = 0; s32_Default < aau8_Defaults.size(); s32_Default++)
    {
-      C_SclChecksums::CalcCRC16STW(&this->aau8_Defaults[s32_Default][0], this->mu32_Size, oru16_CRC);
+      C_SclChecksums::CalcCRC16STW(reinterpret_cast<const uint8_t*>(this->aau8_Defaults[s32_Default].constData()), this->mu32_Size, oru16_CRC);
    }
    if (oq_SkipValue == false)
    {
@@ -937,56 +938,56 @@ bool C_KFXVariableBase::IsBinaryArrayType(void) const
 
 float64_t C_KFXVariableBase::GetFloatMin(void) const
 {
-   return C_KFXVariableBase::mh_GetFloatData(this->u8_Type, &this->mc_MinValue[0]);
+   return C_KFXVariableBase::mh_GetFloatData(this->u8_Type, reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_MinValue.data())));
 }
 
 //**************************************************************
 
 float64_t C_KFXVariableBase::GetFloatMax(void) const
 {
-   return C_KFXVariableBase::mh_GetFloatData(this->u8_Type, &this->mc_MaxValue[0]);
+   return C_KFXVariableBase::mh_GetFloatData(this->u8_Type, reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_MaxValue.data())));
 }
 
 //**************************************************************
 
 void C_KFXVariableBase::SetFloatMin(const float64_t of64_Min)
 {
-   C_KFXVariableBase::mh_SetFloatData(this->u8_Type, &this->mc_MinValue[0], of64_Min);
+   C_KFXVariableBase::mh_SetFloatData(this->u8_Type, reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_MinValue.data())), of64_Min);
 }
 
 //**************************************************************
 
 void C_KFXVariableBase::SetFloatMax(const float64_t of64_Max)
 {
-   C_KFXVariableBase::mh_SetFloatData(this->u8_Type, &this->mc_MaxValue[0], of64_Max);
+   C_KFXVariableBase::mh_SetFloatData(this->u8_Type, reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_MaxValue.data())), of64_Max);
 }
 
 //**************************************************************
 
 int64_t C_KFXVariableBase::GetNumericMin(void) const
 {
-   return C_KFXVariableBase::mh_GetNumericData(this->u8_Type, &this->mc_MinValue[0]);
+   return C_KFXVariableBase::mh_GetNumericData(this->u8_Type, reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_MinValue.data())));
 }
 
 //**************************************************************
 
 int64_t C_KFXVariableBase::GetNumericMax(void) const
 {
-   return C_KFXVariableBase::mh_GetNumericData(this->u8_Type, &this->mc_MaxValue[0]);
+   return C_KFXVariableBase::mh_GetNumericData(this->u8_Type, reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_MaxValue.data())));
 }
 
 //**************************************************************
 
 void C_KFXVariableBase::SetNumericMin(const int64_t os64_Min)
 {
-   C_KFXVariableBase::mh_SetNumericData(this->mu32_Size, &this->mc_MinValue[0], os64_Min);
+   C_KFXVariableBase::mh_SetNumericData(this->mu32_Size, reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_MinValue.data())), os64_Min);
 }
 
 //**************************************************************
 
 void C_KFXVariableBase::SetNumericMax(const int64_t os64_Max)
 {
-   C_KFXVariableBase::mh_SetNumericData(this->mu32_Size, &this->mc_MaxValue[0], os64_Max);
+   C_KFXVariableBase::mh_SetNumericData(this->mu32_Size, reinterpret_cast<uint8_t*>(const_cast<char*>(this->mc_MaxValue.data())), os64_Max);
 }
 
 //**************************************************************
@@ -1003,7 +1004,7 @@ float64_t C_KFXVariableBase::GetFloatMinFromArray(const uint32_t ou32_ArrayIndex
    {
       throw "C_KFXVariableBase::GetFloatMinFromArray: not a valid array type";
    }
-   return C_KFXVariableBase::mh_GetFloatData(u8_ElementType, &mc_MinValue[u32_ByteOffset]);
+   return C_KFXVariableBase::mh_GetFloatData(u8_ElementType, reinterpret_cast<uint8_t*>(const_cast<char*>(&mc_MinValue.data()[u32_ByteOffset])));
 }
 
 //**************************************************************
@@ -1020,7 +1021,7 @@ float64_t C_KFXVariableBase::GetFloatMaxFromArray(const uint32_t ou32_ArrayIndex
    {
       throw "C_KFXVariableBase::GetFloatMaxFromArray: not a valid array type";
    }
-   return C_KFXVariableBase::mh_GetFloatData(u8_ElementType, &mc_MaxValue[u32_ByteOffset]);
+   return C_KFXVariableBase::mh_GetFloatData(u8_ElementType, reinterpret_cast<uint8_t*>(const_cast<char*>(&mc_MaxValue.data()[u32_ByteOffset])));
 }
 
 //**************************************************************
@@ -1037,7 +1038,7 @@ void C_KFXVariableBase::SetFloatMinInArray(const uint32_t ou32_ArrayIndex, const
    {
       throw "C_KFXVariableBase::SetFloatMinInArray: not a valid array type";
    }
-   C_KFXVariableBase::mh_SetFloatData(u8_ElementType, &this->mc_MinValue[u32_ByteOffset], of64_Min);
+   C_KFXVariableBase::mh_SetFloatData(u8_ElementType, reinterpret_cast<uint8_t*>(&this->mc_MinValue.data()[u32_ByteOffset]), of64_Min);
 }
 
 //**************************************************************
@@ -1054,7 +1055,7 @@ void C_KFXVariableBase::SetFloatMaxInArray(const uint32_t ou32_ArrayIndex, const
    {
       throw "C_KFXVariableBase::SetFloatMaxInArray: not a valid array type";
    }
-   C_KFXVariableBase::mh_SetFloatData(u8_ElementType, &this->mc_MaxValue[u32_ByteOffset], of64_Max);
+   C_KFXVariableBase::mh_SetFloatData(u8_ElementType, reinterpret_cast<uint8_t*>(&this->mc_MaxValue.data()[u32_ByteOffset]), of64_Max);
 }
 
 //**************************************************************
@@ -1071,7 +1072,7 @@ int64_t C_KFXVariableBase::GetNumericMinFromArray(const uint32_t ou32_ArrayIndex
    {
       throw "C_KFXVariableBase::GetNumericMinFromArray: not a valid array type";
    }
-   return C_KFXVariableBase::mh_GetNumericData(u8_ElementType, &mc_MinValue[u32_ByteOffset]);
+   return C_KFXVariableBase::mh_GetNumericData(u8_ElementType, reinterpret_cast<uint8_t*>(const_cast<char*>(&mc_MinValue.data()[u32_ByteOffset])));
 }
 
 //**************************************************************
@@ -1088,7 +1089,7 @@ int64_t C_KFXVariableBase::GetNumericMaxFromArray(const uint32_t ou32_ArrayIndex
    {
       throw "C_KFXVariableBase::GetNumericMaxFromArray: not a valid array type";
    }
-   return C_KFXVariableBase::mh_GetNumericData(u8_ElementType, &mc_MaxValue[u32_ByteOffset]);
+   return C_KFXVariableBase::mh_GetNumericData(u8_ElementType, reinterpret_cast<uint8_t*>(const_cast<char*>(&mc_MaxValue.data()[u32_ByteOffset])));
 }
 
 //**************************************************************
@@ -1105,7 +1106,7 @@ void C_KFXVariableBase::SetNumericMinInArray(const uint32_t ou32_ArrayIndex, con
    {
       throw "C_KFXVariableBase::SetNumericMinInArray: not a valid array type";
    }
-   C_KFXVariableBase::mh_SetNumericData(u8_SizeOfOneEntry, &this->mc_MinValue[u32_ByteOffset], os64_Min);
+   C_KFXVariableBase::mh_SetNumericData(u8_SizeOfOneEntry, reinterpret_cast<uint8_t*>(&this->mc_MinValue.data()[u32_ByteOffset]), os64_Min);
 }
 
 //**************************************************************
@@ -1122,7 +1123,7 @@ void C_KFXVariableBase::SetNumericMaxInArray(const uint32_t ou32_ArrayIndex, con
    {
       throw "C_KFXVariableBase::SetNumericMaxInArray: not a valid array type";
    }
-   C_KFXVariableBase::mh_SetNumericData(u8_SizeOfOneEntry, &this->mc_MaxValue[u32_ByteOffset], os64_Max);
+   C_KFXVariableBase::mh_SetNumericData(u8_SizeOfOneEntry, reinterpret_cast<uint8_t*>(&this->mc_MaxValue.data()[u32_ByteOffset]), os64_Max);
 }
 
 //**************************************************************
@@ -1154,7 +1155,7 @@ int64_t C_KFXVariableBase::GetNumericDefaultFromArray(const uint32_t ou32_ArrayI
    {
       throw "C_KFXVariableBase::GetNumericDefaultFromArray: not a valid array type";
    }
-   return C_KFXVariableBase::mh_GetNumericData(u8_ElementType, &aau8_Defaults[ou16_DefaultIndex][u32_ByteOffset]);
+   return C_KFXVariableBase::mh_GetNumericData(u8_ElementType, reinterpret_cast<uint8_t*>(const_cast<char*>(&aau8_Defaults[ou16_DefaultIndex].data()[u32_ByteOffset])));
 }
 
 //**************************************************************
@@ -1172,7 +1173,7 @@ float64_t C_KFXVariableBase::GetFloatDefaultFromArray(const uint32_t ou32_ArrayI
    {
       throw "C_KFXVariableBase::GetFloatDefaultFromArray: not a valid array type";
    }
-   return C_KFXVariableBase::mh_GetFloatData(u8_ElementType, &aau8_Defaults[ou16_DefaultIndex][u32_ByteOffset]);
+   return C_KFXVariableBase::mh_GetFloatData(u8_ElementType, reinterpret_cast<uint8_t*>(const_cast<char*>(&aau8_Defaults[ou16_DefaultIndex].data()[u32_ByteOffset])));
 }
 
 //**************************************************************
@@ -1379,7 +1380,7 @@ void C_KFXVariableBase::SetNumericDefaultInArray(const uint32_t ou32_ArrayIndex,
       throw "C_KFXVariableBase::SetNumericDefaultInArray: not a valid array type";
    }
 
-   C_KFXVariableBase::mh_SetNumericData(u8_SizeOfOneEntry, &this->aau8_Defaults[ou16_DefaultIndex][u32_ByteOffset],
+   C_KFXVariableBase::mh_SetNumericData(u8_SizeOfOneEntry, reinterpret_cast<uint8_t*>(&this->aau8_Defaults[ou16_DefaultIndex].data()[u32_ByteOffset]),
                                         os64_Value);
 }
 
@@ -1399,7 +1400,7 @@ void C_KFXVariableBase::SetFloatDefaultInArray(const uint32_t ou32_ArrayIndex, c
       throw "C_KFXVariableBase::SetFloatDefaultInArray: not a valid array type";
    }
 
-   C_KFXVariableBase::mh_SetFloatData(u8_ElementType, &this->aau8_Defaults[ou16_DefaultIndex][u32_ByteOffset],
+   C_KFXVariableBase::mh_SetFloatData(u8_ElementType, reinterpret_cast<uint8_t*>(&this->aau8_Defaults[ou16_DefaultIndex].data()[u32_ByteOffset]),
                                       of64_Value);
 }
 
@@ -1555,28 +1556,28 @@ void C_KFXVariableBase::SetMinMaxToMaximum(void)
 
 //**************************************************************
 
-const QList<uint8_t> & C_KFXVariableBase::GetMinReference(void) const
+const QByteArray & C_KFXVariableBase::GetMinReference(void) const
 {
    return this->mc_MinValue;
 }
 
 //**************************************************************
 
-const QList<uint8_t> & C_KFXVariableBase::GetMaxReference(void) const
+const QByteArray & C_KFXVariableBase::GetMaxReference(void) const
 {
    return this->mc_MaxValue;
 }
 
 //**************************************************************
 
-QList<uint8_t> & C_KFXVariableBase::GetMinReference(void)
+QByteArray & C_KFXVariableBase::GetMinReference(void)
 {
    return this->mc_MinValue;
 }
 
 //**************************************************************
 
-QList<uint8_t> & C_KFXVariableBase::GetMaxReference(void)
+QByteArray & C_KFXVariableBase::GetMaxReference(void)
 {
    return this->mc_MaxValue;
 }

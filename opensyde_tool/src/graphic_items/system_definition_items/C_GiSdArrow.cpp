@@ -44,7 +44,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_GiSdArrow::C_GiSdArrow(const int32_t & ors32_Index, const uint64_t & oru64_Id,
-                         const std::vector<QPointF> * const opc_Points, QGraphicsItem * const opc_Parent) :
+                         const QList<QPointF> * const opc_Points, QGraphicsItem * const opc_Parent) :
    C_GiBiArrow(oru64_Id, opc_Points, opc_Parent),
    C_PuiSdDataElement(ors32_Index, C_PuiSdDataElement::eLINE_ARROW)
 {

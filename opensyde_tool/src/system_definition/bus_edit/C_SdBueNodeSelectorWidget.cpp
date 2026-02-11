@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include <vector>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -103,8 +103,8 @@ void C_SdBueNodeSelectorWidget::InitStaticNames(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueNodeSelectorWidget::SetBusId(const uint32_t ou32_BusIndex)
 {
-   std::vector<uint32_t> c_NodeIndexes;
-   std::vector<uint32_t> c_InterfaceIndexes;
+   QList<uint32_t> c_NodeIndexes;
+   QList<uint32_t> c_InterfaceIndexes;
    QStringList c_NodeNames;
 
    // save the bus index
@@ -142,10 +142,10 @@ void C_SdBueNodeSelectorWidget::SetBusId(const uint32_t ou32_BusIndex)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueNodeSelectorWidget::SetProtocol(const C_OscCanProtocol::E_Type oe_Protocol)
 {
-   std::vector<uint32_t> c_NodeIndexes;
-   std::vector<uint32_t> c_InterfaceIndexes;
-   std::vector<uint32_t> c_NodeIndexesWithInterfaceDuplicates;
-   std::vector<uint32_t> c_ReducedInterfaceIndexes;
+   QList<uint32_t> c_NodeIndexes;
+   QList<uint32_t> c_InterfaceIndexes;
+   QList<uint32_t> c_NodeIndexesWithInterfaceDuplicates;
+   QList<uint32_t> c_ReducedInterfaceIndexes;
 
    disconnect(this->mpc_Ui->pc_NodeSelectorListWidget, &C_SdBueNodeSelectorCheckBoxListWidget::SigNodeToggled,
               this, &C_SdBueNodeSelectorWidget::m_NodeToggled);
@@ -170,7 +170,7 @@ void C_SdBueNodeSelectorWidget::SetProtocol(const C_OscCanProtocol::E_Type oe_Pr
          if (pc_Node != NULL)
          {
             // get the protocols
-            std::vector<const C_OscCanProtocol *> c_Protocols = pc_Node->GetCanProtocolsConst(oe_Protocol);
+            QList<const C_OscCanProtocol *> c_Protocols = pc_Node->GetCanProtocolsConst(oe_Protocol);
 
             for (uint32_t u32_Counter = 0U; u32_Counter < c_Protocols.size(); ++u32_Counter)
             {

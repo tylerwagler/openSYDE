@@ -44,7 +44,7 @@ C_UsNodeDatapoolList::C_UsNodeDatapoolList(void)
    Current column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> & C_UsNodeDatapoolList::GetColumnWidths(void) const
+const QList<int32_t> & C_UsNodeDatapoolList::GetColumnWidths(void) const
 {
    return this->mc_ColumnWidth;
 }
@@ -55,7 +55,7 @@ const std::vector<int32_t> & C_UsNodeDatapoolList::GetColumnWidths(void) const
    \param[in] orc_ColumnWidths Last known column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsNodeDatapoolList::SetColumnSizes(const std::vector<int32_t> & orc_ColumnWidths)
+void C_UsNodeDatapoolList::SetColumnSizes(const QList<int32_t> & orc_ColumnWidths)
 {
    this->mc_ColumnWidth = orc_ColumnWidths;
 }

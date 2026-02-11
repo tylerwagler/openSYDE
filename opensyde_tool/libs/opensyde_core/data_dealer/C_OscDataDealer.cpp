@@ -166,7 +166,7 @@ int32_t C_OscDataDealer::DataPoolRead(const uint8_t ou8_DataPoolIndex,
     if (pc_Element == NULL) {
       s32_Return = C_RANGE;
     } else {
-      std::vector<uint8_t> c_Data;
+      QByteArray c_Data;
       // Set the expected size. It will be checked in the read functions.
       c_Data.resize(pc_Element->GetSizeByte());
       // use communication function matching the element type
@@ -246,7 +246,7 @@ int32_t C_OscDataDealer::DataPoolWrite(const uint8_t ou8_DataPoolIndex,
     if (pc_Element == NULL) {
       s32_Return = C_RANGE;
     } else {
-      std::vector<uint8_t> c_Data;
+      QByteArray c_Data;
 
       // is the value within the defines min/max ranges ?
       s32_Return = pc_Element->CheckValueRange();
@@ -325,7 +325,7 @@ int32_t C_OscDataDealer::NvmRead(const uint8_t ou8_DataPoolIndex,
     if (pc_Element == NULL) {
       s32_Return = C_RANGE;
     } else {
-      std::vector<uint8_t> c_Data;
+      QByteArray c_Data;
 
       c_Data.resize(pc_Element->GetSizeByte());
       // request data from server
@@ -401,7 +401,7 @@ int32_t C_OscDataDealer::NvmWrite(const uint8_t ou8_DataPoolIndex,
     if (pc_Element == NULL) {
       s32_Return = C_RANGE;
     } else {
-      std::vector<uint8_t> c_Data;
+      QByteArray c_Data;
 
       // is the value within the defined min/max ranges ?
       s32_Return = pc_Element->CheckNvmValueRange();
@@ -533,7 +533,7 @@ void C_OscDataDealer::m_Init(void) {
 void C_OscDataDealer::mh_ReadDataPoolDataEventReceived(
     void *const opv_Instance, const uint8_t ou8_DataPoolIndex,
     const uint16_t ou16_ListIndex, const uint16_t ou16_ElementIndex,
-    const std::vector<uint8_t> &orc_Value) {
+    const QByteArray &orc_Value) {
   // lint -e{9079}  This class is the only one which registers itself at the
   // caller of this function. It must match.
   C_OscDataDealer *const pc_Dealer =
@@ -565,7 +565,7 @@ void C_OscDataDealer::mh_ReadDataPoolDataEventReceived(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDataDealer::m_ReadDataPoolDataEventReceived(
     const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-    const uint16_t ou16_ElementIndex, const std::vector<uint8_t> &orc_Value) {
+    const uint16_t ou16_ElementIndex, const QByteArray &orc_Value) {
   // check for weird misconfiguration:
   if ((this->mpc_Node == NULL) || (this->mpc_DiagProtocol == NULL)) {
     osc_write_log_warning("Asynchronous communication",
@@ -600,7 +600,7 @@ void C_OscDataDealer::m_ReadDataPoolDataEventReceived(
                               ou16_ElementIndex));
       } else {
         // size OK; cut off potential cruft
-        std::vector<uint8_t> c_Data = orc_Value;
+        QByteArray c_Data = orc_Value;
         c_Data.resize(pc_Element->GetSizeByte());
 
         // convert to native endianness depending on the type ...

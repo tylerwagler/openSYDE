@@ -9,6 +9,7 @@
 #define C_CIEDBCIMPORTNODEASSIGNMENTWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include "C_OgePopUpDialog.hpp"
 #include "C_CieConverter.hpp"
@@ -40,7 +41,7 @@ public:
    ~C_CieDbcImportNodeAssignmentWidget(void) override;
 
    void InitStaticNames(void) const;
-   std::vector<C_CieDbcOsyNodeAssignment> GetNodeAssignments(void) const;
+   QList<C_CieDbcOsyNodeAssignment> GetNodeAssignments(void) const;
 
 protected:
    void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
@@ -49,10 +50,10 @@ private:
    Ui::C_CieDbcImportNodeAssignmentWidget * mpc_Ui;
    //lint -e{1725} Only problematic if copy or assignment is allowed
    stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
-   std::vector<stw::opensyde_gui::C_CieDbcImportNodeAssignmentItemWidget *> mc_Entries;
-   std::vector<uint32_t> mc_NodeIndexes;
-   std::vector<uint32_t> mc_InterfaceIndexes;
-   std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> mc_UnmappedMessages;
+   QList<stw::opensyde_gui::C_CieDbcImportNodeAssignmentItemWidget *> mc_Entries;
+   QList<uint32_t> mc_NodeIndexes;
+   QList<uint32_t> mc_InterfaceIndexes;
+   QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> mc_UnmappedMessages;
 
    static const uint8_t mhu8_INDEX_TRANSMIT;
    static const uint8_t mhu8_INDEX_RECEIVE;

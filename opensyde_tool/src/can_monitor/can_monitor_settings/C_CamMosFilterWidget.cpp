@@ -18,6 +18,7 @@
 
 #include <QListWidgetItem>
 #include <QMimeData>
+#include <vector>
 
 #include "C_CamMosFilterWidget.hpp"
 #include "ui_C_CamMosFilterWidget.h"
@@ -160,7 +161,7 @@ void C_CamMosFilterWidget::Clear(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosFilterWidget::SetAddFilter(const QList<int32_t> oc_CanMsgId,
                                         const QList<uint8_t> oc_CanMsgXtd) {
-  const std::vector<C_CamProFilterData> c_Filters =
+  const QList<C_CamProFilterData> c_Filters =
       C_CamProHandler::h_GetInstance()->GetFilters();
   const int32_t s32_MessageFilterItemDroppedOnIndex =
       (ms32_LastMessageFilterItemDropPosition - 20) / 26;
@@ -181,7 +182,7 @@ void C_CamMosFilterWidget::SetAddFilter(const QList<int32_t> oc_CanMsgId,
         static_cast<QString>(
             "Do you want to add the filter item to an existing filter \"%1\" ?")
             .arg(c_Filters
-                     .at(static_cast<std::vector<int32_t>::size_type>(
+                     .at(static_cast<QList<int32_t>::size_type>(
                              s32_MessageFilterItemDroppedOnIndex) -
                          1)
                      .c_Name));
@@ -372,7 +373,7 @@ void C_CamMosFilterWidget::m_LoadConfig(void) {
   this->mpc_Ui->pc_GroupBoxNoElements->setVisible(true);
 
   // initialize filter widgets
-  std::vector<C_CamProFilterData> c_Filters =
+  QList<C_CamProFilterData> c_Filters =
       C_CamProHandler::h_GetInstance()->GetFilters();
 
   for (uint32_t u32_ItFilter = 0UL; u32_ItFilter < c_Filters.size();
@@ -427,7 +428,7 @@ void C_CamMosFilterWidget::m_EnableFilters(const bool &orq_Enabled) {
   // inform main window about changes of active filters
   if (orq_Enabled == true) {
     QList<C_CamProFilterItemData> c_ActiveFilterItems;
-    const std::vector<C_CamProFilterData> c_Filters =
+    const QList<C_CamProFilterData> c_Filters =
         C_CamProHandler::h_GetInstance()->GetFilters();
 
     // check all filter (packages)
@@ -463,7 +464,7 @@ void C_CamMosFilterWidget::m_EnableFilters(const bool &orq_Enabled) {
 void C_CamMosFilterWidget::m_OnAddClicked() {
   // Create unique name
   std::map<QString, bool> c_Names;
-  std::vector<C_CamProFilterData> c_Filters =
+  QList<C_CamProFilterData> c_Filters =
       C_CamProHandler::h_GetInstance()->GetFilters();
   const QString c_ProposedName = "NewFilter";
   C_CamProFilterData c_FilterData;
@@ -548,7 +549,7 @@ void C_CamMosFilterWidget::m_OnAddFilterFromContextmenu(
     const QList<int32_t> oc_CanMsgId, const QList<uint8_t> oc_CanMsgXtd) {
   // Create unique name
   std::map<QString, bool> c_Names;
-  std::vector<C_CamProFilterData> c_Filters =
+  QList<C_CamProFilterData> c_Filters =
       C_CamProHandler::h_GetInstance()->GetFilters();
   const QString c_ProposedName = "NewFilter";
   C_CamProFilterData c_FilterData;
@@ -677,7 +678,7 @@ void C_CamMosFilterWidget::m_RemoveFilter(
       int32_t s32_IndexToRemove = 0;
 
       // remove widget from list
-      for (std::vector<C_CamMosFilterItemWidget *>::iterator c_It =
+      for (QList<C_CamMosFilterItemWidget *>::iterator c_It =
                mc_Entries.begin();
            c_It != mc_Entries.end(); ++c_It) {
         if (*c_It == opc_ItemWidget) {
@@ -817,7 +818,7 @@ void C_CamMosFilterWidget::m_UpdateFilterConfiguration(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CamMosFilterWidget::m_CountActiveFilterPackages() const {
   int32_t s32_Return = 0;
-  const std::vector<C_CamProFilterData> c_Filters =
+  const QList<C_CamProFilterData> c_Filters =
       C_CamProHandler::h_GetInstance()->GetFilters();
 
   for (uint32_t u32_Pos = 0; u32_Pos < c_Filters.size(); u32_Pos++) {
@@ -844,7 +845,7 @@ int32_t C_CamMosFilterWidget::m_GetIndexFromWidget(
 
   if (opc_ItemWidget != NULL) {
     // get index from opc_Item
-    for (std::vector<C_CamMosFilterItemWidget *>::iterator c_It =
+    for (QList<C_CamMosFilterItemWidget *>::iterator c_It =
              mc_Entries.begin();
          c_It != mc_Entries.end(); ++c_It) {
       if (*c_It == opc_ItemWidget) {

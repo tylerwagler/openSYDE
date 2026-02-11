@@ -106,42 +106,42 @@ void C_FlaUpHexFileInfo::SetHexFileInfo(const QString &orc_File) {
            ++s32_ItAppl) {
         const stw::diag_lib::C_XFLECUInformation &rc_CurInfo =
             c_InfoBlocks[s32_ItAppl];
-        c_BlockInfo.at(s32_ItAppl).c_BlockType =
+        c_BlockInfo[s32_ItAppl].c_BlockType =
             rc_CurInfo.GetInfoLevelAsString();
-        c_BlockInfo.at(s32_ItAppl).c_Version =
+        c_BlockInfo[s32_ItAppl].c_Version =
             QString::number(rc_CurInfo.u8_StructVersion);
         if (rc_CurInfo.ContainsDeviceID() == true) {
-          c_BlockInfo.at(s32_ItAppl).c_DeviceId = rc_CurInfo.GetDeviceID();
+          c_BlockInfo[s32_ItAppl].c_DeviceId = rc_CurInfo.GetDeviceID();
         } else {
-          c_BlockInfo.at(s32_ItAppl).c_DeviceId = "Unknown";
+          c_BlockInfo[s32_ItAppl].c_DeviceId = "Unknown";
         }
         if (rc_CurInfo.ContainsDateAndTime() == true) {
-          c_BlockInfo.at(s32_ItAppl).c_Date = rc_CurInfo.GetDate();
+          c_BlockInfo[s32_ItAppl].c_Date = rc_CurInfo.GetDate();
         } else {
-          c_BlockInfo.at(s32_ItAppl).c_Date = "Unknown";
+          c_BlockInfo[s32_ItAppl].c_Date = "Unknown";
         }
         if (rc_CurInfo.ContainsDateAndTime() == true) {
-          c_BlockInfo.at(s32_ItAppl).c_Time = rc_CurInfo.GetTime();
+          c_BlockInfo[s32_ItAppl].c_Time = rc_CurInfo.GetTime();
         } else {
-          c_BlockInfo.at(s32_ItAppl).c_Time = "Unknown";
+          c_BlockInfo[s32_ItAppl].c_Time = "Unknown";
         }
         if (rc_CurInfo.ContainsProjectName() == true) {
-          c_BlockInfo.at(s32_ItAppl).c_ProjectName =
+          c_BlockInfo[s32_ItAppl].c_ProjectName =
               rc_CurInfo.GetProjectName();
         } else {
-          c_BlockInfo.at(s32_ItAppl).c_ProjectName = "Unknown";
+          c_BlockInfo[s32_ItAppl].c_ProjectName = "Unknown";
         }
         if (rc_CurInfo.ContainsProjectVersion() == true) {
-          c_BlockInfo.at(s32_ItAppl).c_ProjectVersion =
+          c_BlockInfo[s32_ItAppl].c_ProjectVersion =
               rc_CurInfo.GetProjectVersion();
         } else {
-          c_BlockInfo.at(s32_ItAppl).c_ProjectVersion = "Unknown";
+          c_BlockInfo[s32_ItAppl].c_ProjectVersion = "Unknown";
         }
         if (rc_CurInfo.ContainsAdditionalInfo() == true) {
-          c_BlockInfo.at(s32_ItAppl).c_AdditionalInfo =
+          c_BlockInfo[s32_ItAppl].c_AdditionalInfo =
               rc_CurInfo.GetAdditionalInfo();
         } else {
-          c_BlockInfo.at(s32_ItAppl).c_AdditionalInfo = "Unknown";
+          c_BlockInfo[s32_ItAppl].c_AdditionalInfo = "Unknown";
         }
       }
     }

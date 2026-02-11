@@ -61,7 +61,7 @@ void C_OscHalcConfigUtil::h_GetConfigStandalone(const C_OscHalcConfig & orc_Conf
       if (pc_Domain != NULL)
       {
          uint32_t u32_Channels;
-         std::vector<C_OscHalcConfigStandaloneChannel> c_ChannelIds;
+         QList<C_OscHalcConfigStandaloneChannel> c_ChannelIds;
 
          c_ChannelIds.resize(pc_Domain->c_Channels.size());
 
@@ -121,7 +121,7 @@ int32_t C_OscHalcConfigUtil::h_GetConfigStandaloneChannel(const C_OscHalcConfig 
                (ou32_ChannelIndex < pc_Domain->c_ChannelConfigs.size()))) &&
              (pc_Domain->c_Channels.size() == pc_Domain->c_ChannelConfigs.size()))
          {
-            std::vector<C_OscHalcConfigStandaloneChannel> c_ChannelIds;
+            QList<C_OscHalcConfigStandaloneChannel> c_ChannelIds;
 
             s32_Return = C_NO_ERR;
 

@@ -37,18 +37,18 @@ public:
 
    void SetUseInternalExpandedItems(const bool oq_Use);
    void InitSd(const uint32_t ou32_NodeIndex, const int32_t os32_SkipApplicationIndex,
-               const std::vector<uint32_t> & orc_UsedDataPoolIndicesIndex);
+               const QList<uint32_t> & orc_UsedDataPoolIndicesIndex);
    void InitSv(const uint32_t ou32_ViewIndex, const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
                const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues, const bool oq_ShowNvmLists,
-               const std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements, const bool oq_UseInSysViews = true, const uint32_t ou32_SdDataLoggerUseCaseNodeIndex = 0UL);
+               const QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements, const bool oq_UseInSysViews = true, const uint32_t ou32_SdDataLoggerUseCaseNodeIndex = 0UL);
    void Search(const QString & orc_Text);
    void SetViewIndex(const uint32_t ou32_ViewIndex);
    void SwitchMode(const stw::opensyde_gui_logic::C_TblTreDataElementModel::E_Mode & ore_Mode,
                    const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
                    const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-                   const std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements);
+                   const QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements);
 
-   std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> GetSelectedDataElements(void) const;
+   QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> GetSelectedDataElements(void) const;
    bool IsEmpty(void) const;
    void SaveExpandedIndices(void);
    void CleanUpLastView(void);
@@ -72,9 +72,9 @@ private:
    uint32_t mu32_ViewIndex;
    stw::opensyde_gui_logic::C_TblTreDataElementModel::E_Mode me_Mode;
    static QMap<stw::opensyde_gui_logic::C_TblTreDataElementModel::E_Mode,
-               std::vector<std::vector<uint32_t> > > mhc_LastKnownExpandedIndices;
+               QList<QList<uint32_t> > > mhc_LastKnownExpandedIndices;
 
-   void m_AppendExpandedIndices(std::vector<std::vector<uint32_t> > & orc_FoundItems, const QModelIndex & orc_CurParent,
+   void m_AppendExpandedIndices(QList<QList<uint32_t> > & orc_FoundItems, const QModelIndex & orc_CurParent,
                                 const int32_t os32_Column);
    void m_RestoreExpandedIndices(void);
    QModelIndex m_ManualMapFromSource(const QModelIndex & orc_Index) const;
@@ -82,7 +82,7 @@ private:
    void m_ExpandAllChildren(const QModelIndex & orc_Index, const uint32_t ou32_LayerCounter,
                             const uint32_t ou32_MaxLayer);
    bool m_CheckIndicesMatchesCurrentSelection(
-      const std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> & orc_Indices) const;
+      const QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> & orc_Indices) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

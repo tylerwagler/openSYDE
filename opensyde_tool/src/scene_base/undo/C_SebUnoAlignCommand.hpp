@@ -29,7 +29,7 @@ class C_SebUnoAlignCommand :
    public C_SebUnoBaseCommand
 {
 public:
-   C_SebUnoAlignCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SebUnoAlignCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                         const uint64_t & oru64_GuidelineItemId, const E_Alignment & ore_Alignment,
                         QUndoCommand * const opc_Parent = NULL);
    ~C_SebUnoAlignCommand(void) override;

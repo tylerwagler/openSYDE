@@ -15,6 +15,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -44,7 +45,7 @@ class C_SyvDaItPaImageRecordWidget :
 public:
    explicit C_SyvDaItPaImageRecordWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                          stw::opensyde_gui_logic::C_SyvComDriverDiag & orc_ComDriver,
-                                         const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListItemIds,
+                                         const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ListItemIds,
                                          const QString & orc_ViewName);
    ~C_SyvDaItPaImageRecordWidget() override;
 
@@ -80,10 +81,10 @@ private:
    int32_t m_CreateParameterSetFile(const QString & orc_Comment);
    int32_t m_ReadBackElementsOfNodeFromFile(void);
    QString m_GetTextForStep(
-      const std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> > & orc_DataPoolListsForEachNode,
+      const QList<QList<stw::opensyde_core::C_OscNodeDataPoolListId> > & orc_DataPoolListsForEachNode,
       const bool oq_IsConfirm) const;
    void m_PrepareConfirmStep(
-      const std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> > & orc_DataPoolListsForEachNode);
+      const QList<QList<stw::opensyde_core::C_OscNodeDataPoolListId> > & orc_DataPoolListsForEachNode);
    void m_WriteCrcOfNodeToFile(void);
 
    void m_OkClicked(void);
@@ -103,9 +104,9 @@ private:
    stw::opensyde_gui_elements::C_OgePopUpDialog * mpc_ParentDialog;
    //lint -e{1725} Only problematic if copy or assignment is allowed
    stw::opensyde_gui_logic::C_SyvComDriverDiag & mrc_ComDriver;
-   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_ListItemIds;
-   std::vector<uint32_t> mc_AllNodeIndexes;
-   std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> > mc_RelevantListsForEachNode;
+   const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_ListItemIds;
+   QList<uint32_t> mc_AllNodeIndexes;
+   QList<QList<stw::opensyde_core::C_OscNodeDataPoolListId> > mc_RelevantListsForEachNode;
    QTimer mc_Timer;
    E_Step me_Step;
    uint32_t mu32_CurrentNode;

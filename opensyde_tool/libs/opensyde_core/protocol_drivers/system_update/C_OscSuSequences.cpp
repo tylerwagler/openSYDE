@@ -24,6 +24,7 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 #include <QDateTime>
+#include <QList>
 #include <set>
 
 
@@ -337,16 +338,16 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeHex(
     const QStringList &orc_OtherAcceptedDeviceNames,
     const uint32_t ou32_RequestDownloadTimeout,
     const uint32_t ou32_TransferDataTimeout, bool &orq_SetProgrammingMode,
-    std::vector<C_OscSuSequencesNodeHexFileStates> &orc_StateHexFiles) {
+    QList<C_OscSuSequencesNodeHexFileStates> &orc_StateHexFiles) {
   int32_t s32_Return = C_NO_ERR;
   uint32_t u32_Return;
 
-  std::vector<uint32_t> c_SignatureAddresses(
+  QList<uint32_t> c_SignatureAddresses(
       orc_FilesToFlash.size()); ///< addresses of signatures within hex files
 
   // C_OscHexFile cannot be copied; so we cannot put it into a resizable vector
   //-> create instances manually
-  std::vector<C_OscHexFile *> c_Files(orc_FilesToFlash.size());
+  QList<C_OscHexFile *> c_Files(orc_FilesToFlash.size());
   for (uint32_t u32_File = 0U; u32_File < c_Files.size(); u32_File++) {
     c_Files[u32_File] = new C_OscHexFile();
   }
@@ -710,7 +711,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeHex(
       // perform the actual transfer
       uint8_t u8_BlockSequenceCounter = 1U;
       uint32_t u32_RemainingBytes = u32_AreaSize;
-      std::vector<uint8_t> c_Data;
+      QByteArray c_Data;
       const uint32_t u32_AdaptedTransferDataTimeout =
           m_GetAdaptedTransferDataTimeout(ou32_TransferDataTimeout,
                                           u32_MaxBlockLength,
@@ -745,10 +746,8 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeHex(
             c_Data.resize(u32_RemainingBytes);
           }
 
-          (void)memcpy(&c_Data[0],
-                       &orc_HexDataDump.at_Blocks[s32_Area]
-                            .au8_Data[static_cast<int32_t>(u32_AreaSize -
-                                                           u32_RemainingBytes)],
+          (void)memcpy(reinterpret_cast<uint8_t*>(c_Data.data()),
+                       reinterpret_cast<const uint8_t*>(orc_HexDataDump.at_Blocks[s32_Area].au8_Data.constData() + static_cast<int32_t>(u32_AreaSize - u32_RemainingBytes)),
                        c_Data.size());
 
           s32_Return = this->mpc_ComDriver->SendOsyTransferData(
@@ -889,7 +888,7 @@ int32_t C_OscSuSequences::m_FlashNodeOpenSydeFile(
     const uint32_t ou32_TransferDataTimeout,
     const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
     bool &orq_SetProgrammingMode,
-    std::vector<C_OscSuSequencesNodeOtherFileStates> &orc_StateOtherFiles) {
+    QList<C_OscSuSequencesNodeOtherFileStates> &orc_StateOtherFiles) {
   int32_t s32_Return = C_NO_ERR;
 
   // start the actual transfers
@@ -1063,7 +1062,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
     // perform the actual transfer
     uint8_t u8_BlockSequenceCounter = 1U;
     uint32_t u32_RemainingBytes = u32_TotalNumberOfBytes;
-    std::vector<uint8_t> c_Data;
+    QByteArray c_Data;
     uint32_t u32_TotalNumberOfBytesFlashed = 0U;
     const uint32_t u32_AdaptedTransferDataTimeout =
         m_GetAdaptedTransferDataTimeout(ou32_TransferDataTimeout,
@@ -1108,7 +1107,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
 
         // lint -e{668}  //file cannot be NULL if we get here
         s32_FileApiReturn = static_cast<int32_t>(std::fread(
-            &c_Data[0], 1U, static_cast<size_t>(c_Data.size()), pc_File));
+            reinterpret_cast<uint8_t*>(c_Data.data()), 1U, static_cast<size_t>(c_Data.size()), pc_File));
         if (s32_FileApiReturn != static_cast<int32_t>(c_Data.size())) {
           // it's not ideal that we have to abort in the middle of the procedure
           // an alternative would be to read in the file before starting
@@ -1124,7 +1123,7 @@ int32_t C_OscSuSequences::m_FlashOneFileOpenSydeFile(
               mc_CurrentNode, u8_BlockSequenceCounter, c_Data, &u8_NrCode);
           if (s32_Return == C_NO_ERR) {
             // update continuous CRC:
-            C_SclChecksums::CalcCRC32(&c_Data[0],
+            C_SclChecksums::CalcCRC32(reinterpret_cast<uint8_t*>(c_Data.data()),
                                       static_cast<uint32_t>(c_Data.size()),
                                       u32_TransferCrc);
 
@@ -1304,7 +1303,7 @@ int32_t C_OscSuSequences::m_WriteNvmOpenSyde(
     const QStringList &orc_FilesToWrite,
     const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
     const bool oq_SetProgrammingMode,
-    std::vector<C_OscSuSequencesNodePsiFileStates> &orc_StatePsiFiles) {
+    QList<C_OscSuSequencesNodePsiFileStates> &orc_StatePsiFiles) {
   int32_t s32_Return = C_NO_ERR;
 
   // Get pointer to OSY protocol driver provided by comm driver:
@@ -1526,10 +1525,10 @@ int32_t C_OscSuSequences::m_WritePemOpenSydeFile(
           c_PemFile.LoadFromFile(orc_FileToWrite.toUtf8().constData(), c_ErrorMessage);
 
       if (s32_Return == C_NO_ERR) {
-        const std::vector<uint8_t> c_PubKeyDecoded =
+        const QByteArray c_PubKeyDecoded =
             c_PemFile.GetKeyInfo().GetX509CertificateData();
-        std::vector<uint8_t> c_PubKeyModulus;
-        std::vector<uint8_t> c_PubKeyExponent;
+        QByteArray c_PubKeyModulus;
+        QByteArray c_PubKeyExponent;
 
         orc_StatePemFile.e_FileLoaded = eSUSEQ_STATE_NO_ERR;
 
@@ -1561,7 +1560,7 @@ int32_t C_OscSuSequences::m_WritePemOpenSydeFile(
         }
 
         if (s32_Return == C_NO_ERR) {
-          const std::vector<uint8_t> c_KeySerialNumber =
+          const QByteArray c_KeySerialNumber =
               c_PemFile.GetKeyInfo().GetCertificateSerialNumber();
           uint8_t u8_NrCode;
 
@@ -1871,7 +1870,7 @@ int32_t C_OscSuSequences::m_WriteFingerPrintOsy(void) {
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::m_FlashNodeXfl(
     const QStringList &orc_FilesToFlash,
-    std::vector<C_OscSuSequencesNodeStwFlHexFileStates> &orc_StateHexFiles) {
+    QList<C_OscSuSequencesNodeStwFlHexFileStates> &orc_StateHexFiles) {
   int32_t s32_Return = C_NO_ERR;
 
   (void)m_ReportProgress(eUPDATE_SYSTEM_XFL_NODE_START, C_NO_ERR, 0U,
@@ -2239,14 +2238,14 @@ C_OscSuSequences::~C_OscSuSequences(void) {}
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::h_CreateTemporaryFolder(
-    const std::vector<C_OscNode> &orc_Nodes,
-    const std::vector<uint8_t> &orc_ActiveNodes,
+    const QList<C_OscNode> &orc_Nodes,
+    const QByteArray &orc_ActiveNodes,
     const QString &orc_TargetPath,
-    std::vector<C_DoFlash> &orc_ApplicationsToWrite,
+    QList<C_DoFlash> &orc_ApplicationsToWrite,
     QString *const opc_ErrorPath) {
   int32_t s32_Return = C_NO_ERR;
 
-  std::vector<C_DoFlash> c_NodesToFlashNewPaths = orc_ApplicationsToWrite;
+  QList<C_DoFlash> c_NodesToFlashNewPaths = orc_ApplicationsToWrite;
   QStringList c_NodeTargetPaths;
 
   const QChar cn_LastCharacter = orc_TargetPath.isEmpty() ? QChar() : orc_TargetPath[orc_TargetPath.length() - 1];
@@ -2551,9 +2550,9 @@ int32_t C_OscSuSequences::h_CreateTemporaryFolder(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSuSequences::h_CheckForChangedApplications(
-    const std::vector<C_ApplicationProperties> &orc_ClientSideApplications,
-    const std::vector<C_ApplicationProperties> &orc_ServerSideApplications,
-    std::vector<uint8_t> &orc_ApplicationsPresentOnServer) {
+    const QList<C_ApplicationProperties> &orc_ClientSideApplications,
+    const QList<C_ApplicationProperties> &orc_ServerSideApplications,
+    QByteArray &orc_ApplicationsPresentOnServer) {
   orc_ApplicationsPresentOnServer.resize(orc_ClientSideApplications.size());
   for (uint32_t u32_ClientApplIndex = 0U;
        u32_ClientApplIndex < orc_ClientSideApplications.size();
@@ -3552,8 +3551,8 @@ C_OscSuSequences::ReadDeviceInformation(const bool oq_FailOnFirstError) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::UpdateSystem(
-    const std::vector<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
-    const std::vector<uint32_t> &orc_NodesOrder) {
+    const QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+    const QList<uint32_t> &orc_NodesOrder) {
   int32_t s32_Return = C_NO_ERR;
 
   this->mu32_CurrentNode = 0U;
@@ -4165,7 +4164,7 @@ int32_t C_OscSuSequences::ResetSystem(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::GetConnectStates(
-    std::vector<C_OscSuSequencesNodeConnectStates> &orc_ConnectStatesNodes)
+    QList<C_OscSuSequencesNodeConnectStates> &orc_ConnectStatesNodes)
     const {
   orc_ConnectStatesNodes = this->mc_ConnectStatesNodes;
   return C_NO_ERR;
@@ -4185,7 +4184,7 @@ int32_t C_OscSuSequences::GetConnectStates(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSuSequences::GetUpdateStates(
-    std::vector<C_OscSuSequencesNodeUpdateStates> &orc_UpdateStatesNodes)
+    QList<C_OscSuSequencesNodeUpdateStates> &orc_UpdateStatesNodes)
     const {
   orc_UpdateStatesNodes = this->mc_UpdateStatesNodes;
   return C_NO_ERR;

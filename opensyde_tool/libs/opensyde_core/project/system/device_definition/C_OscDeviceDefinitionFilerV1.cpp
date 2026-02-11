@@ -308,7 +308,7 @@ int32_t C_OscDeviceDefinitionFilerV1::h_Load(C_OscDeviceDefinition & orc_DeviceD
          }
          else
          {
-            const std::vector<C_OscXmlAttribute> c_Attributes = orc_Parser.GetAttributes();
+            const QList<C_OscXmlAttribute> c_Attributes = orc_Parser.GetAttributes();
             for (uint16_t u16_Index = 0U; u16_Index < c_Attributes.size(); u16_Index++)
             {
                if (c_Attributes[u16_Index].c_Name == "support")

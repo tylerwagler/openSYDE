@@ -179,21 +179,21 @@ void C_OscProtocolSerialNumber::SetPosSerialNumber(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(
-    const std::vector<uint8_t> &orc_SerialNumber,
+    const QByteArray &orc_SerialNumber,
     const uint8_t ou8_SerialNumberManufacturerFormat) {
   int32_t s32_Return = C_NO_ERR;
 
   if ((ou8_SerialNumberManufacturerFormat == 0U) &&
       (orc_SerialNumber.size() == 6)) {
     // Special case. Handle it as POS serial number
-    (void)std::memcpy(&this->au8_SerialNumber[0], &orc_SerialNumber[0], 6U);
+    (void)std::memcpy(&this->au8_SerialNumber[0], orc_SerialNumber.data(), 6U);
     this->q_FsnSerialNumber = false;
   } else if ((ou8_SerialNumberManufacturerFormat > 0U) &&
              (orc_SerialNumber.size() > 0) && (orc_SerialNumber.size() <= 29)) {
     // extract text:
     if (orc_SerialNumber.size() > 0) {
       this->c_SerialNumberExt = QString::fromUtf8(
-          reinterpret_cast<const char *>(&orc_SerialNumber[0]),
+          reinterpret_cast<const char *>(orc_SerialNumber.data()),
           static_cast<int>(orc_SerialNumber.size()));
     } else {
       this->c_SerialNumberExt.clear();
@@ -274,21 +274,21 @@ int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(
    Serial number in uint8 vector
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint8_t>
+QByteArray
 C_OscProtocolSerialNumber::GetSerialNumberAsRawData(void) const {
-  std::vector<uint8_t> c_SerialNumber;
+  QByteArray c_SerialNumber;
 
   if (this->q_FsnSerialNumber == true) {
     c_SerialNumber.resize(this->c_SerialNumberExt.length());
     // Use the FSN string serial number
-    memcpy(&c_SerialNumber[0], this->c_SerialNumberExt.toUtf8().constData(),
+    memcpy(reinterpret_cast<uint8_t*>(c_SerialNumber.data()), this->c_SerialNumberExt.toUtf8().constData(),
            this->c_SerialNumberExt.length());
     Q_ASSERT(this->c_SerialNumberExt.length() ==
              this->u8_SerialNumberByteLength);
   } else {
     c_SerialNumber.resize(6);
     // Use the POS serial number
-    memcpy(&c_SerialNumber[0], &this->au8_SerialNumber[0], 6);
+    memcpy(reinterpret_cast<uint8_t*>(c_SerialNumber.data()), &this->au8_SerialNumber[0], 6);
     Q_ASSERT(this->u8_SerialNumberByteLength == 6U);
   }
 

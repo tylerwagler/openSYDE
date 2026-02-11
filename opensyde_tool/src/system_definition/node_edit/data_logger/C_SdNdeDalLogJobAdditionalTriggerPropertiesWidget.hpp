@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QList>
 
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
@@ -46,7 +47,7 @@ public:
 private:
    uint32_t mu32_NodeIndex;
    uint32_t mu32_DataLoggerJobIndex;
-   std::vector<std::pair<QString, QString> > mc_MapCoreOperationToUi;
+   QList<std::pair<QString, QString> > mc_MapCoreOperationToUi;
    QMap<QString, stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> mc_MapDataElement;
    Ui::C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget * mpc_Ui;
 

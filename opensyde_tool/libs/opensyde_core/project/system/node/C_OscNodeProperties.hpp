@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <vector>
+#include <QList>
 #include <QString>
 #include "C_OscNodeStwFlashloaderSettings.hpp"
 #include "C_OscNodeComInterfaceSettings.hpp"
@@ -47,8 +48,8 @@ public:
    void DisconnectComInterface(const C_OscSystemBus::E_Type oe_InterfaceType, const uint8_t ou8_InterfaceNumber);
    void CreateComInterfaces(const C_OscDeviceDefinition & orc_Device, const uint32_t ou32_SubDeviceIndex);
 
-   std::vector<C_OscNodeComInterfaceSettings> GetCanInterfaces() const;
-   std::vector<C_OscNodeComInterfaceSettings> GetEthernetInterfaces() const;
+   QList<C_OscNodeComInterfaceSettings> GetCanInterfaces() const;
+   QList<C_OscNodeComInterfaceSettings> GetEthernetInterfaces() const;
 
    ///possible types of diagnostic protocols
    enum E_DiagnosticServerProtocol
@@ -70,14 +71,14 @@ public:
    QString c_Comment;                               ///< User comment
    E_DiagnosticServerProtocol e_DiagnosticServer;              ///< Selected diagnostic server
    E_FlashLoaderProtocol e_FlashLoader;                        ///< Selected flash loader
-   std::vector<C_OscNodeComInterfaceSettings> c_ComInterfaces; ///< List of all present com interfaces
+   QList<C_OscNodeComInterfaceSettings> c_ComInterfaces; ///< List of all present com interfaces
    C_OscNodeOpenSydeServerSettings c_OpenSydeServerSettings;   ///< Optional openSYDE server settings
    C_OscNodeStwFlashloaderSettings c_StwFlashloaderSettings;   ///< Optional STW flashloader settings
    C_OscNodeCodeExportSettings c_CodeExportSettings;           ///< Optional code export settings
    bool q_XappSupport;                                         ///< Flag to indicate X_App support of node
 
 private:
-   std::vector<C_OscNodeComInterfaceSettings> m_GetInterfaces(const C_OscSystemBus::E_Type oe_Type) const;
+   QList<C_OscNodeComInterfaceSettings> m_GetInterfaces(const C_OscSystemBus::E_Type oe_Type) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

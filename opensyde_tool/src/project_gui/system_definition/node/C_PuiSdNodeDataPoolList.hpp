@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include <vector>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -35,7 +35,7 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const;
 
-   std::vector<C_PuiSdNodeDataPoolListElement> c_DataPoolListElements;
+   QList<C_PuiSdNodeDataPoolListElement> c_DataPoolListElements;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

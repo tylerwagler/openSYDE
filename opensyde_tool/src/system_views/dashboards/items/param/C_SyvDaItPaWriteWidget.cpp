@@ -59,8 +59,8 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaItPaWriteWidget::C_SyvDaItPaWriteWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                C_SyvComDriverDiag & orc_ComDriver,
-                                               const std::vector<C_OscNodeDataPoolListElementId> & orc_ChangedElements,
-                                               const std::vector<C_OscNodeDataPoolListId> & orc_InvalidLists) :
+                                               const QList<C_OscNodeDataPoolListElementId> & orc_ChangedElements,
+                                               const QList<C_OscNodeDataPoolListId> & orc_InvalidLists) :
    QWidget(&orc_Parent),
    mpc_Ui(new Ui::C_SyvDaItPaWriteWidget),
    mpc_ParentDialog(&orc_Parent),
@@ -213,8 +213,8 @@ void C_SyvDaItPaWriteWidget::keyPressEvent(QKeyEvent * const opc_Event)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaWriteWidget::m_StartWriteChangedElements(
-   const std::vector<C_OscNodeDataPoolListElementId> & orc_ChangedElements,
-   const std::vector<C_OscNodeDataPoolListId> & orc_InvalidLists)
+   const QList<C_OscNodeDataPoolListElementId> & orc_ChangedElements,
+   const QList<C_OscNodeDataPoolListId> & orc_InvalidLists)
 {
    // Prepare the writing for each node
    uint32_t u32_Counter;
@@ -299,7 +299,7 @@ void C_SyvDaItPaWriteWidget::m_StartWriteChangedElements(
 
       if (q_NodeFound == false)
       {
-         std::vector<C_OscNodeDataPoolListId> c_NewList;
+         QList<C_OscNodeDataPoolListId> c_NewList;
          c_NewList.push_back(rc_CurListId);
          // Both indexes must be synchronous
          // Add the node index

@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoLeDataPoolListManager.hpp"
@@ -64,7 +65,7 @@ C_SdNdeUnoLeDataPoolListManager::C_SdNdeUnoLeDataPoolListManager(void) :
 void C_SdNdeUnoLeDataPoolListManager::DoMoveElements(const uint32_t & oru32_NodeIndex,
                                                      const uint32_t & oru32_DataPoolIndex,
                                                      const uint32_t & oru32_DataPoolListIndex,
-                                                     C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const std::vector<uint32_t> & orc_StartIndex, const std::vector<uint32_t> & orc_TargetIndex,
+                                                     C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const QList<uint32_t> & orc_StartIndex, const QList<uint32_t> & orc_TargetIndex,
                                                      const bool & orq_AdaptIndices)
 {
    if (((orc_StartIndex.size() > 0) && (orc_TargetIndex.size() > 0)) &&
@@ -96,7 +97,7 @@ void C_SdNdeUnoLeDataPoolListManager::DoDeleteElements(const uint32_t & oru32_No
                                                        const uint32_t & oru32_DataPoolIndex,
                                                        const uint32_t & oru32_DataPoolListIndex,
                                                        C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                                       const std::vector<uint32_t> & orc_Indices)
+                                                       const QList<uint32_t> & orc_Indices)
 {
    if (orc_Indices.size() > 0)
    {
@@ -118,7 +119,7 @@ void C_SdNdeUnoLeDataPoolListManager::DoDeleteElements(const uint32_t & oru32_No
          {
             if (static_cast<uint32_t>(pc_Model->rowCount()) == orc_Indices.size())
             {
-               std::vector<uint32_t> c_Index;
+               QList<uint32_t> c_Index;
                c_Index.push_back(0);
                new C_SdNdeUnoLeDataPoolListElementAddCommand(oru32_NodeIndex, oru32_DataPoolIndex,
                                                              oru32_DataPoolListIndex,
@@ -177,7 +178,7 @@ void C_SdNdeUnoLeDataPoolListManager::DoAddElements(const uint32_t & oru32_NodeI
                                                     const uint32_t & oru32_DataPoolIndex,
                                                     const uint32_t & oru32_DataPoolListIndex,
                                                     C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                                    const std::vector<uint32_t> & orc_Indices)
+                                                    const QList<uint32_t> & orc_Indices)
 {
    if (orc_Indices.size() > 0)
    {
@@ -206,8 +207,8 @@ void C_SdNdeUnoLeDataPoolListManager::DoAddElements(const uint32_t & oru32_NodeI
 void C_SdNdeUnoLeDataPoolListManager::DoAddSpecificElements(const uint32_t & oru32_NodeIndex,
                                                             const uint32_t & oru32_DataPoolIndex,
                                                             const uint32_t & oru32_DataPoolListIndex,
-                                                            C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const std::vector<uint32_t> & orc_Indices, const std::vector<C_OscNodeDataPoolListElement> & orc_OscData,
-                                                            const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiData)
+                                                            C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const QList<uint32_t> & orc_Indices, const QList<C_OscNodeDataPoolListElement> & orc_OscData,
+                                                            const QList<C_PuiSdNodeDataPoolListElement> & orc_UiData)
 {
    if (orc_Indices.size() > 0)
    {

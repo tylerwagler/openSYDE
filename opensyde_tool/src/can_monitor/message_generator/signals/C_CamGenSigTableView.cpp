@@ -139,7 +139,7 @@ void C_CamGenSigTableView::UpdateMessageDlc(const uint32_t ou32_MessageIndex)
    \param[in] orc_ColumnWidths Stored column widths (Restores default values if empty)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamGenSigTableView::SetCurrentColumnWidths(const std::vector<int32_t> & orc_ColumnWidths)
+void C_CamGenSigTableView::SetCurrentColumnWidths(const QList<int32_t> & orc_ColumnWidths)
 {
    int32_t s32_CurColIndex;
 
@@ -192,9 +192,9 @@ void C_CamGenSigTableView::SetCurrentColumnWidths(const std::vector<int32_t> & o
    Current column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_CamGenSigTableView::GetCurrentColumnWidths(void) const
+QList<int32_t> C_CamGenSigTableView::GetCurrentColumnWidths(void) const
 {
-   std::vector<int32_t> c_Retval;
+   QList<int32_t> c_Retval;
    c_Retval.reserve(this->model()->columnCount());
    for (int32_t s32_ItCol = 0; s32_ItCol < this->model()->columnCount(); ++s32_ItCol)
    {

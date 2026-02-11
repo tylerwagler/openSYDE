@@ -12,7 +12,7 @@
 #define C_CAMMETCLIPBOARDHELPER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include "C_UtiClipBoardHelper.hpp"
 
 #include "C_OscComMessageLoggerData.hpp"
@@ -37,7 +37,7 @@ public:
 
    const stw::opensyde_core::C_OscComMessageLoggerData * pc_MessageData;
    bool q_Extended;
-   std::vector<int32_t> c_ExpandedIndices;
+   QList<int32_t> c_ExpandedIndices;
 };
 
 class C_CamMetClipBoardHelper :
@@ -46,7 +46,7 @@ class C_CamMetClipBoardHelper :
 public:
    static void h_StoreCanMessages(const bool oq_DisplayAsHex, const bool oq_DisplayTimestampRelative,
                                   const bool oq_DisplayTimestampAbsoluteTimeOfDay,
-                                  const std::vector<C_CamMetClipBoardHelperCanMessageData> & orc_MessageData);
+                                  const QList<C_CamMetClipBoardHelperCanMessageData> & orc_MessageData);
 
 private:
    static void mh_AddHeader(QString & orc_Text, const int32_t os32_WidthInitial, const int32_t os32_WidthTime,
@@ -58,10 +58,10 @@ private:
                              const int32_t os32_WidthInitial, const int32_t os32_WidthTime, const int32_t os32_WidthId,
                              const int32_t os32_WidthName, const int32_t os32_WidthDir, const int32_t os32_WidthDlc,
                              const int32_t os32_WidthData, const int32_t os32_WidthCounter,
-                             const std::vector<int32_t> & orc_ExpandedIndices);
+                             const QList<int32_t> & orc_ExpandedIndices);
    static void mh_AddCanSignals(const int32_t os32_LineWidthInitial, const bool oq_DisplayAsHex,
-                                const std::vector<stw::opensyde_core::C_OscComMessageLoggerDataSignal> & orc_Signals,
-                                const std::vector<int32_t> & orc_ExpandedSignalIndices, QString & orc_CompleteString);
+                                const QList<stw::opensyde_core::C_OscComMessageLoggerDataSignal> & orc_Signals,
+                                const QList<int32_t> & orc_ExpandedSignalIndices, QString & orc_CompleteString);
    static void mh_AddCanSignal(const int32_t os32_LineWidthInitial, const bool oq_DisplayAsHex,
                                const stw::opensyde_core::C_OscComMessageLoggerDataSignal & orc_Signal,
                                QString & orc_CompleteString, const bool oq_IsMux);

@@ -10,6 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QList>
 #include <set>
 
 #include "stwerrors.hpp"
@@ -49,8 +50,8 @@ using namespace stw::opensyde_core;
    \param[in]     oe_Mode              Decision for update or diagnostic routing
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscRoutingCalculation::C_OscRoutingCalculation(const vector<C_OscNode> & orc_AllNodes,
-                                                 const vector<uint8_t> & orc_ActiveNodes,
+C_OscRoutingCalculation::C_OscRoutingCalculation(const QList<C_OscNode> & orc_AllNodes,
+                                                 const QByteArray & orc_ActiveNodes,
                                                  const uint32_t ou32_StartBusIndex, const uint32_t ou32_TargetNodeIndex,
                                                  const E_Mode oe_Mode) :
    mu32_StartBusIndex(ou32_StartBusIndex),
@@ -82,7 +83,7 @@ C_OscRoutingCalculation::~C_OscRoutingCalculation()
    Vector with all found routes
 */
 //----------------------------------------------------------------------------------------------------------------------
-const vector<C_OscRoutingRoute> * C_OscRoutingCalculation::GetRoutes(void) const
+const QList<C_OscRoutingRoute> * C_OscRoutingCalculation::GetRoutes(void) const
 {
    return &this->mc_RoutesToTarget;
 }
@@ -421,7 +422,7 @@ void C_OscRoutingCalculation::m_SearchRoutePointsOnBus(const uint32_t ou32_BusIn
                                                 pc_ActNode->c_Properties.c_ComInterfaces[u32_InItfCounter]) == true))
             {
                C_OscRoutingRoutePoint c_PointIn;
-               vector<uint32_t> c_VecBusesToSearchOfNode;
+               QList<uint32_t> c_VecBusesToSearchOfNode;
                uint32_t u32_NodeBuses;
 
                // Configure the input and common parameter of the route point
@@ -465,12 +466,12 @@ void C_OscRoutingCalculation::m_SearchRoutePointsOnBus(const uint32_t ou32_BusIn
    \param[in]       ou32_InItfNumber  The interface index of the interface set in orc_InPoint
 */
 //----------------------------------------------------------------------------------------------------------------------
-vector<uint32_t> C_OscRoutingCalculation::m_GetAllRoutePointsOfNodeOnOneInput(
+QList<uint32_t> C_OscRoutingCalculation::m_GetAllRoutePointsOfNodeOnOneInput(
    const C_OscRoutingRoutePoint & orc_InPoint, const uint32_t ou32_InItfNumber)
 {
    const C_OscNode * const pc_ActNode = &this->mrc_AllNodes[orc_InPoint.u32_NodeIndex];
 
-   vector<uint32_t> c_VecBussesToSearch;
+   QList<uint32_t> c_VecBussesToSearch;
    C_OscRoutingRoutePoint c_Point = orc_InPoint;
 
    if (c_Point.u32_NodeIndex == this->mu32_TargetNodeIndex)
@@ -545,7 +546,7 @@ vector<uint32_t> C_OscRoutingCalculation::m_GetAllRoutePointsOfNodeOnOneInput(
 void C_OscRoutingCalculation::m_AddOneRoutePoint(const C_OscRoutingRoutePoint & orc_Point)
 {
    // add the point only if it is not already in the vector
-   std::vector<C_OscRoutingRoutePoint>::const_iterator c_ItPoint;
+   QList<C_OscRoutingRoutePoint>::const_iterator c_ItPoint;
    bool q_Found = false;
 
    for (c_ItPoint = this->mc_AllRoutePoints.begin(); c_ItPoint != this->mc_AllRoutePoints.end(); ++c_ItPoint)
@@ -616,7 +617,7 @@ void C_OscRoutingCalculation::m_CalculateRoutes(const uint32_t ou32_BusIndex)
             {
                if ((*c_ItOldRoute).c_VecRoutePoints.size() > 0)
                {
-                  const vector<C_OscRoutingRoutePoint> * const pc_RoutePoints = &((*c_ItOldRoute).c_VecRoutePoints);
+                  const QList<C_OscRoutingRoutePoint> * const pc_RoutePoints = &((*c_ItOldRoute).c_VecRoutePoints);
                   const uint32_t u32_RoutePointIndex = static_cast<uint32_t>(pc_RoutePoints->size() - 1U);
                   const C_OscRoutingRoutePoint * const pc_LastPointOfRoute = &((*pc_RoutePoints)[u32_RoutePointIndex]);
 
@@ -713,7 +714,7 @@ void C_OscRoutingCalculation::m_AddOneOpenRoute(const C_OscRoutingRoute & orc_Ro
 void C_OscRoutingCalculation::m_AddOneRouteToTarget(const C_OscRoutingRoute & orc_Route)
 {
    // add the route only if it is not already in the vector
-   std::vector<C_OscRoutingRoute>::const_iterator c_ItRoute;
+   QList<C_OscRoutingRoute>::const_iterator c_ItRoute;
    bool q_Found = false;
 
    for (c_ItRoute = this->mc_RoutesToTarget.begin(); c_ItRoute != this->mc_RoutesToTarget.end(); ++c_ItRoute)
@@ -743,7 +744,7 @@ int32_t C_OscRoutingCalculation::m_CheckRoutesForLimitations(void)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   std::vector<C_OscRoutingRoute>::iterator c_ItRoute;
+   QList<C_OscRoutingRoute>::iterator c_ItRoute;
 
    // Check all routes
    for (c_ItRoute = this->mc_RoutesToTarget.begin(); c_ItRoute != this->mc_RoutesToTarget.end();)

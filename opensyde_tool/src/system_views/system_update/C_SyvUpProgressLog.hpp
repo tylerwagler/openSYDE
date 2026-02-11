@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QLabel>
+#include <QList>
 #include <QWidget>
 #include "stwtypes.hpp"
 #include "C_SyvUpProgressLogEntry.hpp"
@@ -47,14 +48,14 @@ public:
    void AddSpacer(void);
    void UpdateStatus(const uint32_t ou32_NodeIndex, const QString & orc_Value, const bool oq_Update) const;
    void AddLogHyperlink(void);
-   std::vector<uint32_t> GetConnectNodeEntryIndices(void);
+   QList<uint32_t> GetConnectNodeEntryIndices(void);
 
 private:
    Ui::C_SyvUpProgressLog * mpc_Ui;
-   std::vector<C_SyvUpProgressLogEntry *> mc_ConnectEntries;
-   std::vector<C_SyvUpProgressLogEntry *> mc_SpacerEntries;
-   std::vector<C_SyvUpProgressLogEntry *> mc_UpdateEntries;
-   std::vector<QLabel *> mc_ProcessEntries;
+   QList<C_SyvUpProgressLogEntry *> mc_ConnectEntries;
+   QList<C_SyvUpProgressLogEntry *> mc_SpacerEntries;
+   QList<C_SyvUpProgressLogEntry *> mc_UpdateEntries;
+   QList<QLabel *> mc_ProcessEntries;
    QLabel * mpc_LogHyperlink;
    stw::opensyde_gui_elements::C_OgeContextMenu * mpc_ContextMenu;
 

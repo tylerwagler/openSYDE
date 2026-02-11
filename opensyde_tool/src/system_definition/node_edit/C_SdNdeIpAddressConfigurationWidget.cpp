@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeIpAddressConfigurationWidget.hpp"
 
@@ -74,24 +75,24 @@ C_SdNdeIpAddressConfigurationWidget::C_SdNdeIpAddressConfigurationWidget(
    connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
            &C_SdNdeIpAddressConfigurationWidget::m_CancelClicked);
 
-   std::vector<QLineEdit *> c_LeIpAddress =  this->mpc_Ui->pc_WidgetIpAddress->GetLineEdits();
-   for (std::vector<QLineEdit *>::iterator c_Iter = c_LeIpAddress.begin(); c_Iter != c_LeIpAddress.end(); ++c_Iter)
+   QList<QLineEdit *> c_LeIpAddress =  this->mpc_Ui->pc_WidgetIpAddress->GetLineEdits();
+   for (QList<QLineEdit *>::iterator c_Iter = c_LeIpAddress.begin(); c_Iter != c_LeIpAddress.end(); ++c_Iter)
    {
       connect(dynamic_cast<C_OgeLeIpAddress *>(*c_Iter),
               &C_OgeLeIpAddress::SignalTabKey,
               this, &C_SdNdeIpAddressConfigurationWidget::SlotTabKey);
    }
 
-   std::vector<QLineEdit *> c_LeSubNetMask =  this->mpc_Ui->pc_WidgetSubNetMask->GetLineEdits();
-   for (std::vector<QLineEdit *>::iterator c_Iter = c_LeSubNetMask.begin(); c_Iter != c_LeSubNetMask.end(); ++c_Iter)
+   QList<QLineEdit *> c_LeSubNetMask =  this->mpc_Ui->pc_WidgetSubNetMask->GetLineEdits();
+   for (QList<QLineEdit *>::iterator c_Iter = c_LeSubNetMask.begin(); c_Iter != c_LeSubNetMask.end(); ++c_Iter)
    {
       connect(dynamic_cast<C_OgeLeIpAddress *>(*c_Iter),
               &C_OgeLeIpAddress::SignalTabKey,
               this, &C_SdNdeIpAddressConfigurationWidget::SlotTabKey);
    }
 
-   std::vector<QLineEdit *> c_LeDefaultGateway =  this->mpc_Ui->pc_WidgetDefaultGateway->GetLineEdits();
-   for (std::vector<QLineEdit *>::iterator c_Iter = c_LeDefaultGateway.begin(); c_Iter != c_LeDefaultGateway.end();
+   QList<QLineEdit *> c_LeDefaultGateway =  this->mpc_Ui->pc_WidgetDefaultGateway->GetLineEdits();
+   for (QList<QLineEdit *>::iterator c_Iter = c_LeDefaultGateway.begin(); c_Iter != c_LeDefaultGateway.end();
         ++c_Iter)
    {
       connect(dynamic_cast<C_OgeLeIpAddress *>(*c_Iter),

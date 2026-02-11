@@ -13,6 +13,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QRegularExpression>
 
 #include "C_SdNdeLeIpAddressWidget.hpp"
@@ -139,9 +140,9 @@ void C_SdNdeLeIpAddressWidget::SlotTextChanged(const QLineEdit * const opc_LineE
    vector of QLineEdit pointers of this widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<QLineEdit *> C_SdNdeLeIpAddressWidget::GetLineEdits(void)
+QList<QLineEdit *> C_SdNdeLeIpAddressWidget::GetLineEdits(void)
 {
-   std::vector<QLineEdit *> c_LineEdits;
+   QList<QLineEdit *> c_LineEdits;
 
    for (uint32_t u32_Pos = 0; u32_Pos != mhs32_IPV4SIZE; ++u32_Pos)
    {
@@ -425,9 +426,9 @@ void C_SdNdeLeIpAddressWidget::SetIpAddress(const uint8_t * const opu8_IpAddress
    \return IP Address as vector
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_SdNdeLeIpAddressWidget::GetIpAddress(void) const
+QList<int32_t> C_SdNdeLeIpAddressWidget::GetIpAddress(void) const
 {
-   std::vector<int32_t> c_Return;
+   QList<int32_t> c_Return;
 
    for (uint32_t u32_Pos = 0; u32_Pos < mhs32_IPV4SIZE; ++u32_Pos)
    {

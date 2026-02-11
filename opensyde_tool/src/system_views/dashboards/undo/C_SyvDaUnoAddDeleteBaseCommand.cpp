@@ -59,7 +59,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaUnoAddDeleteBaseCommand::C_SyvDaUnoAddDeleteBaseCommand(QGraphicsScene * const opc_Scene,
-                                                               const std::vector<uint64_t> & orc_Ids,
+                                                               const QList<uint64_t> & orc_Ids,
                                                                const QString & orc_Text,
                                                                QUndoCommand * const opc_Parent,
                                                                const C_SyvDaDashboardSnapshot & orc_InitialSnapshotData)
@@ -274,7 +274,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(pc_Scene->GetDashboardIndex());
          if (pc_Dashboard != NULL)
          {
-            const std::vector<QGraphicsItem *> c_RelatedItems = this->m_GetSceneItems();
+            const QList<QGraphicsItem *> c_RelatedItems = this->m_GetSceneItems();
             C_PuiSvDbDataElement * pc_Data;
             C_GiUnique * pc_Unique;
             const C_GiSvDaRectBaseGroup * pc_RectBase;
@@ -284,7 +284,7 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_SaveToData(void)
             //Base elements
             m_StoreCommon(this->mc_DataBackup, this->mc_MapTypeAndIndexToId, *pc_Dashboard);
             //Other elements
-            for (std::vector<QGraphicsItem *>::const_iterator c_ItRelatedItem = c_RelatedItems.begin();
+            for (QList<QGraphicsItem *>::const_iterator c_ItRelatedItem = c_RelatedItems.begin();
                  c_ItRelatedItem != c_RelatedItems.end(); ++c_ItRelatedItem)
             {
                pc_Unique = dynamic_cast<C_GiUnique *>(*c_ItRelatedItem);
@@ -502,8 +502,8 @@ void C_SyvDaUnoAddDeleteBaseCommand::m_Delete(void)
    if (pc_Scene != NULL)
    {
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(pc_Scene->GetViewIndex());
-      const std::vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
-      for (std::vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end();
+      const QList<QGraphicsItem *> c_Items = this->m_GetSceneItems();
+      for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end();
            ++c_ItItem)
       {
          pc_Scene->DeleteItem(*c_ItItem);

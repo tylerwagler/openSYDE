@@ -14,9 +14,10 @@
 #define C_USHANDLER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QFile>
+#include <QList>
 #include <QString>
 #include <QStringList>
-#include <QFile>
 #include <QPoint>
 #include <QSize>
 #include <QMap>
@@ -71,11 +72,11 @@ public:
    int32_t GetSplitterMessageGenVertical(void) const;
    bool GetMessageGenIsExpanded(void) const;
    int32_t GetSplitterMesSigHorizontal(void) const;
-   const std::vector<int32_t> & GetSelectedMessages(void) const;
-   const std::vector<int32_t> & GetTraceColWidths(void) const;
-   const std::vector<int32_t> & GetTraceColPositions(void) const;
-   const std::vector<int32_t> & GetMessageColWidths(void) const;
-   const std::vector<int32_t> & GetSignalsColWidths(void) const;
+   const QList<int32_t> & GetSelectedMessages(void) const;
+   const QList<int32_t> & GetTraceColWidths(void) const;
+   const QList<int32_t> & GetTraceColPositions(void) const;
+   const QList<int32_t> & GetMessageColWidths(void) const;
+   const QList<int32_t> & GetSignalsColWidths(void) const;
    bool GetWiDatabaseExpanded(void) const;
 
    bool GetWiFilterExpanded(void) const;
@@ -105,11 +106,11 @@ public:
    void SetSplitterMessageGenVertical(const int32_t os32_New);
    void SetMessageGenIsExpanded(const bool oq_New);
    void SetSplitterMesSigHorizontal(const int32_t os32_New);
-   void SetSelectedMessages(const std::vector<int32_t> & orc_Value);
-   void SetTraceColWidths(const std::vector<int32_t> & orc_Value);
-   void SetTraceColPositions(const std::vector<int32_t> & orc_Value);
-   void SetMessageColWidths(const std::vector<int32_t> & orc_Value);
-   void SetSignalsColWidths(const std::vector<int32_t> & orc_Value);
+   void SetSelectedMessages(const QList<int32_t> & orc_Value);
+   void SetTraceColWidths(const QList<int32_t> & orc_Value);
+   void SetTraceColPositions(const QList<int32_t> & orc_Value);
+   void SetMessageColWidths(const QList<int32_t> & orc_Value);
+   void SetSignalsColWidths(const QList<int32_t> & orc_Value);
    void SetWiDatabaseExpanded(const bool oq_New);
 
    void SetWiFilterExpanded(const bool oq_New);
@@ -166,11 +167,11 @@ private:
 
    bool mq_WiFilterExpanded;                   ///< History of last known filter widget expanded state
    bool mq_WiLoggingExpanded;                  ///< History of last known logging widget expanded state
-   std::vector<int32_t> mc_SelectedMessages;   ///< History of last known selected message generator indices
-   std::vector<int32_t> mc_TraceColWidth;      ///< History of last known trace column widths
-   std::vector<int32_t> mc_TraceColPosition;   ///< History of last known trace column widths
-   std::vector<int32_t> mc_MessageGenColWidth; ///< History of last known message generator column widths
-   std::vector<int32_t> mc_SignalsColWidth;    ///< History of last known message generator signals table
+   QList<int32_t> mc_SelectedMessages;   ///< History of last known selected message generator indices
+   QList<int32_t> mc_TraceColWidth;      ///< History of last known trace column widths
+   QList<int32_t> mc_TraceColPosition;   ///< History of last known trace column widths
+   QList<int32_t> mc_MessageGenColWidth; ///< History of last known message generator column widths
+   QList<int32_t> mc_SignalsColWidth;    ///< History of last known message generator signals table
    // column widths
    E_SettingsSubSection me_PopOpenSection; ///< History of last known expanded settings subsection
    int32_t ms32_CanBitrate;                ///< History of last known CAN bitrate in kBit/s

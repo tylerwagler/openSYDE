@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <vector>
 
 #include "C_OgePopUpDialog.hpp"
 #include "C_CamProFilterData.hpp"

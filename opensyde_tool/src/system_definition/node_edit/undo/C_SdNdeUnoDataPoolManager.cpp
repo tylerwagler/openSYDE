@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoDataPoolManager.hpp"
@@ -71,8 +72,8 @@ C_SdNdeUnoDataPoolManager::~C_SdNdeUnoDataPoolManager(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDataPoolManager::DoMoveList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                            C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                                           const std::vector<uint32_t> & orc_StartIndices,
-                                           const std::vector<uint32_t> & orc_TargetIndices)
+                                           const QList<uint32_t> & orc_StartIndices,
+                                           const QList<uint32_t> & orc_TargetIndices)
 {
    if (((orc_StartIndices.size() > 0) && (orc_TargetIndices.size() > 0)) &&
        (orc_StartIndices.size() == orc_TargetIndices.size()))
@@ -98,7 +99,7 @@ void C_SdNdeUnoDataPoolManager::DoMoveList(const uint32_t & oru32_NodeIndex, con
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDataPoolManager::DoDeleteList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                              stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                                             const std::vector<uint32_t> & orc_Indices)
+                                             const QList<uint32_t> & orc_Indices)
 {
    if (orc_Indices.size() > 0)
    {
@@ -112,7 +113,7 @@ void C_SdNdeUnoDataPoolManager::DoDeleteList(const uint32_t & oru32_NodeIndex, c
       {
          if (static_cast<uint32_t>(opc_DataPoolListsTreeWidget->topLevelItemCount()) <= orc_Indices.size())
          {
-            std::vector<uint32_t> c_Tmp;
+            QList<uint32_t> c_Tmp;
             c_Tmp.push_back(0);
             new C_SdNdeUnoDataPoolListAddCommand(oru32_NodeIndex, oru32_DataPoolIndex, opc_DataPoolListsTreeWidget,
                                                  c_Tmp, pc_DeleteCommand);
@@ -162,7 +163,7 @@ void C_SdNdeUnoDataPoolManager::DoPaste(const uint32_t & oru32_NodeIndex, const 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDataPoolManager::DoAddList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                           stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                                          const std::vector<uint32_t> & orc_Indices)
+                                          const QList<uint32_t> & orc_Indices)
 {
    if (orc_Indices.size() > 0)
    {

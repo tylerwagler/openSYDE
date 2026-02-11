@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 
 #include <QString>
 #include <QStringList>
@@ -38,28 +39,28 @@ public:
    void CheckChannelNameUnique(const uint32_t ou32_ChannelIndex, bool * const opq_NameConflict) const;
    int32_t CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex, bool & orq_IsLinked,
                               QStringList * const opc_LinkedChannelNames,
-                              std::vector<uint32_t> * const opc_LinkedChannelIndices,
+                              QList<uint32_t> * const opc_LinkedChannelIndices,
                               const uint32_t * const opu32_UseCaseIndex) const;
    int32_t ResetChannelToDefault(const uint32_t ou32_ChannelIndex);
    int32_t ResetChannelUseCase(const uint32_t ou32_ChannelIndex);
    void ResetDomainToDefault(void);
    int32_t GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-                                                std::vector<uint32_t> * const opc_ParameterIndices,
-                                                std::vector<uint32_t> * const opc_InputIndices,
-                                                std::vector<uint32_t> * const opc_OutputIndices,
-                                                std::vector<uint32_t> * const opc_StatusIndices)
+                                                QList<uint32_t> * const opc_ParameterIndices,
+                                                QList<uint32_t> * const opc_InputIndices,
+                                                QList<uint32_t> * const opc_OutputIndices,
+                                                QList<uint32_t> * const opc_StatusIndices)
    const;
    void HandleFileLoadPostProcessing(const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode);
    void HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
                                std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 
    C_OscHalcConfigChannel c_DomainConfig;                ///< Domain specific configuration
-   std::vector<C_OscHalcConfigChannel> c_ChannelConfigs; ///< Channels of domain of IO description (synced with
+   QList<C_OscHalcConfigChannel> c_ChannelConfigs; ///< Channels of domain of IO description (synced with
                                                          // C_OscHalcDefBase)
 
 private:
-   static void mh_AddParameters(const std::vector<C_OscHalcDefStruct> & orc_Parameters,
-                                std::vector<C_OscHalcConfigParameterStruct> & orc_ParamConfig);
+   static void mh_AddParameters(const QList<C_OscHalcDefStruct> & orc_Parameters,
+                                QList<C_OscHalcConfigParameterStruct> & orc_ParamConfig);
    static C_OscHalcConfigChannel mh_InitConfigFromName(const QString & orc_Name);
    C_OscHalcConfigChannel m_InitChannelConfig(const uint32_t ou32_ChannelIndex) const;
    uint32_t m_InitChannelUseCase(const uint32_t ou32_ChannelIndex) const;

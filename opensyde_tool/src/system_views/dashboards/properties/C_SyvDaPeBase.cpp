@@ -962,7 +962,7 @@ void C_SyvDaPeBase::m_Browse(void)
 
    if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> c_DataElements = pc_Dialog->GetSelectedDataElements();
+      const QList<C_PuiSvDbNodeDataPoolListElementId> c_DataElements = pc_Dialog->GetSelectedDataElements();
       //Only accept valid selection (assumed if any elements
       if (c_DataElements.size() > 0)
       {

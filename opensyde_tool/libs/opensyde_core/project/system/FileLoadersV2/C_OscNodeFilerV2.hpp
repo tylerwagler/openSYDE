@@ -12,6 +12,7 @@
 #define C_OSCNODEFILERV2_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscNode.hpp"
 #include "C_OscXmlParser.hpp"
 
@@ -31,30 +32,30 @@ public:
    static int32_t h_LoadNode(const uint16_t ou16_XmlFormatVersion, C_OscNode & orc_Node,
                              C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNode(const C_OscNode & orc_Node, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & orc_NodeComProtocols,
+   static int32_t h_LoadNodeComProtocols(QList<C_OscCanProtocol> & orc_NodeComProtocols,
                                          C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveNodeComProtocols(const std::vector<C_OscCanProtocol> & orc_NodeComProtocols,
+   static void h_SaveNodeComProtocols(const QList<C_OscCanProtocol> & orc_NodeComProtocols,
                                       C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadNodeComProtocol(C_OscCanProtocol & orc_NodeComProtocol, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeComProtocol(const C_OscCanProtocol & orc_NodeComProtocol, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadNodeComMessageContainers(std::vector<C_OscCanMessageContainer> & orc_NodeComMessageContainers,
+   static int32_t h_LoadNodeComMessageContainers(QList<C_OscCanMessageContainer> & orc_NodeComMessageContainers,
                                                  C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeComMessageContainers(
-      const std::vector<C_OscCanMessageContainer> & orc_NodeComMessageContainers,
+      const QList<C_OscCanMessageContainer> & orc_NodeComMessageContainers,
       C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadNodeComMessageContainer(C_OscCanMessageContainer & orc_NodeComMessageContainer,
                                                 C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeComMessageContainer(const C_OscCanMessageContainer & orc_NodeComMessageContainer,
                                              C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadNodeComMessages(std::vector<C_OscCanMessage> & orc_NodeComMessages,
+   static int32_t h_LoadNodeComMessages(QList<C_OscCanMessage> & orc_NodeComMessages,
                                         C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveNodeComMessages(const std::vector<C_OscCanMessage> & orc_NodeComMessages,
+   static void h_SaveNodeComMessages(const QList<C_OscCanMessage> & orc_NodeComMessages,
                                      C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadNodeComMessage(C_OscCanMessage & orc_NodeComMessage, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeComMessage(const C_OscCanMessage & orc_NodeComMessage, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadNodeComSignals(std::vector<C_OscCanSignal> & orc_NodeComSignals,
+   static int32_t h_LoadNodeComSignals(QList<C_OscCanSignal> & orc_NodeComSignals,
                                        C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveNodeComSignals(const std::vector<C_OscCanSignal> & orc_NodeComSignals,
+   static void h_SaveNodeComSignals(const QList<C_OscCanSignal> & orc_NodeComSignals,
                                     C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadNodeComSignal(C_OscCanSignal & orc_NodeComSignal, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeComSignal(const C_OscCanSignal & orc_NodeComSignal, C_OscXmlParserBase & orc_XmlParser);
@@ -70,13 +71,13 @@ private:
                                                C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveStwFlashloaderOptions(const C_OscNodeStwFlashloaderSettings & orc_StwFlashloaderSettings,
                                             C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadApplications(std::vector<C_OscNodeApplication> & orc_NodeApplications,
+   static int32_t mh_LoadApplications(QList<C_OscNodeApplication> & orc_NodeApplications,
                                       C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveApplications(const std::vector<C_OscNodeApplication> & orc_NodeApplications,
+   static void mh_SaveApplications(const QList<C_OscNodeApplication> & orc_NodeApplications,
                                    C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadDataPools(const uint16_t ou16_XmlFormatVersion, C_OscNode & orc_Node,
                                    C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
+   static void mh_SaveDataPools(const QList<C_OscNodeDataPool> & orc_NodeDataPools,
                                 C_OscXmlParserBase & orc_XmlParser);
    static QString mh_DiagnosticServerToString(
       const C_OscNodeProperties::E_DiagnosticServerProtocol & ore_DiagnosticProtocol);

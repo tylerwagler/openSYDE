@@ -12,6 +12,7 @@
 #define C_CAMGENSIGTABLEVIEW_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QSortFilterProxyModel>
 #include "C_OgePubIconOnly.hpp"
 #include "C_TblViewToolTipBase.hpp"
@@ -40,8 +41,8 @@ public:
    void SetMessage(const uint32_t ou32_Message);
    void UpdateMessageDlc(const uint32_t ou32_MessageIndex);
 
-   void SetCurrentColumnWidths(const std::vector<int32_t> & orc_ColumnWidths);
-   std::vector<int32_t> GetCurrentColumnWidths(void) const;
+   void SetCurrentColumnWidths(const QList<int32_t> & orc_ColumnWidths);
+   QList<int32_t> GetCurrentColumnWidths(void) const;
 
    void SaveUserSettings(void) const;
    void LoadUserSettings(void);

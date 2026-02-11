@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 #include <QString>
 #include "C_OscNodeDataPoolContent.hpp"
@@ -54,7 +55,7 @@ public:
    E_Access e_Access;                                     ///< Defined access level
    bool q_InterpretAsString;                              ///< Flag if data type should be interpreted as string
    bool q_DiagEventCall;                                  ///< Flag if there is an event call
-   std::vector<C_OscNodeDataPoolContent> c_DataSetValues; ///< Dataset value(s) for complete data element
+   QList<C_OscNodeDataPoolContent> c_DataSetValues; ///< Dataset value(s) for complete data element
    C_OscNodeDataPoolContent c_Value;                      ///< Current value(s) for complete data element
    C_OscNodeDataPoolContent c_NvmValue;                   ///< Current value(s) for complete data element in NVM
    bool q_NvmValueChanged;                                ///< Flag if the NvM element value was changed

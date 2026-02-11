@@ -29,8 +29,8 @@ class C_SebUnoZetOrderCommand :
    public C_SebUnoBaseCommand
 {
 public:
-   C_SebUnoZetOrderCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                           const std::vector<float64_t> & orc_NewZetValues, QUndoCommand * const opc_Parent = NULL);
+   C_SebUnoZetOrderCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
+                           const QList<float64_t> & orc_NewZetValues, QUndoCommand * const opc_Parent = NULL);
    ~C_SebUnoZetOrderCommand(void) override;
    void undo(void) override;
    void redo(void) override;
@@ -40,10 +40,10 @@ public:
                                     float64_t> & orc_NewZetValues);
 
 private:
-   std::vector<float64_t> mc_OldZetValues;
-   const std::vector<float64_t> mc_NewZetValues;
+   QList<float64_t> mc_OldZetValues;
+   const QList<float64_t> mc_NewZetValues;
 
-   void m_ApplyZetValues(const std::vector<float64_t> & orc_Values) const;
+   void m_ApplyZetValues(const QList<float64_t> & orc_Values) const;
    static void mh_CreateZetValueMap(const QGraphicsScene * const opc_Scene, const QList<QGraphicsItem *> & orc_Items,
                                     const QList<QGraphicsItem *> & orc_SelectedItems, const bool oq_BringToFront,
                                     QMap<QGraphicsItem *,

@@ -23,7 +23,7 @@ using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 QMap<C_TblTreDataElementModel::E_Mode,
-     std::vector<std::vector<uint32_t> > > C_TblTreDataElementView::mhc_LastKnownExpandedIndices;
+     QList<QList<uint32_t> > > C_TblTreDataElementView::mhc_LastKnownExpandedIndices;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -91,7 +91,7 @@ void C_TblTreDataElementView::SetUseInternalExpandedItems(const bool oq_Use)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblTreDataElementView::InitSd(const uint32_t ou32_NodeIndex, const int32_t os32_SkipApplicationIndex,
-                                     const std::vector<uint32_t> & orc_UsedDataPoolIndicesIndex)
+                                     const QList<uint32_t> & orc_UsedDataPoolIndicesIndex)
 {
    this->me_Mode = C_TblTreDataElementModel::eDATAPOOLS;
    this->mc_Model.InitSd(ou32_NodeIndex, os32_SkipApplicationIndex, orc_UsedDataPoolIndicesIndex);
@@ -118,7 +118,7 @@ void C_TblTreDataElementView::InitSd(const uint32_t ou32_NodeIndex, const int32_
 void C_TblTreDataElementView::InitSv(const uint32_t ou32_ViewIndex, const bool oq_ShowOnlyWriteElements,
                                      const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements,
                                      const bool oq_Show64BitValues, const bool oq_ShowNvmLists,
-                                     const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements, const bool oq_UseInSysViews,
+                                     const QList<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements, const bool oq_UseInSysViews,
                                      const uint32_t ou32_SdDataLoggerUseCaseNodeIndex)
 {
    this->mu32_ViewIndex = ou32_ViewIndex;
@@ -210,7 +210,7 @@ void C_TblTreDataElementView::SetViewIndex(const uint32_t ou32_ViewIndex)
 void C_TblTreDataElementView::SwitchMode(const C_TblTreDataElementModel::E_Mode & ore_Mode,
                                          const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
                                          const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-                                         const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements)
+                                         const QList<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements)
 {
    this->me_Mode = ore_Mode;
    this->mc_Model.InitSv(this->mu32_ViewIndex, ore_Mode, oq_ShowOnlyWriteElements, oq_ShowArrayElements,
@@ -226,16 +226,16 @@ void C_TblTreDataElementView::SwitchMode(const C_TblTreDataElementModel::E_Mode 
    Current selected data elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_PuiSvDbNodeDataPoolListElementId> C_TblTreDataElementView::GetSelectedDataElements(void) const
+QList<C_PuiSvDbNodeDataPoolListElementId> C_TblTreDataElementView::GetSelectedDataElements(void) const
 {
-   std::vector<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
+   QList<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
    const QModelIndexList c_List = this->selectedIndexes();
 
    for (QModelIndexList::const_iterator c_It = c_List.begin(); c_It != c_List.end(); ++c_It)
    {
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> c_SubContent = this->mc_Model.GetDataElements(this->mc_SortModel.mapToSource(
+      const QList<C_PuiSvDbNodeDataPoolListElementId> c_SubContent = this->mc_Model.GetDataElements(this->mc_SortModel.mapToSource(
                                                                                                              *c_It));
-      for (std::vector<C_PuiSvDbNodeDataPoolListElementId>::const_iterator c_ItSubContent = c_SubContent.begin();
+      for (QList<C_PuiSvDbNodeDataPoolListElementId>::const_iterator c_ItSubContent = c_SubContent.begin();
            c_ItSubContent != c_SubContent.end(); ++c_ItSubContent)
       {
          c_Retval.push_back(*c_ItSubContent);
@@ -267,7 +267,7 @@ void C_TblTreDataElementView::SaveExpandedIndices(void)
    {
       const int32_t s32_COLUMN = 0;
 
-      std::vector<std::vector<uint32_t> > c_FoundItems;
+      QList<QList<uint32_t> > c_FoundItems;
       //THIS ONE HAS TO BE INVALID
       const QModelIndex c_INDEX;
       //Handle children
@@ -302,7 +302,7 @@ void C_TblTreDataElementView::mouseDoubleClickEvent(QMouseEvent * const opc_Even
    QTreeView::mouseDoubleClickEvent(opc_Event);
    if ((c_Index.isValid() == true) && (this->selectedIndexes().size() > 0))
    {
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> c_IdsForIndex = this->mc_Model.GetDataElements(this->mc_SortModel.mapToSource(
+      const QList<C_PuiSvDbNodeDataPoolListElementId> c_IdsForIndex = this->mc_Model.GetDataElements(this->mc_SortModel.mapToSource(
                                                                                                               c_Index));
       if (c_IdsForIndex.size() == 1UL)
       {
@@ -339,7 +339,7 @@ void C_TblTreDataElementView::selectionChanged(const QItemSelection & orc_Select
    \param[in]     os32_Column     Column to use for index access
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_TblTreDataElementView::m_AppendExpandedIndices(std::vector<std::vector<uint32_t> > & orc_FoundItems,
+void C_TblTreDataElementView::m_AppendExpandedIndices(QList<QList<uint32_t> > & orc_FoundItems,
                                                       const QModelIndex & orc_CurParent, const int32_t os32_Column)
 {
    for (int32_t s32_ItChild = 0; s32_ItChild < this->mc_Model.rowCount(orc_CurParent); ++s32_ItChild)
@@ -362,7 +362,7 @@ void C_TblTreDataElementView::m_RestoreExpandedIndices(void)
    if (this->mq_UseInternalExpandedItems == true)
    {
       const QMap<stw::opensyde_gui_logic::C_TblTreDataElementModel::E_Mode,
-                 std::vector<std::vector<uint32_t> > >::const_iterator c_ItMap =
+                 QList<QList<uint32_t> > >::const_iterator c_ItMap =
          C_TblTreDataElementView::mhc_LastKnownExpandedIndices.find(this->me_Mode);
 
       if (c_ItMap != C_TblTreDataElementView::mhc_LastKnownExpandedIndices.end())
@@ -461,10 +461,10 @@ void C_TblTreDataElementView::m_ExpandAllChildren(const QModelIndex & orc_Index,
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_TblTreDataElementView::m_CheckIndicesMatchesCurrentSelection(
-   const std::vector<C_PuiSvDbNodeDataPoolListElementId> & orc_Indices) const
+   const QList<C_PuiSvDbNodeDataPoolListElementId> & orc_Indices) const
 {
    bool q_Match = false;
-   const std::vector<C_PuiSvDbNodeDataPoolListElementId> c_SelectedIndices = this->GetSelectedDataElements();
+   const QList<C_PuiSvDbNodeDataPoolListElementId> c_SelectedIndices = this->GetSelectedDataElements();
 
    if (orc_Indices.size() == c_SelectedIndices.size())
    {

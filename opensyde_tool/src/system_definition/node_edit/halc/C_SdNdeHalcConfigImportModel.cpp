@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwerrors.hpp"
 
@@ -319,8 +320,8 @@ void C_SdNdeHalcConfigImportModel::GetAdaptedConfiguration(C_OscHalcConfig & orc
    \retval  false    There exist linked channels where one is selected and the other one not
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeHalcConfigImportModel::IsSelectionOfLinkedChannelsValid(std::vector<uint32_t> & orc_DomainIndices,
-                                                                    std::vector<std::vector<uint32_t> > & orc_MissingChannelIndices)
+bool C_SdNdeHalcConfigImportModel::IsSelectionOfLinkedChannelsValid(QList<uint32_t> & orc_DomainIndices,
+                                                                    QList<QList<uint32_t> > & orc_MissingChannelIndices)
 {
    bool q_LinkedValid = true;
 
@@ -367,8 +368,8 @@ bool C_SdNdeHalcConfigImportModel::IsSelectionOfLinkedChannelsValid(std::vector<
                   {
                      bool q_IsLinkedOld;
                      bool q_IsLinkedNew;
-                     std::vector<uint32_t> c_LinkedChannelIndicesOld;
-                     std::vector<uint32_t> c_LinkedChannelIndicesNew;
+                     QList<uint32_t> c_LinkedChannelIndicesOld;
+                     QList<uint32_t> c_LinkedChannelIndicesNew;
                      const C_OscHalcConfigChannel & rc_Channel =
                         rc_ImpDomainConfig.c_ChannelConfigs[pc_ChildItem->u32_ImportIndex];
 
@@ -437,7 +438,7 @@ bool C_SdNdeHalcConfigImportModel::IsSelectionOfLinkedChannelsValid(std::vector<
          {
             // find all missing linked channels and collect their indices
             std::map<uint32_t, bool>::const_iterator c_ItLinkBuddies;
-            std::vector<uint32_t> c_MissingChannelIndicesPerDomain;
+            QList<uint32_t> c_MissingChannelIndicesPerDomain;
             for (c_ItLinkBuddies = c_LinkBuddyCheckStates.begin(); c_ItLinkBuddies != c_LinkBuddyCheckStates.end();
                  ++c_ItLinkBuddies)
             {
@@ -467,8 +468,8 @@ bool C_SdNdeHalcConfigImportModel::IsSelectionOfLinkedChannelsValid(std::vector<
    \param[in]  orc_ChannelIndices   Channel indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeHalcConfigImportModel::CheckChannels(const std::vector<uint32_t> & orc_DomainIndices,
-                                                 const std::vector<std::vector<uint32_t> > & orc_ChannelIndices)
+void C_SdNdeHalcConfigImportModel::CheckChannels(const QList<uint32_t> & orc_DomainIndices,
+                                                 const QList<QList<uint32_t> > & orc_ChannelIndices)
 {
    Q_ASSERT(orc_DomainIndices.size() == orc_ChannelIndices.size());
 
@@ -477,7 +478,7 @@ void C_SdNdeHalcConfigImportModel::CheckChannels(const std::vector<uint32_t> & o
    {
       for (uint32_t u32_DomainCounter = 0; u32_DomainCounter < orc_DomainIndices.size(); u32_DomainCounter++)
       {
-         const std::vector<uint32_t> & rc_ChannelIndices = orc_ChannelIndices[u32_DomainCounter];
+         const QList<uint32_t> & rc_ChannelIndices = orc_ChannelIndices[u32_DomainCounter];
          const QModelIndex & rc_Domain = this->index(orc_DomainIndices[u32_DomainCounter], 0, rc_VisibleRoot);
 
          if (rc_Domain.isValid() == true)
@@ -761,7 +762,7 @@ QString C_SdNdeHalcConfigImportModel::m_CreateTooltipContent(const uint32_t ou32
       {
          const C_OscHalcConfigChannel & rc_ImpChannelConfig = rc_ImpDomain.c_ChannelConfigs[ou32_ChannelIndex];
 
-         std::vector<uint32_t> c_LinkedChannelIndices;
+         QList<uint32_t> c_LinkedChannelIndices;
          bool q_IsLinked = false;
 
          // comment

@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 #include <QString>
 #include "C_OscNodeProperties.hpp"
@@ -51,11 +52,11 @@ public:
    int32_t InsertMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
                          const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
                          const C_OscCanMessage & orc_Message,
-                         const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData);
+                         const QList<C_OscNodeDataPoolListElement> & orc_SignalData);
    int32_t SetMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
                       const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx, const uint32_t ou32_MessageIndex,
                       const C_OscCanMessage & orc_Message, const bool oq_NewMessageIsTx,
-                      const std::vector<C_OscNodeDataPoolListElement> & orc_SignalData);
+                      const QList<C_OscNodeDataPoolListElement> & orc_SignalData);
    int32_t DeleteMessage(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_InterfaceIndex,
                          const uint32_t ou32_DatapoolIndex, const bool oq_MessageIsTx,
                          const uint32_t ou32_MessageIndex);
@@ -81,7 +82,7 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const;
 
-   std::vector<C_OscNodeApplication> GetHexApplications(void) const;
+   QList<C_OscNodeApplication> GetHexApplications(void) const;
    int32_t GetDataPoolIndex(const C_OscNodeDataPool::E_Type oe_DataPoolType,
                             const uint32_t ou32_DataPoolTypeIndex) const;
    int32_t GetDataPoolTypeIndex(const uint32_t ou32_DataPoolIndex) const;
@@ -98,13 +99,13 @@ public:
    const C_OscNodeDataPool * GetComDataPoolConst(const C_OscCanProtocol::E_Type oe_ComProtocol,
                                                  const uint32_t ou32_DataPoolIndex) const;
    C_OscNodeDataPool * GetComDataPool(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_DataPoolIndex);
-   std::vector<const C_OscNodeDataPool *> GetComDatapoolsConst(const C_OscCanProtocol::E_Type oe_ComProtocol) const;
-   std::vector<C_OscNodeDataPool *> GetComDataPools(const C_OscCanProtocol::E_Type oe_ComProtocol);
+   QList<const C_OscNodeDataPool *> GetComDatapoolsConst(const C_OscCanProtocol::E_Type oe_ComProtocol) const;
+   QList<C_OscNodeDataPool *> GetComDataPools(const C_OscCanProtocol::E_Type oe_ComProtocol);
    const C_OscCanProtocol * GetCanProtocolConst(const C_OscCanProtocol::E_Type oe_ComProtocol,
                                                 const uint32_t ou32_DataPoolIndex) const;
    C_OscCanProtocol * GetCanProtocol(const C_OscCanProtocol::E_Type oe_ComProtocol, const uint32_t ou32_DataPoolIndex);
-   std::vector<const C_OscCanProtocol *> GetCanProtocolsConst(const C_OscCanProtocol::E_Type oe_ComProtocol) const;
-   std::vector<C_OscCanProtocol *> GetCanProtocols(const C_OscCanProtocol::E_Type oe_ComProtocol);
+   QList<const C_OscCanProtocol *> GetCanProtocolsConst(const C_OscCanProtocol::E_Type oe_ComProtocol) const;
+   QList<C_OscCanProtocol *> GetCanProtocols(const C_OscCanProtocol::E_Type oe_ComProtocol);
    const C_OscCanProtocol * GetRelatedCanProtocolConst(const uint32_t ou32_DataPoolIndex) const;
    C_OscCanProtocol * GetRelatedCanProtocol(const uint32_t ou32_DataPoolIndex);
    void CheckErrorCanProtocol(const C_OscCanProtocol::E_Type oe_ComProtocol, const bool oq_ComProtocolUsedByInterface,
@@ -121,7 +122,7 @@ public:
    void CheckErrorDataPool(const uint32_t ou32_DataPoolIndex, bool * const opq_NameConflict,
                            bool * const opq_NameInvalid, bool * const opq_IsErrorInListOrMessage,
                            bool * const opq_TooFewListsOrElements, bool * const opq_TooManyListsOrElements,
-                           std::vector<uint32_t> * const opc_InvalidListIndices) const;
+                           QList<uint32_t> * const opc_InvalidListIndices) const;
    void CheckMessageId(const uint32_t ou32_InterfaceIndex, const C_OscCanMessageUniqueId & orc_MessageId,
                        bool & orq_Valid, const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = NULL,
                        const uint32_t * const opu32_SkipInterfaceIndex = NULL,
@@ -134,7 +135,7 @@ public:
                          const uint32_t * const opu32_SkipMessageIndex = NULL) const;
    int32_t CheckApplicationProcessIdValid(const uint32_t ou32_ApplicationIndex, bool & orq_Valid) const;
    void CheckHalcConfigValid(bool * const opq_ConfigInvalid,
-                             std::vector<uint32_t> * const opc_InvalidDomainIndices) const;
+                             QList<uint32_t> * const opc_InvalidDomainIndices) const;
    void ReCalcCanProtocolDataPoolIndices(void);
    bool IsAnyUpdateAvailable(void) const;
    bool IsRoutingAvailable(const C_OscSystemBus::E_Type oe_Type) const;
@@ -155,19 +156,19 @@ public:
    ///< Simply put: When the device type of multi-cpu device is needed:
    ///< "C_OscNode::pc_DeviceDefinition->c_DeviceName" will do the trick.
    C_OscNodeProperties c_Properties;           ///< General node properties
-   std::vector<C_OscNodeDataPool> c_DataPools; ///< All datapools assigned to this node, expected type order:
+   QList<C_OscNodeDataPool> c_DataPools; ///< All datapools assigned to this node, expected type order:
    ///< DIAG, NVM then COM
    bool q_DatapoolAutoNvmStartAddress; ///< Flag if the Datapool NvM start will be calculate automatically
 
-   std::vector<C_OscNodeApplication> c_Applications; ///< All data blocks assigned to this node
-   std::vector<C_OscCanProtocol> c_ComProtocols;     ///< All node specific information
+   QList<C_OscNodeApplication> c_Applications; ///< All data blocks assigned to this node
+   QList<C_OscCanProtocol> c_ComProtocols;     ///< All node specific information
    ///< for related communication protocol.
    ///< Created if necessary.
    ///< Maximum size equal to number of possible com protocol types.
    C_OscHalcConfig c_HalcConfig;                                 ///< Optional HALC configuration for this node
    std::map<uint8_t, C_OscCanOpenManagerInfo> c_CanOpenManagers; ///< CANopen managers grouped by their
    ///< according CAN interface ID
-   std::vector<C_OscDataLoggerJob> c_DataLoggerJobs; ///< Data logger jobs
+   QList<C_OscDataLoggerJob> c_DataLoggerJobs; ///< Data logger jobs
    C_OscXappProperties c_XappProperties;             ///< X-App properties
 
    //constraints imposed by openSYDE protocol:
@@ -179,20 +180,20 @@ public:
    static const uint32_t hu32_MAX_NUMBER_OF_ACTIVE_PDO_PER_DIRECTION   = 512U;
 
 private:
-   void m_GetAllMessages(const uint32_t ou32_InterfaceIndex, std::vector<const C_OscCanMessage *> & orc_Messages,
+   void m_GetAllMessages(const uint32_t ou32_InterfaceIndex, QList<const C_OscCanMessage *> & orc_Messages,
                          const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = NULL,
                          const uint32_t * const opu32_SkipInterfaceIndex = NULL,
                          const bool * const opq_SkipMessageIsTxFlag = NULL,
                          const uint32_t * const opu32_SkipMessageIndex = NULL) const;
    void m_AppendAllProtocolMessages(const uint32_t ou32_InterfaceIndex, const C_OscCanProtocol::E_Type oe_ComProtocol,
-                                    std::vector<const C_OscCanMessage *> & orc_Messages,
+                                    QList<const C_OscCanMessage *> & orc_Messages,
                                     const C_OscCanProtocol::E_Type * const ope_SkipComProtocol = NULL,
                                     const uint32_t * const opu32_SkipInterfaceIndex = NULL,
                                     const bool * const opq_SkipMessageIsTxFlag = NULL,
                                     const uint32_t * const opu32_SkipMessageIndex = NULL) const;
    uint32_t m_GetListHash(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex) const;
    uint32_t m_GetContainerHash(const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ContainerIndex) const;
-   static void mh_CheckErrorCanProtocolDirection(const std::vector<C_OscCanMessage> & orc_Messages,
+   static void mh_CheckErrorCanProtocolDirection(const QList<C_OscCanMessage> & orc_Messages,
                                                  const C_OscCanProtocol::E_Type oe_ComProtocol,
                                                  bool & orq_InvalidMaxSignalCount, bool & orq_InvalidCoPdoCount,
                                                  bool & orq_InvalidMinSignalCount);

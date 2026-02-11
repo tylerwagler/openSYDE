@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QList>
 #include "stwtypes.hpp"
 
 #include "stwerrors.hpp"
@@ -134,8 +135,8 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const QString & orc_
                                                             uint32_t & oru32_FileVersion,
                                                             QString &  orc_FilePackagePath,
                                                             uint32_t & oru32_ActiveBusIndex,
-                                                            std::vector<uint8_t> & orc_ActiveNodes,
-                                                            std::vector<uint32_t> & orc_UpdatePosition,
+                                                            QByteArray & orc_ActiveNodes,
+                                                            QList<uint32_t> & orc_UpdatePosition,
                                                             QStringList & orc_PackageFiles)
 {
    int32_t s32_Retval;
@@ -195,7 +196,7 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const QString & orc_
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
-                                           const std::vector<C_OscSupNodeDefinition> & orc_Nodes,
+                                           const QList<C_OscSupNodeDefinition> & orc_Nodes,
                                            const QStringList & orc_Files)
 {
    //Nodes
@@ -252,8 +253,8 @@ void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
    \param[in,out]  orc_PackageFiles    Package files
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, std::vector<uint8_t> & orc_ActiveNodes,
-                                           std::vector<uint32_t> & orc_UpdatePosition,
+void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, QByteArray & orc_ActiveNodes,
+                                           QList<uint32_t> & orc_UpdatePosition,
                                            QStringList & orc_PackageFiles)
 {
    Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_NODES) == mc_NODES);

@@ -347,8 +347,8 @@ void C_OscNodeDataPool::CheckErrorList(const uint32_t & oru32_ListIndex, bool * 
                                        bool * const opq_NameInvalid, bool * const opq_UsageInvalid,
                                        bool * const opq_OutOfDataPool, bool * const opq_DataSetsInvalid,
                                        bool * const opq_ElementsInvalid,
-                                       std::vector<uint32_t> * const opc_InvalidDataSetIndices,
-                                       std::vector<uint32_t> * const opc_InvalidElementIndices) const
+                                       QList<uint32_t> * const opc_InvalidDataSetIndices,
+                                       QList<uint32_t> * const opc_InvalidElementIndices) const
 {
    //Init
    if (oru32_ListIndex < this->c_Lists.size())

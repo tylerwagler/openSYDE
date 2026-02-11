@@ -45,14 +45,14 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueUnoSignalMoveCommand::C_SdBueUnoSignalMoveCommand(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_SourceMessageId,
-   const std::vector<uint32_t> & orc_SourceSignalIndex,
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_TargetMessageId,
-   const std::vector<uint32_t> & orc_TargetSignalIndex, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
+   const QList<C_OscCanMessageIdentificationIndices> & orc_SourceMessageId,
+   const QList<uint32_t> & orc_SourceSignalIndex,
+   const QList<C_OscCanMessageIdentificationIndices> & orc_TargetMessageId,
+   const QList<uint32_t> & orc_TargetSignalIndex, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
    C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget, QUndoCommand * const opc_Parent) :
-   C_SdBueUnoSignalAddDeleteBaseCommand(orc_SourceMessageId, orc_SourceSignalIndex, std::vector<uint16_t>(),
-                                        std::vector<C_OscCanSignal::E_MultiplexerType>(),
-                                        std::vector<uint16_t>(), opc_MessageSyncManager, opc_MessageTreeWidget, "Move Signal(s)",
+   C_SdBueUnoSignalAddDeleteBaseCommand(orc_SourceMessageId, orc_SourceSignalIndex, QList<uint16_t>(),
+                                        QList<C_OscCanSignal::E_MultiplexerType>(),
+                                        QList<uint16_t>(), opc_MessageSyncManager, opc_MessageTreeWidget, "Move Signal(s)",
                                         opc_Parent),
    mc_SourceSignalIndex(orc_SourceSignalIndex),
    mc_TargetSignalIndex(orc_TargetSignalIndex)
@@ -89,10 +89,10 @@ void C_SdBueUnoSignalMoveCommand::redo(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoSignalMoveCommand::undo(void)
 {
-   std::vector<uint64_t> c_SourceUniqueId = mc_SourceUniqueId;
-   std::vector<uint32_t> c_SourceSignalIndex = mc_SourceSignalIndex;
-   std::vector<uint64_t> c_TargetUniqueId = mc_TargetUniqueId;
-   std::vector<uint32_t> c_TargetSignalIndex = mc_TargetSignalIndex;
+   QList<uint64_t> c_SourceUniqueId = mc_SourceUniqueId;
+   QList<uint32_t> c_SourceSignalIndex = mc_SourceSignalIndex;
+   QList<uint64_t> c_TargetUniqueId = mc_TargetUniqueId;
+   QList<uint32_t> c_TargetSignalIndex = mc_TargetSignalIndex;
 
    C_SdBueUnoSignalAddDeleteBaseCommand::undo();
    //Reverse order necessary
@@ -112,10 +112,10 @@ void C_SdBueUnoSignalMoveCommand::undo(void)
    \param[in]  orc_TargetSignalIndex   Target signal index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueUnoSignalMoveCommand::m_Move(const std::vector<uint64_t> & orc_SourceUniqueId,
-                                         const std::vector<uint32_t> & orc_SourceSignalIndex,
-                                         const std::vector<uint64_t> & orc_TargetUniqueId,
-                                         const std::vector<uint32_t> & orc_TargetSignalIndex)
+void C_SdBueUnoSignalMoveCommand::m_Move(const QList<uint64_t> & orc_SourceUniqueId,
+                                         const QList<uint32_t> & orc_SourceSignalIndex,
+                                         const QList<uint64_t> & orc_TargetUniqueId,
+                                         const QList<uint32_t> & orc_TargetSignalIndex)
 {
    //Step 1: delete source (Internal save of data)
    this->mc_UniqueId = orc_SourceUniqueId;

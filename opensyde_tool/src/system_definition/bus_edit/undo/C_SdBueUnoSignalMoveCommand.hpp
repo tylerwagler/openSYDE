@@ -12,6 +12,7 @@
 #define C_SDBUEUNOSIGNALMOVECOMMAND_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_SdBueUnoSignalAddDeleteBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,10 +29,10 @@ class C_SdBueUnoSignalMoveCommand :
 {
 public:
    C_SdBueUnoSignalMoveCommand(
-      const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_SourceMessageId,
-      const std::vector<uint32_t> & orc_SourceSignalIndex,
-      const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_TargetMessageId,
-      const std::vector<uint32_t> & orc_TargetSignalIndex,
+      const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_SourceMessageId,
+      const QList<uint32_t> & orc_SourceSignalIndex,
+      const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_TargetMessageId,
+      const QList<uint32_t> & orc_TargetSignalIndex,
       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
       stw::opensyde_gui::C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget,
       QUndoCommand * const opc_Parent = NULL);
@@ -40,13 +41,13 @@ public:
    void undo(void) override;
 
 private:
-   void m_Move(const std::vector<uint64_t> & orc_SourceUniqueId, const std::vector<uint32_t> & orc_SourceSignalIndex,
-               const std::vector<uint64_t> & orc_TargetUniqueId, const std::vector<uint32_t> & orc_TargetSignalIndex);
+   void m_Move(const QList<uint64_t> & orc_SourceUniqueId, const QList<uint32_t> & orc_SourceSignalIndex,
+               const QList<uint64_t> & orc_TargetUniqueId, const QList<uint32_t> & orc_TargetSignalIndex);
 
-   std::vector<uint64_t> mc_SourceUniqueId;
-   const std::vector<uint32_t> mc_SourceSignalIndex;
-   std::vector<uint64_t> mc_TargetUniqueId;
-   const std::vector<uint32_t> mc_TargetSignalIndex;
+   QList<uint64_t> mc_SourceUniqueId;
+   const QList<uint32_t> mc_SourceSignalIndex;
+   QList<uint64_t> mc_TargetUniqueId;
+   const QList<uint32_t> mc_TargetSignalIndex;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

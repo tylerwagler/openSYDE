@@ -9,6 +9,7 @@
 #define C_OSCHALCDEFFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include "C_OscHalcDef.hpp"
 #include "C_OscXmlParser.hpp"
@@ -31,7 +32,7 @@ public:
    static int32_t h_SaveData(const C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
 
    static int32_t h_LoadAvailability(const QString & orc_AttributeName,
-                                     std::vector<C_OscHalcDefChannelAvailability> & orc_Availability,
+                                     QList<C_OscHalcDefChannelAvailability> & orc_Availability,
                                      const uint32_t ou32_NumChannels, const C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_CheckUseCaseValue(const C_OscHalcDefDomain & orc_IoDataDomain);
    static int32_t h_CheckDomainDisplayNames(const C_OscHalcDefDomain & orc_IoDataDomain);
@@ -42,7 +43,7 @@ private:
    C_OscHalcDefFiler(void);
 
    static int32_t mh_LoadNvmData(C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadNvmAddressOffsetData(std::vector<uint32_t> & orc_Vector,
+   static int32_t mh_LoadNvmAddressOffsetData(QList<uint32_t> & orc_Vector,
                                               const C_OscXmlParserBase & orc_XmlParser,
                                               const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
                                               const uint8_t ou8_NumConfigCopies, const bool oq_IsSafeVector);
@@ -50,39 +51,39 @@ private:
    static int32_t mh_LoadIoDataDomain(C_OscHalcDefDomain & orc_IoDataDomain, C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_CheckIoDataDomain(const C_OscHalcDefDomain & orc_IoDataDomain);
    static int32_t mh_CheckDefaultUseCase(const C_OscHalcDefDomain & orc_IoDataDomain);
-   static int32_t mh_LoadChannels(std::vector<C_OscHalcDefChannelDef> & orc_Channels,
+   static int32_t mh_LoadChannels(QList<C_OscHalcDefChannelDef> & orc_Channels,
                                   C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadChannelUseCases(std::vector<C_OscHalcDefChannelUseCase> & orc_ChannelUsecases,
+   static int32_t mh_LoadChannelUseCases(QList<C_OscHalcDefChannelUseCase> & orc_ChannelUsecases,
                                          C_OscXmlParserBase & orc_XmlParser, const uint32_t ou32_NumChannels);
    static int32_t mh_SplitAvailabilityString(const QString & orc_AvailabilityString,
                                              QStringList & orc_SubElements,
                                              const C_OscXmlParserBase & orc_XmlParser,
                                              const QString & orc_AttributeName);
    static int32_t mh_ParseAvailabilityStringSubElements(const QStringList & orc_SubElements,
-                                                        std::vector<C_OscHalcDefChannelAvailability> & orc_Availability,
+                                                        QList<C_OscHalcDefChannelAvailability> & orc_Availability,
                                                         const uint32_t ou32_NumChannels,
                                                         const C_OscXmlParserBase & orc_XmlParser,
                                                         const QString & orc_AttributeName);
-   static int32_t mh_CheckAvailability(const std::vector<C_OscHalcDefChannelAvailability> & orc_Availability,
+   static int32_t mh_CheckAvailability(const QList<C_OscHalcDefChannelAvailability> & orc_Availability,
                                        const C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_ConvertStringToNumber(const QString & orc_Number, int32_t & ors32_Number,
                                            const C_OscXmlParserBase & orc_XmlParser,
                                            const QString & orc_AttributeName);
-   static int32_t mh_HandleNumberSection(QString & orc_Number, std::vector<int32_t> & orc_FoundNumbers,
+   static int32_t mh_HandleNumberSection(QString & orc_Number, QList<int32_t> & orc_FoundNumbers,
                                          bool & orq_LastNumDeclaredSection, const QString & orc_Section,
                                          const C_OscXmlParserBase & orc_XmlParser,
                                          const QString & orc_AttributeName);
-   static int32_t mh_HandleNumberSectionEnd(const std::vector<int32_t> & orc_FoundNumbers, const bool oq_IsGroupSection,
-                                            std::vector<C_OscHalcDefChannelAvailability> & orc_Availability,
+   static int32_t mh_HandleNumberSectionEnd(const QList<int32_t> & orc_FoundNumbers, const bool oq_IsGroupSection,
+                                            QList<C_OscHalcDefChannelAvailability> & orc_Availability,
                                             const uint32_t ou32_NumChannels, const C_OscXmlParserBase & orc_XmlParser,
                                             const QString & orc_AttributeName);
    static QString mh_GetAvailabilityString(
-      const std::vector<C_OscHalcDefChannelAvailability> & orc_Availability, const bool oq_OnlySaveOnce);
+      const QList<C_OscHalcDefChannelAvailability> & orc_Availability, const bool oq_OnlySaveOnce);
    static int32_t mh_SaveUseCase(const C_OscHalcDefChannelUseCase & orc_UseCase, C_OscXmlParserBase & orc_XmlParser);
    static QString mh_DomainCategoryEnumToString(const C_OscHalcDefDomain::E_Category oe_Category);
    static int32_t mh_DomainCategoryStringToEnum(const QString & orc_Category,
                                                 C_OscHalcDefDomain::E_Category & ore_Category);
-   static void mh_GetAllNames(const std::vector<C_OscHalcDefStruct> & orc_Values,
+   static void mh_GetAllNames(const QList<C_OscHalcDefStruct> & orc_Values,
                               QStringList & orc_Names);
    static int32_t mh_CheckDuplicateNames(const QString & orc_Section,
                                          const QString & orc_DomainSingularName,

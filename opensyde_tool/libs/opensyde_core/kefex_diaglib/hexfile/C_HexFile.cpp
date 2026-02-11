@@ -2253,7 +2253,7 @@ int32_t C_HexFile::GetDataByAddress(const uint32_t ou32_Address, uint16_t & oru1
             s32_Return = 0; //not enough bytes !
             u16_NumBytes = oru16_NumBytes;
          }
-         (void)std::memcpy(opu8_Data, &pc_HexFileData->at_Blocks[s32_Block].au8_Data[u32_Offset], u16_NumBytes);
+         (void)std::memcpy(opu8_Data, pc_HexFileData->at_Blocks[s32_Block].au8_Data.data() + u32_Offset, u16_NumBytes);
          return s32_Return;
       }
    }
@@ -2362,7 +2362,7 @@ int32_t C_HexFile::FindPattern(uint32_t & oru32_Address, const uint8_t ou8_Patte
             u32_Offset = 0U;
          }
 
-         s32_Return = mh_FindPattern(&pc_HexFileData->at_Blocks[s32_Block].au8_Data[u32_Offset], opu8_Pattern,
+         s32_Return = mh_FindPattern(reinterpret_cast<const uint8_t*>(pc_HexFileData->at_Blocks[s32_Block].au8_Data.data() + u32_Offset), opu8_Pattern,
                                      u32_BlockLength - u32_Offset, ou8_PatternLength);
          if (s32_Return >= 0) //found in this block !
          {

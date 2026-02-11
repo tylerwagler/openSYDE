@@ -44,7 +44,7 @@ using namespace std;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologySetupStyleCommand::C_SdManUnoTopologySetupStyleCommand(QGraphicsScene * const opc_Scene,
-                                                                         const std::vector<uint64_t> & orc_Ids,
+                                                                         const QList<uint64_t> & orc_Ids,
                                                                          const bool oq_DarkMode,
                                                                          QUndoCommand * const opc_Parent) :
    C_SebUnoSetupStyleCommand(opc_Scene, orc_Ids, oq_DarkMode, opc_Parent)
@@ -81,10 +81,10 @@ void C_SdManUnoTopologySetupStyleCommand::m_Restore(const QMap<uint64_t,
 
    if (pc_Snapshot != NULL)
    {
-      const vector<QGraphicsItem *> c_Items = m_GetSceneItems();
+      const QList<QGraphicsItem *> c_Items = m_GetSceneItems();
       QMap<uint64_t, C_PuiBsTemporaryDataId>::const_iterator c_Entry;
 
-      for (vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
+      for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
       {
          //Bus
 
@@ -117,7 +117,7 @@ void C_SdManUnoTopologySetupStyleCommand::m_Restore(const QMap<uint64_t,
    \param[out] opc_Snapshot Preserved state data
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdManUnoTopologySetupStyleCommand::m_CreateMapAndSaveState(const vector<QGraphicsItem *> & orc_Items,
+void C_SdManUnoTopologySetupStyleCommand::m_CreateMapAndSaveState(const QList<QGraphicsItem *> & orc_Items,
                                                                   QMap<uint64_t, C_PuiBsTemporaryDataId> & orc_Map,
                                                                   C_PuiBsElements * const opc_Snapshot) const
 {
@@ -130,7 +130,7 @@ void C_SdManUnoTopologySetupStyleCommand::m_CreateMapAndSaveState(const vector<Q
       C_GiLiBus * pc_Bus;
       uint32_t u32_Index;
 
-      for (vector<QGraphicsItem *>::const_iterator c_ItItem = orc_Items.begin(); c_ItItem != orc_Items.end();
+      for (QList<QGraphicsItem *>::const_iterator c_ItItem = orc_Items.begin(); c_ItItem != orc_Items.end();
            ++c_ItItem)
       {
          //Bus
@@ -142,7 +142,7 @@ void C_SdManUnoTopologySetupStyleCommand::m_CreateMapAndSaveState(const vector<Q
             u32_Index = pc_Snapshot->c_UiBuses.size();
             orc_Map.insert(pc_Bus->GetId(),
                            C_PuiBsTemporaryDataId(static_cast<int32_t>(C_PuiSdDataElement::eBUS), u32_Index));
-            pc_Snapshot->c_UiBuses.resize(static_cast<std::vector<C_PuiSdBus>::size_type>(u32_Index + 1UL));
+            pc_Snapshot->c_UiBuses.resize(static_cast<QList<C_PuiSdBus>::size_type>(u32_Index + 1UL));
             //Content
             {
                C_PuiSdBus & rc_UiBus = pc_Snapshot->c_UiBuses[u32_Index];

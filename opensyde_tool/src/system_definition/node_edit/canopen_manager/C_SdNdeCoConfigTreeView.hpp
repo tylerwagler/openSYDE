@@ -10,6 +10,7 @@
 #define C_SDNDECOCONFIGTREEVIEW_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_UsNode.hpp"
 #include "C_OgeContextMenu.hpp"
@@ -108,7 +109,7 @@ private:
    void m_OnRemoveDevice(void);
    void m_OnItemSelected(void);
    static void mh_InitMappableSignals(
-      std::vector<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> & orc_MappableSignals,
+      QList<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> & orc_MappableSignals,
       const stw::opensyde_core::C_OscCanOpenObjectDictionary & orc_EdsDictionary, const bool oq_IsEds);
    void m_SelectManager(const QModelIndex & orc_ManagerIndex);
    void m_HandleManagerUnchecked(const QModelIndex & orc_ManagerIndex);

@@ -43,8 +43,8 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyZetOrderCommand::C_SdManUnoTopologyZetOrderCommand(QGraphicsScene * const opc_Scene,
-                                                                     const vector<uint64_t> & orc_Ids,
-                                                                     const vector<float64_t> & orc_NewZetValues,
+                                                                     const QList<uint64_t> & orc_Ids,
+                                                                     const QList<float64_t> & orc_NewZetValues,
                                                                      QUndoCommand * const opc_Parent) :
    C_SebUnoZetOrderCommand(opc_Scene, orc_Ids, orc_NewZetValues, opc_Parent)
 {

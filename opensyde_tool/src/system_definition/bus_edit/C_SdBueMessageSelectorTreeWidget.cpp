@@ -167,7 +167,7 @@ QSize C_SdBueMessageSelectorTreeWidget::sizeHint(void) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageSelectorTreeWidget::SetNodeId(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-                                                 const std::vector<uint32_t> & orc_DatapoolIndexes)
+                                                 const QList<uint32_t> & orc_DatapoolIndexes)
 {
    this->mu32_NodeIndex = ou32_NodeIndex;
    this->mu32_InterfaceIndex = ou32_InterfaceIndex;
@@ -357,10 +357,10 @@ void C_SdBueMessageSelectorTreeWidget::AddMessageFromCatalog(void)
 
       if (c_NodeForCatalogMessages.c_TxMessages.size() > 0)
       {
-         const std::vector<C_CieImportDataAssignment> c_NodeAssignments = m_GetJ1939DefaultNodeAssignment(
+         const QList<C_CieImportDataAssignment> c_NodeAssignments = m_GetJ1939DefaultNodeAssignment(
             c_NodeForCatalogMessages);
 
-         const std::vector<C_CieImportDataAssignment> c_SkippedImportDataAssigned;
+         const QList<C_CieImportDataAssignment> c_SkippedImportDataAssigned;
 
          // Create message report for user
          const QPointer<C_OgePopUpDialog> c_PopUpDialogReportDialog =
@@ -516,10 +516,10 @@ void C_SdBueMessageSelectorTreeWidget::Delete(void)
    if (this->mpc_UndoManager != NULL)
    {
       const QModelIndexList c_IndexList = this->selectedIndexes();
-      std::vector<C_OscCanMessageIdentificationIndices> c_SelectedMessageIds;
-      std::vector<C_OscCanMessageIdentificationIndices> c_SelectedSignalMessageIds;
-      std::vector<uint32_t> c_SelectedSignals;
-      std::vector<uint32_t> c_Dummy;
+      QList<C_OscCanMessageIdentificationIndices> c_SelectedMessageIds;
+      QList<C_OscCanMessageIdentificationIndices> c_SelectedSignalMessageIds;
+      QList<uint32_t> c_SelectedSignals;
+      QList<uint32_t> c_Dummy;
       for (QModelIndexList::const_iterator c_ItIndex = c_IndexList.begin(); c_ItIndex != c_IndexList.end(); ++c_ItIndex)
       {
          if (c_ItIndex->parent().isValid() == false)
@@ -566,9 +566,9 @@ void C_SdBueMessageSelectorTreeWidget::Delete(void)
       //Sort messages
       if (c_SelectedMessageIds.size() > 0)
       {
-         std::vector<C_OscCanMessageIdentificationIndices> c_Groups;
-         std::vector<std::vector<uint32_t> > c_GroupMessages;
-         std::vector<std::vector<C_OscCanMessageIdentificationIndices> > c_SortedAscendingMessageGroups;
+         QList<C_OscCanMessageIdentificationIndices> c_Groups;
+         QList<QList<uint32_t> > c_GroupMessages;
+         QList<QList<C_OscCanMessageIdentificationIndices> > c_SortedAscendingMessageGroups;
          c_Groups.push_back(c_SelectedMessageIds[0]);
          c_GroupMessages.resize(1);
          //First element
@@ -600,7 +600,7 @@ void C_SdBueMessageSelectorTreeWidget::Delete(void)
                c_Groups.push_back(rc_CurMessage);
                c_GroupMessages.resize(c_Groups.size());
                //Add first matching element
-               c_GroupMessages[static_cast<std::vector< std::vector< uint32_t> >::size_type >
+               c_GroupMessages[static_cast<QList< QList< uint32_t> >::size_type >
                                (c_Groups.size() - 1UL)].push_back(rc_CurMessage.u32_MessageIndex);
             }
          }
@@ -614,14 +614,14 @@ void C_SdBueMessageSelectorTreeWidget::Delete(void)
          c_SortedAscendingMessageGroups.reserve(c_Groups.size());
          for (uint32_t u32_ItGroup = 0; u32_ItGroup < c_Groups.size(); ++u32_ItGroup)
          {
-            std::vector<C_OscCanMessageIdentificationIndices> c_Tmp;
+            QList<C_OscCanMessageIdentificationIndices> c_Tmp;
             const C_OscCanMessageIdentificationIndices & rc_CurGroup = c_Groups[u32_ItGroup];
             c_Tmp.reserve(c_GroupMessages[u32_ItGroup].size());
             for (uint32_t u32_ItGroupMessage = 0UL; u32_ItGroupMessage < c_GroupMessages[u32_ItGroup].size();
                  ++u32_ItGroupMessage)
             {
                const uint32_t u32_GroupMessageIndex =
-                  c_GroupMessages[u32_ItGroup][static_cast<std::vector< uint32_t>::size_type >
+                  c_GroupMessages[u32_ItGroup][static_cast<QList< uint32_t>::size_type >
                                                (u32_ItGroupMessage)];
                const C_OscCanMessageIdentificationIndices c_MessageId(rc_CurGroup.u32_NodeIndex,
                                                                       rc_CurGroup.e_ComProtocol,
@@ -663,8 +663,8 @@ void C_SdBueMessageSelectorTreeWidget::DeleteSignal(const C_OscCanMessageIdentif
    Q_ASSERT(this->mpc_UndoManager != NULL);
    if (this->mpc_UndoManager != NULL)
    {
-      std::vector<C_OscCanMessageIdentificationIndices> c_MessageIds;
-      std::vector<uint32_t> c_Signals;
+      QList<C_OscCanMessageIdentificationIndices> c_MessageIds;
+      QList<uint32_t> c_Signals;
       c_MessageIds.push_back(orc_MessageId);
       c_Signals.push_back(ou32_SignalIndex);
       //Core
@@ -707,14 +707,14 @@ void C_SdBueMessageSelectorTreeWidget::Copy(void)
       if ((q_MessagesOnly == true) && (this->mpc_MessageSyncManager != NULL))
       {
          uint32_t u32_ItVec = 0;
-         std::vector<C_OscCanMessage> c_Messages;
-         std::vector<std::vector<C_OscNodeDataPoolListElement> > c_OscSignalCommons;
-         std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > c_UiSignalCommons;
-         std::vector<C_PuiSdNodeCanMessage> c_UiMessages;
+         QList<C_OscCanMessage> c_Messages;
+         QList<QList<C_OscNodeDataPoolListElement> > c_OscSignalCommons;
+         QList<QList<C_PuiSdNodeDataPoolListElement> > c_UiSignalCommons;
+         QList<C_PuiSdNodeCanMessage> c_UiMessages;
          QList<QStringList> c_OwnerNodeName;
-         std::vector<std::vector<uint32_t> > c_OwnerNodeInterfaceIndex;
-         std::vector<std::vector<uint32_t> > c_OwnerNodeDatapoolIndex;
-         std::vector<std::vector<bool> > c_OwnerIsTxFlag;
+         QList<QList<uint32_t> > c_OwnerNodeInterfaceIndex;
+         QList<QList<uint32_t> > c_OwnerNodeDatapoolIndex;
+         QList<QList<bool> > c_OwnerIsTxFlag;
 
          //Reserve
          c_Messages.resize(c_IndexList.size());
@@ -733,11 +733,11 @@ void C_SdBueMessageSelectorTreeWidget::Copy(void)
                if (u32_MessageIndex < this->mc_UniqueMessageIds.size())
                {
                   QStringList c_OwnerNodeNamePerMessage;
-                  std::vector<uint32_t> c_OwnerNodeInterfaceIndexPerMessage;
-                  std::vector<uint32_t> c_OwnerNodeDatapoolIndexPerMessage;
+                  QList<uint32_t> c_OwnerNodeInterfaceIndexPerMessage;
+                  QList<uint32_t> c_OwnerNodeDatapoolIndexPerMessage;
 
-                  std::vector<bool> c_OwnerIsTxFlagPerMessage;
-                  const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingMessages =
+                  QList<bool> c_OwnerIsTxFlagPerMessage;
+                  const QList<C_OscCanMessageIdentificationIndices> c_MatchingMessages =
                      this->mpc_MessageSyncManager->GetMatchingMessageVector(this->mc_UniqueMessageIds[
                                                                                u32_MessageIndex]);
                   Q_ASSERT(C_PuiSdHandler::h_GetInstance()->GetCanMessageComplete(this->mc_UniqueMessageIds[
@@ -784,10 +784,10 @@ void C_SdBueMessageSelectorTreeWidget::Copy(void)
       if (q_SignalsOnly == true)
       {
          uint32_t u32_ItVec = 0;
-         std::vector<C_OscCanSignal> c_Signals;
-         std::vector<C_OscNodeDataPoolListElement> c_OscSignalCommons;
-         std::vector<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
-         std::vector<C_PuiSdNodeCanSignal> c_UiSignals;
+         QList<C_OscCanSignal> c_Signals;
+         QList<C_OscNodeDataPoolListElement> c_OscSignalCommons;
+         QList<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
+         QList<C_PuiSdNodeCanSignal> c_UiSignals;
 
          //Reserve
          c_Signals.resize(c_IndexList.size());
@@ -846,10 +846,10 @@ void C_SdBueMessageSelectorTreeWidget::CopySignal(const C_OscCanMessageIdentific
 {
    const uint32_t u32_IT_VEC = 0U;
 
-   std::vector<C_OscCanSignal> c_Signals;
-   std::vector<C_OscNodeDataPoolListElement> c_OscSignalCommons;
-   std::vector<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
-   std::vector<C_PuiSdNodeCanSignal> c_UiSignals;
+   QList<C_OscCanSignal> c_Signals;
+   QList<C_OscNodeDataPoolListElement> c_OscSignalCommons;
+   QList<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
+   QList<C_PuiSdNodeCanSignal> c_UiSignals;
 
    //Reserve
    c_Signals.resize(1);
@@ -908,10 +908,10 @@ void C_SdBueMessageSelectorTreeWidget::Paste(void)
    Q_ASSERT(this->mpc_UndoManager != NULL);
    if (this->mpc_UndoManager != NULL)
    {
-      std::vector<C_OscCanSignal> c_Signals;
-      std::vector<C_OscNodeDataPoolListElement> c_OscSignalCommons;
-      std::vector<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
-      std::vector<C_PuiSdNodeCanSignal> c_UiSignals;
+      QList<C_OscCanSignal> c_Signals;
+      QList<C_OscNodeDataPoolListElement> c_OscSignalCommons;
+      QList<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
+      QList<C_PuiSdNodeCanSignal> c_UiSignals;
       if (C_SdClipBoardHelper::h_LoadSignalsFromClipboard(c_Signals, c_OscSignalCommons, c_UiSignalCommons,
                                                           c_UiSignals) == C_NO_ERR)
       {
@@ -1018,14 +1018,14 @@ void C_SdBueMessageSelectorTreeWidget::Paste(void)
       }
       else
       {
-         std::vector<C_OscCanMessage> c_Messages;
-         std::vector<std::vector<C_OscNodeDataPoolListElement> > c_OscMsgSignalCommons;
-         std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > c_UiMsgSignalCommons;
-         std::vector<C_PuiSdNodeCanMessage> c_UiMessages;
+         QList<C_OscCanMessage> c_Messages;
+         QList<QList<C_OscNodeDataPoolListElement> > c_OscMsgSignalCommons;
+         QList<QList<C_PuiSdNodeDataPoolListElement> > c_UiMsgSignalCommons;
+         QList<C_PuiSdNodeCanMessage> c_UiMessages;
          QList<QStringList> c_OwnerNodeName;
-         std::vector<std::vector<uint32_t> > c_OwnerNodeInterfaceIndex;
-         std::vector<std::vector<uint32_t> > c_OwnerNodeDatapoolIndex;
-         std::vector<std::vector<bool> > c_OwnerIsTxFlag;
+         QList<QList<uint32_t> > c_OwnerNodeInterfaceIndex;
+         QList<QList<uint32_t> > c_OwnerNodeDatapoolIndex;
+         QList<QList<bool> > c_OwnerIsTxFlag;
          if (C_SdClipBoardHelper::h_LoadMessages(c_Messages, c_OscMsgSignalCommons, c_UiMsgSignalCommons,
                                                  c_UiMessages, c_OwnerNodeName, c_OwnerNodeInterfaceIndex,
                                                  c_OwnerNodeDatapoolIndex, c_OwnerIsTxFlag) == C_NO_ERR)
@@ -1046,7 +1046,7 @@ void C_SdBueMessageSelectorTreeWidget::Paste(void)
             //Valid messages
             if (m_GetMessageIdForAdd(c_MessageId) == C_NO_ERR)
             {
-               std::vector<C_OscCanMessageIdentificationIndices> c_NewIds;
+               QList<C_OscCanMessageIdentificationIndices> c_NewIds;
                this->mpc_UndoManager->DoPasteMessages(c_MessageId, c_Messages, c_OscMsgSignalCommons,
                                                       c_UiMsgSignalCommons,
                                                       c_UiMessages, c_OwnerNodeName, c_OwnerNodeInterfaceIndex,
@@ -1074,10 +1074,10 @@ void C_SdBueMessageSelectorTreeWidget::PasteSignal(const C_OscCanMessageIdentifi
    Q_ASSERT(this->mpc_UndoManager != NULL);
    if (this->mpc_UndoManager != NULL)
    {
-      std::vector<C_OscCanSignal> c_Signals;
-      std::vector<C_OscNodeDataPoolListElement> c_OscSignalCommons;
-      std::vector<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
-      std::vector<C_PuiSdNodeCanSignal> c_UiSignals;
+      QList<C_OscCanSignal> c_Signals;
+      QList<C_OscNodeDataPoolListElement> c_OscSignalCommons;
+      QList<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
+      QList<C_PuiSdNodeCanSignal> c_UiSignals;
       if (C_SdClipBoardHelper::h_LoadSignalsFromClipboard(c_Signals, c_OscSignalCommons, c_UiSignalCommons,
                                                           c_UiSignals) == C_NO_ERR)
       {
@@ -1657,8 +1657,8 @@ bool C_SdBueMessageSelectorTreeWidget::CheckIfAnyNodeConnected(void) const
       }
       else
       {
-         std::vector<uint32_t> c_NodeIndexes;
-         std::vector<uint32_t> c_InterfaceIndexes;
+         QList<uint32_t> c_NodeIndexes;
+         QList<uint32_t> c_InterfaceIndexes;
          C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(this->mu32_BusIndex,
                                                                                             c_NodeIndexes,
                                                                                             c_InterfaceIndexes);
@@ -1666,7 +1666,7 @@ bool C_SdBueMessageSelectorTreeWidget::CheckIfAnyNodeConnected(void) const
          {
             for (uint32_t u32_ItNode = 0; u32_ItNode < c_NodeIndexes.size(); ++u32_ItNode)
             {
-               std::vector<const C_OscCanMessageContainer *> c_MessageContainers =
+               QList<const C_OscCanMessageContainer *> c_MessageContainers =
                   C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainers(c_NodeIndexes[u32_ItNode],
                                                                                    this->me_ProtocolType,
                                                                                    c_InterfaceIndexes[u32_ItNode]);
@@ -1703,7 +1703,7 @@ bool C_SdBueMessageSelectorTreeWidget::CheckIfAnyNodeConnected(void) const
 void C_SdBueMessageSelectorTreeWidget::SelectMessage(const C_OscCanMessageIdentificationIndices & orc_MessageId,
                                                      const bool oq_BlockSignal)
 {
-   const std::vector<uint32_t> c_Signal;
+   const QList<uint32_t> c_Signal;
 
    this->mc_SelectedMessageIds.clear();
    this->mc_SelectedSignals.clear();
@@ -1728,7 +1728,7 @@ void C_SdBueMessageSelectorTreeWidget::SelectMessage(const C_OscCanMessageIdenti
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageSelectorTreeWidget::SelectMessages(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageIds)
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MessageIds)
 {
    const uint16_t u16_Timer = osc_write_log_performance_start();
 
@@ -1736,7 +1736,7 @@ void C_SdBueMessageSelectorTreeWidget::SelectMessages(
    this->mc_SelectedSignals.clear();
    for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < orc_MessageIds.size(); ++u32_ItMessage)
    {
-      const std::vector<uint32_t> c_Signal;
+      const QList<uint32_t> c_Signal;
       this->mc_SelectedMessageIds.push_back(orc_MessageIds[u32_ItMessage]);
       this->mc_SelectedSignals.push_back(c_Signal);
    }
@@ -1759,7 +1759,7 @@ void C_SdBueMessageSelectorTreeWidget::SelectMessages(
 void C_SdBueMessageSelectorTreeWidget::SelectSignal(const C_OscCanMessageIdentificationIndices & orc_MessageId,
                                                     const uint32_t & oru32_SignalIndex, const bool oq_BlockSignal)
 {
-   std::vector<uint32_t> c_Signal;
+   QList<uint32_t> c_Signal;
 
    this->mc_SelectedMessageIds.clear();
    this->mc_SelectedSignals.clear();
@@ -1824,7 +1824,7 @@ bool C_SdBueMessageSelectorTreeWidget::IsSelectedMessageContentReadOnly(void) co
    bool q_Return = false;
 
    // If empty, this information is not available and can not be checked
-   if (this->mc_CoUniqueMessagesPdoMappingRo.empty() == false)
+   if (this->mc_CoUniqueMessagesPdoMappingRo.isEmpty() == false)
    {
       const QModelIndexList c_IndexList = this->selectedIndexes();
 
@@ -1962,8 +1962,8 @@ void C_SdBueMessageSelectorTreeWidget::dropEvent(QDropEvent * const opc_Event)
             if ((pc_MimeData->hasFormat(this->mimeTypes().at(1)) == true) &&
                 (pc_MimeData->hasFormat(this->mimeTypes().at(2)) == true))
             {
-               std::vector<C_OscCanMessageIdentificationIndices> c_SourceMessageIds;
-               std::vector<uint32_t> c_SourceSignalIndices;
+               QList<C_OscCanMessageIdentificationIndices> c_SourceMessageIds;
+               QList<uint32_t> c_SourceSignalIndices;
                const QString c_MessageIndicesString = pc_MimeData->data(this->mimeTypes().at(1));
                const QString c_SignalIndicesString = pc_MimeData->data(this->mimeTypes().at(2));
                if (C_SdClipBoardHelper::h_LoadMessageIndexFromString(c_MessageIndicesString,
@@ -1998,8 +1998,8 @@ void C_SdBueMessageSelectorTreeWidget::dropEvent(QDropEvent * const opc_Event)
                               {
                                  if (c_SourceMessageIds.size() == c_SourceSignalIndices.size())
                                  {
-                                    std::vector<C_OscCanMessageIdentificationIndices> c_TargetMessageIds;
-                                    std::vector<uint32_t> c_TargetSignalIndices;
+                                    QList<C_OscCanMessageIdentificationIndices> c_TargetMessageIds;
+                                    QList<uint32_t> c_TargetSignalIndices;
                                     uint32_t u32_SignalCounter = pc_Message->c_Signals.size();
                                     c_TargetMessageIds.reserve(c_SourceMessageIds.size());
                                     c_TargetSignalIndices.reserve(c_SourceMessageIds.size());
@@ -2089,8 +2089,8 @@ QMimeData * C_SdBueMessageSelectorTreeWidget::mimeData(const QList<QTreeWidgetIt
 
    if ((orc_Items.size() > 0) && (this->mimeTypes().size() > 2))
    {
-      std::vector<C_OscCanMessageIdentificationIndices> c_MessageIds;
-      std::vector<uint32_t> c_SignalIndices;
+      QList<C_OscCanMessageIdentificationIndices> c_MessageIds;
+      QList<uint32_t> c_SignalIndices;
       bool q_SignalsOnly = true;
 
       //Get selected indices
@@ -2295,7 +2295,7 @@ void C_SdBueMessageSelectorTreeWidget::m_AddCoSignal(const C_OscCanMessageIdenti
 
    if (c_PopUp->exec() == static_cast<int32_t>(QDialog::Accepted))
    {
-      const std::vector<C_OscCanOpenManagerMappableSignal> c_Signals = pc_AddDialog->GetSelectedSignals();
+      const QList<C_OscCanOpenManagerMappableSignal> c_Signals = pc_AddDialog->GetSelectedSignals();
       if (c_Signals.size() > 0UL)
       {
          //Core
@@ -2703,9 +2703,9 @@ int32_t C_SdBueMessageSelectorTreeWidget::m_GetFirstConnectedNodeAndInterface(ui
    }
    else
    {
-      std::vector<uint32_t> c_NodeIndexes;
-      std::vector<uint32_t> c_InterfaceIndexes;
-      std::vector<uint32_t> c_DatapoolIndexes;
+      QList<uint32_t> c_NodeIndexes;
+      QList<uint32_t> c_InterfaceIndexes;
+      QList<uint32_t> c_DatapoolIndexes;
 
       C_PuiSdNodeCanMessageSyncManager::h_GetConnectedAndActiveInterfaces(this->mu32_BusIndex,
                                                                           this->me_ProtocolType,
@@ -2746,7 +2746,7 @@ int32_t C_SdBueMessageSelectorTreeWidget::m_MapMessageIdToInternalMessageIndex(
 
    if (this->mpc_MessageSyncManager != NULL)
    {
-      const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingIds =
+      const QList<C_OscCanMessageIdentificationIndices> c_MatchingIds =
          this->mpc_MessageSyncManager->GetMatchingMessageVector(orc_MessageId);
 
       for (uint32_t u32_ItMessageId = 0; (u32_ItMessageId < c_MatchingIds.size()) && (s32_Retval != C_NO_ERR);
@@ -2843,8 +2843,8 @@ void C_SdBueMessageSelectorTreeWidget::m_UpdateUniqueMessageIdsSignals(const uin
          this->mc_UniqueMessageIds[oru32_InternalMessageIndex]);
       if ((pc_Message != NULL) && (oru32_InternalMessageIndex < this->mc_UniqueMessageIdsSignalsOrder.size()))
       {
-         std::vector<uint32_t> & orc_CurrentSignals = this->mc_UniqueMessageIdsSignalsOrder[oru32_InternalMessageIndex];
-         std::vector<uint32_t>::iterator c_Begin;
+         QList<uint32_t> & orc_CurrentSignals = this->mc_UniqueMessageIdsSignalsOrder[oru32_InternalMessageIndex];
+         QList<uint32_t>::iterator c_Begin;
          orc_CurrentSignals.clear();
          for (uint32_t u32_ItSignal = 0; u32_ItSignal < pc_Message->c_Signals.size(); ++u32_ItSignal)
          {
@@ -2957,7 +2957,7 @@ void C_SdBueMessageSelectorTreeWidget::m_SaveSelection(void)
 {
    const QModelIndexList c_Selection = this->selectedIndexes();
 
-   std::vector<uint32_t> c_Signals;
+   QList<uint32_t> c_Signals;
 
    m_DisconnectSelection();
 
@@ -3052,7 +3052,7 @@ void C_SdBueMessageSelectorTreeWidget::m_RestoreSelection(const bool oq_AlsoSetC
                QTreeWidgetItem * const pc_TopLevelItem = this->topLevelItem(u32_InternalIndex);
                if (pc_TopLevelItem != NULL)
                {
-                  const std::vector<uint32_t> & rc_Signals = this->mc_SelectedSignals[u32_ItPrevSelection];
+                  const QList<uint32_t> & rc_Signals = this->mc_SelectedSignals[u32_ItPrevSelection];
 
                   if (rc_Signals.size() == 0)
                   {
@@ -3177,7 +3177,7 @@ int32_t C_SdBueMessageSelectorTreeWidget::m_MapSignalInternalIndexToDataIndex(
 
    if (oru32_InternalMessageIndex < this->mc_UniqueMessageIdsSignalsOrder.size())
    {
-      const std::vector<uint32_t> & rc_Signals = this->mc_UniqueMessageIdsSignalsOrder[oru32_InternalMessageIndex];
+      const QList<uint32_t> & rc_Signals = this->mc_UniqueMessageIdsSignalsOrder[oru32_InternalMessageIndex];
       if (oru32_InternalSignalIndex < rc_Signals.size())
       {
          oru32_SignalDataIndex = rc_Signals[oru32_InternalSignalIndex];
@@ -3214,7 +3214,7 @@ int32_t C_SdBueMessageSelectorTreeWidget::m_MapSignalDataIndexToInternalIndex(
 
    if (oru32_InternalMessageIndex < this->mc_UniqueMessageIdsSignalsOrder.size())
    {
-      const std::vector<uint32_t> & rc_Signals = this->mc_UniqueMessageIdsSignalsOrder[oru32_InternalMessageIndex];
+      const QList<uint32_t> & rc_Signals = this->mc_UniqueMessageIdsSignalsOrder[oru32_InternalMessageIndex];
       for (uint32_t u32_ItSignal = 0; u32_ItSignal < rc_Signals.size(); ++u32_ItSignal)
       {
          if (rc_Signals[u32_ItSignal] == oru32_DataSignalIndex)
@@ -3420,11 +3420,11 @@ bool C_SdBueMessageSelectorTreeWidget::m_GetHighestSelected(QModelIndex & orc_In
    J1939 default node assignment
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_CieImportDataAssignment> C_SdBueMessageSelectorTreeWidget::m_GetJ1939DefaultNodeAssignment(
+QList<C_CieImportDataAssignment> C_SdBueMessageSelectorTreeWidget::m_GetJ1939DefaultNodeAssignment(
    const C_CieConverter::C_CieNode & orc_NodeInfo) const
 {
    // Assign the imported messages to the first active node on the current bus
-   std::vector<C_CieImportDataAssignment> c_NodeAssignments;
+   QList<C_CieImportDataAssignment> c_NodeAssignments;
    C_CieImportDataAssignment c_NodeAssignmentConverted;
    c_NodeAssignmentConverted.c_ImportData = C_CieDataPoolListAdapter::h_GetStructureFromDbcFileImport(orc_NodeInfo);
    if (this->mq_ModeSingleNode)
@@ -3435,8 +3435,8 @@ std::vector<C_CieImportDataAssignment> C_SdBueMessageSelectorTreeWidget::m_GetJ1
    else
    {
       // Fetch nodes and interfaces of the current bus
-      std::vector<uint32_t> c_NodeIndexes;
-      std::vector<uint32_t> c_InterfaceIndexes;
+      QList<uint32_t> c_NodeIndexes;
+      QList<uint32_t> c_InterfaceIndexes;
 
       C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(this->mu32_BusIndex,
                                                                                          c_NodeIndexes,
@@ -3448,7 +3448,7 @@ std::vector<C_CieImportDataAssignment> C_SdBueMessageSelectorTreeWidget::m_GetJ1
          bool q_NodeFound = false;
          for (uint32_t u32_ItNode = 0; u32_ItNode < c_NodeIndexes.size(); ++u32_ItNode)
          {
-            std::vector<const C_OscCanMessageContainer *> c_MessageContainers =
+            QList<const C_OscCanMessageContainer *> c_MessageContainers =
                C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainers(c_NodeIndexes[u32_ItNode],
                                                                                 this->me_ProtocolType,
                                                                                 c_InterfaceIndexes[u32_ItNode]);

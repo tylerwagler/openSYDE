@@ -122,7 +122,7 @@ C_SdBueMessageTableView::~C_SdBueMessageTableView(void)
    \param[in]  orc_Values  Values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMessageTableView::LoadUserSettings(const std::vector<int32_t> & orc_Values)
+void C_SdBueMessageTableView::LoadUserSettings(const QList<int32_t> & orc_Values)
 {
    if (this->m_SetColumnWidths(orc_Values) == false)
    {
@@ -136,7 +136,7 @@ void C_SdBueMessageTableView::LoadUserSettings(const std::vector<int32_t> & orc_
    \param[in,out]  orc_Values    Values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMessageTableView::SaveUserSettings(std::vector<int32_t> & orc_Values) const
+void C_SdBueMessageTableView::SaveUserSettings(QList<int32_t> & orc_Values) const
 {
    const std::map<C_SdBueMessageTableModel::E_Columns,
                   uint32_t> c_DefaultColumnWidths = C_SdBueMessageTableView::mh_GetDefaultColumnWidths();

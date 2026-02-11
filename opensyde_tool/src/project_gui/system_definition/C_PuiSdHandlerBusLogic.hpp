@@ -9,6 +9,7 @@
 #define C_PUISDHANDLERBUSLOGIC_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include "C_PuiSdHandlerHalc.hpp"
 #include "C_PuiSdNodeInterfaceAutomaticProperties.hpp"
@@ -41,7 +42,7 @@ public:
    bool CheckBusConflict(const uint32_t ou32_BusIndex) const;
    int32_t CheckBusConflictDetailed(const uint32_t ou32_BusIndex, bool * const opq_NameConflict = NULL,
                                     bool * const opq_NameEmpty = NULL, bool * const opq_IdInvalid = NULL,
-                                    QStringList * const opc_InvalidNodesForBitRate = NULL, std::vector<stw::opensyde_core::C_OscCanProtocol::E_Type> * const opc_InvalidProtocols =
+                                    QStringList * const opc_InvalidNodesForBitRate = NULL, QList<stw::opensyde_core::C_OscCanProtocol::E_Type> * const opc_InvalidProtocols =
                                        NULL) const;
    uint32_t GetOscBusesSize(void) const;
    int32_t SetAutomaticBusRoutingSettings(const uint32_t ou32_BusIndex);
@@ -53,18 +54,18 @@ public:
 
    //Connections
    void AddConnection(const uint32_t ou32_NodeIndex, const uint8_t ou8_InterfaceNumber,
-                      const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
+                      const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
                       const uint32_t ou32_BusIndex);
    void RemoveConnection(const uint32_t ou32_NodeIndex, const C_PuiSdNodeConnectionId & orc_Id);
    void ChangeConnection(const uint32_t ou32_NodeIndex, const C_PuiSdNodeConnectionId & orc_Id,
                          const uint8_t ou8_NewInterface,
-                         const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+                         const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    void ChangeCompleteConnection(const uint32_t ou32_NodeIndex, const C_PuiSdNodeConnectionId & orc_PrevId,
                                  const C_PuiSdNodeConnectionId & orc_NewId,
-                                 const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
+                                 const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
                                  const uint32_t & oru32_BusIndex = 0xFFFFFFFFUL,
                                  const bool oq_IncludeCanOpenSync = true);
-   void SetUiNodeConnections(const uint32_t ou32_NodeIndex, const std::vector<C_PuiSdNodeConnection> & orc_Connections);
+   void SetUiNodeConnections(const uint32_t ou32_NodeIndex, const QList<C_PuiSdNodeConnection> & orc_Connections);
    void SetUiNodeConnectionId(const uint32_t ou32_NodeIndex, const uint32_t ou32_ConnectionIndex,
                               const C_PuiSdNodeConnectionId & orc_Id);
 
@@ -75,7 +76,7 @@ public:
    const stw::opensyde_core::C_OscNodeDataPool * GetOscCanDataPool(const uint32_t & oru32_NodeIndex,
                                                                    const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType, const uint32_t & oru32_DatapoolIndex)
    const;
-   std::vector<const stw::opensyde_core::C_OscNodeDataPool *> GetOscCanDataPools(const uint32_t & oru32_NodeIndex,
+   QList<const stw::opensyde_core::C_OscNodeDataPool *> GetOscCanDataPools(const uint32_t & oru32_NodeIndex,
                                                                                  const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType)
    const;
    const C_PuiSdNodeDataPool * GetUiCanDataPool(const uint32_t & oru32_NodeIndex,
@@ -92,7 +93,7 @@ public:
    const stw::opensyde_core::C_OscCanMessageContainer * GetCanProtocolMessageContainer(const uint32_t & oru32_NodeIndex,
                                                                                        const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType, const uint32_t & oru32_InterfaceIndex, const uint32_t ou32_DatapoolIndex)
    const;
-   std::vector<const stw::opensyde_core::C_OscCanMessageContainer *> GetCanProtocolMessageContainers(
+   QList<const stw::opensyde_core::C_OscCanMessageContainer *> GetCanProtocolMessageContainers(
       const uint32_t & oru32_NodeIndex, const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType,
       const uint32_t & oru32_InterfaceIndex) const;
    int32_t GetCanProtocolType(const uint32_t ou32_NodeIndex, const uint32_t ou32_DatapoolIndex,
@@ -101,8 +102,8 @@ public:
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId) const;
    int32_t GetCanMessageComplete(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                                  stw::opensyde_core::C_OscCanMessage & orc_Message,
-                                 std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
-                                 std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                                 QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
+                                 QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
                                  C_PuiSdNodeCanMessage & orc_UiMessage,
                                  const bool oq_ChangeSignalIndicesToOutput = false) const;
    const stw::opensyde_core::C_OscNodeDataPoolList * GetOscCanDataPoolList(const uint32_t & oru32_NodeIndex,
@@ -154,15 +155,15 @@ public:
    int32_t AddCanMessage(const uint32_t & oru32_NodeIndex,
                          const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType,
                          const uint32_t & oru32_InterfaceIndex, const uint32_t ou32_DatapoolIndex,
-                         const bool & orq_MessageIsTx, const stw::opensyde_core::C_OscCanMessage & orc_Message, const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement>
+                         const bool & orq_MessageIsTx, const stw::opensyde_core::C_OscCanMessage & orc_Message, const QList<stw::opensyde_core::C_OscNodeDataPoolListElement>
                          & orc_OscSignalCommons,
-                         const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                         const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
                          const C_PuiSdNodeCanMessage & orc_UiMessage,
                          const bool & orq_AutomatedPropertiesAdaption);
    int32_t InsertCanMessage(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-                            const stw::opensyde_core::C_OscCanMessage & orc_Message, const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement>
+                            const stw::opensyde_core::C_OscCanMessage & orc_Message, const QList<stw::opensyde_core::C_OscNodeDataPoolListElement>
                             & orc_OscSignalCommons,
-                            const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                            const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
                             const C_PuiSdNodeCanMessage & orc_UiMessage,
                             const bool & orq_AutomatedPropertiesAdaption);
    int32_t DeleteCanMessage(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
@@ -213,7 +214,7 @@ protected:
                                                            const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType, const uint32_t & oru32_InterfaceIndex, const uint32_t ou32_DatapoolIndex, const bool & orq_MessageIsTx)
    const;
    int32_t m_InsertUiCanMessage(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-                                const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                                const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
                                 const C_PuiSdNodeCanMessage & orc_UiMessage);
    int32_t m_DeleteUiCanMessage(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
    virtual void m_HandleChangeConnectionForCanOpen(const uint32_t ou32_NodeIndex,

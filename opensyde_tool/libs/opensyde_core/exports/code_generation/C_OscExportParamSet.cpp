@@ -15,6 +15,7 @@
  */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
+#include <QList>
 
 #include "C_OscExportParamSet.hpp"
 #include "stwerrors.hpp"
@@ -232,7 +233,7 @@ int32_t C_OscExportParamSet::mh_FillPsiStructure(
   if (pc_FirstDataPool != NULL) {
     // get raw data (data from only dataset of list "configuration" of first
     // Datapool)
-    std::vector<uint8_t> c_ConfigRawBytes;
+    QByteArray c_ConfigRawBytes;
     s32_Retval =
         mh_GetConfigurationRawBytes(*pc_FirstDataPool, c_ConfigRawBytes);
 
@@ -358,8 +359,8 @@ void C_OscExportParamSet::mh_FillInterpretedDatapool(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportParamSet::mh_FillRawEntries(
     const C_OscNodeDataPool &orc_SdDataPool,
-    const std::vector<uint8_t> &orc_ConfigRawBytes,
-    std::vector<C_OscParamSetRawEntry> &orc_Entries) {
+    const QByteArray &orc_ConfigRawBytes,
+    QList<C_OscParamSetRawEntry> &orc_Entries) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_SdDataPool.c_Lists.size() ==
@@ -536,7 +537,7 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(
    C_CONFIG    number of Datapool list elements not as expected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportParamSet::mh_InsertCrc16(std::vector<uint8_t> &orc_Bytes) {
+int32_t C_OscExportParamSet::mh_InsertCrc16(QByteArray &orc_Bytes) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_Bytes.size() > 2) {
@@ -567,7 +568,7 @@ int32_t C_OscExportParamSet::mh_InsertCrc16(std::vector<uint8_t> &orc_Bytes) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportParamSet::mh_GetConfigurationRawBytes(
-    const C_OscNodeDataPool &orc_SdDataPool, std::vector<uint8_t> &orc_Bytes) {
+    const C_OscNodeDataPool &orc_SdDataPool, QByteArray &orc_Bytes) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_SdDataPool.c_Lists.size() > 0) {
@@ -577,9 +578,9 @@ int32_t C_OscExportParamSet::mh_GetConfigurationRawBytes(
     // insert dummies for CRC bytes
     // do not use list's GetCRCAsBigEndianBlob resp. u32_NvmCrc as this members
     // content would need calculation first
-    std::vector<uint8_t> c_CrcDummy;
+    QByteArray c_CrcDummy;
     c_CrcDummy.resize(2, 0);
-    orc_Bytes.insert(orc_Bytes.begin(), c_CrcDummy.begin(), c_CrcDummy.end());
+    orc_Bytes.insert(0, c_CrcDummy);
 
     // insert configured data
     for (uint32_t u32_ItElement = 0U;
@@ -589,9 +590,9 @@ int32_t C_OscExportParamSet::mh_GetConfigurationRawBytes(
       const C_OscNodeDataPoolListElement &rc_Element =
           orc_SdDataPool.c_Lists[0].c_Elements[u32_ItElement];
       if (rc_Element.c_DataSetValues.size() == 1) {
-        std::vector<uint8_t> c_NewBytes;
+        QByteArray c_NewBytes;
         rc_Element.c_DataSetValues[0].GetValueAsBigEndianBlob(c_NewBytes);
-        orc_Bytes.insert(orc_Bytes.end(), c_NewBytes.begin(), c_NewBytes.end());
+        orc_Bytes.append(c_NewBytes);
       } else {
         s32_Retval = C_CONFIG;
       }

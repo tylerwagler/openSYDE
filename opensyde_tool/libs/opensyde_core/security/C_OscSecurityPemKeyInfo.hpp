@@ -62,28 +62,28 @@ public:
 
    void Clear();
 
-   const std::vector<uint8_t> & GetPrivateKey(void) const;
-   const std::vector<uint8_t> & GetX509CertificateData(void) const;
-   const std::vector<uint8_t> & GetCertificateSerialNumber(void) const;
+   const QByteArray & GetPrivateKey(void) const;
+   const QByteArray & GetX509CertificateData(void) const;
+   const QByteArray & GetCertificateSerialNumber(void) const;
    const C_CertificateKeyUsageInformation & GetKeyUsageInformation(void) const;
 
    bool AreKeysAvailable(std::string & orc_ErrorMessage, const bool oq_CheckSerialNumber) const;
-   void SetPrivateKey(const std::vector<uint8_t> & orc_Value);
-   void SetX509CertificateData(const std::vector<uint8_t> & orc_Value);
-   void SetCertificateSerialNumber(const std::vector<uint8_t> & orc_Value);
+   void SetPrivateKey(const QByteArray & orc_Value);
+   void SetX509CertificateData(const QByteArray & orc_Value);
+   void SetCertificateSerialNumber(const QByteArray & orc_Value);
    void SetKeyUsageInformation(const C_CertificateKeyUsageInformation & orc_KeyUsage);
 
 private:
    //information flags from certificate
    C_CertificateKeyUsageInformation mc_KeyUsageInformation;
 
-   std::vector<uint8_t> mc_PrivateKey;
+   QByteArray mc_PrivateKey;
 
    //certificate information (includes public key, certificate data, flags, ...)
-   std::vector<uint8_t> mc_X509CertificateData;
+   QByteArray mc_X509CertificateData;
 
    //serial number of certificate
-   std::vector<uint8_t> mc_CertificateSerialNumber;
+   QByteArray mc_CertificateSerialNumber;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

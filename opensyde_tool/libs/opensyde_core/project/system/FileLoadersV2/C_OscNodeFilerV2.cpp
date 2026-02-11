@@ -152,7 +152,7 @@ void C_OscNodeFilerV2::h_SaveNode(const C_OscNode & orc_Node, C_OscXmlParserBase
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFilerV2::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> & orc_NodeComProtocols,
+int32_t C_OscNodeFilerV2::h_LoadNodeComProtocols(QList<C_OscCanProtocol> & orc_NodeComProtocols,
                                                  C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -214,7 +214,7 @@ int32_t C_OscNodeFilerV2::h_LoadNodeComProtocols(std::vector<C_OscCanProtocol> &
    \param[in,out]  orc_XmlParser          XML with list active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeFilerV2::h_SaveNodeComProtocols(const std::vector<C_OscCanProtocol> & orc_NodeComProtocols,
+void C_OscNodeFilerV2::h_SaveNodeComProtocols(const QList<C_OscCanProtocol> & orc_NodeComProtocols,
                                               C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_NodeComProtocols.size()));
@@ -316,7 +316,7 @@ void C_OscNodeFilerV2::h_SaveNodeComProtocol(const C_OscCanProtocol & orc_NodeCo
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFilerV2::h_LoadNodeComMessageContainers(
-   std::vector<C_OscCanMessageContainer> & orc_NodeComMessageContainers, C_OscXmlParserBase & orc_XmlParser)
+   QList<C_OscCanMessageContainer> & orc_NodeComMessageContainers, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -378,7 +378,7 @@ int32_t C_OscNodeFilerV2::h_LoadNodeComMessageContainers(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeFilerV2::h_SaveNodeComMessageContainers(
-   const std::vector<C_OscCanMessageContainer> & orc_NodeComMessageContainers, C_OscXmlParserBase & orc_XmlParser)
+   const QList<C_OscCanMessageContainer> & orc_NodeComMessageContainers, C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_NodeComMessageContainers.size()));
    for (uint32_t u32_ItComMessageContainer = 0; u32_ItComMessageContainer < orc_NodeComMessageContainers.size();
@@ -489,7 +489,7 @@ void C_OscNodeFilerV2::h_SaveNodeComMessageContainer(const C_OscCanMessageContai
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFilerV2::h_LoadNodeComMessages(std::vector<C_OscCanMessage> & orc_NodeComMessages,
+int32_t C_OscNodeFilerV2::h_LoadNodeComMessages(QList<C_OscCanMessage> & orc_NodeComMessages,
                                                 C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -552,7 +552,7 @@ int32_t C_OscNodeFilerV2::h_LoadNodeComMessages(std::vector<C_OscCanMessage> & o
    \param[in,out]  orc_XmlParser          XML with list active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeFilerV2::h_SaveNodeComMessages(const std::vector<C_OscCanMessage> & orc_NodeComMessages,
+void C_OscNodeFilerV2::h_SaveNodeComMessages(const QList<C_OscCanMessage> & orc_NodeComMessages,
                                              C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_NodeComMessages.size()));
@@ -692,7 +692,7 @@ void C_OscNodeFilerV2::h_SaveNodeComMessage(const C_OscCanMessage & orc_NodeComM
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFilerV2::h_LoadNodeComSignals(std::vector<C_OscCanSignal> & orc_NodeComSignals,
+int32_t C_OscNodeFilerV2::h_LoadNodeComSignals(QList<C_OscCanSignal> & orc_NodeComSignals,
                                                C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -755,7 +755,7 @@ int32_t C_OscNodeFilerV2::h_LoadNodeComSignals(std::vector<C_OscCanSignal> & orc
    \param[in,out]  orc_XmlParser       XML with list active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeFilerV2::h_SaveNodeComSignals(const std::vector<C_OscCanSignal> & orc_NodeComSignals,
+void C_OscNodeFilerV2::h_SaveNodeComSignals(const QList<C_OscCanSignal> & orc_NodeComSignals,
                                             C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_NodeComSignals.size()));
@@ -1404,7 +1404,7 @@ void C_OscNodeFilerV2::mh_SaveStwFlashloaderOptions(const C_OscNodeStwFlashloade
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFilerV2::mh_LoadApplications(std::vector<C_OscNodeApplication> & orc_NodeApplications,
+int32_t C_OscNodeFilerV2::mh_LoadApplications(QList<C_OscNodeApplication> & orc_NodeApplications,
                                               C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1585,7 +1585,7 @@ int32_t C_OscNodeFilerV2::mh_LoadApplications(std::vector<C_OscNodeApplication> 
    \param[in,out]  orc_XmlParser          XML with core active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeFilerV2::mh_SaveApplications(const std::vector<C_OscNodeApplication> & orc_NodeApplications,
+void C_OscNodeFilerV2::mh_SaveApplications(const QList<C_OscNodeApplication> & orc_NodeApplications,
                                            C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("applications");
@@ -1704,7 +1704,7 @@ int32_t C_OscNodeFilerV2::mh_LoadDataPools(const uint16_t ou16_XmlFormatVersion,
    \param[in,out]  orc_XmlParser       XML with core active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeFilerV2::mh_SaveDataPools(const std::vector<C_OscNodeDataPool> & orc_NodeDataPools,
+void C_OscNodeFilerV2::mh_SaveDataPools(const QList<C_OscNodeDataPool> & orc_NodeDataPools,
                                         C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("data-pools");

@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include "C_OscParamSetInterpretedElement.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -31,7 +32,7 @@ public:
    C_OscParamSetInterpretedList(void);
 
    QString c_Name;                            ///< List name
-   std::vector<C_OscParamSetInterpretedElement> c_Elements; ///< Interpreted elements of this list
+   QList<C_OscParamSetInterpretedElement> c_Elements; ///< Interpreted elements of this list
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

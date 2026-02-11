@@ -28,7 +28,7 @@ class C_GiSvPcBusConnector :
 {
 public:
    C_GiSvPcBusConnector(const uint64_t ou64_UniqueId, const uint32_t ou32_ViewIndex,
-                        const std::vector<QPointF> & orc_InteractionPoints, const C_GiLiBus * const opc_BusItem,
+                        const QList<QPointF> & orc_InteractionPoints, const C_GiLiBus * const opc_BusItem,
                         C_GiBiConnectableItem * const opc_GenericItem);
    int32_t type(void) const override;
    void GenerateHint(void) override;

@@ -12,6 +12,7 @@
 #define C_SDBUEUNOSIGNALDELETECOMMAND_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_SdBueUnoSignalAddDeleteBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,8 +29,8 @@ class C_SdBueUnoSignalDeleteCommand :
 {
 public:
    C_SdBueUnoSignalDeleteCommand(
-      const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
-      const std::vector<uint32_t> & orc_SignalIndex,
+      const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
+      const QList<uint32_t> & orc_SignalIndex,
       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
       stw::opensyde_gui::C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget,
       QUndoCommand * const opc_Parent = NULL);

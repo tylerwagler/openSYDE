@@ -34,7 +34,7 @@ using namespace stw::opensyde_gui_logic;
 /* -- Global Variables ---------------------------------------------------------------------------------------------- */
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
-std::vector<QPointer<C_NagToolTip> > C_NagToolTip::mhc_ExistingToolTips;
+QList<QPointer<C_NagToolTip> > C_NagToolTip::mhc_ExistingToolTips;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
 
@@ -211,7 +211,7 @@ bool C_NagToolTip::h_HideAll(void)
 {
    bool q_Retval = false;
 
-   for (std::vector<QPointer<C_NagToolTip> >::iterator c_ItExisting = C_NagToolTip::mhc_ExistingToolTips.begin();
+   for (QList<QPointer<C_NagToolTip> >::iterator c_ItExisting = C_NagToolTip::mhc_ExistingToolTips.begin();
         c_ItExisting != C_NagToolTip::mhc_ExistingToolTips.end();)
    {
       QPointer<C_NagToolTip> & rc_ExistingToolTip = *c_ItExisting;
@@ -247,7 +247,7 @@ void C_NagToolTip::showEvent(QShowEvent * const opc_Event)
    bool q_Found = false;
 
    //Clean up old ones
-   for (std::vector<QPointer<C_NagToolTip> >::iterator c_ItExisting = C_NagToolTip::mhc_ExistingToolTips.begin();
+   for (QList<QPointer<C_NagToolTip> >::iterator c_ItExisting = C_NagToolTip::mhc_ExistingToolTips.begin();
         c_ItExisting != C_NagToolTip::mhc_ExistingToolTips.end();)
    {
       QPointer<C_NagToolTip> & rc_ExistingToolTip = *c_ItExisting;

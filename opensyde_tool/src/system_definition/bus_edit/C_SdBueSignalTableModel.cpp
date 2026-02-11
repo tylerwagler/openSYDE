@@ -733,7 +733,7 @@ QFont C_SdBueSignalTableModel::m_GetFontValue(const C_SdBueSignalTableModel::E_C
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueSignalTableModel::m_FillSigInfo(void)
 {
-   const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> c_MessageIds =
+   const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> c_MessageIds =
       this->mpc_SyncManager->GetUniqueMessages();
    uint32_t u32_MessageCounter;
 

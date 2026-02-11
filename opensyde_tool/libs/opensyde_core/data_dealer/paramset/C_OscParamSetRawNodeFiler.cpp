@@ -115,7 +115,7 @@ C_OscParamSetRawNodeFiler::C_OscParamSetRawNodeFiler(void) :
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler::mh_LoadEntries(std::vector<C_OscParamSetRawEntry> & orc_Entries,
+int32_t C_OscParamSetRawNodeFiler::mh_LoadEntries(QList<C_OscParamSetRawEntry> & orc_Entries,
                                                   C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -169,7 +169,7 @@ int32_t C_OscParamSetRawNodeFiler::mh_LoadEntries(std::vector<C_OscParamSetRawEn
    \param[in,out] orc_XmlParser XML with specified node active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscParamSetRawNodeFiler::mh_SaveEntries(const std::vector<C_OscParamSetRawEntry> & orc_Entries,
+void C_OscParamSetRawNodeFiler::mh_SaveEntries(const QList<C_OscParamSetRawEntry> & orc_Entries,
                                                C_OscXmlParserBase & orc_XmlParser)
 {
    //Clean start

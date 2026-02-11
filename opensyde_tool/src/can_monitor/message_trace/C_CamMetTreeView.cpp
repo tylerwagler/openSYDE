@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Max performance view (implementation)
@@ -17,6 +17,7 @@
 #include <QApplication>
 #include <algorithm> //for std::sort
 #include <QDrag>
+#include <vector>
 
 #include "stwerrors.hpp"
 #include "constants.hpp"
@@ -240,7 +241,7 @@ void C_CamMetTreeView::ActionClearData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetTreeView::SetProtocol(const stw::cmon_protocol::e_CanMonL7Protocols oe_Protocol)
 {
-   std::vector<C_CamMetTreeLoggerData *> c_Messages;
+   QList<C_CamMetTreeLoggerData *> c_Messages;
    C_SyvComMessageMonitor::SetProtocol(oe_Protocol);
    //Change all existing messages
    c_Messages = this->mc_Model.GetAllMessagesForProtocolChange();
@@ -454,7 +455,7 @@ void C_CamMetTreeView::SaveUserSettings(void) const
    \param[in]  orc_ColumnWidths  Stored column widths (Restores default values if empty)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMetTreeView::SetCurrentColumnWidths(const std::vector<int32_t> & orc_ColumnWidths)
+void C_CamMetTreeView::SetCurrentColumnWidths(const QList<int32_t> & orc_ColumnWidths)
 {
    if (orc_ColumnWidths.size() > 0)
    {
@@ -485,9 +486,9 @@ void C_CamMetTreeView::SetCurrentColumnWidths(const std::vector<int32_t> & orc_C
    Current column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_CamMetTreeView::GetCurrentColumnWidths() const
+QList<int32_t> C_CamMetTreeView::GetCurrentColumnWidths() const
 {
-   std::vector<int32_t> c_Retval;
+   QList<int32_t> c_Retval;
    c_Retval.reserve(this->model()->columnCount());
    for (int32_t s32_ItCol = 0; s32_ItCol < this->model()->columnCount(); ++s32_ItCol)
    {
@@ -863,8 +864,8 @@ void C_CamMetTreeView::m_CopySelection(void)
 
    if (c_SelectedItems.size() > 0L)
    {
-      std::vector<int32_t> c_AddedTopLevelRows;
-      std::vector<C_CamMetClipBoardHelperCanMessageData> c_CanMessagesData;
+      QList<int32_t> c_AddedTopLevelRows;
+      QList<C_CamMetClipBoardHelperCanMessageData> c_CanMessagesData;
 
       for (QModelIndexList::ConstIterator c_It = c_SelectedItems.begin(); c_It != c_SelectedItems.end(); ++c_It)
       {
@@ -970,7 +971,7 @@ void C_CamMetTreeView::m_HandleMessages(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetTreeView::m_UpdateUi(const std::list<C_CamMetTreeLoggerData> & orc_Data)
 {
-   std::vector<int32_t> c_Rows;
+   QList<int32_t> c_Rows;
    // Get the maximum of the scroll bar before adding new data
    const int32_t s32_ScrollBarValMax = this->verticalScrollBar()->maximum();
 
@@ -1008,7 +1009,7 @@ void C_CamMetTreeView::m_UpdateUi(const std::list<C_CamMetTreeLoggerData> & orc_
    \param[in]  orc_Indices    Rows to stretch all child items for
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMetTreeView::m_SetChildColumns(const std::vector<int32_t> & orc_Indices)
+void C_CamMetTreeView::m_SetChildColumns(const QList<int32_t> & orc_Indices)
 {
    for (uint32_t u32_It = 0; u32_It < orc_Indices.size(); ++u32_It)
    {
@@ -1229,9 +1230,9 @@ void C_CamMetTreeView::m_OnCollapse(const QModelIndex & orc_Index)
    Current column position indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_CamMetTreeView::m_GetCurrentColumnPositionIndices(void) const
+QList<int32_t> C_CamMetTreeView::m_GetCurrentColumnPositionIndices(void) const
 {
-   std::vector<int32_t> c_Retval;
+   QList<int32_t> c_Retval;
    c_Retval.reserve(this->mc_Model.columnCount());
    for (int32_t s32_ItCol = 0L; s32_ItCol < this->mc_Model.columnCount(); ++s32_ItCol)
    {
@@ -1246,7 +1247,7 @@ std::vector<int32_t> C_CamMetTreeView::m_GetCurrentColumnPositionIndices(void) c
    \param[in]  orc_NewColPositionIndices  New column position indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMetTreeView::m_SetColumnPositionIndices(const std::vector<int32_t> & orc_NewColPositionIndices)
+void C_CamMetTreeView::m_SetColumnPositionIndices(const QList<int32_t> & orc_NewColPositionIndices)
 {
    if (orc_NewColPositionIndices.size() == static_cast<uint32_t>(this->mc_Model.columnCount()))
    {
@@ -1294,7 +1295,7 @@ void C_CamMetTreeView::m_SetColumnPositionIndices(const std::vector<int32_t> & o
    False Unsorted
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_CamMetTreeView::m_ColumnsSortedAsExpected(const std::vector<int32_t> & orc_NewColPositionIndices) const
+bool C_CamMetTreeView::m_ColumnsSortedAsExpected(const QList<int32_t> & orc_NewColPositionIndices) const
 {
    bool q_Retval = true;
 

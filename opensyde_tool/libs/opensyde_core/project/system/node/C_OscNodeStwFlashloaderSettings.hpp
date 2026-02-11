@@ -38,7 +38,7 @@ public:
    bool q_ResetMessageExtendedId;
    uint32_t u32_ResetMessageId;
    uint8_t u8_ResetMessageDlc;
-   std::vector<uint8_t> c_Data;
+   QByteArray c_Data;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

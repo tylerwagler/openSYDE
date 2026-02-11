@@ -105,12 +105,12 @@ C_FlaSenSearchNodePopup::C_FlaSenSearchNodePopup(
   // emitted from C_FlaSenDcBasicSequences::m_ReportDevicesInfoRead. Following
   // message appears if the meta type is not registered: "QObject::connect:
   // Cannot queue arguments of type
-  // 'std::vector<stw::opensyde_core::C_OscDcDeviceInformation>' (Make sure
-  // 'std::vector<stw::opensyde_core::C_OscDcDeviceInformation>' is registered
+  // 'QList<stw::opensyde_core::C_OscDcDeviceInformation>' (Make sure
+  // 'QList<stw::opensyde_core::C_OscDcDeviceInformation>' is registered
   // using qRegisterMetaType().)"
 
-  qRegisterMetaType<std::vector<stw::opensyde_core::C_OscDcDeviceInformation>>(
-      "std::vector<stw::opensyde_core::C_OscDcDeviceInformation>");
+  qRegisterMetaType<QList<stw::opensyde_core::C_OscDcDeviceInformation>>(
+      "QList<stw::opensyde_core::C_OscDcDeviceInformation>");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -337,7 +337,7 @@ void C_FlaSenSearchNodePopup::m_ScanNodes(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaSenSearchNodePopup::m_DeviceInfoReceived(
-    const std::vector<stw::opensyde_core::C_OscDcDeviceInformation>
+    const QList<stw::opensyde_core::C_OscDcDeviceInformation>
         &orc_DeviceInfoResult,
     const bool oq_SecurityFeatureUsed) {
   // SYDEflash is not able to cope with Security mechanisms and we don't want to

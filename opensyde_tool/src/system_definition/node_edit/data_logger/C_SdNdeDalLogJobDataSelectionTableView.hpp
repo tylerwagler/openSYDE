@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QSortFilterProxyModel>
+#include <QList>
 
 #include "C_TblViewScroll.hpp"
 #include "C_SdNdeDalLogJobDataSelectionTableModel.hpp"
@@ -34,15 +35,15 @@ public:
    C_SdNdeDalLogJobDataSelectionTableView(QWidget * const opc_Parent = NULL);
    ~C_SdNdeDalLogJobDataSelectionTableView(void) override;
 
-   void LoadUserSettings(const std::vector<int32_t> & orc_Values);
-   void SaveUserSettings(std::vector<int32_t> & orc_Values) const;
+   void LoadUserSettings(const QList<int32_t> & orc_Values);
+   void SaveUserSettings(QList<int32_t> & orc_Values) const;
    bool IsEmpty(void) const;
    void Search(const QString & orc_Text);
-   void UpdateData(const std::vector<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
+   void UpdateData(const QList<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
                    const uint32_t ou32_NodeIndex);
-   void AddData(const std::vector<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
+   void AddData(const QList<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
                 const uint32_t ou32_NodeIndex);
-   void GetSelectedElements(std::vector<uint32_t> & orc_SelectedIndices) const;
+   void GetSelectedElements(QList<uint32_t> & orc_SelectedIndices) const;
    void DeleteSelectedElements();
    void GetElementLocationCount(uint32_t & oru32_LocalElements, uint32_t & oru32_RemoteElements);
 

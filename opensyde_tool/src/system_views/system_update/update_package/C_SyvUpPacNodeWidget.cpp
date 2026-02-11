@@ -1860,7 +1860,7 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(
       &c_SelectedFilterName);
   if (!c_FullPackagePath.isEmpty()) {
     int32_t s32_Return;
-    std::vector<C_OscXceUpdatePackageParameters> c_UpdatePackageParameters;
+    QList<C_OscXceUpdatePackageParameters> c_UpdatePackageParameters;
     QStringList c_UsedCertificatesPath;
     if (oq_OptionAddPemFiles) {
       for (const auto &path : orc_CertificatesPath) {
@@ -1869,9 +1869,9 @@ void C_SyvUpPacNodeWidget::m_OnCreatePackage(
     }
     if (oq_OptionAddSecureAuthentification) {
       c_UpdatePackageParameters.resize(1);
-      c_UpdatePackageParameters.at(0).c_AuthenticationKeyPath =
+      c_UpdatePackageParameters[0].c_AuthenticationKeyPath =
           orc_PublicKeyPath;
-      c_UpdatePackageParameters.at(0).c_Password =
+      c_UpdatePackageParameters[0].c_Password =
           orc_Password;
     }
     s32_Return = C_OscXceCreate::h_CreatePackage(

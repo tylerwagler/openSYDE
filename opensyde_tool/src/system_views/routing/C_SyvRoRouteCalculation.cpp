@@ -79,7 +79,7 @@ C_SyvRoRouteCalculation::~C_SyvRoRouteCalculation()
    Pointer to Vector with all found routes
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_OscRoutingRoute> * C_SyvRoRouteCalculation::GetRoutes(void) const
+const QList<C_OscRoutingRoute> * C_SyvRoRouteCalculation::GetRoutes(void) const
 {
    return this->mpc_Calculation->GetRoutes();
 }

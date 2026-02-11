@@ -113,17 +113,17 @@ void C_SdBueCoAddSignalsView::PrepareCleanUp()
    Selected signals
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscCanOpenManagerMappableSignal> C_SdBueCoAddSignalsView::GetSelectedSignals() const
+QList<C_OscCanOpenManagerMappableSignal> C_SdBueCoAddSignalsView::GetSelectedSignals() const
 {
-   std::vector<C_OscCanOpenManagerMappableSignal> c_Retval;
-   const std::map<uint32_t, std::vector<uint32_t> > c_UniqueSignals = C_SdBueCoAddSignalsModel::h_GetUniqueIndices(m_MapModelIndices(
+   QList<C_OscCanOpenManagerMappableSignal> c_Retval;
+   const std::map<uint32_t, QList<uint32_t> > c_UniqueSignals = C_SdBueCoAddSignalsModel::h_GetUniqueIndices(m_MapModelIndices(
                                                                                                                       this
                                                                                                                       ->
                                                                                                                       selectedIndexes()));
-   for (std::map<uint32_t, std::vector<uint32_t> >::const_iterator c_ItTopLevel = c_UniqueSignals.cbegin();
+   for (std::map<uint32_t, QList<uint32_t> >::const_iterator c_ItTopLevel = c_UniqueSignals.cbegin();
         c_ItTopLevel != c_UniqueSignals.cend(); ++c_ItTopLevel)
    {
-      for (std::vector<uint32_t>::const_iterator c_ItSignal = c_ItTopLevel->second.cbegin();
+      for (QList<uint32_t>::const_iterator c_ItSignal = c_ItTopLevel->second.cbegin();
            c_ItSignal != c_ItTopLevel->second.cend(); ++c_ItSignal)
       {
          const C_OscCanOpenManagerMappableSignal * const pc_Entry = this->mc_Model.GetDataForIndex(c_ItTopLevel->first,
@@ -214,9 +214,9 @@ uint32_t C_SdBueCoAddSignalsView::mh_CountUnique(const QModelIndexList & orc_Ind
    uint32_t u32_Retval = 0;
 
    const std::map<uint32_t,
-                  std::vector<uint32_t> > c_Rows = C_SdBueCoAddSignalsModel::h_GetUniqueIndices(orc_Indices);
+                  QList<uint32_t> > c_Rows = C_SdBueCoAddSignalsModel::h_GetUniqueIndices(orc_Indices);
 
-   for (std::map<uint32_t, std::vector<uint32_t> >::const_iterator c_It = c_Rows.cbegin();
+   for (std::map<uint32_t, QList<uint32_t> >::const_iterator c_It = c_Rows.cbegin();
         c_It != c_Rows.cend(); ++c_It)
    {
       u32_Retval += c_It->second.size();

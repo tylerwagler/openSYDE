@@ -20,6 +20,7 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 #include <QElapsedTimer>
+#include <QList>
 #include <cstring>
 #include <iostream>
 
@@ -682,7 +683,7 @@ void C_OscProtocolDriverOsyTpCan::mh_ComposeSingleFrame(
   orc_CanMessage.au8_Data[0] = static_cast<uint8_t>(
       mhu8_ISO15765_N_PCI_SF + (orc_Service.c_Data.size()));
   if (orc_Service.c_Data.size() > 0) {
-    (void)std::memcpy(&orc_CanMessage.au8_Data[1], &orc_Service.c_Data[0],
+    (void)std::memcpy(&orc_CanMessage.au8_Data[1], orc_Service.c_Data.data(),
                       orc_Service.c_Data.size());
   }
 }
@@ -1289,8 +1290,8 @@ int32_t C_OscProtocolDriverOsyTpCan::SetDispatcher(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
-    std::vector<C_BroadcastReadEcuSerialNumberResults> &orc_Responses,
-    std::vector<C_BroadcastReadEcuSerialNumberExtendedResults>
+    QList<C_BroadcastReadEcuSerialNumberResults> &orc_Responses,
+    QList<C_BroadcastReadEcuSerialNumberExtendedResults>
         &orc_ExtendedResponses) const {
   int32_t s32_Return;
 
@@ -1696,7 +1697,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsyTpCan::BroadcastRequestProgramming(
-    std::vector<C_BroadcastRequestProgrammingResults> &orc_Results) const {
+    QList<C_BroadcastRequestProgrammingResults> &orc_Results) const {
   int32_t s32_Return;
 
   orc_Results.clear();
@@ -1974,7 +1975,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExtended(
     T_STWCAN_Msg_TX c_Msg;
     uint16_t u16_PartCounter = 0U;
     uint8_t u8_SerialNumberBytesSent = 0U;
-    const std::vector<uint8_t> c_RawSerialNumber =
+    const QByteArray c_RawSerialNumber =
         orc_SerialNumber.GetSerialNumberAsRawData();
     c_Service.c_Data.resize(7);
     c_Service.c_Data[0] = mhu8_OSY_BC_SI_ROUTINE_CONTROL;
@@ -2013,7 +2014,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExtended(
         }
 
         memcpy(&c_Service.c_Data[4],
-               &c_RawSerialNumber[u8_SerialNumberBytesSent], u8_BytesToCopy);
+               reinterpret_cast<uint8_t*>(const_cast<char*>(c_RawSerialNumber.data() + u8_SerialNumberBytesSent)), u8_BytesToCopy);
         u8_SerialNumberBytesSent += u8_BytesToCopy;
       }
 

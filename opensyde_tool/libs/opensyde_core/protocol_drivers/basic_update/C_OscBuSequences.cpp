@@ -611,7 +611,7 @@ int32_t C_OscBuSequences::UpdateNode(const QString & orc_HexFilePath, const uint
             //perform the actual transfer
             uint8_t u8_BlockSequenceCounter = 1U;
             int32_t s32_RemainingBytes = s32_Size;
-            std::vector<uint8_t> c_Data;
+            QByteArray c_Data;
 
             //set a proper timeout
             const uint32_t u32_AdaptedTimeout =
@@ -631,8 +631,8 @@ int32_t C_OscBuSequences::UpdateNode(const QString & orc_HexFilePath, const uint
                }
 
                (void)memcpy(
-                  &c_Data[0],
-                  &pc_HexDump->at_Blocks[u16_Area].au8_Data[s32_Size - s32_RemainingBytes],
+                  reinterpret_cast<uint8_t*>(c_Data.data()),
+                  reinterpret_cast<const uint8_t*>(pc_HexDump->at_Blocks[u16_Area].au8_Data.constData() + (s32_Size - s32_RemainingBytes)),
                   c_Data.size());
 
                s32_Return = mc_OsyProtocol.OsyTransferData(u8_BlockSequenceCounter, c_Data, &u8_NumberCode);

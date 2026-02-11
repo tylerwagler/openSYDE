@@ -177,10 +177,10 @@ bool C_OscCanMessage::CheckErrorSignal(const C_OscNodeDataPoolList * const opc_L
       bool q_NoMultiplexerButMultiplexed;
       bool q_MultiplexedValueOutOfRange;
       //Get Hash for all relevant data
-      const std::vector<uint32_t> c_Hashes = this->m_GetSignalHashes(opc_List, oru32_SignalIndex);
-      static std::map<std::vector<uint32_t>, bool> hc_PreviousResults;
+      const QList<uint32_t> c_Hashes = this->m_GetSignalHashes(opc_List, oru32_SignalIndex);
+      static std::map<QList<uint32_t>, bool> hc_PreviousResults;
       //Check if check was already performed in the past
-      const std::map<std::vector<uint32_t>, bool>::const_iterator c_It = hc_PreviousResults.find(c_Hashes);
+      const std::map<QList<uint32_t>, bool>::const_iterator c_It = hc_PreviousResults.find(c_Hashes);
 
       if (c_It == hc_PreviousResults.end())
       {
@@ -667,7 +667,7 @@ bool C_OscCanMessage::IsMultiplexed(uint32_t * const opu32_MultiplexerIndex) con
    \retval   false   No multiplexer signal found
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscCanMessage::h_ContainsMultiplexer(const std::vector<C_OscCanSignal> & orc_Signals,
+bool C_OscCanMessage::h_ContainsMultiplexer(const QList<C_OscCanSignal> & orc_Signals,
                                             uint32_t * const opu32_MultiplexerIndex)
 {
    bool q_Return = false;
@@ -720,10 +720,10 @@ void C_OscCanMessage::GetMultiplexerValues(std::set<uint16_t> & orc_Values) cons
    Hashes for signal
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_OscCanMessage::m_GetSignalHashes(const C_OscNodeDataPoolList * const opc_List,
+QList<uint32_t> C_OscCanMessage::m_GetSignalHashes(const C_OscNodeDataPoolList * const opc_List,
                                                          const uint32_t & oru32_SignalIndex) const
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    if (opc_List != NULL)
    {
       if (oru32_SignalIndex < this->c_Signals.size())

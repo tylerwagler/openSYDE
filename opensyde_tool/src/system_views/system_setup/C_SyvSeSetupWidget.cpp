@@ -279,7 +279,7 @@ void C_SyvSeSetupWidget::StartDeviceConfiguration(void)
    bool q_DeviceConfigPossible = true;
 
    // Check for special case of a automatically deactivated sub node
-   std::vector<uint8_t> c_NodeActiveFlagsWithDeactivatedSubNodes;
+   QByteArray c_NodeActiveFlagsWithDeactivatedSubNodes;
    const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
       this->mu32_ViewIndex,
       c_NodeActiveFlagsWithDeactivatedSubNodes, false);
@@ -288,7 +288,7 @@ void C_SyvSeSetupWidget::StartDeviceConfiguration(void)
    if ((pc_View != NULL) &&
        (s32_Retval == C_NO_ERR))
    {
-      const std::vector<uint8_t> & rc_NodeActiveFlags = pc_View->GetNodeActiveFlags();
+      const QByteArray & rc_NodeActiveFlags = pc_View->GetNodeActiveFlags();
       uint32_t u32_Counter;
 
       Q_ASSERT(rc_NodeActiveFlags.size() == c_NodeActiveFlagsWithDeactivatedSubNodes.size());
@@ -455,7 +455,7 @@ void C_SyvSeSetupWidget::m_OnViewConnectionChange(void)
    if (pc_View != NULL)
    {
       // Get original active flags
-      const std::vector<uint8_t> & rc_ActiveFlags = pc_View->GetNodeActiveFlags();
+      const QByteArray & rc_ActiveFlags = pc_View->GetNodeActiveFlags();
       bool q_AllActive = true;
       for (uint32_t u32_ItActive = 0UL; u32_ItActive < rc_ActiveFlags.size(); ++u32_ItActive)
       {

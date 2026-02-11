@@ -565,7 +565,7 @@ void C_NagNaviBarWidget::m_NodesChanged(void) const
 
    QStringList c_Nodes;
    QList<QStringList> c_SubNodes;
-   std::vector<int32_t> c_NodeListWithSquads;
+   QList<int32_t> c_NodeListWithSquads;
    const QStringList c_EmptySubNodeDummy; // dummy necessary for correspondence of nodes and sub-nodes
 
    // get node indices
@@ -840,7 +840,7 @@ void C_NagNaviBarWidget::m_TabSdClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagNaviBarWidget::m_UpdateNodeErrors(void)  const
 {
-   std::vector<bool> c_ErrorsNode;
+   QList<bool> c_ErrorsNode;
    c_ErrorsNode.reserve(C_PuiSdHandler::h_GetInstance()->GetOscNodesSize());
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < C_PuiSdHandler::h_GetInstance()->GetOscNodesSize(); ++u32_ItNode)
    {
@@ -855,7 +855,7 @@ void C_NagNaviBarWidget::m_UpdateNodeErrors(void)  const
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagNaviBarWidget::m_UpdateBusErrors(void) const
 {
-   std::vector<bool> c_ErrorsBus;
+   QList<bool> c_ErrorsBus;
    c_ErrorsBus.reserve(C_PuiSdHandler::h_GetInstance()->GetOscBusesSize());
    for (uint32_t u32_ItBus = 0UL; u32_ItBus < C_PuiSdHandler::h_GetInstance()->GetOscBusesSize(); ++u32_ItBus)
    {

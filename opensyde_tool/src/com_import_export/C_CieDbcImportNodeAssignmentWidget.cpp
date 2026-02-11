@@ -169,10 +169,10 @@ void C_CieDbcImportNodeAssignmentWidget::InitStaticNames(void) const
    class package of DBC nodes and its assigned node indexes and interface indexes
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_CieDbcOsyNodeAssignment> C_CieDbcImportNodeAssignmentWidget::GetNodeAssignments(void) const
+QList<C_CieDbcOsyNodeAssignment> C_CieDbcImportNodeAssignmentWidget::GetNodeAssignments(void) const
 {
-   std::vector<C_CieDbcOsyNodeAssignment> c_Return;
-   std::vector<C_CieDbcImportNodeAssignmentItemWidget *>::const_iterator c_It;
+   QList<C_CieDbcOsyNodeAssignment> c_Return;
+   QList<C_CieDbcImportNodeAssignmentItemWidget *>::const_iterator c_It;
 
    const int32_t s32_UnmappedIndex = this->mpc_Ui->pc_CbxAssignee->currentIndex();
 
@@ -266,7 +266,7 @@ void C_CieDbcImportNodeAssignmentWidget::keyPressEvent(QKeyEvent * const opc_Key
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieDbcImportNodeAssignmentWidget::m_OkClicked(void)
 {
-   std::vector<C_CieDbcImportNodeAssignmentItemWidget *>::const_iterator c_It;
+   QList<C_CieDbcImportNodeAssignmentItemWidget *>::const_iterator c_It;
    bool q_AtLeastOneSelected = false;
 
    // check all widgets to find out if user selected anything
@@ -328,7 +328,7 @@ void C_CieDbcImportNodeAssignmentWidget::m_InitNodes(const uint32_t ou32_BusInde
               stw::errors::C_NO_ERR);
 
    // mapped messages section: insert item widgets
-   for (std::vector<C_CieConverter::C_CieNode>::const_iterator c_It = orc_CieCommDef.c_Nodes.begin();
+   for (QList<C_CieConverter::C_CieNode>::const_iterator c_It = orc_CieCommDef.c_Nodes.begin();
         c_It != orc_CieCommDef.c_Nodes.end(); ++c_It)
    {
       C_CieDbcImportNodeAssignmentItemWidget * const pc_NewItem =
@@ -400,7 +400,7 @@ void C_CieDbcImportNodeAssignmentWidget::m_OnUnmappedCbxIndexChanged(const int32
 void C_CieDbcImportNodeAssignmentWidget::m_UpdateComboboxEntries(const uint32_t ou32_Index, const bool oq_Enable,
                                                                  const C_CieDbcImportNodeAssignmentItemWidget * const opc_Sender)
 {
-   std::vector<C_CieDbcImportNodeAssignmentItemWidget *>::const_iterator c_It;
+   QList<C_CieDbcImportNodeAssignmentItemWidget *>::const_iterator c_It;
 
    for (c_It = this->mc_Entries.begin(); c_It != this->mc_Entries.end(); ++c_It)
    {

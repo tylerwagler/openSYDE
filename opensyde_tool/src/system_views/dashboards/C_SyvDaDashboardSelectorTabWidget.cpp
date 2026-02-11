@@ -223,8 +223,8 @@ void C_SyvDaDashboardSelectorTabWidget::SetViewIndex(const uint32_t ou32_Value)
    //Load tabs
    if (pc_View != NULL)
    {
-      const std::vector<C_PuiSvDashboard> & rc_Dashboards = pc_View->GetDashboards();
-      std::vector<uint32_t> c_LeftToAdd;
+      const QList<C_PuiSvDashboard> & rc_Dashboards = pc_View->GetDashboards();
+      QList<uint32_t> c_LeftToAdd;
       const C_UsSystemView c_ViewUserSettings =
          C_UsHandler::h_GetInstance()->GetProjSvSetupView(pc_View->GetName());
       c_LeftToAdd.reserve(rc_Dashboards.size());
@@ -237,7 +237,7 @@ void C_SyvDaDashboardSelectorTabWidget::SetViewIndex(const uint32_t ou32_Value)
       {
          uint32_t u32_LastIteration;
          //Copy all indices to add
-         std::vector<uint32_t> c_Iteration = c_LeftToAdd;
+         QList<uint32_t> c_Iteration = c_LeftToAdd;
          u32_LastIteration = c_LeftToAdd.size();
          //Reset next indices to add
          c_LeftToAdd.clear();

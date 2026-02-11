@@ -221,9 +221,9 @@ bool C_CamMetTreeDelegate::mh_PaintChildCell(QPainter * const opc_Painter, const
    {
       //Handle manually
       const QStringList c_StringParts = orc_Index.data(ms32_USER_ROLE_STRING_PARTS).toStringList();
-      const std::vector<int32_t> c_ColSizes = mh_GetChildColWidths(orc_Index.parent().parent().isValid());
+      const QList<int32_t> c_ColSizes = mh_GetChildColWidths(orc_Index.parent().parent().isValid());
       const QStringList c_Spaces = C_CamMetTreeDelegate::mh_GetTopSpaces();
-      const std::vector<QFlags<Qt::AlignmentFlag> > c_Alignments = C_CamMetTreeDelegate::mh_GetTopAlignmentFlags();
+      const QList<QFlags<Qt::AlignmentFlag> > c_Alignments = C_CamMetTreeDelegate::mh_GetTopAlignmentFlags();
       QRect c_CellRectAdapted;
 
       // Space for icon necessary
@@ -309,9 +309,9 @@ bool C_CamMetTreeDelegate::mh_PaintChildCell(QPainter * const opc_Painter, const
    Vector of all restricted column sizes
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_CamMetTreeDelegate::mh_GetChildColWidths(const bool oq_IsThirdLayer)
+QList<int32_t> C_CamMetTreeDelegate::mh_GetChildColWidths(const bool oq_IsThirdLayer)
 {
-   std::vector<int32_t> c_Retval;
+   QList<int32_t> c_Retval;
    c_Retval.reserve(5);
    //Signal name
    if (oq_IsThirdLayer == false)
@@ -341,9 +341,9 @@ std::vector<int32_t> C_CamMetTreeDelegate::mh_GetChildColWidths(const bool oq_Is
    Alignment flags for top items
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<QFlags<Qt::AlignmentFlag> > C_CamMetTreeDelegate::mh_GetTopAlignmentFlags(void)
+QList<QFlags<Qt::AlignmentFlag> > C_CamMetTreeDelegate::mh_GetTopAlignmentFlags(void)
 {
-   std::vector<QFlags<Qt::AlignmentFlag> > c_Retval;
+   QList<QFlags<Qt::AlignmentFlag> > c_Retval;
    c_Retval.reserve(5);
    c_Retval.push_back(Qt::AlignLeft | Qt::AlignVCenter);
    c_Retval.push_back(Qt::AlignRight | Qt::AlignVCenter);

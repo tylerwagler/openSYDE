@@ -12,6 +12,7 @@
 #define C_SDBUEUNOSIGNALADDDELETEBASECOMMAND_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_SdBueUnoMessageBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,20 +29,20 @@ class C_SdBueUnoSignalAddDeleteBaseCommand :
 {
 public:
    C_SdBueUnoSignalAddDeleteBaseCommand(
-      const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
-      const std::vector<uint32_t> & orc_SignalIndex, const std::vector<uint16_t> & orc_StartBit,
-      const std::vector<stw::opensyde_core::C_OscCanSignal::E_MultiplexerType> & orc_MultiplexerType,
-      const std::vector<uint16_t> & orc_MultiplexerValue,
+      const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
+      const QList<uint32_t> & orc_SignalIndex, const QList<uint16_t> & orc_StartBit,
+      const QList<stw::opensyde_core::C_OscCanSignal::E_MultiplexerType> & orc_MultiplexerType,
+      const QList<uint16_t> & orc_MultiplexerValue,
       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
       stw::opensyde_gui::C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget,
       const QString & orc_Text = "", QUndoCommand * const opc_Parent = NULL);
 
 protected:
-   std::vector<uint32_t> mc_SignalIndex;
-   std::vector<stw::opensyde_core::C_OscCanSignal> mc_Signal;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> mc_OscSignalCommon;
-   std::vector<C_PuiSdNodeDataPoolListElement> mc_UiSignalCommon;
-   std::vector<C_PuiSdNodeCanSignal> mc_UiSignal;
+   QList<uint32_t> mc_SignalIndex;
+   QList<stw::opensyde_core::C_OscCanSignal> mc_Signal;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElement> mc_OscSignalCommon;
+   QList<C_PuiSdNodeDataPoolListElement> mc_UiSignalCommon;
+   QList<C_PuiSdNodeCanSignal> mc_UiSignal;
 
    void m_Add(void);
    void m_Delete(void);

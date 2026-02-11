@@ -17,7 +17,7 @@
 #include <QBrush>
 #include <QPen>
 #include <QColor>
-#include <vector>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -43,7 +43,7 @@ public:
    ~C_SdNdeDpViewUsageWidget(void) override;
 
    void SetUsage(const uint32_t ou32_NodeIndex, const uint32_t ou32_MaximumSize,
-                 const std::vector<stw::opensyde_gui_logic::C_PuiSdHandlerNodeLogic::C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas, uint32_t & oru32_Percentage, uint32_t & oru32_UsedNvmSize);
+                 const QList<stw::opensyde_gui_logic::C_PuiSdHandlerNodeLogic::C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas, uint32_t & oru32_Percentage, uint32_t & oru32_UsedNvmSize);
    void DataPoolHoverStateChanged(const uint32_t ou32_DataPoolIndex, const bool oq_Hovered);
 
    //The signals keyword is necessary for Qt signal slot functionality
@@ -83,15 +83,15 @@ private:
    uint32_t mu32_TotalUsed;
    uint32_t mu32_TotalPercentage;
    uint32_t mu32_Size;
-   std::vector<C_SdNdeDpViewUsageArea> mc_VecUsageAreas;
-   std::vector<int32_t> mc_Distances;
+   QList<C_SdNdeDpViewUsageArea> mc_VecUsageAreas;
+   QList<int32_t> mc_Distances;
 
    bool mq_DataPoolHovered;
    uint32_t mu32_HoveredDataPoolIndex;
 
    uint32_t m_GetUsageAreaIndex(const int32_t os32_PosHorizontal);
    bool m_CheckForContainingDataPool(const uint32_t ou32_AreaIndex, const uint32_t ou32_DataPoolIndex);
-   bool m_CheckForContainingDataPool(const uint32_t ou32_AreaIndex, const std::vector<uint32_t> & orc_DataPoolIndexes);
+   bool m_CheckForContainingDataPool(const uint32_t ou32_AreaIndex, const QList<uint32_t> & orc_DataPoolIndexes);
    void m_UpdateTooltip(const int32_t os32_MouseHorizontal);
 };
 

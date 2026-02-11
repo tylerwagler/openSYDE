@@ -12,6 +12,7 @@
 #define C_OSCPARAMSETRAWNODEFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscParamSetRawNode.hpp"
 #include "C_OscParamSetFilerBase.hpp"
@@ -36,8 +37,8 @@ public:
 private:
    C_OscParamSetRawNodeFiler(void);
 
-   static int32_t mh_LoadEntries(std::vector<C_OscParamSetRawEntry> & orc_Entries, C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveEntries(const std::vector<C_OscParamSetRawEntry> & orc_Entries,
+   static int32_t mh_LoadEntries(QList<C_OscParamSetRawEntry> & orc_Entries, C_OscXmlParserBase & orc_XmlParser);
+   static void mh_SaveEntries(const QList<C_OscParamSetRawEntry> & orc_Entries,
                               C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadEntry(C_OscParamSetRawEntry & orc_Entry, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveEntry(const C_OscParamSetRawEntry & orc_Entry, C_OscXmlParserBase & orc_XmlParser);

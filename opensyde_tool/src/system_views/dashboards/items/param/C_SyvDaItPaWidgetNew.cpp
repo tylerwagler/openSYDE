@@ -442,7 +442,7 @@ void C_SyvDaItPaWidgetNew::ButtonAddClicked(void)
 
       if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
       {
-         const std::vector<C_PuiSvDbNodeDataPoolListElementId> c_DataElements = pc_Dialog->GetSelectedDataElements();
+         const QList<C_PuiSvDbNodeDataPoolListElementId> c_DataElements = pc_Dialog->GetSelectedDataElements();
 
          //Implicitly update the data this one is important for the following reload step!
          pc_ParamWidget->UpdateData();
@@ -517,7 +517,7 @@ uint32_t C_SyvDaItPaWidgetNew::GetSelectedItemCount(void) const
    Current column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_SyvDaItPaWidgetNew::GetCurrentColumnWidths(void) const
+QList<int32_t> C_SyvDaItPaWidgetNew::GetCurrentColumnWidths(void) const
 {
    return this->mpc_Ui->pc_TreeView->GetCurrentColumnWidths();
 }
@@ -529,7 +529,7 @@ std::vector<int32_t> C_SyvDaItPaWidgetNew::GetCurrentColumnWidths(void) const
    Current column position indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_SyvDaItPaWidgetNew::GetCurrentColumnPositionIndices(void) const
+QList<int32_t> C_SyvDaItPaWidgetNew::GetCurrentColumnPositionIndices(void) const
 {
    return this->mpc_Ui->pc_TreeView->GetCurrentColumnPositionIndices();
 }
@@ -540,7 +540,7 @@ std::vector<int32_t> C_SyvDaItPaWidgetNew::GetCurrentColumnPositionIndices(void)
    \param[in]  orc_NewColWidths  New column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::SetColumnWidth(const std::vector<int32_t> & orc_NewColWidths) const
+void C_SyvDaItPaWidgetNew::SetColumnWidth(const QList<int32_t> & orc_NewColWidths) const
 {
    this->mpc_Ui->pc_TreeView->SetColumnWidth(orc_NewColWidths);
 }
@@ -551,7 +551,7 @@ void C_SyvDaItPaWidgetNew::SetColumnWidth(const std::vector<int32_t> & orc_NewCo
    \param[in]  orc_NewColPositionIndices  New column position indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::SetColumnPositionIndices(const std::vector<int32_t> & orc_NewColPositionIndices) const
+void C_SyvDaItPaWidgetNew::SetColumnPositionIndices(const QList<int32_t> & orc_NewColPositionIndices) const
 {
    this->mpc_Ui->pc_TreeView->SetColumnPositionIndices(orc_NewColPositionIndices);
 }
@@ -563,7 +563,7 @@ void C_SyvDaItPaWidgetNew::SetColumnPositionIndices(const std::vector<int32_t> &
    All expanded tree items
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_PuiSvDbExpandedTreeIndex> C_SyvDaItPaWidgetNew::GetAllExpandedTreeItems(void) const
+QList<C_PuiSvDbExpandedTreeIndex> C_SyvDaItPaWidgetNew::GetAllExpandedTreeItems(void) const
 {
    return this->mpc_Ui->pc_TreeView->GetAllExpandedTreeItems();
 }
@@ -574,7 +574,7 @@ std::vector<C_PuiSvDbExpandedTreeIndex> C_SyvDaItPaWidgetNew::GetAllExpandedTree
    \param[in]  orc_Items   Items to expand
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::SetAllExpandedTreeItems(const std::vector<C_PuiSvDbExpandedTreeIndex> & orc_Items) const
+void C_SyvDaItPaWidgetNew::SetAllExpandedTreeItems(const QList<C_PuiSvDbExpandedTreeIndex> & orc_Items) const
 {
    this->mpc_Ui->pc_TreeView->SetAllExpandedTreeItems(orc_Items);
 }
@@ -682,7 +682,7 @@ void C_SyvDaItPaWidgetNew::m_ReadElements(void)
    if (this->mpc_ComDriver != NULL)
    {
       //Check all list IDs valid -> node active in view
-      std::vector<uint8_t> c_NodeActiveFlags;
+      QByteArray c_NodeActiveFlags;
       const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
          this->mu32_ViewIndex,
          c_NodeActiveFlags);
@@ -783,14 +783,14 @@ void C_SyvDaItPaWidgetNew::m_ReadElements(void)
    \param[in]  orc_ChangedIds    Changed IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::m_WriteElements(const std::vector<C_OscNodeDataPoolListElementId> & orc_ChangedIds)
+void C_SyvDaItPaWidgetNew::m_WriteElements(const QList<C_OscNodeDataPoolListElementId> & orc_ChangedIds)
 {
    //Step 1: Check the changed elements for all specified lists
-   std::vector<C_OscNodeDataPoolListId> c_InterestingInvalidLists;
-   std::vector<C_OscNodeDataPoolListElementId> c_InterestingChangedElements;
-   const std::vector<C_OscNodeDataPoolListElementId> c_ChangedElementsStart =
+   QList<C_OscNodeDataPoolListId> c_InterestingInvalidLists;
+   QList<C_OscNodeDataPoolListElementId> c_InterestingChangedElements;
+   const QList<C_OscNodeDataPoolListElementId> c_ChangedElementsStart =
       this->mpc_Ui->pc_TreeView->GetChangedListElementIds();
-   const std::vector<C_OscNodeDataPoolListId> c_InvalidLists =
+   const QList<C_OscNodeDataPoolListId> c_InvalidLists =
       this->mpc_Ui->pc_TreeView->GetInvalidListIds();
    for (uint32_t u32_ItChanged = 0UL; u32_ItChanged < c_ChangedElementsStart.size(); ++u32_ItChanged)
    {
@@ -947,7 +947,7 @@ void C_SyvDaItPaWidgetNew::m_WriteElements(const std::vector<C_OscNodeDataPoolLi
    \param[in]  ou32_ValidLayers  Number of valid layers in trigger source ID
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolListElementId> & orc_ElementIds,
+void C_SyvDaItPaWidgetNew::m_LoadElements(const QList<C_OscNodeDataPoolListElementId> & orc_ElementIds,
                                           const C_OscNodeDataPoolListElementId & orc_Id,
                                           const uint32_t ou32_ValidLayers) const
 {
@@ -984,7 +984,7 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
             if (s32_Result == C_NO_ERR)
             {
                const C_OscParamSetInterpretedData & rc_Data = c_ParamSetHandler.GetInterpretedData();
-               std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> c_FloatRangeCheckInvalidValueIds;
+               QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> c_FloatRangeCheckInvalidValueIds;
                QStringList c_FloatRangeCheckInvalidValues;
                QStringList c_FloatRangeCheckNewValues;
 
@@ -1007,8 +1007,8 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
 
                if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
                {
-                  std::vector<C_OscNodeDataPoolListElementId> c_OutputListIds;
-                  std::vector<C_OscNodeDataPoolContent> c_OutputContent;
+                  QList<C_OscNodeDataPoolListElementId> c_OutputListIds;
+                  QList<C_OscNodeDataPoolContent> c_OutputContent;
                   pc_Dialog->GetOutput(c_OutputListIds, c_OutputContent);
                   //only accept if output formatted as expected
                   if (c_OutputListIds.size() == c_OutputContent.size())
@@ -1088,17 +1088,17 @@ void C_SyvDaItPaWidgetNew::m_LoadElements(const std::vector<C_OscNodeDataPoolLis
    \param[in]  ou32_ValidLayers  Number of valid layers in trigger source ID
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds,
+void C_SyvDaItPaWidgetNew::m_SaveElements(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds,
                                           const C_OscNodeDataPoolListElementId & orc_Id,
                                           const uint32_t ou32_ValidLayers) const
 {
    int32_t s32_Result = C_NO_ERR;
    C_OscParamSetHandler c_ParamSetFileHandler;
 
-   std::vector<C_OscParamSetInterpretedNode> c_IntNodes;
-   std::vector<uint32_t> c_UsedNodeIndices;
+   QList<C_OscParamSetInterpretedNode> c_IntNodes;
+   QList<uint32_t> c_UsedNodeIndices;
    // For each node which is synchronous to c_UsedNodeIndices
-   std::vector<std::vector<uint32_t> > c_UsedDataPoolIndices;
+   QList<QList<uint32_t> > c_UsedDataPoolIndices;
    const C_OscParamSetInterpretedFileInfoData c_FileInfo = C_SyvDaItPaImageRecordWidget::h_GetFileInfoData("");
 
    if (orc_ListIds.size() != 0)
@@ -1123,7 +1123,7 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
             C_OscParamSetInterpretedList c_NewIntList;
             uint32_t u32_CurIntNodeIndex;
             bool q_NodeFound = false;
-            std::vector<C_OscNodeDataPoolContent> c_ListValues;
+            QList<C_OscNodeDataPoolContent> c_ListValues;
 
             // Was the node already added
             Q_ASSERT(c_UsedNodeIndices.size() == c_IntNodes.size());
@@ -1368,7 +1368,7 @@ void C_SyvDaItPaWidgetNew::m_SaveElements(const std::vector<C_OscNodeDataPoolLis
    \param[in]  orc_ListIds    List IDs to record for
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::m_RecordElements(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds)
+void C_SyvDaItPaWidgetNew::m_RecordElements(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds)
 {
    const C_GiSvDaParam * const pc_ParamWidget = dynamic_cast<C_GiSvDaParam * const>(this->mpc_DataWidget);
 
@@ -1479,7 +1479,7 @@ void C_SyvDaItPaWidgetNew::m_HandleTreeInitAction(void)
    \param[in]  orc_ListIds    Current list IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::m_HandleTreeReadAction(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds)
+void C_SyvDaItPaWidgetNew::m_HandleTreeReadAction(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds)
 {
    //Deactivate any left over active write actions
    this->mq_WriteActive = false;
@@ -1494,7 +1494,7 @@ void C_SyvDaItPaWidgetNew::m_HandleTreeReadAction(const std::vector<C_OscNodeDat
    \param[in]  orc_ListIds    List IDs to write
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::m_HandleWriteProcessTrigger(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds)
+void C_SyvDaItPaWidgetNew::m_HandleWriteProcessTrigger(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds)
 {
    if (this->mpc_Ui->pc_TreeView->CheckListsRead(orc_ListIds) == true)
    {
@@ -1517,7 +1517,7 @@ void C_SyvDaItPaWidgetNew::m_HandleWriteProcessTrigger(const std::vector<C_OscNo
    \param[in]  orc_ListIds    List IDs to delete
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaWidgetNew::m_HandleRemoveTrigger(const std::vector<C_OscNodeDataPoolListElementId> & orc_ListIds)
+void C_SyvDaItPaWidgetNew::m_HandleRemoveTrigger(const QList<C_OscNodeDataPoolListElementId> & orc_ListIds)
 {
    C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
 
@@ -1685,7 +1685,7 @@ QString C_SyvDaItPaWidgetNew::mh_GetFile(const C_OscNodeDataPoolListElementId & 
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaWidgetNew::m_InformUserFloatRangeCheck(
-   const std::vector<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
+   const QList<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds,
    const QStringList & orc_InvalidValues, const QStringList & orc_NewValues) const
 {
    Q_ASSERT((orc_InvalidValueIds.size() == orc_InvalidValues.size()) &&

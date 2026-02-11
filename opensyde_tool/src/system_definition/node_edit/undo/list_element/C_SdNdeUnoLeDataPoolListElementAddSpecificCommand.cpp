@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoLeDataPoolListElementAddSpecificCommand.hpp"
@@ -45,9 +46,9 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeUnoLeDataPoolListElementAddSpecificCommand::C_SdNdeUnoLeDataPoolListElementAddSpecificCommand(
    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex,
-   C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const std::vector<uint32_t> & orc_Indices,
-   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscData,
-   const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiData, QUndoCommand * const opc_Parent) :
+   C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const QList<uint32_t> & orc_Indices,
+   const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscData,
+   const QList<C_PuiSdNodeDataPoolListElement> & orc_UiData, QUndoCommand * const opc_Parent) :
    C_SdNdeUnoLeDataPoolListElementAddCommand(oru32_NodeIndex, oru32_DataPoolIndex, oru32_DataPoolListIndex,
                                              opc_DataPoolListModelViewManager, orc_Indices, opc_Parent)
 {

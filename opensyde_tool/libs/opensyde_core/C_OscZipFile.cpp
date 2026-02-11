@@ -199,7 +199,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const QString &orc_SourcePath,
   mz_zip_archive c_ZipArchive;
   mz_bool x_MzStatus; // lint !e8080  //using type to match library interface
 
-  vector<mz_zip_archive_file_stat> c_Files; // to store content of zip archive
+  QList<mz_zip_archive_file_stat> c_Files; // to store content of zip archive
 
   // open archive
   (void)memset(&c_ZipArchive, 0, sizeof(c_ZipArchive));
@@ -237,7 +237,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const QString &orc_SourcePath,
       }
     }
 
-    vector<mz_zip_archive_file_stat>::const_iterator c_Iter;
+    QList<mz_zip_archive_file_stat>::const_iterator c_Iter;
     for (c_Iter = c_Files.begin();
          (c_Iter != c_Files.end()) && (s32_Return == C_NO_ERR); ++c_Iter) {
       // lint -e{8080} //using type expected by the library for compatibility

@@ -43,7 +43,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyAddCommand::C_SdManUnoTopologyAddCommand(QGraphicsScene * const opc_Scene,
-                                                           const std::vector<uint64_t> & orc_Ids,
+                                                           const QList<uint64_t> & orc_Ids,
                                                            const E_ElementType & ore_Type, const QPointF & orc_NewPos,
                                                            const QString & orc_AdditionalInformation,
                                                            QUndoCommand * const opc_Parent,
@@ -76,12 +76,12 @@ C_SdManUnoTopologyAddCommand::C_SdManUnoTopologyAddCommand(QGraphicsScene * cons
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyAddCommand::C_SdManUnoTopologyAddCommand(QGraphicsScene * const opc_Scene,
-                                                           const std::vector<uint64_t> & orc_Ids,
+                                                           const QList<uint64_t> & orc_Ids,
                                                            const E_ElementType & ore_Type, const QPointF & orc_NewPos,
                                                            const uint64_t ou64_BusConnectorNodeId,
                                                            const uint64_t ou64_BusConnectorBusId,
                                                            const uint8_t ou8_InterfaceNumber,
-                                                           const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
+                                                           const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
                                                            QUndoCommand * const opc_Parent) :
    C_SdManUnoTopologyAddBaseCommand(opc_Scene, orc_Ids, "Add drawing element(s)",
                                     opc_Parent),
@@ -113,7 +113,7 @@ void C_SdManUnoTopologyAddCommand::m_AddNew(void)
 
    if (pc_Scene != NULL)
    {
-      const std::vector<uint64_t> c_Ids = this->m_GetIds();
+      const QList<uint64_t> c_Ids = this->m_GetIds();
       if (c_Ids.size() > 0)
       {
          C_GiNode * pc_Node;

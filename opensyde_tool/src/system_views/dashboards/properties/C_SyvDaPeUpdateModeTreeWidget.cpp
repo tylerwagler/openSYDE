@@ -107,7 +107,7 @@ C_SyvDaPeUpdateModeTreeWidget::~C_SyvDaPeUpdateModeTreeWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeUpdateModeTreeWidget::Init(const uint32_t ou32_ViewIndex)
 {
-   std::vector<uint8_t> c_NodeActiveFlags;
+   QByteArray c_NodeActiveFlags;
    const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
       ou32_ViewIndex,
       c_NodeActiveFlags);

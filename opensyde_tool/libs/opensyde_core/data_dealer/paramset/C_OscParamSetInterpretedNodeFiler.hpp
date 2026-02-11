@@ -12,6 +12,7 @@
 #define C_OSCPARAMSETINTERPRETEDNODEFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscParamSetFilerBase.hpp"
 #include "C_OscParamSetInterpretedNode.hpp"
 
@@ -36,25 +37,25 @@ public:
 private:
    C_OscParamSetInterpretedNodeFiler(void);
 
-   static int32_t mh_LoadDataPools(std::vector<C_OscParamSetInterpretedDataPool> & orc_DataPools,
-                                   const std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
+   static int32_t mh_LoadDataPools(QList<C_OscParamSetInterpretedDataPool> & orc_DataPools,
+                                   const QList<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
                                    C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveDataPools(const std::vector<C_OscParamSetInterpretedDataPool> & orc_DataPools,
+   static void mh_SaveDataPools(const QList<C_OscParamSetInterpretedDataPool> & orc_DataPools,
                                 C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadDataPool(C_OscParamSetInterpretedDataPool & orc_DataPool, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveDataPool(const C_OscParamSetInterpretedDataPool & orc_DataPool,
                                C_OscXmlParserBase & orc_XmlParser);
 
-   static int32_t mh_LoadLists(std::vector<C_OscParamSetInterpretedList> & orc_Lists,
+   static int32_t mh_LoadLists(QList<C_OscParamSetInterpretedList> & orc_Lists,
                                C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveLists(const std::vector<C_OscParamSetInterpretedList> & orc_Lists,
+   static void mh_SaveLists(const QList<C_OscParamSetInterpretedList> & orc_Lists,
                             C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadList(C_OscParamSetInterpretedList & orc_List, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveList(const C_OscParamSetInterpretedList & orc_List, C_OscXmlParserBase & orc_XmlParser);
 
-   static int32_t mh_LoadElements(std::vector<C_OscParamSetInterpretedElement> & orc_Elements,
+   static int32_t mh_LoadElements(QList<C_OscParamSetInterpretedElement> & orc_Elements,
                                   C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveElements(const std::vector<C_OscParamSetInterpretedElement> & orc_Elements,
+   static void mh_SaveElements(const QList<C_OscParamSetInterpretedElement> & orc_Elements,
                                C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadElement(C_OscParamSetInterpretedElement & orc_Element, C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveElement(const C_OscParamSetInterpretedElement & orc_Element, C_OscXmlParserBase & orc_XmlParser);

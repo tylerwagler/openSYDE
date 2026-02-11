@@ -9,6 +9,7 @@
 #define C_OSCHALCCONFIGSTANDALONEDOMAIN_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscHalcConfigDomain.hpp"
 #include "C_OscHalcConfigStandaloneChannel.hpp"
 
@@ -27,9 +28,9 @@ class C_OscHalcConfigStandaloneDomain :
 public:
    C_OscHalcConfigStandaloneDomain(void);
    C_OscHalcConfigStandaloneDomain(const C_OscHalcConfigDomain & orc_ConfigDomain,
-                                   const std::vector<C_OscHalcConfigStandaloneChannel> & orc_StandaloneChannels);
+                                   const QList<C_OscHalcConfigStandaloneChannel> & orc_StandaloneChannels);
 
-   std::vector<C_OscHalcConfigStandaloneChannel> c_StandaloneChannels;
+   QList<C_OscHalcConfigStandaloneChannel> c_StandaloneChannels;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

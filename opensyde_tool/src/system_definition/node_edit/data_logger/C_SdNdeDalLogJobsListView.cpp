@@ -10,6 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QKeyEvent>
 #include <QScrollBar>
+#include <QList>
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
@@ -153,7 +154,7 @@ void C_SdNdeDalLogJobsListView::SetSelection(const C_SdNdeDalLogJobsListView::E_
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobsListView::DeleteLogJobs(const std::vector<uint32_t> & orc_DataLoggerJobIndices)
+void C_SdNdeDalLogJobsListView::DeleteLogJobs(const QList<uint32_t> & orc_DataLoggerJobIndices)
 {
    if ((this->IsEmpty() == false) &&
        (orc_DataLoggerJobIndices.size() <= static_cast<uint32_t>(this->mc_Model.rowCount())))

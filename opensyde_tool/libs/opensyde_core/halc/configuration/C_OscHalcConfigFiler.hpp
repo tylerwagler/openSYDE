@@ -9,6 +9,7 @@
 #define C_OSCHALCCONFIGFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include "stwtypes.hpp"
 #include "C_OscXmlParser.hpp"
@@ -52,17 +53,17 @@ private:
                                     const QString & orc_BasePath,
                                     QStringList * const opc_CreatedFiles);
    static int32_t mh_SaveIoDomains(const C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_SaveIoChannels(const std::vector<C_OscHalcConfigChannel> & orc_Channels,
+   static int32_t mh_SaveIoChannels(const QList<C_OscHalcConfigChannel> & orc_Channels,
                                     C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_SaveIoChannel(const C_OscHalcConfigChannel & orc_Channel, C_OscXmlParserBase & orc_XmlParser,
                                    const QString & orc_NodeName,
                                    const QString & orc_NodeParentName);
-   static int32_t mh_SaveIoParameterStructs(const std::vector<C_OscHalcConfigParameterStruct> & orc_ParameterStructs,
+   static int32_t mh_SaveIoParameterStructs(const QList<C_OscHalcConfigParameterStruct> & orc_ParameterStructs,
                                             C_OscXmlParserBase & orc_XmlParser,
                                             const QString & orc_NodeName);
    static int32_t mh_SaveIoParameterStruct(const C_OscHalcConfigParameterStruct & orc_ParameterStruct,
                                            C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_SaveIoParameters(const std::vector<C_OscHalcConfigParameter> & orc_Parameters,
+   static int32_t mh_SaveIoParameters(const QList<C_OscHalcConfigParameter> & orc_Parameters,
                                       C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_SaveIoParameter(const C_OscHalcConfigParameter & orc_Parameter, C_OscXmlParserBase & orc_XmlParser,
                                      const QString & orc_BaseNode);
@@ -71,12 +72,12 @@ private:
    static int32_t mh_LoadIoDomains(C_OscHalcConfig & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadIoChannel(C_OscHalcConfigChannel & orc_IoChannel, C_OscXmlParserBase & orc_XmlParser,
                                    const QString & orc_NodeName);
-   static int32_t mh_LoadIoParameterStructs(std::vector<C_OscHalcConfigParameterStruct> & orc_ParameterStructs,
+   static int32_t mh_LoadIoParameterStructs(QList<C_OscHalcConfigParameterStruct> & orc_ParameterStructs,
                                             C_OscXmlParserBase & orc_XmlParser,
                                             const QString & orc_NodeName);
    static int32_t mh_LoadIoParameterStruct(C_OscHalcConfigParameterStruct & orc_ParameterStruct,
                                            C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadIoParameters(std::vector<C_OscHalcConfigParameter> & orc_Parameters,
+   static int32_t mh_LoadIoParameters(QList<C_OscHalcConfigParameter> & orc_Parameters,
                                       C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadIoParameter(C_OscHalcConfigParameter & orc_Parameter, C_OscXmlParserBase & orc_XmlParser,
                                      const QString & orc_BaseName);

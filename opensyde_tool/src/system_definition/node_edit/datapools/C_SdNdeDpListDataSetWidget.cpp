@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
+#include <QList>
 #include "stwerrors.hpp"
 #include "C_SdNdeDpListDataSetWidget.hpp"
 #include "ui_C_SdNdeDpListDataSetWidget.h"
@@ -559,8 +560,8 @@ void C_SdNdeDpListDataSetWidget::m_DoInsert(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListDataSetWidget::m_DoPaste(void)
 {
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolDataSet> c_OscNames;
-   std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> > c_OscDataSetValues;
+   QList<stw::opensyde_core::C_OscNodeDataPoolDataSet> c_OscNames;
+   QList<QList<stw::opensyde_core::C_OscNodeDataPoolContent> > c_OscDataSetValues;
 
    //how many items does the user want to paste ?
    if (C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromClipBoard(c_OscNames,

@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QStringList>
+#include <QList>
 
 #include "C_TblTreModel.hpp"
 #include "C_TblTreItem.hpp"
@@ -37,7 +38,7 @@ public:
    void SetTypeNode(const bool oq_IsNode);
    void SetContent(const QStringList & orc_Content,
                    const QList<QStringList> & orc_SubContent = QList<QStringList>());
-   void SetError(const std::vector<bool> & orc_Error);
+   void SetError(const QList<bool> & orc_Error);
    void UpdateItem(const uint32_t ou32_Index, const QString & orc_Content);
    void Clear(void);
    static uint32_t h_GetFlatIndexFromModelIndex(const QModelIndex & orc_ModelIndex);

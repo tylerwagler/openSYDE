@@ -22,6 +22,7 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 #include <QElapsedTimer>
+#include <QList>
 #include <algorithm>
 #include <cstring>
 #include <iostream>
@@ -96,7 +97,7 @@ C_OscProtocolDriverOsyTpIp::C_DoIpHeader::C_DoIpHeader(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsyTpIp::C_DoIpHeader::DecodeHeader(
-    const std::vector<uint8_t> &orc_Header) {
+    const QByteArray &orc_Header) {
   int32_t s32_Return;
 
   if (orc_Header.size() < hu8_DOIP_HEADER_SIZE) {
@@ -128,7 +129,7 @@ int32_t C_OscProtocolDriverOsyTpIp::C_DoIpHeader::DecodeHeader(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpIp::C_DoIpHeader::ComposeHeader(
-    std::vector<uint8_t> &orc_Header) const {
+    QByteArray &orc_Header) const {
   orc_Header.resize(
       static_cast<uint32_t>(hu8_DOIP_HEADER_SIZE + u32_PayloadSize));
   orc_Header[0] = 0x02U;         // protocol version DoIP ISO 13400-2:2012
@@ -274,8 +275,8 @@ int32_t C_OscProtocolDriverOsyTpIp::Disconnect(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsyTpIp::BroadcastGetDeviceInfo(
-    std::vector<C_BroadcastGetDeviceInfoResults> &orc_DeviceInfos,
-    std::vector<C_BroadcastGetDeviceInfoExtendedResults>
+    QList<C_BroadcastGetDeviceInfoResults> &orc_DeviceInfos,
+    QList<C_BroadcastGetDeviceInfoExtendedResults>
         &orc_DeviceExtendedInfos) const {
   const uint32_t u32_PAYLOAD_SIZE_STD = 37U;
   const uint32_t u32_PAYLOAD_SIZE_EXT_MIN = 36U;
@@ -289,7 +290,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastGetDeviceInfo(
   if (mpc_Dispatcher == NULL) {
     s32_Return = C_CONFIG;
   } else {
-    std::vector<uint8_t> c_Request;
+    QByteArray c_Request;
     c_Header.ComposeHeader(c_Request);
 
     s32_Return = mpc_Dispatcher->SendUdp(c_Request);
@@ -302,9 +303,9 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastGetDeviceInfo(
       QElapsedTimer c_Timer;
       c_Timer.start();
       uint8_t au8_Ip[4];
-      std::vector<uint8_t> c_Response;
-      std::vector<C_BroadcastGetDeviceInfoResults>::iterator c_ItDeviceInfo;
-      std::vector<C_BroadcastGetDeviceInfoExtendedResults>::iterator
+      QByteArray c_Response;
+      QList<C_BroadcastGetDeviceInfoResults>::iterator c_ItDeviceInfo;
+      QList<C_BroadcastGetDeviceInfoExtendedResults>::iterator
           c_ItDeviceExtInfo;
 
       while (c_Timer.hasExpired(mu32_BroadcastTimeoutMs) == false) {
@@ -444,7 +445,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(
     uint8_t (&orau8_ResponseIp)[4], uint8_t *const opu8_ErrorResult) const {
   int32_t s32_Return = C_TIMEOUT;
 
-  std::vector<uint8_t> c_Request;
+  QByteArray c_Request;
   if (mpc_Dispatcher == NULL) {
     s32_Return = C_CONFIG;
   } else if ((orc_SerialNumber.q_IsValid == false) ||
@@ -478,7 +479,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(
     } else {
       QElapsedTimer c_Timer;
       c_Timer.start();
-      std::vector<uint8_t> c_Response;
+      QByteArray c_Response;
       bool q_Done = false;
 
       while ((c_Timer.hasExpired(mu32_BroadcastTimeoutMs) == false) &&
@@ -609,7 +610,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
     uint8_t *const opu8_ErrorResult) const {
   int32_t s32_Return = C_TIMEOUT;
 
-  std::vector<uint8_t> c_Request;
+  QByteArray c_Request;
   if (mpc_Dispatcher == NULL) {
     s32_Return = C_CONFIG;
   } else if ((orc_SerialNumber.q_IsValid == false) ||
@@ -618,7 +619,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
   } else {
     const uint8_t u8_SerialNumberLength =
         orc_SerialNumber.u8_SerialNumberByteLength;
-    const std::vector<uint8_t> c_SerialNumberRaw =
+    const QByteArray c_SerialNumberRaw =
         orc_SerialNumber.GetSerialNumberAsRawData();
     C_DoIpHeader c_Header(
         C_DoIpHeader::hu16_PAYLOAD_TYPE_SET_IP_ADDRESS_MESSAGE_EXT_REQ,
@@ -645,7 +646,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
         orc_SerialNumber.u8_SerialNumberManufacturerFormat;
     c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 17] = u8_SerialNumberLength;
     (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 18],
-                      &c_SerialNumberRaw[0], u8_SerialNumberLength);
+                      reinterpret_cast<const uint8_t*>(c_SerialNumberRaw.constData()), u8_SerialNumberLength);
 
     s32_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
     if (s32_ReturnLocal != C_NO_ERR) {
@@ -655,7 +656,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
     } else {
       QElapsedTimer c_Timer;
       c_Timer.start();
-      std::vector<uint8_t> c_Response;
+      QByteArray c_Response;
       bool q_Done = false;
 
       while ((c_Timer.hasExpired(mu32_BroadcastTimeoutMs) == false) &&
@@ -691,7 +692,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
                 const int x_SnrOk = // lint !e970 !e8080 //using type to match
                                     // library interface
                     std::memcmp(
-                        &c_SerialNumberRaw[0],
+                        reinterpret_cast<const uint8_t*>(c_SerialNumberRaw.constData()),
                         &c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6U],
                         u8_SerialNumberLength);
 
@@ -792,7 +793,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
-    std::vector<
+    QList<
         C_OscProtocolDriverOsyTpIp::C_BroadcastRequestProgrammingResults>
         &orc_Results) const {
   int32_t s32_Return;
@@ -803,7 +804,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
   if (mpc_Dispatcher == NULL) {
     s32_Return = C_CONFIG;
   } else {
-    std::vector<uint8_t> c_Request;
+    QByteArray c_Request;
 
     c_Header.ComposeHeader(c_Request);
 
@@ -817,7 +818,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
       QElapsedTimer c_Timer;
       c_Timer.start();
       uint8_t au8_Ip[4];
-      std::vector<uint8_t> c_Response;
+      QByteArray c_Response;
 
       while (c_Timer.hasExpired(mu32_BroadcastTimeoutMs) == false) {
         int32_t s32_ReturnLocal = mpc_Dispatcher->ReadUdp(c_Response, au8_Ip);
@@ -913,7 +914,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastNetReset(
   const C_DoIpHeader c_Header(
       C_DoIpHeader::hu16_PAYLOAD_TYPE_NET_RESET_MESSAGE_REQ, 8U);
 
-  std::vector<uint8_t> c_Request;
+  QByteArray c_Request;
 
   if (mpc_Dispatcher == NULL) {
     s32_Return = C_CONFIG;
@@ -981,7 +982,7 @@ C_OscProtocolDriverOsyTpIp::~C_OscProtocolDriverOsyTpIp(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpIp::m_ComposeRequest(
     const C_OscProtocolDriverOsyService &orc_Service,
-    std::vector<uint8_t> &orc_Request) const {
+    QByteArray &orc_Request) const {
   const uint16_t u16_SourceAddress =
       (static_cast<uint16_t>(static_cast<uint16_t>(mc_ClientId.u8_BusIdentifier)
                              << 7U) +
@@ -1018,7 +1019,7 @@ void C_OscProtocolDriverOsyTpIp::m_ComposeRequest(
   orc_Request[11] = static_cast<uint8_t>(u16_TargetAddress);
   // service:
   if (orc_Service.c_Data.size() > 0) {
-    (void)std::memcpy(&orc_Request[12], &orc_Service.c_Data[0],
+    (void)std::memcpy(&orc_Request[12], orc_Service.c_Data.constData(),
                       orc_Service.c_Data.size());
   }
 }
@@ -1052,7 +1053,7 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void) {
       s32_Return = this->m_GetFromTxQueue(c_Service);
       if (s32_Return == C_NO_ERR) {
         // send data on TCP:
-        std::vector<uint8_t> c_Request;
+        QByteArray c_Request;
         m_ComposeRequest(c_Service, c_Request);
 
         s32_Return =
@@ -1074,7 +1075,7 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void) {
 
     // read all incoming messages:
     while (s32_Return == C_NO_ERR) {
-      std::vector<uint8_t> c_Data;
+      QByteArray c_Data;
       bool q_DataFromBuffer = false;
 
       // As the TCP transfer is stream based we must consider that we might not
@@ -1158,7 +1159,7 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void) {
             if (mc_RxState.c_ServiceHeader.u16_PayloadType ==
                 C_DoIpHeader::hu16_PAYLOAD_TYPE_DIAGNOSTIC_MESSAGE) {
               c_Service.c_Data.resize(c_Data.size() - 4U);
-              (void)std::memcpy(&c_Service.c_Data[0], &c_Data[4],
+              (void)std::memcpy(&c_Service.c_Data[0], reinterpret_cast<uint8_t*>(&c_Data.data()[4]),
                                 c_Data.size() - 4U);
               // add to queue:
               s32_Return = m_AddToRxQueue(c_Service);
@@ -1328,7 +1329,7 @@ bool C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults::operator<(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults::
-    ParseFromArray(const std::vector<uint8_t> &orc_Data,
+    ParseFromArray(const QByteArray &orc_Data,
                    const uint8_t ou8_DataStartIndex) {
   uint8_t au8_DeviceName[29];
   uint8_t au8_SerialNumber[6];
@@ -1345,14 +1346,14 @@ void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults::
       static_cast<uint8_t>((u16_SourceAddress >> 7U) & 0x0FU);
 
   (void)std::memcpy(&au8_SerialNumber,
-                    &orc_Data[static_cast<size_t>(ou8_DataStartIndex) + 2U],
+                    orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 2U,
                     6U);
   this->c_SerialNumber.SetPosSerialNumber(au8_SerialNumber);
 
   // defensive approach: spec says it's always zero terminated: make sure
   au8_DeviceName[28] = 0U;
   (void)std::memcpy(&au8_DeviceName[0],
-                    &orc_Data[static_cast<size_t>(ou8_DataStartIndex) + 8U],
+                    orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 8U,
                     28U);
 
   // lint -e{9176} //no problems as long as charn has the same size as uint8; if
@@ -1444,7 +1445,7 @@ operator<(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults::
-    ParseFromArray(const std::vector<uint8_t> &orc_Data,
+    ParseFromArray(const QByteArray &orc_Data,
                    const uint8_t ou8_DataStartIndex) {
   uint8_t au8_DeviceName[29];
   uint8_t u8_SerialNumberLength;
@@ -1468,7 +1469,7 @@ void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults::
   // defensive approach: spec says it's always zero terminated: make sure
   au8_DeviceName[28] = 0U;
   (void)std::memcpy(&au8_DeviceName[0],
-                    &orc_Data[static_cast<size_t>(ou8_DataStartIndex) + 3U],
+                    orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 3U,
                     28U);
 
   // lint -e{9176} //no problems as long as charn has the same size as uint8; if
@@ -1480,11 +1481,11 @@ void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults::
   u8_SerialNumberLength =
       orc_Data[static_cast<size_t>(ou8_DataStartIndex) + 34];
   if (u8_SerialNumberLength <= 29) {
-    std::vector<uint8_t> c_CurSerialNumber;
+    QByteArray c_CurSerialNumber;
     // defensive approach: variable length, so set all to 0 first
     c_CurSerialNumber.resize(u8_SerialNumberLength);
-    (void)std::memcpy(&c_CurSerialNumber[0],
-                      &orc_Data[static_cast<size_t>(ou8_DataStartIndex) + 35U],
+    (void)std::memcpy(c_CurSerialNumber.data(),
+                      orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 35U,
                       u8_SerialNumberLength);
 
     this->c_SerialNumber.SetExtSerialNumber(

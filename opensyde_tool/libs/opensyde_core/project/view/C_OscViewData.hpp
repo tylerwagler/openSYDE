@@ -12,6 +12,7 @@
 #define C_OSCVIEWDATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include "C_OscViewPc.hpp"
 #include "C_OscViewNodeUpdate.hpp"
@@ -42,10 +43,10 @@ public:
    const C_OscViewPc & GetOscPcData(void) const;
    void SetOscPcData(const C_OscViewPc & orc_Value);
    bool GetNodeActive(const uint32_t ou32_NodeIndex) const;
-   const std::vector<uint8_t> & GetNodeActiveFlags(void) const;
-   void SetNodeActiveFlags(const std::vector<uint8_t> & orc_Value);
-   const std::vector<C_OscViewNodeUpdate> & GetAllNodeUpdateInformation(void) const;
-   void SetNodeUpdateInformation(const std::vector<C_OscViewNodeUpdate> & orc_NodeUpdateInformation);
+   const QByteArray & GetNodeActiveFlags(void) const;
+   void SetNodeActiveFlags(const QByteArray & orc_Value);
+   const QList<C_OscViewNodeUpdate> & GetAllNodeUpdateInformation(void) const;
+   void SetNodeUpdateInformation(const QList<C_OscViewNodeUpdate> & orc_NodeUpdateInformation);
    const C_OscViewNodeUpdate * GetNodeUpdateInformation(const uint32_t ou32_NodeIndex) const;
    int32_t SetNodeUpdateInformation(const uint32_t ou32_NodeIndex,
                                     const C_OscViewNodeUpdate & orc_NodeUpdateInformation);
@@ -90,11 +91,11 @@ public:
 
 protected:
    //Protected access for tests and inheritance
-   std::vector<uint8_t> mc_NodeActiveFlags; ///< Vector of usage flags.
+   QByteArray mc_NodeActiveFlags; ///< Vector of usage flags.
    ///< Equal to system definition nodes count.
    ///< True: Node used in system view
    ///< False: Node not used in system view
-   std::vector<stw::opensyde_core::C_OscViewNodeUpdate> mc_NodeUpdateInformation;
+   QList<stw::opensyde_core::C_OscViewNodeUpdate> mc_NodeUpdateInformation;
    ///< Vector of node update information.
    ///< Equal to system definition nodes count.
 

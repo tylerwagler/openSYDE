@@ -282,7 +282,7 @@ void C_SyvComDriverDiagConnect::m_RunSetUpCyclicTransmissions(void)
    if (this->mpc_ComDriverDiag != NULL)
    {
       QString c_ErrorDetails;
-      std::vector<C_OscNodeDataPoolListElementId> c_FailedIdRegisters;
+      QList<C_OscNodeDataPoolListElementId> c_FailedIdRegisters;
       QStringList c_FailedIdErrorDetails;
       std::map<uint32_t, uint32_t> c_FailedNodesElementNumber;
       std::map<uint32_t, uint32_t> c_NodesElementNumber;

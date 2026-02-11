@@ -10,9 +10,11 @@
 #define C_SDTOPOLOGYSCENE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QMimeData>
 #include <QMap>
 #include <QTransform>
+#include <QByteArray>
 
 #include "stwtypes.hpp"
 
@@ -66,7 +68,7 @@ public:
    void AddImage(const QString & orc_FilePath, const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId);
    void AddBusConnector(C_GiNode * const opc_Node, const C_GiLiBus * const opc_Bus,
                         const uint8_t & oru8_InterfaceNumber,
-                        const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties, const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId = NULL);
+                        const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties, const QPointF & orc_Pos, const uint64_t * const opu64_UniqueId = NULL);
 
    void UpdateTransform(const QTransform & orc_Transform) override;
    //lint -e{1735} Suppression, because default parameters are identical
@@ -131,11 +133,11 @@ protected:
                            const float64_t & orf64_Height, QGraphicsItem * const opc_Parent) override;
    C_GiLiCanBus * m_CreateCanBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                  C_GiTextElementBus * const opc_TextElementName,
-                                 const std::vector<QPointF> * const opc_Points,
+                                 const QList<QPointF> * const opc_Points,
                                  QGraphicsItem * const opc_Parent) override;
    C_GiLiEthernetBus * m_CreateEthernetBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                            C_GiTextElementBus * const opc_TextElementName,
-                                           const std::vector<QPointF> * const opc_Points,
+                                           const QList<QPointF> * const opc_Points,
                                            QGraphicsItem * const opc_Parent) override;
    C_GiTextElementBus * m_CreateBusTextElement(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                                QGraphicsItem * const opc_Parent) override;
@@ -175,9 +177,9 @@ private:
    void m_SyncIndex(const stw::opensyde_gui_logic::C_PuiSdDataElement::E_Type & ore_Type, const int32_t & ors32_Index,
                     const stw::opensyde_gui_logic::C_PuiSdDataElement::E_Action & ore_Action) const;
    void m_ConnectNodeToBus(const uint8_t &  oru8_InterfaceNumber,
-                           const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+                           const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    void m_ChangeInterface(const uint8_t & oru8_InterfaceNumber,
-                          const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties, C_GiLiBusConnector * const opc_Connector);
+                          const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties, C_GiLiBusConnector * const opc_Connector);
    void m_RestoreToolTips(void) const;
    void m_RemoveNodeOfScene(const C_GiNode * const opc_NodeGraphicsItem);
    void m_RemoveBusOfScene(const C_GiLiBus * const opc_BusGraphicsItem);
@@ -197,22 +199,22 @@ private:
                                  const bool & orq_ChangeInterface, const bool & orq_Reconnect,
                                  const int32_t & ors32_SpecialInterface, C_GiLiBusConnector * const opc_Connector);
    void m_ShowNewNodeToNodeConnectionPopUp(const C_GiNode * const opc_Node1, const C_GiNode * const opc_Node2);
-   std::vector<std::vector<uint8_t> > m_AssignNodeProperty(const std::vector<uint32_t> & orc_NodeIndices, const stw::opensyde_core::C_OscSystemBus::E_Type
+   QList<QByteArray> m_AssignNodeProperty(const QList<uint32_t> & orc_NodeIndices, const stw::opensyde_core::C_OscSystemBus::E_Type
                                                            & ore_BusType, const uint32_t & oru32_BusIndex,
-                                                           const std::vector<uint8_t> & orc_InterfaceIndices,
+                                                           const QByteArray & orc_InterfaceIndices,
                                                            const bool oq_BusExists,
                                                            const bool oq_GenerateId);
    uint32_t m_GeneratePropertyUsingExisting(const stw::opensyde_core::C_OscNode & orc_Node,
-                                            const uint32_t & oru32_BusIndex, const std::vector<
-                                               uint8_t> & orc_ExistingNode1Properties,
-                                            const std::vector<uint8_t> & orc_ExistingNode2Properties,
+                                            const uint32_t & oru32_BusIndex,
+                                            const QByteArray & orc_ExistingNode1Properties,
+                                            const QByteArray & orc_ExistingNode2Properties,
                                             const bool oq_BusExists, const bool oq_GenerateId,
                                             const uint8_t ou8_CurrentProperty);
-   std::vector<uint8_t> m_BuildCompleteIpAddress(const uint8_t & oru8_IpLastByte);
+   QByteArray m_BuildCompleteIpAddress(const uint8_t & oru8_IpLastByte);
 
    void m_ShowInterfaceChangePopUp(QGraphicsItem * const opc_Item);
    void m_LoadSnapshot(const QVector<uint32_t> & orc_NodeIndices, const QVector<uint32_t> & orc_BusIndices,
-                       const QVector<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection, const std::vector<
+                       const QVector<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection, const QList<
                           stw::opensyde_gui_logic::C_PuiSdCompleteBusConnectionData
                           > * const opc_AdditionalConnectionData,
                        const QMap<stw::opensyde_gui_logic::C_PuiBsTemporaryDataId,
@@ -233,7 +235,7 @@ private:
    void m_ReconnectBusConnectorNode(const C_GiLiBusConnector * const opc_BusConnector,
                                     const C_GiNode * const opc_StartingNode, const C_GiNode * const opc_LastNode,
                                     const QPointF & orc_ConnectionPos, const int32_t & ors32_Interface,
-                                    const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+                                    const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    void m_RevertBusConnectorBus(C_GiLiBusConnector * const opc_BusConnector,
                                 const stw::opensyde_gui::C_GiLiBus * const opc_StartingBus,
                                 const stw::opensyde_gui::C_GiLiBus * const opc_LastBus,
@@ -242,7 +244,7 @@ private:
                                    const stw::opensyde_gui::C_GiLiBus * const opc_StartingBus,
                                    const stw::opensyde_gui::C_GiLiBus * const opc_LastBus,
                                    const QPointF & orc_ConnectionPos, const int32_t & ors32_Interface,
-                                   const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+                                   const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    void m_RemoveConnectorLine(void);
    void m_RemoveBusNameLine(void);
    void m_RemoveTemporaryLine(C_GiLiTemporaryLine ** const opc_TemporaryLine);

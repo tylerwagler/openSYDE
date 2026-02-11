@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <set>
+#include <QList>
 #include <QStringList>
 
 #include "stwtypes.hpp"
@@ -31,7 +32,7 @@ class C_OscXceCreate :
 public:
    static int32_t h_CreatePackage(const QString & orc_PackagePath,
                                   const QStringList & orc_CertificatesPath,
-                                  const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
+                                  const QList<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
                                   QStringList & orc_WarningMessages,
                                   QString & orc_ErrorMessage,
                                   const QString & orc_TemporaryDirectory = "");
@@ -41,13 +42,13 @@ private:
 
    static int32_t mh_CheckParamsToCreatePackage(const QString & orc_PackagePath,
                                                 const QStringList & orc_CertificatesPath,
-                                                const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
+                                                const QList<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
    static int32_t mh_CheckFileExists(const QString & orc_Path);
    static C_OscXceManifest mh_CreateManifest(
-      const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
+      const QList<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters);
    static int32_t mh_PrepareCertFiles(const QString & orc_TmpPath,
                                       const QStringList & orc_CertificatesPath,
-                                      std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
+                                      QList<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
                                       std::set<QString> & orc_XcertFiles);
    static QString mh_GenOutFilePathPart(const QString & orc_InPath,
                                                       const QString & orc_TargetFolder);

@@ -78,13 +78,13 @@ const QString C_TblTreDataElementModel::mhc_ADDITIONAL_DATA_POOL_INFO =
 /* -- Module Global Variables
  * ---------------------------------------------------------------------------------------
  */
-QMap<std::vector<uint32_t>,
+QMap<QList<uint32_t>,
      C_TblTreDataElementModel::C_TblTreDataElementModelState>
     C_TblTreDataElementModel::mhc_ViewSetupsNl;
-QMap<std::vector<uint32_t>,
+QMap<QList<uint32_t>,
      C_TblTreDataElementModel::C_TblTreDataElementModelState>
     C_TblTreDataElementModel::mhc_ViewSetupsDe;
-QMap<std::vector<uint32_t>,
+QMap<QList<uint32_t>,
      C_TblTreDataElementModel::C_TblTreDataElementModelState>
     C_TblTreDataElementModel::mhc_ViewSetupsBs;
 
@@ -129,7 +129,7 @@ C_TblTreDataElementModel::~C_TblTreDataElementModel(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblTreDataElementModel::InitSd(
     const uint32_t ou32_NodeIndex, const int32_t os32_SkipApplicationIndex,
-    const std::vector<uint32_t> &orc_UsedDataPoolIndicesIndex) {
+    const QList<uint32_t> &orc_UsedDataPoolIndicesIndex) {
   C_TblTreItem *const pc_NodeItem = new C_TblTreItem();
   const C_OscNode *const pc_Node =
       C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
@@ -315,13 +315,13 @@ void C_TblTreDataElementModel::InitSv(
     const uint32_t ou32_ViewIndex, const E_Mode oe_Mode,
     const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
     const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements) {
   const uint16_t u16_TimerId = osc_write_log_performance_start();
 
-  QMap<std::vector<uint32_t>, C_TblTreDataElementModelState>::const_iterator
+  QMap<QList<uint32_t>, C_TblTreDataElementModelState>::const_iterator
       c_It;
-  const std::vector<uint32_t> c_Hashes =
+  const QList<uint32_t> c_Hashes =
       C_TblTreDataElementModel::mh_GetViewSdHash(ou32_ViewIndex);
 
   this->me_Mode = oe_Mode;
@@ -430,10 +430,10 @@ void C_TblTreDataElementModel::InitSdDatapoolElements(
     const uint32_t ou32_SdDataLoggerUseCaseNodeIndex,
     const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
     const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements) {
   const uint16_t u16_TimerId = osc_write_log_performance_start();
-  const std::vector<uint32_t> c_Hashes =
+  const QList<uint32_t> c_Hashes =
       C_TblTreDataElementModel::mh_GetViewSdHash(0U);
 
   this->beginResetModel();
@@ -465,9 +465,9 @@ void C_TblTreDataElementModel::InitSdDatapoolElements(
    Data elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_PuiSvDbNodeDataPoolListElementId>
+QList<C_PuiSvDbNodeDataPoolListElementId>
 C_TblTreDataElementModel::GetDataElements(const QModelIndex &orc_Index) const {
-  std::vector<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
+  QList<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
   if (orc_Index.isValid() == true) {
     switch (this->me_Mode) {
     case eDATAPOOLS:
@@ -528,7 +528,7 @@ C_TblTreDataElementModel::columnCount(const QModelIndex &orc_Parent) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 QModelIndex C_TblTreDataElementModel::GetIndexForItem(
-    const std::vector<uint32_t> &orc_ItemIndices) const {
+    const QList<uint32_t> &orc_ItemIndices) const {
   QModelIndex c_Retval;
 
   if (orc_ItemIndices.size() > 0UL) {
@@ -576,10 +576,10 @@ QModelIndex C_TblTreDataElementModel::GetIndexForItem(
    Generic item representation
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t>
+QList<uint32_t>
 C_TblTreDataElementModel::GetGenericRepresentationForIndex(
     const QModelIndex &orc_ItemIndex) const {
-  std::vector<uint32_t> c_Retval;
+  QList<uint32_t> c_Retval;
   QModelIndex c_CurItem = orc_ItemIndex;
   while (c_CurItem.isValid() == true) {
     // lint -e{9079}  Result of Qt interface restrictions, set by index function
@@ -716,7 +716,7 @@ void C_TblTreDataElementModel::m_InitBusSignal(
     const uint32_t ou32_ViewIndex, const bool oq_ShowOnlyWriteElements,
     const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements,
     const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements) {
   const C_PuiSvData *const pc_View =
       C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
@@ -763,7 +763,7 @@ void C_TblTreDataElementModel::m_InitBusSignal(
           C_PuiSdNodeCanMessageSyncManager *const pc_SyncManager =
               new C_PuiSdNodeCanMessageSyncManager();
           C_OscCanProtocol::E_Type e_Type;
-          std::vector<C_OscCanMessageIdentificationIndices> c_UniqueMessages;
+          QList<C_OscCanMessageIdentificationIndices> c_UniqueMessages;
           C_TblTreItem *const pc_ProtocolItem = new C_TblTreItem();
           // Init current node
           pc_ProtocolItem->u32_Index = static_cast<uint32_t>(u8_ItProtocol);
@@ -847,11 +847,11 @@ void C_TblTreDataElementModel::m_InitDatapoolElements(
     const uint32_t ou32_ViewIndex, const bool oq_ShowOnlyWriteElements,
     const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements,
     const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements,
     const bool oq_IsModelUsedInSysViews,
     const uint32_t ou32_SdDataLoggerUseCaseNodeIndex) {
-  std::vector<uint8_t> c_NodeActiveFlags;
+  QByteArray c_NodeActiveFlags;
   const int32_t s32_Retval =
       C_TblTreDataElementModel::mh_GetCurrentNodeActiveFlags(
           ou32_ViewIndex, oq_IsModelUsedInSysViews, c_NodeActiveFlags);
@@ -1152,7 +1152,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalc(
     const uint32_t ou32_NodeIndex, const uint32_t ou32_DpIndex,
     const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
     const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements) {
   if ((opc_DpItem != NULL) &&
       ((orc_Dp.e_Type == C_OscNodeDataPool::eHALC) ||
@@ -1309,7 +1309,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfig(
     const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
     const stw::opensyde_core::C_OscHalcMagicianDatapoolListHandler
         &orc_DpHandler,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements,
     const uint32_t ou32_DatapoolUniqueChannelCounter) {
   const bool q_ChanNumVarNecessary =
@@ -1450,7 +1450,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfig(
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
     C_TblTreItem *const opc_ChannelItem, bool &orq_ChannelValid,
-    const std::vector<C_OscHalcDefStruct> &orc_Values,
+    const QList<C_OscHalcDefStruct> &orc_Values,
     const C_OscNodeDataPoolList &orc_List,
     const uint32_t ou32_ChannelArrayIndex, const uint32_t ou32_NodeIndex,
     const uint32_t ou32_DpIndex, const uint32_t ou32_ListIndex,
@@ -1461,7 +1461,7 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsHalcConfigList(
     const QString &orc_DomainSingularName, const bool oq_ShowOnlyWriteElements,
     const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements,
     const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements,
     const QString &orc_HalChannelOrDomainName) {
   C_TblTreItem *const pc_ListItem = new C_TblTreItem();
@@ -1653,7 +1653,7 @@ void C_TblTreDataElementModel::mh_AddHalcItem(
     const uint32_t ou32_ChannelArrayIndex, const bool oq_ShowOnlyWriteElements,
     const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements,
     const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements,
     const QString &orc_HalChannelOrDomainName) {
   C_PuiSvDbNodeDataPoolListElementId c_Id(
@@ -1700,7 +1700,7 @@ void C_TblTreDataElementModel::mh_AddHalcTreeItem(
     const bool oq_IsString, const bool oq_ShowOnlyWriteElements,
     const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements,
     const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements) {
   const C_OscNodeDataPoolListElement *const pc_OscElement =
       C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(orc_Id);
@@ -1749,10 +1749,10 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsComm(
     const uint32_t ou32_NodeIndex, const uint32_t ou32_DpIndex,
     const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
     const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements) {
   if ((opc_DpItem != NULL) && (orc_Dp.e_Type == C_OscNodeDataPool::eCOM)) {
-    std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices>
+    QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices>
         c_MessageIds;
     C_OscCanProtocol::E_Type e_Protocol = C_OscCanProtocol::eLAYER2;
 
@@ -1766,10 +1766,10 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsComm(
       const C_OscNodeComInterfaceSettings &rc_CurInterface =
           orc_Node.c_Properties.c_ComInterfaces[u32_ItInterface];
       if (rc_CurInterface.e_InterfaceType == C_OscSystemBus::eCAN) {
-        const std::vector<const C_OscCanMessageContainer *> c_Containers =
+        const QList<const C_OscCanMessageContainer *> c_Containers =
             C_PuiSdHandler::h_GetInstance()->GetCanProtocolMessageContainers(
                 ou32_NodeIndex, e_Protocol, u32_ItInterface);
-        for (std::vector<const C_OscCanMessageContainer *>::const_iterator
+        for (QList<const C_OscCanMessageContainer *>::const_iterator
                  c_It = c_Containers.begin();
              c_It != c_Containers.end(); ++c_It) {
           const C_OscCanMessageContainer *const pc_Container = *c_It;
@@ -1831,11 +1831,11 @@ void C_TblTreDataElementModel::mh_InitDatapoolElementsComm(
 //----------------------------------------------------------------------------------------------------------------------
 bool C_TblTreDataElementModel::mh_AddCommMessageItems(
     C_TblTreItem *const opc_BaseItem,
-    const std::vector<C_OscCanMessageIdentificationIndices> &orc_MessageIds,
+    const QList<C_OscCanMessageIdentificationIndices> &orc_MessageIds,
     const C_PuiSvDbNodeDataPoolListElementId::E_Type oe_IdType,
     const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
     const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements) {
   bool q_Valid = false;
 
@@ -1927,7 +1927,7 @@ bool C_TblTreDataElementModel::mh_AddCommMessageItems(
 void C_TblTreDataElementModel::mh_UpdateDatapoolElement(
     const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
     const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements,
     C_TblTreSimpleItem *const opc_Tree) {
   if (opc_Tree != NULL) {
@@ -1976,7 +1976,7 @@ void C_TblTreDataElementModel::mh_CreateArrayElementNodes(
     const C_OscNodeDataPoolListElement &orc_Element,
     const bool oq_IsStringElement, C_TblTreItem *const opc_ElementItem,
     const C_PuiSvDbNodeDataPoolListElementId &orc_ParentId,
-    const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+    const QList<C_PuiSvDbNodeDataPoolListElementId> *const
         opc_AlreasyUsedElements) {
   if (opc_ElementItem != NULL) {
     if ((orc_Element.GetArray()) && (oq_IsStringElement == false)) {
@@ -2026,7 +2026,7 @@ void C_TblTreDataElementModel::m_InitNvmList(const uint32_t ou32_ViewIndex) {
   const C_PuiSvData *const pc_View =
       C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-  std::vector<uint8_t> c_NodeActiveFlags;
+  QByteArray c_NodeActiveFlags;
   const int32_t s32_Retval =
       C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
           ou32_ViewIndex, c_NodeActiveFlags);
@@ -2219,9 +2219,9 @@ void C_TblTreDataElementModel::m_InitNvmList(const uint32_t ou32_ViewIndex) {
    Data pools
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_PuiSvDbNodeDataPoolListElementId>
+QList<C_PuiSvDbNodeDataPoolListElementId>
 C_TblTreDataElementModel::m_GetDatapools(const QModelIndex &orc_Index) const {
-  std::vector<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
+  QList<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
   // lint -e{9079}  Result of Qt interface restrictions, set by index function
   const C_TblTreItem *const pc_TreeItem =
       static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
@@ -2273,10 +2273,10 @@ C_TblTreDataElementModel::m_GetDatapools(const QModelIndex &orc_Index) const {
    Any data pool elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_PuiSvDbNodeDataPoolListElementId>
+QList<C_PuiSvDbNodeDataPoolListElementId>
 C_TblTreDataElementModel::m_GetAnyDatapoolElements(
     const QModelIndex &orc_Index) const {
-  std::vector<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
+  QList<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
   // lint -e{9079}  Result of Qt interface restrictions, set by index function
   const C_TblTreItem *const pc_TreeItem =
       static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
@@ -2302,9 +2302,9 @@ C_TblTreDataElementModel::m_GetAnyDatapoolElements(
    Data pool elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_PuiSvDbNodeDataPoolListElementId>
+QList<C_PuiSvDbNodeDataPoolListElementId>
 C_TblTreDataElementModel::m_GetNvmList(const QModelIndex &orc_Index) const {
-  std::vector<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
+  QList<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
   // lint -e{9079}  Result of Qt interface restrictions, set by index function
   const C_TblTreItem *const pc_TreeItem =
       static_cast<const C_TblTreItem *>(orc_Index.internalPointer());
@@ -2383,8 +2383,8 @@ C_TblTreDataElementModel::m_GetNvmList(const QModelIndex &orc_Index) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblTreDataElementModel::mh_CleanUp(
-    QMap<std::vector<uint32_t>, C_TblTreDataElementModelState> &orc_Map) {
-  for (QMap<std::vector<uint32_t>, C_TblTreDataElementModelState>::iterator
+    QMap<QList<uint32_t>, C_TblTreDataElementModelState> &orc_Map) {
+  for (QMap<QList<uint32_t>, C_TblTreDataElementModelState>::iterator
            c_It = orc_Map.begin();
        c_It != orc_Map.end(); ++c_It) {
     c_It.value().CleanUp();
@@ -2404,11 +2404,11 @@ void C_TblTreDataElementModel::mh_CleanUp(
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_TblTreDataElementModel::mh_Contains(
-    const QMap<std::vector<uint32_t>, C_TblTreDataElementModelState> &orc_Map,
+    const QMap<QList<uint32_t>, C_TblTreDataElementModelState> &orc_Map,
     const C_TblTreSimpleItem *const opc_Item) {
   bool q_Retval = false;
 
-  for (QMap<std::vector<uint32_t>,
+  for (QMap<QList<uint32_t>,
             C_TblTreDataElementModelState>::const_iterator c_It =
            orc_Map.begin();
        c_It != orc_Map.end(); ++c_It) {
@@ -2429,13 +2429,13 @@ bool C_TblTreDataElementModel::mh_Contains(
    View and system definition hash in combination
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t>
+QList<uint32_t>
 C_TblTreDataElementModel::mh_GetViewSdHash(const uint32_t ou32_ViewIndex) {
-  std::vector<uint32_t> c_Retval;
+  QList<uint32_t> c_Retval;
   uint32_t u32_Hash;
   const C_PuiSvData *const pc_View =
       C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
-  std::vector<uint8_t> c_NodeActiveFlags;
+  QByteArray c_NodeActiveFlags;
   const int32_t s32_Retval =
       C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
           ou32_ViewIndex, c_NodeActiveFlags);
@@ -2444,7 +2444,7 @@ C_TblTreDataElementModel::mh_GetViewSdHash(const uint32_t ou32_ViewIndex) {
     bool q_Data;
     uint32_t u32_Data;
     uint32_t u32_DashboardCounter;
-    const std::vector<C_PuiSvDashboard> &rc_Dashboards =
+    const QList<C_PuiSvDashboard> &rc_Dashboards =
         pc_View->GetDashboards();
 
     u32_Hash = 0xFFFFFFFFUL;
@@ -2465,7 +2465,7 @@ C_TblTreDataElementModel::mh_GetViewSdHash(const uint32_t ou32_ViewIndex) {
     for (u32_DashboardCounter = 0U; u32_DashboardCounter < rc_Dashboards.size();
          ++u32_DashboardCounter) {
       uint32_t u32_ParamCounter;
-      const std::vector<C_PuiSvDbParam> &rc_Params =
+      const QList<C_PuiSvDbParam> &rc_Params =
           rc_Dashboards[u32_DashboardCounter].GetParams();
 
       for (u32_ParamCounter = 0U; u32_ParamCounter < rc_Params.size();
@@ -2532,7 +2532,7 @@ bool C_TblTreDataElementModel::mh_SvCheckNodeDiagnostic(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_TblTreDataElementModel::mh_GetCurrentNodeActiveFlags(
     const uint32_t ou32_ViewIndex, const bool oq_IsModelUsedInSysViews,
-    std::vector<uint8_t> &orc_NodeActiveFlags) {
+    QByteArray &orc_NodeActiveFlags) {
   int32_t s32_Retval;
   const uint32_t u32_NodeSize =
       C_PuiSdHandler::h_GetInstance()->GetOscNodesSize();
@@ -2540,7 +2540,8 @@ int32_t C_TblTreDataElementModel::mh_GetCurrentNodeActiveFlags(
   // Model used in a different context than system views e.g. system definition
   if (oq_IsModelUsedInSysViews == false) {
     s32_Retval = C_NO_ERR;
-    orc_NodeActiveFlags.resize(u32_NodeSize, 1U);
+    orc_NodeActiveFlags.resize(static_cast<int>(u32_NodeSize));
+    orc_NodeActiveFlags.fill(static_cast<char>(1U));
   } else {
     s32_Retval =
         C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(

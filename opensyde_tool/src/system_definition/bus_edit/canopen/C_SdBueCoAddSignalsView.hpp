@@ -9,6 +9,7 @@
 #define C_SDBUECOADDSIGNALSVIEW_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OgeTreeViewToolTipBase.hpp"
 #include "C_SdBueCoAddSignalsModel.hpp"
 #include "C_TblTreMultiColumnLeafSortFilter.hpp"
@@ -31,7 +32,7 @@ public:
    C_SdBueCoAddSignalsView(QWidget * const opc_Parent = NULL);
    void SetIndex(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId);
    void PrepareCleanUp(void);
-   std::vector<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> GetSelectedSignals(void) const;
+   QList<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> GetSelectedSignals(void) const;
    bool IsEmpty(void) const;
    void Search(const QString & orc_Text);
 

@@ -10,7 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <map>
-#include <vector>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -33,7 +33,7 @@ public:
    // changed
    // data bytes of CAN
    // message
-   std::vector<int32_t> c_GrayOutValueDataBytes; ///< Gray out values for
+   QList<int32_t> c_GrayOutValueDataBytes; ///< Gray out values for
    // each
    // data
    // byte of CAN message
@@ -42,7 +42,7 @@ public:
    // multiplexer value of a
    // CAN
    // message
-   std::vector<uint32_t> c_DataBytesChangedTimeStamps; ///< Time stamp of last
+   QList<uint32_t> c_DataBytesChangedTimeStamps; ///< Time stamp of last
    // change for
    // each data byte of CAN
    // message

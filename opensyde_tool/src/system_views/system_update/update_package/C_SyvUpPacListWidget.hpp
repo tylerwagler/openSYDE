@@ -16,6 +16,7 @@
 
 #include <QAction>
 #include <QStringList>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -61,8 +62,8 @@ public:
   void SetUpdateFinished(void) const;
   void SetDisconnected(void);
   void UpdateDeviceInformation(
-      const std::vector<uint32_t> &orc_NodeIndexes,
-      const std::vector<stw::opensyde_gui_logic::C_SyvUpDeviceInfo>
+      const QList<uint32_t> &orc_NodeIndexes,
+      const QList<stw::opensyde_gui_logic::C_SyvUpDeviceInfo>
           &orc_DeviceInformation) const;
   void SetNodeProgress(const uint32_t ou32_NodeIndex,
                        const uint8_t ou8_Progress) const;
@@ -73,10 +74,10 @@ public:
 
   void CreateServiceUpdatePackage(
       const bool oq_SaveAsFile, const bool oq_SecureFile,
-      const std::vector<uint8_t> &orc_EncryptNodes = std::vector<uint8_t>(),
+      const QByteArray &orc_EncryptNodes = QByteArray(),
       const QStringList &orc_EncryptNodesPassword = QStringList(),
-      const std::vector<uint8_t> &orc_AddSignatureNodes =
-          std::vector<uint8_t>(),
+      const QByteArray &orc_AddSignatureNodes =
+          QByteArray(),
       const QStringList &orc_NodeSignaturePemFiles = QStringList(),
       const QString oc_CurrentSelectedVersion = "");
 
@@ -87,10 +88,10 @@ public:
                         QStringList *const opc_MissingFiles) const;
 
   int32_t GetUpdatePackage(
-      std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
+      QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
           &orc_ApplicationsToWrite,
-      std::vector<uint32_t> &orc_NodesOrder,
-      std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> *const
+      QList<uint32_t> &orc_NodesOrder,
+      QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> *const
           opc_AllApplications = NULL) const;
 
   // The signals keyword is necessary for Qt signal slot functionality

@@ -18,6 +18,7 @@
 #include "stwtypes.hpp"
 #include <QString>
 #include <QStringList>
+#include <QList>
 #include "C_OscXmlParser.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_OscSecurityEcdsa.hpp"
@@ -51,9 +52,9 @@ protected:
    static QString mhc_ErrorMessage;        // description of error which caused the service update package
                                                          // to fail
 
-   static int32_t mh_CheckCommonSecurityParameters(const std::vector<uint8_t> & orc_EncryptNodes,
+   static int32_t mh_CheckCommonSecurityParameters(const QByteArray & orc_EncryptNodes,
                                                    const QStringList & orc_EncryptNodesPassword,
-                                                   const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
+                                                   const QList<QByteArray > & orc_NodeSignatureKeys,
                                                    const uint32_t ou32_NumNodes, const QString & orc_Mode,
                                                    const QString & orc_Function);
 
@@ -65,13 +66,13 @@ protected:
                                      const QString & orc_TargetPath,
                                      QStringList & orc_AbsPath,
                                      QStringList & orc_RelPath);
-   static void mh_AdaptEncryptionParameters(const std::vector<uint8_t> & orc_InEncryptNodes,
+   static void mh_AdaptEncryptionParameters(const QByteArray & orc_InEncryptNodes,
                                             const QStringList & orc_InEncryptNodesPassword,
-                                            const uint32_t ou32_NodeCount, std::vector<uint8_t> & orc_OutEncryptNodes,
+                                            const uint32_t ou32_NodeCount, QByteArray & orc_OutEncryptNodes,
                                             QStringList & orc_OutEncryptNodesPassword);
-   static void mh_AdaptCommonSignatureParameters(const std::vector<std::vector<uint8_t> > & orc_InNodeSignatureKeys,
+   static void mh_AdaptCommonSignatureParameters(const QList<QByteArray > & orc_InNodeSignatureKeys,
                                                  const uint32_t ou32_NodeCount,
-                                                 std::vector<std::vector<uint8_t> > & orc_OutNodeSignatureKeys);
+                                                 QList<QByteArray > & orc_OutNodeSignatureKeys);
    static int32_t mh_CalcDigest(const QString & orc_SourcePath,
                                 const std::set<QString> &orc_SupFiles,
                                 uint8_t(&orau8_Digest)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH],

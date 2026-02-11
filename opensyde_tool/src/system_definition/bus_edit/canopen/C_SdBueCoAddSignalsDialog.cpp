@@ -118,7 +118,7 @@ void C_SdBueCoAddSignalsDialog::InitStaticNames(void) const
    Current selected signals
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscCanOpenManagerMappableSignal> C_SdBueCoAddSignalsDialog::GetSelectedSignals(void) const
+QList<C_OscCanOpenManagerMappableSignal> C_SdBueCoAddSignalsDialog::GetSelectedSignals(void) const
 {
    return this->mpc_Ui->pc_TreeView->GetSelectedSignals();
 }

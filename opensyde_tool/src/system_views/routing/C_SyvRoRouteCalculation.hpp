@@ -10,7 +10,7 @@
 #define C_SYVROROUTECALCULATION_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include <list>
 
 #include "stwtypes.hpp"
@@ -35,7 +35,7 @@ public:
                            const stw::opensyde_core::C_OscRoutingCalculation::E_Mode oe_Mode);
    virtual ~C_SyvRoRouteCalculation();
 
-   const std::vector<stw::opensyde_core::C_OscRoutingRoute> * GetRoutes(void) const;
+   const QList<stw::opensyde_core::C_OscRoutingRoute> * GetRoutes(void) const;
    const stw::opensyde_core::C_OscRoutingRoute * GetBestRoute(void) const;
    bool CheckItfNumberForRouting(const uint32_t ou32_TargetNodeIndex,
                                  const stw::opensyde_core::C_OscNodeComInterfaceSettings & orc_ComItfSettings) const;

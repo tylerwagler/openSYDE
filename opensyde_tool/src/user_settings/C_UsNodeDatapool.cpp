@@ -140,7 +140,7 @@ C_UsCommunication C_UsNodeDatapool::GetCommList(const QString & orc_ListName) co
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNodeDatapool::SetCommMessageOverviewColumnWidth(const QString & orc_ListName,
-                                                         const std::vector<int32_t> & orc_Value)
+                                                         const QList<int32_t> & orc_Value)
 {
    if (this->mc_InterfaceSettings.contains(orc_ListName) == true)
    {
@@ -163,7 +163,7 @@ void C_UsNodeDatapool::SetCommMessageOverviewColumnWidth(const QString & orc_Lis
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNodeDatapool::SetCommSignalOverviewColumnWidth(const QString & orc_ListName,
-                                                        const std::vector<int32_t> & orc_Value)
+                                                        const QList<int32_t> & orc_Value)
 {
    if (this->mc_InterfaceSettings.contains(orc_ListName) == true)
    {
@@ -244,7 +244,7 @@ C_UsNodeDatapoolList C_UsNodeDatapool::GetOtherList(const QString & orc_ListName
    \param[in]  orc_ColumnWidths  Last known column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsNodeDatapool::SetListColumnSizes(const QString & orc_ListName, const std::vector<int32_t> & orc_ColumnWidths)
+void C_UsNodeDatapool::SetListColumnSizes(const QString & orc_ListName, const QList<int32_t> & orc_ColumnWidths)
 {
    if (this->mc_ListSettings.contains(orc_ListName) == true)
    {

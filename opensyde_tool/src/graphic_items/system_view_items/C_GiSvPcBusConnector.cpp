@@ -47,7 +47,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_GiSvPcBusConnector::C_GiSvPcBusConnector(const uint64_t ou64_UniqueId, const uint32_t ou32_ViewIndex,
-                                           const std::vector<QPointF> & orc_InteractionPoints,
+                                           const QList<QPointF> & orc_InteractionPoints,
                                            const C_GiLiBus * const opc_BusItem,
                                            C_GiBiConnectableItem * const opc_GenericItem) :
    C_GiLiBusConnectorBase(ou64_UniqueId, orc_InteractionPoints, opc_BusItem),

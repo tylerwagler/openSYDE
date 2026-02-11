@@ -146,7 +146,7 @@ void C_PuiBsElementsFiler::h_SaveBaseElements(const C_PuiBsElements & orc_Elemen
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiBsElementsFiler::h_LoadTextElements(std::vector<C_PuiBsTextElement> & orc_TextElements,
+int32_t C_PuiBsElementsFiler::h_LoadTextElements(QList<C_PuiBsTextElement> & orc_TextElements,
                                                  C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -181,7 +181,7 @@ int32_t C_PuiBsElementsFiler::h_LoadTextElements(std::vector<C_PuiBsTextElement>
    \param[in,out] orc_XmlParser    XML parser with the "current" element set to the "text-elements" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiBsElementsFiler::h_SaveTextElements(const std::vector<C_PuiBsTextElement> & orc_TextElements,
+void C_PuiBsElementsFiler::h_SaveTextElements(const QList<C_PuiBsTextElement> & orc_TextElements,
                                               C_OscXmlParserBase & orc_XmlParser)
 {
    for (uint32_t u32_Index = 0U; u32_Index < orc_TextElements.size(); ++u32_Index)
@@ -202,7 +202,7 @@ void C_PuiBsElementsFiler::h_SaveTextElements(const std::vector<C_PuiBsTextEleme
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiBsElementsFiler::h_LoadBoundaries(std::vector<C_PuiBsBoundary> & orc_Boundaries,
+int32_t C_PuiBsElementsFiler::h_LoadBoundaries(QList<C_PuiBsBoundary> & orc_Boundaries,
                                                C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -237,7 +237,7 @@ int32_t C_PuiBsElementsFiler::h_LoadBoundaries(std::vector<C_PuiBsBoundary> & or
    \param[in,out] orc_XmlParser  XML parser with the "current" element set to the "boundaries" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiBsElementsFiler::h_SaveBoundaries(const std::vector<C_PuiBsBoundary> & orc_Boundaries,
+void C_PuiBsElementsFiler::h_SaveBoundaries(const QList<C_PuiBsBoundary> & orc_Boundaries,
                                             C_OscXmlParserBase & orc_XmlParser)
 {
    for (uint32_t u32_Index = 0U; u32_Index < orc_Boundaries.size(); ++u32_Index)
@@ -259,7 +259,7 @@ void C_PuiBsElementsFiler::h_SaveBoundaries(const std::vector<C_PuiBsBoundary> &
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiBsElementsFiler::h_LoadImages(std::vector<C_PuiBsImage> & orc_Images, C_OscXmlParserBase & orc_XmlParser)
+int32_t C_PuiBsElementsFiler::h_LoadImages(QList<C_PuiBsImage> & orc_Images, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
    QString c_SelectedNode = orc_XmlParser.SelectNodeChild("image");
@@ -293,7 +293,7 @@ int32_t C_PuiBsElementsFiler::h_LoadImages(std::vector<C_PuiBsImage> & orc_Image
    \param[in,out] orc_XmlParser XML parser with the "current" element set to the "images" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiBsElementsFiler::h_SaveImages(const std::vector<C_PuiBsImage> & orc_Images,
+void C_PuiBsElementsFiler::h_SaveImages(const QList<C_PuiBsImage> & orc_Images,
                                         C_OscXmlParserBase & orc_XmlParser)
 {
    for (uint32_t u32_Index = 0U; u32_Index < orc_Images.size(); ++u32_Index)
@@ -315,7 +315,7 @@ void C_PuiBsElementsFiler::h_SaveImages(const std::vector<C_PuiBsImage> & orc_Im
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiBsElementsFiler::h_LoadLineArrows(std::vector<C_PuiBsLineArrow> & orc_LineArrows,
+int32_t C_PuiBsElementsFiler::h_LoadLineArrows(QList<C_PuiBsLineArrow> & orc_LineArrows,
                                                C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -350,7 +350,7 @@ int32_t C_PuiBsElementsFiler::h_LoadLineArrows(std::vector<C_PuiBsLineArrow> & o
    \param[in,out] orc_XmlParser  XML parser with the "current" element set to the "line-arrows" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiBsElementsFiler::h_SaveLineArrows(const std::vector<C_PuiBsLineArrow> & orc_LineArrows,
+void C_PuiBsElementsFiler::h_SaveLineArrows(const QList<C_PuiBsLineArrow> & orc_LineArrows,
                                             C_OscXmlParserBase & orc_XmlParser)
 {
    for (uint32_t u32_Index = 0U; u32_Index < orc_LineArrows.size(); ++u32_Index)

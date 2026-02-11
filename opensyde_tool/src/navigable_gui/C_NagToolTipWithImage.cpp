@@ -28,7 +28,7 @@ using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-std::vector<QPointer<C_NagToolTipWithImage> > C_NagToolTipWithImage::mhc_ExistingToolTips;
+QList<QPointer<C_NagToolTipWithImage> > C_NagToolTipWithImage::mhc_ExistingToolTips;
 
 const uint16_t C_NagToolTipWithImage::mhu16_IMAGE_WIDTH = 150;
 const QString C_NagToolTipWithImage::mhc_DEFAULT_IMAGE = "Image_Grey.svg";
@@ -288,7 +288,7 @@ bool C_NagToolTipWithImage::h_HideAll(void)
 {
    bool q_Retval = false;
 
-   for (std::vector<QPointer<C_NagToolTipWithImage> >::iterator c_ItExisting =
+   for (QList<QPointer<C_NagToolTipWithImage> >::iterator c_ItExisting =
            C_NagToolTipWithImage::mhc_ExistingToolTips.begin();
         c_ItExisting != C_NagToolTipWithImage::mhc_ExistingToolTips.end();)
    {
@@ -325,7 +325,7 @@ void C_NagToolTipWithImage::showEvent(QShowEvent * const opc_Event)
    bool q_Found = false;
 
    //Clean up old ones
-   for (std::vector<QPointer<C_NagToolTipWithImage> >::iterator c_ItExisting =
+   for (QList<QPointer<C_NagToolTipWithImage> >::iterator c_ItExisting =
            C_NagToolTipWithImage::mhc_ExistingToolTips.begin();
         c_ItExisting != C_NagToolTipWithImage::mhc_ExistingToolTips.end();)
    {

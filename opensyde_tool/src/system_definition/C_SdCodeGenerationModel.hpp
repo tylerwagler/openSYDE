@@ -10,6 +10,7 @@
 #define C_SDCODEGENERATIONMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "stwtypes.hpp"
 
 #include "C_TblTreeModelCheckable.hpp"
@@ -33,14 +34,14 @@ public:
    explicit C_SdCodeGenerationModel(QObject * const opc_Parent = NULL);
    ~C_SdCodeGenerationModel() override;
 
-   int32_t Init(const std::vector<uint32_t> & orc_ElementIndices) override;
-   void GetCheckedItems(std::vector<uint32_t> & orc_ElementIndices,
-                        std::vector<std::vector<uint32_t> > & orc_ChildIndicesPerElement) const override;
+   int32_t Init(const QList<uint32_t> & orc_ElementIndices) override;
+   void GetCheckedItems(QList<uint32_t> & orc_ElementIndices,
+                        QList<QList<uint32_t> > & orc_ChildIndicesPerElement) const override;
    uint32_t GetCheckedItemCount(void) const override;
 
 private:
    void m_CheckInitItems(C_TblTreeModelCheckableItem & orc_VisibleRootItem,
-                         const std::vector<uint32_t> & orc_NodeIndices) const;
+                         const QList<uint32_t> & orc_NodeIndices) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

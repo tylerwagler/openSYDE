@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -239,7 +240,7 @@ void C_OscXceManifestFiler::h_SaveData(const C_OscXceManifest & orc_Config, C_Os
    C_CONFIG    manifest file content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscXceUpdatePackageParameters> & orc_Config,
+int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(QList<C_OscXceUpdatePackageParameters> & orc_Config,
                                                               C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("secure-update");
@@ -306,7 +307,7 @@ int32_t C_OscXceManifestFiler::mh_LoadUpdatePackageParameters(std::vector<C_OscX
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscXceManifestFiler::mh_SaveUpdatePackageParameters(
-   const std::vector<C_OscXceUpdatePackageParameters> & orc_Config, C_OscXmlParserBase & orc_XmlParser)
+   const QList<C_OscXceUpdatePackageParameters> & orc_Config, C_OscXmlParserBase & orc_XmlParser)
 {
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("secure-update") == "secure-update");
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(

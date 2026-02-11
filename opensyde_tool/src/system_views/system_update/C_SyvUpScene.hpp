@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include "stwtypes.hpp"
 
 #include "C_GiNode.hpp"
@@ -42,20 +43,20 @@ public:
    void SetConnecting(const bool oq_Active) const;
    void SetConnected(const bool oq_Active) const;
    void SetUpdating(const bool oq_Active) const;
-   void UpdateDeviceInformation(const std::vector<uint32_t> & orc_NodeIndexes,
-                                const std::vector<stw::opensyde_gui_logic::C_SyvUpDeviceInfo> & orc_DeviceInformation)
+   void UpdateDeviceInformation(const QList<uint32_t> & orc_NodeIndexes,
+                                const QList<stw::opensyde_gui_logic::C_SyvUpDeviceInfo> & orc_DeviceInformation)
    const;
    void StartConnectionAnimation(void) const;
    void StartProgressAnimation(const uint32_t ou32_NodeIndex) const;
    void StopProgressAnimation(const bool oq_Abort, const uint32_t ou32_FailedApplicationIndex,
                               const bool oq_StopUpdateingState) const;
    void SetNodeError(const uint32_t ou32_NodeIndex) const;
-   std::vector<uint32_t> GetActiveNoneThirdPartyNodeIndices(void) const;
+   QList<uint32_t> GetActiveNoneThirdPartyNodeIndices(void) const;
    void CheckUpdateDisabledState(void) const;
 
-   void SetNodeConnectStates(const std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
+   void SetNodeConnectStates(const QList<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
                              const C_GiSvNodeData::C_GiSvNodeDataPreconditionErrors & orc_NodePreconditionErrors);
-   void SetNodeUpdateStates(const std::vector<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> & orc_NodeStates);
+   void SetNodeUpdateStates(const QList<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> & orc_NodeStates);
 
    bool IsAnyItemAddable(void) const override;
    bool IsItemMovable(const QGraphicsItem * const opc_Item) const override;
@@ -99,7 +100,7 @@ private:
    int32_t m_StartProgressAnimationBusses(const stw::opensyde_gui_logic::C_SyvRoRouteCalculation & orc_Calc,
                                           const uint32_t ou32_NodeIndex) const;
    static int32_t mh_GetAnimationPath(const QPointF & orc_PointStart, const QPointF & orc_PointEnd,
-                                      const std::vector<QPointF> & orc_UiInteractionPoints, QPolygonF & orc_Path,
+                                      const QList<QPointF> & orc_UiInteractionPoints, QPolygonF & orc_Path,
                                       bool & orq_Inverse);
 };
 

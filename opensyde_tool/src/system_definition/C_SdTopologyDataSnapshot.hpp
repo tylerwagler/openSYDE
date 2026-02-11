@@ -12,7 +12,7 @@
 #define C_SDTOPOLOGYDATASNAPSHOT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_PuiSdNode.hpp"
 #include "C_OscNodeSquad.hpp"
@@ -37,17 +37,17 @@ public:
    C_SdTopologyDataSnapshot(void);
    ~C_SdTopologyDataSnapshot(void) override;
 
-   std::vector<C_PuiSdTextElementBus> c_BusTextElements; ///< UI information for bus text elements
-   std::vector<C_PuiSdNode> c_UiNodes;                   ///< UI information for nodes (should always
+   QList<C_PuiSdTextElementBus> c_BusTextElements; ///< UI information for bus text elements
+   QList<C_PuiSdNode> c_UiNodes;                   ///< UI information for nodes (should always
    ///< stay synchronous with core arrays)
-   std::vector<C_PuiSdBus> c_UiBuses; ///< UI information for buses (should always
+   QList<C_PuiSdBus> c_UiBuses; ///< UI information for buses (should always
    ///< stay synchronous with core arrays)
-   std::vector<stw::opensyde_core::C_OscNode> c_OscNodes;           ///< all nodes that are part of this system
-   std::vector<stw::opensyde_core::C_OscNodeSquad> c_OscNodeGroups; ///< all node groups that are part of this system
+   QList<stw::opensyde_core::C_OscNode> c_OscNodes;           ///< all nodes that are part of this system
+   QList<stw::opensyde_core::C_OscNodeSquad> c_OscNodeGroups; ///< all node groups that are part of this system
    ///< definition
-   std::vector<stw::opensyde_core::C_OscSystemBus> c_OscBuses; ///< all buses that are part of this system
+   QList<stw::opensyde_core::C_OscSystemBus> c_OscBuses; ///< all buses that are part of this system
    ///< definition
-   std::vector<C_PuiSdCompleteBusConnectionData> c_BusConnections;
+   QList<C_PuiSdCompleteBusConnectionData> c_BusConnections;
 
    void Clear(void) override;
    uint32_t Count(void) const override;

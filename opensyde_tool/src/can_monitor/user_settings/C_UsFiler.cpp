@@ -400,7 +400,7 @@ void C_UsFiler::mh_LoadProjectDependentSection(C_UsHandler & orc_UserSettings, Q
 {
    if (orc_ActiveProject != "")
    {
-      std::vector<int32_t> c_Columns;
+      QList<int32_t> c_Columns;
       // project specific settings
 
       // message generator
@@ -443,7 +443,7 @@ void C_UsFiler::mh_LoadProjectDependentSection(C_UsHandler & orc_UserSettings, Q
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_SaveColumns(QSettings & orc_Ini, const QString & orc_SectionName,
-                               const std::string & orc_IdentifierBaseName, const std::vector<int32_t> & orc_Columns)
+                               const std::string & orc_IdentifierBaseName, const QList<int32_t> & orc_Columns)
 {
    const QString c_CountId = static_cast<QString>("%1_count").arg(orc_IdentifierBaseName);
 
@@ -465,7 +465,7 @@ void C_UsFiler::mh_SaveColumns(QSettings & orc_Ini, const QString & orc_SectionN
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_LoadColumns(QSettings & orc_Ini, const QString & orc_SectionName,
-                               const std::string & orc_IdentifierBaseName, std::vector<int32_t> & orc_Columns)
+                               const std::string & orc_IdentifierBaseName, QList<int32_t> & orc_Columns)
 {
    const QString c_CountId = static_cast<QString>("%1_count").arg(orc_IdentifierBaseName);
    const int32_t s32_Count = orc_Ini.value(orc_SectionName + "/" + c_CountId, 0).toInt();

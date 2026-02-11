@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include "C_SdManUnoTopologyAddBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -30,7 +31,7 @@ class C_SdManUnoTopologyAddSnapshotCommand :
 public:
    C_SdManUnoTopologyAddSnapshotCommand(QGraphicsScene * const opc_Scene,
                                         const C_SdTopologyDataSnapshot & orc_InitialSnapshotData,
-                                        const std::vector<uint64_t> & orc_Ids, const QPointF & orc_NewPos,
+                                        const QList<uint64_t> & orc_Ids, const QPointF & orc_NewPos,
                                         const float64_t of64_HighestUsedZetValue,
                                         QUndoCommand * const opc_Parent = NULL);
    ~C_SdManUnoTopologyAddSnapshotCommand(void) override;

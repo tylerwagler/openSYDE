@@ -12,6 +12,7 @@
 #define C_SDBUEUNOMESSAGEADDDELETEBASECOMMAND_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_SdBueUnoMessageBaseCommand.hpp"
 #include "C_OscCanMessage.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
@@ -32,19 +33,19 @@ class C_SdBueUnoMessageAddDeleteBaseCommand :
 {
 public:
    C_SdBueUnoMessageAddDeleteBaseCommand(
-      const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
+      const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager, stw::opensyde_gui::
       C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget,
       const QString & orc_Text = "", QUndoCommand * const opc_Parent = NULL);
 
 protected:
    //Avoid using the message index under all circumstances!!!!!
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mc_LastMessageId;
-   std::vector<stw::opensyde_core::C_OscCanMessage> mc_Message;
-   std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> > mc_OscSignalCommons;
-   std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > mc_UiSignalCommons;
-   std::vector<C_PuiSdNodeCanMessage> mc_UiMessage;
-   std::vector<std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > mc_MatchingIds;
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> mc_LastMessageId;
+   QList<stw::opensyde_core::C_OscCanMessage> mc_Message;
+   QList<QList<stw::opensyde_core::C_OscNodeDataPoolListElement> > mc_OscSignalCommons;
+   QList<QList<C_PuiSdNodeDataPoolListElement> > mc_UiSignalCommons;
+   QList<C_PuiSdNodeCanMessage> mc_UiMessage;
+   QList<QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > mc_MatchingIds;
 
    void m_Add(void);
    void m_Delete(void);
@@ -53,7 +54,7 @@ private:
    void m_Store(void);
    void m_Remove(void);
    static void mh_UpdateSignalsToProtocol(stw::opensyde_core::C_OscCanMessage & orc_Message,
-                                          std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignals, const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignals, const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType);
+                                          QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignals, const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignals, const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

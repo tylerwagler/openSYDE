@@ -13,6 +13,7 @@
 
 #include <mutex>
 
+#include <QList>
 #include <QWidget>
 #include <QTimer>
 
@@ -62,9 +63,9 @@ Q_SIGNALS:
    void SigChanged(void);
    void SigInvalidView(void);
    void SigBlockDragAndDrop(const bool oq_Block);
-   void SigNodeConnectStates(const std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
+   void SigNodeConnectStates(const QList<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
                              const C_GiSvNodeData::C_GiSvNodeDataPreconditionErrors & orc_NodePreconditionErrors);
-   void SigNodeUpdateStates(const std::vector<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> & orc_NodeStates);
+   void SigNodeUpdateStates(const QList<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> & orc_NodeStates);
 
 protected:
    void showEvent(QShowEvent * const opc_Event) override;
@@ -91,8 +92,8 @@ private:
    void m_ReportOpenSydeFlashloaderInformationRead(void);
    void m_ReportStwFlashloaderInformationRead(void);
 
-   void m_CheckOpenSydeFlashloaderInformation(const std::vector<uint32_t> & orc_OsyNodeIndexes,
-                                              const std::vector<stw::opensyde_core::C_OscSuSequences::C_OsyDeviceInformation> & orc_OsyDeviceInformation);
+   void m_CheckOpenSydeFlashloaderInformation(const QList<uint32_t> & orc_OsyNodeIndexes,
+                                              const QList<stw::opensyde_core::C_OscSuSequences::C_OsyDeviceInformation> & orc_OsyDeviceInformation);
 
    void m_Connect(void);
    void m_Update(void);
@@ -103,7 +104,7 @@ private:
 
    void m_Timer(void);
 
-   void m_HandlePreconditionErrorType(const std::vector<uint32_t> & orc_ErrorNodeIndexes,
+   void m_HandlePreconditionErrorType(const QList<uint32_t> & orc_ErrorNodeIndexes,
                                       const QString & orc_Description, const QString & orc_DetailsStart);
    void m_HandleNodePreconditionError(QString & orc_ErrorText, const uint32_t ou32_ErrorNodeIndex);
    void m_UpdateReportText(const QString & orc_NewTextPart) const;
@@ -118,7 +119,7 @@ private:
    void m_ReplaceOriginalWithTempPaths(void);
    void m_DiscardInfo(const uint32_t ou32_NodeIndex);
 
-   std::vector<bool> m_GetIsFileBasedFlagForEach(void) const;
+   QList<bool> m_GetIsFileBasedFlagForEach(void) const;
 
    static bool mh_IsConnectionStart(const stw::opensyde_core::C_OscSuSequences::E_ProgressStep oe_Step);
    static bool mh_IsConnectionSuccess(const stw::opensyde_core::C_OscSuSequences::E_ProgressStep oe_Step);
@@ -132,7 +133,7 @@ private:
    static bool mh_IsUpdateFailure(const stw::opensyde_core::C_OscSuSequences::E_ProgressStep oe_Step);
    static bool mh_IsUpdateAbort(const stw::opensyde_core::C_OscSuSequences::E_ProgressStep oe_Step);
    static bool mh_IsSecurityWarningNecessary(
-      const std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_NodesToFlash);
+      const QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_NodesToFlash);
 
    void m_UpdateUpdatePackageStatus(void);
    void m_WiFixPosMaxBtnClicked(void);
@@ -157,10 +158,10 @@ private:
    bool mq_ConnectFailed;
    bool mq_ErrorDetected;
 
-   std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> mc_NodesToFlash;
-   std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> mc_NodesWithAllApplications;
-   std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> mc_NodesWithAllApplicationsAndTempPath;
-   std::vector<uint32_t> mc_NodesOrder;
+   QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> mc_NodesToFlash;
+   QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> mc_NodesWithAllApplications;
+   QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> mc_NodesWithAllApplicationsAndTempPath;
+   QList<uint32_t> mc_NodesOrder;
    bool mq_NodesPreconditionError;
    C_GiSvNodeData::C_GiSvNodeDataPreconditionErrors mc_NodePreconditionErrors;
 

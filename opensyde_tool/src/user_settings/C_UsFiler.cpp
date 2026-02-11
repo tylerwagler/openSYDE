@@ -591,7 +591,7 @@ void C_UsFiler::mh_SaveList(QSettings &orc_Ini, const QString &orc_SectionName,
                             const C_UsNodeDatapoolList &orc_List) {
   const QString c_ListIdName =
       static_cast<QString>("%1Name").arg(orc_ListIdBase);
-  const std::vector<int32_t> &rc_ColumnWidths = orc_List.GetColumnWidths();
+  const QList<int32_t> &rc_ColumnWidths = orc_List.GetColumnWidths();
 
   // Name
   orc_Ini.setValue(orc_SectionName + "/" + c_ListIdName, orc_ListName);
@@ -1397,7 +1397,7 @@ void C_UsFiler::mh_LoadNode(QSettings &orc_Ini, const QString &orc_SectionName,
 
   stw::opensyde_core::C_OscCanProtocol::E_Type e_Tmp;
   uint32_t u32_Tmp;
-  std::vector<int32_t> c_Columns;
+  QList<int32_t> c_Columns;
 
   const QString c_CanOpenOvColumnId =
       static_cast<QString>("%1CANopenOverview").arg(orc_NodeIdBase);
@@ -1690,8 +1690,8 @@ void C_UsFiler::mh_LoadBus(QSettings &orc_Ini, const QString &orc_SectionName,
   QString c_MessageName;
   bool q_SignalSelected;
   QString c_SignalName;
-  std::vector<int32_t> c_MessageColumns;
-  std::vector<int32_t> c_SignalColumns;
+  QList<int32_t> c_MessageColumns;
+  QList<int32_t> c_SignalColumns;
 
   C_UsFiler::mh_LoadColumns(orc_Ini, orc_SectionName, c_BusIdMessageOverview,
                             c_MessageColumns);
@@ -1911,7 +1911,7 @@ void C_UsFiler::mh_LoadList(QSettings &orc_Ini, const QString &orc_SectionName,
       orc_Ini.value(orc_SectionName + "/" + c_ListIdName, "").toString();
 
   if (c_ListName.compare("") != 0) {
-    std::vector<int32_t> c_ColumnWidths;
+    QList<int32_t> c_ColumnWidths;
     C_UsFiler::mh_LoadColumns(orc_Ini, orc_SectionName, orc_ListIdBase,
                               c_ColumnWidths);
     orc_UserSettings.SetProjSdNodeDatapoolListColumnSizes(
@@ -2926,7 +2926,7 @@ void C_UsFiler::mh_LoadProjectDependentSection(
 void C_UsFiler::mh_SaveColumns(QSettings &orc_Ini,
                                const QString &orc_SectionName,
                                const QString &orc_IdBase,
-                               const std::vector<int32_t> &orc_ColumnWidths) {
+                               const QList<int32_t> &orc_ColumnWidths) {
   const QString c_IdColumnCount =
       static_cast<QString>("%1Column_Count").arg(orc_IdBase);
 
@@ -2953,7 +2953,7 @@ void C_UsFiler::mh_SaveColumns(QSettings &orc_Ini,
 void C_UsFiler::mh_LoadColumns(QSettings &orc_Ini,
                                const QString &orc_SectionName,
                                const QString &orc_IdBase,
-                               std::vector<int32_t> &orc_ColumnWidths) {
+                               QList<int32_t> &orc_ColumnWidths) {
   const QString c_IdColumnCount =
       static_cast<QString>("%1Column_Count").arg(orc_IdBase);
   const int32_t s32_ColumnCount =

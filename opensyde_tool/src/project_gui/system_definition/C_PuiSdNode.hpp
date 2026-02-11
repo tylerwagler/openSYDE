@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include <vector>
+#include <QList>
 #include <QPointF>
 #include "C_OscNode.hpp"
 #include "C_PuiBsBox.hpp"
@@ -39,7 +39,7 @@ public:
    void CalcHash(uint32_t & oru32_HashValue) const;
 
    C_PuiSdNodeConnectionId c_ConnectionId;
-   std::vector<QPointF> c_UiNodeConnectionInteractionPoints;
+   QList<QPointF> c_UiNodeConnectionInteractionPoints;
 };
 
 class C_PuiSdNode :
@@ -52,9 +52,9 @@ public:
 
    void DeleteConnection(const C_PuiSdNodeConnectionId & orc_ConnectionId);
 
-   std::vector<C_PuiSdNodeConnection> c_UiBusConnections; ///< GUI information about this node's bus connections
-   std::vector<C_PuiSdNodeDataPool> c_UiDataPools;
-   std::vector<C_PuiSdNodeCanProtocol> c_UiCanProtocols;
+   QList<C_PuiSdNodeConnection> c_UiBusConnections; ///< GUI information about this node's bus connections
+   QList<C_PuiSdNodeDataPool> c_UiDataPools;
+   QList<C_PuiSdNodeCanProtocol> c_UiCanProtocols;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

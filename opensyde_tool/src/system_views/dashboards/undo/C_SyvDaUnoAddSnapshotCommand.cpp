@@ -52,7 +52,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaUnoAddSnapshotCommand::C_SyvDaUnoAddSnapshotCommand(QGraphicsScene * const opc_Scene,
                                                            const C_SyvDaDashboardSnapshot & orc_InitialSnapshotData,
-                                                           const std::vector<uint64_t> & orc_Ids,
+                                                           const QList<uint64_t> & orc_Ids,
                                                            const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                                                                       C_PuiSvReadDataConfiguration> & orc_RestoredRails, const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue,
                                                            QUndoCommand * const opc_Parent) :
@@ -93,7 +93,7 @@ void C_SyvDaUnoAddSnapshotCommand::m_AddNew(void)
    {
       QMap<C_PuiBsTemporaryDataId, uint64_t> c_IdMap;
       const C_PuiSvDashboard c_InitialData = this->m_GetDataBackup();
-      const std::vector<uint64_t> c_AllIds = this->m_GetIds();
+      const QList<uint64_t> c_AllIds = this->m_GetIds();
       const uint32_t u32_ItemCount = c_InitialData.Count();
       if (u32_ItemCount <= c_AllIds.size())
       {
@@ -215,7 +215,7 @@ void C_SyvDaUnoAddSnapshotCommand::m_InitialReadRailHandling(void)
       const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(pc_Scene->GetViewIndex());
       if (pc_View != NULL)
       {
-         std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+         QList<const C_PuiSvDbWidgetBase *> c_Widgets;
          const C_PuiSvDashboard c_InitialData = this->m_GetDataBackup();
          c_InitialData.GetAllWidgetItems(c_Widgets);
          for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)

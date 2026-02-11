@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "C_Uti.hpp"
 
@@ -48,8 +49,8 @@ using namespace stw::opensyde_gui_logic;
 C_SdNdeUnoDataPoolListMoveCommand::C_SdNdeUnoDataPoolListMoveCommand(const uint32_t & oru32_NodeIndex,
                                                                      const uint32_t & oru32_DataPoolIndex,
                                                                      stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                                                                     const std::vector<uint32_t> & orc_SourceRows,
-                                                                     const std::vector<uint32_t> & orc_TargetRows,
+                                                                     const QList<uint32_t> & orc_SourceRows,
+                                                                     const QList<uint32_t> & orc_TargetRows,
                                                                      QUndoCommand * const opc_Parent) :
    C_SdNdeUnoDataPoolListAddDeleteBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex, opc_DataPoolListsTreeWidget,
                                               orc_SourceRows,
@@ -98,14 +99,14 @@ void C_SdNdeUnoDataPoolListMoveCommand::undo(void)
                                    "move down" -> orc_TargetIndices + 1
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeUnoDataPoolListMoveCommand::m_DoMoveRows(const std::vector<uint32_t> & orc_SelectedIndices,
-                                                     const std::vector<uint32_t> & orc_TargetIndices)
+void C_SdNdeUnoDataPoolListMoveCommand::m_DoMoveRows(const QList<uint32_t> & orc_SelectedIndices,
+                                                     const QList<uint32_t> & orc_TargetIndices)
 {
    if (orc_SelectedIndices.size() == orc_TargetIndices.size())
    {
-      std::vector<uint32_t> c_SelectedIndicesCopy = orc_SelectedIndices;
-      std::vector<uint32_t> c_TargetIndicesCopy = orc_TargetIndices;
-      std::vector<std::vector<uint32_t> > c_ContiguousSections;
+      QList<uint32_t> c_SelectedIndicesCopy = orc_SelectedIndices;
+      QList<uint32_t> c_TargetIndicesCopy = orc_TargetIndices;
+      QList<QList<uint32_t> > c_ContiguousSections;
       uint32_t u32_TargetAccessIndex = 0UL;
 
       //Step 1 sort (so the next step can assume the contiguous selection has the same order!
@@ -117,7 +118,7 @@ void C_SdNdeUnoDataPoolListMoveCommand::m_DoMoveRows(const std::vector<uint32_t>
       //Step 3: move
       for (uint32_t u32_ItSection = 0UL; u32_ItSection < c_ContiguousSections.size(); ++u32_ItSection)
       {
-         const std::vector<uint32_t> & rc_Section = c_ContiguousSections[u32_ItSection];
+         const QList<uint32_t> & rc_Section = c_ContiguousSections[u32_ItSection];
          if (rc_Section.size() > 0UL)
          {
             uint32_t u32_TargetIndex = c_TargetIndicesCopy[u32_TargetAccessIndex];
@@ -155,12 +156,12 @@ void C_SdNdeUnoDataPoolListMoveCommand::m_DoMoveRows(const std::vector<uint32_t>
    \param[in] ou32_TargetIndex      Target index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeUnoDataPoolListMoveCommand::m_MoveItems(const std::vector<uint32_t> & orc_ContiguousIndices,
+void C_SdNdeUnoDataPoolListMoveCommand::m_MoveItems(const QList<uint32_t> & orc_ContiguousIndices,
                                                     const uint32_t ou32_TargetIndex) const
 {
    if (orc_ContiguousIndices.size() > 0UL)
    {
-      std::vector<uint32_t> c_ContiguousIndicesCopy = orc_ContiguousIndices;
+      QList<uint32_t> c_ContiguousIndicesCopy = orc_ContiguousIndices;
       bool q_Forward;
       if (c_ContiguousIndicesCopy[0UL] < ou32_TargetIndex)
       {

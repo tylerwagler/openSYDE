@@ -62,7 +62,7 @@ QString C_OscExportCanOpenInit::h_GetFileName()
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const QString & orc_FilePath, const C_OscNode & orc_Node,
-                                                   const std::vector<uint8_t> & orc_IfWithCanOpenMan,
+                                                   const QByteArray & orc_IfWithCanOpenMan,
                                                    const QString & orc_ExportToolInfo)
 {
    int32_t s32_Return;
@@ -256,7 +256,7 @@ int32_t C_OscExportCanOpenInit::h_CreateSourceCode(const QString & orc_FilePath,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenInit::mh_ComposeDefineNumTotal(QString & orc_DefineValue,
-                                                      const std::vector<uint8_t> & orc_IfWithCanOpenMan,
+                                                      const QByteArray & orc_IfWithCanOpenMan,
                                                       const bool oq_IsTx, const QString & orc_Subject)
 {
    const QString c_PdoType = oq_IsTx ? "TX" : "RX";
@@ -286,7 +286,7 @@ void C_OscExportCanOpenInit::mh_ComposeDefineNumTotal(QString & orc_DefineValue,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenInit::mh_ComposeDefineNumDevices(QString & orc_DefineValue,
-                                                        const std::vector<uint8_t> & orc_IfWithCanOpenMan)
+                                                        const QByteArray & orc_IfWithCanOpenMan)
 {
    for (uint32_t u32_IfIt = 0; u32_IfIt < orc_IfWithCanOpenMan.size(); ++u32_IfIt)
    {

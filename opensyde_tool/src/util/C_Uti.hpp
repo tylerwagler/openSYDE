@@ -19,8 +19,8 @@
 #include <QColor>
 #include <QFontMetrics>
 #include <QKeyEvent>
+#include <QList>
 #include <QStyle>
-#include <vector>
 
 
 #include "constants.hpp"
@@ -44,16 +44,16 @@ namespace opensyde_gui_logic {
 
 class C_Uti {
 public:
-  static void h_Uniqueify(std::vector<uint32_t> &orc_Indices);
-  static std::vector<std::vector<uint32_t>>
-  h_GetContiguousSectionsAscending(const std::vector<uint32_t> &orc_Indices);
+  static void h_Uniqueify(QList<uint32_t> &orc_Indices);
+  static QList<QList<uint32_t>>
+  h_GetContiguousSectionsAscending(const QList<uint32_t> &orc_Indices);
   static bool h_CheckFloatHasNoFractionPart(const float64_t of64_Value);
   static int32_t h_GetNumberOfDecimals(const float64_t of64_Value);
   static QString h_GetStringFromDouble(const float64_t of64_Value);
-  static std::vector<uint32_t>
-  h_UniquifyAndSortAscending(const std::vector<uint32_t> &orc_Items);
-  static std::vector<uint32_t>
-  h_UniquifyAndSortDescending(const std::vector<uint32_t> &orc_Items);
+  static QList<uint32_t>
+  h_UniquifyAndSortAscending(const QList<uint32_t> &orc_Items);
+  static QList<uint32_t>
+  h_UniquifyAndSortDescending(const QList<uint32_t> &orc_Items);
   static QColor h_ScaleColor(const QColor &orc_Color,
                              const uint32_t ou32_Percentage);
   static QColor h_GetDisabledColorLook(const QColor &orc_DefaultColorLook);
@@ -93,13 +93,13 @@ public:
   static QString
   h_GetUniqueNameQt(const std::map<QString, bool> &orc_ExistingStrings,
                     const QString &orc_ProposedName);
-  static std::vector<int32_t>
-  h_CreateAscendingIndexMap(const std::vector<uint32_t> &orc_UnsortedIndices);
-  static bool h_CheckSortedAscending(const std::vector<uint32_t> &orc_Indices);
+  static QList<int32_t>
+  h_CreateAscendingIndexMap(const QList<uint32_t> &orc_UnsortedIndices);
+  static bool h_CheckSortedAscending(const QList<uint32_t> &orc_Indices);
   template <typename T>
   static void
-  h_SortIndicesAscendingAndSync(std::vector<uint32_t> &orc_IndicesTmp,
-                                std::vector<T> &orc_SyncContent);
+  h_SortIndicesAscendingAndSync(QList<uint32_t> &orc_IndicesTmp,
+                                QList<T> &orc_SyncContent);
   static QString h_GetAbsolutePathFromExe(const QString &orc_Path);
   static bool h_IsPathRelativeToDir(const QString &orc_PathIn,
                                     const QString &orc_AbsoluteReferenceDir,

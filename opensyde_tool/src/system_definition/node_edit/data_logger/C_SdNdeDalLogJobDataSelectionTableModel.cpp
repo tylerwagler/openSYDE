@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 #include "constants.hpp"
 #include "stwtypes.hpp"
 
@@ -53,7 +54,7 @@ C_SdNdeDalLogJobDataSelectionTableModel::C_SdNdeDalLogJobDataSelectionTableModel
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobDataSelectionTableModel::AddData(
-   const std::vector<C_OscDataLoggerDataElementReference> & orc_DataElements, const uint32_t ou32_NodeIndex)
+   const QList<C_OscDataLoggerDataElementReference> & orc_DataElements, const uint32_t ou32_NodeIndex)
 {
    beginResetModel();
 
@@ -137,7 +138,7 @@ void C_SdNdeDalLogJobDataSelectionTableModel::GetElementLocationCount(uint32_t &
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobDataSelectionTableModel::UpdateData(
-   const std::vector<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
+   const QList<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
    const uint32_t ou32_NodeIndex)
 {
    this->mc_LoggingDataList.clear();
@@ -154,7 +155,7 @@ void C_SdNdeDalLogJobDataSelectionTableModel::UpdateData(
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-void C_SdNdeDalLogJobDataSelectionTableModel::DoRemoveRows(const std::vector<uint32_t> & orc_SelectedIndices)
+void C_SdNdeDalLogJobDataSelectionTableModel::DoRemoveRows(const QList<uint32_t> & orc_SelectedIndices)
 {
    for (uint32_t u32_Index = 0; u32_Index < orc_SelectedIndices.size(); u32_Index++)
    {
@@ -490,7 +491,7 @@ bool C_SdNdeDalLogJobDataSelectionTableModel::setData(const QModelIndex & orc_In
             case eCOMMENT:
                break;
             case eLOGGING_NAME:
-               this->mc_LoggingDataList.at(u32_Index).c_LoggingName = orc_Value.toString();
+               this->mc_LoggingDataList[u32_Index].c_LoggingName = orc_Value.toString();
                q_Retval = true;
                break;
             default:

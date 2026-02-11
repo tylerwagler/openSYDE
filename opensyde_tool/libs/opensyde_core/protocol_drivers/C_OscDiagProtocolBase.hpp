@@ -43,7 +43,7 @@ protected:
    //The endianness of reported value is specific to the protocol
    typedef void (* PR_DataPoolReadEventReceived)(void * const opv_Instance, const uint8_t ou8_DataPoolIndex,
                                                  const uint16_t ou16_ListIndex, const uint16_t ou16_ElementIndex,
-                                                 const std::vector<uint8_t> & orc_Value);
+                                                 const QByteArray & orc_Value);
    typedef void (* PR_DataPoolReadEventErrorReceived)(void * const opv_Instance, const uint8_t ou8_DataPoolIndex,
                                                       const uint16_t ou16_ListIndex, const uint16_t ou16_ElementIndex,
                                                       const uint8_t ou8_NrCode);
@@ -136,7 +136,7 @@ public:
    */
    //-----------------------------------------------------------------------------
    virtual int32_t DataPoolReadNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                       const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
+                                       const uint16_t ou16_ElementIndex, QByteArray & orc_ReadData,
                                        uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
@@ -165,7 +165,7 @@ public:
    */
    //-----------------------------------------------------------------------------
    virtual int32_t DataPoolReadArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                     const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
+                                     const uint16_t ou16_ElementIndex, QByteArray & orc_ReadData,
                                      uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
@@ -193,7 +193,7 @@ public:
    */
    //-----------------------------------------------------------------------------
    virtual int32_t DataPoolWriteNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                        const uint16_t ou16_ElementIndex, const std::vector<uint8_t> & orc_DataToWrite,
+                                        const uint16_t ou16_ElementIndex, const QByteArray & orc_DataToWrite,
                                         uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
@@ -222,7 +222,7 @@ public:
    */
    //-----------------------------------------------------------------------------
    virtual int32_t DataPoolWriteArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                      const uint16_t ou16_ElementIndex, const std::vector<uint8_t> & orc_DataToWrite,
+                                      const uint16_t ou16_ElementIndex, const QByteArray & orc_DataToWrite,
                                       uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
@@ -363,7 +363,7 @@ public:
       C_RD_WR    malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t NvmRead(const uint32_t ou32_MemoryAddress, std::vector<uint8_t> & orc_DataRecord,
+   virtual int32_t NvmRead(const uint32_t ou32_MemoryAddress, QByteArray & orc_DataRecord,
                            uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------
@@ -415,7 +415,7 @@ public:
       C_RD_WR    malformed protocol response
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t NvmWrite(const uint32_t ou32_MemoryAddress, const std::vector<uint8_t> & orc_DataRecord,
+   virtual int32_t NvmWrite(const uint32_t ou32_MemoryAddress, const QByteArray & orc_DataRecord,
                             uint8_t * const opu8_NrCode) = 0;
 
    //-----------------------------------------------------------------------------

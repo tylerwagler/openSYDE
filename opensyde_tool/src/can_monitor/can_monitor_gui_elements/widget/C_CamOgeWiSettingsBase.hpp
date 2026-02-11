@@ -9,7 +9,7 @@
 #define C_CAMOGEWISETTINGSBASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include <QPair>
 #include "C_CamMosSectionPopup.hpp"
 #include "C_OgeWiOnlyBackground.hpp"
@@ -52,7 +52,7 @@ protected:
                     const stw::opensyde_gui_elements::C_CamOgePubSettingsAdd * const opc_Button) const;
    QPoint m_GetPopupMovePoint(const stw::opensyde_gui_elements::C_CamOgePubSettingsAdd * const opc_Button) const;
 
-   std::vector<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
+   QList<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
                      opensyde_gui_elements::C_CamOgePubSettingsAdd *> > mc_Settings;
 };
 

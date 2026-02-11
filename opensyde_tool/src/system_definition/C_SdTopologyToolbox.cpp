@@ -309,11 +309,11 @@ void C_SdTopologyToolbox::dropEvent(QDropEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyToolbox::m_FillToolboxDynamic(void)
 {
-   std::vector<C_OgePubIconOnly *> c_Icons;
-   std::vector<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
+   QList<C_OgePubIconOnly *> c_Icons;
+   QList<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
    for (uint32_t u32_ItDeviceGroup = 0U; u32_ItDeviceGroup < c_DeviceGroups.size(); ++u32_ItDeviceGroup)
    {
-      const std::vector<C_OscDeviceDefinition> c_Devices = c_DeviceGroups[u32_ItDeviceGroup].GetDevices();
+      const QList<C_OscDeviceDefinition> c_Devices = c_DeviceGroups[u32_ItDeviceGroup].GetDevices();
 
       if (c_DeviceGroups[u32_ItDeviceGroup].GetGroupName() != "User Nodes")
       {
@@ -581,8 +581,8 @@ void C_SdTopologyToolbox::m_LoadUserDeviceDefinitionPaths(const QString & orc_Pa
    {
       // load the file
       const QString c_CheckString = "User Nodes";
-      std::vector<C_OscDeviceGroup> c_DeviceGroups;
-      std::vector<C_OscDeviceDefinition> c_UserDevices;
+      QList<C_OscDeviceGroup> c_DeviceGroups;
+      QList<C_OscDeviceDefinition> c_UserDevices;
       bool q_IsValidUserIni = false;
 
       c_UserDeviceManager.LoadFromFile(orc_Path, false, ps32_PtrDeviceCount);
@@ -696,8 +696,8 @@ void C_SdTopologyToolbox::m_AddUserNodesToToolbox(void)
    // get names of all nodes, which already are in toolbox
    if (this->mpc_List != NULL)
    {
-      std::vector<C_OscDeviceDefinition> c_UserDevices;
-      const std::vector<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
+      QList<C_OscDeviceDefinition> c_UserDevices;
+      const QList<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
 
       QStringList c_ToolboxItems;
       const QString c_CheckString = "User Nodes";
@@ -754,10 +754,10 @@ int32_t C_SdTopologyToolbox::m_DeleteUserNode(const QPoint & orc_Pos)
    {
       QListWidgetItem * const pc_Item = this->mpc_List->itemAt(orc_Pos);
 
-      std::vector<C_OscDeviceDefinition> c_Devices;
-      std::vector<C_OscDeviceDefinition>::iterator c_ItDevice;
-      std::vector<C_OscDeviceDefinition>::iterator c_ItEraseDevice;
-      std::vector<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
+      QList<C_OscDeviceDefinition> c_Devices;
+      QList<C_OscDeviceDefinition>::iterator c_ItDevice;
+      QList<C_OscDeviceDefinition>::iterator c_ItEraseDevice;
+      QList<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
       c_Devices = c_DeviceGroups[c_DeviceGroups.size() - 1].GetDevices();
 
       // Search for the device which should be deleted
@@ -837,8 +837,8 @@ int32_t C_SdTopologyToolbox::m_ClearAllUserNodes()
 
    if (this->mpc_List != NULL)
    {
-      std::vector<C_OscDeviceDefinition> c_Devices;
-      std::vector<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
+      QList<C_OscDeviceDefinition> c_Devices;
+      QList<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
       c_Devices = c_DeviceGroups[c_DeviceGroups.size() - 1].GetDevices();
 
       // get all nodes, which are currently used in Network Topology

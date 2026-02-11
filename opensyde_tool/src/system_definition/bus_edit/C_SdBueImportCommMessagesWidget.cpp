@@ -114,7 +114,7 @@ void C_SdBueImportCommMessagesWidget::m_InitStaticNames(const QString & orc_Name
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueImportCommMessagesWidget::m_AddPrototcolsToCombobox()
 {
-   const std::vector<C_OscCanProtocol::E_Type> & rc_AvailableCanProtocols = C_OscCanProtocol::hc_ALL_PROTOCOLS;
+   const QList<C_OscCanProtocol::E_Type> & rc_AvailableCanProtocols = C_OscCanProtocol::hc_ALL_PROTOCOLS;
 
    for (uint32_t u32_ProtocolIndex = 0; u32_ProtocolIndex < rc_AvailableCanProtocols.size(); ++u32_ProtocolIndex)
    {

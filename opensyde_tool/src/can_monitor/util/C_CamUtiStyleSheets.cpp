@@ -27,7 +27,7 @@ const QStringList C_CamUtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
 {
 }
    );
-const std::vector<C_CamUtiStyleSheets::C_PropertyValueColorConfig> C_CamUtiStyleSheets::mhc_SCROLL_AREA_PROPERTIES(
+const QList<C_CamUtiStyleSheets::C_PropertyValueColorConfig> C_CamUtiStyleSheets::mhc_SCROLL_AREA_PROPERTIES(
 {
    C_CamUtiStyleSheets::C_PropertyValueColorConfig("", "background-color", static_cast<QColor>(Qt::transparent))
 }
@@ -43,7 +43,7 @@ const QStringList C_CamUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
    "stw--opensyde_gui_elements--C_CamOgeCbxTable QAbstractItemView QScrollBar"
 }
    );
-const std::vector<C_CamUtiStyleSheets::C_PropertyValueColorConfig> C_CamUtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_BRIGHT(
+const QList<C_CamUtiStyleSheets::C_PropertyValueColorConfig> C_CamUtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_BRIGHT(
 {
    C_CamUtiStyleSheets::C_PropertyValueColorConfig(":vertical", "background-color",
                                                    static_cast<QColor>(Qt::transparent)),
@@ -69,7 +69,7 @@ const QStringList C_CamUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_DARK(
    // insert dark scroll bar here
 }
    );
-const std::vector<C_CamUtiStyleSheets::C_PropertyValueColorConfig> C_CamUtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_DARK(
+const QList<C_CamUtiStyleSheets::C_PropertyValueColorConfig> C_CamUtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_DARK(
 {
    C_CamUtiStyleSheets::C_PropertyValueColorConfig(":vertical", "background-color",
                                                    static_cast<QColor>(Qt::transparent)),
@@ -199,7 +199,7 @@ void C_CamUtiStyleSheets::mh_AppendScrollBarStyleSheets(QString & orc_Stylesheet
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamUtiStyleSheets::mh_AppendScrollBarStyleSheet(const QStringList & orc_ScrollBarElements,
-                                                       const std::vector<C_PropertyValueColorConfig> & orc_ScrollBarProperties,
+                                                       const QList<C_PropertyValueColorConfig> & orc_ScrollBarProperties,
                                                        QString & orc_Stylesheet)
 {
    if ((orc_ScrollBarElements.size() > 0) && (orc_ScrollBarProperties.size() > 0))

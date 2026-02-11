@@ -10,6 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QList>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscExportHalc.hpp"
@@ -452,7 +453,7 @@ void C_OscExportHalc::mh_AddGlobalVariables(QStringList & orc_Data, const C_OscH
             {
                bool q_IsArray;
                const C_OscHalcDefChannelValues * pc_ChannelValues;
-               std::vector<C_OscHalcConfigChannel> c_ChannelConfigs;
+               QList<C_OscHalcConfigChannel> c_ChannelConfigs;
                uint32_t u32_NumberOfAssignedChannels = 0U;
                bool q_BracketIsOpen = false;
                const bool q_DomainHasChannels = (pc_Domain->c_Channels.size() > 0U) ? true : false;
@@ -663,8 +664,8 @@ QString C_OscExportHalc::mh_GetMagicName(const QString & orc_ProjectId, const bo
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportHalc::mh_AddDpListElementReferences(QStringList & orc_Data,
-                                                     const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
-                                                     const std::vector<C_OscHalcConfigChannel> & orc_ConfigArray,
+                                                     const QList<C_OscHalcDefStruct> & orc_DefinitionArray,
+                                                     const QList<C_OscHalcConfigChannel> & orc_ConfigArray,
                                                      const C_OscHalcDefDomain::E_VariableSelector & ore_Type,
                                                      const QString & orc_DomainSingularName, const bool oq_IsArray,
                                                      const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
@@ -746,7 +747,7 @@ void C_OscExportHalc::mh_AddDpListElementReferences(QStringList & orc_Data,
    Parameter variable string, e.g. &gt_HAL_DataPoolValues.t_ConfigurationValues.au8_InputScaleValue[0]
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscExportHalc::mh_GetDpListElementReference(const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
+QString C_OscExportHalc::mh_GetDpListElementReference(const QList<C_OscHalcDefStruct> & orc_DefinitionArray,
                                                            const C_OscHalcDefDomain::E_VariableSelector & ore_Type,
                                                            const C_OscHalcDefElement & orc_Element,
                                                            const uint32_t ou32_StructIndex,

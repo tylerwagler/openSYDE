@@ -12,6 +12,7 @@
 #define C_CAMPROCLIPBOARDHELPER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscXmlParser.hpp"
 #include "C_CamProMessageData.hpp"
 #include "C_UtiClipBoardHelper.hpp"
@@ -29,8 +30,8 @@ class C_CamProClipBoardHelper :
    public C_UtiClipBoardHelper
 {
 public:
-   static void h_SaveMessages(const std::vector<C_CamProMessageData> & orc_Messages);
-   static int32_t h_LoadMessages(std::vector<C_CamProMessageData> & orc_Messages);
+   static void h_SaveMessages(const QList<C_CamProMessageData> & orc_Messages);
+   static int32_t h_LoadMessages(QList<C_CamProMessageData> & orc_Messages);
 
 private:
    C_CamProClipBoardHelper(void);

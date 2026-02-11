@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
+#include <QList>
 #include <QString>
 #include <QStringList>
 #include "C_OscNode.hpp"
@@ -39,33 +40,33 @@ public:
                                              const QString & orc_PathDeviceDefinitions,
                                              const bool oq_UseDeviceDefinitions = true,
                                              uint16_t * const opu16_ReadFileVersion = NULL,
-                                             const std::vector<uint8_t> * const opc_NodesToLoad = NULL,
+                                             const QByteArray * const opc_NodesToLoad = NULL,
                                              const bool oq_SkipContent = false,
                                              const QString * const opc_ExpectedNodeName = NULL,
                                              QStringList * const opc_ErrorDetailsMissingDevices = NULL);
    static int32_t h_SaveSystemDefinitionFile(const C_OscSystemDefinition & orc_SystemDefinition,
                                              const QString & orc_Path,
                                              QStringList * const opc_CreatedFiles = NULL);
-   static int32_t h_LoadNodes(std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
+   static int32_t h_LoadNodes(QList<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
                               const C_OscDeviceManager & orc_DeviceDefinitions,
                               const QString & orc_BasePath, const bool oq_UseDeviceDefinitions = true,
                               const bool oq_UseFileInterface = true,
-                              const std::vector<uint8_t> * const opc_NodesToLoad = NULL,
+                              const QByteArray * const opc_NodesToLoad = NULL,
                               const bool oq_SkipContent = false,
                               const QString * const opc_ExpectedNodeName = NULL,
                               QStringList * const opc_ErrorDetailsMissingDevices = NULL);
-   static int32_t h_LoadBuses(std::vector<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_SaveNodes(const std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
+   static int32_t h_LoadBuses(QList<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
+   static int32_t h_SaveNodes(const QList<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
                               const QString & orc_BasePath,
                               QStringList * const opc_CreatedFiles);
-   static void h_SaveBuses(const std::vector<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
+   static void h_SaveBuses(const QList<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadSystemDefinition(C_OscSystemDefinition & orc_SystemDefinition,
                                          C_OscXmlParserBase & orc_XmlParser,
                                          const QString & orc_PathDeviceDefinitions,
                                          const QString & orc_BasePath,
                                          const bool oq_UseDeviceDefinitions = true,
                                          uint16_t * const opu16_ReadFileVersion = NULL,
-                                         const std::vector<uint8_t> * const opc_NodesToLoad = NULL,
+                                         const QByteArray * const opc_NodesToLoad = NULL,
                                          const bool oq_SkipContent = false,
                                          const QString * const opc_ExpectedNodeName = NULL,
                                          QStringList * const opc_ErrorDetailsMissingDevices = NULL);
@@ -83,7 +84,7 @@ public:
    static const uint16_t hu16_FILE_VERSION_LATEST = hu16_FILE_VERSION_3;
 
 private:
-   static std::map<uint32_t, QString> mh_MapNodeIndicesToName(const std::vector<C_OscNode> & orc_Nodes);
+   static std::map<uint32_t, QString> mh_MapNodeIndicesToName(const QList<C_OscNode> & orc_Nodes);
    static int32_t mh_LoadSystemDefinitionProperties(C_OscSystemDefinition & orc_SystemDefinition,
                                                     C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveSystemDefinitionProperties(const C_OscSystemDefinition & orc_SystemDefinition,

@@ -174,7 +174,7 @@ bool C_OscHalcDefElement::GetArray() const
    Enum items
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<std::pair<QString,
+const QList<std::pair<QString,
                             C_OscNodeDataPoolContent> > & C_OscHalcDefElement::GetEnumItems() const
 {
    return this->c_InitialValue.GetEnumItems();
@@ -187,7 +187,7 @@ const std::vector<std::pair<QString,
    Bitmask items
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_OscHalcDefContentBitmaskItem> & C_OscHalcDefElement::GetBitmaskItems() const
+const QList<C_OscHalcDefContentBitmaskItem> & C_OscHalcDefElement::GetBitmaskItems() const
 {
    return this->c_InitialValue.GetBitmaskItems();
 }

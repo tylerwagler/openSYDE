@@ -15,6 +15,7 @@
 
 #include <QPointF>
 #include <QSizeF>
+#include <QList>
 #include "C_SebUnoBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -30,7 +31,7 @@ class C_SebUnoResizeRectangleCommand :
    public C_SebUnoBaseCommand
 {
 public:
-   C_SebUnoResizeRectangleCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SebUnoResizeRectangleCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                   const QPointF & orc_OldPos, const QSizeF & orc_OldSize, const QPointF & orc_NewPos,
                                   const QSizeF & orc_NewSize, QUndoCommand * const opc_Parent = NULL);
    ~C_SebUnoResizeRectangleCommand() override;

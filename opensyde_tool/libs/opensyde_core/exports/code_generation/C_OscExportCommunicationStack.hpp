@@ -15,6 +15,7 @@
 #include <vector>
 #include <map>
 
+#include <QList>
 #include "stwtypes.hpp"
 
 #include <QString>
@@ -77,23 +78,23 @@ protected:
                                        const C_OscCanProtocol::E_Type & ore_Protocol, const bool oq_TxMessagesPresent,
                                        const bool oq_RxMessagesPresent);
    static void mh_AddSignalDefinitions(QStringList & orc_Data, const uint32_t ou32_SignalListIndex,
-                                       const std::vector<C_OscCanMessage> & orc_Messages,
+                                       const QList<C_OscCanMessage> & orc_Messages,
                                        const uint16_t ou16_GenCodeVersion);
    static void mh_AddMessageMuxDefinitions(QStringList & orc_Data,
-                                           const std::vector<C_OscCanMessage> & orc_Messages,
+                                           const QList<C_OscCanMessage> & orc_Messages,
                                            const QString & orc_TxRxString);
    static void mh_AddMessageDefinitions(QStringList & orc_Data, const uint8_t ou8_InterfaceIndex,
                                         const C_OscCanProtocol::E_Type & ore_Protocol,
-                                        const std::vector<C_OscCanMessage> & orc_Messages,
+                                        const QList<C_OscCanMessage> & orc_Messages,
                                         const uint16_t ou16_GenCodeVersion, const bool oq_Tx);
-   static uint32_t mh_CountMuxMessages(const std::vector<C_OscCanMessage> & orc_Messages);
+   static uint32_t mh_CountMuxMessages(const QList<C_OscCanMessage> & orc_Messages);
    static void mh_ConvertSignalsToStrings(QStringList & orc_Data,
-                                          const std::vector<C_OscCanSignal> & orc_Signals,
+                                          const QList<C_OscCanSignal> & orc_Signals,
                                           const uint32_t ou32_SignalListIndex, const bool oq_RemoveLastComma);
    static void mh_GroupSignalsByMuxValue(const C_OscCanMessage & orc_Message, const uint32_t ou32_MultiplexerIndex,
                                          std::map<int32_t,
-                                                  std::vector<C_OscCanSignal> > & orc_MuxedSignalsPerValue,
-                                         std::vector<C_OscCanSignal> & orc_NonMuxedSignals);
+                                                  QList<C_OscCanSignal> > & orc_MuxedSignalsPerValue,
+                                         QList<C_OscCanSignal> & orc_NonMuxedSignals);
    static QString mh_GetProtocolNameByType(const C_OscCanProtocol::E_Type & ore_Protocol);
    static QString mh_GetByteOrderNameByType(const C_OscCanSignal::E_ByteOrderType & ore_ByteOrder);
    static QString mh_GetTransmissionTriggerNameByType(

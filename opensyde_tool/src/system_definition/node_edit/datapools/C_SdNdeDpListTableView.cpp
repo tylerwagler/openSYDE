@@ -17,6 +17,7 @@
 #include <QDrag>
 #include <QScrollBar>
 #include <QPointer>
+#include <QList>
 
 #include "C_SdNdeDpListTableView.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -231,12 +232,12 @@ void C_SdNdeDpListTableView::Copy(void) const
 
    if (pc_Datapool != NULL)
    {
-      std::vector<C_OscNodeDataPoolListElement> c_OscContentVec;
-      std::vector<C_PuiSdNodeDataPoolListElement> c_UiContentVec;
+      QList<C_OscNodeDataPoolListElement> c_OscContentVec;
+      QList<C_PuiSdNodeDataPoolListElement> c_UiContentVec;
       C_OscNodeDataPoolListElement c_OscContent;
       C_PuiSdNodeDataPoolListElement c_UiContent;
 
-      std::vector<uint32_t> c_SelectedIndices = m_GetSelectedIndices();
+      QList<uint32_t> c_SelectedIndices = m_GetSelectedIndices();
       c_OscContentVec.reserve(c_SelectedIndices.size());
       c_UiContentVec.reserve(c_SelectedIndices.size());
 
@@ -287,7 +288,7 @@ void C_SdNdeDpListTableView::Paste(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableView::Delete(void)
 {
-   const std::vector<uint32_t> c_Indices = m_GetSelectedIndices();
+   const QList<uint32_t> c_Indices = m_GetSelectedIndices();
 
    this->mc_UndoManager.DoDeleteElements(this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex,
                                          this->mpc_ModelViewManager,
@@ -349,7 +350,7 @@ void C_SdNdeDpListTableView::Insert(const bool & orq_SetFocus)
 {
    if (mq_AllowAdd == true)
    {
-      std::vector<uint32_t> c_Indices;
+      QList<uint32_t> c_Indices;
       c_Indices.push_back(m_GetOneAfterHighestSelected());
 
       this->mc_UndoManager.DoAddElements(this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex,
@@ -390,8 +391,8 @@ void C_SdNdeDpListTableView::DoMoveUp(void)
    {
       bool q_AllowMove = true;
 
-      std::vector<uint32_t> c_TargetIndices;
-      std::vector<uint32_t> c_SourceIndices = m_GetSelectedIndices();
+      QList<uint32_t> c_TargetIndices;
+      QList<uint32_t> c_SourceIndices = m_GetSelectedIndices();
       c_TargetIndices.resize(c_SourceIndices.size());
 
       //Sort to have "correct" move order
@@ -432,8 +433,8 @@ void C_SdNdeDpListTableView::DoMoveDown(void)
          {
             bool q_AllowMove = true;
 
-            std::vector<uint32_t> c_TargetIndices;
-            std::vector<uint32_t> c_SourceIndices = m_GetSelectedIndices();
+            QList<uint32_t> c_TargetIndices;
+            QList<uint32_t> c_SourceIndices = m_GetSelectedIndices();
             const uint32_t u32_LastIndex = static_cast<uint32_t>(pc_Model->rowCount() - 1);
             c_TargetIndices.resize(c_SourceIndices.size());
 
@@ -467,7 +468,7 @@ void C_SdNdeDpListTableView::DoMoveDown(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListTableView::EditInitial(void)
 {
-   const std::vector<uint32_t> c_Selection = this->m_GetSelectedIndices();
+   const QList<uint32_t> c_Selection = this->m_GetSelectedIndices();
 
    if (c_Selection.size() == 1)
    {
@@ -652,17 +653,17 @@ void C_SdNdeDpListTableView::dropEvent(QDropEvent * const opc_Event)
                   if ((pc_MimeData->hasFormat(pc_Model->mimeTypes().at(1)) == true) &&
                       (pc_MimeData->hasFormat(pc_Model->mimeTypes().at(2)) == true))
                   {
-                     std::vector<C_OscNodeDataPoolListElement> c_OscContent;
-                     std::vector<C_PuiSdNodeDataPoolListElement> c_UiContent;
+                     QList<C_OscNodeDataPoolListElement> c_OscContent;
+                     QList<C_PuiSdNodeDataPoolListElement> c_UiContent;
                      const QString c_Content = pc_MimeData->data(pc_Model->mimeTypes().at(1));
                      //Insert indices
                      if (C_SdClipBoardHelper::h_LoadToDataPoolListElementsFromString(c_OscContent, c_UiContent,
                                                                                      c_Content) == C_NO_ERR)
                      {
-                        std::vector<uint32_t> c_SourceIndices;
+                        QList<uint32_t> c_SourceIndices;
                         uint32_t u32_TargetRow;
                         const QString c_IndicesString = pc_MimeData->data(pc_Model->mimeTypes().at(2));
-                        std::vector<uint32_t> c_NewIndices;
+                        QList<uint32_t> c_NewIndices;
                         const QModelIndex c_Index = this->indexAt(opc_Event->pos());
                         //Target row
                         if (c_Index.isValid())
@@ -727,7 +728,7 @@ void C_SdNdeDpListTableView::dropEvent(QDropEvent * const opc_Event)
 void C_SdNdeDpListTableView::selectionChanged(const QItemSelection & orc_Selected,
                                               const QItemSelection & orc_Deselected)
 {
-   std::vector<uint32_t> c_SelectedIndices;
+   QList<uint32_t> c_SelectedIndices;
    C_TblViewScroll::selectionChanged(orc_Selected, orc_Deselected);
 
    c_SelectedIndices = C_SdNdeDpUtil::h_ConvertVector(this->selectedIndexes());
@@ -747,7 +748,7 @@ void C_SdNdeDpListTableView::selectionChanged(const QItemSelection & orc_Selecte
 void C_SdNdeDpListTableView::startDrag(const Qt::DropActions oc_SupportedActions)
 {
    const QModelIndexList c_SelectedItems = this->selectedIndexes();
-   const std::vector<uint32_t> c_ReallySelectedItems = this->m_GetSelectedIndices();
+   const QList<uint32_t> c_ReallySelectedItems = this->m_GetSelectedIndices();
 
    if (c_ReallySelectedItems.size() > 0)
    {
@@ -829,7 +830,7 @@ void C_SdNdeDpListTableView::UpdateSelectionForNewDataSetColumn(const int32_t os
       if (pc_Model != NULL)
       {
          const int32_t s32_DataSetOffset = pc_Model->EnumToColumn(C_SdNdeDpListTableModel::eDATA_SET);
-         std::vector<uint32_t> c_Rows;
+         QList<uint32_t> c_Rows;
          //Get all rows
          for (uint32_t u32_ItIndex = 0; static_cast<int32_t>(u32_ItIndex) < c_SelectedIndices.size(); ++u32_ItIndex)
          {
@@ -915,7 +916,7 @@ QStringList C_SdNdeDpListTableView::GetSelectedVariableNames(void) const
       this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
    if (pc_List != NULL)
    {
-      const std::vector<uint32_t> c_Indices = this->m_GetSelectedIndices();
+      const QList<uint32_t> c_Indices = this->m_GetSelectedIndices();
       c_Retval.reserve(c_Indices.size());
       for (uint32_t u32_ItVar = 0; u32_ItVar < c_Indices.size(); ++u32_ItVar)
       {
@@ -936,9 +937,9 @@ QStringList C_SdNdeDpListTableView::GetSelectedVariableNames(void) const
    \param[in]  orc_Indices    Indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListTableView::m_DeleteIndices(const std::vector<uint32_t> & orc_Indices)
+void C_SdNdeDpListTableView::m_DeleteIndices(const QList<uint32_t> & orc_Indices)
 {
-   std::vector<uint32_t> c_Indices = orc_Indices;
+   QList<uint32_t> c_Indices = orc_Indices;
    C_Uti::h_Uniqueify(c_Indices);
    this->mc_UndoManager.DoDeleteElements(this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex,
                                          this->mpc_ModelViewManager,
@@ -952,8 +953,8 @@ void C_SdNdeDpListTableView::m_DeleteIndices(const std::vector<uint32_t> & orc_I
    \param[in]  orc_TargetIndices  Target index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListTableView::m_Move(const std::vector<uint32_t> & orc_SourceIndices,
-                                    const std::vector<uint32_t> & orc_TargetIndices)
+void C_SdNdeDpListTableView::m_Move(const QList<uint32_t> & orc_SourceIndices,
+                                    const QList<uint32_t> & orc_TargetIndices)
 {
    this->mc_UndoManager.DoMoveElements(this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex,
                                        this->mpc_ModelViewManager,
@@ -966,9 +967,9 @@ void C_SdNdeDpListTableView::m_Move(const std::vector<uint32_t> & orc_SourceIndi
    Selected indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SdNdeDpListTableView::m_GetSelectedIndices(void) const
+QList<uint32_t> C_SdNdeDpListTableView::m_GetSelectedIndices(void) const
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    QModelIndexList c_SelectedItems = this->selectedIndexes();
 
    c_Retval.reserve(c_SelectedItems.size());
@@ -1085,7 +1086,7 @@ void C_SdNdeDpListTableView::m_HandleColumnChange(void)
    \param[in]  orc_SelectedIndices  Selected indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListTableView::m_CheckActions(const std::vector<uint32_t> & orc_SelectedIndices)
+void C_SdNdeDpListTableView::m_CheckActions(const QList<uint32_t> & orc_SelectedIndices)
 {
    if (orc_SelectedIndices.size() > 0)
    {
@@ -1381,7 +1382,7 @@ void C_SdNdeDpListTableView::m_OnColumnResize(void)
 uint32_t C_SdNdeDpListTableView::m_GetOneAfterHighestSelected(void)
 {
    uint32_t u32_Retval = 0;
-   const std::vector<uint32_t> c_SelectedItems = this->m_GetSelectedIndices();
+   const QList<uint32_t> c_SelectedItems = this->m_GetSelectedIndices();
 
    if (c_SelectedItems.size() > 0)
    {
@@ -1428,7 +1429,7 @@ void C_SdNdeDpListTableView::m_HandleColumnStateSave(void) const
 
       if (((pc_Node != NULL) && (pc_NodeDataPool != NULL)) && (pc_NodeDataPoolList != NULL))
       {
-         const std::vector<int32_t> c_ColumnWidths = this->m_GetColumnWidths();
+         const QList<int32_t> c_ColumnWidths = this->m_GetColumnWidths();
          C_UsHandler::h_GetInstance()->SetProjSdNodeDatapoolListColumnSizes(
             pc_Node->c_Properties.c_Name, pc_NodeDataPool->c_Name,
             pc_NodeDataPoolList->c_Name, c_ColumnWidths);
@@ -1461,7 +1462,7 @@ void C_SdNdeDpListTableView::m_HandleColumnStateRestore(void)
                C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
             const C_UsNodeDatapool c_UserDataPool = c_UserNode.GetDatapool(pc_NodeDataPool->c_Name);
             const C_UsNodeDatapoolList c_UserList = c_UserDataPool.GetOtherList(pc_NodeDataPoolList->c_Name);
-            const std::vector<int32_t> & rc_ColumnWidths = c_UserList.GetColumnWidths();
+            const QList<int32_t> & rc_ColumnWidths = c_UserList.GetColumnWidths();
             q_UserSettingsApplied = this->m_SetColumnWidths(rc_ColumnWidths);
          }
          if (q_UserSettingsApplied == false)

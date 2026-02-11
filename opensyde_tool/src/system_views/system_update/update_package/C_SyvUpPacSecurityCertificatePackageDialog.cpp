@@ -619,7 +619,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckUpdatePath() {
         const C_OscSecurityPemKeyInfo &rc_KeyInfo = c_Pem.GetKeyInfo();
 
         // check that public keys are available
-        if (rc_KeyInfo.GetX509CertificateData().empty()) {
+        if (rc_KeyInfo.GetX509CertificateData().isEmpty()) {
           osc_write_log_error("PEM file keys",
                               "No public keys found in PEM file. (Path: " +
                                   this->GetPublicKeyPath() + ")");
@@ -627,7 +627,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckUpdatePath() {
         }
 
         // check that no private key is contained
-        if (rc_KeyInfo.GetPrivateKey().empty() == false) {
+        if (rc_KeyInfo.GetPrivateKey().isEmpty() == false) {
           osc_write_log_error("PEM file keys",
                               "File contains a private key, but should be a "
                               "public PEM file. (Path: " +
@@ -709,7 +709,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(
           }
 
           // check that at least one private key is contained
-          if (rc_KeyInfo.GetPrivateKey().empty() == true) {
+          if (rc_KeyInfo.GetPrivateKey().isEmpty() == true) {
             osc_write_log_error("PEM file keys",
                                 "No private key available. (Path: " +
                                     rc_CurFile + ")");

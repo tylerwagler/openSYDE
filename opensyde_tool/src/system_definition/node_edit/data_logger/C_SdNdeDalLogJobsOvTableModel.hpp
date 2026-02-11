@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
+#include <QList>
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
 {
@@ -37,7 +38,7 @@ public:
    };
 
    void SetNodeIndex(const uint32_t ou32_NodeIndex);
-   void UpdateData(const std::vector<std::tuple<uint32_t, uint32_t,
+   void UpdateData(const QList<std::tuple<uint32_t, uint32_t,
                                                 uint32_t> > & orc_AllLoggerJobElementsLocationCount);
    uint32_t GetNodeIndex(void) const;
 
@@ -63,11 +64,11 @@ private:
       QVariant c_LogJobIcon;
    };
 
-   void m_FillLogJobsInfo(const std::vector<std::tuple<uint32_t, uint32_t,
+   void m_FillLogJobsInfo(const QList<std::tuple<uint32_t, uint32_t,
                                                        uint32_t> > & orc_AllLoggerJobElementsLocationCount);
 
    uint32_t mu32_NodeIndex;
-   std::vector<C_LogJobOvTableData> mc_LogJobsInfoAll;
+   QList<C_LogJobOvTableData> mc_LogJobsInfoAll;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

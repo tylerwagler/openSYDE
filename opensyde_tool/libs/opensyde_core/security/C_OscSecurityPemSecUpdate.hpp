@@ -28,7 +28,7 @@ public:
    virtual int32_t LoadFromFile(const std::string & orc_FileName, std::string & orc_ErrorMessage);
 
 protected:
-   virtual int32_t m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent, std::string & orc_ErrorMessage);
+   virtual int32_t m_ReadPrivateKey(const QByteArray & orc_FileContent, std::string & orc_ErrorMessage);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

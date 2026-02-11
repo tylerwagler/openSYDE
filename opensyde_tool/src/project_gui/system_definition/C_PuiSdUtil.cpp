@@ -49,7 +49,7 @@ using namespace stw::opensyde_core;
    False Name already in use
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_PuiSdUtil::h_CheckNameAvailable(const std::vector<const QString *> & orc_ExistingStrings,
+bool C_PuiSdUtil::h_CheckNameAvailable(const QList<const QString *> & orc_ExistingStrings,
                                        const QString & orc_Proposal, const uint32_t * const opu32_SkipIndex)
 {
    bool q_Retval = true;
@@ -326,7 +326,7 @@ int32_t C_PuiSdUtil::h_ConvertIndex(const C_OscNodeDataPoolListElementId & orc_E
                                                                             orc_MessageId.u32_DatapoolIndex);
          if ((pc_Container != NULL) && (pc_List != NULL))
          {
-            const std::vector<C_OscCanMessage> * pc_Messages;
+            const QList<C_OscCanMessage> * pc_Messages;
 
             if (C_OscCanProtocol::h_ListIsComTx(*pc_List) == true)
             {
@@ -781,7 +781,7 @@ uint32_t C_PuiSdUtil::h_GetIndexOfFirstNodeInGroup(const uint32_t ou32_NodeIndex
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PuiSdUtil::h_CheckIsFirstInAnyGroupOrNotInAny(const uint32_t ou32_NodeIndex,
-                                                     const std::vector<C_OscNodeSquad> & orc_AvailableGroups)
+                                                     const QList<C_OscNodeSquad> & orc_AvailableGroups)
 {
    bool q_IsFirst = true;
 
@@ -814,9 +814,9 @@ bool C_PuiSdUtil::h_CheckIsFirstInAnyGroupOrNotInAny(const uint32_t ou32_NodeInd
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdUtil::h_GetInterfaceDataForNode(const uint32_t ou32_NodeIndex,
                                             const C_PuiSdNodeConnectionId & orc_ConnectionId,
-                                            std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
+                                            QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
-   const std::vector<uint32_t> c_NodeIndices =
+   const QList<uint32_t> c_NodeIndices =
       C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
 
    orc_Properties.clear();
@@ -840,7 +840,7 @@ void C_PuiSdUtil::h_GetInterfaceDataForNode(const uint32_t ou32_NodeIndex,
                c_Property.c_Ip.reserve(4);
                for (uint32_t u32_It = 0UL; u32_It < 4; ++u32_It)
                {
-                  c_Property.c_Ip.push_back(rc_ComInterface.c_Ip.au8_IpAddress[u32_It]);
+                  c_Property.c_Ip.append(static_cast<char>(rc_ComInterface.c_Ip.au8_IpAddress[u32_It]));
                }
                c_Property.u8_NodeId = rc_ComInterface.u8_NodeId;
                orc_Properties.push_back(c_Property);
@@ -889,8 +889,9 @@ bool C_PuiSdUtil::h_CheckXappNodeReachable(const uint32_t ou32_SdNodeIndex, cons
       {
          const stw::opensyde_core::C_OscSystemDefinition & rc_SystemDefintion =
             C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst();
+         const QByteArray c_NodeActiveFlags = C_PuiSdUtil::mh_GetAllNodesActive();
          const C_OscRoutingCalculation c_Calculation(rc_SystemDefintion.c_Nodes,
-                                                     C_PuiSdUtil::mh_GetAllNodesActive(),
+                                                     c_NodeActiveFlags,
                                                      u32_BusIndex,
                                                      ou32_TargetNodeIndex, C_OscRoutingCalculation::eDIAGNOSTIC);
 
@@ -985,11 +986,11 @@ C_PuiSdUtil::C_PuiSdUtil(void)
    All nodes active
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint8_t> C_PuiSdUtil::mh_GetAllNodesActive()
+QByteArray C_PuiSdUtil::mh_GetAllNodesActive()
 {
    const stw::opensyde_core::C_OscSystemDefinition & rc_SystemDefintion =
       C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst();
-   const std::vector<uint8_t> c_Retval(rc_SystemDefintion.c_Nodes.size(), 1UL);
+   const QByteArray c_Retval(rc_SystemDefintion.c_Nodes.size(), static_cast<char>(1UL));
 
    return c_Retval;
 }

@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include "stwtypes.hpp"
+#include <QList>
 #include "C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -32,15 +33,15 @@ public:
    C_SdNdeUnoDasDataPoolListMoveCommand(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                         const uint32_t & oru32_DataPoolListIndex,
                                         C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                        const std::vector<uint32_t> & orc_SourceCol,
-                                        const std::vector<uint32_t> & orc_TargetCol, const bool & orq_AdaptIndices,
+                                        const QList<uint32_t> & orc_SourceCol,
+                                        const QList<uint32_t> & orc_TargetCol, const bool & orq_AdaptIndices,
                                         QUndoCommand * const opc_Parent = NULL);
    void redo(void) override;
    void undo(void) override;
 
 private:
-   std::vector<uint32_t> mc_SourceCol;
-   std::vector<uint32_t> mc_TargetCol;
+   QList<uint32_t> mc_SourceCol;
+   QList<uint32_t> mc_TargetCol;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

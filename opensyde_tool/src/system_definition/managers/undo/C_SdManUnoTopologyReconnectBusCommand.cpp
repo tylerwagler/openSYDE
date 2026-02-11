@@ -51,12 +51,12 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyReconnectBusCommand::C_SdManUnoTopologyReconnectBusCommand(QGraphicsScene * const opc_Scene,
-                                                                             const std::vector<uint64_t> & orc_Ids,
+                                                                             const QList<uint64_t> & orc_Ids,
                                                                              const uint64_t & oru64_StartingNodeId,
                                                                              const uint64_t & oru64_LastNodeId,
                                                                              const QPointF & orc_ConnectionPos,
                                                                              const int32_t & ors32_Interface,
-                                                                             const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
+                                                                             const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
                                                                              QUndoCommand * const opc_Parent) :
    C_SdManUnoTopologyReconnectBaseCommand(opc_Scene, orc_Ids, oru64_StartingNodeId, oru64_LastNodeId, orc_ConnectionPos,
                                           ors32_Interface, orc_Properties, "Reconnect bus connetor(s) to new bus",
@@ -73,7 +73,7 @@ C_SdManUnoTopologyReconnectBusCommand::C_SdManUnoTopologyReconnectBusCommand(QGr
          pc_Node->UpdateData();
          if (s32_NodeIndex >= 0)
          {
-            const std::vector<uint32_t> c_NodeIndices =
+            const QList<uint32_t> c_NodeIndices =
                C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
                   static_cast<uint32_t>(s32_NodeIndex));
             this->mc_InitialProperties.clear();
@@ -130,7 +130,7 @@ C_SdManUnoTopologyReconnectBusCommand::~C_SdManUnoTopologyReconnectBusCommand(vo
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManUnoTopologyReconnectBusCommand::m_Reconnect(const uint64_t & oru64_StartingId,
                                                         const uint64_t & oru64_LastId, const int32_t & ors32_Interface,
-                                                        const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
+                                                        const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
    C_GiLiBus * const pc_StartingBus = dynamic_cast<C_GiLiBus *>(m_GetSceneItem(oru64_StartingId));
    C_GiLiBus * const pc_LastBus = dynamic_cast<C_GiLiBus *>(m_GetSceneItem(oru64_LastId));

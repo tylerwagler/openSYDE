@@ -46,7 +46,7 @@ C_OscHalcConfigStandaloneDomain::C_OscHalcConfigStandaloneDomain(void) :
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscHalcConfigStandaloneDomain::C_OscHalcConfigStandaloneDomain(const C_OscHalcConfigDomain & orc_ConfigDomain,
-                                                                 const std::vector<C_OscHalcConfigStandaloneChannel> & orc_StandaloneChannels)
+                                                                 const QList<C_OscHalcConfigStandaloneChannel> & orc_StandaloneChannels)
    :
    C_OscHalcConfigDomain(orc_ConfigDomain),
    c_StandaloneChannels(orc_StandaloneChannels)

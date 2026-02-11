@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -35,7 +36,7 @@ public:
 
    int32_t rowCount(const QModelIndex & orc_Parent = QModelIndex()) const override;
 
-   uint32_t AddNewItem(const std::vector<uint32_t> & orc_SelectedIndices);
+   uint32_t AddNewItem(const QList<uint32_t> & orc_SelectedIndices);
 
    //-----------------------------------------------------------------------------
    /*!
@@ -47,12 +48,12 @@ public:
       \param[in] orc_SelectedIndices Selected row indices (Expected: unique)
    */
    //-----------------------------------------------------------------------------
-   virtual void CopySelectedItems(const std::vector<uint32_t> & orc_SelectedIndices) const = 0;
-   std::vector<uint32_t> PasteItems(const std::vector<uint32_t> & orc_SelectedIndices);
-   uint32_t CutSelectedItems(const std::vector<uint32_t> & orc_SelectedIndices);
-   uint32_t DeleteSelectedItems(const std::vector<uint32_t> & orc_SelectedIndices);
-   void MoveSelectedItems(const std::vector<uint32_t> & orc_SelectedIndices, const bool oq_Up);
-   bool CheckAllIndicesInRange(const std::vector<uint32_t> & orc_Indices) const;
+   virtual void CopySelectedItems(const QList<uint32_t> & orc_SelectedIndices) const = 0;
+   QList<uint32_t> PasteItems(const QList<uint32_t> & orc_SelectedIndices);
+   uint32_t CutSelectedItems(const QList<uint32_t> & orc_SelectedIndices);
+   uint32_t DeleteSelectedItems(const QList<uint32_t> & orc_SelectedIndices);
+   void MoveSelectedItems(const QList<uint32_t> & orc_SelectedIndices, const bool oq_Up);
+   bool CheckAllIndicesInRange(const QList<uint32_t> & orc_Indices) const;
 
    //Utility
    void ReloadAll(void);
@@ -86,7 +87,7 @@ protected:
       Indices of new items
    */
    //-----------------------------------------------------------------------------
-   virtual std::vector<uint32_t> m_PasteItems(const uint32_t ou32_SelectedIndex) = 0;
+   virtual QList<uint32_t> m_PasteItems(const uint32_t ou32_SelectedIndex) = 0;
    //-----------------------------------------------------------------------------
    /*!
       \brief   Get size of item container, i.e. number of items.
@@ -125,10 +126,10 @@ protected:
    static QVariant mh_HandleHexValue(const uint64_t ou64_Value, const int32_t os32_Role);
    static QVariant mh_GetBoolAsCheckStateVariant(const bool oq_Value);
    static bool mh_GetCheckStateVariantAsBool(const QVariant & orc_Value);
-   uint32_t m_GetLastSelectedIndex(const std::vector<uint32_t> & orc_SelectedIndices) const;
+   uint32_t m_GetLastSelectedIndex(const QList<uint32_t> & orc_SelectedIndices) const;
 
 private:
-   void m_MoveItems(const std::vector<uint32_t> & orc_ContiguousIndices, const uint32_t ou32_TargetIndex);
+   void m_MoveItems(const QList<uint32_t> & orc_ContiguousIndices, const uint32_t ou32_TargetIndex);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

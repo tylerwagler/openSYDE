@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
+#include <QList>
 #include "C_OscProtocolDriverOsy.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -148,13 +149,13 @@ public:
    C_OscSuSequencesNodeUpdateStates(void);
 
    // openSYDE specific
-   std::vector<C_OscSuSequencesNodeHexFileStates> c_StateHexFiles;
-   std::vector<C_OscSuSequencesNodeOtherFileStates> c_StateOtherFiles;
-   std::vector<C_OscSuSequencesNodePsiFileStates> c_StatePsiFiles;
+   QList<C_OscSuSequencesNodeHexFileStates> c_StateHexFiles;
+   QList<C_OscSuSequencesNodeOtherFileStates> c_StateOtherFiles;
+   QList<C_OscSuSequencesNodePsiFileStates> c_StatePsiFiles;
    C_OscSuSequencesNodePemFileStates c_StatePemFile;
 
    // STW flashloader specific
-   std::vector<C_OscSuSequencesNodeStwFlHexFileStates> c_StateStwFlHexFiles;
+   QList<C_OscSuSequencesNodeStwFlHexFileStates> c_StateStwFlHexFiles;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

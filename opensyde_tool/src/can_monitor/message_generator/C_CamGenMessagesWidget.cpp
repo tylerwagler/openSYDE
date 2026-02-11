@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for all displaying and interacting with manually configured messages (implementation)
@@ -141,7 +141,7 @@ void C_CamGenMessagesWidget::LoadUserSettings(void) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamGenMessagesWidget::RemoveMessagesForFile(const QString & orc_File,
-                                                   const std::vector<uint32_t> * const opc_Indices) const
+                                                   const QList<uint32_t> * const opc_Indices) const
 {
    this->mpc_Ui->pc_TableView->RemoveMessagesForFile(orc_File, opc_Indices);
 }

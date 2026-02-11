@@ -12,7 +12,6 @@
 #define C_USNODEDATAPOOLLIST_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -29,11 +28,11 @@ class C_UsNodeDatapoolList
 public:
    C_UsNodeDatapoolList(void);
 
-   const std::vector<int32_t> & GetColumnWidths(void) const;
-   void SetColumnSizes(const std::vector<int32_t> & orc_ColumnWidths);
+   const QList<int32_t> & GetColumnWidths(void) const;
+   void SetColumnSizes(const QList<int32_t> & orc_ColumnWidths);
 
 private:
-   std::vector<int32_t> mc_ColumnWidth;
+   QList<int32_t> mc_ColumnWidth;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

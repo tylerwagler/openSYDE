@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for progress log (implementation)
@@ -238,7 +238,7 @@ void C_SyvUpProgressLog::AddSpacer(void)
 void C_SyvUpProgressLog::UpdateStatus(const uint32_t ou32_NodeIndex, const QString & orc_Value,
                                       const bool oq_Update) const
 {
-   const std::vector<C_SyvUpProgressLogEntry *> * pc_Entries;
+   const QList<C_SyvUpProgressLogEntry *> * pc_Entries;
 
    if (oq_Update == true)
    {
@@ -307,9 +307,9 @@ void C_SyvUpProgressLog::AddLogHyperlink(void)
    All registered connect node entry indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SyvUpProgressLog::GetConnectNodeEntryIndices(void)
+QList<uint32_t> C_SyvUpProgressLog::GetConnectNodeEntryIndices(void)
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    c_Retval.reserve(mc_ConnectEntries.size());
    for (uint32_t u32_ItEntry = 0; u32_ItEntry < mc_ConnectEntries.size(); ++u32_ItEntry)
    {

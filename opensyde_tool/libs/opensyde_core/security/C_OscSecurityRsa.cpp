@@ -70,12 +70,12 @@ C_OscSecurityRsa::C_OscSecurityRsa()
    \retval   C_NOACT    Could not encrypt message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityRsa::h_SignSignature(const std::vector<uint8_t> & orc_PrivateKey,
-                                          const std::vector<uint8_t> & orc_Message,
-                                          std::vector<uint8_t> & orc_EncryptedMessage)
+int32_t C_OscSecurityRsa::h_SignSignature(const QByteArray & orc_PrivateKey,
+                                          const QByteArray & orc_Message,
+                                          QByteArray & orc_EncryptedMessage)
 {
    int32_t s32_Retval = C_RANGE;
-   const uint8_t * pu8_Data = &orc_PrivateKey[0];
+   const uint8_t * pu8_Data = reinterpret_cast<const uint8_t*>(orc_PrivateKey.constData());
 
    orc_EncryptedMessage.resize(C_OscSecurityRsa::mhu32_DEFAULT_BUFFER_SIZE);
 
@@ -101,7 +101,7 @@ int32_t C_OscSecurityRsa::h_SignSignature(const std::vector<uint8_t> & orc_Priva
             //Perform the actual encryption:
             const int x_ResultEncrypt = RSA_private_encrypt( //lint !e970 !e8080 //using type to match library interface
                static_cast<int>(orc_Message.size()),         //lint !e970 //using type to match library interface
-               &orc_Message[0], &orc_EncryptedMessage[0], pc_Rsa,
+               reinterpret_cast<const uint8_t*>(orc_Message.constData()), reinterpret_cast<uint8_t*>(orc_EncryptedMessage.data()), pc_Rsa,
                RSA_PKCS1_PADDING);
             RSA_free(pc_Rsa);
 
@@ -146,14 +146,14 @@ int32_t C_OscSecurityRsa::h_SignSignature(const std::vector<uint8_t> & orc_Priva
    \retval   C_NOACT    Could not decrypt message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityRsa::h_VerifySignature(const std::vector<uint8_t> & orc_PublicKey,
-                                            const std::vector<uint8_t> & orc_Message,
-                                            const std::vector<uint8_t> & orc_EncryptedMessage, bool & orq_Valid)
+int32_t C_OscSecurityRsa::h_VerifySignature(const QByteArray & orc_PublicKey,
+                                            const QByteArray & orc_Message,
+                                            const QByteArray & orc_EncryptedMessage, bool & orq_Valid)
 {
    int32_t s32_Retval = C_RANGE;
 
    //get RSA structure from binary key:
-   const uint8_t * pu8_Data = &orc_PublicKey[0];
+   const uint8_t * pu8_Data = reinterpret_cast<const uint8_t*>(orc_PublicKey.constData());
 
    orq_Valid = false;
 
@@ -176,14 +176,14 @@ int32_t C_OscSecurityRsa::h_VerifySignature(const std::vector<uint8_t> & orc_Pub
 
          if (pc_Rsa != NULL)
          {
-            std::vector<uint8_t> c_DecryptedMessage;
+            QByteArray c_DecryptedMessage;
             c_DecryptedMessage.resize(C_OscSecurityRsa::mhu32_DEFAULT_BUFFER_SIZE);
 
             //Perform the actual decryption:
             const int x_DecryptResult = //lint !e970 !e8080  //using type to match library interface
                                         RSA_public_decrypt(
                static_cast<int>(orc_EncryptedMessage.size()), //lint !e970 //using type to match library interface
-               &orc_EncryptedMessage[0], &c_DecryptedMessage[0], pc_Rsa,
+               reinterpret_cast<uint8_t*>(const_cast<char*>(orc_EncryptedMessage.data())), reinterpret_cast<uint8_t*>(const_cast<char*>(c_DecryptedMessage.data())), pc_Rsa,
                RSA_PKCS1_PADDING);
             RSA_free(pc_Rsa);
 
@@ -196,7 +196,7 @@ int32_t C_OscSecurityRsa::h_VerifySignature(const std::vector<uint8_t> & orc_Pub
                if (c_DecryptedMessage.size() == orc_Message.size())
                {
                   const int x_DiffResult = //lint !e970 !e8080 //using type to match library interface
-                                           std::memcmp(&c_DecryptedMessage[0], &orc_Message[0], orc_Message.size());
+                                           std::memcmp(reinterpret_cast<uint8_t*>(c_DecryptedMessage.data()), reinterpret_cast<const uint8_t*>(orc_Message.constData()), orc_Message.size());
                   if (x_DiffResult == 0)
                   {
                      orq_Valid = true; //we have a winner

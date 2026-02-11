@@ -9,6 +9,7 @@
 #define C_OSCXCEMANIFESTFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscXmlParser.hpp"
 #include "C_OscXceManifest.hpp"
 
@@ -36,9 +37,9 @@ private:
    static const uint16_t mhu16_PACKAGE_VERSION_1;
 
    C_OscXceManifestFiler();
-   static int32_t mh_LoadUpdatePackageParameters(std::vector<C_OscXceUpdatePackageParameters> & orc_Config,
+   static int32_t mh_LoadUpdatePackageParameters(QList<C_OscXceUpdatePackageParameters> & orc_Config,
                                                  C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveUpdatePackageParameters(const std::vector<C_OscXceUpdatePackageParameters> & orc_Config,
+   static void mh_SaveUpdatePackageParameters(const QList<C_OscXceUpdatePackageParameters> & orc_Config,
                                               C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadUpdatePackageParameter(C_OscXceUpdatePackageParameters & orc_Config,
                                                 const C_OscXmlParserBase & orc_XmlParser);

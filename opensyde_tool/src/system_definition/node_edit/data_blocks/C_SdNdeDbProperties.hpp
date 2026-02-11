@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_OgeLeFilePath.hpp"
@@ -57,7 +58,7 @@ private:
    const uint32_t mu32_NodeIndex;
    const int32_t ms32_ApplicationIndex;
    stw::opensyde_core::C_OscNodeApplication::E_Type me_Type;
-   std::vector<C_SdNdeDbDataPoolEntry *> mc_DataPoolWidgets;
+   QList<C_SdNdeDbDataPoolEntry *> mc_DataPoolWidgets;
    std::set<uint32_t> mc_SelectedDataPools;
    //lint -e{1725} Only problematic if copy or assignment is allowed
    stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;

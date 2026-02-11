@@ -21,6 +21,7 @@
 #include <QMimeData>
 #include <QList>
 #include <QMouseEvent>
+#include <vector>
 
 #include "C_CamMetTreeModel.hpp"
 #include "C_CamMetTreeDelegate.hpp"
@@ -71,8 +72,8 @@ public:
    void SearchTrace(const QString & orc_SearchString, const bool oq_Next);
 
    void SaveUserSettings(void) const;
-   void SetCurrentColumnWidths(const std::vector<int32_t> & orc_ColumnWidths);
-   std::vector<int32_t> GetCurrentColumnWidths(void) const;
+   void SetCurrentColumnWidths(const QList<int32_t> & orc_ColumnWidths);
+   QList<int32_t> GetCurrentColumnWidths(void) const;
    void CanFilterMsgDropped(void);
 
 protected:
@@ -109,7 +110,7 @@ private:
    void m_CopySelection(void);
    void m_HandleMessages(void);
    void m_UpdateUi(const std::list<stw::opensyde_gui_logic::C_CamMetTreeLoggerData> & orc_Data);
-   void m_SetChildColumns(const std::vector<int32_t> & orc_Indices);
+   void m_SetChildColumns(const QList<int32_t> & orc_Indices);
    void m_SetChildColumns(const QModelIndex & orc_ModelIndex);
    void m_SetAllChildren(void);
    void m_RepositionButtons(void);
@@ -121,9 +122,9 @@ private:
    void m_AddFilter();
    void m_OnAddFilterClicked();
    void m_OnCollapse(const QModelIndex & orc_Index);
-   std::vector<int32_t> m_GetCurrentColumnPositionIndices(void) const;
-   void m_SetColumnPositionIndices(const std::vector<int32_t> & orc_NewColPositionIndices);
-   bool m_ColumnsSortedAsExpected(const std::vector<int32_t> & orc_NewColPositionIndices) const;
+   QList<int32_t> m_GetCurrentColumnPositionIndices(void) const;
+   void m_SetColumnPositionIndices(const QList<int32_t> & orc_NewColPositionIndices);
+   bool m_ColumnsSortedAsExpected(const QList<int32_t> & orc_NewColPositionIndices) const;
    void m_HandleSorting(void);
    static void mh_DrawEl(QPainter * const opc_Painter, const QPoint & orc_TopLeft, const int32_t os32_Offset);
    static void mh_DrawPlus(QPainter * const opc_Painter, const QPoint & orc_TopLeft, const int32_t os32_Offset);

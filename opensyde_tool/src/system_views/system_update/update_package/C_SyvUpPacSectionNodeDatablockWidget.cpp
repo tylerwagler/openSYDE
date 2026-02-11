@@ -682,7 +682,7 @@ void C_SyvUpPacSectionNodeDatablockWidget::m_InitSpecificItem(
     if (rc_Datablock.e_Type != C_OscNodeApplication::ePARAMETER_SET_HALC) {
       const QStringList &c_ViewDatablockPaths =
           orc_UpdateInfo.GetPaths(C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
-      std::vector<bool> c_ViewDatablockSkipFlags =
+      QList<bool> c_ViewDatablockSkipFlags =
           orc_UpdateInfo.GetSkipUpdateOfPathsFlags(
               C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
       C_SyvUpPacListNodeItemDatablockWidget *const pc_FileWidget =
@@ -733,9 +733,9 @@ void C_SyvUpPacSectionNodeDatablockWidget::m_InitSpecificItem(
       // the Qt memory management
     else {
       // Special case: Datablock for NVM HALC parameter set image files
-      const std::vector<C_OscViewNodeUpdateParamInfo> c_ViewParamsetPaths =
+      const QList<C_OscViewNodeUpdateParamInfo> c_ViewParamsetPaths =
           orc_UpdateInfo.GetParamInfos();
-      std::vector<bool> c_ViewParamSetSkipFlags =
+      QList<bool> c_ViewParamSetSkipFlags =
           orc_UpdateInfo.GetSkipUpdateOfParamInfosFlags();
       uint32_t u32_ParamSetFileCounter;
 

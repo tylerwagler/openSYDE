@@ -1404,7 +1404,7 @@ int32_t C_PuiSdHandlerHalc::CheckHalcDomainChannelLinked(
     const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
     const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
     bool &orq_IsLinked, QStringList *const opc_LinkedChannelNames,
-    std::vector<uint32_t> *const opc_LinkedChannelIndices,
+    QList<uint32_t> *const opc_LinkedChannelIndices,
     const uint32_t *const opu32_UseCaseIndex) const {
   int32_t s32_Retval = C_RANGE;
   const C_OscHalcConfigDomain *const pc_Domain =
@@ -1444,8 +1444,8 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigOfLinkedChannels(
   if (oq_UseChannelIndex == true) {
     bool q_IsLinkedOld = false;
     bool q_IsLinkedNew = false;
-    std::vector<uint32_t> c_LinkedChannelIndicesOld;
-    std::vector<uint32_t> c_LinkedChannelIndicesNew;
+    QList<uint32_t> c_LinkedChannelIndicesOld;
+    QList<uint32_t> c_LinkedChannelIndicesNew;
 
     // get information about linked channels
     s32_Retval = this->CheckHalcDomainChannelLinked(
@@ -1463,7 +1463,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigOfLinkedChannels(
         ((q_IsLinkedOld == true) || (q_IsLinkedNew == true))) {
       // first revert use case of all previously linked channels
       if (q_IsLinkedOld == true) {
-        for (std::vector<uint32_t>::const_iterator c_ItChannels =
+        for (QList<uint32_t>::const_iterator c_ItChannels =
                  c_LinkedChannelIndicesOld.begin();
              (c_ItChannels != c_LinkedChannelIndicesOld.end()) &&
              (s32_Retval == C_NO_ERR);
@@ -1480,7 +1480,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelConfigOfLinkedChannels(
                 ou32_NodeIndex, ou32_DomainIndex, ou32_ChannelIndex,
                 oq_UseChannelIndex);
         if (pc_Channel != NULL) {
-          for (std::vector<uint32_t>::const_iterator c_ItChannels =
+          for (QList<uint32_t>::const_iterator c_ItChannels =
                    c_LinkedChannelIndicesNew.begin();
                (c_ItChannels != c_LinkedChannelIndicesNew.end()) &&
                (s32_Retval == C_NO_ERR);
@@ -1536,7 +1536,7 @@ int32_t C_PuiSdHandlerHalc::CheckHalcDomainChannelError(
   if (pc_Node != NULL) {
     bool q_DomainInvalid;
     bool q_Tmp;
-    std::vector<uint32_t> c_InvalidChannelIndices;
+    QList<uint32_t> c_InvalidChannelIndices;
     pc_Node->c_HalcConfig.CheckDomainConfigValid(
         ou32_DomainIndex, &q_DomainInvalid, &q_Tmp, &c_InvalidChannelIndices);
     if (oq_UseChannelIndex == true) {
@@ -1577,10 +1577,10 @@ int32_t C_PuiSdHandlerHalc::CheckHalcDomainChannelError(
 int32_t C_PuiSdHandlerHalc::GetHalcRelevantIndicesForSelectedUseCase(
     const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
     const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
-    std::vector<uint32_t> *const opc_ParameterIndices,
-    std::vector<uint32_t> *const opc_InputIndices,
-    std::vector<uint32_t> *const opc_OutputIndices,
-    std::vector<uint32_t> *const opc_StatusIndices) const {
+    QList<uint32_t> *const opc_ParameterIndices,
+    QList<uint32_t> *const opc_InputIndices,
+    QList<uint32_t> *const opc_OutputIndices,
+    QList<uint32_t> *const opc_StatusIndices) const {
   int32_t s32_Retval = C_NO_ERR;
 
   const C_OscNode *const pc_Node = this->GetOscNodeConst(ou32_NodeIndex);
@@ -1625,7 +1625,7 @@ C_PuiSdHandlerHalc::HalcGenerateDatapools(const uint32_t ou32_NodeIndex) {
     // check if HALC configuration changed since last HALC Datapool generation
     if ((c_ItPrevHash == mc_PreviousHashes.end()) ||
         (c_ItPrevHash->second != u32_CurrentHash)) {
-      std::vector<C_OscNodeDataPool> c_Tmp;
+      QList<C_OscNodeDataPool> c_Tmp;
       mc_PreviousHashes[ou32_NodeIndex] = u32_CurrentHash;
 
       // In case of existing HAL Datapools, safe Datapool specific properties
@@ -1646,7 +1646,7 @@ C_PuiSdHandlerHalc::HalcGenerateDatapools(const uint32_t ou32_NodeIndex) {
       if (s32_Retval == C_NO_ERR) {
         // Check if new datapools should be generated
         if (rc_OscNode.c_HalcConfig.c_FileString.isEmpty() == false) {
-          std::vector<C_OscNodeDataPool> c_Datapools;
+          QList<C_OscNodeDataPool> c_Datapools;
           const C_OscHalcMagicianGenerator c_Magician(&rc_OscNode);
           s32_Retval = c_Magician.GenerateHalcDatapools(c_Datapools);
           if (s32_Retval == C_NO_ERR) {
@@ -1655,7 +1655,7 @@ C_PuiSdHandlerHalc::HalcGenerateDatapools(const uint32_t ou32_NodeIndex) {
                      rc_UiNode.c_UiDataPools.size());
             if (rc_OscNode.c_DataPools.size() ==
                 rc_UiNode.c_UiDataPools.size()) {
-              std::vector<C_PuiSdNodeDataPool> c_UiDatapools;
+              QList<C_PuiSdNodeDataPool> c_UiDatapools;
 
               // Get ui datapools
               for (uint32_t u32_It = 0UL; u32_It < c_Datapools.size();
@@ -1729,7 +1729,7 @@ C_PuiSdHandlerHalc::HalcRemoveDatapools(const uint32_t ou32_NodeIndex,
     const C_OscNode &rc_OscNode =
         this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
 
-    std::vector<C_OscNodeDataPool>::const_iterator c_ItOsc =
+    QList<C_OscNodeDataPool>::const_iterator c_ItOsc =
         rc_OscNode.c_DataPools.begin();
     uint32_t u32_DatapoolIndex = 0;
     for (; c_ItOsc != rc_OscNode.c_DataPools.end();) {
@@ -1954,7 +1954,7 @@ C_PuiSdNodeDataPool C_PuiSdHandlerHalc::mh_GetUiDatapoolForOscDataPool(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerHalc::mh_GetIndexInVector(
-    const std::vector<C_OscHalcDefStruct> &orc_Structs,
+    const QList<C_OscHalcDefStruct> &orc_Structs,
     const uint32_t ou32_StartingIndex, const uint32_t ou32_TargetIndex,
     uint32_t &oru32_ParameterIndex, bool &orq_UseElementIndex,
     uint32_t &oru32_ParameterElementIndex,

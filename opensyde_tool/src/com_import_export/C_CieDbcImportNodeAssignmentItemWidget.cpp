@@ -47,7 +47,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_CieDbcImportNodeAssignmentItemWidget::C_CieDbcImportNodeAssignmentItemWidget(
    const C_CieConverter::C_CieNode & orc_DbcNode, const QStringList & orc_OsyNodeNames,
-   const std::vector<uint32_t> & orc_NodeIndexes, const std::vector<uint32_t> & orc_InterfaceIndexes,
+   const QList<uint32_t> & orc_NodeIndexes, const QList<uint32_t> & orc_InterfaceIndexes,
    QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_CieDbcImportNodeAssignmentItemWidget),

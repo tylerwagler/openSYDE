@@ -9,6 +9,7 @@
 #define C_OSCHALCDEFELEMENT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include "C_OscHalcDefContent.hpp"
 
@@ -36,8 +37,8 @@ public:
    C_OscHalcDefContent::E_ComplexType GetComplexType(void) const;
    C_OscNodeDataPoolContent::E_Type GetType(void) const;
    bool GetArray(void) const;
-   const std::vector<std::pair<QString, C_OscNodeDataPoolContent> > & GetEnumItems(void) const;
-   const std::vector<C_OscHalcDefContentBitmaskItem> & GetBitmaskItems(void) const;
+   const QList<std::pair<QString, C_OscNodeDataPoolContent> > & GetEnumItems(void) const;
+   const QList<C_OscHalcDefContentBitmaskItem> & GetBitmaskItems(void) const;
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
@@ -47,7 +48,7 @@ public:
    C_OscHalcDefContent c_InitialValue;            ///< Initial value of this element
    C_OscHalcDefContent c_MinValue;                ///< Minimum value of this element
    C_OscHalcDefContent c_MaxValue;                ///< Maximum value of this element
-   std::vector<uint32_t> c_UseCaseAvailabilities; ///< Availability for this element (use-case index)
+   QList<uint32_t> c_UseCaseAvailabilities; ///< Availability for this element (use-case index)
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

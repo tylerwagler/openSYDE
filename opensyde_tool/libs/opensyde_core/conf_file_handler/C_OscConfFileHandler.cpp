@@ -137,7 +137,7 @@ int32_t C_OscConfFileHandler::LoadSettings(const QString &orc_Path) {
 //---------------------------------------------------------------------------------------------------------------------/
 int32_t C_OscConfFileHandler::mh_ReplaceSettings(
     const QString &orc_Path,
-    const std::vector<std::pair<QString, QString>> &orc_Configs) {
+    const QList<std::pair<QString, QString>> &orc_Configs) {
   QStringList c_StringList;
   int32_t s32_Result = C_NO_ERR;
 

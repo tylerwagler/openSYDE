@@ -12,7 +12,7 @@
 #define C_PUISVDBPARAM_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include "C_PuiSvDbWidgetBase.hpp"
 #include "C_OscNodeDataPoolListId.hpp"
 
@@ -44,18 +44,18 @@ public:
                                 const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Value, bool & orq_Ok);
    int32_t RemoveElement(const uint32_t & oru32_Index) override;
 
-   std::vector<int32_t> c_DataSetSelectionIndices; ///< Index of selected data set (-1 if
+   QList<int32_t> c_DataSetSelectionIndices; ///< Index of selected data set (-1 if
    ///< invalid)
    ///< Size of list values expected
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> c_ListValues; ///< Values for each included list item,
+   QList<stw::opensyde_core::C_OscNodeDataPoolContent> c_ListValues; ///< Values for each included list item,
    ///< needs to be synchronised
    ///< with system definition
    ///< Size of elements expected
-   std::vector<std::vector<int32_t> > c_ColWidth; ///< Column width of table
+   QList<QList<int32_t> > c_ColWidth; ///< Column width of table
    ///< Outer vector: Size of 1 expected
    ///< Inner vector: Size of exactly 7 expected
-   std::vector<C_PuiSvDbExpandedTreeIndex> c_ExpandedItems; ///< Expanded items
-   std::vector<int32_t> c_ColPosIndices;                    ///< Column position indices,
+   QList<C_PuiSvDbExpandedTreeIndex> c_ExpandedItems; ///< Expanded items
+   QList<int32_t> c_ColPosIndices;                    ///< Column position indices,
    ///<  e.g. [0]=2 -< model column 0 is at
    ///<   visible index 2
 };

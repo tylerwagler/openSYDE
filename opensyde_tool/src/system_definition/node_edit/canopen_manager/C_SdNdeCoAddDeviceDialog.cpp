@@ -15,6 +15,7 @@
 #include <QIcon>
 #include <QImageReader>
 #include <QFileDialog>
+#include <QList>
 
 #include "stwerrors.hpp"
 
@@ -340,8 +341,8 @@ void C_SdNdeCoAddDeviceDialog::m_LoadPicture(const QFileInfo oc_FileInfo)
 void C_SdNdeCoAddDeviceDialog::m_FillUpComboBox(const uint32_t ou32_BusIndex, const QString oc_NodeName)
 {
    QStringList c_NotExistNames;
-   std::vector<uint32_t> c_NotExistNodeIndexes;
-   std::vector<uint32_t> c_NotExistInterfaceIndexes;
+   QList<uint32_t> c_NotExistNodeIndexes;
+   QList<uint32_t> c_NotExistInterfaceIndexes;
    // get node and interface names
    C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(ou32_BusIndex,
                                                                                       this->mc_NodeIndexes,
@@ -415,7 +416,7 @@ bool C_SdNdeCoAddDeviceDialog::m_CheckIfNodeHasCanOpenManager(const uint32_t ou3
    const C_OscNode * const pc_CurrentNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
    // check if node has already a CANopen protocol by its comm interfaces
-   std::vector<C_OscNodeComInterfaceSettings>::const_iterator c_ComInterfacesIter;
+   QList<C_OscNodeComInterfaceSettings>::const_iterator c_ComInterfacesIter;
    for (c_ComInterfacesIter = pc_CurrentNode->c_Properties.c_ComInterfaces.begin();
         c_ComInterfacesIter != pc_CurrentNode->c_Properties.c_ComInterfaces.end();
         ++c_ComInterfacesIter)

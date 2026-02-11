@@ -9,6 +9,7 @@
 #define C_SYVUPINFORMATIONWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include <QTimer>
 #include <QElapsedTimer>
@@ -53,20 +54,20 @@ public:
    void DiscardApplicationStatus(const uint32_t ou32_NodeIndex) const;
    void SetUpdateFinished(void) const;
    void SetDisconnected(void) const;
-   void UpdateDeviceInformation(const std::vector<uint32_t> & orc_NodeIndexes,
-                                const std::vector<stw::opensyde_gui_logic::C_SyvUpDeviceInfo> & orc_DeviceInformation)
+   void UpdateDeviceInformation(const QList<uint32_t> & orc_NodeIndexes,
+                                const QList<stw::opensyde_gui_logic::C_SyvUpDeviceInfo> & orc_DeviceInformation)
    const;
    void SetNodeProgress(const uint32_t ou32_NodeIndex, const uint8_t ou8_Progress) const;
 
-   int32_t GetUpdatePackage(std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-                            std::vector<uint32_t> & orc_NodesOrder, std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> * const opc_AllApplications =
+   int32_t GetUpdatePackage(QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+                            QList<uint32_t> & orc_NodesOrder, QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> * const opc_AllApplications =
                                NULL) const;
 
    void ResetSummary(void);
    void SetHeading(const QString & orc_Icon, const QString & orc_Text, const bool oq_Failure = false,
                    const bool oq_Success = false) const;
-   void InitUpdatePackage(const std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_Flashpackage,
-                          const std::vector<uint32_t> & orc_Order, const std::vector<bool> & orc_IsFileBased,
+   void InitUpdatePackage(const QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_Flashpackage,
+                          const QList<uint32_t> & orc_Order, const QList<bool> & orc_IsFileBased,
                           const bool oq_IncludesCurrentNodeStatus);
 
    void UpdateProgress(const uint16_t ou16_Progress100, const bool oq_Finished = false);

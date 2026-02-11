@@ -9,6 +9,7 @@
 #define C_OSCHALCDEFCHANNELUSECASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_OscHalcDefChannelAvailability.hpp"
@@ -34,8 +35,8 @@ public:
    QString c_Display;                             ///< Name to display to user
    QString c_Comment;                             ///< Description to display to user
    C_OscNodeDataPoolContent c_Value;                            ///< Internal value to use
-   std::vector<C_OscHalcDefChannelAvailability> c_Availability; ///< Channel availability settings
-   std::vector<uint32_t> c_DefaultChannels;                     ///< Indices of channels which use this as default
+   QList<C_OscHalcDefChannelAvailability> c_Availability; ///< Channel availability settings
+   QList<uint32_t> c_DefaultChannels;                     ///< Indices of channels which use this as default
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -15,6 +15,7 @@
 #include <vector>
 #include <set>
 #include <map>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscRoutingRoute.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
@@ -45,11 +46,11 @@ public:
    virtual ~C_OscComDriverProtocol(void);
 
    virtual int32_t Init(const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex,
-                        const std::vector<uint8_t> & orc_ActiveNodes,
+                        const QByteArray & orc_ActiveNodes,
                         stw::can::C_CanDispatcher * const opc_CanDispatcher, C_OscIpDispatcher * const opc_IpDispatcher,
                         C_OscSecurityPemDatabase * const opc_SecurityPemDb);
    int32_t SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes = NULL);
-   int32_t SendTesterPresent(const std::vector<uint32_t> & orc_ActiveNodes) const;
+   int32_t SendTesterPresent(const QList<uint32_t> & orc_ActiveNodes) const;
    int32_t SendTesterPresent(const C_OscProtocolDriverOsyNode & orc_ServerId) const;
    int32_t StartRouting(const uint32_t ou32_NodeIndex, uint32_t * const opu32_ErrorNodeIndex = NULL);
    int32_t StopRouting(const uint32_t ou32_NodeIndex);
@@ -82,24 +83,24 @@ protected:
    bool mq_Initialized;
    ///Holds all indices of all relevant nodes for the current use case. This active nodes represent the initialized
    /// active node (for example mc_OsyProtocols) indexes which are part of mc_ActiveNodesSystem.
-   std::vector<uint32_t> mc_ActiveNodesIndexes;
+   QList<uint32_t> mc_ActiveNodesIndexes;
    ///Has pointer to created instances of generic openSYDE protocol if available. Lifetime is handled by child classes.
    ///Length matches number of active nodes.
-   std::vector<C_OscProtocolDriverOsy *> mc_OsyProtocols;
+   QList<C_OscProtocolDriverOsy *> mc_OsyProtocols;
    ///Holds routes to use for each active node
-   std::vector<C_OscRoutingRoute> mc_Routes;
+   QList<C_OscRoutingRoute> mc_Routes;
    ///Holds server Ids for each active node
-   std::vector<C_OscProtocolDriverOsyNode> mc_ServerIds;
+   QList<C_OscProtocolDriverOsyNode> mc_ServerIds;
    ///Holds server IP addresses for each active node
-   std::vector<C_OscNodeComInterfaceSettings::C_IpAddress> mc_ServerIpAddresses;
+   QList<C_OscNodeComInterfaceSettings::C_IpAddress> mc_ServerIpAddresses;
    ///Holds created instances of either CAN or IP TP. Length matches number of active nodes.
-   std::vector<C_OscProtocolDriverOsyTpBase *> mc_TransportProtocols;
+   QList<C_OscProtocolDriverOsyTpBase *> mc_TransportProtocols;
    ///Holds created instances of routing dispatcher (one for each routed KEFEX diagnostic server).
    ///Length matches number of active nodes.
-   std::vector<C_OscCanDispatcherOsyRouter *> mc_LegacyRouterDispatchers;
+   QList<C_OscCanDispatcherOsyRouter *> mc_LegacyRouterDispatchers;
 
    ///Active nodes which are the last CAN node on a route before the concrete target
-   std::vector<uint32_t> mc_ActiveNodesLastCanRouters;
+   QList<uint32_t> mc_ActiveNodesLastCanRouters;
 
    C_OscProtocolDriverOsyTpCan * mpc_CanTransportProtocolBroadcast;
    C_OscProtocolDriverOsyTpIp * mpc_IpTransportProtocolBroadcast;
@@ -122,7 +123,7 @@ protected:
                               const bool oq_CheckForSession, uint8_t * const opu8_NrCode) const;
    int32_t m_SetNodesSessionId(const uint8_t ou8_SessionId, const bool oq_CheckForSession,
                                std::set<uint32_t> & orc_DefectNodeIndices) const;
-   int32_t m_SetNodesSessionId(const std::vector<uint32_t> & orc_ActiveNodes, const uint8_t ou8_SessionId,
+   int32_t m_SetNodesSessionId(const QList<uint32_t> & orc_ActiveNodes, const uint8_t ou8_SessionId,
                                const bool oq_CheckForSession, std::set<uint32_t> & orc_DefectNodeIndices) const;
    int32_t m_SetNodeSessionIdWithExpectation(const uint32_t ou32_ActiveNode,
                                              const uint8_t ou8_ExpectedNeededSession) const;
@@ -131,7 +132,7 @@ protected:
    int32_t m_SetNodeSecurityAccess(C_OscProtocolDriverOsy * const opc_ExistingProtocol, const uint8_t ou8_SecurityLevel,
                                    uint8_t * const opu8_NrCode) const;
    int32_t m_SetNodesSecurityAccess(const uint8_t ou8_SecurityLevel, std::set<uint32_t> & orc_ErrorActiveNodes) const;
-   int32_t m_SetNodesSecurityAccess(const std::vector<uint32_t> & orc_ActiveNodes, const uint8_t ou8_SecurityLevel,
+   int32_t m_SetNodesSecurityAccess(const QList<uint32_t> & orc_ActiveNodes, const uint8_t ou8_SecurityLevel,
                                     std::set<uint32_t> & orc_ErrorActiveNodes) const;
 
    int32_t m_StartRoutingIp2Ip(const uint32_t ou32_ActiveNode, uint32_t * const opu32_ErrorActiveNodeIndex);
@@ -194,7 +195,7 @@ private:
    // node
    // TCP dispatcher handle for IP to IP
    // routing
-   std::vector<uint32_t> mc_ActiveNodeIp2IpDispatcherNodeCount; ///< Count of nodes which use the TCP
+   QList<uint32_t> mc_ActiveNodeIp2IpDispatcherNodeCount; ///< Count of nodes which use the TCP
    // dispatcher handle for IP to IP
    // routing
 
@@ -202,11 +203,11 @@ private:
    // node
    // TCP dispatcher handle for IP to CAN
    // routing
-   std::vector<uint32_t> mc_ActiveNodeIp2CanDispatcherNodeCount; ///< Count of nodes which use the TCP
+   QList<uint32_t> mc_ActiveNodeIp2CanDispatcherNodeCount; ///< Count of nodes which use the TCP
    // dispatcher handle for IP to CAN
    // routing
 
-   std::vector<uint8_t> mc_ActiveNodesSystem; ///< List of flags for all nodes which are active in the system
+   QByteArray mc_ActiveNodesSystem; ///< List of flags for all nodes which are active in the system
    // definition set by Init call
 
    uint32_t mu32_ActiveBusIndex;

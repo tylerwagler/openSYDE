@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <map>
 
+#include <QList>
 #include <QString>
 #include <QStringList>
 #include "C_OscXmlParser.hpp"
@@ -35,17 +36,17 @@ public:
    static int32_t h_LoadUpdatePackageDefFile(const QString & orc_TargetUnzipPath, const bool oq_IsZip,
                                              const QString & orc_PackagePath,
                                              uint32_t & oru32_FileVersion, QString & orc_FilePackagePath,
-                                             uint32_t & oru32_ActiveBusIndex, std::vector<uint8_t> & orc_ActiveNodes,
-                                             std::vector<uint32_t> & orc_UpdatePosition,
+                                             uint32_t & oru32_ActiveBusIndex, QByteArray & orc_ActiveNodes,
+                                             QList<uint32_t> & orc_UpdatePosition,
                                              QStringList & orc_PackageFiles);
 
    static const QString hc_PACKAGE_UPDATE_DEF;
 
 private:
-   static void mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser, const std::vector<C_OscSupNodeDefinition> & orc_Nodes,
+   static void mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser, const QList<C_OscSupNodeDefinition> & orc_Nodes,
                             const QStringList & orc_Files);
-   static void mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, std::vector<uint8_t> & orc_ActiveNodes,
-                            std::vector<uint32_t> & orc_UpdatePosition,
+   static void mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, QByteArray & orc_ActiveNodes,
+                            QList<uint32_t> & orc_UpdatePosition,
                             QStringList & orc_PackageFiles);
 };
 

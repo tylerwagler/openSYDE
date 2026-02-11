@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "constants.hpp"
@@ -166,7 +167,7 @@ void C_SdNdeDpImportRamViewReport::m_FillReport(const QString & orc_ProjectPath,
    // Count all Datapool elements
    uint32_t u32_ElementCount = 0;
 
-   for (std::vector<C_OscNodeDataPoolList>::const_iterator c_ItLists = orc_DataPool.c_Lists.begin();
+   for (QList<C_OscNodeDataPoolList>::const_iterator c_ItLists = orc_DataPool.c_Lists.begin();
         c_ItLists < orc_DataPool.c_Lists.end(); ++c_ItLists)
    {
       u32_ElementCount += c_ItLists->c_Elements.size();

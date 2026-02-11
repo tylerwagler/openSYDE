@@ -42,12 +42,12 @@ protected:
    std::string mc_MetaInfo;
    C_OscSecurityPemKeyInfo mc_KeyInfo;
 
-   virtual int32_t m_ReadPublicKey(const std::vector<uint8_t> & orc_FileContent, std::string & orc_ErrorMessage);
-   virtual int32_t m_ReadMetaInfos(const std::vector<uint8_t> & orc_FileContent, std::string & orc_ErrorMessage);
+   virtual int32_t m_ReadPublicKey(const QByteArray & orc_FileContent, std::string & orc_ErrorMessage);
+   virtual int32_t m_ReadMetaInfos(const QByteArray & orc_FileContent, std::string & orc_ErrorMessage);
 
    //Pure virtual function. Implementation will differ depending on whether a regular key or an elliptic curve key is
    // expected.
-   virtual int32_t m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent, std::string & orc_ErrorMessage) = 0;
+   virtual int32_t m_ReadPrivateKey(const QByteArray & orc_FileContent, std::string & orc_ErrorMessage) = 0;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

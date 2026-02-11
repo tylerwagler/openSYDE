@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QLineEdit>
+#include <QList>
 #include <QRegularExpressionValidator>
 #include "stwtypes.hpp"
 
@@ -38,7 +39,7 @@ public:
    ~C_SdNdeLeIpAddressWidget(void) override;
 
    void SetIpAddress(const uint8_t * const opu8_IpAddress);
-   std::vector<int32_t> GetIpAddress(void) const;
+   QList<int32_t> GetIpAddress(void) const;
    void SetCursorPosition(const uint32_t ou32_Pos);
 
    bool eventFilter(QObject * opc_Obj, QEvent * opc_Event) override;
@@ -47,7 +48,7 @@ public:
 
    void SlotTextChanged(const QLineEdit * const opc_LineEdit);
 
-   std::vector<QLineEdit *> GetLineEdits(void);
+   QList<QLineEdit *> GetLineEdits(void);
    bool IsLineEditPartOfWidget(const QLineEdit * const opc_LineEdit) const;
 
    //The signals keyword is necessary for Qt signal slot functionality

@@ -12,7 +12,7 @@
 #define C_PUIBSELEMENTS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include "C_PuiBsBoundary.hpp"
 #include "C_PuiBsImage.hpp"
 #include "C_PuiBsLineArrow.hpp"
@@ -66,10 +66,10 @@ public:
    const C_PuiBsTextElement * GetTextElement(const uint32_t & oru32_Index) const;
    int32_t SetTextElement(const uint32_t & oru32_Index, const C_PuiBsTextElement & orc_Data);
 
-   std::vector<C_PuiBsBoundary> c_Boundaries;      ///< UI information for boundaries
-   std::vector<C_PuiBsImage> c_Images;             ///< UI information for images
-   std::vector<C_PuiBsLineArrow> c_LineArrows;     ///< UI information for line arrows
-   std::vector<C_PuiBsTextElement> c_TextElements; ///< UI information for text elements
+   QList<C_PuiBsBoundary> c_Boundaries;      ///< UI information for boundaries
+   QList<C_PuiBsImage> c_Images;             ///< UI information for images
+   QList<C_PuiBsLineArrow> c_LineArrows;     ///< UI information for line arrows
+   QList<C_PuiBsTextElement> c_TextElements; ///< UI information for text elements
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

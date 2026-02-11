@@ -13,6 +13,7 @@
 
 #include <QWidget>
 #include <QStringList>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -135,10 +136,10 @@ private:
    void m_OnMessageCountChanged(void);
    void m_OnMessageRxChanged(void) const;
    void m_OnChange(void);
-   const std::vector<stw::opensyde_core::C_OscCanMessage> * m_PrepareMessageId(const uint32_t ou32_NodeIndex,
-                                                                               const uint32_t ou32_DataPoolIndex,
-                                                                               const uint32_t ou32_ListIndex,
-                                                                               stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId)
+   const QList<stw::opensyde_core::C_OscCanMessage> * m_PrepareMessageId(const uint32_t ou32_NodeIndex,
+                                                                        const uint32_t ou32_DataPoolIndex,
+                                                                        const uint32_t ou32_ListIndex,
+                                                                        stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId)
    const;
    void m_OnLinkSwitchToBus(const QString & orc_Link) const;
    void m_UpdateText(void);
@@ -156,21 +157,21 @@ private:
    uint32_t mu32_BusIndex;                               // For bus mode
    uint32_t mu32_NodeIndex;                              // For single node mode
    uint32_t mu32_InterfaceIndex;                         // For single node mode
-   std::vector<std::vector<bool> > mc_ProtocolUsedOnBus; // For single node mode
+   QList<QList<bool> > mc_ProtocolUsedOnBus; // For single node mode
    // 1st layer is matching to the protocol types
    // 2nd layer is matching to the combo box entries
 
    // Information for the interface combo box in node mode
    QStringList mc_InterfaceNames;
    QStringList mc_BusNames;
-   std::vector<uint32_t> mc_BusIndexes;
+   QList<uint32_t> mc_BusIndexes;
    // First layer is for protocols
    // In case of node mode second layer is for interface
    // In case of bus mode second layer has fixed size 1
-   std::vector<std::vector<uint32_t> > mc_MessageCount;
-   std::vector<std::vector<uint32_t> > mc_SignalCount;
+   QList<QList<uint32_t> > mc_MessageCount;
+   QList<QList<uint32_t> > mc_SignalCount;
 
-   std::vector<uint32_t> mc_DatapoolIndexes; // For single node mode
+   QList<uint32_t> mc_DatapoolIndexes; // For single node mode
    bool mq_ModeSingleNode;
    bool mq_LinkOnly;
    bool mq_IsCoDevice;              // Special case CANopen: mq_LinkOnly == false,

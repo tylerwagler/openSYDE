@@ -15,6 +15,7 @@
 
 #include <QUndoStack>
 #include <QLabel>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_TblViewScroll.hpp"
 #include "C_PuiSdNodeDataPoolList.hpp"
@@ -75,7 +76,7 @@ private:
    stw::opensyde_gui_logic::C_SdNdeDpListModelViewManager * mpc_ModelViewManager;
    QLabel * mpc_LabelCorner;
 
-   std::vector<uint32_t> m_GetSelectedIndices(void) const;
+   QList<uint32_t> m_GetSelectedIndices(void) const;
    void m_UpdateModelView(void);
    void m_UpdateCornerButton(void);
    //Avoid call

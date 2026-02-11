@@ -203,7 +203,7 @@ QString C_PuiSvDbDataElementDisplayFormatterConfig::GetSingleValueContentFormatt
 //----------------------------------------------------------------------------------------------------------------------
 QStringList C_PuiSvDbDataElementDisplayFormatterConfig::GetValuesContentFormatted(
    const C_PuiSvDbDataElementContent & orc_Value, const C_PuiSvDbDataElementScaling & orc_Scaling,
-   std::vector<float64_t> & orc_UnscaledValueAsFloat) const
+   QList<float64_t> & orc_UnscaledValueAsFloat) const
 {
    QStringList c_Return;
 
@@ -228,7 +228,7 @@ QStringList C_PuiSvDbDataElementDisplayFormatterConfig::GetValuesContentFormatte
       else
       {
          // Special case string: No float as unscaled value
-         std::vector<int8_t> c_VecValues;
+         QList<int8_t> c_VecValues;
          c_VecValues = orc_Value.GetValueArrS8();
          c_Return.push_back(C_SdNdeDpContentUtil::h_ConvertToString(c_VecValues));
       }
@@ -266,7 +266,7 @@ QStringList C_PuiSvDbDataElementDisplayFormatterConfig::GetValuesContentFormatte
          {
             // Special case string: No float as unscaled value
             QString c_Temp;
-            std::vector<int8_t> c_VecValues;
+            QList<int8_t> c_VecValues;
             c_VecValues = orc_Value.GetValueArrS8();
 
             c_Temp = C_SdNdeDpContentUtil::h_ConvertToString(c_VecValues);
@@ -285,13 +285,13 @@ QStringList C_PuiSvDbDataElementDisplayFormatterConfig::GetValuesContentFormatte
          for (u32_ArrayCounter = 0U; u32_ArrayCounter < orc_Value.GetArraySize(); ++u32_ArrayCounter)
          {
             // For each array element an error return string
-            c_Return.emplace_back("Invalid Formatter");
+            c_Return.emplaceBack("Invalid Formatter");
          }
       }
       else
       {
          // Special case string: Only one string as return value
-         c_Return.emplace_back("Invalid Formatter");
+         c_Return.emplaceBack("Invalid Formatter");
       }
    }
 

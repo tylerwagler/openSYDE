@@ -51,12 +51,12 @@ using namespace std;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyReconnectNodeCommand::C_SdManUnoTopologyReconnectNodeCommand(QGraphicsScene * const opc_Scene,
-                                                                               const vector<uint64_t> & orc_Ids,
+                                                                               const QList<uint64_t> & orc_Ids,
                                                                                const uint64_t & oru64_StartingNodeId,
                                                                                const uint64_t & oru64_LastNodeId,
                                                                                const QPointF & orc_ConnectionPos,
                                                                                const int32_t & ors32_Interface,
-                                                                               const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
+                                                                               const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
                                                                                QUndoCommand * const opc_Parent) :
    C_SdManUnoTopologyReconnectBaseCommand(opc_Scene, orc_Ids, oru64_StartingNodeId, oru64_LastNodeId, orc_ConnectionPos,
                                           ors32_Interface, orc_Properties,
@@ -108,7 +108,7 @@ C_SdManUnoTopologyReconnectNodeCommand::~C_SdManUnoTopologyReconnectNodeCommand(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManUnoTopologyReconnectNodeCommand::m_Reconnect(const uint64_t & oru64_StartingId,
                                                          const uint64_t & oru64_LastId, const int32_t & ors32_Interface,
-                                                         const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
+                                                         const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
    C_GiNode * const pc_StartingNode = dynamic_cast<C_GiNode *>(m_GetSceneItem(oru64_StartingId));
    C_GiNode * const pc_LastNode = dynamic_cast<C_GiNode *>(m_GetSceneItem(oru64_LastId));

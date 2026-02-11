@@ -11,6 +11,7 @@
 #include "precomp_headers.hpp"
 
 #include <QScrollBar>
+#include <QList>
 
 #include "C_SdNdeHalcConfigImportView.hpp"
 
@@ -102,8 +103,8 @@ void C_SdNdeHalcConfigImportView::GetAdaptedConfiguration(C_OscHalcConfig & orc_
    \retval  false    There exist linked channels where one is selected and the other one not
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdNdeHalcConfigImportView::IsSelectionOfLinkedChannelsValid(std::vector<uint32_t> & orc_DomainIndices,
-                                                                   std::vector<std::vector<uint32_t> > & orc_MissingChannelIndices)
+bool C_SdNdeHalcConfigImportView::IsSelectionOfLinkedChannelsValid(QList<uint32_t> & orc_DomainIndices,
+                                                                   QList<QList<uint32_t> > & orc_MissingChannelIndices)
 {
    return this->mc_Model.IsSelectionOfLinkedChannelsValid(orc_DomainIndices, orc_MissingChannelIndices);
 }
@@ -115,8 +116,8 @@ bool C_SdNdeHalcConfigImportView::IsSelectionOfLinkedChannelsValid(std::vector<u
    \param[in]  orc_ChannelIndices   Channel indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeHalcConfigImportView::CheckChannels(const std::vector<uint32_t> & orc_DomainIndices,
-                                                const std::vector<std::vector<uint32_t> > & orc_ChannelIndices)
+void C_SdNdeHalcConfigImportView::CheckChannels(const QList<uint32_t> & orc_DomainIndices,
+                                                const QList<QList<uint32_t> > & orc_ChannelIndices)
 {
    return this->mc_Model.CheckChannels(orc_DomainIndices, orc_ChannelIndices);
 }

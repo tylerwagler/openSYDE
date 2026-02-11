@@ -133,7 +133,7 @@ QString C_OscHalcMagicianUtil::h_GetListName(const C_OscHalcDefDomain::E_Variabl
    C_RANGE  Invalid input
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcMagicianUtil::h_GetVariableName(const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
+int32_t C_OscHalcMagicianUtil::h_GetVariableName(const QList<C_OscHalcDefStruct> & orc_DefinitionArray,
                                                  const uint32_t ou32_ParameterIndexStruct,
                                                  const uint32_t ou32_ParameterIndexElement,
                                                  const QString & orc_DomainSingularName,

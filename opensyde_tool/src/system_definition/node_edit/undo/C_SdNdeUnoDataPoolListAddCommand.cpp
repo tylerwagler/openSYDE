@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -45,14 +46,14 @@ using namespace stw::opensyde_core;
 C_SdNdeUnoDataPoolListAddCommand::C_SdNdeUnoDataPoolListAddCommand(const uint32_t & oru32_NodeIndex,
                                                                    const uint32_t & oru32_DataPoolIndex,
                                                                    stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                                                                   const std::vector<uint32_t> & orc_Indices,
+                                                                   const QList<uint32_t> & orc_Indices,
                                                                    QUndoCommand * const opc_Parent) :
    C_SdNdeUnoDataPoolListAddDeleteBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex,
                                               opc_DataPoolListsTreeWidget, orc_Indices,
                                               "Add List", opc_Parent)
 {
-   std::vector<C_OscNodeDataPoolList> c_OscContent;
-   std::vector<C_PuiSdNodeDataPoolList> c_UiContent;
+   QList<C_OscNodeDataPoolList> c_OscContent;
+   QList<C_PuiSdNodeDataPoolList> c_UiContent;
    const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(oru32_NodeIndex,
                                                                                                  oru32_DataPoolIndex);
    c_OscContent.resize(orc_Indices.size());

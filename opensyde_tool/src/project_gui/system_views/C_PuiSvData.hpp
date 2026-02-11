@@ -12,7 +12,7 @@
 #define C_PUISVDATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include <set>
 #include <QMap>
 #include <QString>
@@ -59,9 +59,9 @@ public:
    const C_PuiSvPc & GetPuiPcData(void) const;
    void SetPuiPcData(const C_PuiSvPc & orc_Value);
    bool GetNodeStatusDisplayedAsActive(const uint32_t ou32_NodeIndex) const;
-   const std::vector<C_PuiSvDashboard> & GetDashboards(void) const;
+   const QList<C_PuiSvDashboard> & GetDashboards(void) const;
    const C_PuiSvDashboard * GetDashboard(const uint32_t ou32_Index) const;
-   void SetDashboards(const std::vector<C_PuiSvDashboard> & orc_Value);
+   void SetDashboards(const QList<C_PuiSvDashboard> & orc_Value);
    uint16_t GetUpdateRateFast(void) const;
    void SetUpdateRateFast(const uint16_t ou16_Value);
    uint16_t GetUpdateRateMedium(void) const;
@@ -225,7 +225,7 @@ public:
 
 protected:
    //Protected access for tests
-   std::vector<C_PuiSvDashboard> mc_Dashboards; ///< Dashboard data
+   QList<C_PuiSvDashboard> mc_Dashboards; ///< Dashboard data
 
 private:
    C_PuiSvHashCacheHandling mc_ViewHashCache;
@@ -245,7 +245,7 @@ private:
    bool mq_IsServiceModeUpdateActive;
    bool mq_IsServiceModeDashboardActive;
 
-   std::vector<const QString *> m_GetExistingDashboardNames(void) const;
+   QList<const QString *> m_GetExistingDashboardNames(void) const;
    std::map<QString, bool> m_GetExistingDashboardNamesMap(void) const;
    void m_CheckAllReadRails(void);
 };

@@ -15,6 +15,7 @@
 #include <QWidget>
 #include <QButtonGroup>
 #include <QStringList>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_SdBueMessageRxEntry.hpp"
 #include "C_PuiSdNodeCanMessage.hpp"
@@ -43,14 +44,14 @@ public:
 
    void InitStaticNames(void) const;
    void AddNodes(const QStringList & orc_EntryNames, const QStringList & orc_EntryDatapoolNames,
-                 const std::vector<uint32_t> & orc_NodeIndexes, const std::vector<uint32_t> & orc_InterfaceIndexes,
-                 const std::vector<uint32_t> & orc_DatapoolIndexes,
-                 const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage::E_RxTimeoutMode> & orc_ReceiveTimeoutModes, const std::vector<uint32_t> & orc_ReceiveTimeoutValues, const bool oq_ReadOnly, const QString & orc_SpecificTooltip);
+                 const QList<uint32_t> & orc_NodeIndexes, const QList<uint32_t> & orc_InterfaceIndexes,
+                 const QList<uint32_t> & orc_DatapoolIndexes,
+                 const QList<stw::opensyde_gui_logic::C_PuiSdNodeCanMessage::E_RxTimeoutMode> & orc_ReceiveTimeoutModes, const QList<uint32_t> & orc_ReceiveTimeoutValues, const bool oq_ReadOnly, const QString & orc_SpecificTooltip);
    void SetLastKnownCycleTimeValue(const uint32_t ou32_Value);
    void SetRxTimeoutPreconditions(const bool oq_TxMethodOnEvent, const bool oq_DisableOptionPossible);
    void SetRxTimeoutConfigurationReadOnly(const bool oq_TimeoutConfigurationReadOnly);
-   void CheckNodes(const std::vector<uint32_t> & orc_NodeIndexes, const std::vector<uint32_t> & orc_InterfaceIndexes,
-                   const std::vector<uint32_t> & orc_DatapoolIndexes) const;
+   void CheckNodes(const QList<uint32_t> & orc_NodeIndexes, const QList<uint32_t> & orc_InterfaceIndexes,
+                   const QList<uint32_t> & orc_DatapoolIndexes) const;
    void CheckSpecificNode(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
                           const uint32_t ou32_DatapoolIndex, const bool oq_Checked) const;
    void SetModeSingleNode(const bool oq_ModeSingleNode);
@@ -74,7 +75,7 @@ Q_SIGNALS:
 
 private:
    Ui::C_SdBueMessageRxList * mpc_Ui;
-   std::vector<C_SdBueMessageRxEntry *> mc_Entries;
+   QList<C_SdBueMessageRxEntry *> mc_Entries;
    QButtonGroup mc_RadioGroup;
    uint32_t mu32_LastKnownCycleTimeValue;
    bool mq_TxMethodOnEvent;

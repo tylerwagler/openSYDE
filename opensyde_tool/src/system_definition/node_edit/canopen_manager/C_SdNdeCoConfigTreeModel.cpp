@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <QDir>
+#include <QList>
 
 #include "C_Uti.hpp"
 
@@ -117,7 +118,7 @@ void C_SdNdeCoConfigTreeModel::SetNodeId(const uint32_t ou32_NodeIndex)
    \retval   C_NO_ERR   Init successful
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdNdeCoConfigTreeModel::Init(const std::vector<uint32_t> & orc_ElementIndices)
+int32_t C_SdNdeCoConfigTreeModel::Init(const QList<uint32_t> & orc_ElementIndices)
 {
    Q_UNUSED(orc_ElementIndices)
    return C_NO_ERR;
@@ -131,8 +132,8 @@ int32_t C_SdNdeCoConfigTreeModel::Init(const std::vector<uint32_t> & orc_Element
 */
 //----------------------------------------------------------------------------------------------------------------------
 //lint -e{9175} intentionally no functionality in this implementation
-void C_SdNdeCoConfigTreeModel::GetCheckedItems(std::vector<uint32_t> & orc_ElementIndices,
-                                               std::vector<std::vector<uint32_t> > & orc_ChildIndicesPerElement) const
+void C_SdNdeCoConfigTreeModel::GetCheckedItems(QList<uint32_t> & orc_ElementIndices,
+                                               QList<QList<uint32_t> > & orc_ChildIndicesPerElement) const
 {
    Q_UNUSED(orc_ElementIndices)
    Q_UNUSED(orc_ChildIndicesPerElement)

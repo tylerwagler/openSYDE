@@ -277,12 +277,12 @@ bool C_PuiSdHandlerBusLogic::CheckBusConflict(const uint32_t ou32_BusIndex) cons
 {
    bool q_NameConflict;
    bool q_IdInvalid;
-   static QMap<std::vector<uint32_t>, bool> hc_PreviousResults;
+   static QMap<QList<uint32_t>, bool> hc_PreviousResults;
 
-   QMap<std::vector<uint32_t>, bool>::const_iterator c_It;
-   std::vector<uint32_t> c_Hashes;
-   std::vector<uint32_t> c_NodeIndexes;
-   std::vector<uint32_t> c_InterfaceIndexes;
+   QMap<QList<uint32_t>, bool>::const_iterator c_It;
+   QList<uint32_t> c_Hashes;
+   QList<uint32_t> c_NodeIndexes;
+   QList<uint32_t> c_InterfaceIndexes;
    bool q_Retval;
 
    //get all required hashes
@@ -302,7 +302,7 @@ bool C_PuiSdHandlerBusLogic::CheckBusConflict(const uint32_t ou32_BusIndex) cons
       bool q_NameEmpty;
 
       QStringList c_InvalidNodesForBitRate;
-      std::vector<C_OscCanProtocol::E_Type> c_InvalidProtocols;
+      QList<C_OscCanProtocol::E_Type> c_InvalidProtocols;
 
       //Do all checks
       if (this->CheckBusConflictDetailed(ou32_BusIndex, &q_NameConflict, &q_NameEmpty, &q_IdInvalid,
@@ -374,7 +374,7 @@ bool C_PuiSdHandlerBusLogic::CheckBusConflict(const uint32_t ou32_BusIndex) cons
 int32_t C_PuiSdHandlerBusLogic::CheckBusConflictDetailed(const uint32_t ou32_BusIndex, bool * const opq_NameConflict,
                                                          bool * const opq_NameEmpty, bool * const opq_IdInvalid,
                                                          QStringList * const opc_InvalidNodesForBitRate,
-                                                         std::vector<C_OscCanProtocol::E_Type> * const opc_InvalidProtocols)
+                                                         QList<C_OscCanProtocol::E_Type> * const opc_InvalidProtocols)
 const
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -386,8 +386,8 @@ const
       if ((opc_InvalidNodesForBitRate != NULL) ||
           (opc_InvalidProtocols != NULL))
       {
-         std::vector<uint32_t> c_ConnectedNodes;
-         std::vector<uint32_t> c_ConnectedInterfaces;
+         QList<uint32_t> c_ConnectedNodes;
+         QList<uint32_t> c_ConnectedInterfaces;
          uint32_t u32_NodeCounter;
 
          this->mc_CoreDefinition.GetNodeIndexesOfBus(ou32_BusIndex, c_ConnectedNodes, c_ConnectedInterfaces);
@@ -544,8 +544,8 @@ int32_t C_PuiSdHandlerBusLogic::SetAutomaticBusRoutingSettings(const uint32_t ou
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   std::vector<uint32_t> c_NodeIndexes;
-   std::vector<uint32_t> c_InterfaceIndexes;
+   QList<uint32_t> c_NodeIndexes;
+   QList<uint32_t> c_InterfaceIndexes;
 
    this->mc_CoreDefinition.GetNodeIndexesOfBus(ou32_BusIndex, c_NodeIndexes, c_InterfaceIndexes);
    Q_ASSERT(c_NodeIndexes.size() == c_InterfaceIndexes.size());
@@ -678,11 +678,11 @@ int32_t C_PuiSdHandlerBusLogic::SetAutomaticNodeInterfaceRoutingSettings(const u
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerBusLogic::AddConnection(const uint32_t ou32_NodeIndex, const uint8_t ou8_InterfaceNumber,
-                                           const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
+                                           const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
                                            const uint32_t ou32_BusIndex)
 {
    const C_OscSystemBus * const pc_Bus = this->GetOscBus(ou32_BusIndex);
-   const std::vector<uint32_t> c_Indices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
+   const QList<uint32_t> c_Indices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
 
    Q_ASSERT(c_Indices.size() == orc_Properties.size());
    if (c_Indices.size() == orc_Properties.size())
@@ -708,7 +708,7 @@ void C_PuiSdHandlerBusLogic::AddConnection(const uint32_t ou32_NodeIndex, const 
                   Q_ASSERT(orc_Properties[u32_ItIndex].c_Ip.size() == 4UL);
                   for (uint32_t u32_It = 0UL; u32_It < orc_Properties[u32_ItIndex].c_Ip.size(); ++u32_It)
                   {
-                     c_CurComInterface.c_Ip.au8_IpAddress[u32_It] = orc_Properties[u32_ItIndex].c_Ip[u32_It];
+                     c_CurComInterface.c_Ip.au8_IpAddress[u32_It] = static_cast<uint8_t>(orc_Properties[u32_ItIndex].c_Ip[u32_It]);
                   }
 
                   rc_Node.c_Properties.SetComInterface(c_CurComInterface);
@@ -742,7 +742,7 @@ void C_PuiSdHandlerBusLogic::AddConnection(const uint32_t ou32_NodeIndex, const 
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerBusLogic::RemoveConnection(const uint32_t ou32_NodeIndex, const C_PuiSdNodeConnectionId & orc_Id)
 {
-   const std::vector<uint32_t> c_Indices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
+   const QList<uint32_t> c_Indices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
 
    //Check size & consistency
    Q_ASSERT(this->mc_UiNodes.size() == this->mc_CoreDefinition.c_Nodes.size());
@@ -773,7 +773,7 @@ void C_PuiSdHandlerBusLogic::RemoveConnection(const uint32_t ou32_NodeIndex, con
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerBusLogic::ChangeConnection(const uint32_t ou32_NodeIndex, const C_PuiSdNodeConnectionId & orc_Id,
                                               const uint8_t ou8_NewInterface,
-                                              const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
+                                              const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
    //Copy is necessary as the value changes during function call
    const C_PuiSdNodeConnectionId c_OrgCopy = orc_Id;
@@ -803,12 +803,12 @@ void C_PuiSdHandlerBusLogic::ChangeConnection(const uint32_t ou32_NodeIndex, con
 void C_PuiSdHandlerBusLogic::ChangeCompleteConnection(const uint32_t ou32_NodeIndex,
                                                       const C_PuiSdNodeConnectionId & orc_PrevId,
                                                       const C_PuiSdNodeConnectionId & orc_NewId,
-                                                      const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties, const uint32_t & oru32_BusIndex,
+                                                      const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties, const uint32_t & oru32_BusIndex,
                                                       const bool oq_IncludeCanOpenSync)
 {
    //Copy is necessary as the value changes during function call
    const C_PuiSdNodeConnectionId c_PrevIdCopy = orc_PrevId;
-   const std::vector<uint32_t> c_Indices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
+   const QList<uint32_t> c_Indices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
 
    //Check size & consistency
    Q_ASSERT(c_Indices.size() == orc_Properties.size());
@@ -859,7 +859,7 @@ void C_PuiSdHandlerBusLogic::ChangeCompleteConnection(const uint32_t ou32_NodeIn
                Q_ASSERT(orc_Properties[u32_ItIndex].c_Ip.size() == 4UL);
                for (uint32_t u32_It = 0UL; u32_It < orc_Properties[u32_ItIndex].c_Ip.size(); ++u32_It)
                {
-                  rc_ComInterface.c_Ip.au8_IpAddress[u32_It] = orc_Properties[u32_ItIndex].c_Ip[u32_It];
+                  rc_ComInterface.c_Ip.au8_IpAddress[u32_It] = static_cast<uint8_t>(orc_Properties[u32_ItIndex].c_Ip[u32_It]);
                }
             }
          }
@@ -892,9 +892,9 @@ void C_PuiSdHandlerBusLogic::ChangeCompleteConnection(const uint32_t ou32_NodeIn
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerBusLogic::SetUiNodeConnections(const uint32_t ou32_NodeIndex,
-                                                  const std::vector<C_PuiSdNodeConnection> & orc_Connections)
+                                                  const QList<C_PuiSdNodeConnection> & orc_Connections)
 {
-   const std::vector<uint32_t> c_Indices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
+   const QList<uint32_t> c_Indices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
 
    for (uint32_t u32_ItIndex = 0UL; u32_ItIndex < c_Indices.size(); ++u32_ItIndex)
    {
@@ -918,7 +918,7 @@ void C_PuiSdHandlerBusLogic::SetUiNodeConnections(const uint32_t ou32_NodeIndex,
 void C_PuiSdHandlerBusLogic::SetUiNodeConnectionId(const uint32_t ou32_NodeIndex, const uint32_t ou32_ConnectionIndex,
                                                    const C_PuiSdNodeConnectionId & orc_Id)
 {
-   const std::vector<uint32_t> c_Indices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
+   const QList<uint32_t> c_Indices = this->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
 
    for (uint32_t u32_ItIndex = 0UL; u32_ItIndex < c_Indices.size(); ++u32_ItIndex)
    {
@@ -997,11 +997,11 @@ const C_OscNodeDataPool * C_PuiSdHandlerBusLogic::GetOscCanDataPool(const uint32
    Pointer to protocols    Pointers to communication datapools of node
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector< const C_OscNodeDataPool *> C_PuiSdHandlerBusLogic::GetOscCanDataPools(const uint32_t & oru32_NodeIndex,
+QList< const C_OscNodeDataPool *> C_PuiSdHandlerBusLogic::GetOscCanDataPools(const uint32_t & oru32_NodeIndex,
                                                                                    const C_OscCanProtocol::E_Type & ore_ComType)
 const
 {
-   std::vector<const C_OscNodeDataPool *> c_Return;
+   QList<const C_OscNodeDataPool *> c_Return;
 
    if (oru32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
@@ -1175,16 +1175,16 @@ const
    Pointer to protocols    Pointers to message containers
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<const C_OscCanMessageContainer *> C_PuiSdHandlerBusLogic::GetCanProtocolMessageContainers(
+QList<const C_OscCanMessageContainer *> C_PuiSdHandlerBusLogic::GetCanProtocolMessageContainers(
    const uint32_t & oru32_NodeIndex, const C_OscCanProtocol::E_Type & ore_ComType,
    const uint32_t & oru32_InterfaceIndex) const
 {
-   std::vector<const C_OscCanMessageContainer *> c_Retval;
+   QList<const C_OscCanMessageContainer *> c_Retval;
 
    if (oru32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       const C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[oru32_NodeIndex];
-      std::vector<const C_OscCanProtocol *> c_Protocols = rc_Node.GetCanProtocolsConst(ore_ComType);
+      QList<const C_OscCanProtocol *> c_Protocols = rc_Node.GetCanProtocolsConst(ore_ComType);
       uint32_t u32_Counter;
 
       for (u32_Counter = 0U; u32_Counter < c_Protocols.size(); ++u32_Counter)
@@ -1252,7 +1252,7 @@ const
 
    if (pc_MessageContainer != NULL)
    {
-      const std::vector<C_OscCanMessage> & rc_Messages = pc_MessageContainer->GetMessagesConst(
+      const QList<C_OscCanMessage> & rc_Messages = pc_MessageContainer->GetMessagesConst(
          orc_MessageId.q_MessageIsTx);
       if (orc_MessageId.u32_MessageIndex < rc_Messages.size())
       {
@@ -1280,8 +1280,8 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerBusLogic::GetCanMessageComplete(const C_OscCanMessageIdentificationIndices & orc_MessageId,
                                                       C_OscCanMessage & orc_Message,
-                                                      std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
-                                                      std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                                                      QList<C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
+                                                      QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
                                                       C_PuiSdNodeCanMessage & orc_UiMessage,
                                                       const bool oq_ChangeSignalIndicesToOutput) const
 {
@@ -1416,7 +1416,7 @@ const
       {
          const C_PuiSdNodeCanMessageContainer & rc_MessageContainer =
             pc_CanProtocol->c_ComMessages[orc_MessageId.u32_InterfaceIndex];
-         const std::vector<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessagesConst(
+         const QList<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessagesConst(
             orc_MessageId.q_MessageIsTx);
          if (orc_MessageId.u32_MessageIndex < rc_Messages.size())
          {
@@ -1629,7 +1629,7 @@ void C_PuiSdHandlerBusLogic::SetCanProtocolMessageContainerConnected(const uint3
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
       // get necessary datapool
-      std::vector<C_OscCanProtocol *> c_Protocols = rc_Node.GetCanProtocols(oe_ComType);
+      QList<C_OscCanProtocol *> c_Protocols = rc_Node.GetCanProtocols(oe_ComType);
       uint32_t u32_Counter;
 
       for (u32_Counter = 0; u32_Counter < c_Protocols.size(); ++u32_Counter)
@@ -1684,7 +1684,7 @@ int32_t C_PuiSdHandlerBusLogic::SetCanMessageProperties(const C_OscCanMessageIde
             orc_MessageId.q_MessageIsTx, orc_MessageId.u32_MessageIndex);
          if ((u32_SignalStartIndex + pc_Message->c_Signals.size()) <= pc_List->c_Elements.size())
          {
-            std::vector<C_OscNodeDataPoolListElement> c_Signals;
+            QList<C_OscNodeDataPoolListElement> c_Signals;
             C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[orc_MessageId.u32_NodeIndex];
             //Copy signals
             c_Signals.reserve(pc_Message->c_Signals.size());
@@ -1711,10 +1711,10 @@ int32_t C_PuiSdHandlerBusLogic::SetCanMessageProperties(const C_OscCanMessageIde
                   orc_MessageId.u32_DatapoolIndex, orc_MessageId.q_MessageIsTx);
                if (((pc_UiMessage != NULL) && (pc_UpdatedMessageContainer != NULL)) && (pc_UiDataPoolList != NULL))
                {
-                  const std::vector<C_OscCanMessage> & rc_Messages = pc_UpdatedMessageContainer->GetMessagesConst(
+                  const QList<C_OscCanMessage> & rc_Messages = pc_UpdatedMessageContainer->GetMessagesConst(
                      orq_NewMessageIsTx);
                   const C_PuiSdNodeCanMessage c_UiMessageCopy = *pc_UiMessage;
-                  std::vector<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
+                  QList<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
                   const C_OscCanMessageIdentificationIndices c_NewId(orc_MessageId.u32_NodeIndex,
                                                                      orc_MessageId.e_ComProtocol,
                                                                      orc_MessageId.u32_InterfaceIndex,
@@ -1790,7 +1790,7 @@ int32_t C_PuiSdHandlerBusLogic::SetUiCanMessage(const C_OscCanMessageIdentificat
       {
          C_PuiSdNodeCanMessageContainer & rc_MessageContainer =
             pc_UiProtocol->c_ComMessages[orc_MessageId.u32_InterfaceIndex];
-         std::vector<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
+         QList<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
             orc_MessageId.q_MessageIsTx);
          if (orc_MessageId.u32_MessageIndex < rc_Messages.size())
          {
@@ -1871,7 +1871,7 @@ int32_t C_PuiSdHandlerBusLogic::SetCanSignal(const C_OscCanMessageIdentification
          {
             const C_OscCanMessageContainer & rc_MessageContainer =
                pc_Protocol->c_ComMessages[orc_MessageId.u32_InterfaceIndex];
-            const std::vector<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessagesConst(
+            const QList<C_OscCanMessage> & rc_Messages = rc_MessageContainer.GetMessagesConst(
                orc_MessageId.q_MessageIsTx);
             if (orc_MessageId.u32_MessageIndex < rc_Messages.size())
             {
@@ -1917,7 +1917,7 @@ int32_t C_PuiSdHandlerBusLogic::SetCanSignal(const C_OscCanMessageIdentification
          {
             C_PuiSdNodeCanMessageContainer & rc_MessageContainer =
                pc_UiProtocol->c_ComMessages[orc_MessageId.u32_InterfaceIndex];
-            std::vector<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
+            QList<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
                orc_MessageId.q_MessageIsTx);
             if (orc_MessageId.u32_MessageIndex < rc_Messages.size())
             {
@@ -1995,8 +1995,8 @@ int32_t C_PuiSdHandlerBusLogic::AddCanMessage(const uint32_t & oru32_NodeIndex,
                                               const C_OscCanProtocol::E_Type & ore_ComType,
                                               const uint32_t & oru32_InterfaceIndex, const uint32_t ou32_DatapoolIndex,
                                               const bool & orq_MessageIsTx, const C_OscCanMessage & orc_Message,
-                                              const std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
-                                              const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                                              const QList<C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
+                                              const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
                                               const C_PuiSdNodeCanMessage & orc_UiMessage,
                                               const bool & orq_AutomatedPropertiesAdaption)
 {
@@ -2008,7 +2008,7 @@ int32_t C_PuiSdHandlerBusLogic::AddCanMessage(const uint32_t & oru32_NodeIndex,
 
    if (pc_MessageContainer != NULL)
    {
-      const std::vector<C_OscCanMessage> & rc_Messages = pc_MessageContainer->GetMessagesConst(orq_MessageIsTx);
+      const QList<C_OscCanMessage> & rc_Messages = pc_MessageContainer->GetMessagesConst(orq_MessageIsTx);
       const uint32_t u32_MessageIndex = rc_Messages.size();
       const C_OscCanMessageIdentificationIndices c_MessageId(oru32_NodeIndex, ore_ComType, oru32_InterfaceIndex,
                                                              ou32_DatapoolIndex,
@@ -2041,8 +2041,8 @@ int32_t C_PuiSdHandlerBusLogic::AddCanMessage(const uint32_t & oru32_NodeIndex,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerBusLogic::InsertCanMessage(const C_OscCanMessageIdentificationIndices & orc_MessageId,
                                                  const C_OscCanMessage & orc_Message,
-                                                 const std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
-                                                 const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons, const C_PuiSdNodeCanMessage & orc_UiMessage,
+                                                 const QList<C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
+                                                 const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons, const C_PuiSdNodeCanMessage & orc_UiMessage,
                                                  const bool & orq_AutomatedPropertiesAdaption)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -2291,7 +2291,7 @@ int32_t C_PuiSdHandlerBusLogic::InsertCanSignal(const C_OscCanMessageIdentificat
             {
                C_PuiSdNodeCanMessageContainer & rc_MessageContainer =
                   pc_UiProtocol->c_ComMessages[orc_MessageId.u32_InterfaceIndex];
-               std::vector<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
+               QList<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
                   orc_MessageId.q_MessageIsTx);
                if (orc_MessageId.u32_MessageIndex < rc_Messages.size())
                {
@@ -2442,7 +2442,7 @@ int32_t C_PuiSdHandlerBusLogic::DeleteCanSignal(const C_OscCanMessageIdentificat
             {
                C_PuiSdNodeCanMessageContainer & rc_MessageContainer =
                   pc_UiProtocol->c_ComMessages[orc_MessageId.u32_InterfaceIndex];
-               std::vector<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
+               QList<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
                   orc_MessageId.q_MessageIsTx);
                if (orc_MessageId.u32_MessageIndex < rc_Messages.size())
                {
@@ -2525,7 +2525,7 @@ void C_PuiSdHandlerBusLogic::ConvertElementIndexToSignalIndex(
       const C_OscCanMessageContainer * const pc_MessageContainer = this->GetCanProtocolMessageContainer(
          orc_NodeDatapoolListElementId.u32_NodeIndex, e_ComProtocol, u32_InterfaceIndex,
          orc_NodeDatapoolListElementId.u32_DataPoolIndex);
-      std::vector<C_OscCanMessage> c_Messages; // either tx messages or rx messages
+      QList<C_OscCanMessage> c_Messages; // either tx messages or rx messages
       bool q_IndexFound = false;
       Q_ASSERT(pc_MessageContainer != NULL);
 
@@ -2599,9 +2599,9 @@ int32_t C_PuiSdHandlerBusLogic::CheckMessageMatch(const C_OscCanMessageIdentific
                                               orc_MessageId2.u32_InterfaceIndex, orc_MessageId2.u32_DatapoolIndex);
       if ((pc_MessageContainer1 != NULL) && (pc_MessageContainer2 != NULL))
       {
-         const std::vector<C_OscCanMessage> & rc_Messages1 = pc_MessageContainer1->GetMessagesConst(
+         const QList<C_OscCanMessage> & rc_Messages1 = pc_MessageContainer1->GetMessagesConst(
             orc_MessageId1.q_MessageIsTx);
-         const std::vector<C_OscCanMessage> & rc_Messages2 = pc_MessageContainer2->GetMessagesConst(
+         const QList<C_OscCanMessage> & rc_Messages2 = pc_MessageContainer2->GetMessagesConst(
             orc_MessageId2.q_MessageIsTx);
          if ((orc_MessageId1.u32_MessageIndex < rc_Messages1.size()) &&
              (orc_MessageId2.u32_MessageIndex < rc_Messages2.size()))
@@ -2889,7 +2889,7 @@ void C_PuiSdHandlerBusLogic::m_GetExistingMessageNamesProtocol(const uint32_t & 
                                                                std::map<QString, bool> & orc_ExistingNames)
 const
 {
-   const std::vector<const C_OscCanMessageContainer *> c_Container = this->GetCanProtocolMessageContainers(
+   const QList<const C_OscCanMessageContainer *> c_Container = this->GetCanProtocolMessageContainers(
       oru32_NodeIndex, ore_ComType, oru32_InterfaceIndex);
    uint32_t u32_Counter;
 
@@ -2897,8 +2897,8 @@ const
    for (u32_Counter = 0U; u32_Counter < c_Container.size(); ++u32_Counter)
    {
       const C_OscCanMessageContainer * const pc_Container = c_Container[u32_Counter];
-      const std::vector<C_OscCanMessage> & rc_TxMessages = pc_Container->GetMessagesConst(true);
-      const std::vector<C_OscCanMessage> & rc_RxMessages = pc_Container->GetMessagesConst(false);
+      const QList<C_OscCanMessage> & rc_TxMessages = pc_Container->GetMessagesConst(true);
+      const QList<C_OscCanMessage> & rc_RxMessages = pc_Container->GetMessagesConst(false);
       //Tx
       for (uint32_t u32_ItMessage = 0; u32_ItMessage < rc_TxMessages.size(); ++u32_ItMessage)
       {
@@ -3083,7 +3083,7 @@ const C_PuiSdNodeDataPoolList * C_PuiSdHandlerBusLogic::m_GetUiCanDataPoolList(c
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerBusLogic::m_InsertUiCanMessage(const C_OscCanMessageIdentificationIndices & orc_MessageId,
-                                                     const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                                                     const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
                                                      const C_PuiSdNodeCanMessage & orc_UiMessage)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -3173,7 +3173,7 @@ int32_t C_PuiSdHandlerBusLogic::m_InsertUiCanMessage(const C_OscCanMessageIdenti
          {
             C_PuiSdNodeCanMessageContainer & rc_MessageContainer =
                pc_UiProtocol->c_ComMessages[orc_MessageId.u32_InterfaceIndex];
-            std::vector<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
+            QList<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
                orc_MessageId.q_MessageIsTx);
             if (orc_MessageId.u32_MessageIndex <= rc_Messages.size())
             {
@@ -3305,7 +3305,7 @@ int32_t C_PuiSdHandlerBusLogic::m_DeleteUiCanMessage(const C_OscCanMessageIdenti
          {
             C_PuiSdNodeCanMessageContainer & rc_MessageContainer =
                pc_UiProtocol->c_ComMessages[orc_MessageId.u32_InterfaceIndex];
-            std::vector<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
+            QList<C_PuiSdNodeCanMessage> & rc_Messages = rc_MessageContainer.GetMessages(
                orc_MessageId.q_MessageIsTx);
             if (orc_MessageId.u32_MessageIndex < rc_Messages.size())
             {

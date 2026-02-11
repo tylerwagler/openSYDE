@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QPointF>
+#include <QList>
 #include "C_SebUnoBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,9 +29,9 @@ class C_SebUnoTopBusConnectorMoveCommand :
    public C_SebUnoBaseCommand
 {
 public:
-   C_SebUnoTopBusConnectorMoveCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                                      const std::vector<QPointF> & orc_InitialPoints,
-                                      const std::vector<QPointF> & orc_FinalPoints,
+   C_SebUnoTopBusConnectorMoveCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
+                                      const QList<QPointF> & orc_InitialPoints,
+                                      const QList<QPointF> & orc_FinalPoints,
                                       QUndoCommand * const opc_Parent = NULL);
    C_SebUnoTopBusConnectorMoveCommand(const C_SebUnoTopBusConnectorMoveCommand * const opc_Prev = NULL,
                                       QUndoCommand * const opc_Parent = NULL);
@@ -39,8 +40,8 @@ public:
    void redo(void) override;
 
 private:
-   const std::vector<QPointF> mc_Initial;
-   const std::vector<QPointF> mc_Final;
+   const QList<QPointF> mc_Initial;
+   const QList<QPointF> mc_Final;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -34,7 +34,7 @@ using namespace stw::opensyde_gui_logic;
 const QStringList C_FlaUtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
     {"stw--opensyde_gui_elements--C_OgeTebMessageDetails",
      "stw--opensyde_gui--C_SyvDcConnectedNodeList"});
-const std::vector<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
+const QList<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
     C_FlaUtiStyleSheets::mhc_SCROLL_AREA_PROPERTIES(
         {C_FlaUtiStyleSheets::C_PropertyValueColorConfig(
             "", "background-color", static_cast<QColor>(Qt::transparent))});
@@ -48,7 +48,7 @@ const QStringList C_FlaUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
      "stw--opensyde_gui_elements--C_OgeTransparentScrollArea QScrollBar",
      "stw--opensyde_gui--C_SyvDcConnectedNodeList QScrollBar"});
 
-const std::vector<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
+const QList<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
     C_FlaUtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_SETTINGS_DARK_BLUE(
         {C_FlaUtiStyleSheets::C_PropertyValueColorConfig(
              "::handle:pressed", "background-color", mc_STYLE_GUIDE_COLOR_11),
@@ -68,7 +68,7 @@ const std::vector<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
          C_FlaUtiStyleSheets::C_PropertyValueColorConfig(
              "::handle:!hover", "border-color", mc_STYLE_GUIDE_COLOR_10)});
 
-const std::vector<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
+const QList<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
     C_FlaUtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_BRIGHT(
         {C_FlaUtiStyleSheets::C_PropertyValueColorConfig(
              ":vertical", "background-color",
@@ -104,7 +104,7 @@ const std::vector<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
 const QStringList C_FlaUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_DARK({
     // insert dark scroll bar here
 });
-const std::vector<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
+const QList<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
     C_FlaUtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_DARK(
         {C_FlaUtiStyleSheets::C_PropertyValueColorConfig(
              ":vertical", "background-color",
@@ -265,7 +265,7 @@ void C_FlaUtiStyleSheets::mh_AppendScrollBarStyleSheets(
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaUtiStyleSheets::mh_AppendScrollBarStyleSheet(
     const QStringList &orc_ScrollBarElements,
-    const std::vector<C_PropertyValueColorConfig> &orc_ScrollBarProperties,
+    const QList<C_PropertyValueColorConfig> &orc_ScrollBarProperties,
     QString &orc_Stylesheet) {
   if ((orc_ScrollBarElements.size() > 0) &&
       (orc_ScrollBarProperties.size() > 0)) {

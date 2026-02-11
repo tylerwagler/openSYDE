@@ -51,7 +51,7 @@ public:
    static bool h_IsSignalInMessage(const uint8_t ou8_Dlc, const stw::opensyde_core::C_OscCanSignal & orc_Signal);
 
    static void h_GetSignalValue(const uint8_t(&orau8_CanDb)[8], const stw::opensyde_core::C_OscCanSignal & orc_Signal,
-                                std::vector<uint8_t> & orc_DataPoolData,
+                                QByteArray & orc_DataPoolData,
                                 const C_OscNodeDataPoolContent::E_Type oe_ContentType);
 
    static void h_GetSignalValue(const uint8_t(&orau8_CanDb)[8], const stw::opensyde_core::C_OscCanSignal & orc_Signal,

@@ -52,7 +52,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_GiLiCanBus::C_GiLiCanBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                            C_GiTextElementBus * const opc_TextElementName, const bool oq_DoErrorCheck,
-                           const std::vector<QPointF> * const opc_Points, QGraphicsItem * const opc_Parent) :
+                           const QList<QPointF> * const opc_Points, QGraphicsItem * const opc_Parent) :
    C_GiLiBus(ors32_Index, oru64_Id, opc_TextElementName, oq_DoErrorCheck, opc_Points, false, opc_Parent)
 {
 }

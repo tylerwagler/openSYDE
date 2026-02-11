@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -194,7 +195,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
          const C_OscHalcConfigParameter * const pc_ParameterElement = m_GetParameterElement(orc_Index);
          if (pc_ParameterElement != NULL)
          {
-            const std::vector<std::pair<QString, C_OscNodeDataPoolContent> > & rc_EnumItems =
+            const QList<std::pair<QString, C_OscNodeDataPoolContent> > & rc_EnumItems =
                pc_ParameterElement->c_Value.GetEnumItems();
             uint32_t u32_Counter = 0;
 
@@ -213,7 +214,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                case C_OscHalcDefContent::eCT_ENUM:
                   c_Retval = "unknown";
 
-                  for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+                  for (QList<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
                           rc_EnumItems.begin(); c_It != rc_EnumItems.end(); ++c_It)
                   {
                      if (c_It->second == pc_ParameterElement->c_Value)
@@ -408,7 +409,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
    if ((data(orc_Index, os32_Role) != orc_Value) && (e_Col == eVALUE))
    {
       bool q_Tmp;
-      std::vector<uint32_t> c_LinkedChannels;
+      QList<uint32_t> c_LinkedChannels;
       if (C_PuiSdHandler::h_GetInstance()->CheckHalcDomainChannelLinked(this->mu32_NodeIndex, this->mu32_DomainIndex,
                                                                         this->mu32_ChannelIndex, this->mq_ChannelCase,
                                                                         q_Tmp, NULL, &c_LinkedChannels) == C_NO_ERR)
@@ -640,7 +641,7 @@ void C_SdNdeHalcConfigTreeModel::SetHalcChannelUseCase(const uint32_t ou32_Domai
 
    if (pc_Domain != NULL)
    {
-      const std::vector<C_OscHalcDefStruct> & rc_Parameters =
+      const QList<C_OscHalcDefStruct> & rc_Parameters =
          mq_ChannelCase ? pc_Domain->c_ChannelValues.c_Parameters : pc_Domain->c_DomainValues.c_Parameters;
 
       // create tree items for parameters and elements that are relevant for selected channel and use case resp. domain
@@ -711,7 +712,7 @@ void C_SdNdeHalcConfigTreeModel::Clear(void)
 {
    if (this->mpc_InvisibleRootItem != NULL)
    {
-      std::vector<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
+      QList<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
 
       this->beginResetModel();
 
@@ -900,7 +901,7 @@ bool C_SdNdeHalcConfigTreeModel::m_CheckAvailability(const C_OscHalcDefElement &
 
    if (this->mq_ChannelCase == true)
    {
-      std::vector<uint32_t>::const_iterator c_ItParamAvail;
+      QList<uint32_t>::const_iterator c_ItParamAvail;
       for (c_ItParamAvail = orc_Parameter.c_UseCaseAvailabilities.begin();
            c_ItParamAvail != orc_Parameter.c_UseCaseAvailabilities.end(); ++c_ItParamAvail)
       {
@@ -933,10 +934,10 @@ QStringList C_SdNdeHalcConfigTreeModel::mh_ConvertEnumsToStringList(const C_OscH
 {
    QStringList c_Return;
 
-   const std::vector<std::pair<QString,
+   const QList<std::pair<QString,
                                C_OscNodeDataPoolContent> > & rc_EnumItems = orc_Value.GetEnumItems();
 
-   for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+   for (QList<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
            rc_EnumItems.begin();
         c_It != rc_EnumItems.end(); ++c_It)
    {
@@ -976,7 +977,7 @@ QString C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToString(const C_OscHalcDe
    QString c_Display;
 
    QStringList c_Displays;
-   std::vector<bool> c_Values;
+   QList<bool> c_Values;
    orc_Value.GetBitmaskStatusValues(&c_Displays, &c_Values);
    if (c_Displays.size() == c_Values.size())
    {
@@ -1019,7 +1020,7 @@ QString C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToString(const C_OscHalcDe
 //----------------------------------------------------------------------------------------------------------------------
 QBitArray C_SdNdeHalcConfigTreeModel::mh_ConvertBitmasksToBitArray(const C_OscHalcDefContent & orc_Value)
 {
-   std::vector<bool> c_Values;
+   QList<bool> c_Values;
    QBitArray c_Retval;
    orc_Value.GetBitmaskStatusValues(NULL, &c_Values);
    c_Retval.resize(c_Values.size());

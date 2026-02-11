@@ -15,6 +15,7 @@
 #include <QPainter>
 #include <QEvent>
 #include <QHelpEvent>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "constants.hpp"
@@ -84,7 +85,7 @@ C_SdNdeDpViewUsageWidget::~C_SdNdeDpViewUsageWidget(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpViewUsageWidget::SetUsage(const uint32_t ou32_NodeIndex, const uint32_t ou32_MaximumSize,
-                                        const std::vector<C_PuiSdHandler::C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas,
+                                        const QList<C_PuiSdHandler::C_PuiSdHandlerNodeLogicNvmArea> & orc_Areas,
                                         uint32_t & oru32_Percentage, uint32_t & oru32_UsedNvmSize)
 {
    uint32_t u32_AreaCounter;
@@ -600,7 +601,7 @@ bool C_SdNdeDpViewUsageWidget::m_CheckForContainingDataPool(const uint32_t ou32_
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SdNdeDpViewUsageWidget::m_CheckForContainingDataPool(const uint32_t ou32_AreaIndex,
-                                                            const std::vector<uint32_t> & orc_DataPoolIndexes)
+                                                            const QList<uint32_t> & orc_DataPoolIndexes)
 {
    bool q_Return = false;
    uint32_t u32_DpIndexCounter;

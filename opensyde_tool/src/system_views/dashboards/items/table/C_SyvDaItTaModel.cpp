@@ -226,7 +226,7 @@ void C_SyvDaItTaModel::UpdateValue(void)
             C_PuiSvDbNodeDataPoolListElementId c_Id;
             if (pc_TableWidget->GetDataPoolElementIndex(u32_ItElement, c_Id) == C_NO_ERR)
             {
-               std::vector<float64_t> c_UnscaledValues;
+               QList<float64_t> c_UnscaledValues;
                QStringList c_ScaledDisplayValues;
                if ((pc_TableWidget->GetLastValueUnscaled(u32_ItElement, c_UnscaledValues,
                                                          c_ScaledDisplayValues) == C_NO_ERR) &&
@@ -327,7 +327,7 @@ void C_SyvDaItTaModel::UpdateTransparency(const uint32_t ou32_DataElementIndex, 
    \param[in]  orc_ItemIndices   Item indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItTaModel::GetUniqueRows(const QModelIndexList & orc_Indices, std::vector<uint32_t> & orc_ItemIndices) const
+void C_SyvDaItTaModel::GetUniqueRows(const QModelIndexList & orc_Indices, QList<uint32_t> & orc_ItemIndices) const
 {
    //Step 1: extract rows
    orc_ItemIndices.reserve(orc_Indices.count());
@@ -1019,7 +1019,7 @@ QVariant C_SyvDaItTaModel::data(const QModelIndex & orc_Index, const int32_t os3
 */
 //-----------------------------------------------------------------------------
 //lint -e{9175}  //intentionally no functionality in default implementation
-void C_SyvDaItTaModel::CopySelectedItems(const std::vector<uint32_t> & orc_SelectedIndices) const
+void C_SyvDaItTaModel::CopySelectedItems(const QList<uint32_t> & orc_SelectedIndices) const
 {
    //Copy paste not supported
    Q_UNUSED(orc_SelectedIndices)
@@ -1066,7 +1066,7 @@ uint32_t C_SyvDaItTaModel::AddItem(const QModelIndexList & orc_Indices,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItTaModel::RemoveItems(const QModelIndexList & orc_Indices,
-                                   std::vector<C_PuiSvDbNodeDataPoolListElementId> & orc_RemovedDataElements)
+                                   QList<C_PuiSvDbNodeDataPoolListElementId> & orc_RemovedDataElements)
 {
    this->mc_RemovedDataPoolElementIds.clear();
    this->DeleteSelectedItems(C_SyvDaItTaModel::mh_GetSelectedRows(orc_Indices));
@@ -1284,9 +1284,9 @@ uint32_t C_SyvDaItTaModel::m_AddNewItem(const uint32_t ou32_SelectedIndex)
    Indices of new items
 */
 //-----------------------------------------------------------------------------
-std::vector<uint32_t> C_SyvDaItTaModel::m_PasteItems(const uint32_t ou32_SelectedIndex)
+QList<uint32_t> C_SyvDaItTaModel::m_PasteItems(const uint32_t ou32_SelectedIndex)
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    //Paste not supported
    Q_UNUSED(ou32_SelectedIndex)
    return c_Retval;
@@ -1473,7 +1473,7 @@ C_PuiSvDbNodeDataElementConfig C_SyvDaItTaModel::mh_GetConfigForNewItem(
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_PuiSvDbNodeDataPoolListElementId C_SyvDaItTaModel::m_RemoveItem(const uint32_t ou32_Index,
-                                                                  std::vector<C_PuiSvDbNodeDataElementConfig> & orc_AdaptedItems)
+                                                                  QList<C_PuiSvDbNodeDataElementConfig> & orc_AdaptedItems)
 {
    C_PuiSvDbNodeDataPoolListElementId c_Retval;
    const C_PuiSvDbNodeDataPoolListElementId * const pc_CurId = this->GetDataPoolElementIndex(ou32_Index);
@@ -1625,9 +1625,9 @@ QString C_SyvDaItTaModel::m_GetValue(const uint32_t ou32_Index) const
    Unique row indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SyvDaItTaModel::mh_GetSelectedRows(const QModelIndexList & orc_Indices)
+QList<uint32_t> C_SyvDaItTaModel::mh_GetSelectedRows(const QModelIndexList & orc_Indices)
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    for (QModelIndexList::const_iterator c_It = orc_Indices.begin(); c_It != orc_Indices.end(); ++c_It)
    {
       c_Retval.push_back(c_It->row());
@@ -1701,7 +1701,7 @@ void C_SyvDaItTaModel::m_InitMinMaxAndNameForOneRow(const C_PuiSvDbNodeDataPoolL
    }
    else
    {
-      const std::vector<float64_t> c_Empty;
+      const QList<float64_t> c_Empty;
       //Fill up values with dummies
       this->mc_Names[ou32_Index] = orc_ElementId.GetInvalidNamePlaceholder();
       this->mc_Units[ou32_Index] = "";
@@ -1729,7 +1729,7 @@ void C_SyvDaItTaModel::m_InitValuesForOneRow(const C_PuiSvDbNodeDataPoolListElem
                                              const C_OscNodeDataPoolListElement & orc_OscElement,
                                              const uint32_t ou32_Index)
 {
-   std::vector<float64_t> c_Values;
+   QList<float64_t> c_Values;
    C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_OscElement.c_MinValue, c_Values);
    this->mc_UnscaledMinValues[ou32_Index] = c_Values;
    C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_OscElement.c_MaxValue, c_Values);
@@ -1772,7 +1772,7 @@ void C_SyvDaItTaModel::m_InitStartValueForOneRow(const C_PuiSvDbNodeDataElementC
 {
    C_OscNodeDataPoolContentUtil::E_ValueChangedTo e_FullyUsefulAndTotallyNecessaryVariable;
    C_OscNodeDataPoolContent c_Val = orc_OscElement.c_MinValue;
-   std::vector<float64_t> c_Values;
+   QList<float64_t> c_Values;
    QStringList c_Formatted;
    C_PuiSvDbDataElementDisplayFormatterConfig c_Formatter;
    //Formatter
@@ -1815,9 +1815,9 @@ void C_SyvDaItTaModel::m_AddAndInitMinMaxAndNameForItem(const uint32_t ou32_Inde
          this->mc_ScaledDisplayDataValues.insert(this->mc_ScaledDisplayDataValues.begin() + ou32_Index,
                                                  QStringList());
          this->mc_UnscaledLastDataValues.insert(this->mc_UnscaledLastDataValues.begin() + ou32_Index,
-                                                std::vector<float64_t>());
-         this->mc_UnscaledMaxValues.insert(this->mc_UnscaledMaxValues.begin() + ou32_Index, std::vector<float64_t>());
-         this->mc_UnscaledMinValues.insert(this->mc_UnscaledMinValues.begin() + ou32_Index, std::vector<float64_t>());
+                                                QList<float64_t>());
+         this->mc_UnscaledMaxValues.insert(this->mc_UnscaledMaxValues.begin() + ou32_Index, QList<float64_t>());
+         this->mc_UnscaledMinValues.insert(this->mc_UnscaledMinValues.begin() + ou32_Index, QList<float64_t>());
          this->mc_ArrayItemIndex.insert(this->mc_ArrayItemIndex.begin() + ou32_Index, 0UL);
          this->mc_Names.insert(this->mc_Names.begin() + ou32_Index, "");
          this->mc_Units.insert(this->mc_Units.begin() + ou32_Index, "");

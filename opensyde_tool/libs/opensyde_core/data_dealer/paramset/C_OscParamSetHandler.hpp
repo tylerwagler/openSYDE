@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 #include <QString>
 #include "C_OscXmlParser.hpp"
@@ -55,7 +56,7 @@ public:
 
 private:
    C_OscParamSetInterpretedData mc_Data;
-   std::vector<C_OscParamSetRawNode> mc_RawNodes;
+   QList<C_OscParamSetRawNode> mc_RawNodes;
 
    int32_t m_LoadNodes(C_OscXmlParser & orc_XmlParser, const bool oq_InterpretedDataOnly,
                        bool & orq_MissingOptionalContent);

@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include "C_OscCanMessage.hpp"
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
 
@@ -33,8 +34,8 @@ public:
    void CalcHash(uint32_t & oru32_HashValue) const;
    void ReCalcDataElementIndices(void);
    uint32_t GetMessageSignalDataStartIndex(const bool & orq_IsTx, const uint32_t & oru32_MessageIndex) const;
-   const std::vector<C_OscCanMessage> & GetMessagesConst(const bool & orq_IsTx) const;
-   std::vector<C_OscCanMessage> & GetMessages(const bool & orq_IsTx);
+   const QList<C_OscCanMessage> & GetMessagesConst(const bool & orq_IsTx) const;
+   QList<C_OscCanMessage> & GetMessages(const bool & orq_IsTx);
    void CheckMessageLocalError(const C_OscNodeDataPoolList * const opc_List, const uint32_t & oru32_MessageIndex,
                                const bool & orq_IsTx, bool * const opq_NameConflict, bool * const opq_NameInvalid,
                                bool * const opq_DelayTimeInvalid, bool * const opq_IdConflict,
@@ -46,8 +47,8 @@ public:
    bool CheckLocalError(const C_OscNodeDataPoolList & orc_ListTx, const C_OscNodeDataPoolList & orc_ListRx,
                         const uint32_t ou32_CanMessageValidSignalsDlcOffset, const bool oq_CanMessageSignalGapsValid,
                         const bool oq_ByteAlignmentRequired, const bool oq_SignalsRequired,
-                        const bool oq_CanOpenPdoSyncValid, std::vector<uint32_t> * const opc_InvalidTxMessages = NULL,
-                        std::vector<uint32_t> * const opc_InvalidRxMessages = NULL) const;
+                        const bool oq_CanOpenPdoSyncValid, QList<uint32_t> * const opc_InvalidTxMessages = NULL,
+                        QList<uint32_t> * const opc_InvalidRxMessages = NULL) const;
 
    bool ContainsAtLeastOneMessage(void) const;
    bool ContainsAtLeastOneActiveMessage(void) const;
@@ -55,17 +56,17 @@ public:
    void HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
                                std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 
-   std::vector<C_OscCanMessage> c_TxMessages; ///< Transmitted message types
-   std::vector<C_OscCanMessage> c_RxMessages; ///< Received message types
+   QList<C_OscCanMessage> c_TxMessages; ///< Transmitted message types
+   QList<C_OscCanMessage> c_RxMessages; ///< Received message types
    bool q_IsComProtocolUsedByInterface;       ///< Flag whether com protocol is used on the corresponding CAN
    ///< interface.
    ///< Default is false
 
 private:
-   std::vector<uint32_t> m_GetHashes(const C_OscNodeDataPoolList & orc_ListTx,
+   QList<uint32_t> m_GetHashes(const C_OscNodeDataPoolList & orc_ListTx,
                                      const C_OscNodeDataPoolList & orc_ListRx) const;
 
-   static bool mh_CheckMinSignalErrorPerVector(const std::vector<C_OscCanMessage> & orc_Messages);
+   static bool mh_CheckMinSignalErrorPerVector(const QList<C_OscCanMessage> & orc_Messages);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

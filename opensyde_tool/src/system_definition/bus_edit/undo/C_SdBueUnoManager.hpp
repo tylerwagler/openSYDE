@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QTreeWidget>
 #include <QStringList>
+#include <QList>
 #include "C_UtiUndoStack.hpp"
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
 #include "C_OscCanOpenManagerMappableSignal.hpp"
@@ -46,28 +47,28 @@ public:
                      C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
                      QTreeWidget * const opc_MessageTreeWidget);
    void DoPasteMessages(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
-                        const std::vector<stw::opensyde_core::C_OscCanMessage> & orc_Messages, const std::
-                        vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> > & orc_OscSignalCommons,
-                        const std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons,
-                        const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages,
+                        const QList<stw::opensyde_core::C_OscCanMessage> & orc_Messages,
+                        const QList<QList<stw::opensyde_core::C_OscNodeDataPoolListElement> > & orc_OscSignalCommons,
+                        const QList<QList<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons,
+                        const QList<C_PuiSdNodeCanMessage> & orc_UiMessages,
                         const QList<QStringList> & orc_OwnerNodeName,
-                        const std::vector<std::vector<uint32_t> > & orc_OwnerNodeInterfaceIndex,
-                        const std::vector<std::vector<uint32_t> > & orc_OwnerNodeDatapoolIndex,
-                        const std::vector<std::vector<bool> > & orc_OwnerIsTxFlag,
+                        const QList<QList<uint32_t> > & orc_OwnerNodeInterfaceIndex,
+                        const QList<QList<uint32_t> > & orc_OwnerNodeDatapoolIndex,
+                        const QList<QList<bool> > & orc_OwnerIsTxFlag,
                         C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
                         QTreeWidget * const opc_MessageTreeWidget,
-                        std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_NewIds);
+                        QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_NewIds);
    void DoPasteSignals(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                        const uint32_t ou32_SignalIndex,
-                       const std::vector<stw::opensyde_core::C_OscCanSignal> & orc_Signals,
-                       const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
-                       const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
-                       const std::vector<C_PuiSdNodeCanSignal> & orc_UiSignals,
+                       const QList<stw::opensyde_core::C_OscCanSignal> & orc_Signals,
+                       const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
+                       const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                       const QList<C_PuiSdNodeCanSignal> & orc_UiSignals,
                        C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
                        QTreeWidget * const opc_MessageTreeWidget,
                        const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType);
    void DoDeleteMessages(
-      const std::vector<std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_SortedAscendingMessageGroups, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager, QTreeWidget * const opc_MessageTreeWidget);
+      const QList<QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> > & orc_SortedAscendingMessageGroups, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager, QTreeWidget * const opc_MessageTreeWidget);
    void DoAddSignal(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                     const uint32_t ou32_SignalIndex, const uint16_t ou16_StartBit,
                     const stw::opensyde_core::C_OscCanSignal::E_MultiplexerType oe_MultiplexerType,
@@ -76,17 +77,17 @@ public:
                     QTreeWidget * const opc_MessageTreeWidget);
    void DoAddCoSignal(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
                       const uint32_t ou32_SignalIndex, const uint16_t ou16_StartBit,
-                      const std::vector<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> & orc_NewSignalInfo,
+                      const QList<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> & orc_NewSignalInfo,
                       C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
                       QTreeWidget * const opc_MessageTreeWidget);
-   void DoDeleteSignals(const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
-                        const std::vector<uint32_t> & orc_SignalIndex,
+   void DoDeleteSignals(const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_MessageId,
+                        const QList<uint32_t> & orc_SignalIndex,
                         C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
                         QTreeWidget * const opc_MessageTreeWidget);
-   void DoMoveSignal(const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_SourceMessageIds,
-                     const std::vector<uint32_t> & orc_SourceSignalIndices,
-                     const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_TargetMessageIds,
-                     const std::vector<uint32_t> & orc_TargetSignalIndices,
+   void DoMoveSignal(const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_SourceMessageIds,
+                     const QList<uint32_t> & orc_SourceSignalIndices,
+                     const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_TargetMessageIds,
+                     const QList<uint32_t> & orc_TargetSignalIndices,
                      C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
                      QTreeWidget * const opc_MessageTreeWidget);
    void CommitDelete(void);
@@ -101,13 +102,13 @@ private:
    static void mh_HandleLastOwnersValidation(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
       const QList<QStringList> & orc_LastOwnerNodeName,
-      const std::vector<std::vector<uint32_t> > & orc_LastOwnerNodeInterfaceIndex,
-      const std::vector<std::vector<uint32_t> > & orc_LastOwnerNodeDatapoolIndex,
-      const std::vector<std::vector<bool> > & orc_LastOwnerIsTxFlag,
+      const QList<QList<uint32_t> > & orc_LastOwnerNodeInterfaceIndex,
+      const QList<QList<uint32_t> > & orc_LastOwnerNodeDatapoolIndex,
+      const QList<QList<bool> > & orc_LastOwnerIsTxFlag,
       QList<QStringList> & orc_NewOwnerNodeName,
-      std::vector<std::vector<uint32_t> > & orc_NewOwnerNodeInterfaceIndex,
-      std::vector<std::vector<uint32_t> > & orc_NewOwnerNodeDatapoolIndex,
-      std::vector<std::vector<bool> > & orc_NewOwnerIsTxFlag);
+      QList<QList<uint32_t> > & orc_NewOwnerNodeInterfaceIndex,
+      QList<QList<uint32_t> > & orc_NewOwnerNodeDatapoolIndex,
+      QList<QList<bool> > & orc_NewOwnerIsTxFlag);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

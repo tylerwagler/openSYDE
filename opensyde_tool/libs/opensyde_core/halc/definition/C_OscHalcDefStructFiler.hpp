@@ -9,6 +9,7 @@
 #define C_OSCHALCDEFSTRUCTFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include "C_OscHalcDefStruct.hpp"
 #include "C_OscXmlParser.hpp"
@@ -26,15 +27,15 @@ namespace opensyde_core
 class C_OscHalcDefStructFiler
 {
 public:
-   static int32_t h_LoadStructs(std::vector<C_OscHalcDefStruct> & orc_Structs, C_OscXmlParserBase & orc_XmlParser,
-                                const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+   static int32_t h_LoadStructs(QList<C_OscHalcDefStruct> & orc_Structs, C_OscXmlParserBase & orc_XmlParser,
+                                const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                 const QString & orc_CurrentNodeName,
                                 const QString & orc_SectionNodeName,
                                 const QString & orc_GroupNodeName,
                                 const QString & orc_SingleNodeName, const bool oq_RequireId,
                                 const bool oq_RequireSection, const uint32_t ou32_DomainNameLength);
-   static int32_t h_SaveStructs(const std::vector<C_OscHalcDefStruct> & orc_Structs,
-                                const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+   static int32_t h_SaveStructs(const QList<C_OscHalcDefStruct> & orc_Structs,
+                                const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                 C_OscXmlParserBase & orc_XmlParser, const QString & orc_CurrentNodeName,
                                 const QString & orc_SectionNodeName,
                                 const QString & orc_GroupNodeName,
@@ -69,29 +70,29 @@ private:
    C_OscHalcDefStructFiler(void);
 
    static int32_t mh_LoadStruct(C_OscHalcDefStruct & orc_Struct, C_OscXmlParserBase & orc_XmlParser,
-                                const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                 const QString & orc_GroupNodeName,
                                 const QString & orc_SingleNodeName, const bool oq_RequireId,
                                 const uint32_t ou32_DomainNameLength);
    static int32_t mh_SaveStruct(const C_OscHalcDefStruct & orc_Struct,
-                                const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                 C_OscXmlParserBase & orc_XmlParser, const QString & orc_GroupNodeName,
                                 const QString & orc_SingleNodeName);
    static int32_t mh_LoadDataElement(C_OscHalcDefElement & orc_Element, C_OscXmlParserBase & orc_XmlParser,
-                                     const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
-                                     const std::vector<uint32_t> & orc_BaseAvailability,
+                                     const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                     const QList<uint32_t> & orc_BaseAvailability,
                                      const QString & orc_SingleNodeName, const bool oq_RequireId,
                                      const uint32_t ou32_DomainNameLength);
    static int32_t mh_SaveDataElement(const C_OscHalcDefElement & orc_Element,
-                                     const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                     const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                      C_OscXmlParserBase & orc_XmlParser,
                                      const QString & orc_SingleNodeName);
-   static int32_t mh_ParseAttributeAvailability(std::vector<uint32_t> & orc_Availability,
+   static int32_t mh_ParseAttributeAvailability(QList<uint32_t> & orc_Availability,
                                                 const QString & orc_AttributeContent,
-                                                const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+                                                const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                                 const C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_GetAvailabilityString(const std::vector<uint32_t> & orc_Availability,
-                                           const std::vector<C_OscHalcDefChannelUseCase> & orc_UseCases,
+   static int32_t mh_GetAvailabilityString(const QList<uint32_t> & orc_Availability,
+                                           const QList<C_OscHalcDefChannelUseCase> & orc_UseCases,
                                            QString & orc_Output);
    static void mh_SetMaxValForType(const QString & orc_TypeStr, C_OscNodeDataPoolContent & orc_Content);
    static void mh_SetMinValForType(const QString & orc_TypeStr, C_OscNodeDataPoolContent & orc_Content);

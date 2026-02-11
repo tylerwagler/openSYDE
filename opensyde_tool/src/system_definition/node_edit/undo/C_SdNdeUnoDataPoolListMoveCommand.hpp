@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include "stwtypes.hpp"
+#include <QList>
 #include "C_SdNdeUnoDataPoolListAddDeleteBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -31,19 +32,19 @@ class C_SdNdeUnoDataPoolListMoveCommand :
 public:
    C_SdNdeUnoDataPoolListMoveCommand(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                      stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                                     const std::vector<uint32_t> & orc_SourceRows,
-                                     const std::vector<uint32_t> & orc_TargetRows,
+                                     const QList<uint32_t> & orc_SourceRows,
+                                     const QList<uint32_t> & orc_TargetRows,
                                      QUndoCommand * const opc_Parent = NULL);
    void redo(void) override;
    void undo(void) override;
 
 private:
-   std::vector<uint32_t> mc_SourceRows;
-   std::vector<uint32_t> mc_TargetRows;
+   QList<uint32_t> mc_SourceRows;
+   QList<uint32_t> mc_TargetRows;
 
-   void m_DoMoveRows(const std::vector<uint32_t> & orc_SelectedIndices,
-                     const std::vector<uint32_t> & orc_TargetIndices);
-   void m_MoveItems(const std::vector<uint32_t> & orc_ContiguousIndices, const uint32_t ou32_TargetIndex) const;
+   void m_DoMoveRows(const QList<uint32_t> & orc_SelectedIndices,
+                     const QList<uint32_t> & orc_TargetIndices);
+   void m_MoveItems(const QList<uint32_t> & orc_ContiguousIndices, const uint32_t ou32_TargetIndex) const;
    void m_MoveItem(const uint32_t ou32_SourceIndex, const uint32_t ou32_TargetIndex) const;
 };
 

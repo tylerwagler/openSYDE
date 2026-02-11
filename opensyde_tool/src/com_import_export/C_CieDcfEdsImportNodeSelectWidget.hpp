@@ -10,6 +10,7 @@
 #define C_CIEDCFEDSIMPORTNODESELECTWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include "stwtypes.hpp"
 #include "C_CieDcfEdsImportNodeSelectWidget.hpp"
@@ -52,8 +53,8 @@ private:
    C_CieDcfEdsImportNodeSelectWidget & operator =(const C_CieDcfEdsImportNodeSelectWidget &) &;
    C_CieDcfEdsImportNodeSelectWidget(const C_CieDcfEdsImportNodeSelectWidget &);
 
-   std::vector<uint32_t> mc_NodeIndexes;
-   std::vector<uint32_t> mc_InterfaceIndexes;
+   QList<uint32_t> mc_NodeIndexes;
+   QList<uint32_t> mc_InterfaceIndexes;
 
    void m_OkClicked(void) const;
    void m_CancelClicked(void) const;

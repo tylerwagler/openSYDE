@@ -121,7 +121,7 @@ C_SdBueSignalTableView::~C_SdBueSignalTableView(void)
    \param[in]  orc_Values  Values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueSignalTableView::LoadUserSettings(const std::vector<int32_t> & orc_Values)
+void C_SdBueSignalTableView::LoadUserSettings(const QList<int32_t> & orc_Values)
 {
    if (this->m_SetColumnWidths(orc_Values) == false)
    {
@@ -135,7 +135,7 @@ void C_SdBueSignalTableView::LoadUserSettings(const std::vector<int32_t> & orc_V
    \param[in,out]  orc_Values    Values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueSignalTableView::SaveUserSettings(std::vector<int32_t> & orc_Values) const
+void C_SdBueSignalTableView::SaveUserSettings(QList<int32_t> & orc_Values) const
 {
    const std::map<C_SdBueSignalTableModel::E_Columns,
                   uint32_t> c_DefaultColumnWidths = C_SdBueSignalTableView::mh_GetDefaultColumnWidths();

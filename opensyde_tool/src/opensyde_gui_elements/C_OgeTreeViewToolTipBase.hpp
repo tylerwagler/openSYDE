@@ -15,6 +15,7 @@
 #include <QTreeView>
 #include <QStyledItemDelegate>
 #include <QProxyStyle>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OgeTreeToolTipBase.hpp"
 
@@ -57,8 +58,8 @@ protected:
    bool m_BaseEvent(QEvent * const opc_Event) override;
    QModelIndex m_IndexAtGlobalPos(const QPoint & orc_GlobalPos) const override;
 
-   std::vector<int32_t> m_GetColumnWidths(void) const;
-   bool m_SetColumnWidths(const std::vector<int32_t> & orc_ColumnWidths);
+   QList<int32_t> m_GetColumnWidths(void) const;
+   bool m_SetColumnWidths(const QList<int32_t> & orc_ColumnWidths);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

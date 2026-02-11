@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "C_UsHandler.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -281,7 +282,7 @@ void C_SdNdeDalTabContentWidget::m_ShowOverview(const bool oq_Show)
 
    if (pc_Node != NULL)
    {
-      std::vector<std::tuple<uint32_t, uint32_t, uint32_t> > c_AllLoggerJobElementsLocationCount;
+      QList<std::tuple<uint32_t, uint32_t, uint32_t> > c_AllLoggerJobElementsLocationCount;
       for (uint32_t u32_It = 0UL; u32_It < pc_Node->c_DataLoggerJobs.size(); ++u32_It)
       {
          uint32_t u32_LogJobIndex = u32_It;
@@ -289,7 +290,7 @@ void C_SdNdeDalTabContentWidget::m_ShowOverview(const bool oq_Show)
          uint32_t u32_RemoteElements = 0;
          this->mpc_Ui->pc_LogJobDataSelectionWidget->SetNodeDataLoggerJob(this->mu32_NodeIndex, u32_LogJobIndex);
          this->mpc_Ui->pc_LogJobDataSelectionWidget->GetElementLocationCount(u32_LocalElements, u32_RemoteElements);
-         c_AllLoggerJobElementsLocationCount.emplace_back(u32_LogJobIndex, u32_LocalElements, u32_RemoteElements);
+         c_AllLoggerJobElementsLocationCount.emplaceBack(u32_LogJobIndex, u32_LocalElements, u32_RemoteElements);
       }
       this->mpc_Ui->pc_LogJobEditWidget->setVisible(!oq_Show);
       this->mpc_Ui->pc_LogJobsOverviewWidget->setVisible(oq_Show);

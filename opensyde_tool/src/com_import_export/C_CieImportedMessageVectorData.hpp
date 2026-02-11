@@ -9,6 +9,7 @@
 #define C_CIEIMPORTEDMESSAGEVECTORDATA_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include <QStringList>
 
@@ -30,23 +31,23 @@ class C_CieImportedMessageVectorData
 {
 public:
    C_CieImportedMessageVectorData();
-   C_CieImportedMessageVectorData(const std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData,
-                                  const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData,
-                                  const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessageData,
-                                  const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
+   C_CieImportedMessageVectorData(const QList<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData,
+                                  const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData,
+                                  const QList<C_PuiSdNodeCanMessage> & orc_UiMessageData,
+                                  const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
                                   const QStringList * const opc_WarningMessagesPerMessage = NULL);
 
-   std::vector<stw::opensyde_core::C_OscCanMessage> c_OscMessageData;
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> c_OscSignalData;
-   std::vector<C_PuiSdNodeCanMessage> c_UiMessageData;
-   std::vector<C_PuiSdNodeDataPoolListElement> c_UiSignalData;
+   QList<stw::opensyde_core::C_OscCanMessage> c_OscMessageData;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElement> c_OscSignalData;
+   QList<C_PuiSdNodeCanMessage> c_UiMessageData;
+   QList<C_PuiSdNodeDataPoolListElement> c_UiSignalData;
    QStringList c_WarningMessagesPerMessage;
 
    void Clear(void);
-   void WriteBack(std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData,
-                  std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData,
-                  std::vector<C_PuiSdNodeCanMessage> & orc_UiMessageData,
-                  std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
+   void WriteBack(QList<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData,
+                  QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData,
+                  QList<C_PuiSdNodeCanMessage> & orc_UiMessageData,
+                  QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
                   QStringList & orc_WarningMessagesPerMessage) const;
 };
 

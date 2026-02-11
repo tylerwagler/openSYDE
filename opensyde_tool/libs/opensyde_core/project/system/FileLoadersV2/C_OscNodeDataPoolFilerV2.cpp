@@ -549,7 +549,7 @@ void C_OscNodeDataPoolFilerV2::h_SaveDataPoolElement(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolLists(
     const uint16_t ou16_XmlFormatVersion,
-    std::vector<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
+    QList<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_CurNodeList;
@@ -611,7 +611,7 @@ int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolLists(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolFilerV2::h_SaveDataPoolLists(
-    const std::vector<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
+    const QList<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32(
       "length", static_cast<uint32_t>(orc_NodeDataPoolLists.size()));
@@ -643,7 +643,7 @@ void C_OscNodeDataPoolFilerV2::h_SaveDataPoolLists(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolListElements(
     const uint16_t ou16_XmlFormatVersion,
-    std::vector<C_OscNodeDataPoolListElement> &orc_NodeDataPoolListElements,
+    QList<C_OscNodeDataPoolListElement> &orc_NodeDataPoolListElements,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_CurNodeDataElement;
@@ -704,7 +704,7 @@ int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolListElements(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolFilerV2::h_SaveDataPoolListElements(
-    const std::vector<C_OscNodeDataPoolListElement>
+    const QList<C_OscNodeDataPoolListElement>
         &orc_NodeDataPoolListElements,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32(
@@ -745,7 +745,7 @@ void C_OscNodeDataPoolFilerV2::h_SaveDataPoolListElements(
 int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolListElementDataSetValues(
     const uint16_t ou16_XmlFormatVersion,
     const C_OscNodeDataPoolContent &orc_ContType,
-    std::vector<C_OscNodeDataPoolContent>
+    QList<C_OscNodeDataPoolContent>
         &orc_NodeDataPoolListElementDataSetValues,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
@@ -794,7 +794,7 @@ int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolListElementDataSetValues(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolFilerV2::h_SaveDataPoolListElementDataSetValues(
-    const std::vector<C_OscNodeDataPoolContent>
+    const QList<C_OscNodeDataPoolContent>
         &orc_NodeDataPoolListElementDataSetValues,
     C_OscXmlParserBase &orc_XmlParser) {
   // Data set values
@@ -825,7 +825,7 @@ void C_OscNodeDataPoolFilerV2::h_SaveDataPoolListElementDataSetValues(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolListDataSets(
-    std::vector<C_OscNodeDataPoolDataSet> &orc_NodeDataPoolListDataSets,
+    QList<C_OscNodeDataPoolDataSet> &orc_NodeDataPoolListDataSets,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_CurNodeDataSet = orc_XmlParser.SelectNodeChild("data-set");
@@ -876,7 +876,7 @@ int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolListDataSets(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolFilerV2::h_SaveDataPoolListDataSets(
-    const std::vector<C_OscNodeDataPoolDataSet> &orc_NodeDataPoolListDataSets,
+    const QList<C_OscNodeDataPoolDataSet> &orc_NodeDataPoolListDataSets,
     C_OscXmlParserBase &orc_XmlParser) {
   for (uint32_t u32_ItDataSet = 0;
        u32_ItDataSet < orc_NodeDataPoolListDataSets.size(); ++u32_ItDataSet) {

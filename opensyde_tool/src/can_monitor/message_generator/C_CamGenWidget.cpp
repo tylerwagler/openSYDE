@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for configuring and showing the CAN message generation (implementation)
@@ -145,7 +145,7 @@ void C_CamGenWidget::TriggerSignalReload(void) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamGenWidget::RemoveMessagesForFile(const QString & orc_File,
-                                           const std::vector<uint32_t> * const opc_Indices) const
+                                           const QList<uint32_t> * const opc_Indices) const
 {
    this->mpc_Ui->pc_WidgetMessages->RemoveMessagesForFile(orc_File, opc_Indices);
 }

@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QList>
 #include "C_OscDataLoggerDataElementReference.hpp"
 #include "C_OgeContextMenu.hpp"
 
@@ -65,7 +66,7 @@ private:
 
    uint32_t mu32_NodeIndex;
    uint32_t mu32_DataLoggerJobIndex;
-   std::vector<stw::opensyde_core::C_OscDataLoggerDataElementReference> mc_DataElements;
+   QList<stw::opensyde_core::C_OscDataLoggerDataElementReference> mc_DataElements;
 
    //Avoid call
    C_SdNdeDalLogJobDataSelectionWidget(const C_SdNdeDalLogJobDataSelectionWidget &);

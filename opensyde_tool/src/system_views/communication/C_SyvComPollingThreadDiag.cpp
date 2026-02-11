@@ -121,7 +121,7 @@ void C_SyvComPollingThreadDiag::m_SetRunParams(const C_SyvComPollingThreadDiag::
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComPollingThreadDiag::m_SetRunParams(const C_SyvComPollingThreadDiag::E_Service oe_Service,
                                                C_SyvComDataDealer & orc_Dealer,
-                                               const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds)
+                                               const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds)
 {
    me_Service = oe_Service;
    mpc_Dealer = &orc_Dealer;
@@ -397,7 +397,7 @@ int32_t C_SyvComPollingThreadDiag::StartNvmReadList(C_SyvComDataDealer & orc_Dea
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComPollingThreadDiag::StartNvmSafeWriteChangedValues(C_SyvComDataDealer & orc_Dealer,
-                                                                  const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds)
+                                                                  const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -427,7 +427,7 @@ int32_t C_SyvComPollingThreadDiag::StartNvmSafeWriteChangedValues(C_SyvComDataDe
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComPollingThreadDiag::GetNvmSafeWriteChangedValuesOutput(
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedElements) const
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedElements) const
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -604,7 +604,7 @@ int32_t C_SyvComPollingThreadDiag::GetNvmNotifyOfChangesOutput(bool & orq_Applic
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComPollingThreadDiag::StartNvmSafeReadParameterValues(C_SyvComDataDealer & orc_Dealer,
-                                                                   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds)
+                                                                   const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds)
 {
    int32_t s32_Return = C_NO_ERR;
 

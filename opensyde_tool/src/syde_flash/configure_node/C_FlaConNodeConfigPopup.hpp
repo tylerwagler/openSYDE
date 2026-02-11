@@ -9,6 +9,7 @@
 #define C_FLACONNODECONFIGPOPUP_H
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include <QTimer>
 
@@ -75,7 +76,7 @@ private:
    void m_OnCancel(void);
    void m_MonitorSequence();
    void m_FinishConfig(const int32_t os32_SequenceResult);
-   void m_DeviceInfoRead(const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
+   void m_DeviceInfoRead(const QList<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
                          const bool oq_SecurityFeatureUsed);
    void m_EnableUi(const bool oq_Enabled);
    QString m_GetErrorAsString(const int32_t os32_SequenceResult);

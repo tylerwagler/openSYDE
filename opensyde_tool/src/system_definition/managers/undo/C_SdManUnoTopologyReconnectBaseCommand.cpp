@@ -48,12 +48,12 @@ using namespace std;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyReconnectBaseCommand::C_SdManUnoTopologyReconnectBaseCommand(QGraphicsScene * const opc_Scene,
-                                                                               const std::vector<uint64_t> & orc_Ids,
+                                                                               const QList<uint64_t> & orc_Ids,
                                                                                const uint64_t & oru64_StartingItemId,
                                                                                const uint64_t & oru64_LastItemId,
                                                                                const QPointF & orc_ConnectionPos,
                                                                                const int32_t & ors32_Interface,
-                                                                               const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties, const QString & orc_Description,
+                                                                               const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties, const QString & orc_Description,
                                                                                QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, orc_Description, opc_Parent),
    mu64_StartingItemId(oru64_StartingItemId),
@@ -107,7 +107,7 @@ C_GiLiBusConnector * C_SdManUnoTopologyReconnectBaseCommand::m_GetBusConnector(v
 {
    C_GiLiBusConnector * pc_Retval = NULL;
 
-   const vector<QGraphicsItem *> c_Items = m_GetSceneItems();
+   const QList<QGraphicsItem *> c_Items = m_GetSceneItems();
 
    if (c_Items.size() > 0)
    {

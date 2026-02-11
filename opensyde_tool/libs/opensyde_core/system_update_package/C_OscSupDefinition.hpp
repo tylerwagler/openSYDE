@@ -9,6 +9,7 @@
 #define C_OSCSUPDEFINITION_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscSupNodeDefinition.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,7 +29,7 @@ public:
    //lint -sem(stw::opensyde_core::C_OscSupDefinition::Initialize,initializer)
    void Initialize(void);
 
-   std::vector<C_OscSupNodeDefinition> c_Nodes;
+   QList<C_OscSupNodeDefinition> c_Nodes;
    uint32_t u32_ActiveBusIndex;
 };
 

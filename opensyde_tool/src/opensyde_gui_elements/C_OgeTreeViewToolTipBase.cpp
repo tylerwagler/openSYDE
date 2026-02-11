@@ -285,9 +285,9 @@ QModelIndex C_OgeTreeViewToolTipBase::m_IndexAtGlobalPos(const QPoint & orc_Glob
    column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_OgeTreeViewToolTipBase::m_GetColumnWidths() const
+QList<int32_t> C_OgeTreeViewToolTipBase::m_GetColumnWidths() const
 {
-   std::vector<int32_t> c_ColumnWidths;
+   QList<int32_t> c_ColumnWidths;
    c_ColumnWidths.reserve(this->model()->columnCount());
    for (int32_t s32_ItColumn = 0; s32_ItColumn < this->model()->columnCount(); ++s32_ItColumn)
    {
@@ -305,7 +305,7 @@ std::vector<int32_t> C_OgeTreeViewToolTipBase::m_GetColumnWidths() const
    \retval   false   column widths invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OgeTreeViewToolTipBase::m_SetColumnWidths(const std::vector<int32_t> & orc_ColumnWidths)
+bool C_OgeTreeViewToolTipBase::m_SetColumnWidths(const QList<int32_t> & orc_ColumnWidths)
 {
    bool q_Retval = false;
 

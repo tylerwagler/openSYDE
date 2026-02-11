@@ -29,7 +29,7 @@ class C_SebUnoSetupStyleCommand :
    public C_SebUnoBaseCommand
 {
 public:
-   C_SebUnoSetupStyleCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SebUnoSetupStyleCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                              const bool oq_DarkMode, QUndoCommand * const opc_Parent = NULL);
    ~C_SebUnoSetupStyleCommand(void) override;
    void InitPrevious(void);
@@ -43,7 +43,7 @@ protected:
 
    virtual void m_Restore(const QMap<uint64_t, C_PuiBsTemporaryDataId> & orc_MapIdToTypeAndIndex,
                           const C_PuiBsElements * const opc_Snapshot);
-   virtual void m_CreateMapAndSaveState(const std::vector<QGraphicsItem *> & orc_Items, QMap<uint64_t,
+   virtual void m_CreateMapAndSaveState(const QList<QGraphicsItem *> & orc_Items, QMap<uint64_t,
                                                                                              C_PuiBsTemporaryDataId> & orc_Map,
                                         C_PuiBsElements * const opc_Snapshot) const;
 

@@ -897,8 +897,8 @@ Qt::ItemFlags C_CamGenTableModel::flags(const QModelIndex &orc_Index) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamGenTableModel::CopySelectedItems(
-    const std::vector<uint32_t> &orc_SelectedIndices) const {
-  std::vector<C_CamProMessageData> c_Messages;
+    const QList<uint32_t> &orc_SelectedIndices) const {
+  QList<C_CamProMessageData> c_Messages;
   for (uint32_t u32_It = 0UL; u32_It < orc_SelectedIndices.size(); ++u32_It) {
     const C_CamProMessageData *const pc_Message =
         C_CamProHandler::h_GetInstance()->GetMessageConst(
@@ -1028,10 +1028,10 @@ int32_t C_CamGenTableModel::h_EnumToColumn(
    Index of new item
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_CamGenTableModel::AddSpecificNewItems(
-    const std::vector<uint32_t> &orc_SelectedIndex,
-    const std::vector<C_CamProMessageData> &orc_Messages) {
-  std::vector<uint32_t> c_Retval;
+QList<uint32_t> C_CamGenTableModel::AddSpecificNewItems(
+    const QList<uint32_t> &orc_SelectedIndex,
+    const QList<C_CamProMessageData> &orc_Messages) {
+  QList<uint32_t> c_Retval;
   c_Retval =
       m_AddNewMessages(m_GetLastSelectedIndex(orc_SelectedIndex), orc_Messages);
   Q_EMIT(this->SigItemCountChanged(this->m_GetSizeItems()));
@@ -1087,8 +1087,8 @@ QString C_CamGenTableModel::UpdateDataForAutoProtocol(
 uint32_t C_CamGenTableModel::m_AddNewItem(const uint32_t ou32_SelectedIndex) {
   uint32_t u32_Retval;
 
-  std::vector<uint32_t> c_Items;
-  std::vector<C_CamProMessageData> c_Messages;
+  QList<uint32_t> c_Items;
+  QList<C_CamProMessageData> c_Messages;
   C_CamProMessageData c_NewMessage;
 
   // Initial name
@@ -1114,10 +1114,10 @@ uint32_t C_CamGenTableModel::m_AddNewItem(const uint32_t ou32_SelectedIndex) {
    Indices of new items
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t>
+QList<uint32_t>
 C_CamGenTableModel::m_PasteItems(const uint32_t ou32_SelectedIndex) {
-  std::vector<uint32_t> c_Retval;
-  std::vector<C_CamProMessageData> c_Messages;
+  QList<uint32_t> c_Retval;
+  QList<C_CamProMessageData> c_Messages;
   if (C_CamProClipBoardHelper::h_LoadMessages(c_Messages) == C_NO_ERR) {
     c_Retval = m_AddNewMessages(ou32_SelectedIndex, c_Messages);
   }
@@ -1174,12 +1174,12 @@ void C_CamGenTableModel::m_MoveItem(const uint32_t ou32_SourceIndex,
    Indices of new items
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_CamGenTableModel::m_AddNewMessages(
+QList<uint32_t> C_CamGenTableModel::m_AddNewMessages(
     const uint32_t ou32_SelectedIndex,
-    const std::vector<C_CamProMessageData> &orc_Data) {
+    const QList<C_CamProMessageData> &orc_Data) {
   uint32_t u32_Index;
 
-  std::vector<uint32_t> c_Retval;
+  QList<uint32_t> c_Retval;
 
   if (ou32_SelectedIndex <
       C_CamProHandler::h_GetInstance()->GetMessages().size()) {

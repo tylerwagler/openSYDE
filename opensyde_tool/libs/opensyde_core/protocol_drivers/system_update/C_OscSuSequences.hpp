@@ -18,6 +18,7 @@
 #include <QString>
 #include <QStringList>
 #include <vector>
+#include <QList>
 
 #include "C_OscComFlashloaderInformation.hpp"
 #include "C_OscComSequencesBase.hpp"
@@ -47,7 +48,7 @@ public:
   class C_OsyDeviceInformation {
   public:
     QString c_DeviceName; ///< name of device
-    std::vector<C_OscProtocolDriverOsy::C_FlashBlockInfo>
+    QList<C_OscProtocolDriverOsy::C_FlashBlockInfo>
         c_Applications; ///< list of applications present on the
                         // device
     C_OscComFlashloaderInformation
@@ -271,26 +272,26 @@ public:
   virtual ~C_OscSuSequences(void);
 
   static int32_t
-  h_CreateTemporaryFolder(const std::vector<C_OscNode> &orc_Nodes,
-                          const std::vector<uint8_t> &orc_ActiveNodes,
+  h_CreateTemporaryFolder(const QList<C_OscNode> &orc_Nodes,
+                          const QByteArray &orc_ActiveNodes,
                           const QString &orc_TargetPath,
-                          std::vector<C_DoFlash> &orc_ApplicationsToWrite,
+                          QList<C_DoFlash> &orc_ApplicationsToWrite,
                           QString *const opc_ErrorPath = NULL);
   static void h_CheckForChangedApplications(
-      const std::vector<C_ApplicationProperties> &orc_ClientSideApplications,
-      const std::vector<C_ApplicationProperties> &orc_ServerSideApplications,
-      std::vector<uint8_t> &orc_ApplicationsPresentOnServer);
+      const QList<C_ApplicationProperties> &orc_ClientSideApplications,
+      const QList<C_ApplicationProperties> &orc_ServerSideApplications,
+      QByteArray &orc_ApplicationsPresentOnServer);
 
   int32_t ActivateFlashloader(const bool oq_FailOnFirstError = true);
   int32_t ReadDeviceInformation(const bool oq_FailOnFirstError = true);
-  int32_t UpdateSystem(const std::vector<C_DoFlash> &orc_ApplicationsToWrite,
-                       const std::vector<uint32_t> &orc_NodesOrder);
+  int32_t UpdateSystem(const QList<C_DoFlash> &orc_ApplicationsToWrite,
+                       const QList<uint32_t> &orc_NodesOrder);
   int32_t ResetSystem(void);
 
   virtual int32_t GetConnectStates(
-      std::vector<C_OscSuSequencesNodeConnectStates> &orc_ConnectStatesNodes)
+      QList<C_OscSuSequencesNodeConnectStates> &orc_ConnectStatesNodes)
       const;
-  virtual int32_t GetUpdateStates(std::vector<C_OscSuSequencesNodeUpdateStates>
+  virtual int32_t GetUpdateStates(QList<C_OscSuSequencesNodeUpdateStates>
                                       &orc_UpdateStatesNodes) const;
 
   static void h_FillDoFlashWithPemStates(
@@ -340,15 +341,15 @@ private:
 
   C_OscProtocolDriverOsyNode mc_CurrentNode; // node we currently deal with
 
-  std::vector<C_OscSuSequencesNodeConnectStates> mc_ConnectStatesNodes;
-  std::vector<C_OscSuSequencesNodeUpdateStates> mc_UpdateStatesNodes;
+  QList<C_OscSuSequencesNodeConnectStates> mc_ConnectStatesNodes;
+  QList<C_OscSuSequencesNodeUpdateStates> mc_UpdateStatesNodes;
 
   int32_t m_FlashNodeOpenSydeHex(
       const QStringList &orc_FilesToFlash,
       const QStringList &orc_OtherAcceptedDeviceNames,
       const uint32_t ou32_RequestDownloadTimeout,
       const uint32_t ou32_TransferDataTimeout, bool &orq_SetProgrammingMode,
-      std::vector<C_OscSuSequencesNodeHexFileStates> &orc_StateHexFiles);
+      QList<C_OscSuSequencesNodeHexFileStates> &orc_StateHexFiles);
   int32_t m_FlashOneFileOpenSydeHex(
       const stw::hex_file::C_HexDataDump &orc_HexDataDump,
       const uint32_t ou32_SignatureAddress,
@@ -361,7 +362,7 @@ private:
       const uint32_t ou32_TransferDataTimeout,
       const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
       bool &orq_SetProgrammingMode,
-      std::vector<C_OscSuSequencesNodeOtherFileStates> &orc_StateOtherFiles);
+      QList<C_OscSuSequencesNodeOtherFileStates> &orc_StateOtherFiles);
   int32_t m_FlashOneFileOpenSydeFile(
       const QString &orc_FileToFlash,
       const uint32_t ou32_RequestDownloadTimeout,
@@ -372,7 +373,7 @@ private:
       const QStringList &orc_FilesToWrite,
       const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
       const bool oq_SetProgrammingMode,
-      std::vector<C_OscSuSequencesNodePsiFileStates> &orc_StatePsiFiles);
+      QList<C_OscSuSequencesNodePsiFileStates> &orc_StatePsiFiles);
   int32_t m_WritePemOpenSydeFile(
       const QString &orc_FileToWrite,
       const C_OscProtocolDriverOsy::C_ListOfFeatures &orc_ProtocolFeatures,
@@ -388,7 +389,7 @@ private:
 
   int32_t m_FlashNodeXfl(
       const QStringList &orc_FilesToFlash,
-      std::vector<C_OscSuSequencesNodeStwFlHexFileStates> &orc_StateHexFiles);
+      QList<C_OscSuSequencesNodeStwFlHexFileStates> &orc_StateHexFiles);
 
   int32_t m_ReadDeviceInformationOpenSyde(
       const uint8_t ou8_ProgressToReport, const uint32_t ou32_NodeIndex,

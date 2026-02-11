@@ -60,7 +60,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_ViewIndex,
                                                            uint32_t & oru32_ActiveBusIndex,
-                                                           std::vector<uint8_t> & orc_ActiveNodes,
+                                                           QByteArray & orc_ActiveNodes,
                                                            stw::can::C_Can ** const oppc_CanDispatcher,
                                                            C_OscIpDispatcherWinSock ** const oppc_IpDispatcher,
                                                            const bool oq_InitCan,
@@ -101,6 +101,7 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                    ou32_ViewIndex,
                    orc_ActiveNodes) == C_NO_ERR)
             {
+
                if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
                {
                   QFile c_File;

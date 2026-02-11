@@ -15,6 +15,7 @@
 
 #include <map>
 #include <algorithm>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -270,8 +271,8 @@ bool C_OscSystemDefinition::CheckInterfaceIsAvailable(const uint32_t ou32_NodeIn
          //Check com interface has bus connected
          if (rc_CurComInterface.GetBusConnected() == true)
          {
-            std::vector<uint32_t> c_NodeIndices;
-            std::vector<uint32_t> c_InterfaceIndices;
+            QList<uint32_t> c_NodeIndices;
+            QList<uint32_t> c_InterfaceIndices;
             this->GetNodeIndexesOfBus(rc_CurComInterface.u32_BusIndex, c_NodeIndices, c_InterfaceIndices);
             if (c_NodeIndices.size() == c_InterfaceIndices.size())
             {
@@ -319,7 +320,7 @@ bool C_OscSystemDefinition::CheckInterfaceIsAvailable(const uint32_t ou32_NodeIn
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OscSystemDefinition::CheckIpAddressIsValid(const uint32_t ou32_NodeIndex, const uint32_t ou32_ComIndex,
-                                                  const std::vector<int32_t> & orc_Ip) const
+                                                  const QList<int32_t> & orc_Ip) const
 {
    bool q_Retval = true;
 
@@ -335,8 +336,8 @@ bool C_OscSystemDefinition::CheckIpAddressIsValid(const uint32_t ou32_NodeIndex,
          //Check com interface has bus connected
          if (rc_CurComInterface.GetBusConnected() == true)
          {
-            std::vector<uint32_t> c_NodeIndices;
-            std::vector<uint32_t> c_InterfaceIndices;
+            QList<uint32_t> c_NodeIndices;
+            QList<uint32_t> c_InterfaceIndices;
             this->GetNodeIndexesOfBus(rc_CurComInterface.u32_BusIndex, c_NodeIndices, c_InterfaceIndices);
             if (c_NodeIndices.size() == c_InterfaceIndices.size())
             {
@@ -482,11 +483,11 @@ int32_t C_OscSystemDefinition::CheckErrorNode(const uint32_t ou32_NodeIndex, boo
                                               bool * const opq_CoPdoCountInvalid, bool * const opq_CoNodeIdInvalid,
                                               bool * const opq_CoHearbeatTimeInvalid,
                                               const bool & orq_AllowComDataPoolException,
-                                              std::vector<uint32_t> * const opc_InvalidInterfaceIndices,
-                                              std::vector<uint32_t> * const opc_InvalidDataPoolIndices,
-                                              std::vector<uint32_t> * const opc_InvalidApplicationIndices,
-                                              std::vector<uint32_t> * const opc_InvalidDomainIndices,
-                                              std::vector<C_OscCanProtocol::E_Type> * const opc_InvalidProtocolTypes)
+                                              QList<uint32_t> * const opc_InvalidInterfaceIndices,
+                                              QList<uint32_t> * const opc_InvalidDataPoolIndices,
+                                              QList<uint32_t> * const opc_InvalidApplicationIndices,
+                                              QList<uint32_t> * const opc_InvalidDomainIndices,
+                                              QList<C_OscCanProtocol::E_Type> * const opc_InvalidProtocolTypes)
 const
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -585,7 +586,7 @@ const
             if (rc_CheckedNode.c_Properties.c_ComInterfaces[u32_ItComInterface].e_InterfaceType ==
                 C_OscSystemBus::eETHERNET)
             {
-               std::vector<int32_t> c_Ip;
+               QList<int32_t> c_Ip;
                c_Ip.reserve(4U);
                c_Ip.push_back(static_cast<int32_t>(rc_CheckedNode.c_Properties.c_ComInterfaces[u32_ItComInterface].c_Ip.
                                                    au8_IpAddress[0]));
@@ -626,7 +627,7 @@ const
          bool q_DataPoolTooFewListsOrElementsError;
          bool q_DataPoolTooManyListsOrElementsError;
          bool q_ResultError = false;
-         static std::map<std::vector<uint32_t>, bool> hc_PreviousCommChecks;
+         static std::map<QList<uint32_t>, bool> hc_PreviousCommChecks;
          static std::map<uint32_t, bool> hc_PreviousCommonChecks;
 
          for (u32_Counter = 0U;
@@ -648,8 +649,8 @@ const
                {
                   //Get Hash for all relevant data
                   const uint32_t u32_ProtocolHash = this->m_GetRelatedProtocolHash(ou32_NodeIndex, u32_Counter);
-                  std::map<std::vector<uint32_t>, bool>::const_iterator c_It;
-                  std::vector<uint32_t> c_Hashes;
+                  std::map<QList<uint32_t>, bool>::const_iterator c_It;
+                  QList<uint32_t> c_Hashes;
                   c_Hashes.push_back(u32_Hash);
                   c_Hashes.push_back(u32_ProtocolHash);
 
@@ -1031,8 +1032,8 @@ int32_t C_OscSystemDefinition::CheckErrorBus(const uint32_t ou32_BusIndex, bool 
    }
    if ((opq_DataPoolsInvalid != NULL) && (s32_Retval == C_NO_ERR))
    {
-      std::vector<uint32_t> c_NodeIndexes;
-      std::vector<uint32_t> c_InterfaceIndexes;
+      QList<uint32_t> c_NodeIndexes;
+      QList<uint32_t> c_InterfaceIndexes;
       *opq_DataPoolsInvalid = false;
       this->GetNodeIndexesOfBus(ou32_BusIndex, c_NodeIndexes, c_InterfaceIndexes);
       if (c_NodeIndexes.size() == c_InterfaceIndexes.size())
@@ -1211,8 +1212,8 @@ const
 
    if (ou32_BusIndex < this->c_Buses.size())
    {
-      std::vector<uint32_t> c_NodeIndices;
-      std::vector<uint32_t> c_InterfaceIndices;
+      QList<uint32_t> c_NodeIndices;
+      QList<uint32_t> c_InterfaceIndices;
       //Get all connected nodes
       GetNodeIndexesOfBus(ou32_BusIndex, c_NodeIndices, c_InterfaceIndices);
       orq_Valid = true;
@@ -1283,8 +1284,8 @@ const
 
    if (ou32_BusIndex < this->c_Buses.size())
    {
-      std::vector<uint32_t> c_NodeIndices;
-      std::vector<uint32_t> c_InterfaceIndices;
+      QList<uint32_t> c_NodeIndices;
+      QList<uint32_t> c_InterfaceIndices;
       //Get all connected nodes
       GetNodeIndexesOfBus(ou32_BusIndex, c_NodeIndices, c_InterfaceIndices);
       orq_Valid = true;
@@ -1394,9 +1395,9 @@ int32_t C_OscSystemDefinition::CheckMessageMatch(const C_OscCanMessageIdentifica
                      pc_Protocol1->c_ComMessages[orc_MessageId1.u32_InterfaceIndex];
                   const C_OscCanMessageContainer & rc_MessageContainer2 =
                      pc_Protocol2->c_ComMessages[orc_MessageId2.u32_InterfaceIndex];
-                  const std::vector<C_OscCanMessage> & rc_Messages1 = rc_MessageContainer1.GetMessagesConst(
+                  const QList<C_OscCanMessage> & rc_Messages1 = rc_MessageContainer1.GetMessagesConst(
                      orc_MessageId1.q_MessageIsTx);
-                  const std::vector<C_OscCanMessage> & rc_Messages2 = rc_MessageContainer2.GetMessagesConst(
+                  const QList<C_OscCanMessage> & rc_Messages2 = rc_MessageContainer2.GetMessagesConst(
                      orc_MessageId2.q_MessageIsTx);
                   if ((orc_MessageId1.u32_MessageIndex < rc_Messages1.size()) &&
                       (orc_MessageId2.u32_MessageIndex < rc_Messages2.size()))
@@ -1591,8 +1592,8 @@ void C_OscSystemDefinition::ApplyNameMaxCharLimit(const uint32_t ou32_NameMaxCha
    \param[out]  orc_InterfaceIndexes   Vector with all node interface ids which are connected to the bus
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinition::GetNodeIndexesOfBus(const uint32_t ou32_BusIndex, std::vector<uint32_t> & orc_NodeIndexes,
-                                                std::vector<uint32_t> & orc_InterfaceIndexes) const
+void C_OscSystemDefinition::GetNodeIndexesOfBus(const uint32_t ou32_BusIndex, QList<uint32_t> & orc_NodeIndexes,
+                                                QList<uint32_t> & orc_InterfaceIndexes) const
 {
    m_GetNodeAndComDpIndexesOfBus(ou32_BusIndex, NULL, orc_NodeIndexes, orc_InterfaceIndexes, NULL);
 }
@@ -1608,9 +1609,9 @@ void C_OscSystemDefinition::GetNodeIndexesOfBus(const uint32_t ou32_BusIndex, st
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinition::GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusIndex,
-                                                        std::vector<uint32_t> & orc_NodeIndexes,
-                                                        std::vector<uint32_t> & orc_InterfaceIndexes,
-                                                        std::vector<uint32_t> & orc_DatapoolIndexes) const
+                                                        QList<uint32_t> & orc_NodeIndexes,
+                                                        QList<uint32_t> & orc_InterfaceIndexes,
+                                                        QList<uint32_t> & orc_DatapoolIndexes) const
 {
    m_GetNodeAndComDpIndexesOfBus(ou32_BusIndex, NULL, orc_NodeIndexes, orc_InterfaceIndexes,
                                  &orc_DatapoolIndexes);
@@ -1629,9 +1630,9 @@ void C_OscSystemDefinition::GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusI
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinition::GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusIndex,
                                                         const C_OscCanProtocol::E_Type & ore_ComProtocol,
-                                                        std::vector<uint32_t> & orc_NodeIndexes,
-                                                        std::vector<uint32_t> & orc_InterfaceIndexes,
-                                                        std::vector<uint32_t> & orc_DatapoolIndexes) const
+                                                        QList<uint32_t> & orc_NodeIndexes,
+                                                        QList<uint32_t> & orc_InterfaceIndexes,
+                                                        QList<uint32_t> & orc_DatapoolIndexes) const
 {
    m_GetNodeAndComDpIndexesOfBus(ou32_BusIndex, &ore_ComProtocol, orc_NodeIndexes, orc_InterfaceIndexes,
                                  &orc_DatapoolIndexes);
@@ -1679,7 +1680,7 @@ void C_OscSystemDefinition::AddNode(C_OscNode & orc_Node, const QString & orc_Su
    \param[in]      orc_MainDeviceName  Main device name (empty if none)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinition::AddNodeSquad(std::vector<C_OscNode> & orc_Nodes,
+void C_OscSystemDefinition::AddNodeSquad(QList<C_OscNode> & orc_Nodes,
                                          const QStringList & orc_SubDeviceNames,
                                          const QString & orc_MainDeviceName)
 {
@@ -1726,7 +1727,7 @@ int32_t C_OscSystemDefinition::DeleteNode(const uint32_t ou32_NodeIndex)
 
       int32_t s32_NodeIndexToDeleteCounter;
 
-      std::vector<uint32_t> c_AllNodeIndexToRemove;
+      QList<uint32_t> c_AllNodeIndexToRemove;
       const int32_t s32_ReturnSquadNode = this->GetNodeSquadIndexWithNodeIndex(
          ou32_NodeIndex,
          u32_SquadNodeIndexToDelete);
@@ -1918,9 +1919,9 @@ uint32_t C_OscSystemDefinition::m_GetRelatedProtocolHash(const uint32_t ou32_Nod
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinition::m_GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusIndex,
                                                           const C_OscCanProtocol::E_Type * const ope_ComProtocol,
-                                                          std::vector<uint32_t> & orc_NodeIndexes,
-                                                          std::vector<uint32_t> & orc_InterfaceIndexes,
-                                                          std::vector<uint32_t> * const opc_DatapoolIndexes) const
+                                                          QList<uint32_t> & orc_NodeIndexes,
+                                                          QList<uint32_t> & orc_InterfaceIndexes,
+                                                          QList<uint32_t> * const opc_DatapoolIndexes) const
 {
    uint32_t u32_NodeIndex;
    uint32_t u32_ComInterfaces;

@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoLeDataPoolListElementAddCommand.hpp"
@@ -45,15 +46,15 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeUnoLeDataPoolListElementAddCommand::C_SdNdeUnoLeDataPoolListElementAddCommand(const uint32_t & oru32_NodeIndex,
                                                                                      const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex, C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                                                                     const std::vector<uint32_t> & orc_Indices,
+                                                                                     const QList<uint32_t> & orc_Indices,
                                                                                      QUndoCommand * const opc_Parent) :
    C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex, oru32_DataPoolListIndex,
                                                        opc_DataPoolListModelViewManager,
                                                        orc_Indices,
                                                        "Add List element", opc_Parent)
 {
-   std::vector<C_OscNodeDataPoolListElement> c_OscContent;
-   std::vector<C_PuiSdNodeDataPoolListElement> c_UiContent;
+   QList<C_OscNodeDataPoolListElement> c_OscContent;
+   QList<C_PuiSdNodeDataPoolListElement> c_UiContent;
    const C_OscNodeDataPool * const pc_DataPool = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(oru32_NodeIndex,
                                                                                                  oru32_DataPoolIndex);
    c_OscContent.resize(orc_Indices.size());

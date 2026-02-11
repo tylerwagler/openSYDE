@@ -50,7 +50,7 @@ const float64_t C_GiBiArrow::mhf64_SHAPE_OFFSET_FACTOR = 4.0;
    \param[in,out] opc_Parent Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiBiArrow::C_GiBiArrow(const uint64_t & oru64_Id, const std::vector<QPointF> * const opc_Points,
+C_GiBiArrow::C_GiBiArrow(const uint64_t & oru64_Id, const QList<QPointF> * const opc_Points,
                          QGraphicsItem * const opc_Parent) :
    C_GiLiLineGroup(opc_Points, false, opc_Parent),
    C_GiUnique(oru64_Id),

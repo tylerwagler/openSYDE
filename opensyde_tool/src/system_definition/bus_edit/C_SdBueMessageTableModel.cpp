@@ -719,7 +719,7 @@ int32_t C_SdBueMessageTableModel::ConvertRowToMessage(const int32_t & ors32_Row,
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SdBueMessageTableModel::m_CreateNodeName(const C_OscCanMessageIdentificationIndices & orc_CurMatchingId,
-                                                   const std::vector<C_OscCanMessageIdentificationIndices> & orc_AllMatchingIds)
+                                                   const QList<C_OscCanMessageIdentificationIndices> & orc_AllMatchingIds)
 const
 {
    QString c_Return = "";
@@ -950,7 +950,7 @@ QString C_SdBueMessageTableModel::m_GetTransmitter(const C_OscCanMessageIdentifi
 
    if (this->mpc_SyncManager != NULL)
    {
-      const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingIds =
+      const QList<C_OscCanMessageIdentificationIndices> c_MatchingIds =
          this->mpc_SyncManager->GetMatchingMessageVector(orc_Id);
       bool q_Found = false;
       for (uint32_t u32_ItMatchingId = 0; u32_ItMatchingId < c_MatchingIds.size(); ++u32_ItMatchingId)
@@ -1001,7 +1001,7 @@ QString C_SdBueMessageTableModel::m_GetReceiver(const C_OscCanMessageIdentificat
 
    if (this->mpc_SyncManager != NULL)
    {
-      const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingIds =
+      const QList<C_OscCanMessageIdentificationIndices> c_MatchingIds =
          this->mpc_SyncManager->GetMatchingMessageVector(orc_Id);
       QString c_Output = "";
       bool q_Found = false;
@@ -1138,7 +1138,7 @@ QVariant C_SdBueMessageTableModel::m_GetMessageIcon(const C_OscCanMessageIdentif
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageTableModel::m_FillMsgInfo(void)
 {
-   std::vector<C_OscCanMessageIdentificationIndices> c_MessageIds =
+   QList<C_OscCanMessageIdentificationIndices> c_MessageIds =
       this->mpc_SyncManager->GetUniqueMessages();
    uint32_t u32_Counter;
 

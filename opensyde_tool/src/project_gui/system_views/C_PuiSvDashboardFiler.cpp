@@ -87,7 +87,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
 
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDbChart> c_Widgets;
+      QList<C_PuiSvDbChart> c_Widgets;
       s32_Retval = mh_LoadCharts(c_Widgets, orc_XmlParser);
       orc_Dashboard.SetCharts(c_Widgets);
       if (oq_IgnoreMostErrorCases == true)
@@ -97,7 +97,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
    }
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDbLabel> c_Widgets;
+      QList<C_PuiSvDbLabel> c_Widgets;
       s32_Retval = mh_LoadLabels(c_Widgets, orc_XmlParser);
       orc_Dashboard.SetLabels(c_Widgets);
       if (oq_IgnoreMostErrorCases == true)
@@ -107,7 +107,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
    }
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDbParam> c_Widgets;
+      QList<C_PuiSvDbParam> c_Widgets;
       s32_Retval = mh_LoadParams(c_Widgets, orc_XmlParser);
       orc_Dashboard.SetParams(c_Widgets);
       if (oq_IgnoreMostErrorCases == true)
@@ -117,7 +117,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
    }
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDbPieChart> c_Widgets;
+      QList<C_PuiSvDbPieChart> c_Widgets;
       s32_Retval = mh_LoadPieCharts(c_Widgets, orc_XmlParser);
       orc_Dashboard.SetPieCharts(c_Widgets);
       if (oq_IgnoreMostErrorCases == true)
@@ -127,7 +127,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
    }
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDbSpinBox> c_Widgets;
+      QList<C_PuiSvDbSpinBox> c_Widgets;
       s32_Retval = mh_LoadSpinBoxes(c_Widgets, orc_XmlParser);
       orc_Dashboard.SetSpinBoxes(c_Widgets);
       if (oq_IgnoreMostErrorCases == true)
@@ -137,7 +137,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
    }
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDbSlider> c_Widgets;
+      QList<C_PuiSvDbSlider> c_Widgets;
       s32_Retval = mh_LoadSliders(c_Widgets, orc_XmlParser);
       orc_Dashboard.SetSliders(c_Widgets);
       if (oq_IgnoreMostErrorCases == true)
@@ -147,7 +147,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
    }
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDbProgressBar> c_Widgets;
+      QList<C_PuiSvDbProgressBar> c_Widgets;
       s32_Retval = mh_LoadProgressBars(c_Widgets, orc_XmlParser);
       orc_Dashboard.SetProgressBars(c_Widgets);
       if (oq_IgnoreMostErrorCases == true)
@@ -157,7 +157,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
    }
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDbTable> c_Widgets;
+      QList<C_PuiSvDbTable> c_Widgets;
       s32_Retval = mh_LoadTables(c_Widgets, orc_XmlParser);
       orc_Dashboard.SetTables(c_Widgets);
       if (oq_IgnoreMostErrorCases == true)
@@ -167,7 +167,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
    }
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDbToggle> c_Widgets;
+      QList<C_PuiSvDbToggle> c_Widgets;
       s32_Retval = mh_LoadToggles(c_Widgets, orc_XmlParser);
       orc_Dashboard.SetToggles(c_Widgets);
       if (oq_IgnoreMostErrorCases == true)
@@ -409,7 +409,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadSliderValue(C_PuiSvDbSlider & orc_Slider, C
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadCharts(std::vector<C_PuiSvDbChart> & orc_Widgets,
+int32_t C_PuiSvDashboardFiler::mh_LoadCharts(QList<C_PuiSvDbChart> & orc_Widgets,
                                              C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -549,8 +549,8 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChart(C_PuiSvDbTabChart & orc_Widget, C
             {
                if (orc_XmlParser.AttributeExists("index") == true)
                {
-                  orc_Widget.c_DataPoolElementsColorIndex.push_back(
-                     static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("index")));
+                  orc_Widget.c_DataPoolElementsColorIndex.append(
+                     static_cast<char>(orc_XmlParser.GetAttributeUint32("index")));
                }
                else
                {
@@ -576,7 +576,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChart(C_PuiSvDbTabChart & orc_Widget, C
          for (u32_Counter = orc_Widget.c_DataPoolElementsColorIndex.size();
               u32_Counter < orc_Widget.c_DataPoolElementsConfig.size(); ++u32_Counter)
          {
-            orc_Widget.c_DataPoolElementsColorIndex.push_back(static_cast<uint8_t>(u32_Counter));
+            orc_Widget.c_DataPoolElementsColorIndex.append(static_cast<char>(u32_Counter));
          }
       }
 
@@ -672,7 +672,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChart(C_PuiSvDbTabChart & orc_Widget, C
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadLabels(std::vector<C_PuiSvDbLabel> & orc_Widgets,
+int32_t C_PuiSvDashboardFiler::mh_LoadLabels(QList<C_PuiSvDbLabel> & orc_Widgets,
                                              C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -739,7 +739,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadLabels(std::vector<C_PuiSvDbLabel> & orc_W
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadParams(std::vector<C_PuiSvDbParam> & orc_Widgets,
+int32_t C_PuiSvDashboardFiler::mh_LoadParams(QList<C_PuiSvDbParam> & orc_Widgets,
                                              C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -804,7 +804,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParams(std::vector<C_PuiSvDbParam> & orc_W
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "param" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_LoadParamExpandedItems(std::vector<C_PuiSvDbExpandedTreeIndex> & orc_Items,
+void C_PuiSvDashboardFiler::mh_LoadParamExpandedItems(QList<C_PuiSvDbExpandedTreeIndex> & orc_Items,
                                                       C_OscXmlParserBase & orc_XmlParser)
 {
    orc_Items.clear();
@@ -845,7 +845,7 @@ void C_PuiSvDashboardFiler::mh_LoadParamExpandedItems(std::vector<C_PuiSvDbExpan
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "param" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_LoadParamColumnPositionIndices(std::vector<int32_t> & orc_Items,
+void C_PuiSvDashboardFiler::mh_LoadParamColumnPositionIndices(QList<int32_t> & orc_Items,
                                                               C_OscXmlParserBase & orc_XmlParser)
 {
    orc_Items.clear();
@@ -889,7 +889,7 @@ void C_PuiSvDashboardFiler::mh_LoadParamColumnPositionIndices(std::vector<int32_
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadPieCharts(std::vector<C_PuiSvDbPieChart> & orc_Widgets,
+int32_t C_PuiSvDashboardFiler::mh_LoadPieCharts(QList<C_PuiSvDbPieChart> & orc_Widgets,
                                                 C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -937,7 +937,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadPieCharts(std::vector<C_PuiSvDbPieChart> &
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadSpinBoxes(std::vector<C_PuiSvDbSpinBox> & orc_Widgets,
+int32_t C_PuiSvDashboardFiler::mh_LoadSpinBoxes(QList<C_PuiSvDbSpinBox> & orc_Widgets,
                                                 C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1006,7 +1006,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadSpinBoxes(std::vector<C_PuiSvDbSpinBox> & 
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadTables(std::vector<C_PuiSvDbTable> & orc_Widgets,
+int32_t C_PuiSvDashboardFiler::mh_LoadTables(QList<C_PuiSvDbTable> & orc_Widgets,
                                              C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1080,7 +1080,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTables(std::vector<C_PuiSvDbTable> & orc_W
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadSliders(std::vector<C_PuiSvDbSlider> & orc_Widgets,
+int32_t C_PuiSvDashboardFiler::mh_LoadSliders(QList<C_PuiSvDbSlider> & orc_Widgets,
                                               C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1150,7 +1150,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadSliders(std::vector<C_PuiSvDbSlider> & orc
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadProgressBars(std::vector<C_PuiSvDbProgressBar> & orc_Widgets,
+int32_t C_PuiSvDashboardFiler::mh_LoadProgressBars(QList<C_PuiSvDbProgressBar> & orc_Widgets,
                                                    C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1239,7 +1239,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadProgressBars(std::vector<C_PuiSvDbProgress
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadToggles(std::vector<C_PuiSvDbToggle> & orc_Widgets,
+int32_t C_PuiSvDashboardFiler::mh_LoadToggles(QList<C_PuiSvDbToggle> & orc_Widgets,
                                               C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1582,7 +1582,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadDataFormatterConfig(C_PuiSvDbDataElementDi
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadParamDataSetIndices(std::vector<int32_t> & orc_Values,
+int32_t C_PuiSvDashboardFiler::mh_LoadParamDataSetIndices(QList<int32_t> & orc_Values,
                                                           C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1632,7 +1632,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamDataSetIndices(std::vector<int32_t> &
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadParamValues(std::vector<C_OscNodeDataPoolContent> & orc_Values,
+int32_t C_PuiSvDashboardFiler::mh_LoadParamValues(QList<C_OscNodeDataPoolContent> & orc_Values,
                                                   C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1676,7 +1676,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamValues(std::vector<C_OscNodeDataPoolC
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadParamTables(std::vector<std::vector<int32_t> > & orc_Values,
+int32_t C_PuiSvDashboardFiler::mh_LoadParamTables(QList<QList<int32_t> > & orc_Values,
                                                   C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1689,7 +1689,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamTables(std::vector<std::vector<int32_
       {
          do
          {
-            std::vector<int32_t> c_Table;
+            QList<int32_t> c_Table;
             s32_Retval = mh_LoadParamColumns(c_Table, orc_XmlParser);
             if (s32_Retval == C_NO_ERR)
             {
@@ -1723,7 +1723,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamTables(std::vector<std::vector<int32_
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadParamColumns(std::vector<int32_t> & orc_Values,
+int32_t C_PuiSvDashboardFiler::mh_LoadParamColumns(QList<int32_t> & orc_Values,
                                                    C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1773,7 +1773,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamColumns(std::vector<int32_t> & orc_Va
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadTabChartScreenRegion(std::vector<std::array<float64_t, 4> > & orc_ScreenRegion,
+int32_t C_PuiSvDashboardFiler::mh_LoadTabChartScreenRegion(QList<std::array<float64_t, 4> > & orc_ScreenRegion,
                                                            C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -1829,7 +1829,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChartScreenRegion(std::vector<std::arra
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveCharts(const std::vector<C_PuiSvDbChart> & orc_Widgets,
+void C_PuiSvDashboardFiler::mh_SaveCharts(const QList<C_PuiSvDbChart> & orc_Widgets,
                                           C_OscXmlParserBase & orc_XmlParser)
 {
    Q_UNUSED(orc_Widgets)
@@ -1866,7 +1866,7 @@ void C_PuiSvDashboardFiler::mh_SaveTabChart(const C_PuiSvDbTabChart & orc_Widget
    for (uint32_t u32_ItActive = 0; u32_ItActive < orc_Widget.c_DataPoolElementsColorIndex.size(); ++u32_ItActive)
    {
       orc_XmlParser.CreateAndSelectNodeChild("color-index");
-      orc_XmlParser.SetAttributeUint32("index", orc_Widget.c_DataPoolElementsColorIndex[u32_ItActive]);
+      orc_XmlParser.SetAttributeUint32("index", static_cast<uint8_t>(orc_Widget.c_DataPoolElementsColorIndex[u32_ItActive]));
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "color-indexes");
    }
@@ -1897,7 +1897,7 @@ void C_PuiSvDashboardFiler::mh_SaveTabChart(const C_PuiSvDbTabChart & orc_Widget
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveLabels(const std::vector<C_PuiSvDbLabel> & orc_Widgets,
+void C_PuiSvDashboardFiler::mh_SaveLabels(const QList<C_PuiSvDbLabel> & orc_Widgets,
                                           C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("labels");
@@ -1924,7 +1924,7 @@ void C_PuiSvDashboardFiler::mh_SaveLabels(const std::vector<C_PuiSvDbLabel> & or
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveParams(const std::vector<C_PuiSvDbParam> & orc_Widgets,
+void C_PuiSvDashboardFiler::mh_SaveParams(const QList<C_PuiSvDbParam> & orc_Widgets,
                                           C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("params");
@@ -1959,7 +1959,7 @@ void C_PuiSvDashboardFiler::mh_SaveParams(const std::vector<C_PuiSvDbParam> & or
       orc_XmlParser.CreateAndSelectNodeChild("tables");
       for (uint32_t u32_ItTable = 0; u32_ItTable < rc_Param.c_ColWidth.size(); ++u32_ItTable)
       {
-         const std::vector<int32_t> & rc_Cols = rc_Param.c_ColWidth[u32_ItTable];
+         const QList<int32_t> & rc_Cols = rc_Param.c_ColWidth[u32_ItTable];
          orc_XmlParser.CreateAndSelectNodeChild("table");
          orc_XmlParser.CreateAndSelectNodeChild("columns");
          for (uint32_t u32_ItColumn = 0; u32_ItColumn < rc_Cols.size(); ++u32_ItColumn)
@@ -1992,7 +1992,7 @@ void C_PuiSvDashboardFiler::mh_SaveParams(const std::vector<C_PuiSvDbParam> & or
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "param" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveParamExpandedItems(const std::vector<C_PuiSvDbExpandedTreeIndex> & orc_Items,
+void C_PuiSvDashboardFiler::mh_SaveParamExpandedItems(const QList<C_PuiSvDbExpandedTreeIndex> & orc_Items,
                                                       C_OscXmlParserBase & orc_XmlParser)
 {
    //Columns
@@ -2017,7 +2017,7 @@ void C_PuiSvDashboardFiler::mh_SaveParamExpandedItems(const std::vector<C_PuiSvD
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "param" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveParamColumnPositionIndices(const std::vector<int32_t> & orc_Items,
+void C_PuiSvDashboardFiler::mh_SaveParamColumnPositionIndices(const QList<int32_t> & orc_Items,
                                                               C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("column-position-indices");
@@ -2039,7 +2039,7 @@ void C_PuiSvDashboardFiler::mh_SaveParamColumnPositionIndices(const std::vector<
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SavePieCharts(const std::vector<C_PuiSvDbPieChart> & orc_Widgets,
+void C_PuiSvDashboardFiler::mh_SavePieCharts(const QList<C_PuiSvDbPieChart> & orc_Widgets,
                                              C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("pie-charts");
@@ -2065,7 +2065,7 @@ void C_PuiSvDashboardFiler::mh_SavePieCharts(const std::vector<C_PuiSvDbPieChart
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveSpinBoxes(const std::vector<C_PuiSvDbSpinBox> & orc_Widgets,
+void C_PuiSvDashboardFiler::mh_SaveSpinBoxes(const QList<C_PuiSvDbSpinBox> & orc_Widgets,
                                              C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("spin-boxes");
@@ -2098,7 +2098,7 @@ void C_PuiSvDashboardFiler::mh_SaveSpinBoxes(const std::vector<C_PuiSvDbSpinBox>
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveTables(const std::vector<C_PuiSvDbTable> & orc_Widgets,
+void C_PuiSvDashboardFiler::mh_SaveTables(const QList<C_PuiSvDbTable> & orc_Widgets,
                                           C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("tables");
@@ -2135,7 +2135,7 @@ void C_PuiSvDashboardFiler::mh_SaveTables(const std::vector<C_PuiSvDbTable> & or
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveSliders(const std::vector<C_PuiSvDbSlider> & orc_Widgets,
+void C_PuiSvDashboardFiler::mh_SaveSliders(const QList<C_PuiSvDbSlider> & orc_Widgets,
                                            C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("sliders");
@@ -2165,7 +2165,7 @@ void C_PuiSvDashboardFiler::mh_SaveSliders(const std::vector<C_PuiSvDbSlider> & 
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveProgressBars(const std::vector<C_PuiSvDbProgressBar> & orc_Widgets,
+void C_PuiSvDashboardFiler::mh_SaveProgressBars(const QList<C_PuiSvDbProgressBar> & orc_Widgets,
                                                 C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("progress-bars");
@@ -2195,7 +2195,7 @@ void C_PuiSvDashboardFiler::mh_SaveProgressBars(const std::vector<C_PuiSvDbProgr
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveToggles(const std::vector<C_PuiSvDbToggle> & orc_Widgets,
+void C_PuiSvDashboardFiler::mh_SaveToggles(const QList<C_PuiSvDbToggle> & orc_Widgets,
                                            C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("toggles");
@@ -2353,11 +2353,11 @@ void C_PuiSvDashboardFiler::mh_SaveDataFormatterConfig(const C_PuiSvDbDataElemen
    \param[in,out]  orc_XmlParser       XML parser
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveTabChartScreenRegion(const std::vector<std::array<float64_t, 4> > & orc_ScreenRegion,
+void C_PuiSvDashboardFiler::mh_SaveTabChartScreenRegion(const QList<std::array<float64_t, 4> > & orc_ScreenRegion,
                                                         C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("screen-regions");
-   for (std::vector<std::array<float64_t, 4> >::const_iterator c_It = orc_ScreenRegion.begin();
+   for (QList<std::array<float64_t, 4> >::const_iterator c_It = orc_ScreenRegion.begin();
         c_It != orc_ScreenRegion.end(); ++c_It)
    {
       const std::array<float64_t, 4> & rc_Vals = *c_It;

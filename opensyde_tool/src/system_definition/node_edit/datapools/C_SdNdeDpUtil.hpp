@@ -13,8 +13,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include <vector>
 #include <QItemSelection>
+#include <QList>
 #include <QStringList>
 #include <QPainter>
 #include <QWidget>
@@ -78,7 +78,7 @@ public:
       eARRAY_EDIT_DATA_SET
    };
 
-   static std::vector<uint32_t> h_ConvertVector(const QModelIndexList & orc_Items, const bool & orq_Rows = true);
+   static QList<uint32_t> h_ConvertVector(const QModelIndexList & orc_Items, const bool & orq_Rows = true);
    static void h_ConvertToElementGeneric(const stw::opensyde_core::C_OscNodeDataPoolListElement & orc_OscElement,
                                          const C_PuiSdNodeDataPoolListElement & orc_UiElement,
                                          const E_ElementDataChangeType & ore_Type, QVariant & orc_Generic,

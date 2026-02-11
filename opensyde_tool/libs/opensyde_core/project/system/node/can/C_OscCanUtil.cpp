@@ -95,7 +95,7 @@ bool C_OscCanUtil::h_IsSignalInMessage(const uint8_t ou8_Dlc, const C_OscCanSign
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanUtil::h_GetSignalValue(const uint8_t (&orau8_CanDb)[8], const C_OscCanSignal & orc_Signal,
-                                    std::vector<uint8_t> & orc_DataPoolData,
+                                    QByteArray & orc_DataPoolData,
                                     const C_OscNodeDataPoolContent::E_Type oe_ContentType)
 {
    const uint16_t u16_StartByte = orc_Signal.u16_ComBitStart / 8U;
@@ -258,7 +258,7 @@ void C_OscCanUtil::h_GetSignalValue(const uint8_t (&orau8_CanDb)[8], const C_Osc
 void C_OscCanUtil::h_GetSignalValue(const uint8_t (&orau8_CanDb)[8], const C_OscCanSignal & orc_Signal,
                                     C_OscNodeDataPoolContent & orc_Value)
 {
-   std::vector<uint8_t> c_Data;
+   QByteArray c_Data;
 
    c_Data.resize(orc_Value.GetSizeByte(), 0U);
    // The result is in little endian. The function converts in case of Motorola format automatically.
@@ -284,7 +284,7 @@ void C_OscCanUtil::h_SetSignalValue(uint8_t (&orau8_CanDb)[8], const C_OscCanSig
    const uint8_t u8_LengthBitOffset = static_cast<uint8_t>(orc_Signal.u16_ComBitLength % 8U);
    uint8_t u8_LengthByte = static_cast<uint8_t>(orc_Signal.u16_ComBitLength / 8U);
 
-   std::vector<uint8_t> c_ValueData;
+   QByteArray c_ValueData;
 
    //Get data in format as necessary
    orc_Value.GetValueAsLittleEndianBlob(c_ValueData);
@@ -303,10 +303,10 @@ void C_OscCanUtil::h_SetSignalValue(uint8_t (&orau8_CanDb)[8], const C_OscCanSig
       const uint8_t u8_LastSignalByte = u8_LengthByte - 1U;
 
       // clear data pool data
-      std::vector<uint8_t> c_ValueDataCopy(8UL, 0UL);
+      QByteArray c_ValueDataCopy(8UL, 0UL);
 
       // Copy the Datapool data. Only the bytes which are necessary for the signal dependent of its defined length
-      (void)memcpy(&c_ValueDataCopy[0], &c_ValueData[0], u8_LengthByte);
+      (void)memcpy(reinterpret_cast<uint8_t*>(c_ValueDataCopy.data()), reinterpret_cast<uint8_t*>(c_ValueData.data()), u8_LengthByte);
 
       // Handle a signed value
       if ((orc_Value.GetType() == C_OscNodeDataPoolContent::eSINT8) ||
@@ -347,7 +347,7 @@ void C_OscCanUtil::h_SetSignalValue(uint8_t (&orau8_CanDb)[8], const C_OscCanSig
          if (u8_LengthBitOffset == 0U)
          {
             // Byte aligned data on MSB and LSB side, copy the data
-            (void)memcpy(&orau8_CanDb[u8_StartByte], &c_ValueData[0], u8_LengthByte);
+            (void)memcpy(&orau8_CanDb[u8_StartByte], reinterpret_cast<uint8_t*>(c_ValueData.data()), u8_LengthByte);
          }
          else
          {
@@ -355,7 +355,7 @@ void C_OscCanUtil::h_SetSignalValue(uint8_t (&orau8_CanDb)[8], const C_OscCanSig
             // Byte aligned data only on LSB side, copy the data till the last byte
             if (u8_LengthByte > 1U)
             {
-               (void)memcpy(&orau8_CanDb[u8_StartByte], &c_ValueData[0], u8_IndexLastByte);
+               (void)memcpy(&orau8_CanDb[u8_StartByte], reinterpret_cast<uint8_t*>(c_ValueData.data()), u8_IndexLastByte);
             }
             // The last message byte can have multiple signals, which could be already assigned
             orau8_CanDb[u8_StartByte + u8_IndexLastByte] |= c_ValueData[u8_IndexLastByte];

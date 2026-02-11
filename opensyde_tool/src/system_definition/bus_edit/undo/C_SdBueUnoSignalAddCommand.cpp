@@ -52,10 +52,10 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueUnoSignalAddCommand::C_SdBueUnoSignalAddCommand(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageId,
-   const std::vector<uint32_t> & orc_SignalIndex, const std::vector<uint16_t> & orc_StartBit,
-   const std::vector<C_OscCanSignal::E_MultiplexerType> & orc_MultiplexerType,
-   const std::vector<uint16_t> & orc_MultiplexerValue, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MessageId,
+   const QList<uint32_t> & orc_SignalIndex, const QList<uint16_t> & orc_StartBit,
+   const QList<C_OscCanSignal::E_MultiplexerType> & orc_MultiplexerType,
+   const QList<uint16_t> & orc_MultiplexerValue, C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
    C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget, const QString & orc_Text) :
    C_SdBueUnoSignalAddDeleteBaseCommand(orc_MessageId, orc_SignalIndex, orc_StartBit, orc_MultiplexerType,
                                         orc_MultiplexerValue, opc_MessageSyncManager,
@@ -90,11 +90,11 @@ C_SdBueUnoSignalAddCommand::C_SdBueUnoSignalAddCommand(
    \param[in]  orc_ProtocolType     Current active protocol to handle necessary adaptations
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueUnoSignalAddCommand::SetInitialData(const std::vector<C_OscCanSignal> & orc_Signal,
-                                                const std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalCommon,
-                                                const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommon,
-                                                const std::vector<C_PuiSdNodeCanSignal> & orc_UiSignal,
-                                                const std::vector<C_OscCanProtocol::E_Type> & orc_ProtocolType)
+void C_SdBueUnoSignalAddCommand::SetInitialData(const QList<C_OscCanSignal> & orc_Signal,
+                                                const QList<C_OscNodeDataPoolListElement> & orc_OscSignalCommon,
+                                                const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommon,
+                                                const QList<C_PuiSdNodeCanSignal> & orc_UiSignal,
+                                                const QList<C_OscCanProtocol::E_Type> & orc_ProtocolType)
 {
    this->mc_Signal = orc_Signal;
    this->mc_OscSignalCommon = orc_OscSignalCommon;

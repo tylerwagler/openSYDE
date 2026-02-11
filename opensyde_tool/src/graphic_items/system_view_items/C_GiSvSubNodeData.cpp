@@ -907,7 +907,7 @@ void C_GiSvSubNodeData::m_CheckThirdParty(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvSubNodeData::m_InitPackageData(const C_OscNode & orc_Node, const C_OscViewNodeUpdate & orc_UpdateInformation)
 {
-   const std::vector<C_OscNodeApplication> c_HexApps = orc_Node.GetHexApplications();
+   const QList<C_OscNodeApplication> c_HexApps = orc_Node.GetHexApplications();
 
    if (c_HexApps.size() == orc_UpdateInformation.GetPaths(C_OscViewNodeUpdate::eFTP_DATA_BLOCK).size())
    {
@@ -1009,7 +1009,7 @@ void C_GiSvSubNodeData::m_InitPackageDataForApplicationsFromFiles(const QStringL
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSvSubNodeData::m_InitPackageDataForOtherFiles(const C_OscViewNodeUpdate & orc_UpdateInformation)
 {
-   const std::vector<C_OscViewNodeUpdateParamInfo> & rc_ParamInfo = orc_UpdateInformation.GetParamInfos();
+   const QList<C_OscViewNodeUpdateParamInfo> & rc_ParamInfo = orc_UpdateInformation.GetParamInfos();
    const QStringList & c_Files =
       orc_UpdateInformation.GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
 

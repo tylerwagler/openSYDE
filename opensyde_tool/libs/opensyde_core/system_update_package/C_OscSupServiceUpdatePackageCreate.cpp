@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
+#include <QList>
 
 #include <fstream>
 #include <iterator>
@@ -121,7 +122,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const QString & orc_PackagePath,
-                                                                         const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes, const std::vector<uint32_t> & orc_NodesUpdateOrder, const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, QString & orc_ErrorMessage, const QString & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
+                                                                         const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const QByteArray & orc_ActiveNodes, const QList<uint32_t> & orc_NodesUpdateOrder, const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, QString & orc_ErrorMessage, const QString & orc_TemporaryDirectory, const QByteArray & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const QByteArray & orc_AddSignatureNodes,
                                                                          const QStringList & orc_NodeSignaturePemFiles)
 {
    int32_t s32_Retval;
@@ -133,8 +134,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const Q
                                 static_cast<uint32_t>(orc_SystemDefinition.c_Nodes.size()));
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<uint8_t> c_AddSignatureNodes;
-      std::vector<std::vector<uint8_t> > c_NodeSignatureKeys;
+      QByteArray c_AddSignatureNodes;
+      QList<QByteArray > c_NodeSignatureKeys;
       s32_Retval =
          mh_GetPemFileContent(orc_ActiveNodes, orc_AddSignatureNodes, orc_NodeSignaturePemFiles,
                               static_cast<uint32_t>(orc_SystemDefinition.c_Nodes.size()), c_AddSignatureNodes,
@@ -214,10 +215,10 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackageUsingPemFiles(const Q
 int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const QString & orc_PackagePath,
                                                             const C_OscSystemDefinition & orc_SystemDefinition,
                                                             const uint32_t ou32_ActiveBusIndex,
-                                                            const vector<uint8_t> & orc_ActiveNodes,
-                                                            const vector<uint32_t> & orc_NodesUpdateOrder,
-                                                            const vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, QString & orc_ErrorMessage, const QString & orc_TemporaryDirectory, const std::vector<uint8_t> & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
-                                                            const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
+                                                            const QByteArray & orc_ActiveNodes,
+                                                            const QList<uint32_t> & orc_NodesUpdateOrder,
+                                                            const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, QStringList & orc_WarningMessages, QString & orc_ErrorMessage, const QString & orc_TemporaryDirectory, const QByteArray & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const QByteArray & orc_AddSignatureNodes,
+                                                            const QList<QByteArray > & orc_NodeSignatureKeys)
 {
    int32_t s32_Return;
 
@@ -229,7 +230,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const QString & orc_
                                                                                         // creating zip archive
    const QString c_TargetZipArchive = orc_PackagePath;                              // complete path of target zip
                                                                                         // archive
-   vector<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite = orc_ApplicationsToWrite; // paths of applications
+   QList<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite = orc_ApplicationsToWrite; // paths of applications
    std::set<QString> c_SupFiles;                                          // unique container with
                                                                                         // relative file paths for zip
                                                                                         // archive
@@ -347,8 +348,8 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(const QString & orc_
    C_CHECKSUM  size of orc_EncryptNodes does not match system definition
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckSecurityParameters(const std::vector<uint8_t> & orc_EncryptNodes,
-                                                                       const QStringList & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_SignatureNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys, const uint32_t ou32_NumNodes, const QString & orc_Mode,
+int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckSecurityParameters(const QByteArray & orc_EncryptNodes,
+                                                                       const QStringList & orc_EncryptNodesPassword, const QByteArray & orc_SignatureNodes, const QList<QByteArray > & orc_NodeSignatureKeys, const uint32_t ou32_NumNodes, const QString & orc_Mode,
                                                                        const QString & orc_Function)
 {
    int32_t s32_Return = C_NO_ERR;
@@ -382,7 +383,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckSecurityParameters(const std
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckPemFileParameters(
-   const QStringList & orc_NodeSignaturePemFiles, const std::vector<uint8_t> & orc_SignatureNodes,
+   const QStringList & orc_NodeSignaturePemFiles, const QByteArray & orc_SignatureNodes,
    const uint32_t ou32_NumNodes)
 {
    int32_t s32_Return = C_NO_ERR;
@@ -418,9 +419,9 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckPemFileParameters(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageCreate::mh_AdaptSignatureParameters(
-   const std::vector<uint8_t> & orc_InAddSignatureNodes,
-   const std::vector<std::vector<uint8_t> > & orc_InNodeSignatureKeys, const uint32_t ou32_NodeCount,
-   std::vector<uint8_t> & orc_OutAddSignatureNodes, std::vector<std::vector<uint8_t> > & orc_OutNodeSignatureKeys)
+   const QByteArray & orc_InAddSignatureNodes,
+   const QList<QByteArray > & orc_InNodeSignatureKeys, const uint32_t ou32_NodeCount,
+   QByteArray & orc_OutAddSignatureNodes, QList<QByteArray > & orc_OutNodeSignatureKeys)
 {
    orc_OutAddSignatureNodes = orc_InAddSignatureNodes;
    if (orc_OutAddSignatureNodes.size() == 0UL)
@@ -450,9 +451,9 @@ void C_OscSupServiceUpdatePackageCreate::mh_AdaptSignatureParameters(
    \param[in,out]  orc_OutAddSignatureNodes        Out add signature nodes
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupServiceUpdatePackageCreate::mh_AdaptPemFileParameters(const std::vector<uint8_t> & orc_InAddSignatureNodes,
+void C_OscSupServiceUpdatePackageCreate::mh_AdaptPemFileParameters(const QByteArray & orc_InAddSignatureNodes,
                                                                    const QStringList & orc_InNodeSignaturePemFiles, const uint32_t ou32_NodeCount, QStringList & orc_OutNodeSignaturePemFiles,
-                                                                   std::vector<uint8_t> & orc_OutAddSignatureNodes)
+                                                                   QByteArray & orc_OutAddSignatureNodes)
 {
    orc_OutAddSignatureNodes = orc_InAddSignatureNodes;
    if (orc_OutAddSignatureNodes.size() == 0UL)
@@ -513,8 +514,8 @@ void C_OscSupServiceUpdatePackageCreate::mh_AdaptPemFileParameters(const std::ve
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckParamsToCreatePackage(const QString & orc_PackagePath,
-                                                                          const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const vector<uint8_t> & orc_ActiveNodes, const vector<uint32_t> & orc_NodesUpdateOrder, const vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, const std::vector<uint8_t> & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes,
-                                                                          const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
+                                                                          const C_OscSystemDefinition & orc_SystemDefinition, const uint32_t ou32_ActiveBusIndex, const QByteArray & orc_ActiveNodes, const QList<uint32_t> & orc_NodesUpdateOrder, const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, const QByteArray & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const QByteArray & orc_AddSignatureNodes,
+                                                                          const QList<QByteArray > & orc_NodeSignatureKeys)
 {
    int32_t s32_Return = C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath,
                                                                                   "Creating Update Package",
@@ -615,9 +616,9 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckParamsToCreatePackage(const 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::mh_SupDefParamAdapter(const uint32_t ou32_ActiveBusIndex,
-                                                                  const vector<uint8_t> & orc_ActiveNodes,
-                                                                  const vector<uint32_t> & orc_NodesUpdateOrder,
-                                                                  const vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+                                                                  const QByteArray & orc_ActiveNodes,
+                                                                  const QList<uint32_t> & orc_NodesUpdateOrder,
+                                                                  const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                                                   C_OscSupDefinition & orc_SupDefContent)
 {
    int32_t s32_Return = C_NO_ERR;
@@ -704,7 +705,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_SupDefParamAdapter(const uint32_t
    C_NOACT      node not available in node update order
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageCreate::mh_GetUpdatePositionOfNode(const vector<uint32_t> & orc_NodesUpdateOrder,
+int32_t C_OscSupServiceUpdatePackageCreate::mh_GetUpdatePositionOfNode(const QList<uint32_t> & orc_NodesUpdateOrder,
                                                                        const uint32_t ou32_NodeForUpdate,
                                                                        uint32_t & oru32_UpdatePosition)
 {
@@ -757,8 +758,8 @@ void C_OscSupServiceUpdatePackageCreate::mh_GetSydeSecureFileNames(const C_OscSy
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageCreate::mh_AppendFlashFilesToSecureFileSections(
-   const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-   const QStringList & orc_NodeFoldersAbs, std::vector<std::set<QString> > & orc_SecureFiles)
+   const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+   const QStringList & orc_NodeFoldersAbs, QList<std::set<QString> > & orc_SecureFiles)
 {
    Q_ASSERT(orc_ApplicationsToWrite.size() == orc_NodeFoldersAbs.size());
    if (orc_ApplicationsToWrite.size() == orc_NodeFoldersAbs.size())
@@ -811,15 +812,15 @@ void C_OscSupServiceUpdatePackageCreate::mh_AppendFlashFilesToSecureFileSections
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateDefFilesAndZipSecureFiles(
    const C_OscSystemDefinition & orc_SystemDefinition, C_OscSupDefinition & orc_SupDefContent,
-   const QString & orc_PackagePathTmp, const std::vector<uint8_t> & orc_ActiveNodes,
-   const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
-   std::set<QString> & orc_SupFiles, const std::vector<uint8_t> & orc_EncryptNodes,
+   const QString & orc_PackagePathTmp, const QByteArray & orc_ActiveNodes,
+   const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+   std::set<QString> & orc_SupFiles, const QByteArray & orc_EncryptNodes,
    const QStringList & orc_EncryptNodesPassword,
-   const std::vector<uint8_t> & orc_AddSignatureNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
+   const QByteArray & orc_AddSignatureNodes, const QList<QByteArray > & orc_NodeSignatureKeys)
 {
    int32_t s32_Return;
 
-   vector<std::set<QString> > c_SecFiles;
+   QList<std::set<QString> > c_SecFiles;
    QStringList c_SecPackageFilesRel;
    QStringList c_SecPackageFilesAbs;
    QStringList c_SecDefFilesRel;
@@ -890,12 +891,12 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateDefFilesAndZipSecureFiles(
    \retval   C_BUSY      Problems with deleting the temporary file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(const std::vector<std::set<QString> > & orc_SecFiles,
+int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(const QList<std::set<QString> > & orc_SecFiles,
                                                               const QStringList & orc_SecPackageFilesRel,
                                                               const QStringList & orc_SecPackageFilesAbs,
                                                               const QStringList & orc_NodeFoldersAbs,
-                                                              const std::vector<uint8_t> & orc_ActiveNodes,
-                                                              const std::vector<uint8_t> & orc_EncryptNodes,
+                                                              const QByteArray & orc_ActiveNodes,
+                                                              const QByteArray & orc_EncryptNodes,
                                                               const QStringList & orc_EncryptNodesPassword,
                                                               const uint32_t ou32_NodeCount,
                                                               std::set<QString> & orc_SupFiles)
@@ -919,7 +920,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(const std::vector<
                                                                orc_SecFiles.size() ==
                                                                orc_SecPackageFilesAbs.size()))))
    {
-      std::vector<uint8_t> c_EncryptNodes;
+      QByteArray c_EncryptNodes;
       QStringList c_EncryptNodesPassword;
       // Convert QString vector to QString vector
       QStringList c_EncryptNodesPasswordInput;
@@ -988,15 +989,15 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(const std::vector<
    \retval   C_CONFIG   Input invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(const std::vector<uint8_t> & orc_ActiveNodes,
-                                                                     const QStringList & orc_SecDefFilesAbs, const QStringList & orc_SecDefFilesRel, const std::vector<uint8_t> & orc_AddSignatureNodes, const uint32_t ou32_NodeCount, std::vector<C_OscSupNodeDefinition> & orc_SupDefNodes,
-                                                                     std::vector<std::set<QString> > & orc_SecFiles)
+int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(const QByteArray & orc_ActiveNodes,
+                                                                     const QStringList & orc_SecDefFilesAbs, const QStringList & orc_SecDefFilesRel, const QByteArray & orc_AddSignatureNodes, const uint32_t ou32_NodeCount, QList<C_OscSupNodeDefinition> & orc_SupDefNodes,
+                                                                     QList<std::set<QString> > & orc_SecFiles)
 {
    int32_t s32_Return;
 
-   std::vector<uint8_t> c_AddSignatureNodes;
-   const std::vector<std::vector<uint8_t> > c_Unused;
-   std::vector<std::vector<uint8_t> > c_Unused2;
+   QByteArray c_AddSignatureNodes;
+   const QList<QByteArray > c_Unused;
+   QList<QByteArray > c_Unused2;
    mh_AdaptSignatureParameters(orc_AddSignatureNodes, c_Unused, ou32_NodeCount, c_AddSignatureNodes, c_Unused2);
 
    //Add sig files to nodes
@@ -1055,14 +1056,14 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(const std::
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleSignatureCreation(
-   const QStringList & orc_NodeFoldersAbs, const std::vector<uint8_t> & orc_ActiveNodes,
-   const std::vector<uint8_t> & orc_AddSignatureNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
-   const uint32_t ou32_NodeCount, std::vector<std::set<QString> > & orc_SecFiles)
+   const QStringList & orc_NodeFoldersAbs, const QByteArray & orc_ActiveNodes,
+   const QByteArray & orc_AddSignatureNodes, const QList<QByteArray > & orc_NodeSignatureKeys,
+   const uint32_t ou32_NodeCount, QList<std::set<QString> > & orc_SecFiles)
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   std::vector<uint8_t> c_AddSignatureNodes;
-   std::vector<std::vector<uint8_t> > c_NodeSignatureKeys;
+   QByteArray c_AddSignatureNodes;
+   QList<QByteArray > c_NodeSignatureKeys;
    mh_AdaptSignatureParameters(orc_AddSignatureNodes, orc_NodeSignatureKeys, ou32_NodeCount, c_AddSignatureNodes,
                                c_NodeSignatureKeys);
 
@@ -1122,7 +1123,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleSignatureCreation(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageCreate::mh_CalcSig(const QString & orc_SourcePath,
                                                        const std::set<QString> & orc_SupFiles,
-                                                       const std::vector<uint8_t> & orc_Key,
+                                                       const QByteArray & orc_Key,
                                                        QString & orc_Signature)
 {
    int32_t s32_Retval = C_RANGE;
@@ -1148,7 +1149,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CalcSig(const QString & orc_Sourc
          QString c_Log;
          QString c_Error;
 
-         (void)std::memcpy(&au8_PrivateKey[0], &orc_Key[0], C_OscSecurityEcdsa::hu32_SECP256R1_PRIVATE_KEY_LENGTH);
+         (void)std::memcpy(&au8_PrivateKey[0], reinterpret_cast<const uint8_t*>(orc_Key.constData()), C_OscSecurityEcdsa::hu32_SECP256R1_PRIVATE_KEY_LENGTH);
 
          s32_Retval =
             C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(au8_BinDigest, au8_PrivateKey, c_Signature, c_Error);
@@ -1189,10 +1190,10 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CalcSig(const QString & orc_Sourc
    \retval   C_RD_WR     pem file does not contain a private key with the correct length
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageCreate::mh_GetPemFileContent(const std::vector<uint8_t> & orc_ActiveNodes,
-                                                                 const std::vector<uint8_t> & orc_SignatureNodes,
-                                                                 const QStringList & orc_NodeSignaturePemFiles, const uint32_t ou32_NumNodes, std::vector<uint8_t> & orc_PreparedSignatureNodes,
-                                                                 std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys)
+int32_t C_OscSupServiceUpdatePackageCreate::mh_GetPemFileContent(const QByteArray & orc_ActiveNodes,
+                                                                 const QByteArray & orc_SignatureNodes,
+                                                                 const QStringList & orc_NodeSignaturePemFiles, const uint32_t ou32_NumNodes, QByteArray & orc_PreparedSignatureNodes,
+                                                                 QList<QByteArray > & orc_NodeSignatureKeys)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1218,7 +1219,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_GetPemFileContent(const std::vect
             }
             else
             {
-               const std::vector<uint8_t> c_PrivateKey = c_Pem.GetKeyInfo().GetPrivateKey();
+               const QByteArray c_PrivateKey = c_Pem.GetKeyInfo().GetPrivateKey();
                if (c_PrivateKey.size() != C_OscSecurityEcdsa::hu32_SECP256R1_PRIVATE_KEY_LENGTH)
                {
                   C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage = "ECDSA private key not provided in pem file \"" +
@@ -1234,7 +1235,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_GetPemFileContent(const std::vect
          }
          else
          {
-            orc_NodeSignatureKeys.push_back(std::vector<uint8_t>());
+            orc_NodeSignatureKeys.push_back(QByteArray());
          }
       }
    }

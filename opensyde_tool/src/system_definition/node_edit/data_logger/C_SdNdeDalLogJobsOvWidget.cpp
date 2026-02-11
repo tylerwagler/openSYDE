@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "C_SdNdeDalLogJobsOvWidget.hpp"
 #include "ui_C_SdNdeDalLogJobsOvWidget.h"
@@ -68,7 +69,7 @@ C_SdNdeDalLogJobsOvWidget::~C_SdNdeDalLogJobsOvWidget()
    \param[in]  orc_AllLoggerJobElementsLocationCount     vector holds all Logjobs Index, Local elements count, remote elements count
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobsOvWidget::UpdateData(const std::vector<std::tuple<uint32_t, uint32_t,
+void C_SdNdeDalLogJobsOvWidget::UpdateData(const QList<std::tuple<uint32_t, uint32_t,
                                                                         uint32_t> > & orc_AllLoggerJobElementsLocationCount)
 {
    this->mpc_Ui->pc_TableView->UpdateData(orc_AllLoggerJobElementsLocationCount);

@@ -12,6 +12,7 @@
 #define C_SYVDAUNOMANAGER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "stwtypes.hpp"
 #include <QGraphicsScene>
 
@@ -42,7 +43,7 @@ public:
    void DoAddGeneric(const C_PuiSvDbDataElement::E_Type & ore_Type, const uint64_t & oru64_UniqueId,
                      const QPointF & orc_NewPos, const float64_t of64_ZetValue, const bool & orq_DarkModeDefault,
                      const QString & orc_AdditionalInformation = "");
-   void DoAddSnapshot(const std::vector<uint64_t> & orc_UniqueIds, const C_SyvDaDashboardSnapshot & orc_Snapshot,
+   void DoAddSnapshot(const QList<uint64_t> & orc_UniqueIds, const C_SyvDaDashboardSnapshot & orc_Snapshot,
                       const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                                  stw::opensyde_gui_logic::C_PuiSvReadDataConfiguration> & orc_RestoredRails,
                       const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue);

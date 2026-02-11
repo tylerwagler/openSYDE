@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoDasDataPoolListAddCommand.hpp"
@@ -47,7 +48,7 @@ C_SdNdeUnoDasDataPoolListAddCommand::C_SdNdeUnoDasDataPoolListAddCommand(const u
                                                                          const uint32_t & oru32_DataPoolIndex,
                                                                          const uint32_t & oru32_DataPoolListIndex,
                                                                          C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                                                         const std::vector<uint32_t> & orc_Indices,
+                                                                         const QList<uint32_t> & orc_Indices,
                                                                          QUndoCommand * const opc_Parent) :
    C_SdNdeUnoDasDataPoolListAddDeleteBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex, oru32_DataPoolListIndex,
                                                  opc_DataPoolListModelViewManager,
@@ -58,8 +59,8 @@ C_SdNdeUnoDasDataPoolListAddCommand::C_SdNdeUnoDasDataPoolListAddCommand(const u
       C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(oru32_NodeIndex, oru32_DataPoolIndex,
                                                           oru32_DataPoolListIndex);
 
-   std::vector<C_OscNodeDataPoolDataSet> c_OscNames;
-   std::vector<std::vector<C_OscNodeDataPoolContent> > c_OscDataSetValues;
+   QList<C_OscNodeDataPoolDataSet> c_OscNames;
+   QList<QList<C_OscNodeDataPoolContent> > c_OscDataSetValues;
    c_OscNames.resize(orc_Indices.size());
    c_OscDataSetValues.resize(orc_Indices.size());
    //Init data set values

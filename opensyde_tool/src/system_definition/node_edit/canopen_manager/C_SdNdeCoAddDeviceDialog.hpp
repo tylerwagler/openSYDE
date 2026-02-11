@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QFileInfo>
+#include <QList>
 #include "C_OgePopUpDialog.hpp"
 #include "stwtypes.hpp"
 
@@ -55,8 +56,8 @@ private:
    uint32_t mu32_BusIndex;
    uint32_t mu32_NodeIndex;
    uint8_t mu8_InterfaceId;
-   std::vector<uint32_t> mc_NodeIndexes;
-   std::vector<uint32_t> mc_InterfaceIndexes;
+   QList<uint32_t> mc_NodeIndexes;
+   QList<uint32_t> mc_InterfaceIndexes;
 
    static const QStringList mhc_SUFFIX;
 

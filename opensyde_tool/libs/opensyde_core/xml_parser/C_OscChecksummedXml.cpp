@@ -152,7 +152,7 @@ void C_OscChecksummedXml::m_CalcXmlCrcNode(uint16_t &oru16_Crc) {
   mu16_CrcDepth++;
   C_SclChecksums::CalcCRC16(&mu16_CrcDepth, 2U, oru16_Crc);
   while (c_NodeLv1 != "") {
-    std::vector<C_OscXmlAttribute> c_Attributes;
+    QList<C_OscXmlAttribute> c_Attributes;
     C_SclChecksums::CalcCRC16(c_NodeLv1.toLocal8Bit().constData(),
                               c_NodeLv1.length(), oru16_Crc);
     c_Attributes = this->GetAttributes();
@@ -183,7 +183,7 @@ void C_OscChecksummedXml::m_CalcXmlCrcNode(uint16_t &oru16_Crc) {
 //----------------------------------------------------------------------------------------------------------------------
 
 uint16_t C_OscChecksummedXml::m_CalcXmlCrc(void) {
-  std::vector<C_OscXmlAttribute> c_Attributes;
+  QList<C_OscXmlAttribute> c_Attributes;
   QString c_Text;
   uint16_t u16_Crc = 0x1D0FU; // set CCITT25 start value
 

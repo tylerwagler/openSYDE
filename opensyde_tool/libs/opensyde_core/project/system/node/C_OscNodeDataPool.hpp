@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 #include <QString>
 #include "C_OscNodeApplication.hpp"
@@ -52,8 +53,8 @@ public:
    uint32_t GetListsSize(void) const;
    void CheckErrorList(const uint32_t & oru32_ListIndex, bool * const opq_NameConflict, bool * const opq_NameInvalid,
                        bool * const opq_UsageInvalid, bool * const opq_OutOfDataPool, bool * const opq_DataSetsInvalid,
-                       bool * const opq_ElementsInvalid, std::vector<uint32_t> * const opc_InvalidDataSetIndices,
-                       std::vector<uint32_t> * const opc_InvalidElementIndices) const;
+                       bool * const opq_ElementsInvalid, QList<uint32_t> * const opc_InvalidDataSetIndices,
+                       QList<uint32_t> * const opc_InvalidElementIndices) const;
    void HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
                                std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 
@@ -79,7 +80,7 @@ public:
    uint32_t u32_NvmStartAddress;                ///< NvM start address of data pool
    uint32_t u32_NvmSize;                        ///< NvM size of data pool
    static const uint32_t hu32_DEFAULT_NVM_SIZE; ///< Default NvM size of data pool
-   std::vector<C_OscNodeDataPoolList> c_Lists;  ///< Data pool lists
+   QList<C_OscNodeDataPoolList> c_Lists;  ///< Data pool lists
 
 private:
    uint32_t m_GetElementHash(const uint32_t ou32_ListIndex, const uint32_t ou32_ElementIndex) const;

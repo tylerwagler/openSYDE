@@ -47,7 +47,7 @@ public:
 
    void OnLoadFinishedDbc(const int32_t os32_Result) const;
    void OnLoadFinishedOsySysDef(const int32_t os32_Result,
-                                const std::vector<stw::opensyde_core::C_OscSystemBus> & orc_Busses) const;
+                                const QList<stw::opensyde_core::C_OscSystemBus> & orc_Busses) const;
    void OnSigOsySysDefBusResult(const QString & orc_PathSystemDefinition, const int32_t os32_Result) const;
    void OnCommunicationStarted(const bool oq_Online) const;
    void OnSigLogFileAddResult(const int32_t os32_Result) const;

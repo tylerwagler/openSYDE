@@ -10,6 +10,7 @@
 #define C_IMPCODEGENERATIONREPORTWIDGET_HPP
 
 #include <QWidget>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OgePopUpDialog.hpp"
 
@@ -47,7 +48,7 @@ public:
    };
 
    void InitStaticNames(void) const;
-   void CreateReport(const std::vector<C_ReportData> & orc_ExportInfo) const;
+   void CreateReport(const QList<C_ReportData> & orc_ExportInfo) const;
 
 protected:
    void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;

@@ -218,9 +218,9 @@ void C_SdTopologyScene::AddNode(const QString &orc_NodeType,
       s32_Index = C_PuiSdHandler::h_GetInstance()->AddNodeAndSort(
           c_OscNode, c_UiNode, orc_NodeType, "");
     } else {
-      std::vector<stw::opensyde_core::C_OscNode> c_OscNodes;
+      QList<stw::opensyde_core::C_OscNode> c_OscNodes;
       QStringList c_OscNodeNames;
-      std::vector<stw::opensyde_gui_logic::C_PuiSdNode> c_UiNodes;
+      QList<stw::opensyde_gui_logic::C_PuiSdNode> c_UiNodes;
 
       for (uint32_t u32_ItSubDevice = 0UL; u32_ItSubDevice < u32_SubDevicesSize;
            ++u32_ItSubDevice) {
@@ -300,7 +300,7 @@ void C_SdTopologyScene::AddCanBus(const QPointF &orc_Pos,
                                   const float64_t of64_ZetValue,
                                   C_GiTextElementBus *const opc_TextElementBus,
                                   const QString *const opc_NameProposal) {
-  std::vector<QPointF> c_Points;
+  QList<QPointF> c_Points;
   C_GiLiCanBus *pc_CanBus;
   C_OscSystemBus c_OscBus;
   C_PuiSdBus c_UiBus;
@@ -318,8 +318,8 @@ void C_SdTopologyScene::AddCanBus(const QPointF &orc_Pos,
   this->clearSelection();
 
   // Initial points
-  c_Points.emplace_back(QPointF(std::max(0., orc_Pos.x() - 150.), orc_Pos.y()));
-  c_Points.emplace_back(QPointF(orc_Pos.x() + 150., orc_Pos.y()));
+  c_Points.emplaceBack(QPointF(std::max(0., orc_Pos.x() - 150.), orc_Pos.y()));
+  c_Points.emplaceBack(QPointF(orc_Pos.x() + 150., orc_Pos.y()));
 
   // Object
   c_OscBus.e_Type = C_OscSystemBus::E_Type::eCAN;
@@ -360,7 +360,7 @@ void C_SdTopologyScene::AddEthernetBus(
     const QPointF &orc_Pos, const uint64_t *const opu64_UniqueId,
     const float64_t of64_ZetValue, C_GiTextElementBus *const opc_TextElementBus,
     const QString *const opc_NameProposal) {
-  std::vector<QPointF> c_Points;
+  QList<QPointF> c_Points;
   C_GiLiEthernetBus *pc_EthernetBus;
   C_PuiSdBus c_UiBus;
   C_OscSystemBus c_OscBus;
@@ -378,8 +378,8 @@ void C_SdTopologyScene::AddEthernetBus(
   this->clearSelection();
 
   // Initial points
-  c_Points.emplace_back(QPointF(std::max(0., orc_Pos.x() - 150.), orc_Pos.y()));
-  c_Points.emplace_back(QPointF(orc_Pos.x() + 150., orc_Pos.y()));
+  c_Points.emplaceBack(QPointF(std::max(0., orc_Pos.x() - 150.), orc_Pos.y()));
+  c_Points.emplaceBack(QPointF(orc_Pos.x() + 150., orc_Pos.y()));
 
   // Object
   c_OscBus.e_Type = C_OscSystemBus::E_Type::eETHERNET;
@@ -613,10 +613,10 @@ void C_SdTopologyScene::AddLine(const QPointF &orc_Pos,
 void C_SdTopologyScene::AddBusConnector(
     C_GiNode *const opc_Node, const C_GiLiBus *const opc_Bus,
     const uint8_t &oru8_InterfaceNumber,
-    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> &orc_Properties,
+    const QList<C_PuiSdNodeInterfaceAutomaticProperties> &orc_Properties,
     const QPointF &orc_Pos, const uint64_t *const opu64_UniqueId) {
   if ((opc_Node != NULL) && (opc_Bus != NULL)) {
-    std::vector<QPointF> c_Points;
+    QList<QPointF> c_Points;
     uint64_t u64_UniqueId;
 
     // Check if a specific unique ID should be used
@@ -736,7 +736,7 @@ void C_SdTopologyScene::CopyFromManagerToScene(const QPointF *const opc_Pos) {
     const QPointF c_OFFSET = QPointF(10.0, 10.0);
     const uint32_t u32_ItemCount = pc_SnapShot->Count();
 
-    std::vector<uint64_t> c_UniqueIds;
+    QList<uint64_t> c_UniqueIds;
     QPointF c_TotalOffset;
     if (opc_Pos == NULL) {
       // Add point offset
@@ -886,11 +886,11 @@ void C_SdTopologyScene::DeleteItem(QGraphicsItem *const opc_Item) {
         } else {
           C_GiNode *const pc_Node = dynamic_cast<C_GiNode *>(pc_Item);
           if (pc_Node != NULL) {
-            const std::vector<uint32_t> c_NodeIndices =
+            const QList<uint32_t> c_NodeIndices =
                 C_PuiSdHandler::h_GetInstance()
                     ->GetAllNodeGroupIndicesUsingNodeIndex(
                         static_cast<uint32_t>(pc_Node->GetIndex()));
-            for (std::vector<uint32_t>::const_reverse_iterator c_ItIndex =
+            for (QList<uint32_t>::const_reverse_iterator c_ItIndex =
                      c_NodeIndices.rbegin();
                  c_ItIndex != c_NodeIndices.rend(); ++c_ItIndex) {
               Q_EMIT this->SigNodeDeleted(*c_ItIndex);
@@ -1716,7 +1716,7 @@ C_GiLiCanBus *
 C_SdTopologyScene::m_CreateCanBus(const int32_t &ors32_Index,
                                   const uint64_t &oru64_Id,
                                   C_GiTextElementBus *const opc_TextElementName,
-                                  const std::vector<QPointF> *const opc_Points,
+                                  const QList<QPointF> *const opc_Points,
                                   QGraphicsItem *const opc_Parent) {
   return new C_GiLiCanBus(ors32_Index, oru64_Id, opc_TextElementName, true,
                           opc_Points, opc_Parent);
@@ -1740,7 +1740,7 @@ C_SdTopologyScene::m_CreateCanBus(const int32_t &ors32_Index,
 C_GiLiEthernetBus *C_SdTopologyScene::m_CreateEthernetBus(
     const int32_t &ors32_Index, const uint64_t &oru64_Id,
     C_GiTextElementBus *const opc_TextElementName,
-    const std::vector<QPointF> *const opc_Points,
+    const QList<QPointF> *const opc_Points,
     QGraphicsItem *const opc_Parent) {
   return new C_GiLiEthernetBus(ors32_Index, oru64_Id, opc_TextElementName, true,
                                opc_Points, opc_Parent);
@@ -1912,8 +1912,8 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
     QString c_MainDeviceName;
     QString c_SubDeviceName;
     QStringList c_SubDevices;
-    std::vector<C_OscNode> c_OscNodes;
-    std::vector<C_PuiSdNode> c_UiNodes;
+    QList<C_OscNode> c_OscNodes;
+    QList<C_PuiSdNode> c_UiNodes;
     for (uint32_t u32_ItGroup = 0UL;
          u32_ItGroup < orc_Snapshot.c_OscNodeGroups.size(); ++u32_ItGroup) {
       const C_OscNodeSquad &rc_Group =
@@ -1973,7 +1973,7 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
 void C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAdaptConnections(
     const uint32_t ou32_DataNodeIndex,
     const QMap<uint32_t, uint32_t> &orc_MapOldBusIndexToNewBusIndex) {
-  const std::vector<uint32_t> c_NodeIndices =
+  const QList<uint32_t> c_NodeIndices =
       C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
           ou32_DataNodeIndex);
 
@@ -1988,9 +1988,9 @@ void C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAdaptConnections(
 
     if ((pc_OscNode != NULL) && (pc_UiNode != NULL)) {
       C_OscNodeProperties c_OscAdaptedNodeproperties = pc_OscNode->c_Properties;
-      std::vector<C_PuiSdNodeConnection> c_UiAdaptedNodeConnections =
+      QList<C_PuiSdNodeConnection> c_UiAdaptedNodeConnections =
           pc_UiNode->c_UiBusConnections;
-      for (std::vector<C_PuiSdNodeConnection>::iterator c_ItConn =
+      for (QList<C_PuiSdNodeConnection>::iterator c_ItConn =
                c_UiAdaptedNodeConnections.begin();
            c_ItConn != c_UiAdaptedNodeConnections.end();) {
         uint32_t u32_BusIndex = std::numeric_limits<uint32_t>::max();
@@ -2305,7 +2305,7 @@ void C_SdTopologyScene::m_SyncIndex(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyScene::m_ConnectNodeToBus(
     const uint8_t &oru8_InterfaceNumber,
-    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties>
+    const QList<C_PuiSdNodeInterfaceAutomaticProperties>
         &orc_Properties) {
   if ((this->mpc_NodeConnectItem != NULL) &&
       (this->mpc_BusConnectItem != NULL)) {
@@ -2330,7 +2330,7 @@ void C_SdTopologyScene::m_ConnectNodeToBus(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyScene::m_ChangeInterface(
     const uint8_t &oru8_InterfaceNumber,
-    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> &orc_Properties,
+    const QList<C_PuiSdNodeInterfaceAutomaticProperties> &orc_Properties,
     C_GiLiBusConnector *const opc_Connector) {
   if (opc_Connector != NULL) {
     // Update interface
@@ -2339,10 +2339,10 @@ void C_SdTopologyScene::m_ChangeInterface(
     if (pc_Conn != NULL) {
       const C_GiNode *const pc_Node = opc_Connector->GetNodeItem();
       if (pc_Node != NULL) {
-        const std::vector<uint32_t> c_NodeIndices =
+        const QList<uint32_t> c_NodeIndices =
             C_PuiSdHandler::h_GetInstance()
                 ->GetAllNodeGroupIndicesUsingNodeIndex(pc_Node->GetIndex());
-        std::vector<C_PuiSdNodeInterfaceAutomaticProperties> c_Properties;
+        QList<C_PuiSdNodeInterfaceAutomaticProperties> c_Properties;
         C_PuiSdUtil::h_GetInterfaceDataForNode(pc_Node->GetIndex(), *pc_Conn,
                                                c_Properties);
         if ((c_NodeIndices.size() == c_Properties.size())) {
@@ -2390,7 +2390,7 @@ void C_SdTopologyScene::m_RestoreToolTips(void) const {
 void C_SdTopologyScene::m_RemoveNodeOfScene(
     const C_GiNode *const opc_NodeGraphicsItem) {
   if (opc_NodeGraphicsItem != NULL) {
-    const std::vector<uint32_t> c_NodeIndices =
+    const QList<uint32_t> c_NodeIndices =
         C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
             static_cast<uint32_t>(opc_NodeGraphicsItem->GetIndex()));
     // Context menu button of node
@@ -2402,7 +2402,7 @@ void C_SdTopologyScene::m_RemoveNodeOfScene(
     // unregister arrow
     this->mpc_ArrowCursorButton->DetachNode();
     // Update indices
-    for (std::vector<uint32_t>::const_reverse_iterator c_ItIndex =
+    for (QList<uint32_t>::const_reverse_iterator c_ItIndex =
              c_NodeIndices.rbegin();
          c_ItIndex != c_NodeIndices.rend(); ++c_ItIndex) {
       this->m_SyncIndex(C_PuiSdDataElement::eNODE, *c_ItIndex,
@@ -2852,7 +2852,7 @@ void C_SdTopologyScene::m_ShowNewConnectionPopUp(
     QGraphicsView *const pc_View = this->views().at(0);
     const QPointer<C_OgePopUpDialog> c_Dialog =
         new C_OgePopUpDialog(pc_View, pc_View);
-    std::vector<uint32_t> c_NodeIndices;
+    QList<uint32_t> c_NodeIndices;
 
     c_NodeIndices.push_back(opc_Node->GetIndex());
 
@@ -2877,16 +2877,16 @@ void C_SdTopologyScene::m_ShowNewConnectionPopUp(
     c_Dialog->SetSize(c_SIZE);
     if (pc_ComIfWidget->GetInteractionPossible() == true) {
       if (c_Dialog->exec() == static_cast<int32_t>(QDialog::Accepted)) {
-        std::vector<std::vector<uint8_t>> c_ContainerId;
-        std::vector<std::vector<uint8_t>> c_ContainerIp;
-        std::vector<C_PuiSdNodeInterfaceAutomaticProperties> c_Properties;
-        std::vector<uint8_t> c_InterfaceIndices;
+        QList<QByteArray> c_ContainerId;
+        QList<QByteArray> c_ContainerIp;
+        QList<C_PuiSdNodeInterfaceAutomaticProperties> c_Properties;
+        QByteArray c_InterfaceIndices;
         const uint8_t u8_SelectedInterface =
             pc_ComIfWidget->GetSelectedInterface();
         const C_OscSystemBus *const pc_Bus =
             C_PuiSdHandler::h_GetInstance()->GetOscBus(opc_Bus->GetIndex());
 
-        c_InterfaceIndices.push_back(u8_SelectedInterface);
+        c_InterfaceIndices.append(static_cast<char>(u8_SelectedInterface));
 
         // generate ID(s)
         c_ContainerId = this->m_AssignNodeProperty(
@@ -2900,14 +2900,14 @@ void C_SdTopologyScene::m_ShowNewConnectionPopUp(
         Q_ASSERT(c_ContainerId[0].size() == c_ContainerIp[0].size());
         c_Properties.reserve(c_ContainerId[0].size());
 
-        for (uint32_t u32_It = 0UL; u32_It < c_ContainerId[0].size();
+        for (uint32_t u32_It = 0UL; u32_It < static_cast<uint32_t>(c_ContainerId[0].size());
              ++u32_It) {
           C_PuiSdNodeInterfaceAutomaticProperties c_Property;
-          c_Property.u8_NodeId = c_ContainerId[0][u32_It];
+          c_Property.u8_NodeId = static_cast<uint8_t>(c_ContainerId[0][static_cast<int>(u32_It)]);
           // build whole IP address. c_ContainerIp holds the last byte(s). First
           // 3 bytes are STW default.
           c_Property.c_Ip =
-              this->m_BuildCompleteIpAddress(c_ContainerIp[0][u32_It]);
+              this->m_BuildCompleteIpAddress(static_cast<uint8_t>(c_ContainerIp[0][static_cast<int>(u32_It)]));
           c_Properties.push_back(c_Property);
         }
 
@@ -2947,7 +2947,7 @@ void C_SdTopologyScene::m_ShowNewNodeToNodeConnectionPopUp(
     const C_GiNode *const opc_Node1, const C_GiNode *const opc_Node2) {
   if (((opc_Node1 != NULL) && (opc_Node2 != NULL)) &&
       (opc_Node1 != opc_Node2)) {
-    std::vector<uint32_t> c_NodeIndices;
+    QList<uint32_t> c_NodeIndices;
     QGraphicsView *const pc_View = this->views().at(0);
     const QPointer<C_OgePopUpDialog> c_Dialog =
         new C_OgePopUpDialog(pc_View, pc_View);
@@ -2966,22 +2966,22 @@ void C_SdTopologyScene::m_ShowNewNodeToNodeConnectionPopUp(
     c_Dialog->SetSize(QSize(800, 577));
     if (pc_ComIfWidget->GetInteractionPossible() == true) {
       if (c_Dialog->exec() == static_cast<int32_t>(QDialog::Accepted)) {
-        std::vector<uint64_t> c_Ids;
-        std::vector<uint8_t> c_InterfaceIndices;
-        std::vector<std::vector<uint8_t>> c_ContainerId;
-        std::vector<std::vector<uint8_t>> c_ContainerIp;
+        QList<uint64_t> c_Ids;
+        QByteArray c_InterfaceIndices;
+        QList<QByteArray> c_ContainerId;
+        QList<QByteArray> c_ContainerIp;
 
         // get the selected interfaces
-        c_InterfaceIndices.push_back(
-            static_cast<uint8_t>(pc_ComIfWidget->GetSelectedInterface1()));
-        c_InterfaceIndices.push_back(
-            static_cast<uint8_t>(pc_ComIfWidget->GetSelectedInterface2()));
+        c_InterfaceIndices.append(
+            static_cast<char>(pc_ComIfWidget->GetSelectedInterface1()));
+        c_InterfaceIndices.append(
+            static_cast<char>(pc_ComIfWidget->GetSelectedInterface2()));
 
         // connection creates a new bus
         if (pc_ComIfWidget->CheckIfCreateNew() == true) {
-          std::vector<C_PuiSdNodeInterfaceAutomaticProperties>
+          QList<C_PuiSdNodeInterfaceAutomaticProperties>
               c_Node1Properties;
-          std::vector<C_PuiSdNodeInterfaceAutomaticProperties>
+          QList<C_PuiSdNodeInterfaceAutomaticProperties>
               c_Node2Properties;
           const QPointF c_Node1Bottom(
               opc_Node1->sceneBoundingRect().center().x(),
@@ -3037,7 +3037,7 @@ void C_SdTopologyScene::m_ShowNewNodeToNodeConnectionPopUp(
         else {
           const uint32_t u32_BusDataIndex = pc_ComIfWidget->GetBusIndex();
           uint64_t u64_UniqueBusId = 0;
-          std::vector<C_PuiSdNodeInterfaceAutomaticProperties> c_Properties;
+          QList<C_PuiSdNodeInterfaceAutomaticProperties> c_Properties;
           const QPointF c_Node1Center = opc_Node1->sceneBoundingRect().center();
           QList<QGraphicsItem *>::const_iterator c_ItItem;
           const QList<QGraphicsItem *> &rc_Items = this->items();
@@ -3124,16 +3124,16 @@ void C_SdTopologyScene::m_ShowNewNodeToNodeConnectionPopUp(
    remains empty and is not used by the calling function.
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<std::vector<uint8_t>> C_SdTopologyScene::m_AssignNodeProperty(
-    const std::vector<uint32_t> &orc_NodeIndices,
+QList<QByteArray> C_SdTopologyScene::m_AssignNodeProperty(
+    const QList<uint32_t> &orc_NodeIndices,
     const C_OscSystemBus::E_Type &ore_BusType, const uint32_t &oru32_BusIndex,
-    const std::vector<uint8_t> &orc_InterfaceIndices, const bool oq_BusExists,
+    const QByteArray &orc_InterfaceIndices, const bool oq_BusExists,
     const bool oq_GenerateId) {
-  std::vector<std::vector<uint8_t>> c_Container;
+  QList<QByteArray> c_Container;
   // these 2 vectors hold whether ID(s) or IP's last byte(s) depending on
   // oq_GenerateId
-  const std::vector<uint8_t> c_Node1Property;
-  const std::vector<uint8_t> c_Node2Property;
+  const QByteArray c_Node1Property;
+  const QByteArray c_Node2Property;
 
   c_Container.push_back(c_Node1Property);
   c_Container.push_back(c_Node2Property);
@@ -3154,7 +3154,7 @@ std::vector<std::vector<uint8_t>> C_SdTopologyScene::m_AssignNodeProperty(
     // new one
     uint8_t u8_CurrentProperty;
 
-    u8_Interface = orc_InterfaceIndices[u32_NodeIt];
+    u8_Interface = static_cast<uint8_t>(orc_InterfaceIndices[static_cast<int>(u32_NodeIt)]);
 
     // check if current node squad
     if (C_PuiSdHandler::h_GetInstance()->GetNodeSquadIndexWithNodeIndex(
@@ -3177,12 +3177,12 @@ std::vector<std::vector<uint8_t>> C_SdTopologyScene::m_AssignNodeProperty(
             const bool q_Connected =
                 pc_SubNode->pc_DeviceDefinition
                     ->c_SubDevices[pc_SubNode->u32_SubDeviceIndex]
-                    .IsConnected(ore_BusType, orc_InterfaceIndices[u32_NodeIt]);
+                    .IsConnected(ore_BusType, static_cast<uint8_t>(orc_InterfaceIndices[static_cast<int>(u32_NodeIt)]));
             if (q_Connected == false) {
               // dummy id/ip if not connected to selected interface to match the
               // checks in layers above (node id/ip count shall be equal to node
               // index count)
-              c_Container[u32_NodeIt].push_back(0);
+              c_Container[static_cast<int>(u32_NodeIt)].append(static_cast<char>(0));
             } else {
               if ((oq_GenerateId == false) &&
                   (ore_BusType == C_OscSystemBus::eETHERNET)) {
@@ -3211,8 +3211,8 @@ std::vector<std::vector<uint8_t>> C_SdTopologyScene::m_AssignNodeProperty(
                     *pc_SubNode, oru32_BusIndex, c_Container[0], c_Container[1],
                     oq_BusExists, true, u8_CurrentProperty);
               }
-              c_Container[u32_NodeIt].push_back(
-                  static_cast<uint8_t>(u32_NewNodeProperty));
+              c_Container[static_cast<int>(u32_NodeIt)].append(
+                  static_cast<char>(u32_NewNodeProperty));
             }
           }
         }
@@ -3248,8 +3248,8 @@ std::vector<std::vector<uint8_t>> C_SdTopologyScene::m_AssignNodeProperty(
               *pc_Node, oru32_BusIndex, c_Container[0], c_Container[1],
               oq_BusExists, true, u8_CurrentProperty);
         }
-        c_Container[u32_NodeIt].push_back(
-            static_cast<uint8_t>(u32_NewNodeProperty));
+        c_Container[static_cast<int>(u32_NodeIt)].append(
+            static_cast<char>(u32_NewNodeProperty));
       }
     }
   }
@@ -3278,13 +3278,13 @@ std::vector<std::vector<uint8_t>> C_SdTopologyScene::m_AssignNodeProperty(
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_SdTopologyScene::m_GeneratePropertyUsingExisting(
     const C_OscNode &orc_Node, const uint32_t &oru32_BusIndex,
-    const std::vector<uint8_t> &orc_ExistingNode1Properties,
-    const std::vector<uint8_t> &orc_ExistingNode2Properties,
+    const QByteArray &orc_ExistingNode1Properties,
+    const QByteArray &orc_ExistingNode2Properties,
     const bool oq_BusExists, const bool oq_GenerateId,
     const uint8_t ou8_CurrentProperty) {
   uint32_t u32_Retval;
 
-  std::vector<uint32_t> c_UsedProperties;
+  QList<uint32_t> c_UsedProperties;
   bool q_CurrentPropInUse = false;
 
   if (oq_BusExists) {
@@ -3310,12 +3310,14 @@ uint32_t C_SdTopologyScene::m_GeneratePropertyUsingExisting(
   }
 
   // put together all used/existing properties
-  c_UsedProperties.insert(c_UsedProperties.end(),
-                          orc_ExistingNode1Properties.begin(),
-                          orc_ExistingNode1Properties.end());
-  c_UsedProperties.insert(c_UsedProperties.end(),
-                          orc_ExistingNode2Properties.begin(),
-                          orc_ExistingNode2Properties.end());
+  for (const auto & u8_Prop : orc_ExistingNode1Properties)
+  {
+    c_UsedProperties.push_back(static_cast<uint32_t>(static_cast<uint8_t>(u8_Prop)));
+  }
+  for (const auto & u8_Prop : orc_ExistingNode2Properties)
+  {
+    c_UsedProperties.push_back(static_cast<uint32_t>(static_cast<uint8_t>(u8_Prop)));
+  }
   c_UsedProperties = C_Uti::h_UniquifyAndSortAscending(c_UsedProperties);
 
   // search for ou8_CurrentProperty in c_UsedProperties. If it's not used yet,
@@ -3352,17 +3354,17 @@ uint32_t C_SdTopologyScene::m_GeneratePropertyUsingExisting(
    IP address as a vector
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint8_t>
+QByteArray
 C_SdTopologyScene::m_BuildCompleteIpAddress(const uint8_t &oru8_IpLastByte) {
-  std::vector<uint8_t> c_Retval;
+  QByteArray c_Retval;
 
-  c_Retval.push_back(
-      C_OscNodeComInterfaceSettings::C_IpAddress::hu8_IP_FIRST_BYTE);
-  c_Retval.push_back(
-      C_OscNodeComInterfaceSettings::C_IpAddress::hu8_IP_SECOND_BYTE);
-  c_Retval.push_back(
-      C_OscNodeComInterfaceSettings::C_IpAddress::hu8_IP_THIRD_BYTE);
-  c_Retval.push_back(oru8_IpLastByte);
+  c_Retval.append(
+      static_cast<char>(C_OscNodeComInterfaceSettings::C_IpAddress::hu8_IP_FIRST_BYTE));
+  c_Retval.append(
+      static_cast<char>(C_OscNodeComInterfaceSettings::C_IpAddress::hu8_IP_SECOND_BYTE));
+  c_Retval.append(
+      static_cast<char>(C_OscNodeComInterfaceSettings::C_IpAddress::hu8_IP_THIRD_BYTE));
+  c_Retval.append(static_cast<char>(oru8_IpLastByte));
 
   return c_Retval;
 }
@@ -3410,7 +3412,7 @@ void C_SdTopologyScene::m_LoadSnapshot(
     const QVector<uint32_t> &orc_NodeIndices,
     const QVector<uint32_t> &orc_BusIndices,
     const QVector<uint32_t> &orc_OtherStartIndices, const bool &orq_Selection,
-    const std::vector<C_PuiSdCompleteBusConnectionData> *const
+    const QList<C_PuiSdCompleteBusConnectionData> *const
         opc_AdditionalConnectionData,
     const QMap<C_PuiBsTemporaryDataId, uint64_t> *const opc_IdMap) {
   QVector<uint32_t> c_SaveIndices;
@@ -3555,7 +3557,7 @@ void C_SdTopologyScene::m_ReconnectBusConnectorNode(
     const stw::opensyde_gui::C_GiLiBusConnector *const opc_BusConnector,
     const C_GiNode *const opc_StartingNode, const C_GiNode *const opc_LastNode,
     const QPointF &orc_ConnectionPos, const int32_t &ors32_Interface,
-    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties>
+    const QList<C_PuiSdNodeInterfaceAutomaticProperties>
         &orc_Properties) {
   this->mc_UndoManager.DoReconnectNode(opc_BusConnector, opc_StartingNode,
                                        opc_LastNode, orc_ConnectionPos,
@@ -3599,7 +3601,7 @@ void C_SdTopologyScene::m_ReconnectBusConnectorBus(
     const stw::opensyde_gui::C_GiLiBus *const opc_StartingBus,
     const stw::opensyde_gui::C_GiLiBus *const opc_LastBus,
     const QPointF &orc_ConnectionPos, const int32_t &ors32_Interface,
-    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties>
+    const QList<C_PuiSdNodeInterfaceAutomaticProperties>
         &orc_Properties) {
   this->mc_UndoManager.DoReconnectBus(opc_BusConnector, opc_StartingBus,
                                       opc_LastBus, orc_ConnectionPos,

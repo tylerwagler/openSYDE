@@ -11,6 +11,7 @@
 #ifndef C_OSCPARAMSETINTERPRETEDNODE_HPP
 #define C_OSCPARAMSETINTERPRETEDNODE_HPP
 
+#include <QList>
 #include <QString>
 #include "C_OscParamSetInterpretedDataPool.hpp"
 
@@ -30,7 +31,7 @@ public:
    C_OscParamSetInterpretedNode(void);
 
    QString c_Name;                              ///< Node name
-   std::vector<C_OscParamSetInterpretedDataPool> c_DataPools; ///< Interpreted data pools, used by this parameter set
+   QList<C_OscParamSetInterpretedDataPool> c_DataPools; ///< Interpreted data pools, used by this parameter set
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QStringList>
 #include <QWidget>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -63,7 +64,7 @@ private:
    uint32_t mu32_DomainIndex;
    uint32_t mu32_ChannelIndex;
    bool mq_UseChannelIndex;
-   std::vector<uint32_t> mc_CbxUseCaseIndices;
+   QList<uint32_t> mc_CbxUseCaseIndices;
    int32_t ms32_LastComboboxUseCaseIndex;
 
    //Avoid call
@@ -78,7 +79,7 @@ private:
    void m_OnLinkedChannelClicked(const QString & orc_LinkedChannelName);
    void m_OnViewDatapoolDetailsClicked(void);
    void m_SetLinkedSymbolAndChannel(const bool oq_IsLinked,
-                                    const std::vector<uint32_t> & orc_LinkedChannelIndices) const;
+                                    const QList<uint32_t> & orc_LinkedChannelIndices) const;
    void m_LoadChannelData(void);
    void m_EmitUpdateSignal(void);
    void m_ConnectWidgets(const bool oq_Connect) const;

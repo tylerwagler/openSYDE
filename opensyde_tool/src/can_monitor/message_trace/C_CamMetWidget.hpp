@@ -12,9 +12,11 @@
 #define C_CAMMETWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include <QTimer>
 #include <QMouseEvent>
+#include <vector>
 
 #include "stwtypes.hpp"
 
@@ -114,7 +116,7 @@ Q_SIGNALS:
    // C_COM       no CAN bus in system definition
    // C_WARN      specified bus index was not found or is no CAN bus
    void SigDatabaseLoadResultOsySysDef(const int32_t os32_Result,
-                                       const std::vector<stw::opensyde_core::C_OscSystemBus> & orc_Busses);
+                                       const QList<stw::opensyde_core::C_OscSystemBus> & orc_Busses);
    // Values of os32_Result:
    // C_NO_ERR    Bus index for this system definition adapted
    // C_NOACT     No system definition found with this path

@@ -57,7 +57,7 @@ C_TblTreItem * C_TblTreItem::GetItem(const uint32_t ou32_Index)
 {
    C_TblTreItem * pc_Retval = NULL;
 
-   for (std::vector<C_TblTreSimpleItem *>::const_iterator c_It = this->c_Children.begin();
+   for (QList<C_TblTreSimpleItem *>::const_iterator c_It = this->c_Children.begin();
         c_It != this->c_Children.end(); ++c_It)
    {
       C_TblTreSimpleItem * const pc_Item = *c_It;

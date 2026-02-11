@@ -47,7 +47,7 @@ public:
 
   virtual int32_t Init(C_OscSystemDefinition &orc_SystemDefinition,
                        const uint32_t ou32_ActiveBusIndex,
-                       const std::vector<uint8_t> &orc_ActiveNodes,
+                       const QByteArray &orc_ActiveNodes,
                        stw::can::C_CanDispatcher *const opc_CanDispatcher,
                        C_OscIpDispatcher *const opc_IpDispatcher,
                        C_OscSecurityPemDatabase *const opc_SecurityPemDb);
@@ -77,8 +77,8 @@ protected:
   // class configuration parameters:
   C_OscSystemDefinition *mpc_SystemDefinition;
   uint32_t mu32_ActiveBusIndex;
-  std::vector<uint8_t> mc_ActiveNodes;
-  std::vector<uint8_t>
+  QByteArray mc_ActiveNodes;
+  QByteArray
       mc_TimeoutNodes; // Flag if a node had a timeout and is not reachable
 
   bool mq_OpenSydeDevicesActive;

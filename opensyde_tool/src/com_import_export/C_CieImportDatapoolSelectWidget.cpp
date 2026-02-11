@@ -202,10 +202,10 @@ void C_CieImportDatapoolSelectWidget::m_CancelClicked(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieImportDatapoolSelectWidget::m_InitComboBox(void) const
 {
-   const std::vector< const C_OscNodeDataPool *> & rc_Datapools =
+   const QList< const C_OscNodeDataPool *> & rc_Datapools =
       C_PuiSdHandler::h_GetInstance()->GetOscCanDataPools(this->mu32_NodeIndex, this->me_ComProtocolType);
 
-   for (std::vector< const C_OscNodeDataPool *>::const_iterator c_It = rc_Datapools.begin(); c_It != rc_Datapools.end();
+   for (QList< const C_OscNodeDataPool *>::const_iterator c_It = rc_Datapools.begin(); c_It != rc_Datapools.end();
         ++c_It)
    {
       if (*c_It != NULL)

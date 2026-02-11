@@ -41,7 +41,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyAddBaseCommand::C_SdManUnoTopologyAddBaseCommand(QGraphicsScene * const opc_Scene,
-                                                                   const std::vector<uint64_t> & orc_Ids,
+                                                                   const QList<uint64_t> & orc_Ids,
                                                                    const QString & orc_Text,
                                                                    QUndoCommand * const opc_Parent,
                                                                    const C_SdTopologyDataSnapshot & orc_InitialSnapshotData)

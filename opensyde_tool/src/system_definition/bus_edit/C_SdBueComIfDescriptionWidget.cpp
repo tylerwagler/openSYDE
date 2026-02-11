@@ -459,7 +459,7 @@ void C_SdBueComIfDescriptionWidget::SetProtocolByDataPool(const uint32_t ou32_Da
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueComIfDescriptionWidget::SetBusId(const uint32_t ou32_BusIndex)
 {
-   std::vector<uint32_t> c_MsgCounter;
+   QList<uint32_t> c_MsgCounter;
 
    this->SaveUserSettings();
 
@@ -579,7 +579,7 @@ void C_SdBueComIfDescriptionWidget::SelectSignalSearch(const uint32_t ou32_NodeI
    C_OscCanMessageIdentificationIndices c_MessageId;
 
    // fills all information except the message index
-   const std::vector<C_OscCanMessage> * const pc_Messages = m_PrepareMessageId(ou32_NodeIndex, ou32_DataPoolIndex,
+   const QList<C_OscCanMessage> * const pc_Messages = m_PrepareMessageId(ou32_NodeIndex, ou32_DataPoolIndex,
                                                                                ou32_ListIndex, c_MessageId);
 
    if (pc_Messages != NULL)
@@ -703,8 +703,8 @@ void C_SdBueComIfDescriptionWidget::ImportMessages(void)
 
    if (e_Protocol != C_OscCanProtocol::eCAN_OPEN)
    {
-      std::vector<uint32_t> c_NodeIndexes;
-      std::vector<uint32_t> c_InterfaceIndexes;
+      QList<uint32_t> c_NodeIndexes;
+      QList<uint32_t> c_InterfaceIndexes;
       const int32_t s32_Return =
          C_CieUtil::h_ImportFile(this->mu32_BusIndex, e_Protocol, this, c_NodeIndexes, c_InterfaceIndexes);
 
@@ -1222,8 +1222,8 @@ void C_SdBueComIfDescriptionWidget::SaveUserSettings(void) const
       QString c_SelectedMessageName;
       bool q_SignalSelected;
       QString c_SelectedSignalName;
-      std::vector<int32_t> c_MessageValues;
-      std::vector<int32_t> c_SignalValues;
+      QList<int32_t> c_MessageValues;
+      QList<int32_t> c_SignalValues;
       this->mpc_Ui->pc_MsgSigTableWidget->SaveUserSettings(c_MessageValues, c_SignalValues);
 
       if (this->mpc_Ui->pc_MessageSelectorWidget->IsSelectionEmpty() == true)
@@ -1722,12 +1722,12 @@ void C_SdBueComIfDescriptionWidget::m_OnChange(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_OscCanMessage> * C_SdBueComIfDescriptionWidget::m_PrepareMessageId(const uint32_t ou32_NodeIndex,
+const QList<C_OscCanMessage> * C_SdBueComIfDescriptionWidget::m_PrepareMessageId(const uint32_t ou32_NodeIndex,
                                                                                        const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex,
                                                                                        stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId)
 const
 {
-   const std::vector<C_OscCanMessage> * pc_Messages = NULL;
+   const QList<C_OscCanMessage> * pc_Messages = NULL;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
    if (pc_Node != NULL)

@@ -9,7 +9,7 @@
 #define C_PUISDNODEINTERFACEAUTOMATICPROPERTIES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QByteArray>
 
 #include "stwtypes.hpp"
 
@@ -28,7 +28,7 @@ public:
    C_PuiSdNodeInterfaceAutomaticProperties();
 
    uint8_t u8_NodeId;
-   std::vector<uint8_t> c_Ip;
+   QByteArray c_Ip;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

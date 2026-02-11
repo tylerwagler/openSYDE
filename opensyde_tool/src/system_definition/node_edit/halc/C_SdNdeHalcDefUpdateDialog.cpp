@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -506,8 +507,8 @@ void C_SdNdeHalcDefUpdateDialog::m_UpdateChannelConfiguration(const C_OscHalcCon
    bool q_ResetToDefault = false;
 
    // Parameters to compare
-   std::vector<C_OscHalcDefStruct> * pc_UpdatedParametersToCompare = NULL;
-   const std::vector<C_OscHalcDefStruct> * pc_CurrentParametersToCompare = NULL;
+   QList<C_OscHalcDefStruct> * pc_UpdatedParametersToCompare = NULL;
+   const QList<C_OscHalcDefStruct> * pc_CurrentParametersToCompare = NULL;
 
    // Update all users adaption of configuration in loaded configuration except parameters
    // Check if name was changed by user. If it equals the definition name of the current definition

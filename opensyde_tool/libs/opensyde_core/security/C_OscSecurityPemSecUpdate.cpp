@@ -105,14 +105,14 @@ int32_t C_OscSecurityPemSecUpdate::LoadFromFile(const std::string & orc_FileName
    C_CONFIG   Invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent,
+int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const QByteArray & orc_FileContent,
                                                     std::string & orc_ErrorMessage)
 {
    int32_t s32_Retval = C_NO_ERR;
 
    const int x_ContentSize = static_cast<int>(orc_FileContent.size()); //lint !e970 !e8080 //use type expected by API
    //read pem file content into a BIO (= openSSL I/O stream)
-   BIO * const pc_PrivKeyFile = BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
+   BIO * const pc_PrivKeyFile = BIO_new_mem_buf(orc_FileContent.data(), x_ContentSize);
 
    if (pc_PrivKeyFile != NULL)
    {
@@ -132,10 +132,11 @@ int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> &
             if (pc_PrivBigNum != NULL)
             {
                const int x_Size = BN_num_bytes(pc_PrivBigNum); //lint !e970 !e8080 //use type expected by API
-               std::vector<uint8_t> c_PrivKey(x_Size);
+               QByteArray c_PrivKey;
+               c_PrivKey.resize(x_Size);
 
                //convert BIGNUM to byte array
-               BN_bn2bin(pc_PrivBigNum, &c_PrivKey[0]);
+               BN_bn2bin(pc_PrivBigNum, reinterpret_cast<uint8_t*>(c_PrivKey.data()));
 
                //write private key to our internal structure
                this->mc_KeyInfo.SetPrivateKey(c_PrivKey);

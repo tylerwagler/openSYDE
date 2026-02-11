@@ -65,8 +65,8 @@ C_PuiSvHandlerFiler::C_PuiSvHandlerFiler(void)
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvHandlerFiler::h_LoadViews(std::vector<C_PuiSvData> & orc_Views,
-                                         const std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes,
+int32_t C_PuiSvHandlerFiler::h_LoadViews(QList<C_PuiSvData> & orc_Views,
+                                         const QList<stw::opensyde_core::C_OscNode> & orc_OscNodes,
                                          C_OscXmlParserBase & orc_XmlParser, const QDir * const opc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -145,7 +145,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadViews(std::vector<C_PuiSvData> & orc_Views,
    C_CONFIG   file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvHandlerFiler::h_SaveViews(const std::vector<C_PuiSvData> & orc_Views, C_OscXmlParserBase & orc_XmlParser,
+int32_t C_PuiSvHandlerFiler::h_SaveViews(const QList<C_PuiSvData> & orc_Views, C_OscXmlParserBase & orc_XmlParser,
                                          const QDir * const opc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -312,7 +312,7 @@ QString C_PuiSvHandlerFiler::h_GetViewFileName(const QString & orc_ViewName)
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvHandlerFiler::mh_LoadDashboards(std::vector<C_PuiSvDashboard> & orc_Dashboards,
+int32_t C_PuiSvHandlerFiler::mh_LoadDashboards(QList<C_PuiSvDashboard> & orc_Dashboards,
                                                C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -360,7 +360,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadDashboards(std::vector<C_PuiSvDashboard> & o
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandlerFiler::mh_LoadViewFile(C_PuiSvData & orc_View, const QString & orc_FilePath,
-                                             const std::vector<C_OscNode> & orc_OscNodes)
+                                             const QList<C_OscNode> & orc_OscNodes)
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser,
@@ -437,7 +437,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadViewFile(C_PuiSvData & orc_View, const QStri
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandlerFiler::mh_LoadView(C_PuiSvData & orc_View, C_OscXmlParserBase & orc_XmlParser,
-                                         const std::vector<C_OscNode> & orc_OscNodes)
+                                         const QList<C_OscNode> & orc_OscNodes)
 {
    int32_t s32_Retval;
 
@@ -560,7 +560,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadView(C_PuiSvData & orc_View, C_OscXmlParserB
    }
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_PuiSvDashboard> c_Dashboards;
+      QList<C_PuiSvDashboard> c_Dashboards;
       s32_Retval = mh_LoadDashboards(c_Dashboards, orc_XmlParser);
       orc_View.SetDashboards(c_Dashboards);
    }
@@ -715,7 +715,7 @@ int32_t C_PuiSvHandlerFiler::mh_StringToTransmissionMode(const QString & orc_Str
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "opensyde-system-view" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvHandlerFiler::mh_SaveDashboards(const std::vector<C_PuiSvDashboard> & orc_Dashboards,
+void C_PuiSvHandlerFiler::mh_SaveDashboards(const QList<C_PuiSvDashboard> & orc_Dashboards,
                                             C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("dashboards");

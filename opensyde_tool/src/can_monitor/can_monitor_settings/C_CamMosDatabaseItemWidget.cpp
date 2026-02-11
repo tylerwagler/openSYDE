@@ -240,7 +240,7 @@ void C_CamMosDatabaseItemWidget::SetBusIndex(const uint32_t ou32_BusIndex)
    \param[in]  orc_Busses  buses
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMosDatabaseItemWidget::SetBusses(const std::vector<stw::opensyde_core::C_OscSystemBus> & orc_Busses)
+void C_CamMosDatabaseItemWidget::SetBusses(const QList<stw::opensyde_core::C_OscSystemBus> & orc_Busses)
 {
    this->mc_Busses = orc_Busses;
 }

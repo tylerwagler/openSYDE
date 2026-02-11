@@ -12,10 +12,10 @@
 #define C_USNODEDATAPOOL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
 #include <QMap>
 #include <QString>
 #include <QStringList>
+#include <QList>
 #include "C_UsCommunication.hpp"
 #include "C_UsNodeDatapoolList.hpp"
 
@@ -44,8 +44,8 @@ public:
 
    const QStringList GetInterfaceSettingsKeysInternal(void) const;
    C_UsCommunication GetCommList(const QString & orc_ListName) const;
-   void SetCommMessageOverviewColumnWidth(const QString & orc_ListName, const std::vector<int32_t> & orc_Value);
-   void SetCommSignalOverviewColumnWidth(const QString & orc_ListName, const std::vector<int32_t> & orc_Value);
+   void SetCommMessageOverviewColumnWidth(const QString & orc_ListName, const QList<int32_t> & orc_Value);
+   void SetCommSignalOverviewColumnWidth(const QString & orc_ListName, const QList<int32_t> & orc_Value);
    void SetListSelectedMessage(const QString & orc_ListName,
                                const stw::opensyde_core::C_OscCanProtocol::E_Type oe_SelectedProtocol,
                                const bool oq_MessageSelected, const QString & orc_SelectedMessageName,
@@ -53,7 +53,7 @@ public:
 
    const QStringList GetListSettingsKeysInternal(void) const;
    C_UsNodeDatapoolList GetOtherList(const QString & orc_ListName) const;
-   void SetListColumnSizes(const QString & orc_ListName, const std::vector<int32_t> & orc_ColumnWidths);
+   void SetListColumnSizes(const QString & orc_ListName, const QList<int32_t> & orc_ColumnWidths);
 
 private:
    QStringList mc_ExpandedListNames;

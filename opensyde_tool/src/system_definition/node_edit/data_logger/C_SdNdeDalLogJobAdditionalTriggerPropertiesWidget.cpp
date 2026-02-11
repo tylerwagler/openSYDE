@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 
 #include "stwerrors.hpp"
@@ -218,15 +219,15 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_HandleEditFieldsEnable
 void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_InitSupportedOperations()
 {
    this->mc_MapCoreOperationToUi.clear();
-   this->mc_MapCoreOperationToUi.emplace_back(std::pair<QString, QString>("<",
+   this->mc_MapCoreOperationToUi.emplaceBack(std::pair<QString, QString>("<",
                                                                           "<  (smaller than)"));
-   this->mc_MapCoreOperationToUi.emplace_back(std::pair<QString, QString>("<=",
+   this->mc_MapCoreOperationToUi.emplaceBack(std::pair<QString, QString>("<=",
                                                                           "<= (smaller than or equal)"));
-   this->mc_MapCoreOperationToUi.emplace_back(std::pair<QString, QString>("==",
+   this->mc_MapCoreOperationToUi.emplaceBack(std::pair<QString, QString>("==",
                                                                           "== (equal to)"));
-   this->mc_MapCoreOperationToUi.emplace_back(std::pair<QString, QString>(">",
+   this->mc_MapCoreOperationToUi.emplaceBack(std::pair<QString, QString>(">",
                                                                           ">  (greater than)"));
-   this->mc_MapCoreOperationToUi.emplace_back(std::pair<QString, QString>(">=",
+   this->mc_MapCoreOperationToUi.emplaceBack(std::pair<QString, QString>(">=",
                                                                           ">= (greater than or equal)"));
 }
 
@@ -237,7 +238,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_InitSupportedOperation
 void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_InitSupportedOperationsComboBox() const
 {
    this->mpc_Ui->pc_ComboBoxOperation->clear();
-   for (std::vector<std::pair<QString, QString> >::const_iterator c_It = this->mc_MapCoreOperationToUi.cbegin();
+   for (QList<std::pair<QString, QString> >::const_iterator c_It = this->mc_MapCoreOperationToUi.cbegin();
         c_It != this->mc_MapCoreOperationToUi.cend(); ++c_It)
    {
       this->mpc_Ui->pc_ComboBoxOperation->addItem(c_It->second);
@@ -498,7 +499,7 @@ void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_DataElementChanged()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_SetOperation(const QString & orc_NewValue)
 {
-   for (std::vector<std::pair<QString, QString> >::const_iterator c_It = this->mc_MapCoreOperationToUi.cbegin();
+   for (QList<std::pair<QString, QString> >::const_iterator c_It = this->mc_MapCoreOperationToUi.cbegin();
         c_It != this->mc_MapCoreOperationToUi.cend(); ++c_It)
    {
       if (c_It->first.compare(orc_NewValue) == 0)
@@ -658,7 +659,7 @@ QString C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget::m_GetOperationForCore
 
    QString c_Retval;
 
-   for (std::vector<std::pair<QString, QString> >::const_iterator c_It = this->mc_MapCoreOperationToUi.cbegin();
+   for (QList<std::pair<QString, QString> >::const_iterator c_It = this->mc_MapCoreOperationToUi.cbegin();
         c_It != this->mc_MapCoreOperationToUi.cend(); ++c_It)
    {
       if (c_It->second.compare(c_ComboBoxContent) == 0)

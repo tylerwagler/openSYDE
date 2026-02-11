@@ -9,6 +9,7 @@
 #define C_PUISDHANDLERCANOPENLOGIC_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_PuiSdHandlerBusLogic.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -106,7 +107,7 @@ protected:
    int32_t m_DeleteAllCanOpenManagerDevices(const uint32_t ou32_NodeIndex, const uint8_t ou8_InterfaceNumber);
    int32_t m_DeleteCanOpenManagerMessageVectors(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageIdBase,
-      const bool oq_VectorIsTx, const std::vector<stw::opensyde_core::C_OscCanMessage> & orc_MessageVector,
+      const bool oq_VectorIsTx, const QList<stw::opensyde_core::C_OscCanMessage> & orc_MessageVector,
       const stw::opensyde_core::C_OscCanInterfaceId & orc_DeviceId);
    bool m_HandleCreateCanOpenDatapool(const uint32_t ou32_NodeIndex);
    bool m_HandleCleanUpCanOpenDatapool(const uint32_t ou32_NodeIndex);
@@ -115,12 +116,12 @@ protected:
    void m_HandleSyncNodeAddedForCanOpenDevices(const uint32_t ou32_Index);
    void m_HandleSyncNodeAddedForCanOpenMessages(const uint32_t ou32_Index);
    static void mh_HandleSyncNodeAddedForCanOpenMessages(const uint32_t ou32_Index,
-                                                        std::vector<stw::opensyde_core::C_OscCanMessage> & orc_Messages);
+                                                        QList<stw::opensyde_core::C_OscCanMessage> & orc_Messages);
    void m_HandleSyncNodeAboutToBeDeleted(const uint32_t ou32_Index) override;
    void m_HandleSyncNodeAboutToBeDeletedForCanOpenDevices(const uint32_t ou32_Index);
    void m_HandleSyncNodeAboutToBeDeletedForCanOpenMessages(const uint32_t ou32_Index);
    static void mh_HandleSyncNodeAboutToBeDeletedForCanOpenMessages(const uint32_t ou32_Index,
-                                                                   std::vector<stw::opensyde_core::C_OscCanMessage> & orc_Messages);
+                                                                   QList<stw::opensyde_core::C_OscCanMessage> & orc_Messages);
    void m_HandleChangeConnectionForCanOpen(const uint32_t ou32_NodeIndex, const C_PuiSdNodeConnectionId & orc_PrevId,
                                            const uint8_t ou8_NewInterface) override;
    void m_HandleChangeConnectionForCanOpenDevices(const uint32_t ou32_NodeIndex,
@@ -135,7 +136,7 @@ protected:
    static void mh_HandleChangeConnectionForCanOpenDeviceMessages(const uint32_t ou32_NodeIndex,
                                                                  const C_PuiSdNodeConnectionId & orc_PrevId,
                                                                  const uint8_t ou8_NewInterface,
-                                                                 std::vector<stw::opensyde_core::C_OscCanMessage> & orc_Messages);
+                                                                 QList<stw::opensyde_core::C_OscCanMessage> & orc_Messages);
    void m_HandleChangeConnectionForCanOpenManagerMessages(const uint32_t ou32_NodeIndex,
                                                           const C_PuiSdNodeConnectionId & orc_PrevId,
                                                           const uint8_t ou8_NewInterface);
@@ -164,12 +165,12 @@ protected:
    void m_HandleNodeIdChangeForCanOpenMessages(const uint32_t ou32_NodeIndex, const uint8_t ou8_InterfaceNumber);
    static void mh_HandleNodeIdChangeForCanOpenMessages(const stw::opensyde_core::C_OscCanInterfaceId & orc_DeviceId,
                                                        const uint8_t ou8_NewNodeId,
-                                                       std::vector<stw::opensyde_core::C_OscCanMessage> & orc_Messages);
+                                                       QList<stw::opensyde_core::C_OscCanMessage> & orc_Messages);
 
    void m_HandlePdoSyncChangeForCanOpenMessages(const uint32_t ou32_NodeIndex, const uint8_t ou8_InterfaceNumber);
    static void mh_HandlePdoSyncChangeForCanOpenMessages(const uint32_t ou32_PdoSyncPeriodMs,
-                                                        std::vector<stw::opensyde_core::C_OscCanMessage> & orc_Messages,
-                                                        const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages);
+                                                        QList<stw::opensyde_core::C_OscCanMessage> & orc_Messages,
+                                                        const QList<C_PuiSdNodeCanMessage> & orc_UiMessages);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

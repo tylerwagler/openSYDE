@@ -40,7 +40,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoAddBendPointCommand::C_SebUnoAddBendPointCommand(QGraphicsScene * const opc_Scene,
-                                                         const std::vector<uint64_t> & orc_Ids,
+                                                         const QList<uint64_t> & orc_Ids,
                                                          const QPointF & orc_ScenePosition,
                                                          QUndoCommand * const opc_Parent) :
    C_SebUnoBendPointBaseCommand(opc_Scene, orc_Ids, "Add bend point for line(s)", orc_ScenePosition,

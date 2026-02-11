@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
+#include <QList>
 #include <QString>
 #include "C_OscHalcDefBase.hpp"
 #include "C_OscHalcConfigParameterStruct.hpp"
@@ -41,7 +42,7 @@ public:
    QString c_Comment;                          ///< User configured description for this channel
    bool q_SafetyRelevant;                                    ///< Flag if channel is safety relevant
    uint32_t u32_UseCaseIndex;                                ///< Current selected use-case index
-   std::vector<C_OscHalcConfigParameterStruct> c_Parameters; ///< Parameter configuration (synced with C_OscHalcDefBase)
+   QList<C_OscHalcConfigParameterStruct> c_Parameters; ///< Parameter configuration (synced with C_OscHalcDefBase)
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

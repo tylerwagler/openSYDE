@@ -15,6 +15,7 @@
 #ifndef C_OSCSUPSERVICEUPDATEPACKAGEV1_H
 #define C_OSCSUPSERVICEUPDATEPACKAGEV1_H
 
+#include <QList>
 #include <QStringList>
 #include <map>
 #include <set>
@@ -46,9 +47,9 @@ public:
       const QString &orc_PackagePath,
       const C_OscSystemDefinition &orc_SystemDefinition,
       const uint32_t ou32_ActiveBusIndex,
-      const std::vector<uint8_t> &orc_ActiveNodes,
-      const std::vector<uint32_t> &orc_NodesUpdateOrder,
-      const std::vector<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+      const QByteArray &orc_ActiveNodes,
+      const QList<uint32_t> &orc_NodesUpdateOrder,
+      const QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
       QStringList &orc_WarningMessages, QString &orc_ErrorMessage,
       const bool oq_SaveInCompatibilityFormat, const bool oq_SaveAsFile,
       const QString &orc_TemporaryDirectory = "");
@@ -56,9 +57,9 @@ public:
   static int32_t h_ProcessPackage(
       const QString &orc_PackagePath, const QString &orc_TargetUnzipPath,
       C_OscSystemDefinition &orc_SystemDefinition,
-      uint32_t &oru32_ActiveBusIndex, std::vector<uint8_t> &orc_ActiveNodes,
-      std::vector<uint32_t> &orc_NodesUpdateOrder,
-      std::vector<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+      uint32_t &oru32_ActiveBusIndex, QByteArray &orc_ActiveNodes,
+      QList<uint32_t> &orc_NodesUpdateOrder,
+      QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
       QStringList &orc_WarningMessages, QString &orc_ErrorMessage,
       const bool oq_IsZip);
 
@@ -88,7 +89,7 @@ protected:
   ///  is used for easy conversion of input parameters to target xml file
   class C_SupDefContent {
   public:
-    std::vector<C_SupDefNodeContent> c_Nodes;
+    QList<C_SupDefNodeContent> c_Nodes;
     uint32_t u32_ActiveBusIndex;
   };
 
@@ -104,9 +105,9 @@ protected:
       const QString &orc_PackagePath,
       const C_OscSystemDefinition &orc_SystemDefinition,
       const uint32_t ou32_ActiveBusIndex,
-      const std::vector<uint8_t> &orc_ActiveNodes,
-      const std::vector<uint32_t> &orc_NodesUpdateOrder,
-      const std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
+      const QByteArray &orc_ActiveNodes,
+      const QList<uint32_t> &orc_NodesUpdateOrder,
+      const QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
           &orc_ApplicationsToWrite,
       const bool oq_SaveAsFile);
 
@@ -121,19 +122,19 @@ protected:
   static int32_t mh_SupDefParamAdapter(
       const C_OscSystemDefinition &orc_SystemDefinition,
       const uint32_t ou32_ActiveBusIndex,
-      const std::vector<uint8_t> &orc_ActiveNodes,
-      const std::vector<uint32_t> &orc_NodesUpdateOrder,
-      const std::vector<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+      const QByteArray &orc_ActiveNodes,
+      const QList<uint32_t> &orc_NodesUpdateOrder,
+      const QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
       C_OscSupServiceUpdatePackageV1::C_SupDefContent &orc_SupDefContent);
 
   static int32_t
-  mh_GetUpdatePositionOfNode(const std::vector<uint32_t> &orc_NodesUpdateOrder,
+  mh_GetUpdatePositionOfNode(const QList<uint32_t> &orc_NodesUpdateOrder,
                              const uint32_t ou32_NodeForUpdate,
                              uint32_t &oru32_UpdatePosition);
 
   static int32_t mh_SetNodesUpdateOrder(
       const std::map<uint32_t, uint32_t> &orc_UpdateOrderByNodes,
-      std::vector<uint32_t> &orc_NodesUpdateOrder);
+      QList<uint32_t> &orc_NodesUpdateOrder);
   static void mh_LoadFilesSection(QStringList &orc_Files,
                                   const uint32_t ou32_NodeCounter,
                                   const uint32_t ou32_UpdatePos,

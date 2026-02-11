@@ -12,6 +12,7 @@
 
 #include <QObject>
 #include <QItemSelection>
+#include <QList>
 
 #include "C_TblTreModel.hpp"
 #include "C_TblTreItem.hpp"
@@ -62,13 +63,13 @@ private:
       QString c_Extension;
    };
 
-   std::vector<C_FileTableData> mc_FileInfoList;
+   QList<C_FileTableData> mc_FileInfoList;
 
    void m_FillFileInfo(const QStringList & orc_UnUsedFilesList, const QStringList & orc_EmptyFoldersList);
    QStringList m_ConvertAbsoluteToRelative(const QStringList & orc_UnUsedFilesList);
    const QString m_ConvertRelativeToAbsolute(const QString & orc_UnUsedFilePath) const;
    const QString m_GetFileSuffix(const QString & orc_FilePath) const;
-   void m_MoveFilesToTrash(const std::vector<uint32_t> & orc_FileIndexes);
+   void m_MoveFilesToTrash(const QList<uint32_t> & orc_FileIndexes);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

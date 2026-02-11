@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <algorithm> //for sort
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -61,7 +62,7 @@ C_OscExportCanOpenConciseEntry::C_OscExportCanOpenConciseEntry() :
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscExportCanOpenConciseEntry::C_OscExportCanOpenConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
-                                                               const std::vector<uint8_t> & orc_Payload,
+                                                               const QByteArray & orc_Payload,
                                                                const QString & orc_Comment) :
    u16_Index(ou16_Index),
    u8_SubIndex(ou8_SubIndex),
@@ -88,7 +89,7 @@ C_OscExportCanOpenConciseEntry::~C_OscExportCanOpenConciseEntry()
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
-                                                     const std::vector<uint8_t> & orc_Payload,
+                                                     const QByteArray & orc_Payload,
                                                      const QString & orc_Comment)
 {
    u16_Index = ou16_Index;
@@ -109,7 +110,7 @@ void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, 
 void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, const uint8_t ou8_SubIndex,
                                                      const uint8_t ou8_Value, const QString & orc_Comment)
 {
-   std::vector<uint8_t> c_ThePayload;
+   QByteArray c_ThePayload;
    c_ThePayload.push_back(ou8_Value);
 
    this->SetConciseEntry(ou16_Index, ou8_SubIndex, c_ThePayload, orc_Comment);
@@ -128,7 +129,7 @@ void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, 
                                                      const uint16_t ou16_Value,
                                                      const QString & orc_Comment)
 {
-   std::vector<uint8_t> c_ThePayload;
+   QByteArray c_ThePayload;
    c_ThePayload.push_back(static_cast<uint8_t>(ou16_Value));
    c_ThePayload.push_back(static_cast<uint8_t>(ou16_Value >> 8U));
 
@@ -148,7 +149,7 @@ void C_OscExportCanOpenConciseEntry::SetConciseEntry(const uint16_t ou16_Index, 
                                                      const uint32_t ou32_Value,
                                                      const QString & orc_Comment)
 {
-   std::vector<uint8_t> c_ThePayload;
+   QByteArray c_ThePayload;
    c_ThePayload.push_back(static_cast<uint8_t>(ou32_Value));
    c_ThePayload.push_back(static_cast<uint8_t>(ou32_Value >> 8U));
    c_ThePayload.push_back(static_cast<uint8_t>(ou32_Value >> 16U));
@@ -214,7 +215,7 @@ QString C_OscExportCanOpenConciseEntry::h_GetNumOfEntriesString(const uint32_t o
 */
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_OscExportCanOpenConciseEntry::h_GetConciseArraySize(
-   std::vector<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries)
+   QList<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries)
 {
    uint32_t u32_Retval;
    uint32_t u32_PayloadByteCount = 0;
@@ -799,7 +800,7 @@ void C_OscExportCanOpenConfig::mh_AddGlobalVariables(QStringList & orc_Data, con
       }
    }
 
-   std::vector<uint32_t> c_ConcArraySizes;
+   QList<uint32_t> c_ConcArraySizes;
    //get the CANopen manager info via interface index
    const std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_Iterator =
       orc_Node.c_CanOpenManagers.find(ou8_InterfaceIndex);
@@ -861,7 +862,7 @@ void C_OscExportCanOpenConfig::mh_AddGlobalVariables(QStringList & orc_Data, con
 void C_OscExportCanOpenConfig::mh_AddSignalDefinitions(QStringList & orc_Data,
                                                        const C_OscNodeDataPoolList & orc_DatapoolList,
                                                        const uint32_t ou32_SignalListIndex,
-                                                       const std::vector<C_OscCanMessage> & orc_Messages)
+                                                       const QList<C_OscCanMessage> & orc_Messages)
 {
    for (uint16_t u16_MsgIndex = 0; u16_MsgIndex < orc_Messages.size(); ++u16_MsgIndex)
    {
@@ -870,7 +871,7 @@ void C_OscExportCanOpenConfig::mh_AddSignalDefinitions(QStringList & orc_Data,
       //only compose array if PDO is active and contains signals
       if (rc_CurrentMsg.q_CanOpenManagerMessageActive == true)
       {
-         const std::vector<C_OscCanSignal> & rc_CurrentSignalList = orc_Messages[u16_MsgIndex].c_Signals;
+         const QList<C_OscCanSignal> & rc_CurrentSignalList = orc_Messages[u16_MsgIndex].c_Signals;
          if (rc_CurrentSignalList.size() > 0)
          {
             orc_Data.append("static const T_osco_man_pdo_signal_definition mat_Pdo_" +
@@ -896,7 +897,7 @@ void C_OscExportCanOpenConfig::mh_AddSignalDefinitions(QStringList & orc_Data,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConfig::mh_AddPdoDefinitions(QStringList & orc_Data,
-                                                    const std::vector<C_OscCanMessage> & orc_Messages,
+                                                    const QList<C_OscCanMessage> & orc_Messages,
                                                     const uint8_t ou8_InterfaceIndex, const bool oq_IsTx,
                                                     const bool oq_RemoveLastComma)
 {
@@ -995,12 +996,12 @@ void C_OscExportCanOpenConfig::mh_AddPdoDefinitions(QStringList & orc_Data,
    \return vector with size of concise array for every device
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_OscExportCanOpenConfig::mh_AddDeviceSpecificConciseData(QStringList & orc_Data,
+QList<uint32_t> C_OscExportCanOpenConfig::mh_AddDeviceSpecificConciseData(QStringList & orc_Data,
                                                                                 const C_OscNode & orc_Node,
                                                                                 const C_OscCanMessageContainer & orc_MsgContainer,
                                                                                 const uint8_t ou8_InterfaceIndex)
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    //get the CANopen manager info via interface index
    const std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_Iterator =
       orc_Node.c_CanOpenManagers.find(ou8_InterfaceIndex);
@@ -1020,7 +1021,7 @@ std::vector<uint32_t> C_OscExportCanOpenConfig::mh_AddDeviceSpecificConciseData(
          QString c_NumOfEntries;
          const C_OscCanOpenManagerDeviceInfo & rc_CurrentDevice = c_DeviceIt->second;
          const uint32_t u32_NodeIndex = c_DeviceIt->first.u32_NodeIndex;
-         std::vector<C_OscExportCanOpenConciseEntry> c_ConciseEntries;
+         QList<C_OscExportCanOpenConciseEntry> c_ConciseEntries;
 
          mh_CollectDeviceSpecificConciseData(c_ConciseEntries, rc_CurrentDevice, c_ManInfo.u8_NodeIdValue,
                                              c_ManInfo.u32_SyncCyclePeriodUs, c_ManInfo.u32_SyncWindowLengthUs);
@@ -1100,7 +1101,7 @@ std::vector<uint32_t> C_OscExportCanOpenConfig::mh_AddDeviceSpecificConciseData(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConfig::mh_AddDeviceSettings(QStringList & orc_Data,
-                                                    const std::vector<uint32_t> & orc_ConcSizes,
+                                                    const QList<uint32_t> & orc_ConcSizes,
                                                     const C_OscCanOpenManagerInfo & orc_ManInfo,
                                                     const uint8_t ou8_InterfaceIndex,
                                                     const uint16_t ou16_GenCodeVersion)
@@ -1235,7 +1236,7 @@ void C_OscExportCanOpenConfig::mh_AddManagerConfig(QStringList & orc_Data, const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
-   std::vector<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries,
+   QList<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries,
    const C_OscCanOpenManagerDeviceInfo & orc_DeviceInfo, const uint8_t ou8_ManagerId, const uint32_t ou32_CyclePeriod,
    const uint32_t ou32_WindowLength)
 {
@@ -1358,12 +1359,12 @@ void C_OscExportCanOpenConfig::mh_CollectDeviceSpecificConciseData(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConfig::mh_CollectPdoConciseData(
-   std::vector<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries,
+   QList<C_OscExportCanOpenConciseEntry> & orc_ConciseEntries,
    const C_OscCanOpenManagerDeviceInfo & orc_DeviceInfo, const uint32_t ou32_NodeIndex,
    const C_OscCanMessageContainer & orc_MsgContainer, const bool oq_IsTx)
 {
    //for device's TX PDOs we need to look at the manager's RX PDOs and vice versa
-   std::vector<C_OscCanMessage> c_Pdos = oq_IsTx ? orc_MsgContainer.c_RxMessages : orc_MsgContainer.c_TxMessages;
+   QList<C_OscCanMessage> c_Pdos = oq_IsTx ? orc_MsgContainer.c_RxMessages : orc_MsgContainer.c_TxMessages;
 
    //iterate over RX or TX PDOS (depends on flag) of current device and push info into array
    for (uint16_t u16_PdoIndex = 0; u16_PdoIndex < c_Pdos.size(); ++u16_PdoIndex)
@@ -1736,11 +1737,11 @@ void C_OscExportCanOpenConfig::mh_CreatePdoConfig(QStringList & orc_Data, const 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCanOpenConfig::mh_ConvertSignalsToStrings(QStringList & orc_Data,
                                                           const C_OscNodeDataPoolList & orc_DatapoolList,
-                                                          const std::vector<C_OscCanSignal> & orc_Signals,
+                                                          const QList<C_OscCanSignal> & orc_Signals,
                                                           const uint32_t ou32_SignalListIndex,
                                                           const bool oq_RemoveLastComma)
 {
-   std::vector<C_OscCanSignal> c_SignalsSorted(orc_Signals);
+   QList<C_OscCanSignal> c_SignalsSorted(orc_Signals);
    std::sort(c_SignalsSorted.begin(), c_SignalsSorted.end());
 
    //get type of element via datapool_index, data_list_index, element_index
@@ -1858,7 +1859,7 @@ uint32_t C_OscExportCanOpenConfig::mh_GetTotalNumOfPdoSignals(const C_OscCanMess
 {
    uint32_t u32_Retval = 0;
 
-   std::vector<C_OscCanMessage> c_Pdos = oq_IsTx ? orc_MsgContainer.c_TxMessages : orc_MsgContainer.c_RxMessages;
+   QList<C_OscCanMessage> c_Pdos = oq_IsTx ? orc_MsgContainer.c_TxMessages : orc_MsgContainer.c_RxMessages;
 
    for (uint16_t u16_MsgIndex = 0U; u16_MsgIndex < c_Pdos.size(); ++u16_MsgIndex)
    {

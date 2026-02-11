@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for update package and summary.
@@ -258,8 +258,8 @@ void C_SyvUpInformationWidget::SetDisconnected(void) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpInformationWidget::UpdateDeviceInformation(
-    const std::vector<uint32_t> &orc_NodeIndexes,
-    const std::vector<stw::opensyde_gui_logic::C_SyvUpDeviceInfo>
+    const QList<uint32_t> &orc_NodeIndexes,
+    const QList<stw::opensyde_gui_logic::C_SyvUpDeviceInfo>
         &orc_DeviceInformation) const {
   this->mpc_Ui->pc_WidgetUpdatePackage->UpdateDeviceInformation(
       orc_NodeIndexes, orc_DeviceInformation);
@@ -290,10 +290,10 @@ void C_SyvUpInformationWidget::SetNodeProgress(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvUpInformationWidget::GetUpdatePackage(
-    std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
+    QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
         &orc_ApplicationsToWrite,
-    std::vector<uint32_t> &orc_NodesOrder,
-    std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> *const
+    QList<uint32_t> &orc_NodesOrder,
+    QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> *const
         opc_AllApplications) const {
   return this->mpc_Ui->pc_WidgetUpdatePackage->GetUpdatePackage(
       orc_ApplicationsToWrite, orc_NodesOrder, opc_AllApplications);
@@ -353,10 +353,10 @@ void C_SyvUpInformationWidget::SetHeading(const QString &orc_Icon,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpInformationWidget::InitUpdatePackage(
-    const std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
+    const QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
         &orc_Flashpackage,
-    const std::vector<uint32_t> &orc_Order,
-    const std::vector<bool> &orc_IsFileBased,
+    const QList<uint32_t> &orc_Order,
+    const QList<bool> &orc_IsFileBased,
     const bool oq_IncludesCurrentNodeStatus) {
   this->mu32_ItFile = 0UL;
   this->mu32_ItParamFile = 0UL;
@@ -373,8 +373,8 @@ void C_SyvUpInformationWidget::InitUpdatePackage(
           orc_Flashpackage[u32_NodeIndex];
       if (rc_Device.c_FilesToFlash.size() > 0) {
         // Convert and add hex files
-        std::vector<uint64_t> c_Files;
-        std::vector<uint64_t> c_ParamFiles;
+        QList<uint64_t> c_Files;
+        QList<uint64_t> c_ParamFiles;
         c_Files.reserve(rc_Device.c_FilesToFlash.size());
         for (uint32_t u32_ItFile = 0;
              u32_ItFile < rc_Device.c_FilesToFlash.size(); ++u32_ItFile) {

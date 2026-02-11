@@ -81,8 +81,8 @@ C_SdBueNodeSelectorCheckBoxListWidget::~C_SdBueNodeSelectorCheckBoxListWidget()
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueNodeSelectorCheckBoxListWidget::AddNodes(const QStringList & orc_Names,
-                                                     const std::vector<uint32_t> & orc_Indexes,
-                                                     const std::vector<uint32_t> & orc_SubIndexes)
+                                                     const QList<uint32_t> & orc_Indexes,
+                                                     const QList<uint32_t> & orc_SubIndexes)
 {
    QSpacerItem * const pc_Spacer = new QSpacerItem(0, 3, QSizePolicy::Minimum, QSizePolicy::Expanding);
    const int32_t s32_ItemCount = this->mpc_Ui->pc_CbxVerticalLayout->count();
@@ -131,8 +131,8 @@ void C_SdBueNodeSelectorCheckBoxListWidget::AddNodes(const QStringList & orc_Nam
    \param[in]     orc_SubIndexes     Subindexes of Nodes
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueNodeSelectorCheckBoxListWidget::CheckNodes(const std::vector<uint32_t> & orc_Indexes,
-                                                       const std::vector<uint32_t> & orc_SubIndexes) const
+void C_SdBueNodeSelectorCheckBoxListWidget::CheckNodes(const QList<uint32_t> & orc_Indexes,
+                                                       const QList<uint32_t> & orc_SubIndexes) const
 {
    if (orc_Indexes.size() == orc_SubIndexes.size())
    {

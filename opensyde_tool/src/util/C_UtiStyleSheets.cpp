@@ -80,12 +80,12 @@ const QStringList C_UtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
    "stw--opensyde_gui--C_SdNdeDalLogJobsListView"
 }
    );
-const std::vector<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_SCROLL_AREA_PROPERTIES(
+const QList<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_SCROLL_AREA_PROPERTIES(
 {
    C_UtiStyleSheets::C_PropertyValueColorConfig("", "background-color", Qt::transparent)
 }
    );
-const std::vector<C_UtiStyleSheets::C_ElementColorConfig> C_UtiStyleSheets::mhc_ELEMENT_COLORS_WITH_TRANSPARENCY(
+const QList<C_UtiStyleSheets::C_ElementColorConfig> C_UtiStyleSheets::mhc_ELEMENT_COLORS_WITH_TRANSPARENCY(
 {
    C_UtiStyleSheets::C_ElementColorConfig(
       "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"OPENSYDE_BRIGHT\"]", mc_STYLE_GUIDE_COLOR_32),
@@ -186,7 +186,7 @@ const QStringList C_UtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
    "stw--opensyde_gui--C_SdNdeDalLogJobsListView QScrollBar"
 }
    );
-const std::vector<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_BRIGHT(
+const QList<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_BRIGHT(
 {
    C_UtiStyleSheets::C_PropertyValueColorConfig(":vertical", "background-color", Qt::transparent),
    C_UtiStyleSheets::C_PropertyValueColorConfig(":horizontal", "background-color", Qt::transparent),
@@ -217,7 +217,7 @@ const QStringList C_UtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_DARK(
    "stw--opensyde_gui--C_SyvDaChaDataSelectorWidget QScrollBar[Style=\"OPENSYDE_2_DARK\"]"
 }
    );
-const std::vector<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_DARK(
+const QList<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_DARK(
 {
    C_UtiStyleSheets::C_PropertyValueColorConfig(":vertical", "background-color", Qt::transparent),
    C_UtiStyleSheets::C_PropertyValueColorConfig(":horizontal", "background-color", Qt::transparent),
@@ -241,7 +241,7 @@ const QStringList C_UtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_MAIN_NAVI(
    "stw--opensyde_gui_elements--C_OgeSaNaviBar QScrollBar"
 }
    );
-const std::vector<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_MAIN_NAVI(
+const QList<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_MAIN_NAVI(
 {
    C_UtiStyleSheets::C_PropertyValueColorConfig(":vertical", "background-color", Qt::transparent),
    C_UtiStyleSheets::C_PropertyValueColorConfig(":horizontal", "background-color", Qt::transparent),
@@ -459,7 +459,7 @@ void C_UtiStyleSheets::mh_AppendScrollBarStyleSheets(QString & orc_Stylesheet)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UtiStyleSheets::mh_AppendScrollBarStyleSheet(const QStringList & orc_ScrollBarElements,
-                                                    const std::vector<C_UtiStyleSheets::C_PropertyValueColorConfig> & orc_ScrollBarProperties,
+                                                    const QList<C_UtiStyleSheets::C_PropertyValueColorConfig> & orc_ScrollBarProperties,
                                                     QString & orc_Stylesheet)
 {
    if ((orc_ScrollBarElements.size() > 0) && (orc_ScrollBarProperties.size() > 0))

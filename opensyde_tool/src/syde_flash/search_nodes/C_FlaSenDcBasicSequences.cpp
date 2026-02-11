@@ -322,7 +322,7 @@ void C_FlaSenDcBasicSequences::m_ReportProgress(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaSenDcBasicSequences::m_ReportDevicesInfoRead(
-    const std::vector<stw::opensyde_core::C_OscDcDeviceInformation>
+    const QList<stw::opensyde_core::C_OscDcDeviceInformation>
         &orc_DeviceInfoResult,
     const bool oq_SecurityFeatureUsed) {
   const QString c_Message = C_OscDcBasicSequences::h_DevicesInfoToString(

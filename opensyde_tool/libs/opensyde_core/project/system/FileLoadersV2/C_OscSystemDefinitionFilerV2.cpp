@@ -253,7 +253,7 @@ void C_OscSystemDefinitionFilerV2::h_SaveSystemDefinitionString(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemDefinitionFilerV2::h_LoadNodes(
-    const uint16_t ou16_XmlFormatVersion, std::vector<C_OscNode> &orc_Nodes,
+    const uint16_t ou16_XmlFormatVersion, QList<C_OscNode> &orc_Nodes,
     C_OscXmlParserBase &orc_XmlParser,
     const C_OscDeviceManager &orc_DeviceDefinitions,
     const bool oq_UseDeviceDefinitions,
@@ -350,7 +350,7 @@ int32_t C_OscSystemDefinitionFilerV2::h_LoadNodes(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemDefinitionFilerV2::h_LoadBuses(
-    std::vector<C_OscSystemBus> &orc_Buses, C_OscXmlParserBase &orc_XmlParser) {
+    QList<C_OscSystemBus> &orc_Buses, C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_SelectedNode;
   uint32_t u32_ExpectedSize = 0UL;
@@ -402,7 +402,7 @@ int32_t C_OscSystemDefinitionFilerV2::h_LoadBuses(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinitionFilerV2::h_SaveNodes(
-    const std::vector<C_OscNode> &orc_Nodes,
+    const QList<C_OscNode> &orc_Nodes,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Nodes.size()));
@@ -426,7 +426,7 @@ void C_OscSystemDefinitionFilerV2::h_SaveNodes(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinitionFilerV2::h_SaveBuses(
-    const std::vector<C_OscSystemBus> &orc_Buses,
+    const QList<C_OscSystemBus> &orc_Buses,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Buses.size()));

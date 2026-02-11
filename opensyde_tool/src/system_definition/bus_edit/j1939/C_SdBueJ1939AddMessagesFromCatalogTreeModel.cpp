@@ -69,7 +69,7 @@ C_SdBueJ1939AddMessagesFromCatalogTreeModel::~C_SdBueJ1939AddMessagesFromCatalog
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogTreeModel::UpdateData(
-   const std::vector<C_CieConverter::C_CieNodeMessage> & orc_MessagesImported)
+   const QList<C_CieConverter::C_CieNodeMessage> & orc_MessagesImported)
 {
    this->mc_MessagesImportedFromCatalog = orc_MessagesImported;
 
@@ -489,7 +489,7 @@ int32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::h_EnumToColumn(
    \retval   C_NO_ERR   Init successful
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::Init(const std::vector<uint32_t> & orc_ElementIndices)
+int32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::Init(const QList<uint32_t> & orc_ElementIndices)
 {
    Q_UNUSED(orc_ElementIndices)
    return C_NO_ERR;
@@ -502,13 +502,13 @@ int32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::Init(const std::vector<uint
 \param[in,out]  orc_ChildIndicesPerElement   Child indices per element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueJ1939AddMessagesFromCatalogTreeModel::GetCheckedItems(std::vector<uint32_t> & orc_ElementIndices, std::vector<std::vector<uint32_t> > &
+void C_SdBueJ1939AddMessagesFromCatalogTreeModel::GetCheckedItems(QList<uint32_t> & orc_ElementIndices, QList<QList<uint32_t> > &
                                                                   orc_ChildIndicesPerElement)
 const
 {
    if (this->mpc_InvisibleRootItem != NULL)
    {
-      std::vector<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
+      QList<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
       orc_ElementIndices.clear();
       orc_ChildIndicesPerElement.clear();
 
@@ -535,8 +535,8 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_SdBueJ1939AddMessagesFromCatalogTreeModel::GetCheckedItemCount() const
 {
-   std::vector<uint32_t> c_MessageIndices;
-   std::vector<std::vector<uint32_t> > c_SignalIndices;
+   QList<uint32_t> c_MessageIndices;
+   QList<QList<uint32_t> > c_SignalIndices;
 
    // Only message items are checkable. Hence fetches all checked messages.
    this->GetCheckedItems(c_MessageIndices, c_SignalIndices);
@@ -554,7 +554,7 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::SelectAllParentItems()
 {
    if (this->mpc_InvisibleRootItem != NULL)
    {
-      std::vector<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
+      QList<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
       for (uint32_t u32_MessageItem = 0;
            u32_MessageItem < c_InvisibleRootChildren.size(); u32_MessageItem++)
       {
@@ -575,7 +575,7 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::UnselectAllParentItems()
 {
    if (this->mpc_InvisibleRootItem != NULL)
    {
-      std::vector<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
+      QList<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
       for (uint32_t u32_MessageItem = 0;
            u32_MessageItem < c_InvisibleRootChildren.size(); u32_MessageItem++)
       {
@@ -596,7 +596,7 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::SelectFilteredParentItems(cons
 {
    if (this->mpc_InvisibleRootItem != NULL)
    {
-      std::vector<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
+      QList<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
       for (uint32_t u32_MessageItem = 0;
            u32_MessageItem < c_InvisibleRootChildren.size(); u32_MessageItem++)
       {
@@ -624,10 +624,10 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeModel::SelectFilteredParentItems(cons
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueJ1939AddMessagesFromCatalogTreeModel::GetSelectedMessages(
-   std::vector<C_CieConverter::C_CieNodeMessage> & orc_SelectedMessages) const
+   QList<C_CieConverter::C_CieNodeMessage> & orc_SelectedMessages) const
 {
-   std::vector<uint32_t> c_MessageIndices;
-   std::vector<std::vector<uint32_t> > c_SignalIndices;
+   QList<uint32_t> c_MessageIndices;
+   QList<QList<uint32_t> > c_SignalIndices;
 
    // Only message items are checkable. Hence fetches all checked message indices.
    this->GetCheckedItems(c_MessageIndices, c_SignalIndices);

@@ -30,7 +30,7 @@ class C_SyvDaUnoAddSnapshotCommand :
 public:
    C_SyvDaUnoAddSnapshotCommand(QGraphicsScene * const opc_Scene,
                                 const C_SyvDaDashboardSnapshot & orc_InitialSnapshotData,
-                                const std::vector<uint64_t> & orc_Ids,
+                                const QList<uint64_t> & orc_Ids,
                                 const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                                            C_PuiSvReadDataConfiguration> & orc_RestoredRails,
                                 const QPointF & orc_NewPos, const float64_t of64_HighestUsedZetValue,

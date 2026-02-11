@@ -127,8 +127,8 @@ void C_SyvUpFileSizeInformation::ReserveSpace(const uint32_t ou32_NumNodes)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpFileSizeInformation::AppendFiles(const uint32_t ou32_NodeIndex,
-                                             const std::vector<uint64_t> & orc_OtherFiles,
-                                             const std::vector<uint64_t> & orc_ParamFiles)
+                                             const QList<uint64_t> & orc_OtherFiles,
+                                             const QList<uint64_t> & orc_ParamFiles)
 {
    uint64_t u64_SizeOfNewFiles = 0ULL;
 
@@ -238,7 +238,7 @@ uint64_t C_SyvUpFileSizeInformation::GetParamFileSizeForDevice(const uint32_t ou
 
    if (ou32_DeviceOrder < this->mc_ParamFileSizesByte.size())
    {
-      const std::vector<uint64_t> & rc_Files = this->mc_ParamFileSizesByte[ou32_DeviceOrder];
+      const QList<uint64_t> & rc_Files = this->mc_ParamFileSizesByte[ou32_DeviceOrder];
       if (ou32_FileIndex < rc_Files.size())
       {
          u64_Retval = rc_Files[ou32_FileIndex];
@@ -272,7 +272,7 @@ uint64_t C_SyvUpFileSizeInformation::GetOtherFileSizeForDevice(const uint32_t ou
 
    if (ou32_DeviceOrder < this->mc_FileSizesByte.size())
    {
-      const std::vector<uint64_t> & rc_Files = this->mc_FileSizesByte[ou32_DeviceOrder];
+      const QList<uint64_t> & rc_Files = this->mc_FileSizesByte[ou32_DeviceOrder];
       if (ou32_FileIndex < rc_Files.size())
       {
          u64_Retval = rc_Files[ou32_FileIndex];
@@ -318,7 +318,7 @@ void C_SyvUpFileSizeInformation::LoadUserSettings(const uint32_t ou32_ViewIndex)
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-   std::vector<uint8_t> c_NodeActiveFlags;
+   QByteArray c_NodeActiveFlags;
    const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
       ou32_ViewIndex,
       c_NodeActiveFlags);
@@ -361,7 +361,7 @@ void C_SyvUpFileSizeInformation::SaveUserSettings(const uint32_t ou32_ViewIndex)
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-   std::vector<uint8_t> c_NodeActiveFlags;
+   QByteArray c_NodeActiveFlags;
    const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
       ou32_ViewIndex,
       c_NodeActiveFlags);

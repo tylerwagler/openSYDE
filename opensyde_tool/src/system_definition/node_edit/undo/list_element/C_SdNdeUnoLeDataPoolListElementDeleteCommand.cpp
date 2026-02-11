@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoLeDataPoolListElementDeleteCommand.hpp"
@@ -43,7 +44,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeUnoLeDataPoolListElementDeleteCommand::C_SdNdeUnoLeDataPoolListElementDeleteCommand(
    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex,
-   C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const std::vector<uint32_t> & orc_Indices,
+   C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const QList<uint32_t> & orc_Indices,
    QUndoCommand * const opc_Parent) :
    C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex, oru32_DataPoolListIndex,
                                                        opc_DataPoolListModelViewManager,

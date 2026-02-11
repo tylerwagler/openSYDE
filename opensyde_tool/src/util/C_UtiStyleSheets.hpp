@@ -12,9 +12,10 @@
 #define C_UTISTYLESHEETS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QColor>
+#include <QList>
 #include <QString>
 #include <QStringList>
-#include <QColor>
 
 #include "stwtypes.hpp"
 
@@ -68,21 +69,21 @@ private:
    };
 
    static const QStringList mhc_SCROLL_AREA_ELEMENTS;
-   static const std::vector<C_PropertyValueColorConfig> mhc_SCROLL_AREA_PROPERTIES;
-   static const std::vector<C_ElementColorConfig> mhc_ELEMENT_COLORS_WITH_TRANSPARENCY;
+   static const QList<C_PropertyValueColorConfig> mhc_SCROLL_AREA_PROPERTIES;
+   static const QList<C_ElementColorConfig> mhc_ELEMENT_COLORS_WITH_TRANSPARENCY;
    static const QStringList mhc_SCROLL_BAR_ELEMENTS_BRIGHT;
-   static const std::vector<C_PropertyValueColorConfig> mhc_SCROLL_BAR_PROPERTIES_BRIGHT;
+   static const QList<C_PropertyValueColorConfig> mhc_SCROLL_BAR_PROPERTIES_BRIGHT;
    static const QStringList mhc_SCROLL_BAR_ELEMENTS_DARK;
-   static const std::vector<C_PropertyValueColorConfig> mhc_SCROLL_BAR_PROPERTIES_DARK;
+   static const QList<C_PropertyValueColorConfig> mhc_SCROLL_BAR_PROPERTIES_DARK;
    static const QStringList mhc_SCROLL_BAR_ELEMENTS_MAIN_NAVI;
-   static const std::vector<C_PropertyValueColorConfig> mhc_SCROLL_BAR_PROPERTIES_MAIN_NAVI;
+   static const QList<C_PropertyValueColorConfig> mhc_SCROLL_BAR_PROPERTIES_MAIN_NAVI;
 
    static void mh_AppendStylesheet(const QString & orc_File, QString & orc_Stylesheet);
    static void mh_AppendDynamicStylesheet(QString & orc_Stylesheet);
    static void mh_AppendTransparentColorSteps(QString & orc_Stylesheet);
    static void mh_AppendScrollBarStyleSheets(QString & orc_Stylesheet);
    static void mh_AppendScrollBarStyleSheet(const QStringList & orc_ScrollBarElements,
-                                            const std::vector<C_PropertyValueColorConfig> & orc_ScrollBarProperties,
+                                            const QList<C_PropertyValueColorConfig> & orc_ScrollBarProperties,
                                             QString & orc_Stylesheet);
 
    static void mh_SetStyleSheetColor(const QString & orc_ColorType, QString & orc_Style, const QColor & orc_Color);

@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include "C_SebUnoZetOrderCommand.hpp"
 #include "C_GiLiBusConnector.hpp"
 
@@ -29,8 +30,8 @@ class C_SdManUnoTopologyZetOrderCommand :
    public C_SebUnoZetOrderCommand
 {
 public:
-   C_SdManUnoTopologyZetOrderCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
-                                     const std::vector<float64_t> & orc_NewZetValues,
+   C_SdManUnoTopologyZetOrderCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
+                                     const QList<float64_t> & orc_NewZetValues,
                                      QUndoCommand * const opc_Parent = NULL);
    ~C_SdManUnoTopologyZetOrderCommand(void) override;
 

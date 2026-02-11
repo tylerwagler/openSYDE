@@ -13,6 +13,7 @@
 #define C_CAMMOSDATABASEWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QTimer>
 
 #include "C_OgeWiOnlyBackground.hpp"
@@ -44,7 +45,7 @@ public:
    void LoadUserSettings(void) const;
    void OnLoadFinishedDbc(const int32_t os32_Result);
    void OnLoadFinishedOsySysDef(const int32_t os32_Result,
-                                const std::vector<stw::opensyde_core::C_OscSystemBus> & orc_Busses);
+                                const QList<stw::opensyde_core::C_OscSystemBus> & orc_Busses);
    void OnSigOsySysDefBusResult(const QString & orc_PathSystemDefinition, const int32_t os32_Result);
    void OnCommunicationStarted(const bool oq_Online);
    void PrepareForExpanded(const bool oq_Expand) const;
@@ -67,7 +68,7 @@ Q_SIGNALS:
 
 private:
    Ui::C_CamMosDatabaseWidget * mpc_Ui;
-   std::vector<C_CamMosDatabaseItemWidget *> mc_Entries;
+   QList<C_CamMosDatabaseItemWidget *> mc_Entries;
    QList<C_CamMosDatabaseItemWidget *> mc_DatabasesToLoad;
    QTimer mc_Timer;
 

@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -54,7 +55,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand(
    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex,
-   C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const std::vector<uint32_t> & orc_Indices,
+   C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const QList<uint32_t> & orc_Indices,
    const QString & orc_Text, QUndoCommand * const opc_Parent) :
    C_SdNdeUnoLeDataPoolListElementBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex, oru32_DataPoolListIndex,
                                               opc_DataPoolListModelViewManager,
@@ -79,7 +80,7 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_Add(void)
          this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
       if (pc_Model != NULL)
       {
-         std::vector<std::vector<uint32_t> > c_Continous;
+         QList<QList<uint32_t> > c_Continous;
          //Insert
          c_Continous = pc_Model->DoInsertRows(this->mc_OscContent, this->mc_UiContent, this->mc_Indices);
          m_ReSelect(c_Continous, true);
@@ -118,11 +119,11 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_Delete(void)
          {
             Q_ASSERT(C_PuiSdHandler::h_GetInstance()->GetDataPoolListElement(
                           this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex,
-                          this->mc_Indices[static_cast<std::vector<uint32_t>::size_type >(u32_Index - 1UL)],
-                          this->mc_OscContent[static_cast<std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement>
+                          this->mc_Indices[static_cast<QList<uint32_t>::size_type >(u32_Index - 1UL)],
+                          this->mc_OscContent[static_cast<QList<stw::opensyde_core::C_OscNodeDataPoolListElement>
                                                           ::
                                                           size_type >(u32_Index - 1UL)],
-                          this->mc_UiContent[static_cast<std::vector<C_PuiSdNodeDataPoolListElement>::size_type >(
+                          this->mc_UiContent[static_cast<QList<C_PuiSdNodeDataPoolListElement>::size_type >(
                                                 u32_Index - 1UL)]) ==
                        C_NO_ERR);
          }
@@ -162,7 +163,7 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_Delete(void)
    \param[in] orc_Value Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_SetIndices(const std::vector<uint32_t> & orc_Value)
+void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_SetIndices(const QList<uint32_t> & orc_Value)
 {
    this->mc_Indices = orc_Value;
 }
@@ -175,8 +176,8 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_SetIndices(const std
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_SetInitialData(
-   const std::vector<C_OscNodeDataPoolListElement> & orc_OscContent,
-   const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiContent)
+   const QList<C_OscNodeDataPoolListElement> & orc_OscContent,
+   const QList<C_PuiSdNodeDataPoolListElement> & orc_UiContent)
 {
    const C_OscNodeDataPoolList * const pc_List = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(
       this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
@@ -211,7 +212,7 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_SetInitialData(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_ReSelect(
-   const std::vector<std::vector<uint32_t> > & orc_Items, const bool oq_ScrollToLast)
+   const QList<QList<uint32_t> > & orc_Items, const bool oq_ScrollToLast)
 {
    C_SdNdeDpListTableView * const pc_View = this->mpc_DataPoolListModelViewManager->GetElementView(
       this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
@@ -222,10 +223,10 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_ReSelect(
       //New selection
       for (uint32_t u32_ItSection = 0UL; u32_ItSection < orc_Items.size(); ++u32_ItSection)
       {
-         const std::vector<uint32_t> & rc_Section = orc_Items[u32_ItSection];
+         const QList<uint32_t> & rc_Section = orc_Items[u32_ItSection];
          if (rc_Section.size() > 0UL)
          {
-            pc_View->SelectRange(rc_Section[0UL], rc_Section[static_cast<std::vector<uint32_t>::
+            pc_View->SelectRange(rc_Section[0UL], rc_Section[static_cast<QList<uint32_t>::
                                                                          size_type>(static_cast<uint32_t>(rc_Section
                                                                                                           .size())
                                                                                     -
@@ -238,7 +239,7 @@ void C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand::m_ReSelect(
                      this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_DataPoolListIndex);
                if (pc_Model != NULL)
                {
-                  pc_View->scrollTo(pc_Model->index(rc_Section[static_cast<std::vector<uint32_t>::
+                  pc_View->scrollTo(pc_Model->index(rc_Section[static_cast<QList<uint32_t>::
                                                                            size_type>(static_cast<uint32_t>(rc_Section
                                                                                                             .size())
                                                                                       -

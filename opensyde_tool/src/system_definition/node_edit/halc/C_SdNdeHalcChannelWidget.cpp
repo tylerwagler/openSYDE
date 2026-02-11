@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "C_OgePopUpDialog.hpp"
 #include "C_SdNdeHalcChannelDpPreviewPopUp.hpp"
@@ -345,8 +346,8 @@ void C_SdNdeHalcChannelWidget::m_OnUseCaseChanged(const int32_t os32_NewIndex)
          bool q_IsLinkedNew;
          QStringList c_LinkedChannelNamesOld;
          QStringList c_LinkedChannelNamesNew;
-         std::vector<uint32_t> c_LinkedChannelIndicesOld;
-         std::vector<uint32_t> c_LinkedChannelIndicesNew;
+         QList<uint32_t> c_LinkedChannelIndicesOld;
+         QList<uint32_t> c_LinkedChannelIndicesNew;
          int32_t s32_Result;
          const uint32_t u32_UseCaseIndexNew = this->mc_CbxUseCaseIndices[os32_NewIndex];
          uint32_t u32_UseCaseIndexOld = 0;
@@ -416,7 +417,7 @@ void C_SdNdeHalcChannelWidget::m_OnUseCaseChanged(const int32_t os32_NewIndex)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcChannelWidget::m_SetLinkedSymbolAndChannel(const bool oq_IsLinked,
-                                                           const std::vector<uint32_t> & orc_LinkedChannelIndices) const
+                                                           const QList<uint32_t> & orc_LinkedChannelIndices) const
 {
    QString c_LinkText = "-";
 
@@ -523,7 +524,7 @@ void C_SdNdeHalcChannelWidget::m_LoadChannelData(void)
       {
          bool q_IsLinked = false;
          int32_t s32_SelectedUseCaseCbxIndex = -1;
-         std::vector<uint32_t> c_LinkedChannelIndices;
+         QList<uint32_t> c_LinkedChannelIndices;
 
          // disconnect to avoid data handling update while loading
          this->m_ConnectWidgets(false);
@@ -571,14 +572,14 @@ void C_SdNdeHalcChannelWidget::m_LoadChannelData(void)
          {
             uint32_t u32_UseCaseCounter = 0; // for counting all channels and knowing indices of available ones
 
-            for (std::vector<C_OscHalcDefChannelUseCase>::const_iterator c_ItUseCases =
+            for (QList<C_OscHalcDefChannelUseCase>::const_iterator c_ItUseCases =
                     pc_Domain->c_ChannelUseCases.begin();
                  c_ItUseCases != pc_Domain->c_ChannelUseCases.end(); ++c_ItUseCases)
             {
                const C_OscHalcDefChannelUseCase & rc_CurrentUseCase = *c_ItUseCases;
 
                // only add available use cases to combobox
-               for (std::vector<C_OscHalcDefChannelAvailability>::const_iterator c_ItCurrentAvail =
+               for (QList<C_OscHalcDefChannelAvailability>::const_iterator c_ItCurrentAvail =
                        rc_CurrentUseCase.c_Availability.begin();
                     c_ItCurrentAvail != rc_CurrentUseCase.c_Availability.end(); ++c_ItCurrentAvail)
                {

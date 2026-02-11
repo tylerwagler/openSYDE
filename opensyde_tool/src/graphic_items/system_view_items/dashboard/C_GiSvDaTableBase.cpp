@@ -272,7 +272,7 @@ void C_GiSvDaTableBase::EditElementProperties(void)
    if ((this->mpc_TableWidget != NULL) &&
        (this->mq_EditContentModeEnabled == true))
    {
-      const std::vector<uint32_t> c_Indices = this->mpc_TableWidget->GetUniqueAndValidSelectedRows();
+      const QList<uint32_t> c_Indices = this->mpc_TableWidget->GetUniqueAndValidSelectedRows();
 
       if (c_Indices.size() == 1)
       {
@@ -442,7 +442,7 @@ void C_GiSvDaTableBase::ConfigureContextMenu(C_SyvDaContextMenuManager * const o
       Q_ASSERT(this->mpc_TableWidget != NULL);
       if ((oq_Active == true) && (this->mpc_TableWidget != NULL))
       {
-         const std::vector<uint32_t> c_SelectedRows = this->mpc_TableWidget->GetUniqueSelectedRows();
+         const QList<uint32_t> c_SelectedRows = this->mpc_TableWidget->GetUniqueSelectedRows();
          // Initial registration of the context menu
          if (mpc_AddDataElement == NULL)
          {
@@ -566,7 +566,7 @@ void C_GiSvDaTableBase::ConfigureContextMenu(C_SyvDaContextMenuManager * const o
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiSvDaTableBase::GetLastValueUnscaled(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                                std::vector<float64_t> & orc_Values,
+                                                QList<float64_t> & orc_Values,
                                                 QStringList & orc_DisplayValues)
 {
    uint32_t u32_InternalIndex;
@@ -649,14 +649,14 @@ bool C_GiSvDaTableBase::GetViewActive(const C_PuiSvDbNodeDataPoolListElementId &
 
    if (orc_DataPoolElementId.GetType() == C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT)
    {
-      std::vector<uint8_t> c_NodeActiveFlags;
+      QByteArray c_NodeActiveFlags;
       const int32_t s32_FuncRetval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
          this->mu32_ViewIndex,
          c_NodeActiveFlags);
 
       if (s32_FuncRetval == C_NO_ERR)
       {
-         q_Retval = static_cast<bool>(c_NodeActiveFlags[orc_DataPoolElementId.u32_NodeIndex]);
+         q_Retval = static_cast<bool>(static_cast<uint8_t>(c_NodeActiveFlags[orc_DataPoolElementId.u32_NodeIndex]));
       }
       else
       {
@@ -886,7 +886,7 @@ void C_GiSvDaTableBase::m_AddNewDataElement(void)
 
       if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
       {
-         const std::vector<C_PuiSvDbNodeDataPoolListElementId> c_DataElements = pc_Dialog->GetSelectedDataElements();
+         const QList<C_PuiSvDbNodeDataPoolListElementId> c_DataElements = pc_Dialog->GetSelectedDataElements();
          //Cursor
          QApplication::setOverrideCursor(Qt::WaitCursor);
          if (c_DataElements.size() > 0)
@@ -970,7 +970,7 @@ void C_GiSvDaTableBase::m_RemoveDataElement(void)
       {
          const C_PuiSvData * pc_View;
 
-         std::vector<C_PuiSvDbNodeDataPoolListElementId> c_RemovedDataElements;
+         QList<C_PuiSvDbNodeDataPoolListElementId> c_RemovedDataElements;
          //Remove data element(s)
          this->mpc_TableWidget->RemoveSelectedItems(c_RemovedDataElements);
          //Necessary before view is checked

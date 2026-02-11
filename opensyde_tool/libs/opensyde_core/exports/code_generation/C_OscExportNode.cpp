@@ -15,6 +15,7 @@
  */
 #include "precomp_headers.hpp"
 
+#include <QList>
 #include "C_OscExportCanOpenConfig.hpp"
 #include "C_OscExportCanOpenInit.hpp"
 #include "C_OscExportCommunicationStack.hpp"
@@ -445,7 +446,7 @@ int32_t C_OscExportNode::mh_CreateCommStackCode(
     // by the application than create code
     if (orc_Node.c_DataPools[rc_Protocol.u32_DataPoolIndex]
             .s32_RelatedDataBlockIndex == ou16_ApplicationIndex) {
-      std::vector<uint8_t> c_IfWithCanOpenManager;
+      QByteArray c_IfWithCanOpenManager;
       for (uint32_t u32_ItInterface = 0U;
            u32_ItInterface < rc_Protocol.c_ComMessages.size();
            ++u32_ItInterface) {
@@ -765,7 +766,7 @@ int32_t C_OscExportNode::mh_AdaptComDataPool(const C_OscNode &orc_Node,
             C_OscNodeDataPoolList *const pc_List =
                 C_OscCanProtocol::h_GetComList(orc_DataPool,
                                                u32_ItMessageContainer, q_IsTx);
-            const std::vector<C_OscCanMessage> &rc_Messages =
+            const QList<C_OscCanMessage> &rc_Messages =
                 rc_MessageContainer.GetMessagesConst(q_IsTx);
             // For each message
             for (uint32_t u32_ItMessage = 0; u32_ItMessage < rc_Messages.size();

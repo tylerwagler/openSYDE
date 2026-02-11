@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include <QString>
 #include <QStringList>
 #include "stwtypes.hpp"
@@ -58,14 +59,14 @@ public:
    //Vectors
    void ClearParamPaths(void);
    void ClearPathsAsAppropriate(const E_GenericFileType oe_Type);
-   const std::vector<C_OscViewNodeUpdateParamInfo> & GetParamInfos(void) const;
+   const QList<C_OscViewNodeUpdateParamInfo> & GetParamInfos(void) const;
    const QStringList & GetPaths(const E_GenericFileType oe_Type) const;
-   const std::vector<bool> & GetSkipUpdateOfParamInfosFlags(void) const;
-   const std::vector<bool> & GetSkipUpdateOfPathsFlags(const E_GenericFileType oe_Type) const;
-   void SetParamInfos(const std::vector<C_OscViewNodeUpdateParamInfo> & orc_Value);
+   const QList<bool> & GetSkipUpdateOfParamInfosFlags(void) const;
+   const QList<bool> & GetSkipUpdateOfPathsFlags(const E_GenericFileType oe_Type) const;
+   void SetParamInfos(const QList<C_OscViewNodeUpdateParamInfo> & orc_Value);
    void SetPaths(const QStringList & orc_Value, const E_GenericFileType oe_Type);
-   void SetSkipUpdateOfParamInfosFlags(const std::vector<bool> & orc_Value);
-   void SetSkipUpdateOfPathsFlags(const std::vector<bool> & orc_Value, const E_GenericFileType oe_Type);
+   void SetSkipUpdateOfParamInfosFlags(const QList<bool> & orc_Value);
+   void SetSkipUpdateOfPathsFlags(const QList<bool> & orc_Value, const E_GenericFileType oe_Type);
    int32_t SetParamInfoContent(const uint32_t ou32_Index, const QString & orc_FilePath,
                                const uint32_t ou32_LastKnownCrc);
 
@@ -93,7 +94,7 @@ public:
    void OnSyncNodeApplicationAdded(const uint32_t ou32_ApplicationIndex,
                                    const C_OscNodeApplication::E_Type oe_ApplicationType,
                                    const uint32_t ou32_NumDataBlockPaths,
-                                   const std::vector<C_OscNodeApplication> & orc_AllApplications);
+                                   const QList<C_OscNodeApplication> & orc_AllApplications);
    void OnSyncNodeApplicationMoved(const uint32_t ou32_ApplicationSourceIndex,
                                    const uint32_t ou32_ApplicationTargetIndex,
                                    const C_OscNodeApplication::E_Type oe_ApplicationSourceType,
@@ -107,7 +108,7 @@ public:
    void OnSyncNodeApplicationChangedToParamSetHalc(const uint32_t ou32_ApplicationIndex,
                                                    const C_OscNodeApplication::E_Type oe_ApplicationType,
                                                    const uint32_t ou32_NumDataBlockPaths,
-                                                   const std::vector<C_OscNodeApplication> & orc_AllApplications);
+                                                   const QList<C_OscNodeApplication> & orc_AllApplications);
    void OnSyncNodeApplicationResultPathSizeChanged(const C_OscNodeApplication::E_Type oe_ApplicationType,
                                                    const uint32_t ou32_OldSize, const uint32_t ou32_NewSize);
 
@@ -116,8 +117,8 @@ public:
 private:
    QStringList mc_DataBlockPaths;
    QStringList mc_FileBasedPaths;
-   std::vector<C_OscViewNodeUpdateParamInfo> mc_ParamSetPaths;
-   std::vector<std::vector<bool> > mc_SkipUpdateOfFiles; // Flags for skipping an update of the associated file
+   QList<C_OscViewNodeUpdateParamInfo> mc_ParamSetPaths;
+   QList<QList<bool> > mc_SkipUpdateOfFiles; // Flags for skipping an update of the associated file
    // First level has three "layers":
    // 1: flags for datablock paths
    // 2: flags for file based paths
@@ -132,7 +133,7 @@ private:
    static const int32_t mhs32_PARAMETER_SET_INDEX = 2;
 
    static bool mh_CheckApplicationsContainParamTypeBeforeIndex(
-      const std::vector<C_OscNodeApplication> & orc_AllApplications, const uint32_t ou32_ApplicationIndex);
+      const QList<C_OscNodeApplication> & orc_AllApplications, const uint32_t ou32_ApplicationIndex);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

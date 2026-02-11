@@ -9,6 +9,7 @@
 #define C_FLASENSEARCHNODEPOPUP_H
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include <QTimer>
 
@@ -64,7 +65,7 @@ private:
    void m_ApplyClicked(void);
    void m_OnCancel(void);
    void m_ScanNodes(const uint32_t ou32_FlashloaderResetWaitTime);
-   void m_DeviceInfoReceived(const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
+   void m_DeviceInfoReceived(const QList<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
                              const bool oq_SecurityFeatureUsed);
    void m_Timer(void);
    void m_ShowErrorNoDevices(void);

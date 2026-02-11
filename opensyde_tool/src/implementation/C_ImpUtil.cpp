@@ -88,7 +88,7 @@ C_ImpUtil::C_ImpUtil(void) {}
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_ImpUtil::h_ExportCodeAll(QWidget *const opc_Parent) {
-  std::vector<uint32_t> c_Indices;
+  QList<uint32_t> c_Indices;
   c_Indices.reserve(C_PuiSdHandler::h_GetInstance()->GetOscNodesSize());
   for (uint32_t u32_ItNode = 0;
        u32_ItNode < C_PuiSdHandler::h_GetInstance()->GetOscNodesSize();
@@ -110,8 +110,8 @@ void C_ImpUtil::h_ExportCodeAll(QWidget *const opc_Parent) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_ImpUtil::h_ExportCode(
-    const std::vector<uint32_t> &orc_NodeIndices,
-    const std::vector<std::vector<uint32_t>> &orc_AppIndicesPerNode,
+    const QList<uint32_t> &orc_NodeIndices,
+    const QList<QList<uint32_t>> &orc_AppIndicesPerNode,
     QWidget *const opc_Parent) {
   int32_t s32_Result = C_NO_ERR;
   bool q_Continue = true;
@@ -271,7 +271,7 @@ void C_ImpUtil::h_ExportCode(
 
   // finally we are ready to generate file
   if (q_Continue == true) {
-    std::vector<C_ImpCodeGenerationReportWidget::C_ReportData> c_ExportInfo;
+    QList<C_ImpCodeGenerationReportWidget::C_ReportData> c_ExportInfo;
 
     // export files for each node
     QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -338,11 +338,11 @@ void C_ImpUtil::h_ExportCode(
    \param[in]  opc_Parent        parent widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_ImpUtil::h_ExportCodeNodes(const std::vector<uint32_t> &orc_NodeIndices,
+void C_ImpUtil::h_ExportCodeNodes(const QList<uint32_t> &orc_NodeIndices,
                                   QWidget *const opc_Parent) {
-  std::vector<uint32_t> c_ValidNodeIndices;
-  std::vector<uint32_t> c_ProgAppsNodeIndices;
-  std::vector<std::vector<uint32_t>> c_AllProgApps;
+  QList<uint32_t> c_ValidNodeIndices;
+  QList<uint32_t> c_ProgAppsNodeIndices;
+  QList<QList<uint32_t>> c_AllProgApps;
   C_OgeWiCustomMessage c_Message(opc_Parent);
 
   // get valid nodes (i.e. ones with file generation Data Blocks)
@@ -406,8 +406,8 @@ void C_ImpUtil::h_ExportCodeNodes(const std::vector<uint32_t> &orc_NodeIndices,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_ImpUtil::mh_ExportCodeNode(
-    const uint32_t ou32_NodeIndex, const std::vector<uint32_t> &orc_AppIndices,
-    std::vector<C_ImpCodeGenerationReportWidget::C_ReportData> &orc_ExportInfo,
+    const uint32_t ou32_NodeIndex, const QList<uint32_t> &orc_AppIndices,
+    QList<C_ImpCodeGenerationReportWidget::C_ReportData> &orc_ExportInfo,
     const bool &orq_Erase) {
   int32_t s32_Retval = C_NO_ERR;
   C_OscNode c_Node;
@@ -507,7 +507,7 @@ int32_t C_ImpUtil::h_OpenIde(const QString &orc_IdeExeCall) {
     // check if executable file exists
     const QFileInfo c_ExeFile(c_ExeOnly);
     if (c_ExeFile.exists() == true) {
-      std::vector<HWND> c_Windows;
+      QList<HWND> c_Windows;
       c_ExeOnly = c_ExeFile.fileName();
 
       C_ImpUtil::mh_GetExistingApplicationHandle(
@@ -934,7 +934,7 @@ C_ImpUtil::h_FormatSourceFileInfoForReport(const QString &orc_FilePath,
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_ImpUtil::mh_CheckDatapoolsAssignmentForExportCode(
-    const std::vector<uint32_t> &orc_NodeIndices, QWidget *const opc_Parent) {
+    const QList<uint32_t> &orc_NodeIndices, QWidget *const opc_Parent) {
   bool q_Continue = true;
 
   // check if all datapools are assigned
@@ -1014,7 +1014,7 @@ void C_ImpUtil::mh_CheckNodeDatapoolsAssignmentForExportCode(
 // lint -e715 false positive: orc_ExeName is referenced in call of std::wcscmp,
 // but somehow PC Lint does not get this
 void C_ImpUtil::mh_GetExistingApplicationHandle(
-    const std::wstring &orc_ExeName, std::vector<HWND> &orc_Windows) {
+    const std::wstring &orc_ExeName, QList<HWND> &orc_Windows) {
   PROCESSENTRY32W c_Entry;
   bool q_Exists = false;
   HANDLE pv_Snapshot;

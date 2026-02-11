@@ -35,7 +35,7 @@ using namespace stw::opensyde_gui_logic;
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Convert message data array to vector
+/*! \brief  Convert message data array to QByteArray
 
    \param[in]  orc_Message    message data
 
@@ -43,14 +43,14 @@ using namespace stw::opensyde_gui_logic;
    Converted message data of DLC length
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint8_t> C_CamGenSigUtil::h_ConvertRawDataFormat(const C_CamProMessageData & orc_Message)
+QByteArray C_CamGenSigUtil::h_ConvertRawDataFormat(const C_CamProMessageData & orc_Message)
 {
-   std::vector<uint8_t> c_Retval;
+   QByteArray c_Retval;
    c_Retval.reserve(orc_Message.u16_Dlc);
    //Copy each byte
    for (uint16_t u16_It = 0; u16_It < orc_Message.u16_Dlc; ++u16_It)
    {
-      c_Retval.push_back(orc_Message.c_Bytes[u16_It]);
+      c_Retval.append(static_cast<char>(orc_Message.c_Bytes[u16_It]));
    }
    return c_Retval;
 }
@@ -68,7 +68,7 @@ std::vector<uint8_t> C_CamGenSigUtil::h_ConvertRawDataFormat(const C_CamProMessa
    Value as C_OscNodeDataPoolContent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscNodeDataPoolContent C_CamGenSigUtil::h_DecodeRawToContentSignal(const std::vector<uint8_t> & orc_Raw,
+C_OscNodeDataPoolContent C_CamGenSigUtil::h_DecodeRawToContentSignal(const QByteArray & orc_Raw,
                                                                      const C_OscCanSignal & orc_Signal,
                                                                      const C_OscNodeDataPoolContent & orc_SignalMin)
 {
@@ -78,9 +78,9 @@ C_OscNodeDataPoolContent C_CamGenSigUtil::h_DecodeRawToContentSignal(const std::
 
    for (uint8_t u8_ItByte = 0U; u8_ItByte < 8U; ++u8_ItByte)
    {
-      if (static_cast<uint32_t>(u8_ItByte) < orc_Raw.size())
+      if (static_cast<int32_t>(u8_ItByte) < orc_Raw.size())
       {
-         au8_Bytes[u8_ItByte] = orc_Raw[static_cast<uint32_t>(u8_ItByte)];
+         au8_Bytes[u8_ItByte] = static_cast<uint8_t>(orc_Raw[static_cast<int32_t>(u8_ItByte)]);
       }
       else
       {
@@ -101,7 +101,7 @@ C_OscNodeDataPoolContent C_CamGenSigUtil::h_DecodeRawToContentSignal(const std::
    \param[in]      orc_Value     Signal value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamGenSigUtil::h_DecodeSignalValueToRaw(std::vector<uint8_t> & orc_Raw, const C_OscCanSignal & orc_Signal,
+void C_CamGenSigUtil::h_DecodeSignalValueToRaw(QByteArray & orc_Raw, const C_OscCanSignal & orc_Signal,
                                                const C_OscNodeDataPoolContent & orc_Value)
 {
    //Convert to byte array
@@ -116,9 +116,9 @@ void C_CamGenSigUtil::h_DecodeSignalValueToRaw(std::vector<uint8_t> & orc_Raw, c
    //Step 2: convert all bytes to array
    for (uint8_t u8_ItByte = 0U; u8_ItByte < 8U; ++u8_ItByte)
    {
-      if (static_cast<uint32_t>(u8_ItByte) < orc_Raw.size())
+      if (static_cast<int32_t>(u8_ItByte) < orc_Raw.size())
       {
-         au8_Bytes[u8_ItByte] = orc_Raw[static_cast<uint32_t>(u8_ItByte)];
+         au8_Bytes[u8_ItByte] = static_cast<uint8_t>(orc_Raw[static_cast<int32_t>(u8_ItByte)]);
       }
       else
       {
@@ -127,10 +127,10 @@ void C_CamGenSigUtil::h_DecodeSignalValueToRaw(std::vector<uint8_t> & orc_Raw, c
    }
    //Step 3: use core function
    C_OscCanUtil::h_SetSignalValue(au8_Bytes, orc_Signal, orc_Value);
-   //Step 4: write back to vector
-   for (uint8_t u8_ItByte = 0U; (static_cast<uint32_t>(u8_ItByte) < orc_Raw.size()) && (u8_ItByte < 8U); ++u8_ItByte)
+   //Step 4: write back to QByteArray
+   for (uint8_t u8_ItByte = 0U; (static_cast<int32_t>(u8_ItByte) < orc_Raw.size()) && (u8_ItByte < 8U); ++u8_ItByte)
    {
-      orc_Raw[static_cast<uint32_t>(u8_ItByte)] = au8_Bytes[u8_ItByte];
+      orc_Raw[static_cast<int32_t>(u8_ItByte)] = static_cast<char>(au8_Bytes[u8_ItByte]);
    }
 }
 
@@ -215,7 +215,7 @@ C_OscCanMessage C_CamGenSigUtil::h_ConvertDbcToOsy(const C_CieConverter::C_CieCa
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get a single bit from the input byte vector
+/*! \brief  Get a single bit from the input byte array
 
    \param[in]  ou32_BitPos    Bit position
    \param[in]  orc_Bytes      Bytes to use as data
@@ -224,7 +224,7 @@ C_OscCanMessage C_CamGenSigUtil::h_ConvertDbcToOsy(const C_CieConverter::C_CieCa
    Bit value
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_CamGenSigUtil::h_GetBit(const uint32_t ou32_BitPos, const std::vector<uint8_t> & orc_Bytes)
+bool C_CamGenSigUtil::h_GetBit(const uint32_t ou32_BitPos, const QByteArray & orc_Bytes)
 {
    bool q_Retval = false;
 
@@ -233,9 +233,9 @@ bool C_CamGenSigUtil::h_GetBit(const uint32_t ou32_BitPos, const std::vector<uin
    {
       //Which byte (CAN)
       const uint16_t u16_InBytePos = static_cast<uint16_t>(ou32_BitPos / 8U);
-      if (u16_InBytePos < orc_Bytes.size())
+      if (static_cast<int32_t>(u16_InBytePos) < orc_Bytes.size())
       {
-         const uint8_t u8_Byte = orc_Bytes[u16_InBytePos];
+         const uint8_t u8_Byte = static_cast<uint8_t>(orc_Bytes[static_cast<int32_t>(u16_InBytePos)]);
          //Which bit (CAN)
          const uint8_t u8_Mask = 0x1U << (ou32_BitPos % 8U);
          q_Retval = (u8_Byte & u8_Mask) > 0U;
@@ -245,34 +245,35 @@ bool C_CamGenSigUtil::h_GetBit(const uint32_t ou32_BitPos, const std::vector<uin
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set a single bit in the output byte vector
+/*! \brief  Set a single bit in the output byte array
 
    \param[in]      ou32_BitPos   Bit position
    \param[in,out]  orc_Bytes     Bytes to change
    \param[in]      oq_Value      Bit value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamGenSigUtil::h_SetBit(const uint32_t ou32_BitPos, std::vector<uint8_t> & orc_Bytes, const bool oq_Value)
+void C_CamGenSigUtil::h_SetBit(const uint32_t ou32_BitPos, QByteArray & orc_Bytes, const bool oq_Value)
 {
    Q_ASSERT(ou32_BitPos < 64UL);
    if (ou32_BitPos < 64UL)
    {
       //Which byte (output)
       const uint16_t u16_OutBytePos = static_cast<uint16_t>(ou32_BitPos / 8U);
-      if (u16_OutBytePos < orc_Bytes.size())
+      if (static_cast<int32_t>(u16_OutBytePos) < orc_Bytes.size())
       {
          //Which bit (output)
          const uint8_t u8_Mask = 0x1U << (ou32_BitPos % 8U);
+         const uint8_t u8_CurrentByte = static_cast<uint8_t>(orc_Bytes[static_cast<int32_t>(u16_OutBytePos)]);
          if (oq_Value == true)
          {
             //Apply 1
-            orc_Bytes[u16_OutBytePos] = orc_Bytes[u16_OutBytePos] | u8_Mask;
+            orc_Bytes[static_cast<int32_t>(u16_OutBytePos)] = static_cast<char>(u8_CurrentByte | u8_Mask);
          }
          else
          {
             //Apply 0
             const uint8_t u8_InvertedMask = ~u8_Mask;
-            orc_Bytes[u16_OutBytePos] = orc_Bytes[u16_OutBytePos] & u8_InvertedMask;
+            orc_Bytes[static_cast<int32_t>(u16_OutBytePos)] = static_cast<char>(u8_CurrentByte & u8_InvertedMask);
          }
       }
    }
@@ -289,7 +290,7 @@ void C_CamGenSigUtil::h_SetBit(const uint32_t ou32_BitPos, std::vector<uint8_t> 
 */
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_CamGenSigUtil::h_CalcMessageHash(const C_OscCanMessage & orc_Message,
-                                            const std::vector<C_OscNodeDataPoolListElement> & orc_DatapoolPart)
+                                            const QList<C_OscNodeDataPoolListElement> & orc_DatapoolPart)
 {
    uint32_t u32_Retval = 0UL;
    const uint32_t u32_Size = orc_DatapoolPart.size();
@@ -317,7 +318,7 @@ uint32_t C_CamGenSigUtil::h_CalcMessageHash(const C_OscCanMessage & orc_Message,
 {
    uint32_t u32_Retval;
 
-   std::vector<C_OscNodeDataPoolListElement> c_DatapoolPart;
+   QList<C_OscNodeDataPoolListElement> c_DatapoolPart;
 
    //Fill
    c_DatapoolPart.reserve(orc_Message.c_Signals.size());
@@ -352,7 +353,7 @@ uint32_t C_CamGenSigUtil::h_CalcMessageHash(const C_CieConverter::C_CieCanMessag
    uint32_t u32_Retval;
    C_OscCanMessage c_Message = C_CamGenSigUtil::h_ConvertDbcToOsy(orc_Message);
 
-   std::vector<C_OscNodeDataPoolListElement> c_DatapoolPart;
+   QList<C_OscNodeDataPoolListElement> c_DatapoolPart;
 
    //Fill
    c_Message.c_Signals.clear();

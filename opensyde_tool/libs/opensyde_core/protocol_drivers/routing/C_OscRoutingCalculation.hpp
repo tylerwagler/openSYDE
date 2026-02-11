@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <list>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -37,12 +38,12 @@ public:
       eROUTING_CHECK ///< routing calculation only for validation of an existing route independent of the use case
    };
 
-   C_OscRoutingCalculation(const std::vector<C_OscNode> & orc_AllNodes, const std::vector<uint8_t> & orc_ActiveNodes,
+   C_OscRoutingCalculation(const QList<C_OscNode> & orc_AllNodes, const QByteArray & orc_ActiveNodes,
                            const uint32_t ou32_StartBusIndex, const uint32_t ou32_TargetNodeIndex,
                            const E_Mode oe_Mode);
    virtual ~C_OscRoutingCalculation();
 
-   const std::vector<C_OscRoutingRoute> * GetRoutes(void) const;
+   const QList<C_OscRoutingRoute> * GetRoutes(void) const;
    const C_OscRoutingRoute * GetBestRoute(void) const;
    int32_t GetState(void) const;
    bool CheckItfNumberForRouting(const uint32_t ou32_TargetNodeIndex,
@@ -56,7 +57,7 @@ private:
    void m_SearchRoute(void);
    int32_t m_CheckTargetNodeConfig(void) const;
    void m_SearchRoutePointsOnBus(const uint32_t ou32_BusIndex);
-   std::vector<uint32_t> m_GetAllRoutePointsOfNodeOnOneInput(const C_OscRoutingRoutePoint & orc_InPoint,
+   QList<uint32_t> m_GetAllRoutePointsOfNodeOnOneInput(const C_OscRoutingRoutePoint & orc_InPoint,
                                                              const uint32_t ou32_InItfNumber);
    void m_AddOneRoutePoint(const C_OscRoutingRoutePoint & orc_Point);
 
@@ -70,18 +71,18 @@ private:
    uint32_t mu32_TargetNodeIndex;
    E_Mode me_Mode;
 
-   std::vector<C_OscRoutingRoutePoint> mc_AllRoutePoints;
-   std::vector<C_OscRoutingRoute> mc_RoutesToTarget;
+   QList<C_OscRoutingRoutePoint> mc_AllRoutePoints;
+   QList<C_OscRoutingRoute> mc_RoutesToTarget;
    std::list<C_OscRoutingRoute> mc_AllOpenRoutes;
    int32_t ms32_ResultState;
 
-   std::vector<uint32_t> mc_CheckedBuses;
+   QList<uint32_t> mc_CheckedBuses;
    bool mq_PcBus;
 
    //lint -e{1725} reference used for performance reasons
-   const std::vector<C_OscNode> & mrc_AllNodes;
+   const QList<C_OscNode> & mrc_AllNodes;
    //lint -e{1725} reference used for performance reasons
-   const std::vector<uint8_t> & mrc_ActiveNodes;
+   const QByteArray & mrc_ActiveNodes;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

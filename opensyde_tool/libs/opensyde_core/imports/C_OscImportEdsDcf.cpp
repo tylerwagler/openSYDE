@@ -111,7 +111,7 @@ int32_t C_OscImportEdsDcf::h_Import(const QString & orc_FilePath, const uint8_t 
          C_OscCanOpenObjectDictionary c_Dictionary;
          if (c_Dictionary.LoadFromFile(orc_FilePath) == C_NO_ERR)
          {
-            std::vector<uint32_t> c_Dummies;
+            QList<uint32_t> c_Dummies;
             uint32_t u32_StartId;
             mh_LoadDummies(orc_FilePath, c_Dummies);
             if (oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN)
@@ -522,7 +522,7 @@ const C_OscCanOpenObjectData * C_OscImportEdsDcf::mh_GetCoObject(const std::map<
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscImportEdsDcf::mh_ParseMessages(const uint32_t ou32_StartingId, const uint8_t ou8_NodeId,
                                             const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
-                                            const std::vector<uint32_t> & orc_Dummies,
+                                            const QList<uint32_t> & orc_Dummies,
                                             C_OscEdsDcfImportMessageGroup & orc_AllMessageData, const bool oq_IsEds,
                                             QList<QStringList> & orc_ImportMessages,
                                             const bool oq_IsTx, const bool oq_RestrictForCanOpenUsage,
@@ -746,7 +746,7 @@ int32_t C_OscImportEdsDcf::mh_DoesInformationDirectionMatchToParsedMessages(cons
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscImportEdsDcf::mh_ParseMessageContent(const uint32_t ou32_StartingId, const uint8_t ou8_NodeId,
                                                   const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
-                                                  const std::vector<uint32_t> & orc_Dummies,
+                                                  const QList<uint32_t> & orc_Dummies,
                                                   C_OscEdsDcfImportMessageGroup & orc_AllMessageData,
                                                   const bool oq_IsEds,
                                                   QList<QStringList> & orc_ImportMessages,
@@ -1363,10 +1363,10 @@ void C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(const uint32_t ou32_Sta
 int32_t C_OscImportEdsDcf::mh_ParseSignals(const uint32_t ou32_CoMessageId, const uint16_t ou16_MappingOffset,
                                            const uint8_t ou8_NodeId, const std::map<uint16_t,
                                                                                     C_OscCanOpenObject> & orc_CoObjects,
-                                           const std::vector<uint32_t> & orc_Dummies,
+                                           const QList<uint32_t> & orc_Dummies,
                                            C_OscCanMessage & orc_OscMessageData,
-                                           std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalData,
-                                           std::vector<uint8_t> & orc_SignalDefaultMinMaxValuesUsed,
+                                           QList<C_OscNodeDataPoolListElement> & orc_OscSignalData,
+                                           QByteArray & orc_SignalDefaultMinMaxValuesUsed,
                                            const bool oq_IsEds, const bool oq_RestrictForCanOpenUsage,
                                            const bool oq_ImportSrdoUseCase,
                                            QStringList & orc_ImportMessages)
@@ -2171,7 +2171,7 @@ int32_t C_OscImportEdsDcf::mh_CalcMinMaxInit(const C_OscCanOpenObjectData * cons
    \param[out]  orc_Dummies       Vector to store dummy values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportEdsDcf::mh_LoadDummies(const QString & orc_FilePath, std::vector<uint32_t> & orc_Dummies)
+void C_OscImportEdsDcf::mh_LoadDummies(const QString & orc_FilePath, QList<uint32_t> & orc_Dummies)
 {
    std::ifstream c_File;
    c_File.open(orc_FilePath.toUtf8().constData());

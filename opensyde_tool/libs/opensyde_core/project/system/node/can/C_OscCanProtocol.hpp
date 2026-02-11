@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscCanMessageContainer.hpp"
 #include "C_OscNodeDataPool.hpp"
@@ -44,7 +45,7 @@ public:
    void CalcHash(uint32_t & oru32_HashValue) const;
    int32_t GetAllSignalsForMessage(const C_OscNodeDataPool & orc_DataPool, const uint32_t ou32_InterfaceIndex,
                                    const uint32_t ou32_MessageIndex, const bool oq_IsTx,
-                                   std::vector<const C_OscNodeDataPoolListElement *> & orc_Signals) const;
+                                   QList<const C_OscNodeDataPoolListElement *> & orc_Signals) const;
    static const C_OscNodeDataPoolList * h_GetComListConst(const C_OscNodeDataPool & orc_DataPool,
                                                           const uint32_t ou32_InterfaceIndex, const bool oq_IsTx);
    static int32_t h_GetListIndex(const C_OscNodeDataPool & orc_DataPool, const uint32_t ou32_InterfaceIndex,
@@ -71,13 +72,13 @@ public:
 
    E_Type e_Type;                                       ///< Communication protocol associated to this data pool
    uint32_t u32_DataPoolIndex;                          ///< Related data pool index
-   std::vector<C_OscCanMessageContainer> c_ComMessages; ///< Communication messages.
+   QList<C_OscCanMessageContainer> c_ComMessages; ///< Communication messages.
    ///< Vector size needs to be number of CAN interfaces.
-   static const std::vector<C_OscCanProtocol::E_Type> hc_ALL_PROTOCOLS; ///< Vector with all available CAN protocols, in
+   static const QList<C_OscCanProtocol::E_Type> hc_ALL_PROTOCOLS; ///< Vector with all available CAN protocols, in
    /// the same order as the enum
 
 private:
-   static std::vector<C_OscCanProtocol::E_Type> mh_GetAllProtocols(void);
+   static QList<C_OscCanProtocol::E_Type> mh_GetAllProtocols(void);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

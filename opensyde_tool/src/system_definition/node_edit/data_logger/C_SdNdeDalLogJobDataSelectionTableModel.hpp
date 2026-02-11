@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QAbstractTableModel>
+#include <QList>
 
 #include "C_OscDataLoggerDataElementReference.hpp"
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -39,10 +40,10 @@ public:
    };
 
    explicit C_SdNdeDalLogJobDataSelectionTableModel(QObject * const opc_Parent = NULL);
-   void UpdateData(const std::vector<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
+   void UpdateData(const QList<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
                    const uint32_t ou32_NodeIndex);
-   void DoRemoveRows(const std::vector<uint32_t> & orc_SelectedIndices);
-   void AddData(const std::vector<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
+   void DoRemoveRows(const QList<uint32_t> & orc_SelectedIndices);
+   void AddData(const QList<stw::opensyde_core::C_OscDataLoggerDataElementReference> & orc_DataElements,
                 const uint32_t ou32_NodeIndex);
    void GetElementLocationCount(uint32_t & oru32_LocalElements, uint32_t & oru32_RemoteElements);
 
@@ -77,7 +78,7 @@ private:
       QString c_Comment;
    };
 
-   std::vector<C_DalLogJobData> mc_LoggingDataList;
+   QList<C_DalLogJobData> mc_LoggingDataList;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

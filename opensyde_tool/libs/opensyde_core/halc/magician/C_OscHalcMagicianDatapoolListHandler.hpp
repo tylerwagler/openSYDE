@@ -9,6 +9,7 @@
 #define C_OSCHALCMAGICIANDATAPOOLLISTHANDLER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_OscHalcConfig.hpp"
 
@@ -57,12 +58,12 @@ public:
                                                                       const C_OscNodeDataPoolList & orc_List)
    const;
 
-   uint32_t CountRelevantItems(const std::vector<C_OscHalcConfigChannel> & orc_Channels,
+   uint32_t CountRelevantItems(const QList<C_OscHalcConfigChannel> & orc_Channels,
                                const C_OscHalcConfigChannel & orc_DomainConfig) const;
-   std::vector<uint32_t> GetRelevantChannels(const std::vector<C_OscHalcConfigChannel> & orc_Channels,
+   QList<uint32_t> GetRelevantChannels(const QList<C_OscHalcConfigChannel> & orc_Channels,
                                              const C_OscHalcConfigChannel & orc_DomainConfig) const;
 
-   static uint32_t h_CountElements(const std::vector<C_OscHalcDefStruct> & orc_Structs,
+   static uint32_t h_CountElements(const QList<C_OscHalcDefStruct> & orc_Structs,
                                    const uint32_t ou32_NumChannelsInDatapool);
    static uint32_t h_CountElements(const C_OscHalcDefStruct & orc_Struct, const uint32_t ou32_NumChannelsInDatapool);
    static uint32_t h_CountElements(const C_OscHalcDefElement & orc_Element, const uint32_t ou32_NumChannelsInDatapool);
@@ -85,10 +86,10 @@ private:
 
    static int32_t mh_GetSubElementIndex(const uint32_t ou32_Index, const uint32_t ou32_ElementIndex,
                                         const uint32_t ou32_CurChannel,
-                                        const std::vector<C_OscHalcDefStruct> & orc_Values,
-                                        const std::vector<uint32_t> & orc_RelevantChannels, uint32_t & oru32_ListIndex);
+                                        const QList<C_OscHalcDefStruct> & orc_Values,
+                                        const QList<uint32_t> & orc_RelevantChannels, uint32_t & oru32_ListIndex);
    static void mh_GetSubDefElementIndex(const C_OscHalcDefElement & orc_DefElement, const uint32_t ou32_CurChannel,
-                                        const std::vector<uint32_t> & orc_RelevantChannels, uint32_t & oru32_ListIndex);
+                                        const QList<uint32_t> & orc_RelevantChannels, uint32_t & oru32_ListIndex);
    int32_t m_GetArrayIndexOfChannel(const uint32_t ou32_DomainIndex,
                                     const C_OscNodeDataPoolListElement & orc_ListElement,
                                     const uint32_t ou32_CurChannel, bool & orq_IsArray,

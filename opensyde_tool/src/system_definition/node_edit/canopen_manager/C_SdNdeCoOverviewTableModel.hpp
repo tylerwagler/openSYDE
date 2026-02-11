@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
+#include <QList>
 #include <QString>
 #include "stwtypes.hpp"
 #include "C_OscNode.hpp"
@@ -121,7 +122,7 @@ private:
    void m_FillCoInfo(void);
 
    uint32_t mu32_NodeIndex;
-   std::vector<C_CoInfo> mc_CoInfoAll;
+   QList<C_CoInfo> mc_CoInfoAll;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

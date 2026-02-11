@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QLabel>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_TblViewScroll.hpp"
 #include "C_SyvDaItPaArModel.hpp"
@@ -53,7 +54,7 @@ private:
    stw::opensyde_gui_logic::C_SyvDaItPaArDelegate mc_Delegate;
    QLabel * mpc_LabelCorner;
 
-   std::vector<uint32_t> m_GetSelectedIndices(void) const;
+   QList<uint32_t> m_GetSelectedIndices(void) const;
    void m_UpdateCornerButton(void);
    //Avoid call
    C_SyvDaItPaArView(const C_SyvDaItPaArView &);

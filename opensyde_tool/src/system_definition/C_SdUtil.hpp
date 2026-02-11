@@ -12,12 +12,13 @@
 #define C_SDUTIL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include <QString>
 #include <QStringList>
 #include <QIcon>
 #include <QLabel>
 #include <QComboBox>
+#include <QByteArray>
 #include "stwtypes.hpp"
 #include "C_OscCanMessage.hpp"
 #include "C_OscSystemBus.hpp"
@@ -40,10 +41,10 @@ class C_SdUtil
 {
 public:
    C_SdUtil(void);
-   static int32_t h_GetNames(const std::vector<uint32_t> & orc_NodeIndices,
-                             const std::vector<uint32_t> & orc_InterfaceIndices, QStringList & orc_Names,
+   static int32_t h_GetNames(const QList<uint32_t> & orc_NodeIndices,
+                             const QList<uint32_t> & orc_InterfaceIndices, QStringList & orc_Names,
                              const bool oq_NameWithInterfaceAlways,
-                             const std::vector<uint32_t> * const opc_DatapoolIndices = NULL,
+                             const QList<uint32_t> * const opc_DatapoolIndices = NULL,
                              QStringList * const opc_DatapoolNames = NULL);
    static int32_t h_GetName(const uint32_t & oru32_NodeIndex, QString & orc_Name);
    static int32_t h_GetName(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_InterfaceIndex,
@@ -52,53 +53,53 @@ public:
    static QIcon h_InitStaticIconSvg(const QString & orc_File, const QSize & orc_Size);
    static QString h_ConvertTxMethodToName(const stw::opensyde_core::C_OscCanMessage::E_TxMethodType & ore_Type);
    static QString h_ConvertByteOrderToName(const stw::opensyde_core::C_OscCanSignal::E_ByteOrderType & ore_Type);
-   static void h_GetErrorToolTipDataPools(const uint32_t ou32_NodeIndex, const std::vector<uint32_t> & orc_Indices,
+   static void h_GetErrorToolTipDataPools(const uint32_t ou32_NodeIndex, const QList<uint32_t> & orc_Indices,
                                           const bool oq_NvmSizeInvalid, const bool oq_NvmOverlapDetected,
                                           QString & orc_Heading, QString & orc_Content);
 
-   static void h_SortSourceDescending(std::vector<uint32_t> & orc_Source, std::vector<uint32_t> & orc_Target);
-   static bool h_CheckSortedDescending(const std::vector<uint32_t> & orc_Indices);
-   static void h_SortIndicesAscending(std::vector<uint32_t> & orc_IndicesTmp);
+   static void h_SortSourceDescending(QList<uint32_t> & orc_Source, QList<uint32_t> & orc_Target);
+   static bool h_CheckSortedDescending(const QList<uint32_t> & orc_Indices);
+   static void h_SortIndicesAscending(QList<uint32_t> & orc_IndicesTmp);
    static uint8_t h_GetNodeIdMaximum(const uint32_t & oru32_NodeIndex);
    static uint32_t h_GetActiveNodeInterface(const QComboBox & orc_ComboBox, const uint32_t & oru32_NodeIndex,
                                             const stw::opensyde_core::C_OscSystemBus::E_Type & ore_Type);
    static bool h_InitNodeInterfaceComboBox(const stw::opensyde_core::C_OscNode & orc_Node,
                                            const stw::opensyde_core::C_OscSystemBus::E_Type & ore_BusType,
                                            QComboBox * const opc_ComboBox, const int32_t & ors32_SpecialInterface);
-   static std::vector<uint32_t> h_GetUsedNodeIdsForBusUniqueAndSortedAscending(const uint32_t & oru32_BusIndex,
+   static QList<uint32_t> h_GetUsedNodeIdsForBusUniqueAndSortedAscending(const uint32_t & oru32_BusIndex,
                                                                                const uint32_t & oru32_SpecialNodeIndex,
                                                                                const int32_t & ors32_SpecialInterface);
-   static std::vector<uint32_t> h_GetUsedProcessIdsForApplicationUniqueAndSortedAscending(const uint32_t ou32_NodeIndex,
+   static QList<uint32_t> h_GetUsedProcessIdsForApplicationUniqueAndSortedAscending(const uint32_t ou32_NodeIndex,
                                                                                           const int32_t os32_SpecialApplicationIndex);
-   static std::vector<uint32_t> h_GetUsedBusIdsUniqueAndSortedAscending(const int32_t os32_SpecialBusIndex);
-   static std::vector<uint32_t> h_GetUsedIpAddressesForBusUniqueAndSortedAscending(const uint32_t & oru32_BusIndex,
+   static QList<uint32_t> h_GetUsedBusIdsUniqueAndSortedAscending(const int32_t os32_SpecialBusIndex);
+   static QList<uint32_t> h_GetUsedIpAddressesForBusUniqueAndSortedAscending(const uint32_t & oru32_BusIndex,
                                                                                    const uint32_t & oru32_SpecialNodeIndex, const int32_t & ors32_SpecialInterface);
-   static std::vector<std::vector<uint8_t> > h_GetAllUsedIpAddressesForBus(const uint32_t & oru32_BusIndex,
+   static QList<QByteArray> h_GetAllUsedIpAddressesForBus(const uint32_t & oru32_BusIndex,
                                                                            const uint32_t & oru32_SpecialNodeIndex,
                                                                            const int32_t & ors32_SpecialInterface);
    static void h_AdaptMessageToProtocolType(stw::opensyde_core::C_OscCanMessage & orc_Message,
                                             stw::opensyde_gui_logic::C_PuiSdNodeCanMessage & orc_UiMessage,
-                                            std::vector<opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalListElements, const std::vector<opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_UiSignalListElements, const stw::opensyde_core::C_OscCanProtocol::E_Type oe_Type, QStringList * const opc_AdaptationInfos, const bool oq_IncludeSignalUpdate = true);
+                                            QList<opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalListElements, const QList<opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_UiSignalListElements, const stw::opensyde_core::C_OscCanProtocol::E_Type oe_Type, QStringList * const opc_AdaptationInfos, const bool oq_IncludeSignalUpdate = true);
    static void h_AdaptSignalToProtocolType(stw::opensyde_core::C_OscCanSignal & orc_Signal,
                                            opensyde_core::C_OscNodeDataPoolListElement & orc_OscSignalListElement,
                                            const stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement & orc_UiSignalListElement, const stw::opensyde_core::C_OscCanProtocol::E_Type oe_Type, QStringList * const opc_AdaptationInfos);
-   static QString h_InitUsedIdsString(const std::vector<uint32_t> & orc_UsedIds, const QString & orc_ItemName,
+   static QString h_InitUsedIdsString(const QList<uint32_t> & orc_UsedIds, const QString & orc_ItemName,
                                       const QString & orc_ItemType, const bool oq_SkipItem = false);
-   static QString h_InitUsedIpsString(const std::vector<std::vector<uint8_t> > & orc_UsedIps,
+   static QString h_InitUsedIpsString(const QList<QByteArray> & orc_UsedIps,
                                       const QString & orc_ItemName, const QString & orc_ItemType,
                                       const bool oq_SkiptItem = false);
-   static QString h_IpAddressAsString(const std::vector<uint8_t> & orc_Ip);
+   static QString h_IpAddressAsString(const QByteArray & orc_Ip);
    static uint32_t h_GetNextFreeNodeProperty(
-      const std::vector<stw::opensyde_core::C_OscNodeComInterfaceSettings> & orc_Interfaces,
-      const std::vector<uint32_t> & orc_UsedNodeProperties, const int32_t & ors32_SpecialInterface,
+      const QList<stw::opensyde_core::C_OscNodeComInterfaceSettings> & orc_Interfaces,
+      const QList<uint32_t> & orc_UsedNodeProperties, const int32_t & ors32_SpecialInterface,
       const bool oq_GenerateId);
    static bool h_HasConnectionType(const stw::opensyde_core::C_OscNode & orc_Node,
                                    const stw::opensyde_core::C_OscSystemBus::E_Type oe_Type);
    static bool h_CheckNodeInterfaceAvailable(
-      const std::vector<stw::opensyde_core::C_OscNodeComInterfaceSettings> & orc_ComInterfaces,
+      const QList<stw::opensyde_core::C_OscNodeComInterfaceSettings> & orc_ComInterfaces,
       const stw::opensyde_core::C_OscSystemBus::E_Type & ore_BusType);
    static bool h_CheckNodeInterfaceConnected(
-      const std::vector<stw::opensyde_core::C_OscNodeComInterfaceSettings> & orc_ComInterfaces,
+      const QList<stw::opensyde_core::C_OscNodeComInterfaceSettings> & orc_ComInterfaces,
       const stw::opensyde_core::C_OscSystemBus::E_Type & ore_BusType);
    static bool h_CheckDatapoolNumber(const uint32_t & oru32_NodeIndex, const bool & orq_AlreadyChecked,
                                      QWidget * const opc_Parent);
@@ -116,12 +117,12 @@ public:
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId,
       const uint32_t & oru32_SignalIndex, const QString & orc_AdditionalInformation = "");
    template <typename T, typename U>
-   static void h_SortIndicesDescendingAndSync(std::vector<uint32_t> & orc_IndicesTmp,
-                                              std::vector<T> & orc_OscContentTmp, std::vector<U> & orc_UiContentTmp);
+   static void h_SortIndicesDescendingAndSync(QList<uint32_t> & orc_IndicesTmp,
+                                              QList<T> & orc_OscContentTmp, QList<U> & orc_UiContentTmp);
 
    template <typename T, typename U>
-   static void h_SortIndicesAscendingAndSync(std::vector<uint32_t> & orc_IndicesTmp, std::vector<T> & orc_OscContentTmp,
-                                             std::vector<U> & orc_UiContentTmp);
+   static void h_SortIndicesAscendingAndSync(QList<uint32_t> & orc_IndicesTmp, QList<T> & orc_OscContentTmp,
+                                             QList<U> & orc_UiContentTmp);
    static QString h_GetEdsFileDetails(const stw::opensyde_core::C_OscCanOpenObjectDictionary oc_CanOpenObjDictionary);
 
    static int32_t h_GetMessageCountOfNode(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,

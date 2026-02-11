@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_SdNdeDpSelectorWidget.hpp"
+#include <QList>
 
 #include "constants.hpp"
 
@@ -331,7 +332,7 @@ void C_SdNdeDpSelectorWidget::ErrorCheck(void)
    QString c_Heading;
    QString c_Content;
 
-   std::vector<uint32_t> c_InvalidDatapoolIndices;
+   QList<uint32_t> c_InvalidDatapoolIndices;
    bool q_DatapoolNvmSizeConflict = false;
    bool q_DatapoolNvmOverlapConflict = false;
    bool q_Error = this->mpc_Ui->pc_ListWidget->CheckDataPoolsForConflict(&c_InvalidDatapoolIndices);
@@ -613,7 +614,7 @@ void C_SdNdeDpSelectorWidget::m_UpdateErrorToolTip(void)
       bool q_Error = false;
       bool q_DatapoolNvmSizeConflict = false;
       bool q_DatapoolNvmOverlapConflict = false;
-      std::vector<uint32_t> c_InvalidDataPoolIndices;
+      QList<uint32_t> c_InvalidDataPoolIndices;
 
       for (int32_t s32_ItDp = 0; s32_ItDp < this->mpc_Ui->pc_ListWidget->GetItemCount(); ++s32_ItDp)
       {

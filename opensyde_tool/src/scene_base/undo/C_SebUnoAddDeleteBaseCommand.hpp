@@ -29,7 +29,7 @@ class C_SebUnoAddDeleteBaseCommand :
    public C_SebUnoBaseCommand
 {
 public:
-   C_SebUnoAddDeleteBaseCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SebUnoAddDeleteBaseCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                 const QString & orc_Text, QUndoCommand * const opc_Parent = NULL);
    void undo(void) override = 0;
    void redo(void) override = 0;

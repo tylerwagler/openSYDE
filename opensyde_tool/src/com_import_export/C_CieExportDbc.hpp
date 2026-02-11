@@ -19,6 +19,7 @@
 #include "C_OscNodeDataPoolContent.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
+#include <QList>
 #include <QString>
 #include <QStringList>
 
@@ -60,14 +61,14 @@ private:
       mhc_ErrorMessage; // description of error which caused the export to fail
 
   static int32_t
-  mh_SetNodes(const std::vector<C_CieConverter::C_CieNode> &orc_CieNodes,
+  mh_SetNodes(const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
               std::map<std::string, Vector::DBC::Node> &orc_DbcNodes);
   static int32_t
-  mh_SetMessages(const std::vector<C_CieConverter::C_CieNode> &orc_CieNodes,
+  mh_SetMessages(const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
                  std::map<uint32_t, Vector::DBC::Message> &orc_DbcMessages);
   static int32_t mh_SetSignals(
-      const std::vector<C_CieConverter::C_CieCanSignal> &orc_CieSignals,
-      const std::vector<C_CieConverter::C_CieNode> &orc_CieNodes,
+      const QList<C_CieConverter::C_CieCanSignal> &orc_CieSignals,
+      const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
       Vector::DBC::Message &orc_DbcMessage);
   static int32_t
   mh_SetSignalValues(const C_CieConverter::C_CieDataPoolElement &orc_Element,

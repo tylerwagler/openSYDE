@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <set>
+#include <QList>
 
 #include "C_OscDataDealerNvm.hpp"
 #include "C_OscParamSetHandler.hpp"
@@ -43,7 +44,7 @@ public:
    virtual ~C_OscDataDealerNvmSafe(void);
 
    int32_t NvmSafeCheckCrcs(const C_OscNode & orc_Node) const;
-   int32_t NvmSafeWriteChangedValues(std::vector<C_OscNodeDataPoolListElementId> & orc_ChangedElements, const std::vector<C_OscNodeDataPoolListId> * const opc_AdditionalListsToUpdate =
+   int32_t NvmSafeWriteChangedValues(QList<C_OscNodeDataPoolListElementId> & orc_ChangedElements, const QList<C_OscNodeDataPoolListId> * const opc_AdditionalListsToUpdate =
                                         NULL,
                                      uint8_t * const opu8_NrCode = NULL);
    int32_t NvmSafeReadValues(const C_OscNode * (&orpc_NodeCopy), uint8_t * const opu8_NrCode);
@@ -51,13 +52,13 @@ public:
 
    //Create file process
    void NvmSafeClearInternalContent(void);
-   int32_t NvmSafeReadParameterValues(const std::vector<C_OscNodeDataPoolListId> & orc_ListIds,
+   int32_t NvmSafeReadParameterValues(const QList<C_OscNodeDataPoolListId> & orc_ListIds,
                                       uint8_t * const opu8_NrCode);
    int32_t NvmSafeCreateCleanFileWithoutCrc(const QString & orc_Path, const stw::opensyde_core::C_OscParamSetInterpretedFileInfoData & orc_FileInfo =
                                                stw::opensyde_core::C_OscParamSetInterpretedFileInfoData());
    int32_t NvmSafeReadFileWithoutCrc(const QString & orc_Path);
    int32_t NvmSafeCheckParameterFileContents(const QString & orc_Path,
-                                             std::vector<C_OscNodeDataPoolListId> & orc_DataPoolLists);
+                                             QList<C_OscNodeDataPoolListId> & orc_DataPoolLists);
    int32_t NvmSafeUpdateCrcForFile(const QString & orc_Path);
 
    //Write file process

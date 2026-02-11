@@ -93,7 +93,7 @@ int32_t C_OscAesFile::h_EncryptFile(const QString & orc_Key, const QString & orc
    else
    {
       //load data from input file:
-      vector<uint8_t> c_InputData;
+      QByteArray c_InputData;
       std::ifstream c_InputFileStream;
       const uint32_t u32_InputFileSize = static_cast<uint32_t>(QFileInfo(orc_InFilePath).size());
       const uint8_t u8_Pkcs7Size = static_cast<uint8_t>(16U - (u32_InputFileSize % 16U));
@@ -111,7 +111,7 @@ int32_t C_OscAesFile::h_EncryptFile(const QString & orc_Key, const QString & orc
          //read file content
          bool q_HasFailed;
          //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?& anyway
-         c_InputFileStream.read(reinterpret_cast<char_t *>(&c_InputData[0]), u32_InputFileSize);
+         c_InputFileStream.read(reinterpret_cast<char_t *>(reinterpret_cast<uint8_t*>(c_InputData.data())), u32_InputFileSize);
          //check for error
          q_HasFailed = c_InputFileStream.fail();
          //close file
@@ -144,7 +144,7 @@ int32_t C_OscAesFile::h_EncryptFile(const QString & orc_Key, const QString & orc
             }
 
             pu8_EncryptedData = c_Aes.EncryptECB(
-               &c_InputData[0],
+               reinterpret_cast<uint8_t*>(c_InputData.data()),
                static_cast<unsigned int>(c_InputData.size()), //lint !e970  //using type to match library interface
                &au8_Key[0],
                x_EncryptedSize);
@@ -227,7 +227,7 @@ int32_t C_OscAesFile::h_DecryptFile(const QString & orc_Key, const QString & orc
    else
    {
       //load data from input file:
-      vector<uint8_t> c_InputData;
+      QByteArray c_InputData;
       std::ifstream c_InputFileStream;
       const uint32_t u32_InputFileSize = static_cast<uint32_t>(QFileInfo(orc_InFilePath).size());
 
@@ -252,7 +252,7 @@ int32_t C_OscAesFile::h_DecryptFile(const QString & orc_Key, const QString & orc
             bool q_HasFailed;
             //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?&
             // anyway
-            c_InputFileStream.read(reinterpret_cast<char_t *>(&c_InputData[0]), c_InputData.size());
+            c_InputFileStream.read(reinterpret_cast<char_t *>(reinterpret_cast<uint8_t*>(c_InputData.data())), c_InputData.size());
             //check for error
             q_HasFailed = c_InputFileStream.fail();
             //close file
@@ -280,7 +280,7 @@ int32_t C_OscAesFile::h_DecryptFile(const QString & orc_Key, const QString & orc
                   au8_Key[u8_Index] = static_cast<uint8_t>(c_Text.toInt(nullptr, 16));
                }
 
-               pu8_DecryptedData = c_Aes.DecryptECB(&c_InputData[0], x_InputSize, &au8_Key[0]);
+               pu8_DecryptedData = c_Aes.DecryptECB(reinterpret_cast<uint8_t*>(c_InputData.data()), x_InputSize, &au8_Key[0]);
                //remove padding:
                u8_Pkcs7Value = pu8_DecryptedData[c_InputData.size() - 1];
                if ((u8_Pkcs7Value > 16) || (u8_Pkcs7Value > c_InputData.size()))

@@ -161,7 +161,7 @@ bool C_SebUnoTopBaseManager::m_CheckBusConnectorChange(const QList<QGraphicsItem
          dynamic_cast<const C_GiLiBusConnectorBase * const>(orc_Items[0]);
       if (pc_BusConnector != NULL)
       {
-         vector<uint64_t> c_Ids;
+         QList<uint64_t> c_Ids;
          uint64_t u64_Id;
          C_SebUnoTopBusConnectorMoveCommand * pc_MoveCommand;
 

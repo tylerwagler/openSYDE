@@ -14,8 +14,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QGraphicsScene>
 #include <QVector>
+#include <QList>
 #include <set>
-#include <vector>
 #include <array>
 #include <QCursor>
 #include <QObject>
@@ -197,7 +197,7 @@ private:
 
    // Color configuration for the signals
    static const C_SdBueMlvSignalManager::C_SignalItemColors mhac_SIGNALS_COLORS[64];
-   std::vector<std::array<bool, 64> > mc_SignalsColorsUsed;
+   QList<std::array<bool, 64> > mc_SignalsColorsUsed;
 
    // ECeS hint
    C_SdBueMlvBaseItem * mapc_EcesHints[2];

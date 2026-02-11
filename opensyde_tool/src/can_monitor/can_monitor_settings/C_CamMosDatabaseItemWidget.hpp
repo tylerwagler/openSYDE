@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QDateTime>
 #include <QFileInfo>
+#include <QList>
 
 #include "C_OgeWiOnlyBackground.hpp"
 #include "C_CamProDatabaseData.hpp"
@@ -54,7 +55,7 @@ public:
 
    void SetState(const E_LoadingState oe_State);
    void SetBusIndex(const uint32_t ou32_BusIndex);
-   void SetBusses(const std::vector<stw::opensyde_core::C_OscSystemBus> & orc_Busses);
+   void SetBusses(const QList<stw::opensyde_core::C_OscSystemBus> & orc_Busses);
    void UpdateTooltip(void) const;
    void UpdateDatabasePathRelativeness(const QString & orc_NewDatabaseName);
    void CheckFile(void);
@@ -81,7 +82,7 @@ Q_SIGNALS:
 private:
    Ui::C_CamMosDatabaseItemWidget * mpc_Ui;
    stw::opensyde_gui_logic::C_CamProDatabaseData mc_Database;
-   std::vector<stw::opensyde_core::C_OscSystemBus> mc_Busses;
+   QList<stw::opensyde_core::C_OscSystemBus> mc_Busses;
 
    E_LoadingState me_State;
    bool mq_AlreadyAskedUserReload;

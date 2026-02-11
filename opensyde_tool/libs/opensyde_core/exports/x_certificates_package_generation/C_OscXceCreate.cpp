@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
+#include <QList>
 
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
@@ -82,7 +83,7 @@ const QString C_OscXceCreate::mhc_USE_CASE = "Creating X-Certificates Package";
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceCreate::h_CreatePackage(const QString & orc_PackagePath,
                                         const QStringList & orc_CertificatesPath,
-                                        const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters, QStringList & orc_WarningMessages, QString & orc_ErrorMessage,
+                                        const QList<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters, QStringList & orc_WarningMessages, QString & orc_ErrorMessage,
                                         const QString & orc_TemporaryDirectory)
 {
    int32_t s32_Return;
@@ -98,7 +99,7 @@ int32_t C_OscXceCreate::h_CreatePackage(const QString & orc_PackagePath,
    std::set<QString> c_XcertFiles;                     // unique container with
                                                                      // relative file paths for zip
                                                                      // archive
-   std::vector<C_OscXceUpdatePackageParameters> c_UpdatePackageParameters = orc_UpdatePackageParameters;
+   QList<C_OscXceUpdatePackageParameters> c_UpdatePackageParameters = orc_UpdatePackageParameters;
    // fill with constant file names
    c_XcertFiles.insert(C_OscXceManifestFiler::hc_FILE_NAME);
    c_XcertFiles.insert(stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(mhc_CERTIFICATES_FOLDER));
@@ -192,7 +193,7 @@ int32_t C_OscXceCreate::h_CreatePackage(const QString & orc_PackagePath,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceCreate::mh_CheckParamsToCreatePackage(const QString & orc_PackagePath,
                                                       const QStringList & orc_CertificatesPath,
-                                                      const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters)
+                                                      const QList<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters)
 {
    int32_t s32_Return = C_OscSpaServicePackageCreateUtil::h_CheckPackagePathParam(orc_PackagePath,
                                                                                   mhc_USE_CASE,
@@ -254,7 +255,7 @@ int32_t C_OscXceCreate::mh_CheckFileExists(const QString & orc_Path)
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscXceManifest C_OscXceCreate::mh_CreateManifest(
-   const std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters)
+   const QList<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters)
 {
    C_OscXceManifest c_Manifest;
 
@@ -289,7 +290,7 @@ C_OscXceManifest C_OscXceCreate::mh_CreateManifest(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceCreate::mh_PrepareCertFiles(const QString & orc_TmpPath,
                                             const QStringList & orc_CertificatesPath,
-                                            std::vector<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
+                                            QList<C_OscXceUpdatePackageParameters> & orc_UpdatePackageParameters,
                                             std::set<QString> & orc_XcertFiles)
 {
    int32_t s32_Return = C_NO_ERR;

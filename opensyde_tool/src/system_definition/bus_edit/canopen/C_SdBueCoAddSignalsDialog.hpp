@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_OgePopUpDialog.hpp"
@@ -43,7 +44,7 @@ public:
    ~C_SdBueCoAddSignalsDialog(void) override;
 
    void InitStaticNames(void) const;
-   std::vector<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> GetSelectedSignals(void) const;
+   QList<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> GetSelectedSignals(void) const;
    void PrepareCleanUp(void);
 
 protected:

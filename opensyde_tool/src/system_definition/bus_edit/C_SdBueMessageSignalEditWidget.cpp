@@ -248,7 +248,7 @@ void C_SdBueMessageSignalEditWidget::Hide(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageSignalEditWidget::SetNodeId(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-                                               const std::vector<uint32_t> & orc_DatapoolIndexes) const
+                                               const QList<uint32_t> & orc_DatapoolIndexes) const
 {
    this->mpc_Ui->pc_MsgPropertiesWidget->SetNodeId(ou32_NodeIndex, ou32_InterfaceIndex, orc_DatapoolIndexes);
 }
@@ -313,7 +313,7 @@ void C_SdBueMessageSignalEditWidget::OnSignalCountOfMessageChanged(
 {
    //Check if relevant
    bool q_Found = false;
-   const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
+   const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
       this->mpc_Ui->pc_MsgPropertiesWidget->GetMatchingMessageIds();
 
    for (uint32_t u32_ItMessage = 0; u32_ItMessage < c_MatchingMessageIds.size(); ++u32_ItMessage)
@@ -417,7 +417,7 @@ void C_SdBueMessageSignalEditWidget::GetLastSelection(bool & orq_MessageSelected
    orq_SignalSelected = false;
 
    // check if message is selected (matching IDs vector is empty if signal is selected)
-   const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingIds =
+   const QList<C_OscCanMessageIdentificationIndices> c_MatchingIds =
       this->mpc_Ui->pc_MsgPropertiesWidget->GetMatchingMessageIds();
    if (c_MatchingIds.size() > 0UL)
    {
@@ -666,7 +666,7 @@ int32_t C_SdBueMessageSignalEditWidget::m_GetMessageId(C_OscCanMessageIdentifica
 
    if (this->mpc_Ui->pc_MsgPropertiesWidget->isVisible())
    {
-      const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
+      const QList<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
          this->mpc_Ui->pc_MsgPropertiesWidget->GetMatchingMessageIds();
       if (c_MatchingMessageIds.size() > 0)
       {

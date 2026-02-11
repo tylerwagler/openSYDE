@@ -14,6 +14,7 @@
 
 #include <cmath>
 #include <QApplication>
+#include <QList>
 #include "stwerrors.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "constants.hpp"
@@ -54,9 +55,9 @@ using namespace stw::opensyde_core;
    Std vector of selected items
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SdNdeDpUtil::h_ConvertVector(const QModelIndexList & orc_Items, const bool & orq_Rows)
+QList<uint32_t> C_SdNdeDpUtil::h_ConvertVector(const QModelIndexList & orc_Items, const bool & orq_Rows)
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    c_Retval.reserve(orc_Items.size());
    for (uint32_t u32_ItInput = 0; u32_ItInput < static_cast<uint32_t>(orc_Items.size()); ++u32_ItInput)
    {
@@ -790,7 +791,7 @@ int32_t C_SdNdeDpUtil::h_GetSharedDatapoolGroup(const uint32_t ou32_SharedDatapo
    int32_t s32_Return = C_RANGE;
    const C_PuiSdSharedDatapools & rc_SharedDatapools = C_PuiSdHandler::h_GetInstance()->GetSharedDatapoolsConst();
 
-   std::vector<C_OscNodeDataPoolId> c_SharedDatapoolGroup;
+   QList<C_OscNodeDataPoolId> c_SharedDatapoolGroup;
 
    orc_SharedDatapoolNameGroup.clear();
 

@@ -10,6 +10,7 @@
 #define C_SDNODETONODECONNECTIONSETUPWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include <QRadioButton>
 
@@ -65,8 +66,8 @@ private:
    const uint32_t mu32_Node2Index;
    uint32_t mu32_NodeId1;
    uint32_t mu32_NodeId2;
-   std::vector<uint32_t> mc_UsedNodeIds;
-   std::vector<uint32_t> mc_BusIndices;
+   QList<uint32_t> mc_UsedNodeIds;
+   QList<uint32_t> mc_BusIndices;
    bool mq_InteractionPossible;
 
    void m_OkClicked(void);

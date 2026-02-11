@@ -9,7 +9,7 @@
 #define C_CAMMETUTIL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_CamMetTreeLoggerData.hpp"
@@ -28,12 +28,12 @@ class C_CamMetUtil
 public:
    C_CamMetUtil();
 
-   static std::vector<int32_t> h_GetMultiplexerOrder(
-      const std::vector<stw::opensyde_core::C_OscComMessageLoggerDataSignal> & orc_Signals);
+   static QList<int32_t> h_GetMultiplexerOrder(
+      const QList<stw::opensyde_core::C_OscComMessageLoggerDataSignal> & orc_Signals);
    static int32_t h_GetMultiplexerValue(
-      const std::vector<stw::opensyde_core::C_OscComMessageLoggerDataSignal> & orc_Signals);
+      const QList<stw::opensyde_core::C_OscComMessageLoggerDataSignal> & orc_Signals);
    static int32_t h_GetRowForMultiplexerValue(
-      const std::vector<stw::opensyde_core::C_OscComMessageLoggerDataSignal> & orc_Signals,
+      const QList<stw::opensyde_core::C_OscComMessageLoggerDataSignal> & orc_Signals,
       const int32_t os32_MultiplexerValue);
 };
 

@@ -238,7 +238,7 @@ void C_OscNodeDataPoolList::CheckErrorDataSet(const uint32_t & oru32_DataSetInde
 void C_OscNodeDataPoolList::CheckErrorElement(const uint32_t & oru32_ElementIndex, bool * const opq_NameConflict,
                                               bool * const opq_NameInvalid, bool * const opq_MinOverMax,
                                               bool * const opq_DataSetValueInvalid,
-                                              std::vector<uint32_t> * const opc_InvalidDataSetIndices) const
+                                              QList<uint32_t> * const opc_InvalidDataSetIndices) const
 {
    //Init
    if (oru32_ElementIndex < this->c_Elements.size())
@@ -436,7 +436,7 @@ void C_OscNodeDataPoolList::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCh
    C_RANGE    size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const std::vector<uint8_t> & orc_Data)
+int32_t C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const QByteArray & orc_Data)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -464,7 +464,7 @@ int32_t C_OscNodeDataPoolList::SetCrcFromBigEndianBlob(const std::vector<uint8_t
    C_RANGE    size of orc_Data does not match our size
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolList::SetCrcFromLittleEndianBlob(const std::vector<uint8_t> & orc_Data)
+int32_t C_OscNodeDataPoolList::SetCrcFromLittleEndianBlob(const QByteArray & orc_Data)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -488,7 +488,7 @@ int32_t C_OscNodeDataPoolList::SetCrcFromLittleEndianBlob(const std::vector<uint
    \param[out]     orc_Data    data to set
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolList::GetCrcAsBigEndianBlob(std::vector<uint8_t> & orc_Data) const
+void C_OscNodeDataPoolList::GetCrcAsBigEndianBlob(QByteArray & orc_Data) const
 {
    const uint16_t u16_Value = static_cast<uint16_t>(this->u32_NvmCrc);
 
@@ -506,7 +506,7 @@ void C_OscNodeDataPoolList::GetCrcAsBigEndianBlob(std::vector<uint8_t> & orc_Dat
    \param[out]     orc_Data    data to set
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolList::GetCrcAsLittleEndianBlob(std::vector<uint8_t> & orc_Data) const
+void C_OscNodeDataPoolList::GetCrcAsLittleEndianBlob(QByteArray & orc_Data) const
 {
    const uint16_t u16_Value = static_cast<uint16_t>(this->u32_NvmCrc);
 

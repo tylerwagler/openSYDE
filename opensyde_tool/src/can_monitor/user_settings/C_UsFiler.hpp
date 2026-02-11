@@ -45,9 +45,9 @@ private:
    static void mh_LoadProjectDependentSection(C_UsHandler & orc_UserSettings, QSettings & orc_Ini,
                                               const QString & orc_ActiveProject);
    static void mh_SaveColumns(QSettings & orc_Ini, const QString & orc_SectionName,
-                              const std::string & orc_IdentifierBaseName, const std::vector<int32_t> & orc_Columns);
+                              const std::string & orc_IdentifierBaseName, const QList<int32_t> & orc_Columns);
    static void mh_LoadColumns(QSettings & orc_Ini, const QString & orc_SectionName,
-                              const std::string & orc_IdentifierBaseName, std::vector<int32_t> & orc_Columns);
+                              const std::string & orc_IdentifierBaseName, QList<int32_t> & orc_Columns);
 
    static const std::string mhc_TRACE_COL_WIDTH_IDENTIFIER;
    static const std::string mhc_TRACE_COL_POSITION_IDENTIFIER;

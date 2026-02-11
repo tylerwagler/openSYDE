@@ -54,7 +54,7 @@ public:
    void UpdateActualDataPool(void);
    void AddNewDatapool(void);
    void Paste(void);
-   bool CheckDataPoolsForConflict(std::vector<uint32_t> * const opc_InvalidDatapoolIndices = NULL) const;
+   bool CheckDataPoolsForConflict(QList<uint32_t> * const opc_InvalidDatapoolIndices = NULL) const;
 
    void UpdateSizeHint(const int32_t os32_MaxHeight);
    QSize sizeHint(void) const override;

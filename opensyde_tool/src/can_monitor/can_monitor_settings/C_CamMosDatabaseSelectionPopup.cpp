@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Popup widget for filter ID selection from database (implementation)
@@ -159,7 +159,7 @@ void C_CamMosDatabaseSelectionPopup::SaveUserSettings(void) const
    Current selected data elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<std::array<QString, 2> > C_CamMosDatabaseSelectionPopup::GetSelectedDataElements(void)
+QList<std::array<QString, 2> > C_CamMosDatabaseSelectionPopup::GetSelectedDataElements(void)
 const
 {
    return this->mpc_Ui->pc_TreeView->GetSelectedDataElements();

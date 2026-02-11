@@ -500,7 +500,7 @@ void C_SdBueMessagePropertiesWidget::m_LoadFromData(void)
          {
             if (this->mpc_MessageSyncManager != NULL)
             {
-               const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
+               const QList<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
                   this->mpc_MessageSyncManager->GetMatchingMessageVector(this->mc_MessageId);
 
                //Reload connected nodes
@@ -1218,7 +1218,7 @@ void C_SdBueMessagePropertiesWidget::m_OnDirectionChanged(void)
 
          if (pc_MessageContainer != NULL)
          {
-            const std::vector<C_OscCanMessage> & rc_Messages = pc_MessageContainer->GetMessagesConst(
+            const QList<C_OscCanMessage> & rc_Messages = pc_MessageContainer->GetMessagesConst(
                this->mc_MessageId.q_MessageIsTx);
             Q_ASSERT(rc_Messages.size() > 0);
             if (rc_Messages.size() > 0)
@@ -1263,7 +1263,7 @@ void C_SdBueMessagePropertiesWidget::m_OnDirectionChanged(void)
             }
             else
             {
-               const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
+               const QList<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
                   this->mpc_MessageSyncManager->GetMatchingMessageVector(this->mc_MessageId);
                uint32_t u32_Counter;
 
@@ -1448,7 +1448,7 @@ void C_SdBueMessagePropertiesWidget::m_OnRxChanged(const uint32_t ou32_NodeIndex
             {
                bool q_Found = true;
                bool q_MessageIdChanged = false;
-               const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingIds =
+               const QList<C_OscCanMessageIdentificationIndices> c_MatchingIds =
                   this->mpc_MessageSyncManager->GetMatchingMessageVector(this->mc_MessageId);
                //Update message id if necessary
                if ((this->mc_MessageId.q_MessageIsTx == false) &&
@@ -1486,9 +1486,9 @@ void C_SdBueMessagePropertiesWidget::m_OnRxChanged(const uint32_t ou32_NodeIndex
                else
                {
                   //Revert action as there would be no receiver and transmitter left
-                  std::vector<uint32_t> c_TmpNodeIndexes;
-                  std::vector<uint32_t> c_TmpInterfaceIndexes;
-                  std::vector<uint32_t> c_TmpDatapoolIndexes;
+                  QList<uint32_t> c_TmpNodeIndexes;
+                  QList<uint32_t> c_TmpInterfaceIndexes;
+                  QList<uint32_t> c_TmpDatapoolIndexes;
                   C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eERROR, "A message cannot exist without a receiver and transmitter.");
                   c_MessageBox.SetCustomMinHeight(180, 180);
                   c_TmpNodeIndexes.push_back(ou32_NodeIndex);
@@ -1742,7 +1742,7 @@ void C_SdBueMessagePropertiesWidget::m_ReloadNodes(void)
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessagePropertiesWidget::m_UpdateTxSelection(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MatchingMessageIds)
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MatchingMessageIds)
 {
    bool q_Transmitter = false;
 
@@ -1759,7 +1759,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateTxSelection(
    if (C_SdUtil::h_GetNames(this->mc_BusNodeIndexes, this->mc_BusInterfaceIndexes, c_NodeNames,
                             false, &this->mc_BusDatapoolIndexes, &c_DatapoolNames) == C_NO_ERR)
    {
-      std::vector<uint32_t> c_MappingDatapools;
+      QList<uint32_t> c_MappingDatapools;
       QStringList c_MappingDatapoolNames;
 
       // CANopen specific preparation
@@ -1909,11 +1909,11 @@ void C_SdBueMessagePropertiesWidget::m_UpdateTxSelection(
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessagePropertiesWidget::m_UpdateRxAfterTxSelection(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MatchingMessageIds, const bool oq_SkipDisconnect)
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MatchingMessageIds, const bool oq_SkipDisconnect)
 {
-   std::vector<uint32_t> c_NodeIndexes;
-   std::vector<uint32_t> c_InterfaceIndexes;
-   std::vector<uint32_t> c_DatapoolIndexes;
+   QList<uint32_t> c_NodeIndexes;
+   QList<uint32_t> c_InterfaceIndexes;
+   QList<uint32_t> c_DatapoolIndexes;
    QStringList c_NodeNames;
    QStringList c_DatapoolNames;
    bool q_TxSelected = false;
@@ -1929,8 +1929,8 @@ void C_SdBueMessagePropertiesWidget::m_UpdateRxAfterTxSelection(
                             &this->mc_BusDatapoolIndexes, &c_DatapoolNames) == C_NO_ERR)
    {
       QString c_TooltipText;
-      std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_ReceiveTimeoutModes;
-      std::vector<uint32_t> c_ReceiveTimeoutValues;
+      QList<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_ReceiveTimeoutModes;
+      QList<uint32_t> c_ReceiveTimeoutValues;
       const int32_t s32_CurrentNodeIndex = this->mpc_Ui->pc_ComboBoxTransmitterNode->currentIndex();
 
       //Fill those flags
@@ -1989,13 +1989,13 @@ void C_SdBueMessagePropertiesWidget::m_UpdateRxAfterTxSelection(
       {
          QStringList::iterator c_ItName;
          QList<QStringList::iterator> c_NamesToDelete;
-         std::vector<uint32_t> c_RxNodeIndexes;
-         std::vector<uint32_t> c_RxInterfaceIndexes;
-         std::vector<uint32_t> c_RxDatapoolIndexes;
+         QList<uint32_t> c_RxNodeIndexes;
+         QList<uint32_t> c_RxInterfaceIndexes;
+         QList<uint32_t> c_RxDatapoolIndexes;
          QStringList c_RxDatapoolNames;
-         std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_RxReceiveTimeoutModes;
-         std::vector<uint32_t> c_RxReceiveTimeoutValues;
-         const std::vector<uint32_t> * pc_MappedDatapools;
+         QList<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_RxReceiveTimeoutModes;
+         QList<uint32_t> c_RxReceiveTimeoutValues;
+         const QList<uint32_t> * pc_MappedDatapools;
          uint32_t u32_EntryCounter = 0U;
          int32_t s32_RemoveCounter;
 
@@ -2177,7 +2177,7 @@ void C_SdBueMessagePropertiesWidget::m_HandleCriticalMessagesAndRx(const bool oq
          }
          else
          {
-            const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
+            const QList<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
                this->mpc_MessageSyncManager->GetMatchingMessageVector(this->mc_MessageId);
             if (oq_HandleSignals == true)
             {
@@ -2227,7 +2227,7 @@ int32_t C_SdBueMessagePropertiesWidget::m_GetVectorIndexOfComboBoxSelection(void
        (this->mpc_Ui->pc_ComboBoxTransmitterNode->currentIndex() <
         static_cast<int32_t>(this->mc_MappingTxSelection.size())))
    {
-      const std::vector<uint32_t> & rc_MappingDatapools =
+      const QList<uint32_t> & rc_MappingDatapools =
          this->mc_MappingTxSelection[this->mpc_Ui->pc_ComboBoxTransmitterNode->currentIndex()];
 
       if ((this->mpc_Ui->pc_ComboBoxTransmitterDatapool->currentIndex() >= 0) &&
@@ -2263,7 +2263,7 @@ void C_SdBueMessagePropertiesWidget::m_GetComboBoxIndexesByVectorIndex(const uin
    // Search a matching mapping
    for (u32_CounterNodes = 0U; u32_CounterNodes < this->mc_MappingTxSelection.size(); ++u32_CounterNodes)
    {
-      const std::vector<uint32_t> & rc_DatapoolIndexes = this->mc_MappingTxSelection[u32_CounterNodes];
+      const QList<uint32_t> & rc_DatapoolIndexes = this->mc_MappingTxSelection[u32_CounterNodes];
 
       for (u32_CounterDatapools = 0U; u32_CounterDatapools < rc_DatapoolIndexes.size(); ++u32_CounterDatapools)
       {
@@ -2350,8 +2350,8 @@ void C_SdBueMessagePropertiesWidget::m_NodeModeDirectionChanged(const bool oq_Di
       if ((this->mq_ModeSingleNode == true) &&
           (this->mpc_MessageSyncManager != NULL))
       {
-         std::vector<uint32_t> c_NodeIndexes;
-         std::vector<uint32_t> c_InterfaceIndexes;
+         QList<uint32_t> c_NodeIndexes;
+         QList<uint32_t> c_InterfaceIndexes;
          QStringList c_NodeNames;
          QStringList c_DatapoolNames;
 
@@ -2374,11 +2374,11 @@ void C_SdBueMessagePropertiesWidget::m_NodeModeDirectionChanged(const bool oq_Di
             if (this->mpc_Ui->pc_ComboBoxDirection->currentIndex() == mu8_DIRECTION_INDEX_RECEIVE)
             {
                // Prepare receive widget for single node mode
-               std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_ReceiveTimeoutModes;
-               std::vector<uint32_t> c_ReceiveTimeoutValues;
-               const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
+               QList<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_ReceiveTimeoutModes;
+               QList<uint32_t> c_ReceiveTimeoutValues;
+               const QList<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
                   this->mpc_MessageSyncManager->GetMatchingMessageVector(this->mc_MessageId);
-               std::vector<uint32_t> c_CheckedDatapools;
+               QList<uint32_t> c_CheckedDatapools;
                uint32_t u32_CounterCheckedDatapools;
 
                // Hide transmit and show receive Datapool configuration
@@ -2702,7 +2702,7 @@ void C_SdBueMessagePropertiesWidget::m_UpdateJ1939PgInfo(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessagePropertiesWidget::SetNodeId(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-                                               const std::vector<uint32_t> & orc_DatapoolIndexes)
+                                               const QList<uint32_t> & orc_DatapoolIndexes)
 {
    this->mu32_NodeIndex = ou32_NodeIndex;
    this->mu32_InterfaceIndex = ou32_InterfaceIndex;
@@ -2745,7 +2745,7 @@ void C_SdBueMessagePropertiesWidget::OnConnectionChange(void)
             Q_EMIT this->SigMessageIdChanged(this->mc_MessageId);
          }
          {
-            const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
+            const QList<C_OscCanMessageIdentificationIndices> c_MatchingMessageIds =
                this->mpc_MessageSyncManager->GetMatchingMessageVector(this->mc_MessageId);
 
             m_DisconnectNodeSpecificFields();
@@ -3106,10 +3106,10 @@ void C_SdBueMessagePropertiesWidget::DisconnectAllChanges(void) const
    Current matching message ids
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> C_SdBueMessagePropertiesWidget::
+QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> C_SdBueMessagePropertiesWidget::
 GetMatchingMessageIds(void) const
 {
-   std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> c_Retval;
+   QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> c_Retval;
    if (this->mq_IdIsValid)
    {
       if (this->mpc_MessageSyncManager != NULL)

@@ -15,6 +15,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
+#include <QList>
 
 #include <algorithm>
 
@@ -246,7 +247,7 @@ void C_OscComMessageLogger::SetProtocol(const e_CanMonL7Protocols oe_Protocol)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscComMessageLogger::AddOsySysDef(const QString & orc_PathSystemDefinition,
-                                            std::vector<C_OscSystemBus> & orc_Buses)
+                                            QList<C_OscSystemBus> & orc_Buses)
 {
    return this->AddOsySysDef(orc_PathSystemDefinition, 0xFFFFFFFFUL, orc_Buses);
 }
@@ -270,7 +271,7 @@ int32_t C_OscComMessageLogger::AddOsySysDef(const QString & orc_PathSystemDefini
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscComMessageLogger::AddOsySysDef(const QString & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
-                                            std::vector<C_OscSystemBus> & orc_Buses)
+                                            QList<C_OscSystemBus> & orc_Buses)
 {
    const QString c_FileExtension = "." + QFileInfo(orc_PathSystemDefinition).suffix();
    int32_t s32_Return = C_RANGE;
@@ -1011,7 +1012,7 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
                   Q_ASSERT(u32_IntfCounter < rc_CanProt.c_ComMessages.size());
                   if (u32_IntfCounter < rc_CanProt.c_ComMessages.size())
                   {
-                     const std::vector<C_OscCanMessage> & rc_CanMsgContainerTx =
+                     const QList<C_OscCanMessage> & rc_CanMsgContainerTx =
                         rc_CanProt.c_ComMessages[u32_IntfCounter].c_TxMessages;
                      bool q_SearchAlsoInRxMessages = true; // flag to improve performance
                      uint32_t u32_CanMsgCounter;
@@ -1050,7 +1051,7 @@ bool C_OscComMessageLogger::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
                      // Trigger of this feature is: https://redmine.sensor-technik.de/issues/78633
                      if ((rc_CanProt.e_Type == C_OscCanProtocol::eCAN_OPEN) && (q_SearchAlsoInRxMessages == true))
                      {
-                        const std::vector<C_OscCanMessage> & rc_CanMsgContainerRx =
+                        const QList<C_OscCanMessage> & rc_CanMsgContainerRx =
                            rc_CanProt.c_ComMessages[u32_IntfCounter].c_RxMessages;
                         uint32_t u32_CanMsgCounterRx;
 
@@ -1291,7 +1292,7 @@ void C_OscComMessageLogger::mh_InterpretCanSignalValue(C_OscComMessageLoggerData
    if (q_SignalFits == true)
    {
       uint8_t u8_RawDataCounter;
-      std::vector<uint8_t> c_SignalRawData;
+      QByteArray c_SignalRawData;
       std::string c_StringValue;
       C_OscNodeDataPoolContent c_OscValue = orc_OscValue;
       uint64_t u64_Value = 0U;
@@ -1761,10 +1762,10 @@ void C_OscComMessageLogger::m_SaveEcosMessage()
 {
    const T_STWCAN_Msg_RX & rc_Msg =  this->mc_HandledCanMessage.c_CanMsg;
 
-   std::vector<uint8_t> c_MessageData;
+   QByteArray c_MessageData;
 
    // Insert message data into vector
-   c_MessageData.insert(c_MessageData.end(), &rc_Msg.au8_Data[0], &rc_Msg.au8_Data[rc_Msg.u8_DLC]);
+   c_MessageData.append(reinterpret_cast<const char*>(&rc_Msg.au8_Data[0]), rc_Msg.u8_DLC);
 
    // mc_EcosMessage details saved: CAN Id, message name, message data
    this->mc_EcosMessage.u32_CanId = rc_Msg.u32_ID;
@@ -1833,7 +1834,7 @@ bool C_OscComMessageLogger::m_CheckIfEcosMessage(const stw::can::T_STWCAN_Msg_RX
                      if (u32_IntfCounter < rc_CanProt.c_ComMessages.size())
                      {
                         // Search TX messages
-                        const std::vector<C_OscCanMessage> & rc_CanMsgContainerTx =
+                        const QList<C_OscCanMessage> & rc_CanMsgContainerTx =
                            rc_CanProt.c_ComMessages[u32_IntfCounter].c_TxMessages;
                         bool q_SearchAlsoInRxMessages = true; // flag to improve performance
                         uint32_t u32_CanMsgCounter;
@@ -1857,7 +1858,7 @@ bool C_OscComMessageLogger::m_CheckIfEcosMessage(const stw::can::T_STWCAN_Msg_RX
                         // Search RX messages
                         if (q_SearchAlsoInRxMessages == true)
                         {
-                           const std::vector<C_OscCanMessage> & rc_CanMsgContainerRx =
+                           const QList<C_OscCanMessage> & rc_CanMsgContainerRx =
                               rc_CanProt.c_ComMessages[u32_IntfCounter].c_RxMessages;
                            uint32_t u32_CanMsgCounterRx;
 
@@ -1921,7 +1922,7 @@ void C_OscComMessageLogger::m_HandleEcosInvertedMessage()
       if (((this->mc_HandledCanMessage.c_CanMsg.u32_ID - 1) == (this->mc_EcosMessage.u32_CanId)) &&
           (this->mc_HandledCanMessage.c_CanMsg.u8_DLC == u8_DataSize))
       {
-         std::vector<uint8_t> c_InvertedData;
+         QByteArray c_InvertedData;
 
          // Set message name
          this->mc_HandledCanMessage.c_Name = (this->mc_EcosMessage.c_MessageName) + " (Inverted Frame)";
@@ -1930,8 +1931,8 @@ void C_OscComMessageLogger::m_HandleEcosInvertedMessage()
          C_OscComAutoSupport::h_InvertCanMessage(this->mc_HandledCanMessage.c_CanMsg.au8_Data,
                                                  au8_InvertedData);
 
-         c_InvertedData.insert(c_InvertedData.end(), &au8_InvertedData[0],
-                               &au8_InvertedData[this->mc_HandledCanMessage.c_CanMsg.u8_DLC]);
+         c_InvertedData.append(reinterpret_cast<const char*>(&au8_InvertedData[0]),
+                               this->mc_HandledCanMessage.c_CanMsg.u8_DLC);
 
          // Compare data
          if (c_InvertedData == this->mc_EcosMessage.c_MessageData)

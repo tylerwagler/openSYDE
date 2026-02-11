@@ -12,6 +12,7 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QList>
 #include "C_CanDispatcher.hpp"
 #include "C_OscDcDeviceInformation.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
@@ -47,7 +48,7 @@ public:
                           const uint8_t ou8_InterfaceIndex);
 
   static QString h_DevicesInfoToString(
-      const std::vector<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
+      const QList<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
       const bool oq_SecurityFeatureUsed);
 
   void PrepareForDestruction(void);
@@ -56,7 +57,7 @@ protected:
   virtual void m_ReportProgress(const int32_t os32_Result,
                                 const QString &orc_Information);
   virtual void m_ReportDevicesInfoRead(
-      const std::vector<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
+      const QList<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
       const bool oq_SecurityFeatureUsed);
 
 private:

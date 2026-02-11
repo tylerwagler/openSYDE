@@ -19,6 +19,7 @@
 #include "DiagLib_config.hpp"
 #include "stwtypes.hpp"
 #include <QString>
+#include <vector>
 
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -104,7 +105,7 @@ private:
   uint8_t mu8_ActualLocalID;
   bool mq_VerboseMode;
 
-  QList<uint8_t> mau8_SectorsToErase;
+  QByteArray mau8_SectorsToErase;
 
 protected:
   /// inherit from this class and overload the following functions to implement

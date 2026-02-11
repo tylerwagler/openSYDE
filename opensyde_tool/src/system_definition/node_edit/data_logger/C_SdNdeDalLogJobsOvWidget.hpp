@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -33,7 +34,7 @@ class C_SdNdeDalLogJobsOvWidget :
 public:
    explicit C_SdNdeDalLogJobsOvWidget(QWidget * const opc_Parent = NULL);
    ~C_SdNdeDalLogJobsOvWidget(void) override;
-   void UpdateData(const std::vector<std::tuple<uint32_t, uint32_t,
+   void UpdateData(const QList<std::tuple<uint32_t, uint32_t,
                                                 uint32_t> > & orc_AllLoggerJobElementsLocationCount);
    void LoadUserSettings(void) const;
    void SaveUserSettings(void) const;

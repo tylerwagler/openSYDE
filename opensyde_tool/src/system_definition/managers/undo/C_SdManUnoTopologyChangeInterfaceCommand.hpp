@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include "C_SebUnoBaseCommand.hpp"
 #include "C_PuiSdNodeInterfaceAutomaticProperties.hpp"
 
@@ -29,10 +30,10 @@ class C_SdManUnoTopologyChangeInterfaceCommand :
    public C_SebUnoBaseCommand
 {
 public:
-   C_SdManUnoTopologyChangeInterfaceCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SdManUnoTopologyChangeInterfaceCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                             const uint8_t & oru8_PreviousInterface, const uint8_t & oru8_NewInterface,
-                                            const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_PreviousProperties,
-                                            const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties,
+                                            const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_PreviousProperties,
+                                            const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties,
                                             QUndoCommand * const opc_Parent = NULL);
    ~C_SdManUnoTopologyChangeInterfaceCommand(void) override;
    void undo(void) override;
@@ -41,11 +42,11 @@ public:
 private:
    const uint8_t mu8_PreviousInterface;
    const uint8_t mu8_NewInterface;
-   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> mc_PreviousProperties;
-   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> mc_NewProperties;
+   const QList<C_PuiSdNodeInterfaceAutomaticProperties> mc_PreviousProperties;
+   const QList<C_PuiSdNodeInterfaceAutomaticProperties> mc_NewProperties;
 
    void m_ChangeInterface(const uint8_t & oru8_NewInterface,
-                          const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties) const;
+                          const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties) const;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -13,6 +13,7 @@
 #define C_CAMGENWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include "stwtypes.hpp"
 
@@ -43,7 +44,7 @@ public:
    void SaveUserSettings(void) const;
 
    void TriggerSignalReload(void) const;
-   void RemoveMessagesForFile(const QString & orc_File, const std::vector<uint32_t> * const opc_Indices = NULL) const;
+   void RemoveMessagesForFile(const QString & orc_File, const QList<uint32_t> * const opc_Indices = NULL) const;
    void SetCommunicationStarted(const bool oq_Online) const;
    bool CheckAndHandleKey(const QString & orc_Input) const;
 

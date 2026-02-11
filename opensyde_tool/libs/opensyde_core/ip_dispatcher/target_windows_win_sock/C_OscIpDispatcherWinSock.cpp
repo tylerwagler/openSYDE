@@ -61,7 +61,7 @@ static int32_t m_WsFionRead(void)
 
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 std::map<C_OscIpDispatcherWinSock::C_BufferIdentifier,
-         std::list<std::vector<uint8_t> > > C_OscIpDispatcherWinSock::mhc_TcpBuffer;
+         std::list<QByteArray > > C_OscIpDispatcherWinSock::mhc_TcpBuffer;
 QRecursiveMutex C_OscIpDispatcherWinSock::mhc_LockBuffer;
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
@@ -811,7 +811,7 @@ int32_t C_OscIpDispatcherWinSock::CloseUdp(void)
    C_RANGE    handle invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data)
+int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const QByteArray & orc_Data)
 {
    int32_t s32_Return;
 
@@ -837,7 +837,7 @@ int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std:
          //lint -e{9176}  //Side-effect of the "char"-based API.
          const int x_BytesSent = //lint !e8080 !e970 //using type to match library interface
                                  send(this->mc_SocketsTcp[ou32_Handle].x_Socket,
-                                      reinterpret_cast<const char_t *>(&orc_Data[0]), x_BytesToSend, 0);
+                                      reinterpret_cast<const char_t *>(orc_Data.constData()), x_BytesToSend, 0);
          if (x_BytesSent != x_BytesToSend)
          {
             if (x_BytesSent == SOCKET_ERROR)
@@ -894,7 +894,7 @@ int32_t C_OscIpDispatcherWinSock::SendTcp(const uint32_t ou32_Handle, const std:
    C_RANGE    handle invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data)
+int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, QByteArray & orc_Data)
 {
    int32_t s32_Return;
 
@@ -987,7 +987,7 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, std::vecto
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
                                           const uint8_t ou8_ClientNodeIdentifier, const uint8_t ou8_ServerBusIdentifier,
-                                          const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data)
+                                          const uint8_t ou8_ServerNodeIdentifier, QByteArray & orc_Data)
 {
    int32_t s32_Return;
 
@@ -1013,7 +1013,7 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, const uint
              (u8_TargetbusId != ou8_ClientBusIdentifier))
          {
             // Save the message for other client server connections over the same IP address
-            std::map<C_BufferIdentifier, std::list<std::vector<uint8_t> > >::iterator c_ItBuffer;
+            std::map<C_BufferIdentifier, std::list<QByteArray > >::iterator c_ItBuffer;
             const C_BufferIdentifier c_Id(u8_TargetbusId, u8_TargetNodeId, u8_SourceBusId, u8_SourceNodeId);
 
             {
@@ -1028,10 +1028,10 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, const uint
                }
                else
                {
-                  std::list<std::vector<uint8_t> > c_List;
+                  std::list<QByteArray > c_List;
                   c_List.push_back(orc_Data);
                   mhc_TcpBuffer.insert(
-                     std::pair<C_BufferIdentifier, std::list<std::vector<uint8_t> > >(c_Id, c_List));
+                     std::pair<C_BufferIdentifier, std::list<QByteArray > >(c_Id, c_List));
                }
             }
 
@@ -1075,11 +1075,11 @@ int32_t C_OscIpDispatcherWinSock::ReadTcp(const uint32_t ou32_Handle, const uint
 int32_t C_OscIpDispatcherWinSock::ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier,
                                                 const uint8_t ou8_ClientNodeIdentifier,
                                                 const uint8_t ou8_ServerBusIdentifier,
-                                                const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data)
+                                                const uint8_t ou8_ServerNodeIdentifier, QByteArray & orc_Data)
 {
    int32_t s32_Return = C_NOACT;
 
-   std::map<C_BufferIdentifier, std::list<std::vector<uint8_t> > >::iterator c_ItBuffer;
+   std::map<C_BufferIdentifier, std::list<QByteArray > >::iterator c_ItBuffer;
    const C_BufferIdentifier c_Id(ou8_ClientBusIdentifier, ou8_ClientNodeIdentifier, ou8_ServerBusIdentifier,
                                  ou8_ServerNodeIdentifier);
 
@@ -1091,7 +1091,7 @@ int32_t C_OscIpDispatcherWinSock::ReadTcpBuffer(const uint8_t ou8_ClientBusIdent
 
       if (c_ItBuffer != mhc_TcpBuffer.end())
       {
-         std::list<std::vector<uint8_t> > & rc_List = c_ItBuffer->second;
+         std::list<QByteArray > & rc_List = c_ItBuffer->second;
 
          if (rc_List.size() > 0)
          {
@@ -1122,7 +1122,7 @@ int32_t C_OscIpDispatcherWinSock::ReadTcpBuffer(const uint8_t ou8_ClientBusIdent
    C_RD_WR    error sending data
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
+int32_t C_OscIpDispatcherWinSock::SendUdp(const QByteArray & orc_Data)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -1147,7 +1147,7 @@ int32_t C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
             //lint -e{9176}  //Side-effect of the POSIX-style API. Match is guaranteed by the API.
             const int x_Return = //lint !e8080 !e970 //using type to match library interface
                                  sendto(mc_SocketsUdpClient[u32_Interface],
-                                        reinterpret_cast<const char_t *>(&orc_Data[0]),
+                                        reinterpret_cast<const char_t *>(orc_Data.constData()),
                                         x_NumToSend, 0, reinterpret_cast<const sockaddr *>(&c_TargetAddress),
                                         sizeof(c_TargetAddress));
             if (x_Return != x_NumToSend)
@@ -1187,7 +1187,7 @@ int32_t C_OscIpDispatcherWinSock::SendUdp(const std::vector<uint8_t> & orc_Data)
    C_NOACT    no data received
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscIpDispatcherWinSock::ReadUdp(std::vector<uint8_t> & orc_Data, uint8_t (&orau8_Ip)[4])
+int32_t C_OscIpDispatcherWinSock::ReadUdp(QByteArray & orc_Data, uint8_t (&orau8_Ip)[4])
 {
    int32_t s32_Return = C_NOACT;
 

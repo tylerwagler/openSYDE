@@ -12,9 +12,9 @@
 #define C_SYVUPPACCONFIG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include <QStringList>
-#include <vector>
 
 #include "C_OscViewNodeUpdate.hpp"
 #include "C_OscNodeApplication.hpp"
@@ -46,7 +46,7 @@ public:
    QString c_Name;       // Node name as identificator
    QString c_DeviceType; // Device type as identificator
 
-   std::vector<C_SyvUpPacConfigNodeApp> c_AppConfigs;
+   QList<C_SyvUpPacConfigNodeApp> c_AppConfigs;
    QStringList c_ParamSetConfigs;
    QStringList c_FileConfigs;
 
@@ -61,7 +61,7 @@ class C_SyvUpPacConfig
 public:
    C_SyvUpPacConfig();
 
-   std::vector<C_SyvUpPacConfigNode> c_NodeConfigs;
+   QList<C_SyvUpPacConfigNode> c_NodeConfigs;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

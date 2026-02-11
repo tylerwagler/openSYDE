@@ -16,6 +16,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
@@ -60,8 +61,8 @@ private:
       uint16_t u16_PayloadType;
       uint32_t u32_PayloadSize;
 
-      int32_t DecodeHeader(const std::vector<uint8_t> & orc_Header);
-      void ComposeHeader(std::vector<uint8_t> & orc_Header) const;
+      int32_t DecodeHeader(const QByteArray & orc_Header);
+      void ComposeHeader(QByteArray & orc_Header) const;
    };
 
    ///information about ongoing TCP Rx transmission
@@ -86,7 +87,7 @@ private:
    C_OscIpDispatcher * mpc_Dispatcher; ///< driver to use for accessing local IP stack
    uint32_t mu32_DispatcherHandle;     ///< handler to use for dispatcher TDP functions
 
-   void m_ComposeRequest(const C_OscProtocolDriverOsyService & orc_Service, std::vector<uint8_t> & orc_Request) const;
+   void m_ComposeRequest(const C_OscProtocolDriverOsyService & orc_Service, QByteArray & orc_Request) const;
 
 protected:
    void m_LogWarningWithHeader(const QString & orc_Information, const char_t * const opcn_Function) const;
@@ -107,7 +108,7 @@ public:
 
       bool operator ==(const C_BroadcastGetDeviceInfoResults & orc_Cmp) const;
       bool operator <(const C_BroadcastGetDeviceInfoResults & orc_Cmp) const;
-      virtual void ParseFromArray(const std::vector<uint8_t> & orc_Data, const uint8_t ou8_DataStartIndex);
+      virtual void ParseFromArray(const QByteArray & orc_Data, const uint8_t ou8_DataStartIndex);
    };
 
    class C_BroadcastGetDeviceInfoExtendedResults :
@@ -119,7 +120,7 @@ public:
 
       bool operator ==(const C_BroadcastGetDeviceInfoExtendedResults & orc_Cmp) const;
       bool operator <(const C_BroadcastGetDeviceInfoExtendedResults & orc_Cmp) const;
-      virtual void ParseFromArray(const std::vector<uint8_t> & orc_Data, const uint8_t ou8_DataStartIndex);
+      virtual void ParseFromArray(const QByteArray & orc_Data, const uint8_t ou8_DataStartIndex);
    };
 
    ///container for results reported by "RequestProgramming" UDP service
@@ -144,8 +145,8 @@ public:
    virtual int32_t Disconnect(void);
 
    //Tp-specific broadcast services:
-   int32_t BroadcastGetDeviceInfo(std::vector<C_BroadcastGetDeviceInfoResults> & orc_DeviceInfos,
-                                  std::vector<C_BroadcastGetDeviceInfoExtendedResults> & orc_DeviceExtendedInfos)
+   int32_t BroadcastGetDeviceInfo(QList<C_BroadcastGetDeviceInfoResults> & orc_DeviceInfos,
+                                  QList<C_BroadcastGetDeviceInfoExtendedResults> & orc_DeviceExtendedInfos)
    const;
    int32_t BroadcastSetIpAddress(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
                                  const uint8_t(&orau8_NewIpAddress)[4],
@@ -163,7 +164,7 @@ public:
       const uint8_t ou8_SubNodeId,
       uint8_t(&orau8_ResponseIp)[4],
       uint8_t * const opu8_ErrorResult = NULL) const;
-   int32_t BroadcastRequestProgramming(std::vector<C_BroadcastRequestProgrammingResults> & orc_Results) const;
+   int32_t BroadcastRequestProgramming(QList<C_BroadcastRequestProgrammingResults> & orc_Results) const;
    int32_t BroadcastNetReset(const uint8_t ou8_ResetType, const bool oq_SpecificSerialNumberOnly = false,
                              const uint8_t (*const opau8_SerialNumber)[6] = NULL) const;
 };

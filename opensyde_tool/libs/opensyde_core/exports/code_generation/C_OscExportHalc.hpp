@@ -10,6 +10,7 @@
 #define C_OSCEXPORTHALC_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "stwtypes.hpp"
 #include <QStringList>
 #include "C_OscHalcConfig.hpp"
@@ -59,14 +60,14 @@ protected:
                                      const bool oq_FileType, const bool oq_IsSafe);
    static QString mh_GetMagicName(const QString & orc_ProjectId, const bool oq_IsSafe);
    static void mh_AddDpListElementReferences(QStringList & orc_Data,
-                                             const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
-                                             const std::vector<C_OscHalcConfigChannel> & orc_ConfigArray,
+                                             const QList<C_OscHalcDefStruct> & orc_DefinitionArray,
+                                             const QList<C_OscHalcConfigChannel> & orc_ConfigArray,
                                              const C_OscHalcDefDomain::E_VariableSelector & ore_Type,
                                              const QString & orc_DomainSingularName,
                                              const bool oq_IsArray, const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
                                              const bool oq_IsSafe);
    static QString mh_GetDpListElementReference(
-      const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
+      const QList<C_OscHalcDefStruct> & orc_DefinitionArray,
       const C_OscHalcDefDomain::E_VariableSelector & ore_Type, const C_OscHalcDefElement & orc_Element,
       const uint32_t ou32_StructIndex, const uint32_t ou32_ElementIndex,
       const QString & orc_DomainSingularName, const bool oq_IsArray, const bool oq_IsSafe);

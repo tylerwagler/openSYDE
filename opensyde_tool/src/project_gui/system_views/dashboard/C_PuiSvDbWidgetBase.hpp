@@ -12,7 +12,7 @@
 #define C_PUISVDBWIDGETBASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -48,7 +48,7 @@ public:
    virtual int32_t RemoveElement(const uint32_t & oru32_Index);
    void RemoveAllReferencesToElementId(const C_PuiSvDbNodeDataPoolListElementId & orc_DataElementId);
 
-   std::vector<C_PuiSvDbNodeDataElementConfig> c_DataPoolElementsConfig;
+   QList<C_PuiSvDbNodeDataElementConfig> c_DataPoolElementsConfig;
    E_Style e_DisplayStyle;
 };
 

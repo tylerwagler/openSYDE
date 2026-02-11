@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Model for Unused files and empty folders table (implementation)
@@ -282,7 +282,7 @@ void C_NagUnUsedProjectFilesTableModel::UpdateData(const QStringList & orc_UnUse
 void C_NagUnUsedProjectFilesTableModel::DeleteSelectedFiles(const QItemSelection & orc_Selection)
 {
    std::set<int32_t> c_UniqueRows;
-   std::vector<uint32_t> c_SelectedFileIndexes;
+   QList<uint32_t> c_SelectedFileIndexes;
    for (const QModelIndex & rc_Index : orc_Selection.indexes())
    {
       const uint32_t u32_Row = static_cast<uint32_t>(rc_Index.row());
@@ -308,7 +308,7 @@ void C_NagUnUsedProjectFilesTableModel::DeleteSelectedFiles(const QItemSelection
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagUnUsedProjectFilesTableModel::DeleteAllFiles()
 {
-   std::vector<uint32_t> c_AllFileIndexes;
+   QList<uint32_t> c_AllFileIndexes;
    c_AllFileIndexes.reserve(this->mc_FileInfoList.size());
 
    for (uint32_t u32_Index = 0; u32_Index < this->mc_FileInfoList.size(); ++u32_Index)
@@ -339,7 +339,7 @@ QString C_NagUnUsedProjectFilesTableModel::DetailsOfFilesToDelete(const QItemSel
    QString c_FileDetails = "";
 
    std::set<int32_t> c_UniqueRows;
-   std::vector<uint32_t> c_SelectedFileIndexes;
+   QList<uint32_t> c_SelectedFileIndexes;
 
    //for getting unique rows (due to 2 columns in a row)
    for (const QModelIndex & rc_Index : orc_Selection.indexes())
@@ -503,7 +503,7 @@ const QString C_NagUnUsedProjectFilesTableModel::m_GetFileSuffix(const QString &
    \param[in]  orc_FileIndexes   vector of file indexes
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_NagUnUsedProjectFilesTableModel::m_MoveFilesToTrash(const std::vector<uint32_t> & orc_FileIndexes)
+void C_NagUnUsedProjectFilesTableModel::m_MoveFilesToTrash(const QList<uint32_t> & orc_FileIndexes)
 {
    for (const uint32_t u32_FileIndex : orc_FileIndexes)
    {

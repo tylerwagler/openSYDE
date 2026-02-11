@@ -182,7 +182,7 @@ void C_SyvDaChaWidget::Save(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaWidget::RegisterWidgets(C_SyvComDriverDiag & orc_ComDriver)
 {
-   const std::vector<C_SyvComDataDealer *> & rc_AllDataDealer = orc_ComDriver.GetAllDataDealer();
+   const QList<C_SyvComDataDealer *> & rc_AllDataDealer = orc_ComDriver.GetAllDataDealer();
    uint32_t u32_Counter;
 
    // Registration of Datapool elements
@@ -697,7 +697,7 @@ void C_SyvDaChaWidget::m_OnCustomContextMenuRequested(const QPoint & orc_Pos)
 void C_SyvDaChaWidget::m_AddNewDataElement(void)
 {
    // Get all registered elements for marking as used in the tree
-   std::vector<C_PuiSvDbNodeDataPoolListElementId> c_RegisteredElements;
+   QList<C_PuiSvDbNodeDataPoolListElementId> c_RegisteredElements;
    this->m_GetAllRegisteredElements(c_RegisteredElements);
 
    {
@@ -711,7 +711,7 @@ void C_SyvDaChaWidget::m_AddNewDataElement(void)
 
       if (c_New->exec() == static_cast<int32_t>(QDialog::Accepted))
       {
-         const std::vector<C_PuiSvDbNodeDataPoolListElementId> c_DataElements = pc_Dialog->GetSelectedDataElements();
+         const QList<C_PuiSvDbNodeDataPoolListElementId> c_DataElements = pc_Dialog->GetSelectedDataElements();
          //Cursor
          QApplication::setOverrideCursor(Qt::WaitCursor);
          if (c_DataElements.size() > 0)

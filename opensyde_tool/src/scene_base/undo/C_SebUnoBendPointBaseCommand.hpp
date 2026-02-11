@@ -28,7 +28,7 @@ class C_SebUnoBendPointBaseCommand :
    public C_SebUnoBaseCommand
 {
 public:
-   C_SebUnoBendPointBaseCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SebUnoBendPointBaseCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                 const QString & orc_Text, const QPointF & orc_ScenePosition,
                                 QUndoCommand * const opc_Parent = NULL);
    ~C_SebUnoBendPointBaseCommand(void) override;

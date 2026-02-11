@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QIcon>
+#include <QList>
 
 #include "C_OscNode.hpp"
 #include "C_TblTreeModelCheckable.hpp"
@@ -34,9 +35,9 @@ public:
 
    void SetNodeId(const uint32_t ou32_NodeIndex);
 
-   int32_t Init(const std::vector<uint32_t> & orc_ElementIndices) override;
-   void GetCheckedItems(std::vector<uint32_t> & orc_ElementIndices,
-                        std::vector<std::vector<uint32_t> > & orc_ChildIndicesPerElement) const override;
+   int32_t Init(const QList<uint32_t> & orc_ElementIndices) override;
+   void GetCheckedItems(QList<uint32_t> & orc_ElementIndices,
+                        QList<QList<uint32_t> > & orc_ChildIndicesPerElement) const override;
    uint32_t GetCheckedItemCount(void) const override;
 
    bool setData(const QModelIndex & orc_Index, const QVariant & orc_Value, const int32_t os32_Role) override;

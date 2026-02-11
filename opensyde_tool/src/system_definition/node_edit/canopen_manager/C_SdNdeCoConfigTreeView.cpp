@@ -10,6 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
+#include <QList>
 
 #include <QPainter>
 #include <QKeyEvent>
@@ -867,9 +868,9 @@ void C_SdNdeCoConfigTreeView::m_OnAddDeviceReport(const uint32_t ou32_SelectedNo
                                                                      c_ParsingError);
          if (s32_ImportResult == C_NO_ERR)
          {
-            const std::vector<C_CieImportDataAssignment> c_NodeAssignmentVector = {c_NodeAssignment};
+            const QList<C_CieImportDataAssignment> c_NodeAssignmentVector = {c_NodeAssignment};
 
-            const std::vector<C_CieImportDataAssignment> c_InvalidNodeAssignmentVector = {c_InvalidNodeAssignment};
+            const QList<C_CieImportDataAssignment> c_InvalidNodeAssignmentVector = {c_InvalidNodeAssignment};
 
             const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
             C_CieImportReportWidget * const pc_Dialog =
@@ -1055,12 +1056,12 @@ void C_SdNdeCoConfigTreeView::m_OnItemSelected(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoConfigTreeView::mh_InitMappableSignals(
-   std::vector<C_OscCanOpenManagerMappableSignal> & orc_MappableSignals,
+   QList<C_OscCanOpenManagerMappableSignal> & orc_MappableSignals,
    const C_OscCanOpenObjectDictionary & orc_EdsDictionary, const bool oq_IsEds)
 {
-   std::map<uint32_t, std::vector<uint32_t> > c_MappableObjects;
+   std::map<uint32_t, QList<uint32_t> > c_MappableObjects;
    orc_EdsDictionary.GetMappableObjects(c_MappableObjects);
-   for (std::map<uint32_t, std::vector<uint32_t> >::const_iterator c_It = c_MappableObjects.begin();
+   for (std::map<uint32_t, QList<uint32_t> >::const_iterator c_It = c_MappableObjects.begin();
         c_It != c_MappableObjects.end(); ++c_It)
    {
       for (uint32_t u32_ItSig = 0UL; u32_ItSig < c_It->second.size(); ++u32_ItSig)

@@ -18,6 +18,7 @@
 #include "C_OscNode.hpp"
 #include "C_OscSystemBus.hpp"
 #include "stwtypes.hpp"
+#include <QList>
 #include <QString>
 #include <QStringList>
 
@@ -67,7 +68,7 @@ public:
     float64_t f64_Factor; ///< Adaptation factor for display
     float64_t f64_Offset; ///< Offset factor for display
     QString c_Unit;       ///< Variable unit
-    std::vector<stw::opensyde_core::C_OscNodeDataPoolContent>
+    QList<stw::opensyde_core::C_OscNodeDataPoolContent>
         c_DataSetValues; ///< Only one element which is initial
                          // value
   };
@@ -104,7 +105,7 @@ public:
         e_TxMethod;           ///< Message transmission trigger type
     uint32_t u32_CycleTimeMs; ///< ONLY used if transmission trigger is
     // eTX_METHOD_CYCLIC
-    std::vector<C_CieCanSignal> c_Signals; ///< Communication signals
+    QList<C_CieCanSignal> c_Signals; ///< Communication signals
   };
 
   /// Messages and appropriate warnings
@@ -122,9 +123,9 @@ public:
   class C_CieNode {
   public:
     C_CieNodeProperties c_Properties; ///< General node properties
-    std::vector<C_CieNodeMessage>
+    QList<C_CieNodeMessage>
         c_TxMessages; ///< Transmitted messages with optional warnings
-    std::vector<C_CieNodeMessage>
+    QList<C_CieNodeMessage>
         c_RxMessages; ///< Received messages with optional warnings
   };
 
@@ -133,8 +134,8 @@ public:
   class C_CieCommDefinition {
   public:
     C_CieSystemBus c_Bus;           ///< the all node are connected to
-    std::vector<C_CieNode> c_Nodes; ///< all nodes for this bus
-    std::vector<C_CieNodeMessage> c_UnmappedMessages;
+    QList<C_CieNode> c_Nodes; ///< all nodes for this bus
+    QList<C_CieNodeMessage> c_UnmappedMessages;
   };
 };
 

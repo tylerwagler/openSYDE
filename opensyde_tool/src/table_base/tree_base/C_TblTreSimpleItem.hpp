@@ -9,7 +9,6 @@
 #define C_TBLTRESIMPLEITEM_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -33,11 +32,11 @@ public:
    void SetChild(const uint32_t ou32_Index, C_TblTreSimpleItem * const opc_Child);
    int32_t GetIndexInParentNumber(void) const;
    void ClearChildren(void);
-   static int32_t h_GetIndex(const std::vector<C_TblTreSimpleItem *> & orc_Vector,
+   static int32_t h_GetIndex(const QList<C_TblTreSimpleItem *> & orc_Vector,
                              const C_TblTreSimpleItem * const opc_Item);
 
    C_TblTreSimpleItem * pc_Parent;               ///< If this one is NULL you have the invisible root item
-   std::vector<C_TblTreSimpleItem *> c_Children; ///< If this one is empty you have a data element leaf
+   QList<C_TblTreSimpleItem *> c_Children; ///< If this one is empty you have a data element leaf
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       short description (implementation)
@@ -159,11 +159,11 @@ C_OgeFraSeparator * C_SebToolboxUtil::h_AddNewHeading(const QString & orc_Name, 
    Pointer to svg icon button (add node and clear-all-nodes)
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OgePubIconOnly *> C_SebToolboxUtil::h_AddNewUserHeading(const QString & orc_Name,
+QList<C_OgePubIconOnly *> C_SebToolboxUtil::h_AddNewUserHeading(const QString & orc_Name,
                                                                       QVBoxLayout * const opc_Layout,
                                                                       QWidget * const opc_Parent)
 {
-   std::vector<C_OgePubIconOnly *> c_Icons;
+   QList<C_OgePubIconOnly *> c_Icons;
    C_OgePubIconOnly * pc_IconButton = NULL;
    C_OgePubIconOnly * pc_ClearAllUserNodesButton = NULL;
 

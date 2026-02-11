@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -52,7 +53,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeUnoDataPoolListAddDeleteBaseCommand::C_SdNdeUnoDataPoolListAddDeleteBaseCommand(const uint32_t & oru32_NodeIndex,
                                                                                        const uint32_t & oru32_DataPoolIndex, stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                                                                                       const std::vector<uint32_t> & orc_Indices, const QString & orc_Text,
+                                                                                       const QList<uint32_t> & orc_Indices, const QString & orc_Text,
                                                                                        QUndoCommand * const opc_Parent)
    :
    C_SdNdeUnoDataPoolListBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex, opc_DataPoolListsTreeWidget,
@@ -170,7 +171,7 @@ void C_SdNdeUnoDataPoolListAddDeleteBaseCommand::m_Delete(void)
    \param[in] orc_Value Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeUnoDataPoolListAddDeleteBaseCommand::m_SetIndices(const std::vector<uint32_t> & orc_Value)
+void C_SdNdeUnoDataPoolListAddDeleteBaseCommand::m_SetIndices(const QList<uint32_t> & orc_Value)
 {
    mc_Indices = orc_Value;
 }
@@ -183,8 +184,8 @@ void C_SdNdeUnoDataPoolListAddDeleteBaseCommand::m_SetIndices(const std::vector<
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeUnoDataPoolListAddDeleteBaseCommand::m_SetInitialData(
-   const std::vector<C_OscNodeDataPoolList> & orc_OscContent,
-   const std::vector<C_PuiSdNodeDataPoolList> & orc_UiContent)
+   const QList<C_OscNodeDataPoolList> & orc_OscContent,
+   const QList<C_PuiSdNodeDataPoolList> & orc_UiContent)
 {
    this->mc_OscContent = orc_OscContent;
    this->mc_UiContent = orc_UiContent;

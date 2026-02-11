@@ -12,7 +12,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
-#include <vector>
+#include <QList>
 #include <stwtypes.h>
 #include "C_OscCanInterfaceId.hpp"
 #include "C_OscCanMessage.hpp"
@@ -98,7 +98,7 @@ private:
    uint32_t mu32_ManagerNodeIndex;
    uint8_t mu8_ManagerInterfaceId;
    stw::opensyde_core::C_OscCanInterfaceId mc_DeviceNodeInterfaceId;
-   std::vector<C_PdoTableData> mc_PdoTableData;
+   QList<C_PdoTableData> mc_PdoTableData;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

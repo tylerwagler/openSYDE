@@ -189,7 +189,7 @@ void C_SyvDaItTaView::MoveSelected(const bool oq_Up)
    \param[in,out]  orc_RemovedDataElements   Removed data elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItTaView::RemoveSelectedItems(std::vector<C_PuiSvDbNodeDataPoolListElementId> & orc_RemovedDataElements)
+void C_SyvDaItTaView::RemoveSelectedItems(QList<C_PuiSvDbNodeDataPoolListElementId> & orc_RemovedDataElements)
 {
    const QModelIndexList c_IndexList = this->selectedIndexes();
 
@@ -203,9 +203,9 @@ void C_SyvDaItTaView::RemoveSelectedItems(std::vector<C_PuiSvDbNodeDataPoolListE
    Selected item indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SyvDaItTaView::GetUniqueSelectedRows(void) const
+QList<uint32_t> C_SyvDaItTaView::GetUniqueSelectedRows(void) const
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    const QModelIndexList c_IndexList = this->selectedIndexes();
    this->mc_Model.GetUniqueRows(c_IndexList, c_Retval);
    return c_Retval;
@@ -218,10 +218,10 @@ std::vector<uint32_t> C_SyvDaItTaView::GetUniqueSelectedRows(void) const
    Only valid selected item indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SyvDaItTaView::GetUniqueAndValidSelectedRows(void) const
+QList<uint32_t> C_SyvDaItTaView::GetUniqueAndValidSelectedRows(void) const
 {
-   std::vector<uint32_t> c_Retval;
-   const std::vector<uint32_t> c_Tmp = GetUniqueSelectedRows();
+   QList<uint32_t> c_Retval;
+   const QList<uint32_t> c_Tmp = GetUniqueSelectedRows();
    for (uint32_t u32_It = 0UL; u32_It < c_Tmp.size(); ++u32_It)
    {
       const C_PuiSvDbNodeDataPoolListElementId * const pc_DataElementId =
@@ -240,7 +240,7 @@ std::vector<uint32_t> C_SyvDaItTaView::GetUniqueAndValidSelectedRows(void) const
    \param[in]  orc_ColumnWidths  Stored column widths (Restores default values if empty)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItTaView::SetCurrentColumnWidths(const std::vector<int32_t> & orc_ColumnWidths)
+void C_SyvDaItTaView::SetCurrentColumnWidths(const QList<int32_t> & orc_ColumnWidths)
 {
    if (orc_ColumnWidths.size() > 0)
    {
@@ -266,9 +266,9 @@ void C_SyvDaItTaView::SetCurrentColumnWidths(const std::vector<int32_t> & orc_Co
    Current column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_SyvDaItTaView::GetCurrentColumnWidths(void) const
+QList<int32_t> C_SyvDaItTaView::GetCurrentColumnWidths(void) const
 {
-   std::vector<int32_t> c_Retval;
+   QList<int32_t> c_Retval;
    c_Retval.reserve(this->model()->columnCount());
    for (int32_t s32_ItCol = 0; s32_ItCol < this->model()->columnCount(); ++s32_ItCol)
    {

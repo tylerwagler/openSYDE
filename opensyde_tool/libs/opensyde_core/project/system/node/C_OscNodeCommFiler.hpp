@@ -12,6 +12,7 @@
 #define C_OSCNODECOMMFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscCanProtocol.hpp"
@@ -30,35 +31,35 @@ class C_OscNodeCommFiler
 public:
    static int32_t h_LoadNodeComProtocolFile(C_OscCanProtocol & orc_NodeComProtocol,
                                             const QString & orc_FilePath,
-                                            const std::vector<C_OscNodeDataPool> & orc_NodeDataPools);
+                                            const QList<C_OscNodeDataPool> & orc_NodeDataPools);
    static int32_t h_LoadNodeComProtocol(C_OscCanProtocol & orc_NodeComProtocol, C_OscXmlParserBase & orc_XmlParser,
-                                        const std::vector<C_OscNodeDataPool> & orc_NodeDataPools);
+                                        const QList<C_OscNodeDataPool> & orc_NodeDataPools);
    static int32_t h_SaveNodeComProtocolFile(const C_OscCanProtocol & orc_NodeComProtocol,
                                             const QString & orc_FilePath,
                                             const QString & orc_DatapoolName);
    static void h_SaveNodeComProtocol(const C_OscCanProtocol & orc_NodeComProtocol, C_OscXmlParserBase & orc_XmlParser,
                                      const QString & orc_DatapoolName);
-   static int32_t h_LoadNodeComMessageContainers(std::vector<C_OscCanMessageContainer> & orc_NodeComMessageContainers,
+   static int32_t h_LoadNodeComMessageContainers(QList<C_OscCanMessageContainer> & orc_NodeComMessageContainers,
                                                  C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeComMessageContainers(
-      const std::vector<C_OscCanMessageContainer> & orc_NodeComMessageContainers,
+      const QList<C_OscCanMessageContainer> & orc_NodeComMessageContainers,
       C_OscXmlParserBase & orc_XmlParser, const C_OscCanProtocol::E_Type oe_ProtocolType);
    static int32_t h_LoadNodeComMessageContainer(C_OscCanMessageContainer & orc_NodeComMessageContainer,
                                                 C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeComMessageContainer(const C_OscCanMessageContainer & orc_NodeComMessageContainer,
                                              C_OscXmlParserBase & orc_XmlParser,
                                              const C_OscCanProtocol::E_Type oe_ProtocolType);
-   static int32_t h_LoadNodeComMessages(std::vector<C_OscCanMessage> & orc_NodeComMessages,
+   static int32_t h_LoadNodeComMessages(QList<C_OscCanMessage> & orc_NodeComMessages,
                                         C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveNodeComMessages(const std::vector<C_OscCanMessage> & orc_NodeComMessages,
+   static void h_SaveNodeComMessages(const QList<C_OscCanMessage> & orc_NodeComMessages,
                                      C_OscXmlParserBase & orc_XmlParser,
                                      const C_OscCanProtocol::E_Type oe_ProtocolType);
    static int32_t h_LoadNodeComMessage(C_OscCanMessage & orc_NodeComMessage, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveNodeComMessage(const C_OscCanMessage & orc_NodeComMessage, C_OscXmlParserBase & orc_XmlParser,
                                     const C_OscCanProtocol::E_Type oe_ProtocolType);
-   static int32_t h_LoadNodeComSignals(std::vector<C_OscCanSignal> & orc_NodeComSignals,
+   static int32_t h_LoadNodeComSignals(QList<C_OscCanSignal> & orc_NodeComSignals,
                                        C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveNodeComSignals(const std::vector<C_OscCanSignal> & orc_NodeComSignals,
+   static void h_SaveNodeComSignals(const QList<C_OscCanSignal> & orc_NodeComSignals,
                                     C_OscXmlParserBase & orc_XmlParser, const C_OscCanProtocol::E_Type oe_ProtocolType);
    static int32_t h_LoadNodeComSignal(C_OscCanSignal & orc_NodeComSignal, C_OscXmlParserBase & orc_XmlParser,
                                       const bool oq_CanOpenOnly = false);

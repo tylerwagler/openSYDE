@@ -30,7 +30,7 @@ public:
    C_OscParamSetRawEntry(void);
 
    uint32_t u32_StartAddress;    ///< Start address to write to
-   std::vector<uint8_t> c_Bytes; ///< Bytes to write at address
+   QByteArray c_Bytes; ///< Bytes to write at address
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

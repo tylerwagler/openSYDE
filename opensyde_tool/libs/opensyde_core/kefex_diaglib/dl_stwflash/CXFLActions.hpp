@@ -19,6 +19,7 @@
 #include <QSettings>
 #include <QString>
 #include <QStringList>
+#include <vector>
 
 
 namespace stw {
@@ -258,7 +259,7 @@ public:
   QList<uint32_t> c_DeviceInfoAddresses;
   bool q_DeviceInfoAddressesValid;
   QList<C_XFLECUInformation> c_DeviceInfoBlocks; ///< from target's flash area
-  QList<uint8_t> c_DeviceInfoBlocksValid;
+  QByteArray c_DeviceInfoBlocksValid;
 
   // flash mapping information:
   C_XFLFlashInformation c_FlashMappingInformation;

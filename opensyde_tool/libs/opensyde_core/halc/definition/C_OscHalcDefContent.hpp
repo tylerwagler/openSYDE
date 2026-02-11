@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include <QString>
 #include <QStringList>
 
@@ -45,12 +46,12 @@ public:
    int32_t SetEnumValue(const QString & orc_DisplayName);
    int32_t GetEnumValue(QString & orc_DisplayName);
    const C_OscNodeDataPoolContent * FindEnumItem(const QString & orc_DisplayName) const;
-   const std::vector<std::pair<QString, C_OscNodeDataPoolContent> > & GetEnumItems(void) const;
+   const QList<std::pair<QString, C_OscNodeDataPoolContent> > & GetEnumItems(void) const;
 
    void AddBitmaskItem(const C_OscHalcDefContentBitmaskItem & orc_Value);
-   const std::vector<C_OscHalcDefContentBitmaskItem> & GetBitmaskItems(void) const;
+   const QList<C_OscHalcDefContentBitmaskItem> & GetBitmaskItems(void) const;
    void GetBitmaskStatusValues(QStringList * const opc_Displays,
-                               std::vector<bool> * const opc_Values) const;
+                               QList<bool> * const opc_Values) const;
    int32_t GetBitmask(const QString & orc_DisplayName, bool & orq_Value) const;
    int32_t SetBitmask(const QString & orc_DisplayName, const bool oq_Value);
 
@@ -65,8 +66,8 @@ public:
 
 private:
    E_ComplexType me_ComplexType;
-   std::vector<std::pair<QString, C_OscNodeDataPoolContent> > mc_EnumItems; ///< All known enum values
-   std::vector<C_OscHalcDefContentBitmaskItem> mc_BitmaskItems;                           ///< All known bitmask values
+   QList<std::pair<QString, C_OscNodeDataPoolContent> > mc_EnumItems; ///< All known enum values
+   QList<C_OscHalcDefContentBitmaskItem> mc_BitmaskItems;                           ///< All known bitmask values
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

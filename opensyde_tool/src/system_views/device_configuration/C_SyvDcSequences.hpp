@@ -17,8 +17,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include <QObject>
+#include <QList>
 #include <QString>
-#include <vector>
+#include <QByteArray>
 
 
 #include "C_Can.hpp"
@@ -61,10 +62,10 @@ public:
   stw::opensyde_core::C_OscDcDeviceOldComConfig c_OldComConfig;
 
   // Configuration parameters for all interfaces
-  std::vector<uint8_t> c_NodeIds;
-  std::vector<uint8_t> c_BusIds;
-  std::vector<uint32_t> c_CanBitrates; // In Bit/s
-  std::vector<stw::opensyde_core::C_OscNodeComInterfaceSettings::C_IpAddress>
+  QByteArray c_NodeIds;
+  QByteArray c_BusIds;
+  QList<uint32_t> c_CanBitrates; // In Bit/s
+  QList<stw::opensyde_core::C_OscNodeComInterfaceSettings::C_IpAddress>
       c_IpAddresses;
 };
 
@@ -93,14 +94,14 @@ public:
   int32_t ScanEthGetInfoFromOpenSydeDevices(void);
 
   int32_t CheckOpenSydeDevicesConfig(
-      const std::vector<C_SyvDcDeviceConfiguation> &orc_DeviceConfig) const;
+      const QList<C_SyvDcDeviceConfiguation> &orc_DeviceConfig) const;
   int32_t ConfCanStwFlashloaderDevices(
-      const std::vector<C_SyvDcDeviceConfiguation> &orc_DeviceConfig);
+      const QList<C_SyvDcDeviceConfiguation> &orc_DeviceConfig);
   int32_t ConfCanOpenSydeDevices(
-      const std::vector<C_SyvDcDeviceConfiguation> &orc_DeviceConfig,
+      const QList<C_SyvDcDeviceConfiguation> &orc_DeviceConfig,
       const bool oq_ConfigureAllInterfaces, const bool oq_SecurityFeatureUsed);
   int32_t ConfEthOpenSydeDevices(
-      const std::vector<C_SyvDcDeviceConfiguation> &orc_DeviceConfig,
+      const QList<C_SyvDcDeviceConfiguation> &orc_DeviceConfig,
       const bool oq_ConfigureAllInterfaces, const bool oq_SecurityFeatureUsed);
 
   int32_t SendOsyBroadcastRequestProgramming(bool &orq_NotAccepted) const;
@@ -110,20 +111,20 @@ public:
   int32_t InitCanAndSetCanBitrate(const uint32_t ou32_Bitrate);
 
   int32_t
-  ReadBackCan(const std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode>
+  ReadBackCan(const QList<stw::opensyde_core::C_OscProtocolDriverOsyNode>
                   &orc_OpenSydeIds,
-              const std::vector<bool> &orc_OpenSydeSnrExtFormat,
-              const std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode>
+              const QList<bool> &orc_OpenSydeSnrExtFormat,
+              const QList<stw::opensyde_core::C_OscProtocolDriverOsyNode>
                   &orc_StwIds);
   int32_t
-  ReadBackEth(const std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode>
+  ReadBackEth(const QList<stw::opensyde_core::C_OscProtocolDriverOsyNode>
                   &orc_OpenSydeIds,
-              const std::vector<bool> &orc_OpenSydeSnrExtFormat);
+              const QList<bool> &orc_OpenSydeSnrExtFormat);
 
   int32_t GetResults(int32_t &ors32_Result) const;
   bool GetCanInitializationResult(void) const;
   int32_t GetDeviceInfosResult(
-      std::vector<stw::opensyde_core::C_OscDcDeviceInformation> &orc_DeviceInfo)
+      QList<stw::opensyde_core::C_OscDcDeviceInformation> &orc_DeviceInfo)
       const;
   int32_t GetSecurityFeatureUsageResult(bool &orq_SecurityFeatureUsed) const;
 
@@ -198,28 +199,28 @@ private:
   int32_t m_RunConfCanStwFlashloaderDevices(void);
   int32_t m_RunConfCanOpenSydeDevices(void);
   int32_t m_RunConfCanOpenSydeDevicesWithBroadcasts(
-      std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode>
+      QList<stw::opensyde_core::C_OscProtocolDriverOsyNode>
           &orc_UsedServerIds);
   int32_t m_RunConfCanOpenSydeDevicesWithoutBroadcasts(
-      std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode>
+      QList<stw::opensyde_core::C_OscProtocolDriverOsyNode>
           &orc_UsedServerIds);
 
   int32_t m_RunScanEthGetInfoFromOpenSydeDevices(void);
   int32_t m_RunConfEthOpenSydeDevices(void);
   int32_t m_RunConfEthOpenSydeDevicesWithBroadcasts(
-      std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode>
+      QList<stw::opensyde_core::C_OscProtocolDriverOsyNode>
           &orc_UsedServerIds);
   int32_t m_RunConfEthOpenSydeDevicesWithoutBroadcasts(
-      std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode>
+      QList<stw::opensyde_core::C_OscProtocolDriverOsyNode>
           &orc_UsedServerIds);
 
   int32_t
   m_ConfigureNodes(const bool oq_ViaCan,
-                   std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode>
+                   QList<stw::opensyde_core::C_OscProtocolDriverOsyNode>
                        &orc_UsedServerIds);
 
   int32_t m_CheckConfOpenSydeDevices(
-      const std::vector<C_SyvDcDeviceConfiguation> &orc_DeviceConfiguration)
+      const QList<C_SyvDcDeviceConfiguation> &orc_DeviceConfiguration)
       const;
   int32_t m_SetCanOpenSydeBitrate(
       const stw::opensyde_core::C_OscProtocolDriverOsyNode &orc_ServerId,
@@ -242,11 +243,11 @@ private:
   // Sequence execution parameter
   E_Sequence me_Sequence;
   // Input parameter for sequence
-  std::vector<C_SyvDcDeviceConfiguation>
+  QList<C_SyvDcDeviceConfiguation>
       mc_DeviceConfiguration; ///< desired device configuration
-  std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> mc_OpenSydeIds;
-  std::vector<bool> mc_OpenSydeSnrExtFormat;
-  std::vector<stw::opensyde_core::C_OscProtocolDriverOsyNode> mc_StwIds;
+  QList<stw::opensyde_core::C_OscProtocolDriverOsyNode> mc_OpenSydeIds;
+  QList<bool> mc_OpenSydeSnrExtFormat;
+  QList<stw::opensyde_core::C_OscProtocolDriverOsyNode> mc_StwIds;
   uint32_t mu32_CanBitrate;
   bool mq_ConfigureAllInterfaces; ///< flag if the bitrate for all connected
                                   ///< interfaces sould be configured or
@@ -265,7 +266,7 @@ private:
   mutable QRecursiveMutex mc_CriticalSectionCanInitialization;
 
   // Result information of several sequences
-  std::vector<stw::opensyde_core::C_OscDcDeviceInformation> mc_DeviceInfoResult;
+  QList<stw::opensyde_core::C_OscDcDeviceInformation> mc_DeviceInfoResult;
   // Result of ScanCanGetInfoFromOpenSydeDevices and
   // ScanEthGetInfoFromOpenSydeDevices Input of ConfCanOpenSydeDevices and
   // ConfEthOpenSydeDevices

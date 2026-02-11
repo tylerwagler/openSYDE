@@ -12,6 +12,7 @@
 #define C_SYVTOPOLOGYBASESCENE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_SebTopologyBaseScene.hpp"
 #include "C_GiSvPcBusConnector.hpp"
 
@@ -47,11 +48,11 @@ protected:
 
    C_GiLiCanBus * m_CreateCanBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                  C_GiTextElementBus * const opc_TextElementName,
-                                 const std::vector<QPointF> * const opc_Points,
+                                 const QList<QPointF> * const opc_Points,
                                  QGraphicsItem * const opc_Parent) override;
    C_GiLiEthernetBus * m_CreateEthernetBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                            C_GiTextElementBus * const opc_TextElementName,
-                                           const std::vector<QPointF> * const opc_Points,
+                                           const QList<QPointF> * const opc_Points,
                                            QGraphicsItem * const opc_Parent) override;
    C_GiTextElementBus * m_CreateBusTextElement(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                                QGraphicsItem * const opc_Parent) override;

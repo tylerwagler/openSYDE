@@ -891,9 +891,9 @@ void C_SyvUpUpdateWidget::m_ReportProgressForServer(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void) {
   if (this->mpc_UpSequences != NULL) {
-    std::vector<uint32_t> c_NodeIndexes;
-    std::vector<C_OscSuSequences::C_OsyDeviceInformation> c_DeviceInformation;
-    std::vector<C_SyvUpDeviceInfo> c_Devices;
+    QList<uint32_t> c_NodeIndexes;
+    QList<C_OscSuSequences::C_OsyDeviceInformation> c_DeviceInformation;
+    QList<C_SyvUpDeviceInfo> c_Devices;
     uint32_t u32_Counter;
 
     this->mpc_UpSequences->GetOsyDeviceInformation(c_NodeIndexes,
@@ -1114,9 +1114,9 @@ void C_SyvUpUpdateWidget::m_ReportOpenSydeFlashloaderInformationRead(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_ReportStwFlashloaderInformationRead(void) {
   if (this->mpc_UpSequences != NULL) {
-    std::vector<uint32_t> c_NodeIndexes;
-    std::vector<C_OscSuSequences::C_XflDeviceInformation> c_DeviceInformation;
-    std::vector<C_SyvUpDeviceInfo> c_Devices;
+    QList<uint32_t> c_NodeIndexes;
+    QList<C_OscSuSequences::C_XflDeviceInformation> c_DeviceInformation;
+    QList<C_SyvUpDeviceInfo> c_Devices;
     uint32_t u32_Counter;
 
     this->mpc_UpSequences->GetXflDeviceInformation(c_NodeIndexes,
@@ -1172,8 +1172,8 @@ void C_SyvUpUpdateWidget::m_ReportStwFlashloaderInformationRead(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_CheckOpenSydeFlashloaderInformation(
-    const std::vector<uint32_t> &orc_OsyNodeIndexes,
-    const std::vector<C_OscSuSequences::C_OsyDeviceInformation>
+    const QList<uint32_t> &orc_OsyNodeIndexes,
+    const QList<C_OscSuSequences::C_OsyDeviceInformation>
         &orc_OsyDeviceInformation) {
   uint32_t u32_NodesInformationCounter;
 
@@ -1812,7 +1812,7 @@ void C_SyvUpUpdateWidget::m_Timer(void) {
               "Read Device information: Cannot start. Thread is still busy."));
         }
       } else {
-        std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates>
+        QList<stw::opensyde_core::C_OscSuSequencesNodeConnectStates>
             c_NodeStates;
 
         // Sequence failed
@@ -1837,7 +1837,7 @@ void C_SyvUpUpdateWidget::m_Timer(void) {
       this->me_Step = C_SyvUpSequences::eNOT_ACTIVE;
       {
         // Get the connect status of the nodes and inform the UI
-        std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates>
+        QList<stw::opensyde_core::C_OscSuSequencesNodeConnectStates>
             c_NodeStates;
 
         Q_ASSERT(this->mpc_UpSequences->GetConnectStates(c_NodeStates) ==
@@ -1969,7 +1969,7 @@ void C_SyvUpUpdateWidget::m_Timer(void) {
 
       {
         // Get the connect status of the nodes and inform the UI
-        std::vector<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates>
+        QList<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates>
             c_NodeStates;
 
         Q_ASSERT(this->mpc_UpSequences->GetUpdateStates(c_NodeStates) ==
@@ -2168,7 +2168,7 @@ void C_SyvUpUpdateWidget::m_Timer(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpUpdateWidget::m_HandlePreconditionErrorType(
-    const std::vector<uint32_t> &orc_ErrorNodeIndexes,
+    const QList<uint32_t> &orc_ErrorNodeIndexes,
     const QString &orc_Description, const QString &orc_DetailsStart) {
   C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::E_Type::eERROR);
 
@@ -2256,13 +2256,13 @@ void C_SyvUpUpdateWidget::m_HandleConnectionFailure(
 
   if ((this->mpc_Scene != NULL) && (this->mpc_ProgressLogContent != NULL)) {
     // All nodes with any response
-    const std::vector<uint32_t> c_RespondedNodes =
+    const QList<uint32_t> c_RespondedNodes =
         this->mpc_ProgressLogContent->GetConnectNodeEntryIndices();
     // All nodes which require an update
-    const std::vector<uint32_t> c_ActiveNoneThirdPartyNodeIndices =
+    const QList<uint32_t> c_ActiveNoneThirdPartyNodeIndices =
         this->mpc_Scene->GetActiveNoneThirdPartyNodeIndices();
     // All nodes which require a response
-    std::vector<uint32_t> c_NodeIndicesWhichRequireResponse;
+    QList<uint32_t> c_NodeIndicesWhichRequireResponse;
 
     // Check which nodes are either directly required or indirectly required for
     // routing
@@ -2591,9 +2591,9 @@ void C_SyvUpUpdateWidget::m_DiscardInfo(const uint32_t ou32_NodeIndex) {
    Vector with is file based flag for each node
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<bool> C_SyvUpUpdateWidget::m_GetIsFileBasedFlagForEach(void) const {
-  std::vector<bool> c_Retval;
-  std::vector<uint8_t> c_NodeActiveFlags;
+QList<bool> C_SyvUpUpdateWidget::m_GetIsFileBasedFlagForEach(void) const {
+  QList<bool> c_Retval;
+  QByteArray c_NodeActiveFlags;
   const int32_t s32_FuncRetval =
       C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
           this->mu32_ViewIndex, c_NodeActiveFlags);
@@ -2979,7 +2979,7 @@ bool C_SyvUpUpdateWidget::mh_IsUpdateAbort(
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SyvUpUpdateWidget::mh_IsSecurityWarningNecessary(
-    const std::vector<C_OscSuSequences::C_DoFlash> &orc_NodesToFlash) {
+    const QList<C_OscSuSequences::C_DoFlash> &orc_NodesToFlash) {
   bool q_Retval = false;
 
   for (uint32_t u32_It = 0UL; u32_It < orc_NodesToFlash.size(); ++u32_It) {

@@ -45,7 +45,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoAddDeleteBaseCommand::C_SebUnoAddDeleteBaseCommand(QGraphicsScene * const opc_Scene,
-                                                           const std::vector<uint64_t> & orc_Ids,
+                                                           const QList<uint64_t> & orc_Ids,
                                                            const QString & orc_Text, QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, orc_Text, opc_Parent)
 {
@@ -63,7 +63,7 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
                                                                                      uint64_t> & orc_MapTypeAndIndexToId,
                                                  const C_PuiBsElements & orc_AllElements) const
 {
-   std::vector<QGraphicsItem *> c_RelatedItems = this->m_GetSceneItems();
+   QList<QGraphicsItem *> c_RelatedItems = this->m_GetSceneItems();
    const C_GiBiArrow * pc_LineArrow;
    const C_GiBiBoundary * pc_Boundary;
    const C_GiBiImageGroup * pc_Image;
@@ -71,7 +71,7 @@ void C_SebUnoAddDeleteBaseCommand::m_StoreCommon(C_PuiBsElements & orc_Storage, 
    C_PuiBsDataElement * pc_Data;
    C_GiUnique * pc_Unique;
 
-   for (std::vector<QGraphicsItem *>::iterator c_ItRelatedItem = c_RelatedItems.begin();
+   for (QList<QGraphicsItem *>::iterator c_ItRelatedItem = c_RelatedItems.begin();
         c_ItRelatedItem != c_RelatedItems.end(); ++c_ItRelatedItem)
    {
       pc_Unique = dynamic_cast<C_GiUnique *>(*c_ItRelatedItem);

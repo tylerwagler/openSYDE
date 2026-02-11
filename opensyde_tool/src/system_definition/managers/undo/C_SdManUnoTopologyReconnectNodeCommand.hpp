@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include "C_SdManUnoTopologyReconnectBaseCommand.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,16 +29,16 @@ class C_SdManUnoTopologyReconnectNodeCommand :
    public C_SdManUnoTopologyReconnectBaseCommand
 {
 public:
-   C_SdManUnoTopologyReconnectNodeCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SdManUnoTopologyReconnectNodeCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                           const uint64_t & oru64_StartingNodeId, const uint64_t & oru64_LastNodeId,
                                           const QPointF & orc_ConnectionPos, const int32_t & ors32_Interface,
-                                          const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
+                                          const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
                                           QUndoCommand * const opc_Parent = NULL);
    ~C_SdManUnoTopologyReconnectNodeCommand(void) override;
 
 protected:
    void m_Reconnect(const uint64_t & oru64_StartingId, const uint64_t & oru64_LastId, const int32_t & ors32_Interface,
-                    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties) override;
+                    const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties) override;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for showing all possible openSYDE CAN Monitor settings
@@ -179,7 +179,7 @@ void C_CamMosWidget::OnLoadFinishedDbc(const int32_t os32_Result) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosWidget::OnLoadFinishedOsySysDef(const int32_t os32_Result,
-                                             const std::vector<stw::opensyde_core::C_OscSystemBus> & orc_Busses) const
+                                             const QList<stw::opensyde_core::C_OscSystemBus> & orc_Busses) const
 {
    this->mpc_Ui->pc_WiDatabase->OnLoadFinishedOsySysDef(os32_Result, orc_Busses);
 }

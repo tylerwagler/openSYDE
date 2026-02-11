@@ -127,7 +127,7 @@ void C_OscDiagProtocolKfx::m_CyclicResponseReceived(const uint32_t ou32_Index, c
       {
          //convert value; we don't know the size of the element; we know the maximum is 32bits so always return those
          const uint32_t u32_Value = static_cast<uint32_t>(os64_Value);
-         std::vector<uint8_t> c_Value;
+         QByteArray c_Value;
          c_Value.resize(4);
          c_Value[0] = static_cast<uint8_t>(u32_Value);
          c_Value[1] = static_cast<uint8_t>(u32_Value >> 8U);
@@ -306,7 +306,7 @@ int32_t C_OscDiagProtocolKfx::Cycle(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDiagProtocolKfx::DataPoolReadNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                                  const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
+                                                  const uint16_t ou16_ElementIndex, QByteArray & orc_ReadData,
                                                   uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return = C_RANGE;
@@ -423,7 +423,7 @@ int32_t C_OscDiagProtocolKfx::DataPoolReadNumeric(const uint8_t ou8_DataPoolInde
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDiagProtocolKfx::DataPoolReadArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                                const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
+                                                const uint16_t ou16_ElementIndex, QByteArray & orc_ReadData,
                                                 uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return = C_RANGE;
@@ -442,7 +442,7 @@ int32_t C_OscDiagProtocolKfx::DataPoolReadArray(const uint8_t ou8_DataPoolIndex,
 
          s32_Return = this->mpc_CommKefex->ReadAggregateVariable(u16_Index,
                                                                  static_cast<uint32_t>(orc_ReadData.size()),
-                                                                 &orc_ReadData[0]);
+                                                                 reinterpret_cast<uint8_t*>(orc_ReadData.data()));
          //map KEFEX to openSYDE error codes as good as possible:
          switch (s32_Return)
          {
@@ -506,7 +506,7 @@ int32_t C_OscDiagProtocolKfx::DataPoolReadArray(const uint8_t ou8_DataPoolIndex,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDiagProtocolKfx::DataPoolWriteNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                    const uint16_t ou16_ElementIndex,
-                                                   const std::vector<uint8_t> & orc_DataToWrite,
+                                                   const QByteArray & orc_DataToWrite,
                                                    uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return = C_RANGE;
@@ -622,7 +622,7 @@ int32_t C_OscDiagProtocolKfx::DataPoolWriteNumeric(const uint8_t ou8_DataPoolInd
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDiagProtocolKfx::DataPoolWriteArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                  const uint16_t ou16_ElementIndex,
-                                                 const std::vector<uint8_t> & orc_DataToWrite,
+                                                 const QByteArray & orc_DataToWrite,
                                                  uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return = C_RANGE;
@@ -641,7 +641,7 @@ int32_t C_OscDiagProtocolKfx::DataPoolWriteArray(const uint8_t ou8_DataPoolIndex
 
          s32_Return = this->mpc_CommKefex->WriteAggregateVariable(u16_Index,
                                                                   static_cast<uint32_t>(orc_DataToWrite.size()),
-                                                                  &orc_DataToWrite[0]);
+                                                                  reinterpret_cast<const uint8_t*>(orc_DataToWrite.constData()));
          //map KEFEX to openSYDE error codes as good as possible:
          switch (s32_Return)
          {
@@ -888,7 +888,7 @@ int32_t C_OscDiagProtocolKfx::DataPoolStopEventDriven(void)
    C_WARN     error response
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDiagProtocolKfx::NvmRead(const uint32_t ou32_MemoryAddress, std::vector<uint8_t> & orc_DataRecord,
+int32_t C_OscDiagProtocolKfx::NvmRead(const uint32_t ou32_MemoryAddress, QByteArray & orc_DataRecord,
                                       uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return = C_RANGE;
@@ -902,7 +902,7 @@ int32_t C_OscDiagProtocolKfx::NvmRead(const uint32_t ou32_MemoryAddress, std::ve
       if ((ou32_MemoryAddress <= 0xFFFFFFU) && (orc_DataRecord.size() > 0))
       {
          s32_Return = this->mpc_CommKefex->ReadEEPROM(ou32_MemoryAddress,
-                                                      static_cast<uint32_t>(orc_DataRecord.size()), &orc_DataRecord[0]);
+                                                      static_cast<uint32_t>(orc_DataRecord.size()), reinterpret_cast<uint8_t*>(orc_DataRecord.data()));
          //map KEFEX to openSYDE error codes as good as possible:
          switch (s32_Return)
          {
@@ -1011,7 +1011,7 @@ int32_t C_OscDiagProtocolKfx::NvmWriteStartTransaction(const uint8_t ou8_DataPoo
    C_WARN     error response
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDiagProtocolKfx::NvmWrite(const uint32_t ou32_MemoryAddress, const std::vector<uint8_t> & orc_DataRecord,
+int32_t C_OscDiagProtocolKfx::NvmWrite(const uint32_t ou32_MemoryAddress, const QByteArray & orc_DataRecord,
                                        uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return = C_RANGE;
@@ -1026,7 +1026,7 @@ int32_t C_OscDiagProtocolKfx::NvmWrite(const uint32_t ou32_MemoryAddress, const 
       {
          s32_Return = this->mpc_CommKefex->WriteEEPROM(ou32_MemoryAddress,
                                                        static_cast<uint32_t>(orc_DataRecord.size()),
-                                                       &orc_DataRecord[0]);
+                                                       reinterpret_cast<const uint8_t*>(orc_DataRecord.constData()));
          //map KEFEX to openSYDE error codes as good as possible:
          switch (s32_Return)
          {

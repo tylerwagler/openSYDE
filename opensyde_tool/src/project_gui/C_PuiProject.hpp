@@ -12,6 +12,7 @@
 #define C_PUIPROJECT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include <QStringList>
 #include "C_OscProject.hpp"
@@ -34,7 +35,7 @@ public:
 
    int32_t Save(const bool oq_ForceSaveAll = false, const bool oq_UseDeprecatedFileFormatV2 = false);
    int32_t SaveCurrentProjectForServiceMode(const QString & orc_FilePath, const QString & orc_Password,
-                                            const std::vector<std::array<bool, 3> > & orc_ViewConfigs);
+                                            const QList<std::array<bool, 3> > & orc_ViewConfigs);
    int32_t Load(uint16_t * const opu16_FileVersion,
                 QStringList * const opc_ErrorDetailsMissingDevices);
    bool HasHashChanged(void) const;

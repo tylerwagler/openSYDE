@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <array>
+#include <QList>
 #include <QStringList>
 
 #include "C_OgeTreeViewToolTipBase.hpp"
@@ -40,7 +41,7 @@ public:
    void Init(void);
    void Search(const QString & orc_Text);
 
-   std::vector<std::array<QString, 2> > GetSelectedDataElements(void) const;
+   QList<std::array<QString, 2> > GetSelectedDataElements(void) const;
    bool IsEmpty(void) const;
    void SaveExpandedIndices(void);
 

@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <map>
+#include <QList>
 #include <QString>
 
 #include "stwtypes.hpp"
@@ -898,7 +899,7 @@ void C_OscExportCommunicationStack::mh_AddCeGlobalVariables(QStringList & orc_Da
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCommunicationStack::mh_AddSignalDefinitions(QStringList & orc_Data,
                                                             const uint32_t ou32_SignalListIndex,
-                                                            const std::vector<C_OscCanMessage> & orc_Messages,
+                                                            const QList<C_OscCanMessage> & orc_Messages,
                                                             const uint16_t ou16_GenCodeVersion)
 {
    for (uint16_t u16_MessageIndex = 0U; u16_MessageIndex < orc_Messages.size(); u16_MessageIndex++)
@@ -917,8 +918,8 @@ void C_OscExportCommunicationStack::mh_AddSignalDefinitions(QStringList & orc_Da
             uint32_t u32_MultiplexerIndex;
             if (rc_Message.IsMultiplexed(&u32_MultiplexerIndex) == true)
             {
-               std::map< int32_t, std::vector<C_OscCanSignal> > c_MuxedSignalsPerValue;
-               std::vector<C_OscCanSignal> c_NonMuxedSignals;
+               std::map< int32_t, QList<C_OscCanSignal> > c_MuxedSignalsPerValue;
+               QList<C_OscCanSignal> c_NonMuxedSignals;
 
                // get signals grouped by mux value
                mh_GroupSignalsByMuxValue(rc_Message, u32_MultiplexerIndex, c_MuxedSignalsPerValue, c_NonMuxedSignals);
@@ -927,10 +928,10 @@ void C_OscExportCommunicationStack::mh_AddSignalDefinitions(QStringList & orc_Da
                if (c_MuxedSignalsPerValue.size() == 0) //no muxed signals ...
                {
                   const C_OscCanSignal & rc_MultiplexerSignal = rc_Message.c_Signals[u32_MultiplexerIndex];
-                  std::vector<C_OscCanSignal> c_Signals;
+                  QList<C_OscCanSignal> c_Signals;
                   c_Signals.push_back(rc_MultiplexerSignal);
                   //add non-muxed signals:
-                  c_Signals.insert(c_Signals.end(), c_NonMuxedSignals.begin(), c_NonMuxedSignals.end());
+                  c_Signals.append(c_NonMuxedSignals);
 
                   orc_Data.append("static const T_osy_com_signal_definition mat_" + rc_Message.c_Name + "[" +
                                   QString::number(c_Signals.size()) + "] =");
@@ -942,7 +943,7 @@ void C_OscExportCommunicationStack::mh_AddSignalDefinitions(QStringList & orc_Da
                }
                else
                {
-                  std::map< int32_t, std::vector<C_OscCanSignal> >::const_iterator c_ItValue;
+                  std::map< int32_t, QList<C_OscCanSignal> >::const_iterator c_ItValue;
 
                   // add signal definitions to data string list
                   for (c_ItValue = c_MuxedSignalsPerValue.begin(); c_ItValue != c_MuxedSignalsPerValue.end();
@@ -997,7 +998,7 @@ void C_OscExportCommunicationStack::mh_AddSignalDefinitions(QStringList & orc_Da
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCommunicationStack::mh_AddMessageMuxDefinitions(QStringList & orc_Data,
-                                                                const std::vector<C_OscCanMessage> & orc_Messages,
+                                                                const QList<C_OscCanMessage> & orc_Messages,
                                                                 const QString & orc_TxRxString)
 {
    const uint16_t u16_MessageCount = static_cast<uint16_t>(orc_Messages.size());
@@ -1017,8 +1018,8 @@ void C_OscExportCommunicationStack::mh_AddMessageMuxDefinitions(QStringList & or
       if (rc_Message.IsMultiplexed(&u32_MultiplexerIndex) == true)
       {
          // mux message: add entry for every mux value
-         std::map< int32_t, std::vector<C_OscCanSignal> > c_MuxedSignalsPerValue;
-         std::vector<C_OscCanSignal> c_NonMuxedSignals;
+         std::map< int32_t, QList<C_OscCanSignal> > c_MuxedSignalsPerValue;
+         QList<C_OscCanSignal> c_NonMuxedSignals;
 
          // get signals grouped by mux value
          mh_GroupSignalsByMuxValue(rc_Message, u32_MultiplexerIndex, c_MuxedSignalsPerValue, c_NonMuxedSignals);
@@ -1037,7 +1038,7 @@ void C_OscExportCommunicationStack::mh_AddMessageMuxDefinitions(QStringList & or
          else
          {
             uint16_t u16_MuxCount = 0;
-            std::map< int32_t, std::vector<C_OscCanSignal> >::const_iterator c_ItValue;
+            std::map< int32_t, QList<C_OscCanSignal> >::const_iterator c_ItValue;
 
             // add signal definitions to data string list
             for (c_ItValue = c_MuxedSignalsPerValue.begin(); c_ItValue != c_MuxedSignalsPerValue.end(); ++c_ItValue)
@@ -1098,7 +1099,7 @@ void C_OscExportCommunicationStack::mh_AddMessageMuxDefinitions(QStringList & or
 void C_OscExportCommunicationStack::mh_AddMessageDefinitions(QStringList & orc_Data,
                                                              const uint8_t ou8_InterfaceIndex,
                                                              const C_OscCanProtocol::E_Type & ore_Protocol,
-                                                             const std::vector<C_OscCanMessage> & orc_Messages,
+                                                             const QList<C_OscCanMessage> & orc_Messages,
                                                              const uint16_t ou16_GenCodeVersion, const bool oq_Tx)
 {
    const QString c_ProtocolName = mh_GetProtocolNameByType(ore_Protocol).toUpper();
@@ -1256,7 +1257,7 @@ void C_OscExportCommunicationStack::mh_AddMessageDefinitions(QStringList & orc_D
    Number of multiplex messages
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint32_t C_OscExportCommunicationStack::mh_CountMuxMessages(const std::vector<C_OscCanMessage> & orc_Messages)
+uint32_t C_OscExportCommunicationStack::mh_CountMuxMessages(const QList<C_OscCanMessage> & orc_Messages)
 {
    uint32_t u32_MessageNum = 0;
 
@@ -1428,7 +1429,7 @@ QString C_OscExportCommunicationStack::mh_GetMagicName(const QString & orc_Proje
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCommunicationStack::mh_ConvertSignalsToStrings(QStringList & orc_Data,
-                                                               const std::vector<C_OscCanSignal> & orc_Signals,
+                                                               const QList<C_OscCanSignal> & orc_Signals,
                                                                const uint32_t ou32_SignalListIndex,
                                                                const bool oq_RemoveLastComma)
 {
@@ -1466,8 +1467,8 @@ void C_OscExportCommunicationStack::mh_ConvertSignalsToStrings(QStringList & orc
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscExportCommunicationStack::mh_GroupSignalsByMuxValue(const C_OscCanMessage & orc_Message,
                                                               const uint32_t ou32_MultiplexerIndex, std::map<int32_t,
-                                                                                                             std::vector<C_OscCanSignal> > & orc_MuxedSignalsPerValue,
-                                                              std::vector<C_OscCanSignal> & orc_NonMuxedSignals)
+                                                                                                             QList<C_OscCanSignal> > & orc_MuxedSignalsPerValue,
+                                                              QList<C_OscCanSignal> & orc_NonMuxedSignals)
 {
    if (ou32_MultiplexerIndex < orc_Message.c_Signals.size())
    {

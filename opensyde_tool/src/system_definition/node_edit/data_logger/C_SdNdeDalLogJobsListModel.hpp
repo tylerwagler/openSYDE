@@ -12,6 +12,7 @@
 
 #include <QWidget>
 #include <QAbstractListModel>
+#include <QList>
 
 #include "C_OscDataLoggerJob.hpp"
 
@@ -34,7 +35,7 @@ class C_SdNdeDalLogJobsListModel :
 public:
    explicit C_SdNdeDalLogJobsListModel(QObject * const opc_Parent = NULL);
    void UpdateData(const uint32_t ou32_NodeIndex);
-   void DoRemoveRows(const std::vector<uint32_t> & orc_DataLoggerJobIndices);
+   void DoRemoveRows(const QList<uint32_t> & orc_DataLoggerJobIndices);
 
    QVariant data(const QModelIndex & orc_Index, const int32_t os32_Role =
                     static_cast<int32_t>(Qt::DisplayRole)) const override;
@@ -57,7 +58,7 @@ private:
       bool q_Enabled;
    };
 
-   std::vector<C_DalLogJob> mc_LogJobsList;
+   QList<C_DalLogJob> mc_LogJobsList;
 };
 
 /* -- Extern Global Variables ---------------------------------------------------------------------------------------

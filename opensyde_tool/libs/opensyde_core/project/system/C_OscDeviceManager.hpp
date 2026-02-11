@@ -17,6 +17,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 
+#include <QList>
 #include "C_OscDeviceGroup.hpp"
 #include <QString>
 
@@ -43,11 +44,11 @@ public:
   int32_t AddDevice(const QString &orc_DeviceDefinitionFile,
                     const QString &orc_DeviceGroup, const QString &orc_IniFile);
 
-  int32_t ChangeDevices(std::vector<C_OscDeviceDefinition> &orc_Devices,
+  int32_t ChangeDevices(QList<C_OscDeviceDefinition> &orc_Devices,
                         const QString &orc_DeviceGroup,
                         const QString &orc_IniFile);
 
-  std::vector<C_OscDeviceGroup> GetDeviceGroups(void) const;
+  QList<C_OscDeviceGroup> GetDeviceGroups(void) const;
 
   bool WasLoaded(void) const;
   int32_t LoadFromFile(const QString &orc_File, const bool oq_Optional,
@@ -57,7 +58,7 @@ public:
 
 private:
   bool mq_WasLoaded;
-  std::vector<C_OscDeviceGroup>
+  QList<C_OscDeviceGroup>
       mc_DeviceGroups; ///< Array of all known device groups
 };
 

@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include <QStringList>
 #include <QUndoStack>
 #include "stwtypes.hpp"
@@ -109,13 +110,13 @@ private:
    bool mq_AllowMoveDown;
    bool mq_AllowAdd;
 
-   void m_DeleteIndices(const std::vector<uint32_t> & orc_Indices);
-   void m_Move(const std::vector<uint32_t> & orc_SourceIndices, const std::vector<uint32_t> & orc_TargetIndices);
-   std::vector<uint32_t> m_GetSelectedIndices(void) const;
+   void m_DeleteIndices(const QList<uint32_t> & orc_Indices);
+   void m_Move(const QList<uint32_t> & orc_SourceIndices, const QList<uint32_t> & orc_TargetIndices);
+   QList<uint32_t> m_GetSelectedIndices(void) const;
    void m_SetupContextMenu(void);
    void m_OnCustomContextMenuRequested(const QPoint & orc_Pos);
    void m_HandleColumnChange(void);
-   void m_CheckActions(const std::vector<uint32_t> & orc_SelectedIndices);
+   void m_CheckActions(const QList<uint32_t> & orc_SelectedIndices);
    void m_UpdateModelView(void);
    void m_HandleLinkClicked(const QModelIndex & orc_Index);
    void m_CheckContextMenuText(void);

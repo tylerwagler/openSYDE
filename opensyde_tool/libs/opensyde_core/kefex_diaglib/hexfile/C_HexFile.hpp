@@ -14,6 +14,7 @@
 #include <cstdio> //for "FILE"
 #include "stwtypes.hpp"
 #include <QList>
+#include <vector>
 
 namespace stw
 {
@@ -57,7 +58,7 @@ class C_HexDataDumpBlock
 {
 public:
    uint32_t u32_AddressOffset;
-   QList<uint8_t> au8_Data;
+   QByteArray au8_Data;
 };
 
 ///Array of containers for memory dump data

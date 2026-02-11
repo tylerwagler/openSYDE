@@ -48,10 +48,10 @@ C_CieImportedMessageVectorData::C_CieImportedMessageVectorData()
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_CieImportedMessageVectorData::C_CieImportedMessageVectorData(
-   const std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData,
-   const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData,
-   const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessageData,
-   const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
+   const QList<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData,
+   const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData,
+   const QList<C_PuiSdNodeCanMessage> & orc_UiMessageData,
+   const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
    const QStringList * const opc_WarningMessagesPerMessage) :
    c_OscMessageData(orc_OscMessageData),
    c_OscSignalData(orc_OscSignalData),
@@ -87,8 +87,8 @@ void C_CieImportedMessageVectorData::Clear()
    \param[in,out]  orc_WarningMessagesPerMessage   Warning messages per message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CieImportedMessageVectorData::WriteBack(std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData,
-                                               std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData, std::vector<C_PuiSdNodeCanMessage> & orc_UiMessageData, std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
+void C_CieImportedMessageVectorData::WriteBack(QList<stw::opensyde_core::C_OscCanMessage> & orc_OscMessageData,
+                                               QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscSignalData, QList<C_PuiSdNodeCanMessage> & orc_UiMessageData, QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalData,
                                                QStringList & orc_WarningMessagesPerMessage) const
 {
    orc_OscMessageData = c_OscMessageData;

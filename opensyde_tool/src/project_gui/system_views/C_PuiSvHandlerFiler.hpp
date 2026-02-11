@@ -12,7 +12,7 @@
 #define C_PUISVHANDLERFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include <QDir>
 #include "stwtypes.hpp"
 #include "C_OscNode.hpp"
@@ -34,10 +34,10 @@ class C_PuiSvHandlerFiler
 public:
    C_PuiSvHandlerFiler(void);
 
-   static int32_t h_LoadViews(std::vector<C_PuiSvData> & orc_Views,
-                              const std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes,
+   static int32_t h_LoadViews(QList<C_PuiSvData> & orc_Views,
+                              const QList<stw::opensyde_core::C_OscNode> & orc_OscNodes,
                               stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser, const QDir * const opc_BasePath);
-   static int32_t h_SaveViews(const std::vector<C_PuiSvData> & orc_Views,
+   static int32_t h_SaveViews(const QList<C_PuiSvData> & orc_Views,
                               stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser, const QDir * const opc_BasePath);
    static int32_t h_LoadReadRails(QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                                        C_PuiSvReadDataConfiguration> & orc_Rails,
@@ -48,18 +48,18 @@ public:
    static QString h_GetViewFileName(const QString & orc_ViewName);
 
 private:
-   static int32_t mh_LoadDashboards(std::vector<C_PuiSvDashboard> & orc_Dashboards,
+   static int32_t mh_LoadDashboards(QList<C_PuiSvDashboard> & orc_Dashboards,
                                     stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadViewFile(C_PuiSvData & orc_View, const QString & orc_FilePath,
-                                  const std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes);
+                                  const QList<stw::opensyde_core::C_OscNode> & orc_OscNodes);
    static int32_t mh_LoadView(C_PuiSvData & orc_View, stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser,
-                              const std::vector<stw::opensyde_core::C_OscNode> & orc_OscNodes);
+                              const QList<stw::opensyde_core::C_OscNode> & orc_OscNodes);
    static int32_t mh_LoadPc(C_PuiSvPc & orc_PuiPc, stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void mh_LoadDataElement(stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                                   const stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_StringToTransmissionMode(const QString & orc_String,
                                               C_PuiSvReadDataConfiguration::E_TransmissionMode & ore_Mode);
-   static void mh_SaveDashboards(const std::vector<C_PuiSvDashboard> & orc_Dashboards,
+   static void mh_SaveDashboards(const QList<C_PuiSvDashboard> & orc_Dashboards,
                                  stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_SaveViewFile(const C_PuiSvData & orc_View, const QString & orc_FilePath);
    static void mh_SaveView(const C_PuiSvData & orc_View, stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);

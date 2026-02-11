@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Short description
@@ -64,7 +64,7 @@ C_PopServiceProjSettingsModel::~C_PopServiceProjSettingsModel(void)
    \retval  C_RANGE     View is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PopServiceProjSettingsModel::Init(const std::vector<uint32_t> & orc_ElementIndices)
+int32_t C_PopServiceProjSettingsModel::Init(const QList<uint32_t> & orc_ElementIndices)
 {
    int32_t s32_Return = C_NO_ERR;
 
@@ -138,11 +138,11 @@ int32_t C_PopServiceProjSettingsModel::Init(const std::vector<uint32_t> & orc_El
    \param[out]      orc_ChildIndicesPerElement   Vector of vectors for child indices per view
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PopServiceProjSettingsModel::GetCheckedItems(std::vector<uint32_t> & orc_ElementIndices,
-                                                    std::vector<std::vector<uint32_t> > & orc_ChildIndicesPerElement)
+void C_PopServiceProjSettingsModel::GetCheckedItems(QList<uint32_t> & orc_ElementIndices,
+                                                    QList<QList<uint32_t> > & orc_ChildIndicesPerElement)
 const
 {
-   std::vector<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
+   QList<C_TblTreSimpleItem *> c_InvisibleRootChildren = this->mpc_InvisibleRootItem->c_Children;
    orc_ElementIndices.clear();
    orc_ChildIndicesPerElement.clear();
    for (uint32_t u32_ItInvisibleRootChild = 0;
@@ -152,7 +152,7 @@ const
          dynamic_cast<C_TblTreeModelCheckableItem *>(c_InvisibleRootChildren.at(u32_ItInvisibleRootChild));
       if (pc_VisibleRootItem != NULL)
       {
-         const std::vector<C_TblTreSimpleItem *> c_VisibleRootChildren = pc_VisibleRootItem->c_Children;
+         const QList<C_TblTreSimpleItem *> c_VisibleRootChildren = pc_VisibleRootItem->c_Children;
          for (uint32_t u32_ItVisibleRootChild = 0;
               u32_ItVisibleRootChild < c_VisibleRootChildren.size(); u32_ItVisibleRootChild++)
          {
@@ -160,8 +160,8 @@ const
                dynamic_cast<C_TblTreeModelCheckableItem *>(c_VisibleRootChildren.at(u32_ItVisibleRootChild));
             if (pc_ViewItem != NULL)
             {
-               const std::vector<C_TblTreSimpleItem *> c_ViewChildren = pc_ViewItem->c_Children;
-               std::vector<uint32_t> c_ChildIndices;
+               const QList<C_TblTreSimpleItem *> c_ViewChildren = pc_ViewItem->c_Children;
+               QList<uint32_t> c_ChildIndices;
                for (uint32_t u32_ItNodeChild = 0; u32_ItNodeChild < c_ViewChildren.size(); u32_ItNodeChild++)
                {
                   const C_TblTreeModelCheckableItem * const pc_ChildItem =
@@ -199,8 +199,8 @@ uint32_t C_PopServiceProjSettingsModel::GetCheckedItemCount(void) const
 {
    uint32_t u32_CheckedItems = 0;
 
-   std::vector<uint32_t> c_ViewIndices;
-   std::vector<std::vector<uint32_t> > c_ChildIndicesPerView;
+   QList<uint32_t> c_ViewIndices;
+   QList<QList<uint32_t> > c_ChildIndicesPerView;
 
    this->GetCheckedItems(c_ViewIndices, c_ChildIndicesPerView);
 
@@ -225,7 +225,7 @@ uint32_t C_PopServiceProjSettingsModel::GetCheckedItemCount(void) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PopServiceProjSettingsModel::m_CheckInitItems(C_TblTreeModelCheckableItem & orc_VisibleRootItem,
-                                                     const std::vector<uint32_t> & orc_ViewIndices) const
+                                                     const QList<uint32_t> & orc_ViewIndices) const
 {
    uint32_t u32_CheckedChildCounter;
    uint32_t u32_CheckedViewCounter = 0;

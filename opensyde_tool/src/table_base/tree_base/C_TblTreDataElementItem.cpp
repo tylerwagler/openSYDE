@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Data element tree item
@@ -78,7 +78,7 @@ C_TblTreDataElementItem::C_TblTreDataElementItem(const bool oq_IsArrayItem, cons
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblTreDataElementItem::ConfigureDynamicName(const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
                                                    const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-                                                   const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements)
+                                                   const QList<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements)
 {
    // Set the name always here, in case of an earlier update, the name was adapted with the explanation
    this->c_Name = this->mc_OriginalName;

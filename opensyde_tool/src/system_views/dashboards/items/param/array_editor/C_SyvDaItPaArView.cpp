@@ -139,11 +139,11 @@ void C_SyvDaItPaArView::OnErrorChangePossible(void)
    Selected indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SyvDaItPaArView::m_GetSelectedIndices(void) const
+QList<uint32_t> C_SyvDaItPaArView::m_GetSelectedIndices(void) const
 {
    const QModelIndexList c_SelectedItems = this->selectedIndexes();
 
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
 
    c_Retval.reserve(c_SelectedItems.size());
    for (QModelIndexList::const_iterator c_ItSelectedItem = c_SelectedItems.begin();

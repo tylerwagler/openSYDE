@@ -149,7 +149,7 @@ void C_GiSvDaParam::LoadData(void)
             else
             {
                //Initialize with default values
-               const std::vector<int32_t> c_Empty;
+               const QList<int32_t> c_Empty;
                this->mpc_ParamWidget->SetColumnWidth(c_Empty);
             }
             this->mpc_ParamWidget->SetAllExpandedTreeItems(pc_Box->c_ExpandedItems);
@@ -530,7 +530,7 @@ int32_t C_GiSvDaParam::AddParamItemDataElement(const C_OscNodeDataPoolListElemen
    C_CONFIG Operation failure: configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_GiSvDaParam::DeleteLists(const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds)
+int32_t C_GiSvDaParam::DeleteLists(const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -539,7 +539,7 @@ int32_t C_GiSvDaParam::DeleteLists(const std::vector<stw::opensyde_core::C_OscNo
 
    if (orc_ListIds.size() > 0)
    {
-      std::vector<C_PuiSvDbNodeDataPoolListElementId> c_DeletedIds;
+      QList<C_PuiSvDbNodeDataPoolListElementId> c_DeletedIds;
       const C_PuiSvDbParam * const pc_Param = this->GetParamItem();
       Q_ASSERT(pc_Param != NULL);
       if (pc_Param != NULL)

@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include "stwtypes.hpp"
+#include <QList>
 #include "C_SdNdeDpUtil.hpp"
 #include "C_UtiUndoStack.hpp"
 
@@ -43,16 +44,16 @@ public:
 
    void DoMoveList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                    stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                   const std::vector<uint32_t> & orc_StartIndices, const std::vector<uint32_t> & orc_TargetIndices);
+                   const QList<uint32_t> & orc_StartIndices, const QList<uint32_t> & orc_TargetIndices);
    void DoDeleteList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                      stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                     const std::vector<uint32_t> & orc_Indices);
+                     const QList<uint32_t> & orc_Indices);
    void DoPaste(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                 stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
                 const uint32_t & oru32_InsertListIndex);
    void DoAddList(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                   stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
-                  const std::vector<uint32_t> & orc_Indices);
+                  const QList<uint32_t> & orc_Indices);
    void DoChangeListData(const uint32_t & oru32_NodeIndex,     const uint32_t & oru32_DataPoolIndex,
                          stw::opensyde_gui::C_SdNdeDpListsTreeWidget * const opc_DataPoolListsTreeWidget,
                          const uint32_t & oru32_DataPoolListIndex, const QVariant & orc_NewData,

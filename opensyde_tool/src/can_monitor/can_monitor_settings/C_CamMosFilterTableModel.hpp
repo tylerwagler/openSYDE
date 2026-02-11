@@ -12,6 +12,7 @@
 #define C_CAMMOSFILTERTABLEMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_TblModelAction.hpp"
 #include "C_CamProFilterData.hpp"
 
@@ -45,7 +46,7 @@ public:
    int32_t columnCount(const QModelIndex & orc_Parent = QModelIndex()) const override;
    QVariant data(const QModelIndex & orc_Index, const int32_t os32_Role =
                     static_cast<int32_t>(Qt::DisplayRole)) const override;
-   void CopySelectedItems(const std::vector<uint32_t> & orc_SelectedIndices) const override;
+   void CopySelectedItems(const QList<uint32_t> & orc_SelectedIndices) const override;
    bool setData(const QModelIndex & orc_Index, const QVariant & orc_Value,
                 const int32_t os32_Role = static_cast<int32_t>(Qt::EditRole)) override;
    Qt::ItemFlags flags(const QModelIndex & orc_Index) const override;
@@ -66,7 +67,7 @@ public:
 
 protected:
    uint32_t m_AddNewItem(const uint32_t ou32_SelectedIndex) override;
-   std::vector<uint32_t> m_PasteItems(const uint32_t ou32_SelectedIndex) override;
+   QList<uint32_t> m_PasteItems(const uint32_t ou32_SelectedIndex) override;
    uint32_t m_GetSizeItems(void) const override;
    void m_DeleteItem(const uint32_t ou32_Index) override;
    void m_MoveItem(const uint32_t ou32_SourceIndex, const uint32_t ou32_TargetIndex) override;

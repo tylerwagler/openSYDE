@@ -12,6 +12,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_SdNdeDalLogJobsOvTableModel.hpp"
 #include "constants.hpp"
@@ -63,7 +64,7 @@ void C_SdNdeDalLogJobsOvTableModel::SetNodeIndex(const uint32_t ou32_NodeIndex)
    \param[in]  orc_AllLoggerJobElementsLocationCount     vector holds all Logjobs Index, Local elements count, remote elements count
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobsOvTableModel::UpdateData(const std::vector<std::tuple<uint32_t, uint32_t,
+void C_SdNdeDalLogJobsOvTableModel::UpdateData(const QList<std::tuple<uint32_t, uint32_t,
                                                                             uint32_t> > & orc_AllLoggerJobElementsLocationCount)
 {
    this->beginResetModel();
@@ -443,7 +444,7 @@ int32_t C_SdNdeDalLogJobsOvTableModel::h_EnumToColumn(const C_SdNdeDalLogJobsOvT
    \param[in]  oc_AllLoggerJobElementsLocationCount     vector holds all Logjobs Index, Local elements count, remote elements count
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobsOvTableModel::m_FillLogJobsInfo(const std::vector<std::tuple<uint32_t, uint32_t,
+void C_SdNdeDalLogJobsOvTableModel::m_FillLogJobsInfo(const QList<std::tuple<uint32_t, uint32_t,
                                                                                    uint32_t> > & orc_AllLoggerJobElementsLocationCount)
 {
    const C_OscNode * const pc_Node =

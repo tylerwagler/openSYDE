@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QAbstractTableModel>
+#include <QList>
 #include "C_SdNdeCoPdoTableModel.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -576,7 +577,7 @@ void C_SdNdeCoPdoTableModel::m_FillPdoInfo(void)
       if (q_IntfFound == true)
       {
          // get message container of CANopen protocol
-         std::vector<C_OscCanProtocol>::const_iterator c_IterComProtocols;
+         QList<C_OscCanProtocol>::const_iterator c_IterComProtocols;
 
          for (c_IterComProtocols = pc_Node->c_ComProtocols.begin();
               c_IterComProtocols != pc_Node->c_ComProtocols.end();

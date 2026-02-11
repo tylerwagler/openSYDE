@@ -133,7 +133,7 @@ int32_t C_PuiProject::Save(const bool oq_ForceSaveAll,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiProject::SaveCurrentProjectForServiceMode(
     const QString &orc_FilePath, const QString &orc_Password,
-    const std::vector<std::array<bool, 3>> &orc_ViewConfigs) {
+    const QList<std::array<bool, 3>> &orc_ViewConfigs) {
   int32_t s32_Retval = C_RANGE;
   const uint32_t u32_ViewCount =
       C_PuiSvHandler::h_GetInstance()->GetViewCount();

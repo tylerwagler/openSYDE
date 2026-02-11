@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Handle user settings data (implementation)
@@ -1710,7 +1710,7 @@ void C_UsHandler::SetProjSdNodeDatapoolSelectedVariableNames(
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdNodeDatapoolCommMessageOverviewColumnWidth(
     const QString &orc_NodeName, const QString &orc_DatapoolName,
-    const QString &orc_ListName, const std::vector<int32_t> &orc_Value) {
+    const QString &orc_ListName, const QList<int32_t> &orc_Value) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -1736,7 +1736,7 @@ void C_UsHandler::SetProjSdNodeDatapoolCommMessageOverviewColumnWidth(
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdNodeDatapoolCommSignalOverviewColumnWidth(
     const QString &orc_NodeName, const QString &orc_DatapoolName,
-    const QString &orc_ListName, const std::vector<int32_t> &orc_Value) {
+    const QString &orc_ListName, const QList<int32_t> &orc_Value) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -1805,7 +1805,7 @@ void C_UsHandler::SetProjSdNodeDatapoolListSelectedMessage(
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdNodeDatapoolListColumnSizes(
     const QString &orc_NodeName, const QString &orc_DatapoolName,
-    const QString &orc_ListName, const std::vector<int32_t> &orc_ColumnWidths) {
+    const QString &orc_ListName, const QList<int32_t> &orc_ColumnWidths) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -1828,7 +1828,7 @@ void C_UsHandler::SetProjSdNodeDatapoolListColumnSizes(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdNodeCanOpenOverviewColumnWidth(
-    const QString &orc_NodeName, const std::vector<int32_t> &orc_Value) {
+    const QString &orc_NodeName, const QList<int32_t> &orc_Value) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -1849,7 +1849,7 @@ void C_UsHandler::SetProjSdNodeCanOpenOverviewColumnWidth(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdNodeCanOpenPdoOverviewColumnWidth(
-    const QString &orc_NodeName, const std::vector<int32_t> &orc_Value) {
+    const QString &orc_NodeName, const QList<int32_t> &orc_Value) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -1988,7 +1988,7 @@ void C_UsHandler::SetProjSdNodeCanOpenSelectedUseCaseOrInterface(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdNodeHalcOverviewColumnWidth(
-    const QString &orc_NodeName, const std::vector<int32_t> &orc_Value) {
+    const QString &orc_NodeName, const QList<int32_t> &orc_Value) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -2010,7 +2010,7 @@ void C_UsHandler::SetProjSdNodeHalcOverviewColumnWidth(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdNodeHalcConfigColumnWidth(
-    const QString &orc_NodeName, const std::vector<int32_t> &orc_Value) {
+    const QString &orc_NodeName, const QList<int32_t> &orc_Value) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -2150,7 +2150,7 @@ void C_UsHandler::SetProjSdBusSelectedMessage(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdBusCommMessageOverviewColumnWidth(
-    const QString &orc_BusName, const std::vector<int32_t> &orc_Value) {
+    const QString &orc_BusName, const QList<int32_t> &orc_Value) {
   if (this->mc_ProjSdBus.contains(orc_BusName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item
@@ -2171,7 +2171,7 @@ void C_UsHandler::SetProjSdBusCommMessageOverviewColumnWidth(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsHandler::SetProjSdBusCommSignalOverviewColumnWidth(
-    const QString &orc_BusName, const std::vector<int32_t> &orc_Value) {
+    const QString &orc_BusName, const QList<int32_t> &orc_Value) {
   if (this->mc_ProjSdBus.contains(orc_BusName) == true) {
     // Do not insert as this will replace all currently known user settings for
     // this item

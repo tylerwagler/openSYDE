@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for param widget configuration import report (implementation)
@@ -58,8 +58,8 @@ const QString C_SyvDaItPaImportReport::mhc_HTML_TABLE_DATA_START =
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaItPaImportReport::C_SyvDaItPaImportReport(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
-                                                 const std::vector<C_OscParamSetInterpretedNode> & orc_Data,
-                                                 const std::vector<C_OscNodeDataPoolListElementId> & orc_ElementIds,
+                                                 const QList<C_OscParamSetInterpretedNode> & orc_Data,
+                                                 const QList<C_OscNodeDataPoolListElementId> & orc_ElementIds,
                                                  const C_OscNodeDataPoolListElementId & orc_Id,
                                                  const uint32_t ou32_ValidLayers, const QString & orc_Path) :
    QWidget(&orc_Parent),
@@ -112,8 +112,8 @@ void C_SyvDaItPaImportReport::InitStaticNames(void) const
    \param[out]  orc_OutputContent   Content to replace items with
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaImportReport::GetOutput(std::vector<C_OscNodeDataPoolListElementId> & orc_OutputListIds,
-                                        std::vector<C_OscNodeDataPoolContent> & orc_OutputContent) const
+void C_SyvDaItPaImportReport::GetOutput(QList<C_OscNodeDataPoolListElementId> & orc_OutputListIds,
+                                        QList<C_OscNodeDataPoolContent> & orc_OutputContent) const
 {
    orc_OutputListIds = this->mc_OutputListIds;
    orc_OutputContent = this->mc_OutputContent;
@@ -128,7 +128,7 @@ void C_SyvDaItPaImportReport::GetOutput(std::vector<C_OscNodeDataPoolListElement
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaImportReport::GetFloatRangeCheckResults(
-   std::vector<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, QStringList & orc_InvalidValues,
+   QList<C_OscNodeDataPoolListElementId> & orc_InvalidValueIds, QStringList & orc_InvalidValues,
    QStringList & orc_NewValues) const
 {
    orc_InvalidValueIds = this->mc_FloatRangeCheckInvalidValueIds;

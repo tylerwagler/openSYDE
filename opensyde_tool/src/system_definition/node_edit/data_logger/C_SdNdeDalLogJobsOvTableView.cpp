@@ -11,6 +11,7 @@
 #include "precomp_headers.hpp"
 
 #include <QMouseEvent>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_SdNdeDalLogJobsOvTableView.hpp"
@@ -127,7 +128,7 @@ C_SdNdeDalLogJobsOvTableView::~C_SdNdeDalLogJobsOvTableView()
    \param[in]  orc_AllLoggerJobElementsLocationCount     vector holds all Logjobs Index, Local elements count, remote elements count
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobsOvTableView::UpdateData(const std::vector<std::tuple<uint32_t, uint32_t,
+void C_SdNdeDalLogJobsOvTableView::UpdateData(const QList<std::tuple<uint32_t, uint32_t,
                                                                            uint32_t> > & orc_AllLoggerJobElementsLocationCount)
 {
    this->mc_Model.UpdateData(orc_AllLoggerJobElementsLocationCount);

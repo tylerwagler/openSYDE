@@ -9,6 +9,7 @@
 #define C_OSCHALCDEFCHANNELVALUES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscHalcDefStruct.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,10 +29,10 @@ public:
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
-   std::vector<C_OscHalcDefStruct> c_Parameters;   ///< All available parameters for this domain
-   std::vector<C_OscHalcDefStruct> c_InputValues;  ///< All available inputs for this domain
-   std::vector<C_OscHalcDefStruct> c_OutputValues; ///< All available outputs for this domain
-   std::vector<C_OscHalcDefStruct> c_StatusValues; ///< All available status values for this domain
+   QList<C_OscHalcDefStruct> c_Parameters;   ///< All available parameters for this domain
+   QList<C_OscHalcDefStruct> c_InputValues;  ///< All available inputs for this domain
+   QList<C_OscHalcDefStruct> c_OutputValues; ///< All available outputs for this domain
+   QList<C_OscHalcDefStruct> c_StatusValues; ///< All available status values for this domain
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

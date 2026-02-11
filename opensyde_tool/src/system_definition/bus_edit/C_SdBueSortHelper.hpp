@@ -12,6 +12,7 @@
 #define C_SDBUESORTHELPER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_PuiSdNodeCanMessage.hpp"
 #include "C_PuiSdNodeDataPoolList.hpp"
 #include "C_OscCanMessageIdentificationIndices.hpp"
@@ -33,16 +34,16 @@ public:
                     const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_Message2) const;
    static bool h_CompareString(const QString & orc_String1, const QString & orc_String2);
 
-   static int32_t h_SortOneMessageVector(std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessages,
-                                         std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages,
+   static int32_t h_SortOneMessageVector(QList<stw::opensyde_core::C_OscCanMessage> & orc_OscMessages,
+                                         QList<C_PuiSdNodeCanMessage> & orc_UiMessages,
                                          stw::opensyde_core::C_OscNodeDataPoolList & orc_OscList,
                                          C_PuiSdNodeDataPoolList & orc_UiList);
 
 private:
-   static bool mh_CheckMessagesSorted(const std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessages);
+   static bool mh_CheckMessagesSorted(const QList<stw::opensyde_core::C_OscCanMessage> & orc_OscMessages);
    static int32_t mh_SwapMessages(const uint32_t ou32_MessageIndex1, const uint32_t ou32_MessageIndex2,
-                                  std::vector<stw::opensyde_core::C_OscCanMessage> & orc_OscMessages,
-                                  std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages,
+                                  QList<stw::opensyde_core::C_OscCanMessage> & orc_OscMessages,
+                                  QList<C_PuiSdNodeCanMessage> & orc_UiMessages,
                                   stw::opensyde_core::C_OscNodeDataPoolList & orc_OscList,
                                   C_PuiSdNodeDataPoolList & orc_UiList);
 };

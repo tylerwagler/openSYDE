@@ -16,7 +16,7 @@
 #include <QTreeWidget>
 #include <QDropEvent>
 #include <QKeyEvent>
-#include <vector>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_SdNdeDpListHeaderWidget.hpp"
 #include "C_SdNdeUnoDataPoolManager.hpp"
@@ -104,7 +104,7 @@ private:
    void m_OnExpandRequestedHeader(const C_SdNdeDpListHeaderWidget * const opc_Item, const bool oq_Expand);
    void m_OnExpandRequestedIndex(const int32_t os32_Index, const bool oq_Expand);
    void m_InitialItemConfigure(QTreeWidgetItem * const opc_Item, const int32_t os32_Index);
-   void m_Move(const std::vector<uint32_t> & orc_SourceIndices, const std::vector<uint32_t> & orc_TargetIndices);
+   void m_Move(const QList<uint32_t> & orc_SourceIndices, const QList<uint32_t> & orc_TargetIndices);
    void m_InitFromData(void);
    void m_OnCustomContextMenuRequested(const QPoint & orc_Pos);
    void m_SetupContextMenu(void);
@@ -113,14 +113,14 @@ private:
    void m_HandleDataSetErrorChange(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                                    const uint32_t & oru32_ListIndex) const;
    void m_HandleTableSelection(const uint32_t & oru32_ListIndex, const uint32_t & oru32_Count);
-   std::vector<uint32_t> m_GetSelectedIndices(void) const;
+   QList<uint32_t> m_GetSelectedIndices(void) const;
    void m_OnButtonChange(const bool & orq_AddActive, const bool & orq_CutActive, const bool & orq_CopyActive,
                          const bool & orq_PasteActive, const bool & orq_DeleteActive, const bool & orq_MoveDownActive,
                          const bool & orq_MoveUpActive);
    void m_CheckActions(void);
    C_SdNdeDpListTableWidget * m_GetActiveTable(const bool & orq_IgnoreSelectedItems = false) const;
    QTreeWidgetItem * m_GetActiveTableTreeWidget(const bool & orq_IgnoreSelectedItems = false) const;
-   static void mh_AdaptDropTargetIndex(const std::vector<uint32_t> & orc_SelectedIndices,
+   static void mh_AdaptDropTargetIndex(const QList<uint32_t> & orc_SelectedIndices,
                                        const DropIndicatorPosition & ore_DropIndicatorPosition,
                                        int32_t & ors32_TargetPosition);
    void m_HandleChanged(void);

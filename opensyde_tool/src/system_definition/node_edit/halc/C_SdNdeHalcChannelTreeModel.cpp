@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -251,7 +252,7 @@ void C_SdNdeHalcChannelTreeModel::Clear(void)
 {
    if (this->mpc_InvisibleRootItem != NULL)
    {
-      std::vector<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
+      QList<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
 
       this->beginResetModel();
 
@@ -323,7 +324,7 @@ void C_SdNdeHalcChannelTreeModel::Reset(const QModelIndexList & orc_Indexes)
 
    for (QModelIndexList::const_iterator c_ItIndex = orc_Indexes.begin(); c_ItIndex != orc_Indexes.end(); ++c_ItIndex)
    {
-      std::vector<uint32_t> c_LinkedChannelIndices;
+      QList<uint32_t> c_LinkedChannelIndices;
       C_SdNdeHalcChannelTreeModel::h_GetIndexesFromModelIndex(*c_ItIndex, u32_DomainIndex, u32_ChannelIndex,
                                                               q_ChannelCase);
 
@@ -333,7 +334,7 @@ void C_SdNdeHalcChannelTreeModel::Reset(const QModelIndexList & orc_Indexes)
                                                                     &c_LinkedChannelIndices);
       if (q_IsLinked == true)
       {
-         for (std::vector<uint32_t>::const_iterator c_ItLinked = c_LinkedChannelIndices.begin();
+         for (QList<uint32_t>::const_iterator c_ItLinked = c_LinkedChannelIndices.begin();
               c_ItLinked != c_LinkedChannelIndices.end(); ++c_ItLinked)
          {
             C_PuiSdHandler::h_GetInstance()->ResetHalcDomainChannelUseCase(this->mu32_NodeIndex, u32_DomainIndex,

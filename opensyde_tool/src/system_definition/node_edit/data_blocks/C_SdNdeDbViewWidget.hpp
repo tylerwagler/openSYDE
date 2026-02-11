@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscNodeApplication.hpp"
 #include "C_SdNdeDbAddNewProject.hpp"
@@ -65,7 +66,7 @@ private:
 
    void m_OnDelete(const uint32_t ou32_NodeIndex, const uint32_t ou32_ApplicationIndex);
    void m_DeleteAllDatablocks(const uint32_t ou32_NodeIndex,
-                              const std::vector<stw::opensyde_core::C_OscNodeApplication> & orc_Applications);
+                              const QList<stw::opensyde_core::C_OscNodeApplication> & orc_Applications);
    void m_OnAppDisplay() const;
    void m_HandleNoDatablocksLabel() const;
    void m_UpdateCount(void) const;

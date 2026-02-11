@@ -75,8 +75,8 @@ void C_SdManUnoTopologyManager::AdaptZetOrder(const QList<QGraphicsItem *> & orc
                                               const QList<QGraphicsItem *> & orc_Items, const bool oq_BringToFront)
 {
    QMap<QGraphicsItem *, float64_t> c_Changes;
-   vector<uint64_t> c_Ids;
-   vector<float64_t> c_Values;
+   QList<uint64_t> c_Ids;
+   QList<float64_t> c_Values;
    QList<QGraphicsItem *> c_List;
    C_SdManUnoTopologyZetOrderCommand * pc_ZetOrderCommand;
 
@@ -106,7 +106,7 @@ void C_SdManUnoTopologyManager::DoDelete(const QList<QGraphicsItem *> & orc_Item
 {
    if (orc_Items.size() > 0)
    {
-      vector<uint64_t> c_Ids;
+      QList<uint64_t> c_Ids;
       C_SdManUnoTopologyDeleteCommand * pc_DeleteCommand;
       QList<QGraphicsItem *> c_ImprovedItemList;
 
@@ -142,7 +142,7 @@ void C_SdManUnoTopologyManager::DoAddGeneric(const C_SdManUnoTopologyAddCommand:
                                              const uint64_t & oru64_UniqueId, const QPointF & orc_NewPos,
                                              const QString & orc_AdditionalInformation)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    C_SdManUnoTopologyAddCommand * pc_AddCommand;
 
    c_Ids.push_back(oru64_UniqueId);
@@ -166,7 +166,7 @@ void C_SdManUnoTopologyManager::DoAddBus(const C_SdManUnoTopologyAddCommand::E_E
                                          const uint64_t & oru64_UniqueIdBus, const uint64_t & oru64_UniqueIdBusName,
                                          const QPointF & orc_NewPos)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    C_SdManUnoTopologyAddCommand * pc_AddCommand;
 
    c_Ids.push_back(oru64_UniqueIdBus);
@@ -193,9 +193,9 @@ void C_SdManUnoTopologyManager::DoAddBusConnector(const uint64_t & oru64_UniqueI
                                                   const QGraphicsItem * const opc_Node,
                                                   const QGraphicsItem * const opc_Bus,
                                                   const uint8_t & oru8_InterfaceNumber,
-                                                  const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
+                                                  const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
-   vector<uint64_t> c_Ids;
+   QList<uint64_t> c_Ids;
    uint64_t u64_NodeId;
    uint64_t u64_BusId;
    C_SdManUnoTopologyAddCommand * pc_AddCommand;
@@ -228,18 +228,18 @@ void C_SdManUnoTopologyManager::DoAddBusConnector(const uint64_t & oru64_UniqueI
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManUnoTopologyManager::DoAddNodeToNodeConnectionAndCreateNewBus(
-   const std::vector<uint64_t> & orc_FourUniqueIds, const stw::opensyde_core::C_OscSystemBus::E_Type
+   const QList<uint64_t> & orc_FourUniqueIds, const stw::opensyde_core::C_OscSystemBus::E_Type
    & ore_BusType, const QString & orc_BusName,
    const QPointF & orc_BusPosition, const uint64_t & oru64_Node1UniqueId, const uint64_t & oru64_Node2UniqueId,
    const uint8_t & oru8_Node1InterfaceNumber, const uint8_t & oru8_Node2InterfaceNumber,
-   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node1Properties,
-   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node2Properties)
+   const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node1Properties,
+   const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node2Properties)
 {
    if (orc_FourUniqueIds.size() >= 4)
    {
       QUndoCommand * const pc_UndoCommand = new QUndoCommand("Add node to node connection (creating new bus)");
       C_SdManUnoTopologyAddCommand * pc_TmpAddCmd;
-      vector<uint64_t> c_Ids;
+      QList<uint64_t> c_Ids;
       C_SdManUnoTopologyAddCommand::E_ElementType e_ElementType;
       if (ore_BusType == stw::opensyde_core::C_OscSystemBus::eETHERNET)
       {
@@ -300,14 +300,14 @@ void C_SdManUnoTopologyManager::DoAddNodeToNodeConnectionAndCreateNewBus(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManUnoTopologyManager::DoAddNodeToNodeConnectionUsingExistingBus(
-   const std::vector<uint64_t> & orc_TwoUniqueIds, const uint64_t & oru64_BusUniqueId,
+   const QList<uint64_t> & orc_TwoUniqueIds, const uint64_t & oru64_BusUniqueId,
    const QPointF & orc_Node1Position, const uint64_t & oru64_Node1UniqueId, const uint8_t & oru8_Node1InterfaceNumber,
-   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node1Properties)
+   const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Node1Properties)
 {
    if (orc_TwoUniqueIds.size() >= 2)
    {
       QUndoCommand * const pc_UndoCommand = new QUndoCommand("Add node to node connection (using existing bus)");
-      vector<uint64_t> c_Ids;
+      QList<uint64_t> c_Ids;
       C_SdManUnoTopologyAddCommand * pc_TmpAddCmd;
       c_Ids.clear();
       c_Ids.push_back(orc_TwoUniqueIds[0]);
@@ -333,7 +333,7 @@ void C_SdManUnoTopologyManager::DoAddNodeToNodeConnectionUsingExistingBus(
    \param[in]  of64_HighestUsedZetValue  Highest used Z value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdManUnoTopologyManager::DoAddSnapshot(const std::vector<uint64_t> & orc_UniqueIds,
+void C_SdManUnoTopologyManager::DoAddSnapshot(const QList<uint64_t> & orc_UniqueIds,
                                               const C_SdTopologyDataSnapshot & orc_Snapshot, const QPointF & orc_NewPos,
                                               const float64_t of64_HighestUsedZetValue)
 {
@@ -361,11 +361,11 @@ void C_SdManUnoTopologyManager::DoReconnectNode(const C_GiLiBusConnector * const
                                                 const C_GiNode * const opc_StartingNode,
                                                 const C_GiNode * const opc_LastNode, const QPointF & orc_ConnectionPos,
                                                 const int32_t & ors32_Interface,
-                                                const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
+                                                const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
    if ((opc_StartingNode != NULL) && (opc_LastNode != NULL))
    {
-      vector<uint64_t> c_Ids;
+      QList<uint64_t> c_Ids;
       uint64_t u64_Id;
       C_SdManUnoTopologyReconnectNodeCommand * pc_ReconnectCommand;
 
@@ -401,11 +401,11 @@ void C_SdManUnoTopologyManager::DoReconnectBus(const C_GiLiBusConnector * const 
                                                const C_GiLiBus * const opc_StartingBus,
                                                const C_GiLiBus * const opc_LastBus, const QPointF & orc_ConnectionPos,
                                                const int32_t & ors32_Interface,
-                                               const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
+                                               const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
 {
    if ((opc_StartingBus != NULL) && (opc_LastBus != NULL))
    {
-      vector<uint64_t> c_Ids;
+      QList<uint64_t> c_Ids;
       uint64_t u64_Id;
       C_SdManUnoTopologyReconnectBusCommand * pc_ReconnectCommand;
 
@@ -439,12 +439,12 @@ void C_SdManUnoTopologyManager::DoReconnectBus(const C_GiLiBusConnector * const 
 void C_SdManUnoTopologyManager::DoChangeInterface(const C_GiLiBusConnector * const opc_BusConnector,
                                                   const uint8_t & oru8_PreviousInterfaceNumber,
                                                   const uint8_t & oru8_NewInterfaceNumber,
-                                                  const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_PreviousProperties,
-                                                  const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties)
+                                                  const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_PreviousProperties,
+                                                  const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_NewProperties)
 {
    if (opc_BusConnector != NULL)
    {
-      vector<uint64_t> c_Ids;
+      QList<uint64_t> c_Ids;
       uint64_t u64_Id;
       C_SdManUnoTopologyChangeInterfaceCommand * pc_ReconnectCommand;
 
@@ -474,7 +474,7 @@ void C_SdManUnoTopologyManager::DoChangeInterface(const C_GiLiBusConnector * con
    Valid pointer to new style command
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SebUnoSetupStyleCommand * C_SdManUnoTopologyManager::m_GetNewStyleCommand(const std::vector<uint64_t> & orc_Items,
+C_SebUnoSetupStyleCommand * C_SdManUnoTopologyManager::m_GetNewStyleCommand(const QList<uint64_t> & orc_Items,
                                                                             const bool oq_DarkMode)
 {
    return new C_SdManUnoTopologySetupStyleCommand(this->mpc_Scene, orc_Items, oq_DarkMode);

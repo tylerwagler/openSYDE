@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QList>
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 
@@ -631,7 +632,7 @@ bool C_OscExportOsyInit::mh_IsDpdInitRequired(const C_OscNodeComInterfaceSetting
    size of the greatest Datapool element/list in bytes
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint32_t C_OscExportOsyInit::mh_GetSizeOfLargestDataPoolElement(const std::vector<C_OscNodeDataPool> & orc_DataPools)
+uint32_t C_OscExportOsyInit::mh_GetSizeOfLargestDataPoolElement(const QList<C_OscNodeDataPool> & orc_DataPools)
 {
    uint32_t u32_GreatestSize = 0U;
 

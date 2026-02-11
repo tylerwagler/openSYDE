@@ -9,6 +9,7 @@
 #define C_OSCSUPNODEDEFINITIONFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include <QStringList>
 #include <map>
@@ -32,13 +33,13 @@ class C_OscSupNodeDefinitionFiler
 {
 public:
    static int32_t h_SaveNodes(const QStringList & orc_Files,
-                              const std::vector<C_OscSupNodeDefinition> & orc_Nodes);
+                              const QList<C_OscSupNodeDefinition> & orc_Nodes);
    static int32_t h_LoadNodes(const QStringList & orc_Files,
                               const QStringList & orc_NodeFoldersAbs,
-                              const std::vector<uint8_t> & orc_ActiveNodes,
-                              std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+                              const QByteArray & orc_ActiveNodes,
+                              QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                               std::map<uint32_t, uint32_t> & orc_UpdateOrderByNodes,
-                              const std::vector<uint32_t> & orc_UpdatePosition,
+                              const QList<uint32_t> & orc_UpdatePosition,
                               QStringList & orc_Signatures);
 
    static const uint8_t hu8_ACTIVE_NODE;

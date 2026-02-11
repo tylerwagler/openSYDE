@@ -30,15 +30,15 @@ public:
    C_OscSecurityPem();
 
    static int32_t h_ExtractModulusAndExponentFromFile(const std::string & orc_FileName,
-                                                      std::vector<uint8_t> & orc_Modulus,
-                                                      std::vector<uint8_t> & orc_Exponent,
+                                                      QByteArray & orc_Modulus,
+                                                      QByteArray & orc_Exponent,
                                                       std::string & orc_ErrorMessage);
-   static int32_t h_ExtractModulusAndExponent(const std::vector<uint8_t> & orc_PubKeyTextDecoded,
-                                              std::vector<uint8_t> & orc_Modulus, std::vector<uint8_t> & orc_Exponent,
+   static int32_t h_ExtractModulusAndExponent(const QByteArray & orc_PubKeyTextDecoded,
+                                              QByteArray & orc_Modulus, QByteArray & orc_Exponent,
                                               std::string & orc_ErrorMessage);
 
 protected:
-   virtual int32_t m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent, std::string & orc_ErrorMessage);
+   virtual int32_t m_ReadPrivateKey(const QByteArray & orc_FileContent, std::string & orc_ErrorMessage);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

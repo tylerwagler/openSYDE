@@ -801,7 +801,7 @@ void C_SdHandlerWidget::m_GenerateCode(void) const
       c_PopUpDialog->SetSize(QSize(1000, 700));
       if (this->ms32_SubMode == ms32_SUBMODE_SYSDEF_TOPOLOGY)
       {
-         std::vector<uint32_t> c_Indices;
+         QList<uint32_t> c_Indices;
          c_Indices.reserve(C_PuiSdHandler::h_GetInstance()->GetOscNodesSize());
          for (uint32_t u32_ItNode = 0; u32_ItNode < C_PuiSdHandler::h_GetInstance()->GetOscNodesSize(); ++u32_ItNode)
          {
@@ -811,7 +811,7 @@ void C_SdHandlerWidget::m_GenerateCode(void) const
       }
       else if (this->ms32_SubMode == ms32_SUBMODE_SYSDEF_NODEEDIT)
       {
-         std::vector<uint32_t> c_Indices;
+         QList<uint32_t> c_Indices;
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_Index);
          Q_ASSERT(pc_Node != NULL);
          c_Indices.push_back(this->mu32_Index);
@@ -819,9 +819,9 @@ void C_SdHandlerWidget::m_GenerateCode(void) const
       }
       else if (this->ms32_SubMode == ms32_SUBMODE_SYSDEF_BUSEDIT)
       {
-         std::vector<uint32_t> c_Indices;
-         std::vector<uint32_t> c_NodeIndexes;
-         std::vector<uint32_t> c_InterfaceIndexes;
+         QList<uint32_t> c_Indices;
+         QList<uint32_t> c_NodeIndexes;
+         QList<uint32_t> c_InterfaceIndexes;
          C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(this->mu32_Index,
                                                                                             c_NodeIndexes,
                                                                                             c_InterfaceIndexes);
@@ -842,8 +842,8 @@ void C_SdHandlerWidget::m_GenerateCode(void) const
 
       if (c_PopUpDialog->exec() == static_cast<int32_t>(QDialog::Accepted))
       {
-         std::vector<uint32_t> c_NodeIndices;
-         std::vector< std::vector<uint32_t> > c_AppIndicesPerNode;
+         QList<uint32_t> c_NodeIndices;
+         QList< QList<uint32_t> > c_AppIndicesPerNode;
          pc_CodeGenerationDialog->GetCheckedItems(c_NodeIndices, c_AppIndicesPerNode);
          C_ImpUtil::h_ExportCode(c_NodeIndices, c_AppIndicesPerNode, this->parentWidget());
       }
@@ -893,9 +893,9 @@ void C_SdHandlerWidget::m_Export(void)
                                                              // then the export button is not displayed.
          {
             uint32_t u32_NumOfInputSignals = 0;
-            std::vector<uint32_t> c_NodeIndexes;
-            std::vector<uint32_t> c_InterfaceIndexes;
-            std::vector<uint32_t> c_DatapoolIndexes;
+            QList<uint32_t> c_NodeIndexes;
+            QList<uint32_t> c_InterfaceIndexes;
+            QList<uint32_t> c_DatapoolIndexes;
             std::set<uint32_t> c_UniqueNodeIndexes;
             uint32_t u32_NumOfInputMessages = 0;
 
@@ -945,8 +945,8 @@ void C_SdHandlerWidget::m_Export(void)
                   c_CurrentCieNode.c_Properties.c_Comment = pc_Node->c_Properties.c_Comment;
 
                   // get Tx can messages
-                  const std::vector<C_OscCanMessage> c_TxMsgs = pc_CanMessageContainer->GetMessagesConst(true);
-                  std::vector<C_OscCanMessage>::const_iterator c_TxIter;
+                  const QList<C_OscCanMessage> c_TxMsgs = pc_CanMessageContainer->GetMessagesConst(true);
+                  QList<C_OscCanMessage>::const_iterator c_TxIter;
                   for (c_TxIter = c_TxMsgs.begin(); c_TxIter != c_TxMsgs.end(); ++c_TxIter)
                   {
                      if ((e_ComType == C_OscCanProtocol::eCAN_OPEN) && (!c_TxIter->q_CanOpenManagerMessageActive))
@@ -991,8 +991,8 @@ void C_SdHandlerWidget::m_Export(void)
                   }
 
                   // get Rx can messages
-                  const std::vector<C_OscCanMessage> & rc_RxMsgs = pc_CanMessageContainer->GetMessagesConst(false);
-                  std::vector<C_OscCanMessage>::const_iterator c_RxIter;
+                  const QList<C_OscCanMessage> & rc_RxMsgs = pc_CanMessageContainer->GetMessagesConst(false);
+                  QList<C_OscCanMessage>::const_iterator c_RxIter;
                   for (c_RxIter = rc_RxMsgs.begin(); c_RxIter != rc_RxMsgs.end(); ++c_RxIter)
                   {
                      if ((e_ComType == C_OscCanProtocol::eCAN_OPEN) && (!c_RxIter->q_CanOpenManagerMessageActive))
@@ -1332,8 +1332,8 @@ bool C_SdHandlerWidget::m_CheckImportPossible()
 {
    bool q_Retval;
 
-   std::vector<uint32_t> c_NodeIndexes;
-   std::vector<uint32_t> c_InterfaceIndexes;
+   QList<uint32_t> c_NodeIndexes;
+   QList<uint32_t> c_InterfaceIndexes;
 
    C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(
       mu32_Index, c_NodeIndexes, c_InterfaceIndexes);

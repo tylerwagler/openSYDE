@@ -249,7 +249,7 @@ QString C_OscDeviceGroup::GetGroupName(void) const { return mc_GroupName; }
    copy of device definitions owned by this class
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<stw::opensyde_core::C_OscDeviceDefinition> &
+const QList<stw::opensyde_core::C_OscDeviceDefinition> &
 C_OscDeviceGroup::GetDevices(void) const {
   return mc_Devices;
 }

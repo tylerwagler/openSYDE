@@ -133,7 +133,7 @@ bool C_OscViewData::GetNodeActive(const uint32_t ou32_NodeIndex) const
    Current node active flags
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint8_t> & C_OscViewData::GetNodeActiveFlags(void) const
+const QByteArray & C_OscViewData::GetNodeActiveFlags(void) const
 {
    return this->mc_NodeActiveFlags;
 }
@@ -144,7 +144,7 @@ const std::vector<uint8_t> & C_OscViewData::GetNodeActiveFlags(void) const
    \param[in]  orc_Value   New node active flags
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::SetNodeActiveFlags(const std::vector<uint8_t> & orc_Value)
+void C_OscViewData::SetNodeActiveFlags(const QByteArray & orc_Value)
 {
    this->mc_NodeActiveFlags = orc_Value;
 }
@@ -156,7 +156,7 @@ void C_OscViewData::SetNodeActiveFlags(const std::vector<uint8_t> & orc_Value)
    Current node update information
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_OscViewNodeUpdate> & C_OscViewData::GetAllNodeUpdateInformation(void) const
+const QList<C_OscViewNodeUpdate> & C_OscViewData::GetAllNodeUpdateInformation(void) const
 {
    return this->mc_NodeUpdateInformation;
 }
@@ -167,7 +167,7 @@ const std::vector<C_OscViewNodeUpdate> & C_OscViewData::GetAllNodeUpdateInformat
    \param[in]  orc_NodeUpdateInformation  New node update information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::SetNodeUpdateInformation(const std::vector<C_OscViewNodeUpdate> & orc_NodeUpdateInformation)
+void C_OscViewData::SetNodeUpdateInformation(const QList<C_OscViewNodeUpdate> & orc_NodeUpdateInformation)
 {
    this->mc_NodeUpdateInformation = orc_NodeUpdateInformation;
 }

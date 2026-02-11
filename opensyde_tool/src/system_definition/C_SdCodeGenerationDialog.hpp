@@ -9,6 +9,7 @@
 #define C_SDCODEGENERATIONDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 
 #include "stwtypes.hpp"
@@ -40,9 +41,9 @@ public:
    ~C_SdCodeGenerationDialog(void) override;
 
    void InitStaticNames(void) const;
-   void PrepareDialog(const std::vector<uint32_t> & orc_NodesIndices);
-   void GetCheckedItems(std::vector<uint32_t> & orc_NodeIndices,
-                        std::vector<std::vector<uint32_t> > & orc_AppIndicesPerNode) const;
+   void PrepareDialog(const QList<uint32_t> & orc_NodesIndices);
+   void GetCheckedItems(QList<uint32_t> & orc_NodeIndices,
+                        QList<QList<uint32_t> > & orc_AppIndicesPerNode) const;
 
 protected:
    void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;

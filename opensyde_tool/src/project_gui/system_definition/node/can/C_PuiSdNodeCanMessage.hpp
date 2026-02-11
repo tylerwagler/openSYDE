@@ -12,7 +12,7 @@
 #define C_PUISDNODECANMESSAGE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include "C_PuiSdNodeCanSignal.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -39,7 +39,7 @@ public:
    };
 
    E_RxTimeoutMode e_ReceiveTimeoutMode;
-   std::vector<C_PuiSdNodeCanSignal> c_Signals;
+   QList<C_PuiSdNodeCanSignal> c_Signals;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

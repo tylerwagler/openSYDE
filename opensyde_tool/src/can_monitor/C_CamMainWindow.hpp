@@ -14,7 +14,9 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QMainWindow>
 #include <QMimeData>
+#include <QList>
 #include <QStringList>
+#include <vector>
 
 #include "C_CamComDriverBase.hpp"
 
@@ -67,7 +69,7 @@ private:
    QString mc_CurrentLoadedFile;
    QString mc_CurrentLoadedFileOrg;
    QStringList mc_OsySysDefs;
-   std::vector<uint32_t> mc_OsySysDefBuses;
+   QList<uint32_t> mc_OsySysDefBuses;
    QStringList mc_DbcFiles;
 
    // For custom splitter resizing
@@ -117,7 +119,7 @@ private:
 
    void m_CheckMessagesForLoadedDatabase(const QString & orc_DatabasePath);
    void m_CheckForLastDatabaseLoaded(const QString & orc_DatabasePath);
-   void m_DisplayCheckMessagesDialog(const QString & orc_DatabasePath, const std::vector<uint32_t> & orc_Indices);
+   void m_DisplayCheckMessagesDialog(const QString & orc_DatabasePath, const QList<uint32_t> & orc_Indices);
    void m_AddFilterData(const QList<int32_t> oc_CanMsgId, const QList<uint8_t> oc_CanMsgXtd);
    void m_UpdateAutoSupportProtocol(const uint32_t ou32_MessageIndex, const bool oq_Active);
 

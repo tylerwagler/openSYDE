@@ -47,11 +47,11 @@ public:
    void ReserveItems(const uint32_t ou32_Number);
    void MoveSelected(const bool oq_Up);
    void RemoveSelectedItems(
-      std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> & orc_RemovedDataElements);
-   std::vector<uint32_t> GetUniqueSelectedRows(void) const;
-   std::vector<uint32_t> GetUniqueAndValidSelectedRows(void) const;
-   void SetCurrentColumnWidths(const std::vector<int32_t> & orc_ColumnWidths);
-   std::vector<int32_t> GetCurrentColumnWidths(void) const;
+      QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> & orc_RemovedDataElements);
+   QList<uint32_t> GetUniqueSelectedRows(void) const;
+   QList<uint32_t> GetUniqueAndValidSelectedRows(void) const;
+   void SetCurrentColumnWidths(const QList<int32_t> & orc_ColumnWidths);
+   QList<int32_t> GetCurrentColumnWidths(void) const;
 
    void SetSelectionAvailable(const bool oq_Active, const bool oq_SelectFirst);
    void SetDisplayStyle(const stw::opensyde_gui_logic::C_PuiSvDbWidgetBase::E_Style oe_Style, const bool oq_DarkMode);

@@ -42,13 +42,13 @@ public:
    C_GiLiBusConnector(const uint64_t & oru64_Id, const QPointF & orc_TriggerPos, C_GiNode * const opc_NodeItem,
                       const C_GiLiBus * const opc_BusItem, const bool oq_MiddleLine = false,
                       QGraphicsItem * const opc_Parent = NULL);
-   C_GiLiBusConnector(const uint64_t & oru64_Id, const std::vector<QPointF> & orc_InteractionPoints,
+   C_GiLiBusConnector(const uint64_t & oru64_Id, const QList<QPointF> & orc_InteractionPoints,
                       C_GiNode * const opc_NodeItem, const C_GiLiBus * const opc_BusItem,
                       const bool oq_MiddleLine = false, QGraphicsItem * const opc_Parent = NULL);
    ~C_GiLiBusConnector(void) override;
    int32_t type(void) const override;
    void DeleteConnection(void);
-   void SetPoints(const std::vector<QPointF> & orc_ScenePos) override;
+   void SetPoints(const QList<QPointF> & orc_ScenePos) override;
 
    const C_GiNode * GetNodeItem(void) const;
    C_GiNode * GetNodeItem(void);
@@ -56,15 +56,15 @@ public:
    void GenerateHint(void) override;
    const stw::opensyde_gui_logic::C_PuiSdNodeConnectionId * GetConnectionData(void) const;
    void ChangeInterface(const uint8_t & oru8_NewInterface,
-                        const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+                        const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    void Revert(C_GiNode * const opc_StartingNode, const C_GiNode * const opc_LastNode, const QPointF & orc_ScenePos);
    void Reconnect(C_GiNode * const opc_StartingNode, stw::opensyde_gui::C_GiNode * const opc_LastNode,
                   const QPointF & orc_ConnectionPos, const int32_t & ors32_Interface,
-                  const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+                  const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    void Reconnect(const stw::opensyde_gui::C_GiLiBus * const opc_StartingBus,
                   const stw::opensyde_gui::C_GiLiBus * const opc_LastBus, const QPointF & orc_ConnectionPos,
                   const int32_t & ors32_Interface,
-                  const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+                  const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    const C_GiPort * GetPortItem(void) const;
 
    //The signals keyword is necessary for Qt signal slot functionality

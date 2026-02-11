@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_SdNdeUnoUtil.hpp"
@@ -37,8 +38,8 @@ using namespace stw::opensyde_gui_logic;
    \param[in,out] orc_Target Target indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeUnoUtil::h_AdaptTargetToDeletedSource(const std::vector<uint32_t> & orc_Source,
-                                                  std::vector<uint32_t> & orc_Target)
+void C_SdNdeUnoUtil::h_AdaptTargetToDeletedSource(const QList<uint32_t> & orc_Source,
+                                                  QList<uint32_t> & orc_Target)
 {
    for (uint32_t u32_ItTarget = 0; u32_ItTarget < orc_Target.size(); ++u32_ItTarget)
    {

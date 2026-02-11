@@ -51,7 +51,7 @@ using namespace stw::opensyde_gui_logic;
    \param[in]     orq_DarkModeDefault               Optional flag to change default values
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SyvDaUnoAddCommand::C_SyvDaUnoAddCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+C_SyvDaUnoAddCommand::C_SyvDaUnoAddCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                            const C_PuiSvDbDataElement::E_Type & ore_Type, const QPointF & orc_NewPos,
                                            const float64_t of64_ZetValue, const QString & orc_AdditionalInformation,
                                            QUndoCommand * const opc_Parent,
@@ -86,7 +86,7 @@ void C_SyvDaUnoAddCommand::m_AddNew(void)
 
    if (pc_Scene != NULL)
    {
-      const std::vector<uint64_t> c_Ids = this->m_GetIds();
+      const QList<uint64_t> c_Ids = this->m_GetIds();
       if (c_Ids.size() > 0)
       {
          QMap<C_PuiBsTemporaryDataId, uint64_t> c_IdMap;

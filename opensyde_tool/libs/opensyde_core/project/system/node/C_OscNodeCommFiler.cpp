@@ -67,7 +67,7 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeCommFiler::h_LoadNodeComProtocolFile(
     C_OscCanProtocol &orc_NodeComProtocol, const QString &orc_FilePath,
-    const std::vector<C_OscNodeDataPool> &orc_NodeDataPools) {
+    const QList<C_OscNodeDataPool> &orc_NodeDataPools) {
   C_OscXmlParser c_XmlParser;
   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(
       c_XmlParser, orc_FilePath, "opensyde-comm-core-definition");
@@ -142,7 +142,7 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComProtocolFile(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeCommFiler::h_LoadNodeComProtocol(
     C_OscCanProtocol &orc_NodeComProtocol, C_OscXmlParserBase &orc_XmlParser,
-    const std::vector<C_OscNodeDataPool> &orc_NodeDataPools) {
+    const QList<C_OscNodeDataPool> &orc_NodeDataPools) {
   int32_t s32_Retval = C_NO_ERR;
 
   // Get index from name
@@ -287,7 +287,7 @@ void C_OscNodeCommFiler::h_SaveNodeComProtocol(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeCommFiler::h_LoadNodeComMessageContainers(
-    std::vector<C_OscCanMessageContainer> &orc_NodeComMessageContainers,
+    QList<C_OscCanMessageContainer> &orc_NodeComMessageContainers,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -352,7 +352,7 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComMessageContainers(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeCommFiler::h_SaveNodeComMessageContainers(
-    const std::vector<C_OscCanMessageContainer> &orc_NodeComMessageContainers,
+    const QList<C_OscCanMessageContainer> &orc_NodeComMessageContainers,
     C_OscXmlParserBase &orc_XmlParser,
     const C_OscCanProtocol::E_Type oe_ProtocolType) {
   orc_XmlParser.SetAttributeUint32(
@@ -473,7 +473,7 @@ void C_OscNodeCommFiler::h_SaveNodeComMessageContainer(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeCommFiler::h_LoadNodeComMessages(
-    std::vector<C_OscCanMessage> &orc_NodeComMessages,
+    QList<C_OscCanMessage> &orc_NodeComMessages,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -535,7 +535,7 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComMessages(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeCommFiler::h_SaveNodeComMessages(
-    const std::vector<C_OscCanMessage> &orc_NodeComMessages,
+    const QList<C_OscCanMessage> &orc_NodeComMessages,
     C_OscXmlParserBase &orc_XmlParser,
     const C_OscCanProtocol::E_Type oe_ProtocolType) {
   orc_XmlParser.SetAttributeUint32(
@@ -694,7 +694,7 @@ void C_OscNodeCommFiler::h_SaveNodeComMessage(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeCommFiler::h_LoadNodeComSignals(
-    std::vector<C_OscCanSignal> &orc_NodeComSignals,
+    QList<C_OscCanSignal> &orc_NodeComSignals,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -756,7 +756,7 @@ int32_t C_OscNodeCommFiler::h_LoadNodeComSignals(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeCommFiler::h_SaveNodeComSignals(
-    const std::vector<C_OscCanSignal> &orc_NodeComSignals,
+    const QList<C_OscCanSignal> &orc_NodeComSignals,
     C_OscXmlParserBase &orc_XmlParser,
     const C_OscCanProtocol::E_Type oe_ProtocolType) {
   orc_XmlParser.SetAttributeUint32(

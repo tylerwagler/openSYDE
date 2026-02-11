@@ -120,8 +120,8 @@ void C_SdBueMessageSignalTableWidget::InitStaticNames(void) const
    \param[in]  orc_SignalValues     Signal values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMessageSignalTableWidget::LoadUserSettings(const std::vector<int32_t> & orc_MessageValues,
-                                                       const std::vector<int32_t> & orc_SignalValues) const
+void C_SdBueMessageSignalTableWidget::LoadUserSettings(const QList<int32_t> & orc_MessageValues,
+                                                       const QList<int32_t> & orc_SignalValues) const
 {
    this->mpc_Ui->pc_TableViewSignals->LoadUserSettings(orc_SignalValues);
    this->mpc_Ui->pc_TableViewMessages->LoadUserSettings(orc_MessageValues);
@@ -134,8 +134,8 @@ void C_SdBueMessageSignalTableWidget::LoadUserSettings(const std::vector<int32_t
    \param[in,out]  orc_SignalValues    Signal values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMessageSignalTableWidget::SaveUserSettings(std::vector<int32_t> & orc_MessageValues,
-                                                       std::vector<int32_t> & orc_SignalValues) const
+void C_SdBueMessageSignalTableWidget::SaveUserSettings(QList<int32_t> & orc_MessageValues,
+                                                       QList<int32_t> & orc_SignalValues) const
 {
    this->mpc_Ui->pc_TableViewSignals->SaveUserSettings(orc_SignalValues);
    this->mpc_Ui->pc_TableViewMessages->SaveUserSettings(orc_MessageValues);

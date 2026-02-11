@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QTimer>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -63,7 +64,7 @@ private:
    void m_RegisterNameChange(void);
    void m_CheckComInterface(const uint32_t ou32_Row, const uint32_t ou32_Column) const;
    void m_GetInterfaceStatus(const uint32_t ou32_NodeIndex, const int32_t os32_InterfaceIndex, const uint8_t ou8_NodeId,
-                             const std::vector<int32_t> & orc_Ip, bool & orq_IdValid, bool & orq_IpValid) const;
+                             const QList<int32_t> & orc_Ip, bool & orq_IdValid, bool & orq_IpValid) const;
    void m_HandlePropertyConflict(const int32_t os32_Row, const int32_t os32_ColumnId, const int32_t os32_ColumnIp,
                                  const bool oq_IdValid, const bool oq_IpValid) const;
    void m_HandleErrorFeedback(const int32_t os32_InterfaceIndex, const bool oq_IdValid, const bool oq_IpValid) const;

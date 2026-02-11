@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -67,7 +68,7 @@ C_SdNdeUnoDasDataPoolListManager::C_SdNdeUnoDasDataPoolListManager(void) :
 void C_SdNdeUnoDasDataPoolListManager::DoMoveElements(const uint32_t & oru32_NodeIndex,
                                                       const uint32_t & oru32_DataPoolIndex,
                                                       const uint32_t & oru32_DataPoolListIndex,
-                                                      C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const std::vector<uint32_t> & orc_StartIndex, const std::vector<uint32_t> & orc_TargetIndex,
+                                                      C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const QList<uint32_t> & orc_StartIndex, const QList<uint32_t> & orc_TargetIndex,
                                                       const bool & orq_AdaptIndices)
 {
    if (((orc_StartIndex.size() > 0) && (orc_TargetIndex.size() > 0)) &&
@@ -100,7 +101,7 @@ void C_SdNdeUnoDasDataPoolListManager::DoDeleteElements(const uint32_t & oru32_N
                                                         const uint32_t & oru32_DataPoolIndex,
                                                         const uint32_t & oru32_DataPoolListIndex,
                                                         C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                                        const std::vector<uint32_t> & orc_Indices)
+                                                        const QList<uint32_t> & orc_Indices)
 {
    if (orc_Indices.size() > 0)
    {
@@ -132,14 +133,14 @@ void C_SdNdeUnoDasDataPoolListManager::DoPaste(const uint32_t & oru32_NodeIndex,
                                                C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
                                                const uint32_t & oru32_InsertListIndex)
 {
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolDataSet> c_OscNames;
-   std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> > c_OscDataSetValues;
+   QList<stw::opensyde_core::C_OscNodeDataPoolDataSet> c_OscNames;
+   QList<QList<stw::opensyde_core::C_OscNodeDataPoolContent> > c_OscDataSetValues;
    if (C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromClipBoard(c_OscNames,
                                                                       c_OscDataSetValues) == stw::errors::C_NO_ERR)
    {
       if (c_OscNames.size() == c_OscDataSetValues.size())
       {
-         std::vector<uint32_t> c_Indices;
+         QList<uint32_t> c_Indices;
          QUndoCommand * pc_Command;
          c_Indices.reserve(c_OscNames.size());
          for (uint32_t u32_NewIndices = 0; u32_NewIndices < c_OscNames.size(); ++u32_NewIndices)
@@ -172,7 +173,7 @@ void C_SdNdeUnoDasDataPoolListManager::DoAddElements(const uint32_t & oru32_Node
                                                      const uint32_t & oru32_DataPoolIndex,
                                                      const uint32_t & oru32_DataPoolListIndex,
                                                      C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                                     const std::vector<uint32_t> & orc_Indices)
+                                                     const QList<uint32_t> & orc_Indices)
 {
    if (orc_Indices.size() > 0)
    {
@@ -203,8 +204,8 @@ void C_SdNdeUnoDasDataPoolListManager::DoAddElements(const uint32_t & oru32_Node
 void C_SdNdeUnoDasDataPoolListManager::DoAddSpecificElements(const uint32_t & oru32_NodeIndex,
                                                              const uint32_t & oru32_DataPoolIndex,
                                                              const uint32_t & oru32_DataPoolListIndex,
-                                                             C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const std::vector<uint32_t> & orc_Indices, const std::vector<stw::opensyde_core::C_OscNodeDataPoolDataSet> & orc_OscNames,
-                                                             const std::vector<std::vector<C_OscNodeDataPoolContent> > & orc_OscDataSetValues)
+                                                             C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager, const QList<uint32_t> & orc_Indices, const QList<stw::opensyde_core::C_OscNodeDataPoolDataSet> & orc_OscNames,
+                                                             const QList<QList<C_OscNodeDataPoolContent> > & orc_OscDataSetValues)
 {
    if (orc_Indices.size() > 0)
    {

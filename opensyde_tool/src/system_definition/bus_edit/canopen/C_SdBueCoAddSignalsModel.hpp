@@ -9,6 +9,7 @@
 #define C_SDBUECOADDSIGNALSMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_TblTreItem.hpp"
 #include "C_TblTreModel.hpp"
 #include "C_OscCanOpenObjectDictionary.hpp"
@@ -42,7 +43,7 @@ public:
    void PrepareCleanUp(void);
    const stw::opensyde_core::C_OscCanOpenManagerMappableSignal * GetDataForIndex(const uint32_t ou32_ObjectIndex,
                                                                                  const uint32_t ou32_SignalIndex) const;
-   static std::map<uint32_t, std::vector<uint32_t> > h_GetUniqueIndices(const QModelIndexList & orc_ModelIndices);
+   static std::map<uint32_t, QList<uint32_t> > h_GetUniqueIndices(const QModelIndexList & orc_ModelIndices);
 
    int32_t columnCount(const QModelIndex & orc_Parent = QModelIndex()) const override;
    QVariant headerData(const int32_t os32_Section, const Qt::Orientation oe_Orientation, const int32_t os32_Role =
@@ -72,7 +73,7 @@ private:
                   const uint32_t ou32_SignalIndex, const bool oq_IsSignal, const int32_t os32_Role,
                   QVariant & orc_Output) const;
    const stw::opensyde_core::C_OscCanOpenObjectDictionary * m_GetEdsDictionary(void) const;
-   const std::vector<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> * m_GetMappableSignals(void) const;
+   const QList<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> * m_GetMappableSignals(void) const;
    const stw::opensyde_core::C_OscCanOpenManagerDeviceInfo * m_GetDeviceInfo(void) const;
    static const stw::opensyde_core::C_OscCanOpenObjectData * mh_GetCanOpenObject(
       const stw::opensyde_core::C_OscCanOpenObjectDictionary & orc_Dictionary, const uint32_t ou32_ObjectIndex,

@@ -15,6 +15,7 @@
 
 #include <vector>
 #include <list>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stw_can.hpp"
@@ -94,7 +95,7 @@ private:
    static uint32_t mh_GetCanMessageSizeInBits(const stw::can::T_STWCAN_Msg_RX & orc_Msg);
 
    // Handling the CAN message logging and monitoring
-   std::vector<C_OscComMessageLogger *> mc_Logger;
+   QList<C_OscComMessageLogger *> mc_Logger;
    uint16_t mu16_DispatcherClientHandle;
    bool mq_Started;
    bool mq_Paused;

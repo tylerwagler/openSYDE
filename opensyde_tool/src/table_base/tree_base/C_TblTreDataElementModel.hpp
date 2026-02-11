@@ -16,6 +16,8 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include <QMap>
+#include <QList>
+#include <QByteArray>
 
 #include "C_OscHalcMagicianDatapoolListHandler.hpp"
 #include "C_OscNode.hpp"
@@ -48,22 +50,22 @@ public:
 
   void InitSd(const uint32_t ou32_NodeIndex,
               const int32_t os32_SkipApplicationIndex,
-              const std::vector<uint32_t> &orc_UsedDataPoolIndicesIndex);
+              const QList<uint32_t> &orc_UsedDataPoolIndicesIndex);
   void InitSv(const uint32_t ou32_ViewIndex, const E_Mode oe_Mode,
               const bool oq_ShowOnlyWriteElements,
               const bool oq_ShowArrayElements,
               const bool oq_ShowArrayIndexElements,
               const bool oq_Show64BitValues,
-              const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+              const QList<C_PuiSvDbNodeDataPoolListElementId> *const
                   opc_AlreasyUsedElements);
   void InitSdDatapoolElements(
       const uint32_t ou32_SdDataLoggerUseCaseNodeIndex,
       const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
       const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements);
 
-  std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId>
+  QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId>
   GetDataElements(const QModelIndex &orc_Index) const;
   static void h_CleanUp(void);
 
@@ -72,8 +74,8 @@ public:
 
   // Generic interface
   QModelIndex
-  GetIndexForItem(const std::vector<uint32_t> &orc_ItemIndices) const;
-  std::vector<uint32_t>
+  GetIndexForItem(const QList<uint32_t> &orc_ItemIndices) const;
+  QList<uint32_t>
   GetGenericRepresentationForIndex(const QModelIndex &orc_ItemIndex) const;
 
   void CleanUpLastModel(void);
@@ -88,11 +90,11 @@ private:
   };
 
   E_Mode me_Mode;
-  static QMap<std::vector<uint32_t>, C_TblTreDataElementModelState>
+  static QMap<QList<uint32_t>, C_TblTreDataElementModelState>
       mhc_ViewSetupsNl;
-  static QMap<std::vector<uint32_t>, C_TblTreDataElementModelState>
+  static QMap<QList<uint32_t>, C_TblTreDataElementModelState>
       mhc_ViewSetupsDe;
-  static QMap<std::vector<uint32_t>, C_TblTreDataElementModelState>
+  static QMap<QList<uint32_t>, C_TblTreDataElementModelState>
       mhc_ViewSetupsBs;
   static const QString mhc_ICON_NODE;
   static const QString mhc_ICON_DATAPOOL;
@@ -117,13 +119,13 @@ private:
       const uint32_t ou32_ViewIndex, const bool oq_ShowOnlyWriteElements,
       const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements,
       const bool oq_Show64BitValues,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements);
   void m_InitDatapoolElements(
       const uint32_t ou32_ViewIndex, const bool oq_ShowOnlyWriteElements,
       const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements,
       const bool oq_Show64BitValues,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements,
       const bool oq_IsModelUsedInSysViews = true,
       const uint32_t ou32_SdDataLoggerUseCaseNodeIndex = 0UL);
@@ -134,7 +136,7 @@ private:
       const uint32_t ou32_NodeIndex, const uint32_t ou32_DpIndex,
       const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
       const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements);
   static void mh_InitDatapoolElementsHalcConfig(
       C_TblTreItem *const opc_DpItem, bool &orq_HalcValid,
@@ -152,12 +154,12 @@ private:
       const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
       const stw::opensyde_core::C_OscHalcMagicianDatapoolListHandler
           &orc_DpHandler,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements,
       const uint32_t ou32_DatapoolUniqueChannelCounter);
   static void mh_InitDatapoolElementsHalcConfigList(
       C_TblTreItem *const opc_ChannelItem, bool &orq_ChannelValid,
-      const std::vector<stw::opensyde_core::C_OscHalcDefStruct> &orc_Values,
+      const QList<stw::opensyde_core::C_OscHalcDefStruct> &orc_Values,
       const stw::opensyde_core::C_OscNodeDataPoolList &orc_List,
       const uint32_t ou32_ChannelArrayIndex, const uint32_t ou32_NodeIndex,
       const uint32_t ou32_DpIndex, const uint32_t ou32_ListIndex,
@@ -168,7 +170,7 @@ private:
       const QString &orc_DomainSingularName,
       const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
       const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements,
       const QString &orc_HalChannelOrDomainName);
   static void mh_AddHalcItem(
@@ -180,7 +182,7 @@ private:
       const uint32_t ou32_ChannelArrayIndex,
       const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
       const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements,
       const QString &orc_HalChannelOrDomainName);
   static void mh_AddHalcTreeItem(
@@ -189,7 +191,7 @@ private:
       const bool oq_IsString, const bool oq_ShowOnlyWriteElements,
       const bool oq_ShowArrayElements, const bool oq_ShowArrayIndexElements,
       const bool oq_Show64BitValues,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements);
   static void mh_InitDatapoolElementsComm(
       C_TblTreItem *const opc_DpItem, bool &orq_ComValid,
@@ -198,22 +200,22 @@ private:
       const uint32_t ou32_NodeIndex, const uint32_t ou32_DpIndex,
       const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
       const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements);
   static bool mh_AddCommMessageItems(
       C_TblTreItem *const opc_BaseItem,
-      const std::vector<
+      const QList<
           stw::opensyde_core::C_OscCanMessageIdentificationIndices>
           &orc_MessageIds,
       const C_PuiSvDbNodeDataPoolListElementId::E_Type oe_IdType,
       const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
       const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements);
   static void mh_UpdateDatapoolElement(
       const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
       const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements,
       C_TblTreSimpleItem *const opc_Tree);
   static void mh_CreateArrayElementNodes(
@@ -222,28 +224,28 @@ private:
       const stw::opensyde_core::C_OscNodeDataPoolListElement &orc_Element,
       const bool oq_IsStringElement, C_TblTreItem *const opc_ElementItem,
       const C_PuiSvDbNodeDataPoolListElementId &orc_ParentId,
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> *const
+      const QList<C_PuiSvDbNodeDataPoolListElementId> *const
           opc_AlreasyUsedElements);
   void m_InitNvmList(const uint32_t ou32_ViewIndex);
-  std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId>
+  QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId>
   m_GetDatapools(const QModelIndex &orc_Index) const;
-  std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId>
+  QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId>
   m_GetAnyDatapoolElements(const QModelIndex &orc_Index) const;
-  std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId>
+  QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId>
   m_GetNvmList(const QModelIndex &orc_Index) const;
 
   static void mh_CleanUp(
-      QMap<std::vector<uint32_t>, C_TblTreDataElementModelState> &orc_Map);
+      QMap<QList<uint32_t>, C_TblTreDataElementModelState> &orc_Map);
   static bool mh_Contains(
-      const QMap<std::vector<uint32_t>, C_TblTreDataElementModelState> &orc_Map,
+      const QMap<QList<uint32_t>, C_TblTreDataElementModelState> &orc_Map,
       const C_TblTreSimpleItem *const opc_Item);
-  static std::vector<uint32_t> mh_GetViewSdHash(const uint32_t ou32_ViewIndex);
+  static QList<uint32_t> mh_GetViewSdHash(const uint32_t ou32_ViewIndex);
   static bool mh_SvCheckNodeDiagnostic(const uint32_t ou32_ViewIndex,
                                        const uint32_t ou32_NodeIndex);
   static int32_t
   mh_GetCurrentNodeActiveFlags(const uint32_t ou32_ViewIndex,
                                const bool oq_IsModelUsedInSysViews,
-                               std::vector<uint8_t> &orc_NodeActiveFlags);
+                               QByteArray &orc_NodeActiveFlags);
 };
 
 /* -- Extern Global Variables

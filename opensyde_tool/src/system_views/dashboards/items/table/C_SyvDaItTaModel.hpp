@@ -12,6 +12,7 @@
 #define C_SYVDAITTAMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_TblModelAction.hpp"
 #include <QIcon>
 #include <QStringList>
@@ -53,7 +54,7 @@ public:
    void UpdateValue(void);
    void UpdateError(void);
    void UpdateTransparency(const uint32_t ou32_DataElementIndex, const int32_t os32_Value);
-   void GetUniqueRows(const QModelIndexList & orc_Indices, std::vector<uint32_t> & orc_ItemIndices) const;
+   void GetUniqueRows(const QModelIndexList & orc_Indices, QList<uint32_t> & orc_ItemIndices) const;
 
    QVariant headerData(const int32_t os32_Section, const Qt::Orientation oe_Orientation, const int32_t os32_Role =
                           static_cast<int32_t>(Qt::DisplayRole)) const override;
@@ -63,14 +64,14 @@ public:
                     static_cast<int32_t>(Qt::DisplayRole)) const override;
 
    //Common interface
-   void CopySelectedItems(const std::vector<uint32_t> & orc_SelectedIndices) const override;
+   void CopySelectedItems(const QList<uint32_t> & orc_SelectedIndices) const override;
    void MoveItems(const QModelIndexList & orc_Indices, const bool oq_Up);
 
    // Change data count:
    uint32_t AddItem(const QModelIndexList & orc_Indices,
                     const stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId & orc_DataPoolElementId);
    void RemoveItems(const QModelIndexList & orc_Indices,
-                    std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> & orc_RemovedDataElements);
+                    QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> & orc_RemovedDataElements);
 
    static E_Columns h_ColumnToEnum(const int32_t & ors32_Column);
    static int32_t h_EnumToColumn(const E_Columns & ore_Value);
@@ -81,7 +82,7 @@ public:
 
 protected:
    uint32_t m_AddNewItem(const uint32_t ou32_SelectedIndex) override;
-   std::vector<uint32_t> m_PasteItems(const uint32_t ou32_SelectedIndex) override;
+   QList<uint32_t> m_PasteItems(const uint32_t ou32_SelectedIndex) override;
    uint32_t m_GetSizeItems(void) const override;
    void m_DeleteItem(const uint32_t ou32_Index) override;
    void m_BeginRemoveRows(const uint32_t ou32_FirstIndex, const uint32_t ou32_LastIndex) override;
@@ -90,18 +91,18 @@ protected:
 
 private:
    stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId mc_AddDataPoolElementId;
-   std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> mc_RemovedDataPoolElementIds;
+   QList<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> mc_RemovedDataPoolElementIds;
    stw::opensyde_gui_logic::C_PuiSvDbDataElementHandler * const mpc_Data;
    QList<QStringList> mc_ScaledDisplayDataValues;
-   std::vector<std::vector<float64_t> > mc_UnscaledLastDataValues;
-   std::vector<std::vector<float64_t> > mc_UnscaledMinValues;
-   std::vector<std::vector<float64_t> > mc_UnscaledMaxValues;
-   std::vector<uint32_t> mc_ArrayItemIndex;
+   QList<QList<float64_t> > mc_UnscaledLastDataValues;
+   QList<QList<float64_t> > mc_UnscaledMinValues;
+   QList<QList<float64_t> > mc_UnscaledMaxValues;
+   QList<uint32_t> mc_ArrayItemIndex;
    QStringList mc_Names;
    QStringList mc_Units;
-   std::vector<int32_t> mc_Transparency;
-   std::vector<bool> mc_InterpretAsStringFlags;
-   std::vector<bool> mc_ShowPercentage;
+   QList<int32_t> mc_Transparency;
+   QList<bool> mc_InterpretAsStringFlags;
+   QList<bool> mc_ShowPercentage;
    QString mc_IconParameter;
    QString mc_IconSignal;
    QString mc_IconVariable;
@@ -126,10 +127,10 @@ private:
    static C_PuiSvDbNodeDataElementConfig mh_GetConfigForNewItem(
       const stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId & orc_DataPoolElementId);
    stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId m_RemoveItem(const uint32_t ou32_Index,
-                                                                            std::vector<C_PuiSvDbNodeDataElementConfig> & orc_AdaptedItems);
+                                                                            QList<C_PuiSvDbNodeDataElementConfig> & orc_AdaptedItems);
    float32_t m_GetPercentage(const uint32_t ou32_Index) const;
    QString m_GetValue(const uint32_t ou32_Index) const;
-   static std::vector<uint32_t> mh_GetSelectedRows(const QModelIndexList & orc_Indices);
+   static QList<uint32_t> mh_GetSelectedRows(const QModelIndexList & orc_Indices);
    void m_InitMinMaxAndNameForOneRow(const C_PuiSvDbNodeDataPoolListElementId & orc_ElementId,
                                      const C_PuiSvDbNodeDataElementConfig & orc_ElementConfig,
                                      const uint32_t ou32_Index);

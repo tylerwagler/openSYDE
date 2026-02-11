@@ -48,14 +48,14 @@ public:
    void SetNodeUpdateInProgress(const bool oq_Active, const bool oq_Aborted, const uint32_t ou32_FailedApplicationIndex,
                                 const uint32_t ou32_NodeIndex);
    void SetNodeError(const uint32_t ou32_NodeIndex);
-   void SetNodeConnectStates(const std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
+   void SetNodeConnectStates(const QList<stw::opensyde_core::C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
                              const C_GiSvNodeData::C_GiSvNodeDataPreconditionErrors & orc_NodePreconditionErrors);
-   void SetNodeUpdateStates(const std::vector<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> & orc_NodeStates);
+   void SetNodeUpdateStates(const QList<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates> & orc_NodeStates);
    void ShowInfo(void);
    void UpdateInitialPackageStatus(const stw::opensyde_gui_logic::C_SyvUpDeviceInfo & orc_DeviceApplicationInfos,
                                    const uint32_t ou32_NodeIndex);
    bool HasNoResponseAndIsActive(void) const;
-   std::vector<uint32_t> GetAllActiveStwDeviceIndices(void) const;
+   QList<uint32_t> GetAllActiveStwDeviceIndices(void) const;
    bool IsActiveInView(void) const;
    bool HasNodeAnAvailableFlashloader(void) const;
    void UpdateIcons(void);

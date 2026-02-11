@@ -877,7 +877,7 @@ void C_SyvDaPeUpdateModeTableModel::m_Init(const uint32_t ou32_NodeIndex)
    {
       const QMap<C_OscNodeDataPoolListElementId,
                  C_PuiSvReadDataConfiguration> & rc_AllReadRailAssignments = pc_View->GetReadRailAssignments();
-      const std::vector<C_PuiSvDashboard> & rc_Dashboards = pc_View->GetDashboards();
+      const QList<C_PuiSvDashboard> & rc_Dashboards = pc_View->GetDashboards();
       //Sort by node
       for (QMap<C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration>::const_iterator c_ItAssignment =
               rc_AllReadRailAssignments.begin();
@@ -901,8 +901,8 @@ void C_SyvDaPeUpdateModeTableModel::m_Init(const uint32_t ou32_NodeIndex)
          const C_PuiSvDashboard * const pc_Dashboard = pc_View->GetDashboard(u32_ItDashboard);
          if (pc_Dashboard != NULL)
          {
-            std::vector<uint32_t> c_Count;
-            std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+            QList<uint32_t> c_Count;
+            QList<const C_PuiSvDbWidgetBase *> c_Widgets;
 
             c_Count.resize(this->mc_UniqueDataElementIds.size(), 0);
             pc_Dashboard->GetAllWidgetItems(c_Widgets);

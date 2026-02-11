@@ -9,6 +9,7 @@
 #define C_FLASENDCBASICSEQUENCES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QObject>
 #include <QString>
 #include "C_Can.hpp"
@@ -60,12 +61,12 @@ Q_SIGNALS:
    //lint -restore
    void SigReportProgress(const QString & orc_Information);
    void SigReportFlashingProgress(const int32_t os32_FullBytesSize, const int32_t os32_FlashedBytes);
-   void SigReportDevicesInfoRead(const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
+   void SigReportDevicesInfoRead(const QList<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
                                  const bool oq_SecurityFeatureUsed);
 
 protected:
    void m_ReportProgress(const int32_t os32_Result, const QString & orc_Information) override;
-   void m_ReportDevicesInfoRead(const std::vector<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
+   void m_ReportDevicesInfoRead(const QList<stw::opensyde_core::C_OscDcDeviceInformation> & orc_DeviceInfoResult,
                                 const bool oq_SecurityFeatureUsed) override;
 
 private:

@@ -457,7 +457,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(
     if (c_Text != "kefex") {
       // Optional: Use default values
     } else {
-      const std::vector<C_OscXmlAttribute> c_Attributes =
+      const QList<C_OscXmlAttribute> c_Attributes =
           orc_Parser.GetAttributes();
       for (uint16_t u16_Index = 0U; u16_Index < c_Attributes.size();
            u16_Index++) {
@@ -1144,7 +1144,7 @@ void C_OscDeviceDefinitionFiler::mh_SaveCanFdProperties(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDeviceDefinitionFiler::mh_LoadCanFdBitrates(
-    std::vector<uint16_t> &orc_CanFdDataBitrates, C_OscXmlParser &orc_Parser) {
+    QList<uint16_t> &orc_CanFdDataBitrates, C_OscXmlParser &orc_Parser) {
   int32_t s32_Retval = C_NO_ERR;
 
   orc_CanFdDataBitrates.clear();
@@ -1174,7 +1174,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadCanFdBitrates(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDeviceDefinitionFiler::mh_SaveCanFdBitrates(
-    const std::vector<uint16_t> &orc_CanFdDataBitrates,
+    const QList<uint16_t> &orc_CanFdDataBitrates,
     C_OscXmlParser &orc_Parser) {
   orc_Parser.CreateAndSelectNodeChild("can-fd-data-bitrates-support");
   for (uint32_t u32_ItBitRate = 0UL;
@@ -1199,7 +1199,7 @@ void C_OscDeviceDefinitionFiler::mh_SaveCanFdBitrates(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDeviceDefinitionFiler::mh_LoadFeatures(
-    std::vector<C_OscSupportedCanInterfaceFeatures> &orc_SupportedCanFeatures,
+    QList<C_OscSupportedCanInterfaceFeatures> &orc_SupportedCanFeatures,
     C_OscXmlParser &orc_Parser) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -1233,7 +1233,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadFeatures(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDeviceDefinitionFiler::mh_SaveFeatures(
-    const std::vector<C_OscSupportedCanInterfaceFeatures>
+    const QList<C_OscSupportedCanInterfaceFeatures>
         &orc_SupportedCanFeatures,
     C_OscXmlParser &orc_Parser) {
   orc_Parser.CreateAndSelectNodeChild("supported-can-features");

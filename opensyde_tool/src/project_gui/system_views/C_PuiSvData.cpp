@@ -252,7 +252,7 @@ void C_PuiSvData::SetPuiPcData(const C_PuiSvPc & orc_Value)
 bool C_PuiSvData::GetNodeStatusDisplayedAsActive(const uint32_t ou32_NodeIndex) const
 {
    bool q_Retval = false;
-   const std::vector<uint32_t> c_NodeIndices = C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
+   const QList<uint32_t> c_NodeIndices = C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
       ou32_NodeIndex);
 
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < c_NodeIndices.size(); ++u32_ItNode)
@@ -276,7 +276,7 @@ bool C_PuiSvData::GetNodeStatusDisplayedAsActive(const uint32_t ou32_NodeIndex) 
    Current dashboards
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_PuiSvDashboard> & C_PuiSvData::GetDashboards(void) const
+const QList<C_PuiSvDashboard> & C_PuiSvData::GetDashboards(void) const
 {
    return this->mc_Dashboards;
 }
@@ -308,7 +308,7 @@ const C_PuiSvDashboard * C_PuiSvData::GetDashboard(const uint32_t ou32_Index) co
    \param[in]  orc_Value   New dashboards
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvData::SetDashboards(const std::vector<C_PuiSvDashboard> & orc_Value)
+void C_PuiSvData::SetDashboards(const QList<C_PuiSvDashboard> & orc_Value)
 {
    this->mc_Dashboards = orc_Value;
 }
@@ -516,7 +516,7 @@ const std::set<C_OscNodeDataPoolListElementId> C_PuiSvData::GetWriteAssignments(
 
    for (u32_DashboardCounter = 0U; u32_DashboardCounter < this->mc_Dashboards.size(); ++u32_DashboardCounter)
    {
-      std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+      QList<const C_PuiSvDbWidgetBase *> c_Widgets;
       this->mc_Dashboards[u32_DashboardCounter].GetAllWidgetItems(c_Widgets);
       uint32_t u32_WidgetCounter;
 
@@ -618,7 +618,7 @@ void C_PuiSvData::GetRelevantReadRailAssigmentsForDashboard(const C_PuiSvDashboa
                                                                  C_PuiSvReadDataConfiguration> & orc_Rails)
 const
 {
-   std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+   QList<const C_PuiSvDbWidgetBase *> c_Widgets;
    orc_Dashboard.GetAllWidgetItems(c_Widgets);
    for (uint32_t u32_ItWidget = 0UL; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
    {
@@ -949,7 +949,7 @@ void C_PuiSvData::OnSyncNodeAdded(const uint32_t ou32_Index)
    QMap<C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration> c_NewItems;
    if (ou32_Index <= this->mc_NodeActiveFlags.size())
    {
-      this->mc_NodeActiveFlags.insert(this->mc_NodeActiveFlags.begin() + ou32_Index, static_cast<uint8_t>(false));
+      this->mc_NodeActiveFlags.insert(static_cast<int32_t>(ou32_Index), static_cast<char>(0));
    }
    if (ou32_Index <= this->mc_NodeUpdateInformation.size())
    {
@@ -1090,9 +1090,9 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
                if ((c_Tmp.c_DataPoolElementsConfig.size() == c_Tmp.c_DataSetSelectionIndices.size()) &&
                    (c_Tmp.c_DataPoolElementsConfig.size() == c_Tmp.c_ListValues.size()))
                {
-                  std::vector<C_PuiSvDbNodeDataElementConfig>::iterator c_ItEl = c_Tmp.c_DataPoolElementsConfig.begin();
-                  std::vector<int32_t>::iterator c_ItData = c_Tmp.c_DataSetSelectionIndices.begin();
-                  std::vector<C_OscNodeDataPoolContent>::iterator c_ItLi = c_Tmp.c_ListValues.begin();
+                  QList<C_PuiSvDbNodeDataElementConfig>::iterator c_ItEl = c_Tmp.c_DataPoolElementsConfig.begin();
+                  QList<int32_t>::iterator c_ItData = c_Tmp.c_DataSetSelectionIndices.begin();
+                  QList<C_OscNodeDataPoolContent>::iterator c_ItLi = c_Tmp.c_ListValues.begin();
                   while (c_ItEl != c_Tmp.c_DataPoolElementsConfig.end())
                   {
                      const C_OscNodeDataPool * const pc_Dp = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
@@ -1129,7 +1129,7 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
                if (q_ParamChanged)
                {
                   //Remove HAL tree
-                  for (std::vector<C_PuiSvDbExpandedTreeIndex>::iterator c_ItTree = c_Tmp.c_ExpandedItems.begin();
+                  for (QList<C_PuiSvDbExpandedTreeIndex>::iterator c_ItTree = c_Tmp.c_ExpandedItems.begin();
                        c_ItTree != c_Tmp.c_ExpandedItems.end();)
                   {
                      if (c_ItTree->u32_Layer >= 2UL)
@@ -1738,11 +1738,11 @@ void C_PuiSvData::OnSyncNodeDataPoolListElementAdded(const uint32_t ou32_NodeInd
 
    //For all param widgets
    {
-      const std::vector<C_PuiSvDashboard> & rc_Dashboards = this->GetDashboards();
+      const QList<C_PuiSvDashboard> & rc_Dashboards = this->GetDashboards();
       for (uint32_t u32_ItDashboard = 0; u32_ItDashboard < rc_Dashboards.size(); ++u32_ItDashboard)
       {
          const C_PuiSvDashboard & rc_Dashboard = rc_Dashboards[u32_ItDashboard];
-         const std::vector<C_PuiSvDbParam> & rc_Params = rc_Dashboard.GetParams();
+         const QList<C_PuiSvDbParam> & rc_Params = rc_Dashboard.GetParams();
          for (uint32_t u32_ItParam = 0; u32_ItParam < rc_Params.size(); ++u32_ItParam)
          {
             const C_PuiSvDbParam & rc_Param = rc_Params[u32_ItParam];
@@ -1983,7 +1983,7 @@ void C_PuiSvData::OnSyncNodeDataPoolListElementAboutToBeDeleted(const uint32_t o
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvData::SetNodeCheckedState(const uint32_t ou32_NodeIndex, const uint8_t ou8_Checked)
 {
-   const std::vector<uint32_t> c_NodeIndices =
+   const QList<uint32_t> c_NodeIndices =
       C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(ou32_NodeIndex);
 
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < c_NodeIndices.size(); ++u32_ItNode)
@@ -2110,7 +2110,7 @@ int32_t C_PuiSvData::InsertDashboard(const uint32_t ou32_Index, const C_PuiSvDas
 
    if (ou32_Index <= this->mc_Dashboards.size())
    {
-      std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+      QList<const C_PuiSvDbWidgetBase *> c_Widgets;
       C_PuiSvDashboard c_Copy = orc_Dashboard;
 
       if (oq_AutoAdapt == true)
@@ -2493,7 +2493,7 @@ int32_t C_PuiSvData::ClearDashboardParamDataPoolElements(const uint32_t ou32_Das
       const C_PuiSvDbParam * const pc_Param = rc_Dashboard.GetParam(ou32_ParamWidgetIndex);
       if (pc_Param != NULL)
       {
-         const std::vector<C_PuiSvDbNodeDataElementConfig> c_Configs = pc_Param->c_DataPoolElementsConfig;
+         const QList<C_PuiSvDbNodeDataElementConfig> c_Configs = pc_Param->c_DataPoolElementsConfig;
          s32_Retval = rc_Dashboard.ClearParamDataPoolElements(ou32_ParamWidgetIndex);
          if (s32_Retval == C_NO_ERR)
          {
@@ -2802,7 +2802,7 @@ int32_t C_PuiSvData::SyncDashboardScalingInformation(const uint32_t ou32_Dashboa
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvData::ActivateAllRelevantSubDevices(void)
 {
-   const std::vector<C_OscNodeSquad> & rc_Groups =
+   const QList<C_OscNodeSquad> & rc_Groups =
       C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().c_NodeSquads;
 
    for (uint32_t u32_ItGroup = 0UL; u32_ItGroup < rc_Groups.size(); ++u32_ItGroup)
@@ -2853,7 +2853,7 @@ void C_PuiSvData::FixInvalidRailConfig(const bool oq_PrintLog)
            ++u32_ItDashboard)
       {
          const C_PuiSvDashboard & rc_Dashboard = this->mc_Dashboards[u32_ItDashboard];
-         std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+         QList<const C_PuiSvDbWidgetBase *> c_Widgets;
          rc_Dashboard.GetAllWidgetItems(c_Widgets);
          //For each widget
          for (uint32_t u32_ItWidget = 0; (u32_ItWidget < c_Widgets.size()) && (u32_Count == 0UL); ++u32_ItWidget)
@@ -2906,7 +2906,7 @@ void C_PuiSvData::FixInvalidRailConfig(const bool oq_PrintLog)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvData::HandleCompatibilityChart(void)
 {
-   std::vector<C_PuiSvDashboard> c_NewDashboards;
+   QList<C_PuiSvDashboard> c_NewDashboards;
 
    for (C_PuiSvDashboard & rc_Dashboard : this->mc_Dashboards)
    {
@@ -2949,8 +2949,8 @@ void C_PuiSvData::InitFromSystemDefinition(void)
          if (pc_Node != NULL)
          {
             QStringList c_ApplPaths;
-            std::vector<C_OscViewNodeUpdateParamInfo> c_ParamInfos;
-            std::vector<bool> c_ApplSkipFlags;
+            QList<C_OscViewNodeUpdateParamInfo> c_ParamInfos;
+            QList<bool> c_ApplSkipFlags;
             C_OscViewNodeUpdate c_Info;
             c_Info.u32_NodeUpdatePosition = u32_ItInfo;
             //Sync applications
@@ -2992,7 +2992,7 @@ void C_PuiSvData::InitFromSystemDefinition(void)
 
             if (c_ParamInfos.size() > 0)
             {
-               std::vector<bool> c_ParamSetSkipFlags;
+               QList<bool> c_ParamSetSkipFlags;
                c_ParamSetSkipFlags.resize(c_ParamInfos.size(), false);
                c_Info.SetParamInfos(c_ParamInfos);
                c_Info.SetSkipUpdateOfParamInfosFlags(c_ParamSetSkipFlags);
@@ -3072,7 +3072,7 @@ bool C_PuiSvData::CheckReadUsage(const C_OscNodeDataPoolListElementId & orc_Id) 
         ++u32_ItDashboard)
    {
       const C_PuiSvDashboard & rc_Dashboard = this->mc_Dashboards[u32_ItDashboard];
-      std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+      QList<const C_PuiSvDbWidgetBase *> c_Widgets;
       rc_Dashboard.GetAllWidgetItems(c_Widgets);
       //For each widget
       for (uint32_t u32_ItWidget = 0; (u32_ItWidget < c_Widgets.size()) && (q_Retval == false); ++u32_ItWidget)
@@ -3130,7 +3130,7 @@ bool C_PuiSvData::CheckNonParamReadUsage(const C_OscNodeDataPoolListElementId & 
         ++u32_ItDashboard)
    {
       const C_PuiSvDashboard & rc_Dashboard = this->mc_Dashboards[u32_ItDashboard];
-      std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+      QList<const C_PuiSvDbWidgetBase *> c_Widgets;
       rc_Dashboard.GetAllWidgetItems(c_Widgets);
       //For each widget
       for (uint32_t u32_ItWidget = 0; (u32_ItWidget < c_Widgets.size()) && (q_Retval == false); ++u32_ItWidget)
@@ -3175,7 +3175,7 @@ uint32_t C_PuiSvData::CountReadUsage(const C_OscNodeDataPoolListElementId & orc_
    for (uint32_t u32_ItDashboard = 0; u32_ItDashboard < this->mc_Dashboards.size(); ++u32_ItDashboard)
    {
       const C_PuiSvDashboard & rc_Dashboard = this->mc_Dashboards[u32_ItDashboard];
-      std::vector<const C_PuiSvDbWidgetBase *> c_Widgets;
+      QList<const C_PuiSvDbWidgetBase *> c_Widgets;
       rc_Dashboard.GetAllWidgetItems(c_Widgets);
       //For each widget
       for (uint32_t u32_ItWidget = 0; u32_ItWidget < c_Widgets.size(); ++u32_ItWidget)
@@ -3264,9 +3264,9 @@ bool C_PuiSvData::CheckNvmParamListUsage(const C_OscNodeDataPoolListId & orc_Id)
    Vector of pointers to all currently registered dashboard names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<const QString *> C_PuiSvData::m_GetExistingDashboardNames(void) const
+QList<const QString *> C_PuiSvData::m_GetExistingDashboardNames(void) const
 {
-   std::vector<const QString *> c_Retval;
+   QList<const QString *> c_Retval;
    c_Retval.reserve(this->mc_Dashboards.size());
    for (uint32_t u32_ItDashboard = 0; u32_ItDashboard < this->mc_Dashboards.size(); ++u32_ItDashboard)
    {

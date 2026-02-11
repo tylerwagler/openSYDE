@@ -151,7 +151,7 @@ void C_OscHalcConfigDomain::CheckChannelNameUnique(const uint32_t ou32_ChannelIn
 int32_t C_OscHalcConfigDomain::CheckChannelLinked(const uint32_t ou32_ChannelIndex, const bool oq_UseChannelIndex,
                                                   bool & orq_IsLinked,
                                                   QStringList * const opc_LinkedChannelNames,
-                                                  std::vector<uint32_t> * const opc_LinkedChannelIndices,
+                                                  QList<uint32_t> * const opc_LinkedChannelIndices,
                                                   const uint32_t * const opu32_UseCaseIndex) const
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -320,10 +320,10 @@ void C_OscHalcConfigDomain::ResetDomainToDefault(void)
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigDomain::GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_ChannelIndex,
                                                                     const bool oq_UseChannelIndex,
-                                                                    std::vector<uint32_t> * const opc_ParameterIndices,
-                                                                    std::vector<uint32_t> * const opc_InputIndices,
-                                                                    std::vector<uint32_t> * const opc_OutputIndices,
-                                                                    std::vector<uint32_t> * const opc_StatusIndices)
+                                                                    QList<uint32_t> * const opc_ParameterIndices,
+                                                                    QList<uint32_t> * const opc_InputIndices,
+                                                                    QList<uint32_t> * const opc_OutputIndices,
+                                                                    QList<uint32_t> * const opc_StatusIndices)
 const
 {
    int32_t s32_Return = C_NO_ERR;
@@ -473,8 +473,8 @@ void C_OscHalcConfigDomain::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCh
    \param[in,out]  orc_ParamConfig  Param config
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigDomain::mh_AddParameters(const std::vector<C_OscHalcDefStruct> & orc_Parameters,
-                                             std::vector<C_OscHalcConfigParameterStruct> & orc_ParamConfig)
+void C_OscHalcConfigDomain::mh_AddParameters(const QList<C_OscHalcDefStruct> & orc_Parameters,
+                                             QList<C_OscHalcConfigParameterStruct> & orc_ParamConfig)
 {
    for (uint32_t u32_ItParam = 0UL; u32_ItParam < orc_Parameters.size(); ++u32_ItParam)
    {

@@ -9,6 +9,7 @@
 #define C_OSCHALCCONFIG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscHalcDefBase.hpp"
 #include "C_OscHalcConfigDomain.hpp"
 
@@ -82,21 +83,21 @@ public:
                                                         const std::string & orc_Value);
    int32_t GetRelevantIndicesForSelectedUseCase(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,
                                                 const bool oq_UseChannelIndex,
-                                                std::vector<uint32_t> * const opc_ParameterIndices,
-                                                std::vector<uint32_t> * const opc_InputIndices,
-                                                std::vector<uint32_t> * const opc_OutputIndices,
-                                                std::vector<uint32_t> * const opc_StatusIndices)
+                                                QList<uint32_t> * const opc_ParameterIndices,
+                                                QList<uint32_t> * const opc_InputIndices,
+                                                QList<uint32_t> * const opc_OutputIndices,
+                                                QList<uint32_t> * const opc_StatusIndices)
    const;
-   void CheckConfigValid(bool * const opq_DomainsInvalid, std::vector<uint32_t> * const opc_InvalidDomainIndices) const;
+   void CheckConfigValid(bool * const opq_DomainsInvalid, QList<uint32_t> * const opc_InvalidDomainIndices) const;
    void CheckDomainConfigValid(const uint32_t ou32_DomainIndex, bool * const opq_DomainInvalid,
                                bool * const opq_ChannelsInvalid,
-                               std::vector<uint32_t> * const opc_InvalidChannelIndices) const;
+                               QList<uint32_t> * const opc_InvalidChannelIndices) const;
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
    void HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
                                std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 
 private:
-   std::vector<C_OscHalcConfigDomain> mc_Domains; ///< Domains of HALC configuration (synced with C_OscHalcDefBase)
+   QList<C_OscHalcConfigDomain> mc_Domains; ///< Domains of HALC configuration (synced with C_OscHalcDefBase)
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

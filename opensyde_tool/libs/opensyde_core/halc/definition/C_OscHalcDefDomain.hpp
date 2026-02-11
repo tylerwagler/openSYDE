@@ -9,6 +9,7 @@
 #define C_OSCHALCDEFDOMAIN_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include "C_OscHalcDefChannelDef.hpp"
 #include "C_OscHalcDefChannelValues.hpp"
@@ -50,8 +51,8 @@ public:
    QString c_Name;                              ///< Displayable plural name of domain
    QString c_SingularName;                      ///< Displayable singular name of domain
    QString c_Comment;                           ///< Description to display to user
-   std::vector<C_OscHalcDefChannelDef> c_Channels;            ///< All available channels for this domain
-   std::vector<C_OscHalcDefChannelUseCase> c_ChannelUseCases; ///< All available channel use-cases for this domain
+   QList<C_OscHalcDefChannelDef> c_Channels;            ///< All available channels for this domain
+   QList<C_OscHalcDefChannelUseCase> c_ChannelUseCases; ///< All available channel use-cases for this domain
    C_OscHalcDefChannelValues c_DomainValues;                  ///< All available values for the domain
    C_OscHalcDefChannelValues c_ChannelValues;                 ///< All available values for each channel
    E_Category e_Category;                                     ///< Optional category

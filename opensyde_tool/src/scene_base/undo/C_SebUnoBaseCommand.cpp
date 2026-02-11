@@ -40,7 +40,7 @@ using namespace std;
    \param[in,out] opc_Parent Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SebUnoBaseCommand::C_SebUnoBaseCommand(QGraphicsScene * const opc_Scene, const vector<uint64_t> & orc_Ids,
+C_SebUnoBaseCommand::C_SebUnoBaseCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                          const QString & orc_Text, QUndoCommand * const opc_Parent) :
    QUndoCommand(orc_Text, opc_Parent),
    mpc_Scene(opc_Scene),
@@ -81,9 +81,9 @@ C_SebUnoBaseCommand::~C_SebUnoBaseCommand(void)
    else: pointer to item
 */
 //----------------------------------------------------------------------------------------------------------------------
-vector<QGraphicsItem *> C_SebUnoBaseCommand::m_GetSceneItems(void) const
+QList<QGraphicsItem *> C_SebUnoBaseCommand::m_GetSceneItems(void) const
 {
-   vector<QGraphicsItem *> c_Retval;
+   QList<QGraphicsItem *> c_Retval;
    c_Retval.resize(this->mc_Ids.size(), NULL);
    for (uint32_t u32_ItId = 0; u32_ItId < this->mc_Ids.size(); ++u32_ItId)
    {
@@ -136,8 +136,8 @@ bool C_SebUnoBaseCommand::m_MergePossible(const C_SebUnoBaseCommand * const opc_
 
    if (this->mc_Ids.size() == opc_Command->mc_Ids.size())
    {
-      vector<uint64_t>::const_iterator c_ItId2 = opc_Command->mc_Ids.begin();
-      for (vector<uint64_t>::const_iterator c_ItId1 = this->mc_Ids.begin(); c_ItId1 != this->mc_Ids.end();
+      auto c_ItId2 = opc_Command->mc_Ids.begin();
+      for (auto c_ItId1 = this->mc_Ids.begin(); c_ItId1 != this->mc_Ids.end();
            ++c_ItId1)
       {
          if (*c_ItId1 != *c_ItId2)
@@ -161,7 +161,7 @@ bool C_SebUnoBaseCommand::m_MergePossible(const C_SebUnoBaseCommand * const opc_
    All unique IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<uint64_t> C_SebUnoBaseCommand::m_GetIds(void) const
+const QList<uint64_t> C_SebUnoBaseCommand::m_GetIds(void) const
 {
    return this->mc_Ids;
 }

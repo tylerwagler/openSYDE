@@ -628,14 +628,14 @@ void C_SyvUpPacSectionNodeFilesWidget::m_InitSpecificItem(
     const stw::opensyde_core::C_OscViewNodeUpdate &orc_UpdateInfo) {
   const QStringList &c_ViewAppPaths =
       orc_UpdateInfo.GetPaths(C_OscViewNodeUpdate::eFTP_FILE_BASED);
-  const std::vector<C_OscViewNodeUpdateParamInfo> c_ViewParamsetPaths =
+  const QList<C_OscViewNodeUpdateParamInfo> c_ViewParamsetPaths =
       orc_UpdateInfo.GetParamInfos();
   const QString c_ViewPemPath = orc_UpdateInfo.GetPemFilePath();
 
-  std::vector<bool> c_ViewFileSkipFlags =
+  QList<bool> c_ViewFileSkipFlags =
       orc_UpdateInfo.GetSkipUpdateOfPathsFlags(
           C_OscViewNodeUpdate::eFTP_FILE_BASED);
-  std::vector<bool> c_ViewParamSetSkipFlags =
+  QList<bool> c_ViewParamSetSkipFlags =
       orc_UpdateInfo.GetSkipUpdateOfParamInfosFlags();
   const bool q_ViewPemSkipFlag = orc_UpdateInfo.GetSkipUpdateOfPemFile();
   uint32_t u32_Counter;

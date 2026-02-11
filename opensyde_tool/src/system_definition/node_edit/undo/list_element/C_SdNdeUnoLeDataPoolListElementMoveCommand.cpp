@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "C_Uti.hpp"
 #include "stwtypes.hpp"
@@ -50,8 +51,8 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeUnoLeDataPoolListElementMoveCommand::C_SdNdeUnoLeDataPoolListElementMoveCommand(const uint32_t & oru32_NodeIndex,
                                                                                        const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex, C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                                                                       const std::vector<uint32_t> & orc_SourceRow,
-                                                                                       const std::vector<uint32_t> & orc_TargetRow, const bool & orq_AdaptIndices,
+                                                                                       const QList<uint32_t> & orc_SourceRow,
+                                                                                       const QList<uint32_t> & orc_TargetRow, const bool & orq_AdaptIndices,
                                                                                        QUndoCommand * const opc_Parent)
    :
    C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand(oru32_NodeIndex, oru32_DataPoolIndex, oru32_DataPoolListIndex,
@@ -80,7 +81,7 @@ void C_SdNdeUnoLeDataPoolListElementMoveCommand::redo(void)
       {
          const uint16_t u16_TimerId = osc_write_log_performance_start();
 
-         std::vector<std::vector<uint32_t> > c_Items;
+         QList<QList<uint32_t> > c_Items;
 
          pc_Model->DoMoveRows(mc_SourceRow, mc_TargetRow);
          //Sort ascending, only done for the "source" row which is not necessary here
@@ -108,7 +109,7 @@ void C_SdNdeUnoLeDataPoolListElementMoveCommand::undo(void)
       {
          const uint16_t u16_TimerId = osc_write_log_performance_start();
 
-         std::vector<std::vector<uint32_t> > c_Items;
+         QList<QList<uint32_t> > c_Items;
 
          pc_Model->DoMoveRows(mc_TargetRow, mc_SourceRow);
          //Sort ascending, only done for the "source" row which is not necessary here

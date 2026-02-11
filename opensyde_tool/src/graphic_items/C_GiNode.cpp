@@ -1099,7 +1099,7 @@ void C_GiNode::UpdateData(void) {
   C_PuiBsBox c_BoxData;
 
   stw::opensyde_gui_logic::C_PuiSdNodeConnection c_Conn;
-  std::vector<C_PuiSdNodeConnection> c_BusConnections;
+  QList<C_PuiSdNodeConnection> c_BusConnections;
 
   this->UpdateBasicData(c_BoxData);
 
@@ -1197,7 +1197,7 @@ void C_GiNode::AddConnection(C_GiLiBusConnector *const opc_Connection) {
 void C_GiNode::AddConnectionAndData(
     C_GiLiBusConnector *const opc_Connection,
     const C_PuiSdNodeConnectionId &orc_NodeConnection,
-    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> &orc_Properties,
+    const QList<C_PuiSdNodeInterfaceAutomaticProperties> &orc_Properties,
     const uint32_t &oru32_BusIndex) {
   if (opc_Connection != NULL) {
     this->AddConnection(opc_Connection);
@@ -1220,7 +1220,7 @@ void C_GiNode::AddConnectionAndData(
 void C_GiNode::UpdateConnection(
     const C_GiLiBusConnector *const opc_Connection,
     const C_PuiSdNodeConnectionId &orc_NodeConnection,
-    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> &orc_Properties,
+    const QList<C_PuiSdNodeInterfaceAutomaticProperties> &orc_Properties,
     const uint32_t &oru32_BusIndex) const {
   const C_PuiSdNodeConnectionId *const pc_PrevConn =
       this->GetNodeConnectionId(opc_Connection);
@@ -1242,7 +1242,7 @@ void C_GiNode::UpdateConnection(
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiNode::ChangeInterface(
     const uint8_t ou8_Interface, const C_GiLiBusConnector *const opc_Connection,
-    const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> &orc_Properties)
+    const QList<C_PuiSdNodeInterfaceAutomaticProperties> &orc_Properties)
     const {
   if (opc_Connection != NULL) {
     const C_GiLiBus *const pc_Bus = opc_Connection->GetBusItem();

@@ -307,7 +307,7 @@ void C_SyvUpNodePropertiesDialog::m_InitStatus(void) const {
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpNodePropertiesDialog::m_InitDataBlockTable(void) const {
   QString c_Content = "<html><body>";
-  const std::vector<uint32_t> c_NodeIndices =
+  const QList<uint32_t> c_NodeIndices =
       C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
           this->mu32_NodeIndex);
 
@@ -360,7 +360,7 @@ void C_SyvUpNodePropertiesDialog::mh_InitDataBlockTableForNode(
       } else {
         // index of applications does not match index of HEX files if there
         // exists a PSI Data Block so we need to only consider HEX file apps
-        const std::vector<C_OscNodeApplication> c_HexApps =
+        const QList<C_OscNodeApplication> c_HexApps =
             orc_Node.GetHexApplications();
         if (c_HexApps.size() > 0) {
           if (c_HexApps.size() == orc_NodeInfo.GetHexFileInfosCount()) {
@@ -864,7 +864,7 @@ void C_SyvUpNodePropertiesDialog::mh_InitDataBlockTableOtherSectionForNode(
 void C_SyvUpNodePropertiesDialog::m_InitFlashloaderTable(void) const {
   QString c_Content = "<html><body>";
 
-  const std::vector<uint32_t> c_NodeIndices =
+  const QList<uint32_t> c_NodeIndices =
       C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
           this->mu32_NodeIndex);
 

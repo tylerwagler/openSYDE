@@ -209,8 +209,8 @@ C_OscDataDealerNvmSafe::NvmSafeCheckCrcs(const C_OscNode &orc_Node) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
-    std::vector<C_OscNodeDataPoolListElementId> &orc_ChangedElements,
-    const std::vector<C_OscNodeDataPoolListId> *const
+    QList<C_OscNodeDataPoolListElementId> &orc_ChangedElements,
+    const QList<C_OscNodeDataPoolListId> *const
         opc_AdditionalListsToUpdate,
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
@@ -313,7 +313,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
                   // Check range if value was changed
                   if (pc_Element->q_NvmValueChanged == true) {
                     if (pc_Element->CheckNvmValueRange() == C_NO_ERR) {
-                      std::vector<uint8_t> c_ElementData;
+                      QByteArray c_ElementData;
 
                       // convert to native endianness depending on the type ...
                       // no possible problem we did not check for already ...
@@ -449,7 +449,7 @@ C_OscDataDealerNvmSafe::NvmSafeReadValues(const C_OscNode *(&orpc_NodeCopy),
               this->mc_NodeCopy
                   .c_DataPools[(*c_ItChangedList).u32_DataPoolIndex]
                   .c_Lists[(*c_ItChangedList).u32_ListIndex];
-          std::vector<uint8_t> c_Values;
+          QByteArray c_Values;
           uint32_t u32_ElementCounter;
 
           // Reset of all valid flags
@@ -636,7 +636,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t *const opu8_NrCode) {
                 .c_Lists[(*c_ItChangedList).u32_ListIndex];
 
         if (rc_List.q_NvmCrcActive == true) {
-          std::vector<uint8_t> c_CrcData;
+          QByteArray c_CrcData;
 
           // Calc the CRC
           rc_List.u32_NvmCrc = this->NvmCalcCrc(rc_List);
@@ -703,7 +703,7 @@ void C_OscDataDealerNvmSafe::NvmSafeClearInternalContent(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(
-    const std::vector<C_OscNodeDataPoolListId> &orc_ListIds,
+    const QList<C_OscNodeDataPoolListId> &orc_ListIds,
     uint8_t *const opu8_NrCode) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -736,8 +736,8 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(
                 c_RawEntry.u32_StartAddress = rc_List.u32_NvmStartAddress;
                 c_RawEntry.c_Bytes.clear();
                 c_RawEntry.c_Bytes.reserve(2);
-                c_RawEntry.c_Bytes.push_back(0);
-                c_RawEntry.c_Bytes.push_back(0);
+                c_RawEntry.c_Bytes.append(static_cast<char>(0x00));
+                c_RawEntry.c_Bytes.append(static_cast<char>(0x00));
                 c_RawNode.c_Entries.push_back(c_RawEntry);
               }
             } else {
@@ -776,7 +776,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeReadParameterValues(
             }
           }
           if (s32_Retval == C_NO_ERR) {
-            std::vector<uint32_t> c_AlreadyUsedDataPoolIndices;
+            QList<uint32_t> c_AlreadyUsedDataPoolIndices;
             C_OscParamSetInterpretedNode c_InterpretedNode;
             // Prepare data
             // Node
@@ -1022,7 +1022,7 @@ C_OscDataDealerNvmSafe::NvmSafeReadFileWithoutCrc(const QString &orc_Path) {
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(
     const QString &orc_Path,
-    std::vector<C_OscNodeDataPoolListId> &orc_DataPoolLists) {
+    QList<C_OscNodeDataPoolListId> &orc_DataPoolLists) {
   int32_t s32_Retval = C_NO_ERR;
 
   orc_DataPoolLists.clear();
@@ -1091,7 +1091,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(
             }
             if (s32_Retval == C_NO_ERR) {
               // Remove duplicates
-              const std::vector<C_OscNodeDataPoolListId> c_Copy =
+              const QList<C_OscNodeDataPoolListId> c_Copy =
                   orc_DataPoolLists;
               orc_DataPoolLists.clear();
               orc_DataPoolLists.reserve(c_Copy.size());
@@ -1455,7 +1455,7 @@ int32_t C_OscDataDealerNvmSafe::m_CheckParameterFileContent(
 int32_t C_OscDataDealerNvmSafe::m_CreateRawEntryAndPrepareInterpretedData(
     C_OscNodeDataPoolList &orc_List, C_OscParamSetRawEntry &orc_Entry,
     uint8_t *const opu8_NrCode) {
-  std::vector<uint8_t> c_Values;
+  QByteArray c_Values;
   int32_t s32_Retval = this->m_NvmReadListRaw(orc_List, c_Values, opu8_NrCode);
   if (s32_Retval == C_NO_ERR) {
     // Raw

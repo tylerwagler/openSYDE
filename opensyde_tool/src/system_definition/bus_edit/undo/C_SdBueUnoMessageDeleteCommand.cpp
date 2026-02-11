@@ -41,7 +41,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueUnoMessageDeleteCommand::C_SdBueUnoMessageDeleteCommand(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageId,
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MessageId,
    C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
    C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget, QUndoCommand * const opc_Parent) :
    C_SdBueUnoMessageAddDeleteBaseCommand(orc_MessageId, opc_MessageSyncManager, opc_MessageTreeWidget, "Delete Message",

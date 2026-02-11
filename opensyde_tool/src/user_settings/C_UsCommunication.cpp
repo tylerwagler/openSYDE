@@ -48,7 +48,7 @@ C_UsCommunication::C_UsCommunication(void) :
    Overview column width
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> & C_UsCommunication::GetMessageOverviewColumnWidth(void) const
+const QList<int32_t> & C_UsCommunication::GetMessageOverviewColumnWidth(void) const
 {
    return this->mc_MessageOverviewColumnWidth;
 }
@@ -60,7 +60,7 @@ const std::vector<int32_t> & C_UsCommunication::GetMessageOverviewColumnWidth(vo
    Overview column width
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> & C_UsCommunication::GetSignalOverviewColumnWidth(void) const
+const QList<int32_t> & C_UsCommunication::GetSignalOverviewColumnWidth(void) const
 {
    return this->mc_SignalOverviewColumnWidth;
 }
@@ -71,7 +71,7 @@ const std::vector<int32_t> & C_UsCommunication::GetSignalOverviewColumnWidth(voi
    \param[in]  orc_Value   Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsCommunication::SetMessageOverviewColumnWidth(const std::vector<int32_t> & orc_Value)
+void C_UsCommunication::SetMessageOverviewColumnWidth(const QList<int32_t> & orc_Value)
 {
    this->mc_MessageOverviewColumnWidth = orc_Value;
 }
@@ -82,7 +82,7 @@ void C_UsCommunication::SetMessageOverviewColumnWidth(const std::vector<int32_t>
    \param[in]  orc_Value   Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsCommunication::SetSignalOverviewColumnWidth(const std::vector<int32_t> & orc_Value)
+void C_UsCommunication::SetSignalOverviewColumnWidth(const QList<int32_t> & orc_Value)
 {
    this->mc_SignalOverviewColumnWidth = orc_Value;
 }

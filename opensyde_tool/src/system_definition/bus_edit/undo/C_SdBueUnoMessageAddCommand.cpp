@@ -44,7 +44,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueUnoMessageAddCommand::C_SdBueUnoMessageAddCommand(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageId,
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MessageId,
    C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
    C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget, const QString & orc_Text) :
    C_SdBueUnoMessageAddDeleteBaseCommand(orc_MessageId, opc_MessageSyncManager, opc_MessageTreeWidget,
@@ -65,9 +65,9 @@ C_SdBueUnoMessageAddCommand::C_SdBueUnoMessageAddCommand(
    \param[in]   orc_OwnerIsTxFlag            Owner has message as Tx flags
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueUnoMessageAddCommand::SetInitialData(const std::vector<C_OscCanMessage> & orc_Message,
-                                                 const std::vector<std::vector<C_OscNodeDataPoolListElement> > & orc_OscSignalCommons, const std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons, const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages, const QList<QStringList> & orc_OwnerNodeName, const std::vector<std::vector<uint32_t> > & orc_OwnerNodeInterfaceIndex, const std::vector<std::vector<uint32_t> > & orc_OwnerNodeDatapoolIndex,
-                                                 const std::vector<std::vector<bool> > & orc_OwnerIsTxFlag)
+void C_SdBueUnoMessageAddCommand::SetInitialData(const QList<C_OscCanMessage> & orc_Message,
+                                                 const QList<QList<C_OscNodeDataPoolListElement> > & orc_OscSignalCommons, const QList<QList<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons, const QList<C_PuiSdNodeCanMessage> & orc_UiMessages, const QList<QStringList> & orc_OwnerNodeName, const QList<QList<uint32_t> > & orc_OwnerNodeInterfaceIndex, const QList<QList<uint32_t> > & orc_OwnerNodeDatapoolIndex,
+                                                 const QList<QList<bool> > & orc_OwnerIsTxFlag)
 {
    this->mc_Message = orc_Message;
    this->mc_OscSignalCommons = orc_OscSignalCommons;
@@ -177,7 +177,7 @@ void C_SdBueUnoMessageAddCommand::SetInitialData(const std::vector<C_OscCanMessa
    Last known value for the message index
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscCanMessageIdentificationIndices> C_SdBueUnoMessageAddCommand::GetLastMessageIds(void) const
+QList<C_OscCanMessageIdentificationIndices> C_SdBueUnoMessageAddCommand::GetLastMessageIds(void) const
 {
    return this->mc_LastMessageId;
 }

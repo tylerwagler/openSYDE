@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -293,10 +294,10 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddDeSection(const uint32_t ou32_NodeI
       const C_OscHalcMagicianDatapoolListHandler c_DpHandlerListStatus(pc_OscNode->c_HalcConfig,
                                                                        C_OscHalcDefDomain::eVA_STATUS,
                                                                        pc_Channel->q_SafetyRelevant);
-      std::vector<uint32_t> c_ParameterIndices;
-      std::vector<uint32_t> c_InputIndices;
-      std::vector<uint32_t> c_OutputIndices;
-      std::vector<uint32_t> c_StatusIndices;
+      QList<uint32_t> c_ParameterIndices;
+      QList<uint32_t> c_InputIndices;
+      QList<uint32_t> c_OutputIndices;
+      QList<uint32_t> c_StatusIndices;
       if (C_PuiSdHandler::h_GetInstance()->GetHalcRelevantIndicesForSelectedUseCase(ou32_NodeIndex, ou32_DomainIndex,
                                                                                     ou32_ChannelIndex,
                                                                                     oq_UseChannelIndex,
@@ -424,8 +425,8 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddUseCase(const uint32_t ou32_NodeInd
    \param[in]      oq_AddSpecialVars         Add special vars
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListSection(const std::vector<C_OscHalcDefStruct> & orc_Definition,
-                                                         const std::vector<uint32_t> & orc_Indices,
+void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListSection(const QList<C_OscHalcDefStruct> & orc_Definition,
+                                                         const QList<uint32_t> & orc_Indices,
                                                          const QString & orc_ListName,
                                                          const QString & orc_DomainSingularName,
                                                          QString & orc_Text,
@@ -437,7 +438,7 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListSection(const std::vector<C_Osc
 
    if (orc_Indices.size() > 0UL)
    {
-      const std::vector<uint32_t> c_RelevantChannels = orc_DpHandler.GetRelevantChannels(
+      const QList<uint32_t> c_RelevantChannels = orc_DpHandler.GetRelevantChannels(
          orc_DomainConfig.c_ChannelConfigs, orc_DomainConfig.c_DomainConfig);
       if (oq_AddSpecialVars)
       {
@@ -501,11 +502,11 @@ void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddListSection(const std::vector<C_Osc
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeHalcChannelDpPreviewPopUp::mh_AddElementSection(const C_OscHalcDefElement & orc_HalDefElement,
-                                                            const std::vector<C_OscHalcDefStruct> & orc_Definition,
+                                                            const QList<C_OscHalcDefStruct> & orc_Definition,
                                                             const uint32_t ou32_Index,
                                                             const QString & orc_DomainSingularName,
                                                             const uint32_t ou32_ElementIndex,
-                                                            const std::vector<uint32_t> & orc_RelevantChannels,
+                                                            const QList<uint32_t> & orc_RelevantChannels,
                                                             const QString & orc_ListName,
                                                             bool & orq_AddedList, QString & orc_Text)
 {

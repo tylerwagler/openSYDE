@@ -9,6 +9,7 @@
 #define C_OSCDATALOGGERJOBFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscXmlParser.hpp"
 #include "C_OscDataLoggerJob.hpp"
 
@@ -24,11 +25,11 @@ namespace opensyde_core
 class C_OscDataLoggerJobFiler
 {
 public:
-   static int32_t h_LoadFile(std::vector<C_OscDataLoggerJob> & orc_Config, const QString & orc_Path);
-   static int32_t h_SaveFile(const std::vector<C_OscDataLoggerJob> & orc_Config,
+   static int32_t h_LoadFile(QList<C_OscDataLoggerJob> & orc_Config, const QString & orc_Path);
+   static int32_t h_SaveFile(const QList<C_OscDataLoggerJob> & orc_Config,
                              const QString & orc_Path);
-   static int32_t h_LoadData(std::vector<C_OscDataLoggerJob> & orc_Config, C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveData(const std::vector<C_OscDataLoggerJob> & orc_Config, C_OscXmlParserBase & orc_XmlParser);
+   static int32_t h_LoadData(QList<C_OscDataLoggerJob> & orc_Config, C_OscXmlParserBase & orc_XmlParser);
+   static void h_SaveData(const QList<C_OscDataLoggerJob> & orc_Config, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadDataElementId(C_OscNodeDataPoolListElementId & orc_Config, C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveDataElementId(const C_OscNodeDataPoolListElementId & orc_Config,
                                    C_OscXmlParserBase & orc_XmlParser);
@@ -51,9 +52,9 @@ private:
                                                         C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveJobAdditionalTriggerProperties(const C_OscDataLoggerJobAdditionalTriggerProperties & orc_Config,
                                                      C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadConfiguredDataElements(std::vector<C_OscDataLoggerDataElementReference> & orc_Config,
+   static int32_t mh_LoadConfiguredDataElements(QList<C_OscDataLoggerDataElementReference> & orc_Config,
                                                 C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveConfiguredDataElements(const std::vector<C_OscDataLoggerDataElementReference> & orc_Config,
+   static void mh_SaveConfiguredDataElements(const QList<C_OscDataLoggerDataElementReference> & orc_Config,
                                              C_OscXmlParserBase & orc_XmlParser);
    static int32_t mh_LoadConfiguredDataElement(C_OscDataLoggerDataElementReference & orc_Config,
                                                C_OscXmlParserBase & orc_XmlParser);

@@ -16,6 +16,7 @@
 #include <QHeaderView>
 #include <QMimeData>
 #include <QDrag>
+#include <QList>
 #include "C_SdNdeDpListArrayEditView.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -257,9 +258,9 @@ void C_SdNdeDpListArrayEditView::SetModelViewManager(C_SdNdeDpListModelViewManag
    Selected indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_SdNdeDpListArrayEditView::m_GetSelectedIndices(void) const
+QList<uint32_t> C_SdNdeDpListArrayEditView::m_GetSelectedIndices(void) const
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    QModelIndexList c_SelectedItems = this->selectedIndexes();
 
    c_Retval.reserve(c_SelectedItems.size());

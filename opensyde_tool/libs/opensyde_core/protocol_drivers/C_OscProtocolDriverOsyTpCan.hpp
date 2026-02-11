@@ -16,6 +16,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
+#include <QList>
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 #include "C_CanDispatcher.hpp"
@@ -156,10 +157,10 @@ public:
    int32_t SetDispatcher(stw::can::C_CanDispatcher * const opc_Dispatcher);
 
    //Tp-specific broadcast services:
-   int32_t BroadcastReadSerialNumber(std::vector<C_BroadcastReadEcuSerialNumberResults> & orc_Responses,
-                                     std::vector<C_BroadcastReadEcuSerialNumberExtendedResults> & orc_ExtendedResponses)
+   int32_t BroadcastReadSerialNumber(QList<C_BroadcastReadEcuSerialNumberResults> & orc_Responses,
+                                     QList<C_BroadcastReadEcuSerialNumberExtendedResults> & orc_ExtendedResponses)
    const;
-   int32_t BroadcastRequestProgramming(std::vector<C_BroadcastRequestProgrammingResults> & orc_Results) const;
+   int32_t BroadcastRequestProgramming(QList<C_BroadcastRequestProgrammingResults> & orc_Results) const;
    int32_t BroadcastSetNodeIdBySerialNumber(const C_OscProtocolSerialNumber & orc_SerialNumber,
                                             const C_OscProtocolDriverOsyNode & orc_NewNodeId,
                                             uint8_t * const opu8_NrCode = NULL) const;

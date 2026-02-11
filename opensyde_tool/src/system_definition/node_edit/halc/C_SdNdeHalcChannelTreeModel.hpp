@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_TblTreModel.hpp"
+#include <QList>
 #include "C_TblTreItem.hpp"
 #include "C_OscHalcConfig.hpp"
 
@@ -52,11 +53,11 @@ private:
    C_SdNdeHalcChannelTreeModel & operator =(const C_SdNdeHalcChannelTreeModel &) &;
 
    uint32_t mu32_NodeIndex;
-   std::vector<QIcon> mc_InputIcons;
-   std::vector<QIcon> mc_OutputIcons;
-   std::vector<QIcon> mc_OtherIcons;
+   QList<QIcon> mc_InputIcons;
+   QList<QIcon> mc_OutputIcons;
+   QList<QIcon> mc_OtherIcons;
 
-   std::vector<QIcon> mc_Icons;
+   QList<QIcon> mc_Icons;
 
    static void mh_SetChannelText(C_TblTreItem * const opc_Item, const QString & orc_ChannelName,
                                  const QString & orc_ChannelId, const QString & orc_Comment);

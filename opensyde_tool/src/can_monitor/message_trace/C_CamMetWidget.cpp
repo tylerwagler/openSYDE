@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for showing entire CAN trace and its buttons (implementation)
@@ -434,7 +434,7 @@ void C_CamMetWidget::m_DatabaseTimer(void)
       }
       else
       {
-         std::vector<stw::opensyde_core::C_OscSystemBus> c_Busses;
+         QList<stw::opensyde_core::C_OscSystemBus> c_Busses;
          this->mpc_Ui->pc_TraceView->GetResultBusses(c_Busses);
 
          // openSYDE system definition

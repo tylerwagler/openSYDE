@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscCanMessageIdentificationIndices.hpp"
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
@@ -110,12 +111,12 @@ private:
       C_MsgTableData c_MessageData;
    };
 
-   std::vector<C_MsgTableConfig> mc_MsgInfoAll;
+   QList<C_MsgTableConfig> mc_MsgInfoAll;
 
    C_PuiSdNodeCanMessageSyncManager * mpc_SyncManager;
 
    QString m_CreateNodeName(const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_CurMatchingId,
-                            const std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_AllMatchingIds)
+                            const QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices> & orc_AllMatchingIds)
    const;
    QString m_GetNotEarlierThanHeaderName(void) const;
    QString m_GetNotLaterThanHeaderName(void) const;

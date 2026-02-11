@@ -13,6 +13,7 @@
 #include "CKFXDATFile.hpp"
 #include "C_OscZipData.hpp"
 #include <QString>
+#include <vector>
 
 
 using namespace stw::errors;
@@ -60,7 +61,7 @@ static const uint16_t KFX_DAT_FILE_BLOCK_0101 = 0x0101U;
 
 int32_t C_KFXDATFile::LoadDATAllLists(const QString & orc_FileName, const QString & orc_DeviceName,
                                       C_KFXVariableLists & orc_VariableLists,
-                                      QList<uint8_t> * const opc_ListsLoaded)
+                                      QByteArray * const opc_ListsLoaded)
 {
    return LoadDATList(orc_FileName, orc_DeviceName, orc_VariableLists, -1, opc_ListsLoaded);
 }
@@ -133,7 +134,7 @@ void C_KFXDATFile::m_GetStringFromBuffer(QString & orc_String, const uint8_t ** 
 //-----------------------------------------------------------------------------
 int32_t C_KFXDATFile::LoadDATList(const QString & orc_FileName, const QString & orc_DeviceName,
                                   C_KFXVariableLists & orc_VariableLists, const int32_t os32_ListIndex,
-                                  QList<uint8_t> * const opc_ListsLoaded)
+                                  QByteArray * const opc_ListsLoaded)
 {
    std::FILE * pt_FileHandle;
    int32_t s32_NumBytes;
@@ -255,7 +256,7 @@ int32_t C_KFXDATFile::LoadDATList(const QString & orc_FileName, const QString & 
 int32_t C_KFXDATFile::m_BufferToLists(const uint8_t * const opu8_Buffer, C_KFXVariableLists & orc_VariableLists,
                                       const uint16_t ou16_NumListsInDat, const uint32_t ou32_NumBytesTotal,
                                       const bool oq_SingleList, const uint16_t ou16_SingleListIndex,
-                                      QList<uint8_t> * const opc_ListsLoaded)
+                                      QByteArray * const opc_ListsLoaded)
 {
    QString c_List;
    QString c_Var;

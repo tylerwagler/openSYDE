@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -390,7 +391,7 @@ const
    opc_PdoDeviceMap->clear(); // empty pdo device list for current manager
 
    // get message container of CANopen protocol
-   std::vector<C_OscCanProtocol>::const_iterator c_IterComProtocols;
+   QList<C_OscCanProtocol>::const_iterator c_IterComProtocols;
    for (c_IterComProtocols = opc_Node->c_ComProtocols.begin();
         c_IterComProtocols != opc_Node->c_ComProtocols.end();
         ++c_IterComProtocols)
@@ -404,7 +405,7 @@ const
 
          // Tx
          opc_PdoManagerCnt->u16_TxTotal = static_cast<uint16_t>(pc_MsgContainer->c_TxMessages.size());
-         std::vector<C_OscCanMessage>::const_iterator c_MsgIter;
+         QList<C_OscCanMessage>::const_iterator c_MsgIter;
          for (c_MsgIter = pc_MsgContainer->c_TxMessages.begin();
               c_MsgIter != pc_MsgContainer->c_TxMessages.end();
               ++c_MsgIter)

@@ -16,6 +16,7 @@
 #include "C_UsHandler.hpp"
 #include "stwtypes.hpp"
 #include <QSettings>
+#include <QList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -101,9 +102,9 @@ private:
                                               const QString & orc_ActiveProject);
 
    static void mh_SaveColumns(QSettings & orc_Ini, const QString & orc_SectionName,
-                              const QString & orc_IdBase, const std::vector<int32_t> & orc_ColumnWidths);
+                              const QString & orc_IdBase, const QList<int32_t> & orc_ColumnWidths);
    static void mh_LoadColumns(QSettings & orc_Ini, const QString & orc_SectionName,
-                              const QString & orc_IdBase, std::vector<int32_t> & orc_ColumnWidths);
+                              const QString & orc_IdBase, QList<int32_t> & orc_ColumnWidths);
    static void mh_LoadScreenshotGifSucessTimeout(C_UsHandler & orc_UserSettings, QSettings & orc_Ini);
 };
 

@@ -29,6 +29,7 @@
 #include <QString>
 #include <QStringList>
 #include <QVector>
+#include <QList>
 
 
 /* -- Namespace
@@ -211,10 +212,10 @@ public:
       const QStringList &orc_New);
   void SetProjSdNodeDatapoolCommMessageOverviewColumnWidth(
       const QString &orc_NodeName, const QString &orc_DatapoolName,
-      const QString &orc_ListName, const std::vector<int32_t> &orc_Value);
+      const QString &orc_ListName, const QList<int32_t> &orc_Value);
   void SetProjSdNodeDatapoolCommSignalOverviewColumnWidth(
       const QString &orc_NodeName, const QString &orc_DatapoolName,
-      const QString &orc_ListName, const std::vector<int32_t> &orc_Value);
+      const QString &orc_ListName, const QList<int32_t> &orc_Value);
   void SetProjSdNodeDatapoolListSelectedMessage(
       const QString &orc_NodeName, const QString &orc_DatapoolName,
       const QString &orc_ListName,
@@ -224,11 +225,11 @@ public:
   void SetProjSdNodeDatapoolListColumnSizes(
       const QString &orc_NodeName, const QString &orc_DatapoolName,
       const QString &orc_ListName,
-      const std::vector<int32_t> &orc_ColumnWidths);
+      const QList<int32_t> &orc_ColumnWidths);
   void SetProjSdNodeCanOpenOverviewColumnWidth(
-      const QString &orc_NodeName, const std::vector<int32_t> &orc_Value);
+      const QString &orc_NodeName, const QList<int32_t> &orc_Value);
   void SetProjSdNodeCanOpenPdoOverviewColumnWidth(
-      const QString &orc_NodeName, const std::vector<int32_t> &orc_Value);
+      const QString &orc_NodeName, const QList<int32_t> &orc_Value);
   void SetProjSdNodeSelectedCanOpenManager(const QString &orc_NodeName,
                                            const uint8_t &oru8_Value);
   void SetProjSdNodeSelectedCanOpenDevice(const QString &orc_NodeName,
@@ -247,10 +248,10 @@ public:
       const QString &orc_NodeName, const bool &orq_IsUseCaseSelected);
   void
   SetProjSdNodeHalcOverviewColumnWidth(const QString &orc_NodeName,
-                                       const std::vector<int32_t> &orc_Value);
+                                       const QList<int32_t> &orc_Value);
   void
   SetProjSdNodeHalcConfigColumnWidth(const QString &orc_NodeName,
-                                     const std::vector<int32_t> &orc_Value);
+                                     const QList<int32_t> &orc_Value);
   void SetProjSdNodeSelectedHalcDomain(const QString &orc_NodeName,
                                        const QString &orc_Value);
   void SetProjSdNodeSelectedHalcChannel(const QString &orc_NodeName,
@@ -267,9 +268,9 @@ public:
       const bool oq_MessageSelected, const QString &orc_SelectedMessageName,
       const bool oq_SignalSelected, const QString &orc_SelectedSignalName);
   void SetProjSdBusCommMessageOverviewColumnWidth(
-      const QString &orc_BusName, const std::vector<int32_t> &orc_Value);
+      const QString &orc_BusName, const QList<int32_t> &orc_Value);
   void SetProjSdBusCommSignalOverviewColumnWidth(
-      const QString &orc_BusName, const std::vector<int32_t> &orc_Value);
+      const QString &orc_BusName, const QList<int32_t> &orc_Value);
   void
   SetProjSvNavigationExpandedStatus(const QString &orc_ViewName,
                                     const bool oq_NavigationExpandedStatus);

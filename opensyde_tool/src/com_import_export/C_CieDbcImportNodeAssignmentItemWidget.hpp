@@ -9,6 +9,7 @@
 #define C_CIEDBCIMPORTNODEASSIGNMENTITEMWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include <QStringList>
 
@@ -44,8 +45,8 @@ class C_CieDbcImportNodeAssignmentItemWidget :
 public:
    explicit C_CieDbcImportNodeAssignmentItemWidget(
       const stw::opensyde_gui_logic::C_CieConverter::C_CieNode & orc_DbcNode,
-      const QStringList & orc_OsyNodeNames, const std::vector<uint32_t> & orc_NodeIndexes,
-      const std::vector<uint32_t> & orc_InterfaceIndexes, QWidget * const opc_Parent = NULL);
+      const QStringList & orc_OsyNodeNames, const QList<uint32_t> & orc_NodeIndexes,
+      const QList<uint32_t> & orc_InterfaceIndexes, QWidget * const opc_Parent = NULL);
    ~C_CieDbcImportNodeAssignmentItemWidget(void) override;
 
    C_CieDbcOsyNodeAssignment GetNodeAssignment(void) const;
@@ -63,8 +64,8 @@ Q_SIGNALS:
 private:
    Ui::C_CieDbcImportNodeAssignmentItemWidget * mpc_Ui;
    const stw::opensyde_gui_logic::C_CieConverter::C_CieNode & mrc_DbcNode;
-   const std::vector<uint32_t> mc_NodeIndexes;
-   const std::vector<uint32_t> mc_InterfaceIndexes;
+   const QList<uint32_t> mc_NodeIndexes;
+   const QList<uint32_t> mc_InterfaceIndexes;
    int32_t ms32_PreviousCbxIndex;
 
    void m_OnComboboxIndexChanged(const int32_t os32_Index);

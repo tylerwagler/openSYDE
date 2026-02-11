@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QUndoStack>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_UtiUndoStack.hpp"
@@ -36,12 +37,12 @@ public:
    void DoMoveElements(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                        const uint32_t & oru32_DataPoolListIndex,
                        C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                       const std::vector<uint32_t> & orc_StartIndex, const std::vector<uint32_t> & orc_TargetIndex,
+                       const QList<uint32_t> & orc_StartIndex, const QList<uint32_t> & orc_TargetIndex,
                        const bool & orq_AdaptIndices);
    void DoDeleteElements(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                          const uint32_t & oru32_DataPoolListIndex,
                          C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                         const std::vector<uint32_t> & orc_Indices);
+                         const QList<uint32_t> & orc_Indices);
    void DoPaste(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                 const uint32_t & oru32_DataPoolListIndex,
                 C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
@@ -49,12 +50,12 @@ public:
    void DoAddElements(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                       const uint32_t & oru32_DataPoolListIndex,
                       C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                      const std::vector<uint32_t> & orc_Indices);
+                      const QList<uint32_t> & orc_Indices);
    void DoAddSpecificElements(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                               const uint32_t & oru32_DataPoolListIndex,
                               C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                              const std::vector<uint32_t> & orc_Indices,
-                              const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscData, const std::vector<stw::opensyde_gui_logic::
+                              const QList<uint32_t> & orc_Indices,
+                              const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscData, const QList<stw::opensyde_gui_logic::
                                                                                                                                    C_PuiSdNodeDataPoolListElement> & orc_UiData);
    void DoDataChangeElements(const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex,
                              const uint32_t & oru32_DataPoolListIndex,

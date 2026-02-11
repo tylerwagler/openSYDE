@@ -21,6 +21,7 @@
  */
 #include "C_OscIpDispatcher.hpp"
 #include "stwtypes.hpp"
+#include <QList>
 #include <QRecursiveMutex>
 #include <QString>
 #include <list>
@@ -72,17 +73,17 @@ private:
     const uint8_t u8_ServerNodeIdentifier;
   };
 
-  std::vector<C_TcpConnection> mc_SocketsTcp; ///< one per connection
+  QList<C_TcpConnection> mc_SocketsTcp; ///< one per connection
 
-  std::vector<SOCKET> mc_SocketsUdpClient; ///< one socket per local interface
+  QList<SOCKET> mc_SocketsUdpClient; ///< one socket per local interface
                                            ///< (for sending broadcasts)
-  std::vector<SOCKET> mc_SocketsUdpServer; ///< one socket per local interface
+  QList<SOCKET> mc_SocketsUdpServer; ///< one socket per local interface
                                            ///< (for receiving responses)
 
-  std::vector<uint32_t> mc_LocalInterfaceIps; ///< IPs of local interfaces
+  QList<uint32_t> mc_LocalInterfaceIps; ///< IPs of local interfaces
   QStringList mc_PreferredInterfaceNames;     ///< Optional preferred interfaces
 
-  static std::map<C_BufferIdentifier, std::list<std::vector<uint8_t>>>
+  static std::map<C_BufferIdentifier, std::list<QByteArray>>
       mhc_TcpBuffer; ///< dispatcher buffer
   static QRecursiveMutex mhc_LockBuffer;
 
@@ -107,22 +108,22 @@ public:
   virtual int32_t CloseTcp(const uint32_t ou32_Handle);
   virtual int32_t CloseUdp(void);
   virtual int32_t SendTcp(const uint32_t ou32_Handle,
-                          const std::vector<uint8_t> &orc_Data);
+                          const QByteArray &orc_Data);
   virtual int32_t ReadTcp(const uint32_t ou32_Handle,
-                          std::vector<uint8_t> &orc_Data);
+                          QByteArray &orc_Data);
   virtual int32_t ReadTcp(const uint32_t ou32_Handle,
                           const uint8_t ou8_ClientBusIdentifier,
                           const uint8_t ou8_ClientNodeIdentifier,
                           const uint8_t ou8_ServerBusIdentifier,
                           const uint8_t ou8_ServerNodeIdentifier,
-                          std::vector<uint8_t> &orc_Data);
+                          QByteArray &orc_Data);
   virtual int32_t ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier,
                                 const uint8_t ou8_ClientNodeIdentifier,
                                 const uint8_t ou8_ServerBusIdentifier,
                                 const uint8_t ou8_ServerNodeIdentifier,
-                                std::vector<uint8_t> &orc_Data);
-  virtual int32_t SendUdp(const std::vector<uint8_t> &orc_Data);
-  virtual int32_t ReadUdp(std::vector<uint8_t> &orc_Data,
+                                QByteArray &orc_Data);
+  virtual int32_t SendUdp(const QByteArray &orc_Data);
+  virtual int32_t ReadUdp(QByteArray &orc_Data,
                           uint8_t (&orau8_Ip)[4]);
 
   void LoadConfigFile(const QString &orc_FileLocation);

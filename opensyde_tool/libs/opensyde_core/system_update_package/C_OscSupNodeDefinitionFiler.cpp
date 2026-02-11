@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -73,7 +74,7 @@ static const QString mc_SIG_FILE_ATTR = "name";                                 
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const QStringList & orc_Files,
-                                                 const std::vector<C_OscSupNodeDefinition> & orc_Nodes)
+                                                 const QList<C_OscSupNodeDefinition> & orc_Nodes)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -114,10 +115,10 @@ int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const QStringList & orc_Files,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupNodeDefinitionFiler::h_LoadNodes(const QStringList & orc_Files,
                                                  const QStringList & orc_NodeFoldersAbs,
-                                                 const std::vector<uint8_t> & orc_ActiveNodes,
-                                                 std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+                                                 const QByteArray & orc_ActiveNodes,
+                                                 QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                                  std::map<uint32_t, uint32_t> & orc_UpdateOrderByNodes,
-                                                 const std::vector<uint32_t> & orc_UpdatePosition,
+                                                 const QList<uint32_t> & orc_UpdatePosition,
                                                  QStringList & orc_Signatures)
 {
    int32_t s32_Retval = C_NO_ERR;

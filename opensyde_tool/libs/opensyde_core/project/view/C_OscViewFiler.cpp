@@ -10,6 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -57,9 +58,9 @@ C_OscViewFiler::C_OscViewFiler(void)
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_Views,
+int32_t C_OscViewFiler::h_LoadSystemViewsFile(QList<C_OscViewData> & orc_Views,
                                               const QString & orc_PathSystemViews,
-                                              const std::vector<C_OscNode> & orc_OscNodes)
+                                              const QList<C_OscNode> & orc_OscNodes)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -100,8 +101,8 @@ int32_t C_OscViewFiler::h_LoadSystemViewsFile(std::vector<C_OscViewData> & orc_V
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
-                                       const std::vector<C_OscNode> & orc_OscNodes, C_OscXmlParserBase & orc_XmlParser,
+int32_t C_OscViewFiler::h_LoadViewsOsc(QList<C_OscViewData> & orc_Views,
+                                       const QList<C_OscNode> & orc_OscNodes, C_OscXmlParserBase & orc_XmlParser,
                                        const QString & orc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -180,7 +181,7 @@ int32_t C_OscViewFiler::h_LoadViewsOsc(std::vector<C_OscViewData> & orc_Views,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_LoadViewOsc(C_OscViewData & orc_View, C_OscXmlParserBase & orc_XmlParser,
-                                      const std::vector<C_OscNode> & orc_OscNodes)
+                                      const QList<C_OscNode> & orc_OscNodes)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -197,12 +198,12 @@ int32_t C_OscViewFiler::h_LoadViewOsc(C_OscViewData & orc_View, C_OscXmlParserBa
    }
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<uint8_t> c_NodeActiveFlags;
+      QByteArray c_NodeActiveFlags;
       s32_Retval = C_OscViewFiler::mh_LoadNodeActiveFlags(c_NodeActiveFlags, orc_XmlParser);
       orc_View.SetNodeActiveFlags(c_NodeActiveFlags);
       if (s32_Retval == C_NO_ERR)
       {
-         std::vector<C_OscViewNodeUpdate> c_NodeUpdateInformation;
+         QList<C_OscViewNodeUpdate> c_NodeUpdateInformation;
          //If you have an async project this might help
          //c_NodeUpdateInformation.resize(c_NodeActiveFlags.size(),C_OscViewNodeUpdate());
          s32_Retval =
@@ -241,7 +242,7 @@ int32_t C_OscViewFiler::h_LoadViewOsc(C_OscViewData & orc_View, C_OscXmlParserBa
    \param[in,out]  orc_XmlParser          XML parser with the "current" element set to the "opensyde-system-view" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::h_SaveNodeActiveFlags(const std::vector<uint8_t> & orc_NodeActiveFlags,
+void C_OscViewFiler::h_SaveNodeActiveFlags(const QByteArray & orc_NodeActiveFlags,
                                            C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("active-nodes");
@@ -264,7 +265,7 @@ void C_OscViewFiler::h_SaveNodeActiveFlags(const std::vector<uint8_t> & orc_Node
                                                 to the "opensyde-system-view" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::h_SaveNodeUpdateInformation(const std::vector<C_OscViewNodeUpdate> & orc_NodeUpdateInformation,
+void C_OscViewFiler::h_SaveNodeUpdateInformation(const QList<C_OscViewNodeUpdate> & orc_NodeUpdateInformation,
                                                  C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("node-update-information");
@@ -274,14 +275,14 @@ void C_OscViewFiler::h_SaveNodeUpdateInformation(const std::vector<C_OscViewNode
       const C_OscViewNodeUpdate & rc_NodeUpdateInformation = orc_NodeUpdateInformation[u32_ItNodeActiveFlag];
       const QStringList & rc_DataBlockPaths = rc_NodeUpdateInformation.GetPaths(
          C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
-      const std::vector<C_OscViewNodeUpdateParamInfo> & rc_ParamSetPaths = rc_NodeUpdateInformation.GetParamInfos();
+      const QList<C_OscViewNodeUpdateParamInfo> & rc_ParamSetPaths = rc_NodeUpdateInformation.GetParamInfos();
       const QStringList & rc_FileBasedPaths = rc_NodeUpdateInformation.GetPaths(
          C_OscViewNodeUpdate::eFTP_FILE_BASED);
-      std::vector<bool> c_SkipFlags;
-      const std::vector<bool> & rc_PathSkipFlags = rc_NodeUpdateInformation.GetSkipUpdateOfPathsFlags(
+      QList<bool> c_SkipFlags;
+      const QList<bool> & rc_PathSkipFlags = rc_NodeUpdateInformation.GetSkipUpdateOfPathsFlags(
          C_OscViewNodeUpdate::eFTP_DATA_BLOCK);
-      const std::vector<bool> & rc_ParamSetSkipFlags = rc_NodeUpdateInformation.GetSkipUpdateOfParamInfosFlags();
-      const std::vector<bool> & rc_FileBasedSkipFlags = rc_NodeUpdateInformation.GetSkipUpdateOfPathsFlags(
+      const QList<bool> & rc_ParamSetSkipFlags = rc_NodeUpdateInformation.GetSkipUpdateOfParamInfosFlags();
+      const QList<bool> & rc_FileBasedSkipFlags = rc_NodeUpdateInformation.GetSkipUpdateOfPathsFlags(
          C_OscViewNodeUpdate::eFTP_FILE_BASED);
 
       orc_XmlParser.CreateAndSelectNodeChild("node-specific-update-information");
@@ -480,7 +481,7 @@ QString C_OscViewFiler::h_PemFileStateSecurityToString(const C_OscViewNodeUpdate
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::mh_LoadNodeActiveFlags(std::vector<uint8_t> & orc_NodeActiveFlags,
+int32_t C_OscViewFiler::mh_LoadNodeActiveFlags(QByteArray & orc_NodeActiveFlags,
                                                C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -529,9 +530,9 @@ int32_t C_OscViewFiler::mh_LoadNodeActiveFlags(std::vector<uint8_t> & orc_NodeAc
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(std::vector<C_OscViewNodeUpdate> & orc_NodeUpdateInformation,
+int32_t C_OscViewFiler::mh_LoadNodeUpdateInformation(QList<C_OscViewNodeUpdate> & orc_NodeUpdateInformation,
                                                      C_OscXmlParserBase & orc_XmlParser,
-                                                     const std::vector<C_OscNode> & orc_OscNodes)
+                                                     const QList<C_OscNode> & orc_OscNodes)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -688,7 +689,7 @@ int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & or
                                                         C_OscXmlParserBase & orc_XmlParser, const C_OscNode & orc_Node)
 {
    QStringList c_Paths;
-   std::vector<bool> c_SkipFlags;
+   QList<bool> c_SkipFlags;
    int32_t s32_Retval = C_NO_ERR;
 
    if (orc_XmlParser.AttributeExists("position") == true)
@@ -739,11 +740,11 @@ int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & or
    }
    else
    {
-      std::vector<C_OscViewNodeUpdateParamInfo> c_ParamInfo;
+      QList<C_OscViewNodeUpdateParamInfo> c_ParamInfo;
       QStringList c_FileBasedPaths;
-      std::vector<bool> c_PathSkipFlags;
-      std::vector<bool> c_ParamSetSkipFlags;
-      std::vector<bool> c_FileBasedSkipFlags;
+      QList<bool> c_PathSkipFlags;
+      QList<bool> c_ParamSetSkipFlags;
+      QList<bool> c_FileBasedSkipFlags;
 
       //New format
       C_OscViewFiler::mh_LoadNodeUpdateInformationPaths(c_Paths, "data-block-path", orc_XmlParser);
@@ -806,7 +807,7 @@ int32_t C_OscViewFiler::mh_LoadOneNodeUpdateInformation(C_OscViewNodeUpdate & or
                                     "node-specific-update-information" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::mh_LoadNodeUpdateInformationParam(std::vector<C_OscViewNodeUpdateParamInfo> & orc_Info,
+void C_OscViewFiler::mh_LoadNodeUpdateInformationParam(QList<C_OscViewNodeUpdateParamInfo> & orc_Info,
                                                        C_OscXmlParserBase & orc_XmlParser)
 {
    orc_Info.clear();
@@ -866,7 +867,7 @@ void C_OscViewFiler::mh_LoadNodeUpdateInformationParam(std::vector<C_OscViewNode
                                     "node-specific-update-information" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::mh_LoadNodeUpdateInformationSkipUpdateOfFiles(std::vector<bool> & orc_Flags,
+void C_OscViewFiler::mh_LoadNodeUpdateInformationSkipUpdateOfFiles(QList<bool> & orc_Flags,
                                                                    C_OscXmlParserBase & orc_XmlParser)
 {
    // No error in case of not existing flags due to compatibility
@@ -1012,7 +1013,7 @@ int32_t C_OscViewFiler::mh_LoadNodeUpdateInformationPemStates(C_OscViewNodeUpdat
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::mh_LoadViewFileOsc(C_OscViewData & orc_View, const QString & orc_FilePath,
-                                           const std::vector<C_OscNode> & orc_OscNodes)
+                                           const QList<C_OscNode> & orc_OscNodes)
 {
    C_OscXmlParser c_XmlParser;
    int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath,
@@ -1109,7 +1110,7 @@ void C_OscViewFiler::mh_SaveNodeUpdateInformationPaths(const QStringList & orc_P
                                     to the "node-specific-update-information" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::mh_SaveNodeUpdateInformationParamInfo(const std::vector<C_OscViewNodeUpdateParamInfo> & orc_Info,
+void C_OscViewFiler::mh_SaveNodeUpdateInformationParamInfo(const QList<C_OscViewNodeUpdateParamInfo> & orc_Info,
                                                            C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("param-sets");
@@ -1134,7 +1135,7 @@ void C_OscViewFiler::mh_SaveNodeUpdateInformationParamInfo(const std::vector<C_O
                                     to the "node-specific-update-information" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewFiler::mh_SaveNodeUpdateInformationSkipUpdateOfFiles(const std::vector<bool> & orc_Flags,
+void C_OscViewFiler::mh_SaveNodeUpdateInformationSkipUpdateOfFiles(const QList<bool> & orc_Flags,
                                                                    C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("skip-update-of-files");

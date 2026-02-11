@@ -75,9 +75,9 @@ private:
 
    static void mh_ReadDataPoolDataEventReceived(void * const opv_Instance, const uint8_t ou8_DataPoolIndex,
                                                 const uint16_t ou16_ListIndex, const uint16_t ou16_ElementIndex,
-                                                const std::vector<uint8_t> & orc_Value);
+                                                const QByteArray & orc_Value);
    void m_ReadDataPoolDataEventReceived(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                        const uint16_t ou16_ElementIndex, const std::vector<uint8_t> & orc_Value);
+                                        const uint16_t ou16_ElementIndex, const QByteArray & orc_Value);
 
    static void mh_ReadDataPoolDataEventErrorReceived(void * const opv_Instance, const uint8_t ou8_DataPoolIndex,
                                                      const uint16_t ou16_ListIndex, const uint16_t ou16_ElementIndex,

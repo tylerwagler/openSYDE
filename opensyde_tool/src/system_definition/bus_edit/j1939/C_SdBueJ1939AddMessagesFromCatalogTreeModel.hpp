@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "C_TblTreeModelCheckable.hpp"
@@ -39,7 +40,7 @@ public:
    explicit C_SdBueJ1939AddMessagesFromCatalogTreeModel(QObject * const opc_Parent = NULL);
    ~C_SdBueJ1939AddMessagesFromCatalogTreeModel() override;
 
-   void UpdateData(const std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_MessagesImported);
+   void UpdateData(const QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_MessagesImported);
 
    int32_t columnCount(const QModelIndex & orc_Parent = QModelIndex()) const override;
    QVariant headerData(const int32_t os32_Section, const Qt::Orientation oe_Orientation, const int32_t os32_Role =
@@ -51,11 +52,11 @@ public:
    static int32_t h_EnumToColumn(const E_Columns & ore_Value);
 
    // Abstract functions overridden from C_TblTreeModelCheckable
-   int32_t Init(const std::vector<uint32_t> & orc_ElementIndices) override;
-   void GetCheckedItems(std::vector<uint32_t> & orc_ElementIndices,
-                        std::vector<std::vector<uint32_t> > & orc_ChildIndicesPerElement) const override;
+   int32_t Init(const QList<uint32_t> & orc_ElementIndices) override;
+   void GetCheckedItems(QList<uint32_t> & orc_ElementIndices,
+                        QList<QList<uint32_t> > & orc_ChildIndicesPerElement) const override;
    uint32_t GetCheckedItemCount(void) const override;
-   void GetSelectedMessages(std::vector<C_CieConverter::C_CieNodeMessage> & orc_SelectedMessages) const;
+   void GetSelectedMessages(QList<C_CieConverter::C_CieNodeMessage> & orc_SelectedMessages) const;
    void SelectAllParentItems(void);
    void UnselectAllParentItems(void);
    void SelectFilteredParentItems(const QModelIndexList & orc_FilteredItems);
@@ -77,15 +78,15 @@ private:
       QVariant c_J1939Pgn;
       QString c_Name;
       QString c_Comment;
-      std::vector< C_SignalTableData> c_Signals;
+      QList< C_SignalTableData> c_Signals;
    };
 
    void m_FillMessageInfo(void);
    void m_DecodeIndex(const QModelIndex & orc_ModelIndex, uint32_t & oru32_MessageIndex, uint32_t & oru32_SignalIndex,
                       bool & orq_IsSignal) const;
 
-   std::vector<C_MsgTableData> mc_MessageInfoList;
-   std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> mc_MessagesImportedFromCatalog;
+   QList<C_MsgTableData> mc_MessageInfoList;
+   QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> mc_MessagesImportedFromCatalog;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

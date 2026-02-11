@@ -40,7 +40,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoRemoveBendPointCommand::C_SebUnoRemoveBendPointCommand(QGraphicsScene * const opc_Scene,
-                                                               const std::vector<uint64_t> & orc_Ids,
+                                                               const QList<uint64_t> & orc_Ids,
                                                                const QPointF & orc_ScenePosition,
                                                                QUndoCommand * const opc_Parent) :
    C_SebUnoBendPointBaseCommand(opc_Scene, orc_Ids, "Remove bend point for line(s)", orc_ScenePosition,

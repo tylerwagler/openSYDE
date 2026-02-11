@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscViewNodeUpdateParamInfo.hpp"
 #include "C_OscParamSetInterpretedData.hpp"
@@ -45,7 +46,7 @@ private:
    stw::opensyde_core::C_OscParamSetInterpretedData mc_InterpretedFileInfo;
    stw::opensyde_core::C_OscViewNodeUpdateParamInfo mc_ParamInfo;
    QString mc_ComparisonHtml;
-   std::vector<C_SyvUpPacParamSetFileInfoComparisonDescription> mc_ComparisonResults;
+   QList<C_SyvUpPacParamSetFileInfoComparisonDescription> mc_ComparisonResults;
    static const QString mhc_START_HEADING_TD;
    static const QString mhc_CONTINUE_HEADING_TD;
    static const QString mhc_START_DATA_TD;

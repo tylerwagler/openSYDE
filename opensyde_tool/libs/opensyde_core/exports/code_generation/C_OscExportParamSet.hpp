@@ -12,6 +12,7 @@
 #define C_OSCEXPORTPARAMSET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include "C_OscNode.hpp"
 #include "C_OscParamSetHandler.hpp"
@@ -42,8 +43,8 @@ protected:
    static void mh_FillInterpretedDatapool(const stw::opensyde_core::C_OscNodeDataPool & orc_SdDataPool,
                                           stw::opensyde_core::C_OscParamSetInterpretedDataPool & orc_IntDataPool);
    static int32_t mh_FillRawEntries(const stw::opensyde_core::C_OscNodeDataPool & orc_SdDataPool,
-                                    const std::vector<uint8_t> & orc_ConfigRawBytes,
-                                    std::vector<C_OscParamSetRawEntry> & orc_Entries);
+                                    const QByteArray & orc_ConfigRawBytes,
+                                    QList<C_OscParamSetRawEntry> & orc_Entries);
    static C_OscParamSetInterpretedFileInfoData mh_GetFileInfo(const QString & orc_ExportToolName,
                                                               const QString & orc_ExportToolVersion);
    static int32_t mh_WriteParameterSetImage(const C_OscParamSetRawNode & orc_RawNode,
@@ -54,9 +55,9 @@ protected:
                                             const QString & orc_ExportToolName,
                                             const QString & orc_ExportToolVersion);
 
-   static int32_t mh_InsertCrc16(std::vector<uint8_t> & orc_Bytes);
+   static int32_t mh_InsertCrc16(QByteArray & orc_Bytes);
    static int32_t mh_GetConfigurationRawBytes(const stw::opensyde_core::C_OscNodeDataPool & orc_SdDataPool,
-                                              std::vector<uint8_t> & orc_Bytes);
+                                              QByteArray & orc_Bytes);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -106,7 +106,7 @@ int32_t C_TblModelAction::rowCount(const QModelIndex &orc_Parent) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t
-C_TblModelAction::AddNewItem(const std::vector<uint32_t> &orc_SelectedIndices) {
+C_TblModelAction::AddNewItem(const QList<uint32_t> &orc_SelectedIndices) {
   const uint32_t u32_Retval =
       this->m_AddNewItem(m_GetLastSelectedIndex(orc_SelectedIndices));
 
@@ -123,9 +123,9 @@ C_TblModelAction::AddNewItem(const std::vector<uint32_t> &orc_SelectedIndices) {
    Indices of new items
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t>
-C_TblModelAction::PasteItems(const std::vector<uint32_t> &orc_SelectedIndices) {
-  const std::vector<uint32_t> c_Retval =
+QList<uint32_t>
+C_TblModelAction::PasteItems(const QList<uint32_t> &orc_SelectedIndices) {
+  const QList<uint32_t> c_Retval =
       this->m_PasteItems(m_GetLastSelectedIndex(orc_SelectedIndices));
 
   Q_EMIT this->SigItemCountChanged(this->m_GetSizeItems());
@@ -142,7 +142,7 @@ C_TblModelAction::PasteItems(const std::vector<uint32_t> &orc_SelectedIndices) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_TblModelAction::CutSelectedItems(
-    const std::vector<uint32_t> &orc_SelectedIndices) {
+    const QList<uint32_t> &orc_SelectedIndices) {
   uint32_t u32_Retval;
 
   this->CopySelectedItems(orc_SelectedIndices);
@@ -161,21 +161,21 @@ uint32_t C_TblModelAction::CutSelectedItems(
 */
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_TblModelAction::DeleteSelectedItems(
-    const std::vector<uint32_t> &orc_SelectedIndices) {
+    const QList<uint32_t> &orc_SelectedIndices) {
   uint32_t u32_Retval = 0UL;
 
-  std::vector<std::vector<uint32_t>> c_ContiguousSections =
+  QList<QList<uint32_t>> c_ContiguousSections =
       C_Uti::h_GetContiguousSectionsAscending(orc_SelectedIndices);
   // Start deleting from back (easier to keep indices valid)
   for (uint32_t u32_ItSection = c_ContiguousSections.size();
        u32_ItSection > 0UL; --u32_ItSection) {
-    const std::vector<uint32_t> &rc_Section =
-        c_ContiguousSections[static_cast<std::vector<uint32_t>::size_type>(
+    const QList<uint32_t> &rc_Section =
+        c_ContiguousSections[static_cast<QList<uint32_t>::size_type>(
             u32_ItSection - 1UL)];
     if (rc_Section.size() > 0UL) {
       const uint32_t u32_FirstDeletedIndex = rc_Section[0UL];
       const uint32_t u32_LastDeletedIndex =
-          rc_Section[static_cast<std::vector<uint32_t>::size_type>(
+          rc_Section[static_cast<QList<uint32_t>::size_type>(
               rc_Section.size() - 1UL)];
       this->m_BeginRemoveRows(u32_FirstDeletedIndex, u32_LastDeletedIndex);
       // Remove all items in the current section (from back to front -> easier
@@ -184,10 +184,10 @@ uint32_t C_TblModelAction::DeleteSelectedItems(
            --u32_ItItem) {
         // Only remove item if its index is in range (as its a public interface
         // its probably better to check)
-        if (rc_Section[static_cast<std::vector<uint32_t>::size_type>(
+        if (rc_Section[static_cast<QList<uint32_t>::size_type>(
                 u32_ItItem - 1UL)] < this->m_GetSizeItems()) {
           this->m_DeleteItem(
-              rc_Section[static_cast<std::vector<uint32_t>::size_type>(
+              rc_Section[static_cast<QList<uint32_t>::size_type>(
                   u32_ItItem - 1UL)]);
         }
       }
@@ -197,11 +197,11 @@ uint32_t C_TblModelAction::DeleteSelectedItems(
   // If there is at least one item in the input both of these operations should
   // not fail
   if (c_ContiguousSections.size() > 0UL) {
-    const std::vector<uint32_t> &rc_Section = c_ContiguousSections
-        [static_cast<std::vector<std::vector<uint32_t>>::size_type>(
+    const QList<uint32_t> &rc_Section = c_ContiguousSections
+        [static_cast<QList<QList<uint32_t>>::size_type>(
             c_ContiguousSections.size() - 1UL)];
     if (rc_Section.size() > 0UL) {
-      u32_Retval = rc_Section[static_cast<std::vector<uint32_t>::size_type>(
+      u32_Retval = rc_Section[static_cast<QList<uint32_t>::size_type>(
           rc_Section.size() - 1UL)];
     }
   }
@@ -231,10 +231,10 @@ uint32_t C_TblModelAction::DeleteSelectedItems(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblModelAction::MoveSelectedItems(
-    const std::vector<uint32_t> &orc_SelectedIndices, const bool oq_Up) {
-  std::vector<uint32_t> c_TargetIndices = orc_SelectedIndices;
-  std::vector<uint32_t> c_SelectedIndicesCopy = orc_SelectedIndices;
-  std::vector<std::vector<uint32_t>> c_ContiguousSections;
+    const QList<uint32_t> &orc_SelectedIndices, const bool oq_Up) {
+  QList<uint32_t> c_TargetIndices = orc_SelectedIndices;
+  QList<uint32_t> c_SelectedIndicesCopy = orc_SelectedIndices;
+  QList<QList<uint32_t>> c_ContiguousSections;
   uint32_t u32_TargetAccessIndex = 0UL;
   bool q_InBetween;
   //"Calculate" target indices based on source indices and specified direction
@@ -273,7 +273,7 @@ void C_TblModelAction::MoveSelectedItems(
       // Special handling for first/last section if move up/down
       if (oq_Up) {
         if (u32_ItSection == 0UL) {
-          const std::vector<uint32_t> &rc_Section =
+          const QList<uint32_t> &rc_Section =
               c_ContiguousSections[u32_ItSection];
           q_Continue = false;
           // This still has to happen! (even if we skip that section!)
@@ -291,7 +291,7 @@ void C_TblModelAction::MoveSelectedItems(
       }
     }
     if (q_Continue) {
-      const std::vector<uint32_t> &rc_Section =
+      const QList<uint32_t> &rc_Section =
           c_ContiguousSections[u32_ItSection];
       if (rc_Section.size() > 0UL) {
         uint32_t u32_TargetIndex = c_TargetIndices[u32_TargetAccessIndex];
@@ -308,7 +308,7 @@ void C_TblModelAction::MoveSelectedItems(
         }
         this->beginMoveRows(
             QModelIndex(), rc_Section[0UL],
-            rc_Section[static_cast<std::vector<uint32_t>::size_type>(
+            rc_Section[static_cast<QList<uint32_t>::size_type>(
                 rc_Section.size() - 1UL)],
             QModelIndex(), u32_TargetIndex);
         this->m_MoveItems(rc_Section, u32_TargetIndexParam);
@@ -331,7 +331,7 @@ void C_TblModelAction::MoveSelectedItems(
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_TblModelAction::CheckAllIndicesInRange(
-    const std::vector<uint32_t> &orc_Indices) const {
+    const QList<uint32_t> &orc_Indices) const {
   bool q_Retval = true;
 
   for (uint32_t u32_ItItem = 0UL; u32_ItItem < orc_Indices.size();
@@ -462,7 +462,7 @@ bool C_TblModelAction::mh_GetCheckStateVariantAsBool(
 */
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_TblModelAction::m_GetLastSelectedIndex(
-    const std::vector<uint32_t> &orc_SelectedIndices) const {
+    const QList<uint32_t> &orc_SelectedIndices) const {
   uint32_t u32_Retval;
 
   if (orc_SelectedIndices.size() == 0UL) {
@@ -487,7 +487,7 @@ uint32_t C_TblModelAction::m_GetLastSelectedIndex(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_TblModelAction::m_MoveItems(
-    const std::vector<uint32_t> &orc_ContiguousIndices,
+    const QList<uint32_t> &orc_ContiguousIndices,
     const uint32_t ou32_TargetIndex) {
   if (orc_ContiguousIndices.size() > 0UL) {
     bool q_Forward;

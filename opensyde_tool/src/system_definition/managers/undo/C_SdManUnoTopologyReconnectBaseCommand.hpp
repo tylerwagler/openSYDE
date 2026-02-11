@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include "C_SebUnoBaseCommand.hpp"
 #include "C_GiLiBusConnector.hpp"
 
@@ -29,10 +30,10 @@ class C_SdManUnoTopologyReconnectBaseCommand :
    public C_SebUnoBaseCommand
 {
 public:
-   C_SdManUnoTopologyReconnectBaseCommand(QGraphicsScene * const opc_Scene, const std::vector<uint64_t> & orc_Ids,
+   C_SdManUnoTopologyReconnectBaseCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
                                           const uint64_t & oru64_StartingItemId, const uint64_t & oru64_LastItemId,
                                           const QPointF & orc_ConnectionPos, const int32_t & ors32_Interface,
-                                          const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
+                                          const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
                                           const QString & orc_Description, QUndoCommand * const opc_Parent = NULL);
    ~C_SdManUnoTopologyReconnectBaseCommand(void) override;
    void undo(void) override;
@@ -45,13 +46,13 @@ protected:
    //TODO: Save initial position (If this command ever needs to be undone) -> also add to m_Reconnect interface
    const int32_t ms32_Interface;
    uint8_t mu8_InitialInterface;
-   const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> mc_Properties;
-   std::vector<C_PuiSdNodeInterfaceAutomaticProperties> mc_InitialProperties;
+   const QList<C_PuiSdNodeInterfaceAutomaticProperties> mc_Properties;
+   QList<C_PuiSdNodeInterfaceAutomaticProperties> mc_InitialProperties;
 
    stw::opensyde_gui::C_GiLiBusConnector * m_GetBusConnector(void) const;
    virtual void m_Reconnect(const uint64_t & oru64_StartingId, const uint64_t & oru64_LastId,
                             const int32_t & ors32_Interface,
-                            const std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties) = 0;
+                            const QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties) = 0;
 
 private:
    bool mq_Merged;

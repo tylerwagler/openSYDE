@@ -10,6 +10,7 @@
 #define C_GILINODE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QObject>
 #include <QPainter>
 #include <QGraphicsItem>
@@ -57,13 +58,13 @@ public:
    void AddConnection(C_GiLiBusConnector * const opc_Connection);
    void AddConnectionAndData(C_GiLiBusConnector * const opc_Connection,
                              const stw::opensyde_gui_logic::C_PuiSdNodeConnectionId & orc_NodeConnection,
-                             const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties, const uint32_t & oru32_BusIndex);
+                             const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties, const uint32_t & oru32_BusIndex);
    void UpdateConnection(const C_GiLiBusConnector * const opc_Connection,
                          const stw::opensyde_gui_logic::C_PuiSdNodeConnectionId & orc_NodeConnection,
-                         const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
+                         const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties,
                          const uint32_t & oru32_BusIndex) const;
    void ChangeInterface(const uint8_t ou8_Interface, const C_GiLiBusConnector * const opc_Connection,
-                        const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
+                        const QList<stw::opensyde_gui_logic::C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties)
    const;
    const stw::opensyde_gui_logic::C_PuiSdNodeConnectionId * GetNodeConnectionId(
       const C_GiLiBusConnector * const opc_Connection) const;

@@ -12,6 +12,7 @@
 #define C_SDNDEDPCONTENTUTIL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStringList>
 #include <QVariant>
 #include "stwtypes.hpp"
@@ -34,7 +35,7 @@ public:
    static int32_t h_GetValueAsFloat64(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
                                       float64_t & orf64_Output, const uint32_t ou32_Index);
    static void h_GetValuesAsFloat64(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
-                                    std::vector<float64_t> & orc_Output);
+                                    QList<float64_t> & orc_Output);
    static void h_GetAnyValueAsUint64(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
                                      uint64_t & oru64_Output, const uint32_t ou32_Index);
    static void h_GetAnyValueAsSint64(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content,
@@ -58,7 +59,7 @@ public:
    static int32_t h_GetMinimalTypeAfterScaling(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,
                                                const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Max,
                                                const float64_t of64_Factor, const float64_t of64_Offset,
-                                               std::vector<stw::opensyde_core::C_OscNodeDataPoolContent::E_Type> & orc_Types);
+                                               QList<stw::opensyde_core::C_OscNodeDataPoolContent::E_Type> & orc_Types);
    static stw::opensyde_core::C_OscNodeDataPoolContent::E_Type h_GetMinimumTypeForRange(const float64_t of64_Min,
                                                                                         const float64_t of64_Max,
                                                                                         const uint64_t ou64_Steps);
@@ -101,7 +102,7 @@ public:
    static int32_t h_SetAllContentFromString(const QString & orc_Input,
                                             stw::opensyde_core::C_OscNodeDataPoolContent & orc_Output);
    static QString h_ConvertToString(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Data);
-   static QString h_ConvertToString(const std::vector<int8_t> & orc_Data);
+   static QString h_ConvertToString(const QList<int8_t> & orc_Data);
    static void h_SetString(const QString & orc_String, stw::opensyde_core::C_OscNodeDataPoolContent & orc_Output);
 };
 

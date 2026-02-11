@@ -15,6 +15,7 @@
  */
 #include "precomp_headers.hpp"
 #include <QDir>
+#include <QList>
 #include <QFile>
 #include <QFileInfo>
 
@@ -112,7 +113,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
     const QString &orc_PathSystemDefinition,
     const QString &orc_PathDeviceDefinitions,
     const bool oq_UseDeviceDefinitions, uint16_t *const opu16_ReadFileVersion,
-    const std::vector<uint8_t> *const opc_NodesToLoad,
+    const QByteArray *const opc_NodesToLoad,
     const bool oq_SkipContent, const QString *const opc_ExpectedNodeName,
     QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval = C_NO_ERR;
@@ -243,11 +244,11 @@ int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemDefinitionFiler::h_LoadNodes(
-    std::vector<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser,
+    QList<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser,
     const C_OscDeviceManager &orc_DeviceDefinitions,
     const QString &orc_BasePath, const bool oq_UseDeviceDefinitions,
     const bool oq_UseFileInterface,
-    const std::vector<uint8_t> *const opc_NodesToLoad,
+    const QByteArray *const opc_NodesToLoad,
     const bool oq_SkipContent, const QString *const opc_ExpectedNodeName,
     QStringList *const opc_ErrorDetailsMissingDevices)
 
@@ -414,7 +415,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t
-C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> &orc_Buses,
+C_OscSystemDefinitionFiler::h_LoadBuses(QList<C_OscSystemBus> &orc_Buses,
                                         C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_SelectedNode;
@@ -474,7 +475,7 @@ C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> &orc_Buses,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemDefinitionFiler::h_SaveNodes(
-    const std::vector<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser,
+    const QList<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser,
     const QString &orc_BasePath, QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
   const std::map<uint32_t, QString> c_NodeIndicesToNameMap =
@@ -544,7 +545,7 @@ int32_t C_OscSystemDefinitionFiler::h_SaveNodes(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinitionFiler::h_SaveBuses(
-    const std::vector<C_OscSystemBus> &orc_Buses,
+    const QList<C_OscSystemBus> &orc_Buses,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Buses.size()));
@@ -596,7 +597,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_PathDeviceDefinitions,
     const QString &orc_BasePath, const bool oq_UseDeviceDefinitions,
     uint16_t *const opu16_ReadFileVersion,
-    const std::vector<uint8_t> *const opc_NodesToLoad,
+    const QByteArray *const opc_NodesToLoad,
     const bool oq_SkipContent, const QString *const opc_ExpectedNodeName,
     QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval = C_NO_ERR;
@@ -815,7 +816,7 @@ void C_OscSystemDefinitionFiler::h_SplitDeviceType(
 */
 //----------------------------------------------------------------------------------------------------------------------
 std::map<uint32_t, QString> C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(
-    const std::vector<C_OscNode> &orc_Nodes) {
+    const QList<C_OscNode> &orc_Nodes) {
   std::map<uint32_t, QString> c_Retval;
   for (uint32_t u32_It = 0UL; u32_It < orc_Nodes.size(); ++u32_It) {
     const C_OscNode &rc_Node = orc_Nodes[u32_It];

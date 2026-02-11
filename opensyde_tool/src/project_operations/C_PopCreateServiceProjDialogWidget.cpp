@@ -164,7 +164,7 @@ void C_PopCreateServiceProjDialogWidget::InitStaticNames(void) const
  *  \param[in]    orc_ViewIndices   View indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PopCreateServiceProjDialogWidget::PrepareDialog(const std::vector<uint32_t> & orc_ViewIndices)
+void C_PopCreateServiceProjDialogWidget::PrepareDialog(const QList<uint32_t> & orc_ViewIndices)
 {
    this->mpc_Ui->pc_TreeView->Init(&this->mc_Model, orc_ViewIndices);
 }
@@ -176,8 +176,8 @@ void C_PopCreateServiceProjDialogWidget::PrepareDialog(const std::vector<uint32_
    \param[out]      orc_ChildIndicesPerView   Vector of vectors of childs per view
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PopCreateServiceProjDialogWidget::GetCheckedItems(std::vector<uint32_t> & orc_ViewIndices,
-                                                         std::vector<std::vector<uint32_t> > & orc_ChildIndicesPerView)
+void C_PopCreateServiceProjDialogWidget::GetCheckedItems(QList<uint32_t> & orc_ViewIndices,
+                                                         QList<QList<uint32_t> > & orc_ChildIndicesPerView)
 const
 {
    this->mpc_Ui->pc_TreeView->GetCheckedItems(&this->mc_Model, orc_ViewIndices, orc_ChildIndicesPerView);
@@ -236,7 +236,7 @@ int32_t C_PopCreateServiceProjDialogWidget::SaveCurrentProjectForServiceMode(voi
 {
    int32_t s32_Retval;
 
-   std::vector<std::array<bool, 3> > c_ViewConfigs = this->m_CollectViewConfig();
+   QList<std::array<bool, 3> > c_ViewConfigs = this->m_CollectViewConfig();
    const QString c_Path = C_PuiUtil::h_GetAbsolutePathFromProject(this->GetSpPath());
    const QString c_Password = this->GetPassword();
 
@@ -471,12 +471,12 @@ void C_PopCreateServiceProjDialogWidget::m_UpdateSelection(const int32_t os32_Se
    \retval   c_ViewConfig   Vector of arrays, which hold 3 booleans each. Each array represents a view
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<std::array<bool, 3> > C_PopCreateServiceProjDialogWidget::m_CollectViewConfig(void)
+QList<std::array<bool, 3> > C_PopCreateServiceProjDialogWidget::m_CollectViewConfig(void)
 {
-   std::vector<std::array<bool, 3> > c_ViewConfig;
+   QList<std::array<bool, 3> > c_ViewConfig;
 
-   std::vector<uint32_t> c_ViewIndices;
-   std::vector<std::vector<uint32_t> > c_ChildIndicesPerView;
+   QList<uint32_t> c_ViewIndices;
+   QList<QList<uint32_t> > c_ChildIndicesPerView;
 
    this->GetCheckedItems(c_ViewIndices, c_ChildIndicesPerView);
 
@@ -508,7 +508,7 @@ std::vector<std::array<bool, 3> > C_PopCreateServiceProjDialogWidget::m_CollectV
    \param[in]       c_ViewConfigs     Vector of arrays, which hold 3 booleans each. Each array represents a view
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PopCreateServiceProjDialogWidget::m_SavePermissionsToUserSettings(std::vector<std::array<bool,
+void C_PopCreateServiceProjDialogWidget::m_SavePermissionsToUserSettings(QList<std::array<bool,
                                                                                                 3> > & orc_ViewConfigs)
 {
    // get views

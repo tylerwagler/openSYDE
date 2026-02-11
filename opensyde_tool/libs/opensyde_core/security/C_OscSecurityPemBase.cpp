@@ -138,9 +138,9 @@ int32_t C_OscSecurityPemBase::LoadFromFile(const std::string &orc_FileName,
     {
       const std::string c_PemFileContent = c_FileContent.toStdString();
 
-      std::vector<uint8_t> c_BufferFile;
+      QByteArray c_BufferFile;
       c_BufferFile.resize(c_PemFileContent.size());
-      memcpy(&c_BufferFile[0], c_PemFileContent.data(),
+      memcpy(reinterpret_cast<uint8_t*>(c_BufferFile.data()), c_PemFileContent.data(),
              c_PemFileContent.size());
       s32_Retval = this->m_ReadPublicKey(c_BufferFile, orc_ErrorMessage);
       if (s32_Retval == C_NO_ERR) {
@@ -179,24 +179,24 @@ int32_t C_OscSecurityPemBase::LoadFromFile(const std::string &orc_FileName,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSecurityPemBase::m_ReadPublicKey(
-    const std::vector<uint8_t> &orc_FileContent,
+    const QByteArray &orc_FileContent,
     std::string &orc_ErrorMessage) {
   int32_t s32_Retval = C_NO_ERR;
 
   const int x_ContentSize = static_cast<int>(
       orc_FileContent.size()); // lint !e970 !e8080 //use type expected by API
   BIO *const pc_PubKeyFile =
-      BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
+      BIO_new_mem_buf(reinterpret_cast<const char*>(orc_FileContent.constData()), x_ContentSize);
 
   if (pc_PubKeyFile != NULL) {
     // Public key
     X509 *const pc_RsaPub = PEM_read_bio_X509(pc_PubKeyFile, NULL, NULL, NULL);
     if (pc_RsaPub != NULL) {
-      std::vector<uint8_t> c_PubKeyTextDecoded;
+      QByteArray c_PubKeyTextDecoded;
       c_PubKeyTextDecoded.resize(
           C_OscSecurityPemBase::mhu32_DEFAULT_BUFFER_SIZE);
       {
-        uint8_t *pu8_PubKeyTextDecodedPointer = &c_PubKeyTextDecoded[0];
+        uint8_t *pu8_PubKeyTextDecodedPointer = reinterpret_cast<uint8_t*>(c_PubKeyTextDecoded.data());
         const uint32_t u32_PubKeyTextDecodedOpensslCount =
             i2d_X509(pc_RsaPub, &pu8_PubKeyTextDecodedPointer);
         c_PubKeyTextDecoded.resize(u32_PubKeyTextDecodedOpensslCount);
@@ -297,11 +297,11 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(
             ASN1_INTEGER *const pc_SerialNumberOpenssl =
                 X509_get_serialNumber(pc_RsaPub);
             if (pc_SerialNumberOpenssl != NULL) {
-              std::vector<uint8_t> c_PubKeySerialNumber;
+              QByteArray c_PubKeySerialNumber;
               c_PubKeySerialNumber.resize(
                   C_OscSecurityPemBase::mhu32_DEFAULT_BUFFER_SIZE);
               {
-                uint8_t *pu8_SerialNumberPointer = &c_PubKeySerialNumber[0];
+                uint8_t *pu8_SerialNumberPointer = reinterpret_cast<uint8_t*>(c_PubKeySerialNumber.data());
                 const uint32_t u32_SerialNumberCount = i2d_ASN1_INTEGER(
                     pc_SerialNumberOpenssl, &pu8_SerialNumberPointer);
                 c_PubKeySerialNumber.resize(u32_SerialNumberCount);
@@ -388,14 +388,14 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSecurityPemBase::m_ReadMetaInfos(
-    const std::vector<uint8_t> &orc_FileContent,
+    const QByteArray &orc_FileContent,
     std::string &orc_ErrorMessage) {
   int32_t s32_Retval = C_NO_ERR;
 
   const int x_ContentSize = static_cast<int>(
       orc_FileContent.size()); // lint !e970 !e8080 //use type expected by API
   BIO *const pc_PubKeyFile =
-      BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
+      BIO_new_mem_buf(reinterpret_cast<const char*>(orc_FileContent.constData()), x_ContentSize);
 
   if (pc_PubKeyFile != NULL) {
     // Public key

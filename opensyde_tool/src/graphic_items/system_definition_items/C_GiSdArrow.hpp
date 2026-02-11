@@ -30,7 +30,7 @@ class C_GiSdArrow :
 {
 public:
    C_GiSdArrow(const int32_t & ors32_Index, const uint64_t & oru64_Id,
-               const std::vector<QPointF> * const opc_Points = NULL, QGraphicsItem * const opc_Parent = NULL);
+               const QList<QPointF> * const opc_Points = NULL, QGraphicsItem * const opc_Parent = NULL);
    void LoadData(void) override;
    void UpdateData(void) override;
    void DeleteData(void) override;

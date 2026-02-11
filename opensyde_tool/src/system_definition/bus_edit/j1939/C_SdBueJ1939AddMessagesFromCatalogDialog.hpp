@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QList>
 
 #include "stwerrors.hpp"
 #include "C_OgePopUpDialog.hpp"
@@ -47,7 +48,7 @@ public:
    ~C_SdBueJ1939AddMessagesFromCatalogDialog(void)  override;
 
    void InitStaticNames(void) const;
-   std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> GetMessagesImportedFromCatalog(void) const;
+   QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> GetMessagesImportedFromCatalog(void) const;
    const QString GetCatalogFilePath() const;
 
 protected:
@@ -74,7 +75,7 @@ private:
    void m_CatalogPathEntered();
    void m_ProcessCatalogPath(const bool oq_PathManuallyEntered);
    void m_FilterJ1939SpecificMessages(
-      std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_FilteredMessages);
+      QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> & orc_FilteredMessages);
    void m_SetMessageMode();
    void m_SelectAllMessages();
 
@@ -88,7 +89,7 @@ private:
    stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    QString mc_CatalogFilePath;
    int32_t ms32_ImportCatalogReturn;
-   std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> mc_MessagesImportedFromCatalog;
+   QList<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> mc_MessagesImportedFromCatalog;
    E_MessageMode me_Mode;
 };
 

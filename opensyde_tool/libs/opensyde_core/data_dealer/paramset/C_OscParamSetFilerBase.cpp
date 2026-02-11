@@ -372,7 +372,7 @@ void C_OscParamSetFilerBase::mh_SaveNodeName(const QString & orc_Name, C_OscXmlP
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfos(std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
+int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfos(QList<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
                                                      C_OscXmlParserBase & orc_XmlParser,
                                                      bool & orq_MissingOptionalContent)
 {
@@ -428,7 +428,7 @@ int32_t C_OscParamSetFilerBase::mh_LoadDataPoolInfos(std::vector<C_OscParamSetDa
    \param[in,out] orc_XmlParser     XML with specified node active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscParamSetFilerBase::mh_SaveDataPoolInfos(const std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
+void C_OscParamSetFilerBase::mh_SaveDataPoolInfos(const QList<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
                                                   C_OscXmlParserBase & orc_XmlParser)
 {
    //Avoid adding the same datapools twice

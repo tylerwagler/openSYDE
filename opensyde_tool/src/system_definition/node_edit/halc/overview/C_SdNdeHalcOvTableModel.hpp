@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscHalcConfigDomain.hpp"
 
@@ -88,7 +89,7 @@ private:
    };
 
    uint32_t mu32_NodeIndex;
-   std::vector<C_HalcTableConfig> mc_HalcInfoAll;
+   QList<C_HalcTableConfig> mc_HalcInfoAll;
 
    void m_FillHalcInfo(void);
    void m_FillHalcInfoLinked(const uint32_t ou32_DomainIndex, const uint32_t ou32_ChannelIndex,

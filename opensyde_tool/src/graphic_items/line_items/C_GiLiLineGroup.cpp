@@ -48,7 +48,7 @@ const float64_t C_GiLiLineGroup::mhf64_MAX_DIST_TO_ALIGN = 10.0;
    \param[in,out] opc_Parent     Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_GiLiLineGroup::C_GiLiLineGroup(const std::vector<QPointF> * const opc_Points, const bool & orq_MiddleLine,
+C_GiLiLineGroup::C_GiLiLineGroup(const QList<QPointF> * const opc_Points, const bool & orq_MiddleLine,
                                  QGraphicsItem * const opc_Parent) :
    C_GiBiConnectableItem(),
    C_GiBiCustomMouseItem(),
@@ -569,7 +569,7 @@ void C_GiLiLineGroup::m_UpdateBasicData(stw::opensyde_gui_logic::C_PuiBsLineBase
    \param[in] orc_Points Initial points
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiLiLineGroup::m_Init(const std::vector<QPointF> & orc_Points)
+void C_GiLiLineGroup::m_Init(const QList<QPointF> & orc_Points)
 {
    this->mpc_LinePath->Init(orc_Points);
    //Points

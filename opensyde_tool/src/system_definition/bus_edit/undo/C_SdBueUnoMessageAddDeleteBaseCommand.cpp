@@ -49,7 +49,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueUnoMessageAddDeleteBaseCommand::C_SdBueUnoMessageAddDeleteBaseCommand(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageId,
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MessageId,
    C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
    C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget, const QString & orc_Text,
    QUndoCommand * const opc_Parent) :
@@ -57,12 +57,12 @@ C_SdBueUnoMessageAddDeleteBaseCommand::C_SdBueUnoMessageAddDeleteBaseCommand(
    mc_LastMessageId(orc_MessageId)
 {
    this->mc_MatchingIds.resize(this->mc_UniqueId.size(),
-                               std::vector<stw::opensyde_core::C_OscCanMessageIdentificationIndices>());
+                               QList<stw::opensyde_core::C_OscCanMessageIdentificationIndices>());
    this->mc_LastMessageId.resize(this->mc_UniqueId.size(), C_OscCanMessageIdentificationIndices());
    this->mc_Message.resize(this->mc_UniqueId.size(), C_OscCanMessage());
    this->mc_OscSignalCommons.resize(this->mc_UniqueId.size(),
-                                    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement>());
-   this->mc_UiSignalCommons.resize(this->mc_UniqueId.size(), std::vector<C_PuiSdNodeDataPoolListElement>());
+                                    QList<stw::opensyde_core::C_OscNodeDataPoolListElement>());
+   this->mc_UiSignalCommons.resize(this->mc_UniqueId.size(), QList<C_PuiSdNodeDataPoolListElement>());
    this->mc_UiMessage.resize(this->mc_UniqueId.size(), C_PuiSdNodeCanMessage());
 }
 
@@ -191,8 +191,8 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Store(void)
          }
          {
             C_OscCanMessage c_Message;
-            std::vector<C_OscNodeDataPoolListElement> c_OscSignalCommons;
-            std::vector<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
+            QList<C_OscNodeDataPoolListElement> c_OscSignalCommons;
+            QList<C_PuiSdNodeDataPoolListElement> c_UiSignalCommons;
             C_PuiSdNodeCanMessage c_UiMessage;
             Q_ASSERT(C_PuiSdHandler::h_GetInstance()->GetCanMessageComplete(this->mpc_MessageSyncManager->
                                                                               GetMessageIdForUniqueId(this->
@@ -208,7 +208,7 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Store(void)
             this->mc_UiMessage[u32_ItStep] = c_UiMessage;
          }
          {
-            const std::vector<C_OscCanMessageIdentificationIndices> c_MatchingIds =
+            const QList<C_OscCanMessageIdentificationIndices> c_MatchingIds =
                this->mpc_MessageSyncManager->GetMatchingMessageVector(this->mpc_MessageSyncManager->
                                                                       GetMessageIdForUniqueId(
                                                                          this->
@@ -239,7 +239,7 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Remove(void)
       {
          Q_ASSERT(this->mpc_MessageSyncManager->DeleteCanMessage(this->mpc_MessageSyncManager->GetMessageIdForUniqueId(
                                                                       this->
-                                                                      mc_UniqueId[static_cast<std::vector<uint64_t>
+                                                                      mc_UniqueId[static_cast<QList<uint64_t>
                                                                                               ::size_type>(u32_ItStep -
                                                                                                            1UL)])) ==
                     C_NO_ERR);
@@ -248,7 +248,7 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Remove(void)
             //At this point we can't get the message ID by unique ID because it was already deleted
             // but this should be no problem as we do always remember the message ID anyways
             u32_InternalMessageIndex =
-               this->mpc_MessageTreeWidget->InternalDeleteMessage(this->mc_LastMessageId[static_cast<std::vector<uint64_t>
+               this->mpc_MessageTreeWidget->InternalDeleteMessage(this->mc_LastMessageId[static_cast<QList<uint64_t>
                                                                                                      ::size_type>(
                                                                                             u32_ItStep - 1UL)]);
          }
@@ -274,8 +274,8 @@ void C_SdBueUnoMessageAddDeleteBaseCommand::m_Remove(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueUnoMessageAddDeleteBaseCommand::mh_UpdateSignalsToProtocol(
-   stw::opensyde_core::C_OscCanMessage & orc_Message, std::vector<C_OscNodeDataPoolListElement> & orc_OscSignals,
-   const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignals,
+   stw::opensyde_core::C_OscCanMessage & orc_Message, QList<C_OscNodeDataPoolListElement> & orc_OscSignals,
+   const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignals,
    const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType)
 {
    Q_ASSERT(orc_Message.c_Signals.size() == orc_OscSignals.size());

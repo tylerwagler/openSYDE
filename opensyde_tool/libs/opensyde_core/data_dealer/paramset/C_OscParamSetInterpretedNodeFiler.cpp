@@ -64,7 +64,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::h_LoadInterpretedNode(C_OscParamSetIn
 
    if (s32_Retval == C_NO_ERR)
    {
-      std::vector<C_OscParamSetDataPoolInfo> c_DataPoolInfos;
+      QList<C_OscParamSetDataPoolInfo> c_DataPoolInfos;
       s32_Retval = C_OscParamSetFilerBase::mh_LoadDataPoolInfos(c_DataPoolInfos, orc_XmlParser,
                                                                 orq_MissingOptionalContent);
       if (s32_Retval == C_NO_ERR)
@@ -90,7 +90,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::h_LoadInterpretedNode(C_OscParamSetIn
 void C_OscParamSetInterpretedNodeFiler::h_SaveInterpretedNode(const C_OscParamSetInterpretedNode & orc_Node,
                                                               C_OscXmlParserBase & orc_XmlParser)
 {
-   std::vector<C_OscParamSetDataPoolInfo> c_Infos;
+   QList<C_OscParamSetDataPoolInfo> c_Infos;
    C_OscParamSetFilerBase::mh_SaveNodeName(orc_Node.c_Name, orc_XmlParser);
    //Extract data pool info
    c_Infos.reserve(orc_Node.c_DataPools.size());
@@ -129,8 +129,8 @@ C_OscParamSetInterpretedNodeFiler::C_OscParamSetInterpretedNodeFiler(void) :
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(
-   std::vector<C_OscParamSetInterpretedDataPool> & orc_DataPools,
-   const std::vector<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos, C_OscXmlParserBase & orc_XmlParser)
+   QList<C_OscParamSetInterpretedDataPool> & orc_DataPools,
+   const QList<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos, C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -205,7 +205,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadDataPools(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscParamSetInterpretedNodeFiler::mh_SaveDataPools(
-   const std::vector<C_OscParamSetInterpretedDataPool> & orc_DataPools, C_OscXmlParserBase & orc_XmlParser)
+   const QList<C_OscParamSetInterpretedDataPool> & orc_DataPools, C_OscXmlParserBase & orc_XmlParser)
 {
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("interpreted") == "interpreted");
    for (uint32_t u32_Index = 0U; u32_Index < orc_DataPools.size(); u32_Index++)
@@ -274,7 +274,7 @@ void C_OscParamSetInterpretedNodeFiler::mh_SaveDataPool(const C_OscParamSetInter
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadLists(std::vector<C_OscParamSetInterpretedList> & orc_Lists,
+int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadLists(QList<C_OscParamSetInterpretedList> & orc_Lists,
                                                         C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -331,7 +331,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadLists(std::vector<C_OscParamSe
    \param[in,out]  orc_XmlParser    XML with specified node active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscParamSetInterpretedNodeFiler::mh_SaveLists(const std::vector<C_OscParamSetInterpretedList> & orc_Lists,
+void C_OscParamSetInterpretedNodeFiler::mh_SaveLists(const QList<C_OscParamSetInterpretedList> & orc_Lists,
                                                      C_OscXmlParserBase & orc_XmlParser)
 {
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("lists") == "lists");
@@ -418,7 +418,7 @@ void C_OscParamSetInterpretedNodeFiler::mh_SaveList(const C_OscParamSetInterpret
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElements(std::vector<C_OscParamSetInterpretedElement> & orc_Elements,
+int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElements(QList<C_OscParamSetInterpretedElement> & orc_Elements,
                                                            C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -474,7 +474,7 @@ int32_t C_OscParamSetInterpretedNodeFiler::mh_LoadElements(std::vector<C_OscPara
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscParamSetInterpretedNodeFiler::mh_SaveElements(
-   const std::vector<C_OscParamSetInterpretedElement> & orc_Elements, C_OscXmlParserBase & orc_XmlParser)
+   const QList<C_OscParamSetInterpretedElement> & orc_Elements, C_OscXmlParserBase & orc_XmlParser)
 {
    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("elements") == "elements");
    for (uint32_t u32_Index = 0U; u32_Index < orc_Elements.size(); u32_Index++)

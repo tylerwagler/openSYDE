@@ -38,6 +38,7 @@
 
 
 #include <QDebug>
+#include <vector>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -1330,7 +1331,7 @@ void C_CamMainWindow::m_OnOsyChangeBus(const QString &orc_File,
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMainWindow::m_CheckMessagesForLoadedDatabase(
     const QString &orc_DatabasePath) {
-  const std::vector<uint32_t> c_Indices =
+  const QList<uint32_t> c_Indices =
       C_CamProHandler::h_GetInstance()->GetInvalidMessagesFromDatabase(
           orc_DatabasePath);
 
@@ -1347,13 +1348,13 @@ void C_CamMainWindow::m_CheckMessagesForLoadedDatabase(
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMainWindow::m_CheckForLastDatabaseLoaded(
     const QString &orc_DatabasePath) {
-  const std::vector<C_CamProDatabaseData> &rc_Dbs =
+  const QList<C_CamProDatabaseData> &rc_Dbs =
       C_CamProHandler::h_GetInstance()->GetDatabases();
 
   if (rc_Dbs.size() > 0UL) {
     const C_CamProDatabaseData &rc_Db = rc_Dbs[rc_Dbs.size() - 1UL];
     if (rc_Db.c_Name == orc_DatabasePath) {
-      const std::vector<uint32_t> c_Indices =
+      const QList<uint32_t> c_Indices =
           C_CamProHandler::h_GetInstance()->GetInvalidMessagesWithNoDatabase();
       this->m_DisplayCheckMessagesDialog(orc_DatabasePath, c_Indices);
     }
@@ -1368,7 +1369,7 @@ void C_CamMainWindow::m_CheckForLastDatabaseLoaded(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMainWindow::m_DisplayCheckMessagesDialog(
-    const QString &orc_DatabasePath, const std::vector<uint32_t> &orc_Indices) {
+    const QString &orc_DatabasePath, const QList<uint32_t> &orc_Indices) {
   if (orc_Indices.size() > 0UL) {
     QString c_Details;
     C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eINFORMATION);

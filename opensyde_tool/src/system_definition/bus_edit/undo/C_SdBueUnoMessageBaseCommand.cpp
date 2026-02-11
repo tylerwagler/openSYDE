@@ -44,7 +44,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueUnoMessageBaseCommand::C_SdBueUnoMessageBaseCommand(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageId,
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MessageId,
    C_PuiSdNodeCanMessageSyncManager * const opc_MessageSyncManager,
    C_SdBueMessageSelectorTreeWidget * const opc_MessageTreeWidget, const QString & orc_Text,
    QUndoCommand * const opc_Parent) :

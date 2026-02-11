@@ -12,6 +12,7 @@
 #define C_PUISVDBCHART_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_PuiSvDbWidgetBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -40,7 +41,7 @@ public:
    bool IsReadElement(void) const override;
    int32_t RemoveElement(const uint32_t & oru32_Index) override;
 
-   std::vector<bool> c_DataPoolElementsActive;
+   QList<bool> c_DataPoolElementsActive;
    E_SettingZoomMode e_SettingZoomMode;
 };
 

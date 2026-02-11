@@ -194,11 +194,11 @@ void C_NagTopTreeModel::SetContent(const QStringList & orc_Content,
    \param[in]  orc_Error   List error states
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_NagTopTreeModel::SetError(const std::vector<bool> & orc_Error)
+void C_NagTopTreeModel::SetError(const QList<bool> & orc_Error)
 {
    if (this->mpc_InvisibleRootItem != NULL)
    {
-      std::vector<C_TblTreSimpleItem *>::const_iterator c_ItParents;
+      QList<C_TblTreSimpleItem *>::const_iterator c_ItParents;
       for (c_ItParents = this->mpc_InvisibleRootItem->c_Children.begin();
            c_ItParents != this->mpc_InvisibleRootItem->c_Children.end(); ++c_ItParents)
       {
@@ -218,7 +218,7 @@ void C_NagTopTreeModel::SetError(const std::vector<bool> & orc_Error)
             {
                // sub item case
                QStringList c_ChildNames;
-               std::vector<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
+               QList<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
                for (c_ItChildren = pc_ParentItem->c_Children.begin();
                     c_ItChildren != pc_ParentItem->c_Children.end(); ++c_ItChildren)
                {
@@ -262,7 +262,7 @@ void C_NagTopTreeModel::UpdateItem(const uint32_t ou32_Index, const QString & or
 {
    if (this->mpc_InvisibleRootItem != NULL)
    {
-      std::vector<C_TblTreSimpleItem *>::const_iterator c_ItParents;
+      QList<C_TblTreSimpleItem *>::const_iterator c_ItParents;
       for (c_ItParents = this->mpc_InvisibleRootItem->c_Children.begin();
            c_ItParents != this->mpc_InvisibleRootItem->c_Children.end(); ++c_ItParents)
       {
@@ -282,7 +282,7 @@ void C_NagTopTreeModel::UpdateItem(const uint32_t ou32_Index, const QString & or
             else
             {
                // sub item case: search for child that corresponds to index
-               std::vector<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
+               QList<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
                for (c_ItChildren = pc_ParentItem->c_Children.begin();
                     c_ItChildren != pc_ParentItem->c_Children.end(); ++c_ItChildren)
                {
@@ -313,7 +313,7 @@ void C_NagTopTreeModel::Clear(void)
 {
    if (this->mpc_InvisibleRootItem != NULL)
    {
-      std::vector<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
+      QList<C_TblTreSimpleItem *>::const_iterator c_ItChildren;
 
       this->beginResetModel();
 

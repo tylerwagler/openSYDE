@@ -12,6 +12,7 @@
 #define C_CAMMOSDATABASEBUSSELECTIONPOPUP_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include "C_OgePopUpDialog.hpp"
 #include "C_OscSystemBus.hpp"
@@ -37,7 +38,7 @@ class C_CamMosDatabaseBusSelectionPopup :
    Q_OBJECT
 
 public:
-   explicit C_CamMosDatabaseBusSelectionPopup(const std::vector<stw::opensyde_core::C_OscSystemBus> & orc_Busses,
+   explicit C_CamMosDatabaseBusSelectionPopup(const QList<stw::opensyde_core::C_OscSystemBus> & orc_Busses,
                                               const stw::opensyde_gui_logic::C_CamProDatabaseData & orc_Database,
                                               stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent);
    ~C_CamMosDatabaseBusSelectionPopup(void) override;
@@ -53,7 +54,7 @@ private:
    stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    //Don't use reference as this somehow can be deleted in the background
    const stw::opensyde_gui_logic::C_CamProDatabaseData mc_Database;
-   std::vector<stw::opensyde_core::C_OscSystemBus> mc_Busses;
+   QList<stw::opensyde_core::C_OscSystemBus> mc_Busses;
 
    void m_InitStaticNames(void) const;
    void m_InitStaticGuiElements(void) const;

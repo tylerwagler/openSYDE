@@ -242,9 +242,9 @@ void C_PuiSvDbDataElementHandler::UpdateElementTransmissionConfiguration(void)
 {
    const uint32_t u32_Count = this->GetWidgetDataPoolElementCount();
 
-   std::vector<C_PuiSvDbNodeDataPoolListElementId> c_Ids;
-   std::vector<C_PuiSvDbDataElementScaling> c_Scalings;
-   std::vector<C_PuiSvDbDataElementDisplayFormatter> c_FormatterConfis;
+   QList<C_PuiSvDbNodeDataPoolListElementId> c_Ids;
+   QList<C_PuiSvDbDataElementScaling> c_Scalings;
+   QList<C_PuiSvDbDataElementDisplayFormatter> c_FormatterConfis;
 
    //Reserve
    c_Ids.resize(u32_Count);
@@ -746,7 +746,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
                                                     QStringList & orc_ScaledValues,
-                                                    std::vector<float64_t> & orc_UnscaledValues)
+                                                    QList<float64_t> & orc_UnscaledValues)
 {
    int32_t s32_Return = C_RANGE;
 
@@ -804,7 +804,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                                    std::vector<float64_t> & orc_Values, const bool oq_UseScaling)
+                                                    QList<float64_t> & orc_Values, const bool oq_UseScaling)
 {
    int32_t s32_Return = C_RANGE;
 
@@ -1201,7 +1201,7 @@ void C_PuiSvDbDataElementHandler::m_UpdateDataPoolElementTimeoutAndValidFlag(
                Q_ASSERT(pc_OscContent != NULL);
                if (pc_OscContent != NULL)
                {
-                  std::vector<stw::opensyde_core::C_OscNodeDataPoolContent::E_Type> c_Types;
+                  QList<stw::opensyde_core::C_OscNodeDataPoolContent::E_Type> c_Types;
                   const C_PuiSvDbDataElementScaling & rc_Scaling = this->mc_UsedConfig[c_ItItem.value()].c_Scaling;
                   if (C_SdNdeDpContentUtil::h_GetMinimalTypeAfterScaling(pc_OscContent->c_MinValue,
                                                                          pc_OscContent->c_MaxValue,
@@ -1307,7 +1307,7 @@ bool C_PuiSvDbDataElementHandler::m_CheckHasAnyRequiredNodesActive(void) const
 {
    bool q_AtLeastOneValidElement = false;
 
-   std::vector<uint8_t> c_ActiveNodes;
+   QByteArray c_ActiveNodes;
    const int32_t s32_Retval =
       C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(this->mu32_ViewIndex,
                                                                             c_ActiveNodes);
@@ -1323,7 +1323,7 @@ bool C_PuiSvDbDataElementHandler::m_CheckHasAnyRequiredNodesActive(void) const
          {
             //Is corresponding view active
             if ((rc_ElementId.u32_NodeIndex < c_ActiveNodes.size()) &&
-                (c_ActiveNodes[rc_ElementId.u32_NodeIndex] == 1U))
+                (static_cast<uint8_t>(c_ActiveNodes[rc_ElementId.u32_NodeIndex]) == 1U))
             {
                q_AtLeastOneValidElement = true;
                break;
@@ -1472,7 +1472,7 @@ bool C_PuiSvDbDataElementHandler::m_CheckNodeActive(const uint32_t ou32_NodeInde
 {
    bool q_Retval = false;
 
-   std::vector<uint8_t> c_ActiveNodes;
+   QByteArray c_ActiveNodes;
    const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
       this->mu32_ViewIndex,
       c_ActiveNodes);
@@ -1481,7 +1481,7 @@ bool C_PuiSvDbDataElementHandler::m_CheckNodeActive(const uint32_t ou32_NodeInde
    {
       if (ou32_NodeIndex < c_ActiveNodes.size())
       {
-         if (static_cast<bool>(c_ActiveNodes[ou32_NodeIndex]) == true)
+         if (static_cast<bool>(static_cast<uint8_t>(c_ActiveNodes[ou32_NodeIndex])) == true)
          {
             q_Retval = true;
          }
@@ -1743,7 +1743,7 @@ const QMap<C_PuiSvDbNodeDataPoolListElementId,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbDataElementHandler::m_GetAllRegisteredElements(
-   std::vector<C_PuiSvDbNodeDataPoolListElementId> & orc_RegisteredElements) const
+   QList<C_PuiSvDbNodeDataPoolListElementId> & orc_RegisteredElements) const
 {
    QMap<C_PuiSvDbNodeDataPoolListElementId, C_DpElementConfig>::const_iterator c_ItItem;
 
@@ -1795,7 +1795,7 @@ QString C_PuiSvDbDataElementHandler::C_DpElementConfig::GetSingleValueContentFor
 */
 //----------------------------------------------------------------------------------------------------------------------
 QStringList C_PuiSvDbDataElementHandler::C_DpElementConfig::GetValuesContentFormatted(
-   const C_PuiSvDbDataElementContent & orc_Value, std::vector<float64_t> & orc_UnscaledValueAsFloat)
+   const C_PuiSvDbDataElementContent & orc_Value, QList<float64_t> & orc_UnscaledValueAsFloat)
 const
 {
    return this->c_FormatterConfig.GetValuesContentFormatted(orc_Value, this->c_Scaling, orc_UnscaledValueAsFloat);

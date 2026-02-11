@@ -205,8 +205,8 @@ int32_t C_SyvUtil::h_GetIndicesFromBusId(const uint8_t ou8_BusIdentifier, const 
       const C_OscSystemBus * const pc_Bus = C_PuiSdHandler::h_GetInstance()->GetOscBus(u32_ItBus);
       if ((pc_Bus != NULL) && (pc_Bus->u8_BusId == ou8_BusIdentifier))
       {
-         std::vector<uint32_t> c_NodeIndexes;
-         std::vector<uint32_t> c_InterfaceIndexes;
+         QList<uint32_t> c_NodeIndexes;
+         QList<uint32_t> c_InterfaceIndexes;
          oru32_BusIndex = u32_ItBus;
          //Node
          C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(u32_ItBus, c_NodeIndexes,

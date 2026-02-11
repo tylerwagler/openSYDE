@@ -67,7 +67,7 @@ const uint16_t C_OscDataLoggerJobFiler::mhu16_FILE_VERSION_1 = 1;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t
-C_OscDataLoggerJobFiler::h_LoadFile(std::vector<C_OscDataLoggerJob> &orc_Config,
+C_OscDataLoggerJobFiler::h_LoadFile(QList<C_OscDataLoggerJob> &orc_Config,
                                     const QString &orc_Path) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -95,7 +95,7 @@ C_OscDataLoggerJobFiler::h_LoadFile(std::vector<C_OscDataLoggerJob> &orc_Config,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDataLoggerJobFiler::h_SaveFile(
-    const std::vector<C_OscDataLoggerJob> &orc_Config,
+    const QList<C_OscDataLoggerJob> &orc_Config,
     const QString &orc_Path) {
   C_OscXmlParser c_XmlParser;
   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
@@ -129,7 +129,7 @@ int32_t C_OscDataLoggerJobFiler::h_SaveFile(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t
-C_OscDataLoggerJobFiler::h_LoadData(std::vector<C_OscDataLoggerJob> &orc_Config,
+C_OscDataLoggerJobFiler::h_LoadData(QList<C_OscDataLoggerJob> &orc_Config,
                                     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(
       orc_XmlParser, mhu16_FILE_VERSION_1, "file-version",
@@ -180,7 +180,7 @@ C_OscDataLoggerJobFiler::h_LoadData(std::vector<C_OscDataLoggerJob> &orc_Config,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDataLoggerJobFiler::h_SaveData(
-    const std::vector<C_OscDataLoggerJob> &orc_Config,
+    const QList<C_OscDataLoggerJob> &orc_Config,
     C_OscXmlParserBase &orc_XmlParser) {
   // File version
   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("file-version") ==
@@ -191,7 +191,7 @@ void C_OscDataLoggerJobFiler::h_SaveData(
   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("jobs") == "jobs");
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Config.size()));
-  for (std::vector<C_OscDataLoggerJob>::const_iterator c_It =
+  for (QList<C_OscDataLoggerJob>::const_iterator c_It =
            orc_Config.begin();
        c_It != orc_Config.end(); ++c_It) {
     Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("job") == "job");
@@ -589,7 +589,7 @@ void C_OscDataLoggerJobFiler::mh_SaveJobAdditionalTriggerProperties(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElements(
-    std::vector<C_OscDataLoggerDataElementReference> &orc_Config,
+    QList<C_OscDataLoggerDataElementReference> &orc_Config,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval =
       orc_XmlParser.SelectNodeChildError("configured-data-elements");
@@ -638,13 +638,13 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElements(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDataLoggerJobFiler::mh_SaveConfiguredDataElements(
-    const std::vector<C_OscDataLoggerDataElementReference> &orc_Config,
+    const QList<C_OscDataLoggerDataElementReference> &orc_Config,
     C_OscXmlParserBase &orc_XmlParser) {
   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("configured-data-elements") ==
            "configured-data-elements");
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Config.size()));
-  for (std::vector<C_OscDataLoggerDataElementReference>::const_iterator c_It =
+  for (QList<C_OscDataLoggerDataElementReference>::const_iterator c_It =
            orc_Config.begin();
        c_It != orc_Config.end(); ++c_It) {
     Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(

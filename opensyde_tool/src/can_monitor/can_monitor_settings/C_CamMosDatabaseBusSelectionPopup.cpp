@@ -52,7 +52,7 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_CamMosDatabaseBusSelectionPopup::C_CamMosDatabaseBusSelectionPopup(
-   const std::vector<stw::opensyde_core::C_OscSystemBus> & orc_Busses,
+   const QList<stw::opensyde_core::C_OscSystemBus> & orc_Busses,
    const stw::opensyde_gui_logic::C_CamProDatabaseData & orc_Database,
    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
    QWidget(&orc_Parent),
@@ -257,7 +257,7 @@ void C_CamMosDatabaseBusSelectionPopup::m_InitComboBox(void) const
    this->mpc_Ui->pc_CbxBus->clear();
 
    // fill up
-   for (std::vector<C_OscSystemBus>::const_iterator c_Iter = mc_Busses.begin(); c_Iter != mc_Busses.end(); ++c_Iter)
+   for (QList<C_OscSystemBus>::const_iterator c_Iter = mc_Busses.begin(); c_Iter != mc_Busses.end(); ++c_Iter)
    {
       // only show can buses
       if (c_Iter->e_Type == C_OscSystemBus::eCAN)

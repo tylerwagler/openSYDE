@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <algorithm>
+#include <QList>
 
 #include <QString>
 #include "stwtypes.hpp"
@@ -73,7 +74,7 @@ public:
    QString c_Counter;
    QString c_Status;
 
-   std::vector<C_OscComMessageLoggerDataSignal> c_Signals;
+   QList<C_OscComMessageLoggerDataSignal> c_Signals;
 
    stw::can::T_STWCAN_Msg_RX c_CanMsg;
    bool q_IsTx;

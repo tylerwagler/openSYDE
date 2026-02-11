@@ -11,6 +11,8 @@
 #define C_FLAUPHEXFILEINFO_H
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -54,7 +56,7 @@ public:
       QString c_AdditionalInfo;
    };
 
-   std::vector<C_BlockInfo> c_BlockInfo;
+   QList<C_BlockInfo> c_BlockInfo;
    int32_t s32_CurrentHexFileIndex;
 
 private:

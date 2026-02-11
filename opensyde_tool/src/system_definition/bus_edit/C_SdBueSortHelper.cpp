@@ -213,8 +213,8 @@ bool C_SdBueSortHelperSignal::operator ()(const uint32_t & oru32_Signal1, const 
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdBueSortHelper::h_SortOneMessageVector(std::vector<C_OscCanMessage> & orc_OscMessages,
-                                                  std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages,
+int32_t C_SdBueSortHelper::h_SortOneMessageVector(QList<C_OscCanMessage> & orc_OscMessages,
+                                                  QList<C_PuiSdNodeCanMessage> & orc_UiMessages,
                                                   C_OscNodeDataPoolList & orc_OscList,
                                                   C_PuiSdNodeDataPoolList & orc_UiList)
 {
@@ -231,7 +231,7 @@ int32_t C_SdBueSortHelper::h_SortOneMessageVector(std::vector<C_OscCanMessage> &
          {
             const C_OscCanMessage & rc_CurrentMessage = orc_OscMessages[u32_ItMessagePair];
             const C_OscCanMessage & rc_NextMessage =
-               orc_OscMessages[static_cast<std::vector< C_OscCanMessage>::size_type > (u32_ItMessagePair + 1UL)];
+               orc_OscMessages[static_cast<QList< C_OscCanMessage>::size_type > (u32_ItMessagePair + 1UL)];
             //Compare
             if ((h_CompareString(rc_CurrentMessage.c_Name, rc_NextMessage.c_Name) == false) &&
                 (rc_CurrentMessage.c_Name != rc_NextMessage.c_Name))
@@ -256,7 +256,7 @@ int32_t C_SdBueSortHelper::h_SortOneMessageVector(std::vector<C_OscCanMessage> &
    False At least one message is not sorted properly by name
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SdBueSortHelper::mh_CheckMessagesSorted(const std::vector<C_OscCanMessage> & orc_OscMessages)
+bool C_SdBueSortHelper::mh_CheckMessagesSorted(const QList<C_OscCanMessage> & orc_OscMessages)
 {
    bool q_Retval = true;
 
@@ -267,7 +267,7 @@ bool C_SdBueSortHelper::mh_CheckMessagesSorted(const std::vector<C_OscCanMessage
       {
          const C_OscCanMessage & rc_CurrentMessage = orc_OscMessages[u32_ItMessagePair];
          const C_OscCanMessage & rc_NextMessage =
-            orc_OscMessages[static_cast<std::vector< C_OscCanMessage>::size_type > (u32_ItMessagePair + 1UL)];
+            orc_OscMessages[static_cast<QList< C_OscCanMessage>::size_type > (u32_ItMessagePair + 1UL)];
          //Compare
          if ((h_CompareString(rc_CurrentMessage.c_Name,
                               rc_NextMessage.c_Name) == false) && (rc_CurrentMessage.c_Name != rc_NextMessage.c_Name))
@@ -295,8 +295,8 @@ bool C_SdBueSortHelper::mh_CheckMessagesSorted(const std::vector<C_OscCanMessage
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdBueSortHelper::mh_SwapMessages(const uint32_t ou32_MessageIndex1, const uint32_t ou32_MessageIndex2,
-                                           std::vector<C_OscCanMessage> & orc_OscMessages,
-                                           std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages,
+                                           QList<C_OscCanMessage> & orc_OscMessages,
+                                           QList<C_PuiSdNodeCanMessage> & orc_UiMessages,
                                            C_OscNodeDataPoolList & orc_OscList, C_PuiSdNodeDataPoolList & orc_UiList)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -308,11 +308,11 @@ int32_t C_SdBueSortHelper::mh_SwapMessages(const uint32_t ou32_MessageIndex1, co
           (orc_OscList.c_Elements.size() == orc_UiList.c_DataPoolListElements.size())))) &&
        (ou32_MessageIndex1 != ou32_MessageIndex2))
    {
-      std::vector<C_OscNodeDataPoolListElement> c_OscMessage1SignalCopy;
-      std::vector<C_OscNodeDataPoolListElement> c_OscMessage2SignalCopy;
-      std::vector<C_PuiSdNodeDataPoolListElement> c_UiMessage1SignalCopy;
-      std::vector<C_PuiSdNodeDataPoolListElement> c_UiMessage2SignalCopy;
-      std::vector<uint32_t> c_SignalIndices;
+      QList<C_OscNodeDataPoolListElement> c_OscMessage1SignalCopy;
+      QList<C_OscNodeDataPoolListElement> c_OscMessage2SignalCopy;
+      QList<C_PuiSdNodeDataPoolListElement> c_UiMessage1SignalCopy;
+      QList<C_PuiSdNodeDataPoolListElement> c_UiMessage2SignalCopy;
+      QList<uint32_t> c_SignalIndices;
       uint32_t u32_FirstIndex;
       uint32_t u32_SecondIndex;
       //Swap

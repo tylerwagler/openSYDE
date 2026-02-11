@@ -129,7 +129,7 @@ C_OscComSequencesBase::~C_OscComSequencesBase(void) {
 int32_t
 C_OscComSequencesBase::Init(C_OscSystemDefinition &orc_SystemDefinition,
                             const uint32_t ou32_ActiveBusIndex,
-                            const std::vector<uint8_t> &orc_ActiveNodes,
+                            const QByteArray &orc_ActiveNodes,
                             stw::can::C_CanDispatcher *const opc_CanDispatcher,
                             C_OscIpDispatcher *const opc_IpDispatcher,
                             C_OscSecurityPemDatabase *const opc_SecurityPemDb) {

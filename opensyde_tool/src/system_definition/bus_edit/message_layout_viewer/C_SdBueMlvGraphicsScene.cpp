@@ -1396,7 +1396,7 @@ void C_SdBueMlvGraphicsScene::m_SetColorsUnused(const C_SdBueMlvSignalManager::C
 {
    uint32_t u32_ColorCounter;
 
-   std::vector<std::array<bool, 64> >::reverse_iterator c_ItSection;
+   QList<std::array<bool, 64> >::reverse_iterator c_ItSection;
 
    // Search the color to reset the flag
    // Search the sections from behind to reduce the number of sections if possible

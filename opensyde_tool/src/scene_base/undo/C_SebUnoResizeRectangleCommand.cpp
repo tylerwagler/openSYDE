@@ -45,7 +45,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoResizeRectangleCommand::C_SebUnoResizeRectangleCommand(QGraphicsScene * const opc_Scene,
-                                                               const std::vector<uint64_t> & orc_Ids,
+                                                               const QList<uint64_t> & orc_Ids,
                                                                const QPointF & orc_OldPos, const QSizeF & orc_OldSize,
                                                                const QPointF & orc_NewPos, const QSizeF & orc_NewSize,
                                                                QUndoCommand * const opc_Parent) :
@@ -71,7 +71,7 @@ C_SebUnoResizeRectangleCommand::~C_SebUnoResizeRectangleCommand()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoResizeRectangleCommand::undo(void)
 {
-   vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
+   const auto c_Items = this->m_GetSceneItems();
    for (uint32_t u32_ItId = 0; u32_ItId < c_Items.size(); ++u32_ItId)
    {
       m_UndoSingle(c_Items[u32_ItId]);
@@ -85,7 +85,7 @@ void C_SebUnoResizeRectangleCommand::undo(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoResizeRectangleCommand::redo(void)
 {
-   vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
+   const auto c_Items = this->m_GetSceneItems();
    for (uint32_t u32_ItId = 0; u32_ItId < c_Items.size(); ++u32_ItId)
    {
       m_RedoSingle(c_Items[u32_ItId]);

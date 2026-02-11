@@ -16,6 +16,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "stwtypes.hpp"
+#include <QList>
 #include <QString>
 #include <vector>
 
@@ -54,11 +55,11 @@ public:
   uint8_t
       u8_NumEthernetBusses; ///< number of ethernet interfaces present on device
 
-  std::vector<uint16_t>
+  QList<uint16_t>
       c_SupportedBitrates; ///< supported CAN bitrates in kbit/s
-  std::vector<uint16_t> c_SupportedCanFdDataBitrates; ///< supported CAN-FD data
+  QList<uint16_t> c_SupportedCanFdDataBitrates; ///< supported CAN-FD data
                                                       ///< bitrates in kbit/s
-  std::vector<C_OscSupportedCanInterfaceFeatures>
+  QList<C_OscSupportedCanInterfaceFeatures>
       c_SupportedCanFeatures; ///< supported CAN features per interface
 
   uint8_t u8_ManufacturerId; ///< manufacturer id used by device configuration
@@ -69,7 +70,7 @@ public:
   QString c_ProductPageLink; ///< link to product page (Eco-Partner devices)
   QString c_ToolboxIcon;     ///< link to Toolbox Icon (Eco-Partners)
 
-  std::vector<C_OscSubDeviceDefinition> c_SubDevices;
+  QList<C_OscSubDeviceDefinition> c_SubDevices;
 
   static const QString hc_DEFAULT_COMPANY_NAME;
 };

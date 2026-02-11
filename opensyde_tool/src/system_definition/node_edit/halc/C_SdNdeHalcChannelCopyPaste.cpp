@@ -9,6 +9,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -416,7 +417,7 @@ bool C_SdNdeHalcChannelCopyPaste::mh_CheckSelectedChannel(const uint32_t ou32_No
             {
                const C_OscHalcDefChannelUseCase & rc_UseCase =
                   pc_Domain->c_ChannelUseCases[orc_SourceChannel.u32_UseCaseIndex];
-               std::vector<C_OscHalcDefChannelAvailability>::const_iterator c_ItAvail;
+               QList<C_OscHalcDefChannelAvailability>::const_iterator c_ItAvail;
 
                c_UseCaseName = rc_UseCase.c_Display;
 

@@ -9,6 +9,7 @@
 #define C_OSCHALCCONFIGPARAMETERSTRUCT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscHalcConfigParameter.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,7 +29,7 @@ public:
 
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
-   std::vector<C_OscHalcConfigParameter> c_ParameterElements; ///< Parameter elements (synced with C_OscHalcDefBase)
+   QList<C_OscHalcConfigParameter> c_ParameterElements; ///< Parameter elements (synced with C_OscHalcDefBase)
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

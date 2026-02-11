@@ -631,8 +631,8 @@ bool C_GiSvDaToggleBase::m_CheckHasValidElements(QString & orc_FirstInvalidEleme
                                                                              c_ElementId.u32_ElementIndex);
                if ((pc_Element != NULL) && (this->GetDataPoolElementScaling(u32_Index, c_Scaling) == C_NO_ERR))
                {
-                  std::vector<float64_t> c_Min;
-                  std::vector<float64_t> c_Max;
+                  QList<float64_t> c_Min;
+                  QList<float64_t> c_Max;
                   C_SdNdeDpContentUtil::h_GetValuesAsFloat64(pc_Element->c_MinValue, c_Min);
                   C_SdNdeDpContentUtil::h_GetValuesAsFloat64(pc_Element->c_MaxValue, c_Max);
                   if ((c_Min.size() == c_Max.size()) && (c_Min.size() == 1UL))

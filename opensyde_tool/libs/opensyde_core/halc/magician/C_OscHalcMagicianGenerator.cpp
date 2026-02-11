@@ -55,7 +55,7 @@ C_OscHalcMagicianGenerator::C_OscHalcMagicianGenerator(const C_OscNode * const o
    C_CONFIG Configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcMagicianGenerator::GenerateHalcDatapools(std::vector<C_OscNodeDataPool> & orc_Datapools) const
+int32_t C_OscHalcMagicianGenerator::GenerateHalcDatapools(QList<C_OscNodeDataPool> & orc_Datapools) const
 {
    const uint16_t u16_TimerId = osc_write_log_performance_start();
 
@@ -99,7 +99,7 @@ int32_t C_OscHalcMagicianGenerator::GenerateHalcDatapools(std::vector<C_OscNodeD
    C_CONFIG Configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcMagicianGenerator::m_GenerateHalcDatapoolsDefinition(std::vector<C_OscNodeDataPool> & orc_Datapools)
+int32_t C_OscHalcMagicianGenerator::m_GenerateHalcDatapoolsDefinition(QList<C_OscNodeDataPool> & orc_Datapools)
 const
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -250,7 +250,7 @@ const
    C_CONFIG Configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcMagicianGenerator::m_FillHalcDatapools(std::vector<C_OscNodeDataPool> & orc_Datapools) const
+int32_t C_OscHalcMagicianGenerator::m_FillHalcDatapools(QList<C_OscNodeDataPool> & orc_Datapools) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -363,7 +363,7 @@ int32_t C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsDomain(C_OscNodeDataPool
 
    if (u32_CountRelevant > 0UL)
    {
-      std::vector<uint32_t> c_RelevantParameters;
+      QList<uint32_t> c_RelevantParameters;
       uint32_t u32_ItRelevantChannel = 0UL;
 
       if (orc_Domain.c_ChannelConfigs.size() == 0UL)
@@ -647,8 +647,8 @@ int32_t C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsUseCase(C_OscNodeDataPoo
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcMagicianGenerator::mh_FillHalcDatapoolsChannel(C_OscNodeDataPoolList & orc_List,
                                                                 const C_OscHalcConfigChannel & orc_Channel,
-                                                                const C_OscHalcMagicianDatapoolListHandler & orc_Handler, const uint32_t ou32_ItDomain, const uint32_t ou32_ItRelevantChannel, const std::vector<uint32_t> & orc_RelevantParameters,
-                                                                const std::vector<C_OscHalcDefStruct> & orc_DefParam)
+                                                                const C_OscHalcMagicianDatapoolListHandler & orc_Handler, const uint32_t ou32_ItDomain, const uint32_t ou32_ItRelevantChannel, const QList<uint32_t> & orc_RelevantParameters,
+                                                                const QList<C_OscHalcDefStruct> & orc_DefParam)
 
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -798,7 +798,7 @@ int32_t C_OscHalcMagicianGenerator::mh_GenerateVariablesForDomain(const C_OscHal
 {
    int32_t s32_Retval = C_NO_ERR;
    //Count
-   const std::vector<uint32_t> c_RelevantChannels = orc_DpHandler.GetRelevantChannels(
+   const QList<uint32_t> c_RelevantChannels = orc_DpHandler.GetRelevantChannels(
       orc_Domain.c_ChannelConfigs, orc_Domain.c_DomainConfig);
    const uint32_t u32_CountRelevant = static_cast<uint32_t>(c_RelevantChannels.size());
 
@@ -903,8 +903,8 @@ int32_t C_OscHalcMagicianGenerator::mh_GenerateVariablesForDomain(const C_OscHal
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcMagicianGenerator::mh_GenerateVariablesForVector(
-   const std::vector<C_OscHalcDefStruct> & orc_Definition, const QString & orc_DomainSingularName,
-   const bool oq_IsSafe, const std::vector<uint32_t> & orc_RelevantChannels, const bool oq_AddDataset,
+   const QList<C_OscHalcDefStruct> & orc_Definition, const QString & orc_DomainSingularName,
+   const bool oq_IsSafe, const QList<uint32_t> & orc_RelevantChannels, const bool oq_AddDataset,
    C_OscNodeDataPoolList & orc_List)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -936,9 +936,9 @@ int32_t C_OscHalcMagicianGenerator::mh_GenerateVariablesForVector(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcMagicianGenerator::mh_GenerateVariablesForVectorElement(
-   const std::vector<C_OscHalcDefStruct> & orc_Definition, const uint32_t ou32_DefinitionElementIndex,
+   const QList<C_OscHalcDefStruct> & orc_Definition, const uint32_t ou32_DefinitionElementIndex,
    const QString & orc_DomainSingularName,   const bool oq_IsSafe,
-   const std::vector<uint32_t> & orc_RelevantChannels, const bool oq_AddDataset, C_OscNodeDataPoolList & orc_List)
+   const QList<uint32_t> & orc_RelevantChannels, const bool oq_AddDataset, C_OscNodeDataPoolList & orc_List)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -988,12 +988,12 @@ int32_t C_OscHalcMagicianGenerator::mh_GenerateVariablesForVectorElement(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcMagicianGenerator::mh_AddVariableToList(const C_OscHalcDefElement & orc_Definition,
-                                                         const std::vector<C_OscHalcDefStruct> & orc_DefinitionArray,
+                                                         const QList<C_OscHalcDefStruct> & orc_DefinitionArray,
                                                          const uint32_t ou32_ParameterIndexStruct,
                                                          const uint32_t ou32_ParameterIndexElement,
                                                          const QString & orc_DomainSingularName,
                                                          const bool oq_IsSafe,
-                                                         const std::vector<uint32_t> & orc_RelevantChannels,
+                                                         const QList<uint32_t> & orc_RelevantChannels,
                                                          const bool oq_AddDataset, C_OscNodeDataPoolList & orc_List)
 {
    int32_t s32_Retval;
@@ -1349,13 +1349,13 @@ void C_OscHalcMagicianGenerator::mh_InitList(C_OscNodeDataPoolList & orc_List, c
    \param[in,out]  orc_Datapools    Datapools
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcMagicianGenerator::mh_CleanUpHalcDatapools(std::vector<C_OscNodeDataPool> & orc_Datapools)
+void C_OscHalcMagicianGenerator::mh_CleanUpHalcDatapools(QList<C_OscNodeDataPool> & orc_Datapools)
 {
    //Unused elements
-   for (std::vector<C_OscNodeDataPool>::iterator c_ItDp = orc_Datapools.begin(); c_ItDp != orc_Datapools.end();
+   for (QList<C_OscNodeDataPool>::iterator c_ItDp = orc_Datapools.begin(); c_ItDp != orc_Datapools.end();
         ++c_ItDp)
    {
-      for (std::vector<C_OscNodeDataPoolList>::iterator c_ItList = c_ItDp->c_Lists.begin();
+      for (QList<C_OscNodeDataPoolList>::iterator c_ItList = c_ItDp->c_Lists.begin();
            c_ItList != c_ItDp->c_Lists.end(); ++c_ItList)
       {
          if (c_ItList->c_Elements.size() == 0UL)
@@ -1387,21 +1387,21 @@ void C_OscHalcMagicianGenerator::mh_CleanUpHalcDatapools(std::vector<C_OscNodeDa
    \param[in,out]  orc_Datapools    Datapools
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcMagicianGenerator::m_FillEmptySpaceHalcDatapools(std::vector<C_OscNodeDataPool> & orc_Datapools) const
+void C_OscHalcMagicianGenerator::m_FillEmptySpaceHalcDatapools(QList<C_OscNodeDataPool> & orc_Datapools) const
 {
    Q_ASSERT(this->mpc_Node != NULL);
 
    if ((this->mpc_Node != NULL) && (this->mpc_Node->c_HalcConfig.q_NvmBasedConfig))
    {
-      for (std::vector<C_OscNodeDataPool>::iterator c_ItDp = orc_Datapools.begin(); c_ItDp != orc_Datapools.end();
+      for (QList<C_OscNodeDataPool>::iterator c_ItDp = orc_Datapools.begin(); c_ItDp != orc_Datapools.end();
            ++c_ItDp)
       {
-         for (std::vector<C_OscNodeDataPoolList>::iterator c_ItList = c_ItDp->c_Lists.begin();
+         for (QList<C_OscNodeDataPoolList>::iterator c_ItList = c_ItDp->c_Lists.begin();
               c_ItList != c_ItDp->c_Lists.end(); ++c_ItList)
          {
             //CRC
             uint32_t u32_ProjectedSize = 2UL;
-            for (std::vector<C_OscNodeDataPoolListElement>::const_iterator c_ItEl = c_ItList->c_Elements.begin();
+            for (QList<C_OscNodeDataPoolListElement>::const_iterator c_ItEl = c_ItList->c_Elements.begin();
                  c_ItEl != c_ItList->c_Elements.end(); ++c_ItEl)
             {
                u32_ProjectedSize += c_ItEl->GetSizeByte();
@@ -1477,13 +1477,13 @@ bool C_OscHalcMagicianGenerator::m_CheckTwoDp(void) const
    C_CONFIG Configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcMagicianGenerator::m_HandleCopies(std::vector<C_OscNodeDataPool> & orc_Datapools) const
+int32_t C_OscHalcMagicianGenerator::m_HandleCopies(QList<C_OscNodeDataPool> & orc_Datapools) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
    if ((this->mpc_Node != NULL) && (this->mpc_Node->c_HalcConfig.u8_NumConfigCopies >= 1U))
    {
-      const std::vector<C_OscNodeDataPool> c_Initial = orc_Datapools;
+      const QList<C_OscNodeDataPool> c_Initial = orc_Datapools;
       for (uint8_t u8_ItCopy = 0U; u8_ItCopy < (this->mpc_Node->c_HalcConfig.u8_NumConfigCopies - 1U); ++u8_ItCopy)
       {
          for (uint32_t u32_ItInit = 0UL; u32_ItInit < c_Initial.size(); ++u32_ItInit)
@@ -1495,11 +1495,11 @@ int32_t C_OscHalcMagicianGenerator::m_HandleCopies(std::vector<C_OscNodeDataPool
             c_Tmp.c_Comment = C_OscHalcMagicianUtil::h_GetDatapoolComment(c_Initial[u32_ItInit].q_IsSafety,
                                                                           u8_ItCopy + 1UL);
             //Remove datasets
-            for (std::vector<C_OscNodeDataPoolList>::iterator c_ItList = c_Tmp.c_Lists.begin();
+            for (QList<C_OscNodeDataPoolList>::iterator c_ItList = c_Tmp.c_Lists.begin();
                  c_ItList != c_Tmp.c_Lists.end(); ++c_ItList)
             {
                c_ItList->c_DataSets.clear();
-               for (std::vector<C_OscNodeDataPoolListElement>::iterator c_ItEl = c_ItList->c_Elements.begin();
+               for (QList<C_OscNodeDataPoolListElement>::iterator c_ItEl = c_ItList->c_Elements.begin();
                     c_ItEl != c_ItList->c_Elements.end(); ++c_ItEl)
                {
                   c_ItEl->c_DataSetValues.clear();
@@ -1527,7 +1527,7 @@ int32_t C_OscHalcMagicianGenerator::m_HandleCopies(std::vector<C_OscNodeDataPool
    C_CONFIG Configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcMagicianGenerator::m_HandleNvm(std::vector<C_OscNodeDataPool> & orc_Datapools) const
+int32_t C_OscHalcMagicianGenerator::m_HandleNvm(QList<C_OscNodeDataPool> & orc_Datapools) const
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1618,8 +1618,8 @@ int32_t C_OscHalcMagicianGenerator::m_HandleNvm(std::vector<C_OscNodeDataPool> &
    C_CONFIG Configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcMagicianGenerator::m_HandleNvmDpOffset(std::vector<C_OscNodeDataPool> & orc_Datapools,
-                                                        const std::vector<uint32_t> & orc_Offsets,
+int32_t C_OscHalcMagicianGenerator::m_HandleNvmDpOffset(QList<C_OscNodeDataPool> & orc_Datapools,
+                                                        const QList<uint32_t> & orc_Offsets,
                                                         const bool oq_IsSafe) const
 {
    int32_t s32_Retval = C_NO_ERR;

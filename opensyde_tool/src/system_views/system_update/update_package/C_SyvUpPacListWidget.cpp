@@ -132,7 +132,7 @@ void C_SyvUpPacListWidget::SetViewIndex(const uint32_t ou32_ViewIndex) {
   const C_PuiSvData *const pc_View =
       C_PuiSvHandler::h_GetInstance()->GetView(ou32_ViewIndex);
 
-  std::vector<uint8_t> c_NodeActiveFlags;
+  QByteArray c_NodeActiveFlags;
   const int32_t s32_Retval =
       C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
           ou32_ViewIndex, c_NodeActiveFlags);
@@ -140,7 +140,7 @@ void C_SyvUpPacListWidget::SetViewIndex(const uint32_t ou32_ViewIndex) {
   this->clear();
 
   if ((pc_View != NULL) && (s32_Retval == C_NO_ERR)) {
-    const std::vector<C_OscViewNodeUpdate> &rc_NodeUpdate =
+    const QList<C_OscViewNodeUpdate> &rc_NodeUpdate =
         pc_View->GetAllNodeUpdateInformation();
     uint32_t u32_CurrentPosition = 0U;
     uint32_t u32_FoundNodes = 0U;
@@ -418,8 +418,8 @@ void C_SyvUpPacListWidget::SetDisconnected(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::UpdateDeviceInformation(
-    const std::vector<uint32_t> &orc_NodeIndexes,
-    const std::vector<C_SyvUpDeviceInfo> &orc_DeviceInformation) const {
+    const QList<uint32_t> &orc_NodeIndexes,
+    const QList<C_SyvUpDeviceInfo> &orc_DeviceInformation) const {
   Q_ASSERT(orc_NodeIndexes.size() == orc_DeviceInformation.size());
   if (orc_NodeIndexes.size() == orc_DeviceInformation.size()) {
     int32_t s32_NodeWidgetCounter;
@@ -673,9 +673,9 @@ void C_SyvUpPacListWidget::ImportConfig(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
     const bool oq_SaveAsFile, const bool oq_SecureFile,
-    const std::vector<uint8_t> &orc_EncryptNodes,
+    const QByteArray &orc_EncryptNodes,
     const QStringList &orc_EncryptNodesPassword,
-    const std::vector<uint8_t> &orc_AddSignatureNodes,
+    const QByteArray &orc_AddSignatureNodes,
     const QStringList &orc_NodeSignaturePemFiles,
     const QString oc_CurrentSelectedVersion) {
   const C_PuiSvData *const pc_ViewData =
@@ -767,7 +767,7 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
       const uint32_t u32_ActiveBusIndex = pc_View->GetOscPcData().GetBusIndex();
 
       // active nodes
-      std::vector<uint8_t> c_NodeActiveFlags;
+      QByteArray c_NodeActiveFlags;
       const int32_t s32_FuncRetval =
           C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
               this->mu32_ViewIndex, c_NodeActiveFlags);
@@ -775,8 +775,8 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(
       Q_ASSERT(s32_FuncRetval == C_NO_ERR);
 
       // update applications of nodes, update position of nodes,
-      std::vector<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite;
-      vector<uint32_t> c_NodesUpdateOrder;
+      QList<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite;
+      QList<uint32_t> c_NodesUpdateOrder;
 
       s32_Return =
           this->GetUpdatePackage(c_ApplicationsToWrite, c_NodesUpdateOrder);
@@ -950,9 +950,9 @@ int32_t C_SyvUpPacListWidget::CheckAllPaths(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvUpPacListWidget::GetUpdatePackage(
-    std::vector<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
-    std::vector<uint32_t> &orc_NodesOrder,
-    std::vector<C_OscSuSequences::C_DoFlash> *const opc_AllApplications) const {
+    QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+    QList<uint32_t> &orc_NodesOrder,
+    QList<C_OscSuSequences::C_DoFlash> *const opc_AllApplications) const {
   int32_t s32_Return = C_NOACT;
   int32_t s32_Counter;
   bool q_AtLeastOneApplication = false;
@@ -1170,7 +1170,7 @@ void C_SyvUpPacListWidget::m_MoveItem(const int32_t os32_SourceIndex,
   // Update all position numbers in the node update information
   // The numbers in the widgets must be updated before
   if (pc_View != NULL) {
-    std::vector<C_OscViewNodeUpdate> c_NodeUpdate =
+    QList<C_OscViewNodeUpdate> c_NodeUpdate =
         pc_View->GetAllNodeUpdateInformation();
     int32_t s32_Counter;
 

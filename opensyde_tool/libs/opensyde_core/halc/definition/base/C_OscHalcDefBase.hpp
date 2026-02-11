@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include <QString>
@@ -49,8 +50,8 @@ public:
    E_SafetyMode e_SafetyMode;                       ///< Safety mode
    uint8_t u8_NumConfigCopies;                      ///< Number of copies (starting at one)
    bool q_NvmBasedConfig;                           ///< Flag if NVM based
-   std::vector<uint32_t> c_NvmSafeAddressOffset;    ///< NVM start addresses for safe datapools
-   std::vector<uint32_t> c_NvmNonSafeAddressOffset; ///< NVM start address for non-safe datapools
+   QList<uint32_t> c_NvmSafeAddressOffset;    ///< NVM start addresses for safe datapools
+   QList<uint32_t> c_NvmNonSafeAddressOffset; ///< NVM start address for non-safe datapools
    uint32_t u32_NvmReservedListSizeParameters;      ///< Reserved NVM parameters list size
    uint32_t u32_NvmReservedListSizeInputValues;     ///< Reserved NVM input values list size
    uint32_t u32_NvmReservedListSizeOutputValues;    ///< Reserved NVM output values list size
@@ -67,7 +68,7 @@ public:
    virtual void CalcHash(uint32_t & oru32_HashValue) const;
 
 private:
-   static void mh_AggregateIds(const std::vector<C_OscHalcDefStruct> & orc_Items,
+   static void mh_AggregateIds(const QList<C_OscHalcDefStruct> & orc_Items,
                                QStringList & orc_DuplicateIds);
 };
 

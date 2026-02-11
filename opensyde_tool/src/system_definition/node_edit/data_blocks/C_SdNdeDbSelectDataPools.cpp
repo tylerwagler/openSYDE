@@ -11,6 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include <QList>
 
 
 #include "stwerrors.hpp"
@@ -53,7 +54,7 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeDbSelectDataPools::C_SdNdeDbSelectDataPools(const uint32_t ou32_NodeIndex,
                                                    const int32_t os32_SkipApplicationIndex,
-                                                   const std::vector<uint32_t> & orc_UsedDataPoolIndicesIndex,
+                                                   const QList<uint32_t> & orc_UsedDataPoolIndicesIndex,
                                                    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
    QWidget(&orc_Parent),
    mpc_Ui(new Ui::C_SdNdeDbSelectDataPools),
@@ -126,7 +127,7 @@ void C_SdNdeDbSelectDataPools::InitStaticNames(void) const
    Current selected data elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_PuiSvDbNodeDataPoolListElementId> C_SdNdeDbSelectDataPools::GetSelectedDataPools(void) const
+QList<C_PuiSvDbNodeDataPoolListElementId> C_SdNdeDbSelectDataPools::GetSelectedDataPools(void) const
 {
    return this->mpc_Ui->pc_TreeView->GetSelectedDataElements();
 }
@@ -300,8 +301,8 @@ bool C_SdNdeDbSelectDataPools::m_IsCommDatapoolSelectionValid(void)
    {
       // put already used and newly selected datapools together
       // note: in fact we only need to check COMM datapools, but differentiating also needs to check every DP (for type)
-      std::vector<uint32_t> c_DatapoolIndices = this->mc_UsedDataPoolIndices;
-      const std::vector<C_PuiSvDbNodeDataPoolListElementId> & rc_SelectedDatapoolElements =
+      QList<uint32_t> c_DatapoolIndices = this->mc_UsedDataPoolIndices;
+      const QList<C_PuiSvDbNodeDataPoolListElementId> & rc_SelectedDatapoolElements =
          this->mpc_Ui->pc_TreeView->GetSelectedDataElements();
       for (uint32_t u32_It = 0UL; u32_It < rc_SelectedDatapoolElements.size(); ++u32_It)
       {

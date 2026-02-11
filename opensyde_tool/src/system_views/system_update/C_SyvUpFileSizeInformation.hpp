@@ -9,8 +9,7 @@
 #define C_SYVUPFILESIZEINFORMATION_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
-
+#include <QList>
 #include <QMap>
 
 #include "stwtypes.hpp"
@@ -33,8 +32,8 @@ public:
    uint64_t GetEstimatedTimeSeconds(bool * const opq_Ok) const;
    uint64_t GetOverallFilesSize(void) const;
    void ReserveSpace(const uint32_t ou32_NumNodes);
-   void AppendFiles(const uint32_t ou32_NodeIndex, const std::vector<uint64_t> & orc_OtherFiles,
-                    const std::vector<uint64_t> & orc_ParamFiles);
+   void AppendFiles(const uint32_t ou32_NodeIndex, const QList<uint64_t> & orc_OtherFiles,
+                    const QList<uint64_t> & orc_ParamFiles);
    uint32_t GetNumParamFiles(void) const;
    uint32_t GetNumOtherFiles(void) const;
    uint32_t GetNumParamFilesForDevice(const uint32_t ou32_DeviceOrder) const;
@@ -49,8 +48,8 @@ public:
 
 private:
    uint64_t mu64_OverallFilesSize;
-   std::vector<std::vector<uint64_t> > mc_FileSizesByte;
-   std::vector<std::vector<uint64_t> > mc_ParamFileSizesByte;
+   QList<QList<uint64_t> > mc_FileSizesByte;
+   QList<QList<uint64_t> > mc_ParamFileSizesByte;
    QMap<uint32_t, float64_t> mc_FileSizesByteMapPerNode;
    QMap<uint32_t, float64_t> mc_BytesPerMsMapPerNode;
 };

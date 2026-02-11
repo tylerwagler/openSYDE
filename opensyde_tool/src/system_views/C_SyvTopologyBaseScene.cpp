@@ -265,7 +265,7 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 C_GiLiCanBus * C_SyvTopologyBaseScene::m_CreateCanBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                                       C_GiTextElementBus * const opc_TextElementName,
-                                                      const std::vector<QPointF> * const opc_Points,
+                                                      const QList<QPointF> * const opc_Points,
                                                       QGraphicsItem * const opc_Parent)
 {
    return new C_GiSvCanBus(this->mu32_ViewIndex, ors32_Index, oru64_Id, opc_TextElementName, opc_Points, opc_Parent);
@@ -286,7 +286,7 @@ C_GiLiCanBus * C_SyvTopologyBaseScene::m_CreateCanBus(const int32_t & ors32_Inde
 //----------------------------------------------------------------------------------------------------------------------
 C_GiLiEthernetBus * C_SyvTopologyBaseScene::m_CreateEthernetBus(const int32_t & ors32_Index, const uint64_t & oru64_Id,
                                                                 C_GiTextElementBus * const opc_TextElementName,
-                                                                const std::vector<QPointF> * const opc_Points,
+                                                                const QList<QPointF> * const opc_Points,
                                                                 QGraphicsItem * const opc_Parent)
 {
    return new C_GiSvEthernetBus(this->mu32_ViewIndex, ors32_Index, oru64_Id, opc_TextElementName, opc_Points,
@@ -523,7 +523,7 @@ C_GiLiBus * C_SyvTopologyBaseScene::m_CheckBusState(void) const
             Q_ASSERT((pc_Node != NULL) && (pc_View != NULL));
             if ((pc_Node != NULL) && (pc_View != NULL))
             {
-               const std::vector<uint8_t> & rc_NodeActiveFlages = pc_View->GetNodeActiveFlags();
+               const QByteArray & rc_NodeActiveFlages = pc_View->GetNodeActiveFlags();
                const int32_t s32_NodeIndex = pc_Node->GetIndex();
                Q_ASSERT((s32_NodeIndex >= 0) && (static_cast<uint32_t>(s32_NodeIndex) < rc_NodeActiveFlages.size()));
                if ((s32_NodeIndex >= 0) && (static_cast<uint32_t>(s32_NodeIndex) < rc_NodeActiveFlages.size()))
@@ -548,7 +548,7 @@ C_GiLiBus * C_SyvTopologyBaseScene::m_CheckBusState(void) const
 void C_SyvTopologyBaseScene::m_AddPcBusConnector(const C_GiLiBus * const opc_Bus, C_GiBiConnectableItem * const opc_Pc,
                                                  const C_PuiBsLineBase & orc_LineData)
 {
-   std::vector<QPointF> c_UiInteractionPoints;
+   QList<QPointF> c_UiInteractionPoints;
    //Initial points
    if (orc_LineData.c_UiInteractionPoints.size() == 0)
    {
@@ -618,7 +618,7 @@ bool C_SyvTopologyBaseScene::m_HandlePcReconnectIfNecessary(QString & orc_BusNam
    if (pc_ValidBus == NULL)
    {
       const QList<QGraphicsItem *> & rc_Items = this->items();
-      std::vector<QGraphicsItem *> c_ItemsToBeDeleted;
+      QList<QGraphicsItem *> c_ItemsToBeDeleted;
 
       QList<QGraphicsItem *>::const_iterator c_ItItem;
       for (c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)

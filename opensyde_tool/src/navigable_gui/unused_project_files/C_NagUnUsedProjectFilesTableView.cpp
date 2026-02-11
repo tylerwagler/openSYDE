@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Table view for unused files and empty folders table (implementation)
@@ -231,7 +231,7 @@ void C_NagUnUsedProjectFilesTableView::selectionChanged(const QItemSelection & o
    // This method call ensures correct item row selection
    C_TblViewScroll::selectionChanged(orc_Selected, orc_Deselected);
 
-   std::vector<uint32_t> c_SelectedIndices;
+   QList<uint32_t> c_SelectedIndices;
    c_SelectedIndices = C_SdNdeDpUtil::h_ConvertVector(this->selectedIndexes());
    C_Uti::h_Uniqueify(c_SelectedIndices);
    Q_EMIT this->SigSelectionChanged(c_SelectedIndices.size());

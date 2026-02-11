@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QWidget>
+#include <QList>
 #include "C_SdBueUnoManager.hpp"
 #include "C_OgeContextMenu.hpp"
 
@@ -40,7 +41,7 @@ public:
    ~C_SdBueMessageSelectorWidget() override;
 
    void SetNodeId(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex,
-                  const std::vector<uint32_t> & orc_DatapoolIndexes);
+                  const QList<uint32_t> & orc_DatapoolIndexes);
    void SetBusId(const uint32_t ou32_BusIndex);
    void SetUndoManager(stw::opensyde_gui_logic::C_SdBueUnoManager * const opc_Value) const;
    void SetProtocolType(const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_Value);

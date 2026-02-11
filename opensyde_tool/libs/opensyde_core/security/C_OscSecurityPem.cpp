@@ -68,8 +68,8 @@ C_OscSecurityPem::C_OscSecurityPem() :
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSecurityPem::h_ExtractModulusAndExponentFromFile(const std::string & orc_FileName,
-                                                              std::vector<uint8_t> & orc_Modulus,
-                                                              std::vector<uint8_t> & orc_Exponent,
+                                                              QByteArray & orc_Modulus,
+                                                              QByteArray & orc_Exponent,
                                                               std::string & orc_ErrorMessage)
 {
    C_OscSecurityPem c_Pem;
@@ -98,14 +98,14 @@ int32_t C_OscSecurityPem::h_ExtractModulusAndExponentFromFile(const std::string 
    \retval   C_CHECKSUM Could not parse modulus and exponent from key
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPem::h_ExtractModulusAndExponent(const std::vector<uint8_t> & orc_PubKeyTextDecoded,
-                                                      std::vector<uint8_t> & orc_Modulus,
-                                                      std::vector<uint8_t> & orc_Exponent,
+int32_t C_OscSecurityPem::h_ExtractModulusAndExponent(const QByteArray & orc_PubKeyTextDecoded,
+                                                      QByteArray & orc_Modulus,
+                                                      QByteArray & orc_Exponent,
                                                       std::string & orc_ErrorMessage)
 {
    int32_t s32_Retval = C_NO_ERR;
    X509 * pc_X509Key = X509_new();
-   const uint8_t * pu8_DataPointer = &orc_PubKeyTextDecoded[0];
+   const uint8_t * pu8_DataPointer = reinterpret_cast<const uint8_t*>(orc_PubKeyTextDecoded.constData());
 
    const long x_DecodedSize = static_cast<long>(orc_PubKeyTextDecoded.size()); //lint !e970 !e8080 //use API type
 
@@ -128,8 +128,8 @@ int32_t C_OscSecurityPem::h_ExtractModulusAndExponent(const std::vector<uint8_t>
             orc_Modulus.resize(C_OscSecurityPem::mhu32_DEFAULT_BUFFER_SIZE);
             orc_Exponent.resize(C_OscSecurityPem::mhu32_DEFAULT_BUFFER_SIZE);
             {
-               const int32_t s32_SizeModulus = BN_bn2bin(pc_Modulus, &orc_Modulus[0]);
-               const int32_t s32_SizeExponent = BN_bn2bin(pc_Exponent, &orc_Exponent[0]);
+               const int32_t s32_SizeModulus = BN_bn2bin(pc_Modulus, reinterpret_cast<unsigned char*>(orc_Modulus.data()));
+               const int32_t s32_SizeExponent = BN_bn2bin(pc_Exponent, reinterpret_cast<unsigned char*>(orc_Exponent.data()));
                BN_clear_free(pc_Modulus);  //not needed any more
                BN_clear_free(pc_Exponent); //not needed any more
                if ((s32_SizeModulus > 0) && (s32_SizeExponent > 0))
@@ -178,12 +178,12 @@ int32_t C_OscSecurityPem::h_ExtractModulusAndExponent(const std::vector<uint8_t>
    \retval   C_CONFIG   Invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPem::m_ReadPrivateKey(const std::vector<uint8_t> & orc_FileContent, std::string & orc_ErrorMessage)
+int32_t C_OscSecurityPem::m_ReadPrivateKey(const QByteArray & orc_FileContent, std::string & orc_ErrorMessage)
 {
    int32_t s32_Retval = C_NO_ERR;
    //Private key
    const int x_ContentSize = static_cast<int>(orc_FileContent.size()); //lint !e970 !e8080 //use type expected by API
-   BIO * const pc_PrivKeyFile = BIO_new_mem_buf(&orc_FileContent[0], x_ContentSize);
+   BIO * const pc_PrivKeyFile = BIO_new_mem_buf(reinterpret_cast<const char*>(orc_FileContent.constData()), x_ContentSize);
 
    if (pc_PrivKeyFile != NULL)
    {
@@ -191,10 +191,10 @@ int32_t C_OscSecurityPem::m_ReadPrivateKey(const std::vector<uint8_t> & orc_File
                                                                                 NULL);
       if (pc_RsaPriv != NULL)
       {
-         std::vector<uint8_t> c_PrivKeyTextDecoded;
+         QByteArray c_PrivKeyTextDecoded;
          c_PrivKeyTextDecoded.resize(C_OscSecurityPem::mhu32_DEFAULT_BUFFER_SIZE);
          {
-            uint8_t * pu8_PrivKeyTextPointer = &c_PrivKeyTextDecoded[0];
+            uint8_t * pu8_PrivKeyTextPointer = reinterpret_cast<uint8_t*>(c_PrivKeyTextDecoded.data());
             const uint32_t u32_PrivKeyTextCount = i2d_PKCS8_PRIV_KEY_INFO(pc_RsaPriv, &pu8_PrivKeyTextPointer);
             c_PrivKeyTextDecoded.resize(u32_PrivKeyTextCount);
             this->mc_KeyInfo.SetPrivateKey(c_PrivKeyTextDecoded);

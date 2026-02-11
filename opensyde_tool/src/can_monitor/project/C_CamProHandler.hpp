@@ -17,6 +17,7 @@
  */
 #include <vector>
 
+#include <QList>
 #include <QObject>
 #include <QString>
 
@@ -47,19 +48,19 @@ public:
   enum E_CanDllType { ePEAK = 0 };
 
   // Get
-  const std::vector<C_CamProMessageData> &GetMessages(void) const;
+  const QList<C_CamProMessageData> &GetMessages(void) const;
   const C_CamProMessageData *GetMessageConst(const uint32_t ou32_Index) const;
   const bool &GetCyclicMessageTransmitActive(void) const;
   const QString GetCanDllPath(void) const;
   const QString GetCustomCanDllPath(void) const;
   E_CanDllType GetCanDllType(void) const;
-  const std::vector<C_CamProFilterData> &GetFilters(void) const;
+  const QList<C_CamProFilterData> &GetFilters(void) const;
   const bool &GetFilterWidgetEnabled(void) const;
-  const std::vector<C_CamProDatabaseData> &GetDatabases(void) const;
+  const QList<C_CamProDatabaseData> &GetDatabases(void) const;
   const C_CamProLoggingData &GetLoggingData(void) const;
 
   // Set
-  void SetMessages(const std::vector<C_CamProMessageData> &orc_Messages);
+  void SetMessages(const QList<C_CamProMessageData> &orc_Messages);
   int32_t SetMessageName(const uint32_t ou32_Index, const QString &orc_Name);
   int32_t SetMessageUint32Value(
       const uint32_t ou32_Index,
@@ -76,12 +77,12 @@ public:
   void SetCyclicMessageTransmitActive(const bool oq_Active);
   void SetCustomCanDllPath(const QString &orc_CanDllPath);
   void SetCanDllType(const E_CanDllType oe_CanDllType);
-  void SetFilters(const std::vector<C_CamProFilterData> &orc_Filters);
+  void SetFilters(const QList<C_CamProFilterData> &orc_Filters);
   int32_t SetFilter(const uint32_t ou32_Index,
                     const C_CamProFilterData &orc_NewFilter);
   void SetFilterEnabled(const uint32_t ou32_Index, const bool oq_Enable);
   void SetFilterWidgetEnabled(const bool oq_Enable);
-  void SetDatabases(const std::vector<C_CamProDatabaseData> &orc_Databases);
+  void SetDatabases(const QList<C_CamProDatabaseData> &orc_Databases);
   int32_t SetDatabaseName(const uint32_t ou32_Index,
                           const QString &orc_NewName);
   int32_t SetDatabaseOsySysDefBus(const uint32_t ou32_Index,
@@ -116,10 +117,10 @@ public:
   // Search
   void GetAllMessagesFromDatabase(
       const QString &orc_File, QStringList *const opc_CompleteMessageNames,
-      std::vector<uint32_t> *const opc_MessageIndices) const;
-  std::vector<uint32_t>
+      QList<uint32_t> *const opc_MessageIndices) const;
+  QList<uint32_t>
   GetInvalidMessagesFromDatabase(const QString &orc_File) const;
-  std::vector<uint32_t> GetInvalidMessagesWithNoDatabase(void) const;
+  QList<uint32_t> GetInvalidMessagesWithNoDatabase(void) const;
   bool CheckFilterNameAvailable(const QString &orc_Name) const;
 
   // Utility
@@ -152,11 +153,11 @@ private:
   uint32_t mu32_FileHash;
 
   // Content
-  std::vector<C_CamProMessageData> mc_Messages;
+  QList<C_CamProMessageData> mc_Messages;
   bool mq_CyclicMessageTransmitActive;
-  std::vector<C_CamProFilterData> mc_Filters;
+  QList<C_CamProFilterData> mc_Filters;
   bool mq_FiltersActive;
-  std::vector<C_CamProDatabaseData> mc_Databases;
+  QList<C_CamProDatabaseData> mc_Databases;
   QString mc_CustomCanDllPath;
   E_CanDllType me_CanDllType;
   C_CamProLoggingData mc_LoggingData;

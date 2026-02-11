@@ -194,7 +194,7 @@ bool C_SyvDcExistingNodeWidget::IsAssigned(void) const
    \param[in,out] orc_Configs All configs
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDcExistingNodeWidget::AppendDeviceConfig(std::vector<C_SyvDcDeviceConfiguation> & orc_Configs) const
+void C_SyvDcExistingNodeWidget::AppendDeviceConfig(QList<C_SyvDcDeviceConfiguation> & orc_Configs) const
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
@@ -209,7 +209,7 @@ void C_SyvDcExistingNodeWidget::AppendDeviceConfig(std::vector<C_SyvDcDeviceConf
       c_Config.c_SerialNumber = c_SerialNumber;
 
       const uint32_t u32_ConnectedBusIndex = pc_View->GetOscPcData().GetBusIndex();
-      std::vector<uint32_t> c_AllRelevantNodeIndexes;
+      QList<uint32_t> c_AllRelevantNodeIndexes;
       uint32_t u32_NodeCounter;
 
       if (this->mq_PartOfSquad == false)
@@ -700,7 +700,7 @@ void C_SyvDcExistingNodeWidget::mh_AppendDeviceConfigForNode(const uint32_t ou32
                                                              C_SyvDcDeviceConfiguation oc_NodeConfig,
                                                              const std::map<uint8_t,
                                                                             C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds,
-                                                             std::vector<C_SyvDcDeviceConfiguation> & orc_Configs)
+                                                             QList<C_SyvDcDeviceConfiguation> & orc_Configs)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 

@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for system view dashboard data element selection (implementation)
@@ -58,7 +58,7 @@ C_SyvDaPeDataElementBrowse::C_SyvDaPeDataElementBrowse(C_OgePopUpDialog & orc_Pa
                                                        const bool oq_ShowArrayElements,
                                                        const bool oq_ShowArrayIndexElements,
                                                        const bool oq_Show64BitValues, const bool oq_ShowNvmLists,
-                                                       const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements, const bool oq_UseInSysViews,
+                                                       const QList<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements, const bool oq_UseInSysViews,
                                                        const uint32_t ou32_SdDataLoggerUseCaseNodeIndex) :
    QWidget(&orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeDataElementBrowse),
@@ -215,7 +215,7 @@ void C_SyvDaPeDataElementBrowse::SaveUserSettings(void) const
    Current selected data elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_PuiSvDbNodeDataPoolListElementId> C_SyvDaPeDataElementBrowse::GetSelectedDataElements(void) const
+QList<C_PuiSvDbNodeDataPoolListElementId> C_SyvDaPeDataElementBrowse::GetSelectedDataElements(void) const
 {
    return this->mpc_Ui->pc_TreeView->GetSelectedDataElements();
 }

@@ -153,8 +153,8 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPool(C_OscNodeDataPool & orc_OscContent
    \param[in]  ore_Type          Data pool type
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdClipBoardHelper::h_StoreDataPoolLists(const std::vector<C_OscNodeDataPoolList> & orc_OscContent,
-                                               const std::vector<C_PuiSdNodeDataPoolList> & orc_UiContent,
+void C_SdClipBoardHelper::h_StoreDataPoolLists(const QList<C_OscNodeDataPoolList> & orc_OscContent,
+                                               const QList<C_PuiSdNodeDataPoolList> & orc_UiContent,
                                                const C_OscNodeDataPool::E_Type & ore_Type)
 {
    QString c_XmlContent;
@@ -197,8 +197,8 @@ void C_SdClipBoardHelper::h_StoreDataPoolLists(const std::vector<C_OscNodeDataPo
    C_CONFIG Clipboard invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdClipBoardHelper::h_LoadToDataPoolLists(std::vector<C_OscNodeDataPoolList> & orc_OscContent,
-                                                   std::vector<C_PuiSdNodeDataPoolList> & orc_UiContent,
+int32_t C_SdClipBoardHelper::h_LoadToDataPoolLists(QList<C_OscNodeDataPoolList> & orc_OscContent,
+                                                   QList<C_PuiSdNodeDataPoolList> & orc_UiContent,
                                                    C_OscNodeDataPool::E_Type & ore_Type)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -276,8 +276,8 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolLists(std::vector<C_OscNodeDataPool
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdClipBoardHelper::h_StoreDataPoolListElementsToClipBoard(
-   const std::vector<C_OscNodeDataPoolListElement> & orc_OscContent,
-   const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiContent, const C_OscNodeDataPool::E_Type oe_DatapoolType)
+   const QList<C_OscNodeDataPoolListElement> & orc_OscContent,
+   const QList<C_PuiSdNodeDataPoolListElement> & orc_UiContent, const C_OscNodeDataPool::E_Type oe_DatapoolType)
 {
    QString c_Tmp;
 
@@ -297,8 +297,8 @@ void C_SdClipBoardHelper::h_StoreDataPoolListElementsToClipBoard(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdClipBoardHelper::h_LoadToDataPoolListElementsFromClipBoard(
-   std::vector<C_OscNodeDataPoolListElement> & orc_OscContent,
-   std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiContent)
+   QList<C_OscNodeDataPoolListElement> & orc_OscContent,
+   QList<C_PuiSdNodeDataPoolListElement> & orc_UiContent)
 {
    return h_LoadToDataPoolListElementsFromString(orc_OscContent, orc_UiContent, mh_GetClipBoard());
 }
@@ -313,8 +313,8 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListElementsFromClipBoard(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdClipBoardHelper::h_StoreDataPoolListElementsToString(
-   const std::vector<C_OscNodeDataPoolListElement> & orc_OscContent,
-   const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiContent, const C_OscNodeDataPool::E_Type oe_DatapoolType,
+   const QList<C_OscNodeDataPoolListElement> & orc_OscContent,
+   const QList<C_PuiSdNodeDataPoolListElement> & orc_UiContent, const C_OscNodeDataPool::E_Type oe_DatapoolType,
    QString & orc_Output)
 {
    QString c_XmlContent;
@@ -352,8 +352,8 @@ void C_SdClipBoardHelper::h_StoreDataPoolListElementsToString(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdClipBoardHelper::h_LoadToDataPoolListElementsFromString(
-   std::vector<C_OscNodeDataPoolListElement> & orc_OscContent,
-   std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiContent, const QString & orc_Input)
+   QList<C_OscNodeDataPoolListElement> & orc_OscContent,
+   QList<C_PuiSdNodeDataPoolListElement> & orc_UiContent, const QString & orc_Input)
 {
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
@@ -415,7 +415,7 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListElementsFromString(
    \param[out]  orc_Output    String output
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdClipBoardHelper::h_StoreIndicesToString(const std::vector<uint32_t> & orc_Indices, QString & orc_Output)
+void C_SdClipBoardHelper::h_StoreIndicesToString(const QList<uint32_t> & orc_Indices, QString & orc_Output)
 {
    QString c_XmlContent;
    C_OscXmlParser c_StringXml;
@@ -444,7 +444,7 @@ void C_SdClipBoardHelper::h_StoreIndicesToString(const std::vector<uint32_t> & o
    C_CONFIG String invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdClipBoardHelper::h_LoadIndicesFromString(std::vector<uint32_t> & orc_Indices, const QString & orc_Input)
+int32_t C_SdClipBoardHelper::h_LoadIndicesFromString(QList<uint32_t> & orc_Indices, const QString & orc_Input)
 {
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
@@ -484,8 +484,8 @@ int32_t C_SdClipBoardHelper::h_LoadIndicesFromString(std::vector<uint32_t> & orc
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdClipBoardHelper::h_StoreDataPoolListDataSetsToClipBoard(
-   const std::vector<C_OscNodeDataPoolDataSet> & orc_OscNames,
-   const std::vector<std::vector<C_OscNodeDataPoolContent> > & orc_OscDataSetValues)
+   const QList<C_OscNodeDataPoolDataSet> & orc_OscNames,
+   const QList<QList<C_OscNodeDataPoolContent> > & orc_OscDataSetValues)
 {
    QString c_Tmp;
 
@@ -505,8 +505,8 @@ void C_SdClipBoardHelper::h_StoreDataPoolListDataSetsToClipBoard(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromClipBoard(
-   std::vector<C_OscNodeDataPoolDataSet> & orc_OscNames,
-   std::vector<std::vector<C_OscNodeDataPoolContent> > & orc_OscDataSetValues)
+   QList<C_OscNodeDataPoolDataSet> & orc_OscNames,
+   QList<QList<C_OscNodeDataPoolContent> > & orc_OscDataSetValues)
 {
    return h_LoadToDataPoolListDataSetsFromString(orc_OscNames, orc_OscDataSetValues, mh_GetClipBoard());
 }
@@ -520,8 +520,8 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromClipBoard(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdClipBoardHelper::h_StoreDataPoolListDataSetsToString(
-   const std::vector<C_OscNodeDataPoolDataSet> & orc_OscNames,
-   const std::vector<std::vector<C_OscNodeDataPoolContent> > & orc_OscDataSetValues, QString & orc_Output)
+   const QList<C_OscNodeDataPoolDataSet> & orc_OscNames,
+   const QList<QList<C_OscNodeDataPoolContent> > & orc_OscDataSetValues, QString & orc_Output)
 {
    QString c_XmlContent;
    C_OscXmlParser c_StringXml;
@@ -537,7 +537,7 @@ void C_SdClipBoardHelper::h_StoreDataPoolListDataSetsToString(
    c_StringXml.CreateAndSelectNodeChild("data-sets-2");
    for (uint32_t u32_ItDataSet = 0; u32_ItDataSet < orc_OscDataSetValues.size(); ++u32_ItDataSet)
    {
-      const std::vector<C_OscNodeDataPoolContent> & rc_DataSetValues = orc_OscDataSetValues[u32_ItDataSet];
+      const QList<C_OscNodeDataPoolContent> & rc_DataSetValues = orc_OscDataSetValues[u32_ItDataSet];
       c_StringXml.CreateAndSelectNodeChild("data-set-values");
       c_StringXml.SetAttributeUint32("index", u32_ItDataSet);
       for (uint32_t u32_ItType = 0; u32_ItType < rc_DataSetValues.size(); ++u32_ItType)
@@ -567,8 +567,8 @@ void C_SdClipBoardHelper::h_StoreDataPoolListDataSetsToString(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromString(
-   std::vector<C_OscNodeDataPoolDataSet> & orc_OscNames,
-   std::vector<std::vector<C_OscNodeDataPoolContent> > & orc_OscDataSetValues, const QString & orc_Input)
+   QList<C_OscNodeDataPoolDataSet> & orc_OscNames,
+   QList<QList<C_OscNodeDataPoolContent> > & orc_OscDataSetValues, const QString & orc_Input)
 {
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
@@ -594,7 +594,7 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromString(
                   {
                      do
                      {
-                        std::vector<C_OscNodeDataPoolContent> c_CurDataSetValue;
+                        QList<C_OscNodeDataPoolContent> c_CurDataSetValue;
 
                         if (s32_Retval == C_NO_ERR)
                         {
@@ -678,8 +678,8 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPoolListDataSetsFromString(
    \param[in]  oe_ProtocolType               Protocol type
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdClipBoardHelper::h_StoreMessages(const std::vector<C_OscCanMessage> & orc_Messages,
-                                          const std::vector<std::vector<C_OscNodeDataPoolListElement> > & orc_OscSignalCommons, const std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons, const std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages, const QList<QStringList> & orc_OwnerNodeName, const std::vector<std::vector<uint32_t> > & orc_OwnerNodeInterfaceIndex, const std::vector<std::vector<uint32_t> > & orc_OwnerNodeDatapoolIndex, const std::vector<std::vector<bool> > & orc_OwnerIsTxFlag,
+void C_SdClipBoardHelper::h_StoreMessages(const QList<C_OscCanMessage> & orc_Messages,
+                                          const QList<QList<C_OscNodeDataPoolListElement> > & orc_OscSignalCommons, const QList<QList<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons, const QList<C_PuiSdNodeCanMessage> & orc_UiMessages, const QList<QStringList> & orc_OwnerNodeName, const QList<QList<uint32_t> > & orc_OwnerNodeInterfaceIndex, const QList<QList<uint32_t> > & orc_OwnerNodeDatapoolIndex, const QList<QList<bool> > & orc_OwnerIsTxFlag,
                                           const opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType)
 {
    QString c_String;
@@ -736,9 +736,9 @@ void C_SdClipBoardHelper::h_StoreMessages(const std::vector<C_OscCanMessage> & o
       for (uint32_t u32_ItMessage = 0; u32_ItMessage < orc_OwnerNodeName.size(); ++u32_ItMessage)
       {
          const QStringList  & rc_OwnerNodeName = orc_OwnerNodeName[u32_ItMessage];
-         const std::vector<uint32_t>  & rc_OwnerNodeInterfaceIndex = orc_OwnerNodeInterfaceIndex[u32_ItMessage];
-         const std::vector<uint32_t>  & rc_OwnerNodeDatapoolIndex = orc_OwnerNodeDatapoolIndex[u32_ItMessage];
-         const std::vector<bool>  & rc_OwnerIsTxFlag = orc_OwnerIsTxFlag[u32_ItMessage];
+         const QList<uint32_t>  & rc_OwnerNodeInterfaceIndex = orc_OwnerNodeInterfaceIndex[u32_ItMessage];
+         const QList<uint32_t>  & rc_OwnerNodeDatapoolIndex = orc_OwnerNodeDatapoolIndex[u32_ItMessage];
+         const QList<bool>  & rc_OwnerIsTxFlag = orc_OwnerIsTxFlag[u32_ItMessage];
          c_StringXml.CreateAndSelectNodeChild("message-parents");
          Q_ASSERT((rc_OwnerNodeName.size() == rc_OwnerNodeInterfaceIndex.size()) &&
                     (rc_OwnerNodeName.size() == rc_OwnerNodeDatapoolIndex.size()) &&
@@ -787,9 +787,9 @@ void C_SdClipBoardHelper::h_StoreMessages(const std::vector<C_OscCanMessage> & o
    C_CONFIG Clipboard invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_Messages,
-                                            std::vector<std::vector<C_OscNodeDataPoolListElement> > & orc_OscSignalCommons, std::vector<std::vector<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons, std::vector<C_PuiSdNodeCanMessage> & orc_UiMessages, QList<QStringList> & orc_OwnerNodeName, std::vector<std::vector<uint32_t> > & orc_OwnerNodeInterfaceIndex, std::vector<std::vector<uint32_t> > & orc_OwnerNodeDatapoolIndex,
-                                            std::vector<std::vector<bool> > & orc_OwnerIsTxFlag)
+int32_t C_SdClipBoardHelper::h_LoadMessages(QList<C_OscCanMessage> & orc_Messages,
+                                            QList<QList<C_OscNodeDataPoolListElement> > & orc_OscSignalCommons, QList<QList<C_PuiSdNodeDataPoolListElement> > & orc_UiSignalCommons, QList<C_PuiSdNodeCanMessage> & orc_UiMessages, QList<QStringList> & orc_OwnerNodeName, QList<QList<uint32_t> > & orc_OwnerNodeInterfaceIndex, QList<QList<uint32_t> > & orc_OwnerNodeDatapoolIndex,
+                                            QList<QList<bool> > & orc_OwnerIsTxFlag)
 {
    int32_t s32_Retval = C_NO_ERR;
    const QString c_Input = C_SdClipBoardHelper::mh_GetClipBoard();
@@ -813,7 +813,7 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
                   QString c_CurrentNode = c_StringXml.SelectNodeChild("data-elements");
                   if (c_CurrentNode == "data-elements")
                   {
-                     std::vector<C_OscNodeDataPoolListElement> c_Tmp;
+                     QList<C_OscNodeDataPoolListElement> c_Tmp;
                      do
                      {
                         c_Tmp.clear();
@@ -836,7 +836,7 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
                         c_CurrentNode = c_StringXml.SelectNodeChild("data-elements");
                         if (c_CurrentNode == "data-elements")
                         {
-                           std::vector<C_PuiSdNodeDataPoolListElement> c_Tmp;
+                           QList<C_PuiSdNodeDataPoolListElement> c_Tmp;
                            do
                            {
                               c_Tmp.clear();
@@ -867,9 +867,9 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
                                     do
                                     {
                                        QStringList  c_OwnerNodeName;
-                                       std::vector<uint32_t>  c_OwnerNodeInterfaceIndex;
-                                       std::vector<uint32_t>  c_OwnerNodeDatapoolIndex;
-                                       std::vector<bool>  c_OwnerIsTxFlag;
+                                       QList<uint32_t>  c_OwnerNodeInterfaceIndex;
+                                       QList<uint32_t>  c_OwnerNodeDatapoolIndex;
+                                       QList<bool>  c_OwnerIsTxFlag;
                                        QString c_CurrentNode2 = c_StringXml.SelectNodeChild(
                                           "message-parent");
                                        if (c_CurrentNode2 == "message-parent")
@@ -959,8 +959,8 @@ int32_t C_SdClipBoardHelper::h_LoadMessages(std::vector<C_OscCanMessage> & orc_M
    \param[in]  oe_ProtocolType         Protocol type
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdClipBoardHelper::h_StoreSignalsToClipboard(const std::vector<C_OscCanSignal> & orc_Signals,
-                                                    const std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalCommons, const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons, const std::vector<C_PuiSdNodeCanSignal> & orc_UiSignals,
+void C_SdClipBoardHelper::h_StoreSignalsToClipboard(const QList<C_OscCanSignal> & orc_Signals,
+                                                    const QList<C_OscNodeDataPoolListElement> & orc_OscSignalCommons, const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons, const QList<C_PuiSdNodeCanSignal> & orc_UiSignals,
                                                     const opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType)
 {
    QString c_String;
@@ -983,9 +983,9 @@ void C_SdClipBoardHelper::h_StoreSignalsToClipboard(const std::vector<C_OscCanSi
    C_CONFIG Clipboard invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SdClipBoardHelper::h_LoadSignalsFromClipboard(std::vector<C_OscCanSignal> & orc_Signals,
-                                                        std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalCommons, std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
-                                                        std::vector<C_PuiSdNodeCanSignal> & orc_UiSignals)
+int32_t C_SdClipBoardHelper::h_LoadSignalsFromClipboard(QList<C_OscCanSignal> & orc_Signals,
+                                                        QList<C_OscNodeDataPoolListElement> & orc_OscSignalCommons, QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                                                        QList<C_PuiSdNodeCanSignal> & orc_UiSignals)
 {
    const QString c_Input = C_SdClipBoardHelper::mh_GetClipBoard();
    int32_t s32_Retval = mh_LoadSignalsFromString(c_Input, orc_Signals, orc_OscSignalCommons, orc_UiSignalCommons,
@@ -1007,7 +1007,7 @@ int32_t C_SdClipBoardHelper::h_LoadSignalsFromClipboard(std::vector<C_OscCanSign
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdClipBoardHelper::h_StoreMessageIndexToString(
-   const std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageIds, QString & orc_Output)
+   const QList<C_OscCanMessageIdentificationIndices> & orc_MessageIds, QString & orc_Output)
 {
    QString c_XmlContent;
    C_OscXmlParser c_StringXml;
@@ -1047,7 +1047,7 @@ void C_SdClipBoardHelper::h_StoreMessageIndexToString(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdClipBoardHelper::h_LoadMessageIndexFromString(const QString & orc_Input,
-                                                          std::vector<C_OscCanMessageIdentificationIndices> & orc_MessageIds)
+                                                          QList<C_OscCanMessageIdentificationIndices> & orc_MessageIds)
 {
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;
@@ -1320,8 +1320,8 @@ C_SdClipBoardHelper::C_SdClipBoardHelper(void) :
    \param[out]  orc_Output             String output
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdClipBoardHelper::mh_StoreSignalsToString(const std::vector<C_OscCanSignal> & orc_Signals,
-                                                  const std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalCommons, const std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons, const std::vector<C_PuiSdNodeCanSignal> & orc_UiSignals, const opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
+void C_SdClipBoardHelper::mh_StoreSignalsToString(const QList<C_OscCanSignal> & orc_Signals,
+                                                  const QList<C_OscNodeDataPoolListElement> & orc_OscSignalCommons, const QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons, const QList<C_PuiSdNodeCanSignal> & orc_UiSignals, const opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType,
                                                   QString & orc_Output)
 {
    QString c_XmlContent;
@@ -1368,10 +1368,10 @@ void C_SdClipBoardHelper::mh_StoreSignalsToString(const std::vector<C_OscCanSign
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdClipBoardHelper::mh_LoadSignalsFromString(const QString & orc_Input,
-                                                      std::vector<C_OscCanSignal> & orc_Signals,
-                                                      std::vector<C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
-                                                      std::vector<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
-                                                      std::vector<C_PuiSdNodeCanSignal> & orc_UiSignals)
+                                                      QList<C_OscCanSignal> & orc_Signals,
+                                                      QList<C_OscNodeDataPoolListElement> & orc_OscSignalCommons,
+                                                      QList<C_PuiSdNodeDataPoolListElement> & orc_UiSignalCommons,
+                                                      QList<C_PuiSdNodeCanSignal> & orc_UiSignals)
 {
    int32_t s32_Retval = C_NO_ERR;
    C_OscXmlParser c_StringXml;

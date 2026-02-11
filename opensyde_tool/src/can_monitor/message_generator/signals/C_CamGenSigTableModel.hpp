@@ -13,6 +13,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
+#include <QByteArray>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_CieConverter.hpp"
 #include "C_OscCanMessage.hpp"
@@ -85,7 +87,7 @@ private:
    const;
    const C_CieConverter::C_CieCanMessage * m_GetMessageInterpretedDbc(void) const;
    const C_CieConverter::C_CieCanSignal * m_GetSignalInterpretedDbc(const uint32_t ou32_Index) const;
-   static stw::opensyde_core::C_OscNodeDataPoolContent mh_DecodeRawToContentDbc(const std::vector<uint8_t> & orc_Raw,
+   static stw::opensyde_core::C_OscNodeDataPoolContent mh_DecodeRawToContentDbc(const QByteArray & orc_Raw,
                                                                                 const C_CieConverter::C_CieCanSignal & orc_Signal);
    bool m_CheckUseCheckBox(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,
                            const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Max) const;
@@ -109,7 +111,7 @@ private:
                                            const C_CieConverter::C_CieCanMessage * const opc_DbcMessage,
                                            const uint16_t ou16_MuxValue);
    uint32_t m_TranslateRowToIndex(const int32_t os32_Row) const;
-   static std::vector<uint16_t> mh_GetStartBits(const stw::opensyde_core::C_OscCanMessage * const opc_OsyMessage,
+   static QList<uint16_t> mh_GetStartBits(const stw::opensyde_core::C_OscCanMessage * const opc_OsyMessage,
                                                 const C_CieConverter::C_CieCanMessage * const opc_DbcMessage,
                                                 const uint16_t ou16_MuxValue);
    void m_ResetUnusedMultiplexedSignals(void);

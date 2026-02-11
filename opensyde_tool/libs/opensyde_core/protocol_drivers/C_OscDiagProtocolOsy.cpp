@@ -52,7 +52,7 @@ using namespace stw::scl;
 void C_OscDiagProtocolOsy::m_OsyReadDataPoolDataEventReceived(const uint8_t ou8_DataPoolIndex,
                                                               const uint16_t ou16_ListIndex,
                                                               const uint16_t ou16_ElementIndex,
-                                                              const std::vector<uint8_t> & orc_Value)
+                                                              const QByteArray & orc_Value)
 {
    if (mpr_OnDataPoolReadEventReceived != NULL)
    {
@@ -165,7 +165,7 @@ int32_t C_OscDiagProtocolOsy::Cycle(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDiagProtocolOsy::DataPoolReadNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                                  const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
+                                                  const uint16_t ou16_ElementIndex, QByteArray & orc_ReadData,
                                                   uint8_t * const opu8_NrCode)
 {
    //in this protocol: no need to differentiate between numeric and array ...
@@ -196,7 +196,7 @@ int32_t C_OscDiagProtocolOsy::DataPoolReadNumeric(const uint8_t ou8_DataPoolInde
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDiagProtocolOsy::DataPoolReadArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-                                                const uint16_t ou16_ElementIndex, std::vector<uint8_t> & orc_ReadData,
+                                                const uint16_t ou16_ElementIndex, QByteArray & orc_ReadData,
                                                 uint8_t * const opu8_NrCode)
 {
    int32_t s32_Return;
@@ -236,7 +236,7 @@ int32_t C_OscDiagProtocolOsy::DataPoolReadArray(const uint8_t ou8_DataPoolIndex,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDiagProtocolOsy::DataPoolWriteNumeric(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                    const uint16_t ou16_ElementIndex,
-                                                   const std::vector<uint8_t> & orc_DataToWrite,
+                                                   const QByteArray & orc_DataToWrite,
                                                    uint8_t * const opu8_NrCode)
 {
    return this->OsyWriteDataPoolData(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
@@ -267,7 +267,7 @@ int32_t C_OscDiagProtocolOsy::DataPoolWriteNumeric(const uint8_t ou8_DataPoolInd
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDiagProtocolOsy::DataPoolWriteArray(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
                                                  const uint16_t ou16_ElementIndex,
-                                                 const std::vector<uint8_t> & orc_DataToWrite,
+                                                 const QByteArray & orc_DataToWrite,
                                                  uint8_t * const opu8_NrCode)
 {
    return this->DataPoolWriteNumeric(ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex, orc_DataToWrite,
@@ -409,7 +409,7 @@ int32_t C_OscDiagProtocolOsy::DataPoolStopEventDriven(void)
    C_COM      expected server response not received because of communication error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDiagProtocolOsy::NvmRead(const uint32_t ou32_MemoryAddress, std::vector<uint8_t> & orc_DataRecord,
+int32_t C_OscDiagProtocolOsy::NvmRead(const uint32_t ou32_MemoryAddress, QByteArray & orc_DataRecord,
                                       uint8_t * const opu8_NrCode)
 {
    int32_t s32_Retval;
@@ -462,7 +462,7 @@ int32_t C_OscDiagProtocolOsy::NvmWriteStartTransaction(const uint8_t ou8_DataPoo
    C_COM      communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDiagProtocolOsy::NvmWrite(const uint32_t ou32_MemoryAddress, const std::vector<uint8_t> & orc_DataRecord,
+int32_t C_OscDiagProtocolOsy::NvmWrite(const uint32_t ou32_MemoryAddress, const QByteArray & orc_DataRecord,
                                        uint8_t * const opu8_NrCode)
 {
    int32_t s32_Retval;

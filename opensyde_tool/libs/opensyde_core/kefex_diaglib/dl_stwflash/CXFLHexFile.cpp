@@ -257,7 +257,7 @@ int32_t C_XFLHexFile::CalcFileChecksum(uint32_t &oru32_Checksum) {
     C_SclChecksums::CalcCRC32(&au8_AddressOffset[0], 4U, oru32_Checksum);
 
     // data:
-    C_SclChecksums::CalcCRC32(&pc_Dump->at_Blocks[u32_Index].au8_Data[0],
+    C_SclChecksums::CalcCRC32(pc_Dump->at_Blocks[u32_Index].au8_Data.data(),
                               pc_Dump->at_Blocks[u32_Index].au8_Data.size(),
                               oru32_Checksum);
   }

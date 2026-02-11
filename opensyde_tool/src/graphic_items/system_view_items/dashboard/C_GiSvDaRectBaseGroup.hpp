@@ -115,9 +115,9 @@ protected:
                           float64_t * const opf64_UnscaledValueAsFloat,
                           float64_t * const opf64_ScaledValueAsFloat) override;
    int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, QStringList & orc_ScaledValues,
-                          std::vector<float64_t> & orc_UnscaledValues) override;
+                          QList<float64_t> & orc_UnscaledValues) override;
 
-   int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, std::vector<float64_t> & orc_Values,
+   int32_t m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex, QList<float64_t> & orc_Values,
                           const bool oq_UseScaling) override;
    void m_ResizeUpdateItems(const float64_t of64_DiffWidth, const float64_t of64_DiffHeight) override;
    virtual void m_ForceWidgetResize(const QSizeF & orc_NewSize);
@@ -167,7 +167,7 @@ private:
    static const float64_t mhf64_ACTION_POINT_OFFSET;
    QSizeF mc_CurrentSize;
    bool mq_ProxyWidgetInteractionActive;
-   std::vector<int32_t> mc_LastTransparencyValue;
+   QList<int32_t> mc_LastTransparencyValue;
    static const uint8_t mhu8_START_GREY_TIMEOUT_PERCENTAGE;
    bool mq_ConnectionActive;
    bool mq_ShowButton;

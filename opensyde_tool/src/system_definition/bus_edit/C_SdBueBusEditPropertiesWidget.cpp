@@ -248,10 +248,10 @@ void C_SdBueBusEditPropertiesWidget::m_LoadFromData(void)
       //Bit rate
       if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
       {
-         std::vector<uint32_t> c_ConnectedNodes;
-         std::vector<uint32_t> c_ConnectedInterfaces;
-         std::vector<uint32_t> c_SupportedBitrates;
-         std::vector<uint32_t> c_SupportedCanFdBitrates;
+         QList<uint32_t> c_ConnectedNodes;
+         QList<uint32_t> c_ConnectedInterfaces;
+         QList<uint32_t> c_SupportedBitrates;
+         QList<uint32_t> c_SupportedCanFdBitrates;
          uint32_t u32_BitrateCounter;
          const uint32_t u32_CurrentSetBitrate = static_cast<uint32_t>(pc_Bus->u64_BitRate / 1000ULL);
          const QString c_CurrentSetBitrate = this->m_GetComboBoxString(u32_CurrentSetBitrate);
@@ -744,7 +744,7 @@ void C_SdBueBusEditPropertiesWidget::m_CheckBusId(void) const
    }
    else
    {
-      const std::vector<uint32_t> c_UsedIds = C_SdUtil::h_GetUsedBusIdsUniqueAndSortedAscending(this->mu32_BusIndex);
+      const QList<uint32_t> c_UsedIds = C_SdUtil::h_GetUsedBusIdsUniqueAndSortedAscending(this->mu32_BusIndex);
       const QString c_Content = C_SdUtil::h_InitUsedIdsString(c_UsedIds, "", "", true);
       this->mpc_Ui->pc_SpinBoxBusId->SetToolTipAdditionalInfo(c_Content, C_NagToolTip::eERROR);
    }

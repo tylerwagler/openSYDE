@@ -101,7 +101,7 @@ void C_NagTopTreeView::SetContent(const QStringList & orc_Content,
    \param[in]  orc_Error   List error states
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_NagTopTreeView::SetError(const std::vector<bool> & orc_Error)
+void C_NagTopTreeView::SetError(const QList<bool> & orc_Error)
 {
    this->mc_Model.SetError(orc_Error);
 }

@@ -43,7 +43,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoTopResizeLineCommand::C_SebUnoTopResizeLineCommand(QGraphicsScene * const opc_Scene,
-                                                           const std::vector<uint64_t> & orc_Ids,
+                                                           const QList<uint64_t> & orc_Ids,
                                                            const int32_t & ors32_InteractionPointId,
                                                            const QPointF & orc_PositionDifference,
                                                            QUndoCommand * const opc_Parent) :
@@ -67,7 +67,7 @@ C_SebUnoTopResizeLineCommand::~C_SebUnoTopResizeLineCommand()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoTopResizeLineCommand::undo(void)
 {
-   vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
+   const auto c_Items = this->m_GetSceneItems();
    for (uint32_t u32_ItId = 0; u32_ItId < c_Items.size(); ++u32_ItId)
    {
       m_UndoSingle(c_Items[u32_ItId]);
@@ -81,7 +81,7 @@ void C_SebUnoTopResizeLineCommand::undo(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SebUnoTopResizeLineCommand::redo(void)
 {
-   vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
+   const auto c_Items = this->m_GetSceneItems();
    for (uint32_t u32_ItId = 0; u32_ItId < c_Items.size(); ++u32_ItId)
    {
       m_RedoSingle(c_Items[u32_ItId]);

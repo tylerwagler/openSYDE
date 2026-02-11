@@ -134,9 +134,9 @@ void C_SdBueMessageRxEntry::InitStaticNames(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageRxEntry::Init(const QString & orc_EntryName, const uint32_t ou32_NodeIndex,
                                  const uint32_t ou32_InterfaceIndex,
-                                 const std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> & orc_ReceiveTimeoutModes,
-                                 const std::vector<uint32_t> & orc_ReceiveTimeoutValues,
-                                 const std::vector<uint32_t> & orc_DatapoolIndexes,
+                                 const QList<C_PuiSdNodeCanMessage::E_RxTimeoutMode> & orc_ReceiveTimeoutModes,
+                                 const QList<uint32_t> & orc_ReceiveTimeoutValues,
+                                 const QList<uint32_t> & orc_DatapoolIndexes,
                                  const QStringList & orc_DatapoolNames, const bool oq_NodeLayer,
                                  const bool oq_ReadOnly)
 {
@@ -191,10 +191,10 @@ void C_SdBueMessageRxEntry::Init(const QString & orc_EntryName, const uint32_t o
       // Create for each Datapool an own sub entry
       for (u32_ItEntry = 0U; u32_ItEntry < orc_DatapoolIndexes.size(); ++u32_ItEntry)
       {
-         std::vector<uint32_t> c_NodeDatapoolIndexes;
+         QList<uint32_t> c_NodeDatapoolIndexes;
          QStringList c_NodeDatapoolNames;
-         std::vector<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_ReceiveTimeoutModes;
-         std::vector<uint32_t> c_ReceiveTimeoutValues;
+         QList<C_PuiSdNodeCanMessage::E_RxTimeoutMode> c_ReceiveTimeoutModes;
+         QList<uint32_t> c_ReceiveTimeoutValues;
          C_SdBueMessageRxEntry * const pc_Entry = new C_SdBueMessageRxEntry(this);
 
          // Special handling for node toggled signal

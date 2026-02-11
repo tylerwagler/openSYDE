@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 
+#include <QList>
 #include <QString>
 #include "C_OscXceUpdatePackageParameters.hpp"
 
@@ -29,7 +30,7 @@ public:
    C_OscXceManifest();
 
    QString c_CertificatesPath;
-   std::vector<C_OscXceUpdatePackageParameters> c_UpdatePackageParameters;
+   QList<C_OscXceUpdatePackageParameters> c_UpdatePackageParameters;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

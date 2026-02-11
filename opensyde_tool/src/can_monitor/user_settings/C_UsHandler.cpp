@@ -332,7 +332,7 @@ int32_t C_UsHandler::GetSplitterMesSigHorizontal() const
    Last known selected message indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> & C_UsHandler::GetSelectedMessages(void) const
+const QList<int32_t> & C_UsHandler::GetSelectedMessages(void) const
 {
    return this->mc_SelectedMessages;
 }
@@ -344,7 +344,7 @@ const std::vector<int32_t> & C_UsHandler::GetSelectedMessages(void) const
    Last known trace tree column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> & C_UsHandler::GetTraceColWidths(void) const
+const QList<int32_t> & C_UsHandler::GetTraceColWidths(void) const
 {
    return this->mc_TraceColWidth;
 }
@@ -356,7 +356,7 @@ const std::vector<int32_t> & C_UsHandler::GetTraceColWidths(void) const
    Last known trace tree column positions
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> & C_UsHandler::GetTraceColPositions(void) const
+const QList<int32_t> & C_UsHandler::GetTraceColPositions(void) const
 {
    return this->mc_TraceColPosition;
 }
@@ -368,7 +368,7 @@ const std::vector<int32_t> & C_UsHandler::GetTraceColPositions(void) const
    Last known message generator table column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> & C_UsHandler::GetMessageColWidths(void) const
+const QList<int32_t> & C_UsHandler::GetMessageColWidths(void) const
 {
    return this->mc_MessageGenColWidth;
 }
@@ -380,7 +380,7 @@ const std::vector<int32_t> & C_UsHandler::GetMessageColWidths(void) const
    Last known message generator signals table column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<int32_t> & C_UsHandler::GetSignalsColWidths(void) const
+const QList<int32_t> & C_UsHandler::GetSignalsColWidths(void) const
 {
    return this->mc_SignalsColWidth;
 }
@@ -721,7 +721,7 @@ void C_UsHandler::SetSplitterMesSigHorizontal(const int32_t os32_New)
    \param[in] orc_Value New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsHandler::SetSelectedMessages(const std::vector<int32_t> & orc_Value)
+void C_UsHandler::SetSelectedMessages(const QList<int32_t> & orc_Value)
 {
    this->mc_SelectedMessages = orc_Value;
 }
@@ -732,7 +732,7 @@ void C_UsHandler::SetSelectedMessages(const std::vector<int32_t> & orc_Value)
    \param[in] orc_Value New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsHandler::SetTraceColWidths(const std::vector<int32_t> & orc_Value)
+void C_UsHandler::SetTraceColWidths(const QList<int32_t> & orc_Value)
 {
    this->mc_TraceColWidth = orc_Value;
 }
@@ -743,7 +743,7 @@ void C_UsHandler::SetTraceColWidths(const std::vector<int32_t> & orc_Value)
    \param[in] orc_Value New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsHandler::SetTraceColPositions(const std::vector<int32_t> & orc_Value)
+void C_UsHandler::SetTraceColPositions(const QList<int32_t> & orc_Value)
 {
    this->mc_TraceColPosition = orc_Value;
 }
@@ -754,7 +754,7 @@ void C_UsHandler::SetTraceColPositions(const std::vector<int32_t> & orc_Value)
    \param[in] orc_Value New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsHandler::SetMessageColWidths(const std::vector<int32_t> & orc_Value)
+void C_UsHandler::SetMessageColWidths(const QList<int32_t> & orc_Value)
 {
    this->mc_MessageGenColWidth = orc_Value;
 }
@@ -765,7 +765,7 @@ void C_UsHandler::SetMessageColWidths(const std::vector<int32_t> & orc_Value)
    \param[in] orc_Value New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsHandler::SetSignalsColWidths(const std::vector<int32_t> & orc_Value)
+void C_UsHandler::SetSignalsColWidths(const QList<int32_t> & orc_Value)
 {
    this->mc_SignalsColWidth = orc_Value;
 }

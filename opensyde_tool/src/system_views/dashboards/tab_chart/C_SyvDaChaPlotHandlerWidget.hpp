@@ -10,10 +10,10 @@
 #define C_SYVDACHAPLOTHANDLERWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QWidget>
 #include <QColor>
 #include <QTimer>
-#include <vector>
 #include <QFile>
 #include <QTextStream>
 #include <algorithm>
@@ -150,13 +150,13 @@ private:
    qint64 ms64_TimeStampOfStart;
 
    // Saving for each datapool element the minimum content to have the type
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> mc_DataPoolElementContentMin;
-   std::vector<stw::opensyde_gui_logic::C_PuiSvDbDataElementDisplayFormatterConfig> mc_DataPoolElementDisplayFormatter;
+   QList<stw::opensyde_core::C_OscNodeDataPoolContent> mc_DataPoolElementContentMin;
+   QList<stw::opensyde_gui_logic::C_PuiSvDbDataElementDisplayFormatterConfig> mc_DataPoolElementDisplayFormatter;
 
    // Color configuration for the data series
    static const uint8_t mhu8_COUNT_COLORS;
    static const QColor mhac_DATA_COLORS[47];
-   std::vector<std::array<bool, 47> > mc_DataColorsUsed;
+   QList<std::array<bool, 47> > mc_DataColorsUsed;
 
    std::map<uint32_t, uint32_t> mc_ElementHandlerRegIndexToDataElementIndex;
 
@@ -273,10 +273,10 @@ private:
    void m_ShowSamplePoints(const bool oq_ShowSamplePoints);
 
    // load and save
-   void m_LoadState(const bool oq_IsPaused, const bool orq_AreSamplePointsShown, const std::vector<std::array<float64_t,
+   void m_LoadState(const bool oq_IsPaused, const bool orq_AreSamplePointsShown, const QList<std::array<float64_t,
                                                                                                               4> > & orc_ScreenState);
    void m_SaveState(bool & orq_IsPaused, int32_t & ors32_SplitterLeftWidth, bool & orq_AreSamplePointsShown,
-                    std::vector<std::array<float64_t, 4> > & orc_ScreenState);
+                    QList<std::array<float64_t, 4> > & orc_ScreenState);
    void m_ExtractDataToCsv(void);
    void m_SetSaveLocationToCsv(void);
    QString m_SaveCsvAs(void) const;

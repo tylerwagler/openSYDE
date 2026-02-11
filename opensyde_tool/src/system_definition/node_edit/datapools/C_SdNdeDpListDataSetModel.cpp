@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <QMimeData>
+#include <QList>
 #include "C_SdNdeDpListDataSetModel.hpp"
 #include "stwerrors.hpp"
 #include "constants.hpp"
@@ -513,8 +514,8 @@ Qt::DropActions C_SdNdeDpListDataSetModel::supportedDropActions(void) const
    \param[in]  oru32_Row               Starting Row
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListDataSetModel::DoInsertColumns(const std::vector<C_OscNodeDataPoolDataSet> & orc_OscNames,
-                                                const std::vector<std::vector<C_OscNodeDataPoolContent> > & orc_OscDataSetValues,
+void C_SdNdeDpListDataSetModel::DoInsertColumns(const QList<C_OscNodeDataPoolDataSet> & orc_OscNames,
+                                                const QList<QList<C_OscNodeDataPoolContent> > & orc_OscDataSetValues,
                                                 const uint32_t & oru32_Row)
 {
    if (orc_OscNames.size() == orc_OscDataSetValues.size())
@@ -737,10 +738,10 @@ QMimeData * C_SdNdeDpListDataSetModel::mimeData(const QModelIndexList & orc_Indi
             this->mu32_NodeIndex, this->mu32_DataPoolIndex, this->mu32_ListIndex);
          if (pc_OscList != NULL)
          {
-            std::vector<uint32_t> c_Cols = C_SdNdeDpUtil::h_ConvertVector(orc_Indices, false);
+            QList<uint32_t> c_Cols = C_SdNdeDpUtil::h_ConvertVector(orc_Indices, false);
             QString c_String;
-            std::vector<C_OscNodeDataPoolDataSet> c_OscNames;
-            std::vector<std::vector<C_OscNodeDataPoolContent> > c_OscDataSetValues;
+            QList<C_OscNodeDataPoolDataSet> c_OscNames;
+            QList<QList<C_OscNodeDataPoolContent> > c_OscDataSetValues;
             //Convert indices to unique rows
             C_Uti::h_Uniqueify(c_Cols);
             //Reserve
@@ -749,7 +750,7 @@ QMimeData * C_SdNdeDpListDataSetModel::mimeData(const QModelIndexList & orc_Indi
             //Copy relevant data
             for (uint32_t u32_ItDataSetIndex = 0; u32_ItDataSetIndex < c_Cols.size(); ++u32_ItDataSetIndex)
             {
-               std::vector<C_OscNodeDataPoolContent> c_CurrentDataSetValues;
+               QList<C_OscNodeDataPoolContent> c_CurrentDataSetValues;
                c_OscNames.push_back(pc_OscList->c_DataSets.at(c_Cols[u32_ItDataSetIndex]));
                c_CurrentDataSetValues.reserve(pc_OscList->c_Elements.size());
                for (uint32_t u32_ItElementIndex = 0; u32_ItElementIndex < pc_OscList->c_Elements.size();

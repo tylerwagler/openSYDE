@@ -13,6 +13,8 @@
 #define C_CAMMOSFILTERWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
+#include <vector>
 #include "C_OgeWiOnlyBackground.hpp"
 #include "C_CamMosFilterItemWidget.hpp"
 #include "C_CamProFilterData.hpp"
@@ -65,7 +67,7 @@ Q_SIGNALS:
 
 private:
    Ui::C_CamMosFilterWidget * mpc_Ui;
-   std::vector<C_CamMosFilterItemWidget *> mc_Entries;
+   QList<C_CamMosFilterItemWidget *> mc_Entries;
 
    //Avoid call
    C_CamMosFilterWidget(const C_CamMosFilterWidget &);

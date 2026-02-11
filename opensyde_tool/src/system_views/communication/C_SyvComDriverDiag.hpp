@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QObject>
 #include <QStringList>
+#include <QList>
 #include <set>
 
 #include "stwtypes.hpp"
@@ -52,7 +53,7 @@ public:
 
    int32_t SetDiagnosticMode(QString & orc_ErrorDetails);
    int32_t SetUpCyclicTransmissions(QString & orc_ErrorDetails,
-                                    std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, QStringList & orc_FailedIdErrorDetails, std::map<uint32_t, uint32_t> & orc_FailedNodesElementNumber, std::map<uint32_t, uint32_t> & orc_NodesElementNumber);
+                                    QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, QStringList & orc_FailedIdErrorDetails, std::map<uint32_t, uint32_t> & orc_FailedNodesElementNumber, std::map<uint32_t, uint32_t> & orc_NodesElementNumber);
    int32_t StopCyclicTransmissions(void);
    int32_t StopDiagnosisServer(void);
 
@@ -73,9 +74,9 @@ public:
    int32_t PollNvmReadList(const uint32_t ou32_NodeIndex, const uint8_t ou8_DataPoolIndex,
                            const uint16_t ou16_ListIndex);
    int32_t PollSafeNvmWriteChangedElements(const uint32_t ou32_NodeIndex,
-                                           const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
+                                           const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
    int32_t GetPollSafeNvmWriteChangedElementsOutput(
-      std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedElements) const;
+      QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_ChangedElements) const;
    int32_t PollSafeNvmReadValues(const uint32_t ou32_NodeIndex);
    int32_t GetPollNvmSafeReadValuesOutput(const stw::opensyde_core::C_OscNode * (&orpc_ParamNodeValues)) const;
    int32_t PollSafeNvmSafeWriteCrcs(const uint32_t ou32_NodeIndex);
@@ -87,16 +88,16 @@ public:
 
    int32_t NvmSafeClearInternalContent(const uint32_t ou32_NodeIndex) const;
    int32_t PollNvmSafeReadParameterValues(const uint32_t ou32_NodeIndex,
-                                          const std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
+                                          const QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_ListIds);
    int32_t NvmSafeCreateCleanFileWithoutCrc(const uint32_t ou32_NodeIndex, const QString & orc_Path, const stw::opensyde_core::C_OscParamSetInterpretedFileInfoData & orc_FileInfo =
                                                stw::opensyde_core::C_OscParamSetInterpretedFileInfoData())
    const;
    int32_t NvmSafeReadFileWithoutCrc(const uint32_t ou32_NodeIndex, const QString & orc_Path) const;
    int32_t NvmSafeCheckParameterFileContents(const uint32_t ou32_NodeIndex, const QString & orc_Path,
-                                             std::vector<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_DataPoolLists);
+                                             QList<stw::opensyde_core::C_OscNodeDataPoolListId> & orc_DataPoolLists);
    int32_t NvmSafeUpdateCrcForFile(const uint32_t ou32_NodeIndex, const QString & orc_Path) const;
 
-   const std::vector<C_SyvComDataDealer *> & GetAllDataDealer(void) const;
+   const QList<C_SyvComDataDealer *> & GetAllDataDealer(void) const;
 
    void RegisterWidget(C_PuiSvDbDataElementHandler * const opc_Widget);
 
@@ -149,24 +150,24 @@ private:
    C_SyvComDriverThread * mpc_AsyncThread; ///< Thread for handling all async messages
    C_SyvComPollingThreadDiag mc_PollingThread;
 
-   std::vector<stw::opensyde_core::C_OscDiagProtocolBase *> mc_DiagProtocols; ///< Holds created
+   QList<stw::opensyde_core::C_OscDiagProtocolBase *> mc_DiagProtocols; ///< Holds created
                                                                               // instances
    ///< of either openSYDE or
    ///< KEFEX protocols.
-   std::vector<C_SyvComDataDealer *> mc_DataDealers; ///< Array of elements with
+   QList<C_SyvComDataDealer *> mc_DataDealers; ///< Array of elements with
                                                      // as many entries as we
                                                      // have nodes.
 
-   std::vector<uint32_t> mc_ActiveDiagNodes; ///< Nodes which has diagnostic active. The other active
+   QList<uint32_t> mc_ActiveDiagNodes; ///< Nodes which has diagnostic active. The other active
    // nodes are active for routing but not for diagnostic.
    // It has the indexes of the mc_ActiveNodesIndexes
-   std::vector<uint32_t> mc_ActiveCommunicatingNodes; ///< All nodes which are communicating for dashboard or
+   QList<uint32_t> mc_ActiveCommunicatingNodes; ///< All nodes which are communicating for dashboard or
    // part of at least one route
    std::set<uint32_t> mc_DiagNodesWithElements; ///< Nodes which has used datapool elements
    std::set<uint32_t> mc_DefectNodeIndices;     ///< Nodes which could not be reached on start
    // Read metadata of all active nodes and its Datapools. First layer are the active
    // nodes, second layer are the Datapools
-   std::vector<std::list<stw::opensyde_core::C_OscProtocolDriverOsy::C_DataPoolMetaData> > mc_ReadDatapoolMetadata;
+   QList<std::list<stw::opensyde_core::C_OscProtocolDriverOsy::C_DataPoolMetaData> > mc_ReadDatapoolMetadata;
 
    const uint32_t mu32_ViewIndex;
    stw::can::C_Can * mpc_CanDllDispatcher;

@@ -12,6 +12,7 @@
 #define C_GILILINE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QTimer>
 #include <QObject>
 #include <QPolygonF>
@@ -37,10 +38,10 @@ class C_GiLiLine :
    public QGraphicsPathItem
 {
 public:
-   C_GiLiLine(const std::vector<QPointF> * const opc_Points = NULL, const bool & orq_MiddleLine = false,
+   C_GiLiLine(const QList<QPointF> * const opc_Points = NULL, const bool & orq_MiddleLine = false,
               QGraphicsItem * const opc_Parent = NULL);
    ~C_GiLiLine() override;
-   void Init(const std::vector<QPointF> & orc_Points);
+   void Init(const QList<QPointF> & orc_Points);
 
    int32_t type() const override;
 

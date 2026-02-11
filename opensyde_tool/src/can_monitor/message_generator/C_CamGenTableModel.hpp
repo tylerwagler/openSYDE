@@ -12,6 +12,7 @@
 #define C_CAMGENTABLEMODEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_TblModelAction.hpp"
 #include "C_CamProMessageData.hpp"
@@ -63,13 +64,13 @@ public:
                 const int32_t os32_Role = static_cast<int32_t>(Qt::EditRole)) override;
    Qt::ItemFlags flags(const QModelIndex & orc_Index) const override;
 
-   void CopySelectedItems(const std::vector<uint32_t> & orc_SelectedIndices) const override;
+   void CopySelectedItems(const QList<uint32_t> & orc_SelectedIndices) const override;
 
    static E_Columns h_ColumnToEnum(const int32_t os32_Column);
    static int32_t h_EnumToColumn(const E_Columns oe_Value);
 
-   std::vector<uint32_t> AddSpecificNewItems(const std::vector<uint32_t> & orc_SelectedIndex,
-                                             const std::vector<C_CamProMessageData> & orc_Messages);
+   QList<uint32_t> AddSpecificNewItems(const QList<uint32_t> & orc_SelectedIndex,
+                                             const QList<C_CamProMessageData> & orc_Messages);
    QString UpdateDataForAutoProtocol(const QModelIndex & orc_Index) const;
    void UpdateMessageData(const uint32_t ou32_MessageIndex);
    void UpdateAutoProtocolCellData(const uint32_t ou32_MessageIndex);
@@ -89,14 +90,14 @@ Q_SIGNALS:
 
 protected:
    uint32_t m_AddNewItem(const uint32_t ou32_SelectedIndex) override;
-   std::vector<uint32_t> m_PasteItems(const uint32_t ou32_SelectedIndex) override;
+   QList<uint32_t> m_PasteItems(const uint32_t ou32_SelectedIndex) override;
    uint32_t m_GetSizeItems(void) const override;
    void m_DeleteItem(const uint32_t ou32_Index) override;
    void m_MoveItem(const uint32_t ou32_SourceIndex, const uint32_t ou32_TargetIndex) override;
 
 private:
-   std::vector<uint32_t> m_AddNewMessages(const uint32_t ou32_SelectedIndex,
-                                          const std::vector<C_CamProMessageData> & orc_Data);
+   QList<uint32_t> m_AddNewMessages(const uint32_t ou32_SelectedIndex,
+                                          const QList<C_CamProMessageData> & orc_Data);
 
    void m_CheckAndHandleRegisterCyclicMessage(const uint32_t ou32_MessageIndex, const bool oq_Active);
    void m_SpecialXtdFlagSetHandling(const int32_t os32_Row, const uint32_t ou32_Index, const int32_t os32_Role);

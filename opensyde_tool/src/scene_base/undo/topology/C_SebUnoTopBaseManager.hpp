@@ -45,7 +45,7 @@ protected:
    void m_CleanupAction(void) override;
 
 private:
-   std::vector<QPointF> mc_BusConnectorInitialPoints;
+   QList<QPointF> mc_BusConnectorInitialPoints;
 
    bool m_CheckBusConnectorChange(const QList<QGraphicsItem *> & orc_Items);
 };

@@ -17,6 +17,7 @@
  */
 #include <map>
 #include <set>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include <QString>
@@ -221,7 +222,7 @@ public:
   bool CheckObjectPresentByIndex(const uint16_t ou16_OdIndex,
                                  const uint8_t ou8_OdSubIndex) const;
   void GetMappableObjects(
-      std::map<uint32_t, std::vector<uint32_t>> &orc_SubIndices) const;
+      std::map<uint32_t, QList<uint32_t>> &orc_SubIndices) const;
 
   static uint16_t
   h_GetCanOpenObjectDictionaryIndexForPdo(const uint16_t ou16_PdoIndex,

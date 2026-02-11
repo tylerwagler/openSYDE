@@ -33,7 +33,7 @@ public:
 
    void ConfigureDynamicName(const bool oq_ShowOnlyWriteElements, const bool oq_ShowArrayElements,
                              const bool oq_ShowArrayIndexElements, const bool oq_Show64BitValues,
-                             const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements);
+                             const QList<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements);
 
    const C_PuiSvDbNodeDataPoolListElementId & GetId(void) const;
 

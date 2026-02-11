@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
+#include <QList>
 #include "C_OscDataLoggerJobProperties.hpp"
 #include "C_OscDataLoggerDataElementReference.hpp"
 
@@ -34,7 +35,7 @@ public:
    bool q_IsEnabled;                                                          ///< Flag to enable or disable logging
                                                                               // configuration
    C_OscDataLoggerJobProperties c_Properties;                                 ///< all configured properties
-   std::vector<C_OscDataLoggerDataElementReference> c_ConfiguredDataElements; ///< selected data elements to log
+   QList<C_OscDataLoggerDataElementReference> c_ConfiguredDataElements; ///< selected data elements to log
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

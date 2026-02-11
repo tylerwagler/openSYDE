@@ -9,6 +9,7 @@
 #define C_OSCHALCCONFIGSTANDALONE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscHalcConfigStandaloneDomain.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -27,7 +28,7 @@ public:
 
    QString c_DeviceType;
    uint32_t u32_DefinitionContentVersion;
-   std::vector<C_OscHalcConfigStandaloneDomain> c_Domains;
+   QList<C_OscHalcConfigStandaloneDomain> c_Domains;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

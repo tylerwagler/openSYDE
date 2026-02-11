@@ -81,7 +81,7 @@ void C_GiSvNodeData::Init(const uint32_t ou32_ViewIndex, const uint32_t ou32_Nod
          C_PuiSdHandler::h_GetInstance()->GetOscNodeSquadConst(u32_NodeSquadIndex);
       if (pc_NodeSquad != NULL)
       {
-         std::vector<uint8_t> c_NodeActiveFlags;
+         QByteArray c_NodeActiveFlags;
          // In case of node squads we need to know about deactivated sub nodes
          const int32_t s32_Retval = C_PuiSvHandler::h_GetInstance()->GetNodeActiveFlagsWithSquadAdaptions(
             ou32_ViewIndex,
@@ -90,7 +90,7 @@ void C_GiSvNodeData::Init(const uint32_t ou32_ViewIndex, const uint32_t ou32_Nod
          Q_ASSERT(s32_Retval == C_NO_ERR);
          if (s32_Retval == C_NO_ERR)
          {
-            std::vector<uint32_t>::const_iterator c_ItSubNodeIndices;
+            QList<uint32_t>::const_iterator c_ItSubNodeIndices;
             for (c_ItSubNodeIndices = pc_NodeSquad->c_SubNodeIndexes.begin();
                  c_ItSubNodeIndices != pc_NodeSquad->c_SubNodeIndexes.end();
                  ++c_ItSubNodeIndices)
@@ -101,7 +101,7 @@ void C_GiSvNodeData::Init(const uint32_t ou32_ViewIndex, const uint32_t ou32_Nod
                {
                   const C_GiSvSubNodeData c_SubNode(ou32_ViewIndex, u32_SubNodeIndex);
                   this->mc_SubNodes.push_back(c_SubNode);
-                  this->mc_SubNodesActiveFlags.push_back(c_NodeActiveFlags[u32_SubNodeIndex]);
+                  this->mc_SubNodesActiveFlags.append(c_NodeActiveFlags[u32_SubNodeIndex]);
                }
             }
          }
@@ -113,7 +113,7 @@ void C_GiSvNodeData::Init(const uint32_t ou32_ViewIndex, const uint32_t ou32_Nod
       const C_GiSvSubNodeData c_SubNode(ou32_ViewIndex, ou32_NodeIndex);
       this->mc_SubNodes.push_back(c_SubNode);
       // must be active
-      this->mc_SubNodesActiveFlags.push_back(1U);
+      this->mc_SubNodesActiveFlags.append(static_cast<char>(1U));
    }
 }
 
@@ -178,7 +178,7 @@ void C_GiSvNodeData::SetNodeUpdateInProgress(const bool oq_Active, const bool oq
 {
    if (oq_Active)
    {
-      const std::vector<uint32_t> c_NodeIndices = C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
+      const QList<uint32_t> c_NodeIndices = C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
          ou32_CurrentNodeIndex);
       if (c_NodeIndices.size() == this->mc_SubNodes.size())
       {
@@ -233,7 +233,7 @@ void C_GiSvNodeData::SetErrorState(const uint32_t ou32_NodeIndex)
    \param[in]       orc_NodePreconditionErrors     Node precondition error states
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvNodeData::SetNodeConnectStates(const std::vector<C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
+void C_GiSvNodeData::SetNodeConnectStates(const QList<C_OscSuSequencesNodeConnectStates> & orc_NodeStates,
                                           const C_GiSvNodeDataPreconditionErrors & orc_NodePreconditionErrors)
 {
    uint32_t u32_Counter;
@@ -268,7 +268,7 @@ void C_GiSvNodeData::SetNodeConnectStates(const std::vector<C_OscSuSequencesNode
    \param[in]       orc_NodeStates     Node connect states
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSvNodeData::SetNodeUpdateStates(const std::vector<C_OscSuSequencesNodeUpdateStates> & orc_NodeStates)
+void C_GiSvNodeData::SetNodeUpdateStates(const QList<C_OscSuSequencesNodeUpdateStates> & orc_NodeStates)
 {
    uint32_t u32_Counter;
 
@@ -505,7 +505,7 @@ bool C_GiSvNodeData::IsSubNodeActive(const uint32_t ou32_SubDeviceIndex) const
 
    if (ou32_SubDeviceIndex < this->mc_SubNodesActiveFlags.size())
    {
-      q_Retval = (this->mc_SubNodesActiveFlags[ou32_SubDeviceIndex] == 1U) ? true : false;
+      q_Retval = (static_cast<uint8_t>(this->mc_SubNodesActiveFlags[ou32_SubDeviceIndex]) == 1U) ? true : false;
    }
    return q_Retval;
 }
@@ -914,7 +914,7 @@ uint32_t C_GiSvNodeData::m_GetCorrespondingSubNodeIndex(const uint32_t ou32_Node
    \retval   false   Current node has no precondition error
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_GiSvNodeData::mh_IsPreconditionErrorSet(const std::vector<uint32_t> & orc_ErrorIndexes,
+bool C_GiSvNodeData::mh_IsPreconditionErrorSet(const QList<uint32_t> & orc_ErrorIndexes,
                                                const uint32_t ou32_CurrentNodeIndex)
 {
    bool q_Return = false;

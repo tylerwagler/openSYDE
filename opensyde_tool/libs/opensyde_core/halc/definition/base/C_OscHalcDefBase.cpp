@@ -219,7 +219,7 @@ void C_OscHalcDefBase::CalcHash(uint32_t & oru32_HashValue) const
    \param[in,out]  orc_DuplicateIds    Duplicate ids
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefBase::mh_AggregateIds(const std::vector<C_OscHalcDefStruct> & orc_Items,
+void C_OscHalcDefBase::mh_AggregateIds(const QList<C_OscHalcDefStruct> & orc_Items,
                                        QStringList & orc_DuplicateIds)
 {
    for (uint32_t u32_ItItem = 0UL; u32_ItItem < orc_Items.size(); ++u32_ItItem)

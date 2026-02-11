@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscNode.hpp"
 
@@ -41,7 +42,7 @@ public:
 
 protected:
    static bool mh_IsDpdInitRequired(const C_OscNodeComInterfaceSettings & orc_Settings);
-   static uint32_t mh_GetSizeOfLargestDataPoolElement(const std::vector<C_OscNodeDataPool> & orc_DataPools);
+   static uint32_t mh_GetSizeOfLargestDataPoolElement(const QList<C_OscNodeDataPool> & orc_DataPools);
    static bool mh_IsDpKnownToApp(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ApplicationIndex,
                                  const C_OscNode & orc_Node, const bool oq_RunsDpd);
 };

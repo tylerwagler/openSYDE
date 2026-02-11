@@ -1100,7 +1100,7 @@ int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPool
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
                                               QStringList & orc_ScaledValues,
-                                              std::vector<float64_t> & orc_UnscaledValues)
+                                              QList<float64_t> & orc_UnscaledValues)
 {
    C_PuiSvDbNodeDataPoolListElementId c_Id;
    const int32_t s32_Retval = C_PuiSvDbDataElementHandler::m_GetLastValue(ou32_WidgetDataPoolElementIndex,
@@ -1140,7 +1140,7 @@ int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPool
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_GiSvDaRectBaseGroup::m_GetLastValue(const uint32_t ou32_WidgetDataPoolElementIndex,
-                                              std::vector<float64_t> & orc_Values, const bool oq_UseScaling)
+                                              QList<float64_t> & orc_Values, const bool oq_UseScaling)
 {
    C_PuiSvDbNodeDataPoolListElementId c_Id;
    const int32_t s32_Retval = C_PuiSvDbDataElementHandler::m_GetLastValue(ou32_WidgetDataPoolElementIndex, orc_Values,

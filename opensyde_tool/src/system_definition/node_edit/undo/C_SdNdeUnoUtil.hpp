@@ -12,8 +12,8 @@
 #define C_SDNDEUNOUTIL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
 #include "stwtypes.hpp"
+#include <QList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -27,8 +27,8 @@ namespace opensyde_gui_logic
 class C_SdNdeUnoUtil
 {
 public:
-   static void h_AdaptTargetToDeletedSource(const std::vector<uint32_t> & orc_Source,
-                                            std::vector<uint32_t> & orc_Target);
+   static void h_AdaptTargetToDeletedSource(const QList<uint32_t> & orc_Source,
+                                            QList<uint32_t> & orc_Target);
 
 private:
    C_SdNdeUnoUtil();

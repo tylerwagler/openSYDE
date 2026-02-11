@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include "C_SdNdeUnoLeDataPoolListElementAddCommand.hpp"
+#include <QList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -32,9 +33,9 @@ public:
                                                      const uint32_t & oru32_DataPoolIndex,
                                                      const uint32_t & oru32_DataPoolListIndex,
                                                      C_SdNdeDpListModelViewManager * const opc_DataPoolListModelViewManager,
-                                                     const std::vector<uint32_t> & orc_Indices,
-                                                     const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscData,
-                                                     const std::vector<stw::opensyde_gui_logic::
+                                                     const QList<uint32_t> & orc_Indices,
+                                                     const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscData,
+                                                     const QList<stw::opensyde_gui_logic::
                                                                        C_PuiSdNodeDataPoolListElement> & orc_UiData,
                                                      QUndoCommand * const opc_Parent = NULL);
 };

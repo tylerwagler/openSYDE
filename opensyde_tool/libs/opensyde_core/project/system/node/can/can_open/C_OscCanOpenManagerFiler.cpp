@@ -902,7 +902,7 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignals(
-    std::vector<C_OscCanOpenManagerMappableSignal> &orc_Config,
+    QList<C_OscCanOpenManagerMappableSignal> &orc_Config,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -950,12 +950,12 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerMappedSignals(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanOpenManagerFiler::mh_SaveManagerMappedSignals(
-    const std::vector<C_OscCanOpenManagerMappableSignal> &orc_Config,
+    const QList<C_OscCanOpenManagerMappableSignal> &orc_Config,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.CreateAndSelectNodeChild("mappable-signals");
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Config.size()));
-  for (std::vector<C_OscCanOpenManagerMappableSignal>::const_iterator c_It =
+  for (QList<C_OscCanOpenManagerMappableSignal>::const_iterator c_It =
            orc_Config.begin();
        c_It != orc_Config.end(); ++c_It) {
     orc_XmlParser.CreateAndSelectNodeChild("mappable-signal");

@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QWidget>
+#include <QList>
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -41,9 +42,9 @@ public:
    void SetMessageSyncManager(stw::opensyde_gui_logic::C_PuiSdNodeCanMessageSyncManager * const opc_Value) const;
    void UpdateData(void);
    void InitStaticNames(void) const;
-   void LoadUserSettings(const std::vector<int32_t> & orc_MessageValues,
-                         const std::vector<int32_t> & orc_SignalValues) const;
-   void SaveUserSettings(std::vector<int32_t> & orc_MessageValues, std::vector<int32_t> & orc_SignalValues) const;
+   void LoadUserSettings(const QList<int32_t> & orc_MessageValues,
+                         const QList<int32_t> & orc_SignalValues) const;
+   void SaveUserSettings(QList<int32_t> & orc_MessageValues, QList<int32_t> & orc_SignalValues) const;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

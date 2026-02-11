@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QPointer>
+#include <QList>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -62,7 +63,7 @@ private:
    C_NagToolTip & operator =(const C_NagToolTip &) &;
 
    Ui::C_NagToolTip * mpc_Ui;
-   static std::vector<QPointer<C_NagToolTip> > mhc_ExistingToolTips; ///< All known existing tooltips
+   static QList<QPointer<C_NagToolTip> > mhc_ExistingToolTips; ///< All known existing tooltips
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

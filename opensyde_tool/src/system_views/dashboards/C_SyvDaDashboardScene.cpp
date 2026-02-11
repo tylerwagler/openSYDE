@@ -376,14 +376,14 @@ void C_SyvDaDashboardScene::CopyFromSnapshotToScene(const C_PuiSvDashboard & orc
       if (pc_Dashboard != NULL)
       {
          uint32_t u32_ItElem;
-         const std::vector<C_PuiSvDbLabel> & rc_Labels = orc_Snapshot.GetLabels();
-         const std::vector<C_PuiSvDbParam> & rc_Params = orc_Snapshot.GetParams();
-         const std::vector<C_PuiSvDbPieChart> & rc_PieCharts = orc_Snapshot.GetPieCharts();
-         const std::vector<C_PuiSvDbProgressBar> & rc_ProgressBars = orc_Snapshot.GetProgressBars();
-         const std::vector<C_PuiSvDbSlider> & rc_Sliders = orc_Snapshot.GetSliders();
-         const std::vector<C_PuiSvDbSpinBox> & rc_SpinBoxes = orc_Snapshot.GetSpinBoxes();
-         const std::vector<C_PuiSvDbTable> & rc_Tables = orc_Snapshot.GetTables();
-         const std::vector<C_PuiSvDbToggle> & rc_Toggles = orc_Snapshot.GetToggles();
+         const QList<C_PuiSvDbLabel> & rc_Labels = orc_Snapshot.GetLabels();
+         const QList<C_PuiSvDbParam> & rc_Params = orc_Snapshot.GetParams();
+         const QList<C_PuiSvDbPieChart> & rc_PieCharts = orc_Snapshot.GetPieCharts();
+         const QList<C_PuiSvDbProgressBar> & rc_ProgressBars = orc_Snapshot.GetProgressBars();
+         const QList<C_PuiSvDbSlider> & rc_Sliders = orc_Snapshot.GetSliders();
+         const QList<C_PuiSvDbSpinBox> & rc_SpinBoxes = orc_Snapshot.GetSpinBoxes();
+         const QList<C_PuiSvDbTable> & rc_Tables = orc_Snapshot.GetTables();
+         const QList<C_PuiSvDbToggle> & rc_Toggles = orc_Snapshot.GetToggles();
          /*
          0: Boundary
          1: Text element
@@ -694,7 +694,7 @@ void C_SyvDaDashboardScene::CopyFromManagerToScene(const QPointF * const opc_Pos
       const QPointF c_OFFSET = QPointF(10.0, 10.0);
       const uint32_t u32_ItemCount = pc_SnapShot->Count();
 
-      std::vector<uint64_t> c_UniqueIds;
+      QList<uint64_t> c_UniqueIds;
       QPointF c_TotalOffset;
       if (opc_Pos == NULL)
       {
@@ -990,7 +990,7 @@ uint32_t C_SyvDaDashboardScene::GetDashboardIndex(void) const
 void C_SyvDaDashboardScene::RegisterWidgets(C_SyvComDriverDiag & orc_ComDriver) const
 {
    const QList<QGraphicsItem *> & rc_Items = this->items();
-   const std::vector<C_SyvComDataDealer *> & rc_AllDataDealer = orc_ComDriver.GetAllDataDealer();
+   const QList<C_SyvComDataDealer *> & rc_AllDataDealer = orc_ComDriver.GetAllDataDealer();
 
    // update the items
    for (QList<QGraphicsItem *>::const_iterator c_ItItem = rc_Items.begin(); c_ItItem != rc_Items.end(); ++c_ItItem)
@@ -1880,14 +1880,14 @@ void C_SyvDaDashboardScene::m_LoadSubset(const QVector<uint32_t> & orc_OtherStar
       {
          //Load
          uint64_t u64_CurUniqueId;
-         const std::vector<C_PuiSvDbLabel> & rc_Labels = pc_Dashboard->GetLabels();
-         const std::vector<C_PuiSvDbParam> & rc_Params = pc_Dashboard->GetParams();
-         const std::vector<C_PuiSvDbPieChart> & rc_PieCharts = pc_Dashboard->GetPieCharts();
-         const std::vector<C_PuiSvDbSpinBox> & rc_SpinBoxes = pc_Dashboard->GetSpinBoxes();
-         const std::vector<C_PuiSvDbSlider> & rc_Sliders = pc_Dashboard->GetSliders();
-         const std::vector<C_PuiSvDbProgressBar> & rc_ProgressBars = pc_Dashboard->GetProgressBars();
-         const std::vector<C_PuiSvDbTable> & rc_Tables = pc_Dashboard->GetTables();
-         const std::vector<C_PuiSvDbToggle> & rc_Toggles = pc_Dashboard->GetToggles();
+         const QList<C_PuiSvDbLabel> & rc_Labels = pc_Dashboard->GetLabels();
+         const QList<C_PuiSvDbParam> & rc_Params = pc_Dashboard->GetParams();
+         const QList<C_PuiSvDbPieChart> & rc_PieCharts = pc_Dashboard->GetPieCharts();
+         const QList<C_PuiSvDbSpinBox> & rc_SpinBoxes = pc_Dashboard->GetSpinBoxes();
+         const QList<C_PuiSvDbSlider> & rc_Sliders = pc_Dashboard->GetSliders();
+         const QList<C_PuiSvDbProgressBar> & rc_ProgressBars = pc_Dashboard->GetProgressBars();
+         const QList<C_PuiSvDbTable> & rc_Tables = pc_Dashboard->GetTables();
+         const QList<C_PuiSvDbToggle> & rc_Toggles = pc_Dashboard->GetToggles();
 
          if (orq_Selection == true)
          {

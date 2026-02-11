@@ -399,7 +399,7 @@ int32_t C_OscProtocolDriverOsy::m_PollForSpecificServiceResponse(
     const uint8_t ou8_ExpectedServiceId, const uint16_t ou16_ExpectedSize,
     C_OscProtocolDriverOsyService &orc_Service, uint8_t &oru8_NrCode,
     const bool oq_ExactSizeExpected,
-    const std::vector<uint8_t> *const opc_ExpectedErrData) {
+    const QByteArray *const opc_ExpectedErrData) {
   int32_t s32_Return = C_NO_ERR;
   QElapsedTimer c_Timer;
   c_Timer.start();
@@ -649,7 +649,7 @@ int32_t C_OscProtocolDriverOsy::OsyDiagnosticSessionControl(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::m_ReadDataByIdentifier(
     const uint16_t ou16_Identifier, const uint16_t ou16_ExpectedPayloadSize,
-    const bool oq_ExactSizeExpected, std::vector<uint8_t> &orc_ReadData,
+    const bool oq_ExactSizeExpected, QByteArray &orc_ReadData,
     uint8_t &oru8_NrCode) {
   int32_t s32_Return;
   C_OscProtocolDriverOsyService c_Request;
@@ -680,7 +680,7 @@ int32_t C_OscProtocolDriverOsy::m_ReadDataByIdentifier(
         } else {
           orc_ReadData.resize(c_Response.c_Data.size() - 3);
           if (c_Response.c_Data.size() > 3) {
-            (void)std::memcpy(&orc_ReadData[0], &c_Response.c_Data[3],
+            (void)std::memcpy(orc_ReadData.data(), &c_Response.c_Data[3],
                               c_Response.c_Data.size() - 3);
           }
         }
@@ -723,7 +723,7 @@ int32_t C_OscProtocolDriverOsy::m_ReadStringDataIdentifier(
     uint8_t &oru8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
 
   s32_Return = m_ReadDataByIdentifier(ou16_DataIdentifier, 0U, false, c_Data,
                                       oru8_NrCode);
@@ -764,7 +764,7 @@ int32_t C_OscProtocolDriverOsy::m_ReadStringDataIdentifier(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::m_WriteDataByIdentifier(
-    const uint16_t ou16_Identifier, const std::vector<uint8_t> &orc_WriteData,
+    const uint16_t ou16_Identifier, const QByteArray &orc_WriteData,
     uint8_t &oru8_NrCode) {
   int32_t s32_Return;
   C_OscProtocolDriverOsyService c_Request;
@@ -777,7 +777,7 @@ int32_t C_OscProtocolDriverOsy::m_WriteDataByIdentifier(
     c_Request.c_Data[0] = mhu8_OSY_SI_WRITE_DATA_BY_IDENTIFIER;
     c_Request.c_Data[1] = static_cast<uint8_t>(ou16_Identifier >> 8U);
     c_Request.c_Data[2] = static_cast<uint8_t>(ou16_Identifier & 0xFFU);
-    (void)std::memcpy(&c_Request.c_Data[3], &orc_WriteData[0],
+    (void)std::memcpy(&c_Request.c_Data[3], orc_WriteData.constData(),
                       orc_WriteData.size());
 
     s32_Return = mpc_TransportProtocol->SendRequest(c_Request);
@@ -831,14 +831,14 @@ int32_t C_OscProtocolDriverOsy::OsyReadEcuSerialNumber(
     C_OscProtocolSerialNumber &orc_SerialNumber, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Snr;
+  QByteArray c_Snr;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_ECU_SERIAL_NUMBER, 6U, true,
                                       c_Snr, u8_NrErrorCode);
   if (s32_Return == C_NO_ERR) {
     uint8_t au8_SerialNumber[6];
-    (void)std::memcpy(&au8_SerialNumber[0], &c_Snr[0], 6);
+    (void)std::memcpy(&au8_SerialNumber[0], c_Snr.constData(), 6);
     orc_SerialNumber.SetPosSerialNumber(au8_SerialNumber);
   }
   if (opu8_NrCode != NULL) {
@@ -876,7 +876,7 @@ C_OscProtocolDriverOsy::OsyReadHardwareNumber(uint32_t &oru32_HardwareNumber,
                                               uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SYS_SUPPLIER_ECU_HW_NUMBER,
@@ -961,7 +961,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadListOfFeatures(
     C_ListOfFeatures &orc_ListOfFeatures, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_LIST_OF_FEATURES, 8U, true,
@@ -1024,7 +1024,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMaxNumberOfBlockLength(
     uint16_t &oru16_MaxNumberOfBlockLength, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_MAX_NUMBER_OF_BLOCK_LENGTH,
@@ -1195,7 +1195,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadBootSoftwareIdentification(
     uint8_t (&orau8_Version)[3], uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_BOOT_SOFTWARE_IDENTIFICATION,
@@ -1242,7 +1242,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadActiveDiagnosticSession(
     uint8_t &oru8_SessionId, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_ACTIVE_DIAGNOSTIC_SESSION,
@@ -1288,14 +1288,14 @@ int32_t C_OscProtocolDriverOsy::OsyReadApplicationSoftwareFingerprint(
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return =
       m_ReadDataByIdentifier(mhu16_OSY_DI_APPLICATION_SOFTWARE_FINGERPRINT, 7U,
                              false, c_Data, u8_NrErrorCode);
   if (s32_Return == C_NO_ERR) {
-    (void)std::memcpy(&orau8_Date[0], &c_Data[0], 3U);
+    (void)std::memcpy(&orau8_Date[0], c_Data.data(), 3U);
     (void)std::memcpy(&orau8_Time[0], &c_Data[3], 3U);
     // extract text from data[7] onwards:
     if (c_Data.size() > 7) {
@@ -1381,7 +1381,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadEcuSerialNumberExt(
   int32_t s32_Return;
   uint8_t u8_NrErrorCode = 0U;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_ECU_SERIAL_NUMBER_EXT, 3,
                                       false, c_Data, u8_NrErrorCode);
@@ -1446,7 +1446,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadSubNodeId(uint8_t &oru8_SubNodeId,
                                                  uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SUB_NODE_ID, 1U, true,
@@ -1494,7 +1494,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(
     const QString &orc_UserName, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   QString c_UserName = orc_UserName;
   uint8_t u8_NrErrorCode = 0U;
 
@@ -1504,7 +1504,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(
 
   const QByteArray c_UserNameBytes = c_UserName.toUtf8();
   c_Data.resize(7U + static_cast<size_t>(c_UserNameBytes.size()));
-  (void)std::memcpy(&c_Data[0], &orau8_Date[0], 3U);
+  (void)std::memcpy(c_Data.data(), &orau8_Date[0], 3U);
   (void)std::memcpy(&c_Data[3], &orau8_Time[0], 3U);
   c_Data[6] = static_cast<uint8_t>(c_UserNameBytes.size());
   (void)std::memcpy(&c_Data[7], c_UserNameBytes.constData(), c_UserNameBytes.size());
@@ -1549,13 +1549,13 @@ int32_t C_OscProtocolDriverOsy::OsyFactoryMode(const uint8_t ou8_Operation,
                                                uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_ReceiveData;
-  std::vector<uint8_t> c_SendData;
+  QByteArray c_ReceiveData;
+  QByteArray c_SendData;
   uint8_t u8_NrErrorCode = 0U;
 
   c_SendData.resize(2);
-  c_SendData[0] = ou8_Operation;
-  c_SendData[1] = 0U; // reserved byte for future usage
+  c_SendData[0] = static_cast<char>(ou8_Operation);
+  c_SendData[1] = 0; // reserved byte for future usage
 
   s32_Return = m_RoutineControl(
       mhu16_OSY_RC_SID_FACTORY_MODE, mhu8_OSY_RC_SUB_FUNCTION_START_ROUTINE,
@@ -1597,7 +1597,7 @@ int32_t C_OscProtocolDriverOsy::OsyFactoryMode(const uint8_t ou8_Operation,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyReadCertificateSerialNumber(
-    std::vector<uint8_t> &orc_SerialNumber, uint8_t *const opu8_NrCode) {
+    QByteArray &orc_SerialNumber, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
   uint8_t u8_NrErrorCode = 0U;
@@ -1666,7 +1666,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadCertificateSerialNumber(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyReadCertificateSerialNumberL7(
-    std::vector<uint8_t> &orc_SerialNumber, uint8_t *const opu8_NrCode) {
+    QByteArray &orc_SerialNumber, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
   uint8_t u8_NrErrorCode = 0U;
@@ -1725,9 +1725,9 @@ int32_t C_OscProtocolDriverOsy::OsyReadCertificateSerialNumberL7(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyWriteSecurityKey(
-    const std::vector<uint8_t> &orc_PublicKeyModulus,
-    const std::vector<uint8_t> &orc_PublicKeyExponent,
-    const std::vector<uint8_t> &orc_CertificateSerialNumber,
+    const QByteArray &orc_PublicKeyModulus,
+    const QByteArray &orc_PublicKeyExponent,
+    const QByteArray &orc_CertificateSerialNumber,
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
   uint8_t u8_NrErrorCode = 0U;
@@ -1739,18 +1739,18 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityKey(
       (orc_CertificateSerialNumber.size() > 20)) {
     s32_Return = C_RANGE;
   } else {
-    std::vector<uint8_t> c_Data;
+    QByteArray c_Data;
     c_Data.resize(orc_PublicKeyModulus.size() + 4 +
                   orc_CertificateSerialNumber.size());
-    (void)memcpy(&c_Data[0], &orc_PublicKeyModulus[0],
+    (void)memcpy(c_Data.data(), orc_PublicKeyModulus.constData(),
                  orc_PublicKeyModulus.size());
-    (void)memset(&c_Data[128], 0, 4);
+    (void)memset(c_Data.data() + 128, 0, 4);
     // MSB first: move exponent "to the right":
-    (void)memcpy(&c_Data[(128 + 4) - orc_PublicKeyExponent.size()],
-                 &orc_PublicKeyExponent[0], orc_PublicKeyExponent.size());
+    (void)memcpy(c_Data.data() + ((128 + 4) - orc_PublicKeyExponent.size()),
+                 orc_PublicKeyExponent.constData(), orc_PublicKeyExponent.size());
 
-    (void)memcpy(&c_Data[orc_PublicKeyModulus.size() + 4],
-                 &orc_CertificateSerialNumber[0],
+    (void)memcpy(c_Data.data() + orc_PublicKeyModulus.size() + 4,
+                 orc_CertificateSerialNumber.constData(),
                  orc_CertificateSerialNumber.size());
 
     s32_Return = m_WriteDataByIdentifier(mhu16_OSY_DI_SECURITY_KEY, c_Data,
@@ -1793,7 +1793,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadSecurityActivation(
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_SECURITY_ACTIVATION, 2U,
@@ -1841,7 +1841,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityActivation(
   int32_t s32_Return;
   uint8_t u8_NrErrorCode = 0U;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
 
   c_Data.resize(2);
   c_Data[0] = (oq_SecurityOn == true) ? 0x01U : 0x00U;
@@ -1885,7 +1885,7 @@ C_OscProtocolDriverOsy::OsyReadDebuggerEnabled(bool &orq_DebuggerEnabled,
                                                uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_DEBUGGER_ACTIVATION, 1U,
@@ -1936,7 +1936,7 @@ C_OscProtocolDriverOsy::OsyWriteDebuggerEnabled(const bool oq_DebuggerEnabled,
   int32_t s32_Return;
   uint8_t u8_NrErrorCode = 0U;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
 
   c_Data.resize(1);
   c_Data[0] = (oq_DebuggerEnabled == true) ? 0x01U : 0x00U;
@@ -1977,7 +1977,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMaxNumOfEventDrivenTransmissions(
     uint16_t &oru16_MaxNum, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_MAX_NUM_ASYNC, 2U, true,
@@ -2024,13 +2024,13 @@ C_OscProtocolDriverOsy::OsyReadProtocolVersion(uint8_t (&orau8_Version)[3],
                                                uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_PROTOCOL_VERSION, 3U, true,
                                       c_Data, u8_NrErrorCode);
   if (s32_Return == C_NO_ERR) {
-    (void)std::memcpy(&orau8_Version[0], &c_Data[0], 3U);
+    (void)std::memcpy(&orau8_Version[0], c_Data.data(), 3U);
   }
   if (opu8_NrCode != NULL) {
     (*opu8_NrCode) = u8_NrErrorCode;
@@ -2068,13 +2068,13 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashloaderProtocolVersion(
     uint8_t (&orau8_Version)[3], uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_FLASHLOADER_PROTOCOL_VERSION,
                                       3U, true, c_Data, u8_NrErrorCode);
   if (s32_Return == C_NO_ERR) {
-    (void)std::memcpy(&orau8_Version[0], &c_Data[0], 3U);
+    (void)std::memcpy(&orau8_Version[0], c_Data.data(), 3U);
   }
   if (opu8_NrCode != NULL) {
     (*opu8_NrCode) = u8_NrErrorCode;
@@ -2110,7 +2110,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadFlashCount(uint32_t &oru32_FlashCount,
                                                   uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(mhu16_OSY_DI_FLASH_COUNT, 4U, true,
@@ -2157,14 +2157,14 @@ int32_t C_OscProtocolDriverOsy::OsyReadProtocolDriverImplementationVersion(
     uint8_t (&orau8_Version)[3], uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_Data;
+  QByteArray c_Data;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return = m_ReadDataByIdentifier(
       mhu16_OSY_DI_PROTOCOL_DRIVER_IMPLEMENTATION_VERSION, 3U, true, c_Data,
       u8_NrErrorCode);
   if (s32_Return == C_NO_ERR) {
-    (void)std::memcpy(&orau8_Version[0], &c_Data[0], 3U);
+    (void)std::memcpy(&orau8_Version[0], c_Data.data(), 3U);
   }
   if (opu8_NrCode != NULL) {
     (*opu8_NrCode) = u8_NrErrorCode;
@@ -2266,7 +2266,7 @@ void C_OscProtocolDriverOsy::m_UnpackDataPoolIdentifier(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyReadDataPoolData(
     const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-    const uint16_t ou16_ElementIndex, std::vector<uint8_t> &orc_ReadData,
+    const uint16_t ou16_ElementIndex, QByteArray &orc_ReadData,
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
   C_OscProtocolDriverOsyService c_Request;
@@ -2304,7 +2304,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolData(
             s32_Return = C_RD_WR;
           } else {
             orc_ReadData.resize(c_Response.c_Data.size() - 4);
-            (void)std::memcpy(&orc_ReadData[0], &c_Response.c_Data[4],
+            (void)std::memcpy(orc_ReadData.data(), &c_Response.c_Data[4],
                               c_Response.c_Data.size() - 4);
           }
           break;
@@ -2357,7 +2357,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolData(
 int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolData(
     const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
     const uint16_t ou16_ElementIndex,
-    const std::vector<uint8_t> &orc_DataToWrite, uint8_t *const opu8_NrCode) {
+    const QByteArray &orc_DataToWrite, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
   C_OscProtocolDriverOsyService c_Request;
   C_OscProtocolDriverOsyService c_Response;
@@ -2379,7 +2379,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolData(
       c_Request.c_Data[1] = au8_Identifier[0];
       c_Request.c_Data[2] = au8_Identifier[1];
       c_Request.c_Data[3] = au8_Identifier[2];
-      (void)std::memcpy(&c_Request.c_Data[4], &orc_DataToWrite[0],
+      (void)std::memcpy(&c_Request.c_Data[4], orc_DataToWrite.constData(),
                         orc_DataToWrite.size());
 
       s32_Return = mpc_TransportProtocol->SendRequest(c_Request);
@@ -2452,7 +2452,7 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolEventDataRate(
   uint8_t u8_NrErrorCode = 0U;
 
   if (ou8_TransmissionRail <= 2) {
-    std::vector<uint8_t> c_Data;
+    QByteArray c_Data;
     uint16_t u16_DataIdentifier;
 
     // Get the correct data identifier
@@ -2539,7 +2539,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(
       if (s32_Return != C_NO_ERR) {
         s32_Return = C_NOACT;
       } else {
-        std::vector<uint8_t> c_IdentifierForErrorResponse;
+        QByteArray c_IdentifierForErrorResponse;
 
         c_IdentifierForErrorResponse.resize(3);
         c_IdentifierForErrorResponse[0] = au8_Identifier[0];
@@ -2636,7 +2636,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataChangeDriven(
       if (s32_Return != C_NO_ERR) {
         s32_Return = C_NOACT;
       } else {
-        std::vector<uint8_t> c_IdentifierForErrorResponse;
+        QByteArray c_IdentifierForErrorResponse;
 
         c_IdentifierForErrorResponse.resize(3);
         c_IdentifierForErrorResponse[0] = au8_Identifier[0];
@@ -2755,8 +2755,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolMetaData(
   const uint8_t ou8_ServerDpIndex =
       this->m_GetDataPoolIndexClientToServer(ou8_DataPoolIndex);
 
-  std::vector<uint8_t> c_SendData;
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_SendData;
+  QByteArray c_ReceiveData;
 
   c_SendData.resize(1, ou8_ServerDpIndex);
   s32_Return =
@@ -2867,8 +2867,8 @@ int32_t C_OscProtocolDriverOsy::OsyVerifyDataPool(
   const uint8_t ou8_ServerDpIndex =
       this->m_GetDataPoolIndexClientToServer(ou8_DataPoolIndex);
 
-  std::vector<uint8_t> c_SendData;
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_SendData;
+  QByteArray c_ReceiveData;
   c_SendData.resize(5);
   c_SendData[0] = ou8_ServerDpIndex;
   c_SendData[1] = static_cast<uint8_t>(ou32_DataPoolChecksum >> 24U);
@@ -2942,8 +2942,8 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteDiagnosisCommunication(
   if ((ou8_SourceBusId <= C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) &&
       (ou8_TargetBusId <= C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) &&
       ((ou8_InputChannelType != 0) || (ou8_OutputChannelType != 1))) {
-    std::vector<uint8_t> c_SendData;
-    std::vector<uint8_t> c_ReceiveData;
+    QByteArray c_SendData;
+    QByteArray c_ReceiveData;
 
     c_SendData.resize(6);
     c_SendData[0] = ou8_InputChannelType;
@@ -2999,9 +2999,9 @@ int32_t C_OscProtocolDriverOsy::OsyStopRouteDiagnosisCommunication(
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  const std::vector<uint8_t> c_SendData;
+  const QByteArray c_SendData;
 
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_ReceiveData;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return =
@@ -3061,8 +3061,8 @@ int32_t C_OscProtocolDriverOsy::OsySetRouteIp2IpCommunication(
   if ((ou8_SourceBusId <= C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) &&
       (ou8_TargetBusId <= C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) &&
       (ou8_OutputChannelType == 1)) {
-    std::vector<uint8_t> c_SendData;
-    std::vector<uint8_t> c_ReceiveData;
+    QByteArray c_SendData;
+    QByteArray c_ReceiveData;
 
     c_SendData.resize(8);
     c_SendData[0] = ou8_OutputChannelType;
@@ -3128,8 +3128,8 @@ int32_t C_OscProtocolDriverOsy::OsyCheckRouteIp2IpCommunication(
   int32_t s32_Return;
   uint8_t u8_NrErrorCode = 0U;
 
-  std::vector<uint8_t> c_SendData;
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_SendData;
+  QByteArray c_ReceiveData;
 
   c_SendData.resize(0);
 
@@ -3193,8 +3193,8 @@ int32_t C_OscProtocolDriverOsy::OsySendCanMessage(
       (orc_CanMessage.u8_DLC > 8U)) {
     s32_Return = C_RANGE;
   } else {
-    std::vector<uint8_t> c_SendData;
-    std::vector<uint8_t> c_ReceiveData;
+    QByteArray c_SendData;
+    QByteArray c_ReceiveData;
     uint32_t u32_Id;
     c_SendData.resize(14);
     u32_Id = orc_CanMessage.u32_ID;
@@ -3265,8 +3265,8 @@ int32_t C_OscProtocolDriverOsy::OsySetTunnelCanMessages(
     const uint32_t ou32_FilterMask, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_SendData;
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_SendData;
+  QByteArray c_ReceiveData;
   uint8_t u8_NrErrorCode = 0U;
 
   c_SendData.resize(9);
@@ -3322,9 +3322,9 @@ int32_t
 C_OscProtocolDriverOsy::OsyStopTunnelCanMessages(uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  const std::vector<uint8_t> c_SendData;
+  const QByteArray c_SendData;
 
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_ReceiveData;
   uint8_t u8_NrErrorCode = 0U;
 
   s32_Return =
@@ -3550,7 +3550,7 @@ int32_t C_OscProtocolDriverOsy::Cycle(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsy::m_OsyReadDataPoolDataEventReceived(
     const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-    const uint16_t ou16_ElementIndex, const std::vector<uint8_t> &orc_Value) {
+    const uint16_t ou16_ElementIndex, const QByteArray &orc_Value) {
   (void)orc_Value;
   m_LogErrorWithHeader(
       "Asynchronous communication",
@@ -3619,8 +3619,8 @@ int32_t C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_ReceiveData;
-  std::vector<uint8_t> c_SendData;
+  QByteArray c_ReceiveData;
+  QByteArray c_SendData;
   uint8_t u8_NrErrorCode = 0U;
 
   c_SendData.resize(8);
@@ -3683,9 +3683,9 @@ int32_t C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::m_RoutineControl(
     const uint16_t ou16_RoutineIdentifier, const uint8_t ou8_SubFunction,
-    const std::vector<uint8_t> &orc_SendData,
+    const QByteArray &orc_SendData,
     const uint16_t ou16_ExpectedPayloadSize, const bool oq_ExactSizeExpected,
-    std::vector<uint8_t> &orc_ReadData, uint8_t &oru8_NrCode,
+    QByteArray &orc_ReadData, uint8_t &oru8_NrCode,
     const bool oq_CanTransferWithoutFlowControl) {
   int32_t s32_Return;
   C_OscProtocolDriverOsyService c_Request;
@@ -3705,7 +3705,7 @@ int32_t C_OscProtocolDriverOsy::m_RoutineControl(
         oq_CanTransferWithoutFlowControl;
 
     if (u32_SendPayloadSize > 0U) {
-      (void)std::memcpy(&c_Request.c_Data[4], &orc_SendData[0],
+      (void)std::memcpy(&c_Request.c_Data[4], orc_SendData.constData(),
                         u32_SendPayloadSize);
     }
 
@@ -3730,7 +3730,7 @@ int32_t C_OscProtocolDriverOsy::m_RoutineControl(
           // standard library implementation this
           //  could result in an access to undefined memory:
           if (c_Response.c_Data.size() > 4) {
-            (void)std::memcpy(&orc_ReadData[0], &c_Response.c_Data[4],
+            (void)std::memcpy(orc_ReadData.data(), &c_Response.c_Data[4],
                               c_Response.c_Data.size() - 4);
           }
         }
@@ -3790,8 +3790,8 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(
     uint8_t &oru8_SecurityAlgorithm, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_SendData;
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_SendData;
+  QByteArray c_ReceiveData;
   uint8_t u8_NrErrorCode = 0U;
 
   c_SendData.resize(0);
@@ -3870,8 +3870,8 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_SendData;
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_SendData;
+  QByteArray c_ReceiveData;
   uint8_t u8_NrErrorCode = 0U;
 
   c_SendData.resize(4);
@@ -3923,11 +3923,11 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(
-    const uint8_t ou8_SecurityLevel, const std::vector<uint8_t> &orc_Key,
+    const uint8_t ou8_SecurityLevel, const QByteArray &orc_Key,
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_ReceiveData;
   uint8_t u8_NrErrorCode = 0U;
 
   c_ReceiveData.resize(0);
@@ -3978,9 +3978,9 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::m_SecurityAccess(
-    const uint8_t ou8_SubFunction, const std::vector<uint8_t> &orc_SendData,
+    const uint8_t ou8_SubFunction, const QByteArray &orc_SendData,
     const uint16_t ou16_SendPayloadSize,
-    const uint16_t ou16_ExpectedPayloadSize, std::vector<uint8_t> &orc_ReadData,
+    const uint16_t ou16_ExpectedPayloadSize, QByteArray &orc_ReadData,
     uint8_t &oru8_NrCode) {
   int32_t s32_Return;
   C_OscProtocolDriverOsyService c_Request;
@@ -4003,7 +4003,7 @@ int32_t C_OscProtocolDriverOsy::m_SecurityAccess(
       // check size to prevent potential access to undefined orc_SendData[0]
       // (depending on std::memcpy implementation)
       if (ou16_SendPayloadSize > 0) {
-        (void)std::memcpy(&c_Request.c_Data[2], &orc_SendData[0],
+        (void)std::memcpy(&c_Request.c_Data[2], orc_SendData.constData(),
                           ou16_SendPayloadSize);
       }
     }
@@ -4024,7 +4024,7 @@ int32_t C_OscProtocolDriverOsy::m_SecurityAccess(
         } else {
           orc_ReadData.resize(c_Response.c_Data.size() - 2);
           if (orc_ReadData.size() > 0) {
-            (void)std::memcpy(&orc_ReadData[0], &c_Response.c_Data[2],
+            (void)std::memcpy(orc_ReadData.data(), &c_Response.c_Data[2],
                               c_Response.c_Data.size() - 2);
           }
         }
@@ -4162,9 +4162,9 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataEvent(
     au8_Identifier[2] = orc_ReceivedService.c_Data[3];
 
     // Copy the received value of the datapool element
-    std::vector<uint8_t> c_Value;
+    QByteArray c_Value;
     c_Value.resize(u16_NumberOfBytes);
-    (void)std::memcpy(&c_Value[0], &orc_ReceivedService.c_Data[4],
+    (void)std::memcpy(c_Value.data(), orc_ReceivedService.c_Data.constData() + 4,
                       u16_NumberOfBytes);
 
     // Get the indexes of all parameter
@@ -4273,7 +4273,7 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyTunnelCanMessagesEvent(
       // Fill the struct
       c_CanMessage.u8_DLC = orc_ReceivedService.c_Data[5];
       (void)std::memcpy(&c_CanMessage.au8_Data[0],
-                        &orc_ReceivedService.c_Data[6], 8U);
+                        orc_ReceivedService.c_Data.constData() + 6, 8U);
       c_CanMessage.u64_TimeStamp = static_cast<uint64_t>(
           std::chrono::duration_cast<std::chrono::microseconds>(
               std::chrono::steady_clock::now().time_since_epoch())
@@ -4372,25 +4372,25 @@ uint8_t C_OscProtocolDriverOsy::m_GetDataPoolIndexServerToClient(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsy::mh_ConvertVariableToNecessaryBytes(
-    const uint32_t ou32_Variable, std::vector<uint8_t> &orc_Bytes) {
+    const uint32_t ou32_Variable, QByteArray &orc_Bytes) {
   if (ou32_Variable <= 0xFFUL) {
     orc_Bytes.resize(1);
-    orc_Bytes[0] = static_cast<uint8_t>(ou32_Variable);
+    orc_Bytes[0] = static_cast<char>(ou32_Variable);
   } else if (ou32_Variable <= 0xFFFFUL) {
     orc_Bytes.resize(2);
-    orc_Bytes[0] = static_cast<uint8_t>(ou32_Variable >> 8U);
-    orc_Bytes[1] = static_cast<uint8_t>(ou32_Variable & 0xFFU);
+    orc_Bytes[0] = static_cast<char>(ou32_Variable >> 8U);
+    orc_Bytes[1] = static_cast<char>(ou32_Variable & 0xFFU);
   } else if (ou32_Variable <= 0xFFFFFFUL) {
     orc_Bytes.resize(3);
-    orc_Bytes[0] = static_cast<uint8_t>(ou32_Variable >> 16U);
-    orc_Bytes[1] = static_cast<uint8_t>(ou32_Variable >> 8U);
-    orc_Bytes[2] = static_cast<uint8_t>(ou32_Variable & 0xFFU);
+    orc_Bytes[0] = static_cast<char>(ou32_Variable >> 16U);
+    orc_Bytes[1] = static_cast<char>(ou32_Variable >> 8U);
+    orc_Bytes[2] = static_cast<char>(ou32_Variable & 0xFFU);
   } else {
     orc_Bytes.resize(4);
-    orc_Bytes[0] = static_cast<uint8_t>(ou32_Variable >> 24U);
-    orc_Bytes[1] = static_cast<uint8_t>(ou32_Variable >> 16U);
-    orc_Bytes[2] = static_cast<uint8_t>(ou32_Variable >> 8U);
-    orc_Bytes[3] = static_cast<uint8_t>(ou32_Variable & 0xFFU);
+    orc_Bytes[0] = static_cast<char>(ou32_Variable >> 24U);
+    orc_Bytes[1] = static_cast<char>(ou32_Variable >> 16U);
+    orc_Bytes[2] = static_cast<char>(ou32_Variable >> 8U);
+    orc_Bytes[3] = static_cast<char>(ou32_Variable & 0xFFU);
   }
 }
 
@@ -4648,7 +4648,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestFileTransfer(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t
 C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceCounter,
-                                        const std::vector<uint8_t> &orc_Data,
+                                        const QByteArray &orc_Data,
                                         uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
   uint8_t u8_NrErrorCode = 0U;
@@ -4661,7 +4661,7 @@ C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceCounter,
     c_Request.c_Data.resize(static_cast<size_t>(u16_NumberOfBytes) + 2U);
     c_Request.c_Data[0] = mhu8_OSY_SI_TRANSFER_DATA;
     c_Request.c_Data[1] = ou8_BlockSequenceCounter;
-    (void)std::memcpy(&c_Request.c_Data[2], &orc_Data[0], u16_NumberOfBytes);
+    (void)std::memcpy(&c_Request.c_Data[2], orc_Data.constData(), u16_NumberOfBytes);
 
     s32_Return = mpc_TransportProtocol->SendRequest(c_Request);
     if (s32_Return != C_NO_ERR) {
@@ -4893,7 +4893,7 @@ int32_t C_OscProtocolDriverOsy::OsyRequestTransferExitFileBased(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(
-    const uint32_t ou32_MemoryAddress, std::vector<uint8_t> &orc_DataRecord,
+    const uint32_t ou32_MemoryAddress, QByteArray &orc_DataRecord,
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return = C_RANGE;
   uint8_t u8_NrErrorCode = 0U;
@@ -4913,8 +4913,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(
     for (uint32_t u32_ReadIndex = 0U; u32_ReadIndex < orc_DataRecord.size();
          u32_ReadIndex += u32_BLOCK_SIZE) {
       C_OscProtocolDriverOsyService c_Request;
-      std::vector<uint8_t> c_MemoryAddress;
-      std::vector<uint8_t> c_MemorySize;
+      QByteArray c_MemoryAddress;
+      QByteArray c_MemorySize;
       uint8_t u8_MemoryAddressByteCount;
       uint8_t u8_MemorySizeByteCount;
       const uint32_t u32_MemoryAddress = ou32_MemoryAddress + u32_ReadIndex;
@@ -4945,12 +4945,12 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(
           (static_cast<uint8_t>(u8_MemorySizeByteCount << 4U)) +
           u8_MemoryAddressByteCount;
       // Address part
-      (void)std::memcpy(&c_Request.c_Data[2], &c_MemoryAddress[0],
+      (void)std::memcpy(&c_Request.c_Data[2], c_MemoryAddress.constData(),
                         c_MemoryAddress.size());
       // Size part
       (void)std::memcpy(
           &c_Request.c_Data[static_cast<size_t>(2) + u8_MemoryAddressByteCount],
-          &c_MemorySize[0], c_MemorySize.size());
+          c_MemorySize.constData(), c_MemorySize.size());
 
       s32_Return = mpc_TransportProtocol->SendRequest(c_Request);
       if (s32_Return != C_NO_ERR) {
@@ -4964,8 +4964,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(
         switch (s32_Return) {
         case C_NO_ERR:
           // size is OK: copy data
-          (void)std::memcpy(&orc_DataRecord[u32_ReadIndex],
-                            &c_Response.c_Data[1],
+          (void)std::memcpy(orc_DataRecord.data() + u32_ReadIndex,
+                            c_Response.c_Data.constData() + 1,
                             c_Response.c_Data.size() - 1U);
           break;
         case C_WARN:
@@ -5022,7 +5022,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(
     const uint32_t ou32_MemoryAddress,
-    const std::vector<uint8_t> &orc_DataRecord, uint8_t *const opu8_NrCode) {
+    const QByteArray &orc_DataRecord, uint8_t *const opu8_NrCode) {
   int32_t s32_Return = C_RANGE;
   uint8_t u8_NrErrorCode = 0U;
 
@@ -5041,8 +5041,8 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(
     for (uint32_t u32_WriteIndex = 0U; u32_WriteIndex < orc_DataRecord.size();
          u32_WriteIndex += u32_BlockSize) {
       C_OscProtocolDriverOsyService c_Request;
-      std::vector<uint8_t> c_MemoryAddress;
-      std::vector<uint8_t> c_MemorySize;
+      QByteArray c_MemoryAddress;
+      QByteArray c_MemorySize;
       uint8_t u8_MemoryAddressByteCount;
       uint8_t u8_MemorySizeByteCount;
       const uint32_t u32_MemoryAddress = ou32_MemoryAddress + u32_WriteIndex;
@@ -5072,17 +5072,17 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(
       c_Request.c_Data[1] = static_cast<uint8_t>(u8_MemorySizeByteCount << 4U) +
                             u8_MemoryAddressByteCount;
       // Address part
-      (void)std::memcpy(&c_Request.c_Data[2], &c_MemoryAddress[0],
+      (void)std::memcpy(&c_Request.c_Data[2], c_MemoryAddress.constData(),
                         c_MemoryAddress.size());
       // Size part
       (void)std::memcpy(
           &c_Request.c_Data[static_cast<size_t>(2) + u8_MemoryAddressByteCount],
-          &c_MemorySize[0], c_MemorySize.size());
+          c_MemorySize.constData(), c_MemorySize.size());
       // Data part
       (void)std::memcpy(
-          &c_Request.c_Data[static_cast<size_t>(2) + u8_MemoryAddressByteCount +
-                            u8_MemorySizeByteCount],
-          &orc_DataRecord[u32_WriteIndex], u32_Size);
+          c_Request.c_Data.data() + static_cast<size_t>(2) + u8_MemoryAddressByteCount +
+                            u8_MemorySizeByteCount,
+          orc_DataRecord.constData() + u32_WriteIndex, u32_Size);
 
       s32_Return = mpc_TransportProtocol->SendRequest(c_Request);
       if (s32_Return != C_NO_ERR) {
@@ -5160,8 +5160,8 @@ int32_t C_OscProtocolDriverOsy::OsyNotifyNvmDataChanges(
   const uint8_t ou8_ServerDpIndex =
       this->m_GetDataPoolIndexClientToServer(ou8_DataPoolIndex);
 
-  std::vector<uint8_t> c_SendData;
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_SendData;
+  QByteArray c_ReceiveData;
   c_SendData.resize(2);
   c_SendData[0] = ou8_ServerDpIndex;
   c_SendData[1] = ou8_ListIndex;
@@ -5366,8 +5366,8 @@ int32_t C_OscProtocolDriverOsy::OsySetNodeIdForChannel(
        C_OscProtocolDriverOsyNode::mhu8_MAX_BUS) &&
       (orc_NewNodeId.u8_NodeIdentifier <
        C_OscProtocolDriverOsyNode::mhu8_MAX_NODE)) {
-    std::vector<uint8_t> c_ReceiveData;
-    std::vector<uint8_t> c_SendData;
+    QByteArray c_ReceiveData;
+    QByteArray c_SendData;
 
     c_SendData.resize(4);
     c_SendData[0] = ou8_ChannelType;
@@ -5434,8 +5434,8 @@ int32_t C_OscProtocolDriverOsy::OsySetBitrate(const uint8_t ou8_ChannelType,
                                               uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_ReceiveData;
-  std::vector<uint8_t> c_SendData;
+  QByteArray c_ReceiveData;
+  QByteArray c_SendData;
   uint8_t u8_NrErrorCode = 0U;
 
   c_SendData.resize(6);
@@ -5513,9 +5513,9 @@ C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock,
   int32_t s32_Return;
   uint8_t u8_NrErrorCode = 0U;
 
-  std::vector<uint8_t> c_ReceiveData;
-  std::vector<uint8_t> c_SendData;
-  std::vector<char_t> c_Text;
+  QByteArray c_ReceiveData;
+  QByteArray c_SendData;
+  QByteArray c_Text;
 
   c_SendData.resize(1);
   c_SendData[0] = ou8_FlashBlock;
@@ -5561,25 +5561,25 @@ C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock,
       c_Text.resize(static_cast<size_t>(u32_Length) +
                     1U);                 // plus 1 for termination
       c_Text[c_Text.size() - 1U] = '\0'; // add termination
-      (void)std::memcpy(&c_Text[0],
-                        &c_ReceiveData[static_cast<size_t>(u32_Counter) + 2U],
+      (void)std::memcpy(c_Text.data(),
+                        c_ReceiveData.constData() + static_cast<size_t>(u32_Counter) + 2U,
                         u32_Length);
-      orc_BlockInfo.c_ApplicationVersion = &c_Text[0];
+      orc_BlockInfo.c_ApplicationVersion = QString::fromUtf8(c_Text);
       u32_Counter += u32_Length + 2U;
     }
     if (c_ReceiveData[u32_Counter] ==
         C_FlashBlockInfo::hu8_ID_BUILD_TIMESTAMP) {
       c_Text.resize(11U + 1U);           // plus 1 for termination
       c_Text[c_Text.size() - 1U] = '\0'; // add termination
-      (void)std::memcpy(&c_Text[0],
-                        &c_ReceiveData[static_cast<size_t>(u32_Counter) + 1U],
+      (void)std::memcpy(c_Text.data(),
+                        c_ReceiveData.constData() + static_cast<size_t>(u32_Counter) + 1U,
                         11U);
-      orc_BlockInfo.c_BuildDate = &c_Text[0];
+      orc_BlockInfo.c_BuildDate = QString::fromUtf8(c_Text);
       u32_Counter += (11U + 1U);
       c_Text.resize(8U + 1U);            // plus 1 for termination
       c_Text[c_Text.size() - 1U] = '\0'; // add termination
-      (void)std::memcpy(&c_Text[0], &c_ReceiveData[u32_Counter], 8U);
-      orc_BlockInfo.c_BuildTime = &c_Text[0];
+      (void)std::memcpy(c_Text.data(), c_ReceiveData.constData() + u32_Counter, 8U);
+      orc_BlockInfo.c_BuildTime = QString::fromUtf8(c_Text);
       u32_Counter += 8U;
     }
     if (c_ReceiveData[u32_Counter] ==
@@ -5589,10 +5589,10 @@ C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock,
       c_Text.resize(static_cast<size_t>(u32_Length) +
                     1U);                 // plus 1 for termination
       c_Text[c_Text.size() - 1U] = '\0'; // add termination
-      (void)std::memcpy(&c_Text[0],
-                        &c_ReceiveData[static_cast<size_t>(u32_Counter) + 2U],
+      (void)std::memcpy(c_Text.data(),
+                        c_ReceiveData.constData() + static_cast<size_t>(u32_Counter) + 2U,
                         u32_Length);
-      orc_BlockInfo.c_ApplicationName = &c_Text[0];
+      orc_BlockInfo.c_ApplicationName = QString::fromUtf8(c_Text);
       u32_Counter += u32_Length + 2U;
     }
     if (c_ReceiveData[u32_Counter] ==
@@ -5602,10 +5602,10 @@ C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock,
       c_Text.resize(static_cast<size_t>(u32_Length) +
                     1U);                 // plus 1 for termination
       c_Text[c_Text.size() - 1U] = '\0'; // add termination
-      (void)std::memcpy(&c_Text[0],
-                        &c_ReceiveData[static_cast<size_t>(u32_Counter) + 2U],
+      (void)std::memcpy(c_Text.data(),
+                        c_ReceiveData.constData() + static_cast<size_t>(u32_Counter) + 2U,
                         u32_Length);
-      orc_BlockInfo.c_AdditionalInformation = &c_Text[0];
+      orc_BlockInfo.c_AdditionalInformation = QString::fromUtf8(c_Text);
     }
   }
   if (opu8_NrCode != NULL) {
@@ -5647,8 +5647,8 @@ C_OscProtocolDriverOsy::OsyRequestProgramming(uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
   uint8_t u8_NrErrorCode = 0U;
 
-  std::vector<uint8_t> c_ReceiveData;
-  const std::vector<uint8_t> c_SendData;
+  QByteArray c_ReceiveData;
+  const QByteArray c_SendData;
 
   s32_Return =
       m_RoutineControl(mhu16_OSY_RC_SID_REQUEST_PROGRAMMING,
@@ -5691,8 +5691,8 @@ int32_t C_OscProtocolDriverOsy::OsyConfigureFlashloaderCommunicationChannel(
     const bool oq_Activated, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_SendData;
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_SendData;
+  QByteArray c_ReceiveData;
   uint8_t u8_NrErrorCode = 0U;
 
   c_SendData.resize(3);
@@ -5750,8 +5750,8 @@ int32_t C_OscProtocolDriverOsy::OsySetIpAddressForChannel(
     const uint8_t (&orau8_DefaultGateway)[4], uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
-  std::vector<uint8_t> c_SendData;
-  std::vector<uint8_t> c_ReceiveData;
+  QByteArray c_SendData;
+  QByteArray c_ReceiveData;
   uint8_t u8_NrErrorCode = 0U;
 
   c_SendData.resize(14);

@@ -9,6 +9,7 @@
 #define C_OSCHALCDEF_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OscHalcDefBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -32,7 +33,7 @@ public:
    virtual void HandleFileLoadPostProcessing(void);
 
 private:
-   std::vector<C_OscHalcDefDomain> mc_Domains; ///< Domains of HALC definition
+   QList<C_OscHalcDefDomain> mc_Domains; ///< Domains of HALC definition
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

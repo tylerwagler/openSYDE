@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
+#include <QList>
 #include <QStringList>
 #include "stwtypes.hpp"
 #include "C_PuiSvReadDataConfiguration.hpp"
@@ -74,8 +75,8 @@ Q_SIGNALS:
    void SigTransmissionCountChange(const int32_t os32_Count);
 
 private:
-   std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_UniqueDataElementIds;
-   std::vector<stw::opensyde_gui_logic::C_PuiSvReadDataConfiguration> mc_DataElementConfigurations;
+   QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_UniqueDataElementIds;
+   QList<stw::opensyde_gui_logic::C_PuiSvReadDataConfiguration> mc_DataElementConfigurations;
    QStringList mc_Usage;
    const uint32_t mu32_ViewIndex;
 

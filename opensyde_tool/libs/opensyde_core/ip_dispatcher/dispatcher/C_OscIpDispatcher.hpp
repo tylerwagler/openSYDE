@@ -194,7 +194,7 @@ public:
       C_RANGE    invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t SendTcp(const uint32_t ou32_Handle, const std::vector<uint8_t> & orc_Data) = 0;
+   virtual int32_t SendTcp(const uint32_t ou32_Handle, const QByteArray & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -217,7 +217,7 @@ public:
       C_RANGE    invalid handle
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t ReadTcp(const uint32_t ou32_Handle, std::vector<uint8_t> & orc_Data) = 0;
+   virtual int32_t ReadTcp(const uint32_t ou32_Handle, QByteArray & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -248,7 +248,7 @@ public:
    //-----------------------------------------------------------------------------
    virtual int32_t ReadTcp(const uint32_t ou32_Handle, const uint8_t ou8_ClientBusIdentifier,
                            const uint8_t ou8_ClientNodeIdentifier, const uint8_t ou8_ServerBusIdentifier,
-                           const uint8_t ou8_ServerNodeIdentifier, std::vector<uint8_t> & orc_Data) = 0;
+                           const uint8_t ou8_ServerNodeIdentifier, QByteArray & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -274,7 +274,7 @@ public:
    //-----------------------------------------------------------------------------
    virtual int32_t ReadTcpBuffer(const uint8_t ou8_ClientBusIdentifier, const uint8_t ou8_ClientNodeIdentifier,
                                  const uint8_t ou8_ServerBusIdentifier, const uint8_t ou8_ServerNodeIdentifier,
-                                 std::vector<uint8_t> & orc_Data) = 0;
+                                 QByteArray & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -290,7 +290,7 @@ public:
       C_RD_WR    error sending data
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t SendUdp(const std::vector<uint8_t> & orc_Data) = 0;
+   virtual int32_t SendUdp(const QByteArray & orc_Data) = 0;
 
    //-----------------------------------------------------------------------------
    /*!
@@ -310,7 +310,7 @@ public:
       C_NOACT    no data received
    */
    //-----------------------------------------------------------------------------
-   virtual int32_t ReadUdp(std::vector<uint8_t> &orc_Data, uint8_t(&orau8_Ip)[4]) = 0;
+   virtual int32_t ReadUdp(QByteArray &orc_Data, uint8_t(&orau8_Ip)[4]) = 0;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

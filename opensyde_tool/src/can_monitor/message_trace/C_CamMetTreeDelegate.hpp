@@ -12,6 +12,7 @@
 #define C_CAMMETTREEDELEGATE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QSvgRenderer>
@@ -64,8 +65,8 @@ private:
    void m_StoreRenderer(const QString & orc_Path, QSvgRenderer * const opc_Renderer);
    static bool mh_PaintChildCell(QPainter * const opc_Painter, const QRect & orc_CellRect,
                                  const QModelIndex & orc_Index, const bool oq_Selected);
-   static std::vector<int32_t> mh_GetChildColWidths(const bool oq_IsThirdLayer);
-   static std::vector<QFlags<Qt::AlignmentFlag> > mh_GetTopAlignmentFlags(void);
+   static QList<int32_t> mh_GetChildColWidths(const bool oq_IsThirdLayer);
+   static QList<QFlags<Qt::AlignmentFlag> > mh_GetTopAlignmentFlags(void);
    static QStringList mh_GetTopSpaces(void);
 };
 

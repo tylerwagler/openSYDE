@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Dialog for file generation report (implementation)
@@ -93,12 +93,12 @@ void C_ImpCodeGenerationReportWidget::InitStaticNames(void) const
    \param[in]  orc_ExportInfo    Information containing exported file paths for each Data Block
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_ImpCodeGenerationReportWidget::CreateReport(const std::vector<C_ReportData> & orc_ExportInfo)
+void C_ImpCodeGenerationReportWidget::CreateReport(const QList<C_ReportData> & orc_ExportInfo)
 const
 {
    QString c_MessageResultText;
 
-   for (std::vector<C_ReportData>::const_iterator c_ItDatablocks = orc_ExportInfo.begin();
+   for (QList<C_ReportData>::const_iterator c_ItDatablocks = orc_ExportInfo.begin();
         c_ItDatablocks != orc_ExportInfo.end(); ++c_ItDatablocks)
    {
       const C_ReportData & rc_ReportData = *c_ItDatablocks;

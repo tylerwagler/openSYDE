@@ -229,7 +229,7 @@ int32_t C_OscHalcDefContent::GetEnumValue(QString & orc_DisplayName)
 {
    int32_t s32_Retval = C_RANGE;
 
-   for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+   for (QList<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
            this->mc_EnumItems.begin();
         c_It != this->mc_EnumItems.end(); ++c_It)
    {
@@ -256,7 +256,7 @@ const C_OscNodeDataPoolContent * C_OscHalcDefContent::FindEnumItem(const QString
 {
    const C_OscNodeDataPoolContent * pc_Retval = NULL;
 
-   for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+   for (QList<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
            this->mc_EnumItems.begin();
         c_It != this->mc_EnumItems.end(); ++c_It)
    {
@@ -276,7 +276,7 @@ const C_OscNodeDataPoolContent * C_OscHalcDefContent::FindEnumItem(const QString
    All enum items
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<std::pair<QString,
+const QList<std::pair<QString,
                             C_OscNodeDataPoolContent> > & C_OscHalcDefContent::GetEnumItems(void) const
 {
    return this->mc_EnumItems;
@@ -300,7 +300,7 @@ void C_OscHalcDefContent::AddBitmaskItem(const C_OscHalcDefContentBitmaskItem & 
    All bitmask items
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::vector<C_OscHalcDefContentBitmaskItem> & C_OscHalcDefContent::GetBitmaskItems(void) const
+const QList<C_OscHalcDefContentBitmaskItem> & C_OscHalcDefContent::GetBitmaskItems(void) const
 {
    return this->mc_BitmaskItems;
 }
@@ -313,7 +313,7 @@ const std::vector<C_OscHalcDefContentBitmaskItem> & C_OscHalcDefContent::GetBitm
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefContent::GetBitmaskStatusValues(QStringList * const opc_Displays,
-                                                 std::vector<bool> * const opc_Values) const
+                                                 QList<bool> * const opc_Values) const
 {
    if (opc_Displays != NULL)
    {
@@ -325,7 +325,7 @@ void C_OscHalcDefContent::GetBitmaskStatusValues(QStringList * const opc_Display
       opc_Values->clear();
       opc_Values->reserve(this->mc_BitmaskItems.size());
    }
-   for (std::vector<C_OscHalcDefContentBitmaskItem>::const_iterator c_ItBitmask = this->mc_BitmaskItems.begin();
+   for (QList<C_OscHalcDefContentBitmaskItem>::const_iterator c_ItBitmask = this->mc_BitmaskItems.begin();
         c_ItBitmask != this->mc_BitmaskItems.end(); ++c_ItBitmask)
    {
       if (opc_Displays != NULL)
@@ -359,7 +359,7 @@ int32_t C_OscHalcDefContent::GetBitmask(const QString & orc_DisplayName, bool & 
    {
       bool q_Found = false;
 
-      for (std::vector<C_OscHalcDefContentBitmaskItem>::const_iterator c_ItBitmask = this->mc_BitmaskItems.begin();
+      for (QList<C_OscHalcDefContentBitmaskItem>::const_iterator c_ItBitmask = this->mc_BitmaskItems.begin();
            c_ItBitmask != this->mc_BitmaskItems.end(); ++c_ItBitmask)
       {
          if (orc_DisplayName == c_ItBitmask->c_Display)
@@ -403,7 +403,7 @@ int32_t C_OscHalcDefContent::SetBitmask(const QString & orc_DisplayName, const b
       bool q_Found = false;
 
       //Step 1: update flag
-      for (std::vector<C_OscHalcDefContentBitmaskItem>::iterator c_ItBitmask = this->mc_BitmaskItems.begin();
+      for (QList<C_OscHalcDefContentBitmaskItem>::iterator c_ItBitmask = this->mc_BitmaskItems.begin();
            c_ItBitmask != this->mc_BitmaskItems.end(); ++c_ItBitmask)
       {
          if (orc_DisplayName == c_ItBitmask->c_Display)
@@ -444,14 +444,14 @@ int32_t C_OscHalcDefContent::SetBitmask(const QString & orc_DisplayName, const b
          if (s32_Retval == C_NO_ERR)
          {
             //Step 2: get initial value
-            for (std::vector<C_OscHalcDefContentBitmaskItem>::iterator c_ItBitmask = this->mc_BitmaskItems.begin();
+            for (QList<C_OscHalcDefContentBitmaskItem>::iterator c_ItBitmask = this->mc_BitmaskItems.begin();
                  c_ItBitmask != this->mc_BitmaskItems.end(); ++c_ItBitmask)
             {
                //Mask any used bits
                u64_CurrentValue = u64_CurrentValue & (~(c_ItBitmask->u64_Value));
             }
             //Step 3: apply all active flags
-            for (std::vector<C_OscHalcDefContentBitmaskItem>::iterator c_ItBitmask = this->mc_BitmaskItems.begin();
+            for (QList<C_OscHalcDefContentBitmaskItem>::iterator c_ItBitmask = this->mc_BitmaskItems.begin();
                  c_ItBitmask != this->mc_BitmaskItems.end(); ++c_ItBitmask)
             {
                if (c_ItBitmask->q_ApplyValueSetting)
@@ -502,7 +502,7 @@ int32_t C_OscHalcDefContent::SetStringValue(const std::string & orc_Value)
    {
       if ((orc_Value.size() + 1UL) <= this->GetArraySize())
       {
-         std::vector<int8_t> c_Values;
+         QList<int8_t> c_Values;
          c_Values.resize(this->GetArraySize(), 0U);
          for (uint32_t u32_ItChar = 0UL; u32_ItChar < orc_Value.size(); ++u32_ItChar)
          {
@@ -575,7 +575,7 @@ void C_OscHalcDefContent::CalcHash(uint32_t & oru32_HashValue) const
 
    stw::scl::C_SclChecksums::CalcCRC32(&this->me_ComplexType, sizeof(this->me_ComplexType), oru32_HashValue);
 
-   for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+   for (QList<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
            this->mc_EnumItems.begin();
         c_It != this->mc_EnumItems.end(); ++c_It)
    {
@@ -605,7 +605,7 @@ void C_OscHalcDefContent::CalcHashElement(uint32_t & oru32_HashValue, const uint
 
    stw::scl::C_SclChecksums::CalcCRC32(&this->me_ComplexType, sizeof(this->me_ComplexType), oru32_HashValue);
 
-   for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+   for (QList<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
            this->mc_EnumItems.begin();
         c_It != this->mc_EnumItems.end(); ++c_It)
    {
@@ -634,7 +634,7 @@ void C_OscHalcDefContent::CalcHashStructure(uint32_t & oru32_HashValue) const
 
    stw::scl::C_SclChecksums::CalcCRC32(&this->me_ComplexType, sizeof(this->me_ComplexType), oru32_HashValue);
 
-   for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+   for (QList<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
            this->mc_EnumItems.begin();
         c_It != this->mc_EnumItems.end(); ++c_It)
    {

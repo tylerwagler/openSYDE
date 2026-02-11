@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Model for database message selection (implementation)
@@ -91,10 +91,9 @@ void C_CamMosDatabaseSelectionModel::Init(void)
    Current selected data elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<std::array<QString,
-                       2> > C_CamMosDatabaseSelectionModel::GetDataElements(const QModelIndex & orc_Index) const
+QList<std::array<QString, 2> > C_CamMosDatabaseSelectionModel::GetDataElements(const QModelIndex & orc_Index) const
 {
-   std::vector<std::array<QString, 2> > c_Retval;
+   QList<std::array<QString, 2> > c_Retval;
    if (orc_Index.isValid() == false)
    {
       //Invisible root
@@ -184,10 +183,10 @@ QModelIndex C_CamMosDatabaseSelectionModel::GetIndexForItem(const QString & orc_
    Generic item representation
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<uint32_t> C_CamMosDatabaseSelectionModel::GetGenericRepresentationForIndex(const QModelIndex & orc_ItemIndex)
+QList<uint32_t> C_CamMosDatabaseSelectionModel::GetGenericRepresentationForIndex(const QModelIndex & orc_ItemIndex)
 const
 {
-   std::vector<uint32_t> c_Retval;
+   QList<uint32_t> c_Retval;
    QModelIndex c_CurItem = orc_ItemIndex;
    while (c_CurItem.isValid() == true)
    {
@@ -354,10 +353,8 @@ void C_CamMosDatabaseSelectionModel::m_CreateAndFillMessageNode(const C_OscCanMe
    \param[in]      orc_SmallVectorToAdd      New items
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMosDatabaseSelectionModel::mh_CombineIndices(std::vector<std::array<QString,
-                                                                              2> > & orc_BigVectorToAppendTo,
-                                                       const std::vector<std::array<QString,
-                                                                                    2> > & orc_SmallVectorToAdd)
+void C_CamMosDatabaseSelectionModel::mh_CombineIndices(QList<std::array<QString, 2> > & orc_BigVectorToAppendTo,
+                                                       const QList<std::array<QString, 2> > & orc_SmallVectorToAdd)
 {
    //Reserve
    orc_BigVectorToAppendTo.reserve(orc_BigVectorToAppendTo.size() + orc_SmallVectorToAdd.size());

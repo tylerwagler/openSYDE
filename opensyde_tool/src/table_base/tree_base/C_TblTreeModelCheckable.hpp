@@ -45,9 +45,9 @@ public:
    explicit C_TblTreeModelCheckable(QObject * const opc_Parent = NULL);
    ~C_TblTreeModelCheckable() override;
 
-   virtual int32_t Init(const std::vector<uint32_t> & orc_ElementIndices) = 0;
-   virtual void GetCheckedItems(std::vector<uint32_t> & orc_ElementIndices,
-                                std::vector<std::vector<uint32_t> > & orc_ChildIndicesPerElement) const = 0;
+   virtual int32_t Init(const QList<uint32_t> & orc_ElementIndices) = 0;
+   virtual void GetCheckedItems(QList<uint32_t> & orc_ElementIndices,
+                                QList<QList<uint32_t> > & orc_ChildIndicesPerElement) const = 0;
    virtual uint32_t GetCheckedItemCount(void) const = 0;
 
    int32_t columnCount(const QModelIndex & orc_Parent = QModelIndex()) const override;

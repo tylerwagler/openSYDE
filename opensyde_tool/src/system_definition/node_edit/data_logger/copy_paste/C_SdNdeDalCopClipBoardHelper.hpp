@@ -10,9 +10,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <set>
-#include <vector>
 
 #include <QMap>
+#include <QList>
 
 #include "C_OscXmlParser.hpp"
 #include "C_OscDataLoggerJob.hpp"
@@ -32,17 +32,17 @@ class C_SdNdeDalCopClipBoardHelper :
    public C_UtiClipBoardHelper
 {
 public:
-   static void h_StoreDataloggerToClipboard(const std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data);
+   static void h_StoreDataloggerToClipboard(const QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data);
    static int32_t h_LoadDataloggerFromClipboardAndRemoveInvalidIds(const uint32_t ou32_NodeIndex,
-                                                                   std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data, bool & orq_IdsChanged);
+                                                                   QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data, bool & orq_IdsChanged);
    static int32_t h_LoadDataloggerFromClipboardRemoveInvalidIdsAndReportChanges(const uint32_t ou32_NodeIndex,
-                                                                                std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data, QWidget * const opc_Parent);
+                                                                                QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data, QWidget * const opc_Parent);
 
 private:
    static const QString mhc_CLIP_BOARD_BASE_TAG_NAME;
 
    C_SdNdeDalCopClipBoardHelper();
-   static void mh_StoreDataloggerToClipboard(const std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
+   static void mh_StoreDataloggerToClipboard(const QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
                                              const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                         C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups,
                                              const QString & orc_GenericTagName);
@@ -53,7 +53,7 @@ private:
    static void mh_StoreElementIdGroup(const stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId & orc_ElementId,
                                       const C_SdNdeDalCopElementIdCrcGroup & orc_ElementIdGroup,
                                       stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadDataloggerFromClipboard(std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
+   static int32_t mh_LoadDataloggerFromClipboard(QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
                                                  QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                       C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups,
                                                  const QString & orc_GenericTagName);
@@ -66,22 +66,22 @@ private:
                                         stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                C_SdNdeDalCopElementIdCrcGroup> mh_FillElementIdGroups(
-      const std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data);
+      const QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data);
    static std::set<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> mh_GetAllIds(
-      const std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data);
+      const QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data);
    static void mh_GetAllIds(const stw::opensyde_core::C_OscDataLoggerJob & orc_Data,
                             std::set<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> & orc_Ids);
-   static int32_t mh_ValidateIds(const std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
+   static int32_t mh_ValidateIds(const QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
                                  const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                             C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups);
-   static bool mh_ValidateCrcs(std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
+   static bool mh_ValidateCrcs(QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
                                const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                           C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups);
-   static void mh_RemoveAllReferencesToElementId(std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
+   static void mh_RemoveAllReferencesToElementId(QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
                                                  const stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId & orc_Id);
    static void mh_RemoveAllReferencesToElementId(stw::opensyde_core::C_OscDataLoggerJob & orc_Data,
                                                  const stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId & orc_Id);
-   static int32_t mh_LoadDataloggerFromClipboard(std::vector<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
+   static int32_t mh_LoadDataloggerFromClipboard(QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
                                                  QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                       C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups);
 };

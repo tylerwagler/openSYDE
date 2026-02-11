@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QTableView>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_NagToolTip.hpp"
 
@@ -39,8 +40,8 @@ protected:
 
    virtual void m_HideToolTip(void);
 
-   std::vector<int32_t> m_GetColumnWidths(void) const;
-   bool m_SetColumnWidths(const std::vector<int32_t> & orc_ColumnWidths);
+   QList<int32_t> m_GetColumnWidths(void) const;
+   bool m_SetColumnWidths(const QList<int32_t> & orc_ColumnWidths);
 
 private:
    C_NagToolTip * mpc_ToolTip;

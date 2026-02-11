@@ -697,9 +697,9 @@ void C_OscXmlParserBase::ReportErrorForNodeMissing(const QString & orc_MissingNo
 /*! \brief  Get all attribute values of selected node
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscXmlAttribute> C_OscXmlParserBase::GetAttributes(void) const
+QList<C_OscXmlAttribute> C_OscXmlParserBase::GetAttributes(void) const
 {
-   std::vector<C_OscXmlAttribute> c_AttributeList;
+   QList<C_OscXmlAttribute> c_AttributeList;
    if (!mc_CurrentElement.isNull())
    {
       QDomNamedNodeMap c_Attrs = mc_CurrentElement.attributes();

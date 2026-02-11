@@ -75,7 +75,7 @@ C_OgeTreeViewToolTipBaseCheckable::~C_OgeTreeViewToolTipBaseCheckable(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeTreeViewToolTipBaseCheckable::Init(C_TblTreeModelCheckable * const opc_Model,
-                                             const std::vector<uint32_t> & orc_ElementIndices)
+                                             const QList<uint32_t> & orc_ElementIndices)
 {
    if (opc_Model != NULL)
    {
@@ -99,8 +99,8 @@ void C_OgeTreeViewToolTipBaseCheckable::Init(C_TblTreeModelCheckable * const opc
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeTreeViewToolTipBaseCheckable::GetCheckedItems(const C_TblTreeModelCheckable * const opc_Model,
-                                                        std::vector<uint32_t> & orc_ElementIndices,
-                                                        std::vector<std::vector<uint32_t> > & orc_ChildIndicesPerElement)
+                                                        QList<uint32_t> & orc_ElementIndices,
+                                                        QList<QList<uint32_t> > & orc_ChildIndicesPerElement)
 const
 {
    if (opc_Model != NULL)

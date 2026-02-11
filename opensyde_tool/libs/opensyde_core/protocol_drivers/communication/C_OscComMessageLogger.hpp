@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <vector>
 #include <map>
+#include <QList>
 
 #include "stwtypes.hpp"
 #include <QString>
@@ -63,9 +64,9 @@ public:
    // openSYDE system definition handling
    virtual void SetProtocol(const stw::cmon_protocol::e_CanMonL7Protocols oe_Protocol);
    int32_t AddOsySysDef(const QString & orc_PathSystemDefinition,
-                        std::vector<C_OscSystemBus> & orc_Buses);
+                        QList<C_OscSystemBus> & orc_Buses);
    int32_t AddOsySysDef(const QString & orc_PathSystemDefinition, const uint32_t ou32_BusIndex,
-                        std::vector<C_OscSystemBus> & orc_Buses);
+                        QList<C_OscSystemBus> & orc_Buses);
    virtual int32_t SetOsySysDefBus(const QString & orc_PathSystemDefinition,
                                    const uint32_t ou32_BusIndex);
    virtual int32_t GetOsySysDef(const QString & orc_PathSystemDefinition,
@@ -170,11 +171,11 @@ private:
    std::map<QString, C_OscComMessageLoggerOsySysDefConfig> mc_OsySysDefs;
 
    // Filtering
-   std::vector<C_OscComMessageLoggerFilter> mc_CanFilterConfig;
+   QList<C_OscComMessageLoggerFilter> mc_CanFilterConfig;
    uint32_t mu32_FilteredMessages; //number of messages that did not pass the filter
 
    // Message counting
-   std::vector<uint32_t> mc_MsgCounterStandardId;
+   QList<uint32_t> mc_MsgCounterStandardId;
    std::map<uint32_t, uint32_t> mc_MsgCounterExtendedId;
    std::map<uint32_t, QString> mc_EcesMessages;
    C_OscComAutoSupport * mpc_AutoSupportProtocol;
@@ -184,7 +185,7 @@ private:
    public:
       uint32_t u32_CanId;
       QString c_MessageName;
-      std::vector<uint8_t> c_MessageData;
+      QByteArray c_MessageData;
 
       C_EcosMessage() :
          u32_CanId(0),

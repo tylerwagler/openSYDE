@@ -110,7 +110,7 @@ int32_t C_CamProHandlerFiler::h_Load(C_CamProHandler &orc_Handler,
 
     // load messages
     if (orc_XmlParser.SelectNodeChild("messages") == "messages") {
-      std::vector<C_CamProMessageData> c_Messages;
+      QList<C_CamProMessageData> c_Messages;
       if (orc_XmlParser.AttributeExists("cyclic-active")) {
         orc_Handler.SetCyclicMessageTransmitActive(
             orc_XmlParser.GetAttributeBool("cyclic-active"));
@@ -136,7 +136,7 @@ int32_t C_CamProHandlerFiler::h_Load(C_CamProHandler &orc_Handler,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProHandlerFiler::h_SaveMessages(
-    const std::vector<C_CamProMessageData> &orc_Messages,
+    const QList<C_CamProMessageData> &orc_Messages,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32("length", orc_Messages.size());
   for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < orc_Messages.size();
@@ -198,7 +198,7 @@ void C_CamProHandlerFiler::h_SaveMessage(const C_CamProMessageData &orc_Message,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CamProHandlerFiler::h_LoadMessages(
-    std::vector<C_CamProMessageData> &orc_Messages,
+    QList<C_CamProMessageData> &orc_Messages,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_CurrentDataPoolNode;
@@ -460,7 +460,7 @@ C_CamProHandlerFiler::h_LoadSettings(C_CamProHandler &orc_Handler,
       orc_Handler.SetFilterWidgetEnabled(
           orc_XmlParser.GetAttributeBool("active"));
 
-      std::vector<C_CamProFilterData> c_Filters;
+      QList<C_CamProFilterData> c_Filters;
       s32_Return = h_LoadFilters(c_Filters, orc_XmlParser);
       orc_Handler.SetFilters(c_Filters);
 
@@ -476,7 +476,7 @@ C_CamProHandlerFiler::h_LoadSettings(C_CamProHandler &orc_Handler,
   // Databases
   if ((s32_Return == C_NO_ERR) &&
       (orc_XmlParser.SelectNodeChild("databases") == "databases")) {
-    std::vector<C_CamProDatabaseData> c_Databases;
+    QList<C_CamProDatabaseData> c_Databases;
     s32_Return = h_LoadDatabases(c_Databases, orc_XmlParser);
     orc_Handler.SetDatabases(c_Databases);
 
@@ -510,7 +510,7 @@ C_CamProHandlerFiler::h_LoadSettings(C_CamProHandler &orc_Handler,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProHandlerFiler::h_SaveFilters(
-    const std::vector<C_CamProFilterData> &orc_Filters,
+    const QList<C_CamProFilterData> &orc_Filters,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32("length", orc_Filters.size());
   for (uint32_t u32_ItFilter = 0UL; u32_ItFilter < orc_Filters.size();
@@ -586,7 +586,7 @@ void C_CamProHandlerFiler::h_SaveFilterItem(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CamProHandlerFiler::h_LoadFilters(
-    std::vector<C_CamProFilterData> &orc_Filters,
+    QList<C_CamProFilterData> &orc_Filters,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_CurrentFilter;
@@ -773,7 +773,7 @@ int32_t C_CamProHandlerFiler::h_LoadFilterItem(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProHandlerFiler::h_SaveDatabases(
-    const std::vector<C_CamProDatabaseData> &orc_Databases,
+    const QList<C_CamProDatabaseData> &orc_Databases,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32("length", orc_Databases.size());
   for (uint32_t u32_ItDatabase = 0UL; u32_ItDatabase < orc_Databases.size();
@@ -814,7 +814,7 @@ void C_CamProHandlerFiler::h_SaveDatabase(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CamProHandlerFiler::h_LoadDatabases(
-    std::vector<C_CamProDatabaseData> &orc_Databases,
+    QList<C_CamProDatabaseData> &orc_Databases,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_CurrentDatabase;

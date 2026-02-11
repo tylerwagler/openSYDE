@@ -39,7 +39,7 @@ public:
    void ApplyData(void) const;
 
 private:
-   std::vector<stw::opensyde_gui_logic::C_SyvDaPeUpdateModeTableModel *> mc_Models;
+   QList<stw::opensyde_gui_logic::C_SyvDaPeUpdateModeTableModel *> mc_Models;
 
    void m_Clear(void);
    void m_OnExpandRequested(QTreeWidgetItem * const opc_Item, const bool oq_Expand);

@@ -105,7 +105,7 @@ QString C_OgeWiSpinBoxGroup::GetText(void) const
 void C_OgeWiSpinBoxGroup::Init(const C_OscNodeDataPoolContent & orc_Min, const C_OscNodeDataPoolContent & orc_Max,
                                const float64_t of64_Factor, const float64_t of64_Offset, const uint32_t ou32_Index)
 {
-   std::vector<C_OscNodeDataPoolContent::E_Type> c_Types;
+   QList<C_OscNodeDataPoolContent::E_Type> c_Types;
    m_DeactivateConnections();
    if (C_SdNdeDpContentUtil::h_GetMinimalTypeAfterScaling(orc_Min, orc_Max, of64_Factor, of64_Offset,
                                                           c_Types) == C_NO_ERR)

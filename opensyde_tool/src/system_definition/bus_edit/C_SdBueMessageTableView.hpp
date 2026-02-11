@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QSortFilterProxyModel>
+#include <QList>
 #include "C_TblViewScroll.hpp"
 #include "C_SdBueMessageTableModel.hpp"
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
@@ -36,8 +37,8 @@ public:
    C_SdBueMessageTableView(QWidget * const opc_Parent = NULL);
    ~C_SdBueMessageTableView(void) override;
 
-   void LoadUserSettings(const std::vector<int32_t> & orc_Values);
-   void SaveUserSettings(std::vector<int32_t> & orc_Values) const;
+   void LoadUserSettings(const QList<int32_t> & orc_Values);
+   void SaveUserSettings(QList<int32_t> & orc_Values) const;
    void SetMessageSyncManager(stw::opensyde_gui_logic::C_PuiSdNodeCanMessageSyncManager * const opc_Value);
    void UpdateData(void);
    int32_t GetCountRows(void) const;

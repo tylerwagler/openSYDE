@@ -147,7 +147,7 @@ void C_SyvDaCopyPasteManager::CopyFromSceneToManager(const QList<QGraphicsItem *
          const C_GiSvDaArrow * pc_LineArrow;
          const C_GiSvDaTextElement * pc_TextElement;
 
-         std::vector<const QGraphicsItem *> c_HandledItems;
+         QList<const QGraphicsItem *> c_HandledItems;
          QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration> c_Rails;
 
          //Clear data
@@ -560,13 +560,13 @@ void C_SyvDaCopyPasteManager::m_CalcOriginalPosition(const C_PuiBsElements * con
    if (pc_ExpectedData != NULL)
    {
       uint32_t u32_ItElem;
-      const std::vector<C_PuiSvDbLabel> & rc_Labels = pc_ExpectedData->GetLabels();
-      const std::vector<C_PuiSvDbPieChart> & rc_PieCharts = pc_ExpectedData->GetPieCharts();
-      const std::vector<C_PuiSvDbProgressBar> & rc_ProgressBars = pc_ExpectedData->GetProgressBars();
-      const std::vector<C_PuiSvDbSpinBox> & rc_SpinBoxs = pc_ExpectedData->GetSpinBoxes();
-      const std::vector<C_PuiSvDbSlider> & rc_Sliders = pc_ExpectedData->GetSliders();
-      const std::vector<C_PuiSvDbTable> & rc_Tabless = pc_ExpectedData->GetTables();
-      const std::vector<C_PuiSvDbToggle> & rc_Toggles = pc_ExpectedData->GetToggles();
+      const QList<C_PuiSvDbLabel> & rc_Labels = pc_ExpectedData->GetLabels();
+      const QList<C_PuiSvDbPieChart> & rc_PieCharts = pc_ExpectedData->GetPieCharts();
+      const QList<C_PuiSvDbProgressBar> & rc_ProgressBars = pc_ExpectedData->GetProgressBars();
+      const QList<C_PuiSvDbSpinBox> & rc_SpinBoxs = pc_ExpectedData->GetSpinBoxes();
+      const QList<C_PuiSvDbSlider> & rc_Sliders = pc_ExpectedData->GetSliders();
+      const QList<C_PuiSvDbTable> & rc_Tabless = pc_ExpectedData->GetTables();
+      const QList<C_PuiSvDbToggle> & rc_Toggles = pc_ExpectedData->GetToggles();
 
       for (u32_ItElem = 0; u32_ItElem < rc_Labels.size(); ++u32_ItElem)
       {

@@ -156,7 +156,7 @@ QValidator::State C_OgeSpxDoubleAutoFix::validate(QString & orc_Input, int32_t &
 //----------------------------------------------------------------------------------------------------------------------
 void C_OgeSpxDoubleAutoFix::m_Init(void)
 {
-   std::vector<float64_t> c_Tmp;
+   QList<float64_t> c_Tmp;
    int32_t s32_DecimalsFactor;
    int32_t s32_DecimalsOffset;
 

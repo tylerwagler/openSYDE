@@ -15,6 +15,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <map>
 
+#include <QList>
 #include "stwtypes.hpp"
 #include <QString>
 #include <QStringList>
@@ -43,60 +44,60 @@ public:
    static int32_t h_CreatePackageUsingPemFiles(const QString & orc_PackagePath,
                                                const C_OscSystemDefinition & orc_SystemDefinition,
                                                const uint32_t ou32_ActiveBusIndex,
-                                               const std::vector<uint8_t> & orc_ActiveNodes,
-                                               const std::vector<uint32_t> & orc_NodesUpdateOrder,
-                                               const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+                                               const QByteArray & orc_ActiveNodes,
+                                               const QList<uint32_t> & orc_NodesUpdateOrder,
+                                               const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                                QStringList & orc_WarningMessages,
                                                QString & orc_ErrorMessage,
                                                const QString & orc_TemporaryDirectory = "",
-                                               const std::vector<uint8_t> & orc_EncryptNodes = std::vector<uint8_t>(),
-                                               const QStringList & orc_EncryptNodesPassword = QStringList(), const std::vector<uint8_t> & orc_AddSignatureNodes = std::vector<uint8_t>(), const QStringList & orc_NodeSignaturePemFiles = QStringList());
+                                               const QByteArray & orc_EncryptNodes = QByteArray(),
+                                               const QStringList & orc_EncryptNodesPassword = QStringList(), const QByteArray & orc_AddSignatureNodes = QByteArray(), const QStringList & orc_NodeSignaturePemFiles = QStringList());
 
    static int32_t h_CreatePackage(const QString & orc_PackagePath,
                                   const C_OscSystemDefinition & orc_SystemDefinition,
-                                  const uint32_t ou32_ActiveBusIndex, const std::vector<uint8_t> & orc_ActiveNodes,
-                                  const std::vector<uint32_t> & orc_NodesUpdateOrder,
-                                  const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+                                  const uint32_t ou32_ActiveBusIndex, const QByteArray & orc_ActiveNodes,
+                                  const QList<uint32_t> & orc_NodesUpdateOrder,
+                                  const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                   QStringList & orc_WarningMessages,
                                   QString & orc_ErrorMessage,
                                   const QString & orc_TemporaryDirectory = "",
-                                  const std::vector<uint8_t> & orc_EncryptNodes = std::vector<uint8_t>(),
-                                  const QStringList & orc_EncryptNodesPassword = QStringList(), const std::vector<uint8_t> & orc_AddSignatureNodes = std::vector<uint8_t>(), const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys = std::vector<std::vector<uint8_t> >());
+                                  const QByteArray & orc_EncryptNodes = QByteArray(),
+                                  const QStringList & orc_EncryptNodesPassword = QStringList(), const QByteArray & orc_AddSignatureNodes = QByteArray(), const QList<QByteArray > & orc_NodeSignatureKeys = QList<QByteArray >());
 
 private:
-   static int32_t mh_CheckSecurityParameters(const std::vector<uint8_t> & orc_EncryptNodes,
+   static int32_t mh_CheckSecurityParameters(const QByteArray & orc_EncryptNodes,
                                              const QStringList & orc_EncryptNodesPassword,
-                                             const std::vector<uint8_t> & orc_SignatureNodes,
-                                             const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
+                                             const QByteArray & orc_SignatureNodes,
+                                             const QList<QByteArray > & orc_NodeSignatureKeys,
                                              const uint32_t ou32_NumNodes, const QString & orc_Mode,
                                              const QString & orc_Function);
    static int32_t mh_CheckPemFileParameters(const QStringList & orc_NodeSignaturePemFiles,
-                                            const std::vector<uint8_t> & orc_SignatureNodes,
+                                            const QByteArray & orc_SignatureNodes,
                                             const uint32_t ou32_NumNodes);
-   static void mh_AdaptSignatureParameters(const std::vector<uint8_t> & orc_InAddSignatureNodes,
-                                           const std::vector<std::vector<uint8_t> > & orc_InNodeSignatureKeys,
+   static void mh_AdaptSignatureParameters(const QByteArray & orc_InAddSignatureNodes,
+                                           const QList<QByteArray > & orc_InNodeSignatureKeys,
                                            const uint32_t ou32_NodeCount,
-                                           std::vector<uint8_t> & orc_OutAddSignatureNodes,
-                                           std::vector<std::vector<uint8_t> > & orc_OutNodeSignatureKeys);
-   static void mh_AdaptPemFileParameters(const std::vector<uint8_t> & orc_InAddSignatureNodes,
+                                           QByteArray & orc_OutAddSignatureNodes,
+                                           QList<QByteArray > & orc_OutNodeSignatureKeys);
+   static void mh_AdaptPemFileParameters(const QByteArray & orc_InAddSignatureNodes,
                                          const QStringList & orc_InNodeSignaturePemFiles,
                                          const uint32_t ou32_NodeCount,
                                          QStringList & orc_OutNodeSignaturePemFiles,
-                                         std::vector<uint8_t> & orc_OutAddSignatureNodes);
+                                         QByteArray & orc_OutAddSignatureNodes);
    static int32_t mh_CheckParamsToCreatePackage(const QString & orc_PackagePath,
                                                 const C_OscSystemDefinition & orc_SystemDefinition,
                                                 const uint32_t ou32_ActiveBusIndex,
-                                                const std::vector<uint8_t> & orc_ActiveNodes,
-                                                const std::vector<uint32_t> & orc_NodesUpdateOrder,
-                                                const std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, const std::vector<uint8_t> & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys);
+                                                const QByteArray & orc_ActiveNodes,
+                                                const QList<uint32_t> & orc_NodesUpdateOrder,
+                                                const QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, const QByteArray & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const QByteArray & orc_AddSignatureNodes, const QList<QByteArray > & orc_NodeSignatureKeys);
 
    static int32_t mh_SupDefParamAdapter(const uint32_t ou32_ActiveBusIndex,
-                                        const std::vector<uint8_t> & orc_ActiveNodes,
-                                        const std::vector<uint32_t> & orc_NodesUpdateOrder,
-                                        const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+                                        const QByteArray & orc_ActiveNodes,
+                                        const QList<uint32_t> & orc_NodesUpdateOrder,
+                                        const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
                                         C_OscSupDefinition & orc_SupDefContent);
 
-   static int32_t mh_GetUpdatePositionOfNode(const std::vector<uint32_t> & orc_NodesUpdateOrder,
+   static int32_t mh_GetUpdatePositionOfNode(const QList<uint32_t> & orc_NodesUpdateOrder,
                                              const uint32_t ou32_NodeForUpdate, uint32_t & oru32_UpdatePosition);
 
    static void mh_GetSydeSecureFileNames(const C_OscSystemDefinition & orc_SystemDefinition,
@@ -104,43 +105,43 @@ private:
                                          QStringList & orc_AbsPath,
                                          QStringList & orc_RelPath);
    static void mh_AppendFlashFilesToSecureFileSections(
-      const std::vector<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
+      const QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite,
       const QStringList & orc_NodeFoldersAbs,
-      std::vector<std::set<QString> > & orc_SecureFiles);
+      QList<std::set<QString> > & orc_SecureFiles);
    static int32_t mh_CreateDefFilesAndZipSecureFiles(const C_OscSystemDefinition & orc_SystemDefinition,
                                                      C_OscSupDefinition & orc_SupDefContent,
                                                      const QString & orc_PackagePathTmp,
-                                                     const std::vector<uint8_t> & orc_ActiveNodes,
-                                                     const std::vector<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::set<QString> & orc_SupFiles, const std::vector<uint8_t> & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const std::vector<uint8_t> & orc_AddSignatureNodes, const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys);
-   static int32_t mh_CreateNodesZip(const std::vector<std::set<QString> > & orc_SecFiles,
+                                                     const QByteArray & orc_ActiveNodes,
+                                                     const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::set<QString> & orc_SupFiles, const QByteArray & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const QByteArray & orc_AddSignatureNodes, const QList<QByteArray > & orc_NodeSignatureKeys);
+   static int32_t mh_CreateNodesZip(const QList<std::set<QString> > & orc_SecFiles,
                                     const QStringList & orc_SecPackageFilesRel,
                                     const QStringList & orc_SecPackageFilesAbs,
                                     const QStringList & orc_NodeFoldersAbs,
-                                    const std::vector<uint8_t> & orc_ActiveNodes,
-                                    const std::vector<uint8_t> & orc_EncryptNodes,
+                                    const QByteArray & orc_ActiveNodes,
+                                    const QByteArray & orc_EncryptNodes,
                                     const QStringList & orc_EncryptNodesPassword,
                                     const uint32_t ou32_NodeCount, std::set<QString> & orc_SupFiles);
-   static int32_t mh_HandleNodeDefCreation(const std::vector<uint8_t> & orc_ActiveNodes,
+   static int32_t mh_HandleNodeDefCreation(const QByteArray & orc_ActiveNodes,
                                            const QStringList & orc_SecDefFilesAbs,
                                            const QStringList & orc_SecDefFilesRel,
-                                           const std::vector<uint8_t> & orc_AddSignatureNodes,
+                                           const QByteArray & orc_AddSignatureNodes,
                                            const uint32_t ou32_NodeCount,
-                                           std::vector<C_OscSupNodeDefinition> & orc_SupDefNodes,
-                                           std::vector<std::set<QString> > & orc_SecFiles);
+                                           QList<C_OscSupNodeDefinition> & orc_SupDefNodes,
+                                           QList<std::set<QString> > & orc_SecFiles);
    static int32_t mh_HandleSignatureCreation(const QStringList & orc_NodeFoldersAbs,
-                                             const std::vector<uint8_t> & orc_ActiveNodes,
-                                             const std::vector<uint8_t> & orc_AddSignatureNodes,
-                                             const std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys,
+                                             const QByteArray & orc_ActiveNodes,
+                                             const QByteArray & orc_AddSignatureNodes,
+                                             const QList<QByteArray > & orc_NodeSignatureKeys,
                                              const uint32_t ou32_NodeCount,
-                                             std::vector<std::set<QString> > & orc_SecFiles);
+                                             QList<std::set<QString> > & orc_SecFiles);
    static int32_t mh_CalcSig(const QString & orc_SourcePath,
-                             const std::set<QString> & orc_SupFiles, const std::vector<uint8_t> & orc_Key,
+                             const std::set<QString> & orc_SupFiles, const QByteArray & orc_Key,
                              QString & orc_Signature);
-   static int32_t mh_GetPemFileContent(const std::vector<uint8_t> & orc_ActiveNodes,
-                                       const std::vector<uint8_t> & orc_SignatureNodes,
+   static int32_t mh_GetPemFileContent(const QByteArray & orc_ActiveNodes,
+                                       const QByteArray & orc_SignatureNodes,
                                        const QStringList & orc_NodeSignaturePemFiles,
-                                       const uint32_t ou32_NumNodes, std::vector<uint8_t> & orc_PreparedSignatureNodes,
-                                       std::vector<std::vector<uint8_t> > & orc_NodeSignatureKeys);
+                                       const uint32_t ou32_NumNodes, QByteArray & orc_PreparedSignatureNodes,
+                                       QList<QByteArray > & orc_NodeSignatureKeys);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

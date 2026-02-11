@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QList>
 #include <vector>
 #include <QString>
 #include <QStringList>
@@ -40,7 +41,7 @@ namespace opensyde_gui_logic
 class C_PuiSdUtil
 {
 public:
-   static bool h_CheckNameAvailable(const std::vector<const QString *> & orc_ExistingStrings,
+   static bool h_CheckNameAvailable(const QList<const QString *> & orc_ExistingStrings,
                                     const QString & orc_Proposal, const uint32_t * const opu32_SkipIndex);
    static QString h_ConvertBusTypeToStringUppercase(const stw::opensyde_core::C_OscSystemBus::E_Type & ore_Type);
 
@@ -68,10 +69,10 @@ public:
    static QString h_GetNodeBaseNameOrName(const uint32_t ou32_NodeIndex);
    static uint32_t h_GetIndexOfFirstNodeInGroup(const uint32_t ou32_NodeIndex);
    static bool h_CheckIsFirstInAnyGroupOrNotInAny(const uint32_t ou32_NodeIndex,
-                                                  const std::vector<stw::opensyde_core::C_OscNodeSquad> & orc_AvailableGroups);
+                                                  const QList<stw::opensyde_core::C_OscNodeSquad> & orc_AvailableGroups);
    static void h_GetInterfaceDataForNode(const uint32_t ou32_NodeIndex,
                                          const C_PuiSdNodeConnectionId & orc_ConnectionId,
-                                         std::vector<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
+                                         QList<C_PuiSdNodeInterfaceAutomaticProperties> & orc_Properties);
    static bool h_CheckXappNodeReachable(const uint32_t ou32_SdNodeIndex, const uint32_t ou32_TargetNodeIndex);
    static bool h_CheckNodeDataLoggerNameAvailable(const uint32_t ou32_NodeIndex, const QString & orc_Name,
                                                   const uint32_t * const opu32_DataLoggerJobIndexToSkip,
@@ -79,7 +80,7 @@ public:
 
 private:
    C_PuiSdUtil(void);
-   static std::vector<uint8_t> mh_GetAllNodesActive(void);
+   static QByteArray mh_GetAllNodesActive(void);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

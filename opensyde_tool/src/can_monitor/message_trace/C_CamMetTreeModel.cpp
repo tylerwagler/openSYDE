@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Max performance model (implementation)
@@ -260,9 +260,9 @@ void C_CamMetTreeModel::ActionClearData(void) {
    Indices of added rows (only valid if not in unique message mode)
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t>
+QList<int32_t>
 C_CamMetTreeModel::AddRows(const std::list<C_CamMetTreeLoggerData> &orc_Data) {
-  const std::vector<int32_t> c_Retval = this->m_AddRowsContinuousMode(orc_Data);
+  const QList<int32_t> c_Retval = this->m_AddRowsContinuousMode(orc_Data);
 
   this->m_AddRowsUnique(orc_Data);
 
@@ -468,9 +468,9 @@ void C_CamMetTreeModel::SetTraceBufferSize(const uint32_t ou32_Value) {
    All messages
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_CamMetTreeLoggerData *>
+QList<C_CamMetTreeLoggerData *>
 C_CamMetTreeModel::GetAllMessagesForProtocolChange(void) {
-  std::vector<C_CamMetTreeLoggerData *> c_Retval;
+  QList<C_CamMetTreeLoggerData *> c_Retval;
   const int32_t s32_CompleteSize =
       static_cast<int32_t>(this->mc_DataBase.size()) +
       this->mc_UniqueMessages.size();
@@ -934,7 +934,7 @@ QVariant C_CamMetTreeModel::data(const QModelIndex &orc_Index,
           c_Array.reserve(pc_CurMessage->c_GreyOutInformation
                               .c_GrayOutValueDataBytes.size());
           // Copy over
-          for (std::vector<int32_t>::const_iterator c_ItVal =
+          for (QList<int32_t>::const_iterator c_ItVal =
                    pc_CurMessage->c_GreyOutInformation.c_GrayOutValueDataBytes
                        .begin();
                c_ItVal != pc_CurMessage->c_GreyOutInformation
@@ -1517,9 +1517,9 @@ void C_CamMetTreeModel::m_AdaptTraceBufferSize(void) {
    Indices of added rows (only valid if not in unique message mode)
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_CamMetTreeModel::m_AddRowsContinuousMode(
+QList<int32_t> C_CamMetTreeModel::m_AddRowsContinuousMode(
     const std::list<C_CamMetTreeLoggerData> &orc_Data) {
-  std::vector<int32_t> c_Retval;
+  QList<int32_t> c_Retval;
   if (orc_Data.empty() == false) {
     // Columns which need to get updated on change of static message
     const uint32_t u32_CompleteSize =
@@ -2080,7 +2080,7 @@ void C_CamMetTreeModel::m_UpdateTreeItemBasedOnMessage(
     C_TblTreSimpleItem *const opc_Item,
     const C_CamMetTreeLoggerData &orc_Message, const bool oq_SignalInsert,
     const int32_t os32_MessageRow) {
-  const std::vector<int32_t> c_Order =
+  const QList<int32_t> c_Order =
       C_CamMetUtil::h_GetMultiplexerOrder(orc_Message.c_Signals);
 
   if (c_Order.size() == 0UL) {
@@ -2118,8 +2118,8 @@ void C_CamMetTreeModel::m_UpdateTreeItemBasedOnMessage(
       // Nothing to do
     }
   } else {
-    std::vector<uint32_t> c_Expected;
-    std::vector<uint32_t> c_Current;
+    QList<uint32_t> c_Expected;
+    QList<uint32_t> c_Current;
     // Multiplexer
     for (uint32_t u32_ItOr = 0UL; u32_ItOr < c_Order.size(); ++u32_ItOr) {
       uint32_t u32_Counter = 0UL;
@@ -2449,7 +2449,7 @@ bool C_CamMetTreeModel::m_CheckSignalDataForSearch(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetTreeModel::m_GetMultiplexedMsgSignalRow(
-    const std::vector<C_OscComMessageLoggerDataSignal> &orc_Signals,
+    const QList<C_OscComMessageLoggerDataSignal> &orc_Signals,
     const uint32_t ou32_SignalIndexToCheck, int32_t &ors32_SignalRow,
     int32_t &ors32_MultiplexedSignalRow) const {
   ors32_SignalRow = -1;
@@ -2705,8 +2705,8 @@ void C_CamMetTreeModel::mh_ApplyPreviousGreyOutInformation(
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_CamMetTreeModel::mh_CheckForFixByInsertingNewChild(
-    const std::vector<uint32_t> &orc_ExpectedVec,
-    const std::vector<uint32_t> &orc_CurrentVec, uint32_t &oru32_InsertAt,
+    const QList<uint32_t> &orc_ExpectedVec,
+    const QList<uint32_t> &orc_CurrentVec, uint32_t &oru32_InsertAt,
     uint32_t &oru32_InsertNum) {
   bool q_FixByInsertingNewChild = false;
 
@@ -2725,7 +2725,7 @@ bool C_CamMetTreeModel::mh_CheckForFixByInsertingNewChild(
       // If all valid, use last item
       oru32_InsertAt = orc_CurrentVec.size();
       oru32_InsertNum =
-          orc_ExpectedVec[static_cast<std::vector<uint32_t>::size_type>(
+          orc_ExpectedVec[static_cast<QList<uint32_t>::size_type>(
               orc_ExpectedVec.size() - 1UL)];
     }
     for (uint32_t u32_ItCurrent = 0;
@@ -2792,12 +2792,12 @@ void C_CamMetTreeModel::mh_CopyMessageWhileKeepingUniqueSignals(
     const C_CamMetTreeLoggerData &orc_NewMessage, const int32_t os32_MuxValue)
 
 {
-  std::vector<C_OscComMessageLoggerDataSignal> c_KeptSignals;
+  QList<C_OscComMessageLoggerDataSignal> c_KeptSignals;
 
   // Only if mux value valid there is a chance that some signals should be kept
   if (os32_MuxValue >= 0) {
     // Look for signals which might not be present in the new message
-    for (std::vector<C_OscComMessageLoggerDataSignal>::iterator c_ItSig =
+    for (QList<C_OscComMessageLoggerDataSignal>::iterator c_ItSig =
              orc_PreviousMessage.c_Signals.begin();
          c_ItSig != orc_PreviousMessage.c_Signals.end(); ++c_ItSig) {
       const C_OscComMessageLoggerDataSignal &rc_Sig = *c_ItSig;
@@ -2838,7 +2838,7 @@ void C_CamMetTreeModel::mh_CopyMessageWhileKeepingUniqueSignals(
   orc_PreviousMessage.c_Signals.reserve(orc_PreviousMessage.c_Signals.size() +
                                         c_KeptSignals.size());
   // Append left signals to merge
-  for (std::vector<C_OscComMessageLoggerDataSignal>::const_iterator c_ItSig =
+  for (QList<C_OscComMessageLoggerDataSignal>::const_iterator c_ItSig =
            c_KeptSignals.begin();
        c_ItSig != c_KeptSignals.end(); ++c_ItSig) {
     orc_PreviousMessage.c_Signals.push_back(*c_ItSig);
@@ -2857,10 +2857,10 @@ void C_CamMetTreeModel::mh_CopyMessageWhileKeepingUniqueSignals(
 */
 //----------------------------------------------------------------------------------------------------------------------
 uint32_t C_CamMetTreeModel::mh_TranslateTreeRowsToSignalIndex(
-    const std::vector<C_OscComMessageLoggerDataSignal> &orc_Signals,
+    const QList<C_OscComMessageLoggerDataSignal> &orc_Signals,
     const int32_t os32_SignalIndex, const int32_t os32_SignalIndexL2) {
   uint32_t u32_Retval = 0UL;
-  const std::vector<int32_t> c_Order =
+  const QList<int32_t> c_Order =
       C_CamMetUtil::h_GetMultiplexerOrder(orc_Signals);
   uint32_t u32_Counter = 0UL;
 
@@ -2970,7 +2970,7 @@ bool C_CamMetTreeModel::mh_IsMessageMultiplexed(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetTreeModel::mh_SortMultiplexedSignals(
-    std::vector<C_OscComMessageLoggerDataSignal> &orc_Signals) {
+    QList<C_OscComMessageLoggerDataSignal> &orc_Signals) {
   uint32_t u32_MultiplexerCounter = 0U;
   uint32_t u32_SignalCounter;
 

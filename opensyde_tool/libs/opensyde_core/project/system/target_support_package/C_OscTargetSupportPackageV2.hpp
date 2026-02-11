@@ -10,6 +10,7 @@
 #define C_OSCTARGETSUPPORTPACKAGEV2_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include <QString>
 #include "C_OscNodeCodeExportSettings.hpp"
 #include <QString>
@@ -47,7 +48,7 @@ public:
    C_OscTargetSupportPackageV2(void);
    QString c_DeviceName;              ///< name of device this package it intended for
    QString c_Comment;                 ///< comment about this package
-   std::vector<C_OscTspApplication> c_Applications; ///< applications contained in template package archive
+   QList<C_OscTspApplication> c_Applications; ///< applications contained in template package archive
 
    uint8_t u8_ApplicationIndex; ///< Which application is Diagnostic Protocol Driver assigned to?
    ///< zero based

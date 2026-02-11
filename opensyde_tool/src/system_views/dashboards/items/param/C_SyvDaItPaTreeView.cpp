@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Parameter tree view (implementation)
@@ -189,8 +189,8 @@ void C_SyvDaItPaTreeView::ReloadSetValues(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SyvDaItPaTreeView::CheckRange(
-    const std::vector<C_OscNodeDataPoolListElementId> &orc_ListIds,
-    const std::vector<C_OscNodeDataPoolListId> &orc_ListIds2) const {
+    const QList<C_OscNodeDataPoolListElementId> &orc_ListIds,
+    const QList<C_OscNodeDataPoolListId> &orc_ListIds2) const {
   return this->mc_Model.CheckRange(orc_ListIds, orc_ListIds2);
 }
 
@@ -213,7 +213,7 @@ bool C_SyvDaItPaTreeView::CheckAllListsRead(void) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeView::PrepareChangedValues(
-    const std::vector<C_OscNodeDataPoolListElementId> &orc_ListIds) const {
+    const QList<C_OscNodeDataPoolListElementId> &orc_ListIds) const {
   this->mc_Model.PrepareChangedValues(orc_ListIds);
 }
 
@@ -224,7 +224,7 @@ void C_SyvDaItPaTreeView::PrepareChangedValues(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeView::RemoveValuesChangedFlag(
-    const std::vector<C_OscNodeDataPoolListElementId> &orc_ListIds) const {
+    const QList<C_OscNodeDataPoolListElementId> &orc_ListIds) const {
   this->mc_Model.RemoveValuesChangedFlag(orc_ListIds);
 }
 
@@ -347,7 +347,7 @@ void C_SyvDaItPaTreeView::Init(
       }
     } else {
       // Initialize with default values
-      const std::vector<int32_t> c_Empty;
+      const QList<int32_t> c_Empty;
       this->SetColumnWidth(c_Empty);
     }
   }
@@ -368,8 +368,8 @@ void C_SyvDaItPaTreeView::UpdateEcuValues(void) {
    Current column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t> C_SyvDaItPaTreeView::GetCurrentColumnWidths(void) const {
-  std::vector<int32_t> c_Retval;
+QList<int32_t> C_SyvDaItPaTreeView::GetCurrentColumnWidths(void) const {
+  QList<int32_t> c_Retval;
   c_Retval.reserve(this->mc_Model.columnCount());
   for (int32_t s32_ItCol = 0L; s32_ItCol < this->mc_Model.columnCount();
        ++s32_ItCol) {
@@ -386,9 +386,9 @@ std::vector<int32_t> C_SyvDaItPaTreeView::GetCurrentColumnWidths(void) const {
    Current column position indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<int32_t>
+QList<int32_t>
 C_SyvDaItPaTreeView::GetCurrentColumnPositionIndices(void) const {
-  std::vector<int32_t> c_Retval;
+  QList<int32_t> c_Retval;
   c_Retval.reserve(this->mc_Model.columnCount());
   for (int32_t s32_ItCol = 0L; s32_ItCol < this->mc_Model.columnCount();
        ++s32_ItCol) {
@@ -404,7 +404,7 @@ C_SyvDaItPaTreeView::GetCurrentColumnPositionIndices(void) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeView::DeleteSpecified(
-    const std::vector<C_OscNodeDataPoolListElementId> &orc_ListIds) {
+    const QList<C_OscNodeDataPoolListElementId> &orc_ListIds) {
   this->mc_Model.DeleteSpecified(orc_ListIds);
   // Reload
   this->Init(this->mpc_DataWidget);
@@ -417,7 +417,7 @@ void C_SyvDaItPaTreeView::DeleteSpecified(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeView::SetColumnPositionIndices(
-    const std::vector<int32_t> &orc_NewColPositionIndices) {
+    const QList<int32_t> &orc_NewColPositionIndices) {
   this->mq_IgnoreChanges = true;
   if (orc_NewColPositionIndices.size() ==
       static_cast<uint32_t>(this->mc_Model.columnCount())) {
@@ -461,8 +461,8 @@ void C_SyvDaItPaTreeView::SetColumnPositionIndices(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeView::SetColumnWidth(
-    const std::vector<int32_t> &orc_NewColWidths) {
-  std::vector<int32_t> c_Copy = orc_NewColWidths;
+    const QList<int32_t> &orc_NewColWidths) {
+  QList<int32_t> c_Copy = orc_NewColWidths;
 
   this->mq_IgnoreChanges = true;
 
@@ -514,7 +514,7 @@ void C_SyvDaItPaTreeView::SetColumnWidth(
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SyvDaItPaTreeView::CheckListsRead(
-    const std::vector<C_OscNodeDataPoolListElementId> &orc_ListIds) const {
+    const QList<C_OscNodeDataPoolListElementId> &orc_ListIds) const {
   return this->mc_Model.CheckListsRead(orc_ListIds);
 }
 
@@ -525,9 +525,9 @@ bool C_SyvDaItPaTreeView::CheckListsRead(
    All expanded tree items
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_PuiSvDbExpandedTreeIndex>
+QList<C_PuiSvDbExpandedTreeIndex>
 C_SyvDaItPaTreeView::GetAllExpandedTreeItems(void) const {
-  std::vector<C_PuiSvDbExpandedTreeIndex> c_Retval;
+  QList<C_PuiSvDbExpandedTreeIndex> c_Retval;
   const QModelIndexList c_Indixes =
       this->mc_Model.GetAllAvailableIndixesForOneColumn();
   for (QModelIndexList::const_iterator c_ItList = c_Indixes.begin();
@@ -549,7 +549,7 @@ C_SyvDaItPaTreeView::GetAllExpandedTreeItems(void) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeView::SetAllExpandedTreeItems(
-    const std::vector<C_PuiSvDbExpandedTreeIndex> &orc_Items) {
+    const QList<C_PuiSvDbExpandedTreeIndex> &orc_Items) {
   this->mq_IgnoreChanges = true;
   this->collapseAll();
   for (uint32_t u32_ItItem = 0UL; u32_ItItem < orc_Items.size(); ++u32_ItItem) {
@@ -570,7 +570,7 @@ void C_SyvDaItPaTreeView::SetAllExpandedTreeItems(
    All list IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId>
+QList<stw::opensyde_core::C_OscNodeDataPoolListElementId>
 C_SyvDaItPaTreeView::GetAllListIds(void) const {
   return this->mc_Model.GetAllListIds();
 }
@@ -582,7 +582,7 @@ C_SyvDaItPaTreeView::GetAllListIds(void) const {
    All list IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId>
+QList<stw::opensyde_core::C_OscNodeDataPoolListElementId>
 C_SyvDaItPaTreeView::GetChangedListElementIds(void) const {
   return this->mc_Model.GetChangedListElementIds();
 }
@@ -594,7 +594,7 @@ C_SyvDaItPaTreeView::GetChangedListElementIds(void) const {
    All invalid list IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::vector<C_OscNodeDataPoolListId>
+QList<C_OscNodeDataPoolListId>
 C_SyvDaItPaTreeView::GetInvalidListIds() const {
   return this->mc_Model.GetInvalidListIds();
 }
@@ -620,7 +620,7 @@ void C_SyvDaItPaTreeView::SetCrcStatus(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaTreeView::GetListSetValues(
     const stw::opensyde_core::C_OscNodeDataPoolListElementId &orc_ListId,
-    std::vector<stw::opensyde_core::C_OscNodeDataPoolContent> &orc_ListValues)
+    QList<stw::opensyde_core::C_OscNodeDataPoolContent> &orc_ListValues)
     const {
   this->mc_Model.GetListSetValues(orc_ListId, orc_ListValues);
 }
@@ -793,7 +793,7 @@ void C_SyvDaItPaTreeView::m_HandleChange(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SyvDaItPaTreeView::m_ColumnsSortedAsExpected(
-    const std::vector<int32_t> &orc_NewColPositionIndices) const {
+    const QList<int32_t> &orc_NewColPositionIndices) const {
   bool q_Retval = true;
 
   if (orc_NewColPositionIndices.size() ==
@@ -873,7 +873,7 @@ void C_SyvDaItPaTreeView::m_HandleLinkClicked(const QModelIndex &orc_Index) {
 void C_SyvDaItPaTreeView::m_HandleActionRead(
     const C_OscNodeDataPoolListElementId &orc_Id,
     const uint32_t ou32_ValidLayers) {
-  const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId>
+  const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId>
       c_ListIds = this->mc_Model.GetListIdsForId(orc_Id, ou32_ValidLayers);
 
   // Force change of focus
@@ -892,7 +892,7 @@ void C_SyvDaItPaTreeView::m_HandleActionRead(
 void C_SyvDaItPaTreeView::m_HandleActionWrite(
     const C_OscNodeDataPoolListElementId &orc_Id,
     const uint32_t ou32_ValidLayers) {
-  const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId>
+  const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId>
       c_ListIds = this->mc_Model.GetListIdsForId(orc_Id, ou32_ValidLayers);
 
   // Force change of focus
@@ -911,10 +911,10 @@ void C_SyvDaItPaTreeView::m_HandleActionWrite(
 void C_SyvDaItPaTreeView::m_HandleActionApply(
     const C_OscNodeDataPoolListElementId &orc_Id,
     const uint32_t ou32_ValidLayers) {
-  const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId>
+  const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId>
       c_ListIds = this->mc_Model.GetListIdsForId(orc_Id, ou32_ValidLayers);
 
-  std::vector<C_OscNodeDataPoolListElementId> c_InvalidValueIds;
+  QList<C_OscNodeDataPoolListElementId> c_InvalidValueIds;
   QStringList c_InvalidValues;
   QStringList c_NewValues;
 
@@ -938,7 +938,7 @@ void C_SyvDaItPaTreeView::m_HandleActionApply(
 void C_SyvDaItPaTreeView::m_HandleActionLoad(
     const C_OscNodeDataPoolListElementId &orc_Id,
     const uint32_t ou32_ValidLayers) {
-  const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId>
+  const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId>
       c_ElementIds =
           this->mc_Model.GetElementIdsForId(orc_Id, ou32_ValidLayers);
 
@@ -958,7 +958,7 @@ void C_SyvDaItPaTreeView::m_HandleActionLoad(
 void C_SyvDaItPaTreeView::m_HandleActionSave(
     const C_OscNodeDataPoolListElementId &orc_Id,
     const uint32_t ou32_ValidLayers) {
-  const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId>
+  const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId>
       c_ElementIds = this->mc_Model.GetListIdsForId(orc_Id, ou32_ValidLayers);
 
   // Force change of focus
@@ -977,7 +977,7 @@ void C_SyvDaItPaTreeView::m_HandleActionSave(
 void C_SyvDaItPaTreeView::m_HandleActionRecord(
     const C_OscNodeDataPoolListElementId &orc_Id,
     const uint32_t ou32_ValidLayers) {
-  const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId>
+  const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId>
       c_ListIds = this->mc_Model.GetListIdsForId(orc_Id, ou32_ValidLayers);
 
   // Force change of focus
@@ -996,7 +996,7 @@ void C_SyvDaItPaTreeView::m_HandleActionRecord(
 void C_SyvDaItPaTreeView::m_HandleActionRemove(
     const C_OscNodeDataPoolListElementId &orc_Id,
     const uint32_t ou32_ValidLayers) {
-  const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementId>
+  const QList<stw::opensyde_core::C_OscNodeDataPoolListElementId>
       c_ListIds = this->mc_Model.GetListIdsForId(orc_Id, ou32_ValidLayers);
 
   // Force change of focus

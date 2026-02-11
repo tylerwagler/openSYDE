@@ -89,8 +89,8 @@ void C_CamDbOsy::SetData(
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamDbOsy::FindAllMessages(void) {
   if (this->mq_FoundAll == false) {
-    std::vector<uint32_t> c_NodeIndexes;
-    std::vector<uint32_t> c_InterfaceIndexes;
+    QList<uint32_t> c_NodeIndexes;
+    QList<uint32_t> c_InterfaceIndexes;
     C_CamDbOsyMessageId c_CurId;
     C_CamDbOsyListId c_CurListId;
 
@@ -217,8 +217,8 @@ int32_t C_CamDbOsy::FindMessageById(const uint32_t ou32_Id,
                                     QString &orc_Message) const {
   int32_t s32_Retval = C_NOACT;
 
-  std::vector<uint32_t> c_NodeIndexes;
-  std::vector<uint32_t> c_InterfaceIndexes;
+  QList<uint32_t> c_NodeIndexes;
+  QList<uint32_t> c_InterfaceIndexes;
 
   this->mc_Data.c_OsySysDef.GetNodeIndexesOfBus(
       this->mc_Data.u32_BusIndex, c_NodeIndexes, c_InterfaceIndexes);
@@ -298,8 +298,8 @@ int32_t C_CamDbOsy::FindMessage(const QString &orc_Message) {
       (this->mc_FoundMessagesListId.contains(orc_Message) == true)) {
     s32_Retval = C_NO_ERR;
   } else {
-    std::vector<uint32_t> c_NodeIndexes;
-    std::vector<uint32_t> c_InterfaceIndexes;
+    QList<uint32_t> c_NodeIndexes;
+    QList<uint32_t> c_InterfaceIndexes;
     C_CamDbOsyMessageId c_CurId;
     C_CamDbOsyListId c_CurListId;
 
@@ -475,7 +475,7 @@ const stw::opensyde_core::C_OscCanMessage *C_CamDbOsy::GetOscMessage(
                 pc_Protocol->c_ComMessages.size()) {
               const C_OscCanMessageContainer &rc_Container =
                   pc_Protocol->c_ComMessages[c_It->c_Id.u32_InterfaceIndex];
-              const std::vector<C_OscCanMessage> &rc_Messages =
+              const QList<C_OscCanMessage> &rc_Messages =
                   rc_Container.GetMessagesConst(c_It->c_Id.q_MessageIsTx);
               if (c_It->c_Id.u32_MessageIndex < rc_Messages.size()) {
                 pc_Retval = &rc_Messages[c_It->c_Id.u32_MessageIndex];

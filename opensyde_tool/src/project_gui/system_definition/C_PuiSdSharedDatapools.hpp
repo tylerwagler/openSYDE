@@ -12,7 +12,7 @@
 #define C_PUISDSHAREDDATAPOOLS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+#include <QList>
 #include <list>
 
 #include "stwtypes.hpp"
@@ -49,13 +49,13 @@ public:
    bool IsSharedDatapool(const stw::opensyde_core::C_OscNodeDataPoolId & orc_Datapool,
                          uint32_t * const opu32_SharedDatapoolGroup) const;
    int32_t GetSharedDatapoolGroup(const uint32_t ou32_SharedDatapoolGroup,
-                                  std::vector<stw::opensyde_core::C_OscNodeDataPoolId> & orc_SharedDatapoolGroup)
+                                  QList<stw::opensyde_core::C_OscNodeDataPoolId> & orc_SharedDatapoolGroup)
    const;
    bool IsSharedAndGetDatapoolGroup(const uint32_t ou32_SharedNodeIndex, const uint32_t ou32_SharedDatapoolIndex,
-                                    std::vector<stw::opensyde_core::C_OscNodeDataPoolId> & orc_SharedDatapoolGroup)
+                                    QList<stw::opensyde_core::C_OscNodeDataPoolId> & orc_SharedDatapoolGroup)
    const;
    bool IsSharedAndGetDatapoolGroup(const stw::opensyde_core::C_OscNodeDataPoolId & orc_Datapool,
-                                    std::vector<stw::opensyde_core::C_OscNodeDataPoolId> & orc_SharedDatapoolGroup)
+                                    QList<stw::opensyde_core::C_OscNodeDataPoolId> & orc_SharedDatapoolGroup)
    const;
 
    // Helper functions to adapt configuration on change of Datapool configuration in system definition
@@ -66,7 +66,7 @@ public:
                         const stw::opensyde_core::C_OscNodeDataPoolId & orc_TargetDatapool);
 
    // Each vector in the upper vector equals a connected group of shared datapools
-   std::vector<std::vector<stw::opensyde_core::C_OscNodeDataPoolId> > c_SharedDatapools;
+   QList<QList<stw::opensyde_core::C_OscNodeDataPoolId> > c_SharedDatapools;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

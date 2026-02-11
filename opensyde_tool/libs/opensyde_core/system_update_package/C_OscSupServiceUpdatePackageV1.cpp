@@ -16,6 +16,7 @@
 #include "precomp_headers.hpp"
 #include <QDir>
 #include <QFileInfo>
+#include <QList>
 
 #include "C_OscDeviceDefinition.hpp"
 #include "C_OscDeviceDefinitionFiler.hpp"
@@ -173,9 +174,9 @@ QString C_OscSupServiceUpdatePackageV1::
 int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
     const QString &orc_PackagePath,
     const C_OscSystemDefinition &orc_SystemDefinition,
-    const uint32_t ou32_ActiveBusIndex, const vector<uint8_t> &orc_ActiveNodes,
-    const vector<uint32_t> &orc_NodesUpdateOrder,
-    const vector<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+    const uint32_t ou32_ActiveBusIndex, const QByteArray &orc_ActiveNodes,
+    const QList<uint32_t> &orc_NodesUpdateOrder,
+    const QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
     QStringList &orc_WarningMessages, QString &orc_ErrorMessage,
     const bool oq_SaveInCompatibilityFormat, const bool oq_SaveAsFile,
     const QString &orc_TemporaryDirectory) {
@@ -194,7 +195,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
                                         // creating zip archive
   const QString c_TargetZipArchive = orc_PackagePath; // complete path of target
                                                       // zip archive
-  vector<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite =
+  QList<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite =
       orc_ApplicationsToWrite;  // paths of applications
   std::set<QString> c_SupFiles; // unique container with
                                 // relative file paths for zip
@@ -473,8 +474,8 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
 int32_t C_OscSupServiceUpdatePackageV1::h_ProcessPackage(
     const QString &orc_PackagePath, const QString &orc_TargetUnzipPath,
     C_OscSystemDefinition &orc_SystemDefinition, uint32_t &oru32_ActiveBusIndex,
-    vector<uint8_t> &orc_ActiveNodes, vector<uint32_t> &orc_NodesUpdateOrder,
-    vector<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+    QByteArray &orc_ActiveNodes, QList<uint32_t> &orc_NodesUpdateOrder,
+    QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
     QStringList &orc_WarningMessages, QString &orc_ErrorMessage,
     const bool oq_IsZip) {
   int32_t s32_Return = C_NO_ERR;
@@ -804,9 +805,9 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_CheckSupFiles(
 int32_t C_OscSupServiceUpdatePackageV1::mh_CheckParamsToCreatePackage(
     const QString &orc_PackagePath,
     const C_OscSystemDefinition &orc_SystemDefinition,
-    const uint32_t ou32_ActiveBusIndex, const vector<uint8_t> &orc_ActiveNodes,
-    const vector<uint32_t> &orc_NodesUpdateOrder,
-    const vector<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+    const uint32_t ou32_ActiveBusIndex, const QByteArray &orc_ActiveNodes,
+    const QList<uint32_t> &orc_NodesUpdateOrder,
+    const QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
     const bool oq_SaveAsFile) {
   int32_t s32_Return = C_NO_ERR;
 
@@ -1121,9 +1122,9 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_CreateDeviceIniFile(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageV1::mh_SupDefParamAdapter(
     const C_OscSystemDefinition &orc_SystemDefinition,
-    const uint32_t ou32_ActiveBusIndex, const vector<uint8_t> &orc_ActiveNodes,
-    const vector<uint32_t> &orc_NodesUpdateOrder,
-    const vector<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+    const uint32_t ou32_ActiveBusIndex, const QByteArray &orc_ActiveNodes,
+    const QList<uint32_t> &orc_NodesUpdateOrder,
+    const QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
     C_OscSupServiceUpdatePackageV1::C_SupDefContent &orc_SupDefContent) {
   int32_t s32_Return = C_NO_ERR;
   C_SupDefContent c_SupDefContent;
@@ -1219,7 +1220,7 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_SupDefParamAdapter(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageV1::mh_GetUpdatePositionOfNode(
-    const vector<uint32_t> &orc_NodesUpdateOrder,
+    const QList<uint32_t> &orc_NodesUpdateOrder,
     const uint32_t ou32_NodeForUpdate, uint32_t &oru32_UpdatePosition) {
   int32_t s32_Return = C_NOACT;
 
@@ -1250,7 +1251,7 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_GetUpdatePositionOfNode(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageV1::mh_SetNodesUpdateOrder(
     const map<uint32_t, uint32_t> &orc_UpdateOrderByNodes,
-    vector<uint32_t> &orc_NodesUpdateOrder) {
+    QList<uint32_t> &orc_NodesUpdateOrder) {
   int32_t s32_Return = 0;
 
   if (orc_UpdateOrderByNodes.size() == 0) {

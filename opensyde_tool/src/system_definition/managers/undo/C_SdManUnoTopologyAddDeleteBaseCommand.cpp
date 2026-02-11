@@ -61,7 +61,7 @@ using namespace stw::opensyde_core;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdManUnoTopologyAddDeleteBaseCommand::C_SdManUnoTopologyAddDeleteBaseCommand(QGraphicsScene * const opc_Scene,
-                                                                               const std::vector<uint64_t> & orc_Ids,
+                                                                               const QList<uint64_t> & orc_Ids,
                                                                                const QString & orc_Text,
                                                                                QUndoCommand * const opc_Parent,
                                                                                const C_SdTopologyDataSnapshot & orc_InitialSnapshotData)
@@ -312,7 +312,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::mh_SearchAndAddAllAffectedBusTextEl
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToData(void)
 {
-   const vector<QGraphicsItem *> c_RelatedItems = this->m_GetSceneItems();
+   const QList<QGraphicsItem *> c_RelatedItems = this->m_GetSceneItems();
    C_GiNode * pc_Node;
    C_GiLiBus * pc_Bus;
    C_GiLiBusConnector * pc_BusConnector;
@@ -328,7 +328,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToData(void)
    //Base elements
    m_StoreCommon(this->mc_DataBackup, this->mc_MapTypeAndIndexToId, C_PuiSdHandler::h_GetInstance()->c_Elements);
    //Other elements
-   for (vector<QGraphicsItem *>::const_iterator c_ItRelatedItem = c_RelatedItems.begin();
+   for (QList<QGraphicsItem *>::const_iterator c_ItRelatedItem = c_RelatedItems.begin();
         c_ItRelatedItem != c_RelatedItems.end(); ++c_ItRelatedItem)
    {
       pc_Unique = dynamic_cast<C_GiUnique *>(*c_ItRelatedItem);
@@ -408,7 +408,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToData(void)
             {
                const C_GiLiBus * pc_BusConst;
                const uint32_t u32_BackupBusConnectionIndex = this->mc_DataBackup.c_BusConnections.size();
-               this->mc_DataBackup.c_BusConnections.emplace_back(C_PuiSdCompleteBusConnectionData());
+               this->mc_DataBackup.c_BusConnections.emplaceBack(C_PuiSdCompleteBusConnectionData());
                {
                   C_PuiSdCompleteBusConnectionData & rc_CurBusConnectionBackupData =
                      this->mc_DataBackup.c_BusConnections[u32_BackupBusConnectionIndex];
@@ -558,7 +558,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_SaveToDataMultiNode(const uint32_
          u32_GroupIndex);
       if (pc_Group != NULL)
       {
-         const std::vector<uint32_t> c_Indices = C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
+         const QList<uint32_t> c_Indices = C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
             ou32_NodeIndex);
          C_OscNodeSquad c_Group = *pc_Group;
          c_Group.c_SubNodeIndexes.clear();
@@ -604,8 +604,8 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_Delete(void)
 
    if (pc_Scene != NULL)
    {
-      const vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
-      for (vector<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
+      const QList<QGraphicsItem *> c_Items = this->m_GetSceneItems();
+      for (QList<QGraphicsItem *>::const_iterator c_ItItem = c_Items.begin(); c_ItItem != c_Items.end(); ++c_ItItem)
       {
          pc_Scene->DeleteItem(*c_ItItem);
       }
@@ -618,14 +618,14 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_Delete(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenBeforeDelete() const
 {
-   const vector<QGraphicsItem *> c_RelatedItems = this->m_GetSceneItems();
+   const QList<QGraphicsItem *> c_RelatedItems = this->m_GetSceneItems();
    C_GiNode * pc_Node;
    const C_GiLiBus * pc_Bus;
    C_GiLiBusConnector * pc_BusConnector;
    C_PuiSdDataElement * pc_Data;
 
    //Other elements
-   for (vector<QGraphicsItem *>::const_iterator c_ItRelatedItem = c_RelatedItems.begin();
+   for (QList<QGraphicsItem *>::const_iterator c_ItRelatedItem = c_RelatedItems.begin();
         c_ItRelatedItem != c_RelatedItems.end(); ++c_ItRelatedItem)
    {
       const C_GiUnique * const pc_Unique = dynamic_cast<C_GiUnique *>(*c_ItRelatedItem);
@@ -720,19 +720,19 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenManagerBeforeDelete(
 
    if (pc_Node != NULL)
    {
-      std::vector<uint8_t> c_Tmp;
-      c_Tmp.reserve(pc_Node->c_CanOpenManagers.size());
+      QByteArray c_Tmp;
+      c_Tmp.reserve(static_cast<int>(pc_Node->c_CanOpenManagers.size()));
       for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
               pc_Node->c_CanOpenManagers.begin();
            c_ItManager != pc_Node->c_CanOpenManagers.end(); ++c_ItManager)
       {
-         c_Tmp.push_back(c_ItManager->first);
+         c_Tmp.append(static_cast<char>(c_ItManager->first));
       }
-      for (uint32_t u32_ItDelete = 0UL; u32_ItDelete < c_Tmp.size(); ++u32_ItDelete)
+      for (uint32_t u32_ItDelete = 0UL; u32_ItDelete < static_cast<uint32_t>(c_Tmp.size()); ++u32_ItDelete)
       {
          bool q_Tmp;
          Q_ASSERT(C_PuiSdHandler::h_GetInstance()->DeleteCanOpenManager(ou32_Index,
-                                                                          c_Tmp[u32_ItDelete], true,
+                                                                          static_cast<uint8_t>(c_Tmp[static_cast<int>(u32_ItDelete)]), true,
                                                                           q_Tmp) == C_NO_ERR);
       }
    }
@@ -755,7 +755,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenDeviceBeforeDelete(c
                  pc_Node->c_CanOpenManagers.begin();
               c_ItManager != pc_Node->c_CanOpenManagers.end(); ++c_ItManager)
          {
-            std::vector<C_OscCanInterfaceId> c_Tmp;
+            QList<C_OscCanInterfaceId> c_Tmp;
             for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
                     c_ItManager->second.c_CanOpenDevices.begin();
                  c_ItDevice != c_ItManager->second.c_CanOpenDevices.end(); ++c_ItDevice)
@@ -789,8 +789,8 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenBusBeforeDelete(cons
    {
       if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
       {
-         std::vector<uint32_t> c_NodeIndexes;
-         std::vector<uint32_t> c_InterfaceIndexes;
+         QList<uint32_t> c_NodeIndexes;
+         QList<uint32_t> c_InterfaceIndexes;
          C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeIndexesOfBus(ou32_Index, c_NodeIndexes,
                                                                                             c_InterfaceIndexes);
          Q_ASSERT(c_NodeIndexes.size() == c_InterfaceIndexes.size());
@@ -867,7 +867,7 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenDeviceNodeBusConnect
                  pc_Node->c_CanOpenManagers.begin();
               c_ItManager != pc_Node->c_CanOpenManagers.end(); ++c_ItManager)
          {
-            std::vector<C_OscCanInterfaceId> c_Tmp;
+            QList<C_OscCanInterfaceId> c_Tmp;
             for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
                     c_ItManager->second.c_CanOpenDevices.begin();
                  c_ItDevice != c_ItManager->second.c_CanOpenDevices.end(); ++c_ItDevice)

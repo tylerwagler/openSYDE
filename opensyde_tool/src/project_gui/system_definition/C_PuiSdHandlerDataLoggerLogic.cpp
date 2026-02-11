@@ -153,16 +153,16 @@ int32_t C_PuiSdHandlerDataLoggerLogic::AddDataLogger(const uint32_t ou32_NodeInd
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdHandlerDataLoggerLogic::DeleteMultipleDataLoggers(const uint32_t ou32_NodeIndex,
-                                                                 const std::vector<uint32_t> & orc_DataLoggerJobIndices)
+                                                                 const QList<uint32_t> & orc_DataLoggerJobIndices)
 {
    int32_t s32_Retval = C_NO_ERR;
 
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
-      const std::vector<uint32_t> c_DataLoggerJobIndicesSortedDescending = C_Uti::h_UniquifyAndSortDescending(
+      const QList<uint32_t> c_DataLoggerJobIndicesSortedDescending = C_Uti::h_UniquifyAndSortDescending(
          orc_DataLoggerJobIndices);
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      for (std::vector<uint32_t>::const_iterator c_It = c_DataLoggerJobIndicesSortedDescending.cbegin();
+      for (QList<uint32_t>::const_iterator c_It = c_DataLoggerJobIndicesSortedDescending.cbegin();
            c_It != c_DataLoggerJobIndicesSortedDescending.cend(); ++c_It)
       {
          if (*c_It < rc_Node.c_DataLoggerJobs.size())
@@ -586,7 +586,7 @@ int32_t C_PuiSdHandlerDataLoggerLogic::CheckAndHandleNewElement(const C_OscNodeD
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PuiSdHandlerDataLoggerLogic::h_RemoveAllIdsForInvalidRoutesForOneNode(const uint32_t ou32_Index,
-                                                                             std::vector<C_OscDataLoggerJob> & orc_Data)
+                                                                             QList<C_OscDataLoggerJob> & orc_Data)
 {
    bool q_Retval = false;
 

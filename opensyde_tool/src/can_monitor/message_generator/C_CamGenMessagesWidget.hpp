@@ -12,6 +12,7 @@
 #define C_CAMGENMESSAGESWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QList>
 #include "C_OgeWiOnlyBackground.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -40,7 +41,7 @@ public:
    void InitStaticNames(void) const;
    void SaveUserSettings(void) const;
    void LoadUserSettings(void) const;
-   void RemoveMessagesForFile(const QString & orc_File, const std::vector<uint32_t> * const opc_Indices) const;
+   void RemoveMessagesForFile(const QString & orc_File, const QList<uint32_t> * const opc_Indices) const;
    void SetCommunicationStarted(const bool oq_Online);
    bool CheckAndHandleKey(const QString & orc_Input) const;
    void UpdateMessageData(const uint32_t ou32_MessageIndex) const;

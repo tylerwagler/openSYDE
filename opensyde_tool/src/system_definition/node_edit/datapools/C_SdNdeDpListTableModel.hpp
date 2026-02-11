@@ -14,6 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QAbstractTableModel>
+#include <QList>
 #include "stwtypes.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 #include "C_PuiSdNodeDataPoolList.hpp"
@@ -77,19 +78,19 @@ public:
    Qt::DropActions supportedDropActions(void) const override;
 
    // Add data:
-   std::vector<std::vector<uint32_t> > DoInsertRows(
-      const std::vector<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscInsertedElements,
-      const std::vector<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_UiInsertedElements,
-      const std::vector<uint32_t> & orc_Rows);
+   QList<QList<uint32_t> > DoInsertRows(
+      const QList<stw::opensyde_core::C_OscNodeDataPoolListElement> & orc_OscInsertedElements,
+      const QList<stw::opensyde_gui_logic::C_PuiSdNodeDataPoolListElement> & orc_UiInsertedElements,
+      const QList<uint32_t> & orc_Rows);
    bool insertColumns(const int32_t os32_Col, const int32_t os32_Count,
                       const QModelIndex & orc_Parent = QModelIndex()) override;
    // Remove data:
-   void DoRemoveRows(const std::vector<uint32_t> & orc_Rows);
+   void DoRemoveRows(const QList<uint32_t> & orc_Rows);
    bool removeColumns(const int32_t os32_Col, const int32_t os32_Count,
                       const QModelIndex & orc_Parent = QModelIndex()) override;
 
    //Move data:
-   void DoMoveRows(const std::vector<uint32_t> & orc_SelectedIndices, const std::vector<uint32_t> & orc_TargetIndices);
+   void DoMoveRows(const QList<uint32_t> & orc_SelectedIndices, const QList<uint32_t> & orc_TargetIndices);
 
    E_Columns ColumnToEnum(const int32_t & ors32_Column, int32_t * const ops32_DataSetIndex = NULL) const;
    int32_t EnumToColumn(const E_Columns & ore_Value) const;
@@ -163,7 +164,7 @@ private:
       QVariant c_Unit;
 
       QFont c_DataSetFont; // For all data sets
-      std::vector<C_DpListTableDataSetData> c_DataSetData;
+      QList<C_DpListTableDataSetData> c_DataSetData;
 
       QVariant c_Access;
       QVariant c_AccessEdit;
@@ -185,7 +186,7 @@ private:
    uint32_t mu32_NodeIndex;
    uint32_t mu32_DataPoolIndex;
    uint32_t mu32_ListIndex;
-   std::vector<C_DpListTableData> mc_DpListInfoAll;
+   QList<C_DpListTableData> mc_DpListInfoAll;
    bool mq_DpIsSafety;
    C_SdNdeDpListTableErrorManager mc_ErrorManager;
 
@@ -199,7 +200,7 @@ private:
 
    bool m_CheckLink(const opensyde_core::C_OscNodeDataPoolListElement * const opc_OscElement) const;
    void m_OnErrorChange(void);
-   void m_MoveItems(const std::vector<uint32_t> & orc_ContiguousIndices, const uint32_t ou32_TargetIndex) const;
+   void m_MoveItems(const QList<uint32_t> & orc_ContiguousIndices, const uint32_t ou32_TargetIndex) const;
    void m_MoveItem(const uint32_t ou32_SourceIndex, const uint32_t ou32_TargetIndex) const;
    QString m_GetFloatAsString(const float64_t of64_Value);
 };

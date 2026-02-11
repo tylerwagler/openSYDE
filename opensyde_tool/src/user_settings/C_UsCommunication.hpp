@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
+#include <QList>
 
 #include "stwtypes.hpp"
 
@@ -32,10 +33,10 @@ class C_UsCommunication
 public:
    C_UsCommunication(void);
 
-   const std::vector<int32_t> & GetMessageOverviewColumnWidth(void) const;
-   const std::vector<int32_t> & GetSignalOverviewColumnWidth(void) const;
-   void SetMessageOverviewColumnWidth(const std::vector<int32_t> & orc_Value);
-   void SetSignalOverviewColumnWidth(const std::vector<int32_t> & orc_Value);
+   const QList<int32_t> & GetMessageOverviewColumnWidth(void) const;
+   const QList<int32_t> & GetSignalOverviewColumnWidth(void) const;
+   void SetMessageOverviewColumnWidth(const QList<int32_t> & orc_Value);
+   void SetSignalOverviewColumnWidth(const QList<int32_t> & orc_Value);
 
    void SetMessageSelected(const stw::opensyde_core::C_OscCanProtocol::E_Type oe_SelectedProtocol,
                            const bool oq_MessageSelected, const QString & orc_SelectedMessageName,
@@ -45,8 +46,8 @@ public:
                                QString & orc_SelectedSignalName) const;
 
 private:
-   std::vector<int32_t> mc_MessageOverviewColumnWidth;
-   std::vector<int32_t> mc_SignalOverviewColumnWidth;
+   QList<int32_t> mc_MessageOverviewColumnWidth;
+   QList<int32_t> mc_SignalOverviewColumnWidth;
    stw::opensyde_core::C_OscCanProtocol::E_Type me_SelectedProtocol;
    bool mq_MessageSelected;
    QString mc_SelectedMessageName;

@@ -44,7 +44,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SebUnoBendPointBaseCommand::C_SebUnoBendPointBaseCommand(QGraphicsScene * const opc_Scene,
-                                                           const std::vector<uint64_t> & orc_Ids,
+                                                           const QList<uint64_t> & orc_Ids,
                                                            const QString & orc_Text, const QPointF & orc_ScenePosition,
                                                            QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, orc_Text, opc_Parent),
@@ -71,7 +71,7 @@ void C_SebUnoBendPointBaseCommand::m_DeleteBend(void)
 
    if (pc_Scene != NULL)
    {
-      vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
+      auto c_Items = this->m_GetSceneItems();
       for (uint32_t u32_ItItem = 0; u32_ItItem < c_Items.size(); ++u32_ItItem)
       {
          if (this->ms32_Index < 0)
@@ -96,7 +96,7 @@ void C_SebUnoBendPointBaseCommand::m_AddBend(void)
 
    if (pc_Scene != NULL)
    {
-      vector<QGraphicsItem *> c_Items = this->m_GetSceneItems();
+      auto c_Items = this->m_GetSceneItems();
       for (uint32_t u32_ItItem = 0; u32_ItItem < c_Items.size(); ++u32_ItItem)
       {
          if (this->ms32_Index < 0)

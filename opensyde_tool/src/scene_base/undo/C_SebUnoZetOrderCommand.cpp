@@ -45,13 +45,13 @@ using namespace stw::opensyde_gui_logic;
    \param[in,out] opc_Parent     Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SebUnoZetOrderCommand::C_SebUnoZetOrderCommand(QGraphicsScene * const opc_Scene, const vector<uint64_t> & orc_Ids,
-                                                 const vector<float64_t> & orc_NewZetValues,
+C_SebUnoZetOrderCommand::C_SebUnoZetOrderCommand(QGraphicsScene * const opc_Scene, const QList<uint64_t> & orc_Ids,
+                                                 const QList<float64_t> & orc_NewZetValues,
                                                  QUndoCommand * const opc_Parent) :
    C_SebUnoBaseCommand(opc_Scene, orc_Ids, "Reorder drawing element(s)", opc_Parent),
    mc_NewZetValues(orc_NewZetValues)
 {
-   vector<QGraphicsItem *> c_AffectedItems = this->m_GetSceneItems();
+   auto c_AffectedItems = this->m_GetSceneItems();
    if (c_AffectedItems.size() == this->mc_NewZetValues.size())
    {
       this->mc_OldZetValues.resize(this->mc_NewZetValues.size());
@@ -127,9 +127,9 @@ void C_SebUnoZetOrderCommand::h_AdaptZetOrder(const QGraphicsScene * const opc_S
    \param[in] orc_Values New Z values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SebUnoZetOrderCommand::m_ApplyZetValues(const std::vector<float64_t> & orc_Values) const
+void C_SebUnoZetOrderCommand::m_ApplyZetValues(const QList<float64_t> & orc_Values) const
 {
-   const vector<QGraphicsItem *> c_AffectedItems = this->m_GetSceneItems();
+   const auto c_AffectedItems = this->m_GetSceneItems();
 
    if (c_AffectedItems.size() == orc_Values.size())
    {

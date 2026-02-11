@@ -176,7 +176,7 @@ void C_SebTopologyBaseScene::m_LoadProject(void)
 void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndices,
                                           const QVector<uint32_t> & orc_BusIndices,
                                           const QVector<uint32_t> & orc_OtherStartIndices, const bool & orq_Selection,
-                                          const std::vector<C_PuiSdCompleteBusConnectionData> * const opc_AdditionalConnectionData,
+                                          const QList<C_PuiSdCompleteBusConnectionData> * const opc_AdditionalConnectionData,
                                           const QMap<C_PuiBsTemporaryDataId, uint64_t> * const opc_IdMap)
 {
    //Load
@@ -184,7 +184,7 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
    uint32_t u32_CurIndex;
    C_GiNode * pc_Node;
 
-   std::vector<C_GiLiBus *> c_GraphicsBuses;
+   QList<C_GiLiBus *> c_GraphicsBuses;
    C_GiLiBus * pc_BusReferenced;
    const C_OscNode * pc_OscNodeData;
    C_GiLiBus * pc_Bus;
@@ -281,7 +281,7 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
          pc_OscNodeData = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_CurIndex);
          if ((pc_UiNodeData != NULL) && (pc_OscNodeData != NULL))
          {
-            const std::vector<C_PuiSdNodeConnection> c_UiBusConnections = pc_UiNodeData->c_UiBusConnections;
+            const QList<C_PuiSdNodeConnection> c_UiBusConnections = pc_UiNodeData->c_UiBusConnections;
             //create
             pc_Node = this->m_CreateNode(u32_CurIndex, u64_CurUniqueId, pc_UiNodeData->f64_Width,
                                          pc_UiNodeData->f64_Height,
@@ -378,10 +378,10 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
                 true)
             {
                const uint32_t u32_NodeIndex = static_cast<uint32_t>(pc_Node->GetIndex());
-               const std::vector<uint32_t> c_NodeIndices =
+               const QList<uint32_t> c_NodeIndices =
                   C_PuiSdHandler::h_GetInstance()->GetAllNodeGroupIndicesUsingNodeIndex(
                      u32_NodeIndex);
-               std::vector<C_PuiSdNodeInterfaceAutomaticProperties> c_Properties;
+               QList<C_PuiSdNodeInterfaceAutomaticProperties> c_Properties;
                C_PuiSdUtil::h_GetInterfaceDataForNode(u32_NodeIndex, c_CompleteBusConnectionData.c_ConnectionId,
                                                       c_Properties);
                if (c_Properties.size() == c_NodeIndices.size())
@@ -511,7 +511,7 @@ void C_SebTopologyBaseScene::m_LoadSubset(const QVector<uint32_t> & orc_NodeIndi
 uint64_t C_SebTopologyBaseScene::m_GetNewUniqueBusConnectorId(const QMap<C_PuiBsTemporaryDataId,
                                                                          uint64_t> * const opc_IdMap,
                                                               const uint32_t & oru32_Index,
-                                                              const std::vector<C_PuiSdCompleteBusConnectionData> * const opc_AdditionalConnectionData)
+                                                              const QList<C_PuiSdCompleteBusConnectionData> * const opc_AdditionalConnectionData)
 {
    uint64_t u64_Retval;
 

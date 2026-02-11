@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
    \brief       Widget for title, about and help elements
@@ -528,7 +528,7 @@ void C_CamTitleBarWidget::m_OnRecentProjectSelected(const QAction * const opc_Ac
 void C_CamTitleBarWidget::m_RemapOnSaveAs(const QString & orc_NewFileName) const
 {
    // iterate over all databases
-   std::vector<C_CamProDatabaseData> c_Databases = C_CamProHandler::h_GetInstance()->GetDatabases();
+   QList<C_CamProDatabaseData> c_Databases = C_CamProHandler::h_GetInstance()->GetDatabases();
    for (uint32_t u32_Pos = 0; u32_Pos < c_Databases.size(); u32_Pos++)
    {
       C_CamProDatabaseData & rc_Database = c_Databases[u32_Pos];

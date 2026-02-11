@@ -15,6 +15,7 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QList>
 #include "C_Can.hpp"
 #include "C_OscIpDispatcherWinSock.hpp"
 #include "C_OscSecurityPemDatabase.hpp"
@@ -49,14 +50,14 @@ public:
   void CloseDispatcher(void);
   int32_t
   SyvUpCreateTemporaryFolder(const QString &orc_TargetPath,
-                             std::vector<C_DoFlash> &orc_ApplicationsToWrite,
+                             QList<C_DoFlash> &orc_ApplicationsToWrite,
                              QString &orc_ErrorPath) const;
 
   int32_t StartActivateFlashloader(void);
   int32_t StartReadDeviceInformation(void);
   int32_t
-  StartUpdateSystem(const std::vector<C_DoFlash> &orc_ApplicationsToWrite,
-                    const std::vector<uint32_t> &orc_NodesOrder);
+  StartUpdateSystem(const QList<C_DoFlash> &orc_ApplicationsToWrite,
+                    const QList<uint32_t> &orc_NodesOrder);
   int32_t StartResetSystem(void);
 
   int32_t GetResults(int32_t &ors32_Result) const;
@@ -64,11 +65,11 @@ public:
                                 uint32_t &oru32_FileIndex) const;
 
   void GetOsyDeviceInformation(
-      std::vector<uint32_t> &orc_OsyNodeIndexes,
-      std::vector<C_OsyDeviceInformation> &orc_OsyDeviceInformation);
+      QList<uint32_t> &orc_OsyNodeIndexes,
+      QList<C_OsyDeviceInformation> &orc_OsyDeviceInformation);
   void GetXflDeviceInformation(
-      std::vector<uint32_t> &orc_XflNodeIndexes,
-      std::vector<C_XflDeviceInformation> &orc_XflDeviceInformation);
+      QList<uint32_t> &orc_XflNodeIndexes,
+      QList<C_XflDeviceInformation> &orc_XflDeviceInformation);
   QString GetStepName(const E_ProgressStep oe_Step) const;
 
   void AbortCurrentProgress(void);
@@ -82,10 +83,10 @@ public:
   };
 
   int32_t GetConnectStates(
-      std::vector<stw::opensyde_core::C_OscSuSequencesNodeConnectStates>
+      QList<stw::opensyde_core::C_OscSuSequencesNodeConnectStates>
           &orc_ConnectStatesNodes) const override;
   int32_t GetUpdateStates(
-      std::vector<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates>
+      QList<stw::opensyde_core::C_OscSuSequencesNodeUpdateStates>
           &orc_UpdateStatesNodes) const override;
 
   // The signals keyword is necessary for Qt signal slot functionality
@@ -143,19 +144,19 @@ private:
   // Sequence execution parameter
   E_Sequence me_Sequence;
   // Input parameter for sequence
-  std::vector<C_DoFlash> mc_NodesToFlash;
-  std::vector<uint32_t> mc_NodesOrder;
+  QList<C_DoFlash> mc_NodesToFlash;
+  QList<uint32_t> mc_NodesOrder;
 
   // Service execution result
   int32_t ms32_Result;
 
   // results of openSYDE device information scans:
-  std::vector<uint32_t> mc_ReportOsyDeviceInformationNodeIndex;
-  std::vector<C_OsyDeviceInformation> mc_ReportOsyDeviceInformation;
+  QList<uint32_t> mc_ReportOsyDeviceInformationNodeIndex;
+  QList<C_OsyDeviceInformation> mc_ReportOsyDeviceInformation;
 
   // results of STW Flashloader device information scans:
-  std::vector<uint32_t> mc_ReportXflDeviceInformationNodeIndex;
-  std::vector<C_XflDeviceInformation> mc_ReportXflDeviceInformation;
+  QList<uint32_t> mc_ReportXflDeviceInformationNodeIndex;
+  QList<C_XflDeviceInformation> mc_ReportXflDeviceInformation;
 
   // Security PEM database
   stw::opensyde_core::C_OscSecurityPemDatabase mc_PemDatabase;

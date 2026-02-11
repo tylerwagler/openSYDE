@@ -18,6 +18,7 @@
 
 #include "C_Uti.hpp"
 #include <QLocale>
+#include <QList>
 #include <cmath>
 #include <limits>
 
@@ -191,7 +192,7 @@ int32_t C_SdNdeDpContentUtil::h_GetValueAsFloat64(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpContentUtil::h_GetValuesAsFloat64(
     const C_OscNodeDataPoolContent &orc_Content,
-    std::vector<float64_t> &orc_Output) {
+    QList<float64_t> &orc_Output) {
   float64_t f64_Value = 0.0;
 
   orc_Output.clear();
@@ -1136,7 +1137,7 @@ int32_t C_SdNdeDpContentUtil::h_GetMinimalTypeAfterScaling(
     const C_OscNodeDataPoolContent &orc_Min,
     const C_OscNodeDataPoolContent &orc_Max, const float64_t of64_Factor,
     const float64_t of64_Offset,
-    std::vector<C_OscNodeDataPoolContent::E_Type> &orc_Types) {
+    QList<C_OscNodeDataPoolContent::E_Type> &orc_Types) {
   int32_t s32_Retval = C_NO_ERR;
 
   orc_Types.clear();
@@ -1163,8 +1164,8 @@ int32_t C_SdNdeDpContentUtil::h_GetMinimalTypeAfterScaling(
         orc_Types.push_back(C_OscNodeDataPoolContent::eFLOAT64);
       }
     } else {
-      std::vector<float64_t> c_Min;
-      std::vector<float64_t> c_Max;
+      QList<float64_t> c_Min;
+      QList<float64_t> c_Max;
       // Scale min & max
       C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_Min, c_Min);
       C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_Max, c_Max);
@@ -2191,7 +2192,7 @@ QVariant C_SdNdeDpContentUtil::h_ConvertScaledContentToGeneric(
         orc_Input, oru32_Index, os32_Role);
   } else {
     QString c_Precison;
-    std::vector<float64_t> c_Values;
+    QList<float64_t> c_Values;
     C_SdNdeDpContentUtil::h_GetValuesAsFloat64(orc_Input, c_Values);
     if (oru32_Index < c_Values.size()) {
       const float64_t f64_ScaledValue =
@@ -2829,7 +2830,7 @@ QString C_SdNdeDpContentUtil::h_ConvertToString(
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString
-C_SdNdeDpContentUtil::h_ConvertToString(const std::vector<int8_t> &orc_Data) {
+C_SdNdeDpContentUtil::h_ConvertToString(const QList<int8_t> &orc_Data) {
   QString c_Retval = "";
 
   // Each element is an character

@@ -13,6 +13,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include <vector>
+#include <QList>
 
 #include <QString>
 #include <QStringList>
@@ -44,7 +45,7 @@ protected:
       const QStringList &orc_SettingsWithoutComments) = 0;
   static int32_t mh_ReplaceSettings(
       const QString &orc_Path,
-      const std::vector<std::pair<QString, QString>> &orc_Configs);
+      const QList<std::pair<QString, QString>> &orc_Configs);
 
   QString mc_ConfigFilePath; // path where the config file was loaded from
 };

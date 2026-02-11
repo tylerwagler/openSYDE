@@ -253,14 +253,14 @@ C_OscSecurityEcdsa::~C_OscSecurityEcdsa()
    \retval   C_RANGE    Could not parse key from certificate
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(const std::vector<uint8_t> & orc_X509, uint8_t(
+int32_t C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(const QByteArray & orc_X509, uint8_t(
                                                                      &orau8_Binary)[C_OscSecurityEcdsa::hu32_SECP256R1_PUBLIC_KEY_LENGTH])
 {
    int32_t s32_Result = C_RANGE;
 
    if (orc_X509.size() != 0)
    {
-      const uint8_t * pu8_KeyData = &orc_X509[0];
+      const uint8_t * pu8_KeyData = reinterpret_cast<const uint8_t*>(orc_X509.data());
       //Convert the binary key data to X509 certificate format:
       X509 * const pc_X509Data = d2i_X509(NULL, &pu8_KeyData,
                                           static_cast<long>(orc_X509.size())); //lint !e970 //using type to match
@@ -281,7 +281,7 @@ int32_t C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(const std::vec
                EC_POINT * const pc_PublicKey = EC_POINT_new(pc_EcGroup);
                if (pc_PublicKey != NULL)
                {
-                  std::vector<uint8_t> c_PublicKeyOctets;
+                  QByteArray c_PublicKeyOctets;
                   size_t x_NumBytesPublicKey; //lint !e970 !e8080 //use API type
 
                   //get public key as octet string
@@ -299,7 +299,7 @@ int32_t C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(const std::vec
                      c_PublicKeyOctets.resize(x_NumBytesPublicKey);
                      x_ResultGetPublicKey =  EVP_PKEY_get_octet_string_param(pc_EvpKey,
                                                                              OSSL_PKEY_PARAM_PUB_KEY,
-                                                                             &c_PublicKeyOctets[0],
+                                                                             reinterpret_cast<uint8_t*>(c_PublicKeyOctets.data()),
                                                                              c_PublicKeyOctets.size(),
                                                                              &x_NumBytesPublicKey);
                   }
@@ -307,7 +307,7 @@ int32_t C_OscSecurityEcdsa::h_ExtractPublicKeyFromX509Certificate(const std::vec
                   {
                      //convert from octet string to EC_POINT
                      const int x_ResultOct2Point = //lint !e970 !e8080 //use API type
-                                                   EC_POINT_oct2point(pc_EcGroup, pc_PublicKey, &c_PublicKeyOctets[0],
+                                                   EC_POINT_oct2point(pc_EcGroup, pc_PublicKey, reinterpret_cast<uint8_t*>(c_PublicKeyOctets.data()),
                                                                       x_NumBytesPublicKey, NULL);
                      if (x_ResultOct2Point == 1)
                      {

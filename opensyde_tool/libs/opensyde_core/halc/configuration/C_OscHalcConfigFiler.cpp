@@ -564,7 +564,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoDomains(const C_OscHalcConfig & orc_IoDat
    C_CONFIG   data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler::mh_SaveIoChannels(const std::vector<C_OscHalcConfigChannel> & orc_Channels,
+int32_t C_OscHalcConfigFiler::mh_SaveIoChannels(const QList<C_OscHalcConfigChannel> & orc_Channels,
                                                 C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -630,7 +630,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoChannel(const C_OscHalcConfigChannel & or
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_SaveIoParameterStructs(
-   const std::vector<C_OscHalcConfigParameterStruct> & orc_ParameterStructs, C_OscXmlParserBase & orc_XmlParser,
+   const QList<C_OscHalcConfigParameterStruct> & orc_ParameterStructs, C_OscXmlParserBase & orc_XmlParser,
    const QString & orc_NodeName)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -701,7 +701,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoParameterStruct(const C_OscHalcConfigPara
    C_CONFIG   data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler::mh_SaveIoParameters(const std::vector<C_OscHalcConfigParameter> & orc_Parameters,
+int32_t C_OscHalcConfigFiler::mh_SaveIoParameters(const QList<C_OscHalcConfigParameter> & orc_Parameters,
                                                   C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -783,9 +783,9 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoParameter(const C_OscHalcConfigParameter 
    }
    if (s32_Retval == C_NO_ERR)
    {
-      const std::vector<std::pair<QString,
+      const QList<std::pair<QString,
                                   C_OscNodeDataPoolContent> > & rc_EnumItems = orc_Parameter.c_Value.GetEnumItems();
-      for (std::vector<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
+      for (QList<std::pair<QString, C_OscNodeDataPoolContent> >::const_iterator c_It =
               rc_EnumItems.begin();
            (c_It != rc_EnumItems.end()) && (s32_Retval == C_NO_ERR); ++c_It)
       {
@@ -801,7 +801,7 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoParameter(const C_OscHalcConfigParameter 
    }
    if (s32_Retval == C_NO_ERR)
    {
-      const std::vector<C_OscHalcDefContentBitmaskItem> & rc_BitmaskItems = orc_Parameter.c_Value.GetBitmaskItems();
+      const QList<C_OscHalcDefContentBitmaskItem> & rc_BitmaskItems = orc_Parameter.c_Value.GetBitmaskItems();
       for (uint32_t u32_ItBitMask = 0UL; u32_ItBitMask < rc_BitmaskItems.size(); ++u32_ItBitMask)
       {
          std::stringstream c_Mask;
@@ -1005,7 +1005,7 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoChannel(C_OscHalcConfigChannel & orc_IoCh
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler::mh_LoadIoParameterStructs(
-   std::vector<C_OscHalcConfigParameterStruct> & orc_ParameterStructs, C_OscXmlParserBase & orc_XmlParser,
+   QList<C_OscHalcConfigParameterStruct> & orc_ParameterStructs, C_OscXmlParserBase & orc_XmlParser,
    const QString & orc_NodeName)
 {
    int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("parameter-structs");
@@ -1105,7 +1105,7 @@ int32_t C_OscHalcConfigFiler::mh_LoadIoParameterStruct(C_OscHalcConfigParameterS
    C_CONFIG    HALC configuration content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler::mh_LoadIoParameters(std::vector<C_OscHalcConfigParameter> & orc_Parameters,
+int32_t C_OscHalcConfigFiler::mh_LoadIoParameters(QList<C_OscHalcConfigParameter> & orc_Parameters,
                                                   C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
