@@ -268,9 +268,9 @@ int32_t C_SyvComMessageMonitor::StartAddDbcFile(const QString &orc_PathDbc) {
 int32_t C_SyvComMessageMonitor::GetDbcFile(
     const QString &orc_PathDbc,
     C_CieConverter::C_CieCommDefinition &orc_DbcDefinition) {
-  int32_t s32_Return = C_RANGE;
+   int32_t s32_Return = C_RANGE;
 
-  std::map<QString, C_CieConverter::C_CieCommDefinition>::iterator c_ItDbc;
+   QHash<QString, C_CieConverter::C_CieCommDefinition>::iterator c_ItDbc;
 
   this->mc_CriticalSectionConfig.lock();
 
@@ -299,9 +299,9 @@ int32_t C_SyvComMessageMonitor::GetDbcFile(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComMessageMonitor::RemoveDatabase(const QString &orc_Path) {
-  int32_t s32_Return = C_NOACT;
+   int32_t s32_Return = C_NOACT;
 
-  std::map<QString, C_CieConverter::C_CieCommDefinition>::iterator c_ItDbc;
+   QHash<QString, C_CieConverter::C_CieCommDefinition>::iterator c_ItDbc;
 
   this->mc_CriticalSectionConfig.lock();
   c_ItDbc = this->mc_DbcFiles.find(orc_Path);
@@ -956,10 +956,10 @@ int32_t C_SyvComMessageMonitor::m_AddDbcFile(const QString &orc_PathDbc) {
 //----------------------------------------------------------------------------------------------------------------------
 const C_CieConverter::C_CieCanMessage *
 C_SyvComMessageMonitor::m_CheckDbcFile(const T_STWCAN_Msg_RX &orc_Msg) {
-  const C_CieConverter::C_CieCanMessage *pc_DbcMessage = NULL;
+   const C_CieConverter::C_CieCanMessage *pc_DbcMessage = NULL;
 
-  std::map<QString, C_CieConverter::C_CieCommDefinition>::const_iterator
-      c_ItDbc;
+   QHash<QString, C_CieConverter::C_CieCommDefinition>::const_iterator
+       c_ItDbc;
 
   this->mc_CriticalSectionConfig.lock();
 

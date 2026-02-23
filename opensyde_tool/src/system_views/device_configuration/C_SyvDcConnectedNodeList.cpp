@@ -286,9 +286,9 @@ QMimeData *C_SyvDcConnectedNodeList::mimeData(
               this->itemWidget(orc_Items[0]));
       if (pc_Widget != NULL) {
         QString c_StringSubNodeIdsToOldNodeIds;
-        const std::map<uint8_t, C_OscDcDeviceOldComConfig>
+        const QMap<uint8_t, C_OscDcDeviceOldComConfig>
             c_SubNodeIdsToOldNodeIds = pc_Widget->GetSubNodeIdsToOldNodeIds();
-        std::map<uint8_t, C_OscDcDeviceOldComConfig>::const_iterator c_ItIds;
+        QMap<uint8_t, C_OscDcDeviceOldComConfig>::const_iterator c_ItIds;
 
         pc_Retval->setData(
             C_SyvDcConnectedNodeList::mhc_MIME_DATA,
@@ -348,7 +348,7 @@ void C_SyvDcConnectedNodeList::m_Init(void) {
   uint32_t u32_ItData;
 
   QList<C_OscDcDeviceInformation> c_DataUnique;
-  QList<std::map<uint8_t, C_OscDcDeviceOldComConfig>>
+  QList<QMap<uint8_t, C_OscDcDeviceOldComConfig>>
       c_DataUniqueSubNodeIdsToOldNodeIds;
 
   // Init/Reinit UI
@@ -384,7 +384,7 @@ void C_SyvDcConnectedNodeList::m_Init(void) {
     }
 
     if (q_MatchingSubNodeFound == false) {
-      std::map<uint8_t, C_OscDcDeviceOldComConfig> c_SubNodeIdToNodeId;
+      QMap<uint8_t, C_OscDcDeviceOldComConfig> c_SubNodeIdToNodeId;
       C_OscDcDeviceOldComConfig c_OldComConfig;
       c_OldComConfig.SetContent(rc_Data.u8_NodeId, rc_Data.q_IpAddressValid,
                                 &rc_Data.au8_IpAddress[0]);
@@ -420,7 +420,7 @@ void C_SyvDcConnectedNodeList::m_Init(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcConnectedNodeList::m_AppendNode(
     const C_OscDcDeviceInformation &orc_Info,
-    const std::map<uint8_t, C_OscDcDeviceOldComConfig>
+    const QMap<uint8_t, C_OscDcDeviceOldComConfig>
         &orc_SubNodeIdsToOldNodeIds) {
   C_SyvDcConnectedNodeWidget *pc_Widget;
 

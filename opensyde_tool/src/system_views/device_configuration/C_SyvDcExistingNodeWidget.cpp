@@ -372,11 +372,11 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
 
          QString c_SerialNumberString;
          C_OscProtocolSerialNumber c_SerialNumber;
-         bool q_ExtFormat = false;
-         uint8_t u8_ManufacturerFormat = 0U;
-         bool q_SubNodeIdsToNodeIdsValid = false;
-         bool q_ErrorDetected = false;
-         std::map<uint8_t, C_OscDcDeviceOldComConfig> c_SubNodeIdsToOldNodeIds;
+          bool q_ExtFormat = false;
+          uint8_t u8_ManufacturerFormat = 0U;
+          bool q_SubNodeIdsToNodeIdsValid = false;
+          bool q_ErrorDetected = false;
+          QHash<uint8_t, C_OscDcDeviceOldComConfig> c_SubNodeIdsToOldNodeIds;
 
          //Connect new one
          if (pc_Mime->hasFormat(C_SyvDcExistingNodeWidget::mhc_MIME_DATA) == true)
@@ -508,7 +508,7 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
                         const uint32_t u32_CountSubNodes = pc_Squad->c_SubNodeIndexes.size();
                         if (u32_CountSubNodes == c_SubNodeIdsToOldNodeIds.size())
                         {
-                           std::map<uint8_t, C_OscDcDeviceOldComConfig>::const_iterator c_ItSubeNodeIds;
+                            QHash<uint8_t, C_OscDcDeviceOldComConfig>::const_iterator c_ItSubeNodeIds;
 
                            // Correct number of sub node ids
                            q_SubNodeIdsToNodeIdsValid = true;
@@ -710,7 +710,7 @@ void C_SyvDcExistingNodeWidget::m_OnDisconnectRequest(const C_OscProtocolSerialN
          if ((rc_CurInterface.GetBusConnected() == true) &&
              (rc_CurInterface.u32_BusIndex == ou32_ConnectedBusIndex))
          {
-            std::map<uint8_t, C_OscDcDeviceOldComConfig>::const_iterator c_ItOldNodeId;
+            QHash<uint8_t, C_OscDcDeviceOldComConfig>::const_iterator c_ItOldNodeId;
             // Set the sub node id. In case of a not multiple CPU it is always 0
             oc_NodeConfig.u8_SubNodeId = static_cast<uint8_t>(pc_Node->u32_SubDeviceIndex);
 

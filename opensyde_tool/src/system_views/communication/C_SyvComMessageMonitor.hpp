@@ -175,11 +175,11 @@ private:
   QList<stw::opensyde_core::C_OscComMessageLoggerData> mc_ReceivedMessages;
 
   uint8_t mu8_BusLoad;
-  uint32_t mu32_TxMessages;
-  uint32_t mu32_TxErrors;
+   uint32_t mu32_TxMessages;
+   uint32_t mu32_TxErrors;
 
-  // DBC files
-  std::map<QString, C_CieConverter::C_CieCommDefinition> mc_DbcFiles;
+   // DBC files
+   QHash<QString, C_CieConverter::C_CieCommDefinition> mc_DbcFiles;
 };
 
 /* -- Extern Global Variables
