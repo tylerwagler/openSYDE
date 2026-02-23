@@ -45,9 +45,7 @@ public:
                     QListWidgetItem * const opc_Item, const bool oq_ShowAssignment);
    bool CompareIndex(const uint32_t ou32_NodeIndex) const;
    void ConnectSerialNumber(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
-const QMap<uint8_t,
-                                           stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds)
-   const;
+                            const QHash<uint8_t, stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds) const;
    void DisconnectSerialNumber(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber) const;
    bool IsAssigned(void) const;
    void AppendDeviceConfig(QList<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_Configs) const;
@@ -89,9 +87,8 @@ private:
    int32_t m_Init(void);
    void m_OnDisconnectRequest(const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber);
    static void mh_AppendDeviceConfigForNode(const uint32_t ou32_NodeIndex, const uint32_t ou32_ConnectedBusIndex,
-                                            stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation oc_NodeConfig,
-const QMap<uint8_t,
-                                                           stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds, QList<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_Configs);
+                                             stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation oc_NodeConfig,
+                                             const QHash<uint8_t, stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds, QList<stw::opensyde_gui_logic::C_SyvDcDeviceConfiguation> & orc_Configs);
 
    //Avoid call
    C_SyvDcExistingNodeWidget(const C_SyvDcExistingNodeWidget &);

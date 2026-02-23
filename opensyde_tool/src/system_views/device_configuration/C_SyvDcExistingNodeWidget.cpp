@@ -153,9 +153,8 @@ bool C_SyvDcExistingNodeWidget::CompareIndex(const uint32_t ou32_NodeIndex) cons
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcExistingNodeWidget::ConnectSerialNumber(const C_OscProtocolSerialNumber & orc_SerialNumber,
-                                                    const std::map<uint8_t,
-                                                                   C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds)
-const
+                                                     const QHash<uint8_t, C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds)
+ const
 {
    this->mpc_Ui->pc_WidgetSerialNumber->SetContent(true, orc_SerialNumber, orc_SubNodeIdsToOldNodeIds);
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_WidgetSerialNumber, "Assigned", true);
@@ -169,7 +168,7 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcExistingNodeWidget::DisconnectSerialNumber(const C_OscProtocolSerialNumber & orc_SerialNumber) const
 {
-   const std::map<uint8_t, C_OscDcDeviceOldComConfig> c_EmptySubNodeIdsToOldNodeIds;
+   const QHash<uint8_t, C_OscDcDeviceOldComConfig> c_EmptySubNodeIdsToOldNodeIds;
 
    this->mpc_Ui->pc_WidgetSerialNumber->SetContent(false, orc_SerialNumber, c_EmptySubNodeIdsToOldNodeIds);
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_WidgetSerialNumber, "Assigned", false);
@@ -194,7 +193,7 @@ bool C_SyvDcExistingNodeWidget::IsAssigned(void) const
    \param[in,out] orc_Configs All configs
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDcExistingNodeWidget::AppendDeviceConfig(QList<C_SyvDcDeviceConfiguation> & orc_Configs) const
+   void C_SyvDcExistingNodeWidget::AppendDeviceConfig(QList<C_SyvDcDeviceConfiguation> & orc_Configs) const
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
 
@@ -202,7 +201,7 @@ void C_SyvDcExistingNodeWidget::AppendDeviceConfig(QList<C_SyvDcDeviceConfiguati
    {
       C_SyvDcDeviceConfiguation c_Config;
       C_OscProtocolSerialNumber c_SerialNumber;
-      std::map<uint8_t, C_OscDcDeviceOldComConfig> c_SubNodeIdsToOldNodeIds;
+      QHash<uint8_t, C_OscDcDeviceOldComConfig> c_SubNodeIdsToOldNodeIds;
 
       // Prepare the config for all sub nodes with the same serial number
       this->mpc_Ui->pc_WidgetSerialNumber->GetContent(c_SerialNumber, &c_SubNodeIdsToOldNodeIds);
@@ -397,91 +396,91 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
 
          if (pc_Mime->hasFormat(C_SyvDcExistingNodeWidget::mhc_MIME_DATA_SUB_NODE_IDS_TO_OLD_NODE_IDS) == true)
          {
-            // Get the mapping of sub node ids to the used old node id and if valid the old IP address of the node
-            const QString c_StringAllSubNodeIdsToOldNodeIds = pc_Mime->data(
-               C_SyvDcExistingNodeWidget::mhc_MIME_DATA_SUB_NODE_IDS_TO_OLD_NODE_IDS);
+         // Get the mapping of sub node ids to the used old node id and if valid the old IP address of the node
+             const QString c_StringAllSubNodeIdsToOldNodeIds = pc_Mime->data(
+                C_SyvDcExistingNodeWidget::mhc_MIME_DATA_SUB_NODE_IDS_TO_OLD_NODE_IDS);
 
-            // Parsing of the string. Building of this string is here: C_SyvDcConnectedNodeList::mimeData
-            const QStringList c_ListSubNodeIdsToOldNodeIds = c_StringAllSubNodeIdsToOldNodeIds.split(";",
-                                                                                                     Qt::SkipEmptyParts);
-            int32_t s32_Listcounter;
+             // Parsing of the string. Building of this string is here: C_SyvDcConnectedNodeList::mimeData
+             const QStringList c_ListSubNodeIdsToOldNodeIds = c_StringAllSubNodeIdsToOldNodeIds.split(";",
+                                                                                                      Qt::SkipEmptyParts);
+             int32_t s32_Listcounter;
 
-            for (s32_Listcounter = 0U; s32_Listcounter < c_ListSubNodeIdsToOldNodeIds.size(); ++s32_Listcounter)
-            {
-               const QStringList c_ListPair = c_ListSubNodeIdsToOldNodeIds.at(s32_Listcounter).split(",",
-                                                                                                     Qt::SkipEmptyParts);
+             for (s32_Listcounter = 0U; s32_Listcounter < c_ListSubNodeIdsToOldNodeIds.size(); ++s32_Listcounter)
+             {
+                const QStringList c_ListPair = c_ListSubNodeIdsToOldNodeIds.at(s32_Listcounter).split(",",
+                                                                                                      Qt::SkipEmptyParts);
 
-               if (c_ListPair.size() >= 3)
-               {
-                  bool q_SubNodeIdOk;
-                  bool q_OldNodeIdOk;
-                  bool q_IpAddressValidFlagOk;
-                  const uint8_t u8_SubNodeId = static_cast<uint8_t>(c_ListPair.at(0).toInt(&q_SubNodeIdOk));
-                  const uint8_t u8_OldNodeId = static_cast<uint8_t>(c_ListPair.at(1).toInt(&q_OldNodeIdOk));
-                  const uint8_t u8_IpAddressValid =
-                     static_cast<uint8_t>(c_ListPair.at(2).toInt(&q_IpAddressValidFlagOk));
-                  uint8_t au8_IpAddress[4];
+                if (c_ListPair.size() >= 3)
+                {
+                   bool q_SubNodeIdOk;
+                   bool q_OldNodeIdOk;
+                   bool q_IpAddressValidFlagOk;
+                   const uint8_t u8_SubNodeId = static_cast<uint8_t>(c_ListPair.at(0).toInt(&q_SubNodeIdOk));
+                   const uint8_t u8_OldNodeId = static_cast<uint8_t>(c_ListPair.at(1).toInt(&q_OldNodeIdOk));
+                   const uint8_t u8_IpAddressValid =
+                      static_cast<uint8_t>(c_ListPair.at(2).toInt(&q_IpAddressValidFlagOk));
+                   uint8_t au8_IpAddress[4];
 
-                  if ((q_SubNodeIdOk == true) && (q_OldNodeIdOk == true) && (q_IpAddressValidFlagOk == true))
-                  {
-                     C_OscDcDeviceOldComConfig c_OldComConfig;
-                     bool q_IpAddressValid = (u8_IpAddressValid > 0);
+                   if ((q_SubNodeIdOk == true) && (q_OldNodeIdOk == true) && (q_IpAddressValidFlagOk == true))
+                   {
+                      C_OscDcDeviceOldComConfig c_OldComConfig;
+                      bool q_IpAddressValid = (u8_IpAddressValid > 0);
 
-                     if (q_IpAddressValid == true)
-                     {
-                        if (c_ListPair.size() == 4)
-                        {
-                           const QStringList c_Ip = c_ListPair.at(3).split(":", Qt::SkipEmptyParts);
-                           if (c_Ip.size() == 4)
-                           {
-                              bool q_IpAddressOk;
-                              uint8_t u8_Counter;
+                      if (q_IpAddressValid == true)
+                      {
+                         if (c_ListPair.size() == 4)
+                         {
+                            const QStringList c_Ip = c_ListPair.at(3).split(":", Qt::SkipEmptyParts);
+                            if (c_Ip.size() == 4)
+                            {
+                               bool q_IpAddressOk;
+                               uint8_t u8_Counter;
 
-                              for (u8_Counter = 0U; u8_Counter < 4; ++u8_Counter)
-                              {
-                                 au8_IpAddress[u8_Counter] =
-                                    static_cast<uint8_t>(c_Ip.at(u8_Counter).toInt(&q_IpAddressOk));
-                                 if (q_IpAddressOk == false)
-                                 {
-                                    break;
-                                 }
-                              }
-                              if (q_IpAddressOk == false)
-                              {
-                                 Q_ASSERT(false);
-                                 q_IpAddressValid = false;
-                                 q_ErrorDetected = true;
-                              }
-                           }
-                           else
-                           {
-                              Q_ASSERT(false);
-                              q_IpAddressValid = false;
-                              q_ErrorDetected = true;
-                           }
-                        }
-                        else
-                        {
-                           Q_ASSERT(false);
-                           q_IpAddressValid = false;
-                           q_ErrorDetected = true;
-                        }
-                     }
+                               for (u8_Counter = 0U; u8_Counter < 4; ++u8_Counter)
+                               {
+                                  au8_IpAddress[u8_Counter] =
+                                     static_cast<uint8_t>(c_Ip.at(u8_Counter).toInt(&q_IpAddressOk));
+                                  if (q_IpAddressOk == false)
+                                  {
+                                     break;
+                                  }
+                               }
+                               if (q_IpAddressOk == false)
+                               {
+                                  Q_ASSERT(false);
+                                  q_IpAddressValid = false;
+                                  q_ErrorDetected = true;
+                               }
+                            }
+                            else
+                            {
+                               Q_ASSERT(false);
+                               q_IpAddressValid = false;
+                               q_ErrorDetected = true;
+                            }
+                         }
+                         else
+                         {
+                            Q_ASSERT(false);
+                            q_IpAddressValid = false;
+                            q_ErrorDetected = true;
+                         }
+                      }
 
-                     c_OldComConfig.SetContent(u8_OldNodeId, q_IpAddressValid, &au8_IpAddress[0]);
-                     c_SubNodeIdsToOldNodeIds[u8_SubNodeId] = c_OldComConfig;
-                  }
-                  else
-                  {
-                     q_ErrorDetected = true;
-                  }
-               }
-               else
-               {
-                  q_ErrorDetected = true;
-                  break;
-               }
-            }
+                      c_OldComConfig.SetContent(u8_OldNodeId, q_IpAddressValid, &au8_IpAddress[0]);
+                      c_SubNodeIdsToOldNodeIds.insert(u8_SubNodeId, c_OldComConfig);
+                   }
+                   else
+                   {
+                      q_ErrorDetected = true;
+                   }
+                }
+                else
+                {
+                   q_ErrorDetected = true;
+                   break;
+                }
+             }
 
             if (q_ErrorDetected == false)
             {
@@ -514,17 +513,17 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
                            // Correct number of sub node ids
                            q_SubNodeIdsToNodeIdsValid = true;
 
-                           // Cross check the sub node ids. All sub node ids must be smaller.
-                           for (c_ItSubeNodeIds = c_SubNodeIdsToOldNodeIds.begin();
-                                c_ItSubeNodeIds != c_SubNodeIdsToOldNodeIds.end(); ++c_ItSubeNodeIds)
-                           {
-                              if (c_ItSubeNodeIds->first >= u32_CountSubNodes)
-                              {
-                                 // Sub node ids must be in order and smaller than the number of sub nodes
-                                 q_SubNodeIdsToNodeIdsValid = false;
-                                 break;
-                              }
-                           }
+            // Cross check the sub node ids. All sub node ids must be smaller.
+                            for (c_ItSubeNodeIds = c_SubNodeIdsToOldNodeIds.constBegin();
+                                 c_ItSubeNodeIds != c_SubNodeIdsToOldNodeIds.constEnd(); ++c_ItSubeNodeIds)
+                            {
+                               if (c_ItSubeNodeIds.key() >= u32_CountSubNodes)
+                               {
+                                  // Sub node ids must be in order and smaller than the number of sub nodes
+                                  q_SubNodeIdsToNodeIdsValid = false;
+                                  break;
+                               }
+                            }
                         }
                      }
                   }
@@ -695,12 +694,10 @@ void C_SyvDcExistingNodeWidget::m_OnDisconnectRequest(const C_OscProtocolSerialN
    \param[in,out] orc_Configs                All configs
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDcExistingNodeWidget::mh_AppendDeviceConfigForNode(const uint32_t ou32_NodeIndex,
-                                                             const uint32_t ou32_ConnectedBusIndex,
-                                                             C_SyvDcDeviceConfiguation oc_NodeConfig,
-                                                             const std::map<uint8_t,
-                                                                            C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds,
-                                                             QList<C_SyvDcDeviceConfiguation> & orc_Configs)
+   void C_SyvDcExistingNodeWidget::mh_AppendDeviceConfigForNode(const uint32_t ou32_NodeIndex,
+                                                              const uint32_t ou32_ConnectedBusIndex,
+                                                              C_SyvDcDeviceConfiguation oc_NodeConfig,
+                                                              const QHash<uint8_t, stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds, QList<C_SyvDcDeviceConfiguation> & orc_Configs)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_NodeIndex);
 
@@ -717,11 +714,11 @@ void C_SyvDcExistingNodeWidget::mh_AppendDeviceConfigForNode(const uint32_t ou32
             // Set the sub node id. In case of a not multiple CPU it is always 0
             oc_NodeConfig.u8_SubNodeId = static_cast<uint8_t>(pc_Node->u32_SubDeviceIndex);
 
-            c_ItOldNodeId = orc_SubNodeIdsToOldNodeIds.find(oc_NodeConfig.u8_SubNodeId);
-            if (c_ItOldNodeId != orc_SubNodeIdsToOldNodeIds.end())
+            c_ItOldNodeId = orc_SubNodeIdsToOldNodeIds.constFind(oc_NodeConfig.u8_SubNodeId);
+            if (c_ItOldNodeId != orc_SubNodeIdsToOldNodeIds.constEnd())
             {
                // Set the old node id which is used of the node for first communication
-               oc_NodeConfig.c_OldComConfig = c_ItOldNodeId->second;
+               oc_NodeConfig.c_OldComConfig = c_ItOldNodeId.value();
             }
             else
             {
