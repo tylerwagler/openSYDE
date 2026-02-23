@@ -84,7 +84,7 @@ public:
    static const uint16_t hu16_FILE_VERSION_LATEST = hu16_FILE_VERSION_3;
 
 private:
-   static std::map<uint32_t, QString> mh_MapNodeIndicesToName(const QList<C_OscNode> & orc_Nodes);
+   static QHash<uint32_t, QString> mh_MapNodeIndicesToName(const QList<C_OscNode> & orc_Nodes);
    static int32_t mh_LoadSystemDefinitionProperties(C_OscSystemDefinition & orc_SystemDefinition,
                                                     C_OscXmlParserBase & orc_XmlParser);
    static void mh_SaveSystemDefinitionProperties(const C_OscSystemDefinition & orc_SystemDefinition,

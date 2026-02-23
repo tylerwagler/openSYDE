@@ -815,12 +815,12 @@ void C_OscSystemDefinitionFiler::h_SplitDeviceType(
    Mapping of node indices to name
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<uint32_t, QString> C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(
+QHash<uint32_t, QString> C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(
     const QList<C_OscNode> &orc_Nodes) {
-  std::map<uint32_t, QString> c_Retval;
+  QHash<uint32_t, QString> c_Retval;
   for (uint32_t u32_It = 0UL; u32_It < orc_Nodes.size(); ++u32_It) {
     const C_OscNode &rc_Node = orc_Nodes[u32_It];
-    c_Retval[u32_It] = rc_Node.c_Properties.c_Name;
+    c_Retval.insert(u32_It, rc_Node.c_Properties.c_Name);
   }
   return c_Retval;
 }
