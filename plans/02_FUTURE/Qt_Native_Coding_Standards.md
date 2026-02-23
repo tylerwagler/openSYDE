@@ -469,6 +469,34 @@ thread->start();
 
 ---
 
+## Formatting Standards
+
+### ✅ ALWAYS Run clang-format
+
+Before committing any code changes, **always run clang-format** to ensure consistent code style.
+
+```bash
+# Format a single file
+clang-format -i --style=file <file_path>
+
+# Check style without modifying (useful for CI)
+clang-format -n --style=file <file_path>
+```
+
+**Why?**
+- Maintains consistent code style across the codebase
+- Reduces git diff noise in commits
+- Follows project-defined formatting rules (see `.clang-format` in root)
+
+**When to run:**
+- Before every commit
+- After making any code changes
+- Before submitting pull requests
+
+**Note:** The project uses a `.clang-format` configuration file in the repository root. Always use `--style=file` to load the project settings.
+
+---
+
 ## Code Review Checklist
 
 ### For Reviewers
@@ -480,6 +508,7 @@ thread->start();
 - [ ] Are Qt signals/slots used for events?
 - [ ] Is Qt Model/View used for tables?
 - [ ] Are Qt properties used for configuration?
+- [ ] Was clang-format run before commit?
 
 ### For Authors
 
@@ -490,6 +519,7 @@ Before submitting code:
 - [ ] I used QSS for any styling needs
 - [ ] I used Qt signals/slots for events
 - [ ] I followed Qt naming conventions (camelCase for methods)
+- [ ] I ran clang-format before committing
 
 ---
 

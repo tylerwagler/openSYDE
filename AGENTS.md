@@ -25,6 +25,8 @@
 - Run clang-format: `clang-format -i --style=file <file_path>`
 - Check style with: `clang-format -n --style=file <file_path>`
 
+**IMPORTANT: Always run clang-format before committing code changes.**
+
 ## Code Style Guidelines
 
 ### Naming Conventions
