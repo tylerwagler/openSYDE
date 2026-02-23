@@ -40,7 +40,7 @@ public:
 
    QString c_SubDeviceName; ///< Name of sub device
 
-   std::map<QString, bool> c_ConnectedInterfaces;
+   QHash<QString, bool> c_ConnectedInterfaces;
 
    QStringList c_OtherAcceptedNames; ///< Other compatible names for this device
 

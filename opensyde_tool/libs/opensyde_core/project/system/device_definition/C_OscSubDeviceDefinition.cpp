@@ -187,10 +187,10 @@ bool C_OscSubDeviceDefinition::IsConnected(const C_OscSystemBus::E_Type oe_Type,
    const QString c_Interface = C_OscSubDeviceDefinition::h_GetInterfaceNameLower(oe_Type,
                                                                                  ou8_InterfaceNumber);
    {
-      const std::map<QString, bool>::const_iterator c_It = this->c_ConnectedInterfaces.find(c_Interface);
+      const QHash<QString, bool>::const_iterator c_It = this->c_ConnectedInterfaces.find(c_Interface);
       if (c_It != this->c_ConnectedInterfaces.end())
       {
-         q_Retval = c_It->second;
+         q_Retval = c_It.value();
       }
    }
 

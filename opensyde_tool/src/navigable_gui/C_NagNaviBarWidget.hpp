@@ -135,8 +135,8 @@ private:
    uint32_t mu32_ActiveIndex;
 
    // set to save information about changed elements
-   std::set<uint32_t> mc_SetChangedNodes;
-   std::set<uint32_t> mc_SetChangedBusses;
+   QSet<uint32_t> mc_SetChangedNodes;
+   QSet<uint32_t> mc_SetChangedBusses;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
