@@ -448,13 +448,13 @@ const C_OscCanOpenObjectData *C_OscImportEdsDcf::mh_GetCoObject(
 
   if (c_Element != orc_CoObjects.end()) {
     if (os32_SubIndex < 0) {
-      pc_Retval = &c_Element->second;
+       pc_Retval = &c_Element.value();
     } else {
-      const QHash<uint8_t, C_OscCanOpenObjectData>::const_iterator
-          c_SubElement = c_Element->second.c_SubObjects.find(
+       const QHash<uint8_t, C_OscCanOpenObjectData>::const_iterator
+           c_SubElement = c_Element.value().c_SubObjects.find(
               static_cast<uint8_t>(os32_SubIndex));
-      if (c_SubElement != c_Element->second.c_SubObjects.end()) {
-        pc_Retval = &c_SubElement->second;
+       if (c_SubElement != c_Element.value().c_SubObjects.end()) {
+         pc_Retval = &c_SubElement.value();
       }
     }
   }
@@ -503,7 +503,7 @@ int32_t C_OscImportEdsDcf::mh_ParseMessages(
            orc_CoObjects.begin();
        c_Element != orc_CoObjects.end(); ++c_Element) {
     // Main section
-    const C_OscCanOpenObjectData &rc_CoMessageMainObject = c_Element->second;
+     const C_OscCanOpenObjectData &rc_CoMessageMainObject = c_Element.value();
     // Check if relevant object
     if ((rc_CoMessageMainObject.u8_NumSubs != 255) &&
         ((rc_CoMessageMainObject.u16_Index >= ou32_StartingId) &&
@@ -520,9 +520,9 @@ int32_t C_OscImportEdsDcf::mh_ParseMessages(
               static_cast<uint16_t>(ou32_StartingId + u32_ItMessage));
       if (c_Object != orc_CoObjects.end()) {
       const QHash<uint8_t, C_OscCanOpenObjectData>::const_iterator
-            c_SubObject = c_Object->second.c_SubObjects.find(u8_CobIdSubIndex);
-        if (c_SubObject != c_Object->second.c_SubObjects.end()) {
-          pc_SubObject = &c_SubObject->second;
+            c_SubObject = c_Object.value().c_SubObjects.find(u8_CobIdSubIndex);
+        if (c_SubObject != c_Object.value().c_SubObjects.end()) {
+          pc_SubObject = &c_SubObject.value();
         }
       }
 

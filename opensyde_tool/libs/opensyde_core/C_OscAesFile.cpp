@@ -121,7 +121,7 @@ int32_t C_OscAesFile::h_EncryptFile(const QString &orc_Key,
 
     c_InputData.resize(static_cast<size_t>(u32_InputFileSize) + u8_Pkcs7Size);
 
-    if (!c_InputFile.open(QIODevice::ReadOnly | QIODevice::Binary)) {
+       if (!c_InputFile.open(QIODevice::ReadOnly)) {
       s32_Return = C_RD_WR;
     } else {
       // read file content
@@ -167,8 +167,7 @@ int32_t C_OscAesFile::h_EncryptFile(const QString &orc_Key,
 
         // save to output file:
         QFile c_OutputFile(orc_OutFilePath);
-        if (c_OutputFile.open(QIODevice::WriteOnly | QIODevice::Truncate |
-                              QIODevice::Binary)) {
+        if (c_OutputFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
           // lint -e{9176} //no problems as long as charn has the same size as
           // uint8; if not we'd be in deep !"=?&
           //  anyway
@@ -253,7 +252,7 @@ int32_t C_OscAesFile::h_DecryptFile(const QString &orc_Key,
     } else {
       c_InputData.resize(static_cast<size_t>(QFileInfo(orc_InFilePath).size()));
 
-      if (!c_InputFile.open(QIODevice::ReadOnly | QIODevice::Binary)) {
+    if (!c_InputFile.open(QIODevice::ReadOnly)) {
         s32_Return = C_RD_WR;
       } else {
         // read file content
@@ -296,8 +295,7 @@ int32_t C_OscAesFile::h_DecryptFile(const QString &orc_Key,
           } else {
             // save to output file:
             QFile c_OutputFile(orc_OutFilePath);
-            if (c_OutputFile.open(QIODevice::WriteOnly | QIODevice::Truncate |
-                                  QIODevice::Binary)) {
+            if (c_OutputFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
               // write without the PKCS#7 bytes:
               // lint -e{9176} //no problems as long as charn has the same size
               // as uint8; if not we'd be in deep

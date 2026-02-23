@@ -111,17 +111,13 @@ bool C_OscUtils::h_CheckValidCeName(const QString &orc_Name,
       // no automatic c string adaptation
       for (u32_Index = 0; u32_Index < orc_Name.length(); u32_Index++) {
         // first char of name
-        cn_Char = orc_Name[u32_Index];
+         const QChar cn_Char = orc_Name[u32_Index];
         // is alphanumeric and no underscore true or a number true -> invalid
         // name
 
-        // If the value of the character is not representable as unsigned char
-        // the behavior of isalnum is
-        //  undefined. So be as defensive as possible:
-        if ((static_cast<int8_t>(cn_Char) < 0) ||
-            (((std::isalnum(cn_Char) == 0) && (cn_Char != '_')) ||
-             (std::isdigit(orc_Name[0]) !=
-              0))) // ANSI compliant check
+        // Use Qt-native character classification
+        if ((!cn_Char.isLetterOrNumber() && (cn_Char != '_')) ||
+            (u32_Index == 0 && !cn_Char.isDigit()))) // Qt-compliant check
         {
           q_IsValid = false;
           break;
@@ -131,18 +127,14 @@ bool C_OscUtils::h_CheckValidCeName(const QString &orc_Name,
       // automatic c string adaptation
       for (u32_Index = 0; u32_Index < orc_Name.length(); u32_Index++) {
         // fist char of name
-        cn_Char = orc_Name[u32_Index];
+         const QChar cn_Char = orc_Name[u32_Index];
 
         // is alphanumeric true or no underscore and a number true -> invalid
         // name
 
-        // If the value of the character is not representable as unsigned char
-        // the the behavior of isalnum is
-        //  undefined. So be as defensive as possible:
-        if ((static_cast<int8_t>(cn_Char) < 0) ||
-            ((std::isalnum(cn_Char) == 0) &&
-             ((cn_Char != '_') || (std::isdigit(orc_Name[0]) !=
-                                   0)))) // ANSI compliant check
+        // Use Qt-native character classification
+        if ((!cn_Char.isLetterOrNumber() && (cn_Char != '_')) ||
+            (u32_Index == 0 && !cn_Char.isDigit()))) // Qt-compliant check
         {
           q_IsValid = false;
           break;
@@ -219,7 +211,7 @@ int32_t C_OscUtils::h_CreateFolderRecursively(const QString &orc_Folder) {
   const QString c_Path = orc_Folder;
 
   do {
-    x_CharIndex = c_Path.find_firstOf("\\/", x_CharIndex + 1);
+    x_CharIndex = c_Path.indexOf("\\/", x_CharIndex + 1);
 
     QString c_PartialPath = c_Path.left(x_CharIndex);
     s32_Return = QDir().mkpath(c_PartialPath) ? 0 : -1;
@@ -298,32 +290,41 @@ QString C_OscUtils::h_NiceifyStringForFileName(const QString &orc_String) {
   } else {
     for (uint32_t u32_Index = 0U; u32_Index < orc_String.length();
          u32_Index++) {
-      const char_t cn_Character = orc_String[u32_Index];
+       const QChar cn_Character = orc_String[u32_Index];
 
-      // If the value of the character is not representable as unsigned char the
-      // the behavior of isalnum is
-      //  undefined. So be as defensive as possible:
-      if ((static_cast<int8_t>(cn_Character) < 0) ||
-          ((std::isalnum(cn_Character) == 0) && (cn_Character != '_') &&
-           (cn_Character != '-') && (cn_Character != '(') &&
-           (cn_Character != ')') && (cn_Character != '{') &&
-           (cn_Character != '}') && (cn_Character != '$') &&
-           (cn_Character != '.') && (cn_Character != ' ') &&
-           (cn_Character != '%') && (cn_Character != '&') &&
-           (cn_Character != '!') && (cn_Character != '#') &&
-           (cn_Character != '+') && (cn_Character != ',') &&
-           (cn_Character != ';') && (cn_Character != '=') &&
-           (cn_Character != '@') && (cn_Character != '[') &&
-           (cn_Character != ']') && (cn_Character != '^') &&
-           (cn_Character != '\'') && (cn_Character != '~'))) {
-        c_Result += QString::number(static_cast<int>(cn_Character));
-      } else {
-        c_Result += cn_Character;
+       // Use Qt-native character classification
+       if (!cn_Character.isLetterOrNumber() &&
+           (cn_Character != '_') &&
+           (cn_Character != '-') &&
+           (cn_Character != '(') &&
+           (cn_Character != ')') &&
+           (cn_Character != '{') &&
+           (cn_Character != '}') &&
+           (cn_Character != '$') &&
+           (cn_Character != '.') &&
+           (cn_Character != ' ') &&
+           (cn_Character != '%') &&
+           (cn_Character != '&') &&
+           (cn_Character != '!') &&
+           (cn_Character != '#') &&
+           (cn_Character != '+') &&
+           (cn_Character != ',') &&
+           (cn_Character != ';') &&
+           (cn_Character != '=') &&
+           (cn_Character != '@') &&
+           (cn_Character != '[') &&
+           (cn_Character != ']') &&
+           (cn_Character != '^') &&
+           (cn_Character != '\'') &&
+           (cn_Character != '~')) {
+         c_Result += QString::number(static_cast<int>(cn_Character.unicode()));
+       } else {
+         c_Result += cn_Character;
 
-        if (cn_Character != ' ') {
-          q_Blank = false;
-        }
-      }
+         if (cn_Character != ' ') {
+           q_Blank = false;
+         }
+       }
     }
   }
 

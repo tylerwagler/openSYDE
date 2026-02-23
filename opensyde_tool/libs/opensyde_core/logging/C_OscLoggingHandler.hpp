@@ -90,8 +90,8 @@ public:
 
   // Utility functions
   static void h_Flush(void);
-  static std::string
-  h_UtilConvertDateTimeToString(const QDateTime &orc_DateTime);
+   static QString
+   h_UtilConvertDateTimeToString(const QDateTime &orc_DateTime);
 
 private:
   static bool mhq_WriteToFile;
@@ -105,7 +105,7 @@ private:
   static QString mhc_FileName;
   static QRecursiveMutex mhc_ConsoleCriticalSection;
   static QRecursiveMutex mhc_FileCriticalSection;
-  static std::ofstream mhc_File;
+   static QFile mhc_File;
 
   static void mh_WriteLog(const QString &orc_Type, const QString &orc_Activity,
                           const QString &orc_Message,
