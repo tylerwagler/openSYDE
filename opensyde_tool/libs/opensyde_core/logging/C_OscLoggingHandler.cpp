@@ -19,12 +19,11 @@
 #include "stwerrors.hpp"
 #include <QDateTime>
 #include <QDir>
+#include <QFile>
 #include <QFileInfo>
 #include <QMutexLocker>
-#include <cstdlib>
-#include <iomanip>
-#include <iostream>
-#include <sstream>
+#include <QString>
+#include <QTextStream>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -58,7 +57,7 @@ std::map<uint16_t, qint64> C_OscLoggingHandler::mhc_StartTimes =
 QString C_OscLoggingHandler::mhc_FileName = "";
 QRecursiveMutex C_OscLoggingHandler::mhc_ConsoleCriticalSection;
 QRecursiveMutex C_OscLoggingHandler::mhc_FileCriticalSection;
-std::ofstream C_OscLoggingHandler::mhc_File;
+QFile C_OscLoggingHandler::mhc_File;
 
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
@@ -313,7 +312,7 @@ void C_OscLoggingHandler::h_Flush(void) {
 
   // File
   if ((C_OscLoggingHandler::mhq_WriteToFile == true) &&
-      (C_OscLoggingHandler::mhc_File.is_open() == true)) {
+      C_OscLoggingHandler::mhc_File.isOpen()) {
     QMutexLocker c_Locker(&C_OscLoggingHandler::mhc_FileCriticalSection);
     C_OscLoggingHandler::mhc_File.flush();
   }
@@ -330,9 +329,9 @@ void C_OscLoggingHandler::h_Flush(void) {
    Formatted string
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::string C_OscLoggingHandler::h_UtilConvertDateTimeToString(
+QString C_OscLoggingHandler::h_UtilConvertDateTimeToString(
     const QDateTime &orc_DateTime) {
-  return orc_DateTime.toString("yyyy-MM-dd HH:mm:ss.zzz").toStdString();
+  return orc_DateTime.toString("yyyy-MM-dd HH:mm:ss.zzz");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -353,9 +352,9 @@ void C_OscLoggingHandler::mh_WriteLog(const QString &orc_Type,
                                       const QString &orc_Message,
                                       const char_t *const opcn_Class,
                                       const char_t *const opcn_Function) {
-  std::string c_DateTimeFormatted;
+  QString c_DateTimeFormatted;
   // C_TglDateTime removed
-  std::stringstream c_LogEntryStream;
+  QString c_LogEntry;
   QString c_Class;
   QString c_Function;
   QString c_CombinedClassAndFunction;
@@ -395,32 +394,24 @@ void C_OscLoggingHandler::mh_WriteLog(const QString &orc_Type,
   //[DATE/TIME] [TYPE_OF_REPORT (Info, Warning, Error)] [ACTIVITY]
   //[CLASS::FUNCTION] [MESSAGE] 2017-08-29 07:32:19.123      INFO       Startup
   // Main                            Application started.
-  c_LogEntryStream << &std::left << std::setw(25) << c_DateTimeFormatted;
-  c_LogEntryStream << &std::left << std::setw(7)
-                   << orc_Type.toUtf8().constData();
-  c_LogEntryStream << "  ";
-  c_LogEntryStream << &std::left << std::setw(26)
-                   << orc_Activity.toUtf8().constData();
-  c_LogEntryStream << "  ";
-  c_LogEntryStream << &std::left << std::setw(52)
-                   << c_CombinedClassAndFunction.toUtf8().constData();
-  c_LogEntryStream << "  ";
-  c_LogEntryStream << &std::left << orc_Message.toUtf8().constData()
-                   << &std::endl;
+  c_LogEntry = c_DateTimeFormatted.leftJustified(25, ' ') + " " +
+               orc_Type.leftJustified(7, ' ') + "  " +
+               orc_Activity.leftJustified(26, ' ') + "  " +
+               c_CombinedClassAndFunction.leftJustified(52, ' ') + "  " +
+               orc_Message + "\n";
 
   // Console
   if (C_OscLoggingHandler::mhq_WriteToConsole == true) {
     QMutexLocker c_Locker(&C_OscLoggingHandler::mhc_ConsoleCriticalSection);
-    std::cout << c_LogEntryStream.str();
+    std::cout << c_LogEntry.toUtf8().constData();
   }
 
   // File
   if ((C_OscLoggingHandler::mhq_WriteToFile == true) &&
-      (C_OscLoggingHandler::mhc_File.is_open() == true)) {
-    const std::string c_Message = c_LogEntryStream.str();
+      C_OscLoggingHandler::mhc_File.isOpen()) {
     QMutexLocker c_Locker(&C_OscLoggingHandler::mhc_FileCriticalSection);
 
-    C_OscLoggingHandler::mhc_File.write(c_Message.c_str(), c_Message.size());
+    C_OscLoggingHandler::mhc_File.write(c_LogEntry.toUtf8());
     if ((mhq_AutoFlushAllFile == true) ||
         ((C_OscLoggingHandler::mhq_AutoFlushWarningsAndErrorsFile == true) &&
          ((orc_Type == "WARNING") || (orc_Type == "ERROR")))) {
@@ -446,12 +437,11 @@ void C_OscLoggingHandler::mh_OpenFile(void) {
       QDir().mkpath(c_QFilePath);
     }
 
-    C_OscLoggingHandler::mhc_File.open(
-        C_OscLoggingHandler::mhc_FileName.toUtf8().constData(), std::ios::app);
-
-    // if opening the file fails then at least try to write an info to console
-    // once (if configured so)
-    if (C_OscLoggingHandler::mhc_File.is_open() == false) {
+    if (!C_OscLoggingHandler::mhc_File.open(C_OscLoggingHandler::mhc_FileName,
+                                            QIODevice::Append |
+                                                QIODevice::Text)) {
+      // if opening the file fails then at least try to write an info to console
+      // once (if configured so)
       if (C_OscLoggingHandler::mhq_LogInitErrorsToConsole == true) {
         const QString c_ErrorText = "Could not open log file \"" +
                                     C_OscLoggingHandler::mhc_FileName +
@@ -475,7 +465,7 @@ C_OscLoggingHandler::C_OscLoggingHandler(void) {}
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OscLoggingHandler::~C_OscLoggingHandler(void) {
-  if (C_OscLoggingHandler::mhc_File.is_open() == true) {
+  if (C_OscLoggingHandler::mhc_File.isOpen()) {
     C_OscLoggingHandler::mhc_File.close();
   }
 }

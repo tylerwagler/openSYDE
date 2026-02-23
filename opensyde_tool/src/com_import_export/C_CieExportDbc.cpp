@@ -46,7 +46,6 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
 
-
 /* -- Module Global Constants
  * ---------------------------------------------------------------------------------------
  */
@@ -66,7 +65,7 @@ QStringList
                                           // messages could not be exported
 QString C_CieExportDbc::mhc_ErrorMessage; // description of error which caused
                                           // the export to fail
-std::map<QString, QString>
+QHash<QString, QString>
     C_CieExportDbc::mhc_NodeMapping; // to receive niceified names after export
                                      // to DBC file
 bool C_CieExportDbc::mhq_ValidDbcExport = false; // for public getter functions
@@ -127,8 +126,7 @@ int32_t C_CieExportDbc::h_ExportNetwork(
   mhc_ExportStatistic.u32_NumOfSignals = 0;
 
   // check file path
-  if (QFileInfo(QFileInfo(orc_File).absolutePath()).isDir() ==
-      false) {
+  if (QFileInfo(QFileInfo(orc_File).absolutePath()).isDir() == false) {
     orc_ErrorMessage = "Path \"" + orc_File + "\" does not exist.";
     osc_write_log_warning("DBC file export", orc_ErrorMessage);
     s32_Return = C_CONFIG;
@@ -182,12 +180,19 @@ int32_t C_CieExportDbc::h_ExportNetwork(
 
   // save DBC export to file
   if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN)) {
-    std::ofstream c_File(orc_File.toStdString().c_str());
+    QFile c_File(orc_File);
 
-    if (c_File.is_open()) {
+    if (c_File.open(QIODevice::WriteOnly | QIODevice::Text)) {
       c_Message = "Saving network to file ...";
       osc_write_log_info("DBC file export", c_Message);
-      c_File << c_DbcNetwork;
+
+      // Convert Vector::DBC::Network to string for writing
+      std::ostringstream c_OStream;
+      c_OStream << c_DbcNetwork;
+      QString c_Content = QString::fromStdString(c_OStream.str());
+
+      c_File.write(c_Content.toUtf8());
+      c_File.close();
 
       // set status flag of this export
       mhq_ValidDbcExport = true;
@@ -218,8 +223,8 @@ int32_t C_CieExportDbc::h_ExportNetwork(
    C_NOACT      no valid export to DBC file executed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CieExportDbc::h_GetNodeMapping(
-    std::map<QString, QString> &orc_NodeMapping) {
+int32_t
+C_CieExportDbc::h_GetNodeMapping(std::map<QString, QString> &orc_NodeMapping) {
   int32_t s32_Return = C_NOACT;
 
   if (mhq_ValidDbcExport == true) {
@@ -290,8 +295,8 @@ int32_t C_CieExportDbc::mh_SetNodes(
       Vector::DBC::Node
           c_Node; // store name and comment, we have no attribute values
       c_Node.name = c_Name;
-      c_Node.comment =
-          mh_EscapeCriticalSymbols(c_Iter->c_Properties.c_Comment).toStdString();
+      c_Node.comment = mh_EscapeCriticalSymbols(c_Iter->c_Properties.c_Comment)
+                           .toStdString();
       // store current key value entry to map
       orc_DbcNodes.emplace(
           std::pair<std::string, Vector::DBC::Node>(c_Name, c_Node));
@@ -501,7 +506,8 @@ int32_t C_CieExportDbc::mh_SetSignals(
       // fill up receivers for signal
       for (const auto &rc_Node : orc_CieNodes) {
         const std::string c_NodeName =
-            mh_NiceifyStringForDbcSymbol(rc_Node.c_Properties.c_Name).toStdString();
+            mh_NiceifyStringForDbcSymbol(rc_Node.c_Properties.c_Name)
+                .toStdString();
         if (c_ReceiverNodes.find(c_NodeName) == c_ReceiverNodes.end()) {
           for (const auto &rc_Receiver : rc_Node.c_RxMessages) {
             // if we have the same message, then check if message is receiver of
@@ -684,7 +690,7 @@ int32_t C_CieExportDbc::mh_SetTransmission(
     Vector::DBC::Message &orc_DbcMessage) {
   int32_t s32_Return = C_NO_ERR;
   QString c_Message = "Setting transmission mode of message \"" +
-                          orc_Message.c_CanMessage.c_Name + "\"...";
+                      orc_Message.c_CanMessage.c_Name + "\"...";
 
   osc_write_log_info("DBC file export", c_Message);
 
@@ -740,36 +746,35 @@ int32_t C_CieExportDbc::mh_SetTransmission(
    \param[in,out]  orc_NewSymbols   symbol list to fill with standard entries
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CieExportDbc::mh_SetNewSymbols(
-    std::vector<std::string> &orc_NewSymbols) {
-  orc_NewSymbols.emplace_back("NS_DESC_");
-  orc_NewSymbols.emplace_back("CM_");
-  orc_NewSymbols.emplace_back("BA_DEF_");
-  orc_NewSymbols.emplace_back("BA_");
-  orc_NewSymbols.emplace_back("VAL_");
-  orc_NewSymbols.emplace_back("CAT_DEF_");
-  orc_NewSymbols.emplace_back("CAT_");
-  orc_NewSymbols.emplace_back("FILTER");
-  orc_NewSymbols.emplace_back("BA_DEF_DEF_");
-  orc_NewSymbols.emplace_back("EV_DATA_");
-  orc_NewSymbols.emplace_back("ENVVAR_DATA_");
-  orc_NewSymbols.emplace_back("SGTYPE_");
-  orc_NewSymbols.emplace_back("SGTYPE_VAL_");
-  orc_NewSymbols.emplace_back("BA_DEF_SGTYPE_");
-  orc_NewSymbols.emplace_back("BA_SGTYPE_");
-  orc_NewSymbols.emplace_back("SIG_TYPE_REF_");
-  orc_NewSymbols.emplace_back("VAL_TABLE_");
-  orc_NewSymbols.emplace_back("SIG_GROUP_");
-  orc_NewSymbols.emplace_back("SIG_VALTYPE_");
-  orc_NewSymbols.emplace_back("SIGTYPE_VALTYPE_");
-  orc_NewSymbols.emplace_back("BO_TX_BU_");
-  orc_NewSymbols.emplace_back("BA_DEF_REL_");
-  orc_NewSymbols.emplace_back("BA_REL_");
-  orc_NewSymbols.emplace_back("BA_DEF_DEF_REL_");
-  orc_NewSymbols.emplace_back("BU_SG_REL_");
-  orc_NewSymbols.emplace_back("BU_EV_REL_");
-  orc_NewSymbols.emplace_back("BU_BO_REL_");
-  orc_NewSymbols.emplace_back("SG_MUL_VAL_");
+void C_CieExportDbc::mh_SetNewSymbols(QList<QString> &orc_NewSymbols) {
+  orc_NewSymbols.append("NS_DESC_");
+  orc_NewSymbols.append("CM_");
+  orc_NewSymbols.append("BA_DEF_");
+  orc_NewSymbols.append("BA_");
+  orc_NewSymbols.append("VAL_");
+  orc_NewSymbols.append("CAT_DEF_");
+  orc_NewSymbols.append("CAT_");
+  orc_NewSymbols.append("FILTER");
+  orc_NewSymbols.append("BA_DEF_DEF_");
+  orc_NewSymbols.append("EV_DATA_");
+  orc_NewSymbols.append("ENVVAR_DATA_");
+  orc_NewSymbols.append("SGTYPE_");
+  orc_NewSymbols.append("SGTYPE_VAL_");
+  orc_NewSymbols.append("BA_DEF_SGTYPE_");
+  orc_NewSymbols.append("BA_SGTYPE_");
+  orc_NewSymbols.append("SIG_TYPE_REF_");
+  orc_NewSymbols.append("VAL_TABLE_");
+  orc_NewSymbols.append("SIG_GROUP_");
+  orc_NewSymbols.append("SIG_VALTYPE_");
+  orc_NewSymbols.append("SIGTYPE_VALTYPE_");
+  orc_NewSymbols.append("BO_TX_BU_");
+  orc_NewSymbols.append("BA_DEF_REL_");
+  orc_NewSymbols.append("BA_REL_");
+  orc_NewSymbols.append("BA_DEF_DEF_REL_");
+  orc_NewSymbols.append("BU_SG_REL_");
+  orc_NewSymbols.append("BU_EV_REL_");
+  orc_NewSymbols.append("BU_BO_REL_");
+  orc_NewSymbols.append("SG_MUL_VAL_");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -780,55 +785,49 @@ void C_CieExportDbc::mh_SetNewSymbols(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieExportDbc::mh_SetAttributeDefaults(
-    std::map<std::string, Vector::DBC::Attribute> &orc_AttributeDefaults) {
+    QHash<QString, Vector::DBC::Attribute> &orc_AttributeDefaults) {
   // bus type
-  const std::string c_BusTypeName = "BusType";
+  const QString c_BusTypeName = "BusType";
 
   Vector::DBC::Attribute c_BusTypeAttribute;
-  c_BusTypeAttribute.name = c_BusTypeName;
+  c_BusTypeAttribute.name = c_BusTypeName.toStdString();
   c_BusTypeAttribute.stringValue = "";
-  orc_AttributeDefaults.emplace(std::pair<std::string, Vector::DBC::Attribute>(
-      c_BusTypeName, c_BusTypeAttribute));
+  orc_AttributeDefaults.insert(c_BusTypeName, c_BusTypeAttribute);
 
   // database name
-  const std::string c_DbName = "DBName";
+  const QString c_DbName = "DBName";
   Vector::DBC::Attribute c_DbNameAttribute;
-  c_DbNameAttribute.name = c_DbName;
+  c_DbNameAttribute.name = c_DbName.toStdString();
   c_DbNameAttribute.stringValue = "";
-  orc_AttributeDefaults.emplace(std::pair<std::string, Vector::DBC::Attribute>(
-      c_DbName, c_DbNameAttribute));
+  orc_AttributeDefaults.insert(c_DbName, c_DbNameAttribute);
 
   // general message cycle time
-  const std::string c_MsgCycleTimeName = "GenMsgCycleTime";
+  const QString c_MsgCycleTimeName = "GenMsgCycleTime";
   Vector::DBC::Attribute c_MsgCycleTimeAttribute;
-  c_MsgCycleTimeAttribute.name = c_MsgCycleTimeName;
+  c_MsgCycleTimeAttribute.name = c_MsgCycleTimeName.toStdString();
   c_MsgCycleTimeAttribute.integerValue = 0;
-  orc_AttributeDefaults.emplace(std::pair<std::string, Vector::DBC::Attribute>(
-      c_MsgCycleTimeName, c_MsgCycleTimeAttribute));
+  orc_AttributeDefaults.insert(c_MsgCycleTimeName, c_MsgCycleTimeAttribute);
 
   // general message send type
-  const std::string c_MsgSendTypeName = "GenMsgSendType";
+  const QString c_MsgSendTypeName = "GenMsgSendType";
   Vector::DBC::Attribute c_MsgSendTypeAttribute;
-  c_MsgSendTypeAttribute.name = c_MsgSendTypeName;
+  c_MsgSendTypeAttribute.name = c_MsgSendTypeName.toStdString();
   c_MsgSendTypeAttribute.stringValue = "NoMsgSendType";
-  orc_AttributeDefaults.emplace(std::pair<std::string, Vector::DBC::Attribute>(
-      c_MsgSendTypeName, c_MsgSendTypeAttribute));
+  orc_AttributeDefaults.insert(c_MsgSendTypeName, c_MsgSendTypeAttribute);
 
   // general signal inactive value
-  const std::string c_SigInactiveName = "GenSigInactiveValue";
+  const QString c_SigInactiveName = "GenSigInactiveValue";
   Vector::DBC::Attribute c_SigInactiveAttribute;
-  c_SigInactiveAttribute.name = c_SigInactiveName;
+  c_SigInactiveAttribute.name = c_SigInactiveName.toStdString();
   c_SigInactiveAttribute.integerValue = 0;
-  orc_AttributeDefaults.emplace(std::pair<std::string, Vector::DBC::Attribute>(
-      c_SigInactiveName, c_SigInactiveAttribute));
+  orc_AttributeDefaults.insert(c_SigInactiveName, c_SigInactiveAttribute);
 
   // general signal send type
-  const std::string c_SigSendTypeName = "GenSigSendType";
+  const QString c_SigSendTypeName = "GenSigSendType";
   Vector::DBC::Attribute c_SigSendTypeAttribute;
-  c_SigSendTypeAttribute.name = c_SigSendTypeName;
+  c_SigSendTypeAttribute.name = c_SigSendTypeName.toStdString();
   c_SigSendTypeAttribute.stringValue = "Cyclic";
-  orc_AttributeDefaults.emplace(std::pair<std::string, Vector::DBC::Attribute>(
-      c_SigSendTypeName, c_SigSendTypeAttribute));
+  orc_AttributeDefaults.insert(c_SigSendTypeName, c_SigSendTypeAttribute);
 
   // network management station address
   // do not know if I have to set this, but in default configuration with one
@@ -836,20 +835,18 @@ void C_CieExportDbc::mh_SetAttributeDefaults(
   // https://vector.com/portal/medien/cmc/manuals/CANisterConfigurator_Manual_EN.pdf
   // "NmStationAddress: The number of the control unit for network management
   // (node attribute)."
-  const std::string c_NmStationName = "NmStationAddress";
+  const QString c_NmStationName = "NmStationAddress";
   Vector::DBC::Attribute c_NmStationAttribute;
-  c_NmStationAttribute.name = c_NmStationName;
+  c_NmStationAttribute.name = c_NmStationName.toStdString();
   c_NmStationAttribute.hexValue = 0;
-  orc_AttributeDefaults.emplace(std::pair<std::string, Vector::DBC::Attribute>(
-      c_NmStationName, c_NmStationAttribute));
+  orc_AttributeDefaults.insert(c_NmStationName, c_NmStationAttribute);
 
   // set spn
-  std::string c_SpnName = "SPN";
+  QString c_SpnName = "SPN";
   Vector::DBC::Attribute c_SpnAttribute;
-  c_SpnAttribute.name = c_SpnName;
+  c_SpnAttribute.name = c_SpnName.toStdString();
   c_SpnAttribute.integerValue = 0;
-  orc_AttributeDefaults.emplace(std::pair<std::string, Vector::DBC::Attribute>(
-      c_SpnName, c_SpnAttribute));
+  orc_AttributeDefaults.insert(c_SpnName, c_SpnAttribute);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -860,30 +857,26 @@ void C_CieExportDbc::mh_SetAttributeDefaults(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieExportDbc::mh_SetAttributeDefinitions(
-    std::map<std::string, Vector::DBC::AttributeDefinition>
+    QHash<QString, Vector::DBC::AttributeDefinition>
         &orc_AttributeDefinitions) {
   // set bus type
-  std::string c_BusTypeName = "BusType";
+  QString c_BusTypeName = "BusType";
   Vector::DBC::AttributeDefinition c_BusTypeAttributeDef;
-  c_BusTypeAttributeDef.name = c_BusTypeName;
+  c_BusTypeAttributeDef.name = c_BusTypeName.toStdString();
   c_BusTypeAttributeDef.objectType = Vector::DBC::AttributeObjectType::Network;
   c_BusTypeAttributeDef.valueType.type =
       Vector::DBC::AttributeValueType::Type::String;
-  orc_AttributeDefinitions.emplace(
-      std::pair<std::string, Vector::DBC::AttributeDefinition>(
-          c_BusTypeName, c_BusTypeAttributeDef));
+  orc_AttributeDefinitions.insert(c_BusTypeName, c_BusTypeAttributeDef);
 
   // set database name
-  std::string c_DbName = "DBName";
+  QString c_DbName = "DBName";
   Vector::DBC::AttributeDefinition c_DbNameAttributeDef;
-  c_DbNameAttributeDef.name = c_DbName;
+  c_DbNameAttributeDef.name = c_DbName.toStdString();
   c_DbNameAttributeDef.objectType = Vector::DBC::AttributeObjectType::Network;
   c_DbNameAttributeDef.valueType.type =
       Vector::DBC::AttributeValueType::Type::String;
   c_DbNameAttributeDef.valueType.enumValues.emplace_back("");
-  orc_AttributeDefinitions.emplace(
-      std::pair<std::string, Vector::DBC::AttributeDefinition>(
-          c_DbName, c_DbNameAttributeDef));
+  orc_AttributeDefinitions.insert(c_DbName, c_DbNameAttributeDef);
 
   // set global attribute definition for cycle time (default)
   Vector::DBC::AttributeDefinition c_CycleTimeAttributeDef;
@@ -892,9 +885,7 @@ void C_CieExportDbc::mh_SetAttributeDefinitions(
       Vector::DBC::AttributeObjectType::Message;
   c_CycleTimeAttributeDef.valueType.type =
       Vector::DBC::AttributeValueType::Type::Int;
-  orc_AttributeDefinitions.emplace(
-      std::pair<std::string, Vector::DBC::AttributeDefinition>(
-          c_CycleTimeAttributeDef.name, c_CycleTimeAttributeDef));
+  orc_AttributeDefinitions.insert(mhc_MSG_CYCLE_TIME, c_CycleTimeAttributeDef);
 
   // set global attribute definitions for openSYDE message send types 'Cyclic'
   // and 'OnEvent'
@@ -906,35 +897,30 @@ void C_CieExportDbc::mh_SetAttributeDefinitions(
       Vector::DBC::AttributeValueType::Type::Enum;
   c_MsgSendTypeAttributeDef.valueType.enumValues.emplace_back("Cyclic");
   c_MsgSendTypeAttributeDef.valueType.enumValues.emplace_back("OnEvent");
-  orc_AttributeDefinitions.emplace(
-      std::pair<std::string, Vector::DBC::AttributeDefinition>(
-          c_MsgSendTypeAttributeDef.name, c_MsgSendTypeAttributeDef));
+  orc_AttributeDefinitions.insert(mhc_MSG_SEND_TYPE, c_MsgSendTypeAttributeDef);
 
   // set general signal inactive value
-  std::string c_SigInactiveValueName = "GenSigInactiveValue";
+  QString c_SigInactiveValueName = "GenSigInactiveValue";
   Vector::DBC::AttributeDefinition c_SigInactiveValueAttributeDef;
-  c_SigInactiveValueAttributeDef.name = c_SigInactiveValueName;
+  c_SigInactiveValueAttributeDef.name = c_SigInactiveValueName.toStdString();
   c_SigInactiveValueAttributeDef.objectType =
       Vector::DBC::AttributeObjectType::Signal;
   c_SigInactiveValueAttributeDef.valueType.type =
       Vector::DBC::AttributeValueType::Type::Int;
-  orc_AttributeDefinitions.emplace(
-      std::pair<std::string, Vector::DBC::AttributeDefinition>(
-          c_SigInactiveValueName, c_SigInactiveValueAttributeDef));
+  orc_AttributeDefinitions.insert(c_SigInactiveValueName,
+                                  c_SigInactiveValueAttributeDef);
 
   // set general signal send type
-  std::string c_SigSendTypeName = "GenSigSendType";
+  QString c_SigSendTypeName = "GenSigSendType";
   Vector::DBC::AttributeDefinition c_SigSendTypeAttributeDef;
-  c_SigSendTypeAttributeDef.name = c_SigSendTypeName;
+  c_SigSendTypeAttributeDef.name = c_SigSendTypeName.toStdString();
   c_SigSendTypeAttributeDef.objectType =
       Vector::DBC::AttributeObjectType::Signal;
   c_SigSendTypeAttributeDef.valueType.type =
       Vector::DBC::AttributeValueType::Type::Enum;
 
   c_SigSendTypeAttributeDef.valueType.enumValues.emplace_back("NoSigSendType");
-  orc_AttributeDefinitions.emplace(
-      std::pair<std::string, Vector::DBC::AttributeDefinition>(
-          c_SigSendTypeName, c_SigSendTypeAttributeDef));
+  orc_AttributeDefinitions.insert(c_SigSendTypeName, c_SigSendTypeAttributeDef);
 
   // set network management station address
   // do not know if I have to set this, but in default configuration with one
@@ -942,20 +928,18 @@ void C_CieExportDbc::mh_SetAttributeDefinitions(
   // https://vector.com/portal/medien/cmc/manuals/CANisterConfigurator_Manual_EN.pdf
   // "NmStationAddress: The number of the control unit for network management
   // (node attribute)."
-  std::string c_NmStationName = "NmStationAddress";
+  QString c_NmStationName = "NmStationAddress";
   Vector::DBC::AttributeDefinition c_NmStationAttributeDef;
-  c_NmStationAttributeDef.name = c_NmStationName;
+  c_NmStationAttributeDef.name = c_NmStationName.toStdString();
   c_NmStationAttributeDef.objectType = Vector::DBC::AttributeObjectType::Node;
   c_NmStationAttributeDef.valueType.type =
       Vector::DBC::AttributeValueType::Type::Hex;
-  orc_AttributeDefinitions.emplace(
-      std::pair<std::string, Vector::DBC::AttributeDefinition>(
-          c_NmStationName, c_NmStationAttributeDef));
+  orc_AttributeDefinitions.insert(c_NmStationName, c_NmStationAttributeDef);
 
   // set initial value
-  std::string c_SigInitialValueName = mhc_SIG_INITIAL_VALUE.toStdString();
+  QString c_SigInitialValueName = mhc_SIG_INITIAL_VALUE;
   Vector::DBC::AttributeDefinition c_SigInitialValueAttribute;
-  c_SigInitialValueAttribute.name = c_SigInitialValueName;
+  c_SigInitialValueAttribute.name = c_SigInitialValueName.toStdString();
   c_SigInitialValueAttribute.objectType =
       Vector::DBC::AttributeObjectType::Signal;
   c_SigInitialValueAttribute.valueType.type =
@@ -966,21 +950,18 @@ void C_CieExportDbc::mh_SetAttributeDefinitions(
                                                   // raw
                                                   // values
                                                   // here
-  orc_AttributeDefinitions.emplace(
-      std::pair<std::string, Vector::DBC::AttributeDefinition>(
-          c_SigInitialValueName, c_SigInitialValueAttribute));
+  orc_AttributeDefinitions.insert(c_SigInitialValueName,
+                                  c_SigInitialValueAttribute);
 
   // set spn
-  std::string c_SpnName = "SPN";
+  QString c_SpnName = "SPN";
   Vector::DBC::AttributeDefinition c_SpnAttributeDef;
-  c_SpnAttributeDef.name = c_SpnName;
+  c_SpnAttributeDef.name = c_SpnName.toStdString();
   c_SpnAttributeDef.objectType = Vector::DBC::AttributeObjectType::Signal;
   c_SpnAttributeDef.valueType.type = Vector::DBC::AttributeValueType::Type::Int;
   c_SpnAttributeDef.valueType.integerValue.minimum = 0;
   c_SpnAttributeDef.valueType.integerValue.maximum = 524287;
-  orc_AttributeDefinitions.emplace(
-      std::pair<std::string, Vector::DBC::AttributeDefinition>(
-          c_SpnName, c_SpnAttributeDef));
+  orc_AttributeDefinitions.insert(c_SpnName, c_SpnAttributeDef);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1011,7 +992,8 @@ C_CieExportDbc::mh_NiceifyStringForDbcSymbol(const QString &orc_String) {
 
   // first character must not contain a digit, in this case place '_' before
   // digit.
-  if ((orc_String.length() > 0) && (std::isdigit(orc_String.toStdString()[0]) != 0)) {
+  if ((orc_String.length() > 0) &&
+      (std::isdigit(orc_String.toStdString()[0]) != 0)) {
     // first character is digit, add '_'
     c_Result = '_';
   }
@@ -1041,12 +1023,10 @@ C_CieExportDbc::mh_NiceifyStringForDbcSymbol(const QString &orc_String) {
    Escaped string
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString
-C_CieExportDbc::mh_EscapeCriticalSymbols(const QString &orc_String) {
+QString C_CieExportDbc::mh_EscapeCriticalSymbols(const QString &orc_String) {
   QString c_Retval;
 
-  for (int32_t s32_Char = 0;
-       s32_Char < orc_String.length(); ++s32_Char) {
+  for (int32_t s32_Char = 0; s32_Char < orc_String.length(); ++s32_Char) {
     const char_t cn_Char = orc_String[s32_Char].toLatin1();
     if (cn_Char == '\"') {
       c_Retval += "\\\"";

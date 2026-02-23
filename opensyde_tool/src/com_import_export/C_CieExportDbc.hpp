@@ -79,11 +79,11 @@ private:
   static int32_t
   mh_SetTransmission(const C_CieConverter::C_CieNodeMessage &orc_Message,
                      Vector::DBC::Message &orc_DbcMessage);
-  static void mh_SetNewSymbols(std::vector<std::string> &orc_NewSymbols);
+  static void mh_SetNewSymbols(QList<QString> &orc_NewSymbols);
   static void mh_SetAttributeDefaults(
-      std::map<std::string, Vector::DBC::Attribute> &orc_AttributeDefaults);
+      QHash<QString, Vector::DBC::Attribute> &orc_AttributeDefaults);
   static void mh_SetAttributeDefinitions(
-      std::map<std::string, Vector::DBC::AttributeDefinition>
+      QHash<QString, Vector::DBC::AttributeDefinition>
           &orc_AttributeDefinitions);
   static QString mh_NiceifyStringForDbcSymbol(const QString &orc_String);
   static QString mh_EscapeCriticalSymbols(const QString &orc_String);
@@ -91,7 +91,7 @@ private:
   static const QString mhc_SIG_INITIAL_VALUE;
   static const QString mhc_MSG_CYCLE_TIME;
   static const QString mhc_MSG_SEND_TYPE;
-  static std::map<QString, QString> mhc_NodeMapping;
+  static QHash<QString, QString> mhc_NodeMapping;
   static bool mhq_ValidDbcExport;
   static C_ExportStatistic mhc_ExportStatistic;
 };

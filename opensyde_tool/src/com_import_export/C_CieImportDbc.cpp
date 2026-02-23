@@ -120,14 +120,13 @@ int32_t C_CieImportDbc::h_ImportNetwork(
 
   if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN)) {
     uint32_t u32_Nodes = 0U;
-    QString c_FileName =
-        QFileInfo(orc_File).fileName();
+    QString c_FileName = QFileInfo(orc_File).fileName();
     c_FileName = c_FileName.left(c_FileName.length() - 4); // no extension
 
     // add bus information
     orc_Definition.c_Bus.c_Name = c_FileName; // file name means network name
-    orc_Definition.c_Bus.c_Comment =
-        mh_ReEscapeCriticalSymbols(QString::fromStdString(c_DbcNetwork.comment));
+    orc_Definition.c_Bus.c_Comment = mh_ReEscapeCriticalSymbols(
+        QString::fromStdString(c_DbcNetwork.comment));
 
     osc_write_log_info("DBC file import",
                        "Reading node and messages with signals of network \"" +
@@ -135,9 +134,10 @@ int32_t C_CieImportDbc::h_ImportNetwork(
 
     // assign node definitions with messages
     // there is also a check if each message was assigned
-    std::set<std::string> c_MessageAssignment;
+    QSet<QString> c_MessageAssignment;
     for (const auto &rc_DbcMessage : c_DbcNetwork.messages) {
-      c_MessageAssignment.insert(rc_DbcMessage.second.name);
+      c_MessageAssignment.insert(
+          QString::fromStdString(rc_DbcMessage.second.name));
     }
     orc_Definition.c_Nodes.resize(c_DbcNetwork.nodes.size());
     for (const auto &rc_DbcNode : c_DbcNetwork.nodes) {
@@ -248,10 +248,19 @@ int32_t C_CieImportDbc::mh_ReadFile(const QString &orc_File,
     // when reading files with not supported
     //  content
     try {
-      std::ifstream c_InputFile(orc_File.toStdString().c_str());
-      if (c_InputFile.is_open()) {
-        c_InputFile >> orc_Network;
+      QFile c_InputFile(orc_File);
+      if (c_InputFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream c_Stream(&c_InputFile);
+        // Read the entire file content
+        QString c_Content = c_Stream.readAll();
         c_InputFile.close();
+        // Convert QString to Vector::DBC::Network (assuming the library
+        // supports string parsing) This requires modifying the DBC library
+        // interface to accept QString For now, we'll convert back to
+        // std::string for compatibility
+        std::string c_ContentStd = c_Content.toStdString();
+        std::istringstream c_IStream(c_ContentStd);
+        c_IStream >> orc_Network;
         if (orc_Network.successfullyParsed == false) {
           q_ReadError = true;
         }
@@ -314,12 +323,14 @@ C_CieImportDbc::mh_GetMessage(const Vector::DBC::Network &orc_DbcNetwork,
   // check on sender node
   if (orc_DbcMessage.transmitter.size() > 0U) {
     if (orc_Node.c_Properties.c_Name.compare(
-            QString::fromStdString(orc_DbcMessage.transmitter), Qt::CaseInsensitive) == 0) {
+            QString::fromStdString(orc_DbcMessage.transmitter),
+            Qt::CaseInsensitive) == 0) {
       q_IsTxMessage = true;
     }
   } else if (orc_DbcMessage.transmitters.empty() == false) {
     for (const auto &rc_DbcTransmitter : orc_DbcMessage.transmitters) {
-      if (orc_Node.c_Properties.c_Name.compare(QString::fromStdString(rc_DbcTransmitter), Qt::CaseInsensitive) ==
+      if (orc_Node.c_Properties.c_Name.compare(
+              QString::fromStdString(rc_DbcTransmitter), Qt::CaseInsensitive) ==
           0) {
         q_IsTxMessage = true;
         break;
@@ -332,7 +343,8 @@ C_CieImportDbc::mh_GetMessage(const Vector::DBC::Network &orc_DbcNetwork,
   // check on receiver nodes
   for (const auto &rc_DbcSignal : orc_DbcMessage.signals) {
     for (const auto &rc_DbcReceiver : rc_DbcSignal.second.receivers) {
-      if (orc_Node.c_Properties.c_Name.compare(QString::fromStdString(rc_DbcReceiver), Qt::CaseInsensitive) ==
+      if (orc_Node.c_Properties.c_Name.compare(
+              QString::fromStdString(rc_DbcReceiver), Qt::CaseInsensitive) ==
           0) {
         // node found
         q_IsRxMessage = true;
@@ -385,8 +397,8 @@ int32_t C_CieImportDbc::mh_PrepareMessage(
   int32_t s32_Return = C_NO_ERR;
 
   orc_Message.c_CanMessage.c_Name = QString::fromStdString(orc_DbcMessage.name);
-  orc_Message.c_CanMessage.c_Comment =
-      mh_ReEscapeCriticalSymbols(QString::fromStdString(orc_DbcMessage.comment));
+  orc_Message.c_CanMessage.c_Comment = mh_ReEscapeCriticalSymbols(
+      QString::fromStdString(orc_DbcMessage.comment));
   if ((orc_DbcMessage.id & (static_cast<uint32_t>(1U) << 31U)) != 0U) {
     orc_Message.c_CanMessage.q_IsExtended = true;
   } else {
@@ -624,8 +636,7 @@ void C_CieImportDbc::mh_GetSignalSpnInfo(
     const Vector::DBC::Network &orc_DbcNetwork,
     const Vector::DBC::Signal &orc_DbcSignal,
     C_CieConverter::C_CieCanSignal &orc_Signal) {
-  std::map<std::string, Vector::DBC::Attribute>::const_iterator c_IterSpn;
-  c_IterSpn = orc_DbcSignal.attributeValues.find("SPN");
+  const auto c_IterSpn = orc_DbcSignal.attributeValues.find("SPN");
   if (c_IterSpn != orc_DbcSignal.attributeValues.end()) {
     const std::map<std::string,
                    Vector::DBC::AttributeDefinition>::const_iterator
@@ -998,8 +1009,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(
         // are and display warning to user
         const QString c_Message =
             "Signal \"" + c_String + "\": Minimum raw value \"" +
-            QString::number(f64_MinValue) +
-            "\" and maximum raw value \"" +
+            QString::number(f64_MinValue) + "\" and maximum raw value \"" +
             QString::number(f64_MaxValue) +
             "\" are interchanged. This is not supported. Values left as they "
             "are.";
@@ -1027,8 +1037,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(
               "Signal \"" + c_String + "\": Initial value \"" +
               QString::number(f64_InitialValuePhy) +
               "\" is not between minimum \"" +
-              QString::number(f64_MinValuePhy) +
-              "\" and maximum \"" +
+              QString::number(f64_MinValuePhy) + "\" and maximum \"" +
               QString::number(f64_MaxValuePhy) +
               "\" value. Initial value set to " + c_PlaceholderMinMax +
               " value.";
@@ -1037,8 +1046,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(
         }
       }
     } else {
-      const QString c_Message =
-          "Signal \"" + c_String + "\": Type not found.";
+      const QString c_Message = "Signal \"" + c_String + "\": Type not found.";
       osc_write_log_warning("DBC file import", c_Message);
       orc_WarningMessages.append(c_Message);
       s32_Return = C_WARN;
@@ -1077,8 +1085,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(
       // and display warning to user
       const QString c_Message =
           "Signal \"" + c_String + "\": Minimum raw value \"" +
-          QString::number(f64_MinValue) +
-          "\" and maximum raw value \"" +
+          QString::number(f64_MinValue) + "\" and maximum raw value \"" +
           QString::number(f64_MaxValue) +
           "\" are interchanged. This is not supported. Values left as they "
           "are.";
@@ -1096,8 +1103,7 @@ int32_t C_CieImportDbc::mh_GetSignalValues(
           const QString c_Message =
               "No initial value for signal \"" + c_String +
               "\" available. Initial value set to default \"" +
-              QString::number(f64_InitialValuePhy) +
-              "\".";
+              QString::number(f64_InitialValuePhy) + "\".";
           osc_write_log_warning("DBC file import", c_Message);
           orc_WarningMessages.append(c_Message);
           s32_Return = C_WARN;
@@ -1109,14 +1115,12 @@ int32_t C_CieImportDbc::mh_GetSignalValues(
         QString c_PlaceholderValue;
         if (e_ValueChangedTo == C_OscNodeDataPoolContentUtil::eMIN) {
           c_PlaceholderMinMax = "minimum";
-          c_PlaceholderValue =
-              QString::number(f64_MinValuePhy);
+          c_PlaceholderValue = QString::number(f64_MinValuePhy);
           f64_InitialValue =
               f64_MinValue; // set value for later datatype range check
         } else {
           c_PlaceholderMinMax = "maximum";
-          c_PlaceholderValue =
-              QString::number(f64_MaxValuePhy);
+          c_PlaceholderValue = QString::number(f64_MaxValuePhy);
           f64_InitialValue =
               f64_MaxValue; // set value for later datatype range check
         }
@@ -1126,10 +1130,8 @@ int32_t C_CieImportDbc::mh_GetSignalValues(
               (f64_DEFAULT * c_DbcSignal.factor) + c_DbcSignal.offset;
           const QString c_Message =
               "Signal \"" + c_String + "\": Global initial value \"" +
-              QString::number(f64_DefaultPhy) +
-              "\" is not between minimum \"" +
-              QString::number(f64_MinValuePhy) +
-              "\" and maximum \"" +
+              QString::number(f64_DefaultPhy) + "\" is not between minimum \"" +
+              QString::number(f64_MinValuePhy) + "\" and maximum \"" +
               QString::number(f64_MaxValuePhy) +
               "\" value. Initial value set to " + c_PlaceholderMinMax +
               " value.";
@@ -1190,7 +1192,8 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(
 
   // search Send Type
   const auto c_DbcAttributeDefinition =
-      orc_DbcNetwork.attributeDefinitions.find(mhc_SEND_TYPE.toStdString().c_str());
+      orc_DbcNetwork.attributeDefinitions.find(
+          mhc_SEND_TYPE.toStdString().c_str());
 
   // attribute found?
   if (c_DbcAttributeDefinition != orc_DbcNetwork.attributeDefinitions.end()) {
@@ -1205,8 +1208,8 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(
   }
 
   // search default send type
-  const auto c_DbcAttributeDefaults =
-      orc_DbcNetwork.attributeDefaults.find(mhc_SEND_TYPE.toStdString().c_str());
+  const auto c_DbcAttributeDefaults = orc_DbcNetwork.attributeDefaults.find(
+      mhc_SEND_TYPE.toStdString().c_str());
 
   // attribute found?
   if (c_DbcAttributeDefaults != orc_DbcNetwork.attributeDefaults.end()) {
@@ -1228,8 +1231,8 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(
   }
 
   // search default initial value
-  const auto c_DbcAttributeDefaultsInit =
-      orc_DbcNetwork.attributeDefaults.find(mhc_INITIAL_VALUE.toStdString().c_str());
+  const auto c_DbcAttributeDefaultsInit = orc_DbcNetwork.attributeDefaults.find(
+      mhc_INITIAL_VALUE.toStdString().c_str());
 
   // attribute found?
   mhq_DefaultValueDefined = false;
@@ -1261,8 +1264,8 @@ int32_t C_CieImportDbc::mh_GetAttributeDefinitions(
         mhq_DefaultValueDefined = true;
       } else if (c_IterType->second.valueType.type ==
                  Vector::DBC::AttributeValueType::Type::String) {
-        const QString c_DefaultInitialValue =
-            QString::fromStdString((c_DbcAttributeDefaultsInit->second).stringValue);
+        const QString c_DefaultInitialValue = QString::fromStdString(
+            (c_DbcAttributeDefaultsInit->second).stringValue);
         // try to convert to DBC standard raw float value
         bool q_Ok = false;
         mhf32_DefaultInitialValue = c_DefaultInitialValue.toDouble(&q_Ok);
@@ -1340,7 +1343,9 @@ void C_CieImportDbc::mh_GetTransmission(
   // search for attribute cycle time (cycle time also means cyclic transmission
   // method)
   for (const auto &rc_DbcAttributeValue : orc_DbcMessage.attributeValues) {
-    if (mhc_CYCLE_TIME.compare(QString::fromStdString(rc_DbcAttributeValue.first), Qt::CaseInsensitive) == 0) {
+    if (mhc_CYCLE_TIME.compare(
+            QString::fromStdString(rc_DbcAttributeValue.first),
+            Qt::CaseInsensitive) == 0) {
       const std::map<std::string,
                      Vector::DBC::AttributeDefinition>::const_iterator
           c_IterType = orc_DbcNetwork.attributeDefinitions.find(
@@ -1372,7 +1377,9 @@ void C_CieImportDbc::mh_GetTransmission(
   // eTX_METHOD_ON_EVENT)
   for (const auto &rc_DbcAttributeValue : orc_DbcMessage.attributeValues) {
     // check for message send type
-    if (mhc_SEND_TYPE.compare(QString::fromStdString(rc_DbcAttributeValue.first), Qt::CaseInsensitive) == 0) {
+    if (mhc_SEND_TYPE.compare(
+            QString::fromStdString(rc_DbcAttributeValue.first),
+            Qt::CaseInsensitive) == 0) {
       const std::map<std::string,
                      Vector::DBC::AttributeDefinition>::const_iterator
           c_IterType = orc_DbcNetwork.attributeDefinitions.find(
@@ -1384,8 +1391,8 @@ void C_CieImportDbc::mh_GetTransmission(
             Vector::DBC::AttributeValueType::Type::Enum) {
           const uint32_t u32_Type =
               static_cast<uint32_t>(rc_DbcAttributeValue.second.enumValue);
-          c_MessageType =
-              QString::fromStdString(mhc_AttributeSendType.valueType.enumValues[u32_Type]);
+          c_MessageType = QString::fromStdString(
+              mhc_AttributeSendType.valueType.enumValues[u32_Type]);
           const QString c_Tmp = c_MessageType.toLower();
           if (c_Tmp != "") {
             if (c_Tmp.contains("cyclic")) {
@@ -1394,9 +1401,8 @@ void C_CieImportDbc::mh_GetTransmission(
               // only display warning if it does not match exactly
               // (case-insensitive)
               if (c_Tmp.compare("cyclic", Qt::CaseInsensitive) != 0) {
-                const QString c_Message = "Message type \"" +
-                                              c_MessageType +
-                                              "\" interpreted as \"Cyclic\".";
+                const QString c_Message = "Message type \"" + c_MessageType +
+                                          "\" interpreted as \"Cyclic\".";
 
                 osc_write_log_warning("DBC file import", c_Message);
                 orc_Message.c_Warnings.append(c_Message);
@@ -1408,9 +1414,8 @@ void C_CieImportDbc::mh_GetTransmission(
               // only display warning if it does not match exactly
               // (case-insensitive)
               if (c_Tmp.compare("onevent", Qt::CaseInsensitive) != 0) {
-                const QString c_Message = "Message type \"" +
-                                              c_MessageType +
-                                              "\" interpreted as \"OnEvent\".";
+                const QString c_Message = "Message type \"" + c_MessageType +
+                                          "\" interpreted as \"OnEvent\".";
                 osc_write_log_warning("DBC file import", c_Message);
                 orc_Message.c_Warnings.append(c_Message);
               }

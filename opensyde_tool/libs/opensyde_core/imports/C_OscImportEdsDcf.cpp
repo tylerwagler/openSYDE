@@ -1,64 +1,85 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Utility class to handle imports of file type .eds and .dcf (implementation)
+   \brief       Utility class to handle imports of file type .eds and .dcf
+   (implementation)
 
    Utility class to handle imports of file type .eds and .dcf
 
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
 #include <QSettings>
 #include <QString>
 
+#include "stwerrors.hpp"
 #include <cmath>
+#include <cstdlib>
+#include <iomanip>
 #include <limits>
 #include <sstream>
-#include <iomanip>
-#include <cstdlib>
-#include "stwerrors.hpp"
 
 #include "C_OscImportEdsDcf.hpp"
 #include "C_OscLoggingHandler.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Import EDS or DCF file
 
    Some assumptions:
    * Data types are not parsed but calculated automatically instead
-   * Cyclic transmission types are only partially supported because the cycle time can not be imported
+   * Cyclic transmission types are only partially supported because the cycle
+   time can not be imported
    * Signal parsing errors are not reported by return value (only by string)
 
-   \param[in]   orc_FilePath                          File to import, file type is based on file ending
-   \param[in]   ou8_NodeId                            Node ID
-   \param[out]  orc_AllRxMessageData                  All imported core Rx message data
-   \param[out]  orc_AllTxMessageData                  All imported core Tx message data
-   \param[out]  orc_ImportMessagesPerMessage          Import result messages
-   \param[out]  orc_ParsingError                      Optional parsing error message
-   \param[in]   oe_ImportForProtocol                  For which protocol to import, to apply protocol specific restrictions
-   \param[out]  orc_AllInvalidRxMessageData           All invalid core Rx message data
-   \param[out]  orc_AllInvalidTxMessageData           All invalid core Tx message data
-   \param[out]  orc_InvalidImportMessagesPerMessage   Import result messages per invalid message
+   \param[in]   orc_FilePath                          File to import, file type
+   is based on file ending \param[in]   ou8_NodeId Node ID \param[out]
+   orc_AllRxMessageData                  All imported core Rx message data
+   \param[out]  orc_AllTxMessageData                  All imported core Tx
+   message data \param[out]  orc_ImportMessagesPerMessage          Import result
+   messages \param[out]  orc_ParsingError                      Optional parsing
+   error message \param[in]   oe_ImportForProtocol                  For which
+   protocol to import, to apply protocol specific restrictions \param[out]
+   orc_AllInvalidRxMessageData           All invalid core Rx message data
+   \param[out]  orc_AllInvalidTxMessageData           All invalid core Tx
+   message data \param[out]  orc_InvalidImportMessagesPerMessage   Import result
+   messages per invalid message
 
    \return
    C_NO_ERR Operation success
@@ -67,126 +88,103 @@ using namespace stw::opensyde_core;
    C_CONFIG Parsing error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::h_Import(const QString & orc_FilePath, const uint8_t ou8_NodeId,
-                                    C_OscEdsDcfImportMessageGroup & orc_AllRxMessageData,
-                                    C_OscEdsDcfImportMessageGroup & orc_AllTxMessageData,
-                                    QList<QStringList> & orc_ImportMessagesPerMessage,
-                                    QString & orc_ParsingError, const C_OscCanProtocol::E_Type oe_ImportForProtocol,
-                                    C_OscEdsDcfImportMessageGroup & orc_AllInvalidRxMessageData,
-                                    C_OscEdsDcfImportMessageGroup & orc_AllInvalidTxMessageData,
-                                    QList<QStringList> & orc_InvalidImportMessagesPerMessage)
-{
-   int32_t s32_Retval = C_NO_ERR;
+int32_t C_OscImportEdsDcf::h_Import(
+    const QString &orc_FilePath, const uint8_t ou8_NodeId,
+    C_OscEdsDcfImportMessageGroup &orc_AllRxMessageData,
+    C_OscEdsDcfImportMessageGroup &orc_AllTxMessageData,
+    QList<QStringList> &orc_ImportMessagesPerMessage, QString &orc_ParsingError,
+    const C_OscCanProtocol::E_Type oe_ImportForProtocol,
+    C_OscEdsDcfImportMessageGroup &orc_AllInvalidRxMessageData,
+    C_OscEdsDcfImportMessageGroup &orc_AllInvalidTxMessageData,
+    QList<QStringList> &orc_InvalidImportMessagesPerMessage) {
+  int32_t s32_Retval = C_NO_ERR;
 
-   //Clear data
-   orc_AllRxMessageData.Clear();
-   orc_AllTxMessageData.Clear();
-   orc_AllInvalidRxMessageData.Clear();
-   orc_AllInvalidTxMessageData.Clear();
-   orc_ImportMessagesPerMessage.clear();
-   orc_ParsingError = "";
+  // Clear data
+  orc_AllRxMessageData.Clear();
+  orc_AllTxMessageData.Clear();
+  orc_AllInvalidRxMessageData.Clear();
+  orc_AllInvalidTxMessageData.Clear();
+  orc_ImportMessagesPerMessage.clear();
+  orc_ParsingError = "";
 
-   if ((QFileInfo(orc_FilePath).exists() && QFileInfo(orc_FilePath).isFile()) == true)
-   {
-      bool q_Eds = true;
-      const QString c_Extension = ("." + QFileInfo(orc_FilePath).suffix()).toLower();
-      if (c_Extension == ".eds")
-      {
-         q_Eds = true;
-         if ((ou8_NodeId == 0U) || (ou8_NodeId > 127U))
-         {
-            s32_Retval = C_NOACT;
-         }
+  if ((QFileInfo(orc_FilePath).exists() && QFileInfo(orc_FilePath).isFile()) ==
+      true) {
+    bool q_Eds = true;
+    const QString c_Extension =
+        ("." + QFileInfo(orc_FilePath).suffix()).toLower();
+    if (c_Extension == ".eds") {
+      q_Eds = true;
+      if ((ou8_NodeId == 0U) || (ou8_NodeId > 127U)) {
+        s32_Retval = C_NOACT;
       }
-      else if (c_Extension == ".dcf")
-      {
-         q_Eds = false;
-      }
-      else
-      {
-         s32_Retval = C_RANGE;
-      }
-      if (s32_Retval == C_NO_ERR)
-      {
-         C_OscCanOpenObjectDictionary c_Dictionary;
-         if (c_Dictionary.LoadFromFile(orc_FilePath) == C_NO_ERR)
-         {
-            QList<uint32_t> c_Dummies;
-            uint32_t u32_StartId;
-            mh_LoadDummies(orc_FilePath, c_Dummies);
-            if (oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN)
-            {
-               u32_StartId = C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_TX_PDO;
-            }
-            else
-            {
-               u32_StartId = C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_RX_PDO;
-            }
-            s32_Retval = mh_ParseMessages(u32_StartId,
-                                          ou8_NodeId, c_Dictionary.c_OdObjects, c_Dummies,
-                                          orc_AllRxMessageData,
-                                          q_Eds, orc_ImportMessagesPerMessage, false,
-                                          oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN, false,
-                                          orc_AllInvalidRxMessageData,
-                                          orc_InvalidImportMessagesPerMessage);
-            if (s32_Retval == C_NO_ERR)
-            {
-               if (oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN)
-               {
-                  u32_StartId = C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_RX_PDO;
-               }
-               else
-               {
-                  u32_StartId = C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_TX_PDO;
-               }
-               s32_Retval = mh_ParseMessages(u32_StartId,
-                                             ou8_NodeId, c_Dictionary.c_OdObjects, c_Dummies,
-                                             orc_AllTxMessageData,
-                                             q_Eds, orc_ImportMessagesPerMessage, true,
-                                             oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN, false,
-                                             orc_AllInvalidTxMessageData,
-                                             orc_InvalidImportMessagesPerMessage);
-            }
-            if (s32_Retval == C_NO_ERR)
-            {
-               if (oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN_SAFETY)
-               {
-                  s32_Retval = mh_ParseMessages(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_SRDO,
-                                                ou8_NodeId,
-                                                c_Dictionary.c_OdObjects, c_Dummies,
-                                                orc_AllTxMessageData,
-                                                q_Eds, orc_ImportMessagesPerMessage, true,
-                                                false, true,
-                                                orc_AllInvalidTxMessageData,
-                                                orc_InvalidImportMessagesPerMessage);
-                  if (s32_Retval == C_NO_ERR)
-                  {
-                     s32_Retval = mh_ParseMessages(C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_SRDO,
-                                                   ou8_NodeId,
-                                                   c_Dictionary.c_OdObjects, c_Dummies,
-                                                   orc_AllRxMessageData,
-                                                   q_Eds, orc_ImportMessagesPerMessage, false,
-                                                   false, true,
-                                                   orc_AllInvalidRxMessageData,
-                                                   orc_InvalidImportMessagesPerMessage);
-                  }
-               }
-            }
-         }
-         else
-         {
-            s32_Retval = C_RANGE;
-            orc_ParsingError = c_Dictionary.GetLastErrorText();
-            osc_write_log_warning("Import ECS/DCF", "Could not parse file: " + c_Dictionary.GetLastErrorText());
-         }
-      }
-   }
-   else
-   {
+    } else if (c_Extension == ".dcf") {
+      q_Eds = false;
+    } else {
       s32_Retval = C_RANGE;
-   }
+    }
+    if (s32_Retval == C_NO_ERR) {
+      C_OscCanOpenObjectDictionary c_Dictionary;
+      if (c_Dictionary.LoadFromFile(orc_FilePath) == C_NO_ERR) {
+        QList<uint32_t> c_Dummies;
+        uint32_t u32_StartId;
+        mh_LoadDummies(orc_FilePath, c_Dummies);
+        if (oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN) {
+          u32_StartId =
+              C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_TX_PDO;
+        } else {
+          u32_StartId =
+              C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_RX_PDO;
+        }
+        s32_Retval = mh_ParseMessages(
+            u32_StartId, ou8_NodeId, c_Dictionary.c_OdObjects, c_Dummies,
+            orc_AllRxMessageData, q_Eds, orc_ImportMessagesPerMessage, false,
+            oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN, false,
+            orc_AllInvalidRxMessageData, orc_InvalidImportMessagesPerMessage);
+        if (s32_Retval == C_NO_ERR) {
+          if (oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN) {
+            u32_StartId =
+                C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_RX_PDO;
+          } else {
+            u32_StartId =
+                C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_TX_PDO;
+          }
+          s32_Retval = mh_ParseMessages(
+              u32_StartId, ou8_NodeId, c_Dictionary.c_OdObjects, c_Dummies,
+              orc_AllTxMessageData, q_Eds, orc_ImportMessagesPerMessage, true,
+              oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN, false,
+              orc_AllInvalidTxMessageData, orc_InvalidImportMessagesPerMessage);
+        }
+        if (s32_Retval == C_NO_ERR) {
+          if (oe_ImportForProtocol == C_OscCanProtocol::eCAN_OPEN_SAFETY) {
+            s32_Retval = mh_ParseMessages(
+                C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_SRDO,
+                ou8_NodeId, c_Dictionary.c_OdObjects, c_Dummies,
+                orc_AllTxMessageData, q_Eds, orc_ImportMessagesPerMessage, true,
+                false, true, orc_AllInvalidTxMessageData,
+                orc_InvalidImportMessagesPerMessage);
+            if (s32_Retval == C_NO_ERR) {
+              s32_Retval = mh_ParseMessages(
+                  C_OscCanOpenObjectDictionary::hu16_OD_INDEX_FIRST_SRDO,
+                  ou8_NodeId, c_Dictionary.c_OdObjects, c_Dummies,
+                  orc_AllRxMessageData, q_Eds, orc_ImportMessagesPerMessage,
+                  false, false, true, orc_AllInvalidRxMessageData,
+                  orc_InvalidImportMessagesPerMessage);
+            }
+          }
+        }
+      } else {
+        s32_Retval = C_RANGE;
+        orc_ParsingError = c_Dictionary.GetLastErrorText();
+        osc_write_log_warning("Import ECS/DCF",
+                              "Could not parse file: " +
+                                  c_Dictionary.GetLastErrorText());
+      }
+    }
+  } else {
+    s32_Retval = C_RANGE;
+  }
 
-   return s32_Retval;
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -194,202 +192,183 @@ int32_t C_OscImportEdsDcf::h_Import(const QString & orc_FilePath, const uint8_t 
 
    OSY signal factory for CANopen objects
 
-   \param[in]      orc_CoObjects                All CANopen objects of the current file
-   \param[in]      ou32_CoSignalObjectIndex     CANopen signal object index
-   \param[in]      ou32_CoSignalObjectSubIndex  CANopen signal object sub index
-   \param[in]      ou32_StartBitCounter         Start bit counter
-   \param[in]      oq_RestrictForCanOpenUsage   Restrict for CANopen usage
-   \param[in]      oq_IsEds                     Flag if current file is an EDS file
-   \param[in,out]  orc_CurSignal                Current signal data
+   \param[in]      orc_CoObjects                All CANopen objects of the
+   current file \param[in]      ou32_CoSignalObjectIndex     CANopen signal
+   object index \param[in]      ou32_CoSignalObjectSubIndex  CANopen signal
+   object sub index \param[in]      ou32_StartBitCounter         Start bit
+   counter \param[in]      oq_RestrictForCanOpenUsage   Restrict for CANopen
+   usage \param[in]      oq_IsEds                     Flag if current file is an
+   EDS file \param[in,out]  orc_CurSignal                Current signal data
    \param[in,out]  orc_CurDataPoolSignal        Current data pool signal data
-   \param[out]     orq_DefaultMinMax            Flag if default values min max values are set or object specific
-                                                limits are set
+   \param[out]     orq_DefaultMinMax            Flag if default values min max
+   values are set or object specific limits are set
 
    \return
    C_NO_ERR Operation success
    C_CONFIG Operation failure: configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::h_ParseSignalContent(const std::map<uint16_t,
-                                                               C_OscCanOpenObject> & orc_CoObjects,
-                                                const uint32_t ou32_CoSignalObjectIndex,
-                                                const uint32_t ou32_CoSignalObjectSubIndex,
-                                                const uint32_t ou32_StartBitCounter,
-                                                const bool oq_RestrictForCanOpenUsage, const bool oq_IsEds,
-                                                C_OscCanSignal & orc_CurSignal,
-                                                C_OscNodeDataPoolListElement & orc_CurDataPoolSignal,
-                                                bool & orq_DefaultMinMax)
-{
-   int32_t s32_Retval = C_NO_ERR;
-   const C_OscCanOpenObjectData * pc_CoSignalObject;
+int32_t C_OscImportEdsDcf::h_ParseSignalContent(
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const uint32_t ou32_CoSignalObjectIndex,
+    const uint32_t ou32_CoSignalObjectSubIndex,
+    const uint32_t ou32_StartBitCounter, const bool oq_RestrictForCanOpenUsage,
+    const bool oq_IsEds, C_OscCanSignal &orc_CurSignal,
+    C_OscNodeDataPoolListElement &orc_CurDataPoolSignal,
+    bool &orq_DefaultMinMax) {
+  int32_t s32_Retval = C_NO_ERR;
+  const C_OscCanOpenObjectData *pc_CoSignalObject;
 
-   if (ou32_CoSignalObjectSubIndex == 0)
-   {
-      //Access object directly
-      pc_CoSignalObject =
-         mh_GetCoObject(orc_CoObjects, ou32_CoSignalObjectIndex, -1);
-   }
-   else
-   {
-      //Access sub index
-      pc_CoSignalObject =
-         mh_GetCoObject(orc_CoObjects, ou32_CoSignalObjectIndex, ou32_CoSignalObjectSubIndex);
-   }
+  if (ou32_CoSignalObjectSubIndex == 0) {
+    // Access object directly
+    pc_CoSignalObject =
+        mh_GetCoObject(orc_CoObjects, ou32_CoSignalObjectIndex, -1);
+  } else {
+    // Access sub index
+    pc_CoSignalObject = mh_GetCoObject(orc_CoObjects, ou32_CoSignalObjectIndex,
+                                       ou32_CoSignalObjectSubIndex);
+  }
 
-   //CANopen attributes
-   if (oq_RestrictForCanOpenUsage)
-   {
-      orc_CurSignal.u16_CanOpenManagerObjectDictionaryIndex = static_cast<uint16_t>(ou32_CoSignalObjectIndex);
-      orc_CurSignal.u8_CanOpenManagerObjectDictionarySubIndex = static_cast<uint8_t>(ou32_CoSignalObjectSubIndex);
-   }
-   //Always intel
-   orc_CurSignal.e_ComByteOrder = C_OscCanSignal::eBYTE_ORDER_INTEL;
-   //Handle start bit
-   orc_CurSignal.u16_ComBitStart = static_cast<uint16_t>(ou32_StartBitCounter);
-   if (pc_CoSignalObject != NULL)
-   {
-      //Name
-      orc_CurDataPoolSignal.c_Name = C_OscImportEdsDcf::h_GetObjectName(*pc_CoSignalObject);
-      //Signal should never be an array
-      orc_CurDataPoolSignal.SetArray(false);
-      // Prepare dataset for the default value
-      orc_CurDataPoolSignal.c_DataSetValues.resize(1);
-      //Get length
-      switch (pc_CoSignalObject->u8_DataType)
-      {
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_BOOLEAN:
-         orc_CurSignal.u16_ComBitLength = 1U;
-         break;
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED8:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER8:
-         orc_CurSignal.u16_ComBitLength = 8U;
-         break;
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER16:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED16:
-         orc_CurSignal.u16_ComBitLength = 16U;
-         break;
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER24:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED24:
-         orc_CurSignal.u16_ComBitLength = 24U;
-         break;
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_REAL32:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER32:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED32:
-         orc_CurSignal.u16_ComBitLength = 32U;
-         break;
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER40:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED40:
-         orc_CurSignal.u16_ComBitLength = 40U;
-         break;
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER48:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED48:
-         orc_CurSignal.u16_ComBitLength = 48U;
-         break;
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER56:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED56:
-         orc_CurSignal.u16_ComBitLength = 56U;
-         break;
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER64:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED64:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_REAL64:
-         orc_CurSignal.u16_ComBitLength = 64U;
-         break;
-      default:
-         //Reported next
-         break;
+  // CANopen attributes
+  if (oq_RestrictForCanOpenUsage) {
+    orc_CurSignal.u16_CanOpenManagerObjectDictionaryIndex =
+        static_cast<uint16_t>(ou32_CoSignalObjectIndex);
+    orc_CurSignal.u8_CanOpenManagerObjectDictionarySubIndex =
+        static_cast<uint8_t>(ou32_CoSignalObjectSubIndex);
+  }
+  // Always intel
+  orc_CurSignal.e_ComByteOrder = C_OscCanSignal::eBYTE_ORDER_INTEL;
+  // Handle start bit
+  orc_CurSignal.u16_ComBitStart = static_cast<uint16_t>(ou32_StartBitCounter);
+  if (pc_CoSignalObject != NULL) {
+    // Name
+    orc_CurDataPoolSignal.c_Name =
+        C_OscImportEdsDcf::h_GetObjectName(*pc_CoSignalObject);
+    // Signal should never be an array
+    orc_CurDataPoolSignal.SetArray(false);
+    // Prepare dataset for the default value
+    orc_CurDataPoolSignal.c_DataSetValues.resize(1);
+    // Get length
+    switch (pc_CoSignalObject->u8_DataType) {
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_BOOLEAN:
+      orc_CurSignal.u16_ComBitLength = 1U;
+      break;
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED8:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER8:
+      orc_CurSignal.u16_ComBitLength = 8U;
+      break;
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER16:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED16:
+      orc_CurSignal.u16_ComBitLength = 16U;
+      break;
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER24:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED24:
+      orc_CurSignal.u16_ComBitLength = 24U;
+      break;
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_REAL32:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER32:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED32:
+      orc_CurSignal.u16_ComBitLength = 32U;
+      break;
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER40:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED40:
+      orc_CurSignal.u16_ComBitLength = 40U;
+      break;
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER48:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED48:
+      orc_CurSignal.u16_ComBitLength = 48U;
+      break;
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER56:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED56:
+      orc_CurSignal.u16_ComBitLength = 56U;
+      break;
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER64:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED64:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_REAL64:
+      orc_CurSignal.u16_ComBitLength = 64U;
+      break;
+    default:
+      // Reported next
+      break;
+    }
+    // Data type (automatic calculation based on set type)
+    switch (pc_CoSignalObject->u8_DataType) {
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER8:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER16:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER32:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER64:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER24:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER40:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER48:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER56:
+      if (orc_CurSignal.u16_ComBitLength <= 8U) {
+        orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eSINT8);
+      } else if ((orc_CurSignal.u16_ComBitLength > 8U) &&
+                 (orc_CurSignal.u16_ComBitLength <= 16U)) {
+        orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eSINT16);
+      } else if ((orc_CurSignal.u16_ComBitLength > 16U) &&
+                 (orc_CurSignal.u16_ComBitLength <= 32U)) {
+        orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eSINT32);
+      } else {
+        orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eSINT64);
       }
-      //Data type (automatic calculation based on set type)
-      switch (pc_CoSignalObject->u8_DataType)
-      {
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER8:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER16:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER32:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER64:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER24:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER40:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER48:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_INTEGER56:
-         if (orc_CurSignal.u16_ComBitLength <= 8U)
-         {
-            orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eSINT8);
-         }
-         else if ((orc_CurSignal.u16_ComBitLength > 8U) && (orc_CurSignal.u16_ComBitLength <= 16U))
-         {
-            orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eSINT16);
-         }
-         else if ((orc_CurSignal.u16_ComBitLength > 16U) && (orc_CurSignal.u16_ComBitLength <= 32U))
-         {
-            orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eSINT32);
-         }
-         else
-         {
-            orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eSINT64);
-         }
-         break;
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_BOOLEAN:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED8:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED16:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED32:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED64:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED24:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED40:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED48:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED56:
-         if (orc_CurSignal.u16_ComBitLength <= 8U)
-         {
-            orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eUINT8);
-         }
-         else if ((orc_CurSignal.u16_ComBitLength > 8U) && (orc_CurSignal.u16_ComBitLength <= 16U))
-         {
-            orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eUINT16);
-         }
-         else if ((orc_CurSignal.u16_ComBitLength > 16U) && (orc_CurSignal.u16_ComBitLength <= 32U))
-         {
-            orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eUINT32);
-         }
-         else
-         {
-            orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eUINT64);
-         }
-         break;
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_REAL32:
-      case C_OscCanOpenObjectData::hu8_DATA_TYPE_REAL64:
-         if (orc_CurSignal.u16_ComBitLength <= 32U)
-         {
-            orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eFLOAT32);
-         }
-         else
-         {
-            orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eFLOAT64);
-         }
-         break;
-      default:
-         mh_AddUserMessage(ou32_CoSignalObjectIndex, "", "data type not supported",
-                           static_cast<int32_t>(ou32_CoSignalObjectSubIndex), true);
-         s32_Retval = C_CONFIG;
-         break;
+      break;
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_BOOLEAN:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED8:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED16:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED32:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED64:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED24:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED40:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED48:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_UNSIGNED56:
+      if (orc_CurSignal.u16_ComBitLength <= 8U) {
+        orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eUINT8);
+      } else if ((orc_CurSignal.u16_ComBitLength > 8U) &&
+                 (orc_CurSignal.u16_ComBitLength <= 16U)) {
+        orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eUINT16);
+      } else if ((orc_CurSignal.u16_ComBitLength > 16U) &&
+                 (orc_CurSignal.u16_ComBitLength <= 32U)) {
+        orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eUINT32);
+      } else {
+        orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eUINT64);
       }
-
-      //Min & max & init value
-      if (mh_CalcMinMaxInit(pc_CoSignalObject, orc_CurDataPoolSignal, orc_CurSignal.u16_ComBitLength, oq_IsEds,
-                            orq_DefaultMinMax) != C_NO_ERR)
-      {
-         mh_AddUserMessage(ou32_CoSignalObjectIndex, "",
-                           "signal bit length does not fit the selected data type",
-                           static_cast<int32_t>(ou32_CoSignalObjectSubIndex), true);
-         s32_Retval = C_CONFIG;
+      break;
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_REAL32:
+    case C_OscCanOpenObjectData::hu8_DATA_TYPE_REAL64:
+      if (orc_CurSignal.u16_ComBitLength <= 32U) {
+        orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eFLOAT32);
+      } else {
+        orc_CurDataPoolSignal.SetType(C_OscNodeDataPoolContent::eFLOAT64);
       }
-
-      //Access
-      //Use default == current
-   }
-   else
-   {
-      mh_AddUserMessage(ou32_CoSignalObjectIndex, "", "does not exist",
-                        static_cast<int32_t>(ou32_CoSignalObjectSubIndex), true);
+      break;
+    default:
+      mh_AddUserMessage(ou32_CoSignalObjectIndex, "", "data type not supported",
+                        static_cast<int32_t>(ou32_CoSignalObjectSubIndex),
+                        true);
       s32_Retval = C_CONFIG;
-   }
-   return s32_Retval;
+      break;
+    }
+
+    // Min & max & init value
+    if (mh_CalcMinMaxInit(pc_CoSignalObject, orc_CurDataPoolSignal,
+                          orc_CurSignal.u16_ComBitLength, oq_IsEds,
+                          orq_DefaultMinMax) != C_NO_ERR) {
+      mh_AddUserMessage(ou32_CoSignalObjectIndex, "",
+                        "signal bit length does not fit the selected data type",
+                        static_cast<int32_t>(ou32_CoSignalObjectSubIndex),
+                        true);
+      s32_Retval = C_CONFIG;
+    }
+
+    // Access
+    // Use default == current
+  } else {
+    mh_AddUserMessage(ou32_CoSignalObjectIndex, "", "does not exist",
+                      static_cast<int32_t>(ou32_CoSignalObjectSubIndex), true);
+    s32_Retval = C_CONFIG;
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -401,19 +380,16 @@ int32_t C_OscImportEdsDcf::h_ParseSignalContent(const std::map<uint16_t,
    Object name
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscImportEdsDcf::h_GetObjectName(const C_OscCanOpenObjectData & orc_CoObject)
-{
-   QString c_Retval;
+QString
+C_OscImportEdsDcf::h_GetObjectName(const C_OscCanOpenObjectData &orc_CoObject) {
+  QString c_Retval;
 
-   if (orc_CoObject.c_Denotation != "")
-   {
-      c_Retval = orc_CoObject.c_Denotation;
-   }
-   else
-   {
-      c_Retval = orc_CoObject.c_Name;
-   }
-   return c_Retval;
+  if (orc_CoObject.c_Denotation != "") {
+    c_Retval = orc_CoObject.c_Denotation;
+  } else {
+    c_Retval = orc_CoObject.c_Name;
+  }
+  return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -426,36 +402,28 @@ QString C_OscImportEdsDcf::h_GetObjectName(const C_OscCanOpenObjectData & orc_Co
    CO object value
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscImportEdsDcf::h_GetCoObjectValue(const C_OscCanOpenObjectData & orc_CoObject, const bool oq_IsEds)
-{
-   QString c_Retval;
+QString C_OscImportEdsDcf::h_GetCoObjectValue(
+    const C_OscCanOpenObjectData &orc_CoObject, const bool oq_IsEds) {
+  QString c_Retval;
 
-   if (oq_IsEds == true)
-   {
+  if (oq_IsEds == true) {
+    c_Retval = orc_CoObject.c_DefaultValue;
+  } else {
+    if (orc_CoObject.c_ParameterValue.isEmpty()) {
       c_Retval = orc_CoObject.c_DefaultValue;
-   }
-   else
-   {
-      if (orc_CoObject.c_ParameterValue.isEmpty())
-      {
-         c_Retval = orc_CoObject.c_DefaultValue;
-      }
-      else
-      {
-         c_Retval = orc_CoObject.c_ParameterValue;
-      }
-   }
+    } else {
+      c_Retval = orc_CoObject.c_ParameterValue;
+    }
+  }
 
-   return c_Retval;
+  return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscImportEdsDcf::C_OscImportEdsDcf(void)
-{
-}
+C_OscImportEdsDcf::C_OscImportEdsDcf(void) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get CO object by object ID
@@ -469,34 +437,28 @@ C_OscImportEdsDcf::C_OscImportEdsDcf(void)
    Else Valid object
 */
 //----------------------------------------------------------------------------------------------------------------------
-const C_OscCanOpenObjectData * C_OscImportEdsDcf::mh_GetCoObject(const std::map<uint16_t,
-                                                                                C_OscCanOpenObject> & orc_CoObjects,
-                                                                 const uint32_t ou32_Id, const int32_t os32_SubIndex)
-{
-   const C_OscCanOpenObjectData * pc_Retval = NULL;
+const C_OscCanOpenObjectData *C_OscImportEdsDcf::mh_GetCoObject(
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const uint32_t ou32_Id, const int32_t os32_SubIndex) {
+  const C_OscCanOpenObjectData *pc_Retval = NULL;
 
-   //use "find" as "at" is not available in C++98
-   const std::map<uint16_t,
-                  C_OscCanOpenObject>::const_iterator c_Element = orc_CoObjects.find(static_cast<uint16_t>(ou32_Id));
+  // use "find" as "at" is not available in C++98
+  const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element =
+      orc_CoObjects.find(static_cast<uint16_t>(ou32_Id));
 
-   if (c_Element != orc_CoObjects.end())
-   {
-      if (os32_SubIndex < 0)
-      {
-         pc_Retval = &c_Element->second;
+  if (c_Element != orc_CoObjects.end()) {
+    if (os32_SubIndex < 0) {
+      pc_Retval = &c_Element->second;
+    } else {
+      const std::map<uint8_t, C_OscCanOpenObjectData>::const_iterator
+          c_SubElement = c_Element->second.c_SubObjects.find(
+              static_cast<uint8_t>(os32_SubIndex));
+      if (c_SubElement != c_Element->second.c_SubObjects.end()) {
+        pc_Retval = &c_SubElement->second;
       }
-      else
-      {
-         const std::map<uint8_t,
-                        C_OscCanOpenObjectData>::const_iterator c_SubElement = c_Element->second.c_SubObjects.find(
-            static_cast<uint8_t>(os32_SubIndex));
-         if (c_SubElement != c_Element->second.c_SubObjects.end())
-         {
-            pc_Retval = &c_SubElement->second;
-         }
-      }
-   }
-   return pc_Retval;
+    }
+  }
+  return pc_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -504,157 +466,129 @@ const C_OscCanOpenObjectData * C_OscImportEdsDcf::mh_GetCoObject(const std::map<
 
    \param[in]      ou32_StartingId              Starting ID for message section
    \param[in]      ou8_NodeId                   Node ID
-   \param[in]      orc_CoObjects                All CO objects of the current file
-   \param[in]      orc_Dummies                  Found and valid dummy data types
-   \param[in,out]  orc_AllMessageData           All imported core message data
-   \param[in]      oq_IsEds                     Flag if current file is an EDS file
-   \param[in,out]  orc_ImportMessages           Import result messages
+   \param[in]      orc_CoObjects                All CO objects of the current
+   file \param[in]      orc_Dummies                  Found and valid dummy data
+   types \param[in,out]  orc_AllMessageData           All imported core message
+   data \param[in]      oq_IsEds                     Flag if current file is an
+   EDS file \param[in,out]  orc_ImportMessages           Import result messages
    \param[in]      oq_IsTx                      Flag if message is a Tx message
    \param[in]      oq_RestrictForCanOpenUsage   Restrict for can open usage
    \param[in]      oq_ImportSrdoUseCase         Import SRDO use case
    \param[in,out]  orc_AllInvalidMessageData    All invalid core message data
-   \param[in,out]  orc_InvalidImportMessages    Import result messages per invalid message
+   \param[in,out]  orc_InvalidImportMessages    Import result messages per
+   invalid message
 
    \return
    C_NO_ERR Operation success
    C_CONFIG Operation failure: configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_ParseMessages(const uint32_t ou32_StartingId, const uint8_t ou8_NodeId,
-                                            const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
-                                            const QList<uint32_t> & orc_Dummies,
-                                            C_OscEdsDcfImportMessageGroup & orc_AllMessageData, const bool oq_IsEds,
-                                            QList<QStringList> & orc_ImportMessages,
-                                            const bool oq_IsTx, const bool oq_RestrictForCanOpenUsage,
-                                            const bool oq_ImportSrdoUseCase,
-                                            C_OscEdsDcfImportMessageGroup & orc_AllInvalidMessageData,
-                                            QList<QStringList> & orc_InvalidImportMessages)
-{
-   int32_t s32_Retval = C_NO_ERR;
-   const uint16_t u16_EndIdOffset = oq_ImportSrdoUseCase ? 0x40U : 0x200U;
-   const uint8_t u8_CobIdSubIndex = oq_ImportSrdoUseCase ?
-                                    C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_COB_ID :
-                                    C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_COB_ID;
+int32_t C_OscImportEdsDcf::mh_ParseMessages(
+    const uint32_t ou32_StartingId, const uint8_t ou8_NodeId,
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const QList<uint32_t> &orc_Dummies,
+    C_OscEdsDcfImportMessageGroup &orc_AllMessageData, const bool oq_IsEds,
+    QList<QStringList> &orc_ImportMessages, const bool oq_IsTx,
+    const bool oq_RestrictForCanOpenUsage, const bool oq_ImportSrdoUseCase,
+    C_OscEdsDcfImportMessageGroup &orc_AllInvalidMessageData,
+    QList<QStringList> &orc_InvalidImportMessages) {
+  int32_t s32_Retval = C_NO_ERR;
+  const uint16_t u16_EndIdOffset = oq_ImportSrdoUseCase ? 0x40U : 0x200U;
+  const uint8_t u8_CobIdSubIndex =
+      oq_ImportSrdoUseCase
+          ? C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_COB_ID
+          : C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_COB_ID;
 
-   for (std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element = orc_CoObjects.begin();
-        c_Element != orc_CoObjects.end();
-        ++c_Element)
-   {
-      //Main section
-      const C_OscCanOpenObjectData & rc_CoMessageMainObject = c_Element->second;
-      //Check if relevant object
-      if ((rc_CoMessageMainObject.u8_NumSubs != 255) &&
-          ((rc_CoMessageMainObject.u16_Index >= ou32_StartingId) &&
-           (rc_CoMessageMainObject.u16_Index < (ou32_StartingId + u16_EndIdOffset))))
-      {
-         const uint32_t u32_ItMessage = rc_CoMessageMainObject.u16_Index - ou32_StartingId;
-         //COB-ID section
-         //--------------
-         const C_OscCanOpenObjectData * pc_SubObject = NULL;
+  for (std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element =
+           orc_CoObjects.begin();
+       c_Element != orc_CoObjects.end(); ++c_Element) {
+    // Main section
+    const C_OscCanOpenObjectData &rc_CoMessageMainObject = c_Element->second;
+    // Check if relevant object
+    if ((rc_CoMessageMainObject.u8_NumSubs != 255) &&
+        ((rc_CoMessageMainObject.u16_Index >= ou32_StartingId) &&
+         (rc_CoMessageMainObject.u16_Index <
+          (ou32_StartingId + u16_EndIdOffset)))) {
+      const uint32_t u32_ItMessage =
+          rc_CoMessageMainObject.u16_Index - ou32_StartingId;
+      // COB-ID section
+      //--------------
+      const C_OscCanOpenObjectData *pc_SubObject = NULL;
 
-         const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = orc_CoObjects.find(
-            static_cast<uint16_t>(ou32_StartingId + u32_ItMessage));
-         if (c_Object != orc_CoObjects.end())
-         {
-            const std::map<uint8_t,
-                           C_OscCanOpenObjectData>::const_iterator c_SubObject = c_Object->second.c_SubObjects.find(
-               u8_CobIdSubIndex);
-            if (c_SubObject != c_Object->second.c_SubObjects.end())
-            {
-               pc_SubObject = &c_SubObject->second;
-            }
-         }
-
-         if (pc_SubObject != NULL)
-         {
-            bool q_CobIdIncludesNodeId;
-            uint32_t u32_CobId;
-            if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_SubObject, oq_IsEds), ou8_NodeId,
-                                   u32_CobId, &q_CobIdIncludesNodeId) == C_NO_ERR)
-            {
-               //Check if message active
-               if ((u32_CobId & 0x80000000UL) == 0UL)
-               {
-                  bool q_Continue = false;
-                  if (oq_ImportSrdoUseCase)
-                  {
-                     //Information direction section
-                     //-----------------------------
-                     s32_Retval = C_OscImportEdsDcf::mh_DoesInformationDirectionMatchToParsedMessages(ou32_StartingId,
-                                                                                                      ou8_NodeId,
-                                                                                                      orc_CoObjects,
-                                                                                                      oq_IsEds, oq_IsTx,
-                                                                                                      u32_ItMessage,
-                                                                                                      q_Continue);
-                  }
-                  else
-                  {
-                     q_Continue = true;
-                  }
-                  if (q_Continue)
-                  {
-                     s32_Retval = C_OscImportEdsDcf::mh_ParseMessageContent(ou32_StartingId,
-                                                                            ou8_NodeId,
-                                                                            orc_CoObjects,
-                                                                            orc_Dummies,
-                                                                            orc_AllMessageData,
-                                                                            oq_IsEds,
-                                                                            orc_ImportMessages, oq_IsTx,
-                                                                            oq_RestrictForCanOpenUsage,
-                                                                            oq_ImportSrdoUseCase,
-                                                                            rc_CoMessageMainObject, u32_ItMessage,
-                                                                            u32_CobId, orc_AllInvalidMessageData,
-                                                                            orc_InvalidImportMessages,
-                                                                            q_CobIdIncludesNodeId);
-                  }
-               }
-               else
-               {
-                  if (oq_RestrictForCanOpenUsage)
-                  {
-                     s32_Retval = C_OscImportEdsDcf::mh_ParseMessageContent(ou32_StartingId,
-                                                                            ou8_NodeId, orc_CoObjects,
-                                                                            orc_Dummies,
-                                                                            orc_AllMessageData,
-                                                                            oq_IsEds,
-                                                                            orc_ImportMessages, oq_IsTx,
-                                                                            oq_RestrictForCanOpenUsage,
-                                                                            oq_ImportSrdoUseCase,
-                                                                            rc_CoMessageMainObject, u32_ItMessage,
-                                                                            u32_CobId, orc_AllInvalidMessageData,
-                                                                            orc_InvalidImportMessages,
-                                                                            q_CobIdIncludesNodeId);
-                  }
-                  else
-                  {
-                     std::stringstream c_Stream;
-                     const uint32_t u32_Id = u32_CobId & 0x1FFFFFFFUL;
-                     c_Stream << "Skipped message as marked as inactive (highest bit set in COB_ID) ";
-                     c_Stream << &std::hex << u32_Id;
-                     mh_AddUserMessage(ou32_StartingId + u32_ItMessage, "COB-ID used by PDO",
-                                       c_Stream.str().c_str(), u8_CobIdSubIndex,
-                                       true);
-                  }
-               }
-            }
-            else
-            {
-               mh_AddUserMessage(ou32_StartingId + u32_ItMessage, "COB-ID used by PDO",
-                                 "empty or not a number", u8_CobIdSubIndex, true);
-               s32_Retval = C_CONFIG;
-            }
-         }
-         else
-         {
-            mh_AddUserMessage(ou32_StartingId + u32_ItMessage, "COB-ID used by PDO",
-                              "does not exist", u8_CobIdSubIndex,
-                              true);
-            s32_Retval = C_CONFIG;
-         }
+      const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object =
+          orc_CoObjects.find(
+              static_cast<uint16_t>(ou32_StartingId + u32_ItMessage));
+      if (c_Object != orc_CoObjects.end()) {
+        const std::map<uint8_t, C_OscCanOpenObjectData>::const_iterator
+            c_SubObject = c_Object->second.c_SubObjects.find(u8_CobIdSubIndex);
+        if (c_SubObject != c_Object->second.c_SubObjects.end()) {
+          pc_SubObject = &c_SubObject->second;
+        }
       }
-   }
 
-   return s32_Retval;
+      if (pc_SubObject != NULL) {
+        bool q_CobIdIncludesNodeId;
+        uint32_t u32_CobId;
+        if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_SubObject, oq_IsEds),
+                               ou8_NodeId, u32_CobId,
+                               &q_CobIdIncludesNodeId) == C_NO_ERR) {
+          // Check if message active
+          if ((u32_CobId & 0x80000000UL) == 0UL) {
+            bool q_Continue = false;
+            if (oq_ImportSrdoUseCase) {
+              // Information direction section
+              //-----------------------------
+              s32_Retval = C_OscImportEdsDcf::
+                  mh_DoesInformationDirectionMatchToParsedMessages(
+                      ou32_StartingId, ou8_NodeId, orc_CoObjects, oq_IsEds,
+                      oq_IsTx, u32_ItMessage, q_Continue);
+            } else {
+              q_Continue = true;
+            }
+            if (q_Continue) {
+              s32_Retval = C_OscImportEdsDcf::mh_ParseMessageContent(
+                  ou32_StartingId, ou8_NodeId, orc_CoObjects, orc_Dummies,
+                  orc_AllMessageData, oq_IsEds, orc_ImportMessages, oq_IsTx,
+                  oq_RestrictForCanOpenUsage, oq_ImportSrdoUseCase,
+                  rc_CoMessageMainObject, u32_ItMessage, u32_CobId,
+                  orc_AllInvalidMessageData, orc_InvalidImportMessages,
+                  q_CobIdIncludesNodeId);
+            }
+          } else {
+            if (oq_RestrictForCanOpenUsage) {
+              s32_Retval = C_OscImportEdsDcf::mh_ParseMessageContent(
+                  ou32_StartingId, ou8_NodeId, orc_CoObjects, orc_Dummies,
+                  orc_AllMessageData, oq_IsEds, orc_ImportMessages, oq_IsTx,
+                  oq_RestrictForCanOpenUsage, oq_ImportSrdoUseCase,
+                  rc_CoMessageMainObject, u32_ItMessage, u32_CobId,
+                  orc_AllInvalidMessageData, orc_InvalidImportMessages,
+                  q_CobIdIncludesNodeId);
+            } else {
+              QString c_Stream;
+              const uint32_t u32_Id = u32_CobId & 0x1FFFFFFFUL;
+              c_Stream = QString("Skipped message as marked as inactive "
+                                 "(highest bit set in COB_ID) ") +
+                         QString::number(u32_Id, 16);
+              mh_AddUserMessage(
+                  ou32_StartingId + u32_ItMessage, "COB-ID used by PDO",
+                  c_Stream.toUtf8().constData(), u8_CobIdSubIndex, true);
+            }
+          }
+        } else {
+          mh_AddUserMessage(ou32_StartingId + u32_ItMessage,
+                            "COB-ID used by PDO", "empty or not a number",
+                            u8_CobIdSubIndex, true);
+          s32_Retval = C_CONFIG;
+        }
+      } else {
+        mh_AddUserMessage(ou32_StartingId + u32_ItMessage, "COB-ID used by PDO",
+                          "does not exist", u8_CobIdSubIndex, true);
+        s32_Retval = C_CONFIG;
+      }
+    }
+  }
+
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -673,50 +607,46 @@ int32_t C_OscImportEdsDcf::mh_ParseMessages(const uint32_t ou32_StartingId, cons
    C_CONFIG Operation failure: configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_DoesInformationDirectionMatchToParsedMessages(const uint32_t ou32_StartingId,
-                                                                            const uint8_t ou8_NodeId,
-                                                                            const std::map<uint16_t,
-                                                                                           C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_IsTx, const uint32_t ou32_MessageIndex,
-                                                                            bool & orq_Matches)
-{
-   int32_t s32_Retval = C_NO_ERR;
+int32_t C_OscImportEdsDcf::mh_DoesInformationDirectionMatchToParsedMessages(
+    const uint32_t ou32_StartingId, const uint8_t ou8_NodeId,
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const bool oq_IsEds, const bool oq_IsTx, const uint32_t ou32_MessageIndex,
+    bool &orq_Matches) {
+  int32_t s32_Retval = C_NO_ERR;
 
-   orq_Matches = false;
-   //Information direction section
-   //-----------------------------
-   const C_OscCanOpenObjectData * const pc_CoMessageInfoDirObject =
+  orq_Matches = false;
+  // Information direction section
+  //-----------------------------
+  const C_OscCanOpenObjectData *const pc_CoMessageInfoDirObject =
       mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_MessageIndex,
-                     C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_INFORMATION_DIRECTION);
-   if (pc_CoMessageInfoDirObject != NULL)
-   {
-      uint32_t u32_InfoDir;
-      if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageInfoDirObject, oq_IsEds), ou8_NodeId,
-                             u32_InfoDir, NULL) == C_NO_ERR)
-      {
-         if (((u32_InfoDir == 1UL) && (oq_IsTx == true)) ||
-             ((u32_InfoDir == 2UL) && (oq_IsTx == false)))
-         {
-            orq_Matches = true;
-         }
+                     C_OscCanOpenObjectDictionary::
+                         hu8_OD_SRDO_SUB_INDEX_INFORMATION_DIRECTION);
+  if (pc_CoMessageInfoDirObject != NULL) {
+    uint32_t u32_InfoDir;
+    if (mh_GetIntegerValue(
+            h_GetCoObjectValue(*pc_CoMessageInfoDirObject, oq_IsEds),
+            ou8_NodeId, u32_InfoDir, NULL) == C_NO_ERR) {
+      if (((u32_InfoDir == 1UL) && (oq_IsTx == true)) ||
+          ((u32_InfoDir == 2UL) && (oq_IsTx == false))) {
+        orq_Matches = true;
       }
-      else
-      {
-         mh_AddUserMessage(ou32_StartingId + ou32_MessageIndex, "Information direction",
-                           "empty or not a number",
-                           C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_INFORMATION_DIRECTION,
-                           true);
-         s32_Retval = C_CONFIG;
-      }
-   }
-   else
-   {
-      mh_AddUserMessage(ou32_StartingId + ou32_MessageIndex, "Information direction",
-                        "does not exist",
-                        C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_INFORMATION_DIRECTION,
+    } else {
+      mh_AddUserMessage(ou32_StartingId + ou32_MessageIndex,
+                        "Information direction", "empty or not a number",
+                        C_OscCanOpenObjectDictionary::
+                            hu8_OD_SRDO_SUB_INDEX_INFORMATION_DIRECTION,
                         true);
       s32_Retval = C_CONFIG;
-   }
-   return s32_Retval;
+    }
+  } else {
+    mh_AddUserMessage(ou32_StartingId + ou32_MessageIndex,
+                      "Information direction", "does not exist",
+                      C_OscCanOpenObjectDictionary::
+                          hu8_OD_SRDO_SUB_INDEX_INFORMATION_DIRECTION,
+                      true);
+    s32_Retval = C_CONFIG;
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -724,11 +654,11 @@ int32_t C_OscImportEdsDcf::mh_DoesInformationDirectionMatchToParsedMessages(cons
 
    \param[in]      ou32_StartingId              Starting ID for message section
    \param[in]      ou8_NodeId                   Node ID
-   \param[in]      orc_CoObjects                All CO objects of the current file
-   \param[in]      orc_Dummies                  Found and valid dummy data types
-   \param[in,out]  orc_AllMessageData           All imported core message data
-   \param[in]      oq_IsEds                     Flag if current file is an EDS file
-   \param[in,out]  orc_ImportMessages           Import result messages
+   \param[in]      orc_CoObjects                All CO objects of the current
+   file \param[in]      orc_Dummies                  Found and valid dummy data
+   types \param[in,out]  orc_AllMessageData           All imported core message
+   data \param[in]      oq_IsEds                     Flag if current file is an
+   EDS file \param[in,out]  orc_ImportMessages           Import result messages
    \param[in]      oq_IsTx                      Flag if message is a Tx message
    \param[in]      oq_RestrictForCanOpenUsage   Restrict for can open usage
    \param[in]      oq_ImportSrdoUseCase         Import SRDO use case
@@ -736,161 +666,143 @@ int32_t C_OscImportEdsDcf::mh_DoesInformationDirectionMatchToParsedMessages(cons
    \param[in]      ou32_ItMessage               Current message index
    \param[in]      ou32_CobId                   Message COB-ID
    \param[in,out]  orc_AllInvalidMessageData    All invalid core message data
-   \param[in,out]  orc_InvalidImportMessages    Import result messages per invalid message
-   \param[in]      oq_CobIdIncludesNodeId       Flag if message COB-ID includes node id
+   \param[in,out]  orc_InvalidImportMessages    Import result messages per
+   invalid message \param[in]      oq_CobIdIncludesNodeId       Flag if message
+   COB-ID includes node id
 
    \return
    C_NO_ERR Operation success
    C_CONFIG Operation failure: configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_ParseMessageContent(const uint32_t ou32_StartingId, const uint8_t ou8_NodeId,
-                                                  const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
-                                                  const QList<uint32_t> & orc_Dummies,
-                                                  C_OscEdsDcfImportMessageGroup & orc_AllMessageData,
-                                                  const bool oq_IsEds,
-                                                  QList<QStringList> & orc_ImportMessages,
-                                                  const bool oq_IsTx, const bool oq_RestrictForCanOpenUsage,
-                                                  const bool oq_ImportSrdoUseCase,
-                                                  const C_OscCanOpenObjectData & orc_CoMessageMainObject,
-                                                  const uint32_t ou32_ItMessage, const uint32_t ou32_CobId,
-                                                  C_OscEdsDcfImportMessageGroup & orc_AllInvalidMessageData,
-                                                  QList<QStringList> & orc_InvalidImportMessages,
-                                                  const bool oq_CobIdIncludesNodeId)
-{
-   const uint16_t u16_MappingOffset = oq_ImportSrdoUseCase ? 0x80U : 0x200U;
-   int32_t s32_Retval = C_NO_ERR;
-   bool q_AddToSkippedMessages = false;
+int32_t C_OscImportEdsDcf::mh_ParseMessageContent(
+    const uint32_t ou32_StartingId, const uint8_t ou8_NodeId,
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const QList<uint32_t> &orc_Dummies,
+    C_OscEdsDcfImportMessageGroup &orc_AllMessageData, const bool oq_IsEds,
+    QList<QStringList> &orc_ImportMessages, const bool oq_IsTx,
+    const bool oq_RestrictForCanOpenUsage, const bool oq_ImportSrdoUseCase,
+    const C_OscCanOpenObjectData &orc_CoMessageMainObject,
+    const uint32_t ou32_ItMessage, const uint32_t ou32_CobId,
+    C_OscEdsDcfImportMessageGroup &orc_AllInvalidMessageData,
+    QList<QStringList> &orc_InvalidImportMessages,
+    const bool oq_CobIdIncludesNodeId) {
+  const uint16_t u16_MappingOffset = oq_ImportSrdoUseCase ? 0x80U : 0x200U;
+  int32_t s32_Retval = C_NO_ERR;
+  bool q_AddToSkippedMessages = false;
 
-   QStringList c_CurMessages;
-   C_OscCanMessage c_Message;
-   //Name
-   if (oq_IsEds)
-   {
-      c_Message.c_Name = orc_CoMessageMainObject.c_Name.toUtf8().constData();
-   }
-   else
-   {
-      c_Message.c_Name = C_OscImportEdsDcf::h_GetObjectName(orc_CoMessageMainObject);
-   }
-   //Extended ID
-   if ((ou32_CobId & 0x20000000UL) > 0UL)
-   {
-      c_Message.q_IsExtended = true;
-   }
-   else
-   {
-      c_Message.q_IsExtended = false;
-   }
-   //CAN ID
-   c_Message.u32_CanId = ou32_CobId & 0x1FFFFFFFUL;
-   //CANopen attributes
-   if (oq_RestrictForCanOpenUsage)
-   {
-      c_Message.q_CanOpenManagerCobIdIncludesNodeId = oq_CobIdIncludesNodeId;
-      // u32_CanId has the resulting CAN ID with already added node id
-      if (oq_CobIdIncludesNodeId)
-      {
-         c_Message.u32_CanOpenManagerCobIdOffset = c_Message.u32_CanId - ou8_NodeId;
-      }
-      else
-      {
-         c_Message.u32_CanOpenManagerCobIdOffset = c_Message.u32_CanId;
-      }
-      c_Message.u16_CanOpenManagerPdoIndex = static_cast<uint16_t>(ou32_ItMessage);
-      if ((ou32_CobId & 0x80000000UL) == 0UL)
-      {
-         c_Message.q_CanOpenManagerMessageActive = true;
-      }
-      else
-      {
-         c_Message.q_CanOpenManagerMessageActive = false;
-      }
+  QStringList c_CurMessages;
+  C_OscCanMessage c_Message;
+  // Name
+  if (oq_IsEds) {
+    c_Message.c_Name = orc_CoMessageMainObject.c_Name.toUtf8().constData();
+  } else {
+    c_Message.c_Name =
+        C_OscImportEdsDcf::h_GetObjectName(orc_CoMessageMainObject);
+  }
+  // Extended ID
+  if ((ou32_CobId & 0x20000000UL) > 0UL) {
+    c_Message.q_IsExtended = true;
+  } else {
+    c_Message.q_IsExtended = false;
+  }
+  // CAN ID
+  c_Message.u32_CanId = ou32_CobId & 0x1FFFFFFFUL;
+  // CANopen attributes
+  if (oq_RestrictForCanOpenUsage) {
+    c_Message.q_CanOpenManagerCobIdIncludesNodeId = oq_CobIdIncludesNodeId;
+    // u32_CanId has the resulting CAN ID with already added node id
+    if (oq_CobIdIncludesNodeId) {
+      c_Message.u32_CanOpenManagerCobIdOffset =
+          c_Message.u32_CanId - ou8_NodeId;
+    } else {
+      c_Message.u32_CanOpenManagerCobIdOffset = c_Message.u32_CanId;
+    }
+    c_Message.u16_CanOpenManagerPdoIndex =
+        static_cast<uint16_t>(ou32_ItMessage);
+    if ((ou32_CobId & 0x80000000UL) == 0UL) {
+      c_Message.q_CanOpenManagerMessageActive = true;
+    } else {
+      c_Message.q_CanOpenManagerMessageActive = false;
+    }
 
-      //Transmission type section
-      //-------------------------
-      C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(ou32_StartingId, ou32_ItMessage, ou8_NodeId,
-                                                               orc_CoObjects, oq_IsEds, q_AddToSkippedMessages,
-                                                               c_CurMessages, c_Message);
-   }
-   else
-   {
-      s32_Retval = C_OscImportEdsDcf::mh_LoadMessageTransmissionType(ou32_StartingId, ou32_ItMessage, ou8_NodeId,
-                                                                     orc_CoObjects, oq_IsEds, oq_ImportSrdoUseCase,
-                                                                     c_CurMessages, c_Message);
-   }
-   //Optional
-   //Event-timer section
-   //-------------------
-   if (oq_RestrictForCanOpenUsage)
-   {
-      C_OscImportEdsDcf::mh_LoadEventTimerSectionCanOpen(ou32_StartingId, ou32_ItMessage, ou8_NodeId,
-                                                         orc_CoObjects, oq_IsEds, oq_IsTx, c_Message);
-   }
-   else
-   {
-      if (oq_ImportSrdoUseCase)
-      {
-         C_OscImportEdsDcf::mh_LoadSrdoCyclicSection(ou32_StartingId, ou32_ItMessage, ou8_NodeId,
-                                                     orc_CoObjects, oq_IsEds, c_CurMessages, c_Message);
-      }
-      else
-      {
-         C_OscImportEdsDcf::mh_LoadEventTimerSection(ou32_StartingId, ou32_ItMessage, ou8_NodeId,
-                                                     orc_CoObjects, oq_IsEds, oq_IsTx, c_CurMessages, c_Message);
-      }
-   }
+    // Transmission type section
+    //-------------------------
+    C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(
+        ou32_StartingId, ou32_ItMessage, ou8_NodeId, orc_CoObjects, oq_IsEds,
+        q_AddToSkippedMessages, c_CurMessages, c_Message);
+  } else {
+    s32_Retval = C_OscImportEdsDcf::mh_LoadMessageTransmissionType(
+        ou32_StartingId, ou32_ItMessage, ou8_NodeId, orc_CoObjects, oq_IsEds,
+        oq_ImportSrdoUseCase, c_CurMessages, c_Message);
+  }
+  // Optional
+  // Event-timer section
+  //-------------------
+  if (oq_RestrictForCanOpenUsage) {
+    C_OscImportEdsDcf::mh_LoadEventTimerSectionCanOpen(
+        ou32_StartingId, ou32_ItMessage, ou8_NodeId, orc_CoObjects, oq_IsEds,
+        oq_IsTx, c_Message);
+  } else {
+    if (oq_ImportSrdoUseCase) {
+      C_OscImportEdsDcf::mh_LoadSrdoCyclicSection(
+          ou32_StartingId, ou32_ItMessage, ou8_NodeId, orc_CoObjects, oq_IsEds,
+          c_CurMessages, c_Message);
+    } else {
+      C_OscImportEdsDcf::mh_LoadEventTimerSection(
+          ou32_StartingId, ou32_ItMessage, ou8_NodeId, orc_CoObjects, oq_IsEds,
+          oq_IsTx, c_CurMessages, c_Message);
+    }
+  }
 
-   //Inhibit-time section
-   //-------------------
-   if (oq_RestrictForCanOpenUsage)
-   {
-      C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(ou32_StartingId, ou32_ItMessage, ou8_NodeId,
-                                                          orc_CoObjects, oq_IsEds, c_CurMessages, c_Message);
-   }
+  // Inhibit-time section
+  //-------------------
+  if (oq_RestrictForCanOpenUsage) {
+    C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(
+        ou32_StartingId, ou32_ItMessage, ou8_NodeId, orc_CoObjects, oq_IsEds,
+        c_CurMessages, c_Message);
+  }
 
-   if (s32_Retval == C_NO_ERR)
-   {
-      //Signals
+  if (s32_Retval == C_NO_ERR) {
+    // Signals
 
-      if (q_AddToSkippedMessages)
-      {
-         s32_Retval = mh_ParseSignals(ou32_StartingId + ou32_ItMessage, u16_MappingOffset, ou8_NodeId,
-                                      orc_CoObjects, orc_Dummies, c_Message, orc_AllInvalidMessageData.c_OscSignalData,
-                                      orc_AllInvalidMessageData.c_SignalDefaultMinMaxValuesUsed,
-                                      oq_IsEds, oq_RestrictForCanOpenUsage, oq_ImportSrdoUseCase, c_CurMessages);
-      }
-      else
-      {
-         s32_Retval = mh_ParseSignals(ou32_StartingId + ou32_ItMessage, u16_MappingOffset, ou8_NodeId,
-                                      orc_CoObjects, orc_Dummies, c_Message, orc_AllMessageData.c_OscSignalData,
-                                      orc_AllMessageData.c_SignalDefaultMinMaxValuesUsed,
-                                      oq_IsEds, oq_RestrictForCanOpenUsage, oq_ImportSrdoUseCase, c_CurMessages);
-      }
-      if (s32_Retval != C_NO_ERR)
-      {
-         //Ignore signal parsing errors, at least message was valid
-         s32_Retval = C_NO_ERR;
-         mh_AddUserMessage(ou32_StartingId + ou32_ItMessage + u16_MappingOffset, "",
-                           "Information: PDO has no mapping.",
-                           -1L, false, &c_CurMessages);
-      }
-      if (q_AddToSkippedMessages)
-      {
-         //Should be in sync
-         orc_AllInvalidMessageData.c_OscMessageData.push_back(c_Message);
-         orc_AllInvalidMessageData.c_MessageIsSrdo.push_back(static_cast<uint8_t>(oq_ImportSrdoUseCase));
-         orc_InvalidImportMessages.push_back(c_CurMessages);
-      }
-      else
-      {
-         //Should be in sync
-         orc_AllMessageData.c_OscMessageData.push_back(c_Message);
-         orc_AllMessageData.c_MessageIsSrdo.push_back(static_cast<uint8_t>(oq_ImportSrdoUseCase));
-         orc_ImportMessages.push_back(c_CurMessages);
-      }
-   }
-   return s32_Retval;
+    if (q_AddToSkippedMessages) {
+      s32_Retval = mh_ParseSignals(
+          ou32_StartingId + ou32_ItMessage, u16_MappingOffset, ou8_NodeId,
+          orc_CoObjects, orc_Dummies, c_Message,
+          orc_AllInvalidMessageData.c_OscSignalData,
+          orc_AllInvalidMessageData.c_SignalDefaultMinMaxValuesUsed, oq_IsEds,
+          oq_RestrictForCanOpenUsage, oq_ImportSrdoUseCase, c_CurMessages);
+    } else {
+      s32_Retval = mh_ParseSignals(
+          ou32_StartingId + ou32_ItMessage, u16_MappingOffset, ou8_NodeId,
+          orc_CoObjects, orc_Dummies, c_Message,
+          orc_AllMessageData.c_OscSignalData,
+          orc_AllMessageData.c_SignalDefaultMinMaxValuesUsed, oq_IsEds,
+          oq_RestrictForCanOpenUsage, oq_ImportSrdoUseCase, c_CurMessages);
+    }
+    if (s32_Retval != C_NO_ERR) {
+      // Ignore signal parsing errors, at least message was valid
+      s32_Retval = C_NO_ERR;
+      mh_AddUserMessage(ou32_StartingId + ou32_ItMessage + u16_MappingOffset,
+                        "", "Information: PDO has no mapping.", -1L, false,
+                        &c_CurMessages);
+    }
+    if (q_AddToSkippedMessages) {
+      // Should be in sync
+      orc_AllInvalidMessageData.c_OscMessageData.push_back(c_Message);
+      orc_AllInvalidMessageData.c_MessageIsSrdo.push_back(
+          static_cast<uint8_t>(oq_ImportSrdoUseCase));
+      orc_InvalidImportMessages.push_back(c_CurMessages);
+    } else {
+      // Should be in sync
+      orc_AllMessageData.c_OscMessageData.push_back(c_Message);
+      orc_AllMessageData.c_MessageIsSrdo.push_back(
+          static_cast<uint8_t>(oq_ImportSrdoUseCase));
+      orc_ImportMessages.push_back(c_CurMessages);
+    }
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -912,60 +824,56 @@ int32_t C_OscImportEdsDcf::mh_ParseMessageContent(const uint32_t ou32_StartingId
    \retval   C_CONFIG   Operation failure: configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_LoadMessageTransmissionType(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
-                                                          const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                                   C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_ImportSrdoUseCase, QStringList & orc_CurMessages,
-                                                          C_OscCanMessage & orc_Message)
-{
-   int32_t s32_Retval = C_NO_ERR;
-   const uint8_t u8_ActualSubIndex =
-      oq_ImportSrdoUseCase ? C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_TRANSMISSION_TYPE :
-      C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE;
-   const C_OscCanOpenObjectData * const pc_CoMessageTransTypeObject =
-      mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage, u8_ActualSubIndex);
+int32_t C_OscImportEdsDcf::mh_LoadMessageTransmissionType(
+    const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
+    const uint8_t ou8_NodeId,
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const bool oq_IsEds, const bool oq_ImportSrdoUseCase,
+    QStringList &orc_CurMessages, C_OscCanMessage &orc_Message) {
+  int32_t s32_Retval = C_NO_ERR;
+  const uint8_t u8_ActualSubIndex =
+      oq_ImportSrdoUseCase
+          ? C_OscCanOpenObjectDictionary::
+                hu8_OD_SRDO_SUB_INDEX_TRANSMISSION_TYPE
+          : C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE;
+  const C_OscCanOpenObjectData *const pc_CoMessageTransTypeObject =
+      mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
+                     u8_ActualSubIndex);
 
-   if (pc_CoMessageTransTypeObject != NULL)
-   {
-      uint32_t u32_TransmissionType;
-      if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageTransTypeObject, oq_IsEds), ou8_NodeId,
-                             u32_TransmissionType) == C_NO_ERR)
-      {
-         if ((u32_TransmissionType >= 1UL) && (u32_TransmissionType <= 0xF0UL))
-         {
-            orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CYCLIC;
-            mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
-                              "the message type \"synchronous\" was converted to \"cyclic\".\n"
-                              "Cycle time set default to " +
-                              QString::number(
-                                 orc_Message.u32_CycleTimeMs) + "ms.", u8_ActualSubIndex, false,
-                              &orc_CurMessages);
-         }
-         else if ((u32_TransmissionType == 0xFCUL) || (u32_TransmissionType == 0xFDUL))
-         {
-            mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
-                              "not supported", u8_ActualSubIndex, true);
-            s32_Retval = C_CONFIG;
-         }
-         else
-         {
-            orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_ON_EVENT;
-         }
+  if (pc_CoMessageTransTypeObject != NULL) {
+    uint32_t u32_TransmissionType;
+    if (mh_GetIntegerValue(
+            h_GetCoObjectValue(*pc_CoMessageTransTypeObject, oq_IsEds),
+            ou8_NodeId, u32_TransmissionType) == C_NO_ERR) {
+      if ((u32_TransmissionType >= 1UL) && (u32_TransmissionType <= 0xF0UL)) {
+        orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CYCLIC;
+        mh_AddUserMessage(
+            ou32_StartingId + ou32_ItMessage, "Transmission type",
+            "the message type \"synchronous\" was converted to \"cyclic\".\n"
+            "Cycle time set default to " +
+                QString::number(orc_Message.u32_CycleTimeMs) + "ms.",
+            u8_ActualSubIndex, false, &orc_CurMessages);
+      } else if ((u32_TransmissionType == 0xFCUL) ||
+                 (u32_TransmissionType == 0xFDUL)) {
+        mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
+                          "not supported", u8_ActualSubIndex, true);
+        s32_Retval = C_CONFIG;
+      } else {
+        orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_ON_EVENT;
       }
-      else
-      {
-         mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
-                           "empty or not a number, default set to: \"on event\"", u8_ActualSubIndex, false,
-                           &orc_CurMessages);
-         orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_ON_EVENT;
-      }
-   }
-   else
-   {
+    } else {
       mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
-                        "does not exist, default set to: \"on event\"", u8_ActualSubIndex, false, &orc_CurMessages);
+                        "empty or not a number, default set to: \"on event\"",
+                        u8_ActualSubIndex, false, &orc_CurMessages);
       orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_ON_EVENT;
-   }
-   return s32_Retval;
+    }
+  } else {
+    mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
+                      "does not exist, default set to: \"on event\"",
+                      u8_ActualSubIndex, false, &orc_CurMessages);
+    orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_ON_EVENT;
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -981,85 +889,77 @@ int32_t C_OscImportEdsDcf::mh_LoadMessageTransmissionType(const uint32_t ou32_St
    \param[in,out]  orc_Message               Message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou32_StartingId,
-                                                              const uint32_t ou32_ItMessage, const uint8_t ou8_NodeId,
-                                                              const std::map<uint16_t,
-                                                                             C_OscCanOpenObject> & orc_CoObjects,
-                                                              const bool oq_IsEds, bool & orq_AddToSkippedMessages,
-                                                              QStringList & orc_CurMessages,
-                                                              C_OscCanMessage & orc_Message)
-{
-   const C_OscCanOpenObjectData * const pc_CoMessageTransTypeObject =
-      mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
-                     C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE);
+void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(
+    const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
+    const uint8_t ou8_NodeId,
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const bool oq_IsEds, bool &orq_AddToSkippedMessages,
+    QStringList &orc_CurMessages, C_OscCanMessage &orc_Message) {
+  const C_OscCanOpenObjectData *const pc_CoMessageTransTypeObject =
+      mh_GetCoObject(
+          orc_CoObjects, ou32_StartingId + ou32_ItMessage,
+          C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE);
 
-   if (pc_CoMessageTransTypeObject != NULL)
-   {
-      uint32_t u32_TransmissionType;
-      if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageTransTypeObject, oq_IsEds), ou8_NodeId,
-                             u32_TransmissionType) == C_NO_ERR)
-      {
-         if (u32_TransmissionType == 254UL)
-         {
-            orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
-         }
-         else if (u32_TransmissionType == 255UL)
-         {
-            orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_255;
-         }
-         else if (u32_TransmissionType == 0UL)
-         {
-            orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_0;
-         }
-         else if (u32_TransmissionType <= 240UL)
-         {
-            orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_1_TO_240;
-            orc_Message.u8_CanOpenTxMethodAdditionalInfo = static_cast<uint8_t>(u32_TransmissionType);
-         }
-         else
-         {
-            if (pc_CoMessageTransTypeObject->IsWriteable())
-            {
-               orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
-               mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
-                                 "the message type \"CANopen type " +
-                                 QString::number(
-                                    u32_TransmissionType) + "\" was converted to \"async, manufacturer specific (254)\".",
-                                 C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE, false,
-                                 &orc_CurMessages);
-            }
-            else
-            {
-               orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
-               mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
-                                 "the message type \"CANopen type " +
-                                 QString::number(
-                                    u32_TransmissionType) + "\" was found which is not supported"
-                                 " and cannot be changed because it is read only.",
-                                 C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE, false,
-                                 &orc_CurMessages);
-               orq_AddToSkippedMessages = true;
-            }
-         }
+  if (pc_CoMessageTransTypeObject != NULL) {
+    uint32_t u32_TransmissionType;
+    if (mh_GetIntegerValue(
+            h_GetCoObjectValue(*pc_CoMessageTransTypeObject, oq_IsEds),
+            ou8_NodeId, u32_TransmissionType) == C_NO_ERR) {
+      if (u32_TransmissionType == 254UL) {
+        orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
+      } else if (u32_TransmissionType == 255UL) {
+        orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_255;
+      } else if (u32_TransmissionType == 0UL) {
+        orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_0;
+      } else if (u32_TransmissionType <= 240UL) {
+        orc_Message.e_TxMethod =
+            C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_1_TO_240;
+        orc_Message.u8_CanOpenTxMethodAdditionalInfo =
+            static_cast<uint8_t>(u32_TransmissionType);
+      } else {
+        if (pc_CoMessageTransTypeObject->IsWriteable()) {
+          orc_Message.e_TxMethod =
+              C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
+          mh_AddUserMessage(
+              ou32_StartingId + ou32_ItMessage, "Transmission type",
+              "the message type \"CANopen type " +
+                  QString::number(u32_TransmissionType) +
+                  "\" was converted to \"async, manufacturer specific (254)\".",
+              C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE,
+              false, &orc_CurMessages);
+        } else {
+          orc_Message.e_TxMethod =
+              C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
+          mh_AddUserMessage(
+              ou32_StartingId + ou32_ItMessage, "Transmission type",
+              "the message type \"CANopen type " +
+                  QString::number(u32_TransmissionType) +
+                  "\" was found which is not supported"
+                  " and cannot be changed because it is read only.",
+              C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE,
+              false, &orc_CurMessages);
+          orq_AddToSkippedMessages = true;
+        }
       }
-      else
-      {
-         mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
-                           "empty or not a number, default set to: \"async, manufacturer specific (254)\"",
-                           C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE, false,
-                           &orc_CurMessages);
-         orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
-      }
-   }
-   else
-   {
-      mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Transmission type",
-                        "does not exist, default set to: \"async, manufacturer specific (254)\"",
-                        C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE, false,
-                        &orc_CurMessages);
+    } else {
+      mh_AddUserMessage(
+          ou32_StartingId + ou32_ItMessage, "Transmission type",
+          "empty or not a number, default set to: \"async, manufacturer "
+          "specific (254)\"",
+          C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE,
+          false, &orc_CurMessages);
       orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
-      orq_AddToSkippedMessages = true;
-   }
+    }
+  } else {
+    mh_AddUserMessage(
+        ou32_StartingId + ou32_ItMessage, "Transmission type",
+        "does not exist, default set to: \"async, manufacturer specific "
+        "(254)\"",
+        C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_TRANSMISSION_TYPE, false,
+        &orc_CurMessages);
+    orc_Message.e_TxMethod = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
+    orq_AddToSkippedMessages = true;
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1075,74 +975,64 @@ void C_OscImportEdsDcf::mh_LoadMessageTransmissionTypeCanOpen(const uint32_t ou3
    \param[in,out]  orc_Message      Message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportEdsDcf::mh_LoadEventTimerSection(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
-                                                 const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                          C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_IsTx, QStringList & orc_CurMessages,
-                                                 C_OscCanMessage & orc_Message)
-{
-   if (oq_IsTx == false)
-   {
-      bool q_UseDefault = false;
-      QString c_Reason;
+void C_OscImportEdsDcf::mh_LoadEventTimerSection(
+    const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
+    const uint8_t ou8_NodeId,
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const bool oq_IsEds, const bool oq_IsTx, QStringList &orc_CurMessages,
+    C_OscCanMessage &orc_Message) {
+  if (oq_IsTx == false) {
+    bool q_UseDefault = false;
+    QString c_Reason;
 
-      // Event-timer only relevant for Rx because it equals the timeout time
-      const C_OscCanOpenObjectData * const pc_CoMessageEventTimerObject =
-         mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
-                        C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER);
-      if (pc_CoMessageEventTimerObject != NULL)
-      {
-         uint32_t u32_EventTimer;
-         if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageEventTimerObject, oq_IsEds),
-                                ou8_NodeId,
-                                u32_EventTimer) == C_NO_ERR)
-         {
-            if ((orc_Message.e_TxMethod == C_OscCanMessage::eTX_METHOD_ON_EVENT) ||
-                (u32_EventTimer > 0U))
-            {
-               orc_Message.u32_TimeoutMs = u32_EventTimer;
-            }
-            else
-            {
-               // In case of cyclic or change, 0ms is not supported.
-               // In case of on event, timeout is disabled
-               q_UseDefault = true;
-               c_Reason = "was 0ms";
-            }
-         }
-         else
-         {
-            q_UseDefault = true;
-            c_Reason = "empty or not a number";
-         }
+    // Event-timer only relevant for Rx because it equals the timeout time
+    const C_OscCanOpenObjectData *const pc_CoMessageEventTimerObject =
+        mh_GetCoObject(
+            orc_CoObjects, ou32_StartingId + ou32_ItMessage,
+            C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER);
+    if (pc_CoMessageEventTimerObject != NULL) {
+      uint32_t u32_EventTimer;
+      if (mh_GetIntegerValue(
+              h_GetCoObjectValue(*pc_CoMessageEventTimerObject, oq_IsEds),
+              ou8_NodeId, u32_EventTimer) == C_NO_ERR) {
+        if ((orc_Message.e_TxMethod == C_OscCanMessage::eTX_METHOD_ON_EVENT) ||
+            (u32_EventTimer > 0U)) {
+          orc_Message.u32_TimeoutMs = u32_EventTimer;
+        } else {
+          // In case of cyclic or change, 0ms is not supported.
+          // In case of on event, timeout is disabled
+          q_UseDefault = true;
+          c_Reason = "was 0ms";
+        }
+      } else {
+        q_UseDefault = true;
+        c_Reason = "empty or not a number";
       }
-      else
-      {
-         q_UseDefault = true;
-         c_Reason = "does not exist";
-      }
+    } else {
+      q_UseDefault = true;
+      c_Reason = "does not exist";
+    }
 
-      if (q_UseDefault == true)
-      {
-         // In case of cyclic or change, set to default.
-         // In case of on event, timeout is disabled
-         if (orc_Message.e_TxMethod != C_OscCanMessage::eTX_METHOD_ON_EVENT)
-         {
-            mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Event-timer",
-                              c_Reason + ", default set to: " +
-                              QString::number(
-                                 orc_Message.u32_TimeoutMs) + "ms", C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER, false,
-                              &orc_CurMessages);
-         }
-         else
-         {
-            mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Event-timer",
-                              c_Reason + ", default set to: disabled (0)",
-                              C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER, false,
-                              &orc_CurMessages);
-            orc_Message.u32_TimeoutMs = 0U;
-         }
+    if (q_UseDefault == true) {
+      // In case of cyclic or change, set to default.
+      // In case of on event, timeout is disabled
+      if (orc_Message.e_TxMethod != C_OscCanMessage::eTX_METHOD_ON_EVENT) {
+        mh_AddUserMessage(
+            ou32_StartingId + ou32_ItMessage, "Event-timer",
+            c_Reason + ", default set to: " +
+                QString::number(orc_Message.u32_TimeoutMs) + "ms",
+            C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER, false,
+            &orc_CurMessages);
+      } else {
+        mh_AddUserMessage(
+            ou32_StartingId + ou32_ItMessage, "Event-timer",
+            c_Reason + ", default set to: disabled (0)",
+            C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER, false,
+            &orc_CurMessages);
+        orc_Message.u32_TimeoutMs = 0U;
       }
-   }
+    }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1157,73 +1047,64 @@ void C_OscImportEdsDcf::mh_LoadEventTimerSection(const uint32_t ou32_StartingId,
    \param[in,out]  orc_Message      Message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportEdsDcf::mh_LoadSrdoCyclicSection(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
-                                                 const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                          C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, QStringList & orc_CurMessages,
-                                                 C_OscCanMessage & orc_Message)
-{
-   bool q_UseDefault = false;
-   QString c_Reason;
+void C_OscImportEdsDcf::mh_LoadSrdoCyclicSection(
+    const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
+    const uint8_t ou8_NodeId,
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const bool oq_IsEds, QStringList &orc_CurMessages,
+    C_OscCanMessage &orc_Message) {
+  bool q_UseDefault = false;
+  QString c_Reason;
 
-   const C_OscCanOpenObjectData * const pc_CoMessageCycleTimeObject =
-      mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
-                     C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_CYCLE_TIME);
+  const C_OscCanOpenObjectData *const pc_CoMessageCycleTimeObject =
+      mh_GetCoObject(
+          orc_CoObjects, ou32_StartingId + ou32_ItMessage,
+          C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_CYCLE_TIME);
 
-   if (pc_CoMessageCycleTimeObject != NULL)
-   {
-      uint32_t u32_CycleTime;
-      if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageCycleTimeObject, oq_IsEds),
-                             ou8_NodeId,
-                             u32_CycleTime) == C_NO_ERR)
-      {
-         if ((orc_Message.e_TxMethod == C_OscCanMessage::eTX_METHOD_ON_EVENT) ||
-             (u32_CycleTime > 0U))
-         {
-            orc_Message.u32_CycleTimeMs = u32_CycleTime;
-            orc_Message.u32_TimeoutMs = (u32_CycleTime * 3UL) + 10UL;
-         }
-         else
-         {
-            // In case of cyclic or change, 0ms is not supported.
-            // In case of on event, timeout is disabled
-            q_UseDefault = true;
-            c_Reason = "was 0ms";
-         }
+  if (pc_CoMessageCycleTimeObject != NULL) {
+    uint32_t u32_CycleTime;
+    if (mh_GetIntegerValue(
+            h_GetCoObjectValue(*pc_CoMessageCycleTimeObject, oq_IsEds),
+            ou8_NodeId, u32_CycleTime) == C_NO_ERR) {
+      if ((orc_Message.e_TxMethod == C_OscCanMessage::eTX_METHOD_ON_EVENT) ||
+          (u32_CycleTime > 0U)) {
+        orc_Message.u32_CycleTimeMs = u32_CycleTime;
+        orc_Message.u32_TimeoutMs = (u32_CycleTime * 3UL) + 10UL;
+      } else {
+        // In case of cyclic or change, 0ms is not supported.
+        // In case of on event, timeout is disabled
+        q_UseDefault = true;
+        c_Reason = "was 0ms";
       }
-      else
-      {
-         q_UseDefault = true;
-         c_Reason = "empty or not a number";
-      }
-   }
-   else
-   {
+    } else {
       q_UseDefault = true;
-      c_Reason = "does not exist";
-   }
+      c_Reason = "empty or not a number";
+    }
+  } else {
+    q_UseDefault = true;
+    c_Reason = "does not exist";
+  }
 
-   if (q_UseDefault == true)
-   {
-      // In case of cyclic or change, set to default.
-      // In case of on event, timeout is disabled
-      if (orc_Message.e_TxMethod != C_OscCanMessage::eTX_METHOD_ON_EVENT)
-      {
-         mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Cycle-time",
-                           c_Reason + ", default set to: " +
-                           QString::number(
-                              orc_Message.u32_TimeoutMs) + "ms", C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_CYCLE_TIME, false,
-                           &orc_CurMessages);
-      }
-      else
-      {
-         mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Cycle-time",
-                           c_Reason + ", default set to: disabled (0)",
-                           C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_CYCLE_TIME, false,
-                           &orc_CurMessages);
-         orc_Message.u32_CycleTimeMs = 0U;
-         orc_Message.u32_TimeoutMs = 0U;
-      }
-   }
+  if (q_UseDefault == true) {
+    // In case of cyclic or change, set to default.
+    // In case of on event, timeout is disabled
+    if (orc_Message.e_TxMethod != C_OscCanMessage::eTX_METHOD_ON_EVENT) {
+      mh_AddUserMessage(
+          ou32_StartingId + ou32_ItMessage, "Cycle-time",
+          c_Reason + ", default set to: " +
+              QString::number(orc_Message.u32_TimeoutMs) + "ms",
+          C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_CYCLE_TIME, false,
+          &orc_CurMessages);
+    } else {
+      mh_AddUserMessage(
+          ou32_StartingId + ou32_ItMessage, "Cycle-time",
+          c_Reason + ", default set to: disabled (0)",
+          C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_CYCLE_TIME, false,
+          &orc_CurMessages);
+      orc_Message.u32_CycleTimeMs = 0U;
+      orc_Message.u32_TimeoutMs = 0U;
+    }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1238,51 +1119,43 @@ void C_OscImportEdsDcf::mh_LoadSrdoCyclicSection(const uint32_t ou32_StartingId,
    \param[in,out]  orc_Message      Message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportEdsDcf::mh_LoadEventTimerSectionCanOpen(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
-                                                        const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                                 C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, const bool oq_IsTx,
-                                                        C_OscCanMessage & orc_Message)
-{
-   const C_OscCanOpenObjectData * const pc_CoMessageEventTimerObject =
-      mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
-                     C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER);
+void C_OscImportEdsDcf::mh_LoadEventTimerSectionCanOpen(
+    const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
+    const uint8_t ou8_NodeId,
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const bool oq_IsEds, const bool oq_IsTx, C_OscCanMessage &orc_Message) {
+  const C_OscCanOpenObjectData *const pc_CoMessageEventTimerObject =
+      mh_GetCoObject(
+          orc_CoObjects, ou32_StartingId + ou32_ItMessage,
+          C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_EVENT_TIMER);
 
-   if (pc_CoMessageEventTimerObject != NULL)
-   {
-      uint32_t u32_EventTimer;
-      if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageEventTimerObject, oq_IsEds),
-                             ou8_NodeId,
-                             u32_EventTimer) == C_NO_ERR)
-      {
-         //RPDO device info
-         orc_Message.u32_CycleTimeMs = u32_EventTimer;
-         //TPDO device info
-         if ((u32_EventTimer == 0UL) ||
-             (oq_IsTx == true))
-         {
-            // Special case: The device is the receiver and defines the timeout time with the value of the event time
-            // In this case, the timeout time must be set to the original device value
-            // Definition: In this scenario the cycle time and timeout will be set to the same value
-            orc_Message.u32_TimeoutMs = u32_EventTimer;
-         }
-         else
-         {
-            orc_Message.u32_TimeoutMs = (u32_EventTimer * 3UL) + 10UL;
-         }
+  if (pc_CoMessageEventTimerObject != NULL) {
+    uint32_t u32_EventTimer;
+    if (mh_GetIntegerValue(
+            h_GetCoObjectValue(*pc_CoMessageEventTimerObject, oq_IsEds),
+            ou8_NodeId, u32_EventTimer) == C_NO_ERR) {
+      // RPDO device info
+      orc_Message.u32_CycleTimeMs = u32_EventTimer;
+      // TPDO device info
+      if ((u32_EventTimer == 0UL) || (oq_IsTx == true)) {
+        // Special case: The device is the receiver and defines the timeout time
+        // with the value of the event time In this case, the timeout time must
+        // be set to the original device value Definition: In this scenario the
+        // cycle time and timeout will be set to the same value
+        orc_Message.u32_TimeoutMs = u32_EventTimer;
+      } else {
+        orc_Message.u32_TimeoutMs = (u32_EventTimer * 3UL) + 10UL;
       }
-      else
-      {
-         //Default
-         orc_Message.u32_CycleTimeMs = 0UL;
-         orc_Message.u32_TimeoutMs = 0UL;
-      }
-   }
-   else
-   {
-      //Default
+    } else {
+      // Default
       orc_Message.u32_CycleTimeMs = 0UL;
       orc_Message.u32_TimeoutMs = 0UL;
-   }
+    }
+  } else {
+    // Default
+    orc_Message.u32_CycleTimeMs = 0UL;
+    orc_Message.u32_TimeoutMs = 0UL;
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1297,229 +1170,216 @@ void C_OscImportEdsDcf::mh_LoadEventTimerSectionCanOpen(const uint32_t ou32_Star
    \param[in,out]  orc_Message      Message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
-                                                         const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                                  C_OscCanOpenObject> & orc_CoObjects, const bool oq_IsEds, QStringList & orc_CurMessages,
-                                                         C_OscCanMessage & orc_Message)
-{
-   const C_OscCanOpenObjectData * const pc_CoMessageInhibitTimeObject =
-      mh_GetCoObject(orc_CoObjects, ou32_StartingId + ou32_ItMessage,
-                     C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_INHIBIT_TIME);
+void C_OscImportEdsDcf::mh_LoadInhibitTimeSectionCanOpen(
+    const uint32_t ou32_StartingId, const uint32_t ou32_ItMessage,
+    const uint8_t ou8_NodeId,
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const bool oq_IsEds, QStringList &orc_CurMessages,
+    C_OscCanMessage &orc_Message) {
+  const C_OscCanOpenObjectData *const pc_CoMessageInhibitTimeObject =
+      mh_GetCoObject(
+          orc_CoObjects, ou32_StartingId + ou32_ItMessage,
+          C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_INHIBIT_TIME);
 
-   if (pc_CoMessageInhibitTimeObject != NULL)
-   {
-      uint32_t u32_InhibitTime;
-      if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageInhibitTimeObject, oq_IsEds),
-                             ou8_NodeId,
-                             u32_InhibitTime) == C_NO_ERR)
-      {
-         orc_Message.u16_DelayTimeMs =
-            static_cast<uint16_t>(std::ceil(static_cast<float32_t>(u32_InhibitTime) / 10.0F));
-         if ((u32_InhibitTime % 10) != 0)
-         {
-            mh_AddUserMessage(ou32_StartingId + ou32_ItMessage, "Inhibit-time",
-                              "Inhibit time cannot \"" + QString::number(
-                                 u32_InhibitTime * 100U) + "\" ns cannot be used, and has been rounded to \"" +
-                              QString::number(orc_Message.u16_DelayTimeMs) + "\" ms",
-                              C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_INHIBIT_TIME, false,
-                              &orc_CurMessages);
-         }
+  if (pc_CoMessageInhibitTimeObject != NULL) {
+    uint32_t u32_InhibitTime;
+    if (mh_GetIntegerValue(
+            h_GetCoObjectValue(*pc_CoMessageInhibitTimeObject, oq_IsEds),
+            ou8_NodeId, u32_InhibitTime) == C_NO_ERR) {
+      orc_Message.u16_DelayTimeMs = static_cast<uint16_t>(
+          std::ceil(static_cast<float32_t>(u32_InhibitTime) / 10.0F));
+      if ((u32_InhibitTime % 10) != 0) {
+        mh_AddUserMessage(
+            ou32_StartingId + ou32_ItMessage, "Inhibit-time",
+            "Inhibit time cannot \"" + QString::number(u32_InhibitTime * 100U) +
+                "\" ns cannot be used, and has been rounded to \"" +
+                QString::number(orc_Message.u16_DelayTimeMs) + "\" ms",
+            C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_INHIBIT_TIME, false,
+            &orc_CurMessages);
       }
-      else
-      {
-         //Default
-         orc_Message.u16_DelayTimeMs = 0U;
-      }
-   }
-   else
-   {
-      //Default
+    } else {
+      // Default
       orc_Message.u16_DelayTimeMs = 0U;
-   }
+    }
+  } else {
+    // Default
+    orc_Message.u16_DelayTimeMs = 0U;
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Load core signal data
 
    \param[in]      ou32_CoMessageId                   ID for CO message section
-   \param[in]      ou16_MappingOffset                 Mapping offset for message section
-   \param[in]      ou8_NodeId                         Node ID
-   \param[in]      orc_CoObjects                      All CO objects of the current file
-   \param[in]      orc_Dummies                        Found and valid dummy data types
-   \param[in,out]  orc_OscMessageData                 Imported core message data
-   \param[in,out]  orc_OscSignalData                  Imported core signal data
-   \param[in,out]  orc_SignalDefaultMinMaxValuesUsed  Flag if imported core signal data uses the default min max values or
-                                                      or specific set values
-   \param[in]      oq_IsEds                           Flag if current file is an EDS file
-   \param[in]      oq_RestrictForCanOpenUsage         Restrict for can open usage
-   \param[in]      oq_ImportSrdoUseCase               Import SRDO use case
-   \param[in,out]  orc_ImportMessages                 Import result messages
+   \param[in]      ou16_MappingOffset                 Mapping offset for message
+   section \param[in]      ou8_NodeId                         Node ID \param[in]
+   orc_CoObjects                      All CO objects of the current file
+   \param[in]      orc_Dummies                        Found and valid dummy data
+   types \param[in,out]  orc_OscMessageData                 Imported core
+   message data \param[in,out]  orc_OscSignalData                  Imported core
+   signal data \param[in,out]  orc_SignalDefaultMinMaxValuesUsed  Flag if
+   imported core signal data uses the default min max values or or specific set
+   values \param[in]      oq_IsEds                           Flag if current
+   file is an EDS file \param[in]      oq_RestrictForCanOpenUsage Restrict for
+   can open usage \param[in]      oq_ImportSrdoUseCase               Import SRDO
+   use case \param[in,out]  orc_ImportMessages                 Import result
+   messages
 
    \return
    C_NO_ERR Operation success
    C_CONFIG Operation failure: configuration invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_ParseSignals(const uint32_t ou32_CoMessageId, const uint16_t ou16_MappingOffset,
-                                           const uint8_t ou8_NodeId, const std::map<uint16_t,
-                                                                                    C_OscCanOpenObject> & orc_CoObjects,
-                                           const QList<uint32_t> & orc_Dummies,
-                                           C_OscCanMessage & orc_OscMessageData,
-                                           QList<C_OscNodeDataPoolListElement> & orc_OscSignalData,
-                                           QByteArray & orc_SignalDefaultMinMaxValuesUsed,
-                                           const bool oq_IsEds, const bool oq_RestrictForCanOpenUsage,
-                                           const bool oq_ImportSrdoUseCase,
-                                           QStringList & orc_ImportMessages)
-{
-   int32_t s32_Retval = C_NO_ERR;
-   //PDO mapping parameter
-   //---------------------
-   const C_OscCanOpenObjectData * const pc_CoMessageMappingObject =
+int32_t C_OscImportEdsDcf::mh_ParseSignals(
+    const uint32_t ou32_CoMessageId, const uint16_t ou16_MappingOffset,
+    const uint8_t ou8_NodeId,
+    const QHash<uint16_t, C_OscCanOpenObject> &orc_CoObjects,
+    const QList<uint32_t> &orc_Dummies, C_OscCanMessage &orc_OscMessageData,
+    QList<C_OscNodeDataPoolListElement> &orc_OscSignalData,
+    QByteArray &orc_SignalDefaultMinMaxValuesUsed, const bool oq_IsEds,
+    const bool oq_RestrictForCanOpenUsage, const bool oq_ImportSrdoUseCase,
+    QStringList &orc_ImportMessages) {
+  int32_t s32_Retval = C_NO_ERR;
+  // PDO mapping parameter
+  //---------------------
+  const C_OscCanOpenObjectData *const pc_CoMessageMappingObject =
       mh_GetCoObject(orc_CoObjects, ou32_CoMessageId + ou16_MappingOffset, 0);
 
-   // Adapt the DLC automatically
-   orc_OscMessageData.u16_Dlc = 0U;
+  // Adapt the DLC automatically
+  orc_OscMessageData.u16_Dlc = 0U;
 
-   if (pc_CoMessageMappingObject != NULL)
-   {
-      //Skip first section because this is just the number of sub segments
-      uint32_t u32_MappingCount;
-      if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageMappingObject, oq_IsEds), ou8_NodeId,
-                             u32_MappingCount) == C_NO_ERR)
-      {
-         if (u32_MappingCount <= 0x40U)
-         {
-            uint32_t u32_StartBitCounter = 0U;
-            for (uint32_t u32_ItSignal = 0U; (u32_ItSignal < u32_MappingCount) && (s32_Retval == C_NO_ERR);
-                 ++u32_ItSignal)
-            {
-               //Signal pointer section
-               //----------------------
-               //Skip every second signal for SRDOs (inverted signal)
-               if ((oq_ImportSrdoUseCase && ((u32_ItSignal % 2) == 0)) == false)
-               {
-                  //Skip first section because this is just the number of sub segments
-                  const C_OscCanOpenObjectData * const pc_CoMessageMappingSubObject =
-                     mh_GetCoObject(orc_CoObjects, ou32_CoMessageId + ou16_MappingOffset,
-                                    static_cast<int32_t>(u32_ItSignal + 1UL));
+  if (pc_CoMessageMappingObject != NULL) {
+    // Skip first section because this is just the number of sub segments
+    uint32_t u32_MappingCount;
+    if (mh_GetIntegerValue(
+            h_GetCoObjectValue(*pc_CoMessageMappingObject, oq_IsEds),
+            ou8_NodeId, u32_MappingCount) == C_NO_ERR) {
+      if (u32_MappingCount <= 0x40U) {
+        uint32_t u32_StartBitCounter = 0U;
+        for (uint32_t u32_ItSignal = 0U;
+             (u32_ItSignal < u32_MappingCount) && (s32_Retval == C_NO_ERR);
+             ++u32_ItSignal) {
+          // Signal pointer section
+          //----------------------
+          // Skip every second signal for SRDOs (inverted signal)
+          if ((oq_ImportSrdoUseCase && ((u32_ItSignal % 2) == 0)) == false) {
+            // Skip first section because this is just the number of sub
+            // segments
+            const C_OscCanOpenObjectData *const pc_CoMessageMappingSubObject =
+                mh_GetCoObject(orc_CoObjects,
+                               ou32_CoMessageId + ou16_MappingOffset,
+                               static_cast<int32_t>(u32_ItSignal + 1UL));
 
-                  if (pc_CoMessageMappingSubObject != NULL)
-                  {
-                     uint32_t u32_MappingSubIndexValue;
-                     if (mh_GetIntegerValue(h_GetCoObjectValue(*pc_CoMessageMappingSubObject, oq_IsEds), ou8_NodeId,
-                                            u32_MappingSubIndexValue) == C_NO_ERR)
-                     {
-                        bool q_Dummy = false;
-                        const uint32_t u32_CoRefId = (u32_MappingSubIndexValue & 0xFFFF0000UL) >> 16UL;
-                        //Search if this signal is a valid dummy signal
-                        for (uint32_t u32_ItDummy = 0; u32_ItDummy < orc_Dummies.size(); ++u32_ItDummy)
-                        {
-                           if (u32_CoRefId == orc_Dummies[u32_ItDummy])
-                           {
-                              q_Dummy = true;
-                              //Move start bit to expected position
-                              u32_StartBitCounter += (u32_MappingSubIndexValue & 0xFFU);
-                              break;
-                           }
-                        }
-                        //If not dummy signal check referenced CO object
-                        if (q_Dummy == false)
-                        {
-                           const uint32_t u32_CoRefIdSub = (u32_MappingSubIndexValue & 0xFF00UL) >> 8UL;
-                           const uint16_t u16_ExpectedLength = static_cast<uint16_t>(u32_MappingSubIndexValue & 0xFFUL);
-                           C_OscCanSignal c_CurSignal;
-                           C_OscNodeDataPoolListElement c_CurDataPoolSignal;
-                           bool q_DefaultMinMax = true;
-
-                           s32_Retval = C_OscImportEdsDcf::h_ParseSignalContent(orc_CoObjects, u32_CoRefId,
-                                                                                u32_CoRefIdSub,
-                                                                                u32_StartBitCounter,
-                                                                                oq_RestrictForCanOpenUsage, oq_IsEds,
-                                                                                c_CurSignal, c_CurDataPoolSignal,
-                                                                                q_DefaultMinMax);
-                           if (u16_ExpectedLength != c_CurSignal.u16_ComBitLength)
-                           {
-                              mh_AddUserMessage(u32_CoRefId, "",
-                                                "mapping signal bit length " +
-                                                QString::number(
-                                                   u16_ExpectedLength) + " did not match to bit length from data type " +
-                                                QString::number(
-                                                   c_CurSignal.u16_ComBitLength) + ". Using bit length " +
-                                                QString::number(c_CurSignal.u16_ComBitLength),
-                                                static_cast<int32_t>(u32_CoRefIdSub), false, &orc_ImportMessages);
-                           }
-                           u32_StartBitCounter += c_CurSignal.u16_ComBitLength;
-                           if (s32_Retval == C_NO_ERR)
-                           {
-                              //Handle index
-                              c_CurSignal.u32_ComDataElementIndex = static_cast<uint32_t>(orc_OscSignalData.size());
-                              //Add
-                              orc_OscMessageData.c_Signals.push_back(c_CurSignal);
-                              orc_OscSignalData.push_back(c_CurDataPoolSignal);
-                              orc_SignalDefaultMinMaxValuesUsed.push_back(static_cast<uint8_t>(q_DefaultMinMax));
-
-                              {
-                                 // Adapt the DLC automatically. Adapt to the added signals
-                                 const uint16_t u16_LastBit = c_CurSignal.u16_ComBitStart +
-                                                              c_CurSignal.u16_ComBitLength;
-                                 uint16_t u16_NeededBytes = u16_LastBit / 8U;
-
-                                 // Check for not byte aligned signals
-                                 if ((u16_LastBit % 8U) != 0U)
-                                 {
-                                    ++u16_NeededBytes;
-                                 }
-
-                                 if (u16_NeededBytes > orc_OscMessageData.u16_Dlc)
-                                 {
-                                    orc_OscMessageData.u16_Dlc = u16_NeededBytes;
-
-                                    if (orc_OscMessageData.u16_Dlc > 8U)
-                                    {
-                                       // 8 is maximum
-                                       orc_OscMessageData.u16_Dlc = 8U;
-                                    }
-                                 }
-                              }
-                           }
-                        }
-                     }
-                     else
-                     {
-                        mh_AddUserMessage(ou32_CoMessageId + ou16_MappingOffset, "",
-                                          "empty or not a number", static_cast<int32_t>(u32_ItSignal + 1UL), true);
-                        s32_Retval = C_CONFIG;
-                     }
+            if (pc_CoMessageMappingSubObject != NULL) {
+              uint32_t u32_MappingSubIndexValue;
+              if (mh_GetIntegerValue(
+                      h_GetCoObjectValue(*pc_CoMessageMappingSubObject,
+                                         oq_IsEds),
+                      ou8_NodeId, u32_MappingSubIndexValue) == C_NO_ERR) {
+                bool q_Dummy = false;
+                const uint32_t u32_CoRefId =
+                    (u32_MappingSubIndexValue & 0xFFFF0000UL) >> 16UL;
+                // Search if this signal is a valid dummy signal
+                for (uint32_t u32_ItDummy = 0; u32_ItDummy < orc_Dummies.size();
+                     ++u32_ItDummy) {
+                  if (u32_CoRefId == orc_Dummies[u32_ItDummy]) {
+                    q_Dummy = true;
+                    // Move start bit to expected position
+                    u32_StartBitCounter += (u32_MappingSubIndexValue & 0xFFU);
+                    break;
                   }
-                  else
-                  {
-                     mh_AddUserMessage(ou32_CoMessageId + ou16_MappingOffset, "", "does not exist",
-                                       static_cast<int32_t>(u32_ItSignal + 1UL), true);
-                     s32_Retval = C_CONFIG;
+                }
+                // If not dummy signal check referenced CO object
+                if (q_Dummy == false) {
+                  const uint32_t u32_CoRefIdSub =
+                      (u32_MappingSubIndexValue & 0xFF00UL) >> 8UL;
+                  const uint16_t u16_ExpectedLength =
+                      static_cast<uint16_t>(u32_MappingSubIndexValue & 0xFFUL);
+                  C_OscCanSignal c_CurSignal;
+                  C_OscNodeDataPoolListElement c_CurDataPoolSignal;
+                  bool q_DefaultMinMax = true;
+
+                  s32_Retval = C_OscImportEdsDcf::h_ParseSignalContent(
+                      orc_CoObjects, u32_CoRefId, u32_CoRefIdSub,
+                      u32_StartBitCounter, oq_RestrictForCanOpenUsage, oq_IsEds,
+                      c_CurSignal, c_CurDataPoolSignal, q_DefaultMinMax);
+                  if (u16_ExpectedLength != c_CurSignal.u16_ComBitLength) {
+                    mh_AddUserMessage(
+                        u32_CoRefId, "",
+                        "mapping signal bit length " +
+                            QString::number(u16_ExpectedLength) +
+                            " did not match to bit length from data type " +
+                            QString::number(c_CurSignal.u16_ComBitLength) +
+                            ". Using bit length " +
+                            QString::number(c_CurSignal.u16_ComBitLength),
+                        static_cast<int32_t>(u32_CoRefIdSub), false,
+                        &orc_ImportMessages);
                   }
-               }
+                  u32_StartBitCounter += c_CurSignal.u16_ComBitLength;
+                  if (s32_Retval == C_NO_ERR) {
+                    // Handle index
+                    c_CurSignal.u32_ComDataElementIndex =
+                        static_cast<uint32_t>(orc_OscSignalData.size());
+                    // Add
+                    orc_OscMessageData.c_Signals.push_back(c_CurSignal);
+                    orc_OscSignalData.push_back(c_CurDataPoolSignal);
+                    orc_SignalDefaultMinMaxValuesUsed.push_back(
+                        static_cast<uint8_t>(q_DefaultMinMax));
+
+                    {
+                      // Adapt the DLC automatically. Adapt to the added signals
+                      const uint16_t u16_LastBit = c_CurSignal.u16_ComBitStart +
+                                                   c_CurSignal.u16_ComBitLength;
+                      uint16_t u16_NeededBytes = u16_LastBit / 8U;
+
+                      // Check for not byte aligned signals
+                      if ((u16_LastBit % 8U) != 0U) {
+                        ++u16_NeededBytes;
+                      }
+
+                      if (u16_NeededBytes > orc_OscMessageData.u16_Dlc) {
+                        orc_OscMessageData.u16_Dlc = u16_NeededBytes;
+
+                        if (orc_OscMessageData.u16_Dlc > 8U) {
+                          // 8 is maximum
+                          orc_OscMessageData.u16_Dlc = 8U;
+                        }
+                      }
+                    }
+                  }
+                }
+              } else {
+                mh_AddUserMessage(ou32_CoMessageId + ou16_MappingOffset, "",
+                                  "empty or not a number",
+                                  static_cast<int32_t>(u32_ItSignal + 1UL),
+                                  true);
+                s32_Retval = C_CONFIG;
+              }
+            } else {
+              mh_AddUserMessage(ou32_CoMessageId + ou16_MappingOffset, "",
+                                "does not exist",
+                                static_cast<int32_t>(u32_ItSignal + 1UL), true);
+              s32_Retval = C_CONFIG;
             }
-         }
-         else
-         {
-            mh_AddUserMessage(ou32_CoMessageId + ou16_MappingOffset, "", "has unexpected value", -1L, true);
-            s32_Retval = C_CONFIG;
-         }
+          }
+        }
+      } else {
+        mh_AddUserMessage(ou32_CoMessageId + ou16_MappingOffset, "",
+                          "has unexpected value", -1L, true);
+        s32_Retval = C_CONFIG;
       }
-      else
-      {
-         mh_AddUserMessage(ou32_CoMessageId + ou16_MappingOffset, "",
-                           "empty or not a number", 0, true);
-         s32_Retval = C_CONFIG;
-      }
-   }
-   else
-   {
-      mh_AddUserMessage(ou32_CoMessageId + ou16_MappingOffset, "", "does not exist", 0, true);
+    } else {
+      mh_AddUserMessage(ou32_CoMessageId + ou16_MappingOffset, "",
+                        "empty or not a number", 0, true);
       s32_Retval = C_CONFIG;
-   }
+    }
+  } else {
+    mh_AddUserMessage(ou32_CoMessageId + ou16_MappingOffset, "",
+                      "does not exist", 0, true);
+    s32_Retval = C_CONFIG;
+  }
 
-   return s32_Retval;
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1535,87 +1395,70 @@ int32_t C_OscImportEdsDcf::mh_ParseSignals(const uint32_t ou32_CoMessageId, cons
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const QString & orc_CoValue, const uint8_t ou8_NodeId,
-                                              uint32_t & oru32_Value, bool * const opq_IncludesNodeId)
-{
-   int32_t s32_Retval = C_NO_ERR;
+int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const QString &orc_CoValue,
+                                              const uint8_t ou8_NodeId,
+                                              uint32_t &oru32_Value,
+                                              bool *const opq_IncludesNodeId) {
+  int32_t s32_Retval = C_NO_ERR;
 
-   oru32_Value = 0UL;
+  oru32_Value = 0UL;
 
-   if (opq_IncludesNodeId != NULL)
-   {
-      *opq_IncludesNodeId = false;
-   }
+  if (opq_IncludesNodeId != NULL) {
+    *opq_IncludesNodeId = false;
+  }
 
-   if (orc_CoValue.length() > 0)
-   {
-      QString c_LowerCaseNoWhiteSpaceNumber;
-      //Remove whitespace and $
-      for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length(); ++u32_ItChar)
-      {
-         const char_t cn_Character = orc_CoValue[u32_ItChar].toLatin1();
-         if ((cn_Character == ' ') || (cn_Character == '$'))
-         {
-            //Skip
-         }
-         else
-         {
-            c_LowerCaseNoWhiteSpaceNumber += orc_CoValue[u32_ItChar];
-         }
+  if (orc_CoValue.length() > 0) {
+    QString c_LowerCaseNoWhiteSpaceNumber;
+    // Remove whitespace and $
+    for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length();
+         ++u32_ItChar) {
+      const char_t cn_Character = orc_CoValue[u32_ItChar].toLatin1();
+      if ((cn_Character == ' ') || (cn_Character == '$')) {
+        // Skip
+      } else {
+        c_LowerCaseNoWhiteSpaceNumber += orc_CoValue[u32_ItChar];
       }
-      //Lower case
-      c_LowerCaseNoWhiteSpaceNumber = c_LowerCaseNoWhiteSpaceNumber.toLower();
-      if (c_LowerCaseNoWhiteSpaceNumber.length() > 0)
-      {
-         QStringList c_Tokens = c_LowerCaseNoWhiteSpaceNumber.split("+", Qt::SkipEmptyParts);
-         if (c_Tokens.size() > 0)
-         {
-            for (uint32_t u32_ItToken = 0;
-                 (u32_ItToken < static_cast<uint32_t>(c_Tokens.size())) && (s32_Retval == C_NO_ERR);
-                 ++u32_ItToken)
-            {
-               const QString & rc_CurToken = c_Tokens[u32_ItToken];
-               if (rc_CurToken.indexOf("nodeid") == 0)
-               {
-                  uint32_t u32_CurNumber;
-                  //Number
-                  if (mh_GetIntegerValueSimple(rc_CurToken, u32_CurNumber) == C_NO_ERR)
-                  {
-                     oru32_Value += u32_CurNumber;
-                  }
-                  else
-                  {
-                     s32_Retval = C_RANGE;
-                  }
-               }
-               else
-               {
-                  //Node ID
-                  oru32_Value += static_cast<uint32_t>(ou8_NodeId);
-
-                  if (opq_IncludesNodeId != NULL)
-                  {
-                     *opq_IncludesNodeId = true;
-                  }
-               }
+    }
+    // Lower case
+    c_LowerCaseNoWhiteSpaceNumber = c_LowerCaseNoWhiteSpaceNumber.toLower();
+    if (c_LowerCaseNoWhiteSpaceNumber.length() > 0) {
+      QStringList c_Tokens =
+          c_LowerCaseNoWhiteSpaceNumber.split("+", Qt::SkipEmptyParts);
+      if (c_Tokens.size() > 0) {
+        for (uint32_t u32_ItToken = 0;
+             (u32_ItToken < static_cast<uint32_t>(c_Tokens.size())) &&
+             (s32_Retval == C_NO_ERR);
+             ++u32_ItToken) {
+          const QString &rc_CurToken = c_Tokens[u32_ItToken];
+          if (rc_CurToken.indexOf("nodeid") == 0) {
+            uint32_t u32_CurNumber;
+            // Number
+            if (mh_GetIntegerValueSimple(rc_CurToken, u32_CurNumber) ==
+                C_NO_ERR) {
+              oru32_Value += u32_CurNumber;
+            } else {
+              s32_Retval = C_RANGE;
             }
-         }
-         else
-         {
-            s32_Retval = C_RANGE;
-         }
-      }
-      else
-      {
-         s32_Retval = C_RANGE;
-      }
-   }
-   else
-   {
-      s32_Retval = C_RANGE;
-   }
+          } else {
+            // Node ID
+            oru32_Value += static_cast<uint32_t>(ou8_NodeId);
 
-   return s32_Retval;
+            if (opq_IncludesNodeId != NULL) {
+              *opq_IncludesNodeId = true;
+            }
+          }
+        }
+      } else {
+        s32_Retval = C_RANGE;
+      }
+    } else {
+      s32_Retval = C_RANGE;
+    }
+  } else {
+    s32_Retval = C_RANGE;
+  }
+
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1629,52 +1472,40 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValue(const QString & orc_CoValue, const
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_Get64IntegerValue(const QString & orc_CoValue, int64_t & ors64_Value)
-{
-   int32_t s32_Retval = C_NO_ERR;
+int32_t C_OscImportEdsDcf::mh_Get64IntegerValue(const QString &orc_CoValue,
+                                                int64_t &ors64_Value) {
+  int32_t s32_Retval = C_NO_ERR;
 
-   ors64_Value = 0UL;
+  ors64_Value = 0UL;
 
-   if (orc_CoValue.length() > 0)
-   {
-      QString c_ReducedString;
-      //Remove whitespace and $
-      for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length(); ++u32_ItChar)
-      {
-         const char_t cn_Character = orc_CoValue[u32_ItChar].toLatin1();
-         if ((cn_Character == ' ') || (cn_Character == '$'))
-         {
-            //Skip
-         }
-         else
-         {
-            c_ReducedString += orc_CoValue[u32_ItChar];
-         }
+  if (orc_CoValue.length() > 0) {
+    QString c_ReducedString;
+    // Remove whitespace and $
+    for (uint32_t u32_ItChar = 0; u32_ItChar < orc_CoValue.length();
+         ++u32_ItChar) {
+      const char_t cn_Character = orc_CoValue[u32_ItChar].toLatin1();
+      if ((cn_Character == ' ') || (cn_Character == '$')) {
+        // Skip
+      } else {
+        c_ReducedString += orc_CoValue[u32_ItChar];
       }
+    }
 
-      //Try to convert it
-      if (c_ReducedString.length() > 0)
-      {
-         try
-         {
-            ors64_Value = c_ReducedString.toLongLong();
-         }
-         catch (...)
-         {
-            s32_Retval = C_RANGE;
-         }
+    // Try to convert it
+    if (c_ReducedString.length() > 0) {
+      try {
+        ors64_Value = c_ReducedString.toLongLong();
+      } catch (...) {
+        s32_Retval = C_RANGE;
       }
-      else
-      {
-         s32_Retval = C_RANGE;
-      }
-   }
-   else
-   {
+    } else {
       s32_Retval = C_RANGE;
-   }
+    }
+  } else {
+    s32_Retval = C_RANGE;
+  }
 
-   return s32_Retval;
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1688,38 +1519,29 @@ int32_t C_OscImportEdsDcf::mh_Get64IntegerValue(const QString & orc_CoValue, int
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_GetIntegerValueSimple(const QString & orc_CoValue, uint32_t & oru32_Value)
-{
-   int32_t s32_Retval;
+int32_t C_OscImportEdsDcf::mh_GetIntegerValueSimple(const QString &orc_CoValue,
+                                                    uint32_t &oru32_Value) {
+  int32_t s32_Retval;
 
-   oru32_Value = 0U;
+  oru32_Value = 0U;
 
-   if (orc_CoValue.length() > 0)
-   {
-      char_t * pcn_Ptr = NULL;
+  if (orc_CoValue.length() > 0) {
+    char_t *pcn_Ptr = NULL;
 
-      oru32_Value = strtoul(orc_CoValue.toUtf8().constData(), &pcn_Ptr, 0);
-      if (pcn_Ptr != NULL)
-      {
-         if (*pcn_Ptr == '\0')
-         {
-            s32_Retval = C_NO_ERR;
-         }
-         else
-         {
-            s32_Retval = C_RANGE;
-         }
+    oru32_Value = strtoul(orc_CoValue.toUtf8().constData(), &pcn_Ptr, 0);
+    if (pcn_Ptr != NULL) {
+      if (*pcn_Ptr == '\0') {
+        s32_Retval = C_NO_ERR;
+      } else {
+        s32_Retval = C_RANGE;
       }
-      else
-      {
-         s32_Retval = C_RANGE;
-      }
-   }
-   else
-   {
+    } else {
       s32_Retval = C_RANGE;
-   }
-   return s32_Retval;
+    }
+  } else {
+    s32_Retval = C_RANGE;
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1733,47 +1555,41 @@ int32_t C_OscImportEdsDcf::mh_GetIntegerValueSimple(const QString & orc_CoValue,
    \param[in,out]  opc_ImportMessages     Import result messages
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportEdsDcf::mh_AddUserMessage(const uint32_t ou32_CoObjectId, const QString & orc_CoSectionName,
-                                          const QString & orc_ErrorMessage, const int32_t os32_CoSubSectionId,
-                                          const bool oq_IsError, QStringList * const opc_ImportMessages)
-{
-   QString c_Message;
+void C_OscImportEdsDcf::mh_AddUserMessage(
+    const uint32_t ou32_CoObjectId, const QString &orc_CoSectionName,
+    const QString &orc_ErrorMessage, const int32_t os32_CoSubSectionId,
+    const bool oq_IsError, QStringList *const opc_ImportMessages) {
+  QString c_Message;
 
-   //Object ID in file
-   c_Message += "Object ";
-   //Add object id to message
-   //Use hex notation because that's probably used in the file
-   c_Message += C_OscImportEdsDcf::mh_GetNumberAsHex(ou32_CoObjectId);
+  // Object ID in file
+  c_Message += "Object ";
+  // Add object id to message
+  // Use hex notation because that's probably used in the file
+  c_Message += C_OscImportEdsDcf::mh_GetNumberAsHex(ou32_CoObjectId);
 
-   if (os32_CoSubSectionId >= 0L)
-   {
-      c_Message += "sub";
-      //Use hex notation because that's probably used in the file
-      c_Message += C_OscImportEdsDcf::mh_GetNumberAsHex(os32_CoSubSectionId);
-   }
-   //Optional section name by spec
-   if (orc_CoSectionName != "")
-   {
-      c_Message += " (\"";
-      c_Message += orc_CoSectionName;
-      c_Message += "\")";
-   }
-   //Our error message
-   c_Message += " ";
-   c_Message += orc_ErrorMessage;
+  if (os32_CoSubSectionId >= 0L) {
+    c_Message += "sub";
+    // Use hex notation because that's probably used in the file
+    c_Message += C_OscImportEdsDcf::mh_GetNumberAsHex(os32_CoSubSectionId);
+  }
+  // Optional section name by spec
+  if (orc_CoSectionName != "") {
+    c_Message += " (\"";
+    c_Message += orc_CoSectionName;
+    c_Message += "\")";
+  }
+  // Our error message
+  c_Message += " ";
+  c_Message += orc_ErrorMessage;
 
-   //If error report to file otherwise store as warning
-   if (oq_IsError == true)
-   {
-      osc_write_log_warning("Import EDS/DCF", c_Message.toUtf8().constData());
-   }
-   else
-   {
-      if (opc_ImportMessages != NULL)
-      {
-         opc_ImportMessages->push_back(c_Message);
-      }
-   }
+  // If error report to file otherwise store as warning
+  if (oq_IsError == true) {
+    osc_write_log_warning("Import EDS/DCF", c_Message.toUtf8().constData());
+  } else {
+    if (opc_ImportMessages != NULL) {
+      opc_ImportMessages->push_back(c_Message);
+    }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1785,11 +1601,11 @@ void C_OscImportEdsDcf::mh_AddUserMessage(const uint32_t ou32_CoObjectId, const 
    Number as hex
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscImportEdsDcf::mh_GetNumberAsHex(const uint32_t ou32_Number)
-{
-   const QString c_HexObjectIdUpperCase = QString::number(ou32_Number, 16).toUpper();
+QString C_OscImportEdsDcf::mh_GetNumberAsHex(const uint32_t ou32_Number) {
+  const QString c_HexObjectIdUpperCase =
+      QString::number(ou32_Number, 16).toUpper();
 
-   return c_HexObjectIdUpperCase;
+  return c_HexObjectIdUpperCase;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1799,7 +1615,8 @@ QString C_OscImportEdsDcf::mh_GetNumberAsHex(const uint32_t ou32_Number)
    \param[in,out]  orc_Element         Data pool element
    \param[in]      ou16_NumberBits     Number of bits
    \param[in]      oq_IsEds            Flag if current file is an EDS file
-   \param[out]     orq_DefaultMinMax   Flag if default values min max values are set or object specific limits are set
+   \param[out]     orq_DefaultMinMax   Flag if default values min max values are
+   set or object specific limits are set
 
    \return
    C_NO_ERR Operation success
@@ -1807,361 +1624,321 @@ QString C_OscImportEdsDcf::mh_GetNumberAsHex(const uint32_t ou32_Number)
    C_CONFIG Operation failure: Element invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscImportEdsDcf::mh_CalcMinMaxInit(const C_OscCanOpenObjectData * const opc_CoSignalObject,
-                                             C_OscNodeDataPoolListElement & orc_Element, const uint16_t ou16_NumberBits,
-                                             const bool oq_IsEds, bool & orq_DefaultMinMax)
-{
-   int32_t s32_Retval = C_NO_ERR;
-   bool q_IsUnsigned = false;
-   bool q_IsSigned = false;
-   bool q_IsFloat = false;
+int32_t C_OscImportEdsDcf::mh_CalcMinMaxInit(
+    const C_OscCanOpenObjectData *const opc_CoSignalObject,
+    C_OscNodeDataPoolListElement &orc_Element, const uint16_t ou16_NumberBits,
+    const bool oq_IsEds, bool &orq_DefaultMinMax) {
+  int32_t s32_Retval = C_NO_ERR;
+  bool q_IsUnsigned = false;
+  bool q_IsSigned = false;
+  bool q_IsFloat = false;
 
-   orq_DefaultMinMax = true;
+  orq_DefaultMinMax = true;
 
-   //Check type is realistic for number of bits
-   switch (orc_Element.GetType())
-   {
-   case C_OscNodeDataPoolContent::eUINT8:
-      if (ou16_NumberBits > 8)
-      {
-         s32_Retval = C_RANGE;
-      }
-      q_IsUnsigned = true;
-      break;
-   case C_OscNodeDataPoolContent::eUINT16:
-      if (ou16_NumberBits > 16)
-      {
-         s32_Retval = C_RANGE;
-      }
-      q_IsUnsigned = true;
-      break;
-   case C_OscNodeDataPoolContent::eUINT32:
-      if (ou16_NumberBits > 32)
-      {
-         s32_Retval = C_RANGE;
-      }
-      q_IsUnsigned = true;
-      break;
-   case C_OscNodeDataPoolContent::eUINT64:
-      if (ou16_NumberBits > 64)
-      {
-         s32_Retval = C_RANGE;
-      }
-      q_IsUnsigned = true;
-      break;
-   case C_OscNodeDataPoolContent::eSINT8:
-      if (ou16_NumberBits > 8)
-      {
-         s32_Retval = C_RANGE;
-      }
-      q_IsSigned = true;
-      break;
-   case C_OscNodeDataPoolContent::eSINT16:
-      if (ou16_NumberBits > 16)
-      {
-         s32_Retval = C_RANGE;
-      }
-      q_IsSigned = true;
-      break;
-   case C_OscNodeDataPoolContent::eSINT32:
-      if (ou16_NumberBits > 32)
-      {
-         s32_Retval = C_RANGE;
-      }
-      q_IsSigned = true;
-      break;
-   case C_OscNodeDataPoolContent::eSINT64:
-      if (ou16_NumberBits > 64)
-      {
-         s32_Retval = C_RANGE;
-      }
-      q_IsSigned = true;
-      break;
-   case C_OscNodeDataPoolContent::eFLOAT32:
-      if (ou16_NumberBits > 32)
-      {
-         s32_Retval = C_RANGE;
-      }
-      q_IsFloat = true;
-      break;
-   case C_OscNodeDataPoolContent::eFLOAT64:
-      if (ou16_NumberBits > 64)
-      {
-         s32_Retval = C_RANGE;
-      }
-      q_IsFloat = true;
-      break;
-   default:
-      break;
-   }
-   if (s32_Retval == C_NO_ERR)
-   {
-      uint64_t u64_LowLimit = 0U;
-      int64_t s64_LowLimit = 0U;
-      uint64_t u64_HighLimit = 0U;
-      int64_t s64_HighLimit = 0U;
-      uint64_t u64_DefaultValue = 0U;
-      int64_t s64_DefaultValue = 0U;
-      bool q_LowLimitSet = false;
-      bool q_HighLimitSet = false;
+  // Check type is realistic for number of bits
+  switch (orc_Element.GetType()) {
+  case C_OscNodeDataPoolContent::eUINT8:
+    if (ou16_NumberBits > 8) {
+      s32_Retval = C_RANGE;
+    }
+    q_IsUnsigned = true;
+    break;
+  case C_OscNodeDataPoolContent::eUINT16:
+    if (ou16_NumberBits > 16) {
+      s32_Retval = C_RANGE;
+    }
+    q_IsUnsigned = true;
+    break;
+  case C_OscNodeDataPoolContent::eUINT32:
+    if (ou16_NumberBits > 32) {
+      s32_Retval = C_RANGE;
+    }
+    q_IsUnsigned = true;
+    break;
+  case C_OscNodeDataPoolContent::eUINT64:
+    if (ou16_NumberBits > 64) {
+      s32_Retval = C_RANGE;
+    }
+    q_IsUnsigned = true;
+    break;
+  case C_OscNodeDataPoolContent::eSINT8:
+    if (ou16_NumberBits > 8) {
+      s32_Retval = C_RANGE;
+    }
+    q_IsSigned = true;
+    break;
+  case C_OscNodeDataPoolContent::eSINT16:
+    if (ou16_NumberBits > 16) {
+      s32_Retval = C_RANGE;
+    }
+    q_IsSigned = true;
+    break;
+  case C_OscNodeDataPoolContent::eSINT32:
+    if (ou16_NumberBits > 32) {
+      s32_Retval = C_RANGE;
+    }
+    q_IsSigned = true;
+    break;
+  case C_OscNodeDataPoolContent::eSINT64:
+    if (ou16_NumberBits > 64) {
+      s32_Retval = C_RANGE;
+    }
+    q_IsSigned = true;
+    break;
+  case C_OscNodeDataPoolContent::eFLOAT32:
+    if (ou16_NumberBits > 32) {
+      s32_Retval = C_RANGE;
+    }
+    q_IsFloat = true;
+    break;
+  case C_OscNodeDataPoolContent::eFLOAT64:
+    if (ou16_NumberBits > 64) {
+      s32_Retval = C_RANGE;
+    }
+    q_IsFloat = true;
+    break;
+  default:
+    break;
+  }
+  if (s32_Retval == C_NO_ERR) {
+    uint64_t u64_LowLimit = 0U;
+    int64_t s64_LowLimit = 0U;
+    uint64_t u64_HighLimit = 0U;
+    int64_t s64_HighLimit = 0U;
+    uint64_t u64_DefaultValue = 0U;
+    int64_t s64_DefaultValue = 0U;
+    bool q_LowLimitSet = false;
+    bool q_HighLimitSet = false;
 
-      if (q_IsFloat == false)
-      {
-         bool q_DefaultValueSet = false;
+    if (q_IsFloat == false) {
+      bool q_DefaultValueSet = false;
 
-         // Check for specific limits and check against the generic limits
-         if (mh_Get64IntegerValue(opc_CoSignalObject->c_LowLimit, s64_LowLimit) == C_NO_ERR)
-         {
-            q_LowLimitSet = true;
-         }
-         if (mh_Get64IntegerValue(opc_CoSignalObject->c_HighLimit, s64_HighLimit) == C_NO_ERR)
-         {
-            q_HighLimitSet = true;
-         }
-         if (mh_Get64IntegerValue(h_GetCoObjectValue(*opc_CoSignalObject, oq_IsEds), s64_DefaultValue) == C_NO_ERR)
-         {
-            q_DefaultValueSet = true;
-         }
-
-         if (q_IsSigned == false)
-         {
-            if (q_LowLimitSet == true)
-            {
-               u64_LowLimit = static_cast<uint64_t>(s64_LowLimit);
-            }
-            if (q_HighLimitSet == true)
-            {
-               u64_HighLimit = static_cast<uint64_t>(s64_HighLimit);
-            }
-            if (q_DefaultValueSet == true)
-            {
-               u64_DefaultValue = static_cast<uint64_t>(s64_DefaultValue);
-            }
-         }
+      // Check for specific limits and check against the generic limits
+      if (mh_Get64IntegerValue(opc_CoSignalObject->c_LowLimit, s64_LowLimit) ==
+          C_NO_ERR) {
+        q_LowLimitSet = true;
+      }
+      if (mh_Get64IntegerValue(opc_CoSignalObject->c_HighLimit,
+                               s64_HighLimit) == C_NO_ERR) {
+        q_HighLimitSet = true;
+      }
+      if (mh_Get64IntegerValue(
+              h_GetCoObjectValue(*opc_CoSignalObject, oq_IsEds),
+              s64_DefaultValue) == C_NO_ERR) {
+        q_DefaultValueSet = true;
       }
 
-      if (orc_Element.GetArray() == false)
-      {
-         //Unsigned
-         if (q_IsUnsigned == true)
-         {
-            uint64_t u64_Max = 0U;
-            uint64_t u64_Min = 0U;
-
-            for (uint16_t u16_ItBit = 0U; u16_ItBit < ou16_NumberBits; ++u16_ItBit)
-            {
-               u64_Max += (static_cast<uint64_t>(1U) << u16_ItBit);
-            }
-
-            // Check custom range for a valid limit
-            if ((q_HighLimitSet == true) &&
-                (u64_HighLimit < u64_Max))
-            {
-               u64_Max = u64_HighLimit;
-               orq_DefaultMinMax = false;
-            }
-            if ((q_LowLimitSet == true) &&
-                (u64_LowLimit < u64_Max))
-            {
-               u64_Min = u64_LowLimit;
-               orq_DefaultMinMax = false;
-            }
-
-            // Check range for default value in any case
-            // If no specific default value is set, 0 will be used and adapted for the new limits if necessary
-            if (u64_DefaultValue > u64_Max)
-            {
-               u64_DefaultValue = u64_Max;
-            }
-            else if (u64_DefaultValue < u64_Min)
-            {
-               u64_DefaultValue = u64_Min;
-            }
-            else
-            {
-               // Nothing to do
-            }
-
-            switch (orc_Element.GetType()) //lint !e788 not all enum constants used; this is for unsigned only
-            {
-            case C_OscNodeDataPoolContent::eUINT8:
-               orc_Element.c_MinValue.SetValueU8(static_cast<uint8_t>(u64_Min));
-               orc_Element.c_MaxValue.SetValueU8(static_cast<uint8_t>(u64_Max));
-               orc_Element.c_DataSetValues[0].SetValueU8(static_cast<uint8_t>(u64_DefaultValue));
-               break;
-            case C_OscNodeDataPoolContent::eUINT16:
-               orc_Element.c_MinValue.SetValueU16(static_cast<uint16_t>(u64_Min));
-               orc_Element.c_MaxValue.SetValueU16(static_cast<uint16_t>(u64_Max));
-               orc_Element.c_DataSetValues[0].SetValueU16(static_cast<uint16_t>(u64_DefaultValue));
-               break;
-            case C_OscNodeDataPoolContent::eUINT32:
-               orc_Element.c_MinValue.SetValueU32(static_cast<uint32_t>(u64_Min));
-               orc_Element.c_MaxValue.SetValueU32(static_cast<uint32_t>(u64_Max));
-               orc_Element.c_DataSetValues[0].SetValueU32(static_cast<uint32_t>(u64_DefaultValue));
-               break;
-            case C_OscNodeDataPoolContent::eUINT64:
-               orc_Element.c_MinValue.SetValueU64(static_cast<uint64_t>(u64_Min));
-               orc_Element.c_MaxValue.SetValueU64(static_cast<uint64_t>(u64_Max));
-               orc_Element.c_DataSetValues[0].SetValueU64(static_cast<uint64_t>(u64_DefaultValue));
-               break;
-            default:
-               break;
-            }
-         }
-         //Signed
-         else if (q_IsSigned == true)
-         {
-            int64_t s64_Max = 0L;
-            int64_t s64_Min = 0L;
-
-            for (uint16_t u16_ItBit = 0U; u16_ItBit < ou16_NumberBits; ++u16_ItBit)
-            {
-               s64_Max = (s64_Max << 1) | 1L;
-            }
-
-            // Check custom range for a valid limit
-            if ((q_HighLimitSet == true) &&
-                (s64_HighLimit < s64_Max))
-            {
-               s64_Max = s64_HighLimit;
-               orq_DefaultMinMax = false;
-            }
-            if ((q_LowLimitSet == true) &&
-                (s64_LowLimit < s64_Max))
-            {
-               s64_Min = s64_LowLimit;
-               orq_DefaultMinMax = false;
-            }
-
-            // Check range for default value in any case
-            // If no specific default value is set, 0 will be used and adapted for the new limits if necessary
-            if (s64_DefaultValue > s64_Max)
-            {
-               s64_DefaultValue = s64_Max;
-            }
-            else if (s64_DefaultValue < s64_Min)
-            {
-               s64_DefaultValue = s64_Min;
-            }
-            else
-            {
-               // Nothing to do
-            }
-
-            switch (orc_Element.GetType()) //lint !e788 not all enum constants used; this is for signed only
-            {
-            case C_OscNodeDataPoolContent::eSINT8:
-               orc_Element.c_MinValue.SetValueS8(static_cast<int8_t>(s64_Min));
-               orc_Element.c_MaxValue.SetValueS8(static_cast<int8_t>(s64_Max));
-               orc_Element.c_DataSetValues[0].SetValueS8(static_cast<int8_t>(s64_DefaultValue));
-               break;
-            case C_OscNodeDataPoolContent::eSINT16:
-               orc_Element.c_MinValue.SetValueS16(static_cast<int16_t>(s64_Min));
-               orc_Element.c_MaxValue.SetValueS16(static_cast<int16_t>(s64_Max));
-               orc_Element.c_DataSetValues[0].SetValueS16(static_cast<int16_t>(s64_DefaultValue));
-               break;
-            case C_OscNodeDataPoolContent::eSINT32:
-               orc_Element.c_MinValue.SetValueS32(static_cast<int32_t>(s64_Min));
-               orc_Element.c_MaxValue.SetValueS32(static_cast<int32_t>(s64_Max));
-               orc_Element.c_DataSetValues[0].SetValueS32(static_cast<int32_t>(s64_DefaultValue));
-               break;
-            case C_OscNodeDataPoolContent::eSINT64:
-               orc_Element.c_MinValue.SetValueS64(static_cast<int64_t>(s64_Min));
-               orc_Element.c_MaxValue.SetValueS64(static_cast<int64_t>(s64_Max));
-               orc_Element.c_DataSetValues[0].SetValueS64(static_cast<int64_t>(s64_DefaultValue));
-               break;
-            default:
-               break;
-            }
-         }
-         //Float
-         else if (q_IsFloat == true)
-         {
-            float32_t f32_Max = 0.0F;
-            float32_t f32_Min = 0.0F;
-
-            for (uint16_t u16_ItBit = 0U; u16_ItBit < ou16_NumberBits; ++u16_ItBit)
-            {
-               f32_Max = (f32_Max * 2.0F) + 1.0F;
-            }
-
-            // Check custom range for a valid limit
-            if ((q_HighLimitSet == true) &&
-                (orc_Element.GetType() == C_OscNodeDataPoolContent::eFLOAT32) &&
-                (orc_Element.c_MaxValue.GetValueF32() < f32_Max))
-            {
-               f32_Max = orc_Element.c_MaxValue.GetValueF32();
-               orq_DefaultMinMax = false;
-            }
-            if ((q_LowLimitSet == true) &&
-                (orc_Element.GetType() == C_OscNodeDataPoolContent::eFLOAT32) &&
-                (orc_Element.c_MinValue.GetValueF32() < f32_Max))
-            {
-               f32_Min = orc_Element.c_MinValue.GetValueF32();
-               orq_DefaultMinMax = false;
-            }
-
-            // Check range for default value in any case
-            // If no specific default value is set, 0 will be used and adapted for the new limits if necessary
-            if (orc_Element.GetType() == C_OscNodeDataPoolContent::eFLOAT32)
-            {
-               if (orc_Element.c_DataSetValues[0].GetValueF32() > f32_Max)
-               {
-                  orc_Element.c_DataSetValues[0].SetValueF32(f32_Max);
-               }
-               else if (orc_Element.c_DataSetValues[0].GetValueF32() < f32_Min)
-               {
-                  orc_Element.c_DataSetValues[0].SetValueF32(f32_Min);
-               }
-               else
-               {
-                  // Nothing to do
-               }
-            }
-            //Float64
-            else if (orc_Element.GetType() == C_OscNodeDataPoolContent::eFLOAT64)
-            {
-               float64_t f64_Max = 0.0;
-               float64_t f64_Min = 0.0;
-
-               for (uint16_t u16_ItBit = 0U; u16_ItBit < ou16_NumberBits; ++u16_ItBit)
-               {
-                  f64_Max = (f64_Max * 2.0) + 1.0;
-               }
-
-               // Check custom range for a valid limit
-               if ((q_HighLimitSet == true) &&
-                   (orc_Element.c_MaxValue.GetValueF64() < f64_Max))
-               {
-                  f64_Max = orc_Element.c_MaxValue.GetValueF64();
-                  orq_DefaultMinMax = false;
-               }
-               if ((q_LowLimitSet == true) &&
-                   (orc_Element.c_MinValue.GetValueF64() < f64_Max))
-               {
-                  f64_Min = orc_Element.c_MinValue.GetValueF64();
-                  orq_DefaultMinMax = false;
-               }
-
-               // Check range for default value in any case
-               // If no specific default value is set, 0 will be used and adapted for the new limits if necessary
-               if (orc_Element.c_DataSetValues[0].GetValueF64() > f64_Max)
-               {
-                  orc_Element.c_DataSetValues[0].SetValueF64(f64_Max);
-               }
-               else if (orc_Element.c_DataSetValues[0].GetValueF64() < f64_Min)
-               {
-                  orc_Element.c_DataSetValues[0].SetValueF64(f64_Min);
-               }
-               else
-               {
-                  // Nothing to do
-               }
-            }
-         }
+      if (q_IsSigned == false) {
+        if (q_LowLimitSet == true) {
+          u64_LowLimit = static_cast<uint64_t>(s64_LowLimit);
+        }
+        if (q_HighLimitSet == true) {
+          u64_HighLimit = static_cast<uint64_t>(s64_HighLimit);
+        }
+        if (q_DefaultValueSet == true) {
+          u64_DefaultValue = static_cast<uint64_t>(s64_DefaultValue);
+        }
       }
-   }
-   return s32_Retval;
+    }
+
+    if (orc_Element.GetArray() == false) {
+      // Unsigned
+      if (q_IsUnsigned == true) {
+        uint64_t u64_Max = 0U;
+        uint64_t u64_Min = 0U;
+
+        for (uint16_t u16_ItBit = 0U; u16_ItBit < ou16_NumberBits;
+             ++u16_ItBit) {
+          u64_Max += (static_cast<uint64_t>(1U) << u16_ItBit);
+        }
+
+        // Check custom range for a valid limit
+        if ((q_HighLimitSet == true) && (u64_HighLimit < u64_Max)) {
+          u64_Max = u64_HighLimit;
+          orq_DefaultMinMax = false;
+        }
+        if ((q_LowLimitSet == true) && (u64_LowLimit < u64_Max)) {
+          u64_Min = u64_LowLimit;
+          orq_DefaultMinMax = false;
+        }
+
+        // Check range for default value in any case
+        // If no specific default value is set, 0 will be used and adapted for
+        // the new limits if necessary
+        if (u64_DefaultValue > u64_Max) {
+          u64_DefaultValue = u64_Max;
+        } else if (u64_DefaultValue < u64_Min) {
+          u64_DefaultValue = u64_Min;
+        } else {
+          // Nothing to do
+        }
+
+        switch (orc_Element.GetType()) // lint !e788 not all enum constants
+                                       // used; this is for unsigned only
+        {
+        case C_OscNodeDataPoolContent::eUINT8:
+          orc_Element.c_MinValue.SetValueU8(static_cast<uint8_t>(u64_Min));
+          orc_Element.c_MaxValue.SetValueU8(static_cast<uint8_t>(u64_Max));
+          orc_Element.c_DataSetValues[0].SetValueU8(
+              static_cast<uint8_t>(u64_DefaultValue));
+          break;
+        case C_OscNodeDataPoolContent::eUINT16:
+          orc_Element.c_MinValue.SetValueU16(static_cast<uint16_t>(u64_Min));
+          orc_Element.c_MaxValue.SetValueU16(static_cast<uint16_t>(u64_Max));
+          orc_Element.c_DataSetValues[0].SetValueU16(
+              static_cast<uint16_t>(u64_DefaultValue));
+          break;
+        case C_OscNodeDataPoolContent::eUINT32:
+          orc_Element.c_MinValue.SetValueU32(static_cast<uint32_t>(u64_Min));
+          orc_Element.c_MaxValue.SetValueU32(static_cast<uint32_t>(u64_Max));
+          orc_Element.c_DataSetValues[0].SetValueU32(
+              static_cast<uint32_t>(u64_DefaultValue));
+          break;
+        case C_OscNodeDataPoolContent::eUINT64:
+          orc_Element.c_MinValue.SetValueU64(static_cast<uint64_t>(u64_Min));
+          orc_Element.c_MaxValue.SetValueU64(static_cast<uint64_t>(u64_Max));
+          orc_Element.c_DataSetValues[0].SetValueU64(
+              static_cast<uint64_t>(u64_DefaultValue));
+          break;
+        default:
+          break;
+        }
+      }
+      // Signed
+      else if (q_IsSigned == true) {
+        int64_t s64_Max = 0L;
+        int64_t s64_Min = 0L;
+
+        for (uint16_t u16_ItBit = 0U; u16_ItBit < ou16_NumberBits;
+             ++u16_ItBit) {
+          s64_Max = (s64_Max << 1) | 1L;
+        }
+
+        // Check custom range for a valid limit
+        if ((q_HighLimitSet == true) && (s64_HighLimit < s64_Max)) {
+          s64_Max = s64_HighLimit;
+          orq_DefaultMinMax = false;
+        }
+        if ((q_LowLimitSet == true) && (s64_LowLimit < s64_Max)) {
+          s64_Min = s64_LowLimit;
+          orq_DefaultMinMax = false;
+        }
+
+        // Check range for default value in any case
+        // If no specific default value is set, 0 will be used and adapted for
+        // the new limits if necessary
+        if (s64_DefaultValue > s64_Max) {
+          s64_DefaultValue = s64_Max;
+        } else if (s64_DefaultValue < s64_Min) {
+          s64_DefaultValue = s64_Min;
+        } else {
+          // Nothing to do
+        }
+
+        switch (orc_Element.GetType()) // lint !e788 not all enum constants
+                                       // used; this is for signed only
+        {
+        case C_OscNodeDataPoolContent::eSINT8:
+          orc_Element.c_MinValue.SetValueS8(static_cast<int8_t>(s64_Min));
+          orc_Element.c_MaxValue.SetValueS8(static_cast<int8_t>(s64_Max));
+          orc_Element.c_DataSetValues[0].SetValueS8(
+              static_cast<int8_t>(s64_DefaultValue));
+          break;
+        case C_OscNodeDataPoolContent::eSINT16:
+          orc_Element.c_MinValue.SetValueS16(static_cast<int16_t>(s64_Min));
+          orc_Element.c_MaxValue.SetValueS16(static_cast<int16_t>(s64_Max));
+          orc_Element.c_DataSetValues[0].SetValueS16(
+              static_cast<int16_t>(s64_DefaultValue));
+          break;
+        case C_OscNodeDataPoolContent::eSINT32:
+          orc_Element.c_MinValue.SetValueS32(static_cast<int32_t>(s64_Min));
+          orc_Element.c_MaxValue.SetValueS32(static_cast<int32_t>(s64_Max));
+          orc_Element.c_DataSetValues[0].SetValueS32(
+              static_cast<int32_t>(s64_DefaultValue));
+          break;
+        case C_OscNodeDataPoolContent::eSINT64:
+          orc_Element.c_MinValue.SetValueS64(static_cast<int64_t>(s64_Min));
+          orc_Element.c_MaxValue.SetValueS64(static_cast<int64_t>(s64_Max));
+          orc_Element.c_DataSetValues[0].SetValueS64(
+              static_cast<int64_t>(s64_DefaultValue));
+          break;
+        default:
+          break;
+        }
+      }
+      // Float
+      else if (q_IsFloat == true) {
+        float32_t f32_Max = 0.0F;
+        float32_t f32_Min = 0.0F;
+
+        for (uint16_t u16_ItBit = 0U; u16_ItBit < ou16_NumberBits;
+             ++u16_ItBit) {
+          f32_Max = (f32_Max * 2.0F) + 1.0F;
+        }
+
+        // Check custom range for a valid limit
+        if ((q_HighLimitSet == true) &&
+            (orc_Element.GetType() == C_OscNodeDataPoolContent::eFLOAT32) &&
+            (orc_Element.c_MaxValue.GetValueF32() < f32_Max)) {
+          f32_Max = orc_Element.c_MaxValue.GetValueF32();
+          orq_DefaultMinMax = false;
+        }
+        if ((q_LowLimitSet == true) &&
+            (orc_Element.GetType() == C_OscNodeDataPoolContent::eFLOAT32) &&
+            (orc_Element.c_MinValue.GetValueF32() < f32_Max)) {
+          f32_Min = orc_Element.c_MinValue.GetValueF32();
+          orq_DefaultMinMax = false;
+        }
+
+        // Check range for default value in any case
+        // If no specific default value is set, 0 will be used and adapted for
+        // the new limits if necessary
+        if (orc_Element.GetType() == C_OscNodeDataPoolContent::eFLOAT32) {
+          if (orc_Element.c_DataSetValues[0].GetValueF32() > f32_Max) {
+            orc_Element.c_DataSetValues[0].SetValueF32(f32_Max);
+          } else if (orc_Element.c_DataSetValues[0].GetValueF32() < f32_Min) {
+            orc_Element.c_DataSetValues[0].SetValueF32(f32_Min);
+          } else {
+            // Nothing to do
+          }
+        }
+        // Float64
+        else if (orc_Element.GetType() == C_OscNodeDataPoolContent::eFLOAT64) {
+          float64_t f64_Max = 0.0;
+          float64_t f64_Min = 0.0;
+
+          for (uint16_t u16_ItBit = 0U; u16_ItBit < ou16_NumberBits;
+               ++u16_ItBit) {
+            f64_Max = (f64_Max * 2.0) + 1.0;
+          }
+
+          // Check custom range for a valid limit
+          if ((q_HighLimitSet == true) &&
+              (orc_Element.c_MaxValue.GetValueF64() < f64_Max)) {
+            f64_Max = orc_Element.c_MaxValue.GetValueF64();
+            orq_DefaultMinMax = false;
+          }
+          if ((q_LowLimitSet == true) &&
+              (orc_Element.c_MinValue.GetValueF64() < f64_Max)) {
+            f64_Min = orc_Element.c_MinValue.GetValueF64();
+            orq_DefaultMinMax = false;
+          }
+
+          // Check range for default value in any case
+          // If no specific default value is set, 0 will be used and adapted for
+          // the new limits if necessary
+          if (orc_Element.c_DataSetValues[0].GetValueF64() > f64_Max) {
+            orc_Element.c_DataSetValues[0].SetValueF64(f64_Max);
+          } else if (orc_Element.c_DataSetValues[0].GetValueF64() < f64_Min) {
+            orc_Element.c_DataSetValues[0].SetValueF64(f64_Min);
+          } else {
+            // Nothing to do
+          }
+        }
+      }
+    }
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2171,29 +1948,26 @@ int32_t C_OscImportEdsDcf::mh_CalcMinMaxInit(const C_OscCanOpenObjectData * cons
    \param[out]  orc_Dummies       Vector to store dummy values
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportEdsDcf::mh_LoadDummies(const QString & orc_FilePath, QList<uint32_t> & orc_Dummies)
-{
-   std::ifstream c_File;
-   c_File.open(orc_FilePath.toUtf8().constData());
+void C_OscImportEdsDcf::mh_LoadDummies(const QString &orc_FilePath,
+                                       QList<uint32_t> &orc_Dummies) {
+  std::ifstream c_File;
+  c_File.open(orc_FilePath.toUtf8().constData());
 
-   if (c_File.is_open())
-   {
-      std::string c_Line;
-      while (std::getline(c_File, c_Line))
-      {
-         std::stringstream c_Stream;
-         c_Stream << c_Line;
-         std::string c_CurString;
-         if (c_Stream >> c_CurString)
-         {
-            if (c_CurString == "Dummy")
-            {
-               uint32_t u32_DummyId = 0U;
-               c_Stream >> u32_DummyId;
-               orc_Dummies.push_back(u32_DummyId);
-            }
-         }
+  if (c_File.is_open()) {
+    QString c_Line;
+    while (c_File.canReadLine()) {
+      c_Line = c_File.readLine();
+      QString c_CurString;
+      QStringList c_Tokens = c_Line.split(" ", Qt::SkipEmptyParts);
+      if (!c_Tokens.isEmpty()) {
+        c_CurString = c_Tokens.first();
+        if (c_CurString == "Dummy") {
+          uint32_t u32_DummyId = 0U;
+          c_Stream >> u32_DummyId;
+          orc_Dummies.push_back(u32_DummyId);
+        }
       }
-      c_File.close();
-   }
+    }
+    c_File.close();
+  }
 }

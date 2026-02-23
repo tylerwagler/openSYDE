@@ -111,7 +111,7 @@ bool C_OscUtils::h_CheckValidCeName(const QString &orc_Name,
       // no automatic c string adaptation
       for (u32_Index = 0; u32_Index < orc_Name.length(); u32_Index++) {
         // first char of name
-        cn_Char = orc_Name.toStdString()[u32_Index];
+        cn_Char = orc_Name[u32_Index];
         // is alphanumeric and no underscore true or a number true -> invalid
         // name
 
@@ -120,7 +120,7 @@ bool C_OscUtils::h_CheckValidCeName(const QString &orc_Name,
         //  undefined. So be as defensive as possible:
         if ((static_cast<int8_t>(cn_Char) < 0) ||
             (((std::isalnum(cn_Char) == 0) && (cn_Char != '_')) ||
-             (std::isdigit(orc_Name.toStdString()[0]) !=
+             (std::isdigit(orc_Name[0]) !=
               0))) // ANSI compliant check
         {
           q_IsValid = false;
@@ -131,7 +131,7 @@ bool C_OscUtils::h_CheckValidCeName(const QString &orc_Name,
       // automatic c string adaptation
       for (u32_Index = 0; u32_Index < orc_Name.length(); u32_Index++) {
         // fist char of name
-        cn_Char = orc_Name.toStdString()[u32_Index];
+        cn_Char = orc_Name[u32_Index];
 
         // is alphanumeric true or no underscore and a number true -> invalid
         // name
@@ -141,7 +141,7 @@ bool C_OscUtils::h_CheckValidCeName(const QString &orc_Name,
         //  undefined. So be as defensive as possible:
         if ((static_cast<int8_t>(cn_Char) < 0) ||
             ((std::isalnum(cn_Char) == 0) &&
-             ((cn_Char != '_') || (std::isdigit(orc_Name.toStdString()[0]) !=
+             ((cn_Char != '_') || (std::isdigit(orc_Name[0]) !=
                                    0)))) // ANSI compliant check
         {
           q_IsValid = false;
@@ -216,18 +216,17 @@ int32_t C_OscUtils::h_CreateFolderRecursively(const QString &orc_Folder) {
   size_t x_CharIndex = 0U;
   int32_t s32_Return = C_NO_ERR;
 
-  const std::string c_Path = orc_Folder.toStdString();
+  const QString c_Path = orc_Folder;
 
   do {
-    std::string c_PartialPath;
-    x_CharIndex = c_Path.find_first_of("\\/", x_CharIndex + 1);
+    x_CharIndex = c_Path.find_firstOf("\\/", x_CharIndex + 1);
 
-    c_PartialPath = c_Path.substr(0, x_CharIndex);
-    s32_Return = QDir().mkpath(QString::fromStdString(c_PartialPath)) ? 0 : -1;
+    QString c_PartialPath = c_Path.left(x_CharIndex);
+    s32_Return = QDir().mkpath(c_PartialPath) ? 0 : -1;
     if (s32_Return != 0) {
       s32_Return = C_NOACT;
     }
-  } while ((x_CharIndex != std::string::npos) && (s32_Return == C_NO_ERR));
+  } while ((x_CharIndex != -1) && (s32_Return == C_NO_ERR));
   return s32_Return;
 }
 
@@ -299,7 +298,7 @@ QString C_OscUtils::h_NiceifyStringForFileName(const QString &orc_String) {
   } else {
     for (uint32_t u32_Index = 0U; u32_Index < orc_String.length();
          u32_Index++) {
-      const char_t cn_Character = orc_String.toStdString()[u32_Index];
+      const char_t cn_Character = orc_String[u32_Index];
 
       // If the value of the character is not representable as unsigned char the
       // the behavior of isalnum is
@@ -630,9 +629,9 @@ C_OscUtils::h_FsnSerialNumberToString(const uint8_t ou8_ManufacturerFormat,
         // lint -e{9176} //no problems as long as charn has the same size as
         // uint8; if not we'd be in deep !"=?&
         // anyway
-        c_Result = C_OscUtils::h_PosSerialNumberToString(
-            reinterpret_cast<const uint8_t *>(
-                orc_RawSerialNumber.toStdString().c_str()));
+         c_Result = C_OscUtils::h_PosSerialNumberToString(
+             reinterpret_cast<const uint8_t *>(
+                 orc_RawSerialNumber.toUtf8().constData()));
       }
     } else {
       // No concrete formats defined yet
@@ -652,24 +651,15 @@ C_OscUtils::h_FsnSerialNumberToString(const uint8_t ou8_ManufacturerFormat,
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscUtils::h_FileToString(const QString &orc_FilePath,
                                 QString &orc_OutputString) {
-  std::string c_Input;
-  {
-    // Read
-    std::ifstream c_File;
-
-    c_File.open(orc_FilePath.toStdString().c_str(), std::ifstream::in);
-    if (c_File.is_open()) {
-      c_File.seekg(0LL, std::ios::end);
-      c_Input.reserve(static_cast<uint32_t>(c_File.tellg()));
-      c_File.seekg(0LL, std::ios::beg);
-
-      c_Input.assign(static_cast<std::istreambuf_iterator<char_t>>(c_File),
-                     std::istreambuf_iterator<char_t>());
-      c_File.close();
-    }
+  QFile c_File(orc_FilePath);
+  if (c_File.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    // Read the entire file content
+    orc_OutputString = c_File.readAll();
+    c_File.close();
+  } else {
+    // File couldn't be opened, leave orc_OutputString empty
+    orc_OutputString.clear();
   }
-  // Copy to output
-  orc_OutputString = QString::fromStdString(c_Input);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -733,15 +723,14 @@ QString C_OscUtils::h_LoadString(const uint16_t ou16_StringIndex) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscUtils::h_CopyFile(const QString &orc_SourceFile,
-                               const QString &orc_TargetFile,
-                               QString *const opc_ErrorPath,
-                               QString *const opc_ErrorMessage) {
+                                const QString &orc_TargetFile,
+                                QString *const opc_ErrorPath,
+                                QString *const opc_ErrorMessage) {
   int32_t s32_Return = C_NO_ERR;
   QString c_ErrorMessage = "";
 
-  std::fstream c_Input(orc_SourceFile.toStdString().c_str(),
-                       std::fstream::in | std::fstream::binary);
-  if (c_Input.fail() == true) {
+  QFile c_SourceFile(orc_SourceFile);
+  if (!c_SourceFile.open(QIODevice::ReadOnly)) {
     c_ErrorMessage = "Could not read \"" + orc_SourceFile + "\".";
     osc_write_log_error("Copying file",
                         c_ErrorMessage.toLocal8Bit().constData());
@@ -750,15 +739,12 @@ int32_t C_OscUtils::h_CopyFile(const QString &orc_SourceFile,
       *opc_ErrorPath = orc_SourceFile;
     }
   } else {
-    c_Input << &std::noskipws;
+    // Read all data from source file
+    QByteArray c_Data = c_SourceFile.readAll();
+    c_SourceFile.close();
 
-    const std::istream_iterator<uint8_t> c_Begin(c_Input);
-    const std::istream_iterator<uint8_t> c_END;
-
-    std::fstream c_Output(orc_TargetFile.toStdString().c_str(),
-                          std::fstream::out | std::fstream::trunc |
-                              std::fstream::binary);
-    if (c_Output.fail() == true) {
+    QFile c_TargetFile(orc_TargetFile);
+    if (!c_TargetFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
       c_ErrorMessage = "Could not write \"" + orc_TargetFile + "\".";
       osc_write_log_error("Copying file",
                           c_ErrorMessage.toLocal8Bit().constData());
@@ -767,10 +753,8 @@ int32_t C_OscUtils::h_CopyFile(const QString &orc_SourceFile,
         *opc_ErrorPath = orc_TargetFile;
       }
     } else {
-      const std::ostream_iterator<uint8_t> c_Begin2(c_Output);
-      try {
-        std::copy(c_Begin, c_END, c_Begin2);
-      } catch (...) {
+      // Write data to target file
+      if (c_TargetFile.write(c_Data) != c_Data.size()) {
         c_ErrorMessage =
             "Could not write stream of \"" + orc_TargetFile + "\".";
         osc_write_log_error("Copying file",
@@ -780,6 +764,7 @@ int32_t C_OscUtils::h_CopyFile(const QString &orc_SourceFile,
           *opc_ErrorPath = orc_TargetFile;
         }
       }
+      c_TargetFile.close();
     }
   }
 
