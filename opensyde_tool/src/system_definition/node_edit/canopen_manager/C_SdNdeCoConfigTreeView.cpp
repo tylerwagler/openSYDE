@@ -197,43 +197,45 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
       uint8_t u8_InterfaceNumber;
       const C_UsNode c_UsNode =
          C_UsHandler::h_GetInstance()->GetProjSdNode(pc_Node->c_Properties.c_Name);
-      const std::map<uint8_t, C_OscCanOpenManagerInfo> c_CanOpenManagers = pc_Node->c_CanOpenManagers;
+       const QHash<uint8_t, C_OscCanOpenManagerInfo> c_CanOpenManagers = pc_Node->c_CanOpenManagers;
 
-      for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager = c_CanOpenManagers.begin();
-           c_ItManager != c_CanOpenManagers.end(); ++c_ItManager)
-      {
-         const QModelIndex c_InterfaceModelIndex = this->mc_Model.GetInterfaceModelIndex(c_ItManager->first);
-         const QModelIndex c_DevicesModelIndex = this->mc_Model.GetDevicesModelIndex(c_ItManager->first);
+       for (QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager = c_CanOpenManagers.constBegin();
+            c_ItManager != c_CanOpenManagers.constEnd(); ++c_ItManager)
+       {
+          const QModelIndex c_InterfaceModelIndex = this->mc_Model.GetInterfaceModelIndex(c_ItManager.key());
+          const QModelIndex c_DevicesModelIndex = this->mc_Model.GetDevicesModelIndex(c_ItManager.key());
 
-         const C_OscCanOpenManagerInfo c_CanOpenManagerInfo = c_ItManager->second;
-         const std::map<C_OscCanInterfaceId,
-                        C_OscCanOpenManagerDeviceInfo> & rc_Devices = c_CanOpenManagerInfo.c_CanOpenDevices;
+          const C_OscCanOpenManagerInfo c_CanOpenManagerInfo = c_ItManager.value();
+           const QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> & rc_Devices = c_CanOpenManagerInfo.c_CanOpenDevices;
 
-         const std::map<uint8_t, bool> c_Interfaces = c_UsNode.GetExpandedCanOpenManager();
+            const std::map<uint8_t, bool> c_Interfaces = c_UsNode.GetExpandedCanOpenManager();
          for (std::map<uint8_t, bool>::const_iterator c_ItInterfaces = c_Interfaces.begin();
               c_ItInterfaces != c_Interfaces.end(); ++c_ItInterfaces)
          {
-            if (c_ItInterfaces->first == c_ItManager->first)
+            if (c_ItInterfaces->first == c_ItManager.key())
             {
-               if (c_ItInterfaces->second == true)
-               {
-                  for (std::map<C_OscCanInterfaceId,
-                                C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevices = rc_Devices.begin();
-                       c_ItDevices != rc_Devices.end(); ++c_ItDevices)
-                  {
+              if (c_ItInterfaces->first == c_ItManager.key())
+              {
+                if (c_ItInterfaces->second == true)
+                {
+                   for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevices = rc_Devices.constBegin();
+                        c_ItDevices != rc_Devices.constEnd(); ++c_ItDevices)
+                   {
                      const std::map<uint8_t, bool> c_Devices = c_UsNode.GetExpandedCanOpenDevices();
-                     for (std::map<uint8_t, bool>::const_iterator c_ItUsDevices = c_Devices.begin();
-                          c_ItUsDevices != c_Devices.end(); ++c_ItUsDevices)
-                     {
-                        const QModelIndex c_DeviceModelIndex =
-                           this->mc_Model.GetDeviceModelIndex(c_ItManager->first, c_ItDevices->first);
+               for (std::map<uint8_t, bool>::const_iterator c_ItUsDevices = c_Devices.begin();
+                    c_ItUsDevices != c_Devices.end(); ++c_ItUsDevices)
+               {
+                  if (c_ItUsDevices->first == c_ItDevices.key().u8_InterfaceNumber)
+                  {
+         const QModelIndex c_DeviceModelIndex =
+            this->mc_Model.GetDeviceModelIndex(c_ItManager.key(), c_ItDevices.key());
 
-                        if (c_ItUsDevices->first == c_ItDevices->first.u8_InterfaceNumber)
-                        {
+                              if (c_ItUsDevices->first == c_ItDevices.key().u8_InterfaceNumber)
+                              {
                            if (c_ItUsDevices->second == true)
                            {
-                              const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
-                                 c_ItDevices->first.u32_NodeIndex);
+            const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
+               c_ItDevices.key().u32_NodeIndex);
 
                               if (pc_DeviceNode != NULL)
                               {
@@ -245,10 +247,10 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
                                       c_ItDevice != c_Device.end();
                                       ++c_ItDevice)
                                  {
-                                    if (pc_DeviceNode->c_Properties.c_Name == c_ItDevice->first.second.second)
+                                    if (pc_DeviceNode->c_Properties.c_Name == c_ItDevice.key().second.second)
                                     {
-                                       this->setExpanded(c_DeviceModelIndex, c_ItDevice->second);
-                                    }
+                                    this->setExpanded(c_DeviceModelIndex, c_ItDevice.value());
+                                 }
                                  }
                               }
                               this->setExpanded(c_DevicesModelIndex, c_ItUsDevices->second);
@@ -339,8 +341,8 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
                        C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevices = rc_Devices.begin();
               c_ItDevices != rc_Devices.end(); ++c_ItDevices)
          {
-            const QModelIndex c_DeviceModelIndex =
-               this->mc_Model.GetDeviceModelIndex(c_ItManager->first, c_ItDevices->first);
+               const QModelIndex c_DeviceModelIndex =
+                  this->mc_Model.GetDeviceModelIndex(c_ItManager.key(), c_ItDevices.key());
 
             if (this->isExpanded(c_DeviceModelIndex) == true)
             {
@@ -349,9 +351,9 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
                if (pc_DeviceNode != NULL)
                {
                   const std::pair<uint8_t, QString> c_PairInterfaceId(
-                     c_ItDevices->first.u8_InterfaceNumber, pc_DeviceNode->c_Properties.c_Name);
-                  const std::pair<uint8_t, std::pair<uint8_t, QString> > c_Pair(
-                     c_ItManager->first, c_PairInterfaceId);
+                     c_ItDevices.key().u8_InterfaceNumber, pc_DeviceNode->c_Properties.c_Name);
+            const std::pair<uint8_t, std::pair<uint8_t, QString> > c_Pair(
+               c_ItManager.key(), c_PairInterfaceId);
                   c_SaveDevice[c_Pair] = true;
                }
             }
