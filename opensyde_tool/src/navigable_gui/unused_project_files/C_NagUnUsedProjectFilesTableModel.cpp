@@ -281,7 +281,7 @@ void C_NagUnUsedProjectFilesTableModel::UpdateData(const QStringList & orc_UnUse
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagUnUsedProjectFilesTableModel::DeleteSelectedFiles(const QItemSelection & orc_Selection)
 {
-   std::set<int32_t> c_UniqueRows;
+   QSet<int32_t> c_UniqueRows;
    QList<uint32_t> c_SelectedFileIndexes;
    for (const QModelIndex & rc_Index : orc_Selection.indexes())
    {
@@ -291,7 +291,7 @@ void C_NagUnUsedProjectFilesTableModel::DeleteSelectedFiles(const QItemSelection
          c_UniqueRows.insert(u32_Row);
       }
    }
-   c_SelectedFileIndexes.assign(c_UniqueRows.begin(), c_UniqueRows.end());
+   c_SelectedFileIndexes = c_UniqueRows.values();
    std::sort(c_SelectedFileIndexes.begin(), c_SelectedFileIndexes.end());
    this->m_MoveFilesToTrash(c_SelectedFileIndexes);
    for (const uint32_t u32_Row : c_SelectedFileIndexes)
@@ -338,7 +338,7 @@ QString C_NagUnUsedProjectFilesTableModel::DetailsOfFilesToDelete(const QItemSel
 {
    QString c_FileDetails = "";
 
-   std::set<int32_t> c_UniqueRows;
+   QSet<int32_t> c_UniqueRows;
    QList<uint32_t> c_SelectedFileIndexes;
 
    //for getting unique rows (due to 2 columns in a row)
@@ -350,7 +350,7 @@ QString C_NagUnUsedProjectFilesTableModel::DetailsOfFilesToDelete(const QItemSel
          c_UniqueRows.insert(u32_Row);
       }
    }
-   c_SelectedFileIndexes.assign(c_UniqueRows.begin(), c_UniqueRows.end());
+   c_SelectedFileIndexes = c_UniqueRows.values();
    std::sort(c_SelectedFileIndexes.begin(), c_SelectedFileIndexes.end());
    if (!c_SelectedFileIndexes.empty())
    {
