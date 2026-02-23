@@ -429,12 +429,12 @@ uint16_t C_SdBueMlvWidget::m_GetSelectedMultiplexerValues(void) const
 {
    uint16_t u16_Value = 0U;
 
-   const std::map<QString, uint16_t>::const_iterator c_ItValue =
+   const QHash<QString, uint16_t>::const_iterator c_ItValue =
       this->mc_MultiplexerValues.find(this->mpc_Ui->pc_ComboBoxMultiplexer->currentText());
 
    if (c_ItValue != this->mc_MultiplexerValues.end())
    {
-      u16_Value = c_ItValue->second;
+      u16_Value = c_ItValue.value();
    }
    else
    {
@@ -457,13 +457,13 @@ QString C_SdBueMlvWidget::m_GetComboBoxEntryByMultiplexerValue(const uint16_t ou
 {
    QString c_Entry = "";
 
-   std::map<QString, uint16_t>::const_iterator c_ItValue;
+   QHash<QString, uint16_t>::const_iterator c_ItValue;
 
-   for (c_ItValue = this->mc_MultiplexerValues.begin(); c_ItValue != this->mc_MultiplexerValues.end(); ++c_ItValue)
+   for (c_ItValue = this->mc_MultiplexerValues.constBegin(); c_ItValue != this->mc_MultiplexerValues.constEnd(); ++c_ItValue)
    {
-      if (c_ItValue->second == ou16_Value)
+      if (c_ItValue.value() == ou16_Value)
       {
-         c_Entry = c_ItValue->first;
+         c_Entry = c_ItValue.key();
          break;
       }
    }

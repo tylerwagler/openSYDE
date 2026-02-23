@@ -96,7 +96,7 @@ private:
    stw::opensyde_core::C_OscCanProtocol::E_Type me_Protocol;
    stw::opensyde_core::C_OscCanMessageIdentificationIndices mc_PreviousMessageId;
    // Mapping from combo box string to concrete value
-   std::map<QString, uint16_t> mc_MultiplexerValues;
+   QHash<QString, uint16_t> mc_MultiplexerValues;
 };
 }
 }

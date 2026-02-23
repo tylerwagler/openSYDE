@@ -861,7 +861,7 @@ void C_SdHandlerWidget::m_GenerateCode(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdHandlerWidget::m_Export(void)
 {
-   std::set<uint32_t> c_CanMessageIds; // to count CAN messages
+   QSet<uint32_t> c_CanMessageIds; // to count CAN messages
    std::set<C_OscCanMessageUniqueId> c_CanMessageIdsWithExtended;
 
    Q_ASSERT(this->mpc_ActBusEdit != NULL);
@@ -896,7 +896,7 @@ void C_SdHandlerWidget::m_Export(void)
             QList<uint32_t> c_NodeIndexes;
             QList<uint32_t> c_InterfaceIndexes;
             QList<uint32_t> c_DatapoolIndexes;
-            std::set<uint32_t> c_UniqueNodeIndexes;
+            QSet<uint32_t> c_UniqueNodeIndexes;
             uint32_t u32_NumOfInputMessages = 0;
 
             C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst().GetNodeAndComDpIndexesOfBus(
@@ -961,7 +961,7 @@ void C_SdHandlerWidget::m_Export(void)
                                                                                            c_Warnings);
                         c_CurrentCieNode.c_TxMessages.push_back(c_CurrentMessage);
                         // for counting messages and signals
-                        const std::set<uint32_t>::const_iterator c_Iter = c_CanMessageIds.find(c_TxIter->u32_CanId);
+                        const QSet<uint32_t>::const_iterator c_Iter = c_CanMessageIds.find(c_TxIter->u32_CanId);
                         if (c_Iter == c_CanMessageIds.end())
                         {
                            c_CanMessageIdsWithExtended.emplace(C_OscCanMessageUniqueId(c_TxIter->u32_CanId,
@@ -974,8 +974,8 @@ void C_SdHandlerWidget::m_Export(void)
                         {
                            const std::set<C_OscCanMessageUniqueId>::const_iterator c_IterWithExtended =
                               c_CanMessageIdsWithExtended.find(C_OscCanMessageUniqueId(c_TxIter->u32_CanId,
-                                                                                       c_TxIter
-                                                                                       ->q_IsExtended));
+                                                                                      c_TxIter
+                                                                                      ->q_IsExtended));
                            if (c_IterWithExtended == c_CanMessageIdsWithExtended.end())
                            {
                               const QString c_Message = "Can't export message \"" +
@@ -1007,7 +1007,7 @@ void C_SdHandlerWidget::m_Export(void)
                                                                                            c_Warnings);
                         c_CurrentCieNode.c_RxMessages.push_back(c_CurrentMessage);
                         // for counting messages and signals
-                        const std::set<uint32_t>::const_iterator c_Iter = c_CanMessageIds.find(c_RxIter->u32_CanId);
+                        const QSet<uint32_t>::const_iterator c_Iter = c_CanMessageIds.find(c_RxIter->u32_CanId);
                         if (c_Iter == c_CanMessageIds.end())
                         {
                            c_CanMessageIdsWithExtended.emplace(C_OscCanMessageUniqueId(c_RxIter->u32_CanId,
@@ -1020,8 +1020,8 @@ void C_SdHandlerWidget::m_Export(void)
                         {
                            const std::set<C_OscCanMessageUniqueId>::const_iterator c_IterWithExtended =
                               c_CanMessageIdsWithExtended.find(C_OscCanMessageUniqueId(c_RxIter->u32_CanId,
-                                                                                       c_RxIter
-                                                                                       ->q_IsExtended));
+                                                                                      c_RxIter
+                                                                                      ->q_IsExtended));
                            if (c_IterWithExtended == c_CanMessageIdsWithExtended.end())
                            {
                               const QString c_Message = "Can't export message \"" +

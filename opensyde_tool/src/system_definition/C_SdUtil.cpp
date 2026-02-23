@@ -109,10 +109,10 @@ C_SdUtil::h_GetNames(const QList<uint32_t> &orc_NodeIndices,
                      QStringList *const opc_DatapoolNames) {
   int32_t s32_Retval = C_NO_ERR;
 
-  if (orc_NodeIndices.size() == orc_InterfaceIndices.size()) {
-    QString c_TmpName;
-    // set for all nodes with more than one interface
-    std::set<uint32_t> c_SetNodesWithMultipleItf;
+   if (orc_NodeIndices.size() == orc_InterfaceIndices.size()) {
+      QString c_TmpName;
+      // set for all nodes with more than one interface
+      QSet<uint32_t> c_SetNodesWithMultipleItf;
 
     // detect all nodes with more than one used interface if the interface name
     // should not be visible always
