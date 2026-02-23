@@ -128,7 +128,7 @@ protected:
    virtual QString m_GetProtocolStringDecHook(void) const;
 
    // Generic database (for example openSYDE system definitions) activation flag register
-   std::map<QString, bool> mc_DatabaseActiveFlags;
+   QHash<QString, bool> mc_DatabaseActiveFlags;
 
    const C_OscCanMessage * mpc_OsySysDefMessage;
    const C_OscNodeDataPoolList * mpc_OsySysDefDataPoolList;

@@ -18,8 +18,8 @@
 #include <QDateTime>
 #include <QRecursiveMutex>
 #include <QString>
-#include <fstream>
-#include <map>
+#include <QFile>
+#include <QHash>
 
 // PC-Lint suppressions: function-like macro is the only way to get
 // file,func,line information into the text lint -save -e9026

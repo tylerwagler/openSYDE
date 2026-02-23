@@ -341,7 +341,7 @@ bool C_SdNdeHalcConfigImportModel::IsSelectionOfLinkedChannelsValid(QList<uint32
       {
          const C_SdNdeHalcConfigImportItem * const pc_DomainItem =
             dynamic_cast<const C_SdNdeHalcConfigImportItem * const>(pc_VisibleRootItem->c_Children[u32_DomainCounter]);
-         std::map<uint32_t, bool> c_LinkBuddyCheckStates;
+         QHash<uint32_t, bool> c_LinkBuddyCheckStates;
 
          if ((pc_DomainItem != NULL) && (pc_DomainItem->q_Enabled == true))
          {
@@ -383,7 +383,7 @@ bool C_SdNdeHalcConfigImportModel::IsSelectionOfLinkedChannelsValid(QList<uint32
                      // check of linked channels: are all link-buddies also checked?
                      if ((q_IsLinkedNew == true) || (q_IsLinkedOld == true))
                      {
-                        std::map<uint32_t, bool>::const_iterator c_ItFind;
+                        QHash<uint32_t, bool>::const_iterator c_ItFind;
 
                         // if current channel is not in the map, its buddies are also not there and need to be added
                         c_ItFind = c_LinkBuddyCheckStates.find(u32_ChannelCounter);
@@ -437,7 +437,7 @@ bool C_SdNdeHalcConfigImportModel::IsSelectionOfLinkedChannelsValid(QList<uint32
          if (c_LinkBuddyCheckStates.empty() == false)
          {
             // find all missing linked channels and collect their indices
-            std::map<uint32_t, bool>::const_iterator c_ItLinkBuddies;
+            QHash<uint32_t, bool>::const_iterator c_ItLinkBuddies;
             QList<uint32_t> c_MissingChannelIndicesPerDomain;
             for (c_ItLinkBuddies = c_LinkBuddyCheckStates.begin(); c_ItLinkBuddies != c_LinkBuddyCheckStates.end();
                  ++c_ItLinkBuddies)

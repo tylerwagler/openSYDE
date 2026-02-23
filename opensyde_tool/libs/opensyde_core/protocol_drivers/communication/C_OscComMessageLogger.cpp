@@ -472,14 +472,14 @@ int32_t C_OscComMessageLogger::ActivateDatabase(const QString & orc_Path, const 
 {
    int32_t s32_Return = C_NOACT;
 
-   const std::map<QString, bool>::iterator c_ItFlag = this->mc_DatabaseActiveFlags.find(orc_Path);
+   const QHash<QString, bool>::iterator c_ItFlag = this->mc_DatabaseActiveFlags.find(orc_Path);
 
    if (c_ItFlag != this->mc_DatabaseActiveFlags.end())
    {
       const std::map<QString, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef =
          this->mc_OsySysDefs.find(orc_Path);
 
-      c_ItFlag->second = oq_Active;
+      c_ItFlag.value() = oq_Active;
       s32_Return = C_NO_ERR;
 
       // Check if it is an openSYDE System Definition
