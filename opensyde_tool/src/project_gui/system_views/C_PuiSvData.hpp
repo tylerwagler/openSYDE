@@ -246,7 +246,7 @@ private:
    bool mq_IsServiceModeDashboardActive;
 
    QList<const QString *> m_GetExistingDashboardNames(void) const;
-   std::map<QString, bool> m_GetExistingDashboardNamesMap(void) const;
+   QHash<QString, bool> m_GetExistingDashboardNamesMap(void) const;
    void m_CheckAllReadRails(void);
 };
 

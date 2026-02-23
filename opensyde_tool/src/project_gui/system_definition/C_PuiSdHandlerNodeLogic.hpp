@@ -333,20 +333,20 @@ public:
 protected:
    C_PuiSdHandlerNodeLogic(QObject * const opc_Parent = NULL);
 
-   std::map<QString, bool> m_GetExistingNodeNames(void) const;
-   std::map<QString, bool> m_GetExistingNodeApplicationNames(const uint32_t & oru32_NodeIndex)
+   QHash<QString, bool> m_GetExistingNodeNames(void) const;
+   QHash<QString, bool> m_GetExistingNodeApplicationNames(const uint32_t & oru32_NodeIndex)
    const;
-   std::map<QString, bool> m_GetExistingNodeDataPoolNames(const uint32_t & oru32_NodeIndex)
+   QHash<QString, bool> m_GetExistingNodeDataPoolNames(const uint32_t & oru32_NodeIndex)
    const;
-   std::map<QString, bool> m_GetExistingNodeDataPoolListNames(const uint32_t & oru32_NodeIndex,
+   QHash<QString, bool> m_GetExistingNodeDataPoolListNames(const uint32_t & oru32_NodeIndex,
                                                                             const uint32_t & oru32_DataPoolIndex)
    const;
-   std::map<QString, bool> m_GetExistingNodeDataPoolListDataSetNames(const uint32_t & oru32_NodeIndex,
+   QHash<QString, bool> m_GetExistingNodeDataPoolListDataSetNames(const uint32_t & oru32_NodeIndex,
                                                                                    const uint32_t & oru32_DataPoolIndex,
                                                                                    const uint32_t & oru32_DataPoolListIndex)
    const;
-   std::map<QString, bool> m_GetExistingNodeDataPoolListVariableNames(const uint32_t & oru32_NodeIndex,
-                                                                                    const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex)
+   QHash<QString, bool> m_GetExistingNodeDataPoolListVariableNames(const uint32_t & oru32_NodeIndex,
+                                                                            const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex)
    const;
    void m_SyncNodeApplicationAdded(const uint32_t ou32_NodeIndex, const uint32_t ou32_ApplicationIndex);
    void m_SyncNodeApplicationMoved(const uint32_t ou32_NodeIndex, const uint32_t ou32_ApplicationSourceIndex,

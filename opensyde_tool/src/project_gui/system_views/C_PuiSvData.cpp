@@ -3283,9 +3283,9 @@ QList<const QString *> C_PuiSvData::m_GetExistingDashboardNames(void) const
    Vector of pointers to all currently registered dashboard names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_PuiSvData::m_GetExistingDashboardNamesMap(void) const
+QHash<QString, bool> C_PuiSvData::m_GetExistingDashboardNamesMap(void) const
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    for (uint32_t u32_ItDashboard = 0; u32_ItDashboard < this->mc_Dashboards.size(); ++u32_ItDashboard)
    {
       const C_PuiSvDashboard & rc_Data = this->mc_Dashboards[u32_ItDashboard];

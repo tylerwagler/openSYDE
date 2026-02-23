@@ -5807,9 +5807,9 @@ C_PuiSdHandlerNodeLogic::C_PuiSdHandlerNodeLogic(QObject * const opc_Parent) :
    Vector of pointers to all currently registered node names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeNames(void) const
+QHash<QString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeNames(void) const
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    for (uint32_t u32_ItNode = 0; u32_ItNode < this->mc_CoreDefinition.c_Nodes.size(); ++u32_ItNode)
    {
       uint32_t u32_GroupIndex;
@@ -5842,10 +5842,10 @@ std::map<QString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeNames(void) co
    Vector of pointers to all currently registered node application names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString,
+QHash<QString,
          bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeApplicationNames(const uint32_t & oru32_NodeIndex) const
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(oru32_NodeIndex);
    if (pc_Node != NULL)
    {
@@ -5866,10 +5866,10 @@ std::map<QString,
    Vector of pointers to all currently registered data pool names contained in the specified node
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString,
+QHash<QString,
          bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolNames(const uint32_t & oru32_NodeIndex) const
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(oru32_NodeIndex);
    if (pc_Node != NULL)
    {
@@ -5891,11 +5891,11 @@ std::map<QString,
    Vector of pointers to all currently registered list names contained in the specified node data pool
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListNames(
+QHash<QString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListNames(
    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex)
 const
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    const C_OscNodeDataPool * const pc_NodeDataPool = this->GetOscDataPool(oru32_NodeIndex, oru32_DataPoolIndex);
    if (pc_NodeDataPool != NULL)
    {
@@ -5918,11 +5918,11 @@ const
    Vector of pointers to all currently registered data set names contained in the specified node data pool list
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListDataSetNames(
+QHash<QString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListDataSetNames(
    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex)
 const
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    const C_OscNodeDataPoolList * const pc_NodeDataPoolList = this->GetOscDataPoolList(oru32_NodeIndex,
                                                                                       oru32_DataPoolIndex,
                                                                                       oru32_DataPoolListIndex);
@@ -5948,11 +5948,11 @@ const
    Vector of pointers to all currently registered variable names contained in the specified node data pool list
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListVariableNames(
+QHash<QString, bool> C_PuiSdHandlerNodeLogic::m_GetExistingNodeDataPoolListVariableNames(
    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_DataPoolIndex, const uint32_t & oru32_DataPoolListIndex)
 const
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    const C_OscNodeDataPoolList * const pc_NodeDataPoolList = this->GetOscDataPoolList(oru32_NodeIndex,
                                                                                       oru32_DataPoolIndex,
                                                                                       oru32_DataPoolListIndex);

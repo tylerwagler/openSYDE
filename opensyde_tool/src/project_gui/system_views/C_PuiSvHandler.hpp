@@ -316,7 +316,7 @@ private:
                           QString & orc_SetupWarningMessage, QStringList & orc_ErrorMessages,
                           std::set<uint32_t> & orc_NodesWithDashboardRoutingError,
                           std::set<uint32_t> & orc_NodesRelevantForDashboardRouting) const;
-   std::map<QString, bool> m_GetExistingViewNames(void) const;
+   QHash<QString, bool> m_GetExistingViewNames(void) const;
 
    static C_PuiSvHandler * mhpc_Singleton;
    QList<bool> mc_SdNodeErrors;

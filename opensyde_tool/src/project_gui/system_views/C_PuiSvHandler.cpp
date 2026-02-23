@@ -4515,9 +4515,9 @@ int32_t C_PuiSvHandler::m_CheckRouting(const uint32_t ou32_ViewIndex,
    Vector of pointers to all currently registered view names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_PuiSvHandler::m_GetExistingViewNames(void) const
+QHash<QString, bool> C_PuiSvHandler::m_GetExistingViewNames(void) const
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    for (uint32_t u32_ItView = 0; u32_ItView < this->mc_Views.size(); ++u32_ItView)
    {
       const C_PuiSvData & rc_Data = this->mc_Views[u32_ItView];
