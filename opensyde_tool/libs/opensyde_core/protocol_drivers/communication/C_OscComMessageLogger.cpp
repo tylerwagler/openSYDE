@@ -1490,19 +1490,19 @@ void C_OscComMessageLogger::m_ConvertCanMessage(const T_STWCAN_Msg_RX & orc_Msg,
    }
    else
    {
-      const std::map<uint32_t, uint32_t>::iterator c_ItCounter =
+      const QHash<uint32_t, uint32_t>::iterator c_ItCounter =
          this->mc_MsgCounterExtendedId.find(orc_Msg.u32_ID);
 
       if (c_ItCounter == this->mc_MsgCounterExtendedId.end())
       {
          // New message
-         this->mc_MsgCounterExtendedId.insert(std::pair<uint32_t, uint32_t>(orc_Msg.u32_ID, 1U));
+         this->mc_MsgCounterExtendedId.insert(orc_Msg.u32_ID, 1U);
          this->mc_HandledCanMessage.c_Counter = "1";
       }
       else
       {
-         c_ItCounter->second = c_ItCounter->second + 1;
-         this->mc_HandledCanMessage.c_Counter = QString::number(c_ItCounter->second);
+         c_ItCounter.value() = c_ItCounter.value() + 1;
+         this->mc_HandledCanMessage.c_Counter = QString::number(c_ItCounter.value());
       }
    }
 }
@@ -1675,7 +1675,7 @@ void C_OscComMessageLogger::m_CheckAndHandleEcesMessage()
       if (rc_Signal.c_Name.compare(mhc_ECES_MESSAGE_COUNTER, Qt::CaseInsensitive) == 0)
       {
          // Search for the unique ECeS message (based on CAN Id) in the saved ECeS messages
-         const std::map<uint32_t,  QString>::iterator c_Iterator = this->mc_EcesMessages.find(
+         const QHash<uint32_t,  QString>::iterator c_Iterator = this->mc_EcesMessages.find(
             this->mpc_OsySysDefMessage->u32_CanId);
 
          this->mc_HandledCanMessage.c_Status = "Counter OK. ";
@@ -1685,7 +1685,7 @@ void C_OscComMessageLogger::m_CheckAndHandleEcesMessage()
          if (c_Iterator != this->mc_EcesMessages.end())
          {
             // compare the message counter values (ideally the counter of the received message should be +1)
-            int32_t s32_CounterDiff = rc_Signal.c_Value.toInt() - c_Iterator->second.toInt();
+            int32_t s32_CounterDiff = rc_Signal.c_Value.toInt() - c_Iterator.value().toInt();
 
             // When max value of counter is reached, ensure that the increment is valid
             // E.g if max value = 255, next counter value = 0. Hence s32_CounterDiff = -255.
@@ -1709,14 +1709,14 @@ void C_OscComMessageLogger::m_CheckAndHandleEcesMessage()
                c_DifferenceValue.prepend("+");
             }
             this->mc_HandledCanMessage.c_Status += "Diff: " + c_DifferenceValue +
-                                                   "; Prev. Counter = " + c_Iterator->second + ". ";
+                                                   "; Prev. Counter = " + c_Iterator.value() + ". ";
 
             // remove the old message
             this->mc_EcesMessages.erase(this->mpc_OsySysDefMessage->u32_CanId);
          }
 
-         this->mc_EcesMessages.insert(std::pair<uint32_t, QString>(this->mpc_OsySysDefMessage->u32_CanId,
-                                                                       rc_Signal.c_Value));
+         this->mc_EcesMessages.insert(this->mpc_OsySysDefMessage->u32_CanId,
+                                       rc_Signal.c_Value);
       }
 
       // Look for special signal "ECeS_Checksum" in the message received

@@ -176,8 +176,8 @@ private:
 
    // Message counting
    QList<uint32_t> mc_MsgCounterStandardId;
-   std::map<uint32_t, uint32_t> mc_MsgCounterExtendedId;
-   std::map<uint32_t, QString> mc_EcesMessages;
+   QHash<uint32_t, uint32_t> mc_MsgCounterExtendedId;
+   QHash<uint32_t, QString> mc_EcesMessages;
    C_OscComAutoSupport * mpc_AutoSupportProtocol;
 
    class C_EcosMessage

@@ -97,11 +97,11 @@ private:
   static bool mhq_WriteToFile;
   static bool mhq_AutoFlushAllFile;
   static bool mhq_AutoFlushWarningsAndErrorsFile;
-  static bool mhq_WriteToConsole;
-  static bool mhq_MeasureTime;
-  static bool mhq_LogInitErrorsToConsole;
-  static std::map<uint16_t, qint64>
-      mhc_StartTimes; ///< first: Timer ID, second: start time (ms since epoch)
+   static bool mhq_WriteToConsole;
+   static bool mhq_MeasureTime;
+   static bool mhq_LogInitErrorsToConsole;
+   static QHash<uint16_t, qint64>
+       mhc_StartTimes; ///< first: Timer ID, second: start time (ms since epoch)
   static QString mhc_FileName;
   static QRecursiveMutex mhc_ConsoleCriticalSection;
   static QRecursiveMutex mhc_FileCriticalSection;

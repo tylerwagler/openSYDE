@@ -52,8 +52,8 @@ bool C_OscLoggingHandler::mhq_AutoFlushWarningsAndErrorsFile = false;
 bool C_OscLoggingHandler::mhq_WriteToConsole = true;
 bool C_OscLoggingHandler::mhq_MeasureTime = false;
 bool C_OscLoggingHandler::mhq_LogInitErrorsToConsole = false;
-std::map<uint16_t, qint64> C_OscLoggingHandler::mhc_StartTimes =
-    std::map<uint16_t, qint64>();
+QHash<uint16_t, qint64> C_OscLoggingHandler::mhc_StartTimes =
+    QHash<uint16_t, qint64>();
 QString C_OscLoggingHandler::mhc_FileName = "";
 QRecursiveMutex C_OscLoggingHandler::mhc_ConsoleCriticalSection;
 QRecursiveMutex C_OscLoggingHandler::mhc_FileCriticalSection;
