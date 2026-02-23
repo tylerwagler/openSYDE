@@ -443,14 +443,14 @@ const C_OscCanOpenObjectData *C_OscImportEdsDcf::mh_GetCoObject(
   const C_OscCanOpenObjectData *pc_Retval = NULL;
 
   // use "find" as "at" is not available in C++98
-  const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element =
+  const QHash<uint16_t, C_OscCanOpenObject>::const_iterator c_Element =
       orc_CoObjects.find(static_cast<uint16_t>(ou32_Id));
 
   if (c_Element != orc_CoObjects.end()) {
     if (os32_SubIndex < 0) {
       pc_Retval = &c_Element->second;
     } else {
-      const std::map<uint8_t, C_OscCanOpenObjectData>::const_iterator
+      const QHash<uint8_t, C_OscCanOpenObjectData>::const_iterator
           c_SubElement = c_Element->second.c_SubObjects.find(
               static_cast<uint8_t>(os32_SubIndex));
       if (c_SubElement != c_Element->second.c_SubObjects.end()) {
@@ -499,7 +499,7 @@ int32_t C_OscImportEdsDcf::mh_ParseMessages(
           ? C_OscCanOpenObjectDictionary::hu8_OD_SRDO_SUB_INDEX_COB_ID
           : C_OscCanOpenObjectDictionary::hu8_OD_SUB_INDEX_COB_ID;
 
-  for (std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element =
+  for (QHash<uint16_t, C_OscCanOpenObject>::const_iterator c_Element =
            orc_CoObjects.begin();
        c_Element != orc_CoObjects.end(); ++c_Element) {
     // Main section
@@ -515,11 +515,11 @@ int32_t C_OscImportEdsDcf::mh_ParseMessages(
       //--------------
       const C_OscCanOpenObjectData *pc_SubObject = NULL;
 
-      const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object =
+      const QHash<uint16_t, C_OscCanOpenObject>::const_iterator c_Object =
           orc_CoObjects.find(
               static_cast<uint16_t>(ou32_StartingId + u32_ItMessage));
       if (c_Object != orc_CoObjects.end()) {
-        const std::map<uint8_t, C_OscCanOpenObjectData>::const_iterator
+      const QHash<uint8_t, C_OscCanOpenObjectData>::const_iterator
             c_SubObject = c_Object->second.c_SubObjects.find(u8_CobIdSubIndex);
         if (c_SubObject != c_Object->second.c_SubObjects.end()) {
           pc_SubObject = &c_SubObject->second;

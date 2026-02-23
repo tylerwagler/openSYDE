@@ -192,7 +192,7 @@ uint32_t C_UsNode::GetSelectedCanOpenDeviceUseCaseIndex(void) const {
    CANopen expandend manager
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<uint8_t, bool> C_UsNode::GetExpandedCanOpenManager(void) const {
+QHash<uint8_t, bool> C_UsNode::GetExpandedCanOpenManager(void) const {
   return this->mc_CanOpenExpandedManager;
 }
 
@@ -203,7 +203,7 @@ std::map<uint8_t, bool> C_UsNode::GetExpandedCanOpenManager(void) const {
    CANopen expanded devices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<uint8_t, bool> C_UsNode::GetExpandedCanOpenDevices(void) const {
+QHash<uint8_t, bool> C_UsNode::GetExpandedCanOpenDevices(void) const {
   return this->mc_CanOpenExpandedDevices;
 }
 
@@ -563,7 +563,7 @@ void C_UsNode::SetSelectedCanOpenDeviceUseCaseIndex(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetExpandedCanOpenManager(
-    const std::map<uint8_t, bool> &orc_Interfaces) {
+    const QHash<uint8_t, bool> &orc_Interfaces) {
   this->mc_CanOpenExpandedManager = orc_Interfaces;
 }
 
@@ -574,7 +574,7 @@ void C_UsNode::SetExpandedCanOpenManager(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetExpandedCanOpenDevices(
-    const std::map<uint8_t, bool> &orc_Devices) {
+    const QHash<uint8_t, bool> &orc_Devices) {
   this->mc_CanOpenExpandedDevices = orc_Devices;
 }
 

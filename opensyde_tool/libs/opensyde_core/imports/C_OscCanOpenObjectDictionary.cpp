@@ -345,7 +345,7 @@ int32_t C_OscCanOpenObjectDictionary::m_CheckForExistingObjects(const QString & 
          if (s32_Return == C_NO_ERR)
          {
             //does the referenced object exist in the file?
-            const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(u16_Index);
+            const QHash<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(u16_Index);
             if (c_Object == c_OdObjects.end())
             {
                mc_LastError = orc_Blockname + ": References object 0x" +
@@ -864,7 +864,7 @@ void C_OscCanOpenObjectDictionary::CalcHash(uint32_t & oru32_HashValue) const
 
    this->c_InfoBlock.CalcHash(oru32_HashValue);
 
-   for (std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element = this->c_OdObjects.begin();
+   for (QHash<uint16_t, C_OscCanOpenObject>::const_iterator c_Element = this->c_OdObjects.begin();
         c_Element != this->c_OdObjects.end();
         ++c_Element)
    {
@@ -1005,9 +1005,9 @@ uint8_t C_OscCanOpenObjectDictionary::GetGranularity() const
    All available factory settings sub indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::set<uint8_t> C_OscCanOpenObjectDictionary::GetAllAvailableFactorySettingsSubIndices() const
+QSet<uint8_t> C_OscCanOpenObjectDictionary::GetAllAvailableFactorySettingsSubIndices() const
 {
-   const std::set<uint8_t> c_Retval = this->GetAllAvailableSubIndices(0x1011U);
+   const QSet<uint8_t> c_Retval = this->GetAllAvailableSubIndices(0x1011U);
 
    return c_Retval;
 }
@@ -1021,14 +1021,14 @@ std::set<uint8_t> C_OscCanOpenObjectDictionary::GetAllAvailableFactorySettingsSu
    All available sub indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::set<uint8_t> C_OscCanOpenObjectDictionary::GetAllAvailableSubIndices(const uint16_t ou16_OdIndex) const
+QSet<uint8_t> C_OscCanOpenObjectDictionary::GetAllAvailableSubIndices(const uint16_t ou16_OdIndex) const
 {
-   std::set<uint8_t> c_Retval;
+   QSet<uint8_t> c_Retval;
 
-   const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(ou16_OdIndex);
+   const QHash<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(ou16_OdIndex);
    if (c_Object != c_OdObjects.end())
    {
-      for (std::map<uint8_t, C_OscCanOpenObjectData>::const_iterator c_Element = c_Object->second.c_SubObjects.begin();
+      for (QHash<uint8_t, C_OscCanOpenObjectData>::const_iterator c_Element = c_Object->second.c_SubObjects.begin();
            c_Element != c_Object->second.c_SubObjects.end();
            ++c_Element)
       {
@@ -1254,7 +1254,7 @@ const C_OscCanOpenObjectData * C_OscCanOpenObjectDictionary::GetCanOpenObject(co
 {
    const C_OscCanOpenObjectData * pc_Retval = NULL;
 
-   const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(ou16_OdIndex);
+   const QHash<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(ou16_OdIndex);
 
    if (c_Object != c_OdObjects.end())
    {
@@ -1281,11 +1281,11 @@ const
 {
    const C_OscCanOpenObjectData * pc_SubObject = NULL;
 
-   const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = this->c_OdObjects.find(ou16_OdIndex);
+   const QHash<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = this->c_OdObjects.find(ou16_OdIndex);
 
    if (c_Object != this->c_OdObjects.end())
    {
-      const std::map<uint8_t, C_OscCanOpenObjectData>::const_iterator c_SubObject = c_Object->second.c_SubObjects.find(
+      const QHash<uint8_t, C_OscCanOpenObjectData>::const_iterator c_SubObject = c_Object->second.c_SubObjects.find(
          ou8_OdSubIndex);
       if (c_SubObject != c_Object->second.c_SubObjects.end())
       {
@@ -1313,7 +1313,7 @@ bool C_OscCanOpenObjectDictionary::CheckObjectPresentByIndex(const uint16_t ou16
 {
    bool q_Retval = false;
 
-   const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = this->c_OdObjects.find(ou16_OdIndex);
+   const QHash<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = this->c_OdObjects.find(ou16_OdIndex);
 
    if (c_Object != this->c_OdObjects.end())
    {
@@ -1323,7 +1323,7 @@ bool C_OscCanOpenObjectDictionary::CheckObjectPresentByIndex(const uint16_t ou16
       }
       else
       {
-         const std::map<uint8_t,
+         const QHash<uint8_t,
                         C_OscCanOpenObjectData>::const_iterator c_SubObject = c_Object->second.c_SubObjects.find(
             ou8_OdSubIndex);
          if (c_SubObject != c_Object->second.c_SubObjects.end())
@@ -1348,10 +1348,10 @@ bool C_OscCanOpenObjectDictionary::CheckObjectPresentByIndex(const uint16_t ou16
    \param[in,out]  orc_SubIndices   Sub indices
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenObjectDictionary::GetMappableObjects(std::map<uint32_t, QList<uint32_t> > & orc_SubIndices)
+void C_OscCanOpenObjectDictionary::GetMappableObjects(QHash<uint32_t, QList<uint32_t> > & orc_SubIndices)
 const
 {
-   for (std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element = this->c_OdObjects.begin();
+   for (QHash<uint16_t, C_OscCanOpenObject>::const_iterator c_Element = this->c_OdObjects.begin();
         c_Element != this->c_OdObjects.end();
         ++c_Element)
    {
@@ -1361,7 +1361,7 @@ const
       }
 
       //check sub objects:
-      for (std::map<uint8_t, C_OscCanOpenObjectData>::const_iterator c_SubElement =
+      for (QHash<uint8_t, C_OscCanOpenObjectData>::const_iterator c_SubElement =
               c_Element->second.c_SubObjects.begin();
            c_SubElement != c_Element->second.c_SubObjects.end();
            ++c_SubElement)

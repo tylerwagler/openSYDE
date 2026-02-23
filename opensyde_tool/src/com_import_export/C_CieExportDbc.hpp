@@ -44,7 +44,7 @@ public:
                   const C_CieConverter::C_CieCommDefinition &orc_Definition,
                   QStringList &orc_WarningMessages, QString &orc_ErrorMessage);
 
-  static int32_t h_GetNodeMapping(std::map<QString, QString> &orc_NodeMapping);
+  static int32_t h_GetNodeMapping(QHash<QString, QString> &orc_NodeMapping);
 
   class C_ExportStatistic {
   public:
@@ -62,10 +62,10 @@ private:
 
   static int32_t
   mh_SetNodes(const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
-              std::map<std::string, Vector::DBC::Node> &orc_DbcNodes);
+              QHash<QString, Vector::DBC::Node> &orc_DbcNodes);
   static int32_t
   mh_SetMessages(const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
-                 std::map<uint32_t, Vector::DBC::Message> &orc_DbcMessages);
+                 QHash<uint32_t, Vector::DBC::Message> &orc_DbcMessages);
   static int32_t mh_SetSignals(
       const QList<C_CieConverter::C_CieCanSignal> &orc_CieSignals,
       const QList<C_CieConverter::C_CieNode> &orc_CieNodes,

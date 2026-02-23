@@ -934,7 +934,7 @@ C_Uti::h_ConcatPathIfNecessary(const QString &orc_BaseDir,
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString
-C_Uti::h_GetUniqueNameQt(const std::map<QString, bool> &orc_ExistingStrings,
+C_Uti::h_GetUniqueNameQt(const QHash<QString, bool> &orc_ExistingStrings,
                          const QString &orc_ProposedName) {
   return C_OscUtils::h_GetUniqueName(orc_ExistingStrings, orc_ProposedName,
                                      0UL);

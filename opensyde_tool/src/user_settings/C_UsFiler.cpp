@@ -268,9 +268,9 @@ void C_UsFiler::mh_SaveNode(QSettings &orc_Ini, const QString &orc_SectionName,
 
   // CANopen
   uint32_t u32_InterfaceCounter = 0UL;
-  const std::map<uint8_t, bool> c_Interfaces =
+  const QHash<uint8_t, bool> c_Interfaces =
       orc_Node.GetExpandedCanOpenManager();
-  for (std::map<uint8_t, bool>::const_iterator c_ItInterface =
+  for (QHash<uint8_t, bool>::const_iterator c_ItInterface =
            c_Interfaces.begin();
        c_ItInterface != c_Interfaces.end(); ++c_ItInterface) {
     orc_Ini.setValue(orc_SectionName + "/" +
@@ -285,11 +285,11 @@ void C_UsFiler::mh_SaveNode(QSettings &orc_Ini, const QString &orc_SectionName,
     u32_InterfaceCounter++;
   }
   orc_Ini.setValue(orc_SectionName + "/" +
-                       c_CanOpenExpandedCanOpenManagerCounter,
-                   static_cast<int>(c_Interfaces.size()));
+                        c_CanOpenExpandedCanOpenManagerCounter,
+                    static_cast<int>(c_Interfaces.size()));
   uint32_t u32_DevicesCounter = 0UL;
-  std::map<uint8_t, bool> c_Devices = orc_Node.GetExpandedCanOpenDevices();
-  for (std::map<uint8_t, bool>::const_iterator c_ItDevices = c_Devices.begin();
+  QHash<uint8_t, bool> c_Devices = orc_Node.GetExpandedCanOpenDevices();
+  for (QHash<uint8_t, bool>::const_iterator c_ItDevices = c_Devices.begin();
        c_ItDevices != c_Devices.end(); ++c_ItDevices) {
     orc_Ini.setValue(orc_SectionName + "/" +
                          (c_CanOpenExpandedCanOpenDevices +
@@ -303,8 +303,8 @@ void C_UsFiler::mh_SaveNode(QSettings &orc_Ini, const QString &orc_SectionName,
     u32_DevicesCounter++;
   }
   orc_Ini.setValue(orc_SectionName + "/" +
-                       c_CanOpenExpandedCanOpenDevicesCounter,
-                   static_cast<int>(c_Devices.size()));
+                        c_CanOpenExpandedCanOpenDevicesCounter,
+                    static_cast<int>(c_Devices.size()));
   uint32_t u32_DeviceCounter = 0UL;
   std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool> c_Device =
       orc_Node.GetExpandedCanOpenDevice();
@@ -1487,8 +1487,8 @@ void C_UsFiler::mh_LoadNode(QSettings &orc_Ini, const QString &orc_SectionName,
                                                               c_Columns);
 
   // CANopen
-  std::map<uint8_t, bool> c_LoadInterfaces;
-  std::map<uint8_t, bool> c_LoadDevices;
+  QHash<uint8_t, bool> c_LoadInterfaces;
+  QHash<uint8_t, bool> c_LoadDevices;
   std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool> c_LoadDevice;
   u32_Tmp =
       orc_Ini

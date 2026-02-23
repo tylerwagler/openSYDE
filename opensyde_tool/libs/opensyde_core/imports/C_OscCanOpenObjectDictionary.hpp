@@ -119,7 +119,7 @@ public:
 
 class C_OscCanOpenObject : public C_OscCanOpenObjectData {
 public:
-  std::map<uint8_t, C_OscCanOpenObjectData> c_SubObjects;
+  QHash<uint8_t, C_OscCanOpenObjectData> c_SubObjects;
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ public:
   C_OscCanOpenEdsInfoBlock c_InfoBlock;
 
   // all objects loaded from file; key = object index
-  std::map<uint16_t, C_OscCanOpenObject> c_OdObjects;
+  QHash<uint16_t, C_OscCanOpenObject> c_OdObjects;
 
   // Textual content of loaded EDS file to use e.g. for re-saving to file
   QStringList c_TextFileContent;
@@ -191,8 +191,8 @@ public:
   int32_t IsHeartbeatProducerRo(bool &orq_IsRo) const;
   bool IsEmcySupported() const;
   uint8_t GetGranularity() const;
-  std::set<uint8_t> GetAllAvailableFactorySettingsSubIndices() const;
-  std::set<uint8_t>
+  QSet<uint8_t> GetAllAvailableFactorySettingsSubIndices() const;
+  QSet<uint8_t>
   GetAllAvailableSubIndices(const uint16_t ou16_OdIndex) const;
 
   // Message
@@ -222,7 +222,7 @@ public:
   bool CheckObjectPresentByIndex(const uint16_t ou16_OdIndex,
                                  const uint8_t ou8_OdSubIndex) const;
   void GetMappableObjects(
-      std::map<uint32_t, QList<uint32_t>> &orc_SubIndices) const;
+      QHash<uint32_t, QList<uint32_t>> &orc_SubIndices) const;
 
   static uint16_t
   h_GetCanOpenObjectDictionaryIndexForPdo(const uint16_t ou16_PdoIndex,

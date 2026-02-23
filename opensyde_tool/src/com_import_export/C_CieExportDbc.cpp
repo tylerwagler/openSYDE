@@ -135,21 +135,17 @@ int32_t C_CieExportDbc::h_ExportNetwork(
   // set common information
   if (s32_Return == C_NO_ERR) {
     // set network information (bus name is network name)
-    const std::string c_DbName = "DBName";
+    const QString c_DbName = "DBName";
     Vector::DBC::Attribute c_DbNameAttribute;
     Vector::DBC::AttributeDefinition c_DbNameAttributeType;
-    c_DbNameAttribute.name = "DBName";
+    c_DbNameAttribute.name = c_DbName.toStdString();
     c_DbNameAttribute.stringValue =
         mh_EscapeCriticalSymbols(orc_Definition.c_Bus.c_Name).toStdString();
-    c_DbNameAttributeType.name = "DBName";
+    c_DbNameAttributeType.name = c_DbName.toStdString();
     c_DbNameAttributeType.valueType.type =
         Vector::DBC::AttributeValueType::Type::String;
-    c_DbcNetwork.attributeValues.emplace(
-        std::pair<std::string, Vector::DBC::Attribute>(c_DbName,
-                                                       c_DbNameAttribute));
-    c_DbcNetwork.attributeDefinitions.emplace(
-        std::pair<std::string, Vector::DBC::AttributeDefinition>(
-            c_DbName, c_DbNameAttributeType));
+    c_DbcNetwork.attributeValues.insert(c_DbName, c_DbNameAttribute);
+    c_DbcNetwork.attributeDefinitions.insert(c_DbName, c_DbNameAttributeType);
     c_DbcNetwork.comment =
         mh_EscapeCriticalSymbols(orc_Definition.c_Bus.c_Comment).toStdString();
 
@@ -224,7 +220,7 @@ int32_t C_CieExportDbc::h_ExportNetwork(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t
-C_CieExportDbc::h_GetNodeMapping(std::map<QString, QString> &orc_NodeMapping) {
+C_CieExportDbc::h_GetNodeMapping(QHash<QString, QString> &orc_NodeMapping) {
   int32_t s32_Return = C_NOACT;
 
   if (mhq_ValidDbcExport == true) {
@@ -275,7 +271,7 @@ C_CieExportDbc::h_GetExportStatistic(C_ExportStatistic &orc_ExportStatistic) {
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieExportDbc::mh_SetNodes(
     const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
-    std::map<std::string, Vector::DBC::Node> &orc_DbcNodes) {
+    QHash<QString, Vector::DBC::Node> &orc_DbcNodes) {
   int32_t s32_Return = C_NO_ERR;
 
   if (orc_CieNodes.size() > 0) {
@@ -289,17 +285,16 @@ int32_t C_CieExportDbc::mh_SetNodes(
           mh_NiceifyStringForDbcSymbol(c_Iter->c_Properties.c_Name);
       mhc_NodeMapping.emplace(std::pair<QString, QString>(
           c_Iter->c_Properties.c_Name, c_Niceified));
-      std::string c_Name = mh_EscapeCriticalSymbols(c_Niceified).toStdString();
+      QString c_Name = mh_EscapeCriticalSymbols(c_Niceified);
 
       // value
       Vector::DBC::Node
           c_Node; // store name and comment, we have no attribute values
-      c_Node.name = c_Name;
+      c_Node.name = c_Name.toStdString();
       c_Node.comment = mh_EscapeCriticalSymbols(c_Iter->c_Properties.c_Comment)
                            .toStdString();
       // store current key value entry to map
-      orc_DbcNodes.emplace(
-          std::pair<std::string, Vector::DBC::Node>(c_Name, c_Node));
+      orc_DbcNodes.insert(c_Name, c_Node);
     }
   } else {
     // strange case should not happen
@@ -324,7 +319,7 @@ int32_t C_CieExportDbc::mh_SetNodes(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CieExportDbc::mh_SetMessages(
     const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
-    std::map<uint32_t, Vector::DBC::Message> &orc_DbcMessages) {
+    QHash<uint32_t, Vector::DBC::Message> &orc_DbcMessages) {
   QString c_Message;
 
   QList<C_CieConverter::C_CieNode>::const_iterator c_Iter;
@@ -340,9 +335,7 @@ int32_t C_CieExportDbc::mh_SetMessages(
           c_MsgIter->c_CanMessage;
       uint32_t u32_CanId = c_CanMessage.u32_CanId;
       // only add new CAN messages
-      std::map<uint32_t, Vector::DBC::Message>::iterator c_DbcMsgIter;
-      c_DbcMsgIter = orc_DbcMessages.find(u32_CanId);
-      if (c_DbcMsgIter == orc_DbcMessages.end()) {
+      if (!orc_DbcMessages.contains(u32_CanId)) {
         // new CAN message
         Vector::DBC::Message c_DbcMessage;
         if (c_CanMessage.q_IsExtended == true) {
@@ -371,8 +364,7 @@ int32_t C_CieExportDbc::mh_SetMessages(
         mh_SetTransmission(*c_MsgIter, c_DbcMessage);
 
         // store new CAN message
-        orc_DbcMessages.emplace(
-            std::pair<uint32_t, Vector::DBC::Message>(u32_CanId, c_DbcMessage));
+        orc_DbcMessages.insert(u32_CanId, c_DbcMessage);
 
         c_Message = "CAN Tx message with transmitter and signals \"" +
                     c_CanMessage.c_Name + "\" inserted.";
@@ -383,9 +375,9 @@ int32_t C_CieExportDbc::mh_SetMessages(
         // activating different nodes, but this is not supported in openSYDE.
         c_Message = "Setting node \"" + c_NodeName +
                     "\" as transmitter for CAN message \"" +
-                    QString::fromStdString(c_DbcMsgIter->second.name) + "\".";
+                    QString::fromStdString(orc_DbcMessages.value(u32_CanId).name) + "\".";
         osc_write_log_info("DBC file export", c_Message);
-        c_DbcMsgIter->second.transmitter = c_NodeName.toStdString();
+        orc_DbcMessages.value(u32_CanId).transmitter = c_NodeName.toStdString();
       }
     }
     // get Rx messages of node
@@ -397,9 +389,7 @@ int32_t C_CieExportDbc::mh_SetMessages(
       // only add new CAN messages with signals and transceivers
       // (there is nothing in 'else case' to be done because we have already all
       // information)
-      std::map<uint32_t, Vector::DBC::Message>::iterator c_DbcMsgIter;
-      c_DbcMsgIter = orc_DbcMessages.find(u32_CanId);
-      if (c_DbcMsgIter == orc_DbcMessages.end()) {
+      if (!orc_DbcMessages.contains(u32_CanId)) {
         // new CAN message
         Vector::DBC::Message c_DbcMessage;
         if (c_CanMessage.q_IsExtended == true) {
@@ -422,8 +412,7 @@ int32_t C_CieExportDbc::mh_SetMessages(
         mh_SetTransmission(*c_MsgIter, c_DbcMessage);
 
         // store new CAN message
-        orc_DbcMessages.emplace(
-            std::pair<uint32_t, Vector::DBC::Message>(u32_CanId, c_DbcMessage));
+        orc_DbcMessages.insert(u32_CanId, c_DbcMessage);
 
         c_Message = "CAN Rx message with receivers and signals \"" +
                     c_CanMessage.c_Name + "\" inserted.";
@@ -500,29 +489,29 @@ int32_t C_CieExportDbc::mh_SetSignals(
     Q_ASSERT(s32_Return == C_NO_ERR);
 
     if (s32_Return == C_NO_ERR) {
-      const std::unordered_set<std::string> c_ReceiverNodes(
-          c_DbcSignal.receivers.begin(), c_DbcSignal.receivers.end());
+      // Convert receivers to QSet for efficient lookup
+      QSet<QString> c_ReceiverNodes;
+      for (const auto& receiver : c_DbcSignal.receivers) {
+        c_ReceiverNodes.insert(QString::fromStdString(receiver));
+      }
 
       // fill up receivers for signal
       for (const auto &rc_Node : orc_CieNodes) {
-        const std::string c_NodeName =
-            mh_NiceifyStringForDbcSymbol(rc_Node.c_Properties.c_Name)
-                .toStdString();
-        if (c_ReceiverNodes.find(c_NodeName) == c_ReceiverNodes.end()) {
+        const QString c_NodeName =
+            mh_NiceifyStringForDbcSymbol(rc_Node.c_Properties.c_Name);
+        if (!c_ReceiverNodes.contains(c_NodeName)) {
           for (const auto &rc_Receiver : rc_Node.c_RxMessages) {
             // if we have the same message, then check if message is receiver of
             // signal
-            if (rc_Receiver.c_CanMessage.c_Name.compare(
-                    QString::fromStdString(orc_DbcMessage.name)) == 0) {
+            if (rc_Receiver.c_CanMessage.c_Name.compare(orc_DbcMessage.name) == 0) {
               const QList<C_CieConverter::C_CieCanSignal> &rc_Signals =
                   rc_Receiver.c_CanMessage.c_Signals;
               for (const auto &rc_Signal : rc_Signals) {
                 // check if node with Rx messages has signal
-                if (rc_Signal.c_Element.c_Name.compare(
-                        QString::fromStdString(c_DbcSignal.name)) == 0) {
+                if (rc_Signal.c_Element.c_Name.compare(c_DbcSignal.name) == 0) {
                   // receiver for signal found -> add node as receiver if not
                   // already exists
-                  c_DbcSignal.receivers.insert(c_NodeName);
+                  c_DbcSignal.receivers.insert(c_NodeName.toStdString());
                 }
               }
             }
@@ -530,9 +519,7 @@ int32_t C_CieExportDbc::mh_SetSignals(
         }
       }
       // got all information for signal, therefore store signal for message
-      orc_DbcMessage.signals.emplace(
-          std::pair<std::string, Vector::DBC::Signal>(c_DbcSignal.name,
-                                                      c_DbcSignal));
+      orc_DbcMessage.signals.insert(c_DbcSignal.name, c_DbcSignal);
       mhc_ExportStatistic.u32_NumOfSignals++;
     }
   }
@@ -644,9 +631,7 @@ int32_t C_CieExportDbc::mh_SetSignalValues(
     c_Attribute.integerValue = static_cast<int32_t>(f64_Value);
   }
 
-  orc_DbcSignal.attributeValues.emplace(
-      std::pair<std::string, Vector::DBC::Attribute>(c_Attribute.name,
-                                                     c_Attribute));
+  orc_DbcSignal.attributeValues.insert(c_Attribute.name, c_Attribute);
 
   return s32_Return;
 }
@@ -665,9 +650,7 @@ void C_CieExportDbc::mh_SetSignalSpnValue(
   Vector::DBC::Attribute c_SpnAttribute;
   c_SpnAttribute.name = "SPN";
   c_SpnAttribute.integerValue = orc_Signal.u32_J1939Spn;
-  orc_DbcSignal.attributeValues.emplace(
-      std::pair<std::string, Vector::DBC::Attribute>(c_SpnAttribute.name,
-                                                     c_SpnAttribute));
+  orc_DbcSignal.attributeValues.insert(c_SpnAttribute.name, c_SpnAttribute);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -707,9 +690,7 @@ int32_t C_CieExportDbc::mh_SetTransmission(
   }
 
   // set transmission type for DBC message
-  orc_DbcMessage.attributeValues.emplace(
-      std::pair<std::string, Vector::DBC::Attribute>(c_TransmissionMode.name,
-                                                     c_TransmissionMode));
+  orc_DbcMessage.attributeValues.insert(c_TransmissionMode.name, c_TransmissionMode);
 
   // set cycle time
   if (C_OscCanMessage::h_IsTransmissionTypeOfCyclicType(
@@ -729,9 +710,7 @@ int32_t C_CieExportDbc::mh_SetTransmission(
     }
     c_CycleTime.integerValue = s32_CycleTime;
 
-    orc_DbcMessage.attributeValues.emplace(
-        std::pair<std::string, Vector::DBC::Attribute>(c_CycleTime.name,
-                                                       c_CycleTime));
+    orc_DbcMessage.attributeValues.insert(c_CycleTime.name, c_CycleTime);
   }
 
   c_Message = "Transmission mode set.";
@@ -992,16 +971,18 @@ C_CieExportDbc::mh_NiceifyStringForDbcSymbol(const QString &orc_String) {
 
   // first character must not contain a digit, in this case place '_' before
   // digit.
-  if ((orc_String.length() > 0) &&
-      (std::isdigit(orc_String.toStdString()[0]) != 0)) {
-    // first character is digit, add '_'
-    c_Result = '_';
+  if (orc_String.length() > 0) {
+    QChar firstChar = orc_String[0];
+    if (firstChar.isDigit()) {
+      // first character is digit, add '_'
+      c_Result = '_';
+    }
   }
 
   for (int32_t s32_Index = 0; s32_Index < orc_String.length(); s32_Index++) {
-    const char_t cn_Character = orc_String.toStdString()[s32_Index];
-    if ((std::isalnum(cn_Character) == 0) && (cn_Character != '_')) {
-      c_Result += QString::number(cn_Character);
+    QChar cn_Character = orc_String[s32_Index];
+    if (!cn_Character.isLetterOrNumber() && (cn_Character != '_')) {
+      c_Result += QString::number(cn_Character.unicode());
     } else {
       c_Result += cn_Character;
     }
@@ -1027,12 +1008,15 @@ QString C_CieExportDbc::mh_EscapeCriticalSymbols(const QString &orc_String) {
   QString c_Retval;
 
   for (int32_t s32_Char = 0; s32_Char < orc_String.length(); ++s32_Char) {
-    const char_t cn_Char = orc_String[s32_Char].toLatin1();
-    if (cn_Char == '\"') {
-      c_Retval += "\\\"";
+    QChar cn_Char = orc_String[s32_Char];
+    if (cn_Char == '"') {
+      c_Retval += "\"";
     } else {
       c_Retval += cn_Char;
     }
+  }
+  return c_Retval;
+}
   }
   return c_Retval;
 }

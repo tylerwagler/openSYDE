@@ -1149,8 +1149,8 @@ void C_CamProHandler::m_CalcHash(uint32_t &oru32_HashValue) const {
    All current message names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_CamProHandler::m_GetAllMessageNames(void) const {
-  std::map<QString, bool> c_Retval;
+QHash<QString, bool> C_CamProHandler::m_GetAllMessageNames(void) const {
+  QHash<QString, bool> c_Retval;
   for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < this->mc_Messages.size();
        ++u32_ItMessage) {
     const C_CamProMessageData &rc_Message = this->mc_Messages[u32_ItMessage];

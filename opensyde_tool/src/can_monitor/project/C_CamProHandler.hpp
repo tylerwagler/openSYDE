@@ -165,7 +165,7 @@ private:
   C_CamProHandler(void);
   uint32_t m_GetHash(void) const;
   void m_CalcHash(uint32_t &oru32_HashValue) const;
-  std::map<QString, bool> m_GetAllMessageNames(void) const;
+  QHash<QString, bool> m_GetAllMessageNames(void) const;
 };
 
 /* -- Extern Global Variables

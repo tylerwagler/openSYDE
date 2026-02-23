@@ -51,8 +51,8 @@ public:
   uint8_t GetSelectedCanOpenDeviceInterfaceNumber(void) const;
   QString GetSelectedCanOpenDeviceNodeName(void) const;
   uint32_t GetSelectedCanOpenDeviceUseCaseIndex(void) const;
-  std::map<uint8_t, bool> GetExpandedCanOpenManager(void) const;
-  std::map<uint8_t, bool> GetExpandedCanOpenDevices(void) const;
+  QHash<uint8_t, bool> GetExpandedCanOpenManager(void) const;
+  QHash<uint8_t, bool> GetExpandedCanOpenDevices(void) const;
   std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
   GetExpandedCanOpenDevice(void) const;
   bool GetCanOpenSelectedUseCaseOrInterface(void) const;
@@ -93,8 +93,8 @@ public:
   void SetSelectedCanOpenDevice(const uint8_t &oru8_Number,
                                 const QString &orc_Value);
   void SetSelectedCanOpenDeviceUseCaseIndex(const uint32_t &oru32_Value);
-  void SetExpandedCanOpenManager(const std::map<uint8_t, bool> &orc_Interfaces);
-  void SetExpandedCanOpenDevices(const std::map<uint8_t, bool> &orc_Devices);
+  void SetExpandedCanOpenManager(const QHash<uint8_t, bool> &orc_Interfaces);
+  void SetExpandedCanOpenDevices(const QHash<uint8_t, bool> &orc_Devices);
   void SetExpandedCanOpenDevice(
       const std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
           &orc_Device);
@@ -113,8 +113,8 @@ private:
   uint8_t mu8_DeviceInterfaceNumber;
   QString mc_CanOpenNodeName;
   uint32_t mu32_CanOpenDeviceUseCaseIndex;
-  std::map<uint8_t, bool> mc_CanOpenExpandedManager;
-  std::map<uint8_t, bool> mc_CanOpenExpandedDevices;
+  QHash<uint8_t, bool> mc_CanOpenExpandedManager;
+  QHash<uint8_t, bool> mc_CanOpenExpandedDevices;
   std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
       mc_CanOpenExpandedDevice;
   bool mq_IsUseCaseIndexSelected;

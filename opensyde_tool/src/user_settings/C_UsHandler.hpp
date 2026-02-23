@@ -237,13 +237,13 @@ public:
                                           const QString &orc_Value);
   void
   SetProjSdNodeSelectedCanOpenDeviceUseCaseIndex(const QString &orc_NodeName,
-                                                 const uint32_t &oru32_Value);
-  void SetProjSdNodeExpandedCanOpenTree(
-      const QString &orc_NodeName,
-      const std::map<uint8_t, bool> &orc_Interfaces,
-      const std::map<uint8_t, bool> &orc_Devices,
-      const std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
-          &orc_Device);
+                                                  const uint32_t &oru32_Value);
+   void SetProjSdNodeExpandedCanOpenTree(
+       const QString &orc_NodeName,
+       const QHash<uint8_t, bool> &orc_Interfaces,
+       const QHash<uint8_t, bool> &orc_Devices,
+       const std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
+           &orc_Device);
   void SetProjSdNodeCanOpenSelectedUseCaseOrInterface(
       const QString &orc_NodeName, const bool &orq_IsUseCaseSelected);
   void

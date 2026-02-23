@@ -91,7 +91,7 @@ public:
   h_ConcatPathIfNecessary(const QString &orc_BaseDir,
                           const QString &orc_RelativeOrAbsolutePath);
   static QString
-  h_GetUniqueNameQt(const std::map<QString, bool> &orc_ExistingStrings,
+  h_GetUniqueNameQt(const QHash<QString, bool> &orc_ExistingStrings,
                     const QString &orc_ProposedName);
   static QList<int32_t>
   h_CreateAscendingIndexMap(const QList<uint32_t> &orc_UnsortedIndices);
