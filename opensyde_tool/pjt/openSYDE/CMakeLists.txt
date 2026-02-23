@@ -11,14 +11,16 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-# For supporting windows .rc files
-enable_language("RC")
-# Special configuration of RC file compiling with windres necessary. Without change, the command line call is to long
-# for windres with all include paths forwarded by CMake
-set(CMAKE_RC_INCLUDE_PATH
-   ${PROJECT_ROOT}/src
-)
-set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
+# For supporting windows .rc files - only enable on Windows
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    enable_language("RC")
+    # Special configuration of RC file compiling with windres necessary. Without change, the command line call is to long
+    # for windres with all include paths forwarded by CMake
+    set(CMAKE_RC_INCLUDE_PATH
+       ${PROJECT_ROOT}/src
+    )
+    set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
+endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)

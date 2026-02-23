@@ -1,0 +1,64 @@
+# Linux Build Workflow
+
+name: Linux Build
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          cmake \
+          ninja-build \
+          qt6-base-dev \
+          qt6-declarative-dev \
+          qt6-svg-dev \
+          qt6-widgets-dev
+
+    - name: Install linuxdeployqt (for deployment)
+      run: |
+        wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage
+        chmod +x linuxdeployqt-continuous-x86_64.AppImage
+        ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract
+        export PATH="$HOME/squashfs-root/usr/bin:$PATH"
+
+    - name: Make build.sh executable
+      run: chmod +x opensyde_tool/bat/build.sh
+
+    - name: Build all components
+      run: |
+        cd opensyde_tool/bat
+        ./build.sh -Component All -BuildType Release
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-build-artifacts
+        path: |
+          opensyde_tool/result/
+
+    - name: Check if tests exist
+      run: |
+        if [ -d "opensyde_tool/test" ]; then
+          echo "Tests directory exists. Running tests may be added in future."
+        else
+          echo "No test directory found. Tests not available yet."
+        fi
+
+    - name: Verify build structure
+      run: |
+        ls -la opensyde_tool/result/
