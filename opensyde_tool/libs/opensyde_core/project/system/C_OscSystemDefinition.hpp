@@ -12,9 +12,8 @@
 #define C_OSCSYSTEMDEFINITION_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <list>
-#include <vector>
 #include <QList>
+#include <QHash>
 #include "C_OscNode.hpp"
 #include "C_OscNodeSquad.hpp"
 #include "C_OscSystemBus.hpp"
@@ -75,7 +74,7 @@ public:
                              const C_OscCanMessageIdentificationIndices & orc_MessageId2, bool & orq_IsMatch,
                              const bool oq_IgnoreMessageDirection = false) const;
    void GetNameMaxCharLimitAffectedItems(const uint32_t ou32_NameMaxCharLimit,
-                                         std::list<C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems);
+                                          QList<C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems);
    void ApplyNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit);
    void GetNodeIndexesOfBus(const uint32_t ou32_BusIndex, QList<uint32_t> & orc_NodeIndexes,
                             QList<uint32_t> & orc_InterfaceIndexes) const;
@@ -113,9 +112,9 @@ private:
                                       QList<uint32_t> & orc_InterfaceIndexes,
                                       QList<uint32_t> * const opc_DatapoolIndexes) const;
    void m_HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
-                                 std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
+                                  QList<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
    void m_HandleNameMaxCharLimitNodeName(const uint32_t ou32_NodeIndex, const uint32_t ou32_NameMaxCharLimit,
-                                         std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
+                                          QList<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

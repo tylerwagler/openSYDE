@@ -627,8 +627,8 @@ const
          bool q_DataPoolTooFewListsOrElementsError;
          bool q_DataPoolTooManyListsOrElementsError;
          bool q_ResultError = false;
-         static std::map<QList<uint32_t>, bool> hc_PreviousCommChecks;
-         static std::map<uint32_t, bool> hc_PreviousCommonChecks;
+   static QHash<QList<uint32_t>, bool> hc_PreviousCommChecks;
+   static QHash<uint32_t, bool> hc_PreviousCommonChecks;
 
          for (u32_Counter = 0U;
               (u32_Counter < rc_CheckedNode.c_DataPools.size()) &&
@@ -649,28 +649,28 @@ const
                {
                   //Get Hash for all relevant data
                   const uint32_t u32_ProtocolHash = this->m_GetRelatedProtocolHash(ou32_NodeIndex, u32_Counter);
-                  std::map<QList<uint32_t>, bool>::const_iterator c_It;
-                  QList<uint32_t> c_Hashes;
-                  c_Hashes.push_back(u32_Hash);
-                  c_Hashes.push_back(u32_ProtocolHash);
+   QHash<QList<uint32_t>, bool>::const_iterator c_It;
+   QList<uint32_t> c_Hashes;
+   c_Hashes.push_back(u32_Hash);
+   c_Hashes.push_back(u32_ProtocolHash);
 
-                  //check basic: list and element count:
-                  rc_CheckedNode.CheckErrorDataPoolNumListsAndElements(u32_Counter,
-                                                                       q_DataPoolTooFewListsOrElementsError,
-                                                                       q_DataPoolTooManyListsOrElementsError);
-                  if ((q_DataPoolTooFewListsOrElementsError == true) || (q_DataPoolTooManyListsOrElementsError == true))
-                  {
-                     q_ResultError = true;
-                     q_AlreadyAdded = true;
-                     if (opc_InvalidDataPoolIndices != NULL)
-                     {
-                        opc_InvalidDataPoolIndices->push_back(u32_Counter);
-                     }
-                  }
+   //check basic: list and element count:
+   rc_CheckedNode.CheckErrorDataPoolNumListsAndElements(u32_Counter,
+                                                        q_DataPoolTooFewListsOrElementsError,
+                                                        q_DataPoolTooManyListsOrElementsError);
+   if ((q_DataPoolTooFewListsOrElementsError == true) || (q_DataPoolTooManyListsOrElementsError == true))
+   {
+      q_ResultError = true;
+      q_AlreadyAdded = true;
+      if (opc_InvalidDataPoolIndices != NULL)
+      {
+         opc_InvalidDataPoolIndices->append(u32_Counter);
+      }
+   }
 
-                  //Check if check was already performed in the past
-                  c_It = hc_PreviousCommChecks.find(c_Hashes);
-                  if (c_It == hc_PreviousCommChecks.end())
+   //Check if check was already performed in the past
+   c_It = hc_PreviousCommChecks.constFind(c_Hashes);
+   if (c_It == hc_PreviousCommChecks.constEnd())
                   {
                      bool q_CurRes = false;
                      const C_OscCanProtocol * const pc_Protocol =
@@ -720,8 +720,8 @@ const
                            }
                         }
                      }
-                     //Append for possible reusing this result
-                     hc_PreviousCommChecks[c_Hashes] = q_CurRes;
+   //Append for possible reusing this result
+   hc_PreviousCommChecks.insert(c_Hashes, q_CurRes);
                   }
                   else
                   {
@@ -739,9 +739,9 @@ const
             //Default check
             if ((q_Skip == false) && (q_AlreadyAdded == false))
             {
-               //Check if check was already performed in the past
-               const std::map<uint32_t, bool>::const_iterator c_It = hc_PreviousCommonChecks.find(u32_Hash);
-               if (c_It == hc_PreviousCommonChecks.end())
+   //Check if check was already performed in the past
+   const QHash<uint32_t, bool>::const_iterator c_It = hc_PreviousCommonChecks.constFind(u32_Hash);
+   if (c_It == hc_PreviousCommonChecks.constEnd())
                {
                   rc_CheckedNode.CheckErrorDataPool(u32_Counter, &q_DataPoolNameConflict, &q_DataPoolNameInvalid,
                                                     &q_DataPoolListError, &q_DataPoolTooFewListsOrElementsError,
@@ -757,35 +757,35 @@ const
                         opc_InvalidDataPoolIndices->push_back(u32_Counter);
                      }
                   }
-                  //Append for possible reusing this result (without conflict checks)
-                  if ((q_DataPoolNameInvalid == true) || (q_DataPoolListError == true))
-                  {
-                     hc_PreviousCommonChecks[u32_Hash] = true;
-                  }
-                  else
-                  {
-                     hc_PreviousCommonChecks[u32_Hash] = false;
-                  }
+   //Append for possible reusing this result (without conflict checks)
+   if ((q_DataPoolNameInvalid == true) || (q_DataPoolListError == true))
+   {
+      hc_PreviousCommonChecks.insert(u32_Hash, true);
+   }
+   else
+   {
+      hc_PreviousCommonChecks.insert(u32_Hash, false);
+   }
                }
                else
                {
-                  //ALWAYS do datapool name conflict check
-                  rc_CheckedNode.CheckErrorDataPool(u32_Counter, &q_DataPoolNameConflict, NULL, NULL, NULL, NULL, NULL);
+   //ALWAYS do datapool name conflict check
+   rc_CheckedNode.CheckErrorDataPool(u32_Counter, &q_DataPoolNameConflict, NULL, NULL, NULL, NULL, NULL);
 
-                  if (q_DataPoolNameConflict == true)
-                  {
-                     //Signal datapool conflict error
-                     q_ResultError = true;
-                  }
-                  else
-                  {
-                     //Do not reset error
-                     q_ResultError = q_ResultError || c_It->second;
-                     if ((opc_InvalidDataPoolIndices != NULL) && (c_It->second))
-                     {
-                        opc_InvalidDataPoolIndices->push_back(u32_Counter);
-                     }
-                  }
+   if (q_DataPoolNameConflict == true)
+   {
+      //Signal datapool conflict error
+      q_ResultError = true;
+   }
+   else
+   {
+      //Do not reset error
+      q_ResultError = q_ResultError || c_It.value();
+      if ((opc_InvalidDataPoolIndices != NULL) && (c_It.value()))
+      {
+         opc_InvalidDataPoolIndices->append(u32_Counter);
+      }
+   }
                }
             }
          }
@@ -885,7 +885,7 @@ const
       // CANopen specific check
       if ((opq_CoNodeIdInvalid != NULL) || (opq_CoHearbeatTimeInvalid != NULL))
       {
-         std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager;
+         QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager;
          bool q_TempCoNodeIdConflict;
          bool * pq_TempCoNodeIdConflict = NULL;
          bool q_TempCoManagerNodeIdInvalid;
@@ -913,12 +913,12 @@ const
             pq_TempCoHeartbeatInvalid = &q_TempCoHeartbeatInvalid;
          }
 
-         for (c_ItManager = rc_CheckedNode.c_CanOpenManagers.begin();
-              c_ItManager != rc_CheckedNode.c_CanOpenManagers.end(); ++c_ItManager)
+   for (c_ItManager = rc_CheckedNode.c_CanOpenManagers.constBegin();
+               c_ItManager != rc_CheckedNode.c_CanOpenManagers.constEnd(); ++c_ItManager)
          {
-            c_ItManager->second.CheckErrorManager(pq_TempCoNodeIdConflict, pq_TempCoManagerNodeIdInvalid,
-                                                  pq_TempCoDevicesNodeIdInvalid,
-                                                  pq_TempCoHeartbeatInvalid, true);
+               c_ItManager.value().CheckErrorManager(pq_TempCoNodeIdConflict, pq_TempCoManagerNodeIdInvalid,
+                                                   pq_TempCoDevicesNodeIdInvalid,
+                                                   pq_TempCoHeartbeatInvalid, true);
 
             if ((opq_CoNodeIdInvalid != NULL) &&
                 ((q_TempCoNodeIdConflict == true) ||
@@ -1567,10 +1567,10 @@ int32_t C_OscSystemDefinition::CheckMessageMatch(const C_OscCanMessageIdentifica
    \param[in,out]  orc_ChangedItems       Changed items
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinition::GetNameMaxCharLimitAffectedItems(const uint32_t ou32_NameMaxCharLimit,
-                                                             std::list<C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems)
+   void C_OscSystemDefinition::GetNameMaxCharLimitAffectedItems(const uint32_t ou32_NameMaxCharLimit,
+                                                              QList<C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems)
 {
-   this->m_HandleNameMaxCharLimit(ou32_NameMaxCharLimit, &orc_ChangedItems);
+   m_HandleNameMaxCharLimit(ou32_NameMaxCharLimit, &orc_ChangedItems);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1984,15 +1984,30 @@ void C_OscSystemDefinition::m_GetNodeAndComDpIndexesOfBus(const uint32_t ou32_Bu
    \param[in,out]  opc_ChangedItems       Changed items
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinition::m_HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
-                                                     std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
+   void C_OscSystemDefinition::m_HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
+                                                         QList<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
 {
-   for (uint32_t u32_ItNode = 0UL; u32_ItNode < this->c_Nodes.size(); ++u32_ItNode)
+   if (opc_ChangedItems != NULL)
    {
-      C_OscNode & rc_Node = this->c_Nodes[u32_ItNode];
-      m_HandleNameMaxCharLimitNodeName(u32_ItNode, ou32_NameMaxCharLimit, opc_ChangedItems);
-      rc_Node.HandleNameMaxCharLimit(ou32_NameMaxCharLimit, opc_ChangedItems);
+      for (uint32_t u32_ItNode = 0U; u32_ItNode < this->c_Nodes.size(); ++u32_ItNode)
+      {
+         m_HandleNameMaxCharLimitNodeName(u32_ItNode, ou32_NameMaxCharLimit, opc_ChangedItems);
+      }
+
+      for (uint32_t u32_ItBus = 0U; u32_ItBus < this->c_Buses.size(); ++u32_ItBus)
+      {
+         if (this->c_Buses[u32_ItBus].c_Name.length() > ou32_NameMaxCharLimit)
+         {
+            C_OscSystemNameMaxCharLimitChangeReportItem c_Item;
+            c_Item.e_Type = C_OscSystemNameMaxCharLimitChangeReportItem::eBUS;
+            c_Item.u32_Index = u32_ItBus;
+            c_Item.c_OldName = this->c_Buses[u32_ItBus].c_Name;
+            c_Item.c_NewName = this->c_Buses[u32_ItBus].c_Name.left(ou32_NameMaxCharLimit);
+            opc_ChangedItems->append(c_Item);
+         }
+      }
    }
+}
       for (uint32_t u32_ItBus = 0UL; u32_ItBus < this->c_Buses.size(); ++u32_ItBus)
       {
          C_OscSystemBus & rc_Bus = this->c_Buses[u32_ItBus];
@@ -2012,29 +2027,23 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimit(const uint32_t ou32_NameMax
    \param[in,out]  opc_ChangedItems       Changed items
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinition::m_HandleNameMaxCharLimitNodeName(const uint32_t ou32_NodeIndex,
-                                                             const uint32_t ou32_NameMaxCharLimit,
-                                                             std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
+   void C_OscSystemDefinition::m_HandleNameMaxCharLimitNodeName(const uint32_t ou32_NodeIndex,
+                                                                 const uint32_t ou32_NameMaxCharLimit,
+                                                                 QList<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
 {
-   //Name
-   uint32_t u32_SquadIndex;
-   const int32_t s32_SquadReturn = this->GetNodeSquadIndexWithNodeIndex(ou32_NodeIndex, u32_SquadIndex);
-
-      if (s32_SquadReturn == C_NO_ERR)
+   if (opc_ChangedItems != NULL)
+   {
+      if (this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name.length() > ou32_NameMaxCharLimit)
       {
-         C_OscNodeSquad & rc_Squad = this->c_NodeSquads[u32_SquadIndex];
-         QString c_TempName = rc_Squad.c_BaseName;
-         C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit,
-                                                                                   "multi-node-name",
-                                                                                   c_TempName,
-                                                                                   opc_ChangedItems);
-         if (opc_ChangedItems == NULL)
-         {
-            rc_Squad.c_BaseName = c_TempName;
-            if (c_TempName != rc_Squad.c_BaseName)
-            {
-               this->SetNodeName(ou32_NodeIndex, rc_Squad.c_BaseName);
-            }
+         C_OscSystemNameMaxCharLimitChangeReportItem c_Item;
+         c_Item.e_Type = C_OscSystemNameMaxCharLimitChangeReportItem::eNODE;
+         c_Item.u32_Index = ou32_NodeIndex;
+         c_Item.c_OldName = this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name;
+         c_Item.c_NewName = this->c_Nodes[ou32_NodeIndex].c_Properties.c_Name.left(ou32_NameMaxCharLimit);
+         opc_ChangedItems->append(c_Item);
+      }
+   }
+}
          }
       }
    else
