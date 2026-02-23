@@ -1023,16 +1023,16 @@ C_OscUtils::h_ConcatPathIfNecessary(const QString &orc_BaseDir,
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString
-C_OscUtils::h_GetUniqueName(const std::map<QString, bool> &orc_ExistingStrings,
-                            const QString &orc_ProposedName,
-                            const uint32_t ou32_MaxCharLimit,
-                            const QString &orc_SkipName) {
+C_OscUtils::h_GetUniqueName(const QHash<QString, bool> &orc_ExistingStrings,
+                          const QString &orc_ProposedName,
+                          const uint32_t ou32_MaxCharLimit,
+                          const QString &orc_SkipName) {
   QString c_Retval = orc_ProposedName;
   bool q_Conflict;
   int32_t s32_MaxDeviation;
   QString c_BaseStr;
 
-  std::map<QString, bool>::const_iterator c_ItString;
+  QHash<QString, bool>::const_iterator c_ItString;
 
   // Apply restriction
   if ((ou32_MaxCharLimit > 0UL) && (c_Retval.length() > ou32_MaxCharLimit)) {
@@ -1045,7 +1045,7 @@ C_OscUtils::h_GetUniqueName(const std::map<QString, bool> &orc_ExistingStrings,
     if (c_ItString != orc_ExistingStrings.end()) {
       q_Conflict = true;
       mh_GetBaseNameAndCurrentConflictNumberFromString(
-          c_ItString->first, orc_SkipName, c_BaseStr, s32_MaxDeviation);
+          c_ItString.key(), orc_SkipName, c_BaseStr, s32_MaxDeviation);
       // Do not use 0 and 1 for name adaptation
       if (s32_MaxDeviation <= 0) {
         s32_MaxDeviation = 1;

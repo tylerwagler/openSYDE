@@ -93,7 +93,7 @@ private:
    QString mc_ParameterSetFilePath;
    C_OscNode mc_NodeCopy;
    C_OscParamSetHandler mc_ImageFileHandler;
-   std::set<C_OscNodeDataPoolListId> mc_ChangedLists;
+   QSet<C_OscNodeDataPoolListId> mc_ChangedLists;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

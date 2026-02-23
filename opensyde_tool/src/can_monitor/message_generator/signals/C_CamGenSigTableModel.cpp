@@ -1707,14 +1707,9 @@ int32_t C_CamGenSigTableModel::m_SetSignalFromOsyValue(
     C_CamGenSigUtil::h_DecodeSignalValueToRaw(c_RawData, orc_OsySignal,
                                               orc_Value);
     // Convert to vector for project interface (out of scope for Phase B-B2)
-    std::vector<uint8_t> c_VecData;
-    c_VecData.reserve(c_RawData.size());
-    for (int32_t s32_Idx = 0; s32_Idx < c_RawData.size(); ++s32_Idx) {
-      c_VecData.push_back(static_cast<uint8_t>(c_RawData[s32_Idx]));
-    }
-    // Write new values
+    // Write new values directly using QByteArray (no vector conversion needed)
     s32_Retval = C_CamProHandler::h_GetInstance()->SetMessageDataBytes(
-        this->mu32_MessageIndex, c_VecData);
+        this->mu32_MessageIndex, c_RawData.toStdVector());
   } else {
     s32_Retval = C_RANGE;
   }

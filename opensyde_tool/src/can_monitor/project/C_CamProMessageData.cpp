@@ -258,7 +258,7 @@ void C_CamProMessageData::SetMessageKey(const QString &orc_Key,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CamProMessageData::SetMessageDataBytes(
-    const std::vector<uint8_t> &orc_DataBytes) {
+    const QList<uint8_t> &orc_DataBytes) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_DataBytes.size() <= 8UL) {

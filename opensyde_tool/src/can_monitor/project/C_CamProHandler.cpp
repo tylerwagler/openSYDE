@@ -314,7 +314,7 @@ int32_t C_CamProHandler::SetMessageKey(const uint32_t ou32_Index,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CamProHandler::SetMessageDataBytes(
-    const uint32_t ou32_Index, const std::vector<uint8_t> &orc_DataBytes) {
+    const uint32_t ou32_Index, const QList<uint8_t> &orc_DataBytes) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (ou32_Index < this->mc_Messages.size()) {

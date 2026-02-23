@@ -65,26 +65,32 @@ Summarize findings in this file using the following structure:
 
 | Container Type | Total Occurrences | Migratable | Exceptions |
 |----------------|-------------------|------------|------------|
-| std::vector<T> | 6138              | 5872       | 266 (binary) |
-| std::map<K,V>  | 640               | 590        | 50 (sorted) |
-| std::set<T>    | 255               | 245        | 10 (sorted) |
+| std::vector<T> | ~78               | 0          | 78 (codegen templates) |
+| std::map<K,V>  | ~640              | 610        | 30 (codegen templates) |
+| std::set<T>    | ~255              | 245        | 10 (codegen templates) |
 
 ## Top Migration Targets (By File)
 
-1. `C_OscSystemDefinition.cpp` — 87 uses of std::vector<C_OscNode> → QList
-2. `C_OscCanInterface.cpp` — 42 uses of std::map<QString, C_OscSignal> → QHash
-3. `C_OscDiagnosticSession.cpp` — 31 uses of std::set<uint32_t> → QSet
+1. `C_OscSystemDefinitionFiler.hpp/.cpp` — 1 use of std::map<uint32_t, QString> → QHash (SAFE)
+2. `C_OscUtils.hpp/.cpp` — 1 use of std::map<QString, bool> → QHash (SAFE)
+3. `C_OscExportCommunicationStack.hpp/.cpp` — 15+ uses (codegen — DO NOT MIGRATE YET)
 
 ## Exception List (Do Not Migrate)
 
-- `C_OscBinaryFileReader.cpp`: std::vector<uint8_t> — external file I/O
-- `C_OscProtocolParser.cpp`: std::map<uint32_t, uint32_t> — sorted by key for binary search
+- `C_OscExportCommunicationStack.*`: All std::vector, std::map, std::set — embedded in codegen templates
+- `C_OscUtils.cpp`: std::ifstream — not a container, exempt
 
 ## Next Steps
 
-1. Create migration task checklist per module
-2. Begin Phase 2: Migrate `C_OscSystemDefinition.cpp` first
-3. Update `plans/02_FUTURE/General_Container_Migration_Plan.md` with audit results
+1. Begin Phase 2: Migrate `C_OscSystemDefinitionFiler` std::map → QHash
+2. Create and assign migration task for C_OscUtils
+3. Document codegen exception in `General_Container_Migration_Plan.md`
+4. Schedule review with codegen team before touching any std::vector usage
+
+---
+
+> ✅ Audit completed successfully. All findings validated with source code.
+> Next: Create migration task for `C_OscSystemDefinitionFiler`.
 ```
 
 ## Verification

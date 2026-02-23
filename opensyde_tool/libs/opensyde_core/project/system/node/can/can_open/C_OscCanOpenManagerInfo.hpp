@@ -9,7 +9,7 @@
 #define C_OSCCANOPENMANAGERINFO_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <map>
+#include <QHash>
 
 #include "stwtypes.hpp"
 #include "C_OscCanInterfaceId.hpp"
@@ -62,9 +62,9 @@ public:
    uint32_t u32_SyncCyclePeriodUs;  ///< Setting for SYNC message cycle time in us
    uint32_t u32_SyncWindowLengthUs; ///< Setting for SYNC message window length in us
 
-   std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> c_CanOpenDevices; ///< CANopen devices assigned to the
-                                                                                  // CANopen manager, grouped by node
-                                                                                  // index and interface ID
+   QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> c_CanOpenDevices; ///< CANopen devices assigned to the
+                   // CANopen manager, grouped by node
+                   // index and interface ID
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

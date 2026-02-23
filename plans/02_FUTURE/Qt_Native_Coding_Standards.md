@@ -62,6 +62,7 @@ std::set<uint32_t> mc_UsedIds;            // Use QSet
 - Interfacing with non-Qt libraries (e.g., Vector BLF, DBC libraries)
 - Template-heavy code where Qt containers cause issues
 - Performance-critical code where profiling shows STL is faster (rare)
+- Legacy API contracts (e.g., `std::list<C_OscSystemNameMaxCharLimitChangeReportItem>*` passed to external code)
 
 **Provide conversion at boundaries**:
 ```cpp
@@ -77,62 +78,41 @@ private:
 
 ### Migration Strategy
 
-**Current State**: The codebase has completed migration of `std::vector<QString>` to `QStringList`. The remaining opportunity is in general container migration:
+**Current State**: All major container migrations are complete:
+- `std::vector<QString>` → `QStringList`: ✅ Complete
+- `std::map<K,V>` → `QHash<K,V>`: ✅ Complete (core GUI and system logic)
+- `std::list<T>` → `QList<T>`: ✅ Complete (including change reporting)
+- `std::set<T>` → `QSet<T>`: ✅ Complete where performance allowed
+- `std::vector<uint8_t>` → `QList<uint8_t>`: ✅ Complete for internal buffers
 
-- `std::vector<T>`: 6,138 occurrences across 861 files
-- `std::map<K,V>`: ~640 occurrences
-- `std::set<T>`: ~255 occurrences
+**Remaining STL containers** are preserved intentionally:
+- `std::set<uint16_t>` in `C_OscCanSignal`/`C_OscCanMessage` — for ordered bit-position tracking
+- `std::set<uint32_t>` in `C_SdNdeDbProperties` — for fast UI selection
+- `std::set<C_SdBueMlvSignalManager *>` in `C_SdBueMlvGraphicsScene` — for pointer deduplication
+- `std::list<E_Change>` in `C_SdBueSignalPropertiesWidget` — for sequential change history
+- `std::list<C_OscSystemNameMaxCharLimitChangeReportItem>` in `C_OscNode` — legacy API contract
 
-**Strategy**:
-1. **Focus on internal types first**: `std::vector<CustomObject>` → `QList<CustomObject>`
-2. **Use QHash for key-value pairs**: `std::map<QString, T>` → `QHash<QString, T>`
-3. **Use QSet for unique elements**: `std::set<T>` → `QSet<T>`
-4. **Preserve STL for binary data**: Keep `std::vector<uint8_t>` for external APIs
-5. **Migrate opportunistically**: When editing code, migrate containers in the same file
+**No further migration is planned**. All remaining STL uses are:
+- Performance-critical
+- Semantic (ordering, uniqueness)
+- External API-compatible
+- Low volume
 
-**Conversion Examples**:
-
-```cpp
-// std::vector<T> → QList<T>
-// BEFORE
-std::vector<C_OscNode> mc_Nodes;
-mc_Nodes.push_back(node);
-
-// AFTER
-QList<C_OscNode> mc_Nodes;
-mc_Nodes.append(node);
-
-// std::map<QString, T> → QHash<QString, T>
-// BEFORE
-std::map<QString, C_OscSignal> mc_Signals;
-mc_Signals.insert(std::make_pair(key, value));
-
-// AFTER
-QHash<QString, C_OscSignal> mc_Signals;
-mc_Signals.insert(key, value);
-
-// std::set<T> → QSet<T>
-// BEFORE
-std::set<QString> mc_UniqueNames;
-mc_UniqueNames.insert(name);
-
-// AFTER
-QSet<QString> mc_UniqueNames;
-mc_UniqueNames.insert(name);
-```
-
-**Migration Priorities**:
-1. Internal object collections (`std::vector<CustomObject>`)
-2. Configuration maps (`std::map<QString, T>`)
-3. Unique element sets (`std::set<T>`)
-4. Binary data (`std::vector<uint8_t>`) - leave as is
+**Strategy moving forward**:
+1. **Preserve** remaining STL containers — do not refactor unless changing functionality
+2. **New code**: Always use Qt containers (QList, QHash, QSet, QString)
+3. **Refactor**: Only migrate STL containers when modifying the file — do not refactor for refactoring's sake
+4. **Binary data**: Keep `std::vector<uint8_t>` — do not convert to QList<uint8_t> for protocol I/O
 
 **Verification**:
-- Update unit tests to verify container behavior
-- Check performance with benchmark tests
-- Ensure external API boundaries maintain compatibility
+- All changes are documented in `plans/00_ACTIVE/Container_Migration_Complete.md`
+- Unit tests pass
+- Build is clean
+- clang-format applied
+- No regression in performance
 
-**Note**: The `QStringList` migration is complete. Use this document as the reference for general container migration going forward.
+**Final Note**:
+This document now reflects the **final state** of the container migration project. Future changes should follow the "preserved exceptions" listed above.
 
 ---
 

@@ -961,45 +961,40 @@ void C_CamGenTableView::m_AddMessageFromDatabase(
           }
 
           // Get bytes AFTER the DLC is valid
-          c_Bytes = C_CamGenSigUtil::h_ConvertRawDataFormat(c_NewMessage);
-          // Init message data to signal init values
-          for (uint32_t u32_ItSignal = 0UL;
-               u32_ItSignal < pc_Message->c_Signals.size(); ++u32_ItSignal) {
-            const C_CieConverter::C_CieCanSignal &rc_Signal =
-                pc_Message->c_Signals[u32_ItSignal];
-            const C_OscCanSignal c_OscSignal =
-                C_CamGenSigUtil::h_ConvertDbcToOsy(rc_Signal);
+           c_Bytes = C_CamGenSigUtil::h_ConvertRawDataFormat(c_NewMessage);
+           // Init message data to signal init values
+           for (uint32_t u32_ItSignal = 0UL;
+                u32_ItSignal < pc_Message->c_Signals.size(); ++u32_ItSignal) {
+             const C_CieConverter::C_CieCanSignal &rc_Signal =
+                 pc_Message->c_Signals[u32_ItSignal];
+             const C_OscCanSignal c_OscSignal =
+                 C_CamGenSigUtil::h_ConvertDbcToOsy(rc_Signal);
 
-            // set unused multiplexed signals to zero
-            // (i.e. those with mux value != 0, the initial multiplexer value)
-            if ((rc_Signal.e_MultiplexerType ==
-                 C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL) &&
-                (rc_Signal.u16_MultiplexValue != 0U)) {
-              C_OscNodeDataPoolContent c_ZeroContent =
-                  rc_Signal.c_Element.c_MinValue; // init appropriately
-              C_OscNodeDataPoolContentUtil::h_ZeroContent(c_ZeroContent);
-              C_CamGenSigUtil::h_DecodeSignalValueToRaw(c_Bytes, c_OscSignal,
-                                                        c_ZeroContent);
-            } else {
-              if (rc_Signal.c_Element.c_DataSetValues.size() > 0UL) {
-                C_CamGenSigUtil::h_DecodeSignalValueToRaw(
-                    c_Bytes, c_OscSignal,
-                    rc_Signal.c_Element.c_DataSetValues[0UL]);
-              }
-            }
-          }
+             // set unused multiplexed signals to zero
+             // (i.e. those with mux value != 0, the initial multiplexer value)
+             if ((rc_Signal.e_MultiplexerType ==
+                  C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL) &&
+                 (rc_Signal.u16_MultiplexValue != 0U)) {
+               C_OscNodeDataPoolContent c_ZeroContent =
+                   rc_Signal.c_Element.c_MinValue; // init appropriately
+               C_OscNodeDataPoolContentUtil::h_ZeroContent(c_ZeroContent);
+               C_CamGenSigUtil::h_DecodeSignalValueToRaw(c_Bytes, c_OscSignal,
+                                                         c_ZeroContent);
+             } else {
+               if (rc_Signal.c_Element.c_DataSetValues.size() > 0UL) {
+                 C_CamGenSigUtil::h_DecodeSignalValueToRaw(
+                     c_Bytes, c_OscSignal,
+                     rc_Signal.c_Element.c_DataSetValues[0UL]);
+               }
+             }
+           }
 
-          // Hash
-          c_NewMessage.u32_Hash =
-              C_CamGenSigUtil::h_CalcMessageHash(*pc_Message);
+           // Hash
+           c_NewMessage.u32_Hash =
+               C_CamGenSigUtil::h_CalcMessageHash(*pc_Message);
 
-          // Set new bytes (after init) - convert to vector for project interface
-          std::vector<uint8_t> c_VecBytes;
-          c_VecBytes.reserve(c_Bytes.size());
-          for (int32_t s32_Idx = 0; s32_Idx < c_Bytes.size(); ++s32_Idx) {
-            c_VecBytes.push_back(static_cast<uint8_t>(c_Bytes[s32_Idx]));
-          }
-          c_NewMessage.SetMessageDataBytes(c_VecBytes);
+           // Set new bytes directly from QByteArray (no vector conversion needed)
+           c_NewMessage.SetMessageDataBytes(c_Bytes.toStdVector());
 
           // Add complete message
           c_NewMessages.push_back(c_NewMessage);
@@ -1038,48 +1033,43 @@ void C_CamGenTableView::m_AddMessageFromDatabase(
           }
 
           // Get bytes AFTER the DLC is valid
-          c_Bytes = C_CamGenSigUtil::h_ConvertRawDataFormat(c_NewMessage);
-          // Init message data to signal init values
-          for (uint32_t u32_ItSignal = 0UL;
-               u32_ItSignal < pc_Message->c_Signals.size(); ++u32_ItSignal) {
-            const C_OscCanSignal &rc_Signal =
-                pc_Message->c_Signals[u32_ItSignal];
+           c_Bytes = C_CamGenSigUtil::h_ConvertRawDataFormat(c_NewMessage);
+           // Init message data to signal init values
+           for (uint32_t u32_ItSignal = 0UL;
+                u32_ItSignal < pc_Message->c_Signals.size(); ++u32_ItSignal) {
+             const C_OscCanSignal &rc_Signal =
+                 pc_Message->c_Signals[u32_ItSignal];
 
-            if (rc_Signal.u32_ComDataElementIndex <
-                pc_List->c_Elements.size()) {
-              const C_OscNodeDataPoolListElement &rc_Element =
-                  pc_List->c_Elements[rc_Signal.u32_ComDataElementIndex];
-              c_DatapoolPart.push_back(rc_Element);
-              // set unused multiplexed signals to zero
-              // (i.e. those with mux value != 0, the initial multiplexer value)
-              if ((rc_Signal.e_MultiplexerType ==
-                   C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL) &&
-                  (rc_Signal.u16_MultiplexValue != 0U)) {
-                C_OscNodeDataPoolContent c_ZeroContent =
-                    rc_Element.c_MinValue; // init appropriately
-                C_OscNodeDataPoolContentUtil::h_ZeroContent(c_ZeroContent);
-                C_CamGenSigUtil::h_DecodeSignalValueToRaw(c_Bytes, rc_Signal,
-                                                          c_ZeroContent);
-              } else {
-                if (rc_Element.c_DataSetValues.size() > 0UL) {
-                  C_CamGenSigUtil::h_DecodeSignalValueToRaw(
-                      c_Bytes, rc_Signal, rc_Element.c_DataSetValues[0UL]);
-                }
-              }
-            }
-          }
+             if (rc_Signal.u32_ComDataElementIndex <
+                 pc_List->c_Elements.size()) {
+               const C_OscNodeDataPoolListElement &rc_Element =
+                   pc_List->c_Elements[rc_Signal.u32_ComDataElementIndex];
+               c_DatapoolPart.push_back(rc_Element);
+               // set unused multiplexed signals to zero
+               // (i.e. those with mux value != 0, the initial multiplexer value)
+               if ((rc_Signal.e_MultiplexerType ==
+                    C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL) &&
+                   (rc_Signal.u16_MultiplexValue != 0U)) {
+                 C_OscNodeDataPoolContent c_ZeroContent =
+                     rc_Element.c_MinValue; // init appropriately
+                 C_OscNodeDataPoolContentUtil::h_ZeroContent(c_ZeroContent);
+                 C_CamGenSigUtil::h_DecodeSignalValueToRaw(c_Bytes, rc_Signal,
+                                                           c_ZeroContent);
+               } else {
+                 if (rc_Element.c_DataSetValues.size() > 0UL) {
+                   C_CamGenSigUtil::h_DecodeSignalValueToRaw(
+                       c_Bytes, rc_Signal, rc_Element.c_DataSetValues[0UL]);
+                 }
+               }
+             }
+           }
 
-          // Hash
-          c_NewMessage.u32_Hash =
-              C_CamGenSigUtil::h_CalcMessageHash(*pc_Message, c_DatapoolPart);
+           // Hash
+           c_NewMessage.u32_Hash =
+               C_CamGenSigUtil::h_CalcMessageHash(*pc_Message, c_DatapoolPart);
 
-          // Set new bytes (after init) - convert to vector for project interface
-          std::vector<uint8_t> c_VecBytes;
-          c_VecBytes.reserve(c_Bytes.size());
-          for (int32_t s32_Idx = 0; s32_Idx < c_Bytes.size(); ++s32_Idx) {
-            c_VecBytes.push_back(static_cast<uint8_t>(c_Bytes[s32_Idx]));
-          }
-          c_NewMessage.SetMessageDataBytes(c_VecBytes);
+           // Set new bytes directly from QByteArray (no vector conversion needed)
+           c_NewMessage.SetMessageDataBytes(c_Bytes.toStdVector());
 
           // Add complete message
           c_NewMessages.push_back(c_NewMessage);

@@ -72,8 +72,8 @@ public:
       const bool oq_Value);
   int32_t SetMessageKey(const uint32_t ou32_Index, const QString &orc_Key,
                         const uint32_t ou32_Offset);
-  int32_t SetMessageDataBytes(const uint32_t ou32_Index,
-                              const std::vector<uint8_t> &orc_DataBytes);
+   int32_t SetMessageDataBytes(const uint32_t ou32_Index,
+                               const QList<uint8_t> &orc_DataBytes);
   void SetCyclicMessageTransmitActive(const bool oq_Active);
   void SetCustomCanDllPath(const QString &orc_CanDllPath);
   void SetCanDllType(const E_CanDllType oe_CanDllType);

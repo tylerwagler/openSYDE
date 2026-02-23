@@ -99,7 +99,7 @@ public:
 
   // Unique string
   static QString
-  h_GetUniqueName(const std::map<QString, bool> &orc_ExistingStrings,
+  h_GetUniqueName(const QHash<QString, bool> &orc_ExistingStrings,
                   const QString &orc_ProposedName,
                   const uint32_t ou32_MaxCharLimit,
                   const QString &orc_SkipName = "");
