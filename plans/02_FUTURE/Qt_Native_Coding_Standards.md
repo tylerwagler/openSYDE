@@ -75,6 +75,65 @@ private:
    QList<uint8_t> mc_Data;
 ```
 
+### Migration Strategy
+
+**Current State**: The codebase has completed migration of `std::vector<QString>` to `QStringList`. The remaining opportunity is in general container migration:
+
+- `std::vector<T>`: 6,138 occurrences across 861 files
+- `std::map<K,V>`: ~640 occurrences
+- `std::set<T>`: ~255 occurrences
+
+**Strategy**:
+1. **Focus on internal types first**: `std::vector<CustomObject>` → `QList<CustomObject>`
+2. **Use QHash for key-value pairs**: `std::map<QString, T>` → `QHash<QString, T>`
+3. **Use QSet for unique elements**: `std::set<T>` → `QSet<T>`
+4. **Preserve STL for binary data**: Keep `std::vector<uint8_t>` for external APIs
+5. **Migrate opportunistically**: When editing code, migrate containers in the same file
+
+**Conversion Examples**:
+
+```cpp
+// std::vector<T> → QList<T>
+// BEFORE
+std::vector<C_OscNode> mc_Nodes;
+mc_Nodes.push_back(node);
+
+// AFTER
+QList<C_OscNode> mc_Nodes;
+mc_Nodes.append(node);
+
+// std::map<QString, T> → QHash<QString, T>
+// BEFORE
+std::map<QString, C_OscSignal> mc_Signals;
+mc_Signals.insert(std::make_pair(key, value));
+
+// AFTER
+QHash<QString, C_OscSignal> mc_Signals;
+mc_Signals.insert(key, value);
+
+// std::set<T> → QSet<T>
+// BEFORE
+std::set<QString> mc_UniqueNames;
+mc_UniqueNames.insert(name);
+
+// AFTER
+QSet<QString> mc_UniqueNames;
+mc_UniqueNames.insert(name);
+```
+
+**Migration Priorities**:
+1. Internal object collections (`std::vector<CustomObject>`)
+2. Configuration maps (`std::map<QString, T>`)
+3. Unique element sets (`std::set<T>`)
+4. Binary data (`std::vector<uint8_t>`) - leave as is
+
+**Verification**:
+- Update unit tests to verify container behavior
+- Check performance with benchmark tests
+- Ensure external API boundaries maintain compatibility
+
+**Note**: The `QStringList` migration is complete. Use this document as the reference for general container migration going forward.
+
 ---
 
 ## String Standards

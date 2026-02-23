@@ -1,0 +1,195 @@
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCanOpenConfig.cpp:      const std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_Iterator =
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCanOpenConfig.cpp:      std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_DeviceIt;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCanOpenConfig.cpp:   const std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_Iterator =
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCanOpenConfig.cpp:   const std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_Iterator =
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCanOpenConfig.cpp:      std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_DeviceIt;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCanOpenConfig.cpp:      std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_DeviceIt;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCanOpenConfig.cpp:      std::map<C_OscCanInterfaceId,
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportNode.cpp:    std::map<bool, int32_t> c_HalDataPools;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportNode.cpp:      std::map<bool, int32_t>::const_iterator c_ItHalDataPools;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportNode.cpp:    const C_OscNode &orc_Node, std::map<bool, int32_t> &orc_HalcDataPools) {
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.hpp:                                         std::map<int32_t,
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:               std::map< int32_t, QList<C_OscCanSignal> > c_MuxedSignalsPerValue;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:                  std::map< int32_t, QList<C_OscCanSignal> >::const_iterator c_ItValue;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:         std::map< int32_t, QList<C_OscCanSignal> > c_MuxedSignalsPerValue;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:            std::map< int32_t, QList<C_OscCanSignal> >::const_iterator c_ItValue;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:                                                              const uint32_t ou32_MultiplexerIndex, std::map<int32_t,
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.cpp:   std::map<QString, bool> c_ExistingCertNames;
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.cpp:      std::map<QString, bool> c_ExistingPackageNames;
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.cpp:                                    const QString & orc_OutFolder, std::map<QString,
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.cpp:                                                           std::map<QString, bool> & orc_ExistingFiles)
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.hpp:                              const QString & orc_OutFolder, std::map<QString,
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.hpp:                                                     std::map<QString,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageLoad.hpp:   static int32_t mh_SetNodesUpdateOrder(const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageV1.cpp:    std::map<uint32_t, uint32_t> &orc_PositionMap,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageV1.cpp:    std::map<uint32_t, uint32_t> &orc_PositionMap,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupNodeDefinitionFiler.hpp:                              std::map<uint32_t, uint32_t> & orc_UpdateOrderByNodes,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupNodeDefinitionFiler.hpp:                                   const uint32_t ou32_UpdatePos, std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupNodeDefinitionFiler.hpp:                                       const uint32_t ou32_UpdatePos, std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageLoad.cpp:         std::map<uint32_t, uint32_t> c_UpdateOrderByNodes; // to store node update positions which are represented by
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageV1.hpp:      const std::map<uint32_t, uint32_t> &orc_UpdateOrderByNodes,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageV1.hpp:                                  std::map<uint32_t, uint32_t> &orc_PositionMap,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageV1.hpp:      std::map<uint32_t, uint32_t> &orc_PositionMap,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupNodeDefinitionFiler.cpp:                                                 std::map<uint32_t, uint32_t> & orc_UpdateOrderByNodes,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupNodeDefinitionFiler.cpp:                                                      std::map<uint32_t, uint32_t> & orc_PositionMap,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupNodeDefinitionFiler.cpp:                                                          const uint32_t ou32_UpdatePos, std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/logging/C_OscLoggingHandler.hpp:  static std::map<uint16_t, qint64>
+opensyde_tool/libs/opensyde_core/logging/C_OscLoggingHandler.cpp:std::map<uint16_t, qint64> C_OscLoggingHandler::mhc_StartTimes =
+opensyde_tool/libs/opensyde_core/logging/C_OscLoggingHandler.cpp:    std::map<uint16_t, qint64>();
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.hpp:  std::map<uint8_t, C_OscCanOpenObjectData> c_SubObjects;
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.hpp:  std::map<uint16_t, C_OscCanOpenObject> c_OdObjects;
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.hpp:      std::map<uint32_t, QList<uint32_t>> &orc_SubIndices) const;
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:int32_t C_OscImportEdsDcf::h_ParseSignalContent(const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:const C_OscCanOpenObjectData * C_OscImportEdsDcf::mh_GetCoObject(const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:   const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:         const std::map<uint8_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:                                            const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:   for (std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element = orc_CoObjects.begin();
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:         const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = orc_CoObjects.find(
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:            const std::map<uint8_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:                                                                            const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:                                                  const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:                                                          const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:                                                              const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:                                                 const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:                                                 const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:                                                        const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:                                                         const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.cpp:                                           const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:   static int32_t h_ParseSignalContent(const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:   static const C_OscCanOpenObjectData * mh_GetCoObject(const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:   static int32_t mh_ParseMessages(const uint32_t ou32_StartingId, const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:                                                                   const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:                                         const std::map<uint16_t, C_OscCanOpenObject> & orc_CoObjects,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:                                                 const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:                                                     const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:                                        const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:                                        const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:                                               const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:                                                const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscImportEdsDcf.hpp:                                  const uint8_t ou8_NodeId, const std::map<uint16_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:            const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(u16_Index);
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:   for (std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element = this->c_OdObjects.begin();
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:   const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(ou16_OdIndex);
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:      for (std::map<uint8_t, C_OscCanOpenObjectData>::const_iterator c_Element = c_Object->second.c_SubObjects.begin();
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:   const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = c_OdObjects.find(ou16_OdIndex);
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:   const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = this->c_OdObjects.find(ou16_OdIndex);
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:      const std::map<uint8_t, C_OscCanOpenObjectData>::const_iterator c_SubObject = c_Object->second.c_SubObjects.find(
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:   const std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Object = this->c_OdObjects.find(ou16_OdIndex);
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:         const std::map<uint8_t,
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:void C_OscCanOpenObjectDictionary::GetMappableObjects(std::map<uint32_t, QList<uint32_t> > & orc_SubIndices)
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:   for (std::map<uint16_t, C_OscCanOpenObject>::const_iterator c_Element = this->c_OdObjects.begin();
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:      for (std::map<uint8_t, C_OscCanOpenObjectData>::const_iterator c_SubElement =
+opensyde_tool/libs/opensyde_core/ip_dispatcher/target_windows_win_sock/C_OscIpDispatcherWinSock.cpp:std::map<C_OscIpDispatcherWinSock::C_BufferIdentifier,
+opensyde_tool/libs/opensyde_core/ip_dispatcher/target_windows_win_sock/C_OscIpDispatcherWinSock.cpp:            std::map<C_BufferIdentifier, std::list<QByteArray > >::iterator c_ItBuffer;
+opensyde_tool/libs/opensyde_core/ip_dispatcher/target_windows_win_sock/C_OscIpDispatcherWinSock.cpp:   std::map<C_BufferIdentifier, std::list<QByteArray > >::iterator c_ItBuffer;
+opensyde_tool/libs/opensyde_core/ip_dispatcher/target_windows_win_sock/C_OscIpDispatcherWinSock.hpp:  static std::map<C_BufferIdentifier, std::list<QByteArray>>
+opensyde_tool/libs/opensyde_core/project/system/device_definition/C_OscSubDeviceDefinition.hpp:   std::map<QString, bool> c_ConnectedInterfaces;
+opensyde_tool/libs/opensyde_core/project/system/device_definition/C_OscDeviceDefinitionFiler.cpp:  for (std::map<QString, bool>::const_iterator c_It =
+opensyde_tool/libs/opensyde_core/project/system/device_definition/C_OscSubDeviceDefinition.cpp:      const std::map<QString, bool>::const_iterator c_It = this->c_ConnectedInterfaces.find(c_Interface);
+opensyde_tool/libs/opensyde_core/project/system/C_OscSystemDefinitionFiler.hpp:   static std::map<uint32_t, QString> mh_MapNodeIndicesToName(const QList<C_OscNode> & orc_Nodes);
+opensyde_tool/libs/opensyde_core/project/system/C_OscSystemDefinition.cpp:         static std::map<QList<uint32_t>, bool> hc_PreviousCommChecks;
+opensyde_tool/libs/opensyde_core/project/system/C_OscSystemDefinition.cpp:         static std::map<uint32_t, bool> hc_PreviousCommonChecks;
+opensyde_tool/libs/opensyde_core/project/system/C_OscSystemDefinition.cpp:                  std::map<QList<uint32_t>, bool>::const_iterator c_It;
+opensyde_tool/libs/opensyde_core/project/system/C_OscSystemDefinition.cpp:               const std::map<uint32_t, bool>::const_iterator c_It = hc_PreviousCommonChecks.find(u32_Hash);
+opensyde_tool/libs/opensyde_core/project/system/C_OscSystemDefinition.cpp:         std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager;
+opensyde_tool/libs/opensyde_core/project/system/C_OscSystemDefinition.cpp:                                       const std::map<uint8_t,
+opensyde_tool/libs/opensyde_core/project/system/C_OscSystemDefinitionFiler.cpp:  const std::map<uint32_t, QString> c_NodeIndicesToNameMap =
+opensyde_tool/libs/opensyde_core/project/system/C_OscSystemDefinitionFiler.cpp:std::map<uint32_t, QString> C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(
+opensyde_tool/libs/opensyde_core/project/system/C_OscSystemDefinitionFiler.cpp:  std::map<uint32_t, QString> c_Retval;
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeDataPool.cpp:         std::map<QString, uint32_t> c_PreviousNames;
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeDataPool.cpp:         static std::map<uint32_t, bool> hc_PreviousResults;
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeDataPool.cpp:            const std::map<QString,
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeDataPool.cpp:               const std::map<uint32_t, bool>::const_iterator c_ItErr = hc_PreviousResults.find(u32_Hash);
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNode.cpp:   for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_It = this->c_CanOpenManagers.begin();
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNode.cpp:               static std::map<QList<uint32_t>, bool> hc_PreviousResults;
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNode.cpp:                     std::map<QList<uint32_t>, bool>::const_iterator c_It;
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNode.cpp:                           const std::map<uint8_t,
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNode.cpp:            std::map<QString, uint32_t> c_PreviousNames;
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNode.cpp:            static std::map<uint32_t, bool> hc_PreviousResults;
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNode.cpp:      const std::map<QString,
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNode.cpp:                  const std::map<uint32_t, bool>::const_iterator c_ItErr = hc_PreviousResults.find(u32_Hash);
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerInfo.hpp:   std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> c_CanOpenDevices; ///< CANopen devices assigned to the
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    const std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    const std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:  for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_It =
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> &orc_Config,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    const std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:  for (std::map<C_OscCanInterfaceId,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp:    const std::map<uint32_t, QString>::const_iterator c_FoundName =
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp:   static int32_t h_LoadFile(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp:   static int32_t h_SaveFile(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp:                             QStringList * const opc_CreatedFiles, const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp:   static int32_t h_LoadData(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp:   static int32_t h_SaveData(const std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp:                             QStringList * const opc_CreatedFiles, const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp:                                     const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp:   static int32_t mh_LoadManagerSubDevices(std::map<C_OscCanInterfaceId,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp:   static int32_t mh_SaveManagerSubDevices(const std::map<C_OscCanInterfaceId,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp:                                           const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerInfo.cpp:   for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_It =
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerInfo.cpp:   std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice;
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerInfo.cpp:   const std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerInfo.cpp:            std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDeviceComp;
+opensyde_tool/libs/opensyde_core/project/system/node/can/can_open/C_OscCanOpenManagerInfo.cpp:   const std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanMessage.cpp:      static std::map<QList<uint32_t>, bool> hc_PreviousResults;
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanMessage.cpp:      const std::map<QList<uint32_t>, bool>::const_iterator c_It = hc_PreviousResults.find(c_Hashes);
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNode.hpp:   std::map<uint8_t, C_OscCanOpenManagerInfo> c_CanOpenManagers; ///< CANopen managers grouped by their
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeFiler.hpp:                                 QStringList * const opc_CreatedFiles, const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeFiler.hpp:                             QStringList * const opc_CreatedFiles, const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeFiler.hpp:   static int32_t mh_LoadCanOpenManagers(std::map<uint8_t, C_OscCanOpenManagerInfo> & orc_Config,
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeFiler.hpp:   static int32_t mh_SaveCanOpenManagers(const std::map<uint8_t,
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeFiler.hpp:                                         const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeFiler.cpp:    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeFiler.cpp:    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeFiler.cpp:    std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_CanOpenManagers,
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeFiler.cpp:    const std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_CanOpenManagers,
+opensyde_tool/libs/opensyde_core/project/system/node/C_OscNodeFiler.cpp:    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+opensyde_tool/libs/opensyde_core/C_OscUtils.cpp:C_OscUtils::h_GetUniqueName(const std::map<QString, bool> &orc_ExistingStrings,
+opensyde_tool/libs/opensyde_core/C_OscUtils.cpp:  std::map<QString, bool>::const_iterator c_ItString;
+opensyde_tool/libs/opensyde_core/C_OscUtils.hpp:  h_GetUniqueName(const std::map<QString, bool> &orc_ExistingStrings,
+opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsy.hpp:  std::map<uint8_t, uint8_t> mc_DataPoolMappingClientToServer;
+opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsy.hpp:  std::map<uint8_t, uint8_t> mc_DataPoolMappingServerToClient;
+opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsy.hpp:  void RegisterDataPoolMapping(const std::map<uint8_t, uint8_t> &orc_Mapping);
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.hpp:   std::map<uint32_t, uint32_t> mc_ActiveNodeIp2IpDispatcher; ///< Mapping from active node index to
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.hpp:   std::map<uint32_t, uint32_t> mc_ActiveNodeIp2CanDispatcher; ///< Mapping from active node index to
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.hpp:   std::map<QString, bool> mc_DatabaseActiveFlags;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.hpp:   std::map<QString, C_OscComMessageLoggerFileBase * const> mc_LoggingFiles;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.hpp:   std::map<QString, C_OscComMessageLoggerOsySysDefConfig> mc_OsySysDefs;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.hpp:   std::map<uint32_t, uint32_t> mc_MsgCounterExtendedId;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.hpp:   std::map<uint32_t, QString> mc_EcesMessages;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:   std::map<QString, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:   const std::map<QString,
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:   std::map<QString, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:   const std::map<QString,
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:   const std::map<QString, bool>::iterator c_ItFlag = this->mc_DatabaseActiveFlags.find(orc_Path);
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:      const std::map<QString, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItSysDef =
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:   std::map<QString, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:   std::map<QString, C_OscComMessageLoggerFileBase * const>::iterator c_ItFile;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:         std::map<QString, C_OscComMessageLoggerFileBase * const>::const_iterator c_ItFileLogger;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:   std::map<QString, C_OscComMessageLoggerOsySysDefConfig>::iterator c_ItNewConfig;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:   std::map<QString, C_OscComMessageLoggerOsySysDefConfig>::const_iterator c_ItSysDef;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:      const std::map<uint32_t, uint32_t>::iterator c_ItCounter =
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:         const std::map<uint32_t,  QString>::iterator c_Iterator = this->mc_EcesMessages.find(
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComMessageLogger.cpp:   std::map<QString, C_OscComMessageLoggerOsySysDefConfig>::const_iterator c_ItSysDef;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComAutoSupport.hpp:   std::map<int32_t, uint8_t > mc_MessageCounterInfoMap;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComAutoSupport.hpp:   std::map<int32_t, std::pair<bool, C_OscCanProtocol::E_Type> > mc_MessageAutoSupportInfoMap;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:            const std::map<uint32_t, uint32_t>::const_iterator c_Iter =
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:               const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:            const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:         const std::map<uint32_t, uint32_t>::const_iterator c_Iter =
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:         std::map<uint32_t, uint32_t> c_ActiveNodeIp2IpRouters;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:                     const std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsy.cpp:    const std::map<uint8_t, uint8_t> &orc_Mapping) {
+opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsy.cpp:  std::map<uint8_t, uint8_t>::const_iterator c_It;
+opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsy.cpp:  const std::map<uint8_t, uint8_t>::const_iterator c_It =
+opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsy.cpp:  const std::map<uint8_t, uint8_t>::const_iterator c_It =
+opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsyTpCan.cpp:      std::map<uint32_t, C_BroadcastReadEcuSerialNumberExtendedResults>
+opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsyTpCan.cpp:                    std::map<uint32_t,
+opensyde_tool/libs/opensyde_core/protocol_drivers/C_OscProtocolDriverOsyTpCan.cpp:        std::map<uint32_t,

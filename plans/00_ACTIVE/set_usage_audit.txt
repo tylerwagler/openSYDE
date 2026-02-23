@@ -1,0 +1,90 @@
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:               std::set<uint16_t> c_MultiplexerValues;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:               std::set<uint16_t>::const_iterator c_ItValue;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:               std::set<uint16_t> c_MultiplexerValues;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:               std::set<uint16_t>::const_iterator c_ItValue;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:         std::set<uint16_t> c_MultiplexerValues;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:         std::set<uint16_t> c_MultiplexerValues;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:      std::set<uint16_t> c_MultiplexValues;
+opensyde_tool/libs/opensyde_core/exports/code_generation/C_OscExportCommunicationStack.cpp:      std::set<uint16_t>::const_iterator c_ItValue;
+opensyde_tool/libs/opensyde_core/exports/x_config_generation/C_OscXcoCreate.cpp:   std::set<QString> c_XcfgFiles;            // unique container with
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.cpp:   std::set<QString> c_XcertFiles;                     // unique container with
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.cpp:      std::set<QString> c_XcertFilesQt;
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.cpp:                                            std::set<QString> & orc_XcertFiles)
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.cpp:                                    std::set<QString> & orc_XcertFiles,
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.hpp:                                      std::set<QString> & orc_XcertFiles);
+opensyde_tool/libs/opensyde_core/exports/x_certificates_package_generation/C_OscXceCreate.hpp:                              std::set<QString> & orc_XcertFiles,
+opensyde_tool/libs/opensyde_core/data_dealer/C_OscDataDealerNvmSafe.hpp:   std::set<C_OscNodeDataPoolListId> mc_ChangedLists;
+opensyde_tool/libs/opensyde_core/data_dealer/C_OscDataDealerNvmSafe.cpp:      std::set<C_OscNodeDataPoolListId>::const_iterator c_ItChangedList;
+opensyde_tool/libs/opensyde_core/data_dealer/C_OscDataDealerNvmSafe.cpp:    std::set<C_OscNodeDataPoolListId>::const_iterator c_ItChangedList;
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.hpp:      std::set<QString> &orc_AllCreatedFiles, QString &orc_ErrorMessage);
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.hpp:      const QString &orc_OutFilePrefix, std::set<QString> &orc_AllCreatedFiles,
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.hpp:                             const std::set<QString> &orc_AllCreatedFiles,
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.hpp:                         const std::set<QString> &orc_DeviceDefinitionPaths,
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.cpp:    std::set<QString> &orc_AllCreatedFiles, QString &orc_ErrorMessage) {
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.cpp:    const QString &orc_OutFilePrefix, std::set<QString> &orc_AllCreatedFiles,
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.cpp:  std::set<QString>
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.cpp:    std::set<QString>::const_iterator c_Iter;
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.cpp:    const std::set<QString> &orc_AllCreatedFiles, QString &orc_ErrorMessage) {
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.cpp:    const QString &orc_Path, const std::set<QString> &orc_DeviceDefinitionPaths,
+opensyde_tool/libs/opensyde_core/system_package_handling/C_OscSpaServicePackageCreateUtil.cpp:    std::set<QString>::const_iterator c_Iter;
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageLoad.hpp:                                 std::set<QString> & orc_Files);
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageV1.cpp:  std::set<QString> c_SupFiles; // unique container with
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageLoad.cpp:      std::set<QString> c_Files;
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageLoad.cpp:                                                         std::set<QString> & orc_Files)
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageBase.cpp:                                                        const std::set<QString> & orc_SupFiles,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageBase.cpp:      for (std::set<QString>::const_iterator c_ItFile = orc_SupFiles.begin();
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.hpp:      QList<std::set<QString> > & orc_SecureFiles);
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.hpp:                                                     const QList<C_OscSuSequences::C_DoFlash> & orc_ApplicationsToWrite, std::set<QString> & orc_SupFiles, const QByteArray & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword, const QByteArray & orc_AddSignatureNodes, const QList<QByteArray > & orc_NodeSignatureKeys);
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.hpp:   static int32_t mh_CreateNodesZip(const QList<std::set<QString> > & orc_SecFiles,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.hpp:                                    const uint32_t ou32_NodeCount, std::set<QString> & orc_SupFiles);
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.hpp:                                           QList<std::set<QString> > & orc_SecFiles);
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.hpp:                                             QList<std::set<QString> > & orc_SecFiles);
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.hpp:                             const std::set<QString> & orc_SupFiles, const QByteArray & orc_Key,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageBase.hpp:                                const std::set<QString> &orc_SupFiles,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageV1.hpp:                         const std::set<QString> &orc_DeviceDefinitionPaths);
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:   std::set<QString> c_SupFiles;                                          // unique container with
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:   const QStringList & orc_NodeFoldersAbs, QList<std::set<QString> > & orc_SecureFiles)
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:         std::set<QString> c_NodeSecFiles;
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:   std::set<QString> & orc_SupFiles, const QByteArray & orc_EncryptNodes,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:   QList<std::set<QString> > c_SecFiles;
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(const QList<std::set<QString> > & orc_SecFiles,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:                                                              std::set<QString> & orc_SupFiles)
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:                                                                     QList<std::set<QString> > & orc_SecFiles)
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:   const uint32_t ou32_NodeCount, QList<std::set<QString> > & orc_SecFiles)
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:                                                       const std::set<QString> & orc_SupFiles,
+opensyde_tool/libs/opensyde_core/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp:      std::set<QString> c_SupFiles;
+opensyde_tool/libs/opensyde_core/C_OscAesFile.cpp:                                               const std::set<QString> & orc_SupFiles,
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.hpp:  std::set<uint8_t> GetAllAvailableFactorySettingsSubIndices() const;
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.hpp:  std::set<uint8_t>
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:std::set<uint8_t> C_OscCanOpenObjectDictionary::GetAllAvailableFactorySettingsSubIndices() const
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:   const std::set<uint8_t> c_Retval = this->GetAllAvailableSubIndices(0x1011U);
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:std::set<uint8_t> C_OscCanOpenObjectDictionary::GetAllAvailableSubIndices(const uint16_t ou16_OdIndex) const
+opensyde_tool/libs/opensyde_core/imports/C_OscCanOpenObjectDictionary.cpp:   std::set<uint8_t> c_Retval;
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanSignal.cpp:void C_OscCanSignal::GetDataBytesBitPositionsOfSignal(std::set<uint16_t> & orc_SetPositions) const
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanSignal.cpp:      std::set<uint16_t> c_SetPositions;
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanSignal.hpp:   void GetDataBytesBitPositionsOfSignal(std::set<uint16_t> & orc_SetPositions) const;
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanMessage.hpp:   void GetMultiplexerValues(std::set<uint16_t> & orc_Values) const;
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanMessage.cpp:            std::set<uint16_t> c_CheckedSetPositions;
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanMessage.cpp:                     std::set<uint16_t> c_CurrentSetPositions;
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanMessage.cpp:                     for (std::set<uint16_t>::const_iterator c_ItCurrentPosition = c_CurrentSetPositions.begin();
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanMessage.cpp:                        for (std::set<uint16_t>::const_iterator c_ItCheckedPosition = c_CheckedSetPositions.begin();
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanMessage.cpp:               std::set<uint16_t> c_SetPositions;
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanMessage.cpp:               for (std::set<uint16_t>::const_iterator c_ItPosition = c_SetPositions.begin();
+opensyde_tool/libs/opensyde_core/project/system/node/can/C_OscCanMessage.cpp:void C_OscCanMessage::GetMultiplexerValues(std::set<uint16_t> & orc_Values) const
+opensyde_tool/libs/opensyde_core/C_OscZipFile.hpp:                                 const std::set<QString> &orc_SupFiles,
+opensyde_tool/libs/opensyde_core/C_OscZipFile.hpp:  static void h_AppendFilesRelative(std::set<QString> &orc_Set,
+opensyde_tool/libs/opensyde_core/C_OscZipFile.cpp:                                      const std::set<QString> &orc_SupFiles,
+opensyde_tool/libs/opensyde_core/C_OscZipFile.cpp:  std::set<QString>::const_iterator c_Iter;
+opensyde_tool/libs/opensyde_core/C_OscZipFile.cpp:void C_OscZipFile::h_AppendFilesRelative(std::set<QString> &orc_Set,
+opensyde_tool/libs/opensyde_core/C_OscAesFile.hpp:                                           const std::set<QString> & orc_SupFiles,
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.hpp:   int32_t SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes = NULL);
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.hpp:                               std::set<uint32_t> & orc_DefectNodeIndices) const;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.hpp:                               const bool oq_CheckForSession, std::set<uint32_t> & orc_DefectNodeIndices) const;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.hpp:   int32_t m_SetNodesSecurityAccess(const uint8_t ou8_SecurityLevel, std::set<uint32_t> & orc_ErrorActiveNodes) const;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.hpp:                                    std::set<uint32_t> & orc_ErrorActiveNodes) const;
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:int32_t C_OscComDriverProtocol::SendTesterPresent(const std::set<uint32_t> * const opc_SkipNodes)
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:                                                    std::set<uint32_t> & orc_DefectNodeIndices) const
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:                                                    std::set<uint32_t> & orc_DefectNodeIndices) const
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:                                                         std::set<uint32_t> & orc_ErrorActiveNodes) const
+opensyde_tool/libs/opensyde_core/protocol_drivers/communication/C_OscComDriverProtocol.cpp:                                                         std::set<uint32_t> & orc_ErrorActiveNodes) const
+opensyde_tool/libs/opensyde_core/protocol_drivers/system_update/C_OscSuSequences.cpp:    std::set<uint32_t> c_XflResetSentForBus;
