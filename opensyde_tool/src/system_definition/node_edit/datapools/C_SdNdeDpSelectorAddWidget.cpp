@@ -403,7 +403,7 @@ void C_SdNdeDpSelectorAddWidget::m_GetSelectedSharedDatapool(C_OscNodeDataPoolId
 {
    if (this->mpc_Ui->pc_ComboBoxSharedDatapool->count() > 0)
    {
-      const std::map<QString, stw::opensyde_core::C_OscNodeDataPoolId>::const_iterator c_ItDatapool =
+      const QHash<QString, stw::opensyde_core::C_OscNodeDataPoolId>::const_iterator c_ItDatapool =
          this->mc_AvailableDatapools.find(this->mpc_Ui->pc_ComboBoxSharedDatapool->currentText());
 
       Q_ASSERT(c_ItDatapool != this->mc_AvailableDatapools.end());

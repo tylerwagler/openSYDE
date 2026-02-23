@@ -1167,7 +1167,7 @@ uint32_t C_SyvDaChaPlotHandlerWidget::GetCountGraphs(void) const
 void C_SyvDaChaPlotHandlerWidget::UpdateError(const uint32_t ou32_DataElementIndex, const QString & orc_ErrorText,
                                               const bool oq_IsTransmissionError, const bool oq_ErrorActive) const
 {
-   const std::map<uint32_t, uint32_t>::const_iterator c_It =
+   const QHash<uint32_t, uint32_t>::const_iterator c_It =
       this->mc_ElementHandlerRegIndexToDataElementIndex.find(ou32_DataElementIndex);
 
    if (c_It != this->mc_ElementHandlerRegIndexToDataElementIndex.end())

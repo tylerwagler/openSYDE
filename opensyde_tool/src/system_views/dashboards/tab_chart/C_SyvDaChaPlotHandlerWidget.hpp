@@ -158,7 +158,7 @@ private:
    static const QColor mhac_DATA_COLORS[47];
    QList<std::array<bool, 47> > mc_DataColorsUsed;
 
-   std::map<uint32_t, uint32_t> mc_ElementHandlerRegIndexToDataElementIndex;
+   QHash<uint32_t, uint32_t> mc_ElementHandlerRegIndexToDataElementIndex;
 
    // Index of list equals data element config index
    QList<QCPAxis *> mc_DataElementConfigIndexToVerticalAxis;

@@ -59,7 +59,7 @@ private:
    const int32_t ms32_ApplicationIndex;
    stw::opensyde_core::C_OscNodeApplication::E_Type me_Type;
    QList<C_SdNdeDbDataPoolEntry *> mc_DataPoolWidgets;
-   std::set<uint32_t> mc_SelectedDataPools;
+   QSet<uint32_t> mc_SelectedDataPools;
    //lint -e{1725} Only problematic if copy or assignment is allowed
    stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    static const int32_t mhs32_VERSION_INDEX_V1;

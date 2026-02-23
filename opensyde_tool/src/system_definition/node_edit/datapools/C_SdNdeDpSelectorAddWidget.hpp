@@ -70,7 +70,7 @@ private:
    stw::opensyde_core::C_OscNodeDataPool & mrc_OscDataPool;
    QString mc_RamViewFilePath;
 
-   std::map<QString, stw::opensyde_core::C_OscNodeDataPoolId> mc_AvailableDatapools;
+   QHash<QString, stw::opensyde_core::C_OscNodeDataPoolId> mc_AvailableDatapools;
 
    void m_InitFromData(void);
 

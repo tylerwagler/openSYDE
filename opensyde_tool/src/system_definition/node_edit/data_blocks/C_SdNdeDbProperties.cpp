@@ -491,17 +491,17 @@ void C_SdNdeDbProperties::HandleDataPools(const uint32_t ou32_ApplicationIndex) 
    if (pc_Node != NULL)
    {
       for (uint32_t u32_ItDataPool = 0UL; u32_ItDataPool < pc_Node->c_DataPools.size(); ++u32_ItDataPool)
-      {
-         bool q_Found = false;
-         const C_OscNodeDataPool & rc_DataPool = pc_Node->c_DataPools[u32_ItDataPool];
-         for (std::set<uint32_t>::const_iterator c_ItSelect = this->mc_SelectedDataPools.begin();
-              c_ItSelect != this->mc_SelectedDataPools.end(); ++c_ItSelect)
-         {
-            if (*c_ItSelect == u32_ItDataPool)
-            {
-               q_Found = true;
-            }
-         }
+       {
+          bool q_Found = false;
+          const C_OscNodeDataPool & rc_DataPool = pc_Node->c_DataPools[u32_ItDataPool];
+          for (QSet<uint32_t>::const_iterator c_ItSelect = this->mc_SelectedDataPools.begin();
+               c_ItSelect != this->mc_SelectedDataPools.end(); ++c_ItSelect)
+          {
+             if (*c_ItSelect == u32_ItDataPool)
+             {
+                q_Found = true;
+             }
+          }
          //Hint: these operations should not change the vector so no reload of nodes necessary
          if (q_Found == true)
          {
@@ -1836,7 +1836,7 @@ void C_SdNdeDbProperties::m_InitDataPoolsSection(void)
    m_CleanUpDataPoolWidgets();
    int32_t s32_Count = 0;
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
-   for (std::set<uint32_t>::const_iterator c_It = this->mc_SelectedDataPools.begin();
+   for (QSet<uint32_t>::const_iterator c_It = this->mc_SelectedDataPools.begin();
         c_It != this->mc_SelectedDataPools.end(); ++c_It)
    {
       const uint32_t u32_Val = *c_It;
@@ -1933,7 +1933,7 @@ void C_SdNdeDbProperties::m_HandleDeleteDataPool(C_SdNdeDbDataPoolEntry * const 
 {
    if (opc_Source != NULL)
    {
-      for (std::set<uint32_t>::iterator c_It = this->mc_SelectedDataPools.begin();
+      for (QSet<uint32_t>::iterator c_It = this->mc_SelectedDataPools.begin();
            c_It != this->mc_SelectedDataPools.end(); ++c_It)
       {
          if (*c_It == ou32_Index)
