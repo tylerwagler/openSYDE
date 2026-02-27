@@ -44,10 +44,7 @@ public:
 
 inline size_t qHash(const C_OscCanMessageUniqueId &orc_Id,
                     size_t ou_Seed = 0) {
-  QtPrivate::QHashCombine c_Hash;
-  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_CanId);
-  ou_Seed = c_Hash(ou_Seed, orc_Id.q_IsExtended);
-  return ou_Seed;
+  return qHashMulti(ou_Seed, orc_Id.u32_CanId, orc_Id.q_IsExtended);
 }
 
 /* -- Extern Global Variables

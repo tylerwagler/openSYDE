@@ -49,11 +49,8 @@ public:
 
 inline size_t qHash(const C_OscNodeDataPoolListId &orc_Id,
                     size_t ou_Seed = 0) {
-  QtPrivate::QHashCombine c_Hash;
-  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_NodeIndex);
-  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_DataPoolIndex);
-  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_ListIndex);
-  return ou_Seed;
+  return qHashMulti(ou_Seed, orc_Id.u32_NodeIndex, orc_Id.u32_DataPoolIndex,
+                    orc_Id.u32_ListIndex);
 }
 
 /* -- Extern Global Variables

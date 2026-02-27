@@ -244,8 +244,8 @@ int32_t C_OscProtocolDriverOsyTpBase::m_GetFromTxQueue(
     if (mc_TxQueue.size() < 1U) {
       s32_Return = C_NOACT;
     } else {
-      orc_Service = mc_TxQueue.front(); // get element from queue
-      mc_TxQueue.pop_front();           // delete element from queue
+      orc_Service = mc_TxQueue.first();  // get element from queue
+      mc_TxQueue.removeFirst();          // delete element from queue
     }
   }
   return s32_Return;
@@ -273,8 +273,8 @@ int32_t C_OscProtocolDriverOsyTpBase::m_GetFromRxQueue(
     if (mc_RxQueue.size() < 1U) {
       s32_Return = C_NOACT;
     } else {
-      orc_Service = mc_RxQueue.front(); // get element from queue
-      mc_RxQueue.pop_front();           // delete element from queue
+      orc_Service = mc_RxQueue.first();  // get element from queue
+      mc_RxQueue.removeFirst();          // delete element from queue
     }
   }
   return s32_Return;

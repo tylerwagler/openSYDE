@@ -23,7 +23,6 @@
 #include "stwtypes.hpp"
 #include <QList>
 #include <QRecursiveMutex>
-#include <deque>
 
 namespace stw {
 namespace can {
@@ -40,7 +39,7 @@ const uint32_t mu32_CAN_QUEUE_DEFAULT_MAX_SIZE = 2048U;
 // if nobody clears the RX queue.
 class C_CanRxQueue {
 private:
-  std::deque<T_STWCAN_Msg_RX> mc_Messages;
+  QList<T_STWCAN_Msg_RX> mc_Messages;
   uint32_t mu32_MaxSize;
   int32_t ms32_Status;
 

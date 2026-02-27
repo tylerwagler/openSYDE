@@ -83,17 +83,13 @@ private:
 
 inline size_t qHash(const C_PuiSvDbNodeDataPoolListElementId &orc_Id,
                     size_t ou_Seed = 0) {
-  QtPrivate::QHashCombine c_Hash;
-  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_NodeIndex);
-  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_DataPoolIndex);
-  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_ListIndex);
-  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_ElementIndex);
-  ou_Seed = c_Hash(ou_Seed, orc_Id.GetUseArrayElementIndex());
-  ou_Seed = c_Hash(ou_Seed, orc_Id.GetArrayElementIndex());
-  ou_Seed = c_Hash(ou_Seed, orc_Id.GetHalChannelName());
-  ou_Seed = c_Hash(ou_Seed, static_cast<int32_t>(orc_Id.GetType()));
-  ou_Seed = c_Hash(ou_Seed, orc_Id.GetIsValid());
-  return ou_Seed;
+  return qHashMulti(ou_Seed, orc_Id.u32_NodeIndex, orc_Id.u32_DataPoolIndex,
+                    orc_Id.u32_ListIndex, orc_Id.u32_ElementIndex,
+                    orc_Id.GetUseArrayElementIndex(),
+                    orc_Id.GetArrayElementIndex(),
+                    orc_Id.GetHalChannelName(),
+                    static_cast<int32_t>(orc_Id.GetType()),
+                    orc_Id.GetIsValid());
 }
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

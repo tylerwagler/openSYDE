@@ -35,9 +35,8 @@
 #include "C_OscZipFile.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
+#include <QFile>
 #include <QString>
-#include <fstream>
-#include <iterator>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -325,30 +324,27 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(
   int32_t s32_Retval = C_NO_ERR;
   const uint32_t u32_SECTION_SIZE = 256;
 
-  std::ifstream c_InputFileStream;
+  QFile c_InputFile(orc_FilePath);
   const uint32_t u32_InputFileSize =
       static_cast<uint32_t>(QFileInfo(orc_FilePath).size());
 
-  c_InputFileStream.open(orc_FilePath.toUtf8().constData(),
-                         std::ifstream::binary);
-
-  if (c_InputFileStream.is_open() == false) {
+  if (c_InputFile.open(QIODevice::ReadOnly) == false) {
     s32_Retval = C_RD_WR;
   } else {
     uint32_t u32_RemainingFileCount = u32_InputFileSize;
     while ((u32_RemainingFileCount / u32_SECTION_SIZE) >= 1UL) {
-      s32_Retval = mh_AddFileSectionToDigest(c_InputFileStream, orc_Signature,
+      s32_Retval = mh_AddFileSectionToDigest(c_InputFile, orc_Signature,
                                              u32_SECTION_SIZE);
       u32_RemainingFileCount = u32_RemainingFileCount - u32_SECTION_SIZE;
     }
     if (s32_Retval == C_NO_ERR) {
       if (u32_RemainingFileCount > 0UL) {
-        s32_Retval = mh_AddFileSectionToDigest(c_InputFileStream, orc_Signature,
+        s32_Retval = mh_AddFileSectionToDigest(c_InputFile, orc_Signature,
                                                u32_RemainingFileCount);
       }
     }
     // close file
-    c_InputFileStream.close();
+    c_InputFile.close();
   }
   return s32_Retval;
 }
@@ -368,22 +364,12 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(
-    ifstream &orc_File, C_OscSecurityEcdsa &orc_Signature,
+    QFile &orc_File, C_OscSecurityEcdsa &orc_Signature,
     const uint32_t ou32_SectionLength) {
   int32_t s32_Retval = C_NO_ERR;
-  // read file content
-  bool q_HasFailed;
 
-  QByteArray c_InputData;
-  c_InputData.resize(static_cast<size_t>(ou32_SectionLength));
-  // lint -e{9176} //no problems as long as charn has the same size as uint8; if
-  // not we'd be in deep !"=?& anyway
-  orc_File.read(reinterpret_cast<char_t *>(
-                    reinterpret_cast<uint8_t *>(c_InputData.data())),
-                c_InputData.size());
-  // check for error
-  q_HasFailed = orc_File.fail();
-  if (q_HasFailed == true) {
+  QByteArray c_InputData = orc_File.read(static_cast<qint64>(ou32_SectionLength));
+  if (static_cast<uint32_t>(c_InputData.size()) != ou32_SectionLength) {
     s32_Retval = C_RD_WR;
   } else {
     s32_Retval = orc_Signature.Sha256Update(

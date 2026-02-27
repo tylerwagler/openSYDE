@@ -16,7 +16,7 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include <map>
+#include <QFile>
 
 #include "C_OscSecurityEcdsa.hpp"
 #include "C_OscSuSequences.hpp"
@@ -92,7 +92,7 @@ protected:
       const bool oq_PathsAreAbsolute);
   static int32_t mh_AddFileToDigest(const QString &orc_FilePath,
                                     C_OscSecurityEcdsa &orc_Signature);
-  static int32_t mh_AddFileSectionToDigest(std::ifstream &orc_File,
+  static int32_t mh_AddFileSectionToDigest(QFile &orc_File,
                                            C_OscSecurityEcdsa &orc_Signature,
                                            const uint32_t ou32_SectionLength);
   static void mh_Init(void);

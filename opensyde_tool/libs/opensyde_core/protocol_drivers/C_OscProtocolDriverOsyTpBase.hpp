@@ -21,10 +21,10 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include "stwtypes.hpp"
+#include <QList>
 #include <QRecursiveMutex>
-#include <deque>
-#include <vector>
+
+#include "stwtypes.hpp"
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -82,8 +82,8 @@ private:
   operator=(const C_OscProtocolDriverOsyTpBase &orc_Source);
 
   uint16_t mu16_MaxServiceQueueSize;
-  std::deque<C_OscProtocolDriverOsyService> mc_TxQueue;
-  std::deque<C_OscProtocolDriverOsyService> mc_RxQueue;
+  QList<C_OscProtocolDriverOsyService> mc_TxQueue;
+  QList<C_OscProtocolDriverOsyService> mc_RxQueue;
   QRecursiveMutex mc_CsTxQueue; /// critical section protecting Tx Queue
   QRecursiveMutex mc_CsRxQueue; /// critical section protecting Rx Queue
 

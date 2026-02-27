@@ -16,8 +16,7 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include <fstream>
-
+#include <QFile>
 #include <QString>
 
 #include "C_OscComMessageLoggerFileBase.hpp"
@@ -60,7 +59,7 @@ private:
 
   const bool mq_HexActive;
   const bool mq_RelativeTimeStampActive;
-  std::ofstream mc_File;
+  QFile mc_File;
 };
 
 /* -- Extern Global Variables

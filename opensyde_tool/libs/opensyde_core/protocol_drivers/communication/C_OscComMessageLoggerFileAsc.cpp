@@ -82,9 +82,9 @@ C_OscComMessageLoggerFileAsc::C_OscComMessageLoggerFileAsc(
 //----------------------------------------------------------------------------------------------------------------------
 C_OscComMessageLoggerFileAsc::~C_OscComMessageLoggerFileAsc(void) {
   try {
-    if (this->mc_File.is_open() == true) {
-      const QString c_EndLine = "End TriggerBlock";
-      this->mc_File.write(c_EndLine.toUtf8().constData(), c_EndLine.length());
+    if (this->mc_File.isOpen() == true) {
+      const QByteArray c_EndLine = "End TriggerBlock";
+      this->mc_File.write(c_EndLine);
       this->mc_File.close();
     }
   } catch (...) {
@@ -106,7 +106,7 @@ C_OscComMessageLoggerFileAsc::~C_OscComMessageLoggerFileAsc(void) {
 int32_t C_OscComMessageLoggerFileAsc::OpenFile(void) {
   int32_t s32_Return;
 
-  if (this->mc_File.is_open() == true) {
+  if (this->mc_File.isOpen() == true) {
     // Close the file if it is open. The previous file will be deleted
     this->mc_File.close();
   }
@@ -119,7 +119,8 @@ int32_t C_OscComMessageLoggerFileAsc::OpenFile(void) {
   s32_Return = C_OscComMessageLoggerFileBase::OpenFile();
 
   if (s32_Return == C_NO_ERR) {
-    this->mc_File.open(this->mc_FilePath.toUtf8().constData(), std::ios::app);
+    this->mc_File.setFileName(this->mc_FilePath);
+    this->mc_File.open(QIODevice::WriteOnly | QIODevice::Append);
 
     // Write default header
     this->m_WriteHeader();
@@ -143,7 +144,7 @@ int32_t C_OscComMessageLoggerFileAsc::OpenFile(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComMessageLoggerFileAsc::AddMessageToFile(
     const C_OscComMessageLoggerData &orc_MessageData) {
-  if (this->mc_File.is_open() == true) {
+  if (this->mc_File.isOpen() == true) {
     uint32_t u32_SignalCounter;
     QString c_LogEntry = "   ";
     QString c_Temp;
@@ -235,7 +236,7 @@ void C_OscComMessageLoggerFileAsc::AddMessageToFile(
       c_LogEntry += "\n";
     }
 
-    this->mc_File.write(c_LogEntry.toUtf8().constData(), c_LogEntry.length());
+    this->mc_File.write(c_LogEntry.toUtf8());
   }
 }
 
@@ -250,7 +251,7 @@ void C_OscComMessageLoggerFileAsc::AddMessageToFile(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscComMessageLoggerFileAsc::m_WriteHeader(void) {
-  if (this->mc_File.is_open() == true) {
+  if (this->mc_File.isOpen() == true) {
     QString c_Header;
     const QString c_TimeString = mh_GetAscTimeString();
 
@@ -279,7 +280,7 @@ void C_OscComMessageLoggerFileAsc::m_WriteHeader(void) {
     c_Header += "// version 7.2.0\n";
     c_Header += "Begin Triggerblock " + c_TimeString + "\n";
 
-    this->mc_File.write(c_Header.toUtf8().constData(), c_Header.length());
+    this->mc_File.write(c_Header.toUtf8());
   }
 }
 

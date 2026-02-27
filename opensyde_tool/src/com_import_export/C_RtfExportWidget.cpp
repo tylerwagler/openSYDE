@@ -20,7 +20,7 @@
 #include <QGraphicsView>
 #include <QProcess>
 #include <QScreen>
-#include <fstream>
+#include <QFile>
 #include <limits>
 
 #include "C_OgeWiCustomMessage.hpp"
@@ -567,9 +567,10 @@ int32_t C_RtfExportWidget::m_CreateConfigXml(
   const QString c_COMPANY = "company";
 
   // create empty DocuCreator configuration file
-  std::fstream c_File;
-
-  c_File.open(orc_Path.toUtf8().constData(), std::fstream::out);
+  {
+    QFile c_File(orc_Path);
+    c_File.open(QIODevice::WriteOnly | QIODevice::Truncate);
+  }
 
   // fill DocuCreator configuration definition
   C_OscXmlParser c_XmlParser;

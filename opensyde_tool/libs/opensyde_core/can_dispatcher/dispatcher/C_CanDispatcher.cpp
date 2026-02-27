@@ -182,8 +182,8 @@ int32_t C_CanRxQueue::Pop(T_STWCAN_Msg_RX &orc_Message) {
   if (mc_Messages.size() < 1U) {
     s32_Return = C_NOACT;
   } else {
-    orc_Message = mc_Messages.front(); // get element from queue
-    mc_Messages.pop_front();           // delete element from queue
+    orc_Message = mc_Messages.first();  // get element from queue
+    mc_Messages.removeFirst();          // delete element from queue
   }
   return s32_Return;
 }
