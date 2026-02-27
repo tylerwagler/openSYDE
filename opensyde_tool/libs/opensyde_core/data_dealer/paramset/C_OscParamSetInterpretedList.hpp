@@ -1,42 +1,53 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Data class, containing the interpreted entries for one list in a parameter set file (header)
+   \brief       Data class, containing the interpreted entries for one list in a
+   parameter set file (header)
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCPARAMSETINTERPRETEDLIST_HPP
 #define C_OSCPARAMSETINTERPRETEDLIST_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
-#include <QList>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscParamSetInterpretedElement.hpp"
+#include <QList>
+#include <vector>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-///Data class, containing the interpreted entries for one list in a parameter set file
-class C_OscParamSetInterpretedList
-{
+/// Data class, containing the interpreted entries for one list in a parameter
+/// set file
+class C_OscParamSetInterpretedList {
 public:
-   C_OscParamSetInterpretedList(void);
+  C_OscParamSetInterpretedList(void);
 
-   QString c_Name;                            ///< List name
-   QList<C_OscParamSetInterpretedElement> c_Elements; ///< Interpreted elements of this list
+  QString c_Name; ///< List name
+  QList<C_OscParamSetInterpretedElement>
+      c_Elements; ///< Interpreted elements of this list
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QList>
+#include <QMap>
 #include "C_PuiSdHandlerCanOpenLogic.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -58,8 +59,8 @@ public:
                                           const uint32_t ou32_DataLoggerDataElementIndex, const bool oq_UseCustomName,
                                           const QString & orc_CustomName);
 
-   const std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
-                  C_PuiSdLastKnownHalElementId> & GetLastKnownHalcCrcs(void) const;
+   const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+              C_PuiSdLastKnownHalElementId> & GetLastKnownHalcCrcs(void) const;
    int32_t CheckAndHandleNewElement(const stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId & orc_NewId);
    static bool h_RemoveAllIdsForInvalidRoutesForOneNode(const uint32_t ou32_Index,
                                                         QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data);
@@ -117,7 +118,7 @@ private:
    void m_HandleNodeAboutToBeDeleted(const uint32_t ou32_Index, const bool oq_OnlyMarkInvalid = false);
    void m_HandlePossibleRouteChange(void);
    void m_ValidateAllRoutesForOneNode(const uint32_t ou32_Index);
-   static std::map<QString, bool> mh_GetExistingDataLoggerNames(
+   static QHash<QString, bool> mh_GetExistingDataLoggerNames(
       const stw::opensyde_core::C_OscNode & orc_Node);
    static void mh_HandleSyncDataLoggerElementAboutToBeDeleted(
       stw::opensyde_core::C_OscDataLoggerJobProperties & orc_Properties,

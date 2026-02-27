@@ -5,75 +5,91 @@
 
    Group domain channel config data for HALC configuration
 
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
-#include "C_OscUtils.hpp"
 #include "C_OscHalcConfigChannel.hpp"
+#include "C_OscUtils.hpp"
+#include "C_SclChecksums.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscHalcConfigChannel::C_OscHalcConfigChannel(void) :
-   q_SafetyRelevant(false),
-   u32_UseCaseIndex(0UL)
-{
-}
+C_OscHalcConfigChannel::C_OscHalcConfigChannel(void)
+    : q_SafetyRelevant(false), u32_UseCaseIndex(0UL) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Destructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscHalcConfigChannel::~C_OscHalcConfigChannel()
-{
-}
+C_OscHalcConfigChannel::~C_OscHalcConfigChannel() {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Calculates the hash value over all data
 
    The hash value is a 32 bit CRC value.
-   It is not endian-safe, so it should only be used on the same system it is created on.
+   It is not endian-safe, so it should only be used on the same system it is
+   created on.
 
-   \param[in,out]  oru32_HashValue  Hash value with initial [in] value and result [out] value
+   \param[in,out]  oru32_HashValue  Hash value with initial [in] value and
+   result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigChannel::CalcHash(uint32_t & oru32_HashValue) const
-{
-   const QByteArray c_NameData = this->c_Name.toUtf8();
-   stw::scl::C_SclChecksums::CalcCRC32(c_NameData.constData(), static_cast<uint32_t>(c_NameData.size()),
-                                       oru32_HashValue);
-   const QByteArray c_CommentData = this->c_Comment.toUtf8();
-   stw::scl::C_SclChecksums::CalcCRC32(c_CommentData.constData(), static_cast<uint32_t>(c_CommentData.size()),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_SafetyRelevant, sizeof(this->q_SafetyRelevant), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_UseCaseIndex, sizeof(this->u32_UseCaseIndex), oru32_HashValue);
+void C_OscHalcConfigChannel::CalcHash(uint32_t &oru32_HashValue) const {
+  const QByteArray c_NameData = this->c_Name.toUtf8();
+  stw::scl::C_SclChecksums::CalcCRC32(c_NameData.constData(),
+                                      static_cast<uint32_t>(c_NameData.size()),
+                                      oru32_HashValue);
+  const QByteArray c_CommentData = this->c_Comment.toUtf8();
+  stw::scl::C_SclChecksums::CalcCRC32(
+      c_CommentData.constData(), static_cast<uint32_t>(c_CommentData.size()),
+      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(
+      &this->q_SafetyRelevant, sizeof(this->q_SafetyRelevant), oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(
+      &this->u32_UseCaseIndex, sizeof(this->u32_UseCaseIndex), oru32_HashValue);
 
-   for (uint32_t u32_It = 0UL; u32_It < this->c_Parameters.size(); ++u32_It)
-   {
-      this->c_Parameters[u32_It].CalcHash(oru32_HashValue);
-   }
+  for (uint32_t u32_It = 0UL; u32_It < this->c_Parameters.size(); ++u32_It) {
+    this->c_Parameters[u32_It].CalcHash(oru32_HashValue);
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -82,19 +98,15 @@ void C_OscHalcConfigChannel::CalcHash(uint32_t & oru32_HashValue) const
    \param[out]  opq_NameInvalid  Name invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigChannel::CheckConfigValid(bool * const opq_NameInvalid) const
-{
-   if (opq_NameInvalid != NULL)
-   {
-      if (C_OscUtils::h_CheckValidCeName(this->c_Name) == false)
-      {
-         *opq_NameInvalid = true;
-      }
-      else
-      {
-         *opq_NameInvalid = false;
-      }
-   }
+void C_OscHalcConfigChannel::CheckConfigValid(
+    bool *const opq_NameInvalid) const {
+  if (opq_NameInvalid != NULL) {
+    if (C_OscUtils::h_CheckValidCeName(this->c_Name) == false) {
+      *opq_NameInvalid = true;
+    } else {
+      *opq_NameInvalid = false;
+    }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -103,20 +115,15 @@ void C_OscHalcConfigChannel::CheckConfigValid(bool * const opq_NameInvalid) cons
    \param[in]  oe_SafetyMode  Safety mode
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigChannel::HandleFileLoadPostProcessing(const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode)
-{
-   if (oe_SafetyMode == C_OscHalcDefBase::eONE_LEVEL_ALL_SAFE)
-   {
-      this->q_SafetyRelevant = true;
-   }
-   else if (oe_SafetyMode == C_OscHalcDefBase::eONE_LEVEL_ALL_NON_SAFE)
-   {
-      this->q_SafetyRelevant = false;
-   }
-   else
-   {
-      //Nothing to do
-   }
+void C_OscHalcConfigChannel::HandleFileLoadPostProcessing(
+    const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode) {
+  if (oe_SafetyMode == C_OscHalcDefBase::eONE_LEVEL_ALL_SAFE) {
+    this->q_SafetyRelevant = true;
+  } else if (oe_SafetyMode == C_OscHalcDefBase::eONE_LEVEL_ALL_NON_SAFE) {
+    this->q_SafetyRelevant = false;
+  } else {
+    // Nothing to do
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -127,11 +134,10 @@ void C_OscHalcConfigChannel::HandleFileLoadPostProcessing(const C_OscHalcDefBase
    \param[in,out]  opc_ChangedItems       Changed items
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigChannel::HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
-                                                    const QString & orc_Type,
-                                                    std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
-{
-   C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(ou32_NameMaxCharLimit, orc_Type,
-                                                                             this->c_Name,
-                                                                             opc_ChangedItems);
+void C_OscHalcConfigChannel::HandleNameMaxCharLimit(
+    const uint32_t ou32_NameMaxCharLimit, const QString &orc_Type,
+    QList<C_OscSystemNameMaxCharLimitChangeReportItem>
+        *const opc_ChangedItems) {
+  C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(
+      ou32_NameMaxCharLimit, orc_Type, this->c_Name, opc_ChangedItems);
 }

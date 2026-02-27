@@ -5,47 +5,62 @@
 
    Access to RSA signature handling
 
-   \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
 #include <cstring>
 
-#include "openssl/x509.h"
-#include "openssl/rsa.h"
 #include "openssl/pem.h"
+#include "openssl/rsa.h"
+#include "openssl/x509.h"
 
-#include "stwerrors.hpp"
 #include "C_OscSecurityRsa.hpp"
+#include "stwerrors.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 const uint32_t C_OscSecurityRsa::mhu32_DEFAULT_BUFFER_SIZE = 1024;
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscSecurityRsa::C_OscSecurityRsa()
-{
-}
+C_OscSecurityRsa::C_OscSecurityRsa() {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Sign signature
@@ -70,64 +85,67 @@ C_OscSecurityRsa::C_OscSecurityRsa()
    \retval   C_NOACT    Could not encrypt message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityRsa::h_SignSignature(const QByteArray & orc_PrivateKey,
-                                          const QByteArray & orc_Message,
-                                          QByteArray & orc_EncryptedMessage)
-{
-   int32_t s32_Retval = C_RANGE;
-   const uint8_t * pu8_Data = reinterpret_cast<const uint8_t*>(orc_PrivateKey.constData());
+int32_t C_OscSecurityRsa::h_SignSignature(const QByteArray &orc_PrivateKey,
+                                          const QByteArray &orc_Message,
+                                          QByteArray &orc_EncryptedMessage) {
+  int32_t s32_Retval = C_RANGE;
+  const uint8_t *pu8_Data =
+      reinterpret_cast<const uint8_t *>(orc_PrivateKey.constData());
 
-   orc_EncryptedMessage.resize(C_OscSecurityRsa::mhu32_DEFAULT_BUFFER_SIZE);
+  orc_EncryptedMessage.resize(C_OscSecurityRsa::mhu32_DEFAULT_BUFFER_SIZE);
 
-   //Get private key information from PKCS#8 dump:
-   PKCS8_PRIV_KEY_INFO * const pc_Key = d2i_PKCS8_PRIV_KEY_INFO(
+  // Get private key information from PKCS#8 dump:
+  PKCS8_PRIV_KEY_INFO *const pc_Key = d2i_PKCS8_PRIV_KEY_INFO(
       NULL, &pu8_Data,
-      static_cast<long>(orc_PrivateKey.size())); //lint !e970 //using type to match library interface
-   if (pc_Key != NULL)
-   {
-      //Convert PKCS#8 key to EVP_PKEY:
-      EVP_PKEY * const pc_EvpKey = EVP_PKCS82PKEY(pc_Key);
-      PKCS8_PRIV_KEY_INFO_free(pc_Key);
+      static_cast<long>(orc_PrivateKey.size())); // lint !e970 //using type to
+                                                 // match library interface
+  if (pc_Key != NULL) {
+    // Convert PKCS#8 key to EVP_PKEY:
+    EVP_PKEY *const pc_EvpKey = EVP_PKCS82PKEY(pc_Key);
+    PKCS8_PRIV_KEY_INFO_free(pc_Key);
 
-      if (pc_EvpKey != NULL)
-      {
-         //Get RSA context from EVP_PKEY:
-         RSA * const pc_Rsa = EVP_PKEY_get1_RSA(pc_EvpKey);
-         EVP_PKEY_free(pc_EvpKey);
-         s32_Retval = C_NOACT;
+    if (pc_EvpKey != NULL) {
+      // Get RSA context from EVP_PKEY:
+      RSA *const pc_Rsa = EVP_PKEY_get1_RSA(pc_EvpKey);
+      EVP_PKEY_free(pc_EvpKey);
+      s32_Retval = C_NOACT;
 
-         if (pc_Rsa != NULL)
-         {
-            //Perform the actual encryption:
-            const int x_ResultEncrypt = RSA_private_encrypt( //lint !e970 !e8080 //using type to match library interface
-               static_cast<int>(orc_Message.size()),         //lint !e970 //using type to match library interface
-               reinterpret_cast<const uint8_t*>(orc_Message.constData()), reinterpret_cast<uint8_t*>(orc_EncryptedMessage.data()), pc_Rsa,
-               RSA_PKCS1_PADDING);
-            RSA_free(pc_Rsa);
+      if (pc_Rsa != NULL) {
+        // Perform the actual encryption:
+        const int x_ResultEncrypt =
+            RSA_private_encrypt( // lint !e970 !e8080 //using type to match
+                                 // library interface
+                static_cast<int>(
+                    orc_Message.size()), // lint !e970 //using type to match
+                                         // library interface
+                reinterpret_cast<const uint8_t *>(orc_Message.constData()),
+                reinterpret_cast<uint8_t *>(orc_EncryptedMessage.data()),
+                pc_Rsa, RSA_PKCS1_PADDING);
+        RSA_free(pc_Rsa);
 
-            orc_EncryptedMessage.resize(x_ResultEncrypt);
-            if (x_ResultEncrypt != 0)
-            {
-               s32_Retval = C_NO_ERR;
-            }
-         }
+        orc_EncryptedMessage.resize(x_ResultEncrypt);
+        if (x_ResultEncrypt != 0) {
+          s32_Retval = C_NO_ERR;
+        }
       }
-   }
+    }
+  }
 
-   return s32_Retval;
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Verify signature
 
-   Checks whether an encrypted messages, decrypted with a public key matches an expected message.
+   Checks whether an encrypted messages, decrypted with a public key matches an
+   expected message.
 
    Formats:
    Key:
    * is expected to be provided in X.509 format.
    * When looking at a .PEM file:
-   ** effectively everything between the "BEGIN CERTIFICATE" and "END CERTIFICATE" lines converted from base64 to binary.
-   Message:
+   ** effectively everything between the "BEGIN CERTIFICATE" and "END
+   CERTIFICATE" lines converted from base64 to binary. Message:
    * stream of binary data
    Encrypted message:
    * <tbd>
@@ -146,66 +164,71 @@ int32_t C_OscSecurityRsa::h_SignSignature(const QByteArray & orc_PrivateKey,
    \retval   C_NOACT    Could not decrypt message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityRsa::h_VerifySignature(const QByteArray & orc_PublicKey,
-                                            const QByteArray & orc_Message,
-                                            const QByteArray & orc_EncryptedMessage, bool & orq_Valid)
-{
-   int32_t s32_Retval = C_RANGE;
+int32_t C_OscSecurityRsa::h_VerifySignature(
+    const QByteArray &orc_PublicKey, const QByteArray &orc_Message,
+    const QByteArray &orc_EncryptedMessage, bool &orq_Valid) {
+  int32_t s32_Retval = C_RANGE;
 
-   //get RSA structure from binary key:
-   const uint8_t * pu8_Data = reinterpret_cast<const uint8_t*>(orc_PublicKey.constData());
+  // get RSA structure from binary key:
+  const uint8_t *pu8_Data =
+      reinterpret_cast<const uint8_t *>(orc_PublicKey.constData());
 
-   orq_Valid = false;
+  orq_Valid = false;
 
-   //Extract X509 data from binary key data:
-   X509 * const pc_X509Data = d2i_X509(
+  // Extract X509 data from binary key data:
+  X509 *const pc_X509Data = d2i_X509(
       NULL, &pu8_Data,
-      static_cast<long>(orc_PublicKey.size())); //lint !e970 //using type to match library interface
-   if (pc_X509Data != NULL)
-   {
-      //Get key in EVP_PKEY format:
-      EVP_PKEY * const pc_EvpKey = X509_get_pubkey(pc_X509Data);
-      X509_free(pc_X509Data);
+      static_cast<long>(orc_PublicKey.size())); // lint !e970 //using type to
+                                                // match library interface
+  if (pc_X509Data != NULL) {
+    // Get key in EVP_PKEY format:
+    EVP_PKEY *const pc_EvpKey = X509_get_pubkey(pc_X509Data);
+    X509_free(pc_X509Data);
 
-      if (pc_EvpKey != NULL)
-      {
-         //Get RSA context from EVP_PKEY:
-         RSA * const pc_Rsa = EVP_PKEY_get1_RSA(pc_EvpKey);
-         EVP_PKEY_free(pc_EvpKey);
-         s32_Retval = C_NOACT;
+    if (pc_EvpKey != NULL) {
+      // Get RSA context from EVP_PKEY:
+      RSA *const pc_Rsa = EVP_PKEY_get1_RSA(pc_EvpKey);
+      EVP_PKEY_free(pc_EvpKey);
+      s32_Retval = C_NOACT;
 
-         if (pc_Rsa != NULL)
-         {
-            QByteArray c_DecryptedMessage;
-            c_DecryptedMessage.resize(C_OscSecurityRsa::mhu32_DEFAULT_BUFFER_SIZE);
+      if (pc_Rsa != NULL) {
+        QByteArray c_DecryptedMessage;
+        c_DecryptedMessage.resize(C_OscSecurityRsa::mhu32_DEFAULT_BUFFER_SIZE);
 
-            //Perform the actual decryption:
-            const int x_DecryptResult = //lint !e970 !e8080  //using type to match library interface
-                                        RSA_public_decrypt(
-               static_cast<int>(orc_EncryptedMessage.size()), //lint !e970 //using type to match library interface
-               reinterpret_cast<uint8_t*>(const_cast<char*>(orc_EncryptedMessage.data())), reinterpret_cast<uint8_t*>(const_cast<char*>(c_DecryptedMessage.data())), pc_Rsa,
-               RSA_PKCS1_PADDING);
-            RSA_free(pc_Rsa);
+        // Perform the actual decryption:
+        const int x_DecryptResult = // lint !e970 !e8080  //using type to match
+                                    // library interface
+            RSA_public_decrypt(
+                static_cast<int>(
+                    orc_EncryptedMessage.size()), // lint !e970 //using type to
+                                                  // match library interface
+                reinterpret_cast<uint8_t *>(
+                    const_cast<char *>(orc_EncryptedMessage.data())),
+                reinterpret_cast<uint8_t *>(
+                    const_cast<char *>(c_DecryptedMessage.data())),
+                pc_Rsa, RSA_PKCS1_PADDING);
+        RSA_free(pc_Rsa);
 
-            if (x_DecryptResult != 0)
-            {
-               s32_Retval = C_NO_ERR;
-               c_DecryptedMessage.resize(x_DecryptResult);
+        if (x_DecryptResult != 0) {
+          s32_Retval = C_NO_ERR;
+          c_DecryptedMessage.resize(x_DecryptResult);
 
-               //compare decrypted messages with expected message:
-               if (c_DecryptedMessage.size() == orc_Message.size())
-               {
-                  const int x_DiffResult = //lint !e970 !e8080 //using type to match library interface
-                                           std::memcmp(reinterpret_cast<uint8_t*>(c_DecryptedMessage.data()), reinterpret_cast<const uint8_t*>(orc_Message.constData()), orc_Message.size());
-                  if (x_DiffResult == 0)
-                  {
-                     orq_Valid = true; //we have a winner
-                  }
-               }
+          // compare decrypted messages with expected message:
+          if (c_DecryptedMessage.size() == orc_Message.size()) {
+            const int x_DiffResult = // lint !e970 !e8080 //using type to match
+                                     // library interface
+                std::memcmp(
+                    reinterpret_cast<uint8_t *>(c_DecryptedMessage.data()),
+                    reinterpret_cast<const uint8_t *>(orc_Message.constData()),
+                    orc_Message.size());
+            if (x_DiffResult == 0) {
+              orq_Valid = true; // we have a winner
             }
-         }
+          }
+        }
       }
-   }
+    }
+  }
 
-   return s32_Retval;
+  return s32_Retval;
 }

@@ -15,8 +15,6 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include <QList>
-#include <QStringList>
 #include "C_OscNode.hpp"
 #include "C_OscNodeFilerV2.hpp"
 #include "C_OscSystemBus.hpp"
@@ -24,7 +22,8 @@
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscXmlParser.hpp"
 #include "stwtypes.hpp"
-
+#include <QList>
+#include <QStringList>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -57,12 +56,12 @@ public:
                                const bool oq_UseDeviceDefinitions = true);
   static void h_SaveSystemDefinitionString(
       const C_OscSystemDefinition &orc_SystemDefinition, QString &orc_Content);
-  static int32_t h_LoadNodes(
-      const uint16_t ou16_XmlFormatVersion, QList<C_OscNode> &orc_Nodes,
-      C_OscXmlParserBase &orc_XmlParser,
-      const C_OscDeviceManager &orc_DeviceDefinitions,
-      const bool oq_UseDeviceDefinitions = true,
-      QStringList *const opc_ErrorDetailsMissingDevices = NULL);
+  static int32_t
+  h_LoadNodes(const uint16_t ou16_XmlFormatVersion, QList<C_OscNode> &orc_Nodes,
+              C_OscXmlParserBase &orc_XmlParser,
+              const C_OscDeviceManager &orc_DeviceDefinitions,
+              const bool oq_UseDeviceDefinitions = true,
+              QStringList *const opc_ErrorDetailsMissingDevices = NULL);
   static int32_t h_LoadBuses(QList<C_OscSystemBus> &orc_Buses,
                              C_OscXmlParserBase &orc_XmlParser);
   static void h_SaveNodes(const QList<C_OscNode> &orc_Nodes,

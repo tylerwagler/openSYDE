@@ -2,64 +2,84 @@
 /*!
    \file
    \brief       Utility for HALC magician related functionality
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCHALCMAGICIANUTIL_HPP
 #define C_OSCHALCMAGICIANUTIL_HPP
 
-#include <QList>
-#include <QString>
 #include "C_OscHalcConfigDomain.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
+#include <QList>
+#include <QString>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscHalcMagicianUtil
-{
+class C_OscHalcMagicianUtil {
 public:
-   C_OscHalcMagicianUtil(void);
+  C_OscHalcMagicianUtil(void);
 
-   static QString h_GetDatapoolName(const bool oq_IsSafe, const uint32_t ou32_CopyIndex = 0UL);
-   static QString h_GetDatapoolComment(const bool oq_IsSafe, const uint32_t ou32_CopyIndex = 0UL);
-   static QString h_GetListName(const C_OscHalcDefDomain::E_VariableSelector oe_Type);
-   static int32_t h_GetVariableName(const QList<C_OscHalcDefStruct> & orc_DefinitionArray,
-                                    const uint32_t ou32_ParameterIndexStruct, const uint32_t ou32_ParameterIndexElement,
-                                    const QString & orc_DomainSingularName,
-                                    QString & orc_Name, const uint32_t ou32_CurChannel = 0UL);
-   static QString h_CombineVariableName(const QString & orc_Domain,
-                                                       const QString & orc_ParameterName);
-   static C_OscNodeDataPoolListElement h_GetChanNumVariable(const QString & orc_DomainSingularName,
-                                                            const bool oq_IsSafe, const uint32_t ou32_NumChannels,
-                                                            const bool oq_AddDataset);
-   static QString h_GetChanNumVariableName(const QString & orc_DomainSingularName);
-   static C_OscNodeDataPoolListElement h_GetUseCaseVariable(const QString & orc_DomainSingularName,
-                                                            const bool oq_IsSafe, const uint32_t ou32_NumChannels,
-                                                            const bool oq_AddDataset);
-   static QString h_GetUseCaseVariableName(const QString & orc_DomainSingularName);
-   static C_OscNodeDataPoolListElement h_GetSafetyFlagVariable(const QString & orc_DomainSingularName,
-                                                               const bool oq_IsSafe, const uint32_t ou32_NumChannels,
-                                                               const bool oq_AddDataset);
-   static QString h_GetSafetyFlagVariableName(const QString & orc_DomainSingularName);
-   static void h_SetCommonDpElementDefaults(C_OscNodeDataPoolListElement & orc_Element);
+  static QString h_GetDatapoolName(const bool oq_IsSafe,
+                                   const uint32_t ou32_CopyIndex = 0UL);
+  static QString h_GetDatapoolComment(const bool oq_IsSafe,
+                                      const uint32_t ou32_CopyIndex = 0UL);
+  static QString
+  h_GetListName(const C_OscHalcDefDomain::E_VariableSelector oe_Type);
+  static int32_t
+  h_GetVariableName(const QList<C_OscHalcDefStruct> &orc_DefinitionArray,
+                    const uint32_t ou32_ParameterIndexStruct,
+                    const uint32_t ou32_ParameterIndexElement,
+                    const QString &orc_DomainSingularName, QString &orc_Name,
+                    const uint32_t ou32_CurChannel = 0UL);
+  static QString h_CombineVariableName(const QString &orc_Domain,
+                                       const QString &orc_ParameterName);
+  static C_OscNodeDataPoolListElement
+  h_GetChanNumVariable(const QString &orc_DomainSingularName,
+                       const bool oq_IsSafe, const uint32_t ou32_NumChannels,
+                       const bool oq_AddDataset);
+  static QString
+  h_GetChanNumVariableName(const QString &orc_DomainSingularName);
+  static C_OscNodeDataPoolListElement
+  h_GetUseCaseVariable(const QString &orc_DomainSingularName,
+                       const bool oq_IsSafe, const uint32_t ou32_NumChannels,
+                       const bool oq_AddDataset);
+  static QString
+  h_GetUseCaseVariableName(const QString &orc_DomainSingularName);
+  static C_OscNodeDataPoolListElement
+  h_GetSafetyFlagVariable(const QString &orc_DomainSingularName,
+                          const bool oq_IsSafe, const uint32_t ou32_NumChannels,
+                          const bool oq_AddDataset);
+  static QString
+  h_GetSafetyFlagVariableName(const QString &orc_DomainSingularName);
+  static void
+  h_SetCommonDpElementDefaults(C_OscNodeDataPoolListElement &orc_Element);
 
 private:
-   static QString mh_GetElementName(const C_OscHalcDefElement & orc_Param,
-                                                   const QString & orc_Domain,
-                                                   const uint32_t ou32_CurChannel);
-   static void mh_HandleGenericType(C_OscNodeDataPoolListElement & orc_Element, const uint32_t ou32_NumChannels,
-                                    const bool oq_AddDataset, const bool oq_UseU16);
+  static QString mh_GetElementName(const C_OscHalcDefElement &orc_Param,
+                                   const QString &orc_Domain,
+                                   const uint32_t ou32_CurChannel);
+  static void mh_HandleGenericType(C_OscNodeDataPoolListElement &orc_Element,
+                                   const uint32_t ou32_NumChannels,
+                                   const bool oq_AddDataset,
+                                   const bool oq_UseU16);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

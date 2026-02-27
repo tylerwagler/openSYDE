@@ -15,7 +15,7 @@
 #include <QObject>
 #include <QVector>
 #include <QColor>
-#include <set>
+#include <QSet>
 
 #include "stwtypes.hpp"
 
@@ -99,7 +99,7 @@ public:
    // Helper functions for converting byte order
    uint16_t GetDataBytesBitPosOfSignalBit(const uint16_t ou16_SignalBitPosition) const;
    uint16_t GetDataBytesBitPosOfSignalBit(const uint16_t ou16_StartBit, const uint16_t ou16_SignalBitPosition) const;
-   void GetDataBytesBitPositionsOfSignal(std::set<uint16_t> & orc_SetPositions) const;
+   void GetDataBytesBitPositionsOfSignal(QSet<uint16_t> & orc_SetPositions) const;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736

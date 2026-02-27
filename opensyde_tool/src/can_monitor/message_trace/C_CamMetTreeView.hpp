@@ -109,7 +109,7 @@ private:
    void m_OnCustomContextMenuRequested(const QPoint & orc_Pos);
    void m_CopySelection(void);
    void m_HandleMessages(void);
-   void m_UpdateUi(const std::list<stw::opensyde_gui_logic::C_CamMetTreeLoggerData> & orc_Data);
+   void m_UpdateUi(const QList<stw::opensyde_gui_logic::C_CamMetTreeLoggerData> & orc_Data);
    void m_SetChildColumns(const QList<int32_t> & orc_Indices);
    void m_SetChildColumns(const QModelIndex & orc_ModelIndex);
    void m_SetAllChildren(void);

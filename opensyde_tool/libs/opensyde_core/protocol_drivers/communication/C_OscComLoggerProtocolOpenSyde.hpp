@@ -5,51 +5,59 @@
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCCOMLOGGERPROTOCOLOPENSYDE_HPP
 #define C_OSCCOMLOGGERPROTOCOLOPENSYDE_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <list>
-
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
+#include <QList>
 #include <QString>
 
 #include "C_CanMonProtocolOpenSyde.hpp"
 #include "C_OscComMessageLoggerOsySysDefConfig.hpp"
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscComLoggerProtocolOpenSyde :
-   public stw::cmon_protocol::C_CanMonProtocolOpenSyde
-{
+class C_OscComLoggerProtocolOpenSyde
+    : public stw::cmon_protocol::C_CanMonProtocolOpenSyde {
 public:
-   C_OscComLoggerProtocolOpenSyde(void);
+  C_OscComLoggerProtocolOpenSyde(void);
 
-   void AddOsySysDef(const C_OscComMessageLoggerOsySysDefConfig * const opc_SysDefConfig);
-   void RemoveOsySysDef(const C_OscComMessageLoggerOsySysDefConfig * const opc_SysDefConfig);
+  void AddOsySysDef(
+      const C_OscComMessageLoggerOsySysDefConfig *const opc_SysDefConfig);
+  void RemoveOsySysDef(
+      const C_OscComMessageLoggerOsySysDefConfig *const opc_SysDefConfig);
 
 protected:
-   virtual QString m_AddressInformationToText(const T_CanAddressInformation & orc_CanAddressInformation)
-   const;
-   virtual QString m_DataPoolIdentifierToText(const uint32_t ou32_DataPoolIdentifier,
-                                                            const bool oq_IsResponse,
-                                                            const T_CanAddressInformation & orc_CanAddressInformation)
-   const;
+  virtual QString m_AddressInformationToText(
+      const T_CanAddressInformation &orc_CanAddressInformation) const;
+  virtual QString m_DataPoolIdentifierToText(
+      const uint32_t ou32_DataPoolIdentifier, const bool oq_IsResponse,
+      const T_CanAddressInformation &orc_CanAddressInformation) const;
 
-   std::list<const C_OscComMessageLoggerOsySysDefConfig *> mc_SysDefConfigs;
+  QList<const C_OscComMessageLoggerOsySysDefConfig *> mc_SysDefConfigs;
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

@@ -5,61 +5,79 @@
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCPARAMSETFILERBASE_HPP
 #define C_OSCPARAMSETFILERBASE_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QList>
-#include "stwtypes.hpp"
-#include <QString>
-#include "C_OscXmlParser.hpp"
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscParamSetDataPoolInfo.hpp"
 #include "C_OscParamSetInterpretedFileInfoData.hpp"
+#include "C_OscXmlParser.hpp"
+#include "stwtypes.hpp"
+#include <QList>
+#include <QString>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-///filer class to read and write parameter set files
-class C_OscParamSetFilerBase
-{
+/// filer class to read and write parameter set files
+class C_OscParamSetFilerBase {
 public:
-   static int32_t h_AddCrc(const QString & orc_Path);
-   static int32_t h_CheckFileVersion(C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveFileVersion(C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveFileInfo(C_OscXmlParserBase & orc_XmlParser,
-                              const C_OscParamSetInterpretedFileInfoData & orc_FileInfo);
-   static void h_LoadFileInfo(C_OscXmlParserBase & orc_XmlParser, C_OscParamSetInterpretedFileInfoData & orc_FileInfo,
-                              bool & orq_MissingOptionalContent);
+  static int32_t h_AddCrc(const QString &orc_Path);
+  static int32_t h_CheckFileVersion(C_OscXmlParserBase &orc_XmlParser);
+  static void h_SaveFileVersion(C_OscXmlParserBase &orc_XmlParser);
+  static void
+  h_SaveFileInfo(C_OscXmlParserBase &orc_XmlParser,
+                 const C_OscParamSetInterpretedFileInfoData &orc_FileInfo);
+  static void h_LoadFileInfo(C_OscXmlParserBase &orc_XmlParser,
+                             C_OscParamSetInterpretedFileInfoData &orc_FileInfo,
+                             bool &orq_MissingOptionalContent);
 
 protected:
-   C_OscParamSetFilerBase(void);
+  C_OscParamSetFilerBase(void);
 
-   static int32_t mh_LoadNodeName(QString & orc_Name, C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveNodeName(const QString & orc_Name, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadDataPoolInfos(QList<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
-                                       C_OscXmlParserBase & orc_XmlParser, bool & orq_MissingOptionalContent);
-   static void mh_SaveDataPoolInfos(const QList<C_OscParamSetDataPoolInfo> & orc_DataPoolInfos,
-                                    C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo & orc_DataPoolInfo, C_OscXmlParserBase & orc_XmlParser,
-                                      bool & orq_MissingOptionalContent);
-   static void mh_SaveDataPoolInfo(const C_OscParamSetDataPoolInfo & orc_DataPoolInfo,
-                                   C_OscXmlParserBase & orc_XmlParser);
+  static int32_t mh_LoadNodeName(QString &orc_Name,
+                                 C_OscXmlParserBase &orc_XmlParser);
+  static void mh_SaveNodeName(const QString &orc_Name,
+                              C_OscXmlParserBase &orc_XmlParser);
+  static int32_t
+  mh_LoadDataPoolInfos(QList<C_OscParamSetDataPoolInfo> &orc_DataPoolInfos,
+                       C_OscXmlParserBase &orc_XmlParser,
+                       bool &orq_MissingOptionalContent);
+  static void mh_SaveDataPoolInfos(
+      const QList<C_OscParamSetDataPoolInfo> &orc_DataPoolInfos,
+      C_OscXmlParserBase &orc_XmlParser);
+  static int32_t
+  mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo &orc_DataPoolInfo,
+                      C_OscXmlParserBase &orc_XmlParser,
+                      bool &orq_MissingOptionalContent);
+  static void
+  mh_SaveDataPoolInfo(const C_OscParamSetDataPoolInfo &orc_DataPoolInfo,
+                      C_OscXmlParserBase &orc_XmlParser);
 
 private:
-   static uint16_t mhu16_FileVersion;
+  static uint16_t mhu16_FileVersion;
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

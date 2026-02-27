@@ -53,7 +53,7 @@ private:
    void m_CancelClicked(void);
    void m_ValueChanged(void);
    bool m_AskUserForModifyName(
-      const std::list<stw::opensyde_core::C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems);
+      const QList<stw::opensyde_core::C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems);
    void m_ShowUnUsedFiles(void);
 
    //Avoid call

@@ -15,10 +15,10 @@
 #ifndef C_OSCSUSEQUENCES_HPP
 #define C_OSCSUSEQUENCES_HPP
 
+#include <QList>
 #include <QString>
 #include <QStringList>
 #include <vector>
-#include <QList>
 
 #include "C_OscComFlashloaderInformation.hpp"
 #include "C_OscComSequencesBase.hpp"
@@ -271,12 +271,10 @@ public:
   C_OscSuSequences(void);
   virtual ~C_OscSuSequences(void);
 
-  static int32_t
-  h_CreateTemporaryFolder(const QList<C_OscNode> &orc_Nodes,
-                          const QByteArray &orc_ActiveNodes,
-                          const QString &orc_TargetPath,
-                          QList<C_DoFlash> &orc_ApplicationsToWrite,
-                          QString *const opc_ErrorPath = NULL);
+  static int32_t h_CreateTemporaryFolder(
+      const QList<C_OscNode> &orc_Nodes, const QByteArray &orc_ActiveNodes,
+      const QString &orc_TargetPath, QList<C_DoFlash> &orc_ApplicationsToWrite,
+      QString *const opc_ErrorPath = NULL);
   static void h_CheckForChangedApplications(
       const QList<C_ApplicationProperties> &orc_ClientSideApplications,
       const QList<C_ApplicationProperties> &orc_ServerSideApplications,
@@ -289,10 +287,9 @@ public:
   int32_t ResetSystem(void);
 
   virtual int32_t GetConnectStates(
-      QList<C_OscSuSequencesNodeConnectStates> &orc_ConnectStatesNodes)
-      const;
-  virtual int32_t GetUpdateStates(QList<C_OscSuSequencesNodeUpdateStates>
-                                      &orc_UpdateStatesNodes) const;
+      QList<C_OscSuSequencesNodeConnectStates> &orc_ConnectStatesNodes) const;
+  virtual int32_t GetUpdateStates(
+      QList<C_OscSuSequencesNodeUpdateStates> &orc_UpdateStatesNodes) const;
 
   static void h_FillDoFlashWithPemStates(
       const C_OscViewNodeUpdate::E_StateSecurity oe_StateSecurity,

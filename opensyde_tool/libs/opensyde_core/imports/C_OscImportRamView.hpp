@@ -17,10 +17,9 @@
 #include "CKFXProjectOptions.hpp"
 #include "CKFXVariableLists.hpp"
 #include "C_OscNodeDataPool.hpp"
-#include <QString>
 #include "stwtypes.hpp"
+#include <QString>
 #include <QStringList>
-
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -37,10 +36,10 @@ namespace opensyde_core {
 
 class C_OscImportRamView {
 public:
-  static int32_t h_ImportDataPoolFromRamViewDefProject(
-      const QString &orc_ProjectPath,
-      C_OscNodeDataPool &orc_DataPool,
-      QStringList &orc_ImportInformation);
+  static int32_t
+  h_ImportDataPoolFromRamViewDefProject(const QString &orc_ProjectPath,
+                                        C_OscNodeDataPool &orc_DataPool,
+                                        QStringList &orc_ImportInformation);
 
 private:
   static int32_t mh_ImportElementType(

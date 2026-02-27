@@ -9,7 +9,6 @@
 #include <QString>
 #include <string.h>
 
-
 #include "C_SclChecksums.hpp"
 
 using namespace stw::errors;

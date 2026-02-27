@@ -509,9 +509,9 @@ const QMap<C_OscNodeDataPoolListElementId,
    Set of element ids with all write elements
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::set<C_OscNodeDataPoolListElementId> C_PuiSvData::GetWriteAssignments(void) const
+const QSet<C_OscNodeDataPoolListElementId> C_PuiSvData::GetWriteAssignments(void) const
 {
-   std::set<C_OscNodeDataPoolListElementId> c_WriteElements;
+   QSet<C_OscNodeDataPoolListElementId> c_WriteElements;
    uint32_t u32_DashboardCounter;
 
    for (u32_DashboardCounter = 0U; u32_DashboardCounter < this->mc_Dashboards.size(); ++u32_DashboardCounter)
@@ -646,7 +646,7 @@ const
    \param[in,out]  orc_Ids    Set with all registered elements. Will not be cleared when called
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvData::GetAllRegisteredDashboardElements(std::set<C_OscNodeDataPoolListElementId> & orc_Ids) const
+void C_PuiSvData::GetAllRegisteredDashboardElements(QSet<C_OscNodeDataPoolListElementId> & orc_Ids) const
 {
    uint32_t u32_DashboardCounter;
 
@@ -1013,7 +1013,7 @@ void C_PuiSvData::OnSyncNodeAdded(const uint32_t ou32_Index)
    \param[in]  orc_MapCurToNew   Map cur to new
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_OscNodeDataPoolListElementOptArrayId,
+void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                            C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew)
 {
    QMap<C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration> c_NewItems;
@@ -1040,17 +1040,17 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
                if ((e_Type == C_OscNodeDataPool::eHALC) || (e_Type == C_OscNodeDataPool::eHALC_NVM))
                {
                   //Manual compare because only base is necessary
-                  for (std::map<C_OscNodeDataPoolListElementOptArrayId,
+                  for (QMap<C_OscNodeDataPoolListElementOptArrayId,
                                 C_OscNodeDataPoolListElementOptArrayId>::const_iterator c_ItMap =
                           orc_MapCurToNew.begin();
                        c_ItMap != orc_MapCurToNew.end(); ++c_ItMap)
                   {
-                     if ((((c_ItMap->first.u32_NodeIndex == c_ItReadItem.key().u32_NodeIndex) &&
-                           (c_ItMap->first.u32_DataPoolIndex == c_ItReadItem.key().u32_DataPoolIndex)) &&
-                          (c_ItMap->first.u32_ListIndex == c_ItReadItem.key().u32_ListIndex)) &&
-                         (c_ItMap->first.u32_ElementIndex == c_ItReadItem.key().u32_ElementIndex))
+                     if ((((c_ItMap.key().u32_NodeIndex == c_ItReadItem.key().u32_NodeIndex) &&
+                           (c_ItMap.key().u32_DataPoolIndex == c_ItReadItem.key().u32_DataPoolIndex)) &&
+                          (c_ItMap.key().u32_ListIndex == c_ItReadItem.key().u32_ListIndex)) &&
+                         (c_ItMap.key().u32_ElementIndex == c_ItReadItem.key().u32_ElementIndex))
                      {
-                        c_NewItems.insert(c_ItMap->second, c_ItReadItem.value());
+                        c_NewItems.insert(c_ItMap.value(), c_ItReadItem.value());
                         break;
                      }
                   }
@@ -1079,7 +1079,7 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
       C_PuiSvDashboard & rc_Dashboard = this->mc_Dashboards[u32_ItDashboard];
       for (uint32_t u32_ItPa = 0UL; u32_ItPa < rc_Dashboard.GetParams().size(); ++u32_ItPa)
       {
-         std::set<C_OscNodeDataPoolListId> c_NewLists;
+         QSet<C_OscNodeDataPoolListId> c_NewLists;
          {
             //Clean
             const C_PuiSvDbParam * const pc_Param = rc_Dashboard.GetParam(u32_ItPa);
@@ -1165,7 +1165,7 @@ void C_PuiSvData::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_Osc
          //Re-add
          if (c_NewLists.size() > 0UL)
          {
-            for (std::set<C_OscNodeDataPoolListId>::const_iterator c_ItLi = c_NewLists.cbegin();
+            for (QSet<C_OscNodeDataPoolListId>::const_iterator c_ItLi = c_NewLists.cbegin();
                  c_ItLi != c_NewLists.cend(); ++c_ItLi)
             {
                const C_OscNodeDataPoolList * const pc_Li = C_PuiSdHandler::h_GetInstance()->GetOscDataPoolList(

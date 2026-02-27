@@ -18,7 +18,6 @@
 #include <QFileInfo>
 #include <QSettings>
 
-
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSpaServicePackageCreateUtil.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
@@ -26,7 +25,6 @@
 #include "C_OscZipFile.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -205,8 +203,8 @@ int32_t C_OscSpaServicePackageCreateUtil::h_CreateTempFolderAndSubFolders(
     const QString &orc_PackagePath, const QString &orc_TemporaryDirectory,
     const QString &orc_UseCase, const QString &orc_PackageExtension,
     const QString &orc_TemporaryPackageExtension,
-    const QStringList &orc_AllStaticSubFolders,
-    QString &orc_UsedTempPath, QString &orc_ErrorMessage) {
+    const QStringList &orc_AllStaticSubFolders, QString &orc_UsedTempPath,
+    QString &orc_ErrorMessage) {
   int32_t s32_Return = C_NO_ERR;
 
   QString c_ErrorPath;
@@ -266,7 +264,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(
     const C_OscSystemDefinition &orc_SystemDefinition,
     const QString &orc_SystemDefinitionFileName, const QString &orc_UseCase,
     const QString &orc_UsedTempPath, const QString &orc_OutFilePrefix,
-    std::set<QString> &orc_AllCreatedFiles, QString &orc_ErrorMessage) {
+    QSet<QString> &orc_AllCreatedFiles, QString &orc_ErrorMessage) {
   // take current system definition of view (is required) and store to file
   const QString c_SysDefPath = orc_UsedTempPath + orc_SystemDefinitionFileName;
 
@@ -312,11 +310,11 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(
 int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
     const C_OscSystemDefinition &orc_SystemDefinition,
     const QString &orc_UseCase, const QString &orc_UsedTempPath,
-    const QString &orc_OutFilePrefix, std::set<QString> &orc_AllCreatedFiles,
+    const QString &orc_OutFilePrefix, QSet<QString> &orc_AllCreatedFiles,
     QString &orc_ErrorMessage) {
   int32_t s32_Return;
 
-  std::set<QString>
+  QSet<QString>
       c_DeviceDefinitionFiles; // unique container to store
                                // full device definitions file
                                // paths
@@ -345,14 +343,13 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
   // we have to store all device definition files of current system definition
   // because of routing functionality
   if (s32_Return == C_NO_ERR) {
-    std::set<QString>::const_iterator c_Iter;
-    for (c_Iter = c_DeviceDefinitionFiles.begin();
-         (c_Iter != c_DeviceDefinitionFiles.end()) && (s32_Return == C_NO_ERR);
-         ++c_Iter) {
-      const QString c_TargetFileName = QFileInfo(*c_Iter).fileName();
+    QSetIterator<QString> c_Iter(c_DeviceDefinitionFiles);
+    while (c_Iter.hasNext() && (s32_Return == C_NO_ERR)) {
+      const QString c_CurrentFile = c_Iter.next();
+      const QString c_TargetFileName = QFileInfo(c_CurrentFile).fileName();
       const QString c_TargetFilePath = orc_UsedTempPath + c_TargetFileName;
       orc_AllCreatedFiles.insert(orc_OutFilePrefix + c_TargetFileName);
-      s32_Return = C_OscUtils::h_CopyFile(*c_Iter, c_TargetFilePath, NULL,
+      s32_Return = C_OscUtils::h_CopyFile(c_CurrentFile, c_TargetFilePath, NULL,
                                           &orc_ErrorMessage);
       if (s32_Return != C_NO_ERR) {
         orc_ErrorMessage = "Could not save device definition file \"" +
@@ -388,7 +385,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
 int32_t C_OscSpaServicePackageCreateUtil::h_CreateZip(
     const QString &orc_UseCase, const QString &orc_UsedTempPath,
     const QString &orc_ZipFilePath,
-    const std::set<QString> &orc_AllCreatedFiles, QString &orc_ErrorMessage) {
+    const QSet<QString> &orc_AllCreatedFiles, QString &orc_ErrorMessage) {
   const int32_t s32_Return =
       C_OscZipFile::h_CreateZipFile(orc_UsedTempPath, orc_AllCreatedFiles,
                                     orc_ZipFilePath, &orc_ErrorMessage);
@@ -450,7 +447,7 @@ void C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder(
  */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSpaServicePackageCreateUtil::mh_CreateDeviceIniFile(
-    const QString &orc_Path, const std::set<QString> &orc_DeviceDefinitionPaths,
+    const QString &orc_Path, const QSet<QString> &orc_DeviceDefinitionPaths,
     QString &orc_ErrorMessage) {
   int32_t s32_Return = C_NO_ERR;
 
@@ -477,11 +474,11 @@ int32_t C_OscSpaServicePackageCreateUtil::mh_CreateDeviceIniFile(
     c_IniFile.setValue(c_DEVICE_SECTION + "/" + c_DEVICE_COUNT,
                        static_cast<int32_t>(orc_DeviceDefinitionPaths.size()));
     // fill up with device definitions
-    std::set<QString>::const_iterator c_Iter;
-    for (c_Iter = orc_DeviceDefinitionPaths.begin();
-         c_Iter != orc_DeviceDefinitionPaths.end(); ++c_Iter) {
+    QSetIterator<QString> c_Iter(orc_DeviceDefinitionPaths);
+    while (c_Iter.hasNext()) {
+      const QString c_CurrentFile = c_Iter.next();
       const QString c_Key = c_DEVICE_KEY + QString::number(u32_DeviceCounter);
-      const QString c_Value = QFileInfo(*c_Iter).fileName();
+      const QString c_Value = QFileInfo(c_CurrentFile).fileName();
       c_IniFile.setValue(c_DEVICE_SECTION + "/" + c_Key, c_Value);
       u32_DeviceCounter++;
     }

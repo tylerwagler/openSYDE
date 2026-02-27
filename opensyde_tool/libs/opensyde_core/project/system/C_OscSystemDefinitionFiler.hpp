@@ -5,94 +5,114 @@
 
    (See .cpp file for full description)
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCSYSTEMDEFINITIONFILER_HPP
 #define C_OSCSYSTEMDEFINITIONFILER_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
-#include <QList>
-#include <QString>
-#include <QStringList>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscNode.hpp"
 #include "C_OscNodeFiler.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscSystemBusFiler.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscXmlParser.hpp"
+#include "stwtypes.hpp"
+#include <QList>
+#include <QString>
+#include <QStringList>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscSystemDefinitionFiler
-{
+class C_OscSystemDefinitionFiler {
 public:
-   static int32_t h_LoadSystemDefinitionFile(C_OscSystemDefinition & orc_SystemDefinition,
-                                             const QString & orc_PathSystemDefinition,
-                                             const QString & orc_PathDeviceDefinitions,
-                                             const bool oq_UseDeviceDefinitions = true,
-                                             uint16_t * const opu16_ReadFileVersion = NULL,
-                                             const QByteArray * const opc_NodesToLoad = NULL,
-                                             const bool oq_SkipContent = false,
-                                             const QString * const opc_ExpectedNodeName = NULL,
-                                             QStringList * const opc_ErrorDetailsMissingDevices = NULL);
-   static int32_t h_SaveSystemDefinitionFile(const C_OscSystemDefinition & orc_SystemDefinition,
-                                             const QString & orc_Path,
-                                             QStringList * const opc_CreatedFiles = NULL);
-   static int32_t h_LoadNodes(QList<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
-                              const C_OscDeviceManager & orc_DeviceDefinitions,
-                              const QString & orc_BasePath, const bool oq_UseDeviceDefinitions = true,
-                              const bool oq_UseFileInterface = true,
-                              const QByteArray * const opc_NodesToLoad = NULL,
-                              const bool oq_SkipContent = false,
-                              const QString * const opc_ExpectedNodeName = NULL,
-                              QStringList * const opc_ErrorDetailsMissingDevices = NULL);
-   static int32_t h_LoadBuses(QList<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_SaveNodes(const QList<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
-                              const QString & orc_BasePath,
-                              QStringList * const opc_CreatedFiles);
-   static void h_SaveBuses(const QList<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadSystemDefinition(C_OscSystemDefinition & orc_SystemDefinition,
-                                         C_OscXmlParserBase & orc_XmlParser,
-                                         const QString & orc_PathDeviceDefinitions,
-                                         const QString & orc_BasePath,
-                                         const bool oq_UseDeviceDefinitions = true,
-                                         uint16_t * const opu16_ReadFileVersion = NULL,
-                                         const QByteArray * const opc_NodesToLoad = NULL,
-                                         const bool oq_SkipContent = false,
-                                         const QString * const opc_ExpectedNodeName = NULL,
-                                         QStringList * const opc_ErrorDetailsMissingDevices = NULL);
-   static int32_t h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
-                                         C_OscXmlParserBase & orc_XmlParser, const QString & orc_BasePath,
-                                         QStringList * const opc_CreatedFiles);
+  static int32_t h_LoadSystemDefinitionFile(
+      C_OscSystemDefinition &orc_SystemDefinition,
+      const QString &orc_PathSystemDefinition,
+      const QString &orc_PathDeviceDefinitions,
+      const bool oq_UseDeviceDefinitions = true,
+      uint16_t *const opu16_ReadFileVersion = NULL,
+      const QByteArray *const opc_NodesToLoad = NULL,
+      const bool oq_SkipContent = false,
+      const QString *const opc_ExpectedNodeName = NULL,
+      QStringList *const opc_ErrorDetailsMissingDevices = NULL);
+  static int32_t
+  h_SaveSystemDefinitionFile(const C_OscSystemDefinition &orc_SystemDefinition,
+                             const QString &orc_Path,
+                             QStringList *const opc_CreatedFiles = NULL);
+  static int32_t
+  h_LoadNodes(QList<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser,
+              const C_OscDeviceManager &orc_DeviceDefinitions,
+              const QString &orc_BasePath,
+              const bool oq_UseDeviceDefinitions = true,
+              const bool oq_UseFileInterface = true,
+              const QByteArray *const opc_NodesToLoad = NULL,
+              const bool oq_SkipContent = false,
+              const QString *const opc_ExpectedNodeName = NULL,
+              QStringList *const opc_ErrorDetailsMissingDevices = NULL);
+  static int32_t h_LoadBuses(QList<C_OscSystemBus> &orc_Buses,
+                             C_OscXmlParserBase &orc_XmlParser);
+  static int32_t h_SaveNodes(const QList<C_OscNode> &orc_Nodes,
+                             C_OscXmlParserBase &orc_XmlParser,
+                             const QString &orc_BasePath,
+                             QStringList *const opc_CreatedFiles);
+  static void h_SaveBuses(const QList<C_OscSystemBus> &orc_Buses,
+                          C_OscXmlParserBase &orc_XmlParser);
+  static int32_t h_LoadSystemDefinition(
+      C_OscSystemDefinition &orc_SystemDefinition,
+      C_OscXmlParserBase &orc_XmlParser,
+      const QString &orc_PathDeviceDefinitions, const QString &orc_BasePath,
+      const bool oq_UseDeviceDefinitions = true,
+      uint16_t *const opu16_ReadFileVersion = NULL,
+      const QByteArray *const opc_NodesToLoad = NULL,
+      const bool oq_SkipContent = false,
+      const QString *const opc_ExpectedNodeName = NULL,
+      QStringList *const opc_ErrorDetailsMissingDevices = NULL);
+  static int32_t
+  h_SaveSystemDefinition(const C_OscSystemDefinition &orc_SystemDefinition,
+                         C_OscXmlParserBase &orc_XmlParser,
+                         const QString &orc_BasePath,
+                         QStringList *const opc_CreatedFiles);
 
-   static void h_SplitDeviceType(const QString & orc_CompleteType, QString & orc_MainType,
-                                 QString & orc_SubType);
+  static void h_SplitDeviceType(const QString &orc_CompleteType,
+                                QString &orc_MainType, QString &orc_SubType);
 
-   ///known file versions
-   static const uint16_t hu16_FILE_VERSION_1 = 1U;
-   static const uint16_t hu16_FILE_VERSION_2 = 2U;
-   static const uint16_t hu16_FILE_VERSION_3 = 3U;
-   static const uint16_t hu16_FILE_VERSION_LATEST = hu16_FILE_VERSION_3;
+  /// known file versions
+  static const uint16_t hu16_FILE_VERSION_1 = 1U;
+  static const uint16_t hu16_FILE_VERSION_2 = 2U;
+  static const uint16_t hu16_FILE_VERSION_3 = 3U;
+  static const uint16_t hu16_FILE_VERSION_LATEST = hu16_FILE_VERSION_3;
 
 private:
-   static QHash<uint32_t, QString> mh_MapNodeIndicesToName(const QList<C_OscNode> & orc_Nodes);
-   static int32_t mh_LoadSystemDefinitionProperties(C_OscSystemDefinition & orc_SystemDefinition,
-                                                    C_OscXmlParserBase & orc_XmlParser);
-   static void mh_SaveSystemDefinitionProperties(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                 C_OscXmlParserBase & orc_XmlParser);
+  static QHash<uint32_t, QString>
+  mh_MapNodeIndicesToName(const QList<C_OscNode> &orc_Nodes);
+  static int32_t
+  mh_LoadSystemDefinitionProperties(C_OscSystemDefinition &orc_SystemDefinition,
+                                    C_OscXmlParserBase &orc_XmlParser);
+  static void mh_SaveSystemDefinitionProperties(
+      const C_OscSystemDefinition &orc_SystemDefinition,
+      C_OscXmlParserBase &orc_XmlParser);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-}
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

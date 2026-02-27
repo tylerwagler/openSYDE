@@ -21,7 +21,6 @@
 #include <QStringList>
 #include <vector>
 
-
 namespace stw {
 namespace diag_lib {
 //----------------------------------------------------------------------------------------------------------------------
@@ -40,7 +39,7 @@ public:
   C_XFLDivertParameters(void);
   C_XFLDivertParameters &operator=(const C_XFLDivertParameters &orc_Source);
 
-  uint8_t u8_DeviceIndex;         /// target device index (0 = CAN; 1 = RS232)
+  uint8_t u8_DeviceIndex;      /// target device index (0 = CAN; 1 = RS232)
   QStringList c_PositionNames; /// available positions e.g. "CAN_BUS_[n]"
   QList<C_XFLDivertParameter>
       c_Parameters;            /// list of parameters for target device

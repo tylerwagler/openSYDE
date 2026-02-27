@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QAbstractTableModel>
 #include <QList>
+#include <QMap>
 #include <QString>
 #include "stwtypes.hpp"
 #include "C_OscNode.hpp"
@@ -109,14 +110,14 @@ private:
    };
 
    void m_GetPdoCountsByManager(const stw::opensyde_core::C_OscNode * const opc_Node, const uint8_t ou8_InterfaceIndex,
-                                C_PdoCount * const opc_PdoManagerCnt, std::map<uint32_t,
-                                                                               C_PdoCount> * const opc_PdoDeviceMap)
+                                C_PdoCount * const opc_PdoManagerCnt, QMap<uint32_t,
+                                                                           C_PdoCount> * const opc_PdoDeviceMap)
    const;
    void m_GetResultStringsOfPdos(const C_PdoCount * const opc_PdoCount, QString & orc_ActiveTxPdos,
                                  QString & orc_ActiveRxPdos) const;
    void m_AddToMessageDeviceCount(const uint32_t ou32_NodeId, const bool oq_MessageActive, const E_PdoType oe_PdoType,
-                                  std::map<uint32_t,
-                                           C_PdoCount> * const opc_PdoDeviceMap)
+                                  QMap<uint32_t,
+                                       C_PdoCount> * const opc_PdoDeviceMap)
    const;
 
    void m_FillCoInfo(void);

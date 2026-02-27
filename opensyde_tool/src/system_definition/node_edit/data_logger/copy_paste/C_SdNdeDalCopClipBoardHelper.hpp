@@ -9,7 +9,7 @@
 #define C_SDNDEDALCOPCLIPBOARDHELPER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <set>
+#include <QSet>
 
 #include <QMap>
 #include <QList>
@@ -67,10 +67,10 @@ private:
    static QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                C_SdNdeDalCopElementIdCrcGroup> mh_FillElementIdGroups(
       const QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data);
-   static std::set<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> mh_GetAllIds(
+   static QSet<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> mh_GetAllIds(
       const QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data);
    static void mh_GetAllIds(const stw::opensyde_core::C_OscDataLoggerJob & orc_Data,
-                            std::set<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> & orc_Ids);
+                            QSet<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> & orc_Ids);
    static int32_t mh_ValidateIds(const QList<stw::opensyde_core::C_OscDataLoggerJob> & orc_Data,
                                  const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                             C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups);

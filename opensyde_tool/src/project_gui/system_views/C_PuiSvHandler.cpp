@@ -227,7 +227,7 @@ uint32_t C_PuiSvHandler::GetViewCount(void) const
    Last known HALC crcs
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::map<C_OscNodeDataPoolListElementOptArrayId,
+const QMap<C_OscNodeDataPoolListElementOptArrayId,
                C_PuiSdLastKnownHalElementId> & C_PuiSvHandler::GetLastKnownHalcCrcs(void) const
 {
    return this->mc_LastKnownHalcCrcs;
@@ -2580,8 +2580,8 @@ int32_t C_PuiSvHandler::CheckViewError(const uint32_t ou32_Index, bool * const o
          const C_PuiSvData & rc_CheckedData = this->mc_Views[ou32_Index];
          C_PuiSvViewErrorDetails c_Details;
          QStringList c_ErrorMessages;
-         std::set<uint32_t> c_NodesWithDashboardRoutingError;
-         std::set<uint32_t> c_NodesRelevantForDashboardRouting;
+         QSet<uint32_t> c_NodesWithDashboardRoutingError;
+         QSet<uint32_t> c_NodesRelevantForDashboardRouting;
          QString c_SetupWarningMessage;
          QByteArray c_NodeActiveFlags;
 
@@ -2766,8 +2766,7 @@ int32_t C_PuiSvHandler::CheckViewNodeDashboardRoutingError(const uint32_t ou32_V
          u32_Hash);
       if (c_It != this->mc_PreviousErrorCheckResults.end())
       {
-         if (c_It.value().c_ResultNodesWithDashboardRoutingError.find(ou32_NodeIndex) !=
-             c_It.value().c_ResultNodesWithDashboardRoutingError.end())
+         if (c_It.value().c_ResultNodesWithDashboardRoutingError.contains(ou32_NodeIndex))
          {
             // Node id was added
             orq_RoutingDashboardError = true;
@@ -2780,8 +2779,7 @@ int32_t C_PuiSvHandler::CheckViewNodeDashboardRoutingError(const uint32_t ou32_V
          c_It = this->mc_PreviousErrorCheckResults.find(u32_Hash);
          if (c_It != this->mc_PreviousErrorCheckResults.end())
          {
-            if (c_It.value().c_ResultNodesWithDashboardRoutingError.find(ou32_NodeIndex) !=
-                c_It.value().c_ResultNodesWithDashboardRoutingError.end())
+            if (c_It.value().c_ResultNodesWithDashboardRoutingError.contains(ou32_NodeIndex))
             {
                // Node id was added
                orq_RoutingDashboardError = true;
@@ -2815,7 +2813,7 @@ int32_t C_PuiSvHandler::CheckViewNodeDashboardRoutingError(const uint32_t ou32_V
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandler::GetViewNodeDashboardRoutingErrors(const uint32_t ou32_ViewIndex,
-                                                          std::set<uint32_t> & orc_NodesWithErrors)
+                                                          QSet<uint32_t> & orc_NodesWithErrors)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -2851,7 +2849,7 @@ int32_t C_PuiSvHandler::GetViewNodeDashboardRoutingErrors(const uint32_t ou32_Vi
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandler::GetViewRelevantNodesForDashboardRouting(const uint32_t ou32_ViewIndex,
-                                                                std::set<uint32_t> & orc_RelevantNodes)
+                                                                QSet<uint32_t> & orc_RelevantNodes)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -3619,7 +3617,7 @@ void C_PuiSvHandler::m_OnSyncNodeAdded(const uint32_t ou32_Index)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvHandler::m_OnSyncNodeHalc(const uint32_t ou32_Index)
 {
-   std::map<C_OscNodeDataPoolListElementOptArrayId, C_OscNodeDataPoolListElementOptArrayId> c_MapCurToNew;
+   QMap<C_OscNodeDataPoolListElementOptArrayId, C_OscNodeDataPoolListElementOptArrayId> c_MapCurToNew;
    C_PuiSdNodeDataPoolListElementIdSyncUtil::h_GetNewMapOnSyncHalc(ou32_Index, c_MapCurToNew,
                                                                    this->mc_LastKnownHalcCrcs);
    //Check any removed elements
@@ -4174,13 +4172,13 @@ uint32_t C_PuiSvHandler::m_CalcHashSystemViews(void) const
    // init value of CRC
    uint32_t u32_Hash = 0xFFFFFFFFU;
 
-   for (std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
+   for (QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
            this->mc_LastKnownHalcCrcs.begin();
         c_It != this->mc_LastKnownHalcCrcs.end(); ++c_It)
    {
-      c_It->first.CalcHash(u32_Hash);
-      c_It->second.CalcHash(u32_Hash);
-      stw::scl::C_SclChecksums::CalcCRC32(&c_It->second, sizeof(uint32_t), u32_Hash);
+      c_It.key().CalcHash(u32_Hash);
+      c_It.value().CalcHash(u32_Hash);
+      stw::scl::C_SclChecksums::CalcCRC32(&c_It.value(), sizeof(uint32_t), u32_Hash);
    }
 
    for (uint32_t u32_Counter = 0U; u32_Counter < this->mc_Views.size(); ++u32_Counter)
@@ -4250,10 +4248,10 @@ void C_PuiSvHandler::m_FixDashboardWriteContentType()
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandler::m_CheckRoutingDetails(const uint32_t ou32_ViewIndex,
                                               const QByteArray & orc_CheckedNodeActiveFlags,
-                                              std::map<uint32_t, QString> & orc_SetupWarningRoutingDetails,
-                                              QList<std::map<uint32_t, QString> > & orc_ErrorRoutingDetails,
-                                              std::set<uint32_t> & orc_NodesWithDashboardRoutingError,
-                                              std::set<uint32_t> & orc_NodesRelevantForDashboardRouting)
+                                              QMap<uint32_t, QString> & orc_SetupWarningRoutingDetails,
+                                              QList<QMap<uint32_t, QString> > & orc_ErrorRoutingDetails,
+                                              QSet<uint32_t> & orc_NodesWithDashboardRoutingError,
+                                              QSet<uint32_t> & orc_NodesRelevantForDashboardRouting)
 const
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -4426,11 +4424,11 @@ const
 int32_t C_PuiSvHandler::m_CheckRouting(const uint32_t ou32_ViewIndex,
                                        const QByteArray & orc_CheckedNodeActiveFlags,
                                        QString & orc_SetupWarningMessage, QStringList & orc_ErrorMessages,
-                                       std::set<uint32_t> & orc_NodesWithDashboardRoutingError,
-                                       std::set<uint32_t> & orc_NodesRelevantForDashboardRouting) const
+                                       QSet<uint32_t> & orc_NodesWithDashboardRoutingError,
+                                       QSet<uint32_t> & orc_NodesRelevantForDashboardRouting) const
 {
-   std::map<uint32_t, QString> c_SetupWarningDetails;
-   QList<std::map<uint32_t, QString> > c_ErrorDetails;
+   QMap<uint32_t, QString> c_SetupWarningDetails;
+   QList<QMap<uint32_t, QString> > c_ErrorDetails;
    const int32_t s32_Retval = this->m_CheckRoutingDetails(ou32_ViewIndex, orc_CheckedNodeActiveFlags,
                                                           c_SetupWarningDetails, c_ErrorDetails,
                                                           orc_NodesWithDashboardRoutingError,
@@ -4478,12 +4476,12 @@ int32_t C_PuiSvHandler::m_CheckRouting(const uint32_t ou32_ViewIndex,
             break;
          }
 
-         for (std::map<uint32_t, QString>::const_iterator c_It = c_ErrorDetails[u32_ErrorCounter].begin();
+         for (QMap<uint32_t, QString>::const_iterator c_It = c_ErrorDetails[u32_ErrorCounter].begin();
               c_It != c_ErrorDetails[u32_ErrorCounter].end();
               ++c_It)
          {
             orc_ErrorMessages[u32_ErrorCounter] += c_Space;
-            orc_ErrorMessages[u32_ErrorCounter] += c_It->second;
+            orc_ErrorMessages[u32_ErrorCounter] += c_It.value();
             c_Space = ", ";
          }
       }
@@ -4495,12 +4493,12 @@ int32_t C_PuiSvHandler::m_CheckRouting(const uint32_t ou32_ViewIndex,
       QString c_Space = " ";
       orc_SetupWarningMessage = "Following node communication interface flags are disabled:";
 
-      for (std::map<uint32_t, QString>::const_iterator c_It = c_SetupWarningDetails.begin();
+      for (QMap<uint32_t, QString>::const_iterator c_It = c_SetupWarningDetails.begin();
            c_It != c_SetupWarningDetails.end();
            ++c_It)
       {
          orc_SetupWarningMessage += c_Space;
-         orc_SetupWarningMessage += c_It->second;
+         orc_SetupWarningMessage += c_It.value();
          c_Space = ", ";
       }
    }

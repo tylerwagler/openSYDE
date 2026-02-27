@@ -5,49 +5,68 @@
 
    System update package definition filer
 
-   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include <QList>
 #include "stwtypes.hpp"
+#include <QList>
 
-#include "stwerrors.hpp"
-#include "C_OscXmlParser.hpp"
 #include "C_OscSupDefinitionFiler.hpp"
 #include "C_OscSupNodeDefinitionFiler.hpp"
+#include "C_OscXmlParser.hpp"
+#include "stwerrors.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const QString C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF = "service_update_package.syde_supdef";
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
+const QString C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF =
+    "service_update_package.syde_supdef";
 static const uint16_t mu16_FILE_VERSION = 2U;
 // XML node names of service update package definition
-static const QString mc_FILE_VERSION = "file-version";                // xml node
-static const QString mc_BUS_INDEX = "bus-index-client";               // xml node
-static const QString mc_ROOT_NAME = "opensyde-updatepack-definition"; // xml root node
-static const QString mc_NODES = "nodes";                              // xml node
-static const QString mc_NODE = "node";                                // xml node
-static const QString mc_NODE_ACTIVE_ATTR = "active";                  // xml node attribute
-static const QString mc_NODE_POSITION_ATTR = "position";              // xml node attribute
-static const QString mc_NODE_UPDATE = "update_package";               // xml node
-static const QString mc_NODE_FILE_ATTR = "file";                      // xml node attribute
+static const QString mc_FILE_VERSION = "file-version";  // xml node
+static const QString mc_BUS_INDEX = "bus-index-client"; // xml node
+static const QString mc_ROOT_NAME =
+    "opensyde-updatepack-definition";                    // xml root node
+static const QString mc_NODES = "nodes";                 // xml node
+static const QString mc_NODE = "node";                   // xml node
+static const QString mc_NODE_ACTIVE_ATTR = "active";     // xml node attribute
+static const QString mc_NODE_POSITION_ATTR = "position"; // xml node attribute
+static const QString mc_NODE_UPDATE = "update_package";  // xml node
+static const QString mc_NODE_FILE_ATTR = "file";         // xml node attribute
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Creates update package definition file (internal function).
@@ -58,55 +77,55 @@ static const QString mc_NODE_FILE_ATTR = "file";                      // xml nod
    * write permission of target folder
 
    \param[in]  orc_Path             destination path
-   \param[in]  orc_SupDefContent    content to write in service update package xml file
-   \param[in]  orc_Files            Files
+   \param[in]  orc_SupDefContent    content to write in service update package
+   xml file \param[in]  orc_Files            Files
 
    \return
    C_NO_ERR    success
    C_RD_WR     read/write error (see log file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const QString & orc_Path,
-                                                              const C_OscSupDefinition & orc_SupDefContent,
-                                                              const QStringList & orc_Files)
-{
-   const QString c_FileName =
-      stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_Path) + hc_PACKAGE_UPDATE_DEF;
-   int32_t s32_Result;
+int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(
+    const QString &orc_Path, const C_OscSupDefinition &orc_SupDefContent,
+    const QStringList &orc_Files) {
+  const QString c_FileName =
+      stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_Path) +
+      hc_PACKAGE_UPDATE_DEF;
+  int32_t s32_Result;
 
-   // fill update package definition
-   C_OscXmlParser c_XmlParser;
+  // fill update package definition
+  C_OscXmlParser c_XmlParser;
 
-   //Root Node
-   c_XmlParser.CreateAndSelectNodeChild(mc_ROOT_NAME);
+  // Root Node
+  c_XmlParser.CreateAndSelectNodeChild(mc_ROOT_NAME);
 
-   //File version
-   Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild(mc_FILE_VERSION) == mc_FILE_VERSION);
-   c_XmlParser.SetNodeContent(QString::number(mu16_FILE_VERSION));
-   Q_ASSERT(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
+  // File version
+  Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild(mc_FILE_VERSION) ==
+           mc_FILE_VERSION);
+  c_XmlParser.SetNodeContent(QString::number(mu16_FILE_VERSION));
+  Q_ASSERT(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
-   // Convert QString vector to QString vector
-   QStringList c_FilesQt;
-   c_FilesQt.reserve(orc_Files.size());
-   for (const QString & rc_File : orc_Files)
-   {
-      c_FilesQt.push_back(rc_File);
-   }
-   mh_SaveNodes(c_XmlParser, orc_SupDefContent.c_Nodes, c_FilesQt);
+  // Convert QString vector to QString vector
+  QStringList c_FilesQt;
+  c_FilesQt.reserve(orc_Files.size());
+  for (const QString &rc_File : orc_Files) {
+    c_FilesQt.push_back(rc_File);
+  }
+  mh_SaveNodes(c_XmlParser, orc_SupDefContent.c_Nodes, c_FilesQt);
 
-   Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild(mc_BUS_INDEX) == mc_BUS_INDEX);
-   c_XmlParser.SetNodeContent(QString::number(orc_SupDefContent.u32_ActiveBusIndex));
+  Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild(mc_BUS_INDEX) == mc_BUS_INDEX);
+  c_XmlParser.SetNodeContent(
+      QString::number(orc_SupDefContent.u32_ActiveBusIndex));
 
-   //Return
-   Q_ASSERT(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
+  // Return
+  Q_ASSERT(c_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 
-   // save update package definition file
-   s32_Result = c_XmlParser.SaveToFile(c_FileName);
-   if (s32_Result != C_NO_ERR)
-   {
-      s32_Result = C_RD_WR;
-   }
-   return s32_Result;
+  // save update package definition file
+  s32_Result = c_XmlParser.SaveToFile(c_FileName);
+  if (s32_Result != C_NO_ERR) {
+    s32_Result = C_RD_WR;
+  }
+  return s32_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -129,62 +148,59 @@ int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(const QString & or
    \retval   C_RD_WR    read/write error (see log file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const QString & orc_TargetUnzipPath,
-                                                            const bool oq_IsZip,
-                                                            const QString & orc_PackagePath,
-                                                            uint32_t & oru32_FileVersion,
-                                                            QString &  orc_FilePackagePath,
-                                                            uint32_t & oru32_ActiveBusIndex,
-                                                            QByteArray & orc_ActiveNodes,
-                                                            QList<uint32_t> & orc_UpdatePosition,
-                                                            QStringList & orc_PackageFiles)
-{
-   int32_t s32_Retval;
-   C_OscXmlParser c_XmlParser;
+int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(
+    const QString &orc_TargetUnzipPath, const bool oq_IsZip,
+    const QString &orc_PackagePath, uint32_t &oru32_FileVersion,
+    QString &orc_FilePackagePath, uint32_t &oru32_ActiveBusIndex,
+    QByteArray &orc_ActiveNodes, QList<uint32_t> &orc_UpdatePosition,
+    QStringList &orc_PackageFiles) {
+  int32_t s32_Retval;
+  C_OscXmlParser c_XmlParser;
 
-   if (oq_IsZip)
-   {
-      s32_Retval = c_XmlParser.LoadFromFile((orc_TargetUnzipPath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF));
-   }
-   else
-   {
-      orc_FilePackagePath =
-         stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_PackagePath);
-      s32_Retval = c_XmlParser.LoadFromFile((orc_FilePackagePath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF));
-   }
+  if (oq_IsZip) {
+    s32_Retval = c_XmlParser.LoadFromFile(
+        (orc_TargetUnzipPath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF));
+  } else {
+    orc_FilePackagePath =
+        stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(
+            orc_PackagePath);
+    s32_Retval = c_XmlParser.LoadFromFile(
+        (orc_FilePackagePath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF));
+  }
 
-   if (s32_Retval == C_NO_ERR)
-   {
-      Q_ASSERT(c_XmlParser.SelectRoot() == mc_ROOT_NAME); // we shall have a valid and
+  if (s32_Retval == C_NO_ERR) {
+    Q_ASSERT(c_XmlParser.SelectRoot() ==
+             mc_ROOT_NAME); // we shall have a valid and
+    // compatible update package
+
+    // file version
+    Q_ASSERT(c_XmlParser.SelectNodeChild(mc_FILE_VERSION) == mc_FILE_VERSION);
+    const QString c_FileVersion = c_XmlParser.GetNodeContent();
+    oru32_FileVersion = static_cast<uint32_t>(c_FileVersion.toInt());
+    Q_ASSERT(c_XmlParser.SelectRoot() ==
+             mc_ROOT_NAME); // we shall have a valid and
+    // compatible update package
+
+    if (oru32_FileVersion == mu16_FILE_VERSION) {
+      // active bus index
+      Q_ASSERT(c_XmlParser.SelectNodeChild(mc_BUS_INDEX) == mc_BUS_INDEX);
+      const QString c_BusIndex = c_XmlParser.GetNodeContent();
+      oru32_ActiveBusIndex = static_cast<uint32_t>(c_BusIndex.toInt());
+
+      // get active nodes with update positions and files to flash
+
+      Q_ASSERT(c_XmlParser.SelectRoot() ==
+               mc_ROOT_NAME); // we shall have a valid and
       // compatible update package
+      mh_LoadNodes(c_XmlParser, orc_ActiveNodes, orc_UpdatePosition,
+                   orc_PackageFiles);
+    }
+  }
+  if (s32_Retval != C_NO_ERR) {
+    s32_Retval = C_RD_WR;
+  }
 
-      // file version
-      Q_ASSERT(c_XmlParser.SelectNodeChild(mc_FILE_VERSION) == mc_FILE_VERSION);
-      const QString c_FileVersion = c_XmlParser.GetNodeContent();
-      oru32_FileVersion = static_cast<uint32_t>(c_FileVersion.toInt());
-      Q_ASSERT(c_XmlParser.SelectRoot() == mc_ROOT_NAME); // we shall have a valid and
-      // compatible update package
-
-      if (oru32_FileVersion == mu16_FILE_VERSION)
-      {
-         // active bus index
-         Q_ASSERT(c_XmlParser.SelectNodeChild(mc_BUS_INDEX) == mc_BUS_INDEX);
-         const QString c_BusIndex = c_XmlParser.GetNodeContent();
-         oru32_ActiveBusIndex = static_cast<uint32_t>(c_BusIndex.toInt());
-
-         // get active nodes with update positions and files to flash
-
-         Q_ASSERT(c_XmlParser.SelectRoot() == mc_ROOT_NAME); // we shall have a valid and
-         // compatible update package
-         mh_LoadNodes(c_XmlParser, orc_ActiveNodes, orc_UpdatePosition, orc_PackageFiles);
-      }
-   }
-   if (s32_Retval != C_NO_ERR)
-   {
-      s32_Retval = C_RD_WR;
-   }
-
-   return s32_Retval;
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -195,53 +211,51 @@ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(const QString & orc_
    \param[in]      orc_Files        Files
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
-                                           const QList<C_OscSupNodeDefinition> & orc_Nodes,
-                                           const QStringList & orc_Files)
-{
-   //Nodes
-   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_NODES) == mc_NODES);
+void C_OscSupDefinitionFiler::mh_SaveNodes(
+    C_OscXmlParserBase &orc_XmlParser,
+    const QList<C_OscSupNodeDefinition> &orc_Nodes,
+    const QStringList &orc_Files) {
+  // Nodes
+  Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_NODES) == mc_NODES);
 
-   //List nodes
-   Q_ASSERT(orc_Nodes.size() == orc_Files.size());
-   if (orc_Nodes.size() == orc_Files.size())
-   {
-      for (uint32_t u32_Pos = 0; u32_Pos < orc_Nodes.size(); u32_Pos++)
-      {
-         const C_OscSupNodeDefinition c_CurrentNode = orc_Nodes[u32_Pos];
+  // List nodes
+  Q_ASSERT(orc_Nodes.size() == orc_Files.size());
+  if (orc_Nodes.size() == orc_Files.size()) {
+    for (uint32_t u32_Pos = 0; u32_Pos < orc_Nodes.size(); u32_Pos++) {
+      const C_OscSupNodeDefinition c_CurrentNode = orc_Nodes[u32_Pos];
 
-         //Node
-         Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_NODE) == mc_NODE);
-         orc_XmlParser.SetAttributeUint32(mc_NODE_ACTIVE_ATTR, static_cast<uint32_t>(c_CurrentNode.u8_Active));
+      // Node
+      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_NODE) == mc_NODE);
+      orc_XmlParser.SetAttributeUint32(
+          mc_NODE_ACTIVE_ATTR, static_cast<uint32_t>(c_CurrentNode.u8_Active));
 
-         // active node?
-         if (c_CurrentNode.u8_Active == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE)
-         {
-            // if there are files to update for active node then list files
-            if ((c_CurrentNode.c_ApplicationFileNames.size() > 0) ||
-                (c_CurrentNode.c_NvmFileNames.size() > 0) ||
-                (c_CurrentNode.c_PemFile != ""))
-            {
-               //Update Position
-               orc_XmlParser.SetAttributeUint32(mc_NODE_POSITION_ATTR, c_CurrentNode.u32_Position);
-            }
-            Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_NODE_UPDATE) == mc_NODE_UPDATE);
+      // active node?
+      if (c_CurrentNode.u8_Active ==
+          C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+        // if there are files to update for active node then list files
+        if ((c_CurrentNode.c_ApplicationFileNames.size() > 0) ||
+            (c_CurrentNode.c_NvmFileNames.size() > 0) ||
+            (c_CurrentNode.c_PemFile != "")) {
+          // Update Position
+          orc_XmlParser.SetAttributeUint32(mc_NODE_POSITION_ATTR,
+                                           c_CurrentNode.u32_Position);
+        }
+        Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild(mc_NODE_UPDATE) ==
+                 mc_NODE_UPDATE);
 
-            orc_XmlParser.SetAttributeString(mc_NODE_FILE_ATTR, orc_Files[u32_Pos]);
+        orc_XmlParser.SetAttributeString(mc_NODE_FILE_ATTR, orc_Files[u32_Pos]);
 
-            Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODE);
-            Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODES);
-         }
-         else
-         {
-            //Return for next node
-            Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODES);
-         }
+        Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODE);
+        Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODES);
+      } else {
+        // Return for next node
+        Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODES);
       }
-   }
+    }
+  }
 
-   //Return
-   Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
+  // Return
+  Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -253,36 +267,34 @@ void C_OscSupDefinitionFiler::mh_SaveNodes(C_OscXmlParserBase & orc_XmlParser,
    \param[in,out]  orc_PackageFiles    Package files
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase & orc_XmlParser, QByteArray & orc_ActiveNodes,
-                                           QList<uint32_t> & orc_UpdatePosition,
-                                           QStringList & orc_PackageFiles)
-{
-   Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_NODES) == mc_NODES);
+void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase &orc_XmlParser,
+                                           QByteArray &orc_ActiveNodes,
+                                           QList<uint32_t> &orc_UpdatePosition,
+                                           QStringList &orc_PackageFiles) {
+  Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_NODES) == mc_NODES);
 
-   Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_NODE) == mc_NODE);
+  Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_NODE) == mc_NODE);
 
-   // go through all nodes
-   QString c_SelectedNode;
-   do
-   {
-      // get content of node
-      QString c_File;
-      uint32_t u32_UpdatePosition = 0U;
-      const uint8_t u8_NodeActive = static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32(mc_NODE_ACTIVE_ATTR));
-      orc_ActiveNodes.push_back(u8_NodeActive);
-      if (u8_NodeActive == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE)
-      {
-         // get update position
-         u32_UpdatePosition  = static_cast<uint8_t>(
-            orc_XmlParser.GetAttributeUint32(mc_NODE_POSITION_ATTR));
-         Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_NODE_UPDATE) == mc_NODE_UPDATE);
-         c_File = orc_XmlParser.GetAttributeString(mc_NODE_FILE_ATTR);
-         Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODE);
-      }
-      orc_UpdatePosition.push_back(u32_UpdatePosition);
-      orc_PackageFiles.push_back(c_File);
-      //Next
-      c_SelectedNode = orc_XmlParser.SelectNodeNext(mc_NODE);
-   }
-   while (c_SelectedNode == mc_NODE);
+  // go through all nodes
+  QString c_SelectedNode;
+  do {
+    // get content of node
+    QString c_File;
+    uint32_t u32_UpdatePosition = 0U;
+    const uint8_t u8_NodeActive = static_cast<uint8_t>(
+        orc_XmlParser.GetAttributeUint32(mc_NODE_ACTIVE_ATTR));
+    orc_ActiveNodes.push_back(u8_NodeActive);
+    if (u8_NodeActive == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+      // get update position
+      u32_UpdatePosition = static_cast<uint8_t>(
+          orc_XmlParser.GetAttributeUint32(mc_NODE_POSITION_ATTR));
+      Q_ASSERT(orc_XmlParser.SelectNodeChild(mc_NODE_UPDATE) == mc_NODE_UPDATE);
+      c_File = orc_XmlParser.GetAttributeString(mc_NODE_FILE_ATTR);
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_NODE);
+    }
+    orc_UpdatePosition.push_back(u32_UpdatePosition);
+    orc_PackageFiles.push_back(c_File);
+    // Next
+    c_SelectedNode = orc_XmlParser.SelectNodeNext(mc_NODE);
+  } while (c_SelectedNode == mc_NODE);
 }

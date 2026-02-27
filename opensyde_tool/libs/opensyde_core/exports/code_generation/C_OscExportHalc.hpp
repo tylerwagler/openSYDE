@@ -3,80 +3,101 @@
    \file
    \brief       Export HALC configuration of an openSYDE node.
 
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCEXPORTHALC_HPP
 #define C_OSCEXPORTHALC_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QList>
-#include "stwtypes.hpp"
-#include <QStringList>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscHalcConfig.hpp"
 #include "C_OscNodeDataPool.hpp"
+#include "stwtypes.hpp"
+#include <QList>
+#include <QStringList>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscExportHalc
-{
+class C_OscExportHalc {
 public:
-   static QString h_GetFileName(const bool oq_IsSafe);
-   static uint16_t h_ConvertOverallCodeVersion(const uint16_t ou16_GenCodeVersion);
-   static int32_t h_CreateSourceCode(const QString & orc_Path, const uint16_t ou16_GenCodeVersion,
-                                     const C_OscHalcConfig & orc_HalcConfig,
-                                     const stw::opensyde_core::C_OscNodeDataPool & orc_Datapool,
-                                     const QString & orc_ExportToolInfo);
+  static QString h_GetFileName(const bool oq_IsSafe);
+  static uint16_t
+  h_ConvertOverallCodeVersion(const uint16_t ou16_GenCodeVersion);
+  static int32_t
+  h_CreateSourceCode(const QString &orc_Path,
+                     const uint16_t ou16_GenCodeVersion,
+                     const C_OscHalcConfig &orc_HalcConfig,
+                     const stw::opensyde_core::C_OscNodeDataPool &orc_Datapool,
+                     const QString &orc_ExportToolInfo);
 
 protected:
-   static const bool mhq_IS_HEADER_FILE = false;
-   static const bool mhq_IS_IMPLEMENTATION_FILE = true;
+  static const bool mhq_IS_HEADER_FILE = false;
+  static const bool mhq_IS_IMPLEMENTATION_FILE = true;
 
-   static int32_t mh_CreateHeaderFile(const QString & orc_ExportToolInfo,
-                                      const QString & orc_Path, const C_OscHalcConfig & orc_HalcConfig,
-                                      const QString & orc_ProjectId, const bool oq_IsSafe,
-                                      const uint16_t ou16_GenCodeVersion);
+  static int32_t mh_CreateHeaderFile(const QString &orc_ExportToolInfo,
+                                     const QString &orc_Path,
+                                     const C_OscHalcConfig &orc_HalcConfig,
+                                     const QString &orc_ProjectId,
+                                     const bool oq_IsSafe,
+                                     const uint16_t ou16_GenCodeVersion);
 
-   static int32_t mh_CreateImplementationFile(const QString & orc_ExportToolInfo,
-                                               const QString & orc_Path,
-                                               const C_OscHalcConfig & orc_HalcConfig,
-                                               const QString & orc_ProjectId, const bool oq_IsSafe,
-                                               const uint16_t ou16_GenCodeVersion);
+  static int32_t mh_CreateImplementationFile(
+      const QString &orc_ExportToolInfo, const QString &orc_Path,
+      const C_OscHalcConfig &orc_HalcConfig, const QString &orc_ProjectId,
+      const bool oq_IsSafe, const uint16_t ou16_GenCodeVersion);
 
-   static void mh_AddHeader(const QString & orc_ExportToolInfo, QStringList & orc_Data,
-                            const bool oq_FileType, const bool oq_IsSafe);
-   static void mh_AddIncludes(QStringList & orc_Data, const bool oq_FileType, const bool oq_IsSafe);
-   static void mh_AddDefines(QStringList & orc_Data,  const C_OscHalcConfig & orc_HalcConfig,
-                             const QString & orc_ProjectId, const bool oq_FileType, const bool oq_IsSafe,
-                             const uint16_t ou16_GenCodeVersion);
-   static void mh_AddGlobalVariables(QStringList & orc_Data, const C_OscHalcConfig & orc_HalcConfig,
-                                     const bool oq_FileType, const bool oq_IsSafe);
-   static QString mh_GetMagicName(const QString & orc_ProjectId, const bool oq_IsSafe);
-   static void mh_AddDpListElementReferences(QStringList & orc_Data,
-                                             const QList<C_OscHalcDefStruct> & orc_DefinitionArray,
-                                             const QList<C_OscHalcConfigChannel> & orc_ConfigArray,
-                                             const C_OscHalcDefDomain::E_VariableSelector & ore_Type,
-                                             const QString & orc_DomainSingularName,
-                                             const bool oq_IsArray, const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
-                                             const bool oq_IsSafe);
-   static QString mh_GetDpListElementReference(
-      const QList<C_OscHalcDefStruct> & orc_DefinitionArray,
-      const C_OscHalcDefDomain::E_VariableSelector & ore_Type, const C_OscHalcDefElement & orc_Element,
-      const uint32_t ou32_StructIndex, const uint32_t ou32_ElementIndex,
-      const QString & orc_DomainSingularName, const bool oq_IsArray, const bool oq_IsSafe);
-   static bool mh_DropChannel(const bool oq_IsChannelSafe, const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
-                               const bool oq_IsSafeCase);
+  static void mh_AddHeader(const QString &orc_ExportToolInfo,
+                           QStringList &orc_Data, const bool oq_FileType,
+                           const bool oq_IsSafe);
+  static void mh_AddIncludes(QStringList &orc_Data, const bool oq_FileType,
+                             const bool oq_IsSafe);
+  static void mh_AddDefines(QStringList &orc_Data,
+                            const C_OscHalcConfig &orc_HalcConfig,
+                            const QString &orc_ProjectId,
+                            const bool oq_FileType, const bool oq_IsSafe,
+                            const uint16_t ou16_GenCodeVersion);
+  static void mh_AddGlobalVariables(QStringList &orc_Data,
+                                    const C_OscHalcConfig &orc_HalcConfig,
+                                    const bool oq_FileType,
+                                    const bool oq_IsSafe);
+  static QString mh_GetMagicName(const QString &orc_ProjectId,
+                                 const bool oq_IsSafe);
+  static void mh_AddDpListElementReferences(
+      QStringList &orc_Data,
+      const QList<C_OscHalcDefStruct> &orc_DefinitionArray,
+      const QList<C_OscHalcConfigChannel> &orc_ConfigArray,
+      const C_OscHalcDefDomain::E_VariableSelector &ore_Type,
+      const QString &orc_DomainSingularName, const bool oq_IsArray,
+      const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode, const bool oq_IsSafe);
+  static QString mh_GetDpListElementReference(
+      const QList<C_OscHalcDefStruct> &orc_DefinitionArray,
+      const C_OscHalcDefDomain::E_VariableSelector &ore_Type,
+      const C_OscHalcDefElement &orc_Element, const uint32_t ou32_StructIndex,
+      const uint32_t ou32_ElementIndex, const QString &orc_DomainSingularName,
+      const bool oq_IsArray, const bool oq_IsSafe);
+  static bool mh_DropChannel(const bool oq_IsChannelSafe,
+                             const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
+                             const bool oq_IsSafeCase);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

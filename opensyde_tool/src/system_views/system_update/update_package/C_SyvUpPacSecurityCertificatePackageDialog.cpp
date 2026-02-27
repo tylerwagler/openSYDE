@@ -604,15 +604,15 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckUpdatePath() {
     // now check the selected file a bit more detailed
     if ((s32_Return == C_NO_ERR) && (c_FileInfo.exists() == true)) {
       C_OscSecurityPemSecUpdate c_Pem;
-      std::string c_ErrorMessage;
+      QString c_ErrorMessage;
 
       // C_OscSecurityPemSecUpdate::LoadFromFile checks for correct key usage
       const int32_t s32_Result = c_Pem.LoadFromFile(
-          this->GetPublicKeyPath().toStdString(), c_ErrorMessage);
+          this->GetPublicKeyPath(), c_ErrorMessage);
 
       if (s32_Result != C_NO_ERR) {
         osc_write_log_error("Load PEM file",
-                            QString::fromStdString(c_ErrorMessage) + " (Path: " +
+                            c_ErrorMessage + " (Path: " +
                                 this->GetPublicKeyPath() + ")");
         s32_Return = C_CONFIG;
       } else {
@@ -687,14 +687,14 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(
       // now check the file a bit more detailed
       if ((s32_Return == C_NO_ERR) && (c_FileInfo.exists() == true)) {
         C_OscSecurityPem c_Pem;
-        std::string c_ErrorMessage;
+        QString c_ErrorMessage;
 
         const int32_t s32_Result =
-            c_Pem.LoadFromFile(rc_CurFile.toStdString(), c_ErrorMessage);
+            c_Pem.LoadFromFile(rc_CurFile, c_ErrorMessage);
 
         if (s32_Result != C_NO_ERR) {
           osc_write_log_error("Load PEM file",
-                              QString::fromStdString(c_ErrorMessage) +
+                              c_ErrorMessage +
                                   " (Path: " + rc_CurFile + ")");
           s32_Return = C_CONFIG;
         } else {
@@ -704,7 +704,7 @@ int32_t C_SyvUpPacSecurityCertificatePackageDialog::m_CheckAuthPemFiles(
           if (rc_KeyInfo.AreKeysAvailable(c_ErrorMessage, false) == false) {
             osc_write_log_error(
                 "PEM file keys",
-                QString::fromStdString(c_ErrorMessage) + " (Path: " + rc_CurFile + ")");
+                c_ErrorMessage + " (Path: " + rc_CurFile + ")");
             s32_Return = C_CONFIG;
           }
 

@@ -121,7 +121,7 @@ int32_t C_OscAesFile::h_EncryptFile(const QString &orc_Key,
 
     c_InputData.resize(static_cast<size_t>(u32_InputFileSize) + u8_Pkcs7Size);
 
-       if (!c_InputFile.open(QIODevice::ReadOnly)) {
+    if (!c_InputFile.open(QIODevice::ReadOnly)) {
       s32_Return = C_RD_WR;
     } else {
       // read file content
@@ -139,7 +139,6 @@ int32_t C_OscAesFile::h_EncryptFile(const QString &orc_Key,
         uint8_t *pu8_EncryptedData;
         unsigned int x_EncryptedSize; // lint !e8080 !e970  //using type to
                                       // match library interface
-        std::ofstream c_OutputFileStream;
         AES c_Aes(128);
 
         // add PKCS#7 values:
@@ -252,7 +251,7 @@ int32_t C_OscAesFile::h_DecryptFile(const QString &orc_Key,
     } else {
       c_InputData.resize(static_cast<size_t>(QFileInfo(orc_InFilePath).size()));
 
-    if (!c_InputFile.open(QIODevice::ReadOnly)) {
+      if (!c_InputFile.open(QIODevice::ReadOnly)) {
         s32_Return = C_RD_WR;
       } else {
         // read file content
@@ -269,7 +268,6 @@ int32_t C_OscAesFile::h_DecryptFile(const QString &orc_Key,
           // do the decryption:
           uint8_t au8_Key[16];
           uint8_t *pu8_DecryptedData;
-          std::ofstream c_OutputFileStream;
           uint8_t u8_Pkcs7Value;
           AES c_Aes(128);
           // using type to match library interface
@@ -321,19 +319,6 @@ int32_t C_OscAesFile::h_DecryptFile(const QString &orc_Key,
     return s32_Return;
   }
 }
-else {
-  s32_Return = C_NOACT;
-}
-}
-// clean up memory allocated by AES library:
-delete[] pu8_DecryptedData;
-}
-}
-}
-}
-
-return s32_Return;
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Create a zip file will all files of a folder and encrypts it with
@@ -357,7 +342,7 @@ return s32_Return;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscAesFile::h_CreateEncryptedZipFile(
-    const QString &orc_FolderPathToZip, const std::set<QString> &orc_SupFiles,
+    const QString &orc_FolderPathToZip, const QSet<QString> &orc_SupFiles,
     const QString &orc_PathForZipFile, const QString &orc_Key,
     QString *const opc_ErrorMessage) {
   int32_t s32_Return;

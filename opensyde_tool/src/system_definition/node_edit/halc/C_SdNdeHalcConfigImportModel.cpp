@@ -442,9 +442,9 @@ bool C_SdNdeHalcConfigImportModel::IsSelectionOfLinkedChannelsValid(QList<uint32
             for (c_ItLinkBuddies = c_LinkBuddyCheckStates.begin(); c_ItLinkBuddies != c_LinkBuddyCheckStates.end();
                  ++c_ItLinkBuddies)
             {
-               if (c_ItLinkBuddies->second == false)
+               if (c_ItLinkBuddies.value() == false)
                {
-                  c_MissingChannelIndicesPerDomain.push_back(c_ItLinkBuddies->first);
+                  c_MissingChannelIndicesPerDomain.push_back(c_ItLinkBuddies.key());
                   q_LinkedValid = false;
                }
             }

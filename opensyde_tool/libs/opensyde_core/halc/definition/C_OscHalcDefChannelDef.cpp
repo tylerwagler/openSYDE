@@ -5,49 +5,65 @@
 
    Store HALC channel information
 
-   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
 #include "C_OscHalcDefChannelDef.hpp"
+#include "C_SclChecksums.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Default constructor/destructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscHalcDefChannelDef::C_OscHalcDefChannelDef(void)
-{
-}
+C_OscHalcDefChannelDef::C_OscHalcDefChannelDef(void) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Calculates the hash value over all data
 
    The hash value is a 32 bit CRC value.
 
-   \param[in,out]  oru32_HashValue  Hash value with initial [in] value and result [out] value
+   \param[in,out]  oru32_HashValue  Hash value with initial [in] value and
+   result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefChannelDef::CalcHash(uint32_t & oru32_HashValue) const
-{
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().data(),
-                                      static_cast<uint32_t>(this->c_Name.toUtf8().size()), oru32_HashValue);
+void C_OscHalcDefChannelDef::CalcHash(uint32_t &oru32_HashValue) const {
+  stw::scl::C_SclChecksums::CalcCRC32(
+      this->c_Name.toUtf8().data(),
+      static_cast<uint32_t>(this->c_Name.toUtf8().size()), oru32_HashValue);
 }

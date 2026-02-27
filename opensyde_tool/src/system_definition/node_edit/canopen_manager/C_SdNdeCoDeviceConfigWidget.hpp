@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
+#include <QMap>
 
 #include "stwtypes.hpp"
 #include "C_OscCanInterfaceId.hpp"
@@ -55,7 +56,7 @@ private:
    uint32_t mu32_ManagerNodeIndex;
    uint8_t mu8_ManagerInterfaceId;
    stw::opensyde_core::C_OscCanInterfaceId mc_DeviceInterfaceId;
-   std::map<int32_t, uint8_t> mc_ComboboxIndexToFactorySettingsSub;
+   QMap<int32_t, uint8_t> mc_ComboboxIndexToFactorySettingsSub;
 
    //Avoid call
    C_SdNdeCoDeviceConfigWidget(const C_SdNdeCoDeviceConfigWidget &);

@@ -15,7 +15,8 @@
 #include <QObject>
 #include <QStringList>
 #include <QList>
-#include <set>
+#include <QMap>
+#include <QSet>
 
 #include "stwtypes.hpp"
 
@@ -53,7 +54,7 @@ public:
 
    int32_t SetDiagnosticMode(QString & orc_ErrorDetails);
    int32_t SetUpCyclicTransmissions(QString & orc_ErrorDetails,
-                                    QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, QStringList & orc_FailedIdErrorDetails, std::map<uint32_t, uint32_t> & orc_FailedNodesElementNumber, std::map<uint32_t, uint32_t> & orc_NodesElementNumber);
+                                    QList<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, QStringList & orc_FailedIdErrorDetails, QMap<uint32_t, uint32_t> & orc_FailedNodesElementNumber, QMap<uint32_t, uint32_t> & orc_NodesElementNumber);
    int32_t StopCyclicTransmissions(void);
    int32_t StopDiagnosisServer(void);
 
@@ -163,11 +164,11 @@ private:
    // It has the indexes of the mc_ActiveNodesIndexes
    QList<uint32_t> mc_ActiveCommunicatingNodes; ///< All nodes which are communicating for dashboard or
    // part of at least one route
-   std::set<uint32_t> mc_DiagNodesWithElements; ///< Nodes which has used datapool elements
-   std::set<uint32_t> mc_DefectNodeIndices;     ///< Nodes which could not be reached on start
+   QSet<uint32_t> mc_DiagNodesWithElements; ///< Nodes which has used datapool elements
+   QSet<uint32_t> mc_DefectNodeIndices;     ///< Nodes which could not be reached on start
    // Read metadata of all active nodes and its Datapools. First layer are the active
    // nodes, second layer are the Datapools
-   QList<std::list<stw::opensyde_core::C_OscProtocolDriverOsy::C_DataPoolMetaData> > mc_ReadDatapoolMetadata;
+   QList<QList<stw::opensyde_core::C_OscProtocolDriverOsy::C_DataPoolMetaData>> mc_ReadDatapoolMetadata;
 
    const uint32_t mu32_ViewIndex;
    stw::can::C_Can * mpc_CanDllDispatcher;
@@ -183,7 +184,7 @@ private:
    void m_InitDiagProtocolKfx(stw::opensyde_core::C_OscDiagProtocolKfx * const opc_DiagProtocolKefex) const;
    int32_t m_InitDiagProtocol(void);
    int32_t m_InitDataDealer(void);
-   int32_t m_StartRoutingDiag(QString & orc_ErrorDetails, std::set<uint32_t> & orc_ErrorActiveNodes);
+   int32_t m_StartRoutingDiag(QString & orc_ErrorDetails, QSet<uint32_t> & orc_ErrorActiveNodes);
    int32_t m_StartDiagServers(QString & orc_ErrorDetails);
    int32_t m_GetAllDatapoolMetadata(const uint32_t ou32_ActiveDiagNodeIndex, QString & orc_ErrorDetails);
    int32_t m_CheckOsyDatapoolsAndCreateMapping(const uint32_t ou32_ActiveDiagNodeIndex, QString & orc_ErrorDetails);
@@ -209,7 +210,7 @@ private:
 
    void m_HandlePollingFinished(void);
 
-   void m_GetRoutingErrorDetails(QString & orc_ErrorDetails, std::set<uint32_t> & orc_ErrorActiveNodes,
+   void m_GetRoutingErrorDetails(QString & orc_ErrorDetails, QSet<uint32_t> & orc_ErrorActiveNodes,
                                  const uint32_t ou32_ActiveNode, const uint32_t ou32_ErrorActiveNodeIndex) const;
 
    //Avoid call

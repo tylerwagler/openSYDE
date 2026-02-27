@@ -56,8 +56,8 @@ C_SyvUpPacPemFileInfoPopUp::C_SyvUpPacPemFileInfoPopUp(stw::opensyde_gui_element
    QString c_DisplayText;
    C_OscSecurityPem c_Pem;
 
-   std::string c_ErrorMessage;
-   const int32_t s32_Result = c_Pem.LoadFromFile(orc_Path.toStdString(), c_ErrorMessage);
+   QString c_ErrorMessage;
+   const int32_t s32_Result = c_Pem.LoadFromFile(orc_Path, c_ErrorMessage);
 
    this->mpc_Ui->setupUi(this);
 

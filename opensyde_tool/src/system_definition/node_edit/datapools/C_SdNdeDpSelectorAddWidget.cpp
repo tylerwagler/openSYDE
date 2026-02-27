@@ -409,7 +409,7 @@ void C_SdNdeDpSelectorAddWidget::m_GetSelectedSharedDatapool(C_OscNodeDataPoolId
       Q_ASSERT(c_ItDatapool != this->mc_AvailableDatapools.end());
       if (c_ItDatapool != this->mc_AvailableDatapools.end())
       {
-         orc_SharedDatapoolId = c_ItDatapool->second;
+         orc_SharedDatapoolId = c_ItDatapool.value();
       }
    }
 }

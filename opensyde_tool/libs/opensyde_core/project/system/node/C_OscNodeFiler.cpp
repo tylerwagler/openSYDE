@@ -28,7 +28,6 @@
 #include "stwtypes.hpp"
 #include <QString>
 
-
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
  */
@@ -236,7 +235,7 @@ int32_t C_OscNodeFiler::h_LoadNode(C_OscNode &orc_Node,
 int32_t C_OscNodeFiler::h_SaveNodeFile(
     const C_OscNode &orc_Node, const QString &orc_FilePath,
     QStringList *const opc_CreatedFiles,
-    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   C_OscXmlParser c_XmlParser;
   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
       c_XmlParser, orc_FilePath, "opensyde-node-core-definition");
@@ -288,7 +287,7 @@ int32_t C_OscNodeFiler::h_SaveNodeFile(
 int32_t C_OscNodeFiler::h_SaveNode(
     const C_OscNode &orc_Node, C_OscXmlParserBase &orc_XmlParser,
     const QString &orc_BasePath, QStringList *const opc_CreatedFiles,
-    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   int32_t s32_Retval;
 
   orc_XmlParser.SetAttributeBool("datapool-auto-nvm-start-address",
@@ -1300,8 +1299,6 @@ int32_t C_OscNodeFiler::mh_LoadApplications(
     }
     // Return
     Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  } else {
-    s32_Retval = C_CONFIG;
   }
 
   return s32_Retval;
@@ -1562,9 +1559,10 @@ int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig &orc_HalcConfig,
    C_CONFIG   file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveHalc(
-    const C_OscHalcConfig &orc_HalcConfig, C_OscXmlParserBase &orc_XmlParser,
-    const QString &orc_BasePath, QStringList *const opc_CreatedFiles) {
+int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig &orc_HalcConfig,
+                                    C_OscXmlParserBase &orc_XmlParser,
+                                    const QString &orc_BasePath,
+                                    QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (!orc_HalcConfig.c_FileString.isEmpty()) {
@@ -1611,7 +1609,7 @@ int32_t C_OscNodeFiler::mh_SaveHalc(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(
-    std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_CanOpenManagers,
+    QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_CanOpenManagers,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -1656,30 +1654,24 @@ int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(
-    const std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_CanOpenManagers,
+    const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
     QStringList *const opc_CreatedFiles,
-    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   int32_t s32_Retval = C_NO_ERR;
 
-  if (orc_CanOpenManagers.size() > 0) {
+  if (orc_Config.size() > 0) {
     orc_XmlParser.CreateAndSelectNodeChild("can-open-managers-file");
     if (orc_BasePath.isEmpty()) {
       // To string
-      C_OscCanOpenManagerFiler::h_SaveData(orc_CanOpenManagers, orc_XmlParser,
-                                           orc_BasePath, opc_CreatedFiles,
+      C_OscCanOpenManagerFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
                                            orc_NodeIndicesToNameMap);
     } else {
-      // const QString c_FileName =
-      // C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
-      // Fix
       const QString c_FileName = "can_open_managers.xml";
-      const QString c_CombinedFileName =
-          C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
+      const QString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
       // Save datapool file
-      s32_Retval = C_OscCanOpenManagerFiler::h_SaveFile(
-          orc_CanOpenManagers, c_CombinedFileName, orc_BasePath,
-          opc_CreatedFiles, orc_NodeIndicesToNameMap);
+      s32_Retval = C_OscCanOpenManagerFiler::h_SaveFile(orc_Config, c_CombinedFileName, orc_BasePath,
+                                                        opc_CreatedFiles, orc_NodeIndicesToNameMap);
       // Set file reference
       orc_XmlParser.SetNodeContent(c_FileName);
       // Store if necessary

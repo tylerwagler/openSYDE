@@ -83,7 +83,7 @@ void C_CamMetTreeGuiBuffer::ClearBuffer(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetTreeGuiBuffer::m_HandleUpdateUi(void)
 {
-   std::list<C_CamMetTreeLoggerData> c_BufferCopy;
+   QList<C_CamMetTreeLoggerData> c_BufferCopy;
    this->mc_BufferMutex.lock();
    c_BufferCopy = this->mc_Buffer;
    this->mc_Buffer.clear();

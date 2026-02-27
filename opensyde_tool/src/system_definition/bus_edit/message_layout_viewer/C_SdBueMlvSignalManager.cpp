@@ -12,6 +12,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <algorithm>
+
 #include "stwerrors.hpp"
 
 #include "C_SdBueMlvSignalManager.hpp"
@@ -624,7 +626,7 @@ uint16_t C_SdBueMlvSignalManager::GetDataBytesBitPosOfSignalBit(const uint16_t o
    \param[out]     orc_SetPositions   Signal bit positions
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMlvSignalManager::GetDataBytesBitPositionsOfSignal(std::set<uint16_t> & orc_SetPositions) const
+void C_SdBueMlvSignalManager::GetDataBytesBitPositionsOfSignal(QSet<uint16_t> & orc_SetPositions) const
 {
    this->mc_Signal.GetDataBytesBitPositionsOfSignal(orc_SetPositions);
 }
@@ -636,24 +638,23 @@ void C_SdBueMlvSignalManager::m_UpdateItemConfiguration(void)
    int32_t s32_Counter = 0;
    bool q_AllRowsVisible = true;
 
-   std::set<uint16_t> c_SetPositions;
-   std::set<uint16_t>::iterator c_ItSetPosition;
-   std::set<uint16_t>::reverse_iterator c_ItReverseSetPosition;
+   QSet<uint16_t> c_SetPositionsQSet;
+   QList<uint16_t> c_SetPositions;
 
    // get the positions of the signal
-   this->GetDataBytesBitPositionsOfSignal(c_SetPositions);
+   this->GetDataBytesBitPositionsOfSignal(c_SetPositionsQSet);
+
+   // Convert to sorted QList (QSet has no reverse iterators; QList supports rbegin/rend in Qt6)
+   c_SetPositions = c_SetPositionsQSet.values();
+   std::sort(c_SetPositions.begin(), c_SetPositions.end());
 
    // remove all position which are not in the usable area (because of DLC)
    while (c_SetPositions.size() > 0)
    {
       // start the search at the end with the highest elements
-      c_ItReverseSetPosition = c_SetPositions.rbegin();
-
-      if ((*c_ItReverseSetPosition) >= this->mu16_MaximumCountBits)
+      if (c_SetPositions.last() >= this->mu16_MaximumCountBits)
       {
-         // the erase function needs the base iterator, but the base iterator has an offset of -1
-         std::advance(c_ItReverseSetPosition, 1);
-         c_SetPositions.erase(c_ItReverseSetPosition.base());
+         c_SetPositions.removeLast();
          q_AllRowsVisible = false;
       }
       else
@@ -699,12 +700,11 @@ void C_SdBueMlvSignalManager::m_UpdateItemConfiguration(void)
       }
 
       // get the first bit in this row
-      c_ItSetPosition = c_SetPositions.begin();
-      u16_StartBitInRow = *c_ItSetPosition % 8U;
-      u16_ByteRow = *c_ItSetPosition / 8U;
+      u16_StartBitInRow = c_SetPositions.first() % 8U;
+      u16_ByteRow = c_SetPositions.first() / 8U;
       // save the raw bit position for the compare in the next loop
-      u16_BitPosition = *c_ItSetPosition;
-      c_SetPositions.erase(c_ItSetPosition);
+      u16_BitPosition = c_SetPositions.first();
+      c_SetPositions.removeFirst();
 
       // if no further bit is available in this row, the start bit is the last bit in this row too
       // it will be used for the compare too
@@ -713,19 +713,17 @@ void C_SdBueMlvSignalManager::m_UpdateItemConfiguration(void)
       // search the last bit in this row
       while (c_SetPositions.size() > 0)
       {
-         c_ItSetPosition = c_SetPositions.begin();
-
-         if (((*c_ItSetPosition - 1U) == u16_BitPosition) &&
-             ((*c_ItSetPosition % 8U) > 0U))
+         if (((c_SetPositions.first() - 1U) == u16_BitPosition) &&
+             ((c_SetPositions.first() % 8U) > 0U))
          {
             // the bit is in the same row
-            u16_LastBitInRow = *c_ItSetPosition % 8U;
-            u16_BitPosition = *c_ItSetPosition;
-            c_SetPositions.erase(c_ItSetPosition);
+            u16_LastBitInRow = c_SetPositions.first() % 8U;
+            u16_BitPosition = c_SetPositions.first();
+            c_SetPositions.removeFirst();
          }
          else
          {
-            // the bit is in the next row. do not erase the bit from the set for the next row
+            // the bit is in the next row. do not erase the bit from the list for the next row
             // the previous bit is the last bit of this row
             break;
          }

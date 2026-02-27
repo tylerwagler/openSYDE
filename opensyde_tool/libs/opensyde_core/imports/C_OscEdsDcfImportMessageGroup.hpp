@@ -2,42 +2,50 @@
 /*!
    \file
    \brief       Data class to group multiple imported EDS/Dcf messages
-   \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCEDSDCFIMPORTMESSAGEGROUP_HPP
 #define C_OSCEDSDCFIMPORTMESSAGEGROUP_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QList>
-#include "stwtypes.hpp"
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscCanMessage.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
+#include "stwtypes.hpp"
+#include <QList>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscEdsDcfImportMessageGroup
-{
+class C_OscEdsDcfImportMessageGroup {
 public:
-   C_OscEdsDcfImportMessageGroup();
+  C_OscEdsDcfImportMessageGroup();
 
-   QList<C_OscCanMessage> c_OscMessageData;
-   QList<C_OscNodeDataPoolListElement> c_OscSignalData;
-   QByteArray c_SignalDefaultMinMaxValuesUsed;
-   QByteArray c_MessageIsSrdo;
+  QList<C_OscCanMessage> c_OscMessageData;
+  QList<C_OscNodeDataPoolListElement> c_OscSignalData;
+  QByteArray c_SignalDefaultMinMaxValuesUsed;
+  QByteArray c_MessageIsSrdo;
 
-   void Clear(void);
+  void Clear(void);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

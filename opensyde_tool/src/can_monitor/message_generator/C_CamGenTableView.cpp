@@ -994,7 +994,7 @@ void C_CamGenTableView::m_AddMessageFromDatabase(
                C_CamGenSigUtil::h_CalcMessageHash(*pc_Message);
 
            // Set new bytes directly from QByteArray (no vector conversion needed)
-           c_NewMessage.SetMessageDataBytes(c_Bytes.toStdVector());
+           c_NewMessage.SetMessageDataBytes(QList<uint8_t>(c_Bytes.begin(), c_Bytes.end()));
 
           // Add complete message
           c_NewMessages.push_back(c_NewMessage);
@@ -1069,7 +1069,7 @@ void C_CamGenTableView::m_AddMessageFromDatabase(
                C_CamGenSigUtil::h_CalcMessageHash(*pc_Message, c_DatapoolPart);
 
            // Set new bytes directly from QByteArray (no vector conversion needed)
-           c_NewMessage.SetMessageDataBytes(c_Bytes.toStdVector());
+           c_NewMessage.SetMessageDataBytes(QList<uint8_t>(c_Bytes.begin(), c_Bytes.end()));
 
           // Add complete message
           c_NewMessages.push_back(c_NewMessage);

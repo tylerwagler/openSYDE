@@ -30,7 +30,6 @@
 #include <QString>
 #include <string>
 
-
 namespace stw {
 namespace scl {
 /* -- Defines

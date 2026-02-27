@@ -21,10 +21,8 @@
 #include "stwtypes.hpp"
 #include <QSettings>
 
-
 #include "C_OscDeviceDefinitionFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -215,9 +213,10 @@ int32_t C_OscDeviceManager::AddDevice(const QString &orc_DeviceDefinitionFile,
    C_RANGE    No devices in group to delete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceManager::ChangeDevices(
-    QList<C_OscDeviceDefinition> &orc_Devices,
-    const QString &orc_DeviceGroup, const QString &orc_IniFile) {
+int32_t
+C_OscDeviceManager::ChangeDevices(QList<C_OscDeviceDefinition> &orc_Devices,
+                                  const QString &orc_DeviceGroup,
+                                  const QString &orc_IniFile) {
   int32_t s32_Return = C_CONFIG;
 
   uint32_t u32_DeviceGroupCounter;

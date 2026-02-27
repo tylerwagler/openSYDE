@@ -48,7 +48,11 @@ const int32_t ms32_TRACE_TRANSPARENCY_END = 80;
 const int32_t ms32_TRACE_TRANSPARENCY_STEPS = ms32_TRACE_TRANSPARENCY_START - ms32_TRACE_TRANSPARENCY_END;
 
 // Paths (different from paths in constants.h!)
+#ifdef _WIN32
 const QString mc_DLL_PATH_PEAK_CAM = "..\\STW_dlls\\stwpeak2\\stwpeak2_64.dll";
+#else
+const QString mc_DLL_PATH_PEAK_CAM = "can0";
+#endif
 
 
 // Path variables for can monitor only

@@ -5,37 +5,53 @@
 
    Simple data class for max char limit change report information
 
-   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeReportItem()
-{
-}
+C_OscSystemNameMaxCharLimitChangeReportItem::
+    C_OscSystemNameMaxCharLimitChangeReportItem() {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Init constructor
@@ -45,14 +61,11 @@ C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeRe
    \param[in]  oc_NewName        New name
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeReportItem(
-   const QString oc_Type, const QString oc_OriginalName,
-   const QString oc_NewName) :
-   c_Type(oc_Type),
-   c_OriginalName(oc_OriginalName),
-   c_NewName(oc_NewName)
-{
-}
+C_OscSystemNameMaxCharLimitChangeReportItem::
+    C_OscSystemNameMaxCharLimitChangeReportItem(const QString oc_Type,
+                                                const QString oc_OriginalName,
+                                                const QString oc_NewName)
+    : c_Type(oc_Type), c_OriginalName(oc_OriginalName), c_NewName(oc_NewName) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Handle name max char limit item
@@ -63,18 +76,18 @@ C_OscSystemNameMaxCharLimitChangeReportItem::C_OscSystemNameMaxCharLimitChangeRe
    \param[in,out]  opc_ChangedItems       Changed items
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(const uint32_t ou32_NameMaxCharLimit,
-                                                                               const QString & orc_Type,
-                                                                               const QString & orc_Name,
-                                                                               std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems)
-{
-   if (static_cast<uint32_t>(orc_Name.length()) > ou32_NameMaxCharLimit)
-   {
-      const QString c_NewNameTmp = orc_Name.left(static_cast<int>(ou32_NameMaxCharLimit));
-      if (opc_ChangedItems != NULL)
-      {
-         const C_OscSystemNameMaxCharLimitChangeReportItem c_Entry(orc_Type, orc_Name, c_NewNameTmp);
-         opc_ChangedItems->push_back(c_Entry);
-      }
-   }
+void C_OscSystemNameMaxCharLimitChangeReportItem::h_HandleNameMaxCharLimitItem(
+    const uint32_t ou32_NameMaxCharLimit, const QString &orc_Type,
+    const QString &orc_Name,
+    QList<C_OscSystemNameMaxCharLimitChangeReportItem>
+        *const opc_ChangedItems) {
+  if (static_cast<uint32_t>(orc_Name.length()) > ou32_NameMaxCharLimit) {
+    const QString c_NewNameTmp =
+        orc_Name.left(static_cast<int>(ou32_NameMaxCharLimit));
+    if (opc_ChangedItems != NULL) {
+      const C_OscSystemNameMaxCharLimitChangeReportItem c_Entry(
+          orc_Type, orc_Name, c_NewNameTmp);
+      opc_ChangedItems->push_back(c_Entry);
+    }
+  }
 }

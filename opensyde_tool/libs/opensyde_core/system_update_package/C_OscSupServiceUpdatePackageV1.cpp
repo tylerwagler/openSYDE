@@ -188,16 +188,16 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
   mhc_WarningMessages.clear(); // clear old warning messages
   mhc_ErrorMessage = "";       // clear old error message
 
-  set<QString> c_DeviceDefinitionFiles; // unique container to store
-                                        // full device definitions file
-                                        // paths
+  QSet<QString> c_DeviceDefinitionFiles; // unique container to store
+                                         // full device definitions file
+                                         // paths
   QString c_PackagePathTmp;             // temporary package path before
                                         // creating zip archive
   const QString c_TargetZipArchive = orc_PackagePath; // complete path of target
                                                       // zip archive
   QList<C_OscSuSequences::C_DoFlash> c_ApplicationsToWrite =
       orc_ApplicationsToWrite;  // paths of applications
-  std::set<QString> c_SupFiles; // unique container with
+  QSet<QString> c_SupFiles; // unique container with
                                 // relative file paths for zip
                                 // archive
   // fill with constant file names
@@ -345,14 +345,13 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
   // we have to store all device definition files of current system definition
   // because of routing functionality
   if (s32_Return == C_NO_ERR) {
-    set<QString>::const_iterator c_Iter;
-    for (c_Iter = c_DeviceDefinitionFiles.begin();
-         (c_Iter != c_DeviceDefinitionFiles.end()) && (s32_Return == C_NO_ERR);
-         ++c_Iter) {
-      const QString c_TargetFileName = QFileInfo(*c_Iter).fileName();
+    QSetIterator<QString> c_Iter(c_DeviceDefinitionFiles);
+    while (c_Iter.hasNext() && (s32_Return == C_NO_ERR)) {
+      const QString c_CurrentFile = c_Iter.next();
+      const QString c_TargetFileName = QFileInfo(c_CurrentFile).fileName();
       c_SupFiles.insert(c_TargetFileName);
       const QString c_TargetFilePath = c_PackagePathTmp + c_TargetFileName;
-      s32_Return = C_OscUtils::h_CopyFile(*c_Iter, c_TargetFilePath, NULL,
+      s32_Return = C_OscUtils::h_CopyFile(c_CurrentFile, c_TargetFilePath, NULL,
                                           &mhc_ErrorMessage);
       if (s32_Return != C_NO_ERR) {
         mhc_ErrorMessage = "Could not save device definition file \"" +
@@ -613,7 +612,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_ProcessPackage(
 
     // go through all nodes
     QString c_SelectedNode;
-    map<uint32_t, uint32_t>
+    QMap<uint32_t, uint32_t>
         c_UpdateOrderByNodes; // to store node update positions which are
                               // represented by index at
     // orc_NodesUpdateOrder
@@ -1046,7 +1045,7 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_CreateUpdatePackageDefFile(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageV1::mh_CreateDeviceIniFile(
-    const QString &orc_Path, const set<QString> &orc_DeviceDefinitionPaths) {
+    const QString &orc_Path, const QSet<QString> &orc_DeviceDefinitionPaths) {
   int32_t s32_Return = C_NO_ERR;
 
   const QString c_HEAD_SECTION = "DeviceTypes"; //                      -"-
@@ -1082,11 +1081,11 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_CreateDeviceIniFile(
     c_IniFile.setValue(c_GroupDevice + c_DEVICE_COUNT,
                        static_cast<int32_t>(orc_DeviceDefinitionPaths.size()));
     // fill up with device definitions
-    set<QString>::const_iterator c_Iter;
-    for (c_Iter = orc_DeviceDefinitionPaths.begin();
-         c_Iter != orc_DeviceDefinitionPaths.end(); ++c_Iter) {
+    QSetIterator<QString> c_Iter(orc_DeviceDefinitionPaths);
+    while (c_Iter.hasNext()) {
+      const QString c_CurrentFile = c_Iter.next();
       const QString c_Key = c_DEVICE_KEY + QString::number(u32_DeviceCounter);
-      const QString c_Value = QFileInfo(*c_Iter).fileName();
+      const QString c_Value = QFileInfo(c_CurrentFile).fileName();
       c_IniFile.setValue(c_GroupDevice + c_Key, c_Value);
       u32_DeviceCounter++;
     }
@@ -1250,7 +1249,7 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_GetUpdatePositionOfNode(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageV1::mh_SetNodesUpdateOrder(
-    const map<uint32_t, uint32_t> &orc_UpdateOrderByNodes,
+    const QMap<uint32_t, uint32_t> &orc_UpdateOrderByNodes,
     QList<uint32_t> &orc_NodesUpdateOrder) {
   int32_t s32_Return = 0;
 
@@ -1258,11 +1257,11 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_SetNodesUpdateOrder(
     s32_Return = C_WARN;
   } else {
     orc_NodesUpdateOrder.resize(orc_UpdateOrderByNodes.size());
-    map<uint32_t, uint32_t>::const_iterator c_Iter;
+    QMap<uint32_t, uint32_t>::const_iterator c_Iter;
     for (c_Iter = orc_UpdateOrderByNodes.begin();
          c_Iter != orc_UpdateOrderByNodes.end(); ++c_Iter) {
       // interchange index with value
-      orc_NodesUpdateOrder[c_Iter->second] = c_Iter->first;
+      orc_NodesUpdateOrder[c_Iter.value()] = c_Iter.key();
     }
   }
 
@@ -1288,14 +1287,13 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_SetNodesUpdateOrder(
 void C_OscSupServiceUpdatePackageV1::mh_LoadFilesSection(
     QStringList &orc_Files, const uint32_t ou32_NodeCounter,
     const uint32_t ou32_UpdatePos,
-    std::map<uint32_t, uint32_t> &orc_PositionMap,
+    QMap<uint32_t, uint32_t> &orc_PositionMap,
     const QString &orc_TargetUnzipPath, C_OscXmlParserBase &orc_XmlParser,
     const QString &orc_BaseNodeName, const QString &orc_ElementNodeName) {
   if (orc_XmlParser.SelectNodeChild(orc_BaseNodeName) == orc_BaseNodeName) {
     QString c_SelectedNode;
     // node has applications to update
-    orc_PositionMap.insert(
-        std::pair<uint32_t, uint32_t>(ou32_NodeCounter, ou32_UpdatePos));
+    orc_PositionMap.insert(ou32_NodeCounter, ou32_UpdatePos);
     // get update application paths
     Q_ASSERT(orc_XmlParser.SelectNodeChild(orc_ElementNodeName) ==
              orc_ElementNodeName);
@@ -1340,7 +1338,7 @@ void C_OscSupServiceUpdatePackageV1::mh_LoadFilesSection(
 void C_OscSupServiceUpdatePackageV1::mh_LoadPemConfigSection(
     C_OscSuSequences::C_DoFlash &orc_DoFlash, const uint32_t ou32_NodeCounter,
     const uint32_t ou32_UpdatePos,
-    std::map<uint32_t, uint32_t> &orc_PositionMap,
+    QMap<uint32_t, uint32_t> &orc_PositionMap,
     const QString &orc_TargetUnzipPath, C_OscXmlParserBase &orc_XmlParser) {
   if (orc_XmlParser.SelectNodeChild(mc_PEM_FILE_CONFIG) == mc_PEM_FILE_CONFIG) {
     // get PEM file path
@@ -1361,8 +1359,7 @@ void C_OscSupServiceUpdatePackageV1::mh_LoadPemConfigSection(
       orc_DoFlash.c_PemFile = c_FilePath;
 
       // node has applications to update
-      orc_PositionMap.insert(
-          std::pair<uint32_t, uint32_t>(ou32_NodeCounter, ou32_UpdatePos));
+      orc_PositionMap.insert(ou32_NodeCounter, ou32_UpdatePos);
     }
 
     Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_PEM_FILE_CONFIG);

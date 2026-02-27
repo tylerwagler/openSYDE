@@ -704,8 +704,7 @@ int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolListElements(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolFilerV2::h_SaveDataPoolListElements(
-    const QList<C_OscNodeDataPoolListElement>
-        &orc_NodeDataPoolListElements,
+    const QList<C_OscNodeDataPoolListElement> &orc_NodeDataPoolListElements,
     C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32(
       "length", static_cast<uint32_t>(orc_NodeDataPoolListElements.size()));
@@ -745,8 +744,7 @@ void C_OscNodeDataPoolFilerV2::h_SaveDataPoolListElements(
 int32_t C_OscNodeDataPoolFilerV2::h_LoadDataPoolListElementDataSetValues(
     const uint16_t ou16_XmlFormatVersion,
     const C_OscNodeDataPoolContent &orc_ContType,
-    QList<C_OscNodeDataPoolContent>
-        &orc_NodeDataPoolListElementDataSetValues,
+    QList<C_OscNodeDataPoolContent> &orc_NodeDataPoolListElementDataSetValues,
     C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_CurNodeDataSetValue =

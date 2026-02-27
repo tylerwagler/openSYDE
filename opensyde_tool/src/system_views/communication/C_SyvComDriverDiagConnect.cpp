@@ -284,8 +284,8 @@ void C_SyvComDriverDiagConnect::m_RunSetUpCyclicTransmissions(void)
       QString c_ErrorDetails;
       QList<C_OscNodeDataPoolListElementId> c_FailedIdRegisters;
       QStringList c_FailedIdErrorDetails;
-      std::map<uint32_t, uint32_t> c_FailedNodesElementNumber;
-      std::map<uint32_t, uint32_t> c_NodesElementNumber;
+      QMap<uint32_t, uint32_t> c_FailedNodesElementNumber;
+      QMap<uint32_t, uint32_t> c_NodesElementNumber;
 
       // Start the asyn communication
       this->ms32_OperationResult = this->mpc_ComDriverDiag->SetUpCyclicTransmissions(c_ErrorDetails,
@@ -327,8 +327,8 @@ void C_SyvComDriverDiagConnect::m_RunSetUpCyclicTransmissions(void)
 
                   if (pc_Node != NULL)
                   {
-                     const std::map<uint32_t,
-                                    uint32_t>::const_iterator c_ItFailedNodesElementNumber =
+                     const QMap<uint32_t,
+                                 uint32_t>::const_iterator c_ItFailedNodesElementNumber =
                         c_FailedNodesElementNumber.find(rc_Id.u32_NodeIndex);
 
                      // This information as title for all errors of this node

@@ -16,9 +16,9 @@
  */
 #include "precomp_headers.hpp"
 
-#include <QString>
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
+#include <QString>
 
 #include "C_OscFlashProtocolStwFlashloader.hpp"
 #include "C_OscLoggingHandler.hpp"

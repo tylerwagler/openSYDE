@@ -12,13 +12,12 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include <QList>
 #include "C_CanDispatcher.hpp"
 #include "C_OscDcDeviceInformation.hpp"
 #include "C_OscProtocolDriverOsy.hpp"
 #include "C_OscProtocolDriverOsyTpCan.hpp"
+#include <QList>
 #include <QString>
-
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------

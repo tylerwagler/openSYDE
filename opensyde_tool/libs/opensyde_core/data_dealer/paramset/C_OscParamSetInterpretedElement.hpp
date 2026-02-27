@@ -1,41 +1,51 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Data class, containing the interpreted entries for one element in a parameter set file (header)
+   \brief       Data class, containing the interpreted entries for one element
+   in a parameter set file (header)
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCPARAMSETINTERPRETEDELEMENT_HPP
 #define C_OSCPARAMSETINTERPRETEDELEMENT_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QString>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscNodeDataPoolContent.hpp"
+#include <QString>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-///Data class, containing the interpreted entries for one element in a parameter set file
-class C_OscParamSetInterpretedElement
-{
+/// Data class, containing the interpreted entries for one element in a
+/// parameter set file
+class C_OscParamSetInterpretedElement {
 public:
-   C_OscParamSetInterpretedElement(void);
+  C_OscParamSetInterpretedElement(void);
 
-   QString c_Name;        ///< Element name
-   C_OscNodeDataPoolContent c_NvmValue; ///< Element parameter value
+  QString c_Name;                      ///< Element name
+  C_OscNodeDataPoolContent c_NvmValue; ///< Element parameter value
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

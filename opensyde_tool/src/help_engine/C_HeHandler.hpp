@@ -12,11 +12,14 @@
 #define C_HEHANDLER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <windows.h>
 #include <QWidget>
 #include <QString>
 #include <QMap>
 #include "stwtypes.hpp"
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -27,9 +30,11 @@ namespace opensyde_gui_logic
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
+#ifdef _WIN32
 //lint -save -e8080 //using types expected by the library for API compatibility
 typedef HWND (WINAPI * PR_HtmlHelp)(HWND opc_Caller, LPCSTR opx_File, UINT ox_Command, DWORD_PTR ox_Data);
 //lint -restore
+#endif
 
 class C_HeHandler
 {
@@ -51,8 +56,10 @@ private:
    QString m_GetHelpLocation(void) const;
    static C_HeHandler mhc_Instance;
    QMap<QString, QString> mc_LookUpHelpPageName;
+#ifdef _WIN32
    HINSTANCE mpc_InstHtmlHelp; ///< Pointer for DLL
    PR_HtmlHelp mpr_HtmlHelp;   ///< Function pointer for HtmlHelp
+#endif
    QString mc_HelpFileRelPath;
 };
 

@@ -901,7 +901,7 @@ uint8_t C_SdBueMessagePropertiesWidget::m_GetCoNodeId(const C_OscCanMessage & or
                  pc_Manager->c_Properties.c_ComInterfaces.size());
       if (this->mc_MessageId.u32_InterfaceIndex < pc_Manager->c_Properties.c_ComInterfaces.size())
       {
-         const std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManagerInfo =
+         const QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManagerInfo =
             pc_Manager->c_CanOpenManagers.find(
                pc_Manager->c_Properties.c_ComInterfaces[
                   this->mc_MessageId.u32_InterfaceIndex].u8_InterfaceNumber);
@@ -909,18 +909,18 @@ uint8_t C_SdBueMessagePropertiesWidget::m_GetCoNodeId(const C_OscCanMessage & or
          Q_ASSERT(c_ItManagerInfo != pc_Manager->c_CanOpenManagers.end());
          if (c_ItManagerInfo != pc_Manager->c_CanOpenManagers.end())
          {
-            const C_OscCanOpenManagerInfo & rc_ManagerInfo = c_ItManagerInfo->second;
+            const C_OscCanOpenManagerInfo & rc_ManagerInfo = c_ItManagerInfo.value();
 
             // Get the device info
-            const std::map<C_OscCanInterfaceId,
-                           C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
+            const QHash<C_OscCanInterfaceId,
+                        C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
                rc_ManagerInfo.c_CanOpenDevices.find(orc_MessageData.c_CanOpenManagerOwnerNodeIndex);
 
             Q_ASSERT(c_ItDevice != rc_ManagerInfo.c_CanOpenDevices.end());
             if (c_ItDevice != rc_ManagerInfo.c_CanOpenDevices.end())
             {
                // Adding the CANopen node id of the device
-               u8_CoNodeId = c_ItDevice->second.u8_NodeIdValue;
+               u8_CoNodeId = c_ItDevice.value().u8_NodeIdValue;
             }
          }
       }

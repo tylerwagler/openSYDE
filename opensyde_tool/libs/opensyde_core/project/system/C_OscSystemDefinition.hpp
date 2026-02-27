@@ -5,120 +5,164 @@
 
    (See .cpp file for full description)
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCSYSTEMDEFINITION_HPP
 #define C_OSCSYSTEMDEFINITION_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QList>
-#include <QHash>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
+#include "C_OscCanMessageIdentificationIndices.hpp"
+#include "C_OscCanProtocol.hpp"
+#include "C_OscDeviceManager.hpp"
 #include "C_OscNode.hpp"
 #include "C_OscNodeSquad.hpp"
 #include "C_OscSystemBus.hpp"
-#include "C_OscCanMessageIdentificationIndices.hpp"
-#include "stwtypes.hpp"
-#include <QString>
-#include "C_OscDeviceManager.hpp"
-#include "C_OscCanProtocol.hpp"
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
+#include "stwtypes.hpp"
+#include <QHash>
+#include <QList>
+#include <QString>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscSystemDefinition
-{
+class C_OscSystemDefinition {
 public:
-   C_OscSystemDefinition(void);
-   virtual ~C_OscSystemDefinition(void);
+  C_OscSystemDefinition(void);
+  virtual ~C_OscSystemDefinition(void);
 
-   void CalcHash(uint32_t & oru32_HashValue) const;
+  void CalcHash(uint32_t &oru32_HashValue) const;
 
-   void AddBus(const C_OscSystemBus & orc_Bus);
-   int32_t InsertBus(const uint32_t ou32_BusIndex, const C_OscSystemBus & orc_Bus);
-   int32_t DeleteBus(const uint32_t ou32_BusIndex);
-   int32_t AddConnection(const uint32_t ou32_NodeIndex, const uint32_t ou32_BusIndex, const uint8_t ou8_Interface);
-   bool CheckInterfaceIsAvailable(const uint32_t ou32_NodeIndex, const uint32_t ou32_ComIndex,
-                                  const uint8_t ou8_ComNodeId) const;
-   bool CheckIpAddressIsValid(const uint32_t ou32_NodeIndex, const uint32_t ou32_ComIndex,
-                              const QList<int32_t> & orc_Ip) const;
-   bool CheckBusIdAvailable(const uint8_t ou8_BusId, const uint32_t * const opu32_BusIndexToSkip = NULL) const;
-   int32_t GetNextFreeBusId(uint8_t & oru8_BusId) const;
-   int32_t CheckErrorNode(const uint32_t ou32_NodeIndex, bool * const opq_NameConflict, bool * const opq_NameInvalid,
-                          bool * const opq_NodeIdInvalid, bool * const opq_IpInvalid, bool * const opq_DataPoolsInvalid,
-                          bool * const opq_ApplicationsInvalid, bool * const opq_DomainsInvalid,
-                          bool * const opq_CommMinSignalCountInvalid, bool * const opq_CommMaxSignalCountInvalid,
-                          bool * const opq_CoPdoCountInvalid, bool * const opq_CoNodeIdInvalid,
-                          bool * const opq_CoHearbeatTimeInvalid, const bool & orq_AllowComDataPoolException,
-                          QList<uint32_t> * const opc_InvalidInterfaceIndices,
-                          QList<uint32_t> * const opc_InvalidDataPoolIndices,
-                          QList<uint32_t> * const opc_InvalidApplicationIndices,
-                          QList<uint32_t> * const opc_InvalidDomainIndices,
-                          QList<C_OscCanProtocol::E_Type> * const opc_InvalidProtocolTypes) const;
-   int32_t CheckErrorBus(const uint32_t ou32_BusIndex, bool * const opq_NameConflict, bool * const opq_NameInvalid,
-                         bool * const opq_IdInvalid, bool * const opq_DataPoolsInvalid) const;
-   int32_t CheckMessageIdBus(const uint32_t ou32_BusIndex, const C_OscCanMessageUniqueId & orc_MessageId,
-                             bool & orq_Valid,
-                             const C_OscCanMessageIdentificationIndices * const opc_SkipMessage = NULL) const;
-   int32_t CheckMessageNameBus(const uint32_t ou32_BusIndex, const QString & orc_MessageName,
-                               bool & orq_Valid, const C_OscCanMessageIdentificationIndices * const opc_SkipMessage =
-                                  NULL) const;
-   int32_t CheckMessageMatch(const C_OscCanMessageIdentificationIndices & orc_MessageId1,
-                             const C_OscCanMessageIdentificationIndices & orc_MessageId2, bool & orq_IsMatch,
-                             const bool oq_IgnoreMessageDirection = false) const;
-   void GetNameMaxCharLimitAffectedItems(const uint32_t ou32_NameMaxCharLimit,
-                                          QList<C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems);
-   void ApplyNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit);
-   void GetNodeIndexesOfBus(const uint32_t ou32_BusIndex, QList<uint32_t> & orc_NodeIndexes,
-                            QList<uint32_t> & orc_InterfaceIndexes) const;
-   void GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusIndex, QList<uint32_t> & orc_NodeIndexes,
-                                    QList<uint32_t> & orc_InterfaceIndexes,
-                                    QList<uint32_t> & orc_DatapoolIndexes) const;
-   void GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusIndex, const C_OscCanProtocol::E_Type & ore_ComProtocol,
-                                    QList<uint32_t> & orc_NodeIndexes,
-                                    QList<uint32_t> & orc_InterfaceIndexes,
-                                    QList<uint32_t> & orc_DatapoolIndexes) const;
+  void AddBus(const C_OscSystemBus &orc_Bus);
+  int32_t InsertBus(const uint32_t ou32_BusIndex,
+                    const C_OscSystemBus &orc_Bus);
+  int32_t DeleteBus(const uint32_t ou32_BusIndex);
+  int32_t AddConnection(const uint32_t ou32_NodeIndex,
+                        const uint32_t ou32_BusIndex,
+                        const uint8_t ou8_Interface);
+  bool CheckInterfaceIsAvailable(const uint32_t ou32_NodeIndex,
+                                 const uint32_t ou32_ComIndex,
+                                 const uint8_t ou8_ComNodeId) const;
+  bool CheckIpAddressIsValid(const uint32_t ou32_NodeIndex,
+                             const uint32_t ou32_ComIndex,
+                             const QList<int32_t> &orc_Ip) const;
+  bool
+  CheckBusIdAvailable(const uint8_t ou8_BusId,
+                      const uint32_t *const opu32_BusIndexToSkip = NULL) const;
+  int32_t GetNextFreeBusId(uint8_t &oru8_BusId) const;
+  int32_t CheckErrorNode(
+      const uint32_t ou32_NodeIndex, bool *const opq_NameConflict,
+      bool *const opq_NameInvalid, bool *const opq_NodeIdInvalid,
+      bool *const opq_IpInvalid, bool *const opq_DataPoolsInvalid,
+      bool *const opq_ApplicationsInvalid, bool *const opq_DomainsInvalid,
+      bool *const opq_CommMinSignalCountInvalid,
+      bool *const opq_CommMaxSignalCountInvalid,
+      bool *const opq_CoPdoCountInvalid, bool *const opq_CoNodeIdInvalid,
+      bool *const opq_CoHearbeatTimeInvalid,
+      const bool &orq_AllowComDataPoolException,
+      QList<uint32_t> *const opc_InvalidInterfaceIndices,
+      QList<uint32_t> *const opc_InvalidDataPoolIndices,
+      QList<uint32_t> *const opc_InvalidApplicationIndices,
+      QList<uint32_t> *const opc_InvalidDomainIndices,
+      QList<C_OscCanProtocol::E_Type> *const opc_InvalidProtocolTypes) const;
+  int32_t CheckErrorBus(const uint32_t ou32_BusIndex,
+                        bool *const opq_NameConflict,
+                        bool *const opq_NameInvalid, bool *const opq_IdInvalid,
+                        bool *const opq_DataPoolsInvalid) const;
+  int32_t CheckMessageIdBus(const uint32_t ou32_BusIndex,
+                            const C_OscCanMessageUniqueId &orc_MessageId,
+                            bool &orq_Valid,
+                            const C_OscCanMessageIdentificationIndices
+                                *const opc_SkipMessage = NULL) const;
+  int32_t CheckMessageNameBus(const uint32_t ou32_BusIndex,
+                              const QString &orc_MessageName, bool &orq_Valid,
+                              const C_OscCanMessageIdentificationIndices
+                                  *const opc_SkipMessage = NULL) const;
+  int32_t
+  CheckMessageMatch(const C_OscCanMessageIdentificationIndices &orc_MessageId1,
+                    const C_OscCanMessageIdentificationIndices &orc_MessageId2,
+                    bool &orq_IsMatch,
+                    const bool oq_IgnoreMessageDirection = false) const;
+  void GetNameMaxCharLimitAffectedItems(
+      const uint32_t ou32_NameMaxCharLimit,
+      QList<C_OscSystemNameMaxCharLimitChangeReportItem> &orc_ChangedItems);
+  void ApplyNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit);
+  void GetNodeIndexesOfBus(const uint32_t ou32_BusIndex,
+                           QList<uint32_t> &orc_NodeIndexes,
+                           QList<uint32_t> &orc_InterfaceIndexes) const;
+  void GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusIndex,
+                                   QList<uint32_t> &orc_NodeIndexes,
+                                   QList<uint32_t> &orc_InterfaceIndexes,
+                                   QList<uint32_t> &orc_DatapoolIndexes) const;
+  void
+  GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusIndex,
+                              const C_OscCanProtocol::E_Type &ore_ComProtocol,
+                              QList<uint32_t> &orc_NodeIndexes,
+                              QList<uint32_t> &orc_InterfaceIndexes,
+                              QList<uint32_t> &orc_DatapoolIndexes) const;
 
-   void AddNode(C_OscNode & orc_Node, const QString & orc_SubDeviceName = "",
-                const QString & orc_MainDeviceName = "");
-   void AddNodeSquad(QList<C_OscNode> & orc_Nodes, const QStringList & orc_SubDeviceNames,
-                     const QString & orc_MainDeviceName);
+  void AddNode(C_OscNode &orc_Node, const QString &orc_SubDeviceName = "",
+               const QString &orc_MainDeviceName = "");
+  void AddNodeSquad(QList<C_OscNode> &orc_Nodes,
+                    const QStringList &orc_SubDeviceNames,
+                    const QString &orc_MainDeviceName);
 
-   int32_t DeleteNode(const uint32_t ou32_NodeIndex);
+  int32_t DeleteNode(const uint32_t ou32_NodeIndex);
 
-   int32_t SetNodeName(const uint32_t ou32_NodeIndex, const QString & orc_NodeName);
-   int32_t GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex, uint32_t & oru32_NodeSquadIndex) const;
+  int32_t SetNodeName(const uint32_t ou32_NodeIndex,
+                      const QString &orc_NodeName);
+  int32_t GetNodeSquadIndexWithNodeIndex(const uint32_t ou32_NodeIndex,
+                                         uint32_t &oru32_NodeSquadIndex) const;
 
-   static C_OscDeviceManager hc_Devices;     ///< container of device types known in the system
-   QList<C_OscNode> c_Nodes;           ///< all nodes that are part of this system definition
-   QList<C_OscNodeSquad> c_NodeSquads; ///< all multi CPU based devices with sub nodes of this system definition
-   QList<C_OscSystemBus> c_Buses;      ///< all buses that are part of this system definition
-   uint32_t u32_NameMaxCharLimit;            ///< global limit for naming length checks
+  static C_OscDeviceManager
+      hc_Devices; ///< container of device types known in the system
+  QList<C_OscNode>
+      c_Nodes; ///< all nodes that are part of this system definition
+  QList<C_OscNodeSquad> c_NodeSquads; ///< all multi CPU based devices with sub
+                                      ///< nodes of this system definition
+  QList<C_OscSystemBus>
+      c_Buses; ///< all buses that are part of this system definition
+  uint32_t u32_NameMaxCharLimit; ///< global limit for naming length checks
 
 private:
-   uint32_t m_GetDataPoolHash(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex) const;
-   uint32_t m_GetRelatedProtocolHash(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex) const;
+  uint32_t m_GetDataPoolHash(const uint32_t ou32_NodeIndex,
+                             const uint32_t ou32_DataPoolIndex) const;
+  uint32_t m_GetRelatedProtocolHash(const uint32_t ou32_NodeIndex,
+                                    const uint32_t ou32_DataPoolIndex) const;
 
-   void m_GetNodeAndComDpIndexesOfBus(const uint32_t ou32_BusIndex,
-                                      const C_OscCanProtocol::E_Type * const ope_ComProtocol,
-                                      QList<uint32_t> & orc_NodeIndexes,
-                                      QList<uint32_t> & orc_InterfaceIndexes,
-                                      QList<uint32_t> * const opc_DatapoolIndexes) const;
-   void m_HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
-                                  QList<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
-   void m_HandleNameMaxCharLimitNodeName(const uint32_t ou32_NodeIndex, const uint32_t ou32_NameMaxCharLimit,
-                                          QList<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
+  void m_GetNodeAndComDpIndexesOfBus(
+      const uint32_t ou32_BusIndex,
+      const C_OscCanProtocol::E_Type *const ope_ComProtocol,
+      QList<uint32_t> &orc_NodeIndexes, QList<uint32_t> &orc_InterfaceIndexes,
+      QList<uint32_t> *const opc_DatapoolIndexes) const;
+  void
+  m_HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
+                           QList<C_OscSystemNameMaxCharLimitChangeReportItem>
+                               *const opc_ChangedItems);
+  void m_HandleNameMaxCharLimitNodeName(
+      const uint32_t ou32_NodeIndex, const uint32_t ou32_NameMaxCharLimit,
+      QList<C_OscSystemNameMaxCharLimitChangeReportItem>
+          *const opc_ChangedItems);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-}
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

@@ -2,51 +2,61 @@
 /*!
    \file
    \brief       openSYDE: X-Config Package base
-   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCXCOBASE_HPP
 #define C_OSCXCOBASE_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "stwtypes.hpp"
 #include <QString>
 #include <QStringList>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscXcoBase
-{
+class C_OscXcoBase {
 public:
-   static QString h_GetPackageExtension();
+  static QString h_GetPackageExtension();
 
-   static const QString hc_PACKAGE_EXT;
-   static const QString hc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
-   static const QString hc_XCFG_SYSDEF;
-   static const QString hc_XCFG_SYSDEF_FOLDER;
-   static const QString hc_INI_DEV;
-   static const QString hc_INI_DEV_FOLDER;
+  static const QString hc_PACKAGE_EXT;
+  static const QString
+      hc_PACKAGE_EXT_TMP; // intermediate directory before creating zip archive
+  static const QString hc_XCFG_SYSDEF;
+  static const QString hc_XCFG_SYSDEF_FOLDER;
+  static const QString hc_INI_DEV;
+  static const QString hc_INI_DEV_FOLDER;
 
 protected:
-   static QStringList mhc_WarningMessages; // global warnings e.g. if update position of active node is
-                                           // not available
-   static QString mhc_ErrorMessage;        // description of error which caused the service update package
-                                                         // to fail
+  static QStringList
+      mhc_WarningMessages; // global warnings e.g. if update position of active
+                           // node is not available
+  static QString mhc_ErrorMessage; // description of error which caused the
+                                   // service update package to fail
 
-   static void mh_Init(void);
-   static void mh_GetWarningsAndErrors(QStringList & orc_WarningMessages,
-                                       QString & orc_ErrorMessage);
+  static void mh_Init(void);
+  static void mh_GetWarningsAndErrors(QStringList &orc_WarningMessages,
+                                      QString &orc_ErrorMessage);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

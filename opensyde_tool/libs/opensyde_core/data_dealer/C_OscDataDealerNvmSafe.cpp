@@ -30,13 +30,11 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
-
 #include "C_OscDataDealerNvmSafe.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscParamSetHandler.hpp"
 #include "C_OscParamSetInterpretedNodeFiler.hpp"
 #include "C_OscParamSetRawNodeFiler.hpp"
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -210,8 +208,7 @@ C_OscDataDealerNvmSafe::NvmSafeCheckCrcs(const C_OscNode &orc_Node) const {
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscDataDealerNvmSafe::NvmSafeWriteChangedValues(
     QList<C_OscNodeDataPoolListElementId> &orc_ChangedElements,
-    const QList<C_OscNodeDataPoolListId> *const
-        opc_AdditionalListsToUpdate,
+    const QList<C_OscNodeDataPoolListId> *const opc_AdditionalListsToUpdate,
     uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
 
@@ -435,7 +432,7 @@ C_OscDataDealerNvmSafe::NvmSafeReadValues(const C_OscNode *(&orpc_NodeCopy),
     this->mc_NodeCopy = *this->mpc_Node;
 
     if (this->mc_ChangedLists.size() > 0) {
-      std::set<C_OscNodeDataPoolListId>::const_iterator c_ItChangedList;
+      QSet<C_OscNodeDataPoolListId>::const_iterator c_ItChangedList;
 
       // Read all changed lists
       for (c_ItChangedList = this->mc_ChangedLists.begin();
@@ -530,7 +527,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeWriteCrcs(uint8_t *const opu8_NrCode) {
   } else {
     uint32_t u32_DataPoolCounter;
     uint32_t u32_ListCounter;
-    std::set<C_OscNodeDataPoolListId>::const_iterator c_ItChangedList;
+    QSet<C_OscNodeDataPoolListId>::const_iterator c_ItChangedList;
 
     s32_Return = C_NO_ERR;
 
@@ -936,8 +933,10 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCreateCleanFileWithoutCrc(
     const C_OscParamSetInterpretedFileInfoData &orc_FileInfo) {
   int32_t s32_Retval;
 
-  if (!(QFileInfo(QString::fromStdString(orc_Path.toUtf8().constData())).exists() &&
-        QFileInfo(QString::fromStdString(orc_Path.toUtf8().constData())).isFile())) {
+  if (!(QFileInfo(QString::fromStdString(orc_Path.toUtf8().constData()))
+            .exists() &&
+        QFileInfo(QString::fromStdString(orc_Path.toUtf8().constData()))
+            .isFile())) {
     if (this->me_ParameterSetFileState ==
         C_OscDataDealerNvmSafe::ePSFS_DATA_RESET) {
       this->mc_ImageFileHandler.AddInterpretedFileData(orc_FileInfo);
@@ -1091,8 +1090,7 @@ int32_t C_OscDataDealerNvmSafe::NvmSafeCheckParameterFileContents(
             }
             if (s32_Retval == C_NO_ERR) {
               // Remove duplicates
-              const QList<C_OscNodeDataPoolListId> c_Copy =
-                  orc_DataPoolLists;
+              const QList<C_OscNodeDataPoolListId> c_Copy = orc_DataPoolLists;
               orc_DataPoolLists.clear();
               orc_DataPoolLists.reserve(c_Copy.size());
               for (uint32_t u32_ItCopy = 0; u32_ItCopy < c_Copy.size();
@@ -1216,11 +1214,11 @@ C_OscDataDealerNvmSafe::NvmSafeReadFileWithCrc(const QString &orc_Path) {
     // data for one file contained ?
     if (this->mc_ImageFileHandler.GetNumberOfNodes() != 1U) {
       QString c_Error;
-      c_Error =
-          QString::asprintf(
-              "File \"%s\"  Expected: contains parameters for one device  "
-              "Found: contains parameters for %u devices\n",
-              orc_Path.toUtf8().constData(), this->mc_ImageFileHandler.GetNumberOfNodes());
+      c_Error = QString::asprintf(
+          "File \"%s\"  Expected: contains parameters for one device  "
+          "Found: contains parameters for %u devices\n",
+          orc_Path.toUtf8().constData(),
+          this->mc_ImageFileHandler.GetNumberOfNodes());
       this->mc_ImageFileHandler.ClearContent();
       s32_Retval = C_CONFIG;
       osc_write_log_error("Loading parameter set file", c_Error);

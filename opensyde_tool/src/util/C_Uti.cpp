@@ -555,14 +555,16 @@ QString C_Uti::h_GetPemDbPath() {
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat) {
+  QString c_Version;
+
+  c_Version = "V?.\?\?r?";
+
+#ifdef _WIN32
   const QFileInfo c_FileInfo(QApplication::applicationFilePath());
   const QString c_FileName = c_FileInfo.fileName();
   VS_FIXEDFILEINFO *pc_Info;
   uint32_t u32_ValSize;
   int32_t s32_InfoSize;
-  QString c_Version;
-
-  c_Version = "V?.\?\?r?";
 
   s32_InfoSize =
       GetFileVersionInfoSizeA(c_FileName.toStdString().c_str(), NULL);
@@ -591,6 +593,7 @@ QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat) {
     }
     delete[] pu8_Buffer;
   }
+#endif
   return c_Version;
 }
 
@@ -662,7 +665,7 @@ QString C_Uti::h_GetCompleteLogFileLocation(const QString &orc_Extension) {
   QDateTime c_DateTime = QDateTime::currentDateTime();
   // Format:2017-08-29 07:32:19.123
   QString c_FileBaseName =
-      QString::fromStdString(C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime));
+      C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime);
 
   // Replace invalid characters
   c_FileBaseName = c_FileBaseName.replace(4, 1, '_');

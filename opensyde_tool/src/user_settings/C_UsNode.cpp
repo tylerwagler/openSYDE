@@ -214,7 +214,7 @@ QHash<uint8_t, bool> C_UsNode::GetExpandedCanOpenDevices(void) const {
    CANopen expanded device
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
+QMap<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
 C_UsNode::GetExpandedCanOpenDevice(void) const {
   return this->mc_CanOpenExpandedDevice;
 }
@@ -585,7 +585,7 @@ void C_UsNode::SetExpandedCanOpenDevices(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsNode::SetExpandedCanOpenDevice(
-    const std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
+    const QMap<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
         &orc_Device) {
   this->mc_CanOpenExpandedDevice = orc_Device;
 }

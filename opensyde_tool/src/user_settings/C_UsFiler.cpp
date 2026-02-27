@@ -277,11 +277,11 @@ void C_UsFiler::mh_SaveNode(QSettings &orc_Ini, const QString &orc_SectionName,
                          (c_CanOpenExpandedCanOpenManager +
                           QString::number(u32_InterfaceCounter) +
                           "InterfaceNumber"),
-                     c_ItInterface->first);
+                     c_ItInterface.key());
     orc_Ini.setValue(orc_SectionName + "/" +
                          (c_CanOpenExpandedCanOpenManager +
                           QString::number(u32_InterfaceCounter)),
-                     c_ItInterface->second);
+                     c_ItInterface.value());
     u32_InterfaceCounter++;
   }
   orc_Ini.setValue(orc_SectionName + "/" +
@@ -295,41 +295,41 @@ void C_UsFiler::mh_SaveNode(QSettings &orc_Ini, const QString &orc_SectionName,
                          (c_CanOpenExpandedCanOpenDevices +
                           QString::number(u32_DevicesCounter) +
                           "InterfaceNumber"),
-                     c_ItDevices->first);
+                     c_ItDevices.key());
     orc_Ini.setValue(orc_SectionName + "/" +
                          (c_CanOpenExpandedCanOpenDevices +
                           QString::number(u32_DevicesCounter)),
-                     c_ItDevices->second);
+                     c_ItDevices.value());
     u32_DevicesCounter++;
   }
   orc_Ini.setValue(orc_SectionName + "/" +
                         c_CanOpenExpandedCanOpenDevicesCounter,
                     static_cast<int>(c_Devices.size()));
   uint32_t u32_DeviceCounter = 0UL;
-  std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool> c_Device =
+  QMap<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool> c_Device =
       orc_Node.GetExpandedCanOpenDevice();
-  for (std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>,
-                bool>::const_iterator c_ItDevice = c_Device.begin();
+  for (QMap<std::pair<uint8_t, std::pair<uint8_t, QString>>,
+            bool>::const_iterator c_ItDevice = c_Device.begin();
        c_ItDevice != c_Device.end(); ++c_ItDevice) {
     orc_Ini.setValue(orc_SectionName + "/" +
                          (c_CanOpenExpandedCanOpenDevice +
                           QString::number(u32_DeviceCounter) +
                           "InterfaceNumber"),
-                     c_ItDevice->first.first);
+                     c_ItDevice.key().first);
     orc_Ini.setValue(orc_SectionName + "/" +
                          (c_CanOpenExpandedCanOpenDevice +
                           QString::number(u32_DeviceCounter) +
                           "DeviceInterfaceNumber"),
-                     c_ItDevice->first.second.first);
+                     c_ItDevice.key().second.first);
     orc_Ini.setValue(orc_SectionName + "/" +
                          (c_CanOpenExpandedCanOpenDevice +
                           QString::number(u32_DeviceCounter) +
                           "DeviceNodeName"),
-                     c_ItDevice->first.second.second);
+                     c_ItDevice.key().second.second);
     orc_Ini.setValue(orc_SectionName + "/" +
                          (c_CanOpenExpandedCanOpenDevice +
                           QString::number(u32_DeviceCounter)),
-                     c_ItDevice->second);
+                     c_ItDevice.value());
     u32_DeviceCounter++;
   }
   orc_Ini.setValue(orc_SectionName + "/" +
@@ -1371,10 +1371,9 @@ void C_UsFiler::mh_SaveProjectDependentSection(
     for (int32_t s32_SectionCounter = 0;
          s32_SectionCounter < static_cast<int32_t>(c_PemFilePaths.size());
          ++s32_SectionCounter) {
-      const std::string c_PemFilePath =
-          c_PemFilePaths[s32_SectionCounter].toStdString();
+      const QString c_PemFilePath = c_PemFilePaths[s32_SectionCounter];
       orc_Ini.setValue("Update/PemFiles_" + QString::number(s32_SectionCounter),
-                       QString::fromStdString(c_PemFilePath));
+                       c_PemFilePath);
     }
   }
 }
@@ -1489,7 +1488,7 @@ void C_UsFiler::mh_LoadNode(QSettings &orc_Ini, const QString &orc_SectionName,
   // CANopen
   QHash<uint8_t, bool> c_LoadInterfaces;
   QHash<uint8_t, bool> c_LoadDevices;
-  std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool> c_LoadDevice;
+  QMap<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool> c_LoadDevice;
   u32_Tmp =
       orc_Ini
           .value(orc_SectionName + "/" + c_CanOpenExpandedCanOpenManagerCounter,

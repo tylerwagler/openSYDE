@@ -6,32 +6,49 @@
    ANSI C++ MD5 hashing class using Qt's QCryptographicHash.
    For details see documentation in .hpp file.
 
-   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
+#include "C_Md5Checksum.hpp"
 #include <QCryptographicHash>
 #include <QFile>
-#include "C_Md5Checksum.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::md5;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief    Get MD5 over data
@@ -43,18 +60,19 @@ using namespace stw::md5;
    Calculated MD5 as lowercase hex string (empty string if there are problems)
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_Md5Checksum::GetMD5(const uint8_t * const opu8_Data, const uint32_t ou32_Length)
-{
-   if (opu8_Data == NULL)
-   {
-      return "";
-   }
+QString C_Md5Checksum::GetMD5(const uint8_t *const opu8_Data,
+                              const uint32_t ou32_Length) {
+  if (opu8_Data == NULL) {
+    return "";
+  }
 
-   const QByteArray c_Data = QByteArray::fromRawData(reinterpret_cast<const char *>(opu8_Data),
-                                                      static_cast<qsizetype>(ou32_Length));
-   const QByteArray c_Hash = QCryptographicHash::hash(c_Data, QCryptographicHash::Md5);
+  const QByteArray c_Data =
+      QByteArray::fromRawData(reinterpret_cast<const char *>(opu8_Data),
+                              static_cast<qsizetype>(ou32_Length));
+  const QByteArray c_Hash =
+      QCryptographicHash::hash(c_Data, QCryptographicHash::Md5);
 
-   return QString::fromLatin1(c_Hash.toHex());
+  return QString::fromLatin1(c_Hash.toHex());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -66,29 +84,26 @@ QString C_Md5Checksum::GetMD5(const uint8_t * const opu8_Data, const uint32_t ou
    Calculated MD5 as lowercase hex string (empty string if there are problems)
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_Md5Checksum::GetMD5(std::FILE * const opc_File)
-{
-   if (opc_File == NULL)
-   {
-      return "";
-   }
+QString C_Md5Checksum::GetMD5(std::FILE *const opc_File) {
+  if (opc_File == NULL) {
+    return "";
+  }
 
-   QCryptographicHash c_Hash(QCryptographicHash::Md5);
-   const uint32_t u32_BufferSize = 4096;
-   char acn_Buffer[u32_BufferSize];
+  QCryptographicHash c_Hash(QCryptographicHash::Md5);
+  const uint32_t u32_BufferSize = 4096;
+  char acn_Buffer[u32_BufferSize];
 
-   // Read file in chunks and feed to hash
-   while (true)
-   {
-      const size_t uq_BytesRead = std::fread(acn_Buffer, 1, u32_BufferSize, opc_File);
-      if (uq_BytesRead == 0)
-      {
-         break;
-      }
-      c_Hash.addData(acn_Buffer, static_cast<qsizetype>(uq_BytesRead));
-   }
+  // Read file in chunks and feed to hash
+  while (true) {
+    const size_t uq_BytesRead =
+        std::fread(acn_Buffer, 1, u32_BufferSize, opc_File);
+    if (uq_BytesRead == 0) {
+      break;
+    }
+    c_Hash.addData(acn_Buffer, static_cast<qsizetype>(uq_BytesRead));
+  }
 
-   return QString::fromLatin1(c_Hash.result().toHex());
+  return QString::fromLatin1(c_Hash.result().toHex());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -100,21 +115,18 @@ QString C_Md5Checksum::GetMD5(std::FILE * const opc_File)
    Calculated MD5 as lowercase hex string (empty string if there are problems)
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_Md5Checksum::GetMD5(const QString & orc_FilePath)
-{
-   QFile c_File(orc_FilePath);
+QString C_Md5Checksum::GetMD5(const QString &orc_FilePath) {
+  QFile c_File(orc_FilePath);
 
-   if (!c_File.open(QIODevice::ReadOnly))
-   {
-      return "";
-   }
+  if (!c_File.open(QIODevice::ReadOnly)) {
+    return "";
+  }
 
-   QCryptographicHash c_Hash(QCryptographicHash::Md5);
+  QCryptographicHash c_Hash(QCryptographicHash::Md5);
 
-   if (!c_Hash.addData(&c_File))
-   {
-      return "";
-   }
+  if (!c_Hash.addData(&c_File)) {
+    return "";
+  }
 
-   return QString::fromLatin1(c_Hash.result().toHex());
+  return QString::fromLatin1(c_Hash.result().toHex());
 }

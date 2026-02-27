@@ -117,7 +117,7 @@ C_CamMetTreeView::C_CamMetTreeView(QWidget * const opc_Parent) :
    this->mc_GuiBuffer.moveToThread(&mc_ThreadGuiBuffer);
    this->mc_ThreadGuiBuffer.start();
    //lint -e{1938}  static const is guaranteed preinitialized before main
-   qRegisterMetaType<std::list<C_CamMetTreeLoggerData> >();
+   qRegisterMetaType<QList<C_CamMetTreeLoggerData>>();
    connect(&this->mc_GuiBuffer, &C_CamMetTreeGuiBuffer::SigUpdateUi, this, &C_CamMetTreeView::m_UpdateUi);
    connect(&this->mc_Delegate, &C_CamMetTreeDelegate::SigStartAccept, &this->mc_Model, &C_CamMetTreeModel::UnlockData);
    connect(&this->mc_Delegate, &C_CamMetTreeDelegate::SigEndAccept, &this->mc_Model, &C_CamMetTreeModel::LockData);
@@ -969,7 +969,7 @@ void C_CamMetTreeView::m_HandleMessages(void)
    \param[in]  orc_Data    New data
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamMetTreeView::m_UpdateUi(const std::list<C_CamMetTreeLoggerData> & orc_Data)
+void C_CamMetTreeView::m_UpdateUi(const QList<C_CamMetTreeLoggerData> & orc_Data)
 {
    QList<int32_t> c_Rows;
    // Get the maximum of the scroll bar before adding new data

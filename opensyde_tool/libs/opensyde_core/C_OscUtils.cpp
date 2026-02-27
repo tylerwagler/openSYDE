@@ -99,7 +99,6 @@ const QString C_OscUtils::hc_PATH_VARIABLE_COMPUTER_NAME = "%{COMPUTER_NAME}";
 bool C_OscUtils::h_CheckValidCeName(const QString &orc_Name,
                                     const bool oq_AutomaticCeStringAdaptation,
                                     const uint16_t ou16_MaxLength) {
-  char_t cn_Char;
   bool q_IsValid = true;
 
   if (orc_Name.length() == 0) {
@@ -111,13 +110,13 @@ bool C_OscUtils::h_CheckValidCeName(const QString &orc_Name,
       // no automatic c string adaptation
       for (u32_Index = 0; u32_Index < orc_Name.length(); u32_Index++) {
         // first char of name
-         const QChar cn_Char = orc_Name[u32_Index];
+        const QChar cn_Char = orc_Name[u32_Index];
         // is alphanumeric and no underscore true or a number true -> invalid
         // name
 
         // Use Qt-native character classification
         if ((!cn_Char.isLetterOrNumber() && (cn_Char != '_')) ||
-            (u32_Index == 0 && !cn_Char.isDigit()))) // Qt-compliant check
+            (u32_Index == 0 && !cn_Char.isDigit())) // Qt-compliant check
         {
           q_IsValid = false;
           break;
@@ -127,14 +126,14 @@ bool C_OscUtils::h_CheckValidCeName(const QString &orc_Name,
       // automatic c string adaptation
       for (u32_Index = 0; u32_Index < orc_Name.length(); u32_Index++) {
         // fist char of name
-         const QChar cn_Char = orc_Name[u32_Index];
+        const QChar cn_Char = orc_Name[u32_Index];
 
         // is alphanumeric true or no underscore and a number true -> invalid
         // name
 
         // Use Qt-native character classification
         if ((!cn_Char.isLetterOrNumber() && (cn_Char != '_')) ||
-            (u32_Index == 0 && !cn_Char.isDigit()))) // Qt-compliant check
+            (u32_Index == 0 && !cn_Char.isDigit())) // Qt-compliant check
         {
           q_IsValid = false;
           break;
@@ -290,41 +289,29 @@ QString C_OscUtils::h_NiceifyStringForFileName(const QString &orc_String) {
   } else {
     for (uint32_t u32_Index = 0U; u32_Index < orc_String.length();
          u32_Index++) {
-       const QChar cn_Character = orc_String[u32_Index];
+      const QChar cn_Character = orc_String[u32_Index];
 
-       // Use Qt-native character classification
-       if (!cn_Character.isLetterOrNumber() &&
-           (cn_Character != '_') &&
-           (cn_Character != '-') &&
-           (cn_Character != '(') &&
-           (cn_Character != ')') &&
-           (cn_Character != '{') &&
-           (cn_Character != '}') &&
-           (cn_Character != '$') &&
-           (cn_Character != '.') &&
-           (cn_Character != ' ') &&
-           (cn_Character != '%') &&
-           (cn_Character != '&') &&
-           (cn_Character != '!') &&
-           (cn_Character != '#') &&
-           (cn_Character != '+') &&
-           (cn_Character != ',') &&
-           (cn_Character != ';') &&
-           (cn_Character != '=') &&
-           (cn_Character != '@') &&
-           (cn_Character != '[') &&
-           (cn_Character != ']') &&
-           (cn_Character != '^') &&
-           (cn_Character != '\'') &&
-           (cn_Character != '~')) {
-         c_Result += QString::number(static_cast<int>(cn_Character.unicode()));
-       } else {
-         c_Result += cn_Character;
+      // Use Qt-native character classification
+      if (!cn_Character.isLetterOrNumber() && (cn_Character != '_') &&
+          (cn_Character != '-') && (cn_Character != '(') &&
+          (cn_Character != ')') && (cn_Character != '{') &&
+          (cn_Character != '}') && (cn_Character != '$') &&
+          (cn_Character != '.') && (cn_Character != ' ') &&
+          (cn_Character != '%') && (cn_Character != '&') &&
+          (cn_Character != '!') && (cn_Character != '#') &&
+          (cn_Character != '+') && (cn_Character != ',') &&
+          (cn_Character != ';') && (cn_Character != '=') &&
+          (cn_Character != '@') && (cn_Character != '[') &&
+          (cn_Character != ']') && (cn_Character != '^') &&
+          (cn_Character != '\'') && (cn_Character != '~')) {
+        c_Result += QString::number(static_cast<int>(cn_Character.unicode()));
+      } else {
+        c_Result += cn_Character;
 
-         if (cn_Character != ' ') {
-           q_Blank = false;
-         }
-       }
+        if (cn_Character != ' ') {
+          q_Blank = false;
+        }
+      }
     }
   }
 
@@ -630,9 +617,9 @@ C_OscUtils::h_FsnSerialNumberToString(const uint8_t ou8_ManufacturerFormat,
         // lint -e{9176} //no problems as long as charn has the same size as
         // uint8; if not we'd be in deep !"=?&
         // anyway
-         c_Result = C_OscUtils::h_PosSerialNumberToString(
-             reinterpret_cast<const uint8_t *>(
-                 orc_RawSerialNumber.toUtf8().constData()));
+        c_Result = C_OscUtils::h_PosSerialNumberToString(
+            reinterpret_cast<const uint8_t *>(
+                orc_RawSerialNumber.toUtf8().constData()));
       }
     } else {
       // No concrete formats defined yet
@@ -724,9 +711,9 @@ QString C_OscUtils::h_LoadString(const uint16_t ou16_StringIndex) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscUtils::h_CopyFile(const QString &orc_SourceFile,
-                                const QString &orc_TargetFile,
-                                QString *const opc_ErrorPath,
-                                QString *const opc_ErrorMessage) {
+                               const QString &orc_TargetFile,
+                               QString *const opc_ErrorPath,
+                               QString *const opc_ErrorMessage) {
   int32_t s32_Return = C_NO_ERR;
   QString c_ErrorMessage = "";
 
@@ -1010,9 +997,9 @@ C_OscUtils::h_ConcatPathIfNecessary(const QString &orc_BaseDir,
 //----------------------------------------------------------------------------------------------------------------------
 QString
 C_OscUtils::h_GetUniqueName(const QHash<QString, bool> &orc_ExistingStrings,
-                          const QString &orc_ProposedName,
-                          const uint32_t ou32_MaxCharLimit,
-                          const QString &orc_SkipName) {
+                            const QString &orc_ProposedName,
+                            const uint32_t ou32_MaxCharLimit,
+                            const QString &orc_SkipName) {
   QString c_Retval = orc_ProposedName;
   bool q_Conflict;
   int32_t s32_MaxDeviation;
@@ -1235,26 +1222,34 @@ QString C_OscUtils::h_ChangeFileExtension(const QString &orc_FilePath,
    "h_IntToHex(0x123, 4)" will return "0123".
 
    \param[in]  os64_Value    value to convert
-   \param[in]  ou32_Digits   number of digits to return (zeroes will be filled in from the left)
+   \param[in]  ou32_Digits   number of digits to return (zeroes will be filled
+   in from the left)
 
    \return
    Resulting hexadecimal string (uppercase)
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscUtils::h_IntToHex(const int64_t os64_Value, const uint32_t ou32_Digits) {
-  return QString::number(os64_Value, 16).toUpper().rightJustified(static_cast<int>(ou32_Digits), '0');
+QString C_OscUtils::h_IntToHex(const int64_t os64_Value,
+                               const uint32_t ou32_Digits) {
+  return QString::number(os64_Value, 16)
+      .toUpper()
+      .rightJustified(static_cast<int>(ou32_Digits), '0');
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Convert unsigned integer to hexadecimal string
 
    \param[in]  ou64_Value    value to convert
-   \param[in]  ou32_Digits   number of digits to return (zeroes will be filled in from the left)
+   \param[in]  ou32_Digits   number of digits to return (zeroes will be filled
+   in from the left)
 
    \return
    Resulting hexadecimal string (uppercase)
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscUtils::h_IntToHex(const uint64_t ou64_Value, const uint32_t ou32_Digits) {
-  return QString::number(ou64_Value, 16).toUpper().rightJustified(static_cast<int>(ou32_Digits), '0');
+QString C_OscUtils::h_IntToHex(const uint64_t ou64_Value,
+                               const uint32_t ou32_Digits) {
+  return QString::number(ou64_Value, 16)
+      .toUpper()
+      .rightJustified(static_cast<int>(ou32_Digits), '0');
 }

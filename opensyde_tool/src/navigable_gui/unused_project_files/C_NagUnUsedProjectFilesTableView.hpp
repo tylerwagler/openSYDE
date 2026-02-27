@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QObject>
+#include <QMap>
 
 #include "C_OgeTreeViewToolTipBase.hpp"
 #include "C_TblTreMultiColumnLeafSortFilter.hpp"
@@ -50,8 +51,8 @@ protected:
    void selectionChanged(const QItemSelection & orc_Selected, const QItemSelection & orc_Deselected) override;
 
 private:
-   static std::map<opensyde_gui_logic::C_NagUnUsedProjectFilesTableModel::E_Columns,
-                   uint32_t> mh_GetDefaultColumnWidths(void);
+   static QMap<opensyde_gui_logic::C_NagUnUsedProjectFilesTableModel::E_Columns,
+               uint32_t> mh_GetDefaultColumnWidths(void);
    void m_InitColumns(void);
    void m_ShowHideVerticalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const;
    void m_ShowHideHorizontalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const;

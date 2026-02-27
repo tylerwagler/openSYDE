@@ -333,8 +333,8 @@ QMap<C_OscNodeDataPoolListElementOptArrayId,
 {
    QMap<C_OscNodeDataPoolListElementOptArrayId,
         C_SdNdeDalCopElementIdCrcGroup> c_Retval;
-   const std::set<C_OscNodeDataPoolListElementOptArrayId> c_Ids = C_SdNdeDalCopClipBoardHelper::mh_GetAllIds(orc_Data);
-   for (std::set<C_OscNodeDataPoolListElementOptArrayId>::const_iterator c_It = c_Ids.cbegin(); c_It != c_Ids.cend();
+   const QSet<C_OscNodeDataPoolListElementOptArrayId> c_Ids = C_SdNdeDalCopClipBoardHelper::mh_GetAllIds(orc_Data);
+   for (QSet<C_OscNodeDataPoolListElementOptArrayId>::const_iterator c_It = c_Ids.cbegin(); c_It != c_Ids.cend();
         ++c_It)
    {
       C_SdNdeDalCopElementIdCrcGroup c_Tmp;
@@ -354,10 +354,10 @@ QMap<C_OscNodeDataPoolListElementOptArrayId,
    All IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::set<C_OscNodeDataPoolListElementOptArrayId> C_SdNdeDalCopClipBoardHelper::mh_GetAllIds(
+QSet<C_OscNodeDataPoolListElementOptArrayId> C_SdNdeDalCopClipBoardHelper::mh_GetAllIds(
    const QList<C_OscDataLoggerJob> & orc_Data)
 {
-   std::set<C_OscNodeDataPoolListElementOptArrayId> c_Retval;
+   QSet<C_OscNodeDataPoolListElementOptArrayId> c_Retval;
    for (uint32_t u32_ItLogger = 0UL; u32_ItLogger < orc_Data.size(); ++u32_ItLogger)
    {
       mh_GetAllIds(orc_Data[u32_ItLogger], c_Retval);
@@ -373,7 +373,7 @@ std::set<C_OscNodeDataPoolListElementOptArrayId> C_SdNdeDalCopClipBoardHelper::m
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalCopClipBoardHelper::mh_GetAllIds(const C_OscDataLoggerJob & orc_Data,
-                                                std::set<C_OscNodeDataPoolListElementOptArrayId> & orc_Ids)
+                                                QSet<C_OscNodeDataPoolListElementOptArrayId> & orc_Ids)
 {
    for (uint32_t u32_ItDataEl = 0UL; u32_ItDataEl < orc_Data.c_ConfiguredDataElements.size(); ++u32_ItDataEl)
    {
@@ -400,10 +400,10 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_ValidateIds(const QList<C_OscDataLogger
                                                                 C_SdNdeDalCopElementIdCrcGroup> & orc_ElementIdGroups)
 {
    int32_t s32_Retval = C_NO_ERR;
-   const std::set<C_OscNodeDataPoolListElementOptArrayId> c_Ids = C_SdNdeDalCopClipBoardHelper::mh_GetAllIds(orc_Data);
+   const QSet<C_OscNodeDataPoolListElementOptArrayId> c_Ids = C_SdNdeDalCopClipBoardHelper::mh_GetAllIds(orc_Data);
 
    //Check
-   for (std::set<C_OscNodeDataPoolListElementOptArrayId>::const_iterator c_It = c_Ids.cbegin(); c_It != c_Ids.cend();
+   for (QSet<C_OscNodeDataPoolListElementOptArrayId>::const_iterator c_It = c_Ids.cbegin(); c_It != c_Ids.cend();
         ++c_It)
    {
       if (!orc_ElementIdGroups.contains(*c_It))

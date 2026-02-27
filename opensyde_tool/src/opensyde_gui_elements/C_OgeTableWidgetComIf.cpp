@@ -110,7 +110,7 @@ void C_OgeTableWidgetComIf::SetToolTipAt(const uint32_t ou32_Row, const uint32_t
    c_Id.s32_Col = static_cast<int32_t>(ou32_Col);
    if ((orc_Heading.compare("") == 0) && (orc_Content.compare("") == 0))
    {
-      const std::map<C_ItemId, C_ToolTipContent>::iterator c_ItPos = this->mc_ToolTips.find(c_Id);
+      const QMap<C_ItemId, C_ToolTipContent>::iterator c_ItPos = this->mc_ToolTips.find(c_Id);
       if (c_ItPos != this->mc_ToolTips.end())
       {
          this->mc_ToolTips.erase(c_ItPos);
@@ -255,7 +255,7 @@ bool C_OgeTableWidgetComIf::event(QEvent * const opc_Event)
                {
                   const int32_t s32_ToolTipRow = c_Index.row();
                   const int32_t s32_ToolTipCol = c_Index.column();
-                  std::map<C_ItemId, C_ToolTipContent>::const_iterator c_ItToolTip;
+                  QMap<C_ItemId, C_ToolTipContent>::const_iterator c_ItToolTip;
                   C_ItemId c_Id;
                   c_Id.s32_Row = s32_ToolTipRow;
                   c_Id.s32_Col = s32_ToolTipCol;
@@ -265,9 +265,9 @@ bool C_OgeTableWidgetComIf::event(QEvent * const opc_Event)
                      this->mc_HoveredRow = c_Id;
                      //Update text
                      this->setMouseTracking(true);
-                     this->mpc_ToolTip->SetHeading(c_ItToolTip->second.c_Heading);
-                     this->mpc_ToolTip->SetContent(c_ItToolTip->second.c_Content);
-                     this->mpc_ToolTip->SetType(c_ItToolTip->second.e_Type);
+                     this->mpc_ToolTip->SetHeading(c_ItToolTip.value().c_Heading);
+                     this->mpc_ToolTip->SetContent(c_ItToolTip.value().c_Content);
+                     this->mpc_ToolTip->SetType(c_ItToolTip.value().e_Type);
                      this->mpc_ToolTip->show();
                      this->mpc_ToolTip->DoMove(pc_HelpEvent->globalPos());
                   }

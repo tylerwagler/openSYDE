@@ -13,6 +13,7 @@
 #include "C_CieExportDbc.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "stwtypes.hpp"
+#include <QHash>
 #include <QStringList>
 #include <QWidget>
 
@@ -42,7 +43,7 @@ public:
 
   void InitStaticNames(void) const;
   void SetMessageData(
-      const std::map<QString, QString> &orc_NodeMapping,
+      const QHash<QString, QString> &orc_NodeMapping,
       const stw::opensyde_gui_logic::C_CieExportDbc::C_ExportStatistic
           &orc_ExportStatistic,
       const QStringList &orc_Warnings);
@@ -54,7 +55,7 @@ private:
   Ui::C_CieExportReportWidget *mpc_Ui;
   // lint -e{1725} Only problematic if copy or assignment is allowed
   stw::opensyde_gui_elements::C_OgePopUpDialog &mrc_ParentDialog;
-  std::map<QString, QString> mc_NodeMapping;
+  QHash<QString, QString> mc_NodeMapping;
   stw::opensyde_gui_logic::C_CieExportDbc::C_ExportStatistic mc_ExportStatistic;
   QStringList mc_Warnings;
   const QString mc_FilePath;

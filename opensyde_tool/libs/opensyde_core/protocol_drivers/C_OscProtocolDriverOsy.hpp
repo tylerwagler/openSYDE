@@ -27,14 +27,12 @@
 #include <QByteArray>
 #include <QRecursiveMutex>
 #include <QString>
-#include <map>
-
+#include <QMap>
 
 #include "C_OscProtocolDriverOsyTpBase.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 #include "stw_can.hpp" //for CAN message type
 #include "stwtypes.hpp"
-
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -75,8 +73,8 @@ private:
   // maximum service size including header (used in WriteMemoryByAddress):
   uint16_t mu16_MaxServiceSize;
 
-  std::map<uint8_t, uint8_t> mc_DataPoolMappingClientToServer;
-  std::map<uint8_t, uint8_t> mc_DataPoolMappingServerToClient;
+  QMap<uint8_t, uint8_t> mc_DataPoolMappingClientToServer;
+  QMap<uint8_t, uint8_t> mc_DataPoolMappingServerToClient;
 
   void m_LogServiceError(const QString &orc_Service,
                          const int32_t os32_ReturnCode,
@@ -116,15 +114,13 @@ private:
                            const QByteArray &orc_SendData,
                            const uint16_t ou16_ExpectedPayloadSize,
                            const bool oq_ExactSizeExpected,
-                           QByteArray &orc_ReadData,
-                           uint8_t &oru8_NrCode,
+                           QByteArray &orc_ReadData, uint8_t &oru8_NrCode,
                            const bool oq_CanTransferWithoutFlowControl = false);
   int32_t m_SecurityAccess(const uint8_t ou8_SubFunction,
                            const QByteArray &orc_SendData,
                            const uint16_t ou16_SendPayloadSize,
                            const uint16_t ou16_ExpectedPayloadSize,
-                           QByteArray &orc_ReadData,
-                           uint8_t &oru8_NrCode);
+                           QByteArray &orc_ReadData, uint8_t &oru8_NrCode);
 
   int32_t m_HandleAsyncResponse(
       const C_OscProtocolDriverOsyService &orc_ReceivedService);
@@ -140,9 +136,8 @@ private:
   uint8_t
   m_GetDataPoolIndexServerToClient(const uint8_t ou8_ServerDataPoolIndex) const;
 
-  static void
-  mh_ConvertVariableToNecessaryBytes(const uint32_t ou32_Variable,
-                                     QByteArray &orc_Bytes);
+  static void mh_ConvertVariableToNecessaryBytes(const uint32_t ou32_Variable,
+                                                 QByteArray &orc_Bytes);
 
   // service IDs:
   static const uint8_t mhu8_OSY_SI_DIAGNOSTIC_SESSION_CONTROL = 0x10U;
@@ -295,9 +290,10 @@ public:
     bool q_MaxNumberOfBlockLengthAvailable;    ///< true: MaxNumberOfBlockLength
                                                ///< can be read
     bool q_EthernetToEthernetRoutingSupported; ///< true: E2E routing supported
-    bool q_FileBasedTransferExitResultAvailable; ///< true:
-                                                 ///< FileBasedTransferExitResult
-                                                 ///< can be read
+    bool
+        q_FileBasedTransferExitResultAvailable; ///< true:
+                                                ///< FileBasedTransferExitResult
+                                                ///< can be read
     bool q_ExtendedSerialNumberModeImplemented; ///< true: The device has the
                                                 ///< extended serial number
                                                 ///< format
@@ -336,7 +332,7 @@ public:
   void GetNodeIdentifiers(C_OscProtocolDriverOsyNode &orc_ClientId,
                           C_OscProtocolDriverOsyNode &orc_ServerId) const;
 
-  void RegisterDataPoolMapping(const std::map<uint8_t, uint8_t> &orc_Mapping);
+  void RegisterDataPoolMapping(const QMap<uint8_t, uint8_t> &orc_Mapping);
   void ClearDataPoolMapping(void);
 
   static QString
@@ -373,9 +369,8 @@ public:
   int32_t
   OsyReadMaxNumOfEventDrivenTransmissions(uint16_t &oru16_MaxNum,
                                           uint8_t *const opu8_NrCode = NULL);
-  int32_t
-  OsyReadProtocolDriverImplementationVersion(uint8_t (&orau8_Version)[3],
-                                             uint8_t *const opu8_NrCode = NULL);
+  int32_t OsyReadProtocolDriverImplementationVersion(
+      uint8_t (&orau8_Version)[3], uint8_t *const opu8_NrCode = NULL);
   int32_t OsyReadProtocolVersion(uint8_t (&orau8_Version)[3],
                                  uint8_t *const opu8_NrCode = NULL);
   int32_t OsyReadFlashloaderProtocolVersion(uint8_t (&orau8_Version)[3],
@@ -526,14 +521,12 @@ public:
   // Security
   int32_t OsyReadCertificateSerialNumber(QByteArray &orc_SerialNumber,
                                          uint8_t *const opu8_NrCode = NULL);
-  int32_t
-  OsyReadCertificateSerialNumberL7(QByteArray &orc_SerialNumber,
-                                   uint8_t *const opu8_NrCode = NULL);
-  int32_t
-  OsyWriteSecurityKey(const QByteArray &orc_PublicKeyModulus,
-                      const QByteArray &orc_PublicKeyExponent,
-                      const QByteArray &orc_CertificateSerialNumber,
-                      uint8_t *const opu8_NrCode = NULL);
+  int32_t OsyReadCertificateSerialNumberL7(QByteArray &orc_SerialNumber,
+                                           uint8_t *const opu8_NrCode = NULL);
+  int32_t OsyWriteSecurityKey(const QByteArray &orc_PublicKeyModulus,
+                              const QByteArray &orc_PublicKeyExponent,
+                              const QByteArray &orc_CertificateSerialNumber,
+                              uint8_t *const opu8_NrCode = NULL);
   int32_t OsyReadSecurityActivation(bool &orq_SecurityOn,
                                     uint8_t &oru8_SecurityAlgorithm,
                                     uint8_t *const opu8_NrCode = NULL);

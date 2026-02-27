@@ -5,36 +5,44 @@
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCPARAMSETRAWENTRY_HPP
 #define C_OSCPARAMSETRAWENTRY_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <vector>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "stwtypes.hpp"
+#include <vector>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
-///Describes one raw (black box) entry in a parameter set file
-class C_OscParamSetRawEntry
-{
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
+/// Describes one raw (black box) entry in a parameter set file
+class C_OscParamSetRawEntry {
 public:
-   C_OscParamSetRawEntry(void);
+  C_OscParamSetRawEntry(void);
 
-   uint32_t u32_StartAddress;    ///< Start address to write to
-   QByteArray c_Bytes; ///< Bytes to write at address
+  uint32_t u32_StartAddress; ///< Start address to write to
+  QByteArray c_Bytes;        ///< Bytes to write at address
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

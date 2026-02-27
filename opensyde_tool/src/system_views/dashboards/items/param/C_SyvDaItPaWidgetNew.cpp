@@ -874,19 +874,19 @@ void C_SyvDaItPaWidgetNew::m_WriteElements(const QList<C_OscNodeDataPoolListElem
                }
                else
                {
-                  std::map<C_OscNodeDataPoolListElementId, C_SyvDaItPaValuePairs> c_AffectedElementValues;
+                  QMap<C_OscNodeDataPoolListElementId, C_SyvDaItPaValuePairs> c_AffectedElementValues;
                   if (pc_Dialog->GetChangedElements(c_AffectedElementValues) == C_NO_ERR)
                   {
-                     for (std::map<stw::opensyde_core::C_OscNodeDataPoolListElementId,
-                                   stw::opensyde_gui_logic::C_SyvDaItPaValuePairs>::iterator c_It =
+                     for (QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
+                               stw::opensyde_gui_logic::C_SyvDaItPaValuePairs>::iterator c_It =
                              c_AffectedElementValues.begin();
                           c_It != c_AffectedElementValues.end(); ++c_It)
                      {
-                        const C_PuiSvDbNodeDataPoolListElementId c_Id(c_It->first,
+                        const C_PuiSvDbNodeDataPoolListElementId c_Id(c_It.key(),
                                                                       C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT, false,
                                                                       0UL);
                         this->mpc_DataWidget->AddNewNvmValueIntoQueue(c_Id,
-                                                                      c_It->second.c_Actual);
+                                                                      c_It.value().c_Actual);
                      }
                   }
                   //Trigger ECU value update

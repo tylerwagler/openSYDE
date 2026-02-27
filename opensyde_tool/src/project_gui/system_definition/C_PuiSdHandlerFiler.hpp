@@ -15,6 +15,7 @@
 #include <QDir>
 #include <QColor>
 #include <QList>
+#include <QMap>
 #include <QFont>
 #include "C_OscXmlParser.hpp"
 #include "C_PuiSdNode.hpp"
@@ -142,23 +143,23 @@ public:
                                         stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
    static void h_SaveBusTextElements(const QList<C_PuiSdTextElementBus> & orc_BusTextElements,
                                      stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadLastKnownHalcCrcs(std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
-                                                   C_PuiSdLastKnownHalElementId> & orc_Crcs,
+   static int32_t h_LoadLastKnownHalcCrcs(QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+                                              C_PuiSdLastKnownHalElementId> & orc_Crcs,
                                           stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
-   static void h_SaveLastKnownHalcCrcs(const std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
-                                                      C_PuiSdLastKnownHalElementId> & orc_Crcs,
+   static void h_SaveLastKnownHalcCrcs(const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+                                                 C_PuiSdLastKnownHalElementId> & orc_Crcs,
                                        stw::opensyde_core::C_OscXmlParserBase & orc_XmlParser);
 
    //Complete
    static int32_t h_SaveSystemDefinitionUiFile(const QString & orc_FilePath,
-                                               const stw::opensyde_core::C_OscSystemDefinition & orc_OscSystemDefinition, const QList<C_PuiSdNode> & orc_UiNodes, const QList<C_PuiSdBus> & orc_UiBuses, const QList<C_PuiSdTextElementBus> & orc_BusTextElements, const stw::opensyde_gui_logic::C_PuiBsElements & orc_Elements, const std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
-                                                                                                                                                                                                                                                                                                                                                                   C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs);
+                                               const stw::opensyde_core::C_OscSystemDefinition & orc_OscSystemDefinition, const QList<C_PuiSdNode> & orc_UiNodes, const QList<C_PuiSdBus> & orc_UiBuses, const QList<C_PuiSdTextElementBus> & orc_BusTextElements, const stw::opensyde_gui_logic::C_PuiBsElements & orc_Elements, const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+                                                                                                                                                                                                                                                                                                                                                              C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs);
    static int32_t h_LoadSystemDefinitionUiFile(const QString & orc_FilePath, QList<C_PuiSdNode> & orc_UiNodes,
                                                QList<C_PuiSdBus> & orc_UiBuses,
                                                QList<C_PuiSdTextElementBus> & orc_BusTextElements,
                                                stw::opensyde_gui_logic::C_PuiBsElements & orc_Elements,
-                                               std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
-                                                        C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
+                                               QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+                                                    C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
                                                QList<stw::opensyde_core::C_OscNode> * const opc_OscNodes);
 
    //File names

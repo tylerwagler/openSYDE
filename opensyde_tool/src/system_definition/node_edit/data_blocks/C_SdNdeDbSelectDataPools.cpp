@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QList>
+#include <QMap>
 
 
 #include "stwerrors.hpp"
@@ -294,8 +295,8 @@ bool C_SdNdeDbSelectDataPools::m_IsCommDatapoolSelectionValid(void)
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
    QString c_Details = "";
 
-   std::map<C_OscCanProtocol::E_Type, uint32_t> c_Counter;
-   std::map<C_OscCanProtocol::E_Type, uint32_t>::const_iterator c_It;
+   QMap<C_OscCanProtocol::E_Type, uint32_t> c_Counter;
+   QMap<C_OscCanProtocol::E_Type, uint32_t>::const_iterator c_It;
 
    if (pc_Node != NULL)
    {
@@ -323,10 +324,10 @@ bool C_SdNdeDbSelectDataPools::m_IsCommDatapoolSelectionValid(void)
 
    for (c_It = c_Counter.begin(); c_It != c_Counter.end(); ++c_It)
    {
-      if (c_It->second > 1)
+      if (c_It.value() > 1)
       {
          // more than one COMM Datapool of a protocol found
-         c_Details += "\n" + C_PuiSdUtil::h_ConvertProtocolTypeToString(c_It->first);
+         c_Details += "\n" + C_PuiSdUtil::h_ConvertProtocolTypeToString(c_It.key());
          q_Return = false;
       }
    }

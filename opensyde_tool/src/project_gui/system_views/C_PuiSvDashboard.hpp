@@ -13,7 +13,8 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QList>
-#include <set>
+#include <QMap>
+#include <QSet>
 #include <QString>
 #include "C_PuiSvDbChart.hpp"
 #include "C_PuiSvDbLabel.hpp"
@@ -94,8 +95,8 @@ public:
    const C_PuiSvDbWidgetBase * GetWidgetBase(const C_PuiSvDbDataElement::E_Type oe_Type,
                                              const uint32_t ou32_Index) const;
    void GetAllWidgetItems(QList<const C_PuiSvDbWidgetBase *> & orc_Output) const;
-   void GetAllRegisteredDashboardElements(std::set<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_Ids) const;
-   void GetAllRegisteredDashboardElementsGuiId(std::set<C_PuiSvDbNodeDataPoolListElementId> & orc_Ids) const;
+   void GetAllRegisteredDashboardElements(QSet<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_Ids) const;
+   void GetAllRegisteredDashboardElementsGuiId(QSet<C_PuiSvDbNodeDataPoolListElementId> & orc_Ids) const;
 
    //Set
    int32_t SetWidget(const uint32_t ou32_Index, const C_PuiSvDbWidgetBase * const opc_Value,
@@ -103,7 +104,7 @@ public:
 
    //Sync to system definition
    void OnSyncNodeAdded(const uint32_t ou32_Index);
-   void OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+   void OnSyncNodeHalc(const uint32_t ou32_Index, const QMap<opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                                  opensyde_core::C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew);
    void OnSyncNodeAboutToBeDeleted(const uint32_t ou32_Index, const bool oq_OnlyMarkInvalid);
    void OnSyncNodeDataPoolAdded(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex);
@@ -143,7 +144,7 @@ public:
                                                       const uint32_t ou32_ListIndex, const uint32_t ou32_ElementIndex);
    static void h_OnSyncNodeAdded(C_PuiSvDbNodeDataPoolListElementId & orc_DataElementId, const uint32_t ou32_Index);
    static void h_OnSyncNodeHalc(C_PuiSvDbNodeDataPoolListElementId & orc_DataElementId, const uint32_t ou32_Index,
-                                const std::map<opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+                                const QMap<opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                opensyde_core::C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew);
    static void h_OnSyncNodeAboutToBeDeleted(C_PuiSvDbNodeDataPoolListElementId & orc_DataElementId,
                                             const uint32_t ou32_Index, const bool oq_OnlyMarkInvalid = false);

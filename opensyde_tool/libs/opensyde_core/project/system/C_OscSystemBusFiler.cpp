@@ -19,10 +19,8 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
-
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------

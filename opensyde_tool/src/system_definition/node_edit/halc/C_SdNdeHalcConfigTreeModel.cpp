@@ -225,7 +225,7 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                         }
                         else
                         {
-                           c_Retval = static_cast<int64_t>(u32_Counter);
+                           c_Retval = static_cast<qint64>(u32_Counter);
                         }
                         break;
                      }
@@ -244,10 +244,10 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                   break;
                case C_OscHalcDefContent::eCT_STRING:
                   {
-                     std::string c_String;
+                     QString c_String;
                      if (pc_ParameterElement->c_Value.GetStringValue(c_String) == C_NO_ERR)
                      {
-                        c_Retval = QString::fromStdString(c_String);
+                        c_Retval = c_String;
                      }
                   }
                   break;
@@ -529,7 +529,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
                       this->mu32_NodeIndex,
                       this->mu32_DomainIndex,
                       this->mu32_ChannelIndex, u32_ParameterIndex, u32_ParameterElementIndex,
-                      this->mq_ChannelCase, orc_Value.toString().toStdString()) == C_NO_ERR)
+                      this->mq_ChannelCase, orc_Value.toString()) == C_NO_ERR)
                {
                   q_Retval = true;
                   //Linked values
@@ -539,7 +539,7 @@ bool C_SdNdeHalcConfigTreeModel::setData(const QModelIndex & orc_Index, const QV
                                    this->mu32_NodeIndex,
                                    this->mu32_DomainIndex,
                                    c_LinkedChannels[u32_It], u32_ParameterIndex, u32_ParameterElementIndex,
-                                   this->mq_ChannelCase, orc_Value.toString().toStdString()) == C_NO_ERR);
+                                   this->mq_ChannelCase, orc_Value.toString()) == C_NO_ERR);
                   }
                }
                break;

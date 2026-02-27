@@ -21,14 +21,12 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
-
 #include "C_SclChecksums.hpp"
 
 #include "C_OscExportUti.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscParamSetHandler.hpp"
 #include <QDateTime>
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -119,8 +117,7 @@ C_OscExportParamSet::h_GetFileName(const C_OscNodeApplication &orc_DataBlock,
 int32_t C_OscExportParamSet::h_CreateParameterSetImage(
     const QString &orc_Path, const C_OscNode &orc_Node,
     const uint16_t ou16_ApplicationIndex, QStringList &orc_Files,
-    const QString &orc_ExportToolName,
-    const QString &orc_ExportToolVersion) {
+    const QString &orc_ExportToolName, const QString &orc_ExportToolVersion) {
   int32_t s32_Retval = C_NO_ERR;
 
   const C_OscNodeApplication &rc_Application =
@@ -413,7 +410,7 @@ C_OscExportParamSet::mh_GetFileInfo(const QString &orc_ExportToolName,
 
   QDateTime c_DateTime = QDateTime::currentDateTime();
   c_Info.c_DateTime =
-      QString::fromStdString(C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime));
+      C_OscLoggingHandler::h_UtilConvertDateTimeToString(c_DateTime);
   stw::opensyde_core::C_OscUtils::h_GetSystemUserName(c_Tmp);
   c_Info.c_Creator = c_Tmp;
   c_Info.c_ToolName = orc_ExportToolName;
@@ -456,8 +453,7 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(
   int32_t s32_Retval;
 
   const QString c_Path =
-      stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(
-          orc_Path) +
+      stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_Path) +
       h_GetFileName(orc_DataBlock, oq_IsSafe);
   const C_OscParamSetInterpretedFileInfoData c_FileInfo =
       mh_GetFileInfo(orc_ExportToolName, orc_ExportToolVersion);
@@ -479,8 +475,7 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(
   } else {
     // Remove pre-existing files because PSI writing will else result in an
     // error
-    if (QFileInfo(c_Path).exists() &&
-        QFileInfo(c_Path).isFile()) {
+    if (QFileInfo(c_Path).exists() && QFileInfo(c_Path).isFile()) {
       int x_Return; // lint !e970 !e8080  //using type to match library
                     // interface
       x_Return = std::remove(c_Path.toUtf8().constData());
@@ -508,8 +503,7 @@ int32_t C_OscExportParamSet::mh_WriteParameterSetImage(
       QStringList c_TempFiles;
       C_OscExportUti::h_CollectFilePaths(
           c_TempFiles, orc_Path,
-          C_OscExportParamSet::h_GetFileName(orc_DataBlock, oq_IsSafe),
-          false);
+          C_OscExportParamSet::h_GetFileName(orc_DataBlock, oq_IsSafe), false);
       for (QStringList::const_iterator c_It = c_TempFiles.begin();
            c_It != c_TempFiles.end(); ++c_It) {
         orc_Files.push_back(QString(*c_It));

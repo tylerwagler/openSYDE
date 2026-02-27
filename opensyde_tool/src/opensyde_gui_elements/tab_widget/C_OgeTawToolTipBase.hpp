@@ -12,7 +12,7 @@
 #define C_OGETAWTOOLTIPBASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <map>
+#include <QMap>
 #include <QTabWidget>
 #include "stwtypes.hpp"
 #include "C_NagToolTip.hpp"
@@ -49,7 +49,7 @@ private:
       QString c_Content;
    };
 
-   std::map<int32_t, C_ToolTipContent> mc_ToolTips;
+   QMap<int32_t, C_ToolTipContent> mc_ToolTips;
    stw::opensyde_gui::C_NagToolTip * mpc_ToolTip;
    int32_t ms32_CurrentHoveredIndex;
 

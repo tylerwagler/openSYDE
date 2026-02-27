@@ -9,8 +9,8 @@
 #define C_CAMMETTREELOGGERDATAGREYOUTINFORMATION_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <map>
 #include <QList>
+#include <QMap>
 
 #include "stwtypes.hpp"
 
@@ -37,7 +37,7 @@ public:
    // each
    // data
    // byte of CAN message
-   std::map<int32_t, int32_t> c_MapMultiplexerValueToGrayOutValue; ///< Gray out values map for
+   QMap<int32_t, int32_t> c_MapMultiplexerValueToGrayOutValue; ///< Gray out values map for
    // each
    // multiplexer value of a
    // CAN
@@ -46,7 +46,7 @@ public:
    // change for
    // each data byte of CAN
    // message
-   std::map<int32_t, uint32_t> c_MapMultiplexerValueToChangedTimeStamps; ///< Time stamp of last
+   QMap<int32_t, uint32_t> c_MapMultiplexerValueToChangedTimeStamps; ///< Time stamp of last
    // change for each
    // multiplexer value of a
    // CAN message

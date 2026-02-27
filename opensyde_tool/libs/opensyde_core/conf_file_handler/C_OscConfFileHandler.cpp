@@ -21,7 +21,6 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
-
 #include "C_OscConfFileHandler.hpp"
 #include "C_OscLoggingHandler.hpp"
 
@@ -96,7 +95,8 @@ int32_t C_OscConfFileHandler::LoadSettings(const QString &orc_Path) {
 
   if (s32_Result == C_NO_ERR) {
     // extract only lines without comments:
-    for (uint32_t u32_Line = 0U; u32_Line < static_cast<uint32_t>(c_StringListSource.count());
+    for (uint32_t u32_Line = 0U;
+         u32_Line < static_cast<uint32_t>(c_StringListSource.count());
          u32_Line++) {
       const QString c_Line =
           c_StringListSource.at(static_cast<int>(u32_Line)).trimmed();

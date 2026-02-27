@@ -763,9 +763,10 @@ int32_t C_OscProtocolDriverOsy::m_ReadStringDataIdentifier(
    C_COM      communication driver reported error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscProtocolDriverOsy::m_WriteDataByIdentifier(
-    const uint16_t ou16_Identifier, const QByteArray &orc_WriteData,
-    uint8_t &oru8_NrCode) {
+int32_t
+C_OscProtocolDriverOsy::m_WriteDataByIdentifier(const uint16_t ou16_Identifier,
+                                                const QByteArray &orc_WriteData,
+                                                uint8_t &oru8_NrCode) {
   int32_t s32_Return;
   C_OscProtocolDriverOsyService c_Request;
   C_OscProtocolDriverOsyService c_Response;
@@ -1507,7 +1508,8 @@ int32_t C_OscProtocolDriverOsy::OsyWriteApplicationSoftwareFingerprint(
   (void)std::memcpy(c_Data.data(), &orau8_Date[0], 3U);
   (void)std::memcpy(&c_Data[3], &orau8_Time[0], 3U);
   c_Data[6] = static_cast<uint8_t>(c_UserNameBytes.size());
-  (void)std::memcpy(&c_Data[7], c_UserNameBytes.constData(), c_UserNameBytes.size());
+  (void)std::memcpy(&c_Data[7], c_UserNameBytes.constData(),
+                    c_UserNameBytes.size());
 
   s32_Return = m_WriteDataByIdentifier(
       mhu16_OSY_DI_APPLICATION_SOFTWARE_FINGERPRINT, c_Data, u8_NrErrorCode);
@@ -1565,8 +1567,8 @@ int32_t C_OscProtocolDriverOsy::OsyFactoryMode(const uint8_t ou8_Operation,
   }
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
-    c_ErrorText = QString::asprintf("RoutineControl::FactoryMode(Operation: %d)",
-                               ou8_Operation);
+    c_ErrorText = QString::asprintf(
+        "RoutineControl::FactoryMode(Operation: %d)", ou8_Operation);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
   return s32_Return;
@@ -1727,8 +1729,7 @@ int32_t C_OscProtocolDriverOsy::OsyReadCertificateSerialNumberL7(
 int32_t C_OscProtocolDriverOsy::OsyWriteSecurityKey(
     const QByteArray &orc_PublicKeyModulus,
     const QByteArray &orc_PublicKeyExponent,
-    const QByteArray &orc_CertificateSerialNumber,
-    uint8_t *const opu8_NrCode) {
+    const QByteArray &orc_CertificateSerialNumber, uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
   uint8_t u8_NrErrorCode = 0U;
 
@@ -1747,7 +1748,8 @@ int32_t C_OscProtocolDriverOsy::OsyWriteSecurityKey(
     (void)memset(c_Data.data() + 128, 0, 4);
     // MSB first: move exponent "to the right":
     (void)memcpy(c_Data.data() + ((128 + 4) - orc_PublicKeyExponent.size()),
-                 orc_PublicKeyExponent.constData(), orc_PublicKeyExponent.size());
+                 orc_PublicKeyExponent.constData(),
+                 orc_PublicKeyExponent.size());
 
     (void)memcpy(c_Data.data() + orc_PublicKeyModulus.size() + 4,
                  orc_CertificateSerialNumber.constData(),
@@ -2356,8 +2358,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolData(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolData(
     const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ListIndex,
-    const uint16_t ou16_ElementIndex,
-    const QByteArray &orc_DataToWrite, uint8_t *const opu8_NrCode) {
+    const uint16_t ou16_ElementIndex, const QByteArray &orc_DataToWrite,
+    uint8_t *const opu8_NrCode) {
   int32_t s32_Return;
   C_OscProtocolDriverOsyService c_Request;
   C_OscProtocolDriverOsyService c_Response;
@@ -2412,11 +2414,11 @@ int32_t C_OscProtocolDriverOsy::OsyWriteDataPoolData(
   }
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
-    c_ErrorText = QString::asprintf("WriteDataPoolData(Client indexes: Datapool: "
-                               "%d, List: %d, Element: %d, Size: %u)",
-                               ou8_DataPoolIndex, ou16_ListIndex,
-                               ou16_ElementIndex,
-                               static_cast<uint32_t>(orc_DataToWrite.size()));
+    c_ErrorText =
+        QString::asprintf("WriteDataPoolData(Client indexes: Datapool: "
+                          "%d, List: %d, Element: %d, Size: %u)",
+                          ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
+                          static_cast<uint32_t>(orc_DataToWrite.size()));
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
   return s32_Return;
@@ -2567,10 +2569,11 @@ int32_t C_OscProtocolDriverOsy::OsyReadDataPoolDataCyclic(
   }
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
-    c_ErrorText = QString::asprintf("ReadDataPoolDataCyclic(Client indexes: "
-                               "Datapool: %d, List: %d, Element: %d, Rail: %d)",
-                               ou8_DataPoolIndex, ou16_ListIndex,
-                               ou16_ElementIndex, ou8_TransmissionRail);
+    c_ErrorText =
+        QString::asprintf("ReadDataPoolDataCyclic(Client indexes: "
+                          "Datapool: %d, List: %d, Element: %d, Rail: %d)",
+                          ou8_DataPoolIndex, ou16_ListIndex, ou16_ElementIndex,
+                          ou8_TransmissionRail);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -2890,9 +2893,10 @@ int32_t C_OscProtocolDriverOsy::OsyVerifyDataPool(
   }
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
-    c_ErrorText = QString::asprintf("RoutineControl::VerifyDataPool(Client indexes: "
-                               "Datapool: %d, Checksum: 0x%08X)",
-                               ou8_DataPoolIndex, ou32_DataPoolChecksum);
+    c_ErrorText =
+        QString::asprintf("RoutineControl::VerifyDataPool(Client indexes: "
+                          "Datapool: %d, Checksum: 0x%08X)",
+                          ou8_DataPoolIndex, ou32_DataPoolChecksum);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -3147,8 +3151,8 @@ int32_t C_OscProtocolDriverOsy::OsyCheckRouteIp2IpCommunication(
   }
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
-    c_ErrorText = QString::asprintf(
-        "RoutineControl::OsyCheckRouteIp2IpCommunication()");
+    c_ErrorText =
+        QString::asprintf("RoutineControl::OsyCheckRouteIp2IpCommunication()");
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -3289,10 +3293,10 @@ int32_t C_OscProtocolDriverOsy::OsySetTunnelCanMessages(
   }
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
-    c_ErrorText = QString::asprintf("RoutineControl::SetTunnelCanMessages(Channel: "
-                               "%d, Filter-Id: 0x%08X, Mask: 0x%08X)",
-                               ou8_CanChannelIndex, ou32_FilterId,
-                               ou32_FilterMask);
+    c_ErrorText =
+        QString::asprintf("RoutineControl::SetTunnelCanMessages(Channel: "
+                          "%d, Filter-Id: 0x%08X, Mask: 0x%08X)",
+                          ou8_CanChannelIndex, ou32_FilterId, ou32_FilterMask);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -3480,15 +3484,15 @@ void C_OscProtocolDriverOsy::GetNodeIdentifiers(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscProtocolDriverOsy::RegisterDataPoolMapping(
-    const std::map<uint8_t, uint8_t> &orc_Mapping) {
-  std::map<uint8_t, uint8_t>::const_iterator c_It;
+    const QMap<uint8_t, uint8_t> &orc_Mapping) {
+  QMap<uint8_t, uint8_t>::const_iterator c_It;
 
   this->mc_DataPoolMappingClientToServer = orc_Mapping;
 
   // Invert the map to improve speed for the search in the other direction
-  for (c_It = this->mc_DataPoolMappingClientToServer.begin();
-       c_It != this->mc_DataPoolMappingClientToServer.end(); ++c_It) {
-    this->mc_DataPoolMappingServerToClient[c_It->second] = c_It->first;
+  for (c_It = this->mc_DataPoolMappingClientToServer.constBegin();
+       c_It != this->mc_DataPoolMappingClientToServer.constEnd(); ++c_It) {
+    this->mc_DataPoolMappingServerToClient[c_It.value()] = c_It.key();
   }
 }
 
@@ -3642,8 +3646,8 @@ int32_t C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
     c_ErrorText = QString::asprintf("RoutineControl::CheckFlashMemoryAvailable("
-                               "Address: 0x%08X, Size: 0x%08X)",
-                               ou32_StartAddress, ou32_Size);
+                                    "Address: 0x%08X, Size: 0x%08X)",
+                                    ou32_StartAddress, ou32_Size);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -3683,10 +3687,9 @@ int32_t C_OscProtocolDriverOsy::OsyCheckFlashMemoryAvailable(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::m_RoutineControl(
     const uint16_t ou16_RoutineIdentifier, const uint8_t ou8_SubFunction,
-    const QByteArray &orc_SendData,
-    const uint16_t ou16_ExpectedPayloadSize, const bool oq_ExactSizeExpected,
-    QByteArray &orc_ReadData, uint8_t &oru8_NrCode,
-    const bool oq_CanTransferWithoutFlowControl) {
+    const QByteArray &orc_SendData, const uint16_t ou16_ExpectedPayloadSize,
+    const bool oq_ExactSizeExpected, QByteArray &orc_ReadData,
+    uint8_t &oru8_NrCode, const bool oq_CanTransferWithoutFlowControl) {
   int32_t s32_Return;
   C_OscProtocolDriverOsyService c_Request;
   C_OscProtocolDriverOsyService c_Response;
@@ -3832,7 +3835,7 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessRequestSeed(
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
     c_ErrorText = QString::asprintf("SecurityAccessRequestSeed(Level: %d)",
-                               ou8_SecurityLevel);
+                                    ou8_SecurityLevel);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -3888,8 +3891,9 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(
   }
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
-    c_ErrorText = QString::asprintf("SecurityAccessSendKey(Level: %d, Key: 0x%08X)",
-                               ou8_SecurityLevel, ou32_Key);
+    c_ErrorText =
+        QString::asprintf("SecurityAccessSendKey(Level: %d, Key: 0x%08X)",
+                          ou8_SecurityLevel, ou32_Key);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -3941,7 +3945,7 @@ int32_t C_OscProtocolDriverOsy::OsySecurityAccessSendKey(
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
     c_ErrorText = QString::asprintf("SecurityAccessSendKey(Level: %d)",
-                               ou8_SecurityLevel);
+                                    ou8_SecurityLevel);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -4164,7 +4168,8 @@ int32_t C_OscProtocolDriverOsy::m_HandleAsyncOsyReadDataPoolDataEvent(
     // Copy the received value of the datapool element
     QByteArray c_Value;
     c_Value.resize(u16_NumberOfBytes);
-    (void)std::memcpy(c_Value.data(), orc_ReceivedService.c_Data.constData() + 4,
+    (void)std::memcpy(c_Value.data(),
+                      orc_ReceivedService.c_Data.constData() + 4,
                       u16_NumberOfBytes);
 
     // Get the indexes of all parameter
@@ -4319,12 +4324,12 @@ uint8_t C_OscProtocolDriverOsy::m_GetDataPoolIndexClientToServer(
     const uint8_t ou8_ClientDataPoolIndex) const {
   uint8_t u8_ServerIndex;
 
-  const std::map<uint8_t, uint8_t>::const_iterator c_It =
-      this->mc_DataPoolMappingClientToServer.find(ou8_ClientDataPoolIndex);
+  const QMap<uint8_t, uint8_t>::const_iterator c_It =
+      this->mc_DataPoolMappingClientToServer.constFind(ou8_ClientDataPoolIndex);
 
-  if (c_It != this->mc_DataPoolMappingClientToServer.end()) {
+  if (c_It != this->mc_DataPoolMappingClientToServer.constEnd()) {
     // Server index is registered. Use the mapped value.
-    u8_ServerIndex = c_It->second;
+    u8_ServerIndex = c_It.value();
   } else {
     // Server index is not registered for mapping. Use the origin value.
     u8_ServerIndex = ou8_ClientDataPoolIndex;
@@ -4350,12 +4355,12 @@ uint8_t C_OscProtocolDriverOsy::m_GetDataPoolIndexServerToClient(
     const uint8_t ou8_ServerDataPoolIndex) const {
   uint8_t u8_ClientIndex;
 
-  const std::map<uint8_t, uint8_t>::const_iterator c_It =
-      this->mc_DataPoolMappingServerToClient.find(ou8_ServerDataPoolIndex);
+  const QMap<uint8_t, uint8_t>::const_iterator c_It =
+      this->mc_DataPoolMappingServerToClient.constFind(ou8_ServerDataPoolIndex);
 
-  if (c_It != this->mc_DataPoolMappingServerToClient.end()) {
+  if (c_It != this->mc_DataPoolMappingServerToClient.constEnd()) {
     // Server index is registered. Use the mapped value.
-    u8_ClientIndex = c_It->second;
+    u8_ClientIndex = c_It.value();
   } else {
     // Server index is not registered for mapping. Use the origin value.
     u8_ClientIndex = ou8_ServerDataPoolIndex;
@@ -4661,7 +4666,8 @@ C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceCounter,
     c_Request.c_Data.resize(static_cast<size_t>(u16_NumberOfBytes) + 2U);
     c_Request.c_Data[0] = mhu8_OSY_SI_TRANSFER_DATA;
     c_Request.c_Data[1] = ou8_BlockSequenceCounter;
-    (void)std::memcpy(&c_Request.c_Data[2], orc_Data.constData(), u16_NumberOfBytes);
+    (void)std::memcpy(&c_Request.c_Data[2], orc_Data.constData(),
+                      u16_NumberOfBytes);
 
     s32_Return = mpc_TransportProtocol->SendRequest(c_Request);
     if (s32_Return != C_NO_ERR) {
@@ -4690,8 +4696,8 @@ C_OscProtocolDriverOsy::OsyTransferData(const uint8_t ou8_BlockSequenceCounter,
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
     c_ErrorText = QString::asprintf("TransferData(Sequence: %d, Size: %u)",
-                               ou8_BlockSequenceCounter,
-                               static_cast<uint32_t>(orc_Data.size()));
+                                    ou8_BlockSequenceCounter,
+                                    static_cast<uint32_t>(orc_Data.size()));
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -5021,8 +5027,8 @@ int32_t C_OscProtocolDriverOsy::OsyReadMemoryByAddress(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(
-    const uint32_t ou32_MemoryAddress,
-    const QByteArray &orc_DataRecord, uint8_t *const opu8_NrCode) {
+    const uint32_t ou32_MemoryAddress, const QByteArray &orc_DataRecord,
+    uint8_t *const opu8_NrCode) {
   int32_t s32_Return = C_RANGE;
   uint8_t u8_NrErrorCode = 0U;
 
@@ -5079,10 +5085,9 @@ int32_t C_OscProtocolDriverOsy::OsyWriteMemoryByAddress(
           &c_Request.c_Data[static_cast<size_t>(2) + u8_MemoryAddressByteCount],
           c_MemorySize.constData(), c_MemorySize.size());
       // Data part
-      (void)std::memcpy(
-          c_Request.c_Data.data() + static_cast<size_t>(2) + u8_MemoryAddressByteCount +
-                            u8_MemorySizeByteCount,
-          orc_DataRecord.constData() + u32_WriteIndex, u32_Size);
+      (void)std::memcpy(c_Request.c_Data.data() + static_cast<size_t>(2) +
+                            u8_MemoryAddressByteCount + u8_MemorySizeByteCount,
+                        orc_DataRecord.constData() + u32_WriteIndex, u32_Size);
 
       s32_Return = mpc_TransportProtocol->SendRequest(c_Request);
       if (s32_Return != C_NO_ERR) {
@@ -5183,9 +5188,10 @@ int32_t C_OscProtocolDriverOsy::OsyNotifyNvmDataChanges(
   }
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
-    c_ErrorText = QString::asprintf("RoutineControl::NotifyNvmDataChanges(Client "
-                               "indexes: Datapool: %d, List: %d)",
-                               ou8_DataPoolIndex, ou8_ListIndex);
+    c_ErrorText =
+        QString::asprintf("RoutineControl::NotifyNvmDataChanges(Client "
+                          "indexes: Datapool: %d, List: %d)",
+                          ou8_DataPoolIndex, ou8_ListIndex);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -5386,11 +5392,11 @@ int32_t C_OscProtocolDriverOsy::OsySetNodeIdForChannel(
   }
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
-    c_ErrorText = QString::asprintf("RoutineControl::SetNodeIdForChannel(Type: %d, "
-                               "Index: %d, BusId: %d, NodeId: %d)",
-                               ou8_ChannelType, ou8_ChannelIndex,
-                               orc_NewNodeId.u8_BusIdentifier,
-                               orc_NewNodeId.u8_NodeIdentifier);
+    c_ErrorText = QString::asprintf(
+        "RoutineControl::SetNodeIdForChannel(Type: %d, "
+        "Index: %d, BusId: %d, NodeId: %d)",
+        ou8_ChannelType, ou8_ChannelIndex, orc_NewNodeId.u8_BusIdentifier,
+        orc_NewNodeId.u8_NodeIdentifier);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 
@@ -5562,7 +5568,8 @@ C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock,
                     1U);                 // plus 1 for termination
       c_Text[c_Text.size() - 1U] = '\0'; // add termination
       (void)std::memcpy(c_Text.data(),
-                        c_ReceiveData.constData() + static_cast<size_t>(u32_Counter) + 2U,
+                        c_ReceiveData.constData() +
+                            static_cast<size_t>(u32_Counter) + 2U,
                         u32_Length);
       orc_BlockInfo.c_ApplicationVersion = QString::fromUtf8(c_Text);
       u32_Counter += u32_Length + 2U;
@@ -5572,13 +5579,15 @@ C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock,
       c_Text.resize(11U + 1U);           // plus 1 for termination
       c_Text[c_Text.size() - 1U] = '\0'; // add termination
       (void)std::memcpy(c_Text.data(),
-                        c_ReceiveData.constData() + static_cast<size_t>(u32_Counter) + 1U,
+                        c_ReceiveData.constData() +
+                            static_cast<size_t>(u32_Counter) + 1U,
                         11U);
       orc_BlockInfo.c_BuildDate = QString::fromUtf8(c_Text);
       u32_Counter += (11U + 1U);
       c_Text.resize(8U + 1U);            // plus 1 for termination
       c_Text[c_Text.size() - 1U] = '\0'; // add termination
-      (void)std::memcpy(c_Text.data(), c_ReceiveData.constData() + u32_Counter, 8U);
+      (void)std::memcpy(c_Text.data(), c_ReceiveData.constData() + u32_Counter,
+                        8U);
       orc_BlockInfo.c_BuildTime = QString::fromUtf8(c_Text);
       u32_Counter += 8U;
     }
@@ -5590,7 +5599,8 @@ C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock,
                     1U);                 // plus 1 for termination
       c_Text[c_Text.size() - 1U] = '\0'; // add termination
       (void)std::memcpy(c_Text.data(),
-                        c_ReceiveData.constData() + static_cast<size_t>(u32_Counter) + 2U,
+                        c_ReceiveData.constData() +
+                            static_cast<size_t>(u32_Counter) + 2U,
                         u32_Length);
       orc_BlockInfo.c_ApplicationName = QString::fromUtf8(c_Text);
       u32_Counter += u32_Length + 2U;
@@ -5603,7 +5613,8 @@ C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock,
                     1U);                 // plus 1 for termination
       c_Text[c_Text.size() - 1U] = '\0'; // add termination
       (void)std::memcpy(c_Text.data(),
-                        c_ReceiveData.constData() + static_cast<size_t>(u32_Counter) + 2U,
+                        c_ReceiveData.constData() +
+                            static_cast<size_t>(u32_Counter) + 2U,
                         u32_Length);
       orc_BlockInfo.c_AdditionalInformation = QString::fromUtf8(c_Text);
     }
@@ -5613,8 +5624,8 @@ C_OscProtocolDriverOsy::OsyReadFlashBlockData(const uint8_t ou8_FlashBlock,
   }
   if (s32_Return != C_NO_ERR) {
     QString c_ErrorText;
-    c_ErrorText = QString::asprintf("RoutineControl::ReadFlashBlockData(Block: %d)",
-                               ou8_FlashBlock);
+    c_ErrorText = QString::asprintf(
+        "RoutineControl::ReadFlashBlockData(Block: %d)", ou8_FlashBlock);
     m_LogServiceError(c_ErrorText, s32_Return, u8_NrErrorCode);
   }
 

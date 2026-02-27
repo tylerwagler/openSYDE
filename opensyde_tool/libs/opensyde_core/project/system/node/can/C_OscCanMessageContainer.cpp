@@ -20,7 +20,6 @@
 #include "C_SclChecksums.hpp"
 #include "stwtypes.hpp"
 
-
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
  */
@@ -235,8 +234,7 @@ void C_OscCanMessageContainer::CheckMessageLocalError(
     const bool oq_CanMessageSignalGapsValid,
     const bool oq_ByteAlignmentRequired, const bool oq_SignalsRequired,
     const bool oq_CanOpenPdoSyncValid) const {
-  const QList<C_OscCanMessage> &rc_Messages =
-      this->GetMessagesConst(orq_IsTx);
+  const QList<C_OscCanMessage> &rc_Messages = this->GetMessagesConst(orq_IsTx);
 
   if (oru32_MessageIndex < rc_Messages.size()) {
     const C_OscCanMessage &rc_Message = rc_Messages[oru32_MessageIndex];
@@ -617,8 +615,8 @@ bool C_OscCanMessageContainer::CheckMinSignalError() const {
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanMessageContainer::HandleNameMaxCharLimit(
     const uint32_t ou32_NameMaxCharLimit,
-    std::list<C_OscSystemNameMaxCharLimitChangeReportItem> *const
-        opc_ChangedItems) {
+    QList<C_OscSystemNameMaxCharLimitChangeReportItem>
+        *const opc_ChangedItems) {
   for (uint32_t u32_ItTxMsg = 0UL; u32_ItTxMsg < this->c_TxMessages.size();
        ++u32_ItTxMsg) {
     C_OscCanMessage &rc_TxMsg = this->c_TxMessages[u32_ItTxMsg];

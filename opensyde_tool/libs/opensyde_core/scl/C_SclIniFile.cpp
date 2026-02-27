@@ -6,35 +6,52 @@
    ANSI C++ INI file class using QSettings internally.
    For details cf. documentation in .h file.
 
-   \copyright   Copyright 2009 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2009 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp" //pre-compiled headers
 
 #include <QFile>
 #include <QTextStream>
 
 #include "C_SclIniFile.hpp"
-#include <QString>
 #include "stwtypes.hpp"
+#include <QString>
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::scl;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Helper to build section/key path for QSettings
@@ -48,9 +65,9 @@ using namespace stw::scl;
    Combined key path for QSettings (e.g., "Section/Key")
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_SclIniFile::mh_BuildKey(const QString & orc_Section, const QString & orc_Key)
-{
-   return orc_Section + "/" + orc_Key;
+QString C_SclIniFile::mh_BuildKey(const QString &orc_Section,
+                                  const QString &orc_Key) {
+  return orc_Section + "/" + orc_Key;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -62,26 +79,21 @@ QString C_SclIniFile::mh_BuildKey(const QString & orc_Section, const QString & o
    \param[in]     orc_FileName    path to ini file
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclIniFile::C_SclIniFile(const QString & orc_FileName) :
-   mq_Dirty(false),
-   mq_InMemoryMode(false),
-   FileName(orc_FileName)
-{
-   if (orc_FileName == "")
-   {
-      // In-memory mode: use a temporary file that will be deleted when we're done
-      mq_InMemoryMode = true;
-      mpc_TempFile = std::make_unique<QTemporaryFile>();
-      if (mpc_TempFile->open())
-      {
-         mpc_Settings = std::make_unique<QSettings>(mpc_TempFile->fileName(), QSettings::IniFormat);
-      }
-   }
-   else
-   {
-      // Normal file mode
-      mpc_Settings = std::make_unique<QSettings>(orc_FileName, QSettings::IniFormat);
-   }
+C_SclIniFile::C_SclIniFile(const QString &orc_FileName)
+    : mq_Dirty(false), mq_InMemoryMode(false), FileName(orc_FileName) {
+  if (orc_FileName == "") {
+    // In-memory mode: use a temporary file that will be deleted when we're done
+    mq_InMemoryMode = true;
+    mpc_TempFile = std::make_unique<QTemporaryFile>();
+    if (mpc_TempFile->open()) {
+      mpc_Settings = std::make_unique<QSettings>(mpc_TempFile->fileName(),
+                                                 QSettings::IniFormat);
+    }
+  } else {
+    // Normal file mode
+    mpc_Settings =
+        std::make_unique<QSettings>(orc_FileName, QSettings::IniFormat);
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -94,12 +106,10 @@ C_SclIniFile::C_SclIniFile(const QString & orc_FileName) :
    - writing to the file fails (e.g. write protected)
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_SclIniFile::~C_SclIniFile() SCL_WILL_THROW
-{
-   if ((mq_Dirty == true) && (FileName != ""))
-   {
-      UpdateFile();
-   }
+C_SclIniFile::~C_SclIniFile() SCL_WILL_THROW {
+  if ((mq_Dirty == true) && (FileName != "")) {
+    UpdateFile();
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -111,34 +121,28 @@ C_SclIniFile::~C_SclIniFile() SCL_WILL_THROW
    - writing to the file fails (e.g. write protected)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::UpdateFile(void)
-{
-   if (FileName.length() == 0U)
-   {
-      throw "C_SclIniFile::UpdateFile failed !";
-   }
+void C_SclIniFile::UpdateFile(void) {
+  if (FileName.length() == 0U) {
+    throw "C_SclIniFile::UpdateFile failed !";
+  }
 
-   if (mpc_Settings != nullptr)
-   {
-      // If FileName was changed after construction, we need to handle it
-      if (FileName != mpc_Settings->fileName())
-      {
-         // Need to write to a different file - use GetFileAsStringList and save manually
-         QStringList c_Strings;
-         this->GetFileAsStringList(c_Strings);
-         mh_WriteStringListToFile(c_Strings, FileName);
+  if (mpc_Settings != nullptr) {
+    // If FileName was changed after construction, we need to handle it
+    if (FileName != mpc_Settings->fileName()) {
+      // Need to write to a different file - use GetFileAsStringList and save
+      // manually
+      QStringList c_Strings;
+      this->GetFileAsStringList(c_Strings);
+      mh_WriteStringListToFile(c_Strings, FileName);
+    } else {
+      mpc_Settings->sync();
+      if (mpc_Settings->status() != QSettings::NoError) {
+        throw "C_SclIniFile::UpdateFile: could not write to file !";
       }
-      else
-      {
-         mpc_Settings->sync();
-         if (mpc_Settings->status() != QSettings::NoError)
-         {
-            throw "C_SclIniFile::UpdateFile: could not write to file !";
-         }
-      }
-   }
+    }
+  }
 
-   mq_Dirty = false;
+  mq_Dirty = false;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -151,7 +155,8 @@ void C_SclIniFile::UpdateFile(void)
    corrupted INI file but makes a big performance improvement when generating a
    new file.
 
-   Note: With QSettings, ForceAppend is ignored as QSettings handles duplicate keys.
+   Note: With QSettings, ForceAppend is ignored as QSettings handles duplicate
+   keys.
 
    Throws if orc_Section or orc_Key are empty strings.
 
@@ -161,21 +166,20 @@ void C_SclIniFile::UpdateFile(void)
    \param[in]  oq_ForceAppend  ignored in QSettings implementation
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::WriteString(const QString & orc_Section, const QString & orc_Key,
-                               const QString & orc_Value, const bool oq_ForceAppend)
-{
-   (void)oq_ForceAppend; // Not needed with QSettings
+void C_SclIniFile::WriteString(const QString &orc_Section,
+                               const QString &orc_Key, const QString &orc_Value,
+                               const bool oq_ForceAppend) {
+  (void)oq_ForceAppend; // Not needed with QSettings
 
-   if ((orc_Section == "") || (orc_Key == ""))
-   {
-      throw "C_SclIniFile::WriteString failed !";
-   }
+  if ((orc_Section == "") || (orc_Key == "")) {
+    throw "C_SclIniFile::WriteString failed !";
+  }
 
-   if (mpc_Settings != nullptr)
-   {
-      mpc_Settings->setValue(mh_BuildKey(orc_Section, orc_Key), orc_Value.trimmed());
-      mq_Dirty = true;
-   }
+  if (mpc_Settings != nullptr) {
+    mpc_Settings->setValue(mh_BuildKey(orc_Section, orc_Key),
+                           orc_Value.trimmed());
+    mq_Dirty = true;
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -196,21 +200,20 @@ void C_SclIniFile::WriteString(const QString & orc_Section, const QString & orc_
    \param[in]  oq_ForceAppend  ignored in QSettings implementation
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::WriteInteger(const QString & orc_Section, const QString & orc_Key, const int32_t os32_Value,
-                                const bool oq_ForceAppend)
-{
-   (void)oq_ForceAppend; // Not needed with QSettings
+void C_SclIniFile::WriteInteger(const QString &orc_Section,
+                                const QString &orc_Key,
+                                const int32_t os32_Value,
+                                const bool oq_ForceAppend) {
+  (void)oq_ForceAppend; // Not needed with QSettings
 
-   if ((orc_Section == "") || (orc_Key == ""))
-   {
-      throw "C_SclIniFile::WriteInteger failed !";
-   }
+  if ((orc_Section == "") || (orc_Key == "")) {
+    throw "C_SclIniFile::WriteInteger failed !";
+  }
 
-   if (mpc_Settings != nullptr)
-   {
-      mpc_Settings->setValue(mh_BuildKey(orc_Section, orc_Key), os32_Value);
-      mq_Dirty = true;
-   }
+  if (mpc_Settings != nullptr) {
+    mpc_Settings->setValue(mh_BuildKey(orc_Section, orc_Key), os32_Value);
+    mq_Dirty = true;
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -231,22 +234,21 @@ void C_SclIniFile::WriteInteger(const QString & orc_Section, const QString & orc
    \param[in]  oq_ForceAppend  ignored in QSettings implementation
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::WriteBool(const QString & orc_Section, const QString & orc_Key, const bool oq_Value,
-                             const bool oq_ForceAppend)
-{
-   (void)oq_ForceAppend; // Not needed with QSettings
+void C_SclIniFile::WriteBool(const QString &orc_Section, const QString &orc_Key,
+                             const bool oq_Value, const bool oq_ForceAppend) {
+  (void)oq_ForceAppend; // Not needed with QSettings
 
-   if ((orc_Section == "") || (orc_Key == ""))
-   {
-      throw "C_SclIniFile::WriteBool failed !";
-   }
+  if ((orc_Section == "") || (orc_Key == "")) {
+    throw "C_SclIniFile::WriteBool failed !";
+  }
 
-   if (mpc_Settings != nullptr)
-   {
-      // Write as integer for compatibility with existing code that reads bools as integers
-      mpc_Settings->setValue(mh_BuildKey(orc_Section, orc_Key), static_cast<int32_t>(oq_Value));
-      mq_Dirty = true;
-   }
+  if (mpc_Settings != nullptr) {
+    // Write as integer for compatibility with existing code that reads bools as
+    // integers
+    mpc_Settings->setValue(mh_BuildKey(orc_Section, orc_Key),
+                           static_cast<int32_t>(oq_Value));
+    mq_Dirty = true;
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -267,21 +269,20 @@ void C_SclIniFile::WriteBool(const QString & orc_Section, const QString & orc_Ke
    \param[in]  oq_ForceAppend  ignored in QSettings implementation
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::WriteFloat(const QString & orc_Section, const QString & orc_Key, const float64_t of64_Value,
-                              const bool oq_ForceAppend)
-{
-   (void)oq_ForceAppend; // Not needed with QSettings
+void C_SclIniFile::WriteFloat(const QString &orc_Section,
+                              const QString &orc_Key,
+                              const float64_t of64_Value,
+                              const bool oq_ForceAppend) {
+  (void)oq_ForceAppend; // Not needed with QSettings
 
-   if ((orc_Section == "") || (orc_Key == ""))
-   {
-      throw "C_SclIniFile::WriteFloat failed !";
-   }
+  if ((orc_Section == "") || (orc_Key == "")) {
+    throw "C_SclIniFile::WriteFloat failed !";
+  }
 
-   if (mpc_Settings != nullptr)
-   {
-      mpc_Settings->setValue(mh_BuildKey(orc_Section, orc_Key), of64_Value);
-      mq_Dirty = true;
-   }
+  if (mpc_Settings != nullptr) {
+    mpc_Settings->setValue(mh_BuildKey(orc_Section, orc_Key), of64_Value);
+    mq_Dirty = true;
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -301,25 +302,22 @@ void C_SclIniFile::WriteFloat(const QString & orc_Section, const QString & orc_K
    QString value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_SclIniFile::ReadString(const QString & orc_Section, const QString & orc_Key,
-                                     const QString & orc_Default)
-{
-   QString c_Result = orc_Default;
+QString C_SclIniFile::ReadString(const QString &orc_Section,
+                                 const QString &orc_Key,
+                                 const QString &orc_Default) {
+  QString c_Result = orc_Default;
 
-   if (mpc_Settings != nullptr)
-   {
-      const QString c_Key = mh_BuildKey(orc_Section, orc_Key);
-      if (mpc_Settings->contains(c_Key))
-      {
-         const QString c_Value = mpc_Settings->value(c_Key).toString();
-         if (!c_Value.isEmpty())
-         {
-            c_Result = c_Value;
-         }
+  if (mpc_Settings != nullptr) {
+    const QString c_Key = mh_BuildKey(orc_Section, orc_Key);
+    if (mpc_Settings->contains(c_Key)) {
+      const QString c_Value = mpc_Settings->value(c_Key).toString();
+      if (!c_Value.isEmpty()) {
+        c_Result = c_Value;
       }
-   }
+    }
+  }
 
-   return c_Result;
+  return c_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -340,16 +338,16 @@ QString C_SclIniFile::ReadString(const QString & orc_Section, const QString & or
    uint8 value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint8_t C_SclIniFile::ReadUint8(const QString & orc_Section, const QString & orc_Key, const uint8_t ou8_Default)
-{
-   int32_t s32_Return;
+uint8_t C_SclIniFile::ReadUint8(const QString &orc_Section,
+                                const QString &orc_Key,
+                                const uint8_t ou8_Default) {
+  int32_t s32_Return;
 
-   s32_Return = ReadInteger(orc_Section, orc_Key, ou8_Default);
-   if ((s32_Return > 0xFF) || (s32_Return < 0))
-   {
-      s32_Return = ou8_Default;
-   }
-   return static_cast<uint8_t>(s32_Return);
+  s32_Return = ReadInteger(orc_Section, orc_Key, ou8_Default);
+  if ((s32_Return > 0xFF) || (s32_Return < 0)) {
+    s32_Return = ou8_Default;
+  }
+  return static_cast<uint8_t>(s32_Return);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -370,17 +368,16 @@ uint8_t C_SclIniFile::ReadUint8(const QString & orc_Section, const QString & orc
    uint16 value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint16_t C_SclIniFile::ReadUint16(const QString & orc_Section, const QString & orc_Key,
-                                  const uint16_t ou16_Default)
-{
-   int32_t s32_Return;
+uint16_t C_SclIniFile::ReadUint16(const QString &orc_Section,
+                                  const QString &orc_Key,
+                                  const uint16_t ou16_Default) {
+  int32_t s32_Return;
 
-   s32_Return = ReadInteger(orc_Section, orc_Key, ou16_Default);
-   if ((s32_Return < 0) || (s32_Return > 0xFFFF))
-   {
-      s32_Return = ou16_Default;
-   }
-   return static_cast<uint16_t>(s32_Return);
+  s32_Return = ReadInteger(orc_Section, orc_Key, ou16_Default);
+  if ((s32_Return < 0) || (s32_Return > 0xFFFF)) {
+    s32_Return = ou16_Default;
+  }
+  return static_cast<uint16_t>(s32_Return);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -403,42 +400,34 @@ uint16_t C_SclIniFile::ReadUint16(const QString & orc_Section, const QString & o
    int32_t value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SclIniFile::ReadInteger(const QString & orc_Section, const QString & orc_Key,
-                                  const int32_t os32_Default)
-{
-   int32_t s32_Return = os32_Default;
+int32_t C_SclIniFile::ReadInteger(const QString &orc_Section,
+                                  const QString &orc_Key,
+                                  const int32_t os32_Default) {
+  int32_t s32_Return = os32_Default;
 
-   if (mpc_Settings != nullptr)
-   {
-      const QString c_Key = mh_BuildKey(orc_Section, orc_Key);
-      if (mpc_Settings->contains(c_Key))
-      {
-         const QVariant c_Value = mpc_Settings->value(c_Key);
-         bool q_Ok = false;
-         const int32_t s32_Value = c_Value.toInt(&q_Ok);
+  if (mpc_Settings != nullptr) {
+    const QString c_Key = mh_BuildKey(orc_Section, orc_Key);
+    if (mpc_Settings->contains(c_Key)) {
+      const QVariant c_Value = mpc_Settings->value(c_Key);
+      bool q_Ok = false;
+      const int32_t s32_Value = c_Value.toInt(&q_Ok);
 
-         if (q_Ok)
-         {
-            s32_Return = s32_Value;
-         }
-         else
-         {
-            // Check for TRUE/FALSE strings
-            const QString c_StringValue = c_Value.toString().toUpper();
-            if (c_StringValue == "TRUE")
-            {
-               s32_Return = 1;
-            }
-            else if (c_StringValue == "FALSE")
-            {
-               s32_Return = 0;
-            }
-            // else use default
-         }
+      if (q_Ok) {
+        s32_Return = s32_Value;
+      } else {
+        // Check for TRUE/FALSE strings
+        const QString c_StringValue = c_Value.toString().toUpper();
+        if (c_StringValue == "TRUE") {
+          s32_Return = 1;
+        } else if (c_StringValue == "FALSE") {
+          s32_Return = 0;
+        }
+        // else use default
       }
-   }
+    }
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -461,9 +450,12 @@ int32_t C_SclIniFile::ReadInteger(const QString & orc_Section, const QString & o
    bool value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SclIniFile::ReadBool(const QString & orc_Section, const QString & orc_Key, const bool oq_Default)
-{
-   return ((ReadInteger(orc_Section, orc_Key, static_cast<int32_t>(oq_Default)) == 0) ? false : true);
+bool C_SclIniFile::ReadBool(const QString &orc_Section, const QString &orc_Key,
+                            const bool oq_Default) {
+  return (
+      (ReadInteger(orc_Section, orc_Key, static_cast<int32_t>(oq_Default)) == 0)
+          ? false
+          : true);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -485,39 +477,33 @@ bool C_SclIniFile::ReadBool(const QString & orc_Section, const QString & orc_Key
    float64 value from ini (or default if error)
 */
 //----------------------------------------------------------------------------------------------------------------------
-float64_t C_SclIniFile::ReadFloat(const QString & orc_Section, const QString & orc_Key,
-                                  const float64_t of64_Default)
-{
-   float64_t f64_Return = of64_Default;
+float64_t C_SclIniFile::ReadFloat(const QString &orc_Section,
+                                  const QString &orc_Key,
+                                  const float64_t of64_Default) {
+  float64_t f64_Return = of64_Default;
 
-   if (mpc_Settings != nullptr)
-   {
-      const QString c_Key = mh_BuildKey(orc_Section, orc_Key);
-      if (mpc_Settings->contains(c_Key))
-      {
-         const QVariant c_Value = mpc_Settings->value(c_Key);
-         bool q_Ok = false;
-         const float64_t f64_Value = c_Value.toDouble(&q_Ok);
+  if (mpc_Settings != nullptr) {
+    const QString c_Key = mh_BuildKey(orc_Section, orc_Key);
+    if (mpc_Settings->contains(c_Key)) {
+      const QVariant c_Value = mpc_Settings->value(c_Key);
+      bool q_Ok = false;
+      const float64_t f64_Value = c_Value.toDouble(&q_Ok);
 
-         if (q_Ok)
-         {
-            f64_Return = f64_Value;
-         }
-         else
-         {
-            // Try with comma replaced by dot
-            QString c_StringValue = c_Value.toString();
-            c_StringValue.replace(',', '.');
-            f64_Return = c_StringValue.toDouble(&q_Ok);
-            if (!q_Ok)
-            {
-               f64_Return = of64_Default;
-            }
-         }
+      if (q_Ok) {
+        f64_Return = f64_Value;
+      } else {
+        // Try with comma replaced by dot
+        QString c_StringValue = c_Value.toString();
+        c_StringValue.replace(',', '.');
+        f64_Return = c_StringValue.toDouble(&q_Ok);
+        if (!q_Ok) {
+          f64_Return = of64_Default;
+        }
       }
-   }
+    }
+  }
 
-   return f64_Return;
+  return f64_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -529,29 +515,24 @@ float64_t C_SclIniFile::ReadFloat(const QString & orc_Section, const QString & o
    \param[in]     orc_Section    ini section to erase
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::EraseSection(const QString & orc_Section)
-{
-   if (mpc_Settings != nullptr)
-   {
-      const QString c_Section = orc_Section;
+void C_SclIniFile::EraseSection(const QString &orc_Section) {
+  if (mpc_Settings != nullptr) {
+    const QString c_Section = orc_Section;
 
-      // Check if section exists
-      mpc_Settings->beginGroup(c_Section);
-      const QStringList c_Keys = mpc_Settings->childKeys();
-      mpc_Settings->endGroup();
+    // Check if section exists
+    mpc_Settings->beginGroup(c_Section);
+    const QStringList c_Keys = mpc_Settings->childKeys();
+    mpc_Settings->endGroup();
 
-      if (c_Keys.isEmpty() && !mpc_Settings->childGroups().contains(c_Section))
-      {
-         throw "C_SclIniFile::EraseSection failed !";
-      }
-
-      mpc_Settings->remove(c_Section);
-      mq_Dirty = true;
-   }
-   else
-   {
+    if (c_Keys.isEmpty() && !mpc_Settings->childGroups().contains(c_Section)) {
       throw "C_SclIniFile::EraseSection failed !";
-   }
+    }
+
+    mpc_Settings->remove(c_Section);
+    mq_Dirty = true;
+  } else {
+    throw "C_SclIniFile::EraseSection failed !";
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -564,17 +545,15 @@ void C_SclIniFile::EraseSection(const QString & orc_Section)
    \param[in]     orc_Key        key to erase
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::DeleteKey(const QString & orc_Section, const QString & orc_Key)
-{
-   if (mpc_Settings != nullptr)
-   {
-      const QString c_Key = mh_BuildKey(orc_Section, orc_Key);
-      if (mpc_Settings->contains(c_Key))
-      {
-         mpc_Settings->remove(c_Key);
-         mq_Dirty = true;
-      }
-   }
+void C_SclIniFile::DeleteKey(const QString &orc_Section,
+                             const QString &orc_Key) {
+  if (mpc_Settings != nullptr) {
+    const QString c_Key = mh_BuildKey(orc_Section, orc_Key);
+    if (mpc_Settings->contains(c_Key)) {
+      mpc_Settings->remove(c_Key);
+      mq_Dirty = true;
+    }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -589,33 +568,32 @@ void C_SclIniFile::DeleteKey(const QString & orc_Section, const QString & orc_Ke
    false   section does not exist
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SclIniFile::SectionExists(const QString & orc_Section)
-{
-   bool q_Exists = false;
+bool C_SclIniFile::SectionExists(const QString &orc_Section) {
+  bool q_Exists = false;
 
-   if (mpc_Settings != nullptr)
-   {
-      const QString c_Section = orc_Section;
+  if (mpc_Settings != nullptr) {
+    const QString c_Section = orc_Section;
 
-      // Check if section has any keys
-      mpc_Settings->beginGroup(c_Section);
-      q_Exists = !mpc_Settings->childKeys().isEmpty();
-      mpc_Settings->endGroup();
+    // Check if section has any keys
+    mpc_Settings->beginGroup(c_Section);
+    q_Exists = !mpc_Settings->childKeys().isEmpty();
+    mpc_Settings->endGroup();
 
-      // Also check if it's in the group list (for sections with subsections but no keys)
-      if (!q_Exists)
-      {
-         q_Exists = mpc_Settings->childGroups().contains(c_Section);
-      }
-   }
+    // Also check if it's in the group list (for sections with subsections but
+    // no keys)
+    if (!q_Exists) {
+      q_Exists = mpc_Settings->childGroups().contains(c_Section);
+    }
+  }
 
-   return q_Exists;
+  return q_Exists;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Detect whether a key exists.
 
-   Checks whether a specified key exists within a specified section in the ini file.
+   Checks whether a specified key exists within a specified section in the ini
+   file.
 
    \param[in]     orc_Section    section to check
    \param[in]     orc_Key        key to check
@@ -625,16 +603,15 @@ bool C_SclIniFile::SectionExists(const QString & orc_Section)
    false   key does not exist in section
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_SclIniFile::ValueExists(const QString & orc_Section, const QString & orc_Key)
-{
-   bool q_Exists = false;
+bool C_SclIniFile::ValueExists(const QString &orc_Section,
+                               const QString &orc_Key) {
+  bool q_Exists = false;
 
-   if (mpc_Settings != nullptr)
-   {
-      q_Exists = mpc_Settings->contains(mh_BuildKey(orc_Section, orc_Key));
-   }
+  if (mpc_Settings != nullptr) {
+    q_Exists = mpc_Settings->contains(mh_BuildKey(orc_Section, orc_Key));
+  }
 
-   return q_Exists;
+  return q_Exists;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -648,34 +625,29 @@ bool C_SclIniFile::ValueExists(const QString & orc_Section, const QString & orc_
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSection(const QString & orc_Section, QStringList * const opc_Strings,
-                               const bool oq_Append)
-{
-   if (mpc_Settings != nullptr)
-   {
-      uint32_t u32_OldLength;
+void C_SclIniFile::ReadSection(const QString &orc_Section,
+                               QStringList *const opc_Strings,
+                               const bool oq_Append) {
+  if (mpc_Settings != nullptr) {
+    uint32_t u32_OldLength;
 
-      if (oq_Append == true)
-      {
-         u32_OldLength = opc_Strings->count();
-      }
-      else
-      {
-         u32_OldLength = 0U;
-         opc_Strings->clear();
-      }
+    if (oq_Append == true) {
+      u32_OldLength = opc_Strings->count();
+    } else {
+      u32_OldLength = 0U;
+      opc_Strings->clear();
+    }
 
-      mpc_Settings->beginGroup(orc_Section);
-      const QStringList c_Keys = mpc_Settings->childKeys();
-      mpc_Settings->endGroup();
+    mpc_Settings->beginGroup(orc_Section);
+    const QStringList c_Keys = mpc_Settings->childKeys();
+    mpc_Settings->endGroup();
 
-      opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + c_Keys.size());
-      for (int32_t s32_Loop = 0; s32_Loop < c_Keys.size(); s32_Loop++)
-      {
-         (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
-            c_Keys[s32_Loop];
-      }
-   }
+    opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + c_Keys.size());
+    for (int32_t s32_Loop = 0; s32_Loop < c_Keys.size(); s32_Loop++) {
+      (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
+          c_Keys[s32_Loop];
+    }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -690,37 +662,32 @@ void C_SclIniFile::ReadSection(const QString & orc_Section, QStringList * const 
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSectionValues(const QString & orc_Section, QStringList * const opc_Strings,
-                                     const bool oq_Append)
-{
-   if (mpc_Settings != nullptr)
-   {
-      uint32_t u32_OldLength;
+void C_SclIniFile::ReadSectionValues(const QString &orc_Section,
+                                     QStringList *const opc_Strings,
+                                     const bool oq_Append) {
+  if (mpc_Settings != nullptr) {
+    uint32_t u32_OldLength;
 
-      if (oq_Append == true)
-      {
-         u32_OldLength = opc_Strings->count();
-      }
-      else
-      {
-         u32_OldLength = 0U;
-         opc_Strings->clear();
-      }
+    if (oq_Append == true) {
+      u32_OldLength = opc_Strings->count();
+    } else {
+      u32_OldLength = 0U;
+      opc_Strings->clear();
+    }
 
-      const QString c_Section = orc_Section;
-      mpc_Settings->beginGroup(c_Section);
-      const QStringList c_Keys = mpc_Settings->childKeys();
-      mpc_Settings->endGroup();
+    const QString c_Section = orc_Section;
+    mpc_Settings->beginGroup(c_Section);
+    const QStringList c_Keys = mpc_Settings->childKeys();
+    mpc_Settings->endGroup();
 
-      opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + c_Keys.size());
-      for (int32_t s32_Loop = 0; s32_Loop < c_Keys.size(); s32_Loop++)
-      {
-         const QString c_FullKey = c_Section + "/" + c_Keys[s32_Loop];
-         const QString c_Value = mpc_Settings->value(c_FullKey).toString();
-         (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
-            c_Keys[s32_Loop] + "=" + c_Value;
-      }
-   }
+    opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + c_Keys.size());
+    for (int32_t s32_Loop = 0; s32_Loop < c_Keys.size(); s32_Loop++) {
+      const QString c_FullKey = c_Section + "/" + c_Keys[s32_Loop];
+      const QString c_Value = mpc_Settings->value(c_FullKey).toString();
+      (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
+          c_Keys[s32_Loop] + "=" + c_Value;
+    }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -733,31 +700,26 @@ void C_SclIniFile::ReadSectionValues(const QString & orc_Section, QStringList * 
                                false: clear string list before adding keys
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::ReadSections(QStringList * const opc_Strings, const bool oq_Append) const
-{
-   if (mpc_Settings != nullptr)
-   {
-      uint32_t u32_OldLength;
+void C_SclIniFile::ReadSections(QStringList *const opc_Strings,
+                                const bool oq_Append) const {
+  if (mpc_Settings != nullptr) {
+    uint32_t u32_OldLength;
 
-      if (oq_Append == true)
-      {
-         u32_OldLength = opc_Strings->count();
-      }
-      else
-      {
-         u32_OldLength = 0U;
-         opc_Strings->clear();
-      }
+    if (oq_Append == true) {
+      u32_OldLength = opc_Strings->count();
+    } else {
+      u32_OldLength = 0U;
+      opc_Strings->clear();
+    }
 
-      const QStringList c_Groups = mpc_Settings->childGroups();
+    const QStringList c_Groups = mpc_Settings->childGroups();
 
-      opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + c_Groups.size());
-      for (int32_t s32_Loop = 0; s32_Loop < c_Groups.size(); s32_Loop++)
-      {
-         (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
-            c_Groups[s32_Loop];
-      }
-   }
+    opc_Strings->resize(static_cast<int32_t>(u32_OldLength) + c_Groups.size());
+    for (int32_t s32_Loop = 0; s32_Loop < c_Groups.size(); s32_Loop++) {
+      (*opc_Strings)[static_cast<int32_t>(u32_OldLength) + s32_Loop] =
+          c_Groups[s32_Loop];
+    }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -768,42 +730,39 @@ void C_SclIniFile::ReadSections(QStringList * const opc_Strings, const bool oq_A
 
    Note: Comments are NOT included as QSettings does not preserve them.
 
-   \param[out]     orc_Strings    content of INI file (will be cleared before adding INI file strings)
+   \param[out]     orc_Strings    content of INI file (will be cleared before
+   adding INI file strings)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::GetFileAsStringList(QStringList & orc_Strings) const
-{
-   orc_Strings.clear();
+void C_SclIniFile::GetFileAsStringList(QStringList &orc_Strings) const {
+  orc_Strings.clear();
 
-   if (mpc_Settings != nullptr)
-   {
-      const QStringList c_Groups = mpc_Settings->childGroups();
+  if (mpc_Settings != nullptr) {
+    const QStringList c_Groups = mpc_Settings->childGroups();
 
-      for (int32_t s32_Section = 0; s32_Section < c_Groups.size(); s32_Section++)
-      {
-         const QString & rc_Section = c_Groups[s32_Section];
+    for (int32_t s32_Section = 0; s32_Section < c_Groups.size();
+         s32_Section++) {
+      const QString &rc_Section = c_Groups[s32_Section];
 
-         // Add section header
-         orc_Strings.append("[" + rc_Section + "]");
+      // Add section header
+      orc_Strings.append("[" + rc_Section + "]");
 
-         // Add keys in this section
-         mpc_Settings->beginGroup(rc_Section);
-         const QStringList c_Keys = mpc_Settings->childKeys();
-         for (int32_t s32_Key = 0; s32_Key < c_Keys.size(); s32_Key++)
-         {
-            const QString & rc_Key = c_Keys[s32_Key];
-            const QString c_Value = mpc_Settings->value(rc_Key).toString();
-            orc_Strings.append(rc_Key + "=" + c_Value);
-         }
-         mpc_Settings->endGroup();
-
-         // Add blank line after section (except for last section)
-         if (s32_Section < (c_Groups.size() - 1))
-         {
-            orc_Strings.append("");
-         }
+      // Add keys in this section
+      mpc_Settings->beginGroup(rc_Section);
+      const QStringList c_Keys = mpc_Settings->childKeys();
+      for (int32_t s32_Key = 0; s32_Key < c_Keys.size(); s32_Key++) {
+        const QString &rc_Key = c_Keys[s32_Key];
+        const QString c_Value = mpc_Settings->value(rc_Key).toString();
+        orc_Strings.append(rc_Key + "=" + c_Value);
       }
-   }
+      mpc_Settings->endGroup();
+
+      // Add blank line after section (except for last section)
+      if (s32_Section < (c_Groups.size() - 1)) {
+        orc_Strings.append("");
+      }
+    }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -816,22 +775,18 @@ void C_SclIniFile::GetFileAsStringList(QStringList & orc_Strings) const
    \param[in]  orc_FileName   target file path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SclIniFile::mh_WriteStringListToFile(const QStringList & orc_Strings, const QString & orc_FileName)
-{
-   QFile c_File(orc_FileName);
-   if (c_File.open(QIODevice::WriteOnly | QIODevice::Text))
-   {
-      QTextStream c_Stream(&c_File);
-      for (const QString & rc_Line : orc_Strings)
-      {
-         c_Stream << rc_Line << "\n";
-      }
-      c_File.close();
-   }
-   else
-   {
-      throw "C_SclIniFile::mh_WriteStringListToFile failed !";
-   }
+void C_SclIniFile::mh_WriteStringListToFile(const QStringList &orc_Strings,
+                                            const QString &orc_FileName) {
+  QFile c_File(orc_FileName);
+  if (c_File.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    QTextStream c_Stream(&c_File);
+    for (const QString &rc_Line : orc_Strings) {
+      c_Stream << rc_Line << "\n";
+    }
+    c_File.close();
+  } else {
+    throw "C_SclIniFile::mh_WriteStringListToFile failed !";
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

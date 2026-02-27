@@ -1,44 +1,60 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Data class, containing information about the data pools in a parameter set file (implementation)
+   \brief       Data class, containing information about the data pools in a
+   parameter set file (implementation)
 
-   Data class, containing information about the data pools in a parameter set file
+   Data class, containing information about the data pools in a parameter set
+   file
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
 #include "C_OscParamSetDataPoolInfo.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscParamSetDataPoolInfo::C_OscParamSetDataPoolInfo(void) :
-   u32_DataPoolCrc(0),
-   u32_NvmStartAddress(0),
-   u32_NvmSize(0)
-{
-   au8_Version[0] = 0;
-   au8_Version[1] = 0;
-   au8_Version[2] = 0;
+C_OscParamSetDataPoolInfo::C_OscParamSetDataPoolInfo(void)
+    : u32_DataPoolCrc(0), u32_NvmStartAddress(0), u32_NvmSize(0) {
+  au8_Version[0] = 0;
+  au8_Version[1] = 0;
+  au8_Version[2] = 0;
 }

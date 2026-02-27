@@ -150,7 +150,7 @@ private:
 
    void m_AssignmentConnect(const uint32_t ou32_NodeIndex,
                             const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
-                            const QMap<uint8_t,
+                            const QHash<uint8_t,
                                            stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds)
    const;
    void m_AssignmentDisconnect(const uint32_t ou32_NodeIndex,

@@ -548,7 +548,7 @@ int32_t C_PuiSdHandlerDataLoggerLogic::SetDataLoggerElementProperties(const uint
    Last known HALC crcs
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::map<C_OscNodeDataPoolListElementOptArrayId,
+const QMap<C_OscNodeDataPoolListElementOptArrayId,
                C_PuiSdLastKnownHalElementId> & C_PuiSdHandlerDataLoggerLogic::GetLastKnownHalcCrcs(void) const
 {
    return this->mc_LastKnownHalcCrcs;
@@ -739,7 +739,7 @@ void C_PuiSdHandlerDataLoggerLogic::m_HandleSyncNodeAdded(const uint32_t ou32_In
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerDataLoggerLogic::m_HandleSyncNodeHalc(const uint32_t ou32_Index)
 {
-   std::map<C_OscNodeDataPoolListElementOptArrayId, C_OscNodeDataPoolListElementOptArrayId> c_MapCurToNew;
+   QMap<C_OscNodeDataPoolListElementOptArrayId, C_OscNodeDataPoolListElementOptArrayId> c_MapCurToNew;
    C_PuiSdNodeDataPoolListElementIdSyncUtil::h_GetNewMapOnSyncHalc(ou32_Index, c_MapCurToNew,
                                                                    this->mc_LastKnownHalcCrcs);
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < this->mc_CoreDefinition.c_Nodes.size(); ++u32_ItNode)
@@ -1400,10 +1400,10 @@ void C_PuiSdHandlerDataLoggerLogic::m_ValidateAllRoutesForOneNode(const uint32_t
    Vector of pointers to all currently registered bus names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_PuiSdHandlerDataLoggerLogic::mh_GetExistingDataLoggerNames(
+QHash<QString, bool> C_PuiSdHandlerDataLoggerLogic::mh_GetExistingDataLoggerNames(
    const C_OscNode & orc_Node)
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    for (uint32_t u32_ItLogger = 0; u32_ItLogger < orc_Node.c_DataLoggerJobs.size(); ++u32_ItLogger)
    {
       c_Retval[orc_Node.c_DataLoggerJobs[u32_ItLogger].c_Properties.c_Name] = true;

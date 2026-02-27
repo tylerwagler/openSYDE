@@ -286,9 +286,9 @@ QMimeData *C_SyvDcConnectedNodeList::mimeData(
               this->itemWidget(orc_Items[0]));
       if (pc_Widget != NULL) {
         QString c_StringSubNodeIdsToOldNodeIds;
-        const QMap<uint8_t, C_OscDcDeviceOldComConfig>
+        const QHash<uint8_t, C_OscDcDeviceOldComConfig>
             c_SubNodeIdsToOldNodeIds = pc_Widget->GetSubNodeIdsToOldNodeIds();
-        QMap<uint8_t, C_OscDcDeviceOldComConfig>::const_iterator c_ItIds;
+        QHash<uint8_t, C_OscDcDeviceOldComConfig>::const_iterator c_ItIds;
 
         pc_Retval->setData(
             C_SyvDcConnectedNodeList::mhc_MIME_DATA,
@@ -315,18 +315,18 @@ QMimeData *C_SyvDcConnectedNodeList::mimeData(
           // Format: sub node id,node id, ip valid flag(true), ip0:ip1:ip2:ip3;
           // sub node id, node id, ip valid flag(false);
           c_StringSubNodeIdsToOldNodeIds +=
-              QString::number(c_ItIds->first) + "," +
-              QString::number(c_ItIds->second.u8_OldNodeId) + "," +
+              QString::number(c_ItIds.key()) + "," +
+              QString::number(c_ItIds.value().u8_OldNodeId) + "," +
               QString::number(
-                  static_cast<uint8_t>(c_ItIds->second.q_OldIpAddressValid));
+                  static_cast<uint8_t>(c_ItIds.value().q_OldIpAddressValid));
 
-          if (c_ItIds->second.q_OldIpAddressValid == true) {
+          if (c_ItIds.value().q_OldIpAddressValid == true) {
             c_StringSubNodeIdsToOldNodeIds += ",";
             c_StringSubNodeIdsToOldNodeIds +=
-                QString::number(c_ItIds->second.au8_OldIpAddress[0]) + ":" +
-                QString::number(c_ItIds->second.au8_OldIpAddress[1]) + ":" +
-                QString::number(c_ItIds->second.au8_OldIpAddress[2]) + ":" +
-                QString::number(c_ItIds->second.au8_OldIpAddress[3]);
+                QString::number(c_ItIds.value().au8_OldIpAddress[0]) + ":" +
+                QString::number(c_ItIds.value().au8_OldIpAddress[1]) + ":" +
+                QString::number(c_ItIds.value().au8_OldIpAddress[2]) + ":" +
+                QString::number(c_ItIds.value().au8_OldIpAddress[3]);
           }
           c_StringSubNodeIdsToOldNodeIds += ";";
         }
@@ -348,7 +348,7 @@ void C_SyvDcConnectedNodeList::m_Init(void) {
   uint32_t u32_ItData;
 
   QList<C_OscDcDeviceInformation> c_DataUnique;
-  QList<QMap<uint8_t, C_OscDcDeviceOldComConfig>>
+  QList<QHash<uint8_t, C_OscDcDeviceOldComConfig>>
       c_DataUniqueSubNodeIdsToOldNodeIds;
 
   // Init/Reinit UI
@@ -384,7 +384,7 @@ void C_SyvDcConnectedNodeList::m_Init(void) {
     }
 
     if (q_MatchingSubNodeFound == false) {
-      QMap<uint8_t, C_OscDcDeviceOldComConfig> c_SubNodeIdToNodeId;
+      QHash<uint8_t, C_OscDcDeviceOldComConfig> c_SubNodeIdToNodeId;
       C_OscDcDeviceOldComConfig c_OldComConfig;
       c_OldComConfig.SetContent(rc_Data.u8_NodeId, rc_Data.q_IpAddressValid,
                                 &rc_Data.au8_IpAddress[0]);
@@ -420,7 +420,7 @@ void C_SyvDcConnectedNodeList::m_Init(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcConnectedNodeList::m_AppendNode(
     const C_OscDcDeviceInformation &orc_Info,
-    const QMap<uint8_t, C_OscDcDeviceOldComConfig>
+    const QHash<uint8_t, C_OscDcDeviceOldComConfig>
         &orc_SubNodeIdsToOldNodeIds) {
   C_SyvDcConnectedNodeWidget *pc_Widget;
 

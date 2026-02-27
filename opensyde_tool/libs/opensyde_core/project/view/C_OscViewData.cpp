@@ -5,42 +5,56 @@
 
    System view data element
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "precomp_headers.hpp"
-#include "stwtypes.hpp"
-#include "stwerrors.hpp"
-#include "C_SclChecksums.hpp"
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscViewData.hpp"
+#include "C_SclChecksums.hpp"
+#include "precomp_headers.hpp"
+#include "stwerrors.hpp"
+#include "stwtypes.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::scl;
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscViewData::C_OscViewData(void) :
-   mc_Name("NewView")
-{
-}
+C_OscViewData::C_OscViewData(void) : mc_Name("NewView") {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   destructor
@@ -48,32 +62,33 @@ C_OscViewData::C_OscViewData(void) :
    clean up ...
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscViewData::~C_OscViewData(void)
-{
-}
+C_OscViewData::~C_OscViewData(void) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Calculates the hash value over all data
 
    The hash value is a 32 bit CRC value.
 
-   \param[in,out]  oru32_HashValue  Hash value with init [in] value and result [out] value
+   \param[in,out]  oru32_HashValue  Hash value with init [in] value and result
+   [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::CalcHash(uint32_t & oru32_HashValue) const
-{
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Name.toUtf8().constData(), this->mc_Name.length(), oru32_HashValue);
-   this->mc_PcData.CalcHash(oru32_HashValue);
-   for (uint32_t u32_ItUpdate = 0; u32_ItUpdate < this->mc_NodeUpdateInformation.size(); ++u32_ItUpdate)
-   {
-      const C_OscViewNodeUpdate & rc_Update = this->mc_NodeUpdateInformation[u32_ItUpdate];
-      rc_Update.CalcHash(oru32_HashValue);
-   }
-   for (uint32_t u32_ItNode = 0; u32_ItNode < this->mc_NodeActiveFlags.size(); ++u32_ItNode)
-   {
-      const uint8_t u8_Value = this->mc_NodeActiveFlags[u32_ItNode];
-      stw::scl::C_SclChecksums::CalcCRC32(&u8_Value, sizeof(u8_Value), oru32_HashValue);
-   }
+void C_OscViewData::CalcHash(uint32_t &oru32_HashValue) const {
+  stw::scl::C_SclChecksums::CalcCRC32(this->mc_Name.toUtf8().constData(),
+                                      this->mc_Name.length(), oru32_HashValue);
+  this->mc_PcData.CalcHash(oru32_HashValue);
+  for (uint32_t u32_ItUpdate = 0;
+       u32_ItUpdate < this->mc_NodeUpdateInformation.size(); ++u32_ItUpdate) {
+    const C_OscViewNodeUpdate &rc_Update =
+        this->mc_NodeUpdateInformation[u32_ItUpdate];
+    rc_Update.CalcHash(oru32_HashValue);
+  }
+  for (uint32_t u32_ItNode = 0; u32_ItNode < this->mc_NodeActiveFlags.size();
+       ++u32_ItNode) {
+    const uint8_t u8_Value = this->mc_NodeActiveFlags[u32_ItNode];
+    stw::scl::C_SclChecksums::CalcCRC32(&u8_Value, sizeof(u8_Value),
+                                        oru32_HashValue);
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -83,9 +98,8 @@ void C_OscViewData::CalcHash(uint32_t & oru32_HashValue) const
    Current PC data
 */
 //----------------------------------------------------------------------------------------------------------------------
-const C_OscViewPc & C_OscViewData::GetOscPcData(void) const
-{
-   return this->mc_PcData;
+const C_OscViewPc &C_OscViewData::GetOscPcData(void) const {
+  return this->mc_PcData;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -94,9 +108,8 @@ const C_OscViewPc & C_OscViewData::GetOscPcData(void) const
    \param[in]  orc_Value   New PC data
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::SetOscPcData(const C_OscViewPc & orc_Value)
-{
-   this->mc_PcData = orc_Value;
+void C_OscViewData::SetOscPcData(const C_OscViewPc &orc_Value) {
+  this->mc_PcData = orc_Value;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -108,22 +121,17 @@ void C_OscViewData::SetOscPcData(const C_OscViewPc & orc_Value)
    Status if node is active
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscViewData::GetNodeActive(const uint32_t ou32_NodeIndex) const
-{
-   bool q_Retval = false;
+bool C_OscViewData::GetNodeActive(const uint32_t ou32_NodeIndex) const {
+  bool q_Retval = false;
 
-   if (ou32_NodeIndex < this->mc_NodeActiveFlags.size())
-   {
-      if (this->mc_NodeActiveFlags[ou32_NodeIndex] == 0U)
-      {
-         q_Retval = false;
-      }
-      else
-      {
-         q_Retval = true;
-      }
-   }
-   return q_Retval;
+  if (ou32_NodeIndex < this->mc_NodeActiveFlags.size()) {
+    if (this->mc_NodeActiveFlags[ou32_NodeIndex] == 0U) {
+      q_Retval = false;
+    } else {
+      q_Retval = true;
+    }
+  }
+  return q_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -133,9 +141,8 @@ bool C_OscViewData::GetNodeActive(const uint32_t ou32_NodeIndex) const
    Current node active flags
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QByteArray & C_OscViewData::GetNodeActiveFlags(void) const
-{
-   return this->mc_NodeActiveFlags;
+const QByteArray &C_OscViewData::GetNodeActiveFlags(void) const {
+  return this->mc_NodeActiveFlags;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -144,9 +151,8 @@ const QByteArray & C_OscViewData::GetNodeActiveFlags(void) const
    \param[in]  orc_Value   New node active flags
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::SetNodeActiveFlags(const QByteArray & orc_Value)
-{
-   this->mc_NodeActiveFlags = orc_Value;
+void C_OscViewData::SetNodeActiveFlags(const QByteArray &orc_Value) {
+  this->mc_NodeActiveFlags = orc_Value;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -156,9 +162,9 @@ void C_OscViewData::SetNodeActiveFlags(const QByteArray & orc_Value)
    Current node update information
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<C_OscViewNodeUpdate> & C_OscViewData::GetAllNodeUpdateInformation(void) const
-{
-   return this->mc_NodeUpdateInformation;
+const QList<C_OscViewNodeUpdate> &
+C_OscViewData::GetAllNodeUpdateInformation(void) const {
+  return this->mc_NodeUpdateInformation;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -167,9 +173,9 @@ const QList<C_OscViewNodeUpdate> & C_OscViewData::GetAllNodeUpdateInformation(vo
    \param[in]  orc_NodeUpdateInformation  New node update information
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::SetNodeUpdateInformation(const QList<C_OscViewNodeUpdate> & orc_NodeUpdateInformation)
-{
-   this->mc_NodeUpdateInformation = orc_NodeUpdateInformation;
+void C_OscViewData::SetNodeUpdateInformation(
+    const QList<C_OscViewNodeUpdate> &orc_NodeUpdateInformation) {
+  this->mc_NodeUpdateInformation = orc_NodeUpdateInformation;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -182,15 +188,14 @@ void C_OscViewData::SetNodeUpdateInformation(const QList<C_OscViewNodeUpdate> & 
    Else Valid update information
 */
 //----------------------------------------------------------------------------------------------------------------------
-const C_OscViewNodeUpdate * C_OscViewData::GetNodeUpdateInformation(const uint32_t ou32_NodeIndex) const
-{
-   const C_OscViewNodeUpdate * pc_Retval = NULL;
+const C_OscViewNodeUpdate *
+C_OscViewData::GetNodeUpdateInformation(const uint32_t ou32_NodeIndex) const {
+  const C_OscViewNodeUpdate *pc_Retval = NULL;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      pc_Retval = &this->mc_NodeUpdateInformation[ou32_NodeIndex];
-   }
-   return pc_Retval;
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    pc_Retval = &this->mc_NodeUpdateInformation[ou32_NodeIndex];
+  }
+  return pc_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -204,18 +209,17 @@ const C_OscViewNodeUpdate * C_OscViewData::GetNodeUpdateInformation(const uint32
    C_RANGE     Node index invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformation(const uint32_t ou32_NodeIndex,
-                                                const C_OscViewNodeUpdate & orc_NodeUpdateInformation)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::SetNodeUpdateInformation(
+    const uint32_t ou32_NodeIndex,
+    const C_OscViewNodeUpdate &orc_NodeUpdateInformation) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      this->mc_NodeUpdateInformation[ou32_NodeIndex] = orc_NodeUpdateInformation;
-      s32_Return = C_NO_ERR;
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    this->mc_NodeUpdateInformation[ou32_NodeIndex] = orc_NodeUpdateInformation;
+    s32_Return = C_NO_ERR;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -231,19 +235,19 @@ int32_t C_OscViewData::SetNodeUpdateInformation(const uint32_t ou32_NodeIndex,
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
-                                                    const QString & orc_Value,
-                                                    const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::SetNodeUpdateInformationPath(
+    const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+    const QString &orc_Value,
+    const C_OscViewNodeUpdate::E_GenericFileType oe_Type) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.SetPath(ou32_Index, orc_Value, oe_Type);
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    s32_Return = rc_UpdateInformation.SetPath(ou32_Index, orc_Value, oe_Type);
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -258,18 +262,18 @@ int32_t C_OscViewData::SetNodeUpdateInformationPath(const uint32_t ou32_NodeInde
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
-                                                         const C_OscViewNodeUpdateParamInfo & orc_Value)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::SetNodeUpdateInformationParamInfo(
+    const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+    const C_OscViewNodeUpdateParamInfo &orc_Value) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.SetParamInfo(ou32_Index, orc_Value);
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    s32_Return = rc_UpdateInformation.SetParamInfo(ou32_Index, orc_Value);
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -283,18 +287,18 @@ int32_t C_OscViewData::SetNodeUpdateInformationParamInfo(const uint32_t ou32_Nod
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex, const QString & orc_Value)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::SetNodeUpdateInformationPemFilePath(
+    const uint32_t ou32_NodeIndex, const QString &orc_Value) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      rc_UpdateInformation.SetPemFilePath(orc_Value);
-      s32_Return = C_NO_ERR;
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    rc_UpdateInformation.SetPemFilePath(orc_Value);
+    s32_Return = C_NO_ERR;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -310,19 +314,20 @@ int32_t C_OscViewData::SetNodeUpdateInformationPemFilePath(const uint32_t ou32_N
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPath(const uint32_t ou32_NodeIndex,
-                                                                const uint32_t ou32_Index, const bool oq_SkipFile,
-                                                                const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPath(
+    const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+    const bool oq_SkipFile,
+    const C_OscViewNodeUpdate::E_GenericFileType oe_Type) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.SetSkipUpdateOfPath(ou32_Index, oq_SkipFile, oe_Type);
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    s32_Return = rc_UpdateInformation.SetSkipUpdateOfPath(ou32_Index,
+                                                          oq_SkipFile, oe_Type);
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -337,18 +342,19 @@ int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPath(const uint32_t o
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfParamInfo(const uint32_t ou32_NodeIndex,
-                                                                     const uint32_t ou32_Index, const bool oq_SkipFile)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfParamInfo(
+    const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+    const bool oq_SkipFile) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.SetSkipUpdateOfParamInfo(ou32_Index, oq_SkipFile);
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    s32_Return =
+        rc_UpdateInformation.SetSkipUpdateOfParamInfo(ou32_Index, oq_SkipFile);
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -362,19 +368,18 @@ int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfParamInfo(const uint3
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPemFile(const uint32_t ou32_NodeIndex,
-                                                                   const bool oq_SkipFile)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPemFile(
+    const uint32_t ou32_NodeIndex, const bool oq_SkipFile) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      rc_UpdateInformation.SetSkipUpdateOfPemFile(oq_SkipFile);
-      s32_Return = C_NO_ERR;
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    rc_UpdateInformation.SetSkipUpdateOfPemFile(oq_SkipFile);
+    s32_Return = C_NO_ERR;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -389,20 +394,20 @@ int32_t C_OscViewData::SetNodeUpdateInformationSkipUpdateOfPemFile(const uint32_
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationStates(const uint32_t ou32_NodeIndex,
-                                                      const C_OscViewNodeUpdate::E_StateSecurity oe_StateSecurity,
-                                                      const C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::SetNodeUpdateInformationStates(
+    const uint32_t ou32_NodeIndex,
+    const C_OscViewNodeUpdate::E_StateSecurity oe_StateSecurity,
+    const C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      rc_UpdateInformation.SetStates(oe_StateSecurity, oe_StateDebugger);
-      s32_Return = C_NO_ERR;
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    rc_UpdateInformation.SetStates(oe_StateSecurity, oe_StateDebugger);
+    s32_Return = C_NO_ERR;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -418,20 +423,19 @@ int32_t C_OscViewData::SetNodeUpdateInformationStates(const uint32_t ou32_NodeIn
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::SetNodeUpdateInformationParamInfoContent(const uint32_t ou32_NodeIndex,
-                                                                const uint32_t ou32_Index,
-                                                                const QString & orc_FilePath,
-                                                                const uint32_t ou32_LastKnownCrc)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::SetNodeUpdateInformationParamInfoContent(
+    const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+    const QString &orc_FilePath, const uint32_t ou32_LastKnownCrc) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.SetParamInfoContent(ou32_Index, orc_FilePath, ou32_LastKnownCrc);
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    s32_Return = rc_UpdateInformation.SetParamInfoContent(
+        ou32_Index, orc_FilePath, ou32_LastKnownCrc);
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -446,20 +450,20 @@ int32_t C_OscViewData::SetNodeUpdateInformationParamInfoContent(const uint32_t o
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::AddNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const QString & orc_Value,
-                                                    const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::AddNodeUpdateInformationPath(
+    const uint32_t ou32_NodeIndex, const QString &orc_Value,
+    const C_OscViewNodeUpdate::E_GenericFileType oe_Type) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      rc_UpdateInformation.AddPath(orc_Value, oe_Type);
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    rc_UpdateInformation.AddPath(orc_Value, oe_Type);
 
-      s32_Return = C_NO_ERR;
-   }
+    s32_Return = C_NO_ERR;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -473,20 +477,20 @@ int32_t C_OscViewData::AddNodeUpdateInformationPath(const uint32_t ou32_NodeInde
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::AddNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex,
-                                                         const C_OscViewNodeUpdateParamInfo & orc_Value)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::AddNodeUpdateInformationParamInfo(
+    const uint32_t ou32_NodeIndex,
+    const C_OscViewNodeUpdateParamInfo &orc_Value) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      rc_UpdateInformation.AddParamInfo(orc_Value);
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    rc_UpdateInformation.AddParamInfo(orc_Value);
 
-      s32_Return = C_NO_ERR;
-   }
+    s32_Return = C_NO_ERR;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -496,10 +500,7 @@ int32_t C_OscViewData::AddNodeUpdateInformationParamInfo(const uint32_t ou32_Nod
    Current name
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QString & C_OscViewData::GetName(void) const
-{
-   return this->mc_Name;
-}
+const QString &C_OscViewData::GetName(void) const { return this->mc_Name; }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set name
@@ -507,9 +508,8 @@ const QString & C_OscViewData::GetName(void) const
    \param[in]  orc_Value   New name
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::SetName(const QString & orc_Value)
-{
-   this->mc_Name = orc_Value;
+void C_OscViewData::SetName(const QString &orc_Value) {
+  this->mc_Name = orc_Value;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -519,9 +519,9 @@ void C_OscViewData::SetName(const QString & orc_Value)
    \param[in]  ou32_BusIndex  Bus index PC is connected to
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::SetPcConnected(const bool oq_Connected, const uint32_t ou32_BusIndex)
-{
-   this->mc_PcData.SetConnected(oq_Connected, ou32_BusIndex);
+void C_OscViewData::SetPcConnected(const bool oq_Connected,
+                                   const uint32_t ou32_BusIndex) {
+  this->mc_PcData.SetConnected(oq_Connected, ou32_BusIndex);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -530,9 +530,8 @@ void C_OscViewData::SetPcConnected(const bool oq_Connected, const uint32_t ou32_
    \param[in]  ou32_Index  Added bus index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::OnSyncBusAdded(const uint32_t ou32_Index)
-{
-   this->mc_PcData.OnSyncBusAdded(ou32_Index);
+void C_OscViewData::OnSyncBusAdded(const uint32_t ou32_Index) {
+  this->mc_PcData.OnSyncBusAdded(ou32_Index);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -541,9 +540,8 @@ void C_OscViewData::OnSyncBusAdded(const uint32_t ou32_Index)
    \param[in]  ou32_Index  Deleted bus index
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewData::OnSyncBusDeleted(const uint32_t ou32_Index)
-{
-   this->mc_PcData.OnSyncBusDeleted(ou32_Index);
+void C_OscViewData::OnSyncBusDeleted(const uint32_t ou32_Index) {
+  this->mc_PcData.OnSyncBusDeleted(ou32_Index);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -558,18 +556,18 @@ void C_OscViewData::OnSyncBusDeleted(const uint32_t ou32_Index)
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::RemoveNodeUpdateInformationPath(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
-                                                       const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::RemoveNodeUpdateInformationPath(
+    const uint32_t ou32_NodeIndex, const uint32_t ou32_Index,
+    const C_OscViewNodeUpdate::E_GenericFileType oe_Type) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.RemovePath(ou32_Index, oe_Type);
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    s32_Return = rc_UpdateInformation.RemovePath(ou32_Index, oe_Type);
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -583,17 +581,17 @@ int32_t C_OscViewData::RemoveNodeUpdateInformationPath(const uint32_t ou32_NodeI
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::RemoveNodeUpdateInformationParamInfo(const uint32_t ou32_NodeIndex, const uint32_t ou32_Index)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::RemoveNodeUpdateInformationParamInfo(
+    const uint32_t ou32_NodeIndex, const uint32_t ou32_Index) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      s32_Return = rc_UpdateInformation.RemoveParamInfo(ou32_Index);
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    s32_Return = rc_UpdateInformation.RemoveParamInfo(ou32_Index);
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -606,18 +604,18 @@ int32_t C_OscViewData::RemoveNodeUpdateInformationParamInfo(const uint32_t ou32_
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::RemoveNodeUpdateInformationPemFilePath(const uint32_t ou32_NodeIndex)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::RemoveNodeUpdateInformationPemFilePath(
+    const uint32_t ou32_NodeIndex) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      rc_UpdateInformation.RemovePemFilePath();
-      s32_Return = C_NO_ERR;
-   }
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    rc_UpdateInformation.RemovePemFilePath();
+    s32_Return = C_NO_ERR;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -631,20 +629,20 @@ int32_t C_OscViewData::RemoveNodeUpdateInformationPemFilePath(const uint32_t ou3
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::ClearNodeUpdateInformationAsAppropriate(const uint32_t ou32_NodeIndex,
-                                                               const C_OscViewNodeUpdate::E_GenericFileType oe_Type)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::ClearNodeUpdateInformationAsAppropriate(
+    const uint32_t ou32_NodeIndex,
+    const C_OscViewNodeUpdate::E_GenericFileType oe_Type) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      rc_UpdateInformation.ClearPathsAsAppropriate(oe_Type);
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    rc_UpdateInformation.ClearPathsAsAppropriate(oe_Type);
 
-      s32_Return = C_NO_ERR;
-   }
+    s32_Return = C_NO_ERR;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -657,17 +655,17 @@ int32_t C_OscViewData::ClearNodeUpdateInformationAsAppropriate(const uint32_t ou
    C_RANGE  Operation failure: parameter invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscViewData::ClearNodeUpdateInformationParamPaths(const uint32_t ou32_NodeIndex)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_OscViewData::ClearNodeUpdateInformationParamPaths(
+    const uint32_t ou32_NodeIndex) {
+  int32_t s32_Return = C_RANGE;
 
-   if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size())
-   {
-      C_OscViewNodeUpdate & rc_UpdateInformation = this->mc_NodeUpdateInformation[ou32_NodeIndex];
-      rc_UpdateInformation.ClearParamPaths();
+  if (ou32_NodeIndex < this->mc_NodeUpdateInformation.size()) {
+    C_OscViewNodeUpdate &rc_UpdateInformation =
+        this->mc_NodeUpdateInformation[ou32_NodeIndex];
+    rc_UpdateInformation.ClearParamPaths();
 
-      s32_Return = C_NO_ERR;
-   }
+    s32_Return = C_NO_ERR;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }

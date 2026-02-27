@@ -577,8 +577,8 @@ void C_SdNdeCoDeviceConfigWidget::m_LoadFromData(void)
    {
       const C_OscCanOpenObjectDictionary & rc_EdsFileContent = pc_CanOpenDeviceInfo->GetEdsFileContent();
 
-      std::set<uint8_t> c_Map = rc_EdsFileContent.GetAllAvailableFactorySettingsSubIndices();
-      std::set<uint8_t>::const_iterator c_ItResult;
+      QSet<uint8_t> c_Map = rc_EdsFileContent.GetAllAvailableFactorySettingsSubIndices();
+      QSet<uint8_t>::const_iterator c_ItResult;
 
       //Change range before setting value
       m_HandleNodeIdRange(pc_CanOpenDeviceInfo->q_UseOpenSydeNodeId);
@@ -827,15 +827,15 @@ bool C_SdNdeCoDeviceConfigWidget::m_GetIndexOfSub(const uint8_t ou8_Sub, int32_t
 {
    bool q_RetVal = false;
 
-   std::map<int32_t, uint8_t>::iterator c_ItResult;
+   QMap<int32_t, uint8_t>::iterator c_ItResult;
 
    for (c_ItResult = mc_ComboboxIndexToFactorySettingsSub.begin();
         c_ItResult != mc_ComboboxIndexToFactorySettingsSub.end(); ++c_ItResult)
    {
-      if (c_ItResult->second == ou8_Sub)
+      if (c_ItResult.value() == ou8_Sub)
       {
          q_RetVal = true;
-         ors32_FoundIndex = c_ItResult->first;
+         ors32_FoundIndex = c_ItResult.key();
          //stop search
          break;
       }
@@ -860,7 +860,7 @@ bool C_SdNdeCoDeviceConfigWidget::m_GetSubOfIndex(const int32_t os32_Index, uint
 {
    bool q_RetVal = false;
 
-   std::map<int32_t, uint8_t>::iterator c_ItResult;
+   QMap<int32_t, uint8_t>::iterator c_ItResult;
    // Search
    c_ItResult = mc_ComboboxIndexToFactorySettingsSub.find(os32_Index);
 
@@ -868,7 +868,7 @@ bool C_SdNdeCoDeviceConfigWidget::m_GetSubOfIndex(const int32_t os32_Index, uint
    {
       //found
       q_RetVal = true;
-      oru8_FoundSub = c_ItResult->second;
+      oru8_FoundSub = c_ItResult.value();
    }
 
    return q_RetVal;

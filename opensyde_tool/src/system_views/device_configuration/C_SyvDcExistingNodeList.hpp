@@ -37,7 +37,7 @@ public:
    int32_t SetView(const uint32_t ou32_Index, const bool oq_ShowAssignment);
    void ConnectSerialNumber(const uint32_t ou32_NodeIndex,
                             const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
-const QMap<uint8_t,
+const QHash<uint8_t,
                                            stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds)
    const;
    void DisconnectSerialNumber(const uint32_t ou32_NodeIndex,
@@ -55,7 +55,7 @@ const QMap<uint8_t,
 Q_SIGNALS:
    //lint -restore
    void SigConnect(const uint32_t ou32_NodeIndex,
-                   const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber, const QMap<uint8_t,
+                   const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber, const QHash<uint8_t,
                                                                                                           stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds);
    void SigDisconnect(const uint32_t ou32_NodeIndex,
                       const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber);

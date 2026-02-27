@@ -83,7 +83,7 @@ void C_OscLoggingHandler::h_SetWriteToFileActive(
     const bool oq_Active, const bool oq_AutoFlushAll,
     const bool oq_LogInitErrorsToConsole,
     const bool oq_AutoFlushWarningsAndErrors) {
-  if (C_OscLoggingHandler::mhc_File.is_open() == true) {
+  if (C_OscLoggingHandler::mhc_File.isOpen()) {
     C_OscLoggingHandler::mhc_File.close();
   }
   C_OscLoggingHandler::mhq_WriteToFile = oq_Active;
@@ -122,7 +122,7 @@ void C_OscLoggingHandler::h_SetMeasurePerformanceActive(const bool oq_Active) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscLoggingHandler::h_SetCompleteLogFileLocation(
     const QString &orc_CompleteLogFileLocation) {
-  if (C_OscLoggingHandler::mhc_File.is_open() == true) {
+  if (C_OscLoggingHandler::mhc_File.isOpen()) {
     C_OscLoggingHandler::mhc_File.close();
   }
   C_OscLoggingHandler::mhc_FileName = orc_CompleteLogFileLocation;
@@ -214,7 +214,7 @@ void C_OscLoggingHandler::h_WriteLogPerformance(
           "INFO", "Performance measurement",
           orc_Message + " time: " +
               QString::number(static_cast<int32_t>(
-                  QDateTime::currentMSecsSinceEpoch() - c_StartTime->second)) +
+                  QDateTime::currentMSecsSinceEpoch() - c_StartTime.value())) +
               " ms",
           opcn_Class, opcn_Function);
 
@@ -427,7 +427,7 @@ void C_OscLoggingHandler::mh_WriteLog(const QString &orc_Type,
 void C_OscLoggingHandler::mh_OpenFile(void) {
   if (((C_OscLoggingHandler::mhc_FileName != "") &&
        (C_OscLoggingHandler::mhq_WriteToFile == true)) &&
-      (C_OscLoggingHandler::mhc_File.is_open() == false)) {
+      (!C_OscLoggingHandler::mhc_File.isOpen())) {
     const QString c_QFileName = C_OscLoggingHandler::mhc_FileName;
     const QFileInfo c_FileInfo(c_QFileName);
     const QString c_QFilePath = c_FileInfo.absolutePath() + "/";
@@ -437,9 +437,10 @@ void C_OscLoggingHandler::mh_OpenFile(void) {
       QDir().mkpath(c_QFilePath);
     }
 
-    if (!C_OscLoggingHandler::mhc_File.open(C_OscLoggingHandler::mhc_FileName,
-                                            QIODevice::Append |
-                                                QIODevice::Text)) {
+    // Set the file name first
+    C_OscLoggingHandler::mhc_File.setFileName(c_QFileName);
+    if (!C_OscLoggingHandler::mhc_File.open(QIODevice::Append |
+                                            QIODevice::Text)) {
       // if opening the file fails then at least try to write an info to console
       // once (if configured so)
       if (C_OscLoggingHandler::mhq_LogInitErrorsToConsole == true) {

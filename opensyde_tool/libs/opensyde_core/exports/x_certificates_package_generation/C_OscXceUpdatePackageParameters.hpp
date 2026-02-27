@@ -2,35 +2,43 @@
 /*!
    \file
    \brief       Xapp update package parameters data
-   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCXCEUPDATEPACKAGEPARAMETERS_HPP
 #define C_OSCXCEUPDATEPACKAGEPARAMETERS_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include <QString>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscXceUpdatePackageParameters
-{
+class C_OscXceUpdatePackageParameters {
 public:
-   C_OscXceUpdatePackageParameters();
+  C_OscXceUpdatePackageParameters();
 
-   QString c_Password;
-   QString c_AuthenticationKeyPath;
+  QString c_Password;
+  QString c_AuthenticationKeyPath;
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

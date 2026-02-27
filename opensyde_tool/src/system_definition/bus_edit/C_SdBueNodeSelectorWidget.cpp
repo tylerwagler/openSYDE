@@ -212,7 +212,7 @@ void C_SdBueNodeSelectorWidget::SetProtocol(const C_OscCanProtocol::E_Type oe_Pr
             uint32_t u32_ManagerIntfIndex = 0U;
             // The devices have to be added manually as checked due to not having own protocol information about
             // CANopen. Only the manager has all information.
-            const std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManagerInfo =
+            const QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManagerInfo =
                pc_NodeManager->c_CanOpenManagers.find(u8_ManagerIntfNumber);
 
             // Set the info for the manager
@@ -235,13 +235,13 @@ void C_SdBueNodeSelectorWidget::SetProtocol(const C_OscCanProtocol::E_Type oe_Pr
             Q_ASSERT(c_ItManagerInfo != pc_NodeManager->c_CanOpenManagers.end());
             if (c_ItManagerInfo != pc_NodeManager->c_CanOpenManagers.end())
             {
-               const C_OscCanOpenManagerInfo & rc_ManagerInfo = c_ItManagerInfo->second;
-               std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice;
+               const C_OscCanOpenManagerInfo & rc_ManagerInfo = c_ItManagerInfo.value();
+               QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice;
 
-               for (c_ItDevice = rc_ManagerInfo.c_CanOpenDevices.begin();
-                    c_ItDevice != rc_ManagerInfo.c_CanOpenDevices.end(); ++c_ItDevice)
+               for (c_ItDevice = rc_ManagerInfo.c_CanOpenDevices.constBegin();
+                    c_ItDevice != rc_ManagerInfo.c_CanOpenDevices.constEnd(); ++c_ItDevice)
                {
-                  const C_OscCanInterfaceId & rc_DeviceId = c_ItDevice->first;
+                  const C_OscCanInterfaceId & rc_DeviceId = c_ItDevice.key();
                   const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                      rc_DeviceId.u32_NodeIndex);
 

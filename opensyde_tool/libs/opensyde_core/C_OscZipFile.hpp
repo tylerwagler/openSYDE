@@ -38,7 +38,7 @@ namespace opensyde_core {
 class C_OscZipFile {
 public:
   static int32_t h_CreateZipFile(const QString &orc_SourcePath,
-                                 const std::set<QString> &orc_SupFiles,
+                                 const QSet<QString> &orc_SupFiles,
                                  const QString &orc_ZipArchivePath,
                                  QString *const opc_ErrorText = NULL);
 
@@ -46,7 +46,7 @@ public:
                                  const QString &orc_TargetUnzipPath,
                                  QString *const opc_ErrorText = NULL);
 
-  static void h_AppendFilesRelative(std::set<QString> &orc_Set,
+  static void h_AppendFilesRelative(QSet<QString> &orc_Set,
                                     const QStringList &orc_Files,
                                     const QString &orc_BasePath);
 

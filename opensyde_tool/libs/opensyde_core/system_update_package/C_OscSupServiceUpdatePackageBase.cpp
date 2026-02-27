@@ -5,39 +5,43 @@
 
    For details cf. documentation in .h file.
 
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
 
-#include <fstream>
-#include <iterator>
-#include "stwtypes.hpp"
-#include "stwerrors.hpp"
-#include <QString>
-#include "C_OscSupServiceUpdatePackageV1.hpp"
-#include "C_OscSupServiceUpdatePackageBase.hpp"
+#include "C_OscAesFile.hpp"
+#include "C_OscDeviceDefinition.hpp"
+#include "C_OscDeviceDefinitionFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_OscSecurityEcdsa.hpp"
+#include "C_OscSecurityPemSecUpdate.hpp"
+#include "C_OscSuSequences.hpp"
+#include "C_OscSupDefinitionFiler.hpp"
+#include "C_OscSupNodeDefinitionFiler.hpp"
+#include "C_OscSupServiceUpdatePackageBase.hpp"
+#include "C_OscSupServiceUpdatePackageV1.hpp"
+#include "C_OscSupSignatureFiler.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscSystemDefinitionFilerV2.hpp"
-#include "C_OscDeviceDefinition.hpp"
-#include "C_OscDeviceDefinitionFiler.hpp"
-#include "C_OscSuSequences.hpp"
-#include "C_OscSuSequences.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscZipFile.hpp"
-#include "C_OscAesFile.hpp"
-#include "C_OscSupSignatureFiler.hpp"
-#include "C_OscSupDefinitionFiler.hpp"
-#include "C_OscSecurityPemSecUpdate.hpp"
-#include "C_OscSupNodeDefinitionFiler.hpp"
-#include "C_OscSecurityEcdsa.hpp"
+#include "stwerrors.hpp"
+#include "stwtypes.hpp"
+#include <QString>
+#include <fstream>
+#include <iterator>
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
@@ -47,30 +51,47 @@ using namespace stw::diag_lib;
 using namespace std;
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 const QString C_OscSupServiceUpdatePackageBase::mhc_PACKAGE_EXT = ".syde_sup";
-const QString C_OscSupServiceUpdatePackageBase::mhc_PACKAGE_EXT_TMP = ".syde_sup_tmp"; // intermediate directory
-                                                                                           // before creating zip
-                                                                                           // archive
-const QString C_OscSupServiceUpdatePackageBase::mhc_SUP_SYSDEF = "sup_system_definition.syde_sysdef";
+const QString C_OscSupServiceUpdatePackageBase::mhc_PACKAGE_EXT_TMP =
+    ".syde_sup_tmp"; // intermediate directory
+                     // before creating zip
+                     // archive
+const QString C_OscSupServiceUpdatePackageBase::mhc_SUP_SYSDEF =
+    "sup_system_definition.syde_sysdef";
 const QString C_OscSupServiceUpdatePackageBase::mhc_INI_DEV = "devices.ini";
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
-QStringList C_OscSupServiceUpdatePackageBase::mhc_WarningMessages; // global warnings e.g. if update
-                                                                                 // position
-                                                                                 // of
-                                                                                 // active node is not available
-QString C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage;        // description of error which caused
-                                                                                 // the
-                                                                                 // service update package to fail
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+QStringList C_OscSupServiceUpdatePackageBase::
+    mhc_WarningMessages; // global warnings e.g. if update
+                         // position
+                         // of
+                         // active node is not available
+QString
+    C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage; // description of error
+                                                        // which caused the
+                                                        // service update
+                                                        // package to fail
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Returns fix defined service update package extension.
@@ -79,9 +100,8 @@ QString C_OscSupServiceUpdatePackageBase::mhc_ErrorMessage;        // descriptio
    service update package extension
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscSupServiceUpdatePackageBase::h_GetPackageExtension()
-{
-   return mhc_PACKAGE_EXT;
+QString C_OscSupServiceUpdatePackageBase::h_GetPackageExtension() {
+  return mhc_PACKAGE_EXT;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -100,43 +120,43 @@ QString C_OscSupServiceUpdatePackageBase::h_GetPackageExtension()
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParameters(
-   const QByteArray & orc_EncryptNodes, const QStringList & orc_EncryptNodesPassword,
-   const QList<QByteArray > & orc_NodeSignatureKeys, const uint32_t ou32_NumNodes,
-   const QString & orc_Mode, const QString & orc_Function)
-{
-   int32_t s32_Return = C_NO_ERR;
+    const QByteArray &orc_EncryptNodes,
+    const QStringList &orc_EncryptNodesPassword,
+    const QList<QByteArray> &orc_NodeSignatureKeys,
+    const uint32_t ou32_NumNodes, const QString &orc_Mode,
+    const QString &orc_Function) {
+  int32_t s32_Return = C_NO_ERR;
 
-   if (orc_EncryptNodes.size() != orc_EncryptNodesPassword.size())
-   {
-      mhc_ErrorMessage = "The container of " + orc_Mode + "ed nodes and " + orc_Mode +
-                         "ed passwords have not the same size.";
+  if (orc_EncryptNodes.size() != orc_EncryptNodesPassword.size()) {
+    mhc_ErrorMessage = "The container of " + orc_Mode + "ed nodes and " +
+                       orc_Mode + "ed passwords have not the same size.";
+    osc_write_log_error(orc_Function, mhc_ErrorMessage);
+    s32_Return = C_CHECKSUM;
+  }
+
+  if (s32_Return == C_NO_ERR) {
+    if (((orc_EncryptNodes.size() != 0UL) &&
+         (orc_EncryptNodes.size() != 1UL)) &&
+        (orc_EncryptNodes.size() != ou32_NumNodes)) {
+      mhc_ErrorMessage = "The container of " + orc_Mode +
+                         "ed nodes and nodes have not the same size.";
       osc_write_log_error(orc_Function, mhc_ErrorMessage);
       s32_Return = C_CHECKSUM;
-   }
+    }
+  }
 
-   if (s32_Return == C_NO_ERR)
-   {
-      if (((orc_EncryptNodes.size() != 0UL) && (orc_EncryptNodes.size() != 1UL)) &&
-          (orc_EncryptNodes.size() != ou32_NumNodes))
-      {
-         mhc_ErrorMessage = "The container of " + orc_Mode + "ed nodes and nodes have not the same size.";
-         osc_write_log_error(orc_Function, mhc_ErrorMessage);
-         s32_Return = C_CHECKSUM;
-      }
-   }
+  if (s32_Return == C_NO_ERR) {
+    if (((orc_NodeSignatureKeys.size() != 0UL) &&
+         (orc_NodeSignatureKeys.size() != 1UL)) &&
+        (orc_NodeSignatureKeys.size() != ou32_NumNodes)) {
+      mhc_ErrorMessage =
+          "The container of signature keys and nodes have not the same size.";
+      osc_write_log_error(orc_Function, mhc_ErrorMessage);
+      s32_Return = C_CHECKSUM;
+    }
+  }
 
-   if (s32_Return == C_NO_ERR)
-   {
-      if (((orc_NodeSignatureKeys.size() != 0UL) && (orc_NodeSignatureKeys.size() != 1UL)) &&
-          (orc_NodeSignatureKeys.size() != ou32_NumNodes))
-      {
-         mhc_ErrorMessage = "The container of signature keys and nodes have not the same size.";
-         osc_write_log_error(orc_Function, mhc_ErrorMessage);
-         s32_Return = C_CHECKSUM;
-      }
-   }
-
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -148,22 +168,23 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_CheckCommonSecurityParameters(
    \param[in,out]  orc_RelPath            Rel path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupServiceUpdatePackageBase::mh_GetSydeSecureDefFileNames(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                                    const QString & orc_TargetPath,
-                                                                    QStringList & orc_AbsPath,
-                                                                    QStringList & orc_RelPath)
-{
-   for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
-   {
-      const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_ItNode];
-      const QString c_Folder = stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(C_OscUtils::h_NiceifyStringForFileName(
-                                                                      rc_Node.c_Properties.c_Name));
-      const QString c_File = "secure_update_collection.syde_sucdef";
-      const QString c_RelPath = c_File;
-      const QString c_AbsPath = orc_TargetPath + c_Folder + c_RelPath;
-      orc_AbsPath.push_back(c_AbsPath);
-      orc_RelPath.push_back(c_RelPath);
-   }
+void C_OscSupServiceUpdatePackageBase::mh_GetSydeSecureDefFileNames(
+    const C_OscSystemDefinition &orc_SystemDefinition,
+    const QString &orc_TargetPath, QStringList &orc_AbsPath,
+    QStringList &orc_RelPath) {
+  for (uint32_t u32_ItNode = 0UL;
+       u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode) {
+    const C_OscNode &rc_Node = orc_SystemDefinition.c_Nodes[u32_ItNode];
+    const QString c_Folder =
+        stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(
+            C_OscUtils::h_NiceifyStringForFileName(
+                rc_Node.c_Properties.c_Name));
+    const QString c_File = "secure_update_collection.syde_sucdef";
+    const QString c_RelPath = c_File;
+    const QString c_AbsPath = orc_TargetPath + c_Folder + c_RelPath;
+    orc_AbsPath.push_back(c_AbsPath);
+    orc_RelPath.push_back(c_RelPath);
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -175,19 +196,21 @@ void C_OscSupServiceUpdatePackageBase::mh_GetSydeSecureDefFileNames(const C_OscS
    \param[in,out]  orc_RelPath            Rel path
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                             const QString & orc_TargetPath,
-                                                             QStringList & orc_AbsPath,
-                                                             QStringList & orc_RelPath)
-{
-   for (uint32_t u32_ItNode = 0UL; u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode)
-   {
-      const C_OscNode & rc_Node = orc_SystemDefinition.c_Nodes[u32_ItNode];
-      const QString c_RelFile = C_OscUtils::h_NiceifyStringForFileName(rc_Node.c_Properties.c_Name);
-      const QString c_AbsFile = stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_TargetPath + c_RelFile);
-      orc_AbsPath.push_back(c_AbsFile);
-      orc_RelPath.push_back(c_RelFile);
-   }
+void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(
+    const C_OscSystemDefinition &orc_SystemDefinition,
+    const QString &orc_TargetPath, QStringList &orc_AbsPath,
+    QStringList &orc_RelPath) {
+  for (uint32_t u32_ItNode = 0UL;
+       u32_ItNode < orc_SystemDefinition.c_Nodes.size(); ++u32_ItNode) {
+    const C_OscNode &rc_Node = orc_SystemDefinition.c_Nodes[u32_ItNode];
+    const QString c_RelFile =
+        C_OscUtils::h_NiceifyStringForFileName(rc_Node.c_Properties.c_Name);
+    const QString c_AbsFile =
+        stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(
+            orc_TargetPath + c_RelFile);
+    orc_AbsPath.push_back(c_AbsFile);
+    orc_RelPath.push_back(c_RelFile);
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -200,28 +223,25 @@ void C_OscSupServiceUpdatePackageBase::mh_GetNodeFolderNames(const C_OscSystemDe
    \param[in,out]  orc_OutEncryptNodesPassword  Out encrypt nodes password
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupServiceUpdatePackageBase::mh_AdaptEncryptionParameters(const QByteArray & orc_InEncryptNodes,
-                                                                    const QStringList & orc_InEncryptNodesPassword, const uint32_t ou32_NodeCount, QByteArray & orc_OutEncryptNodes,
-                                                                    QStringList & orc_OutEncryptNodesPassword)
-{
-   orc_OutEncryptNodes = orc_InEncryptNodes;
-   orc_OutEncryptNodesPassword = orc_InEncryptNodesPassword;
-   if (orc_OutEncryptNodes.size() == 0UL)
-   {
-      //Default
-      orc_OutEncryptNodes.resize(ou32_NodeCount, 0U);
-      orc_OutEncryptNodesPassword.resize(ou32_NodeCount, "");
-   }
-   else if (orc_OutEncryptNodes.size() == 1UL)
-   {
-      //All same
-      orc_OutEncryptNodes.resize(ou32_NodeCount, orc_InEncryptNodes[0U]);
-      orc_OutEncryptNodesPassword.resize(ou32_NodeCount, orc_InEncryptNodesPassword[0U]);
-   }
-   else
-   {
-      //No change necessary
-   }
+void C_OscSupServiceUpdatePackageBase::mh_AdaptEncryptionParameters(
+    const QByteArray &orc_InEncryptNodes,
+    const QStringList &orc_InEncryptNodesPassword,
+    const uint32_t ou32_NodeCount, QByteArray &orc_OutEncryptNodes,
+    QStringList &orc_OutEncryptNodesPassword) {
+  orc_OutEncryptNodes = orc_InEncryptNodes;
+  orc_OutEncryptNodesPassword = orc_InEncryptNodesPassword;
+  if (orc_OutEncryptNodes.size() == 0UL) {
+    // Default
+    orc_OutEncryptNodes.resize(ou32_NodeCount, 0U);
+    orc_OutEncryptNodesPassword.resize(ou32_NodeCount, "");
+  } else if (orc_OutEncryptNodes.size() == 1UL) {
+    // All same
+    orc_OutEncryptNodes.resize(ou32_NodeCount, orc_InEncryptNodes[0U]);
+    orc_OutEncryptNodesPassword.resize(ou32_NodeCount,
+                                       orc_InEncryptNodesPassword[0U]);
+  } else {
+    // No change necessary
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -233,24 +253,20 @@ void C_OscSupServiceUpdatePackageBase::mh_AdaptEncryptionParameters(const QByteA
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_AdaptCommonSignatureParameters(
-   const QList<QByteArray > & orc_InNodeSignatureKeys, const uint32_t ou32_NodeCount,
-   QList<QByteArray > & orc_OutNodeSignatureKeys)
-{
-   orc_OutNodeSignatureKeys = orc_InNodeSignatureKeys;
-   if (orc_OutNodeSignatureKeys.size() == 0UL)
-   {
-      //Default
-      orc_OutNodeSignatureKeys.resize(ou32_NodeCount, QByteArray());
-   }
-   else if (orc_OutNodeSignatureKeys.size() == 1UL)
-   {
-      //All same
-      orc_OutNodeSignatureKeys.resize(ou32_NodeCount, orc_OutNodeSignatureKeys[0U]);
-   }
-   else
-   {
-      //No change necessary
-   }
+    const QList<QByteArray> &orc_InNodeSignatureKeys,
+    const uint32_t ou32_NodeCount,
+    QList<QByteArray> &orc_OutNodeSignatureKeys) {
+  orc_OutNodeSignatureKeys = orc_InNodeSignatureKeys;
+  if (orc_OutNodeSignatureKeys.size() == 0UL) {
+    // Default
+    orc_OutNodeSignatureKeys.resize(ou32_NodeCount, QByteArray());
+  } else if (orc_OutNodeSignatureKeys.size() == 1UL) {
+    // All same
+    orc_OutNodeSignatureKeys.resize(ou32_NodeCount,
+                                    orc_OutNodeSignatureKeys[0U]);
+  } else {
+    // No change necessary
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -268,30 +284,27 @@ void C_OscSupServiceUpdatePackageBase::mh_AdaptCommonSignatureParameters(
    \retval   C_RD_WR    File not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const QString & orc_SourcePath,
-                                                        const std::set<QString> & orc_SupFiles,
-                                                        uint8_t (&orau8_Digest)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH],
-                                                        const bool oq_PathsAreAbsolute)
-{
-   C_OscSecurityEcdsa c_Signature;
+int32_t C_OscSupServiceUpdatePackageBase::mh_CalcDigest(
+    const QString &orc_SourcePath, const QSet<QString> &orc_SupFiles,
+    uint8_t (&orau8_Digest)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH],
+    const bool oq_PathsAreAbsolute) {
+  C_OscSecurityEcdsa c_Signature;
 
-   int32_t s32_Retval = c_Signature.Sha256Init();
+  int32_t s32_Retval = c_Signature.Sha256Init();
 
-   if (s32_Retval == C_NO_ERR)
-   {
-      for (std::set<QString>::const_iterator c_ItFile = orc_SupFiles.begin();
-           (c_ItFile != orc_SupFiles.end()) && (s32_Retval == C_NO_ERR);
-           ++c_ItFile)
-      {
-         const QString c_CompleteFilePath = oq_PathsAreAbsolute ? *c_ItFile : orc_SourcePath + *c_ItFile;
-         s32_Retval = mh_AddFileToDigest(c_CompleteFilePath, c_Signature);
-      }
-   }
-   if (s32_Retval == C_NO_ERR)
-   {
-      s32_Retval = c_Signature.Sha256GetDigest(orau8_Digest);
-   }
-   return s32_Retval;
+  if (s32_Retval == C_NO_ERR) {
+    for (QSet<QString>::const_iterator c_ItFile = orc_SupFiles.begin();
+         (c_ItFile != orc_SupFiles.end()) && (s32_Retval == C_NO_ERR);
+         ++c_ItFile) {
+      const QString c_CompleteFilePath =
+          oq_PathsAreAbsolute ? *c_ItFile : orc_SourcePath + *c_ItFile;
+      s32_Retval = mh_AddFileToDigest(c_CompleteFilePath, c_Signature);
+    }
+  }
+  if (s32_Retval == C_NO_ERR) {
+    s32_Retval = c_Signature.Sha256GetDigest(orau8_Digest);
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -307,40 +320,37 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_CalcDigest(const QString & orc_Sour
    \retval   C_RD_WR    File not found
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(const QString & orc_FilePath,
-                                                             C_OscSecurityEcdsa & orc_Signature)
-{
-   int32_t s32_Retval = C_NO_ERR;
-   const uint32_t u32_SECTION_SIZE = 256;
+int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(
+    const QString &orc_FilePath, C_OscSecurityEcdsa &orc_Signature) {
+  int32_t s32_Retval = C_NO_ERR;
+  const uint32_t u32_SECTION_SIZE = 256;
 
-   std::ifstream c_InputFileStream;
-   const uint32_t u32_InputFileSize = static_cast<uint32_t>(QFileInfo(orc_FilePath).size());
+  std::ifstream c_InputFileStream;
+  const uint32_t u32_InputFileSize =
+      static_cast<uint32_t>(QFileInfo(orc_FilePath).size());
 
-   c_InputFileStream.open(orc_FilePath.toUtf8().constData(), std::ifstream::binary);
+  c_InputFileStream.open(orc_FilePath.toUtf8().constData(),
+                         std::ifstream::binary);
 
-   if (c_InputFileStream.is_open() == false)
-   {
-      s32_Retval = C_RD_WR;
-   }
-   else
-   {
-      uint32_t u32_RemainingFileCount = u32_InputFileSize;
-      while ((u32_RemainingFileCount / u32_SECTION_SIZE) >= 1UL)
-      {
-         s32_Retval = mh_AddFileSectionToDigest(c_InputFileStream, orc_Signature, u32_SECTION_SIZE);
-         u32_RemainingFileCount = u32_RemainingFileCount - u32_SECTION_SIZE;
+  if (c_InputFileStream.is_open() == false) {
+    s32_Retval = C_RD_WR;
+  } else {
+    uint32_t u32_RemainingFileCount = u32_InputFileSize;
+    while ((u32_RemainingFileCount / u32_SECTION_SIZE) >= 1UL) {
+      s32_Retval = mh_AddFileSectionToDigest(c_InputFileStream, orc_Signature,
+                                             u32_SECTION_SIZE);
+      u32_RemainingFileCount = u32_RemainingFileCount - u32_SECTION_SIZE;
+    }
+    if (s32_Retval == C_NO_ERR) {
+      if (u32_RemainingFileCount > 0UL) {
+        s32_Retval = mh_AddFileSectionToDigest(c_InputFileStream, orc_Signature,
+                                               u32_RemainingFileCount);
       }
-      if (s32_Retval == C_NO_ERR)
-      {
-         if (u32_RemainingFileCount > 0UL)
-         {
-            s32_Retval = mh_AddFileSectionToDigest(c_InputFileStream, orc_Signature, u32_RemainingFileCount);
-         }
-      }
-      //close file
-      c_InputFileStream.close();
-   }
-   return s32_Retval;
+    }
+    // close file
+    c_InputFileStream.close();
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -357,39 +367,39 @@ int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileToDigest(const QString & orc
    \retval   C_RD_WR    File could not be read
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(ifstream & orc_File,
-                                                                    C_OscSecurityEcdsa & orc_Signature,
-                                                                    const uint32_t ou32_SectionLength)
-{
-   int32_t s32_Retval = C_NO_ERR;
-   //read file content
-   bool q_HasFailed;
+int32_t C_OscSupServiceUpdatePackageBase::mh_AddFileSectionToDigest(
+    ifstream &orc_File, C_OscSecurityEcdsa &orc_Signature,
+    const uint32_t ou32_SectionLength) {
+  int32_t s32_Retval = C_NO_ERR;
+  // read file content
+  bool q_HasFailed;
 
-   QByteArray c_InputData;
-   c_InputData.resize(static_cast<size_t>(ou32_SectionLength));
-   //lint -e{9176} //no problems as long as charn has the same size as uint8; if not we'd be in deep !"=?& anyway
-   orc_File.read(reinterpret_cast<char_t *>(reinterpret_cast<uint8_t*>(c_InputData.data())), c_InputData.size());
-   //check for error
-   q_HasFailed = orc_File.fail();
-   if (q_HasFailed == true)
-   {
-      s32_Retval = C_RD_WR;
-   }
-   else
-   {
-      s32_Retval = orc_Signature.Sha256Update(reinterpret_cast<uint8_t*>(c_InputData.data()), static_cast<uint32_t>(c_InputData.size()));
-   }
-   return s32_Retval;
+  QByteArray c_InputData;
+  c_InputData.resize(static_cast<size_t>(ou32_SectionLength));
+  // lint -e{9176} //no problems as long as charn has the same size as uint8; if
+  // not we'd be in deep !"=?& anyway
+  orc_File.read(reinterpret_cast<char_t *>(
+                    reinterpret_cast<uint8_t *>(c_InputData.data())),
+                c_InputData.size());
+  // check for error
+  q_HasFailed = orc_File.fail();
+  if (q_HasFailed == true) {
+    s32_Retval = C_RD_WR;
+  } else {
+    s32_Retval = orc_Signature.Sha256Update(
+        reinterpret_cast<uint8_t *>(c_InputData.data()),
+        static_cast<uint32_t>(c_InputData.size()));
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Init
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupServiceUpdatePackageBase::mh_Init()
-{
-   mhc_WarningMessages.clear(); // clear old warning messages
-   mhc_ErrorMessage = "";       // clear old error message
+void C_OscSupServiceUpdatePackageBase::mh_Init() {
+  mhc_WarningMessages.clear(); // clear old warning messages
+  mhc_ErrorMessage = "";       // clear old error message
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -399,11 +409,10 @@ void C_OscSupServiceUpdatePackageBase::mh_Init()
    \param[in,out]  orc_ErrorMessage       Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupServiceUpdatePackageBase::mh_GetWarningsAndErrors(QStringList & orc_WarningMessages,
-                                                               QString & orc_ErrorMessage)
-{
-   orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
-   orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller
+void C_OscSupServiceUpdatePackageBase::mh_GetWarningsAndErrors(
+    QStringList &orc_WarningMessages, QString &orc_ErrorMessage) {
+  orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
+  orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -414,14 +423,13 @@ void C_OscSupServiceUpdatePackageBase::mh_GetWarningsAndErrors(QStringList & orc
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSupServiceUpdatePackageBase::mh_DigestToString(
-   const uint8_t (&orau8_DigestBin)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH], QString & orc_Digest)
-{
-   orc_Digest = "";
-   for (uint32_t u32_ItByte = 0UL; u32_ItByte < C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH; ++u32_ItByte)
-   {
-      std::stringstream c_Stream;
-      c_Stream << std::setw(2) << std::setfill('0') << std::hex << std::uppercase <<
-         static_cast<int32_t>(orau8_DigestBin[u32_ItByte]);
-      orc_Digest += c_Stream.str();
-   }
+    const uint8_t (
+        &orau8_DigestBin)[C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH],
+    QString &orc_Digest) {
+  orc_Digest = "";
+  for (uint32_t u32_ItByte = 0UL;
+       u32_ItByte < C_OscSecurityEcdsa::hu32_SHA256_FINAL_LENGTH;
+       ++u32_ItByte) {
+    orc_Digest += QString::number(static_cast<int32_t>(orau8_DigestBin[u32_ItByte]), 16).toUpper().rightJustified(2, '0');
+  }
 }

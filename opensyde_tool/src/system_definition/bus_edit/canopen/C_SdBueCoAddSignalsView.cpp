@@ -116,17 +116,17 @@ void C_SdBueCoAddSignalsView::PrepareCleanUp()
 QList<C_OscCanOpenManagerMappableSignal> C_SdBueCoAddSignalsView::GetSelectedSignals() const
 {
    QList<C_OscCanOpenManagerMappableSignal> c_Retval;
-   const std::map<uint32_t, QList<uint32_t> > c_UniqueSignals = C_SdBueCoAddSignalsModel::h_GetUniqueIndices(m_MapModelIndices(
+   const QMap<uint32_t, QList<uint32_t> > c_UniqueSignals = C_SdBueCoAddSignalsModel::h_GetUniqueIndices(m_MapModelIndices(
                                                                                                                       this
                                                                                                                       ->
                                                                                                                       selectedIndexes()));
-   for (std::map<uint32_t, QList<uint32_t> >::const_iterator c_ItTopLevel = c_UniqueSignals.cbegin();
+   for (QMap<uint32_t, QList<uint32_t> >::const_iterator c_ItTopLevel = c_UniqueSignals.cbegin();
         c_ItTopLevel != c_UniqueSignals.cend(); ++c_ItTopLevel)
    {
-      for (QList<uint32_t>::const_iterator c_ItSignal = c_ItTopLevel->second.cbegin();
-           c_ItSignal != c_ItTopLevel->second.cend(); ++c_ItSignal)
+      for (QList<uint32_t>::const_iterator c_ItSignal = c_ItTopLevel.value().cbegin();
+           c_ItSignal != c_ItTopLevel.value().cend(); ++c_ItSignal)
       {
-         const C_OscCanOpenManagerMappableSignal * const pc_Entry = this->mc_Model.GetDataForIndex(c_ItTopLevel->first,
+         const C_OscCanOpenManagerMappableSignal * const pc_Entry = this->mc_Model.GetDataForIndex(c_ItTopLevel.key(),
                                                                                                    *c_ItSignal);
          if (pc_Entry != NULL)
          {
@@ -213,13 +213,13 @@ uint32_t C_SdBueCoAddSignalsView::mh_CountUnique(const QModelIndexList & orc_Ind
 {
    uint32_t u32_Retval = 0;
 
-   const std::map<uint32_t,
-                  QList<uint32_t> > c_Rows = C_SdBueCoAddSignalsModel::h_GetUniqueIndices(orc_Indices);
+   const QMap<uint32_t,
+              QList<uint32_t> > c_Rows = C_SdBueCoAddSignalsModel::h_GetUniqueIndices(orc_Indices);
 
-   for (std::map<uint32_t, QList<uint32_t> >::const_iterator c_It = c_Rows.cbegin();
+   for (QMap<uint32_t, QList<uint32_t> >::const_iterator c_It = c_Rows.cbegin();
         c_It != c_Rows.cend(); ++c_It)
    {
-      u32_Retval += c_It->second.size();
+      u32_Retval += c_It.value().size();
    }
    return u32_Retval;
 }

@@ -22,10 +22,9 @@
 #include "C_OscIpDispatcher.hpp"
 #include "stwtypes.hpp"
 #include <QList>
+#include <QMap>
 #include <QRecursiveMutex>
 #include <QString>
-#include <list>
-#include <map>
 #include <vector>
 #include <winsock.h>
 
@@ -76,14 +75,14 @@ private:
   QList<C_TcpConnection> mc_SocketsTcp; ///< one per connection
 
   QList<SOCKET> mc_SocketsUdpClient; ///< one socket per local interface
-                                           ///< (for sending broadcasts)
+                                     ///< (for sending broadcasts)
   QList<SOCKET> mc_SocketsUdpServer; ///< one socket per local interface
-                                           ///< (for receiving responses)
+                                     ///< (for receiving responses)
 
-  QList<uint32_t> mc_LocalInterfaceIps; ///< IPs of local interfaces
-  QStringList mc_PreferredInterfaceNames;     ///< Optional preferred interfaces
+  QList<uint32_t> mc_LocalInterfaceIps;   ///< IPs of local interfaces
+  QStringList mc_PreferredInterfaceNames; ///< Optional preferred interfaces
 
-  static std::map<C_BufferIdentifier, std::list<QByteArray>>
+  static QMap<C_BufferIdentifier, QList<QByteArray>>
       mhc_TcpBuffer; ///< dispatcher buffer
   static QRecursiveMutex mhc_LockBuffer;
 
@@ -109,8 +108,7 @@ public:
   virtual int32_t CloseUdp(void);
   virtual int32_t SendTcp(const uint32_t ou32_Handle,
                           const QByteArray &orc_Data);
-  virtual int32_t ReadTcp(const uint32_t ou32_Handle,
-                          QByteArray &orc_Data);
+  virtual int32_t ReadTcp(const uint32_t ou32_Handle, QByteArray &orc_Data);
   virtual int32_t ReadTcp(const uint32_t ou32_Handle,
                           const uint8_t ou8_ClientBusIdentifier,
                           const uint8_t ou8_ClientNodeIdentifier,
@@ -123,8 +121,7 @@ public:
                                 const uint8_t ou8_ServerNodeIdentifier,
                                 QByteArray &orc_Data);
   virtual int32_t SendUdp(const QByteArray &orc_Data);
-  virtual int32_t ReadUdp(QByteArray &orc_Data,
-                          uint8_t (&orau8_Ip)[4]);
+  virtual int32_t ReadUdp(QByteArray &orc_Data, uint8_t (&orau8_Ip)[4]);
 
   void LoadConfigFile(const QString &orc_FileLocation);
 };

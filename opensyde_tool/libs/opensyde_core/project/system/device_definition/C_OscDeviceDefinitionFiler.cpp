@@ -457,8 +457,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(
     if (c_Text != "kefex") {
       // Optional: Use default values
     } else {
-      const QList<C_OscXmlAttribute> c_Attributes =
-          orc_Parser.GetAttributes();
+      const QList<C_OscXmlAttribute> c_Attributes = orc_Parser.GetAttributes();
       for (uint16_t u16_Index = 0U; u16_Index < c_Attributes.size();
            u16_Index++) {
         if (c_Attributes[u16_Index].c_Name == "support") {
@@ -525,8 +524,8 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadSubDevice(
             "Loading device definition",
             "Due to compatibility all flashloader reset wait times set to the"
             " same configuration value (" +
-                QString::number(u32_Value) + " ms) for XML file \"" +
-                orc_Path + "\".");
+                QString::number(u32_Value) + " ms) for XML file \"" + orc_Path +
+                "\".");
 
         c_Text = orc_Parser.SelectNodeParent(); // back to parent ...
         Q_ASSERT(c_Text == "protocols-flashloader");
@@ -721,12 +720,13 @@ void C_OscDeviceDefinitionFiler::mh_SaveSubDevice(
   orc_Parser.CreateNodeChild("sub-device-name",
                              orc_SubDeviceDefinition.c_SubDeviceName);
   orc_Parser.CreateAndSelectNodeChild("connected-interfaces");
-  for (std::map<QString, bool>::const_iterator c_It =
-           orc_SubDeviceDefinition.c_ConnectedInterfaces.begin();
-       c_It != orc_SubDeviceDefinition.c_ConnectedInterfaces.end(); ++c_It) {
+  for (QHash<QString, bool>::const_iterator c_It =
+           orc_SubDeviceDefinition.c_ConnectedInterfaces.constBegin();
+       c_It != orc_SubDeviceDefinition.c_ConnectedInterfaces.constEnd();
+       ++c_It) {
     orc_Parser.CreateAndSelectNodeChild("interface");
-    orc_Parser.SetAttributeString("name", c_It->first);
-    orc_Parser.SetAttributeBool("connected", c_It->second);
+    orc_Parser.SetAttributeString("name", c_It.key());
+    orc_Parser.SetAttributeBool("connected", c_It.value());
     orc_Parser.SelectNodeParent();
   }
   orc_Parser.SelectNodeParent();
@@ -1174,8 +1174,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadCanFdBitrates(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDeviceDefinitionFiler::mh_SaveCanFdBitrates(
-    const QList<uint16_t> &orc_CanFdDataBitrates,
-    C_OscXmlParser &orc_Parser) {
+    const QList<uint16_t> &orc_CanFdDataBitrates, C_OscXmlParser &orc_Parser) {
   orc_Parser.CreateAndSelectNodeChild("can-fd-data-bitrates-support");
   for (uint32_t u32_ItBitRate = 0UL;
        u32_ItBitRate < orc_CanFdDataBitrates.size(); ++u32_ItBitRate) {
@@ -1233,8 +1232,7 @@ int32_t C_OscDeviceDefinitionFiler::mh_LoadFeatures(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscDeviceDefinitionFiler::mh_SaveFeatures(
-    const QList<C_OscSupportedCanInterfaceFeatures>
-        &orc_SupportedCanFeatures,
+    const QList<C_OscSupportedCanInterfaceFeatures> &orc_SupportedCanFeatures,
     C_OscXmlParser &orc_Parser) {
   orc_Parser.CreateAndSelectNodeChild("supported-can-features");
   for (uint32_t u32_ItFeature = 0UL;
@@ -1419,29 +1417,28 @@ int32_t C_OscDeviceDefinitionFiler::h_Save(
     c_Xml.CreateNodeChild("display-value",
                           orc_DeviceDefinition.c_ManufacturerDisplayValue);
     c_Xml.CreateNodeChild("toolbox-node-image",
-                              orc_DeviceDefinition.c_ToolboxIcon);
-        c_Xml.CreateNodeChild("company-logo",
-                              orc_DeviceDefinition.c_CompanyLogoLink);
-        c_Xml.CreateNodeChild("web-link",
-                              orc_DeviceDefinition.c_ProductPageLink);
-        c_Xml.SelectNodeParent();
-        c_Xml.SelectNodeParent();
-        c_Xml.CreateAndSelectNodeChild("sub-devices");
-        for (uint32_t u32_ItSubDevice = 0UL;
-             u32_ItSubDevice < orc_DeviceDefinition.c_SubDevices.size();
-             ++u32_ItSubDevice) {
-          const C_OscSubDeviceDefinition &rc_CurSubDevice =
-              orc_DeviceDefinition.c_SubDevices[u32_ItSubDevice];
-          C_OscDeviceDefinitionFiler::mh_SaveSubDevice(rc_CurSubDevice, c_Xml);
-        }
-        c_Xml.SelectNodeParent();
+                          orc_DeviceDefinition.c_ToolboxIcon);
+    c_Xml.CreateNodeChild("company-logo",
+                          orc_DeviceDefinition.c_CompanyLogoLink);
+    c_Xml.CreateNodeChild("web-link", orc_DeviceDefinition.c_ProductPageLink);
+    c_Xml.SelectNodeParent();
+    c_Xml.SelectNodeParent();
+    c_Xml.CreateAndSelectNodeChild("sub-devices");
+    for (uint32_t u32_ItSubDevice = 0UL;
+         u32_ItSubDevice < orc_DeviceDefinition.c_SubDevices.size();
+         ++u32_ItSubDevice) {
+      const C_OscSubDeviceDefinition &rc_CurSubDevice =
+          orc_DeviceDefinition.c_SubDevices[u32_ItSubDevice];
+      C_OscDeviceDefinitionFiler::mh_SaveSubDevice(rc_CurSubDevice, c_Xml);
+    }
+    c_Xml.SelectNodeParent();
 
-        s32_Return = c_Xml.SaveToFile(orc_Path);
-        if (s32_Return != C_NO_ERR) {
-          osc_write_log_error("Saving Device definition",
-                              "Could not write to file \"" + orc_Path + "\".");
-          s32_Return = C_RD_WR;
-        }
+    s32_Return = c_Xml.SaveToFile(orc_Path);
+    if (s32_Return != C_NO_ERR) {
+      osc_write_log_error("Saving Device definition",
+                          "Could not write to file \"" + orc_Path + "\".");
+      s32_Return = C_RD_WR;
+    }
   } else {
     osc_write_log_error("Saving Device definition", "No sub devices found.");
     s32_Return = C_RD_WR;

@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QList>
+#include <QMap>
 #include "C_OgeTreeViewToolTipBase.hpp"
 #include "C_TblTreMultiColumnLeafSortFilter.hpp"
 #include "C_SdBueJ1939AddMessagesFromCatalogTreeModel.hpp"
@@ -63,8 +64,8 @@ private:
    void m_InitColumns(void);
    void m_ShowHideVerticalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const;
    void m_ShowHideHorizontalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const;
-   static std::map<opensyde_gui_logic::C_SdBueJ1939AddMessagesFromCatalogTreeModel::E_Columns,
-                   uint32_t> mh_GetDefaultColumnWidths(void);
+   static QMap<opensyde_gui_logic::C_SdBueJ1939AddMessagesFromCatalogTreeModel::E_Columns,
+               uint32_t> mh_GetDefaultColumnWidths(void);
    void m_OnItemChecked();
 
    stw::opensyde_gui_logic::C_TblTreMultiColumnLeafSortFilter mc_SortProxyModel;

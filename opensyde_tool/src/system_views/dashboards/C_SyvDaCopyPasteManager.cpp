@@ -407,10 +407,10 @@ void C_SyvDaCopyPasteManager::h_AdaptCopyDataForPaste(C_PuiSvDashboard & orc_Cop
 
    if (pc_View != NULL)
    {
-      //Check param widget validity
-      for (uint32_t u32_ItParam = 0; u32_ItParam < orc_CopyData.GetParams().size();)
-      {
-         std::set<QString> c_AdaptedLists;
+          //Check param widget validity
+          for (uint32_t u32_ItParam = 0; u32_ItParam < orc_CopyData.GetParams().size();)
+          {
+             QSet<QString> c_AdaptedLists;
          bool q_Found = false;
          bool q_ElementMissing = false;
          const C_PuiSvDbParam & rc_ParamWidget = orc_CopyData.GetParams()[u32_ItParam];
@@ -506,7 +506,7 @@ void C_SyvDaCopyPasteManager::h_AdaptCopyDataForPaste(C_PuiSvDashboard & orc_Cop
             else if (q_ElementMissing)
             {
                c_Details = "The following copied lists were changed before pasting the parametrization widget:\n";
-               for (std::set<QString>::const_iterator c_It = c_AdaptedLists.begin(); c_It != c_AdaptedLists.end();
+               for (QSet<QString>::const_iterator c_It = c_AdaptedLists.begin(); c_It != c_AdaptedLists.end();
                     ++c_It)
                {
                   c_Details += *c_It;

@@ -61,11 +61,30 @@ fi
 
 # Build configurations
 CONFIGS=(
-    "GUI:../pjt/openSYDE:../temp_openSYDE:openSYDE:./result/tool"
-    "CORE:../pjt/openSYDE:../temp_openSYDE:opensyde_core:"
-    "CANMONITOR:../pjt/openSYDE_CAN_Monitor:../temp_openSYDE_CAN_Monitor:openSYDE_CAN_Monitor:./result/tool/CAN_Monitor"
-    "SYDEFLASH:../pjt/SYDEflash:../temp_SYDEflash:SYDEflash:./result/utilities/SYDEflash"
+    "GUI:/home/tyler/Projects/openSYDE/opensyde_tool/pjt/openSYDE:temp_openSYDE:openSYDE:./result/tool"
+    "CORE:/home/tyler/Projects/openSYDE/opensyde_tool/pjt/openSYDE:temp_openSYDE:opensyde_core:"
+    "CANMONITOR:/home/tyler/Projects/openSYDE/opensyde_tool/pjt/openSYDE_CAN_Monitor:temp_openSYDE_CAN_Monitor:openSYDE_CAN_Monitor:./result/tool/CAN_Monitor"
+    "SYDEFLASH:/home/tyler/Projects/openSYDE/opensyde_tool/pjt/SYDEflash:temp_SYDEflash:SYDEflash:./result/utilities/SYDEflash"
 )
+
+# Helper functions
+write_header() {
+    echo "========================================"
+    echo "$1"
+    echo "========================================"
+}
+
+write_step() {
+    echo "[BUILD] $1"
+}
+
+write_error() {
+    echo "[ERROR] $1" >&2
+}
+
+# Debug: Print project folder path
+write_step "Debug: Project folder for GUI: /home/tyler/Projects/openSYDE/opensyde_tool/pjt/openSYDE"
+write_step "Debug: Absolute path: $(realpath /home/tyler/Projects/openSYDE/opensyde_tool/pjt/openSYDE)"
 
 # Helper functions
 write_header() {

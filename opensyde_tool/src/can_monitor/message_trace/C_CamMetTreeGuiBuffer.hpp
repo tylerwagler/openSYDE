@@ -12,8 +12,8 @@
 #define C_CAMMETTREEGUIBUFFER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <list>
 #include <mutex>
+#include <QList>
 #include <QTimer>
 #include <QObject>
 #include "C_CamMetTreeLoggerData.hpp"
@@ -44,13 +44,13 @@ public:
 Q_SIGNALS:
    //lint -restore
    void SigInternalTrigger(void);
-   void SigUpdateUi(const std::list<C_CamMetTreeLoggerData> & orc_Buffer);
+   void SigUpdateUi(const QList<C_CamMetTreeLoggerData> & orc_Buffer);
 
 private:
    bool mq_Connected;
    QTimer mc_Timer;
    std::mutex mc_BufferMutex;
-   std::list<C_CamMetTreeLoggerData> mc_Buffer;
+   QList<C_CamMetTreeLoggerData> mc_Buffer;
 
    void m_HandleUpdateUi(void);
 };

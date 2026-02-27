@@ -2,39 +2,47 @@
 /*!
    \file
    \brief       Standalone HALC domain config
-   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCHALCCONFIGSTANDALONEDOMAIN_HPP
 #define C_OSCHALCCONFIGSTANDALONEDOMAIN_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QList>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscHalcConfigDomain.hpp"
 #include "C_OscHalcConfigStandaloneChannel.hpp"
+#include <QList>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscHalcConfigStandaloneDomain :
-   public C_OscHalcConfigDomain
-{
+class C_OscHalcConfigStandaloneDomain : public C_OscHalcConfigDomain {
 public:
-   C_OscHalcConfigStandaloneDomain(void);
-   C_OscHalcConfigStandaloneDomain(const C_OscHalcConfigDomain & orc_ConfigDomain,
-                                   const QList<C_OscHalcConfigStandaloneChannel> & orc_StandaloneChannels);
+  C_OscHalcConfigStandaloneDomain(void);
+  C_OscHalcConfigStandaloneDomain(
+      const C_OscHalcConfigDomain &orc_ConfigDomain,
+      const QList<C_OscHalcConfigStandaloneChannel> &orc_StandaloneChannels);
 
-   QList<C_OscHalcConfigStandaloneChannel> c_StandaloneChannels;
+  QList<C_OscHalcConfigStandaloneChannel> c_StandaloneChannels;
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

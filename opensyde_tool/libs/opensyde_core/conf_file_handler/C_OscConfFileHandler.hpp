@@ -12,12 +12,11 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include <vector>
 #include <QList>
+#include <vector>
 
 #include <QString>
 #include <QStringList>
-
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -41,11 +40,11 @@ public:
 
 protected:
   // Function for loading concrete settings. Must return C_CONFIG in error case
-  virtual int32_t m_LoadSettings(
-      const QStringList &orc_SettingsWithoutComments) = 0;
-  static int32_t mh_ReplaceSettings(
-      const QString &orc_Path,
-      const QList<std::pair<QString, QString>> &orc_Configs);
+  virtual int32_t
+  m_LoadSettings(const QStringList &orc_SettingsWithoutComments) = 0;
+  static int32_t
+  mh_ReplaceSettings(const QString &orc_Path,
+                     const QList<std::pair<QString, QString>> &orc_Configs);
 
   QString mc_ConfigFilePath; // path where the config file was loaded from
 };

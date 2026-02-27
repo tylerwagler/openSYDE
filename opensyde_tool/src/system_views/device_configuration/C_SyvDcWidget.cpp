@@ -2412,7 +2412,7 @@ int32_t C_SyvDcWidget::m_GetBitRateValue(uint32_t & oru32_Value) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_AssignmentConnect(const uint32_t ou32_NodeIndex,
                                         const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber,
-                                        const std::map<uint8_t,
+                                        const QHash<uint8_t,
                                                        C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds)
 const
 {

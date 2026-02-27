@@ -138,21 +138,21 @@ void C_SdBueMessageTableView::LoadUserSettings(const QList<int32_t> & orc_Values
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageTableView::SaveUserSettings(QList<int32_t> & orc_Values) const
 {
-   const std::map<C_SdBueMessageTableModel::E_Columns,
-                  uint32_t> c_DefaultColumnWidths = C_SdBueMessageTableView::mh_GetDefaultColumnWidths();
+   const QMap<C_SdBueMessageTableModel::E_Columns,
+              uint32_t> c_DefaultColumnWidths = C_SdBueMessageTableView::mh_GetDefaultColumnWidths();
 
    orc_Values = this->m_GetColumnWidths();
    for (uint32_t u32_It = 0UL; u32_It < orc_Values.size(); ++u32_It)
    {
       if (orc_Values[u32_It] == 0L)
       {
-         const std::map<C_SdBueMessageTableModel::E_Columns,
-                        uint32_t>::const_iterator c_It = c_DefaultColumnWidths.find(C_SdBueMessageTableModel::h_ColumnToEnum(
-                                                                                       u32_It));
+         const QMap<C_SdBueMessageTableModel::E_Columns,
+                    uint32_t>::const_iterator c_It = c_DefaultColumnWidths.find(C_SdBueMessageTableModel::h_ColumnToEnum(
+                                                                                   u32_It));
          if (c_It != c_DefaultColumnWidths.cend())
          {
             //Column hidden, use default instead
-            orc_Values[u32_It] = static_cast<int32_t>(c_It->second);
+            orc_Values[u32_It] = static_cast<int32_t>(c_It.value());
          }
       }
    }
@@ -270,14 +270,14 @@ void C_SdBueMessageTableView::mouseDoubleClickEvent(QMouseEvent * const opc_Even
 void C_SdBueMessageTableView::m_InitColumns(void)
 {
    const
-   std::map<C_SdBueMessageTableModel::E_Columns,
-            uint32_t> c_ColumnWidths = C_SdBueMessageTableView::mh_GetDefaultColumnWidths();
+   QMap<C_SdBueMessageTableModel::E_Columns,
+        uint32_t> c_ColumnWidths = C_SdBueMessageTableView::mh_GetDefaultColumnWidths();
 
-   for (std::map<C_SdBueMessageTableModel::E_Columns,
-                 uint32_t>::const_iterator c_ItEntry = c_ColumnWidths.cbegin(); c_ItEntry != c_ColumnWidths.cend();
+   for (QMap<C_SdBueMessageTableModel::E_Columns,
+             uint32_t>::const_iterator c_ItEntry = c_ColumnWidths.cbegin(); c_ItEntry != c_ColumnWidths.cend();
         ++c_ItEntry)
    {
-      this->setColumnWidth(C_SdBueMessageTableModel::h_EnumToColumn(c_ItEntry->first), c_ItEntry->second);
+      this->setColumnWidth(C_SdBueMessageTableModel::h_EnumToColumn(c_ItEntry.key()), c_ItEntry.value());
    }
 }
 
@@ -288,9 +288,9 @@ void C_SdBueMessageTableView::m_InitColumns(void)
    Default column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SdBueMessageTableModel::E_Columns, uint32_t> C_SdBueMessageTableView::mh_GetDefaultColumnWidths()
+QMap<C_SdBueMessageTableModel::E_Columns, uint32_t> C_SdBueMessageTableView::mh_GetDefaultColumnWidths()
 {
-   std::map<C_SdBueMessageTableModel::E_Columns, uint32_t> c_ColumnWidths;
+   QMap<C_SdBueMessageTableModel::E_Columns, uint32_t> c_ColumnWidths;
    c_ColumnWidths[C_SdBueMessageTableModel::eINDEX] = 40;
    c_ColumnWidths[C_SdBueMessageTableModel::eICON] = 26;
    c_ColumnWidths[C_SdBueMessageTableModel::eENABLED] = 54;

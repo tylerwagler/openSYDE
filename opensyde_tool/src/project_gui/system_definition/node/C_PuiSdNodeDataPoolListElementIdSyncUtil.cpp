@@ -99,19 +99,19 @@ bool C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeAboutToBeDeleted(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeAboutToBeDeleted(
-   std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
+   QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
    const uint32_t ou32_Index, const bool oq_OnlyMarkInvalid)
 {
-   std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_Tmp;
-   for (std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
+   QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_Tmp;
+   for (QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
            orc_LastKnownHalcCrcs.begin();
         c_It != orc_LastKnownHalcCrcs.end(); ++c_It)
    {
-      C_OscNodeDataPoolListElementOptArrayId c_Id = c_It->first;
+      C_OscNodeDataPoolListElementOptArrayId c_Id = c_It.key();
       if (C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeAboutToBeDeleted(c_Id, ou32_Index,
                                                                                  oq_OnlyMarkInvalid) == false)
       {
-         c_Tmp[c_Id] = c_It->second;
+         c_Tmp[c_Id] = c_It.value();
       }
    }
    orc_LastKnownHalcCrcs = c_Tmp;
@@ -146,17 +146,17 @@ void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolAdded(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolAdded(
-   std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
+   QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
    const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex)
 {
-   std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_Tmp;
-   for (std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
+   QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_Tmp;
+   for (QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
            orc_LastKnownHalcCrcs.begin();
         c_It != orc_LastKnownHalcCrcs.end(); ++c_It)
    {
-      C_OscNodeDataPoolListElementOptArrayId c_Id = c_It->first;
+      C_OscNodeDataPoolListElementOptArrayId c_Id = c_It.key();
       C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolAdded(c_Id, ou32_NodeIndex, ou32_DataPoolIndex);
-      c_Tmp[c_Id] = c_It->second;
+      c_Tmp[c_Id] = c_It.value();
    }
    orc_LastKnownHalcCrcs = c_Tmp;
 }
@@ -216,19 +216,19 @@ void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolMoved(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolMoved(
-   std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
+   QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
    const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolSourceIndex, const uint32_t ou32_DataPoolTargetIndex)
 {
-   std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_Tmp;
-   for (std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
+   QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_Tmp;
+   for (QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
            orc_LastKnownHalcCrcs.begin();
         c_It != orc_LastKnownHalcCrcs.end(); ++c_It)
    {
-      C_OscNodeDataPoolListElementOptArrayId c_Id = c_It->first;
+      C_OscNodeDataPoolListElementOptArrayId c_Id = c_It.key();
       C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolMoved(c_Id, ou32_NodeIndex,
                                                                           ou32_DataPoolSourceIndex,
                                                                           ou32_DataPoolTargetIndex);
-      c_Tmp[c_Id] = c_It->second;
+      c_Tmp[c_Id] = c_It.value();
    }
    orc_LastKnownHalcCrcs = c_Tmp;
 }
@@ -279,20 +279,20 @@ bool C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolAboutToBeDele
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolAboutToBeDeleted(
-   std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
+   QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
    const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex)
 {
-   std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_Tmp;
-   for (std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
+   QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_Tmp;
+   for (QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
            orc_LastKnownHalcCrcs.begin();
         c_It != orc_LastKnownHalcCrcs.end(); ++c_It)
    {
-      C_OscNodeDataPoolListElementOptArrayId c_Id = c_It->first;
+      C_OscNodeDataPoolListElementOptArrayId c_Id = c_It.key();
       if (C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolAboutToBeDeleted(c_Id, ou32_NodeIndex,
                                                                                          ou32_DataPoolIndex) ==
           false)
       {
-         c_Tmp[c_Id] = c_It->second;
+         c_Tmp[c_Id] = c_It.value();
       }
    }
    orc_LastKnownHalcCrcs = c_Tmp;
@@ -597,19 +597,19 @@ bool C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeDataPoolListElementAb
 //----------------------------------------------------------------------------------------------------------------------
 bool C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeHalc(
    C_OscNodeDataPoolListElementOptArrayId & orc_DataElementId, const uint32_t ou32_Index,
-   const std::map<C_OscNodeDataPoolListElementOptArrayId, C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew)
+   const QMap<C_OscNodeDataPoolListElementOptArrayId, C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew)
 {
    bool q_Remove = false;
 
    if (orc_DataElementId.u32_NodeIndex == ou32_Index)
    {
-      const std::map<C_OscNodeDataPoolListElementOptArrayId,
+      const QMap<C_OscNodeDataPoolListElementOptArrayId,
                      C_OscNodeDataPoolListElementOptArrayId>::const_iterator c_It = orc_MapCurToNew.find(
          orc_DataElementId);
       if (c_It != orc_MapCurToNew.end())
       {
          //Replace
-         orc_DataElementId = c_It->second;
+         orc_DataElementId = c_It.value();
       }
       else
       {
@@ -649,7 +649,7 @@ bool C_PuiSdNodeDataPoolListElementIdSyncUtil::h_OnSyncNodeHalc(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSdNodeDataPoolListElementIdSyncUtil::h_CheckAndHandleNewElement(
-   const C_OscNodeDataPoolListElementOptArrayId & orc_NewId, std::map<C_OscNodeDataPoolListElementOptArrayId,
+   const C_OscNodeDataPoolListElementOptArrayId & orc_NewId, QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                       C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -673,7 +673,7 @@ int32_t C_PuiSdNodeDataPoolListElementIdSyncUtil::h_CheckAndHandleNewElement(
                                                                        orc_NewId.u32_ElementIndex);
          if ((pc_Node != NULL) && ((pc_Element != NULL) && (pc_Dp != NULL)))
          {
-            const std::string c_Tmp = orc_NewId.GetHalChannelName().toStdString();
+            const QByteArray c_Tmp = orc_NewId.GetHalChannelName().toUtf8();
             uint32_t u32_Hash = 0UL;
             if (pc_Node->c_HalcConfig.e_SafetyMode == C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING)
             {
@@ -684,7 +684,7 @@ int32_t C_PuiSdNodeDataPoolListElementIdSyncUtil::h_CheckAndHandleNewElement(
                pc_Element->CalcHashStructure(u32_Hash);
             }
             stw::scl::C_SclChecksums::CalcCRC32(
-               c_Tmp.c_str(), c_Tmp.length(), u32_Hash);
+               c_Tmp.constData(), c_Tmp.length(), u32_Hash);
             orc_LastKnownHalcCrcs[orc_NewId] = C_PuiSdLastKnownHalElementId(
                u32_Hash, pc_Dp->c_Name);
          }
@@ -711,15 +711,15 @@ int32_t C_PuiSdNodeDataPoolListElementIdSyncUtil::h_CheckAndHandleNewElement(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_GetNewMapOnSyncHalc(const uint32_t ou32_Index,
-                                                                     std::map<C_OscNodeDataPoolListElementOptArrayId,
-                                                                              C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew, std::map<C_OscNodeDataPoolListElementOptArrayId,
+                                                                     QMap<C_OscNodeDataPoolListElementOptArrayId,
+                                                                              C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew, QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                                                                                                   C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs)
 {
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(ou32_Index);
 
    if (pc_Node != NULL)
    {
-      std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_NewMap;
+      QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId> c_NewMap;
       for (uint32_t u32_ItDp = 0UL; u32_ItDp < pc_Node->c_DataPools.size(); ++u32_ItDp)
       {
          const C_OscNodeDataPool & rc_Dp = pc_Node->c_DataPools[u32_ItDp];
@@ -764,7 +764,7 @@ void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_GetNewMapOnSyncHalc(const uint3
                                                                                        u32_ChannelIndex,
                                                                                        c_Name) == C_NO_ERR)
                         {
-                           const std::string c_Tmp = c_Name.toStdString();
+                           const QByteArray c_Tmp = c_Name.toUtf8();
                            uint32_t u32_Hash = 0UL;
                            if (pc_Node->c_HalcConfig.e_SafetyMode == C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING)
                            {
@@ -775,22 +775,22 @@ void C_PuiSdNodeDataPoolListElementIdSyncUtil::h_GetNewMapOnSyncHalc(const uint3
                               rc_El.CalcHashStructure(u32_Hash);
                            }
                            stw::scl::C_SclChecksums::CalcCRC32(
-                              c_Tmp.c_str(), c_Tmp.length(), u32_Hash);
-                           c_NewId.SetHalChannelName(QString::fromStdString(c_Tmp));
-                           for (std::map<C_OscNodeDataPoolListElementOptArrayId,
+                              c_Tmp.constData(), c_Tmp.length(), u32_Hash);
+                           c_NewId.SetHalChannelName(c_Name);
+                           for (QMap<C_OscNodeDataPoolListElementOptArrayId,
                                          C_PuiSdLastKnownHalElementId>::const_iterator c_ItCur =
                                    orc_LastKnownHalcCrcs.begin();
                                 c_ItCur != orc_LastKnownHalcCrcs.end();
                                 ++c_ItCur)
                            {
-                              if (((c_ItCur->second.u32_Crc == u32_Hash) &&
-                                   (c_ItCur->second.c_HalDpName.compare(rc_Dp.c_Name) == 0)) &&
+                              if (((c_ItCur.value().u32_Crc == u32_Hash) &&
+                                   (c_ItCur.value().c_HalDpName.compare(rc_Dp.c_Name) == 0)) &&
                                   ((pc_Node->c_HalcConfig.e_SafetyMode ==
                                     C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING) ||
-                                   (c_ItCur->first.GetArrayElementIndexOrZero() == u32_ParameterElementIndex)))
+                                   (c_ItCur.key().GetArrayElementIndexOrZero() == u32_ParameterElementIndex)))
                               {
                                  c_NewMap[c_NewId] = C_PuiSdLastKnownHalElementId(u32_Hash, rc_Dp.c_Name);
-                                 orc_MapCurToNew[c_ItCur->first] = c_NewId;
+                                 orc_MapCurToNew[c_ItCur.key()] = c_NewId;
                               }
                            }
                         }

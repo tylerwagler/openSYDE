@@ -15,6 +15,8 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QSet>
+
 #include "C_OscXmlParser.hpp"
 #include "C_PuiSvDashboard.hpp"
 #include "C_PuiSvDbElementIdCrcGroup.hpp"
@@ -90,7 +92,7 @@ private:
       const C_PuiSvDashboard &orc_Data,
       const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                  C_PuiSvReadDataConfiguration> &orc_Rails);
-  static std::set<C_PuiSvDbNodeDataPoolListElementId>
+  static QSet<C_PuiSvDbNodeDataPoolListElementId>
   mh_GetAllIds(const C_PuiSvDashboard &orc_Data,
                const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                           C_PuiSvReadDataConfiguration> &orc_Rails);

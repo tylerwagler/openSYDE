@@ -5,63 +5,78 @@
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCEXPORTPARAMSET_HPP
 #define C_OSCEXPORTPARAMSET_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QList>
-#include <QStringList>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscNode.hpp"
 #include "C_OscParamSetHandler.hpp"
+#include <QList>
+#include <QStringList>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscExportParamSet
-{
+class C_OscExportParamSet {
 public:
-   static QString h_GetFileName(const C_OscNodeApplication & orc_DataBlock, const bool oq_IsSafe);
-   static int32_t h_CreateParameterSetImage(const QString & orc_Path, const C_OscNode & orc_Node,
-                                            const uint16_t ou16_ApplicationIndex,
-                                            QStringList & orc_Files,
-                                            const QString & orc_ExportToolName = "",
-                                            const QString & orc_ExportToolVersion = "");
+  static QString h_GetFileName(const C_OscNodeApplication &orc_DataBlock,
+                               const bool oq_IsSafe);
+  static int32_t
+  h_CreateParameterSetImage(const QString &orc_Path, const C_OscNode &orc_Node,
+                            const uint16_t ou16_ApplicationIndex,
+                            QStringList &orc_Files,
+                            const QString &orc_ExportToolName = "",
+                            const QString &orc_ExportToolVersion = "");
 
 protected:
-   static int32_t mh_FillPsiStructure(const C_OscNode & orc_Node, const bool oq_IsSafe,
-                                      const uint16_t ou16_ApplicationIndex, C_OscParamSetRawNode & orc_RawNode,
-                                      C_OscParamSetInterpretedNode & orc_IntNode);
-   static void mh_FillInterpretedDatapool(const stw::opensyde_core::C_OscNodeDataPool & orc_SdDataPool,
-                                          stw::opensyde_core::C_OscParamSetInterpretedDataPool & orc_IntDataPool);
-   static int32_t mh_FillRawEntries(const stw::opensyde_core::C_OscNodeDataPool & orc_SdDataPool,
-                                    const QByteArray & orc_ConfigRawBytes,
-                                    QList<C_OscParamSetRawEntry> & orc_Entries);
-   static C_OscParamSetInterpretedFileInfoData mh_GetFileInfo(const QString & orc_ExportToolName,
-                                                              const QString & orc_ExportToolVersion);
-   static int32_t mh_WriteParameterSetImage(const C_OscParamSetRawNode & orc_RawNode,
-                                            const C_OscParamSetInterpretedNode & orc_IntNode, const bool oq_IsSafe,
-                                            const C_OscNodeApplication & orc_DataBlock,
-                                            const QString & orc_Path,
-                                            QStringList & orc_Files,
-                                            const QString & orc_ExportToolName,
-                                            const QString & orc_ExportToolVersion);
+  static int32_t mh_FillPsiStructure(const C_OscNode &orc_Node,
+                                     const bool oq_IsSafe,
+                                     const uint16_t ou16_ApplicationIndex,
+                                     C_OscParamSetRawNode &orc_RawNode,
+                                     C_OscParamSetInterpretedNode &orc_IntNode);
+  static void mh_FillInterpretedDatapool(
+      const stw::opensyde_core::C_OscNodeDataPool &orc_SdDataPool,
+      stw::opensyde_core::C_OscParamSetInterpretedDataPool &orc_IntDataPool);
+  static int32_t
+  mh_FillRawEntries(const stw::opensyde_core::C_OscNodeDataPool &orc_SdDataPool,
+                    const QByteArray &orc_ConfigRawBytes,
+                    QList<C_OscParamSetRawEntry> &orc_Entries);
+  static C_OscParamSetInterpretedFileInfoData
+  mh_GetFileInfo(const QString &orc_ExportToolName,
+                 const QString &orc_ExportToolVersion);
+  static int32_t mh_WriteParameterSetImage(
+      const C_OscParamSetRawNode &orc_RawNode,
+      const C_OscParamSetInterpretedNode &orc_IntNode, const bool oq_IsSafe,
+      const C_OscNodeApplication &orc_DataBlock, const QString &orc_Path,
+      QStringList &orc_Files, const QString &orc_ExportToolName,
+      const QString &orc_ExportToolVersion);
 
-   static int32_t mh_InsertCrc16(QByteArray & orc_Bytes);
-   static int32_t mh_GetConfigurationRawBytes(const stw::opensyde_core::C_OscNodeDataPool & orc_SdDataPool,
-                                              QByteArray & orc_Bytes);
+  static int32_t mh_InsertCrc16(QByteArray &orc_Bytes);
+  static int32_t mh_GetConfigurationRawBytes(
+      const stw::opensyde_core::C_OscNodeDataPool &orc_SdDataPool,
+      QByteArray &orc_Bytes);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

@@ -1006,8 +1006,8 @@ C_OscCanOpenManagerDeviceInfo C_SdNdeCoDeviceUpdateEdsDialog::m_AdaptConfig(
    Q_ASSERT(pc_ExistingConfig != NULL);
    if (pc_ExistingConfig != NULL)
    {
-      const std::set<uint8_t> c_Map = rc_EdsFileContent.GetAllAvailableFactorySettingsSubIndices();
-      const std::set<uint8_t>::const_iterator c_ItResult = c_Map.find(
+      const QSet<uint8_t> c_Map = rc_EdsFileContent.GetAllAvailableFactorySettingsSubIndices();
+      const QSet<uint8_t>::const_iterator c_ItResult = c_Map.find(
          pc_ExistingConfig->u8_ResetNodeObjectDictionarySubIndex);
       // check for read-only
       bool q_IsRo = true;

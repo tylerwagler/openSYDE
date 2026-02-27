@@ -135,8 +135,8 @@ private:
 
    void m_HandleAnyChange(const E_Change oe_Change, const bool oq_AllowSignalsToInformOtherWidgets = true);
    void m_ApplyNewValueFromUi(const E_Change oe_Change);
-   void m_AdaptOtherValues(const E_Change oe_Change, std::list<E_Change> & orc_Changes,
-                           std::list<E_Change> & orc_ErrorChanges, QString & orc_UserNotificationText,
+   void m_AdaptOtherValues(const E_Change oe_Change, QList<E_Change> & orc_Changes,
+                           QList<E_Change> & orc_ErrorChanges, QString & orc_UserNotificationText,
                            QString & orc_UserNotificationAdditionalInformation);
    void m_InitializeDataWithPotentialNewType(const stw::opensyde_core::C_OscNodeDataPoolContent::E_Type oe_Type);
    void m_HandleMinValueRange(void);

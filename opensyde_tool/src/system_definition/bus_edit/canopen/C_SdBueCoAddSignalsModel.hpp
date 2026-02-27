@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QList>
+#include <QMap>
 #include "C_TblTreItem.hpp"
 #include "C_TblTreModel.hpp"
 #include "C_OscCanOpenObjectDictionary.hpp"
@@ -43,7 +44,7 @@ public:
    void PrepareCleanUp(void);
    const stw::opensyde_core::C_OscCanOpenManagerMappableSignal * GetDataForIndex(const uint32_t ou32_ObjectIndex,
                                                                                  const uint32_t ou32_SignalIndex) const;
-   static std::map<uint32_t, QList<uint32_t> > h_GetUniqueIndices(const QModelIndexList & orc_ModelIndices);
+   static QMap<uint32_t, QList<uint32_t> > h_GetUniqueIndices(const QModelIndexList & orc_ModelIndices);
 
    int32_t columnCount(const QModelIndex & orc_Parent = QModelIndex()) const override;
    QVariant headerData(const int32_t os32_Section, const Qt::Orientation oe_Orientation, const int32_t os32_Role =
@@ -57,7 +58,7 @@ public:
 private:
    const QIcon mc_IconSignal;
    stw::opensyde_core::C_OscCanMessageIdentificationIndices mc_MessageId;
-   std::map<uint32_t,  std::map<uint32_t, uint32_t> > mc_MapObjectIndexToVectorIndex;
+   QMap<uint32_t, QMap<uint32_t, uint32_t> > mc_MapObjectIndexToVectorIndex;
 
    void m_Init(void);
    void m_InitObjectMap(void);

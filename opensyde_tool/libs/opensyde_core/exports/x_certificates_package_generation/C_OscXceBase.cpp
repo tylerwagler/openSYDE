@@ -5,43 +5,63 @@
 
    openSYDE: X-Certificates Package base
 
-   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
 #include "C_OscXceBase.hpp"
+#include "stwtypes.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 const QString C_OscXceBase::hc_PACKAGE_EXT = ".syde_xcert";
-const QString C_OscXceBase::hc_PACKAGE_EXT_TMP = ".syde_xcert_tmp"; // intermediate directory
-                                                                                  // before creating zip
-                                                                                  // archive
+const QString C_OscXceBase::hc_PACKAGE_EXT_TMP =
+    ".syde_xcert_tmp"; // intermediate directory
+                       // before creating zip
+                       // archive
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 QStringList C_OscXceBase::mhc_WarningMessages; // global warnings e.g. if update
                                                // position
                                                // of
                                                // active node is not available
-QString C_OscXceBase::mhc_ErrorMessage;        // description of error which caused
-                                                             // the
-                                                             // service update package to fail
-const QString C_OscXceBase::mhc_CERTIFICATES_FOLDER = "authentication_certificates";
-const QString C_OscXceBase::mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER = "update_certificates";
+QString C_OscXceBase::mhc_ErrorMessage; // description of error which caused
+                                        // the
+                                        // service update package to fail
+const QString C_OscXceBase::mhc_CERTIFICATES_FOLDER =
+    "authentication_certificates";
+const QString C_OscXceBase::mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER =
+    "update_certificates";
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Returns fix defined service update package extension.
@@ -50,19 +70,15 @@ const QString C_OscXceBase::mhc_UPDATE_PACKAGE_PARAMETERS_FOLDER = "update_certi
    service update package extension
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscXceBase::h_GetPackageExtension()
-{
-   return hc_PACKAGE_EXT;
-}
+QString C_OscXceBase::h_GetPackageExtension() { return hc_PACKAGE_EXT; }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Init
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXceBase::mh_Init()
-{
-   mhc_WarningMessages.clear(); // clear old warning messages
-   mhc_ErrorMessage = "";       // clear old error message
+void C_OscXceBase::mh_Init() {
+  mhc_WarningMessages.clear(); // clear old warning messages
+  mhc_ErrorMessage = "";       // clear old error message
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -72,9 +88,8 @@ void C_OscXceBase::mh_Init()
    \param[in,out]  orc_ErrorMessage       Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXceBase::mh_GetWarningsAndErrors(QStringList & orc_WarningMessages,
-                                           QString & orc_ErrorMessage)
-{
-   orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
-   orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller
+void C_OscXceBase::mh_GetWarningsAndErrors(QStringList &orc_WarningMessages,
+                                           QString &orc_ErrorMessage) {
+  orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
+  orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller
 }

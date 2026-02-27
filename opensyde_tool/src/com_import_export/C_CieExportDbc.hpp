@@ -19,6 +19,9 @@
 #include "C_OscNodeDataPoolContent.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
+#include <map>
+#include <string>
+#include <vector>
 #include <QList>
 #include <QString>
 #include <QStringList>
@@ -62,10 +65,10 @@ private:
 
   static int32_t
   mh_SetNodes(const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
-              QHash<QString, Vector::DBC::Node> &orc_DbcNodes);
+              std::map<std::string, Vector::DBC::Node> &orc_DbcNodes);
   static int32_t
   mh_SetMessages(const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
-                 QHash<uint32_t, Vector::DBC::Message> &orc_DbcMessages);
+                 std::map<unsigned int, Vector::DBC::Message> &orc_DbcMessages);
   static int32_t mh_SetSignals(
       const QList<C_CieConverter::C_CieCanSignal> &orc_CieSignals,
       const QList<C_CieConverter::C_CieNode> &orc_CieNodes,
@@ -79,11 +82,11 @@ private:
   static int32_t
   mh_SetTransmission(const C_CieConverter::C_CieNodeMessage &orc_Message,
                      Vector::DBC::Message &orc_DbcMessage);
-  static void mh_SetNewSymbols(QList<QString> &orc_NewSymbols);
+  static void mh_SetNewSymbols(std::vector<std::string> &orc_NewSymbols);
   static void mh_SetAttributeDefaults(
-      QHash<QString, Vector::DBC::Attribute> &orc_AttributeDefaults);
+      std::map<std::string, Vector::DBC::Attribute> &orc_AttributeDefaults);
   static void mh_SetAttributeDefinitions(
-      QHash<QString, Vector::DBC::AttributeDefinition>
+      std::map<std::string, Vector::DBC::AttributeDefinition>
           &orc_AttributeDefinitions);
   static QString mh_NiceifyStringForDbcSymbol(const QString &orc_String);
   static QString mh_EscapeCriticalSymbols(const QString &orc_String);

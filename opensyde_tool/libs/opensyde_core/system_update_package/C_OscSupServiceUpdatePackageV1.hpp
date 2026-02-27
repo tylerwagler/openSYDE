@@ -16,9 +16,9 @@
 #define C_OSCSUPSERVICEUPDATEPACKAGEV1_H
 
 #include <QList>
+#include <QMap>
+#include <QSet>
 #include <QStringList>
-#include <map>
-#include <set>
 #include <vector>
 
 #include "C_OscSuSequences.hpp"
@@ -46,22 +46,22 @@ public:
   static int32_t h_CreatePackage(
       const QString &orc_PackagePath,
       const C_OscSystemDefinition &orc_SystemDefinition,
-      const uint32_t ou32_ActiveBusIndex,
-      const QByteArray &orc_ActiveNodes,
+      const uint32_t ou32_ActiveBusIndex, const QByteArray &orc_ActiveNodes,
       const QList<uint32_t> &orc_NodesUpdateOrder,
       const QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
       QStringList &orc_WarningMessages, QString &orc_ErrorMessage,
       const bool oq_SaveInCompatibilityFormat, const bool oq_SaveAsFile,
       const QString &orc_TemporaryDirectory = "");
 
-  static int32_t h_ProcessPackage(
-      const QString &orc_PackagePath, const QString &orc_TargetUnzipPath,
-      C_OscSystemDefinition &orc_SystemDefinition,
-      uint32_t &oru32_ActiveBusIndex, QByteArray &orc_ActiveNodes,
-      QList<uint32_t> &orc_NodesUpdateOrder,
-      QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
-      QStringList &orc_WarningMessages, QString &orc_ErrorMessage,
-      const bool oq_IsZip);
+  static int32_t
+  h_ProcessPackage(const QString &orc_PackagePath,
+                   const QString &orc_TargetUnzipPath,
+                   C_OscSystemDefinition &orc_SystemDefinition,
+                   uint32_t &oru32_ActiveBusIndex, QByteArray &orc_ActiveNodes,
+                   QList<uint32_t> &orc_NodesUpdateOrder,
+                   QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
+                   QStringList &orc_WarningMessages, QString &orc_ErrorMessage,
+                   const bool oq_IsZip);
 
   static QString h_GetPackageExtension();
 
@@ -104,8 +104,7 @@ protected:
   static int32_t mh_CheckParamsToCreatePackage(
       const QString &orc_PackagePath,
       const C_OscSystemDefinition &orc_SystemDefinition,
-      const uint32_t ou32_ActiveBusIndex,
-      const QByteArray &orc_ActiveNodes,
+      const uint32_t ou32_ActiveBusIndex, const QByteArray &orc_ActiveNodes,
       const QList<uint32_t> &orc_NodesUpdateOrder,
       const QList<stw::opensyde_core::C_OscSuSequences::C_DoFlash>
           &orc_ApplicationsToWrite,
@@ -117,12 +116,11 @@ protected:
 
   static int32_t
   mh_CreateDeviceIniFile(const QString &orc_Path,
-                         const std::set<QString> &orc_DeviceDefinitionPaths);
+                         const QSet<QString> &orc_DeviceDefinitionPaths);
 
   static int32_t mh_SupDefParamAdapter(
       const C_OscSystemDefinition &orc_SystemDefinition,
-      const uint32_t ou32_ActiveBusIndex,
-      const QByteArray &orc_ActiveNodes,
+      const uint32_t ou32_ActiveBusIndex, const QByteArray &orc_ActiveNodes,
       const QList<uint32_t> &orc_NodesUpdateOrder,
       const QList<C_OscSuSequences::C_DoFlash> &orc_ApplicationsToWrite,
       C_OscSupServiceUpdatePackageV1::C_SupDefContent &orc_SupDefContent);
@@ -133,12 +131,12 @@ protected:
                              uint32_t &oru32_UpdatePosition);
 
   static int32_t mh_SetNodesUpdateOrder(
-      const std::map<uint32_t, uint32_t> &orc_UpdateOrderByNodes,
+      const QMap<uint32_t, uint32_t> &orc_UpdateOrderByNodes,
       QList<uint32_t> &orc_NodesUpdateOrder);
   static void mh_LoadFilesSection(QStringList &orc_Files,
                                   const uint32_t ou32_NodeCounter,
                                   const uint32_t ou32_UpdatePos,
-                                  std::map<uint32_t, uint32_t> &orc_PositionMap,
+                                  QMap<uint32_t, uint32_t> &orc_PositionMap,
                                   const QString &orc_TargetUnzipPath,
                                   C_OscXmlParserBase &orc_XmlParser,
                                   const QString &orc_BaseNodeName,
@@ -146,7 +144,7 @@ protected:
   static void mh_LoadPemConfigSection(
       C_OscSuSequences::C_DoFlash &orc_DoFlash, const uint32_t ou32_NodeCounter,
       const uint32_t ou32_UpdatePos,
-      std::map<uint32_t, uint32_t> &orc_PositionMap,
+      QMap<uint32_t, uint32_t> &orc_PositionMap,
       const QString &orc_TargetUnzipPath, C_OscXmlParserBase &orc_XmlParser);
   static void mh_SaveFiles(const QStringList &orc_Files,
                            C_OscXmlParserBase &orc_XmlParser,

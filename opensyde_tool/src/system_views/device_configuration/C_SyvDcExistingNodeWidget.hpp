@@ -59,7 +59,7 @@ public:
 Q_SIGNALS:
    //lint -restore
    void SigConnect(const uint32_t ou32_NodeIndex,
-                   const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber, const QMap<uint8_t,
+                   const stw::opensyde_core::C_OscProtocolSerialNumber & orc_SerialNumber, const QHash<uint8_t,
                                                                                                           stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds);
    void SigDisconnect(const uint32_t ou32_NodeIndex, const stw::opensyde_core::C_OscProtocolSerialNumber);
 

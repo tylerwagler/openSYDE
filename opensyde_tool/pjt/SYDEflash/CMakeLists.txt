@@ -12,13 +12,15 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
 # For supporting windows .rc files
-enable_language("RC")
-# Special configuration of RC file compiling with windres necessary. Without change, the command line call is to long
-# for windres with all include paths forwarded by CMake
-set(CMAKE_RC_INCLUDE_PATH
-   ${PROJECT_ROOT}/src/syde_flash
-)
-set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
+if(WIN32)
+   enable_language("RC")
+   # Special configuration of RC file compiling with windres necessary. Without change, the command line call is to long
+   # for windres with all include paths forwarded by CMake
+   set(CMAKE_RC_INCLUDE_PATH
+      ${PROJECT_ROOT}/src/syde_flash
+   )
+   set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
+endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
@@ -39,6 +41,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Svg)
 find_package(Qt6 REQUIRED COMPONENTS SvgWidgets)
 find_package(Qt6 REQUIRED COMPONENTS Xml)
+find_package(Qt6 REQUIRED COMPONENTS SerialBus Network)
 
 # --- PROJECT INCLUDE PATHS --------------------------------------------------------------------------------------------
 
@@ -484,8 +487,13 @@ set(OPENSYDE_CORE_SKIP_X_CONFIG_GENERATION         1)
 set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     1)
 set(OPENSYDE_CORE_SKIP_XAPP_BASIC_FILE_HANDLING    1)
 set(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION   1)
-set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS             0)
-set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET              0)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          1)
+   set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           1)
+else()
+   set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          0)
+   set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           0)
+endif()
 
 add_subdirectory(${PROJECT_ROOT}/libs/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
 
@@ -497,10 +505,14 @@ set(OPENSYDE_LINK_LIBRARIES
    Qt6::Svg
    Qt6::SvgWidgets
    opensyde_core
-   version
-   ws2_32   #WinSock
-   Iphlpapi #IP helper API
 )
+if(WIN32)
+   list(APPEND OPENSYDE_LINK_LIBRARIES
+      version
+      ws2_32   #WinSock
+      Iphlpapi #IP helper API
+   )
+endif()
 
 # COMPILER SWITCHES
 # use same compiler switches that gcc uses when compiling openSYDE core from osc_moduletest.pro file
@@ -515,9 +527,14 @@ set_source_files_properties(${PROJECT_ROOT}/libs/opensyde_core/miniz/miniz.c PRO
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 
 # WIN32 is necessary to suppress console opening in background
+if(WIN32)
+   set(PLATFORM_RC_FILE ${PROJECT_ROOT}/src/syde_flash/fla_resources.rc)
+else()
+   set(PLATFORM_RC_FILE "")
+endif()
 qt_add_executable(SYDEflash
    WIN32
-   ${PROJECT_ROOT}/src/syde_flash/fla_resources.rc
+   ${PLATFORM_RC_FILE}
    ${PROJECT_ROOT}/src/syde_flash/fla_application.qrc
    ${OPENSYDE_SOURCES} ${OPENSYDE_HEADERS} ${OPENSYDE_FORMS})
 

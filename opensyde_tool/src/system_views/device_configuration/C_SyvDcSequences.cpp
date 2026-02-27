@@ -20,6 +20,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 #include <QMutexLocker>
+#include <QSet>
 #include <QThread>
 
 #include "stwerrors.hpp"
@@ -196,7 +197,7 @@ int32_t C_SyvDcSequences::InitDcSequences(const uint32_t ou32_ViewIndex)
    if (s32_Return == C_NO_ERR)
    {
       // pem folder is optional -> no error handling
-      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
+      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath());
 
       s32_Return = C_OscComSequencesBase::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinition(),
                                                u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
@@ -3318,19 +3319,20 @@ int32_t C_SyvDcSequences::m_SetCanOpenSydeBitrate(const C_OscProtocolDriverOsyNo
          {
             uint32_t u32_CanCounter = 0U;
             uint32_t u32_BusCounter;
-            std::set<uint32_t> c_FinishedBusIds;
+            QSet<uint32_t> c_FinishedBusIds;
 
             for (u32_BusCounter = 0U; u32_BusCounter < orc_DeviceConfig.c_BusIds.size(); ++u32_BusCounter)
             {
-               std::pair<std::set<uint32_t>::iterator, bool> c_InsertResult;
+               const uint32_t u32_BusIdValue = static_cast<uint8_t>(orc_DeviceConfig.c_BusIds[u32_BusCounter]);
+               const bool q_WasNew = !c_FinishedBusIds.contains(u32_BusIdValue);
                s32_Return = C_NO_ERR;
 
                // If a node is connected at least two times with the same bus,
                // the configuration will be handled by the interface loop
-               c_InsertResult = c_FinishedBusIds.insert(static_cast<uint8_t>(orc_DeviceConfig.c_BusIds[u32_BusCounter]));
+               c_FinishedBusIds.insert(u32_BusIdValue);
 
                //was the element inserted (or already present) ?
-               if (c_InsertResult.second == true)
+               if (q_WasNew == true)
                {
                   uint32_t u32_InterfaceCounter;
                   // Newly inserted.

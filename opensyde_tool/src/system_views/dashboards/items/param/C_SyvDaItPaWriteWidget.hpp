@@ -16,6 +16,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QList>
+#include <QMap>
 #include <set>
 
 #include "stwtypes.hpp"
@@ -64,8 +65,8 @@ public:
 
    void InitText(void);
    E_Step GetStep(void) const;
-   int32_t GetChangedElements(std::map<stw::opensyde_core::C_OscNodeDataPoolListElementId,
-                                       stw::opensyde_gui_logic::C_SyvDaItPaValuePairs> & orc_AffectedElementValues)
+   int32_t GetChangedElements(QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
+                                    stw::opensyde_gui_logic::C_SyvDaItPaValuePairs> & orc_AffectedElementValues)
    const;
 
 protected:
@@ -117,8 +118,8 @@ private:
    stw::opensyde_gui_elements::C_OgePopUpDialog * mpc_ParentDialog;
    //lint -e{1725} Only problematic if copy or assignment is allowed
    stw::opensyde_gui_logic::C_SyvComDriverDiag & mrc_ComDriver;
-   std::map<stw::opensyde_core::C_OscNodeDataPoolListElementId,
-            stw::opensyde_gui_logic::C_SyvDaItPaValuePairs> mc_AllAffectedValues;
+   QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
+        stw::opensyde_gui_logic::C_SyvDaItPaValuePairs> mc_AllAffectedValues;
 
    QList<uint32_t> mc_AllNodeIndexes;
    QList<const stw::opensyde_core::C_OscNode *> mc_ReadNodeValues;

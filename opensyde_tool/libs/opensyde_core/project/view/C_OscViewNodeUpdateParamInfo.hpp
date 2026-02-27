@@ -5,46 +5,55 @@
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCVIEWNODEUPDATEPARAMINFO_HPP
 #define C_OSCVIEWNODEUPDATEPARAMINFO_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QString>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "stwtypes.hpp"
+#include <QString>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscViewNodeUpdateParamInfo
-{
+class C_OscViewNodeUpdateParamInfo {
 public:
-   C_OscViewNodeUpdateParamInfo(void);
+  C_OscViewNodeUpdateParamInfo(void);
 
-   void CalcHash(uint32_t & oru32_HashValue) const;
+  void CalcHash(uint32_t &oru32_HashValue) const;
 
-   //Set
-   void SetContent(const QString & orc_FilePath, const uint32_t ou32_LastKnownCrc);
+  // Set
+  void SetContent(const QString &orc_FilePath,
+                  const uint32_t ou32_LastKnownCrc);
 
-   //Get
-   const QString & GetPath(void) const;
-   uint32_t GetLastKnownCrc(void) const;
+  // Get
+  const QString &GetPath(void) const;
+  uint32_t GetLastKnownCrc(void) const;
 
 private:
-   QString mc_FilePath;
-   uint32_t mu32_LastKnownCrc;
+  QString mc_FilePath;
+  uint32_t mu32_LastKnownCrc;
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

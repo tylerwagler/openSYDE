@@ -7,36 +7,53 @@
    The interpretation is based on no high level protocol.
    The raw CAN message data will be returned as a string.
 
-   \copyright   Copyright 2010 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2010 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp" //pre-compiled headers
 
-#include "stwtypes.hpp"
-#include "stwerrors.hpp"
 #include "C_CanMonProtocolL2.hpp"
+#include "stwerrors.hpp"
+#include "stwtypes.hpp"
 #include <QString>
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::errors;
 using namespace stw::cmon_protocol;
 using namespace stw::scl;
 using namespace stw::can;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Convert CAN message to text representation.
@@ -47,43 +64,41 @@ using namespace stw::can;
    Text interpretation of CAN message ("" if the message can not be interpreted)
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
-{
-   QString c_Text;
-   QString c_Help;
-   char_t cn_XTD;
-   char_t cn_RTR;
-   int32_t j;
-   uint8_t u8_Len;
+QString
+C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX &orc_Msg) const {
+  QString c_Text;
+  QString c_Help;
+  char_t cn_XTD;
+  char_t cn_RTR;
+  int32_t j;
+  uint8_t u8_Len;
 
-   cn_XTD = (orc_Msg.u8_XTD == 1U) ? 'x' : ' ';
-   cn_RTR = (orc_Msg.u8_RTR == 1U) ? 'r' : ' '; //note: displaying RTR correctly will only work if comm driver supplies
-                                                // that information
-   u8_Len = (orc_Msg.u8_DLC > 8U) ? static_cast<uint8_t>(8U) : orc_Msg.u8_DLC;
+  cn_XTD = (orc_Msg.u8_XTD == 1U) ? 'x' : ' ';
+  cn_RTR =
+      (orc_Msg.u8_RTR == 1U) ? 'r' : ' '; // note: displaying RTR correctly will
+                                          // only work if comm driver supplies
+                                          //  that information
+  u8_Len = (orc_Msg.u8_DLC > 8U) ? static_cast<uint8_t>(8U) : orc_Msg.u8_DLC;
 
-   if (mq_Decimal == false)
-   {
-      c_Text = QString::asprintf("%08X%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
-      for (j = 0; j < u8_Len; j++)
-      {
-         c_Help = QString::asprintf(" %02X ", orc_Msg.au8_Data[j]);
-         c_Text += c_Help;
-      }
-      for (; j < 8; j++)
-      {
-         c_Text += "    ";
-      }
-   }
-   else
-   {
-      c_Text = QString::asprintf("%8d%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR, orc_Msg.u8_DLC);
-      for (j = 0; j < u8_Len; j++)
-      {
-         c_Help = QString::asprintf("%3d ", orc_Msg.au8_Data[j]);
-         c_Text += c_Help;
-      }
-   }
-   return c_Text;
+  if (mq_Decimal == false) {
+    c_Text = QString::asprintf("%08X%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR,
+                               orc_Msg.u8_DLC);
+    for (j = 0; j < u8_Len; j++) {
+      c_Help = QString::asprintf(" %02X ", orc_Msg.au8_Data[j]);
+      c_Text += c_Help;
+    }
+    for (; j < 8; j++) {
+      c_Text += "    ";
+    }
+  } else {
+    c_Text = QString::asprintf("%8d%c%c %d ", orc_Msg.u32_ID, cn_XTD, cn_RTR,
+                               orc_Msg.u8_DLC);
+    for (j = 0; j < u8_Len; j++) {
+      c_Help = QString::asprintf("%3d ", orc_Msg.au8_Data[j]);
+      c_Text += c_Help;
+    }
+  }
+  return c_Text;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -93,9 +108,8 @@ QString C_CanMonProtocolL2::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) con
    Text representation of protocol name
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_CanMonProtocolL2::GetProtocolName(void) const
-{
-   return "CAN Layer 2";
+QString C_CanMonProtocolL2::GetProtocolName(void) const {
+  return "CAN Layer 2";
 }
 
 //----------------------------------------------------------------------------------------------------------------------

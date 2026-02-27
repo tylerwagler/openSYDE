@@ -10,7 +10,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include <QFile>
+#include <QString>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -104,35 +104,26 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
 
                if (pc_Bus->e_Type == C_OscSystemBus::eCAN)
                {
-                  QFile c_File;
-                  QString c_FilePath;
                   //No ethernet
                   *oppc_IpDispatcher = NULL;
 
-                  c_FilePath = pc_View->GetPuiPcData().GetCanDllAbsolute();
+                  const QString c_FilePath = pc_View->GetPuiPcData().GetCanDllAbsolute();
 
-                  c_File.setFileName(c_FilePath);
+                  *oppc_CanDispatcher = new stw::can::C_Can();
 
-                  if (c_File.exists() == true)
+                  s32_Retval = (*oppc_CanDispatcher)->DLL_Open(c_FilePath);
+                  if ((s32_Retval == C_NO_ERR) &&
+                      (oq_InitCan == true))
                   {
-                     *oppc_CanDispatcher = new stw::can::C_Can();
-
-                     s32_Retval = (*oppc_CanDispatcher)->DLL_Open(c_FilePath);
-                     if ((s32_Retval == C_NO_ERR) &&
-                         (oq_InitCan == true))
-                     {
-                        s32_Retval =
-                           (*oppc_CanDispatcher)->CAN_Init(static_cast<int32_t>(pc_Bus->u64_BitRate / 1000ULL));
-                     }
-
-                     if (s32_Retval != C_NO_ERR)
-                     {
-                        s32_Retval = C_COM;
-                     }
+                     s32_Retval =
+                        (*oppc_CanDispatcher)->CAN_Init(static_cast<int32_t>(pc_Bus->u64_BitRate / 1000ULL));
                   }
-                  else
+
+                  if (s32_Retval != C_NO_ERR)
                   {
-                     s32_Retval = C_RD_WR;
+                     delete *oppc_CanDispatcher;
+                     *oppc_CanDispatcher = NULL;
+                     s32_Retval = C_COM;
                   }
                }
                else

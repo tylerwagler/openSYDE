@@ -56,12 +56,12 @@ const C_OscCanOpenManagerInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenManager(co
 
    if (pc_Node != NULL)
    {
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::const_iterator c_ItManager = pc_Node->c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != pc_Node->c_CanOpenManagers.end())
       {
-         pc_Retval = &c_ItManager->second;
+         pc_Retval = &c_ItManager.value();
       }
    }
    return pc_Retval;
@@ -89,14 +89,14 @@ const C_OscCanOpenManagerInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenManager(
    Q_ASSERT(pc_Node != NULL);
    if (pc_Node != NULL)
    {
-      std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager;
+      QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager;
       Q_ASSERT(orc_MessageId.u32_InterfaceIndex < pc_Node->c_Properties.c_ComInterfaces.size());
       c_ItManager = pc_Node->c_CanOpenManagers.find(
          pc_Node->c_Properties.c_ComInterfaces[orc_MessageId.u32_InterfaceIndex].u8_InterfaceNumber);
       Q_ASSERT(c_ItManager != pc_Node->c_CanOpenManagers.end());
       if (c_ItManager != pc_Node->c_CanOpenManagers.end())
       {
-         pc_Manager = &c_ItManager->second;
+         pc_Manager = &c_ItManager.value();
       }
    }
 
@@ -210,12 +210,12 @@ const
 
    if (pc_Manager != NULL)
    {
-      const std::map<C_OscCanInterfaceId,
+      const QHash<C_OscCanInterfaceId,
                      C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice = pc_Manager->c_CanOpenDevices.find(
          orc_DeviceId);
       if (c_ItDevice != pc_Manager->c_CanOpenDevices.end())
       {
-         pc_Retval = &c_ItDevice->second;
+         pc_Retval = &c_ItDevice.value();
       }
    }
 
@@ -247,7 +247,7 @@ const C_OscCanOpenManagerDeviceInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenMana
       Q_ASSERT(pc_Message != NULL);
       if (pc_Message != NULL)
       {
-         const std::map<C_OscCanInterfaceId,
+         const QHash<C_OscCanInterfaceId,
                         C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
             pc_CoManagerInfo->c_CanOpenDevices.find(
                pc_Message->c_CanOpenManagerOwnerNodeIndex);
@@ -255,7 +255,7 @@ const C_OscCanOpenManagerDeviceInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenMana
          Q_ASSERT(c_ItDevice != pc_CoManagerInfo->c_CanOpenDevices.end());
          if (c_ItDevice != pc_CoManagerInfo->c_CanOpenDevices.end())
          {
-            pc_Device = &c_ItDevice->second;
+            pc_Device = &c_ItDevice.value();
          }
       }
    }
@@ -297,17 +297,17 @@ const
       {
          const C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[u32_NodeCounter];
 
-         std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager;
+         QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager;
          for (c_ItManager = rc_Node.c_CanOpenManagers.begin(); c_ItManager != rc_Node.c_CanOpenManagers.end();
               ++c_ItManager)
          {
-            const C_OscCanOpenManagerInfo & rc_Manager = c_ItManager->second;
-            std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice;
+            const C_OscCanOpenManagerInfo & rc_Manager = c_ItManager.value();
+            QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice;
 
             for (c_ItDevice = rc_Manager.c_CanOpenDevices.begin(); c_ItDevice != rc_Manager.c_CanOpenDevices.end();
                  ++c_ItDevice)
             {
-               if (c_ItDevice->first.u32_NodeIndex == ou32_DeviceNodeIndex)
+               if (c_ItDevice.key().u32_NodeIndex == ou32_DeviceNodeIndex)
                {
                   if (opu32_ManagerNodeIndex != NULL)
                   {
@@ -315,11 +315,11 @@ const
                   }
                   if (opc_DeviceNodeId != NULL)
                   {
-                     *opc_DeviceNodeId = c_ItDevice->first;
+                     *opc_DeviceNodeId = c_ItDevice.key();
                   }
                   if (opu8_ManagerInterfaceNumber != NULL)
                   {
-                     *opu8_ManagerInterfaceNumber = c_ItManager->first;
+                     *opu8_ManagerInterfaceNumber = c_ItManager.key();
                   }
                   s32_Retval = C_NO_ERR;
                   break;
@@ -350,17 +350,17 @@ const C_OscCanOpenManagerDeviceInfo * C_PuiSdHandlerCanOpenLogic::GetCanOpenMana
 
    if (pc_Node != NULL)
    {
-      for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
+      for (QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
               pc_Node->c_CanOpenManagers.cbegin();
            (c_ItManager != pc_Node->c_CanOpenManagers.cend()) && (pc_Retval == NULL); ++c_ItManager)
       {
-         const std::map<C_OscCanInterfaceId,
+         const QHash<C_OscCanInterfaceId,
                         C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
-            c_ItManager->second.c_CanOpenDevices.find(
+            c_ItManager.value().c_CanOpenDevices.find(
                orc_DeviceId);
-         if (c_ItDevice != c_ItManager->second.c_CanOpenDevices.cend())
+         if (c_ItDevice != c_ItManager.value().c_CanOpenDevices.cend())
          {
-            pc_Retval = &c_ItDevice->second;
+            pc_Retval = &c_ItDevice.value();
          }
       }
    }
@@ -444,18 +444,18 @@ int32_t C_PuiSdHandlerCanOpenLogic::SetCanOpenManagerCommonProperties(const uint
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
       {
-         c_ItManager->second.q_UseOpenSydeNodeId = oq_UseOpenSydeNodeId;
-         c_ItManager->second.u8_NodeIdValue = ou8_NodeIdValue;
-         c_ItManager->second.u16_GlobalSdoTimeoutMs = ou16_GlobalSdoTimeoutMs;
-         c_ItManager->second.q_AutostartCanOpenManager = oq_AutostartCanOpenManager;
-         c_ItManager->second.q_StartDevices = oq_StartDevices;
-         c_ItManager->second.q_NmtStartAll = oq_NmtStartAll;
-         c_ItManager->second.e_NmtErrorBehaviour = oe_NmtErrorBehaviour;
+         c_ItManager.value().q_UseOpenSydeNodeId = oq_UseOpenSydeNodeId;
+         c_ItManager.value().u8_NodeIdValue = ou8_NodeIdValue;
+         c_ItManager.value().u16_GlobalSdoTimeoutMs = ou16_GlobalSdoTimeoutMs;
+         c_ItManager.value().q_AutostartCanOpenManager = oq_AutostartCanOpenManager;
+         c_ItManager.value().q_StartDevices = oq_StartDevices;
+         c_ItManager.value().q_NmtStartAll = oq_NmtStartAll;
+         c_ItManager.value().e_NmtErrorBehaviour = oe_NmtErrorBehaviour;
       }
       else
       {
@@ -495,33 +495,33 @@ int32_t C_PuiSdHandlerCanOpenLogic::SetCanOpenManagerProducerHeartbeat(const uin
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
       {
-         c_ItManager->second.u16_HeartbeatProducerTimeMs = ou16_HeartbeatProducerTimeMs;
-         c_ItManager->second.q_EnableHeartbeatProducing = oq_EnableHeartbeatProducing;
+         c_ItManager.value().u16_HeartbeatProducerTimeMs = ou16_HeartbeatProducerTimeMs;
+         c_ItManager.value().q_EnableHeartbeatProducing = oq_EnableHeartbeatProducing;
 
          //update consumer time of devices
-         for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItDevice =
-                 c_ItManager->second.c_CanOpenDevices.begin();
-              c_ItDevice != c_ItManager->second.c_CanOpenDevices.end(); ++c_ItDevice)
+         for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItDevice =
+                 c_ItManager.value().c_CanOpenDevices.begin();
+              c_ItDevice != c_ItManager.value().c_CanOpenDevices.end(); ++c_ItDevice)
          {
-            if (c_ItDevice->second.q_EnableHeartbeatConsumingAutoCalculation == true)
+            if (c_ItDevice.value().q_EnableHeartbeatConsumingAutoCalculation == true)
             {
                //auto calculation of consumer time
                const float32_t f32_Temp = static_cast<float32_t>(ou16_HeartbeatProducerTimeMs);
                const float32_t f32_Result = f32_Temp * mf32_HEARTBEAT_CONSUMER_TIME_FACTOR;
                const uint16_t u16_Result = static_cast<uint16_t>(f32_Result);
 
-               c_ItDevice->second.u16_HeartbeatConsumerTimeMs = u16_Result;
+               c_ItDevice.value().u16_HeartbeatConsumerTimeMs = u16_Result;
 
                //disable device HB consuming if manager HB producing is disabled
-               if ((c_ItManager->second.q_EnableHeartbeatProducing == false) &&
-                   (c_ItDevice->second.q_EnableHeartbeatConsuming == true))
+               if ((c_ItManager.value().q_EnableHeartbeatProducing == false) &&
+                   (c_ItDevice.value().q_EnableHeartbeatConsuming == true))
                {
-                  c_ItDevice->second.q_EnableHeartbeatConsuming = false;
+                  c_ItDevice.value().q_EnableHeartbeatConsuming = false;
                }
             }
          }
@@ -566,15 +566,15 @@ int32_t C_PuiSdHandlerCanOpenLogic::SetCanOpenManagerPdoSync(const uint32_t ou32
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
       {
-         const bool q_PeriodChanged = c_ItManager->second.u32_SyncCyclePeriodUs != ou32_PdoSyncCyclePeriodUs;
-         c_ItManager->second.q_ProduceSyncMessage = oq_EnablePdoSyncProducing;
-         c_ItManager->second.u32_SyncCyclePeriodUs = ou32_PdoSyncCyclePeriodUs;
-         c_ItManager->second.u32_SyncWindowLengthUs = ou32_PdoWindowLengthTimeUs;
+         const bool q_PeriodChanged = c_ItManager.value().u32_SyncCyclePeriodUs != ou32_PdoSyncCyclePeriodUs;
+         c_ItManager.value().q_ProduceSyncMessage = oq_EnablePdoSyncProducing;
+         c_ItManager.value().u32_SyncCyclePeriodUs = ou32_PdoSyncCyclePeriodUs;
+         c_ItManager.value().u32_SyncWindowLengthUs = ou32_PdoWindowLengthTimeUs;
 
          if (q_PeriodChanged == true)
          {
@@ -632,25 +632,25 @@ int32_t C_PuiSdHandlerCanOpenLogic::SetCanOpenManagerDeviceCommonProperties(cons
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
       {
-         const std::map<C_OscCanInterfaceId,
-                        C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice = c_ItManager->second.c_CanOpenDevices.
+         const QHash<C_OscCanInterfaceId,
+                        C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice = c_ItManager.value().c_CanOpenDevices.
                                                                                  find(orc_DeviceId);
-         if (c_ItSubDevice != c_ItManager->second.c_CanOpenDevices.end())
+         if (c_ItSubDevice != c_ItManager.value().c_CanOpenDevices.end())
          {
-            c_ItSubDevice->second.q_DeviceOptional = oq_DeviceOptional;
-            c_ItSubDevice->second.q_NoInitialization = oq_NoInitialization;
-            c_ItSubDevice->second.q_FactorySettingsActive = oq_FactorySettingsActive;
-            c_ItSubDevice->second.u8_ResetNodeObjectDictionarySubIndex = ou8_ResetNodeObjectDictionarySubIndex;
-            c_ItSubDevice->second.q_EnableHeartbeatProducing = oq_EnableHeartbeatProducing;
-            c_ItSubDevice->second.u16_HeartbeatProducerTimeMs = ou16_HeartbeatProducerTimeMs;
-            c_ItSubDevice->second.q_EnableHeartbeatConsuming = oq_EnableHeartbeatConsuming;
-            c_ItSubDevice->second.u16_HeartbeatConsumerTimeMs = ou16_HeartbeatConsumerTimeMs;
-            c_ItSubDevice->second.q_EnableHeartbeatConsumingAutoCalculation =
+            c_ItSubDevice.value().q_DeviceOptional = oq_DeviceOptional;
+            c_ItSubDevice.value().q_NoInitialization = oq_NoInitialization;
+            c_ItSubDevice.value().q_FactorySettingsActive = oq_FactorySettingsActive;
+            c_ItSubDevice.value().u8_ResetNodeObjectDictionarySubIndex = ou8_ResetNodeObjectDictionarySubIndex;
+            c_ItSubDevice.value().q_EnableHeartbeatProducing = oq_EnableHeartbeatProducing;
+            c_ItSubDevice.value().u16_HeartbeatProducerTimeMs = ou16_HeartbeatProducerTimeMs;
+            c_ItSubDevice.value().q_EnableHeartbeatConsuming = oq_EnableHeartbeatConsuming;
+            c_ItSubDevice.value().u16_HeartbeatConsumerTimeMs = ou16_HeartbeatConsumerTimeMs;
+            c_ItSubDevice.value().q_EnableHeartbeatConsumingAutoCalculation =
                oq_EnableHeartbeatConsumingAutoCalculation;
          }
          else
@@ -698,18 +698,18 @@ int32_t C_PuiSdHandlerCanOpenLogic::SetCanOpenManagerDeviceNodeId(const uint32_t
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
       {
-         const std::map<C_OscCanInterfaceId,
-                        C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice = c_ItManager->second.c_CanOpenDevices.
+         const QHash<C_OscCanInterfaceId,
+                        C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice = c_ItManager.value().c_CanOpenDevices.
                                                                                  find(orc_DeviceId);
-         if (c_ItSubDevice != c_ItManager->second.c_CanOpenDevices.end())
+         if (c_ItSubDevice != c_ItManager.value().c_CanOpenDevices.end())
          {
-            c_ItSubDevice->second.q_UseOpenSydeNodeId = oq_UseOpenSydeNodeId;
-            c_ItSubDevice->second.u8_NodeIdValue = ou8_NodeIdValue;
+            c_ItSubDevice.value().q_UseOpenSydeNodeId = oq_UseOpenSydeNodeId;
+            c_ItSubDevice.value().u8_NodeIdValue = ou8_NodeIdValue;
             m_HandleNodeIdChangeForCanOpenMessages(orc_DeviceId.u32_NodeIndex, orc_DeviceId.u8_InterfaceNumber);
          }
          else
@@ -754,7 +754,7 @@ int32_t C_PuiSdHandlerCanOpenLogic::AddCanOpenManager(const uint32_t ou32_NodeIn
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::const_iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager == rc_Node.c_CanOpenManagers.end())
@@ -808,7 +808,7 @@ int32_t C_PuiSdHandlerCanOpenLogic::DeleteCanOpenManager(const uint32_t ou32_Nod
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::const_iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
@@ -873,18 +873,18 @@ int32_t C_PuiSdHandlerCanOpenLogic::AddCanOpenManagerDevice(const uint32_t ou32_
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
       {
-         const std::map<C_OscCanInterfaceId,
+         const QHash<C_OscCanInterfaceId,
                         C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItSubDevice =
-            c_ItManager->second.c_CanOpenDevices.
+            c_ItManager.value().c_CanOpenDevices.
             find(orc_DeviceId);
-         if (c_ItSubDevice == c_ItManager->second.c_CanOpenDevices.end())
+         if (c_ItSubDevice == c_ItManager.value().c_CanOpenDevices.end())
          {
-            c_ItManager->second.c_CanOpenDevices[orc_DeviceId] = orc_Config;
+            c_ItManager.value().c_CanOpenDevices[orc_DeviceId] = orc_Config;
          }
          else
          {
@@ -929,18 +929,18 @@ int32_t C_PuiSdHandlerCanOpenLogic::ReplaceCanOpenManagerDevice(const uint32_t o
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
       {
-         const std::map<C_OscCanInterfaceId,
+         const QHash<C_OscCanInterfaceId,
                         C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice =
-            c_ItManager->second.c_CanOpenDevices.
+            c_ItManager.value().c_CanOpenDevices.
             find(orc_DeviceId);
-         if (c_ItSubDevice != c_ItManager->second.c_CanOpenDevices.end())
+         if (c_ItSubDevice != c_ItManager.value().c_CanOpenDevices.end())
          {
-            c_ItSubDevice->second = orc_Config;
+            c_ItSubDevice.value() = orc_Config;
          }
          else
          {
@@ -983,18 +983,18 @@ int32_t C_PuiSdHandlerCanOpenLogic::DeleteCanOpenManagerDevice(const uint32_t ou
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
       {
-         const std::map<C_OscCanInterfaceId,
+         const QHash<C_OscCanInterfaceId,
                         C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItSubDevice =
-            c_ItManager->second.c_CanOpenDevices.
+            c_ItManager.value().c_CanOpenDevices.
             find(orc_DeviceId);
-         if (c_ItSubDevice != c_ItManager->second.c_CanOpenDevices.end())
+         if (c_ItSubDevice != c_ItManager.value().c_CanOpenDevices.end())
          {
-            c_ItManager->second.c_CanOpenDevices.erase(c_ItSubDevice);
+            c_ItManager.value().c_CanOpenDevices.erase(c_ItSubDevice);
             s32_Retval = this->DeleteCanOpenManagerMessages(ou32_NodeIndex, ou8_InterfaceNumber, orc_DeviceId);
          }
          else
@@ -1192,19 +1192,19 @@ int32_t C_PuiSdHandlerCanOpenLogic::m_DeleteAllCanOpenManagerDevices(const uint3
    if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-      const std::map<uint8_t,
+      const QHash<uint8_t,
                      C_OscCanOpenManagerInfo>::const_iterator c_ItManager = rc_Node.c_CanOpenManagers.find(
          ou8_InterfaceNumber);
       if (c_ItManager != rc_Node.c_CanOpenManagers.end())
       {
          //Delete items (handle DP)
          QList<C_OscCanInterfaceId> c_Items;
-         c_Items.reserve(c_ItManager->second.c_CanOpenDevices.size());
-         for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
-                 c_ItManager->second.c_CanOpenDevices.begin();
-              c_ItDevice != c_ItManager->second.c_CanOpenDevices.end(); ++c_ItDevice)
+         c_Items.reserve(c_ItManager.value().c_CanOpenDevices.size());
+         for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
+                 c_ItManager.value().c_CanOpenDevices.begin();
+              c_ItDevice != c_ItManager.value().c_CanOpenDevices.end(); ++c_ItDevice)
          {
-            c_Items.push_back(c_ItDevice->first);
+            c_Items.push_back(c_ItDevice.key());
          }
          for (uint32_t u32_ItDevice = 0UL; u32_ItDevice < c_Items.size(); ++u32_ItDevice)
          {
@@ -1383,22 +1383,22 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleSyncNodeAddedForCanOpenDevices(const ui
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < this->mc_CoreDefinition.c_Nodes.size(); ++u32_ItNode)
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[u32_ItNode];
-      for (std::map<uint8_t, C_OscCanOpenManagerInfo>::iterator c_ItManager =
+      for (QHash<uint8_t, C_OscCanOpenManagerInfo>::iterator c_ItManager =
               rc_Node.c_CanOpenManagers.begin();
            c_ItManager != rc_Node.c_CanOpenManagers.end(); ++c_ItManager)
       {
-         std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> c_Storage;
-         for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice =
-                 c_ItManager->second.c_CanOpenDevices.begin();
-              c_ItSubDevice != c_ItManager->second.c_CanOpenDevices.end();)
+         QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> c_Storage;
+         for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice =
+                 c_ItManager.value().c_CanOpenDevices.begin();
+              c_ItSubDevice != c_ItManager.value().c_CanOpenDevices.end();)
          {
-            if (c_ItSubDevice->first.u32_NodeIndex >= ou32_Index)
+            if (c_ItSubDevice.key().u32_NodeIndex >= ou32_Index)
             {
                //Adapt
-               C_OscCanInterfaceId c_Tmp = c_ItSubDevice->first;
+               C_OscCanInterfaceId c_Tmp = c_ItSubDevice.key();
                ++c_Tmp.u32_NodeIndex;
-               c_Storage[c_Tmp] = c_ItSubDevice->second;
-               c_ItSubDevice = c_ItManager->second.c_CanOpenDevices.erase(c_ItSubDevice);
+               c_Storage[c_Tmp] = c_ItSubDevice.value();
+               c_ItSubDevice = c_ItManager.value().c_CanOpenDevices.erase(c_ItSubDevice);
             }
             else
             {
@@ -1407,11 +1407,11 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleSyncNodeAddedForCanOpenDevices(const ui
             }
          }
          //Re-add adapted elements
-         for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItNewSubDevice =
+         for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItNewSubDevice =
                  c_Storage.begin();
               c_ItNewSubDevice != c_Storage.end(); ++c_ItNewSubDevice)
          {
-            c_ItManager->second.c_CanOpenDevices[c_ItNewSubDevice->first] = c_ItNewSubDevice->second;
+            c_ItManager.value().c_CanOpenDevices[c_ItNewSubDevice.key()] = c_ItNewSubDevice.value();
          }
       }
    }
@@ -1490,29 +1490,29 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleSyncNodeAboutToBeDeletedForCanOpenDevic
    for (uint32_t u32_ItNode = 0UL; u32_ItNode < this->mc_CoreDefinition.c_Nodes.size(); ++u32_ItNode)
    {
       C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[u32_ItNode];
-      for (std::map<uint8_t, C_OscCanOpenManagerInfo>::iterator c_ItManager =
+      for (QHash<uint8_t, C_OscCanOpenManagerInfo>::iterator c_ItManager =
               rc_Node.c_CanOpenManagers.begin();
            c_ItManager != rc_Node.c_CanOpenManagers.end(); ++c_ItManager)
       {
-         std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> c_Storage;
-         for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice =
-                 c_ItManager->second.c_CanOpenDevices.begin();
-              c_ItSubDevice != c_ItManager->second.c_CanOpenDevices.end();)
+         QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> c_Storage;
+         for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice =
+                 c_ItManager.value().c_CanOpenDevices.begin();
+              c_ItSubDevice != c_ItManager.value().c_CanOpenDevices.end();)
          {
-            if (c_ItSubDevice->first.u32_NodeIndex > ou32_Index)
+            if (c_ItSubDevice.key().u32_NodeIndex > ou32_Index)
             {
                //Adapt
-               C_OscCanInterfaceId c_Tmp = c_ItSubDevice->first;
+               C_OscCanInterfaceId c_Tmp = c_ItSubDevice.key();
                --c_Tmp.u32_NodeIndex;
-               c_Storage[c_Tmp] = c_ItSubDevice->second;
-               c_ItSubDevice = c_ItManager->second.c_CanOpenDevices.erase(c_ItSubDevice);
+               c_Storage[c_Tmp] = c_ItSubDevice.value();
+               c_ItSubDevice = c_ItManager.value().c_CanOpenDevices.erase(c_ItSubDevice);
             }
-            else if (c_ItSubDevice->first.u32_NodeIndex == ou32_Index)
+            else if (c_ItSubDevice.key().u32_NodeIndex == ou32_Index)
             {
                //Should not happen here
                Q_ASSERT(false);
                //Remove
-               c_ItSubDevice = c_ItManager->second.c_CanOpenDevices.erase(c_ItSubDevice);
+               c_ItSubDevice = c_ItManager.value().c_CanOpenDevices.erase(c_ItSubDevice);
             }
             else
             {
@@ -1521,11 +1521,11 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleSyncNodeAboutToBeDeletedForCanOpenDevic
             }
          }
          //Re-add adapted elements
-         for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItNewSubDevice =
+         for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItNewSubDevice =
                  c_Storage.begin();
               c_ItNewSubDevice != c_Storage.end(); ++c_ItNewSubDevice)
          {
-            c_ItManager->second.c_CanOpenDevices[c_ItNewSubDevice->first] = c_ItNewSubDevice->second;
+            c_ItManager.value().c_CanOpenDevices[c_ItNewSubDevice.key()] = c_ItNewSubDevice.value();
          }
       }
    }
@@ -1632,23 +1632,23 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleChangeConnectionForCanOpenDevices(const
       for (uint32_t u32_ItNode = 0UL; u32_ItNode < this->mc_CoreDefinition.c_Nodes.size(); ++u32_ItNode)
       {
          C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[u32_ItNode];
-         for (std::map<uint8_t, C_OscCanOpenManagerInfo>::iterator c_ItManager =
+         for (QHash<uint8_t, C_OscCanOpenManagerInfo>::iterator c_ItManager =
                  rc_Node.c_CanOpenManagers.begin();
               c_ItManager != rc_Node.c_CanOpenManagers.end(); ++c_ItManager)
          {
-            std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> c_Storage;
-            for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice =
-                    c_ItManager->second.c_CanOpenDevices.begin();
-                 c_ItSubDevice != c_ItManager->second.c_CanOpenDevices.end();)
+            QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> c_Storage;
+            for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItSubDevice =
+                    c_ItManager.value().c_CanOpenDevices.begin();
+                 c_ItSubDevice != c_ItManager.value().c_CanOpenDevices.end();)
             {
-               if ((c_ItSubDevice->first.u32_NodeIndex == ou32_NodeIndex) &&
-                   (c_ItSubDevice->first.u8_InterfaceNumber == orc_PrevId.u8_InterfaceNumber))
+               if ((c_ItSubDevice.key().u32_NodeIndex == ou32_NodeIndex) &&
+                   (c_ItSubDevice.key().u8_InterfaceNumber == orc_PrevId.u8_InterfaceNumber))
                {
                   //Adapt
-                  C_OscCanInterfaceId c_Tmp = c_ItSubDevice->first;
+                  C_OscCanInterfaceId c_Tmp = c_ItSubDevice.key();
                   c_Tmp.u8_InterfaceNumber = ou8_NewInterface;
-                  c_Storage[c_Tmp] = c_ItSubDevice->second;
-                  c_ItSubDevice = c_ItManager->second.c_CanOpenDevices.erase(c_ItSubDevice);
+                  c_Storage[c_Tmp] = c_ItSubDevice.value();
+                  c_ItSubDevice = c_ItManager.value().c_CanOpenDevices.erase(c_ItSubDevice);
                }
                else
                {
@@ -1657,11 +1657,11 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleChangeConnectionForCanOpenDevices(const
                }
             }
             //Re-add adapted elements
-            for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItNewSubDevice =
+            for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::iterator c_ItNewSubDevice =
                     c_Storage.begin();
                  c_ItNewSubDevice != c_Storage.end(); ++c_ItNewSubDevice)
             {
-               c_ItManager->second.c_CanOpenDevices[c_ItNewSubDevice->first] = c_ItNewSubDevice->second;
+               c_ItManager.value().c_CanOpenDevices[c_ItNewSubDevice.key()] = c_ItNewSubDevice.value();
             }
          }
       }
@@ -1687,7 +1687,7 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleChangeConnectionForCanOpenManager(const
       {
          C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
 
-         const std::map<uint8_t,
+         const QHash<uint8_t,
                         C_OscCanOpenManagerInfo>::const_iterator c_ItPrev = rc_Node.c_CanOpenManagers.find(
             orc_PrevId.u8_InterfaceNumber);
          if (c_ItPrev != rc_Node.c_CanOpenManagers.end())
@@ -1697,7 +1697,7 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleChangeConnectionForCanOpenManager(const
             //May not exist
             this->DeleteCanOpenManager(ou32_NodeIndex, ou8_NewInterface, false, q_Tmp);
             //Move
-            Q_ASSERT(this->AddCanOpenManager(ou32_NodeIndex, ou8_NewInterface, c_ItPrev->second,
+            Q_ASSERT(this->AddCanOpenManager(ou32_NodeIndex, ou8_NewInterface, c_ItPrev.value(),
                                                q_Tmp) == C_NO_ERR);
             //Remove deprecated config
             //Don't use interface as messages should be kept
@@ -2129,11 +2129,11 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleChangeCompleteConnectionForCanOpenDevic
       for (uint32_t u32_ItNode = 0UL; u32_ItNode < this->mc_CoreDefinition.c_Nodes.size(); ++u32_ItNode)
       {
          const C_OscNode & rc_Node = this->mc_CoreDefinition.c_Nodes[u32_ItNode];
-         for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
+         for (QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
                  rc_Node.c_CanOpenManagers.begin();
               c_ItManager != rc_Node.c_CanOpenManagers.end(); ++c_ItManager)
          {
-            this->DeleteCanOpenManagerDevice(u32_ItNode, c_ItManager->first, c_Id);
+            this->DeleteCanOpenManagerDevice(u32_ItNode, c_ItManager.key(), c_Id);
          }
       }
    }
@@ -2195,15 +2195,15 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleOsyNodeIdChangeForCanOpenManager(const 
       if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size())
       {
          C_OscNode & rc_OscNode = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-         const std::map<uint8_t,
+         const QHash<uint8_t,
                         C_OscCanOpenManagerInfo>::iterator c_ItCanOpenManager = rc_OscNode.c_CanOpenManagers.find(
             u8_InterfaceNumber);
          if (c_ItCanOpenManager != rc_OscNode.c_CanOpenManagers.end())
          {
             //TODO SSI check
-            if (c_ItCanOpenManager->second.q_UseOpenSydeNodeId == true)
+            if (c_ItCanOpenManager.value().q_UseOpenSydeNodeId == true)
             {
-               c_ItCanOpenManager->second.u8_NodeIdValue = ou8_NewNodeId;
+               c_ItCanOpenManager.value().u8_NodeIdValue = ou8_NewNodeId;
             }
          }
       }
@@ -2230,19 +2230,19 @@ void C_PuiSdHandlerCanOpenLogic::m_HandleOsyNodeIdChangeForCanOpenDevice(const u
       for (uint32_t u32_ItNode = 0UL; u32_ItNode < this->mc_CoreDefinition.c_Nodes.size(); ++u32_ItNode)
       {
          C_OscNode & rc_OscNode = this->mc_CoreDefinition.c_Nodes[u32_ItNode];
-         for (std::map<uint8_t,
+         for (QHash<uint8_t,
                        C_OscCanOpenManagerInfo>::iterator c_ItCanOpenManager = rc_OscNode.c_CanOpenManagers.begin();
               c_ItCanOpenManager != rc_OscNode.c_CanOpenManagers.end(); ++c_ItCanOpenManager)
          {
-            const std::map<C_OscCanInterfaceId,
+            const QHash<C_OscCanInterfaceId,
                            C_OscCanOpenManagerDeviceInfo>::iterator c_ItCanOpenDevice =
-               c_ItCanOpenManager->second.c_CanOpenDevices.find(c_DeviceId);
-            if (c_ItCanOpenDevice != c_ItCanOpenManager->second.c_CanOpenDevices.end())
+               c_ItCanOpenManager.value().c_CanOpenDevices.find(c_DeviceId);
+            if (c_ItCanOpenDevice != c_ItCanOpenManager.value().c_CanOpenDevices.end())
             {
                //TODO SSI check
-               if (c_ItCanOpenDevice->second.q_UseOpenSydeNodeId == true)
+               if (c_ItCanOpenDevice.value().q_UseOpenSydeNodeId == true)
                {
-                  c_ItCanOpenDevice->second.u8_NodeIdValue = ou8_NewNodeId;
+                  c_ItCanOpenDevice.value().u8_NodeIdValue = ou8_NewNodeId;
                }
             }
          }
@@ -2340,14 +2340,14 @@ void C_PuiSdHandlerCanOpenLogic::m_HandlePdoSyncChangeForCanOpenMessages(const u
              (rc_Node.c_Properties.c_ComInterfaces[u32_InterfaceIndex].u8_InterfaceNumber == ou8_InterfaceNumber))
          {
             // Get the CANopen manager
-            const std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItCoManager =
+            const QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItCoManager =
                rc_Node.c_CanOpenManagers.find(ou8_InterfaceNumber);
 
             if (c_ItCoManager != rc_Node.c_CanOpenManagers.end())
             {
                uint32_t u32_ProtCounter;
                // The timeout interval must be updated if the SYNC PDO period time was changed
-               const uint32_t u32_SyncPeriodMs = c_ItCoManager->second.u32_SyncCyclePeriodUs / 1000U;
+               const uint32_t u32_SyncPeriodMs = c_ItCoManager.value().u32_SyncCyclePeriodUs / 1000U;
                const C_PuiSdNode & rc_UiNode = this->mc_UiNodes[ou32_NodeIndex];
 
                // Search the CANopen protocol

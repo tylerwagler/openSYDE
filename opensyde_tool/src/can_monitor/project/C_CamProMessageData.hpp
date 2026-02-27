@@ -52,7 +52,44 @@ public:
   uint16_t u16_Dlc;
   uint32_t u32_Id;
   QList<uint8_t> c_Bytes;
+  bool q_SetAutoSupportMode;
 
+  void CalcHash(uint32_t &oru32_HashValue) const;
+  stw::can::T_STWCAN_Msg_TX ToCanMessage(void) const;
+
+  enum E_GenericUint32DataSelector {
+    eGUIDS_ID = 0,
+    eGUIDS_DLC,
+    eGUIDS_DB0,
+    eGUIDS_DB1,
+    eGUIDS_DB2,
+    eGUIDS_DB3,
+    eGUIDS_DB4,
+    eGUIDS_DB5,
+    eGUIDS_DB6,
+    eGUIDS_DB7,
+    eGUIDS_CYCLIC_TIME
+  };
+
+  enum E_GenericBoolDataSelector {
+    eGBODS_EXTENDED = 0,
+    eGBODS_RTR,
+    eGBODS_DO_CYCLIC,
+    eGBODS_AUTO_SUPPORT
+  };
+
+  // Get
+  bool GetExtended(void) const;
+  bool GetRtr(void) const;
+
+  // Set
+  void SetMessageUint32Value(
+      const C_CamProMessageData::E_GenericUint32DataSelector oe_Selector,
+      const uint32_t ou32_Value);
+  void SetMessageBoolValue(
+      const C_CamProMessageData::E_GenericBoolDataSelector oe_Selector,
+      const bool oq_Value);
+  void SetMessageKey(const QString &orc_Key, const uint32_t ou32_Offset);
   int32_t SetMessageDataBytes(const QList<uint8_t> &orc_DataBytes);
   static uint8_t h_GetBoolValue(const bool oq_Value);
 };

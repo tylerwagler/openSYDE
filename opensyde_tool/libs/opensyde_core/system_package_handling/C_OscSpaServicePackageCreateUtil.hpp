@@ -13,10 +13,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "C_OscSystemDefinition.hpp"
+#include <QSet>
 #include <QString>
 #include <QStringList>
-#include <set>
-
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -49,23 +48,23 @@ public:
       const QString &orc_PackagePath, const QString &orc_TemporaryDirectory,
       const QString &orc_UseCase, const QString &orc_PackageExtension,
       const QString &orc_TemporaryPackageExtension,
-      const QStringList &orc_AllStaticSubFolders,
-      QString &orc_UsedTempPath, QString &orc_ErrorMessage);
+      const QStringList &orc_AllStaticSubFolders, QString &orc_UsedTempPath,
+      QString &orc_ErrorMessage);
   static int32_t h_SaveSystemDefinition(
       const C_OscSystemDefinition &orc_SystemDefinition,
       const QString &orc_SystemDefinitionFileName, const QString &orc_UseCase,
       const QString &orc_UsedTempPath, const QString &orc_OutFilePrefix,
-      std::set<QString> &orc_AllCreatedFiles, QString &orc_ErrorMessage);
+      QSet<QString> &orc_AllCreatedFiles, QString &orc_ErrorMessage);
   static int32_t h_SaveDeviceDefinitionsAndIni(
       const C_OscSystemDefinition &orc_SystemDefinition,
       const QString &orc_UseCase, const QString &orc_UsedTempPath,
-      const QString &orc_OutFilePrefix, std::set<QString> &orc_AllCreatedFiles,
+      const QString &orc_OutFilePrefix, QSet<QString> &orc_AllCreatedFiles,
       QString &orc_ErrorMessage);
-  static int32_t h_CreateZip(const QString &orc_UseCase,
-                             const QString &orc_UsedTempPath,
-                             const QString &orc_ZipFilePath,
-                             const std::set<QString> &orc_AllCreatedFiles,
-                             QString &orc_ErrorMessage);
+   static int32_t h_CreateZip(const QString &orc_UseCase,
+                              const QString &orc_UsedTempPath,
+                              const QString &orc_ZipFilePath,
+                              const QSet<QString> &orc_AllCreatedFiles,
+                              QString &orc_ErrorMessage);
   static void h_CleanUpTempFolder(const QString &orc_UseCase,
                                   const QString &orc_UsedTempPath,
                                   int32_t &ors32_ErrVal,
@@ -76,7 +75,7 @@ private:
 
   static int32_t
   mh_CreateDeviceIniFile(const QString &orc_Path,
-                         const std::set<QString> &orc_DeviceDefinitionPaths,
+                         const QSet<QString> &orc_DeviceDefinitionPaths,
                          QString &orc_ErrorMessage);
 };
 

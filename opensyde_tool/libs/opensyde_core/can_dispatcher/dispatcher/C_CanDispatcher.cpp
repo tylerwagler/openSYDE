@@ -8,33 +8,47 @@
    Incoming messages will be reported in an installable queue.
    This class also allows to add RX-fiters.
 
-   \copyright   Copyright 2010 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2010 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp" //pre-compiled headers
 
-#include "stwtypes.hpp"
-#include "stwerrors.hpp"
 #include "C_CanDispatcher.hpp"
+#include "stwerrors.hpp"
+#include "stwtypes.hpp"
 #include <QMutexLocker>
-
 
 using namespace stw::errors;
 using namespace stw::can;
 
-/* -- Defines ------------------------------------------------------------------------------------------------------- */
+/* -- Defines
+ * -------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   constructor
@@ -42,9 +56,8 @@ using namespace stw::can;
    Init instance.
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_CanRxFilter::C_CanRxFilter(void)
-{
-   this->PassAll(); //default: let all messages pass
+C_CanRxFilter::C_CanRxFilter(void) {
+  this->PassAll(); // default: let all messages pass
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -53,16 +66,15 @@ C_CanRxFilter::C_CanRxFilter(void)
    Shortcut utility: Set filters to let all messages pass.
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CanRxFilter::PassAll(void)
-{
-   u32_Code = 0U;
-   u32_Mask = 0U;
+void C_CanRxFilter::PassAll(void) {
+  u32_Code = 0U;
+  u32_Mask = 0U;
 
-   q_XTDMustMatch = false;
-   q_RTRMustMatch = false;
+  q_XTDMustMatch = false;
+  q_RTRMustMatch = false;
 
-   q_XTD = false;
-   q_RTR = false;
+  q_XTD = false;
+  q_RTR = false;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -77,15 +89,15 @@ void C_CanRxFilter::PassAll(void)
                           false -> ID must not be an RTR ID
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CanRxFilter::PassOneID(const uint32_t ou32_ID, const bool oq_ExtID, const bool oq_RTR)
-{
-   u32_Code = ou32_ID;
-   u32_Mask = 0xFFFFFFFFUL;
+void C_CanRxFilter::PassOneID(const uint32_t ou32_ID, const bool oq_ExtID,
+                              const bool oq_RTR) {
+  u32_Code = ou32_ID;
+  u32_Mask = 0xFFFFFFFFUL;
 
-   q_XTD = oq_ExtID;
-   q_XTDMustMatch = true;
-   q_RTR = oq_RTR;
-   q_RTRMustMatch = true;
+  q_XTD = oq_ExtID;
+  q_XTDMustMatch = true;
+  q_RTR = oq_RTR;
+  q_RTRMustMatch = true;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -100,14 +112,15 @@ void C_CanRxFilter::PassOneID(const uint32_t ou32_ID, const bool oq_ExtID, const
    false   -> message can not pass filter
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_CanRxFilter::DoesMessagePass(const T_STWCAN_Msg_RX & orc_Message) const
-{
-   bool q_Pass;
+bool C_CanRxFilter::DoesMessagePass(const T_STWCAN_Msg_RX &orc_Message) const {
+  bool q_Pass;
 
-   q_Pass  = ((orc_Message.u32_ID & u32_Mask) == u32_Code) ? true : false;
-   q_Pass = q_Pass && ((q_XTDMustMatch == false) || (static_cast<uint8_t>(q_XTD) == orc_Message.u8_XTD));
-   q_Pass = q_Pass && ((q_RTRMustMatch == false) || (static_cast<uint8_t>(q_RTR) == orc_Message.u8_RTR));
-   return q_Pass;
+  q_Pass = ((orc_Message.u32_ID & u32_Mask) == u32_Code) ? true : false;
+  q_Pass = q_Pass && ((q_XTDMustMatch == false) ||
+                      (static_cast<uint8_t>(q_XTD) == orc_Message.u8_XTD));
+  q_Pass = q_Pass && ((q_RTRMustMatch == false) ||
+                      (static_cast<uint8_t>(q_RTR) == orc_Message.u8_RTR));
+  return q_Pass;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -116,11 +129,10 @@ bool C_CanRxFilter::DoesMessagePass(const T_STWCAN_Msg_RX & orc_Message) const
    Init instance.
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_CanRxQueue::C_CanRxQueue(void)
-{
-   //set a default that should be fine for many application cases:
-   mu32_MaxSize = mu32_CAN_QUEUE_DEFAULT_MAX_SIZE;
-   ms32_Status = C_NO_ERR;
+C_CanRxQueue::C_CanRxQueue(void) {
+  // set a default that should be fine for many application cases:
+  mu32_MaxSize = mu32_CAN_QUEUE_DEFAULT_MAX_SIZE;
+  ms32_Status = C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -136,27 +148,20 @@ C_CanRxQueue::C_CanRxQueue(void)
    C_NOACT     could not add new element -> not added
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanRxQueue::Push(const T_STWCAN_Msg_RX & orc_Message)
-{
-   int32_t s32_Return = C_NO_ERR;
+int32_t C_CanRxQueue::Push(const T_STWCAN_Msg_RX &orc_Message) {
+  int32_t s32_Return = C_NO_ERR;
 
-   if (mc_Messages.size() >= mu32_MaxSize)
-   {
-      s32_Return = C_OVERFLOW;
-   }
-   else
-   {
-      try
-      {
-         mc_Messages.push_back(orc_Message);
-      }
-      catch (...)
-      {
-         s32_Return = C_NOACT; //probably out of memory
-      }
-   }
-   ms32_Status = s32_Return;
-   return s32_Return;
+  if (mc_Messages.size() >= mu32_MaxSize) {
+    s32_Return = C_OVERFLOW;
+  } else {
+    try {
+      mc_Messages.push_back(orc_Message);
+    } catch (...) {
+      s32_Return = C_NOACT; // probably out of memory
+    }
+  }
+  ms32_Status = s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -171,38 +176,33 @@ int32_t C_CanRxQueue::Push(const T_STWCAN_Msg_RX & orc_Message)
    C_NOACT     no element available
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanRxQueue::Pop(T_STWCAN_Msg_RX & orc_Message)
-{
-   int32_t s32_Return = C_NO_ERR;
+int32_t C_CanRxQueue::Pop(T_STWCAN_Msg_RX &orc_Message) {
+  int32_t s32_Return = C_NO_ERR;
 
-   if (mc_Messages.size() < 1U)
-   {
-      s32_Return = C_NOACT;
-   }
-   else
-   {
-      orc_Message = mc_Messages.front(); //get element from queue
-      mc_Messages.pop_front();           //delete element from queue
-   }
-   return s32_Return;
+  if (mc_Messages.size() < 1U) {
+    s32_Return = C_NOACT;
+  } else {
+    orc_Message = mc_Messages.front(); // get element from queue
+    mc_Messages.pop_front();           // delete element from queue
+  }
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set maximum queue size
 
    Set the maximum possible number of queue entries.
-   If the queue already contains more entries than the new maximum value it is downsized.
+   If the queue already contains more entries than the new maximum value it is
+   downsized.
 
    \param[in]   ou32_MaxSize  maximum number of entries in queue
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CanRxQueue::SetMaxSize(const uint32_t ou32_MaxSize)
-{
-   mu32_MaxSize = ou32_MaxSize;
-   if (mc_Messages.size() > mu32_MaxSize)
-   {
-      mc_Messages.resize(mu32_MaxSize);
-   }
+void C_CanRxQueue::SetMaxSize(const uint32_t ou32_MaxSize) {
+  mu32_MaxSize = ou32_MaxSize;
+  if (mc_Messages.size() > mu32_MaxSize) {
+    mc_Messages.resize(mu32_MaxSize);
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -214,10 +214,7 @@ void C_CanRxQueue::SetMaxSize(const uint32_t ou32_MaxSize)
    Configured maximum
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint32_t C_CanRxQueue::GetMaxSize(void) const
-{
-   return mu32_MaxSize;
-}
+uint32_t C_CanRxQueue::GetMaxSize(void) const { return mu32_MaxSize; }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get actual queue size
@@ -228,9 +225,8 @@ uint32_t C_CanRxQueue::GetMaxSize(void) const
    Actual queue size
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint32_t C_CanRxQueue::GetSize(void) const
-{
-   return static_cast<uint32_t>(mc_Messages.size());
+uint32_t C_CanRxQueue::GetSize(void) const {
+  return static_cast<uint32_t>(mc_Messages.size());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -239,10 +235,7 @@ uint32_t C_CanRxQueue::GetSize(void) const
    Clear all queue entries.
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CanRxQueue::Clear(void)
-{
-   mc_Messages.clear();
-}
+void C_CanRxQueue::Clear(void) { mc_Messages.clear(); }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get queue status
@@ -256,12 +249,11 @@ void C_CanRxQueue::Clear(void)
    C_NOACT    -> internal problem (e.g. out of memory)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanRxQueue::GetStatus(void)
-{
-   const int32_t s32_Return = ms32_Status;
+int32_t C_CanRxQueue::GetStatus(void) {
+  const int32_t s32_Return = ms32_Status;
 
-   ms32_Status = C_NO_ERR;
-   return s32_Return;
+  ms32_Status = C_NO_ERR;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -270,10 +262,8 @@ int32_t C_CanRxQueue::GetStatus(void)
    Init instance.
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_CanDispatcher::C_CanDispatcher(void) :
-   C_CanBase()
-{
-   //nothing to do yet
+C_CanDispatcher::C_CanDispatcher(void) : C_CanBase() {
+  // nothing to do yet
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -284,10 +274,9 @@ C_CanDispatcher::C_CanDispatcher(void) :
    \param[in]  ou8_CommChannel  communication driver channel
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_CanDispatcher::C_CanDispatcher(const uint8_t ou8_CommChannel) :
-   C_CanBase(ou8_CommChannel)
-{
-   //nothing to do yet
+C_CanDispatcher::C_CanDispatcher(const uint8_t ou8_CommChannel)
+    : C_CanBase(ou8_CommChannel) {
+  // nothing to do yet
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -296,68 +285,69 @@ C_CanDispatcher::C_CanDispatcher(const uint8_t ou8_CommChannel) :
    Clean up instance.
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_CanDispatcher::~C_CanDispatcher(void)
-{
-   //nothing more than base class destrcutor to do yet ...
-   //RX-queue will clean up itself
+C_CanDispatcher::~C_CanDispatcher(void) {
+  // nothing more than base class destrcutor to do yet ...
+  // RX-queue will clean up itself
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Reception handler call.
 
-   Check for incoming messages apply RX filters and place messages that pass into registered RX FIFOs.
-   Can be called from one central point. But calling it from multiple positions will also not hurt
-   (e.g. for one client doing synchronous communication).
+   Check for incoming messages apply RX filters and place messages that pass
+   into registered RX FIFOs. Can be called from one central point. But calling
+   it from multiple positions will also not hurt (e.g. for one client doing
+   synchronous communication).
 
    \return
-   Number of newly received messages. Caution: unless the caller can be sure it is the only one it shall not rely on
-   the return value to report newly received messages as some other client could have called DispatchIncoming()
-   in the meantime resulting in messages being placed in the registered RX-Queue even though this function returns 0.
+   Number of newly received messages. Caution: unless the caller can be sure it
+   is the only one it shall not rely on the return value to report newly
+   received messages as some other client could have called DispatchIncoming()
+   in the meantime resulting in messages being placed in the registered RX-Queue
+   even though this function returns 0.
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::DispatchIncoming(void)
-{
-   T_STWCAN_Msg_RX t_Msg;
-   int32_t s32_Return = C_NO_ERR;
-   int32_t s32_NumMessages = 0;
-   int32_t s32_Loop;
+int32_t C_CanDispatcher::DispatchIncoming(void) {
+  T_STWCAN_Msg_RX t_Msg;
+  int32_t s32_Return = C_NO_ERR;
+  int32_t s32_NumMessages = 0;
+  int32_t s32_Loop;
 
-   while (s32_Return == C_NO_ERR)
-   {
-      // Need to lock the read of the message too, because of the order of pushing the messages in the queue
-      // by at least two threads is not guaranteed if only the push is locked.
-      // An older message could be pushed into the queue after a newer message.
-      {
-         QMutexLocker c_Lock(&mc_CriticalSection);
-         s32_Return = m_CAN_Read_Msg(t_Msg);
-         if (s32_Return == C_NO_ERR)
-         {
-            s32_NumMessages++;
-            for (s32_Loop = 0; s32_Loop < mc_InstalledClients.size(); s32_Loop++)
-            {
-               if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(t_Msg) == true)
-               {
-                  (void)mc_InstalledClients[s32_Loop].c_RXQueue.Push(t_Msg);
-               }
-            }
-         }
+  while (s32_Return == C_NO_ERR) {
+    // Need to lock the read of the message too, because of the order of pushing
+    // the messages in the queue by at least two threads is not guaranteed if
+    // only the push is locked. An older message could be pushed into the queue
+    // after a newer message.
+    {
+      QMutexLocker c_Lock(&mc_CriticalSection);
+      s32_Return = m_CAN_Read_Msg(t_Msg);
+      if (s32_Return == C_NO_ERR) {
+        s32_NumMessages++;
+        for (s32_Loop = 0; s32_Loop < mc_InstalledClients.size(); s32_Loop++) {
+          if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(t_Msg) ==
+              true) {
+            (void)mc_InstalledClients[s32_Loop].c_RXQueue.Push(t_Msg);
+          }
+        }
       }
-   }
+    }
+  }
 
-   return s32_NumMessages;
+  return s32_NumMessages;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Register RX client.
 
-   Register interest in received messages. Optionally an RX filter can be specified.
-   A queue for the registered client will be added to the list maintained in this class.
+   Register interest in received messages. Optionally an RX filter can be
+   specified. A queue for the registered client will be added to the list
+   maintained in this class.
 
    The registered queue will be added to the list maintained in this class.
-   Subsequent incoming messages detected in DispatchIncoming() will be added to all registered queues.
+   Subsequent incoming messages detected in DispatchIncoming() will be added to
+   all registered queues.
 
-   \param[out]    oru16_Handle      Handle to RX queue to be used in subsequent actions
-   \param[in]     opc_RXFilter      RX filter configuration (optional)
+   \param[out]    oru16_Handle      Handle to RX queue to be used in subsequent
+   actions \param[in]     opc_RXFilter      RX filter configuration (optional)
    \param[in]     oru32_BufferSize  size of buffer for this client
 
    \return
@@ -365,52 +355,58 @@ int32_t C_CanDispatcher::DispatchIncoming(void)
    C_OVERFLOW -> too many clients installed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFilter * const opc_RXFilter,
-                                        const uint32_t & oru32_BufferSize)
-{
-   uint16_t u16_Handle;
-   bool q_Found = false;
+int32_t C_CanDispatcher::RegisterClient(uint16_t &oru16_Handle,
+                                        const C_CanRxFilter *const opc_RXFilter,
+                                        const uint32_t &oru32_BufferSize) {
+  uint16_t u16_Handle;
+  bool q_Found = false;
 
-   if ((mc_InstalledClients.size() > 0 ? mc_InstalledClients.size() - 1 : 0) >= 0xFFFF)
-   {
-      return C_OVERFLOW;
-   }
+  if ((mc_InstalledClients.size() > 0 ? mc_InstalledClients.size() - 1 : 0) >=
+      0xFFFF) {
+    return C_OVERFLOW;
+  }
 
-   mc_InstalledClients.resize(mc_InstalledClients.size() + 1);
-   if (opc_RXFilter != NULL)
-   {
-      mc_InstalledClients[(mc_InstalledClients.size() > 0 ? mc_InstalledClients.size() - 1 : 0)].c_RXFilter = *opc_RXFilter;
-   }
-   else
-   {
-      mc_InstalledClients[(mc_InstalledClients.size() > 0 ? mc_InstalledClients.size() - 1 : 0)].c_RXFilter.PassAll();
-   }
-   mc_InstalledClients[(mc_InstalledClients.size() > 0 ? mc_InstalledClients.size() - 1 : 0)].c_RXQueue.SetMaxSize(oru32_BufferSize);
+  mc_InstalledClients.resize(mc_InstalledClients.size() + 1);
+  if (opc_RXFilter != NULL) {
+    mc_InstalledClients[(mc_InstalledClients.size() > 0
+                             ? mc_InstalledClients.size() - 1
+                             : 0)]
+        .c_RXFilter = *opc_RXFilter;
+  } else {
+    mc_InstalledClients[(mc_InstalledClients.size() > 0
+                             ? mc_InstalledClients.size() - 1
+                             : 0)]
+        .c_RXFilter.PassAll();
+  }
+  mc_InstalledClients[(mc_InstalledClients.size() > 0
+                           ? mc_InstalledClients.size() - 1
+                           : 0)]
+      .c_RXQueue.SetMaxSize(oru32_BufferSize);
 
-   //is there a free one ?
-   for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.size(); u16_Handle++)
-   {
-      if (mc_ClientsByHandle[u16_Handle] == NULL)
-      {
-         q_Found = true;
-         break;
-      }
-   }
+  // is there a free one ?
+  for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.size(); u16_Handle++) {
+    if (mc_ClientsByHandle[u16_Handle] == NULL) {
+      q_Found = true;
+      break;
+    }
+  }
 
-   if (q_Found == true)
-   {
-      //insert here !
-      mc_InstalledClients[(mc_InstalledClients.size() > 0 ? mc_InstalledClients.size() - 1 : 0)].u16_Handle = u16_Handle;
-   }
-   else
-   {
-      mc_InstalledClients[(mc_InstalledClients.size() > 0 ? mc_InstalledClients.size() - 1 : 0)].u16_Handle =
-         static_cast<uint16_t>(mc_ClientsByHandle.size());
-   }
+  if (q_Found == true) {
+    // insert here !
+    mc_InstalledClients[(mc_InstalledClients.size() > 0
+                             ? mc_InstalledClients.size() - 1
+                             : 0)]
+        .u16_Handle = u16_Handle;
+  } else {
+    mc_InstalledClients[(mc_InstalledClients.size() > 0
+                             ? mc_InstalledClients.size() - 1
+                             : 0)]
+        .u16_Handle = static_cast<uint16_t>(mc_ClientsByHandle.size());
+  }
 
-   m_ResyncShortcutPointers();
-   oru16_Handle = u16_Handle;
-   return C_NO_ERR;
+  m_ResyncShortcutPointers();
+  oru16_Handle = u16_Handle;
+  return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -425,74 +421,63 @@ int32_t C_CanDispatcher::RegisterClient(uint16_t & oru16_Handle, const C_CanRxFi
    C_NOACT    -> client not found -> not removed
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::RemoveClient(const uint16_t ou16_Handle)
-{
-   uint16_t u16_Index;
+int32_t C_CanDispatcher::RemoveClient(const uint16_t ou16_Handle) {
+  uint16_t u16_Index;
 
-   if (ou16_Handle >= mc_ClientsByHandle.size())
-   {
-      return C_NOACT;
-   }
-   if (mc_ClientsByHandle[ou16_Handle] == NULL)
-   {
-      //nothing installed there ...
-      return C_NOACT;
-   }
+  if (ou16_Handle >= mc_ClientsByHandle.size()) {
+    return C_NOACT;
+  }
+  if (mc_ClientsByHandle[ou16_Handle] == NULL) {
+    // nothing installed there ...
+    return C_NOACT;
+  }
 
-   //find it in the list:
-   for (u16_Index = 0U; u16_Index < mc_InstalledClients.size(); u16_Index++)
-   {
-      if (mc_ClientsByHandle[ou16_Handle] == &mc_InstalledClients[u16_Index])
-      {
-         mc_InstalledClients.removeAt(u16_Index);
-         break;
-      }
-   }
-   m_ResyncShortcutPointers();
-   return C_NO_ERR;
+  // find it in the list:
+  for (u16_Index = 0U; u16_Index < mc_InstalledClients.size(); u16_Index++) {
+    if (mc_ClientsByHandle[ou16_Handle] == &mc_InstalledClients[u16_Index]) {
+      mc_InstalledClients.removeAt(u16_Index);
+      break;
+    }
+  }
+  m_ResyncShortcutPointers();
+  return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-void C_CanDispatcher::m_ResyncShortcutPointers(void)
-{
-   uint16_t u16_Index;
-   uint16_t u16_Handle;
-   uint16_t u16_Max;
+void C_CanDispatcher::m_ResyncShortcutPointers(void) {
+  uint16_t u16_Index;
+  uint16_t u16_Handle;
+  uint16_t u16_Max;
 
-   if (mc_InstalledClients.size() == 0)
-   {
-      mc_ClientsByHandle.resize(0);
-      return;
-   }
+  if (mc_InstalledClients.size() == 0) {
+    mc_ClientsByHandle.resize(0);
+    return;
+  }
 
-   //get greatest handle number:
-   u16_Max = 0U;
-   for (u16_Index = 0U; u16_Index < mc_InstalledClients.size(); u16_Index++)
-   {
-      if (mc_InstalledClients[u16_Index].u16_Handle > u16_Max)
-      {
-         u16_Max = mc_InstalledClients[u16_Index].u16_Handle;
-      }
-   }
-   mc_ClientsByHandle.resize(static_cast<int32_t>(u16_Max) + 1);
+  // get greatest handle number:
+  u16_Max = 0U;
+  for (u16_Index = 0U; u16_Index < mc_InstalledClients.size(); u16_Index++) {
+    if (mc_InstalledClients[u16_Index].u16_Handle > u16_Max) {
+      u16_Max = mc_InstalledClients[u16_Index].u16_Handle;
+    }
+  }
+  mc_ClientsByHandle.resize(static_cast<int32_t>(u16_Max) + 1);
 
-   //preset all pointers to zero:
-   for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.size(); u16_Handle++)
-   {
-      mc_ClientsByHandle[u16_Handle] = NULL;
-   }
+  // preset all pointers to zero:
+  for (u16_Handle = 0U; u16_Handle < mc_ClientsByHandle.size(); u16_Handle++) {
+    mc_ClientsByHandle[u16_Handle] = NULL;
+  }
 
-   for (u16_Index = 0U; u16_Index < mc_InstalledClients.size(); u16_Index++)
-   {
-      //find client with this handle
-      u16_Handle = mc_InstalledClients[u16_Index].u16_Handle;
-      if (u16_Handle > (mc_ClientsByHandle.size() > 0 ? mc_ClientsByHandle.size() - 1 : 0))
-      {
-         return; //internal problem
-      }
-      mc_ClientsByHandle[u16_Handle] = &mc_InstalledClients[u16_Index];
-   }
+  for (u16_Index = 0U; u16_Index < mc_InstalledClients.size(); u16_Index++) {
+    // find client with this handle
+    u16_Handle = mc_InstalledClients[u16_Index].u16_Handle;
+    if (u16_Handle >
+        (mc_ClientsByHandle.size() > 0 ? mc_ClientsByHandle.size() - 1 : 0)) {
+      return; // internal problem
+    }
+    mc_ClientsByHandle[u16_Handle] = &mc_InstalledClients[u16_Index];
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -510,22 +495,20 @@ void C_CanDispatcher::m_ResyncShortcutPointers(void)
    C_NOACT    -> no new message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::ReadFromQueue(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message)
-{
-   int32_t s32_Return;
+int32_t C_CanDispatcher::ReadFromQueue(const uint16_t ou16_Handle,
+                                       T_STWCAN_Msg_RX &orc_Message) {
+  int32_t s32_Return;
 
-   if (ou16_Handle >= mc_ClientsByHandle.size())
-   {
-      return C_RANGE;
-   }
-   if (mc_ClientsByHandle[ou16_Handle] == NULL)
-   {
-      return C_RANGE;
-   }
+  if (ou16_Handle >= mc_ClientsByHandle.size()) {
+    return C_RANGE;
+  }
+  if (mc_ClientsByHandle[ou16_Handle] == NULL) {
+    return C_RANGE;
+  }
 
-   QMutexLocker c_Lock(&mc_CriticalSection);
-   s32_Return = mc_ClientsByHandle[ou16_Handle]->c_RXQueue.Pop(orc_Message);
-   return s32_Return;
+  QMutexLocker c_Lock(&mc_CriticalSection);
+  s32_Return = mc_ClientsByHandle[ou16_Handle]->c_RXQueue.Pop(orc_Message);
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -540,18 +523,16 @@ int32_t C_CanDispatcher::ReadFromQueue(const uint16_t ou16_Handle, T_STWCAN_Msg_
    C_RANGE    -> invalid ou16_Handle
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle)
-{
-   int32_t s32_Return = C_RANGE;
+int32_t C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle) {
+  int32_t s32_Return = C_RANGE;
 
-   if ((ou16_Handle < mc_ClientsByHandle.size()) &&
-       (mc_ClientsByHandle[ou16_Handle] != NULL))
-   {
-      s32_Return = C_NO_ERR;
-      QMutexLocker c_Lock(&mc_CriticalSection);
-      mc_ClientsByHandle[ou16_Handle]->c_RXQueue.Clear();
-   }
-   return s32_Return;
+  if ((ou16_Handle < mc_ClientsByHandle.size()) &&
+      (mc_ClientsByHandle[ou16_Handle] != NULL)) {
+    s32_Return = C_NO_ERR;
+    QMutexLocker c_Lock(&mc_CriticalSection);
+    mc_ClientsByHandle[ou16_Handle]->c_RXQueue.Clear();
+  }
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -568,17 +549,18 @@ int32_t C_CanDispatcher::ClearQueue(const uint16_t ou16_Handle)
    C_WARN     -> no new message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::CAN_Read_Msg(const uint16_t ou16_Handle, T_STWCAN_Msg_RX & orc_Message)
-{
-   this->DispatchIncoming();
-   return ReadFromQueue(ou16_Handle, orc_Message);
+int32_t C_CanDispatcher::CAN_Read_Msg(const uint16_t ou16_Handle,
+                                      T_STWCAN_Msg_RX &orc_Message) {
+  this->DispatchIncoming();
+  return ReadFromQueue(ou16_Handle, orc_Message);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Read message
 
    Dispatch a maximum of one incoming message then return it.
-   This function is useful for clients that did not explicitely install a queue as they are strictly sequential.
+   This function is useful for clients that did not explicitely install a queue
+   as they are strictly sequential.
 
    \param[out] orc_Message   new message
 
@@ -587,30 +569,25 @@ int32_t C_CanDispatcher::CAN_Read_Msg(const uint16_t ou16_Handle, T_STWCAN_Msg_R
    C_WARN     -> no new message
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
-{
-   int32_t s32_Return;
-   int32_t s32_Loop;
+int32_t C_CanDispatcher::CAN_Read_Msg(T_STWCAN_Msg_RX &orc_Message) {
+  int32_t s32_Return;
+  int32_t s32_Loop;
 
-   s32_Return = m_CAN_Read_Msg(orc_Message);
-   if (s32_Return == C_NO_ERR)
-   {
-      //dispatch to installed clients:
-      for (s32_Loop = 0; s32_Loop < mc_InstalledClients.size(); s32_Loop++)
-      {
-         if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(orc_Message) == true)
-         {
-            QMutexLocker c_Lock(&mc_CriticalSection);
-            (void)mc_InstalledClients[s32_Loop].c_RXQueue.Push(orc_Message);
-         }
+  s32_Return = m_CAN_Read_Msg(orc_Message);
+  if (s32_Return == C_NO_ERR) {
+    // dispatch to installed clients:
+    for (s32_Loop = 0; s32_Loop < mc_InstalledClients.size(); s32_Loop++) {
+      if (mc_InstalledClients[s32_Loop].c_RXFilter.DoesMessagePass(
+              orc_Message) == true) {
+        QMutexLocker c_Lock(&mc_CriticalSection);
+        (void)mc_InstalledClients[s32_Loop].c_RXQueue.Push(orc_Message);
       }
-   }
-   else
-   {
-      s32_Return = C_WARN;
-   }
+    }
+  } else {
+    s32_Return = C_WARN;
+  }
 
-   return s32_Return;
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -627,17 +604,15 @@ int32_t C_CanDispatcher::CAN_Read_Msg(T_STWCAN_Msg_RX & orc_Message)
    C_RANGE    -> invalid handle
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_CanDispatcher::SetRXFilter(const uint16_t ou16_Handle, const C_CanRxFilter & orc_RXFilter)
-{
-   if (ou16_Handle >= mc_ClientsByHandle.size())
-   {
-      return C_RANGE;
-   }
-   if (mc_ClientsByHandle[ou16_Handle] == NULL)
-   {
-      return C_RANGE;
-   }
+int32_t C_CanDispatcher::SetRXFilter(const uint16_t ou16_Handle,
+                                     const C_CanRxFilter &orc_RXFilter) {
+  if (ou16_Handle >= mc_ClientsByHandle.size()) {
+    return C_RANGE;
+  }
+  if (mc_ClientsByHandle[ou16_Handle] == NULL) {
+    return C_RANGE;
+  }
 
-   mc_ClientsByHandle[ou16_Handle]->c_RXFilter = orc_RXFilter;
-   return C_NO_ERR;
+  mc_ClientsByHandle[ou16_Handle]->c_RXFilter = orc_RXFilter;
+  return C_NO_ERR;
 }

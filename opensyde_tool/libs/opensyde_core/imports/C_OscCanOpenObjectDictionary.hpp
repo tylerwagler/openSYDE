@@ -15,9 +15,9 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QList>
 #include <map>
 #include <set>
-#include <QList>
 
 #include "stwtypes.hpp"
 #include <QString>
@@ -192,8 +192,7 @@ public:
   bool IsEmcySupported() const;
   uint8_t GetGranularity() const;
   QSet<uint8_t> GetAllAvailableFactorySettingsSubIndices() const;
-  QSet<uint8_t>
-  GetAllAvailableSubIndices(const uint16_t ou16_OdIndex) const;
+  QSet<uint8_t> GetAllAvailableSubIndices(const uint16_t ou16_OdIndex) const;
 
   // Message
   bool DoesInhibitTimeSectionExist(const uint16_t ou16_PdoIndex,
@@ -221,8 +220,8 @@ public:
                            const uint8_t ou8_OdSubIndex) const;
   bool CheckObjectPresentByIndex(const uint16_t ou16_OdIndex,
                                  const uint8_t ou8_OdSubIndex) const;
-  void GetMappableObjects(
-      QHash<uint32_t, QList<uint32_t>> &orc_SubIndices) const;
+  void
+  GetMappableObjects(QHash<uint32_t, QList<uint32_t>> &orc_SubIndices) const;
 
   static uint16_t
   h_GetCanOpenObjectDictionaryIndexForPdo(const uint16_t ou16_PdoIndex,

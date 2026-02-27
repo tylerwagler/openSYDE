@@ -11,7 +11,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes
- * ------------------------------------------------------------------------------------------------------ */
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
 
@@ -23,7 +24,6 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
-
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
  */
@@ -32,21 +32,25 @@ using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants
- * --------------------------------------------------------------------------------------- */
+ * ---------------------------------------------------------------------------------------
+ */
 const uint16_t C_OscDataLoggerJobFiler::mhu16_FILE_VERSION_1 = 1;
 
 /* -- Types
- * --------------------------------------------------------------------------------------------------------- */
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
 /* -- Global Variables
  * ----------------------------------------------------------------------------------------------
  */
 
 /* -- Module Global Variables
- * --------------------------------------------------------------------------------------- */
+ * ---------------------------------------------------------------------------------------
+ */
 
 /* -- Module Global Function Prototypes
- * ----------------------------------------------------------------------------- */
+ * -----------------------------------------------------------------------------
+ */
 
 /* -- Implementation
  * ------------------------------------------------------------------------------------------------
@@ -94,9 +98,9 @@ C_OscDataLoggerJobFiler::h_LoadFile(QList<C_OscDataLoggerJob> &orc_Config,
    C_CONFIG   data invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler::h_SaveFile(
-    const QList<C_OscDataLoggerJob> &orc_Config,
-    const QString &orc_Path) {
+int32_t
+C_OscDataLoggerJobFiler::h_SaveFile(const QList<C_OscDataLoggerJob> &orc_Config,
+                                    const QString &orc_Path) {
   C_OscXmlParser c_XmlParser;
   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
       c_XmlParser, orc_Path, "opensyde-data-loggers");
@@ -191,8 +195,7 @@ void C_OscDataLoggerJobFiler::h_SaveData(
   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("jobs") == "jobs");
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Config.size()));
-  for (QList<C_OscDataLoggerJob>::const_iterator c_It =
-           orc_Config.begin();
+  for (QList<C_OscDataLoggerJob>::const_iterator c_It = orc_Config.begin();
        c_It != orc_Config.end(); ++c_It) {
     Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("job") == "job");
     C_OscDataLoggerJobFiler::mh_SaveJobData(*c_It, orc_XmlParser);
@@ -684,9 +687,8 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElement(
   if (s32_Retval == C_NO_ERR) {
     s32_Retval = orc_XmlParser.SelectNodeChildError("data-pool-element");
     if (s32_Retval == C_NO_ERR) {
-      s32_Retval =
-          h_LoadDataElementOptArrayId(orc_Config.c_ConfiguredElementId,
-                                       orc_XmlParser);
+      s32_Retval = h_LoadDataElementOptArrayId(orc_Config.c_ConfiguredElementId,
+                                               orc_XmlParser);
     }
     // Return
     orc_XmlParser.SelectNodeParent();
@@ -698,8 +700,8 @@ int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElement(
 void C_OscDataLoggerJobFiler::mh_SaveConfiguredDataElement(
     const C_OscDataLoggerDataElementReference &orc_Config,
     C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.CreateNodeChild("use-custom-name",
-                                orc_Config.GetUseCustomName() ? "true" : "false");
+  orc_XmlParser.CreateNodeChild(
+      "use-custom-name", orc_Config.GetUseCustomName() ? "true" : "false");
   orc_XmlParser.CreateNodeChild("custom-name", orc_Config.GetCustomName());
   orc_XmlParser.CreateAndSelectNodeChild("data-pool-element");
   h_SaveDataElementOptArrayId(orc_Config.c_ConfiguredElementId, orc_XmlParser);

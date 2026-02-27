@@ -20,6 +20,7 @@
 #include <QList>
 #include <QMap>
 #include <QPixmap>
+#include <QSet>
 #include <QTimer>
 
 #include "C_CamMetTreeLoggerData.hpp"
@@ -65,7 +66,7 @@ public:
   // Access
   void ActionClearData(void);
   QList<int32_t>
-  AddRows(const std::list<C_CamMetTreeLoggerData> &orc_Data);
+  AddRows(const QList<C_CamMetTreeLoggerData> &orc_Data);
   void SetSelection(const int32_t os32_SelectedParentRow,
                     const int32_t os32_SelectedChildIndex);
   void SetDisplayTree(const bool oq_Value);
@@ -125,11 +126,11 @@ private:
   // communication
   QMap<QString, C_CamMetTreeLoggerData> mc_UniqueMessages;
   QMap<QString, QString> mc_UniqueMessagesOrdering;
-  QList<C_CamMetTreeLoggerData> mc_DataBase;
-  bool mq_DataUnlocked;
-  uint32_t mu32_OldestItemIndex;
-  int32_t ms32_SelectedParentRow;
-  std::set<uint16_t> mc_SelectedChildBytes;
+   QList<C_CamMetTreeLoggerData> mc_DataBase;
+   bool mq_DataUnlocked;
+   uint32_t mu32_OldestItemIndex;
+   int32_t ms32_SelectedParentRow;
+   QSet<uint16_t> mc_SelectedChildBytes;
   QList<QColor> mc_FontTransparcencyColors;
   QTimer mc_GrayOutTimer;
   bool mq_GrayOutPause;
@@ -153,8 +154,8 @@ private:
   void m_AdaptTraceBufferSize(void);
 
   QList<int32_t>
-  m_AddRowsContinuousMode(const std::list<C_CamMetTreeLoggerData> &orc_Data);
-  void m_AddRowsUnique(const std::list<C_CamMetTreeLoggerData> &orc_Data);
+  m_AddRowsContinuousMode(const QList<C_CamMetTreeLoggerData> &orc_Data);
+  void m_AddRowsUnique(const QList<C_CamMetTreeLoggerData> &orc_Data);
   void m_HandleNewUniqueMessageForExistingUniqueMessage(
       const C_CamMetTreeLoggerData &orc_Message,
       const QString &orc_ExistingMessageKey,

@@ -43,6 +43,7 @@ find_package(Qt6 REQUIRED COMPONENTS Svg)
 find_package(Qt6 REQUIRED COMPONENTS SvgWidgets)
 find_package(Qt6 REQUIRED COMPONENTS PrintSupport)
 find_package(Qt6 REQUIRED COMPONENTS Xml)
+find_package(Qt6 REQUIRED COMPONENTS SerialBus Network)
 
 # --- PROJECT INCLUDE PATHS --------------------------------------------------------------------------------------------
 
@@ -138,12 +139,25 @@ set (OPENSYDE_GUI_INCLUDES
 # Include path with library modules
 set (OPENSYDE_GUI_LIB_INCLUDES
    ${PROJECT_ROOT}/libs/flexlexer
-   ${PROJECT_ROOT}/libs/qcustomplot
-   ${PROJECT_ROOT}/libs/openssl/include
    ${PROJECT_ROOT}/libs/dbc_driver_library/src/
    ${PROJECT_ROOT}/libs/dbc_driver_library/src/Vector
    ${PROJECT_ROOT}/libs/dbc_driver_library/src/Vector/DBC
 )
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   # Use system-installed QCustomPlot and OpenSSL on Linux
+   # Keep bundled qcustomplot header (patched for QT_NO_KEYWORDS compatibility)
+   find_package(QCustomPlotQt6 REQUIRED)
+   find_package(OpenSSL REQUIRED)
+   list(APPEND OPENSYDE_GUI_LIB_INCLUDES
+      ${PROJECT_ROOT}/libs/qcustomplot
+      ${OPENSSL_INCLUDE_DIR}
+   )
+else()
+   list(APPEND OPENSYDE_GUI_LIB_INCLUDES
+      ${PROJECT_ROOT}/libs/qcustomplot
+      ${PROJECT_ROOT}/libs/openssl/include
+   )
+endif()
 
 # --- PROJECT SOURCE FILE PATHS ----------------------------------------------------------------------------------------
 
@@ -2153,14 +2167,18 @@ set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING            0)
 set(OPENSYDE_CORE_SKIP_X_CONFIG_GENERATION         1)
 set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     0)
 set(OPENSYDE_CORE_SKIP_XAPP_BASIC_FILE_HANDLING    1)
-set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS             0)
-set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET              0)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          1)
+   set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           1)
+else()
+   set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          0)
+   set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           0)
+endif()
 
 add_subdirectory(${PROJECT_ROOT}/libs/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
 
 # SET LIBRARIES
 set(OPENSYDE_LINK_LIBRARIES
-   ${PROJECT_ROOT}/libs/qcustomplot/libqcustomplot.a
    Qt6::Core
    Qt6::Gui
    Qt6::Widgets
@@ -2168,13 +2186,25 @@ set(OPENSYDE_LINK_LIBRARIES
    Qt6::SvgWidgets
    Qt6::PrintSupport
    opensyde_core
-   version
-   ws2_32   #WinSock
-   Iphlpapi #IP helper API
-   ${PROJECT_ROOT}/libs/openssl/libssl.a
-   ${PROJECT_ROOT}/libs/openssl/libcrypto.a
-
 )
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   list(APPEND OPENSYDE_LINK_LIBRARIES
+      QCustomPlotQt6
+      OpenSSL::SSL
+      OpenSSL::Crypto
+   )
+else()
+   list(PREPEND OPENSYDE_LINK_LIBRARIES
+      ${PROJECT_ROOT}/libs/qcustomplot/libqcustomplot.a
+   )
+   list(APPEND OPENSYDE_LINK_LIBRARIES
+      ${PROJECT_ROOT}/libs/openssl/libssl.a
+      ${PROJECT_ROOT}/libs/openssl/libcrypto.a
+      version
+      ws2_32   #WinSock
+      Iphlpapi #IP helper API
+   )
+endif()
 
 # COMPILER SWITCHES
 # use same compiler switches that gcc uses when compiling openSYDE core from osc_moduletest.pro file
@@ -2189,9 +2219,14 @@ set_source_files_properties(${PROJECT_ROOT}/libs/opensyde_core/miniz/miniz.c PRO
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 
 # WIN32 is necessary to suppress console opening in background
+if(WIN32)
+   set(PLATFORM_RC_FILE ${PROJECT_ROOT}/src/resources.rc)
+else()
+   set(PLATFORM_RC_FILE "")
+endif()
 qt_add_executable(openSYDE
    WIN32
-   ${PROJECT_ROOT}/src/resources.rc
+   ${PLATFORM_RC_FILE}
    ${PROJECT_ROOT}/src/application.qrc
    ${OPENSYDE_SOURCES} ${OPENSYDE_HEADERS} ${OPENSYDE_FORMS})
 
@@ -2200,7 +2235,11 @@ qt_add_executable(openSYDE
 target_include_directories(openSYDE PRIVATE ${OPENSYDE_GUI_INCLUDES})
 target_include_directories(openSYDE SYSTEM PRIVATE ${OPENSYDE_GUI_LIB_INCLUDES})
 # core also needs path to openSSL:
-target_include_directories(opensyde_core PRIVATE ${PROJECT_ROOT}/libs/openssl/include)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   target_include_directories(opensyde_core PRIVATE ${OPENSSL_INCLUDE_DIR})
+else()
+   target_include_directories(opensyde_core PRIVATE ${PROJECT_ROOT}/libs/openssl/include)
+endif()
 
 target_link_libraries(openSYDE PRIVATE ${OPENSYDE_LINK_LIBRARIES})
 

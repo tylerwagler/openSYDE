@@ -11,7 +11,9 @@
 #include "precomp_headers.hpp"
 
 #include <cmath>
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 #include <QGraphicsView>
 
@@ -490,9 +492,11 @@ bool C_GiSvPc::m_OpenCanDllDialog(void) const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_GiSvPc::mh_GetIsLaptop(void)
 {
+   bool q_Return = false;
+
+#ifdef _WIN32
    SYSTEM_POWER_STATUS c_PowerStatus;
    const int32_t s32_Success = GetSystemPowerStatus(&c_PowerStatus);
-   bool q_Return = false;
 
    if (s32_Success > 0)
    {
@@ -502,6 +506,7 @@ bool C_GiSvPc::mh_GetIsLaptop(void)
          q_Return = true;
       }
    }
+#endif
 
    return q_Return;
 }

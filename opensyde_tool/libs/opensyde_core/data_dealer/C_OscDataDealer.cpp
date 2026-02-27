@@ -21,7 +21,6 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
-
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces

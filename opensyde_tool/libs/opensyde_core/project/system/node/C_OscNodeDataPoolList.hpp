@@ -5,72 +5,88 @@
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCNODEDATAPOOLLIST_HPP
 #define C_OSCNODEDATAPOOLLIST_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
+#include "C_OscNodeDataPoolDataSet.hpp"
+#include "C_OscNodeDataPoolListElement.hpp"
+#include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
+#include "stwtypes.hpp"
+#include <QList>
+#include <QString>
 #include <iostream>
 #include <vector>
-#include <QList>
-#include "stwtypes.hpp"
-#include <QString>
-#include "C_OscNodeDataPoolListElement.hpp"
-#include "C_OscNodeDataPoolDataSet.hpp"
-#include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscNodeDataPoolList
-{
+class C_OscNodeDataPoolList {
 public:
-   C_OscNodeDataPoolList(void);
+  C_OscNodeDataPoolList(void);
 
-   void CalcHash(uint32_t & oru32_HashValue) const;
+  void CalcHash(uint32_t &oru32_HashValue) const;
 
-   void RecalculateAddress(void);
-   void MoveElement(const uint32_t & oru32_Start, const uint32_t & oru32_Target);
-   uint32_t GetNumBytesUsed(void) const;
-   int32_t GetFreeBytes(void) const;
-   void CheckErrorDataSet(const uint32_t & oru32_DataSetIndex, bool * const opq_NameConflict,
-                          bool * const opq_NameInvalid) const;
-   void CheckErrorElement(const uint32_t & oru32_ElementIndex, bool * const opq_NameConflict,
-                          bool * const opq_NameInvalid, bool * const opq_MinOverMax,
-                          bool * const opq_DataSetValueInvalid,
-                          QList<uint32_t> * const opc_InvalidDataSetIndices) const;
-   void CheckErrorDataSetValue(const uint32_t & oru32_ElementIndex, const uint32_t & oru32_DataSetIndex,
-                               bool * const opq_ValueBelowMin, bool * const opq_ValueOverMax,
-                               const uint32_t * const opu32_ArrayIndex) const;
-   void HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
-                               std::list<C_OscSystemNameMaxCharLimitChangeReportItem> * const opc_ChangedItems);
+  void RecalculateAddress(void);
+  void MoveElement(const uint32_t &oru32_Start, const uint32_t &oru32_Target);
+  uint32_t GetNumBytesUsed(void) const;
+  int32_t GetFreeBytes(void) const;
+  void CheckErrorDataSet(const uint32_t &oru32_DataSetIndex,
+                         bool *const opq_NameConflict,
+                         bool *const opq_NameInvalid) const;
+  void
+  CheckErrorElement(const uint32_t &oru32_ElementIndex,
+                    bool *const opq_NameConflict, bool *const opq_NameInvalid,
+                    bool *const opq_MinOverMax,
+                    bool *const opq_DataSetValueInvalid,
+                    QList<uint32_t> *const opc_InvalidDataSetIndices) const;
+  void CheckErrorDataSetValue(const uint32_t &oru32_ElementIndex,
+                              const uint32_t &oru32_DataSetIndex,
+                              bool *const opq_ValueBelowMin,
+                              bool *const opq_ValueOverMax,
+                              const uint32_t *const opu32_ArrayIndex) const;
+  void
+  HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
+                         QList<C_OscSystemNameMaxCharLimitChangeReportItem>
+                             *const opc_ChangedItems);
 
-   int32_t SetCrcFromBigEndianBlob(const QByteArray & orc_Data);
-   int32_t SetCrcFromLittleEndianBlob(const QByteArray & orc_Data);
-   void GetCrcAsBigEndianBlob(QByteArray & orc_Data) const;
-   void GetCrcAsLittleEndianBlob(QByteArray & orc_Data) const;
+  int32_t SetCrcFromBigEndianBlob(const QByteArray &orc_Data);
+  int32_t SetCrcFromLittleEndianBlob(const QByteArray &orc_Data);
+  void GetCrcAsBigEndianBlob(QByteArray &orc_Data) const;
+  void GetCrcAsLittleEndianBlob(QByteArray &orc_Data) const;
 
-   QString c_Name;                                       ///< User data list name
-   QString c_Comment;                                    ///< User data list comment
-   bool q_NvmCrcActive;                                  ///< Flag if NvM list checksum is used
-   uint32_t u32_NvmCrc;                                  ///< NvM list checksum
-   uint32_t u32_NvmStartAddress;                         ///< NvM start address of data list
-   uint32_t u32_NvmSize;                                 ///< NvM size of data list
-   static const uint32_t hu32_DEFAULT_NVM_SIZE;          ///< Default NvM size of data list
-   QList<C_OscNodeDataPoolListElement> c_Elements; ///< List variables
-   QList<C_OscNodeDataPoolDataSet> c_DataSets;     ///< Data sets
+  QString c_Name;               ///< User data list name
+  QString c_Comment;            ///< User data list comment
+  bool q_NvmCrcActive;          ///< Flag if NvM list checksum is used
+  uint32_t u32_NvmCrc;          ///< NvM list checksum
+  uint32_t u32_NvmStartAddress; ///< NvM start address of data list
+  uint32_t u32_NvmSize;         ///< NvM size of data list
+  static const uint32_t
+      hu32_DEFAULT_NVM_SIZE; ///< Default NvM size of data list
+  QList<C_OscNodeDataPoolListElement> c_Elements; ///< List variables
+  QList<C_OscNodeDataPoolDataSet> c_DataSets;     ///< Data sets
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

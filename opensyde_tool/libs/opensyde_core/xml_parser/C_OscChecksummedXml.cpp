@@ -18,7 +18,6 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
-
 #include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces

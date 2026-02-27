@@ -27,7 +27,6 @@
 #include <cstring>
 #include <iostream>
 
-
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
  */
@@ -276,8 +275,8 @@ int32_t C_OscProtocolDriverOsyTpIp::Disconnect(void) {
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsyTpIp::BroadcastGetDeviceInfo(
     QList<C_BroadcastGetDeviceInfoResults> &orc_DeviceInfos,
-    QList<C_BroadcastGetDeviceInfoExtendedResults>
-        &orc_DeviceExtendedInfos) const {
+    QList<C_BroadcastGetDeviceInfoExtendedResults> &orc_DeviceExtendedInfos)
+    const {
   const uint32_t u32_PAYLOAD_SIZE_STD = 37U;
   const uint32_t u32_PAYLOAD_SIZE_EXT_MIN = 36U;
   const uint32_t u32_PAYLOAD_SIZE_EXT_MAX = 64U;
@@ -373,7 +372,8 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastGetDeviceInfo(
           } else {
             m_LogWarningWithHeaderAndIp(
                 "UDP response with incorrect payload size (" +
-                 QString::number(c_Response.size()) + ") received. Ignoring.",
+                    QString::number(c_Response.size()) +
+                    ") received. Ignoring.",
                 TGL_UTIL_FUNC_ID, au8_Ip);
           }
         }
@@ -556,7 +556,8 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddress(
           } else {
             m_LogWarningWithHeaderAndIp(
                 "UDP response with incorrect payload size (" +
-                 QString::number(c_Response.size()) + ") received. Ignoring.",
+                    QString::number(c_Response.size()) +
+                    ") received. Ignoring.",
                 TGL_UTIL_FUNC_ID, orau8_ResponseIp);
           }
         }
@@ -645,8 +646,10 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
     c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 16] =
         orc_SerialNumber.u8_SerialNumberManufacturerFormat;
     c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 17] = u8_SerialNumberLength;
-    (void)std::memcpy(&c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 18],
-                      reinterpret_cast<const uint8_t*>(c_SerialNumberRaw.constData()), u8_SerialNumberLength);
+    (void)std::memcpy(
+        &c_Request[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 18],
+        reinterpret_cast<const uint8_t *>(c_SerialNumberRaw.constData()),
+        u8_SerialNumberLength);
 
     s32_ReturnLocal = mpc_Dispatcher->SendUdp(c_Request);
     if (s32_ReturnLocal != C_NO_ERR) {
@@ -692,7 +695,8 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
                 const int x_SnrOk = // lint !e970 !e8080 //using type to match
                                     // library interface
                     std::memcmp(
-                        reinterpret_cast<const uint8_t*>(c_SerialNumberRaw.constData()),
+                        reinterpret_cast<const uint8_t *>(
+                            c_SerialNumberRaw.constData()),
                         &c_Response[C_DoIpHeader::hu8_DOIP_HEADER_SIZE + 6U],
                         u8_SerialNumberLength);
 
@@ -793,8 +797,7 @@ int32_t C_OscProtocolDriverOsyTpIp::BroadcastSetIpAddressExtended(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsyTpIp::BroadcastRequestProgramming(
-    QList<
-        C_OscProtocolDriverOsyTpIp::C_BroadcastRequestProgrammingResults>
+    QList<C_OscProtocolDriverOsyTpIp::C_BroadcastRequestProgrammingResults>
         &orc_Results) const {
   int32_t s32_Return;
   C_DoIpHeader c_Header(C_DoIpHeader::hu16_PAYLOAD_TYPE_REQUEST_PROGRAMMING_REQ,
@@ -1159,7 +1162,8 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void) {
             if (mc_RxState.c_ServiceHeader.u16_PayloadType ==
                 C_DoIpHeader::hu16_PAYLOAD_TYPE_DIAGNOSTIC_MESSAGE) {
               c_Service.c_Data.resize(c_Data.size() - 4U);
-              (void)std::memcpy(&c_Service.c_Data[0], reinterpret_cast<uint8_t*>(&c_Data.data()[4]),
+              (void)std::memcpy(&c_Service.c_Data[0],
+                                reinterpret_cast<uint8_t *>(&c_Data.data()[4]),
                                 c_Data.size() - 4U);
               // add to queue:
               s32_Return = m_AddToRxQueue(c_Service);
@@ -1190,9 +1194,10 @@ int32_t C_OscProtocolDriverOsyTpIp::Cycle(void) {
           // If it gets dropped for some reason we either
           //- will detect an error when trying to send another TCP request
           //- will detect a timeout when waiting for a response (one layer
-          //above)
+          // above)
           //- will detect that there are no more expected incoming event driven
-          //responses In any of these cases it's the application's job to handle
+          // responses In any of these cases it's the application's job to
+          // handle
           // this (e.g. reconnect or cry).
         }
       }
@@ -1345,16 +1350,16 @@ void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults::
   this->c_NodeId.u8_BusIdentifier =
       static_cast<uint8_t>((u16_SourceAddress >> 7U) & 0x0FU);
 
-  (void)std::memcpy(&au8_SerialNumber,
-                    orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 2U,
-                    6U);
+  (void)std::memcpy(
+      &au8_SerialNumber,
+      orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 2U, 6U);
   this->c_SerialNumber.SetPosSerialNumber(au8_SerialNumber);
 
   // defensive approach: spec says it's always zero terminated: make sure
   au8_DeviceName[28] = 0U;
-  (void)std::memcpy(&au8_DeviceName[0],
-                    orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 8U,
-                    28U);
+  (void)std::memcpy(
+      &au8_DeviceName[0],
+      orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 8U, 28U);
 
   // lint -e{9176} //no problems as long as charn has the same size as uint8; if
   // not we'd be in deep !"=?& anyway
@@ -1468,9 +1473,9 @@ void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults::
 
   // defensive approach: spec says it's always zero terminated: make sure
   au8_DeviceName[28] = 0U;
-  (void)std::memcpy(&au8_DeviceName[0],
-                    orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 3U,
-                    28U);
+  (void)std::memcpy(
+      &au8_DeviceName[0],
+      orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 3U, 28U);
 
   // lint -e{9176} //no problems as long as charn has the same size as uint8; if
   // not we'd be in deep !"=?& anyway
@@ -1485,7 +1490,8 @@ void C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults::
     // defensive approach: variable length, so set all to 0 first
     c_CurSerialNumber.resize(u8_SerialNumberLength);
     (void)std::memcpy(c_CurSerialNumber.data(),
-                      orc_Data.constData() + static_cast<size_t>(ou8_DataStartIndex) + 35U,
+                      orc_Data.constData() +
+                          static_cast<size_t>(ou8_DataStartIndex) + 35U,
                       u8_SerialNumberLength);
 
     this->c_SerialNumber.SetExtSerialNumber(

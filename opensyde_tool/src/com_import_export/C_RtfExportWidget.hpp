@@ -13,6 +13,7 @@
 #include "C_OgePopUpDialog.hpp"
 #include "C_SdTopologyWidget.hpp"
 #include "stwtypes.hpp"
+#include <QMap>
 #include <QString>
 #include <QStringList>
 #include <QWidget>
@@ -86,7 +87,7 @@ private:
   Ui::C_RtfExportWidget *mpc_Ui;
   // lint -e{1725} Only problematic if copy or assignment is allowed
   stw::opensyde_gui_elements::C_OgePopUpDialog &mrc_ParentDialog;
-  std::map<QString, QString> mc_NodeMapping;
+  QMap<QString, QString> mc_NodeMapping;
   QStringList mc_Warnings;
   QString mc_Error;
 

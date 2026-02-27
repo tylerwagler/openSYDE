@@ -5,48 +5,60 @@
 
    Datapool ID
 
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
 #include "C_OscNodeDataPoolId.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscNodeDataPoolId::C_OscNodeDataPoolId(void) :
-   u32_NodeIndex(0U),
-   u32_DataPoolIndex(0U)
-{
-}
+C_OscNodeDataPoolId::C_OscNodeDataPoolId(void)
+    : u32_NodeIndex(0U), u32_DataPoolIndex(0U) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Destructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscNodeDataPoolId::~C_OscNodeDataPoolId()
-{
-}
+C_OscNodeDataPoolId::~C_OscNodeDataPoolId() {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
@@ -55,11 +67,9 @@ C_OscNodeDataPoolId::~C_OscNodeDataPoolId()
    \param[in] ou32_DataPoolIndex Data pool index
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscNodeDataPoolId::C_OscNodeDataPoolId(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex) :
-   u32_NodeIndex(ou32_NodeIndex),
-   u32_DataPoolIndex(ou32_DataPoolIndex)
-{
-}
+C_OscNodeDataPoolId::C_OscNodeDataPoolId(const uint32_t ou32_NodeIndex,
+                                         const uint32_t ou32_DataPoolIndex)
+    : u32_NodeIndex(ou32_NodeIndex), u32_DataPoolIndex(ou32_DataPoolIndex) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief    Less operator.
@@ -71,31 +81,22 @@ C_OscNodeDataPoolId::C_OscNodeDataPoolId(const uint32_t ou32_NodeIndex, const ui
    false    Else
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscNodeDataPoolId::operator <(const C_OscNodeDataPoolId & orc_Cmp) const
-{
-   bool q_Return;
+bool C_OscNodeDataPoolId::operator<(const C_OscNodeDataPoolId &orc_Cmp) const {
+  bool q_Return;
 
-   if (this->u32_NodeIndex > orc_Cmp.u32_NodeIndex)
-   {
+  if (this->u32_NodeIndex > orc_Cmp.u32_NodeIndex) {
+    q_Return = false;
+  } else if (this->u32_NodeIndex == orc_Cmp.u32_NodeIndex) {
+    if (this->u32_DataPoolIndex >= orc_Cmp.u32_DataPoolIndex) {
       q_Return = false;
-   }
-   else if (this->u32_NodeIndex == orc_Cmp.u32_NodeIndex)
-   {
-      if (this->u32_DataPoolIndex >= orc_Cmp.u32_DataPoolIndex)
-      {
-         q_Return = false;
-      }
-      else
-      {
-         q_Return = true;
-      }
-   }
-   else
-   {
+    } else {
       q_Return = true;
-   }
+    }
+  } else {
+    q_Return = true;
+  }
 
-   return q_Return;
+  return q_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -108,17 +109,15 @@ bool C_OscNodeDataPoolId::operator <(const C_OscNodeDataPoolId & orc_Cmp) const
    false    Else
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscNodeDataPoolId::operator ==(const C_OscNodeDataPoolId & orc_Cmp) const
-{
-   bool q_Return = false;
+bool C_OscNodeDataPoolId::operator==(const C_OscNodeDataPoolId &orc_Cmp) const {
+  bool q_Return = false;
 
-   if ((this->u32_NodeIndex == orc_Cmp.u32_NodeIndex) &&
-       (this->u32_DataPoolIndex == orc_Cmp.u32_DataPoolIndex))
-   {
-      q_Return = true;
-   }
+  if ((this->u32_NodeIndex == orc_Cmp.u32_NodeIndex) &&
+      (this->u32_DataPoolIndex == orc_Cmp.u32_DataPoolIndex)) {
+    q_Return = true;
+  }
 
-   return q_Return;
+  return q_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -131,9 +130,8 @@ bool C_OscNodeDataPoolId::operator ==(const C_OscNodeDataPoolId & orc_Cmp) const
    false    Else
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscNodeDataPoolId::operator !=(const C_OscNodeDataPoolId & orc_Cmp) const
-{
-   const bool q_Return = !C_OscNodeDataPoolId::operator ==(orc_Cmp);
+bool C_OscNodeDataPoolId::operator!=(const C_OscNodeDataPoolId &orc_Cmp) const {
+  const bool q_Return = !C_OscNodeDataPoolId::operator==(orc_Cmp);
 
-   return q_Return;
+  return q_Return;
 }

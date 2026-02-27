@@ -396,8 +396,7 @@ int32_t C_OscComDriverFlash::SendOsyBroadcastRequestProgramming(
   orq_NotAccepted = false;
 
   if (this->mpc_CanTransportProtocolBroadcast != NULL) {
-    QList<
-        C_OscProtocolDriverOsyTpCan::C_BroadcastRequestProgrammingResults>
+    QList<C_OscProtocolDriverOsyTpCan::C_BroadcastRequestProgrammingResults>
         c_Results;
     s32_Return =
         this->mpc_CanTransportProtocolBroadcast->BroadcastRequestProgramming(
@@ -412,8 +411,7 @@ int32_t C_OscComDriverFlash::SendOsyBroadcastRequestProgramming(
       }
     }
   } else {
-    QList<
-        C_OscProtocolDriverOsyTpIp::C_BroadcastRequestProgrammingResults>
+    QList<C_OscProtocolDriverOsyTpIp::C_BroadcastRequestProgrammingResults>
         c_Results;
     s32_Return =
         this->mpc_IpTransportProtocolBroadcast->BroadcastRequestProgramming(
@@ -531,11 +529,10 @@ C_OscComDriverFlash::SendOsyCanBroadcastEnterDefaultSession(void) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscComDriverFlash::SendOsyCanBroadcastReadSerialNumber(
-    QList<
-        C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults>
+    QList<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults>
         &orc_Responses,
     QList<C_OscProtocolDriverOsyTpCan::
-                    C_BroadcastReadEcuSerialNumberExtendedResults>
+              C_BroadcastReadEcuSerialNumberExtendedResults>
         &orc_ExtendedResponses) const {
   int32_t s32_Return;
 
@@ -766,8 +763,7 @@ int32_t C_OscComDriverFlash::SendOsyCanBroadcastSetNodeIdBySerialNumberExtended(
 int32_t C_OscComDriverFlash::SendOsyEthBroadcastGetDeviceInformation(
     QList<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults>
         &orc_ReadDeviceInfoResults,
-    QList<
-        C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults>
+    QList<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults>
         &orc_ReadDeviceInfoExtendedResults) const {
   int32_t s32_Return;
 
@@ -1284,8 +1280,8 @@ int32_t C_OscComDriverFlash::SendOsyRequestFileTransfer(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscComDriverFlash::SendOsyTransferData(
     const C_OscProtocolDriverOsyNode &orc_ServerId,
-    const uint8_t ou8_BlockSequenceCounter,
-    const QByteArray &orc_Data, uint8_t *const opu8_NrCode) const {
+    const uint8_t ou8_BlockSequenceCounter, const QByteArray &orc_Data,
+    uint8_t *const opu8_NrCode) const {
   int32_t s32_Return = C_RANGE;
   C_OscProtocolDriverOsy *const pc_ExistingProtocol =
       this->m_GetOsyProtocol(orc_ServerId);
@@ -3133,8 +3129,8 @@ C_OscComDriverFlash::m_GetStwResetMessage(const uint32_t ou32_NodeIndex,
       orc_Message.u8_DLC = rc_StwFlSettings.u8_ResetMessageDlc;
 
       if (rc_StwFlSettings.c_Data.size() >= orc_Message.u8_DLC) {
-        (void)std::memcpy(&orc_Message.au8_Data[0], rc_StwFlSettings.c_Data.data(),
-                          orc_Message.u8_DLC);
+        (void)std::memcpy(&orc_Message.au8_Data[0],
+                          rc_StwFlSettings.c_Data.data(), orc_Message.u8_DLC);
 
         s32_Return = C_NO_ERR;
       } else {

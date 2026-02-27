@@ -863,7 +863,7 @@ QVariant C_SdBueMessageTableModel::m_GetCobId(const C_OscCanMessage & orc_Messag
 
    if (os32_Role == static_cast<int32_t>(Qt::EditRole))
    {
-      c_Retval = static_cast<int64_t>(orc_Message.u32_CanId);
+      c_Retval = static_cast<qint64>(orc_Message.u32_CanId);
    }
    else
    {
@@ -924,7 +924,7 @@ QVariant C_SdBueMessageTableModel::m_GetNotLaterThanValue(const C_OscCanMessage 
        ((this->mpc_SyncManager != NULL) &&
         (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN)))
    {
-      c_Retval = static_cast<uint64_t>(orc_Message.u32_CycleTimeMs);
+      c_Retval = static_cast<quint64>(orc_Message.u32_CycleTimeMs);
    }
    else
    {

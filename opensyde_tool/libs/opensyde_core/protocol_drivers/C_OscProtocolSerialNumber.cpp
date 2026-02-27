@@ -20,11 +20,9 @@
 #include "stwerrors.hpp"
 #include <cstring>
 
-
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 #include "C_OscUtils.hpp"
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -274,21 +272,22 @@ int32_t C_OscProtocolSerialNumber::SetExtSerialNumber(
    Serial number in uint8 vector
 */
 //----------------------------------------------------------------------------------------------------------------------
-QByteArray
-C_OscProtocolSerialNumber::GetSerialNumberAsRawData(void) const {
+QByteArray C_OscProtocolSerialNumber::GetSerialNumberAsRawData(void) const {
   QByteArray c_SerialNumber;
 
   if (this->q_FsnSerialNumber == true) {
     c_SerialNumber.resize(this->c_SerialNumberExt.length());
     // Use the FSN string serial number
-    memcpy(reinterpret_cast<uint8_t*>(c_SerialNumber.data()), this->c_SerialNumberExt.toUtf8().constData(),
+    memcpy(reinterpret_cast<uint8_t *>(c_SerialNumber.data()),
+           this->c_SerialNumberExt.toUtf8().constData(),
            this->c_SerialNumberExt.length());
     Q_ASSERT(this->c_SerialNumberExt.length() ==
              this->u8_SerialNumberByteLength);
   } else {
     c_SerialNumber.resize(6);
     // Use the POS serial number
-    memcpy(reinterpret_cast<uint8_t*>(c_SerialNumber.data()), &this->au8_SerialNumber[0], 6);
+    memcpy(reinterpret_cast<uint8_t *>(c_SerialNumber.data()),
+           &this->au8_SerialNumber[0], 6);
     Q_ASSERT(this->u8_SerialNumberByteLength == 6U);
   }
 

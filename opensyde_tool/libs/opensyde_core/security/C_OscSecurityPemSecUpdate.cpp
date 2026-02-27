@@ -3,49 +3,63 @@
    \file
    \brief       Handle content of PEM files for SecureUpdate feature
 
-   Content and thus handling of SecureUpdate PEM files is slightly different than the PEM files of the
-   SecureAuthentication feature.
+   Content and thus handling of SecureUpdate PEM files is slightly different
+   than the PEM files of the SecureAuthentication feature.
 
-   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "openssl/pem.h"
 #include "openssl/evp.h"
+#include "openssl/pem.h"
 
+#include "C_OscSecurityPemSecUpdate.hpp"
+#include "C_OscUtils.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
-#include "C_OscUtils.hpp"
-#include "C_OscSecurityPemSecUpdate.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_core;
 using namespace stw::errors;
 
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
-
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscSecurityPemSecUpdate::C_OscSecurityPemSecUpdate() :
-   C_OscSecurityPemBase()
-{
-}
+C_OscSecurityPemSecUpdate::C_OscSecurityPemSecUpdate()
+    : C_OscSecurityPemBase() {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Load from file
@@ -58,7 +72,8 @@ C_OscSecurityPemSecUpdate::C_OscSecurityPemSecUpdate() :
    Results will be stored in mc_KeyInfo and mc_MetaInfo.
 
    \param[in]      orc_FileName        File name
-   \param[in,out]  orc_ErrorMessage    Error message (does not include file name)
+   \param[in,out]  orc_ErrorMessage    Error message (does not include file
+   name)
 
    \return
    STW error codes
@@ -69,27 +84,30 @@ C_OscSecurityPemSecUpdate::C_OscSecurityPemSecUpdate() :
    \retval   C_OVERFLOW  usage flags not set as expected
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemSecUpdate::LoadFromFile(const std::string & orc_FileName, std::string & orc_ErrorMessage)
-{
-   int32_t s32_Result = C_OscSecurityPemBase::LoadFromFile(orc_FileName, orc_ErrorMessage);
+int32_t C_OscSecurityPemSecUpdate::LoadFromFile(const QString &orc_FileName,
+                                                QString &orc_ErrorMessage) {
+  int32_t s32_Result =
+      C_OscSecurityPemBase::LoadFromFile(orc_FileName, orc_ErrorMessage);
 
-   if (s32_Result == C_NO_ERR)
-   {
-      const C_OscSecurityPemKeyInfo::C_CertificateKeyUsageInformation c_UsageInfo = mc_KeyInfo.GetKeyUsageInformation();
-      if ((c_UsageInfo.q_KeyUsageDefined == false) || (c_UsageInfo.q_KeyUsageDigitalSignature == false) ||
-          (c_UsageInfo.q_ExtendedKeyUsageDefined == false) || (c_UsageInfo.q_ExtendedKeyUsageEmailProtection == false))
-      {
-         s32_Result = C_OVERFLOW;
-         if (orc_ErrorMessage.empty() == false)
-         {
-            orc_ErrorMessage += " ";
-         }
-         orc_ErrorMessage += "Certificate: Key usage flags not as expected in PEM file used for secure update "
-                             "configuration. Expected flags \"digitalSignature\" and \"id-kp-emailProtection\" "
-                             "to be set.";
+  if (s32_Result == C_NO_ERR) {
+    const C_OscSecurityPemKeyInfo::C_CertificateKeyUsageInformation
+        c_UsageInfo = mc_KeyInfo.GetKeyUsageInformation();
+    if ((c_UsageInfo.q_KeyUsageDefined == false) ||
+        (c_UsageInfo.q_KeyUsageDigitalSignature == false) ||
+        (c_UsageInfo.q_ExtendedKeyUsageDefined == false) ||
+        (c_UsageInfo.q_ExtendedKeyUsageEmailProtection == false)) {
+      s32_Result = C_OVERFLOW;
+      if (orc_ErrorMessage.isEmpty() == false) {
+        orc_ErrorMessage += " ";
       }
-   }
-   return s32_Result;
+      orc_ErrorMessage += "Certificate: Key usage flags not as expected in PEM "
+                          "file used for secure update "
+                          "configuration. Expected flags \"digitalSignature\" "
+                          "and \"id-kp-emailProtection\" "
+                          "to be set.";
+    }
+  }
+  return s32_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -105,59 +123,58 @@ int32_t C_OscSecurityPemSecUpdate::LoadFromFile(const std::string & orc_FileName
    C_CONFIG   Invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const QByteArray & orc_FileContent,
-                                                    std::string & orc_ErrorMessage)
-{
-   int32_t s32_Retval = C_NO_ERR;
+int32_t
+C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const QByteArray &orc_FileContent,
+                                            QString &orc_ErrorMessage) {
+  int32_t s32_Retval = C_NO_ERR;
 
-   const int x_ContentSize = static_cast<int>(orc_FileContent.size()); //lint !e970 !e8080 //use type expected by API
-   //read pem file content into a BIO (= openSSL I/O stream)
-   BIO * const pc_PrivKeyFile = BIO_new_mem_buf(orc_FileContent.data(), x_ContentSize);
+  const int x_ContentSize = static_cast<int>(
+      orc_FileContent.size()); // lint !e970 !e8080 //use type expected by API
+  // read pem file content into a BIO (= openSSL I/O stream)
+  BIO *const pc_PrivKeyFile =
+      BIO_new_mem_buf(orc_FileContent.data(), x_ContentSize);
 
-   if (pc_PrivKeyFile != NULL)
-   {
-      //read the private key portion from the BIO
-      EVP_PKEY * const pc_PrivKey = PEM_read_bio_PrivateKey(pc_PrivKeyFile, NULL, NULL, NULL);
+  if (pc_PrivKeyFile != NULL) {
+    // read the private key portion from the BIO
+    EVP_PKEY *const pc_PrivKey =
+        PEM_read_bio_PrivateKey(pc_PrivKeyFile, NULL, NULL, NULL);
 
-      BIO_free(pc_PrivKeyFile);
-      if (pc_PrivKey != NULL)
-      {
-         //extract the ECDSA key from the private key portion
-         EC_KEY * const pc_EcdsaKey = EVP_PKEY_get1_EC_KEY(pc_PrivKey);
-         if (pc_EcdsaKey != NULL)
-         {
-            //get the private key as BIGNUM (needed for later conversion)
-            const BIGNUM * const pc_PrivBigNum = EC_KEY_get0_private_key(pc_EcdsaKey);
+    BIO_free(pc_PrivKeyFile);
+    if (pc_PrivKey != NULL) {
+      // extract the ECDSA key from the private key portion
+      EC_KEY *const pc_EcdsaKey = EVP_PKEY_get1_EC_KEY(pc_PrivKey);
+      if (pc_EcdsaKey != NULL) {
+        // get the private key as BIGNUM (needed for later conversion)
+        const BIGNUM *const pc_PrivBigNum =
+            EC_KEY_get0_private_key(pc_EcdsaKey);
 
-            if (pc_PrivBigNum != NULL)
-            {
-               const int x_Size = BN_num_bytes(pc_PrivBigNum); //lint !e970 !e8080 //use type expected by API
-               QByteArray c_PrivKey;
-               c_PrivKey.resize(x_Size);
+        if (pc_PrivBigNum != NULL) {
+          const int x_Size = BN_num_bytes(
+              pc_PrivBigNum); // lint !e970 !e8080 //use type expected by API
+          QByteArray c_PrivKey;
+          c_PrivKey.resize(x_Size);
 
-               //convert BIGNUM to byte array
-               BN_bn2bin(pc_PrivBigNum, reinterpret_cast<uint8_t*>(c_PrivKey.data()));
+          // convert BIGNUM to byte array
+          BN_bn2bin(pc_PrivBigNum,
+                    reinterpret_cast<uint8_t *>(c_PrivKey.data()));
 
-               //write private key to our internal structure
-               this->mc_KeyInfo.SetPrivateKey(c_PrivKey);
+          // write private key to our internal structure
+          this->mc_KeyInfo.SetPrivateKey(c_PrivKey);
 
-               EVP_PKEY_free(pc_PrivKey);
-               EC_KEY_set_private_key(pc_EcdsaKey, NULL);
-               EC_KEY_free(pc_EcdsaKey);
-            }
-         }
+          EVP_PKEY_free(pc_PrivKey);
+          EC_KEY_set_private_key(pc_EcdsaKey, NULL);
+          EC_KEY_free(pc_EcdsaKey);
+        }
       }
-      else
-      {
-         //No error as private key part is only sometimes present, but info could be useful in layers above
-         orc_ErrorMessage = "Information: No private key present in given file.";
-      }
-   }
-   else
-   {
-      s32_Retval = C_CONFIG;
-      orc_ErrorMessage = "Private key: could not read file content.";
-   }
+    } else {
+      // No error as private key part is only sometimes present, but info could
+      // be useful in layers above
+      orc_ErrorMessage = "Information: No private key present in given file.";
+    }
+  } else {
+    s32_Retval = C_CONFIG;
+    orc_ErrorMessage = "Private key: could not read file content.";
+  }
 
-   return s32_Retval;
+  return s32_Retval;
 }

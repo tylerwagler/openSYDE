@@ -19,8 +19,10 @@
 #include <QDir>
 #include <QProcess>
 #include <QTextStream>
+#ifdef _WIN32
 #include <tlhelp32.h>
 #include <windows.h> //tlhelp32 does not do this by itself ...
+#endif
 
 #include "C_ImpUtil.hpp"
 
@@ -507,6 +509,7 @@ int32_t C_ImpUtil::h_OpenIde(const QString &orc_IdeExeCall) {
     // check if executable file exists
     const QFileInfo c_ExeFile(c_ExeOnly);
     if (c_ExeFile.exists() == true) {
+#ifdef _WIN32
       QList<HWND> c_Windows;
       c_ExeOnly = c_ExeFile.fileName();
 
@@ -527,6 +530,9 @@ int32_t C_ImpUtil::h_OpenIde(const QString &orc_IdeExeCall) {
       {
         q_ContinueWithExeOpening = true;
       }
+#else
+      q_ContinueWithExeOpening = true;
+#endif
     }
     // we could not extract valid executable name, but want to try to open it
     // anyway (maybe results in a second instance of already opened program or
@@ -1011,6 +1017,7 @@ void C_ImpUtil::mh_CheckNodeDatapoolsAssignmentForExportCode(
    \param[in,out]  orc_Windows   All found windows
 */
 //----------------------------------------------------------------------------------------------------------------------
+#ifdef _WIN32
 // lint -e715 false positive: orc_ExeName is referenced in call of std::wcscmp,
 // but somehow PC Lint does not get this
 void C_ImpUtil::mh_GetExistingApplicationHandle(
@@ -1051,6 +1058,7 @@ void C_ImpUtil::mh_GetExistingApplicationHandle(
     orc_Windows.push_back(c_Data.pc_WindowHandle);
   }
 }
+#endif
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Help function to get window from process ID
@@ -1065,6 +1073,7 @@ void C_ImpUtil::mh_GetExistingApplicationHandle(
    TRUE, FALSE
 */
 //----------------------------------------------------------------------------------------------------------------------
+#ifdef _WIN32
 // lint -e{8080} //using type expected by the library for compatibility
 WINBOOL CALLBACK C_ImpUtil::mh_EnumWindowsCallback(HWND opc_Handle,
                                                    const LPARAM ox_LoParam) {
@@ -1089,6 +1098,7 @@ WINBOOL CALLBACK C_ImpUtil::mh_EnumWindowsCallback(HWND opc_Handle,
   }
   return x_Result;
 }
+#endif
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Call external file generation tool.

@@ -160,7 +160,7 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
    if (s32_Return == C_NO_ERR)
    {
       // pem folder is optional -> no error handling
-      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath().toStdString());
+      mc_PemDatabase.ParseFolder(C_Uti::h_GetPemDbPath());
 
       s32_Return = C_OscComDriverProtocol::Init(C_PuiSdHandler::h_GetInstance()->GetOscSystemDefinitionConst(),
                                                 u32_ActiveBusIndex, c_ActiveNodes, this->mpc_CanDllDispatcher,
@@ -170,8 +170,8 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
    // Get active diag nodes
    if (q_NodeDiagRoutingError == true)
    {
-      std::set<uint32_t> c_NodeDashboardErrors;
-      std::set<uint32_t> c_RelevantNodes;
+      QSet<uint32_t> c_NodeDashboardErrors;
+      QSet<uint32_t> c_RelevantNodes;
       // Special case: Dashboard specific routing error detected and this nodes must be deactivated
       C_PuiSvHandler::h_GetInstance()->GetViewNodeDashboardRoutingErrors(this->mu32_ViewIndex,
                                                                          c_NodeDashboardErrors);
@@ -184,8 +184,7 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
            ++u32_ActiveNodeCounter)
       {
          bool q_IsDiagNode = true;
-         if (c_NodeDashboardErrors.find(this->mc_ActiveNodesIndexes[u32_ActiveNodeCounter]) !=
-             c_NodeDashboardErrors.end())
+         if (c_NodeDashboardErrors.contains(this->mc_ActiveNodesIndexes[u32_ActiveNodeCounter]))
          {
             // Deactivate the node for diagnostic
             q_IsDiagNode = false;
@@ -197,8 +196,7 @@ int32_t C_SyvComDriverDiag::InitDiag(void)
          }
 
          // Register all nodes which are relevant for communication (dashboard itself or routing)
-         if (c_RelevantNodes.find(this->mc_ActiveNodesIndexes[u32_ActiveNodeCounter]) !=
-             c_RelevantNodes.end())
+         if (c_RelevantNodes.contains(this->mc_ActiveNodesIndexes[u32_ActiveNodeCounter]))
          {
             // Deactivate the node for diagnostic
             this->mc_ActiveCommunicatingNodes.push_back(u32_ActiveNodeCounter);
@@ -302,8 +300,9 @@ int32_t C_SyvComDriverDiag::SetDiagnosticMode(QString & orc_ErrorDetails)
       }
       if (s32_Return != C_NO_ERR)
       {
-         std::set<uint32_t>::const_iterator c_ItDefectNode;
-         for (c_ItDefectNode = this->mc_DefectNodeIndices.begin(); c_ItDefectNode != this->mc_DefectNodeIndices.end();
+         QSet<uint32_t>::const_iterator c_ItDefectNode;
+         for (c_ItDefectNode = this->mc_DefectNodeIndices.constBegin();
+              c_ItDefectNode != this->mc_DefectNodeIndices.constEnd();
               ++c_ItDefectNode)
          {
             orc_ErrorDetails += "- " + this->m_GetActiveNodeName(*c_ItDefectNode) + "\n";
@@ -346,9 +345,9 @@ int32_t C_SyvComDriverDiag::SetDiagnosticMode(QString & orc_ErrorDetails)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
-                                                     QList<C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, QStringList & orc_FailedIdErrorDetails, std::map<uint32_t,
-                                                                                                                                                                                    uint32_t> & orc_FailedNodesElementNumber, std::map<uint32_t,
-                                                                                                                                                                                                                                       uint32_t> & orc_NodesElementNumber)
+                                                     QList<C_OscNodeDataPoolListElementId> & orc_FailedIdRegisters, QStringList & orc_FailedIdErrorDetails, QMap<uint32_t,
+                                                                                                                                                                                 uint32_t> & orc_FailedNodesElementNumber, QMap<uint32_t,
+                                                                                                                                                                                                                                    uint32_t> & orc_NodesElementNumber)
 {
    int32_t s32_Return = C_NO_ERR;
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
@@ -431,7 +430,7 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
             if ((c_It.value().e_TransmissionMode == C_PuiSvReadDataConfiguration::eTM_CYCLIC) ||
                 (c_It.value().e_TransmissionMode == C_PuiSvReadDataConfiguration::eTM_ON_CHANGE))
             {
-               const std::map<uint32_t, uint32_t>::iterator c_ItNodesElementNumber = orc_NodesElementNumber.find(
+               const QMap<uint32_t, uint32_t>::iterator c_ItNodesElementNumber = orc_NodesElementNumber.find(
                   c_It.key().u32_NodeIndex);
                if (c_ItNodesElementNumber == orc_NodesElementNumber.end())
                {
@@ -439,7 +438,7 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
                }
                else
                {
-                  c_ItNodesElementNumber->second = c_ItNodesElementNumber->second + 1;
+                  c_ItNodesElementNumber.value() = c_ItNodesElementNumber.value() + 1;
                }
             }
 
@@ -480,7 +479,7 @@ int32_t C_SyvComDriverDiag::SetUpCyclicTransmissions(QString & orc_ErrorDetails,
             {
                QString c_AdditionalInfo;
                QString c_Details;
-               std::map<uint32_t, uint32_t>::iterator c_ItFailedNodesElementNumber;
+               QMap<uint32_t, uint32_t>::iterator c_ItFailedNodesElementNumber;
 
                switch (s32_Return)
                {
@@ -1735,7 +1734,7 @@ int32_t C_SyvComDriverDiag::m_InitDiagNodes(void)
       //request all transmissions that are configured for the current view
       const QMap<C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration> & rc_Transmissions =
          pc_View->GetReadRailAssignments();
-      const std::set<C_OscNodeDataPoolListElementId> c_WriteElements = pc_View->GetWriteAssignments();
+      const QSet<C_OscNodeDataPoolListElementId> c_WriteElements = pc_View->GetWriteAssignments();
 
       // Get all nodes which has used datapool elements on this dashboard
       for (QMap<C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration>::const_iterator c_ItElement =
@@ -1743,7 +1742,7 @@ int32_t C_SyvComDriverDiag::m_InitDiagNodes(void)
       {
          this->mc_DiagNodesWithElements.insert(c_ItElement.key().u32_NodeIndex);
       }
-      for (std::set<C_OscNodeDataPoolListElementId>::const_iterator c_ItWriteElement =
+      for (QSet<C_OscNodeDataPoolListElementId>::const_iterator c_ItWriteElement =
               c_WriteElements.begin(); c_ItWriteElement != c_WriteElements.end(); ++c_ItWriteElement)
       {
          this->mc_DiagNodesWithElements.insert((*c_ItWriteElement).u32_NodeIndex);
@@ -1943,7 +1942,7 @@ int32_t C_SyvComDriverDiag::m_InitDataDealer(void)
    C_CHECKSUM  Security related error (something went wrong while handshaking with the server)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComDriverDiag::m_StartRoutingDiag(QString & orc_ErrorDetails, std::set<uint32_t> & orc_ErrorActiveNodes)
+int32_t C_SyvComDriverDiag::m_StartRoutingDiag(QString & orc_ErrorDetails, QSet<uint32_t> & orc_ErrorActiveNodes)
 {
    int32_t s32_Return = C_NO_ERR;
    uint32_t u32_DiagNodeCounter;
@@ -2263,15 +2262,15 @@ int32_t C_SyvComDriverDiag::m_CheckOsyDatapoolsAndCreateMapping(const uint32_t o
        (pc_Protocol != NULL))
    {
       // Get all registered Datapool elements for comparing. Check only used Datapools
-      std::set<C_OscNodeDataPoolListElementId> c_RegisteredElementIds;
+      QSet<C_OscNodeDataPoolListElementId> c_RegisteredElementIds;
       pc_View->GetAllRegisteredDashboardElements(c_RegisteredElementIds);
-      std::map<uint8_t, uint8_t> c_DatapoolMapping;
+      QMap<uint8_t, uint8_t> c_DatapoolMapping;
 
       s32_Retval = C_NO_ERR;
 
       for (uint32_t u32_ItDataPool = 0; u32_ItDataPool < pc_Node->c_DataPools.size(); ++u32_ItDataPool)
       {
-         std::set<C_OscNodeDataPoolListElementId>::const_iterator c_ItElement;
+         QSet<C_OscNodeDataPoolListElementId>::const_iterator c_ItElement;
          bool q_DatapoolRelevant = false;
 
          // Search for a usage of the Datapool
@@ -2446,10 +2445,10 @@ int32_t C_SyvComDriverDiag::m_GetReadDatapoolMetadata(const uint32_t ou32_Active
                                                       C_OscProtocolDriverOsy::C_DataPoolMetaData & orc_Metadata) const
 {
    int32_t s32_Return = C_RANGE;
-   const std::list<C_OscProtocolDriverOsy::C_DataPoolMetaData> & rc_NodeDatapoolsMetadata =
+   const QList<C_OscProtocolDriverOsy::C_DataPoolMetaData> & rc_NodeDatapoolsMetadata =
       this->mc_ReadDatapoolMetadata[ou32_ActiveDiagNodeIndex];
 
-   std::list<C_OscProtocolDriverOsy::C_DataPoolMetaData>::const_iterator c_ItMetadata;
+   QList<C_OscProtocolDriverOsy::C_DataPoolMetaData>::const_iterator c_ItMetadata;
 
    oru32_ServerDatapoolIndex = 0U;
 
@@ -2726,13 +2725,13 @@ void C_SyvComDriverDiag::m_HandlePollingFinished(void)
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvComDriverDiag::m_GetRoutingErrorDetails(QString & orc_ErrorDetails, std::set<uint32_t> & orc_ErrorActiveNodes,
+void C_SyvComDriverDiag::m_GetRoutingErrorDetails(QString & orc_ErrorDetails, QSet<uint32_t> & orc_ErrorActiveNodes,
                                                   const uint32_t ou32_ActiveNode,
                                                   const uint32_t ou32_ErrorActiveNodeIndex) const
 {
    // Check if both nodes are already marked as error to avoid duplicates in the orc_ErrorDetails string
    // Duplicates could occur dependent of the routing order
-   if (orc_ErrorActiveNodes.find(ou32_ActiveNode) == orc_ErrorActiveNodes.end())
+   if (!orc_ErrorActiveNodes.contains(ou32_ActiveNode))
    {
       // Add the "target" node as error target
       const C_OscNode * const pc_Node =
@@ -2745,7 +2744,7 @@ void C_SyvComDriverDiag::m_GetRoutingErrorDetails(QString & orc_ErrorDetails, st
          orc_ErrorDetails += static_cast<QString>("\"") + pc_Node->c_Properties.c_Name + "\"\n";
       }
    }
-   if (orc_ErrorActiveNodes.find(ou32_ErrorActiveNodeIndex) == orc_ErrorActiveNodes.end())
+   if (!orc_ErrorActiveNodes.contains(ou32_ErrorActiveNodeIndex))
    {
       // Add the "routing" node as error target
       const C_OscNode * const pc_Node =

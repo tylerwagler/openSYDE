@@ -5,35 +5,52 @@
 
    X-app properties filer
 
-   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
-#include "stwerrors.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscXappPropertiesFiler.hpp"
+#include "stwerrors.hpp"
+#include "stwtypes.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 const uint16_t C_OscXappPropertiesFiler::mhu16_FILE_VERSION_1 = 1;
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Load X-App properties file
@@ -46,31 +63,28 @@ const uint16_t C_OscXappPropertiesFiler::mhu16_FILE_VERSION_1 = 1;
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler::h_LoadXappPropertiesFile(C_OscXappProperties & orc_XappProperties,
-                                                           const QString & orc_FilePath)
-{
-   C_OscXmlParserLog c_XmlParser;
+int32_t C_OscXappPropertiesFiler::h_LoadXappPropertiesFile(
+    C_OscXappProperties &orc_XappProperties, const QString &orc_FilePath) {
+  C_OscXmlParserLog c_XmlParser;
 
-   c_XmlParser.SetLogHeading("Loading X-App properties");
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(c_XmlParser, orc_FilePath,
-                                                                         "opensyde-x-app-properties");
+  c_XmlParser.SetLogHeading("Loading X-App properties");
+  int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(
+      c_XmlParser, orc_FilePath, "opensyde-x-app-properties");
 
-   //File version
-   if (s32_Retval == C_NO_ERR)
-   {
-      s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(c_XmlParser, mhu16_FILE_VERSION_1, "file-version",
-                                                        "Loading X-App properties");
-   }
-   if (s32_Retval == C_NO_ERR)
-   {
-      s32_Retval = C_OscXappPropertiesFiler::h_LoadXappProperties(orc_XappProperties, c_XmlParser);
-   }
-   else
-   {
-      //More details are in log
-      s32_Retval = C_CONFIG;
-   }
-   return s32_Retval;
+  // File version
+  if (s32_Retval == C_NO_ERR) {
+    s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(
+        c_XmlParser, mhu16_FILE_VERSION_1, "file-version",
+        "Loading X-App properties");
+  }
+  if (s32_Retval == C_NO_ERR) {
+    s32_Retval = C_OscXappPropertiesFiler::h_LoadXappProperties(
+        orc_XappProperties, c_XmlParser);
+  } else {
+    // More details are in log
+    s32_Retval = C_CONFIG;
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -84,39 +98,35 @@ int32_t C_OscXappPropertiesFiler::h_LoadXappPropertiesFile(C_OscXappProperties &
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler::h_LoadXappProperties(C_OscXappProperties & orc_XappProperties,
-                                                       C_OscXmlParserBase & orc_XmlParser)
-{
-   int32_t s32_Retval;
+int32_t C_OscXappPropertiesFiler::h_LoadXappProperties(
+    C_OscXappProperties &orc_XappProperties,
+    C_OscXmlParserBase &orc_XmlParser) {
+  int32_t s32_Retval;
 
-   orc_XappProperties.Initialize();
+  orc_XappProperties.Initialize();
 
-   s32_Retval = orc_XmlParser.SelectNodeChildError("properties");
-   if (s32_Retval == C_NO_ERR)
-   {
-      s32_Retval =
-         orc_XmlParser.GetAttributeUint32Error("polling-interval-ms", orc_XappProperties.u32_PollingIntervalMs);
-   }
-   if (s32_Retval == C_NO_ERR)
-   {
-      s32_Retval =
-         orc_XmlParser.GetAttributeUint32Error("data-request-interval-ms",
-                                               orc_XappProperties.u32_DataRequestIntervalMs);
-   }
-   if (s32_Retval == C_NO_ERR)
-   {
-      s32_Retval = orc_XmlParser.SelectNodeChildError("connected-interface");
-      if (s32_Retval == C_NO_ERR)
-      {
-         s32_Retval = C_OscXappPropertiesFiler::h_LoadCommInterfaceId(orc_XappProperties.e_ConnectedInterfaceType,
-                                                                      orc_XappProperties.u8_ConnectedInterfaceNumber,
-                                                                      orc_XmlParser, "connected-interface",
-                                                                      "Loading X-App properties");
-         Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-      }
-   }
-   orc_XmlParser.SelectNodeParent();
-   return s32_Retval;
+  s32_Retval = orc_XmlParser.SelectNodeChildError("properties");
+  if (s32_Retval == C_NO_ERR) {
+    s32_Retval = orc_XmlParser.GetAttributeUint32Error(
+        "polling-interval-ms", orc_XappProperties.u32_PollingIntervalMs);
+  }
+  if (s32_Retval == C_NO_ERR) {
+    s32_Retval = orc_XmlParser.GetAttributeUint32Error(
+        "data-request-interval-ms",
+        orc_XappProperties.u32_DataRequestIntervalMs);
+  }
+  if (s32_Retval == C_NO_ERR) {
+    s32_Retval = orc_XmlParser.SelectNodeChildError("connected-interface");
+    if (s32_Retval == C_NO_ERR) {
+      s32_Retval = C_OscXappPropertiesFiler::h_LoadCommInterfaceId(
+          orc_XappProperties.e_ConnectedInterfaceType,
+          orc_XappProperties.u8_ConnectedInterfaceNumber, orc_XmlParser,
+          "connected-interface", "Loading X-App properties");
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
+    }
+  }
+  orc_XmlParser.SelectNodeParent();
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -130,35 +140,34 @@ int32_t C_OscXappPropertiesFiler::h_LoadXappProperties(C_OscXappProperties & orc
    C_CONFIG   file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(const C_OscXappProperties & orc_XappProperties,
-                                                           const QString & orc_FilePath)
-{
-   C_OscXmlParser c_XmlParser;
-   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(c_XmlParser, orc_FilePath,
-                                                                    "opensyde-x-app-properties");
+int32_t C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(
+    const C_OscXappProperties &orc_XappProperties,
+    const QString &orc_FilePath) {
+  C_OscXmlParser c_XmlParser;
+  int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
+      c_XmlParser, orc_FilePath, "opensyde-x-app-properties");
 
-   if (s32_Retval == C_NO_ERR)
-   {
-      //File version
-      Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
-      c_XmlParser.SetNodeContent(QString::number(mhu16_FILE_VERSION_1));
-      //Return
-      c_XmlParser.SelectNodeParent();
-      //node
-      C_OscXappPropertiesFiler::h_SaveXappProperties(orc_XappProperties, c_XmlParser);
-      //Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR)
-      {
-         osc_write_log_error("Saving node definition", "Could not create file for node.");
-         s32_Retval = C_CONFIG;
-      }
-   }
-   else
-   {
-      //More details are in log
+  if (s32_Retval == C_NO_ERR) {
+    // File version
+    Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild("file-version") ==
+             "file-version");
+    c_XmlParser.SetNodeContent(QString::number(mhu16_FILE_VERSION_1));
+    // Return
+    c_XmlParser.SelectNodeParent();
+    // node
+    C_OscXappPropertiesFiler::h_SaveXappProperties(orc_XappProperties,
+                                                   c_XmlParser);
+    // Don't forget to save!
+    if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR) {
+      osc_write_log_error("Saving node definition",
+                          "Could not create file for node.");
       s32_Retval = C_CONFIG;
-   }
-   return s32_Retval;
+    }
+  } else {
+    // More details are in log
+    s32_Retval = C_CONFIG;
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -168,19 +177,22 @@ int32_t C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(const C_OscXappProper
    \param[in,out]  orc_XmlParser       XML with node active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXappPropertiesFiler::h_SaveXappProperties(const C_OscXappProperties & orc_XappProperties,
-                                                    C_OscXmlParserBase & orc_XmlParser)
-{
-   orc_XmlParser.CreateAndSelectNodeChild("properties");
-   orc_XmlParser.SetAttributeUint32("polling-interval-ms", orc_XappProperties.u32_PollingIntervalMs);
-   orc_XmlParser.SetAttributeUint32("data-request-interval-ms", orc_XappProperties.u32_DataRequestIntervalMs);
-   orc_XmlParser.CreateAndSelectNodeChild("connected-interface");
-   C_OscXappPropertiesFiler::h_SaveCommInterfaceId(orc_XappProperties.e_ConnectedInterfaceType,
-                                                   orc_XappProperties.u8_ConnectedInterfaceNumber, orc_XmlParser);
-   //Return
-   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-   //Return
-   orc_XmlParser.SelectNodeParent();
+void C_OscXappPropertiesFiler::h_SaveXappProperties(
+    const C_OscXappProperties &orc_XappProperties,
+    C_OscXmlParserBase &orc_XmlParser) {
+  orc_XmlParser.CreateAndSelectNodeChild("properties");
+  orc_XmlParser.SetAttributeUint32("polling-interval-ms",
+                                   orc_XappProperties.u32_PollingIntervalMs);
+  orc_XmlParser.SetAttributeUint32(
+      "data-request-interval-ms", orc_XappProperties.u32_DataRequestIntervalMs);
+  orc_XmlParser.CreateAndSelectNodeChild("connected-interface");
+  C_OscXappPropertiesFiler::h_SaveCommInterfaceId(
+      orc_XappProperties.e_ConnectedInterfaceType,
+      orc_XappProperties.u8_ConnectedInterfaceNumber, orc_XmlParser);
+  // Return
+  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
+  // Return
+  orc_XmlParser.SelectNodeParent();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -197,31 +209,26 @@ void C_OscXappPropertiesFiler::h_SaveXappProperties(const C_OscXappProperties & 
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler::h_LoadCommInterfaceId(C_OscSystemBus::E_Type & ore_Type,
-                                                        uint8_t & oru8_InterfaceNumber,
-                                                        C_OscXmlParserBase & orc_XmlParser,
-                                                        const QString & orc_ParentNodeName,
-                                                        const QString & orc_UseCase)
-{
-   int32_t s32_Retval;
+int32_t C_OscXappPropertiesFiler::h_LoadCommInterfaceId(
+    C_OscSystemBus::E_Type &ore_Type, uint8_t &oru8_InterfaceNumber,
+    C_OscXmlParserBase &orc_XmlParser, const QString &orc_ParentNodeName,
+    const QString &orc_UseCase) {
+  int32_t s32_Retval;
 
-   oru8_InterfaceNumber =
-      static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("interface-number"));
-   //Type
-   if (orc_XmlParser.SelectNodeChild("type") == "type")
-   {
-      s32_Retval = C_OscSystemFilerUtil::h_BusTypeStringToEnum(
-         orc_XmlParser.GetNodeContent(), ore_Type);
-      //Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_ParentNodeName);
-   }
-   else
-   {
-      osc_write_log_error(orc_UseCase,
-                          "Could not find \"" + orc_ParentNodeName + "\".\"type\" node.");
-      s32_Retval = C_CONFIG;
-   }
-   return s32_Retval;
+  oru8_InterfaceNumber = static_cast<uint8_t>(
+      orc_XmlParser.GetAttributeUint32("interface-number"));
+  // Type
+  if (orc_XmlParser.SelectNodeChild("type") == "type") {
+    s32_Retval = C_OscSystemFilerUtil::h_BusTypeStringToEnum(
+        orc_XmlParser.GetNodeContent(), ore_Type);
+    // Return
+    Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_ParentNodeName);
+  } else {
+    osc_write_log_error(orc_UseCase, "Could not find \"" + orc_ParentNodeName +
+                                         "\".\"type\" node.");
+    s32_Retval = C_CONFIG;
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -232,14 +239,13 @@ int32_t C_OscXappPropertiesFiler::h_LoadCommInterfaceId(C_OscSystemBus::E_Type &
    \param[in,out]  orc_XmlParser          Xml parser
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXappPropertiesFiler::h_SaveCommInterfaceId(const C_OscSystemBus::E_Type oe_Type,
-                                                     const uint8_t ou8_InterfaceNumber,
-                                                     C_OscXmlParserBase & orc_XmlParser)
-{
-   orc_XmlParser.SetAttributeUint32("interface-number",
-                                    static_cast<uint32_t>(ou8_InterfaceNumber));
-   orc_XmlParser.CreateNodeChild("type",
-                                 C_OscSystemFilerUtil::h_BusTypeEnumToString(oe_Type));
+void C_OscXappPropertiesFiler::h_SaveCommInterfaceId(
+    const C_OscSystemBus::E_Type oe_Type, const uint8_t ou8_InterfaceNumber,
+    C_OscXmlParserBase &orc_XmlParser) {
+  orc_XmlParser.SetAttributeUint32("interface-number",
+                                   static_cast<uint32_t>(ou8_InterfaceNumber));
+  orc_XmlParser.CreateNodeChild(
+      "type", C_OscSystemFilerUtil::h_BusTypeEnumToString(oe_Type));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -249,7 +255,6 @@ void C_OscXappPropertiesFiler::h_SaveCommInterfaceId(const C_OscSystemBus::E_Typ
    Automatically generated file name
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscXappPropertiesFiler::h_GetFileName(void)
-{
-   return "x_app_properties.xml";
+QString C_OscXappPropertiesFiler::h_GetFileName(void) {
+  return "x_app_properties.xml";
 }

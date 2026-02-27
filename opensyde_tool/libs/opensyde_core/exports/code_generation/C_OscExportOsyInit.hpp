@@ -5,50 +5,65 @@
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCEXPORTOSYINIT_HPP
 #define C_OSCEXPORTOSYINIT_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include <vector>
 
-#include <QList>
-#include "stwtypes.hpp"
 #include "C_OscNode.hpp"
+#include "stwtypes.hpp"
+#include <QList>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
-///Code exporter for server side DPD and DPH init structures
-class C_OscExportOsyInit
-{
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
+/// Code exporter for server side DPD and DPH init structures
+class C_OscExportOsyInit {
 public:
-   static QString h_GetFileName(void);
-   static int32_t h_CreateSourceCode(const QString & orc_FilePath, const C_OscNode & orc_Node,
-                                     const bool oq_RunsDpd, const uint16_t ou16_ApplicationIndex,
-                                     const QString & orc_ExportToolInfo = "");
+  static QString h_GetFileName(void);
+  static int32_t h_CreateSourceCode(const QString &orc_FilePath,
+                                    const C_OscNode &orc_Node,
+                                    const bool oq_RunsDpd,
+                                    const uint16_t ou16_ApplicationIndex,
+                                    const QString &orc_ExportToolInfo = "");
 
-   //Minimum buffer size required for DPD-services
-   //greatest size for openSYDE server: WriteDataByIdentifier::SetKey
-   //Calculation: (8 + 2 + 2) [ETH-Header] + 3 [WriteDataByIdentifierHeader] + (128 + 4 + 20) [SecurityKeyPayload]
-   static const uint8_t hu8_MIN_SIZE_DPD_BUF_INSTANCE = 167U;
+  // Minimum buffer size required for DPD-services
+  // greatest size for openSYDE server: WriteDataByIdentifier::SetKey
+  // Calculation: (8 + 2 + 2) [ETH-Header] + 3 [WriteDataByIdentifierHeader] +
+  // (128 + 4 + 20) [SecurityKeyPayload]
+  static const uint8_t hu8_MIN_SIZE_DPD_BUF_INSTANCE = 167U;
 
 protected:
-   static bool mh_IsDpdInitRequired(const C_OscNodeComInterfaceSettings & orc_Settings);
-   static uint32_t mh_GetSizeOfLargestDataPoolElement(const QList<C_OscNodeDataPool> & orc_DataPools);
-   static bool mh_IsDpKnownToApp(const uint8_t ou8_DataPoolIndex, const uint16_t ou16_ApplicationIndex,
-                                 const C_OscNode & orc_Node, const bool oq_RunsDpd);
+  static bool
+  mh_IsDpdInitRequired(const C_OscNodeComInterfaceSettings &orc_Settings);
+  static uint32_t mh_GetSizeOfLargestDataPoolElement(
+      const QList<C_OscNodeDataPool> &orc_DataPools);
+  static bool mh_IsDpKnownToApp(const uint8_t ou8_DataPoolIndex,
+                                const uint16_t ou16_ApplicationIndex,
+                                const C_OscNode &orc_Node,
+                                const bool oq_RunsDpd);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

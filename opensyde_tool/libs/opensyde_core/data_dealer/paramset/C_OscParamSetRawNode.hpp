@@ -1,43 +1,53 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Data class, containing all raw entries for one node in a parameter set file (header)
+   \brief       Data class, containing all raw entries for one node in a
+   parameter set file (header)
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCPARAMSETRAWNODE_HPP
 #define C_OSCPARAMSETRAWNODE_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
+#include "C_OscParamSetDataPoolInfo.hpp"
+#include "C_OscParamSetRawEntry.hpp"
 #include <QList>
 #include <QString>
-#include "C_OscParamSetRawEntry.hpp"
-#include "C_OscParamSetDataPoolInfo.hpp"
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscParamSetRawNode
-{
+class C_OscParamSetRawNode {
 public:
-   C_OscParamSetRawNode(void);
+  C_OscParamSetRawNode(void);
 
-   QString c_Name;                       ///< Node name
-   QList<C_OscParamSetRawEntry> c_Entries;       ///< All entries to write to this node
-   QList<C_OscParamSetDataPoolInfo> c_DataPools; ///< Information about used data pools
+  QString c_Name;                         ///< Node name
+  QList<C_OscParamSetRawEntry> c_Entries; ///< All entries to write to this node
+  QList<C_OscParamSetDataPoolInfo>
+      c_DataPools; ///< Information about used data pools
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QSortFilterProxyModel>
 #include <QList>
+#include <QMap>
 
 #include "C_TblViewScroll.hpp"
 #include "C_SdNdeDalLogJobDataSelectionTableModel.hpp"
@@ -62,8 +63,8 @@ private:
    void m_InitColumns(void);
    void m_ShowHideVerticalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const;
    void m_ShowHideHorizontalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const;
-   static std::map<opensyde_gui_logic::C_SdNdeDalLogJobDataSelectionTableModel::E_Columns,
-                   uint32_t> mh_GetDefaultColumnWidths(void);
+   static QMap<opensyde_gui_logic::C_SdNdeDalLogJobDataSelectionTableModel::E_Columns,
+               uint32_t> mh_GetDefaultColumnWidths(void);
    QModelIndexList m_MapModelIndices(const QModelIndexList & orc_SortModelIndices) const;
 
    stw::opensyde_gui_logic::C_SdNdeDalLogJobDataSelectionTableModel mc_Model;

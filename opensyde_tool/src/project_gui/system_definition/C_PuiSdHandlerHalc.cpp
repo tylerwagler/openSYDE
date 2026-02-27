@@ -978,7 +978,7 @@ int32_t C_PuiSdHandlerHalc::SetHalcDomainChannelParameterConfigElementString(
     const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
     const uint32_t ou32_ChannelIndex, const uint32_t ou32_ParameterIndex,
     const uint32_t ou32_ElementIndex, const bool oq_UseChannelIndex,
-    const std::string &orc_Value) {
+    const QString &orc_Value) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size()) {
@@ -1616,7 +1616,7 @@ C_PuiSdHandlerHalc::HalcGenerateDatapools(const uint32_t ou32_NodeIndex) {
   if ((ou32_NodeIndex < this->mc_CoreDefinition.c_Nodes.size()) &&
       (ou32_NodeIndex < this->mc_UiNodes.size())) {
     C_OscNode &rc_OscNode = this->mc_CoreDefinition.c_Nodes[ou32_NodeIndex];
-    const std::map<uint32_t, uint32_t>::const_iterator c_ItPrevHash =
+    const QMap<uint32_t, uint32_t>::const_iterator c_ItPrevHash =
         mc_PreviousHashes.find(ou32_NodeIndex);
 
     uint32_t u32_CurrentHash = 0xFFFFFFFFUL;
@@ -1624,7 +1624,7 @@ C_PuiSdHandlerHalc::HalcGenerateDatapools(const uint32_t ou32_NodeIndex) {
 
     // check if HALC configuration changed since last HALC Datapool generation
     if ((c_ItPrevHash == mc_PreviousHashes.end()) ||
-        (c_ItPrevHash->second != u32_CurrentHash)) {
+        (c_ItPrevHash.value() != u32_CurrentHash)) {
       QList<C_OscNodeDataPool> c_Tmp;
       mc_PreviousHashes[ou32_NodeIndex] = u32_CurrentHash;
 
@@ -1863,17 +1863,17 @@ void C_PuiSdHandlerHalc::Clear(const bool oq_TriggerSyncSignals) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerHalc::m_HandleSyncNodeAdded(const uint32_t ou32_Index) {
-  std::map<uint32_t, uint32_t> c_NewContent;
+  QMap<uint32_t, uint32_t> c_NewContent;
   C_PuiSdHandlerNodeLogic::m_HandleSyncNodeAdded(ou32_Index);
-  for (std::map<uint32_t, uint32_t>::iterator c_It =
+  for (QMap<uint32_t, uint32_t>::iterator c_It =
            this->mc_PreviousHashes.begin();
        c_It != this->mc_PreviousHashes.end(); ++c_It) {
-    if (c_It->first >= ou32_Index) {
+    if (c_It.key() >= ou32_Index) {
       // Adapt
-      c_NewContent[c_It->first + 1] = c_It->second;
+      c_NewContent[c_It.key() + 1] = c_It.value();
     } else {
       // No adaptation necessary
-      c_NewContent[c_It->first] = c_It->second;
+      c_NewContent[c_It.key()] = c_It.value();
     }
   }
   this->mc_PreviousHashes = c_NewContent;
@@ -1887,19 +1887,19 @@ void C_PuiSdHandlerHalc::m_HandleSyncNodeAdded(const uint32_t ou32_Index) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerHalc::m_HandleSyncNodeAboutToBeDeleted(
     const uint32_t ou32_Index) {
-  std::map<uint32_t, uint32_t> c_NewContent;
+  QMap<uint32_t, uint32_t> c_NewContent;
   C_PuiSdHandlerNodeLogic::m_HandleSyncNodeAboutToBeDeleted(ou32_Index);
-  for (std::map<uint32_t, uint32_t>::iterator c_It =
+  for (QMap<uint32_t, uint32_t>::iterator c_It =
            this->mc_PreviousHashes.begin();
        c_It != this->mc_PreviousHashes.end(); ++c_It) {
-    if (c_It->first > ou32_Index) {
+    if (c_It.key() > ou32_Index) {
       // Adapt
-      c_NewContent[c_It->first - 1] = c_It->second;
-    } else if (c_It->first == ou32_Index) {
+      c_NewContent[c_It.key() - 1] = c_It.value();
+    } else if (c_It.key() == ou32_Index) {
       // Remove == don't add
     } else {
       // No adaptation necessary
-      c_NewContent[c_It->first] = c_It->second;
+      c_NewContent[c_It.key()] = c_It.value();
     }
   }
   this->mc_PreviousHashes = c_NewContent;

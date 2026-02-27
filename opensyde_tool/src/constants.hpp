@@ -202,7 +202,11 @@ const QSize mc_ICON_SIZE_20 = QSize(20, 20);
 const QSize mc_ICON_SIZE_16 = QSize(16, 16);
 
 // Paths
+#ifdef _WIN32
 const QString mc_DLL_PATH_PEAK = "STW_dlls\\stwpeak2\\stwpeak2_64.dll";
+#else
+const QString mc_DLL_PATH_PEAK = "can0";
+#endif
 
 
 // Identifier of update package subsections or items

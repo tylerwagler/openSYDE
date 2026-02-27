@@ -244,10 +244,10 @@ void C_NagUnUsedProjectFilesTableView::selectionChanged(const QItemSelection & o
    Default column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_NagUnUsedProjectFilesTableModel::E_Columns,
-         uint32_t> C_NagUnUsedProjectFilesTableView::mh_GetDefaultColumnWidths()
+QMap<C_NagUnUsedProjectFilesTableModel::E_Columns,
+     uint32_t> C_NagUnUsedProjectFilesTableView::mh_GetDefaultColumnWidths()
 {
-   std::map<C_NagUnUsedProjectFilesTableModel::E_Columns, uint32_t> c_ColumnWidths;
+   QMap<C_NagUnUsedProjectFilesTableModel::E_Columns, uint32_t> c_ColumnWidths;
    c_ColumnWidths[C_NagUnUsedProjectFilesTableModel::ePATH] = 660;
    c_ColumnWidths[C_NagUnUsedProjectFilesTableModel::eEXTENSION] = 153;
 
@@ -261,15 +261,15 @@ std::map<C_NagUnUsedProjectFilesTableModel::E_Columns,
 void C_NagUnUsedProjectFilesTableView::m_InitColumns()
 {
    const
-   std::map<C_NagUnUsedProjectFilesTableModel::E_Columns,
-            uint32_t> c_ColumnWidths = C_NagUnUsedProjectFilesTableView::mh_GetDefaultColumnWidths();
+   QMap<C_NagUnUsedProjectFilesTableModel::E_Columns,
+        uint32_t> c_ColumnWidths = C_NagUnUsedProjectFilesTableView::mh_GetDefaultColumnWidths();
 
-   for (std::map<C_NagUnUsedProjectFilesTableModel::E_Columns,
-                 uint32_t>::const_iterator c_ItEntry = c_ColumnWidths.cbegin(); c_ItEntry != c_ColumnWidths.cend();
+   for (QMap<C_NagUnUsedProjectFilesTableModel::E_Columns,
+             uint32_t>::const_iterator c_ItEntry = c_ColumnWidths.cbegin(); c_ItEntry != c_ColumnWidths.cend();
         ++c_ItEntry)
    {
       this->setColumnWidth(C_NagUnUsedProjectFilesTableModel::h_EnumToColumn(
-                              c_ItEntry->first), c_ItEntry->second);
+                              c_ItEntry.key()), c_ItEntry.value());
    }
 }
 

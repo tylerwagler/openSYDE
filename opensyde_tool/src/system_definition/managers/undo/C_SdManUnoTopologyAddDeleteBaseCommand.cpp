@@ -722,11 +722,11 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenManagerBeforeDelete(
    {
       QByteArray c_Tmp;
       c_Tmp.reserve(static_cast<int>(pc_Node->c_CanOpenManagers.size()));
-      for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
-              pc_Node->c_CanOpenManagers.begin();
-           c_ItManager != pc_Node->c_CanOpenManagers.end(); ++c_ItManager)
+      for (QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
+              pc_Node->c_CanOpenManagers.constBegin();
+           c_ItManager != pc_Node->c_CanOpenManagers.constEnd(); ++c_ItManager)
       {
-         c_Tmp.append(static_cast<char>(c_ItManager->first));
+         c_Tmp.append(static_cast<char>(c_ItManager.key()));
       }
       for (uint32_t u32_ItDelete = 0UL; u32_ItDelete < static_cast<uint32_t>(c_Tmp.size()); ++u32_ItDelete)
       {
@@ -751,23 +751,23 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenDeviceBeforeDelete(c
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItNode);
       if (pc_Node != NULL)
       {
-         for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
-                 pc_Node->c_CanOpenManagers.begin();
-              c_ItManager != pc_Node->c_CanOpenManagers.end(); ++c_ItManager)
+         for (QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
+                 pc_Node->c_CanOpenManagers.constBegin();
+              c_ItManager != pc_Node->c_CanOpenManagers.constEnd(); ++c_ItManager)
          {
             QList<C_OscCanInterfaceId> c_Tmp;
-            for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
-                    c_ItManager->second.c_CanOpenDevices.begin();
-                 c_ItDevice != c_ItManager->second.c_CanOpenDevices.end(); ++c_ItDevice)
+            for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
+                    c_ItManager.value().c_CanOpenDevices.constBegin();
+                 c_ItDevice != c_ItManager.value().c_CanOpenDevices.constEnd(); ++c_ItDevice)
             {
-               if (c_ItDevice->first.u32_NodeIndex == ou32_Index)
+               if (c_ItDevice.key().u32_NodeIndex == ou32_Index)
                {
-                  c_Tmp.push_back(c_ItDevice->first);
+                  c_Tmp.push_back(c_ItDevice.key());
                }
             }
             for (uint32_t u32_ItDelete = 0UL; u32_ItDelete < c_Tmp.size(); ++u32_ItDelete)
             {
-               Q_ASSERT(C_PuiSdHandler::h_GetInstance()->DeleteCanOpenManagerDevice(u32_ItNode, c_ItManager->first,
+               Q_ASSERT(C_PuiSdHandler::h_GetInstance()->DeleteCanOpenManagerDevice(u32_ItNode, c_ItManager.key(),
                                                                                       c_Tmp[u32_ItDelete]) == C_NO_ERR);
             }
          }
@@ -863,24 +863,24 @@ void C_SdManUnoTopologyAddDeleteBaseCommand::m_HandleCanOpenDeviceNodeBusConnect
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(u32_ItNode);
       if (pc_Node != NULL)
       {
-         for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
-                 pc_Node->c_CanOpenManagers.begin();
-              c_ItManager != pc_Node->c_CanOpenManagers.end(); ++c_ItManager)
+         for (QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager =
+                 pc_Node->c_CanOpenManagers.constBegin();
+              c_ItManager != pc_Node->c_CanOpenManagers.constEnd(); ++c_ItManager)
          {
             QList<C_OscCanInterfaceId> c_Tmp;
-            for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
-                    c_ItManager->second.c_CanOpenDevices.begin();
-                 c_ItDevice != c_ItManager->second.c_CanOpenDevices.end(); ++c_ItDevice)
+            for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
+                    c_ItManager.value().c_CanOpenDevices.constBegin();
+                 c_ItDevice != c_ItManager.value().c_CanOpenDevices.constEnd(); ++c_ItDevice)
             {
-               if ((c_ItDevice->first.u32_NodeIndex == ou32_NodeIndex) &&
-                   (c_ItDevice->first.u8_InterfaceNumber == orc_ConnectionId.u8_InterfaceNumber))
+               if ((c_ItDevice.key().u32_NodeIndex == ou32_NodeIndex) &&
+                   (c_ItDevice.key().u8_InterfaceNumber == orc_ConnectionId.u8_InterfaceNumber))
                {
-                  c_Tmp.push_back(c_ItDevice->first);
+                  c_Tmp.push_back(c_ItDevice.key());
                }
             }
             for (uint32_t u32_ItDelete = 0UL; u32_ItDelete < c_Tmp.size(); ++u32_ItDelete)
             {
-               Q_ASSERT(C_PuiSdHandler::h_GetInstance()->DeleteCanOpenManagerDevice(u32_ItNode, c_ItManager->first,
+               Q_ASSERT(C_PuiSdHandler::h_GetInstance()->DeleteCanOpenManagerDevice(u32_ItNode, c_ItManager.key(),
                                                                                       c_Tmp[u32_ItDelete]) == C_NO_ERR);
             }
          }

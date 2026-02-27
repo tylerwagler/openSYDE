@@ -1171,8 +1171,8 @@ void C_SdBueSignalPropertiesWidget::m_HandleMuxValueRange(const C_OscCanMessage 
 void C_SdBueSignalPropertiesWidget::m_HandleAnyChange(const C_SdBueSignalPropertiesWidget::E_Change oe_Change,
                                                       const bool oq_AllowSignalsToInformOtherWidgets)
 {
-   std::list<E_Change> c_Changes;
-   std::list<E_Change> c_ErrorChanges;
+   QList<E_Change> c_Changes;
+   QList<E_Change> c_ErrorChanges;
    QString c_UserNotificationText;
    QString c_UserNotificationAdditionalInformation;
    //Step 1: get new value from UI
@@ -1185,13 +1185,13 @@ void C_SdBueSignalPropertiesWidget::m_HandleAnyChange(const C_SdBueSignalPropert
    //Step 4: Write new value to data storage
    this->m_SaveToData(oe_Change);
    //Step 5: Update UI errors (usually only relevant for itself)
-   for (std::list<E_Change>::const_iterator c_ItChange = c_ErrorChanges.begin(); c_ItChange != c_ErrorChanges.end();
+   for (QList<E_Change>::const_iterator c_ItChange = c_ErrorChanges.begin(); c_ItChange != c_ErrorChanges.end();
         ++c_ItChange)
    {
       this->m_UpdateErrorForChange(*c_ItChange);
    }
    //Step 6: Update UI based on all changes
-   for (std::list<E_Change>::const_iterator c_ItChange = c_Changes.begin(); c_ItChange != c_Changes.end();
+   for (QList<E_Change>::const_iterator c_ItChange = c_Changes.begin(); c_ItChange != c_Changes.end();
         ++c_ItChange)
    {
       this->m_UpdateUiForChange(*c_ItChange);
@@ -1331,8 +1331,8 @@ void C_SdBueSignalPropertiesWidget::m_ApplyNewValueFromUi(const C_SdBueSignalPro
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueSignalPropertiesWidget::m_AdaptOtherValues(const C_SdBueSignalPropertiesWidget::E_Change oe_Change,
-                                                       std::list<E_Change> & orc_Changes,
-                                                       std::list<E_Change> & orc_ErrorChanges,
+                                                       QList<E_Change> & orc_Changes,
+                                                       QList<E_Change> & orc_ErrorChanges,
                                                        QString & orc_UserNotificationText,
                                                        QString & orc_UserNotificationAdditionalInformation)
 {

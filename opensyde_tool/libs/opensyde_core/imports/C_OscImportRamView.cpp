@@ -24,7 +24,6 @@
 #include "stwerrors.hpp"
 #include <cctype>
 
-
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
  */
@@ -125,11 +124,11 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
     // Add information to log regarding NVM addresses
     if (orc_DataPool.e_Type == C_OscNodeDataPool::eNVM) {
       const QString c_Info = "When importing RAMView EEPROM lists the "
-                                 "absolute addresses after import will not "
-                                 "match the addresses of the RAMView project. "
-                                 "If gaps are intended to be kept between "
-                                 "individual lists those should be "
-                                 "added manually after the import.";
+                             "absolute addresses after import will not "
+                             "match the addresses of the RAMView project. "
+                             "If gaps are intended to be kept between "
+                             "individual lists those should be "
+                             "added manually after the import.";
       orc_ImportInformation.append(c_Info);
     }
 
@@ -137,8 +136,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
     orc_DataPool.c_Name = c_ProjectOptions.c_DeviceName;
     for (uint32_t u32_Line = 0U;
          u32_Line < c_ProjectOptions.c_MetaInfo.c_Text.count(); u32_Line++) {
-      orc_DataPool.c_Comment +=
-          c_ProjectOptions.c_MetaInfo.c_Text[u32_Line];
+      orc_DataPool.c_Comment += c_ProjectOptions.c_MetaInfo.c_Text[u32_Line];
       if (u32_Line != (c_ProjectOptions.c_MetaInfo.c_Text.count() - 1)) {
         orc_DataPool.c_Comment += "\n";
       }
@@ -186,8 +184,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
           C_OscNodeDataPoolDataSet &rc_DataSet = c_List.c_DataSets[u16_DataSet];
 
           if (u16_DataSet < c_VariableLists.ac_DefaultNames.size()) {
-            rc_DataSet.c_Name =
-                c_VariableLists.ac_DefaultNames[u16_DataSet];
+            rc_DataSet.c_Name = c_VariableLists.ac_DefaultNames[u16_DataSet];
           } else {
             // No name known for this set; use some default.
             rc_DataSet.c_Name =
@@ -299,9 +296,9 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
           if ((rc_ElementRamView.IsArrayType() == true) &&
               (rc_ElementRamView.GetNumberOfArrayElements() == 1)) {
             const QString c_Info = "Variable \"" + c_List.c_Name + "." +
-                                       rc_Element.c_Name +
-                                       "\" is an array with only one entry. It "
-                                       "was imported as non-array element.";
+                                   rc_Element.c_Name +
+                                   "\" is an array with only one entry. It "
+                                   "was imported as non-array element.";
             orc_ImportInformation.append(c_Info);
 
             // collapse to non-array (do so after importing min/max and Dataset
@@ -390,8 +387,7 @@ int32_t C_OscImportRamView::h_ImportDataPoolFromRamViewDefProject(
                        "Content of project \"" + orc_ProjectPath +
                            "\" was imported to openSYDE data structures. "
                            "Number of imported lists: " +
-                           QString::number(orc_DataPool.c_Lists.size()) +
-                           ".");
+                           QString::number(orc_DataPool.c_Lists.size()) + ".");
   }
 
   return s32_Result;
@@ -893,8 +889,7 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
     bool q_Return;
 
     //.def file format:
-    pc_IniFile =
-        new QSettings(orc_ProjectPath, QSettings::IniFormat);
+    pc_IniFile = new QSettings(orc_ProjectPath, QSettings::IniFormat);
     // Checksum check removed as QSettings does not support it directly and
     // C_OscChecksummedIniFile is deprecated.
 
@@ -1081,10 +1076,9 @@ int32_t C_OscImportRamView::mh_LoadRamViewDefProject(
    information (if the name changes)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscImportRamView::mh_AdaptName(
-    QString &orc_Name, QString &orc_Comment,
-    const QString &orc_ElementDesignator,
-    QStringList &orc_ImportInformation) {
+void C_OscImportRamView::mh_AdaptName(QString &orc_Name, QString &orc_Comment,
+                                      const QString &orc_ElementDesignator,
+                                      QStringList &orc_ImportInformation) {
   const int32_t s32_C_ITEM_MAX_CHAR_COUNT = 31;
   QString c_NewName = orc_Name;
 

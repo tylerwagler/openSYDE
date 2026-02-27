@@ -548,7 +548,7 @@ QVariant C_CamGenTableModel::data(const QModelIndex &orc_Index,
         switch (e_Col) // lint !e788 //not all columns explicitly handled
         {
         case eID:
-          c_Retval = C_Uti::h_GetValueAsHex(0ULL);
+          c_Retval = C_Uti::h_GetValueAsHex(static_cast<uint64_t>(0ULL));
           break;
         case eDLC:
           c_Retval = 0;
@@ -577,9 +577,9 @@ QVariant C_CamGenTableModel::data(const QModelIndex &orc_Index,
         {
         case eID:
           if (pc_Message->GetExtended()) {
-            c_Retval = C_Uti::h_GetValueAsHex(0x1FFFFFFFULL);
+            c_Retval = C_Uti::h_GetValueAsHex(static_cast<uint64_t>(0x1FFFFFFFULL));
           } else {
-            c_Retval = C_Uti::h_GetValueAsHex(0x7FFULL);
+            c_Retval = C_Uti::h_GetValueAsHex(static_cast<uint64_t>(0x7FFULL));
           }
           break;
         case eDLC:

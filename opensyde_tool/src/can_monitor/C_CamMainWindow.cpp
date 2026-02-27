@@ -634,7 +634,6 @@ void C_CamMainWindow::m_ClearData() { this->mc_ComDriver.ClearData(); }
 int32_t C_CamMainWindow::m_InitCan(int32_t &ors32_Bitrate) {
   QString c_DllPath;
   int32_t s32_Return = C_RD_WR;
-  QFileInfo c_File;
 
   // Initialize
   ors32_Bitrate = 0;
@@ -650,30 +649,25 @@ int32_t C_CamMainWindow::m_InitCan(int32_t &ors32_Bitrate) {
   if (c_DllPath.isEmpty() == false) {
     c_DllPath = C_CamUti::h_GetResolvedAbsolutePathFromExe(c_DllPath);
   }
-  c_File.setFile(c_DllPath);
+  // Open the DLL / CAN interface (QCanBusDevice validates plugin + interface)
+  s32_Return = this->mpc_CanDllDispatcher->DLL_Open(c_DllPath);
 
-  if ((c_File.exists() == true) && (c_File.isFile() == true)) {
-    // Open the DLL
-    c_DllPath = c_DllPath.replace("/", "\\");
-    s32_Return = this->mpc_CanDllDispatcher->DLL_Open(c_DllPath);
+  if (s32_Return == C_NO_ERR) {
+    // Init the CAN with the user-configured bitrate
+    const int32_t s32_ConfiguredBitrate =
+        C_UsHandler::h_GetInstance()->GetCanBitrate();
+    s32_Return = this->mpc_CanDllDispatcher->CAN_Init(s32_ConfiguredBitrate);
 
     if (s32_Return == C_NO_ERR) {
-      // Init the CAN with the user-configured bitrate
-      const int32_t s32_ConfiguredBitrate =
-          C_UsHandler::h_GetInstance()->GetCanBitrate();
-      s32_Return = this->mpc_CanDllDispatcher->CAN_Init(s32_ConfiguredBitrate);
-
-      if (s32_Return == C_NO_ERR) {
-        // Use the configured bitrate directly
-        ors32_Bitrate = s32_ConfiguredBitrate;
-      } else {
-        // Error
-        s32_Return = C_COM;
-      }
+      // Use the configured bitrate directly
+      ors32_Bitrate = s32_ConfiguredBitrate;
     } else {
       // Error
-      s32_Return = C_CONFIG;
+      s32_Return = C_COM;
     }
+  } else {
+    // Error
+    s32_Return = C_CONFIG;
   }
 
   return s32_Return;

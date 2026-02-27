@@ -125,7 +125,7 @@ void C_CieExportReportWidget::InitStaticNames(void) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CieExportReportWidget::SetMessageData(
-    const std::map<QString, QString> &orc_NodeMapping,
+    const QHash<QString, QString> &orc_NodeMapping,
     const C_CieExportDbc::C_ExportStatistic &orc_ExportStatistic,
     const QStringList &orc_Warnings) {
   // Copy to internal data
@@ -182,7 +182,7 @@ void C_CieExportReportWidget::m_BuildReport(void) {
   bool q_FirstEntry = true;
 
   // build up node mapping
-  std::map<QString, QString>::const_iterator c_Iter;
+  QHash<QString, QString>::const_iterator c_Iter;
   for (c_Iter = this->mc_NodeMapping.begin();
        c_Iter != this->mc_NodeMapping.end(); ++c_Iter) {
     if (q_FirstEntry == true) {
@@ -190,7 +190,7 @@ void C_CieExportReportWidget::m_BuildReport(void) {
     } else {
       c_Nodes += ", ";
     }
-    c_Nodes += c_Iter->first + " (DBC Name: " + c_Iter->second + ")";
+    c_Nodes += c_Iter.key() + " (DBC Name: " + c_Iter.value() + ")";
   }
 
   // build up warning messages

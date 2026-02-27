@@ -3,46 +3,61 @@
    \file
    \brief       Short description
 
-   Detailed description (optional). The module shall be described detailed if it is not described completely
-   by short description.
+   Detailed description (optional). The module shall be described detailed if it
+   is not described completely by short description.
 
-   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include <QCoreApplication>
-#include "C_OscBinaryHash.hpp"
 #include "C_Md5Checksum.hpp"
+#include "C_OscBinaryHash.hpp"
+#include <QCoreApplication>
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_core;
 using namespace stw::md5;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
 bool C_OscBinaryHash::mhq_HashCompleted = false;
 QString C_OscBinaryHash::mhc_BinaryHash;
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Default constructor. Set to private
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscBinaryHash::C_OscBinaryHash(void)
-{
-}
+C_OscBinaryHash::C_OscBinaryHash(void) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Creates MD5-Checksum of executable running in current process
@@ -50,16 +65,14 @@ C_OscBinaryHash::C_OscBinaryHash(void)
    \return  void
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscBinaryHash::h_CreateBinaryHash(void)
-{
-   const QString c_ExePath = QCoreApplication::applicationFilePath();
+QString C_OscBinaryHash::h_CreateBinaryHash(void) {
+  const QString c_ExePath = QCoreApplication::applicationFilePath();
 
-   if (h_GetHashBool() == false)
-   {
-      mhc_BinaryHash = C_Md5Checksum::GetMD5(c_ExePath).toUpper();
-      h_SetHashBool(true);
-   }
-   return mhc_BinaryHash;
+  if (h_GetHashBool() == false) {
+    mhc_BinaryHash = C_Md5Checksum::GetMD5(c_ExePath).toUpper();
+    h_SetHashBool(true);
+  }
+  return mhc_BinaryHash;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -68,9 +81,8 @@ QString C_OscBinaryHash::h_CreateBinaryHash(void)
    \param[in]       oq_State   represents if checksum has already been created.
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscBinaryHash::h_SetHashBool(const bool oq_State)
-{
-   mhq_HashCompleted = oq_State;
+void C_OscBinaryHash::h_SetHashBool(const bool oq_State) {
+  mhq_HashCompleted = oq_State;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -80,7 +92,4 @@ void C_OscBinaryHash::h_SetHashBool(const bool oq_State)
 
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscBinaryHash::h_GetHashBool(void)
-{
-   return mhq_HashCompleted;
-}
+bool C_OscBinaryHash::h_GetHashBool(void) { return mhq_HashCompleted; }

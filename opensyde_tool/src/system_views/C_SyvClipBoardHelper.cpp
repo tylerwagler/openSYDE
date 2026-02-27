@@ -345,9 +345,9 @@ C_SyvClipBoardHelper::mh_FillElementIdGroups(
     const QMap<C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration>
         &orc_Rails) {
   QMap<C_PuiSvDbNodeDataPoolListElementId, C_PuiSvDbElementIdCrcGroup> c_Retval;
-  const std::set<C_PuiSvDbNodeDataPoolListElementId> c_Ids =
+  const QSet<C_PuiSvDbNodeDataPoolListElementId> c_Ids =
       C_SyvClipBoardHelper::mh_GetAllIds(orc_Data, orc_Rails);
-  for (std::set<C_PuiSvDbNodeDataPoolListElementId>::const_iterator c_It =
+  for (QSet<C_PuiSvDbNodeDataPoolListElementId>::const_iterator c_It =
            c_Ids.cbegin();
        c_It != c_Ids.cend(); ++c_It) {
     C_PuiSvDbElementIdCrcGroup c_Tmp;
@@ -368,11 +368,11 @@ C_SyvClipBoardHelper::mh_FillElementIdGroups(
    All IDs
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::set<C_PuiSvDbNodeDataPoolListElementId> C_SyvClipBoardHelper::mh_GetAllIds(
+QSet<C_PuiSvDbNodeDataPoolListElementId> C_SyvClipBoardHelper::mh_GetAllIds(
     const C_PuiSvDashboard &orc_Data,
     const QMap<C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration>
         &orc_Rails) {
-  std::set<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
+  QSet<C_PuiSvDbNodeDataPoolListElementId> c_Retval;
   orc_Data.GetAllRegisteredDashboardElementsGuiId(c_Retval);
   for (QMap<C_OscNodeDataPoolListElementId,
             C_PuiSvReadDataConfiguration>::ConstIterator c_It =
@@ -407,11 +407,11 @@ int32_t C_SyvClipBoardHelper::mh_ValidateIds(
     const QMap<C_PuiSvDbNodeDataPoolListElementId, C_PuiSvDbElementIdCrcGroup>
         &orc_ElementIdGroups) {
   int32_t s32_Retval = C_NO_ERR;
-  const std::set<C_PuiSvDbNodeDataPoolListElementId> c_Ids =
+  const QSet<C_PuiSvDbNodeDataPoolListElementId> c_Ids =
       C_SyvClipBoardHelper::mh_GetAllIds(orc_Data, orc_Rails);
 
   // Check
-  for (std::set<C_PuiSvDbNodeDataPoolListElementId>::const_iterator c_It =
+  for (QSet<C_PuiSvDbNodeDataPoolListElementId>::const_iterator c_It =
            c_Ids.cbegin();
        c_It != c_Ids.cend(); ++c_It) {
     if (!orc_ElementIdGroups.contains(*c_It)) {

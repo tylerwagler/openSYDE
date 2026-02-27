@@ -213,7 +213,7 @@ int32_t C_CieUtil::h_ExportFile(
       QApplication::processEvents();         // update cursor
 
       if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN)) {
-        std::map<QString, QString> c_NodeMapping;
+        QHash<QString, QString> c_NodeMapping;
         int32_t s32_Tmp = C_CieExportDbc::h_GetNodeMapping(c_NodeMapping);
 
         Q_ASSERT(s32_Tmp == C_NO_ERR);

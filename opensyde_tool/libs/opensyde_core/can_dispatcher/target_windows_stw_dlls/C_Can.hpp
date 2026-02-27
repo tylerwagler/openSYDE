@@ -22,7 +22,6 @@
 #include <QList>
 #include <QString>
 
-
 namespace stw {
 namespace can {
 /* -- Defines

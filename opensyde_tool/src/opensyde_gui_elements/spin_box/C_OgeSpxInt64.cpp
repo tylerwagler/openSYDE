@@ -271,9 +271,9 @@ void C_OgeSpxInt64::stepBy(const int32_t os32_Steps)
       {
          if (mq_IsUnsigned == true)
          {
-            const uint64_t u64_Max = this->mc_Maximum.toULongLong();
-            uint64_t u64_Tmp = c_Tmp.toULongLong();
-            const uint64_t u64_AllowedSteps = u64_Max - u64_Tmp;
+            const quint64 u64_Max = this->mc_Maximum.toULongLong();
+            quint64 u64_Tmp = c_Tmp.toULongLong();
+            const quint64 u64_AllowedSteps = u64_Max - u64_Tmp;
             if ((u64_Tmp < u64_Max) && (u64_AllowedSteps >= this->mu64_StepWidth))
             {
                u64_Tmp += this->mu64_StepWidth;
@@ -293,12 +293,12 @@ void C_OgeSpxInt64::stepBy(const int32_t os32_Steps)
          }
          else
          {
-            const int64_t s64_Max = this->mc_Maximum.toLongLong();
-            int64_t s64_Tmp = c_Tmp.toLongLong();
-            const uint64_t u64_AllowedSteps = static_cast<uint64_t>(s64_Max - s64_Tmp);
+            const qint64 s64_Max = this->mc_Maximum.toLongLong();
+            qint64 s64_Tmp = c_Tmp.toLongLong();
+            const quint64 u64_AllowedSteps = static_cast<quint64>(s64_Max - s64_Tmp);
             if ((s64_Tmp < s64_Max) && (u64_AllowedSteps >= this->mu64_StepWidth))
             {
-               s64_Tmp += static_cast<int64_t>(this->mu64_StepWidth);
+               s64_Tmp += static_cast<qint64>(this->mu64_StepWidth);
                if (s64_Tmp < s64_Max)
                {
                   c_Tmp = s64_Tmp;
@@ -322,9 +322,9 @@ void C_OgeSpxInt64::stepBy(const int32_t os32_Steps)
       {
          if (mq_IsUnsigned == true)
          {
-            const uint64_t u64_Min = this->mc_Minimum.toULongLong();
-            uint64_t u64_Tmp = c_Tmp.toULongLong();
-            const uint64_t u64_AllowedSteps = u64_Tmp - u64_Min;
+            const quint64 u64_Min = this->mc_Minimum.toULongLong();
+            quint64 u64_Tmp = c_Tmp.toULongLong();
+            const quint64 u64_AllowedSteps = u64_Tmp - u64_Min;
             if ((u64_Tmp > u64_Min) && (u64_AllowedSteps >= this->mu64_StepWidth))
             {
                u64_Tmp -= this->mu64_StepWidth;
@@ -344,12 +344,12 @@ void C_OgeSpxInt64::stepBy(const int32_t os32_Steps)
          }
          else
          {
-            const int64_t s64_Min = this->mc_Minimum.toLongLong();
-            int64_t s64_Tmp = c_Tmp.toLongLong();
-            const uint64_t u64_AllowedSteps = static_cast<uint64_t>(s64_Tmp - s64_Min);
+            const qint64 s64_Min = this->mc_Minimum.toLongLong();
+            qint64 s64_Tmp = c_Tmp.toLongLong();
+            const quint64 u64_AllowedSteps = static_cast<quint64>(s64_Tmp - s64_Min);
             if ((s64_Tmp > s64_Min) && (u64_AllowedSteps >= this->mu64_StepWidth))
             {
-               s64_Tmp -= static_cast<int64_t>(this->mu64_StepWidth);
+               s64_Tmp -= static_cast<qint64>(this->mu64_StepWidth);
                if (s64_Tmp > s64_Min)
                {
                   c_Tmp = s64_Tmp;
@@ -403,7 +403,7 @@ QValidator::State C_OgeSpxInt64::validate(QString & orc_Input, int32_t & ors32_P
       Q_UNUSED(ors32_Pos)
       if (this->mq_IsUnsigned == true)
       {
-         const uint64_t u64_Test = c_ValueOnly.toULongLong(pc_Result);
+         const quint64 u64_Test = c_ValueOnly.toULongLong(pc_Result);
          if (q_Result == true)
          {
             m_CheckMinMax(u64_Test, q_IsUnderMinimum, q_IsOverMaximum);
@@ -423,7 +423,7 @@ QValidator::State C_OgeSpxInt64::validate(QString & orc_Input, int32_t & ors32_P
       }
       else
       {
-         const int64_t s64_Test = c_ValueOnly.toLongLong(pc_Result);
+         const qint64 s64_Test = c_ValueOnly.toLongLong(pc_Result);
          if (q_Result == true)
          {
             m_CheckMinMax(s64_Test, q_IsUnderMinimum, q_IsOverMaximum);
@@ -663,13 +663,13 @@ void C_OgeSpxInt64::m_ResetMinMax(void)
    //Init default min max and default value
    if (this->mq_IsUnsigned == true)
    {
-      this->mc_Minimum = std::numeric_limits<uint64_t>::lowest();
-      this->mc_Maximum = std::numeric_limits<uint64_t>::max();
+      this->mc_Minimum = std::numeric_limits<quint64>::lowest();
+      this->mc_Maximum = std::numeric_limits<quint64>::max();
    }
    else
    {
-      this->mc_Minimum = std::numeric_limits<int64_t>::lowest();
-      this->mc_Maximum = std::numeric_limits<int64_t>::max();
+      this->mc_Minimum = std::numeric_limits<qint64>::lowest();
+      this->mc_Maximum = std::numeric_limits<qint64>::max();
    }
    Q_EMIT this->SigMinMaxChanged();
 }
@@ -692,51 +692,51 @@ QVariant C_OgeSpxInt64::m_PrepareValue(const QVariant & orc_Value) const
    case QVariant::ULongLong:
       if (this->mq_IsUnsigned == true)
       {
-         c_Retval = static_cast<uint64_t>(orc_Value.toULongLong());
+         c_Retval = static_cast<quint64>(orc_Value.toULongLong());
       }
       else
       {
-         c_Retval = static_cast<int64_t>(orc_Value.toULongLong());
+         c_Retval = static_cast<qint64>(orc_Value.toULongLong());
       }
       break;
    case QVariant::UInt:
       if (this->mq_IsUnsigned == true)
       {
-         c_Retval = static_cast<uint64_t>(orc_Value.toUInt());
+         c_Retval = static_cast<quint64>(orc_Value.toUInt());
       }
       else
       {
-         c_Retval = static_cast<int64_t>(orc_Value.toUInt());
+         c_Retval = static_cast<qint64>(orc_Value.toUInt());
       }
       break;
    case QVariant::LongLong:
       if (this->mq_IsUnsigned == true)
       {
-         c_Retval = static_cast<uint64_t>(orc_Value.toLongLong());
+         c_Retval = static_cast<quint64>(orc_Value.toLongLong());
       }
       else
       {
-         c_Retval = static_cast<int64_t>(orc_Value.toLongLong());
+         c_Retval = static_cast<qint64>(orc_Value.toLongLong());
       }
       break;
    case QVariant::Int:
       if (this->mq_IsUnsigned == true)
       {
-         c_Retval = static_cast<uint64_t>(static_cast<int64_t>(orc_Value.toInt()));
+         c_Retval = static_cast<quint64>(static_cast<qint64>(orc_Value.toInt()));
       }
       else
       {
-         c_Retval = static_cast<int64_t>(orc_Value.toInt());
+         c_Retval = static_cast<qint64>(orc_Value.toInt());
       }
       break;
    case QVariant::Double:
       if (this->mq_IsUnsigned == true)
       {
-         c_Retval = static_cast<uint64_t>(orc_Value.toDouble());
+         c_Retval = static_cast<quint64>(orc_Value.toDouble());
       }
       else
       {
-         c_Retval = static_cast<int64_t>(orc_Value.toDouble());
+         c_Retval = static_cast<qint64>(orc_Value.toDouble());
       }
       break;
    default:

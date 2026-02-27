@@ -19,7 +19,6 @@
 #include "C_SclResourceStrings.hpp"
 #include "stwtypes.hpp"
 
-
 using namespace stw::scl;
 
 /* -- Defines

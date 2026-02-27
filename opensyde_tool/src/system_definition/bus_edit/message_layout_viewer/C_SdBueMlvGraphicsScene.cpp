@@ -418,7 +418,7 @@ void C_SdBueMlvGraphicsScene::DisplayToolTip(const QPointF & orc_ScenePos)
           (this->mac_SetGridState[s32_GridIndex].size() > 1))
       {
          // More than one signal on the position
-         std::set<C_SdBueMlvSignalManager *>::const_iterator c_It;
+         QSet<C_SdBueMlvSignalManager *>::const_iterator c_It;
          QString c_ToolTipContent = "";
 
          this->mpc_HoveredSignal = pc_HoveredItem;
@@ -1101,8 +1101,7 @@ void C_SdBueMlvGraphicsScene::m_UpdateSignalInGridMapping(C_SdBueMlvSignalManage
 {
    uint16_t u16_Counter;
 
-   std::set<uint16_t> c_SetGridPositions;
-   std::set<uint16_t>::iterator c_ItSetGridPosition;
+   QSet<uint16_t> c_SetGridPositions;
 
    // get all grid positions for this signal. necessary for motorola byte order
    opc_Item->GetDataBytesBitPositionsOfSignal(c_SetGridPositions);
@@ -1111,13 +1110,12 @@ void C_SdBueMlvGraphicsScene::m_UpdateSignalInGridMapping(C_SdBueMlvSignalManage
    do
    {
       --u16_Counter;
-      c_ItSetGridPosition = c_SetGridPositions.find(u16_Counter);
 
       // is this position used?
-      if (c_ItSetGridPosition != c_SetGridPositions.end())
+      if (c_SetGridPositions.contains(u16_Counter))
       {
          // clean up the set
-         c_SetGridPositions.erase(c_ItSetGridPosition);
+         c_SetGridPositions.remove(u16_Counter);
 
          this->mac_SetGridState[u16_Counter].insert(opc_Item);
 
@@ -1162,7 +1160,7 @@ void C_SdBueMlvGraphicsScene::m_RemoveSignalFromGridMappingPosition(C_SdBueMlvSi
    if (ou16_Pos < mhu8_MAX_NUM_BITS)
    {
       // search the item
-      const std::set<C_SdBueMlvSignalManager *>::iterator c_ItItem = this->mac_SetGridState[ou16_Pos].find(opc_Item);
+      const QSet<C_SdBueMlvSignalManager *>::iterator c_ItItem = this->mac_SetGridState[ou16_Pos].find(opc_Item);
 
       if (c_ItItem != this->mac_SetGridState[ou16_Pos].end())
       {
@@ -1230,7 +1228,7 @@ void C_SdBueMlvGraphicsScene::m_CheckGridMappingPositionForError(const uint16_t 
 
          if (this->mac_SetGridState[ou16_Pos].size() > 0)
          {
-            const std::set<C_SdBueMlvSignalManager *>::iterator c_ItItem = this->mac_SetGridState[ou16_Pos].begin();
+            const QSet<C_SdBueMlvSignalManager *>::iterator c_ItItem = this->mac_SetGridState[ou16_Pos].begin();
             const C_SdBueMlvSignalManager::C_SignalItemColors c_ColorConf = (*c_ItItem)->GetColorConfiguration();
 
             this->mc_VecEmptyItems[ou16_Pos]->SetFontColor(c_ColorConf.c_FontColor);
@@ -1478,7 +1476,7 @@ void C_SdBueMlvGraphicsScene::m_SearchClickedItem(const QPointF & orc_Pos)
    {
       if (this->mac_SetGridState[s32_Counter].size() > 0)
       {
-         std::set<C_SdBueMlvSignalManager *>::iterator c_ItSetGridPosition;
+         QSet<C_SdBueMlvSignalManager *>::iterator c_ItSetGridPosition;
          float64_t f64_ZetOrderActual;
          float64_t f64_ZetOrderHighest = mhf64_Z_ORDER_BELOW_ALL_ITEMS;
 

@@ -5,86 +5,112 @@
 
    Data class for application related information
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
 #include "stwerrors.hpp"
 
 #include "C_OscNodeApplication.hpp"
 
-#include "C_SclChecksums.hpp"
 #include "C_OscLoggingHandler.hpp"
+#include "C_SclChecksums.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::scl;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscNodeApplication::C_OscNodeApplication(void) :
-   e_Type(eBINARY),
-   c_Name(""),
-   c_Comment(""),
-   q_Active(true),
-   u8_ProcessId(0),
-   c_ProjectPath(""),
-   c_IdeCall(""),
-   c_CodeGeneratorPath(""),
-   c_GeneratePath(""),
-   u16_GenCodeVersion(0)
-{
-   // default: one output file
-   c_ResultPaths.resize(1);
-   c_ResultPaths[0] = "";
+C_OscNodeApplication::C_OscNodeApplication(void)
+    : e_Type(eBINARY), c_Name(""), c_Comment(""), q_Active(true),
+      u8_ProcessId(0), c_ProjectPath(""), c_IdeCall(""),
+      c_CodeGeneratorPath(""), c_GeneratePath(""), u16_GenCodeVersion(0) {
+  // default: one output file
+  c_ResultPaths.resize(1);
+  c_ResultPaths[0] = "";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Calculates the hash value over all data
 
    The hash value is a 32 bit CRC value.
-   It is not endian-safe, so it should only be used on the same system it is created on.
+   It is not endian-safe, so it should only be used on the same system it is
+   created on.
 
-   \param[in,out] oru32_HashValue    Hash value with initial [in] value and result [out] value
+   \param[in,out] oru32_HashValue    Hash value with initial [in] value and
+   result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeApplication::CalcHash(uint32_t & oru32_HashValue) const
-{
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(), this->c_Name.length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(), this->c_Comment.length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_Active, sizeof(this->q_Active), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u8_ProcessId, sizeof(this->u8_ProcessId), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_ProjectPath.toUtf8().constData(), this->c_ProjectPath.length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_IdeCall.toUtf8().constData(), this->c_IdeCall.length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_CodeGeneratorPath.toUtf8().constData(),
-                                       this->c_CodeGeneratorPath.length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_GeneratePath.toUtf8().constData(), this->c_GeneratePath.length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u16_GenCodeVersion, sizeof(this->u16_GenCodeVersion), oru32_HashValue);
-   for (uint32_t u32_Counter = 0U; u32_Counter < this->c_ResultPaths.size(); ++u32_Counter)
-   {
-      stw::scl::C_SclChecksums::CalcCRC32(this->c_ResultPaths[u32_Counter].toUtf8().constData(),
-                                          this->c_ResultPaths[u32_Counter].length(), oru32_HashValue);
-   }
+void C_OscNodeApplication::CalcHash(uint32_t &oru32_HashValue) const {
+  stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
+                                      this->c_Name.length(), oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(),
+                                      this->c_Comment.length(),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->q_Active, sizeof(this->q_Active),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(
+      &this->u8_ProcessId, sizeof(this->u8_ProcessId), oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(this->c_ProjectPath.toUtf8().constData(),
+                                      this->c_ProjectPath.length(),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(this->c_IdeCall.toUtf8().constData(),
+                                      this->c_IdeCall.length(),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(
+      this->c_CodeGeneratorPath.toUtf8().constData(),
+      this->c_CodeGeneratorPath.length(), oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(this->c_GeneratePath.toUtf8().constData(),
+                                      this->c_GeneratePath.length(),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->u16_GenCodeVersion,
+                                      sizeof(this->u16_GenCodeVersion),
+                                      oru32_HashValue);
+  for (uint32_t u32_Counter = 0U; u32_Counter < this->c_ResultPaths.size();
+       ++u32_Counter) {
+    stw::scl::C_SclChecksums::CalcCRC32(
+        this->c_ResultPaths[u32_Counter].toUtf8().constData(),
+        this->c_ResultPaths[u32_Counter].length(), oru32_HashValue);
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -96,26 +122,25 @@ void C_OscNodeApplication::CalcHash(uint32_t & oru32_HashValue) const
    Stringified application type
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscNodeApplication::h_ApplicationToString(const C_OscNodeApplication::E_Type & ore_Application)
-{
-   QString c_Retval;
+QString C_OscNodeApplication::h_ApplicationToString(
+    const C_OscNodeApplication::E_Type &ore_Application) {
+  QString c_Retval;
 
-   switch (ore_Application)
-   {
-   case C_OscNodeApplication::eBINARY:
-      c_Retval = "binary";
-      break;
-   case C_OscNodeApplication::ePROGRAMMABLE_APPLICATION:
-      c_Retval = "programming_application";
-      break;
-   case C_OscNodeApplication::ePARAMETER_SET_HALC:
-      c_Retval = "parameter_set_halc";
-      break;
-   default:
-      c_Retval = "invalid";
-      break;
-   }
-   return c_Retval;
+  switch (ore_Application) {
+  case C_OscNodeApplication::eBINARY:
+    c_Retval = "binary";
+    break;
+  case C_OscNodeApplication::ePROGRAMMABLE_APPLICATION:
+    c_Retval = "programming_application";
+    break;
+  case C_OscNodeApplication::ePARAMETER_SET_HALC:
+    c_Retval = "parameter_set_halc";
+    break;
+  default:
+    c_Retval = "invalid";
+    break;
+  }
+  return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -125,27 +150,22 @@ QString C_OscNodeApplication::h_ApplicationToString(const C_OscNodeApplication::
    \param[out] ore_Type   Application type
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeApplication::h_StringToApplication(const QString & orc_String,
-                                                 C_OscNodeApplication::E_Type & ore_Type)
-{
-   if (orc_String == "binary")
-   {
-      ore_Type = C_OscNodeApplication::eBINARY;
-   }
-   else if (orc_String == "programming_application")
-   {
-      ore_Type = C_OscNodeApplication::ePROGRAMMABLE_APPLICATION;
-   }
-   else if (orc_String == "parameter_set_halc")
-   {
-      ore_Type = C_OscNodeApplication::ePARAMETER_SET_HALC;
-   }
-   else
-   {
-      //set binary if unknown type read
-      ore_Type = C_OscNodeApplication::eBINARY;
-      osc_write_log_warning("Loading node definition",
-                            "Invalid value for application type. Unknown type: " + orc_String + ". "
-                            "Type is replaced with: " + h_ApplicationToString(C_OscNodeApplication::eBINARY));
-   }
+void C_OscNodeApplication::h_StringToApplication(
+    const QString &orc_String, C_OscNodeApplication::E_Type &ore_Type) {
+  if (orc_String == "binary") {
+    ore_Type = C_OscNodeApplication::eBINARY;
+  } else if (orc_String == "programming_application") {
+    ore_Type = C_OscNodeApplication::ePROGRAMMABLE_APPLICATION;
+  } else if (orc_String == "parameter_set_halc") {
+    ore_Type = C_OscNodeApplication::ePARAMETER_SET_HALC;
+  } else {
+    // set binary if unknown type read
+    ore_Type = C_OscNodeApplication::eBINARY;
+    osc_write_log_warning(
+        "Loading node definition",
+        "Invalid value for application type. Unknown type: " + orc_String +
+            ". "
+            "Type is replaced with: " +
+            h_ApplicationToString(C_OscNodeApplication::eBINARY));
+  }
 }

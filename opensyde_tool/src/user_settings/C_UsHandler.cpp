@@ -1939,7 +1939,7 @@ void C_UsHandler::SetProjSdNodeSelectedCanOpenDeviceUseCaseIndex(
 void C_UsHandler::SetProjSdNodeExpandedCanOpenTree(
     const QString &orc_NodeName, const QHash<uint8_t, bool> &orc_Interfaces,
     const QHash<uint8_t, bool> &orc_Devices,
-    const std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
+    const QMap<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
         &orc_Device) {
   if (this->mc_ProjSdNode.contains(orc_NodeName) == true) {
     // Do not insert as this will replace all currently known user settings for

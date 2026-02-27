@@ -5,46 +5,65 @@
 
    openSYDE: X-Config Package base
 
-   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
 #include "C_OscXcoBase.hpp"
+#include "stwtypes.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::scl;
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 const QString C_OscXcoBase::hc_PACKAGE_EXT = ".syde_xcfg";
-const QString C_OscXcoBase::hc_PACKAGE_EXT_TMP = ".syde_xcfg_tmp"; // intermediate directory
-                                                                       // before creating zip
-                                                                       // archive
-const QString C_OscXcoBase::hc_XCFG_SYSDEF = "xcfg_system_definition.syde_sysdef";
+const QString C_OscXcoBase::hc_PACKAGE_EXT_TMP =
+    ".syde_xcfg_tmp"; // intermediate directory
+                      // before creating zip
+                      // archive
+const QString C_OscXcoBase::hc_XCFG_SYSDEF =
+    "xcfg_system_definition.syde_sysdef";
 const QString C_OscXcoBase::hc_XCFG_SYSDEF_FOLDER = "system_definition";
 const QString C_OscXcoBase::hc_INI_DEV = "devices.ini";
 const QString C_OscXcoBase::hc_INI_DEV_FOLDER = "device_definitions";
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 QStringList C_OscXcoBase::mhc_WarningMessages; // global warnings e.g. if update
                                                // position
                                                // of
                                                // active node is not available
-QString C_OscXcoBase::mhc_ErrorMessage;        // description of error which caused
-                                                             // the
-                                                             // service update package to fail
+QString C_OscXcoBase::mhc_ErrorMessage; // description of error which caused
+                                        // the
+                                        // service update package to fail
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Returns fix defined service update package extension.
@@ -53,19 +72,15 @@ QString C_OscXcoBase::mhc_ErrorMessage;        // description of error which cau
    service update package extension
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscXcoBase::h_GetPackageExtension()
-{
-   return hc_PACKAGE_EXT;
-}
+QString C_OscXcoBase::h_GetPackageExtension() { return hc_PACKAGE_EXT; }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Init
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXcoBase::mh_Init()
-{
-   mhc_WarningMessages.clear(); // clear old warning messages
-   mhc_ErrorMessage = "";       // clear old error message
+void C_OscXcoBase::mh_Init() {
+  mhc_WarningMessages.clear(); // clear old warning messages
+  mhc_ErrorMessage = "";       // clear old error message
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -75,8 +90,8 @@ void C_OscXcoBase::mh_Init()
    \param[in,out]  orc_ErrorMessage       Error message
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXcoBase::mh_GetWarningsAndErrors(QStringList & orc_WarningMessages, QString & orc_ErrorMessage)
-{
-   orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
-   orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller
+void C_OscXcoBase::mh_GetWarningsAndErrors(QStringList &orc_WarningMessages,
+                                           QString &orc_ErrorMessage) {
+  orc_WarningMessages = mhc_WarningMessages; // set warning messages for caller
+  orc_ErrorMessage = mhc_ErrorMessage;       // set error message for caller
 }

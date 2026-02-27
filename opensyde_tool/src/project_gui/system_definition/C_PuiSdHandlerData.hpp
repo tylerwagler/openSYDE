@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QList>
+#include <QMap>
 #include <QObject>
 #include <QStringList>
 #include "stwtypes.hpp"
@@ -64,8 +65,8 @@ protected:
    ///< core arrays)
 
    C_PuiSdSharedDatapools mc_SharedDatapools; ///< UI information for shared datapools
-   std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
-            C_PuiSdLastKnownHalElementId> mc_LastKnownHalcCrcs; ///< HAL data element info
+   QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+        C_PuiSdLastKnownHalElementId> mc_LastKnownHalcCrcs; ///< HAL data element info
    uint32_t mu32_CalculatedHashSystemDefinition;
 
    C_PuiSdHandlerData(QObject * const opc_Parent = NULL);

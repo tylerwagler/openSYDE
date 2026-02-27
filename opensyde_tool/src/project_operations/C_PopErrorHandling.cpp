@@ -23,7 +23,7 @@
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 
-#include <unordered_set>
+#include <QSet>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -67,7 +67,7 @@ void C_PopErrorHandling::h_ProjectLoadErr(const int32_t & ors32_Err, const QStri
    }
    else if ((ors32_Err != C_NO_ERR) && (ors32_Err != C_WARN))
    {
-      std::unordered_set<std::string> c_UniqueDeviceNames;
+      QSet<QString> c_UniqueDeviceNames;
       QString c_Details;
       QString c_Description;
       C_OgeWiCustomMessage c_Message(opc_Parent, C_OgeWiCustomMessage::eERROR);
@@ -98,8 +98,9 @@ void C_PopErrorHandling::h_ProjectLoadErr(const int32_t & ors32_Err, const QStri
          c_Details = "List of not found nodes in the toolbox:";
          for (const auto & rc_Device : orc_ErrorDetailsMissingDevices)
          {
-            if (c_UniqueDeviceNames.emplace(rc_Device.toStdString()).second)
+            if (c_UniqueDeviceNames.contains(rc_Device) == false)
             {
+               c_UniqueDeviceNames.insert(rc_Device);
                c_Details += "<br/> - ";
                c_Details += rc_Device;
             }

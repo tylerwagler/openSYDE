@@ -25,10 +25,8 @@
 #include <QElapsedTimer>
 #include <QThread>
 
-
 #include "DLLocalize.hpp"
 #include "stw_can.hpp"
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------

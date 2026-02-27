@@ -212,11 +212,11 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
          for (QHash<uint8_t, bool>::const_iterator c_ItInterfaces = c_Interfaces.begin();
               c_ItInterfaces != c_Interfaces.end(); ++c_ItInterfaces)
          {
-            if (c_ItInterfaces->first == c_ItManager.key())
+            if (c_ItInterfaces.key() == c_ItManager.key())
             {
-              if (c_ItInterfaces->first == c_ItManager.key())
+              if (c_ItInterfaces.key() == c_ItManager.key())
               {
-                if (c_ItInterfaces->second == true)
+                if (c_ItInterfaces.value() == true)
                 {
                    for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevices = rc_Devices.constBegin();
                         c_ItDevices != rc_Devices.constEnd(); ++c_ItDevices)
@@ -225,25 +225,25 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
                for (QHash<uint8_t, bool>::const_iterator c_ItUsDevices = c_Devices.begin();
                     c_ItUsDevices != c_Devices.end(); ++c_ItUsDevices)
                {
-                  if (c_ItUsDevices->first == c_ItDevices.key().u8_InterfaceNumber)
+                  if (c_ItUsDevices.key() == c_ItDevices.key().u8_InterfaceNumber)
                   {
                      const QModelIndex c_DeviceModelIndex =
                         this->mc_Model.GetDeviceModelIndex(c_ItManager.key(), c_ItDevices.key());
 
-                                if (c_ItUsDevices->first == c_ItDevices.key().u8_InterfaceNumber)
+                                if (c_ItUsDevices.key() == c_ItDevices.key().u8_InterfaceNumber)
                                 {
-                             if (c_ItUsDevices->second == true)
+                             if (c_ItUsDevices.value() == true)
                              {
                                 const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
                                    c_ItDevices.key().u32_NodeIndex);
 
                                 if (pc_DeviceNode != NULL)
                                 {
-                                   const std::map<std::pair<uint8_t, std::pair<uint8_t, QString> >,
-                                                  bool> c_Device = c_UsNode.GetExpandedCanOpenDevice();
-                                   for (std::map<std::pair<uint8_t,
-                                                           std::pair<uint8_t, QString> >,
-                                                 bool>::const_iterator c_ItDevice = c_Device.begin();
+                                   const QMap<std::pair<uint8_t, std::pair<uint8_t, QString> >,
+                                              bool> c_Device = c_UsNode.GetExpandedCanOpenDevice();
+                                   for (QMap<std::pair<uint8_t,
+                                                       std::pair<uint8_t, QString> >,
+                                             bool>::const_iterator c_ItDevice = c_Device.begin();
                                         c_ItDevice != c_Device.end();
                                       ++c_ItDevice)
                                  {
@@ -253,7 +253,7 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
                                  }
                                  }
                               }
-                              this->setExpanded(c_DevicesModelIndex, c_ItUsDevices->second);
+                              this->setExpanded(c_DevicesModelIndex, c_ItUsDevices.value());
                            }
                            else
                            {
@@ -266,7 +266,8 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
                         }
                      }
                   }
-                  this->setExpanded(c_InterfaceModelIndex, c_ItInterfaces->second);
+                   }
+                  this->setExpanded(c_InterfaceModelIndex, c_ItInterfaces.value());
                }
                else
                {
@@ -278,6 +279,7 @@ void C_SdNdeCoConfigTreeView::LoadUserSettings(void)
                this->setExpanded(c_InterfaceModelIndex, false);
             }
          }
+      }
       }
 
       // last known selected item
@@ -324,22 +326,22 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
    {
       QHash<uint8_t, bool> c_SaveInterface;
       QHash<uint8_t, bool> c_SaveDevices;
-      std::map<std::pair<uint8_t, std::pair<uint8_t, QString> >, bool> c_SaveDevice;
+      QMap<std::pair<uint8_t, std::pair<uint8_t, QString> >, bool> c_SaveDevice;
 
-      const std::map<uint8_t, C_OscCanOpenManagerInfo> c_CanOpenManagers = pc_Node->c_CanOpenManagers;
+      const QHash<uint8_t, C_OscCanOpenManagerInfo> c_CanOpenManagers = pc_Node->c_CanOpenManagers;
 
-      for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager = c_CanOpenManagers.begin();
-           c_ItManager != c_CanOpenManagers.end(); ++c_ItManager)
+      for (QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItManager = c_CanOpenManagers.constBegin();
+           c_ItManager != c_CanOpenManagers.constEnd(); ++c_ItManager)
       {
-         const QModelIndex c_InterfaceModelIndex = this->mc_Model.GetInterfaceModelIndex(c_ItManager->first);
-         const QModelIndex c_DevicesModelIndex = this->mc_Model.GetDevicesModelIndex(c_ItManager->first);
+         const QModelIndex c_InterfaceModelIndex = this->mc_Model.GetInterfaceModelIndex(c_ItManager.key());
+         const QModelIndex c_DevicesModelIndex = this->mc_Model.GetDevicesModelIndex(c_ItManager.key());
 
-         const C_OscCanOpenManagerInfo c_CanOpenManagerInfo = c_ItManager->second;
-         const std::map<C_OscCanInterfaceId,
-                        C_OscCanOpenManagerDeviceInfo> & rc_Devices = c_CanOpenManagerInfo.c_CanOpenDevices;
-         for (std::map<C_OscCanInterfaceId,
-                       C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevices = rc_Devices.begin();
-              c_ItDevices != rc_Devices.end(); ++c_ItDevices)
+         const C_OscCanOpenManagerInfo c_CanOpenManagerInfo = c_ItManager.value();
+         const QHash<C_OscCanInterfaceId,
+                     C_OscCanOpenManagerDeviceInfo> & rc_Devices = c_CanOpenManagerInfo.c_CanOpenDevices;
+         for (QHash<C_OscCanInterfaceId,
+                    C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevices = rc_Devices.constBegin();
+              c_ItDevices != rc_Devices.constEnd(); ++c_ItDevices)
          {
                const QModelIndex c_DeviceModelIndex =
                   this->mc_Model.GetDeviceModelIndex(c_ItManager.key(), c_ItDevices.key());
@@ -347,7 +349,7 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
             if (this->isExpanded(c_DeviceModelIndex) == true)
             {
                const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
-                  c_ItDevices->first.u32_NodeIndex);
+                  c_ItDevices.key().u32_NodeIndex);
                if (pc_DeviceNode != NULL)
                {
                   const std::pair<uint8_t, QString> c_PairInterfaceId(
@@ -361,12 +363,12 @@ void C_SdNdeCoConfigTreeView::SaveUserSettings(void) const
 
          if (this->isExpanded(c_InterfaceModelIndex) == true)
          {
-            c_SaveInterface[c_ItManager->first] = true;
+            c_SaveInterface[c_ItManager.key()] = true;
          }
 
          if (this->isExpanded(c_DevicesModelIndex) == true)
          {
-            c_SaveDevices[c_ItManager->first] = true;
+            c_SaveDevices[c_ItManager.key()] = true;
          }
       }
 
@@ -1061,16 +1063,16 @@ void C_SdNdeCoConfigTreeView::mh_InitMappableSignals(
    QList<C_OscCanOpenManagerMappableSignal> & orc_MappableSignals,
    const C_OscCanOpenObjectDictionary & orc_EdsDictionary, const bool oq_IsEds)
 {
-   std::map<uint32_t, QList<uint32_t> > c_MappableObjects;
+   QHash<uint32_t, QList<uint32_t> > c_MappableObjects;
    orc_EdsDictionary.GetMappableObjects(c_MappableObjects);
-   for (std::map<uint32_t, QList<uint32_t> >::const_iterator c_It = c_MappableObjects.begin();
-        c_It != c_MappableObjects.end(); ++c_It)
+   for (QHash<uint32_t, QList<uint32_t> >::const_iterator c_It = c_MappableObjects.constBegin();
+        c_It != c_MappableObjects.constEnd(); ++c_It)
    {
-      for (uint32_t u32_ItSig = 0UL; u32_ItSig < c_It->second.size(); ++u32_ItSig)
+      for (uint32_t u32_ItSig = 0UL; u32_ItSig < c_It.value().size(); ++u32_ItSig)
       {
          C_OscCanOpenManagerMappableSignal c_Entry;
-         if (C_OscImportEdsDcf::h_ParseSignalContent(orc_EdsDictionary.c_OdObjects, c_It->first,
-                                                     c_It->second[u32_ItSig], 0UL,
+         if (C_OscImportEdsDcf::h_ParseSignalContent(orc_EdsDictionary.c_OdObjects, c_It.key(),
+                                                     c_It.value()[u32_ItSig], 0UL,
                                                      true, oq_IsEds, c_Entry.c_SignalData,
                                                      c_Entry.c_DatapoolData,
                                                      c_Entry.q_AutoMinMaxUsed) == C_NO_ERR)

@@ -9,6 +9,7 @@
 #define C_PUISDNODEDATAPOOLLISTELEMENTIDSYNCUTIL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QMap>
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_PuiSdLastKnownHalElementId.hpp"
 #include "C_OscNodeDataPoolListElementOptArrayId.hpp"
@@ -29,25 +30,25 @@ public:
                                  const uint32_t ou32_Index);
    static bool h_OnSyncNodeAboutToBeDeleted(stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_DataElementId,
                                             const uint32_t ou32_Index, const bool oq_OnlyMarkInvalid = false);
-   static void h_OnSyncNodeAboutToBeDeleted(std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+   static void h_OnSyncNodeAboutToBeDeleted(QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                      C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
                                             const uint32_t ou32_Index, const bool oq_OnlyMarkInvalid = false);
    static void h_OnSyncNodeDataPoolAdded(stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_DataElementId,
                                          const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex);
-   static void h_OnSyncNodeDataPoolAdded(std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+   static void h_OnSyncNodeDataPoolAdded(QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                   C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
                                          const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex);
    static void h_OnSyncNodeDataPoolMoved(stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_DataElementId,
                                          const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolSourceIndex,
                                          const uint32_t ou32_DataPoolTargetIndex);
-   static void h_OnSyncNodeDataPoolMoved(std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+   static void h_OnSyncNodeDataPoolMoved(QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                   C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
                                          const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolSourceIndex,
                                          const uint32_t ou32_DataPoolTargetIndex);
    static bool h_OnSyncNodeDataPoolAboutToBeDeleted(
       stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_DataElementId, const uint32_t ou32_NodeIndex,
       const uint32_t ou32_DataPoolIndex);
-   static void h_OnSyncNodeDataPoolAboutToBeDeleted(std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+   static void h_OnSyncNodeDataPoolAboutToBeDeleted(QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                              C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
                                                     const uint32_t ou32_NodeIndex, const uint32_t ou32_DataPoolIndex);
    static void h_OnSyncNodeDataPoolListAdded(stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_DataElementId,
@@ -81,16 +82,16 @@ public:
       const uint32_t ou32_DataPoolIndex, const uint32_t ou32_ListIndex, const uint32_t ou32_ElementIndex);
    static bool h_OnSyncNodeHalc(stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId & orc_DataElementId,
                                 const uint32_t ou32_Index,
-                                const std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+                                const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew);
 
    static int32_t h_CheckAndHandleNewElement(
       const stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId & orc_NewId,
-      std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+      QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs);
    static void h_GetNewMapOnSyncHalc(const uint32_t ou32_Index,
-                                     std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
-                                              stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew, std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+                                     QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+                                              stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew, QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                                                                                                                       C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs);
 
 private:

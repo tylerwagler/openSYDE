@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <QScrollBar>
+#include <QSet>
 
 #include "stwerrors.hpp"
 
@@ -113,7 +114,7 @@ int32_t C_SyvDcExistingNodeList::SetView(const uint32_t ou32_Index, const bool o
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcExistingNodeList::ConnectSerialNumber(const uint32_t ou32_NodeIndex,
                                                   const C_OscProtocolSerialNumber & orc_SerialNumber,
-                                                  const std::map<uint8_t,
+                                                  const QHash<uint8_t,
                                                                  C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds)
 const
 {
@@ -275,7 +276,7 @@ int32_t C_SyvDcExistingNodeList::m_Init(void)
             uint32_t u32_SquadIndex;
             const C_OscNodeSquad * pc_Squad = NULL;
             QList<uint32_t> c_RelevantNodeIndexes;
-            std::set<uint32_t> c_FirstSubNodeConnectedInterfaces;
+            QSet<uint32_t> c_FirstSubNodeConnectedInterfaces;
             uint32_t u32_SubNodeCounter;
             bool q_AllSubNodesAvailable = true;
 
@@ -328,8 +329,7 @@ int32_t C_SyvDcExistingNodeList::m_Init(void)
                         }
                         else
                         {
-                           if (c_FirstSubNodeConnectedInterfaces.find(u32_ItInterface) !=
-                               c_FirstSubNodeConnectedInterfaces.end())
+                           if (c_FirstSubNodeConnectedInterfaces.contains(u32_ItInterface))
                            {
                               // Interface is used by previous sub node(s) too
                               q_Connected = true;

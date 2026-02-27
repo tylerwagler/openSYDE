@@ -170,13 +170,13 @@ void C_CamMetTreeModel::Continue(void) {
           u32_GrayOutPauseOffset;
     }
     // Update all timestamps of multiplexer map
-    for (std::map<int32_t, uint32_t>::iterator c_ItVal =
+    for (QMap<int32_t, uint32_t>::iterator c_ItVal =
              rc_Data.c_GreyOutInformation
                  .c_MapMultiplexerValueToChangedTimeStamps.begin();
          c_ItVal != rc_Data.c_GreyOutInformation
                         .c_MapMultiplexerValueToChangedTimeStamps.end();
          ++c_ItVal) {
-      c_ItVal->second += u32_GrayOutPauseOffset;
+      c_ItVal.value() += u32_GrayOutPauseOffset;
     }
   }
 
@@ -261,7 +261,7 @@ void C_CamMetTreeModel::ActionClearData(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 QList<int32_t>
-C_CamMetTreeModel::AddRows(const std::list<C_CamMetTreeLoggerData> &orc_Data) {
+C_CamMetTreeModel::AddRows(const QList<C_CamMetTreeLoggerData> &orc_Data) {
   const QList<int32_t> c_Retval = this->m_AddRowsContinuousMode(orc_Data);
 
   this->m_AddRowsUnique(orc_Data);
@@ -293,13 +293,13 @@ void C_CamMetTreeModel::SetSelection(const int32_t os32_SelectedParentRow,
 
       // Check if the signal is valid
       if (u32_ChildIndex < pc_CurMessage->c_Signals.size()) {
-        std::set<uint16_t> c_Bits;
+        QSet<uint16_t> c_Bits;
         const C_OscComMessageLoggerDataSignal &rc_CurSignal =
             pc_CurMessage->c_Signals[u32_ChildIndex];
         // Get all bit positions as intel
         rc_CurSignal.c_OscSignal.GetDataBytesBitPositionsOfSignal(c_Bits);
         // Convert bit positions into byte indices
-        for (std::set<uint16_t>::const_iterator c_ItBit = c_Bits.begin();
+        for (QSet<uint16_t>::const_iterator c_ItBit = c_Bits.begin();
              c_ItBit != c_Bits.end(); ++c_ItBit) {
           this->mc_SelectedChildBytes.insert(*c_ItBit / 8U);
         }
@@ -906,7 +906,7 @@ QVariant C_CamMetTreeModel::data(const QModelIndex &orc_Index,
                (orc_Index.parent().isValid() == false)) &&
               (orc_Index.row() == this->ms32_SelectedParentRow)) {
             // Convert byte indices into bit array
-            for (std::set<uint16_t>::const_iterator c_ItByte =
+            for (QSet<uint16_t>::const_iterator c_ItByte =
                      this->mc_SelectedChildBytes.begin();
                  c_ItByte != this->mc_SelectedChildBytes.end(); ++c_ItByte) {
               if (*c_ItByte < c_Array.size()) {
@@ -1018,13 +1018,13 @@ QVariant C_CamMetTreeModel::data(const QModelIndex &orc_Index,
                   s32_MuxValue = rc_MultiplexerSignal.c_RawValueDec.toInt();
                 }
               }
-              const std::map<int32_t, int32_t>::const_iterator c_It =
+              const QMap<int32_t, int32_t>::const_iterator c_It =
                   pc_CurMessage->c_GreyOutInformation
                       .c_MapMultiplexerValueToGrayOutValue.find(s32_MuxValue);
               // Return gray out value for this multiplexer value (if any)
               if (c_It != pc_CurMessage->c_GreyOutInformation
                               .c_MapMultiplexerValueToGrayOutValue.end()) {
-                c_Retval = this->mc_FontTransparcencyColors[c_It->second];
+                c_Retval = this->mc_FontTransparcencyColors[c_It.value()];
               } else {
                 // Use message value as fallback
                 c_Retval =
@@ -1518,7 +1518,7 @@ void C_CamMetTreeModel::m_AdaptTraceBufferSize(void) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 QList<int32_t> C_CamMetTreeModel::m_AddRowsContinuousMode(
-    const std::list<C_CamMetTreeLoggerData> &orc_Data) {
+    const QList<C_CamMetTreeLoggerData> &orc_Data) {
   QList<int32_t> c_Retval;
   if (orc_Data.empty() == false) {
     // Columns which need to get updated on change of static message
@@ -1535,7 +1535,7 @@ QList<int32_t> C_CamMetTreeModel::m_AddRowsContinuousMode(
                                   (static_cast<int32_t>(orc_Data.size()) - 1));
       }
       // Appending items in reserved space
-      for (std::list<C_CamMetTreeLoggerData>::const_iterator c_ItData =
+      for (QList<C_CamMetTreeLoggerData>::const_iterator c_ItData =
                orc_Data.begin();
            c_ItData != orc_Data.end(); ++c_ItData) {
         C_TblTreSimpleItem *const pc_Item = new C_TblTreSimpleItem();
@@ -1557,7 +1557,7 @@ QList<int32_t> C_CamMetTreeModel::m_AddRowsContinuousMode(
         this->beginResetModel();
       }
       // One time code doing both parts
-      for (std::list<C_CamMetTreeLoggerData>::const_iterator c_ItData =
+      for (QList<C_CamMetTreeLoggerData>::const_iterator c_ItData =
                orc_Data.begin();
            c_ItData != orc_Data.end(); ++c_ItData) {
         C_TblTreSimpleItem *const pc_Item = new C_TblTreSimpleItem();
@@ -1600,7 +1600,7 @@ QList<int32_t> C_CamMetTreeModel::m_AddRowsContinuousMode(
         // (orc_Data.size() - 1), this->rowCount());
       }
       // Shift item in queue
-      for (std::list<C_CamMetTreeLoggerData>::const_iterator c_ItData =
+      for (QList<C_CamMetTreeLoggerData>::const_iterator c_ItData =
                orc_Data.begin();
            c_ItData != orc_Data.end(); ++c_ItData) {
         C_TblTreSimpleItem *const pc_Item = new C_TblTreSimpleItem();
@@ -1631,7 +1631,7 @@ QList<int32_t> C_CamMetTreeModel::m_AddRowsContinuousMode(
       int32_t s32_Start = static_cast<int32_t>(this->rowCount()) -
                           (static_cast<int32_t>(orc_Data.size()) - 1);
       c_Retval.reserve(orc_Data.size());
-      for (std::list<C_CamMetTreeLoggerData>::const_iterator c_ItData =
+      for (QList<C_CamMetTreeLoggerData>::const_iterator c_ItData =
                orc_Data.begin();
            c_ItData != orc_Data.end(); ++c_ItData) {
         c_Retval.push_back(s32_Start);
@@ -1651,10 +1651,10 @@ QList<int32_t> C_CamMetTreeModel::m_AddRowsContinuousMode(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetTreeModel::m_AddRowsUnique(
-    const std::list<C_CamMetTreeLoggerData> &orc_Data) {
+    const QList<C_CamMetTreeLoggerData> &orc_Data) {
   if (orc_Data.empty() == false) {
     // Every time
-    for (std::list<C_CamMetTreeLoggerData>::const_iterator c_ItData =
+    for (QList<C_CamMetTreeLoggerData>::const_iterator c_ItData =
              orc_Data.begin();
          c_ItData != orc_Data.end(); ++c_ItData) {
       const QMap<QString, C_CamMetTreeLoggerData>::const_iterator
@@ -1889,13 +1889,13 @@ void C_CamMetTreeModel::m_GrayOutTimer(void) {
           C_CamMetTreeModel::mh_GetTransparencyStep(u32_DiffMsg);
 
       // Use each value and check if gray out value changed
-      for (std::map<int32_t, uint32_t>::const_iterator c_ItValue =
+      for (QMap<int32_t, uint32_t>::const_iterator c_ItValue =
                rc_Data.c_GreyOutInformation
                    .c_MapMultiplexerValueToChangedTimeStamps.begin();
            c_ItValue != rc_Data.c_GreyOutInformation
                             .c_MapMultiplexerValueToChangedTimeStamps.end();
            ++c_ItValue) {
-        const uint32_t u32_DiffDataByte = u32_CurrentTime - c_ItValue->second;
+        const uint32_t u32_DiffDataByte = u32_CurrentTime - c_ItValue.value();
         int32_t s32_TransparencyStepDataByte;
 
         s32_TransparencyStepDataByte =
@@ -1903,13 +1903,13 @@ void C_CamMetTreeModel::m_GrayOutTimer(void) {
 
         if (s32_TransparencyStepDataByte !=
             rc_Data.c_GreyOutInformation
-                .c_MapMultiplexerValueToGrayOutValue[c_ItValue->first]) {
+                .c_MapMultiplexerValueToGrayOutValue[c_ItValue.key()]) {
           QVector<int32_t> c_Roles;
           const int32_t s32_Row = C_CamMetUtil::h_GetRowForMultiplexerValue(
-              rc_Data.c_Signals, c_ItValue->first);
+              rc_Data.c_Signals, c_ItValue.key());
           // Save the new value
           rc_Data.c_GreyOutInformation
-              .c_MapMultiplexerValueToGrayOutValue[c_ItValue->first] =
+              .c_MapMultiplexerValueToGrayOutValue[c_ItValue.key()] =
               s32_TransparencyStepDataByte;
           // Trigger ui update
 

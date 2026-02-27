@@ -19,7 +19,6 @@
 #include "stwtypes.hpp"
 #include <QSettings>
 
-
 //---------------------------------------------------------------------------
 
 using namespace stw::errors;
@@ -312,15 +311,15 @@ void C_KFXCommConfigurationBase::SetParameterList(
   for (s32_Index = 0; s32_Index < mc_Values.size(); s32_Index++) {
     mc_Values[s32_Index] = 0L;
     // make uppercase as we always compare uppercase
-    mc_Parameters[s32_Index].c_Name =
-        mc_Parameters[s32_Index].c_Name.toUpper();
+    mc_Parameters[s32_Index].c_Name = mc_Parameters[s32_Index].c_Name.toUpper();
   }
 }
 
 //---------------------------------------------------------------------------
 
-int32_t C_KFXCommConfigurationBase::GetParameterValue(
-    const QString &orc_ParameterName, int64_t &ors64_Value) const {
+int32_t
+C_KFXCommConfigurationBase::GetParameterValue(const QString &orc_ParameterName,
+                                              int64_t &ors64_Value) const {
   int32_t s32_Index;
 
   for (s32_Index = 0; s32_Index < mc_Parameters.size(); s32_Index++) {
@@ -334,8 +333,9 @@ int32_t C_KFXCommConfigurationBase::GetParameterValue(
 
 //---------------------------------------------------------------------------
 
-int32_t C_KFXCommConfigurationBase::SetParameterValue(
-    const QString &orc_ParameterName, const int64_t os64_Value) {
+int32_t
+C_KFXCommConfigurationBase::SetParameterValue(const QString &orc_ParameterName,
+                                              const int64_t os64_Value) {
   int32_t s32_Index;
 
   for (s32_Index = 0; s32_Index < mc_Parameters.size(); s32_Index++) {
@@ -375,8 +375,9 @@ C_KFXCommConfigurationBase::LoadConfigFromINI(QSettings &orc_File,
         orc_File
             .value(
                 c_Section + "/" +
-                    QString::fromUtf8(
-                        mc_Parameters[s32_Index].c_INIDirective.toUtf8().constData()),
+                    QString::fromUtf8(mc_Parameters[s32_Index]
+                                          .c_INIDirective.toUtf8()
+                                          .constData()),
                 static_cast<int32_t>(mc_Parameters[s32_Index].s64_DefaultValue))
             .toInt());
   }
@@ -385,8 +386,9 @@ C_KFXCommConfigurationBase::LoadConfigFromINI(QSettings &orc_File,
 
 //---------------------------------------------------------------------------
 
-int32_t C_KFXCommConfigurationBase::SaveConfigToINI(
-    QSettings &orc_File, const QString &orc_Section) const {
+int32_t
+C_KFXCommConfigurationBase::SaveConfigToINI(QSettings &orc_File,
+                                            const QString &orc_Section) const {
   int32_t s32_Index;
   QString c_Section = QString::fromUtf8(orc_Section.toUtf8().constData());
 

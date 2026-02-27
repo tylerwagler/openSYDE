@@ -242,7 +242,7 @@ public:
        const QString &orc_NodeName,
        const QHash<uint8_t, bool> &orc_Interfaces,
        const QHash<uint8_t, bool> &orc_Devices,
-       const std::map<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
+       const QMap<std::pair<uint8_t, std::pair<uint8_t, QString>>, bool>
            &orc_Device);
   void SetProjSdNodeCanOpenSelectedUseCaseOrInterface(
       const QString &orc_NodeName, const bool &orq_IsUseCaseSelected);

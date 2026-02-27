@@ -98,16 +98,17 @@ using namespace std;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscZipFile::h_CreateZipFile(const QString &orc_SourcePath,
-                                      const std::set<QString> &orc_SupFiles,
+                                      const QSet<QString> &orc_SupFiles,
                                       const QString &orc_ZipArchivePath,
                                       QString *const opc_ErrorText) {
   int32_t s32_Return = C_NO_ERR;
 
-  std::set<QString>::const_iterator c_Iter;
+  QSet<QString>::const_iterator c_Iter;
 
   // check whether input file(s) exist:
   // go through all files and store in zip archive
-  for (c_Iter = orc_SupFiles.begin(); c_Iter != orc_SupFiles.end(); ++c_Iter) {
+  for (c_Iter = orc_SupFiles.constBegin(); c_Iter != orc_SupFiles.constEnd();
+       ++c_Iter) {
     const QString c_AbsPath = orc_SourcePath + (*c_Iter);
     if (((QFileInfo(c_AbsPath).exists() && QFileInfo(c_AbsPath).isFile()) ==
          false) &&
@@ -122,8 +123,9 @@ int32_t C_OscZipFile::h_CreateZipFile(const QString &orc_SourcePath,
   }
 
   // go through all files and store in zip archive
-  for (c_Iter = orc_SupFiles.begin();
-       (c_Iter != orc_SupFiles.end()) && (s32_Return == C_NO_ERR); ++c_Iter) {
+  for (c_Iter = orc_SupFiles.constBegin();
+       (c_Iter != orc_SupFiles.constEnd()) && (s32_Return == C_NO_ERR);
+       ++c_Iter) {
     const QString c_FileName = *c_Iter;
     if ((QFileInfo(orc_SourcePath + c_FileName).exists() &&
          QFileInfo(orc_SourcePath + c_FileName).isFile())) {
@@ -324,7 +326,7 @@ int32_t C_OscZipFile::h_UnpackZipFile(const QString &orc_SourcePath,
    \param[in]     orc_BasePath Path the files will be raltive to
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscZipFile::h_AppendFilesRelative(std::set<QString> &orc_Set,
+void C_OscZipFile::h_AppendFilesRelative(QSet<QString> &orc_Set,
                                          const QStringList &orc_Files,
                                          const QString &orc_BasePath) {
   for (uint32_t u32_PosFilesToFlash = 0; u32_PosFilesToFlash < orc_Files.size();

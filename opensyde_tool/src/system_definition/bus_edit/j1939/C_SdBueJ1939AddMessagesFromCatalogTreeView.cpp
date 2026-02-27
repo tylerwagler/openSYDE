@@ -217,15 +217,15 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeView::UnSelectAllMessages(void)
 void C_SdBueJ1939AddMessagesFromCatalogTreeView::m_InitColumns()
 {
    const
-   std::map<C_SdBueJ1939AddMessagesFromCatalogTreeModel::E_Columns,
-            uint32_t> c_ColumnWidths = C_SdBueJ1939AddMessagesFromCatalogTreeView::mh_GetDefaultColumnWidths();
+   QMap<C_SdBueJ1939AddMessagesFromCatalogTreeModel::E_Columns,
+        uint32_t> c_ColumnWidths = C_SdBueJ1939AddMessagesFromCatalogTreeView::mh_GetDefaultColumnWidths();
 
-   for (std::map<C_SdBueJ1939AddMessagesFromCatalogTreeModel::E_Columns,
-                 uint32_t>::const_iterator c_ItEntry = c_ColumnWidths.cbegin(); c_ItEntry != c_ColumnWidths.cend();
+   for (QMap<C_SdBueJ1939AddMessagesFromCatalogTreeModel::E_Columns,
+             uint32_t>::const_iterator c_ItEntry = c_ColumnWidths.cbegin(); c_ItEntry != c_ColumnWidths.cend();
         ++c_ItEntry)
    {
       this->setColumnWidth(C_SdBueJ1939AddMessagesFromCatalogTreeModel::h_EnumToColumn(
-                              c_ItEntry->first), c_ItEntry->second);
+                              c_ItEntry.key()), c_ItEntry.value());
    }
 }
 
@@ -278,10 +278,10 @@ void C_SdBueJ1939AddMessagesFromCatalogTreeView::m_ShowHideHorizontalScrollBar(c
    Default column widths
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<C_SdBueJ1939AddMessagesFromCatalogTreeModel::E_Columns,
-         uint32_t> C_SdBueJ1939AddMessagesFromCatalogTreeView::mh_GetDefaultColumnWidths()
+QMap<C_SdBueJ1939AddMessagesFromCatalogTreeModel::E_Columns,
+     uint32_t> C_SdBueJ1939AddMessagesFromCatalogTreeView::mh_GetDefaultColumnWidths()
 {
-   std::map<C_SdBueJ1939AddMessagesFromCatalogTreeModel::E_Columns, uint32_t> c_ColumnWidths;
+   QMap<C_SdBueJ1939AddMessagesFromCatalogTreeModel::E_Columns, uint32_t> c_ColumnWidths;
    c_ColumnWidths[C_SdBueJ1939AddMessagesFromCatalogTreeModel::eNAME] = 200;
    c_ColumnWidths[C_SdBueJ1939AddMessagesFromCatalogTreeModel::eCOMMENT] = 250;
    c_ColumnWidths[C_SdBueJ1939AddMessagesFromCatalogTreeModel::ePGN_SPN] = 150;

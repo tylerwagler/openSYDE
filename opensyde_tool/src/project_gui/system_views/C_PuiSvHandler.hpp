@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QList>
+#include <QSet>
 #include <vector>
 #include <QObject>
 #include <QStringList>
@@ -44,7 +45,7 @@ public:
    //Get
    const C_PuiSvData * GetView(const uint32_t ou32_Index) const;
    uint32_t GetViewCount(void) const;
-   const std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+   const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                   C_PuiSdLastKnownHalElementId> & GetLastKnownHalcCrcs(void) const;
    bool GetServiceModeActive(void) const;
    int32_t GetNodeActiveFlagsWithSquadAdaptions(const uint32_t ou32_ViewIndex, QByteArray & orc_ActiveFlags,
@@ -203,9 +204,9 @@ public:
    int32_t CheckViewReconnectNecessary(const uint32_t ou32_ViewIndex, bool & orq_ReconnectNecessary);
    int32_t CheckViewNodeDashboardRoutingError(const uint32_t ou32_ViewIndex, const uint32_t ou32_NodeIndex,
                                               bool & orq_RoutingDashboardError);
-   int32_t GetViewNodeDashboardRoutingErrors(const uint32_t ou32_ViewIndex, std::set<uint32_t> & orc_NodesWithErrors);
+   int32_t GetViewNodeDashboardRoutingErrors(const uint32_t ou32_ViewIndex, QSet<uint32_t> & orc_NodesWithErrors);
    int32_t GetViewRelevantNodesForDashboardRouting(const uint32_t ou32_ViewIndex,
-                                                   std::set<uint32_t> & orc_RelevantNodes);
+                                                   QSet<uint32_t> & orc_RelevantNodes);
 
    //Misc
    int32_t CheckAndHandleNewElement(const C_PuiSvDbNodeDataPoolListElementId & orc_NewId);
@@ -308,14 +309,14 @@ private:
    void m_HandleCompatibilityChart(void);
    void m_FixDashboardWriteContentType(void);
    int32_t m_CheckRoutingDetails(const uint32_t ou32_ViewIndex, const QByteArray & orc_CheckedNodeActiveFlags,
-                                 std::map<uint32_t,
-                                          QString> & orc_SetupWarningRoutingDetails, QList< std::map<uint32_t,
-                                                                                                           QString> > & orc_ErrorRoutingDetails, std::set<uint32_t> & orc_NodesWithDashboardRoutingError, std::set<uint32_t> & orc_NodesRelevantForDashboardRouting)
+                                 QMap<uint32_t,
+                                      QString> & orc_SetupWarningRoutingDetails, QList< QMap<uint32_t,
+                                                                                                   QString> > & orc_ErrorRoutingDetails, QSet<uint32_t> & orc_NodesWithDashboardRoutingError, QSet<uint32_t> & orc_NodesRelevantForDashboardRouting)
    const;
    int32_t m_CheckRouting(const uint32_t ou32_ViewIndex, const QByteArray & orc_CheckedNodeActiveFlags,
                           QString & orc_SetupWarningMessage, QStringList & orc_ErrorMessages,
-                          std::set<uint32_t> & orc_NodesWithDashboardRoutingError,
-                          std::set<uint32_t> & orc_NodesRelevantForDashboardRouting) const;
+                          QSet<uint32_t> & orc_NodesWithDashboardRoutingError,
+                          QSet<uint32_t> & orc_NodesRelevantForDashboardRouting) const;
    QHash<QString, bool> m_GetExistingViewNames(void) const;
 
    static C_PuiSvHandler * mhpc_Singleton;
@@ -325,7 +326,7 @@ private:
    uint32_t mu32_PreviousSystemDefintionHash;
 
    bool mq_IsServiceModeActive;
-   std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+   QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
             C_PuiSdLastKnownHalElementId> mc_LastKnownHalcCrcs;
 
    class C_PuiSvViewErrorDetails
@@ -340,8 +341,8 @@ private:
       QString c_RoutingSetupWarningMessage;
       QStringList c_RoutingErrorMessages;
       QByteArray c_ResultingNodeActiveStatus;
-      std::set<uint32_t> c_ResultNodesWithDashboardRoutingError;
-      std::set<uint32_t> c_ResultNodesRelevantForDashboardRouting;
+      QSet<uint32_t> c_ResultNodesWithDashboardRoutingError;
+      QSet<uint32_t> c_ResultNodesRelevantForDashboardRouting;
 
       void GetResults(bool * const opq_NameInvalid, bool * const opq_PcNotConnected, bool * const opq_RoutingInvalid,
                       bool * const opq_RoutingUpdateInvalid, bool * const opq_RoutingDashboardInvalid,

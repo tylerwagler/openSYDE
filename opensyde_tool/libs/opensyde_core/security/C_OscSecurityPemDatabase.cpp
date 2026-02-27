@@ -144,11 +144,11 @@ C_OscSecurityPemDatabase::GetLevel7PemInformation() const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t
-C_OscSecurityPemDatabase::AddLevel7PemFile(const std::string &orc_Path) {
+C_OscSecurityPemDatabase::AddLevel7PemFile(const QString &orc_Path) {
   int32_t s32_Retval;
 
-  if (QFileInfo(QString::fromStdString(orc_Path)).exists() &&
-      QFileInfo(QString::fromStdString(orc_Path)).isFile()) {
+  if (QFileInfo(orc_Path).exists() &&
+      QFileInfo(orc_Path).isFile()) {
     s32_Retval = C_OscSecurityPemDatabase::m_TryAddKeyFromPath(orc_Path, false);
   } else {
     s32_Retval = C_RANGE;
@@ -169,23 +169,21 @@ C_OscSecurityPemDatabase::AddLevel7PemFile(const std::string &orc_Path) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t
-C_OscSecurityPemDatabase::ParseFolder(const std::string &orc_FolderPath) {
+C_OscSecurityPemDatabase::ParseFolder(const QString &orc_FolderPath) {
   int32_t s32_Retval = C_NO_ERR;
 
-  const QString c_SclFolderPathWithDelimiter =
+  const QString c_FolderPathWithDelimiter =
       stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(
-          QString::fromStdString(orc_FolderPath));
-  const std::string c_FolderPathWithDelimiter =
-      c_SclFolderPathWithDelimiter.toUtf8().constData();
+          orc_FolderPath);
 
   // Remove previous results
   this->mc_StoredPemFiles.clear();
 
-  if (QFileInfo(QString::fromStdString(c_FolderPathWithDelimiter)).isDir()) {
-    const QList<std::string> c_Files =
+  if (QFileInfo(c_FolderPathWithDelimiter).isDir()) {
+    const QStringList c_Files =
         C_OscSecurityPemDatabase::mh_GetPemFiles(c_FolderPathWithDelimiter);
     for (uint32_t u32_It = 0UL; u32_It < c_Files.size(); ++u32_It) {
-      const std::string c_CurFolderPath = c_Files[u32_It];
+      const QString c_CurFolderPath = c_Files[u32_It];
       C_OscSecurityPemDatabase::m_TryAddKeyFromPath(c_CurFolderPath, true);
     }
     osc_write_log_info(
@@ -194,7 +192,7 @@ C_OscSecurityPemDatabase::ParseFolder(const std::string &orc_FolderPath) {
                 "folder \"%3\".")
             .arg(this->mc_StoredPemFiles.size())
             .arg(c_Files.size())
-            .arg(QString::fromStdString(c_FolderPathWithDelimiter)));
+            .arg(c_FolderPathWithDelimiter));
   } else {
     s32_Retval = C_RANGE;
   }
@@ -216,27 +214,27 @@ C_OscSecurityPemDatabase::ParseFolder(const std::string &orc_FolderPath) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t
-C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string &orc_Path,
+C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const QString &orc_Path,
                                               const bool oq_AddToList) {
   C_OscSecurityPem c_NewFile;
 
-  std::string c_ErrorMessage;
+  QString c_ErrorMessage;
   int32_t s32_Retval = c_NewFile.LoadFromFile(orc_Path, c_ErrorMessage);
   if (s32_Retval == C_NO_ERR) {
     s32_Retval =
         m_TryAddKey(c_NewFile.GetKeyInfo(), c_ErrorMessage, oq_AddToList);
   }
-  if (c_ErrorMessage.size() > 0UL) {
-    std::string c_Heading;
+  if (c_ErrorMessage.size() > 0) {
+    QString c_Heading;
     if (oq_AddToList) {
       c_Heading = "Read PEM database";
     } else {
       c_Heading = "Read PEM level 7 key";
     }
-    osc_write_log_warning(QString::fromStdString(c_Heading),
+    osc_write_log_warning(c_Heading,
                           QString("Error reading file \"%1\": %2")
-                              .arg(QString::fromStdString(orc_Path))
-                              .arg(QString::fromStdString(c_ErrorMessage)));
+                              .arg(orc_Path)
+                              .arg(c_ErrorMessage));
   }
   return s32_Retval;
 }
@@ -257,7 +255,7 @@ C_OscSecurityPemDatabase::m_TryAddKeyFromPath(const std::string &orc_Path,
 //----------------------------------------------------------------------------------------------------------------------
 int32_t
 C_OscSecurityPemDatabase::m_TryAddKey(const C_OscSecurityPemKeyInfo &orc_NewKey,
-                                      std::string &orc_ErrorMessage,
+                                      QString &orc_ErrorMessage,
                                       const bool oq_AddToList) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -289,11 +287,11 @@ C_OscSecurityPemDatabase::m_TryAddKey(const C_OscSecurityPemKeyInfo &orc_NewKey,
    PEM files
 */
 //----------------------------------------------------------------------------------------------------------------------
-QList<std::string>
-C_OscSecurityPemDatabase::mh_GetPemFiles(const std::string &orc_FolderPath) {
-  QList<std::string> c_Retval;
+QStringList
+C_OscSecurityPemDatabase::mh_GetPemFiles(const QString &orc_FolderPath) {
+  QStringList c_Retval;
 
-  QDir c_QDir(QString::fromStdString(orc_FolderPath));
+  QDir c_QDir(orc_FolderPath);
   QStringList c_Filter;
   c_Filter << "*.pem";
 
@@ -301,8 +299,7 @@ C_OscSecurityPemDatabase::mh_GetPemFiles(const std::string &orc_FolderPath) {
       c_QDir.entryInfoList(c_Filter, QDir::Files | QDir::NoDotAndDotDot);
 
   for (int i = 0; i < c_InfoList.count(); ++i) {
-    c_Retval.push_back(
-        (c_QDir.path() + "/" + c_InfoList.at(i).fileName()).toStdString());
+    c_Retval.push_back(c_QDir.path() + "/" + c_InfoList.at(i).fileName());
   }
   return c_Retval;
 }

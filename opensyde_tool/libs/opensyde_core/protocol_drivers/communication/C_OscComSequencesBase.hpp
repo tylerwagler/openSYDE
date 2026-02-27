@@ -23,7 +23,6 @@
 #include "C_OscComDriverFlash.hpp"
 #include "C_OscSystemDefinition.hpp"
 
-
 #include <QString>
 
 /* -- Namespace

@@ -10,7 +10,7 @@
 #define C_SYVSESCENE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <list>
+#include <QList>
 #include "stwtypes.hpp"
 
 #include "C_SyvTopologyBaseScene.hpp"
@@ -88,7 +88,7 @@ private:
    void m_OnConnectionChanged(void);
 
    bool mq_EditMode;
-   std::list<QDialog *> mc_Dialogs;
+   QList<QDialog *> mc_Dialogs;
    C_GiSvPcBusConnector * mpc_SelectedBusConnectorItem;
    stw::opensyde_gui_logic::C_SebUnoTopBaseManager mc_UndoManager;
    C_SyvSeContextMenuManager mc_ContextMenuManager;

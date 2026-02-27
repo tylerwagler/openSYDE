@@ -55,7 +55,7 @@ const int32_t C_SyvDcConnectedNodeWidget::mhs32_SCROLLBAR_WIDTH = 10;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDcConnectedNodeWidget::C_SyvDcConnectedNodeWidget(QListWidgetItem * const opc_Item,
                                                        const C_OscDcDeviceInformation & orc_Info,
-                                                       const QMap<uint8_t,
+                                                       const QHash<uint8_t,
                                                                       C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds,
                                                        QWidget * const opc_Parent) :
    QWidget(opc_Parent),
@@ -165,7 +165,7 @@ bool C_SyvDcConnectedNodeWidget::GetDeviceNameValid(void) const
    Sub node ids mapping to node ids
 */
 //----------------------------------------------------------------------------------------------------------------------
-QMap<uint8_t, C_OscDcDeviceOldComConfig> C_SyvDcConnectedNodeWidget::GetSubNodeIdsToOldNodeIds(void) const
+QHash<uint8_t, C_OscDcDeviceOldComConfig> C_SyvDcConnectedNodeWidget::GetSubNodeIdsToOldNodeIds(void) const
 {
    return this->mc_SubNodeIdsToOldNodeIds;
 }

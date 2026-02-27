@@ -13,7 +13,7 @@
 #define C_OGETABLEWIDGETCOMIF_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <map>
+#include <QMap>
 #include <QTableWidget>
 #include "stwtypes.hpp"
 #include "C_NagToolTip.hpp"
@@ -65,7 +65,7 @@ private:
       stw::opensyde_gui::C_NagToolTip::E_Type e_Type;
    };
 
-   std::map<C_ItemId, C_ToolTipContent> mc_ToolTips;
+   QMap<C_ItemId, C_ToolTipContent> mc_ToolTips;
    stw::opensyde_gui::C_NagToolTip * mpc_ToolTip;
    C_ItemId mc_HoveredRow;
    int32_t ms32_HoveredVertHeader;

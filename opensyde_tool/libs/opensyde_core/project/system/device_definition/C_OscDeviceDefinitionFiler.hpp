@@ -15,10 +15,10 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include <QList>
 #include "C_OscDeviceDefinition.hpp"
 #include "C_OscXmlParser.hpp"
 #include "stwtypes.hpp"
+#include <QList>
 #include <QString>
 
 /* -- Namespace
@@ -83,19 +83,16 @@ private:
   static void
   mh_SaveCanFdProperties(const C_OscDeviceDefinition &orc_DeviceDefinition,
                          C_OscXmlParser &orc_Parser);
-  static int32_t
-  mh_LoadCanFdBitrates(QList<uint16_t> &orc_CanFdDataBitrates,
-                       C_OscXmlParser &orc_Parser);
-  static void
-  mh_SaveCanFdBitrates(const QList<uint16_t> &orc_CanFdDataBitrates,
-                       C_OscXmlParser &orc_Parser);
+  static int32_t mh_LoadCanFdBitrates(QList<uint16_t> &orc_CanFdDataBitrates,
+                                      C_OscXmlParser &orc_Parser);
+  static void mh_SaveCanFdBitrates(const QList<uint16_t> &orc_CanFdDataBitrates,
+                                   C_OscXmlParser &orc_Parser);
   static int32_t mh_LoadFeatures(
       QList<C_OscSupportedCanInterfaceFeatures> &orc_SupportedCanFeatures,
       C_OscXmlParser &orc_Parser);
-  static void
-  mh_SaveFeatures(const QList<C_OscSupportedCanInterfaceFeatures>
-                      &orc_SupportedCanFeatures,
-                  C_OscXmlParser &orc_Parser);
+  static void mh_SaveFeatures(
+      const QList<C_OscSupportedCanInterfaceFeatures> &orc_SupportedCanFeatures,
+      C_OscXmlParser &orc_Parser);
 
 public:
   static int32_t h_Load(C_OscDeviceDefinition &orc_DeviceDefinition,

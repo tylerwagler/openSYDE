@@ -10,8 +10,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include <list>
-
 #include "C_SyvDaItPaWriteWidget.hpp"
 #include "ui_C_SyvDaItPaWriteWidget.h"
 
@@ -167,8 +165,8 @@ C_SyvDaItPaWriteWidget::E_Step C_SyvDaItPaWriteWidget::GetStep(void) const
    C_RD_WR     An error occurred. The data on the server may not be valid.
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvDaItPaWriteWidget::GetChangedElements(std::map<C_OscNodeDataPoolListElementId,
-                                                            C_SyvDaItPaValuePairs> & orc_AffectedElementValues) const
+int32_t C_SyvDaItPaWriteWidget::GetChangedElements(QMap<C_OscNodeDataPoolListElementId,
+                                                         C_SyvDaItPaValuePairs> & orc_AffectedElementValues) const
 {
    int32_t s32_Return = C_RD_WR;
 
@@ -570,8 +568,8 @@ void C_SyvDaItPaWriteWidget::m_ShowParameterValues(const bool oq_ShowReadValues)
    // Show the read list in the confirm area
    std::set<stw::opensyde_core::C_OscNodeDataPoolListId>::const_iterator c_ItItem;
    // List for sorting all nodes
-   std::list<QString> c_NodeText;
-   std::list<QString>::const_iterator c_ItNodeText;
+   QStringList c_NodeText;
+   QStringList::const_iterator c_ItNodeText;
    QString c_Text = "";
    uint32_t u32_CurNodeIndex = 0xFFFFFFFFU;
    uint32_t u32_CurDataPoolIndex = 0xFFFFFFFFU;
@@ -1105,13 +1103,13 @@ bool C_SyvDaItPaWriteWidget::m_WasElementChanged(const uint32_t ou32_NodeIndex, 
    {
       const C_OscNodeDataPoolListElementId c_ElementId(ou32_NodeIndex, ou32_DataPoolIndex, ou32_ListIndex,
                                                        ou32_ElementIndex);
-      const std::map<stw::opensyde_core::C_OscNodeDataPoolListElementId,
-                     stw::opensyde_gui_logic::C_SyvDaItPaValuePairs>::const_iterator c_It =
+      const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
+                 stw::opensyde_gui_logic::C_SyvDaItPaValuePairs>::const_iterator c_It =
          this->mc_AllAffectedValues.find(c_ElementId);
       Q_ASSERT(c_It != this->mc_AllAffectedValues.end());
       if (c_It != this->mc_AllAffectedValues.end())
       {
-         q_Changed = c_It->second.q_Changed;
+         q_Changed = c_It.value().q_Changed;
       }
    }
 
@@ -1129,32 +1127,32 @@ QString C_SyvDaItPaWriteWidget::m_GetSuspectElementReport(void) const
 {
    QString c_Retval;
 
-   for (std::map<stw::opensyde_core::C_OscNodeDataPoolListElementId,
-                 stw::opensyde_gui_logic::C_SyvDaItPaValuePairs>::const_iterator c_It =
+   for (QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
+             stw::opensyde_gui_logic::C_SyvDaItPaValuePairs>::const_iterator c_It =
            this->mc_AllAffectedValues.begin();
         c_It != this->mc_AllAffectedValues.end(); ++c_It)
    {
-      if (c_It->second.c_Actual.CompareContentStrict(c_It->second.c_Expected))
+      if (c_It.value().c_Actual.CompareContentStrict(c_It.value().c_Expected))
       {
          //Skip: valid
       }
       else
       {
          const C_OscNodeDataPoolListElement * const pc_Element =
-            C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_It->first);
+            C_PuiSdHandler::h_GetInstance()->GetOscDataPoolListElement(c_It.key());
          Q_ASSERT(pc_Element != NULL);
          if (pc_Element != NULL)
          {
-            const QString c_Namespace = C_PuiSdUtil::h_GetNamespace(c_It->first);
+            const QString c_Namespace = C_PuiSdUtil::h_GetNamespace(c_It.key());
             QString c_Expected;
             QString c_Actual;
             QString c_Entry;
             //Mark as suspect
-            C_SdNdeDpContentUtil::h_GetValuesAsScaledCombinedString(c_It->second.c_Expected,
+            C_SdNdeDpContentUtil::h_GetValuesAsScaledCombinedString(c_It.value().c_Expected,
                                                                     pc_Element->f64_Factor,
                                                                     pc_Element->f64_Offset, c_Expected, false);
             c_Expected += static_cast<QString>(" ") + pc_Element->c_Unit;
-            C_SdNdeDpContentUtil::h_GetValuesAsScaledCombinedString(c_It->second.c_Actual,
+            C_SdNdeDpContentUtil::h_GetValuesAsScaledCombinedString(c_It.value().c_Actual,
                                                                     pc_Element->f64_Factor,
                                                                     pc_Element->f64_Offset, c_Actual, false);
             c_Actual += static_cast<QString>(" ") + pc_Element->c_Unit;
@@ -1620,19 +1618,19 @@ void C_SyvDaItPaWriteWidget::m_ReportErrorNvmNotifyOfChanges(const int32_t os32_
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SyvDaItPaWriteWidget::m_ReadAndStoreUpdatedValues(void)
 {
-   for (std::map<stw::opensyde_core::C_OscNodeDataPoolListElementId,
-                 stw::opensyde_gui_logic::C_SyvDaItPaValuePairs>::iterator c_It =
+   for (QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
+             stw::opensyde_gui_logic::C_SyvDaItPaValuePairs>::iterator c_It =
            this->mc_AllAffectedValues.begin();
         c_It != this->mc_AllAffectedValues.end(); ++c_It)
    {
-      const C_OscNodeDataPoolListElement * const pc_Element = m_GetReadElementById(c_It->first.u32_NodeIndex,
-                                                                                   c_It->first.u32_DataPoolIndex,
-                                                                                   c_It->first.u32_ListIndex,
-                                                                                   c_It->first.u32_ElementIndex);
+      const C_OscNodeDataPoolListElement * const pc_Element = m_GetReadElementById(c_It.key().u32_NodeIndex,
+                                                                                   c_It.key().u32_DataPoolIndex,
+                                                                                   c_It.key().u32_ListIndex,
+                                                                                   c_It.key().u32_ElementIndex);
       Q_ASSERT(pc_Element != NULL);
       if (pc_Element != NULL)
       {
-         c_It->second.c_Actual = pc_Element->c_NvmValue;
+         c_It.value().c_Actual = pc_Element->c_NvmValue;
       }
    }
    return m_GetSuspectElementReport();

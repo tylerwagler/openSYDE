@@ -3,40 +3,54 @@
    \file
    \brief       HALC definition
 
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "stwtypes.hpp"
 #include "C_OscHalcDef.hpp"
+#include "stwtypes.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscHalcDef::C_OscHalcDef(void) :
-   C_OscHalcDefBase()
-{
-}
+C_OscHalcDef::C_OscHalcDef(void) : C_OscHalcDefBase() {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Get domain size
@@ -45,9 +59,8 @@ C_OscHalcDef::C_OscHalcDef(void) :
    Current domain count
 */
 //----------------------------------------------------------------------------------------------------------------------
-uint32_t C_OscHalcDef::GetDomainSize(void) const
-{
-   return static_cast<uint32_t>(this->mc_Domains.size());
+uint32_t C_OscHalcDef::GetDomainSize(void) const {
+  return static_cast<uint32_t>(this->mc_Domains.size());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -60,15 +73,14 @@ uint32_t C_OscHalcDef::GetDomainSize(void) const
    Else Valid domain
 */
 //----------------------------------------------------------------------------------------------------------------------
-const C_OscHalcDefDomain * C_OscHalcDef::GetDomainDefDataConst(const uint32_t ou32_Index) const
-{
-   const C_OscHalcDefDomain * pc_Retval = NULL;
+const C_OscHalcDefDomain *
+C_OscHalcDef::GetDomainDefDataConst(const uint32_t ou32_Index) const {
+  const C_OscHalcDefDomain *pc_Retval = NULL;
 
-   if (ou32_Index < this->mc_Domains.size())
-   {
-      pc_Retval = &this->mc_Domains[ou32_Index];
-   }
-   return pc_Retval;
+  if (ou32_Index < this->mc_Domains.size()) {
+    pc_Retval = &this->mc_Domains[ou32_Index];
+  }
+  return pc_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -77,9 +89,8 @@ const C_OscHalcDefDomain * C_OscHalcDef::GetDomainDefDataConst(const uint32_t ou
    \param[in]  orc_Domain  Domain
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDef::AddDomain(const C_OscHalcDefDomain & orc_Domain)
-{
-   this->mc_Domains.push_back(orc_Domain);
+void C_OscHalcDef::AddDomain(const C_OscHalcDefDomain &orc_Domain) {
+  this->mc_Domains.push_back(orc_Domain);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -88,7 +99,5 @@ void C_OscHalcDef::AddDomain(const C_OscHalcDefDomain & orc_Domain)
     Note: not necessary here
 */
 //----------------------------------------------------------------------------------------------------------------------
-//lint -e{9175} intentionally no functionality in this implementation
-void C_OscHalcDef::HandleFileLoadPostProcessing(void)
-{
-}
+// lint -e{9175} intentionally no functionality in this implementation
+void C_OscHalcDef::HandleFileLoadPostProcessing(void) {}

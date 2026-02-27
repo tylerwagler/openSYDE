@@ -90,9 +90,9 @@ uint32_t C_PuiSdHandlerBusLogic::AddBusAndSort(C_OscSystemBus & orc_OscBus, cons
    Vector of pointers to all currently registered bus names
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_PuiSdHandlerBusLogic::GetExistingBusNames(void) const
+QHash<QString, bool> C_PuiSdHandlerBusLogic::GetExistingBusNames(void) const
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    for (uint32_t u32_ItBus = 0; u32_ItBus < this->mc_CoreDefinition.c_Buses.size(); ++u32_ItBus)
    {
       c_Retval[this->mc_CoreDefinition.c_Buses[u32_ItBus].c_Name] = true;
@@ -2886,7 +2886,7 @@ C_PuiSdHandlerBusLogic::C_PuiSdHandlerBusLogic(QObject * const opc_Parent) :
 void C_PuiSdHandlerBusLogic::m_GetExistingMessageNamesProtocol(const uint32_t & oru32_NodeIndex,
                                                                const C_OscCanProtocol::E_Type & ore_ComType,
                                                                const uint32_t & oru32_InterfaceIndex,
-                                                               std::map<QString, bool> & orc_ExistingNames)
+                                                               QHash<QString, bool> & orc_ExistingNames)
 const
 {
    const QList<const C_OscCanMessageContainer *> c_Container = this->GetCanProtocolMessageContainers(
@@ -2924,11 +2924,11 @@ const
    Vector of pointers to all currently registered message names contained in the specified node interface
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_PuiSdHandlerBusLogic::m_GetExistingMessageNames(const uint32_t & oru32_NodeIndex,
-                                                                              const uint32_t & oru32_InterfaceIndex)
+QHash<QString, bool> C_PuiSdHandlerBusLogic::m_GetExistingMessageNames(const uint32_t & oru32_NodeIndex,
+                                                                           const uint32_t & oru32_InterfaceIndex)
 const
 {
-   std::map<QString, bool> c_ExistingNames;
+   QHash<QString, bool> c_ExistingNames;
 
    // get existing message names of all three protocols
    m_GetExistingMessageNamesProtocol(oru32_NodeIndex, C_OscCanProtocol::eLAYER2, oru32_InterfaceIndex, c_ExistingNames);
@@ -2954,10 +2954,10 @@ const
    Vector of pointers to all currently registered signal names contained in the specified message
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<QString, bool> C_PuiSdHandlerBusLogic::m_GetExistingSignalNames(
+QHash<QString, bool> C_PuiSdHandlerBusLogic::m_GetExistingSignalNames(
    const C_OscCanMessageIdentificationIndices & orc_MessageId) const
 {
-   std::map<QString, bool> c_Retval;
+   QHash<QString, bool> c_Retval;
    const C_OscNode * const pc_Node = this->GetOscNodeConst(orc_MessageId.u32_NodeIndex);
    if (pc_Node != NULL)
    {

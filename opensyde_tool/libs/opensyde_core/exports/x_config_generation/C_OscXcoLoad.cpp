@@ -210,11 +210,11 @@ int32_t C_OscXcoLoad::mh_CheckParamsToProcessPackage(
 int32_t C_OscXcoLoad::mh_CheckXcfgFiles(const QString &orc_PackagePath) {
   int32_t s32_Return;
 
-  QStringList c_NecessaryFilesTop; // those are the files we look for
+  QStringList c_NecessaryFilesTop;    // those are the files we look for
   QStringList c_NecessaryFilesSysDef; // those are the files we look
-                                               // for
+                                      // for
   QStringList c_NecessaryFilesDevDef; // those are the files we look
-                                               // for
+                                      // for
 
   c_NecessaryFilesTop.push_back(
       C_OscXcoManifestFiler::hc_FILE_NAME);         //".syde_pkg"

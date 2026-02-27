@@ -123,14 +123,14 @@ bool C_OgeTawToolTipBase::event(QEvent * const opc_Event)
                this->tabBar()->tabAt(this->tabBar()->mapFromGlobal(pc_HelpEvent->globalPos()));
             if (s32_TabIndex >= 0)
             {
-               std::map<int32_t, C_ToolTipContent>::const_iterator c_It;
+               QMap<int32_t, C_ToolTipContent>::const_iterator c_It;
                c_It = this->mc_ToolTips.find(s32_TabIndex);
                if (c_It != this->mc_ToolTips.end())
                {
                   this->setMouseTracking(true);
 
-                  this->mpc_ToolTip->SetHeading(c_It->second.c_Heading);
-                  this->mpc_ToolTip->SetContent(c_It->second.c_Content);
+                  this->mpc_ToolTip->SetHeading(c_It.value().c_Heading);
+                  this->mpc_ToolTip->SetContent(c_It.value().c_Content);
                   this->mpc_ToolTip->show();
                   this->mpc_ToolTip->DoMove(pc_HelpEvent->globalPos());
 

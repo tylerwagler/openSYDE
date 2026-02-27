@@ -264,16 +264,17 @@ int32_t C_SdNdeCoOverviewTableModel::rowCount(const QModelIndex & orc_Parent) co
    {
       const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
 
-      std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_IterManagers;
-      for (c_IterManagers = pc_Node->c_CanOpenManagers.begin(); c_IterManagers != pc_Node->c_CanOpenManagers.end();
+      QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_IterManagers;
+      for (c_IterManagers = pc_Node->c_CanOpenManagers.constBegin();
+           c_IterManagers != pc_Node->c_CanOpenManagers.constEnd();
            ++c_IterManagers)
       {
          s32_Retval++; // manager found
 
          // iterate through devices of manager
-         std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_IterDevices;
-         for (c_IterDevices = c_IterManagers->second.c_CanOpenDevices.begin();
-              c_IterDevices != c_IterManagers->second.c_CanOpenDevices.end();
+         QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_IterDevices;
+         for (c_IterDevices = c_IterManagers.value().c_CanOpenDevices.constBegin();
+              c_IterDevices != c_IterManagers.value().c_CanOpenDevices.constEnd();
               ++c_IterDevices)
          {
             // found normal server device
@@ -380,8 +381,8 @@ QVariant C_SdNdeCoOverviewTableModel::data(const QModelIndex & orc_Index, const 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoOverviewTableModel::m_GetPdoCountsByManager(const C_OscNode * const opc_Node,
                                                           const uint8_t ou8_InterfaceIndex,
-                                                          C_PdoCount * const opc_PdoManagerCnt, std::map<uint32_t,
-                                                                                                         C_PdoCount> * const opc_PdoDeviceMap)
+                                                          C_PdoCount * const opc_PdoManagerCnt, QMap<uint32_t,
+                                                                                                     C_PdoCount> * const opc_PdoDeviceMap)
 const
 {
    opc_PdoManagerCnt->u16_RxActive = 0U;
@@ -485,11 +486,11 @@ void C_SdNdeCoOverviewTableModel::m_GetResultStringsOfPdos(
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeCoOverviewTableModel::m_AddToMessageDeviceCount(const uint32_t ou32_NodeId, const bool oq_MessageActive,
                                                             const C_SdNdeCoOverviewTableModel::E_PdoType oe_PdoType,
-                                                            std::map<uint32_t,
-                                                                     C_PdoCount> * const opc_PdoDeviceMap)
+                                                            QMap<uint32_t,
+                                                                 C_PdoCount> * const opc_PdoDeviceMap)
 const
 {
-   std::map<uint32_t, C_PdoCount>::iterator c_MapIter;
+   QMap<uint32_t, C_PdoCount>::iterator c_MapIter;
 
    c_MapIter = opc_PdoDeviceMap->find(ou32_NodeId);
 
@@ -498,21 +499,21 @@ const
       // map entry already exists for device
       if (oe_PdoType == E_PdoType::eTX)
       {
-         uint16_t & ru16_TmpTotal = c_MapIter->second.u16_TxTotal;
+         uint16_t & ru16_TmpTotal = c_MapIter.value().u16_TxTotal;
          ru16_TmpTotal++;
          if (oq_MessageActive == true)
          {
-            uint16_t & ru16_TmpActive = c_MapIter->second.u16_TxActive;
+            uint16_t & ru16_TmpActive = c_MapIter.value().u16_TxActive;
             ru16_TmpActive++;
          }
       }
       else
       {
-         uint16_t & ru16_TmpTotal = c_MapIter->second.u16_RxTotal;
+         uint16_t & ru16_TmpTotal = c_MapIter.value().u16_RxTotal;
          ru16_TmpTotal++;
          if (oq_MessageActive == true)
          {
-            uint16_t & ru16_TmpActive = c_MapIter->second.u16_RxActive;
+            uint16_t & ru16_TmpActive = c_MapIter.value().u16_RxActive;
             ru16_TmpActive++;
          }
       }
@@ -537,7 +538,7 @@ const
             c_PdoCnt.u16_RxActive++;
          }
       }
-      opc_PdoDeviceMap->emplace(ou32_NodeId, c_PdoCnt);
+      opc_PdoDeviceMap->insert(ou32_NodeId, c_PdoCnt);
    }
 }
 
@@ -551,14 +552,14 @@ void C_SdNdeCoOverviewTableModel::m_FillCoInfo()
 
    const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(this->mu32_NodeIndex);
    C_PdoCount c_PdoManagerCnt;
-   std::map<uint32_t, C_PdoCount> c_PdoDeviceMap;
+   QMap<uint32_t, C_PdoCount> c_PdoDeviceMap;
 
    if (pc_Node->c_CanOpenManagers.empty() == false)
    {
       // we have a CANopen Manager node
-      std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_IterManagers;
-      for (c_IterManagers = pc_Node->c_CanOpenManagers.begin();
-           c_IterManagers != pc_Node->c_CanOpenManagers.end();
+      QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_IterManagers;
+      for (c_IterManagers = pc_Node->c_CanOpenManagers.constBegin();
+           c_IterManagers != pc_Node->c_CanOpenManagers.constEnd();
            ++c_IterManagers)
       {
          // current device is a CANopen Manager
@@ -566,7 +567,7 @@ void C_SdNdeCoOverviewTableModel::m_FillCoInfo()
          uint8_t u8_InterfaceIndex;
 
          c_CoInfoManager.c_CoNodeConfig.e_NodeType = E_NodeType::eMANAGER;
-         u8_InterfaceIndex = c_IterManagers->first;
+         u8_InterfaceIndex = c_IterManagers.key();
          c_CoInfoManager.c_CoNodeConfig.u8_InterfaceNumber = u8_InterfaceIndex;
          c_CoInfoManager.c_CoTableData.c_Interface = C_PuiSdUtil::h_GetInterfaceName(C_OscSystemBus::eCAN,
                                                                                      u8_InterfaceIndex);
@@ -585,7 +586,7 @@ void C_SdNdeCoOverviewTableModel::m_FillCoInfo()
          //lint -e{1946} // use of functional-style cast is fine here
          c_CoInfoManager.c_CoTableData.c_Node = QString(pc_Node->c_Properties.c_Name);
          c_CoInfoManager.c_CoTableData.c_Role = "Manager";
-         c_CoInfoManager.c_CoTableData.c_CanOpenId = QString::number(c_IterManagers->second.u8_NodeIdValue);
+         c_CoInfoManager.c_CoTableData.c_CanOpenId = QString::number(c_IterManagers.value().u8_NodeIdValue);
          // get TPDOs and RPDOs via message container
          this->m_GetPdoCountsByManager(pc_Node, u8_InterfaceIndex, &c_PdoManagerCnt, &c_PdoDeviceMap);
          this->m_GetResultStringsOfPdos(&c_PdoManagerCnt, c_CoInfoManager.c_CoTableData.c_TxPdos,
@@ -594,25 +595,25 @@ void C_SdNdeCoOverviewTableModel::m_FillCoInfo()
          this->mc_CoInfoAll.push_back(c_CoInfoManager);
 
          // iterate throuch normal server devices
-         std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_IterDevices;
-         for (c_IterDevices = c_IterManagers->second.c_CanOpenDevices.begin();
-              c_IterDevices != c_IterManagers->second.c_CanOpenDevices.end();
+         QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_IterDevices;
+         for (c_IterDevices = c_IterManagers.value().c_CanOpenDevices.constBegin();
+              c_IterDevices != c_IterManagers.value().c_CanOpenDevices.constEnd();
               ++c_IterDevices)
          {
             // found normal server device
             C_CoInfo c_CoInfoDevice;
 
             const C_OscNode * const pc_DeviceNode = C_PuiSdHandler::h_GetInstance()->GetOscNodeConst(
-               c_IterDevices->first.u32_NodeIndex);
+               c_IterDevices.key().u32_NodeIndex);
             c_CoInfoDevice.c_CoNodeConfig.e_NodeType = E_NodeType::eDEVICE;
-            u8_InterfaceIndex = c_IterManagers->first; // we display the CAN interface from Manager
+            u8_InterfaceIndex = c_IterManagers.key(); // we display the CAN interface from Manager
             c_CoInfoDevice.c_CoNodeConfig.u8_InterfaceNumber = u8_InterfaceIndex;
             c_CoInfoDevice.c_CoTableData.c_Interface = C_PuiSdUtil::h_GetInterfaceName(C_OscSystemBus::eCAN,
                                                                                        u8_InterfaceIndex);
 
             // Add linked bus info
             QString c_LinkedBusNameDevice = C_PuiSdHandler::h_GetInstance()->GetBusNameOfConnectedDevice(
-               c_IterDevices->first.u32_NodeIndex,
+               c_IterDevices.key().u32_NodeIndex,
                u8_InterfaceIndex);
 
             // Not linked to bus, hence display a "-".
@@ -622,16 +623,16 @@ void C_SdNdeCoOverviewTableModel::m_FillCoInfo()
             }
             c_CoInfoDevice.c_CoTableData.c_LinkedTo = c_LinkedBusNameDevice;
 
-            c_CoInfoDevice.c_CoNodeConfig.c_CanInterfaceId = c_IterDevices->first;
+            c_CoInfoDevice.c_CoNodeConfig.c_CanInterfaceId = c_IterDevices.key();
             //lint -e{1946} // use of functional-style cast is fine here
             c_CoInfoDevice.c_CoTableData.c_Node = QString(pc_DeviceNode->c_Properties.c_Name);
             c_CoInfoDevice.c_CoTableData.c_Role = "Device";
-            c_CoInfoDevice.c_CoTableData.c_CanOpenId = QString::number(c_IterDevices->second.u8_NodeIdValue);
+            c_CoInfoDevice.c_CoTableData.c_CanOpenId = QString::number(c_IterDevices.value().u8_NodeIdValue);
             // get TPDOs and RPDOs via message container
             C_PdoCount c_PdoCount = {0U, 0U, 0U, 0U};
-            if (c_PdoDeviceMap.find(c_IterDevices->first.u32_NodeIndex) != c_PdoDeviceMap.end())
+            if (c_PdoDeviceMap.find(c_IterDevices.key().u32_NodeIndex) != c_PdoDeviceMap.end())
             {
-               c_PdoCount = (c_PdoDeviceMap.find(c_IterDevices->first.u32_NodeIndex))->second;
+               c_PdoCount = c_PdoDeviceMap.find(c_IterDevices.key().u32_NodeIndex).value();
             }
             this->m_GetResultStringsOfPdos(&c_PdoCount, c_CoInfoDevice.c_CoTableData.c_TxPdos,
                                            c_CoInfoDevice.c_CoTableData.c_RxPdos);

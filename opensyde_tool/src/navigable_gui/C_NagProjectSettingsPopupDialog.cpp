@@ -141,7 +141,7 @@ bool C_NagProjectSettingsPopupDialog::ApplyMaxCharLimitSettings()
 {
    bool q_IsMaxCharLimitChanged = false;
 
-   std::list<C_OscSystemNameMaxCharLimitChangeReportItem> orc_ChangedItems;
+   QList<C_OscSystemNameMaxCharLimitChangeReportItem> orc_ChangedItems;
    C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimitAffectedItems(
       this->mpc_Ui->pc_SpinBox->value(), orc_ChangedItems);
    if (orc_ChangedItems.size() > 0)
@@ -235,7 +235,7 @@ void C_NagProjectSettingsPopupDialog::m_ValueChanged()
 */
 //----------------------------------------------------------------------------------------------------------------------
 bool C_NagProjectSettingsPopupDialog::m_AskUserForModifyName(
-   const std::list<C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems)
+   const QList<C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems)
 {
    bool q_IsMaxCharLimitChanged = false;
    QString c_Details;

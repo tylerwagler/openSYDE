@@ -21,9 +21,9 @@
 #include "stwtypes.hpp"
 #include <QElapsedTimer>
 #include <QList>
+#include <QMap>
 #include <cstring>
 #include <iostream>
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -489,10 +489,10 @@ int32_t C_OscProtocolDriverOsyTpCan::m_HandleIncomingConsecutiveFrame(
       // incorrect sequence: abort
       mc_RxService.e_Status = C_ServiceState::eIDLE;
       c_Tmp = QString::asprintf(
-                  "Consecutive frame with incorrect sequence number received. "
-                  "Expected: %u, Received: %u",
-                  static_cast<uint32_t>(mc_RxService.u8_SequenceNumber),
-                  orc_CanMessage.au8_Data[0] & 0x0FU);
+          "Consecutive frame with incorrect sequence number received. "
+          "Expected: %u, Received: %u",
+          static_cast<uint32_t>(mc_RxService.u8_SequenceNumber),
+          orc_CanMessage.au8_Data[0] & 0x0FU);
       m_LogWarningWithHeader(c_Tmp, TGL_UTIL_FUNC_ID);
       s32_Return = C_RANGE;
     }
@@ -1291,8 +1291,8 @@ int32_t C_OscProtocolDriverOsyTpCan::SetDispatcher(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
     QList<C_BroadcastReadEcuSerialNumberResults> &orc_Responses,
-    QList<C_BroadcastReadEcuSerialNumberExtendedResults>
-        &orc_ExtendedResponses) const {
+    QList<C_BroadcastReadEcuSerialNumberExtendedResults> &orc_ExtendedResponses)
+    const {
   int32_t s32_Return;
 
   orc_Responses.clear();
@@ -1370,7 +1370,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
 
     if (s32_Return == C_NO_ERR) {
       bool q_Continue = false;
-      std::map<uint32_t, C_BroadcastReadEcuSerialNumberExtendedResults>
+      QMap<uint32_t, C_BroadcastReadEcuSerialNumberExtendedResults>
           c_UniqueIdToResult;
 
       // Send the extended variant
@@ -1474,8 +1474,8 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
                     // At least two blocks are always necessary
                     q_Continue = true;
                   } else {
-                    std::map<uint32_t,
-                             C_BroadcastReadEcuSerialNumberExtendedResults>::
+                    QMap<uint32_t,
+                         C_BroadcastReadEcuSerialNumberExtendedResults>::
                         iterator c_ItResult;
                     // Search the matching extended result to complete the
                     // result
@@ -1483,7 +1483,7 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
 
                     if (c_ItResult != c_UniqueIdToResult.end()) {
                       C_BroadcastReadEcuSerialNumberExtendedResults
-                          &rc_CurrentResult = c_ItResult->second;
+                          &rc_CurrentResult = c_ItResult.value();
                       if (rc_CurrentResult.u8_SubNodeId ==
                           u8_ReceivedSubNodeId) {
                         if (u8_ReceivedBlockNumber == 1U) {
@@ -1638,31 +1638,31 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastReadSerialNumber(
 
       // Add the extended results to the output
       if (s32_Return == C_NO_ERR) {
-        std::map<uint32_t,
-                 C_BroadcastReadEcuSerialNumberExtendedResults>::iterator
+        QMap<uint32_t,
+             C_BroadcastReadEcuSerialNumberExtendedResults>::iterator
             c_ItResult;
 
         for (c_ItResult = c_UniqueIdToResult.begin();
              c_ItResult != c_UniqueIdToResult.end(); ++c_ItResult) {
           // Check the result for a valid serial number length
-          if ((c_ItResult->second.c_SerialNumber.u8_SerialNumberByteLength >
+          if ((c_ItResult.value().c_SerialNumber.u8_SerialNumberByteLength >
                0U) &&
-              (c_ItResult->second.c_SerialNumber.u8_SerialNumberByteLength <=
+              (c_ItResult.value().c_SerialNumber.u8_SerialNumberByteLength <=
                29) &&
               // Check for FSN serial number ext length
-              (((c_ItResult->second.c_SerialNumber.q_FsnSerialNumber == true) &&
-                (c_ItResult->second.c_SerialNumber.c_SerialNumberExt.length() ==
-                 c_ItResult->second.c_SerialNumber
+              (((c_ItResult.value().c_SerialNumber.q_FsnSerialNumber == true) &&
+                (c_ItResult.value().c_SerialNumber.c_SerialNumberExt.length() ==
+                 c_ItResult.value().c_SerialNumber
                      .u8_SerialNumberByteLength)) ||
                // Check for POS serial number length for exact 6 byte
-               ((c_ItResult->second.c_SerialNumber.q_FsnSerialNumber ==
+               ((c_ItResult.value().c_SerialNumber.q_FsnSerialNumber ==
                  false) &&
-                (c_ItResult->second.c_SerialNumber.u8_SerialNumberByteLength ==
+                (c_ItResult.value().c_SerialNumber.u8_SerialNumberByteLength ==
                  6U)))) {
             // Valid result
-            c_ItResult->second.c_SerialNumber.q_IsValid = true;
+            c_ItResult.value().c_SerialNumber.q_IsValid = true;
 
-            orc_ExtendedResponses.push_back(c_ItResult->second);
+            orc_ExtendedResponses.push_back(c_ItResult.value());
           } else {
             // A not finished result
             m_LogWarningWithHeader(
@@ -2014,7 +2014,9 @@ int32_t C_OscProtocolDriverOsyTpCan::BroadcastSetNodeIdBySerialNumberExtended(
         }
 
         memcpy(&c_Service.c_Data[4],
-               reinterpret_cast<uint8_t*>(const_cast<char*>(c_RawSerialNumber.data() + u8_SerialNumberBytesSent)), u8_BytesToCopy);
+               reinterpret_cast<uint8_t *>(const_cast<char *>(
+                   c_RawSerialNumber.data() + u8_SerialNumberBytesSent)),
+               u8_BytesToCopy);
         u8_SerialNumberBytesSent += u8_BytesToCopy;
       }
 

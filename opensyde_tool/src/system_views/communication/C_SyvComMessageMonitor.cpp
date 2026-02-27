@@ -277,7 +277,7 @@ int32_t C_SyvComMessageMonitor::GetDbcFile(
   c_ItDbc = this->mc_DbcFiles.find(orc_PathDbc);
   if (c_ItDbc != this->mc_DbcFiles.end()) {
     // Copy the DBC definition
-    orc_DbcDefinition = c_ItDbc->second;
+    orc_DbcDefinition = c_ItDbc.value();
     s32_Return = C_NO_ERR;
   }
 
@@ -391,9 +391,7 @@ int32_t C_SyvComMessageMonitor::AddLogFileBlf(const QString &orc_FilePath) {
   s32_Return = pc_File->OpenFile();
 
   this->mc_CriticalSectionConfig.lock();
-  this->mc_LoggingFiles.emplace(
-      std::pair<QString, C_OscComMessageLoggerFileBase *const>(orc_FilePath,
-                                                               pc_File));
+  this->mc_LoggingFiles.insert(orc_FilePath, pc_File);
   this->mc_CriticalSectionConfig.unlock();
 
   // lint -e{429}  no memory leak of pc_File because of handling of instance in
@@ -926,13 +924,10 @@ int32_t C_SyvComMessageMonitor::m_AddDbcFile(const QString &orc_PathDbc) {
 
     if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN)) {
       this->mc_CriticalSectionConfig.lock();
-      this->mc_DbcFiles.emplace(
-          std::pair<QString, C_CieConverter::C_CieCommDefinition>(
-              orc_PathDbc, c_DbcDefinition));
+      this->mc_DbcFiles.insert(orc_PathDbc, c_DbcDefinition);
 
       // Register the database in the activation flag map
-      this->mc_DatabaseActiveFlags.emplace(
-          std::pair<QString, bool>(orc_PathDbc, true));
+      this->mc_DatabaseActiveFlags.insert(orc_PathDbc, true);
 
       this->mc_CriticalSectionConfig.unlock();
     }
@@ -967,15 +962,15 @@ C_SyvComMessageMonitor::m_CheckDbcFile(const T_STWCAN_Msg_RX &orc_Msg) {
   for (c_ItDbc = this->mc_DbcFiles.begin(); c_ItDbc != this->mc_DbcFiles.end();
        ++c_ItDbc) {
     // Check if the database is active
-    if (this->mc_DatabaseActiveFlags[c_ItDbc->first] == true) {
+    if (this->mc_DatabaseActiveFlags[c_ItDbc.key()] == true) {
       uint32_t u32_NodeCounter;
 
       // Nodes
       for (u32_NodeCounter = 0U;
-           u32_NodeCounter < c_ItDbc->second.c_Nodes.size();
+           u32_NodeCounter < c_ItDbc.value().c_Nodes.size();
            ++u32_NodeCounter) {
         const C_CieConverter::C_CieNode &rc_Node =
-            c_ItDbc->second.c_Nodes[u32_NodeCounter];
+            c_ItDbc.value().c_Nodes[u32_NodeCounter];
         uint32_t u32_MsgCounter;
 
         for (u32_MsgCounter = 0U; u32_MsgCounter < rc_Node.c_TxMessages.size();
@@ -1017,10 +1012,10 @@ C_SyvComMessageMonitor::m_CheckDbcFile(const T_STWCAN_Msg_RX &orc_Msg) {
       // Unmapped messages
       if (pc_DbcMessage == NULL) {
         for (uint32_t u32_ItMessage = 0U;
-             u32_ItMessage < c_ItDbc->second.c_UnmappedMessages.size();
+             u32_ItMessage < c_ItDbc.value().c_UnmappedMessages.size();
              ++u32_ItMessage) {
           const C_CieConverter::C_CieCanMessage &rc_Msg =
-              c_ItDbc->second.c_UnmappedMessages[u32_ItMessage].c_CanMessage;
+              c_ItDbc.value().c_UnmappedMessages[u32_ItMessage].c_CanMessage;
 
           // No check of dlc here, it will be checked for each signal
           if ((orc_Msg.u32_ID == rc_Msg.u32_CanId) &&
@@ -1166,11 +1161,11 @@ void C_SyvComMessageMonitor::mh_InterpretDbcFileCanSignal(
     // Check if a value description matches to the current value
     try {
       const int64_t s64_Value = c_Signal.c_RawValueDec.toLongLong();
-      const std::map<int64_t, QString>::const_iterator c_ItDescription =
+      const QMap<int64_t, QString>::const_iterator c_ItDescription =
           orc_DbcSignal.c_ValueDescription.find(s64_Value);
 
       if (c_ItDescription != orc_DbcSignal.c_ValueDescription.end()) {
-        c_Signal.c_Value = c_ItDescription->second;
+        c_Signal.c_Value = c_ItDescription.value();
       }
     } catch (...) {
     }

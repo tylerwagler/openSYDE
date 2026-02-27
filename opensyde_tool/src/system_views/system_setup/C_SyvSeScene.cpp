@@ -90,7 +90,7 @@ C_SyvSeScene::~C_SyvSeScene(void)
 void C_SyvSeScene::PrepareToClose(void)
 {
    //Clean up all created dialogs
-   for (std::list<QDialog *>::iterator c_ItDialog = this->mc_Dialogs.begin(); c_ItDialog != this->mc_Dialogs.end();
+   for (QList<QDialog *>::iterator c_ItDialog = this->mc_Dialogs.begin(); c_ItDialog != this->mc_Dialogs.end();
         ++c_ItDialog)
    {
       (*c_ItDialog)->close();

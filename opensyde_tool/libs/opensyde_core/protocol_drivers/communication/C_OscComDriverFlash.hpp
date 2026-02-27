@@ -12,9 +12,9 @@
 #ifndef C_OSYCOMDRIVERFLASH_HPP
 #define C_OSYCOMDRIVERFLASH_HPP
 
+#include <QList>
 #include <QString>
 #include <vector>
-#include <QList>
 
 #include "C_OscComDriverProtocol.hpp"
 #include "C_OscComFlashloaderInformation.hpp"
@@ -22,7 +22,6 @@
 #include "C_OscProtocolDriverOsy.hpp"
 #include "C_OscProtocolSerialNumber.hpp"
 #include "stwtypes.hpp"
-
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -97,11 +96,10 @@ public:
   int32_t SendOsyCanBroadcastEnterPreProgrammingSession(void) const;
   int32_t SendOsyCanBroadcastEnterDefaultSession(void) const;
   int32_t SendOsyCanBroadcastReadSerialNumber(
-      QList<
-          C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults>
+      QList<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults>
           &orc_Responses,
       QList<C_OscProtocolDriverOsyTpCan::
-                      C_BroadcastReadEcuSerialNumberExtendedResults>
+                C_BroadcastReadEcuSerialNumberExtendedResults>
           &orc_ExtendedResponses) const;
   int32_t SendOsyCanBroadcastSetNodeIdBySerialNumber(
       const C_OscProtocolSerialNumber &orc_SerialNumber,
@@ -115,8 +113,7 @@ public:
   int32_t SendOsyEthBroadcastGetDeviceInformation(
       QList<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoResults>
           &orc_ReadDeviceInfoResults,
-      QList<
-          C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults>
+      QList<C_OscProtocolDriverOsyTpIp::C_BroadcastGetDeviceInfoExtendedResults>
           &orc_ReadDeviceInfoExtendedResults) const;
   int32_t SendOsyEthBroadcastSetIpAddress(
       const C_OscProtocolSerialNumber &orc_SerialNumber,
@@ -244,18 +241,16 @@ public:
 
   int32_t SendOsyReadCertificateSerialNumber(
       const C_OscProtocolDriverOsyNode &orc_ServerId,
-      QByteArray &orc_SerialNumber,
-      uint8_t *const opu8_NrCode = NULL) const;
+      QByteArray &orc_SerialNumber, uint8_t *const opu8_NrCode = NULL) const;
   int32_t SendOsyReadCertificateSerialNumberL7(
       const C_OscProtocolDriverOsyNode &orc_ServerId,
-      QByteArray &orc_SerialNumber,
-      uint8_t *const opu8_NrCode = NULL) const;
-  int32_t SendOsyWriteSecurityKey(
-      const C_OscProtocolDriverOsyNode &orc_ServerId,
-      const QByteArray &orc_PublicKeyModulus,
-      const QByteArray &orc_PublicKeyExponent,
-      const QByteArray &orc_CertificateSerialNumber,
-      uint8_t *const opu8_NrCode = NULL) const;
+      QByteArray &orc_SerialNumber, uint8_t *const opu8_NrCode = NULL) const;
+  int32_t
+  SendOsyWriteSecurityKey(const C_OscProtocolDriverOsyNode &orc_ServerId,
+                          const QByteArray &orc_PublicKeyModulus,
+                          const QByteArray &orc_PublicKeyExponent,
+                          const QByteArray &orc_CertificateSerialNumber,
+                          uint8_t *const opu8_NrCode = NULL) const;
   int32_t SendOsyReadSecurityActivation(
       const C_OscProtocolDriverOsyNode &orc_ServerId, bool &orq_SecurityOn,
       uint8_t &oru8_SecurityAlgorithm, uint8_t *const opu8_NrCode = NULL) const;

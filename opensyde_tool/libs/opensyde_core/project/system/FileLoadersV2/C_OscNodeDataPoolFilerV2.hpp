@@ -16,9 +16,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 
-#include <QList>
 #include "C_OscNodeDataPool.hpp"
 #include "C_OscXmlParser.hpp"
+#include <QList>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -59,8 +59,7 @@ public:
   static int32_t h_LoadDataPoolListElementDataSetValues(
       const uint16_t ou16_XmlFormatVersion,
       const C_OscNodeDataPoolContent &orc_ContType,
-      QList<C_OscNodeDataPoolContent>
-          &orc_NodeDataPoolListElementDataSetValues,
+      QList<C_OscNodeDataPoolContent> &orc_NodeDataPoolListElementDataSetValues,
       C_OscXmlParserBase &orc_XmlParser);
   static int32_t
   h_LoadDataPoolElementType(C_OscNodeDataPoolContent &orc_NodeDataPoolContent,
@@ -81,13 +80,12 @@ public:
   static void h_SaveDataPoolElement(
       const C_OscNodeDataPoolListElement &orc_NodeDataPoolListElement,
       C_OscXmlParserBase &orc_XmlParser);
-  static void h_SaveDataPoolLists(
-      const QList<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
-      C_OscXmlParserBase &orc_XmlParser);
   static void
-  h_SaveDataPoolListElements(const QList<C_OscNodeDataPoolListElement>
-                                 &orc_NodeDataPoolListElements,
-                             C_OscXmlParserBase &orc_XmlParser);
+  h_SaveDataPoolLists(const QList<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
+                      C_OscXmlParserBase &orc_XmlParser);
+  static void h_SaveDataPoolListElements(
+      const QList<C_OscNodeDataPoolListElement> &orc_NodeDataPoolListElements,
+      C_OscXmlParserBase &orc_XmlParser);
   static void h_SaveDataPoolListElementDataSetValues(
       const QList<C_OscNodeDataPoolContent>
           &orc_NodeDataPoolListElementDataSetValues,

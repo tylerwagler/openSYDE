@@ -8,18 +8,23 @@
 
    Aim: provide most of the functionality that Borland's TIniFile does
     while only using ANSI C++ (with STL in this case).
-   So cf. the documentation of the VCL TIniFile for details on most API functions.
+   So cf. the documentation of the VCL TIniFile for details on most API
+   functions.
 
-   Instead of AnsiString/UnicodeString the QString class is used (which is not Unicode-capable).
+   Instead of AnsiString/UnicodeString the QString class is used (which is not
+   Unicode-capable).
 
    This implementation uses QSettings internally for INI file handling.
 
    Additionally the following is supported:
    - INI files > 64kB
-   - using file path "" in the constructor can be used to create a INI file structure in memory only
-   - GetFileAsStringList can be used to save INI file content to a string list in the same format used for the file
+   - using file path "" in the constructor can be used to create a INI file
+   structure in memory only
+   - GetFileAsStringList can be used to save INI file content to a string list
+   in the same format used for the file
 
-   Note: Comments in INI files are NOT preserved when using this QSettings-based implementation.
+   Note: Comments in INI files are NOT preserved when using this QSettings-based
+   implementation.
 
    What is NOT implemented (compared to Borland VCL TIniFile):
    - ReadDate
@@ -30,101 +35,127 @@
    - WriteTime
    - stream-based functions
 
-   \copyright   Copyright 2009 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2009 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_SCLINIFILEHPP
 #define C_SCLINIFILEHPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 
-#include <memory>
-#include <QSettings>
-#include <QTemporaryFile>
 #include "stwtypes.hpp"
+#include <QSettings>
 #include <QString>
+#include <QTemporaryFile>
+#include <memory>
 // QString is used for all string operations
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace scl
-{
-/* -- Defines ------------------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace scl {
+/* -- Defines
+ * -------------------------------------------------------------------------------------------------------
+ */
 
-//unfortunately we need to mark throwing constructors and destructors specially in C++11
+// unfortunately we need to mark throwing constructors and destructors specially
+// in C++11
 #ifndef SCL_WILL_THROW
-#if __cplusplus >= 201103L //C++11 ?
-#define SCL_WILL_THROW  noexcept (false)
+#if __cplusplus >= 201103L // C++11 ?
+#define SCL_WILL_THROW noexcept(false)
 #else
-//not required (will be expected to throw by default)
+// not required (will be expected to throw by default)
 #define SCL_WILL_THROW
 #endif
 #endif
 
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
-///INI file handling
-class C_SclIniFile
-{
+/// INI file handling
+class C_SclIniFile {
 protected:
-   std::unique_ptr<QSettings> mpc_Settings;    ///< QSettings instance for INI handling
-   std::unique_ptr<QTemporaryFile> mpc_TempFile; ///< Temporary file for in-memory mode
-   bool mq_Dirty;                              ///< Tracks whether or not data has changed.
-   bool mq_InMemoryMode;                       ///< True if operating in memory-only mode
+  std::unique_ptr<QSettings>
+      mpc_Settings; ///< QSettings instance for INI handling
+  std::unique_ptr<QTemporaryFile>
+      mpc_TempFile;     ///< Temporary file for in-memory mode
+  bool mq_Dirty;        ///< Tracks whether or not data has changed.
+  bool mq_InMemoryMode; ///< True if operating in memory-only mode
 
-   // Helper to build section/key path for QSettings
-   static QString mh_BuildKey(const QString & orc_Section, const QString & orc_Key);
+  // Helper to build section/key path for QSettings
+  static QString mh_BuildKey(const QString &orc_Section,
+                             const QString &orc_Key);
 
-   // Helper to write string list to file
-   static void mh_WriteStringListToFile(const QStringList & orc_Strings, const QString & orc_FileName);
+  // Helper to write string list to file
+  static void mh_WriteStringListToFile(const QStringList &orc_Strings,
+                                       const QString &orc_FileName);
 
 public:
-   // Constructors & Destructors
-   C_SclIniFile(const QString & orc_FileName);
-   virtual ~C_SclIniFile() SCL_WILL_THROW;
+  // Constructors & Destructors
+  C_SclIniFile(const QString &orc_FileName);
+  virtual ~C_SclIniFile() SCL_WILL_THROW;
 
-   QString ReadString (const QString & orc_Section, const QString & orc_Key,
-                           const QString & orc_Default);
-   int32_t   ReadInteger(const QString & orc_Section, const QString & orc_Key, const int32_t os32_Default);
-   bool      ReadBool   (const QString & orc_Section, const QString & orc_Key, const bool oq_Default);
-   float64_t ReadFloat  (const QString & orc_Section, const QString & orc_Key, const float64_t of64_Default);
+  QString ReadString(const QString &orc_Section, const QString &orc_Key,
+                     const QString &orc_Default);
+  int32_t ReadInteger(const QString &orc_Section, const QString &orc_Key,
+                      const int32_t os32_Default);
+  bool ReadBool(const QString &orc_Section, const QString &orc_Key,
+                const bool oq_Default);
+  float64_t ReadFloat(const QString &orc_Section, const QString &orc_Key,
+                      const float64_t of64_Default);
 
-   //convenience shortcuts for commonly used stw_types:
-   uint8_t   ReadUint8 (const QString & orc_Section, const QString & orc_Key, const uint8_t ou8_Default);
-   uint16_t  ReadUint16(const QString & orc_Section, const QString & orc_Key, const uint16_t ou16_Default);
+  // convenience shortcuts for commonly used stw_types:
+  uint8_t ReadUint8(const QString &orc_Section, const QString &orc_Key,
+                    const uint8_t ou8_Default);
+  uint16_t ReadUint16(const QString &orc_Section, const QString &orc_Key,
+                      const uint16_t ou16_Default);
 
-   void WriteString (const QString & orc_Section, const QString & orc_Key, const QString & orc_Value,
-                     const bool oq_ForceAppend = false);
-   void WriteInteger(const QString & orc_Section, const QString & orc_Key, const int32_t os32_Value,
-                     const bool oq_ForceAppend = false);
-   void WriteBool   (const QString & orc_Section, const QString & orc_Key, const bool oq_Value,
-                     const bool oq_ForceAppend = false);
-   void WriteFloat  (const QString & orc_Section, const QString & orc_Key, const float64_t of64_Value,
-                     const bool oq_ForceAppend = false);
+  void WriteString(const QString &orc_Section, const QString &orc_Key,
+                   const QString &orc_Value, const bool oq_ForceAppend = false);
+  void WriteInteger(const QString &orc_Section, const QString &orc_Key,
+                    const int32_t os32_Value,
+                    const bool oq_ForceAppend = false);
+  void WriteBool(const QString &orc_Section, const QString &orc_Key,
+                 const bool oq_Value, const bool oq_ForceAppend = false);
+  void WriteFloat(const QString &orc_Section, const QString &orc_Key,
+                  const float64_t of64_Value,
+                  const bool oq_ForceAppend = false);
 
-   void EraseSection(const QString & orc_Section);
-   void DeleteKey(const QString & orc_Section, const QString & orc_Key);
+  void EraseSection(const QString &orc_Section);
+  void DeleteKey(const QString &orc_Section, const QString &orc_Key);
 
-   void UpdateFile(void);
+  void UpdateFile(void);
 
-   bool SectionExists(const QString & orc_Section);
-   bool ValueExists(const QString & orc_Section, const QString & orc_Key);
+  bool SectionExists(const QString &orc_Section);
+  bool ValueExists(const QString &orc_Section, const QString &orc_Key);
 
-   void ReadSection(const QString & orc_Section, QStringList * const opc_Strings, const bool oq_Append = false);
-   void ReadSectionValues(const QString & orc_Section, QStringList * const opc_Strings,
-                          const bool oq_Append = false);
-   void ReadSections(QStringList * const opc_Strings, const bool oq_Append = false) const;
+  void ReadSection(const QString &orc_Section, QStringList *const opc_Strings,
+                   const bool oq_Append = false);
+  void ReadSectionValues(const QString &orc_Section,
+                         QStringList *const opc_Strings,
+                         const bool oq_Append = false);
+  void ReadSections(QStringList *const opc_Strings,
+                    const bool oq_Append = false) const;
 
-   void GetFileAsStringList(QStringList & orc_Strings) const;
+  void GetFileAsStringList(QStringList &orc_Strings) const;
 
-   QString FileName; ///< path to ini file; can be used after creation to store data in another ini file
+  QString FileName; ///< path to ini file; can be used after creation to store
+                    ///< data in another ini file
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-}
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace scl
+} // namespace stw
 #endif

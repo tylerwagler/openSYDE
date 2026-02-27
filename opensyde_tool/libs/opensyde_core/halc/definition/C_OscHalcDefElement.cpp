@@ -5,49 +5,62 @@
 
    HALC definition generic element part
 
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include "stwerrors.hpp"
-#include "C_SclChecksums.hpp"
 #include "C_OscHalcDefElement.hpp"
+#include "C_SclChecksums.hpp"
+#include "stwerrors.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscHalcDefElement::C_OscHalcDefElement(void)
-{
-}
+C_OscHalcDefElement::C_OscHalcDefElement(void) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Default destructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscHalcDefElement::~C_OscHalcDefElement(void)
-{
-}
+C_OscHalcDefElement::~C_OscHalcDefElement(void) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Change type
@@ -57,11 +70,11 @@ C_OscHalcDefElement::~C_OscHalcDefElement(void)
    \param[in]  oe_Value    Value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefElement::SetType(const C_OscNodeDataPoolContent::E_Type oe_Value)
-{
-   this->c_InitialValue.SetType(oe_Value);
-   this->c_MinValue.SetType(oe_Value);
-   this->c_MaxValue.SetType(oe_Value);
+void C_OscHalcDefElement::SetType(
+    const C_OscNodeDataPoolContent::E_Type oe_Value) {
+  this->c_InitialValue.SetType(oe_Value);
+  this->c_MinValue.SetType(oe_Value);
+  this->c_MaxValue.SetType(oe_Value);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -70,11 +83,10 @@ void C_OscHalcDefElement::SetType(const C_OscNodeDataPoolContent::E_Type oe_Valu
    \param[in]  oq_Value    New value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefElement::SetArray(const bool oq_Value)
-{
-   this->c_InitialValue.SetArray(oq_Value);
-   this->c_MinValue.SetArray(oq_Value);
-   this->c_MaxValue.SetArray(oq_Value);
+void C_OscHalcDefElement::SetArray(const bool oq_Value) {
+  this->c_InitialValue.SetArray(oq_Value);
+  this->c_MinValue.SetArray(oq_Value);
+  this->c_MaxValue.SetArray(oq_Value);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -83,11 +95,11 @@ void C_OscHalcDefElement::SetArray(const bool oq_Value)
    \param[in]  oe_Type  Type
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefElement::SetComplexType(const C_OscHalcDefContent::E_ComplexType oe_Type)
-{
-   this->c_InitialValue.SetComplexType(oe_Type);
-   this->c_MinValue.SetComplexType(oe_Type);
-   this->c_MaxValue.SetComplexType(oe_Type);
+void C_OscHalcDefElement::SetComplexType(
+    const C_OscHalcDefContent::E_ComplexType oe_Type) {
+  this->c_InitialValue.SetComplexType(oe_Type);
+  this->c_MinValue.SetComplexType(oe_Type);
+  this->c_MaxValue.SetComplexType(oe_Type);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -102,20 +114,19 @@ void C_OscHalcDefElement::SetComplexType(const C_OscHalcDefContent::E_ComplexTyp
    C_CONFIG Content type invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefElement::AddEnumItem(const QString & orc_DisplayName,
-                                         const C_OscNodeDataPoolContent & orc_Value)
-{
-   int32_t s32_Retval = this->c_InitialValue.AddEnumItem(orc_DisplayName, orc_Value);
+int32_t
+C_OscHalcDefElement::AddEnumItem(const QString &orc_DisplayName,
+                                 const C_OscNodeDataPoolContent &orc_Value) {
+  int32_t s32_Retval =
+      this->c_InitialValue.AddEnumItem(orc_DisplayName, orc_Value);
 
-   if (s32_Retval == C_NO_ERR)
-   {
-      s32_Retval = this->c_MinValue.AddEnumItem(orc_DisplayName, orc_Value);
-   }
-   if (s32_Retval == C_NO_ERR)
-   {
-      s32_Retval = this->c_MaxValue.AddEnumItem(orc_DisplayName, orc_Value);
-   }
-   return s32_Retval;
+  if (s32_Retval == C_NO_ERR) {
+    s32_Retval = this->c_MinValue.AddEnumItem(orc_DisplayName, orc_Value);
+  }
+  if (s32_Retval == C_NO_ERR) {
+    s32_Retval = this->c_MaxValue.AddEnumItem(orc_DisplayName, orc_Value);
+  }
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -124,11 +135,11 @@ int32_t C_OscHalcDefElement::AddEnumItem(const QString & orc_DisplayName,
    \param[in]  orc_Value   New bitmask item
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefElement::AddBitmaskItem(const C_OscHalcDefContentBitmaskItem & orc_Value)
-{
-   this->c_InitialValue.AddBitmaskItem(orc_Value);
-   this->c_MinValue.AddBitmaskItem(orc_Value);
-   this->c_MaxValue.AddBitmaskItem(orc_Value);
+void C_OscHalcDefElement::AddBitmaskItem(
+    const C_OscHalcDefContentBitmaskItem &orc_Value) {
+  this->c_InitialValue.AddBitmaskItem(orc_Value);
+  this->c_MinValue.AddBitmaskItem(orc_Value);
+  this->c_MaxValue.AddBitmaskItem(orc_Value);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -138,9 +149,8 @@ void C_OscHalcDefElement::AddBitmaskItem(const C_OscHalcDefContentBitmaskItem & 
    Bitmask status
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscHalcDefContent::E_ComplexType C_OscHalcDefElement::GetComplexType() const
-{
-   return this->c_InitialValue.GetComplexType();
+C_OscHalcDefContent::E_ComplexType C_OscHalcDefElement::GetComplexType() const {
+  return this->c_InitialValue.GetComplexType();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -150,9 +160,8 @@ C_OscHalcDefContent::E_ComplexType C_OscHalcDefElement::GetComplexType() const
    Type
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscNodeDataPoolContent::E_Type C_OscHalcDefElement::GetType() const
-{
-   return this->c_InitialValue.GetType();
+C_OscNodeDataPoolContent::E_Type C_OscHalcDefElement::GetType() const {
+  return this->c_InitialValue.GetType();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -162,9 +171,8 @@ C_OscNodeDataPoolContent::E_Type C_OscHalcDefElement::GetType() const
    Array status
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscHalcDefElement::GetArray() const
-{
-   return this->c_InitialValue.GetArray();
+bool C_OscHalcDefElement::GetArray() const {
+  return this->c_InitialValue.GetArray();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -174,10 +182,9 @@ bool C_OscHalcDefElement::GetArray() const
    Enum items
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<std::pair<QString,
-                            C_OscNodeDataPoolContent> > & C_OscHalcDefElement::GetEnumItems() const
-{
-   return this->c_InitialValue.GetEnumItems();
+const QList<std::pair<QString, C_OscNodeDataPoolContent>> &
+C_OscHalcDefElement::GetEnumItems() const {
+  return this->c_InitialValue.GetEnumItems();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -187,36 +194,40 @@ const QList<std::pair<QString,
    Bitmask items
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<C_OscHalcDefContentBitmaskItem> & C_OscHalcDefElement::GetBitmaskItems() const
-{
-   return this->c_InitialValue.GetBitmaskItems();
+const QList<C_OscHalcDefContentBitmaskItem> &
+C_OscHalcDefElement::GetBitmaskItems() const {
+  return this->c_InitialValue.GetBitmaskItems();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Calculates the hash value over all data
 
    The hash value is a 32 bit CRC value.
-   It is not endian-safe, so it should only be used on the same system it is created on.
+   It is not endian-safe, so it should only be used on the same system it is
+   created on.
 
-   \param[in,out]  oru32_HashValue  Hash value with initial [in] value and result [out] value
+   \param[in,out]  oru32_HashValue  Hash value with initial [in] value and
+   result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefElement::CalcHash(uint32_t & oru32_HashValue) const
-{
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Id.toUtf8().data(),
-                                      static_cast<uint32_t>(this->c_Id.toUtf8().size()), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Display.toUtf8().data(),
-                                      static_cast<uint32_t>(this->c_Display.toUtf8().size()), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().data(),
-                                      static_cast<uint32_t>(this->c_Comment.toUtf8().size()), oru32_HashValue);
+void C_OscHalcDefElement::CalcHash(uint32_t &oru32_HashValue) const {
+  stw::scl::C_SclChecksums::CalcCRC32(
+      this->c_Id.toUtf8().data(),
+      static_cast<uint32_t>(this->c_Id.toUtf8().size()), oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(
+      this->c_Display.toUtf8().data(),
+      static_cast<uint32_t>(this->c_Display.toUtf8().size()), oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(
+      this->c_Comment.toUtf8().data(),
+      static_cast<uint32_t>(this->c_Comment.toUtf8().size()), oru32_HashValue);
 
-   this->c_InitialValue.CalcHash(oru32_HashValue);
-   this->c_MinValue.CalcHash(oru32_HashValue);
-   this->c_MaxValue.CalcHash(oru32_HashValue);
+  this->c_InitialValue.CalcHash(oru32_HashValue);
+  this->c_MinValue.CalcHash(oru32_HashValue);
+  this->c_MaxValue.CalcHash(oru32_HashValue);
 
-   for (uint32_t u32_It = 0UL; u32_It < this->c_UseCaseAvailabilities.size(); ++u32_It)
-   {
-      stw::scl::C_SclChecksums::CalcCRC32(&this->c_UseCaseAvailabilities[u32_It],
-                                          sizeof(uint32_t), oru32_HashValue);
-   }
+  for (uint32_t u32_It = 0UL; u32_It < this->c_UseCaseAvailabilities.size();
+       ++u32_It) {
+    stw::scl::C_SclChecksums::CalcCRC32(&this->c_UseCaseAvailabilities[u32_It],
+                                        sizeof(uint32_t), oru32_HashValue);
+  }
 }

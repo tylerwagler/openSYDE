@@ -22,7 +22,6 @@
 #include <limits.h> //for UCHAR_MAX
 #include <string.h>
 
-
 #include "CXFLActions.hpp"
 #include "CXFLFlashWrite.hpp"
 #include "CXFLHexFile.hpp"
@@ -34,11 +33,9 @@
 #include <QElapsedTimer>
 #include <QThread>
 
-#include <QStringList>
 #include <QDateTime>
 #include <QString>
 #include <QStringList>
-
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -351,7 +348,8 @@ C_XFLFlashWrite::ExecuteWrite(const C_XFLFlashWriteParameters &orc_Params) {
   } else {
     c_Text = QString::asprintf(
         stw::opensyde_core::C_OscUtils::h_LoadString(STR_FM_FL_PROTOCOL_VERSION)
-            .toUtf8().constData(),
+            .toUtf8()
+            .constData(),
         static_cast<uint8_t>((u16_ProtocolVersion >> 12U) & 0x0FU),
         static_cast<uint8_t>((u16_ProtocolVersion >> 8U) & 0x0FU),
         static_cast<uint8_t>((u16_ProtocolVersion >> 4U) & 0x0FU),
@@ -534,7 +532,9 @@ C_XFLFlashWrite::ExecuteWrite(const C_XFLFlashWriteParameters &orc_Params) {
   u32_EndTime = c_TotalTimer.elapsed();
   c_Text = QString::asprintf(
       "%s %d s",
-      stw::opensyde_core::C_OscUtils::h_LoadString(STR_FDL_TOTAL_TIME).toUtf8().constData(),
+      stw::opensyde_core::C_OscUtils::h_LoadString(STR_FDL_TOTAL_TIME)
+          .toUtf8()
+          .constData(),
       u32_EndTime / 1000U);
   m_ReportVerboseStatus(c_Text);
 
@@ -586,9 +586,9 @@ int32_t C_XFLFlashWrite::m_WriteFlashChecksums(
       // Strictly speaking this should be done when the flashloader is first put
       // onto the ECU. But we have to keep this here for compatibility reasons:
       //- for some ECUs the STW production procedure does not set the
-      //flashloader's checksum otherwise
+      // flashloader's checksum otherwise
       //- some ECU applications check for the correct checksum and fail if it is
-      //not OK
+      // not OK
       if ((mau8_SectorsToErase[s32_Block] == 1U) || (s32_Block == 0)) {
         s32_Return = SetSecCRC(static_cast<uint16_t>(s32_Block), u16_Dummy);
         if (s32_Return != C_NO_ERR) {
@@ -640,8 +640,7 @@ int32_t C_XFLFlashWrite::m_WriteFlashChecksums(
           // flashloader to not start the
           //  application
           TRG_ReportStatus("Warning: flash checksum block " +
-                               QString::number(s32_Block) +
-                               " is invalid !",
+                               QString::number(s32_Block) + " is invalid !",
                            gu8_DL_REPORT_STATUS_TYPE_WARNING);
           s32_Return = C_CONFIG;
         } else if (c_CRCs.c_Areas[s32_Block].u32_ChecksumEEP !=
@@ -743,7 +742,7 @@ C_XFLFlashWrite::m_SetAutoSectors(C_HexFile &orc_HexFile,
       // Assumptions here:
       //- one hex-line does not span 3 or more sectors
       //- a hex line could partially lie in a physical and partially in an
-      //aliased sector
+      // aliased sector
       //    however this seems to be a purely theoretical case and is ignored
       //    here
 

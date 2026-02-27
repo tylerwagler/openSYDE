@@ -5,34 +5,32 @@
 
    Translate L2 CAN message to CANopen protocol L7 interpretation
 
-   \copyright   Copyright 2006 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2006 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef CCMONPROTOCOLCANOPENHPP
 #define CCMONPROTOCOLCANOPENHPP
 
-#include "stwtypes.hpp"
 #include "C_CanMonProtocolBase.hpp"
+#include "stwtypes.hpp"
 #include <QString>
 
 //----------------------------------------------------------------------------------------------------------------------
 
-namespace stw
-{
-namespace cmon_protocol
-{
+namespace stw {
+namespace cmon_protocol {
 //----------------------------------------------------------------------------------------------------------------------
 
-///CANopen protocol converter
-class C_CanMonProtocolCanOpen :
-   public C_CanMonProtocolBase
-{
+/// CANopen protocol converter
+class C_CanMonProtocolCanOpen : public C_CanMonProtocolBase {
 public:
-   virtual QString MessageToString(const stw::can::T_STWCAN_Msg_RX & orc_Msg) const;
-   virtual QString GetProtocolName(void) const;
+  virtual QString
+  MessageToString(const stw::can::T_STWCAN_Msg_RX &orc_Msg) const;
+  virtual QString GetProtocolName(void) const;
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-}
-}
+} // namespace cmon_protocol
+} // namespace stw
 #endif

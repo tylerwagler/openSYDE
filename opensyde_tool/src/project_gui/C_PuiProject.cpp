@@ -711,7 +711,7 @@ int32_t C_PuiProject::m_SaveServiceModeProject(const QString &orc_FilePath,
     C_Uti::h_GetAllFilePathsInFolder(c_TemporaryPath, c_AllFilesAbsolute);
 
     {
-      std::set<QString> c_AllFilesRelative;
+      QSet<QString> c_AllFilesRelative;
       C_OscZipFile::h_AppendFilesRelative(
           c_AllFilesRelative, c_AllFilesAbsolute,
           c_TemporaryPath);

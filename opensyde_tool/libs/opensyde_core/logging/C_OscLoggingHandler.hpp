@@ -16,10 +16,10 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include <QDateTime>
-#include <QRecursiveMutex>
-#include <QString>
 #include <QFile>
 #include <QHash>
+#include <QRecursiveMutex>
+#include <QString>
 
 // PC-Lint suppressions: function-like macro is the only way to get
 // file,func,line information into the text lint -save -e9026
@@ -90,22 +90,21 @@ public:
 
   // Utility functions
   static void h_Flush(void);
-   static QString
-   h_UtilConvertDateTimeToString(const QDateTime &orc_DateTime);
+  static QString h_UtilConvertDateTimeToString(const QDateTime &orc_DateTime);
 
 private:
   static bool mhq_WriteToFile;
   static bool mhq_AutoFlushAllFile;
   static bool mhq_AutoFlushWarningsAndErrorsFile;
-   static bool mhq_WriteToConsole;
-   static bool mhq_MeasureTime;
-   static bool mhq_LogInitErrorsToConsole;
-   static QHash<uint16_t, qint64>
-       mhc_StartTimes; ///< first: Timer ID, second: start time (ms since epoch)
+  static bool mhq_WriteToConsole;
+  static bool mhq_MeasureTime;
+  static bool mhq_LogInitErrorsToConsole;
+  static QHash<uint16_t, qint64>
+      mhc_StartTimes; ///< first: Timer ID, second: start time (ms since epoch)
   static QString mhc_FileName;
   static QRecursiveMutex mhc_ConsoleCriticalSection;
   static QRecursiveMutex mhc_FileCriticalSection;
-   static QFile mhc_File;
+  static QFile mhc_File;
 
   static void mh_WriteLog(const QString &orc_Type, const QString &orc_Activity,
                           const QString &orc_Message,

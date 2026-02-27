@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QList>
+#include <QMap>
 #include <QStringList>
 #include "C_PuiSdHandlerNodeLogic.hpp"
 
@@ -131,7 +132,7 @@ public:
                                                             const uint32_t ou32_ParameterIndex,
                                                             const uint32_t ou32_ElementIndex,
                                                             const bool oq_UseChannelIndex,
-                                                            const std::string & orc_Value);
+                                                            const QString & orc_Value);
 
    //Misc
    int32_t GetHalChannelOrDomainName(const uint32_t ou32_NodeIndex, const uint32_t ou32_DomainIndex,
@@ -180,7 +181,7 @@ private:
    static C_PuiSdNodeDataPool mh_GetUiDatapoolForOscDataPool(
       const stw::opensyde_core::C_OscNodeDataPool & orc_OscDatapool);
 
-   std::map<uint32_t, uint32_t> mc_PreviousHashes; // key: node index, value: previous hash
+   QMap<uint32_t, uint32_t> mc_PreviousHashes; // key: node index, value: previous hash
    // value
 
    static int32_t mh_GetIndexInVector(const QList<stw::opensyde_core::C_OscHalcDefStruct> & orc_Structs,

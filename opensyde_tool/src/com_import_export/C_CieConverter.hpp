@@ -19,6 +19,7 @@
 #include "C_OscSystemBus.hpp"
 #include "stwtypes.hpp"
 #include <QList>
+#include <QMap>
 #include <QString>
 #include <QStringList>
 
@@ -83,7 +84,7 @@ public:
     uint16_t u16_ComBitStart;  ///< Communication value bit start
     // position
     C_CieDataPoolElement c_Element; ///< Communication data pool element
-    std::map<int64_t, QString>
+    QMap<int64_t, QString>
         c_ValueDescription; ///< Optional communication value
     // descriptions
     stw::opensyde_core::C_OscCanSignal::E_MultiplexerType

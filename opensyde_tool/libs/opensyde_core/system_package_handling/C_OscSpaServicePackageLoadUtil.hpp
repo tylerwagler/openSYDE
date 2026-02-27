@@ -34,9 +34,8 @@ public:
   static int32_t h_CheckParamsToProcessZipPackage(
       const QString &orc_PackagePath, const QString &orc_TargetUnzipPath,
       const QString &orc_UseCase, QString &orc_ErrorMessage);
-  static int32_t
-  h_SearchFilesInPath(const QString &orc_PackagePath,
-                      const QStringList &orc_NecessaryFiles);
+  static int32_t h_SearchFilesInPath(const QString &orc_PackagePath,
+                                     const QStringList &orc_NecessaryFiles);
 };
 
 /* -- Extern Global Variables

@@ -20,8 +20,13 @@ namespace opensyde_gui
 /* -- Global Constants ---------------------------------------------------------------------------------------------- */
 
 // Paths (different from paths in constants.h!)
+#ifdef _WIN32
 const QString mc_DLL_PATH_PEAK_FLA = "..\\..\\tool\\STW_dlls\\stwpeak2\\stwpeak2_64.dll";
 const QString mc_DLL_PATH_VECTOR_FLA = "..\\..\\tool\\STW_dlls\\stwvec\\stwvec64.dll";
+#else
+const QString mc_DLL_PATH_PEAK_FLA = "can0";
+const QString mc_DLL_PATH_VECTOR_FLA = "can0";
+#endif
 
 // Path variables for can monitor only
 const QString mc_PATH_VARIABLE_SYDE_FLASH_BIN = "%{SYDE_FLASH_BINARY}";

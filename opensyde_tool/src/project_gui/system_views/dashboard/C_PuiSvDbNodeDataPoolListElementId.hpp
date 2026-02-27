@@ -12,6 +12,7 @@
 #define C_PUISVDBNODEDATAPOOLLISTELEMENTID_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QHashFunctions>
 #include <QString>
 #include "C_OscNodeDataPool.hpp"
 #include "C_OscNodeDataPoolListElementOptArrayId.hpp"
@@ -79,6 +80,21 @@ private:
    stw::opensyde_core::C_OscNodeDataPool::E_Type me_InvalidTypePlaceholder; ///< Type used in case of invalid
    QString mc_InvalidNamePlaceholder;                                       ///< Name used in case of invalid
 };
+
+inline size_t qHash(const C_PuiSvDbNodeDataPoolListElementId &orc_Id,
+                    size_t ou_Seed = 0) {
+  QtPrivate::QHashCombine c_Hash;
+  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_NodeIndex);
+  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_DataPoolIndex);
+  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_ListIndex);
+  ou_Seed = c_Hash(ou_Seed, orc_Id.u32_ElementIndex);
+  ou_Seed = c_Hash(ou_Seed, orc_Id.GetUseArrayElementIndex());
+  ou_Seed = c_Hash(ou_Seed, orc_Id.GetArrayElementIndex());
+  ou_Seed = c_Hash(ou_Seed, orc_Id.GetHalChannelName());
+  ou_Seed = c_Hash(ou_Seed, static_cast<int32_t>(orc_Id.GetType()));
+  ou_Seed = c_Hash(ou_Seed, orc_Id.GetIsValid());
+  return ou_Seed;
+}
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
 }

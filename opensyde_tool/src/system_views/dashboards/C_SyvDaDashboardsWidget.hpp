@@ -10,6 +10,8 @@
 #define C_SYVDADASHBOARDSWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <set>
+#include <QSet>
 #include <QWidget>
 #include <QTimer>
 
@@ -145,9 +147,9 @@ private:
    bool mq_EditModeActive;
    bool mq_DarkModeActive;
    bool mq_ConnectActive;
-   std::set<stw::opensyde_core::C_OscNodeDataPoolListId> mc_MissedReadNvmOperations;
+   QSet<stw::opensyde_core::C_OscNodeDataPoolListId> mc_MissedReadNvmOperations;
    std::set<C_MissedReadOperation> mc_MissedReadOperations;
-   std::set<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_MissedWriteOperations;
+   QSet<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_MissedWriteOperations;
    E_ConnectState me_ConnectState;
    int32_t ms32_InitToolboxCounter;
    static qint64 mhs64_DisconnectTime;

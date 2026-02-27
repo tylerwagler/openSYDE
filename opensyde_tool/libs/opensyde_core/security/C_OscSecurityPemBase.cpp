@@ -23,12 +23,10 @@
 #include "openssl/x509.h"
 #include "openssl/x509v3.h"
 
-
 #include "C_OscSecurityPemBase.hpp"
 #include "C_OscUtils.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -98,7 +96,7 @@ const C_OscSecurityPemKeyInfo &C_OscSecurityPemBase::GetKeyInfo() const {
    Meta infos
 */
 //----------------------------------------------------------------------------------------------------------------------
-const std::string &C_OscSecurityPemBase::GetMetaInfos() const {
+const QString &C_OscSecurityPemBase::GetMetaInfos() const {
   return this->mc_MetaInfo;
 }
 
@@ -124,24 +122,24 @@ const std::string &C_OscSecurityPemBase::GetMetaInfos() const {
    \retval   C_CONFIG   Invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemBase::LoadFromFile(const std::string &orc_FileName,
-                                           std::string &orc_ErrorMessage) {
+int32_t C_OscSecurityPemBase::LoadFromFile(const QString &orc_FileName,
+                                           QString &orc_ErrorMessage) {
   int32_t s32_Retval = C_NO_ERR;
 
   this->Clear();
 
-  if (QFileInfo(QString::fromStdString(orc_FileName)).exists() &&
-      QFileInfo(QString::fromStdString(orc_FileName)).isFile()) {
+  if (QFileInfo(orc_FileName).exists() &&
+      QFileInfo(orc_FileName).isFile()) {
     QString c_FileContent;
-    C_OscUtils::h_FileToString(QString::fromStdString(orc_FileName),
+    C_OscUtils::h_FileToString(orc_FileName,
                                c_FileContent);
     {
-      const std::string c_PemFileContent = c_FileContent.toStdString();
+      const QString c_PemFileContent = c_FileContent;
 
       QByteArray c_BufferFile;
       c_BufferFile.resize(c_PemFileContent.size());
-      memcpy(reinterpret_cast<uint8_t*>(c_BufferFile.data()), c_PemFileContent.data(),
-             c_PemFileContent.size());
+      memcpy(reinterpret_cast<uint8_t *>(c_BufferFile.data()),
+             c_PemFileContent.data(), c_PemFileContent.size());
       s32_Retval = this->m_ReadPublicKey(c_BufferFile, orc_ErrorMessage);
       if (s32_Retval == C_NO_ERR) {
         s32_Retval = this->m_ReadMetaInfos(c_BufferFile, orc_ErrorMessage);
@@ -178,15 +176,15 @@ int32_t C_OscSecurityPemBase::LoadFromFile(const std::string &orc_FileName,
    \retval   C_CONFIG   Invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemBase::m_ReadPublicKey(
-    const QByteArray &orc_FileContent,
-    std::string &orc_ErrorMessage) {
+int32_t C_OscSecurityPemBase::m_ReadPublicKey(const QByteArray &orc_FileContent,
+                                              QString &orc_ErrorMessage) {
   int32_t s32_Retval = C_NO_ERR;
 
   const int x_ContentSize = static_cast<int>(
       orc_FileContent.size()); // lint !e970 !e8080 //use type expected by API
-  BIO *const pc_PubKeyFile =
-      BIO_new_mem_buf(reinterpret_cast<const char*>(orc_FileContent.constData()), x_ContentSize);
+  BIO *const pc_PubKeyFile = BIO_new_mem_buf(
+      reinterpret_cast<const char *>(orc_FileContent.constData()),
+      x_ContentSize);
 
   if (pc_PubKeyFile != NULL) {
     // Public key
@@ -196,7 +194,8 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(
       c_PubKeyTextDecoded.resize(
           C_OscSecurityPemBase::mhu32_DEFAULT_BUFFER_SIZE);
       {
-        uint8_t *pu8_PubKeyTextDecodedPointer = reinterpret_cast<uint8_t*>(c_PubKeyTextDecoded.data());
+        uint8_t *pu8_PubKeyTextDecodedPointer =
+            reinterpret_cast<uint8_t *>(c_PubKeyTextDecoded.data());
         const uint32_t u32_PubKeyTextDecodedOpensslCount =
             i2d_X509(pc_RsaPub, &pu8_PubKeyTextDecodedPointer);
         c_PubKeyTextDecoded.resize(u32_PubKeyTextDecodedOpensslCount);
@@ -301,7 +300,8 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(
               c_PubKeySerialNumber.resize(
                   C_OscSecurityPemBase::mhu32_DEFAULT_BUFFER_SIZE);
               {
-                uint8_t *pu8_SerialNumberPointer = reinterpret_cast<uint8_t*>(c_PubKeySerialNumber.data());
+                uint8_t *pu8_SerialNumberPointer =
+                    reinterpret_cast<uint8_t *>(c_PubKeySerialNumber.data());
                 const uint32_t u32_SerialNumberCount = i2d_ASN1_INTEGER(
                     pc_SerialNumberOpenssl, &pu8_SerialNumberPointer);
                 c_PubKeySerialNumber.resize(u32_SerialNumberCount);
@@ -313,12 +313,12 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(
                   // Validate serial number
                   if ((c_PubKeySerialNumber.size() > 22UL) ||
                       (c_PubKeySerialNumber.size() < 3UL)) {
-                    std::stringstream c_Stream;
-                    c_Stream << c_PubKeySerialNumber.size();
+                    QString c_Stream;
+                    c_Stream = QString::number(c_PubKeySerialNumber.size());
                     s32_Retval = C_CONFIG;
                     orc_ErrorMessage = "Public key: serial number has invalid "
                                        "size, should be [3,22], is: " +
-                                       c_Stream.str();
+                                       c_Stream;
                   } else {
                     // Check expected serial number format, for details see
                     // https://en.wikipedia.org/wiki/ASN.1
@@ -387,15 +387,15 @@ int32_t C_OscSecurityPemBase::m_ReadPublicKey(
    \retval   C_CONFIG   Invalid file content
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSecurityPemBase::m_ReadMetaInfos(
-    const QByteArray &orc_FileContent,
-    std::string &orc_ErrorMessage) {
+int32_t C_OscSecurityPemBase::m_ReadMetaInfos(const QByteArray &orc_FileContent,
+                                              QString &orc_ErrorMessage) {
   int32_t s32_Retval = C_NO_ERR;
 
   const int x_ContentSize = static_cast<int>(
       orc_FileContent.size()); // lint !e970 !e8080 //use type expected by API
-  BIO *const pc_PubKeyFile =
-      BIO_new_mem_buf(reinterpret_cast<const char*>(orc_FileContent.constData()), x_ContentSize);
+  BIO *const pc_PubKeyFile = BIO_new_mem_buf(
+      reinterpret_cast<const char *>(orc_FileContent.constData()),
+      x_ContentSize);
 
   if (pc_PubKeyFile != NULL) {
     // Public key
@@ -411,7 +411,8 @@ int32_t C_OscSecurityPemBase::m_ReadMetaInfos(
           if (pc_MemPtr != NULL) {
             this->mc_MetaInfo = "";
             for (uint32_t u32_It = 0UL; u32_It < pc_MemPtr->length; ++u32_It) {
-              this->mc_MetaInfo += pc_MemPtr->data[u32_It];
+              this->mc_MetaInfo +=
+                  QString::fromUtf8(&pc_MemPtr->data[u32_It], 1);
             }
           } else {
             s32_Retval = C_CONFIG;

@@ -3,69 +3,87 @@
    \file
    \brief       Utility class for C code export.
 
-   Handles generic code structures of export classes for Datapool, COMM and HALC export.
+   Handles generic code structures of export classes for Datapool, COMM and HALC
+   export.
 
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include <QFile>
-#include <QTextStream>
-#include <QFileInfo>
 #include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextStream>
 
-#include "stwtypes.hpp"
-#include "stwerrors.hpp"
 #include "C_OscExportUti.hpp"
+#include "stwerrors.hpp"
+#include "stwtypes.hpp"
 
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUtils.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Create 120 characters long section separator.
 
-   \param[in]  orc_SectionName   Name of the following code section (e.g. Includes, Global Variables, ...)
+   \param[in]  orc_SectionName   Name of the following code section (e.g.
+   Includes, Global Variables, ...)
 
    \return
    Section separator as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscExportUti::h_GetSectionSeparator(const QString & orc_SectionName)
-{
-   QString c_Return;
+QString C_OscExportUti::h_GetSectionSeparator(const QString &orc_SectionName) {
+  QString c_Return;
 
-   c_Return = "/* -- ";
-   c_Return += orc_SectionName;
-   c_Return += " ";
+  c_Return = "/* -- ";
+  c_Return += orc_SectionName;
+  c_Return += " ";
 
-   for (int32_t s32_UpfillCounter = 117 - c_Return.length(); s32_UpfillCounter > 0; s32_UpfillCounter--)
-   {
-      c_Return += "-";
-   }
+  for (int32_t s32_UpfillCounter = 117 - c_Return.length();
+       s32_UpfillCounter > 0; s32_UpfillCounter--) {
+    c_Return += "-";
+  }
 
-   c_Return += " */"; // last 3 characters to fill up 120
+  c_Return += " */"; // last 3 characters to fill up 120
 
-   return c_Return;
+  return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -75,13 +93,14 @@ QString C_OscExportUti::h_GetSectionSeparator(const QString & orc_SectionName)
    Class header separator
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscExportUti::h_GetHeaderSeparator(void)
-{
-   const QString c_Return =
-      "//--------------------------------------------------------------------------------------------------------------"
+QString C_OscExportUti::h_GetHeaderSeparator(void) {
+  const QString c_Return =
+      "//"
+      "------------------------------------------------------------------------"
+      "--------------------------------------"
       "--------";
 
-   return c_Return;
+  return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -93,9 +112,9 @@ QString C_OscExportUti::h_GetHeaderSeparator(void)
    generation information string
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscExportUti::h_GetCreationToolInfo(const QString & orc_ExportToolInfo)
-{
-   return "   This file was generated by openSYDE " + orc_ExportToolInfo + ".";
+QString
+C_OscExportUti::h_GetCreationToolInfo(const QString &orc_ExportToolInfo) {
+  return "   This file was generated by openSYDE " + orc_ExportToolInfo + ".";
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -104,12 +123,11 @@ QString C_OscExportUti::h_GetCreationToolInfo(const QString & orc_ExportToolInfo
    \param[in]  orc_Data    File data to append structure to
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_AddExternCeStart(QStringList & orc_Data)
-{
-   orc_Data.append("#ifdef __cplusplus");
-   orc_Data.append("extern \"C\" {");
-   orc_Data.append("#endif");
-   orc_Data.append("");
+void C_OscExportUti::h_AddExternCeStart(QStringList &orc_Data) {
+  orc_Data.append("#ifdef __cplusplus");
+  orc_Data.append("extern \"C\" {");
+  orc_Data.append("#endif");
+  orc_Data.append("");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -118,37 +136,37 @@ void C_OscExportUti::h_AddExternCeStart(QStringList & orc_Data)
    \param[in]  orc_Data    File data to append structure to
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_AddExternCeEnd(QStringList & orc_Data)
-{
-   orc_Data.append("#ifdef __cplusplus");
-   orc_Data.append("} /* end of extern \"C\" */");
-   orc_Data.append("#endif");
-   orc_Data.append("");
+void C_OscExportUti::h_AddExternCeEnd(QStringList &orc_Data) {
+  orc_Data.append("#ifdef __cplusplus");
+  orc_Data.append("} /* end of extern \"C\" */");
+  orc_Data.append("#endif");
+  orc_Data.append("");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Add define with project ID to ensure file consistency between .c and .h file.
+/*! \brief  Add define with project ID to ensure file consistency between .c and
+   .h file.
 
    \param[out]  orc_Data         File data as string list
    \param[in]   orc_MagicName    Magic name including project ID
    \param[in]   oq_HeaderFile    Flag if .c or .h file (true: header file)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_AddProjectIdDef(QStringList & orc_Data, const QString & orc_MagicName,
-                                       const bool oq_HeaderFile)
-{
-   if (oq_HeaderFile == true)
-   {
-      orc_Data.append("///unique ID to ensure consistency between .h and .c files");
-      orc_Data.append("#define " + orc_MagicName + " void " + orc_MagicName.toLower() + "(void) {}");
-      orc_Data.append("");
-   }
-   else
-   {
-      orc_Data.append("///ensure file consistency (if compilation fails here the .h file does not match this .c file)");
-      orc_Data.append(orc_MagicName);
-      orc_Data.append("");
-   }
+void C_OscExportUti::h_AddProjectIdDef(QStringList &orc_Data,
+                                       const QString &orc_MagicName,
+                                       const bool oq_HeaderFile) {
+  if (oq_HeaderFile == true) {
+    orc_Data.append(
+        "///unique ID to ensure consistency between .h and .c files");
+    orc_Data.append("#define " + orc_MagicName + " void " +
+                    orc_MagicName.toLower() + "(void) {}");
+    orc_Data.append("");
+  } else {
+    orc_Data.append("///ensure file consistency (if compilation fails here the "
+                    ".h file does not match this .c file)");
+    orc_Data.append(orc_MagicName);
+    orc_Data.append("");
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -158,63 +176,58 @@ void C_OscExportUti::h_AddProjectIdDef(QStringList & orc_Data, const QString & o
    \param[in]   orc_MagicName    Magic name including project ID
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_AddProjIdFunctionPrototype(QStringList & orc_Data, const QString & orc_MagicName)
-{
-   orc_Data.append(C_OscExportUti::h_GetSectionSeparator("Function Prototypes"));
-   orc_Data.append("///unique ID to ensure consistency between .h and .c files");
-   orc_Data.append("extern void " + orc_MagicName.toLower() + "(void);");
-   orc_Data.append("");
+void C_OscExportUti::h_AddProjIdFunctionPrototype(
+    QStringList &orc_Data, const QString &orc_MagicName) {
+  orc_Data.append(C_OscExportUti::h_GetSectionSeparator("Function Prototypes"));
+  orc_Data.append("///unique ID to ensure consistency between .h and .c files");
+  orc_Data.append("extern void " + orc_MagicName.toLower() + "(void);");
+  orc_Data.append("");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Store assembled data in file
 
    \param[in]  orc_Data       File data as string list
-   \param[in]  orc_Path       Directory path for created file excluding file name
-   \param[in]  orc_FileName   File name excluding file extension
-   \param[in]  oq_HeaderFile  Flag if .c or .h file (true: header file)
+   \param[in]  orc_Path       Directory path for created file excluding file
+   name \param[in]  orc_FileName   File name excluding file extension \param[in]
+   oq_HeaderFile  Flag if .c or .h file (true: header file)
 
    \return
    C_NO_ERR Operation success
    C_RD_WR  Operation failure: cannot store file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscExportUti::h_SaveToFile(QStringList & orc_Data, const QString & orc_Path,
-                                     const QString & orc_FileName, const bool oq_HeaderFile)
-{
-   int32_t s32_Retval = C_NO_ERR;
-   QString c_PathAndFilename;
+int32_t C_OscExportUti::h_SaveToFile(QStringList &orc_Data,
+                                     const QString &orc_Path,
+                                     const QString &orc_FileName,
+                                     const bool oq_HeaderFile) {
+  int32_t s32_Retval = C_NO_ERR;
+  QString c_PathAndFilename;
 
-   // get file path: path + filename + extension
-   c_PathAndFilename = orc_Path + "/" + orc_FileName;
+  // get file path: path + filename + extension
+  c_PathAndFilename = orc_Path + "/" + orc_FileName;
 
-   if (oq_HeaderFile == true)
-   {
-      c_PathAndFilename += ".h";
-   }
-   else
-   {
-      c_PathAndFilename += ".c";
-   }
+  if (oq_HeaderFile == true) {
+    c_PathAndFilename += ".h";
+  } else {
+    c_PathAndFilename += ".c";
+  }
 
-   // store into file
-   QFile c_File(c_PathAndFilename);
-   if (c_File.open(QIODevice::WriteOnly | QIODevice::Text))
-   {
-      QTextStream c_Out(&c_File);
-      for (const QString & rc_Line : orc_Data)
-      {
-         c_Out << rc_Line << "\n";
-      }
-      c_File.close();
-   }
-   else
-   {
-      osc_write_log_error("Creating source code", "Could not write to file \"" + c_PathAndFilename + "\"");
-      s32_Retval = C_RD_WR;
-   }
+  // store into file
+  QFile c_File(c_PathAndFilename);
+  if (c_File.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    QTextStream c_Out(&c_File);
+    for (const QString &rc_Line : orc_Data) {
+      c_Out << rc_Line << "\n";
+    }
+    c_File.close();
+  } else {
+    osc_write_log_error("Creating source code", "Could not write to file \"" +
+                                                    c_PathAndFilename + "\"");
+    s32_Retval = C_RD_WR;
+  }
 
-   return s32_Retval;
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -223,24 +236,26 @@ int32_t C_OscExportUti::h_SaveToFile(QStringList & orc_Data, const QString & orc
    \param[in,out]  orc_FilePaths    List of file paths
    \param[in]      orc_Path         Base path of files to add
    \param[in]      orc_FileName     File base name of files to add
-   \param[in]      oq_SourceCode    Flag if source code (.c and .h) or parameter set image (.syde_psi)
+   \param[in]      oq_SourceCode    Flag if source code (.c and .h) or parameter
+   set image (.syde_psi)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_CollectFilePaths(QStringList & orc_FilePaths, const QString & orc_Path,
-                                        const QString & orc_FileName, const bool oq_SourceCode)
-{
-   QString c_FileName;
+void C_OscExportUti::h_CollectFilePaths(QStringList &orc_FilePaths,
+                                        const QString &orc_Path,
+                                        const QString &orc_FileName,
+                                        const bool oq_SourceCode) {
+  QString c_FileName;
 
-   c_FileName = stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_Path) + orc_FileName;
-   if (oq_SourceCode == true)
-   {
-      orc_FilePaths.push_back(c_FileName + ".h");
-      orc_FilePaths.push_back(c_FileName + ".c");
-   }
-   else
-   {
-      orc_FilePaths.push_back(c_FileName); // file suffix already included in this case
-   }
+  c_FileName =
+      stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_Path) +
+      orc_FileName;
+  if (oq_SourceCode == true) {
+    orc_FilePaths.push_back(c_FileName + ".h");
+    orc_FilePaths.push_back(c_FileName + ".c");
+  } else {
+    orc_FilePaths.push_back(
+        c_FileName); // file suffix already included in this case
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -253,57 +268,54 @@ void C_OscExportUti::h_CollectFilePaths(QStringList & orc_FilePaths, const QStri
    data type as variable prefix string
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscExportUti::h_GetTypePrefix(const C_OscNodeDataPoolContent::E_Type oe_Type, const bool oq_IsArray)
-{
-   QString c_Prefix;
+QString
+C_OscExportUti::h_GetTypePrefix(const C_OscNodeDataPoolContent::E_Type oe_Type,
+                                const bool oq_IsArray) {
+  QString c_Prefix;
 
-   if (oq_IsArray == true)
-   {
-      c_Prefix = "a";
-   }
-   else
-   {
-      c_Prefix = "";
-   }
+  if (oq_IsArray == true) {
+    c_Prefix = "a";
+  } else {
+    c_Prefix = "";
+  }
 
-   switch (oe_Type)
-   {
-   case C_OscNodeDataPoolContent::eUINT8: // Data type unsigned 8 bit integer
-      c_Prefix += "u8";
-      break;
-   case C_OscNodeDataPoolContent::eUINT16: // Data type unsigned 16 bit integer
-      c_Prefix += "u16";
-      break;
-   case C_OscNodeDataPoolContent::eUINT32: // Data type unsigned 32 bit integer
-      c_Prefix += "u32";
-      break;
-   case C_OscNodeDataPoolContent::eUINT64: // Data type unsigned 64 bit integer
-      c_Prefix += "u64";
-      break;
-   case C_OscNodeDataPoolContent::eSINT8: // Data type signed 8 bit integer
-      c_Prefix += "s8";
-      break;
-   case C_OscNodeDataPoolContent::eSINT16: // Data type signed 16 bit integer
-      c_Prefix += "s16";
-      break;
-   case C_OscNodeDataPoolContent::eSINT32: // Data type signed 32 bit integer
-      c_Prefix += "s32";
-      break;
-   case C_OscNodeDataPoolContent::eSINT64: // Data type signed 64 bit integer
-      c_Prefix += "s64";
-      break;
-   case C_OscNodeDataPoolContent::eFLOAT32: // Data type 32 bit floating point
-      c_Prefix += "f32";
-      break;
-   case C_OscNodeDataPoolContent::eFLOAT64: // Data type 64 bit floating point
-      c_Prefix += "f64";
-      break;
-   default:
-      Q_ASSERT(false);
-      break;
-   }
+  switch (oe_Type) {
+  case C_OscNodeDataPoolContent::eUINT8: // Data type unsigned 8 bit integer
+    c_Prefix += "u8";
+    break;
+  case C_OscNodeDataPoolContent::eUINT16: // Data type unsigned 16 bit integer
+    c_Prefix += "u16";
+    break;
+  case C_OscNodeDataPoolContent::eUINT32: // Data type unsigned 32 bit integer
+    c_Prefix += "u32";
+    break;
+  case C_OscNodeDataPoolContent::eUINT64: // Data type unsigned 64 bit integer
+    c_Prefix += "u64";
+    break;
+  case C_OscNodeDataPoolContent::eSINT8: // Data type signed 8 bit integer
+    c_Prefix += "s8";
+    break;
+  case C_OscNodeDataPoolContent::eSINT16: // Data type signed 16 bit integer
+    c_Prefix += "s16";
+    break;
+  case C_OscNodeDataPoolContent::eSINT32: // Data type signed 32 bit integer
+    c_Prefix += "s32";
+    break;
+  case C_OscNodeDataPoolContent::eSINT64: // Data type signed 64 bit integer
+    c_Prefix += "s64";
+    break;
+  case C_OscNodeDataPoolContent::eFLOAT32: // Data type 32 bit floating point
+    c_Prefix += "f32";
+    break;
+  case C_OscNodeDataPoolContent::eFLOAT64: // Data type 64 bit floating point
+    c_Prefix += "f64";
+    break;
+  default:
+    Q_ASSERT(false);
+    break;
+  }
 
-   return c_Prefix;
+  return c_Prefix;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -315,48 +327,47 @@ QString C_OscExportUti::h_GetTypePrefix(const C_OscNodeDataPoolContent::E_Type o
    data type as string
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscExportUti::h_GetElementTypeAsString(const C_OscNodeDataPoolContent::E_Type oe_Type)
-{
-   QString c_Retval;
+QString C_OscExportUti::h_GetElementTypeAsString(
+    const C_OscNodeDataPoolContent::E_Type oe_Type) {
+  QString c_Retval;
 
-   switch (oe_Type)
-   {
-   case C_OscNodeDataPoolContent::eUINT8: // Data type unsigned 8 bit integer
-      c_Retval += "UINT8";
-      break;
-   case C_OscNodeDataPoolContent::eUINT16: // Data type unsigned 16 bit integer
-      c_Retval += "UINT16";
-      break;
-   case C_OscNodeDataPoolContent::eUINT32: // Data type unsigned 32 bit integer
-      c_Retval += "UINT32";
-      break;
-   case C_OscNodeDataPoolContent::eUINT64: // Data type unsigned 64 bit integer
-      c_Retval += "UINT64";
-      break;
-   case C_OscNodeDataPoolContent::eSINT8: // Data type signed 8 bit integer
-      c_Retval += "SINT8";
-      break;
-   case C_OscNodeDataPoolContent::eSINT16: // Data type signed 16 bit integer
-      c_Retval += "SINT16";
-      break;
-   case C_OscNodeDataPoolContent::eSINT32: // Data type signed 32 bit integer
-      c_Retval += "SINT32";
-      break;
-   case C_OscNodeDataPoolContent::eSINT64: // Data type signed 64 bit integer
-      c_Retval += "SINT64";
-      break;
-   case C_OscNodeDataPoolContent::eFLOAT32: // Data type 32 bit floating point
-      c_Retval += "FLOAT32";
-      break;
-   case C_OscNodeDataPoolContent::eFLOAT64: // Data type 64 bit floating point
-      c_Retval += "FLOAT64";
-      break;
-   default:
-      Q_ASSERT(false);
-      break;
-   }
+  switch (oe_Type) {
+  case C_OscNodeDataPoolContent::eUINT8: // Data type unsigned 8 bit integer
+    c_Retval += "UINT8";
+    break;
+  case C_OscNodeDataPoolContent::eUINT16: // Data type unsigned 16 bit integer
+    c_Retval += "UINT16";
+    break;
+  case C_OscNodeDataPoolContent::eUINT32: // Data type unsigned 32 bit integer
+    c_Retval += "UINT32";
+    break;
+  case C_OscNodeDataPoolContent::eUINT64: // Data type unsigned 64 bit integer
+    c_Retval += "UINT64";
+    break;
+  case C_OscNodeDataPoolContent::eSINT8: // Data type signed 8 bit integer
+    c_Retval += "SINT8";
+    break;
+  case C_OscNodeDataPoolContent::eSINT16: // Data type signed 16 bit integer
+    c_Retval += "SINT16";
+    break;
+  case C_OscNodeDataPoolContent::eSINT32: // Data type signed 32 bit integer
+    c_Retval += "SINT32";
+    break;
+  case C_OscNodeDataPoolContent::eSINT64: // Data type signed 64 bit integer
+    c_Retval += "SINT64";
+    break;
+  case C_OscNodeDataPoolContent::eFLOAT32: // Data type 32 bit floating point
+    c_Retval += "FLOAT32";
+    break;
+  case C_OscNodeDataPoolContent::eFLOAT64: // Data type 64 bit floating point
+    c_Retval += "FLOAT64";
+    break;
+  default:
+    Q_ASSERT(false);
+    break;
+  }
 
-   return c_Retval;
+  return c_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -371,22 +382,23 @@ QString C_OscExportUti::h_GetElementTypeAsString(const C_OscNodeDataPoolContent:
    C variable name for given Datapool list element
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscExportUti::h_GetElementCeName(const QString & orc_Name, const bool oq_IsArray,
-                                                const C_OscNodeDataPoolContent::E_Type oe_Type,
-                                                const QString & orc_ArrayPos)
-{
-   QString c_Return = C_OscExportUti::h_GetTypePrefix(oe_Type, oq_IsArray) + "_" + orc_Name;
+QString C_OscExportUti::h_GetElementCeName(
+    const QString &orc_Name, const bool oq_IsArray,
+    const C_OscNodeDataPoolContent::E_Type oe_Type,
+    const QString &orc_ArrayPos) {
+  QString c_Return =
+      C_OscExportUti::h_GetTypePrefix(oe_Type, oq_IsArray) + "_" + orc_Name;
 
-   if (oq_IsArray == true)
-   {
-      c_Return += "[" + orc_ArrayPos + "]";
-   }
+  if (oq_IsArray == true) {
+    c_Return += "[" + orc_ArrayPos + "]";
+  }
 
-   return c_Return;
+  return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Convert 32-bit float to string with %g formatter and maximum representable precision.
+/*! \brief  Convert 32-bit float to string with %g formatter and maximum
+   representable precision.
 
    Always adds a decimal point.
 
@@ -397,37 +409,33 @@ QString C_OscExportUti::h_GetElementCeName(const QString & orc_Name, const bool 
    Value converted to string
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscExportUti::h_FloatToStrGe(const float32_t of32_Value, bool * const opq_InfOrNan)
-{
-   QString c_Return;
-   bool q_InfOrNan;
+QString C_OscExportUti::h_FloatToStrGe(const float32_t of32_Value,
+                                       bool *const opq_InfOrNan) {
+  QString c_Return;
+  bool q_InfOrNan;
 
-   c_Return = QString::asprintf("%.*g", 9, static_cast<double>(of32_Value));
+  c_Return = QString::asprintf("%.*g", 9, static_cast<double>(of32_Value));
 
-   q_InfOrNan = h_CheckInfOrNan(c_Return);
+  q_InfOrNan = h_CheckInfOrNan(c_Return);
 
-   if (opq_InfOrNan != NULL)
-   {
-      *opq_InfOrNan = q_InfOrNan;
-   }
+  if (opq_InfOrNan != NULL) {
+    *opq_InfOrNan = q_InfOrNan;
+  }
 
-   if (q_InfOrNan == false)
-   {
-      h_AddDecimalPointIfNone(c_Return);
-   }
-   else
-   {
-      if (c_Return.toLower().contains("nan"))
-      {
-         c_Return = "nan";
-      }
-   }
+  if (q_InfOrNan == false) {
+    h_AddDecimalPointIfNone(c_Return);
+  } else {
+    if (c_Return.toLower().contains("nan")) {
+      c_Return = "nan";
+    }
+  }
 
-   return c_Return;
+  return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Convert 64-bit float to string with %g formatter and maximum representable precision
+/*! \brief  Convert 64-bit float to string with %g formatter and maximum
+   representable precision
 
    Always adds a decimal point.
 
@@ -438,33 +446,28 @@ QString C_OscExportUti::h_FloatToStrGe(const float32_t of32_Value, bool * const 
    Value converted to string
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscExportUti::h_FloatToStrGe(const float64_t of64_Value, bool * const opq_InfOrNan)
-{
-   QString c_Return;
-   bool q_InfOrNan;
+QString C_OscExportUti::h_FloatToStrGe(const float64_t of64_Value,
+                                       bool *const opq_InfOrNan) {
+  QString c_Return;
+  bool q_InfOrNan;
 
-   c_Return = QString::asprintf("%.*g", 17, of64_Value);
+  c_Return = QString::asprintf("%.*g", 17, of64_Value);
 
-   q_InfOrNan = h_CheckInfOrNan(c_Return);
+  q_InfOrNan = h_CheckInfOrNan(c_Return);
 
-   if (opq_InfOrNan != NULL)
-   {
-      *opq_InfOrNan = q_InfOrNan;
-   }
+  if (opq_InfOrNan != NULL) {
+    *opq_InfOrNan = q_InfOrNan;
+  }
 
-   if (q_InfOrNan == false)
-   {
-      h_AddDecimalPointIfNone(c_Return);
-   }
-   else
-   {
-      if (c_Return.toLower().contains("nan"))
-      {
-         c_Return = "nan";
-      }
-   }
+  if (q_InfOrNan == false) {
+    h_AddDecimalPointIfNone(c_Return);
+  } else {
+    if (c_Return.toLower().contains("nan")) {
+      c_Return = "nan";
+    }
+  }
 
-   return c_Return;
+  return c_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -476,26 +479,24 @@ QString C_OscExportUti::h_FloatToStrGe(const float64_t of64_Value, bool * const 
    \retval   false  string does not contain "inf" or "nan"
 */
 //----------------------------------------------------------------------------------------------------------------------
-bool C_OscExportUti::h_CheckInfOrNan(const QString & orc_String)
-{
-   bool q_Return;
+bool C_OscExportUti::h_CheckInfOrNan(const QString &orc_String) {
+  bool q_Return;
 
-   if (orc_String.toLower().contains("inf") || orc_String.toLower().contains("nan"))
-   {
-      q_Return = true;
-   }
-   else
-   {
-      q_Return = false;
-   }
+  if (orc_String.toLower().contains("inf") ||
+      orc_String.toLower().contains("nan")) {
+    q_Return = true;
+  } else {
+    q_Return = false;
+  }
 
-   return q_Return;
+  return q_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Add decimal point to a float string if there is none.
 
-   Use this if float was converted with %g, but without '#' option as trailing zeroes shall be omitted.
+   Use this if float was converted with %g, but without '#' option as trailing
+   zeroes shall be omitted.
 
    Examples:
       5        -> 5.0
@@ -505,18 +506,13 @@ bool C_OscExportUti::h_CheckInfOrNan(const QString & orc_String)
    \param[in,out]  orc_FloatString  Float string
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscExportUti::h_AddDecimalPointIfNone(QString & orc_FloatString)
-{
-   if (!orc_FloatString.contains('.'))
-   {
-      int32_t s32_PosE = orc_FloatString.indexOf('e');
-      if (s32_PosE >= 0)
-      {
-         orc_FloatString.insert(s32_PosE, ".0");
-      }
-      else
-      {
-         orc_FloatString += ".0";
-      }
-   }
+void C_OscExportUti::h_AddDecimalPointIfNone(QString &orc_FloatString) {
+  if (!orc_FloatString.contains('.')) {
+    int32_t s32_PosE = orc_FloatString.indexOf('e');
+    if (s32_PosE >= 0) {
+      orc_FloatString.insert(s32_PosE, ".0");
+    } else {
+      orc_FloatString += ".0";
+    }
+  }
 }

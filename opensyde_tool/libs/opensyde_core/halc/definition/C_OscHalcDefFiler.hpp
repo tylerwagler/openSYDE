@@ -2,100 +2,134 @@
 /*!
    \file
    \brief       Load HALC definition
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCHALCDEFFILER_HPP
 #define C_OSCHALCDEFFILER_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QList>
-#include <QStringList>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscHalcDef.hpp"
 #include "C_OscXmlParser.hpp"
+#include <QList>
+#include <QStringList>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscHalcDefFiler
-{
+class C_OscHalcDefFiler {
 public:
-   static int32_t h_LoadFile(C_OscHalcDefBase & orc_IoData, const QString & orc_Path);
-   static int32_t h_SaveFile(const C_OscHalcDefBase & orc_IoData, const QString & orc_Path);
-   static int32_t h_LoadData(C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_SaveData(const C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
+  static int32_t h_LoadFile(C_OscHalcDefBase &orc_IoData,
+                            const QString &orc_Path);
+  static int32_t h_SaveFile(const C_OscHalcDefBase &orc_IoData,
+                            const QString &orc_Path);
+  static int32_t h_LoadData(C_OscHalcDefBase &orc_IoData,
+                            C_OscXmlParserBase &orc_XmlParser);
+  static int32_t h_SaveData(const C_OscHalcDefBase &orc_IoData,
+                            C_OscXmlParserBase &orc_XmlParser);
 
-   static int32_t h_LoadAvailability(const QString & orc_AttributeName,
-                                     QList<C_OscHalcDefChannelAvailability> & orc_Availability,
-                                     const uint32_t ou32_NumChannels, const C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_CheckUseCaseValue(const C_OscHalcDefDomain & orc_IoDataDomain);
-   static int32_t h_CheckDomainDisplayNames(const C_OscHalcDefDomain & orc_IoDataDomain);
+  static int32_t
+  h_LoadAvailability(const QString &orc_AttributeName,
+                     QList<C_OscHalcDefChannelAvailability> &orc_Availability,
+                     const uint32_t ou32_NumChannels,
+                     const C_OscXmlParserBase &orc_XmlParser);
+  static int32_t
+  h_CheckUseCaseValue(const C_OscHalcDefDomain &orc_IoDataDomain);
+  static int32_t
+  h_CheckDomainDisplayNames(const C_OscHalcDefDomain &orc_IoDataDomain);
 
 private:
-   static const uint16_t mhu16_FILE_VERSION_1 = 1U;
+  static const uint16_t mhu16_FILE_VERSION_1 = 1U;
 
-   C_OscHalcDefFiler(void);
+  C_OscHalcDefFiler(void);
 
-   static int32_t mh_LoadNvmData(C_OscHalcDefBase & orc_IoData, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadNvmAddressOffsetData(QList<uint32_t> & orc_Vector,
-                                              const C_OscXmlParserBase & orc_XmlParser,
-                                              const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
-                                              const uint8_t ou8_NumConfigCopies, const bool oq_IsSafeVector);
-   static int32_t mh_SaveIoDomain(const C_OscHalcDefDomain & orc_IoDataDomain, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadIoDataDomain(C_OscHalcDefDomain & orc_IoDataDomain, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_CheckIoDataDomain(const C_OscHalcDefDomain & orc_IoDataDomain);
-   static int32_t mh_CheckDefaultUseCase(const C_OscHalcDefDomain & orc_IoDataDomain);
-   static int32_t mh_LoadChannels(QList<C_OscHalcDefChannelDef> & orc_Channels,
-                                  C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_LoadChannelUseCases(QList<C_OscHalcDefChannelUseCase> & orc_ChannelUsecases,
-                                         C_OscXmlParserBase & orc_XmlParser, const uint32_t ou32_NumChannels);
-   static int32_t mh_SplitAvailabilityString(const QString & orc_AvailabilityString,
-                                             QStringList & orc_SubElements,
-                                             const C_OscXmlParserBase & orc_XmlParser,
-                                             const QString & orc_AttributeName);
-   static int32_t mh_ParseAvailabilityStringSubElements(const QStringList & orc_SubElements,
-                                                        QList<C_OscHalcDefChannelAvailability> & orc_Availability,
-                                                        const uint32_t ou32_NumChannels,
-                                                        const C_OscXmlParserBase & orc_XmlParser,
-                                                        const QString & orc_AttributeName);
-   static int32_t mh_CheckAvailability(const QList<C_OscHalcDefChannelAvailability> & orc_Availability,
-                                       const C_OscXmlParserBase & orc_XmlParser);
-   static int32_t mh_ConvertStringToNumber(const QString & orc_Number, int32_t & ors32_Number,
-                                           const C_OscXmlParserBase & orc_XmlParser,
-                                           const QString & orc_AttributeName);
-   static int32_t mh_HandleNumberSection(QString & orc_Number, QList<int32_t> & orc_FoundNumbers,
-                                         bool & orq_LastNumDeclaredSection, const QString & orc_Section,
-                                         const C_OscXmlParserBase & orc_XmlParser,
-                                         const QString & orc_AttributeName);
-   static int32_t mh_HandleNumberSectionEnd(const QList<int32_t> & orc_FoundNumbers, const bool oq_IsGroupSection,
-                                            QList<C_OscHalcDefChannelAvailability> & orc_Availability,
-                                            const uint32_t ou32_NumChannels, const C_OscXmlParserBase & orc_XmlParser,
-                                            const QString & orc_AttributeName);
-   static QString mh_GetAvailabilityString(
-      const QList<C_OscHalcDefChannelAvailability> & orc_Availability, const bool oq_OnlySaveOnce);
-   static int32_t mh_SaveUseCase(const C_OscHalcDefChannelUseCase & orc_UseCase, C_OscXmlParserBase & orc_XmlParser);
-   static QString mh_DomainCategoryEnumToString(const C_OscHalcDefDomain::E_Category oe_Category);
-   static int32_t mh_DomainCategoryStringToEnum(const QString & orc_Category,
-                                                C_OscHalcDefDomain::E_Category & ore_Category);
-   static void mh_GetAllNames(const QList<C_OscHalcDefStruct> & orc_Values,
-                              QStringList & orc_Names);
-   static int32_t mh_CheckDuplicateNames(const QString & orc_Section,
-                                         const QString & orc_DomainSingularName,
-                                         const QStringList & orc_Names);
-   static QString mh_SafetyModeToString(
-      const C_OscHalcDefBase::E_SafetyMode & ore_NodeDataPoolElementAccess);
-   static int32_t mh_StringToSafetyMode(const QString & orc_String,
-                                        C_OscHalcDefBase::E_SafetyMode & ore_Type);
+  static int32_t mh_LoadNvmData(C_OscHalcDefBase &orc_IoData,
+                                C_OscXmlParserBase &orc_XmlParser);
+  static int32_t mh_LoadNvmAddressOffsetData(
+      QList<uint32_t> &orc_Vector, const C_OscXmlParserBase &orc_XmlParser,
+      const C_OscHalcDefBase::E_SafetyMode oe_SafetyMode,
+      const uint8_t ou8_NumConfigCopies, const bool oq_IsSafeVector);
+  static int32_t mh_SaveIoDomain(const C_OscHalcDefDomain &orc_IoDataDomain,
+                                 C_OscXmlParserBase &orc_XmlParser);
+  static int32_t mh_LoadIoDataDomain(C_OscHalcDefDomain &orc_IoDataDomain,
+                                     C_OscXmlParserBase &orc_XmlParser);
+  static int32_t
+  mh_CheckIoDataDomain(const C_OscHalcDefDomain &orc_IoDataDomain);
+  static int32_t
+  mh_CheckDefaultUseCase(const C_OscHalcDefDomain &orc_IoDataDomain);
+  static int32_t mh_LoadChannels(QList<C_OscHalcDefChannelDef> &orc_Channels,
+                                 C_OscXmlParserBase &orc_XmlParser);
+  static int32_t
+  mh_LoadChannelUseCases(QList<C_OscHalcDefChannelUseCase> &orc_ChannelUsecases,
+                         C_OscXmlParserBase &orc_XmlParser,
+                         const uint32_t ou32_NumChannels);
+  static int32_t
+  mh_SplitAvailabilityString(const QString &orc_AvailabilityString,
+                             QStringList &orc_SubElements,
+                             const C_OscXmlParserBase &orc_XmlParser,
+                             const QString &orc_AttributeName);
+  static int32_t mh_ParseAvailabilityStringSubElements(
+      const QStringList &orc_SubElements,
+      QList<C_OscHalcDefChannelAvailability> &orc_Availability,
+      const uint32_t ou32_NumChannels, const C_OscXmlParserBase &orc_XmlParser,
+      const QString &orc_AttributeName);
+  static int32_t mh_CheckAvailability(
+      const QList<C_OscHalcDefChannelAvailability> &orc_Availability,
+      const C_OscXmlParserBase &orc_XmlParser);
+  static int32_t
+  mh_ConvertStringToNumber(const QString &orc_Number, int32_t &ors32_Number,
+                           const C_OscXmlParserBase &orc_XmlParser,
+                           const QString &orc_AttributeName);
+  static int32_t mh_HandleNumberSection(QString &orc_Number,
+                                        QList<int32_t> &orc_FoundNumbers,
+                                        bool &orq_LastNumDeclaredSection,
+                                        const QString &orc_Section,
+                                        const C_OscXmlParserBase &orc_XmlParser,
+                                        const QString &orc_AttributeName);
+  static int32_t mh_HandleNumberSectionEnd(
+      const QList<int32_t> &orc_FoundNumbers, const bool oq_IsGroupSection,
+      QList<C_OscHalcDefChannelAvailability> &orc_Availability,
+      const uint32_t ou32_NumChannels, const C_OscXmlParserBase &orc_XmlParser,
+      const QString &orc_AttributeName);
+  static QString mh_GetAvailabilityString(
+      const QList<C_OscHalcDefChannelAvailability> &orc_Availability,
+      const bool oq_OnlySaveOnce);
+  static int32_t mh_SaveUseCase(const C_OscHalcDefChannelUseCase &orc_UseCase,
+                                C_OscXmlParserBase &orc_XmlParser);
+  static QString mh_DomainCategoryEnumToString(
+      const C_OscHalcDefDomain::E_Category oe_Category);
+  static int32_t
+  mh_DomainCategoryStringToEnum(const QString &orc_Category,
+                                C_OscHalcDefDomain::E_Category &ore_Category);
+  static void mh_GetAllNames(const QList<C_OscHalcDefStruct> &orc_Values,
+                             QStringList &orc_Names);
+  static int32_t mh_CheckDuplicateNames(const QString &orc_Section,
+                                        const QString &orc_DomainSingularName,
+                                        const QStringList &orc_Names);
+  static QString mh_SafetyModeToString(
+      const C_OscHalcDefBase::E_SafetyMode &ore_NodeDataPoolElementAccess);
+  static int32_t
+  mh_StringToSafetyMode(const QString &orc_String,
+                        C_OscHalcDefBase::E_SafetyMode &ore_Type);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

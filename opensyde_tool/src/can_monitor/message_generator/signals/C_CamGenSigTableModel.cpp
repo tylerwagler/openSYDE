@@ -1448,24 +1448,24 @@ QVariant C_CamGenSigTableModel::m_HandleColPhysicalInterpreted(
       }
       // Handle allowed combo box values
       c_Strings.reserve(pc_DbcSignal->c_ValueDescription.size());
-      for (std::map<int64_t, QString>::const_iterator c_It =
+      for (QMap<int64_t, QString>::const_iterator c_It =
                pc_DbcSignal->c_ValueDescription.begin();
            c_It != pc_DbcSignal->c_ValueDescription.end(); ++c_It) {
         // Smaller or equal as zero is also a valid index (+1 might have
         // unintended effects with u64 max)
         if (u64_Counter <= u64_AllowedNumValues) {
           if (os32_Role == ms32_USER_ROLE_INTERACTION_COMBO_BOX_STRINGS_LIST) {
-            c_Strings.push_back(c_It->second);
+            c_Strings.push_back(c_It.value());
           } else {
             // Temporary fix for signed values
-            if ((q_IsSigned) && (static_cast<uint64_t>(c_It->first) >
+            if ((q_IsSigned) && (static_cast<uint64_t>(c_It.key()) >
                                  u64_AllowedNumValuesSigned)) {
               QString c_Negative = "-";
               c_Negative += QString::number(u64_AllowedNumValues -
-                                            static_cast<uint64_t>(c_It->first));
+                                            static_cast<uint64_t>(c_It.key()));
               c_Strings.push_back(c_Negative);
             } else {
-              c_Strings.push_back(QString::number(c_It->first));
+              c_Strings.push_back(QString::number(c_It.key()));
             }
           }
           // Keep track of number of added values (don't allow index out of
@@ -1709,7 +1709,7 @@ int32_t C_CamGenSigTableModel::m_SetSignalFromOsyValue(
     // Convert to vector for project interface (out of scope for Phase B-B2)
     // Write new values directly using QByteArray (no vector conversion needed)
     s32_Retval = C_CamProHandler::h_GetInstance()->SetMessageDataBytes(
-        this->mu32_MessageIndex, c_RawData.toStdVector());
+        this->mu32_MessageIndex, QList<uint8_t>(c_RawData.begin(), c_RawData.end()));
   } else {
     s32_Retval = C_RANGE;
   }

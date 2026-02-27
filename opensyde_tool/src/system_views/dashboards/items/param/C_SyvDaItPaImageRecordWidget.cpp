@@ -807,8 +807,8 @@ QString C_SyvDaItPaImageRecordWidget::m_GetTextForStep(
    const QList<QList<C_OscNodeDataPoolListId> > & orc_DataPoolListsForEachNode,
    const bool oq_IsConfirm) const
 {
-   std::list<QString> c_NodeText;
-   std::list<QString>::const_iterator c_ItNodeText;
+   QStringList c_NodeText;
+   QStringList::const_iterator c_ItNodeText;
    QString c_Text;
    uint32_t u32_NodeCounter;
 

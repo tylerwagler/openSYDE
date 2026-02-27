@@ -1,42 +1,52 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Data class, containing the interpreted entries for one datapool in a parameter set file (header)
+   \brief       Data class, containing the interpreted entries for one datapool
+   in a parameter set file (header)
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCPARAMSETINTERPRETEDDATAPOOL_HPP
 #define C_OSCPARAMSETINTERPRETEDDATAPOOL_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QList>
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscParamSetDataPoolInfo.hpp"
 #include "C_OscParamSetInterpretedList.hpp"
+#include <QList>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-///container class for handling interpreted parameter set file content
-class C_OscParamSetInterpretedDataPool
-{
+/// container class for handling interpreted parameter set file content
+class C_OscParamSetInterpretedDataPool {
 public:
-   C_OscParamSetInterpretedDataPool(void);
+  C_OscParamSetInterpretedDataPool(void);
 
-   C_OscParamSetDataPoolInfo c_DataPoolInfo;
-   QList<C_OscParamSetInterpretedList> c_Lists; ///< Interpreted lists of this datapool
+  C_OscParamSetDataPoolInfo c_DataPoolInfo;
+  QList<C_OscParamSetInterpretedList>
+      c_Lists; ///< Interpreted lists of this datapool
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

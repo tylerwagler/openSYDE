@@ -376,13 +376,13 @@ uint32_t C_PuiSdHandlerData::CalcHashSystemDefinition(void) const
    this->mc_CoreDefinition.CalcHash(u32_Hash);
 
    // calculate the hash for the ui elements
-   for (std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
+   for (QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
            this->mc_LastKnownHalcCrcs.begin();
         c_It != this->mc_LastKnownHalcCrcs.end(); ++c_It)
    {
-      c_It->first.CalcHash(u32_Hash);
-      c_It->second.CalcHash(u32_Hash);
-      stw::scl::C_SclChecksums::CalcCRC32(&c_It->second, sizeof(uint32_t), u32_Hash);
+      c_It.key().CalcHash(u32_Hash);
+      c_It.value().CalcHash(u32_Hash);
+      stw::scl::C_SclChecksums::CalcCRC32(&c_It.value(), sizeof(uint32_t), u32_Hash);
    }
 
    this->c_Elements.CalcHash(u32_Hash);

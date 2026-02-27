@@ -1,43 +1,51 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       This class uses a platform-specific path of the executable, which is running in the current process and
-                creates a MD5-Checksum from this file. It also sets an boolean global state, if the Checksum has already
-                been calculated.
-   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \brief       This class uses a platform-specific path of the executable,
+   which is running in the current process and creates a MD5-Checksum from this
+   file. It also sets an boolean global state, if the Checksum has already been
+   calculated. \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All
+   rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCBINARYHASH_HPP
 #define C_OSCBINARYHASH_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 
 #include <QString>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscBinaryHash
-{
+class C_OscBinaryHash {
 public:
-   static QString h_CreateBinaryHash(void);
-   static void h_SetHashBool(const bool oq_State);
-   static bool h_GetHashBool(void);
+  static QString h_CreateBinaryHash(void);
+  static void h_SetHashBool(const bool oq_State);
+  static bool h_GetHashBool(void);
 
 private:
-   static QString mhc_BinaryHash;
-   static bool mhq_HashCompleted;
-   C_OscBinaryHash();
+  static QString mhc_BinaryHash;
+  static bool mhq_HashCompleted;
+  C_OscBinaryHash();
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

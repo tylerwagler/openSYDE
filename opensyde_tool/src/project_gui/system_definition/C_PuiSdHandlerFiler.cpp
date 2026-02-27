@@ -1870,7 +1870,7 @@ void C_PuiSdHandlerFiler::h_SaveBusTextElements(const QList<C_PuiSdTextElementBu
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSdHandlerFiler::h_LoadLastKnownHalcCrcs(std::map<C_OscNodeDataPoolListElementOptArrayId,
+int32_t C_PuiSdHandlerFiler::h_LoadLastKnownHalcCrcs(QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                               C_PuiSdLastKnownHalElementId> & orc_Crcs,
                                                      C_OscXmlParserBase & orc_XmlParser)
 {
@@ -1936,19 +1936,19 @@ int32_t C_PuiSdHandlerFiler::h_LoadLastKnownHalcCrcs(std::map<C_OscNodeDataPoolL
    \param[in,out]  orc_XmlParser    XML parser
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(const std::map<C_OscNodeDataPoolListElementOptArrayId,
+void C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(const QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                  C_PuiSdLastKnownHalElementId> & orc_Crcs,
                                                   C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("last-known-halc-crcs");
-   for (std::map<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
+   for (QMap<C_OscNodeDataPoolListElementOptArrayId, C_PuiSdLastKnownHalElementId>::const_iterator c_It =
            orc_Crcs.begin();
         c_It != orc_Crcs.end(); ++c_It)
    {
       orc_XmlParser.CreateAndSelectNodeChild("last-known-halc-crc");
-      C_OscDataLoggerJobFiler::h_SaveDataElementOptArrayId(c_It->first, orc_XmlParser);
-      orc_XmlParser.SetAttributeUint32("crc", c_It->second.u32_Crc);
-      orc_XmlParser.CreateNodeChild("hal-data-pool-name", c_It->second.c_HalDpName);
+      C_OscDataLoggerJobFiler::h_SaveDataElementOptArrayId(c_It.key(), orc_XmlParser);
+      orc_XmlParser.SetAttributeUint32("crc", c_It.value().u32_Crc);
+      orc_XmlParser.CreateNodeChild("hal-data-pool-name", c_It.value().c_HalDpName);
 
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "last-known-halc-crcs");
@@ -1979,7 +1979,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveSystemDefinitionUiFile(const QString & orc_Fi
                                                           const C_OscSystemDefinition & orc_OscSystemDefinition,
                                                           const QList<C_PuiSdNode> & orc_UiNodes,
                                                           const QList<C_PuiSdBus> & orc_UiBuses,
-                                                          const QList<C_PuiSdTextElementBus> & orc_BusTextElements, const C_PuiBsElements & orc_Elements, const std::map<C_OscNodeDataPoolListElementOptArrayId,
+                                                          const QList<C_PuiSdTextElementBus> & orc_BusTextElements, const C_PuiBsElements & orc_Elements, const QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                                                                                                                                C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs)
 {
    C_OscXmlParser c_XmlParser;
@@ -2081,7 +2081,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadSystemDefinitionUiFile(const QString & orc_Fi
                                                           QList<C_PuiSdBus> & orc_UiBuses,
                                                           QList<C_PuiSdTextElementBus> & orc_BusTextElements,
                                                           stw::opensyde_gui_logic::C_PuiBsElements & orc_Elements,
-                                                          std::map<C_OscNodeDataPoolListElementOptArrayId,
+                                                          QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                    C_PuiSdLastKnownHalElementId> & orc_LastKnownHalcCrcs,
                                                           QList<C_OscNode> * const opc_OscNodes)
 {

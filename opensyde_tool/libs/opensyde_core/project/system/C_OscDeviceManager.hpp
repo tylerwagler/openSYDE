@@ -17,10 +17,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 
-#include <QList>
 #include "C_OscDeviceGroup.hpp"
+#include <QList>
 #include <QString>
-
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -58,8 +57,7 @@ public:
 
 private:
   bool mq_WasLoaded;
-  QList<C_OscDeviceGroup>
-      mc_DeviceGroups; ///< Array of all known device groups
+  QList<C_OscDeviceGroup> mc_DeviceGroups; ///< Array of all known device groups
 };
 
 /* -- Extern Global Variables

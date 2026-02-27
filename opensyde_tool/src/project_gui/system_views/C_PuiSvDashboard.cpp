@@ -797,7 +797,7 @@ void C_PuiSvDashboard::GetAllWidgetItems(QList<const C_PuiSvDbWidgetBase *> & or
    \param[in,out]  orc_Ids    Set with all registered elements. Will not be cleared when called
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::GetAllRegisteredDashboardElements(std::set<C_OscNodeDataPoolListElementId> & orc_Ids) const
+void C_PuiSvDashboard::GetAllRegisteredDashboardElements(QSet<C_OscNodeDataPoolListElementId> & orc_Ids) const
 {
    QList<const C_PuiSvDbWidgetBase *> c_Widgets;
    uint32_t u32_WidgetCounter;
@@ -822,7 +822,7 @@ void C_PuiSvDashboard::GetAllRegisteredDashboardElements(std::set<C_OscNodeDataP
    \param[in,out]  orc_Ids    Set with all registered elements. Will not be cleared when called
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::GetAllRegisteredDashboardElementsGuiId(std::set<C_PuiSvDbNodeDataPoolListElementId> & orc_Ids)
+void C_PuiSvDashboard::GetAllRegisteredDashboardElementsGuiId(QSet<C_PuiSvDbNodeDataPoolListElementId> & orc_Ids)
 const
 {
    QList<const C_PuiSvDbWidgetBase *> c_Widgets;
@@ -1080,7 +1080,7 @@ void C_PuiSvDashboard::OnSyncNodeAdded(const uint32_t ou32_Index)
    \param[in]  orc_MapCurToNew   Map cur to new
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboard::OnSyncNodeHalc(const uint32_t ou32_Index, const std::map<C_OscNodeDataPoolListElementOptArrayId,
+void C_PuiSvDashboard::OnSyncNodeHalc(const uint32_t ou32_Index, const QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                                                 C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew)
 {
    QList<C_PuiSvDbWidgetBase *> c_Widgets;
@@ -1972,7 +1972,7 @@ void C_PuiSvDashboard::h_OnSyncNodeAdded(C_PuiSvDbNodeDataPoolListElementId & or
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::h_OnSyncNodeHalc(C_PuiSvDbNodeDataPoolListElementId & orc_DataElementId,
                                         const uint32_t ou32_Index,
-                                        const std::map<C_OscNodeDataPoolListElementOptArrayId,
+                                        const QMap<C_OscNodeDataPoolListElementOptArrayId,
                                                        C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew)
 {
    if (orc_DataElementId.GetIsValid() == true)

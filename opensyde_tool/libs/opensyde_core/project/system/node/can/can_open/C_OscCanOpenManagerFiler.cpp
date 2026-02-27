@@ -23,9 +23,8 @@
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscXmlParserLog.hpp"
-#include <QString>
 #include "stwerrors.hpp"
-
+#include <QString>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -82,7 +81,7 @@ C_OscCanOpenManagerFiler::C_OscCanOpenManagerFiler() {}
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenManagerFiler::h_LoadFile(
-    std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+    QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
     const QString &orc_Path, const QString &orc_BasePath) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -130,10 +129,10 @@ int32_t C_OscCanOpenManagerFiler::h_LoadFile(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenManagerFiler::h_SaveFile(
-    const std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+    const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
     const QString &orc_Path, const QString &orc_BasePath,
     QStringList *const opc_CreatedFiles,
-    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   C_OscXmlParser c_XmlParser;
   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
       c_XmlParser, orc_Path, "opensyde-can-open-managers-config");
@@ -171,7 +170,7 @@ int32_t C_OscCanOpenManagerFiler::h_SaveFile(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenManagerFiler::h_LoadData(
-    std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+    QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath) {
   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("can-open-managers");
 
@@ -235,10 +234,10 @@ int32_t C_OscCanOpenManagerFiler::h_LoadData(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenManagerFiler::h_SaveData(
-    const std::map<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+    const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
     QStringList *const opc_CreatedFiles,
-    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   int32_t s32_Retval = C_NO_ERR;
 
   // File version
@@ -251,15 +250,15 @@ int32_t C_OscCanOpenManagerFiler::h_SaveData(
            "can-open-managers");
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Config.size()));
-  for (std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_It =
-           orc_Config.begin();
-       (c_It != orc_Config.end()) && (s32_Retval == C_NO_ERR); ++c_It) {
+   for (QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_It =
+            orc_Config.begin();
+        (c_It != orc_Config.end()) && (s32_Retval == C_NO_ERR); ++c_It) {
     Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("can-open-manager") ==
              "can-open-manager");
-    orc_XmlParser.SetAttributeUint32("interface", c_It->first);
-    s32_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerData(
-        c_It->second, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
-        orc_NodeIndicesToNameMap);
+     orc_XmlParser.SetAttributeUint32("interface", c_It.key());
+     s32_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerData(
+         c_It.value(), orc_XmlParser, orc_BasePath, opc_CreatedFiles,
+         orc_NodeIndicesToNameMap);
     Q_ASSERT(orc_XmlParser.SelectNodeParent() == "can-open-managers");
   }
   // Return
@@ -316,11 +315,20 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerData(
     const C_OscCanOpenManagerInfo &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
     QStringList *const opc_CreatedFiles,
-    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
-  C_OscCanOpenManagerFiler::mh_SaveManagerProperties(orc_Config, orc_XmlParser);
-  return C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(
+    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+  int32_t s32_Retval = C_NO_ERR;
+
+  // Properties
+  mh_SaveManagerProperties(orc_Config, orc_XmlParser);
+
+  // Sync properties
+  mh_SaveManagerSyncProperties(orc_Config, orc_XmlParser);
+
+  // Devices
+  s32_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(
       orc_Config.c_CanOpenDevices, orc_XmlParser, orc_BasePath,
       opc_CreatedFiles, orc_NodeIndicesToNameMap);
+  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -511,7 +519,7 @@ void C_OscCanOpenManagerFiler::mh_SaveManagerSyncProperties(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(
-    std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> &orc_Config,
+    QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo> &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath) {
   int32_t s32_Retval = orc_XmlParser.SelectNodeChildError("can-open-devices");
 
@@ -584,40 +592,40 @@ int32_t C_OscCanOpenManagerFiler::mh_LoadManagerSubDevices(
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevices(
-    const std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>
+    const QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>
         &orc_Config,
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
     QStringList *const opc_CreatedFiles,
-    const std::map<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
   int32_t s32_Retval = C_NO_ERR;
 
   orc_XmlParser.CreateAndSelectNodeChild("can-open-devices");
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Config.size()));
-  for (std::map<C_OscCanInterfaceId,
-                C_OscCanOpenManagerDeviceInfo>::const_iterator c_It =
-           orc_Config.begin();
-       (c_It != orc_Config.end()) && (s32_Retval == C_NO_ERR); ++c_It) {
-    const std::map<uint32_t, QString>::const_iterator c_FoundName =
-        orc_NodeIndicesToNameMap.find(c_It->first.u32_NodeIndex);
-    orc_XmlParser.CreateAndSelectNodeChild("can-open-device");
-    orc_XmlParser.CreateAndSelectNodeChild("interface-id");
-    orc_XmlParser.SetAttributeUint32("node-index", c_It->first.u32_NodeIndex);
-    orc_XmlParser.SetAttributeUint32(
-        "interface-id", static_cast<uint32_t>(c_It->first.u8_InterfaceNumber));
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "can-open-device");
-    if (c_FoundName != orc_NodeIndicesToNameMap.end()) {
-      s32_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerSubDevice(
-          c_It->second, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
-          c_FoundName->second, c_It->first.u8_InterfaceNumber);
-    } else {
-      s32_Retval = C_CONFIG;
-      osc_write_log_error("saving canopen manager",
-                          "could not find index " +
-                              QString::number(c_It->first.u32_NodeIndex) +
-                              " in parameter orc_NodeIndicesToNameMap");
-    }
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "can-open-devices");
+   for (QHash<C_OscCanInterfaceId,
+                 C_OscCanOpenManagerDeviceInfo>::const_iterator c_It =
+            orc_Config.begin();
+        (c_It != orc_Config.end()) && (s32_Retval == C_NO_ERR); ++c_It) {
+     const QHash<uint32_t, QString>::const_iterator c_FoundName =
+         orc_NodeIndicesToNameMap.find(c_It.key().u32_NodeIndex);
+     orc_XmlParser.CreateAndSelectNodeChild("can-open-device");
+     orc_XmlParser.CreateAndSelectNodeChild("interface-id");
+     orc_XmlParser.SetAttributeUint32("node-index", c_It.key().u32_NodeIndex);
+     orc_XmlParser.SetAttributeUint32(
+         "interface-id", static_cast<uint32_t>(c_It.key().u8_InterfaceNumber));
+     Q_ASSERT(orc_XmlParser.SelectNodeParent() == "can-open-device");
+     if (c_FoundName != orc_NodeIndicesToNameMap.end()) {
+       s32_Retval = C_OscCanOpenManagerFiler::mh_SaveManagerSubDevice(
+           c_It.value(), orc_XmlParser, orc_BasePath, opc_CreatedFiles,
+           c_FoundName.value(), c_It.key().u8_InterfaceNumber);
+     } else {
+       s32_Retval = C_CONFIG;
+       osc_write_log_error("saving canopen manager",
+                           "could not find index " +
+                               QString::number(c_It.key().u32_NodeIndex) +
+                               " in parameter orc_NodeIndicesToNameMap");
+     }
+     Q_ASSERT(orc_XmlParser.SelectNodeParent() == "can-open-devices");
   }
   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "can-open-manager");
   return s32_Retval;
@@ -727,7 +735,7 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDevice(
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
     QStringList *const opc_CreatedFiles, const QString &orc_NodeName,
     const uint8_t ou8_InterfaceNumber) {
-  int32_t s32_Retval;
+  int32_t s32_Retval = C_NO_ERR;
 
   orc_XmlParser.CreateAndSelectNodeChild("properties");
   orc_XmlParser.SetAttributeBool("device-optional",
@@ -862,7 +870,6 @@ int32_t C_OscCanOpenManagerFiler::mh_SaveManagerSubDeviceEdsPart(
         orc_Config.GetEdsFileContent();
     orc_XmlParser.CreateNodeChild(
         "eds-file-content", rc_EdsFileContent.c_TextFileContent.join("\n"));
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
   } else {
     if (c_CombinedPath == orc_Config.c_ProjectEdsFilePath) {
       // The source file is the same as the target file.

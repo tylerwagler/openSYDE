@@ -351,7 +351,7 @@ void C_SdBueMlvWidget::m_UpdateMultiplexerValues(const C_OscCanMessageIdentifica
          }
          else
          {
-            std::set<uint16_t> c_MultiplexerValues;
+            QSet<uint16_t> c_MultiplexerValues;
             const C_OscNodeDataPoolListElement * const pc_MultiplexerElement =
                stw::opensyde_gui_logic::C_PuiSdHandler::h_GetInstance()->GetOscCanDataPoolListElement(
                   orc_MessageId,
@@ -364,7 +364,7 @@ void C_SdBueMlvWidget::m_UpdateMultiplexerValues(const C_OscCanMessageIdentifica
                 (c_MultiplexerValues.size() > 0))
             {
                // Selection possible
-               std::set<uint16_t>::const_iterator c_ItValue;
+               QSet<uint16_t>::const_iterator c_ItValue;
                const QString c_SignalName = static_cast<QString>(pc_MultiplexerElement->c_Name) +
                                             static_cast<QString>(" = ");
                QString c_SpecificEntry = "";
@@ -374,19 +374,19 @@ void C_SdBueMlvWidget::m_UpdateMultiplexerValues(const C_OscCanMessageIdentifica
                {
                   QString c_ComboBoxEntry = c_SignalName + QString::number(*c_ItValue);
                   this->mpc_Ui->pc_ComboBoxMultiplexer->addItem(c_ComboBoxEntry);
-                  this->mc_MultiplexerValues.emplace(std::pair<QString, uint16_t>(c_ComboBoxEntry, *c_ItValue));
+                  this->mc_MultiplexerValues.insert(c_ComboBoxEntry, *c_ItValue);
                }
 
                this->mpc_Ui->pc_ComboBoxMultiplexer->setEnabled(true);
 
                if ((oq_SetSpecificMultiplexerValue == true) &&
-                   (c_MultiplexerValues.find(ou16_MultiplexerValue) != c_MultiplexerValues.end()))
+                   (c_MultiplexerValues.contains(ou16_MultiplexerValue)))
                {
                   // Set the multiplexer value of the specific multiplexer value
                   c_SpecificEntry = this->m_GetComboBoxEntryByMultiplexerValue(ou16_MultiplexerValue);
                }
                else if ((q_TryToSetPreviousValue == true) &&
-                        (c_MultiplexerValues.find(u16_PreviousValue) != c_MultiplexerValues.end()))
+                        (c_MultiplexerValues.contains(u16_PreviousValue)))
                {
                   // Set the multiplexer value of the last call
                   c_SpecificEntry = this->m_GetComboBoxEntryByMultiplexerValue(u16_PreviousValue);

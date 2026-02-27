@@ -488,7 +488,7 @@ void C_SyvDcExistingNodeWidget::dropEvent(QDropEvent * const opc_Event)
                if (this->mq_PartOfSquad == false)
                {
                   if ((c_SubNodeIdsToOldNodeIds.size() == 1) &&
-                      (c_SubNodeIdsToOldNodeIds.begin()->first == 0U))
+                      (c_SubNodeIdsToOldNodeIds.begin().key() == 0U))
                   {
                      // sub node id must be 0 in this case
                      q_SubNodeIdsToNodeIdsValid = true;

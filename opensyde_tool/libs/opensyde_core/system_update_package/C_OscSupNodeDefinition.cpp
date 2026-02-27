@@ -5,38 +5,52 @@
 
    Node update package definition
 
-   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
 #include "C_OscSupNodeDefinition.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscSupNodeDefinition::C_OscSupNodeDefinition(void)
-{
-   this->Initialize();
-}
+C_OscSupNodeDefinition::C_OscSupNodeDefinition(void) { this->Initialize(); }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Initialize class content
@@ -44,13 +58,12 @@ C_OscSupNodeDefinition::C_OscSupNodeDefinition(void)
    Clean up.
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSupNodeDefinition::Initialize(void)
-{
-   u8_Active = 0U;
-   u32_Position = 0UL;
-   q_SendSecurityEnabledState = false;
-   q_SecurityEnabled = false;
-   q_SendDebuggerEnabledState = false;
-   q_DebuggerEnabled = false;
-   u8_SignaturePresent = 0U;
+void C_OscSupNodeDefinition::Initialize(void) {
+  u8_Active = 0U;
+  u32_Position = 0UL;
+  q_SendSecurityEnabledState = false;
+  q_SecurityEnabled = false;
+  q_SendDebuggerEnabledState = false;
+  q_DebuggerEnabled = false;
+  u8_SignaturePresent = 0U;
 }

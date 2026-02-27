@@ -69,7 +69,7 @@ uint32_t C_PuiSdHandlerNodeLogic::GetNameMaxCharLimit() const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdHandlerNodeLogic::GetNameMaxCharLimitAffectedItems(const uint32_t ou32_NameMaxCharLimit,
-                                                               std::list<C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems)
+                                                               QList<C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems)
 {
    this->mc_CoreDefinition.GetNameMaxCharLimitAffectedItems(ou32_NameMaxCharLimit, orc_ChangedItems);
 }

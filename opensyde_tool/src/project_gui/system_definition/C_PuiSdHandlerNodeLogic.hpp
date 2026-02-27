@@ -33,7 +33,7 @@ public:
    void SetNameMaxCharLimit(const uint32_t ou32_NewValue);
    uint32_t GetNameMaxCharLimit(void) const;
    void GetNameMaxCharLimitAffectedItems(const uint32_t ou32_NameMaxCharLimit,
-                                         std::list<stw::opensyde_core::C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems);
+                                         QList<stw::opensyde_core::C_OscSystemNameMaxCharLimitChangeReportItem> & orc_ChangedItems);
    void ApplyNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit);
 
    //Node general

@@ -2,50 +2,65 @@
 /*!
    \file
    \brief       X-app properties filer
-   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCXAPPPROPERTIESFILER_HPP
 #define C_OSCXAPPPROPERTIESFILER_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_OscXmlParser.hpp"
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscXappProperties.hpp"
+#include "C_OscXmlParser.hpp"
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscXappPropertiesFiler
-{
+class C_OscXappPropertiesFiler {
 public:
-   static int32_t h_LoadXappPropertiesFile(C_OscXappProperties & orc_XappProperties,
-                                           const QString & orc_FilePath);
-   static int32_t h_LoadXappProperties(C_OscXappProperties & orc_XappProperties, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_SaveXappPropertiesFile(const C_OscXappProperties & orc_XappProperties,
-                                           const QString & orc_FilePath);
-   static void h_SaveXappProperties(const C_OscXappProperties & orc_XappProperties, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_LoadCommInterfaceId(C_OscSystemBus::E_Type & ore_Type, uint8_t & oru8_InterfaceNumber,
-                                        C_OscXmlParserBase & orc_XmlParser,
-                                        const QString & orc_ParentNodeName,
-                                        const QString & orc_UseCase);
-   static void h_SaveCommInterfaceId(const C_OscSystemBus::E_Type oe_Type, const uint8_t ou8_InterfaceNumber,
-                                     C_OscXmlParserBase & orc_XmlParser);
-   static QString h_GetFileName(void);
+  static int32_t
+  h_LoadXappPropertiesFile(C_OscXappProperties &orc_XappProperties,
+                           const QString &orc_FilePath);
+  static int32_t h_LoadXappProperties(C_OscXappProperties &orc_XappProperties,
+                                      C_OscXmlParserBase &orc_XmlParser);
+  static int32_t
+  h_SaveXappPropertiesFile(const C_OscXappProperties &orc_XappProperties,
+                           const QString &orc_FilePath);
+  static void
+  h_SaveXappProperties(const C_OscXappProperties &orc_XappProperties,
+                       C_OscXmlParserBase &orc_XmlParser);
+  static int32_t h_LoadCommInterfaceId(C_OscSystemBus::E_Type &ore_Type,
+                                       uint8_t &oru8_InterfaceNumber,
+                                       C_OscXmlParserBase &orc_XmlParser,
+                                       const QString &orc_ParentNodeName,
+                                       const QString &orc_UseCase);
+  static void h_SaveCommInterfaceId(const C_OscSystemBus::E_Type oe_Type,
+                                    const uint8_t ou8_InterfaceNumber,
+                                    C_OscXmlParserBase &orc_XmlParser);
+  static QString h_GetFileName(void);
 
 private:
-   C_OscXappPropertiesFiler();
+  C_OscXappPropertiesFiler();
 
-   static const uint16_t mhu16_FILE_VERSION_1;
+  static const uint16_t mhu16_FILE_VERSION_1;
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

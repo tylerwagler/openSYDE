@@ -13,51 +13,58 @@
    The following elements are calculated into the CRC:
    - names and values of all nodes
    - names and values of all attributes
-   - absolute index of the node (to prevent a potential situation where moving a node in the hierarchy might not be
-                                 detected)
+   - absolute index of the node (to prevent a potential situation where moving a
+   node in the hierarchy might not be detected)
 
    The following elements are not calculated into the CRC:
    - XML header tag
    - value of the CRC attribute and name
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCCHECKSUMMEDXML_HPP
 #define C_OSCCHECKSUMMEDXML_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
+#include "C_OscXmlParser.hpp"
 #include "stwtypes.hpp"
 #include <QString>
-#include "C_OscXmlParser.hpp"
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscChecksummedXml :
-   public C_OscXmlParser
-{
+class C_OscChecksummedXml : public C_OscXmlParser {
 private:
-   uint16_t mu16_CrcDepth;
+  uint16_t mu16_CrcDepth;
 
-   void m_CalcXmlCrcNode(uint16_t & oru16_Crc);
-   uint16_t m_CalcXmlCrc(void);
+  void m_CalcXmlCrcNode(uint16_t &oru16_Crc);
+  uint16_t m_CalcXmlCrc(void);
 
 public:
-   C_OscChecksummedXml(void);
+  C_OscChecksummedXml(void);
 
-   virtual int32_t LoadFromFile(const QString & orc_FileName);
-   virtual int32_t SaveToFile(const QString & orc_FileName);
+  virtual int32_t LoadFromFile(const QString &orc_FileName);
+  virtual int32_t SaveToFile(const QString &orc_FileName);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-}
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

@@ -5,40 +5,56 @@
 
    Data class for openSYDE server specific settings
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
 #include "C_OscNodeOpenSydeServerSettings.hpp"
 
 #include "C_SclChecksums.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Default constructor
-*/
+ */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscNodeOpenSydeServerSettings::C_OscNodeOpenSydeServerSettings(void)
-{
-   this->Initialize();
+C_OscNodeOpenSydeServerSettings::C_OscNodeOpenSydeServerSettings(void) {
+  this->Initialize();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -47,13 +63,12 @@ C_OscNodeOpenSydeServerSettings::C_OscNodeOpenSydeServerSettings(void)
    Clean up.
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeOpenSydeServerSettings::Initialize(void)
-{
-   u8_MaxClients = 1U;
-   u8_MaxParallelTransmissions = 64U;
-   s16_DpdDataBlockIndex = -1;
-   u16_MaxMessageBufferTx = 585U;
-   u16_MaxRoutingMessageBufferRx = 585U;
+void C_OscNodeOpenSydeServerSettings::Initialize(void) {
+  u8_MaxClients = 1U;
+  u8_MaxParallelTransmissions = 64U;
+  s16_DpdDataBlockIndex = -1;
+  u16_MaxMessageBufferTx = 585U;
+  u16_MaxRoutingMessageBufferRx = 585U;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -61,19 +76,24 @@ void C_OscNodeOpenSydeServerSettings::Initialize(void)
 
    The hash value is a 32 bit CRC value.
 
-   \param[in,out] oru32_HashValue    Hash value with initial [in] value and result [out] value
+   \param[in,out] oru32_HashValue    Hash value with initial [in] value and
+   result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeOpenSydeServerSettings::CalcHash(uint32_t & oru32_HashValue) const
-{
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u8_MaxClients, sizeof(this->u8_MaxClients), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u8_MaxParallelTransmissions, sizeof(this->u8_MaxParallelTransmissions),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->s16_DpdDataBlockIndex, sizeof(this->s16_DpdDataBlockIndex),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u16_MaxMessageBufferTx, sizeof(this->u16_MaxMessageBufferTx),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u16_MaxRoutingMessageBufferRx,
-                                       sizeof(this->u16_MaxRoutingMessageBufferRx),
-                                       oru32_HashValue);
+void C_OscNodeOpenSydeServerSettings::CalcHash(
+    uint32_t &oru32_HashValue) const {
+  stw::scl::C_SclChecksums::CalcCRC32(
+      &this->u8_MaxClients, sizeof(this->u8_MaxClients), oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->u8_MaxParallelTransmissions,
+                                      sizeof(this->u8_MaxParallelTransmissions),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->s16_DpdDataBlockIndex,
+                                      sizeof(this->s16_DpdDataBlockIndex),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(&this->u16_MaxMessageBufferTx,
+                                      sizeof(this->u16_MaxMessageBufferTx),
+                                      oru32_HashValue);
+  stw::scl::C_SclChecksums::CalcCRC32(
+      &this->u16_MaxRoutingMessageBufferRx,
+      sizeof(this->u16_MaxRoutingMessageBufferRx), oru32_HashValue);
 }

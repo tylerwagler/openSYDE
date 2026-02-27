@@ -15,7 +15,6 @@
  */
 #include "precomp_headers.hpp"
 
-#include <QList>
 #include "C_OscExportCanOpenConfig.hpp"
 #include "C_OscExportCanOpenInit.hpp"
 #include "C_OscExportCommunicationStack.hpp"
@@ -28,7 +27,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUtils.hpp"
 #include "stwerrors.hpp"
-
+#include <QList>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -110,8 +109,8 @@ static void h_CollectFilePathsWrapper(QStringList &orc_Files,
                                       const QString &orc_FileName,
                                       const bool oq_SourceCode) {
   QStringList c_TempFiles;
-  C_OscExportUti::h_CollectFilePaths(c_TempFiles, orc_Path,
-                                     orc_FileName, oq_SourceCode);
+  C_OscExportUti::h_CollectFilePaths(c_TempFiles, orc_Path, orc_FileName,
+                                     oq_SourceCode);
   for (QStringList::const_iterator c_It = c_TempFiles.begin();
        c_It != c_TempFiles.end(); ++c_It) {
     orc_Files.push_back(QString(*c_It));
@@ -121,8 +120,7 @@ static void h_CollectFilePathsWrapper(QStringList &orc_Files,
 int32_t C_OscExportNode::h_CreateSourceCode(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
     const QString &orc_Path, QStringList &orc_Files,
-    const QString &orc_ExportToolName,
-    const QString &orc_ExportToolVersion) {
+    const QString &orc_ExportToolName, const QString &orc_ExportToolVersion) {
   int32_t s32_Retval = C_NO_ERR;
 
   orc_Files.clear();
@@ -548,22 +546,22 @@ int32_t C_OscExportNode::mh_CreateHalConfigCode(
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_Node.c_HalcConfig.IsClear() == false) {
-    std::map<bool, int32_t> c_HalDataPools;
+    QMap<bool, int32_t> c_HalDataPools;
 
     // Get HAL Datapool indices for safe and for non-safe Datapool
     s32_Retval = mh_GetHalDataPoolIndices(orc_Node, c_HalDataPools);
 
     if (s32_Retval == C_NO_ERR) {
-      std::map<bool, int32_t>::const_iterator c_ItHalDataPools;
+      QMap<bool, int32_t>::const_iterator c_ItHalDataPools;
 
       // Generate HALC files corresponding to safe and to non-safe Datapool
       for (c_ItHalDataPools = c_HalDataPools.begin();
            c_ItHalDataPools != c_HalDataPools.end(); ++c_ItHalDataPools) {
-        if (c_ItHalDataPools->second >=
+        if (c_ItHalDataPools.value() >=
             0) // no safe resp. non-safe Datapool -> ok, no HALC file generation
         {
           const C_OscNodeDataPool &rc_HalDataPool =
-              orc_Node.c_DataPools[c_ItHalDataPools->second];
+              orc_Node.c_DataPools[c_ItHalDataPools.value()];
 
           // HALC Datapool owned by this application?
           if (rc_HalDataPool.s32_RelatedDataBlockIndex ==
@@ -616,8 +614,7 @@ int32_t C_OscExportNode::mh_CreateHalConfigCode(
 int32_t C_OscExportNode::mh_CreateHalNvmData(
     const C_OscNode &orc_Node, const uint16_t ou16_ApplicationIndex,
     const QString &orc_Path, QStringList &orc_Files,
-    const QString &orc_ExportToolName,
-    const QString &orc_ExportToolVersion) {
+    const QString &orc_ExportToolName, const QString &orc_ExportToolVersion) {
   int32_t s32_Retval = C_NO_ERR;
 
   if (orc_Node.c_HalcConfig.IsClear() == false) {
@@ -817,7 +814,7 @@ int32_t C_OscExportNode::mh_AdaptComDataPool(const C_OscNode &orc_Node,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscExportNode::mh_GetHalDataPoolIndices(
-    const C_OscNode &orc_Node, std::map<bool, int32_t> &orc_HalcDataPools) {
+    const C_OscNode &orc_Node, QMap<bool, int32_t> &orc_HalcDataPools) {
   int32_t s32_Retval = C_NO_ERR;
 
   // Reset

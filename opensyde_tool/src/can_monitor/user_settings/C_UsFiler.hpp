@@ -45,15 +45,15 @@ private:
    static void mh_LoadProjectDependentSection(C_UsHandler & orc_UserSettings, QSettings & orc_Ini,
                                               const QString & orc_ActiveProject);
    static void mh_SaveColumns(QSettings & orc_Ini, const QString & orc_SectionName,
-                              const std::string & orc_IdentifierBaseName, const QList<int32_t> & orc_Columns);
+                              const QString & orc_IdentifierBaseName, const QList<int32_t> & orc_Columns);
    static void mh_LoadColumns(QSettings & orc_Ini, const QString & orc_SectionName,
-                              const std::string & orc_IdentifierBaseName, QList<int32_t> & orc_Columns);
+                              const QString & orc_IdentifierBaseName, QList<int32_t> & orc_Columns);
 
-   static const std::string mhc_TRACE_COL_WIDTH_IDENTIFIER;
-   static const std::string mhc_TRACE_COL_POSITION_IDENTIFIER;
-   static const std::string mhc_MESSAGE_GENERATOR_IDENTIFIER;
-   static const std::string mhc_MESSAGE_GENERATOR_SIGNALS_IDENTIFIER;
-   static const std::string mhc_MESSAGE_GENERATOR_SELECTION_IDENTIFIER;
+   static const QString mhc_TRACE_COL_WIDTH_IDENTIFIER;
+   static const QString mhc_TRACE_COL_POSITION_IDENTIFIER;
+   static const QString mhc_MESSAGE_GENERATOR_IDENTIFIER;
+   static const QString mhc_MESSAGE_GENERATOR_SIGNALS_IDENTIFIER;
+   static const QString mhc_MESSAGE_GENERATOR_SELECTION_IDENTIFIER;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

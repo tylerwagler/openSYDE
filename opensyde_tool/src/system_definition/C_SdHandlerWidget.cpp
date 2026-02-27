@@ -12,6 +12,7 @@
 
 #include <QApplication>
 #include <QFileInfo>
+#include <QSet>
 #include "C_PopErrorHandling.hpp"
 #include "C_PuiProject.hpp"
 #include "C_SdHandlerWidget.hpp"
@@ -862,7 +863,7 @@ void C_SdHandlerWidget::m_GenerateCode(void) const
 void C_SdHandlerWidget::m_Export(void)
 {
    QSet<uint32_t> c_CanMessageIds; // to count CAN messages
-   std::set<C_OscCanMessageUniqueId> c_CanMessageIdsWithExtended;
+   QSet<C_OscCanMessageUniqueId> c_CanMessageIdsWithExtended;
 
    Q_ASSERT(this->mpc_ActBusEdit != NULL);
    if (this->mpc_ActBusEdit != NULL)
@@ -964,19 +965,17 @@ void C_SdHandlerWidget::m_Export(void)
                         const QSet<uint32_t>::const_iterator c_Iter = c_CanMessageIds.find(c_TxIter->u32_CanId);
                         if (c_Iter == c_CanMessageIds.end())
                         {
-                           c_CanMessageIdsWithExtended.emplace(C_OscCanMessageUniqueId(c_TxIter->u32_CanId,
-                                                                                       c_TxIter->q_IsExtended));
+                           c_CanMessageIdsWithExtended.insert(C_OscCanMessageUniqueId(c_TxIter->u32_CanId,
+                                                                                      c_TxIter->q_IsExtended));
                            c_CanMessageIds.insert(c_TxIter->u32_CanId);
                            // count signals
                            u32_NumOfInputSignals += c_TxIter->c_Signals.size();
                         }
                         else
                         {
-                           const std::set<C_OscCanMessageUniqueId>::const_iterator c_IterWithExtended =
-                              c_CanMessageIdsWithExtended.find(C_OscCanMessageUniqueId(c_TxIter->u32_CanId,
-                                                                                      c_TxIter
-                                                                                      ->q_IsExtended));
-                           if (c_IterWithExtended == c_CanMessageIdsWithExtended.end())
+                           if (!c_CanMessageIdsWithExtended.contains(C_OscCanMessageUniqueId(c_TxIter->u32_CanId,
+                                                                                             c_TxIter
+                                                                                             ->q_IsExtended)))
                            {
                               const QString c_Message = "Can't export message \"" +
                                                         c_TxIter->c_Name + "\" in bus \"" +
@@ -1010,19 +1009,17 @@ void C_SdHandlerWidget::m_Export(void)
                         const QSet<uint32_t>::const_iterator c_Iter = c_CanMessageIds.find(c_RxIter->u32_CanId);
                         if (c_Iter == c_CanMessageIds.end())
                         {
-                           c_CanMessageIdsWithExtended.emplace(C_OscCanMessageUniqueId(c_RxIter->u32_CanId,
-                                                                                       c_RxIter->q_IsExtended));
+                           c_CanMessageIdsWithExtended.insert(C_OscCanMessageUniqueId(c_RxIter->u32_CanId,
+                                                                                      c_RxIter->q_IsExtended));
                            c_CanMessageIds.insert(c_RxIter->u32_CanId);
                            // count signals
                            u32_NumOfInputSignals += c_RxIter->c_Signals.size();
                         }
                         else
                         {
-                           const std::set<C_OscCanMessageUniqueId>::const_iterator c_IterWithExtended =
-                              c_CanMessageIdsWithExtended.find(C_OscCanMessageUniqueId(c_RxIter->u32_CanId,
-                                                                                      c_RxIter
-                                                                                      ->q_IsExtended));
-                           if (c_IterWithExtended == c_CanMessageIdsWithExtended.end())
+                           if (!c_CanMessageIdsWithExtended.contains(C_OscCanMessageUniqueId(c_RxIter->u32_CanId,
+                                                                                             c_RxIter
+                                                                                             ->q_IsExtended)))
                            {
                               const QString c_Message = "Can't export message \"" +
                                                                       c_RxIter->c_Name + "\" in bus \"" +

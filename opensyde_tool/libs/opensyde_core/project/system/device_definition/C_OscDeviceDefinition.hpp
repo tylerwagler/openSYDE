@@ -20,7 +20,6 @@
 #include <QString>
 #include <vector>
 
-
 #include "C_OscSubDeviceDefinition.hpp"
 #include "C_OscSupportedCanInterfaceFeatures.hpp"
 
@@ -55,10 +54,9 @@ public:
   uint8_t
       u8_NumEthernetBusses; ///< number of ethernet interfaces present on device
 
-  QList<uint16_t>
-      c_SupportedBitrates; ///< supported CAN bitrates in kbit/s
+  QList<uint16_t> c_SupportedBitrates; ///< supported CAN bitrates in kbit/s
   QList<uint16_t> c_SupportedCanFdDataBitrates; ///< supported CAN-FD data
-                                                      ///< bitrates in kbit/s
+                                                ///< bitrates in kbit/s
   QList<C_OscSupportedCanInterfaceFeatures>
       c_SupportedCanFeatures; ///< supported CAN features per interface
 

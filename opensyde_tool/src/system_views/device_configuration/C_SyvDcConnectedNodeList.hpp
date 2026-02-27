@@ -66,7 +66,7 @@ private:
    static const QString mhc_MIME_DATA_SUB_NODE_IDS_TO_OLD_NODE_IDS;
 
    void m_Init(void);
-   void m_AppendNode(const stw::opensyde_core::C_OscDcDeviceInformation & orc_Info, const QMap<uint8_t,
+   void m_AppendNode(const stw::opensyde_core::C_OscDcDeviceInformation & orc_Info, const QHash<uint8_t,
                                                                                                    stw::opensyde_core::C_OscDcDeviceOldComConfig> & orc_SubNodeIdsToOldNodeIds);
 
    void m_ScrollBarRangeChangedVer(const int32_t os32_Min, const int32_t os32_Max) const;

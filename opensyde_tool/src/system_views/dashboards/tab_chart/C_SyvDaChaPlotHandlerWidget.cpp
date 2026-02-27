@@ -1172,7 +1172,7 @@ void C_SyvDaChaPlotHandlerWidget::UpdateError(const uint32_t ou32_DataElementInd
 
    if (c_It != this->mc_ElementHandlerRegIndexToDataElementIndex.end())
    {
-      this->mpc_Ui->pc_ChartSelectorWidget->UpdateError(c_It->second, orc_ErrorText, oq_IsTransmissionError,
+      this->mpc_Ui->pc_ChartSelectorWidget->UpdateError(c_It.value(), orc_ErrorText, oq_IsTransmissionError,
                                                         oq_ErrorActive);
    }
 }
@@ -1398,10 +1398,9 @@ void C_SyvDaChaPlotHandlerWidget::m_AddGraph(const uint32_t ou32_DataPoolElement
 
    if (oq_Invalid == false)
    {
-      this->mc_ElementHandlerRegIndexToDataElementIndex.emplace(
-         std::pair<uint32_t, uint32_t>(
+      this->mc_ElementHandlerRegIndexToDataElementIndex.insert(
             static_cast<uint32_t>(this->mc_ElementHandlerRegIndexToDataElementIndex.size()),
-            ou32_DataPoolElementConfigIndex));
+            ou32_DataPoolElementConfigIndex);
    }
 
    if (oq_Warning == false)

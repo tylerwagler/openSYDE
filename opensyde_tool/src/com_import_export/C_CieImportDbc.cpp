@@ -154,8 +154,8 @@ int32_t C_CieImportDbc::h_ImportNetwork(
         if (s32_Tmp != C_CONFIG) {
           // message is assigned to a node, then we erase this message from
           // temporary message assignment set
-          const std::set<std::string>::const_iterator c_Iter =
-              c_MessageAssignment.find(rc_DbcMessage.second.name);
+          const QString c_MsgName = QString::fromStdString(rc_DbcMessage.second.name);
+          const auto c_Iter = c_MessageAssignment.find(c_MsgName);
           if (c_Iter != c_MessageAssignment.end()) {
             c_MessageAssignment.erase(c_Iter);
           }
@@ -170,14 +170,14 @@ int32_t C_CieImportDbc::h_ImportNetwork(
     // check if there are some messages left which are not assigned to a node
     if (c_MessageAssignment.size() != 0) {
       // some messages left, add to unmapped messages/report ignore
-      std::set<std::string>::const_iterator c_Iter;
+      QSet<QString>::const_iterator c_Iter;
       for (c_Iter = c_MessageAssignment.begin();
            c_Iter != c_MessageAssignment.end(); ++c_Iter) {
         if (oq_AddUnmappedMessages == true) {
           const auto c_DbcMessage = find_if(
               c_DbcNetwork.messages.begin(), c_DbcNetwork.messages.end(),
               [c_Iter](auto &orc_Message) -> bool {
-                return orc_Message.second.name.compare(*c_Iter) == 0;
+                return orc_Message.second.name == c_Iter->toStdString();
               });
 
           if (c_DbcMessage != c_DbcNetwork.messages.end()) {
@@ -189,7 +189,7 @@ int32_t C_CieImportDbc::h_ImportNetwork(
             }
           }
         } else {
-          const QString c_String = QString::fromStdString(*c_Iter);
+          const QString c_String = *c_Iter;
           // Report issue
           osc_write_log_warning(
               "DBC file import",
@@ -583,8 +583,8 @@ C_CieImportDbc::mh_GetSignal(const Vector::DBC::Network &orc_DbcNetwork,
   for (c_ItValueDescr = orc_DbcSignal.valueDescriptions.begin();
        c_ItValueDescr != orc_DbcSignal.valueDescriptions.end();
        ++c_ItValueDescr) {
-    c_Signal.c_ValueDescription.emplace(std::pair<int64_t, QString>(
-        c_ItValueDescr->first, QString::fromStdString(c_ItValueDescr->second)));
+    c_Signal.c_ValueDescription.insert(
+        c_ItValueDescr->first, QString::fromStdString(c_ItValueDescr->second));
   }
 
   c_Signal.c_Element.c_Name = QString::fromStdString(orc_DbcSignal.name);
@@ -685,20 +685,20 @@ void C_CieImportDbc::mh_VerifySignalValueTable(
             ? std::numeric_limits<uint64_t>::max()
             : ((static_cast<uint64_t>(1ULL) << orc_DbcSignal.u16_ComBitLength) -
                1ULL);
-    for (std::map<int64_t, QString>::const_iterator c_ItValueDescr =
+    for (QMap<int64_t, QString>::iterator c_ItValueDescr =
              orc_DbcSignal.c_ValueDescription.begin();
          c_ItValueDescr != orc_DbcSignal.c_ValueDescription.end();) {
-      if (static_cast<uint64_t>(c_ItValueDescr->first) <= u64_MaxVal) {
+      if (static_cast<uint64_t>(c_ItValueDescr.key()) <= u64_MaxVal) {
         // Fine, iterate to next position
         ++c_ItValueDescr;
       } else {
         const QString &rc_String = orc_DbcSignal.c_Element.c_Name;
-        const QString &rc_String2 = c_ItValueDescr->second;
+        const QString &rc_String2 = c_ItValueDescr.value();
         osc_write_log_warning(
             "DBC file import",
             "signal \"" + rc_String + "\" value \"" + rc_String2 +
                 "\" removed, because value " +
-                QString::number(c_ItValueDescr->first) + " out of range of " +
+                QString::number(c_ItValueDescr.key()) + " out of range of " +
                 QString::number(orc_DbcSignal.u16_ComBitLength) + " bit");
         // Remove, new item at current position
         c_ItValueDescr = orc_DbcSignal.c_ValueDescription.erase(c_ItValueDescr);

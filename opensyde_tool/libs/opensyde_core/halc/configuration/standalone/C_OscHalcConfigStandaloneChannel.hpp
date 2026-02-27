@@ -2,35 +2,43 @@
 /*!
    \file
    \brief       Standalone HALC channel config with parameter Ids
-   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCHALCCONFIGSTANDALONECHANNEL_HPP
 #define C_OSCHALCCONFIGSTANDALONECHANNEL_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include <QString>
 #include <QStringList>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscHalcConfigStandaloneChannel
-{
+class C_OscHalcConfigStandaloneChannel {
 public:
-   C_OscHalcConfigStandaloneChannel(void);
+  C_OscHalcConfigStandaloneChannel(void);
 
-   QStringList c_ParameterIds;
+  QStringList c_ParameterIds;
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

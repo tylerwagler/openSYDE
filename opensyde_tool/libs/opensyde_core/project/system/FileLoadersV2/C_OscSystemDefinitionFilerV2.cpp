@@ -21,7 +21,6 @@
 #include "stwtypes.hpp"
 #include <cstdio>
 
-
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces
@@ -349,8 +348,9 @@ int32_t C_OscSystemDefinitionFilerV2::h_LoadNodes(
    C_CONFIG   content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFilerV2::h_LoadBuses(
-    QList<C_OscSystemBus> &orc_Buses, C_OscXmlParserBase &orc_XmlParser) {
+int32_t
+C_OscSystemDefinitionFilerV2::h_LoadBuses(QList<C_OscSystemBus> &orc_Buses,
+                                          C_OscXmlParserBase &orc_XmlParser) {
   int32_t s32_Retval = C_NO_ERR;
   QString c_SelectedNode;
   uint32_t u32_ExpectedSize = 0UL;
@@ -402,8 +402,7 @@ int32_t C_OscSystemDefinitionFilerV2::h_LoadBuses(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinitionFilerV2::h_SaveNodes(
-    const QList<C_OscNode> &orc_Nodes,
-    C_OscXmlParserBase &orc_XmlParser) {
+    const QList<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Nodes.size()));
   for (uint32_t u32_Index = 0U; u32_Index < orc_Nodes.size(); u32_Index++) {
@@ -426,8 +425,7 @@ void C_OscSystemDefinitionFilerV2::h_SaveNodes(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinitionFilerV2::h_SaveBuses(
-    const QList<C_OscSystemBus> &orc_Buses,
-    C_OscXmlParserBase &orc_XmlParser) {
+    const QList<C_OscSystemBus> &orc_Buses, C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Buses.size()));
   for (uint32_t u32_Index = 0U; u32_Index < orc_Buses.size(); u32_Index++) {

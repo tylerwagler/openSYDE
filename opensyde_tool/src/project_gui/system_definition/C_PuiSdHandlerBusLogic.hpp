@@ -30,7 +30,7 @@ public:
    //Bus general
    uint32_t AddBusAndSort(stw::opensyde_core::C_OscSystemBus & orc_OscBus, const C_PuiSdBus & orc_UiBus,
                           const QString * const opc_Name = NULL, const bool oq_AllowBusIdAdaption = true);
-   std::map<QString, bool> GetExistingBusNames(void) const;
+   QHash<QString, bool> GetExistingBusNames(void) const;
    void SetUiBus(const uint32_t ou32_Index, const C_PuiSdBus & orc_Item);
    void SetOscBus(const uint32_t ou32_Index, const stw::opensyde_core::C_OscSystemBus & orc_Item);
    const C_PuiSdBus * GetUiBus(const uint32_t & oru32_Index) const;
@@ -201,11 +201,11 @@ protected:
 
    void m_GetExistingMessageNamesProtocol(const uint32_t & oru32_NodeIndex,
                                           const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType,
-                                          const uint32_t & oru32_InterfaceIndex, std::map<QString, bool>
+                                          const uint32_t & oru32_InterfaceIndex, QHash<QString, bool>
                                           & orc_ExistingNames) const;
-   std::map<QString, bool> m_GetExistingMessageNames(const uint32_t & oru32_NodeIndex,
-                                                                   const uint32_t & oru32_InterfaceIndex) const;
-   std::map<QString, bool> m_GetExistingSignalNames(
+   QHash<QString, bool> m_GetExistingMessageNames(const uint32_t & oru32_NodeIndex,
+                                                  const uint32_t & oru32_InterfaceIndex) const;
+   QHash<QString, bool> m_GetExistingSignalNames(
       const stw::opensyde_core::C_OscCanMessageIdentificationIndices & orc_MessageId) const;
    C_PuiSdNodeCanProtocol * m_GetUiCanProtocol(const uint32_t & oru32_NodeIndex,
                                                const stw::opensyde_core::C_OscCanProtocol::E_Type & ore_ComType,

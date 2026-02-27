@@ -19,6 +19,7 @@
 #include <QStyleOptionViewItem>
 #include <QTreeWidgetItemIterator>
 #include <QScrollBar>
+#include <QSet>
 #include <QMimeData>
 #include <QDrag>
 #include <QDropEvent>
@@ -1543,7 +1544,7 @@ void C_SdBueMessageSelectorTreeWidget::RecheckError(const C_OscCanMessageIdentif
                Q_ASSERT(pc_Node != NULL);
                if (pc_Node != NULL)
                {
-                  const std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItCoManager =
+                  const QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_ItCoManager =
                      pc_Node->c_CanOpenManagers.find(
                         pc_Node->c_Properties.c_ComInterfaces[orc_MessageId.u32_InterfaceIndex].u8_InterfaceNumber);
 
@@ -1552,7 +1553,7 @@ void C_SdBueMessageSelectorTreeWidget::RecheckError(const C_OscCanMessageIdentif
                   {
                      // When PDO SYNC message is produces, a configured TX method with PDO SYNC
                      // is valid
-                     q_CanOpenPdoSyncValid = c_ItCoManager->second.q_ProduceSyncMessage;
+                     q_CanOpenPdoSyncValid = c_ItCoManager.value().q_ProduceSyncMessage;
                   }
                }
             }
@@ -3245,7 +3246,7 @@ uint16_t C_SdBueMessageSelectorTreeWidget::mh_GetStartBit(const C_OscCanMessage 
 
    if (opc_Message != NULL)
    {
-      std::set<uint16_t> c_SetUsedBits;
+      QSet<uint16_t> c_SetUsedBits;
       uint32_t u32_SignalCounter;
       uint16_t u16_Counter;
       uint16_t u16_BitCounter;
@@ -3274,7 +3275,7 @@ uint16_t C_SdBueMessageSelectorTreeWidget::mh_GetStartBit(const C_OscCanMessage 
             u16_BitCounter = u16_Counter;
          }
 
-         if (c_SetUsedBits.find(u16_BitCounter) == c_SetUsedBits.end())
+         if (!c_SetUsedBits.contains(u16_BitCounter))
          {
             // it is a free bit
             if (u16_GapSizeCounter == 0U)

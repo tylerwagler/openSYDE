@@ -1,52 +1,62 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Class with generic interface to handle and write a CAN log file (header)
+   \brief       Class with generic interface to handle and write a CAN log file
+   (header)
 
    See cpp file for detailed description
 
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCCOMMESSAGELOGGERFILEBASE_HPP
 #define C_OSCCOMMESSAGELOGGERFILEBASE_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "stwtypes.hpp"
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "C_OscComMessageLoggerData.hpp"
+#include "stwtypes.hpp"
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscComMessageLoggerFileBase
-{
+class C_OscComMessageLoggerFileBase {
 public:
-   C_OscComMessageLoggerFileBase(const QString & orc_FilePath,
-                                 const QString & orc_ProtocolName);
-   virtual ~C_OscComMessageLoggerFileBase(void);
+  C_OscComMessageLoggerFileBase(const QString &orc_FilePath,
+                                const QString &orc_ProtocolName);
+  virtual ~C_OscComMessageLoggerFileBase(void);
 
-   virtual int32_t OpenFile(void);
-   virtual void AddMessageToFile(const C_OscComMessageLoggerData & orc_MessageData) = 0;
+  virtual int32_t OpenFile(void);
+  virtual void
+  AddMessageToFile(const C_OscComMessageLoggerData &orc_MessageData) = 0;
 
-   void SetProtocolName(const QString & orc_ProtocolName);
+  void SetProtocolName(const QString &orc_ProtocolName);
 
 protected:
-   QString mc_FilePath;
-   QString mc_ProtocolName;
+  QString mc_FilePath;
+  QString mc_ProtocolName;
 
 private:
-   //Avoid call
-   C_OscComMessageLoggerFileBase(const C_OscComMessageLoggerFileBase &);
+  // Avoid call
+  C_OscComMessageLoggerFileBase(const C_OscComMessageLoggerFileBase &);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

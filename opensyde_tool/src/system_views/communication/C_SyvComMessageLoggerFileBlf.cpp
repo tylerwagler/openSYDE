@@ -21,8 +21,7 @@
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
-using namespace Vector;
-using namespace BLF;
+using namespace Vector::BLF;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -98,7 +97,7 @@ int32_t C_SyvComMessageLoggerFileBlf::OpenFile(void)
 
    if (s32_Return == C_NO_ERR)
    {
-      this->mc_File.open(this->mc_FilePath.toStdString(), File::OpenMode::Write);
+      this->mc_File.open(this->mc_FilePath.toStdString(), std::ios_base::out);
 
       if (this->mc_File.is_open() == false)
       {

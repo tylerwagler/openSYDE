@@ -15,10 +15,9 @@
  */
 #include "precomp_headers.hpp"
 #include <QDir>
-#include <QList>
 #include <QFile>
 #include <QFileInfo>
-
+#include <QList>
 
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscSystemDefinitionFilerV2.hpp"
@@ -28,10 +27,8 @@
 #include "stwtypes.hpp"
 #include <cstdio>
 
-
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscNodeSquadFiler.hpp"
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -113,8 +110,8 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
     const QString &orc_PathSystemDefinition,
     const QString &orc_PathDeviceDefinitions,
     const bool oq_UseDeviceDefinitions, uint16_t *const opu16_ReadFileVersion,
-    const QByteArray *const opc_NodesToLoad,
-    const bool oq_SkipContent, const QString *const opc_ExpectedNodeName,
+    const QByteArray *const opc_NodesToLoad, const bool oq_SkipContent,
+    const QString *const opc_ExpectedNodeName,
     QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -247,8 +244,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(
     QList<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser,
     const C_OscDeviceManager &orc_DeviceDefinitions,
     const QString &orc_BasePath, const bool oq_UseDeviceDefinitions,
-    const bool oq_UseFileInterface,
-    const QByteArray *const opc_NodesToLoad,
+    const bool oq_UseFileInterface, const QByteArray *const opc_NodesToLoad,
     const bool oq_SkipContent, const QString *const opc_ExpectedNodeName,
     QStringList *const opc_ErrorDetailsMissingDevices)
 
@@ -478,8 +474,8 @@ int32_t C_OscSystemDefinitionFiler::h_SaveNodes(
     const QList<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser,
     const QString &orc_BasePath, QStringList *const opc_CreatedFiles) {
   int32_t s32_Retval = C_NO_ERR;
-  const std::map<uint32_t, QString> c_NodeIndicesToNameMap =
-      C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(orc_Nodes);
+   const QHash<uint32_t, QString> c_NodeIndicesToNameMap =
+       C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(orc_Nodes);
 
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Nodes.size()));
@@ -545,8 +541,7 @@ int32_t C_OscSystemDefinitionFiler::h_SaveNodes(
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscSystemDefinitionFiler::h_SaveBuses(
-    const QList<C_OscSystemBus> &orc_Buses,
-    C_OscXmlParserBase &orc_XmlParser) {
+    const QList<C_OscSystemBus> &orc_Buses, C_OscXmlParserBase &orc_XmlParser) {
   orc_XmlParser.SetAttributeUint32("length",
                                    static_cast<uint32_t>(orc_Buses.size()));
   for (uint32_t u32_Index = 0U; u32_Index < orc_Buses.size(); u32_Index++) {
@@ -597,8 +592,8 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
     C_OscXmlParserBase &orc_XmlParser, const QString &orc_PathDeviceDefinitions,
     const QString &orc_BasePath, const bool oq_UseDeviceDefinitions,
     uint16_t *const opu16_ReadFileVersion,
-    const QByteArray *const opc_NodesToLoad,
-    const bool oq_SkipContent, const QString *const opc_ExpectedNodeName,
+    const QByteArray *const opc_NodesToLoad, const bool oq_SkipContent,
+    const QString *const opc_ExpectedNodeName,
     QStringList *const opc_ErrorDetailsMissingDevices) {
   int32_t s32_Retval = C_NO_ERR;
 
@@ -817,12 +812,12 @@ void C_OscSystemDefinitionFiler::h_SplitDeviceType(
 //----------------------------------------------------------------------------------------------------------------------
 QHash<uint32_t, QString> C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(
     const QList<C_OscNode> &orc_Nodes) {
-  QHash<uint32_t, QString> c_Retval;
-  for (uint32_t u32_It = 0UL; u32_It < orc_Nodes.size(); ++u32_It) {
-    const C_OscNode &rc_Node = orc_Nodes[u32_It];
-    c_Retval.insert(u32_It, rc_Node.c_Properties.c_Name);
+  QHash<uint32_t, QString> c_Map;
+  for (uint32_t u32_Index = 0U; u32_Index < orc_Nodes.size(); ++u32_Index) {
+    const C_OscNode &rc_Node = orc_Nodes[u32_Index];
+    c_Map[u32_Index] = rc_Node.c_Properties.c_Name;
   }
-  return c_Retval;
+  return c_Map;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

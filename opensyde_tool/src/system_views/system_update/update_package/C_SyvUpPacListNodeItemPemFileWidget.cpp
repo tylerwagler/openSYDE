@@ -216,11 +216,11 @@ void C_SyvUpPacListNodeItemPemFileWidget::m_LoadFileInformation(bool & orq_FileE
 
    if (orq_FileExists == true)
    {
-      std::string c_ErrorMessage;
+      QString c_ErrorMessage;
       QByteArray c_Modulus;
       QByteArray c_Exponent;
       int32_t s32_Result = stw::opensyde_core::C_OscSecurityPem::h_ExtractModulusAndExponentFromFile(
-         this->GetAppAbsoluteFilePath().toStdString(), c_Modulus, c_Exponent, c_ErrorMessage);
+         this->GetAppAbsoluteFilePath(), c_Modulus, c_Exponent, c_ErrorMessage);
 
       if (s32_Result == C_NO_ERR)
       {

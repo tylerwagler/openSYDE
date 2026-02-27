@@ -8,40 +8,50 @@
 
    (See .cpp file for full description)
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCPROJECTFILER_HPP
 #define C_OSCPROJECTFILER_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
+#include "C_OscProject.hpp"
 #include "stwtypes.hpp"
 #include <QString>
-#include "C_OscProject.hpp"
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_core
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+/* -- Namespace
+ * -----------------------------------------------------------------------------------------------------
+ */
+namespace stw {
+namespace opensyde_core {
+/* -- Global Constants
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-class C_OscProjectFiler
-{
+class C_OscProjectFiler {
 public:
-   static int32_t h_Save(C_OscProject & orc_Project, const QString & orc_Path,
-                         const QString & orc_OpenSydeVersion);
-   static int32_t h_Load(C_OscProject & orc_Project, const QString & orc_Path);
+  static int32_t h_Save(C_OscProject &orc_Project, const QString &orc_Path,
+                        const QString &orc_OpenSydeVersion);
+  static int32_t h_Load(C_OscProject &orc_Project, const QString &orc_Path);
 
 private:
-   static int32_t mh_SaveInternal(C_OscProject & orc_Project, const QString & orc_Path,
-                                  const QString & orc_OpenSydeVersion, const bool oq_New);
+  static int32_t mh_SaveInternal(C_OscProject &orc_Project,
+                                 const QString &orc_Path,
+                                 const QString &orc_OpenSydeVersion,
+                                 const bool oq_New);
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-}
+/* -- Extern Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
+} // namespace opensyde_core
+} // namespace stw
 
 #endif

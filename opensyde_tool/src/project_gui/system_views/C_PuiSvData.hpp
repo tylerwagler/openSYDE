@@ -13,7 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QList>
-#include <set>
+#include <QSet>
 #include <QMap>
 #include <QString>
 #include "C_OscViewData.hpp"
@@ -78,7 +78,7 @@ public:
       const bool oq_Value);
    const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration> & GetReadRailAssignments(
       void) const;
-   const std::set<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetWriteAssignments(void) const;
+   const QSet<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetWriteAssignments(void) const;
    int32_t GetReadRailAssignment(const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                                  C_PuiSvReadDataConfiguration & orc_Config) const;
    void SetReadRailAssignments(const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
@@ -89,7 +89,7 @@ public:
                                                   QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId,
                                                        C_PuiSvReadDataConfiguration> & orc_Rails)
    const;
-   void GetAllRegisteredDashboardElements(std::set<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_Ids) const;
+   void GetAllRegisteredDashboardElements(QSet<stw::opensyde_core::C_OscNodeDataPoolListElementId> & orc_Ids) const;
 
    int32_t SetDashboardName(const uint32_t ou32_DashboardIndex, const QString & orc_Name);
    int32_t SetDashboardComment(const uint32_t ou32_DashboardIndex, const QString & orc_Comment);
@@ -110,7 +110,7 @@ public:
    //Sync to system definition
    void OnSyncNodeAdded(const uint32_t ou32_Index);
    void OnSyncNodeHalc(const uint32_t ou32_Index,
-                       const std::map<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
+                       const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId,
                                       stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId> & orc_MapCurToNew);
    void OnSyncNodeReplace(const uint32_t ou32_Index);
    void OnSyncNodeAboutToBeDeleted(const uint32_t ou32_Index, const bool oq_OnlyMarkInvalid);

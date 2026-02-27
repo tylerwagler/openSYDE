@@ -31,7 +31,7 @@
 cmake_minimum_required(VERSION 3.16)
 project("opensyde_core")
 
-find_package(Qt6 REQUIRED COMPONENTS Core Xml)
+find_package(Qt6 REQUIRED COMPONENTS Core Xml SerialBus Network)
 
 # --- Project source files ---------------------------------------------------------------------------------------------
 #basic infrastructure (requires platform-specific target layer; e.g. TGL for Windows)
@@ -721,26 +721,21 @@ else()
    )
 endif()
 
-# windows target drivers: CAN and Ethernet dispatchers
-if(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS)
-   message("OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS detected ... skipping package")
-else()
-   message("OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS not detected ... dragging in package")
+# Qt CAN bus driver (cross-platform, always included via QCanBusDevice)
+set(OPENSYDE_CORE_CAN_DRIVER_SOURCES
+   ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/C_Can.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/C_Can.hpp
+)
 
-   set (OPENSYDE_CORE_WINDOWS_DRIVERS_SOURCES
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls/C_Can.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls/C_CanDll.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock/C_OscIpDispatcherWinSock.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls/C_Can.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls/C_CanDll.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock/C_OscIpDispatcherWinSock.hpp
-   )
+# Qt IP dispatcher (cross-platform, always included via QTcpSocket/QUdpSocket/QNetworkInterface)
+set(OPENSYDE_CORE_IP_DRIVER_SOURCES
+   ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/C_OscIpDispatcherWinSock.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/C_OscIpDispatcherWinSock.hpp
+)
 
-   set(OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES
-      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_windows_stw_dlls
-      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_windows_win_sock
-   )
-endif()
+set(OPENSYDE_CORE_IP_DRIVER_INCLUDE_DIRECTORIES
+   ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher
+)
 
 # windows target glue layer
 if(OPENSYDE_CORE_SKIP_WINDOWS_TARGET)
@@ -822,7 +817,8 @@ set(OPENSYDE_CORE_SOURCES
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_SYSTEM_SOURCES}
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_SOURCES}
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_MONITOR_SOURCES}
-   ${OPENSYDE_CORE_WINDOWS_DRIVERS_SOURCES}
+   ${OPENSYDE_CORE_CAN_DRIVER_SOURCES}
+   ${OPENSYDE_CORE_IP_DRIVER_SOURCES}
    ${OPENSYDE_CORE_WINDOWS_TARGET_SOURCES}
    ${OPENSYDE_CORE_PROTOCOL_LOGGING_SOURCES}
 )
@@ -841,7 +837,7 @@ set(OPENSYDE_CORE_INCLUDE_DIRECTORIES
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_SYSTEM_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_COMMON_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_MONITOR_INCLUDE_DIRECTORIES}
-   ${OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES}
+   ${OPENSYDE_CORE_IP_DRIVER_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_WINDOWS_TARGET_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_PROTOCOL_LOGGING_INCLUDE_DIRECTORIES}
 )
@@ -863,4 +859,4 @@ target_include_directories(opensyde_core PUBLIC ${OPENSYDE_CORE_INCLUDE_DIRECTOR
 
 target_precompile_headers(opensyde_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/precomp_headers_core.hpp)
 
-target_link_libraries(opensyde_core PUBLIC Qt6::Core Qt6::Xml)
+target_link_libraries(opensyde_core PUBLIC Qt6::Core Qt6::Xml Qt6::SerialBus Qt6::Network)

@@ -17,14 +17,12 @@
 #include <QDir>
 #include <QFileInfo>
 
-
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSpaServicePackageLoadUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscZipFile.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
-
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -163,8 +161,7 @@ int32_t C_OscSpaServicePackageLoadUtil::h_CheckParamsToProcessZipPackage(
  */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(
-    const QString &orc_PackagePath,
-    const QStringList &orc_NecessaryFiles) {
+    const QString &orc_PackagePath, const QStringList &orc_NecessaryFiles) {
   int32_t s32_Return = C_NO_ERR;
 
   QString c_PackagePath =

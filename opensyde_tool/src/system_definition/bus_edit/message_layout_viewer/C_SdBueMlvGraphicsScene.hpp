@@ -15,7 +15,7 @@
 #include <QGraphicsScene>
 #include <QVector>
 #include <QList>
-#include <set>
+#include <QSet>
 #include <array>
 #include <QCursor>
 #include <QObject>
@@ -192,7 +192,7 @@ private:
    static const uint8_t mhu8_MAX_NUM_BITS;
 
    // Array for grid states. It saves the pointer to the signals on each bit
-   std::set<C_SdBueMlvSignalManager *> mac_SetGridState[64];
+   QSet<C_SdBueMlvSignalManager *> mac_SetGridState[64];
    uint16_t mu16_LastGridPosFilled;
 
    // Color configuration for the signals

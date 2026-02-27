@@ -274,11 +274,10 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
   int32_t s32_Return = C_NO_ERR;
   const QString c_LogActivity = "Scan Device Info";
 
-  QList<
-      C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults>
+  QList<C_OscProtocolDriverOsyTpCan::C_BroadcastReadEcuSerialNumberResults>
       c_ReadSnResult;
   QList<C_OscProtocolDriverOsyTpCan::
-                  C_BroadcastReadEcuSerialNumberExtendedResults>
+            C_BroadcastReadEcuSerialNumberExtendedResults>
       c_ReadSnResultExt;
 
   m_ReportProgress(s32_Return,
@@ -484,154 +483,152 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
      C_NO_ERR    everything ok
      else        error occurred, see log file for details
   */
-  //----------------------------------------------------------------------------------------------------------------------
-  int32_t C_OscDcBasicSequences::ResetSystem(void) {
-    int32_t s32_Return = C_NO_ERR;
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscDcBasicSequences::ResetSystem(void) {
+  int32_t s32_Return = C_NO_ERR;
 
-    m_ReportProgress(s32_Return, "Starting system reset broadcast...");
+  m_ReportProgress(s32_Return, "Starting system reset broadcast...");
 
-    s32_Return = mc_TpCan.BroadcastEcuReset(
-        C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
+  s32_Return = mc_TpCan.BroadcastEcuReset(
+      C_OscProtocolDriverOsyTpBase::hu8_OSY_RESET_TYPE_KEY_OFF_ON);
 
-    m_ReportProgress(s32_Return, "System reset broadcast finished.");
+  m_ReportProgress(s32_Return, "System reset broadcast finished.");
 
-    return s32_Return;
-  }
+  return s32_Return;
+}
 
-  //----------------------------------------------------------------------------------------------------------------------
-  /*! \brief  Configure device
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Configure device
 
-    \param[in]   ou8_CurrentNodeId   Node ID that the Node we want to configure
-    currently has
-    \param[in]   ou8_NewNodeId       Node ID we want to configure to Node with
-    ou8_CurrentNodeId
-    \param[in]   ou32_Bitrate        Bitrate we want to configure to Node with
-    ou8_CurrentNodeId
-    \param[in]   ou8_InterfaceIndex  Interface the target is connected
+  \param[in]   ou8_CurrentNodeId   Node ID that the Node we want to configure
+  currently has
+  \param[in]   ou8_NewNodeId       Node ID we want to configure to Node with
+  ou8_CurrentNodeId
+  \param[in]   ou32_Bitrate        Bitrate we want to configure to Node with
+  ou8_CurrentNodeId
+  \param[in]   ou8_InterfaceIndex  Interface the target is connected
 
-     \return
-     C_NO_ERR    everything ok
-     else        error occurred, see log file for details
-  */
-  //----------------------------------------------------------------------------------------------------------------------
-  int32_t C_OscDcBasicSequences::ConfigureDevice(
-      const uint8_t ou8_CurrentNodeId, const uint8_t ou8_NewNodeId,
-      const uint32_t ou32_Bitrate, const uint8_t ou8_InterfaceIndex) {
-    int32_t s32_Return = C_NO_ERR;
-    const C_OscProtocolDriverOsyNode c_ClientId(0, 126);
-    const C_OscProtocolDriverOsyNode c_CurrentServerId(0, ou8_CurrentNodeId);
+   \return
+   C_NO_ERR    everything ok
+   else        error occurred, see log file for details
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscDcBasicSequences::ConfigureDevice(
+    const uint8_t ou8_CurrentNodeId, const uint8_t ou8_NewNodeId,
+    const uint32_t ou32_Bitrate, const uint8_t ou8_InterfaceIndex) {
+  int32_t s32_Return = C_NO_ERR;
+  const C_OscProtocolDriverOsyNode c_ClientId(0, 126);
+  const C_OscProtocolDriverOsyNode c_CurrentServerId(0, ou8_CurrentNodeId);
 
-    m_ReportProgress(s32_Return, "Starting device configuration...");
+  m_ReportProgress(s32_Return, "Starting device configuration...");
 
-    // set up protocol for communication (which node we want to configure)
-    s32_Return =
-        mc_OsyProtocol.SetNodeIdentifiers(c_ClientId, c_CurrentServerId);
-    if (s32_Return != C_NO_ERR) {
-      osc_write_log_error("ProtocolSetup",
-                          "Could not configure Node IDs for transport "
-                          "protocol. Are the IDs in range?");
-    } else {
-      uint8_t u8_Nrc;
-      s32_Return = mc_OsyProtocol.OsyDiagnosticSessionControl(
-          C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PROGRAMMING, &u8_Nrc);
+  // set up protocol for communication (which node we want to configure)
+  s32_Return = mc_OsyProtocol.SetNodeIdentifiers(c_ClientId, c_CurrentServerId);
+  if (s32_Return != C_NO_ERR) {
+    osc_write_log_error("ProtocolSetup",
+                        "Could not configure Node IDs for transport "
+                        "protocol. Are the IDs in range?");
+  } else {
+    uint8_t u8_Nrc;
+    s32_Return = mc_OsyProtocol.OsyDiagnosticSessionControl(
+        C_OscProtocolDriverOsy::hu8_DIAGNOSTIC_SESSION_PROGRAMMING, &u8_Nrc);
 
-      if (s32_Return == C_NO_ERR) {
-        // set security level 1; we want to change ID and Bitrate...
-        const uint8_t u8_SECURITY_LEVEL = 1U;
-        bool q_SecureMode;
-        uint64_t u64_Seed;
-        uint8_t ou8_SecurityAlgorithm;
-        QString c_LogActivity;
+    if (s32_Return == C_NO_ERR) {
+      // set security level 1; we want to change ID and Bitrate...
+      const uint8_t u8_SECURITY_LEVEL = 1U;
+      bool q_SecureMode;
+      uint64_t u64_Seed;
+      uint8_t ou8_SecurityAlgorithm;
+      QString c_LogActivity;
 
-        c_LogActivity = "Security Access";
-        s32_Return = mc_OsyProtocol.OsySecurityAccessRequestSeed(
-            u8_SECURITY_LEVEL, q_SecureMode, u64_Seed, ou8_SecurityAlgorithm,
-            &u8_Nrc);
+      c_LogActivity = "Security Access";
+      s32_Return = mc_OsyProtocol.OsySecurityAccessRequestSeed(
+          u8_SECURITY_LEVEL, q_SecureMode, u64_Seed, ou8_SecurityAlgorithm,
+          &u8_Nrc);
 
-        if (q_SecureMode == true) {
-          osc_write_log_error(c_LogActivity,
-                              "Security request returned security is on. "
-                              "No security support here. Use openSYDE GUI tool "
-                              "for this feature.");
-          s32_Return = C_CONFIG;
-        } else if (s32_Return != C_NO_ERR) {
+      if (q_SecureMode == true) {
+        osc_write_log_error(c_LogActivity,
+                            "Security request returned security is on. "
+                            "No security support here. Use openSYDE GUI tool "
+                            "for this feature.");
+        s32_Return = C_CONFIG;
+      } else if (s32_Return != C_NO_ERR) {
+        osc_write_log_error(
+            c_LogActivity,
+            "Did not get a security seed from the target device! Details: " +
+                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
+                    s32_Return, u8_Nrc));
+      } else {
+        // hard coded keys are the best keys
+        const uint32_t u32_KEY = 23U; // fixed in UDS stack for non secure mode
+        if (u64_Seed != 42U) {
+          const QString c_Tmp =
+              "Received seed in non secure mode does not match the expected "
+              "value, expected: 42, got " +
+              QString::number(u64_Seed);
+          osc_write_log_warning(c_LogActivity, c_Tmp.toUtf8().constData());
+        }
+
+        s32_Return = mc_OsyProtocol.OsySecurityAccessSendKey(u8_SECURITY_LEVEL,
+                                                             u32_KEY, &u8_Nrc);
+        if (s32_Return != C_NO_ERR) {
           osc_write_log_error(
               c_LogActivity,
-              "Did not get a security seed from the target device! Details: " +
+              "The target device did not access the security key! Details: " +
                   C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                       s32_Return, u8_Nrc));
-        } else {
-          // hard coded keys are the best keys
-          const uint32_t u32_KEY =
-              23U; // fixed in UDS stack for non secure mode
-          if (u64_Seed != 42U) {
-            const QString c_Tmp =
-                "Received seed in non secure mode does not match the expected "
-                "value, expected: 42, got " +
-                QString::number(u64_Seed);
-            osc_write_log_warning(c_LogActivity, c_Tmp.toUtf8().constData());
-          }
+        }
+      }
+    }
+    // now we can start setting the Node ID and Bitrate
+    if (s32_Return == C_NO_ERR) {
+      const QString c_LogActivity = "NodeConfiguration";
+      const C_OscProtocolDriverOsyNode c_NewServerId(0, ou8_NewNodeId);
+      QString c_ProgressLogMsg = "";
+      c_ProgressLogMsg = QString::asprintf(
+          "Configuring Node ID \"%d\" to Node with current ID \"%d\" on "
+          "Interface CAN %u.",
+          ou8_NewNodeId, ou8_CurrentNodeId, ou8_InterfaceIndex + 1U);
+      s32_Return = mc_OsyProtocol.OsySetNodeIdForChannel(
+          0, ou8_InterfaceIndex, c_NewServerId, &u8_Nrc);
+      m_ReportProgress(s32_Return, c_ProgressLogMsg);
+      if (s32_Return != C_NO_ERR) {
+        osc_write_log_error(
+            c_LogActivity,
+            "Could not set Node ID! Details: " +
+                C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
+                    s32_Return, u8_Nrc));
+      } else {
+        c_ProgressLogMsg = "";
+        if (s32_Return == C_NO_ERR) {
+          const QString c_LogActivity = "NodeConfiguration";
+          const C_OscProtocolDriverOsyNode c_NewServerId(0, ou8_NewNodeId);
+          QString c_ProgressLogMsg = "";
+          c_ProgressLogMsg = QString::asprintf(
+              "Configuring Node ID \"%d\" to Node with current ID \"%d\" on "
+              "Interface CAN %u.",
+              ou8_NewNodeId, ou8_CurrentNodeId, ou8_InterfaceIndex + 1U);
+          s32_Return = mc_OsyProtocol.OsySetBitrate(
+              0, ou8_InterfaceIndex, ou32_Bitrate * 1000U, &u8_Nrc);
+          m_ReportProgress(s32_Return, c_ProgressLogMsg);
 
-          s32_Return = mc_OsyProtocol.OsySecurityAccessSendKey(
-              u8_SECURITY_LEVEL, u32_KEY, &u8_Nrc);
           if (s32_Return != C_NO_ERR) {
             osc_write_log_error(
                 c_LogActivity,
-                "The target device did not access the security key! Details: " +
+                "Could not set Bitrate! Details: " +
                     C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
                         s32_Return, u8_Nrc));
           }
         }
       }
-      // now we can start setting the Node ID and Bitrate
-      if (s32_Return == C_NO_ERR) {
-        const QString c_LogActivity = "NodeConfiguration";
-        const C_OscProtocolDriverOsyNode c_NewServerId(0, ou8_NewNodeId);
-        QString c_ProgressLogMsg = "";
-        c_ProgressLogMsg = QString::asprintf(
-            "Configuring Node ID \"%d\" to Node with current ID \"%d\" on "
-            "Interface CAN %u.",
-            ou8_NewNodeId, ou8_CurrentNodeId, ou8_InterfaceIndex + 1U);
-        s32_Return = mc_OsyProtocol.OsySetNodeIdForChannel(
-            0, ou8_InterfaceIndex, c_NewServerId, &u8_Nrc);
-        m_ReportProgress(s32_Return, c_ProgressLogMsg);
-        if (s32_Return != C_NO_ERR) {
-          osc_write_log_error(
-              c_LogActivity,
-              "Could not set Node ID! Details: " +
-                  C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
-                      s32_Return, u8_Nrc));
-        } else {
-          c_ProgressLogMsg = "";
-          if (s32_Return == C_NO_ERR) {
-            const QString c_LogActivity = "NodeConfiguration";
-            const C_OscProtocolDriverOsyNode c_NewServerId(0, ou8_NewNodeId);
-            QString c_ProgressLogMsg = "";
-            c_ProgressLogMsg = QString::asprintf(
-                "Configuring Node ID \"%d\" to Node with current ID \"%d\" on "
-                "Interface CAN %u.",
-                ou8_NewNodeId, ou8_CurrentNodeId, ou8_InterfaceIndex + 1U);
-            s32_Return = mc_OsyProtocol.OsySetBitrate(
-                0, ou8_InterfaceIndex, ou32_Bitrate * 1000U, &u8_Nrc);
-            m_ReportProgress(s32_Return, c_ProgressLogMsg);
-
-            if (s32_Return != C_NO_ERR) {
-              osc_write_log_error(
-                  c_LogActivity,
-                  "Could not set Bitrate! Details: " +
-                      C_OscProtocolDriverOsy::h_GetOpenSydeServiceErrorDetails(
-                          s32_Return, u8_Nrc));
-            }
-          }
-        }
-      }
-
-      m_ReportProgress(s32_Return, "Device configuration finished.");
-
-      return s32_Return;
     }
 
+    m_ReportProgress(s32_Return, "Device configuration finished.");
+
     return s32_Return;
+  }
+
+  return s32_Return;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -645,116 +642,112 @@ int32_t C_OscDcBasicSequences::ScanGetInfo(void) {
        \return
        String with information
     */
-    //----------------------------------------------------------------------------------------------------------------------
-    QString C_OscDcBasicSequences::h_DevicesInfoToString(
-        const QList<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
-        const bool oq_SecurityFeatureUsed) {
-      QString c_Information;
+//----------------------------------------------------------------------------------------------------------------------
+QString C_OscDcBasicSequences::h_DevicesInfoToString(
+    const QList<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
+    const bool oq_SecurityFeatureUsed) {
+  QString c_Information;
 
-      c_Information = "Found " + QString::number(orc_DeviceInfoResult.size()) +
-                      " device(s): \n";
+  c_Information = "Found " + QString::number(orc_DeviceInfoResult.size()) +
+                  " device(s): \n";
 
-      for (uint32_t u32_ItDevices = 0;
-           u32_ItDevices < orc_DeviceInfoResult.size(); ++u32_ItDevices) {
-        const C_OscDcDeviceInformation &rc_CurDevice =
-            orc_DeviceInfoResult[u32_ItDevices];
-        c_Information +=
-            " Device #" + QString::number(u32_ItDevices + 1) + "\n";
-        if (rc_CurDevice.q_DeviceNameValid == true) {
-          c_Information +=
-              "   Device name: " + rc_CurDevice.c_DeviceName + "\n";
-        }
-        if (rc_CurDevice.q_NodeIdValid == true) {
-          c_Information +=
-              "   Node ID: " + QString::number(rc_CurDevice.u8_NodeId) + "\n";
-        }
-        if (rc_CurDevice.q_IpAddressValid == true) {
-          c_Information += "   IP address: ";
-          c_Information += QString::number(rc_CurDevice.au8_IpAddress[0]) + ".";
-          c_Information += QString::number(rc_CurDevice.au8_IpAddress[1]) + ".";
-          c_Information += QString::number(rc_CurDevice.au8_IpAddress[2]) + ".";
-          c_Information +=
-              QString::number(rc_CurDevice.au8_IpAddress[3]) + "\n";
-        }
-        if (rc_CurDevice.c_SerialNumber.q_IsValid == true) {
-          c_Information +=
-              "   Serial number: " +
-              rc_CurDevice.c_SerialNumber.GetSerialNumberAsFormattedString() +
-              "\n";
-        }
-        if (rc_CurDevice.q_ExtendedInfoValid == true) {
-          c_Information +=
-              "   Sub node ID: " + QString::number(rc_CurDevice.u8_SubNodeId) +
-              "\n";
-          c_Information += "   Security activated: ";
-          c_Information += rc_CurDevice.q_SecurityActivated ? "yes" : "no";
-          c_Information += "\n";
-        }
-      }
-
-      if (orc_DeviceInfoResult.size() > 0) {
-        c_Information += " Security feature used for at least one device: ";
-        c_Information += oq_SecurityFeatureUsed ? "yes" : "no";
-        c_Information += "\n";
-      }
-
-      return c_Information;
+  for (uint32_t u32_ItDevices = 0; u32_ItDevices < orc_DeviceInfoResult.size();
+       ++u32_ItDevices) {
+    const C_OscDcDeviceInformation &rc_CurDevice =
+        orc_DeviceInfoResult[u32_ItDevices];
+    c_Information += " Device #" + QString::number(u32_ItDevices + 1) + "\n";
+    if (rc_CurDevice.q_DeviceNameValid == true) {
+      c_Information += "   Device name: " + rc_CurDevice.c_DeviceName + "\n";
     }
-
-    //----------------------------------------------------------------------------------------------------------------------
-    /*! \brief   Prepare for shutting down class
-
-       To be called by child classes on shutdown, before they destroy all owned
-       class instances
-    */
-    //----------------------------------------------------------------------------------------------------------------------
-    void C_OscDcBasicSequences::PrepareForDestruction(void) {
-      mc_TpCan.SetDispatcher(NULL); // we are about to destroy the dispatcher;
-                                    // make sure TP disconnects from it
+    if (rc_CurDevice.q_NodeIdValid == true) {
+      c_Information +=
+          "   Node ID: " + QString::number(rc_CurDevice.u8_NodeId) + "\n";
     }
-
-    //----------------------------------------------------------------------------------------------------------------------
-    /*! \brief  Reports some information about the current sequence
-
-       To be overridden by application.
-       Default implementation here: print to console and log file.
-
-       \param[in]  os32_Result       Result of service
-       \param[in]  orc_Information   Text information
-    */
-    //----------------------------------------------------------------------------------------------------------------------
-    void C_OscDcBasicSequences::m_ReportProgress(
-        const int32_t os32_Result, const QString &orc_Information) {
-      std::cout << "Info: " << orc_Information.toUtf8().constData()
-                << " Result: " << os32_Result << std::endl;
-
-      if (os32_Result == C_NO_ERR) {
-        osc_write_log_info("Progress", orc_Information);
-      } else if (os32_Result == C_WARN) {
-        osc_write_log_warning("Progress", orc_Information);
-      } else {
-        osc_write_log_error("Progress", orc_Information);
-      }
+    if (rc_CurDevice.q_IpAddressValid == true) {
+      c_Information += "   IP address: ";
+      c_Information += QString::number(rc_CurDevice.au8_IpAddress[0]) + ".";
+      c_Information += QString::number(rc_CurDevice.au8_IpAddress[1]) + ".";
+      c_Information += QString::number(rc_CurDevice.au8_IpAddress[2]) + ".";
+      c_Information += QString::number(rc_CurDevice.au8_IpAddress[3]) + "\n";
     }
-
-    //----------------------------------------------------------------------------------------------------------------------
-    /*! \brief  Reports device information read from found devices
-
-       Called by ScanGetInfo() after it has scanned information from connected
-       devices. Default implementation here: print read information to console
-       and log file
-
-       \param[in]  orc_DeviceInfoResult    Device information results
-       \param[in]  oq_SecurityFeatureUsed  Security feature used for at least
-       one node
-    */
-    //----------------------------------------------------------------------------------------------------------------------
-    void C_OscDcBasicSequences::m_ReportDevicesInfoRead(
-        const QList<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
-        const bool oq_SecurityFeatureUsed) {
-      std::cout << h_DevicesInfoToString(orc_DeviceInfoResult,
-                                         oq_SecurityFeatureUsed)
-                       .toUtf8()
-                       .constData()
-                << std::endl;
+    if (rc_CurDevice.c_SerialNumber.q_IsValid == true) {
+      c_Information +=
+          "   Serial number: " +
+          rc_CurDevice.c_SerialNumber.GetSerialNumberAsFormattedString() + "\n";
     }
+    if (rc_CurDevice.q_ExtendedInfoValid == true) {
+      c_Information +=
+          "   Sub node ID: " + QString::number(rc_CurDevice.u8_SubNodeId) +
+          "\n";
+      c_Information += "   Security activated: ";
+      c_Information += rc_CurDevice.q_SecurityActivated ? "yes" : "no";
+      c_Information += "\n";
+    }
+  }
+
+  if (orc_DeviceInfoResult.size() > 0) {
+    c_Information += " Security feature used for at least one device: ";
+    c_Information += oq_SecurityFeatureUsed ? "yes" : "no";
+    c_Information += "\n";
+  }
+
+  return c_Information;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Prepare for shutting down class
+
+   To be called by child classes on shutdown, before they destroy all owned
+   class instances
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscDcBasicSequences::PrepareForDestruction(void) {
+  mc_TpCan.SetDispatcher(NULL); // we are about to destroy the dispatcher;
+                                // make sure TP disconnects from it
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Reports some information about the current sequence
+
+   To be overridden by application.
+   Default implementation here: print to console and log file.
+
+   \param[in]  os32_Result       Result of service
+   \param[in]  orc_Information   Text information
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscDcBasicSequences::m_ReportProgress(const int32_t os32_Result,
+                                             const QString &orc_Information) {
+  std::cout << "Info: " << orc_Information.toUtf8().constData()
+            << " Result: " << os32_Result << std::endl;
+
+  if (os32_Result == C_NO_ERR) {
+    osc_write_log_info("Progress", orc_Information);
+  } else if (os32_Result == C_WARN) {
+    osc_write_log_warning("Progress", orc_Information);
+  } else {
+    osc_write_log_error("Progress", orc_Information);
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Reports device information read from found devices
+
+   Called by ScanGetInfo() after it has scanned information from connected
+   devices. Default implementation here: print read information to console
+   and log file
+
+   \param[in]  orc_DeviceInfoResult    Device information results
+   \param[in]  oq_SecurityFeatureUsed  Security feature used for at least
+   one node
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscDcBasicSequences::m_ReportDevicesInfoRead(
+    const QList<C_OscDcDeviceInformation> &orc_DeviceInfoResult,
+    const bool oq_SecurityFeatureUsed) {
+  std::cout << h_DevicesInfoToString(orc_DeviceInfoResult,
+                                     oq_SecurityFeatureUsed)
+                   .toUtf8()
+                   .constData()
+            << std::endl;
+}

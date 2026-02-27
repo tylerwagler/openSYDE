@@ -349,8 +349,8 @@ void C_SdNdeCoAddDeviceDialog::m_FillUpComboBox(const uint32_t ou32_BusIndex, co
                                                                                       this->mc_InterfaceIndexes);
    const C_OscCanOpenManagerInfo * const pc_CanOpenManagerInfo =
       C_PuiSdHandler::h_GetInstance()->GetCanOpenManager(this->mu32_NodeIndex, this->mu8_InterfaceId);
-   const std::map<C_OscCanInterfaceId,
-                  C_OscCanOpenManagerDeviceInfo> & rc_Devices = pc_CanOpenManagerInfo->c_CanOpenDevices;
+   const QHash<C_OscCanInterfaceId,
+               C_OscCanOpenManagerDeviceInfo> & rc_Devices = pc_CanOpenManagerInfo->c_CanOpenDevices;
 
    Q_ASSERT(this->mc_NodeIndexes.size() == this->mc_InterfaceIndexes.size());
 
@@ -365,8 +365,8 @@ void C_SdNdeCoAddDeviceDialog::m_FillUpComboBox(const uint32_t ou32_BusIndex, co
                                                                                     u8_InterfaceId) == C_NO_ERR);
          const uint32_t u32_CurrentNodeIndex = this->mc_NodeIndexes[u32_Counter];
          const C_OscCanInterfaceId c_CanInterfaceId(this->mc_NodeIndexes[u32_Counter], u8_InterfaceId);
-         const std::map<C_OscCanInterfaceId,
-                        C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice = rc_Devices.find(c_CanInterfaceId);
+         const QHash<C_OscCanInterfaceId,
+                     C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice = rc_Devices.find(c_CanInterfaceId);
          if ((c_ItDevice == rc_Devices.end()) && (u32_CurrentNodeIndex != this->mu32_NodeIndex))
          {
             const bool q_NodeHasCanOpen = this->m_CheckIfNodeHasCanOpenManager(u32_CurrentNodeIndex);
@@ -434,19 +434,19 @@ bool C_SdNdeCoAddDeviceDialog::m_CheckIfNodeHasCanOpenManager(const uint32_t ou3
             // Ok, we found a manager on this bus, let's check if the manager has our current device.
             // An additional check if current device is a manager device is not needed here because of
             // u32_CurrentNodeIndex != this->mu32_NodeIndex check earlier.
-            std::map<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_CanOpenManagersIter;
-            for (c_CanOpenManagersIter = pc_ManagerNodeToCheck->c_CanOpenManagers.begin();
-                 (c_CanOpenManagersIter != pc_ManagerNodeToCheck->c_CanOpenManagers.end());
+            QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_CanOpenManagersIter;
+            for (c_CanOpenManagersIter = pc_ManagerNodeToCheck->c_CanOpenManagers.constBegin();
+                 (c_CanOpenManagersIter != pc_ManagerNodeToCheck->c_CanOpenManagers.constEnd());
                  ++c_CanOpenManagersIter)
             {
-               std::map<C_OscCanInterfaceId,
-                        C_OscCanOpenManagerDeviceInfo>::const_iterator c_CanOpenManagerDeviceInfoIter;
-               for (c_CanOpenManagerDeviceInfoIter = c_CanOpenManagersIter->second.c_CanOpenDevices.begin();
-                    (c_CanOpenManagerDeviceInfoIter != c_CanOpenManagersIter->second.c_CanOpenDevices.end()) &&
+               QHash<C_OscCanInterfaceId,
+                     C_OscCanOpenManagerDeviceInfo>::const_iterator c_CanOpenManagerDeviceInfoIter;
+               for (c_CanOpenManagerDeviceInfoIter = c_CanOpenManagersIter.value().c_CanOpenDevices.constBegin();
+                    (c_CanOpenManagerDeviceInfoIter != c_CanOpenManagersIter.value().c_CanOpenDevices.constEnd()) &&
                     (q_NodeHasCanOpen == false);
                     ++c_CanOpenManagerDeviceInfoIter)
                {
-                  if (c_CanOpenManagerDeviceInfoIter->first.u32_NodeIndex == ou32_NodeIndex)
+                  if (c_CanOpenManagerDeviceInfoIter.key().u32_NodeIndex == ou32_NodeIndex)
                   {
                      q_NodeHasCanOpen = true;
                      break;

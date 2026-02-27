@@ -1,32 +1,50 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       openSYDE target support package V2 data handling class (implementation)
+   \brief       openSYDE target support package V2 data handling class
+   (implementation)
 
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
 #include "C_OscTargetSupportPackageV2.hpp"
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Constructor
@@ -34,20 +52,12 @@ using namespace stw::opensyde_core;
    Initialize all class elements with default values
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscTspApplication::C_OscTspApplication(void) :
-   q_IsProgrammable(true),
-   u8_ProcessId(0),
-   c_Name(""),
-   c_Comment(""),
-   c_IdeCall(""),
-   q_IsStandardSydeCoderCe(true),
-   c_CodeGeneratorPath(""),
-   c_ProjectFolder(""),
-   c_GeneratePath(""),
-   u16_GenCodeVersion(0),
-   q_GeneratesPsiFiles(false)
-{
-   c_ResultPaths.clear();
+C_OscTspApplication::C_OscTspApplication(void)
+    : q_IsProgrammable(true), u8_ProcessId(0), c_Name(""), c_Comment(""),
+      c_IdeCall(""), q_IsStandardSydeCoderCe(true), c_CodeGeneratorPath(""),
+      c_ProjectFolder(""), c_GeneratePath(""), u16_GenCodeVersion(0),
+      q_GeneratesPsiFiles(false) {
+  c_ResultPaths.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -56,19 +66,13 @@ C_OscTspApplication::C_OscTspApplication(void) :
    Initialize all class elements with default values
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscTargetSupportPackageV2::C_OscTargetSupportPackageV2(void) :
-   c_DeviceName(""),
-   c_Comment(""),
-   u8_ApplicationIndex(0U),
-   u8_MaxParallelTransmissions(64U),
-   u16_MaxMessageBufferTx(585U),
-   u16_MaxRoutingMessageBufferRx(585U),
-   c_TemplatePath(""),
-   c_HalcDefPath(""),
-   c_HalcComment("")
-{
-   c_Applications.clear();
-   c_CodeExportSettings.Initialize();
+C_OscTargetSupportPackageV2::C_OscTargetSupportPackageV2(void)
+    : c_DeviceName(""), c_Comment(""), u8_ApplicationIndex(0U),
+      u8_MaxParallelTransmissions(64U), u16_MaxMessageBufferTx(585U),
+      u16_MaxRoutingMessageBufferRx(585U), c_TemplatePath(""),
+      c_HalcDefPath(""), c_HalcComment("") {
+  c_Applications.clear();
+  c_CodeExportSettings.Initialize();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -77,17 +81,16 @@ C_OscTargetSupportPackageV2::C_OscTargetSupportPackageV2(void) :
    Sets all strings to "" and other values to default.
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscTargetSupportPackageV2::Clear(void)
-{
-   c_DeviceName = "";
-   c_Comment = "";
-   c_TemplatePath = "";
+void C_OscTargetSupportPackageV2::Clear(void) {
+  c_DeviceName = "";
+  c_Comment = "";
+  c_TemplatePath = "";
 
-   u8_ApplicationIndex = 0U;
-   u8_MaxParallelTransmissions = 64U;
-   u16_MaxMessageBufferTx = 585U;
-   u16_MaxRoutingMessageBufferRx = 585U;
+  u8_ApplicationIndex = 0U;
+  u8_MaxParallelTransmissions = 64U;
+  u16_MaxMessageBufferTx = 585U;
+  u16_MaxRoutingMessageBufferRx = 585U;
 
-   c_Applications.clear();
-   c_CodeExportSettings.Initialize();
+  c_Applications.clear();
+  c_CodeExportSettings.Initialize();
 }

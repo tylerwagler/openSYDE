@@ -1,24 +1,23 @@
 #include "precomp_headers.hpp" //pre-compiled headers
 #include <QFileInfo>
 
-#include <cstring>
-#include "C_CanMonProtocolTarget.hpp"
-#include "stwtypes.hpp"
-#include "stwerrors.hpp"
 #include "C_CanMonProtocol.hpp"
 #include "C_CanMonProtocolCanOpen.hpp"
-#include "C_CanMonProtocolKefex.hpp"
-#include "C_CanMonProtocolShipIpIva.hpp"
 #include "C_CanMonProtocolGd.hpp"
-#include "C_CanMonProtocolStwFf.hpp"
-#include "C_CanMonProtocolXfl.hpp"
-#include "C_CanMonProtocolL2.hpp"
 #include "C_CanMonProtocolJ1939.hpp"
+#include "C_CanMonProtocolKefex.hpp"
+#include "C_CanMonProtocolL2.hpp"
 #include "C_CanMonProtocolOpenSyde.hpp"
+#include "C_CanMonProtocolShipIpIva.hpp"
+#include "C_CanMonProtocolStwFf.hpp"
+#include "C_CanMonProtocolTarget.hpp"
+#include "C_CanMonProtocolXfl.hpp"
+#include "stwerrors.hpp"
+#include "stwtypes.hpp"
+#include <cstring>
 
-#include <QString>
 #include <QSettings>
-
+#include <QString>
 
 //---------------------------------------------------------------------------
 
@@ -30,206 +29,190 @@ using namespace stw::can;
 
 //---------------------------------------------------------------------------
 
-int32_t C_CanMonProtocols::GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol, QString & orc_Description) const
-{
-   int32_t s32_Return = C_NO_ERR;
+int32_t
+C_CanMonProtocols::GetProtocolName(const e_CanMonL7Protocols oe_L7Protocol,
+                                   QString &orc_Description) const {
+  int32_t s32_Return = C_NO_ERR;
 
-   if (static_cast<int32_t>(oe_L7Protocol) < gs32_KFX_CMON_NUM_PROTOCOLS)
-   {
-      orc_Description = "L7-Protocol: " + mapc_Protocols[oe_L7Protocol]->GetProtocolName();
-   }
-   else
-   {
-      orc_Description = "Protocol: Unknown";
-      s32_Return = C_RANGE;
-   }
-   return s32_Return;
+  if (static_cast<int32_t>(oe_L7Protocol) < gs32_KFX_CMON_NUM_PROTOCOLS) {
+    orc_Description =
+        "L7-Protocol: " + mapc_Protocols[oe_L7Protocol]->GetProtocolName();
+  } else {
+    orc_Description = "Protocol: Unknown";
+    s32_Return = C_RANGE;
+  }
+  return s32_Return;
 }
 
 //---------------------------------------------------------------------------
 
-QString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_TX & orc_Msg) const
-{
-   T_STWCAN_Msg_RX c_Msg;
+QString
+C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_TX &orc_Msg) const {
+  T_STWCAN_Msg_RX c_Msg;
 
-   c_Msg.u32_ID = orc_Msg.u32_ID;
-   c_Msg.u8_XTD = orc_Msg.u8_XTD;
-   c_Msg.u8_DLC = orc_Msg.u8_DLC;
-   c_Msg.u8_RTR = orc_Msg.u8_RTR;
-   (void)std::memcpy(c_Msg.au8_Data, orc_Msg.au8_Data, 8U);
-   c_Msg.u64_TimeStamp = 0;
-   return this->MessageToString(c_Msg);
+  c_Msg.u32_ID = orc_Msg.u32_ID;
+  c_Msg.u8_XTD = orc_Msg.u8_XTD;
+  c_Msg.u8_DLC = orc_Msg.u8_DLC;
+  c_Msg.u8_RTR = orc_Msg.u8_RTR;
+  (void)std::memcpy(c_Msg.au8_Data, orc_Msg.au8_Data, 8U);
+  c_Msg.u64_TimeStamp = 0;
+  return this->MessageToString(c_Msg);
 }
 
 //---------------------------------------------------------------------------
 
-QString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_TX & orc_Msg) const
-{
-   T_STWCAN_Msg_RX c_Msg;
+QString
+C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_TX &orc_Msg) const {
+  T_STWCAN_Msg_RX c_Msg;
 
-   c_Msg.u32_ID = orc_Msg.u32_ID;
-   c_Msg.u8_XTD = orc_Msg.u8_XTD;
-   c_Msg.u8_DLC = orc_Msg.u8_DLC;
-   c_Msg.u8_RTR = orc_Msg.u8_RTR;
-   (void)std::memcpy(c_Msg.au8_Data, orc_Msg.au8_Data, 8);
-   c_Msg.u64_TimeStamp = 0U;
-   return this->MessageToStringLog(c_Msg);
+  c_Msg.u32_ID = orc_Msg.u32_ID;
+  c_Msg.u8_XTD = orc_Msg.u8_XTD;
+  c_Msg.u8_DLC = orc_Msg.u8_DLC;
+  c_Msg.u8_RTR = orc_Msg.u8_RTR;
+  (void)std::memcpy(c_Msg.au8_Data, orc_Msg.au8_Data, 8);
+  c_Msg.u64_TimeStamp = 0U;
+  return this->MessageToStringLog(c_Msg);
 }
 
 //---------------------------------------------------------------------------
-//for logging to file; the layer 2 part has a different format than the one for the screen
+// for logging to file; the layer 2 part has a different format than the one for
+// the screen
 // (mainly separating ";" inserted for easier parsing)
-QString C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX & orc_Msg) const
-{
-   const uint16_t u16_MAX_CHARS_RAW_DATA = 73U;
+QString
+C_CanMonProtocols::MessageToStringLog(const T_STWCAN_Msg_RX &orc_Msg) const {
+  const uint16_t u16_MAX_CHARS_RAW_DATA = 73U;
 
-   QString c_Text;
-   QString c_Help;
-   int32_t s32_Index;
-   uint8_t u8_Len;
-   bool q_Decimal = GetDecimalMode();
+  QString c_Text;
+  QString c_Help;
+  int32_t s32_Index;
+  uint8_t u8_Len;
+  bool q_Decimal = GetDecimalMode();
 
-   u8_Len = (orc_Msg.u8_DLC > 8) ? static_cast<uint8_t>(8U) : orc_Msg.u8_DLC;
-   if (q_Decimal == true)
-   {
-      c_Text = QString::asprintf("%8d; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U ? "29B" : "11B",
-                                  (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC));
-      for (s32_Index = 0; s32_Index < u8_Len; s32_Index++)
-      {
-         c_Help = QString::asprintf("%3d; ", orc_Msg.au8_Data[s32_Index]);
-         c_Text += c_Help;
-      }
-   }
-   else
-   {
-      c_Text = QString::asprintf("0x%08X; %s; %s; %d; ", orc_Msg.u32_ID, (orc_Msg.u8_XTD == 1U ? "29B" : "11B",
-                                  (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD", orc_Msg.u8_DLC));
-      for (s32_Index = 0; s32_Index < u8_Len; s32_Index++)
-      {
-         c_Help = QString::asprintf("0x%02X; ", orc_Msg.au8_Data[s32_Index]);
-         c_Text += c_Help;
-      }
-   }
-   for (; s32_Index < 8; s32_Index++)
-   {
-      c_Text += ";";
-   }
+  u8_Len = (orc_Msg.u8_DLC > 8) ? static_cast<uint8_t>(8U) : orc_Msg.u8_DLC;
+  if (q_Decimal == true) {
+    c_Text = QString::asprintf("%8d; %s; %s; %d; ", orc_Msg.u32_ID,
+                               (orc_Msg.u8_XTD == 1U ? "29B" : "11B",
+                                (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD",
+                                orc_Msg.u8_DLC));
+    for (s32_Index = 0; s32_Index < u8_Len; s32_Index++) {
+      c_Help = QString::asprintf("%3d; ", orc_Msg.au8_Data[s32_Index]);
+      c_Text += c_Help;
+    }
+  } else {
+    c_Text = QString::asprintf("0x%08X; %s; %s; %d; ", orc_Msg.u32_ID,
+                               (orc_Msg.u8_XTD == 1U ? "29B" : "11B",
+                                (orc_Msg.u8_RTR == 1U) ? "RTR" : "STD",
+                                orc_Msg.u8_DLC));
+    for (s32_Index = 0; s32_Index < u8_Len; s32_Index++) {
+      c_Help = QString::asprintf("0x%02X; ", orc_Msg.au8_Data[s32_Index]);
+      c_Text += c_Help;
+    }
+  }
+  for (; s32_Index < 8; s32_Index++) {
+    c_Text += ";";
+  }
 
-   if (me_ActiveProtocol != eCMON_L7_PROTOCOL_NONE)
-   {
-      if (c_Text.length() < u16_MAX_CHARS_RAW_DATA)
-      {
-         c_Text = c_Text + QString(u16_MAX_CHARS_RAW_DATA - c_Text.length(), ' ');
-      }
-      c_Text += (MessageToString(orc_Msg) + ";");
-   }
-   return c_Text;
+  if (me_ActiveProtocol != eCMON_L7_PROTOCOL_NONE) {
+    if (c_Text.length() < u16_MAX_CHARS_RAW_DATA) {
+      c_Text = c_Text + QString(u16_MAX_CHARS_RAW_DATA - c_Text.length(), ' ');
+    }
+    c_Text += (MessageToString(orc_Msg) + ";");
+  }
+  return c_Text;
 }
 
 //---------------------------------------------------------------------------
 
-QString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX & orc_Msg) const
-{
-   QString c_Text;
+QString
+C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX &orc_Msg) const {
+  QString c_Text;
 
-   c_Text = "";
-   if (static_cast<int32_t>(me_ActiveProtocol) < gs32_KFX_CMON_NUM_PROTOCOLS)
-   {
-      c_Text = mapc_Protocols[me_ActiveProtocol]->MessageToString(orc_Msg);
-   }
-   if (c_Text == "")
-   {
-      //get L2 representation
-      c_Text = mapc_Protocols[eCMON_L7_PROTOCOL_NONE]->MessageToString(orc_Msg);
-   }
-   return c_Text;
+  c_Text = "";
+  if (static_cast<int32_t>(me_ActiveProtocol) < gs32_KFX_CMON_NUM_PROTOCOLS) {
+    c_Text = mapc_Protocols[me_ActiveProtocol]->MessageToString(orc_Msg);
+  }
+  if (c_Text == "") {
+    // get L2 representation
+    c_Text = mapc_Protocols[eCMON_L7_PROTOCOL_NONE]->MessageToString(orc_Msg);
+  }
+  return c_Text;
 }
 
 //---------------------------------------------------------------------------
 
-QString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX & orc_Message, const uint32_t ou32_Count) const
-{
-   QString c_Text;
-   QString c_Help;
+QString C_CanMonProtocols::MessageToString(const T_STWCAN_Msg_RX &orc_Message,
+                                           const uint32_t ou32_Count) const {
+  QString c_Text;
+  QString c_Help;
 
-   c_Text = this->MessageToString(orc_Message);
-   //count
-   c_Help = QString::asprintf("%7d  ", ou32_Count);
-   return (c_Help + c_Text);
+  c_Text = this->MessageToString(orc_Message);
+  // count
+  c_Help = QString::asprintf("%7d  ", ou32_Count);
+  return (c_Help + c_Text);
 }
 
 //---------------------------------------------------------------------------
 
-C_CanMonProtocols::C_CanMonProtocols() :
-   mq_Decimal(false),
-   me_ActiveProtocol(eCMON_L7_PROTOCOL_NONE)
-{
-   //set shortcut pointers to be able to iterate:
-   mapc_Protocols[eCMON_L7_PROTOCOL_NONE]         = &mc_ProtocolL2;
-   mapc_Protocols[eCMON_L7_PROTOCOL_CAN_OPEN]      = &mc_ProtocolCanOpen;
-   mapc_Protocols[eCMON_L7_PROTOCOL_KEFEX]        = &mc_ProtocolKefex;
-   mapc_Protocols[eCMON_L7_PROTOCOL_XFL]          = &mc_ProtocolXfl;
-   mapc_Protocols[eCMON_L7_PROTOCOL_STW_FF]        = &mc_ProtocolStwFf;
-   mapc_Protocols[eCMON_L7_PROTOCOL_GD]           = &mc_ProtocolGd;
-   mapc_Protocols[eCMON_L7_PROTOCOL_SHIP_IP_IVA] = &mc_ProtocolShipIpIva;
-   mapc_Protocols[eCMON_L7_PROTOCOL_J1939]        = &mc_ProtocolJ1939;
-   mapc_Protocols[eCMON_L7_PROTOCOL_OPEN_SYDE]     = &mc_ProtocolOpenSyde;
+C_CanMonProtocols::C_CanMonProtocols()
+    : mq_Decimal(false), me_ActiveProtocol(eCMON_L7_PROTOCOL_NONE) {
+  // set shortcut pointers to be able to iterate:
+  mapc_Protocols[eCMON_L7_PROTOCOL_NONE] = &mc_ProtocolL2;
+  mapc_Protocols[eCMON_L7_PROTOCOL_CAN_OPEN] = &mc_ProtocolCanOpen;
+  mapc_Protocols[eCMON_L7_PROTOCOL_KEFEX] = &mc_ProtocolKefex;
+  mapc_Protocols[eCMON_L7_PROTOCOL_XFL] = &mc_ProtocolXfl;
+  mapc_Protocols[eCMON_L7_PROTOCOL_STW_FF] = &mc_ProtocolStwFf;
+  mapc_Protocols[eCMON_L7_PROTOCOL_GD] = &mc_ProtocolGd;
+  mapc_Protocols[eCMON_L7_PROTOCOL_SHIP_IP_IVA] = &mc_ProtocolShipIpIva;
+  mapc_Protocols[eCMON_L7_PROTOCOL_J1939] = &mc_ProtocolJ1939;
+  mapc_Protocols[eCMON_L7_PROTOCOL_OPEN_SYDE] = &mc_ProtocolOpenSyde;
 }
 
 //---------------------------------------------------------------------------
 
-C_CanMonProtocols::~C_CanMonProtocols(void)
-{
-}
+C_CanMonProtocols::~C_CanMonProtocols(void) {}
 
 //---------------------------------------------------------------------------
 
 #ifdef CMONPROTOCOL_ALLOW_RAMVIEW_PROJECT_MAPPING
-sint32 C_CMONProtocols::KFXSetVariableInfo(const stw::diag_lib::C_KFXVariableLists * const opc_Lists,
-                                           const uint16 ou16_ListOffset)
-{
-   mc_ProtocolKEFEX.SetVariableInfo(opc_Lists, ou16_ListOffset);
-   return C_NO_ERR;
+sint32 C_CMONProtocols::KFXSetVariableInfo(
+    const stw::diag_lib::C_KFXVariableLists *const opc_Lists,
+    const uint16 ou16_ListOffset) {
+  mc_ProtocolKEFEX.SetVariableInfo(opc_Lists, ou16_ListOffset);
+  return C_NO_ERR;
 }
 #endif
 
 //---------------------------------------------------------------------------
 
-e_CanMonL7Protocols C_CanMonProtocols::GetProtocolMode(void) const
-{
-   return me_ActiveProtocol;
+e_CanMonL7Protocols C_CanMonProtocols::GetProtocolMode(void) const {
+  return me_ActiveProtocol;
 }
 
 //---------------------------------------------------------------------------
 
-int32_t C_CanMonProtocols::SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol)
-{
-   me_ActiveProtocol = oe_L7Protocol;
-   return C_NO_ERR;
+int32_t
+C_CanMonProtocols::SetProtocolMode(const e_CanMonL7Protocols oe_L7Protocol) {
+  me_ActiveProtocol = oe_L7Protocol;
+  return C_NO_ERR;
 }
 
 //---------------------------------------------------------------------------
 
-bool C_CanMonProtocols::GetDecimalMode(void) const
-{
-   return mq_Decimal;
-}
+bool C_CanMonProtocols::GetDecimalMode(void) const { return mq_Decimal; }
 
 //---------------------------------------------------------------------------
 
-int32_t C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
-{
-   int32_t s32_Loop;
+int32_t C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal) {
+  int32_t s32_Loop;
 
-   mq_Decimal = oq_Decimal;
+  mq_Decimal = oq_Decimal;
 
-   //set in all  protocol instances:
-   for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++)
-   {
-      mapc_Protocols[s32_Loop]->SetDecimal(oq_Decimal);
-   }
+  // set in all  protocol instances:
+  for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++) {
+    mapc_Protocols[s32_Loop]->SetDecimal(oq_Decimal);
+  }
 
-   return C_NO_ERR;
+  return C_NO_ERR;
 }
 
 //-----------------------------------------------------------------------------
@@ -249,31 +232,25 @@ int32_t C_CanMonProtocols::SetDecimalMode(const bool oq_Decimal)
    C_RD_WR   -> could not write
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocols::SaveProtocolParametersToIni(const QString & orc_FileName,
-                                                       const QString & orc_Section)
-const
-{
-   int32_t s32_Return;
-   int32_t s32_Loop;
+int32_t C_CanMonProtocols::SaveProtocolParametersToIni(
+    const QString &orc_FileName, const QString &orc_Section) const {
+  int32_t s32_Return;
+  int32_t s32_Loop;
 
-   try
-   {
-      QSettings c_IniFile(orc_FileName, QSettings::IniFormat);
-      s32_Return = 0;
-      for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++)
-      {
-         s32_Return += mapc_Protocols[s32_Loop]->SaveParamsToIni(c_IniFile, orc_Section);
-      }
-      if (s32_Return != C_NO_ERR)
-      {
-         s32_Return = C_RD_WR;
-      }
-   }
-   catch (...)
-   {
+  try {
+    QSettings c_IniFile(orc_FileName, QSettings::IniFormat);
+    s32_Return = 0;
+    for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++) {
+      s32_Return +=
+          mapc_Protocols[s32_Loop]->SaveParamsToIni(c_IniFile, orc_Section);
+    }
+    if (s32_Return != C_NO_ERR) {
       s32_Return = C_RD_WR;
-   }
-   return s32_Return;
+    }
+  } catch (...) {
+    s32_Return = C_RD_WR;
+  }
+  return s32_Return;
 }
 
 //-----------------------------------------------------------------------------
@@ -292,32 +269,27 @@ const
    C_RD_WR   -> could not read (file does not exist)
 */
 //-----------------------------------------------------------------------------
-int32_t C_CanMonProtocols::LoadProtocolParametersFromIni(const QString & orc_FileName,
-                                                         const QString & orc_Section)
-const
-{
-   int32_t s32_Return;
-   int32_t s32_Loop;
+int32_t C_CanMonProtocols::LoadProtocolParametersFromIni(
+    const QString &orc_FileName, const QString &orc_Section) const {
+  int32_t s32_Return;
+  int32_t s32_Loop;
 
-   if ((QFileInfo(orc_FileName).exists() && QFileInfo(orc_FileName).isFile()) == false)
-   {
+  if ((QFileInfo(orc_FileName).exists() && QFileInfo(orc_FileName).isFile()) ==
+      false) {
+    s32_Return = C_RD_WR;
+  } else {
+    QSettings c_IniFile(orc_FileName, QSettings::IniFormat);
+
+    s32_Return = 0;
+    for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++) {
+      s32_Return +=
+          mapc_Protocols[s32_Loop]->LoadParamsFromIni(c_IniFile, orc_Section);
+    }
+    if (s32_Return != C_NO_ERR) {
       s32_Return = C_RD_WR;
-   }
-   else
-   {
-      QSettings c_IniFile(orc_FileName, QSettings::IniFormat);
-
-      s32_Return  = 0;
-      for (s32_Loop = 0; s32_Loop < gs32_KFX_CMON_NUM_PROTOCOLS; s32_Loop++)
-      {
-         s32_Return += mapc_Protocols[s32_Loop]->LoadParamsFromIni(c_IniFile, orc_Section);
-      }
-      if (s32_Return != C_NO_ERR)
-      {
-         s32_Return = C_RD_WR;
-      }
-   }
-   return s32_Return;
+    }
+  }
+  return s32_Return;
 }
 
 //-----------------------------------------------------------------------------
@@ -332,98 +304,88 @@ const
    Formatted timestamp ("mmmmmmmmmm.uuu").
 */
 //-----------------------------------------------------------------------------
-QString C_CanMonProtocols::FormatTimeStamp(const uint64_t ou64_TimeStampUs, const bool oq_LeftFillBlanks)
-{
-   QString c_Time;
+QString C_CanMonProtocols::FormatTimeStamp(const uint64_t ou64_TimeStampUs,
+                                           const bool oq_LeftFillBlanks) {
+  QString c_Time;
 
-   if (oq_LeftFillBlanks == false)
-   {
-      c_Time = QString::asprintf("%013llu", ou64_TimeStampUs);
-   }
-   else
-   {
-      if (ou64_TimeStampUs >= 1000)
-      {
-         c_Time = QString::asprintf("%13llu", ou64_TimeStampUs);
-      }
-      else
-      {
-         //we need at least 4 characters so we don't get strings list " . 12" but "0.012"
-         c_Time = QString::asprintf("         %04llu", ou64_TimeStampUs);
-      }
-   }
-   c_Time.insert(10, ".");
-   return c_Time;
+  if (oq_LeftFillBlanks == false) {
+    c_Time = QString::asprintf("%013llu", ou64_TimeStampUs);
+  } else {
+    if (ou64_TimeStampUs >= 1000) {
+      c_Time = QString::asprintf("%13llu", ou64_TimeStampUs);
+    } else {
+      // we need at least 4 characters so we don't get strings list " . 12" but
+      // "0.012"
+      c_Time = QString::asprintf("         %04llu", ou64_TimeStampUs);
+    }
+  }
+  c_Time.insert(10, ".");
+  return c_Time;
 }
 
 //---------------------------------------------------------------------------
 
-bool C_CanMonProtocols::GetProtocolHasParameters(const e_CanMonL7Protocols oe_L7Protocol) const
-{
-   bool q_HasParams;
+bool C_CanMonProtocols::GetProtocolHasParameters(
+    const e_CanMonL7Protocols oe_L7Protocol) const {
+  bool q_HasParams;
 
-   switch (oe_L7Protocol)
-   {
-   case eCMON_L7_PROTOCOL_NONE:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_CAN_OPEN:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_KEFEX:
-      q_HasParams = true;
-      break;
-   case eCMON_L7_PROTOCOL_XFL:
-      q_HasParams = true;
-      break;
-   case eCMON_L7_PROTOCOL_STW_FF:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_GD:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_SHIP_IP_IVA:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_J1939:
-      q_HasParams = false;
-      break;
-   case eCMON_L7_PROTOCOL_OPEN_SYDE:
-      q_HasParams = false;
-      break;
-   default:
-      q_HasParams = false;
-      break;
-   }
-   return q_HasParams;
+  switch (oe_L7Protocol) {
+  case eCMON_L7_PROTOCOL_NONE:
+    q_HasParams = false;
+    break;
+  case eCMON_L7_PROTOCOL_CAN_OPEN:
+    q_HasParams = false;
+    break;
+  case eCMON_L7_PROTOCOL_KEFEX:
+    q_HasParams = true;
+    break;
+  case eCMON_L7_PROTOCOL_XFL:
+    q_HasParams = true;
+    break;
+  case eCMON_L7_PROTOCOL_STW_FF:
+    q_HasParams = false;
+    break;
+  case eCMON_L7_PROTOCOL_GD:
+    q_HasParams = false;
+    break;
+  case eCMON_L7_PROTOCOL_SHIP_IP_IVA:
+    q_HasParams = false;
+    break;
+  case eCMON_L7_PROTOCOL_J1939:
+    q_HasParams = false;
+    break;
+  case eCMON_L7_PROTOCOL_OPEN_SYDE:
+    q_HasParams = false;
+    break;
+  default:
+    q_HasParams = false;
+    break;
+  }
+  return q_HasParams;
 }
 
 //---------------------------------------------------------------------------
 
-uint16_t C_CanMonProtocols::KfxGetBaseId(void) const
-{
-   return mc_ProtocolKefex.GetBaseId();
+uint16_t C_CanMonProtocols::KfxGetBaseId(void) const {
+  return mc_ProtocolKefex.GetBaseId();
 }
 
 //---------------------------------------------------------------------------
 
-void C_CanMonProtocols::KdxSetBaseId(const uint16_t ou16_BaseId)
-{
-   mc_ProtocolKefex.SetBaseId(ou16_BaseId);
+void C_CanMonProtocols::KdxSetBaseId(const uint16_t ou16_BaseId) {
+  mc_ProtocolKefex.SetBaseId(ou16_BaseId);
 }
 
 //---------------------------------------------------------------------------
 
-uint32_t C_CanMonProtocols::XflGetSendId(void) const
-{
-   return mc_ProtocolXfl.GetSendId();
+uint32_t C_CanMonProtocols::XflGetSendId(void) const {
+  return mc_ProtocolXfl.GetSendId();
 }
 
 //---------------------------------------------------------------------------
 
-void C_CanMonProtocols::XflSetSendId(const uint32_t ou32_SendId)
-{
-   mc_ProtocolXfl.SetSendId(ou32_SendId);
+void C_CanMonProtocols::XflSetSendId(const uint32_t ou32_SendId) {
+  mc_ProtocolXfl.SetSendId(ou32_SendId);
 }
 
 //---------------------------------------------------------------------------

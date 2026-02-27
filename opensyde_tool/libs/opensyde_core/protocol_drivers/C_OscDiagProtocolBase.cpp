@@ -5,42 +5,56 @@
 
    For details cf. documentation in .h file.
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
+/* -- Includes
+ * ------------------------------------------------------------------------------------------------------
+ */
 #include "precomp_headers.hpp"
 
-#include <iostream>
 #include "C_OscDiagProtocolBase.hpp"
+#include <iostream>
 
-/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+/* -- Used Namespaces
+ * -----------------------------------------------------------------------------------------------
+ */
 using namespace stw::opensyde_core;
 
-/* -- Module Global Constants --------------------------------------------------------------------------------------- */
+/* -- Module Global Constants
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
+/* -- Types
+ * ---------------------------------------------------------------------------------------------------------
+ */
 
-/* -- Global Variables ---------------------------------------------------------------------------------------------- */
+/* -- Global Variables
+ * ----------------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Variables --------------------------------------------------------------------------------------- */
+/* -- Module Global Variables
+ * ---------------------------------------------------------------------------------------
+ */
 
-/* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+/* -- Module Global Function Prototypes
+ * -----------------------------------------------------------------------------
+ */
 
-/* -- Implementation ------------------------------------------------------------------------------------------------ */
+/* -- Implementation
+ * ------------------------------------------------------------------------------------------------
+ */
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   constructor
 
    Set up class
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscDiagProtocolBase::C_OscDiagProtocolBase(void) :
-   mpr_OnDataPoolReadEventReceived(NULL),
-   mpr_OnDataPoolReadEventErrorReceived(NULL),
-   mpv_OnAsyncInstance(NULL)
-{
-}
+C_OscDiagProtocolBase::C_OscDiagProtocolBase(void)
+    : mpr_OnDataPoolReadEventReceived(NULL),
+      mpr_OnDataPoolReadEventErrorReceived(NULL), mpv_OnAsyncInstance(NULL) {}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   constructor
@@ -48,11 +62,10 @@ C_OscDiagProtocolBase::C_OscDiagProtocolBase(void) :
    Tear down class
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscDiagProtocolBase::~C_OscDiagProtocolBase(void)
-{
-   mpr_OnDataPoolReadEventReceived = NULL;
-   mpr_OnDataPoolReadEventErrorReceived = NULL;
-   mpv_OnAsyncInstance = NULL;
+C_OscDiagProtocolBase::~C_OscDiagProtocolBase(void) {
+  mpr_OnDataPoolReadEventReceived = NULL;
+  mpr_OnDataPoolReadEventErrorReceived = NULL;
+  mpv_OnAsyncInstance = NULL;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -60,17 +73,18 @@ C_OscDiagProtocolBase::~C_OscDiagProtocolBase(void)
 
    Setting all callbacks for the async messages
 
-   \param[in]  opr_DataPoolReadEventReceived       function to be called if an async DataPoolReadEvent is received
-   \param[in]  opr_DataPoolReadEventErrorReceived  function to be called if an async DataPoolReadEvent error message
-                                                   is received
-   \param[in]  opv_Instance                        instance pointer to pass back when invoking read event callback
+   \param[in]  opr_DataPoolReadEventReceived       function to be called if an
+   async DataPoolReadEvent is received \param[in]
+   opr_DataPoolReadEventErrorReceived  function to be called if an async
+   DataPoolReadEvent error message is received \param[in]  opv_Instance instance
+   pointer to pass back when invoking read event callback
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDiagProtocolBase::Initialize(const PR_DataPoolReadEventReceived opr_DataPoolReadEventReceived,
-                                       const PR_DataPoolReadEventErrorReceived opr_DataPoolReadEventErrorReceived,
-                                       void * const opv_Instance)
-{
-   mpr_OnDataPoolReadEventErrorReceived = opr_DataPoolReadEventErrorReceived;
-   mpr_OnDataPoolReadEventReceived = opr_DataPoolReadEventReceived;
-   mpv_OnAsyncInstance = opv_Instance;
+void C_OscDiagProtocolBase::Initialize(
+    const PR_DataPoolReadEventReceived opr_DataPoolReadEventReceived,
+    const PR_DataPoolReadEventErrorReceived opr_DataPoolReadEventErrorReceived,
+    void *const opv_Instance) {
+  mpr_OnDataPoolReadEventErrorReceived = opr_DataPoolReadEventErrorReceived;
+  mpr_OnDataPoolReadEventReceived = opr_DataPoolReadEventReceived;
+  mpv_OnAsyncInstance = opv_Instance;
 }

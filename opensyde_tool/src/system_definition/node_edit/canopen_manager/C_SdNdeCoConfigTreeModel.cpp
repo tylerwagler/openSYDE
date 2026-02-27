@@ -618,8 +618,8 @@ void C_SdNdeCoConfigTreeModel::m_InitInterfaceNode(const C_OscNodeComInterfaceSe
                                                    const C_OscNode & orc_Node,
                                                    C_TblTreeModelCheckableItem & orc_InterfaceEntry)
 {
-   const std::map<uint8_t,
-                  C_OscCanOpenManagerInfo>::const_iterator c_ItCanOpenManager =
+   const QHash<uint8_t,
+               C_OscCanOpenManagerInfo>::const_iterator c_ItCanOpenManager =
       orc_Node.c_CanOpenManagers.find(orc_Interface.
                                       u8_InterfaceNumber);
 
@@ -628,7 +628,7 @@ void C_SdNdeCoConfigTreeModel::m_InitInterfaceNode(const C_OscNodeComInterfaceSe
    if (c_ItCanOpenManager != orc_Node.c_CanOpenManagers.end())
    {
       C_TblTreeModelCheckableItem * const pc_DevicesEntry = new C_TblTreeModelCheckableItem();
-      this->m_InitDevicesNode(orc_Interface.u8_InterfaceNumber, c_ItCanOpenManager->second, *pc_DevicesEntry);
+      this->m_InitDevicesNode(orc_Interface.u8_InterfaceNumber, c_ItCanOpenManager.value(), *pc_DevicesEntry);
       orc_InterfaceEntry.AddChild(pc_DevicesEntry);
    }
 }
@@ -699,12 +699,12 @@ void C_SdNdeCoConfigTreeModel::m_InitDevicesNode(const uint8_t ou8_InterfaceNumb
                                                  C_TblTreeModelCheckableItem & orc_DevicesEntry)
 {
    this->m_InitDevicesNodeContent(orc_CanOpenManager, orc_DevicesEntry);
-   for (std::map<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
-           orc_CanOpenManager.c_CanOpenDevices.cbegin();
-        c_ItDevice != orc_CanOpenManager.c_CanOpenDevices.cend(); ++c_ItDevice)
+   for (QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>::const_iterator c_ItDevice =
+           orc_CanOpenManager.c_CanOpenDevices.constBegin();
+        c_ItDevice != orc_CanOpenManager.c_CanOpenDevices.constEnd(); ++c_ItDevice)
    {
       C_TblTreeModelCheckableItem * const pc_DeviceEntry = new C_TblTreeModelCheckableItem();
-      this->m_InitDeviceNode(ou8_InterfaceNumber, c_ItDevice->first, *pc_DeviceEntry);
+      this->m_InitDeviceNode(ou8_InterfaceNumber, c_ItDevice.key(), *pc_DeviceEntry);
       orc_DevicesEntry.AddChild(pc_DeviceEntry);
    }
 }
