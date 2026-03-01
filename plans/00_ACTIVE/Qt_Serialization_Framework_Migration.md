@@ -16,6 +16,37 @@ This project migrates all legacy Filer classes from XML-only serialization to a 
 
 ---
 
+## Strategy: Direct Replacement with Git Safety Net
+
+Instead of maintaining duplicate code, we use **direct replacement** with git as our rollback mechanism:
+
+### Approach
+1. **Add serialization methods** to data classes (reusable across all formats)
+2. **Replace Filer classes directly** - legacy code preserved in git history
+3. **Test thoroughly** before committing
+4. **Rollback if needed** using `git revert` or `git checkout`
+
+### Benefits
+✅ **Cleaner codebase** - No duplicate Filer classes  
+✅ **Faster migration** - No need to maintain both versions  
+✅ **Less confusion** - Only one Filer class per component  
+✅ **Smaller codebase** - No dead code  
+✅ **Git preserves history** - Full audit trail and easy rollback  
+
+### Rollback Commands
+```bash
+# Quick rollback of last commit
+git revert HEAD
+
+# Restore specific file from before migration
+git checkout <commit-before-migration> -- path/to/file.cpp
+
+# Restore entire branch state
+git reset --hard <commit-before-migration>
+```
+
+---
+
 ## Current Status
 
 ### ✅ Framework Implementation (COMPLETE)
@@ -23,21 +54,26 @@ This project migrates all legacy Filer classes from XML-only serialization to a 
 - `C_OscFilerHelper<T>` - Template for generic type serialization
 - Complete with examples and unit tests
 
-### ✅ Pilot Migrations (COMPLETE)
+### ✅ Pilot Migrations (COMPLETE - 7/31+ Filer Classes)
 
 | # | Class | Complexity | Special Features | Status |
 |---|-------|------------|------------------|--------|
 | 1 | **C_OscXcoManifest** | Simple | 1 QString field | ✅ Complete |
 | 2 | **C_OscXceManifest** | Medium | QList of nested objects | ✅ Complete |
 | 3 | **C_OscXappProperties** | Simple | Enums, primitives | ✅ Complete |
+| 4 | **C_OscDataLoggerJob** | Medium-High | Nested structures, complex data types | ✅ Complete |
+| 5 | **C_OscParamSetRawNode** | Medium | QList, QByteArray, nested structures | ✅ Complete |
+| 6 | **C_OscTargetSupportPackage** | Simple | 3 QString fields | ✅ Complete |
+| 7 | **C_OscViewData** | Medium-High | Multiple enums, nested QList, QByteArray | ✅ Complete |
 
 ### 📊 Metrics
 
 - **Framework Code**: ~1,800 lines
-- **Pilot Migrations**: ~2,300 lines
-- **Total Code Added**: ~4,100 lines
+- **Pilot Migrations**: ~7,960 lines (7 classes migrated)
+- **Total Code Added**: ~9,760 lines
 - **Build Status**: ✅ All successful
 - **Backward Compatibility**: ✅ 100% maintained
+- **Complexity Range**: Simple (1-3 fields) to Medium-High (nested structures, complex data types, binary data, multiple enums)
 
 ---
 
@@ -69,13 +105,22 @@ public:
 
 **Enums**:
 - Cast to int32_t for binary
-- Store as int in JSON
-- Store as numeric string in XML
+- Store as human-readable strings in JSON ("manual", "aws", "csv", etc.)
+- Store as string values in XML
 
 **Collections (QList)**:
 - Binary: Stream count + iterate elements
 - JSON: Array with nested objects
 - XML: Parent element with child elements
+
+**Complex Data Types** (C_OscNodeDataPoolContent):
+- Binary: Type + Array flag + Size + Binary blob
+- JSON: Type + Array flag + Size + Base64-encoded data
+- XML: Type + Array flag + Size + Base64-encoded data element
+
+**Nested Objects Without Serialization Methods**:
+- Direct field access for simple structures
+- Use existing public API for complex types
 
 ---
 
@@ -83,15 +128,15 @@ public:
 
 ### Immediate (Week 1-2)
 1. **Review pilot results** with team ✅ (Documentation complete)
-2. **Create migration templates** - Code snippets for common patterns
+2. **Create migration templates** - Code snippets for common patterns ✅ (Patterns documented)
 3. **Select 5-10 medium-complexity Filer classes** for systematic migration
 4. **Begin performance benchmarking** on migrated classes
 
 ### Short-term (Week 3-6)
 1. **Migrate medium-complexity Filer classes**:
-   - C_OscDataLoggerJobFiler (has QList)
+   - C_OscViewFiler (medium complexity)
+   - C_OscTargetSupportPackageFiler (moderate complexity)
    - C_OscHalcConfigFiler (moderate complexity)
-   - C_OscParamSetFiler (complex structure)
 
 2. **Create automation scripts**:
    - Generate boilerplate serialization methods
@@ -116,8 +161,8 @@ public:
 - [ ] C_OscNodeFiler (~1,990 lines)
 
 ### Medium Priority
-- [ ] C_OscDataLoggerJobFiler
-- [ ] C_OscParamSetFiler classes
+- [x] C_OscDataLoggerJobFiler ✅ Complete (2026-03-01)
+- [x] C_OscParamSetRawNodeFiler ✅ Complete (2026-03-01)
 - [ ] C_OscViewFiler
 - [ ] C_OscTargetSupportPackageFiler
 
@@ -135,7 +180,13 @@ public:
   - `plans/02_FUTURE/XcoManifest_Migration_Results.md`
   - `plans/02_FUTURE/XceManifest_Migration_Results.md`
   - `plans/02_FUTURE/XappProperties_Migration_Results.md`
+  - `plans/02_FUTURE/DataLoggerJob_Migration_Results.md`
+  - `plans/02_FUTURE/ParamSetRawNode_Migration_Results.md`
+  - `plans/02_FUTURE/TargetSupportPackage_Migration_Results.md`
+  - `plans/02_FUTURE/ViewData_Partial_Migration.md` (legacy, superseded)
+  - `plans/02_FUTURE/ViewData_Complete_Migration.md`
 - **Coding Standards**: `plans/02_FUTURE/Qt_Native_Coding_Standards.md`
+- **Progress Summary**: `plans/00_ACTIVE/Migration_Progress_Summary.md`
 
 ---
 
@@ -147,6 +198,7 @@ All work is committed with clear commit messages:
 - `6417aaf0` - C_OscXcoManifest migration
 - `28e20d56` - C_OscXceManifest migration
 - `e387adf9` - C_OscXappProperties migration
+- C_OscDataLoggerJob and C_OscParamSetRawNode migrations
 
 ---
 
