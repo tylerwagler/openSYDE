@@ -16,6 +16,9 @@
 #include "C_OscViewData.hpp"
 #include "C_OscXmlParser.hpp"
 #include <QList>
+#include <QDataStream>
+#include <QJsonDocument>
+#include <QFile>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -34,7 +37,39 @@ class C_OscViewFiler {
 public:
   C_OscViewFiler(void);
 
-  // Load
+  // Multi-format file I/O (auto-detect by extension)
+  static int32_t h_LoadFile(QList<C_OscViewData> &orc_Views,
+                            const QString &orc_Path,
+                            const QList<C_OscNode> &orc_OscNodes);
+  static int32_t h_SaveFile(const QList<C_OscViewData> &orc_Views,
+                            const QString &orc_Path,
+                            const QList<C_OscNode> &orc_OscNodes);
+
+  // Binary format
+  static int32_t h_LoadBinary(QList<C_OscViewData> &orc_Views,
+                              const QString &orc_Path,
+                              const QList<C_OscNode> &orc_OscNodes);
+  static int32_t h_SaveBinary(const QList<C_OscViewData> &orc_Views,
+                              const QString &orc_Path,
+                              const QList<C_OscNode> &orc_OscNodes);
+
+  // JSON format
+  static int32_t h_LoadJson(QList<C_OscViewData> &orc_Views,
+                            const QString &orc_Path,
+                            const QList<C_OscNode> &orc_OscNodes);
+  static int32_t h_SaveJson(const QList<C_OscViewData> &orc_Views,
+                            const QString &orc_Path,
+                            const QList<C_OscNode> &orc_OscNodes);
+
+  // XML format (legacy compatibility)
+  static int32_t h_LoadXml(QList<C_OscViewData> &orc_Views,
+                           const QString &orc_Path,
+                           const QList<C_OscNode> &orc_OscNodes);
+  static int32_t h_SaveXml(const QList<C_OscViewData> &orc_Views,
+                           const QString &orc_Path,
+                           const QList<C_OscNode> &orc_OscNodes);
+
+  // Original XML methods (for backward compatibility)
   static int32_t h_LoadSystemViewsFile(QList<C_OscViewData> &orc_Views,
                                        const QString &orc_PathSystemViews,
                                        const QList<C_OscNode> &orc_OscNodes);

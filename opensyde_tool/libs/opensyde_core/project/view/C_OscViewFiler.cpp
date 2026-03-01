@@ -14,6 +14,11 @@
 #include "precomp_headers.hpp"
 #include <QFileInfo>
 #include <QList>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
@@ -1147,4 +1152,314 @@ void C_OscViewFiler::mh_SaveNodeUpdateInformationPem(
   // Return
   Q_ASSERT(orc_XmlParser.SelectNodeParent() ==
            "node-specific-update-information");
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Load views from file (auto-detect format by extension)
+   
+   \param[in,out]  orc_Views      Views to load
+   \param[in]      orc_Path       File path
+   \param[in]      orc_OscNodes   Node information
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_LoadFile(QList<C_OscViewData> &orc_Views,
+                                   const QString &orc_Path,
+                                   const QList<C_OscNode> &orc_OscNodes) {
+   int32_t s32_Retval = C_NO_ERR;
+   const QString c_Extension = QFileInfo(orc_Path).suffix().toLower();
+   
+   if (c_Extension == "bin") {
+      s32_Retval = h_LoadBinary(orc_Views, orc_Path, orc_OscNodes);
+   } else if (c_Extension == "json") {
+      s32_Retval = h_LoadJson(orc_Views, orc_Path, orc_OscNodes);
+   } else {
+      // Default to XML for backward compatibility
+      s32_Retval = h_LoadXml(orc_Views, orc_Path, orc_OscNodes);
+   }
+   
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Save views to file (auto-detect format by extension)
+   
+   \param[in]      orc_Views      Views to save
+   \param[in]      orc_Path       File path
+   \param[in]      orc_OscNodes   Node information (not used for saving, but kept for API compatibility)
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_SaveFile(const QList<C_OscViewData> &orc_Views,
+                                   const QString &orc_Path,
+                                   const QList<C_OscNode> &orc_OscNodes) {
+   int32_t s32_Retval = C_NO_ERR;
+   const QString c_Extension = QFileInfo(orc_Path).suffix().toLower();
+   
+   if (c_Extension == "bin") {
+      s32_Retval = h_SaveBinary(orc_Views, orc_Path, orc_OscNodes);
+   } else if (c_Extension == "json") {
+      s32_Retval = h_SaveJson(orc_Views, orc_Path, orc_OscNodes);
+   } else {
+      // Default to XML for backward compatibility
+      s32_Retval = h_SaveXml(orc_Views, orc_Path, orc_OscNodes);
+   }
+   
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Load views from binary file
+   
+   \param[in,out]  orc_Views      Views to load
+   \param[in]      orc_Path       File path
+   \param[in]      orc_OscNodes   Node information (not used for binary format)
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_LoadBinary(QList<C_OscViewData> &orc_Views,
+                                     const QString &orc_Path,
+                                     const QList<C_OscNode> &orc_OscNodes) {
+   Q_UNUSED(orc_OscNodes);
+   int32_t s32_Retval = C_NO_ERR;
+   
+   QFile c_File(orc_Path);
+   if (!c_File.open(QIODevice::ReadOnly)) {
+      osc_write_log_error("Load binary views", 
+                         QString("Cannot open file: %1").arg(orc_Path));
+      return C_RD_WR;
+   }
+   
+   QDataStream c_Stream(&c_File);
+   c_Stream.setVersion(QDataStream::Qt_6_0);
+   
+   // Read view count
+   uint32_t u32_Count = 0;
+   c_Stream >> u32_Count;
+   
+   orc_Views.clear();
+   orc_Views.reserve(u32_Count);
+   
+   for (uint32_t u32_I = 0; u32_I < u32_Count; ++u32_I) {
+      C_OscViewData c_View;
+      s32_Retval = c_View.FromQDataStream(c_Stream);
+      if (s32_Retval != C_NO_ERR) {
+         break;
+      }
+      orc_Views.append(c_View);
+   }
+   
+   c_File.close();
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Save views to binary file
+   
+   \param[in]      orc_Views      Views to save
+   \param[in]      orc_Path       File path
+   \param[in]      orc_OscNodes   Node information (not used for binary format)
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_SaveBinary(const QList<C_OscViewData> &orc_Views,
+                                     const QString &orc_Path,
+                                     const QList<C_OscNode> &orc_OscNodes) {
+   Q_UNUSED(orc_OscNodes);
+   int32_t s32_Retval = C_NO_ERR;
+   
+   QFile c_File(orc_Path);
+   if (!c_File.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Save binary views", 
+                         QString("Cannot open file: %1").arg(orc_Path));
+      return C_RD_WR;
+   }
+   
+   QDataStream c_Stream(&c_File);
+   c_Stream.setVersion(QDataStream::Qt_6_0);
+   
+   // Write view count
+   c_Stream << static_cast<uint32_t>(orc_Views.size());
+   
+   // Write each view
+   for (const auto &rc_View : orc_Views) {
+      s32_Retval = rc_View.ToQDataStream(c_Stream);
+      if (s32_Retval != C_NO_ERR) {
+         break;
+      }
+   }
+   
+   c_File.close();
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Load views from JSON file
+   
+   \param[in,out]  orc_Views      Views to load
+   \param[in]      orc_Path       File path
+   \param[in]      orc_OscNodes   Node information (not used for JSON format)
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_LoadJson(QList<C_OscViewData> &orc_Views,
+                                   const QString &orc_Path,
+                                   const QList<C_OscNode> &orc_OscNodes) {
+   Q_UNUSED(orc_OscNodes);
+   int32_t s32_Retval = C_NO_ERR;
+   
+   QFile c_File(orc_Path);
+   if (!c_File.open(QIODevice::ReadOnly)) {
+      osc_write_log_error("Load JSON views", 
+                         QString("Cannot open file: %1").arg(orc_Path));
+      return C_RD_WR;
+   }
+   
+   QByteArray c_JsonData = c_File.readAll();
+   c_File.close();
+   
+   QJsonParseError c_ParseError;
+   QJsonDocument c_Doc = QJsonDocument::fromJson(c_JsonData, &c_ParseError);
+   
+   if (c_ParseError.error != QJsonParseError::NoError) {
+      osc_write_log_error("Load JSON views", 
+                         QString("JSON parse error: %1").arg(c_ParseError.errorString()));
+      return C_CONFIG;
+   }
+   
+   if (!c_Doc.isArray()) {
+      osc_write_log_error("Load JSON views", "Expected JSON array");
+      return C_CONFIG;
+   }
+   
+   QJsonArray c_Array = c_Doc.array();
+   orc_Views.clear();
+   orc_Views.reserve(c_Array.size());
+   
+   for (const QJsonValue &rc_Value : c_Array) {
+      if (!rc_Value.isObject()) {
+         s32_Retval = C_CONFIG;
+         break;
+      }
+      C_OscViewData c_View;
+      s32_Retval = c_View.FromJsonObject(rc_Value.toObject());
+      if (s32_Retval != C_NO_ERR) {
+         break;
+      }
+      orc_Views.append(c_View);
+   }
+   
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Save views to JSON file
+   
+   \param[in]      orc_Views      Views to save
+   \param[in]      orc_Path       File path
+   \param[in]      orc_OscNodes   Node information (not used for JSON format)
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_SaveJson(const QList<C_OscViewData> &orc_Views,
+                                   const QString &orc_Path,
+                                   const QList<C_OscNode> &orc_OscNodes) {
+   Q_UNUSED(orc_OscNodes);
+   int32_t s32_Retval = C_NO_ERR;
+   
+   QJsonArray c_Array;
+   
+   for (const auto &rc_View : orc_Views) {
+      c_Array.append(rc_View.ToJsonObject());
+   }
+   
+   QJsonDocument c_Doc(c_Array);
+   
+   QFile c_File(orc_Path);
+   if (!c_File.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Save JSON views", 
+                         QString("Cannot open file: %1").arg(orc_Path));
+      return C_RD_WR;
+   }
+   
+   c_File.write(c_Doc.toJson(QJsonDocument::Indented));
+   c_File.close();
+   
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Load views from XML file
+   
+   \param[in,out]  orc_Views      Views to load
+   \param[in]      orc_Path       File path
+   \param[in]      orc_OscNodes   Node information
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_LoadXml(QList<C_OscViewData> &orc_Views,
+                                  const QString &orc_Path,
+                                  const QList<C_OscNode> &orc_OscNodes) {
+   // Delegate to existing XML loading method
+   return h_LoadSystemViewsFile(orc_Views, orc_Path, orc_OscNodes);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Save views to XML file
+   
+   \param[in]      orc_Views      Views to save
+   \param[in]      orc_Path       File path
+   \param[in]      orc_OscNodes   Node information
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_SaveXml(const QList<C_OscViewData> &orc_Views,
+                                  const QString &orc_Path,
+                                  const QList<C_OscNode> &orc_OscNodes) {
+   Q_UNUSED(orc_OscNodes);
+   int32_t s32_Retval = C_NO_ERR;
+   
+   QDomDocument c_Doc("opensyde-system-views");
+   
+   // Create root element
+   QDomElement c_Root = c_Doc.createElement("opensyde-system-views");
+   c_Root.setAttribute("length", static_cast<uint32_t>(orc_Views.size()));
+   c_Doc.appendChild(c_Root);
+   
+   // Save each view
+   for (const auto &rc_View : orc_Views) {
+      QDomElement c_ViewElement = rc_View.ToQDomDocument(c_Doc, "opensyde-system-view");
+      c_Root.appendChild(c_ViewElement);
+   }
+   
+   QFile c_File(orc_Path);
+   if (!c_File.open(QIODevice::WriteOnly | QIODevice::Text)) {
+      osc_write_log_error("Save XML views", 
+                         QString("Cannot open file: %1").arg(orc_Path));
+      return C_RD_WR;
+   }
+   
+   QTextStream c_Stream(&c_File);
+   c_Stream.setCodec("UTF-8");
+   c_Stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+   c_Stream << c_Doc.toString();
+   c_File.close();
+   
+   return s32_Retval;
 }
