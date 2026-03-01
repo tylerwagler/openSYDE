@@ -1184,12 +1184,12 @@ int32_t C_OscHalcDefStructFiler::mh_SaveDataElement(
     }
   } break;
   case C_OscHalcDefContent::eCT_ENUM: {
-    const QList<std::pair<QString, C_OscNodeDataPoolContent>> &rc_EnumItems =
+    const QList<QPair<QString, C_OscNodeDataPoolContent>> &rc_EnumItems =
         orc_Element.GetEnumItems();
     orc_XmlParser.SetAttributeString("type", "enum");
     orc_XmlParser.SetAttributeString("base-type", c_BaseType);
     // Items
-    for (QList<std::pair<QString, C_OscNodeDataPoolContent>>::const_iterator
+    for (QList<QPair<QString, C_OscNodeDataPoolContent>>::const_iterator
              c_It = rc_EnumItems.begin();
          (c_It != rc_EnumItems.end()) && (s32_Retval == C_NO_ERR); ++c_It) {
       Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("enum-item") ==
@@ -1518,9 +1518,9 @@ QString C_OscHalcDefStructFiler::mh_ConvertToHex(const uint64_t ou64_Value) {
 void C_OscHalcDefStructFiler::mh_HandleEnumMinMax(
     C_OscHalcDefElement &orc_Element) {
   if (orc_Element.GetComplexType() == C_OscHalcDefContent::eCT_ENUM) {
-    const QList<std::pair<QString, C_OscNodeDataPoolContent>> &rc_Enums =
+    const QList<QPair<QString, C_OscNodeDataPoolContent>> &rc_Enums =
         orc_Element.c_InitialValue.GetEnumItems();
-    for (QList<std::pair<QString, C_OscNodeDataPoolContent>>::const_iterator
+    for (QList<QPair<QString, C_OscNodeDataPoolContent>>::const_iterator
              c_It = rc_Enums.begin();
          c_It != rc_Enums.end(); ++c_It) {
       if (c_It == rc_Enums.begin()) {

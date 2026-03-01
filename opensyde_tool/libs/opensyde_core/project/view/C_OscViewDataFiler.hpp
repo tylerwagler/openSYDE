@@ -1,18 +1,18 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Filer for C_OscTargetSupportPackage with Qt-native serialization
-   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights
+   \brief       Filer for C_OscViewData with Qt-native serialization
+   \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCTARGETSUPPORTPACKAGEFILER_NEW_HPP
-#define C_OSCTARGETSUPPORTPACKAGEFILER_NEW_HPP
+#ifndef C_OSCVIEWDATAFILER_HPP
+#define C_OSCVIEWDATAFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include "C_OscTargetSupportPackage.hpp"
+#include "C_OscViewData.hpp"
 #include <QDataStream>
 #include <QJsonObject>
 #include <QDomDocument>
@@ -30,38 +30,30 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscTargetSupportPackageFiler_New {
+class C_OscViewDataFiler {
 public:
-   static int32_t h_LoadFile(C_OscTargetSupportPackage &orc_Config,
-                             QString &orc_NodePath,
+   static int32_t h_LoadFile(QList<C_OscViewData> &orc_Views,
                              const QString &orc_Path);
-   static int32_t h_SaveFile(const C_OscTargetSupportPackage &orc_Config,
-                             const QString &orc_NodePath,
+   static int32_t h_SaveFile(const QList<C_OscViewData> &orc_Views,
                              const QString &orc_Path);
 
-   static int32_t h_LoadBinary(C_OscTargetSupportPackage &orc_Config,
-                               QString &orc_NodePath,
+   static int32_t h_LoadBinary(QList<C_OscViewData> &orc_Views,
                                const QString &orc_Path);
-   static int32_t h_SaveBinary(const C_OscTargetSupportPackage &orc_Config,
-                               const QString &orc_NodePath,
+   static int32_t h_SaveBinary(const QList<C_OscViewData> &orc_Views,
                                const QString &orc_Path);
    
-   static int32_t h_LoadJson(C_OscTargetSupportPackage &orc_Config,
-                             QString &orc_NodePath,
+   static int32_t h_LoadJson(QList<C_OscViewData> &orc_Views,
                              const QString &orc_Path);
-   static int32_t h_SaveJson(const C_OscTargetSupportPackage &orc_Config,
-                             const QString &orc_NodePath,
+   static int32_t h_SaveJson(const QList<C_OscViewData> &orc_Views,
                              const QString &orc_Path);
    
-   static int32_t h_LoadXml(C_OscTargetSupportPackage &orc_Config,
-                            QString &orc_NodePath,
+   static int32_t h_LoadXml(QList<C_OscViewData> &orc_Views,
                             const QString &orc_Path);
-   static int32_t h_SaveXml(const C_OscTargetSupportPackage &orc_Config,
-                            const QString &orc_NodePath,
+   static int32_t h_SaveXml(const QList<C_OscViewData> &orc_Views,
                             const QString &orc_Path);
 
 private:
-   C_OscTargetSupportPackageFiler_New();
+   C_OscViewDataFiler();
 };
 
 /* -- Extern Global Variables

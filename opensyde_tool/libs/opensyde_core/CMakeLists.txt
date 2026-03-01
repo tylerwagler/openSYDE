@@ -274,6 +274,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobAdditionalTriggerProperties.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappProperties.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappPropertiesFiler.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappPropertiesFiler_New.cpp  # Migrated version
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewPc.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewData.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewNodeUpdate.cpp
@@ -376,6 +377,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobAdditionalTriggerProperties.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappProperties.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappPropertiesFiler.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappPropertiesFiler_New.hpp  # Migrated version
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewData.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewPc.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewNodeUpdate.hpp
@@ -496,21 +498,23 @@ if(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION)
 else()
    message("OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION not detected ... dragging in package")
 
-   set(OPENSYDE_CORE_X_CERTIFICATES_GENERATION_SOURCES
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifest.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifestFiler.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceUpdatePackageParameters.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceBase.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceCreate.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceLoad.cpp
+    set(OPENSYDE_CORE_X_CERTIFICATES_GENERATION_SOURCES
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifest.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifestFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifestFiler_New.cpp  # Migrated version
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceUpdatePackageParameters.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceBase.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceCreate.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceLoad.cpp
 
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifest.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifestFiler.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceUpdatePackageParameters.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceBase.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceCreate.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceLoad.hpp
-   )
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifest.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifestFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifestFiler_New.hpp  # Migrated version
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceUpdatePackageParameters.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceBase.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceCreate.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceLoad.hpp
+    )
 
    set(OPENSYDE_CORE_X_CERTIFICATES_GENERATION_INCLUDE_DIRECTORIES
       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation
@@ -529,12 +533,14 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoLoad.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifest.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifestFiler.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifestFiler_New.cpp  # Migrated version
 
       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoCreate.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoLoad.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifest.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifestFiler.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifestFiler_New.hpp  # Migrated version
    )
 
    set(OPENSYDE_CORE_X_CONFIG_GENERATION_INCLUDE_DIRECTORIES
@@ -802,6 +808,24 @@ else()
    )
 endif()
 
+# serialization module (Qt-native serialization framework)
+if(OPENSYDE_CORE_SKIP_SERIALIZATION)
+   message("OPENSYDE_CORE_SKIP_SERIALIZATION detected ... skipping package")
+else()
+   message("OPENSYDE_CORE_SKIP_SERIALIZATION not detected ... dragging in package")
+
+   set(OPENSYDE_CORE_SERIALIZATION_SOURCES
+      ${CMAKE_CURRENT_SOURCE_DIR}/serialization/C_OscSerializer.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/serialization/C_OscSerializer.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/serialization/C_OscFilerHelper.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/serialization/C_OscFilerHelperExample.hpp
+   )
+
+   set(OPENSYDE_CORE_SERIALIZATION_INCLUDE_DIRECTORIES
+      ${CMAKE_CURRENT_SOURCE_DIR}/serialization
+   )
+endif()
+
 # all sources
 set(OPENSYDE_CORE_SOURCES
    ${OPENSYDE_CORE_COMMON_SOURCES}
@@ -821,12 +845,14 @@ set(OPENSYDE_CORE_SOURCES
    ${OPENSYDE_CORE_IP_DRIVER_SOURCES}
    ${OPENSYDE_CORE_WINDOWS_TARGET_SOURCES}
    ${OPENSYDE_CORE_PROTOCOL_LOGGING_SOURCES}
+   ${OPENSYDE_CORE_SERIALIZATION_SOURCES}
 )
 
 # all include directories
 set(OPENSYDE_CORE_INCLUDE_DIRECTORIES
    ${OPENSYDE_CORE_COMMON_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_ZIPPING_INCLUDE_DIRECTORIES}
+   ${OPENSYDE_CORE_SERIALIZATION_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_CODE_GENERATION_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_PROJECT_HANDLING_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_PARAM_SET_INCLUDE_DIRECTORIES}

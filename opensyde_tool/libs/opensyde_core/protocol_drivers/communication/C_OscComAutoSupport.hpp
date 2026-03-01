@@ -13,7 +13,6 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include <QMap>
-#include <utility>
 
 #include "C_OscCanProtocol.hpp"
 
@@ -57,7 +56,7 @@ public:
 
 private:
   QMap<int32_t, uint8_t> mc_MessageCounterInfoMap;
-  QMap<int32_t, std::pair<bool, C_OscCanProtocol::E_Type>>
+  QMap<int32_t, QPair<bool, C_OscCanProtocol::E_Type>>
       mc_MessageAutoSupportInfoMap;
 };
 

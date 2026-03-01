@@ -105,7 +105,7 @@ C_OscHalcDefContent::AddEnumItem(const QString &orc_DisplayName,
   } else {
     if ((orc_Value.GetType() == this->GetType()) &&
         (orc_Value.GetArray() == this->GetArray())) {
-      this->mc_EnumItems.push_back(std::pair<QString, C_OscNodeDataPoolContent>(
+      this->mc_EnumItems.push_back(QPair<QString, C_OscNodeDataPoolContent>(
           orc_DisplayName, orc_Value));
     } else {
       s32_Retval = C_CONFIG;
@@ -226,7 +226,7 @@ int32_t C_OscHalcDefContent::SetEnumValue(const QString &orc_DisplayName) {
 int32_t C_OscHalcDefContent::GetEnumValue(QString &orc_DisplayName) {
   int32_t s32_Retval = C_RANGE;
 
-  for (QList<std::pair<QString, C_OscNodeDataPoolContent>>::const_iterator
+  for (QList<QPair<QString, C_OscNodeDataPoolContent>>::const_iterator
            c_It = this->mc_EnumItems.begin();
        c_It != this->mc_EnumItems.end(); ++c_It) {
     if (c_It->second == *this) {
@@ -251,7 +251,7 @@ const C_OscNodeDataPoolContent *
 C_OscHalcDefContent::FindEnumItem(const QString &orc_DisplayName) const {
   const C_OscNodeDataPoolContent *pc_Retval = NULL;
 
-  for (QList<std::pair<QString, C_OscNodeDataPoolContent>>::const_iterator
+  for (QList<QPair<QString, C_OscNodeDataPoolContent>>::const_iterator
            c_It = this->mc_EnumItems.begin();
        c_It != this->mc_EnumItems.end(); ++c_It) {
     if (c_It->first == orc_DisplayName) {
@@ -269,7 +269,7 @@ C_OscHalcDefContent::FindEnumItem(const QString &orc_DisplayName) const {
    All enum items
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<std::pair<QString, C_OscNodeDataPoolContent>> &
+const QList<QPair<QString, C_OscNodeDataPoolContent>> &
 C_OscHalcDefContent::GetEnumItems(void) const {
   return this->mc_EnumItems;
 }
@@ -528,7 +528,7 @@ void C_OscHalcDefContent::CalcHash(uint32_t &oru32_HashValue) const {
   stw::scl::C_SclChecksums::CalcCRC32(
       &this->me_ComplexType, sizeof(this->me_ComplexType), oru32_HashValue);
 
-  for (QList<std::pair<QString, C_OscNodeDataPoolContent>>::const_iterator
+  for (QList<QPair<QString, C_OscNodeDataPoolContent>>::const_iterator
            c_It = this->mc_EnumItems.begin();
        c_It != this->mc_EnumItems.end(); ++c_It) {
     stw::scl::C_SclChecksums::CalcCRC32(
@@ -558,7 +558,7 @@ void C_OscHalcDefContent::CalcHashElement(uint32_t &oru32_HashValue,
   stw::scl::C_SclChecksums::CalcCRC32(
       &this->me_ComplexType, sizeof(this->me_ComplexType), oru32_HashValue);
 
-  for (QList<std::pair<QString, C_OscNodeDataPoolContent>>::const_iterator
+  for (QList<QPair<QString, C_OscNodeDataPoolContent>>::const_iterator
            c_It = this->mc_EnumItems.begin();
        c_It != this->mc_EnumItems.end(); ++c_It) {
     stw::scl::C_SclChecksums::CalcCRC32(
@@ -587,7 +587,7 @@ void C_OscHalcDefContent::CalcHashStructure(uint32_t &oru32_HashValue) const {
   stw::scl::C_SclChecksums::CalcCRC32(
       &this->me_ComplexType, sizeof(this->me_ComplexType), oru32_HashValue);
 
-  for (QList<std::pair<QString, C_OscNodeDataPoolContent>>::const_iterator
+  for (QList<QPair<QString, C_OscNodeDataPoolContent>>::const_iterator
            c_It = this->mc_EnumItems.begin();
        c_It != this->mc_EnumItems.end(); ++c_It) {
     stw::scl::C_SclChecksums::CalcCRC32(

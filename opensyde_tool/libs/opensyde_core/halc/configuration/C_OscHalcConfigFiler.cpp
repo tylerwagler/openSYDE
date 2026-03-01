@@ -774,9 +774,9 @@ int32_t C_OscHalcConfigFiler::mh_SaveIoParameter(
         "value", orc_XmlParser, orc_Parameter.c_Value);
   }
   if (s32_Retval == C_NO_ERR) {
-    const QList<std::pair<QString, C_OscNodeDataPoolContent>> &rc_EnumItems =
+    const QList<QPair<QString, C_OscNodeDataPoolContent>> &rc_EnumItems =
         orc_Parameter.c_Value.GetEnumItems();
-    for (QList<std::pair<QString, C_OscNodeDataPoolContent>>::const_iterator
+    for (QList<QPair<QString, C_OscNodeDataPoolContent>>::const_iterator
              c_It = rc_EnumItems.begin();
          (c_It != rc_EnumItems.end()) && (s32_Retval == C_NO_ERR); ++c_It) {
       Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("enum-item") ==

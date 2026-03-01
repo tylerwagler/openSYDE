@@ -137,7 +137,7 @@ int32_t C_OscConfFileHandler::LoadSettings(const QString &orc_Path) {
 //---------------------------------------------------------------------------------------------------------------------/
 int32_t C_OscConfFileHandler::mh_ReplaceSettings(
     const QString &orc_Path,
-    const QList<std::pair<QString, QString>> &orc_Configs) {
+    const QList<QPair<QString, QString>> &orc_Configs) {
   QStringList c_StringList;
   int32_t s32_Result = C_NO_ERR;
 
@@ -161,7 +161,7 @@ int32_t C_OscConfFileHandler::mh_ReplaceSettings(
 
     // Replacing or adding all entries
     for (u32_Counter = 0U; u32_Counter < orc_Configs.size(); u32_Counter++) {
-      const std::pair<QString, QString> &rc_KeyValuePair =
+      const QPair<QString, QString> &rc_KeyValuePair =
           orc_Configs[u32_Counter];
       const QString c_NewEntry =
           rc_KeyValuePair.first + "=" + rc_KeyValuePair.second;

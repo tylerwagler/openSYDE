@@ -74,7 +74,7 @@ uint8_t C_OscComAutoSupport::SetCyclicRedundancyCheckCalculation(
     const uint32_t ou32_MessageId, const uint8_t ou8_Count,
     const uint8_t *const opu8_Data) {
   uint8_t u8_CrcValue = static_cast<uint8_t>(opu8_Data[7]);
-  const std::pair<bool, C_OscCanProtocol::E_Type> c_PairValue =
+  const QPair<bool, C_OscCanProtocol::E_Type> c_PairValue =
       mc_MessageAutoSupportInfoMap[ou32_MessageId];
 
   if ((mc_MessageAutoSupportInfoMap.count(ou32_MessageId) == 1) &&
@@ -99,7 +99,7 @@ uint8_t C_OscComAutoSupport::SetCyclicRedundancyCheckCalculation(
 //----------------------------------------------------------------------------------------------------------------------
 uint8_t C_OscComAutoSupport::MessageCounter(const uint32_t ou32_MessageId,
                                             uint8_t ou8_MessageCounter) {
-  const std::pair<bool, C_OscCanProtocol::E_Type> c_PairValue =
+  const QPair<bool, C_OscCanProtocol::E_Type> c_PairValue =
       mc_MessageAutoSupportInfoMap[ou32_MessageId];
 
   if ((mc_MessageAutoSupportInfoMap.count(ou32_MessageId) == 1) &&
@@ -221,7 +221,7 @@ void C_OscComAutoSupport::ResetMessageCounters(
 void C_OscComAutoSupport::AutoSupportModeInfo(
     const int32_t os32_MessageId, const bool oq_SetAutoSupportMode,
     const C_OscCanProtocol::E_Type oe_ProtocolType) {
-  const std::pair<bool, C_OscCanProtocol::E_Type> c_Pair(oq_SetAutoSupportMode,
+  const QPair<bool, C_OscCanProtocol::E_Type> c_Pair(oq_SetAutoSupportMode,
                                                          oe_ProtocolType);
 
   mc_MessageAutoSupportInfoMap[os32_MessageId] = c_Pair;
@@ -257,7 +257,7 @@ void C_OscComAutoSupport::h_InvertCanMessage(const uint8_t *const opu8_Data,
 bool C_OscComAutoSupport::SupportInvertedCanMessage(
     const int32_t os32_MessageId) {
   bool q_IsSupportInvertedCanMessage = false;
-  const std::pair<bool, C_OscCanProtocol::E_Type> c_PairValue =
+  const QPair<bool, C_OscCanProtocol::E_Type> c_PairValue =
       mc_MessageAutoSupportInfoMap[os32_MessageId];
 
   if ((mc_MessageAutoSupportInfoMap.count(os32_MessageId) == 1) &&

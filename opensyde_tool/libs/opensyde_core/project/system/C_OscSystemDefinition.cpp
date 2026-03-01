@@ -24,6 +24,9 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 #include <QString>
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QDomDocument>
 
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
@@ -1976,4 +1979,297 @@ void C_OscSystemDefinition::m_HandleNameMaxCharLimitNodeName(
       opc_ChangedItems->append(c_Item);
     }
   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QDataStream (binary format)
+
+   \param[out] orc_Stream    Output stream for serialization
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscSystemDefinition::ToQDataStream(QDataStream& orc_Stream) const {
+   using namespace stw::errors;
+   
+   // Serialize buses
+   uint32_t u32_Count = static_cast<uint32_t>(this->c_Buses.size());
+   orc_Stream << u32_Count;
+   for (const C_OscSystemBus& c_Bus : this->c_Buses) {
+      c_Bus.ToQDataStream(orc_Stream);
+   }
+   
+   // Serialize nodes
+   u32_Count = static_cast<uint32_t>(this->c_Nodes.size());
+   orc_Stream << u32_Count;
+   for (const C_OscNode& c_Node : this->c_Nodes) {
+      c_Node.ToQDataStream(orc_Stream);
+   }
+   
+   // Serialize node squads
+   u32_Count = static_cast<uint32_t>(this->c_NodeSquads.size());
+   orc_Stream << u32_Count;
+   for (const C_OscNodeSquad& c_Squad : this->c_NodeSquads) {
+      c_Squad.ToQDataStream(orc_Stream);
+   }
+   
+   // Serialize name max char limit
+   orc_Stream << this->u32_NameMaxCharLimit;
+   
+   if (orc_Stream.status() == QDataStream::Ok) {
+      return C_NO_ERR;
+   } else {
+      return C_RD_WR;
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QDataStream (binary format)
+
+   \param[in,out] orc_Stream    Input stream for deserialization
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscSystemDefinition::FromQDataStream(QDataStream& orc_Stream) {
+   using namespace stw::errors;
+   
+   // Deserialize buses
+   uint32_t u32_Count = 0;
+   orc_Stream >> u32_Count;
+   this->c_Buses.clear();
+   for (uint32_t i = 0; i < u32_Count; ++i) {
+      C_OscSystemBus c_Bus;
+      c_Bus.FromQDataStream(orc_Stream);
+      this->c_Buses.append(c_Bus);
+   }
+   
+   // Deserialize nodes
+   orc_Stream >> u32_Count;
+   this->c_Nodes.clear();
+   for (uint32_t i = 0; i < u32_Count; ++i) {
+      C_OscNode c_Node;
+      c_Node.FromQDataStream(orc_Stream);
+      this->c_Nodes.append(c_Node);
+   }
+   
+   // Deserialize node squads
+   orc_Stream >> u32_Count;
+   this->c_NodeSquads.clear();
+   for (uint32_t i = 0; i < u32_Count; ++i) {
+      C_OscNodeSquad c_Squad;
+      c_Squad.FromQDataStream(orc_Stream);
+      this->c_NodeSquads.append(c_Squad);
+   }
+   
+   // Deserialize name max char limit
+   orc_Stream >> this->u32_NameMaxCharLimit;
+   
+   if (orc_Stream.status() == QDataStream::Ok) {
+      return C_NO_ERR;
+   } else {
+      return C_RD_WR;
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QJsonObject
+
+   \return JSON object containing all data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscSystemDefinition::ToJsonObject() const {
+   QJsonObject c_Object;
+   
+   // Serialize buses
+   QJsonArray c_BusesArray;
+   for (const C_OscSystemBus& c_Bus : this->c_Buses) {
+      c_BusesArray.append(c_Bus.ToJsonObject());
+   }
+   c_Object["buses"] = c_BusesArray;
+   
+   // Serialize nodes
+   QJsonArray c_NodesArray;
+   for (const C_OscNode& c_Node : this->c_Nodes) {
+      c_NodesArray.append(c_Node.ToJsonObject());
+   }
+   c_Object["nodes"] = c_NodesArray;
+   
+   // Serialize node squads
+   QJsonArray c_SquadsArray;
+   for (const C_OscNodeSquad& c_Squad : this->c_NodeSquads) {
+      c_SquadsArray.append(c_Squad.ToJsonObject());
+   }
+   c_Object["node-squads"] = c_SquadsArray;
+   
+   c_Object["name-max-char-limit"] = static_cast<qlonglong>(this->u32_NameMaxCharLimit);
+   
+   return c_Object;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QJsonObject
+
+   \param[in] orc_Object    JSON object to deserialize from
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscSystemDefinition::FromJsonObject(const QJsonObject& orc_Object) {
+   using namespace stw::errors;
+   
+   // Deserialize buses
+   if (orc_Object.contains("buses")) {
+      QJsonArray c_Array = orc_Object["buses"].toArray();
+      this->c_Buses.clear();
+      for (const QJsonValue& c_Value : c_Array) {
+         C_OscSystemBus c_Bus;
+         c_Bus.FromJsonObject(c_Value.toObject());
+         this->c_Buses.append(c_Bus);
+      }
+   }
+   
+   // Deserialize nodes
+   if (orc_Object.contains("nodes")) {
+      QJsonArray c_Array = orc_Object["nodes"].toArray();
+      this->c_Nodes.clear();
+      for (const QJsonValue& c_Value : c_Array) {
+         C_OscNode c_Node;
+         c_Node.FromJsonObject(c_Value.toObject());
+         this->c_Nodes.append(c_Node);
+      }
+   }
+   
+   // Deserialize node squads
+   if (orc_Object.contains("node-squads")) {
+      QJsonArray c_Array = orc_Object["node-squads"].toArray();
+      this->c_NodeSquads.clear();
+      for (const QJsonValue& c_Value : c_Array) {
+         C_OscNodeSquad c_Squad;
+         c_Squad.FromJsonObject(c_Value.toObject());
+         this->c_NodeSquads.append(c_Squad);
+      }
+   }
+   
+   if (orc_Object.contains("name-max-char-limit")) {
+      this->u32_NameMaxCharLimit = static_cast<uint32_t>(orc_Object["name-max-char-limit"].toInteger());
+   }
+   
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QDomDocument
+
+   \param[in] orc_Doc    XML document to append to
+   \param[in] orc_RootElementName    Name of the root element
+
+   \return QDomElement representing the serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscSystemDefinition::ToQDomDocument(QDomDocument& orc_Doc, 
+                                                  const QString& orc_RootElementName) const {
+   QDomElement c_Element = orc_Doc.createElement(orc_RootElementName);
+   
+   // Serialize buses
+   QDomElement c_BusesElement = orc_Doc.createElement("buses");
+   for (const C_OscSystemBus& c_Bus : this->c_Buses) {
+      c_BusesElement.appendChild(c_Bus.ToQDomDocument(orc_Doc, "bus"));
+   }
+   c_Element.appendChild(c_BusesElement);
+   
+   // Serialize nodes
+   QDomElement c_NodesElement = orc_Doc.createElement("nodes");
+   for (const C_OscNode& c_Node : this->c_Nodes) {
+      c_NodesElement.appendChild(c_Node.ToQDomDocument(orc_Doc, "node"));
+   }
+   c_Element.appendChild(c_NodesElement);
+   
+   // Serialize node squads
+   QDomElement c_SquadsElement = orc_Doc.createElement("node-squads");
+   for (const C_OscNodeSquad& c_Squad : this->c_NodeSquads) {
+      c_SquadsElement.appendChild(c_Squad.ToQDomDocument(orc_Doc, "squad"));
+   }
+   c_Element.appendChild(c_SquadsElement);
+   
+   // Serialize name max char limit
+   QDomElement c_LimitElement = orc_Doc.createElement("name-max-char-limit");
+   c_LimitElement.appendChild(orc_Doc.createTextNode(QString::number(this->u32_NameMaxCharLimit)));
+   c_Element.appendChild(c_LimitElement);
+   
+   return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QDomElement
+
+   \param[in] orc_Element    XML element to deserialize from
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscSystemDefinition::FromQDomElement(const QDomElement& orc_Element) {
+   using namespace stw::errors;
+   
+   // Deserialize buses
+   QDomNode c_BusesNode = orc_Element.namedItem("buses");
+   if (!c_BusesNode.isNull()) {
+      QDomElement c_BusesElement = c_BusesNode.toElement();
+      this->c_Buses.clear();
+      QDomNode c_BusNode = c_BusesElement.firstChild();
+      while (!c_BusNode.isNull()) {
+         if (c_BusNode.isElement()) {
+            C_OscSystemBus c_Bus;
+            c_Bus.FromQDomElement(c_BusNode.toElement());
+            this->c_Buses.append(c_Bus);
+         }
+         c_BusNode = c_BusNode.nextSibling();
+      }
+   }
+   
+   // Deserialize nodes
+   QDomNode c_NodesNode = orc_Element.namedItem("nodes");
+   if (!c_NodesNode.isNull()) {
+      QDomElement c_NodesElement = c_NodesNode.toElement();
+      this->c_Nodes.clear();
+      QDomNode c_NodeNode = c_NodesElement.firstChild();
+      while (!c_NodeNode.isNull()) {
+         if (c_NodeNode.isElement()) {
+            C_OscNode c_Node;
+            c_Node.FromQDomElement(c_NodeNode.toElement());
+            this->c_Nodes.append(c_Node);
+         }
+         c_NodeNode = c_NodeNode.nextSibling();
+      }
+   }
+   
+   // Deserialize node squads
+   QDomNode c_SquadsNode = orc_Element.namedItem("node-squads");
+   if (!c_SquadsNode.isNull()) {
+      QDomElement c_SquadsElement = c_SquadsNode.toElement();
+      this->c_NodeSquads.clear();
+      QDomNode c_SquadNode = c_SquadsElement.firstChild();
+      while (!c_SquadNode.isNull()) {
+         if (c_SquadNode.isElement()) {
+            C_OscNodeSquad c_Squad;
+            c_Squad.FromQDomElement(c_SquadNode.toElement());
+            this->c_NodeSquads.append(c_Squad);
+         }
+         c_SquadNode = c_SquadNode.nextSibling();
+      }
+   }
+   
+   // Deserialize name max char limit
+   QDomNode c_LimitNode = orc_Element.namedItem("name-max-char-limit");
+   if (!c_LimitNode.isNull()) {
+      this->u32_NameMaxCharLimit = static_cast<uint32_t>(c_LimitNode.toElement().text().toUInt());
+   }
+   
+   return C_NO_ERR;
 }

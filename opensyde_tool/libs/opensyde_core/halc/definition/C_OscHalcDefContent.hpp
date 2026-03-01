@@ -47,7 +47,7 @@ public:
   int32_t GetEnumValue(QString &orc_DisplayName);
   const C_OscNodeDataPoolContent *
   FindEnumItem(const QString &orc_DisplayName) const;
-  const QList<std::pair<QString, C_OscNodeDataPoolContent>> &
+  const QList<QPair<QString, C_OscNodeDataPoolContent>> &
   GetEnumItems(void) const;
 
   void AddBitmaskItem(const C_OscHalcDefContentBitmaskItem &orc_Value);
@@ -67,7 +67,7 @@ public:
 
 private:
   E_ComplexType me_ComplexType;
-  QList<std::pair<QString, C_OscNodeDataPoolContent>>
+  QList<QPair<QString, C_OscNodeDataPoolContent>>
       mc_EnumItems; ///< All known enum values
   QList<C_OscHalcDefContentBitmaskItem>
       mc_BitmaskItems; ///< All known bitmask values

@@ -19,6 +19,10 @@
 
 #include "C_OscViewNodeUpdate.hpp"
 #include "C_SclChecksums.hpp"
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QJsonObject>
+#include <QDomDocument>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -850,4 +854,474 @@ bool C_OscViewNodeUpdate::mh_CheckApplicationsContainParamTypeBeforeIndex(
     }
   }
   return q_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QDataStream (binary format)
+
+   \param[out] orc_Stream    Output stream for serialization
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewNodeUpdate::ToQDataStream(QDataStream& orc_Stream) const {
+   using namespace stw::errors;
+   
+   // Serialize enums
+   orc_Stream << static_cast<int32_t>(me_StateSecurity);
+   orc_Stream << static_cast<int32_t>(me_StateDebugger);
+   
+   // Serialize strings
+   orc_Stream << mc_PemFilePath;
+   orc_Stream << mq_SkipUpdateOfPemFile;
+   
+   // Serialize data block paths
+   uint32_t u32_Count = mc_DataBlockPaths.size();
+   orc_Stream << u32_Count;
+   for (const QString& c_Path : mc_DataBlockPaths) {
+      orc_Stream << c_Path;
+   }
+   
+   // Serialize file based paths
+   u32_Count = mc_FileBasedPaths.size();
+   orc_Stream << u32_Count;
+   for (const QString& c_Path : mc_FileBasedPaths) {
+      orc_Stream << c_Path;
+   }
+   
+   // Serialize param set paths
+   u32_Count = mc_ParamSetPaths.size();
+   orc_Stream << u32_Count;
+   for (const C_OscViewNodeUpdateParamInfo& c_Info : mc_ParamSetPaths) {
+      c_Info.ToQDataStream(orc_Stream);
+   }
+   
+   // Serialize skip flags for data block paths
+   u32_Count = mc_SkipUpdateOfFiles.size();
+   orc_Stream << u32_Count;
+   for (const QList<bool>& c_Flags : mc_SkipUpdateOfFiles) {
+      uint32_t u32_FlagCount = c_Flags.size();
+      orc_Stream << u32_FlagCount;
+      for (bool q_Flag : c_Flags) {
+         orc_Stream << q_Flag;
+      }
+   }
+   
+   if (orc_Stream.status() == QDataStream::Ok) {
+      return C_NO_ERR;
+   } else {
+      return C_RD_WR;
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QDataStream (binary format)
+
+   \param[in,out] orc_Stream    Input stream for deserialization
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewNodeUpdate::FromQDataStream(QDataStream& orc_Stream) {
+   using namespace stw::errors;
+   
+   // Deserialize enums
+   int32_t s32_Enum = 0;
+   orc_Stream >> s32_Enum;
+   me_StateSecurity = static_cast<E_StateSecurity>(s32_Enum);
+   
+   orc_Stream >> s32_Enum;
+   me_StateDebugger = static_cast<E_StateDebugger>(s32_Enum);
+   
+   // Deserialize strings
+   orc_Stream >> mc_PemFilePath;
+   orc_Stream >> mq_SkipUpdateOfPemFile;
+   
+   // Deserialize data block paths
+   uint32_t u32_Count = 0;
+   orc_Stream >> u32_Count;
+   mc_DataBlockPaths.clear();
+   for (uint32_t i = 0; i < u32_Count; ++i) {
+      QString c_Path;
+      orc_Stream >> c_Path;
+      mc_DataBlockPaths.append(c_Path);
+   }
+   
+   // Deserialize file based paths
+   orc_Stream >> u32_Count;
+   mc_FileBasedPaths.clear();
+   for (uint32_t i = 0; i < u32_Count; ++i) {
+      QString c_Path;
+      orc_Stream >> c_Path;
+      mc_FileBasedPaths.append(c_Path);
+   }
+   
+   // Deserialize param set paths
+   orc_Stream >> u32_Count;
+   mc_ParamSetPaths.clear();
+   for (uint32_t i = 0; i < u32_Count; ++i) {
+      C_OscViewNodeUpdateParamInfo c_Info;
+      c_Info.FromQDataStream(orc_Stream);
+      mc_ParamSetPaths.append(c_Info);
+   }
+   
+   // Deserialize skip flags
+   orc_Stream >> u32_Count;
+   mc_SkipUpdateOfFiles.clear();
+   for (uint32_t i = 0; i < u32_Count; ++i) {
+      uint32_t u32_FlagCount = 0;
+      orc_Stream >> u32_FlagCount;
+      QList<bool> c_Flags;
+      for (uint32_t j = 0; j < u32_FlagCount; ++j) {
+         bool q_Flag = false;
+         orc_Stream >> q_Flag;
+         c_Flags.append(q_Flag);
+      }
+      mc_SkipUpdateOfFiles.append(c_Flags);
+   }
+   
+   if (orc_Stream.status() == QDataStream::Ok) {
+      return C_NO_ERR;
+   } else {
+      return C_RD_WR;
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QJsonObject
+
+   \return JSON object containing all data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscViewNodeUpdate::ToJsonObject() const {
+   QJsonObject c_Object;
+   
+   // Serialize enums as strings
+   switch (me_StateSecurity) {
+      case eST_SEC_NO_CHANGE: c_Object["state-security"] = "no-change"; break;
+      case eST_SEC_ACTIVATE: c_Object["state-security"] = "activate"; break;
+      case eST_SEC_DEACTIVATE: c_Object["state-security"] = "deactivate"; break;
+   }
+   
+   switch (me_StateDebugger) {
+      case eST_DEB_NO_CHANGE: c_Object["state-debugger"] = "no-change"; break;
+      case eST_DEB_ACTIVATE: c_Object["state-debugger"] = "activate"; break;
+      case eST_DEB_DEACTIVATE: c_Object["state-debugger"] = "deactivate"; break;
+   }
+   
+   c_Object["pem-file-path"] = mc_PemFilePath;
+   c_Object["skip-update-of-pem-file"] = mq_SkipUpdateOfPemFile;
+   
+   // Serialize data block paths
+   QJsonArray c_DataBlockArray;
+   for (const QString& c_Path : mc_DataBlockPaths) {
+      c_DataBlockArray.append(c_Path);
+   }
+   c_Object["data-block-paths"] = c_DataBlockArray;
+   
+   // Serialize file based paths
+   QJsonArray c_FileBasedArray;
+   for (const QString& c_Path : mc_FileBasedPaths) {
+      c_FileBasedArray.append(c_Path);
+   }
+   c_Object["file-based-paths"] = c_FileBasedArray;
+   
+   // Serialize param set paths
+   QJsonArray c_ParamSetArray;
+   for (const C_OscViewNodeUpdateParamInfo& c_Info : mc_ParamSetPaths) {
+      c_ParamSetArray.append(c_Info.ToJsonObject());
+   }
+   c_Object["param-set-paths"] = c_ParamSetArray;
+   
+   // Serialize skip flags
+   QJsonArray c_SkipFlagsArray;
+   for (const QList<bool>& c_Flags : mc_SkipUpdateOfFiles) {
+      QJsonArray c_FlagArray;
+      for (bool q_Flag : c_Flags) {
+         c_FlagArray.append(q_Flag);
+      }
+      c_SkipFlagsArray.append(c_FlagArray);
+   }
+   c_Object["skip-update-of-files"] = c_SkipFlagsArray;
+   
+   return c_Object;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QJsonObject
+
+   \param[in] orc_Object    JSON object to deserialize from
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewNodeUpdate::FromJsonObject(const QJsonObject& orc_Object) {
+   using namespace stw::errors;
+   
+   // Deserialize enums
+   if (orc_Object.contains("state-security")) {
+      QString c_Str = orc_Object["state-security"].toString();
+      if (c_Str == "activate") me_StateSecurity = eST_SEC_ACTIVATE;
+      else if (c_Str == "deactivate") me_StateSecurity = eST_SEC_DEACTIVATE;
+      else me_StateSecurity = eST_SEC_NO_CHANGE;
+   }
+   
+   if (orc_Object.contains("state-debugger")) {
+      QString c_Str = orc_Object["state-debugger"].toString();
+      if (c_Str == "activate") me_StateDebugger = eST_DEB_ACTIVATE;
+      else if (c_Str == "deactivate") me_StateDebugger = eST_DEB_DEACTIVATE;
+      else me_StateDebugger = eST_DEB_NO_CHANGE;
+   }
+   
+   if (orc_Object.contains("pem-file-path")) {
+      mc_PemFilePath = orc_Object["pem-file-path"].toString();
+   }
+   
+   if (orc_Object.contains("skip-update-of-pem-file")) {
+      mq_SkipUpdateOfPemFile = orc_Object["skip-update-of-pem-file"].toBool();
+   }
+   
+   // Deserialize data block paths
+   if (orc_Object.contains("data-block-paths")) {
+      QJsonArray c_Array = orc_Object["data-block-paths"].toArray();
+      mc_DataBlockPaths.clear();
+      for (const QJsonValue& c_Value : c_Array) {
+         mc_DataBlockPaths.append(c_Value.toString());
+      }
+   }
+   
+   // Deserialize file based paths
+   if (orc_Object.contains("file-based-paths")) {
+      QJsonArray c_Array = orc_Object["file-based-paths"].toArray();
+      mc_FileBasedPaths.clear();
+      for (const QJsonValue& c_Value : c_Array) {
+         mc_FileBasedPaths.append(c_Value.toString());
+      }
+   }
+   
+   // Deserialize param set paths
+   if (orc_Object.contains("param-set-paths")) {
+      QJsonArray c_Array = orc_Object["param-set-paths"].toArray();
+      mc_ParamSetPaths.clear();
+      for (const QJsonValue& c_Value : c_Array) {
+         C_OscViewNodeUpdateParamInfo c_Info;
+         c_Info.FromJsonObject(c_Value.toObject());
+         mc_ParamSetPaths.append(c_Info);
+      }
+   }
+   
+   // Deserialize skip flags
+   if (orc_Object.contains("skip-update-of-files")) {
+      QJsonArray c_Array = orc_Object["skip-update-of-files"].toArray();
+      mc_SkipUpdateOfFiles.clear();
+      for (const QJsonValue& c_Value : c_Array) {
+         QJsonArray c_FlagArray = c_Value.toArray();
+         QList<bool> c_Flags;
+         for (const QJsonValue& c_Flag : c_FlagArray) {
+            c_Flags.append(c_Flag.toBool());
+         }
+         mc_SkipUpdateOfFiles.append(c_Flags);
+      }
+   }
+   
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QDomDocument
+
+   \param[in] orc_Doc    XML document to append to
+   \param[in] orc_RootElementName    Name of the root element
+
+   \return QDomElement representing the serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscViewNodeUpdate::ToQDomDocument(QDomDocument& orc_Doc, 
+                                                const QString& orc_RootElementName) const {
+   QDomElement c_Element = orc_Doc.createElement(orc_RootElementName);
+   
+   // Serialize enums as text
+   QDomElement c_StateSecurityElement = orc_Doc.createElement("state-security");
+   QString c_StateSecurityStr;
+   switch (me_StateSecurity) {
+      case eST_SEC_ACTIVATE: c_StateSecurityStr = "activate"; break;
+      case eST_SEC_DEACTIVATE: c_StateSecurityStr = "deactivate"; break;
+      default: c_StateSecurityStr = "no-change"; break;
+   }
+   c_StateSecurityElement.appendChild(orc_Doc.createTextNode(c_StateSecurityStr));
+   c_Element.appendChild(c_StateSecurityElement);
+   
+   QDomElement c_StateDebuggerElement = orc_Doc.createElement("state-debugger");
+   QString c_StateDebuggerStr;
+   switch (me_StateDebugger) {
+      case eST_DEB_ACTIVATE: c_StateDebuggerStr = "activate"; break;
+      case eST_DEB_DEACTIVATE: c_StateDebuggerStr = "deactivate"; break;
+      default: c_StateDebuggerStr = "no-change"; break;
+   }
+   c_StateDebuggerElement.appendChild(orc_Doc.createTextNode(c_StateDebuggerStr));
+   c_Element.appendChild(c_StateDebuggerElement);
+   
+   // Serialize strings
+   QDomElement c_PemFilePathElement = orc_Doc.createElement("pem-file-path");
+   c_PemFilePathElement.appendChild(orc_Doc.createTextNode(mc_PemFilePath));
+   c_Element.appendChild(c_PemFilePathElement);
+   
+   QDomElement c_SkipPemElement = orc_Doc.createElement("skip-update-of-pem-file");
+   c_SkipPemElement.appendChild(orc_Doc.createTextNode(mq_SkipUpdateOfPemFile ? "1" : "0"));
+   c_Element.appendChild(c_SkipPemElement);
+   
+   // Serialize data block paths
+   QDomElement c_DataBlockElement = orc_Doc.createElement("data-block-paths");
+   for (const QString& c_Path : mc_DataBlockPaths) {
+      QDomElement c_PathElement = orc_Doc.createElement("path");
+      c_PathElement.appendChild(orc_Doc.createTextNode(c_Path));
+      c_DataBlockElement.appendChild(c_PathElement);
+   }
+   c_Element.appendChild(c_DataBlockElement);
+   
+   // Serialize file based paths
+   QDomElement c_FileBasedElement = orc_Doc.createElement("file-based-paths");
+   for (const QString& c_Path : mc_FileBasedPaths) {
+      QDomElement c_PathElement = orc_Doc.createElement("path");
+      c_PathElement.appendChild(orc_Doc.createTextNode(c_Path));
+      c_FileBasedElement.appendChild(c_PathElement);
+   }
+   c_Element.appendChild(c_FileBasedElement);
+   
+   // Serialize param set paths
+   QDomElement c_ParamSetElement = orc_Doc.createElement("param-set-paths");
+   for (const C_OscViewNodeUpdateParamInfo& c_Info : mc_ParamSetPaths) {
+      c_ParamSetElement.appendChild(c_Info.ToQDomDocument(orc_Doc, "param-info"));
+   }
+   c_Element.appendChild(c_ParamSetElement);
+   
+   // Serialize skip flags
+   QDomElement c_SkipFlagsElement = orc_Doc.createElement("skip-update-of-files");
+   for (const QList<bool>& c_Flags : mc_SkipUpdateOfFiles) {
+      QDomElement c_FlagGroupElement = orc_Doc.createElement("flag-group");
+      for (bool q_Flag : c_Flags) {
+         QDomElement c_FlagElement = orc_Doc.createElement("flag");
+         c_FlagElement.appendChild(orc_Doc.createTextNode(q_Flag ? "1" : "0"));
+         c_FlagGroupElement.appendChild(c_FlagElement);
+      }
+      c_SkipFlagsElement.appendChild(c_FlagGroupElement);
+   }
+   c_Element.appendChild(c_SkipFlagsElement);
+   
+   return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QDomElement
+
+   \param[in] orc_Element    XML element to deserialize from
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewNodeUpdate::FromQDomElement(const QDomElement& orc_Element) {
+   using namespace stw::errors;
+   
+   // Deserialize enums
+   QDomNode c_StateSecurityNode = orc_Element.namedItem("state-security");
+   if (!c_StateSecurityNode.isNull()) {
+      QString c_Str = c_StateSecurityNode.toElement().text();
+      if (c_Str == "activate") me_StateSecurity = eST_SEC_ACTIVATE;
+      else if (c_Str == "deactivate") me_StateSecurity = eST_SEC_DEACTIVATE;
+      else me_StateSecurity = eST_SEC_NO_CHANGE;
+   }
+   
+   QDomNode c_StateDebuggerNode = orc_Element.namedItem("state-debugger");
+   if (!c_StateDebuggerNode.isNull()) {
+      QString c_Str = c_StateDebuggerNode.toElement().text();
+      if (c_Str == "activate") me_StateDebugger = eST_DEB_ACTIVATE;
+      else if (c_Str == "deactivate") me_StateDebugger = eST_DEB_DEACTIVATE;
+      else me_StateDebugger = eST_DEB_NO_CHANGE;
+   }
+   
+   // Deserialize strings
+   QDomNode c_PemFilePathNode = orc_Element.namedItem("pem-file-path");
+   if (!c_PemFilePathNode.isNull()) {
+      mc_PemFilePath = c_PemFilePathNode.toElement().text();
+   }
+   
+   QDomNode c_SkipPemNode = orc_Element.namedItem("skip-update-of-pem-file");
+   if (!c_SkipPemNode.isNull()) {
+      mq_SkipUpdateOfPemFile = (c_SkipPemNode.toElement().text() == "1");
+   }
+   
+   // Deserialize data block paths
+   QDomNode c_DataBlockNode = orc_Element.namedItem("data-block-paths");
+   if (!c_DataBlockNode.isNull()) {
+      QDomElement c_DataBlockElement = c_DataBlockNode.toElement();
+      mc_DataBlockPaths.clear();
+      QDomNode c_PathNode = c_DataBlockElement.firstChild();
+      while (!c_PathNode.isNull()) {
+         if (c_PathNode.isElement()) {
+            mc_DataBlockPaths.append(c_PathNode.toElement().text());
+         }
+         c_PathNode = c_PathNode.nextSibling();
+      }
+   }
+   
+   // Deserialize file based paths
+   QDomNode c_FileBasedNode = orc_Element.namedItem("file-based-paths");
+   if (!c_FileBasedNode.isNull()) {
+      QDomElement c_FileBasedElement = c_FileBasedNode.toElement();
+      mc_FileBasedPaths.clear();
+      QDomNode c_PathNode = c_FileBasedElement.firstChild();
+      while (!c_PathNode.isNull()) {
+         if (c_PathNode.isElement()) {
+            mc_FileBasedPaths.append(c_PathNode.toElement().text());
+         }
+         c_PathNode = c_PathNode.nextSibling();
+      }
+   }
+   
+   // Deserialize param set paths
+   QDomNode c_ParamSetNode = orc_Element.namedItem("param-set-paths");
+   if (!c_ParamSetNode.isNull()) {
+      QDomElement c_ParamSetElement = c_ParamSetNode.toElement();
+      mc_ParamSetPaths.clear();
+      QDomNode c_InfoNode = c_ParamSetElement.firstChild();
+      while (!c_InfoNode.isNull()) {
+         if (c_InfoNode.isElement()) {
+            C_OscViewNodeUpdateParamInfo c_Info;
+            c_Info.FromQDomElement(c_InfoNode.toElement());
+            mc_ParamSetPaths.append(c_Info);
+         }
+         c_InfoNode = c_InfoNode.nextSibling();
+      }
+   }
+   
+   // Deserialize skip flags
+   QDomNode c_SkipFlagsNode = orc_Element.namedItem("skip-update-of-files");
+   if (!c_SkipFlagsNode.isNull()) {
+      QDomElement c_SkipFlagsElement = c_SkipFlagsNode.toElement();
+      mc_SkipUpdateOfFiles.clear();
+      QDomNode c_GroupNode = c_SkipFlagsElement.firstChild();
+      while (!c_GroupNode.isNull()) {
+         if (c_GroupNode.isElement()) {
+            QDomElement c_GroupElement = c_GroupNode.toElement();
+            QList<bool> c_Flags;
+            QDomNode c_FlagNode = c_GroupElement.firstChild();
+            while (!c_FlagNode.isNull()) {
+               if (c_FlagNode.isElement()) {
+                  c_Flags.append(c_FlagNode.toElement().text() == "1");
+               }
+               c_FlagNode = c_FlagNode.nextSibling();
+            }
+            mc_SkipUpdateOfFiles.append(c_Flags);
+         }
+         c_GroupNode = c_GroupNode.nextSibling();
+      }
+   }
+   
+   return C_NO_ERR;
 }

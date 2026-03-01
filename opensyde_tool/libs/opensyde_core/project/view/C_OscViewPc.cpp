@@ -20,6 +20,11 @@
 #include "C_OscViewPc.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwtypes.hpp"
+#include "stwerrors.hpp"
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QJsonObject>
+#include <QDomDocument>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -166,4 +171,137 @@ bool C_OscViewPc::CheckIndirectDisconnection(void) const {
     q_Retval = false;
   }
   return q_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QDataStream (binary format)
+
+   \param[out] orc_Stream    Output stream for serialization
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewPc::ToQDataStream(QDataStream& orc_Stream) const {
+   using namespace stw::errors;
+   
+   orc_Stream << mq_Connected;
+   orc_Stream << mu32_BusIndex;
+   
+   if (orc_Stream.status() == QDataStream::Ok) {
+      return C_NO_ERR;
+   } else {
+      return C_RD_WR;
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QDataStream (binary format)
+
+   \param[in,out] orc_Stream    Input stream for deserialization
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewPc::FromQDataStream(QDataStream& orc_Stream) {
+   using namespace stw::errors;
+   
+   orc_Stream >> mq_Connected;
+   orc_Stream >> mu32_BusIndex;
+   
+   if (orc_Stream.status() == QDataStream::Ok) {
+      return C_NO_ERR;
+   } else {
+      return C_RD_WR;
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QJsonObject
+
+   \return JSON object containing all data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscViewPc::ToJsonObject() const {
+   QJsonObject c_Object;
+   
+   c_Object["connected"] = mq_Connected;
+   c_Object["bus-index"] = static_cast<qlonglong>(mu32_BusIndex);
+   
+   return c_Object;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QJsonObject
+
+   \param[in] orc_Object    JSON object to deserialize from
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewPc::FromJsonObject(const QJsonObject& orc_Object) {
+   using namespace stw::errors;
+   
+   if (orc_Object.contains("connected")) {
+      mq_Connected = orc_Object["connected"].toBool();
+   }
+   
+   if (orc_Object.contains("bus-index")) {
+      mu32_BusIndex = static_cast<uint32_t>(orc_Object["bus-index"].toInteger());
+   }
+   
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QDomDocument
+
+   \param[in] orc_Doc    XML document to append to
+   \param[in] orc_RootElementName    Name of the root element
+
+   \return QDomElement representing the serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscViewPc::ToQDomDocument(QDomDocument& orc_Doc, 
+                                        const QString& orc_RootElementName) const {
+   QDomElement c_Element = orc_Doc.createElement(orc_RootElementName);
+   
+   QDomElement c_ConnectedElement = orc_Doc.createElement("connected");
+   c_ConnectedElement.appendChild(orc_Doc.createTextNode(mq_Connected ? "1" : "0"));
+   c_Element.appendChild(c_ConnectedElement);
+   
+   QDomElement c_BusIndexElement = orc_Doc.createElement("bus-index");
+   c_BusIndexElement.appendChild(orc_Doc.createTextNode(QString::number(mu32_BusIndex)));
+   c_Element.appendChild(c_BusIndexElement);
+   
+   return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QDomElement
+
+   \param[in] orc_Element    XML element to deserialize from
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewPc::FromQDomElement(const QDomElement& orc_Element) {
+   using namespace stw::errors;
+   
+   QDomNode c_ConnectedNode = orc_Element.namedItem("connected");
+   if (!c_ConnectedNode.isNull()) {
+      mq_Connected = (c_ConnectedNode.toElement().text() == "1");
+   }
+   
+   QDomNode c_BusIndexNode = orc_Element.namedItem("bus-index");
+   if (!c_BusIndexNode.isNull()) {
+      mu32_BusIndex = static_cast<uint32_t>(c_BusIndexNode.toElement().text().toUInt());
+   }
+   
+   return C_NO_ERR;
 }

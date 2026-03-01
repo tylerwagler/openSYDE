@@ -44,7 +44,7 @@ public:
   C_OscHalcDefContent::E_ComplexType GetComplexType(void) const;
   C_OscNodeDataPoolContent::E_Type GetType(void) const;
   bool GetArray(void) const;
-  const QList<std::pair<QString, C_OscNodeDataPoolContent>> &
+  const QList<QPair<QString, C_OscNodeDataPoolContent>> &
   GetEnumItems(void) const;
   const QList<C_OscHalcDefContentBitmaskItem> &GetBitmaskItems(void) const;
 

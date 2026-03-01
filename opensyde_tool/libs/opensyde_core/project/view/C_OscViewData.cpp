@@ -18,6 +18,10 @@
 #include "precomp_headers.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QJsonObject>
+#include <QDomDocument>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -668,4 +672,224 @@ int32_t C_OscViewData::ClearNodeUpdateInformationParamPaths(
   }
 
   return s32_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QDataStream (binary format)
+
+   \param[out] orc_Stream    Output stream for serialization
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewData::ToQDataStream(QDataStream& orc_Stream) const {
+   using namespace stw::errors;
+   
+   // Serialize name
+   orc_Stream << mc_Name;
+   
+   // Serialize PC data
+   mc_PcData.ToQDataStream(orc_Stream);
+   
+   // Serialize node active flags
+   orc_Stream << mc_NodeActiveFlags;
+   
+   // Serialize node update information
+   uint32_t u32_Count = mc_NodeUpdateInformation.size();
+   orc_Stream << u32_Count;
+   for (const C_OscViewNodeUpdate& c_Update : mc_NodeUpdateInformation) {
+      c_Update.ToQDataStream(orc_Stream);
+   }
+   
+   if (orc_Stream.status() == QDataStream::Ok) {
+      return C_NO_ERR;
+   } else {
+      return C_RD_WR;
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QDataStream (binary format)
+
+   \param[in,out] orc_Stream    Input stream for deserialization
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewData::FromQDataStream(QDataStream& orc_Stream) {
+   using namespace stw::errors;
+   
+   // Deserialize name
+   orc_Stream >> mc_Name;
+   
+   // Deserialize PC data
+   mc_PcData.FromQDataStream(orc_Stream);
+   
+   // Deserialize node active flags
+   orc_Stream >> mc_NodeActiveFlags;
+   
+   // Deserialize node update information
+   uint32_t u32_Count = 0;
+   orc_Stream >> u32_Count;
+   mc_NodeUpdateInformation.clear();
+   for (uint32_t i = 0; i < u32_Count; ++i) {
+      C_OscViewNodeUpdate c_Update;
+      c_Update.FromQDataStream(orc_Stream);
+      mc_NodeUpdateInformation.append(c_Update);
+   }
+   
+   if (orc_Stream.status() == QDataStream::Ok) {
+      return C_NO_ERR;
+   } else {
+      return C_RD_WR;
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QJsonObject
+
+   \return JSON object containing all data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscViewData::ToJsonObject() const {
+   QJsonObject c_Object;
+   
+   c_Object["name"] = mc_Name;
+   c_Object["pc-data"] = mc_PcData.ToJsonObject();
+   c_Object["node-active-flags"] = QString(mc_NodeActiveFlags.toBase64());
+   
+   // Serialize node update information
+   QJsonArray c_UpdateArray;
+   for (const C_OscViewNodeUpdate& c_Update : mc_NodeUpdateInformation) {
+      c_UpdateArray.append(c_Update.ToJsonObject());
+   }
+   c_Object["node-update-information"] = c_UpdateArray;
+   
+   return c_Object;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QJsonObject
+
+   \param[in] orc_Object    JSON object to deserialize from
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewData::FromJsonObject(const QJsonObject& orc_Object) {
+   using namespace stw::errors;
+   
+   if (orc_Object.contains("name")) {
+      mc_Name = orc_Object["name"].toString();
+   }
+   
+   if (orc_Object.contains("pc-data")) {
+      mc_PcData.FromJsonObject(orc_Object["pc-data"].toObject());
+   }
+   
+   if (orc_Object.contains("node-active-flags")) {
+      mc_NodeActiveFlags = QByteArray::fromBase64(orc_Object["node-active-flags"].toString().toUtf8());
+   }
+   
+   if (orc_Object.contains("node-update-information")) {
+      QJsonArray c_Array = orc_Object["node-update-information"].toArray();
+      mc_NodeUpdateInformation.clear();
+      for (const QJsonValue& c_Value : c_Array) {
+         C_OscViewNodeUpdate c_Update;
+         c_Update.FromJsonObject(c_Value.toObject());
+         mc_NodeUpdateInformation.append(c_Update);
+      }
+   }
+   
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Serialize to QDomDocument
+
+   \param[in] orc_Doc    XML document to append to
+   \param[in] orc_RootElementName    Name of the root element
+
+   \return QDomElement representing the serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscViewData::ToQDomDocument(QDomDocument& orc_Doc, 
+                                          const QString& orc_RootElementName) const {
+   QDomElement c_Element = orc_Doc.createElement(orc_RootElementName);
+   
+   // Serialize name
+   QDomElement c_NameElement = orc_Doc.createElement("name");
+   c_NameElement.appendChild(orc_Doc.createTextNode(mc_Name));
+   c_Element.appendChild(c_NameElement);
+   
+   // Serialize PC data
+   c_Element.appendChild(mc_PcData.ToQDomDocument(orc_Doc, "pc-data"));
+   
+   // Serialize node active flags as base64
+   QDomElement c_NodeActiveFlagsElement = orc_Doc.createElement("node-active-flags");
+   c_NodeActiveFlagsElement.appendChild(orc_Doc.createTextNode(QString::fromUtf8(mc_NodeActiveFlags.toBase64())));
+   c_Element.appendChild(c_NodeActiveFlagsElement);
+   
+   // Serialize node update information
+   QDomElement c_UpdateElement = orc_Doc.createElement("node-update-information");
+   for (const C_OscViewNodeUpdate& c_Update : mc_NodeUpdateInformation) {
+      c_UpdateElement.appendChild(c_Update.ToQDomDocument(orc_Doc, "update"));
+   }
+   c_Element.appendChild(c_UpdateElement);
+   
+   return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief Deserialize from QDomElement
+
+   \param[in] orc_Element    XML element to deserialize from
+
+   \return C_NO_ERR on success
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewData::FromQDomElement(const QDomElement& orc_Element) {
+   using namespace stw::errors;
+   
+   // Deserialize name
+   QDomNode c_NameNode = orc_Element.namedItem("name");
+   if (!c_NameNode.isNull()) {
+      mc_Name = c_NameNode.toElement().text();
+   }
+   
+   // Deserialize PC data
+   QDomNode c_PcNode = orc_Element.namedItem("pc-data");
+   if (!c_PcNode.isNull()) {
+      mc_PcData.FromQDomElement(c_PcNode.toElement());
+   }
+   
+   // Deserialize node active flags
+   QDomNode c_NodeActiveFlagsNode = orc_Element.namedItem("node-active-flags");
+   if (!c_NodeActiveFlagsNode.isNull()) {
+      mc_NodeActiveFlags = QByteArray::fromBase64(c_NodeActiveFlagsNode.toElement().text().toUtf8());
+   }
+   
+   // Deserialize node update information
+   QDomNode c_UpdateNode = orc_Element.namedItem("node-update-information");
+   if (!c_UpdateNode.isNull()) {
+      QDomElement c_UpdateElement = c_UpdateNode.toElement();
+      mc_NodeUpdateInformation.clear();
+      QDomNode c_UpdateChild = c_UpdateElement.firstChild();
+      while (!c_UpdateChild.isNull()) {
+         if (c_UpdateChild.isElement()) {
+            C_OscViewNodeUpdate c_Update;
+            c_Update.FromQDomElement(c_UpdateChild.toElement());
+            mc_NodeUpdateInformation.append(c_Update);
+         }
+         c_UpdateChild = c_UpdateChild.nextSibling();
+      }
+   }
+   
+   return C_NO_ERR;
 }

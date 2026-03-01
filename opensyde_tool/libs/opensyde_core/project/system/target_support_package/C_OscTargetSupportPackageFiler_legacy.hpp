@@ -1,22 +1,21 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       openSYDE .conf file handler
-   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights
+   \brief       File handler for target support package file data.
+   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
- */
+*/
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCCFGFILEHANDLER_HPP
-#define C_OSCCFGFILEHANDLER_HPP
+#ifndef C_OSCTARGETSUPPORTPACKAGEFILER_HPP
+#define C_OSCTARGETSUPPORTPACKAGEFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include <QList>
-#include <vector>
-
+#include "C_OscTargetSupportPackage.hpp"
+#include "C_OscXmlParser.hpp"
+#include "stwtypes.hpp"
 #include <QString>
-#include <QStringList>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -31,22 +30,16 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-/// Generic config class handler
-class C_OscConfFileHandler {
+class C_OscTargetSupportPackageFiler {
 public:
-  virtual ~C_OscConfFileHandler();
+  static int32_t h_Load(
+      stw::opensyde_core::C_OscTargetSupportPackage &orc_TargetSupportPackage,
+      QString &orc_NodePath, const QString &orc_Path);
 
-  int32_t LoadSettings(const QString &orc_Path);
-
-protected:
-  // Function for loading concrete settings. Must return C_CONFIG in error case
-  virtual int32_t
-  m_LoadSettings(const QStringList &orc_SettingsWithoutComments) = 0;
-  static int32_t
-  mh_ReplaceSettings(const QString &orc_Path,
-                     const QList<QPair<QString, QString>> &orc_Configs);
-
-  QString mc_ConfigFilePath; // path where the config file was loaded from
+private:
+  static int32_t mh_Load(C_OscTargetSupportPackage &orc_TargetSupportPackage,
+                         QString &orc_NodePath,
+                         C_OscXmlParserBase &orc_XmlParser);
 };
 
 /* -- Extern Global Variables

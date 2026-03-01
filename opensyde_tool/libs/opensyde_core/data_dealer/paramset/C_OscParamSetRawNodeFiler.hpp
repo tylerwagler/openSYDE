@@ -1,24 +1,24 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Raw parameter set file reader/writer (header)
+   \brief       File handler for parameter set raw node data (new Qt-native implementation)
 
-   See cpp file for detailed description
+   File handler for parameter set raw node data with Qt-native serialization support (binary, JSON, XML).
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
-   reserved.
+   \copyright   Copyright 2025 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCPARAMSETRAWNODEFILER_HPP
-#define C_OSCPARAMSETRAWNODEFILER_HPP
+#ifndef C_OSCPARAMSETRAWNODEFILER_NEW_HPP
+#define C_OSCPARAMSETRAWNODEFILER_NEW_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include "C_OscParamSetFilerBase.hpp"
 #include "C_OscParamSetRawNode.hpp"
-#include "stwtypes.hpp"
-#include <QList>
+#include <QDataStream>
+#include <QJsonObject>
+#include <QDomDocument>
+#include <QFile>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -32,26 +32,105 @@ namespace opensyde_core {
 /* -- Types
  * ---------------------------------------------------------------------------------------------------------
  */
-/// Filer for C_OscParamSetRawNode
-class C_OscParamSetRawNodeFiler : public C_OscParamSetFilerBase {
+
+/// File handler for parameter set raw node data with Qt-native serialization
+class C_OscParamSetRawNodeFiler_New {
 public:
-  static int32_t h_LoadRawNode(C_OscParamSetRawNode &orc_Node,
-                               C_OscXmlParserBase &orc_XmlParser,
-                               bool &orq_MissingOptionalContent);
-  static void h_SaveRawNode(const C_OscParamSetRawNode &orc_Node,
-                            C_OscXmlParserBase &orc_XmlParser);
+   //----------------------------------------------------------------------------------------------------------------------
+   /*!
+      \brief Load parameter set raw node from file (auto-detect format)
 
-private:
-  C_OscParamSetRawNodeFiler(void);
+      \param[in] c_FilePath Path to the file to load
+      \param[out] rc_Node    Loaded node data
 
-  static int32_t mh_LoadEntries(QList<C_OscParamSetRawEntry> &orc_Entries,
-                                C_OscXmlParserBase &orc_XmlParser);
-  static void mh_SaveEntries(const QList<C_OscParamSetRawEntry> &orc_Entries,
-                             C_OscXmlParserBase &orc_XmlParser);
-  static int32_t mh_LoadEntry(C_OscParamSetRawEntry &orc_Entry,
-                              C_OscXmlParserBase &orc_XmlParser);
-  static void mh_SaveEntry(const C_OscParamSetRawEntry &orc_Entry,
-                           C_OscXmlParserBase &orc_XmlParser);
+      \return C_NO_ERR on success, error code otherwise
+   */
+   //----------------------------------------------------------------------------------------------------------------------
+   static int32_t h_LoadFile(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node);
+
+   //----------------------------------------------------------------------------------------------------------------------
+   /*!
+      \brief Save parameter set raw node to file (auto-detect format)
+
+      \param[in] c_FilePath Path to the file to save
+      \param[in] rc_Node    Node data to save
+
+      \return C_NO_ERR on success, error code otherwise
+   */
+   //----------------------------------------------------------------------------------------------------------------------
+   static int32_t h_SaveFile(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node);
+
+   //----------------------------------------------------------------------------------------------------------------------
+   /*!
+      \brief Load parameter set raw node from binary file
+
+      \param[in] c_FilePath Path to the binary file to load
+      \param[out] rc_Node    Loaded node data
+
+      \return C_NO_ERR on success, error code otherwise
+   */
+   //----------------------------------------------------------------------------------------------------------------------
+   static int32_t h_LoadBinary(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node);
+
+   //----------------------------------------------------------------------------------------------------------------------
+   /*!
+      \brief Save parameter set raw node to binary file
+
+      \param[in] c_FilePath Path to the binary file to save
+      \param[in] rc_Node    Node data to save
+
+      \return C_NO_ERR on success, error code otherwise
+   */
+   //----------------------------------------------------------------------------------------------------------------------
+   static int32_t h_SaveBinary(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node);
+
+   //----------------------------------------------------------------------------------------------------------------------
+   /*!
+      \brief Load parameter set raw node from JSON file
+
+      \param[in] c_FilePath Path to the JSON file to load
+      \param[out] rc_Node    Loaded node data
+
+      \return C_NO_ERR on success, error code otherwise
+   */
+   //----------------------------------------------------------------------------------------------------------------------
+   static int32_t h_LoadJson(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node);
+
+   //----------------------------------------------------------------------------------------------------------------------
+   /*!
+      \brief Save parameter set raw node to JSON file
+
+      \param[in] c_FilePath Path to the JSON file to save
+      \param[in] rc_Node    Node data to save
+
+      \return C_NO_ERR on success, error code otherwise
+   */
+   //----------------------------------------------------------------------------------------------------------------------
+   static int32_t h_SaveJson(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node);
+
+   //----------------------------------------------------------------------------------------------------------------------
+   /*!
+      \brief Load parameter set raw node from XML file
+
+      \param[in] c_FilePath Path to the XML file to load
+      \param[out] rc_Node    Loaded node data
+
+      \return C_NO_ERR on success, error code otherwise
+   */
+   //----------------------------------------------------------------------------------------------------------------------
+   static int32_t h_LoadXml(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node);
+
+   //----------------------------------------------------------------------------------------------------------------------
+   /*!
+      \brief Save parameter set raw node to XML file
+
+      \param[in] c_FilePath Path to the XML file to save
+      \param[in] rc_Node    Node data to save
+
+      \return C_NO_ERR on success, error code otherwise
+   */
+   //----------------------------------------------------------------------------------------------------------------------
+   static int32_t h_SaveXml(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node);
 };
 
 /* -- Extern Global Variables

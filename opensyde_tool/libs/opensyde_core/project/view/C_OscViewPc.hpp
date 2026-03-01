@@ -16,6 +16,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "stwtypes.hpp"
+#include <QDomDocument>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -35,6 +36,25 @@ public:
   C_OscViewPc(void);
 
   void CalcHash(uint32_t &oru32_HashValue) const;
+
+  // --------------------------------------------------------------------------
+  // Binary Serialization (QDataStream)
+  // --------------------------------------------------------------------------
+  int32_t ToQDataStream(QDataStream& orc_Stream) const;
+  int32_t FromQDataStream(QDataStream& orc_Stream);
+
+  // --------------------------------------------------------------------------
+  // JSON Serialization (QJsonObject)
+  // --------------------------------------------------------------------------
+  QJsonObject ToJsonObject() const;
+  int32_t FromJsonObject(const QJsonObject& orc_Object);
+
+  // --------------------------------------------------------------------------
+  // XML Serialization (QDomDocument)
+  // --------------------------------------------------------------------------
+  QDomElement ToQDomDocument(QDomDocument& orc_Doc, 
+                             const QString& orc_RootElementName = "pc") const;
+  int32_t FromQDomElement(const QDomElement& orc_Element);
 
   bool GetConnected(void) const;
   uint32_t GetBusIndex(void) const;

@@ -182,7 +182,7 @@ bool C_OscHalcDefElement::GetArray() const {
    Enum items
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<std::pair<QString, C_OscNodeDataPoolContent>> &
+const QList<QPair<QString, C_OscNodeDataPoolContent>> &
 C_OscHalcDefElement::GetEnumItems() const {
   return this->c_InitialValue.GetEnumItems();
 }

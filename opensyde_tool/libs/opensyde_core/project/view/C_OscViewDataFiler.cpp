@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Filer for C_OscTargetSupportPackage with Qt-native serialization
-   \copyright   Copyright 2024 Sensor-Technik Wiedemann GmbH. All rights
+   \brief       Filer for C_OscViewData with Qt-native serialization
+   \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -12,8 +12,8 @@
  */
 #include "precomp_headers.hpp"
 
-#include "C_OscTargetSupportPackageFiler_New.hpp"
-#include "C_OscTargetSupportPackage.hpp"
+#include "C_OscViewDataFiler.hpp"
+#include "C_OscViewData.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 
@@ -50,34 +50,32 @@ using namespace stw::opensyde_core;
 /*! \brief  Default constructor
  */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscTargetSupportPackageFiler_New::C_OscTargetSupportPackageFiler_New() {
+C_OscViewDataFiler::C_OscViewDataFiler() {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \brief Load from file with auto-detection of format based on extension
 
-   \param[out] orc_Config Configuration to load into
-   \param[out] orc_NodePath Node path (output)
+   \param[out] orc_Views List of views to load into
    \param[in]  orc_Path   Path to file to load from
 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadFile(C_OscTargetSupportPackage &orc_Config,
-                                                        QString &orc_NodePath,
-                                                        const QString &orc_Path) {
+int32_t C_OscViewDataFiler::h_LoadFile(QList<C_OscViewData> &orc_Views,
+                                        const QString &orc_Path) {
    using namespace stw::errors;
    
    // Detect format based on extension
    QString c_LowerPath = orc_Path.toLower();
    if (c_LowerPath.endsWith(".bin")) {
-      return h_LoadBinary(orc_Config, orc_NodePath, orc_Path);
+      return h_LoadBinary(orc_Views, orc_Path);
    } else if (c_LowerPath.endsWith(".json")) {
-      return h_LoadJson(orc_Config, orc_NodePath, orc_Path);
+      return h_LoadJson(orc_Views, orc_Path);
    } else {
       // Default to XML
-      return h_LoadXml(orc_Config, orc_NodePath, orc_Path);
+      return h_LoadXml(orc_Views, orc_Path);
    }
 }
 
@@ -85,27 +83,25 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadFile(C_OscTargetSupportPackage
 /*!
    \brief Save to file with auto-detection of format based on extension
 
-   \param[in] orc_Config Configuration to save
-   \param[in] orc_NodePath Node path
+   \param[in] orc_Views List of views to save
    \param[in] orc_Path   Path to file to save to
 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveFile(const C_OscTargetSupportPackage &orc_Config,
-                                                        const QString &orc_NodePath,
-                                                        const QString &orc_Path) {
+int32_t C_OscViewDataFiler::h_SaveFile(const QList<C_OscViewData> &orc_Views,
+                                        const QString &orc_Path) {
    using namespace stw::errors;
    
    // Detect format based on extension
    QString c_LowerPath = orc_Path.toLower();
    if (c_LowerPath.endsWith(".bin")) {
-      return h_SaveBinary(orc_Config, orc_NodePath, orc_Path);
+      return h_SaveBinary(orc_Views, orc_Path);
    } else if (c_LowerPath.endsWith(".json")) {
-      return h_SaveJson(orc_Config, orc_NodePath, orc_Path);
+      return h_SaveJson(orc_Views, orc_Path);
    } else {
       // Default to XML
-      return h_SaveXml(orc_Config, orc_NodePath, orc_Path);
+      return h_SaveXml(orc_Views, orc_Path);
    }
 }
 
@@ -113,16 +109,14 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveFile(const C_OscTargetSupportP
 /*!
    \brief Load from binary file
 
-   \param[out] orc_Config Configuration to load into
-   \param[out] orc_NodePath Node path (output)
+   \param[out] orc_Views List of views to load into
    \param[in]  orc_Path   Path to file to load from
 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadBinary(C_OscTargetSupportPackage &orc_Config,
-                                                          QString &orc_NodePath,
-                                                          const QString &orc_Path) {
+int32_t C_OscViewDataFiler::h_LoadBinary(QList<C_OscViewData> &orc_Views,
+                                          const QString &orc_Path) {
    using namespace stw::errors;
    
    QFile c_File(orc_Path);
@@ -141,13 +135,15 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadBinary(C_OscTargetSupportPacka
       return C_CONFIG;
    }
    
-   // Read node path
-   c_Stream >> orc_NodePath;
+   // Read count
+   uint32_t u32_Count = 0;
+   c_Stream >> u32_Count;
    
-   // Read target support package data
-   int32_t s32_Result = orc_Config.FromQDataStream(c_Stream);
-   if (s32_Result != C_NO_ERR) {
-      return s32_Result;
+   orc_Views.clear();
+   for (uint32_t i = 0; i < u32_Count; ++i) {
+      C_OscViewData c_View;
+      c_View.FromQDataStream(c_Stream);
+      orc_Views.append(c_View);
    }
    
    if (c_Stream.status() != QDataStream::Ok) {
@@ -161,16 +157,14 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadBinary(C_OscTargetSupportPacka
 /*!
    \brief Save to binary file
 
-   \param[in] orc_Config Configuration to save
-   \param[in] orc_NodePath Node path
+   \param[in] orc_Views List of views to save
    \param[in] orc_Path   Path to file to save to
 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveBinary(const C_OscTargetSupportPackage &orc_Config,
-                                                          const QString &orc_NodePath,
-                                                          const QString &orc_Path) {
+int32_t C_OscViewDataFiler::h_SaveBinary(const QList<C_OscViewData> &orc_Views,
+                                          const QString &orc_Path) {
    using namespace stw::errors;
    
    QFile c_File(orc_Path);
@@ -185,13 +179,13 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveBinary(const C_OscTargetSuppor
    uint16_t u16_Version = 1;
    c_Stream << u16_Version;
    
-   // Write node path
-   c_Stream << orc_NodePath;
+   // Write count
+   uint32_t u32_Count = static_cast<uint32_t>(orc_Views.size());
+   c_Stream << u32_Count;
    
-   // Write target support package data
-   int32_t s32_Result = orc_Config.ToQDataStream(c_Stream);
-   if (s32_Result != C_NO_ERR) {
-      return s32_Result;
+   // Write each view
+   for (const C_OscViewData& c_View : orc_Views) {
+      c_View.ToQDataStream(c_Stream);
    }
    
    if (c_Stream.status() != QDataStream::Ok) {
@@ -205,16 +199,14 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveBinary(const C_OscTargetSuppor
 /*!
    \brief Load from JSON file
 
-   \param[out] orc_Config Configuration to load into
-   \param[out] orc_NodePath Node path (output)
+   \param[out] orc_Views List of views to load into
    \param[in]  orc_Path   Path to file to load from
 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadJson(C_OscTargetSupportPackage &orc_Config,
-                                                        QString &orc_NodePath,
-                                                        const QString &orc_Path) {
+int32_t C_OscViewDataFiler::h_LoadJson(QList<C_OscViewData> &orc_Views,
+                                        const QString &orc_Path) {
    using namespace stw::errors;
    
    QFile c_File(orc_Path);
@@ -223,26 +215,18 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadJson(C_OscTargetSupportPackage
    }
    
    QJsonDocument c_Doc = QJsonDocument::fromJson(c_File.readAll());
-   if (c_Doc.isNull()) {
+   if (c_Doc.isNull() || !c_Doc.isArray()) {
       return C_CONFIG;
    }
    
-   if (!c_Doc.isObject()) {
-      return C_CONFIG;
-   }
+   QJsonArray c_Array = c_Doc.array();
+   orc_Views.clear();
    
-   QJsonObject c_Object = c_Doc.object();
-   
-   // Read node path
-   if (c_Object.contains("node-path")) {
-      orc_NodePath = c_Object["node-path"].toString();
-   }
-   
-   // Read target support package data
-   if (c_Object.contains("target-support-package")) {
-      int32_t s32_Result = orc_Config.FromJsonObject(c_Object["target-support-package"].toObject());
-      if (s32_Result != C_NO_ERR) {
-         return s32_Result;
+   for (const QJsonValue& c_Value : c_Array) {
+      if (c_Value.isObject()) {
+         C_OscViewData c_View;
+         c_View.FromJsonObject(c_Value.toObject());
+         orc_Views.append(c_View);
       }
    }
    
@@ -253,24 +237,22 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadJson(C_OscTargetSupportPackage
 /*!
    \brief Save to JSON file
 
-   \param[in] orc_Config Configuration to save
-   \param[in] orc_NodePath Node path
+   \param[in] orc_Views List of views to save
    \param[in] orc_Path   Path to file to save to
 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveJson(const C_OscTargetSupportPackage &orc_Config,
-                                                        const QString &orc_NodePath,
-                                                        const QString &orc_Path) {
+int32_t C_OscViewDataFiler::h_SaveJson(const QList<C_OscViewData> &orc_Views,
+                                        const QString &orc_Path) {
    using namespace stw::errors;
    
-   QJsonObject c_Object;
+   QJsonArray c_Array;
+   for (const C_OscViewData& c_View : orc_Views) {
+      c_Array.append(c_View.ToJsonObject());
+   }
    
-   c_Object["node-path"] = orc_NodePath;
-   c_Object["target-support-package"] = orc_Config.ToJsonObject();
-   
-   QJsonDocument c_Doc(c_Object);
+   QJsonDocument c_Doc(c_Array);
    
    QFile c_File(orc_Path);
    if (!c_File.open(QIODevice::WriteOnly)) {
@@ -286,16 +268,14 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveJson(const C_OscTargetSupportP
 /*!
    \brief Load from XML file
 
-   \param[out] orc_Config Configuration to load into
-   \param[out] orc_NodePath Node path (output)
+   \param[out] orc_Views List of views to load into
    \param[in]  orc_Path   Path to file to load from
 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadXml(C_OscTargetSupportPackage &orc_Config,
-                                                       QString &orc_NodePath,
-                                                       const QString &orc_Path) {
+int32_t C_OscViewDataFiler::h_LoadXml(QList<C_OscViewData> &orc_Views,
+                                       const QString &orc_Path) {
    using namespace stw::errors;
    
    QFile c_File(orc_Path);
@@ -309,23 +289,20 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadXml(C_OscTargetSupportPackage 
    }
    
    QDomElement c_RootElement = c_Doc.documentElement();
-   if (c_RootElement.tagName() != "target-support-packages") {
+   if (c_RootElement.tagName() != "views") {
       return C_CONFIG;
    }
    
-   // Read node path
-   QDomNode c_NodePathNode = c_RootElement.namedItem("node-path");
-   if (!c_NodePathNode.isNull()) {
-      orc_NodePath = c_NodePathNode.toElement().text();
-   }
+   orc_Views.clear();
+   QDomNode c_Node = c_RootElement.firstChild();
    
-   // Read target support package data
-   QDomNode c_TspNode = c_RootElement.namedItem("target-support-package");
-   if (!c_TspNode.isNull()) {
-      int32_t s32_Result = orc_Config.FromQDomElement(c_TspNode.toElement());
-      if (s32_Result != C_NO_ERR) {
-         return s32_Result;
+   while (!c_Node.isNull()) {
+      if (c_Node.isElement() && c_Node.toElement().tagName() == "view") {
+         C_OscViewData c_View;
+         c_View.FromQDomElement(c_Node.toElement());
+         orc_Views.append(c_View);
       }
+      c_Node = c_Node.nextSibling();
    }
    
    return C_NO_ERR;
@@ -335,30 +312,24 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadXml(C_OscTargetSupportPackage 
 /*!
    \brief Save to XML file
 
-   \param[in] orc_Config Configuration to save
-   \param[in] orc_NodePath Node path
+   \param[in] orc_Views List of views to save
    \param[in] orc_Path   Path to file to save to
 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveXml(const C_OscTargetSupportPackage &orc_Config,
-                                                       const QString &orc_NodePath,
-                                                       const QString &orc_Path) {
+int32_t C_OscViewDataFiler::h_SaveXml(const QList<C_OscViewData> &orc_Views,
+                                       const QString &orc_Path) {
    using namespace stw::errors;
    
-   QDomDocument c_Doc("target-support-packages");
-   QDomElement c_RootElement = c_Doc.createElement("target-support-packages");
+   QDomDocument c_Doc("views");
+   QDomElement c_RootElement = c_Doc.createElement("views");
    c_Doc.appendChild(c_RootElement);
    
-   // Add node path
-   QDomElement c_NodePathElement = c_Doc.createElement("node-path");
-   c_NodePathElement.appendChild(c_Doc.createTextNode(orc_NodePath));
-   c_RootElement.appendChild(c_NodePathElement);
-   
-   // Add target support package
-   QDomElement c_TspElement = orc_Config.ToQDomDocument(c_Doc, "target-support-package");
-   c_RootElement.appendChild(c_TspElement);
+   for (const C_OscViewData& c_View : orc_Views) {
+      QDomElement c_ViewElement = c_View.ToQDomDocument(c_Doc, "view");
+      c_RootElement.appendChild(c_ViewElement);
+   }
    
    QFile c_File(orc_Path);
    if (!c_File.open(QIODevice::WriteOnly)) {
