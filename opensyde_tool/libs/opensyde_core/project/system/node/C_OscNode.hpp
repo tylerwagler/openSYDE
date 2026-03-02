@@ -27,6 +27,9 @@
 #include "stwtypes.hpp"
 #include <QList>
 #include <QString>
+#include <QDomDocument>
+#include <QJsonObject>
+#include <QDataStream>
 #include <vector>
 
 /* -- Namespace
@@ -217,28 +220,37 @@ public:
                          const uint32_t ou32_ListIndex,
                          const uint32_t ou32_ElementIndex);
 
+  // Serialization methods
+  int32_t ToQDataStream(QDataStream &ro_DataStream) const;
+  int32_t FromQDataStream(QDataStream &ro_DataStream);
+  QJsonObject ToJsonObject() const;
+  int32_t FromJsonObject(const QJsonObject &ro_Json);
+  QDomElement ToQDomDocument(QDomDocument &ro_Doc,
+                             const QString& orc_RootElementName = "node") const;
+  int32_t FromQDomElement(const QDomElement &ro_Element);
+
   const C_OscDeviceDefinition
       *pc_DeviceDefinition; ///< Pointer to device definition
   uint32_t u32_SubDeviceIndex;
   QString c_DeviceType; ///< Node type: for non multi-cpu devices
                         ///< (C_OscDeviceDefinition::c_DeviceName =
-  ///< C_OscNode::c_DeviceType) for multi-cpu devices
-  ///< (C_OscSubDeviceDefinition::c_DeviceName = C_OscNode::c_DeviceType).
-  ///< Simply put: When the device type of multi-cpu device is needed:
-  ///< "C_OscNode::pc_DeviceDefinition->c_DeviceName" will do the trick.
+                        ///< C_OscNode::c_DeviceType) for multi-cpu devices
+                        ///< (C_OscSubDeviceDefinition::c_DeviceName = C_OscNode::c_DeviceType).
+                        ///< Simply put: When the device type of multi-cpu device is needed:
+                        ///< "C_OscNode::pc_DeviceDefinition->c_DeviceName" will do the trick.
   C_OscNodeProperties c_Properties;     ///< General node properties
   QList<C_OscNodeDataPool> c_DataPools; ///< All datapools assigned to this
                                         ///< node, expected type order:
-  ///< DIAG, NVM then COM
+                                        ///< DIAG, NVM then COM
   bool q_DatapoolAutoNvmStartAddress; ///< Flag if the Datapool NvM start will
                                       ///< be calculate automatically
 
   QList<C_OscNodeApplication>
       c_Applications; ///< All data blocks assigned to this node
   QList<C_OscCanProtocol> c_ComProtocols; ///< All node specific information
-  ///< for related communication protocol.
-  ///< Created if necessary.
-  ///< Maximum size equal to number of possible com protocol types.
+                                          ///< for related communication protocol.
+                                          ///< Created if necessary.
+                                          ///< Maximum size equal to number of possible com protocol types.
   C_OscHalcConfig c_HalcConfig; ///< Optional HALC configuration for this node
   QHash<uint8_t, C_OscCanOpenManagerInfo>
       c_CanOpenManagers; ///< CANopen managers grouped by their

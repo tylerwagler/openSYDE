@@ -1403,14 +1403,14 @@ int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode &orc_Node,
       do {
         C_OscNodeDataPool c_CurDataPool;
         if (orc_BasePath.isEmpty()) {
-          s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPool(c_CurDataPool,
+          s32_Retval = C_OscNodeDataPoolFiler::h_LoadFilePool(c_CurDataPool,
                                                               orc_XmlParser);
         } else {
           const QString c_FileName =
               C_OscNodeDataPoolFiler::h_GetFileName(c_CurDataPool.c_Name);
           const QString c_CombinedFileName =
               C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
-          s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolFile(
+          s32_Retval = C_OscNodeDataPoolFiler::h_LoadFilePoolFile(
               c_CurDataPool, c_CombinedFileName);
         }
         if (s32_Retval != C_NO_ERR) {
@@ -1482,14 +1482,14 @@ int32_t C_OscNodeFiler::mh_SaveDataPools(
     orc_XmlParser.CreateAndSelectNodeChild("data-pool");
     if (orc_BasePath.isEmpty()) {
       // To string
-      C_OscNodeDataPoolFiler::h_SaveDataPool(rc_CurDatapool, orc_XmlParser);
+      C_OscNodeDataPoolFiler::h_SaveFilePool(rc_CurDatapool, orc_XmlParser);
     } else {
       const QString c_FileName =
           C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
       const QString c_CombinedFileName =
           C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
       // Save datapool file
-      s32_Retval = C_OscNodeDataPoolFiler::h_SaveDataPoolFile(
+      s32_Retval = C_OscNodeDataPoolFiler::h_SaveFilePoolFile(
           rc_CurDatapool, c_CombinedFileName);
       // Set file reference
       orc_XmlParser.SetNodeContent(c_FileName);
@@ -1528,7 +1528,7 @@ int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig &orc_HalcConfig,
   if (orc_XmlParser.SelectNodeChild("halc-file") == "halc-file") {
     if (orc_BasePath.isEmpty()) {
       // From string
-      s32_Retval = C_OscHalcConfigFiler::h_LoadData(
+      s32_Retval = C_OscHalcConfigFiler::h_LoadFile(
           orc_HalcConfig, orc_XmlParser, orc_BasePath);
     } else {
       s32_Retval = C_OscHalcConfigFiler::h_LoadFile(
@@ -1569,7 +1569,7 @@ int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig &orc_HalcConfig,
     orc_XmlParser.CreateAndSelectNodeChild("halc-file");
     if (orc_BasePath.isEmpty()) {
       // To string
-      s32_Retval = C_OscHalcConfigFiler::h_SaveData(
+      s32_Retval = C_OscHalcConfigFiler::h_SaveFile(
           orc_HalcConfig, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
     } else {
       // const QString c_FileName =
@@ -1619,7 +1619,7 @@ int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(
       "can-open-managers-file") {
     if (orc_BasePath.isEmpty()) {
       // From string
-      s32_Retval = C_OscCanOpenManagerFiler::h_LoadData(
+      s32_Retval = C_OscCanOpenManagerFiler::h_LoadFile(
           orc_CanOpenManagers, orc_XmlParser, orc_BasePath);
     } else {
       s32_Retval = C_OscCanOpenManagerFiler::h_LoadFile(
@@ -1664,7 +1664,7 @@ int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(
     orc_XmlParser.CreateAndSelectNodeChild("can-open-managers-file");
     if (orc_BasePath.isEmpty()) {
       // To string
-      C_OscCanOpenManagerFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
+      C_OscCanOpenManagerFiler::h_SaveFile(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
                                            orc_NodeIndicesToNameMap);
     } else {
       const QString c_FileName = "can_open_managers.xml";
@@ -1711,7 +1711,7 @@ int32_t C_OscNodeFiler::mh_LoadDataLoggers(
       "data-loggers-file") {
     if (orc_BasePath.isEmpty()) {
       // From string
-      s32_Retval = C_OscDataLoggerJobFiler::h_LoadData(orc_DataLoggerJobs,
+      s32_Retval = C_OscDataLoggerJobFiler::h_LoadFile(orc_DataLoggerJobs,
                                                        orc_XmlParser);
     } else {
       s32_Retval = C_OscDataLoggerJobFiler::h_LoadFile(
@@ -1751,7 +1751,7 @@ int32_t C_OscNodeFiler::mh_SaveDataLoggers(
     orc_XmlParser.CreateAndSelectNodeChild("data-loggers-file");
     if (orc_BasePath.isEmpty()) {
       // To string
-      C_OscDataLoggerJobFiler::h_SaveData(orc_DataLoggerJobs, orc_XmlParser);
+      C_OscDataLoggerJobFiler::h_SaveFile(orc_DataLoggerJobs, orc_XmlParser);
     } else {
       // const QString c_FileName =
       // C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);

@@ -14,7 +14,7 @@
  */
 #include "precomp_headers.hpp"
 
-#include "C_OscParamSetRawNodeFiler_New.hpp"
+#include "C_OscParamSetRawNodeFiler.hpp"
 #include "stwerrors.hpp"
 #include <QTextStream>
 #include <QJsonDocument>
@@ -60,7 +60,7 @@ using namespace stw::errors;
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_LoadFile(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node) {
+int32_t C_OscParamSetRawNodeFiler::h_LoadFile(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node) {
    // Determine file format by extension
    QString c_LowerPath = c_FilePath.toLower();
    
@@ -86,7 +86,7 @@ int32_t C_OscParamSetRawNodeFiler_New::h_LoadFile(const QString &c_FilePath, C_O
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_SaveFile(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node) {
+int32_t C_OscParamSetRawNodeFiler::h_SaveFile(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node) {
    // Determine file format by extension
    QString c_LowerPath = c_FilePath.toLower();
    
@@ -112,7 +112,7 @@ int32_t C_OscParamSetRawNodeFiler_New::h_SaveFile(const QString &c_FilePath, con
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_LoadBinary(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node) {
+int32_t C_OscParamSetRawNodeFiler::h_LoadBinary(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node) {
    QFile c_File(c_FilePath);
    if (!c_File.open(QIODevice::ReadOnly)) {
       return C_RD_WR;
@@ -138,7 +138,7 @@ int32_t C_OscParamSetRawNodeFiler_New::h_LoadBinary(const QString &c_FilePath, C
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_SaveBinary(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node) {
+int32_t C_OscParamSetRawNodeFiler::h_SaveBinary(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node) {
    QFile c_File(c_FilePath);
    if (!c_File.open(QIODevice::WriteOnly)) {
       return C_RD_WR;
@@ -164,7 +164,7 @@ int32_t C_OscParamSetRawNodeFiler_New::h_SaveBinary(const QString &c_FilePath, c
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_LoadJson(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node) {
+int32_t C_OscParamSetRawNodeFiler::h_LoadJson(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node) {
    QFile c_File(c_FilePath);
    if (!c_File.open(QIODevice::ReadOnly | QIODevice::Text)) {
       return C_RD_WR;
@@ -200,7 +200,7 @@ int32_t C_OscParamSetRawNodeFiler_New::h_LoadJson(const QString &c_FilePath, C_O
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_SaveJson(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node) {
+int32_t C_OscParamSetRawNodeFiler::h_SaveJson(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node) {
    QJsonObject c_Object = rc_Node.ToJsonObject();
    QJsonDocument c_Doc(c_Object);
    
@@ -226,7 +226,7 @@ int32_t C_OscParamSetRawNodeFiler_New::h_SaveJson(const QString &c_FilePath, con
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_LoadXml(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node) {
+int32_t C_OscParamSetRawNodeFiler::h_LoadXml(const QString &c_FilePath, C_OscParamSetRawNode &rc_Node) {
    QFile c_File(c_FilePath);
    if (!c_File.open(QIODevice::ReadOnly)) {
       return C_RD_WR;
@@ -258,7 +258,7 @@ int32_t C_OscParamSetRawNodeFiler_New::h_LoadXml(const QString &c_FilePath, C_Os
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_SaveXml(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node) {
+int32_t C_OscParamSetRawNodeFiler::h_SaveXml(const QString &c_FilePath, const C_OscParamSetRawNode &rc_Node) {
    QDomDocument c_Doc("param-set-raw-node");
    
    QDomElement c_RootElement = rc_Node.ToQDomDocument(c_Doc, "param-set-raw-node");

@@ -12,7 +12,7 @@
  */
 #include "precomp_headers.hpp"
 
-#include "C_OscTargetSupportPackageFiler_New.hpp"
+#include "C_OscTargetSupportPackageFiler.hpp"
 #include "C_OscTargetSupportPackage.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -50,7 +50,7 @@ using namespace stw::opensyde_core;
 /*! \brief  Default constructor
  */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscTargetSupportPackageFiler_New::C_OscTargetSupportPackageFiler_New() {
+C_OscTargetSupportPackageFiler::C_OscTargetSupportPackageFiler() {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ C_OscTargetSupportPackageFiler_New::C_OscTargetSupportPackageFiler_New() {
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadFile(C_OscTargetSupportPackage &orc_Config,
+int32_t C_OscTargetSupportPackageFiler::h_LoadFile(C_OscTargetSupportPackage &orc_Config,
                                                         QString &orc_NodePath,
                                                         const QString &orc_Path) {
    using namespace stw::errors;
@@ -92,7 +92,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadFile(C_OscTargetSupportPackage
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveFile(const C_OscTargetSupportPackage &orc_Config,
+int32_t C_OscTargetSupportPackageFiler::h_SaveFile(const C_OscTargetSupportPackage &orc_Config,
                                                         const QString &orc_NodePath,
                                                         const QString &orc_Path) {
    using namespace stw::errors;
@@ -120,7 +120,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveFile(const C_OscTargetSupportP
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadBinary(C_OscTargetSupportPackage &orc_Config,
+int32_t C_OscTargetSupportPackageFiler::h_LoadBinary(C_OscTargetSupportPackage &orc_Config,
                                                           QString &orc_NodePath,
                                                           const QString &orc_Path) {
    using namespace stw::errors;
@@ -168,7 +168,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadBinary(C_OscTargetSupportPacka
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveBinary(const C_OscTargetSupportPackage &orc_Config,
+int32_t C_OscTargetSupportPackageFiler::h_SaveBinary(const C_OscTargetSupportPackage &orc_Config,
                                                           const QString &orc_NodePath,
                                                           const QString &orc_Path) {
    using namespace stw::errors;
@@ -212,7 +212,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveBinary(const C_OscTargetSuppor
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadJson(C_OscTargetSupportPackage &orc_Config,
+int32_t C_OscTargetSupportPackageFiler::h_LoadJson(C_OscTargetSupportPackage &orc_Config,
                                                         QString &orc_NodePath,
                                                         const QString &orc_Path) {
    using namespace stw::errors;
@@ -260,7 +260,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadJson(C_OscTargetSupportPackage
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveJson(const C_OscTargetSupportPackage &orc_Config,
+int32_t C_OscTargetSupportPackageFiler::h_SaveJson(const C_OscTargetSupportPackage &orc_Config,
                                                         const QString &orc_NodePath,
                                                         const QString &orc_Path) {
    using namespace stw::errors;
@@ -293,7 +293,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveJson(const C_OscTargetSupportP
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadXml(C_OscTargetSupportPackage &orc_Config,
+int32_t C_OscTargetSupportPackageFiler::h_LoadXml(C_OscTargetSupportPackage &orc_Config,
                                                        QString &orc_NodePath,
                                                        const QString &orc_Path) {
    using namespace stw::errors;
@@ -342,7 +342,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadXml(C_OscTargetSupportPackage 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveXml(const C_OscTargetSupportPackage &orc_Config,
+int32_t C_OscTargetSupportPackageFiler::h_SaveXml(const C_OscTargetSupportPackage &orc_Config,
                                                        const QString &orc_NodePath,
                                                        const QString &orc_Path) {
    using namespace stw::errors;

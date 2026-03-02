@@ -30,7 +30,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscTargetSupportPackageFiler_New {
+class C_OscTargetSupportPackageFiler {
 public:
    static int32_t h_LoadFile(C_OscTargetSupportPackage &orc_Config,
                              QString &orc_NodePath,
@@ -61,7 +61,7 @@ public:
                             const QString &orc_Path);
 
 private:
-   C_OscTargetSupportPackageFiler_New();
+   C_OscTargetSupportPackageFiler();
 };
 
 /* -- Extern Global Variables

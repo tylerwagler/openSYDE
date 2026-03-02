@@ -16,6 +16,10 @@
 #include "precomp_headers.hpp"
 
 #include <QMap>
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include "stwerrors.hpp"
 
@@ -2533,3 +2537,257 @@ bool C_OscNode::m_CheckErrorTooFewElements(
   }
   return orq_TooFewListsOrElements;
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDataStream (binary format)
+   
+   \param[in,out]  ro_DataStream    Data stream to write to
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNode::ToQDataStream(QDataStream &ro_DataStream) const {
+   using namespace stw::errors;
+   int32_t s32_Retval = C_NO_ERR;
+   
+   // Serialize simple fields
+   ro_DataStream << this->u32_SubDeviceIndex;
+   ro_DataStream << this->c_DeviceType;
+   ro_DataStream << this->q_DatapoolAutoNvmStartAddress;
+   
+   // Serialize already-migrated dependencies
+   uint32_t u32_Count;
+   
+   // c_DataLoggerJobs (already migrated)
+   u32_Count = static_cast<uint32_t>(this->c_DataLoggerJobs.size());
+   ro_DataStream << u32_Count;
+   for (const auto& rc_Job : this->c_DataLoggerJobs) {
+      s32_Retval = rc_Job.ToQDataStream(ro_DataStream);
+      if (s32_Retval != C_NO_ERR) return s32_Retval;
+   }
+   
+   // c_XappProperties (already migrated)
+   s32_Retval = this->c_XappProperties.ToQDataStream(ro_DataStream);
+   if (s32_Retval != C_NO_ERR) return s32_Retval;
+   
+   // Placeholder for complex types that haven't been migrated yet
+   uint32_t u32_Placeholder = 0xFFFFFFFF;
+   ro_DataStream << u32_Placeholder; // c_Properties
+   ro_DataStream << u32_Placeholder; // c_DataPools
+   ro_DataStream << u32_Placeholder; // c_Applications
+   ro_DataStream << u32_Placeholder; // c_ComProtocols
+   ro_DataStream << u32_Placeholder; // c_HalcConfig
+   ro_DataStream << u32_Placeholder; // c_CanOpenManagers
+   
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDataStream (binary format)
+   
+   \param[in,out]  ro_DataStream    Data stream to read from
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNode::FromQDataStream(QDataStream &ro_DataStream) {
+   using namespace stw::errors;
+   int32_t s32_Retval = C_NO_ERR;
+   uint32_t u32_Count = 0;
+   uint32_t u32_Placeholder = 0;
+   
+   // Deserialize simple fields
+   ro_DataStream >> this->u32_SubDeviceIndex;
+   ro_DataStream >> this->c_DeviceType;
+   ro_DataStream >> this->q_DatapoolAutoNvmStartAddress;
+   
+   // Deserialize c_DataLoggerJobs (already migrated)
+   ro_DataStream >> u32_Count;
+   this->c_DataLoggerJobs.clear();
+   this->c_DataLoggerJobs.reserve(u32_Count);
+   for (uint32_t u32_I = 0; u32_I < u32_Count; ++u32_I) {
+      C_OscDataLoggerJob c_Job;
+      s32_Retval = c_Job.FromQDataStream(ro_DataStream);
+      if (s32_Retval != C_NO_ERR) return s32_Retval;
+      this->c_DataLoggerJobs.append(c_Job);
+   }
+   
+   // Deserialize c_XappProperties (already migrated)
+   s32_Retval = this->c_XappProperties.FromQDataStream(ro_DataStream);
+   if (s32_Retval != C_NO_ERR) return s32_Retval;
+   
+   // Skip placeholders for complex types
+   ro_DataStream >> u32_Placeholder; // c_Properties
+   ro_DataStream >> u32_Placeholder; // c_DataPools
+   ro_DataStream >> u32_Placeholder; // c_Applications
+   ro_DataStream >> u32_Placeholder; // c_ComProtocols
+   ro_DataStream >> u32_Placeholder; // c_HalcConfig
+   ro_DataStream >> u32_Placeholder; // c_CanOpenManagers
+   
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QJsonObject (JSON format)
+   
+   \return JSON object containing serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscNode::ToJsonObject() const {
+   using namespace stw::errors;
+   QJsonObject c_Object;
+   
+   // Serialize simple fields
+   c_Object["sub-device-index"] = static_cast<qint64>(this->u32_SubDeviceIndex);
+   c_Object["device-type"] = this->c_DeviceType;
+   c_Object["datapool-auto-nvm-start-address"] = this->q_DatapoolAutoNvmStartAddress;
+   
+   // Serialize already-migrated dependencies
+   QJsonArray c_DataLoggerJobsArray;
+   for (const auto& rc_Job : this->c_DataLoggerJobs) {
+      c_DataLoggerJobsArray.append(rc_Job.ToJsonObject());
+   }
+   c_Object["data-logger-jobs"] = c_DataLoggerJobsArray;
+   
+   c_Object["xapp-properties"] = this->c_XappProperties.ToJsonObject();
+   
+   // Placeholder for complex types that haven't been migrated yet
+   c_Object["properties-placeholder"] = true;
+   c_Object["data-pools-placeholder"] = true;
+   c_Object["applications-placeholder"] = true;
+   c_Object["com-protocols-placeholder"] = true;
+   c_Object["halc-config-placeholder"] = true;
+   c_Object["can-open-managers-placeholder"] = true;
+   
+   return c_Object;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QJsonObject (JSON format)
+   
+   \param[in]  ro_Json    JSON object to read from
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNode::FromJsonObject(const QJsonObject &ro_Json) {
+   using namespace stw::errors;
+   int32_t s32_Retval = C_NO_ERR;
+   
+   // Deserialize simple fields
+   this->u32_SubDeviceIndex = static_cast<uint32_t>(ro_Json["sub-device-index"].toVariant().toUInt());
+   this->c_DeviceType = ro_Json["device-type"].toString();
+   this->q_DatapoolAutoNvmStartAddress = ro_Json["datapool-auto-nvm-start-address"].toBool();
+   
+   // Deserialize c_DataLoggerJobs (already migrated)
+   QJsonArray c_DataLoggerJobsArray = ro_Json["data-logger-jobs"].toArray();
+   this->c_DataLoggerJobs.clear();
+   this->c_DataLoggerJobs.reserve(c_DataLoggerJobsArray.size());
+   for (const QJsonValue& rc_Value : c_DataLoggerJobsArray) {
+      C_OscDataLoggerJob c_Job;
+      s32_Retval = c_Job.FromJsonObject(rc_Value.toObject());
+      if (s32_Retval != C_NO_ERR) return s32_Retval;
+      this->c_DataLoggerJobs.append(c_Job);
+   }
+   
+   // Deserialize c_XappProperties (already migrated)
+   s32_Retval = this->c_XappProperties.FromJsonObject(ro_Json["xapp-properties"].toObject());
+   if (s32_Retval != C_NO_ERR) return s32_Retval;
+   
+   // Skip placeholders for complex types
+   // (They will be deserialized in future iterations)
+   
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDomDocument (XML format)
+   
+   \param[in,out]  ro_Doc              XML document
+   \param[in]      orc_RootElementName  Name for the root element
+   
+   \return XML element containing serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscNode::ToQDomDocument(QDomDocument &ro_Doc, 
+                                      const QString& orc_RootElementName) const {
+   QDomElement c_Element = ro_Doc.createElement(orc_RootElementName);
+   
+   // Serialize simple fields
+   c_Element.setAttribute("sub-device-index", QString::number(this->u32_SubDeviceIndex));
+   c_Element.setAttribute("device-type", this->c_DeviceType);
+   c_Element.setAttribute("datapool-auto-nvm-start-address", this->q_DatapoolAutoNvmStartAddress);
+   
+   // Serialize already-migrated dependencies
+   QDomElement c_DataLoggerJobsElement = ro_Doc.createElement("data-logger-jobs");
+   for (const auto& rc_Job : this->c_DataLoggerJobs) {
+      QDomElement c_JobElement = rc_Job.ToQDomDocument(ro_Doc, "data-logger-job");
+      c_DataLoggerJobsElement.appendChild(c_JobElement);
+   }
+   c_Element.appendChild(c_DataLoggerJobsElement);
+   
+   QDomElement c_XappElement = this->c_XappProperties.ToQDomDocument(ro_Doc, "xapp-properties");
+   c_Element.appendChild(c_XappElement);
+   
+   // Placeholder for complex types that haven't been migrated yet
+   QDomElement c_PlaceholderElement = ro_Doc.createElement("complex-types-placeholder");
+   c_PlaceholderElement.setAttribute("properties", "not-migrated-yet");
+   c_PlaceholderElement.setAttribute("data-pools", "not-migrated-yet");
+   c_PlaceholderElement.setAttribute("applications", "not-migrated-yet");
+   c_PlaceholderElement.setAttribute("com-protocols", "not-migrated-yet");
+   c_PlaceholderElement.setAttribute("halc-config", "not-migrated-yet");
+   c_PlaceholderElement.setAttribute("can-open-managers", "not-migrated-yet");
+   c_Element.appendChild(c_PlaceholderElement);
+   
+   return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDomElement (XML format)
+   
+   \param[in]  ro_Element    XML element to read from
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNode::FromQDomElement(const QDomElement &ro_Element) {
+   using namespace stw::errors;
+   int32_t s32_Retval = C_NO_ERR;
+   
+   // Deserialize simple fields
+   this->u32_SubDeviceIndex = static_cast<uint32_t>(ro_Element.attribute("sub-device-index").toUInt());
+   this->c_DeviceType = ro_Element.attribute("device-type");
+   this->q_DatapoolAutoNvmStartAddress = (ro_Element.attribute("datapool-auto-nvm-start-address").toLower() == "true");
+   
+   // Deserialize c_DataLoggerJobs (already migrated)
+   QDomElement c_DataLoggerJobsElement = ro_Element.firstChildElement("data-logger-jobs");
+   QDomNode c_Node = c_DataLoggerJobsElement.firstChild();
+   this->c_DataLoggerJobs.clear();
+   while (!c_Node.isNull()) {
+      QDomElement c_JobElement = c_Node.toElement();
+      if (!c_JobElement.isNull()) {
+         C_OscDataLoggerJob c_Job;
+         s32_Retval = c_Job.FromQDomElement(c_JobElement);
+         if (s32_Retval != C_NO_ERR) return s32_Retval;
+         this->c_DataLoggerJobs.append(c_Job);
+      }
+      c_Node = c_Node.nextSibling();
+   }
+   
+   // Deserialize c_XappProperties (already migrated)
+   QDomElement c_XappElement = ro_Element.firstChildElement("xapp-properties");
+   s32_Retval = this->c_XappProperties.FromQDomElement(c_XappElement);
+   if (s32_Retval != C_NO_ERR) return s32_Retval;
+   
+   // Skip placeholders for complex types
+   // (They will be deserialized in future iterations)
+   
+   return s32_Retval;
+}
+

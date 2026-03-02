@@ -34,7 +34,7 @@ namespace opensyde_core {
  */
 
 /// File handler for parameter set raw node data with Qt-native serialization
-class C_OscParamSetRawNodeFiler_New {
+class C_OscParamSetRawNodeFiler {
 public:
    //----------------------------------------------------------------------------------------------------------------------
    /*!

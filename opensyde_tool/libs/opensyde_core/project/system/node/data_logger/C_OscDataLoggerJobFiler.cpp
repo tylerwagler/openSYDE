@@ -12,8 +12,13 @@
  */
 #include "precomp_headers.hpp"
 
-#include "C_OscDataLoggerJobFiler_New.hpp"
+#include "C_OscDataLoggerJobFiler.hpp"
 #include "C_OscDataLoggerJob.hpp"
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QJsonObject>
+#include <QDomDocument>
+#include <QDomElement>
 #include "C_OscDataLoggerJobProperties.hpp"
 #include "C_OscDataLoggerJobAdditionalTriggerProperties.hpp"
 #include "C_OscDataLoggerDataElementReference.hpp"
@@ -54,7 +59,7 @@ using namespace stw::opensyde_core;
 /*! \brief  Default constructor
  */
 //----------------------------------------------------------------------------------------------------------------------
-C_OscDataLoggerJobFiler_New::C_OscDataLoggerJobFiler_New() {
+C_OscDataLoggerJobFiler::C_OscDataLoggerJobFiler() {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -67,7 +72,7 @@ C_OscDataLoggerJobFiler_New::C_OscDataLoggerJobFiler_New() {
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadFile(QList<C_OscDataLoggerJob> &orc_Config,
+int32_t C_OscDataLoggerJobFiler::h_LoadFile(QList<C_OscDataLoggerJob> &orc_Config,
                                                 const QString &orc_Path) {
    using namespace stw::errors;
    
@@ -93,7 +98,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadFile(QList<C_OscDataLoggerJob> &orc_C
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_SaveFile(const QList<C_OscDataLoggerJob> &orc_Config,
+int32_t C_OscDataLoggerJobFiler::h_SaveFile(const QList<C_OscDataLoggerJob> &orc_Config,
                                                 const QString &orc_Path) {
    using namespace stw::errors;
    
@@ -119,7 +124,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_SaveFile(const QList<C_OscDataLoggerJob> 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadBinary(QList<C_OscDataLoggerJob> &orc_Config,
+int32_t C_OscDataLoggerJobFiler::h_LoadBinary(QList<C_OscDataLoggerJob> &orc_Config,
                                                   const QString &orc_Path) {
    using namespace stw::errors;
    
@@ -174,7 +179,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadBinary(QList<C_OscDataLoggerJob> &orc
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_SaveBinary(const QList<C_OscDataLoggerJob> &orc_Config,
+int32_t C_OscDataLoggerJobFiler::h_SaveBinary(const QList<C_OscDataLoggerJob> &orc_Config,
                                                    const QString &orc_Path) {
    using namespace stw::errors;
    
@@ -219,7 +224,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_SaveBinary(const QList<C_OscDataLoggerJob
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadJson(QList<C_OscDataLoggerJob> &orc_Config,
+int32_t C_OscDataLoggerJobFiler::h_LoadJson(QList<C_OscDataLoggerJob> &orc_Config,
                                                 const QString &orc_Path) {
    using namespace stw::errors;
    
@@ -276,7 +281,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadJson(QList<C_OscDataLoggerJob> &orc_C
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_SaveJson(const QList<C_OscDataLoggerJob> &orc_Config,
+int32_t C_OscDataLoggerJobFiler::h_SaveJson(const QList<C_OscDataLoggerJob> &orc_Config,
                                                  const QString &orc_Path) {
    using namespace stw::errors;
    
@@ -312,7 +317,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_SaveJson(const QList<C_OscDataLoggerJob> 
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadXml(QList<C_OscDataLoggerJob> &orc_Config,
+int32_t C_OscDataLoggerJobFiler::h_LoadXml(QList<C_OscDataLoggerJob> &orc_Config,
                                                const QString &orc_Path) {
    using namespace stw::errors;
    
@@ -367,7 +372,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadXml(QList<C_OscDataLoggerJob> &orc_Co
    \return C_NO_ERR on success, error code otherwise
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_SaveXml(const QList<C_OscDataLoggerJob> &orc_Config,
+int32_t C_OscDataLoggerJobFiler::h_SaveXml(const QList<C_OscDataLoggerJob> &orc_Config,
                                                 const QString &orc_Path) {
    using namespace stw::errors;
    
@@ -401,7 +406,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_SaveXml(const QList<C_OscDataLoggerJob> &
 
    \return C_NO_ERR on success, error code otherwise
 */
-int32_t C_OscDataLoggerJobFiler_New::mh_LoadJobData(C_OscDataLoggerJob &orc_Config,
+int32_t C_OscDataLoggerJobFiler::mh_LoadJobData(C_OscDataLoggerJob &orc_Config,
                                                      QDataStream& orc_Stream) {
    using namespace stw::errors;
    
@@ -436,7 +441,7 @@ int32_t C_OscDataLoggerJobFiler_New::mh_LoadJobData(C_OscDataLoggerJob &orc_Conf
 
    \return C_NO_ERR on success, error code otherwise
 */
-int32_t C_OscDataLoggerJobFiler_New::mh_SaveJobData(const C_OscDataLoggerJob &orc_Config,
+int32_t C_OscDataLoggerJobFiler::mh_SaveJobData(const C_OscDataLoggerJob &orc_Config,
                                                      QDataStream& orc_Stream) {
    using namespace stw::errors;
    
@@ -471,7 +476,7 @@ int32_t C_OscDataLoggerJobFiler_New::mh_SaveJobData(const C_OscDataLoggerJob &or
 
    \return C_NO_ERR on success, error code otherwise
 */
-int32_t C_OscDataLoggerJobFiler_New::mh_LoadJobProperties(C_OscDataLoggerJobProperties &orc_Config,
+int32_t C_OscDataLoggerJobFiler::mh_LoadJobProperties(C_OscDataLoggerJobProperties &orc_Config,
                                                            QDataStream& orc_Stream) {
    using namespace stw::errors;
    
@@ -518,7 +523,7 @@ int32_t C_OscDataLoggerJobFiler_New::mh_LoadJobProperties(C_OscDataLoggerJobProp
 
    \return C_NO_ERR on success, error code otherwise
 */
-int32_t C_OscDataLoggerJobFiler_New::mh_SaveJobProperties(const C_OscDataLoggerJobProperties &orc_Config,
+int32_t C_OscDataLoggerJobFiler::mh_SaveJobProperties(const C_OscDataLoggerJobProperties &orc_Config,
                                                            QDataStream& orc_Stream) {
    using namespace stw::errors;
    
@@ -559,7 +564,7 @@ int32_t C_OscDataLoggerJobFiler_New::mh_SaveJobProperties(const C_OscDataLoggerJ
 
    \return C_NO_ERR on success, error code otherwise
 */
-int32_t C_OscDataLoggerJobFiler_New::mh_LoadJobAdditionalTriggerProperties(
+int32_t C_OscDataLoggerJobFiler::mh_LoadJobAdditionalTriggerProperties(
     C_OscDataLoggerJobAdditionalTriggerProperties &orc_Config,
     QDataStream& orc_Stream) {
    using namespace stw::errors;
@@ -598,7 +603,7 @@ int32_t C_OscDataLoggerJobFiler_New::mh_LoadJobAdditionalTriggerProperties(
 
    \return C_NO_ERR on success, error code otherwise
 */
-int32_t C_OscDataLoggerJobFiler_New::mh_SaveJobAdditionalTriggerProperties(
+int32_t C_OscDataLoggerJobFiler::mh_SaveJobAdditionalTriggerProperties(
     const C_OscDataLoggerJobAdditionalTriggerProperties &orc_Config,
     QDataStream& orc_Stream) {
    using namespace stw::errors;
@@ -637,7 +642,7 @@ int32_t C_OscDataLoggerJobFiler_New::mh_SaveJobAdditionalTriggerProperties(
 
    \return C_NO_ERR on success, error code otherwise
 */
-int32_t C_OscDataLoggerJobFiler_New::mh_LoadConfiguredDataElements(
+int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElements(
     QList<C_OscDataLoggerDataElementReference> &orc_Config,
     QDataStream& orc_Stream) {
    using namespace stw::errors;
@@ -676,7 +681,7 @@ int32_t C_OscDataLoggerJobFiler_New::mh_LoadConfiguredDataElements(
 
    \return C_NO_ERR on success, error code otherwise
 */
-int32_t C_OscDataLoggerJobFiler_New::mh_SaveConfiguredDataElements(
+int32_t C_OscDataLoggerJobFiler::mh_SaveConfiguredDataElements(
     const QList<C_OscDataLoggerDataElementReference> &orc_Config,
     QDataStream& orc_Stream) {
    using namespace stw::errors;
@@ -709,7 +714,7 @@ int32_t C_OscDataLoggerJobFiler_New::mh_SaveConfiguredDataElements(
 
    \return C_NO_ERR on success, error code otherwise
 */
-int32_t C_OscDataLoggerJobFiler_New::mh_LoadConfiguredDataElement(
+int32_t C_OscDataLoggerJobFiler::mh_LoadConfiguredDataElement(
     C_OscDataLoggerDataElementReference &orc_Config,
     QDataStream& orc_Stream) {
    using namespace stw::errors;
@@ -742,7 +747,7 @@ int32_t C_OscDataLoggerJobFiler_New::mh_LoadConfiguredDataElement(
 
    \return C_NO_ERR on success, error code otherwise
 */
-int32_t C_OscDataLoggerJobFiler_New::mh_SaveConfiguredDataElement(
+int32_t C_OscDataLoggerJobFiler::mh_SaveConfiguredDataElement(
     const C_OscDataLoggerDataElementReference &orc_Config,
     QDataStream& orc_Stream) {
    using namespace stw::errors;

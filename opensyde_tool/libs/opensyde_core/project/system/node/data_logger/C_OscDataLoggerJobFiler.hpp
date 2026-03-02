@@ -30,7 +30,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscDataLoggerJobFiler_New {
+class C_OscDataLoggerJobFiler {
 public:
    static int32_t h_LoadFile(QList<C_OscDataLoggerJob> &orc_Config,
                              const QString &orc_Path);
@@ -53,7 +53,7 @@ public:
                             const QString &orc_Path);
 
 private:
-   C_OscDataLoggerJobFiler_New();
+   C_OscDataLoggerJobFiler();
 
    static int32_t mh_LoadJobData(C_OscDataLoggerJob &orc_Config,
                                  QDataStream& orc_Stream);

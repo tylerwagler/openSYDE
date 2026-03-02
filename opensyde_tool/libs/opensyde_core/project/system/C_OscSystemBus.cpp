@@ -164,11 +164,11 @@ int32_t C_OscSystemBus::ToQDataStream(QDataStream& orc_Stream) const {
    orc_Stream << static_cast<uint32_t>(this->e_Type);
    orc_Stream << this->c_Name;
    orc_Stream << this->c_Comment;
-   orc_Stream << this->u64_BitRate;
+   orc_Stream << static_cast<qint64>(this->u64_BitRate);
    orc_Stream << this->q_UseCanFd;
-   orc_Stream << this->u64_CanFdBitRate;
-   orc_Stream << this->u8_BusId;
-   orc_Stream << this->u16_RxTimeoutOffsetMs;
+   orc_Stream << static_cast<qint64>(this->u64_CanFdBitRate);
+   orc_Stream << static_cast<quint8>(this->u8_BusId);
+   orc_Stream << static_cast<quint16>(this->u16_RxTimeoutOffsetMs);
    orc_Stream << this->q_UseableForRouting;
    
    return s32_Retval;
@@ -190,11 +190,18 @@ int32_t C_OscSystemBus::FromQDataStream(QDataStream& orc_Stream) {
    orc_Stream >> u32_Type;
    orc_Stream >> this->c_Name;
    orc_Stream >> this->c_Comment;
-   orc_Stream >> this->u64_BitRate;
+   qint64 s64_Temp = 0;
+   orc_Stream >> s64_Temp;
+   this->u64_BitRate = static_cast<uint64_t>(s64_Temp);
    orc_Stream >> this->q_UseCanFd;
-   orc_Stream >> this->u64_CanFdBitRate;
-   orc_Stream >> this->u8_BusId;
-   orc_Stream >> this->u16_RxTimeoutOffsetMs;
+   orc_Stream >> s64_Temp;
+   this->u64_CanFdBitRate = static_cast<uint64_t>(s64_Temp);
+   quint8 u8_Temp = 0;
+   orc_Stream >> u8_Temp;
+   this->u8_BusId = u8_Temp;
+   quint16 u16_Temp = 0;
+   orc_Stream >> u16_Temp;
+   this->u16_RxTimeoutOffsetMs = u16_Temp;
    orc_Stream >> this->q_UseableForRouting;
    
    // Convert enum back from uint32_t
@@ -316,11 +323,11 @@ int32_t C_OscSystemBus::FromQDomElement(const QDomElement& orc_Element) {
    this->c_Name = orc_Element.attribute("name");
    this->c_Comment = orc_Element.attribute("comment");
    this->u64_BitRate = static_cast<uint64_t>(orc_Element.attribute("bitRate").toULongLong());
-   this->q_UseCanFd = orc_Element.attribute("useCanFd").toBool();
+   this->q_UseCanFd = (orc_Element.attribute("useCanFd").toLower() == "true");
    this->u64_CanFdBitRate = static_cast<uint64_t>(orc_Element.attribute("canFdBitRate").toULongLong());
    this->u8_BusId = static_cast<uint8_t>(orc_Element.attribute("busId").toUInt());
    this->u16_RxTimeoutOffsetMs = static_cast<uint16_t>(orc_Element.attribute("rxTimeoutOffsetMs").toUInt());
-   this->q_UseableForRouting = orc_Element.attribute("useableForRouting").toBool();
+   this->q_UseableForRouting = (orc_Element.attribute("useableForRouting").toLower() == "true");
    
    return s32_Retval;
 }
