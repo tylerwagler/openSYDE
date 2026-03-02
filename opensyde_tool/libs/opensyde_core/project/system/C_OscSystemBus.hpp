@@ -19,6 +19,10 @@
 #include "C_OscNodeDataPool.hpp"
 #include "stwtypes.hpp"
 #include <QString>
+#include <QDataStream>
+#include <QJsonObject>
+#include <QDomDocument>
+#include <QDomElement>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -39,6 +43,25 @@ public:
   virtual ~C_OscSystemBus(void);
 
   void CalcHash(uint32_t &oru32_HashValue) const;
+
+  // --------------------------------------------------------------------------
+  // Binary Serialization (QDataStream)
+  // --------------------------------------------------------------------------
+  int32_t ToQDataStream(QDataStream& orc_Stream) const;
+  int32_t FromQDataStream(QDataStream& orc_Stream);
+
+  // --------------------------------------------------------------------------
+  // JSON Serialization (QJsonObject)
+  // --------------------------------------------------------------------------
+  QJsonObject ToJsonObject() const;
+  int32_t FromJsonObject(const QJsonObject& orc_Object);
+
+  // --------------------------------------------------------------------------
+  // XML Serialization (QDomDocument)
+  // --------------------------------------------------------------------------
+  QDomElement ToQDomDocument(QDomDocument& orc_Doc, 
+                             const QString& orc_RootElementName = "bus") const;
+  int32_t FromQDomElement(const QDomElement& orc_Element);
 
   enum E_Type ///< type of bus
   {

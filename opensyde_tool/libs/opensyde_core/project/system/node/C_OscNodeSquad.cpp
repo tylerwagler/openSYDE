@@ -17,6 +17,10 @@
 #include "stwerrors.hpp"
 
 #include "C_OscNodeSquad.hpp"
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QDomDocument>
+#include <QDomElement>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -185,4 +189,149 @@ bool C_OscNodeSquad::h_CheckIsMultiDevice(
     }
   }
   return q_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDataStream (binary format)
+   
+   \param[in,out]  orc_Stream    Data stream to write to
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeSquad::ToQDataStream(QDataStream& orc_Stream) const {
+   int32_t s32_Retval = stw::errors::C_NO_ERR;
+   
+   orc_Stream << this->c_BaseName;
+   uint32_t u32_Count = static_cast<uint32_t>(this->c_SubNodeIndexes.size());
+   orc_Stream << u32_Count;
+   for (uint32_t u32_I = 0; u32_I < u32_Count; ++u32_I) {
+      orc_Stream << this->c_SubNodeIndexes[u32_I];
+   }
+   
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDataStream (binary format)
+   
+   \param[in,out]  orc_Stream    Data stream to read from
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeSquad::FromQDataStream(QDataStream& orc_Stream) {
+   int32_t s32_Retval = stw::errors::C_NO_ERR;
+   uint32_t u32_Count = 0;
+   
+   orc_Stream >> this->c_BaseName;
+   orc_Stream >> u32_Count;
+   this->c_SubNodeIndexes.clear();
+   this->c_SubNodeIndexes.reserve(u32_Count);
+   for (uint32_t u32_I = 0; u32_I < u32_Count; ++u32_I) {
+      uint32_t u32_Index = 0;
+      orc_Stream >> u32_Index;
+      this->c_SubNodeIndexes.append(u32_Index);
+   }
+   
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QJsonObject (JSON format)
+   
+   \return JSON object containing serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscNodeSquad::ToJsonObject() const {
+   QJsonObject c_Object;
+   
+   c_Object["baseName"] = this->c_BaseName;
+   QJsonArray c_Array;
+   for (uint32_t u32_I = 0; u32_I < static_cast<uint32_t>(this->c_SubNodeIndexes.size()); ++u32_I) {
+      c_Array.append(static_cast<qint64>(this->c_SubNodeIndexes[u32_I]));
+   }
+   c_Object["subNodeIndexes"] = c_Array;
+   
+   return c_Object;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QJsonObject (JSON format)
+   
+   \param[in]  orc_Object    JSON object containing serialized data
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeSquad::FromJsonObject(const QJsonObject& orc_Object) {
+   int32_t s32_Retval = stw::errors::C_NO_ERR;
+   
+   this->c_BaseName = orc_Object["baseName"].toString();
+   QJsonArray c_Array = orc_Object["subNodeIndexes"].toArray();
+   this->c_SubNodeIndexes.clear();
+   this->c_SubNodeIndexes.reserve(c_Array.size());
+   for (const QJsonValue& rc_Value : c_Array) {
+      this->c_SubNodeIndexes.append(static_cast<uint32_t>(rc_Value.toVariant().toUInt()));
+   }
+   
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDomElement (XML format)
+   
+   \param[in,out]  orc_Doc              XML document
+   \param[in]      orc_RootElementName  Name for the root element
+   
+   \return XML element containing serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscNodeSquad::ToQDomDocument(QDomDocument& orc_Doc, 
+                                           const QString& orc_RootElementName) const {
+   QDomElement c_Element = orc_Doc.createElement(orc_RootElementName);
+   
+   c_Element.setAttribute("baseName", this->c_BaseName);
+   QDomElement c_IndicesElement = orc_Doc.createElement("sub-node-indices");
+   for (uint32_t u32_I = 0; u32_I < static_cast<uint32_t>(this->c_SubNodeIndexes.size()); ++u32_I) {
+      QDomElement c_IndexElement = orc_Doc.createElement("index");
+      c_IndexElement.setAttribute("value", QString::number(this->c_SubNodeIndexes[u32_I]));
+      c_IndicesElement.appendChild(c_IndexElement);
+   }
+   c_Element.appendChild(c_IndicesElement);
+   
+   return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDomElement (XML format)
+   
+   \param[in]  orc_Element    XML element containing serialized data
+   
+   \return Error code
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeSquad::FromQDomElement(const QDomElement& orc_Element) {
+   int32_t s32_Retval = stw::errors::C_NO_ERR;
+   
+   this->c_BaseName = orc_Element.attribute("baseName");
+   QDomElement c_IndicesElement = orc_Element.firstChildElement("sub-node-indices");
+   this->c_SubNodeIndexes.clear();
+   
+   QDomNode c_Node = c_IndicesElement.firstChild();
+   while (!c_Node.isNull()) {
+      QDomElement c_IndexElement = c_Node.toElement();
+      if (!c_IndexElement.isNull()) {
+         this->c_SubNodeIndexes.append(static_cast<uint32_t>(c_IndexElement.attribute("value").toUInt()));
+      }
+      c_Node = c_Node.nextSibling();
+   }
+   
+   return s32_Retval;
 }

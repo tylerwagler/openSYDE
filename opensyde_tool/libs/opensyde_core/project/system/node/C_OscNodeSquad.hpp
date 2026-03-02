@@ -20,6 +20,10 @@
 #include <vector>
 
 #include "C_OscNode.hpp"
+#include <QDataStream>
+#include <QJsonObject>
+#include <QDomDocument>
+#include <QDomElement>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -47,6 +51,25 @@ public:
       const uint32_t ou32_NodeIndex,
       const QList<stw::opensyde_core::C_OscNodeSquad> &orc_AvailableGroups,
       uint32_t *const opu32_GroupIndex = NULL);
+
+  // --------------------------------------------------------------------------
+  // Binary Serialization (QDataStream)
+  // --------------------------------------------------------------------------
+  int32_t ToQDataStream(QDataStream& orc_Stream) const;
+  int32_t FromQDataStream(QDataStream& orc_Stream);
+
+  // --------------------------------------------------------------------------
+  // JSON Serialization (QJsonObject)
+  // --------------------------------------------------------------------------
+  QJsonObject ToJsonObject() const;
+  int32_t FromJsonObject(const QJsonObject& orc_Object);
+
+  // --------------------------------------------------------------------------
+  // XML Serialization (QDomDocument)
+  // --------------------------------------------------------------------------
+  QDomElement ToQDomDocument(QDomDocument& orc_Doc, 
+                             const QString& orc_RootElementName = "squad") const;
+  int32_t FromQDomElement(const QDomElement& orc_Element);
 
   static const QString
       hc_SEPARATOR;   ///< Default separator for GUI and device type checks
