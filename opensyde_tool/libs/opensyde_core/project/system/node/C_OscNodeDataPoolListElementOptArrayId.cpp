@@ -19,6 +19,7 @@
 
 #include "C_OscNodeDataPoolListElementOptArrayId.hpp"
 #include "C_SclChecksums.hpp"
+#include "stwerrors.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -279,4 +280,59 @@ C_OscNodeDataPoolListElementOptArrayId::GetArrayElementIndexOrZero(void) const {
 bool C_OscNodeDataPoolListElementOptArrayId::GetUseArrayElementIndex(
     void) const {
   return this->mq_UseArrayElementIndex;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load element ID from QDataStream
+
+   \param[out]    orc_Id       Element ID to load into
+   \param[in,out] orc_Stream   Stream to read from
+
+   \return
+   C_NO_ERR   data read
+   C_RD_WR    stream error
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolListElementOptArrayId::h_LoadFromStream(
+    C_OscNodeDataPoolListElementOptArrayId &orc_Id, QDataStream &orc_Stream) {
+  orc_Stream >> orc_Id.u32_NodeIndex;
+  orc_Stream >> orc_Id.u32_DataPoolIndex;
+  orc_Stream >> orc_Id.u32_ListIndex;
+  orc_Stream >> orc_Id.u32_ElementIndex;
+  orc_Stream >> orc_Id.mq_UseArrayElementIndex;
+  orc_Stream >> orc_Id.mu32_ArrayElementIndex;
+  orc_Stream >> orc_Id.mc_HalChannelName;
+
+  if (orc_Stream.status() != QDataStream::Ok) {
+    return stw::errors::C_RD_WR;
+  }
+  return stw::errors::C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save element ID to QDataStream
+
+   \param[in]     orc_Id       Element ID to save
+   \param[in,out] orc_Stream   Stream to write to
+
+   \return
+   C_NO_ERR   data written
+   C_RD_WR    stream error
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolListElementOptArrayId::h_SaveToStream(
+    const C_OscNodeDataPoolListElementOptArrayId &orc_Id,
+    QDataStream &orc_Stream) {
+  orc_Stream << orc_Id.u32_NodeIndex;
+  orc_Stream << orc_Id.u32_DataPoolIndex;
+  orc_Stream << orc_Id.u32_ListIndex;
+  orc_Stream << orc_Id.u32_ElementIndex;
+  orc_Stream << orc_Id.mq_UseArrayElementIndex;
+  orc_Stream << orc_Id.mu32_ArrayElementIndex;
+  orc_Stream << orc_Id.mc_HalChannelName;
+
+  if (orc_Stream.status() != QDataStream::Ok) {
+    return stw::errors::C_RD_WR;
+  }
+  return stw::errors::C_NO_ERR;
 }

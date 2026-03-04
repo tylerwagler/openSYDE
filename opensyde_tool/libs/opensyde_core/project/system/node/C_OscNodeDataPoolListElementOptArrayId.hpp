@@ -12,10 +12,12 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QDataStream>
 #include <QHashFunctions>
 #include <QString>
 
 #include "C_OscNodeDataPoolListElementId.hpp"
+#include "stwtypes.hpp"
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -56,6 +58,9 @@ public:
   uint32_t GetArrayElementIndexOrZero(void) const;
 
   bool GetUseArrayElementIndex(void) const;
+
+  static int32_t h_LoadFromStream(C_OscNodeDataPoolListElementOptArrayId &orc_Id, QDataStream &orc_Stream);
+  static int32_t h_SaveToStream(const C_OscNodeDataPoolListElementOptArrayId &orc_Id, QDataStream &orc_Stream);
 
 private:
   bool mq_UseArrayElementIndex;

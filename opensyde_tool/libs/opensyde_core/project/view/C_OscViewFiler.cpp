@@ -1456,8 +1456,7 @@ int32_t C_OscViewFiler::h_SaveXml(const QList<C_OscViewData> &orc_Views,
    }
    
    QTextStream c_Stream(&c_File);
-   c_Stream.setCodec("UTF-8");
-   c_Stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+   c_Stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
    c_Stream << c_Doc.toString();
    c_File.close();
    

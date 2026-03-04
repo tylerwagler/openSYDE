@@ -29,6 +29,7 @@
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
+#include "stwerrors.hpp"
 #include "stwtypes.hpp"
 #include <QString>
 #include <cstring>
@@ -4133,4 +4134,50 @@ void C_OscNodeDataPoolContent::GetValueAsLittleEndianBlob(
       break;
     }
   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load data pool content from QDataStream
+
+   \param[out]    orc_Content  Content to load into
+   \param[in,out] orc_Stream   Stream to read from
+
+   \return
+   C_NO_ERR   data read
+   C_RD_WR    stream error
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolContent::h_LoadFromStream(C_OscNodeDataPoolContent &orc_Content, QDataStream &orc_Stream) {
+  uint32_t u32_Type = 0;
+  orc_Stream >> u32_Type;
+  orc_Content.me_Type = static_cast<E_Type>(u32_Type);
+  orc_Stream >> orc_Content.mq_Array;
+  orc_Stream >> orc_Content.mc_Data;
+
+  if (orc_Stream.status() != QDataStream::Ok) {
+    return stw::errors::C_RD_WR;
+  }
+  return stw::errors::C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save data pool content to QDataStream
+
+   \param[in]     orc_Content  Content to save
+   \param[in,out] orc_Stream   Stream to write to
+
+   \return
+   C_NO_ERR   data written
+   C_RD_WR    stream error
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolContent::h_SaveToStream(const C_OscNodeDataPoolContent &orc_Content, QDataStream &orc_Stream) {
+  orc_Stream << static_cast<uint32_t>(orc_Content.me_Type);
+  orc_Stream << orc_Content.mq_Array;
+  orc_Stream << orc_Content.mc_Data;
+
+  if (orc_Stream.status() != QDataStream::Ok) {
+    return stw::errors::C_RD_WR;
+  }
+  return stw::errors::C_NO_ERR;
 }

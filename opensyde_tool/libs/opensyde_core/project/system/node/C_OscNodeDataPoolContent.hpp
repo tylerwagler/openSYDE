@@ -17,6 +17,7 @@
  */
 
 #include "stwtypes.hpp"
+#include <QDataStream>
 #include <QList>
 #include <QString>
 #include <vector>
@@ -192,6 +193,9 @@ public:
   const QByteArray *
   GetDataAccessConst(QRecursiveMutex **const oppc_CriticalSection) const;
   QByteArray *GetDataAccess(QRecursiveMutex **const oppc_CriticalSection);
+
+  static int32_t h_LoadFromStream(C_OscNodeDataPoolContent &orc_Content, QDataStream &orc_Stream);
+  static int32_t h_SaveToStream(const C_OscNodeDataPoolContent &orc_Content, QDataStream &orc_Stream);
 
 private:
   E_Type me_Type;     ///< Currently active type
