@@ -14,7 +14,7 @@
 
 #include "stwtypes.hpp"
 #include "constants.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiUtil.hpp"
 #include "C_PuiSvPc.hpp"
 
@@ -54,10 +54,10 @@ C_PuiSvPc::C_PuiSvPc(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvPc::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->me_CanDllType, sizeof(this->me_CanDllType), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_CustomCanDllPath.toStdString().c_str(),
-                                       this->mc_CustomCanDllPath.length(), oru32_HashValue);
-   this->mc_ConnectionData.CalcHash(oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->me_CanDllType,
+                                                   this->mc_CustomCanDllPath,
+                                                   this->mc_ConnectionData);
 
    C_PuiBsBox::CalcHash(oru32_HashValue);
 }

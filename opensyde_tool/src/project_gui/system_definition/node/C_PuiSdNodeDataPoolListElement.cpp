@@ -14,7 +14,7 @@
 
 #include "C_PuiSdNodeDataPoolListElement.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_logic;
@@ -50,5 +50,6 @@ C_PuiSdNodeDataPoolListElement::C_PuiSdNodeDataPoolListElement(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNodeDataPoolListElement::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_AutoMinMaxActive, sizeof(this->q_AutoMinMaxActive), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->q_AutoMinMaxActive);
 }

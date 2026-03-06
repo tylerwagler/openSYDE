@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbProgressBar.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -53,10 +53,11 @@ C_PuiSvDbProgressBar::C_PuiSvDbProgressBar() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbProgressBar::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_Alignment, sizeof(this->e_Alignment), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_ShowMinMax, sizeof(this->q_ShowMinMax), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_ShowUnit, sizeof(this->q_ShowUnit), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->e_Type,
+                                                  this->e_Alignment,
+                                                  this->q_ShowMinMax,
+                                                  this->q_ShowUnit);
    C_PuiSvDbWidgetBase::CalcHash(oru32_HashValue);
 }
 

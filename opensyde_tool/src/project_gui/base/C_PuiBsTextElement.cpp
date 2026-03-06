@@ -15,9 +15,10 @@
 #include "constants.hpp"
 #include "C_PuiBsTextElement.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
 
@@ -68,30 +69,15 @@ C_PuiBsTextElement::~C_PuiBsTextElement(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiBsTextElement::CalcHash(uint32_t & oru32_HashValue) const
 {
-   int32_t s32_Value;
    const QString c_Font = this->c_UiFontStyle.toString();
 
-   stw::scl::C_SclChecksums::CalcCRC32(c_Font.toStdString().c_str(), c_Font.length(), oru32_HashValue);
-
-   s32_Value = this->c_UiFontColorBright.red();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiFontColorBright.green();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiFontColorBright.blue();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiFontColorBright.alpha();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-
-   s32_Value = this->c_UiFontColorDark.red();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiFontColorDark.green();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiFontColorDark.blue();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiFontColorDark.alpha();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_UiText.toStdString().c_str(), this->c_UiText.length(), oru32_HashValue);
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              c_Font,
+                              this->c_UiFontColorBright.red(), this->c_UiFontColorBright.green(),
+                              this->c_UiFontColorBright.blue(), this->c_UiFontColorBright.alpha(),
+                              this->c_UiFontColorDark.red(), this->c_UiFontColorDark.green(),
+                              this->c_UiFontColorDark.blue(), this->c_UiFontColorDark.alpha(),
+                              this->c_UiText);
 
    C_PuiBsBox::CalcHash(oru32_HashValue);
 }

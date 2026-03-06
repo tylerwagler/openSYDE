@@ -14,9 +14,10 @@
 
 #include "C_PuiBsBox.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -63,19 +64,7 @@ C_PuiBsBox::~C_PuiBsBox(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiBsBox::CalcHash(uint32_t & oru32_HashValue) const
 {
-   float64_t f64_Value;
-
-   f64_Value = this->c_UiPosition.x();
-   //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-   stw::scl::C_SclChecksums::CalcCRC32(&f64_Value, sizeof(f64_Value), oru32_HashValue);
-   f64_Value = this->c_UiPosition.y();
-   //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-   stw::scl::C_SclChecksums::CalcCRC32(&f64_Value, sizeof(f64_Value), oru32_HashValue);
-
-   //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-   stw::scl::C_SclChecksums::CalcCRC32(&this->f64_Width, sizeof(this->f64_Width), oru32_HashValue);
-   //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-   stw::scl::C_SclChecksums::CalcCRC32(&this->f64_Height, sizeof(this->f64_Height), oru32_HashValue);
-   //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-   stw::scl::C_SclChecksums::CalcCRC32(&this->f64_ZetOrder, sizeof(this->f64_ZetOrder), oru32_HashValue);
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_UiPosition.x(), this->c_UiPosition.y(),
+                              this->f64_Width, this->f64_Height, this->f64_ZetOrder);
 }

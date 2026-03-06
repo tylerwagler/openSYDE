@@ -14,7 +14,7 @@
 
 #include "C_PuiSdTextElementBus.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_logic;
@@ -61,7 +61,8 @@ C_PuiSdTextElementBus::~C_PuiSdTextElementBus()
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdTextElementBus::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_BusIndex, sizeof(this->u32_BusIndex), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->u32_BusIndex);
 
    C_PuiBsTextElement::CalcHash(oru32_HashValue);
 }

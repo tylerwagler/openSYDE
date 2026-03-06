@@ -24,7 +24,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscXmlParser.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_UsHandler.hpp"
 #include "cam_constants.hpp"
 #include "stwerrors.hpp"
@@ -36,6 +36,7 @@
  */
 using namespace stw::errors;
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_core::hash_util;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
 
@@ -1102,42 +1103,11 @@ uint32_t C_CamProHandler::m_GetHash(void) const {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProHandler::m_CalcHash(uint32_t &oru32_HashValue) const {
-  // messages
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->mq_CyclicMessageTransmitActive,
-      sizeof(this->mq_CyclicMessageTransmitActive), oru32_HashValue);
-  for (uint32_t u32_ItMessage = 0UL; u32_ItMessage < this->mc_Messages.size();
-       ++u32_ItMessage) {
-    this->mc_Messages[u32_ItMessage].CalcHash(oru32_HashValue);
-  }
-
-  // settings
-  // CAN DLL configuration
-  {
-    const QByteArray c_DllPathUtf8 = this->mc_CustomCanDllPath.toUtf8();
-    stw::scl::C_SclChecksums::CalcCRC32(
-        c_DllPathUtf8.constData(),
-        c_DllPathUtf8.size(), oru32_HashValue);
-  }
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->me_CanDllType, sizeof(this->me_CanDllType), oru32_HashValue);
-
-  // filters
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->mq_FiltersActive, sizeof(this->mq_FiltersActive), oru32_HashValue);
-  for (uint32_t u32_ItFilters = 0UL; u32_ItFilters < this->mc_Filters.size();
-       ++u32_ItFilters) {
-    this->mc_Filters[u32_ItFilters].CalcHash(oru32_HashValue);
-  }
-
-  // databases
-  for (uint32_t u32_ItDatabases = 0UL;
-       u32_ItDatabases < this->mc_Databases.size(); ++u32_ItDatabases) {
-    this->mc_Databases[u32_ItDatabases].CalcHash(oru32_HashValue);
-  }
-
-  // logging
-  this->mc_LoggingData.CalcHash(oru32_HashValue);
+  CalcHashMembers(oru32_HashValue, this->mq_CyclicMessageTransmitActive,
+                  this->mc_Messages, this->mc_CustomCanDllPath,
+                  this->me_CanDllType, this->mq_FiltersActive,
+                  this->mc_Filters, this->mc_Databases,
+                  this->mc_LoggingData);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

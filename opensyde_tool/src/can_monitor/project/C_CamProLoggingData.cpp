@@ -13,10 +13,11 @@
 #include "precomp_headers.hpp"
 
 #include "C_CamProLoggingData.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_Uti.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_core::hash_util;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -55,17 +56,8 @@ C_CamProLoggingData::C_CamProLoggingData(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProLoggingData::CalcHash(uint32_t & oru32_HashValue) const
 {
-   {
-      const QByteArray c_FileNameUtf8 = this->c_FileName.toUtf8();
-      stw::scl::C_SclChecksums::CalcCRC32(c_FileNameUtf8.constData(), c_FileNameUtf8.size(),
-                                          oru32_HashValue);
-      const QByteArray c_DirectoryUtf8 = this->c_Directory.toUtf8();
-      stw::scl::C_SclChecksums::CalcCRC32(c_DirectoryUtf8.constData(), c_DirectoryUtf8.size(),
-                                          oru32_HashValue);
-   }
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_Enabled, sizeof(this->q_Enabled), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_OverwriteMode, sizeof(this->e_OverwriteMode), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_FileFormat, sizeof(this->e_FileFormat), oru32_HashValue);
+   CalcHashMembers(oru32_HashValue, this->c_FileName, this->c_Directory, this->q_Enabled,
+                   this->e_OverwriteMode, this->e_FileFormat);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

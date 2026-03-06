@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbSpinBox.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -51,9 +51,10 @@ C_PuiSvDbSpinBox::C_PuiSvDbSpinBox(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbSpinBox::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_ShowUnit, sizeof(this->q_ShowUnit), oru32_HashValue);
-   this->c_Value.CalcHash(oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->e_Type,
+                                                  this->q_ShowUnit,
+                                                  this->c_Value);
    C_PuiSvDbWriteWidgetBase::CalcHash(oru32_HashValue);
 }
 

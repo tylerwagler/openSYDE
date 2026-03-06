@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSdLastKnownHalElementId.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -70,7 +70,7 @@ C_PuiSdLastKnownHalElementId::~C_PuiSdLastKnownHalElementId()
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdLastKnownHalElementId::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_Crc, sizeof(this->u32_Crc), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_HalDpName.toStdString().c_str(),
-                                       this->c_HalDpName.length(), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->u32_Crc,
+                                                   this->c_HalDpName);
 }

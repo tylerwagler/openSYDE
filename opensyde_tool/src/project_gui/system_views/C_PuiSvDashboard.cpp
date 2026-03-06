@@ -16,7 +16,7 @@
 #include "stwerrors.hpp"
 
 #include "C_CieUtil.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_PuiSvDashboard.hpp"
@@ -65,58 +65,21 @@ C_PuiSvDashboard::C_PuiSvDashboard(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboard::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Name.toStdString().c_str(),
-                                       this->mc_Name.length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->mc_Comment.toStdString().c_str(),
-                                       this->mc_Comment.length(), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mq_Active, sizeof(this->mq_Active), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->ms32_TabIndex, sizeof(this->ms32_TabIndex), oru32_HashValue);
-   for (uint32_t u32_ItWidget = 0; u32_ItWidget < this->mc_Charts.size(); ++u32_ItWidget)
-   {
-      const C_PuiSvDbChart & rc_Widget = this->mc_Charts[u32_ItWidget];
-      rc_Widget.CalcHash(oru32_HashValue);
-   }
-   for (uint32_t u32_ItWidget = 0; u32_ItWidget < this->mc_Labels.size(); ++u32_ItWidget)
-   {
-      const C_PuiSvDbLabel & rc_Label = this->mc_Labels[u32_ItWidget];
-      rc_Label.CalcHash(oru32_HashValue);
-   }
-   for (uint32_t u32_ItWidget = 0; u32_ItWidget < this->mc_PieCharts.size(); ++u32_ItWidget)
-   {
-      const C_PuiSvDbPieChart & rc_Widget = this->mc_PieCharts[u32_ItWidget];
-      rc_Widget.CalcHash(oru32_HashValue);
-   }
-   for (uint32_t u32_ItWidget = 0; u32_ItWidget < this->mc_ProgressBars.size(); ++u32_ItWidget)
-   {
-      const C_PuiSvDbProgressBar & rc_Widget = this->mc_ProgressBars[u32_ItWidget];
-      rc_Widget.CalcHash(oru32_HashValue);
-   }
-   for (uint32_t u32_ItWidget = 0; u32_ItWidget < this->mc_SpinBoxes.size(); ++u32_ItWidget)
-   {
-      const C_PuiSvDbSpinBox & rc_Widget = this->mc_SpinBoxes[u32_ItWidget];
-      rc_Widget.CalcHash(oru32_HashValue);
-   }
-   for (uint32_t u32_ItWidget = 0; u32_ItWidget < this->mc_Sliders.size(); ++u32_ItWidget)
-   {
-      const C_PuiSvDbSlider & rc_Widget = this->mc_Sliders[u32_ItWidget];
-      rc_Widget.CalcHash(oru32_HashValue);
-   }
-   for (uint32_t u32_ItWidget = 0; u32_ItWidget < this->mc_Tables.size(); ++u32_ItWidget)
-   {
-      const C_PuiSvDbTable & rc_Widget = this->mc_Tables[u32_ItWidget];
-      rc_Widget.CalcHash(oru32_HashValue);
-   }
-   for (uint32_t u32_ItWidget = 0; u32_ItWidget < this->mc_Toggles.size(); ++u32_ItWidget)
-   {
-      const C_PuiSvDbToggle & rc_Widget = this->mc_Toggles[u32_ItWidget];
-      rc_Widget.CalcHash(oru32_HashValue);
-   }
-   for (uint32_t u32_ItWidget = 0; u32_ItWidget < this->mc_ParamWidgets.size(); ++u32_ItWidget)
-   {
-      const C_PuiSvDbParam & rc_Widget = this->mc_ParamWidgets[u32_ItWidget];
-      rc_Widget.CalcHash(oru32_HashValue);
-   }
-   this->mc_TabChart.CalcHash(oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->mc_Name,
+                                                   this->mc_Comment,
+                                                   this->mq_Active,
+                                                   this->ms32_TabIndex,
+                                                   this->mc_Charts,
+                                                   this->mc_Labels,
+                                                   this->mc_PieCharts,
+                                                   this->mc_ProgressBars,
+                                                   this->mc_SpinBoxes,
+                                                   this->mc_Sliders,
+                                                   this->mc_Tables,
+                                                   this->mc_Toggles,
+                                                   this->mc_ParamWidgets,
+                                                   this->mc_TabChart);
    C_PuiBsElements::CalcHash(oru32_HashValue);
 }
 

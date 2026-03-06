@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "stwerrors.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbChart.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -52,12 +52,9 @@ C_PuiSvDbChart::C_PuiSvDbChart() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbChart::CalcHash(uint32_t & oru32_HashValue) const
 {
-   for (uint32_t u32_ItActive = 0; u32_ItActive < this->c_DataPoolElementsActive.size(); ++u32_ItActive)
-   {
-      const bool q_Data = this->c_DataPoolElementsActive[u32_ItActive];
-      stw::scl::C_SclChecksums::CalcCRC32(&q_Data, sizeof(q_Data), oru32_HashValue);
-   }
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_SettingZoomMode, sizeof(this->e_SettingZoomMode), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->c_DataPoolElementsActive,
+                                                  this->e_SettingZoomMode);
 
    C_PuiSvDbWidgetBase::CalcHash(oru32_HashValue);
 }

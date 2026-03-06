@@ -15,12 +15,12 @@
 #include "constants.hpp"
 #include "C_PuiBsLineArrow.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
-using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
@@ -60,20 +60,10 @@ C_PuiBsLineArrow::C_PuiBsLineArrow() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiBsLineArrow::CalcHash(uint32_t & oru32_HashValue) const
 {
-   int32_t s32_Value;
-
-   C_SclChecksums::CalcCRC32(&this->e_StartArrowHeadType, sizeof(this->e_StartArrowHeadType), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(&this->e_EndArrowHeadType, sizeof(this->e_EndArrowHeadType), oru32_HashValue);
-   C_SclChecksums::CalcCRC32(&this->e_LineType, sizeof(this->e_LineType), oru32_HashValue);
-
-   s32_Value = this->c_UiColorDark.red();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiColorDark.green();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiColorDark.blue();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiColorDark.alpha();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->e_StartArrowHeadType, this->e_EndArrowHeadType, this->e_LineType,
+                              this->c_UiColorDark.red(), this->c_UiColorDark.green(),
+                              this->c_UiColorDark.blue(), this->c_UiColorDark.alpha());
 
    C_PuiBsLineBase::CalcHash(oru32_HashValue);
 }

@@ -22,7 +22,7 @@
 #include "C_PuiUtil.hpp"
 #include "C_PuiSvData.hpp"
 #include "C_PuiSdUtil.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscLoggingHandler.hpp"
 
@@ -73,31 +73,17 @@ C_PuiSvData::C_PuiSvData(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvData::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mu32_DeviceConfigSelectedBitRate,
-                                       sizeof(this->mu32_DeviceConfigSelectedBitRate), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->me_DeviceConfigMode, sizeof(this->me_DeviceConfigMode), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mq_DarkModeActive, sizeof(this->mq_DarkModeActive), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mu16_UpdateRateFast, sizeof(this->mu16_UpdateRateFast), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mu16_UpdateRateMedium, sizeof(this->mu16_UpdateRateMedium),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mu16_UpdateRateSlow, sizeof(this->mu16_UpdateRateSlow), oru32_HashValue);
-   this->mc_PuiPcData.CalcHash(oru32_HashValue);
-   for (uint32_t u32_ItNode = 0; u32_ItNode < this->mc_NodeActiveFlags.size(); ++u32_ItNode)
-   {
-      const bool q_Data = static_cast<bool>(this->mc_NodeActiveFlags[u32_ItNode]);
-      stw::scl::C_SclChecksums::CalcCRC32(&q_Data, sizeof(q_Data), oru32_HashValue);
-   }
-   for (uint32_t u32_ItDashboard = 0; u32_ItDashboard < this->mc_Dashboards.size(); ++u32_ItDashboard)
-   {
-      const C_PuiSvDashboard & rc_Data = this->mc_Dashboards[u32_ItDashboard];
-      rc_Data.CalcHash(oru32_HashValue);
-   }
-   for (QMap<C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration>::const_iterator c_It =
-           this->mc_ReadRailAssignments.begin(); c_It != this->mc_ReadRailAssignments.end(); ++c_It)
-   {
-      c_It.key().CalcHash(oru32_HashValue);
-      c_It.value().CalcHash(oru32_HashValue);
-   }
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->mu32_DeviceConfigSelectedBitRate,
+                                                   this->me_DeviceConfigMode,
+                                                   this->mq_DarkModeActive,
+                                                   this->mu16_UpdateRateFast,
+                                                   this->mu16_UpdateRateMedium,
+                                                   this->mu16_UpdateRateSlow,
+                                                   this->mc_PuiPcData,
+                                                   this->mc_NodeActiveFlags,
+                                                   this->mc_Dashboards,
+                                                   this->mc_ReadRailAssignments);
 
    C_OscViewData::CalcHash(oru32_HashValue);
 }

@@ -18,6 +18,7 @@
 #include <QByteArray>
 #include <QList>
 #include <QHash>
+#include <QMap>
 #include "stwtypes/stwtypes.hpp"
 #include "scl/C_SclChecksums.hpp"
 
@@ -46,6 +47,14 @@ struct IsQHash : std::false_type
 };
 template <typename K, typename V>
 struct IsQHash<QHash<K, V>> : std::true_type
+{
+};
+template <typename T>
+struct IsQMap : std::false_type
+{
+};
+template <typename K, typename V>
+struct IsQMap<QMap<K, V>> : std::true_type
 {
 };
 
@@ -85,6 +94,15 @@ void CalcHashMember(const T & orc_Value, uint32_t & oru32_Hash)
    else if constexpr (IsQHash<T>::value)
    {
       // QHash<K,V>: hash each key-value pair
+      for (auto c_It = orc_Value.begin(); c_It != orc_Value.end(); ++c_It)
+      {
+         CalcHashMember(c_It.key(), oru32_Hash);
+         CalcHashMember(c_It.value(), oru32_Hash);
+      }
+   }
+   else if constexpr (IsQMap<T>::value)
+   {
+      // QMap<K,V>: hash each key-value pair
       for (auto c_It = orc_Value.begin(); c_It != orc_Value.end(); ++c_It)
       {
          CalcHashMember(c_It.key(), oru32_Hash);

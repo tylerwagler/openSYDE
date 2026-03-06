@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbDataElementScaling.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -62,10 +62,9 @@ C_PuiSvDbDataElementScaling::~C_PuiSvDbDataElementScaling(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbDataElementScaling::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_UseDefault, sizeof(this->q_UseDefault), oru32_HashValue);
-   //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-   stw::scl::C_SclChecksums::CalcCRC32(&this->f64_Factor, sizeof(this->f64_Factor), oru32_HashValue);
-   //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-   stw::scl::C_SclChecksums::CalcCRC32(&this->f64_Offset, sizeof(this->f64_Offset), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Unit.toStdString().c_str(), this->c_Unit.length(), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->q_UseDefault,
+                                                  this->f64_Factor,
+                                                  this->f64_Offset,
+                                                  this->c_Unit);
 }

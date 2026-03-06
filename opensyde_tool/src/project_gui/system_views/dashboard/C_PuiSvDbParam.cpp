@@ -15,7 +15,7 @@
 #include "stwtypes.hpp"
 
 #include "stwerrors.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvDbParam.hpp"
 
@@ -56,39 +56,18 @@ C_PuiSvDbParam::C_PuiSvDbParam(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbParam::CalcHash(uint32_t & oru32_HashValue) const
 {
-   uint32_t u32_Counter;
-
-   for (u32_Counter = 0U; u32_Counter < this->c_DataSetSelectionIndices.size(); ++u32_Counter)
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->c_DataSetSelectionIndices,
+                                                  this->c_ListValues,
+                                                  this->c_ColWidth);
+   for (const auto & rc_CurItem : this->c_ExpandedItems)
    {
-      const int32_t & rs32_Value = this->c_DataSetSelectionIndices[u32_Counter];
-      stw::scl::C_SclChecksums::CalcCRC32(&rs32_Value, sizeof(rs32_Value), oru32_HashValue);
+      stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                     rc_CurItem.c_ExpandedId,
+                                                     rc_CurItem.u32_Layer);
    }
-
-   for (u32_Counter = 0U; u32_Counter < this->c_ListValues.size(); ++u32_Counter)
-   {
-      this->c_ListValues[u32_Counter].CalcHash(oru32_HashValue);
-   }
-
-   for (u32_Counter = 0U; u32_Counter < this->c_ColWidth.size(); ++u32_Counter)
-   {
-      const QList<int32_t> & rc_ColWidths = this->c_ColWidth[u32_Counter];
-      for (uint32_t u32_Col = 0U; u32_Col < rc_ColWidths.size(); ++u32_Col)
-      {
-         const int32_t & rs32_Value = rc_ColWidths[u32_Col];
-         stw::scl::C_SclChecksums::CalcCRC32(&rs32_Value, sizeof(rs32_Value), oru32_HashValue);
-      }
-   }
-   for (u32_Counter = 0U; u32_Counter < this->c_ExpandedItems.size(); ++u32_Counter)
-   {
-      const C_PuiSvDbExpandedTreeIndex & rc_CurItem = this->c_ExpandedItems[u32_Counter];
-      rc_CurItem.c_ExpandedId.CalcHash(oru32_HashValue);
-      stw::scl::C_SclChecksums::CalcCRC32(&rc_CurItem.u32_Layer, sizeof(rc_CurItem.u32_Layer), oru32_HashValue);
-   }
-   for (u32_Counter = 0U; u32_Counter < this->c_ColPosIndices.size(); ++u32_Counter)
-   {
-      const int32_t & rs32_Value = this->c_ColPosIndices[u32_Counter];
-      stw::scl::C_SclChecksums::CalcCRC32(&rs32_Value, sizeof(rs32_Value), oru32_HashValue);
-   }
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->c_ColPosIndices);
 
    C_PuiSvDbWidgetBase::CalcHash(oru32_HashValue);
 }

@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "stwerrors.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbTabChart.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -57,36 +57,27 @@ C_PuiSvDbTabChart::C_PuiSvDbTabChart() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbTabChart::CalcHash(uint32_t & oru32_HashValue) const
 {
-   for (uint32_t u32_ItActive = 0; u32_ItActive < this->c_DataPoolElementsActive.size(); ++u32_ItActive)
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->c_DataPoolElementsActive,
+                                                  this->c_DataPoolElementsColorIndex);
+   // c_VisibleScreen: intentional float64_t -> float32_t truncation preserved from original implementation
+   for (const auto & orc_Inner : this->c_VisibleScreen)
    {
-      const bool q_Data = this->c_DataPoolElementsActive[u32_ItActive];
-      stw::scl::C_SclChecksums::CalcCRC32(&q_Data, sizeof(q_Data), oru32_HashValue);
-   }
-   for (uint32_t u32_ItActive = 0; u32_ItActive < this->c_DataPoolElementsColorIndex.size(); ++u32_ItActive)
-   {
-      const uint8_t u8_Data = static_cast<uint8_t>(this->c_DataPoolElementsColorIndex[u32_ItActive]);
-      stw::scl::C_SclChecksums::CalcCRC32(&u8_Data, sizeof(u8_Data), oru32_HashValue);
-   }
-   for (uint32_t u32_ItOuter = 0; u32_ItOuter < this->c_VisibleScreen.size(); ++u32_ItOuter)
-   {
-      const std::array<float64_t, 4> & orc_Inner = this->c_VisibleScreen[u32_ItOuter];
-      for (uint32_t u32_ItInner = 0; u32_ItInner < orc_Inner.size(); ++u32_ItInner)
+      for (const auto & of64_Val : orc_Inner)
       {
          //lint -e{736,9120} C++ interface
-         const float32_t f32_Val = orc_Inner[u32_ItInner];
+         const float32_t f32_Val = of64_Val;
          //lint -e{9110} Usual way
-         stw::scl::C_SclChecksums::CalcCRC32(&f32_Val, sizeof(f32_Val), oru32_HashValue);
+         stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue, f32_Val);
       }
    }
-   stw::scl::C_SclChecksums::CalcCRC32(&this->s32_SplitterLeftWidth, sizeof(this->s32_SplitterLeftWidth),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_SettingZoomMode, sizeof(this->e_SettingZoomMode), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsZoomModeActive, sizeof(this->q_IsZoomModeActive), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_SettingVerticalAxisMode, sizeof(this->e_SettingVerticalAxisMode),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsPaused, sizeof(this->q_IsPaused), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_AreSamplePointsShown, sizeof(this->q_AreSamplePointsShown),
-                                       oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->s32_SplitterLeftWidth,
+                                                  this->e_SettingZoomMode,
+                                                  this->q_IsZoomModeActive,
+                                                  this->e_SettingVerticalAxisMode,
+                                                  this->q_IsPaused,
+                                                  this->q_AreSamplePointsShown);
 
    C_PuiSvDbWidgetBase::CalcHash(oru32_HashValue);
 }

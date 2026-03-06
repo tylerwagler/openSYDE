@@ -14,9 +14,10 @@
 
 #include "C_PuiBsLineBase.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
+using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -60,31 +61,13 @@ C_PuiBsLineBase::~C_PuiBsLineBase(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiBsLineBase::CalcHash(uint32_t & oru32_HashValue) const
 {
-   int32_t s32_Value;
-   float64_t f64_Value;
-   uint32_t u32_Counter;
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_UiColor.red(), this->c_UiColor.green(),
+                              this->c_UiColor.blue(), this->c_UiColor.alpha(),
+                              this->s32_UiWidthPixels, this->f64_ZetOrder);
 
-   s32_Value = this->c_UiColor.red();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiColor.green();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiColor.blue();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiColor.alpha();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-
-   stw::scl::C_SclChecksums::CalcCRC32(&this->s32_UiWidthPixels, sizeof(this->s32_UiWidthPixels), oru32_HashValue);
-   //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-   stw::scl::C_SclChecksums::CalcCRC32(&this->f64_ZetOrder, sizeof(this->f64_ZetOrder), oru32_HashValue);
-
-   for (u32_Counter = 0U; u32_Counter < this->c_UiInteractionPoints.size(); ++u32_Counter)
+   for (const QPointF & rc_Point : this->c_UiInteractionPoints)
    {
-      f64_Value = this->c_UiInteractionPoints[u32_Counter].x();
-      //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-      stw::scl::C_SclChecksums::CalcCRC32(&f64_Value, sizeof(f64_Value), oru32_HashValue);
-
-      f64_Value = this->c_UiInteractionPoints[u32_Counter].y();
-      //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-      stw::scl::C_SclChecksums::CalcCRC32(&f64_Value, sizeof(f64_Value), oru32_HashValue);
+      hash_util::CalcHashMembers(oru32_HashValue, rc_Point.x(), rc_Point.y());
    }
 }

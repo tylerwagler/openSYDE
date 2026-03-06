@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -290,8 +290,9 @@ const
 void C_PuiSvDbNodeDataPoolListElementId::CalcHash(uint32_t & oru32_HashValue) const
 {
    C_OscNodeDataPoolListElementOptArrayId::CalcHash(oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->me_Type, sizeof(this->me_Type), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mq_IsValid, sizeof(this->mq_IsValid), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->me_Type,
+                                                  this->mq_IsValid);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

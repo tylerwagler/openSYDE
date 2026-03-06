@@ -16,7 +16,7 @@
 
 #include "stwerrors.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -53,23 +53,19 @@ C_PuiSdSharedDatapools::C_PuiSdSharedDatapools(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdSharedDatapools::CalcHash(uint32_t & oru32_HashValue) const
 {
-   QList<QList<stw::opensyde_core::C_OscNodeDataPoolId> >::const_iterator c_ItSharedGroup;
    uint32_t u32_GroupCounter = 0U;
 
-   for (c_ItSharedGroup = this->c_SharedDatapools.begin(); c_ItSharedGroup != this->c_SharedDatapools.end();
-        ++c_ItSharedGroup)
+   for (const auto & rc_SharedGroup : this->c_SharedDatapools)
    {
-      uint32_t u32_DpCounter;
-
       // The group as index is relevant too
-      stw::scl::C_SclChecksums::CalcCRC32(&u32_GroupCounter, sizeof(u32_GroupCounter), oru32_HashValue);
+      stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue, u32_GroupCounter);
 
-      for (u32_DpCounter = 0U; u32_DpCounter < c_ItSharedGroup->size(); ++u32_DpCounter)
+      for (uint32_t u32_DpCounter = 0U; u32_DpCounter < rc_SharedGroup.size(); ++u32_DpCounter)
       {
-         const C_OscNodeDataPoolId & rc_DpId = c_ItSharedGroup->at(u32_DpCounter);
-         stw::scl::C_SclChecksums::CalcCRC32(&rc_DpId.u32_NodeIndex, sizeof(rc_DpId.u32_NodeIndex), oru32_HashValue);
-         stw::scl::C_SclChecksums::CalcCRC32(&rc_DpId.u32_DataPoolIndex, sizeof(rc_DpId.u32_DataPoolIndex),
-                                             oru32_HashValue);
+         const C_OscNodeDataPoolId & rc_DpId = rc_SharedGroup.at(u32_DpCounter);
+         stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                         rc_DpId.u32_NodeIndex,
+                                                         rc_DpId.u32_DataPoolIndex);
       }
 
       ++u32_GroupCounter;

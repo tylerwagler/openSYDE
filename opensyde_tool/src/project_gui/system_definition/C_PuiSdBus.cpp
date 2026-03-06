@@ -14,7 +14,7 @@
 
 #include "C_PuiSdBus.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_logic;
@@ -53,16 +53,11 @@ C_PuiSdBus::C_PuiSdBus() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdBus::CalcHash(uint32_t & oru32_HashValue) const
 {
-   int32_t s32_Value;
-
-   s32_Value = this->c_UiColorMiddleLine.red();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiColorMiddleLine.green();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiColorMiddleLine.blue();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiColorMiddleLine.alpha();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->c_UiColorMiddleLine.red(),
+                                                   this->c_UiColorMiddleLine.green(),
+                                                   this->c_UiColorMiddleLine.blue(),
+                                                   this->c_UiColorMiddleLine.alpha());
 
    C_PuiBsLineBase::CalcHash(oru32_HashValue);
 }

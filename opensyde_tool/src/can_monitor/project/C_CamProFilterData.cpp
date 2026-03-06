@@ -22,10 +22,11 @@
 #include "precomp_headers.hpp"
 
 #include "C_CamProFilterData.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_core::hash_util;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -62,21 +63,7 @@ C_CamProFilterData::C_CamProFilterData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProFilterData::CalcHash(uint32_t & oru32_HashValue) const
 {
-   // filter properties (name, comment, state)
-   {
-      const QByteArray c_NameUtf8 = this->c_Name.toUtf8();
-      stw::scl::C_SclChecksums::CalcCRC32(c_NameUtf8.constData(), c_NameUtf8.size(), oru32_HashValue);
-      const QByteArray c_CommentUtf8 = this->c_Comment.toUtf8();
-      stw::scl::C_SclChecksums::CalcCRC32(c_CommentUtf8.constData(), c_CommentUtf8.size(),
-                                          oru32_HashValue);
-   }
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_Enabled, sizeof(this->q_Enabled), oru32_HashValue);
-
-   // filter items properties
-   for (int32_t s32_Pos = 0; s32_Pos < this->c_FilterItems.size(); s32_Pos++)
-   {
-      this->c_FilterItems[s32_Pos].CalcHash(oru32_HashValue);
-   }
+   CalcHashMembers(oru32_HashValue, this->c_Name, this->c_Comment, this->q_Enabled, this->c_FilterItems);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -109,10 +96,6 @@ C_CamProFilterItemData::C_CamProFilterItemData() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProFilterItemData::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_PassFilter, sizeof(this->q_PassFilter), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u8_ExtendedId, sizeof(this->u8_ExtendedId), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_EndId, sizeof(this->u32_EndId), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_StartId, sizeof(this->u32_StartId), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_Enabled, sizeof(this->q_Enabled), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type), oru32_HashValue);
+   CalcHashMembers(oru32_HashValue, this->q_PassFilter, this->u8_ExtendedId, this->u32_EndId,
+                   this->u32_StartId, this->q_Enabled, this->e_Type);
 }

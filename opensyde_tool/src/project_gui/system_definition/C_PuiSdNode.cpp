@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_PuiSdNode.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -52,20 +52,15 @@ C_PuiSdNodeConnection::C_PuiSdNodeConnection()
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNodeConnection::CalcHash(uint32_t & oru32_HashValue) const
 {
-   uint32_t u32_Counter;
-   float64_t f64_Value;
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->c_ConnectionId);
 
-   this->c_ConnectionId.CalcHash(oru32_HashValue);
-
-   for (u32_Counter = 0U; u32_Counter < this->c_UiNodeConnectionInteractionPoints.size(); ++u32_Counter)
+   for (uint32_t u32_Counter = 0U; u32_Counter < this->c_UiNodeConnectionInteractionPoints.size(); ++u32_Counter)
    {
-      f64_Value = this->c_UiNodeConnectionInteractionPoints[u32_Counter].x();
       //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-      stw::scl::C_SclChecksums::CalcCRC32(&f64_Value, sizeof(f64_Value), oru32_HashValue);
-
-      f64_Value = this->c_UiNodeConnectionInteractionPoints[u32_Counter].y();
-      //lint -e{9110} //we do not really use the bit representation; we just assume it is "stable" for this type
-      stw::scl::C_SclChecksums::CalcCRC32(&f64_Value, sizeof(f64_Value), oru32_HashValue);
+      stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                      this->c_UiNodeConnectionInteractionPoints[u32_Counter].x(),
+                                                      this->c_UiNodeConnectionInteractionPoints[u32_Counter].y());
    }
 }
 
@@ -90,22 +85,10 @@ C_PuiSdNode::C_PuiSdNode() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNode::CalcHash(uint32_t & oru32_HashValue) const
 {
-   uint32_t u32_Counter;
-
-   for (u32_Counter = 0U; u32_Counter < this->c_UiBusConnections.size(); ++u32_Counter)
-   {
-      this->c_UiBusConnections[u32_Counter].CalcHash(oru32_HashValue);
-   }
-
-   for (u32_Counter = 0U; u32_Counter < this->c_UiDataPools.size(); ++u32_Counter)
-   {
-      this->c_UiDataPools[u32_Counter].CalcHash(oru32_HashValue);
-   }
-
-   for (u32_Counter = 0U; u32_Counter < this->c_UiCanProtocols.size(); ++u32_Counter)
-   {
-      this->c_UiCanProtocols[u32_Counter].CalcHash(oru32_HashValue);
-   }
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->c_UiBusConnections,
+                                                   this->c_UiDataPools,
+                                                   this->c_UiCanProtocols);
 
    C_PuiBsBox::CalcHash(oru32_HashValue);
 }

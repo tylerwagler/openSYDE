@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSdNodeCanMessage.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -49,12 +49,7 @@ C_PuiSdNodeCanMessage::C_PuiSdNodeCanMessage(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNodeCanMessage::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_ReceiveTimeoutMode, sizeof(this->e_ReceiveTimeoutMode),
-                                       oru32_HashValue);
-
-   for (uint32_t u32_ItSignal = 0; u32_ItSignal < this->c_Signals.size(); ++u32_ItSignal)
-   {
-      const C_PuiSdNodeCanSignal & rc_Signal = this->c_Signals[u32_ItSignal];
-      rc_Signal.CalcHash(oru32_HashValue);
-   }
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->e_ReceiveTimeoutMode,
+                                                   this->c_Signals);
 }

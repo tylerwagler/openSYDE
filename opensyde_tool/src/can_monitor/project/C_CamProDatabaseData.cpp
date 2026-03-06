@@ -13,10 +13,11 @@
 #include "precomp_headers.hpp"
 
 #include "C_CamProDatabaseData.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
+using namespace stw::opensyde_core::hash_util;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -52,11 +53,5 @@ C_CamProDatabaseData::C_CamProDatabaseData(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProDatabaseData::CalcHash(uint32_t & oru32_HashValue) const
 {
-   // Database properties (name, state)
-   {
-      const QByteArray c_NameUtf8 = this->c_Name.toUtf8();
-      stw::scl::C_SclChecksums::CalcCRC32(c_NameUtf8.constData(), c_NameUtf8.size(), oru32_HashValue);
-   }
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_Enabled, sizeof(this->q_Enabled), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->s32_BusIndex, sizeof(this->s32_BusIndex), oru32_HashValue);
+   CalcHashMembers(oru32_HashValue, this->c_Name, this->q_Enabled, this->s32_BusIndex);
 }

@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbLabel.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -53,11 +53,11 @@ C_PuiSvDbLabel::C_PuiSvDbLabel(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbLabel::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_Caption.toStdString().c_str(), this->c_Caption.length(),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_ShowCaption, sizeof(this->q_ShowCaption), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_ShowUnit, sizeof(this->q_ShowUnit), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->c_Caption,
+                                                  this->e_Type,
+                                                  this->q_ShowCaption,
+                                                  this->q_ShowUnit);
 
    C_PuiSvDbWidgetBase::CalcHash(oru32_HashValue);
 }

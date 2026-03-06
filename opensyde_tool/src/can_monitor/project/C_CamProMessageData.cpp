@@ -17,7 +17,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_CamProMessageData.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwerrors.hpp"
 
 
@@ -25,6 +25,7 @@
  * -----------------------------------------------------------------------------------------------
  */
 using namespace stw::errors;
+using namespace stw::opensyde_core::hash_util;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants
@@ -74,43 +75,12 @@ C_CamProMessageData::C_CamProMessageData(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProMessageData::CalcHash(uint32_t &oru32_HashValue) const {
-  QByteArray c_Data;
-  c_Data = this->c_DataBaseFilePath.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(c_Data.constData(), c_Data.length(),
-                                      oru32_HashValue);
-  c_Data = this->c_Name.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(c_Data.constData(), c_Data.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_ContainsValidHash,
-                                      sizeof(this->q_ContainsValidHash),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_Hash, sizeof(this->u32_Hash),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_IsExtended, sizeof(this->q_IsExtended), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsRtr, sizeof(this->q_IsRtr),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_Id, sizeof(this->u32_Id),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u16_Dlc, sizeof(this->u16_Dlc),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->c_Bytes[0UL], c_Bytes.size(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_DoCyclicTrigger,
-                                      sizeof(this->q_DoCyclicTrigger),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_SetAutoSupportMode,
-                                      sizeof(this->q_SetAutoSupportMode),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_CyclicTriggerTime,
-                                      sizeof(this->u32_CyclicTriggerTime),
-                                      oru32_HashValue);
-  c_Data = this->c_Key.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(c_Data.constData(), c_Data.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_KeyPressOffset,
-                                      sizeof(this->u32_KeyPressOffset),
-                                      oru32_HashValue);
+  CalcHashMembers(oru32_HashValue, this->c_DataBaseFilePath, this->c_Name,
+                  this->q_ContainsValidHash, this->u32_Hash,
+                  this->q_IsExtended, this->q_IsRtr, this->u32_Id,
+                  this->u16_Dlc, this->c_Bytes, this->q_DoCyclicTrigger,
+                  this->q_SetAutoSupportMode, this->u32_CyclicTriggerTime,
+                  this->c_Key, this->u32_KeyPressOffset);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

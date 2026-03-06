@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbPieChart.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -51,8 +51,9 @@ C_PuiSvDbPieChart::C_PuiSvDbPieChart(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbPieChart::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_ShowUnit, sizeof(this->q_ShowUnit), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_ShowValue, sizeof(this->q_ShowValue), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->q_ShowUnit,
+                                                  this->q_ShowValue);
    C_PuiSvDbWidgetBase::CalcHash(oru32_HashValue);
 }
 

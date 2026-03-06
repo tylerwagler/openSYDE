@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSdNodeCanSignal.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -49,5 +49,6 @@ C_PuiSdNodeCanSignal::C_PuiSdNodeCanSignal(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNodeCanSignal::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&u8_ColorIndex, sizeof(u8_ColorIndex), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->u8_ColorIndex);
 }

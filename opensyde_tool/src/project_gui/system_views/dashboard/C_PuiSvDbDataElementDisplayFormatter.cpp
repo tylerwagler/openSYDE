@@ -12,7 +12,7 @@
 
 #include <regex>
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_PuiSvDbDataElementDisplayFormatter.hpp"
 
@@ -57,9 +57,9 @@ C_PuiSvDbDataElementDisplayFormatter::~C_PuiSvDbDataElementDisplayFormatter()
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbDataElementDisplayFormatter::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsActive, sizeof(this->q_IsActive), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(this->c_FormatterString.toStdString().c_str(),
-                                       this->c_FormatterString.length(), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->q_IsActive,
+                                                  this->c_FormatterString);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

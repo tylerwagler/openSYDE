@@ -14,7 +14,7 @@
 
 #include "stwerrors.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvReadDataConfiguration.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -64,10 +64,10 @@ C_PuiSvReadDataConfiguration::~C_PuiSvReadDataConfiguration(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvReadDataConfiguration::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_TransmissionMode, sizeof(this->e_TransmissionMode), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u8_RailIndex, sizeof(this->u8_RailIndex), oru32_HashValue);
-
-   this->c_ChangeThreshold.CalcHash(oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->e_TransmissionMode,
+                                                   this->u8_RailIndex,
+                                                   this->c_ChangeThreshold);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

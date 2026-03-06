@@ -14,7 +14,7 @@
 
 
 #include "stwerrors.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbWidgetBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -54,13 +54,9 @@ C_PuiSvDbWidgetBase::C_PuiSvDbWidgetBase(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbWidgetBase::CalcHash(uint32_t & oru32_HashValue) const
 {
-   uint32_t u32_Counter;
-
-   for (u32_Counter = 0U; u32_Counter < this->c_DataPoolElementsConfig.size(); ++u32_Counter)
-   {
-      this->c_DataPoolElementsConfig[u32_Counter].CalcHash(oru32_HashValue);
-   }
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_DisplayStyle, sizeof(this->e_DisplayStyle), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->c_DataPoolElementsConfig,
+                                                  this->e_DisplayStyle);
 
    C_PuiBsBox::CalcHash(oru32_HashValue);
 }

@@ -14,7 +14,7 @@
 
 #include "C_PuiSdNodeConnectionId.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_logic;
@@ -77,6 +77,7 @@ bool C_PuiSdNodeConnectionId::operator ==(const C_PuiSdNodeConnectionId & orc_Re
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSdNodeConnectionId::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_InterfaceType, sizeof(this->e_InterfaceType), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u8_InterfaceNumber, sizeof(this->u8_InterfaceNumber), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                   this->e_InterfaceType,
+                                                   this->u8_InterfaceNumber);
 }

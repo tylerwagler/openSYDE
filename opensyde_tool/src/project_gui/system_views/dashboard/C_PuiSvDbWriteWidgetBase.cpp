@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbWriteWidgetBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -53,12 +53,11 @@ C_PuiSvDbWriteWidgetBase::C_PuiSvDbWriteWidgetBase() :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbWriteWidgetBase::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_AutoWriteOnConnect, sizeof(this->q_AutoWriteOnConnect),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_ElementWriteMode, sizeof(this->e_ElementWriteMode), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_InitialValueMode, sizeof(this->e_InitialValueMode), oru32_HashValue);
-
-   this->c_InitialValue.CalcHash(oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->q_AutoWriteOnConnect,
+                                                  this->e_ElementWriteMode,
+                                                  this->e_InitialValueMode,
+                                                  this->c_InitialValue);
 
    C_PuiSvDbWidgetBase::CalcHash(oru32_HashValue);
 }

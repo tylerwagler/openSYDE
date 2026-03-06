@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_PuiSvDbToggle.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -51,8 +51,9 @@ C_PuiSvDbToggle::C_PuiSvDbToggle(void) :
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbToggle::CalcHash(uint32_t & oru32_HashValue) const
 {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->q_State, sizeof(this->q_State), oru32_HashValue);
+   stw::opensyde_core::hash_util::CalcHashMembers(oru32_HashValue,
+                                                  this->e_Type,
+                                                  this->q_State);
    C_PuiSvDbWriteWidgetBase::CalcHash(oru32_HashValue);
 }
 
