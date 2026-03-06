@@ -18,11 +18,6 @@
 #include "C_OscParamSetFilerBase.hpp"
 #include "C_OscParamSetRawNode.hpp"
 #include "stwtypes.hpp"
-#include <QDataStream>
-#include <QDomDocument>
-#include <QFile>
-#include <QJsonObject>
-#include <QList>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------

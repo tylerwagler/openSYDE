@@ -18,6 +18,8 @@
 #include <QString>
 
 #include "C_OscNodeDataPoolList.hpp"
+
+#include "C_OscHashUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
@@ -77,28 +79,10 @@ C_OscNodeDataPoolList::C_OscNodeDataPoolList(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolList::CalcHash(uint32_t &oru32_HashValue) const {
-  uint32_t u32_Counter;
-
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
-                                      this->c_Name.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(),
-                                      this->c_Comment.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_NvmCrc, sizeof(this->u32_NvmCrc), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_NvmStartAddress,
-                                      sizeof(this->u32_NvmStartAddress),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_NvmSize, sizeof(this->u32_NvmSize), oru32_HashValue);
-
-  for (u32_Counter = 0U; u32_Counter < this->c_Elements.size(); ++u32_Counter) {
-    this->c_Elements[u32_Counter].CalcHash(oru32_HashValue);
-  }
-
-  for (u32_Counter = 0U; u32_Counter < this->c_DataSets.size(); ++u32_Counter) {
-    this->c_DataSets[u32_Counter].CalcHash(oru32_HashValue);
-  }
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_Name, this->c_Comment,
+                              this->u32_NvmCrc, this->u32_NvmStartAddress, this->u32_NvmSize,
+                              this->c_Elements, this->c_DataSets);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

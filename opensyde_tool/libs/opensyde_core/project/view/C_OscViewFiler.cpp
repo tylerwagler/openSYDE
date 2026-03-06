@@ -23,6 +23,7 @@
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
+#include "C_OscFilerUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscViewFiler.hpp"
@@ -51,6 +52,21 @@ using namespace stw::opensyde_core;
 /* -- Module Global Variables
  * ---------------------------------------------------------------------------------------
  */
+
+namespace
+{
+const C_OscFilerUtil::EnumEntry<C_OscViewNodeUpdate::E_StateDebugger> mac_STATE_DEBUGGER_TABLE[] = {
+   {C_OscViewNodeUpdate::eST_DEB_ACTIVATE, "activate"},
+   {C_OscViewNodeUpdate::eST_DEB_DEACTIVATE, "deactivate"},
+   {C_OscViewNodeUpdate::eST_DEB_NO_CHANGE, "no-change"}
+};
+
+const C_OscFilerUtil::EnumEntry<C_OscViewNodeUpdate::E_StateSecurity> mac_STATE_SECURITY_TABLE[] = {
+   {C_OscViewNodeUpdate::eST_SEC_ACTIVATE, "activate"},
+   {C_OscViewNodeUpdate::eST_SEC_DEACTIVATE, "deactivate"},
+   {C_OscViewNodeUpdate::eST_SEC_NO_CHANGE, "no-change"}
+};
+}
 
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
@@ -365,20 +381,8 @@ void C_OscViewFiler::h_SavePc(const C_OscViewPc &orc_OscPc,
 int32_t C_OscViewFiler::h_StringToPemFileStateDebugger(
     const QString &orc_String,
     C_OscViewNodeUpdate::E_StateDebugger &ore_State) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String.compare("activate") == 0) {
-    ore_State = C_OscViewNodeUpdate::eST_DEB_ACTIVATE;
-  } else if (orc_String.compare("deactivate") == 0) {
-    ore_State = C_OscViewNodeUpdate::eST_DEB_DEACTIVATE;
-  } else if (orc_String.compare("no-change") == 0) {
-    ore_State = C_OscViewNodeUpdate::eST_DEB_NO_CHANGE;
-  } else {
-    // Default
-    ore_State = C_OscViewNodeUpdate::eST_DEB_NO_CHANGE;
-    s32_Retval = C_RANGE;
-  }
-  return s32_Retval;
+  ore_State = C_OscViewNodeUpdate::eST_DEB_NO_CHANGE;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_STATE_DEBUGGER_TABLE, ore_State);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -395,20 +399,8 @@ int32_t C_OscViewFiler::h_StringToPemFileStateDebugger(
 int32_t C_OscViewFiler::h_StringToPemFileStateSecurity(
     const QString &orc_String,
     C_OscViewNodeUpdate::E_StateSecurity &ore_State) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String.compare("activate") == 0) {
-    ore_State = C_OscViewNodeUpdate::eST_SEC_ACTIVATE;
-  } else if (orc_String.compare("deactivate") == 0) {
-    ore_State = C_OscViewNodeUpdate::eST_SEC_DEACTIVATE;
-  } else if (orc_String.compare("no-change") == 0) {
-    ore_State = C_OscViewNodeUpdate::eST_SEC_NO_CHANGE;
-  } else {
-    // Default
-    ore_State = C_OscViewNodeUpdate::eST_SEC_NO_CHANGE;
-    s32_Retval = C_RANGE;
-  }
-  return s32_Retval;
+  ore_State = C_OscViewNodeUpdate::eST_SEC_NO_CHANGE;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_STATE_SECURITY_TABLE, ore_State);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -422,23 +414,7 @@ int32_t C_OscViewFiler::h_StringToPemFileStateSecurity(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscViewFiler::h_PemFileStateDebuggerToString(
     const C_OscViewNodeUpdate::E_StateDebugger oe_State) {
-  QString c_Retval;
-
-  switch (oe_State) {
-  case C_OscViewNodeUpdate::eST_DEB_ACTIVATE:
-    c_Retval = "activate";
-    break;
-  case C_OscViewNodeUpdate::eST_DEB_DEACTIVATE:
-    c_Retval = "deactivate";
-    break;
-  case C_OscViewNodeUpdate::eST_DEB_NO_CHANGE:
-    c_Retval = "no-change";
-    break;
-  default:
-    break;
-  }
-
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(oe_State, mac_STATE_DEBUGGER_TABLE, "");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -452,23 +428,7 @@ QString C_OscViewFiler::h_PemFileStateDebuggerToString(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscViewFiler::h_PemFileStateSecurityToString(
     const C_OscViewNodeUpdate::E_StateSecurity oe_State) {
-  QString c_Retval;
-
-  switch (oe_State) {
-  case C_OscViewNodeUpdate::eST_SEC_ACTIVATE:
-    c_Retval = "activate";
-    break;
-  case C_OscViewNodeUpdate::eST_SEC_DEACTIVATE:
-    c_Retval = "deactivate";
-    break;
-  case C_OscViewNodeUpdate::eST_SEC_NO_CHANGE:
-    c_Retval = "no-change";
-    break;
-  default:
-    break;
-  }
-
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(oe_State, mac_STATE_SECURITY_TABLE, "");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1155,310 +1115,73 @@ void C_OscViewFiler::mh_SaveNodeUpdateInformationPem(
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*!
-   \brief   Load views from file (auto-detect format by extension)
-   
-   \param[in,out]  orc_Views      Views to load
-   \param[in]      orc_Path       File path
-   \param[in]      orc_OscNodes   Node information
-   
-   \return Error code
-*/
+// Multi-format methods (delegated to C_OscFilerUtil, orc_OscNodes is unused)
+//----------------------------------------------------------------------------------------------------------------------
+
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_LoadFile(QList<C_OscViewData> &orc_Views,
                                    const QString &orc_Path,
                                    const QList<C_OscNode> &orc_OscNodes) {
-   int32_t s32_Retval = C_NO_ERR;
-   const QString c_Extension = QFileInfo(orc_Path).suffix().toLower();
-   
-   if (c_Extension == "bin") {
-      s32_Retval = h_LoadBinary(orc_Views, orc_Path, orc_OscNodes);
-   } else if (c_Extension == "json") {
-      s32_Retval = h_LoadJson(orc_Views, orc_Path, orc_OscNodes);
-   } else {
-      // Default to XML for backward compatibility
-      s32_Retval = h_LoadXml(orc_Views, orc_Path, orc_OscNodes);
-   }
-   
-   return s32_Retval;
+   Q_UNUSED(orc_OscNodes)
+   return C_OscFilerUtil::h_LoadListFile(orc_Views, orc_Path,
+                                         "opensyde-system-views", "opensyde-system-view");
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \brief   Save views to file (auto-detect format by extension)
-   
-   \param[in]      orc_Views      Views to save
-   \param[in]      orc_Path       File path
-   \param[in]      orc_OscNodes   Node information (not used for saving, but kept for API compatibility)
-   
-   \return Error code
-*/
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_SaveFile(const QList<C_OscViewData> &orc_Views,
                                    const QString &orc_Path,
                                    const QList<C_OscNode> &orc_OscNodes) {
-   int32_t s32_Retval = C_NO_ERR;
-   const QString c_Extension = QFileInfo(orc_Path).suffix().toLower();
-   
-   if (c_Extension == "bin") {
-      s32_Retval = h_SaveBinary(orc_Views, orc_Path, orc_OscNodes);
-   } else if (c_Extension == "json") {
-      s32_Retval = h_SaveJson(orc_Views, orc_Path, orc_OscNodes);
-   } else {
-      // Default to XML for backward compatibility
-      s32_Retval = h_SaveXml(orc_Views, orc_Path, orc_OscNodes);
-   }
-   
-   return s32_Retval;
+   Q_UNUSED(orc_OscNodes)
+   return C_OscFilerUtil::h_SaveListFile(orc_Views, orc_Path,
+                                         "opensyde-system-views", "opensyde-system-view");
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \brief   Load views from binary file
-   
-   \param[in,out]  orc_Views      Views to load
-   \param[in]      orc_Path       File path
-   \param[in]      orc_OscNodes   Node information (not used for binary format)
-   
-   \return Error code
-*/
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_LoadBinary(QList<C_OscViewData> &orc_Views,
                                      const QString &orc_Path,
                                      const QList<C_OscNode> &orc_OscNodes) {
-   Q_UNUSED(orc_OscNodes);
-   int32_t s32_Retval = C_NO_ERR;
-   
-   QFile c_File(orc_Path);
-   if (!c_File.open(QIODevice::ReadOnly)) {
-      osc_write_log_error("Load binary views", 
-                         QString("Cannot open file: %1").arg(orc_Path));
-      return C_RD_WR;
-   }
-   
-   QDataStream c_Stream(&c_File);
-   c_Stream.setVersion(QDataStream::Qt_6_0);
-   
-   // Read view count
-   uint32_t u32_Count = 0;
-   c_Stream >> u32_Count;
-   
-   orc_Views.clear();
-   orc_Views.reserve(u32_Count);
-   
-   for (uint32_t u32_I = 0; u32_I < u32_Count; ++u32_I) {
-      C_OscViewData c_View;
-      s32_Retval = c_View.FromQDataStream(c_Stream);
-      if (s32_Retval != C_NO_ERR) {
-         break;
-      }
-      orc_Views.append(c_View);
-   }
-   
-   c_File.close();
-   return s32_Retval;
+   Q_UNUSED(orc_OscNodes)
+   return C_OscFilerUtil::h_LoadListBinary(orc_Views, orc_Path);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \brief   Save views to binary file
-   
-   \param[in]      orc_Views      Views to save
-   \param[in]      orc_Path       File path
-   \param[in]      orc_OscNodes   Node information (not used for binary format)
-   
-   \return Error code
-*/
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_SaveBinary(const QList<C_OscViewData> &orc_Views,
                                      const QString &orc_Path,
                                      const QList<C_OscNode> &orc_OscNodes) {
-   Q_UNUSED(orc_OscNodes);
-   int32_t s32_Retval = C_NO_ERR;
-   
-   QFile c_File(orc_Path);
-   if (!c_File.open(QIODevice::WriteOnly)) {
-      osc_write_log_error("Save binary views", 
-                         QString("Cannot open file: %1").arg(orc_Path));
-      return C_RD_WR;
-   }
-   
-   QDataStream c_Stream(&c_File);
-   c_Stream.setVersion(QDataStream::Qt_6_0);
-   
-   // Write view count
-   c_Stream << static_cast<uint32_t>(orc_Views.size());
-   
-   // Write each view
-   for (const auto &rc_View : orc_Views) {
-      s32_Retval = rc_View.ToQDataStream(c_Stream);
-      if (s32_Retval != C_NO_ERR) {
-         break;
-      }
-   }
-   
-   c_File.close();
-   return s32_Retval;
+   Q_UNUSED(orc_OscNodes)
+   return C_OscFilerUtil::h_SaveListBinary(orc_Views, orc_Path);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \brief   Load views from JSON file
-   
-   \param[in,out]  orc_Views      Views to load
-   \param[in]      orc_Path       File path
-   \param[in]      orc_OscNodes   Node information (not used for JSON format)
-   
-   \return Error code
-*/
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_LoadJson(QList<C_OscViewData> &orc_Views,
                                    const QString &orc_Path,
                                    const QList<C_OscNode> &orc_OscNodes) {
-   Q_UNUSED(orc_OscNodes);
-   int32_t s32_Retval = C_NO_ERR;
-   
-   QFile c_File(orc_Path);
-   if (!c_File.open(QIODevice::ReadOnly)) {
-      osc_write_log_error("Load JSON views", 
-                         QString("Cannot open file: %1").arg(orc_Path));
-      return C_RD_WR;
-   }
-   
-   QByteArray c_JsonData = c_File.readAll();
-   c_File.close();
-   
-   QJsonParseError c_ParseError;
-   QJsonDocument c_Doc = QJsonDocument::fromJson(c_JsonData, &c_ParseError);
-   
-   if (c_ParseError.error != QJsonParseError::NoError) {
-      osc_write_log_error("Load JSON views", 
-                         QString("JSON parse error: %1").arg(c_ParseError.errorString()));
-      return C_CONFIG;
-   }
-   
-   if (!c_Doc.isArray()) {
-      osc_write_log_error("Load JSON views", "Expected JSON array");
-      return C_CONFIG;
-   }
-   
-   QJsonArray c_Array = c_Doc.array();
-   orc_Views.clear();
-   orc_Views.reserve(c_Array.size());
-   
-   for (const QJsonValue &rc_Value : c_Array) {
-      if (!rc_Value.isObject()) {
-         s32_Retval = C_CONFIG;
-         break;
-      }
-      C_OscViewData c_View;
-      s32_Retval = c_View.FromJsonObject(rc_Value.toObject());
-      if (s32_Retval != C_NO_ERR) {
-         break;
-      }
-      orc_Views.append(c_View);
-   }
-   
-   return s32_Retval;
+   Q_UNUSED(orc_OscNodes)
+   return C_OscFilerUtil::h_LoadListJson(orc_Views, orc_Path);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \brief   Save views to JSON file
-   
-   \param[in]      orc_Views      Views to save
-   \param[in]      orc_Path       File path
-   \param[in]      orc_OscNodes   Node information (not used for JSON format)
-   
-   \return Error code
-*/
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_SaveJson(const QList<C_OscViewData> &orc_Views,
                                    const QString &orc_Path,
                                    const QList<C_OscNode> &orc_OscNodes) {
-   Q_UNUSED(orc_OscNodes);
-   int32_t s32_Retval = C_NO_ERR;
-   
-   QJsonArray c_Array;
-   
-   for (const auto &rc_View : orc_Views) {
-      c_Array.append(rc_View.ToJsonObject());
-   }
-   
-   QJsonDocument c_Doc(c_Array);
-   
-   QFile c_File(orc_Path);
-   if (!c_File.open(QIODevice::WriteOnly)) {
-      osc_write_log_error("Save JSON views", 
-                         QString("Cannot open file: %1").arg(orc_Path));
-      return C_RD_WR;
-   }
-   
-   c_File.write(c_Doc.toJson(QJsonDocument::Indented));
-   c_File.close();
-   
-   return s32_Retval;
+   Q_UNUSED(orc_OscNodes)
+   return C_OscFilerUtil::h_SaveListJson(orc_Views, orc_Path);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \brief   Load views from XML file
-   
-   \param[in,out]  orc_Views      Views to load
-   \param[in]      orc_Path       File path
-   \param[in]      orc_OscNodes   Node information
-   
-   \return Error code
-*/
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_LoadXml(QList<C_OscViewData> &orc_Views,
                                   const QString &orc_Path,
                                   const QList<C_OscNode> &orc_OscNodes) {
-   // Delegate to existing XML loading method
-   return h_LoadSystemViewsFile(orc_Views, orc_Path, orc_OscNodes);
+   Q_UNUSED(orc_OscNodes)
+   return C_OscFilerUtil::h_LoadListXml(orc_Views, orc_Path,
+                                        "opensyde-system-views", "opensyde-system-view");
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \brief   Save views to XML file
-   
-   \param[in]      orc_Views      Views to save
-   \param[in]      orc_Path       File path
-   \param[in]      orc_OscNodes   Node information
-   
-   \return Error code
-*/
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_SaveXml(const QList<C_OscViewData> &orc_Views,
                                   const QString &orc_Path,
                                   const QList<C_OscNode> &orc_OscNodes) {
-   Q_UNUSED(orc_OscNodes);
-   int32_t s32_Retval = C_NO_ERR;
-   
-   QDomDocument c_Doc("opensyde-system-views");
-   
-   // Create root element
-   QDomElement c_Root = c_Doc.createElement("opensyde-system-views");
-   c_Root.setAttribute("length", static_cast<uint32_t>(orc_Views.size()));
-   c_Doc.appendChild(c_Root);
-   
-   // Save each view
-   for (const auto &rc_View : orc_Views) {
-      QDomElement c_ViewElement = rc_View.ToQDomDocument(c_Doc, "opensyde-system-view");
-      c_Root.appendChild(c_ViewElement);
-   }
-   
-   QFile c_File(orc_Path);
-   if (!c_File.open(QIODevice::WriteOnly | QIODevice::Text)) {
-      osc_write_log_error("Save XML views", 
-                         QString("Cannot open file: %1").arg(orc_Path));
-      return C_RD_WR;
-   }
-   
-   QTextStream c_Stream(&c_File);
-   c_Stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-   c_Stream << c_Doc.toString();
-   c_File.close();
-   
-   return s32_Retval;
+   Q_UNUSED(orc_OscNodes)
+   return C_OscFilerUtil::h_SaveListXml(orc_Views, orc_Path,
+                                        "opensyde-system-views", "opensyde-system-view");
 }

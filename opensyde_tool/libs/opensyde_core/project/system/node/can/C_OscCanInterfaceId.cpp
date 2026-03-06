@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscCanInterfaceId.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwtypes.hpp"
 
 /* -- Used Namespaces
@@ -146,10 +146,7 @@ bool C_OscCanInterfaceId::operator!=(const C_OscCanInterfaceId &orc_Cmp) const {
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanInterfaceId::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_NodeIndex, sizeof(this->u32_NodeIndex), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u8_InterfaceNumber,
-                                      sizeof(this->u8_InterfaceNumber),
-                                      oru32_HashValue);
+void C_OscCanInterfaceId::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue, this->u32_NodeIndex, this->u8_InterfaceNumber);
 }

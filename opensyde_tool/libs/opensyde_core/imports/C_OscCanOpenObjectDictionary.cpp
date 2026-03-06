@@ -17,6 +17,7 @@
 #include <QFileInfo>
 
 #include "C_OscCanOpenObjectDictionary.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
@@ -581,30 +582,10 @@ uint16_t C_OscCanOpenObjectData::GetSize(void) const { return this->mu16_Size; }
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanOpenObjectData::CalcHash(uint32_t &oru32_HashValue) const {
-  C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
-                            this->c_Name.length(), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u16_Index, sizeof(this->u16_Index),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u8_SubIndex, sizeof(this->u8_SubIndex),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u8_DataType, sizeof(this->u8_DataType),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->c_Access.toUtf8().constData(),
-                            this->c_Access.length(), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u8_NumSubs, sizeof(this->u8_NumSubs),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->c_DefaultValue.toUtf8().constData(),
-                            this->c_DefaultValue.length(), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->c_ParameterValue.toUtf8().constData(),
-                            this->c_ParameterValue.length(), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->c_LowLimit.toUtf8().constData(),
-                            this->c_LowLimit.length(), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->c_HighLimit.toUtf8().constData(),
-                            this->c_HighLimit.length(), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->c_Denotation.toUtf8().constData(),
-                            this->c_Denotation.length(), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_IsMappableIntoPdo,
-                            sizeof(this->q_IsMappableIntoPdo), oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue,
+                             this->c_Name, this->u16_Index, this->u8_SubIndex, this->u8_DataType,
+                             this->c_Access, this->u8_NumSubs, this->c_DefaultValue, this->c_ParameterValue,
+                             this->c_LowLimit, this->c_HighLimit, this->c_Denotation, this->q_IsMappableIntoPdo);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

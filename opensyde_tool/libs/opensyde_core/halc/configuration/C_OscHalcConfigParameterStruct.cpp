@@ -16,6 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcConfigParameterStruct.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -65,11 +66,8 @@ C_OscHalcConfigParameterStruct::C_OscHalcConfigParameterStruct(void)
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigParameterStruct::CalcHash(uint32_t &oru32_HashValue) const {
-  C_OscHalcConfigParameter::CalcHash(oru32_HashValue);
-
-  for (uint32_t u32_It = 0UL; u32_It < this->c_ParameterElements.size();
-       ++u32_It) {
-    this->c_ParameterElements[u32_It].CalcHash(oru32_HashValue);
-  }
+void C_OscHalcConfigParameterStruct::CalcHash(uint32_t & oru32_HashValue) const
+{
+   C_OscHalcConfigParameter::CalcHash(oru32_HashValue);
+   hash_util::CalcHashMembers(oru32_HashValue, this->c_ParameterElements);
 }

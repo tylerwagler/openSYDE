@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcConfig.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
@@ -997,12 +997,10 @@ void C_OscHalcConfig::CheckDomainConfigValid(
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfig::CalcHash(uint32_t &oru32_HashValue) const {
-  C_OscHalcDefBase::CalcHash(oru32_HashValue);
-
-  for (uint32_t u32_It = 0UL; u32_It < this->mc_Domains.size(); ++u32_It) {
-    this->mc_Domains[u32_It].CalcHash(oru32_HashValue);
-  }
+void C_OscHalcConfig::CalcHash(uint32_t & oru32_HashValue) const
+{
+   C_OscHalcDefBase::CalcHash(oru32_HashValue);
+   hash_util::CalcHashMembers(oru32_HashValue, this->mc_Domains);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

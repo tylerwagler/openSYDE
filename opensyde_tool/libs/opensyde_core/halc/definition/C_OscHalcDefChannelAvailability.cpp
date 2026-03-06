@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcDefChannelAvailability.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -70,14 +70,7 @@ C_OscHalcDefChannelAvailability::~C_OscHalcDefChannelAvailability() {}
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefChannelAvailability::CalcHash(
-    uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_ValueIndex, sizeof(this->u32_ValueIndex), oru32_HashValue);
-
-  for (uint32_t u32_It = 0UL; u32_It < this->c_DependentValues.size();
-       ++u32_It) {
-    stw::scl::C_SclChecksums::CalcCRC32(&this->c_DependentValues[u32_It],
-                                        sizeof(uint32_t), oru32_HashValue);
-  }
+void C_OscHalcDefChannelAvailability::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue, this->u32_ValueIndex, this->c_DependentValues);
 }

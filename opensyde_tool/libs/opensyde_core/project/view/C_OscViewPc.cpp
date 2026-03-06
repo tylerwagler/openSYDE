@@ -18,6 +18,7 @@
 #include <limits>
 
 #include "C_OscViewPc.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -73,11 +74,9 @@ C_OscViewPc::C_OscViewPc(void)
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewPc::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->mq_Connected, sizeof(this->mq_Connected), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->mu32_BusIndex, sizeof(this->mu32_BusIndex), oru32_HashValue);
+void C_OscViewPc::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue, this->mq_Connected, this->mu32_BusIndex);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

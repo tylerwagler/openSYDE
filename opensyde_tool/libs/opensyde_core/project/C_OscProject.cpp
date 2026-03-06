@@ -22,6 +22,7 @@
 #include "stwtypes.hpp"
 
 #include "C_OscProject.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces
@@ -87,17 +88,11 @@ C_OscProject::~C_OscProject(void) {}
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscProject::CalcHash(uint32_t &oru32_HashValue) const {
-  // Using QString methods directly instead of toStdString()
-  C_SclChecksums::CalcCRC32(this->c_Editor.toStdString().c_str(),
-                            this->c_Editor.length(), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->c_OpenSydeVersion.toStdString().c_str(),
-                            this->c_OpenSydeVersion.length(), oru32_HashValue);
-  // no need to check c_Author, c_CreationTime & c_ModificationTime
-  C_SclChecksums::CalcCRC32(this->c_Template.toStdString().c_str(),
-                            this->c_Template.length(), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->c_Version.toStdString().c_str(),
-                            this->c_Version.length(), oru32_HashValue);
+void C_OscProject::CalcHash(uint32_t & oru32_HashValue) const
+{
+   //no need to check c_Author, c_CreationTime & c_ModificationTime
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_Editor, this->c_OpenSydeVersion, this->c_Template, this->c_Version);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

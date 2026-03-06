@@ -19,6 +19,7 @@
 
 #include <cstdio>
 
+#include "C_OscFilerUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscUtils.hpp"
@@ -49,6 +50,20 @@ using namespace stw::errors;
  * ---------------------------------------------------------------------------------------
  */
 
+namespace
+{
+const C_OscFilerUtil::EnumEntry<C_OscSystemBus::E_Type> mac_BUS_TYPE_TABLE[] = {
+   {C_OscSystemBus::eCAN, "can"},
+   {C_OscSystemBus::eETHERNET, "ethernet"}
+};
+
+const C_OscFilerUtil::EnumEntry<C_OscNodeCodeExportSettings::E_Scaling> mac_SCALING_TABLE[] = {
+   {C_OscNodeCodeExportSettings::eFLOAT32, "float32"},
+   {C_OscNodeCodeExportSettings::eFLOAT64, "float64"},
+   {C_OscNodeCodeExportSettings::eNONE, "none"}
+};
+}
+
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
  */
@@ -67,14 +82,7 @@ using namespace stw::errors;
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscSystemFilerUtil::h_BusTypeEnumToString(
     const C_OscSystemBus::E_Type oe_Type) {
-  QString c_Retval;
-
-  if (oe_Type == C_OscSystemBus::eETHERNET) {
-    c_Retval = "ethernet";
-  } else {
-    c_Retval = "can";
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(oe_Type, mac_BUS_TYPE_TABLE, "can");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -91,18 +99,7 @@ QString C_OscSystemFilerUtil::h_BusTypeEnumToString(
 int32_t
 C_OscSystemFilerUtil::h_BusTypeStringToEnum(const QString &orc_Type,
                                             C_OscSystemBus::E_Type &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_Type == "ethernet") {
-    ore_Type = C_OscSystemBus::eETHERNET;
-  } else if (orc_Type == "can") {
-    ore_Type = C_OscSystemBus::eCAN;
-  } else {
-    osc_write_log_error("Loading System Definition",
-                        "Invalid value for bus.\"type\":" + orc_Type);
-    s32_Retval = C_RANGE;
-  }
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_Type, mac_BUS_TYPE_TABLE, ore_Type, "Loading System Definition", "bus.type");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -338,24 +335,7 @@ void C_OscSystemFilerUtil::h_AdaptProjectPathToSystemViews(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscSystemFilerUtil::h_CodeExportScalingTypeToString(
     const C_OscNodeCodeExportSettings::E_Scaling &ore_Scaling) {
-  QString c_Retval;
-
-  switch (ore_Scaling) {
-  case C_OscNodeCodeExportSettings::eFLOAT32:
-    c_Retval = "float32";
-    break;
-  case C_OscNodeCodeExportSettings::eFLOAT64:
-    c_Retval = "float64";
-    break;
-  case C_OscNodeCodeExportSettings::eNONE:
-    c_Retval = "none";
-    break;
-  default:
-    c_Retval = "invalid";
-    break;
-  }
-
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_Scaling, mac_SCALING_TABLE);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -372,24 +352,7 @@ QString C_OscSystemFilerUtil::h_CodeExportScalingTypeToString(
 int32_t C_OscSystemFilerUtil::h_StringToCodeExportScalingType(
     const QString &orc_String,
     C_OscNodeCodeExportSettings::E_Scaling &ore_Scaling) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "float32") {
-    ore_Scaling = C_OscNodeCodeExportSettings::eFLOAT32;
-  } else if (orc_String == "float64") {
-    ore_Scaling = C_OscNodeCodeExportSettings::eFLOAT64;
-  } else if (orc_String == "none") {
-    ore_Scaling = C_OscNodeCodeExportSettings::eNONE;
-  } else {
-    osc_write_log_error(
-        "Loading node definition",
-        "Invalid value for "
-        "\"properties\".\"code-export-settings\".\"scaling-support\": " +
-            orc_String);
-    s32_Retval = C_RANGE;
-  }
-
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_SCALING_TABLE, ore_Scaling, "Loading node definition", "properties.code-export-settings.scaling-support");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

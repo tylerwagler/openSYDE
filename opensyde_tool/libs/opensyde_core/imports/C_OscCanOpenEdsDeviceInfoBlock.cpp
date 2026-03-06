@@ -16,6 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscCanOpenEdsDeviceInfoBlock.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
 
@@ -70,60 +71,20 @@ C_OscCanOpenEdsDeviceInfoBlock::C_OscCanOpenEdsDeviceInfoBlock()
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenEdsDeviceInfoBlock::CalcHash(uint32_t &oru32_HashValue) const {
-  C_SclChecksums::CalcCRC32(this->c_VendorName.toUtf8().constData(),
-                            static_cast<uint32_t>(this->c_VendorName.length()),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(
-      this->c_VendorNumber.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_VendorNumber.length()), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->c_ProductName.toUtf8().constData(),
-                            static_cast<uint32_t>(this->c_ProductName.length()),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(
-      this->c_ProductNumber.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_ProductNumber.length()), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(
-      this->c_RevisionNumber.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_RevisionNumber.length()), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->c_OrderCode.toUtf8().constData(),
-                            static_cast<uint32_t>(this->c_OrderCode.length()),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_BaudRate10, sizeof(this->q_BaudRate10),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_BaudRate20, sizeof(this->q_BaudRate20),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_BaudRate50, sizeof(this->q_BaudRate50),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_BaudRate125, sizeof(this->q_BaudRate125),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_BaudRate250, sizeof(this->q_BaudRate250),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_BaudRate500, sizeof(this->q_BaudRate500),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_BaudRate800, sizeof(this->q_BaudRate800),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_BaudRate1000, sizeof(this->q_BaudRate1000),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_SimpleBootUpMaster,
-                            sizeof(this->q_SimpleBootUpMaster),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_SimpleBootUpSlave,
-                            sizeof(this->q_SimpleBootUpSlave), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u8_Granularity, sizeof(this->u8_Granularity),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(
-      this->c_DynamicChannelsSupported.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_DynamicChannelsSupported.length()),
-      oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_GroupMessaging,
-                            sizeof(this->q_GroupMessaging), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u16_NrOfRxPdo, sizeof(this->u16_NrOfRxPdo),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u16_NrOfTxPdo, sizeof(this->u16_NrOfTxPdo),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_LssSupported, sizeof(this->q_LssSupported),
-                            oru32_HashValue);
+void C_OscCanOpenEdsDeviceInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_VendorName, this->c_VendorNumber,
+                              this->c_ProductName, this->c_ProductNumber,
+                              this->c_RevisionNumber, this->c_OrderCode,
+                              this->q_BaudRate10, this->q_BaudRate20,
+                              this->q_BaudRate50, this->q_BaudRate125,
+                              this->q_BaudRate250, this->q_BaudRate500,
+                              this->q_BaudRate800, this->q_BaudRate1000,
+                              this->q_SimpleBootUpMaster, this->q_SimpleBootUpSlave,
+                              this->u8_Granularity, this->c_DynamicChannelsSupported,
+                              this->q_GroupMessaging, this->u16_NrOfRxPdo,
+                              this->u16_NrOfTxPdo, this->q_LssSupported);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

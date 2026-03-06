@@ -15,6 +15,7 @@
  */
 #include "precomp_headers.hpp"
 
+#include "C_OscFilerUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscNodeCommFiler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
@@ -47,6 +48,42 @@ using namespace stw::opensyde_core;
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
  */
+
+namespace
+{
+const stw::opensyde_core::C_OscFilerUtil::EnumEntry<stw::opensyde_core::C_OscCanProtocol::E_Type>
+   mac_COMM_PROTOCOL_TABLE[] = {
+   {stw::opensyde_core::C_OscCanProtocol::eLAYER2, "layer 2"},
+   {stw::opensyde_core::C_OscCanProtocol::eECES, "eces"},
+   {stw::opensyde_core::C_OscCanProtocol::eCAN_OPEN_SAFETY, "can open safety"},
+   {stw::opensyde_core::C_OscCanProtocol::eCAN_OPEN, "can open"},
+   {stw::opensyde_core::C_OscCanProtocol::eJ1939, "j1939"}
+};
+
+const stw::opensyde_core::C_OscFilerUtil::EnumEntry<stw::opensyde_core::C_OscCanSignal::E_ByteOrderType>
+   mac_BYTE_ORDER_TABLE[] = {
+   {stw::opensyde_core::C_OscCanSignal::eBYTE_ORDER_INTEL, "intel"},
+   {stw::opensyde_core::C_OscCanSignal::eBYTE_ORDER_MOTOROLA, "motorola"}
+};
+
+const stw::opensyde_core::C_OscFilerUtil::EnumEntry<stw::opensyde_core::C_OscCanSignal::E_MultiplexerType>
+   mac_MUX_TYPE_TABLE[] = {
+   {stw::opensyde_core::C_OscCanSignal::eMUX_DEFAULT, "default"},
+   {stw::opensyde_core::C_OscCanSignal::eMUX_MULTIPLEXER_SIGNAL, "multiplexer"},
+   {stw::opensyde_core::C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL, "multiplexed"}
+};
+
+const stw::opensyde_core::C_OscFilerUtil::EnumEntry<stw::opensyde_core::C_OscCanMessage::E_TxMethodType>
+   mac_TX_METHOD_TABLE[] = {
+   {stw::opensyde_core::C_OscCanMessage::eTX_METHOD_CYCLIC, "cyclic"},
+   {stw::opensyde_core::C_OscCanMessage::eTX_METHOD_ON_CHANGE, "on-data-change"},
+   {stw::opensyde_core::C_OscCanMessage::eTX_METHOD_ON_EVENT, "on-application-event"},
+   {stw::opensyde_core::C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254, "on-can-open-type-254"},
+   {stw::opensyde_core::C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_255, "on-can-open-type-255"},
+   {stw::opensyde_core::C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_0, "on-can-open-type-0"},
+   {stw::opensyde_core::C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_1_TO_240, "on-can-open-type-1-to-240"}
+};
+}
 
 /* -- Implementation
  * ------------------------------------------------------------------------------------------------
@@ -892,29 +929,7 @@ void C_OscNodeCommFiler::h_SaveNodeComSignal(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscNodeCommFiler::h_CommunicationProtocolToString(
     const C_OscCanProtocol::E_Type &ore_CommunicationProtocol) {
-  QString c_Retval;
-
-  switch (ore_CommunicationProtocol) {
-  case C_OscCanProtocol::eLAYER2:
-    c_Retval = "layer 2";
-    break;
-  case C_OscCanProtocol::eECES:
-    c_Retval = "eces";
-    break;
-  case C_OscCanProtocol::eCAN_OPEN_SAFETY:
-    c_Retval = "can open safety";
-    break;
-  case C_OscCanProtocol::eCAN_OPEN:
-    c_Retval = "can open";
-    break;
-  case C_OscCanProtocol::eJ1939:
-    c_Retval = "j1939";
-    break;
-  default:
-    c_Retval = "invalid";
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_CommunicationProtocol, mac_COMM_PROTOCOL_TABLE);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -930,26 +945,8 @@ QString C_OscNodeCommFiler::h_CommunicationProtocolToString(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeCommFiler::h_StringToCommunicationProtocol(
     const QString &orc_String, C_OscCanProtocol::E_Type &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "can open safety") {
-    ore_Type = C_OscCanProtocol::eCAN_OPEN_SAFETY;
-  } else if (orc_String == "eces") {
-    ore_Type = C_OscCanProtocol::eECES;
-  } else if (orc_String == "layer 2") {
-    ore_Type = C_OscCanProtocol::eLAYER2;
-  } else if (orc_String == "can open") {
-    ore_Type = C_OscCanProtocol::eCAN_OPEN;
-  } else if (orc_String == "j1939") {
-    ore_Type = C_OscCanProtocol::eJ1939;
-  } else {
-    osc_write_log_error("Loading node definition",
-                        "Invalid value for \"communication-protocol\":" +
-                            orc_String);
-    s32_Retval = C_RANGE;
-  }
-
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_COMM_PROTOCOL_TABLE, ore_Type,
+                                        "Loading node definition", "communication-protocol");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1279,19 +1276,7 @@ C_OscNodeCommFiler::mh_LoadSignalJ1939Part(C_OscCanSignal &orc_NodeCommSignal,
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscNodeCommFiler::mh_CommunicationByteOrderToString(
     const C_OscCanSignal::E_ByteOrderType &ore_CommunicationByteOrder) {
-  QString c_Retval;
-
-  switch (ore_CommunicationByteOrder) {
-  case C_OscCanSignal::eBYTE_ORDER_INTEL:
-    c_Retval = "intel";
-    break;
-  case C_OscCanSignal::eBYTE_ORDER_MOTOROLA:
-    c_Retval = "motorola";
-    break;
-  default:
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_CommunicationByteOrder, mac_BYTE_ORDER_TABLE, "");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1307,21 +1292,9 @@ QString C_OscNodeCommFiler::mh_CommunicationByteOrderToString(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeCommFiler::mh_StringToCommunicationByteOrder(
     const QString &orc_String, C_OscCanSignal::E_ByteOrderType &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "intel") {
-    ore_Type = C_OscCanSignal::eBYTE_ORDER_INTEL;
-  } else if (orc_String == "motorola") {
-    ore_Type = C_OscCanSignal::eBYTE_ORDER_MOTOROLA;
-  } else {
-    osc_write_log_error(
-        "Loading node definition",
-        "Invalid value for \"com-message\".\"com-signals\".\nbyte-order\":" +
-            orc_String);
-    s32_Retval = C_RANGE;
-  }
-
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_BYTE_ORDER_TABLE, ore_Type,
+                                        "Loading node definition",
+                                        "com-message.com-signals.byte-order");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1336,22 +1309,7 @@ int32_t C_OscNodeCommFiler::mh_StringToCommunicationByteOrder(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscNodeCommFiler::mh_CommunicationMuxTypeToString(
     const C_OscCanSignal::E_MultiplexerType &ore_CommunicationByteOrder) {
-  QString c_Retval;
-
-  switch (ore_CommunicationByteOrder) {
-  case C_OscCanSignal::eMUX_DEFAULT:
-    c_Retval = "default";
-    break;
-  case C_OscCanSignal::eMUX_MULTIPLEXER_SIGNAL:
-    c_Retval = "multiplexer";
-    break;
-  case C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL:
-    c_Retval = "multiplexed";
-    break;
-  default:
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_CommunicationByteOrder, mac_MUX_TYPE_TABLE, "");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1367,24 +1325,9 @@ QString C_OscNodeCommFiler::mh_CommunicationMuxTypeToString(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeCommFiler::mh_StringToCommunicationMuxType(
     const QString &orc_String, C_OscCanSignal::E_MultiplexerType &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "default") {
-    ore_Type = C_OscCanSignal::eMUX_DEFAULT;
-  } else if (orc_String == "multiplexer") {
-    ore_Type = C_OscCanSignal::eMUX_MULTIPLEXER_SIGNAL;
-  } else if (orc_String == "multiplexed") {
-    ore_Type = C_OscCanSignal::eMUX_MULTIPLEXED_SIGNAL;
-  } else {
-    osc_write_log_error(
-        "Loading node definition",
-        "Invalid value for "
-        "\"com-message\".\"com-signals\".\nmultiplexer-type\":" +
-            orc_String);
-    s32_Retval = C_RANGE;
-  }
-
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_MUX_TYPE_TABLE, ore_Type,
+                                        "Loading node definition",
+                                        "com-message.com-signals.multiplexer-type");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1400,35 +1343,7 @@ int32_t C_OscNodeCommFiler::mh_StringToCommunicationMuxType(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscNodeCommFiler::mh_NodeComMessageTxMethodToString(
     const C_OscCanMessage::E_TxMethodType &ore_NodeComMessageTxMethod) {
-  QString c_Retval;
-
-  switch (ore_NodeComMessageTxMethod) {
-  case C_OscCanMessage::eTX_METHOD_CYCLIC:
-    c_Retval = "cyclic";
-    break;
-  case C_OscCanMessage::eTX_METHOD_ON_CHANGE:
-    c_Retval = "on-data-change";
-    break;
-  case C_OscCanMessage::eTX_METHOD_ON_EVENT:
-    c_Retval = "on-application-event";
-    break;
-  case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254:
-    c_Retval = "on-can-open-type-254";
-    break;
-  case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_255:
-    c_Retval = "on-can-open-type-255";
-    break;
-  case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_0:
-    c_Retval = "on-can-open-type-0";
-    break;
-  case C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_1_TO_240:
-    c_Retval = "on-can-open-type-1-to-240";
-    break;
-  default:
-    c_Retval = "invalid";
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_NodeComMessageTxMethod, mac_TX_METHOD_TABLE);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1442,22 +1357,7 @@ QString C_OscNodeCommFiler::mh_NodeComMessageTxMethodToString(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeCommFiler::mh_StringToNodeComMessageTxMethod(
     const QString &orc_String, C_OscCanMessage::E_TxMethodType &ore_Type) {
-  if (orc_String == "cyclic") {
-    ore_Type = C_OscCanMessage::eTX_METHOD_CYCLIC;
-  } else if (orc_String == "on-data-change") {
-    ore_Type = C_OscCanMessage::eTX_METHOD_ON_CHANGE;
-  } else if (orc_String == "on-application-event") {
-    ore_Type = C_OscCanMessage::eTX_METHOD_ON_EVENT;
-  } else if (orc_String == "on-can-open-type-254") {
-    ore_Type = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_254;
-  } else if (orc_String == "on-can-open-type-255") {
-    ore_Type = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_255;
-  } else if (orc_String == "on-can-open-type-0") {
-    ore_Type = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_0;
-  } else if (orc_String == "on-can-open-type-1-to-240") {
-    ore_Type = C_OscCanMessage::eTX_METHOD_CAN_OPEN_TYPE_1_TO_240;
-  } else {
-    // best guess:
+  if (C_OscFilerUtil::h_StringToEnum(orc_String, mac_TX_METHOD_TABLE, ore_Type) != stw::errors::C_NO_ERR) {
     ore_Type = C_OscCanMessage::eTX_METHOD_ON_CHANGE;
     osc_write_log_warning("Loading project file",
                           "Invalid transmission type \"" + orc_String +

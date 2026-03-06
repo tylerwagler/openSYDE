@@ -16,6 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscViewNodeUpdateParamInfo.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -71,11 +72,9 @@ C_OscViewNodeUpdateParamInfo::C_OscViewNodeUpdateParamInfo(void)
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscViewNodeUpdateParamInfo::CalcHash(uint32_t &oru32_HashValue) const {
-  C_SclChecksums::CalcCRC32(&this->mu32_LastKnownCrc,
-                            sizeof(this->mu32_LastKnownCrc), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(this->mc_FilePath.toUtf8().constData(),
-                            this->mc_FilePath.length(), oru32_HashValue);
+void C_OscViewNodeUpdateParamInfo::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue, this->mu32_LastKnownCrc, this->mc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -16,6 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcDefStruct.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -70,11 +71,8 @@ C_OscHalcDefStruct::~C_OscHalcDefStruct(void) {}
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefStruct::CalcHash(uint32_t &oru32_HashValue) const {
-  C_OscHalcDefElement::CalcHash(oru32_HashValue);
-
-  for (uint32_t u32_It = 0UL; u32_It < this->c_StructElements.size();
-       ++u32_It) {
-    this->c_StructElements[u32_It].CalcHash(oru32_HashValue);
-  }
+void C_OscHalcDefStruct::CalcHash(uint32_t & oru32_HashValue) const
+{
+   C_OscHalcDefElement::CalcHash(oru32_HashValue);
+   hash_util::CalcHashMembers(oru32_HashValue, this->c_StructElements);
 }

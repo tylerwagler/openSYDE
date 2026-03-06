@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcDefBase.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -188,53 +188,17 @@ bool C_OscHalcDefBase::IsClear(void) const {
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefBase::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_ContentVersion,
-                                      sizeof(this->u32_ContentVersion),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_DeviceName.toUtf8().data(),
-      static_cast<uint32_t>(this->c_DeviceName.toUtf8().size()),
-      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_FileString.toUtf8().data(),
-      static_cast<uint32_t>(this->c_FileString.toUtf8().size()),
-      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_OriginalFileName.toUtf8().data(),
-      static_cast<uint32_t>(this->c_OriginalFileName.toUtf8().size()),
-      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->e_SafetyMode, sizeof(this->e_SafetyMode), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u8_NumConfigCopies,
-                                      sizeof(this->u8_NumConfigCopies),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_NvmBasedConfig, sizeof(this->q_NvmBasedConfig), oru32_HashValue);
-  for (uint32_t u32_It = 0UL; u32_It < this->c_NvmNonSafeAddressOffset.size();
-       ++u32_It) {
-    const uint32_t u32_Tmp = this->c_NvmNonSafeAddressOffset[u32_It];
-    stw::scl::C_SclChecksums::CalcCRC32(&u32_Tmp, sizeof(u32_Tmp),
-                                        oru32_HashValue);
-  }
-  for (uint32_t u32_It = 0UL; u32_It < this->c_NvmSafeAddressOffset.size();
-       ++u32_It) {
-    const uint32_t u32_Tmp = this->c_NvmSafeAddressOffset[u32_It];
-    stw::scl::C_SclChecksums::CalcCRC32(&u32_Tmp, sizeof(u32_Tmp),
-                                        oru32_HashValue);
-  }
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_NvmReservedListSizeParameters,
-      sizeof(this->u32_NvmReservedListSizeParameters), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_NvmReservedListSizeInputValues,
-      sizeof(this->u32_NvmReservedListSizeInputValues), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_NvmReservedListSizeOutputValues,
-      sizeof(this->u32_NvmReservedListSizeOutputValues), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_NvmReservedListSizeStatusValues,
-      sizeof(this->u32_NvmReservedListSizeStatusValues), oru32_HashValue);
+void C_OscHalcDefBase::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->u32_ContentVersion,
+                              this->c_DeviceName, this->c_FileString, this->c_OriginalFileName,
+                              this->e_SafetyMode, this->u8_NumConfigCopies, this->q_NvmBasedConfig,
+                              this->c_NvmNonSafeAddressOffset, this->c_NvmSafeAddressOffset,
+                              this->u32_NvmReservedListSizeParameters,
+                              this->u32_NvmReservedListSizeInputValues,
+                              this->u32_NvmReservedListSizeOutputValues,
+                              this->u32_NvmReservedListSizeStatusValues);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

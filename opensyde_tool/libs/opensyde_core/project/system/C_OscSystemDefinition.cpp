@@ -21,6 +21,7 @@
 #include <map>
 
 #include "C_OscSystemDefinition.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 #include <QString>
@@ -91,21 +92,9 @@ C_OscSystemDefinition::~C_OscSystemDefinition(void) {}
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinition::CalcHash(uint32_t &oru32_HashValue) const {
-  uint32_t u32_Counter;
-
-  C_SclChecksums::CalcCRC32(&this->u32_NameMaxCharLimit,
-                            sizeof(this->u32_NameMaxCharLimit),
-                            oru32_HashValue);
-
-  // check all subelements
-  for (u32_Counter = 0U; u32_Counter < this->c_Nodes.size(); ++u32_Counter) {
-    this->c_Nodes[u32_Counter].CalcHash(oru32_HashValue);
-  }
-
-  for (u32_Counter = 0U; u32_Counter < this->c_Buses.size(); ++u32_Counter) {
-    this->c_Buses[u32_Counter].CalcHash(oru32_HashValue);
-  }
+void C_OscSystemDefinition::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue, this->u32_NameMaxCharLimit, this->c_Nodes, this->c_Buses);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

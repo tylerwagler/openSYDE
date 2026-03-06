@@ -19,6 +19,8 @@
 
 #include "C_OscNodeApplication.hpp"
 
+#include "C_OscFilerUtil.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_SclChecksums.hpp"
 
@@ -45,6 +47,15 @@ using namespace stw::scl;
 /* -- Module Global Variables
  * ---------------------------------------------------------------------------------------
  */
+
+namespace
+{
+const C_OscFilerUtil::EnumEntry<C_OscNodeApplication::E_Type> mac_APPLICATION_TYPE_TABLE[] = {
+   {C_OscNodeApplication::eBINARY, "binary"},
+   {C_OscNodeApplication::ePROGRAMMABLE_APPLICATION, "programming_application"},
+   {C_OscNodeApplication::ePARAMETER_SET_HALC, "parameter_set_halc"}
+};
+}
 
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
@@ -79,38 +90,12 @@ C_OscNodeApplication::C_OscNodeApplication(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeApplication::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
-                                      this->c_Name.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(),
-                                      this->c_Comment.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_Active, sizeof(this->q_Active),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u8_ProcessId, sizeof(this->u8_ProcessId), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_ProjectPath.toUtf8().constData(),
-                                      this->c_ProjectPath.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_IdeCall.toUtf8().constData(),
-                                      this->c_IdeCall.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_CodeGeneratorPath.toUtf8().constData(),
-      this->c_CodeGeneratorPath.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_GeneratePath.toUtf8().constData(),
-                                      this->c_GeneratePath.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u16_GenCodeVersion,
-                                      sizeof(this->u16_GenCodeVersion),
-                                      oru32_HashValue);
-  for (uint32_t u32_Counter = 0U; u32_Counter < this->c_ResultPaths.size();
-       ++u32_Counter) {
-    stw::scl::C_SclChecksums::CalcCRC32(
-        this->c_ResultPaths[u32_Counter].toUtf8().constData(),
-        this->c_ResultPaths[u32_Counter].length(), oru32_HashValue);
-  }
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->e_Type, this->c_Name, this->c_Comment,
+                              this->q_Active, this->u8_ProcessId,
+                              this->c_ProjectPath, this->c_IdeCall,
+                              this->c_CodeGeneratorPath, this->c_GeneratePath,
+                              this->u16_GenCodeVersion, this->c_ResultPaths);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -124,23 +109,7 @@ void C_OscNodeApplication::CalcHash(uint32_t &oru32_HashValue) const {
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscNodeApplication::h_ApplicationToString(
     const C_OscNodeApplication::E_Type &ore_Application) {
-  QString c_Retval;
-
-  switch (ore_Application) {
-  case C_OscNodeApplication::eBINARY:
-    c_Retval = "binary";
-    break;
-  case C_OscNodeApplication::ePROGRAMMABLE_APPLICATION:
-    c_Retval = "programming_application";
-    break;
-  case C_OscNodeApplication::ePARAMETER_SET_HALC:
-    c_Retval = "parameter_set_halc";
-    break;
-  default:
-    c_Retval = "invalid";
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_Application, mac_APPLICATION_TYPE_TABLE);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -152,14 +121,7 @@ QString C_OscNodeApplication::h_ApplicationToString(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeApplication::h_StringToApplication(
     const QString &orc_String, C_OscNodeApplication::E_Type &ore_Type) {
-  if (orc_String == "binary") {
-    ore_Type = C_OscNodeApplication::eBINARY;
-  } else if (orc_String == "programming_application") {
-    ore_Type = C_OscNodeApplication::ePROGRAMMABLE_APPLICATION;
-  } else if (orc_String == "parameter_set_halc") {
-    ore_Type = C_OscNodeApplication::ePARAMETER_SET_HALC;
-  } else {
-    // set binary if unknown type read
+  if (C_OscFilerUtil::h_StringToEnum(orc_String, mac_APPLICATION_TYPE_TABLE, ore_Type) != stw::errors::C_NO_ERR) {
     ore_Type = C_OscNodeApplication::eBINARY;
     osc_write_log_warning(
         "Loading node definition",

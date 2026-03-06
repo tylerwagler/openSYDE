@@ -24,6 +24,8 @@
 #include "stwerrors.hpp"
 
 #include "C_OscNode.hpp"
+
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 
 #include "C_OscUtils.hpp"
@@ -797,47 +799,12 @@ int32_t C_OscNode::DeleteSignal(const C_OscCanProtocol::E_Type oe_ComProtocol,
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNode::CalcHash(uint32_t &oru32_HashValue) const {
-  uint32_t u32_Counter;
-
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_DeviceType.toStdString().c_str(),
-                                      this->c_DeviceType.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_DatapoolAutoNvmStartAddress,
-      sizeof(this->q_DatapoolAutoNvmStartAddress), oru32_HashValue);
-
-  this->c_Properties.CalcHash(oru32_HashValue);
-
-  for (u32_Counter = 0U; u32_Counter < this->c_ComProtocols.size();
-       ++u32_Counter) {
-    this->c_ComProtocols[u32_Counter].CalcHash(oru32_HashValue);
-  }
-
-  for (u32_Counter = 0U; u32_Counter < this->c_DataPools.size();
-       ++u32_Counter) {
-    this->c_DataPools[u32_Counter].CalcHash(oru32_HashValue);
-  }
-
-  for (u32_Counter = 0U; u32_Counter < this->c_Applications.size();
-       ++u32_Counter) {
-    this->c_Applications[u32_Counter].CalcHash(oru32_HashValue);
-  }
-
-   this->c_HalcConfig.CalcHash(oru32_HashValue);
-   for (QHash<uint8_t, C_OscCanOpenManagerInfo>::const_iterator c_It =
-            this->c_CanOpenManagers.begin();
-        c_It != this->c_CanOpenManagers.end(); ++c_It) {
-     const uint8_t u8_Value = c_It.key();
-     stw::scl::C_SclChecksums::CalcCRC32(&u8_Value, sizeof(u8_Value),
-                                         oru32_HashValue);
-     c_It.value().CalcHash(oru32_HashValue);
-   }
-
-  for (u32_Counter = 0U; u32_Counter < this->c_DataLoggerJobs.size();
-       ++u32_Counter) {
-    this->c_DataLoggerJobs[u32_Counter].CalcHash(oru32_HashValue);
-  }
-  this->c_XappProperties.CalcHash(oru32_HashValue);
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_DeviceType, this->q_DatapoolAutoNvmStartAddress,
+                              this->c_Properties, this->c_ComProtocols,
+                              this->c_DataPools, this->c_Applications,
+                              this->c_HalcConfig, this->c_CanOpenManagers,
+                              this->c_DataLoggerJobs, this->c_XappProperties);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

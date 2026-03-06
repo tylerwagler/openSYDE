@@ -20,6 +20,7 @@
 #include "stwerrors.hpp"
 
 #include "C_OscCanOpenEdsInfoBlock.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -67,9 +68,9 @@ C_OscCanOpenEdsInfoBlock::C_OscCanOpenEdsInfoBlock() {}
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenEdsInfoBlock::CalcHash(uint32_t &oru32_HashValue) const {
-  this->c_FileInfo.CalcHash(oru32_HashValue);
-  this->c_DeviceInfo.CalcHash(oru32_HashValue);
+void C_OscCanOpenEdsInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue, this->c_FileInfo, this->c_DeviceInfo);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -19,6 +19,7 @@
 
 #include "C_OscHalcDefFiler.hpp"
 #include "C_OscHalcDefStructFiler.hpp"
+#include "C_OscFilerUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscUtils.hpp"
@@ -48,6 +49,22 @@ using namespace stw::opensyde_core;
 /* -- Module Global Variables
  * ---------------------------------------------------------------------------------------
  */
+
+namespace
+{
+const C_OscFilerUtil::EnumEntry<C_OscHalcDefDomain::E_Category> mac_DOMAIN_CATEGORY_TABLE[] = {
+   {C_OscHalcDefDomain::eCA_INPUT, "input"},
+   {C_OscHalcDefDomain::eCA_OUTPUT, "output"},
+   {C_OscHalcDefDomain::eCA_OTHER, "other"}
+};
+
+const C_OscFilerUtil::EnumEntry<C_OscHalcDefBase::E_SafetyMode> mac_SAFETY_MODE_TABLE[] = {
+   {C_OscHalcDefBase::eTWO_LEVELS_WITHOUT_DROPPING, "two-levels-without-dropping"},
+   {C_OscHalcDefBase::eONE_LEVEL_ALL_SAFE, "one-level-all-safe"},
+   {C_OscHalcDefBase::eONE_LEVEL_ALL_NON_SAFE, "one-level-all-non-safe"},
+   {C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING, "two-levels-with-dropping"}
+};
+}
 
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
@@ -1737,22 +1754,7 @@ C_OscHalcDefFiler::mh_SaveUseCase(const C_OscHalcDefChannelUseCase &orc_UseCase,
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscHalcDefFiler::mh_DomainCategoryEnumToString(
     const C_OscHalcDefDomain::E_Category oe_Category) {
-  QString c_Retval;
-
-  switch (oe_Category) {
-  case C_OscHalcDefDomain::eCA_INPUT:
-    c_Retval = "input";
-    break;
-  case C_OscHalcDefDomain::eCA_OUTPUT:
-    c_Retval = "output";
-    break;
-  case C_OscHalcDefDomain::eCA_OTHER:
-    c_Retval = "other";
-    break;
-  default:
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(oe_Category, mac_DOMAIN_CATEGORY_TABLE, "");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1768,18 +1770,7 @@ QString C_OscHalcDefFiler::mh_DomainCategoryEnumToString(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcDefFiler::mh_DomainCategoryStringToEnum(
     const QString &orc_Category, C_OscHalcDefDomain::E_Category &ore_Category) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_Category == "input") {
-    ore_Category = C_OscHalcDefDomain::eCA_INPUT;
-  } else if (orc_Category == "output") {
-    ore_Category = C_OscHalcDefDomain::eCA_OUTPUT;
-  } else if (orc_Category == "other") {
-    ore_Category = C_OscHalcDefDomain::eCA_OTHER;
-  } else {
-    s32_Retval = C_RANGE;
-  }
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_Category, mac_DOMAIN_CATEGORY_TABLE, ore_Category);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1856,24 +1847,7 @@ C_OscHalcDefFiler::mh_CheckDuplicateNames(const QString &orc_Section,
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscHalcDefFiler::mh_SafetyModeToString(
     const C_OscHalcDefBase::E_SafetyMode &ore_NodeDataPoolElementAccess) {
-  QString c_Retval;
-
-  switch (ore_NodeDataPoolElementAccess) {
-  case C_OscHalcDefBase::eTWO_LEVELS_WITHOUT_DROPPING:
-    c_Retval = "two-levels-without-dropping";
-    break;
-  case C_OscHalcDefBase::eONE_LEVEL_ALL_SAFE:
-    c_Retval = "one-level-all-safe";
-    break;
-  case C_OscHalcDefBase::eONE_LEVEL_ALL_NON_SAFE:
-    c_Retval = "one-level-all-non-safe";
-    break;
-  case C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING:
-  default:
-    c_Retval = "two-levels-with-dropping";
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_NodeDataPoolElementAccess, mac_SAFETY_MODE_TABLE, "two-levels-with-dropping");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1889,19 +1863,6 @@ QString C_OscHalcDefFiler::mh_SafetyModeToString(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcDefFiler::mh_StringToSafetyMode(
     const QString &orc_String, C_OscHalcDefBase::E_SafetyMode &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "two-levels-with-dropping") {
-    ore_Type = C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING;
-  } else if (orc_String == "two-levels-without-dropping") {
-    ore_Type = C_OscHalcDefBase::eTWO_LEVELS_WITHOUT_DROPPING;
-  } else if (orc_String == "one-level-all-safe") {
-    ore_Type = C_OscHalcDefBase::eONE_LEVEL_ALL_SAFE;
-  } else if (orc_String == "one-level-all-non-safe") {
-    ore_Type = C_OscHalcDefBase::eONE_LEVEL_ALL_NON_SAFE;
-  } else {
-    ore_Type = C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING;
-    s32_Retval = C_RANGE;
-  }
-  return s32_Retval;
+  ore_Type = C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_SAFETY_MODE_TABLE, ore_Type);
 }

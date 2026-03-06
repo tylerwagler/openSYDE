@@ -14,9 +14,8 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscNodeCodeExportSettings.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwtypes.hpp"
-
-#include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -71,7 +70,7 @@ void C_OscNodeCodeExportSettings::Initialize() { e_ScalingSupport = eFLOAT32; }
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeCodeExportSettings::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->e_ScalingSupport, sizeof(this->e_ScalingSupport), oru32_HashValue);
+void C_OscNodeCodeExportSettings::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue, this->e_ScalingSupport);
 }

@@ -17,6 +17,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscCanSignal.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces
@@ -137,32 +138,15 @@ bool C_OscCanSignal::operator<(const C_OscCanSignal &orc_Cmp) const {
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanSignal::CalcHash(uint32_t &oru32_HashValue,
                               const bool oq_R20Compatible) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->e_ComByteOrder, sizeof(this->e_ComByteOrder), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->e_MultiplexerType,
-                                      sizeof(this->e_MultiplexerType),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u16_ComBitLength, sizeof(this->u16_ComBitLength), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u16_ComBitStart, sizeof(this->u16_ComBitStart), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_ComDataElementIndex,
-                                      sizeof(this->u32_ComDataElementIndex),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u16_MultiplexValue,
-                                      sizeof(this->u16_MultiplexValue),
-                                      oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue,
+                             this->e_ComByteOrder, this->e_MultiplexerType,
+                             this->u16_ComBitLength, this->u16_ComBitStart,
+                             this->u32_ComDataElementIndex, this->u16_MultiplexValue);
   if (oq_R20Compatible == false) {
-    stw::scl::C_SclChecksums::CalcCRC32(
-        &this->u16_CanOpenManagerObjectDictionaryIndex,
-        sizeof(this->u16_CanOpenManagerObjectDictionaryIndex), oru32_HashValue);
-    stw::scl::C_SclChecksums::CalcCRC32(
-        &this->u8_CanOpenManagerObjectDictionarySubIndex,
-        sizeof(this->u8_CanOpenManagerObjectDictionarySubIndex),
-        oru32_HashValue);
-    stw::scl::C_SclChecksums::CalcCRC32(
-        &this->u32_J1939SuspectParameterNumber,
-        sizeof(this->u32_J1939SuspectParameterNumber), oru32_HashValue);
+    hash_util::CalcHashMembers(oru32_HashValue,
+                               this->u16_CanOpenManagerObjectDictionaryIndex,
+                               this->u8_CanOpenManagerObjectDictionarySubIndex,
+                               this->u32_J1939SuspectParameterNumber);
   }
 }
 

@@ -17,8 +17,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscNodeDataPoolDataSet.hpp"
-
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -66,10 +65,7 @@ C_OscNodeDataPoolDataSet::C_OscNodeDataPoolDataSet(void)
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolDataSet::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
-                                      this->c_Name.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(),
-                                      this->c_Comment.length(),
-                                      oru32_HashValue);
+void C_OscNodeDataPoolDataSet::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue, this->c_Name, this->c_Comment);
 }

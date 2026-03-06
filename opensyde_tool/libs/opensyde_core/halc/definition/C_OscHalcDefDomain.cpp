@@ -17,7 +17,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcDefDomain.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -71,35 +71,10 @@ C_OscHalcDefDomain::~C_OscHalcDefDomain(void) {}
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefDomain::CalcHash(uint32_t &oru32_HashValue) const {
-  const QByteArray c_IdData = this->c_Id.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(c_IdData.constData(),
-                                      static_cast<uint32_t>(c_IdData.size()),
-                                      oru32_HashValue);
-  const QByteArray c_NameData = this->c_Name.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(c_NameData.constData(),
-                                      static_cast<uint32_t>(c_NameData.size()),
-                                      oru32_HashValue);
-  const QByteArray c_CommentData = this->c_Comment.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(
-      c_CommentData.constData(), static_cast<uint32_t>(c_CommentData.size()),
-      oru32_HashValue);
-  const QByteArray c_SingularNameData = this->c_SingularName.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(
-      c_SingularNameData.constData(),
-      static_cast<uint32_t>(c_SingularNameData.size()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->e_Category, sizeof(this->e_Category), oru32_HashValue);
-
-  for (uint32_t u32_It = 0UL; u32_It < this->c_Channels.size(); ++u32_It) {
-    this->c_Channels[u32_It].CalcHash(oru32_HashValue);
-  }
-
-  for (uint32_t u32_It = 0UL; u32_It < this->c_ChannelUseCases.size();
-       ++u32_It) {
-    this->c_ChannelUseCases[u32_It].CalcHash(oru32_HashValue);
-  }
-
-  this->c_DomainValues.CalcHash(oru32_HashValue);
-  this->c_ChannelValues.CalcHash(oru32_HashValue);
+void C_OscHalcDefDomain::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_Id, this->c_Name, this->c_Comment, this->c_SingularName,
+                              this->e_Category, this->c_Channels, this->c_ChannelUseCases,
+                              this->c_DomainValues, this->c_ChannelValues);
 }

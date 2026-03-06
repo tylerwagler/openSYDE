@@ -18,6 +18,8 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscNodeDataPoolListElementOptArrayId.hpp"
+
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
 
@@ -205,16 +207,10 @@ bool C_OscNodeDataPoolListElementOptArrayId::operator==(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolListElementOptArrayId::CalcHash(
     uint32_t &oru32_HashValue) const {
-  C_OscNodeDataPoolListElementId::CalcHash(oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->mq_UseArrayElementIndex,
-                                      sizeof(this->mq_UseArrayElementIndex),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->mu32_ArrayElementIndex,
-                                      sizeof(this->mu32_ArrayElementIndex),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->mc_HalChannelName.toUtf8().constData(),
-      this->mc_HalChannelName.length(), oru32_HashValue);
+   C_OscNodeDataPoolListElementId::CalcHash(oru32_HashValue);
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->mq_UseArrayElementIndex, this->mu32_ArrayElementIndex,
+                              this->mc_HalChannelName);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

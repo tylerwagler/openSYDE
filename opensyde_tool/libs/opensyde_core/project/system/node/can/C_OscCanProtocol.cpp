@@ -18,6 +18,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscCanProtocol.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
 
@@ -73,17 +74,10 @@ C_OscCanProtocol::C_OscCanProtocol(void)
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanProtocol::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_DataPoolIndex,
-                                      sizeof(this->u32_DataPoolIndex),
-                                      oru32_HashValue);
-
-  for (uint32_t u32_Counter = 0U; u32_Counter < this->c_ComMessages.size();
-       ++u32_Counter) {
-    this->c_ComMessages[u32_Counter].CalcHash(oru32_HashValue);
-  }
+void C_OscCanProtocol::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->e_Type, this->u32_DataPoolIndex, this->c_ComMessages);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

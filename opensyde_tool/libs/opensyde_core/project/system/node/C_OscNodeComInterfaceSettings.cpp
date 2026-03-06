@@ -18,6 +18,7 @@
 #include "C_OscNodeComInterfaceSettings.hpp"
 #include <cstring>
 
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces
@@ -86,36 +87,11 @@ C_OscNodeComInterfaceSettings::~C_OscNodeComInterfaceSettings(void) {}
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeComInterfaceSettings::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->e_InterfaceType, sizeof(this->e_InterfaceType), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u8_InterfaceNumber,
-                                      sizeof(this->u8_InterfaceNumber),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u8_NodeId, sizeof(this->u8_NodeId),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->c_Ip.au8_IpAddress[0],
-                                      sizeof(this->c_Ip.au8_IpAddress),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->c_Ip.au8_NetMask[0],
-                                      sizeof(this->c_Ip.au8_NetMask),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->c_Ip.au8_DefaultGateway[0],
-                                      sizeof(this->c_Ip.au8_DefaultGateway),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsUpdateEnabled,
-                                      sizeof(this->q_IsUpdateEnabled),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsRoutingEnabled,
-                                      sizeof(this->q_IsRoutingEnabled),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_IsDiagnosisEnabled,
-                                      sizeof(this->q_IsDiagnosisEnabled),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->mq_IsBusConnected,
-                                      sizeof(this->mq_IsBusConnected),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_BusIndex, sizeof(this->u32_BusIndex), oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue,
+                             this->e_InterfaceType, this->u8_InterfaceNumber, this->u8_NodeId,
+                             this->c_Ip.au8_IpAddress, this->c_Ip.au8_NetMask, this->c_Ip.au8_DefaultGateway,
+                             this->q_IsUpdateEnabled, this->q_IsRoutingEnabled, this->q_IsDiagnosisEnabled,
+                             this->mq_IsBusConnected, this->u32_BusIndex);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

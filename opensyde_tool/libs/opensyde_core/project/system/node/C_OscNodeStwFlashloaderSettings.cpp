@@ -16,8 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscNodeStwFlashloaderSettings.hpp"
-
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -80,21 +79,9 @@ void C_OscNodeStwFlashloaderSettings::Initialize(void) {
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeStwFlashloaderSettings::CalcHash(
-    uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_ResetMessageActive,
-                                      sizeof(this->q_ResetMessageActive),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_ResetMessageExtendedId,
-                                      sizeof(this->q_ResetMessageExtendedId),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_ResetMessageId,
-                                      sizeof(this->u32_ResetMessageId),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u8_ResetMessageDlc,
-                                      sizeof(this->u8_ResetMessageDlc),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      reinterpret_cast<const uint8_t *>(this->c_Data.constData()),
-      static_cast<uint32_t>(this->c_Data.size()), oru32_HashValue);
+void C_OscNodeStwFlashloaderSettings::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->q_ResetMessageActive, this->q_ResetMessageExtendedId,
+                              this->u32_ResetMessageId, this->u8_ResetMessageDlc, this->c_Data);
 }

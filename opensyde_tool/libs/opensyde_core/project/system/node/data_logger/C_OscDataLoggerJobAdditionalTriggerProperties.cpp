@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscDataLoggerJobAdditionalTriggerProperties.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwtypes.hpp"
 
 /* -- Used Namespaces
@@ -67,14 +67,8 @@ C_OscDataLoggerJobAdditionalTriggerProperties::
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDataLoggerJobAdditionalTriggerProperties::CalcHash(
-    uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_Enable, sizeof(this->q_Enable),
-                                      oru32_HashValue);
-  this->c_ElementId.CalcHash(oru32_HashValue);
-  this->c_Threshold.CalcHash(oru32_HashValue);
-  const QByteArray c_Utf8 = this->c_Operation.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(c_Utf8.constData(),
-                                      static_cast<uint32_t>(c_Utf8.size()),
-                                      oru32_HashValue);
+void C_OscDataLoggerJobAdditionalTriggerProperties::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->q_Enable, this->c_ElementId, this->c_Threshold, this->c_Operation);
 }

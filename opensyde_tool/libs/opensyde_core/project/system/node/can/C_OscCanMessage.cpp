@@ -20,6 +20,7 @@
 #include <QMap>
 
 #include "C_OscCanMessage.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces
@@ -118,25 +119,10 @@ bool C_OscCanMessage::operator!=(const C_OscCanMessage &orc_Cmp) const {
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscCanMessage::CalcHash(uint32_t &oru32_HashValue,
                                const bool oq_R20Compatible) const {
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
-                                      this->c_Name.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(),
-                                      this->c_Comment.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_CanId, sizeof(this->u32_CanId),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_IsExtended, sizeof(this->q_IsExtended), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u16_Dlc, sizeof(this->u16_Dlc),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->e_TxMethod, sizeof(this->e_TxMethod), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_CycleTimeMs, sizeof(this->u32_CycleTimeMs), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u16_DelayTimeMs, sizeof(this->u16_DelayTimeMs), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_TimeoutMs, sizeof(this->u32_TimeoutMs), oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue,
+                             this->c_Name, this->c_Comment, this->u32_CanId, this->q_IsExtended,
+                             this->u16_Dlc, this->e_TxMethod, this->u32_CycleTimeMs,
+                             this->u16_DelayTimeMs, this->u32_TimeoutMs);
 
   for (uint32_t u32_Counter = 0U; u32_Counter < this->c_Signals.size();
        ++u32_Counter) {
@@ -144,22 +130,12 @@ void C_OscCanMessage::CalcHash(uint32_t &oru32_HashValue,
   }
   if (oq_R20Compatible == false) {
     this->c_CanOpenManagerOwnerNodeIndex.CalcHash(oru32_HashValue);
-
-    stw::scl::C_SclChecksums::CalcCRC32(
-        &this->q_CanOpenManagerCobIdIncludesNodeId,
-        sizeof(this->q_CanOpenManagerCobIdIncludesNodeId), oru32_HashValue);
-    stw::scl::C_SclChecksums::CalcCRC32(
-        &this->u32_CanOpenManagerCobIdOffset,
-        sizeof(this->u32_CanOpenManagerCobIdOffset), oru32_HashValue);
-    stw::scl::C_SclChecksums::CalcCRC32(
-        &this->q_CanOpenManagerMessageActive,
-        sizeof(this->q_CanOpenManagerMessageActive), oru32_HashValue);
-    stw::scl::C_SclChecksums::CalcCRC32(
-        &this->u16_CanOpenManagerPdoIndex,
-        sizeof(this->u16_CanOpenManagerPdoIndex), oru32_HashValue);
-    stw::scl::C_SclChecksums::CalcCRC32(
-        &this->u8_CanOpenTxMethodAdditionalInfo,
-        sizeof(this->u8_CanOpenTxMethodAdditionalInfo), oru32_HashValue);
+    hash_util::CalcHashMembers(oru32_HashValue,
+                               this->q_CanOpenManagerCobIdIncludesNodeId,
+                               this->u32_CanOpenManagerCobIdOffset,
+                               this->q_CanOpenManagerMessageActive,
+                               this->u16_CanOpenManagerPdoIndex,
+                               this->u8_CanOpenTxMethodAdditionalInfo);
   }
 }
 

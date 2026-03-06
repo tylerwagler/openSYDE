@@ -18,7 +18,7 @@
 #include <sstream>
 
 #include "C_OscHalcDefContentBitmaskItem.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwerrors.hpp"
 
 /* -- Used Namespaces
@@ -90,18 +90,11 @@ C_OscHalcDefContentBitmaskItem::SetValueByString(const QString &orc_Item) {
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefContentBitmaskItem::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Display.toUtf8().data(),
-      static_cast<uint32_t>(this->c_Display.toUtf8().size()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Comment.toUtf8().data(),
-      static_cast<uint32_t>(this->c_Comment.toUtf8().size()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->q_ApplyValueSetting,
-                                      sizeof(this->q_ApplyValueSetting),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u64_Value, sizeof(this->u64_Value),
-                                      oru32_HashValue);
+void C_OscHalcDefContentBitmaskItem::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_Display, this->c_Comment,
+                              this->q_ApplyValueSetting, this->u64_Value);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

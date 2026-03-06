@@ -20,8 +20,7 @@
 #include <cstddef>
 
 #include "C_OscNodeDataPoolListElementId.hpp"
-
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -174,14 +173,9 @@ bool C_OscNodeDataPoolListElementId::operator==(
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolListElementId::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_NodeIndex, sizeof(this->u32_NodeIndex), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_DataPoolIndex,
-                                      sizeof(this->u32_DataPoolIndex),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_ListIndex, sizeof(this->u32_ListIndex), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_ElementIndex, sizeof(this->u32_ElementIndex), oru32_HashValue);
+void C_OscNodeDataPoolListElementId::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->u32_NodeIndex, this->u32_DataPoolIndex,
+                              this->u32_ListIndex, this->u32_ElementIndex);
 }

@@ -17,6 +17,7 @@
 #include <QFileInfo>
 
 #include "C_OscCanOpenManagerFiler.hpp"
+#include "C_OscFilerUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscNodeCommFiler.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
@@ -50,6 +51,15 @@ const uint16_t C_OscCanOpenManagerFiler::mhu16_FILE_VERSION_1 = 1;
 /* -- Module Global Variables
  * ---------------------------------------------------------------------------------------
  */
+
+namespace
+{
+const C_OscFilerUtil::EnumEntry<C_OscCanOpenManagerInfo::E_NmtErrorBehaviourType> mac_NMT_ERROR_TABLE[] = {
+   {C_OscCanOpenManagerInfo::eRESTART_ALL_DEVICES, "restart all devices"},
+   {C_OscCanOpenManagerInfo::eRESTART_FAILURE_DEVICE, "restart failure device"},
+   {C_OscCanOpenManagerInfo::eSTOP_ALL_DEVICES, "stop all devices"}
+};
+}
 
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
@@ -1041,23 +1051,7 @@ void C_OscCanOpenManagerFiler::mh_SaveManagerMappedSignal(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscCanOpenManagerFiler::mh_CanOpenManagerInfoTypeToString(
     const C_OscCanOpenManagerInfo::E_NmtErrorBehaviourType &ore_Type) {
-  QString c_Retval;
-
-  switch (ore_Type) {
-  case C_OscCanOpenManagerInfo::eRESTART_ALL_DEVICES:
-    c_Retval = "restart all devices";
-    break;
-  case C_OscCanOpenManagerInfo::eRESTART_FAILURE_DEVICE:
-    c_Retval = "restart failure device";
-    break;
-  case C_OscCanOpenManagerInfo::eSTOP_ALL_DEVICES:
-    c_Retval = "stop all devices";
-    break;
-  default:
-    c_Retval = "invalid";
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_Type, mac_NMT_ERROR_TABLE);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1074,17 +1068,5 @@ QString C_OscCanOpenManagerFiler::mh_CanOpenManagerInfoTypeToString(
 int32_t C_OscCanOpenManagerFiler::mh_StringToCanOpenManagerInfoType(
     const QString &orc_String,
     C_OscCanOpenManagerInfo::E_NmtErrorBehaviourType &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "restart all devices") {
-    ore_Type = C_OscCanOpenManagerInfo::eRESTART_ALL_DEVICES;
-  } else if (orc_String == "restart failure device") {
-    ore_Type = C_OscCanOpenManagerInfo::eRESTART_FAILURE_DEVICE;
-  } else if (orc_String == "stop all devices") {
-    ore_Type = C_OscCanOpenManagerInfo::eSTOP_ALL_DEVICES;
-  } else {
-    s32_Retval = C_RANGE;
-  }
-
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_NMT_ERROR_TABLE, ore_Type);
 }

@@ -20,6 +20,7 @@
 #include "stwtypes.hpp"
 
 #include "C_OscNodeDataPoolListElement.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces
@@ -81,45 +82,24 @@ C_OscNodeDataPoolListElement::C_OscNodeDataPoolListElement(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolListElement::CalcHash(uint32_t &oru32_HashValue) const {
-  uint32_t u32_Counter;
-
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
-                                      this->c_Name.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(),
-                                      this->c_Comment.length(),
-                                      oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue, this->c_Name, this->c_Comment);
   this->c_MinValue.CalcHash(oru32_HashValue);
   this->c_MaxValue.CalcHash(oru32_HashValue);
-  // lint -e{9110} //we do not really use the bit representation; we just assume
-  // it is "stable" for this type
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->f64_Factor, sizeof(this->f64_Factor), oru32_HashValue);
-  // lint -e{9110} //we do not really use the bit representation; we just assume
-  // it is "stable" for this type
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->f64_Offset, sizeof(this->f64_Offset), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Unit.toUtf8().constData(),
-                                      this->c_Unit.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->e_Access, sizeof(this->e_Access),
-                                      oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue,
+                             this->f64_Factor, this->f64_Offset, this->c_Unit, this->e_Access);
   // Only relevant in this case
   if ((this->GetArray() == true) &&
       (this->GetType() == C_OscNodeDataPoolContent::eSINT8)) {
-    stw::scl::C_SclChecksums::CalcCRC32(&this->q_InterpretAsString,
-                                        sizeof(this->q_InterpretAsString),
-                                        oru32_HashValue);
+    hash_util::CalcHashMembers(oru32_HashValue, this->q_InterpretAsString);
   }
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_DiagEventCall, sizeof(this->q_DiagEventCall), oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue, this->q_DiagEventCall);
 
-  for (u32_Counter = 0U; u32_Counter < this->c_DataSetValues.size();
+  for (uint32_t u32_Counter = 0U; u32_Counter < this->c_DataSetValues.size();
        ++u32_Counter) {
     this->c_DataSetValues[u32_Counter].CalcHash(oru32_HashValue);
   }
   // Do not calculate the value to the CRC
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_NvmStartAddress,
-                                      sizeof(this->u32_NvmStartAddress),
-                                      oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue, this->u32_NvmStartAddress);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -133,39 +113,20 @@ void C_OscNodeDataPoolListElement::CalcHash(uint32_t &oru32_HashValue) const {
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolListElement::CalcHashElement(
     uint32_t &oru32_HashValue, const uint32_t ou32_Index) const {
-  uint32_t u32_Counter;
-
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
-                                      this->c_Name.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(),
-                                      this->c_Comment.length(),
-                                      oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue, this->c_Name, this->c_Comment);
   this->c_MinValue.CalcHashElement(oru32_HashValue, ou32_Index);
   this->c_MaxValue.CalcHashElement(oru32_HashValue, ou32_Index);
-  // lint -e{9110} //we do not really use the bit representation; we just assume
-  // it is "stable" for this type
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->f64_Factor, sizeof(this->f64_Factor), oru32_HashValue);
-  // lint -e{9110} //we do not really use the bit representation; we just assume
-  // it is "stable" for this type
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->f64_Offset, sizeof(this->f64_Offset), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Unit.toUtf8().constData(),
-                                      this->c_Unit.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->e_Access, sizeof(this->e_Access),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_DiagEventCall, sizeof(this->q_DiagEventCall), oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue,
+                             this->f64_Factor, this->f64_Offset, this->c_Unit,
+                             this->e_Access, this->q_DiagEventCall);
 
-  for (u32_Counter = 0U; u32_Counter < this->c_DataSetValues.size();
+  for (uint32_t u32_Counter = 0U; u32_Counter < this->c_DataSetValues.size();
        ++u32_Counter) {
     this->c_DataSetValues[u32_Counter].CalcHashElement(oru32_HashValue,
                                                        ou32_Index);
   }
   // Do not calculate the value to the CRC
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_NvmStartAddress,
-                                      sizeof(this->u32_NvmStartAddress),
-                                      oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue, this->u32_NvmStartAddress);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -179,38 +140,19 @@ void C_OscNodeDataPoolListElement::CalcHashElement(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolListElement::CalcHashStructure(
     uint32_t &oru32_HashValue) const {
-  uint32_t u32_Counter;
-
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
-                                      this->c_Name.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(),
-                                      this->c_Comment.length(),
-                                      oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue, this->c_Name, this->c_Comment);
   this->c_MinValue.CalcHashStructure(oru32_HashValue);
   this->c_MaxValue.CalcHashStructure(oru32_HashValue);
-  // lint -e{9110} //we do not really use the bit representation; we just assume
-  // it is "stable" for this type
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->f64_Factor, sizeof(this->f64_Factor), oru32_HashValue);
-  // lint -e{9110} //we do not really use the bit representation; we just assume
-  // it is "stable" for this type
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->f64_Offset, sizeof(this->f64_Offset), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Unit.toUtf8().constData(),
-                                      this->c_Unit.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->e_Access, sizeof(this->e_Access),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_DiagEventCall, sizeof(this->q_DiagEventCall), oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue,
+                             this->f64_Factor, this->f64_Offset, this->c_Unit,
+                             this->e_Access, this->q_DiagEventCall);
 
-  for (u32_Counter = 0U; u32_Counter < this->c_DataSetValues.size();
+  for (uint32_t u32_Counter = 0U; u32_Counter < this->c_DataSetValues.size();
        ++u32_Counter) {
     this->c_DataSetValues[u32_Counter].CalcHashStructure(oru32_HashValue);
   }
   // Do not calculate the value to the CRC
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_NvmStartAddress,
-                                      sizeof(this->u32_NvmStartAddress),
-                                      oru32_HashValue);
+  hash_util::CalcHashMembers(oru32_HashValue, this->u32_NvmStartAddress);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

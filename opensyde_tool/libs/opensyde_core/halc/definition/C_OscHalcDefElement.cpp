@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcDefElement.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwerrors.hpp"
 
 /* -- Used Namespaces
@@ -210,24 +210,10 @@ C_OscHalcDefElement::GetBitmaskItems() const {
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefElement::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Id.toUtf8().data(),
-      static_cast<uint32_t>(this->c_Id.toUtf8().size()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Display.toUtf8().data(),
-      static_cast<uint32_t>(this->c_Display.toUtf8().size()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Comment.toUtf8().data(),
-      static_cast<uint32_t>(this->c_Comment.toUtf8().size()), oru32_HashValue);
-
-  this->c_InitialValue.CalcHash(oru32_HashValue);
-  this->c_MinValue.CalcHash(oru32_HashValue);
-  this->c_MaxValue.CalcHash(oru32_HashValue);
-
-  for (uint32_t u32_It = 0UL; u32_It < this->c_UseCaseAvailabilities.size();
-       ++u32_It) {
-    stw::scl::C_SclChecksums::CalcCRC32(&this->c_UseCaseAvailabilities[u32_It],
-                                        sizeof(uint32_t), oru32_HashValue);
-  }
+void C_OscHalcDefElement::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_Id, this->c_Display, this->c_Comment,
+                              this->c_InitialValue, this->c_MinValue, this->c_MaxValue,
+                              this->c_UseCaseAvailabilities);
 }

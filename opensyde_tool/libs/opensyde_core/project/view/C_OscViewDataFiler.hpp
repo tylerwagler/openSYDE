@@ -13,9 +13,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "C_OscViewData.hpp"
-#include <QDataStream>
-#include <QJsonObject>
-#include <QDomDocument>
+#include "stwtypes.hpp"
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -41,12 +39,12 @@ public:
                                const QString &orc_Path);
    static int32_t h_SaveBinary(const QList<C_OscViewData> &orc_Views,
                                const QString &orc_Path);
-   
+
    static int32_t h_LoadJson(QList<C_OscViewData> &orc_Views,
                              const QString &orc_Path);
    static int32_t h_SaveJson(const QList<C_OscViewData> &orc_Views,
                              const QString &orc_Path);
-   
+
    static int32_t h_LoadXml(QList<C_OscViewData> &orc_Views,
                             const QString &orc_Path);
    static int32_t h_SaveXml(const QList<C_OscViewData> &orc_Views,

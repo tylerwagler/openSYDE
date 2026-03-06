@@ -16,9 +16,6 @@
 #include "C_OscViewData.hpp"
 #include "C_OscXmlParser.hpp"
 #include <QList>
-#include <QDataStream>
-#include <QJsonDocument>
-#include <QFile>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------

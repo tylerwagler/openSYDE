@@ -17,6 +17,7 @@
 
 #include "C_OscCanOpenManagerFiler.hpp"
 #include "C_OscDataLoggerJobFiler.hpp"
+#include "C_OscFilerUtil.hpp"
 #include "C_OscHalcConfigFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscNodeCommFiler.hpp"
@@ -50,6 +51,21 @@ using namespace stw::opensyde_core;
 /* -- Module Global Variables
  * ---------------------------------------------------------------------------------------
  */
+
+namespace
+{
+const C_OscFilerUtil::EnumEntry<C_OscNodeProperties::E_DiagnosticServerProtocol> mac_DIAG_SERVER_TABLE[] = {
+   {C_OscNodeProperties::eDS_OPEN_SYDE, "open-syde"},
+   {C_OscNodeProperties::eDS_KEFEX, "kefex"},
+   {C_OscNodeProperties::eDS_NONE, "none"}
+};
+
+const C_OscFilerUtil::EnumEntry<C_OscNodeProperties::E_FlashLoaderProtocol> mac_FLASH_LOADER_TABLE[] = {
+   {C_OscNodeProperties::eFL_OPEN_SYDE, "open-syde"},
+   {C_OscNodeProperties::eFL_STW, "stw"},
+   {C_OscNodeProperties::eFL_NONE, "none"}
+};
+}
 
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
@@ -1877,23 +1893,7 @@ int32_t C_OscNodeFiler::mh_SaveXappProperties(
 QString C_OscNodeFiler::mh_DiagnosticServerToString(
     const C_OscNodeProperties::E_DiagnosticServerProtocol
         &ore_DiagnosticProtocol) {
-  QString c_Retval;
-
-  switch (ore_DiagnosticProtocol) {
-  case C_OscNodeProperties::eDS_OPEN_SYDE:
-    c_Retval = "open-syde";
-    break;
-  case C_OscNodeProperties::eDS_KEFEX:
-    c_Retval = "kefex";
-    break;
-  case C_OscNodeProperties::eDS_NONE:
-    c_Retval = "none";
-    break;
-  default:
-    c_Retval = "invalid";
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_DiagnosticProtocol, mac_DIAG_SERVER_TABLE);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1910,23 +1910,7 @@ QString C_OscNodeFiler::mh_DiagnosticServerToString(
 int32_t C_OscNodeFiler::mh_StringToDiagnosticServer(
     const QString &orc_String,
     C_OscNodeProperties::E_DiagnosticServerProtocol &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "kefex") {
-    ore_Type = C_OscNodeProperties::eDS_KEFEX;
-  } else if (orc_String == "open-syde") {
-    ore_Type = C_OscNodeProperties::eDS_OPEN_SYDE;
-  } else if (orc_String == "none") {
-    ore_Type = C_OscNodeProperties::eDS_NONE;
-  } else {
-    osc_write_log_error(
-        "Loading node definition",
-        "Invalid value for \"properties\".\"diagnostic-server\": " +
-            orc_String);
-    s32_Retval = C_RANGE;
-  }
-
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_DIAG_SERVER_TABLE, ore_Type, "Loading node definition", "properties.diagnostic-server");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1940,23 +1924,7 @@ int32_t C_OscNodeFiler::mh_StringToDiagnosticServer(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscNodeFiler::mh_FlashLoaderToString(
     const C_OscNodeProperties::E_FlashLoaderProtocol &ore_FlashLoader) {
-  QString c_Retval;
-
-  switch (ore_FlashLoader) {
-  case C_OscNodeProperties::eFL_OPEN_SYDE:
-    c_Retval = "open-syde";
-    break;
-  case C_OscNodeProperties::eFL_STW:
-    c_Retval = "stw";
-    break;
-  case C_OscNodeProperties::eFL_NONE:
-    c_Retval = "none";
-    break;
-  default:
-    c_Retval = "invalid";
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_FlashLoader, mac_FLASH_LOADER_TABLE);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1973,20 +1941,5 @@ QString C_OscNodeFiler::mh_FlashLoaderToString(
 int32_t C_OscNodeFiler::mh_StringToFlashLoader(
     const QString &orc_String,
     C_OscNodeProperties::E_FlashLoaderProtocol &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "stw") {
-    ore_Type = C_OscNodeProperties::eFL_STW;
-  } else if (orc_String == "open-syde") {
-    ore_Type = C_OscNodeProperties::eFL_OPEN_SYDE;
-  } else if (orc_String == "none") {
-    ore_Type = C_OscNodeProperties::eFL_NONE;
-  } else {
-    osc_write_log_error("Loading node definition",
-                        "Invalid value for \"properties\".\"flash-loader\": " +
-                            orc_String);
-    s32_Retval = C_RANGE;
-  }
-
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_FLASH_LOADER_TABLE, ore_Type, "Loading node definition", "properties.flash-loader");
 }

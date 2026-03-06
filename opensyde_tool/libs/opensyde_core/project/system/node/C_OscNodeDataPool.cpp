@@ -19,6 +19,7 @@
 #include <QString>
 
 #include "C_OscNodeDataPool.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
@@ -83,36 +84,12 @@ C_OscNodeDataPool::C_OscNodeDataPool(void)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPool::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
-                                      this->c_Name.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->au8_Version[0], sizeof(this->au8_Version), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(),
-                                      this->c_Comment.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->s32_RelatedDataBlockIndex,
-                                      sizeof(this->s32_RelatedDataBlockIndex),
-                                      oru32_HashValue);
   // pc_RelatedApplication is dynamic
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_IsSafety, sizeof(this->q_IsSafety), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_ScopeIsPrivate, sizeof(this->q_ScopeIsPrivate), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_NvmStartAddress,
-                                      sizeof(this->u32_NvmStartAddress),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_NvmSize, sizeof(this->u32_NvmSize), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u16_DefinitionCrcVersion,
-                                      sizeof(this->u16_DefinitionCrcVersion),
-                                      oru32_HashValue);
-
-  for (uint32_t u32_Counter = 0U; u32_Counter < this->c_Lists.size();
-       ++u32_Counter) {
-    this->c_Lists[u32_Counter].CalcHash(oru32_HashValue);
-  }
+  hash_util::CalcHashMembers(oru32_HashValue,
+                             this->e_Type, this->c_Name, this->au8_Version, this->c_Comment,
+                             this->s32_RelatedDataBlockIndex, this->q_IsSafety, this->q_ScopeIsPrivate,
+                             this->u32_NvmStartAddress, this->u32_NvmSize, this->u16_DefinitionCrcVersion,
+                             this->c_Lists);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

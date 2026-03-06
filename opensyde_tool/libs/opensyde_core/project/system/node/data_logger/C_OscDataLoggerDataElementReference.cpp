@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscDataLoggerDataElementReference.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwtypes.hpp"
 
 /* -- Used Namespaces
@@ -66,14 +66,8 @@ C_OscDataLoggerDataElementReference::C_OscDataLoggerDataElementReference()
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDataLoggerDataElementReference::CalcHash(
-    uint32_t &oru32_HashValue) const {
-  const QByteArray c_Utf8 = this->c_CustomName.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(c_Utf8.constData(),
-                                      static_cast<uint32_t>(c_Utf8.size()),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_UseCustomName, sizeof(this->q_UseCustomName), oru32_HashValue);
-
-  this->c_ConfiguredElementId.CalcHash(oru32_HashValue);
+void C_OscDataLoggerDataElementReference::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_CustomName, this->q_UseCustomName, this->c_ConfiguredElementId);
 }

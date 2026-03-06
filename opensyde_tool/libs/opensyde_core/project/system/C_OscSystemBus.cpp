@@ -16,6 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscSystemBus.hpp"
+#include "C_OscHashUtil.hpp"
 
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
@@ -84,29 +85,12 @@ C_OscSystemBus::~C_OscSystemBus(void) {}
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemBus::CalcHash(uint32_t &oru32_HashValue) const {
-  C_SclChecksums::CalcCRC32(&this->e_Type, sizeof(this->e_Type),
-                            oru32_HashValue);
-  // Convert QString to C string for checksum calculation
-  const QByteArray nameBytes = this->c_Name.toLatin1();
-  const QByteArray commentBytes = this->c_Comment.toLatin1();
-  C_SclChecksums::CalcCRC32(nameBytes.constData(), nameBytes.size(),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(commentBytes.constData(), commentBytes.size(),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u64_BitRate, sizeof(this->u64_BitRate),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_UseCanFd, sizeof(this->q_UseCanFd),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u64_CanFdBitRate,
-                            sizeof(this->u64_CanFdBitRate), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u8_BusId, sizeof(this->u8_BusId),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u16_RxTimeoutOffsetMs,
-                            sizeof(this->u16_RxTimeoutOffsetMs),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_UseableForRouting,
-                            sizeof(this->q_UseableForRouting), oru32_HashValue);
+void C_OscSystemBus::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->e_Type, this->c_Name, this->c_Comment, this->u64_BitRate,
+                              this->q_UseCanFd, this->u64_CanFdBitRate, this->u8_BusId,
+                              this->u16_RxTimeoutOffsetMs, this->q_UseableForRouting);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

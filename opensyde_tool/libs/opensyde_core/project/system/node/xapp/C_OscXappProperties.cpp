@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscXappProperties.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
@@ -81,19 +81,11 @@ void C_OscXappProperties::Initialize() {
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscXappProperties::CalcHash(uint32_t& oru32_HashValue) const {
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_PollingIntervalMs,
-                                       sizeof(this->u32_PollingIntervalMs),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u32_DataRequestIntervalMs,
-                                       sizeof(this->u32_DataRequestIntervalMs),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->e_ConnectedInterfaceType,
-                                       sizeof(this->e_ConnectedInterfaceType),
-                                       oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->u8_ConnectedInterfaceNumber,
-                                       sizeof(this->u8_ConnectedInterfaceNumber),
-                                       oru32_HashValue);
+void C_OscXappProperties::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->u32_PollingIntervalMs, this->u32_DataRequestIntervalMs,
+                              this->e_ConnectedInterfaceType, this->u8_ConnectedInterfaceNumber);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

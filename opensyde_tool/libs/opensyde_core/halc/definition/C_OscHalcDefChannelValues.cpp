@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcDefChannelValues.hpp"
-#include "stwtypes.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -69,17 +69,9 @@ C_OscHalcDefChannelValues::~C_OscHalcDefChannelValues() {}
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefChannelValues::CalcHash(uint32_t &oru32_HashValue) const {
-  for (uint32_t u32_It = 0UL; u32_It < this->c_Parameters.size(); ++u32_It) {
-    this->c_Parameters[u32_It].CalcHash(oru32_HashValue);
-  }
-  for (uint32_t u32_It = 0UL; u32_It < this->c_InputValues.size(); ++u32_It) {
-    this->c_InputValues[u32_It].CalcHash(oru32_HashValue);
-  }
-  for (uint32_t u32_It = 0UL; u32_It < this->c_OutputValues.size(); ++u32_It) {
-    this->c_OutputValues[u32_It].CalcHash(oru32_HashValue);
-  }
-  for (uint32_t u32_It = 0UL; u32_It < this->c_StatusValues.size(); ++u32_It) {
-    this->c_StatusValues[u32_It].CalcHash(oru32_HashValue);
-  }
+void C_OscHalcDefChannelValues::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_Parameters, this->c_InputValues,
+                              this->c_OutputValues, this->c_StatusValues);
 }

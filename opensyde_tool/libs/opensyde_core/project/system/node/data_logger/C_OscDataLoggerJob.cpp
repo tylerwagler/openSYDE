@@ -21,7 +21,7 @@
 #include "C_OscDataLoggerDataElementReference.hpp"
 #include "C_OscNodeDataPoolListElementOptArrayId.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include <QJsonArray>
@@ -74,18 +74,10 @@ C_OscDataLoggerJob::C_OscDataLoggerJob() : q_IsEnabled(true) {}
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDataLoggerJob::CalcHash(uint32_t &oru32_HashValue) const {
-  uint32_t u32_Counter;
-
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_IsEnabled, sizeof(this->q_IsEnabled), oru32_HashValue);
-
-  this->c_Properties.CalcHash(oru32_HashValue);
-
-  for (u32_Counter = 0U; u32_Counter < this->c_ConfiguredDataElements.size();
-       ++u32_Counter) {
-    this->c_ConfiguredDataElements[u32_Counter].CalcHash(oru32_HashValue);
-  }
+void C_OscDataLoggerJob::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->q_IsEnabled, this->c_Properties, this->c_ConfiguredDataElements);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -16,6 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcConfigDomain.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
@@ -104,15 +105,10 @@ C_OscHalcConfigDomain::C_OscHalcConfigDomain(const C_OscHalcDefDomain &orc_Base)
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigDomain::CalcHash(uint32_t &oru32_HashValue) const {
-  C_OscHalcDefDomain::CalcHash(oru32_HashValue);
-
-  c_DomainConfig.CalcHash(oru32_HashValue);
-
-  for (uint32_t u32_It = 0UL; u32_It < this->c_ChannelConfigs.size();
-       ++u32_It) {
-    this->c_ChannelConfigs[u32_It].CalcHash(oru32_HashValue);
-  }
+void C_OscHalcConfigDomain::CalcHash(uint32_t & oru32_HashValue) const
+{
+   C_OscHalcDefDomain::CalcHash(oru32_HashValue);
+   hash_util::CalcHashMembers(oru32_HashValue, this->c_DomainConfig, this->c_ChannelConfigs);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

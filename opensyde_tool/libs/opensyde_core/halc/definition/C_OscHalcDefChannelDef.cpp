@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcDefChannelDef.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -62,8 +62,7 @@ C_OscHalcDefChannelDef::C_OscHalcDefChannelDef(void) {}
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefChannelDef::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Name.toUtf8().data(),
-      static_cast<uint32_t>(this->c_Name.toUtf8().size()), oru32_HashValue);
+void C_OscHalcDefChannelDef::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue, this->c_Name);
 }

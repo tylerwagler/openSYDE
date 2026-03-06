@@ -26,6 +26,8 @@
 #include <QMutexLocker>
 
 #include "C_OscNodeDataPoolContent.hpp"
+
+#include "C_OscHashUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
@@ -125,13 +127,7 @@ C_OscNodeDataPoolContent::~C_OscNodeDataPoolContent(void) {}
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolContent::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(&this->me_Type, sizeof(this->me_Type),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->mq_Array, sizeof(this->mq_Array),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      reinterpret_cast<uint8_t *>(const_cast<char *>(this->mc_Data.data())),
-      static_cast<uint32_t>(this->mc_Data.size()), oru32_HashValue);
+   hash_util::CalcHashMembers(oru32_HashValue, this->me_Type, this->mq_Array, this->mc_Data);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -389,369 +385,33 @@ void C_OscNodeDataPoolContent::m_GetAnyValueAsTemplate(
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for uint8 type
-
-   \param[in]  ou8_Value   New assignment value
-*/
+// Scalar value accessors - all delegate to m_SetValue/m_GetValue templates.
+// Generated via macro to eliminate repetitive boilerplate (10 types x 2 methods = 20 methods).
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueU8(const uint8_t ou8_Value) {
-  m_SetValue(ou8_Value, C_OscNodeDataPoolContent::eUINT8);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for uint8 type
-
-   \return
-   Type match: currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-uint8_t C_OscNodeDataPoolContent::GetValueU8(void) const {
-  uint8_t u8_Retval = 0;
-
-  m_GetValue(C_OscNodeDataPoolContent::eUINT8, u8_Retval);
-  return u8_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for uint16 type
-
-   \param[in]  ou16_Value  New assignment value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueU16(const uint16_t ou16_Value) {
-  m_SetValue(ou16_Value, C_OscNodeDataPoolContent::eUINT16);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for uint16 type
-
-   \return
-   Type match: currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-uint16_t C_OscNodeDataPoolContent::GetValueU16(void) const {
-  uint16_t u16_Retval = 0;
-
-  m_GetValue(C_OscNodeDataPoolContent::eUINT16, u16_Retval);
-  return u16_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for uint32 type
-
-   \param[in]  ou32_Value  New assignment value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueU32(const uint32_t ou32_Value) {
-  m_SetValue(ou32_Value, C_OscNodeDataPoolContent::eUINT32);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for uint32 type
-
-   \return
-   Type match: currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-uint32_t C_OscNodeDataPoolContent::GetValueU32(void) const {
-  uint32_t u32_Retval = 0;
-
-  m_GetValue(C_OscNodeDataPoolContent::eUINT32, u32_Retval);
-  return u32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for uint64 type
-
-   \param[in]  ou64_Value  New assignment value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueU64(const uint64_t ou64_Value) {
-  m_SetValue(ou64_Value, C_OscNodeDataPoolContent::eUINT64);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for uint64 type
-
-   \return
-   Type match: currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-uint64_t C_OscNodeDataPoolContent::GetValueU64(void) const {
-  uint64_t u64_Retval = 0;
-
-  m_GetValue(C_OscNodeDataPoolContent::eUINT64, u64_Retval);
-  return u64_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for sint8 type
-
-   \param[in]  os8_Value   New assignment value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueS8(const int8_t os8_Value) {
-  m_SetValue(os8_Value, C_OscNodeDataPoolContent::eSINT8);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for sint8 type
-
-   \return
-   Type match: currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int8_t C_OscNodeDataPoolContent::GetValueS8(void) const {
-  int8_t s8_Retval = 0;
-
-  m_GetValue(C_OscNodeDataPoolContent::eSINT8, s8_Retval);
-  return s8_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for sint16 type
-
-   \param[in]  os16_Value  New assignment value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueS16(const int16_t os16_Value) {
-  m_SetValue(os16_Value, C_OscNodeDataPoolContent::eSINT16);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for sint16 type
-
-   \return
-   Type match: currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int16_t C_OscNodeDataPoolContent::GetValueS16(void) const {
-  int16_t s16_Retval = 0;
-
-  m_GetValue(C_OscNodeDataPoolContent::eSINT16, s16_Retval);
-  return s16_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for sint32 type
-
-   \param[in]  os32_Value  New assignment value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueS32(const int32_t os32_Value) {
-  m_SetValue(os32_Value, C_OscNodeDataPoolContent::eSINT32);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for sint32 type
-
-   \return
-   Type match: currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolContent::GetValueS32(void) const {
-  int32_t s32_Retval = 0;
-
-  m_GetValue(C_OscNodeDataPoolContent::eSINT32, s32_Retval);
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for sint64 type
-
-   \param[in]  os64_Value  New assignment value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueS64(const int64_t os64_Value) {
-  m_SetValue(os64_Value, C_OscNodeDataPoolContent::eSINT64);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for sint64 type
-
-   \return
-   Type match: currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int64_t C_OscNodeDataPoolContent::GetValueS64(void) const {
-  int64_t s64_Retval = 0;
-
-  m_GetValue(C_OscNodeDataPoolContent::eSINT64, s64_Retval);
-  return s64_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for float32 type
-
-   \param[in]  of32_Value  New assignment value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueF32(const float32_t of32_Value) {
-  m_SetValue(of32_Value, C_OscNodeDataPoolContent::eFLOAT32);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for float32 type
-
-   \return
-   Type match: currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-float32_t C_OscNodeDataPoolContent::GetValueF32(void) const {
-  float32_t f32_Retval = 0.0F;
-
-  m_GetValue(C_OscNodeDataPoolContent::eFLOAT32, f32_Retval);
-  return f32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for float64 type
-
-   \param[in]  of64_Value  New assignment value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueF64(const float64_t of64_Value) {
-  m_SetValue(of64_Value, C_OscNodeDataPoolContent::eFLOAT64);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for float64 type
-
-   \return
-   Type match: currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-float64_t C_OscNodeDataPoolContent::GetValueF64(void) const {
-  float64_t f64_Retval = 0.0;
-
-  m_GetValue(C_OscNodeDataPoolContent::eFLOAT64, f64_Retval);
-  return f64_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for array of uint8 type
-
-   \param[in]  orc_Value   New values
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU8(const QByteArray &orc_Value) {
-  m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eUINT8);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set value at specific index for array of uint8 type
-
-   \param[in]  ou8_Value   New value
-   \param[in]  ou32_Index  Index to access
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU8Element(const uint8_t ou8_Value,
-                                                    const uint32_t ou32_Index) {
-  m_SetValueArrayElement(ou8_Value, ou32_Index,
-                         C_OscNodeDataPoolContent::eUINT8);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for array of uint8 type
-
-   \return
-   Type match:    currently set values
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const QByteArray C_OscNodeDataPoolContent::GetValueArrU8(void) const {
-  QByteArray c_RetVal;
-
-  m_GetValueArray(C_OscNodeDataPoolContent::eUINT8, c_RetVal);
-  return c_RetVal;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for specific index for array of uint8 type
-
-   \param[in]  ou32_Index  Index to access
-
-   \return
-   Type match:    currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-uint8_t C_OscNodeDataPoolContent::GetValueArrU8Element(
-    const uint32_t ou32_Index) const {
-  uint8_t u8_Value = 0;
-
-  m_GetValueArrayElement(C_OscNodeDataPoolContent::eUINT8, ou32_Index,
-                         u8_Value);
-  return u8_Value;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for array of uint16 type
-
-   \param[in]  orc_Value   New values
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU16(
-    const QList<uint16_t> &orc_Value) {
-  m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eUINT16);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set value at specific index for array of uint16 type
-
-   \param[in]  ou16_Value  New value
-   \param[in]  ou32_Index  Index to access
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU16Element(
-    const uint16_t ou16_Value, const uint32_t ou32_Index) {
-  m_SetValueArrayElement(ou16_Value, ou32_Index,
-                         C_OscNodeDataPoolContent::eUINT16);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for array of uint16 type
-
-   \return
-   Type match:    currently set values
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const QList<uint16_t> C_OscNodeDataPoolContent::GetValueArrU16(void) const {
-  QList<uint16_t> c_RetVal;
-
-  m_GetValueArray(C_OscNodeDataPoolContent::eUINT16, c_RetVal);
-  return c_RetVal;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for specific index for array of uint16 type
-
-   \param[in]  ou32_Index  Index to access
-
-   \return
-   Type match:    currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-uint16_t C_OscNodeDataPoolContent::GetValueArrU16Element(
-    const uint32_t ou32_Index) const {
-  uint16_t u16_Value = 0;
-
-  m_GetValueArrayElement(C_OscNodeDataPoolContent::eUINT16, ou32_Index,
-                         u16_Value);
-  return u16_Value;
-}
+// lint -save -e{8058,8080} //template parameter names are not properly handled by naming convention check
+#define OSC_DEFINE_SCALAR_ACCESSORS(TypeSuffix, CppType, EnumValue, ZeroVal) \
+  void C_OscNodeDataPoolContent::SetValue##TypeSuffix(const CppType orc_Value) { \
+    m_SetValue(orc_Value, EnumValue); \
+  } \
+  CppType C_OscNodeDataPoolContent::GetValue##TypeSuffix(void) const { \
+    CppType c_Retval = ZeroVal; \
+    m_GetValue(EnumValue, c_Retval); \
+    return c_Retval; \
+  }
+
+OSC_DEFINE_SCALAR_ACCESSORS(U8,  uint8_t,   eUINT8,   0)
+OSC_DEFINE_SCALAR_ACCESSORS(U16, uint16_t,  eUINT16,  0)
+OSC_DEFINE_SCALAR_ACCESSORS(U32, uint32_t,  eUINT32,  0)
+OSC_DEFINE_SCALAR_ACCESSORS(U64, uint64_t,  eUINT64,  0)
+OSC_DEFINE_SCALAR_ACCESSORS(S8,  int8_t,    eSINT8,   0)
+OSC_DEFINE_SCALAR_ACCESSORS(S16, int16_t,   eSINT16,  0)
+OSC_DEFINE_SCALAR_ACCESSORS(S32, int32_t,   eSINT32,  0)
+OSC_DEFINE_SCALAR_ACCESSORS(S64, int64_t,   eSINT64,  0)
+OSC_DEFINE_SCALAR_ACCESSORS(F32, float32_t, eFLOAT32, 0.0F)
+OSC_DEFINE_SCALAR_ACCESSORS(F64, float64_t, eFLOAT64, 0.0)
+
+#undef OSC_DEFINE_SCALAR_ACCESSORS
+// lint -restore
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Utility: set current value for array of any type
@@ -897,463 +557,81 @@ void C_OscNodeDataPoolContent::m_GetValueArrayElement(const E_Type oe_Type,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for array of uint32 type
-
-   \param[in]  orc_Value   New values
-*/
+// Array value accessors - all delegate to m_SetValueArray/m_GetValueArray/m_SetValueArrayElement/m_GetValueArrayElement.
+// Generated via macro to eliminate repetitive boilerplate (10 types x 4 methods = 40 methods).
+// Each type provides: SetValueArr<T>, SetValueArr<T>Element, GetValueArr<T>, GetValueArr<T>Element.
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU32(
-    const QList<uint32_t> &orc_Value) {
-  m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eUINT32);
-}
+// lint -save -e{8058,8080} //template parameter names are not properly handled by naming convention check
+#define OSC_DEFINE_ARRAY_ACCESSORS(TypeSuffix, CppType, ContainerType, EnumValue, ZeroVal) \
+  void C_OscNodeDataPoolContent::SetValueArr##TypeSuffix(const ContainerType &orc_Value) { \
+    m_SetValueArray(orc_Value, EnumValue); \
+  } \
+  void C_OscNodeDataPoolContent::SetValueArr##TypeSuffix##Element( \
+      const CppType orc_Value, const uint32_t ou32_Index) { \
+    m_SetValueArrayElement(orc_Value, ou32_Index, EnumValue); \
+  } \
+  const ContainerType C_OscNodeDataPoolContent::GetValueArr##TypeSuffix(void) const { \
+    ContainerType c_RetVal; \
+    m_GetValueArray(EnumValue, c_RetVal); \
+    return c_RetVal; \
+  } \
+  CppType C_OscNodeDataPoolContent::GetValueArr##TypeSuffix##Element( \
+      const uint32_t ou32_Index) const { \
+    CppType c_Value = ZeroVal; \
+    m_GetValueArrayElement(EnumValue, ou32_Index, c_Value); \
+    return c_Value; \
+  }
+
+OSC_DEFINE_ARRAY_ACCESSORS(U8,  uint8_t,   QByteArray,       eUINT8,   0)
+OSC_DEFINE_ARRAY_ACCESSORS(U16, uint16_t,  QList<uint16_t>,  eUINT16,  0)
+OSC_DEFINE_ARRAY_ACCESSORS(U32, uint32_t,  QList<uint32_t>,  eUINT32,  0)
+OSC_DEFINE_ARRAY_ACCESSORS(U64, uint64_t,  QList<uint64_t>,  eUINT64,  0)
+OSC_DEFINE_ARRAY_ACCESSORS(S8,  int8_t,    QList<int8_t>,    eSINT8,   0)
+OSC_DEFINE_ARRAY_ACCESSORS(S16, int16_t,   QList<int16_t>,   eSINT16,  0)
+OSC_DEFINE_ARRAY_ACCESSORS(S32, int32_t,   QList<int32_t>,   eSINT32,  0)
+OSC_DEFINE_ARRAY_ACCESSORS(S64, int64_t,   QList<int64_t>,   eSINT64,  0)
+OSC_DEFINE_ARRAY_ACCESSORS(F32, float32_t, QList<float32_t>, eFLOAT32, 0.0F)
+OSC_DEFINE_ARRAY_ACCESSORS(F64, float64_t, QList<float64_t>, eFLOAT64, 0.0)
+
+#undef OSC_DEFINE_ARRAY_ACCESSORS
+// lint -restore
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set value at specific index for array of uint32 type
+/*! \brief   Get size of one element of specified type in bytes
 
-   \param[in]  ou32_Value  New value
-   \param[in]  ou32_Index  Index to access
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU32Element(
-    const uint32_t ou32_Value, const uint32_t ou32_Index) {
-  m_SetValueArrayElement(ou32_Value, ou32_Index,
-                         C_OscNodeDataPoolContent::eUINT32);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for array of uint32 type
+   \param[in]  oe_Type  Data type
 
    \return
-   Type match:    currently set values
-   Type mismatch: Exception C_CONFIG
+   Size in bytes (1, 2, 4, or 8)
 */
 //----------------------------------------------------------------------------------------------------------------------
-const QList<uint32_t> C_OscNodeDataPoolContent::GetValueArrU32(void) const {
-  QList<uint32_t> c_RetVal;
-
-  m_GetValueArray(C_OscNodeDataPoolContent::eUINT32, c_RetVal);
-  return c_RetVal;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for specific index for array of uint32 type
-
-   \param[in]  ou32_Index  Index to access
-
-   \return
-   Type match:    currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-uint32_t C_OscNodeDataPoolContent::GetValueArrU32Element(
-    const uint32_t ou32_Index) const {
-  uint32_t u32_Value = 0;
-
-  m_GetValueArrayElement(C_OscNodeDataPoolContent::eUINT32, ou32_Index,
-                         u32_Value);
-  return u32_Value;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for array of uint64 type
-
-   \param[in]  orc_Value   New values
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU64(
-    const QList<uint64_t> &orc_Value) {
-  m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eUINT64);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set value at specific index for array of uint64 type
-
-   \param[in]  ou64_Value  New value
-   \param[in]  ou32_Index  Index to access
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrU64Element(
-    const uint64_t ou64_Value, const uint32_t ou32_Index) {
-  m_SetValueArrayElement(ou64_Value, ou32_Index,
-                         C_OscNodeDataPoolContent::eUINT64);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for array of uint64 type
-
-   \return
-   Type match:    currently set values
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const QList<uint64_t> C_OscNodeDataPoolContent::GetValueArrU64(void) const {
-  QList<uint64_t> c_RetVal;
-
-  m_GetValueArray(C_OscNodeDataPoolContent::eUINT64, c_RetVal);
-  return c_RetVal;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for specific index for array of uint64 type
-
-   \param[in]  ou32_Index  Index to access
-
-   \return
-   Type match:    currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-uint64_t C_OscNodeDataPoolContent::GetValueArrU64Element(
-    const uint32_t ou32_Index) const {
-  uint64_t u64_Value = 0;
-
-  m_GetValueArrayElement(C_OscNodeDataPoolContent::eUINT64, ou32_Index,
-                         u64_Value);
-  return u64_Value;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for array of sint8 type
-
-   \param[in]  orc_Value   New values
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS8(const QList<int8_t> &orc_Value) {
-  m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eSINT8);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set value at specific index for array of sint8 type
-
-   \param[in]  os8_Value   New value
-   \param[in]  ou32_Index  Index to access
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS8Element(const int8_t os8_Value,
-                                                    const uint32_t ou32_Index) {
-  m_SetValueArrayElement(os8_Value, ou32_Index,
-                         C_OscNodeDataPoolContent::eSINT8);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for array of sint8 type
-
-   \return
-   Type match:    currently set values
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const QList<int8_t> C_OscNodeDataPoolContent::GetValueArrS8(void) const {
-  QList<int8_t> c_RetVal;
-
-  m_GetValueArray(C_OscNodeDataPoolContent::eSINT8, c_RetVal);
-  return c_RetVal;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for specific index for array of sint8 type
-
-   \param[in]  ou32_Index  Index to access
-
-   \return
-   Type match:    currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int8_t C_OscNodeDataPoolContent::GetValueArrS8Element(
-    const uint32_t ou32_Index) const {
-  int8_t s8_Value = 0;
-
-  m_GetValueArrayElement(C_OscNodeDataPoolContent::eSINT8, ou32_Index,
-                         s8_Value);
-  return s8_Value;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for array of sint16 type
-
-   \param[in]  orc_Value   New values
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS16(const QList<int16_t> &orc_Value) {
-  m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eSINT16);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set value at specific index for array of sint16 type
-
-   \param[in]  os16_Value  New value
-   \param[in]  ou32_Index  Index to access
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS16Element(
-    const int16_t os16_Value, const uint32_t ou32_Index) {
-  m_SetValueArrayElement(os16_Value, ou32_Index,
-                         C_OscNodeDataPoolContent::eSINT16);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for array of sint16 type
-
-   \return
-   Type match:    currently set values
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const QList<int16_t> C_OscNodeDataPoolContent::GetValueArrS16(void) const {
-  QList<int16_t> c_RetVal;
-
-  m_GetValueArray(C_OscNodeDataPoolContent::eSINT16, c_RetVal);
-  return c_RetVal;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for specific index for array of sint16 type
-
-   \param[in]  ou32_Index  Index to access
-
-   \return
-   Type match:    currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int16_t C_OscNodeDataPoolContent::GetValueArrS16Element(
-    const uint32_t ou32_Index) const {
-  int16_t s16_Value = 0;
-
-  m_GetValueArrayElement(C_OscNodeDataPoolContent::eSINT16, ou32_Index,
-                         s16_Value);
-  return s16_Value;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for array of sint32 type
-
-   \param[in]  orc_Value   New values
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS32(const QList<int32_t> &orc_Value) {
-  m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eSINT32);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set value at specific index for array of sint32 type
-
-   \param[in]  os32_Value  New value
-   \param[in]  ou32_Index  Index to access
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS32Element(
-    const int32_t os32_Value, const uint32_t ou32_Index) {
-  m_SetValueArrayElement(os32_Value, ou32_Index,
-                         C_OscNodeDataPoolContent::eSINT32);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for array of sint32 type
-
-   \return
-   Type match:    currently set values
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const QList<int32_t> C_OscNodeDataPoolContent::GetValueArrS32(void) const {
-  QList<int32_t> c_RetVal;
-
-  m_GetValueArray(C_OscNodeDataPoolContent::eSINT32, c_RetVal);
-  return c_RetVal;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for specific index for array of sint32 type
-
-   \param[in]  ou32_Index  Index to access
-
-   \return
-   Type match:    currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolContent::GetValueArrS32Element(
-    const uint32_t ou32_Index) const {
-  int32_t s32_Value = 0;
-
-  m_GetValueArrayElement(C_OscNodeDataPoolContent::eSINT32, ou32_Index,
-                         s32_Value);
-  return s32_Value;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for array of sint64 type
-
-   \param[in]  orc_Value   New values
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS64(const QList<int64_t> &orc_Value) {
-  m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eSINT64);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set value at specific index for array of sint64 type
-
-   \param[in]  os64_Value  New value
-   \param[in]  ou32_Index  Index to access
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrS64Element(
-    const int64_t os64_Value, const uint32_t ou32_Index) {
-  m_SetValueArrayElement(os64_Value, ou32_Index,
-                         C_OscNodeDataPoolContent::eSINT64);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for array of sint64 type
-
-   \return
-   Type match:    currently set values
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const QList<int64_t> C_OscNodeDataPoolContent::GetValueArrS64(void) const {
-  QList<int64_t> c_RetVal;
-
-  m_GetValueArray(C_OscNodeDataPoolContent::eSINT64, c_RetVal);
-  return c_RetVal;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for specific index for array of sint64 type
-
-   \param[in]  ou32_Index  Index to access
-
-   \return
-   Type match:    currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int64_t C_OscNodeDataPoolContent::GetValueArrS64Element(
-    const uint32_t ou32_Index) const {
-  int64_t s64_Value = 0;
-
-  m_GetValueArrayElement(C_OscNodeDataPoolContent::eSINT64, ou32_Index,
-                         s64_Value);
-  return s64_Value;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for array of float32 type
-
-   \param[in]  orc_Value   New values
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrF32(
-    const QList<float32_t> &orc_Value) {
-  m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eFLOAT32);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set value at specific index for array of float32 type
-
-   \param[in]  of32_Value  New value
-   \param[in]  ou32_Index  Index to access
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrF32Element(
-    const float32_t of32_Value, const uint32_t ou32_Index) {
-  m_SetValueArrayElement(of32_Value, ou32_Index,
-                         C_OscNodeDataPoolContent::eFLOAT32);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for array of float32 type
-
-   \return
-   Type match:    currently set values
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const QList<float32_t> C_OscNodeDataPoolContent::GetValueArrF32(void) const {
-  QList<float32_t> c_RetVal;
-
-  m_GetValueArray(C_OscNodeDataPoolContent::eFLOAT32, c_RetVal);
-  return c_RetVal;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for specific index for array of float32 type
-
-   \param[in]  ou32_Index  Index to access
-
-   \return
-   Type match:    currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-float32_t C_OscNodeDataPoolContent::GetValueArrF32Element(
-    const uint32_t ou32_Index) const {
-  float32_t f32_Value = 0.0F;
-
-  m_GetValueArrayElement(C_OscNodeDataPoolContent::eFLOAT32, ou32_Index,
-                         f32_Value);
-  return f32_Value;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set current value for array of float64 type
-
-   \param[in]  orc_Value   New values
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrF64(
-    const QList<float64_t> &orc_Value) {
-  m_SetValueArray(orc_Value, C_OscNodeDataPoolContent::eFLOAT64);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set value at specific index for array of float64 type
-
-   \param[in]  of64_Value  New value
-   \param[in]  ou32_Index  Index to access
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolContent::SetValueArrF64Element(
-    const float64_t of64_Value, const uint32_t ou32_Index) {
-  m_SetValueArrayElement(of64_Value, ou32_Index,
-                         C_OscNodeDataPoolContent::eFLOAT64);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for array of float64 type
-
-   \return
-   Type match:    currently set values
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-const QList<float64_t> C_OscNodeDataPoolContent::GetValueArrF64(void) const {
-  QList<float64_t> c_RetVal;
-
-  m_GetValueArray(C_OscNodeDataPoolContent::eFLOAT64, c_RetVal);
-  return c_RetVal;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get current value for specific index for array of float64 type
-
-   \param[in]  ou32_Index  Index to access
-
-   \return
-   Type match:    currently set value
-   Type mismatch: Exception C_CONFIG
-*/
-//----------------------------------------------------------------------------------------------------------------------
-float64_t C_OscNodeDataPoolContent::GetValueArrF64Element(
-    const uint32_t ou32_Index) const {
-  float64_t f64_Value = 0.0;
-
-  m_GetValueArrayElement(C_OscNodeDataPoolContent::eFLOAT64, ou32_Index,
-                         f64_Value);
-  return f64_Value;
+uint32_t C_OscNodeDataPoolContent::mh_GetTypeSizeBytes(const E_Type oe_Type) {
+  uint32_t u32_Size;
+
+  switch (oe_Type) {
+  case eUINT8:
+  case eSINT8:
+    u32_Size = 1U;
+    break;
+  case eUINT16:
+  case eSINT16:
+    u32_Size = 2U;
+    break;
+  case eUINT32:
+  case eSINT32:
+  case eFLOAT32:
+    u32_Size = 4U;
+    break;
+  case eUINT64:
+  case eSINT64:
+  case eFLOAT64:
+    u32_Size = 8U;
+    break;
+  default:
+    u32_Size = 1U;
+    break;
+  }
+  return u32_Size;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1364,29 +642,7 @@ float64_t C_OscNodeDataPoolContent::GetValueArrF64Element(
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscNodeDataPoolContent::SetArraySize(const uint32_t &oru32_Size) {
   if (this->mq_Array == true) {
-    switch (this->me_Type) {
-    case eUINT8:
-    case eSINT8:
-      this->mc_Data.resize(oru32_Size, 0U);
-      break;
-    case eUINT16:
-    case eSINT16:
-      this->mc_Data.resize(static_cast<size_t>(oru32_Size) * 2, 0U);
-      break;
-    case eUINT32:
-    case eSINT32:
-    case eFLOAT32:
-      this->mc_Data.resize(static_cast<size_t>(oru32_Size) * 4, 0U);
-      break;
-    case eUINT64:
-    case eSINT64:
-    case eFLOAT64:
-      this->mc_Data.resize(static_cast<size_t>(oru32_Size) * 8, 0U);
-      break;
-    default:
-      throw std::invalid_argument("Type mismatch (incorrect data type)");
-      break;
-    }
+    this->mc_Data.resize(static_cast<size_t>(oru32_Size) * mh_GetTypeSizeBytes(this->me_Type), 0U);
   } else {
     throw std::invalid_argument("Element type mismatch");
   }
@@ -1404,29 +660,7 @@ uint32_t C_OscNodeDataPoolContent::GetArraySize(void) const {
   uint32_t u32_Retval = 1;
 
   if (this->mq_Array == true) {
-    switch (this->me_Type) {
-    case eUINT8:
-    case eSINT8:
-      u32_Retval = static_cast<uint32_t>(this->mc_Data.size());
-      break;
-    case eUINT16:
-    case eSINT16:
-      u32_Retval = static_cast<uint32_t>(this->mc_Data.size() / 2);
-      break;
-    case eUINT32:
-    case eSINT32:
-    case eFLOAT32:
-      u32_Retval = static_cast<uint32_t>(this->mc_Data.size() / 4);
-      break;
-    case eUINT64:
-    case eSINT64:
-    case eFLOAT64:
-      u32_Retval = static_cast<uint32_t>(this->mc_Data.size() / 8);
-      break;
-    default:
-      throw std::invalid_argument("Element type mismatch");
-      break;
-    }
+    u32_Retval = static_cast<uint32_t>(this->mc_Data.size() / mh_GetTypeSizeBytes(this->me_Type));
   }
   return u32_Retval;
 }
@@ -1463,29 +697,7 @@ void C_OscNodeDataPoolContent::SetType(const E_Type &ore_Value) {
     this->me_Type = ore_Value;
 
     // set new size
-    switch (this->me_Type) {
-    case eUINT8:
-    case eSINT8:
-      this->mc_Data.resize(1);
-      break;
-    case eUINT16:
-    case eSINT16:
-      this->mc_Data.resize(2);
-      break;
-    case eUINT32:
-    case eSINT32:
-    case eFLOAT32:
-      this->mc_Data.resize(4);
-      break;
-    case eUINT64:
-    case eSINT64:
-    case eFLOAT64:
-      this->mc_Data.resize(8);
-      break;
-    default:
-      throw std::invalid_argument("Element type mismatch");
-      break;
-    }
+    this->mc_Data.resize(mh_GetTypeSizeBytes(this->me_Type));
 
     // Get new value type
     m_GetBaseType(q_UnsignedNewBase, q_SignedNewBase, q_FloatNewBase,
@@ -1571,29 +783,7 @@ void C_OscNodeDataPoolContent::SetType(const E_Type &ore_Value) {
     // Apply new type
     this->me_Type = ore_Value;
     // size new data:
-    switch (ore_Value) {
-    case eUINT8:
-    case eSINT8:
-      this->mc_Data.resize(u32_Size);
-      break;
-    case eUINT16:
-    case eSINT16:
-      this->mc_Data.resize(static_cast<size_t>(u32_Size) * 2);
-      break;
-    case eUINT32:
-    case eSINT32:
-    case eFLOAT32:
-      this->mc_Data.resize(static_cast<size_t>(u32_Size) * 4);
-      break;
-    case eUINT64:
-    case eSINT64:
-    case eFLOAT64:
-      this->mc_Data.resize(static_cast<size_t>(u32_Size) * 8);
-      break;
-    default:
-      throw std::invalid_argument("Element type mismatch");
-      break;
-    }
+    this->mc_Data.resize(static_cast<size_t>(u32_Size) * mh_GetTypeSizeBytes(ore_Value));
     // Copy data (if any)
     for (uint32_t u32_ItArray = 0; u32_ItArray < u32_Size; ++u32_ItArray) {
       uint64_t u64_PreviousValue = 0;
@@ -1735,29 +925,7 @@ void C_OscNodeDataPoolContent::SetArray(const bool oq_Value) {
     // ...
 
     // Resize data
-    switch (this->me_Type) {
-    case eUINT8:
-    case eSINT8:
-      this->mc_Data.resize(1);
-      break;
-    case eUINT16:
-    case eSINT16:
-      this->mc_Data.resize(2);
-      break;
-    case eUINT32:
-    case eSINT32:
-    case eFLOAT32:
-      this->mc_Data.resize(4);
-      break;
-    case eUINT64:
-    case eSINT64:
-    case eFLOAT64:
-      this->mc_Data.resize(8);
-      break;
-    default:
-      throw std::invalid_argument("Element type mismatch");
-      break;
-    }
+    this->mc_Data.resize(mh_GetTypeSizeBytes(this->me_Type));
   }
 }
 

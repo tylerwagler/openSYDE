@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcDefChannelUseCase.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -69,26 +69,9 @@ C_OscHalcDefChannelUseCase::~C_OscHalcDefChannelUseCase() {}
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefChannelUseCase::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Id.toUtf8().data(),
-      static_cast<uint32_t>(this->c_Id.toUtf8().size()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Display.toUtf8().data(),
-      static_cast<uint32_t>(this->c_Display.toUtf8().size()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Comment.toUtf8().data(),
-      static_cast<uint32_t>(this->c_Comment.toUtf8().size()), oru32_HashValue);
-
-  c_Value.CalcHash(oru32_HashValue);
-
-  for (uint32_t u32_It = 0UL; u32_It < this->c_Availability.size(); ++u32_It) {
-    this->c_Availability[u32_It].CalcHash(oru32_HashValue);
-  }
-
-  for (uint32_t u32_It = 0UL; u32_It < this->c_DefaultChannels.size();
-       ++u32_It) {
-    stw::scl::C_SclChecksums::CalcCRC32(&this->c_DefaultChannels[u32_It],
-                                        sizeof(uint32_t), oru32_HashValue);
-  }
+void C_OscHalcDefChannelUseCase::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_Id, this->c_Display, this->c_Comment,
+                              this->c_Value, this->c_Availability, this->c_DefaultChannels);
 }

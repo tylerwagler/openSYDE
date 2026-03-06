@@ -17,6 +17,7 @@
 
 #include "C_OscCanOpenEdsDeviceInfoBlock.hpp"
 #include "C_OscCanOpenEdsFileInfoBlock.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
 
@@ -67,40 +68,13 @@ C_OscCanOpenEdsFileInfoBlock::C_OscCanOpenEdsFileInfoBlock()
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenEdsFileInfoBlock::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_FileName.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_FileName.length()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u8_FileVersion, sizeof(this->u8_FileVersion), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u8_FileRevision, sizeof(this->u8_FileRevision), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_EdsVersion.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_EdsVersion.length()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_Description.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_Description.length()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_CreationTime.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_CreationTime.length()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_CreationDate.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_CreationDate.length()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_CreatedBy.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_CreatedBy.length()), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_ModificationTime.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_ModificationTime.length()),
-      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_ModificationDate.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_ModificationDate.length()),
-      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_ModifiedBy.toUtf8().constData(),
-      static_cast<uint32_t>(this->c_ModifiedBy.length()), oru32_HashValue);
+void C_OscCanOpenEdsFileInfoBlock::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_FileName, this->u8_FileVersion, this->u8_FileRevision,
+                              this->c_EdsVersion, this->c_Description,
+                              this->c_CreationTime, this->c_CreationDate, this->c_CreatedBy,
+                              this->c_ModificationTime, this->c_ModificationDate, this->c_ModifiedBy);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

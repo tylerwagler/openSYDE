@@ -16,8 +16,8 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcConfigChannel.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_OscUtils.hpp"
-#include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -73,23 +73,11 @@ C_OscHalcConfigChannel::~C_OscHalcConfigChannel() {}
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigChannel::CalcHash(uint32_t &oru32_HashValue) const {
-  const QByteArray c_NameData = this->c_Name.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(c_NameData.constData(),
-                                      static_cast<uint32_t>(c_NameData.size()),
-                                      oru32_HashValue);
-  const QByteArray c_CommentData = this->c_Comment.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(
-      c_CommentData.constData(), static_cast<uint32_t>(c_CommentData.size()),
-      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->q_SafetyRelevant, sizeof(this->q_SafetyRelevant), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u32_UseCaseIndex, sizeof(this->u32_UseCaseIndex), oru32_HashValue);
-
-  for (uint32_t u32_It = 0UL; u32_It < this->c_Parameters.size(); ++u32_It) {
-    this->c_Parameters[u32_It].CalcHash(oru32_HashValue);
-  }
+void C_OscHalcConfigChannel::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_Name, this->c_Comment,
+                              this->q_SafetyRelevant, this->u32_UseCaseIndex, this->c_Parameters);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

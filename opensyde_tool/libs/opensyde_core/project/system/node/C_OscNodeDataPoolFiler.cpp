@@ -22,6 +22,7 @@
 #include <limits>
 #include <sstream>
 
+#include "C_OscFilerUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces
@@ -46,6 +47,35 @@ using namespace stw::errors;
 /* -- Module Global Variables
  * ---------------------------------------------------------------------------------------
  */
+
+namespace
+{
+const C_OscFilerUtil::EnumEntry<C_OscNodeDataPool::E_Type> mac_DATAPOOL_TYPE_TABLE[] = {
+   {C_OscNodeDataPool::eDIAG, "diag"},
+   {C_OscNodeDataPool::eCOM, "com"},
+   {C_OscNodeDataPool::eNVM, "nvm"},
+   {C_OscNodeDataPool::eHALC, "halc"},
+   {C_OscNodeDataPool::eHALC_NVM, "halc-nvm"}
+};
+
+const C_OscFilerUtil::EnumEntry<C_OscNodeDataPoolContent::E_Type> mac_CONTENT_TYPE_TABLE[] = {
+   {C_OscNodeDataPoolContent::eUINT8, "uint8"},
+   {C_OscNodeDataPoolContent::eUINT16, "uint16"},
+   {C_OscNodeDataPoolContent::eUINT32, "uint32"},
+   {C_OscNodeDataPoolContent::eUINT64, "uint64"},
+   {C_OscNodeDataPoolContent::eSINT8, "sint8"},
+   {C_OscNodeDataPoolContent::eSINT16, "sint16"},
+   {C_OscNodeDataPoolContent::eSINT32, "sint32"},
+   {C_OscNodeDataPoolContent::eSINT64, "sint64"},
+   {C_OscNodeDataPoolContent::eFLOAT32, "float32"},
+   {C_OscNodeDataPoolContent::eFLOAT64, "float64"}
+};
+
+const C_OscFilerUtil::EnumEntry<C_OscNodeDataPoolListElement::E_Access> mac_ACCESS_TABLE[] = {
+   {C_OscNodeDataPoolListElement::eACCESS_RO, "read-only"},
+   {C_OscNodeDataPoolListElement::eACCESS_RW, "read-write"}
+};
+}
 
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
@@ -950,29 +980,7 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolListDataSets(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscNodeDataPoolFiler::h_DataPoolToString(
     const C_OscNodeDataPool::E_Type &ore_DataPool) {
-  QString c_Retval;
-
-  switch (ore_DataPool) {
-  case C_OscNodeDataPool::eDIAG:
-    c_Retval = "diag";
-    break;
-  case C_OscNodeDataPool::eCOM:
-    c_Retval = "com";
-    break;
-  case C_OscNodeDataPool::eNVM:
-    c_Retval = "nvm";
-    break;
-  case C_OscNodeDataPool::eHALC:
-    c_Retval = "halc";
-    break;
-  case C_OscNodeDataPool::eHALC_NVM:
-    c_Retval = "halc-nvm";
-    break;
-  default:
-    c_Retval = "invalid";
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_DataPool, mac_DATAPOOL_TYPE_TABLE);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -988,25 +996,8 @@ QString C_OscNodeDataPoolFiler::h_DataPoolToString(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFiler::h_StringToDataPool(
     const QString &orc_String, C_OscNodeDataPool::E_Type &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "com") {
-    ore_Type = C_OscNodeDataPool::eCOM;
-  } else if (orc_String == "nvm") {
-    ore_Type = C_OscNodeDataPool::eNVM;
-  } else if (orc_String == "diag") {
-    ore_Type = C_OscNodeDataPool::eDIAG;
-  } else if (orc_String == "halc") {
-    ore_Type = C_OscNodeDataPool::eHALC;
-  } else if (orc_String == "halc-nvm") {
-    ore_Type = C_OscNodeDataPool::eHALC_NVM;
-  } else {
-    osc_write_log_error("Loading Datapool",
-                        "Invalid Datapool type:" + orc_String);
-    s32_Retval = C_RANGE;
-  }
-
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_DATAPOOL_TYPE_TABLE, ore_Type,
+                                        "Loading Datapool", "Datapool type");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1842,44 +1833,7 @@ int32_t C_OscNodeDataPoolFiler::h_SaveDataPoolFile(
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OscNodeDataPoolFiler::mh_NodeDataPoolContentToString(
     const C_OscNodeDataPoolContent::E_Type &ore_NodeDataPoolContent) {
-  QString c_Retval;
-
-  switch (ore_NodeDataPoolContent) {
-  case C_OscNodeDataPoolContent::eUINT8:
-    c_Retval = "uint8";
-    break;
-  case C_OscNodeDataPoolContent::eUINT16:
-    c_Retval = "uint16";
-    break;
-  case C_OscNodeDataPoolContent::eUINT32:
-    c_Retval = "uint32";
-    break;
-  case C_OscNodeDataPoolContent::eUINT64:
-    c_Retval = "uint64";
-    break;
-  case C_OscNodeDataPoolContent::eSINT8:
-    c_Retval = "sint8";
-    break;
-  case C_OscNodeDataPoolContent::eSINT16:
-    c_Retval = "sint16";
-    break;
-  case C_OscNodeDataPoolContent::eSINT32:
-    c_Retval = "sint32";
-    break;
-  case C_OscNodeDataPoolContent::eSINT64:
-    c_Retval = "sint64";
-    break;
-  case C_OscNodeDataPoolContent::eFLOAT32:
-    c_Retval = "float32";
-    break;
-  case C_OscNodeDataPoolContent::eFLOAT64:
-    c_Retval = "float64";
-    break;
-  default:
-    c_Retval = "invalid";
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_NodeDataPoolContent, mac_CONTENT_TYPE_TABLE);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1895,35 +1849,8 @@ QString C_OscNodeDataPoolFiler::mh_NodeDataPoolContentToString(
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolContent(
     const QString &orc_String, C_OscNodeDataPoolContent::E_Type &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "uint8") {
-    ore_Type = C_OscNodeDataPoolContent::eUINT8;
-  } else if (orc_String == "uint16") {
-    ore_Type = C_OscNodeDataPoolContent::eUINT16;
-  } else if (orc_String == "uint32") {
-    ore_Type = C_OscNodeDataPoolContent::eUINT32;
-  } else if (orc_String == "uint64") {
-    ore_Type = C_OscNodeDataPoolContent::eUINT64;
-  } else if (orc_String == "sint8") {
-    ore_Type = C_OscNodeDataPoolContent::eSINT8;
-  } else if (orc_String == "sint16") {
-    ore_Type = C_OscNodeDataPoolContent::eSINT16;
-  } else if (orc_String == "sint32") {
-    ore_Type = C_OscNodeDataPoolContent::eSINT32;
-  } else if (orc_String == "sint64") {
-    ore_Type = C_OscNodeDataPoolContent::eSINT64;
-  } else if (orc_String == "float32") {
-    ore_Type = C_OscNodeDataPoolContent::eFLOAT32;
-  } else if (orc_String == "float64") {
-    ore_Type = C_OscNodeDataPoolContent::eFLOAT64;
-  } else {
-    osc_write_log_error("Loading data element",
-                        "Invalid \"type\": " + orc_String);
-    s32_Retval = C_RANGE;
-  }
-
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_CONTENT_TYPE_TABLE, ore_Type,
+                                        "Loading data element", "type");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1939,20 +1866,7 @@ int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolContent(
 QString C_OscNodeDataPoolFiler::mh_NodeDataPoolElementAccessToString(
     const C_OscNodeDataPoolListElement::E_Access
         &ore_NodeDataPoolElementAccess) {
-  QString c_Retval;
-
-  switch (ore_NodeDataPoolElementAccess) {
-  case C_OscNodeDataPoolListElement::eACCESS_RO:
-    c_Retval = "read-only";
-    break;
-  case C_OscNodeDataPoolListElement::eACCESS_RW:
-    c_Retval = "read-write";
-    break;
-  default:
-    c_Retval = "invalid";
-    break;
-  }
-  return c_Retval;
+  return C_OscFilerUtil::h_EnumToString(ore_NodeDataPoolElementAccess, mac_ACCESS_TABLE);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1969,18 +1883,6 @@ QString C_OscNodeDataPoolFiler::mh_NodeDataPoolElementAccessToString(
 int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolElementAccess(
     const QString &orc_String,
     C_OscNodeDataPoolListElement::E_Access &ore_Type) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_String == "read-write") {
-    ore_Type = C_OscNodeDataPoolListElement::eACCESS_RW;
-  } else if (orc_String == "read-only") {
-    ore_Type = C_OscNodeDataPoolListElement::eACCESS_RO;
-  } else {
-    osc_write_log_error("Loading data element",
-                        "Invalid \"access\": " + orc_String);
-
-    s32_Retval = C_RANGE;
-  }
-
-  return s32_Retval;
+  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_ACCESS_TABLE, ore_Type,
+                                        "Loading data element", "access");
 }

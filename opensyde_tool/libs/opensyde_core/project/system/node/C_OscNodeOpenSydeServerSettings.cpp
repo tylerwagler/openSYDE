@@ -16,8 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscNodeOpenSydeServerSettings.hpp"
-
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -80,20 +79,10 @@ void C_OscNodeOpenSydeServerSettings::Initialize(void) {
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeOpenSydeServerSettings::CalcHash(
-    uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u8_MaxClients, sizeof(this->u8_MaxClients), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u8_MaxParallelTransmissions,
-                                      sizeof(this->u8_MaxParallelTransmissions),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->s16_DpdDataBlockIndex,
-                                      sizeof(this->s16_DpdDataBlockIndex),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u16_MaxMessageBufferTx,
-                                      sizeof(this->u16_MaxMessageBufferTx),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->u16_MaxRoutingMessageBufferRx,
-      sizeof(this->u16_MaxRoutingMessageBufferRx), oru32_HashValue);
+void C_OscNodeOpenSydeServerSettings::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->u8_MaxClients, this->u8_MaxParallelTransmissions,
+                              this->s16_DpdDataBlockIndex, this->u16_MaxMessageBufferTx,
+                              this->u16_MaxRoutingMessageBufferRx);
 }

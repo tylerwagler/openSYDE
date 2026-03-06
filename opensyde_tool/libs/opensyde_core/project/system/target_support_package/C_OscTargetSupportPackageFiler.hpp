@@ -6,8 +6,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCTARGETSUPPORTPACKAGEFILER_NEW_HPP
-#define C_OSCTARGETSUPPORTPACKAGEFILER_NEW_HPP
+#ifndef C_OSCTARGETSUPPORTPACKAGEFILER_HPP
+#define C_OSCTARGETSUPPORTPACKAGEFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------

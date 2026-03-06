@@ -238,6 +238,7 @@ private:
                                              uint8_t *const opu8_Data);
   static void mh_UnsignedInt32ToBinaryLittle(const uint32_t ou32_Data,
                                              uint8_t *const opu8_Data);
+  static uint32_t mh_GetTypeSizeBytes(const E_Type oe_Type);
 
   bool m_CompareArrayNotEqual(const C_OscNodeDataPoolContent &orc_Cmp,
                               const uint32_t ou32_Index) const;

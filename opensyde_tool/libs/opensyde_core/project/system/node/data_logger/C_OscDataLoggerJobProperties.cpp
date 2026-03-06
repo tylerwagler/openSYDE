@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscDataLoggerJobProperties.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 #include "stwtypes.hpp"
 
 /* -- Used Namespaces
@@ -68,30 +68,12 @@ C_OscDataLoggerJobProperties::C_OscDataLoggerJobProperties()
    result [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscDataLoggerJobProperties::CalcHash(uint32_t &oru32_HashValue) const {
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Name.toUtf8().constData(),
-                                      this->c_Name.length(), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(this->c_Comment.toUtf8().constData(),
-                                      this->c_Comment.length(),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->e_UseCase, sizeof(this->e_UseCase),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      &this->e_LogFileFormat, sizeof(this->e_LogFileFormat), oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_MaxLogEntries,
-                                      sizeof(this->u32_MaxLogEntries),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_MaxLogDurationSec,
-                                      sizeof(this->u32_MaxLogDurationSec),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->u32_LogIntervalMs,
-                                      sizeof(this->u32_LogIntervalMs),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(&this->e_LocalLogTrigger,
-                                      sizeof(this->e_LocalLogTrigger),
-                                      oru32_HashValue);
-  stw::scl::C_SclChecksums::CalcCRC32(
-      this->c_LogDestinationDirectory.toUtf8().constData(),
-      this->c_LogDestinationDirectory.length(), oru32_HashValue);
-  c_AdditionalTriggerProperties.CalcHash(oru32_HashValue);
+void C_OscDataLoggerJobProperties::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_Name, this->c_Comment,
+                              this->e_UseCase, this->e_LogFileFormat,
+                              this->u32_MaxLogEntries, this->u32_MaxLogDurationSec,
+                              this->u32_LogIntervalMs, this->e_LocalLogTrigger,
+                              this->c_LogDestinationDirectory, this->c_AdditionalTriggerProperties);
 }

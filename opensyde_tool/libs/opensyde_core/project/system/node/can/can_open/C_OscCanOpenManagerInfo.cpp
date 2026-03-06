@@ -18,6 +18,7 @@
 #include "stwerrors.hpp"
 
 #include "C_OscCanOpenManagerInfo.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_SclChecksums.hpp"
 
 /* -- Used Namespaces
@@ -73,45 +74,16 @@ C_OscCanOpenManagerInfo::C_OscCanOpenManagerInfo(void)
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenManagerInfo::CalcHash(uint32_t &oru32_HashValue) const {
-  C_SclChecksums::CalcCRC32(&this->q_UseOpenSydeNodeId,
-                            sizeof(this->q_UseOpenSydeNodeId), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u8_NodeIdValue, sizeof(this->u8_NodeIdValue),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u16_GlobalSdoTimeoutMs,
-                            sizeof(this->u16_GlobalSdoTimeoutMs),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_AutostartCanOpenManager,
-                            sizeof(this->q_AutostartCanOpenManager),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_StartDevices, sizeof(this->q_StartDevices),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_NmtStartAll, sizeof(this->q_NmtStartAll),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->e_NmtErrorBehaviour,
-                            sizeof(this->e_NmtErrorBehaviour), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_EnableHeartbeatProducing,
-                            sizeof(this->q_EnableHeartbeatProducing),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u16_HeartbeatProducerTimeMs,
-                            sizeof(this->u16_HeartbeatProducerTimeMs),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_ProduceSyncMessage,
-                            sizeof(this->q_ProduceSyncMessage),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u32_SyncCyclePeriodUs,
-                            sizeof(this->u32_SyncCyclePeriodUs),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u32_SyncWindowLengthUs,
-                            sizeof(this->u32_SyncWindowLengthUs),
-                            oru32_HashValue);
-   for (QHash<C_OscCanInterfaceId,
-                 C_OscCanOpenManagerDeviceInfo>::const_iterator c_It =
-            this->c_CanOpenDevices.begin();
-        c_It != this->c_CanOpenDevices.end(); ++c_It) {
-     c_It.key().CalcHash(oru32_HashValue);
-     c_It.value().CalcHash(oru32_HashValue);
-   }
+void C_OscCanOpenManagerInfo::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->q_UseOpenSydeNodeId, this->u8_NodeIdValue,
+                              this->u16_GlobalSdoTimeoutMs, this->q_AutostartCanOpenManager,
+                              this->q_StartDevices, this->q_NmtStartAll,
+                              this->e_NmtErrorBehaviour, this->q_EnableHeartbeatProducing,
+                              this->u16_HeartbeatProducerTimeMs, this->q_ProduceSyncMessage,
+                              this->u32_SyncCyclePeriodUs, this->u32_SyncWindowLengthUs,
+                              this->c_CanOpenDevices);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

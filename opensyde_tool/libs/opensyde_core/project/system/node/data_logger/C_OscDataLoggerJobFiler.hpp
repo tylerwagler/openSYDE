@@ -15,9 +15,6 @@
 #include "C_OscNodeDataPoolListElementId.hpp"
 #include "C_OscNodeDataPoolListElementOptArrayId.hpp"
 #include "C_OscXmlParser.hpp"
-#include <QDataStream>
-#include <QDomDocument>
-#include <QJsonObject>
 #include <QList>
 
 /* -- Namespace
@@ -119,33 +116,6 @@ private:
        const QString &orc_String,
        C_OscDataLoggerJobProperties::E_UseCase &ore_Type);
 
-   // New QDataStream helpers
-   static int32_t mh_LoadJobDataBinary(C_OscDataLoggerJob &orc_Config,
-                                       QDataStream &orc_Stream);
-   static int32_t mh_SaveJobDataBinary(const C_OscDataLoggerJob &orc_Config,
-                                       QDataStream &orc_Stream);
-   static int32_t mh_LoadJobPropertiesBinary(C_OscDataLoggerJobProperties &orc_Config,
-                                             QDataStream &orc_Stream);
-   static int32_t mh_SaveJobPropertiesBinary(const C_OscDataLoggerJobProperties &orc_Config,
-                                             QDataStream &orc_Stream);
-   static int32_t mh_LoadJobAdditionalTriggerPropertiesBinary(
-       C_OscDataLoggerJobAdditionalTriggerProperties &orc_Config,
-       QDataStream &orc_Stream);
-   static int32_t mh_SaveJobAdditionalTriggerPropertiesBinary(
-       const C_OscDataLoggerJobAdditionalTriggerProperties &orc_Config,
-       QDataStream &orc_Stream);
-   static int32_t mh_LoadConfiguredDataElementsBinary(
-       QList<C_OscDataLoggerDataElementReference> &orc_Config,
-       QDataStream &orc_Stream);
-   static int32_t mh_SaveConfiguredDataElementsBinary(
-       const QList<C_OscDataLoggerDataElementReference> &orc_Config,
-       QDataStream &orc_Stream);
-   static int32_t mh_LoadConfiguredDataElementBinary(
-       C_OscDataLoggerDataElementReference &orc_Config,
-       QDataStream &orc_Stream);
-   static int32_t mh_SaveConfiguredDataElementBinary(
-       const C_OscDataLoggerDataElementReference &orc_Config,
-       QDataStream &orc_Stream);
 };
 
 /* -- Extern Global Variables

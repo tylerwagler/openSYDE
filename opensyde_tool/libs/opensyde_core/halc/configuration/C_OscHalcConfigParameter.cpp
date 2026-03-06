@@ -16,7 +16,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscHalcConfigParameter.hpp"
-#include "C_SclChecksums.hpp"
+#include "C_OscHashUtil.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -71,10 +71,7 @@ C_OscHalcConfigParameter::~C_OscHalcConfigParameter() {}
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigParameter::CalcHash(uint32_t &oru32_HashValue) const {
-  c_Value.CalcHash(oru32_HashValue);
-
-  const QByteArray c_CommentBytes = this->c_Comment.toUtf8();
-  stw::scl::C_SclChecksums::CalcCRC32(c_CommentBytes.constData(),
-                                      c_CommentBytes.length(), oru32_HashValue);
+void C_OscHalcConfigParameter::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue, this->c_Value, this->c_Comment);
 }

@@ -17,6 +17,7 @@
 #include <QFileInfo>
 
 #include "C_OscCanOpenManagerDeviceInfo.hpp"
+#include "C_OscHashUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_SclChecksums.hpp"
 #include "stwerrors.hpp"
@@ -74,43 +75,16 @@ C_OscCanOpenManagerDeviceInfo::C_OscCanOpenManagerDeviceInfo()
    [out] value
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscCanOpenManagerDeviceInfo::CalcHash(uint32_t &oru32_HashValue) const {
-  // Do not include c_ProjectEdsFilePath, mq_EdsFileContentLoaded as they are
-  // only utilities for delayed loading,
-  //  not parts of the data
-  C_SclChecksums::CalcCRC32(this->c_OriginalEdsFileName.toUtf8().constData(),
-                            this->c_OriginalEdsFileName.length(),
-                            oru32_HashValue);
-  this->mc_EdsFileContent.CalcHash(oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_DeviceOptional,
-                            sizeof(this->q_DeviceOptional), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_NoInitialization,
-                            sizeof(this->q_NoInitialization), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_FactorySettingsActive,
-                            sizeof(this->q_FactorySettingsActive),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u8_ResetNodeObjectDictionarySubIndex,
-                            sizeof(this->u8_ResetNodeObjectDictionarySubIndex),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_EnableHeartbeatProducing,
-                            sizeof(this->q_EnableHeartbeatProducing),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u16_HeartbeatProducerTimeMs,
-                            sizeof(this->u16_HeartbeatProducerTimeMs),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_UseOpenSydeNodeId,
-                            sizeof(this->q_UseOpenSydeNodeId), oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u8_NodeIdValue, sizeof(this->u8_NodeIdValue),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->q_EnableHeartbeatConsuming,
-                            sizeof(this->q_EnableHeartbeatConsuming),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(&this->u16_HeartbeatConsumerTimeMs,
-                            sizeof(this->u16_HeartbeatConsumerTimeMs),
-                            oru32_HashValue);
-  C_SclChecksums::CalcCRC32(
-      &this->q_EnableHeartbeatConsumingAutoCalculation,
-      sizeof(this->q_EnableHeartbeatConsumingAutoCalculation), oru32_HashValue);
+void C_OscCanOpenManagerDeviceInfo::CalcHash(uint32_t & oru32_HashValue) const
+{
+   hash_util::CalcHashMembers(oru32_HashValue,
+                              this->c_OriginalEdsFileName, this->mc_EdsFileContent,
+                              this->q_DeviceOptional, this->q_NoInitialization,
+                              this->q_FactorySettingsActive, this->u8_ResetNodeObjectDictionarySubIndex,
+                              this->q_EnableHeartbeatProducing, this->u16_HeartbeatProducerTimeMs,
+                              this->q_UseOpenSydeNodeId, this->u8_NodeIdValue,
+                              this->q_EnableHeartbeatConsuming, this->u16_HeartbeatConsumerTimeMs,
+                              this->q_EnableHeartbeatConsumingAutoCalculation);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
