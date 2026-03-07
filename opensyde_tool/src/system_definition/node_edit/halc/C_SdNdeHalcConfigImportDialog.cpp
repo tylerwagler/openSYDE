@@ -73,7 +73,7 @@ C_SdNdeHalcConfigImportDialog::C_SdNdeHalcConfigImportDialog(stw::opensyde_gui_e
    this->mrc_ParentDialog.SetWidget(this);
 
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeHalcConfigImportDialog::m_OkClicked);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubStyled::clicked, this,
            &C_SdNdeHalcConfigImportDialog::m_OnCancel);
 }
 

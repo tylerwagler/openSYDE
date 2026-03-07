@@ -107,7 +107,10 @@
             </spacer>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgePubHalcPanel" name="pc_PubUpdate">
+            <widget class="stw::opensyde_gui_elements::C_OgePubStyledToolTip" name="pc_PubUpdate">
+          <property name="variant" stdset="0">
+           <string>HalcPanel</string>
+          </property>
              <property name="text">
               <string>Update</string>
              </property>
@@ -264,9 +267,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubHalcPanel</class>
+   <class>stw::opensyde_gui_elements::C_OgePubStyledToolTip</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubHalcPanel.hpp</header>
+   <header>C_OgePubStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>

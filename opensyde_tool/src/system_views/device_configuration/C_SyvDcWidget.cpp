@@ -153,11 +153,11 @@ C_SyvDcWidget::C_SyvDcWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_
            &C_SyvDcWidget::m_AssignmentConnect);
    connect(this->mpc_Ui->pc_ListWidgetExistingNodesAssignment, &C_SyvDcExistingNodeList::SigDisconnect, this,
            &C_SyvDcWidget::m_AssignmentDisconnect);
-   connect(this->mpc_Ui->pc_PushButtonScan, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonScan, &stw::opensyde_gui_elements::C_OgePubStyled::clicked, this,
            &C_SyvDcWidget::m_StartSearchProper);
-   connect(this->mpc_Ui->pc_PushButtonConfigure, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonConfigure, &stw::opensyde_gui_elements::C_OgePubStyled::clicked, this,
            &C_SyvDcWidget::m_StartConfigProper);
-   connect(this->mpc_Ui->pc_PbBackToScan, &stw::opensyde_gui_elements::C_OgePubCancel::clicked, this,
+   connect(this->mpc_Ui->pc_PbBackToScan, &stw::opensyde_gui_elements::C_OgePubStyled::clicked, this,
            &C_SyvDcWidget::m_BackToScan);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_ComboBoxBitRate, static_cast<void (QComboBox::*)(

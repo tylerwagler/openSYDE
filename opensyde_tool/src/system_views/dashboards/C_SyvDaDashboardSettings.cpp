@@ -92,9 +92,9 @@ C_SyvDaDashboardSettings::C_SyvDaDashboardSettings(C_OgePopUpDialog & orc_Parent
    this->mpc_Ui->pc_PushButtonOk->setAutoDefault(true);
 
    //Connects
-   connect(this->mpc_Ui->pc_PushButtonOk, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &stw::opensyde_gui_elements::C_OgePubStyled::clicked, this,
            &C_SyvDaDashboardSettings::m_OkClicked);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &stw::opensyde_gui_elements::C_OgePubStyled::clicked, this,
            &C_SyvDaDashboardSettings::m_CancelClicked);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_SpinBoxFast, static_cast<void (QSpinBox::*)(

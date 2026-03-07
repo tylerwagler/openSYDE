@@ -223,7 +223,10 @@
        </widget>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeGbxGrayedEdit" name="pc_GroupBox">
+       <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBox">
+          <property name="variant" stdset="0">
+           <string>GrayedEdit</string>
+          </property>
         <property name="title">
          <string/>
         </property>
@@ -294,9 +297,9 @@
    <header>C_OgePubSystemCommissioningEdit.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxGrayedEdit</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxGrayedEdit.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

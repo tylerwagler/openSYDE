@@ -30,7 +30,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_EnvironmentSettings">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_EnvironmentSettings">
+          <property name="variant" stdset="0">
+           <string>Default</string>
+          </property>
      <property name="title">
       <string/>
      </property>
@@ -288,7 +291,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubCancel" name="pc_PushButtonCancel">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_PushButtonCancel">
+          <property name="variant" stdset="0">
+           <string>Cancel</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -323,7 +329,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonOk">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_PushButtonOk">
+          <property name="variant" stdset="0">
+           <string>Dialog</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -385,20 +394,15 @@
    <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
+   <class>stw::opensyde_gui_elements::C_OgePubStyled</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
+   <header>C_OgePubStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbx</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubCancel.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>

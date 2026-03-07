@@ -342,7 +342,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLeDark" name="pc_LineEditVersion"/>
+                 <widget class="stw::opensyde_gui_elements::C_OgeLeStyled" name="pc_LineEditVersion"/>
                 </item>
                 <item>
                  <widget class="stw::opensyde_gui_elements::C_OgePubIconOnly" name="pc_BtnEdit">
@@ -766,9 +766,9 @@
    <header>C_OgePubUseCase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLeDark</class>
+   <class>stw::opensyde_gui_elements::C_OgeLeStyled</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLeDark.hpp</header>
+   <header>C_OgeLeStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabDoubleClick</class>

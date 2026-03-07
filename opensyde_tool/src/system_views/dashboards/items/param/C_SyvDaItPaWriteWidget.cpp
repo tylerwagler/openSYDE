@@ -95,7 +95,7 @@ C_SyvDaItPaWriteWidget::C_SyvDaItPaWriteWidget(stw::opensyde_gui_elements::C_Oge
    connect(this->mpc_Ui->pc_PbConfirm, &QPushButton::clicked, this, &C_SyvDaItPaWriteWidget::m_ConfirmClicked);
    connect(this->mpc_ParentDialog, &C_OgePopUpDialog::SigCloseIgnored, this,
            &C_SyvDaItPaWriteWidget::m_OnCancel);
-   connect(this->mpc_Ui->pc_CbConfirm, &stw::opensyde_gui_elements::C_OgeChxProperties::stateChanged, this,
+   connect(this->mpc_Ui->pc_CbConfirm, &stw::opensyde_gui_elements::C_OgeChxStyled::stateChanged, this,
            &C_SyvDaItPaWriteWidget::m_ConfirmCheckBoxChanged);
    connect(&this->mc_Timer, &QTimer::timeout, this, &C_SyvDaItPaWriteWidget::m_Timer);
    this->mc_Timer.setInterval(10);

@@ -146,9 +146,8 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxProperties.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultCheckedDisabled.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxStyled.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelect.cpp
@@ -158,11 +157,9 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraBorder.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraSeparator.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbx.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxHover.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTip.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxStyled.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparent.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.cpp
@@ -176,23 +173,20 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeDark.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeStyled.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeProperties.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLePropertiesName.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/menu/C_OgeMuSections.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubCancel.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubConfigure.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubMessageCancel.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubMessageOk.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStandard.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToolTipBase.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStyled.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStyledToolTip.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabProperties.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.cpp
@@ -307,9 +301,8 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxProperties.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultCheckedDisabled.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxStyled.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelect.hpp
@@ -319,11 +312,9 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraBorder.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraSeparator.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbx.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxHover.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTip.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxStyled.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparent.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.hpp
@@ -337,23 +328,20 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeDark.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeStyled.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeProperties.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLePropertiesName.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/menu/C_OgeMuSections.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubCancel.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubConfigure.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubMessageCancel.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubMessageOk.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStandard.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToolTipBase.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStyled.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStyledToolTip.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabProperties.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.hpp

@@ -38,7 +38,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbxToolTip" name="mpc_GroupBox">
+         <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="mpc_GroupBox">
+          <property name="variant" stdset="0">
+           <string>ToolTip</string>
+          </property>
           <property name="title">
            <string/>
           </property>
@@ -116,9 +119,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxToolTip</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxToolTip.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

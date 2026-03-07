@@ -1,19 +1,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Line edit field for toolbar search (header)
+   \brief       Consolidated style-only group box
 
-   Line edit field for toolbar search (note: main module description should be in .cpp file)
-
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OGELETOOLBARSEARCH_HPP
-#define C_OGELETOOLBARSEARCH_HPP
+#ifndef C_OGEGBXSTYLED_HPP
+#define C_OGEGBXSTYLED_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-
-#include "C_OgeLeContextMenuBase.hpp"
+#include <QGroupBox>
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -24,13 +22,20 @@ namespace opensyde_gui_elements
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_OgeLeToolBarSearch :
-   public C_OgeLeContextMenuBase
+class C_OgeGbxStyled :
+   public QGroupBox
 {
    Q_OBJECT
+   Q_PROPERTY(QString variant READ GetVariant WRITE SetVariant)
 
 public:
-   C_OgeLeToolBarSearch(QWidget * const opc_Parent = NULL);
+   explicit C_OgeGbxStyled(QWidget * const opc_Parent = NULL);
+
+   QString GetVariant(void) const;
+   void SetVariant(const QString & orc_Variant);
+
+private:
+   QString mc_Variant;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

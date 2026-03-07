@@ -50,7 +50,10 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,0,1">
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral">
+         <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxGeneral">
+          <property name="variant" stdset="0">
+           <string>Default</string>
+          </property>
           <property name="title">
            <string/>
           </property>
@@ -250,7 +253,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral_2">
+         <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxGeneral_2">
+          <property name="variant" stdset="0">
+           <string>Default</string>
+          </property>
           <property name="title">
            <string/>
           </property>
@@ -372,7 +378,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeGbxGrayedEdit" name="pc_GroupBox">
+              <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBox">
+          <property name="variant" stdset="0">
+           <string>GrayedEdit</string>
+          </property>
                <property name="title">
                 <string/>
                </property>
@@ -588,7 +597,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral_3">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxGeneral_3">
+          <property name="variant" stdset="0">
+           <string>Default</string>
+          </property>
      <property name="title">
       <string/>
      </property>
@@ -993,7 +1005,10 @@
                 </widget>
                </item>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgePubConfigure" name="pc_PushButtonUpdateModeConfigure">
+                <widget class="stw::opensyde_gui_elements::C_OgePubStyledToolTip" name="pc_PushButtonUpdateModeConfigure">
+          <property name="variant" stdset="0">
+           <string>Configure</string>
+          </property>
                  <property name="minimumSize">
                   <size>
                    <width>100</width>
@@ -1155,7 +1170,10 @@
            </layout>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeChxProperties" name="pc_CheckBoxDefaultScaling">
+           <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxDefaultScaling">
+          <property name="variant" stdset="0">
+           <string>Properties</string>
+          </property>
             <property name="text">
              <string>CheckBox</string>
             </property>
@@ -1373,7 +1391,10 @@
               </layout>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeChxProperties" name="pc_CheckBoxFormatterActive">
+              <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxFormatterActive">
+          <property name="variant" stdset="0">
+           <string>Properties</string>
+          </property>
                <property name="text">
                 <string>CheckBox</string>
                </property>
@@ -1663,7 +1684,10 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_34" stretch="0,1">
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeChxProperties" name="pc_CheckBoxDashboardConnectWrite">
+              <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxDashboardConnectWrite">
+          <property name="variant" stdset="0">
+           <string>Properties</string>
+          </property>
                <property name="text">
                 <string>Auto write</string>
                </property>
@@ -1724,7 +1748,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubCancel" name="pc_BushButtonCancel">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_BushButtonCancel">
+          <property name="variant" stdset="0">
+           <string>Cancel</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -1765,7 +1792,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_BushButtonOk">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_BushButtonOk">
+          <property name="variant" stdset="0">
+           <string>Dialog</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -1827,20 +1857,15 @@
    <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
+   <class>stw::opensyde_gui_elements::C_OgePubStyled</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
+   <header>C_OgePubStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbx</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubCancel.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
@@ -1858,9 +1883,9 @@
    <header>C_OgeChxTristateTransparentToggle.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubConfigure</class>
+   <class>stw::opensyde_gui_elements::C_OgePubStyledToolTip</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubConfigure.hpp</header>
+   <header>C_OgePubStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
@@ -1869,9 +1894,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxProperties</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxProperties.hpp</header>
+   <header>C_OgeChxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubOpen</class>
@@ -1889,9 +1914,9 @@
    <header>C_OgePubPathVariables.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxGrayedEdit</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxGrayedEdit.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

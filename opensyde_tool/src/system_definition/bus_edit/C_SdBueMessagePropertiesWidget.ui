@@ -358,7 +358,10 @@ p, li { white-space: pre-wrap; }
           </layout>
          </item>
          <item row="1" column="0" colspan="6">
-          <widget class="stw::opensyde_gui_elements::C_OgeChxProperties" name="pc_CheckBoxExtendedType">
+          <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxExtendedType">
+          <property name="variant" stdset="0">
+           <string>Properties</string>
+          </property>
            <property name="text">
             <string>Extended type</string>
            </property>
@@ -549,7 +552,10 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="2" column="2" colspan="3">
-          <widget class="stw::opensyde_gui_elements::C_OgeChxPropertiesSmall" name="pc_CheckBoxCobIdWithNodeId">
+          <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxCobIdWithNodeId">
+          <property name="variant" stdset="0">
+           <string>PropertiesSmall</string>
+          </property>
            <property name="minimumSize">
             <size>
              <width>300</width>
@@ -1306,14 +1312,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeSpxNumber.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxPropertiesSmall</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxPropertiesSmall.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxProperties</class>
-   <extends>QCheckBox</extends>
-   <header>C_OgeChxProperties.hpp</header>
+   <header>C_OgeChxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdBueMessageRxList</class>

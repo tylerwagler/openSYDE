@@ -1,19 +1,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Custom group box transparent for toolbar search (header)
+   \brief       Consolidated style-only push button with tooltip
 
-   Custom group box (note: main module description should be in .cpp file)
-
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OGEGBXTRANSPARENTTOOLBARSEARCH_HPP
-#define C_OGEGBXTRANSPARENTTOOLBARSEARCH_HPP
+#ifndef C_OGEPUBSTYLEDTOOLTIP_HPP
+#define C_OGEPUBSTYLEDTOOLTIP_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-
-#include <QGroupBox>
+#include <QString>
+#include "C_OgePubToolTipBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -24,13 +22,20 @@ namespace opensyde_gui_elements
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_OgeGbxTransparentToolBarSearch :
-   public QGroupBox
+class C_OgePubStyledToolTip :
+   public C_OgePubToolTipBase
 {
    Q_OBJECT
+   Q_PROPERTY(QString variant READ GetVariant WRITE SetVariant)
 
 public:
-   C_OgeGbxTransparentToolBarSearch(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubStyledToolTip(QWidget * const opc_Parent = NULL);
+
+   QString GetVariant(void) const;
+   void SetVariant(const QString & orc_Variant);
+
+private:
+   QString mc_Variant;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

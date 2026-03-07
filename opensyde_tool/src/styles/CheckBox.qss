@@ -1,12 +1,12 @@
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeChxProperties::indicator
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="Properties"]::indicator
 {
 width: 30px;
 height: 30px;
 margin-right: 6px;
 }
 
-stw--opensyde_gui_elements--C_OgeChxPropertiesSmall::indicator
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="Properties"]Small::indicator
 {
 width: 22px;
 height: 22px;
@@ -15,12 +15,12 @@ margin-right: 0px;
 }
 
 /*Set min-width equal to width (C_OgeChxPropertiesSmall::indicator)*/
-stw--opensyde_gui_elements--C_OgeChxPropertiesSmall
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="Properties"]Small
 {
 min-width: 22px;
 }
 
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="DefaultCheckedDisabled"]::indicator
 {
 width: 24px;
 height: 24px;
@@ -54,7 +54,7 @@ stw--opensyde_gui_elements--C_OgeChxDefaultSmall
 margin-bottom: 4px;
 }
 
-stw--opensyde_gui_elements--C_OgeChxTiny::indicator
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="Tiny"]::indicator
 {
 width: 16px;
 height: 16px;
@@ -93,8 +93,8 @@ border: none;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator,
-stw--opensyde_gui_elements--C_OgeChxProperties::indicator,
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="DefaultCheckedDisabled"]::indicator,
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="Properties"]::indicator,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator,
 stw--opensyde_gui_elements--C_OgeChxTristateTransparentError::indicator,
@@ -111,12 +111,12 @@ stw--opensyde_gui--C_SdNdeDalLogJobsListView::indicator
 border: none;
 }
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeChxSystemCommisioningEdit::indicator
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="SystemCommisioningEdit"]::indicator
 {
 margin-right: 8px;
 }
 
-stw--opensyde_gui_elements--C_OgeChxSystemCommisioningEdit::indicator:checked
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="SystemCommisioningEdit"]::indicator:checked
 {
 width: 24px;
 height: 24px;
@@ -124,7 +124,7 @@ border-style: none;
 border-width: 0px;
 }
 
-stw--opensyde_gui_elements--C_OgeChxSystemCommisioningEdit::indicator:!checked
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="SystemCommisioningEdit"]::indicator:!checked
 {
 width: 22px;
 height: 22px;
@@ -153,13 +153,13 @@ height: 24px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator:enabled:checked,
-stw--opensyde_gui_elements--C_OgeChxProperties::indicator:enabled:checked,
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator:disabled:checked,
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="DefaultCheckedDisabled"]::indicator:enabled:checked,
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="Properties"]::indicator:enabled:checked,
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="DefaultCheckedDisabled"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator:checked,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator:enabled:checked,
 stw--opensyde_gui--C_SdBueSignalTableView::indicator:enabled:checked,
-stw--opensyde_gui_elements--C_OgeChxSystemCommisioningEdit::indicator:checked,
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="SystemCommisioningEdit"]::indicator:checked,
 stw--opensyde_gui--C_SdNdeCoPdoTableView::indicator:enabled:checked,
 stw--opensyde_gui--C_SdBueMessageTableView::indicator:enabled:checked,
 stw--opensyde_gui--C_SdNdeHalcOvTableView::indicator:enabled:checked,
@@ -176,7 +176,7 @@ stw--opensyde_gui--C_SdNdeDalLogJobsListView::indicator::enabled::checked
 image: url(://images/CheckBoxActiveWithoutBackground.svg);
 }
 
-stw--opensyde_gui_elements--C_OgeChxTiny::indicator:checked
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="Tiny"]::indicator:checked
 {
 image: url(://images/CheckBoxTinyActive.svg);
 }
@@ -193,16 +193,16 @@ stw--opensyde_gui--C_SdNdeDalLogJobsListView::indicator::indeterminate
 image: url(://images/CheckBoxIndeterminate.svg);
 }
 
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator:disabled:!checked,
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="DefaultCheckedDisabled"]::indicator:disabled:!checked,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator:disabled:!checked,
-stw--opensyde_gui_elements--C_OgeChxProperties::indicator:disabled:!checked
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="Properties"]::indicator:disabled:!checked
 {
 image: url(://images/CheckBoxDisabledNotChecked.svg);
 }
 
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator:disabled:checked,
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="DefaultCheckedDisabled"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator:disabled:checked,
-stw--opensyde_gui_elements--C_OgeChxProperties::indicator:disabled:checked,
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="Properties"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc QListView::indicator:disabled:checked,
 stw--opensyde_gui--C_SdNdeHalcConfigImportView::indicator:disabled:checked,
@@ -240,7 +240,7 @@ stw--opensyde_gui--C_SdBueMessageTableView::indicator:enabled,
 stw--opensyde_gui--C_SdNdeCoPdoTableView::indicator:enabled,
 stw--opensyde_gui--C_SdNdeHalcOvTableView::indicator:enabled,
 stw--opensyde_gui--C_SdNdeDpListTableView::indicator:enabled,
-stw--opensyde_gui_elements--C_OgeChxSystemCommisioningEdit::indicator:!checked
+stw--opensyde_gui_elements--C_OgeChxStyled[variant="SystemCommisioningEdit"]::indicator:!checked
 {
 image: none;
 image-position: center left;

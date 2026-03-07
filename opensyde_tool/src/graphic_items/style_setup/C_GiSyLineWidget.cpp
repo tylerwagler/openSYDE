@@ -16,7 +16,7 @@
 #include "ui_C_GiSyLineWidget.h"
 
 #include "C_HeHandler.hpp"
-#include "C_OgePubColorOnly.hpp"
+#include "C_OgePubStyled.hpp"
 #include "C_UtiStyleSheets.hpp"
 #include "C_GiLiLine.hpp"
 #include "C_SdTopologyScene.hpp"
@@ -127,9 +127,9 @@ C_GiSyLineWidget::C_GiSyLineWidget(const E_Type oe_Mode, C_GiSyBaseWidget & orc_
 
    InitStaticNames();
 
-   connect(this->mpc_Ui->pc_BushButtonColor, &C_OgePubColorOnly::clicked, this,
+   connect(this->mpc_Ui->pc_BushButtonColor, &C_OgePubStyled::clicked, this,
            &C_GiSyLineWidget::m_ColorClicked);
-   connect(this->mpc_Ui->pc_BushButtonColorInner, &C_OgePubColorOnly::clicked,
+   connect(this->mpc_Ui->pc_BushButtonColorInner, &C_OgePubStyled::clicked,
            this, &C_GiSyLineWidget::m_ColorInnerClicked);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_SpinBoxWidth, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged),

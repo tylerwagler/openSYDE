@@ -27,7 +27,10 @@
     <number>25</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxHover" name="pc_GroupBoxPopUp">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxPopUp">
+          <property name="variant" stdset="0">
+           <string>Hover</string>
+          </property>
      <property name="title">
       <string/>
      </property>
@@ -248,9 +251,9 @@
    <header>C_OgeLabPopUpSubTitle.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxHover</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxHover.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

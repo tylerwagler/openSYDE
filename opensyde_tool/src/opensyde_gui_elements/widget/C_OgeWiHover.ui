@@ -97,7 +97,10 @@
     <number>8</number>
    </property>
    <item row="0" column="0">
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxHover" name="pc_GroupBox">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBox">
+          <property name="variant" stdset="0">
+           <string>Hover</string>
+          </property>
      <property name="title">
       <string/>
      </property>
@@ -170,7 +173,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbxGrayed" name="pc_GroupBoxSearch">
+         <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxSearch">
+          <property name="variant" stdset="0">
+           <string>Grayed</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -219,7 +225,10 @@
             </widget>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeLeToolBarSearch" name="pc_LineEditSearch">
+            <widget class="stw::opensyde_gui_elements::C_OgeLeStyled" name="pc_LineEditSearch">
+          <property name="variant" stdset="0">
+           <string>ToolBarSearch</string>
+          </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -322,9 +331,9 @@
    <header>C_OgePubIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxHover</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxHover.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -338,15 +347,9 @@
    <header>C_OgePubIconText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLeToolBarSearch</class>
+   <class>stw::opensyde_gui_elements::C_OgeLeStyled</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLeToolBarSearch.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxGrayed</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxGrayed.hpp</header>
-   <container>1</container>
+   <header>C_OgeLeStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabDoubleClick</class>

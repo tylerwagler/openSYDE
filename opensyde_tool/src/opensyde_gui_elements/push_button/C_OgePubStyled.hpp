@@ -1,15 +1,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Checkbox style for system commisioning screen, edit mode
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \brief       Consolidated style-only push button
+
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OGECHXSYSTEMCOMMISIONINGEDIT_HPP
-#define C_OGECHXSYSTEMCOMMISIONINGEDIT_HPP
+#ifndef C_OGEPUBSTYLED_HPP
+#define C_OGEPUBSTYLED_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_OgeChxToolTipBase.hpp"
+#include <QPushButton>
+#include <QString>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -20,13 +22,20 @@ namespace opensyde_gui_elements
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_OgeChxSystemCommisioningEdit :
-   public C_OgeChxToolTipBase
+class C_OgePubStyled :
+   public QPushButton
 {
    Q_OBJECT
+   Q_PROPERTY(QString variant READ GetVariant WRITE SetVariant)
 
 public:
-   explicit C_OgeChxSystemCommisioningEdit(QWidget * const opc_Parent = NULL);
+   explicit C_OgePubStyled(QWidget * const opc_Parent = NULL);
+
+   QString GetVariant(void) const;
+   void SetVariant(const QString & orc_Variant);
+
+private:
+   QString mc_Variant;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -74,7 +74,10 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubToggleBold" name="pc_PushButtonBold">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_PushButtonBold">
+          <property name="variant" stdset="0">
+           <string>ToggleBold</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>40</width>
@@ -93,7 +96,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubToggle" name="pc_PushButtonItalic">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_PushButtonItalic">
+          <property name="variant" stdset="0">
+           <string>Toggle</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>40</width>
@@ -112,7 +118,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubToggle" name="pc_PushButtonUnderline">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_PushButtonUnderline">
+          <property name="variant" stdset="0">
+           <string>Toggle</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>40</width>
@@ -159,14 +168,9 @@
    <header>C_OgeCbxFontProperties.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubToggleBold</class>
+   <class>stw::opensyde_gui_elements::C_OgePubStyled</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubToggleBold.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubToggle</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubToggle.hpp</header>
+   <header>C_OgePubStyled.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

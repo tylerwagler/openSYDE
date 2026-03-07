@@ -82,7 +82,10 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeGbxGrayed" name="pc_GbxButton">
+        <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxButton">
+          <property name="variant" stdset="0">
+           <string>Grayed</string>
+          </property>
          <property name="minimumSize">
           <size>
            <width>270</width>
@@ -652,9 +655,9 @@
    <header>C_OgeLabSvgOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxGrayed</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxGrayed.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

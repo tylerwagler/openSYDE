@@ -287,7 +287,10 @@
              <number>6</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeChxDefaultCheckedDisabled" name="pc_ChxRememberSelection">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_ChxRememberSelection">
+          <property name="variant" stdset="0">
+           <string>DefaultCheckedDisabled</string>
+          </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -319,7 +322,10 @@
              </spacer>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgePubMessageCancel" name="pc_ButtonCancel">
+             <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_ButtonCancel">
+          <property name="variant" stdset="0">
+           <string>MessageCancel</string>
+          </property>
               <property name="minimumSize">
                <size>
                 <width>120</width>
@@ -338,7 +344,10 @@
              </widget>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgePubMessageCancel" name="pc_ButtonNo">
+             <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_ButtonNo">
+          <property name="variant" stdset="0">
+           <string>MessageCancel</string>
+          </property>
               <property name="minimumSize">
                <size>
                 <width>120</width>
@@ -357,7 +366,10 @@
              </widget>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgePubMessageOk" name="pc_ButtonOk">
+             <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_ButtonOk">
+          <property name="variant" stdset="0">
+           <string>MessageOk</string>
+          </property>
               <property name="minimumSize">
                <size>
                 <width>120</width>
@@ -440,19 +452,14 @@
    <header>C_OgePubSvgIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubMessageOk</class>
+   <class>stw::opensyde_gui_elements::C_OgePubStyled</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubMessageOk.hpp</header>
+   <header>C_OgePubStyled.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubMessageCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubMessageCancel.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxDefaultCheckedDisabled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxDefaultCheckedDisabled.hpp</header>
+   <header>C_OgeChxStyled.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>

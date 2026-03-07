@@ -24,7 +24,7 @@
 #include "constants.hpp"
 #include "C_SebScene.hpp"
 #include "C_SebStyle.hpp"
-#include "C_OgePubZoomNotification.hpp"
+#include "C_OgePubStyled.hpp"
 #include "C_Uti.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OgeWiUtil.hpp"
@@ -85,7 +85,7 @@ C_SebGraphicsView::C_SebGraphicsView(QWidget * const opc_Parent) :
    this->setTransformationAnchor(AnchorUnderMouse);
 
    //create zoom notification button
-   this->mpc_ZoomButton = new stw::opensyde_gui_elements::C_OgePubZoomNotification(this);
+   this->mpc_ZoomButton = new stw::opensyde_gui_elements::C_OgePubStyled(this);
    this->mpc_ZoomButton->setEnabled(false);
    this->mpc_ZoomButton->hide();
    this->mpc_ZoomButton->setGeometry(0, 0, 190, 40);

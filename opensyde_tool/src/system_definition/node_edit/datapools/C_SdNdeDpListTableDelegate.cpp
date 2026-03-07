@@ -17,7 +17,7 @@
 #include "stwtypes.hpp"
 #include "C_SdNdeDpListTableDelegate.hpp"
 #include "C_OgeTedTable.hpp"
-#include "C_OgeLeTable.hpp"
+#include "C_OgeLeStyled.hpp"
 #include "C_OgeSpxTable.hpp"
 #include "C_OgeSpxTableDouble.hpp"
 #include "C_OgeCbxTable.hpp"
@@ -98,7 +98,7 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
    if ((orc_Index.isValid() == true) && (this->mpc_Model != NULL))
    {
       C_OgeSpxFactorTable * pc_SpinBoxFactor;
-      C_OgeLeTable * pc_LineEdit;
+      C_OgeLeStyled * pc_LineEdit;
       C_OgeSpxTableDouble * pc_DoubleSpinBox;
       C_OgeSpxTable * pc_SpinBox;
       C_OgeCbxTable * pc_ComboBox;
@@ -112,7 +112,7 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
          //No edit
          break;
       case C_SdNdeDpListTableModel::eNAME:
-         pc_LineEdit = new C_OgeLeTable(opc_Parent);
+         pc_LineEdit = new C_OgeLeStyled("Table", opc_Parent);
          //Ui restriction
          pc_LineEdit->setMaxLength(C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit());
          pc_Retval = pc_LineEdit;
@@ -182,7 +182,7 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
          pc_Retval = pc_DoubleSpinBox;
          break;
       case C_SdNdeDpListTableModel::eUNIT:
-         pc_Retval = new C_OgeLeTable(opc_Parent);
+         pc_Retval = new C_OgeLeStyled("Table", opc_Parent);
          break;
       case C_SdNdeDpListTableModel::eDATA_SET:
          pc_Retval = m_CreateEditor(opc_Parent, orc_Index, e_Col);

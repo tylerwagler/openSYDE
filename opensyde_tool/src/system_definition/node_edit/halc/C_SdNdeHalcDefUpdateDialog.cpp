@@ -77,7 +77,7 @@ C_SdNdeHalcDefUpdateDialog::C_SdNdeHalcDefUpdateDialog(stw::opensyde_gui_element
    this->mpc_Ui->pc_TextEditFlash->setReadOnly(true);
 
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeHalcDefUpdateDialog::m_OkClicked);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubStyled::clicked, this,
            &C_SdNdeHalcDefUpdateDialog::m_OnCancel);
 
    this->m_UpdateHalcConfiguration();

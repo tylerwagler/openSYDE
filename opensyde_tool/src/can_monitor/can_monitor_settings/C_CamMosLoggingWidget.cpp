@@ -148,7 +148,7 @@ C_CamMosLoggingWidget::C_CamMosLoggingWidget(QWidget *const opc_Parent)
           &C_CamMosLoggingWidget::m_OnFolderEdited);
   connect(this->mpc_Ui->pc_LeFolder, &C_CamOgeLeFilePath::SigPathDropped, this,
           &C_CamMosLoggingWidget::m_OnDroppedPath);
-  connect(this->mpc_Ui->pc_LeFile, &C_OgeLeDark::editingFinished, this,
+  connect(this->mpc_Ui->pc_LeFile, &C_OgeLeStyled::editingFinished, this,
           &C_CamMosLoggingWidget::m_OnFileNameEdited);
   connect(this->mpc_Ui->pc_CbxOverwrite,
           static_cast<void (QComboBox::*)(int32_t)>(

@@ -27,7 +27,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GbxDummy">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxDummy">
+          <property name="variant" stdset="0">
+           <string>Default</string>
+          </property>
      <property name="title">
       <string/>
      </property>
@@ -177,7 +180,10 @@
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GbxSecureAuthentication">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxSecureAuthentication">
+          <property name="variant" stdset="0">
+           <string>Default</string>
+          </property>
      <property name="title">
       <string/>
      </property>
@@ -297,7 +303,10 @@
            <number>12</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeChxDefaultCheckedDisabled" name="pc_ChxBoxAddPEMFiles">
+           <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_ChxBoxAddPEMFiles">
+          <property name="variant" stdset="0">
+           <string>DefaultCheckedDisabled</string>
+          </property>
             <property name="text">
              <string>Add new authentication PEM files</string>
             </property>
@@ -530,7 +539,10 @@
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GbxSecureUpdateConfig">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxSecureUpdateConfig">
+          <property name="variant" stdset="0">
+           <string>Default</string>
+          </property>
      <property name="title">
       <string/>
      </property>
@@ -638,7 +650,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeChxDefaultCheckedDisabled" name="pc_ChxBoxApplyUpdateConfiguration">
+           <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_ChxBoxApplyUpdateConfiguration">
+          <property name="variant" stdset="0">
+           <string>DefaultCheckedDisabled</string>
+          </property>
             <property name="text">
              <string>Apply new secure update configuration</string>
             </property>
@@ -904,7 +919,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubCancel" name="pc_PushButtonCancel">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_PushButtonCancel">
+          <property name="variant" stdset="0">
+           <string>Cancel</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -945,7 +963,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonOk">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_PushButtonOk">
+          <property name="variant" stdset="0">
+           <string>Dialog</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -1018,20 +1039,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
+   <class>stw::opensyde_gui_elements::C_OgePubStyled</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
+   <header>C_OgePubStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbx</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubCancel.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubIconOnly</class>
@@ -1039,9 +1055,9 @@
    <header>C_OgePubIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxDefaultCheckedDisabled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxDefaultCheckedDisabled.hpp</header>
+   <header>C_OgeChxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeFilePath</class>

@@ -59,8 +59,8 @@ C_CamMetSettingsPopup::C_CamMetSettingsPopup(stw::opensyde_gui_elements::C_OgePo
    this->mpc_Ui->pc_SpinBoxTraceBuffer->SetMaximumCustom(50000);
 
    // connects
-   connect(this->mpc_Ui->pc_PushButtonSave, &C_OgePubDialog::clicked, this, &C_CamMetSettingsPopup::m_OnOk);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this, &C_CamMetSettingsPopup::m_OnCancel);
+   connect(this->mpc_Ui->pc_PushButtonSave, &C_OgePubStyled::clicked, this, &C_CamMetSettingsPopup::m_OnOk);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubStyled::clicked, this, &C_CamMetSettingsPopup::m_OnCancel);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

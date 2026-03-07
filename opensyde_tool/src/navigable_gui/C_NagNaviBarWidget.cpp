@@ -142,7 +142,7 @@ C_NagNaviBarWidget::C_NagNaviBarWidget(QWidget * const opc_Parent) :
    connect(this->mpc_Ui->pc_WidgetTabSd, &C_OgeWiNavigationTab::released, this, &C_NagNaviBarWidget::m_TabSdClicked);
 
    // Tree for topology and its nodes and busses
-   connect(this->mpc_Ui->pc_PushButtonTopology, &C_OgePubNavigation::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonTopology, &C_OgePubStyled::clicked, this,
            &C_NagNaviBarWidget::m_PbTopologyClick);
    connect(this->mpc_Ui->pc_TreeViewNodes, &C_NagTopTreeView::SigClicked, this, &C_NagNaviBarWidget::m_OnClickNode);
    connect(this->mpc_Ui->pc_TreeViewBuses, &C_NagTopTreeView::SigClicked, this, &C_NagNaviBarWidget::m_OnClickBus);

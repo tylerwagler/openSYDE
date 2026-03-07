@@ -109,7 +109,7 @@ C_SyvSeSetupWidget::C_SyvSeSetupWidget(const uint32_t ou32_ViewIndex, QWidget * 
            &C_SebGraphicsView::UpdateTransform);
    // Connect buttons
    connect(this->mpc_Ui->pc_CheckBoxSelectAll,
-           &stw::opensyde_gui_elements::C_OgeChxSystemCommisioningEdit::stateChanged,
+           &stw::opensyde_gui_elements::C_OgeChxStyled::stateChanged,
            this, &C_SyvSeSetupWidget::m_SelectAllStateChanged);
    connect(this->mpc_Ui->pc_PbConfirm, &stw::opensyde_gui_elements::C_OgePubSystemCommissioningEdit::clicked,
            this, &C_SyvSeSetupWidget::m_ConfirmClicked);

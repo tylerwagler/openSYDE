@@ -1,18 +1,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Button with two states bold (header)
+   \brief       Consolidated style-only check box with tooltip
 
-   See cpp file for detailed description
-
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OGEPUBTOGGLEBOLD_HPP
-#define C_OGEPUBTOGGLEBOLD_HPP
+#ifndef C_OGECHXSTYLED_HPP
+#define C_OGECHXSTYLED_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QPushButton>
+#include <QString>
+#include "C_OgeChxToolTipBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -23,13 +22,20 @@ namespace opensyde_gui_elements
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_OgePubToggleBold :
-   public QPushButton
+class C_OgeChxStyled :
+   public C_OgeChxToolTipBase
 {
    Q_OBJECT
+   Q_PROPERTY(QString variant READ GetVariant WRITE SetVariant)
 
 public:
-   C_OgePubToggleBold(QWidget * const opc_Parent = NULL);
+   explicit C_OgeChxStyled(QWidget * const opc_Parent = NULL);
+
+   QString GetVariant(void) const;
+   void SetVariant(const QString & orc_Variant);
+
+private:
+   QString mc_Variant;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

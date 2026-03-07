@@ -27,7 +27,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral_3">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxGeneral_3">
+          <property name="variant" stdset="0">
+           <string>Default</string>
+          </property>
      <property name="title">
       <string/>
      </property>
@@ -139,7 +142,10 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_25">
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgePubConfigure" name="pc_PushButtonConfigure">
+           <widget class="stw::opensyde_gui_elements::C_OgePubStyledToolTip" name="pc_PushButtonConfigure">
+          <property name="variant" stdset="0">
+           <string>Configure</string>
+          </property>
             <property name="text">
              <string>PushButton</string>
             </property>
@@ -281,7 +287,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubCancel" name="pc_PushButtonCancel">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_PushButtonCancel">
+          <property name="variant" stdset="0">
+           <string>Cancel</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -322,7 +331,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonOk">
+      <widget class="stw::opensyde_gui_elements::C_OgePubStyled" name="pc_PushButtonOk">
+          <property name="variant" stdset="0">
+           <string>Dialog</string>
+          </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -370,13 +382,13 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbx</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubConfigure</class>
+   <class>stw::opensyde_gui_elements::C_OgePubStyledToolTip</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubConfigure.hpp</header>
+   <header>C_OgePubStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
@@ -396,14 +408,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubCancel</class>
+   <class>stw::opensyde_gui_elements::C_OgePubStyled</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubCancel.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
+   <header>C_OgePubStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SyvDaPeUpdateModeTreeWidget</class>

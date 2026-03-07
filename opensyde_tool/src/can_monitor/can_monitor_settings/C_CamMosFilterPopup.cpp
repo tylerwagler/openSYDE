@@ -100,12 +100,12 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
    this->m_InitStaticGuiElements();
 
    // connects
-   connect(this->mpc_Ui->pc_PushButtonSave, &C_OgePubDialog::clicked, this, &C_CamMosFilterPopup::m_OnOk);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this, &C_CamMosFilterPopup::m_OnCancel);
+   connect(this->mpc_Ui->pc_PushButtonSave, &C_OgePubStyled::clicked, this, &C_CamMosFilterPopup::m_OnOk);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubStyled::clicked, this, &C_CamMosFilterPopup::m_OnCancel);
    connect(this->mpc_Ui->pc_ComboBoxType,
            static_cast<void (C_OgeCbxText::*)(int32_t)>(&C_OgeCbxText::currentIndexChanged),
            this, &C_CamMosFilterPopup::m_OnTypeChanged);
-   connect(this->mpc_Ui->pc_PubAddFromDatabase, &C_OgePubConfigure::clicked, this,
+   connect(this->mpc_Ui->pc_PubAddFromDatabase, &C_OgePubStyledToolTip::clicked, this,
            &C_CamMosFilterPopup::m_OnAddFromDatabase);
    connect(this->mpc_Ui->pc_TableView, &C_CamMosFilterTableView::clicked, this, &C_CamMosFilterPopup::m_OnIndexClicked);
    connect(this->mpc_Ui->pc_TableView->selectionModel(), &QItemSelectionModel::currentRowChanged,
@@ -117,7 +117,7 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
            &C_CamMosFilterPopup::m_OnStartIdEdited);
    connect(this->mpc_Ui->pc_LeCanIdEnd, &C_CamOgeLeIdPopUp::editingFinished, this,
            &C_CamMosFilterPopup::m_OnEndIdEdited);
-   connect(this->mpc_Ui->pc_CheckBoxExtended, &C_OgeChxProperties::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxExtended, &C_OgeChxStyled::toggled, this,
            &C_CamMosFilterPopup::m_OnExtendedToggled);
    connect(this->mpc_Ui->pc_PubAddItem, &C_OgePubSvgIconOnly::clicked, this, &C_CamMosFilterPopup::m_OnAddFilterItem);
 }

@@ -27,7 +27,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxHover" name="pc_GroupBox">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBox">
+          <property name="variant" stdset="0">
+           <string>Hover</string>
+          </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="spacing">
        <number>3</number>
@@ -103,9 +106,9 @@
    <header>C_OgePubIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxHover</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxHover.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
