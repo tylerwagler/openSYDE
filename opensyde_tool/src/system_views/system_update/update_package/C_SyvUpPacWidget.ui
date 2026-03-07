@@ -67,7 +67,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabStateInfo" name="pc_LabelState">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelState">
+   <property name="variant" stdset="0">
+    <string>StateInfo</string>
+   </property>
        <property name="text">
         <string>Warnings</string>
        </property>
@@ -434,7 +437,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabStateInfo</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabStateInfo.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SyvUpPacListWidget</class>

@@ -1,18 +1,20 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Label for Node Prop Com If Table (header)
+   \brief       Consolidated style-only label with context menu support
 
-   See cpp file for detailed description
+   Replaces individual label subclasses of C_OgeLabContextMenuBase that
+   existed solely for QSS targeting. Uses Q_PROPERTY "variant" for style selection.
 
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OGELABNODEPROPCOMIFTABLE_HPP
-#define C_OGELABNODEPROPCOMIFTABLE_HPP
+#ifndef C_OGELABSTYLEDCONTEXTMENU_HPP
+#define C_OGELABSTYLEDCONTEXTMENU_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QLabel>
+#include <QString>
+#include "C_OgeLabContextMenuBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -23,13 +25,20 @@ namespace opensyde_gui_elements
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_OgeLabNodePropComIfTable :
-   public QLabel
+class C_OgeLabStyledContextMenu :
+   public C_OgeLabContextMenuBase
 {
    Q_OBJECT
+   Q_PROPERTY(QString variant READ GetVariant WRITE SetVariant)
 
 public:
-   C_OgeLabNodePropComIfTable(QWidget * const opc_Parent = NULL);
+   explicit C_OgeLabStyledContextMenu(QWidget * const opc_Parent = NULL);
+
+   QString GetVariant(void) const;
+   void SetVariant(const QString & orc_Variant);
+
+private:
+   QString mc_Variant;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

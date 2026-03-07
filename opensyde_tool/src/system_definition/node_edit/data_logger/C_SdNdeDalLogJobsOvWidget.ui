@@ -35,7 +35,10 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNoLogJobs">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelNoLogJobs">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
        <property name="text">
         <string>NoLogJobs</string>
        </property>
@@ -55,7 +58,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdNdeDalLogJobsOvTableView</class>

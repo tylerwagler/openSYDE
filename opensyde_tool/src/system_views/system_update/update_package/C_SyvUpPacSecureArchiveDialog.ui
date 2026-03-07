@@ -50,7 +50,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_Settings">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_Settings">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
           <property name="font">
            <font>
             <family>Segoe UI</family>
@@ -149,7 +152,10 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabPassword">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabPassword">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
           <property name="text">
            <string>Passwd</string>
           </property>
@@ -175,7 +181,10 @@
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabPrivateKey">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabPrivateKey">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
           <property name="text">
            <string>Private Signature Key</string>
           </property>
@@ -384,7 +393,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
@@ -405,7 +414,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeFilePath</class>

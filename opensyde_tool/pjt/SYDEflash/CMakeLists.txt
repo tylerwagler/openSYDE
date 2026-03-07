@@ -165,23 +165,16 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparent.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDescriptionMessage.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItem.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItemValue.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupSubItem.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingMessage.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingToolTip.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPropertiesSubHeading.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUpdateAppPath.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUpdateAppVersion.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeDark.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.cpp
@@ -333,23 +326,16 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparent.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDescriptionMessage.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItem.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItemValue.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupSubItem.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingMessage.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingToolTip.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPropertiesSubHeading.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUpdateAppPath.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUpdateAppVersion.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeDark.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.hpp

@@ -76,7 +76,10 @@
               <number>10</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingToolTip" name="mpc_Heading">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="mpc_Heading">
+   <property name="variant" stdset="0">
+    <string>HeadingToolTip</string>
+   </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                  <horstretch>0</horstretch>
@@ -185,7 +188,10 @@
               </widget>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingToolTip" name="mpc_LabelCaption">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="mpc_LabelCaption">
+   <property name="variant" stdset="0">
+    <string>HeadingToolTip</string>
+   </property>
                <property name="text">
                 <string>Name</string>
                </property>
@@ -229,7 +235,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingToolTip</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingToolTip.hpp</header>
+   <header>C_OgeLabStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTedToolTipContent</class>

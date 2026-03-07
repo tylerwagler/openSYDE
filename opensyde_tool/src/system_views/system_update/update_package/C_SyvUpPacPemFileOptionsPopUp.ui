@@ -50,7 +50,10 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeading">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelHeading">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -146,7 +149,10 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelSecurity">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelSecurity">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
           <property name="minimumSize">
            <size>
             <width>85</width>
@@ -195,7 +201,10 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelDebugger">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelDebugger">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
           <property name="minimumSize">
            <size>
             <width>85</width>
@@ -368,7 +377,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
@@ -389,7 +398,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>

@@ -149,8 +149,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingMessage.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDescriptionMessage.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubCancel.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.cpp
@@ -168,7 +166,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTip.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingToolTip.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipContent.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeContextMenu.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeToolTipBase.cpp
@@ -188,9 +185,10 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/can_monitor/user_settings/C_UsFiler.cpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagAboutDialog.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbx.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItem.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItemValue.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.cpp
    ${PROJECT_ROOT}/src/can_monitor/C_CamComDriverBase.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetWidget.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetStatusBarWidget.cpp
@@ -270,7 +268,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.cpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProDatabaseData.cpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.cpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableDelegate.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenKeySelect.cpp
@@ -376,8 +373,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingMessage.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDescriptionMessage.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubCancel.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.hpp
@@ -395,7 +390,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTip.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingToolTip.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipContent.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeContextMenu.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeToolTipBase.hpp
@@ -416,9 +410,10 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/can_monitor/user_settings/C_UsFiler.hpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagAboutDialog.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbx.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItem.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItemValue.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.hpp
    ${PROJECT_ROOT}/src/can_monitor/C_CamComDriverBase.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetStatusBarWidget.hpp
@@ -613,7 +608,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/libs/blf_driver_library/BLF/VectorTypes.h
    ${PROJECT_ROOT}/libs/blf_driver_library/BLF/WlanFrame.h
    ${PROJECT_ROOT}/libs/blf_driver_library/BLF/WlanStatistic.h
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableDelegate.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenKeySelect.hpp

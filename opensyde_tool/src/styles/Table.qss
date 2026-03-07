@@ -4,7 +4,7 @@ stw--opensyde_gui_elements--C_OgeTableWidgetComIf QLineEdit
 border-style: none;
 }
 
-stw--opensyde_gui_elements--C_OgeLabNodePropComIfTable
+stw--opensyde_gui_elements--C_OgeLabStyled[variant="NodePropComIfTable"]
 {
 padding-left: 6px;
 padding-right: 6px;

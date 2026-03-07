@@ -188,7 +188,10 @@
            <item row="0" column="0">
             <layout class="QVBoxLayout" name="pc_VerticalLayout2" stretch="0,0,1">
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabToolboxHeadingGroup" name="pc_LabelFreeElements">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="pc_LabelFreeElements">
+   <property name="variant" stdset="0">
+    <string>ToolboxHeadingGroup</string>
+   </property>
                <property name="text">
                 <string>Free Elements</string>
                </property>
@@ -253,7 +256,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabToolboxHeadingGroup</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabToolboxHeadingGroup.hpp</header>
+   <header>C_OgeLabStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeSmoothScrollArea</class>

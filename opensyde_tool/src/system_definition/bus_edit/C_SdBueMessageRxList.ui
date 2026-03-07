@@ -76,7 +76,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelEmpty">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelEmpty">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
           <property name="text">
            <string>TextLabel</string>
           </property>
@@ -137,7 +140,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>

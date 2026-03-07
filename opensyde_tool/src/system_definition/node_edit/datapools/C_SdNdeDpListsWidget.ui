@@ -61,7 +61,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabNodeDataPoolSelectedItems" name="pc_SelectionLabel">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="pc_SelectionLabel">
+   <property name="variant" stdset="0">
+    <string>NodeDataPoolSelectedItems</string>
+   </property>
        <property name="text">
         <string>Selection</string>
        </property>
@@ -243,7 +246,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabNodeDataPoolSelectedItems</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabNodeDataPoolSelectedItems.hpp</header>
+   <header>C_OgeLabStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdNdeDpListsTreeWidget</class>

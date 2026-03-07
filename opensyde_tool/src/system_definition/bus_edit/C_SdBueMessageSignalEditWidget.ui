@@ -32,14 +32,20 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingProperties" name="pc_SignalLabel">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="pc_SignalLabel">
+   <property name="variant" stdset="0">
+    <string>HeadingProperties</string>
+   </property>
        <property name="text">
         <string>TextLabel</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingProperties" name="pc_MessageLabel">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="pc_MessageLabel">
+   <property name="variant" stdset="0">
+    <string>HeadingProperties</string>
+   </property>
        <property name="text">
         <string>Message Properties</string>
        </property>
@@ -229,7 +235,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingProperties</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingProperties.hpp</header>
+   <header>C_OgeLabStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabSvgOnly</class>

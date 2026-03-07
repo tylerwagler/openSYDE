@@ -134,7 +134,10 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelName">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelName">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -259,7 +262,10 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelComment">
+               <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelComment">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -348,7 +354,10 @@ p, li { white-space: pre-wrap; }
              </spacer>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabGroupSubItem" name="pc_LabelHintComment">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelHintComment">
+   <property name="variant" stdset="0">
+    <string>GroupSubItem</string>
+   </property>
               <property name="text">
                <string>Note: Comment is shown ...</string>
               </property>
@@ -403,7 +412,10 @@ p, li { white-space: pre-wrap; }
          <number>6</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelType">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelType">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -652,7 +664,7 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
@@ -694,7 +706,7 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupSubItem</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupSubItem.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>

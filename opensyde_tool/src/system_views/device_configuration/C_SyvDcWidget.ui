@@ -442,7 +442,10 @@
       <number>10</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelProgressScan">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="pc_LabelProgressScan">
+   <property name="variant" stdset="0">
+    <string>ProgressText</string>
+   </property>
        <property name="text">
         <string>Write</string>
        </property>
@@ -462,7 +465,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelProgressAssignmnet">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="pc_LabelProgressAssignmnet">
+   <property name="variant" stdset="0">
+    <string>ProgressText</string>
+   </property>
        <property name="text">
         <string>Confirm</string>
        </property>
@@ -482,7 +488,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelProgressConfiguration">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="pc_LabelProgressConfiguration">
+   <property name="variant" stdset="0">
+    <string>ProgressText</string>
+   </property>
        <property name="text">
         <string>Configuration</string>
        </property>
@@ -502,7 +511,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelProgressFinished">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="pc_LabelProgressFinished">
+   <property name="variant" stdset="0">
+    <string>ProgressText</string>
+   </property>
        <property name="text">
         <string>Finished</string>
        </property>
@@ -549,7 +561,10 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingReport">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelHeadingReport">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -673,7 +688,10 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingBitrate">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelHeadingBitrate">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -755,7 +773,10 @@
          <number>10</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelBitRate">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelBitRate">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
           <property name="text">
            <string>_Bitratel</string>
           </property>
@@ -785,7 +806,10 @@
          <number>10</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelConfigurationMode">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelConfigurationMode">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
           <property name="text">
            <string>_Model</string>
           </property>
@@ -846,7 +870,10 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingTopologyNodes">
+               <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelHeadingTopologyNodes">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -935,7 +962,10 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNoExistingNodes">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelNoExistingNodes">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -994,7 +1024,10 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingFoundDevices">
+               <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelHeadingFoundDevices">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -1083,7 +1116,10 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelStartScan">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelStartScan">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -1154,7 +1190,10 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingAssignment">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelHeadingAssignment">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -1233,7 +1272,10 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_17">
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelAssignment">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelAssignment">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
           <property name="text">
            <string>InfoTextLabel</string>
           </property>
@@ -1291,7 +1333,10 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingTopologyNodesAssignment">
+               <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelHeadingTopologyNodesAssignment">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -1329,7 +1374,10 @@
                </spacer>
               </item>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelAssignmentProgress">
+               <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelAssignmentProgress">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
                 <property name="text">
                  <string>_AssignmentProgressTextLabel</string>
                 </property>
@@ -1398,7 +1446,10 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingFoundDevicesAssignment">
+               <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelHeadingFoundDevicesAssignment">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -1674,7 +1725,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
@@ -1701,7 +1752,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
@@ -1728,7 +1779,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabProgressText</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabProgressText.hpp</header>
+   <header>C_OgeLabStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SyvDcExistingNodeList</class>

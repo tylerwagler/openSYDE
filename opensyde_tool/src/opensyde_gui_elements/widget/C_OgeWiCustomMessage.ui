@@ -126,7 +126,10 @@
            <number>9</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingMessage" name="pc_LabelHeading">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelHeading">
+   <property name="variant" stdset="0">
+    <string>HeadingMessage</string>
+   </property>
             <property name="focusPolicy">
              <enum>Qt::NoFocus</enum>
             </property>
@@ -155,7 +158,10 @@
            </spacer>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabDescriptionMessage" name="pc_LabelDescription">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelDescription">
+   <property name="variant" stdset="0">
+    <string>DescriptionMessage</string>
+   </property>
             <property name="text">
              <string>Description</string>
             </property>
@@ -173,7 +179,10 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingMessage" name="pc_LabelDetails">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelDetails">
+   <property name="variant" stdset="0">
+    <string>HeadingMessage</string>
+   </property>
               <property name="text">
                <string>DETAILS</string>
               </property>
@@ -412,7 +421,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingMessage</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingMessage.hpp</header>
+   <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxMouseMove</class>
@@ -423,7 +432,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabDescriptionMessage</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabDescriptionMessage.hpp</header>
+   <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubSvgIconOnly</class>

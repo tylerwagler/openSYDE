@@ -50,7 +50,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelType">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelType">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
           <property name="font">
            <font>
             <family>Segoe UI</family>
@@ -145,7 +148,10 @@
            <number>5</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabFileVersion">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabFileVersion">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
             <property name="text">
              <string>File Version</string>
             </property>
@@ -340,7 +346,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
@@ -361,7 +367,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeRabProperties</class>

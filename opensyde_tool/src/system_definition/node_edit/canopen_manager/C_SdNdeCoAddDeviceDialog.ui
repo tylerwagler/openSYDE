@@ -47,7 +47,10 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelSelectNode">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelSelectNode">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -181,7 +184,10 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelSelectEDSFile">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabelSelectEDSFile">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -410,7 +416,10 @@
               </widget>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNoImageAvailable">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelNoImageAvailable">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -447,7 +456,10 @@
                 </spacer>
                </item>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabNodeType" name="pc_LabelFileName">
+                <widget class="stw::opensyde_gui_elements::C_OgeLabStyled" name="pc_LabelFileName">
+   <property name="variant" stdset="0">
+    <string>NodeType</string>
+   </property>
                  <property name="text">
                   <string>FileName</string>
                  </property>
@@ -608,12 +620,12 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
@@ -660,7 +672,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabNodeType</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabNodeType.hpp</header>
+   <header>C_OgeLabStyled.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

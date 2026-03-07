@@ -30,7 +30,10 @@
     <number>20</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelDisabled">
+    <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelDisabled">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
      <property name="text">
       <string>No Data Here</string>
      </property>
@@ -100,7 +103,10 @@
            <widget class="stw::opensyde_gui::C_SdNdeDalLogJobPropertiesWidget" name="pc_LogJobPropertiesWidget" native="true"/>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNoData">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabelNoData">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
             <property name="text">
              <string>No Data here</string>
             </property>
@@ -128,7 +134,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeSpiStandard</class>

@@ -50,7 +50,10 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabHeadingFileInfo">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabHeadingFileInfo">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -149,14 +152,20 @@
          <number>20</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabPathTitle">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabPathTitle">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
           <property name="text">
            <string>Path ...</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabPath">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabPath">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
           <property name="text">
            <string>C:Blub</string>
           </property>
@@ -225,7 +234,10 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabHeadingMapped">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabHeadingMapped">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -432,7 +444,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabNoMapped">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabNoMapped">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
                <property name="text">
                 <string>No Messages</string>
                </property>
@@ -602,7 +617,10 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabHeadingUnmapped">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabHeadingUnmapped">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -627,7 +645,10 @@
          </widget>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabNumberUnmapped">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabStyledContextMenu" name="pc_LabNumberUnmapped">
+   <property name="variant" stdset="0">
+    <string>HeadingGroupBold</string>
+   </property>
           <property name="text">
            <string>(123)</string>
           </property>
@@ -734,7 +755,10 @@
             </spacer>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabNoUnmapped">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabNoUnmapped">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -796,7 +820,10 @@
           <number>20</number>
          </property>
          <item row="0" column="0">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabAssignee">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabAssignee">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
            <property name="text">
             <string>Assignee ...</string>
            </property>
@@ -819,7 +846,10 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabDirection">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabStyledToolTip" name="pc_LabDirection">
+   <property name="variant" stdset="0">
+    <string>GroupItem</string>
+   </property>
            <property name="text">
             <string>Direction ...</string>
            </property>
@@ -987,7 +1017,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
@@ -1014,7 +1044,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
