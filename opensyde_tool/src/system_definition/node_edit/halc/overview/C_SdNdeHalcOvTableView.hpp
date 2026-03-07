@@ -14,7 +14,7 @@
 #include "stwtypes.hpp"
 #include "C_TblViewScroll.hpp"
 #include "C_SdNdeHalcOvTableModel.hpp"
-#include "C_SdNdeHalcOvDelegate.hpp"
+#include "C_TblHoverDelegate.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -56,7 +56,7 @@ protected:
 private:
    QSortFilterProxyModel mc_SortProxyModel;
    stw::opensyde_gui_logic::C_SdNdeHalcOvTableModel mc_Model;
-   stw::opensyde_gui_logic::C_SdNdeHalcOvDelegate mc_Delegate;
+   stw::opensyde_gui_logic::C_TblHoverDelegate mc_Delegate;
 
    void m_InitColumns(void);
 

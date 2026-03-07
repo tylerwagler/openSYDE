@@ -1,12 +1,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       HALC overview drawing delegate
-   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \brief       Generic table hover-highlight delegate
+
+   Reusable delegate that draws a colored border around the hovered row.
+   Replaces several identical per-feature delegates (CANopen overview,
+   CANopen PDO, HALC overview, Data Logger overview).
+
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_SDNDEHALCOVDELEGATE_HPP
-#define C_SDNDEHALCOVDELEGATE_HPP
+#ifndef C_TBLHOVERDELEGATE_HPP
+#define C_TBLHOVERDELEGATE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QStyledItemDelegate>
@@ -22,21 +27,19 @@ namespace opensyde_gui_logic
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_SdNdeHalcOvDelegate :
+class C_TblHoverDelegate :
    public QStyledItemDelegate
 {
 public:
-   C_SdNdeHalcOvDelegate(QObject * const opc_Parent = NULL);
+   C_TblHoverDelegate(QObject * const opc_Parent = NULL);
 
    void paint(QPainter * const opc_Painter, const QStyleOptionViewItem & orc_Option,
               const QModelIndex & orc_Index) const override;
-
    bool SetHoveredRow(const int32_t & ors32_Value);
    void SetModel(const QAbstractTableModel * const opc_Value);
 
 private:
    const QAbstractTableModel * mpc_Model;
-   const QPixmap mc_CheckMark;
    int32_t ms32_HoveredRow;
 };
 

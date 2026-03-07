@@ -14,7 +14,7 @@
 #include <QList>
 #include "C_TblViewScroll.hpp"
 #include "C_SdNdeDalLogJobsOvTableModel.hpp"
-#include "C_SdNdeDalLogJobOvDelegate.hpp"
+#include "C_TblHoverDelegate.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -55,7 +55,7 @@ protected:
 private:
    QSortFilterProxyModel mc_SortProxyModel;
    stw::opensyde_gui_logic::C_SdNdeDalLogJobsOvTableModel mc_Model;
-   stw::opensyde_gui_logic::C_SdNdeDalLogJobOvDelegate mc_Delegate;
+   stw::opensyde_gui_logic::C_TblHoverDelegate mc_Delegate;
 
    void m_InitColumns(void);
    void m_ShowHideVerticalScrollBar(const int32_t os32_Min, const int32_t os32_Max) const;

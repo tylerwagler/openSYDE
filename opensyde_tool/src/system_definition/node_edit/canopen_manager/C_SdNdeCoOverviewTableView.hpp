@@ -13,7 +13,7 @@
 #include <QSortFilterProxyModel>
 #include "C_TblViewScroll.hpp"
 #include "C_SdNdeCoOverviewTableModel.hpp"
-#include "C_SdNdeCoOverviewDelegate.hpp"
+#include "C_TblHoverDelegate.hpp"
 #include "C_OscCanInterfaceId.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -64,7 +64,7 @@ private:
 
    QSortFilterProxyModel mc_SortProxyModel;
    stw::opensyde_gui_logic::C_SdNdeCoOverviewTableModel mc_Model;
-   stw::opensyde_gui_logic::C_SdNdeCoOverviewDelegate mc_Delegate;
+   stw::opensyde_gui_logic::C_TblHoverDelegate mc_Delegate;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

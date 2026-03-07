@@ -18,7 +18,7 @@
 #include "C_TblViewScroll.hpp"
 #include "C_SdBueMessageTableModel.hpp"
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
-#include "C_SdBueMessageSignalTableDelegate.hpp"
+#include "C_TblHoverDelegate.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -69,7 +69,7 @@ private:
 
    QSortFilterProxyModel mc_SortProxyModel;
    stw::opensyde_gui_logic::C_SdBueMessageTableModel mc_Model;
-   stw::opensyde_gui_logic::C_SdBueMessageSignalTableDelegate mc_Delegate;
+   stw::opensyde_gui_logic::C_TblHoverDelegate mc_Delegate;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -19,7 +19,6 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_SdBueMessageTableView.hpp"
-#include "C_SdBueMessageSignalTableDelegate.hpp"
 #include "C_SdNdeSingleHeaderView.hpp"
 #include "constants.hpp"
 
