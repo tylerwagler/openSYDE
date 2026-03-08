@@ -125,34 +125,68 @@ C_OscFilerHelper<C_OscXappProperties>::SaveXml(node, "node.xml");
 
 ---
 
-## Migration Strategy
+## Migration Strategy: Complete Consistency Approach
 
-### Phase 1: Pilot Migration (Week 1-2)
+**Philosophy**: Migrate **all 45 Filer classes** for architectural consistency, not just the large ones.
+
+### Why Complete Migration?
+- **Uniform patterns**: Same serialization approach everywhere
+- **Reduced cognitive load**: Developers learn one pattern, not multiple
+- **Easier maintenance**: No mixing old and new approaches
+- **Better code quality**: Consistent standards across the codebase
+- **Future-proof**: All code follows modern Qt-native practices
+
+### Phase 1: Pilot Migration (Week 1-2) - ✅ COMPLETE
 - **Target**: `C_OscXappPropertiesFiler` (non-critical, ~200 lines)
 - **Goal**: Validate approach, measure actual performance
 - **Risk**: Low (isolated component)
+- **Result**: Successfully migrated 8 classes, established patterns
 
-### Phase 2: Medium Complexity Filers (Week 3-6)
+### Phase 2: Core System Filers (Weeks 3-8)
+**Priority**: Largest, most impactful Filers
 - **Targets**: 
-  - `C_OscHalcConfigFiler` (~400 lines)
-  - `C_OscDataLoggerJobFiler` (~350 lines)
-  - `C_OscParamSetFiler` (~500 lines)
-- **Goal**: Establish migration patterns, create tools
-- **Risk**: Medium (affects more functionality)
-
-### Phase 3: Complex Filers (Week 7-12)
-- **Targets**:
   - `C_OscNodeFiler` (~1,990 lines)
-  - `C_OscSystemDefinitionFiler` (~1,800 lines)
   - `C_OscHalcDefFiler` (~2,034 lines)
-- **Goal**: Complete major migration
-- **Risk**: High (core functionality)
+  - `C_OscHalcDefStructFiler` (~1,844 lines)
+  - `C_OscNodeDataPoolFiler` (~1,964 lines)
+  - `C_OscSystemDefinitionFiler` (~1,800 lines)
+  - `C_OscHalcConfigFiler`, `C_OscHalcConfigStandaloneFiler`
+  - `C_OscDeviceDefinitionFiler` (V1 & V2)
+  - `C_OscSystemBusFiler` (V1 & V2)
+  - `C_OscCanOpenManagerFiler`, `C_OscNodeCommFiler`, `C_OscNodeSquadFiler`
+  - `C_OscSupDefinitionFiler`, `C_OscSupNodeDefinitionFiler`, `C_OscSupSignatureFiler`
+- **Goal**: Complete core system migration
+- **Risk**: Medium-High (affects critical functionality)
 
-### Phase 4: Legacy Cleanup (Week 13-16)
-- Remove old Filer classes (optional)
-- Update documentation
-- Performance optimization
-- **Risk**: Low (after validation)
+### Phase 3: Project & Data Filers (Weeks 9-10)
+- **Targets**: 
+  - `C_OscProjectFiler`
+  - `C_OscParamSetFilerBase`, `C_OscParamSetInterpretedNodeFiler`
+  - `C_OscTargetSupportPackageV2Filer`
+- **Goal**: Complete project-level serialization
+- **Risk**: Medium
+
+### Phase 4: GUI Handler Filers (Weeks 11-12)
+- **Targets**: 
+  - `C_PuiSdHandlerFiler` (and V2)
+  - `C_PuiSvHandlerFiler` (and V1)
+  - `C_PuiSvDashboardFiler`
+  - `C_PuiBsElementsFiler`
+  - `C_PuiTargetSupportPackageFiler`
+- **Goal**: Complete GUI layer migration
+- **Risk**: Medium
+
+### Phase 5: Application-Specific Filers (Weeks 13-14)
+**CAN Monitor**: `C_CamProHandlerFiler`, `C_UsFiler`  
+**SYDE Flash**: `C_UsFiler`  
+**User Settings**: `C_UsFiler`  
+**Update Package**: `C_SyvUpPacConfigFiler`
+
+### Phase 6: Final Cleanup (Week 15-16)
+- Remove old Filer classes (optional, after validation)
+- Update all documentation
+- Performance benchmarking across all migrated classes
+- Code review and pattern refinement
 
 ---
 

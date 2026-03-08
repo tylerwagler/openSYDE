@@ -16,9 +16,16 @@ This project migrates all legacy Filer classes from XML-only serialization to a 
 
 ---
 
-## Strategy: Direct Replacement with Git Safety Net
+## Strategy: Complete Migration for Consistency
 
-Instead of maintaining duplicate code, we use **direct replacement** with git as our rollback mechanism:
+**Guiding Principle**: All Filer classes will be migrated to the new framework for **codebase consistency**, regardless of individual line savings.
+
+### Why Complete Migration?
+- **Architectural consistency**: Uniform serialization approach across all components
+- **Reduced cognitive load**: Developers only need to learn one pattern
+- **Easier maintenance**: Single framework instead of mixing old and new
+- **Future-proof**: All code follows modern Qt-native practices
+- **Better code reviews**: Consistent patterns make reviews faster and more effective
 
 ### Approach
 1. **Add serialization methods** to data classes (reusable across all formats)
@@ -32,6 +39,7 @@ Instead of maintaining duplicate code, we use **direct replacement** with git as
 ✅ **Less confusion** - Only one Filer class per component  
 ✅ **Smaller codebase** - No dead code  
 ✅ **Git preserves history** - Full audit trail and easy rollback  
+✅ **Consistency** - Uniform patterns throughout the codebase  
 
 ### Rollback Commands
 ```bash
@@ -152,25 +160,69 @@ public:
 
 ---
 
-## Remaining Work
+## Remaining Work: Complete Migration Plan
 
-### High Priority Filer Classes
-- [ ] C_OscNodeDataPoolFiler (~1,964 lines)
-- [ ] C_OscSystemDefinitionFiler (~1,800 lines)
+**Total Filer Classes**: 45  
+**Already Migrated**: 8 (✅ Complete)  
+**Remaining to Migrate**: 37  
+
+### Migration Philosophy
+**All Filer classes will be migrated** for architectural consistency, regardless of individual file size. This ensures:
+- Uniform serialization patterns across the entire codebase
+- No mixing of old XML-only and new multi-format approaches
+- Simplified onboarding for new developers
+- Consistent code review standards
+
+### Phase 1: Core System Filers (Weeks 1-4)
+**Target**: Largest, most impactful Filers
+- [ ] C_OscNodeFiler (~1,990 lines)
 - [ ] C_OscHalcDefFiler (~2,034 lines)
 - [ ] C_OscHalcDefStructFiler (~1,844 lines)
-- [ ] C_OscNodeFiler (~1,990 lines)
+- [ ] C_OscNodeDataPoolFiler (~1,964 lines)
+- [ ] C_OscSystemDefinitionFiler (~1,800 lines)
+- [ ] C_OscHalcConfigFiler
+- [ ] C_OscHalcConfigStandaloneFiler
+- [ ] C_OscDeviceDefinitionFiler (V1 & V2)
+- [ ] C_OscSystemBusFiler (V1 & V2)
+- [ ] C_OscCanOpenManagerFiler
+- [ ] C_OscNodeCommFiler
+- [ ] C_OscNodeSquadFiler
+- [ ] C_OscSupDefinitionFiler
+- [ ] C_OscSupNodeDefinitionFiler
+- [ ] C_OscSupSignatureFiler
 
-### Medium Priority
-- [x] C_OscDataLoggerJobFiler ✅ Complete (2026-03-01)
-- [x] C_OscParamSetRawNodeFiler ✅ Complete (2026-03-01)
-- [ ] C_OscViewFiler
-- [ ] C_OscTargetSupportPackageFiler
+### Phase 2: Project & Data Filers (Weeks 5-7)
+- [ ] C_OscProjectFiler
+- [ ] C_OscParamSetFilerBase
+- [ ] C_OscParamSetInterpretedNodeFiler
+- [ ] C_OscTargetSupportPackageV2Filer
 
-### Low Priority (Legacy/Edge Cases)
-- [ ] Protocol-specific Filers
-- [ ] Import/Export Filers
-- [ ] Specialized configuration Filers
+### Phase 3: GUI Handler Filers (Weeks 8-10)
+- [ ] C_PuiSdHandlerFiler (and V2)
+- [ ] C_PuiSvHandlerFiler (and V1)
+- [ ] C_PuiSvDashboardFiler
+- [ ] C_PuiBsElementsFiler
+- [ ] C_PuiTargetSupportPackageFiler
+
+### Phase 4: Application-Specific Filers (Weeks 11-12)
+**CAN Monitor**:
+- [ ] C_CamProHandlerFiler
+- [ ] C_UsFiler (CAN Monitor version)
+
+**SYDE Flash**:
+- [ ] C_UsFiler (SYDE Flash version)
+
+**User Settings**:
+- [ ] C_UsFiler (Main version)
+
+**Update Package**:
+- [ ] C_SyvUpPacConfigFiler
+
+### Phase 5: Final Cleanup (Week 13)
+- [ ] Remove legacy Filer files (optional, after validation)
+- [ ] Update all documentation
+- [ ] Performance benchmarking across all migrated classes
+- [ ] Code review and pattern refinement
 
 ---
 
