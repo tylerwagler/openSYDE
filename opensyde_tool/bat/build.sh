@@ -15,16 +15,37 @@
 
 set -euo pipefail
 
-# Configuration
+# Resolve directories relative to this script
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TOOLCHAIN_DIR="$SCRIPT_DIR/../pjt"
-RESULT_DIR="$SCRIPT_DIR/../result"
+PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+TOOLCHAIN_DIR="$PROJECT_DIR/pjt"
+RESULT_DIR="$PROJECT_DIR/result"
 
 # Default values
 COMPONENT="GUI"
 BUILD_TYPE="Release"
 CLEAN=false
 SKIP_DEPLOY=false
+
+# Helper functions
+write_header() {
+    echo "========================================"
+    echo "$1"
+    echo "========================================"
+}
+
+write_step() {
+    echo "[BUILD] $1"
+}
+
+write_error() {
+    echo "[ERROR] $1" >&2
+}
+
+usage() {
+    echo "Usage: $0 [-Component <GUI|Core|CANMonitor|SYDEflash|All>] [-BuildType <Release|Debug>] [-Clean] [-SkipDeploy]"
+    exit 0
+}
 
 # Parse command-line arguments
 while [[ "$#" -gt 0 ]]; do
@@ -45,317 +66,181 @@ while [[ "$#" -gt 0 ]]; do
             SKIP_DEPLOY=true
             shift
             ;;
+        -h|--help)
+            usage
+            ;;
         *)
-            echo "Unknown parameter passed: $1" >&2
-            exit 1
+            write_error "Unknown parameter: $1"
+            usage
             ;;
     esac
 done
 
-# Validate component
-CASED_COMPONENT=$(echo "$COMPONENT" | tr '[:lower:]' '[:upper:]')
-if [[ "$CASED_COMPONENT" != "GUI" && "$CASED_COMPONENT" != "CORE" && "$CASED_COMPONENT" != "CANMONITOR" && "$CASED_COMPONENT" != "SYDEFLASH" && "$CASED_COMPONENT" != "ALL" ]]; then
-    echo "Invalid component: $COMPONENT" >&2
-    exit 1
-fi
+# Normalize component name to uppercase for matching
+COMPONENT_UPPER="$(echo "$COMPONENT" | tr '[:lower:]' '[:upper:]')"
 
-# Build configurations
+# Validate component
+case "$COMPONENT_UPPER" in
+    GUI|CORE|CANMONITOR|SYDEFLASH|ALL) ;;
+    *)
+        write_error "Invalid component: $COMPONENT"
+        write_error "Valid components: GUI, Core, CANMonitor, SYDEflash, All"
+        exit 1
+        ;;
+esac
+
+# Build configurations: COMPONENT:PROJECT_SUBDIR:TEMP_FOLDER:TARGET_NAME:INSTALL_SUBDIR
 CONFIGS=(
-    "GUI:/home/tyler/Projects/openSYDE/opensyde_tool/pjt/openSYDE:temp_openSYDE:openSYDE:./result/tool"
-    "CORE:/home/tyler/Projects/openSYDE/opensyde_tool/pjt/openSYDE:temp_openSYDE:opensyde_core:"
-    "CANMONITOR:/home/tyler/Projects/openSYDE/opensyde_tool/pjt/openSYDE_CAN_Monitor:temp_openSYDE_CAN_Monitor:openSYDE_CAN_Monitor:./result/tool/CAN_Monitor"
-    "SYDEFLASH:/home/tyler/Projects/openSYDE/opensyde_tool/pjt/SYDEflash:temp_SYDEflash:SYDEflash:./result/utilities/SYDEflash"
+    "GUI:pjt/openSYDE:temp_openSYDE:openSYDE:result/tool"
+    "CORE:pjt/openSYDE:temp_openSYDE:opensyde_core:"
+    "CANMONITOR:pjt/openSYDE_CAN_Monitor:temp_openSYDE_CAN_Monitor:openSYDE_CAN_Monitor:result/tool/CAN_Monitor"
+    "SYDEFLASH:pjt/SYDEflash:temp_SYDEflash:SYDEflash:result/utilities/SYDEflash"
 )
 
-# Helper functions
-write_header() {
-    echo "========================================"
-    echo "$1"
-    echo "========================================"
-}
-
-write_step() {
-    echo "[BUILD] $1"
-}
-
-write_error() {
-    echo "[ERROR] $1" >&2
-}
-
-# Debug: Print project folder path
-write_step "Debug: Project folder for GUI: /home/tyler/Projects/openSYDE/opensyde_tool/pjt/openSYDE"
-write_step "Debug: Absolute path: $(realpath /home/tyler/Projects/openSYDE/opensyde_tool/pjt/openSYDE)"
-
-# Helper functions
-write_header() {
-    echo "========================================"
-    echo "$1"
-    echo "========================================"
-}
-
-write_step() {
-    echo "[BUILD] $1"
-}
-
-write_error() {
-    echo "[ERROR] $1" >&2
-}
-
-# Detect Qt installation
+# Detect Qt6 installation and set Qt6_DIR
 find_qt6() {
-    # Try pkg-config first
-    if command -v pkg-config &> /dev/null && pkg-config --exists Qt6Core; then
-        QT_PREFIX="$(pkg-config --variable=prefix Qt6Core)"
-        
-        # Handle Ubuntu/Debian system Qt6 installation
-        # Detect architecture
-        ARCH="$(uname -m)"
-        case "$ARCH" in
-            x86_64)
-                LIB_DIR="x86_64-linux-gnu"
-                ;;
-            aarch64|arm64)
-                LIB_DIR="aarch64-linux-gnu"
-                ;;
-            *)
-                echo "Unknown architecture: $ARCH" >&2
-                exit 1
-                ;;
-        esac
-        
-        # Try architecture-specific path first
-        QT6_CONFIG_PATH="$QT_PREFIX/lib/$LIB_DIR/cmake/Qt6/Qt6Config.cmake"
-        if [[ -f "$QT6_CONFIG_PATH" ]]; then
-            export Qt6_DIR="$(dirname "$QT6_CONFIG_PATH")"
-            export QT_DIR="$QT_PREFIX"
-            export PATH="$QT_PREFIX/bin:$PATH"
-            echo "Qt6 found via pkg-config at: $QT_PREFIX (Config: $QT6_CONFIG_PATH)"
-            return 0
-        fi
-        
-        # Look for Qt6Config.cmake in standard locations
-        for config_dir in "lib/cmake/Qt6" "share/cmake/Qt6"; do
-            QT6_CONFIG_PATH="$QT_PREFIX/$config_dir/Qt6Config.cmake"
-            if [[ -f "$QT6_CONFIG_PATH" ]]; then
-                export Qt6_DIR="$(dirname "$QT6_CONFIG_PATH")"
-                export QT_DIR="$QT_PREFIX"
-                export PATH="$QT_PREFIX/bin:$PATH"
-                echo "Qt6 found via pkg-config at: $QT_PREFIX (Config: $QT6_CONFIG_PATH)"
-                return 0
-            fi
-        done
-        
-        # If not found in standard paths, try the lib directory directly
-        if [[ -d "$QT_PREFIX/lib/cmake/Qt6" ]]; then
-            export Qt6_DIR="$QT_PREFIX/lib/cmake/Qt6"
-            export QT_DIR="$QT_PREFIX"
-            export PATH="$QT_PREFIX/bin:$PATH"
-            echo "Qt6 found via pkg-config at: $QT_PREFIX (Config: $QT_PREFIX/lib/cmake/Qt6/Qt6Config.cmake)"
-            return 0
-        fi
-        
-        echo "Qt6 found via pkg-config but Qt6Config.cmake not found in $QT_PREFIX. Check installation." >&2
-        exit 1
-    fi
-    
-    # Check common Qt6 installation paths
-    for qt_root in /opt/Qt/6.10.1/gcc_64 /usr/lib/x86_64-linux-gnu/qt6 /usr/local/Qt6; do
-        if [[ -f "$qt_root/bin/qmake" ]] || [[ -f "$qt_root/bin/cmake" ]]; then
-            # Look for Qt6Config.cmake
-            for config_dir in "lib/cmake/Qt6" "share/cmake/Qt6"; do
-                QT6_CONFIG_PATH="$qt_root/$config_dir/Qt6Config.cmake"
-                if [[ -f "$QT6_CONFIG_PATH" ]]; then
-                    export Qt6_DIR="$(dirname "$QT6_CONFIG_PATH")"
-                    export QT_DIR="$qt_root"
-                    export PATH="$qt_root/bin:$PATH"
-                    echo "Qt6 found at: $qt_root (Config: $QT6_CONFIG_PATH)"
-                    return 0
-                fi
-            done
-            
-            # Fall back to just the root if no config found (less reliable)
-            export QT_DIR="$qt_root"
-            export PATH="$qt_root/bin:$PATH"
-            echo "Qt6 found at: $qt_root (using fallback)"
+    local arch
+    arch="$(uname -m)"
+
+    # Architecture-specific library directory (Debian/Ubuntu convention)
+    local lib_dir
+    case "$arch" in
+        x86_64)  lib_dir="x86_64-linux-gnu" ;;
+        aarch64) lib_dir="aarch64-linux-gnu" ;;
+        *)       lib_dir="" ;;
+    esac
+
+    # Search candidate directories for Qt6Config.cmake
+    local candidates=()
+    [[ -n "$lib_dir" ]] && candidates+=("/usr/lib/$lib_dir/cmake/Qt6")
+    candidates+=(
+        "/usr/lib/cmake/Qt6"
+        "/usr/local/lib/cmake/Qt6"
+        "/opt/Qt/6.10.1/gcc_64/lib/cmake/Qt6"
+    )
+
+    for dir in "${candidates[@]}"; do
+        if [[ -f "$dir/Qt6Config.cmake" ]]; then
+            export Qt6_DIR="$dir"
+            write_step "Qt6 found: $dir"
             return 0
         fi
     done
-    
-    # Try to find cmake in PATH
-    if command -v cmake &> /dev/null; then
-        # Use cmake to find Qt6 path
-        if cmake --find-package Qt6 --name=Qt6Core --mode=compile 2>/dev/null; then
-            # Extract the path from CMake's output
-            CMAKE_QT_PATH=$(cmake --find-package Qt6 --name=Qt6Core --mode=compile 2>/dev/null | grep "Found Qt6Core" | sed -n 's/.*found at \(.*\)/\1/p')
-            if [[ -n "$CMAKE_QT_PATH" ]] && [[ -d "$CMAKE_QT_PATH" ]]; then
-                # Look for Qt6Config.cmake in the found path
-                for config_dir in "lib/cmake/Qt6" "share/cmake/Qt6"; do
-                    QT6_CONFIG_PATH="$CMAKE_QT_PATH/$config_dir/Qt6Config.cmake"
-                    if [[ -f "$QT6_CONFIG_PATH" ]]; then
-                        export Qt6_DIR="$(dirname "$QT6_CONFIG_PATH")"
-                        export QT_DIR="$CMAKE_QT_PATH"
-                        export PATH="$CMAKE_QT_PATH/bin:$PATH"
-                        echo "Qt6 found via CMake find_package at: $CMAKE_QT_PATH (Config: $QT6_CONFIG_PATH)"
-                        return 0
-                    fi
-                done
-                
-                # Fall back
-                export Qt6_DIR="$CMAKE_QT_PATH"
-                export QT_DIR="$CMAKE_QT_PATH"
-                export PATH="$CMAKE_QT_PATH/bin:$PATH"
-                echo "Qt6 found via CMake find_package at: $CMAKE_QT_PATH (using fallback)"
-                return 0
-            fi
-        fi
-    fi
-    
-    # If we get here, Qt6 was not found
-    echo "Qt6 not found. Please install Qt 6.10.1 for Linux (e.g., from qt.io)" >&2
-    exit 1
+
+    # Fall back: let CMake try to find it on its own
+    write_step "Qt6Config.cmake not found in known paths; relying on CMake to locate Qt6"
+    return 0
 }
 
-# Verify toolchain
+# Verify build prerequisites
 verify_toolchain() {
     write_step "Checking prerequisites..."
-    
-    # Check CMake
+
+    local missing=false
+
     if ! command -v cmake &> /dev/null; then
         write_error "CMake not found. Install with: sudo apt install cmake"
-        exit 1
+        missing=true
     fi
-    
-    # Check Ninja
+
     if ! command -v ninja &> /dev/null; then
         write_error "Ninja not found. Install with: sudo apt install ninja-build"
-        exit 1
+        missing=true
     fi
-    
-    # Check GCC
+
     if ! command -v g++ &> /dev/null; then
         write_error "g++ not found. Install with: sudo apt install build-essential"
+        missing=true
+    fi
+
+    if [[ "$missing" == "true" ]]; then
         exit 1
     fi
-    
-    # Find Qt6
+
     find_qt6
-    
-    # Check deployment tool if needed
-    if [[ "$SKIP_DEPLOY" == "false" ]] && [[ "$COMPONENT" != "CORE" ]]; then
-        if ! command -v linuxdeployqt &> /dev/null; then
-            echo "linuxdeployqt not found. Deploying Qt libraries will be skipped. Install with:"
-            echo "wget https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-            echo "chmod +x linuxdeployqt-continuous-x86_64.AppImage"
-            echo "./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract"
-            echo "export PATH=\$PATH:\$HOME/squashfs-root/usr/bin"
-        fi
-    fi
-    
-    echo "  CMake      : $(command -v cmake)"
-    echo "  Ninja      : $(command -v ninja)"
-    echo "  GCC        : $(command -v g++)"
-    echo "  Qt6        : $(which qmake 2>/dev/null || echo \"detected via CMake\")"
+
+    echo "  CMake : $(cmake --version | head -1)"
+    echo "  Ninja : $(ninja --version)"
+    echo "  GCC   : $(g++ --version | head -1)"
 }
 
-# Deploy Qt libraries
+# Deploy Qt libraries alongside an executable
 deploy_qt_libs() {
     local exe_path="$1"
     local component_name="$2"
-    
-    write_step "Deploying Qt libraries for $component_name..."
-    
+
     if [[ ! -f "$exe_path" ]]; then
-        write_error "Executable not found: $exe_path"
-        exit 1
+        write_error "Executable not found for deployment: $exe_path"
+        return 1
     fi
-    
-    local deploy_dir="$(dirname "$exe_path")"
-    
-    # Check if linuxdeployqt is available
+
+    write_step "Deploying Qt libraries for $component_name..."
+
     if command -v linuxdeployqt &> /dev/null; then
-        write_step "Using linuxdeployqt to deploy Qt libraries..."
-        linuxdeployqt "$exe_path" -appimage -always-overwrite -verbose=2
+        linuxdeployqt "$exe_path" -always-overwrite -verbose=2
     else
-        write_step "linuxdeployqt not available. Manually copying Qt libraries may be required."
-        write_step "Run: ldd \"$exe_path\" | grep Qt | cut -d'>' -f2 | xargs -I {} cp {} \"$deploy_dir\""
-        echo "  Note: Libraries must be copied manually to make the executable portable."
+        write_step "linuxdeployqt not available — skipping Qt deployment."
+        write_step "To make the executable portable, install linuxdeployqt or copy Qt libraries manually."
     fi
 }
 
-# Build component
+# Build a single component
 build_component() {
-    local project_folder="$1"
-    local temp_folder="$2"
+    local project_folder="$PROJECT_DIR/$1"
+    local temp_folder="$PROJECT_DIR/$2_${BUILD_TYPE}"
     local component_name="$3"
     local target="$4"
     local skip_install="$5"
     local skip_deploy="$6"
-    local exe_name="$7"
-    local install_dir="$8"
-    
+    local install_dir="$7"
+
     write_header "Building $component_name ($BUILD_TYPE)"
-    
-    # Setup environment
-    export PATH="$QT_DIR/bin:$PATH"
-    
-    # Create temp folder if needed
-    if [[ ! -d "$temp_folder" ]]; then
-        write_step "Creating build directory: $temp_folder"
-        mkdir -p "$temp_folder"
-    fi
-    
-    # Clean if requested
-    if [[ "$CLEAN" == "true" ]] && [[ -f "$temp_folder/build.ninja" ]]; then
+
+    # Create or clean build directory
+    if [[ "$CLEAN" == "true" ]] && [[ -d "$temp_folder" ]]; then
         write_step "Cleaning previous build..."
-        rm -rf "$temp_folder"/*
+        rm -rf "$temp_folder"
     fi
-    
+    mkdir -p "$temp_folder"
+
     pushd "$temp_folder" > /dev/null
-    
+
     # Step 1: CMake configure
     if [[ ! -f "build.ninja" ]]; then
         write_step "Step 1/3 - CMake configure..."
-        cmake -S "$project_folder" -B . -G Ninja "-DCMAKE_BUILD_TYPE=$BUILD_TYPE" -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN_DIR/toolchain_linux.cmake" -DQt6_DIR="$Qt6_DIR"
-        if [[ $? -ne 0 ]]; then
-            write_error "CMake configure failed"
-            popd > /dev/null
-            exit 1
-        fi
+        local cmake_args=(
+            -S "$project_folder" -B . -G Ninja
+            "-DCMAKE_BUILD_TYPE=$BUILD_TYPE"
+            "-DCMAKE_TOOLCHAIN_FILE=$TOOLCHAIN_DIR/toolchain_linux.cmake"
+        )
+        [[ -n "${Qt6_DIR:-}" ]] && cmake_args+=("-DQt6_DIR=$Qt6_DIR")
+        cmake "${cmake_args[@]}"
     else
         write_step "Step 1/3 - Using existing CMake configuration (use -Clean to reconfigure)"
     fi
-    
+
     # Step 2: Build
-    write_step "Step 2/3 - Building target '$target' (parallel jobs: 8)..."
-    cmake --build . --target "$target" -- -j8
-    if [[ $? -ne 0 ]]; then
-        write_error "Build failed"
-        popd > /dev/null
-        exit 1
-    fi
-    
+    write_step "Step 2/3 - Building target '$target'..."
+    cmake --build . --target "$target" -- -j"$(nproc)"
+
     # Step 3: Install
     if [[ "$skip_install" != "true" ]]; then
         write_step "Step 3/3 - Installing to result folder..."
         cmake --build . --target install
-        if [[ $? -ne 0 ]]; then
-            write_error "Install failed"
-            popd > /dev/null
-            exit 1
-        fi
     else
         write_step "Step 3/3 - Install skipped (library-only build)"
     fi
-    
-    echo "\n  $component_name build SUCCESS"
-    
-    # Deploy Qt libraries if needed
-    if [[ "$skip_deploy" != "true" ]] && [[ "$SKIP_DEPLOY" != "true" ]] && [[ -n "$exe_name" ]] && [[ -n "$install_dir" ]]; then
-        local exe_full_path="$SCRIPT_DIR/../$install_dir/$exe_name"
-        deploy_qt_libs "$exe_full_path" "$component_name"
-    fi
-    
+
+    echo ""
+    echo "  $component_name build SUCCESS"
+
     popd > /dev/null
+
+    # Deploy Qt libraries if needed
+    if [[ "$skip_deploy" != "true" ]] && [[ "$SKIP_DEPLOY" != "true" ]] && [[ -n "$install_dir" ]]; then
+        local exe_path="$PROJECT_DIR/$install_dir/$component_name"
+        deploy_qt_libs "$exe_path" "$component_name"
+    fi
 }
 
 # Main
@@ -367,27 +252,34 @@ echo "  Deploy Qt : $([[ "$SKIP_DEPLOY" == "true" ]] && echo "No" || echo "Yes")
 
 verify_toolchain
 
-if [[ "$COMPONENT" == "All" ]]; then
+# Dispatch builds
+run_build() {
+    local comp proj temp name install
+    IFS=':' read -r comp proj temp name install <<< "$1"
+
+    if [[ "$comp" == "CORE" ]]; then
+        build_component "$proj" "$temp" "$name" "$name" "true" "true" ""
+    else
+        build_component "$proj" "$temp" "$name" "all" "false" "$SKIP_DEPLOY" "$install"
+    fi
+}
+
+if [[ "$COMPONENT_UPPER" == "ALL" ]]; then
     write_header "Building All Components"
     for config in "${CONFIGS[@]}"; do
-        IFS=':' read -r comp proj temp name install <<< "$config"
-        if [[ "$comp" != "CORE" ]]; then
-            build_component "$proj" "$temp" "$name" "all" "false" "false" "$name" "$install"
-        fi
+        IFS=':' read -r comp _ _ _ _ <<< "$config"
+        [[ "$comp" == "CORE" ]] && continue
+        run_build "$config"
     done
     write_header "All Components Built Successfully"
 else
     for config in "${CONFIGS[@]}"; do
-        IFS=':' read -r comp proj temp name install <<< "$config"
-        if [[ "$(echo "$comp" | tr '[:upper:]' '[:lower:]')" == "$(echo "$COMPONENT" | tr '[:upper:]' '[:lower:]')" ]]; then
-            if [[ "$comp" == "CORE" ]]; then
-                build_component "$proj" "$temp" "$name" "$name" "true" "true" "" ""
-            else
-                build_component "$proj" "$temp" "$name" "all" "false" "$SKIP_DEPLOY" "$name" "$install"
-            fi
+        IFS=':' read -r comp _ _ _ _ <<< "$config"
+        if [[ "$comp" == "$COMPONENT_UPPER" ]]; then
+            run_build "$config"
             break
         fi
     done
 fi
 
-write_header "Build artifacts: opensyde_tool/result/"
+write_header "Build artifacts: $RESULT_DIR/"
