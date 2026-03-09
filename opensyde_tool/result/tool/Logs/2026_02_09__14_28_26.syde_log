@@ -1,2 +1,0 @@
-2026-02-09 14:28:26.723  INFO     Startup                     main::qMain                                           Starting openSYDE Version: V1.84r1, MD5-Checksum: 831B936A077AF1F2AC889FBDCD57FA35
-2026-02-09 14:28:27.229  ERROR    Loading device definitions  C_OscDeviceManager::LoadFromFile                      File "C:/Users/tyler/Dev/repos/openSYDE/opensyde_tool/result/devices/devices.ini" does not exist.
