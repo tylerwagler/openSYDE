@@ -16,7 +16,7 @@ using namespace stw::opensyde_core;
 using namespace stw::errors;
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefBase::ToQDataStream(QDataStream &ro_DataStream) const {
+int32_t C_OscHalcDefBase::ToQDataStream(QDataStream &ro_DataStream) const {
    // Serialize basic fields
    ro_DataStream << u32_ContentVersion;
    ro_DataStream << c_DeviceName;
@@ -42,10 +42,11 @@ void C_OscHalcDefBase::ToQDataStream(QDataStream &ro_DataStream) const {
    ro_DataStream << u32_NvmReservedListSizeInputValues;
    ro_DataStream << u32_NvmReservedListSizeOutputValues;
    ro_DataStream << u32_NvmReservedListSizeStatusValues;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefBase::FromQDataStream(QDataStream &ro_DataStream) {
+int32_t C_OscHalcDefBase::FromQDataStream(QDataStream &ro_DataStream) {
    // Deserialize basic fields
    ro_DataStream >> u32_ContentVersion;
    ro_DataStream >> c_DeviceName;
@@ -83,6 +84,7 @@ void C_OscHalcDefBase::FromQDataStream(QDataStream &ro_DataStream) {
    ro_DataStream >> u32_NvmReservedListSizeInputValues;
    ro_DataStream >> u32_NvmReservedListSizeOutputValues;
    ro_DataStream >> u32_NvmReservedListSizeStatusValues;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -117,10 +119,11 @@ QJsonObject C_OscHalcDefBase::ToJsonObject() const {
    c_Obj["nvmReservedListSizeStatusValues"] = static_cast<int32_t>(u32_NvmReservedListSizeStatusValues);
 
    return c_Obj;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefBase::FromJsonObject(const QJsonObject &orc_Object) {
+int32_t C_OscHalcDefBase::FromJsonObject(const QJsonObject &orc_Object) {
    // Deserialize basic fields
    if (orc_Object.contains("contentVersion")) {
       u32_ContentVersion = static_cast<uint32_t>(orc_Object["contentVersion"].toInt());
@@ -178,6 +181,7 @@ void C_OscHalcDefBase::FromJsonObject(const QJsonObject &orc_Object) {
       u32_NvmReservedListSizeStatusValues = 
          static_cast<uint32_t>(orc_Object["nvmReservedListSizeStatusValues"].toInt());
    }
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -233,10 +237,11 @@ QDomElement C_OscHalcDefBase::ToQDomElement(QDomDocument &orc_Doc, const QString
    c_Element.appendChild(c_ReservedElem);
 
    return c_Element;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefBase::FromQDomElement(const QDomElement &orc_Element) {
+int32_t C_OscHalcDefBase::FromQDomElement(const QDomElement &orc_Element) {
    // Deserialize basic fields from attributes
    if (orc_Element.hasAttribute("contentVersion")) {
       bool q_Valid;
@@ -336,4 +341,5 @@ void C_OscHalcDefBase::FromQDomElement(const QDomElement &orc_Element) {
             static_cast<uint32_t>(c_StatusList.item(0).toElement().attribute("value").toUInt(&q_Valid));
       }
    }
+  return stw::errors::C_NO_ERR;
 }
