@@ -14,6 +14,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "C_OscNodeCodeExportSettings.hpp"
+#include <QDataStream>
+#include <QDomDocument>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
 #include <QStringList>
@@ -39,16 +42,29 @@ public:
   QString c_Comment;     ///< comment about application
   QString c_IdeCall;     ///< invocation of IDE (binary and parameters)
   bool q_IsStandardSydeCoderCe; ///< true: use standard SYDE Coder C; else: use
-                                ///< c_CodeGeneratorPath
+                                 ///< c_CodeGeneratorPath
   QString c_CodeGeneratorPath;  ///< alternative file generator
   QString c_ProjectFolder; ///< project subfolder (relative to root of template
-                           ///< archive)
+                            ///< archive)
   QString c_GeneratePath;  ///< application file generation path (relative to
-                           ///< projectfolder)
+                            ///< projectfolder)
   uint16_t u16_GenCodeVersion; ///< Version of structure of generated files
   QStringList
       c_ResultPaths; ///< list of output-files (relative to projectfolder)
   bool q_GeneratesPsiFiles; ///< true: generate HALC PSI file for this app
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &orc_Object);
+
+  QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &orc_Element);
 };
 
 class C_OscTargetSupportPackageV2 {
@@ -74,11 +90,24 @@ public:
   QString c_TemplatePath; ///< path to template package archive
 
   QString c_HalcDefPath; ///< path to halc definition file within template
-                         ///< package archive
+  ///< package archive
   QString c_HalcComment; ///< comment on halc definition file included in this
-                         ///< package
+  ///< package
 
   void Clear(void);
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &orc_Object);
+
+  QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables
