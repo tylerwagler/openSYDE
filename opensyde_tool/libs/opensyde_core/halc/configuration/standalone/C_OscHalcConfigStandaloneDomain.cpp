@@ -14,6 +14,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
+#include "stwerrors.hpp"
 
 #include "C_OscHalcConfigStandaloneDomain.hpp"
 
@@ -149,16 +150,17 @@ void C_OscHalcConfigStandaloneDomain::FromJsonObject(const QJsonObject &orc_Obje
    \return  XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcConfigStandaloneDomain::ToQDomDocument(
+int32_t C_OscHalcConfigStandaloneDomain::ToQDomElement(
     QDomDocument &orc_Doc, const QString &orc_ElementName) const {
   QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
   QDomElement c_ChannelsElement = orc_Doc.createElement("standalone-channels");
   for (const C_OscHalcConfigStandaloneChannel &c_Channel : c_StandaloneChannels) {
-    QDomElement c_ChannelElement = c_Channel.ToQDomDocument(orc_Doc, "channel");
+    QDomElement c_ChannelElement = c_Channel.ToQDomElement(orc_Doc, "channel");
     c_ChannelsElement.appendChild(c_ChannelElement);
   }
   c_Element.appendChild(c_ChannelsElement);
-  return c_Element;
+  orc_Doc.appendChild(c_Element);
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -167,7 +169,7 @@ QDomElement C_OscHalcConfigStandaloneDomain::ToQDomDocument(
    \param   orc_Element  XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigStandaloneDomain::FromQDomDocument(const QDomElement &orc_Element) {
+int32_t C_OscHalcConfigStandaloneDomain::FromQDomElement(const QDomElement &orc_Element) {
   c_StandaloneChannels.clear();
   QDomNode c_Node = orc_Element.firstChild();
   while (!c_Node.isNull()) {
@@ -178,7 +180,7 @@ void C_OscHalcConfigStandaloneDomain::FromQDomDocument(const QDomElement &orc_El
         QDomElement c_ChannelElem = c_ChannelNode.toElement();
         if (!c_ChannelElem.isNull() && c_ChannelElem.tagName() == "channel") {
           C_OscHalcConfigStandaloneChannel c_Channel;
-          c_Channel.FromQDomDocument(c_ChannelElem);
+          c_Channel.FromQDomElement(c_ChannelElem);
           c_StandaloneChannels.append(c_Channel);
         }
         c_ChannelNode = c_ChannelNode.nextSibling();
@@ -187,3 +189,4 @@ void C_OscHalcConfigStandaloneDomain::FromQDomDocument(const QDomElement &orc_El
     c_Node = c_Node.nextSibling();
   }
 }
+  return stw::errors::C_NO_ERR;
