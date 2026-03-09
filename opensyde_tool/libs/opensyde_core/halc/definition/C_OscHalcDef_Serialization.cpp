@@ -13,6 +13,7 @@
 #include <QJsonValue>
 
 using namespace stw::opensyde_core;
+using namespace stw::errors;
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDef::ToQDataStream(QDataStream &ro_DataStream) const {
