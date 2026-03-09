@@ -113,7 +113,7 @@ void C_OscHalcConfigStandaloneChannel::FromJsonObject(const QJsonObject &orc_Obj
    \return  XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigStandaloneChannel::ToQDomElement(
+QDomElement C_OscHalcConfigStandaloneChannel::ToQDomElement(
     QDomDocument &orc_Doc, const QString &orc_ElementName) const {
   QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
   QDomElement c_ParamsElement = orc_Doc.createElement("parameter-ids");
@@ -124,7 +124,7 @@ int32_t C_OscHalcConfigStandaloneChannel::ToQDomElement(
   }
   c_Element.appendChild(c_ParamsElement);
   orc_Doc.appendChild(c_Element);
-  return stw::errors::C_NO_ERR;
+  return c_Element;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -149,5 +149,5 @@ int32_t C_OscHalcConfigStandaloneChannel::FromQDomElement(const QDomElement &orc
     }
     c_Node = c_Node.nextSibling();
   }
-  return stw::errors::C_NO_ERR;
+  return c_Element;
 }

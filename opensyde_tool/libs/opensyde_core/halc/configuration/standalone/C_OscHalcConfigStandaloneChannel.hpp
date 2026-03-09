@@ -46,7 +46,7 @@ public:
   QJsonObject ToJsonObject() const;
   void FromJsonObject(const QJsonObject &orc_Object);
 
-  int32_t ToQDomElement(QDomDocument &orc_Doc,
+  QDomElement ToQDomElement(QDomDocument &orc_Doc,
                              const QString &orc_ElementName) const;
   int32_t FromQDomElement(const QDomElement &orc_Element);
 };
