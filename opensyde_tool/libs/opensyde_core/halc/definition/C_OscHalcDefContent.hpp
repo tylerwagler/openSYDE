@@ -12,6 +12,9 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
 #include <QStringList>
@@ -60,10 +63,23 @@ public:
   int32_t SetStringValue(const QString &orc_Value);
   int32_t GetStringValue(QString &orc_Value) const;
 
-  virtual void CalcHash(uint32_t &oru32_HashValue) const;
-  virtual void CalcHashElement(uint32_t &oru32_HashValue,
-                               const uint32_t ou32_Index) const;
-  virtual void CalcHashStructure(uint32_t &oru32_HashValue) const;
+   virtual void CalcHash(uint32_t &oru32_HashValue) const;
+   virtual void CalcHashElement(uint32_t &oru32_HashValue,
+                                const uint32_t ou32_Index) const;
+   virtual void CalcHashStructure(uint32_t &oru32_HashValue) const;
+
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+
+   QJsonObject ToJsonObject() const;
+   void FromJsonObject(const QJsonObject &orc_Object);
+
+   QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                              const QString &orc_ElementName) const;
+   void FromQDomDocument(const QDomElement &orc_Element);
 
 private:
   E_ComplexType me_ComplexType;

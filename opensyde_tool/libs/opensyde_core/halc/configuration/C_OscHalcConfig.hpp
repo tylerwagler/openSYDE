@@ -14,6 +14,9 @@
  */
 #include "C_OscHalcConfigDomain.hpp"
 #include "C_OscHalcDefBase.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 
 /* -- Namespace
@@ -114,10 +117,23 @@ public:
       bool *const opq_ChannelsInvalid,
       QList<uint32_t> *const opc_InvalidChannelIndices) const;
   virtual void CalcHash(uint32_t &oru32_HashValue) const;
-  void
-  HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
-                         QList<C_OscSystemNameMaxCharLimitChangeReportItem>
-                             *const opc_ChangedItems);
+   void
+   HandleNameMaxCharLimit(const uint32_t ou32_NameMaxCharLimit,
+                          QList<C_OscSystemNameMaxCharLimitChangeReportItem>
+                              *const opc_ChangedItems);
+
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+
+   QJsonObject ToJsonObject() const;
+   void FromJsonObject(const QJsonObject &orc_Object);
+
+   QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                              const QString &orc_ElementName) const;
+   void FromQDomDocument(const QDomElement &orc_Element);
 
 private:
   QList<C_OscHalcConfigDomain> mc_Domains; ///< Domains of HALC configuration
