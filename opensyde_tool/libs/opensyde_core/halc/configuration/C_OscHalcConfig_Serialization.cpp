@@ -8,6 +8,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "precomp_headers.hpp"
+#include "stwerrors.hpp"
 #include "C_OscHalcConfig.hpp"
 #include <QJsonArray>
 #include <QJsonValue>
@@ -27,6 +28,7 @@ int32_t C_OscHalcConfig::ToQDataStream(QDataStream &ro_DataStream) const {
       c_Domain.ToQDataStream(ro_DataStream);
    }
    return stw::errors::C_NO_ERR;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -46,6 +48,7 @@ int32_t C_OscHalcConfig::FromQDataStream(QDataStream &ro_DataStream) {
       mc_Domains.push_back(c_Domain);
    }
    return stw::errors::C_NO_ERR;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -64,6 +67,7 @@ QJsonObject C_OscHalcConfig::ToJsonObject() const {
    c_Obj["domains"] = c_DomainArray;
 
    return c_Obj;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -83,6 +87,7 @@ int32_t C_OscHalcConfig::FromJsonObject(const QJsonObject &orc_Object) {
          mc_Domains.push_back(c_Domain);
       }
    }
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -105,6 +110,7 @@ QDomElement C_OscHalcConfig::ToQDomElement(QDomDocument &orc_Doc, const QString 
 
    orc_Doc.appendChild(c_Element);
    return stw::errors::C_NO_ERR;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -139,4 +145,5 @@ int32_t C_OscHalcConfig::FromQDomElement(const QDomElement &orc_Element) {
       }
    }
    return stw::errors::C_NO_ERR;
+  return stw::errors::C_NO_ERR;
 }
