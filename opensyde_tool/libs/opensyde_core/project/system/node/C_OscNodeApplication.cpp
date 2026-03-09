@@ -131,3 +131,216 @@ void C_OscNodeApplication::h_StringToApplication(
             h_ApplicationToString(C_OscNodeApplication::eBINARY));
   }
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDataStream
+   \param   ro_DataStream  Output stream
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeApplication::ToQDataStream(QDataStream &ro_DataStream) const {
+  ro_DataStream << static_cast<int32_t>(e_Type) << c_Name << c_Comment
+                << q_Active << static_cast<int32_t>(u8_ProcessId)
+                << c_ProjectPath << c_IdeCall << c_CodeGeneratorPath
+                << c_GeneratePath << static_cast<int32_t>(u16_GenCodeVersion)
+                << c_ResultPaths;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDataStream
+   \param   ro_DataStream  Input stream
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeApplication::FromQDataStream(QDataStream &ro_DataStream) {
+  int32_t s32_Type;
+  ro_DataStream >> s32_Type >> c_Name >> c_Comment >> q_Active
+      >> u8_ProcessId >> c_ProjectPath >> c_IdeCall >> c_CodeGeneratorPath
+      >> c_GeneratePath >> u16_GenCodeVersion >> c_ResultPaths;
+  e_Type = static_cast<E_Type>(s32_Type);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QJsonObject
+   \return  JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscNodeApplication::ToJsonObject() const {
+  QJsonObject c_Obj;
+  c_Obj["type"] = h_ApplicationToString(e_Type);
+  c_Obj["name"] = c_Name;
+  c_Obj["comment"] = c_Comment;
+  c_Obj["active"] = q_Active;
+  c_Obj["process-id"] = static_cast<int32_t>(u8_ProcessId);
+  c_Obj["project-path"] = c_ProjectPath;
+  c_Obj["ide-call"] = c_IdeCall;
+  c_Obj["code-generator-path"] = c_CodeGeneratorPath;
+  c_Obj["generate-path"] = c_GeneratePath;
+  c_Obj["generated-code-version"] = static_cast<int32_t>(u16_GenCodeVersion);
+  c_Obj["result-paths"] = QJsonValue::fromVariant(c_ResultPaths);
+  return c_Obj;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QJsonObject
+   \param   orc_Object  JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeApplication::FromJsonObject(const QJsonObject &orc_Object) {
+  if (orc_Object.contains("type")) {
+    h_StringToApplication(orc_Object["type"].toString(), e_Type);
+  }
+  if (orc_Object.contains("name")) {
+    c_Name = orc_Object["name"].toString();
+  }
+  if (orc_Object.contains("comment")) {
+    c_Comment = orc_Object["comment"].toString();
+  }
+  if (orc_Object.contains("active")) {
+    q_Active = orc_Object["active"].toBool();
+  }
+  if (orc_Object.contains("process-id")) {
+    u8_ProcessId = static_cast<uint8_t>(orc_Object["process-id"].toInt());
+  }
+  if (orc_Object.contains("project-path")) {
+    c_ProjectPath = orc_Object["project-path"].toString();
+  }
+  if (orc_Object.contains("ide-call")) {
+    c_IdeCall = orc_Object["ide-call"].toString();
+  }
+  if (orc_Object.contains("code-generator-path")) {
+    c_CodeGeneratorPath = orc_Object["code-generator-path"].toString();
+  }
+  if (orc_Object.contains("generate-path")) {
+    c_GeneratePath = orc_Object["generate-path"].toString();
+  }
+  if (orc_Object.contains("generated-code-version")) {
+    u16_GenCodeVersion =
+        static_cast<uint16_t>(orc_Object["generated-code-version"].toInt());
+  }
+  if (orc_Object.contains("result-paths")) {
+    QJsonArray c_Array = orc_Object["result-paths"].toArray();
+    c_ResultPaths.clear();
+    for (const QJsonValue &c_Value : c_Array) {
+      c_ResultPaths.append(c_Value.toString());
+    }
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDomElement
+   \param   orc_Doc        XML document
+   \param   orc_ElementName  Element name
+   \return  XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscNodeApplication::ToQDomDocument(QDomDocument &orc_Doc,
+                                                 const QString &orc_ElementName) const {
+  QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
+  c_Element.setAttribute("type", h_ApplicationToString(e_Type));
+  c_Element.setAttribute("process-id", static_cast<int32_t>(u8_ProcessId));
+  c_Element.setAttribute("active", q_Active);
+  if (u16_GenCodeVersion > 0) {
+    c_Element.setAttribute("generated-code-version",
+                           static_cast<int32_t>(u16_GenCodeVersion));
+  }
+
+  if (!c_Name.isEmpty()) {
+    QDomElement c_NameElement = orc_Doc.createElement("name");
+    c_NameElement.appendChild(orc_Doc.createTextNode(c_Name));
+    c_Element.appendChild(c_NameElement);
+  }
+  if (!c_Comment.isEmpty()) {
+    QDomElement c_CommentElement = orc_Doc.createElement("comment");
+    c_CommentElement.appendChild(orc_Doc.createTextNode(c_Comment));
+    c_Element.appendChild(c_CommentElement);
+  }
+  if (!c_ProjectPath.isEmpty()) {
+    QDomElement c_ProjectElement = orc_Doc.createElement("project-path");
+    c_ProjectElement.appendChild(orc_Doc.createTextNode(c_ProjectPath));
+    c_Element.appendChild(c_ProjectElement);
+  }
+  if (!c_IdeCall.isEmpty()) {
+    QDomElement c_IdeElement = orc_Doc.createElement("ide-call");
+    c_IdeElement.appendChild(orc_Doc.createTextNode(c_IdeCall));
+    c_Element.appendChild(c_IdeElement);
+  }
+  if (!c_CodeGeneratorPath.isEmpty()) {
+    QDomElement c_GenPathElement = orc_Doc.createElement("code-generator-path");
+    c_GenPathElement.appendChild(orc_Doc.createTextNode(c_CodeGeneratorPath));
+    c_Element.appendChild(c_GenPathElement);
+  }
+  if (!c_GeneratePath.isEmpty()) {
+    QDomElement c_GenElement = orc_Doc.createElement("generate-path");
+    c_GenElement.appendChild(orc_Doc.createTextNode(c_GeneratePath));
+    c_Element.appendChild(c_GenElement);
+  }
+  if (!c_ResultPaths.isEmpty()) {
+    QDomElement c_ResultElement = orc_Doc.createElement("result-paths");
+    for (const QString &c_Path : c_ResultPaths) {
+      QDomElement c_PathElement = orc_Doc.createElement("path");
+      c_PathElement.appendChild(orc_Doc.createTextNode(c_Path));
+      c_ResultElement.appendChild(c_PathElement);
+    }
+    c_Element.appendChild(c_ResultElement);
+  }
+
+  return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDomElement
+   \param   orc_Element  XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeApplication::FromQDomDocument(const QDomElement &orc_Element) {
+  if (orc_Element.hasAttribute("type")) {
+    h_StringToApplication(orc_Element.attribute("type"), e_Type);
+  }
+  if (orc_Element.hasAttribute("process-id")) {
+    u8_ProcessId = static_cast<uint8_t>(orc_Element.attribute("process-id").toInt());
+  }
+  if (orc_Element.hasAttribute("active")) {
+    q_Active = orc_Element.attribute("active").toInt();
+  }
+  if (orc_Element.hasAttribute("generated-code-version")) {
+    u16_GenCodeVersion = static_cast<uint16_t>(
+        orc_Element.attribute("generated-code-version").toInt());
+  }
+
+  QDomNode c_Node = orc_Element.firstChild();
+  while (!c_Node.isNull()) {
+    QDomElement c_Elem = c_Node.toElement();
+    if (!c_Elem.isNull()) {
+      const QString c_TagName = c_Elem.tagName();
+      if (c_TagName == "name") {
+        c_Name = c_Elem.text();
+      } else if (c_TagName == "comment") {
+        c_Comment = c_Elem.text();
+      } else if (c_TagName == "project-path") {
+        c_ProjectPath = c_Elem.text();
+      } else if (c_TagName == "ide-call") {
+        c_IdeCall = c_Elem.text();
+      } else if (c_TagName == "code-generator-path") {
+        c_CodeGeneratorPath = c_Elem.text();
+      } else if (c_TagName == "generate-path") {
+        c_GeneratePath = c_Elem.text();
+      } else if (c_TagName == "result-paths") {
+        c_ResultPaths.clear();
+        QDomNode c_PathNode = c_Elem.firstChild();
+        while (!c_PathNode.isNull()) {
+          QDomElement c_PathElem = c_PathNode.toElement();
+          if (!c_PathElem.isNull() && c_PathElem.tagName() == "path") {
+            c_ResultPaths.append(c_PathElem.text());
+          }
+          c_PathNode = c_PathNode.nextSibling();
+        }
+      }
+    }
+    c_Node = c_Node.nextSibling();
+  }
+}

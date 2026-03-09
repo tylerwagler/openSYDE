@@ -12,6 +12,9 @@
 #define C_SYVUPPACCONFIG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
 #include <QStringList>
@@ -36,6 +39,13 @@ public:
    stw::opensyde_core::C_OscNodeApplication::E_Type e_Type;
    QString c_Name;
    QString c_Path;
+
+   void ToQDataStream(QDataStream& ro_Stream) const;
+   void FromQDataStream(QDataStream& ro_Stream);
+   QJsonObject ToJsonObject() const;
+   void FromJsonObject(const QJsonObject& orc_Object);
+   QDomElement ToQDomDocument(QDomDocument& orc_Doc, const QString& orc_Name) const;
+   void FromQDomDocument(const QDomElement& orc_Element);
 };
 
 class C_SyvUpPacConfigNode

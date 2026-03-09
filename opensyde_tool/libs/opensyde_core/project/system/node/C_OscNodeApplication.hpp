@@ -17,6 +17,9 @@
  */
 
 #include "stwtypes.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QString>
 #include <QStringList>
 
@@ -75,11 +78,24 @@ public:
   uint16_t u16_GenCodeVersion; ///< Version of structure of generated files
   QStringList
       c_ResultPaths; ///< Paths to result files of this application
-                     //(if relative they are meant as relative to data block
-                     //project) (vector size is either 1 or 2; 2 only for PSI
-                     // file generation, and in this case, the first one
-                     // corresponds to safe and the second one to non-safe file)
+                      //(if relative they are meant as relative to data block
+                      //project) (vector size is either 1 or 2; 2 only for PSI
+                      // file generation, and in this case, the first one
+                      // corresponds to safe and the second one to non-safe file)
   // Note: all paths and the IDE call can contain placeholder variables!
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &orc_Object);
+
+  QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables
