@@ -66,12 +66,14 @@ C_OscHalcConfigStandalone::C_OscHalcConfigStandalone(void)
    \param   ro_DataStream  Output stream
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigStandalone::ToQDataStream(QDataStream &ro_DataStream) const {
+int32_t C_OscHalcConfigStandalone::ToQDataStream(QDataStream &ro_DataStream) const {
+  using namespace stw::errors;
   ro_DataStream << c_DeviceType << static_cast<int32_t>(u32_DefinitionContentVersion);
   ro_DataStream << static_cast<int32_t>(c_Domains.size());
   for (const C_OscHalcConfigStandaloneDomain &c_Domain : c_Domains) {
     c_Domain.ToQDataStream(ro_DataStream);
   }
+  return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -80,7 +82,7 @@ void C_OscHalcConfigStandalone::ToQDataStream(QDataStream &ro_DataStream) const 
    \param   ro_DataStream  Input stream
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigStandalone::FromQDataStream(QDataStream &ro_DataStream) {
+int32_t C_OscHalcConfigStandalone::FromQDataStream(QDataStream &ro_DataStream) {
   ro_DataStream >> c_DeviceType >> u32_DefinitionContentVersion;
   c_Domains.clear();
   int32_t s32_Count;
@@ -109,7 +111,6 @@ QJsonObject C_OscHalcConfigStandalone::ToJsonObject() const {
   }
   c_Obj["domains"] = c_DomainsArray;
   return c_Obj;
-  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -118,7 +119,8 @@ QJsonObject C_OscHalcConfigStandalone::ToJsonObject() const {
    \param   orc_Object  JSON object
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigStandalone::FromJsonObject(const QJsonObject &orc_Object) {
+int32_t C_OscHalcConfigStandalone::FromJsonObject(const QJsonObject &orc_Object) {
+  using namespace stw::errors;
   if (orc_Object.contains("device-type")) {
     c_DeviceType = orc_Object["device-type"].toString();
   }
@@ -135,7 +137,7 @@ void C_OscHalcConfigStandalone::FromJsonObject(const QJsonObject &orc_Object) {
       c_Domains.append(c_Domain);
     }
   }
-  return stw::errors::C_NO_ERR;
+  return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -166,7 +168,6 @@ int32_t C_OscHalcConfigStandalone::ToQDomElement(
   c_Element.appendChild(c_DomainsElement);
   
   orc_Doc.appendChild(c_Element);
-  return stw::errors::C_NO_ERR;
   return stw::errors::C_NO_ERR;
 }
 
