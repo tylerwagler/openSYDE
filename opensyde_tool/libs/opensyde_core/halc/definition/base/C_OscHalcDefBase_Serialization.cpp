@@ -8,6 +8,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "precomp_headers.hpp"
+#include "stwerrors.hpp"
 #include "C_OscHalcDefBase.hpp"
 #include <QJsonArray>
 #include <QJsonValue>
