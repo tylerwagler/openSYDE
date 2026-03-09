@@ -142,7 +142,7 @@ void C_OscHalcConfigStandalone::FromJsonObject(const QJsonObject &orc_Object) {
    \return  XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcConfigStandalone::ToQDomDocument(
+QDomElement C_OscHalcConfigStandalone::ToQDomElement(
     QDomDocument &orc_Doc, const QString &orc_ElementName) const {
   QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
   
@@ -156,7 +156,7 @@ QDomElement C_OscHalcConfigStandalone::ToQDomDocument(
   
   QDomElement c_DomainsElement = orc_Doc.createElement("domains");
   for (const C_OscHalcConfigStandaloneDomain &c_Domain : c_Domains) {
-    QDomElement c_DomainElement = c_Domain.ToQDomDocument(orc_Doc, "domain");
+    QDomElement c_DomainElement = c_Domain.ToQDomElement(orc_Doc, "domain");
     c_DomainsElement.appendChild(c_DomainElement);
   }
   c_Element.appendChild(c_DomainsElement);
@@ -170,7 +170,7 @@ QDomElement C_OscHalcConfigStandalone::ToQDomDocument(
    \param   orc_Element  XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigStandalone::FromQDomDocument(const QDomElement &orc_Element) {
+int32_t C_OscHalcConfigStandalone::FromQDomElement(const QDomElement &orc_Element) {
   QDomNode c_Node = orc_Element.firstChild();
   while (!c_Node.isNull()) {
     QDomElement c_Elem = c_Node.toElement();
@@ -187,7 +187,7 @@ void C_OscHalcConfigStandalone::FromQDomDocument(const QDomElement &orc_Element)
           QDomElement c_DomainElem = c_DomainNode.toElement();
           if (!c_DomainElem.isNull() && c_DomainElem.tagName() == "domain") {
             C_OscHalcConfigStandaloneDomain c_Domain;
-            c_Domain.FromQDomDocument(c_DomainElem);
+            c_Domain.FromQDomElement(c_DomainElem);
             c_Domains.append(c_Domain);
           }
           c_DomainNode = c_DomainNode.nextSibling();
