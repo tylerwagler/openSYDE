@@ -1,4 +1,0 @@
-2026-02-09 16:57:40.112  INFO     Startup                     main::qMain                                           Starting openSYDE Version: V1.84r1, MD5-Checksum: 789786F5711585CB6045E99D3FA8D113
-2026-02-09 16:57:40.309  ERROR    Loading device definitions  C_OscDeviceManager::LoadFromFile                      File "C:/Users/tyler/Dev/repos/openSYDE/opensyde_tool/result/devices/devices.ini" does not exist.
-2026-02-09 16:57:40.311  INFO     Loading user device definitions  C_OscDeviceManager::LoadFromFile                      File "C:/Users/tyler/Dev/repos/openSYDE/opensyde_tool/result/devices/user_devices.ini" does not exist. (optional)
-2026-02-09 16:57:40.344  INFO     Setup main window screen    C_OgeWiUtil::h_CheckAndFixDialogPositionAndSize       Setup main window for screen width 5120, height 1440
