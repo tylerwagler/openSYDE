@@ -12,7 +12,7 @@
    - int32_t FromJsonObject(const QJsonObject&)
    - QJsonObject ToJsonObject() const
    - int32_t FromQDomElement(const QDomElement&)
-   - QDomElement ToQDomDocument(QDomDocument&, const QString&) const
+   - QDomElement ToQDomElement(QDomDocument&, const QString&) const
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
@@ -343,7 +343,7 @@ int32_t h_SaveListXml(const QList<T> & orc_List, const QString & orc_Path,
 
    for (const T & rc_Item : orc_List)
    {
-      c_Root.appendChild(rc_Item.ToQDomDocument(c_Doc, orc_ItemTag));
+      c_Root.appendChild(rc_Item.ToQDomElement(c_Doc, orc_ItemTag));
    }
 
    QFile c_File(orc_Path);
@@ -610,7 +610,7 @@ int32_t h_SaveSingleXml(const T & orc_Object, const QString & orc_Path,
    using namespace stw::errors;
 
    QDomDocument c_Doc(orc_RootTag);
-   c_Doc.appendChild(orc_Object.ToQDomDocument(c_Doc, orc_RootTag));
+   c_Doc.appendChild(orc_Object.ToQDomElement(c_Doc, orc_RootTag));
 
    QFile c_File(orc_Path);
    if (!c_File.open(QIODevice::WriteOnly))
