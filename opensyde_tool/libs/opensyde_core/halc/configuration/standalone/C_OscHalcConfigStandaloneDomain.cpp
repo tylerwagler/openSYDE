@@ -150,7 +150,7 @@ void C_OscHalcConfigStandaloneDomain::FromJsonObject(const QJsonObject &orc_Obje
    \return  XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigStandaloneDomain::ToQDomElement(
+QDomElement C_OscHalcConfigStandaloneDomain::ToQDomElement(
     QDomDocument &orc_Doc, const QString &orc_ElementName) const {
   QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
   QDomElement c_ChannelsElement = orc_Doc.createElement("standalone-channels");
@@ -159,8 +159,8 @@ int32_t C_OscHalcConfigStandaloneDomain::ToQDomElement(
     c_ChannelsElement.appendChild(c_ChannelElement);
   }
   c_Element.appendChild(c_ChannelsElement);
-  orc_Doc.appendChild(c_Element);
-  return stw::errors::C_NO_ERR;
+  // Append element to document in caller
+  return c_Element;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -188,5 +188,5 @@ int32_t C_OscHalcConfigStandaloneDomain::FromQDomElement(const QDomElement &orc_
     }
     c_Node = c_Node.nextSibling();
   }
-  return stw::errors::C_NO_ERR;
+  return c_Element;
 }
