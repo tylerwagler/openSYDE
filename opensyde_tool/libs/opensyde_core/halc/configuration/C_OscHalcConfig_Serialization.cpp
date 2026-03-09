@@ -15,7 +15,9 @@
 using namespace stw::opensyde_core;
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfig::ToQDataStream(QDataStream &ro_DataStream) const {
+int32_t C_OscHalcConfig::ToQDataStream(QDataStream &ro_DataStream) const {
+   using namespace stw::errors;
+
    // Serialize base class (C_OscHalcDefBase)
    C_OscHalcDefBase::ToQDataStream(ro_DataStream);
 
@@ -24,10 +26,13 @@ void C_OscHalcConfig::ToQDataStream(QDataStream &ro_DataStream) const {
    for (const auto &c_Domain : mc_Domains) {
       c_Domain.ToQDataStream(ro_DataStream);
    }
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfig::FromQDataStream(QDataStream &ro_DataStream) {
+int32_t C_OscHalcConfig::FromQDataStream(QDataStream &ro_DataStream) {
+   using namespace stw::errors;
+
    // Deserialize base class
    C_OscHalcDefBase::FromQDataStream(ro_DataStream);
 
@@ -40,6 +45,7 @@ void C_OscHalcConfig::FromQDataStream(QDataStream &ro_DataStream) {
       c_Domain.FromQDataStream(ro_DataStream);
       mc_Domains.push_back(c_Domain);
    }
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -80,7 +86,9 @@ void C_OscHalcConfig::FromJsonObject(const QJsonObject &orc_Object) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcConfig::ToQDomDocument(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
+int32_t C_OscHalcConfig::ToQDomDocument(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
+   using namespace stw::errors;
+
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
 
    // Serialize base class
@@ -95,11 +103,14 @@ QDomElement C_OscHalcConfig::ToQDomDocument(QDomDocument &orc_Doc, const QString
    }
    c_Element.appendChild(c_DomainElem);
 
-   return c_Element;
+   orc_Doc.appendChild(c_Element);
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfig::FromQDomDocument(const QDomElement &orc_Element) {
+int32_t C_OscHalcConfig::FromQDomDocument(const QDomElement &orc_Element) {
+   using namespace stw::errors;
+
    // Deserialize base class
    QDomNode c_Node = orc_Element.firstChild();
    while (!c_Node.isNull()) {
@@ -127,4 +138,5 @@ void C_OscHalcConfig::FromQDomDocument(const QDomElement &orc_Element) {
          c_DomainNode = c_DomainNode.nextSibling();
       }
    }
+   return C_NO_ERR;
 }
