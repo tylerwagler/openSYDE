@@ -106,8 +106,7 @@ QDomElement C_OscHalcConfig::ToQDomElement(QDomDocument &orc_Doc, const QString 
    c_Element.appendChild(c_DomainElem);
 
    orc_Doc.appendChild(c_Element);
-   return stw::errors::C_NO_ERR;
-  return stw::errors::C_NO_ERR;
+   return c_Element;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
