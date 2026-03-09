@@ -14,6 +14,9 @@
 #define C_OSCPARAMSETINTERPRETEDNODE_HPP
 
 #include "C_OscParamSetInterpretedDataPool.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
 
@@ -39,6 +42,19 @@ public:
   QString c_Name; ///< Node name
   QList<C_OscParamSetInterpretedDataPool>
       c_DataPools; ///< Interpreted data pools, used by this parameter set
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &orc_Object);
+
+  QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables
