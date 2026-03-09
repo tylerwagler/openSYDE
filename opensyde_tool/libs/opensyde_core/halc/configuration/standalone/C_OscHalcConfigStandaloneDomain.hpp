@@ -50,9 +50,9 @@ public:
   QJsonObject ToJsonObject() const;
   void FromJsonObject(const QJsonObject &orc_Object);
 
-  QDomElement ToQDomElement(QDomDocument &orc_Doc,
-                             const QString &orc_ElementName) const;
-  void FromQDomElement(const QDomElement &orc_Element);
+   int32_t ToQDomElement(QDomDocument &orc_Doc,
+                         const QString &orc_ElementName) const;
+   int32_t FromQDomElement(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables
