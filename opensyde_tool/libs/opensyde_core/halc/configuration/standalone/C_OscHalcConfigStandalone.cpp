@@ -72,7 +72,6 @@ void C_OscHalcConfigStandalone::ToQDataStream(QDataStream &ro_DataStream) const 
   for (const C_OscHalcConfigStandaloneDomain &c_Domain : c_Domains) {
     c_Domain.ToQDataStream(ro_DataStream);
   }
-  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
