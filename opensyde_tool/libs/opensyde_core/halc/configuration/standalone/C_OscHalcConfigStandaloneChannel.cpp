@@ -148,5 +148,5 @@ int32_t C_OscHalcConfigStandaloneChannel::FromQDomElement(const QDomElement &orc
     }
     c_Node = c_Node.nextSibling();
   }
-}
   return stw::errors::C_NO_ERR;
+}
