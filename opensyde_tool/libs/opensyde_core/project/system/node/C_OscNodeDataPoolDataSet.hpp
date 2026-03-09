@@ -17,6 +17,9 @@
  */
 
 #include "stwtypes.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QString>
 
 /* -- Namespace
@@ -40,6 +43,19 @@ public:
 
   QString c_Name;    ///< User data set name
   QString c_Comment; ///< User data set comment
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &orc_Object);
+
+  QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables

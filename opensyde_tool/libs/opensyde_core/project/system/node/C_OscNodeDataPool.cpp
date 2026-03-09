@@ -17,8 +17,10 @@
 
 #include <QMap>
 #include <QString>
-
 #include "C_OscNodeDataPool.hpp"
+#include <QJsonArray>
+#include <QJsonValue>
+
 #include "C_OscHashUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_SclChecksums.hpp"
@@ -572,4 +574,241 @@ C_OscNodeDataPool::m_GetElementHash(const uint32_t ou32_ListIndex,
     }
   }
   return u32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDataStream
+   \param   ro_DataStream  Output stream
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPool::ToQDataStream(QDataStream &ro_DataStream) const {
+  ro_DataStream << static_cast<int32_t>(e_Type);
+  ro_DataStream << c_Name;
+  ro_DataStream << au8_Version[0] << au8_Version[1] << au8_Version[2];
+  ro_DataStream << u16_DefinitionCrcVersion;
+  ro_DataStream << c_Comment;
+  ro_DataStream << s32_RelatedDataBlockIndex;
+  ro_DataStream << q_IsSafety;
+  ro_DataStream << q_ScopeIsPrivate;
+  ro_DataStream << u32_NvmStartAddress;
+  ro_DataStream << u32_NvmSize;
+  
+  // Serialize lists
+  ro_DataStream << static_cast<qint32>(c_Lists.size());
+  for (const auto &c_List : c_Lists) {
+    c_List.ToQDataStream(ro_DataStream);
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDataStream
+   \param   ro_DataStream  Input stream
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPool::FromQDataStream(QDataStream &ro_DataStream) {
+  int32_t s_Type;
+  ro_DataStream >> s_Type;
+  e_Type = static_cast<E_Type>(s_Type);
+  ro_DataStream >> c_Name;
+  ro_DataStream >> au8_Version[0] >> au8_Version[1] >> au8_Version[2];
+  ro_DataStream >> u16_DefinitionCrcVersion;
+  ro_DataStream >> c_Comment;
+  ro_DataStream >> s32_RelatedDataBlockIndex;
+  ro_DataStream >> q_IsSafety;
+  ro_DataStream >> q_ScopeIsPrivate;
+  ro_DataStream >> u32_NvmStartAddress;
+  ro_DataStream >> u32_NvmSize;
+  
+  // Deserialize lists
+  qint32 s_ListsSize;
+  ro_DataStream >> s_ListsSize;
+  c_Lists.clear();
+  for (qint32 s_I = 0; s_I < s_ListsSize; ++s_I) {
+    C_OscNodeDataPoolList c_List;
+    c_List.FromQDataStream(ro_DataStream);
+    c_Lists.append(c_List);
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QJsonObject
+   \return  JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscNodeDataPool::ToJsonObject() const {
+  QJsonObject c_Obj;
+  
+  // Convert enum to string
+  QString c_TypeStr;
+  switch (e_Type) {
+    case eDIAG: c_TypeStr = "diag"; break;
+    case eNVM: c_TypeStr = "nvm"; break;
+    case eCOM: c_TypeStr = "com"; break;
+    case eHALC: c_TypeStr = "halc"; break;
+    case eHALC_NVM: c_TypeStr = "halc_nvm"; break;
+    default: c_TypeStr = "unknown"; break;
+  }
+  c_Obj["type"] = c_TypeStr;
+  
+  c_Obj["name"] = c_Name;
+  c_Obj["version"] = QString("%1.%2.%3")
+    .arg(au8_Version[0]).arg(au8_Version[1]).arg(au8_Version[2]);
+  c_Obj["definition-crc-version"] = static_cast<qint64>(u16_DefinitionCrcVersion);
+  c_Obj["comment"] = c_Comment;
+  c_Obj["related-data-block-index"] = s32_RelatedDataBlockIndex;
+  c_Obj["is-safety"] = q_IsSafety;
+  c_Obj["scope-is-private"] = q_ScopeIsPrivate;
+  c_Obj["nvm-start-address"] = static_cast<qint64>(u32_NvmStartAddress);
+  c_Obj["nvm-size"] = static_cast<qint64>(u32_NvmSize);
+  
+  // Serialize lists
+  QJsonArray c_ListsArray;
+  for (const auto &c_List : c_Lists) {
+    c_ListsArray.append(c_List.ToJsonObject());
+  }
+  c_Obj["lists"] = c_ListsArray;
+  
+  return c_Obj;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QJsonObject
+   \param   orc_Object  JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPool::FromJsonObject(const QJsonObject &orc_Object) {
+  if (orc_Object.contains("type")) {
+    QString c_TypeStr = orc_Object["type"].toString();
+    if (c_TypeStr == "diag") e_Type = eDIAG;
+    else if (c_TypeStr == "nvm") e_Type = eNVM;
+    else if (c_TypeStr == "com") e_Type = eCOM;
+    else if (c_TypeStr == "halc") e_Type = eHALC;
+    else if (c_TypeStr == "halc_nvm") e_Type = eHALC_NVM;
+    else e_Type = eDIAG; // Default
+  }
+  
+  if (orc_Object.contains("name")) c_Name = orc_Object["name"].toString();
+  if (orc_Object.contains("version")) {
+    QString c_VersionStr = orc_Object["version"].toString();
+    QStringList c_VersionParts = c_VersionStr.split('.');
+    if (c_VersionParts.size() >= 3) {
+      au8_Version[0] = c_VersionParts[0].toUInt();
+      au8_Version[1] = c_VersionParts[1].toUInt();
+      au8_Version[2] = c_VersionParts[2].toUInt();
+    }
+  }
+  if (orc_Object.contains("definition-crc-version")) u16_DefinitionCrcVersion = static_cast<uint16_t>(orc_Object["definition-crc-version"].toInt());
+  if (orc_Object.contains("comment")) c_Comment = orc_Object["comment"].toString();
+  if (orc_Object.contains("related-data-block-index")) s32_RelatedDataBlockIndex = orc_Object["related-data-block-index"].toInt();
+  if (orc_Object.contains("is-safety")) q_IsSafety = orc_Object["is-safety"].toBool();
+  if (orc_Object.contains("scope-is-private")) q_ScopeIsPrivate = orc_Object["scope-is-private"].toBool();
+  if (orc_Object.contains("nvm-start-address")) u32_NvmStartAddress = static_cast<uint32_t>(orc_Object["nvm-start-address"].toInt());
+  if (orc_Object.contains("nvm-size")) u32_NvmSize = static_cast<uint32_t>(orc_Object["nvm-size"].toInt());
+  
+  // Deserialize lists
+  if (orc_Object.contains("lists")) {
+    QJsonArray c_ListsArray = orc_Object["lists"].toArray();
+    c_Lists.clear();
+    for (const auto &c_Value : c_ListsArray) {
+      C_OscNodeDataPoolList c_List;
+      c_List.FromJsonObject(c_Value.toObject());
+      c_Lists.append(c_List);
+    }
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDomElement
+   \param   orc_Doc        XML document
+   \param   orc_ElementName  Element name
+   \return  XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscNodeDataPool::ToQDomDocument(QDomDocument &orc_Doc,
+                                               const QString &orc_ElementName) const {
+  QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
+  
+  // Convert enum to string
+  QString c_TypeStr;
+  switch (e_Type) {
+    case eDIAG: c_TypeStr = "diag"; break;
+    case eNVM: c_TypeStr = "nvm"; break;
+    case eCOM: c_TypeStr = "com"; break;
+    case eHALC: c_TypeStr = "halc"; break;
+    case eHALC_NVM: c_TypeStr = "halc_nvm"; break;
+    default: c_TypeStr = "unknown"; break;
+  }
+  c_Element.setAttribute("type", c_TypeStr);
+  
+  c_Element.setAttribute("name", c_Name);
+  c_Element.setAttribute("version", QString("%1.%2.%3")
+    .arg(au8_Version[0]).arg(au8_Version[1]).arg(au8_Version[2]));
+  c_Element.setAttribute("definition-crc-version", QString::number(u16_DefinitionCrcVersion));
+  c_Element.setAttribute("comment", c_Comment);
+  c_Element.setAttribute("related-data-block-index", QString::number(s32_RelatedDataBlockIndex));
+  c_Element.setAttribute("is-safety", q_IsSafety ? "true" : "false");
+  c_Element.setAttribute("scope-is-private", q_ScopeIsPrivate ? "true" : "false");
+  c_Element.setAttribute("nvm-start-address", QString::number(u32_NvmStartAddress));
+  c_Element.setAttribute("nvm-size", QString::number(u32_NvmSize));
+  
+  // Serialize lists
+  for (const auto &c_List : c_Lists) {
+    QDomElement c_ListElem = c_List.ToQDomDocument(orc_Doc, "list");
+    c_Element.appendChild(c_ListElem);
+  }
+  
+  return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDomElement
+   \param   orc_Element  XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPool::FromQDomDocument(const QDomElement &orc_Element) {
+  if (orc_Element.hasAttribute("type")) {
+    QString c_TypeStr = orc_Element.attribute("type");
+    if (c_TypeStr == "diag") e_Type = eDIAG;
+    else if (c_TypeStr == "nvm") e_Type = eNVM;
+    else if (c_TypeStr == "com") e_Type = eCOM;
+    else if (c_TypeStr == "halc") e_Type = eHALC;
+    else if (c_TypeStr == "halc_nvm") e_Type = eHALC_NVM;
+    else e_Type = eDIAG; // Default
+  }
+  
+  if (orc_Element.hasAttribute("name")) c_Name = orc_Element.attribute("name");
+  if (orc_Element.hasAttribute("version")) {
+    QString c_VersionStr = orc_Element.attribute("version");
+    QStringList c_VersionParts = c_VersionStr.split('.');
+    if (c_VersionParts.size() >= 3) {
+      au8_Version[0] = c_VersionParts[0].toUInt();
+      au8_Version[1] = c_VersionParts[1].toUInt();
+      au8_Version[2] = c_VersionParts[2].toUInt();
+    }
+  }
+  if (orc_Element.hasAttribute("definition-crc-version")) u16_DefinitionCrcVersion = static_cast<uint16_t>(orc_Element.attribute("definition-crc-version").toUInt());
+  if (orc_Element.hasAttribute("comment")) c_Comment = orc_Element.attribute("comment");
+  if (orc_Element.hasAttribute("related-data-block-index")) s32_RelatedDataBlockIndex = orc_Element.attribute("related-data-block-index").toInt();
+  if (orc_Element.hasAttribute("is-safety")) q_IsSafety = (orc_Element.attribute("is-safety") == "true");
+  if (orc_Element.hasAttribute("scope-is-private")) q_ScopeIsPrivate = (orc_Element.attribute("scope-is-private") == "true");
+  if (orc_Element.hasAttribute("nvm-start-address")) u32_NvmStartAddress = orc_Element.attribute("nvm-start-address").toUInt();
+  if (orc_Element.hasAttribute("nvm-size")) u32_NvmSize = orc_Element.attribute("nvm-size").toUInt();
+  
+  // Deserialize lists
+  QDomNode c_Node = orc_Element.firstChild();
+  while (!c_Node.isNull()) {
+    QDomElement c_Elem = c_Node.toElement();
+    if (!c_Elem.isNull() && c_Elem.tagName() == "list") {
+      C_OscNodeDataPoolList c_List;
+      c_List.FromQDomDocument(c_Elem);
+      c_Lists.append(c_List);
+    }
+    c_Node = c_Node.nextSibling();
+  }
 }

@@ -19,6 +19,9 @@
 #include "C_OscNodeDataPoolListElement.hpp"
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
 #include "stwtypes.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
 #include <iostream>
@@ -50,12 +53,11 @@ public:
   void CheckErrorDataSet(const uint32_t &oru32_DataSetIndex,
                          bool *const opq_NameConflict,
                          bool *const opq_NameInvalid) const;
-  void
-  CheckErrorElement(const uint32_t &oru32_ElementIndex,
-                    bool *const opq_NameConflict, bool *const opq_NameInvalid,
-                    bool *const opq_MinOverMax,
-                    bool *const opq_DataSetValueInvalid,
-                    QList<uint32_t> *const opc_InvalidDataSetIndices) const;
+  void CheckErrorElement(const uint32_t &oru32_ElementIndex,
+                         bool *const opq_NameConflict, bool *const opq_NameInvalid,
+                         bool *const opq_MinOverMax,
+                         bool *const opq_DataSetValueInvalid,
+                         QList<uint32_t> *const opc_InvalidDataSetIndices) const;
   void CheckErrorDataSetValue(const uint32_t &oru32_ElementIndex,
                               const uint32_t &oru32_DataSetIndex,
                               bool *const opq_ValueBelowMin,
@@ -81,6 +83,19 @@ public:
       hu32_DEFAULT_NVM_SIZE; ///< Default NvM size of data list
   QList<C_OscNodeDataPoolListElement> c_Elements; ///< List variables
   QList<C_OscNodeDataPoolDataSet> c_DataSets;     ///< Data sets
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &orc_Object);
+
+  QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables

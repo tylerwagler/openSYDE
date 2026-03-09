@@ -18,6 +18,8 @@
 #include <QString>
 
 #include "C_OscNodeDataPoolList.hpp"
+#include <QJsonArray>
+#include <QJsonValue>
 
 #include "C_OscHashUtil.hpp"
 #include "C_OscUtils.hpp"
@@ -475,4 +477,202 @@ void C_OscNodeDataPoolList::GetCrcAsLittleEndianBlob(
   orc_Data.resize(2);
   orc_Data[1] = static_cast<uint8_t>(u16_Value >> 8U);
   orc_Data[0] = static_cast<uint8_t>(u16_Value);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDataStream
+   \param   ro_DataStream  Output stream
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPoolList::ToQDataStream(QDataStream &ro_DataStream) const {
+  ro_DataStream << c_Name;
+  ro_DataStream << c_Comment;
+  ro_DataStream << q_NvmCrcActive;
+  ro_DataStream << u32_NvmCrc;
+  ro_DataStream << u32_NvmStartAddress;
+  ro_DataStream << u32_NvmSize;
+  
+  // Serialize elements
+  ro_DataStream << static_cast<qint32>(c_Elements.size());
+  for (const auto &c_Element : c_Elements) {
+    c_Element.ToQDataStream(ro_DataStream);
+  }
+  
+  // Serialize data sets
+  ro_DataStream << static_cast<qint32>(c_DataSets.size());
+  for (const auto &c_DataSet : c_DataSets) {
+    c_DataSet.ToQDataStream(ro_DataStream);
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDataStream
+   \param   ro_DataStream  Input stream
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPoolList::FromQDataStream(QDataStream &ro_DataStream) {
+  ro_DataStream >> c_Name;
+  ro_DataStream >> c_Comment;
+  ro_DataStream >> q_NvmCrcActive;
+  ro_DataStream >> u32_NvmCrc;
+  ro_DataStream >> u32_NvmStartAddress;
+  ro_DataStream >> u32_NvmSize;
+  
+  // Deserialize elements
+  qint32 s_ElementsSize;
+  ro_DataStream >> s_ElementsSize;
+  c_Elements.clear();
+  for (qint32 s_I = 0; s_I < s_ElementsSize; ++s_I) {
+    C_OscNodeDataPoolListElement c_Element;
+    c_Element.FromQDataStream(ro_DataStream);
+    c_Elements.append(c_Element);
+  }
+  
+  // Deserialize data sets
+  qint32 s_DataSetsSize;
+  ro_DataStream >> s_DataSetsSize;
+  c_DataSets.clear();
+  for (qint32 s_I = 0; s_I < s_DataSetsSize; ++s_I) {
+    C_OscNodeDataPoolDataSet c_DataSet;
+    c_DataSet.FromQDataStream(ro_DataStream);
+    c_DataSets.append(c_DataSet);
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QJsonObject
+   \return  JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscNodeDataPoolList::ToJsonObject() const {
+  QJsonObject c_Obj;
+  c_Obj["name"] = c_Name;
+  c_Obj["comment"] = c_Comment;
+  c_Obj["nvm-crc-active"] = q_NvmCrcActive;
+  c_Obj["nvm-crc"] = static_cast<qint64>(u32_NvmCrc);
+  c_Obj["nvm-start-address"] = static_cast<qint64>(u32_NvmStartAddress);
+  c_Obj["nvm-size"] = static_cast<qint64>(u32_NvmSize);
+  
+  // Serialize elements
+  QJsonArray c_ElementsArray;
+  for (const auto &c_Element : c_Elements) {
+    c_ElementsArray.append(c_Element.ToJsonObject());
+  }
+  c_Obj["elements"] = c_ElementsArray;
+  
+  // Serialize data sets
+  QJsonArray c_DataSetsArray;
+  for (const auto &c_DataSet : c_DataSets) {
+    c_DataSetsArray.append(c_DataSet.ToJsonObject());
+  }
+  c_Obj["data-sets"] = c_DataSetsArray;
+  
+  return c_Obj;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QJsonObject
+   \param   orc_Object  JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPoolList::FromJsonObject(const QJsonObject &orc_Object) {
+  if (orc_Object.contains("name")) c_Name = orc_Object["name"].toString();
+  if (orc_Object.contains("comment")) c_Comment = orc_Object["comment"].toString();
+  if (orc_Object.contains("nvm-crc-active")) q_NvmCrcActive = orc_Object["nvm-crc-active"].toBool();
+  if (orc_Object.contains("nvm-crc")) u32_NvmCrc = static_cast<uint32_t>(orc_Object["nvm-crc"].toInt());
+  if (orc_Object.contains("nvm-start-address")) u32_NvmStartAddress = static_cast<uint32_t>(orc_Object["nvm-start-address"].toInt());
+  if (orc_Object.contains("nvm-size")) u32_NvmSize = static_cast<uint32_t>(orc_Object["nvm-size"].toInt());
+  
+  // Deserialize elements
+  if (orc_Object.contains("elements")) {
+    QJsonArray c_ElementsArray = orc_Object["elements"].toArray();
+    c_Elements.clear();
+    for (const auto &c_Value : c_ElementsArray) {
+      C_OscNodeDataPoolListElement c_Element;
+      c_Element.FromJsonObject(c_Value.toObject());
+      c_Elements.append(c_Element);
+    }
+  }
+  
+  // Deserialize data sets
+  if (orc_Object.contains("data-sets")) {
+    QJsonArray c_DataSetsArray = orc_Object["data-sets"].toArray();
+    c_DataSets.clear();
+    for (const auto &c_Value : c_DataSetsArray) {
+      C_OscNodeDataPoolDataSet c_DataSet;
+      c_DataSet.FromJsonObject(c_Value.toObject());
+      c_DataSets.append(c_DataSet);
+    }
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDomElement
+   \param   orc_Doc        XML document
+   \param   orc_ElementName  Element name
+   \return  XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscNodeDataPoolList::ToQDomDocument(QDomDocument &orc_Doc,
+                                                   const QString &orc_ElementName) const {
+  QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
+  c_Element.setAttribute("name", c_Name);
+  c_Element.setAttribute("comment", c_Comment);
+  c_Element.setAttribute("nvm-crc-active", q_NvmCrcActive ? "true" : "false");
+  c_Element.setAttribute("nvm-crc", QString::number(u32_NvmCrc));
+  c_Element.setAttribute("nvm-start-address", QString::number(u32_NvmStartAddress));
+  c_Element.setAttribute("nvm-size", QString::number(u32_NvmSize));
+  
+  // Serialize elements
+  for (const auto &c_ElementItem : c_Elements) {
+    QDomElement c_ElementElem = c_ElementItem.ToQDomDocument(orc_Doc, "element");
+    c_Element.appendChild(c_ElementElem);
+  }
+  
+  // Serialize data sets
+  for (const auto &c_DataSet : c_DataSets) {
+    QDomElement c_DataSetElem = c_DataSet.ToQDomDocument(orc_Doc, "data-set");
+    c_Element.appendChild(c_DataSetElem);
+  }
+  
+  return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDomElement
+   \param   orc_Element  XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPoolList::FromQDomDocument(const QDomElement &orc_Element) {
+  if (orc_Element.hasAttribute("name")) c_Name = orc_Element.attribute("name");
+  if (orc_Element.hasAttribute("comment")) c_Comment = orc_Element.attribute("comment");
+  if (orc_Element.hasAttribute("nvm-crc-active")) q_NvmCrcActive = (orc_Element.attribute("nvm-crc-active") == "true");
+  if (orc_Element.hasAttribute("nvm-crc")) u32_NvmCrc = orc_Element.attribute("nvm-crc").toUInt();
+  if (orc_Element.hasAttribute("nvm-start-address")) u32_NvmStartAddress = orc_Element.attribute("nvm-start-address").toUInt();
+  if (orc_Element.hasAttribute("nvm-size")) u32_NvmSize = orc_Element.attribute("nvm-size").toUInt();
+  
+  // Deserialize elements
+  QDomNode c_Node = orc_Element.firstChild();
+  while (!c_Node.isNull()) {
+    QDomElement c_Elem = c_Node.toElement();
+    if (!c_Elem.isNull()) {
+      const QString c_TagName = c_Elem.tagName();
+      if (c_TagName == "element") {
+        C_OscNodeDataPoolListElement c_ElementItem;
+        c_ElementItem.FromQDomDocument(c_Elem);
+        c_Elements.append(c_ElementItem);
+      } else if (c_TagName == "data-set") {
+        C_OscNodeDataPoolDataSet c_DataSet;
+        c_DataSet.FromQDomDocument(c_Elem);
+        c_DataSets.append(c_DataSet);
+      }
+    }
+    c_Node = c_Node.nextSibling();
+  }
 }

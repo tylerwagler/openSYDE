@@ -19,6 +19,9 @@
 #include "C_OscNodeApplication.hpp"
 #include "C_OscNodeDataPoolList.hpp"
 #include "stwtypes.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
 #include <vector>
@@ -98,6 +101,19 @@ public:
   static const uint32_t
       hu32_DEFAULT_NVM_SIZE;            ///< Default NvM size of data pool
   QList<C_OscNodeDataPoolList> c_Lists; ///< Data pool lists
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &orc_Object);
+
+  QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &orc_Element);
 
 private:
   uint32_t m_GetElementHash(const uint32_t ou32_ListIndex,
