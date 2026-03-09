@@ -39,14 +39,14 @@ public:
   uint32_t u32_DefinitionContentVersion;
   QList<C_OscHalcConfigStandaloneDomain> c_Domains;
 
-  // --------------------------------------------------------------------------
-  // Qt Native Serialization
-  // --------------------------------------------------------------------------
-  void ToQDataStream(QDataStream &ro_DataStream) const;
-  void FromQDataStream(QDataStream &ro_DataStream);
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   int32_t ToQDataStream(QDataStream &ro_DataStream) const;
+   int32_t FromQDataStream(QDataStream &ro_DataStream);
 
-  QJsonObject ToJsonObject() const;
-  void FromJsonObject(const QJsonObject &orc_Object);
+   QJsonObject ToJsonObject() const;
+   int32_t FromJsonObject(const QJsonObject &orc_Object);
 
    int32_t ToQDomElement(QDomDocument &orc_Doc,
                          const QString &orc_ElementName) const;
