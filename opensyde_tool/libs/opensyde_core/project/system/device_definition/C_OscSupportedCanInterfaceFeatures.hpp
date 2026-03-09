@@ -13,6 +13,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include <QString>
+#include <QDataStream>
+#include <QJsonObject>
+#include <QDomDocument>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -33,6 +36,17 @@ public:
 
   QString c_Interface;  ///< Interface name
   bool q_SupportsCanFd; ///< Flag if interface supports CAN-FD
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &ro_Json);
+  QDomElement ToQDomDocument(QDomDocument &ro_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &ro_Element);
 };
 
 /* -- Extern Global Variables

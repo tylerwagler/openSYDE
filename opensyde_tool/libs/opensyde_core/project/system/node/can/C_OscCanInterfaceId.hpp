@@ -12,6 +12,9 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QDataStream>
+#include <QDomDocument>
+#include <QJsonObject>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -40,6 +43,17 @@ public:
 
   uint32_t u32_NodeIndex;
   uint8_t u8_InterfaceNumber;
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+   QJsonObject ToJsonObject() const;
+   void FromJsonObject(const QJsonObject &ro_Json);
+   QDomElement ToQDomDocument(QDomDocument &ro_Doc,
+                              const QString &orc_ElementName) const;
+   void FromQDomDocument(const QDomElement &ro_Element);
+
 };
 
 // Hash specialization for QHash

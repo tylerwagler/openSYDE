@@ -14,6 +14,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QDomDocument>
 
 #include "C_OscCanInterfaceId.hpp"
 #include "C_OscHashUtil.hpp"
@@ -149,4 +152,69 @@ bool C_OscCanInterfaceId::operator!=(const C_OscCanInterfaceId &orc_Cmp) const {
 void C_OscCanInterfaceId::CalcHash(uint32_t & oru32_HashValue) const
 {
    hash_util::CalcHashMembers(oru32_HashValue, this->u32_NodeIndex, this->u8_InterfaceNumber);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize interface ID to QDataStream (binary format)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanInterfaceId::ToQDataStream(QDataStream &ro_DataStream) const {
+   ro_DataStream << this->u32_NodeIndex;
+   ro_DataStream << this->u8_InterfaceNumber;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize interface ID from QDataStream (binary format)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanInterfaceId::FromQDataStream(QDataStream &ro_DataStream) {
+   ro_DataStream >> this->u32_NodeIndex;
+   ro_DataStream >> this->u8_InterfaceNumber;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize interface ID to JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscCanInterfaceId::ToJsonObject() const {
+   QJsonObject obj;
+   obj["node-index"] = static_cast<qint64>(this->u32_NodeIndex);
+   obj["interface-number"] = this->u8_InterfaceNumber;
+   return obj;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize interface ID from JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanInterfaceId::FromJsonObject(const QJsonObject &ro_Json) {
+   this->u32_NodeIndex = static_cast<uint32_t>(ro_Json["node-index"].toInt());
+   this->u8_InterfaceNumber = ro_Json["interface-number"].toInt();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize interface ID to XML DOM element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscCanInterfaceId::ToQDomDocument(QDomDocument &ro_Doc,
+                                                const QString &orc_ElementName) const {
+   QDomElement element = ro_Doc.createElement(orc_ElementName);
+   element.setAttribute("node-index", this->u32_NodeIndex);
+   element.setAttribute("interface-number", this->u8_InterfaceNumber);
+   return element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize interface ID from XML DOM element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanInterfaceId::FromQDomDocument(const QDomElement &ro_Element) {
+   this->u32_NodeIndex = ro_Element.attribute("node-index").toUInt();
+   this->u8_InterfaceNumber = ro_Element.attribute("interface-number").toInt();
 }

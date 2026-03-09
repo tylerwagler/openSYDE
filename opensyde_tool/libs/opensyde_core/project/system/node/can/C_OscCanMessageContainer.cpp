@@ -14,6 +14,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QDomDocument>
 
 #include "C_OscCanMessageContainer.hpp"
 #include "C_OscUtils.hpp"
@@ -663,4 +666,172 @@ bool C_OscCanMessageContainer::mh_CheckMinSignalErrorPerVector(
     q_Retval = true;
   }
   return q_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize message container to QDataStream (binary format)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanMessageContainer::ToQDataStream(QDataStream &ro_DataStream) const {
+   // Serialize TX messages
+   ro_DataStream << static_cast<int32_t>(this->c_TxMessages.size());
+   for (const auto &rc_Message : this->c_TxMessages) {
+      rc_Message.ToQDataStream(ro_DataStream);
+   }
+   
+   // Serialize RX messages
+   ro_DataStream << static_cast<int32_t>(this->c_RxMessages.size());
+   for (const auto &rc_Message : this->c_RxMessages) {
+      rc_Message.ToQDataStream(ro_DataStream);
+   }
+   
+   ro_DataStream << static_cast<int32_t>(this->q_IsComProtocolUsedByInterface);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize message container from QDataStream (binary format)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanMessageContainer::FromQDataStream(QDataStream &ro_DataStream) {
+   int32_t s32_TxCount;
+   int32_t s32_RxCount;
+   int32_t s32_IsComProtocolUsed;
+   
+   // Deserialize TX messages
+   ro_DataStream >> s32_TxCount;
+   this->c_TxMessages.clear();
+   for (int32_t i = 0; i < s32_TxCount; ++i) {
+      C_OscCanMessage c_Message;
+      c_Message.FromQDataStream(ro_DataStream);
+      this->c_TxMessages.append(c_Message);
+   }
+   
+   // Deserialize RX messages
+   ro_DataStream >> s32_RxCount;
+   this->c_RxMessages.clear();
+   for (int32_t i = 0; i < s32_RxCount; ++i) {
+      C_OscCanMessage c_Message;
+      c_Message.FromQDataStream(ro_DataStream);
+      this->c_RxMessages.append(c_Message);
+   }
+   
+   ro_DataStream >> s32_IsComProtocolUsed;
+   this->q_IsComProtocolUsedByInterface = (s32_IsComProtocolUsed != 0);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize message container to JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscCanMessageContainer::ToJsonObject() const {
+   QJsonObject obj;
+   QJsonArray txMessagesArray;
+   QJsonArray rxMessagesArray;
+   
+   for (const auto &rc_Message : this->c_TxMessages) {
+      txMessagesArray.append(rc_Message.ToJsonObject());
+   }
+   obj["tx-messages"] = txMessagesArray;
+   
+   for (const auto &rc_Message : this->c_RxMessages) {
+      rxMessagesArray.append(rc_Message.ToJsonObject());
+   }
+   obj["rx-messages"] = rxMessagesArray;
+   
+   obj["is-com-protocol-used"] = this->q_IsComProtocolUsedByInterface;
+   
+   return obj;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize message container from JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanMessageContainer::FromJsonObject(const QJsonObject &ro_Json) {
+   this->c_TxMessages.clear();
+   QJsonArray txMessagesArray = ro_Json["tx-messages"].toArray();
+   for (const auto &messageValue : txMessagesArray) {
+      C_OscCanMessage c_Message;
+      c_Message.FromJsonObject(messageValue.toObject());
+      this->c_TxMessages.append(c_Message);
+   }
+   
+   this->c_RxMessages.clear();
+   QJsonArray rxMessagesArray = ro_Json["rx-messages"].toArray();
+   for (const auto &messageValue : rxMessagesArray) {
+      C_OscCanMessage c_Message;
+      c_Message.FromJsonObject(messageValue.toObject());
+      this->c_RxMessages.append(c_Message);
+   }
+   
+   this->q_IsComProtocolUsedByInterface = ro_Json["is-com-protocol-used"].toBool();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize message container to XML DOM element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscCanMessageContainer::ToQDomDocument(QDomDocument &ro_Doc,
+                                                     const QString &orc_ElementName) const {
+   QDomElement element = ro_Doc.createElement(orc_ElementName);
+   
+   // Serialize TX messages
+   QDomElement txElement = ro_Doc.createElement("tx-messages");
+   for (const auto &rc_Message : this->c_TxMessages) {
+      QDomElement messageElement = rc_Message.ToQDomDocument(ro_Doc, "message");
+      txElement.appendChild(messageElement);
+   }
+   element.appendChild(txElement);
+   
+   // Serialize RX messages
+   QDomElement rxElement = ro_Doc.createElement("rx-messages");
+   for (const auto &rc_Message : this->c_RxMessages) {
+      QDomElement messageElement = rc_Message.ToQDomDocument(ro_Doc, "message");
+      rxElement.appendChild(messageElement);
+   }
+   element.appendChild(rxElement);
+   
+   element.setAttribute("is-com-protocol-used", this->q_IsComProtocolUsedByInterface);
+   
+   return element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize message container from XML DOM element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanMessageContainer::FromQDomDocument(const QDomElement &ro_Element) {
+   this->c_TxMessages.clear();
+   QDomElement txElement = ro_Element.firstChildElement("tx-messages");
+   QDomNode messageNode = txElement.firstChild();
+   while (!messageNode.isNull()) {
+      QDomElement messageElement = messageNode.toElement();
+      if (!messageElement.isNull()) {
+         C_OscCanMessage c_Message;
+         c_Message.FromQDomDocument(messageElement);
+         this->c_TxMessages.append(c_Message);
+      }
+      messageNode = messageNode.nextSibling();
+   }
+   
+   this->c_RxMessages.clear();
+   QDomElement rxElement = ro_Element.firstChildElement("rx-messages");
+   messageNode = rxElement.firstChild();
+   while (!messageNode.isNull()) {
+      QDomElement messageElement = messageNode.toElement();
+      if (!messageElement.isNull()) {
+         C_OscCanMessage c_Message;
+         c_Message.FromQDomDocument(messageElement);
+         this->c_RxMessages.append(c_Message);
+      }
+      messageNode = messageNode.nextSibling();
+   }
+   
+   this->q_IsComProtocolUsedByInterface = ro_Element.attribute("is-com-protocol-used").toInt() != 0;
 }

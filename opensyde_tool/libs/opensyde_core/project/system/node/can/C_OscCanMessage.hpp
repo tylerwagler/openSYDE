@@ -134,6 +134,17 @@ public:
   ///< transmission type is used, only used for detailed information
   ///< about type eTX_METHOD_CAN_OPEN_TYPE_1_TO_240
 
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+   QJsonObject ToJsonObject() const;
+   void FromJsonObject(const QJsonObject &ro_Json);
+   QDomElement ToQDomDocument(QDomDocument &ro_Doc,
+                              const QString &orc_ElementName) const;
+   void FromQDomDocument(const QDomElement &ro_Element);
+
 private:
   QList<uint32_t> m_GetSignalHashes(const C_OscNodeDataPoolList *const opc_List,
                                     const uint32_t &oru32_SignalIndex) const;
