@@ -18,6 +18,9 @@
 #include "C_OscHalcConfigChannel.hpp"
 #include "C_OscHalcDefBase.hpp"
 #include "C_OscHalcDefDomain.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QString>
 #include <QStringList>
 
@@ -68,6 +71,19 @@ public:
   QList<C_OscHalcConfigChannel>
       c_ChannelConfigs; ///< Channels of domain of IO description (synced with
                         // C_OscHalcDefBase)
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &orc_Object);
+
+  QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &orc_Element);
 
 private:
   static void
