@@ -22,7 +22,6 @@
 #include "C_OgeWiTableSpinBoxGroup.hpp"
 #include "C_OgeWiParamSpinBoxGroup.hpp"
 #include "C_OgeLeStyled.hpp"
-#include "C_OgeLeStyled.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
 #include "C_PuiSdSharedDatapools.hpp"
 

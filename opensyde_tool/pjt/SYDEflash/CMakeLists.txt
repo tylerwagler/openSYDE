@@ -140,6 +140,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/navigable_gui/C_NagAboutDialog.cpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolTip.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeContextMenu.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraStyled.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeToolTipBase.cpp
@@ -155,12 +156,9 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraBorder.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraSeparator.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxStyled.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparent.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.cpp
@@ -202,7 +200,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebMessageDetails.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebStyled.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedContextMenuBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedPropertiesComment.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipBase.cpp
@@ -295,6 +293,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/navigable_gui/C_NagAboutDialog.hpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolTip.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeContextMenu.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraStyled.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeToolTipBase.hpp
@@ -310,12 +309,9 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraBorder.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraSeparator.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxStyled.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparent.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.hpp
@@ -357,7 +353,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebMessageDetails.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebStyled.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedContextMenuBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedPropertiesComment.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipBase.hpp

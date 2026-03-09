@@ -17,7 +17,10 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="mpc_GroupBoxInklShadow">
+      <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="mpc_GroupBoxInklShadow">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
        <property name="title">
         <string/>
        </property>
@@ -119,12 +122,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxStyled.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabHeadingToolTip</class>
    <extends>QLabel</extends>
    <header>C_OgeLabStyled.hpp</header>
@@ -135,9 +132,9 @@
    <header>C_OgeTedToolTipContent.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -57,7 +57,10 @@
     </layout>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+    <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>1</width>
@@ -115,7 +118,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_2">
+    <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_2">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>1</width>
@@ -144,7 +150,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_SeparatorRight">
+    <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_SeparatorRight">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>1</width>
@@ -201,9 +210,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

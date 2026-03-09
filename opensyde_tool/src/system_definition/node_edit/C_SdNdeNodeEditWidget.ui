@@ -50,7 +50,10 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeTawPageNavi" name="pc_TabWidgetPageNavi">
+      <widget class="stw::opensyde_gui_elements::C_OgeTawStyled" name="pc_TabWidgetPageNavi">
+     <property name="variant" stdset="0">
+      <string notr="true">PageNavi</string>
+     </property>
        <property name="currentIndex">
         <number>5</number>
        </property>
@@ -262,9 +265,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeTawPageNavi</class>
+   <class>stw::opensyde_gui_elements::C_OgeTawStyled</class>
    <extends>QTabWidget</extends>
-   <header>C_OgeTawPageNavi.hpp</header>
+   <header>C_OgeTawStyled.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -618,7 +618,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_4">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_4">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -644,7 +647,11 @@
        </layout>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeTebReport" name="pc_TextBrowserReport"/>
+       <widget class="stw::opensyde_gui_elements::C_OgeTebStyled" name="pc_TextBrowserReport">
+             <property name="variant" stdset="0">
+         <string notr="true">Report</string>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="verticalSpacer_12">
@@ -748,7 +755,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_5">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_5">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -930,7 +940,10 @@
                <number>0</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_6">
+               <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_6">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -956,7 +969,10 @@
            </layout>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNoExistingNodes">
+           <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxNoExistingNodes">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
             <property name="title">
              <string>No existing nodes</string>
             </property>
@@ -1084,7 +1100,10 @@
                <number>0</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_9">
+               <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_9">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -1110,7 +1129,10 @@
            </layout>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxStartScan">
+           <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxStartScan">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
             <property name="title">
              <string>Scan label</string>
             </property>
@@ -1253,7 +1275,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_10">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_10">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -1406,7 +1431,10 @@
                <number>0</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_11">
+               <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_11">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -1509,7 +1537,10 @@
                <number>0</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_12">
+               <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_12">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -1752,15 +1783,15 @@
    <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1779,9 +1810,9 @@
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeTebReport</class>
+   <class>stw::opensyde_gui_elements::C_OgeTebStyled</class>
    <extends>QTextBrowser</extends>
-   <header>C_OgeTebReport.hpp</header>
+   <header>C_OgeTebStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiProgressBopperle</class>

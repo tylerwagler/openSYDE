@@ -132,7 +132,10 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+             <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -292,7 +295,10 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_2">
+             <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_2">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -353,7 +359,10 @@
               <number>0</number>
              </property>
              <item row="0" column="0">
-              <widget class="stw::opensyde_gui_elements::C_OgeFraFrame" name="pc_PreviewFrame">
+              <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_PreviewFrame">
+     <property name="variant" stdset="0">
+      <string notr="true">Frame</string>
+     </property>
                <property name="autoFillBackground">
                 <bool>false</bool>
                </property>
@@ -666,12 +675,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraFrame</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraFrame.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui::C_SebGraphicsView</class>
    <extends>QGraphicsView</extends>
    <header>C_SebGraphicsView.hpp</header>
@@ -683,9 +686,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

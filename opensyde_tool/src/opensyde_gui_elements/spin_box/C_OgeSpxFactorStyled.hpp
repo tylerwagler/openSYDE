@@ -1,18 +1,17 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Custom border draw frame (header)
+   \brief       Consolidated style-only factor spin box
 
-   See cpp file for detailed description
-
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OGEFRABORDER_HPP
-#define C_OGEFRABORDER_HPP
+#ifndef C_OGESPXFACTORSTYLED_HPP
+#define C_OGESPXFACTORSTYLED_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QFrame>
+#include <QString>
+#include "C_OgeSpxFactor.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -23,13 +22,21 @@ namespace opensyde_gui_elements
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_OgeFraBorder :
-   public QFrame
+class C_OgeSpxFactorStyled :
+   public C_OgeSpxFactor
 {
    Q_OBJECT
+   Q_PROPERTY(QString variant READ GetVariant WRITE SetVariant)
 
 public:
-   C_OgeFraBorder(QWidget * const opc_Parent = NULL);
+   explicit C_OgeSpxFactorStyled(QWidget * const opc_Parent = NULL);
+   C_OgeSpxFactorStyled(const QString & orc_Variant, QWidget * const opc_Parent);
+
+   QString GetVariant(void) const;
+   void SetVariant(const QString & orc_Variant);
+
+private:
+   QString mc_Variant;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

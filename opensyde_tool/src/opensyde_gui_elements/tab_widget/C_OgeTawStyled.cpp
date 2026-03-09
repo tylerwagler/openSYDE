@@ -1,26 +1,18 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Tab widget for page navigation (implementation)
+   \brief       Consolidated style-only tab widget with Q_PROPERTY variant
 
-   Tab widget for page navigation.
-   This class does not contain any functionality,
-   but needs to exist, to have a unique group,
-   to apply a specific stylesheet for.
-
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include <QTabBar>
-
-#include "C_OgeTawPageNavi.hpp"
+#include "C_OgeTawStyled.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -36,16 +28,39 @@ using namespace stw::opensyde_gui_elements;
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Default constructor
+/*! \brief  Default constructor
 
-   Set up GUI with all elements.
+   Sets expanding tab bar (common to all style variants).
 
-   \param[in,out] opc_Parent Optional pointer to parent
+   \param[in,out]  opc_Parent    Parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OgeTawPageNavi::C_OgeTawPageNavi(QWidget * const opc_Parent) :
+C_OgeTawStyled::C_OgeTawStyled(QWidget * const opc_Parent) :
    C_OgeTawToolTipBase(opc_Parent)
 {
-   //This property holds when expanding is true QTabBar will expand the tabs to use the empty space.
-   this->tabBar()->setExpanding(false);
+   this->tabBar()->setExpanding(true);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get style variant name
+
+   \return  Current variant string
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_OgeTawStyled::GetVariant(void) const
+{
+   return this->mc_Variant;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Set style variant name and re-polish for QSS
+
+   \param[in]  orc_Variant    Variant name
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OgeTawStyled::SetVariant(const QString & orc_Variant)
+{
+   this->mc_Variant = orc_Variant;
+   this->style()->unpolish(this);
+   this->style()->polish(this);
 }

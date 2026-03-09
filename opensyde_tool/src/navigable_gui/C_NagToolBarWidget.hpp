@@ -19,7 +19,7 @@
 #include "C_NagUseCaseWidget.hpp"
 
 #include "C_OgePubToolBar.hpp"
-#include "C_OgeGbxTransparent.hpp"
+#include "C_OgeGbxStyled.hpp"
 #include "C_NagToolBarSearchResults.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

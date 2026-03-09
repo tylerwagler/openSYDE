@@ -27,7 +27,10 @@
     <number>1</number>
    </property>
    <item row="0" column="0">
-    <widget class="stw::opensyde_gui_elements::C_OgeFraFrame" name="pc_DrawFrame">
+    <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_DrawFrame">
+     <property name="variant" stdset="0">
+      <string notr="true">Frame</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -54,9 +57,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraFrame</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraFrame.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

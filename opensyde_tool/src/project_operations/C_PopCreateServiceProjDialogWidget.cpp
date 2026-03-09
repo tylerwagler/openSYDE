@@ -23,7 +23,6 @@
 #include "C_PuiProject.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OscUtils.hpp"
-#include "C_OgeWiUtil.hpp"
 
 #include "C_SclIniFile.hpp"
 #include "C_UsFiler.hpp"

@@ -94,7 +94,7 @@ C_SdBueBusEditWidget::C_SdBueBusEditWidget(const uint32_t ou32_BusIndex, const i
 
    // Connect after setCurrentIndex. The signal will not be sent if the index is not changed, but we need the call
    // in both cases
-   connect(this->mpc_Ui->pc_TabWidgetPageNavi, &stw::opensyde_gui_elements::C_OgeTawPageNavi::currentChanged,
+   connect(this->mpc_Ui->pc_TabWidgetPageNavi, &stw::opensyde_gui_elements::C_OgeTawStyled::currentChanged,
            this, &C_SdBueBusEditWidget::m_TabChanged);
 }
 

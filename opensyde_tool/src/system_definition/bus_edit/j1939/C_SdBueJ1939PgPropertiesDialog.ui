@@ -110,7 +110,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame_3">
+         <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_Frame_3">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -174,7 +177,7 @@
          </widget>
         </item>
         <item row="0" column="1" alignment="Qt::AlignRight">
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxPgn">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxPgn">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -229,7 +232,7 @@
          </widget>
         </item>
         <item row="2" column="1" alignment="Qt::AlignRight">
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxSourceAddress">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxSourceAddress">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -313,7 +316,7 @@
             </widget>
            </item>
            <item alignment="Qt::AlignRight">
-            <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxDestinationAddress">
+            <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxDestinationAddress">
              <property name="minimumSize">
               <size>
                <width>120</width>
@@ -477,9 +480,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -504,9 +507,9 @@
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxStyled</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>

@@ -1,24 +1,18 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Custom combo box with arrow heads (implementation)
+   \brief       Consolidated style-only text browser with Q_PROPERTY variant
 
-   Custom combo box with arrow heads.
-   This class does not contain any functionality,
-   but needs to exist, to have a unique group,
-   to apply a specific stylesheet for.
-
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_OgeCbxArrow.hpp"
+#include "C_OgeTebStyled.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -34,14 +28,41 @@ using namespace stw::opensyde_gui_elements;
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Default constructor
+/*! \brief  Default constructor
 
-   Set up GUI with all elements.
-
-   \param[in,out] opc_Parent Optional pointer to parent
+   \param[in,out]  opc_Parent    Parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OgeCbxArrow::C_OgeCbxArrow(QWidget * const opc_Parent) :
-   C_OgeCbxIconOnly(opc_Parent)
+C_OgeTebStyled::C_OgeTebStyled(QWidget * const opc_Parent) :
+   C_OgeTebContextMenuBase(opc_Parent)
 {
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get style variant name
+
+   \return  Current variant string
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_OgeTebStyled::GetVariant(void) const
+{
+   return this->mc_Variant;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Set style variant name and re-polish for QSS
+
+   \param[in]  orc_Variant    Variant name
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OgeTebStyled::SetVariant(const QString & orc_Variant)
+{
+   this->mc_Variant = orc_Variant;
+   // Apply Label-specific behavior
+   if (orc_Variant == "Label")
+   {
+      this->setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::LinksAccessibleByMouse);
+   }
+   this->style()->unpolish(this);
+   this->style()->polish(this);
 }

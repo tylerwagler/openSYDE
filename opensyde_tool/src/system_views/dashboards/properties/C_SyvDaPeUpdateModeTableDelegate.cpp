@@ -16,7 +16,7 @@
 #include "C_OgeCbxTable.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_SdNdeDpUtil.hpp"
-#include "C_OgeSpxFactorTable.hpp"
+#include "C_OgeSpxFactorStyled.hpp"
 #include "C_TblTreDelegateUtil.hpp"
 #include "C_OgeSpxInt64FactorTable.hpp"
 #include "C_SyvDaPeUpdateModeTableModel.hpp"
@@ -110,7 +110,7 @@ QWidget * C_SyvDaPeUpdateModeTableDelegate::createEditor(QWidget * const opc_Par
             const QVariant c_Max = orc_Index.data(ms32_USER_ROLE_INTERACTION_MAXIMUM_VALUE);
             if (c_Data.type() == QVariant::Type::Double)
             {
-               C_OgeSpxFactorTable * const pc_SpinBox = new C_OgeSpxFactorTable(opc_Parent);
+               C_OgeSpxFactorStyled * const pc_SpinBox = new C_OgeSpxFactorStyled("Table", opc_Parent);
                if (c_Max.type() == QVariant::Type::Double)
                {
                   //Factor needs to be above 0

@@ -229,7 +229,10 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FrameCurrProj">
+            <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_FrameCurrProj">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -369,7 +372,10 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_5">
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FrameVersion">
+                <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_FrameVersion">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -577,7 +583,10 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_10">
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FrameRecentProjects">
+            <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_FrameRecentProjects">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -603,7 +612,10 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1">
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNoRecentProj">
+            <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxNoRecentProj">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
              <property name="title">
               <string>Empty</string>
              </property>
@@ -729,9 +741,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -740,9 +752,9 @@
    <header>C_OgePubIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

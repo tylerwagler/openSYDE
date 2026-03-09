@@ -197,7 +197,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Seperator">
+         <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_Seperator">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -224,7 +227,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNoMessages">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxNoMessages">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -336,7 +342,10 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+      <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -394,9 +403,9 @@
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -423,9 +432,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

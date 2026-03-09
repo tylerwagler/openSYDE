@@ -20,7 +20,7 @@
 
 #include "stwtypes.hpp"
 
-#include "C_OgeFraSeparator.hpp"
+#include "C_OgeFraStyled.hpp"
 #include "C_OgeLabToolTipBase.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_SyvUpDeviceInfo.hpp"
@@ -144,7 +144,7 @@ private:
 
   QVector<C_SyvUpPacSectionNodeDatablockWidget *> mc_DatablockWidgets;
   C_SyvUpPacSectionNodeFilesWidget *mpc_FilesWidget;
-  stw::opensyde_gui_elements::C_OgeFraSeparator *mpc_FilesWidgetSeparator;
+  stw::opensyde_gui_elements::C_OgeFraStyled *mpc_FilesWidgetSeparator;
 
   // Avoid call
   C_SyvUpPacNodeWidget(const C_SyvUpPacNodeWidget &);

@@ -114,7 +114,7 @@ C_SdBueComIfDescriptionWidget::C_SdBueComIfDescriptionWidget(QWidget * const opc
            this, &C_SdBueComIfDescriptionWidget::m_ConnectNodeToProtAndAddDataPool);
    connect(this->mpc_Ui->pc_NodeSelectorWidget, &C_SdBueNodeSelectorWidget::SigDisconnectNodeFromProt,
            this, &C_SdBueComIfDescriptionWidget::m_DisconnectNodeFromProt);
-   connect(this->mpc_Ui->pc_ProtocolTabWidget, &C_OgeTawSelector::currentChanged,
+   connect(this->mpc_Ui->pc_ProtocolTabWidget, &C_OgeTawStyled::currentChanged,
            this, &C_SdBueComIfDescriptionWidget::m_ProtocolChanged);
 
    //Selection signals

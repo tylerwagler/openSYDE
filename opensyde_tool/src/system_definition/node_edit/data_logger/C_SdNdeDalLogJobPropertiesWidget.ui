@@ -363,7 +363,10 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxMode">
+            <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxMode">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
              <property name="title">
               <string/>
              </property>
@@ -437,7 +440,10 @@
             </widget>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxLoggingInterval">
+            <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxLoggingInterval">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
              <property name="title">
               <string/>
              </property>
@@ -498,7 +504,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxLoggingInterval">
+                  <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxLoggingInterval">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -545,7 +551,10 @@
             </widget>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxLogDuration">
+            <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxLogDuration">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
              <property name="title">
               <string/>
              </property>
@@ -606,7 +615,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxLogDuration">
+                  <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxLogDuration">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -665,7 +674,10 @@
           </layout>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxMaxLogEntries">
+          <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxMaxLogEntries">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
            <property name="title">
             <string/>
            </property>
@@ -737,7 +749,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpxBoxMaxLogEntries">
+                  <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpxBoxMaxLogEntries">
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                      <horstretch>0</horstretch>
@@ -806,7 +818,10 @@
       </layout>
      </item>
      <item row="9" column="0" colspan="2">
-      <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_2">
+      <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_2">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -828,7 +843,10 @@
       </widget>
      </item>
      <item row="1" column="0" colspan="2">
-      <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_SeperatorName">
+      <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_SeperatorName">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -921,7 +939,10 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxUseCase">
+            <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxUseCase">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
              <property name="title">
               <string/>
              </property>
@@ -995,7 +1016,10 @@
             </widget>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxFileFormat">
+            <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxFileFormat">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
              <property name="title">
               <string/>
              </property>
@@ -1084,7 +1108,10 @@
           </layout>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxLogDestination">
+          <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxLogDestination">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
            <property name="title">
             <string/>
            </property>
@@ -1168,7 +1195,10 @@
         </layout>
        </item>
        <item row="1" column="0" colspan="2">
-        <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+        <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -1223,9 +1253,9 @@
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxStyled</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>
@@ -1238,9 +1268,9 @@
    <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1252,12 +1282,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLePropertiesName</class>
    <extends>QLineEdit</extends>
    <header>C_OgeLePropertiesName.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxStyled.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabSvgOnly</class>
@@ -1276,9 +1300,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

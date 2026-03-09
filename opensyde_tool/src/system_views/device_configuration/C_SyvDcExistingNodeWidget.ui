@@ -77,7 +77,10 @@
     </layout>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxSerialNumber">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxSerialNumber">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>325</width>
@@ -130,9 +133,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

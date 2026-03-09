@@ -88,7 +88,7 @@ stw--opensyde_gui_elements--C_CamOgeLeTableEdit,
 stw--opensyde_gui_elements--C_CamOgeCbxTableSmall,
 stw--opensyde_gui_elements--C_OgePubStyled[variant="Cancel"]:enabled,
 stw--opensyde_gui_elements--C_OgePubStyled[variant="MessageCancel"]:enabled,
-stw--opensyde_gui_elements--C_OgeTebMessageDetails,
+stw--opensyde_gui_elements--C_OgeTebStyled[variant="MessageDetails"],
 stw--opensyde_gui_elements--C_CamOgeCbxTable QListView,
 stw--opensyde_gui_elements--C_CamOgeCbxTable QListView::item,
 stw--opensyde_gui_elements--C_CamOgeCbxWhite QListView,
@@ -164,7 +164,7 @@ stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled,
 stw--opensyde_gui_elements--C_OgePubStyled[variant="Cancel"]:enabled,
 stw--opensyde_gui_elements--C_OgePubStyled[variant="MessageCancel"]:enabled,
 stw--opensyde_gui_elements--C_OgeLabHeadingMessage,
-stw--opensyde_gui_elements--C_OgeTebMessageDetails,
+stw--opensyde_gui_elements--C_OgeTebStyled[variant="MessageDetails"],
 stw--opensyde_gui_elements--C_OgeGbxStyled[variant="Default"]ToolTip[Type="DEFAULT"],
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="DEFAULT"],
 stw--opensyde_gui_elements--C_OgeLabHeadingToolTip[Type="DEFAULT"],
@@ -204,7 +204,7 @@ stw--opensyde_gui_elements--C_CamOgeSpxProperties,
 stw--opensyde_gui_elements--C_CamOgeWiSpinBoxGroupTable QAbstractSpinBox,
 stw--opensyde_gui_elements--C_OgeLabHeadingMessage,
 stw--opensyde_gui_elements--C_OgeLabDescriptionMessage,
-stw--opensyde_gui_elements--C_OgeTebMessageDetails,
+stw--opensyde_gui_elements--C_OgeTebStyled[variant="MessageDetails"],
 stw--opensyde_gui_elements--C_OgeLePropertiesName,
 stw--opensyde_gui_elements--C_OgeLabGroupItemValue,
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment,
@@ -307,7 +307,7 @@ stw--opensyde_gui_elements--C_OgeChxStyled[variant="Properties"]
 color:rgb(130, 130, 143);
 }
 
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor8Background="true"],
+stw--opensyde_gui_elements--C_OgeFraStyled[variant="Separator"][HasColor8Background="true"],
 stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="8"]
 {
 background-color:rgb(130, 130, 143);
@@ -378,7 +378,7 @@ stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="10"],
 stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled:selected,
 stw--opensyde_gui_elements--C_OgePubStyled[variant="Cancel"]:enabled:hover:pressed,
 stw--opensyde_gui_elements--C_OgePubStyled[variant="MessageCancel"]:enabled:hover:pressed,
-stw--opensyde_gui_elements--C_OgeFraSeparator
+stw--opensyde_gui_elements--C_OgeFraStyled[variant="Separator"]
 {
 background-color:rgb(206, 206, 217);
 }
@@ -392,7 +392,7 @@ stw--opensyde_gui_elements--C_CamOgeCbxTableSmall QListView,
 stw--opensyde_gui--C_CamGenTableView::indicator:unchecked,
 stw--opensyde_gui--C_CamGenTableView::indicator:checked:!enabled,
 stw--opensyde_gui--C_CamMosFilterTableView::indicator:unchecked,
-stw--opensyde_gui_elements--C_OgeTebMessageDetails,
+stw--opensyde_gui_elements--C_OgeTebStyled[variant="MessageDetails"],
 stw--opensyde_gui_elements--C_OgePubStyled[variant="Cancel"]:!enabled,
 stw--opensyde_gui_elements--C_OgePubStyled[variant="Dialog"]:!enabled,
 stw--opensyde_gui_elements--C_OgePubStyled[variant="MessageCancel"]:!enabled,
@@ -578,7 +578,7 @@ stw--opensyde_gui_elements--C_CamOgeCbxTableSmall,
 stw--opensyde_gui_elements--C_CamOgeSpxProperties,
 stw--opensyde_gui_elements--C_CamOgeWiSpinBoxGroupTable QAbstractSpinBox,
 stw--opensyde_gui_elements--C_OgeLabHeadingMessage,
-stw--opensyde_gui_elements--C_OgeTebMessageDetails,
+stw--opensyde_gui_elements--C_OgeTebStyled[variant="MessageDetails"],
 stw--opensyde_gui_elements--C_OgeLabDescriptionMessage,
 stw--opensyde_gui_elements--C_OgeLePropertiesName,
 stw--opensyde_gui_elements--C_OgeLabGroupItemValue,
@@ -612,7 +612,7 @@ border-color:rgb(127, 127, 187);
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_36 */
-stw--opensyde_gui_elements--C_OgeFraBorder
+stw--opensyde_gui_elements--C_OgeFraStyled[variant="Border"]
 {
 background-color: rgb(177, 177, 177);
 }

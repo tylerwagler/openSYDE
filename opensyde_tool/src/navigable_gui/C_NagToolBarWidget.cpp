@@ -153,7 +153,7 @@ void stw::opensyde_gui::C_NagToolBarWidget::ConfigureButtons(C_NagUseCaseWidget 
    for (pc_ItFuncName = c_VecFuncs.begin(); pc_ItFuncName != c_VecFuncs.end(); ++pc_ItFuncName)
    {
       // create all necessary elements
-      C_OgeGbxTransparent * const pc_GroupBox = new C_OgeGbxTransparent(this);
+      C_OgeGbxStyled * const pc_GroupBox = new C_OgeGbxStyled("Transparent", this);
       QHBoxLayout * const pc_GroupBoxLayout = new QHBoxLayout();
       C_OgePubToolBar * const pc_Button = new C_OgePubToolBar(NULL, static_cast<uint32_t>(this->mc_VecButtons.count()));
 

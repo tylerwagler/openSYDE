@@ -150,7 +150,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpnBoxPollingInterval">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpnBoxPollingInterval">
           <property name="minimumSize">
            <size>
             <width>225</width>
@@ -229,7 +229,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpnBoxRemoteDataRequestInterval">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpnBoxRemoteDataRequestInterval">
           <property name="minimumSize">
            <size>
             <width>225</width>
@@ -275,9 +275,9 @@
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxStyled</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>

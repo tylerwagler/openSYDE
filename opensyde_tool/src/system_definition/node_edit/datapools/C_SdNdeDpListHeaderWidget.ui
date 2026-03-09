@@ -162,7 +162,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxSize">
+      <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxSize">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
        <layout class="QHBoxLayout" name="pc_LayoutSize">
         <property name="spacing">
          <number>0</number>
@@ -212,7 +215,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxUsage">
+      <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxUsage">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
        <property name="minimumSize">
         <size>
          <width>250</width>
@@ -402,9 +408,9 @@
    <header>C_OgePubIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

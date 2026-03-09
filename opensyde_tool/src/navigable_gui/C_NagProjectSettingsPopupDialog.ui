@@ -116,7 +116,10 @@
          </layout>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame">
+         <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_Frame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -180,7 +183,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBox">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBox">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -405,7 +408,10 @@
          </layout>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FilesUnUsedSeperator">
+         <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_FilesUnUsedSeperator">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -620,9 +626,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -636,9 +642,9 @@
    <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxStyled</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubStyled</class>

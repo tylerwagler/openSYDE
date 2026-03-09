@@ -543,7 +543,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="groupBox_2">
+      <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="groupBox_2">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
        <property name="title">
         <string/>
        </property>
@@ -603,7 +606,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="groupBox_3">
+      <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="groupBox_3">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
        <property name="title">
         <string/>
        </property>
@@ -663,7 +669,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="groupBox_4">
+      <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="groupBox_4">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
        <property name="title">
         <string/>
        </property>
@@ -870,7 +879,10 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_4">
+              <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_4">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -960,7 +972,10 @@
           </layout>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxUserComment">
+          <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxUserComment">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
            <property name="title">
             <string>File user comment</string>
            </property>
@@ -1152,7 +1167,10 @@ p, li { white-space: pre-wrap; }
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_5">
+              <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_5">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1178,7 +1196,10 @@ p, li { white-space: pre-wrap; }
           </layout>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgeTebReport" name="pc_TextBrowserConfirm">
+          <widget class="stw::opensyde_gui_elements::C_OgeTebStyled" name="pc_TextBrowserConfirm">
+     <property name="variant" stdset="0">
+      <string notr="true">Report</string>
+     </property>
            <property name="readOnly">
             <bool>true</bool>
            </property>
@@ -1368,15 +1389,15 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1390,9 +1411,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeTebReport</class>
+   <class>stw::opensyde_gui_elements::C_OgeTebStyled</class>
    <extends>QTextBrowser</extends>
-   <header>C_OgeTebReport.hpp</header>
+   <header>C_OgeTebStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiProgressBopperle</class>

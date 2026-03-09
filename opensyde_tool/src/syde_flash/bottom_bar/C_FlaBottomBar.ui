@@ -57,7 +57,10 @@
     </layout>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="formFrame">
+    <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="formFrame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>1</width>
@@ -115,7 +118,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_SeparatorRight">
+    <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_SeparatorRight">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>1</width>
@@ -152,9 +158,9 @@
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -106,15 +106,15 @@ C_SdTopologyListWidget * C_SebToolboxUtil::h_AddNewList(const QString & orc_Name
    Pointer to frame separator item
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OgeFraSeparator * C_SebToolboxUtil::h_AddNewHeading(const QString & orc_Name, QVBoxLayout * const opc_Layout,
+C_OgeFraStyled * C_SebToolboxUtil::h_AddNewHeading(const QString & orc_Name, QVBoxLayout * const opc_Layout,
                                                       QWidget * const opc_Parent, const bool oq_AddSpacerBefore)
 {
-   C_OgeFraSeparator * pc_FrameSeparator = NULL;
+   C_OgeFraStyled * pc_FrameSeparator = NULL;
 
    if (opc_Layout != NULL)
    {
       C_OgeLabStyled * const pc_Heading = new C_OgeLabStyled("ToolboxHeadingGroupBig", opc_Parent);
-      pc_FrameSeparator = new C_OgeFraSeparator(opc_Parent);
+      pc_FrameSeparator = new C_OgeFraStyled("Separator", opc_Parent);
       QVBoxLayout * const pc_FrameLayout = new QVBoxLayout();
       int32_t s32_Index;
 
@@ -171,7 +171,7 @@ QList<C_OgePubIconOnly *> C_SebToolboxUtil::h_AddNewUserHeading(const QString & 
       //lint -e429  no memory leak because of the parent of the call of addSpacerItem and the Qt
       // memory management
       C_OgeLabStyled * const pc_Heading = new C_OgeLabStyled("ToolboxHeadingGroup", opc_Parent);
-      C_OgeFraSeparator * const pc_FrameSeparator = new C_OgeFraSeparator(opc_Parent);
+      C_OgeFraStyled * const pc_FrameSeparator = new C_OgeFraStyled("Separator", opc_Parent);
       QVBoxLayout * const pc_FrameLayout = new QVBoxLayout();
       QHBoxLayout * const pc_HorizontalLayout = new QHBoxLayout();
       pc_IconButton = new C_OgePubIconOnly(opc_Parent);

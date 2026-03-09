@@ -37,7 +37,7 @@ const QStringList C_CamUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
 {
    "stw--opensyde_gui--C_CamGenTableView QScrollBar",
    "stw--opensyde_gui--C_CamGenSigTableView QScrollBar",
-   "stw--opensyde_gui_elements--C_OgeTebMessageDetails QScrollBar",
+   "stw--opensyde_gui_elements--C_OgeTebStyled[variant=\"MessageDetails\"] QScrollBar",
    "stw--opensyde_gui_elements--C_OgeTransparentScrollArea QScrollBar",
    "stw--opensyde_gui--C_CamMetWidget QScrollBar",
    "stw--opensyde_gui_elements--C_CamOgeCbxTable QAbstractItemView QScrollBar"

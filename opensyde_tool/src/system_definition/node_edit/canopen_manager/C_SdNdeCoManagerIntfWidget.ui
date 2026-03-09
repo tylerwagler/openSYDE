@@ -27,7 +27,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBox_2">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBox_2">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -113,7 +116,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1">
+         <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_FramSperator1">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -183,7 +189,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxCanOpenId">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxCanOpenId">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -333,7 +339,10 @@
                 <number>1</number>
                </property>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_3">
+                <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_FramSperator1_3">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -425,7 +434,7 @@
                   </spacer>
                  </item>
                  <item row="1" column="1">
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxSDOTimeout">
+                  <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxSDOTimeout">
                    <property name="minimumSize">
                     <size>
                      <width>120</width>
@@ -647,7 +656,10 @@
                 <number>1</number>
                </property>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_9">
+                <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_FramSperator1_9">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -719,7 +731,7 @@
                   </spacer>
                  </item>
                  <item row="1" column="1">
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxSYNCWindowLength">
+                  <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxSYNCWindowLength">
                    <property name="minimumSize">
                     <size>
                      <width>120</width>
@@ -819,7 +831,7 @@
                   </layout>
                  </item>
                  <item row="0" column="1">
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxSYNCPeriod">
+                  <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxSYNCPeriod">
                    <property name="minimumSize">
                     <size>
                      <width>120</width>
@@ -971,7 +983,10 @@
                 <number>1</number>
                </property>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_4">
+                <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_FramSperator1_4">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -1062,7 +1077,7 @@
                   </spacer>
                  </item>
                  <item>
-                  <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxProducerTime">
+                  <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxProducerTime">
                    <property name="minimumSize">
                     <size>
                      <width>120</width>
@@ -1165,9 +1180,9 @@
    <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1181,15 +1196,15 @@
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxStyled</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>

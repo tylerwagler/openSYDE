@@ -653,7 +653,7 @@ void C_SdNdeHalcChannelWidget::m_ConnectWidgets(const bool oq_Connect) const
               this, &C_SdNdeHalcChannelWidget::m_OnNameEdited);
       connect(this->mpc_Ui->pc_TedComment, &C_OgeTedPropertiesComment::SigEditingFinished,
               this, &C_SdNdeHalcChannelWidget::m_OnCommentEdited);
-      connect(this->mpc_Ui->pc_ChxSafety, &C_OgeChxTristateTransparentToggle::toggled,
+      connect(this->mpc_Ui->pc_ChxSafety, &C_OgeChxTristateStyled::toggled,
               this, &C_SdNdeHalcChannelWidget::m_OnSafetyToggled);
       connect(this->mpc_Ui->pc_LabLinkedChannel, &QLabel::linkActivated,
               this, &C_SdNdeHalcChannelWidget::m_OnLinkedChannelClicked);
@@ -670,7 +670,7 @@ void C_SdNdeHalcChannelWidget::m_ConnectWidgets(const bool oq_Connect) const
                  this, &C_SdNdeHalcChannelWidget::m_OnNameEdited);
       disconnect(this->mpc_Ui->pc_TedComment, &C_OgeTedPropertiesComment::SigEditingFinished,
                  this, &C_SdNdeHalcChannelWidget::m_OnCommentEdited);
-      disconnect(this->mpc_Ui->pc_ChxSafety, &C_OgeChxTristateTransparentToggle::toggled,
+      disconnect(this->mpc_Ui->pc_ChxSafety, &C_OgeChxTristateStyled::toggled,
                  this, &C_SdNdeHalcChannelWidget::m_OnSafetyToggled);
       disconnect(this->mpc_Ui->pc_LabLinkedChannel, &QLabel::linkActivated,
                  this, &C_SdNdeHalcChannelWidget::m_OnLinkedChannelClicked);

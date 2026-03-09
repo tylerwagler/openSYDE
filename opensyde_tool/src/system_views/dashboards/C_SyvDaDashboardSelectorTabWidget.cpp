@@ -16,7 +16,7 @@
 #include "C_SyvDaDashboardSelectorTabWidget.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSvHandler.hpp"
-#include "C_OgeGbxTransparent.hpp"
+#include "C_OgeGbxStyled.hpp"
 #include "C_UsHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_SyvClipBoardHelper.hpp"
@@ -756,7 +756,7 @@ void C_SyvDaDashboardSelectorTabWidget::m_InitTabStyle(const uint32_t ou32_Index
                                                        const bool oq_Dark)
 {
    C_OgeWiDashboardTab * const pc_DrawingWidget = new C_OgeWiDashboardTab(NULL, true);
-   C_OgeGbxTransparent * const pc_GroupBox = new C_OgeGbxTransparent();
+   C_OgeGbxStyled * const pc_GroupBox = new C_OgeGbxStyled("Transparent", NULL);
 
    switch (this->me_DashboardTabType)
    {

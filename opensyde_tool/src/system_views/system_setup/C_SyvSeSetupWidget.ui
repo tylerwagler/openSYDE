@@ -30,7 +30,10 @@
     <number>18</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_ErrorFrame">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_ErrorFrame">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -54,7 +57,10 @@
        <number>6</number>
       </property>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxErrorContent">
+       <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxErrorContent">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
         <property name="title">
          <string/>
         </property>
@@ -129,7 +135,10 @@
        <number>2</number>
       </property>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxButtons">
+       <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxButtons">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
         <property name="title">
          <string>It has to be flat, so there are no borders</string>
         </property>
@@ -249,7 +258,10 @@
        </widget>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeFraFrame" name="pc_DrawFrame">
+       <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_DrawFrame">
+     <property name="variant" stdset="0">
+      <string notr="true">Frame</string>
+     </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
@@ -418,9 +430,9 @@
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -429,9 +441,9 @@
    <header>C_OgeLabSvgOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraFrame</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraFrame.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

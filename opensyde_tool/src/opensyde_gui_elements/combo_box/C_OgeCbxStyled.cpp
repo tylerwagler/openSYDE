@@ -1,19 +1,16 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Custom tristate check box (implementation)
+   \brief       Consolidated style-only combo box with Q_PROPERTY variant
 
-   Custom tristate check box
-
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_OgeChxTristate.hpp"
-#include "C_OgeWiUtil.hpp"
+#include "C_OgeCbxStyled.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui_elements;
@@ -31,14 +28,36 @@ using namespace stw::opensyde_gui_elements;
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Default constructor
+/*! \brief  Default constructor
 
-   Set up GUI with all elements.
-
-   \param[in,out] opc_Parent Optional pointer to parent
+   \param[in,out]  opc_Parent    Parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OgeChxTristate::C_OgeChxTristate(QWidget * const opc_Parent) :
-   C_OgeChxTristateBase(opc_Parent)
+C_OgeCbxStyled::C_OgeCbxStyled(QWidget * const opc_Parent) :
+   C_OgeCbxIconOnly(opc_Parent)
 {
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Get style variant name
+
+   \return  Current variant string
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QString C_OgeCbxStyled::GetVariant(void) const
+{
+   return this->mc_Variant;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Set style variant name and re-polish for QSS
+
+   \param[in]  orc_Variant    Variant name
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OgeCbxStyled::SetVariant(const QString & orc_Variant)
+{
+   this->mc_Variant = orc_Variant;
+   this->style()->unpolish(this);
+   this->style()->polish(this);
 }

@@ -1411,8 +1411,8 @@ void C_SyvUpPacNodeWidget::m_Init(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpPacNodeWidget::m_AddSeparatorToScrollArea(
     const bool oq_FilesWidgetSeparator) {
-  stw::opensyde_gui_elements::C_OgeFraSeparator *const pc_Separator =
-      new stw::opensyde_gui_elements::C_OgeFraSeparator(this);
+  stw::opensyde_gui_elements::C_OgeFraStyled *const pc_Separator =
+      new stw::opensyde_gui_elements::C_OgeFraStyled(this);
   QSizePolicy c_SizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
   c_SizePolicy.setHorizontalStretch(0);
   c_SizePolicy.setVerticalStretch(0);

@@ -23,7 +23,6 @@
 #include "C_PuiProject.hpp"
 #include "constants.hpp"
 #include "C_SdUtil.hpp"
-#include "C_OgeWiUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_SdNdeDbProperties.hpp"
 #include "C_OgeWiCustomMessage.hpp"

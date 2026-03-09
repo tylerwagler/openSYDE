@@ -39,6 +39,19 @@ C_OgeGbxStyled::C_OgeGbxStyled(QWidget * const opc_Parent) :
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Constructor with variant
+
+   \param[in]      orc_Variant   Style variant name
+   \param[in,out]  opc_Parent    Parent
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_OgeGbxStyled::C_OgeGbxStyled(const QString & orc_Variant, QWidget * const opc_Parent) :
+   QGroupBox(opc_Parent),
+   mc_Variant(orc_Variant)
+{
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Get style variant name
 
    \return  Current variant string

@@ -75,7 +75,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxWidth">
+        <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxWidth">
          <property name="minimumSize">
           <size>
            <width>90</width>
@@ -228,7 +228,10 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeCbxLine" name="pc_ComboBoxLineStyle">
+        <widget class="stw::opensyde_gui_elements::C_OgeCbxStyled" name="pc_ComboBoxLineStyle">
+     <property name="variant" stdset="0">
+      <string notr="true">Line</string>
+     </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -328,7 +331,10 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeCbxArrow" name="pc_ComboBoxStartArrow">
+        <widget class="stw::opensyde_gui_elements::C_OgeCbxStyled" name="pc_ComboBoxStartArrow">
+     <property name="variant" stdset="0">
+      <string notr="true">Arrow</string>
+     </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -443,7 +449,10 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeCbxArrow" name="pc_ComboBoxEndArrow">
+        <widget class="stw::opensyde_gui_elements::C_OgeCbxStyled" name="pc_ComboBoxEndArrow">
+     <property name="variant" stdset="0">
+      <string notr="true">Arrow</string>
+     </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -556,9 +565,9 @@
    <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxStyled</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubStyled</class>
@@ -566,14 +575,9 @@
    <header>C_OgePubStyled.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeCbxLine</class>
+   <class>stw::opensyde_gui_elements::C_OgeCbxStyled</class>
    <extends>QComboBox</extends>
-   <header>C_OgeCbxLine.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeCbxArrow</class>
-   <extends>QComboBox</extends>
-   <header>C_OgeCbxArrow.hpp</header>
+   <header>C_OgeCbxStyled.hpp</header>
   </customwidget>
  </customwidgets>
  <resources>

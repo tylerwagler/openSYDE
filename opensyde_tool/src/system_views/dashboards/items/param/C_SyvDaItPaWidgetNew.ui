@@ -78,7 +78,10 @@
     </layout>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxTreeEmpty">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxTreeEmpty">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
      <property name="title">
       <string>Empty</string>
      </property>
@@ -158,7 +161,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxTree">
+    <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxTree">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
      <property name="title">
       <string>Not empty</string>
      </property>
@@ -193,9 +199,9 @@
    <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

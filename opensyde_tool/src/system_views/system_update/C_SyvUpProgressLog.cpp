@@ -17,7 +17,7 @@
 #include "stwtypes.hpp"
 #include "constants.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_OgeFraSeparator.hpp"
+#include "C_OgeFraStyled.hpp"
 #include "C_OgeLabStyledToolTip.hpp"
 
 #include "C_SyvUpProgressLog.hpp"

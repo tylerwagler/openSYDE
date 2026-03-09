@@ -79,9 +79,9 @@ C_SdNdeNodeEditWidget::C_SdNdeNodeEditWidget(const uint32_t ou32_NodeIndex, cons
    InitStaticNames();
 
    // connecting to signals
-   connect(this->mpc_Ui->pc_TabWidgetPageNavi, &stw::opensyde_gui_elements::C_OgeTawPageNavi::currentChanged,
+   connect(this->mpc_Ui->pc_TabWidgetPageNavi, &stw::opensyde_gui_elements::C_OgeTawStyled::currentChanged,
            this, &C_SdNdeNodeEditWidget::m_CurrentTabChanged);
-   connect(this->mpc_Ui->pc_TabWidgetPageNavi, &stw::opensyde_gui_elements::C_OgeTawPageNavi::tabBarClicked,
+   connect(this->mpc_Ui->pc_TabWidgetPageNavi, &stw::opensyde_gui_elements::C_OgeTawStyled::tabBarClicked,
            this, &C_SdNdeNodeEditWidget::m_TabClicked);
 
    m_HandleVisibleTabs();

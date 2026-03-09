@@ -32,7 +32,7 @@ using namespace stw::opensyde_gui_logic;
  */
 // Configuration for dynamic transparency color configuration of elements
 const QStringList C_FlaUtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
-    {"stw--opensyde_gui_elements--C_OgeTebMessageDetails",
+    {"stw--opensyde_gui_elements--C_OgeTebStyled[variant=\"MessageDetails\"]",
      "stw--opensyde_gui--C_SyvDcConnectedNodeList"});
 const QList<C_FlaUtiStyleSheets::C_PropertyValueColorConfig>
     C_FlaUtiStyleSheets::mhc_SCROLL_AREA_PROPERTIES(
@@ -44,7 +44,7 @@ const QStringList
         {"stw--opensyde_gui_elements--C_FlaOgeTebProgressLog QScrollBar"});
 
 const QStringList C_FlaUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
-    {"stw--opensyde_gui_elements--C_OgeTebMessageDetails QScrollBar",
+    {"stw--opensyde_gui_elements--C_OgeTebStyled[variant=\"MessageDetails\"] QScrollBar",
      "stw--opensyde_gui_elements--C_OgeTransparentScrollArea QScrollBar",
      "stw--opensyde_gui--C_SyvDcConnectedNodeList QScrollBar"});
 

@@ -124,7 +124,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -394,7 +397,10 @@ p, li { white-space: pre-wrap; }
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame_2">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_Frame_2">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -520,7 +526,10 @@ p, li { white-space: pre-wrap; }
                 <number>0</number>
                </property>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame_4">
+                <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_Frame_4">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -906,7 +915,7 @@ p, li { white-space: pre-wrap; }
                    </widget>
                   </item>
                   <item row="1" column="2">
-                   <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxProcessID">
+                   <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxProcessID">
                     <property name="minimumSize">
                      <size>
                       <width>120</width>
@@ -1243,7 +1252,10 @@ p, li { white-space: pre-wrap; }
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame_3">
+              <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_Frame_3">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1267,7 +1279,10 @@ p, li { white-space: pre-wrap; }
             </layout>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxDataPoolsNotEmpty">
+            <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxDataPoolsNotEmpty">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
              <property name="minimumSize">
               <size>
                <width>300</width>
@@ -1485,7 +1500,10 @@ p, li { white-space: pre-wrap; }
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_Frame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -1922,9 +1940,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1964,9 +1982,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1991,9 +2009,9 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxStyled</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTransparentScrollArea</class>

@@ -82,7 +82,10 @@
         <number>1</number>
        </property>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1">
+        <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_FramSperator1">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -306,7 +309,10 @@ p, li { white-space: pre-wrap; }
             <number>1</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_3">
+            <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_FramSperator1_3">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -400,7 +406,7 @@ p, li { white-space: pre-wrap; }
               <number>10</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxBusId">
+              <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxBusId">
                <property name="minimumSize">
                 <size>
                  <width>120</width>
@@ -699,7 +705,10 @@ p, li { white-space: pre-wrap; }
         <number>0</number>
        </property>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+        <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -829,9 +838,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLabStyledContextMenu.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -840,9 +849,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxStyled</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>

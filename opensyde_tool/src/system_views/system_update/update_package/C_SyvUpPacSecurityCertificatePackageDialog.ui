@@ -106,7 +106,10 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_13">
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_4">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_4">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -271,7 +274,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_SeperatorSecureAuthentication">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="pc_SeperatorSecureAuthentication">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -460,7 +466,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_2">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_2">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -484,7 +493,10 @@
          </layout>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxPEMFiles">
+         <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GbxPEMFiles">
+     <property name="variant" stdset="0">
+      <string notr="true">Transparent</string>
+     </property>
           <property name="title">
            <string/>
           </property>
@@ -618,7 +630,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -732,7 +747,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_3">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_3">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -1017,9 +1035,9 @@
    <header>C_OgeLabStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1033,9 +1051,9 @@
    <header>C_OgeLeProperties.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
+   <header>C_OgeGbxStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -17,7 +17,7 @@
 #include <QList>
 #include "stwtypes.hpp"
 #include "C_SdTopologyListWidget.hpp"
-#include "C_OgeFraSeparator.hpp"
+#include "C_OgeFraStyled.hpp"
 #include "C_OgePubIconOnly.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -35,7 +35,7 @@ public:
    static stw::opensyde_gui::C_SdTopologyListWidget * h_AddNewList(const QString & orc_Name,
                                                                    QVBoxLayout * const opc_Layout,
                                                                    QVector<stw::opensyde_gui::C_SdTopologyListWidget *> & orc_ListWidgets, QWidget * const opc_Parent);
-   static stw::opensyde_gui_elements::C_OgeFraSeparator * h_AddNewHeading(const QString & orc_Name,
+   static stw::opensyde_gui_elements::C_OgeFraStyled * h_AddNewHeading(const QString & orc_Name,
                                                                           QVBoxLayout * const opc_Layout,
                                                                           QWidget * const opc_Parent,
                                                                           const bool oq_AddSpacerBefore);

@@ -30,6 +30,7 @@ class C_OgeGbxStyled :
 
 public:
    explicit C_OgeGbxStyled(QWidget * const opc_Parent = NULL);
+   C_OgeGbxStyled(const QString & orc_Variant, QWidget * const opc_Parent);
 
    QString GetVariant(void) const;
    void SetVariant(const QString & orc_Variant);

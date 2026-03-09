@@ -19,7 +19,7 @@
 #include "C_SyvDaDashboardSelectorTabWidget.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSvHandler.hpp"
-#include "C_OgeGbxTransparent.hpp"
+#include "C_OgeGbxStyled.hpp"
 #include "C_UsHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_SyvClipBoardHelper.hpp"

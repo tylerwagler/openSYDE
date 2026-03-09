@@ -191,7 +191,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+           <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -693,7 +696,10 @@ p, li { white-space: pre-wrap; }
              <number>1</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_2">
+             <widget class="stw::opensyde_gui_elements::C_OgeFraStyled" name="frame_2">
+     <property name="variant" stdset="0">
+      <string notr="true">Separator</string>
+     </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -791,7 +797,10 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeChxTristateTransparentToggle" name="pc_CheckBoxSafety">
+           <widget class="stw::opensyde_gui_elements::C_OgeChxTristateStyled" name="pc_CheckBoxSafety">
+     <property name="variant" stdset="0">
+      <string notr="true">TransparentToggle</string>
+     </property>
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -973,7 +982,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="7" column="4">
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxDatapoolStartAddress">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxDatapoolStartAddress">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -1043,7 +1052,7 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="8" column="4">
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxSize">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxStyled" name="pc_SpinBoxSize">
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -1387,9 +1396,9 @@ p, li { white-space: pre-wrap; }
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
+   <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
    <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
+   <header>C_OgeFraStyled.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -1434,9 +1443,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLePropertiesName.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxStyled</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeProperties</class>
@@ -1460,9 +1469,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLabStyled.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxTristateTransparentToggle</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxTristateStyled</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxTristateTransparentToggle.hpp</header>
+   <header>C_OgeChxTristateStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupSubItem</class>
