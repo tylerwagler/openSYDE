@@ -112,6 +112,16 @@ public:
 
   /// size of EEPROM memory available to the user application in bytes
   uint32_t u32_UserEepromSizeBytes;
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+   QJsonObject ToJsonObject() const;
+   void FromJsonObject(const QJsonObject &ro_Json);
+   QDomElement ToQDomDocument(QDomDocument &ro_Doc,
+                              const QString &orc_ElementName) const;
+   void FromQDomDocument(const QDomElement &ro_Element);
 };
 
 /* -- Extern Global Variables

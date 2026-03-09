@@ -97,6 +97,17 @@ public:
       hc_ALL_PROTOCOLS; ///< Vector with all available CAN protocols, in
                         /// the same order as the enum
 
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+   QJsonObject ToJsonObject() const;
+   void FromJsonObject(const QJsonObject &ro_Json);
+   QDomElement ToQDomDocument(QDomDocument &ro_Doc,
+                              const QString &orc_ElementName) const;
+   void FromQDomDocument(const QDomElement &ro_Element);
+
 private:
   static QList<C_OscCanProtocol::E_Type> mh_GetAllProtocols(void);
 };

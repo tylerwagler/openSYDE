@@ -15,6 +15,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QDomDocument>
 
 #include <limits>
 #include <QMap>
@@ -707,4 +710,223 @@ C_OscCanMessage::m_GetSignalHashes(const C_OscNodeDataPoolList *const opc_List,
     }
   }
   return c_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize message to QDataStream (binary format)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanMessage::ToQDataStream(QDataStream &ro_DataStream) const {
+   ro_DataStream << this->c_Name;
+   ro_DataStream << this->c_Comment;
+   ro_DataStream << this->u32_CanId;
+   ro_DataStream << static_cast<int32_t>(this->q_IsExtended);
+   ro_DataStream << this->u16_Dlc;
+   ro_DataStream << static_cast<int32_t>(this->e_TxMethod);
+   ro_DataStream << this->u32_CycleTimeMs;
+   ro_DataStream << this->u16_DelayTimeMs;
+   ro_DataStream << this->u32_TimeoutMs;
+   
+   // Serialize signals
+   ro_DataStream << static_cast<int32_t>(this->c_Signals.size());
+   for (const auto &rc_Signal : this->c_Signals) {
+      rc_Signal.ToQDataStream(ro_DataStream);
+   }
+   
+   this->c_CanOpenManagerOwnerNodeIndex.ToQDataStream(ro_DataStream);
+   ro_DataStream << static_cast<int32_t>(this->q_CanOpenManagerCobIdIncludesNodeId);
+   ro_DataStream << this->u32_CanOpenManagerCobIdOffset;
+   ro_DataStream << static_cast<int32_t>(this->q_CanOpenManagerMessageActive);
+   ro_DataStream << this->u16_CanOpenManagerPdoIndex;
+   ro_DataStream << this->u8_CanOpenTxMethodAdditionalInfo;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize message from QDataStream (binary format)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanMessage::FromQDataStream(QDataStream &ro_DataStream) {
+   int32_t s32_TxMethod;
+   int32_t s32_IsExtended;
+   int32_t s32_CobIdIncludesNodeId;
+   int32_t s32_MessageActive;
+   int32_t s32_SignalCount;
+   
+   ro_DataStream >> this->c_Name;
+   ro_DataStream >> this->c_Comment;
+   ro_DataStream >> this->u32_CanId;
+   ro_DataStream >> s32_IsExtended;
+   ro_DataStream >> this->u16_Dlc;
+   ro_DataStream >> s32_TxMethod;
+   ro_DataStream >> this->u32_CycleTimeMs;
+   ro_DataStream >> this->u16_DelayTimeMs;
+   ro_DataStream >> this->u32_TimeoutMs;
+   
+   // Deserialize signals
+   ro_DataStream >> s32_SignalCount;
+   this->c_Signals.clear();
+   for (int32_t i = 0; i < s32_SignalCount; ++i) {
+      C_OscCanSignal c_Signal;
+      c_Signal.FromQDataStream(ro_DataStream);
+      this->c_Signals.append(c_Signal);
+   }
+   
+   this->c_CanOpenManagerOwnerNodeIndex.FromQDataStream(ro_DataStream);
+   ro_DataStream >> s32_CobIdIncludesNodeId;
+   ro_DataStream >> this->u32_CanOpenManagerCobIdOffset;
+   ro_DataStream >> s32_MessageActive;
+   ro_DataStream >> this->u16_CanOpenManagerPdoIndex;
+   ro_DataStream >> this->u8_CanOpenTxMethodAdditionalInfo;
+   
+   this->q_IsExtended = (s32_IsExtended != 0);
+   this->e_TxMethod = static_cast<E_TxMethodType>(s32_TxMethod);
+   this->q_CanOpenManagerCobIdIncludesNodeId = (s32_CobIdIncludesNodeId != 0);
+   this->q_CanOpenManagerMessageActive = (s32_MessageActive != 0);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize message to JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscCanMessage::ToJsonObject() const {
+   QJsonObject obj;
+   QJsonArray signalsArray;
+   
+   obj["name"] = this->c_Name;
+   obj["comment"] = this->c_Comment;
+   obj["can-id"] = static_cast<qint64>(this->u32_CanId);
+   obj["is-extended"] = this->q_IsExtended;
+   obj["dlc"] = static_cast<qint64>(this->u16_Dlc);
+   obj["tx-method"] = static_cast<qint64>(this->e_TxMethod);
+   obj["cycle-time-ms"] = static_cast<qint64>(this->u32_CycleTimeMs);
+   obj["delay-time-ms"] = static_cast<qint64>(this->u16_DelayTimeMs);
+   obj["timeout-ms"] = static_cast<qint64>(this->u32_TimeoutMs);
+   
+   for (const auto &rc_Signal : this->c_Signals) {
+      signalsArray.append(rc_Signal.ToJsonObject());
+   }
+   obj["signals"] = signalsArray;
+   
+   obj["canopen-owner-node-index"] = this->c_CanOpenManagerOwnerNodeIndex.ToJsonObject();
+   obj["canopen-cobid-includes-node-id"] = this->q_CanOpenManagerCobIdIncludesNodeId;
+   obj["canopen-cobid-offset"] = static_cast<qint64>(this->u32_CanOpenManagerCobIdOffset);
+   obj["canopen-message-active"] = this->q_CanOpenManagerMessageActive;
+   obj["canopen-pdo-index"] = static_cast<qint64>(this->u16_CanOpenManagerPdoIndex);
+   obj["canopen-tx-method-info"] = static_cast<qint64>(this->u8_CanOpenTxMethodAdditionalInfo);
+   
+   return obj;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize message from JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanMessage::FromJsonObject(const QJsonObject &ro_Json) {
+   this->c_Name = ro_Json["name"].toString();
+   this->c_Comment = ro_Json["comment"].toString();
+   this->u32_CanId = static_cast<uint32_t>(ro_Json["can-id"].toInt());
+   this->q_IsExtended = ro_Json["is-extended"].toBool();
+   this->u16_Dlc = static_cast<uint16_t>(ro_Json["dlc"].toInt());
+   this->e_TxMethod = static_cast<E_TxMethodType>(ro_Json["tx-method"].toInt());
+   this->u32_CycleTimeMs = static_cast<uint32_t>(ro_Json["cycle-time-ms"].toInt());
+   this->u16_DelayTimeMs = static_cast<uint16_t>(ro_Json["delay-time-ms"].toInt());
+   this->u32_TimeoutMs = static_cast<uint32_t>(ro_Json["timeout-ms"].toInt());
+   
+   this->c_Signals.clear();
+   QJsonArray signalsArray = ro_Json["signals"].toArray();
+   for (const auto &signalValue : signalsArray) {
+      C_OscCanSignal c_Signal;
+      c_Signal.FromJsonObject(signalValue.toObject());
+      this->c_Signals.append(c_Signal);
+   }
+   
+   this->c_CanOpenManagerOwnerNodeIndex.FromJsonObject(ro_Json["canopen-owner-node-index"].toObject());
+   this->q_CanOpenManagerCobIdIncludesNodeId = ro_Json["canopen-cobid-includes-node-id"].toBool();
+   this->u32_CanOpenManagerCobIdOffset = static_cast<uint32_t>(ro_Json["canopen-cobid-offset"].toInt());
+   this->q_CanOpenManagerMessageActive = ro_Json["canopen-message-active"].toBool();
+   this->u16_CanOpenManagerPdoIndex = static_cast<uint16_t>(ro_Json["canopen-pdo-index"].toInt());
+   this->u8_CanOpenTxMethodAdditionalInfo = static_cast<uint8_t>(ro_Json["canopen-tx-method-info"].toInt());
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize message to XML DOM element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscCanMessage::ToQDomDocument(QDomDocument &ro_Doc,
+                                            const QString &orc_ElementName) const {
+   QDomElement element = ro_Doc.createElement(orc_ElementName);
+   
+   element.setAttribute("name", this->c_Name);
+   element.setAttribute("comment", this->c_Comment);
+   element.setAttribute("can-id", this->u32_CanId);
+   element.setAttribute("is-extended", this->q_IsExtended);
+   element.setAttribute("dlc", this->u16_Dlc);
+   element.setAttribute("tx-method", static_cast<int32_t>(this->e_TxMethod));
+   element.setAttribute("cycle-time-ms", this->u32_CycleTimeMs);
+   element.setAttribute("delay-time-ms", this->u16_DelayTimeMs);
+   element.setAttribute("timeout-ms", this->u32_TimeoutMs);
+   
+   // Serialize signals
+   QDomElement signalsElement = ro_Doc.createElement("signals");
+   for (const auto &rc_Signal : this->c_Signals) {
+      QDomElement signalElement = rc_Signal.ToQDomDocument(ro_Doc, "signal");
+      signalsElement.appendChild(signalElement);
+   }
+   element.appendChild(signalsElement);
+   
+   QDomElement ownerElement = this->c_CanOpenManagerOwnerNodeIndex.ToQDomDocument(ro_Doc, "canopen-owner-node-index");
+   element.appendChild(ownerElement);
+   
+   element.setAttribute("canopen-cobid-includes-node-id", this->q_CanOpenManagerCobIdIncludesNodeId);
+   element.setAttribute("canopen-cobid-offset", this->u32_CanOpenManagerCobIdOffset);
+   element.setAttribute("canopen-message-active", this->q_CanOpenManagerMessageActive);
+   element.setAttribute("canopen-pdo-index", this->u16_CanOpenManagerPdoIndex);
+   element.setAttribute("canopen-tx-method-info", this->u8_CanOpenTxMethodAdditionalInfo);
+   
+   return element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize message from XML DOM element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanMessage::FromQDomDocument(const QDomElement &ro_Element) {
+   this->c_Name = ro_Element.attribute("name");
+   this->c_Comment = ro_Element.attribute("comment");
+   this->u32_CanId = ro_Element.attribute("can-id").toUInt();
+   this->q_IsExtended = ro_Element.attribute("is-extended").toInt() != 0;
+   this->u16_Dlc = ro_Element.attribute("dlc").toInt();
+   this->e_TxMethod = static_cast<E_TxMethodType>(ro_Element.attribute("tx-method").toInt());
+   this->u32_CycleTimeMs = ro_Element.attribute("cycle-time-ms").toUInt();
+   this->u16_DelayTimeMs = ro_Element.attribute("delay-time-ms").toInt();
+   this->u32_TimeoutMs = ro_Element.attribute("timeout-ms").toUInt();
+   
+   // Deserialize signals
+   this->c_Signals.clear();
+   QDomElement signalsElement = ro_Element.firstChildElement("signals");
+   QDomNode signalNode = signalsElement.firstChild();
+   while (!signalNode.isNull()) {
+      QDomElement signalElement = signalNode.toElement();
+      if (!signalElement.isNull()) {
+         C_OscCanSignal c_Signal;
+         c_Signal.FromQDomDocument(signalElement);
+         this->c_Signals.append(c_Signal);
+      }
+      signalNode = signalNode.nextSibling();
+   }
+   
+   QDomElement ownerElement = ro_Element.firstChildElement("canopen-owner-node-index");
+   this->c_CanOpenManagerOwnerNodeIndex.FromQDomDocument(ownerElement);
+   
+   this->q_CanOpenManagerCobIdIncludesNodeId = ro_Element.attribute("canopen-cobid-includes-node-id").toInt() != 0;
+   this->u32_CanOpenManagerCobIdOffset = ro_Element.attribute("canopen-cobid-offset").toUInt();
+   this->q_CanOpenManagerMessageActive = ro_Element.attribute("canopen-message-active").toInt() != 0;
+   this->u16_CanOpenManagerPdoIndex = ro_Element.attribute("canopen-pdo-index").toInt();
+   this->u8_CanOpenTxMethodAdditionalInfo = ro_Element.attribute("canopen-tx-method-info").toInt();
 }

@@ -15,6 +15,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QDomDocument>
 
 #include "C_OscCanSignal.hpp"
 #include "C_SclChecksums.hpp"
@@ -290,4 +293,121 @@ bool C_OscCanSignal::IsBitPosPartOfSignal(
   }
 
   return q_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize signal to QDataStream (binary format)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanSignal::ToQDataStream(QDataStream &ro_DataStream) const {
+   ro_DataStream << static_cast<int32_t>(this->e_ComByteOrder);
+   ro_DataStream << this->u16_ComBitLength;
+   ro_DataStream << this->u16_ComBitStart;
+   ro_DataStream << this->u32_ComDataElementIndex;
+   ro_DataStream << static_cast<int32_t>(this->e_MultiplexerType);
+   ro_DataStream << this->u16_MultiplexValue;
+   ro_DataStream << this->u16_CanOpenManagerObjectDictionaryIndex;
+   ro_DataStream << this->u8_CanOpenManagerObjectDictionarySubIndex;
+   ro_DataStream << this->u32_J1939SuspectParameterNumber;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize signal from QDataStream (binary format)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanSignal::FromQDataStream(QDataStream &ro_DataStream) {
+   int32_t s32_ByteOrder;
+   int32_t s32_MultiplexerType;
+
+   ro_DataStream >> s32_ByteOrder;
+   ro_DataStream >> this->u16_ComBitLength;
+   ro_DataStream >> this->u16_ComBitStart;
+   ro_DataStream >> this->u32_ComDataElementIndex;
+   ro_DataStream >> s32_MultiplexerType;
+   ro_DataStream >> this->u16_MultiplexValue;
+   ro_DataStream >> this->u16_CanOpenManagerObjectDictionaryIndex;
+   ro_DataStream >> this->u8_CanOpenManagerObjectDictionarySubIndex;
+   ro_DataStream >> this->u32_J1939SuspectParameterNumber;
+
+   this->e_ComByteOrder = static_cast<E_ByteOrderType>(s32_ByteOrder);
+   this->e_MultiplexerType = static_cast<E_MultiplexerType>(s32_MultiplexerType);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize signal to JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscCanSignal::ToJsonObject() const {
+   QJsonObject obj;
+
+   obj["byte-order"] = static_cast<qint64>(this->e_ComByteOrder);
+   obj["bit-length"] = static_cast<qint64>(this->u16_ComBitLength);
+   obj["bit-start"] = static_cast<qint64>(this->u16_ComBitStart);
+   obj["data-element-index"] = static_cast<qint64>(this->u32_ComDataElementIndex);
+   obj["multiplexer-type"] = static_cast<qint64>(this->e_MultiplexerType);
+   obj["multiplex-value"] = static_cast<qint64>(this->u16_MultiplexValue);
+   obj["canopen-object-index"] = static_cast<qint64>(this->u16_CanOpenManagerObjectDictionaryIndex);
+   obj["canopen-sub-index"] = static_cast<qint64>(this->u8_CanOpenManagerObjectDictionarySubIndex);
+   obj["j1939-spn"] = static_cast<qint64>(this->u32_J1939SuspectParameterNumber);
+
+   return obj;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize signal from JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanSignal::FromJsonObject(const QJsonObject &ro_Json) {
+   this->e_ComByteOrder = static_cast<E_ByteOrderType>(ro_Json["byte-order"].toInt());
+   this->u16_ComBitLength = static_cast<uint16_t>(ro_Json["bit-length"].toInt());
+   this->u16_ComBitStart = static_cast<uint16_t>(ro_Json["bit-start"].toInt());
+   this->u32_ComDataElementIndex = static_cast<uint32_t>(ro_Json["data-element-index"].toInt());
+   this->e_MultiplexerType = static_cast<E_MultiplexerType>(ro_Json["multiplexer-type"].toInt());
+   this->u16_MultiplexValue = static_cast<uint16_t>(ro_Json["multiplex-value"].toInt());
+   this->u16_CanOpenManagerObjectDictionaryIndex = static_cast<uint16_t>(ro_Json["canopen-object-index"].toInt());
+   this->u8_CanOpenManagerObjectDictionarySubIndex = static_cast<uint8_t>(ro_Json["canopen-sub-index"].toInt());
+   this->u32_J1939SuspectParameterNumber = static_cast<uint32_t>(ro_Json["j1939-spn"].toInt());
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize signal to XML DOM element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscCanSignal::ToQDomDocument(QDomDocument &ro_Doc,
+                                           const QString &orc_ElementName) const {
+   QDomElement element = ro_Doc.createElement(orc_ElementName);
+
+   element.setAttribute("byte-order", static_cast<int32_t>(this->e_ComByteOrder));
+   element.setAttribute("bit-length", this->u16_ComBitLength);
+   element.setAttribute("bit-start", this->u16_ComBitStart);
+   element.setAttribute("data-element-index", this->u32_ComDataElementIndex);
+   element.setAttribute("multiplexer-type", static_cast<int32_t>(this->e_MultiplexerType));
+   element.setAttribute("multiplex-value", this->u16_MultiplexValue);
+   element.setAttribute("canopen-object-index", this->u16_CanOpenManagerObjectDictionaryIndex);
+   element.setAttribute("canopen-sub-index", this->u8_CanOpenManagerObjectDictionarySubIndex);
+   element.setAttribute("j1939-spn", this->u32_J1939SuspectParameterNumber);
+
+   return element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize signal from XML DOM element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanSignal::FromQDomDocument(const QDomElement &ro_Element) {
+   this->e_ComByteOrder = static_cast<E_ByteOrderType>(ro_Element.attribute("byte-order").toInt());
+   this->u16_ComBitLength = ro_Element.attribute("bit-length").toInt();
+   this->u16_ComBitStart = ro_Element.attribute("bit-start").toInt();
+   this->u32_ComDataElementIndex = ro_Element.attribute("data-element-index").toInt();
+   this->e_MultiplexerType = static_cast<E_MultiplexerType>(ro_Element.attribute("multiplexer-type").toInt());
+   this->u16_MultiplexValue = ro_Element.attribute("multiplex-value").toInt();
+   this->u16_CanOpenManagerObjectDictionaryIndex = ro_Element.attribute("canopen-object-index").toInt();
+   this->u8_CanOpenManagerObjectDictionarySubIndex = ro_Element.attribute("canopen-sub-index").toInt();
+   this->u32_J1939SuspectParameterNumber = ro_Element.attribute("j1939-spn").toInt();
 }

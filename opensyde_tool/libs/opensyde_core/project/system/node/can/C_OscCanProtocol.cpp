@@ -16,6 +16,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QDomDocument>
 
 #include "C_OscCanProtocol.hpp"
 #include "C_SclChecksums.hpp"
@@ -537,4 +540,128 @@ QList<C_OscCanProtocol::E_Type> C_OscCanProtocol::mh_GetAllProtocols() {
     Q_ASSERT(static_cast<uint32_t>(c_Retval[u32_ItProt]) == u32_ItProt);
   }
   return c_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize protocol to QDataStream (binary format)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanProtocol::ToQDataStream(QDataStream &ro_DataStream) const {
+   ro_DataStream << static_cast<int32_t>(this->e_Type);
+   ro_DataStream << this->u32_DataPoolIndex;
+   
+   // Serialize messages
+   ro_DataStream << static_cast<int32_t>(this->c_ComMessages.size());
+   for (const auto &rc_Message : this->c_ComMessages) {
+      rc_Message.ToQDataStream(ro_DataStream);
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize protocol from QDataStream (binary format)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanProtocol::FromQDataStream(QDataStream &ro_DataStream) {
+   int32_t s32_Type;
+   int32_t s32_MessageCount;
+   
+   ro_DataStream >> s32_Type;
+   ro_DataStream >> this->u32_DataPoolIndex;
+   
+   this->e_Type = static_cast<E_Type>(s32_Type);
+   
+   // Deserialize messages
+   ro_DataStream >> s32_MessageCount;
+   this->c_ComMessages.clear();
+   for (int32_t i = 0; i < s32_MessageCount; ++i) {
+      C_OscCanMessageContainer c_Message;
+      c_Message.FromQDataStream(ro_DataStream);
+      this->c_ComMessages.append(c_Message);
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize protocol to JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscCanProtocol::ToJsonObject() const {
+   QJsonObject obj;
+   QJsonArray messagesArray;
+   
+   obj["type"] = static_cast<qint64>(this->e_Type);
+   obj["data-pool-index"] = static_cast<qint64>(this->u32_DataPoolIndex);
+   
+   for (const auto &rc_Message : this->c_ComMessages) {
+      messagesArray.append(rc_Message.ToJsonObject());
+   }
+   obj["messages"] = messagesArray;
+   
+   return obj;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize protocol from JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanProtocol::FromJsonObject(const QJsonObject &ro_Json) {
+   this->e_Type = static_cast<E_Type>(ro_Json["type"].toInt());
+   this->u32_DataPoolIndex = static_cast<uint32_t>(ro_Json["data-pool-index"].toInt());
+   
+   this->c_ComMessages.clear();
+   QJsonArray messagesArray = ro_Json["messages"].toArray();
+   for (const auto &messageValue : messagesArray) {
+      C_OscCanMessageContainer c_Message;
+      c_Message.FromJsonObject(messageValue.toObject());
+      this->c_ComMessages.append(c_Message);
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize protocol to XML DOM element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscCanProtocol::ToQDomDocument(QDomDocument &ro_Doc,
+                                             const QString &orc_ElementName) const {
+   QDomElement element = ro_Doc.createElement(orc_ElementName);
+   
+   element.setAttribute("type", static_cast<int32_t>(this->e_Type));
+   element.setAttribute("data-pool-index", this->u32_DataPoolIndex);
+   
+   // Serialize messages
+   QDomElement messagesElement = ro_Doc.createElement("messages");
+   for (const auto &rc_Message : this->c_ComMessages) {
+      QDomElement messageElement = rc_Message.ToQDomDocument(ro_Doc, "message-container");
+      messagesElement.appendChild(messageElement);
+   }
+   element.appendChild(messagesElement);
+   
+   return element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize protocol from XML DOM element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscCanProtocol::FromQDomDocument(const QDomElement &ro_Element) {
+   this->e_Type = static_cast<E_Type>(ro_Element.attribute("type").toInt());
+   this->u32_DataPoolIndex = ro_Element.attribute("data-pool-index").toUInt();
+   
+   this->c_ComMessages.clear();
+   QDomElement messagesElement = ro_Element.firstChildElement("messages");
+   QDomNode messageNode = messagesElement.firstChild();
+   while (!messageNode.isNull()) {
+      QDomElement messageElement = messageNode.toElement();
+      if (!messageElement.isNull()) {
+         C_OscCanMessageContainer c_Message;
+         c_Message.FromQDomDocument(messageElement);
+         this->c_ComMessages.append(c_Message);
+      }
+      messageNode = messageNode.nextSibling();
+   }
 }
