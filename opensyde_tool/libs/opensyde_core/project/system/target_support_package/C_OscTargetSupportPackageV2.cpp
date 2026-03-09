@@ -19,6 +19,8 @@
 #include <QDataStream>
 #include <QDomDocument>
 #include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -143,7 +145,7 @@ QJsonObject C_OscTspApplication::ToJsonObject() const {
   c_Obj["project-folder"] = c_ProjectFolder;
   c_Obj["generate-path"] = c_GeneratePath;
   c_Obj["generated-code-version"] = static_cast<int32_t>(u16_GenCodeVersion);
-  c_Obj["result-paths"] = c_ResultPaths;
+  c_Obj["result-paths"] = QJsonValue::fromVariant(c_ResultPaths);
   c_Obj["generates-halc-psi"] = q_GeneratesPsiFiles;
   return c_Obj;
 }
@@ -188,7 +190,11 @@ void C_OscTspApplication::FromJsonObject(const QJsonObject &orc_Object) {
         static_cast<uint16_t>(orc_Object["generated-code-version"].toInt());
   }
   if (orc_Object.contains("result-paths")) {
-    c_ResultPaths = orc_Object["result-paths"].toStringList();
+    QJsonArray c_ResultPathsArray = orc_Object["result-paths"].toArray();
+    c_ResultPaths.clear();
+    for (const QJsonValue &c_Value : c_ResultPathsArray) {
+      c_ResultPaths.append(c_Value.toString());
+    }
   }
   if (orc_Object.contains("generates-halc-psi")) {
     q_GeneratesPsiFiles = orc_Object["generates-halc-psi"].toBool();
@@ -330,17 +336,17 @@ void C_OscTspApplication::FromQDomDocument(const QDomElement &orc_Element) {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscTargetSupportPackageV2::ToQDataStream(QDataStream &ro_DataStream) const {
-  ro_DataStream << c_DeviceName << c_Comment << c_Applications
-                << static_cast<int32_t>(u8_ApplicationIndex)
+  ro_DataStream << c_DeviceName << c_Comment << static_cast<int32_t>(c_Applications.size());
+  for (const C_OscTspApplication &c_App : c_Applications) {
+    c_App.ToQDataStream(ro_DataStream);
+  }
+  ro_DataStream << static_cast<int32_t>(u8_ApplicationIndex)
                 << static_cast<int32_t>(u8_MaxParallelTransmissions)
                 << static_cast<int32_t>(u16_MaxMessageBufferTx)
                 << static_cast<int32_t>(u16_MaxRoutingMessageBufferRx)
                 << c_TemplatePath << c_HalcDefPath << c_HalcComment;
   // Serialize CodeExportSettings
-  QDataStream c_SettingsStream;
-  c_SettingsStream.setVersion(QDataStream::Qt_6_0);
-  c_CodeExportSettings.ToQDataStream(c_SettingsStream);
-  ro_DataStream << c_SettingsStream.buffer();
+  c_CodeExportSettings.ToQDataStream(ro_DataStream);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -350,15 +356,19 @@ void C_OscTargetSupportPackageV2::ToQDataStream(QDataStream &ro_DataStream) cons
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscTargetSupportPackageV2::FromQDataStream(QDataStream &ro_DataStream) {
-  ro_DataStream >> c_DeviceName >> c_Comment >> c_Applications
-      >> u8_ApplicationIndex >> u8_MaxParallelTransmissions
+  ro_DataStream >> c_DeviceName >> c_Comment;
+  c_Applications.clear();
+  int32_t s32_Count;
+  ro_DataStream >> s32_Count;
+  for (int32_t i = 0; i < s32_Count; ++i) {
+    C_OscTspApplication c_App;
+    c_App.FromQDataStream(ro_DataStream);
+    c_Applications.append(c_App);
+  }
+  ro_DataStream >> u8_ApplicationIndex >> u8_MaxParallelTransmissions
       >> u16_MaxMessageBufferTx >> u16_MaxRoutingMessageBufferRx
       >> c_TemplatePath >> c_HalcDefPath >> c_HalcComment;
-  QByteArray c_SettingsData;
-  ro_DataStream >> c_SettingsData;
-  QDataStream c_SettingsStream(c_SettingsData);
-  c_SettingsStream.setVersion(QDataStream::Qt_6_0);
-  c_CodeExportSettings.FromQDataStream(c_SettingsStream);
+  c_CodeExportSettings.FromQDataStream(ro_DataStream);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

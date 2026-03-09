@@ -14,6 +14,9 @@
  */
 #include "C_OscHalcConfigDomain.hpp"
 #include "C_OscHalcConfigStandaloneChannel.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 
 /* -- Namespace
@@ -37,6 +40,19 @@ public:
       const QList<C_OscHalcConfigStandaloneChannel> &orc_StandaloneChannels);
 
   QList<C_OscHalcConfigStandaloneChannel> c_StandaloneChannels;
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &orc_Object);
+
+  QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables
