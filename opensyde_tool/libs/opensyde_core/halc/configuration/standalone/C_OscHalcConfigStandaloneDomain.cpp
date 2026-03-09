@@ -160,7 +160,7 @@ QDomElement C_OscHalcConfigStandaloneDomain::ToQDomElement(
   }
   c_Element.appendChild(c_ChannelsElement);
   // Append element to document in caller
-  return stw::errors::C_NO_ERR;
+  return c_Element;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
