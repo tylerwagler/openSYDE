@@ -27,8 +27,7 @@ int32_t C_OscHalcConfig::ToQDataStream(QDataStream &ro_DataStream) const {
    for (const auto &c_Domain : mc_Domains) {
       c_Domain.ToQDataStream(ro_DataStream);
    }
-   return stw::errors::C_NO_ERR;
-  return stw::errors::C_NO_ERR;
+    return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -48,7 +47,6 @@ int32_t C_OscHalcConfig::FromQDataStream(QDataStream &ro_DataStream) {
       mc_Domains.push_back(c_Domain);
    }
    return stw::errors::C_NO_ERR;
-  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -67,7 +65,6 @@ QJsonObject C_OscHalcConfig::ToJsonObject() const {
    c_Obj["domains"] = c_DomainArray;
 
    return c_Obj;
-  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
