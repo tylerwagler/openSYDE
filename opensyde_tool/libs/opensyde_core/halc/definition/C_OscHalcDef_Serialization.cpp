@@ -16,7 +16,7 @@ using namespace stw::opensyde_core;
 using namespace stw::errors;
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDef::ToQDataStream(QDataStream &ro_DataStream) const {
+int32_t C_OscHalcDef::ToQDataStream(QDataStream &ro_DataStream) const {
    // Serialize base class
    C_OscHalcDefBase::ToQDataStream(ro_DataStream);
 
@@ -25,10 +25,12 @@ void C_OscHalcDef::ToQDataStream(QDataStream &ro_DataStream) const {
    for (const auto &c_Domain : mc_Domains) {
       c_Domain.ToQDataStream(ro_DataStream);
    }
+
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDef::FromQDataStream(QDataStream &ro_DataStream) {
+int32_t C_OscHalcDef::FromQDataStream(QDataStream &ro_DataStream) {
    // Deserialize base class
    C_OscHalcDefBase::FromQDataStream(ro_DataStream);
 
@@ -41,6 +43,8 @@ void C_OscHalcDef::FromQDataStream(QDataStream &ro_DataStream) {
       c_Domain.FromQDataStream(ro_DataStream);
       mc_Domains.push_back(c_Domain);
    }
+
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -59,10 +63,12 @@ QJsonObject C_OscHalcDef::ToJsonObject() const {
    c_Obj["domains"] = c_DomainArray;
 
    return c_Obj;
+
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDef::FromJsonObject(const QJsonObject &orc_Object) {
+int32_t C_OscHalcDef::FromJsonObject(const QJsonObject &orc_Object) {
    // Deserialize base class
    if (orc_Object.contains("base")) {
       C_OscHalcDefBase::FromJsonObject(orc_Object["base"].toObject());
@@ -78,6 +84,8 @@ void C_OscHalcDef::FromJsonObject(const QJsonObject &orc_Object) {
          mc_Domains.push_back(c_Domain);
       }
    }
+
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -97,10 +105,12 @@ QDomElement C_OscHalcDef::ToQDomDocument(QDomDocument &orc_Doc, const QString &o
    c_Element.appendChild(c_DomainElem);
 
    return c_Element;
+
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDef::FromQDomDocument(const QDomElement &orc_Element) {
+int32_t C_OscHalcDef::FromQDomDocument(const QDomElement &orc_Element) {
    // Deserialize base class
    QDomNode c_Node = orc_Element.firstChild();
    while (!c_Node.isNull()) {
@@ -128,4 +138,6 @@ void C_OscHalcDef::FromQDomDocument(const QDomElement &orc_Element) {
          c_DomainNode = c_DomainNode.nextSibling();
       }
    }
+
+   return C_NO_ERR;
 }
