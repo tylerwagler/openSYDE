@@ -188,6 +188,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigChannel.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigDomain.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigFiler.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigFiler_New.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigParameter.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigParameterStruct.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigUtil.cpp
@@ -195,8 +196,13 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneChannel.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneDomain.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneFiler.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfig_Serialization.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigParameter_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/base/C_OscHalcDefBase.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/base/C_OscHalcDefBase_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDef.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDef_Serialization.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContent_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelAvailability.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelDef.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelUseCase.cpp

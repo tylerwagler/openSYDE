@@ -13,7 +13,7 @@
 
 #include "precomp_headers.hpp"
 #include "C_OscHalcConfigFiler_New.hpp"
-#include "C_OscFilerHelper.hpp"
+#include "C_OscFilerUtil.hpp"
 #include <QFile>
 #include <QFileInfo>
 
@@ -51,37 +51,64 @@ int32_t C_OscHalcConfigFiler_New::h_SaveHalcConfigFile(const C_OscHalcConfig &or
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler_New::h_LoadBinary(C_OscHalcConfig &orc_Config,
                                                const QString &orc_FilePath) {
-   return C_OscFilerHelper<C_OscHalcConfig>::h_LoadBinary(orc_Config, orc_FilePath);
+   QList<C_OscHalcConfig> c_List;
+   int32_t s32_Retval = C_OscFilerUtil::h_LoadListBinary<C_OscHalcConfig>(c_List, orc_FilePath);
+   if (s32_Retval == stw::errors::C_NO_ERR) {
+      if (c_List.size() > 0) {
+         orc_Config = c_List.first();
+      }
+   }
+   return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler_New::h_SaveBinary(const C_OscHalcConfig &orc_Config,
                                                const QString &orc_FilePath) {
-   return C_OscFilerHelper<C_OscHalcConfig>::h_SaveBinary(orc_Config, orc_FilePath);
+   QList<C_OscHalcConfig> c_List;
+   c_List.append(orc_Config);
+   return C_OscFilerUtil::h_SaveListBinary<C_OscHalcConfig>(c_List, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler_New::h_LoadJson(C_OscHalcConfig &orc_Config,
                                              const QString &orc_FilePath) {
-   return C_OscFilerHelper<C_OscHalcConfig>::h_LoadJson(orc_Config, orc_FilePath);
+   QList<C_OscHalcConfig> c_List;
+   int32_t s32_Retval = C_OscFilerUtil::h_LoadListJson<C_OscHalcConfig>(c_List, orc_FilePath);
+   if (s32_Retval == stw::errors::C_NO_ERR) {
+      if (c_List.size() > 0) {
+         orc_Config = c_List.first();
+      }
+   }
+   return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler_New::h_SaveJson(const C_OscHalcConfig &orc_Config,
                                              const QString &orc_FilePath) {
-   return C_OscFilerHelper<C_OscHalcConfig>::h_SaveJson(orc_Config, orc_FilePath);
+   QList<C_OscHalcConfig> c_List;
+   c_List.append(orc_Config);
+   return C_OscFilerUtil::h_SaveListJson<C_OscHalcConfig>(c_List, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler_New::h_LoadXml(C_OscHalcConfig &orc_Config,
                                             const QString &orc_FilePath) {
-   return C_OscFilerHelper<C_OscHalcConfig>::h_LoadXml(orc_Config, orc_FilePath);
+   QList<C_OscHalcConfig> c_List;
+   int32_t s32_Retval = C_OscFilerUtil::h_LoadListXml<C_OscHalcConfig>(c_List, orc_FilePath);
+   if (s32_Retval == stw::errors::C_NO_ERR) {
+      if (c_List.size() > 0) {
+         orc_Config = c_List.first();
+      }
+   }
+   return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcConfigFiler_New::h_SaveXml(const C_OscHalcConfig &orc_Config,
                                             const QString &orc_FilePath) {
-   return C_OscFilerHelper<C_OscHalcConfig>::h_SaveXml(orc_Config, orc_FilePath);
+   QList<C_OscHalcConfig> c_List;
+   c_List.append(orc_Config);
+   return C_OscFilerUtil::h_SaveListXml<C_OscHalcConfig>(c_List, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

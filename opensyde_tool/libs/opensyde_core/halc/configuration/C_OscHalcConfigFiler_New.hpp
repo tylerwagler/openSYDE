@@ -20,7 +20,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "C_OscHalcConfig.hpp"
-#include "C_OscFilerHelper.hpp"
+#include "C_OscFilerUtil.hpp"
 #include "stwtypes.hpp"
 #include <QList>
 #include <QString>
