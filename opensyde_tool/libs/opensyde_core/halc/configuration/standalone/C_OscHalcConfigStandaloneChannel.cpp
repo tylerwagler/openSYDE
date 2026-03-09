@@ -12,6 +12,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
+#include "stwerrors.hpp"
 
 #include "C_OscHalcConfigStandaloneChannel.hpp"
 
