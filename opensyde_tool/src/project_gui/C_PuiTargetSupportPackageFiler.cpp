@@ -61,7 +61,7 @@ int32_t C_PuiTargetSupportPackageFiler::h_LoadTspV3(const QString & orc_TspPath,
                                                     C_PuiSdNode & orc_UiNode)
 {
    QString c_NodePath;
-   int32_t s32_Retval = C_OscTargetSupportPackageFiler::h_Load(orc_Tsp, c_NodePath, orc_TspPath);
+   int32_t s32_Retval = C_OscTargetSupportPackageFiler::h_LoadFile(orc_Tsp, c_NodePath, orc_TspPath);
    if (s32_Retval == C_NO_ERR)
    {
       QString c_FolderPath;

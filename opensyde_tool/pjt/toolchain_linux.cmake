@@ -3,7 +3,10 @@
 
 # Let CMake auto-detect the system
 set(CMAKE_SYSTEM_NAME Linux)
-set(CMAKE_SYSTEM_PROCESSOR aarch64)
+
+# Detect host architecture automatically
+cmake_host_system_information(RESULT _host_arch QUERY OS_PLATFORM)
+set(CMAKE_SYSTEM_PROCESSOR "${_host_arch}")
 
 # Use default compiler (GCC)
 set(CMAKE_C_COMPILER gcc)
