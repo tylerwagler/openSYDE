@@ -1,4 +1,0 @@
-2026-02-06 15:19:27.571  INFO     Startup                     fla_main::qMain                                       Starting SYDEflash tool(MD5-Checksum: E54F4644BF4378186D1335921DC74833)
-2026-02-06 15:19:37.504  INFO     Initialization              C_FlaSenDcBasicSequences::InitDcSequences             CAN DLL path used: ..\..\tool\STW_dlls\stwpeak2\stwpeak2_64.dll
-2026-02-06 15:19:37.506  ERROR    Initialization              C_FlaSenDcBasicSequences::InitDcSequences             Could not load the CAN DLL! Make sure to use a 64-bit DLL.
-2026-02-06 15:19:50.689  INFO     Teardown                    C_FlaSenDcBasicSequences::~C_FlaSenDcBasicSequences   Failed to close CAN DLL.
