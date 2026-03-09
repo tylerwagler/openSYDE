@@ -119,7 +119,6 @@ QJsonObject C_OscHalcDefBase::ToJsonObject() const {
    c_Obj["nvmReservedListSizeStatusValues"] = static_cast<int32_t>(u32_NvmReservedListSizeStatusValues);
 
    return c_Obj;
-  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -237,7 +236,6 @@ QDomElement C_OscHalcDefBase::ToQDomElement(QDomDocument &orc_Doc, const QString
    c_Element.appendChild(c_ReservedElem);
 
    return c_Element;
-  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
