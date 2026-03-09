@@ -92,7 +92,7 @@ int32_t C_OscHalcConfigStandalone::FromQDataStream(QDataStream &ro_DataStream) {
     c_Domain.FromQDataStream(ro_DataStream);
     c_Domains.append(c_Domain);
   }
-  return c_Element;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -168,7 +168,7 @@ QDomElement C_OscHalcConfigStandalone::ToQDomElement(
   c_Element.appendChild(c_DomainsElement);
   
   orc_Doc.appendChild(c_Element);
-  return c_Element;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -203,5 +203,5 @@ int32_t C_OscHalcConfigStandalone::FromQDomElement(const QDomElement &orc_Elemen
     }
     c_Node = c_Node.nextSibling();
   }
-  return c_Element;
+  return stw::errors::C_NO_ERR;
 }
