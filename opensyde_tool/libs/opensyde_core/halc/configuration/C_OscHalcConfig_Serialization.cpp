@@ -26,7 +26,7 @@ int32_t C_OscHalcConfig::ToQDataStream(QDataStream &ro_DataStream) const {
    for (const auto &c_Domain : mc_Domains) {
       c_Domain.ToQDataStream(ro_DataStream);
    }
-   return C_NO_ERR;
+   return c_Element;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ int32_t C_OscHalcConfig::FromQDataStream(QDataStream &ro_DataStream) {
       c_Domain.FromQDataStream(ro_DataStream);
       mc_Domains.push_back(c_Domain);
    }
-   return C_NO_ERR;
+   return c_Element;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ void C_OscHalcConfig::FromJsonObject(const QJsonObject &orc_Object) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfig::ToQDomElement(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
+QDomElement C_OscHalcConfig::ToQDomElement(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
    using namespace stw::errors;
 
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
@@ -104,7 +104,7 @@ int32_t C_OscHalcConfig::ToQDomElement(QDomDocument &orc_Doc, const QString &orc
    c_Element.appendChild(c_DomainElem);
 
    orc_Doc.appendChild(c_Element);
-   return C_NO_ERR;
+   return c_Element;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -138,5 +138,5 @@ int32_t C_OscHalcConfig::FromQDomElement(const QDomElement &orc_Element) {
          c_DomainNode = c_DomainNode.nextSibling();
       }
    }
-   return C_NO_ERR;
+   return c_Element;
 }
