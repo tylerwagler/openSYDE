@@ -88,7 +88,7 @@ void C_OscHalcConfigChannel::FromJsonObject(const QJsonObject &orc_Object) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcConfigChannel::ToQDomDocument(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
+QDomElement C_OscHalcConfigChannel::ToQDomElement(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
    c_Element.setAttribute("name", c_Name);
    c_Element.setAttribute("comment", c_Comment);
@@ -97,7 +97,7 @@ QDomElement C_OscHalcConfigChannel::ToQDomDocument(QDomDocument &orc_Doc, const 
    
    // Serialize parameters
    for (const auto &c_Param : c_Parameters) {
-      QDomElement c_ParamElem = c_Param.ToQDomDocument(orc_Doc, "parameter");
+      QDomElement c_ParamElem = c_Param.ToQDomElement(orc_Doc, "parameter");
       c_Element.appendChild(c_ParamElem);
    }
    
@@ -105,7 +105,7 @@ QDomElement C_OscHalcConfigChannel::ToQDomDocument(QDomDocument &orc_Doc, const 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigChannel::FromQDomDocument(const QDomElement &orc_Element) {
+void C_OscHalcConfigChannel::FromQDomElement(const QDomElement &orc_Element) {
    if (orc_Element.hasAttribute("name")) c_Name = orc_Element.attribute("name");
    if (orc_Element.hasAttribute("comment")) c_Comment = orc_Element.attribute("comment");
    if (orc_Element.hasAttribute("safety-relevant")) q_SafetyRelevant = (orc_Element.attribute("safety-relevant") == "true");
@@ -117,7 +117,7 @@ void C_OscHalcConfigChannel::FromQDomDocument(const QDomElement &orc_Element) {
       QDomElement c_Elem = c_Node.toElement();
       if (!c_Elem.isNull() && c_Elem.tagName() == "parameter") {
          C_OscHalcConfigParameterStruct c_Param;
-         c_Param.FromQDomDocument(c_Elem);
+         c_Param.FromQDomElement(c_Elem);
          c_Parameters.append(c_Param);
       }
       c_Node = c_Node.nextSibling();

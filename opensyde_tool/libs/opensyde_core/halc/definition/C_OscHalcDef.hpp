@@ -50,9 +50,9 @@ public:
    QJsonObject ToJsonObject() const;
    int32_t FromJsonObject(const QJsonObject &orc_Object);
 
-   QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+   QDomElement ToQDomElement(QDomDocument &orc_Doc,
                               const QString &orc_ElementName) const;
-   int32_t FromQDomDocument(const QDomElement &orc_Element);
+   int32_t FromQDomElement(const QDomElement &orc_Element);
 
 private:
   QList<C_OscHalcDefDomain> mc_Domains; ///< Domains of HALC definition

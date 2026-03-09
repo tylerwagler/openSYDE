@@ -76,13 +76,13 @@ void C_OscHalcConfigDomain::FromJsonObject(const QJsonObject &orc_Object) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcConfigDomain::ToQDomDocument(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
+QDomElement C_OscHalcConfigDomain::ToQDomElement(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
    c_Element.setAttribute("name", c_DomainConfig.c_Name);
    c_Element.setAttribute("comment", c_DomainConfig.c_Comment);
    
    for (const auto &c_Channel : c_ChannelConfigs) {
-      QDomElement c_ChannelElem = c_Channel.ToQDomDocument(orc_Doc, "channel");
+      QDomElement c_ChannelElem = c_Channel.ToQDomElement(orc_Doc, "channel");
       c_Element.appendChild(c_ChannelElem);
    }
    
@@ -90,7 +90,7 @@ QDomElement C_OscHalcConfigDomain::ToQDomDocument(QDomDocument &orc_Doc, const Q
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigDomain::FromQDomDocument(const QDomElement &orc_Element) {
+void C_OscHalcConfigDomain::FromQDomElement(const QDomElement &orc_Element) {
    if (orc_Element.hasAttribute("name")) c_DomainConfig.c_Name = orc_Element.attribute("name");
    if (orc_Element.hasAttribute("comment")) c_DomainConfig.c_Comment = orc_Element.attribute("comment");
    
@@ -99,7 +99,7 @@ void C_OscHalcConfigDomain::FromQDomDocument(const QDomElement &orc_Element) {
       QDomElement c_Elem = c_Node.toElement();
       if (!c_Elem.isNull() && c_Elem.tagName() == "channel") {
          C_OscHalcConfigChannel c_Channel;
-         c_Channel.FromQDomDocument(c_Elem);
+         c_Channel.FromQDomElement(c_Elem);
          c_ChannelConfigs.append(c_Channel);
       }
       c_Node = c_Node.nextSibling();

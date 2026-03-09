@@ -52,11 +52,11 @@ void C_OscHalcConfigParameter::FromJsonObject(const QJsonObject &orc_Object) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcConfigParameter::ToQDomDocument(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
+QDomElement C_OscHalcConfigParameter::ToQDomElement(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
    
    // Serialize value
-   QDomElement c_ValueElem = c_Value.ToQDomDocument(orc_Doc, "value");
+   QDomElement c_ValueElem = c_Value.ToQDomElement(orc_Doc, "value");
    c_Element.appendChild(c_ValueElem);
    
    // Add comment as attribute if present
@@ -68,13 +68,13 @@ QDomElement C_OscHalcConfigParameter::ToQDomDocument(QDomDocument &orc_Doc, cons
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigParameter::FromQDomDocument(const QDomElement &orc_Element) {
+void C_OscHalcConfigParameter::FromQDomElement(const QDomElement &orc_Element) {
    // Deserialize value
    QDomNode c_Node = orc_Element.firstChild();
    while (!c_Node.isNull()) {
       QDomElement c_Elem = c_Node.toElement();
       if (!c_Elem.isNull() && c_Elem.tagName() == "value") {
-         c_Value.FromQDomDocument(c_Elem);
+         c_Value.FromQDomElement(c_Elem);
          break;
       }
       c_Node = c_Node.nextSibling();

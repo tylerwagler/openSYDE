@@ -89,17 +89,17 @@ int32_t C_OscHalcDef::FromJsonObject(const QJsonObject &orc_Object) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcDef::ToQDomDocument(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
+QDomElement C_OscHalcDef::ToQDomElement(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
 
    // Serialize base class
-   QDomElement c_BaseElem = C_OscHalcDefBase::ToQDomDocument(orc_Doc, "base");
+   QDomElement c_BaseElem = C_OscHalcDefBase::ToQDomElement(orc_Doc, "base");
    c_Element.appendChild(c_BaseElem);
 
    // Serialize domains
    QDomElement c_DomainElem = orc_Doc.createElement("domains");
    for (const auto &c_Domain : mc_Domains) {
-      QDomElement c_DomainItemElem = c_Domain.ToQDomDocument(orc_Doc, "domain");
+      QDomElement c_DomainItemElem = c_Domain.ToQDomElement(orc_Doc, "domain");
       c_DomainElem.appendChild(c_DomainItemElem);
    }
    c_Element.appendChild(c_DomainElem);
@@ -110,13 +110,13 @@ QDomElement C_OscHalcDef::ToQDomDocument(QDomDocument &orc_Doc, const QString &o
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDef::FromQDomDocument(const QDomElement &orc_Element) {
+int32_t C_OscHalcDef::FromQDomElement(const QDomElement &orc_Element) {
    // Deserialize base class
    QDomNode c_Node = orc_Element.firstChild();
    while (!c_Node.isNull()) {
       QDomElement c_Elem = c_Node.toElement();
       if (!c_Elem.isNull() && c_Elem.tagName() == "base") {
-         C_OscHalcDefBase::FromQDomDocument(c_Elem);
+         C_OscHalcDefBase::FromQDomElement(c_Elem);
          break;
       }
       c_Node = c_Node.nextSibling();
@@ -132,7 +132,7 @@ int32_t C_OscHalcDef::FromQDomDocument(const QDomElement &orc_Element) {
          QDomElement c_DomainItemElem = c_DomainNode.toElement();
          if (!c_DomainItemElem.isNull() && c_DomainItemElem.tagName() == "domain") {
             C_OscHalcDefDomain c_Domain;
-            c_Domain.FromQDomDocument(c_DomainItemElem);
+            c_Domain.FromQDomElement(c_DomainItemElem);
             mc_Domains.push_back(c_Domain);
          }
          c_DomainNode = c_DomainNode.nextSibling();

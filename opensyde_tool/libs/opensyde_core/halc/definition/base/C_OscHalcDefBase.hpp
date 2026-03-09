@@ -96,9 +96,9 @@ public:
    virtual QJsonObject ToJsonObject() const;
    virtual int32_t FromJsonObject(const QJsonObject &orc_Object);
 
-   virtual QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+   virtual QDomElement ToQDomElement(QDomDocument &orc_Doc,
                                       const QString &orc_ElementName) const;
-   virtual int32_t FromQDomDocument(const QDomElement &orc_Element);
+   virtual int32_t FromQDomElement(const QDomElement &orc_Element);
 
 private:
   static void mh_AggregateIds(const QList<C_OscHalcDefStruct> &orc_Items,

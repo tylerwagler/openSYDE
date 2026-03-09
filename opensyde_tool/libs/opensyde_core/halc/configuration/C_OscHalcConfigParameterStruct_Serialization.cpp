@@ -79,14 +79,14 @@ void C_OscHalcConfigParameterStruct::FromJsonObject(const QJsonObject &orc_Objec
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcConfigParameterStruct::ToQDomDocument(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
+QDomElement C_OscHalcConfigParameterStruct::ToQDomElement(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
    c_Element.setAttribute("name", c_Name);
    c_Element.setAttribute("comment", c_Comment);
    
    // Serialize parameter elements
    for (const auto &c_ParamElement : c_ParameterElements) {
-      QDomElement c_ElementElem = c_ParamElement.ToQDomDocument(orc_Doc, "element");
+      QDomElement c_ElementElem = c_ParamElement.ToQDomElement(orc_Doc, "element");
       c_Element.appendChild(c_ElementElem);
    }
    
@@ -94,7 +94,7 @@ QDomElement C_OscHalcConfigParameterStruct::ToQDomDocument(QDomDocument &orc_Doc
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcConfigParameterStruct::FromQDomDocument(const QDomElement &orc_Element) {
+void C_OscHalcConfigParameterStruct::FromQDomElement(const QDomElement &orc_Element) {
    if (orc_Element.hasAttribute("name")) c_Name = orc_Element.attribute("name");
    if (orc_Element.hasAttribute("comment")) c_Comment = orc_Element.attribute("comment");
    
@@ -104,7 +104,7 @@ void C_OscHalcConfigParameterStruct::FromQDomDocument(const QDomElement &orc_Ele
       QDomElement c_Elem = c_Node.toElement();
       if (!c_Elem.isNull() && c_Elem.tagName() == "element") {
          C_OscHalcConfigParameter c_Element;
-         c_Element.FromQDomDocument(c_Elem);
+         c_Element.FromQDomElement(c_Elem);
          c_ParameterElements.append(c_Element);
       }
       c_Node = c_Node.nextSibling();

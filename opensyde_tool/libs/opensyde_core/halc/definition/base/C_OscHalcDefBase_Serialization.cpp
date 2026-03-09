@@ -181,7 +181,7 @@ void C_OscHalcDefBase::FromJsonObject(const QJsonObject &orc_Object) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcDefBase::ToQDomDocument(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
+QDomElement C_OscHalcDefBase::ToQDomElement(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
 
    // Serialize basic fields as attributes
@@ -236,7 +236,7 @@ QDomElement C_OscHalcDefBase::ToQDomDocument(QDomDocument &orc_Doc, const QStrin
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefBase::FromQDomDocument(const QDomElement &orc_Element) {
+void C_OscHalcDefBase::FromQDomElement(const QDomElement &orc_Element) {
    // Deserialize basic fields from attributes
    if (orc_Element.hasAttribute("contentVersion")) {
       bool q_Valid;

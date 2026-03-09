@@ -164,11 +164,11 @@ void C_OscHalcDefContent::FromJsonObject(const QJsonObject &orc_Object) {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcDefContent::ToQDomDocument(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
+QDomElement C_OscHalcDefContent::ToQDomElement(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
 
    // Serialize base class
-   QDomElement c_BaseElem = C_OscNodeDataPoolContent::ToQDomDocument(orc_Doc, "base");
+   QDomElement c_BaseElem = C_OscNodeDataPoolContent::ToQDomElement(orc_Doc, "base");
    c_Element.appendChild(c_BaseElem);
 
    // Serialize complex type
@@ -181,7 +181,7 @@ QDomElement C_OscHalcDefContent::ToQDomDocument(QDomDocument &orc_Doc, const QSt
    for (const auto &c_Item : mc_EnumItems) {
       QDomElement c_EnumItemElem = orc_Doc.createElement("item");
       c_EnumItemElem.setAttribute("displayName", c_Item.first);
-      QDomElement c_ValueElem = c_Item.second.ToQDomDocument(orc_Doc, "value");
+      QDomElement c_ValueElem = c_Item.second.ToQDomElement(orc_Doc, "value");
       c_EnumItemElem.appendChild(c_ValueElem);
       c_EnumElem.appendChild(c_EnumItemElem);
    }
@@ -205,13 +205,13 @@ QDomElement C_OscHalcDefContent::ToQDomDocument(QDomDocument &orc_Doc, const QSt
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscHalcDefContent::FromQDomDocument(const QDomElement &orc_Element) {
+void C_OscHalcDefContent::FromQDomElement(const QDomElement &orc_Element) {
    // Deserialize base class
    QDomNode c_Node = orc_Element.firstChild();
    while (!c_Node.isNull()) {
       QDomElement c_Elem = c_Node.toElement();
       if (!c_Elem.isNull() && c_Elem.tagName() == "base") {
-         C_OscNodeDataPoolContent::FromQDomDocument(c_Elem);
+         C_OscNodeDataPoolContent::FromQDomElement(c_Elem);
          break;
       }
       c_Node = c_Node.nextSibling();
@@ -243,7 +243,7 @@ void C_OscHalcDefContent::FromQDomDocument(const QDomElement &orc_Element) {
                QDomElement c_ValueElem = c_ValueNode.toElement();
                if (!c_ValueElem.isNull() && c_ValueElem.tagName() == "value") {
                   C_OscNodeDataPoolContent c_Value;
-                  c_Value.FromQDomDocument(c_ValueElem);
+                  c_Value.FromQDomElement(c_ValueElem);
                   mc_EnumItems.push_back(QPair<QString, C_OscNodeDataPoolContent>(c_DisplayName, c_Value));
                   break;
                }
