@@ -18,6 +18,8 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscParamSetInterpretedList.hpp"
+#include <QJsonArray>
+#include <QJsonValue>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------

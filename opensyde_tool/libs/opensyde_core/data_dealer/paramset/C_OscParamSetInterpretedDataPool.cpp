@@ -18,6 +18,8 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscParamSetInterpretedDataPool.hpp"
+#include <QJsonArray>
+#include <QJsonValue>
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
@@ -157,7 +159,7 @@ void C_OscParamSetInterpretedDataPool::FromQDomDocument(const QDomElement &orc_E
     if (!c_Elem.isNull()) {
       const QString c_TagName = c_Elem.tagName();
       if (c_TagName == "data-pool-info") {
-        c_DataPoolInfo.FromQDomDocument(c_Elem);
+        c_DataPoolInfo.FromQDomElement(c_Elem);
       } else if (c_TagName == "list") {
         C_OscParamSetInterpretedList c_List;
         c_List.FromQDomDocument(c_Elem);
