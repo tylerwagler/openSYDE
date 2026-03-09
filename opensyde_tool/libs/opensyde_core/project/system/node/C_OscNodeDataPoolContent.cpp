@@ -3349,3 +3349,104 @@ int32_t C_OscNodeDataPoolContent::h_SaveToStream(const C_OscNodeDataPoolContent 
   }
   return stw::errors::C_NO_ERR;
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDataStream (duplicate of h_SaveToStream for consistency)
+   \param   ro_DataStream  Output stream
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPoolContent::ToQDataStream(QDataStream &ro_DataStream) const {
+  h_SaveToStream(*this, ro_DataStream);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDataStream (duplicate of h_LoadFromStream for consistency)
+   \param   ro_DataStream  Input stream
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPoolContent::FromQDataStream(QDataStream &ro_DataStream) {
+  h_LoadFromStream(*this, ro_DataStream);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QJsonObject
+   \return  JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscNodeDataPoolContent::ToJsonObject() const {
+  QJsonObject c_Obj;
+  
+  // Serialize type
+  c_Obj["type"] = static_cast<int32_t>(me_Type);
+  
+  // Serialize array flag
+  c_Obj["is-array"] = mq_Array;
+  
+  // Serialize data as base64 for binary data
+  c_Obj["data"] = QString(mc_Data.toBase64());
+  
+  return c_Obj;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QJsonObject
+   \param   orc_Object  JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPoolContent::FromJsonObject(const QJsonObject &orc_Object) {
+  if (orc_Object.contains("type")) {
+    me_Type = static_cast<E_Type>(orc_Object["type"].toInt());
+  }
+  if (orc_Object.contains("is-array")) {
+    mq_Array = orc_Object["is-array"].toBool();
+  }
+  if (orc_Object.contains("data")) {
+    mc_Data = QByteArray::fromBase64(orc_Object["data"].toString().toUtf8());
+  }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Serialize to QDomElement
+   \param   orc_Doc        XML document
+   \param   orc_ElementName  Element name
+   \return  XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscNodeDataPoolContent::ToQDomDocument(QDomDocument &orc_Doc,
+                                                     const QString &orc_ElementName) const {
+  QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
+  c_Element.setAttribute("type", static_cast<int32_t>(me_Type));
+  c_Element.setAttribute("is-array", mq_Array);
+  
+  // Store data as base64
+  QDomText c_DataText = orc_Doc.createTextNode(QString(mc_Data.toBase64()));
+  c_Element.appendChild(c_DataText);
+  
+  return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+   \brief   Deserialize from QDomElement
+   \param   orc_Element  XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPoolContent::FromQDomDocument(const QDomElement &orc_Element) {
+  if (orc_Element.hasAttribute("type")) {
+    me_Type = static_cast<E_Type>(orc_Element.attribute("type").toInt());
+  }
+  if (orc_Element.hasAttribute("is-array")) {
+    mq_Array = orc_Element.attribute("is-array").toInt();
+  }
+  
+  // Get data from text content (base64 encoded)
+  QString c_DataStr = orc_Element.text();
+  if (!c_DataStr.isEmpty()) {
+    mc_Data = QByteArray::fromBase64(c_DataStr.toUtf8());
+  }
+}
