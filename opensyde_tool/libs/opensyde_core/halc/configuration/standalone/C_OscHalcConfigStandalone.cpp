@@ -14,6 +14,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
+#include "stwerrors.hpp"
 
 #include "C_OscHalcConfigStandalone.hpp"
 
@@ -198,4 +199,3 @@ int32_t C_OscHalcConfigStandalone::FromQDomElement(const QDomElement &orc_Elemen
     c_Node = c_Node.nextSibling();
   }
 }
-  return C_NO_ERR;
