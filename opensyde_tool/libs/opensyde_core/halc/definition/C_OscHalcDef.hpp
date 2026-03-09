@@ -44,15 +44,15 @@ public:
    // --------------------------------------------------------------------------
    // Qt Native Serialization
    // --------------------------------------------------------------------------
-   void ToQDataStream(QDataStream &ro_DataStream) const override;
-   void FromQDataStream(QDataStream &ro_DataStream) override;
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
 
-   QJsonObject ToJsonObject() const override;
-   void FromJsonObject(const QJsonObject &orc_Object) override;
+   QJsonObject ToJsonObject() const;
+   void FromJsonObject(const QJsonObject &orc_Object);
 
    QDomElement ToQDomDocument(QDomDocument &orc_Doc,
-                              const QString &orc_ElementName) const override;
-   void FromQDomDocument(const QDomElement &orc_Element) override;
+                              const QString &orc_ElementName) const;
+   void FromQDomDocument(const QDomElement &orc_Element);
 
 private:
   QList<C_OscHalcDefDomain> mc_Domains; ///< Domains of HALC definition

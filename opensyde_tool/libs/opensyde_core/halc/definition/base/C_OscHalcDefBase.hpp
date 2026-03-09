@@ -90,15 +90,15 @@ public:
    // --------------------------------------------------------------------------
    // Qt Native Serialization
    // --------------------------------------------------------------------------
-   void ToQDataStream(QDataStream &ro_DataStream) const;
-   void FromQDataStream(QDataStream &ro_DataStream);
+   virtual void ToQDataStream(QDataStream &ro_DataStream) const;
+   virtual void FromQDataStream(QDataStream &ro_DataStream);
 
-   QJsonObject ToJsonObject() const;
-   void FromJsonObject(const QJsonObject &orc_Object);
+   virtual QJsonObject ToJsonObject() const;
+   virtual void FromJsonObject(const QJsonObject &orc_Object);
 
-   QDomElement ToQDomDocument(QDomDocument &orc_Doc,
-                              const QString &orc_ElementName) const;
-   void FromQDomDocument(const QDomElement &orc_Element);
+   virtual QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                                      const QString &orc_ElementName) const;
+   virtual void FromQDomDocument(const QDomElement &orc_Element);
 
 private:
   static void mh_AggregateIds(const QList<C_OscHalcDefStruct> &orc_Items,
