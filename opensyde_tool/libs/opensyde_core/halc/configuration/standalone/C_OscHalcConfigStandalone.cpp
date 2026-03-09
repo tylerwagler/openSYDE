@@ -168,7 +168,7 @@ QDomElement C_OscHalcConfigStandalone::ToQDomElement(
   c_Element.appendChild(c_DomainsElement);
   
   orc_Doc.appendChild(c_Element);
-  return stw::errors::C_NO_ERR;
+  return c_Element;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
