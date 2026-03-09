@@ -124,7 +124,7 @@ QDomElement C_OscHalcConfigStandaloneChannel::ToQDomElement(
   }
   c_Element.appendChild(c_ParamsElement);
   orc_Doc.appendChild(c_Element);
-  return c_Element;
+  return stw::errors::C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -149,5 +149,5 @@ int32_t C_OscHalcConfigStandaloneChannel::FromQDomElement(const QDomElement &orc
     }
     c_Node = c_Node.nextSibling();
   }
-  return c_Element;
+  return stw::errors::C_NO_ERR;
 }
