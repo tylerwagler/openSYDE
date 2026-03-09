@@ -142,7 +142,7 @@ void C_OscHalcConfigStandalone::FromJsonObject(const QJsonObject &orc_Object) {
    \return  XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscHalcConfigStandalone::ToQDomElement(
+int32_t C_OscHalcConfigStandalone::ToQDomElement(
     QDomDocument &orc_Doc, const QString &orc_ElementName) const {
   QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
   
