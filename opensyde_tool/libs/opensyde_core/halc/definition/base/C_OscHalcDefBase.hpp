@@ -12,6 +12,9 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 #include <vector>
 
@@ -82,7 +85,20 @@ public:
   virtual void AddDomain(const C_OscHalcDefDomain &orc_Domain) = 0;
   virtual void HandleFileLoadPostProcessing(void) = 0;
 
-  virtual void CalcHash(uint32_t &oru32_HashValue) const;
+   virtual void CalcHash(uint32_t &oru32_HashValue) const;
+
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+
+   QJsonObject ToJsonObject() const;
+   void FromJsonObject(const QJsonObject &orc_Object);
+
+   QDomElement ToQDomDocument(QDomDocument &orc_Doc,
+                              const QString &orc_ElementName) const;
+   void FromQDomDocument(const QDomElement &orc_Element);
 
 private:
   static void mh_AggregateIds(const QList<C_OscHalcDefStruct> &orc_Items,
