@@ -13,6 +13,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "stwtypes.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QString>
 
 /* -- Namespace
@@ -41,7 +44,20 @@ public:
   QString c_Display;        ///< Name to display to user
   QString c_Comment;        ///< Description to display to user
   bool q_ApplyValueSetting; ///< Current setting to apply this bitmask value
-  uint64_t u64_Value;       ///< Bitmask value
+   uint64_t u64_Value;       ///< Bitmask value
+
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+
+   QJsonObject ToJsonObject() const;
+   int32_t FromJsonObject(const QJsonObject &orc_Object);
+
+   QDomElement ToQDomElement(QDomDocument &orc_Doc,
+                              const QString &orc_ElementName) const;
+   int32_t FromQDomElement(const QDomElement &orc_Element);
 
 private:
   static int32_t mh_ParseUintFromString(const QString &orc_Item,

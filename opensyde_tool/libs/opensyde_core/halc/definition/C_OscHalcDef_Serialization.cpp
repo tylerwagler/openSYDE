@@ -8,6 +8,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "precomp_headers.hpp"
+#include "stwerrors.hpp"
 #include "C_OscHalcDef.hpp"
 #include <QJsonArray>
 #include <QJsonValue>
@@ -62,12 +63,10 @@ QJsonObject C_OscHalcDef::ToJsonObject() const {
    }
    c_Obj["domains"] = c_DomainArray;
 
-   return c_Obj;
-
-   return C_NO_ERR;
+    return c_Obj;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+ //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcDef::FromJsonObject(const QJsonObject &orc_Object) {
    // Deserialize base class
    if (orc_Object.contains("base")) {
@@ -104,12 +103,10 @@ QDomElement C_OscHalcDef::ToQDomElement(QDomDocument &orc_Doc, const QString &or
    }
    c_Element.appendChild(c_DomainElem);
 
-   return c_Element;
-
-   return C_NO_ERR;
+    return c_Element;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+ //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscHalcDef::FromQDomElement(const QDomElement &orc_Element) {
    // Deserialize base class
    QDomNode c_Node = orc_Element.firstChild();

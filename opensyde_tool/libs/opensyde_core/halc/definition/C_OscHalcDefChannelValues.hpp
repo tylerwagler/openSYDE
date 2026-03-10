@@ -13,6 +13,9 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "C_OscHalcDefStruct.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 
 /* -- Namespace
@@ -41,8 +44,21 @@ public:
       c_InputValues; ///< All available inputs for this domain
   QList<C_OscHalcDefStruct>
       c_OutputValues; ///< All available outputs for this domain
-  QList<C_OscHalcDefStruct>
-      c_StatusValues; ///< All available status values for this domain
+   QList<C_OscHalcDefStruct>
+       c_StatusValues; ///< All available status values for this domain
+
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+
+   QJsonObject ToJsonObject() const;
+   int32_t FromJsonObject(const QJsonObject &orc_Object);
+
+   QDomElement ToQDomElement(QDomDocument &orc_Doc,
+                              const QString &orc_ElementName) const;
+   int32_t FromQDomElement(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables

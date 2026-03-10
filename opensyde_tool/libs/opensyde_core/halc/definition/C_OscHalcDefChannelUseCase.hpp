@@ -14,6 +14,9 @@
  */
 #include "C_OscHalcDefChannelAvailability.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
 
@@ -43,8 +46,21 @@ public:
   C_OscNodeDataPoolContent c_Value; ///< Internal value to use
   QList<C_OscHalcDefChannelAvailability>
       c_Availability; ///< Channel availability settings
-  QList<uint32_t>
-      c_DefaultChannels; ///< Indices of channels which use this as default
+   QList<uint32_t>
+       c_DefaultChannels; ///< Indices of channels which use this as default
+
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+
+   QJsonObject ToJsonObject() const;
+   int32_t FromJsonObject(const QJsonObject &orc_Object);
+
+   QDomElement ToQDomElement(QDomDocument &orc_Doc,
+                              const QString &orc_ElementName) const;
+   int32_t FromQDomElement(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables

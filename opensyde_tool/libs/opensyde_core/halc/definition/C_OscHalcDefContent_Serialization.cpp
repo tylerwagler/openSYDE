@@ -9,13 +9,14 @@
 
 #include "precomp_headers.hpp"
 #include "C_OscHalcDefContent.hpp"
+#include "stwerrors.hpp"
 #include <QJsonArray>
 #include <QJsonValue>
 
 using namespace stw::opensyde_core;
 using namespace stw::errors;
 
-//----------------------------------------------------------------------------------------------------------------------
+ //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefContent::ToQDataStream(QDataStream &ro_DataStream) const {
    // Serialize base class (C_OscNodeDataPoolContent)
    C_OscNodeDataPoolContent::ToQDataStream(ro_DataStream);
@@ -36,8 +37,8 @@ void C_OscHalcDefContent::ToQDataStream(QDataStream &ro_DataStream) const {
       ro_DataStream << c_Item.c_Display;
       ro_DataStream << c_Item.c_Comment;
       ro_DataStream << c_Item.q_ApplyValueSetting;
-      ro_DataStream << c_Item.u64_Value;
-   }
+ro_DataStream << static_cast<quint64>(c_Item.u64_Value);
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -71,7 +72,9 @@ void C_OscHalcDefContent::FromQDataStream(QDataStream &ro_DataStream) {
       ro_DataStream >> c_Item.c_Display;
       ro_DataStream >> c_Item.c_Comment;
       ro_DataStream >> c_Item.q_ApplyValueSetting;
-      ro_DataStream >> c_Item.u64_Value;
+      quint64 u64_Value;
+       ro_DataStream >> u64_Value;
+       c_Item.u64_Value = static_cast<uint64_t>(u64_Value);
       mc_BitmaskItems.push_back(c_Item);
    }
 }
@@ -168,7 +171,7 @@ QDomElement C_OscHalcDefContent::ToQDomElement(QDomDocument &orc_Doc, const QStr
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
 
    // Serialize base class
-   QDomElement c_BaseElem = C_OscNodeDataPoolContent::ToQDomElement(orc_Doc, "base");
+   QDomElement c_BaseElem = C_OscNodeDataPoolContent::ToQDomDocument(orc_Doc, "base");
    c_Element.appendChild(c_BaseElem);
 
    // Serialize complex type
@@ -181,7 +184,7 @@ QDomElement C_OscHalcDefContent::ToQDomElement(QDomDocument &orc_Doc, const QStr
    for (const auto &c_Item : mc_EnumItems) {
       QDomElement c_EnumItemElem = orc_Doc.createElement("item");
       c_EnumItemElem.setAttribute("displayName", c_Item.first);
-      QDomElement c_ValueElem = c_Item.second.ToQDomElement(orc_Doc, "value");
+      QDomElement c_ValueElem = c_Item.second.ToQDomDocument(orc_Doc, "value");
       c_EnumItemElem.appendChild(c_ValueElem);
       c_EnumElem.appendChild(c_EnumItemElem);
    }
@@ -211,7 +214,7 @@ void C_OscHalcDefContent::FromQDomElement(const QDomElement &orc_Element) {
    while (!c_Node.isNull()) {
       QDomElement c_Elem = c_Node.toElement();
       if (!c_Elem.isNull() && c_Elem.tagName() == "base") {
-         C_OscNodeDataPoolContent::FromQDomElement(c_Elem);
+         C_OscNodeDataPoolContent::FromQDomDocument(c_Elem);
          break;
       }
       c_Node = c_Node.nextSibling();
@@ -243,7 +246,7 @@ void C_OscHalcDefContent::FromQDomElement(const QDomElement &orc_Element) {
                QDomElement c_ValueElem = c_ValueNode.toElement();
                if (!c_ValueElem.isNull() && c_ValueElem.tagName() == "value") {
                   C_OscNodeDataPoolContent c_Value;
-                  c_Value.FromQDomElement(c_ValueElem);
+                  c_Value.FromQDomDocument(c_ValueElem);
                   mc_EnumItems.push_back(QPair<QString, C_OscNodeDataPoolContent>(c_DisplayName, c_Value));
                   break;
                }

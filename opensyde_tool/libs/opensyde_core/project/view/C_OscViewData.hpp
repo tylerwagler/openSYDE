@@ -57,12 +57,14 @@ public:
   QJsonObject ToJsonObject() const;
   int32_t FromJsonObject(const QJsonObject& orc_Object);
 
-  // --------------------------------------------------------------------------
-  // XML Serialization (QDomDocument)
-  // --------------------------------------------------------------------------
-  QDomElement ToQDomDocument(QDomDocument& orc_Doc, 
-                             const QString& orc_RootElementName = "view-data") const;
-  int32_t FromQDomElement(const QDomElement& orc_Element);
+ // --------------------------------------------------------------------------
+   // XML Serialization (QDomDocument)
+   // --------------------------------------------------------------------------
+   QDomElement ToQDomElement(QDomDocument& orc_Doc, 
+                              const QString& orc_RootElementName = "view-data") const;
+   QDomElement ToQDomDocument(QDomDocument& orc_Doc, 
+                              const QString& orc_RootElementName = "view-data") const;
+   int32_t FromQDomElement(const QDomElement& orc_Element);
 
   const C_OscViewPc &GetOscPcData(void) const;
   void SetOscPcData(const C_OscViewPc &orc_Value);

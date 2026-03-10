@@ -15,6 +15,9 @@
 #include "C_OscHalcDefChannelDef.hpp"
 #include "C_OscHalcDefChannelUseCase.hpp"
 #include "C_OscHalcDefChannelValues.hpp"
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QList>
 #include <QString>
 
@@ -54,7 +57,20 @@ public:
       c_DomainValues; ///< All available values for the domain
   C_OscHalcDefChannelValues
       c_ChannelValues;   ///< All available values for each channel
-  E_Category e_Category; ///< Optional category
+   E_Category e_Category; ///< Optional category
+
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+
+   QJsonObject ToJsonObject() const;
+   int32_t FromJsonObject(const QJsonObject &orc_Object);
+
+   QDomElement ToQDomElement(QDomDocument &orc_Doc,
+                              const QString &orc_ElementName) const;
+   int32_t FromQDomElement(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables

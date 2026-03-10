@@ -12,6 +12,9 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
+#include <QDataStream>
+#include <QDomElement>
+#include <QJsonObject>
 #include <QString>
 
 /* -- Namespace
@@ -33,7 +36,20 @@ public:
 
   QString c_Name; ///< Name of this channel
 
-  void CalcHash(uint32_t &oru32_HashValue) const;
+   void CalcHash(uint32_t &oru32_HashValue) const;
+
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+
+   QJsonObject ToJsonObject() const;
+   int32_t FromJsonObject(const QJsonObject &orc_Object);
+
+   QDomElement ToQDomElement(QDomDocument &orc_Doc,
+                              const QString &orc_ElementName) const;
+   int32_t FromQDomElement(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables

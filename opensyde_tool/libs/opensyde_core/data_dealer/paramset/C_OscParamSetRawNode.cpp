@@ -277,12 +277,26 @@ QDomElement C_OscParamSetRawNode::ToQDomDocument(QDomDocument& orc_Doc, const QS
    }
    c_Element.appendChild(c_DataPoolsElement);
    
-   return c_Element;
+    return c_Element;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \brief Deserialize from QDomElement
+ //----------------------------------------------------------------------------------------------------------------------
+ /*!
+    \brief Serialize to QDomElement (wrapper for ToQDomDocument)
+ 
+    \param[in] orc_Doc            DOM document to create element in
+    \param[in] orc_RootElementName    Name of the root element to create
+ 
+    \return QDomElement representing the serialized data
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ QDomElement C_OscParamSetRawNode::ToQDomElement(QDomDocument& orc_Doc, const QString& orc_RootElementName) const {
+    return this->ToQDomDocument(orc_Doc, orc_RootElementName);
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*!
+    \brief Deserialize from QDomElement
    
    \param[in] orc_Element    XML element to deserialize from
    

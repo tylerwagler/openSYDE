@@ -100,9 +100,21 @@ public:
   // XML Serialization (QDomElement)
   // --------------------------------------------------------------------------
   
-  //----------------------------------------------------------------------------------------------------------------------
-  /*!
-     \brief Serialize to QDomDocument
+ //----------------------------------------------------------------------------------------------------------------------
+   /*!
+      \brief Serialize to QDomElement (XML format) - wrapper for C_OscFilerUtil compatibility
+      
+      \param[in] orc_Doc            DOM document to create element in
+      \param[in] orc_RootElementName    Name of the root element to create
+      
+      \return QDomElement representing the serialized data
+   */
+   //----------------------------------------------------------------------------------------------------------------------
+   QDomElement ToQDomElement(QDomDocument& orc_Doc, const QString& orc_RootElementName = "param-set-raw-node") const;
+   
+   //----------------------------------------------------------------------------------------------------------------------
+   /*!
+      \brief Serialize to QDomDocument
      
      \param[in] orc_Doc    XML document to append to
      \param[in] orc_RootElementName    Name of the root element to create
