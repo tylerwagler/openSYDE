@@ -345,7 +345,7 @@
          const QString c_PackagePathTmp =
              stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_NodeFolderAbs) +
              QFileInfo(c_XmlAttr).fileName();
-         s32_Retval = C_OscSupSignatureFiler::h_LoadSignatureFile(c_PackagePathTmp, orc_Signature);
+         s32_Retval = C_OscSupSignatureFiler_New::h_LoadSignatureFile(c_PackagePathTmp, orc_Signature);
          Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);
      }
      return s32_Retval;

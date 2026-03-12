@@ -26,8 +26,8 @@
 
 #include "C_OscNodeCommFiler.hpp"
 #include "C_OscNodeSquadFiler.hpp"
-#include "C_OscSystemDefinitionFiler.hpp"
-#include "C_OscHalcConfigStandaloneFiler.hpp"
+#include "C_OscSystemDefinitionFiler_New.hpp"
+#include "C_OscHalcConfigStandaloneFiler_New.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
@@ -1125,14 +1125,14 @@ void C_SdClipBoardHelper::h_StoreDataSnapShotToClipboard(const C_SdTopologyDataS
    c_StringXml.CreateAndSelectNodeChild("opensyde-system-definition");
    C_OscNodeSquadFiler::h_SaveNodeGroups(orc_Data.c_OscNodeGroups, c_StringXml);
    c_StringXml.CreateAndSelectNodeChild("nodes-core");
-   C_OscSystemDefinitionFiler::h_SaveNodes(orc_Data.c_OscNodes, c_StringXml, "", NULL);
+   C_OscSystemDefinitionFiler_New::h_SaveNodes(orc_Data.c_OscNodes, c_StringXml, "", NULL);
    Q_ASSERT(c_StringXml.SelectNodeParent() == "opensyde-system-definition");
    c_StringXml.CreateAndSelectNodeChild("nodes-ui");
    C_PuiSdHandlerFiler::h_SaveNodes(orc_Data.c_UiNodes, c_StringXml);
    //Return
    Q_ASSERT(c_StringXml.SelectNodeParent() == "opensyde-system-definition");
    c_StringXml.CreateAndSelectNodeChild("buses-core");
-   C_OscSystemDefinitionFiler::h_SaveBuses(orc_Data.c_OscBuses, c_StringXml);
+   C_OscSystemDefinitionFiler_New::h_SaveBuses(orc_Data.c_OscBuses, c_StringXml);
    Q_ASSERT(c_StringXml.SelectNodeParent() == "opensyde-system-definition");
    c_StringXml.CreateAndSelectNodeChild("buses-ui");
    C_PuiSdHandlerFiler::h_SaveBuses(orc_Data.c_UiBuses, c_StringXml);
@@ -1175,7 +1175,7 @@ int32_t C_SdClipBoardHelper::h_LoadDataSnapShotFromClipboard(C_SdTopologyDataSna
       C_OscNodeSquadFiler::h_LoadNodeGroups(orc_Data.c_OscNodeGroups, c_StringXml);
       if (c_StringXml.SelectNodeChild("nodes-core") == "nodes-core")
       {
-         s32_Retval = C_OscSystemDefinitionFiler::h_LoadNodes(orc_Data.c_OscNodes, c_StringXml,
+         s32_Retval = C_OscSystemDefinitionFiler_New::h_LoadNodes(orc_Data.c_OscNodes, c_StringXml,
                                                               C_OscSystemDefinition::hc_Devices, "", true, false);
          if (s32_Retval == C_NO_ERR)
          {
@@ -1194,7 +1194,7 @@ int32_t C_SdClipBoardHelper::h_LoadDataSnapShotFromClipboard(C_SdTopologyDataSna
       }
       if ((c_StringXml.SelectNodeChild("buses-core") == "buses-core") && (s32_Retval == C_NO_ERR))
       {
-         s32_Retval = C_OscSystemDefinitionFiler::h_LoadBuses(orc_Data.c_OscBuses, c_StringXml);
+         s32_Retval = C_OscSystemDefinitionFiler_New::h_LoadBuses(orc_Data.c_OscBuses, c_StringXml);
          if (s32_Retval == C_NO_ERR)
          {
             //Return
@@ -1259,7 +1259,7 @@ void C_SdClipBoardHelper::h_StoreHalcItemConfigToClipboard(const C_OscHalcConfig
 
    c_StringXml.CreateAndSelectNodeChild("clip-board");
 
-   s32_Retval = C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(orc_Data, c_StringXml);
+   s32_Retval = C_OscHalcConfigStandaloneFiler_New::h_SaveDataStandalone(orc_Data, c_StringXml);
 
    if (s32_Retval == C_NO_ERR)
    {
@@ -1290,7 +1290,7 @@ int32_t C_SdClipBoardHelper::h_LoadHalcItemConfigFromClipboard(C_OscHalcConfigSt
 
    if (c_StringXml.SelectRoot() == "clip-board")
    {
-      s32_Retval = C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(orc_Data, c_StringXml);
+      s32_Retval = C_OscHalcConfigStandaloneFiler_New::h_LoadDataStandalone(orc_Data, c_StringXml);
    }
    else
    {

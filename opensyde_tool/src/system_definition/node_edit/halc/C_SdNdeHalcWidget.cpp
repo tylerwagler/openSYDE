@@ -27,7 +27,7 @@
 #include "C_OgePopUpDialog.hpp"
 #include "C_OscHalcConfigUtil.hpp"
 #include "C_OscSystemFilerUtil.hpp"
-#include "C_OscHalcConfigStandaloneFiler.hpp"
+#include "C_OscHalcConfigStandaloneFiler_New.hpp"
 #include "C_SdNdeHalcConfigImportDialog.hpp"
 #include "C_SdNdeHalcDefUpdateDialog.hpp"
 
@@ -401,7 +401,7 @@ void C_SdNdeHalcWidget::m_OnExportConfigClicked(void)
             C_OscHalcConfigStandalone c_StandaloneConfig;
             C_OscHalcConfigUtil::h_GetConfigStandalone(*pc_Config, c_StandaloneConfig);
 
-            s32_Result = C_OscHalcConfigStandaloneFiler::h_SaveFileStandalone(c_StandaloneConfig,
+            s32_Result = C_OscHalcConfigStandaloneFiler_New::h_SaveFileStandalone(c_StandaloneConfig,
                                                                               c_FileName);
          }
          else

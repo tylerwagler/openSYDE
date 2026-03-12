@@ -23,7 +23,7 @@
 
 #include "C_PuiSdHandler.hpp"
 #include "C_OscHalcConfig.hpp"
-#include "C_OscHalcConfigStandaloneFiler.hpp"
+#include "C_OscHalcConfigStandaloneFiler_New.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
@@ -122,7 +122,7 @@ int32_t C_SdNdeHalcConfigImportDialog::PrepareDialog(QString & orc_ErrorDetails)
    if (pc_Config != NULL)
    {
       // Load the configuration only once
-      s32_Return = C_OscHalcConfigStandaloneFiler::h_LoadFileStandalone(this->mc_ImportConfig,
+      s32_Return = C_OscHalcConfigStandaloneFiler_New::h_LoadFileStandalone(this->mc_ImportConfig,
                                                                         this->mc_ImportFileName);
 
       if (s32_Return == C_NO_ERR)

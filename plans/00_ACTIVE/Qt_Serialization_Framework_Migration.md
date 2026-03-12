@@ -230,6 +230,10 @@ public:
 - [x] **C_OscTargetSupportPackageV2Filer** - ✅ Complete (2026-03-09)
 
 ### Phase 3: GUI Handler Filers (Weeks 8-10)
+**Note**: These filers handle UI-specific data (QPointF, QColor, QFont, etc.) and are fundamentally different from core data classes. They use XML parsing for UI state management and may not benefit from the multi-format framework.
+
+**Recommendation**: Defer or skip migration - these are UI-specific and use Qt-native types already.
+
 - [ ] C_PuiSdHandlerFiler (and V2)
 - [ ] C_PuiSvHandlerFiler (and V1)
 - [ ] C_PuiSvDashboardFiler
@@ -237,15 +241,23 @@ public:
 - [ ] C_PuiTargetSupportPackageFiler
 
 ### Phase 4: Application-Specific Filers (Weeks 11-12)
+**Note**: These filers use custom serialization mechanisms (QSettings for INI files, etc.) that are purpose-built for their specific use cases.
+
+**Recommendation**: Skip migration - these serve specialized purposes and using QSettings/INI format is appropriate for user settings.
+
 **CAN Monitor**:
-- [ ] C_CamProHandlerFiler
-- [ ] C_UsFiler (CAN Monitor version)
+- [ ] C_CamProHandlerFiler (uses custom format)
 
 **SYDE Flash**:
-- [ ] C_UsFiler (SYDE Flash version)
+- [ ] C_UsFiler (SYDE Flash version) (uses QSettings)
 
 **User Settings**:
-- [ ] C_UsFiler (Main version)
+- [ ] C_UsFiler (Main version) (uses QSettings)
+
+### Phase 5: Remaining Core Data Filers (Priority)
+**Focus on remaining core data classes that would benefit from multi-format serialization**:
+- [ ] Any remaining core data filers not yet migrated
+- [ ] Verify all core system filers are complete
 
 **Update Package**:
 - [ ] C_SyvUpPacConfigFiler

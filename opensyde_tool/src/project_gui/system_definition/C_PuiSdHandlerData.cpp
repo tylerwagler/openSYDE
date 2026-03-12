@@ -24,7 +24,7 @@
 #include "C_PuiSdHandlerFiler.hpp"
 #include "C_PuiBsElementsFiler.hpp"
 #include "C_PuiSdHandlerFilerV2.hpp"
-#include "C_OscSystemDefinitionFiler.hpp"
+#include "C_OscSystemDefinitionFiler_New.hpp"
 #include "C_OscSystemDefinitionFilerV2.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -81,7 +81,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const QString & orc_Path, uint16_t * co
          uint16_t u16_FileVersion;
          this->Clear(false);
          //We need to use the old format to improve loading performance in compatibility mode
-         s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
+         s32_Return = C_OscSystemDefinitionFiler_New::h_LoadSystemDefinition(
             mc_CoreDefinition, c_XmlParser,
             C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini"),
             orc_Path, true, &u16_FileVersion, NULL, false, NULL,
@@ -291,7 +291,7 @@ int32_t C_PuiSdHandlerData::SaveToFile(const QString & orc_Path, const bool oq_U
       }
       else
       {
-         s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(this->mc_CoreDefinition, orc_Path);
+         s32_Return = C_OscSystemDefinitionFiler_New::h_SaveSystemDefinitionFile(this->mc_CoreDefinition, orc_Path);
          if (s32_Return == C_NO_ERR)
          {
             QString c_FilePath = C_PuiSdHandlerFiler::h_GetSystemDefinitionUiFilePath(orc_Path);

@@ -21,7 +21,7 @@
 #include "C_PopErrorHandling.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_OscSystemDefinitionFiler.hpp"
+#include "C_OscSystemDefinitionFiler_New.hpp"
 
 #include <QSet>
 
@@ -133,7 +133,7 @@ void C_PopErrorHandling::h_ProjectLoadErr(const int32_t & ors32_Err, const QStri
    }
    else
    {
-      if ((ou16_SystemDefinitionVersion < C_OscSystemDefinitionFiler::hu16_FILE_VERSION_LATEST) &&
+      if ((ou16_SystemDefinitionVersion < C_OscSystemDefinitionFiler_New::hu16_FILE_VERSION_LATEST) &&
           (orc_Path.isEmpty() == false))
       {
          //Handle version update

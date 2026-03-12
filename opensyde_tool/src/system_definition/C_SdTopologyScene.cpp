@@ -46,7 +46,7 @@
 #include "C_OgePopUpDialog.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_OscSystemDefinitionFiler.hpp"
+#include "C_OscSystemDefinitionFiler_New.hpp"
 #include "C_SdManTopologyBusConnectorReconnectManager.hpp"
 #include "C_SdNodeComIfSetupWidget.hpp"
 #include "C_SdNodeToNodeConnectionSetupWidget.hpp"
@@ -1938,7 +1938,7 @@ uint32_t C_SdTopologyScene::mh_CopyFromSnapshotToSceneHandleNodesAddNewNodes(
                 (u32_CurIndex < orc_Snapshot.c_UiNodes.size())) {
               const C_OscNode rc_OscNode =
                   orc_Snapshot.c_OscNodes[u32_CurIndex];
-              C_OscSystemDefinitionFiler::h_SplitDeviceType(
+              C_OscSystemDefinitionFiler_New::h_SplitDeviceType(
                   rc_OscNode.c_DeviceType, c_MainDeviceName, c_SubDeviceName);
               c_SubDevices.append(c_SubDeviceName);
               c_OscNodes.push_back(rc_OscNode);

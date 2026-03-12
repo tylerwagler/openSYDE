@@ -27,7 +27,7 @@
 
 
 #include "C_OscAesFile.hpp"
-#include "C_OscProjectFiler.hpp"
+#include "C_OscProjectFiler_New.hpp"
 #include "C_OscZipFile.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -763,7 +763,7 @@ int32_t C_PuiProject::m_LoadProject(
   } else {
     // Load project file
     s32_Retval =
-        C_OscProjectFiler::h_Load(*this, this->mc_Path);
+        C_OscProjectFiler_New::h_Load(*this, this->mc_Path);
     if (s32_Retval == C_NO_ERR) {
       QString c_SystemDefintionPath;
       // Try newest path
@@ -919,7 +919,7 @@ int32_t C_PuiProject::m_SaveAs(const QString &orc_FilePath,
 
   if (c_Directory.mkpath(".") == true) {
     C_PuiProject::h_HandlePendingEvents();
-    s32_Retval = C_OscProjectFiler::h_Save(
+    s32_Retval = C_OscProjectFiler_New::h_Save(
         *this, orc_FilePath,
         stw::opensyde_gui_logic::C_Uti::h_GetApplicationVersion(false)
             );

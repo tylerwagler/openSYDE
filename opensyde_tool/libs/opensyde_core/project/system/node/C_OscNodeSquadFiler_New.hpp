@@ -13,7 +13,7 @@
   * ------------------------------------------------------------------------------------------------------
   */
  #include "C_OscNodeSquad.hpp"
- #include "C_OscFilerHelper.hpp"
+ #include "C_OscFilerUtil.hpp"
  #include <QString>
 
  /* -- Namespace

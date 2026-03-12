@@ -20,7 +20,7 @@
 #include "stwtypes.hpp"
 
 #include "C_OscSupNodeDefinitionFiler.hpp"
-#include "C_OscSupSignatureFiler.hpp"
+#include "C_OscSupSignatureFiler_New.hpp"
 #include "stwerrors.hpp"
 
 /* -- Used Namespaces
@@ -448,7 +448,7 @@ int32_t C_OscSupNodeDefinitionFiler::mh_LoadSignatureFile(
         stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(
             orc_NodeFolderAbs) +
         QFileInfo(c_XmlAttr).fileName();
-    s32_Retval = C_OscSupSignatureFiler::h_LoadSignatureFile(c_PackagePathTmp,
+    s32_Retval = C_OscSupSignatureFiler_New::h_LoadSignatureFile(c_PackagePathTmp,
                                                              orc_Signature);
 
     Q_ASSERT(orc_XmlParser.SelectNodeParent() == mc_ROOT_NAME);

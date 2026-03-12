@@ -33,7 +33,7 @@
 #include "C_PopSaveAsDialogWidget.hpp"
 #include "C_NagAboutDialog.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_OscProjectFiler.hpp"
+#include "C_OscProjectFiler_New.hpp"
 #include "C_Uti.hpp"
 #include "C_GiSyColorSelectWidget.hpp"
 #include "C_PopCreateServiceProjDialogWidget.hpp"
@@ -315,7 +315,7 @@ void C_NagMainWidget::UpdateRecentProjects(void)
    for (QStringList::const_iterator c_ItList = c_List.begin(); c_ItList != c_List.end(); ++c_ItList)
    {
       C_OscProject c_Tmp;
-      if (C_OscProjectFiler::h_Load(c_Tmp, c_ItList->toStdString().c_str()) == C_NO_ERR)
+      if (C_OscProjectFiler_New::h_Load(c_Tmp, c_ItList->toStdString().c_str()) == C_NO_ERR)
       {
          c_Files.push_back(*c_ItList);
          c_Projects.push_back(c_Tmp);

@@ -13,10 +13,11 @@
  /* -- Includes
   * ------------------------------------------------------------------------------------------------------
   */
- #include "C_OscSystemDefinition.hpp"
- #include "C_OscFilerHelper.hpp"
- #include <QString>
- #include <QStringList>
+#include "C_OscSystemDefinition.hpp"
+#include "C_OscFilerUtil.hpp"
+#include "C_OscXmlParser.hpp"
+#include <QString>
+#include <QStringList>
 
  /* -- Namespace
   * -----------------------------------------------------------------------------------------------------

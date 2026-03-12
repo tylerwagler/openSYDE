@@ -24,11 +24,11 @@
 #include "C_OscSecurityPemSecUpdate.hpp"
 #include "C_OscSpaServicePackageCreateUtil.hpp"
 #include "C_OscSuSequences.hpp"
-#include "C_OscSupDefinitionFiler.hpp"
-#include "C_OscSupNodeDefinitionFiler.hpp"
+#include "C_OscSupDefinitionFiler_New.hpp"
+#include "C_OscSupNodeDefinitionFiler_New.hpp"
 #include "C_OscSupServiceUpdatePackageCreate.hpp"
 #include "C_OscSupServiceUpdatePackageV1.hpp"
-#include "C_OscSupSignatureFiler.hpp"
+#include "C_OscSupSignatureFiler_New.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscSystemDefinitionFilerV2.hpp"
@@ -268,7 +268,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(
   // fill with constant file names
   c_SupFiles.insert(mhc_INI_DEV);
   c_SupFiles.insert(mhc_SUP_SYSDEF);
-  c_SupFiles.insert(C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
+  c_SupFiles.insert(C_OscSupDefinitionFiler_New::hc_PACKAGE_UPDATE_DEF);
 
   // precondition checks
   s32_Return = mh_CheckParamsToCreatePackage(
@@ -588,7 +588,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CheckParamsToCreatePackage(
       for (uint32_t u32_Pos = 0;
            (u32_Pos < orc_ActiveNodes.size()) && (q_Tmp == false); u32_Pos++) {
         if (orc_ActiveNodes[u32_Pos] ==
-            C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+            C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
           q_Tmp = true;
         }
       }
@@ -672,7 +672,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_SupDefParamAdapter(
     // in case we have an active node and (!) application(s) for update are
     // available
     if ((c_SupDefNodeContent.u8_Active ==
-         C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) &&
+         C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) &&
         ((orc_ApplicationsToWrite[u32_Pos].c_FilesToFlash.size() > 0) ||
          (orc_ApplicationsToWrite[u32_Pos].c_FilesToWriteToNvm.size() > 0) ||
          (orc_ApplicationsToWrite[u32_Pos].c_PemFile != ""))) {
@@ -889,7 +889,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateDefFilesAndZipSecureFiles(
   for (const QString &rc_File : c_SecPackageFilesRel) {
     c_SecPackageFilesRelSCL.push_back(rc_File);
   }
-  s32_Return = C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(
+  s32_Return = C_OscSupDefinitionFiler_New::h_CreateUpdatePackageDefFile(
       orc_PackagePathTmp, orc_SupDefContent, c_SecPackageFilesRelSCL);
   if (s32_Return == C_NO_ERR) {
     s32_Return = mh_HandleNodeDefCreation(
@@ -974,9 +974,9 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateNodesZip(
          (u32_File < orc_SecFiles.size()) && (s32_Return == C_NO_ERR);
          ++u32_File) {
       if (orc_ActiveNodes[u32_File] ==
-          C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+          C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
         if (c_EncryptNodes[u32_File] ==
-            C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+            C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
           QString c_ErrorQt;
           s32_Return = C_OscAesFile::h_CreateEncryptedZipFile(
               orc_NodeFoldersAbs[u32_File], orc_SecFiles[u32_File],
@@ -1045,18 +1045,18 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(
     for (uint32_t u32_File = 0UL; u32_File < orc_SupDefNodes.size();
          ++u32_File) {
       if (c_AddSignatureNodes[u32_File] ==
-          C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+          C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
         if (orc_ActiveNodes[u32_File] ==
-            C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+            C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
           orc_SupDefNodes[u32_File].u8_SignaturePresent =
-              C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE;
+              C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE;
           orc_SupDefNodes[u32_File].c_SignatureFile =
-              C_OscSupSignatureFiler::h_GetSignatureFileName();
+              C_OscSupSignatureFiler_New::h_GetSignatureFileName();
         }
       }
     }
   }
-  s32_Return = C_OscSupNodeDefinitionFiler::h_SaveNodes(orc_SecDefFilesAbs,
+  s32_Return = C_OscSupNodeDefinitionFiler_New::h_SaveNodes(orc_SecDefFilesAbs,
                                                         orc_SupDefNodes);
   // Add new files
   if (s32_Return == C_NO_ERR) {
@@ -1067,7 +1067,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(
       for (uint32_t u32_File = 0UL; u32_File < orc_SecDefFilesRel.size();
            ++u32_File) {
         if (orc_ActiveNodes[u32_File] ==
-            C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+            C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
           orc_SecFiles[u32_File].insert(orc_SecDefFilesRel[u32_File]);
         }
       }
@@ -1118,9 +1118,9 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleSignatureCreation(
          (u32_File < orc_SecFiles.size()) && (s32_Retval == C_NO_ERR);
          ++u32_File) {
       if (c_AddSignatureNodes[u32_File] ==
-          C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+          C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
         if (orc_ActiveNodes[u32_File] ==
-            C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+            C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
           QString c_Signature;
           s32_Retval =
               mh_CalcSig(orc_NodeFoldersAbs[u32_File], orc_SecFiles[u32_File],
@@ -1129,12 +1129,12 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleSignatureCreation(
           if (s32_Retval == C_NO_ERR) {
             const QString c_SignatureFilePath =
                 orc_NodeFoldersAbs[u32_File] +
-                C_OscSupSignatureFiler::h_GetSignatureFileName();
-            s32_Retval = C_OscSupSignatureFiler::h_CreateSignatureFile(
+                C_OscSupSignatureFiler_New::h_GetSignatureFileName();
+            s32_Retval = C_OscSupSignatureFiler_New::h_CreateSignatureFile(
                 c_SignatureFilePath, c_Signature);
             if (s32_Retval == C_NO_ERR) {
               orc_SecFiles[u32_File].insert(
-                  C_OscSupSignatureFiler::h_GetSignatureFileName());
+                  C_OscSupSignatureFiler_New::h_GetSignatureFileName());
             }
           }
         }
@@ -1250,7 +1250,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_GetPemFileContent(
          (s32_Retval == C_NO_ERR);
          ++u32_ItNode) {
       if (orc_ActiveNodes[u32_ItNode] ==
-          C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+          C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
         QString c_Err;
         C_OscSecurityPemSecUpdate c_Pem;
         s32_Retval = c_Pem.LoadFromFile(

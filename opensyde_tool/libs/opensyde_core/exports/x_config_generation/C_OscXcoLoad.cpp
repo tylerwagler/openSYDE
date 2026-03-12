@@ -20,7 +20,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSpaServicePackageLoadUtil.hpp"
 #include "C_OscXcoLoad.hpp"
-#include "C_OscXcoManifestFiler.hpp"
+#include "C_OscXcoManifestFiler_New.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
@@ -134,9 +134,9 @@ int32_t C_OscXcoLoad::h_ProcessPackage(const QString &orc_PackagePath,
         hc_INI_DEV;
 
     const QString c_ManifestPath =
-        c_TargetUnzipPath + C_OscXcoManifestFiler::hc_FILE_NAME;
+        c_TargetUnzipPath + C_OscXcoManifestFiler_New::hc_FILE_NAME;
     s32_Return =
-        C_OscXcoManifestFiler::h_LoadFile(orc_Manifest, c_ManifestPath);
+        C_OscXcoManifestFiler_New::h_LoadFile(orc_Manifest, c_ManifestPath);
   }
 
   mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
@@ -217,7 +217,7 @@ int32_t C_OscXcoLoad::mh_CheckXcfgFiles(const QString &orc_PackagePath) {
                                       // for
 
   c_NecessaryFilesTop.push_back(
-      C_OscXcoManifestFiler::hc_FILE_NAME);         //".syde_pkg"
+      C_OscXcoManifestFiler_New::hc_FILE_NAME);         //".syde_pkg"
   c_NecessaryFilesSysDef.push_back(hc_XCFG_SYSDEF); //".syde_sysdef"
   c_NecessaryFilesDevDef.push_back(hc_INI_DEV);     //"devices.ini"
 

@@ -24,7 +24,7 @@
 #include "C_OscSuSequences.hpp"
 #include "C_OscSupServiceUpdatePackageV1.hpp"
 #include "C_OscSystemDefinition.hpp"
-#include "C_OscSystemDefinitionFiler.hpp"
+#include "C_OscSystemDefinitionFiler_New.hpp"
 #include "C_OscSystemDefinitionFilerV2.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscZipFile.hpp"
@@ -297,7 +297,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
           orc_SystemDefinition, c_SysDefPath);
     } else {
       QStringList c_AdditionalFiles;
-      s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
+      s32_Return = C_OscSystemDefinitionFiler_New::h_SaveSystemDefinitionFile(
           orc_SystemDefinition, c_SysDefPath.toLocal8Bit().constData(),
           &c_AdditionalFiles);
       if (s32_Return == C_NO_ERR) {
@@ -660,7 +660,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_ProcessPackage(
       c_DevIniPath = c_PackagePath + mc_INI_DEV;
     }
 
-    s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
+    s32_Return = C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile(
         orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, NULL,
         &orc_ActiveNodes,
         true); // skip content
@@ -1027,7 +1027,7 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_CreateUpdatePackageDefFile(
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Creates specific device definition (internal function).
 
-   C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile needs device
+   C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile needs device
    definition. Because we don't want a generic device definition of all devices
    in the service update package, a specific one is created.
 

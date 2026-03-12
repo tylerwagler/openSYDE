@@ -17,7 +17,7 @@
 #include <QFileInfo>
 #include <QSettings>
 
-#include "C_OscDeviceDefinitionFiler.hpp"
+#include "C_OscDeviceDefinitionFiler_New.hpp"
 #include "C_OscDeviceGroup.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "stwerrors.hpp"
@@ -209,7 +209,7 @@ int32_t C_OscDeviceGroup::LoadGroup(QSettings &orc_Ini,
           c_FullDevicePath = c_DevicePath;
         }
 
-        if (C_OscDeviceDefinitionFiler::h_Load(c_DeviceDefinition,
+        if (C_OscDeviceDefinitionFiler_New::h_Load(c_DeviceDefinition,
                                                c_FullDevicePath) == C_NO_ERR) {
           this->mc_Devices.push_back(c_DeviceDefinition);
         } else {

@@ -25,13 +25,13 @@
 #include "C_OscSecurityPemSecUpdate.hpp"
 #include "C_OscSpaServicePackageLoadUtil.hpp"
 #include "C_OscSuSequences.hpp"
-#include "C_OscSupDefinitionFiler.hpp"
-#include "C_OscSupNodeDefinitionFiler.hpp"
+#include "C_OscSupDefinitionFiler_New.hpp"
+#include "C_OscSupNodeDefinitionFiler_New.hpp"
 #include "C_OscSupServiceUpdatePackageLoad.hpp"
 #include "C_OscSupServiceUpdatePackageV1.hpp"
 #include "C_OscSupSignatureFiler.hpp"
 #include "C_OscSystemDefinition.hpp"
-#include "C_OscSystemDefinitionFiler.hpp"
+#include "C_OscSystemDefinitionFiler_New.hpp"
 #include "C_OscSystemDefinitionFilerV2.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscZipFile.hpp"
@@ -254,7 +254,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(
     QStringList c_PackageFiles;
     QList<uint32_t> c_UpdatePosition;
 
-    s32_Return = C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(
+    s32_Return = C_OscSupDefinitionFiler_New::h_LoadUpdatePackageDefFile(
         c_TargetUnzipPath, oq_IsZip, orc_PackagePath, u32_FileVersion,
         c_FilePackagePath, oru32_ActiveBusIndex, orc_ActiveNodes,
         c_UpdatePosition, c_PackageFiles);
@@ -275,7 +275,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(
           const QString c_SysDefPath = c_TargetUnzipPath + mhc_SUP_SYSDEF;
           const QString c_DevIniPath = c_TargetUnzipPath + mhc_INI_DEV;
 
-          s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
+          s32_Return = C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile(
               orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, NULL,
               &orc_ActiveNodes,
               true); // skip content
@@ -310,7 +310,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(
     for (uint8_t u8_Node = 0U; u8_Node < orc_SystemDefinition.c_Nodes.size();
          u8_Node++) {
       if ((orc_ActiveNodes[u8_Node] ==
-           C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) &&
+           C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) &&
           (orc_SystemDefinition.c_Nodes[u8_Node].pc_DeviceDefinition != NULL)) {
         const C_OscNode &rc_CurNode = orc_SystemDefinition.c_Nodes[u8_Node];
         Q_ASSERT(rc_CurNode.u32_SubDeviceIndex <
@@ -367,7 +367,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_CheckSupFiles(
   QStringList c_NecessaryFiles; // those are the files we look for
 
   c_NecessaryFiles.push_back(
-      C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF); //".syde_supdef"
+      C_OscSupDefinitionFiler_New::hc_PACKAGE_UPDATE_DEF); //".syde_supdef"
   c_NecessaryFiles.push_back(mhc_SUP_SYSDEF);          //".syde_sysdef"
   c_NecessaryFiles.push_back(mhc_INI_DEV);             //"devices.ini"
 
@@ -536,7 +536,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackAndLoadNodes(
       QStringList c_Signatures;
       mh_GetSydeSecureDefFileNames(orc_SystemDefinition, orc_TargetUnzipPath,
                                    c_AbsFiles, c_RelFiles);
-      s32_Return = C_OscSupNodeDefinitionFiler::h_LoadNodes(
+      s32_Return = C_OscSupNodeDefinitionFiler_New::h_LoadNodes(
           c_AbsFiles, c_NodeFoldersAbs, orc_ActiveNodes,
           orc_ApplicationsToWrite, c_UpdateOrderByNodes, orc_UpdatePosition,
           c_Signatures);
@@ -601,7 +601,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_UnpackNodes(
       s32_Return = (QDir().mkpath(c_TargetFolder) ? 0 : -1);
       if (s32_Return == C_NO_ERR) {
         if (c_DecryptNodes[u32_ItPackage] ==
-            C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+            C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
           s32_Return = C_OscAesFile::h_UnpackEncryptedZipFile(
               c_FinalZipPath, c_TargetFolder,
               c_DecryptNodesPassword[u32_ItPackage], &mhc_ErrorMessage);
@@ -661,7 +661,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_VerifySignatures(
          (s32_Retval == C_NO_ERR);
          ++u32_ItNode) {
       if (orc_ActiveNodes[u32_ItNode] ==
-          C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+          C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
         if (orc_Signatures[u32_ItNode].isEmpty() == false) {
           s32_Retval = mh_VerifySignature(
               orc_ApplicationsToWrite[u32_ItNode],

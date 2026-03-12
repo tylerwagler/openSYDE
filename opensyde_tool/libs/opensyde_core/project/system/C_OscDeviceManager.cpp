@@ -21,7 +21,7 @@
 #include "stwtypes.hpp"
 #include <QSettings>
 
-#include "C_OscDeviceDefinitionFiler.hpp"
+#include "C_OscDeviceDefinitionFiler_New.hpp"
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces
@@ -129,7 +129,7 @@ int32_t C_OscDeviceManager::AddDevice(const QString &orc_DeviceDefinitionFile,
   }
 
   // Load device definition for name checking
-  s32_Return = C_OscDeviceDefinitionFiler::h_Load(c_DeviceDefinition,
+  s32_Return = C_OscDeviceDefinitionFiler_New::h_Load(c_DeviceDefinition,
                                                   orc_DeviceDefinitionFile);
   if (s32_Return == C_NO_ERR) {
     // Compare new device definition file with existing

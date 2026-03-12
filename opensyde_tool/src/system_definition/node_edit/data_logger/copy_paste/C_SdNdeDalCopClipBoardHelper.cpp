@@ -17,7 +17,7 @@
 
 #include "stwerrors.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_OscDataLoggerJobFiler.hpp"
+#include "C_OscDataLoggerJobFiler_New.hpp"
 #include "C_SdNdeDalCopClipBoardHelper.hpp"
 #include "C_PuiSdHandlerDataLoggerLogic.hpp"
 
@@ -140,7 +140,7 @@ void C_SdNdeDalCopClipBoardHelper::mh_StoreDataloggerToClipboard(const QList<C_O
    C_OscXmlParser c_StringXml;
 
    c_StringXml.CreateAndSelectNodeChild(orc_GenericTagName);
-   C_OscDataLoggerJobFiler::h_SaveData(orc_Data, c_StringXml);
+   C_OscDataLoggerJobFiler_New::h_SaveData(orc_Data, c_StringXml);
    C_SdNdeDalCopClipBoardHelper::mh_StoreElementIdGroups(orc_ElementIdGroups, orc_GenericTagName, c_StringXml);
    c_StringXml.SaveToString(c_XmlContent);
 
@@ -184,7 +184,7 @@ void C_SdNdeDalCopClipBoardHelper::mh_StoreElementIdGroup(const C_OscNodeDataPoo
    Q_ASSERT(orc_ElementId == orc_ElementIdGroup.GetElementId());
    orc_XmlParser.CreateAndSelectNodeChild("element-id-group");
    orc_XmlParser.CreateAndSelectNodeChild("index");
-   C_OscDataLoggerJobFiler::h_SaveDataElementOptArrayId(orc_ElementId, orc_XmlParser);
+   C_OscDataLoggerJobFiler_New::h_SaveDataElementOptArrayId(orc_ElementId, orc_XmlParser);
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "element-id-group");
    orc_XmlParser.SetAttributeUint32("crc", orc_ElementIdGroup.GetCrc());
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "element-id-groups");
@@ -214,7 +214,7 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadDataloggerFromClipboard(QList<C_Osc
 
    if (c_StringXml.SelectRoot() == orc_GenericTagName.toStdString())
    {
-      s32_Retval = C_OscDataLoggerJobFiler::h_LoadData(orc_Data, c_StringXml);
+      s32_Retval = C_OscDataLoggerJobFiler_New::h_LoadData(orc_Data, c_StringXml);
       if (s32_Retval == C_NO_ERR)
       {
          s32_Retval =
@@ -307,7 +307,7 @@ int32_t C_SdNdeDalCopClipBoardHelper::mh_LoadElementIdGroup(C_OscNodeDataPoolLis
       s32_Retval = orc_XmlParser.SelectNodeChildError("index");
       if (s32_Retval == C_NO_ERR)
       {
-         C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(orc_ElementId, orc_XmlParser);
+         C_OscDataLoggerJobFiler_New::h_LoadDataElementOptArrayId(orc_ElementId, orc_XmlParser);
 
          orc_ElementIdGroup.SetElementId(orc_ElementId);
          //Return

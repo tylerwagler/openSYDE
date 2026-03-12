@@ -17,7 +17,7 @@
  #include <fstream>
 
  #include "C_OscSupDefinitionFiler_New.hpp"
- #include "C_OscSupNodeDefinitionFiler.hpp"
+ #include "C_OscSupNodeDefinitionFiler_New.hpp"
  #include "C_OscXmlParser.hpp"
  #include "C_OscUtils.hpp"
  #include "stwerrors.hpp"
@@ -303,7 +303,7 @@
          uint8_t u8_Active = static_cast<uint8_t>(c_Node["active"].toInt());
          orc_ActiveNodes.push_back(u8_Active);
 
-         if (u8_Active == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+         if (u8_Active == C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
              uint32_t u32_Pos = static_cast<uint32_t>(c_Node["position"].toDouble());
              orc_UpdatePosition.append(u32_Pos);
              orc_PackageFiles.append(c_Node["file"].toString());
@@ -461,7 +461,7 @@
 
          c_Node["active"] = static_cast<double>(rc_Node.u8_Active);
 
-         if (rc_Node.u8_Active == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+         if (rc_Node.u8_Active == C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
              c_Node["position"] = static_cast<double>(rc_Node.u32_Position);
              c_Node["file"] = orc_Files[i];
          }
@@ -543,7 +543,7 @@
          orc_XmlParser.SetAttributeUint32(mc_NODE_ACTIVE_ATTR,
                                           static_cast<uint32_t>(c_CurrentNode.u8_Active));
 
-         if (c_CurrentNode.u8_Active == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+         if (c_CurrentNode.u8_Active == C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
              if ((c_CurrentNode.c_ApplicationFileNames.size() > 0) ||
                  (c_CurrentNode.c_NvmFileNames.size() > 0) ||
                  (c_CurrentNode.c_PemFile != "")) {
@@ -586,7 +586,7 @@
              orc_XmlParser.GetAttributeUint32(mc_NODE_ACTIVE_ATTR));
          orc_ActiveNodes.push_back(u8_NodeActive);
 
-         if (u8_NodeActive == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+         if (u8_NodeActive == C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
              u32_UpdatePosition = static_cast<uint8_t>(
                  orc_XmlParser.GetAttributeUint32(mc_NODE_POSITION_ATTR));
              orc_XmlParser.SelectNodeChild(mc_NODE_UPDATE);

@@ -20,7 +20,7 @@
 
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSpaServicePackageCreateUtil.hpp"
-#include "C_OscSystemDefinitionFiler.hpp"
+#include "C_OscSystemDefinitionFiler_New.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscZipFile.hpp"
 #include "stwerrors.hpp"
@@ -269,7 +269,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(
   const QString c_SysDefPath = orc_UsedTempPath + orc_SystemDefinitionFileName;
 
   QStringList c_AdditionalFiles;
-  int32_t s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
+  int32_t s32_Return = C_OscSystemDefinitionFiler_New::h_SaveSystemDefinitionFile(
       orc_SystemDefinition, c_SysDefPath, &c_AdditionalFiles);
   if (s32_Return == C_NO_ERR) {
     // Add files to pack
@@ -428,7 +428,7 @@ void C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder(
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Creates specific device definition (internal function).
 
-   C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile needs device
+   C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile needs device
    definition. Because we don't want a generic device definition of all devices
    in the service update package, a specific one is created.
 

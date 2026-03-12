@@ -29,7 +29,7 @@
 #include "C_OscComMessageLogger.hpp"
 #include "C_OscComMessageLoggerFileAsc.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_OscSystemDefinitionFiler.hpp"
+#include "C_OscSystemDefinitionFiler_New.hpp"
 #include <QDateTime>
 #include <chrono>
 
@@ -283,7 +283,7 @@ C_OscComMessageLogger::AddOsySysDef(const QString &orc_PathSystemDefinition,
     // Optional parameters to skip contents of h_LoadSystemDefinitionFile are
     // not used, because we are not in SYDEsup or SYDE Coder C context (#61996)
     // and we want all system definition data here.
-    s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
+    s32_Return = C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile(
         c_SysDef, orc_PathSystemDefinition, "", false);
     if (s32_Return == C_NO_ERR) {
       uint32_t u32_BusCounter;

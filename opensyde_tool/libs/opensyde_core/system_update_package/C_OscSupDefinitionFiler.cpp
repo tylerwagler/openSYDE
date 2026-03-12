@@ -19,7 +19,7 @@
 #include <QList>
 
 #include "C_OscSupDefinitionFiler.hpp"
-#include "C_OscSupNodeDefinitionFiler.hpp"
+#include "C_OscSupNodeDefinitionFiler_New.hpp"
 #include "C_OscXmlParser.hpp"
 #include "stwerrors.hpp"
 
@@ -231,7 +231,7 @@ void C_OscSupDefinitionFiler::mh_SaveNodes(
 
       // active node?
       if (c_CurrentNode.u8_Active ==
-          C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+          C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
         // if there are files to update for active node then list files
         if ((c_CurrentNode.c_ApplicationFileNames.size() > 0) ||
             (c_CurrentNode.c_NvmFileNames.size() > 0) ||
@@ -284,7 +284,7 @@ void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase &orc_XmlParser,
     const uint8_t u8_NodeActive = static_cast<uint8_t>(
         orc_XmlParser.GetAttributeUint32(mc_NODE_ACTIVE_ATTR));
     orc_ActiveNodes.push_back(u8_NodeActive);
-    if (u8_NodeActive == C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) {
+    if (u8_NodeActive == C_OscSupNodeDefinitionFiler_New::hu8_ACTIVE_NODE) {
       // get update position
       u32_UpdatePosition = static_cast<uint8_t>(
           orc_XmlParser.GetAttributeUint32(mc_NODE_POSITION_ATTR));
