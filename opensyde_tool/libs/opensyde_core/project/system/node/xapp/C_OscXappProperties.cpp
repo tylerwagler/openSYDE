@@ -223,7 +223,58 @@ QDomElement C_OscXappProperties::ToQDomDocument(QDomDocument& orc_Doc, const QSt
    
    \param[in] orc_Element    XML element to deserialize from
    
-   \return C_NO_ERR on success
+    \return QDomElement representing the serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscXappProperties::ToQDomElement(QDomDocument& orc_Doc, const QString& orc_RootElementName) const {
+    QDomElement c_Element = orc_Doc.createElement(orc_RootElementName);
+    
+    // Serialize polling-interval-ms
+    QDomElement c_PollingElement = orc_Doc.createElement("polling-interval-ms");
+    QDomText c_PollingText = orc_Doc.createTextNode(QString::number(u32_PollingIntervalMs));
+    c_PollingElement.appendChild(c_PollingText);
+    c_Element.appendChild(c_PollingElement);
+    
+    // Serialize data-request-interval-ms
+    QDomElement c_RequestElement = orc_Doc.createElement("data-request-interval-ms");
+    QDomText c_RequestText = orc_Doc.createTextNode(QString::number(u32_DataRequestIntervalMs));
+    c_RequestElement.appendChild(c_RequestText);
+    c_Element.appendChild(c_RequestElement);
+    
+    // Serialize connected-interface-type
+    QDomElement c_TypeElement = orc_Doc.createElement("connected-interface-type");
+    QString c_TypeText;
+    switch (e_ConnectedInterfaceType) {
+        case C_OscSystemBus::eCAN:
+            c_TypeText = "can";
+            break;
+        case C_OscSystemBus::eETHERNET:
+            c_TypeText = "ethernet";
+            break;
+        default:
+            c_TypeText = "unknown";
+            break;
+    }
+    QDomText c_TypeTextNode = orc_Doc.createTextNode(c_TypeText);
+    c_TypeElement.appendChild(c_TypeTextNode);
+    c_Element.appendChild(c_TypeElement);
+    
+    // Serialize connected-interface-number
+    QDomElement c_NumberElement = orc_Doc.createElement("connected-interface-number");
+    QDomText c_NumberText = orc_Doc.createTextNode(QString::number(u8_ConnectedInterfaceNumber));
+    c_NumberElement.appendChild(c_NumberText);
+    c_Element.appendChild(c_NumberElement);
+    
+    return c_Element;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*!
+    \brief Deserialize from QDomElement
+
+    \param[in] orc_Element    XML element to deserialize from
+    
+    \return C_NO_ERR on success
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXappProperties::FromQDomElement(const QDomElement& orc_Element) {
