@@ -21,15 +21,15 @@ using namespace stw::opensyde_core;
 using namespace stw::errors;
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_LoadXceManifestFile(QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::h_LoadXceManifestFile(C_OscXceManifest &orc_Manifest,
                                                          const QString &orc_FilePath,
                                                          const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
-   return mh_DetectAndLoad(orc_Manifests, orc_FilePath);
+   return mh_DetectAndLoad(orc_Manifest, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_SaveXceManifestFile(const QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::h_SaveXceManifestFile(const C_OscXceManifest &orc_Manifest,
                                                          const QString &orc_FilePath,
                                                          const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -38,64 +38,64 @@ int32_t C_OscXceManifestFiler_New::h_SaveXceManifestFile(const QList<C_OscXceMan
    const QString c_Extension = c_FileInfo.suffix().toLower();
 
    if (c_Extension == "bin") {
-      return h_SaveBinary(orc_Manifests, orc_FilePath);
+      return h_SaveBinary(orc_Manifest, orc_FilePath);
    } else if (c_Extension == "json") {
-      return h_SaveJson(orc_Manifests, orc_FilePath);
+      return h_SaveJson(orc_Manifest, orc_FilePath);
    } else if (c_Extension == "xml") {
-      return h_SaveXml(orc_Manifests, orc_FilePath);
+      return h_SaveXml(orc_Manifest, orc_FilePath);
    } else {
       return C_CONFIG; // Invalid file extension
    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_LoadBinary(QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::h_LoadBinary(C_OscXceManifest &orc_Manifest,
                                                 const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_LoadListBinary<C_OscXceManifest>(orc_Manifests, orc_FilePath);
+   return C_OscFilerUtil::h_LoadBinary<C_OscXceManifest>(orc_Manifest, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_SaveBinary(const QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::h_SaveBinary(const C_OscXceManifest &orc_Manifest,
                                                 const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_SaveListBinary<C_OscXceManifest>(orc_Manifests, orc_FilePath);
+   return C_OscFilerUtil::h_SaveBinary<C_OscXceManifest>(orc_Manifest, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_LoadJson(QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::h_LoadJson(C_OscXceManifest &orc_Manifest,
                                               const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_LoadListJson<C_OscXceManifest>(orc_Manifests, orc_FilePath);
+   return C_OscFilerUtil::h_LoadJson<C_OscXceManifest>(orc_Manifest, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_SaveJson(const QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::h_SaveJson(const C_OscXceManifest &orc_Manifest,
                                               const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_SaveListJson<C_OscXceManifest>(orc_Manifests, orc_FilePath);
+   return C_OscFilerUtil::h_SaveJson<C_OscXceManifest>(orc_Manifest, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_LoadXml(QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::h_LoadXml(C_OscXceManifest &orc_Manifest,
                                              const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_LoadListXml<C_OscXceManifest>(orc_Manifests, orc_FilePath, "xceManifest", "manifest");
+   return C_OscFilerUtil::h_LoadXml<C_OscXceManifest>(orc_Manifest, orc_FilePath, "xceManifest");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_SaveXml(const QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::h_SaveXml(const C_OscXceManifest &orc_Manifest,
                                              const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_SaveListXml<C_OscXceManifest>(orc_Manifests, orc_FilePath, "xceManifest", "manifest");
+   return C_OscFilerUtil::h_SaveXml<C_OscXceManifest>(orc_Manifest, orc_FilePath, "xceManifest");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::mh_DetectAndLoad(QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::mh_DetectAndLoad(C_OscXceManifest &orc_Manifest,
                                                     const QString &orc_FilePath) {
    QFileInfo c_FileInfo(orc_FilePath);
    const QString c_Extension = c_FileInfo.suffix().toLower();
 
    if (c_Extension == "bin") {
-      return h_LoadBinary(orc_Manifests, orc_FilePath);
+      return h_LoadBinary(orc_Manifest, orc_FilePath);
    } else if (c_Extension == "json") {
-      return h_LoadJson(orc_Manifests, orc_FilePath);
+      return h_LoadJson(orc_Manifest, orc_FilePath);
    } else if (c_Extension == "xml") {
-      return h_LoadXml(orc_Manifests, orc_FilePath);
+      return h_LoadXml(orc_Manifest, orc_FilePath);
    } else {
       return C_CONFIG; // Invalid file extension
    }
@@ -103,14 +103,14 @@ int32_t C_OscXceManifestFiler_New::mh_DetectAndLoad(QList<C_OscXceManifest> &orc
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscXceManifestFiler_New::h_LoadFile(QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::h_LoadFile(C_OscXceManifest &orc_Manifest,
                                               const QString &orc_Path) {
-   return h_LoadXceManifestFile(orc_Manifests, orc_Path, QString());
+   return h_LoadXceManifestFile(orc_Manifest, orc_Path, QString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscXceManifestFiler_New::h_SaveFile(const QList<C_OscXceManifest> &orc_Manifests,
+int32_t C_OscXceManifestFiler_New::h_SaveFile(const C_OscXceManifest &orc_Manifest,
                                               const QString &orc_Path) {
-   return h_SaveXceManifestFile(orc_Manifests, orc_Path, QString());
+   return h_SaveXceManifestFile(orc_Manifest, orc_Path, QString());
 }

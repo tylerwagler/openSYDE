@@ -40,49 +40,49 @@ public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)
    // --------------------------------------------------------------------------
-   static int32_t h_LoadXceManifestFile(QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t h_LoadXceManifestFile(C_OscXceManifest &orc_Manifest,
                                         const QString &orc_FilePath,
                                         const QString &orc_BasePath);
-   static int32_t h_SaveXceManifestFile(const QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t h_SaveXceManifestFile(const C_OscXceManifest &orc_Manifest,
                                         const QString &orc_FilePath,
                                         const QString &orc_BasePath);
 
    // --------------------------------------------------------------------------
    // Binary Format
    // --------------------------------------------------------------------------
-   static int32_t h_LoadBinary(QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t h_LoadBinary(C_OscXceManifest &orc_Manifest,
                                const QString &orc_FilePath);
-   static int32_t h_SaveBinary(const QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t h_SaveBinary(const C_OscXceManifest &orc_Manifest,
                                const QString &orc_FilePath);
 
    // --------------------------------------------------------------------------
    // JSON Format
    // --------------------------------------------------------------------------
-   static int32_t h_LoadJson(QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t h_LoadJson(C_OscXceManifest &orc_Manifest,
                              const QString &orc_FilePath);
-   static int32_t h_SaveJson(const QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t h_SaveJson(const C_OscXceManifest &orc_Manifest,
                              const QString &orc_FilePath);
 
    // --------------------------------------------------------------------------
    // XML Format
    // --------------------------------------------------------------------------
-   static int32_t h_LoadXml(QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t h_LoadXml(C_OscXceManifest &orc_Manifest,
                             const QString &orc_FilePath);
-   static int32_t h_SaveXml(const QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t h_SaveXml(const C_OscXceManifest &orc_Manifest,
                             const QString &orc_FilePath);
 
    // --------------------------------------------------------------------------
    // Legacy Compatibility (deprecated)
    // --------------------------------------------------------------------------
    [[deprecated("Use format-specific methods")]]
-   static int32_t h_LoadFile(QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t h_LoadFile(C_OscXceManifest &orc_Manifest,
                              const QString &orc_Path);
    [[deprecated("Use format-specific methods")]]
-   static int32_t h_SaveFile(const QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t h_SaveFile(const C_OscXceManifest &orc_Manifest,
                              const QString &orc_Path);
 
 private:
-   static int32_t mh_DetectAndLoad(QList<C_OscXceManifest> &orc_Manifests,
+   static int32_t mh_DetectAndLoad(C_OscXceManifest &orc_Manifest,
                                    const QString &orc_FilePath);
 };
 
