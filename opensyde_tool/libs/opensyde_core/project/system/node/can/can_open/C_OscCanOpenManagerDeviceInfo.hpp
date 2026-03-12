@@ -17,6 +17,9 @@
 #include "stwtypes.hpp"
 #include <QList>
 #include <QString>
+#include <QDataStream>
+#include <QJsonObject>
+#include <QDomDocument>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -49,16 +52,16 @@ public:
   void SetEdsFileContent(const C_OscCanOpenObjectDictionary &orc_NewContent);
 
   QString c_ProjectEdsFilePath; ///< Absolute file path to EDS file for delayed
-                                ///< loading; not part of the
-                                // file's content
+                                 ///< loading; not part of the
+                                 // file's content
 
   QString c_OriginalEdsFileName; ///< File name of original EDS file
 
   QList<C_OscCanOpenManagerMappableSignal>
       c_EdsFileMappableSignals; ///< All parsed and valid mappable signals
   bool q_DeviceOptional;        ///< Flag for CANopen manager to consider
-  ///< this device
-  ///< optional
+   ///< this device
+   ///< optional
   bool q_NoInitialization; ///< Flag for CANopen manager to skip initialization
                            ///< for this device
   bool q_FactorySettingsActive; ///< Reset device to default communication
@@ -77,6 +80,17 @@ public:
   bool q_EnableHeartbeatConsumingAutoCalculation; ///< Enable CANopen heartbeat
                                                   ///< consuming automatic
                                                   ///< calculation
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &ro_Json);
+  QDomElement ToQDomElement(QDomDocument &ro_Doc,
+                            const QString &orc_ElementName) const;
+  void FromQDomElement(const QDomElement &ro_Element);
 };
 
 /* -- Extern Global Variables

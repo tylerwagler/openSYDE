@@ -14,6 +14,10 @@
  */
 #include "C_OscCanSignal.hpp"
 #include "C_OscNodeDataPoolListElement.hpp"
+#include <QDataStream>
+#include <QJsonObject>
+#include <QDomDocument>
+#include <QString>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -35,6 +39,17 @@ public:
   bool q_AutoMinMaxUsed;
   C_OscCanSignal c_SignalData;
   C_OscNodeDataPoolListElement c_DatapoolData;
+
+  // --------------------------------------------------------------------------
+  // Qt Native Serialization
+  // --------------------------------------------------------------------------
+  void ToQDataStream(QDataStream &ro_DataStream) const;
+  void FromQDataStream(QDataStream &ro_DataStream);
+  QJsonObject ToJsonObject() const;
+  void FromJsonObject(const QJsonObject &ro_Json);
+  QDomElement ToQDomDocument(QDomDocument &ro_Doc,
+                             const QString &orc_ElementName) const;
+  void FromQDomDocument(const QDomElement &ro_Element);
 };
 
 /* -- Extern Global Variables

@@ -12,7 +12,10 @@
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
-#include <QHash>
+ #include <QHash>
+#include <QDataStream>
+#include <QJsonObject>
+#include <QDomDocument>
 
 #include "C_OscCanInterfaceId.hpp"
 #include "C_OscCanOpenManagerDeviceInfo.hpp"
@@ -81,10 +84,21 @@ public:
   uint32_t
       u32_SyncWindowLengthUs; ///< Setting for SYNC message window length in us
 
-  QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>
-      c_CanOpenDevices; ///< CANopen devices assigned to the
-                        // CANopen manager, grouped by node
-                        // index and interface ID
+ QHash<C_OscCanInterfaceId, C_OscCanOpenManagerDeviceInfo>
+       c_CanOpenDevices; ///< CANopen devices assigned to the
+                         // CANopen manager, grouped by node
+                         // index and interface ID
+
+   // --------------------------------------------------------------------------
+   // Qt Native Serialization
+   // --------------------------------------------------------------------------
+   void ToQDataStream(QDataStream &ro_DataStream) const;
+   void FromQDataStream(QDataStream &ro_DataStream);
+   QJsonObject ToJsonObject() const;
+   int32_t FromJsonObject(const QJsonObject &orc_Object);
+   QDomElement ToQDomElement(QDomDocument &orc_Doc,
+                             const QString &orc_ElementName = "canOpenManagerInfo") const;
+   int32_t FromQDomElement(const QDomElement &orc_Element);
 };
 
 /* -- Extern Global Variables
