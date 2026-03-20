@@ -48,42 +48,8 @@ find_package(Qt6 REQUIRED COMPONENTS SerialBus Network)
 include_directories()
 set (OPENSYDE_INCLUDES
    ${PROJECT_ROOT}/src
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/line_edit
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/push_button
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/spin_box
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/text_browser
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/check_box
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/group_box
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/label
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/menu
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/spin_box
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/splitter
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/tool_button
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings
-   ${PROJECT_ROOT}/src/can_monitor/util
    ${PROJECT_ROOT}/src/help_engine
    ${PROJECT_ROOT}/src/navigable_gui
-   ${PROJECT_ROOT}/src/opensyde_gui_elements
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/frame
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/menu
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/splitter
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/tool_button
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget
    ${PROJECT_ROOT}/src/project_operations
    ${PROJECT_ROOT}/src/syde_flash
    ${PROJECT_ROOT}/src/syde_flash/bottom_bar
@@ -93,14 +59,12 @@ set (OPENSYDE_INCLUDES
    ${PROJECT_ROOT}/src/syde_flash/settings
    ${PROJECT_ROOT}/src/syde_flash/update
    ${PROJECT_ROOT}/src/syde_flash/user_settings
-   ${PROJECT_ROOT}/src/syde_flash/util
    ${PROJECT_ROOT}/src/system_definition
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools
    ${PROJECT_ROOT}/src/system_views/communication
    ${PROJECT_ROOT}/src/system_views/device_configuration
    ${PROJECT_ROOT}/src/table_base
    ${PROJECT_ROOT}/src/table_base/tree_base
-   ${PROJECT_ROOT}/src/util
 )
 
 # Include path with library modules
@@ -110,119 +74,16 @@ set (OPENSYDE_LIB_INCLUDES
 # --- PROJECT SOURCE FILE PATHS ----------------------------------------------------------------------------------------
 
 set(OPENSYDE_SOURCES
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/check_box/C_CamOgeChxSettings.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxDark.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTable.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTableSmall.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxWhite.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/group_box/C_CamOgeGbxMessageGeneratorBackground.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/group_box/C_CamOgeGbxMessageSignalsBorder.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/label/C_CamOgeLabStatusBar.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeIdPopUp.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeTableEdit.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/menu/C_CamOgeMuRecentProjects.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubAbout.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubDarkBrowse.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariablesBase.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubProjOp.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubSettingsAdd.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/spin_box/C_CamOgeSpxProperties.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/splitter/C_CamOgeSpi.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/tool_button/C_CamOgeTobRecentProjects.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSectionHeader.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingSubSection.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingsBase.cpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSpinBoxGroupTable.cpp
 
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.cpp
-   ${PROJECT_ROOT}/src/can_monitor/util/C_CamUtiGeneric.cpp
    ${PROJECT_ROOT}/src/help_engine/C_HeHandler.cpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagAboutDialog.cpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolTip.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeContextMenu.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraStyled.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxStyled.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelect.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxResizingView.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxStyled.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeStyled.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeProperties.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLePropertiesName.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/menu/C_OgeMuSections.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStandard.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStyled.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStyledToolTip.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabProperties.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxAllBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxAutoFixBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFix.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFixCustomTrigger.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleDynamicDecimalsBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64AutoFix.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64ToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebStyled.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedContextMenuBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedPropertiesComment.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipContent.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/tool_button/C_OgeTobToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiCustomMessage.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiError.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiProgressBar.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiOnlyBackground.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroup.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiUtil.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiWithToolTip.cpp
    ${PROJECT_ROOT}/src/project_operations/C_PopErrorHandling.cpp
    ${PROJECT_ROOT}/src/syde_flash/C_FlaMainWindow.cpp
    ${PROJECT_ROOT}/src/syde_flash/C_FlaTitleBarWidget.cpp
    ${PROJECT_ROOT}/src/syde_flash/bottom_bar/C_FlaBottomBar.cpp
    ${PROJECT_ROOT}/src/syde_flash/configure_node/C_FlaConNodeConfigPopup.cpp
    ${PROJECT_ROOT}/src/syde_flash/fla_main.cpp
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/line_edit/C_FlaOgeLeFilePath.cpp
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/push_button/C_FlaOgePubPathVariables.cpp
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/spin_box/C_FlaOgeSpxDark.cpp
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/text_browser/C_FlaOgeTebProgressLog.cpp
    ${PROJECT_ROOT}/src/syde_flash/properties/C_FlaPropWidget.cpp
    ${PROJECT_ROOT}/src/syde_flash/search_nodes/C_FlaSenDcBasicSequences.cpp
    ${PROJECT_ROOT}/src/syde_flash/search_nodes/C_FlaSenSearchNodePopup.cpp
@@ -238,8 +99,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/syde_flash/update/C_FlaUpSequences.cpp
    ${PROJECT_ROOT}/src/syde_flash/user_settings/C_UsFiler.cpp
    ${PROJECT_ROOT}/src/syde_flash/user_settings/C_UsHandler.cpp
-   ${PROJECT_ROOT}/src/syde_flash/util/C_FlaUti.cpp
-   ${PROJECT_ROOT}/src/syde_flash/util/C_FlaUtiStyleSheets.cpp
    ${PROJECT_ROOT}/src/system_definition/C_SdTooltipUtil.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpContentUtil.cpp
    ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
@@ -256,126 +115,20 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreModel.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.cpp
-   ${PROJECT_ROOT}/src/util/C_Uti.cpp
-   ${PROJECT_ROOT}/src/util/C_UtiClipBoardHelper.cpp
-   ${PROJECT_ROOT}/src/util/C_UtiFindNameHelper.cpp
 )
 
 set(OPENSYDE_HEADERS
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/check_box/C_CamOgeChxSettings.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxDark.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTable.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTableSmall.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxWhite.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/group_box/C_CamOgeGbxMessageGeneratorBackground.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/group_box/C_CamOgeGbxMessageSignalsBorder.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/label/C_CamOgeLabStatusBar.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeIdPopUp.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeTableEdit.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/menu/C_CamOgeMuRecentProjects.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubAbout.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubDarkBrowse.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariablesBase.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubProjOp.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubSettingsAdd.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/spin_box/C_CamOgeSpxProperties.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/splitter/C_CamOgeSpi.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/tool_button/C_CamOgeTobRecentProjects.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSectionHeader.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingSubSection.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingsBase.hpp
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSpinBoxGroupTable.hpp
 
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.hpp
-   ${PROJECT_ROOT}/src/can_monitor/util/C_CamUtiGeneric.hpp
    ${PROJECT_ROOT}/src/constants.hpp
    ${PROJECT_ROOT}/src/help_engine/C_HeHandler.hpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagAboutDialog.hpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolTip.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeContextMenu.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraStyled.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxStyled.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelect.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxResizingView.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxStyled.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeStyled.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeProperties.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLePropertiesName.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/menu/C_OgeMuSections.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStandard.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStyled.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStyledToolTip.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabProperties.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxAllBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxAutoFixBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFix.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFixCustomTrigger.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleDynamicDecimalsBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64AutoFix.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64ToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebStyled.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedContextMenuBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedPropertiesComment.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipContent.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/tool_button/C_OgeTobToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiCustomMessage.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiError.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiProgressBar.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiOnlyBackground.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroup.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiUtil.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiWithToolTip.hpp
    ${PROJECT_ROOT}/src/project_operations/C_PopErrorHandling.hpp
    ${PROJECT_ROOT}/src/syde_flash/C_FlaMainWindow.hpp
    ${PROJECT_ROOT}/src/syde_flash/C_FlaTitleBarWidget.hpp
    ${PROJECT_ROOT}/src/syde_flash/bottom_bar/C_FlaBottomBar.hpp
    ${PROJECT_ROOT}/src/syde_flash/configure_node/C_FlaConNodeConfigPopup.hpp
    ${PROJECT_ROOT}/src/syde_flash/fla_constants.hpp
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/line_edit/C_FlaOgeLeFilePath.hpp
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/push_button/C_FlaOgePubPathVariables.hpp
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/spin_box/C_FlaOgeSpxDark.hpp
-   ${PROJECT_ROOT}/src/syde_flash/gui_elements/text_browser/C_FlaOgeTebProgressLog.hpp
    ${PROJECT_ROOT}/src/syde_flash/properties/C_FlaPropWidget.hpp
    ${PROJECT_ROOT}/src/syde_flash/search_nodes/C_FlaSenDcBasicSequences.hpp
    ${PROJECT_ROOT}/src/syde_flash/search_nodes/C_FlaSenSearchNodePopup.hpp
@@ -391,8 +144,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/syde_flash/update/C_FlaUpSequences.hpp
    ${PROJECT_ROOT}/src/syde_flash/user_settings/C_UsFiler.hpp
    ${PROJECT_ROOT}/src/syde_flash/user_settings/C_UsHandler.hpp
-   ${PROJECT_ROOT}/src/syde_flash/util/C_FlaUti.hpp
-   ${PROJECT_ROOT}/src/syde_flash/util/C_FlaUtiStyleSheets.hpp
    ${PROJECT_ROOT}/src/system_definition/C_SdTooltipUtil.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpContentUtil.hpp
    ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
@@ -409,21 +160,12 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreModel.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.hpp
-   ${PROJECT_ROOT}/src/util/C_Uti.hpp
-   ${PROJECT_ROOT}/src/util/C_UtiClipBoardHelper.hpp
-   ${PROJECT_ROOT}/src/util/C_UtiFindNameHelper.hpp
 )
 
 set(OPENSYDE_FORMS
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSectionHeader.ui
-   ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSettingSubSection.ui
 
    ${PROJECT_ROOT}/src/navigable_gui/C_NagAboutDialog.ui
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolTip.ui
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.ui
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiCustomMessage.ui
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiError.ui
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroup.ui
    ${PROJECT_ROOT}/src/syde_flash/C_FlaMainWindow.ui
    ${PROJECT_ROOT}/src/syde_flash/C_FlaTitleBarWidget.ui
    ${PROJECT_ROOT}/src/syde_flash/bottom_bar/C_FlaBottomBar.ui
@@ -525,4 +267,3 @@ if(COMMAND add_pc_lint)
 endif(COMMAND add_pc_lint)
 
 # --- INSTALL RESULTS --------------------------------------------------------------------------------------------------
-install(TARGETS SYDEflash DESTINATION ${PROJECT_ROOT}/result/utilities/SYDEflash)
