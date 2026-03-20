@@ -13,7 +13,7 @@
 #include <QJsonDocument>
 
 #include "C_OscLoggingHandler.hpp"
-#include "C_OscHalcConfigStandaloneFiler_New.hpp"
+#include "C_OscHalcConfigStandaloneFiler.hpp"
 #include "stwerrors.hpp"
 
 using namespace stw::errors;

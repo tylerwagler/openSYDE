@@ -21,7 +21,7 @@
 #include "stwtypes.hpp"
 #include <QSettings>
 
-#include "C_OscDeviceDefinitionFiler_New.hpp"
+#include "C_OscDeviceDefinitionFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces

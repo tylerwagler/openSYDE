@@ -11,7 +11,7 @@
 #include <QFileInfo>
 #include <QJsonDocument>
 
-#include "C_SyvUpPacConfigFiler_New.hpp"
+#include "C_SyvUpPacConfigFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "stwerrors.hpp"
 

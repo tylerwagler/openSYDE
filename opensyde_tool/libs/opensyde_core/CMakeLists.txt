@@ -187,14 +187,14 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfig.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigChannel.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigDomain.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigParameter.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigParameterStruct.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandalone.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneChannel.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneDomain.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfig_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigParameter_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/base/C_OscHalcDefBase.cpp
@@ -210,38 +210,38 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContentBitmaskItem.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefDomain.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefElement.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStruct.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStructFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStructFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianDatapoolListHandler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianGenerator.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/C_OscProject.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/C_OscProjectFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/C_OscProjectFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscDeviceGroup.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscDeviceManager.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemBus.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemBusFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemBusFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemDefinition.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemDefinitionFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemDefinitionFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemNameMaxCharLimitChangeReportItem.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemFilerUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinition.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFilerV1.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSupportedCanInterfaceFeatures.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSubDeviceDefinition.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackage.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2Filer_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2Filer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeDataPoolFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemBusFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemDefinitionFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNode.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquad.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquadFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquadFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeApplication.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCodeExportSettings.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeComInterfaceSettings.cpp
@@ -249,7 +249,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContent.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContentUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolDataSet.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolList.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElement.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementId.cpp
@@ -259,7 +259,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeOpenSydeServerSettings.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeProperties.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeStwFlashloaderSettings.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCommFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCommFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolId.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessage.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageUniqueId.cpp
@@ -274,12 +274,12 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJob.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobProperties.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerDataElementReference.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobAdditionalTriggerProperties.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappProperties.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappPropertiesFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappPropertiesFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewPc.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewData.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewNodeUpdate.cpp
@@ -294,14 +294,14 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfig.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigChannel.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigDomain.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigParameter.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigParameterStruct.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigUtil.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandalone.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneChannel.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneDomain.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/base/C_OscHalcDefBase.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDef.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelAvailability.hpp
@@ -312,48 +312,48 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContentBitmaskItem.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefDomain.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefElement.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStruct.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStructFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStructFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianDatapoolListHandler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianGenerator.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianUtil.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/C_OscProject.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/C_OscProjectFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/C_OscProjectFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscDeviceGroup.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscDeviceManager.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemBus.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemBusFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemBusFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemDefinition.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemDefinitionFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemDefinitionFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemNameMaxCharLimitChangeReportItem.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemFilerUtil.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinition.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFilerV1.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSupportedCanInterfaceFeatures.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSubDeviceDefinition.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackage.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2Filer_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2Filer.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeDataPoolFilerV2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeFilerV2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemBusFilerV2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemDefinitionFilerV2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNode.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquad.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquadFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquadFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeApplication.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCodeExportSettings.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContentUtil.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolId.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeComInterfaceSettings.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCommFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCommFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPool.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContent.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolDataSet.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolList.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElement.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementId.hpp
@@ -376,12 +376,12 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJob.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobProperties.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerDataElementReference.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobAdditionalTriggerProperties.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappProperties.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappPropertiesFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappPropertiesFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewData.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewPc.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewNodeUpdate.hpp
@@ -432,10 +432,10 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedFileInfoData.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedList.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedNode.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedNodeFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedNodeFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetRawEntry.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetRawNode.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetRawNodeFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetRawNodeFiler.cpp
 
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetDataPoolInfo.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetFilerBase.hpp
@@ -446,10 +446,10 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedFileInfoData.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedList.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedNode.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedNodeFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedNodeFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetRawEntry.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetRawNode.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetRawNodeFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetRawNodeFiler.hpp
    )
 
    set(OPENSYDE_CORE_PARAM_SET_INCLUDE_DIRECTORIES
@@ -504,14 +504,14 @@ else()
 
     set(OPENSYDE_CORE_X_CERTIFICATES_GENERATION_SOURCES
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifest.cpp
-       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifestFiler_New.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifestFiler.cpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceUpdatePackageParameters.cpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceBase.cpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceCreate.cpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceLoad.cpp
 
         ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifest.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifestFiler_New.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceManifestFiler.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceUpdatePackageParameters.hpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceBase.hpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_certificates_package_generation/C_OscXceCreate.hpp
@@ -534,13 +534,13 @@ else()
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoCreate.cpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoLoad.cpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifest.cpp
-       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifestFiler_New.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifestFiler.cpp
 
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoBase.hpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoCreate.hpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoLoad.hpp
        ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifest.hpp
-       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifestFiler_New.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/exports/x_config_generation/C_OscXcoManifestFiler.hpp
    )
 
    set(OPENSYDE_CORE_X_CONFIG_GENERATION_INCLUDE_DIRECTORIES
@@ -561,11 +561,11 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageCreate.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageLoad.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageBase.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupSignatureFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupSignatureFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupDefinition.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupDefinitionFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupDefinitionFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupNodeDefinition.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupNodeDefinitionFiler_New.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupNodeDefinitionFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/C_OscDataDealer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/C_OscDataDealerNvm.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/C_OscDataDealerNvmSafe.cpp
@@ -590,11 +590,11 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageCreate.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageLoad.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupServiceUpdatePackageBase.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupSignatureFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupSignatureFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupDefinition.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupDefinitionFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupDefinitionFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupNodeDefinition.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupNodeDefinitionFiler_New.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/system_update_package/C_OscSupNodeDefinitionFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/C_OscDataDealer.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/C_OscDataDealerNvm.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/C_OscDataDealerNvmSafe.hpp

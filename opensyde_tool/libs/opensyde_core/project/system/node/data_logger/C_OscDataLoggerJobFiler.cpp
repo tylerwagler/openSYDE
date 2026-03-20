@@ -15,7 +15,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
-#include "C_OscDataLoggerJobFiler_New.hpp"
+#include "C_OscDataLoggerJobFiler.hpp"
 #include "C_OscFilerUtil.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include <QFile>

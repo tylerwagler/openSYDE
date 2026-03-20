@@ -21,7 +21,7 @@
 #include "C_PopErrorHandling.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_OscSystemDefinitionFiler_New.hpp"
+#include "C_OscSystemDefinitionFiler.hpp"
 
 #include <QSet>
 

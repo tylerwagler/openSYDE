@@ -1,9 +1,10 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Node reader/writer (V3)
+   \brief       Node reader/writer (Multi-Format Implementation)
 
-   Load / save node data from / to XML file
+   Load / save node data from / to binary, JSON, or XML files using the
+   Qt-native serialization framework.
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
@@ -15,26 +16,19 @@
  */
 #include "precomp_headers.hpp"
 
-#include "C_OscCanOpenManagerFiler.hpp"
-#include "C_OscDataLoggerJobFiler.hpp"
-#include "C_OscFilerUtil.hpp"
-#include "C_OscHalcConfigFiler.hpp"
-#include "C_OscLoggingHandler.hpp"
-#include "C_OscNodeCommFiler.hpp"
-#include "C_OscNodeDataPoolFiler.hpp"
 #include "C_OscNodeFiler.hpp"
-#include "C_OscSystemFilerUtil.hpp"
-#include "C_OscXappPropertiesFiler.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
-#include <QString>
+
+#include "C_OscLoggingHandler.hpp"
+#include "C_OscNodeFiler.hpp"
 
 /* -- Used Namespaces
  * -----------------------------------------------------------------------------------------------
  */
+using namespace stw::opensyde_core;
 
 using namespace stw::errors;
-using namespace stw::opensyde_core;
 
 /* -- Module Global Constants
  * ---------------------------------------------------------------------------------------
@@ -52,21 +46,6 @@ using namespace stw::opensyde_core;
  * ---------------------------------------------------------------------------------------
  */
 
-namespace
-{
-const C_OscFilerUtil::EnumEntry<C_OscNodeProperties::E_DiagnosticServerProtocol> mac_DIAG_SERVER_TABLE[] = {
-   {C_OscNodeProperties::eDS_OPEN_SYDE, "open-syde"},
-   {C_OscNodeProperties::eDS_KEFEX, "kefex"},
-   {C_OscNodeProperties::eDS_NONE, "none"}
-};
-
-const C_OscFilerUtil::EnumEntry<C_OscNodeProperties::E_FlashLoaderProtocol> mac_FLASH_LOADER_TABLE[] = {
-   {C_OscNodeProperties::eFL_OPEN_SYDE, "open-syde"},
-   {C_OscNodeProperties::eFL_STW, "stw"},
-   {C_OscNodeProperties::eFL_NONE, "none"}
-};
-}
-
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
  */
@@ -76,1870 +55,618 @@ const C_OscFilerUtil::EnumEntry<C_OscNodeProperties::E_FlashLoaderProtocol> mac_
  */
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node file
+/*! \brief   Load node from file (auto-detect format)
 
-   \param[out]  orc_Node         Data storage
-   \param[in]   orc_FilePath     File path
-   \param[in]   oq_SkipContent   (Optional parameter) skip content when not
-   needed (datapools, halc etc.) (default = false)
+   \param[out]     orc_Node         Node data
+   \param[in]      orc_FilePath     File path
+   \param[in]      oq_SkipContent   Skip content (datapools, halc, etc.)
 
    \return
    C_NO_ERR   data read
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode &orc_Node,
-                                       const QString &orc_FilePath,
-                                       const bool oq_SkipContent) {
-  C_OscXmlParser c_XmlParser;
-  int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(
-      c_XmlParser, orc_FilePath, "opensyde-node-core-definition");
+int32_t C_OscNodeFiler_New::h_LoadNodeFile(C_OscNode &orc_Node,
+                                           const QString &orc_FilePath,
+                                           const bool oq_SkipContent) {
+   return mh_DetectAndLoad(orc_Node, orc_FilePath, oq_SkipContent);
+}
 
-  // File version
-  if (c_XmlParser.SelectNodeChild("file-version") == "file-version") {
-    uint16_t u16_FileVersion = 0U;
-    try {
-      u16_FileVersion =
-          static_cast<uint16_t>(c_XmlParser.GetNodeContent().toInt());
-    } catch (...) {
-      osc_write_log_error(
-          "Loading node definition",
-          "\"file-version\" could not be converted to a number.");
-      s32_Retval = C_CONFIG;
-    }
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save node to file (auto-detect format from extension)
 
-    // is the file version one we know ?
-    if (s32_Retval == C_NO_ERR) {
-      osc_write_log_info("Loading node definition",
-                         "Value of \"file-version\": " +
-                             QString::number(u16_FileVersion));
-      // Check file version
-      if (u16_FileVersion != 1U) {
-        osc_write_log_error(
-            "Loading node definition",
-            "Version defined by \"file-version\" is not supported.");
-        s32_Retval = C_CONFIG;
-      }
-    }
+   \param[in]      orc_Node                         Node data to store
+   \param[in]      orc_FilePath                     File path
+   \param[in,out]  opc_CreatedFiles                 Created files list
+   \param[in]      orc_NodeIndicesToNameMap         Node indices to name map
 
-    // Return
-    c_XmlParser.SelectNodeParent();
-  } else {
-    osc_write_log_error("Loading node definition",
-                        "Could not find \"file-version\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  if (s32_Retval == C_NO_ERR) {
-    if (c_XmlParser.SelectNodeChild("node") == "node") {
-      s32_Retval = C_OscNodeFiler::h_LoadNode(orc_Node, c_XmlParser,
-                                              orc_FilePath, oq_SkipContent);
-    } else {
+   \return
+   C_NO_ERR   data saved
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeFiler_New::h_SaveNodeFile(
+   const C_OscNode &orc_Node, const QString &orc_FilePath,
+   QStringList *const opc_CreatedFiles,
+   const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+   
+   int32_t s32_Retval = C_NO_ERR;
+
+   // Detect format from file extension
+   const QString c_Extension = orc_FilePath.right(4).toLower();
+
+   if (c_Extension == ".bin") {
+      s32_Retval = h_SaveBinary(orc_Node, orc_FilePath, opc_CreatedFiles,
+                                orc_NodeIndicesToNameMap);
+   } else if (c_Extension == ".json") {
+      s32_Retval = h_SaveJson(orc_Node, orc_FilePath, opc_CreatedFiles,
+                              orc_NodeIndicesToNameMap);
+   } else if (c_Extension == ".xml") {
+      s32_Retval = h_SaveXml(orc_Node, orc_FilePath, opc_CreatedFiles,
+                             orc_NodeIndicesToNameMap);
+   } else {
+      // Default to XML for backward compatibility
+      osc_write_log_warning("File I/O",
+                            QString("Unknown file extension \"%1\" for \"%2\". "
+                                    "Defaulting to XML format.")
+                            .arg(c_Extension, orc_FilePath));
+      s32_Retval = h_SaveXml(orc_Node, orc_FilePath, opc_CreatedFiles,
+                             orc_NodeIndicesToNameMap);
+   }
+
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load node from binary file
+
+   \param[out]     orc_Node         Node data
+   \param[in]      orc_Path         File path
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content of file is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeFiler_New::h_LoadBinary(C_OscNode &orc_Node,
+                                         const QString &orc_Path) {
+   QFile file(orc_Path);
+   if (!file.open(QIODevice::ReadOnly)) {
       osc_write_log_error("Loading node definition",
-                          "Could not find \"node\" node.");
-      s32_Retval = C_CONFIG;
-    }
-  } else {
-    // More details are in log
-    s32_Retval = C_CONFIG;
-  }
-  return s32_Retval;
-}
+                          QString("Could not open file \"%1\" for reading.")
+                          .arg(orc_Path));
+      return C_CONFIG;
+   }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node
+   QDataStream in(&file);
+   in.setVersion(QDataStream::Qt_6_0);
 
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "node"
-   post-condition: the passed XML parser has the active node set to the same
-   "node"
+   int32_t s32_Result = orc_Node.FromQDataStream(in);
+   file.close();
 
-   \param[out]     orc_Node         data storage
-   \param[in,out]  orc_XmlParser    XML with node active
-   \param[in]      orc_BasePath     Base path
-   \param[in]      oq_SkipContent   (Optional parameter) skip content when not
-   needed (datapools, halc etc.) (default = false)
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_LoadNode(C_OscNode &orc_Node,
-                                   C_OscXmlParserBase &orc_XmlParser,
-                                   const QString &orc_BasePath,
-                                   const bool oq_SkipContent) {
-  int32_t s32_Retval;
-  bool q_AutoNvmStartAddressHere;
-
-  orc_Node.Initialize();
-
-  // Check optional auto nvm start address
-  q_AutoNvmStartAddressHere =
-      orc_XmlParser.AttributeExists("datapool-auto-nvm-start-address");
-  if (q_AutoNvmStartAddressHere == true) {
-    orc_Node.q_DatapoolAutoNvmStartAddress =
-        orc_XmlParser.GetAttributeBool("datapool-auto-nvm-start-address");
-  }
-
-  // Type
-  if (orc_XmlParser.SelectNodeChild("type") == "type") {
-    orc_Node.c_DeviceType = orc_XmlParser.GetNodeContent();
-    // Return
-    orc_XmlParser.SelectNodeParent(); // back up to node
-  }
-
-  s32_Retval = mh_LoadProperties(orc_Node.c_Properties, orc_XmlParser);
-  if (s32_Retval == C_NO_ERR) {
-    s32_Retval = mh_LoadApplications(orc_Node.c_Applications, orc_XmlParser);
-    if (s32_Retval == C_NO_ERR) {
-      if (oq_SkipContent == false) {
-        s32_Retval = mh_LoadDataPools(orc_Node, orc_XmlParser, orc_BasePath);
-
-        if (s32_Retval == C_NO_ERR) {
-          s32_Retval =
-              mh_LoadHalc(orc_Node.c_HalcConfig, orc_XmlParser, orc_BasePath);
-          // AFTER loading the datapools
-          if ((s32_Retval == C_NO_ERR) &&
-              (orc_XmlParser.SelectNodeChild("com-protocols") ==
-               "com-protocols")) {
-            s32_Retval = h_LoadNodeComProtocols(orc_Node.c_ComProtocols,
-                                                orc_Node.c_DataPools,
-                                                orc_XmlParser, orc_BasePath);
-            if (s32_Retval == C_NO_ERR) {
-              // Return
-              Q_ASSERT(orc_XmlParser.SelectNodeParent() ==
-                       "node"); // back up to node
-              s32_Retval = mh_LoadCanOpenManagers(orc_Node.c_CanOpenManagers,
-                                                  orc_XmlParser, orc_BasePath);
-              if (s32_Retval == C_NO_ERR) {
-                s32_Retval = mh_LoadDataLoggers(orc_Node.c_DataLoggerJobs,
-                                                orc_XmlParser, orc_BasePath);
-                if (s32_Retval == C_NO_ERR) {
-                  s32_Retval = mh_LoadXappProperties(
-                      orc_Node.c_XappProperties, orc_XmlParser, orc_BasePath);
-                }
-              }
-            }
-          } else {
-            osc_write_log_error("Loading node definition",
-                                "Could not find \"com-protocols\" node.");
-            s32_Retval = C_CONFIG;
-          }
-        }
-      }
-    }
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node file
-
-   Save node to XML file
-
-   \param[in]      orc_Node                  data storage
-   \param[in,out]  orc_FilePath              File path for xml
-   \param[in,out]  opc_CreatedFiles          Optional storage for history of all
-   created files
-   \param[in]      orc_NodeIndicesToNameMap  Node indices to name map
-
-   \return
-   C_NO_ERR   data saved
-   C_CONFIG   file could not be created
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_SaveNodeFile(
-    const C_OscNode &orc_Node, const QString &orc_FilePath,
-    QStringList *const opc_CreatedFiles,
-    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
-  C_OscXmlParser c_XmlParser;
-  int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
-      c_XmlParser, orc_FilePath, "opensyde-node-core-definition");
-
-  if (s32_Retval == C_NO_ERR) {
-    // Version
-    c_XmlParser.CreateNodeChild("file-version", "1");
-    Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild("node") == "node");
-    // node
-    s32_Retval =
-        C_OscNodeFiler::h_SaveNode(orc_Node, c_XmlParser, orc_FilePath,
-                                   opc_CreatedFiles, orc_NodeIndicesToNameMap);
-    if (s32_Retval == C_NO_ERR) {
-      // Don't forget to save!
-      s32_Retval = c_XmlParser.SaveToFile(orc_FilePath);
-      if (s32_Retval != C_NO_ERR) {
-        osc_write_log_error("Saving node definition",
-                            "Could not create file for node.");
-        s32_Retval = C_CONFIG;
-      }
-    }
-  } else {
-    // More details are in log
-    s32_Retval = C_CONFIG;
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "node"
-   post-condition: the passed XML parser has the active node set to the same
-   "node"
-
-   \param[in]      orc_Node                  data storage
-   \param[in,out]  orc_XmlParser             XML with node active
-   \param[in]      orc_BasePath              Base path
-   \param[in,out]  opc_CreatedFiles          Optional storage for history of all
-   created files
-   \param[in]      orc_NodeIndicesToNameMap  Node indices to name map
-
-   \return
-   C_NO_ERR   data saved
-   C_CONFIG   file could not be created
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_SaveNode(
-    const C_OscNode &orc_Node, C_OscXmlParserBase &orc_XmlParser,
-    const QString &orc_BasePath, QStringList *const opc_CreatedFiles,
-    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
-  int32_t s32_Retval;
-
-  orc_XmlParser.SetAttributeBool("datapool-auto-nvm-start-address",
-                                 orc_Node.q_DatapoolAutoNvmStartAddress);
-  // Type
-  Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("type") == "type");
-  orc_XmlParser.SetNodeContent(orc_Node.c_DeviceType);
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node"); // back up to node
-
-  mh_SaveProperties(orc_Node.c_Properties, orc_XmlParser);
-  mh_SaveApplications(orc_Node.c_Applications, orc_XmlParser);
-  orc_XmlParser.CreateAndSelectNodeChild("com-protocols");
-  s32_Retval =
-      h_SaveNodeComProtocols(orc_Node.c_ComProtocols, orc_Node.c_DataPools,
-                             orc_XmlParser, orc_BasePath, opc_CreatedFiles);
-  if (s32_Retval == C_NO_ERR) {
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-    s32_Retval = mh_SaveDataPools(orc_Node.c_DataPools, orc_XmlParser,
-                                  orc_BasePath, opc_CreatedFiles);
-  }
-  if (s32_Retval == C_NO_ERR) {
-    s32_Retval = mh_SaveHalc(orc_Node.c_HalcConfig, orc_XmlParser, orc_BasePath,
-                             opc_CreatedFiles);
-  }
-  if (s32_Retval == C_NO_ERR) {
-    s32_Retval = mh_SaveCanOpenManagers(
-        orc_Node.c_CanOpenManagers, orc_XmlParser, orc_BasePath,
-        opc_CreatedFiles, orc_NodeIndicesToNameMap);
-  }
-  if (s32_Retval == C_NO_ERR) {
-    s32_Retval = mh_SaveDataLoggers(orc_Node.c_DataLoggerJobs, orc_XmlParser,
-                                    orc_BasePath, opc_CreatedFiles);
-  }
-  if (s32_Retval == C_NO_ERR) {
-    s32_Retval = mh_SaveXappProperties(orc_Node, orc_XmlParser, orc_BasePath,
-                                       opc_CreatedFiles);
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node com protocols
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to
-   "com-protocols" post-condition: the passed XML parser has the active node set
-   to the same "com-protocols"
-
-   \param[out]     orc_NodeComProtocols   data storage
-   \param[in]      orc_NodeDataPools      Loaded datapools
-   \param[in,out]  orc_XmlParser          XML with list active
-   \param[in]      orc_BasePath           Base path
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_LoadNodeComProtocols(
-    QList<C_OscCanProtocol> &orc_NodeComProtocols,
-    const QList<C_OscNodeDataPool> &orc_NodeDataPools,
-    C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  QString c_CurNodeComProtocol;
-  uint32_t u32_ExpectedSize = 0UL;
-  const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
-
-  // Check optional length
-  if (q_ExpectedSizeHere == true) {
-    u32_ExpectedSize = orc_XmlParser.GetAttributeUint32("length");
-    orc_NodeComProtocols.reserve(u32_ExpectedSize);
-  }
-
-  c_CurNodeComProtocol = orc_XmlParser.SelectNodeChild("com-protocol");
-
-  // Clear
-  orc_NodeComProtocols.clear();
-  if (c_CurNodeComProtocol == "com-protocol") {
-    do {
-      C_OscCanProtocol c_CurComProtocol;
-      if (s32_Retval == C_NO_ERR) {
-        if (orc_BasePath.isEmpty()) {
-          s32_Retval = C_OscNodeCommFiler::h_LoadNodeComProtocol(
-              c_CurComProtocol, orc_XmlParser, orc_NodeDataPools);
-        } else {
-          s32_Retval = C_OscNodeCommFiler::h_LoadNodeComProtocolFile(
-              c_CurComProtocol,
-              C_OscSystemFilerUtil::h_CombinePaths(
-                  orc_BasePath, orc_XmlParser.GetNodeContent()),
-              orc_NodeDataPools);
-        }
-      }
-
-      // Append
-      orc_NodeComProtocols.push_back(c_CurComProtocol);
-
-      // Next
-      c_CurNodeComProtocol = orc_XmlParser.SelectNodeNext("com-protocol");
-    } while (c_CurNodeComProtocol == "com-protocol");
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "com-protocols");
-  }
-  // Compare length
-  if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true)) {
-    if (u32_ExpectedSize != orc_NodeComProtocols.size()) {
-      QString c_Tmp;
-      c_Tmp = QString("Unexpected comm protocol count, expected: %1, got %2")
-                  .arg(u32_ExpectedSize)
-                  .arg(static_cast<uint32_t>(orc_NodeComProtocols.size()));
-      osc_write_log_warning("Load file", c_Tmp);
-    }
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node com protocols
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to
-   "com-protocols" post-condition: the passed XML parser has the active node set
-   to the same "com-protocols"
-
-   \param[in]      orc_NodeComProtocols   data storage
-   \param[in]      orc_NodeDataPools      data pools for file name generation
-   \param[in,out]  orc_XmlParser          XML with list active
-   \param[in]      orc_BasePath           Base path
-   \param[in,out]  opc_CreatedFiles       Optional storage for history of all
-   created files
-
-   \return
-   C_NO_ERR   data saved
-   C_CONFIG   file could not be created
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_SaveNodeComProtocols(
-    const QList<C_OscCanProtocol> &orc_NodeComProtocols,
-    const QList<C_OscNodeDataPool> &orc_NodeDataPools,
-    C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    QStringList *const opc_CreatedFiles) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  orc_XmlParser.SetAttributeUint32(
-      "length", static_cast<uint32_t>(orc_NodeComProtocols.size()));
-  for (uint32_t u32_ItComProtocol = 0;
-       (u32_ItComProtocol < orc_NodeComProtocols.size()) &&
-       (s32_Retval == C_NO_ERR);
-       ++u32_ItComProtocol) {
-    const C_OscCanProtocol &rc_CurProtocol =
-        orc_NodeComProtocols[u32_ItComProtocol];
-    orc_XmlParser.CreateAndSelectNodeChild("com-protocol");
-    // Find matching datapool
-    if (rc_CurProtocol.u32_DataPoolIndex < orc_NodeDataPools.size()) {
-      const C_OscNodeDataPool &rc_CurDatapool =
-          orc_NodeDataPools[rc_CurProtocol.u32_DataPoolIndex];
-      if (orc_BasePath.isEmpty()) {
-        // To string
-        C_OscNodeCommFiler::h_SaveNodeComProtocol(rc_CurProtocol, orc_XmlParser,
-                                                  rc_CurDatapool.c_Name);
-      } else {
-        const QString c_FileName =
-            C_OscNodeCommFiler::h_GetFileName(rc_CurDatapool.c_Name);
-        const QString c_CombinedFileName =
-            C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
-        // Save comm definition file
-        s32_Retval = C_OscNodeCommFiler::h_SaveNodeComProtocolFile(
-            orc_NodeComProtocols[u32_ItComProtocol], c_CombinedFileName,
-            rc_CurDatapool.c_Name);
-        // Set file reference
-        orc_XmlParser.SetNodeContent(c_FileName);
-        // Store if necessary
-        if (opc_CreatedFiles != NULL) {
-          opc_CreatedFiles->push_back(c_FileName);
-        }
-      }
-    } else {
-      s32_Retval = C_CONFIG;
-      osc_write_log_error(
-          "Saving system definition",
-          "Invalid index " + QString::number(rc_CurProtocol.u32_DataPoolIndex) +
-              " for comm protocol");
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "com-protocols");
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get automatically generated folder name
-
-   \param[in]  orc_NodeName   Node name
-
-   \return
-   Automatically generated folder name
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_OscNodeFiler::h_GetFolderName(const QString &orc_NodeName) {
-  return "node_" +
-         C_OscSystemFilerUtil::h_PrepareItemNameForFileName(orc_NodeName);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get automatically generated file name
-
-   \return
-   Automatically generated file name
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_OscNodeFiler::h_GetFileName(void) { return "node_core.xml"; }
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node properties
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "node"
-   post-condition: the passed XML parser has the active node set to the same
-   "node"
-
-   \param[out]     orc_NodeProperties  data storage
-   \param[in,out]  orc_XmlParser       XML with core active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t
-C_OscNodeFiler::mh_LoadProperties(C_OscNodeProperties &orc_NodeProperties,
-                                  C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_XmlParser.SelectNodeChild("properties") == "properties") {
-    // XAppSupport
-    orc_NodeProperties.q_XappSupport =
-        orc_XmlParser.GetAttributeBool("x-app-support", false);
-    // Name
-    if (orc_XmlParser.SelectNodeChild("name") == "name") {
-      orc_NodeProperties.c_Name = orc_XmlParser.GetNodeContent();
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-    } else {
+   if (s32_Result != C_NO_ERR) {
       osc_write_log_error("Loading node definition",
-                          "Could not find \"properties\".\"name\" node.");
-      s32_Retval = C_CONFIG;
-    }
-    // Comment
-    if (orc_XmlParser.SelectNodeChild("comment") == "comment") {
-      orc_NodeProperties.c_Comment = orc_XmlParser.GetNodeContent();
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-    }
-    // Diagnostic server
-    if ((orc_XmlParser.SelectNodeChild("diagnostic-server") ==
-         "diagnostic-server") &&
-        (s32_Retval == C_NO_ERR)) {
-      s32_Retval =
-          mh_StringToDiagnosticServer(orc_XmlParser.GetNodeContent(),
-                                      orc_NodeProperties.e_DiagnosticServer);
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-    } else {
-      osc_write_log_error(
-          "Loading node definition",
-          "Could not find \"properties\".\"diagnostic-server\" node.");
-      s32_Retval = C_CONFIG;
-    }
-    // Flash loader
-    if ((orc_XmlParser.SelectNodeChild("flash-loader") == "flash-loader") &&
-        (s32_Retval == C_NO_ERR)) {
-      s32_Retval = mh_StringToFlashLoader(orc_XmlParser.GetNodeContent(),
-                                          orc_NodeProperties.e_FlashLoader);
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-    } else {
-      osc_write_log_error(
-          "Loading node definition",
-          "Could not find \"properties\".\"flash-loader\" node.");
-      s32_Retval = C_CONFIG;
-    }
+                          "Failed to deserialize node data from binary file.");
+   }
 
-    // Communication interfaces
-    if ((orc_XmlParser.SelectNodeChild("communication-interfaces") ==
-         "communication-interfaces") &&
-        (s32_Retval == C_NO_ERR)) {
-      s32_Retval = mh_LoadComInterface(orc_NodeProperties.c_ComInterfaces,
-                                       orc_XmlParser);
-    }
-
-    // openSYDE server settings
-    if (orc_XmlParser.SelectNodeChild("open-syde-server-settings") ==
-        "open-syde-server-settings") {
-      if (orc_XmlParser.AttributeExists("max-clients") == true) {
-        orc_NodeProperties.c_OpenSydeServerSettings.u8_MaxClients =
-            static_cast<uint8_t>(
-                orc_XmlParser.GetAttributeUint32("max-clients"));
-      } else {
-        orc_NodeProperties.c_OpenSydeServerSettings.u8_MaxClients = 1;
-      }
-      if (orc_XmlParser.AttributeExists("max-parallel-transmissions") == true) {
-        orc_NodeProperties.c_OpenSydeServerSettings
-            .u8_MaxParallelTransmissions = static_cast<uint8_t>(
-            orc_XmlParser.GetAttributeUint32("max-parallel-transmissions"));
-      } else {
-        orc_NodeProperties.c_OpenSydeServerSettings
-            .u8_MaxParallelTransmissions = 64;
-      }
-      if (orc_XmlParser.AttributeExists("application-index") == true) {
-        orc_NodeProperties.c_OpenSydeServerSettings.s16_DpdDataBlockIndex =
-            static_cast<int16_t>(
-                orc_XmlParser.GetAttributeSint32("application-index"));
-      } else {
-        orc_NodeProperties.c_OpenSydeServerSettings.s16_DpdDataBlockIndex = -1;
-      }
-      if (orc_XmlParser.AttributeExists("max-tx-message-buffer") == true) {
-        orc_NodeProperties.c_OpenSydeServerSettings.u16_MaxMessageBufferTx =
-            static_cast<uint16_t>(
-                orc_XmlParser.GetAttributeUint32("max-tx-message-buffer"));
-      } else {
-        orc_NodeProperties.c_OpenSydeServerSettings.u16_MaxMessageBufferTx =
-            585U;
-      }
-      if (orc_XmlParser.AttributeExists("max-rx-routing-message-buffer") ==
-          true) {
-        orc_NodeProperties.c_OpenSydeServerSettings
-            .u16_MaxRoutingMessageBufferRx = static_cast<uint16_t>(
-            orc_XmlParser.GetAttributeUint32("max-rx-routing-message-buffer"));
-      } else {
-        orc_NodeProperties.c_OpenSydeServerSettings
-            .u16_MaxRoutingMessageBufferRx = 585U;
-      }
-
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-    } else {
-      orc_NodeProperties.c_OpenSydeServerSettings.Initialize();
-    }
-
-    // Flashloader settings
-    if (s32_Retval == C_NO_ERR) {
-      s32_Retval = mh_LoadStwFlashloaderOptions(
-          orc_NodeProperties.c_StwFlashloaderSettings, orc_XmlParser);
-    }
-
-    // Code export settings
-    if ((orc_XmlParser.SelectNodeChild("code-export-settings") ==
-         "code-export-settings") &&
-        (s32_Retval == C_NO_ERR)) {
-      if (orc_XmlParser.SelectNodeChild("scaling-support") ==
-          "scaling-support") {
-        s32_Retval = C_OscSystemFilerUtil::h_StringToCodeExportScalingType(
-            orc_XmlParser.GetNodeContent(),
-            orc_NodeProperties.c_CodeExportSettings.e_ScalingSupport);
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "code-export-settings");
-      } else {
-        orc_NodeProperties.c_CodeExportSettings.e_ScalingSupport =
-            C_OscNodeCodeExportSettings::eFLOAT32;
-      }
-
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-    } else {
-      orc_NodeProperties.c_CodeExportSettings.Initialize();
-    }
-
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  } else {
-    osc_write_log_error("Loading node definition",
-                        "Could not find \"properties\" node.");
-    s32_Retval = C_CONFIG;
-  }
-
-  return s32_Retval;
+   return s32_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node properties
+/*! \brief   Save node to binary file
 
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "node"
-   post-condition: the passed XML parser has the active node set to the same
-   "node"
+   \param[in]      orc_Node                         Node data to store
+   \param[in]      orc_Path                         File path
+   \param[in,out]  opc_CreatedFiles                 Created files list
+   \param[in]      orc_NodeIndicesToNameMap         Node indices to name map
 
-   \param[in]      orc_NodeProperties  data storage
-   \param[in,out]  orc_XmlParser       XML with core active
+   \return
+   C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeFiler::mh_SaveProperties(
-    const C_OscNodeProperties &orc_NodeProperties,
-    C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.CreateAndSelectNodeChild("properties");
-  orc_XmlParser.SetAttributeBool("x-app-support",
-                                 orc_NodeProperties.q_XappSupport);
-  orc_XmlParser.CreateNodeChild("name", orc_NodeProperties.c_Name);
-  orc_XmlParser.CreateNodeChild("comment", orc_NodeProperties.c_Comment);
-  orc_XmlParser.CreateNodeChild(
-      "diagnostic-server",
-      mh_DiagnosticServerToString(orc_NodeProperties.e_DiagnosticServer));
-  orc_XmlParser.CreateNodeChild(
-      "flash-loader", mh_FlashLoaderToString(orc_NodeProperties.e_FlashLoader));
+int32_t C_OscNodeFiler_New::h_SaveBinary(
+   const C_OscNode &orc_Node, const QString &orc_Path,
+   QStringList *const opc_CreatedFiles,
+   const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+   
+   QFile file(orc_Path);
+   if (!file.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Saving node definition",
+                          QString("Could not open file \"%1\" for writing.")
+                          .arg(orc_Path));
+      return C_CONFIG;
+   }
 
-  // Com interfaces
-  mh_SaveComInterface(orc_NodeProperties.c_ComInterfaces, orc_XmlParser);
+   QDataStream out(&file);
+   out.setVersion(QDataStream::Qt_6_0);
 
-  // openSYDE server settings
-  orc_XmlParser.CreateAndSelectNodeChild("open-syde-server-settings");
-  orc_XmlParser.SetAttributeUint32(
-      "max-clients", orc_NodeProperties.c_OpenSydeServerSettings.u8_MaxClients);
-  orc_XmlParser.SetAttributeUint32(
-      "max-parallel-transmissions",
-      orc_NodeProperties.c_OpenSydeServerSettings.u8_MaxParallelTransmissions);
-  orc_XmlParser.SetAttributeSint32(
-      "application-index",
-      orc_NodeProperties.c_OpenSydeServerSettings.s16_DpdDataBlockIndex);
-  orc_XmlParser.SetAttributeUint32(
-      "max-tx-message-buffer",
-      orc_NodeProperties.c_OpenSydeServerSettings.u16_MaxMessageBufferTx);
-  orc_XmlParser.SetAttributeUint32("max-rx-routing-message-buffer",
-                                   orc_NodeProperties.c_OpenSydeServerSettings
-                                       .u16_MaxRoutingMessageBufferRx);
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
+   int32_t s32_Result = orc_Node.ToQDataStream(out);
+   file.close();
 
-  // Flashloader options
-  mh_SaveStwFlashloaderOptions(orc_NodeProperties.c_StwFlashloaderSettings,
-                               orc_XmlParser);
+   if (s32_Result == C_NO_ERR) {
+      // Track created file if requested
+      if (opc_CreatedFiles != nullptr) {
+         *opc_CreatedFiles << orc_Path;
+      }
+   } else {
+      osc_write_log_error("Saving node definition",
+                          "Failed to serialize node data to binary file.");
+   }
 
-  // Code export settings
-  orc_XmlParser.CreateAndSelectNodeChild("code-export-settings");
-  orc_XmlParser.CreateNodeChild(
-      "scaling-support",
-      C_OscSystemFilerUtil::h_CodeExportScalingTypeToString(
-          orc_NodeProperties.c_CodeExportSettings.e_ScalingSupport));
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
+   return s32_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node STW flashloader settings
+/*! \brief   Load node from memory (binary)
 
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "properties"
-   post-condition: the passed XML parser has the active node set to the same
-   "properties"
-
-   \param[out]     orc_StwFlashloaderSettings   data storage
-   \param[in,out]  orc_XmlParser                XML with core active
+   \param[out]     orc_Node         Node data
+   \param[in]      orc_Data         Binary data
 
    \return
    C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadStwFlashloaderOptions(
-    C_OscNodeStwFlashloaderSettings &orc_StwFlashloaderSettings,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
+int32_t C_OscNodeFiler_New::h_LoadFromMemoryBinary(C_OscNode &orc_Node,
+                                                   const QByteArray &orc_Data) {
+   QDataStream in(orc_Data);
+   in.setVersion(QDataStream::Qt_6_0);
 
-  if (orc_XmlParser.SelectNodeChild("stw-flashloader-settings") ==
-      "stw-flashloader-settings") {
-    if (orc_XmlParser.SelectNodeChild("reset-message") == "reset-message") {
-      if (orc_XmlParser.AttributeExists("active") == true) {
-        orc_StwFlashloaderSettings.q_ResetMessageActive =
-            orc_XmlParser.GetAttributeBool("active");
-      } else {
-        osc_write_log_error(
-            "Loading node definition",
-            "Could not find \"active\" attribute in \"reset-message\" node.");
-        s32_Retval = C_CONFIG;
-      }
-      if (orc_XmlParser.AttributeExists("extended") == true) {
-        orc_StwFlashloaderSettings.q_ResetMessageExtendedId =
-            orc_XmlParser.GetAttributeBool("extended");
-      } else {
-        orc_StwFlashloaderSettings.q_ResetMessageExtendedId = false;
-      }
-      if (orc_XmlParser.AttributeExists("id") == true) {
-        orc_StwFlashloaderSettings.u32_ResetMessageId =
-            orc_XmlParser.GetAttributeUint32("id");
-      } else {
-        orc_StwFlashloaderSettings.u32_ResetMessageId = 0;
-      }
-      if (orc_XmlParser.AttributeExists("dlc") == true) {
-        orc_StwFlashloaderSettings.u8_ResetMessageDlc =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("dlc"));
-      } else {
-        orc_StwFlashloaderSettings.u8_ResetMessageDlc = 8;
-      }
-      orc_StwFlashloaderSettings.c_Data.clear();
-      if (orc_XmlParser.SelectNodeChild("data-bytes") == "data-bytes") {
-        QString c_CurNode = orc_XmlParser.SelectNodeChild("data-byte");
-        if (c_CurNode == "data-byte") {
-          do {
-            if (orc_XmlParser.AttributeExists("value") == true) {
-              const uint8_t u8_DataByte = static_cast<uint8_t>(
-                  orc_XmlParser.GetAttributeUint32("value"));
-              orc_StwFlashloaderSettings.c_Data.push_back(u8_DataByte);
-            } else {
-              osc_write_log_error(
-                  "Loading node definition",
-                  "Could not find \"value\" attribute in \"data-byte\" node.");
-              s32_Retval = C_CONFIG;
-            }
-            c_CurNode = orc_XmlParser.SelectNodeNext("data-byte");
-          } while ((c_CurNode == "data-byte") && (s32_Retval == C_NO_ERR));
-          // Return
-          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-bytes");
-        }
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "reset-message");
-      }
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "stw-flashloader-settings");
-    } else {
+   int32_t s32_Result = orc_Node.FromQDataStream(in);
+
+   if (s32_Result != C_NO_ERR) {
       osc_write_log_error("Loading node definition",
-                          "Could not find \"reset-message\" node.");
-      s32_Retval = C_CONFIG;
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-  } else {
-    osc_write_log_error("Loading node definition",
-                        "Could not find \"stw-flashloader-settings\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  return s32_Retval;
+                          "Failed to deserialize node data from memory buffer.");
+   }
+
+   return s32_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node STW flashloader settings
+/*! \brief   Save node to memory (binary)
 
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "properties"
-   post-condition: the passed XML parser has the active node set to the same
-   "properties"
+   \param[in]      orc_Node         Node data to store
 
-   \param[in]      orc_StwFlashloaderSettings   data storage
-   \param[in,out]  orc_XmlParser                XML with core active
+   \return
+   QByteArray     Binary data
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeFiler::mh_SaveStwFlashloaderOptions(
-    const C_OscNodeStwFlashloaderSettings &orc_StwFlashloaderSettings,
-    C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.CreateAndSelectNodeChild("stw-flashloader-settings");
-  orc_XmlParser.CreateAndSelectNodeChild("reset-message");
-  orc_XmlParser.SetAttributeBool(
-      "active", orc_StwFlashloaderSettings.q_ResetMessageActive);
-  orc_XmlParser.SetAttributeBool(
-      "extended", orc_StwFlashloaderSettings.q_ResetMessageExtendedId);
-  orc_XmlParser.SetAttributeUint32(
-      "id", orc_StwFlashloaderSettings.u32_ResetMessageId);
-  orc_XmlParser.SetAttributeUint32(
-      "dlc",
-      static_cast<uint32_t>(orc_StwFlashloaderSettings.u8_ResetMessageDlc));
-  orc_XmlParser.CreateAndSelectNodeChild("data-bytes");
-  for (uint32_t u32_ItDataByte = 0;
-       u32_ItDataByte < orc_StwFlashloaderSettings.c_Data.size();
-       ++u32_ItDataByte) {
-    orc_XmlParser.CreateAndSelectNodeChild("data-byte");
-    orc_XmlParser.SetAttributeUint32(
-        "value", static_cast<uint32_t>(
-                     orc_StwFlashloaderSettings.c_Data[u32_ItDataByte]));
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-bytes");
-  }
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "reset-message");
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "stw-flashloader-settings");
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
+QByteArray C_OscNodeFiler_New::h_SaveToMemoryBinary(const C_OscNode &orc_Node) {
+   QByteArray c_Data;
+   QDataStream out(&c_Data, QIODevice::WriteOnly);
+   out.setVersion(QDataStream::Qt_6_0);
+
+   orc_Node.ToQDataStream(out);
+
+   return c_Data;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node communication interface settings
+/*! \brief   Load node from JSON file
 
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "properties"
-   post-condition: the passed XML parser has the active node set to the same
-   "properties"
-
-   \param[out]     orc_ComInterfaces   data storage
-   \param[in,out]  orc_XmlParser       XML with core active
+   \param[out]     orc_Node         Node data
+   \param[in]      orc_Path         File path
 
    \return
    C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadComInterface(
-    QList<C_OscNodeComInterfaceSettings> &orc_ComInterfaces,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-  QString c_CurNode = orc_XmlParser.SelectNodeChild("communication-interface");
+int32_t C_OscNodeFiler_New::h_LoadJson(C_OscNode &orc_Node,
+                                       const QString &orc_Path) {
+   QFile file(orc_Path);
+   if (!file.open(QIODevice::ReadOnly)) {
+      osc_write_log_error("Loading node definition",
+                          QString("Could not open file \"%1\" for reading.")
+                          .arg(orc_Path));
+      return C_CONFIG;
+   }
 
-  if (c_CurNode == "communication-interface") {
-    do {
-      C_OscNodeComInterfaceSettings c_ComInterface;
+   QJsonParseError c_ParseError;
+   QJsonDocument c_Doc = QJsonDocument::fromJson(file.readAll(), &c_ParseError);
+   file.close();
 
-      if (s32_Retval == C_NO_ERR) {
-        s32_Retval = C_OscXappPropertiesFiler::h_LoadCommInterfaceId(
-            c_ComInterface.e_InterfaceType, c_ComInterface.u8_InterfaceNumber,
-            orc_XmlParser, "communication-interface",
-            "Loading node definition");
-      }
+   if (c_ParseError.error != QJsonParseError::NoError) {
+      osc_write_log_error("Loading node definition",
+                          QString("JSON parse error: %1").arg(c_ParseError.errorString()));
+      return C_CONFIG;
+   }
 
-      c_ComInterface.u8_NodeId =
-          static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("node-id"));
-      c_ComInterface.q_IsUpdateEnabled =
-          orc_XmlParser.GetAttributeBool("update-available");
-      c_ComInterface.q_IsRoutingEnabled =
-          orc_XmlParser.GetAttributeBool("routing-available");
-      c_ComInterface.q_IsDiagnosisEnabled =
-          orc_XmlParser.GetAttributeBool("diagnosis-available");
+   if (!c_Doc.isObject()) {
+      osc_write_log_error("Loading node definition",
+                          "JSON root element is not an object.");
+      return C_CONFIG;
+   }
 
-      // IP address
-      if ((orc_XmlParser.SelectNodeChild("ip-address") == "ip-address") &&
-          (s32_Retval == C_NO_ERR)) {
-        c_ComInterface.c_Ip.au8_IpAddress[0] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte1"));
-        c_ComInterface.c_Ip.au8_IpAddress[1] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte2"));
-        c_ComInterface.c_Ip.au8_IpAddress[2] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte3"));
-        c_ComInterface.c_Ip.au8_IpAddress[3] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte4"));
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interface");
-      } else {
-        c_ComInterface.c_Ip.au8_IpAddress[0] = 0U;
-        c_ComInterface.c_Ip.au8_IpAddress[1] = 0U;
-        c_ComInterface.c_Ip.au8_IpAddress[2] = 0U;
-        c_ComInterface.c_Ip.au8_IpAddress[3] = 0U;
-      }
+   int32_t s32_Result = orc_Node.FromJsonObject(c_Doc.object());
 
-      // net mask
-      if ((orc_XmlParser.SelectNodeChild("net-mask") == "net-mask") &&
-          (s32_Retval == C_NO_ERR)) {
-        c_ComInterface.c_Ip.au8_NetMask[0] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte1"));
-        c_ComInterface.c_Ip.au8_NetMask[1] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte2"));
-        c_ComInterface.c_Ip.au8_NetMask[2] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte3"));
-        c_ComInterface.c_Ip.au8_NetMask[3] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte4"));
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interface");
-      } else {
-        c_ComInterface.c_Ip.au8_NetMask[0] = 0U;
-        c_ComInterface.c_Ip.au8_NetMask[1] = 0U;
-        c_ComInterface.c_Ip.au8_NetMask[2] = 0U;
-        c_ComInterface.c_Ip.au8_NetMask[3] = 0U;
-      }
+   if (s32_Result != C_NO_ERR) {
+      osc_write_log_error("Loading node definition",
+                          "Failed to deserialize node data from JSON file.");
+   }
 
-      // default gateway
-      if ((orc_XmlParser.SelectNodeChild("default-gateway") ==
-           "default-gateway") &&
-          (s32_Retval == C_NO_ERR)) {
-        c_ComInterface.c_Ip.au8_DefaultGateway[0] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte1"));
-        c_ComInterface.c_Ip.au8_DefaultGateway[1] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte2"));
-        c_ComInterface.c_Ip.au8_DefaultGateway[2] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte3"));
-        c_ComInterface.c_Ip.au8_DefaultGateway[3] =
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("byte4"));
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interface");
-      } else {
-        c_ComInterface.c_Ip.au8_DefaultGateway[0] = 0U;
-        c_ComInterface.c_Ip.au8_DefaultGateway[1] = 0U;
-        c_ComInterface.c_Ip.au8_DefaultGateway[2] = 0U;
-        c_ComInterface.c_Ip.au8_DefaultGateway[3] = 0U;
-      }
-      // Bus
-      if (orc_XmlParser.SelectNodeChild("bus") == "bus") {
-        c_ComInterface.SetBusConnected(
-            orc_XmlParser.GetAttributeBool("connected"));
-        if (orc_XmlParser.AttributeExists("interface-connected")) {
-          c_ComInterface.SetInterfaceConnectedInDevice(
-              orc_XmlParser.GetAttributeBool("interface-connected"));
-        } else {
-          c_ComInterface.SetInterfaceConnectedInDevice(true);
-        }
-        c_ComInterface.u32_BusIndex =
-            orc_XmlParser.GetAttributeUint32("bus-index");
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interface");
-      } else {
-        osc_write_log_error(
-            "Loading node definition",
-            "Could not find \"communication-interface\".\"bus\" node.");
-        s32_Retval = C_CONFIG;
-      }
-      orc_ComInterfaces.push_back(c_ComInterface);
-      c_CurNode = orc_XmlParser.SelectNodeNext("communication-interface");
-    } while (c_CurNode == "communication-interface");
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interfaces");
-  }
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-
-  return s32_Retval;
+   return s32_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node communication interface settings
+/*! \brief   Save node to JSON file
 
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "properties"
-   post-condition: the passed XML parser has the active node set to the same
-   "properties"
-
-   \param[in]      orc_ComInterfaces   data storage
-   \param[in,out]  orc_XmlParser       XML with core active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeFiler::mh_SaveComInterface(
-    const QList<C_OscNodeComInterfaceSettings> &orc_ComInterfaces,
-    C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.CreateAndSelectNodeChild("communication-interfaces");
-  for (uint32_t u32_ItComInterface = 0;
-       u32_ItComInterface < orc_ComInterfaces.size(); ++u32_ItComInterface) {
-    const C_OscNodeComInterfaceSettings &rc_CurComInterface =
-        orc_ComInterfaces[u32_ItComInterface];
-
-    orc_XmlParser.CreateAndSelectNodeChild("communication-interface");
-    C_OscXappPropertiesFiler::h_SaveCommInterfaceId(
-        rc_CurComInterface.e_InterfaceType,
-        rc_CurComInterface.u8_InterfaceNumber, orc_XmlParser);
-    orc_XmlParser.SetAttributeUint32(
-        "node-id", static_cast<uint32_t>(rc_CurComInterface.u8_NodeId));
-    orc_XmlParser.SetAttributeBool("update-available",
-                                   rc_CurComInterface.q_IsUpdateEnabled);
-    orc_XmlParser.SetAttributeBool("routing-available",
-                                   rc_CurComInterface.q_IsRoutingEnabled);
-    orc_XmlParser.SetAttributeBool("diagnosis-available",
-                                   rc_CurComInterface.q_IsDiagnosisEnabled);
-    if (rc_CurComInterface.e_InterfaceType == C_OscSystemBus::eETHERNET) {
-      orc_XmlParser.CreateAndSelectNodeChild("ip-address");
-      orc_XmlParser.SetAttributeUint32(
-          "byte1", rc_CurComInterface.c_Ip.au8_IpAddress[0]);
-      orc_XmlParser.SetAttributeUint32(
-          "byte2", rc_CurComInterface.c_Ip.au8_IpAddress[1]);
-      orc_XmlParser.SetAttributeUint32(
-          "byte3", rc_CurComInterface.c_Ip.au8_IpAddress[2]);
-      orc_XmlParser.SetAttributeUint32(
-          "byte4", rc_CurComInterface.c_Ip.au8_IpAddress[3]);
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interface");
-      orc_XmlParser.CreateAndSelectNodeChild("net-mask");
-      orc_XmlParser.SetAttributeUint32("byte1",
-                                       rc_CurComInterface.c_Ip.au8_NetMask[0]);
-      orc_XmlParser.SetAttributeUint32("byte2",
-                                       rc_CurComInterface.c_Ip.au8_NetMask[1]);
-      orc_XmlParser.SetAttributeUint32("byte3",
-                                       rc_CurComInterface.c_Ip.au8_NetMask[2]);
-      orc_XmlParser.SetAttributeUint32("byte4",
-                                       rc_CurComInterface.c_Ip.au8_NetMask[3]);
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interface");
-      orc_XmlParser.CreateAndSelectNodeChild("default-gateway");
-      orc_XmlParser.SetAttributeUint32(
-          "byte1", rc_CurComInterface.c_Ip.au8_DefaultGateway[0]);
-      orc_XmlParser.SetAttributeUint32(
-          "byte2", rc_CurComInterface.c_Ip.au8_DefaultGateway[1]);
-      orc_XmlParser.SetAttributeUint32(
-          "byte3", rc_CurComInterface.c_Ip.au8_DefaultGateway[2]);
-      orc_XmlParser.SetAttributeUint32(
-          "byte4", rc_CurComInterface.c_Ip.au8_DefaultGateway[3]);
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interface");
-    }
-    // Create this section for compatibility reasons (had content and was
-    // required by previous openSYDE versions)
-    orc_XmlParser.CreateAndSelectNodeChild("communication-protocol");
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interface");
-    orc_XmlParser.CreateAndSelectNodeChild("bus");
-    orc_XmlParser.SetAttributeBool(
-        "connected", rc_CurComInterface.GetBusConnectedRawValue());
-    orc_XmlParser.SetAttributeBool(
-        "interface-connected",
-        rc_CurComInterface.GetInterfaceConnectedInDeviceRawValue());
-    orc_XmlParser.SetAttributeUint32("bus-index",
-                                     rc_CurComInterface.u32_BusIndex);
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interface");
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "communication-interfaces");
-  }
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "properties");
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node applications
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "node"
-   post-condition: the passed XML parser has the active node set to the same
-   "node"
-
-   \param[out]     orc_NodeApplications   data storage
-   \param[in,out]  orc_XmlParser          XML with core active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadApplications(
-    QList<C_OscNodeApplication> &orc_NodeApplications,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_XmlParser.SelectNodeChild("applications") == "applications") {
-    QString c_CurNode;
-    uint32_t u32_ExpectedSize = 0UL;
-    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
-
-    // Check optional length
-    if (q_ExpectedSizeHere == true) {
-      u32_ExpectedSize = orc_XmlParser.GetAttributeUint32("length");
-      orc_NodeApplications.reserve(u32_ExpectedSize);
-    }
-
-    c_CurNode = orc_XmlParser.SelectNodeChild("application");
-    if (c_CurNode == "application") {
-      do {
-        C_OscNodeApplication c_CurApplication;
-
-        if (orc_XmlParser.AttributeExists("active") == true) {
-          c_CurApplication.q_Active = orc_XmlParser.GetAttributeBool("active");
-        } else {
-          s32_Retval = C_CONFIG;
-        }
-
-        if (orc_XmlParser.AttributeExists("process-id") == true) {
-          c_CurApplication.u8_ProcessId = static_cast<uint8_t>(
-              orc_XmlParser.GetAttributeUint32("process-id"));
-        } else {
-          c_CurApplication.u8_ProcessId = 0U;
-        }
-
-        if (orc_XmlParser.AttributeExists("generated-code-version")) {
-          c_CurApplication.u16_GenCodeVersion = static_cast<uint16_t>(
-              orc_XmlParser.GetAttributeUint32("generated-code-version"));
-        } else {
-          // probably deprecated project -> default to first version
-          c_CurApplication.u16_GenCodeVersion = 1U;
-        }
-
-        // Type
-        if ((s32_Retval == C_NO_ERR) &&
-            (orc_XmlParser.SelectNodeChild("type") == "type")) {
-          C_OscNodeApplication::h_StringToApplication(
-              orc_XmlParser.GetNodeContent(), c_CurApplication.e_Type);
-          // Return
-          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "application");
-        } else {
-          s32_Retval = C_CONFIG;
-        }
-        // Name
-        if ((s32_Retval == C_NO_ERR) &&
-            (orc_XmlParser.SelectNodeChild("name") == "name")) {
-          c_CurApplication.c_Name = orc_XmlParser.GetNodeContent();
-          // Return
-          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "application");
-        } else {
-          s32_Retval = C_CONFIG;
-        }
-
-        // Comment
-        if ((s32_Retval == C_NO_ERR) &&
-            (orc_XmlParser.SelectNodeChild("comment") == "comment")) {
-          c_CurApplication.c_Comment = orc_XmlParser.GetNodeContent();
-          // Return
-          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "application");
-        } else {
-          s32_Retval = C_CONFIG;
-        }
-
-        if ((s32_Retval == C_NO_ERR) &&
-            (orc_XmlParser.SelectNodeChild("project-path") == "project-path")) {
-          c_CurApplication.c_ProjectPath = orc_XmlParser.GetNodeContent();
-          // Return
-          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "application");
-        } else {
-          // No error, if child does not exist.
-          c_CurApplication.c_ProjectPath = "";
-        }
-
-        if ((s32_Retval == C_NO_ERR) &&
-            (orc_XmlParser.SelectNodeChild("ide-call") == "ide-call")) {
-          c_CurApplication.c_IdeCall = orc_XmlParser.GetNodeContent();
-          // Return
-          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "application");
-        } else {
-          // No error, if child does not exist.
-          c_CurApplication.c_IdeCall = "";
-        }
-
-        if ((s32_Retval == C_NO_ERR) &&
-            (orc_XmlParser.SelectNodeChild("code-generator-path") ==
-             "code-generator-path")) {
-          c_CurApplication.c_CodeGeneratorPath = orc_XmlParser.GetNodeContent();
-          // Return
-          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "application");
-        } else {
-          // No error, if child does not exist.
-          c_CurApplication.c_CodeGeneratorPath = "";
-        }
-
-        if ((s32_Retval == C_NO_ERR) &&
-            (orc_XmlParser.SelectNodeChild("generate-path") ==
-             "generate-path")) {
-          c_CurApplication.c_GeneratePath = orc_XmlParser.GetNodeContent();
-          // Return
-          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "application");
-        } else {
-          // No error, if child does not exist.
-          c_CurApplication.c_GeneratePath = "";
-        }
-
-        if ((s32_Retval == C_NO_ERR) &&
-            (orc_XmlParser.SelectNodeChild("result-path") == "result-path")) {
-          c_CurApplication.c_ResultPaths.resize(1);
-          c_CurApplication.c_ResultPaths[0] = orc_XmlParser.GetNodeContent();
-          // Return
-          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "application");
-        } else if ((s32_Retval == C_NO_ERR) &&
-                   (orc_XmlParser.SelectNodeChild("result") == "result")) {
-          uint32_t u32_ExpectedOutputfileNumber = 0UL;
-          const bool q_ExpectedSizeForOutputFiles =
-              orc_XmlParser.AttributeExists("length");
-          c_CurApplication.c_ResultPaths.clear();
-
-          // Check optional length
-          if (q_ExpectedSizeForOutputFiles == true) {
-            u32_ExpectedOutputfileNumber =
-                orc_XmlParser.GetAttributeUint32("length");
-            c_CurApplication.c_ResultPaths.reserve(
-                u32_ExpectedOutputfileNumber);
-          }
-
-          c_CurNode = orc_XmlParser.SelectNodeChild("output-file");
-          if (c_CurNode == "output-file") {
-            do {
-              c_CurApplication.c_ResultPaths.push_back(
-                  orc_XmlParser.GetNodeContent());
-              c_CurNode = orc_XmlParser.SelectNodeNext("output-file");
-            } while (c_CurNode == "output-file");
-
-            // Compare length
-            if (q_ExpectedSizeForOutputFiles == true) {
-              if (u32_ExpectedOutputfileNumber !=
-                  c_CurApplication.c_ResultPaths.size()) {
-                osc_write_log_warning(
-                    "Load file",
-                    QString::asprintf(
-                        "Unexpected output file count, expected: %u, got %u",
-                        u32_ExpectedOutputfileNumber,
-                        static_cast<uint32_t>(
-                            c_CurApplication.c_ResultPaths.size())));
-              }
-            }
-
-            // Return
-            Q_ASSERT(orc_XmlParser.SelectNodeParent() == "result");
-            // Return
-            Q_ASSERT(orc_XmlParser.SelectNodeParent() == "application");
-          } else {
-            // At least one output file must be provided in list
-            s32_Retval = C_CONFIG;
-          }
-        } else {
-          // No error, if child does not exist.
-          c_CurApplication.c_ResultPaths.resize(1);
-          c_CurApplication.c_ResultPaths[0] = "";
-        }
-
-        orc_NodeApplications.push_back(c_CurApplication);
-        c_CurNode = orc_XmlParser.SelectNodeNext("application");
-      } while ((c_CurNode == "application") && (s32_Retval == C_NO_ERR));
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "applications");
-    }
-    // Compare length
-    if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true)) {
-      if (u32_ExpectedSize != orc_NodeApplications.size()) {
-        osc_write_log_warning(
-            "Load file",
-            QString::asprintf(
-                "Unexpected application count, expected: %u, got %u",
-                u32_ExpectedSize,
-                static_cast<uint32_t>(orc_NodeApplications.size())));
-      }
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  }
-
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node applications
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "node"
-   post-condition: the passed XML parser has the active node set to the same
-   "node"
-
-   \param[in]      orc_NodeApplications   data storage
-   \param[in,out]  orc_XmlParser          XML with core active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeFiler::mh_SaveApplications(
-    const QList<C_OscNodeApplication> &orc_NodeApplications,
-    C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.CreateAndSelectNodeChild("applications");
-  orc_XmlParser.SetAttributeUint32(
-      "length", static_cast<uint32_t>(orc_NodeApplications.size()));
-  for (uint32_t u32_ItApplication = 0;
-       u32_ItApplication < orc_NodeApplications.size(); ++u32_ItApplication) {
-    const C_OscNodeApplication &rc_CurApplication =
-        orc_NodeApplications[u32_ItApplication];
-    orc_XmlParser.CreateAndSelectNodeChild("application");
-    orc_XmlParser.SetAttributeBool("active", rc_CurApplication.q_Active);
-    orc_XmlParser.SetAttributeUint32(
-        "process-id", static_cast<uint32_t>(rc_CurApplication.u8_ProcessId));
-    orc_XmlParser.SetAttributeUint32(
-        "generated-code-version",
-        static_cast<uint32_t>(rc_CurApplication.u16_GenCodeVersion));
-    orc_XmlParser.CreateNodeChild(
-        "type",
-        C_OscNodeApplication::h_ApplicationToString(rc_CurApplication.e_Type));
-    orc_XmlParser.CreateNodeChild("name", rc_CurApplication.c_Name);
-    orc_XmlParser.CreateNodeChild("comment", rc_CurApplication.c_Comment);
-    orc_XmlParser.CreateNodeChild("project-path",
-                                  rc_CurApplication.c_ProjectPath);
-    orc_XmlParser.CreateNodeChild("ide-call", rc_CurApplication.c_IdeCall);
-    orc_XmlParser.CreateNodeChild("code-generator-path",
-                                  rc_CurApplication.c_CodeGeneratorPath);
-    orc_XmlParser.CreateNodeChild("generate-path",
-                                  rc_CurApplication.c_GeneratePath);
-    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("result") == "result");
-    orc_XmlParser.SetAttributeUint32(
-        "length",
-        static_cast<uint32_t>(rc_CurApplication.c_ResultPaths.size()));
-    for (uint32_t u32_ItOutFile = 0UL;
-         u32_ItOutFile < rc_CurApplication.c_ResultPaths.size();
-         ++u32_ItOutFile) {
-      orc_XmlParser.CreateNodeChild(
-          "output-file", rc_CurApplication.c_ResultPaths[u32_ItOutFile]);
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "application");
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "applications");
-  }
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node data pools
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "node"
-   post-condition: the passed XML parser has the active node set to the same
-   "node"
-
-   \param[out]     orc_Node         data storage
-   \param[in,out]  orc_XmlParser    XML with core active
-   \param[in]      orc_BasePath     Base path
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadDataPools(C_OscNode &orc_Node,
-                                         C_OscXmlParserBase &orc_XmlParser,
-                                         const QString &orc_BasePath) {
-  int32_t s32_Retval = C_NO_ERR;
-  QString c_CurNode;
-  uint32_t u32_ExpectedSize = 0UL;
-  // Clear
-  orc_Node.c_DataPools.clear();
-  if (orc_XmlParser.SelectNodeChild("data-pools") == "data-pools") {
-    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
-
-    // Check optional length
-    if (q_ExpectedSizeHere == true) {
-      u32_ExpectedSize = orc_XmlParser.GetAttributeUint32("length");
-      orc_Node.c_DataPools.reserve(u32_ExpectedSize);
-    }
-
-    c_CurNode = orc_XmlParser.SelectNodeChild("data-pool");
-    if (c_CurNode == "data-pool") {
-      do {
-        C_OscNodeDataPool c_CurDataPool;
-        if (orc_BasePath.isEmpty()) {
-          s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPool(c_CurDataPool,
-                                                              orc_XmlParser);
-        } else {
-          const QString c_FileName =
-              C_OscNodeDataPoolFiler::h_GetFileName(c_CurDataPool.c_Name);
-          const QString c_CombinedFileName =
-              C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
-          s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolFile(
-              c_CurDataPool, c_CombinedFileName);
-        }
-        if (s32_Retval != C_NO_ERR) {
-          break;
-        }
-        orc_Node.c_DataPools.push_back(c_CurDataPool);
-        c_CurNode = orc_XmlParser.SelectNodeNext("data-pool");
-      } while (c_CurNode == "data-pool");
-
-      if (s32_Retval == C_NO_ERR) {
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pools");
-      }
-    }
-    if (s32_Retval == C_NO_ERR) {
-      if (q_ExpectedSizeHere == true) {
-        if (u32_ExpectedSize != orc_Node.c_DataPools.size()) {
-          osc_write_log_warning(
-              "Load file",
-              QString("Unexpected Datapool count, expected: %1, got %2")
-                  .arg(u32_ExpectedSize)
-                  .arg(static_cast<uint32_t>(orc_Node.c_DataPools.size())));
-        }
-      }
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-    }
-  } else {
-    osc_write_log_error("Loading Datapools",
-                        "Could not find \"data-pools\" node.");
-    s32_Retval = C_CONFIG;
-  }
-
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node data pools
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "node"
-   post-condition: the passed XML parser has the active node set to the same
-   "node"
-
-   \param[in]      orc_NodeDataPools   data storage
-   \param[in,out]  orc_XmlParser       XML with core active
-   \param[in]      orc_BasePath        Base path
-   \param[in,out]  opc_CreatedFiles    Optional storage for history of all
-   created files
+   \param[in]      orc_Node                         Node data to store
+   \param[in]      orc_Path                         File path
+   \param[in,out]  opc_CreatedFiles                 Created files list
+   \param[in]      orc_NodeIndicesToNameMap         Node indices to name map
 
    \return
    C_NO_ERR   data saved
-   C_CONFIG   file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveDataPools(
-    const QList<C_OscNodeDataPool> &orc_NodeDataPools,
-    C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    QStringList *const opc_CreatedFiles) {
-  int32_t s32_Retval = C_NO_ERR;
+int32_t C_OscNodeFiler_New::h_SaveJson(
+   const C_OscNode &orc_Node, const QString &orc_Path,
+   QStringList *const opc_CreatedFiles,
+   const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+   
+   QFile file(orc_Path);
+   if (!file.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Saving node definition",
+                          QString("Could not open file \"%1\" for writing.")
+                          .arg(orc_Path));
+      return C_CONFIG;
+   }
 
-  orc_XmlParser.CreateAndSelectNodeChild("data-pools");
-  orc_XmlParser.SetAttributeUint32(
-      "length", static_cast<uint32_t>(orc_NodeDataPools.size()));
-  for (uint32_t u32_ItDataPool = 0;
-       (u32_ItDataPool < orc_NodeDataPools.size()) && (s32_Retval == C_NO_ERR);
-       ++u32_ItDataPool) {
-    const C_OscNodeDataPool &rc_CurDatapool = orc_NodeDataPools[u32_ItDataPool];
-    orc_XmlParser.CreateAndSelectNodeChild("data-pool");
-    if (orc_BasePath.isEmpty()) {
-      // To string
-      C_OscNodeDataPoolFiler::h_SaveDataPool(rc_CurDatapool, orc_XmlParser);
-    } else {
-      const QString c_FileName =
-          C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
-      const QString c_CombinedFileName =
-          C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
-      // Save datapool file
-      s32_Retval = C_OscNodeDataPoolFiler::h_SaveDataPoolFile(
-          rc_CurDatapool, c_CombinedFileName);
-      // Set file reference
-      orc_XmlParser.SetNodeContent(c_FileName);
-      // Store if necessary
-      if (opc_CreatedFiles != NULL) {
-        opc_CreatedFiles->push_back(c_FileName);
-      }
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pools");
-  }
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  return s32_Retval;
+   QJsonObject c_Json = orc_Node.ToJsonObject();
+   QJsonDocument c_Doc(c_Json);
+   file.write(c_Doc.toJson(QJsonDocument::Indented));
+   file.close();
+
+   // Track created file if requested
+   if (opc_CreatedFiles != nullptr) {
+      *opc_CreatedFiles << orc_Path;
+   }
+
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load HALC
+/*! \brief   Load node from memory (JSON)
 
-   \param[in,out]  orc_Config       Config
-   \param[in,out]  orc_XmlParser    XML parser
-   \param[in]      orc_BasePath     Base path
+   \param[out]     orc_Node         Node data
+   \param[in]      orc_Object       JSON object
 
    \return
    C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+   C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadHalc(C_OscHalcConfig &orc_HalcConfig,
-                                    C_OscXmlParserBase &orc_XmlParser,
-                                    const QString &orc_BasePath) {
-  int32_t s32_Retval = C_NO_ERR;
+int32_t C_OscNodeFiler_New::h_LoadFromMemoryJson(C_OscNode &orc_Node,
+                                                 const QJsonObject &orc_Object) {
+   int32_t s32_Result = orc_Node.FromJsonObject(orc_Object);
 
-  // Clear
-  orc_HalcConfig.Clear();
-  if (orc_XmlParser.SelectNodeChild("halc-file") == "halc-file") {
-    if (orc_BasePath.isEmpty()) {
-      // From string
-      s32_Retval = C_OscHalcConfigFiler::h_LoadData(
-          orc_HalcConfig, orc_XmlParser, orc_BasePath);
-    } else {
-      s32_Retval = C_OscHalcConfigFiler::h_LoadFile(
-          orc_HalcConfig,
-          C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
-                                               orc_XmlParser.GetNodeContent()),
-          orc_BasePath);
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  } else {
-    // Ignore
-  }
+   if (s32_Result != C_NO_ERR) {
+      osc_write_log_error("Loading node definition",
+                          "Failed to deserialize node data from JSON object.");
+   }
 
-  return s32_Retval;
+   return s32_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save HALC
+/*! \brief   Save node to memory (JSON)
 
-   \param[in]      orc_Config          Config
-   \param[in,out]  orc_XmlParser       XML parser
-   \param[in]      orc_BasePath        Base path
-   \param[in,out]  opc_CreatedFiles    Created files
+   \param[in]      orc_Node         Node data to store
+
+   \return
+   QJsonObject    JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscNodeFiler_New::h_SaveToMemoryJson(const C_OscNode &orc_Node) {
+   return orc_Node.ToJsonObject();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load node from XML file
+
+   \param[out]     orc_Node         Node data
+   \param[in]      orc_Path         File path
+   \param[in]      oq_SkipContent   Skip content (datapools, halc, etc.)
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content of file is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeFiler_New::h_LoadXml(C_OscNode &orc_Node,
+                                      const QString &orc_Path,
+                                      const bool oq_SkipContent) {
+   QFile file(orc_Path);
+   if (!file.open(QIODevice::ReadOnly)) {
+      osc_write_log_error("Loading node definition",
+                          QString("Could not open file \"%1\" for reading.")
+                          .arg(orc_Path));
+      return C_CONFIG;
+   }
+
+   QDomDocument c_Doc;
+   QString c_Error;
+   int i_Line, i_Column;
+
+   if (!c_Doc.setContent(file.readAll(), &c_Error, &i_Line, &i_Column)) {
+      osc_write_log_error("Loading node definition",
+                          QString("XML parse error at line %1, column %2: %3")
+                          .arg(i_Line).arg(i_Column).arg(c_Error));
+      file.close();
+      return C_CONFIG;
+   }
+   file.close();
+
+   QDomElement c_Root = c_Doc.documentElement();
+   int32_t s32_Result = orc_Node.FromQDomElement(c_Root);
+
+   if (s32_Result != C_NO_ERR) {
+      osc_write_log_error("Loading node definition",
+                          "Failed to deserialize node data from XML file.");
+   }
+
+   return s32_Result;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save node to XML file
+
+   \param[in]      orc_Node                         Node data to store
+   \param[in]      orc_Path                         File path
+   \param[in,out]  opc_CreatedFiles                 Created files list
+   \param[in]      orc_NodeIndicesToNameMap         Node indices to name map
 
    \return
    C_NO_ERR   data saved
-   C_CONFIG   file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveHalc(const C_OscHalcConfig &orc_HalcConfig,
-                                    C_OscXmlParserBase &orc_XmlParser,
-                                    const QString &orc_BasePath,
-                                    QStringList *const opc_CreatedFiles) {
-  int32_t s32_Retval = C_NO_ERR;
+int32_t C_OscNodeFiler_New::h_SaveXml(
+   const C_OscNode &orc_Node, const QString &orc_Path,
+   QStringList *const opc_CreatedFiles,
+   const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+   
+   QFile file(orc_Path);
+   if (!file.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Saving node definition",
+                          QString("Could not open file \"%1\" for writing.")
+                          .arg(orc_Path));
+      return C_CONFIG;
+   }
 
-  if (!orc_HalcConfig.c_FileString.isEmpty()) {
-    orc_XmlParser.CreateAndSelectNodeChild("halc-file");
-    if (orc_BasePath.isEmpty()) {
-      // To string
-      s32_Retval = C_OscHalcConfigFiler::h_SaveData(
-          orc_HalcConfig, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
-    } else {
-      // const QString c_FileName =
-      // C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
-      // Fix
-      const QString c_FileName = "halc.xml";
-      const QString c_CombinedFileName =
-          C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
-      // Save datapool file
-      s32_Retval = C_OscHalcConfigFiler::h_SaveFile(
-          orc_HalcConfig, c_CombinedFileName, orc_BasePath, opc_CreatedFiles);
-      // Set file reference
-      orc_XmlParser.SetNodeContent(c_FileName);
-      // Store if necessary
-      if (opc_CreatedFiles != NULL) {
-        opc_CreatedFiles->push_back(c_FileName);
-      }
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  }
-  return s32_Retval;
+   QDomDocument c_Doc;
+   QDomElement c_Element = orc_Node.ToQDomDocument(c_Doc, "node");
+   c_Doc.appendChild(c_Element);
+
+   // Write with XML declaration
+   file.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+   file.write(c_Doc.toString().toUtf8());
+   file.close();
+
+   // Track created file if requested
+   if (opc_CreatedFiles != nullptr) {
+      *opc_CreatedFiles << orc_Path;
+   }
+
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load CAN open managers
+/*! \brief   Load node from memory (XML)
 
-   \param[in,out]  orc_Config       Config
-   \param[in,out]  orc_XmlParser    XML parser
+   \param[out]     orc_Node         Node data
+   \param[in]      orc_Element      XML element
+   \param[in]      oq_SkipContent   Skip content (datapools, halc, etc.)
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeFiler_New::h_LoadFromMemoryXml(C_OscNode &orc_Node,
+                                                const QDomElement &orc_Element,
+                                                const bool oq_SkipContent) {
+   int32_t s32_Result = orc_Node.FromQDomElement(orc_Element);
+
+   if (s32_Result != C_NO_ERR) {
+      osc_write_log_error("Loading node definition",
+                          "Failed to deserialize node data from XML element.");
+   }
+
+   return s32_Result;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save node to memory (XML)
+
+   \param[in]      orc_Node         Node data to store
+   \param[in,out]  orc_Doc          DOM document
+
+   \return
+   QDomElement    XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscNodeFiler_New::h_SaveToMemoryXml(const C_OscNode &orc_Node,
+                                                  QDomDocument &orc_Doc) {
+   return orc_Node.ToQDomDocument(orc_Doc, "node");
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load node (legacy XML compatibility)
+
+   \param[out]     orc_Node         Node data
+   \param[in]      orc_FilePath     File path
+   \param[in]      oq_SkipContent   Skip content (datapools, halc, etc.)
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content of file is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeFiler_New::h_LoadNodeFile_Legacy(C_OscNode &orc_Node,
+                                                  const QString &orc_FilePath,
+                                                  const bool oq_SkipContent) {
+   // Delegate to original implementation for backward compatibility
+   return C_OscNodeFiler::h_LoadNodeFile(orc_Node, orc_FilePath, oq_SkipContent);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save node (legacy XML compatibility)
+
+   \param[in]      orc_Node                         Node data to store
+   \param[in]      orc_FilePath                     File path
+   \param[in,out]  opc_CreatedFiles                 Created files list
+   \param[in]      orc_NodeIndicesToNameMap         Node indices to name map
+
+   \return
+   C_NO_ERR   data saved
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeFiler_New::h_SaveNodeFile_Legacy(
+   const C_OscNode &orc_Node, const QString &orc_FilePath,
+   QStringList *const opc_CreatedFiles,
+   const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+   
+   // Delegate to original implementation for backward compatibility
+   return C_OscNodeFiler::h_SaveNodeFile(orc_Node, orc_FilePath, opc_CreatedFiles,
+                                         orc_NodeIndicesToNameMap);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load node (legacy XML compatibility)
+
+   \param[out]     orc_Node         Node data
+   \param[in]      orc_XmlParser    XML parser
    \param[in]      orc_BasePath     Base path
+   \param[in]      oq_SkipContent   Skip content (datapools, halc, etc.)
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   data read
-   \retval   C_CONFIG   content of file is invalid or incomplete
+   C_NO_ERR   data read
+   C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadCanOpenManagers(
-    QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_CanOpenManagers,
-    C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  // Clear
-  orc_CanOpenManagers.clear();
-  if (orc_XmlParser.SelectNodeChild("can-open-managers-file") ==
-      "can-open-managers-file") {
-    if (orc_BasePath.isEmpty()) {
-      // From string
-      s32_Retval = C_OscCanOpenManagerFiler::h_LoadData(
-          orc_CanOpenManagers, orc_XmlParser, orc_BasePath);
-    } else {
-      s32_Retval = C_OscCanOpenManagerFiler::h_LoadFile(
-          orc_CanOpenManagers,
-          C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
-                                               orc_XmlParser.GetNodeContent()),
-          orc_BasePath);
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  } else {
-    // Ignore
-  }
-
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save CAN open managers
-
-   \param[in]      orc_Config                Config
-   \param[in,out]  orc_XmlParser             XML parser
-   \param[in]      orc_BasePath              Base path
-   \param[in,out]  opc_CreatedFiles          Created files
-   \param[in]      orc_NodeIndicesToNameMap  Node indices to name map
-
-   \return
-   STW error codes
-
-   \retval   C_NO_ERR   data saved
-   \retval   C_CONFIG   file could not be created
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveCanOpenManagers(
-    const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
-    C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    QStringList *const opc_CreatedFiles,
-    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_Config.size() > 0) {
-    orc_XmlParser.CreateAndSelectNodeChild("can-open-managers-file");
-    if (orc_BasePath.isEmpty()) {
-      // To string
-      C_OscCanOpenManagerFiler::h_SaveData(orc_Config, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
-                                           orc_NodeIndicesToNameMap);
-    } else {
-      const QString c_FileName = "can_open_managers.xml";
-      const QString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
-      // Save datapool file
-      s32_Retval = C_OscCanOpenManagerFiler::h_SaveFile(orc_Config, c_CombinedFileName, orc_BasePath,
-                                                        opc_CreatedFiles, orc_NodeIndicesToNameMap);
-      // Set file reference
-      orc_XmlParser.SetNodeContent(c_FileName);
-      // Store if necessary
-      if (opc_CreatedFiles != NULL) {
-        opc_CreatedFiles->push_back(c_FileName);
-      }
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  }
-
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load data loggers
-
-   \param[in,out]  orc_Config       Config
-   \param[in,out]  orc_XmlParser    XML parser
-   \param[in]      orc_BasePath     Base path
-
-   \return
-   STW error codes
-
-   \retval   C_NO_ERR   data read
-   \retval   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadDataLoggers(
-    QList<C_OscDataLoggerJob> &orc_DataLoggerJobs,
-    C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  // Clear
-  orc_DataLoggerJobs.clear();
-  if (orc_XmlParser.SelectNodeChild("data-loggers-file") ==
-      "data-loggers-file") {
-    if (orc_BasePath.isEmpty()) {
-      // From string
-      s32_Retval = C_OscDataLoggerJobFiler::h_LoadData(orc_DataLoggerJobs,
-                                                       orc_XmlParser);
-    } else {
-      s32_Retval = C_OscDataLoggerJobFiler::h_LoadFile(
-          orc_DataLoggerJobs,
-          C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
-                                               orc_XmlParser.GetNodeContent()));
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  }
-
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save data loggers
-
-   \param[in]      orc_Config          Config
-   \param[in,out]  orc_XmlParser       XML parser
-   \param[in]      orc_BasePath        Base path
-   \param[in,out]  opc_CreatedFiles    Created files
-
-   \return
-   STW error codes
-
-   \retval   C_NO_ERR   data saved
-   \retval   C_CONFIG   file could not be created
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveDataLoggers(
-    const QList<C_OscDataLoggerJob> &orc_DataLoggerJobs,
-    C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    QStringList *const opc_CreatedFiles) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_DataLoggerJobs.size() > 0) {
-    orc_XmlParser.CreateAndSelectNodeChild("data-loggers-file");
-    if (orc_BasePath.isEmpty()) {
-      // To string
-      C_OscDataLoggerJobFiler::h_SaveData(orc_DataLoggerJobs, orc_XmlParser);
-    } else {
-      // const QString c_FileName =
-      // C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
-      // Fix
-      const QString c_FileName = "data_loggers.xml";
-      const QString c_CombinedFileName =
-          C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
-      // Save datapool file
-      s32_Retval = C_OscDataLoggerJobFiler::h_SaveFile(orc_DataLoggerJobs,
-                                                       c_CombinedFileName);
-      // Set file reference
-      orc_XmlParser.SetNodeContent(c_FileName);
-      // Store if necessary
-      if (opc_CreatedFiles != NULL) {
-        opc_CreatedFiles->push_back(c_FileName);
-      }
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  }
-
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load X-App properties
-
-   \param[in,out]  orc_Config       Config
-   \param[in,out]  orc_XmlParser    XML parser
-   \param[in]      orc_BasePath     Base path
-
-   \return
-   STW error codes
-
-   \retval   C_NO_ERR   data read
-   \retval   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_LoadXappProperties(C_OscXappProperties &orc_Config,
+int32_t C_OscNodeFiler_New::h_LoadNode_Legacy(C_OscNode &orc_Node,
                                               C_OscXmlParserBase &orc_XmlParser,
-                                              const QString &orc_BasePath) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  // Clear
-  orc_Config.Initialize();
-  if (orc_XmlParser.SelectNodeChild("x-app-properties-file") ==
-      "x-app-properties-file") {
-    if (orc_BasePath.isEmpty()) {
-      // From string
-      s32_Retval = C_OscXappPropertiesFiler::h_LoadXappProperties(
-          orc_Config, orc_XmlParser);
-    } else {
-      s32_Retval = C_OscXappPropertiesFiler::h_LoadXappPropertiesFile(
-          orc_Config, C_OscSystemFilerUtil::h_CombinePaths(
-                          orc_BasePath, orc_XmlParser.GetNodeContent()));
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  }
-
-  return s32_Retval;
+                                              const QString &orc_BasePath,
+                                              const bool oq_SkipContent) {
+   // Delegate to original implementation for backward compatibility
+   return C_OscNodeFiler::h_LoadNode(orc_Node, orc_XmlParser, orc_BasePath,
+                                     oq_SkipContent);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save X-App properties
+/*! \brief   Save node (legacy XML compatibility)
 
-   \param[in]      orc_Config          Config
-   \param[in,out]  orc_XmlParser       XML parser
-   \param[in]      orc_BasePath        Base path
-   \param[in,out]  opc_CreatedFiles    Created files
+   \param[in]      orc_Node                         Node data to store
+   \param[in]      orc_XmlParser                    XML parser
+   \param[in]      orc_BasePath                     Base path
+   \param[in,out]  opc_CreatedFiles                 Created files list
+   \param[in]      orc_NodeIndicesToNameMap         Node indices to name map
 
    \return
-   STW error codes
-
-   \retval   C_NO_ERR   data saved
-   \retval   C_CONFIG   file could not be created
+   C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_SaveXappProperties(
-    const C_OscNode &orc_Config, C_OscXmlParserBase &orc_XmlParser,
-    const QString &orc_BasePath, QStringList *const opc_CreatedFiles) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_Config.c_Properties.q_XappSupport) {
-    orc_XmlParser.CreateAndSelectNodeChild("x-app-properties-file");
-    if (orc_BasePath.isEmpty()) {
-      // To string
-      C_OscXappPropertiesFiler::h_SaveXappProperties(
-          orc_Config.c_XappProperties, orc_XmlParser);
-    } else {
-      // const QString c_FileName =
-      // C_OscNodeDataPoolFiler::h_GetFileName(rc_CurDatapool.c_Name);
-      // Fix
-      const QString c_FileName = C_OscXappPropertiesFiler::h_GetFileName();
-      const QString c_CombinedFileName =
-          C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
-      // Save datapool file
-      s32_Retval = C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(
-          orc_Config.c_XappProperties, c_CombinedFileName);
-      // Set file reference
-      orc_XmlParser.SetNodeContent(c_FileName);
-      // Store if necessary
-      if (opc_CreatedFiles != NULL) {
-        opc_CreatedFiles->push_back(c_FileName);
-      }
-    }
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "node");
-  }
-
-  return s32_Retval;
+int32_t C_OscNodeFiler_New::h_SaveNode_Legacy(
+   const C_OscNode &orc_Node, C_OscXmlParserBase &orc_XmlParser,
+   const QString &orc_BasePath, QStringList *const opc_CreatedFiles,
+   const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
+   
+   // Delegate to original implementation for backward compatibility
+   return C_OscNodeFiler::h_SaveNode(orc_Node, orc_XmlParser, orc_BasePath,
+                                     opc_CreatedFiles, orc_NodeIndicesToNameMap);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Transform diagnostic server type to string
+/*! \brief   Get folder name for node
 
-   \param[in]  ore_DiagnosticProtocol  Diagnostic protocol type
+   \param[in]      orc_NodeName     Node name
 
    \return
-   Stringified diagnostic server type
+   QString        Folder name
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscNodeFiler::mh_DiagnosticServerToString(
-    const C_OscNodeProperties::E_DiagnosticServerProtocol
-        &ore_DiagnosticProtocol) {
-  return C_OscFilerUtil::h_EnumToString(ore_DiagnosticProtocol, mac_DIAG_SERVER_TABLE);
+QString C_OscNodeFiler_New::h_GetFolderName(const QString &orc_NodeName) {
+   // Delegate to original implementation
+   return C_OscNodeFiler::h_GetFolderName(orc_NodeName);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Transform string to diagnostic server type
-
-   \param[in]   orc_String    String to interpret
-   \param[out]  ore_Type      Diagnostic server type
+/*! \brief   Get file name for node
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   QString        File name
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_StringToDiagnosticServer(
-    const QString &orc_String,
-    C_OscNodeProperties::E_DiagnosticServerProtocol &ore_Type) {
-  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_DIAG_SERVER_TABLE, ore_Type, "Loading node definition", "properties.diagnostic-server");
+QString C_OscNodeFiler_New::h_GetFileName(void) {
+   // Delegate to original implementation
+   return C_OscNodeFiler::h_GetFileName();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Transform flash loader type to string
+/*! \brief   Detect format and load from file
 
-   \param[in]  ore_FlashLoader   Flash loader type
+   \param[out]     orc_Node         Node data
+   \param[in]      orc_Path         File path
+   \param[in]      oq_SkipContent   Skip content (datapools, halc, etc.)
 
    \return
-   Stringified flash loader type
+   C_NO_ERR   data read
+   C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscNodeFiler::mh_FlashLoaderToString(
-    const C_OscNodeProperties::E_FlashLoaderProtocol &ore_FlashLoader) {
-  return C_OscFilerUtil::h_EnumToString(ore_FlashLoader, mac_FLASH_LOADER_TABLE);
+int32_t C_OscNodeFiler_New::mh_DetectAndLoad(C_OscNode &orc_Node,
+                                             const QString &orc_Path,
+                                             const bool oq_SkipContent) {
+   const QString c_Extension = orc_Path.right(4).toLower();
+
+   if (c_Extension == ".bin") {
+      return h_LoadBinary(orc_Node, orc_Path);
+   } else if (c_Extension == ".json") {
+      return h_LoadJson(orc_Node, orc_Path);
+   } else if (c_Extension == ".xml") {
+      return h_LoadXml(orc_Node, orc_Path, oq_SkipContent);
+   } else {
+      // Default to XML for backward compatibility
+      osc_write_log_warning("File I/O",
+                            QString("Unknown file extension \"%1\" for \"%2\". "
+                                    "Defaulting to XML format.")
+                            .arg(c_Extension, orc_Path));
+      return h_LoadXml(orc_Node, orc_Path, oq_SkipContent);
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Transform string to flash loader type
+/*! \brief   Save node with format specification
 
-   \param[in]   orc_String    String to interpret
-   \param[out]  ore_Type      Flash loader type
+   \param[in]      orc_Node                         Node data to store
+   \param[in]      orc_Path                         File path
+   \param[in,out]  opc_CreatedFiles                 Created files list
+   \param[in]      orc_NodeIndicesToNameMap         Node indices to name map
+   \param[in]      orc_Format                       Format string ("binary", "json", "xml")
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::mh_StringToFlashLoader(
-    const QString &orc_String,
-    C_OscNodeProperties::E_FlashLoaderProtocol &ore_Type) {
-  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_FLASH_LOADER_TABLE, ore_Type, "Loading node definition", "properties.flash-loader");
+int32_t C_OscNodeFiler_New::mh_SaveNodeInternal(
+   const C_OscNode &orc_Node, const QString &orc_Path,
+   QStringList *const opc_CreatedFiles,
+   const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap,
+   const QString &orc_Format) {
+   
+   if (orc_Format == "binary") {
+      return h_SaveBinary(orc_Node, orc_Path, opc_CreatedFiles,
+                          orc_NodeIndicesToNameMap);
+   } else if (orc_Format == "json") {
+      return h_SaveJson(orc_Node, orc_Path, opc_CreatedFiles,
+                        orc_NodeIndicesToNameMap);
+   } else if (orc_Format == "xml") {
+      return h_SaveXml(orc_Node, orc_Path, opc_CreatedFiles,
+                       orc_NodeIndicesToNameMap);
+   } else {
+      osc_write_log_error("Saving node definition",
+                          QString("Unknown format \"%1\" for \"%2\".")
+                          .arg(orc_Format, orc_Path));
+      return C_CONFIG;
+   }
 }

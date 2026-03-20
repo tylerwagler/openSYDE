@@ -15,7 +15,7 @@
  #include <QFileInfo>
  #include <fstream>
 
- #include "C_OscSupSignatureFiler_New.hpp"
+ #include "C_OscSupSignatureFiler.hpp"
  #include "C_OscXmlParser.hpp"
  #include "C_OscSystemFilerUtil.hpp"
  #include "stwerrors.hpp"

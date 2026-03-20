@@ -1,866 +1,431 @@
-//----------------------------------------------------------------------------------------------------------------------
+ //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Load/save system definition data from/to file (V3)
-
-   Load/save system definition data from/to XML file
+   \brief       Load/save system definition data from/to file with multi-format support (V3)
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
 */
+ //----------------------------------------------------------------------------------------------------------------------
+
+ /* -- Includes
+  * ------------------------------------------------------------------------------------------------------
+  */
+ #include "precomp_headers.hpp"
+ #include <QDir>
+ #include <QFile>
+ #include <QFileInfo>
+ #include <fstream>
+
+ #include "C_OscSystemDefinitionFiler.hpp"
+ #include "C_OscSystemFilerUtil.hpp"
+ #include "C_OscLoggingHandler.hpp"
+ #include "C_OscUtils.hpp"
+ #include "C_OscNodeSquadFiler.hpp"
+ #include "C_OscNodeFiler.hpp"
+ #include "C_OscSystemBusFiler.hpp"
+ #include "stwerrors.hpp"
+ #include "stwtypes.hpp"
+
+ /* -- Used Namespaces
+  * -----------------------------------------------------------------------------------------------
+  */
+
+ using namespace stw::errors;
+ using namespace stw::opensyde_core;
+
+ /* -- Module Global Constants
+  * ---------------------------------------------------------------------------------------
+  */
+
+ /* -- Types
+  * ---------------------------------------------------------------------------------------------------------
+  */
+
+ /* -- Global Variables
+  * ----------------------------------------------------------------------------------------------
+  */
+
+ /* -- Module Global Variables
+  * ---------------------------------------------------------------------------------------
+  */
+
+ /* -- Module Global Function Prototypes
+  * -----------------------------------------------------------------------------
+  */
+
+ /* -- Implementation
+  * ------------------------------------------------------------------------------------------------
+  */
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief   Load system definition from file (auto-detects format)
+
+    \param[out]     orc_SystemDefinition            Pointer to storage
+    \param[in]      orc_PathSystemDefinition        Path to system definition
+    \param[in]      orc_PathDeviceDefinitions       Path to device definitions
+    \param[in]      oq_UseDeviceDefinitions         Flag for using device definitions
+    \param[in,out]  opu16_ReadFileVersion           Optional storage for read file version
+
+    \return
+    C_NO_ERR    data read
+    C_RANGE     specified system definition file does not exist
+    C_NOACT     specified file is present but structure is invalid
+    C_CONFIG    system definition file content is invalid or incomplete
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscSystemDefinitionFiler_New::h_LoadFile(
+     C_OscSystemDefinition &orc_SystemDefinition,
+     const QString &orc_PathSystemDefinition,
+     const QString &orc_PathDeviceDefinitions,
+     const bool oq_UseDeviceDefinitions, uint16_t *const opu16_ReadFileVersion) {
+     int32_t s32_Retval = C_NO_ERR;
+
+     if (QFileInfo(orc_PathSystemDefinition).exists() &&
+         QFileInfo(orc_PathSystemDefinition).isFile()) {
+         const QString c_Extension = QFileInfo(orc_PathSystemDefinition).suffix().toLower();
+
+         if (c_Extension == "bin") {
+             // Binary format
+             std::ifstream c_File(orc_PathSystemDefinition.toLocal8Bit().constData(), std::ios::binary);
+             if (c_File.is_open()) {
+                 QDataStream c_Stream(&c_File);
+                 c_Stream.setVersion(QDataStream::Qt_5_12);
+                 s32_Retval = h_LoadBinary(orc_SystemDefinition, c_Stream);
+                 c_File.close();
+             } else {
+                 osc_write_log_error("Loading System Definition",
+                                     "File \"" + orc_PathSystemDefinition + "\" could not be opened for binary reading.");
+                 s32_Retval = C_NOACT;
+             }
+         } else if (c_Extension == "json") {
+             // JSON format
+             QFile c_File(orc_PathSystemDefinition);
+             if (c_File.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                 QJsonDocument c_Doc = QJsonDocument::fromJson(c_File.readAll());
+                 c_File.close();
+                 if (c_Doc.isObject()) {
+                     s32_Retval = h_LoadJson(orc_SystemDefinition, c_Doc.object());
+                 } else {
+                     osc_write_log_error("Loading System Definition",
+                                         "JSON file does not contain a valid object.");
+                     s32_Retval = C_CONFIG;
+                 }
+             } else {
+                 osc_write_log_error("Loading System Definition",
+                                     "File \"" + orc_PathSystemDefinition + "\" could not be opened for JSON reading.");
+                 s32_Retval = C_NOACT;
+             }
+         } else {
+             // XML format (default)
+             C_OscXmlParserLog c_XmlParser;
+             c_XmlParser.SetLogHeading("Loading System Definition");
+             s32_Retval = c_XmlParser.LoadFromFile(orc_PathSystemDefinition);
+             if (s32_Retval == C_NO_ERR) {
+                 s32_Retval = h_LoadXml(orc_SystemDefinition, c_XmlParser);
+             } else {
+                 osc_write_log_error("Loading System Definition",
+                                     "File \"" + orc_PathSystemDefinition + "\" could not be parsed as XML.");
+                 s32_Retval = C_NOACT;
+             }
+         }
+
+         // Save file string for reference
+         if (s32_Retval == C_NO_ERR) {
+             C_OscUtils::h_FileToString(orc_PathSystemDefinition, orc_SystemDefinition.c_FileString);
+         }
+     } else {
+         osc_write_log_error("Loading System Definition",
+                             "File \"" + orc_PathSystemDefinition + "\" does not exist.");
+         s32_Retval = C_RANGE;
+     }
+
+     return s32_Retval;
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief   Save system definition to file (auto-detects format from extension)
+
+    \param[in]      orc_SystemDefinition   Pointer to storage
+    \param[in]      orc_Path               Path of system definition
+    \param[in,out]  opc_CreatedFiles       Optional storage for history of created files
+
+    \return
+    C_NO_ERR   data saved
+    C_RD_WR    could not write to file
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscSystemDefinitionFiler_New::h_SaveFile(
+     const C_OscSystemDefinition &orc_SystemDefinition,
+     const QString &orc_Path,
+     QStringList *const opc_CreatedFiles) {
+     const QString c_Extension = QFileInfo(orc_Path).suffix().toLower();
+
+     if (c_Extension == "bin") {
+         // Binary format
+         QFile c_File(orc_Path);
+         if (c_File.open(QIODevice::WriteOnly)) {
+             QDataStream c_Stream(&c_File);
+             c_Stream.setVersion(QDataStream::Qt_5_12);
+             const int32_t s32_Result = h_SaveBinary(orc_SystemDefinition, c_Stream);
+             c_File.close();
+             return s32_Result;
+         } else {
+             osc_write_log_error("Saving System Definition",
+                                 "File \"" + orc_Path + "\" could not be opened for binary writing.");
+             return C_RD_WR;
+         }
+     } else if (c_Extension == "json") {
+         // JSON format
+         QJsonObject c_Object;
+         const int32_t s32_Result = h_SaveJson(orc_SystemDefinition, c_Object);
+         if (s32_Result == C_NO_ERR) {
+             QJsonDocument c_Doc(c_Object);
+             QFile c_File(orc_Path);
+             if (c_File.open(QIODevice::WriteOnly | QIODevice::Text)) {
+                 c_File.write(c_Doc.toJson(QJsonDocument::Indented));
+                 c_File.close();
+                 if (opc_CreatedFiles) {
+                     opc_CreatedFiles->append(orc_Path);
+                 }
+             } else {
+                 osc_write_log_error("Saving System Definition",
+                                     "File \"" + orc_Path + "\" could not be opened for JSON writing.");
+                 return C_RD_WR;
+             }
+         }
+         return s32_Result;
+     } else {
+         // XML format (default)
+         C_OscXmlParserLog c_XmlParser;
+         const int32_t s32_Result = h_SaveXml(orc_SystemDefinition, c_XmlParser);
+         if (s32_Result == C_NO_ERR) {
+             const int32_t s32_SaveResult = C_OscSystemFilerUtil::h_SaveStringToFile(
+                 c_XmlParser.GetContent(), orc_Path, "Saving System Definition");
+             if (s32_SaveResult == C_NO_ERR && opc_CreatedFiles) {
+                 opc_CreatedFiles->append(orc_Path);
+             }
+             return s32_SaveResult;
+         }
+         return s32_Result;
+     }
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief   Load system definition from binary stream
+
+    \param[out]     orc_SystemDefinition   Pointer to storage
+    \param[in,out]  orc_Stream             Binary stream
+
+    \return
+    C_NO_ERR    no error
+    C_CONFIG    content is invalid or incomplete
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscSystemDefinitionFiler_New::h_LoadBinary(
+     C_OscSystemDefinition &orc_SystemDefinition,
+     QDataStream &orc_Stream) {
+     return orc_SystemDefinition.FromQDataStream(orc_Stream);
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief   Load system definition from JSON object
+
+    \param[out]     orc_SystemDefinition   Pointer to storage
+    \param[in]      orc_Object             JSON object
+
+    \return
+    C_NO_ERR    no error
+    C_CONFIG    content is invalid or incomplete
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscSystemDefinitionFiler_New::h_LoadJson(
+     C_OscSystemDefinition &orc_SystemDefinition,
+     const QJsonObject &orc_Object) {
+     return orc_SystemDefinition.FromJsonObject(orc_Object);
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief   Load system definition from XML parser
+
+    \param[out]     orc_SystemDefinition   Pointer to storage
+    \param[in,out]  orc_XmlParser          XML parser
+
+    \return
+    C_NO_ERR    no error
+    C_CONFIG    content is invalid or incomplete
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscSystemDefinitionFiler_New::h_LoadXml(
+     C_OscSystemDefinition &orc_SystemDefinition,
+     C_OscXmlParserBase &orc_XmlParser) {
+     return orc_SystemDefinition.FromQDomElement(
+         orc_XmlParser.GetRootElement());
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief   Save system definition to binary stream
+
+    \param[in]      orc_SystemDefinition   System definition to save
+    \param[in,out]  orc_Stream             Binary stream
+
+    \return
+    C_NO_ERR   no error
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscSystemDefinitionFiler_New::h_SaveBinary(
+     const C_OscSystemDefinition &orc_SystemDefinition,
+     QDataStream &orc_Stream) {
+     return orc_SystemDefinition.ToQDataStream(orc_Stream);
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief   Save system definition to JSON object
+
+    \param[in]      orc_SystemDefinition   System definition to save
+    \param[out]     orc_Object             JSON object
+
+    \return
+    C_NO_ERR   no error
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscSystemDefinitionFiler_New::h_SaveJson(
+     const C_OscSystemDefinition &orc_SystemDefinition,
+     QJsonObject &orc_Object) {
+     orc_Object = orc_SystemDefinition.ToJsonObject();
+     return C_NO_ERR;
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief   Save system definition to XML parser
+
+    \param[in]      orc_SystemDefinition   System definition to save
+    \param[in,out]  orc_XmlParser          XML parser
+
+    \return
+    C_NO_ERR   no error
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscSystemDefinitionFiler_New::h_SaveXml(
+     const C_OscSystemDefinition &orc_SystemDefinition,
+     C_OscXmlParserBase &orc_XmlParser) {
+     QDomElement c_Element = orc_SystemDefinition.ToQDomDocument(
+         orc_XmlParser.GetDocument(), "opensyde-system-definition");
+
+     // Replace root element if needed
+     QDomDocument &rc_Doc = orc_XmlParser.GetDocument();
+     if (rc_Doc.documentElement().isNull()) {
+         rc_Doc.appendChild(c_Element);
+     } else {
+         rc_Doc.replaceChild(c_Element, rc_Doc.documentElement());
+     }
+
+     return C_NO_ERR;
+ }
+
+
+
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Split device type string into main and sub type
 
-/* -- Includes
- * ------------------------------------------------------------------------------------------------------
- */
-#include "precomp_headers.hpp"
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QList>
-
-#include "C_OscSystemDefinitionFiler.hpp"
-#include "C_OscSystemDefinitionFilerV2.hpp"
-#include "C_OscSystemFilerUtil.hpp"
-#include "C_OscXmlParserLog.hpp"
-#include "stwerrors.hpp"
-#include "stwtypes.hpp"
-#include <cstdio>
-
-#include "C_OscLoggingHandler.hpp"
-#include "C_OscNodeSquadFiler.hpp"
-
-/* -- Used Namespaces
- * -----------------------------------------------------------------------------------------------
- */
-using namespace stw::opensyde_core;
-
-using namespace stw::errors;
-
-/* -- Module Global Constants
- * ---------------------------------------------------------------------------------------
- */
-
-/* -- Types
- * ---------------------------------------------------------------------------------------------------------
- */
-
-/* -- Global Variables
- * ----------------------------------------------------------------------------------------------
- */
-
-/* -- Module Global Variables
- * ---------------------------------------------------------------------------------------
- */
-
-/* -- Module Global Function Prototypes
- * -----------------------------------------------------------------------------
- */
-
-/* -- Implementation
- * ------------------------------------------------------------------------------------------------
- */
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load system definition
-
-   Steps:
-   * Load device definitions (if not already loaded)
-   * Load system definition
-   * for each node set a pointer to the used device definition
-
-   For system definition version V3 the optional parameters to load only active
-   nodes (opc_NodesToLoad), skip unnecessary content (oq_SkipContent) and to
-   load only given node (opc_ExpectedNodeName), as alternative to list of active
-   nodes, are supported.
-
-   \param[out]     orc_SystemDefinition            Pointer to storage
-   \param[in]      orc_PathSystemDefinition        Path to system definition
-   \param[in]      orc_PathDeviceDefinitions       Path to device definition
-   description file
-   \param[in]      oq_UseDeviceDefinitions         Flag for using device
-   definitions, if the flag is false orc_PathDeviceDefinitions can be an empty
-   string. It is highly recommended to use the device definitions. Purpose for
-   not using the device definition is when only read access to a part of the
-   system definition is necessary.
-   \param[in,out]  opu16_ReadFileVersion           Optional storage for read
-   file version (only use in C_NO_ERR case)
-   \param[in]      opc_NodesToLoad                 (Optional parameter) only
-   load content of nodes which are active in sysdef
-   \param[in]      oq_SkipContent                  (Optional parameter) skip
-   content when not needed (datapools, halc etc.) (default = false)
-   \param[in]      opc_ExpectedNodeName            (Optional parameter) only
-   load node content of given node. Parameter is used if no node index is
-   available to fill opc_NodesToLoad parameter.
-   \param[in,out]  opc_ErrorDetailsMissingDevices  (Optional parameter) if
-   C_OVERFLOW contains types of all missing devices
-
-   \return
-   C_NO_ERR    data read
-   C_RANGE     specified system definition file does not exist
-   C_NOACT     specified file is present but structure is invalid (e.g. invalid
-   XML file) C_CONFIG    system definition file content is invalid or incomplete
-               device definition file could not be loaded
-   C_OVERFLOW  node in system definition references a device not part of the
-   device definitions
+   \param[in]      orc_CompleteType   Complete device type string
+   \param[out]     orc_MainType       Main type (output)
+   \param[out]     orc_SubType        Sub type (output)
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
-    C_OscSystemDefinition &orc_SystemDefinition,
-    const QString &orc_PathSystemDefinition,
-    const QString &orc_PathDeviceDefinitions,
-    const bool oq_UseDeviceDefinitions, uint16_t *const opu16_ReadFileVersion,
-    const QByteArray *const opc_NodesToLoad, const bool oq_SkipContent,
-    const QString *const opc_ExpectedNodeName,
-    QStringList *const opc_ErrorDetailsMissingDevices) {
-  int32_t s32_Retval = C_NO_ERR;
+void C_OscSystemDefinitionFiler_New::h_SplitDeviceType(const QString &orc_CompleteType,
+                                                       QString &orc_MainType,
+                                                       QString &orc_SubType) {
+    const int32_t s32_Pos = orc_CompleteType.indexOf(C_OscNodeSquad::hc_SEPARATOR);
 
-  if (QFileInfo(orc_PathSystemDefinition).exists() &&
-      QFileInfo(orc_PathSystemDefinition).isFile()) {
-    C_OscXmlParserLog c_XmlParser;
-    c_XmlParser.SetLogHeading("Loading System Definition");
-    s32_Retval = c_XmlParser.LoadFromFile(orc_PathSystemDefinition);
-    if (s32_Retval == C_NO_ERR) {
-      s32_Retval = h_LoadSystemDefinition(
-          orc_SystemDefinition, c_XmlParser, orc_PathDeviceDefinitions,
-          orc_PathSystemDefinition, oq_UseDeviceDefinitions,
-          opu16_ReadFileVersion, opc_NodesToLoad, oq_SkipContent,
-          opc_ExpectedNodeName, opc_ErrorDetailsMissingDevices);
+    if (s32_Pos != -1) {
+        orc_MainType = orc_CompleteType.left(s32_Pos);
+        orc_SubType = orc_CompleteType.mid(s32_Pos + C_OscNodeSquad::hc_SEPARATOR.length());
     } else {
-      osc_write_log_error("Loading System Definition",
-                          "File \"" + orc_PathSystemDefinition +
-                              "\" could not be opened.");
-      s32_Retval = C_NOACT;
+        orc_MainType = "";
+        orc_SubType = orc_CompleteType;
     }
-  } else {
-    osc_write_log_error("Loading System Definition",
-                        "File \"" + orc_PathSystemDefinition +
-                            "\" does not exist.");
-    s32_Retval = C_RANGE;
-  }
-  return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save system definition
+/*! \brief   Load nodes from XML parser (clipboard support)
 
-   Save system definition
-   Will overwrite the file if it already exists.
-   Does NOT write the device definition file(s)
-
-   \param[in]      orc_SystemDefinition   Pointer to storage
-   \param[in]      orc_Path               Path of system definition
-   \param[in,out]  opc_CreatedFiles       Optional storage for history of all
-   created files (and without sysdef)
+   \param[out]     orc_Nodes                Node list
+   \param[in]      orc_XmlParser            XML parser
+   \param[in]      orc_DeviceDefinitions    Device definitions
+   \param[in]      orc_BasePath             Base path
+   \param[in]      oq_UseDeviceDefinitions  Use device definitions
+   \param[in]      oq_UseFileInterface      Use file interface
+   \param[in]      opc_NodesToLoad          Nodes to load
+   \param[in]      oq_SkipContent           Skip content
+   \param[in]      opc_ExpectedNodeName     Expected node name
+   \param[out]     opc_ErrorDetailsMissingDevices  Error details
 
    \return
-   C_NO_ERR   data saved
-   C_RD_WR    could not erase pre-existing file before saving
-   C_RD_WR    could not write to file (e.g. missing write permissions; missing
-   folder)
+   C_NO_ERR   data read
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
-    const C_OscSystemDefinition &orc_SystemDefinition, const QString &orc_Path,
-    QStringList *const opc_CreatedFiles) {
-  int32_t s32_Return = C_NO_ERR;
-
-  if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile()) {
-    // erase it:
-    if (QFile::remove(orc_Path) == false) {
-      osc_write_log_error("Saving System Definition",
-                          "Could not erase pre-existing file \"" + orc_Path +
-                              "\".");
-      s32_Return = C_RD_WR;
-    }
-  }
-  if (s32_Return == C_NO_ERR) {
-    const QString c_Folder = QFileInfo(orc_Path).absolutePath() + "/";
-    if (!QFileInfo(c_Folder).isDir()) {
-      if (!QDir().mkpath(c_Folder)) {
-        osc_write_log_error("Saving System Definition",
-                            "Could not create folder \"" + c_Folder + "\".");
-        s32_Return = C_RD_WR;
-      }
-    }
-  }
-  if (s32_Return == C_NO_ERR) {
-    C_OscXmlParser c_XmlParser;
-    s32_Return = h_SaveSystemDefinition(orc_SystemDefinition, c_XmlParser,
-                                        orc_Path, opc_CreatedFiles);
-    if (s32_Return == C_NO_ERR) {
-      s32_Return = c_XmlParser.SaveToFile(orc_Path);
-      if (s32_Return != C_NO_ERR) {
-        osc_write_log_error("Saving System Definition",
-                            "Could not write to file \"" + orc_Path + "\".");
-        s32_Return = C_RD_WR;
-      }
-    } else {
-      s32_Return = C_RD_WR;
-    }
-  }
-  return s32_Return;
+int32_t C_OscSystemDefinitionFiler_New::h_LoadNodes(QList<C_OscNode> &orc_Nodes,
+                                                    C_OscXmlParserBase &orc_XmlParser,
+                                                    const C_OscDeviceManager &orc_DeviceDefinitions,
+                                                    const QString &orc_BasePath,
+                                                    const bool oq_UseDeviceDefinitions,
+                                                    const bool oq_UseFileInterface,
+                                                    const QByteArray *const opc_NodesToLoad,
+                                                    const bool oq_SkipContent,
+                                                    const QString *const opc_ExpectedNodeName,
+                                                    QStringList *const opc_ErrorDetailsMissingDevices) {
+    // Delegate to legacy filer for clipboard operations
+    return C_OscSystemDefinitionFiler::h_LoadNodes(orc_Nodes, orc_XmlParser,
+                                                    orc_DeviceDefinitions, orc_BasePath,
+                                                    oq_UseDeviceDefinitions, oq_UseFileInterface,
+                                                    opc_NodesToLoad, oq_SkipContent,
+                                                    opc_ExpectedNodeName, opc_ErrorDetailsMissingDevices);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load nodes
+/*! \brief   Load buses from XML parser (clipboard support)
 
-   Load nodes data.
-   * load node data and add to system definition
-   * for each node set a pointer to the used device definition
-
-    The caller is responsible to provide a static life-time of
-   orc_DeviceDefinitions. Otherwise the "device definition" pointers in
-   C_OscNode will point to invalid data.
-
-   \param[out]     orc_Nodes                       data storage
-   \param[in,out]  orc_XmlParser                   XML with "nodes" active
-   \param[in]      orc_DeviceDefinitions           List of known devices (must
-   contain all device types used by nodes)
-   \param[in]      orc_BasePath                    Base path
-   \param[in]      oq_UseDeviceDefinitions         Flag for using device
-   definitions
-   \param[in]      oq_UseFileInterface             Flag for switching between
-   multiple file and single file interface True: Assume content is split over
-   multiple files False: Assume all relevant content is in this file
-   \param[in]      opc_NodesToLoad                 (Optional parameter) only
-   load content of nodes which are active in sysdef
-   \param[in]      oq_SkipContent                  (Optional parameter) skip
-   content when not needed (datapools, halc etc.) (default = false)
-   \param[in]      opc_ExpectedNodeName            (Optional parameter) only
-   load node content of given node. Parameter is used if no node index is
-   available to fill opc_NodesToLoad parameter.
-   \param[in,out]  opc_ErrorDetailsMissingDevices  (Optional parameter) if
-   C_OVERFLOW contains types of all missing devices
+   \param[out]     orc_Buses      Bus list
+   \param[in]      orc_XmlParser  XML parser
 
    \return
-   C_NO_ERR    no error
-   C_CONFIG    content is invalid or incomplete
-   C_OVERFLOW  node in system definition references a device not part of the
-   device definitions
+   C_NO_ERR   data read
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_LoadNodes(
-    QList<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser,
-    const C_OscDeviceManager &orc_DeviceDefinitions,
-    const QString &orc_BasePath, const bool oq_UseDeviceDefinitions,
-    const bool oq_UseFileInterface, const QByteArray *const opc_NodesToLoad,
-    const bool oq_SkipContent, const QString *const opc_ExpectedNodeName,
-    QStringList *const opc_ErrorDetailsMissingDevices)
-
-{
-  int32_t s32_Retval = C_NO_ERR;
-  QString c_SelectedNode;
-  uint32_t u32_ExpectedSize = 0UL;
-  const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
-  const QString c_UnloadedNode = "UnloadedNodeWithNodeIndex";
-
-  // Check optional length
-  if (q_ExpectedSizeHere == true) {
-    u32_ExpectedSize = orc_XmlParser.GetAttributeUint32("length");
-    orc_Nodes.reserve(u32_ExpectedSize);
-  }
-
-  c_SelectedNode = orc_XmlParser.SelectNodeChild("node");
-
-  // clear list of nodes:
-  orc_Nodes.clear();
-
-  if (c_SelectedNode == "node") {
-    uint8_t u8_NodeIndex = 0U;
-    do {
-      C_OscNode c_Item;
-      bool q_SkipNode = false;
-
-      if ((opc_NodesToLoad == NULL) || (opc_NodesToLoad->size() == 0) ||
-          ((*opc_NodesToLoad)[u8_NodeIndex] == 1U)) {
-        if (oq_UseFileInterface) {
-          const QString c_FileName = C_OscSystemFilerUtil::h_CombinePaths(
-              orc_BasePath, orc_XmlParser.GetNodeContent());
-          if ((opc_ExpectedNodeName != NULL) &&
-              ((*opc_ExpectedNodeName) != "")) {
-            // get current node and compare with expected node name
-            const uint32_t u32_BasePathLength =
-                (QFileInfo(orc_BasePath).absolutePath() + "/").length();
-            QString c_LastFolderName =
-                QFileInfo(c_FileName).absolutePath() + "/";
-            c_LastFolderName = c_LastFolderName.remove(0, u32_BasePathLength);
-            c_LastFolderName = c_LastFolderName.remove(
-                c_LastFolderName.length() - 1, 1); // remove trailing delim
-            QString c_ExpectedFolder = "node_" + (*opc_ExpectedNodeName);
-            // special handling for squad nodes necessary since the separator
-            // can't be used for folder names
-            const int32_t s32_Pos =
-                c_ExpectedFolder.indexOf(C_OscNodeSquad::hc_SEPARATOR);
-            if (s32_Pos != -1) {
-              // Squad nodes have '5858' in folder name for '::'
-              const uint32_t u32_SubstituteLength = static_cast<uint32_t>(
-                  (C_OscNodeSquad::hc_SEPARATOR).length());
-              c_ExpectedFolder =
-                  c_ExpectedFolder.remove(s32_Pos, u32_SubstituteLength);
-              QString c_Substitute = "";
-              for (uint32_t u32_Iter = 0; u32_Iter < u32_SubstituteLength;
-                   u32_Iter++) {
-                c_Substitute += QString::number(static_cast<uint8_t>(
-                    (C_OscNodeSquad::hc_SEPARATOR)[u32_Iter].toLatin1()));
-              }
-              c_ExpectedFolder = c_ExpectedFolder.insert(s32_Pos, c_Substitute);
-            }
-
-            if (c_LastFolderName.compare(c_ExpectedFolder,
-                                         Qt::CaseInsensitive) != 0) {
-              q_SkipNode = true;
-            }
-          }
-          if (q_SkipNode == false) {
-            s32_Retval = C_OscNodeFiler::h_LoadNodeFile(c_Item, c_FileName,
-                                                        oq_SkipContent);
-          }
-        } else {
-          s32_Retval = C_OscNodeFiler::h_LoadNode(c_Item, orc_XmlParser, "",
-                                                  oq_SkipContent);
-        }
-        if (s32_Retval != C_NO_ERR) {
-          break;
-        }
-      } else {
-        q_SkipNode = true;
-      }
-
-      if (q_SkipNode == true) {
-        // don't load; node will have default values
-        c_Item.c_Properties.c_Name =
-            c_UnloadedNode + QString::number(u8_NodeIndex);
-      }
-
-      orc_Nodes.push_back(c_Item);
-      u8_NodeIndex++;
-      // Next
-      c_SelectedNode = orc_XmlParser.SelectNodeNext("node");
-    } while (c_SelectedNode == "node");
-    if (s32_Retval == C_NO_ERR) {
-      // Return (no check to allow reuse)
-      orc_XmlParser.SelectNodeParent();
-    }
-  }
-  // Compare length
-  if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true)) {
-    if (u32_ExpectedSize != orc_Nodes.size()) {
-      osc_write_log_warning(
-          "Load file", QString("Unexpected nodes count, expected: %1, got %2")
-                           .arg(u32_ExpectedSize)
-                           .arg(static_cast<uint32_t>(orc_Nodes.size())));
-    }
-  }
-
-  if ((oq_UseDeviceDefinitions == true) && (s32_Retval == C_NO_ERR)) {
-    // set pointers to device definitions
-    for (uint32_t u32_NodeIndex = 0U; u32_NodeIndex < orc_Nodes.size();
-         u32_NodeIndex++) {
-      // check if we have an active node
-      if (orc_Nodes[u32_NodeIndex].c_Properties.c_Name.indexOf(
-              c_UnloadedNode) == 0) {
-        QString c_SubDeviceName = "";
-        QString c_MainDeviceName = "";
-        C_OscSystemDefinitionFiler::h_SplitDeviceType(
-            orc_Nodes[u32_NodeIndex].c_DeviceType, c_MainDeviceName,
-            c_SubDeviceName);
-        {
-          const C_OscDeviceDefinition *const pc_Device =
-              orc_DeviceDefinitions.LookForDevice(
-                  c_SubDeviceName, c_MainDeviceName,
-                  orc_Nodes[u32_NodeIndex].u32_SubDeviceIndex);
-          if (pc_Device == NULL) {
-            s32_Retval = C_OVERFLOW;
-            osc_write_log_error(
-                "Loading System Definition",
-                "System Definition contains node \"" +
-                    orc_Nodes[u32_NodeIndex].c_Properties.c_Name +
-                    "\" of device type \"" +
-                    orc_Nodes[u32_NodeIndex].c_DeviceType +
-                    "\" which is not a known device.");
-            if (opc_ErrorDetailsMissingDevices == NULL) {
-              break;
-            } else {
-              opc_ErrorDetailsMissingDevices->push_back(
-                  orc_Nodes[u32_NodeIndex].c_DeviceType);
-            }
-          } else {
-            orc_Nodes[u32_NodeIndex].pc_DeviceDefinition = pc_Device;
-          }
-        }
-      }
-    }
-  }
-
-  return s32_Retval;
+int32_t C_OscSystemDefinitionFiler_New::h_LoadBuses(QList<C_OscSystemBus> &orc_Buses,
+                                                    C_OscXmlParserBase &orc_XmlParser) {
+    // Delegate to legacy filer for clipboard operations
+    return C_OscSystemDefinitionFiler::h_LoadBuses(orc_Buses, orc_XmlParser);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load buses
+/*! \brief   Save nodes to XML parser (clipboard support)
 
-   Load buses data.
-   The bus data will be loaded and the bus will be added.
-
-   \param[in,out]  orc_Buses        data storage
-   \param[in,out]  orc_XmlParser    XML with "buses" active
-
-   \return
-   C_NO_ERR   no error
-   C_CONFIG   content is invalid or incomplete
+   \param[in]      orc_Nodes          Node list
+   \param[in]      orc_XmlParser      XML parser
+   \param[in]      orc_BasePath       Base path
+   \param[out]     opc_CreatedFiles   Created files
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t
-C_OscSystemDefinitionFiler::h_LoadBuses(QList<C_OscSystemBus> &orc_Buses,
-                                        C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-  QString c_SelectedNode;
-  uint32_t u32_ExpectedSize = 0UL;
-  const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
-
-  // Check optional length
-  if (q_ExpectedSizeHere == true) {
-    u32_ExpectedSize = orc_XmlParser.GetAttributeUint32("length");
-    orc_Buses.reserve(u32_ExpectedSize);
-  }
-
-  c_SelectedNode = orc_XmlParser.SelectNodeChild("bus");
-
-  orc_Buses.clear();
-  if (c_SelectedNode == "bus") {
-    do {
-      C_OscSystemBus c_Item;
-      s32_Retval = C_OscSystemBusFiler::h_LoadBus(c_Item, orc_XmlParser);
-      if (s32_Retval == C_NO_ERR) {
-        orc_Buses.push_back(c_Item);
-      }
-
-      // Next
-      c_SelectedNode = orc_XmlParser.SelectNodeNext("bus");
-    } while (c_SelectedNode == "bus");
-    // Return (no check to allow reuse)
-    orc_XmlParser.SelectNodeParent();
-  }
-  // Compare length
-  if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true)) {
-    if (u32_ExpectedSize != orc_Buses.size()) {
-      osc_write_log_warning(
-          "Load file", QString("Unexpected bus count, expected: %1, got %2")
-                           .arg(u32_ExpectedSize)
-                           .arg(static_cast<uint32_t>(orc_Buses.size())));
-    }
-  }
-  return s32_Retval;
+int32_t C_OscSystemDefinitionFiler_New::h_SaveNodes(const QList<C_OscNode> &orc_Nodes,
+                                                    C_OscXmlParserBase &orc_XmlParser,
+                                                    const QString &orc_BasePath,
+                                                    QStringList *const opc_CreatedFiles) {
+    // Delegate to legacy filer for clipboard operations
+    C_OscSystemDefinitionFiler::h_SaveNodes(orc_Nodes, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
+    return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save nodes
+/*! \brief   Save buses to XML parser (clipboard support)
 
-   Save nodes data.
-   The node data will be saved and the node will be added.
-
-   \param[in]      orc_Nodes           data storage
-   \param[in,out]  orc_XmlParser       XML with "nodes" active
-   \param[in]      orc_BasePath        Base path
-   \param[in,out]  opc_CreatedFiles    Optional storage for history of all
-   created files
-
-   \return
-   C_NO_ERR   no error
-   C_CONFIG   file could not be created
+   \param[in]      orc_Buses      Bus list
+   \param[in]      orc_XmlParser  XML parser
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_SaveNodes(
-    const QList<C_OscNode> &orc_Nodes, C_OscXmlParserBase &orc_XmlParser,
-    const QString &orc_BasePath, QStringList *const opc_CreatedFiles) {
-  int32_t s32_Retval = C_NO_ERR;
-   const QHash<uint32_t, QString> c_NodeIndicesToNameMap =
-       C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(orc_Nodes);
-
-  orc_XmlParser.SetAttributeUint32("length",
-                                   static_cast<uint32_t>(orc_Nodes.size()));
-  for (uint32_t u32_Index = 0U;
-       (u32_Index < orc_Nodes.size()) && (s32_Retval == C_NO_ERR);
-       u32_Index++) {
-    const C_OscNode &rc_Node = orc_Nodes[u32_Index];
-    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("node") == "node");
-    if (orc_BasePath.isEmpty()) {
-      // To string
-      s32_Retval =
-          C_OscNodeFiler::h_SaveNode(rc_Node, orc_XmlParser, orc_BasePath,
-                                     opc_CreatedFiles, c_NodeIndicesToNameMap);
-    } else {
-      QStringList c_CreatedFiles;
-      const QString c_FolderName =
-          C_OscNodeFiler::h_GetFolderName(rc_Node.c_Properties.c_Name);
-      const QString c_FileName =
-          c_FolderName + "/" + C_OscNodeFiler::h_GetFileName();
-      const QString c_CombinedFolderName =
-          C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FolderName);
-      const QString c_CombinedFileName =
-          C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
-      // Create folder
-      if (!QDir().mkpath(c_CombinedFolderName)) {
-        osc_write_log_error("Saving node definition",
-                            "Could not create directory \"" +
-                                c_CombinedFolderName + "\"");
-      }
-      // Save node file
-      s32_Retval = C_OscNodeFiler::h_SaveNodeFile(
-          rc_Node, c_CombinedFileName,
-          (opc_CreatedFiles != NULL) ? &c_CreatedFiles : NULL,
-          c_NodeIndicesToNameMap);
-      // Store if necessary
-      if (opc_CreatedFiles != NULL) {
-        opc_CreatedFiles->push_back(c_FileName);
-        for (uint32_t u32_ItSubFile = 0UL;
-             u32_ItSubFile < c_CreatedFiles.size(); ++u32_ItSubFile) {
-          const QString c_FileNameWithFolder =
-              c_FolderName + "/" + c_CreatedFiles[u32_ItSubFile];
-          opc_CreatedFiles->push_back(c_FileNameWithFolder);
-        }
-      }
-      // Set file reference
-      orc_XmlParser.SetNodeContent(c_FileName);
-    }
-    // Return (don't check to allow reuse)
-    orc_XmlParser.SelectNodeParent();
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save buses
-
-   Save buses data.
-   The bus data will be saved and the bus will be added to the system definition
-   (sorted).
-
-   \param[in]      orc_Buses        data storage
-   \param[in,out]  orc_XmlParser    XML with "buses" active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinitionFiler::h_SaveBuses(
-    const QList<C_OscSystemBus> &orc_Buses, C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.SetAttributeUint32("length",
-                                   static_cast<uint32_t>(orc_Buses.size()));
-  for (uint32_t u32_Index = 0U; u32_Index < orc_Buses.size(); u32_Index++) {
-    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("bus") == "bus");
-    C_OscSystemBusFiler::h_SaveBus(orc_Buses[u32_Index], orc_XmlParser);
-    // Return (don't check to allow reuse)
-    orc_XmlParser.SelectNodeParent();
-  }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load system definition
-
-   Steps:
-   * Load device definitions (if not already loaded)
-   * Load system definition
-   * for each node set a pointer to the used device definition
-
-   \param[out]     orc_SystemDefinition            Pointer to storage
-   \param[in,out]  orc_XmlParser                   XML with default state
-   \param[in]      orc_PathDeviceDefinitions       Path to device definition
-   description file
-   \param[in]      orc_BasePath                    Base path
-   \param[in]      oq_UseDeviceDefinitions         Flag for using device
-   definitions
-   \param[in,out]  opu16_ReadFileVersion           Optional storage for read
-   file version (only use in C_NO_ERR case)
-   \param[in]      opc_NodesToLoad                 (Optional parameter) only
-   load content of nodes which are active in sysdef
-   \param[in]      oq_SkipContent                  (Optional parameter) skip
-   content when not needed (datapools, halc etc.) (default = false)
-   \param[in]      opc_ExpectedNodeName            (Optional parameter) only
-   load node content of given node. Parameter is used if no node index is
-   available to fill opc_NodesToLoad parameter.
-   \param[in,out]  opc_ErrorDetailsMissingDevices  (Optional parameter) if
-   C_OVERFLOW contains types of all missing devices
-
-   \return
-   C_NO_ERR    data read
-   C_CONFIG    system definition content is invalid or incomplete
-               device definition could not be loaded
-   C_OVERFLOW  node in system definition references a device not part of the
-   device definitions
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(
-    C_OscSystemDefinition &orc_SystemDefinition,
-    C_OscXmlParserBase &orc_XmlParser, const QString &orc_PathDeviceDefinitions,
-    const QString &orc_BasePath, const bool oq_UseDeviceDefinitions,
-    uint16_t *const opu16_ReadFileVersion,
-    const QByteArray *const opc_NodesToLoad, const bool oq_SkipContent,
-    const QString *const opc_ExpectedNodeName,
-    QStringList *const opc_ErrorDetailsMissingDevices) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  // do we need to load the device definitions ?
-  if ((oq_UseDeviceDefinitions == true) &&
-      (C_OscSystemDefinition::hc_Devices.WasLoaded() == false)) {
-    s32_Retval = C_OscSystemDefinition::hc_Devices.LoadFromFile(
-        orc_PathDeviceDefinitions, false, NULL);
-    if (s32_Retval != C_NO_ERR) {
-      osc_write_log_error("Loading System Definition",
-                          "Could not load Device definitions.");
-      s32_Retval = C_CONFIG;
-    }
-  }
-
-  if (orc_XmlParser.SelectRoot() == "opensyde-system-definition") {
-    bool q_UseV2Filer = false;
-    bool q_UseV3Filer = false;
-    // File version
-    if (orc_XmlParser.SelectNodeChild("file-version") == "file-version") {
-      uint16_t u16_FileVersion = 0U;
-      try {
-        u16_FileVersion =
-            static_cast<uint16_t>(orc_XmlParser.GetNodeContent().toInt());
-        if (opu16_ReadFileVersion != NULL) {
-          *opu16_ReadFileVersion = u16_FileVersion;
-        }
-      } catch (...) {
-        osc_write_log_error(
-            "Loading System Definition",
-            "\"file-version\" could not be converted to a number.");
-        s32_Retval = C_CONFIG;
-      }
-
-      // is the file version one we know ?
-      if (s32_Retval == C_NO_ERR) {
-        osc_write_log_info("Loading System Definition",
-                           "Value of \"file-version\": " +
-                               QString::number(u16_FileVersion));
-        // Check which loader needs to be used
-        if ((u16_FileVersion == hu16_FILE_VERSION_1) ||
-            (u16_FileVersion == hu16_FILE_VERSION_2)) {
-          q_UseV2Filer = true;
-        } else if (u16_FileVersion == hu16_FILE_VERSION_3) {
-          q_UseV3Filer = true;
-        } else {
-          osc_write_log_error(
-              "Loading System Definition",
-              "Version defined by \"file-version\" is not supported.");
-          s32_Retval = C_CONFIG;
-        }
-      }
-
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() ==
-               "opensyde-system-definition");
-    } else {
-      osc_write_log_error("Loading System Definition",
-                          "Could not find \"file-version\" node.");
-      s32_Retval = C_CONFIG;
-    }
-    // Only continue if no error so far
-    if (s32_Retval == C_NO_ERR) {
-      if (q_UseV2Filer) {
-        // Unselect root
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "");
-        // Completely rely on V2 loader
-        s32_Retval = C_OscSystemDefinitionFilerV2::h_LoadSystemDefinition(
-            orc_SystemDefinition, orc_XmlParser, orc_PathDeviceDefinitions,
-            oq_UseDeviceDefinitions, opc_ErrorDetailsMissingDevices);
-      }
-      if (q_UseV3Filer) {
-        // Completely rely on V3 loader
-        if (s32_Retval == C_NO_ERR) {
-          s32_Retval = mh_LoadSystemDefinitionProperties(orc_SystemDefinition,
-                                                         orc_XmlParser);
-        }
-        // Groups
-        orc_SystemDefinition.c_NodeSquads.clear();
-        if (s32_Retval == C_NO_ERR) {
-          s32_Retval = C_OscNodeSquadFiler::h_LoadNodeGroups(
-              orc_SystemDefinition.c_NodeSquads, orc_XmlParser);
-        }
-
-        // Node
-        orc_SystemDefinition.c_Nodes.clear();
-        if (s32_Retval == C_NO_ERR) {
-          if (orc_XmlParser.SelectNodeChild("nodes") == "nodes") {
-            s32_Retval = h_LoadNodes(
-                orc_SystemDefinition.c_Nodes, orc_XmlParser,
-                C_OscSystemDefinition::hc_Devices, orc_BasePath,
-                oq_UseDeviceDefinitions, true, opc_NodesToLoad, oq_SkipContent,
-                opc_ExpectedNodeName, opc_ErrorDetailsMissingDevices);
-            if (s32_Retval == C_NO_ERR) {
-              // Return
-              Q_ASSERT(orc_XmlParser.SelectNodeParent() ==
-                       "opensyde-system-definition");
-            }
-          } else {
-            osc_write_log_error("Loading System Definition",
-                                "Could not find \"nodes\" node.");
-            s32_Retval = C_CONFIG;
-          }
-        }
-
-        // Bus
-        orc_SystemDefinition.c_Buses.clear();
-        if (s32_Retval == C_NO_ERR) {
-          if (orc_XmlParser.SelectNodeChild("buses") == "buses") {
-            s32_Retval =
-                h_LoadBuses(orc_SystemDefinition.c_Buses, orc_XmlParser);
-            if (s32_Retval == C_NO_ERR) {
-              // Return
-              Q_ASSERT(orc_XmlParser.SelectNodeParent() ==
-                       "opensyde-system-definition");
-            }
-          } else {
-            osc_write_log_error("Loading System Definition",
-                                "Could not find \"buses\" node.");
-            s32_Retval = C_CONFIG;
-          }
-        }
-      }
-    }
-  } else {
-    osc_write_log_error("Loading System Definition",
-                        "Could not find \"opensyde-system-definition\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save system definition
-
-   Save system definition
-   Does NOT write the device definition file(s)
-
-   \param[in]      orc_SystemDefinition   Pointer to storage
-   \param[in,out]  orc_XmlParser          XML with default state
-   \param[in]      orc_BasePath           Base path
-   \param[in,out]  opc_CreatedFiles       Optional storage for history of all
-   created files
-
-   \return
-   C_NO_ERR   no error
-   C_CONFIG   file could not be created
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinition(
-    const C_OscSystemDefinition &orc_SystemDefinition,
-    C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath,
-    QStringList *const opc_CreatedFiles) {
-  int32_t s32_Return;
-
-  orc_XmlParser.CreateNodeChild("opensyde-system-definition");
-  Q_ASSERT(orc_XmlParser.SelectRoot() == "opensyde-system-definition");
-  // File version
-  Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("file-version") ==
-           "file-version");
-  orc_XmlParser.SetNodeContent(QString::number(hu16_FILE_VERSION_LATEST));
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
-  mh_SaveSystemDefinitionProperties(orc_SystemDefinition, orc_XmlParser);
-  C_OscNodeSquadFiler::h_SaveNodeGroups(orc_SystemDefinition.c_NodeSquads,
-                                        orc_XmlParser);
-  // Node
-  Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("nodes") == "nodes");
-  s32_Return = h_SaveNodes(orc_SystemDefinition.c_Nodes, orc_XmlParser,
-                           orc_BasePath, opc_CreatedFiles);
-  if (s32_Return == C_NO_ERR) {
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
-
-    // Bus
-    Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("buses") == "buses");
-    h_SaveBuses(orc_SystemDefinition.c_Buses, orc_XmlParser);
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
-  }
-  return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Split device type
-
-   \param[in]      orc_CompleteType    Complete type
-   \param[in,out]  orc_MainType        Main type (empty if none)
-   \param[in,out]  orc_SubType         Sub type
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinitionFiler::h_SplitDeviceType(
-    const QString &orc_CompleteType, QString &orc_MainType,
-    QString &orc_SubType) {
-  const int32_t s32_Pos =
-      orc_CompleteType.indexOf(C_OscNodeSquad::hc_SEPARATOR);
-
-  if (s32_Pos != -1) {
-    orc_MainType = orc_CompleteType.left(s32_Pos);
-    orc_SubType =
-        orc_CompleteType.mid(s32_Pos + C_OscNodeSquad::hc_SEPARATOR.length());
-  } else {
-    orc_MainType = "";
-    orc_SubType = orc_CompleteType;
-  }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Map node indices to name
-
-   \param[in]  orc_Nodes   Nodes
-
-   \return
-   Mapping of node indices to name
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QHash<uint32_t, QString> C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(
-    const QList<C_OscNode> &orc_Nodes) {
-  QHash<uint32_t, QString> c_Map;
-  for (uint32_t u32_Index = 0U; u32_Index < orc_Nodes.size(); ++u32_Index) {
-    const C_OscNode &rc_Node = orc_Nodes[u32_Index];
-    c_Map[u32_Index] = rc_Node.c_Properties.c_Name;
-  }
-  return c_Map;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load system definition properties
-
-   \param[in,out]  orc_SystemDefinition   System definition
-   \param[in,out]  orc_XmlParser          Xml parser
-
-   \return
-   C_NO_ERR    data read
-   C_CONFIG    system definition content is invalid or incomplete
-               device definition could not be loaded
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::mh_LoadSystemDefinitionProperties(
-    C_OscSystemDefinition &orc_SystemDefinition,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_XmlParser.SelectNodeChild("properties") == "properties") {
-    s32_Retval = orc_XmlParser.GetAttributeUint32Error(
-        "name-max-char-limit", orc_SystemDefinition.u32_NameMaxCharLimit);
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
-  } else {
-    orc_SystemDefinition.u32_NameMaxCharLimit = 31UL;
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save system definition properties
-
-   \param[in]      orc_SystemDefinition   System definition
-   \param[in,out]  orc_XmlParser          Xml parser
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinitionFiler::mh_SaveSystemDefinitionProperties(
-    const C_OscSystemDefinition &orc_SystemDefinition,
-    C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.CreateAndSelectNodeChild("properties");
-  orc_XmlParser.SetAttributeUint32("name-max-char-limit",
-                                   orc_SystemDefinition.u32_NameMaxCharLimit);
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
+void C_OscSystemDefinitionFiler_New::h_SaveBuses(const QList<C_OscSystemBus> &orc_Buses,
+                                                 C_OscXmlParserBase &orc_XmlParser) {
+    // Delegate to legacy filer for clipboard operations
+    C_OscSystemDefinitionFiler::h_SaveBuses(orc_Buses, orc_XmlParser);
 }

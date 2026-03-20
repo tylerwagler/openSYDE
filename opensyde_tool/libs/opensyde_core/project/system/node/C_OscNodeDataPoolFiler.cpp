@@ -1,11 +1,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Node data pool reader/writer (V3) (implementation)
+   \brief       Filer for data pool files (Multi-Format Implementation)
 
-   Node data pool reader/writer (V3)
+   Load / save data pool data from / to binary, JSON, or XML
+   files using the Qt-native serialization framework.
 
-   \copyright   Copyright 2017 Sensor-Technik Wiedemann GmbH. All rights
+   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -16,19 +17,14 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscNodeDataPoolFiler.hpp"
-#include "C_OscSystemFilerUtil.hpp"
+#include "C_OscNodeDataPoolFiler.hpp"
+#include "C_OscLoggingHandler.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
-#include <limits>
-#include <sstream>
-
-#include "C_OscFilerUtil.hpp"
-#include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces
- * -----------------------------------------------------------------------------------------------
+ * -----------------------------------------------------------------------------------------------------
  */
-
 using namespace stw::opensyde_core;
 using namespace stw::errors;
 
@@ -41,41 +37,12 @@ using namespace stw::errors;
  */
 
 /* -- Global Variables
- * ----------------------------------------------------------------------------------------------
+ * -------------------------------------------------------------------------------------------------------
  */
 
 /* -- Module Global Variables
  * ---------------------------------------------------------------------------------------
  */
-
-namespace
-{
-const C_OscFilerUtil::EnumEntry<C_OscNodeDataPool::E_Type> mac_DATAPOOL_TYPE_TABLE[] = {
-   {C_OscNodeDataPool::eDIAG, "diag"},
-   {C_OscNodeDataPool::eCOM, "com"},
-   {C_OscNodeDataPool::eNVM, "nvm"},
-   {C_OscNodeDataPool::eHALC, "halc"},
-   {C_OscNodeDataPool::eHALC_NVM, "halc-nvm"}
-};
-
-const C_OscFilerUtil::EnumEntry<C_OscNodeDataPoolContent::E_Type> mac_CONTENT_TYPE_TABLE[] = {
-   {C_OscNodeDataPoolContent::eUINT8, "uint8"},
-   {C_OscNodeDataPoolContent::eUINT16, "uint16"},
-   {C_OscNodeDataPoolContent::eUINT32, "uint32"},
-   {C_OscNodeDataPoolContent::eUINT64, "uint64"},
-   {C_OscNodeDataPoolContent::eSINT8, "sint8"},
-   {C_OscNodeDataPoolContent::eSINT16, "sint16"},
-   {C_OscNodeDataPoolContent::eSINT32, "sint32"},
-   {C_OscNodeDataPoolContent::eSINT64, "sint64"},
-   {C_OscNodeDataPoolContent::eFLOAT32, "float32"},
-   {C_OscNodeDataPoolContent::eFLOAT64, "float64"}
-};
-
-const C_OscFilerUtil::EnumEntry<C_OscNodeDataPoolListElement::E_Access> mac_ACCESS_TABLE[] = {
-   {C_OscNodeDataPoolListElement::eACCESS_RO, "read-only"},
-   {C_OscNodeDataPoolListElement::eACCESS_RW, "read-write"}
-};
-}
 
 /* -- Module Global Function Prototypes
  * -----------------------------------------------------------------------------
@@ -86,1803 +53,402 @@ const C_OscFilerUtil::EnumEntry<C_OscNodeDataPoolListElement::E_Access> mac_ACCE
  */
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Default constructor
- */
-//----------------------------------------------------------------------------------------------------------------------
-C_OscNodeDataPoolFiler::C_OscNodeDataPoolFiler(void) {}
+/*! \brief   Load data pool from file (auto-detect format)
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load datapool file
-
-   \param[out]  orc_NodeDataPool    Data storage
-   \param[in]   orc_FilePath        File path
+   \param[out]     orc_DataPool         Data pool data
+   \param[in]      orc_FilePath         File path
 
    \return
    C_NO_ERR   data read
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t
-C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool &orc_NodeDataPool,
-                                           const QString &orc_FilePath) {
-  C_OscXmlParser c_XmlParser;
-  int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForExistingFile(
-      c_XmlParser, orc_FilePath, "opensyde-dp-core-definition");
-
-  // File version
-  if (c_XmlParser.SelectNodeChild("file-version") == "file-version") {
-    uint16_t u16_FileVersion = 0U;
-    try {
-      u16_FileVersion =
-          static_cast<uint16_t>(c_XmlParser.GetNodeContent().toInt());
-    } catch (...) {
-      osc_write_log_error(
-          "Loading Datapool",
-          "\"file-version\" could not be converted to a number.");
-      s32_Retval = C_CONFIG;
-    }
-
-    // is the file version one we know ?
-    if (s32_Retval == C_NO_ERR) {
-      osc_write_log_info("Loading Datapool",
-                         "Value of \"file-version\": " +
-                             QString::number(u16_FileVersion));
-      // Check file version
-      if (u16_FileVersion != 1U) {
-        osc_write_log_error(
-            "Loading Datapool",
-            "Version defined by \"file-version\" is not supported.");
-        s32_Retval = C_CONFIG;
-      }
-    }
-
-    // Return
-    c_XmlParser.SelectNodeParent();
-  } else {
-    osc_write_log_error("Loading Datapool",
-                        "Could not find \"file-version\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  if (s32_Retval == C_NO_ERR) {
-    if (c_XmlParser.SelectNodeChild("data-pool") == "data-pool") {
-      s32_Retval =
-          C_OscNodeDataPoolFiler::h_LoadDataPool(orc_NodeDataPool, c_XmlParser);
-    } else {
-      osc_write_log_error("Loading Datapool",
-                          "Could not find \"data-pool\" node.");
-      s32_Retval = C_CONFIG;
-    }
-  } else {
-    // More details are in log
-    s32_Retval = C_CONFIG;
-  }
-  return s32_Retval;
+int32_t C_OscNodeDataPoolFiler_New::h_LoadDataPoolFile(C_OscNodeDataPool &orc_DataPool,
+                                                        const QString &orc_FilePath) {
+   return mh_DetectAndLoad(orc_DataPool, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node data pool
+/*! \brief   Save data pool to file (auto-detect format from extension)
 
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "data-pool"
-   post-condition: the passed XML parser has the active node set to the same
-   "data-pool"
-
-   \param[out]     orc_NodeDataPool    data storage
-   \param[in,out]  orc_XmlParser       XML with data-pool active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t
-C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool &orc_NodeDataPool,
-                                       C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  // Related application
-  if (orc_XmlParser.AttributeExists("related-application-index") == true) {
-    orc_NodeDataPool.s32_RelatedDataBlockIndex =
-        orc_XmlParser.GetAttributeSint32("related-application-index");
-  } else {
-    orc_NodeDataPool.s32_RelatedDataBlockIndex = -1;
-  }
-  orc_NodeDataPool.q_IsSafety = orc_XmlParser.GetAttributeBool("is-safety");
-  if (orc_XmlParser.AttributeExists("scope-is-private") == true) {
-    orc_NodeDataPool.q_ScopeIsPrivate =
-        orc_XmlParser.GetAttributeBool("scope-is-private");
-  } else {
-    orc_NodeDataPool.q_ScopeIsPrivate = true;
-  }
-  if (orc_XmlParser.AttributeExists("definition-crc-version")) {
-    orc_NodeDataPool.u16_DefinitionCrcVersion = static_cast<uint16_t>(
-        orc_XmlParser.GetAttributeUint32("definition-crc-version"));
-  } else {
-    // probably deprecated project -> default to first version
-    orc_NodeDataPool.u16_DefinitionCrcVersion = 1U;
-  }
-  orc_NodeDataPool.u32_NvmStartAddress =
-      orc_XmlParser.GetAttributeUint32("nvm-start-address");
-  orc_NodeDataPool.u32_NvmSize = orc_XmlParser.GetAttributeUint32("nvm-size");
-  if (orc_XmlParser.SelectNodeChild("type") == "type") {
-    s32_Retval = h_StringToDataPool(orc_XmlParser.GetNodeContent(),
-                                    orc_NodeDataPool.e_Type);
-    if (s32_Retval == C_NO_ERR) {
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pool");
-    }
-  } else {
-    osc_write_log_error("Loading Datapool", "Could not find \"type\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  if (orc_XmlParser.SelectNodeChild("name") == "name") {
-    orc_NodeDataPool.c_Name = orc_XmlParser.GetNodeContent();
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pool");
-  } else {
-    osc_write_log_error("Loading Datapool", "Could not find \"name\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  if (orc_XmlParser.SelectNodeChild("version") == "version") {
-    orc_NodeDataPool.au8_Version[0] =
-        static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("major"));
-    orc_NodeDataPool.au8_Version[1] =
-        static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("minor"));
-    orc_NodeDataPool.au8_Version[2] =
-        static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("release"));
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pool");
-  } else {
-    osc_write_log_error("Loading Datapool", "Could not find \"version\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  if (orc_XmlParser.SelectNodeChild("comment") == "comment") {
-    orc_NodeDataPool.c_Comment = orc_XmlParser.GetNodeContent();
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pool");
-  } else {
-    osc_write_log_error("Loading Datapool", "Could not find \"comment\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  if ((orc_XmlParser.SelectNodeChild("lists") == "lists") &&
-      (s32_Retval == C_NO_ERR)) {
-    s32_Retval = h_LoadDataPoolLists(orc_NodeDataPool.c_Lists, orc_XmlParser);
-
-    if (s32_Retval == C_NO_ERR) {
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pool");
-    }
-  } else {
-    osc_write_log_error("Loading Datapool", "Could not find \"lists\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  // Export settings to be defined
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node data pool
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "data-pool"
-   post-condition: the passed XML parser has the active node set to the same
-   "data-pool"
-
-   \param[in]      orc_NodeDataPool    data storage
-   \param[in,out]  orc_XmlParser       XML with data-pool active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPool(
-    const C_OscNodeDataPool &orc_NodeDataPool,
-    C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.SetAttributeSint32("related-application-index",
-                                   orc_NodeDataPool.s32_RelatedDataBlockIndex);
-  orc_XmlParser.SetAttributeBool("is-safety", orc_NodeDataPool.q_IsSafety);
-  orc_XmlParser.SetAttributeBool("scope-is-private",
-                                 orc_NodeDataPool.q_ScopeIsPrivate);
-  orc_XmlParser.SetAttributeUint32("definition-crc-version",
-                                   orc_NodeDataPool.u16_DefinitionCrcVersion);
-  if ((orc_NodeDataPool.e_Type == C_OscNodeDataPool::eNVM) ||
-      (orc_NodeDataPool.e_Type == C_OscNodeDataPool::eHALC_NVM)) {
-    orc_XmlParser.SetAttributeUint32("nvm-start-address",
-                                     orc_NodeDataPool.u32_NvmStartAddress);
-    orc_XmlParser.SetAttributeUint32("nvm-size", orc_NodeDataPool.u32_NvmSize);
-  }
-  orc_XmlParser.CreateNodeChild("type",
-                                h_DataPoolToString(orc_NodeDataPool.e_Type));
-  orc_XmlParser.CreateNodeChild("name", orc_NodeDataPool.c_Name);
-  orc_XmlParser.CreateAndSelectNodeChild("version");
-  orc_XmlParser.SetAttributeUint32("major", orc_NodeDataPool.au8_Version[0]);
-  orc_XmlParser.SetAttributeUint32("minor", orc_NodeDataPool.au8_Version[1]);
-  orc_XmlParser.SetAttributeUint32("release", orc_NodeDataPool.au8_Version[2]);
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pool");
-
-  orc_XmlParser.CreateNodeChild("comment", orc_NodeDataPool.c_Comment);
-  // Lists
-  orc_XmlParser.CreateAndSelectNodeChild("lists");
-  h_SaveDataPoolLists(orc_NodeDataPool.c_Lists, orc_XmlParser,
-                      orc_NodeDataPool.e_Type);
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-pool");
-  orc_XmlParser.CreateNodeChild("export-settings", "");
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node data pool list
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "list"
-   post-condition: the passed XML parser has the active node set to the same
-   "list"
-
-   \param[out]     orc_NodeDataPoolList   data storage
-   \param[in,out]  orc_XmlParser          XML with data-pool active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolList(
-    C_OscNodeDataPoolList &orc_NodeDataPoolList,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  orc_NodeDataPoolList.q_NvmCrcActive =
-      orc_XmlParser.GetAttributeBool("nvm-crc-active");
-  orc_NodeDataPoolList.u32_NvmCrc = orc_XmlParser.GetAttributeUint32("nvm-crc");
-  orc_NodeDataPoolList.u32_NvmStartAddress =
-      orc_XmlParser.GetAttributeUint32("nvm-start-address");
-  orc_NodeDataPoolList.u32_NvmSize =
-      orc_XmlParser.GetAttributeUint32("nvm-size");
-  if (orc_XmlParser.SelectNodeChild("name") == "name") {
-    orc_NodeDataPoolList.c_Name = orc_XmlParser.GetNodeContent();
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "list");
-  } else {
-    osc_write_log_error("Loading Datapool",
-                        "Could not find \"lists\".\"list\".\"name\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  if (orc_XmlParser.SelectNodeChild("comment") == "comment") {
-    orc_NodeDataPoolList.c_Comment = orc_XmlParser.GetNodeContent();
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "list");
-  } else {
-    osc_write_log_error("Loading Datapool",
-                        "Could not find \"lists\".\"list\".\"comment\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  // Data elements
-  if (s32_Retval == C_NO_ERR) {
-    if (orc_XmlParser.SelectNodeChild("data-elements") == "data-elements") {
-      s32_Retval = h_LoadDataPoolListElements(orc_NodeDataPoolList.c_Elements,
-                                              orc_XmlParser);
-      if (s32_Retval == C_NO_ERR) {
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "list");
-      }
-    } else {
-      osc_write_log_error(
-          "Loading Datapool",
-          "Could not find \"lists\".\"list\".\"data-elements\" node.");
-      s32_Retval = C_CONFIG;
-    }
-  }
-  // Data sets
-  if ((orc_XmlParser.SelectNodeChild("data-sets") == "data-sets") &&
-      (s32_Retval == C_NO_ERR)) {
-    s32_Retval = h_LoadDataPoolListDataSets(orc_NodeDataPoolList.c_DataSets,
-                                            orc_XmlParser);
-    if (s32_Retval == C_NO_ERR) {
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "list");
-    }
-  } else {
-    osc_write_log_error(
-        "Loading Datapool",
-        "Could not find \"lists\".\"list\".\"data-sets\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node data pool list
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "list"
-   post-condition: the passed XML parser has the active node set to the same
-   "list"
-
-   \param[in]      orc_NodeDataPoolList   data storage
-   \param[in,out]  orc_XmlParser          XML with data-pool active
-   \param[in]      oe_DatapoolType        Datapool type
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolList(
-    const C_OscNodeDataPoolList &orc_NodeDataPoolList,
-    C_OscXmlParserBase &orc_XmlParser,
-    const C_OscNodeDataPool::E_Type oe_DatapoolType) {
-  if ((oe_DatapoolType == C_OscNodeDataPool::eNVM) ||
-      (oe_DatapoolType == C_OscNodeDataPool::eHALC_NVM)) {
-    orc_XmlParser.SetAttributeBool("nvm-crc-active",
-                                   orc_NodeDataPoolList.q_NvmCrcActive);
-    orc_XmlParser.SetAttributeUint32("nvm-crc",
-                                     orc_NodeDataPoolList.u32_NvmCrc);
-    orc_XmlParser.SetAttributeUint32("nvm-start-address",
-                                     orc_NodeDataPoolList.u32_NvmStartAddress);
-    orc_XmlParser.SetAttributeUint32("nvm-size",
-                                     orc_NodeDataPoolList.u32_NvmSize);
-  }
-  orc_XmlParser.CreateNodeChild("name", orc_NodeDataPoolList.c_Name);
-  orc_XmlParser.CreateNodeChild("comment", orc_NodeDataPoolList.c_Comment);
-  // Data elements
-  orc_XmlParser.CreateAndSelectNodeChild("data-elements");
-  h_SaveDataPoolListElements(orc_NodeDataPoolList.c_Elements, orc_XmlParser,
-                             oe_DatapoolType);
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "list");
-  // Data sets
-  orc_XmlParser.CreateAndSelectNodeChild("data-sets");
-  h_SaveDataPoolListDataSets(orc_NodeDataPoolList.c_DataSets, orc_XmlParser);
-  // Return
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "list");
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node data pool element
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to
-   "data-element" post-condition: the passed XML parser has the active node set
-   to the same "data-element"
-
-   \param[out]     orc_NodeDataPoolListElement  data storage
-   \param[in,out]  orc_XmlParser                XML with list active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElement(
-    C_OscNodeDataPoolListElement &orc_NodeDataPoolListElement,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  orc_NodeDataPoolListElement.f64_Factor =
-      orc_XmlParser.GetAttributeFloat64("factor");
-  orc_NodeDataPoolListElement.f64_Offset =
-      orc_XmlParser.GetAttributeFloat64("offset");
-  orc_NodeDataPoolListElement.q_InterpretAsString =
-      orc_XmlParser.GetAttributeBool("interpret_as_string");
-  orc_NodeDataPoolListElement.q_DiagEventCall =
-      orc_XmlParser.GetAttributeBool("diag-event-call");
-  orc_NodeDataPoolListElement.u32_NvmStartAddress =
-      orc_XmlParser.GetAttributeUint32("nvm-start-address");
-  if (orc_XmlParser.SelectNodeChild("name") == "name") {
-    orc_NodeDataPoolListElement.c_Name = orc_XmlParser.GetNodeContent();
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-element");
-  } else {
-    osc_write_log_error("Loading data element",
-                        "Could not find \"name\" node.");
-    s32_Retval = C_CONFIG;
-  }
-  if (s32_Retval == C_NO_ERR) {
-    s32_Retval = h_LoadDataPoolElementType(orc_NodeDataPoolListElement.c_Value,
-                                           orc_XmlParser);
-  }
-  if (s32_Retval == C_NO_ERR) {
-    if (orc_XmlParser.SelectNodeChild("min-value") == "min-value") {
-      // copy over value so we have the correct type:
-      orc_NodeDataPoolListElement.c_MinValue =
-          orc_NodeDataPoolListElement.c_Value;
-
-      s32_Retval = h_LoadDataPoolElementValue(
-          orc_NodeDataPoolListElement.c_MinValue, orc_XmlParser, false);
-      // Use minimum value as init value for value and NVM value
-      orc_NodeDataPoolListElement.c_NvmValue =
-          orc_NodeDataPoolListElement.c_MinValue;
-      orc_NodeDataPoolListElement.c_Value =
-          orc_NodeDataPoolListElement.c_MinValue;
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-element");
-    } else {
-      osc_write_log_error("Loading data element",
-                          "Could not find \"min-value\" node.");
-      s32_Retval = C_CONFIG;
-    }
-  }
-
-  if (s32_Retval == C_NO_ERR) {
-    if (orc_XmlParser.SelectNodeChild("max-value") == "max-value") {
-      // copy over value so we have the correct type:
-      orc_NodeDataPoolListElement.c_MaxValue =
-          orc_NodeDataPoolListElement.c_Value;
-
-      s32_Retval = h_LoadDataPoolElementValue(
-          orc_NodeDataPoolListElement.c_MaxValue, orc_XmlParser, false);
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-element");
-    } else {
-      osc_write_log_error("Loading data element",
-                          "Could not find \"max-value\" node.");
-      s32_Retval = C_CONFIG;
-    }
-  }
-
-  if (s32_Retval == C_NO_ERR) {
-    if (orc_XmlParser.SelectNodeChild("comment") == "comment") {
-      orc_NodeDataPoolListElement.c_Comment = orc_XmlParser.GetNodeContent();
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-element");
-    } else {
-      osc_write_log_error("Loading data element",
-                          "Could not find \"comment\" node.");
-      s32_Retval = C_CONFIG;
-    }
-  }
-
-  if (s32_Retval == C_NO_ERR) {
-    if (orc_XmlParser.SelectNodeChild("unit") == "unit") {
-      orc_NodeDataPoolListElement.c_Unit = orc_XmlParser.GetNodeContent();
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-element");
-    } else {
-      osc_write_log_error("Loading data element",
-                          "Could not find \"unit\" node.");
-      s32_Retval = C_CONFIG;
-    }
-  }
-
-  if (s32_Retval == C_NO_ERR) {
-    if (orc_XmlParser.SelectNodeChild("access") == "access") {
-      s32_Retval = mh_StringToNodeDataPoolElementAccess(
-          orc_XmlParser.GetNodeContent(), orc_NodeDataPoolListElement.e_Access);
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-element");
-    } else {
-      osc_write_log_error("Loading data element",
-                          "Could not find \"access\" node.");
-      s32_Retval = C_CONFIG;
-    }
-  }
-
-  if (s32_Retval == C_NO_ERR) {
-    if (orc_XmlParser.SelectNodeChild("data-set-values") == "data-set-values") {
-      s32_Retval = h_LoadDataPoolListElementDataSetValues(
-          orc_NodeDataPoolListElement.c_Value,
-          orc_NodeDataPoolListElement.c_DataSetValues, orc_XmlParser);
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-element");
-    } else {
-      osc_write_log_error("Loading data element",
-                          "Could not find \"data-set-values\" node.");
-      s32_Retval = C_CONFIG;
-    }
-  }
-
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node data pool element
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to
-   "data-element" post-condition: the passed XML parser has the active node set
-   to the same "data-element"
-
-   \param[in]      orc_NodeDataPoolListElement  data storage
-   \param[in,out]  orc_XmlParser                XML with list active
-   \param[in]      oe_DatapoolType              Datapool type
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolElement(
-    const C_OscNodeDataPoolListElement &orc_NodeDataPoolListElement,
-    C_OscXmlParserBase &orc_XmlParser,
-    const C_OscNodeDataPool::E_Type oe_DatapoolType) {
-  orc_XmlParser.SetAttributeFloat64("factor",
-                                    orc_NodeDataPoolListElement.f64_Factor);
-  orc_XmlParser.SetAttributeFloat64("offset",
-                                    orc_NodeDataPoolListElement.f64_Offset);
-  orc_XmlParser.SetAttributeBool(
-      "interpret_as_string", orc_NodeDataPoolListElement.q_InterpretAsString);
-  if (oe_DatapoolType == C_OscNodeDataPool::eDIAG) {
-    orc_XmlParser.SetAttributeBool("diag-event-call",
-                                   orc_NodeDataPoolListElement.q_DiagEventCall);
-  } else if ((oe_DatapoolType == C_OscNodeDataPool::eNVM) ||
-             (oe_DatapoolType == C_OscNodeDataPool::eHALC_NVM)) {
-    orc_XmlParser.SetAttributeUint32(
-        "nvm-start-address", orc_NodeDataPoolListElement.u32_NvmStartAddress);
-  } else {
-    // No relevant variables in this section
-  }
-  orc_XmlParser.CreateNodeChild("name", orc_NodeDataPoolListElement.c_Name);
-  h_SaveDataPoolElementType(orc_NodeDataPoolListElement.c_Value, orc_XmlParser);
-  orc_XmlParser.CreateNodeChild("comment",
-                                orc_NodeDataPoolListElement.c_Comment);
-  h_SaveDataPoolElementValue(
-      "min-value", orc_NodeDataPoolListElement.c_MinValue, orc_XmlParser);
-  h_SaveDataPoolElementValue(
-      "max-value", orc_NodeDataPoolListElement.c_MaxValue, orc_XmlParser);
-  orc_XmlParser.CreateNodeChild("unit", orc_NodeDataPoolListElement.c_Unit);
-  orc_XmlParser.CreateNodeChild("access",
-                                mh_NodeDataPoolElementAccessToString(
-                                    orc_NodeDataPoolListElement.e_Access));
-  orc_XmlParser.CreateAndSelectNodeChild("data-set-values");
-  h_SaveDataPoolListElementDataSetValues(
-      orc_NodeDataPoolListElement.c_DataSetValues, orc_XmlParser);
-  // Return to parent
-  Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-element");
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node data pool lists
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "lists"
-   post-condition: the passed XML parser has the active node set to the same
-   "lists"
-
-   \param[out]     orc_NodeDataPoolLists  data storage
-   \param[in,out]  orc_XmlParser          XML with data-pool active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolLists(
-    QList<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-  QString c_CurNodeList;
-  uint32_t u32_ExpectedSize = 0UL;
-  const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
-
-  // Check optional length
-  if (q_ExpectedSizeHere == true) {
-    u32_ExpectedSize = orc_XmlParser.GetAttributeUint32("length");
-    orc_NodeDataPoolLists.reserve(u32_ExpectedSize);
-  }
-
-  c_CurNodeList = orc_XmlParser.SelectNodeChild("list");
-
-  // Clear
-  orc_NodeDataPoolLists.clear();
-  if (c_CurNodeList == "list") {
-    do {
-      C_OscNodeDataPoolList c_CurList;
-
-      if (s32_Retval == C_NO_ERR) {
-        s32_Retval = h_LoadDataPoolList(c_CurList, orc_XmlParser);
-      }
-
-      orc_NodeDataPoolLists.push_back(c_CurList);
-      // Next
-      c_CurNodeList = orc_XmlParser.SelectNodeNext("list");
-    } while (c_CurNodeList == "list");
-
-    if (s32_Retval == C_NO_ERR) {
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "lists");
-    }
-  }
-  // Compare length
-  if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true)) {
-    if (u32_ExpectedSize != orc_NodeDataPoolLists.size()) {
-      const QString c_Tmp =
-          QString("Unexpected list count, expected: %1, got %2")
-              .arg(u32_ExpectedSize)
-              .arg(static_cast<uint32_t>(orc_NodeDataPoolLists.size()));
-      osc_write_log_warning("Load file", c_Tmp);
-    }
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node data pool lists
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "data-pool"
-   post-condition: the passed XML parser has the active node set to the same
-   "data-pool"
-
-   \param[in]      orc_NodeDataPoolLists  data storage
-   \param[in,out]  orc_XmlParser          XML with data-pool active
-   \param[in]      oe_DatapoolType        Datapool type
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolLists(
-    const QList<C_OscNodeDataPoolList> &orc_NodeDataPoolLists,
-    C_OscXmlParserBase &orc_XmlParser,
-    const C_OscNodeDataPool::E_Type oe_DatapoolType) {
-  orc_XmlParser.SetAttributeUint32(
-      "length", static_cast<uint32_t>(orc_NodeDataPoolLists.size()));
-  for (uint32_t u32_ItList = 0; u32_ItList < orc_NodeDataPoolLists.size();
-       ++u32_ItList) {
-    orc_XmlParser.CreateAndSelectNodeChild("list");
-    h_SaveDataPoolList(orc_NodeDataPoolLists[u32_ItList], orc_XmlParser,
-                       oe_DatapoolType);
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "lists");
-  }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node data pool elements
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to
-   "data-elements" post-condition: the passed XML parser has the active node set
-   to the same "data-elements"
-
-   \param[out]     orc_NodeDataPoolListElements    data storage
-   \param[in,out]  orc_XmlParser                   XML with list active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElements(
-    QList<C_OscNodeDataPoolListElement> &orc_NodeDataPoolListElements,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-  QString c_CurNodeDataElement;
-  uint32_t u32_ExpectedSize = 0UL;
-  const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
-
-  // Check optional length
-  if (q_ExpectedSizeHere == true) {
-    u32_ExpectedSize = orc_XmlParser.GetAttributeUint32("length");
-    orc_NodeDataPoolListElements.reserve(u32_ExpectedSize);
-  }
-
-  c_CurNodeDataElement = orc_XmlParser.SelectNodeChild("data-element");
-
-  // Clear
-  orc_NodeDataPoolListElements.clear();
-  if (c_CurNodeDataElement == "data-element") {
-    do {
-      C_OscNodeDataPoolListElement c_CurDataElement;
-
-      if (s32_Retval == C_NO_ERR) {
-        s32_Retval = h_LoadDataPoolElement(c_CurDataElement, orc_XmlParser);
-      }
-
-      // Append
-      orc_NodeDataPoolListElements.push_back(c_CurDataElement);
-
-      // Next
-      c_CurNodeDataElement = orc_XmlParser.SelectNodeNext("data-element");
-    } while (c_CurNodeDataElement == "data-element");
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-elements");
-  }
-  // Compare length
-  if ((s32_Retval == C_NO_ERR) && (q_ExpectedSizeHere == true)) {
-    if (u32_ExpectedSize != orc_NodeDataPoolListElements.size()) {
-      const QString c_Tmp =
-          QString("Unexpected data element count, expected: %1, got %2")
-              .arg(u32_ExpectedSize)
-              .arg(static_cast<uint32_t>(orc_NodeDataPoolListElements.size()));
-      osc_write_log_warning("Load file", c_Tmp);
-    }
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node data pool elements
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to
-   "data-elements" post-condition: the passed XML parser has the active node set
-   to the same "data-elements"
-
-   \param[in]      orc_NodeDataPoolListElements    data storage
-   \param[in,out]  orc_XmlParser                   XML with list active
-   \param[in]      oe_DatapoolType                 Datapool type
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolListElements(
-    const QList<C_OscNodeDataPoolListElement> &orc_NodeDataPoolListElements,
-    C_OscXmlParserBase &orc_XmlParser,
-    const C_OscNodeDataPool::E_Type oe_DatapoolType) {
-  orc_XmlParser.SetAttributeUint32(
-      "length", static_cast<uint32_t>(orc_NodeDataPoolListElements.size()));
-  for (uint32_t u32_ItDataElement = 0;
-       u32_ItDataElement < orc_NodeDataPoolListElements.size();
-       ++u32_ItDataElement) {
-    orc_XmlParser.CreateAndSelectNodeChild("data-element");
-    h_SaveDataPoolElement(orc_NodeDataPoolListElements[u32_ItDataElement],
-                          orc_XmlParser, oe_DatapoolType);
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-elements");
-  }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node data pool list element data set values
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to
-   "data-set-values" post-condition: the passed XML parser has the active node
-   set to the same "data-set-values"
-
-   All returned elements will be of the type defined by orc_ContentType.
-
-   \param[in]      orc_ContentType                             type reference
-   (see description) \param[out]     orc_NodeDataPoolListElementDataSetValues
-   data storage \param[in,out]  orc_XmlParser                               XML
-   with list active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListElementDataSetValues(
-    const C_OscNodeDataPoolContent &orc_ContentType,
-    QList<C_OscNodeDataPoolContent> &orc_NodeDataPoolListElementDataSetValues,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-  QString c_CurNodeDataSetValue =
-      orc_XmlParser.SelectNodeChild("data-set-value");
-
-  if (c_CurNodeDataSetValue == "data-set-value") {
-    do {
-      C_OscNodeDataPoolContent c_CurDataSetValue =
-          orc_ContentType; // pre set content type
-
-      if (s32_Retval == C_NO_ERR) {
-        s32_Retval =
-            h_LoadDataPoolElementValue(c_CurDataSetValue, orc_XmlParser, false);
-      }
-
-      // Append
-      orc_NodeDataPoolListElementDataSetValues.push_back(c_CurDataSetValue);
-
-      // Next
-      c_CurNodeDataSetValue = orc_XmlParser.SelectNodeNext("data-set-value");
-    } while (c_CurNodeDataSetValue == "data-set-value");
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-set-values");
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node data pool list element data set values
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to
-   "data-set-values" post-condition: the passed XML parser has the active node
-   set to the same "data-set-values"
-
-   \param[in]      orc_NodeDataPoolListElementDataSetValues    data storage
-   \param[in,out]  orc_XmlParser                               XML with list
-   active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolListElementDataSetValues(
-    const QList<C_OscNodeDataPoolContent>
-        &orc_NodeDataPoolListElementDataSetValues,
-    C_OscXmlParserBase &orc_XmlParser) {
-  // Data set values
-  for (uint32_t u32_ItDataSetValue = 0;
-       u32_ItDataSetValue < orc_NodeDataPoolListElementDataSetValues.size();
-       ++u32_ItDataSetValue) {
-    h_SaveDataPoolElementValue(
-        "data-set-value",
-        orc_NodeDataPoolListElementDataSetValues[u32_ItDataSetValue],
-        orc_XmlParser);
-  }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node data pool list data sets
-
-   Load node data from XML file
-   pre-condition: the passed XML parser has the active node set to "data-sets"
-   post-condition: the passed XML parser has the active node set to the same
-   "data-sets"
-
-   \param[out]     orc_NodeDataPoolListDataSets    data storage
-   \param[in,out]  orc_XmlParser                   XML with list active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolListDataSets(
-    QList<C_OscNodeDataPoolDataSet> &orc_NodeDataPoolListDataSets,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-  QString c_CurNodeDataSet = orc_XmlParser.SelectNodeChild("data-set");
-
-  orc_NodeDataPoolListDataSets.clear();
-  if (c_CurNodeDataSet == "data-set") {
-    do {
-      C_OscNodeDataPoolDataSet c_CurDataSet;
-
-      if (orc_XmlParser.SelectNodeChild("name") == "name") {
-        c_CurDataSet.c_Name = orc_XmlParser.GetNodeContent();
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-set");
-      } else {
-        s32_Retval = C_CONFIG;
-      }
-
-      if (orc_XmlParser.SelectNodeChild("comment") == "comment") {
-        c_CurDataSet.c_Comment = orc_XmlParser.GetNodeContent();
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-set");
-      } else {
-        s32_Retval = C_CONFIG;
-      }
-
-      // Append
-      orc_NodeDataPoolListDataSets.push_back(c_CurDataSet);
-
-      // Next
-      c_CurNodeDataSet = orc_XmlParser.SelectNodeNext("data-set");
-    } while (c_CurNodeDataSet == "data-set");
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-sets");
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node data pool list data sets
-
-   Save node to XML file
-   pre-condition: the passed XML parser has the active node set to "data-sets"
-   post-condition: the passed XML parser has the active node set to the same
-   "data-sets"
-
-   \param[in]      orc_NodeDataPoolListDataSets    data storage
-   \param[in,out]  orc_XmlParser                   XML with list active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolListDataSets(
-    const QList<C_OscNodeDataPoolDataSet> &orc_NodeDataPoolListDataSets,
-    C_OscXmlParserBase &orc_XmlParser) {
-  for (uint32_t u32_ItDataSet = 0;
-       u32_ItDataSet < orc_NodeDataPoolListDataSets.size(); ++u32_ItDataSet) {
-    const C_OscNodeDataPoolDataSet &rc_DataSet =
-        orc_NodeDataPoolListDataSets[u32_ItDataSet];
-
-    orc_XmlParser.CreateAndSelectNodeChild("data-set");
-    orc_XmlParser.CreateNodeChild("name", rc_DataSet.c_Name);
-    orc_XmlParser.CreateNodeChild("comment", rc_DataSet.c_Comment);
-    // Return
-    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "data-sets");
-  }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Transform data pool type to string
-
-   \param[in]  ore_DataPool   Data pool type
-
-   \return
-   Stringified data pool type
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_OscNodeDataPoolFiler::h_DataPoolToString(
-    const C_OscNodeDataPool::E_Type &ore_DataPool) {
-  return C_OscFilerUtil::h_EnumToString(ore_DataPool, mac_DATAPOOL_TYPE_TABLE);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Transform string to data pool type
-
-   \param[in]   orc_String    String to interpret
-   \param[out]  ore_Type      Data pool type
-
-   \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_StringToDataPool(
-    const QString &orc_String, C_OscNodeDataPool::E_Type &ore_Type) {
-  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_DATAPOOL_TYPE_TABLE, ore_Type,
-                                        "Loading Datapool", "Datapool type");
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load data pool element type
-
-   Load element type from the node "type"
-   pre-condition: the passed XML parser has the active node set to the parent
-   node of the "type" node
-
-   The function does not change the active node.
-
-   \param[out]     orc_NodeDataPoolContent   data storage
-   \param[in,out]  orc_XmlParser             XML with unknown (Node to store
-   data pool variable) active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElementType(
-    C_OscNodeDataPoolContent &orc_NodeDataPoolContent,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_CONFIG;
-
-  if (orc_XmlParser.SelectNodeChild("type") == "type") {
-    C_OscNodeDataPoolContent::E_Type e_Type;
-    s32_Retval = mh_StringToNodeDataPoolContent(
-        orc_XmlParser.GetAttributeString("base-type"), e_Type);
-    if (s32_Retval == C_NO_ERR) {
-      orc_NodeDataPoolContent.SetType(e_Type);
-      orc_NodeDataPoolContent.SetArray(
-          orc_XmlParser.GetAttributeBool("is-array"));
-      if (orc_NodeDataPoolContent.GetArray() == true) {
-        orc_NodeDataPoolContent.SetArraySize(
-            orc_XmlParser.GetAttributeUint32("array-size"));
-      }
-    }
-    // Return
-    orc_XmlParser.SelectNodeParent();
-  } else {
-    osc_write_log_error("Loading Datapool element",
-                        "Could not find \"type\" node.");
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save data pool element type
-
-   Save data pool element type,isarray,arraysize to XML parser
-   Will create a node and write the value there.
-   Does not modify the active node.
-
-   \param[in]      orc_NodeDataPoolContent   data storage
-   \param[in,out]  orc_XmlParser             XML parser
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolElementType(
-    const C_OscNodeDataPoolContent &orc_NodeDataPoolContent,
-    C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.CreateAndSelectNodeChild("type");
-  orc_XmlParser.SetAttributeString(
-      "base-type",
-      mh_NodeDataPoolContentToString(orc_NodeDataPoolContent.GetType()));
-  orc_XmlParser.SetAttributeBool("is-array",
-                                 orc_NodeDataPoolContent.GetArray());
-  if (orc_NodeDataPoolContent.GetArray() == true) {
-    orc_XmlParser.SetAttributeUint32("array-size",
-                                     orc_NodeDataPoolContent.GetArraySize());
-  }
-
-  orc_XmlParser.SelectNodeParent();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load data pool element value
-
-   Load node data from XML file
-   pre-conditions:
-   * the passed XML parser has the active node set to the node containing the
-   value
-   * the element type of orc_NodeDataPoolContent must match the data contained
-   in the file The function does not change the active node.
-
-   \param[out]     orc_NodeDataPoolContent         data storage
-   \param[in,out]  orc_XmlParser                   XML with unknown (Node to
-   store data pool variable) active \param[in]      oq_CheckDataType Check data
-   type \param[in,out]  opc_CheckDataTypeErrorDetails   Check data type error
-   details
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElementValue(
-    C_OscNodeDataPoolContent &orc_NodeDataPoolContent,
-    C_OscXmlParserBase &orc_XmlParser, const bool oq_CheckDataType,
-    QString *const opc_CheckDataTypeErrorDetails) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_NodeDataPoolContent.GetArray() == false) {
-    if (oq_CheckDataType) {
-      s32_Retval = C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
-          orc_NodeDataPoolContent.GetType(), orc_XmlParser,
-          opc_CheckDataTypeErrorDetails);
-    }
-    if (s32_Retval == C_NO_ERR) {
-      // Single
-      switch (orc_NodeDataPoolContent.GetType()) {
-      case C_OscNodeDataPoolContent::eUINT8:
-        orc_NodeDataPoolContent.SetValueU8(
-            static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("value")));
-        break;
-      case C_OscNodeDataPoolContent::eUINT16:
-        orc_NodeDataPoolContent.SetValueU16(
-            static_cast<uint16_t>(orc_XmlParser.GetAttributeUint32("value")));
-        break;
-      case C_OscNodeDataPoolContent::eUINT32:
-        orc_NodeDataPoolContent.SetValueU32(
-            orc_XmlParser.GetAttributeUint32("value"));
-        break;
-      case C_OscNodeDataPoolContent::eUINT64:
-        orc_NodeDataPoolContent.SetValueU64(
-            orc_XmlParser.GetAttributeUint64("value"));
-        break;
-      case C_OscNodeDataPoolContent::eSINT8:
-        orc_NodeDataPoolContent.SetValueS8(
-            static_cast<int8_t>(orc_XmlParser.GetAttributeSint64("value")));
-        break;
-      case C_OscNodeDataPoolContent::eSINT16:
-        orc_NodeDataPoolContent.SetValueS16(
-            static_cast<int16_t>(orc_XmlParser.GetAttributeSint64("value")));
-        break;
-      case C_OscNodeDataPoolContent::eSINT32:
-        orc_NodeDataPoolContent.SetValueS32(
-            static_cast<int32_t>(orc_XmlParser.GetAttributeSint64("value")));
-        break;
-      case C_OscNodeDataPoolContent::eSINT64:
-        orc_NodeDataPoolContent.SetValueS64(
-            orc_XmlParser.GetAttributeSint64("value"));
-        break;
-      case C_OscNodeDataPoolContent::eFLOAT32:
-        orc_NodeDataPoolContent.SetValueF32(
-            orc_XmlParser.GetAttributeFloat32("value"));
-        break;
-      case C_OscNodeDataPoolContent::eFLOAT64:
-        orc_NodeDataPoolContent.SetValueF64(
-            orc_XmlParser.GetAttributeFloat64("value"));
-        break;
-      default:
-        break;
-      }
-    }
-  } else {
-    // Array
-    QString c_CurNode = orc_XmlParser.SelectNodeChild("element");
-    if (c_CurNode == "element") {
-      uint32_t u32_CurIndex = 0U;
-      do {
-        if (u32_CurIndex > orc_NodeDataPoolContent.GetArraySize()) {
-          break; // too much information ...
-        }
-
-        if (oq_CheckDataType) {
-          s32_Retval = C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
-              orc_NodeDataPoolContent.GetType(), orc_XmlParser,
-              opc_CheckDataTypeErrorDetails);
-        }
-        switch (orc_NodeDataPoolContent.GetType()) {
-        case C_OscNodeDataPoolContent::eUINT8:
-          orc_NodeDataPoolContent.SetValueArrU8Element(
-              static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("value")),
-              u32_CurIndex);
-          break;
-        case C_OscNodeDataPoolContent::eUINT16:
-          orc_NodeDataPoolContent.SetValueArrU16Element(
-              static_cast<uint16_t>(orc_XmlParser.GetAttributeUint32("value")),
-              u32_CurIndex);
-          break;
-        case C_OscNodeDataPoolContent::eUINT32:
-          orc_NodeDataPoolContent.SetValueArrU32Element(
-              orc_XmlParser.GetAttributeUint32("value"), u32_CurIndex);
-          break;
-        case C_OscNodeDataPoolContent::eUINT64:
-          orc_NodeDataPoolContent.SetValueArrU64Element(
-              orc_XmlParser.GetAttributeUint64("value"), u32_CurIndex);
-          break;
-        case C_OscNodeDataPoolContent::eSINT8:
-          orc_NodeDataPoolContent.SetValueArrS8Element(
-              static_cast<int8_t>(orc_XmlParser.GetAttributeSint64("value")),
-              u32_CurIndex);
-          break;
-        case C_OscNodeDataPoolContent::eSINT16:
-          orc_NodeDataPoolContent.SetValueArrS16Element(
-              static_cast<int16_t>(orc_XmlParser.GetAttributeSint64("value")),
-              u32_CurIndex);
-          break;
-        case C_OscNodeDataPoolContent::eSINT32:
-          orc_NodeDataPoolContent.SetValueArrS32Element(
-              static_cast<int32_t>(orc_XmlParser.GetAttributeSint64("value")),
-              u32_CurIndex);
-          break;
-        case C_OscNodeDataPoolContent::eSINT64:
-          orc_NodeDataPoolContent.SetValueArrS64Element(
-              orc_XmlParser.GetAttributeSint64("value"), u32_CurIndex);
-          break;
-        case C_OscNodeDataPoolContent::eFLOAT32:
-          orc_NodeDataPoolContent.SetValueArrF32Element(
-              orc_XmlParser.GetAttributeFloat32("value"), u32_CurIndex);
-          break;
-        case C_OscNodeDataPoolContent::eFLOAT64:
-          orc_NodeDataPoolContent.SetValueArrF64Element(
-              orc_XmlParser.GetAttributeFloat64("value"), u32_CurIndex);
-          break;
-        default:
-          break;
-        }
-        u32_CurIndex++; // next element
-        c_CurNode = orc_XmlParser.SelectNodeNext("element");
-      } while ((c_CurNode == "element") && (s32_Retval == C_NO_ERR));
-
-      // check whether we have the correct number of elements:
-      if (u32_CurIndex != orc_NodeDataPoolContent.GetArraySize()) {
-        osc_write_log_error("Loading Datapool",
-                            "Incorrect size of value for array value.");
-        s32_Retval = C_CONFIG;
-      }
-    }
-    // Return
-    orc_XmlParser.SelectNodeParent();
-  }
-
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save data pool element value
-
-   Save data pool element value to XML parser
-   Will create a node and write the value there.
-   Does not modify the active node.
-
-   \param[in]      orc_NodeName              name of node to create value in
-   \param[in]      orc_NodeDataPoolContent   data storage
-   \param[in,out]  orc_XmlParser             XML parser
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolElementValue(
-    const QString &orc_NodeName,
-    const C_OscNodeDataPoolContent &orc_NodeDataPoolContent,
-    C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.CreateAndSelectNodeChild(orc_NodeName);
-  if (orc_NodeDataPoolContent.GetArray() == false) {
-    // Single
-    switch (orc_NodeDataPoolContent.GetType()) {
-    case C_OscNodeDataPoolContent::eUINT8:
-      orc_XmlParser.SetAttributeUint32(
-          "value", static_cast<uint32_t>(orc_NodeDataPoolContent.GetValueU8()));
-      break;
-    case C_OscNodeDataPoolContent::eUINT16:
-      orc_XmlParser.SetAttributeUint32(
-          "value",
-          static_cast<uint32_t>(orc_NodeDataPoolContent.GetValueU16()));
-      break;
-    case C_OscNodeDataPoolContent::eUINT32:
-      orc_XmlParser.SetAttributeUint32("value",
-                                       orc_NodeDataPoolContent.GetValueU32());
-      break;
-    case C_OscNodeDataPoolContent::eUINT64:
-      orc_XmlParser.SetAttributeUint64("value",
-                                       orc_NodeDataPoolContent.GetValueU64());
-      break;
-    case C_OscNodeDataPoolContent::eSINT8:
-      orc_XmlParser.SetAttributeSint64(
-          "value", static_cast<int64_t>(orc_NodeDataPoolContent.GetValueS8()));
-      break;
-    case C_OscNodeDataPoolContent::eSINT16:
-      orc_XmlParser.SetAttributeSint64(
-          "value", static_cast<int64_t>(orc_NodeDataPoolContent.GetValueS16()));
-      break;
-    case C_OscNodeDataPoolContent::eSINT32:
-      orc_XmlParser.SetAttributeSint64(
-          "value", static_cast<int64_t>(orc_NodeDataPoolContent.GetValueS32()));
-      break;
-    case C_OscNodeDataPoolContent::eSINT64:
-      orc_XmlParser.SetAttributeSint64("value",
-                                       orc_NodeDataPoolContent.GetValueS64());
-      break;
-    case C_OscNodeDataPoolContent::eFLOAT32:
-      orc_XmlParser.SetAttributeFloat32("value",
-                                        orc_NodeDataPoolContent.GetValueF32());
-      break;
-    case C_OscNodeDataPoolContent::eFLOAT64:
-      orc_XmlParser.SetAttributeFloat64("value",
-                                        orc_NodeDataPoolContent.GetValueF64());
-      break;
-    default:
-      break;
-    }
-  } else {
-    // Array
-    for (uint32_t u32_ItElem = 0;
-         u32_ItElem < orc_NodeDataPoolContent.GetArraySize(); ++u32_ItElem) {
-      orc_XmlParser.CreateAndSelectNodeChild("element");
-      switch (orc_NodeDataPoolContent.GetType()) {
-      case C_OscNodeDataPoolContent::eUINT8:
-        orc_XmlParser.SetAttributeUint32(
-            "value",
-            static_cast<uint32_t>(
-                orc_NodeDataPoolContent.GetValueArrU8Element(u32_ItElem)));
-        break;
-      case C_OscNodeDataPoolContent::eUINT16:
-        orc_XmlParser.SetAttributeUint32(
-            "value",
-            static_cast<uint32_t>(
-                orc_NodeDataPoolContent.GetValueArrU16Element(u32_ItElem)));
-        break;
-      case C_OscNodeDataPoolContent::eUINT32:
-        orc_XmlParser.SetAttributeUint32(
-            "value", orc_NodeDataPoolContent.GetValueArrU32Element(u32_ItElem));
-        break;
-      case C_OscNodeDataPoolContent::eUINT64:
-        orc_XmlParser.SetAttributeUint64(
-            "value", orc_NodeDataPoolContent.GetValueArrU64Element(u32_ItElem));
-        break;
-      case C_OscNodeDataPoolContent::eSINT8:
-        orc_XmlParser.SetAttributeSint64(
-            "value",
-            static_cast<int64_t>(
-                orc_NodeDataPoolContent.GetValueArrS8Element(u32_ItElem)));
-        break;
-      case C_OscNodeDataPoolContent::eSINT16:
-        orc_XmlParser.SetAttributeSint64(
-            "value",
-            static_cast<int64_t>(
-                orc_NodeDataPoolContent.GetValueArrS16Element(u32_ItElem)));
-        break;
-      case C_OscNodeDataPoolContent::eSINT32:
-        orc_XmlParser.SetAttributeSint64(
-            "value",
-            static_cast<int64_t>(
-                orc_NodeDataPoolContent.GetValueArrS32Element(u32_ItElem)));
-        break;
-      case C_OscNodeDataPoolContent::eSINT64:
-        orc_XmlParser.SetAttributeSint64(
-            "value", orc_NodeDataPoolContent.GetValueArrS64Element(u32_ItElem));
-        break;
-      case C_OscNodeDataPoolContent::eFLOAT32:
-        orc_XmlParser.SetAttributeFloat32(
-            "value", orc_NodeDataPoolContent.GetValueArrF32Element(u32_ItElem));
-        break;
-      case C_OscNodeDataPoolContent::eFLOAT64:
-        orc_XmlParser.SetAttributeFloat64(
-            "value", orc_NodeDataPoolContent.GetValueArrF64Element(u32_ItElem));
-        break;
-      default:
-        break;
-      }
-      // Return to parent
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == orc_NodeName);
-    }
-  }
-  // Return to parent
-  orc_XmlParser.SelectNodeParent();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save node data pool content
-
-   Save node to XML file in V1 format.
-   Not used by core. But may be of some use to applications.
-
-   pre-condition: the passed XML parser has the active node set to variable
-   (Node to store data pool content) post-condition: the passed XML parser has
-   the active node set to the same variable (Node to store data pool content)
-
-   \param[in]      orc_NodeDataPoolContent   data storage
-   \param[in,out]  orc_XmlParser             XML with variable (Node to store
-   data pool content) active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPoolContentV1(
-    const C_OscNodeDataPoolContent &orc_NodeDataPoolContent,
-    C_OscXmlParserBase &orc_XmlParser) {
-  orc_XmlParser.SetAttributeBool("array", orc_NodeDataPoolContent.GetArray());
-  orc_XmlParser.CreateNodeChild("type", mh_NodeDataPoolContentToString(
-                                            orc_NodeDataPoolContent.GetType()));
-  if (orc_NodeDataPoolContent.GetArray() == false) {
-    // Single
-    switch (orc_NodeDataPoolContent.GetType()) {
-    case C_OscNodeDataPoolContent::eUINT8:
-      orc_XmlParser.SetAttributeUint32(
-          "value", static_cast<uint32_t>(orc_NodeDataPoolContent.GetValueU8()));
-      break;
-    case C_OscNodeDataPoolContent::eUINT16:
-      orc_XmlParser.SetAttributeUint32(
-          "value",
-          static_cast<uint32_t>(orc_NodeDataPoolContent.GetValueU16()));
-      break;
-    case C_OscNodeDataPoolContent::eUINT32:
-      orc_XmlParser.SetAttributeUint32("value",
-                                       orc_NodeDataPoolContent.GetValueU32());
-      break;
-    case C_OscNodeDataPoolContent::eUINT64:
-      orc_XmlParser.SetAttributeUint64("value",
-                                       orc_NodeDataPoolContent.GetValueU64());
-      break;
-    case C_OscNodeDataPoolContent::eSINT8:
-      orc_XmlParser.SetAttributeSint64(
-          "value", static_cast<int64_t>(orc_NodeDataPoolContent.GetValueS8()));
-      break;
-    case C_OscNodeDataPoolContent::eSINT16:
-      orc_XmlParser.SetAttributeSint64(
-          "value", static_cast<int64_t>(orc_NodeDataPoolContent.GetValueS16()));
-      break;
-    case C_OscNodeDataPoolContent::eSINT32:
-      orc_XmlParser.SetAttributeSint64(
-          "value", static_cast<int64_t>(orc_NodeDataPoolContent.GetValueS32()));
-      break;
-    case C_OscNodeDataPoolContent::eSINT64:
-      orc_XmlParser.SetAttributeSint64("value",
-                                       orc_NodeDataPoolContent.GetValueS64());
-      break;
-    case C_OscNodeDataPoolContent::eFLOAT32:
-      orc_XmlParser.SetAttributeFloat32("value",
-                                        orc_NodeDataPoolContent.GetValueF32());
-      break;
-    case C_OscNodeDataPoolContent::eFLOAT64:
-      orc_XmlParser.SetAttributeFloat64("value",
-                                        orc_NodeDataPoolContent.GetValueF64());
-      break;
-    default:
-      break;
-    }
-  } else {
-    // Array
-    orc_XmlParser.CreateAndSelectNodeChild("array");
-    for (uint32_t u32_ItElem = 0;
-         u32_ItElem < orc_NodeDataPoolContent.GetArraySize(); ++u32_ItElem) {
-      orc_XmlParser.CreateAndSelectNodeChild("element");
-      orc_XmlParser.SetAttributeUint32("index", u32_ItElem);
-      switch (orc_NodeDataPoolContent.GetType()) {
-      case C_OscNodeDataPoolContent::eUINT8:
-        orc_XmlParser.SetAttributeUint32(
-            "content",
-            static_cast<uint32_t>(
-                orc_NodeDataPoolContent.GetValueArrU8Element(u32_ItElem)));
-        break;
-      case C_OscNodeDataPoolContent::eUINT16:
-        orc_XmlParser.SetAttributeUint32(
-            "content",
-            static_cast<uint32_t>(
-                orc_NodeDataPoolContent.GetValueArrU16Element(u32_ItElem)));
-        break;
-      case C_OscNodeDataPoolContent::eUINT32:
-        orc_XmlParser.SetAttributeUint32(
-            "content",
-            orc_NodeDataPoolContent.GetValueArrU32Element(u32_ItElem));
-        break;
-      case C_OscNodeDataPoolContent::eUINT64:
-        orc_XmlParser.SetAttributeUint64(
-            "content",
-            orc_NodeDataPoolContent.GetValueArrU64Element(u32_ItElem));
-        break;
-      case C_OscNodeDataPoolContent::eSINT8:
-        orc_XmlParser.SetAttributeSint64(
-            "content",
-            static_cast<int64_t>(
-                orc_NodeDataPoolContent.GetValueArrS8Element(u32_ItElem)));
-        break;
-      case C_OscNodeDataPoolContent::eSINT16:
-        orc_XmlParser.SetAttributeSint64(
-            "content",
-            static_cast<int64_t>(
-                orc_NodeDataPoolContent.GetValueArrS16Element(u32_ItElem)));
-        break;
-      case C_OscNodeDataPoolContent::eSINT32:
-        orc_XmlParser.SetAttributeSint64(
-            "content",
-            static_cast<int64_t>(
-                orc_NodeDataPoolContent.GetValueArrS32Element(u32_ItElem)));
-        break;
-      case C_OscNodeDataPoolContent::eSINT64:
-        orc_XmlParser.SetAttributeSint64(
-            "content",
-            orc_NodeDataPoolContent.GetValueArrS64Element(u32_ItElem));
-        break;
-      case C_OscNodeDataPoolContent::eFLOAT32:
-        orc_XmlParser.SetAttributeFloat32(
-            "content",
-            orc_NodeDataPoolContent.GetValueArrF32Element(u32_ItElem));
-        break;
-      case C_OscNodeDataPoolContent::eFLOAT64:
-        orc_XmlParser.SetAttributeFloat64(
-            "content",
-            orc_NodeDataPoolContent.GetValueArrF64Element(u32_ItElem));
-        break;
-      default:
-        break;
-      }
-      // Return
-      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "array");
-    }
-    // Return
-    orc_XmlParser.SelectNodeParent();
-  }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get automatically generated file name
-
-   \param[in]  orc_DatapoolName  Datapool name
-
-   \return
-   Automatically generated file name
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QString C_OscNodeDataPoolFiler::h_GetFileName(const QString &orc_DatapoolName) {
-  return "dp_" +
-         C_OscSystemFilerUtil::h_PrepareItemNameForFileName(orc_DatapoolName) +
-         "_core.xml";
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Check data pool element value type
-
-   \param[in]      oe_ContentType                  Content type
-   \param[in]      orc_XmlParser                   XML parser
-   \param[in,out]  opc_CheckDataTypeErrorDetails   Check data type error details
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_CheckDataPoolElementValueType(
-    const C_OscNodeDataPoolContent::E_Type oe_ContentType,
-    const C_OscXmlParserBase &orc_XmlParser,
-    QString *const opc_CheckDataTypeErrorDetails) {
-  int32_t s32_Retval = C_CONFIG;
-
-  // Load value
-  const uint64_t u64_Val = orc_XmlParser.GetAttributeUint64("value");
-  const int64_t s64_Val = orc_XmlParser.GetAttributeSint64("value");
-  const float64_t f64_Val = orc_XmlParser.GetAttributeFloat64("value");
-
-  switch (oe_ContentType) {
-  case C_OscNodeDataPoolContent::eUINT8:
-    if ((((u64_Val <= std::numeric_limits<uint8_t>::max())) &&
-         ((s64_Val >=
-           static_cast<int64_t>(std::numeric_limits<uint8_t>::min())) &&
-          (s64_Val <= std::numeric_limits<uint8_t>::max()))) &&
-        (((f64_Val >=
-           static_cast<float64_t>(std::numeric_limits<uint8_t>::min())) &&
-          (f64_Val <=
-           static_cast<float64_t>(std::numeric_limits<uint8_t>::max()))))) {
-      s32_Retval = C_NO_ERR;
-    }
-    break;
-  case C_OscNodeDataPoolContent::eUINT16:
-    if ((((u64_Val <= std::numeric_limits<uint16_t>::max())) &&
-         ((s64_Val >=
-           static_cast<int64_t>(std::numeric_limits<uint16_t>::min())) &&
-          (s64_Val <= std::numeric_limits<uint16_t>::max()))) &&
-        ((f64_Val >=
-          static_cast<float64_t>(std::numeric_limits<uint16_t>::min())) &&
-         (f64_Val <=
-          static_cast<float64_t>(std::numeric_limits<uint16_t>::max())))) {
-      s32_Retval = C_NO_ERR;
-    }
-    break;
-  case C_OscNodeDataPoolContent::eUINT32:
-    if ((((u64_Val <= std::numeric_limits<uint32_t>::max())) &&
-         ((s64_Val >=
-           static_cast<int64_t>(std::numeric_limits<uint32_t>::min())) &&
-          (s64_Val <= std::numeric_limits<uint32_t>::max()))) &&
-        ((f64_Val >=
-          static_cast<float64_t>(std::numeric_limits<uint32_t>::min())) &&
-         (f64_Val <=
-          static_cast<float64_t>(std::numeric_limits<uint32_t>::max())))) {
-      s32_Retval = C_NO_ERR;
-    }
-    break;
-  case C_OscNodeDataPoolContent::eUINT64:
-    // Sint64 check not reliable as the range of uint64 and sint64 don't
-    // completely overlap
-    //  and overflows might mess up the check
-    if (((f64_Val >=
-          static_cast<float64_t>(std::numeric_limits<uint64_t>::min())) &&
-         (f64_Val <=
-          static_cast<float64_t>(std::numeric_limits<uint64_t>::max())))) {
-      s32_Retval = C_NO_ERR;
-    }
-    break;
-  case C_OscNodeDataPoolContent::eSINT8:
-    // All unsigned checks not reliable as the range of uint64 and any signed
-    // value don't completely overlap
-    //  and overflows might mess up the check
-    if ((((s64_Val >= std::numeric_limits<int8_t>::min()) &&
-          (s64_Val <= std::numeric_limits<int8_t>::max()))) &&
-        ((f64_Val >=
-          static_cast<float64_t>(std::numeric_limits<int8_t>::min())) &&
-         (f64_Val <=
-          static_cast<float64_t>(std::numeric_limits<int8_t>::max())))) {
-      s32_Retval = C_NO_ERR;
-    }
-    break;
-  case C_OscNodeDataPoolContent::eSINT16:
-    // All unsigned checks not reliable as the range of uint64 and any signed
-    // value don't completely overlap
-    //  and overflows might mess up the check
-    if ((((s64_Val >= std::numeric_limits<int16_t>::min()) &&
-          (s64_Val <= std::numeric_limits<int16_t>::max()))) &&
-        ((f64_Val >=
-          static_cast<float64_t>(std::numeric_limits<int16_t>::min())) &&
-         (f64_Val <=
-          static_cast<float64_t>(std::numeric_limits<int16_t>::max())))) {
-      s32_Retval = C_NO_ERR;
-    }
-    break;
-  case C_OscNodeDataPoolContent::eSINT32:
-    // All unsigned checks not reliable as the range of uint64 and any signed
-    // value don't completely overlap
-    //  and overflows might mess up the check
-    if ((((s64_Val >= std::numeric_limits<int32_t>::min()) &&
-          (s64_Val <= std::numeric_limits<int32_t>::max()))) &&
-        ((f64_Val >=
-          static_cast<float64_t>(std::numeric_limits<int32_t>::min())) &&
-         (f64_Val <=
-          static_cast<float64_t>(std::numeric_limits<int32_t>::max())))) {
-      s32_Retval = C_NO_ERR;
-    }
-    break;
-  case C_OscNodeDataPoolContent::eSINT64:
-    // All unsigned checks not reliable as the range of uint64 and any signed
-    // value don't completely overlap
-    //  and overflows might mess up the check
-    if ((f64_Val >=
-         static_cast<float64_t>(std::numeric_limits<int64_t>::min())) &&
-        (f64_Val <=
-         static_cast<float64_t>(std::numeric_limits<int64_t>::max()))) {
-      s32_Retval = C_NO_ERR;
-    }
-    break;
-  case C_OscNodeDataPoolContent::eFLOAT32:
-  case C_OscNodeDataPoolContent::eFLOAT64:
-    // No range error or wrong type error possible for uint64 or sint64
-    s32_Retval = C_NO_ERR;
-    break;
-  default:
-    break;
-  }
-  if (s32_Retval != C_NO_ERR) {
-    if (opc_CheckDataTypeErrorDetails != NULL) {
-      const QString c_Val = orc_XmlParser.GetAttributeString("value");
-      const QString c_DataType =
-          C_OscNodeDataPoolFiler::mh_NodeDataPoolContentToString(
-              oe_ContentType);
-
-      *opc_CheckDataTypeErrorDetails =
-          "\"" + c_Val + "\" not in range of data type " + c_DataType;
-    }
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Load node data pool content
-
-   Load node data from XML file in V1 format.
-   pre-condition: the passed XML parser has the active node set to unknown (Node
-   to store data pool variable) post-condition: the passed XML parser has the
-   active node set to the same unknown (Node to store data pool variable)
-
-   \param[out]     orc_NodeDataPoolContent   data storage
-   \param[in,out]  orc_XmlParser             XML with unknown (Node to store
-   data pool variable) active
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(
-    C_OscNodeDataPoolContent &orc_NodeDataPoolContent,
-    C_OscXmlParserBase &orc_XmlParser) {
-  int32_t s32_Retval = C_NO_ERR;
-
-  if (orc_XmlParser.SelectNodeChild("type") == "type") {
-    C_OscNodeDataPoolContent::E_Type e_Type;
-    s32_Retval =
-        mh_StringToNodeDataPoolContent(orc_XmlParser.GetNodeContent(), e_Type);
-    orc_NodeDataPoolContent.SetType(e_Type);
-    // Return
-    orc_XmlParser.SelectNodeParent();
-  } else {
-    s32_Retval = C_CONFIG;
-  }
-  orc_NodeDataPoolContent.SetArray(orc_XmlParser.GetAttributeBool("array"));
-
-  if (orc_NodeDataPoolContent.GetArray() == false) {
-    // same format as in newer file version:
-    h_LoadDataPoolElementValue(orc_NodeDataPoolContent, orc_XmlParser, false);
-  } else {
-    // Array
-    if (orc_XmlParser.SelectNodeChild("array") == "array") {
-      QString c_CurNode = orc_XmlParser.SelectNodeChild("element");
-      if (c_CurNode == "element") {
-        do {
-          const uint32_t u32_CurIndex =
-              orc_XmlParser.GetAttributeUint32("index");
-          if (u32_CurIndex >= orc_NodeDataPoolContent.GetArraySize()) {
-            orc_NodeDataPoolContent.SetArraySize(u32_CurIndex + 1);
-          }
-          switch (orc_NodeDataPoolContent.GetType()) {
-          case C_OscNodeDataPoolContent::eUINT8:
-            orc_NodeDataPoolContent.SetValueArrU8Element(
-                static_cast<uint8_t>(
-                    orc_XmlParser.GetAttributeUint32("content")),
-                u32_CurIndex);
-            break;
-          case C_OscNodeDataPoolContent::eUINT16:
-            orc_NodeDataPoolContent.SetValueArrU16Element(
-                static_cast<uint16_t>(
-                    orc_XmlParser.GetAttributeUint32("content")),
-                u32_CurIndex);
-            break;
-          case C_OscNodeDataPoolContent::eUINT32:
-            orc_NodeDataPoolContent.SetValueArrU32Element(
-                orc_XmlParser.GetAttributeUint32("content"), u32_CurIndex);
-            break;
-          case C_OscNodeDataPoolContent::eUINT64:
-            orc_NodeDataPoolContent.SetValueArrU64Element(
-                orc_XmlParser.GetAttributeUint64("content"), u32_CurIndex);
-            break;
-          case C_OscNodeDataPoolContent::eSINT8:
-            orc_NodeDataPoolContent.SetValueArrS8Element(
-                static_cast<int8_t>(
-                    orc_XmlParser.GetAttributeSint64("content")),
-                u32_CurIndex);
-            break;
-          case C_OscNodeDataPoolContent::eSINT16:
-            orc_NodeDataPoolContent.SetValueArrS16Element(
-                static_cast<int16_t>(
-                    orc_XmlParser.GetAttributeSint64("content")),
-                u32_CurIndex);
-            break;
-          case C_OscNodeDataPoolContent::eSINT32:
-            orc_NodeDataPoolContent.SetValueArrS32Element(
-                static_cast<int32_t>(
-                    orc_XmlParser.GetAttributeSint64("content")),
-                u32_CurIndex);
-            break;
-          case C_OscNodeDataPoolContent::eSINT64:
-            orc_NodeDataPoolContent.SetValueArrS64Element(
-                orc_XmlParser.GetAttributeSint64("content"), u32_CurIndex);
-            break;
-          case C_OscNodeDataPoolContent::eFLOAT32:
-            orc_NodeDataPoolContent.SetValueArrF32Element(
-                orc_XmlParser.GetAttributeFloat32("content"), u32_CurIndex);
-            break;
-          case C_OscNodeDataPoolContent::eFLOAT64:
-            orc_NodeDataPoolContent.SetValueArrF64Element(
-                orc_XmlParser.GetAttributeFloat64("content"), u32_CurIndex);
-            break;
-          default:
-            break;
-          }
-          c_CurNode = orc_XmlParser.SelectNodeNext("element");
-        } while (c_CurNode == "element");
-        // Return
-        Q_ASSERT(orc_XmlParser.SelectNodeParent() == "array");
-      }
-      // Return
-      orc_XmlParser.SelectNodeParent();
-    } else {
-      osc_write_log_error("Loading data element",
-                          "Could not find \"array\" node.");
-      s32_Retval = C_CONFIG;
-    }
-  }
-  return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Save datapool
-
-   Save node to XML file
-
-   \param[in]      orc_NodeDataPool    data storage
-   \param[in,out]  orc_FilePath        File path for xml
+   \param[in]      orc_DataPool         Data pool data to store
+   \param[in]      orc_FilePath         File path
 
    \return
    C_NO_ERR   data saved
-   C_CONFIG   file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_SaveDataPoolFile(
-    const C_OscNodeDataPool &orc_NodeDataPool, const QString &orc_FilePath) {
-  C_OscXmlParser c_XmlParser;
-  int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
-      c_XmlParser, orc_FilePath, "opensyde-dp-core-definition");
+int32_t C_OscNodeDataPoolFiler_New::h_SaveDataPoolFile(const C_OscNodeDataPool &orc_DataPool,
+                                                        const QString &orc_FilePath) {
+   int32_t s32_Retval = C_NO_ERR;
 
-  if (s32_Retval == C_NO_ERR) {
-    // Version
-    c_XmlParser.CreateNodeChild("file-version", "1");
-    Q_ASSERT(c_XmlParser.CreateAndSelectNodeChild("data-pool") == "data-pool");
-    // node
-    C_OscNodeDataPoolFiler::h_SaveDataPool(orc_NodeDataPool, c_XmlParser);
-    // Don't forget to save!
-    if (c_XmlParser.SaveToFile(orc_FilePath) != C_NO_ERR) {
-      osc_write_log_error("Saving node definition",
-                          "Could not create file for node.");
-      s32_Retval = C_CONFIG;
-    }
-  } else {
-    // More details are in log
-    s32_Retval = C_CONFIG;
-  }
-  return s32_Retval;
+   // Detect format from file extension
+   const QString c_Extension = orc_FilePath.right(4).toLower();
+
+   if (c_Extension == ".bin") {
+      s32_Retval = h_SaveBinary(orc_DataPool, orc_FilePath);
+   } else if (c_Extension == ".json") {
+      s32_Retval = h_SaveJson(orc_DataPool, orc_FilePath);
+   } else if (c_Extension == ".xml") {
+      s32_Retval = h_SaveXml(orc_DataPool, orc_FilePath);
+   } else {
+      // Default to XML for backward compatibility
+      osc_write_log_warning("File I/O",
+                            QString("Unknown file extension \"%1\" for \"%2\". "
+                                    "Defaulting to XML format.")
+                              .arg(c_Extension, orc_FilePath));
+      s32_Retval = h_SaveXml(orc_DataPool, orc_FilePath);
+   }
+
+   return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Transform node data pool content type to string
+/*! \brief   Load data pool from binary file
 
-   \param[in]  ore_NodeDataPoolContent    Node data pool content type
+   \param[out]     orc_DataPool         Data pool data
+   \param[in]      orc_FilePath         File path
 
    \return
-   Stringified node data pool content type
+   C_NO_ERR   data read
+   C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscNodeDataPoolFiler::mh_NodeDataPoolContentToString(
-    const C_OscNodeDataPoolContent::E_Type &ore_NodeDataPoolContent) {
-  return C_OscFilerUtil::h_EnumToString(ore_NodeDataPoolContent, mac_CONTENT_TYPE_TABLE);
+int32_t C_OscNodeDataPoolFiler_New::h_LoadBinary(C_OscNodeDataPool &orc_DataPool,
+                                                  const QString &orc_FilePath) {
+   QFile file(orc_FilePath);
+   if (!file.open(QIODevice::ReadOnly)) {
+      osc_write_log_error("Loading data pool",
+                          QString("Could not open file \"%1\" for reading.").arg(orc_FilePath));
+      return C_CONFIG;
+   }
+
+   QDataStream in(&file);
+   in.setVersion(QDataStream::Qt_6_0);
+
+   orc_DataPool.FromQDataStream(in);
+   file.close();
+
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Transform string to node data pool content type
+/*! \brief   Save data pool to binary file
 
-   \param[in]   orc_String    String to interpret
-   \param[out]  ore_Type      Node data pool content type
+   \param[in]      orc_DataPool         Data pool data to store
+   \param[in]      orc_FilePath         File path
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolContent(
-    const QString &orc_String, C_OscNodeDataPoolContent::E_Type &ore_Type) {
-  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_CONTENT_TYPE_TABLE, ore_Type,
-                                        "Loading data element", "type");
+int32_t C_OscNodeDataPoolFiler_New::h_SaveBinary(const C_OscNodeDataPool &orc_DataPool,
+                                                  const QString &orc_FilePath) {
+   QFile file(orc_FilePath);
+   if (!file.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Saving data pool",
+                          QString("Could not open file \"%1\" for writing.").arg(orc_FilePath));
+      return C_RD_WR;
+   }
+
+   QDataStream out(&file);
+   out.setVersion(QDataStream::Qt_6_0);
+   out.setByteOrder(QDataStream::LittleEndian);
+
+   const_cast<C_OscNodeDataPool &>(orc_DataPool).ToQDataStream(out);
+   file.close();
+
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Transform node data pool element access type to string
+/*! \brief   Load data pool from memory (binary)
 
-   \param[in]  ore_NodeDataPoolElementAccess    Node data pool element access
-   type
+   \param[out]     orc_DataPool         Data pool data
+   \param[in]      orc_Data             Serialized data
 
    \return
-   Stringified node data pool element access type
+   C_NO_ERR   data loaded
+   C_CONFIG   data format is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-QString C_OscNodeDataPoolFiler::mh_NodeDataPoolElementAccessToString(
-    const C_OscNodeDataPoolListElement::E_Access
-        &ore_NodeDataPoolElementAccess) {
-  return C_OscFilerUtil::h_EnumToString(ore_NodeDataPoolElementAccess, mac_ACCESS_TABLE);
+int32_t C_OscNodeDataPoolFiler_New::h_LoadFromMemoryBinary(C_OscNodeDataPool &orc_DataPool,
+                                                            const QByteArray &orc_Data) {
+   QDataStream in(orc_Data);
+   in.setVersion(QDataStream::Qt_6_0);
+
+   orc_DataPool.FromQDataStream(in);
+
+   return (in.status() == QDataStream::Ok) ? C_NO_ERR : C_CONFIG;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Transform string to node data pool element access type
+/*! \brief   Save data pool to memory (binary)
 
-   \param[in]   orc_String    String to interpret
-   \param[out]  ore_Type      Node data pool element access type
+   \param[in]      orc_DataPool         Data pool data
 
    \return
-   C_NO_ERR   no error
-   C_RANGE    String unknown
+   QByteArray containing serialized data
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::mh_StringToNodeDataPoolElementAccess(
-    const QString &orc_String,
-    C_OscNodeDataPoolListElement::E_Access &ore_Type) {
-  return C_OscFilerUtil::h_StringToEnum(orc_String, mac_ACCESS_TABLE, ore_Type,
-                                        "Loading data element", "access");
+QByteArray C_OscNodeDataPoolFiler_New::h_SaveToMemoryBinary(const C_OscNodeDataPool &orc_DataPool) const {
+   QByteArray data;
+   QDataStream out(&data, QIODevice::WriteOnly);
+   out.setVersion(QDataStream::Qt_6_0);
+   out.setByteOrder(QDataStream::LittleEndian);
+   const_cast<C_OscNodeDataPool &>(orc_DataPool).ToQDataStream(out);
+   return data;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load data pool from JSON file
+
+   \param[out]     orc_DataPool         Data pool data
+   \param[in]      orc_FilePath         File path
+
+   \return
+   C_NO_ERR   data loaded
+   C_CONFIG   JSON parse error or invalid format
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolFiler_New::h_LoadJson(C_OscNodeDataPool &orc_DataPool,
+                                                const QString &orc_FilePath) {
+   QFile file(orc_FilePath);
+   if (!file.open(QIODevice::ReadOnly)) {
+      osc_write_log_error("Loading data pool",
+                          QString("Could not open file \"%1\" for reading.").arg(orc_FilePath));
+      return C_CONFIG;
+   }
+
+   QJsonParseError parseError;
+   QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &parseError);
+   file.close();
+
+   if (parseError.error != QJsonParseError::NoError) {
+      osc_write_log_error("Loading data pool",
+                          QString("JSON parse error: %1").arg(parseError.errorString()));
+      return C_CONFIG;
+   }
+
+   orc_DataPool.FromJsonObject(doc.object());
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save data pool to JSON file
+
+   \param[in]      orc_DataPool         Data pool data to store
+   \param[in]      orc_FilePath         File path
+
+   \return
+   C_NO_ERR   data saved
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolFiler_New::h_SaveJson(const C_OscNodeDataPool &orc_DataPool,
+                                                const QString &orc_FilePath) {
+   QJsonObject json = const_cast<C_OscNodeDataPool &>(orc_DataPool).ToJsonObject();
+   QJsonDocument doc(json);
+
+   QFile file(orc_FilePath);
+   if (!file.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Saving data pool",
+                          QString("Could not open file \"%1\" for writing.").arg(orc_FilePath));
+      return C_RD_WR;
+   }
+
+   file.write(doc.toJson(QJsonDocument::Indented));
+   file.close();
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load data pool from memory (JSON)
+
+   \param[out]     orc_DataPool         Data pool data
+   \param[in]      orc_Object           JSON object
+
+   \return
+   C_NO_ERR   data loaded
+   C_CONFIG   invalid format
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolFiler_New::h_LoadFromMemoryJson(C_OscNodeDataPool &orc_DataPool,
+                                                          const QJsonObject &orc_Object) {
+   orc_DataPool.FromJsonObject(orc_Object);
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save data pool to memory (JSON)
+
+   \param[in]      orc_DataPool         Data pool data
+
+   \return
+   QJsonObject containing serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscNodeDataPoolFiler_New::h_SaveToMemoryJson(const C_OscNodeDataPool &orc_DataPool) const {
+   return const_cast<C_OscNodeDataPool &>(orc_DataPool).ToJsonObject();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load data pool from XML file
+
+   \param[out]     orc_DataPool         Data pool data
+   \param[in]      orc_FilePath         File path
+
+   \return
+   C_NO_ERR   data loaded
+   C_CONFIG   XML parse error or invalid format
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolFiler_New::h_LoadXml(C_OscNodeDataPool &orc_DataPool,
+                                               const QString &orc_FilePath) {
+   QFile file(orc_FilePath);
+   if (!file.open(QIODevice::ReadOnly)) {
+      osc_write_log_error("Loading data pool",
+                          QString("Could not open file \"%1\" for reading.").arg(orc_FilePath));
+      return C_CONFIG;
+   }
+
+   QDomDocument doc;
+   QString errorMessage;
+   int errorLine, errorColumn;
+
+   if (!doc.setContent(file.readAll(), &errorMessage, &errorLine, &errorColumn)) {
+      osc_write_log_error("Loading data pool",
+                          QString("XML parse error at line %1, column %2: %3")
+                            .arg(errorLine)
+                            .arg(errorColumn)
+                            .arg(errorMessage));
+      file.close();
+      return C_CONFIG;
+   }
+   file.close();
+
+   QDomElement rootElement = doc.documentElement();
+   orc_DataPool.FromQDomDocument(rootElement);
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save data pool to XML file
+
+   \param[in]      orc_DataPool         Data pool data to store
+   \param[in]      orc_FilePath         File path
+
+   \return
+   C_NO_ERR   data saved
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolFiler_New::h_SaveXml(const C_OscNodeDataPool &orc_DataPool,
+                                               const QString &orc_FilePath) {
+   QDomDocument doc;
+   QDomElement rootElement = const_cast<C_OscNodeDataPool &>(orc_DataPool).ToQDomDocument(doc, "data-pool");
+   doc.appendChild(rootElement);
+
+   QFile file(orc_FilePath);
+   if (!file.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Saving data pool",
+                          QString("Could not open file \"%1\" for writing.").arg(orc_FilePath));
+      return C_RD_WR;
+   }
+
+   file.write(doc.toString(2).toUtf8());
+   file.close();
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load data pool from memory (XML)
+
+   \param[out]     orc_DataPool         Data pool data
+   \param[in]      orc_Element          XML element
+
+   \return
+   C_NO_ERR   data loaded
+   C_CONFIG   invalid format
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolFiler_New::h_LoadFromMemoryXml(C_OscNodeDataPool &orc_DataPool,
+                                                         const QDomElement &orc_Element) {
+   orc_DataPool.FromQDomDocument(orc_Element);
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save data pool to memory (XML)
+
+   \param[in]      orc_DataPool         Data pool data
+   \param[in]      ro_Doc               DOM document
+
+   \return
+   QDomElement containing serialized data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscNodeDataPoolFiler_New::h_SaveToMemoryXml(const C_OscNodeDataPool &orc_DataPool,
+                                                           QDomDocument &ro_Doc) const {
+   return const_cast<C_OscNodeDataPool &>(orc_DataPool).ToQDomDocument(ro_Doc, "data-pool");
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Helper for format detection and loading
+
+   \param[out]     orc_DataPool         Data pool data
+   \param[in]      orc_FilePath         File path
+
+   \return
+   C_NO_ERR   data loaded
+   C_CONFIG   file format not supported or parse error
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolFiler_New::mh_DetectAndLoad(C_OscNodeDataPool &orc_DataPool,
+                                                      const QString &orc_FilePath) {
+   const QString c_Extension = orc_FilePath.right(4).toLower();
+
+   if (c_Extension == ".bin") {
+      return h_LoadBinary(orc_DataPool, orc_FilePath);
+   } else if (c_Extension == ".json") {
+      return h_LoadJson(orc_DataPool, orc_FilePath);
+   } else if (c_Extension == ".xml") {
+      return h_LoadXml(orc_DataPool, orc_FilePath);
+   } else {
+      osc_write_log_warning("File I/O",
+                            QString("Unknown file extension \"%1\" for \"%2\". "
+                                    "Attempting XML format as fallback.")
+                              .arg(c_Extension, orc_FilePath));
+      return h_LoadXml(orc_DataPool, orc_FilePath);
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Legacy compatibility - Load data pool (deprecated)
+
+   \param[out]     orc_DataPool         Data pool data
+   \param[in]      orc_XmlParser        XML parser
+
+   \return
+   C_NO_ERR   data loaded
+   C_CONFIG   content of file is invalid or incomplete
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscNodeDataPoolFiler_New::h_LoadDataPool(C_OscNodeDataPool &orc_DataPool,
+                                                    C_OscXmlParserBase &orc_XmlParser) {
+   // Delegate to original implementation for backward compatibility
+   return C_OscNodeDataPoolFiler::h_LoadDataPool(orc_DataPool, orc_XmlParser);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Legacy compatibility - Save data pool (deprecated)
+
+   \param[in]      orc_DataPool         Data pool data
+   \param[in]      orc_XmlParser        XML parser
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscNodeDataPoolFiler_New::h_SaveDataPool(const C_OscNodeDataPool &orc_DataPool,
+                                                 C_OscXmlParserBase &orc_XmlParser) {
+   // Delegate to original implementation for backward compatibility
+   C_OscNodeDataPoolFiler::h_SaveDataPool(orc_DataPool, orc_XmlParser);
 }

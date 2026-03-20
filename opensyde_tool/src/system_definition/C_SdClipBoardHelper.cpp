@@ -26,8 +26,8 @@
 
 #include "C_OscNodeCommFiler.hpp"
 #include "C_OscNodeSquadFiler.hpp"
-#include "C_OscSystemDefinitionFiler_New.hpp"
-#include "C_OscHalcConfigStandaloneFiler_New.hpp"
+#include "C_OscSystemDefinitionFiler.hpp"
+#include "C_OscHalcConfigStandaloneFiler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;

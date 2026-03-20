@@ -21,7 +21,7 @@
 #include "C_OscSpaServicePackageCreateUtil.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscXcoCreate.hpp"
-#include "C_OscXcoManifestFiler_New.hpp"
+#include "C_OscXcoManifestFiler.hpp"
 #include "stwerrors.hpp"
 
 /* -- Used Namespaces

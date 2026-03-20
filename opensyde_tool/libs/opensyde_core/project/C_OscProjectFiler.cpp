@@ -17,7 +17,7 @@
  #include <QFileInfo>
  #include <fstream>
 
- #include "C_OscProjectFiler_New.hpp"
+ #include "C_OscProjectFiler.hpp"
  #include "C_OscLoggingHandler.hpp"
  #include "C_OscUtils.hpp"
  #include "C_OscXmlParser.hpp"

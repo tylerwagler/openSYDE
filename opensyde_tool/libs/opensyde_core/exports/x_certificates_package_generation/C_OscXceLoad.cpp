@@ -20,7 +20,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSpaServicePackageLoadUtil.hpp"
 #include "C_OscXceLoad.hpp"
-#include "C_OscXceManifestFiler_New.hpp"
+#include "C_OscXceManifestFiler.hpp"
 #include "stwerrors.hpp"
 
 /* -- Used Namespaces

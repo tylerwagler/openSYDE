@@ -21,7 +21,7 @@
 #include <QXmlStreamWriter>
 
 #include "C_OscLoggingHandler.hpp"
-#include "C_OscTargetSupportPackageV2Filer_New.hpp"
+#include "C_OscTargetSupportPackageV2Filer.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 

@@ -27,7 +27,7 @@
 #include "C_OgePopUpDialog.hpp"
 #include "C_OscHalcConfigUtil.hpp"
 #include "C_OscSystemFilerUtil.hpp"
-#include "C_OscHalcConfigStandaloneFiler_New.hpp"
+#include "C_OscHalcConfigStandaloneFiler.hpp"
 #include "C_SdNdeHalcConfigImportDialog.hpp"
 #include "C_SdNdeHalcDefUpdateDialog.hpp"
 

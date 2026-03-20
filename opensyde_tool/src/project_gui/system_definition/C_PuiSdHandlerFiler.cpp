@@ -24,7 +24,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_PuiSdHandlerFiler.hpp"
 #include "C_PuiBsElementsFiler.hpp"
-#include "C_OscDataLoggerJobFiler_New.hpp"
+#include "C_OscDataLoggerJobFiler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;

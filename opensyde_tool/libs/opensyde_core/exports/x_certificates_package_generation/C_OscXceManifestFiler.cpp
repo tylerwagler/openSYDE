@@ -12,7 +12,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 
 #include "precomp_headers.hpp"
-#include "C_OscXceManifestFiler_New.hpp"
+#include "C_OscXceManifestFiler.hpp"
 #include "C_OscFilerUtil.hpp"
 #include <QFile>
 #include <QFileInfo>

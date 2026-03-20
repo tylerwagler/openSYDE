@@ -20,7 +20,7 @@
 
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSpaServicePackageCreateUtil.hpp"
-#include "C_OscSystemDefinitionFiler_New.hpp"
+#include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscZipFile.hpp"
 #include "stwerrors.hpp"

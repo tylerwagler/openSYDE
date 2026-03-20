@@ -16,8 +16,8 @@
  #include <QFileInfo>
  #include <fstream>
 
- #include "C_OscSupDefinitionFiler_New.hpp"
- #include "C_OscSupNodeDefinitionFiler_New.hpp"
+ #include "C_OscSupDefinitionFiler.hpp"
+ #include "C_OscSupNodeDefinitionFiler.hpp"
  #include "C_OscXmlParser.hpp"
  #include "C_OscUtils.hpp"
  #include "stwerrors.hpp"

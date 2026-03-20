@@ -16,7 +16,7 @@
  */
 #include "precomp_headers.hpp"
 
-#include "C_OscSystemBusFiler_New.hpp"
+#include "C_OscSystemBusFiler.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 

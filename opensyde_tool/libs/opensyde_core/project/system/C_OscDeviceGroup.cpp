@@ -17,7 +17,7 @@
 #include <QFileInfo>
 #include <QSettings>
 
-#include "C_OscDeviceDefinitionFiler_New.hpp"
+#include "C_OscDeviceDefinitionFiler.hpp"
 #include "C_OscDeviceGroup.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "stwerrors.hpp"

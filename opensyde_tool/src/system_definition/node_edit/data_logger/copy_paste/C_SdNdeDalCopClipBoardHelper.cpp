@@ -17,7 +17,7 @@
 
 #include "stwerrors.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_OscDataLoggerJobFiler_New.hpp"
+#include "C_OscDataLoggerJobFiler.hpp"
 #include "C_SdNdeDalCopClipBoardHelper.hpp"
 #include "C_PuiSdHandlerDataLoggerLogic.hpp"
 

@@ -20,7 +20,7 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSpaServicePackageLoadUtil.hpp"
 #include "C_OscXcoLoad.hpp"
-#include "C_OscXcoManifestFiler_New.hpp"
+#include "C_OscXcoManifestFiler.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 

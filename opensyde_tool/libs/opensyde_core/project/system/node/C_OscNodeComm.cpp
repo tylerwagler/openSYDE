@@ -16,7 +16,7 @@
  */
 #include "precomp_headers.hpp"
 
-#include "C_OscNodeCommFiler_New.hpp"
+#include "C_OscNodeCommFiler.hpp"
 #include "C_OscNodeCommFiler.hpp"
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscLoggingHandler.hpp"

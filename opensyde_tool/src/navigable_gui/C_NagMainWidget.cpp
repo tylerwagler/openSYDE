@@ -33,7 +33,7 @@
 #include "C_PopSaveAsDialogWidget.hpp"
 #include "C_NagAboutDialog.hpp"
 #include "C_OgeWiCustomMessage.hpp"
-#include "C_OscProjectFiler_New.hpp"
+#include "C_OscProjectFiler.hpp"
 #include "C_Uti.hpp"
 #include "C_GiSyColorSelectWidget.hpp"
 #include "C_PopCreateServiceProjDialogWidget.hpp"
