@@ -185,6 +185,12 @@ set(OPENSYDE_SOURCES
 ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabBase.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardDefault.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePath.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/public/C_OgePubIconOnly.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.cpp
    ${PROJECT_ROOT}/src/can_monitor/C_CamComDriverBase.cpp
@@ -248,7 +254,7 @@ ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.cpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProFilterData.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/public/C_OgePubIconOnly.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaBase.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.cpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableView.cpp
@@ -461,7 +467,7 @@ ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeTab
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.hpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProFilterData.hpp
-${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
+${PROJECT_ROOT}/src/opensyde_gui_elements/public/C_OgePubIconOnly.hpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaBase.hpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableView.hpp
@@ -625,6 +631,7 @@ ${PROJECT_ROOT}/src/system_definition/C_SdTooltipUtil.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTreeToolTipBase.hpp
 ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariables.hpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.hpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePath.hpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/menu/C_OgeMuSections.hpp
     ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.hpp

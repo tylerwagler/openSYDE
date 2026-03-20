@@ -17,6 +17,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "C_OscFilerUtil.hpp"
+#include "C_OscXmlParser.hpp"
 #include "C_OscParamSetInterpretedNode.hpp"
 #include "stwtypes.hpp"
 #include <QList>

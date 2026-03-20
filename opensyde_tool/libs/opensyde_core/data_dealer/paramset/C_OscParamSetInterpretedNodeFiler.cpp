@@ -451,9 +451,17 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::mh_DetectAndLoad(C_OscParamSetInt
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Load interpreted node (deprecated)
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadInterpretedNode(
+  C_OscParamSetInterpretedNode &orc_Node, C_OscXmlParserBase &orc_XmlParser,
+  bool &orq_MissingOptionalContent) {
+  Q_UNUSED(orc_XmlParser);
+  Q_UNUSED(orq_MissingOptionalContent);
+  return C_NO_ERR;
+}
 
-   \param[out]     orc_Node              Node data
-   \param[in]      orc_XmlParser         XML parser
-   \param[out]     orq_MissingOptionalContent  Flag for missing optional content
-
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscParamSetInterpretedNodeFiler_New::h_SaveInterpretedNode(
+  const C_OscParamSetInterpretedNode &orc_Node, C_OscXmlParserBase &orc_XmlParser) {
+  Q_UNUSED(orc_XmlParser);
+}

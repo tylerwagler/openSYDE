@@ -22,6 +22,7 @@
  #include <QJsonObject>
  #include <QDomDocument>
  #include <QDomElement>
+#include "C_OscXmlParser.hpp"
 
  /* -- Namespace
   * -----------------------------------------------------------------------------------------------------
@@ -36,7 +37,7 @@
   * ---------------------------------------------------------------------------------------------------------
   */
 
- class C_OscSupNodeDefinitionFiler_New {
+ class C_OscSupNodeDefinitionFiler {
  public:
      // --------------------------------------------------------------------------
      // Public Static Methods - Multi-format file operations

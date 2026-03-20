@@ -111,9 +111,9 @@ int32_t C_OscXceLoad::h_ProcessPackage(const QString &orc_PackagePath,
       mh_CheckParamsToProcessPackage(orc_PackagePath, c_TargetUnzipPath);
   if (s32_Return == C_NO_ERR) {
     const QString c_ManifestPath =
-        c_TargetUnzipPath + C_OscXceManifestFiler_New::hc_FILE_NAME;
+        c_TargetUnzipPath + C_OscXceManifestFiler::hc_FILE_NAME;
     s32_Return =
-        C_OscXceManifestFiler_New::h_LoadXceManifestFile(orc_Manifest, c_ManifestPath, c_TargetUnzipPath);
+        C_OscXceManifestFiler::h_LoadXceManifestFile(orc_Manifest, c_ManifestPath, c_TargetUnzipPath);
   }
 
   mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);
@@ -187,7 +187,7 @@ int32_t C_OscXceLoad::mh_CheckXcertFiles(const QString &orc_PackagePath) {
   QStringList c_NecessaryFilesTop; // those are the files we look for
 
   c_NecessaryFilesTop.push_back(
-      C_OscXceManifestFiler_New::hc_FILE_NAME); //".syde_pkg"
+      C_OscXceManifestFiler::hc_FILE_NAME); //".syde_pkg"
 
   s32_Return = C_OscSpaServicePackageLoadUtil::h_SearchFilesInPath(
       orc_PackagePath, c_NecessaryFilesTop);

@@ -14,6 +14,7 @@
  #include <QJsonObject>
  #include <QDomDocument>
  #include <QDomElement>
+#include "C_OscXmlParser.hpp"
 
  /* -- Namespace
   * -----------------------------------------------------------------------------------------------------

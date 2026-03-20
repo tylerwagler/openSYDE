@@ -21,15 +21,15 @@ using namespace stw::opensyde_core;
 using namespace stw::errors;
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_LoadParamSetRawNodeFile(C_OscParamSetRawNode &orc_Node,
-                                                                 const QString &orc_FilePath,
-                                                                 const QString &orc_BasePath) {
+int32_t C_OscParamSetRawNodeFiler::h_LoadParamSetRawNodeFile(C_OscParamSetRawNode &orc_Node,
+                                                             const QString &orc_FilePath,
+                                                             const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
    return mh_DetectAndLoad(orc_Node, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_SaveParamSetRawNodeFile(const C_OscParamSetRawNode &orc_Node,
+int32_t C_OscParamSetRawNodeFiler::h_SaveParamSetRawNodeFile(const C_OscParamSetRawNode &orc_Node,
                                                                  const QString &orc_FilePath,
                                                                  const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -49,43 +49,43 @@ int32_t C_OscParamSetRawNodeFiler_New::h_SaveParamSetRawNodeFile(const C_OscPara
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_LoadBinary(C_OscParamSetRawNode &orc_Node,
+int32_t C_OscParamSetRawNodeFiler::h_LoadBinary(C_OscParamSetRawNode &orc_Node,
                                                     const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_LoadBinary<C_OscParamSetRawNode>(orc_Node, orc_FilePath);
+   return C_OscFilerUtil::h_LoadSingleBinary<C_OscParamSetRawNode>(orc_Node, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_SaveBinary(const C_OscParamSetRawNode &orc_Node,
+int32_t C_OscParamSetRawNodeFiler::h_SaveBinary(const C_OscParamSetRawNode &orc_Node,
                                                     const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_SaveBinary<C_OscParamSetRawNode>(orc_Node, orc_FilePath);
+   return C_OscFilerUtil::h_SaveSingleBinary<C_OscParamSetRawNode>(orc_Node, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_LoadJson(C_OscParamSetRawNode &orc_Node,
+int32_t C_OscParamSetRawNodeFiler::h_LoadJson(C_OscParamSetRawNode &orc_Node,
                                                   const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_LoadJson<C_OscParamSetRawNode>(orc_Node, orc_FilePath);
+   return C_OscFilerUtil::h_LoadSingleJson<C_OscParamSetRawNode>(orc_Node, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_SaveJson(const C_OscParamSetRawNode &orc_Node,
+int32_t C_OscParamSetRawNodeFiler::h_SaveJson(const C_OscParamSetRawNode &orc_Node,
                                                   const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_SaveJson<C_OscParamSetRawNode>(orc_Node, orc_FilePath);
+   return C_OscFilerUtil::h_SaveSingleJson<C_OscParamSetRawNode>(orc_Node, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_LoadXml(C_OscParamSetRawNode &orc_Node,
+int32_t C_OscParamSetRawNodeFiler::h_LoadXml(C_OscParamSetRawNode &orc_Node,
                                                  const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_LoadXml<C_OscParamSetRawNode>(orc_Node, orc_FilePath, "paramSetRawNode");
+   return C_OscFilerUtil::h_LoadSingleXml<C_OscParamSetRawNode>(orc_Node, orc_FilePath, "paramSetRawNode");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::h_SaveXml(const C_OscParamSetRawNode &orc_Node,
+int32_t C_OscParamSetRawNodeFiler::h_SaveXml(const C_OscParamSetRawNode &orc_Node,
                                                  const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_SaveXml<C_OscParamSetRawNode>(orc_Node, orc_FilePath, "paramSetRawNode");
+   return C_OscFilerUtil::h_SaveSingleXml<C_OscParamSetRawNode>(orc_Node, orc_FilePath, "paramSetRawNode");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetRawNodeFiler_New::mh_DetectAndLoad(C_OscParamSetRawNode &orc_Node,
+int32_t C_OscParamSetRawNodeFiler::mh_DetectAndLoad(C_OscParamSetRawNode &orc_Node,
                                                         const QString &orc_FilePath) {
    QFileInfo c_FileInfo(orc_FilePath);
    const QString c_Extension = c_FileInfo.suffix().toLower();
@@ -103,7 +103,7 @@ int32_t C_OscParamSetRawNodeFiler_New::mh_DetectAndLoad(C_OscParamSetRawNode &or
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscParamSetRawNodeFiler_New::h_LoadFile(C_OscParamSetRawNode &orc_IoData,
+int32_t C_OscParamSetRawNodeFiler::h_LoadFile(C_OscParamSetRawNode &orc_IoData,
                                                   const QString &orc_Path,
                                                   const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -112,7 +112,7 @@ int32_t C_OscParamSetRawNodeFiler_New::h_LoadFile(C_OscParamSetRawNode &orc_IoDa
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscParamSetRawNodeFiler_New::h_SaveFile(const C_OscParamSetRawNode &orc_IoData,
+int32_t C_OscParamSetRawNodeFiler::h_SaveFile(const C_OscParamSetRawNode &orc_IoData,
                                                   const QString &orc_Path,
                                                   const QString &orc_BasePath,
                                                   QStringList *const opc_CreatedFiles) {

@@ -296,14 +296,14 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
       s32_Return = C_OscSystemDefinitionFilerV2::h_SaveSystemDefinitionFile(
           orc_SystemDefinition, c_SysDefPath);
     } else {
-      QStringList c_AdditionalFiles;
-      s32_Return = C_OscSystemDefinitionFiler_New::h_SaveFile(
+      std::vector<stw::scl::C_SclString> c_AdditionalFiles;
+      s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
           orc_SystemDefinition, c_SysDefPath, &c_AdditionalFiles);
       if (s32_Return == C_NO_ERR) {
         // Add files to pack
-        for (uint32_t u32_ItFile = 0UL; u32_ItFile < c_AdditionalFiles.size();
+        for (uint32_t u32_ItFile = 0UL; u32_ItFile < static_cast<uint32_t>(c_AdditionalFiles.size());
              ++u32_ItFile) {
-          c_SupFiles.insert(c_AdditionalFiles[u32_ItFile]);
+          c_SupFiles.insert(c_AdditionalFiles[u32_ItFile].c_str());
         }
       }
     }
@@ -659,7 +659,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_ProcessPackage(
       c_DevIniPath = c_PackagePath + mc_INI_DEV;
     }
 
-    s32_Return = C_OscSystemDefinitionFiler_New::h_LoadFile(
+    s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
         orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, NULL);
   }
 
@@ -1024,7 +1024,7 @@ int32_t C_OscSupServiceUpdatePackageV1::mh_CreateUpdatePackageDefFile(
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Creates specific device definition (internal function).
 
-   C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile needs device
+   C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile needs device
    definition. Because we don't want a generic device definition of all devices
    in the service update package, a specific one is created.
 

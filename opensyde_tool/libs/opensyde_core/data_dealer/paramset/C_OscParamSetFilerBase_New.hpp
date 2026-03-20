@@ -18,7 +18,6 @@
  */
 #include "C_OscParamSetDataPoolInfo.hpp"
 #include "C_OscParamSetInterpretedFileInfoData.hpp"
-#include "C_OscFilerHelper.hpp"
 #include "stwtypes.hpp"
 #include <QList>
 #include <QString>

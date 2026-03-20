@@ -120,7 +120,7 @@ int32_t C_OscXceCreate::h_CreatePackage(
   QList<C_OscXceUpdatePackageParameters> c_UpdatePackageParameters =
       orc_UpdatePackageParameters;
   // fill with constant file names
-  c_XcertFiles.insert(C_OscXceManifestFiler_New::hc_FILE_NAME);
+  c_XcertFiles.insert(C_OscXceManifestFiler::hc_FILE_NAME);
   c_XcertFiles.insert(
       stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(
           mhc_CERTIFICATES_FOLDER));
@@ -160,8 +160,8 @@ int32_t C_OscXceCreate::h_CreatePackage(
     const C_OscXceManifest c_Manifest =
         mh_CreateManifest(c_UpdatePackageParameters);
     const QString c_ManifestPath =
-        c_PackagePathTmp + C_OscXceManifestFiler_New::hc_FILE_NAME;
-    s32_Return = C_OscXceManifestFiler_New::h_SaveXceManifestFile(c_Manifest, c_ManifestPath, c_PackagePathTmp);
+        c_PackagePathTmp + C_OscXceManifestFiler::hc_FILE_NAME;
+    s32_Return = C_OscXceManifestFiler::h_SaveXceManifestFile(c_Manifest, c_ManifestPath, c_PackagePathTmp);
     if (s32_Return != C_NO_ERR) {
       // very strange! normally the precondition check should
       // guarantee a correct behavior of h_SaveFile

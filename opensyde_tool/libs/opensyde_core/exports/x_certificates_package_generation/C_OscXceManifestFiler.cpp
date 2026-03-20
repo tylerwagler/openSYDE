@@ -21,10 +21,10 @@ using namespace stw::opensyde_core;
 using namespace stw::errors;
 
 // Define file name constant
-const QString C_OscXceManifestFiler_New::hc_FILE_NAME = "manifest.syde_pkg";
+const QString C_OscXceManifestFiler::hc_FILE_NAME = "manifest.syde_pkg";
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_LoadXceManifestFile(C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::h_LoadXceManifestFile(C_OscXceManifest &orc_Manifest,
                                                          const QString &orc_FilePath,
                                                          const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -32,7 +32,7 @@ int32_t C_OscXceManifestFiler_New::h_LoadXceManifestFile(C_OscXceManifest &orc_M
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_SaveXceManifestFile(const C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::h_SaveXceManifestFile(const C_OscXceManifest &orc_Manifest,
                                                          const QString &orc_FilePath,
                                                          const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -52,43 +52,43 @@ int32_t C_OscXceManifestFiler_New::h_SaveXceManifestFile(const C_OscXceManifest 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_LoadBinary(C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::h_LoadBinary(C_OscXceManifest &orc_Manifest,
                                                 const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_LoadBinary<C_OscXceManifest>(orc_Manifest, orc_FilePath);
+   return C_OscFilerUtil::h_LoadSingleBinary<C_OscXceManifest>(orc_Manifest, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_SaveBinary(const C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::h_SaveBinary(const C_OscXceManifest &orc_Manifest,
                                                 const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_SaveBinary<C_OscXceManifest>(orc_Manifest, orc_FilePath);
+   return C_OscFilerUtil::h_SaveSingleBinary<C_OscXceManifest>(orc_Manifest, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_LoadJson(C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::h_LoadJson(C_OscXceManifest &orc_Manifest,
                                               const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_LoadJson<C_OscXceManifest>(orc_Manifest, orc_FilePath);
+   return C_OscFilerUtil::h_LoadSingleJson<C_OscXceManifest>(orc_Manifest, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_SaveJson(const C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::h_SaveJson(const C_OscXceManifest &orc_Manifest,
                                               const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_SaveJson<C_OscXceManifest>(orc_Manifest, orc_FilePath);
+   return C_OscFilerUtil::h_SaveSingleJson<C_OscXceManifest>(orc_Manifest, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_LoadXml(C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::h_LoadXml(C_OscXceManifest &orc_Manifest,
                                              const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_LoadXml<C_OscXceManifest>(orc_Manifest, orc_FilePath, "xceManifest");
+   return C_OscFilerUtil::h_LoadSingleXml<C_OscXceManifest>(orc_Manifest, orc_FilePath, "xceManifest");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::h_SaveXml(const C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::h_SaveXml(const C_OscXceManifest &orc_Manifest,
                                              const QString &orc_FilePath) {
-   return C_OscFilerUtil::h_SaveXml<C_OscXceManifest>(orc_Manifest, orc_FilePath, "xceManifest");
+   return C_OscFilerUtil::h_SaveSingleXml<C_OscXceManifest>(orc_Manifest, orc_FilePath, "xceManifest");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXceManifestFiler_New::mh_DetectAndLoad(C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::mh_DetectAndLoad(C_OscXceManifest &orc_Manifest,
                                                     const QString &orc_FilePath) {
    QFileInfo c_FileInfo(orc_FilePath);
    const QString c_Extension = c_FileInfo.suffix().toLower();
@@ -106,14 +106,14 @@ int32_t C_OscXceManifestFiler_New::mh_DetectAndLoad(C_OscXceManifest &orc_Manife
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscXceManifestFiler_New::h_LoadFile(C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::h_LoadFile(C_OscXceManifest &orc_Manifest,
                                               const QString &orc_Path) {
    return h_LoadXceManifestFile(orc_Manifest, orc_Path, QString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscXceManifestFiler_New::h_SaveFile(const C_OscXceManifest &orc_Manifest,
+int32_t C_OscXceManifestFiler::h_SaveFile(const C_OscXceManifest &orc_Manifest,
                                               const QString &orc_Path) {
    return h_SaveXceManifestFile(orc_Manifest, orc_Path, QString());
 }

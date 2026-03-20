@@ -268,15 +268,15 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(
   // take current system definition of view (is required) and store to file
   const QString c_SysDefPath = orc_UsedTempPath + orc_SystemDefinitionFileName;
 
-  QStringList c_AdditionalFiles;
-  int32_t s32_Return = C_OscSystemDefinitionFiler_New::h_SaveFile(
+  std::vector<stw::scl::C_SclString> c_AdditionalFiles;
+  int32_t s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
       orc_SystemDefinition, c_SysDefPath, &c_AdditionalFiles);
   if (s32_Return == C_NO_ERR) {
     // Add files to pack
-    for (uint32_t u32_ItFile = 0UL; u32_ItFile < c_AdditionalFiles.size();
+    for (uint32_t u32_ItFile = 0UL; u32_ItFile < static_cast<uint32_t>(c_AdditionalFiles.size());
          ++u32_ItFile) {
       orc_AllCreatedFiles.insert(orc_OutFilePrefix +
-                                 c_AdditionalFiles[u32_ItFile]);
+                                 c_AdditionalFiles[u32_ItFile].c_str());
     }
   }
 
@@ -428,7 +428,7 @@ void C_OscSpaServicePackageCreateUtil::h_CleanUpTempFolder(
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Creates specific device definition (internal function).
 
-   C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile needs device
+   C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile needs device
    definition. Because we don't want a generic device definition of all devices
    in the service update package, a specific one is created.
 

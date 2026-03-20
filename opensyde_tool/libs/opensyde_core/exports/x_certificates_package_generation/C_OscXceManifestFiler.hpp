@@ -35,7 +35,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscXceManifestFiler_New {
+class C_OscXceManifestFiler {
 public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)
@@ -70,6 +70,16 @@ public:
                              const QString &orc_FilePath);
     static int32_t h_SaveXml(const C_OscXceManifest &orc_Manifest,
                              const QString &orc_FilePath);
+
+    // --------------------------------------------------------------------------
+    // Legacy Compatibility (deprecated)
+    // --------------------------------------------------------------------------
+    [[deprecated("Use format-specific methods")]]
+    static int32_t h_LoadFile(C_OscXceManifest &orc_Manifest,
+                              const QString &orc_Path);
+    [[deprecated("Use format-specific methods")]]
+    static int32_t h_SaveFile(const C_OscXceManifest &orc_Manifest,
+                              const QString &orc_Path);
 
     // File name constant
     static const QString hc_FILE_NAME;

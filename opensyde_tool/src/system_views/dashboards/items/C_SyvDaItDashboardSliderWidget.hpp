@@ -68,12 +68,12 @@ protected:
 
 private:
    /*------ Functions -----------------------------------------------------------------------------------------------*/
-   void m_SetLabelSize(opensyde_gui_elements::C_OgeLabDashboardDefault * const opc_Label,
+   void m_SetLabelSize(stw::opensyde_gui_elements::C_OgeLabDashboardDefault * const opc_Label,
                        const uint32_t & oru32_LabelFontSize, const uint32_t ou32_MinimumFontSize = 10);
-   void m_SetLabelFontSize(opensyde_gui_elements::C_OgeLabDashboardDefault * const opc_Label,
+   void m_SetLabelFontSize(stw::opensyde_gui_elements::C_OgeLabDashboardDefault * const opc_Label,
                            const uint32_t & oru32_LabelFontSize, QFont & orc_Font, const QString & orc_Text);
    void m_UpdateLabels(void) const;
-   QFontMetrics m_GetNewLabelFontMetrics(opensyde_gui_elements::C_OgeLabDashboardDefault * const opc_Label,
+   QFontMetrics m_GetNewLabelFontMetrics(stw::opensyde_gui_elements::C_OgeLabDashboardDefault * const opc_Label,
                                          QFont & orc_Font, const uint32_t & oru32_NewFontSize);
 
    /*------ Variables -----------------------------------------------------------------------------------------------*/

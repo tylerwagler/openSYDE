@@ -17,6 +17,7 @@
 #include "stwtypes.hpp"
 #include "C_OgePopUpDialog.hpp"
 #include "C_OgeLeFilePathBase.hpp"
+#include "C_OgeLeFilePath.hpp"
 #include "C_OscNodeApplication.hpp"
 #include "C_SdNdeDbDataPoolEntry.hpp"
 
