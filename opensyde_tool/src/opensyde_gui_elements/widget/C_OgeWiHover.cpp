@@ -145,9 +145,9 @@ C_OgeWiHover::C_OgeWiHover(QWidget & orc_Widget, const QString & orc_Title, cons
    connect(this->mpc_Ui->pc_BtnMin, &QPushButton::clicked, this, &C_OgeWiHover::SigWiHoverMinBtnClicked);
    connect(&this->mc_TimerAnimation, &QTimer::timeout, this, &C_OgeWiHover::m_AnimationTimerEvent);
    connect(this->mpc_Ui->pc_LineEditSearch, &QLineEdit::textChanged, this, &C_OgeWiHover::m_SearchChanged);
-   connect(this->mpc_Ui->pc_LabelTitle, &C_OgeLabDoubleClick::SigDoubleClicked,
+   connect(this->mpc_Ui->pc_LabelTitle, &C_OgeLabUnified::SigDoubleClicked,
            this, &C_OgeWiHover::SigWiHoverMinBtnClicked);
-   connect(this->mpc_Ui->pc_LabelIcon, &C_OgeLabDoubleClick::SigDoubleClicked,
+   connect(this->mpc_Ui->pc_LabelIcon, &C_OgeLabUnified::SigDoubleClicked,
            this, &C_OgeWiHover::SigWiHoverMinBtnClicked);
 } //lint !e429  //no memory leak because of the parent of pc_Shadow and the Qt memory management
 

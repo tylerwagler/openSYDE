@@ -72,9 +72,9 @@ C_OgeWiFixPosition::C_OgeWiFixPosition(const QString oc_Title, const QString oc_
    this->m_ApplyShadow();
 
    connect(this->mpc_Ui->pc_PushButtonMax, &QPushButton::clicked, this, &C_OgeWiFixPosition::SigWiFixPosMaxBtnClicked);
-   connect(this->mpc_Ui->pc_LabelTitle, &C_OgeLabDoubleClick::SigDoubleClicked,
+   connect(this->mpc_Ui->pc_LabelTitle, &C_OgeLabUnified::SigDoubleClicked,
            this, &C_OgeWiFixPosition::SigWiFixPosMaxBtnClicked);
-   connect(this->mpc_Ui->pc_LabelIcon, &C_OgeLabDoubleClick::SigDoubleClicked,
+   connect(this->mpc_Ui->pc_LabelIcon, &C_OgeLabUnified::SigDoubleClicked,
            this, &C_OgeWiFixPosition::SigWiFixPosMaxBtnClicked);
 }
 

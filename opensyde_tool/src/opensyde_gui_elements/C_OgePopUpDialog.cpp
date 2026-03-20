@@ -100,17 +100,17 @@ C_OgePopUpDialog::C_OgePopUpDialog(QWidget * const opc_Parent, QWidget * const o
    C_OgeWiUtil::h_SetWindowIcon(this);
 
    //Events
-   connect(this->mpc_Ui->pc_LabelTitle, &C_OgeLabPopUpTitle::SigMousePress, this,
+   connect(this->mpc_Ui->pc_LabelTitle, &C_OgeLabUnified::SigMousePress, this,
            &C_OgePopUpDialog::HandleMousePressEvent);
-   connect(this->mpc_Ui->pc_LabelTitle, &C_OgeLabPopUpTitle::SigMouseMove, this,
+   connect(this->mpc_Ui->pc_LabelTitle, &C_OgeLabUnified::SigMouseMove, this,
            &C_OgePopUpDialog::HandleMouseMoveEvent);
-   connect(this->mpc_Ui->pc_LabelTitle, &C_OgeLabPopUpTitle::SigMouseRelease, this,
+   connect(this->mpc_Ui->pc_LabelTitle, &C_OgeLabUnified::SigMouseRelease, this,
            &C_OgePopUpDialog::HandleMouseReleaseEvent);
-   connect(this->mpc_Ui->pc_LabelSubTitle, &C_OgeLabPopUpTitle::SigMousePress, this,
+   connect(this->mpc_Ui->pc_LabelSubTitle, &C_OgeLabUnified::SigMousePress, this,
            &C_OgePopUpDialog::HandleMousePressEvent);
-   connect(this->mpc_Ui->pc_LabelSubTitle, &C_OgeLabPopUpTitle::SigMouseMove, this,
+   connect(this->mpc_Ui->pc_LabelSubTitle, &C_OgeLabUnified::SigMouseMove, this,
            &C_OgePopUpDialog::HandleMouseMoveEvent);
-   connect(this->mpc_Ui->pc_LabelSubTitle, &C_OgeLabPopUpTitle::SigMouseRelease, this,
+   connect(this->mpc_Ui->pc_LabelSubTitle, &C_OgeLabUnified::SigMouseRelease, this,
            &C_OgePopUpDialog::HandleMouseReleaseEvent);
 
    // hide overlay when popup is closed (needed for popups if two read-only mode nodes are open)

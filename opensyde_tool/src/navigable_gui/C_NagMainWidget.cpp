@@ -92,7 +92,7 @@ C_NagMainWidget::C_NagMainWidget(QWidget * const opc_Parent) :
    connect(this->mpc_Ui->pc_BtnCreateServiceProj, &C_OgePubProjAction::clicked, this,
            &C_NagMainWidget::m_OnCreateServiceProj);
    connect(this->mpc_Ui->pc_BtnEdit, &C_OgePubUnified::clicked, this, &C_NagMainWidget::m_OnEdit);
-   connect(this->mpc_Ui->pc_LabelVersion, &C_OgeLabDoubleClick::SigDoubleClicked, this, &C_NagMainWidget::m_OnEdit);
+   connect(this->mpc_Ui->pc_LabelVersion, &C_OgeLabUnified::SigDoubleClicked, this, &C_NagMainWidget::m_OnEdit);
    connect(this->mpc_Ui->pc_LineEditVersion, &C_OgeLeStyled::editingFinished, this, &C_NagMainWidget::m_OnEditFinished);
    connect(this->mpc_Ui->pc_BtnClear, &C_OgePubUnified::clicked, this, &C_NagMainWidget::m_OnClear);
    connect(this->mpc_Ui->pc_TableView, &C_PopFileTableView::clicked, this, &C_NagMainWidget::m_OnIndexClicked);

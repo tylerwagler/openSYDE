@@ -7,7 +7,7 @@
    If the widget is added on the dialog window and properly connected, it is
    possible to move the window by mouse-grabbing it at the widget.
 
-   Adapted from C_OgeLabPopUpTitle
+   Adapted from C_OgeLabUnified
 
    \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */

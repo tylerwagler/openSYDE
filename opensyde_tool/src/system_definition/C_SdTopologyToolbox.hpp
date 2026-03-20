@@ -16,7 +16,7 @@
 #include <QSpacerItem>
 #include "C_SdTopologyListWidget.hpp"
 #include "C_OscDeviceDefinition.hpp"
-#include "C_OgeLabStyled.hpp"
+#include "C_OgeLabUnified.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -64,7 +64,7 @@ private:
    QIcon mc_Icon;
    C_SdTopologyListWidget * mpc_List;
    QSpacerItem * mpc_Spacer;
-   stw::opensyde_gui_elements::C_OgeLabStyled * mpc_Label;
+   stw::opensyde_gui_elements::C_OgeLabUnified * mpc_Label;
 
    void m_FillToolboxDynamic(void);
    void m_FillToolboxStatic(void);

@@ -14,7 +14,7 @@
 
 #include "constants.hpp"
 #include "C_SebToolboxUtil.hpp"
-#include "C_OgeLabStyled.hpp"
+#include "C_OgeLabUnified.hpp"
 #include "C_SdUtil.hpp"
 #include "C_SdTopologyListWidget.hpp"
 
@@ -62,7 +62,7 @@ C_SdTopologyListWidget * C_SebToolboxUtil::h_AddNewList(const QString & orc_Name
 
       if (orc_Name != "")
       {
-         C_OgeLabStyled * const pc_Heading = new C_OgeLabStyled("ToolboxHeadingGroup", opc_Parent);
+         C_OgeLabUnified * const pc_Heading = new C_OgeLabUnified("ToolboxHeadingGroup", opc_Parent);
          pc_Heading->setText(orc_Name);
          pc_Retval->SetGroupName(orc_Name);
 
@@ -113,7 +113,7 @@ C_OgeFraStyled * C_SebToolboxUtil::h_AddNewHeading(const QString & orc_Name, QVB
 
    if (opc_Layout != NULL)
    {
-      C_OgeLabStyled * const pc_Heading = new C_OgeLabStyled("ToolboxHeadingGroupBig", opc_Parent);
+      C_OgeLabUnified * const pc_Heading = new C_OgeLabUnified("ToolboxHeadingGroupBig", opc_Parent);
       pc_FrameSeparator = new C_OgeFraStyled("Separator", opc_Parent);
       QVBoxLayout * const pc_FrameLayout = new QVBoxLayout();
       int32_t s32_Index;
@@ -170,7 +170,7 @@ QList<C_OgePubUnified *> C_SebToolboxUtil::h_AddNewUserHeading(const QString & o
    {
       //lint -e429  no memory leak because of the parent of the call of addSpacerItem and the Qt
       // memory management
-      C_OgeLabStyled * const pc_Heading = new C_OgeLabStyled("ToolboxHeadingGroup", opc_Parent);
+      C_OgeLabUnified * const pc_Heading = new C_OgeLabUnified("ToolboxHeadingGroup", opc_Parent);
       C_OgeFraStyled * const pc_FrameSeparator = new C_OgeFraStyled("Separator", opc_Parent);
       QVBoxLayout * const pc_FrameLayout = new QVBoxLayout();
       QHBoxLayout * const pc_HorizontalLayout = new QHBoxLayout();

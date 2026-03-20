@@ -70,7 +70,7 @@ C_SdTopologyToolbox::C_SdTopologyToolbox(QWidget * const opc_Parent) :
    mpc_Ui(new Ui::C_SdTopologyToolbox),
    mpc_List(NULL),
    mpc_Spacer(new QSpacerItem(20, 10, QSizePolicy::Expanding)),
-   mpc_Label(new C_OgeLabStyled("TopologyToolboxUserNodes", this))
+   mpc_Label(new C_OgeLabUnified("TopologyToolboxUserNodes", this))
 {
    this->mpc_Ui->setupUi(this);
    this->setAcceptDrops(true);

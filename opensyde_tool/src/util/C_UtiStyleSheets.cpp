@@ -88,22 +88,22 @@ const QList<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_
 const QList<C_UtiStyleSheets::C_ElementColorConfig> C_UtiStyleSheets::mhc_ELEMENT_COLORS_WITH_TRANSPARENCY(
 {
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"OPENSYDE_BRIGHT\"]", mc_STYLE_GUIDE_COLOR_32),
+      "stw--opensyde_gui_elements--C_OgeLabUnified[Style=\"OPENSYDE_BRIGHT\"]", mc_STYLE_GUIDE_COLOR_32),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"OPENSYDE_DARK\"]", mc_STYLE_GUIDE_COLOR_32),
+      "stw--opensyde_gui_elements--C_OgeLabUnified[Style=\"OPENSYDE_DARK\"]", mc_STYLE_GUIDE_COLOR_32),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"OPENSYDE_2_BRIGHT\"]", mc_STYLE_GUIDE_COLOR_3),
+      "stw--opensyde_gui_elements--C_OgeLabUnified[Style=\"OPENSYDE_2_BRIGHT\"]", mc_STYLE_GUIDE_COLOR_3),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"OPENSYDE_2_DARK\"]", mc_STYLE_GUIDE_COLOR_0),
+      "stw--opensyde_gui_elements--C_OgeLabUnified[Style=\"OPENSYDE_2_DARK\"]", mc_STYLE_GUIDE_COLOR_0),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"FLAT_BRIGHT\"]", mc_STYLE_GUIDE_COLOR_1),
+      "stw--opensyde_gui_elements--C_OgeLabUnified[Style=\"FLAT_BRIGHT\"]", mc_STYLE_GUIDE_COLOR_1),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"FLAT_DARK\"]",
+      "stw--opensyde_gui_elements--C_OgeLabUnified[Style=\"FLAT_DARK\"]",
       mc_STYLE_GUIDE_COLOR_0),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"SKEUOMORPH_BRIGHT\"]", mc_STYLE_GUIDE_COLOR_34),
+      "stw--opensyde_gui_elements--C_OgeLabUnified[Style=\"SKEUOMORPH_BRIGHT\"]", mc_STYLE_GUIDE_COLOR_34),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"SKEUOMORPH_DARK\"]", mc_STYLE_GUIDE_COLOR_0),
+      "stw--opensyde_gui_elements--C_OgeLabUnified[Style=\"SKEUOMORPH_DARK\"]", mc_STYLE_GUIDE_COLOR_0),
    C_UtiStyleSheets::C_ElementColorConfig(
       "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_BRIGHT\"][Selected=\"true\"][Active=\"true\"]",
       mc_STYLE_GUIDE_COLOR_4),

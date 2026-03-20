@@ -31,7 +31,7 @@
 
 
 #include "C_OgeChxTristateStyled.hpp"
-#include "C_OgeLabStyled.hpp"
+#include "C_OgeLabUnified.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_OscNodeComInterfaceSettings.hpp"
@@ -762,7 +762,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
           // CONNECTED TO
           this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(
               u8_ComIfCnt, s32_COL_CONNECTION,
-              new C_OgeLabStyled("NodePropComIfTable", this));
+              new C_OgeLabUnified("NodePropComIfTable", this));
 
           // set bus name
           if (pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt]
@@ -833,7 +833,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
           // IP Address
           this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(
               u8_ComIfCnt, s32_COL_IP_ADDRESS,
-              new C_OgeLabStyled("NodePropComIfTable", this));
+              new C_OgeLabUnified("NodePropComIfTable", this));
 
           // set IP Address
           if (u8_ComIfCnt >= static_cast<int32_t>(pc_DevDef->u8_NumCanBusses)) {
