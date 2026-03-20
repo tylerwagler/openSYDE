@@ -13,7 +13,7 @@
 #include <QPair>
 #include "C_CamMosSectionPopup.hpp"
 #include "C_OgeWiOnlyBackground.hpp"
-#include "C_CamOgePubSettingsAdd.hpp"
+#include "C_OgePubBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -36,24 +36,24 @@ protected:
    void moveEvent(QMoveEvent * const opc_Event) override;
 
    static stw::opensyde_gui::C_CamMosSectionPopup * mh_GetPopUp(const QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
-                                                                            opensyde_gui_elements::C_CamOgePubSettingsAdd *> & orc_Pair);
-   static stw::opensyde_gui_elements::C_CamOgePubSettingsAdd * mh_GetButton(
+                                                                            opensyde_gui_elements::C_OgePubBase *> & orc_Pair);
+   static stw::opensyde_gui_elements::C_OgePubBase * mh_GetButton(
       const QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
-                  opensyde_gui_elements::C_CamOgePubSettingsAdd *> & orc_Pair);
+                  opensyde_gui_elements::C_OgePubBase *> & orc_Pair);
    void m_PrepareMove() const;
    void m_InitSettingsSection(stw::opensyde_gui::C_CamMosSectionPopup * const opc_PopUp,
-                              opensyde_gui_elements::C_CamOgePubSettingsAdd * const opc_Button,
+                              opensyde_gui_elements::C_OgePubBase * const opc_Button,
                               const QWidget * const opc_Parent, const QString & orc_Icon);
-   static void mh_InitSettingsButton(stw::opensyde_gui_elements::C_CamOgePubSettingsAdd & orc_Button,
+   static void mh_InitSettingsButton(stw::opensyde_gui_elements::C_OgePubBase & orc_Button,
                                      const QString & orc_Icon);
    void m_ShowAnyPopup(const bool oq_Checked);
 
    void m_ShowPopup(stw::opensyde_gui::C_CamMosSectionPopup * const opc_Popup,
-                    const stw::opensyde_gui_elements::C_CamOgePubSettingsAdd * const opc_Button) const;
-   QPoint m_GetPopupMovePoint(const stw::opensyde_gui_elements::C_CamOgePubSettingsAdd * const opc_Button) const;
+                    const stw::opensyde_gui_elements::C_OgePubBase * const opc_Button) const;
+   QPoint m_GetPopupMovePoint(const stw::opensyde_gui_elements::C_OgePubBase * const opc_Button) const;
 
    QList<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
-                     opensyde_gui_elements::C_CamOgePubSettingsAdd *> > mc_Settings;
+                     opensyde_gui_elements::C_OgePubBase *> > mc_Settings;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

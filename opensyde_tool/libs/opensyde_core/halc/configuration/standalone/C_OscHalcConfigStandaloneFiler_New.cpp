@@ -247,3 +247,36 @@ int32_t C_OscHalcConfigStandaloneFiler_New::mh_DetectAndLoad(
    }
    return s32_Result;
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load HALC config standalone from XML parser (clipboard support)
+
+   \param[out]     orc_IoData       HALC config data
+   \param[in]      orc_XmlParser    XML parser
+
+   \return
+   C_NO_ERR   data read
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadDataStandalone(C_OscHalcConfigStandalone &orc_IoData,
+                                                                 C_OscXmlParserBase &orc_XmlParser) {
+    // Delegate to legacy filer for clipboard operations
+    return C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(orc_IoData, orc_XmlParser);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save HALC config standalone to XML parser (clipboard support)
+
+   \param[in]      orc_IoData       HALC config data
+   \param[in]      orc_XmlParser    XML parser
+
+   \return
+   C_NO_ERR   data saved
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveDataStandalone(const C_OscHalcConfigStandalone &orc_IoData,
+                                                                 C_OscXmlParserBase &orc_XmlParser) {
+    // Delegate to legacy filer for clipboard operations
+    C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(orc_IoData, orc_XmlParser);
+    return C_NO_ERR;
+}

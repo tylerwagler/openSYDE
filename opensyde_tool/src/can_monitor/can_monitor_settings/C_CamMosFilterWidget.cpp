@@ -360,7 +360,7 @@ void C_CamMosFilterWidget::m_InitUi(void) {
           this, &C_CamMosFilterWidget::SigHide);
   connect(this->mpc_Ui->pc_WiHeader, &C_CamOgeWiSettingSubSection::SigToggled,
           this, &C_CamMosFilterWidget::m_EnableFilters);
-  connect(this->mpc_Ui->pc_BtnAdd, &C_CamOgePubSettingsAdd::clicked, this,
+  connect(this->mpc_Ui->pc_BtnAdd, &C_OgePubBase::clicked, this,
           &C_CamMosFilterWidget::m_OnAddClicked);
 }
 

@@ -56,42 +56,51 @@
      static int32_t h_LoadXml(C_OscSystemDefinition &orc_SystemDefinition,
                               C_OscXmlParserBase &orc_XmlParser);
 
-     // --------------------------------------------------------------------------
-     // Format-specific saving methods
-     // --------------------------------------------------------------------------
-     static int32_t h_SaveBinary(const C_OscSystemDefinition &orc_SystemDefinition,
-                                 QDataStream &orc_Stream);
-     static int32_t h_SaveJson(const C_OscSystemDefinition &orc_SystemDefinition,
-                               QJsonObject &orc_Object);
-     static int32_t h_SaveXml(const C_OscSystemDefinition &orc_SystemDefinition,
+      // --------------------------------------------------------------------------
+      // Format-specific saving methods
+      // --------------------------------------------------------------------------
+      static int32_t h_SaveBinary(const C_OscSystemDefinition &orc_SystemDefinition,
+                                  QDataStream &orc_Stream);
+      static int32_t h_SaveJson(const C_OscSystemDefinition &orc_SystemDefinition,
+                                QJsonObject &orc_Object);
+      static int32_t h_SaveXml(const C_OscSystemDefinition &orc_SystemDefinition,
+                               C_OscXmlParserBase &orc_XmlParser);
+
+       /// Known file versions
+      static const uint16_t hu16_FILE_VERSION_1 = 1U;
+      static const uint16_t hu16_FILE_VERSION_2 = 2U;
+      static const uint16_t hu16_FILE_VERSION_3 = 3U;
+      static const uint16_t hu16_FILE_VERSION_LATEST = hu16_FILE_VERSION_3;
+
+      // --------------------------------------------------------------------------
+      // Utility Methods
+      // --------------------------------------------------------------------------
+      static void h_SplitDeviceType(const QString &orc_CompleteType,
+                                    QString &orc_MainType,
+                                    QString &orc_SubType);
+
+      // --------------------------------------------------------------------------
+      // Clipboard Support Methods (XML Parser Interface)
+      // --------------------------------------------------------------------------
+      static int32_t h_LoadNodes(QList<C_OscNode> &orc_Nodes,
+                                 C_OscXmlParserBase &orc_XmlParser,
+                                 const C_OscDeviceManager &orc_DeviceDefinitions,
+                                 const QString &orc_BasePath,
+                                 const bool oq_UseDeviceDefinitions = true,
+                                 const bool oq_UseFileInterface = true,
+                                 const QByteArray *const opc_NodesToLoad = NULL,
+                                 const bool oq_SkipContent = false,
+                                 const QString *const opc_ExpectedNodeName = NULL,
+                                 QStringList *const opc_ErrorDetailsMissingDevices = NULL);
+      static int32_t h_LoadBuses(QList<C_OscSystemBus> &orc_Buses,
+                                 C_OscXmlParserBase &orc_XmlParser);
+      static int32_t h_SaveNodes(const QList<C_OscNode> &orc_Nodes,
+                                 C_OscXmlParserBase &orc_XmlParser,
+                                 const QString &orc_BasePath,
+                                 QStringList *const opc_CreatedFiles);
+      static void h_SaveBuses(const QList<C_OscSystemBus> &orc_Buses,
                               C_OscXmlParserBase &orc_XmlParser);
-
-     // --------------------------------------------------------------------------
-     // Legacy compatibility methods (deprecated)
-     // --------------------------------------------------------------------------
-     [[deprecated("Use h_LoadFile/h_SaveFile with auto-detection instead")]]
-     static int32_t h_LoadSystemDefinitionFile(
-         C_OscSystemDefinition &orc_SystemDefinition,
-         const QString &orc_PathSystemDefinition,
-         const QString &orc_PathDeviceDefinitions,
-         const bool oq_UseDeviceDefinitions = true,
-         uint16_t *const opu16_ReadFileVersion = NULL,
-         const QByteArray *const opc_NodesToLoad = NULL,
-         const bool oq_SkipContent = false,
-         const QString *const opc_ExpectedNodeName = NULL,
-         QStringList *const opc_ErrorDetailsMissingDevices = NULL);
-     [[deprecated("Use h_LoadFile/h_SaveFile with auto-detection instead")]]
-     static int32_t h_SaveSystemDefinitionFile(
-         const C_OscSystemDefinition &orc_SystemDefinition,
-         const QString &orc_Path,
-         QStringList *const opc_CreatedFiles = NULL);
-
-     /// Known file versions
-     static const uint16_t hu16_FILE_VERSION_1 = 1U;
-     static const uint16_t hu16_FILE_VERSION_2 = 2U;
-     static const uint16_t hu16_FILE_VERSION_3 = 3U;
-     static const uint16_t hu16_FILE_VERSION_LATEST = hu16_FILE_VERSION_3;
- };
+};
 
  /* -- Extern Global Variables
   * ---------------------------------------------------------------------------------------

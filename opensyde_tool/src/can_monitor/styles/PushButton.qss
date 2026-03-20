@@ -6,20 +6,70 @@ outline: none;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_CamOgePubSettingsAdd,
+/* Base QPushButton styling */
+QPushButton
+{
+/* suppress dotted rectangle: */
+outline: none;
+}
+
+/* --------------------------------------------------------------------- */
+/* C_OgePubBase with objectName="buttonAddSettings" (replaces C_CamOgePubSettingsAdd) */
+QPushButton#buttonAddSettings,
 stw--opensyde_gui_elements--C_OgePubStyledToolTip[variant="Configure"]
 {
 border-style: none;
 }
 
-/* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_CamOgePubSettingsAdd
+QPushButton#buttonAddSettings
 {
 padding: 1px;
 padding-left: 5px;
 padding-right: 5px;
 text-align: center;
 }
+
+/* --------------------------------------------------------------------- */
+/* C_OgePubBase with objectName="buttonDarkBrowse" (replaces C_CamOgePubDarkBrowse) */
+QPushButton#buttonDarkBrowse
+{
+border-style: solid;
+border-width: 1px;
+border-left-width: 0px;
+}
+
+/* --------------------------------------------------------------------- */
+/* C_OgePubBase with objectName="buttonPathVariables" (replaces C_CamOgePubPathVariables) */
+QPushButton#buttonPathVariables
+{
+border-style: solid;
+border-width: 1px;
+border-left-width: 0px;
+border-right-width: 0px;
+}
+
+QPushButton#buttonPathVariables::menu-indicator
+{
+width: 0px;
+}
+
+/* --------------------------------------------------------------------- */
+/* C_OgePubBase with objectName="buttonProjOp" or "buttonAbout" (replaces C_CamOgePubProjOp, C_CamOgePubAbout) */
+QPushButton#buttonProjOp,
+QPushButton#buttonAbout
+{
+border-style: solid;
+border-width: 1px;
+height: 28px;
+padding-left: 10px;
+padding-right: 10px;
+}
+
+QPushButton#buttonProjOp
+{
+padding-left: 50px;
+}
+/* --------------------------------------------------------------------- */
 
 /* --------------------------------------------------------------------- */
 stw--opensyde_gui_elements--C_OgePubProjAction
@@ -52,42 +102,3 @@ stw--opensyde_gui_elements--C_OgePubStyled[variant="MessageCancel"]:focus
 {
 text-decoration: underline;
 }
-
-/* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_CamOgePubDarkBrowse
-{
-border-style: solid;
-border-width: 1px;
-border-left-width: 0px;
-}
-
-/* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_CamOgePubPathVariables
-{
-border-style: solid;
-border-width: 1px;
-border-left-width: 0px;
-border-right-width: 0px;
-}
-
-stw--opensyde_gui_elements--C_CamOgePubPathVariables::menu-indicator
-{
-width: 0px;
-}
-
-/* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_CamOgePubProjOp,
-stw--opensyde_gui_elements--C_CamOgePubAbout
-{
-border-style: solid;
-border-width: 1px;
-height: 28px;
-padding-left: 10px;
-padding-right: 10px;
-}
-
-stw--opensyde_gui_elements--C_CamOgePubProjOp
-{
-padding-left: 50px;
-}
-/* --------------------------------------------------------------------- */

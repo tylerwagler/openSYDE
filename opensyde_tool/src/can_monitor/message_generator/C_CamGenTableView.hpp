@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QList>
 #include <QSortFilterProxyModel>
-#include "C_OgePubIconOnly.hpp"
+#include "C_OgePubUnified.hpp"
 #include "C_OgeContextMenu.hpp"
 #include "C_CamGenTableModel.hpp"
 #include "C_TblViewInteraction.hpp"
@@ -93,7 +93,7 @@ private:
    QAction * mpc_ActionCopy;
    QAction * mpc_ActionPaste;
    QAction * mpc_ActionDelete;
-   stw::opensyde_gui_elements::C_OgePubIconOnly * mpc_PushButtonScrollTop;
+   stw::opensyde_gui_elements::C_OgePubUnified * mpc_PushButtonScrollTop;
 
    QList<uint32_t> m_GetSelectedRows(void) const;
    void m_SetupContextMenu(void);

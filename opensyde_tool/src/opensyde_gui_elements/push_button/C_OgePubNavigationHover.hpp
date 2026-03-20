@@ -12,7 +12,7 @@
 #define C_OGEPUBNAVIGATIONHOVER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_OgePubToolTipBase.hpp"
+#include "C_OgePubUnified.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -24,14 +24,14 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubNavigationHover :
-   public C_OgePubToolTipBase
+    public C_OgePubUnified
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   explicit C_OgePubNavigationHover(QWidget * const opc_Parent = NULL);
+    explicit C_OgePubNavigationHover(QWidget * const opc_Parent = NULL);
 
-   void SetActive(const bool oq_Active);
+    void SetActive(const bool oq_Active);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

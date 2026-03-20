@@ -47,7 +47,7 @@ using namespace stw::opensyde_gui;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubProjAction::C_OgePubProjAction(QWidget * const opc_Parent) :
-   C_OgePubToolTipBase(opc_Parent)
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eSTANDARD)
 {
    this->ms32_IconPaddingLeft = 26;
    this->setIconSize(mc_ICON_SIZE_24);

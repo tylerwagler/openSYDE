@@ -18,7 +18,11 @@
  */
 #include "C_OscDataLoggerJob.hpp"
 #include "C_OscFilerUtil.hpp"
+#include "C_OscNodeDataPoolListElementId.hpp"
+#include "C_OscXmlParser.hpp"
 #include "stwtypes.hpp"
+#include <QList>
+#include <QString>
 
 /* -- Namespace
  * -----------------------------------------------------------------------------------------------------
@@ -65,13 +69,23 @@ public:
    static int32_t h_LoadFromMemoryXml(C_OscDataLoggerJob &orc_Job, const QDomElement &orc_Element);
    static QDomElement h_SaveToMemoryXml(const C_OscDataLoggerJob &orc_Job, QDomDocument &orc_Doc);
 
-   // --------------------------------------------------------------------------
-   // Legacy Compatibility (deprecated)
-   // --------------------------------------------------------------------------
-   [[deprecated("Use h_LoadFile/h_SaveFile with format detection")]]
-   static int32_t h_LoadJob(C_OscDataLoggerJob &orc_Job, C_OscXmlParserBase &orc_XmlParser);
-   [[deprecated("Use h_LoadFile/h_SaveFile with format detection")]]
-   static void h_SaveJob(const C_OscDataLoggerJob &orc_Job, C_OscXmlParserBase &orc_XmlParser);
+    // --------------------------------------------------------------------------
+    // Clipboard Support Methods (XML Parser Interface)
+    // --------------------------------------------------------------------------
+    static int32_t h_LoadData(QList<C_OscDataLoggerJob> &orc_Config,
+                              C_OscXmlParserBase &orc_XmlParser);
+    static void h_SaveData(const QList<C_OscDataLoggerJob> &orc_Config,
+                           C_OscXmlParserBase &orc_XmlParser);
+    static int32_t h_LoadDataElementId(C_OscNodeDataPoolListElementId &orc_Config,
+                                       C_OscXmlParserBase &orc_XmlParser);
+    static void h_SaveDataElementId(const C_OscNodeDataPoolListElementId &orc_Config,
+                                    C_OscXmlParserBase &orc_XmlParser);
+    static int32_t h_LoadDataElementOptArrayId(
+        C_OscNodeDataPoolListElementOptArrayId &orc_Config,
+        C_OscXmlParserBase &orc_XmlParser);
+    static void h_SaveDataElementOptArrayId(
+        const C_OscNodeDataPoolListElementOptArrayId &orc_Config,
+        C_OscXmlParserBase &orc_XmlParser);
 
 private:
    static int32_t mh_DetectAndLoad(C_OscDataLoggerJob &orc_Job, const QString &orc_Path);

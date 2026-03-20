@@ -17,7 +17,7 @@
 #include <QTabWidget>
 #include <QList>
 
-#include "C_OgePubIconText.hpp"
+#include "C_OgePubUnified.hpp"
 #include "C_PuiSvDashboard.hpp"
 #include "C_SyvDaDashboardWidget.hpp"
 #include "C_SyvDaDashboardSelectorTabBar.hpp"
@@ -129,7 +129,7 @@ private:
    void m_Disconnect(const C_SyvDaDashboardWidget * const opc_Widget) const;
    void m_OnTabChanged(const int32_t os32_Index) const;
 
-   stw::opensyde_gui_elements::C_OgePubIconText * mpc_PushButton;
+   stw::opensyde_gui_elements::C_OgePubUnified * mpc_PushButton;
    C_SyvDaDashboardSelectorTabBar * mpc_TabBar;
    QList<C_SyvDaTearOffWidget *> mc_TearedOffWidgets;
    bool mq_EditMode;

@@ -12,7 +12,7 @@
 #define C_OGEPUBOPEN_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_OgePubToolTipBase.hpp"
+#include "C_OgePubUnified.hpp"
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -25,14 +25,14 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubOpen :
-   public C_OgePubToolTipBase
+    public C_OgePubUnified
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   C_OgePubOpen(QWidget * const opc_Parent = NULL);
+    C_OgePubOpen(QWidget * const opc_Parent = NULL);
 
-   void SetBackgroundColor(const int32_t os32_Value);
+    void SetBackgroundColor(const int32_t os32_Value);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

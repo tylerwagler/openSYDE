@@ -27,7 +27,7 @@
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_PuiProject.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_OgePubIconOnly.hpp"
+#include "C_OgePubUnified.hpp"
 #include "C_ImpUtil.hpp"
 #include "C_Uti.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -309,7 +309,7 @@ void C_SdTopologyToolbox::dropEvent(QDropEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdTopologyToolbox::m_FillToolboxDynamic(void)
 {
-   QList<C_OgePubIconOnly *> c_Icons;
+   QList<C_OgePubUnified *> c_Icons;
    QList<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
    for (uint32_t u32_ItDeviceGroup = 0U; u32_ItDeviceGroup < c_DeviceGroups.size(); ++u32_ItDeviceGroup)
    {
@@ -352,17 +352,17 @@ void C_SdTopologyToolbox::m_FillToolboxDynamic(void)
          c_Icons = C_SebToolboxUtil::h_AddNewUserHeading("User Nodes",
                                                          this->mpc_Ui->pc_VerticalLayout1,
                                                          this);
-         C_OgePubIconOnly * const pc_IconButton = c_Icons[0];
+         C_OgePubUnified * const pc_IconButton = c_Icons[0];
          pc_IconButton->SetToolTipInformation("Add User Nodes",
                                               "Add user nodes to toolbox from file device desription file (.syde_defdev)"
                                                  " or user nodes ini file (.ini).");
-         connect(pc_IconButton, &C_OgePubIconOnly::clicked, this, &C_SdTopologyToolbox::m_FileBrowseDialog);
+         connect(pc_IconButton, &C_OgePubUnified::clicked, this, &C_SdTopologyToolbox::m_FileBrowseDialog);
 
-         C_OgePubIconOnly * const pc_ClearAllUserNodesButton = c_Icons[1];
+         C_OgePubUnified * const pc_ClearAllUserNodesButton = c_Icons[1];
          pc_ClearAllUserNodesButton->SetToolTipInformation("Clear User Nodes",
                                                            "Delete all user nodes from toolbox.");
 
-         connect(pc_ClearAllUserNodesButton, &C_OgePubIconOnly::clicked, this,
+         connect(pc_ClearAllUserNodesButton, &C_OgePubUnified::clicked, this,
                  &C_SdTopologyToolbox::m_IconClearAllClicked);
 
          this->mc_Icon.addPixmap(static_cast<QPixmap>("://images/Icon_toolbox_user_node.svg"), QIcon::Normal);

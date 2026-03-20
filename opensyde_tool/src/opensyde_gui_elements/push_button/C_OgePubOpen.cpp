@@ -41,7 +41,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubOpen::C_OgePubOpen(QWidget * const opc_Parent) :
-   C_OgePubToolTipBase(opc_Parent)
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eSTANDARD)
 {
    this->setIcon(QIcon("://images/IconBrowse.svg"));
 }

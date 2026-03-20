@@ -11,7 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QString>
-#include "C_OgePubToolTipBase.hpp"
+#include "C_OgePubUnified.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -23,7 +23,7 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubStyledToolTip :
-   public C_OgePubToolTipBase
+   public C_OgePubUnified
 {
    Q_OBJECT
    Q_PROPERTY(QString variant READ GetVariant WRITE SetVariant)

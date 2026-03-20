@@ -248,7 +248,7 @@ void C_FlaSetWidget::showEvent(QShowEvent *const opc_Event) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaSetWidget::m_PrepareInitialShow() const {
   for (QList<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
-                         opensyde_gui_elements::C_CamOgePubSettingsAdd *>>::
+                         opensyde_gui_elements::C_OgePubBase *>>::
            const_iterator c_ItPair = this->mc_Settings.cbegin();
        c_ItPair != this->mc_Settings.cend(); ++c_ItPair) {
     if (mh_GetButton(*c_ItPair)->isVisible() &&

@@ -83,12 +83,15 @@
           </property>
          </spacer>
         </item>
-        <item>
-         <widget class="stw::opensyde_gui_elements::C_CamOgePubSettingsAdd" name="pc_BtnAdd">
-          <property name="text">
-           <string>Add filter btn</string>
-          </property>
-         </widget>
+         <item>
+          <widget class="stw::opensyde_gui_elements::C_OgePubBase" name="pc_BtnAdd">
+           <property name="objectName">
+            <string notr="true">buttonAddSettings</string>
+           </property>
+           <property name="text">
+            <string>Add filter btn</string>
+           </property>
+          </widget>
         </item>
        </layout>
       </item>
@@ -282,15 +285,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgePubSettingsAdd</class>
-   <extends>QPushButton</extends>
-   <header>C_CamOgePubSettingsAdd.hpp</header>
+   <class>stw::opensyde_gui_elements::C_CamOgeWiSettingSubSection</class>
+   <extends>QWidget</extends>
+   <header>C_CamOgeWiSettingSubSection.hpp</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeWiOnlyBackground</class>
-   <extends>QWidget</extends>
-   <header>C_OgeWiOnlyBackground.hpp</header>
-   <container>1</container>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
+   <extends>QGroupBox</extends>
+   <header>C_OgeGbxStyled.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraStyled</class>
@@ -299,27 +302,49 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgeWiSettingSubSection</class>
-   <extends>QWidget</extends>
-   <header>C_CamOgeWiSettingSubSection.hpp</header>
-   <container>1</container>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
+   <extends>QGroupBox</extends>
+   <header>C_OgeGbxStyled.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeTransparentScrollArea</class>
-   <extends>QScrollArea</extends>
-   <header>C_OgeTransparentScrollArea.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
+   <class>stw::opensyde_gui_elements::C_OgePubBase</class>
+   <extends>QPushButton</extends>
+   <header>C_OgePubBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
    <extends>QGroupBox</extends>
    <header>C_OgeGbxStyled.hpp</header>
-   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>stw::opensyde_gui_elements::C_CamOgeLeFilePath</class>
+   <extends>QLineEdit</extends>
+   <header>C_OgeLeFilePathBase.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>stw::opensyde_gui_elements::C_OgeGbxStyled</class>
+   <extends>QGroupBox</extends>
+   <header>C_OgeGbxStyled.hpp</header>
+  </customwidget>
+   <customwidget>
+   <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>
+   <extends>QLabel</extends>
+   <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
+  </customwidget>
+   <customwidget>
+   <class>stw::opensyde_gui_elements::C_OgeTransparentScrollArea</class>
+   <extends>QScrollArea</extends>
+   <header>C_OgeTransparentScrollArea.hpp</header>
+  </customwidget>
+   <customwidget>
+   <class>stw::opensyde_gui_elements::C_OgeWiOnlyBackground</class>
+   <extends>QWidget</extends>
+   <header>C_OgeWiOnlyBackground.hpp</header>
+  </customwidget>
+   <customwidget>
+   <class>stw::opensyde_gui_elements::C_OgeLeFilePathBase</class>
+   <extends>QLineEdit</extends>
+   <header>C_OgeLeFilePathBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

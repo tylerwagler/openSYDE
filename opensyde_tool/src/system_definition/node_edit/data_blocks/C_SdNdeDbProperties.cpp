@@ -120,9 +120,23 @@ C_SdNdeDbProperties::C_SdNdeDbProperties(const uint32_t ou32_NodeIndex, const in
    this->mpc_Ui->pc_LabelNonSafeFile->setText("");
    this->mpc_Ui->pc_LabelNonSafeFileValue->setText("");
 
-   // Activate drag and drop for path/file line edits
-   this->mpc_Ui->pc_LineEditProject->SetDragAndDropActiveForFolder(true);
-   this->mpc_Ui->pc_LineEditOutputFile->SetDragAndDropActiveForFile("hex");
+// Activate drag and drop for path/file line edits
+  this->mpc_Ui->pc_LineEditProject->SetDragAndDropActiveForFolder(true);
+
+  // Set variable resolver for path line edits
+  auto c_Resolver = [this](const QString & orc_Path) {
+     const QString c_ProjectPath =
+        C_PuiUtil::h_GetResolvedAbsPathFromProject(this->mpc_Ui->pc_LineEditProject->GetPath());
+     return C_PuiUtil::h_ResolvePlaceholderVariables(orc_Path, c_ProjectPath);
+  };
+
+  this->mpc_Ui->pc_LineEditProject->SetVariableResolver(c_Resolver);
+  this->mpc_Ui->pc_LineEditOutputFile->SetVariableResolver(c_Resolver);
+  this->mpc_Ui->pc_LineEditCodeGenerate->SetVariableResolver(c_Resolver);
+  this->mpc_Ui->pc_LineEditFileGenerate->SetVariableResolver(c_Resolver);
+  this->mpc_Ui->pc_LineEditCodeGenerator->SetVariableResolver(c_Resolver);
+
+  this->mpc_Ui->pc_LineEditOutputFile->SetDragAndDropActiveForFile("hex");
 
    c_CodeGeneratorSupportedFiles.push_back("exe");
    c_CodeGeneratorSupportedFiles.push_back("bat");
@@ -143,7 +157,7 @@ C_SdNdeDbProperties::C_SdNdeDbProperties(const uint32_t ou32_NodeIndex, const in
    // general connects
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeDbProperties::m_OkClicked);
    connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_SdNdeDbProperties::m_CancelClicked);
-   connect(this->mpc_Ui->pc_LineEditName, &C_OgeLePropertiesName::textChanged,
+   connect(this->mpc_Ui->pc_LineEditName, &C_OgeLeBase::textChanged,
            this, &C_SdNdeDbProperties::m_OnNameEdited);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_SpinBoxProcessID, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged), this,
@@ -168,42 +182,42 @@ C_SdNdeDbProperties::C_SdNdeDbProperties(const uint32_t ou32_NodeIndex, const in
 
    // path variables actions
    connect(this->mpc_Ui->pc_PubMenuProject, &C_OgePubPathVariables::SigVariableSelected,
-           this->mpc_Ui->pc_LineEditProject, &C_OgeLeFilePath::InsertVariable);
+           this->mpc_Ui->pc_LineEditProject, &C_OgeLeFilePathBase::InsertVariable);
    connect(this->mpc_Ui->pc_PubMenuProject, &C_OgePubPathVariables::SigVariableSelected,
            this, &C_SdNdeDbProperties::m_UpdatePathsRelativeToProject);
    connect(this->mpc_Ui->pc_PubMenuOutputFile, &C_OgePubPathVariables::SigVariableSelected,
-           this->mpc_Ui->pc_LineEditOutputFile, &C_OgeLeFilePath::InsertVariable);
+           this->mpc_Ui->pc_LineEditOutputFile, &C_OgeLeFilePathBase::InsertVariable);
    connect(this->mpc_Ui->pc_PubMenuCodeGenerate, &C_OgePubPathVariables::SigVariableSelected,
-           this->mpc_Ui->pc_LineEditCodeGenerate, &C_OgeLeFilePath::InsertVariable);
+           this->mpc_Ui->pc_LineEditCodeGenerate, &C_OgeLeFilePathBase::InsertVariable);
    connect(this->mpc_Ui->pc_PubMenuFileGenerate, &C_OgePubPathVariables::SigVariableSelected,
-           this->mpc_Ui->pc_LineEditFileGenerate, &C_OgeLeFilePath::InsertVariable);
+           this->mpc_Ui->pc_LineEditFileGenerate, &C_OgeLeFilePathBase::InsertVariable);
    connect(this->mpc_Ui->pc_PubMenuFileGenerate, &C_OgePubPathVariables::SigVariableSelected,
            this, &C_SdNdeDbProperties::m_UpdatePathsRelativeToGeneratedDir);
    connect(this->mpc_Ui->pc_PubMenuCodeGenerator, &C_OgePubPathVariables::SigVariableSelected,
-           this->mpc_Ui->pc_LineEditCodeGenerator, &C_OgeLeFilePath::InsertVariable);
+           this->mpc_Ui->pc_LineEditCodeGenerator, &C_OgeLeFilePathBase::InsertVariable);
    connect(this->mpc_Ui->pc_PubMenuIDE, &C_OgePubPathVariables::SigVariableSelected,
            this->mpc_Ui->pc_LineEditIDE, &C_OgeLePlaceholderVar::InsertVariable);
    connect(this->mpc_Ui->pc_PubMenuCodeGenerate, &C_OgePubPathVariables::SigVariableSelected,
            this, &C_SdNdeDbProperties::m_OnUpdateOutputFilePath);
 
    // connect for updating paths that are relative to project path
-   connect(this->mpc_Ui->pc_LineEditProject, &C_OgeLeFilePath::editingFinished,
+   connect(this->mpc_Ui->pc_LineEditProject, &C_OgeLeFilePathBase::editingFinished,
            this, &C_SdNdeDbProperties::m_UpdatePathsRelativeToProject);
-   connect(this->mpc_Ui->pc_LineEditFileGenerate, &C_OgeLeFilePath::editingFinished,
+   connect(this->mpc_Ui->pc_LineEditFileGenerate, &C_OgeLeFilePathBase::editingFinished,
            this, &C_SdNdeDbProperties::m_UpdatePathsRelativeToGeneratedDir);
    connect(this->mpc_Ui->pc_LineEditCodeGenerate, &QLineEdit::editingFinished,
            this, &C_SdNdeDbProperties::m_OnUpdateOutputFilePath);
 
    // connect for drag and drop path handling
-   connect(this->mpc_Ui->pc_LineEditProject, &C_OgeLeFilePath::SigPathDropped,
+   connect(this->mpc_Ui->pc_LineEditProject, &C_OgeLeFilePathBase::SigPathDropped,
            this, &C_SdNdeDbProperties::m_OnDroppedProject);
-   connect(this->mpc_Ui->pc_LineEditOutputFile, &C_OgeLeFilePath::SigPathDropped,
+   connect(this->mpc_Ui->pc_LineEditOutputFile, &C_OgeLeFilePathBase::SigPathDropped,
            this, &C_SdNdeDbProperties::m_OnDroppedOutput);
-   connect(this->mpc_Ui->pc_LineEditCodeGenerator, &C_OgeLeFilePath::SigPathDropped,
+   connect(this->mpc_Ui->pc_LineEditCodeGenerator, &C_OgeLeFilePathBase::SigPathDropped,
            this, &C_SdNdeDbProperties::m_OnDroppedGenerator);
-   connect(this->mpc_Ui->pc_LineEditCodeGenerate, &C_OgeLeFilePath::SigPathDropped,
+   connect(this->mpc_Ui->pc_LineEditCodeGenerate, &C_OgeLeFilePathBase::SigPathDropped,
            this, &C_SdNdeDbProperties::m_OnDroppedCodeGeneration);
-   connect(this->mpc_Ui->pc_LineEditFileGenerate, &C_OgeLeFilePath::SigPathDropped,
+   connect(this->mpc_Ui->pc_LineEditFileGenerate, &C_OgeLeFilePathBase::SigPathDropped,
            this, &C_SdNdeDbProperties::m_OnDroppedFileGeneration);
 }
 
@@ -1974,7 +1988,7 @@ void C_SdNdeDbProperties::m_HandleDeleteDataPool(C_SdNdeDbDataPoolEntry * const 
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDbProperties::m_AskUserToSaveRelativePath(const QString & orc_Path,
                                                       const QString & orc_AbsoluteReferenceDir,
-                                                      stw::opensyde_gui_elements::C_OgeLeFilePath * const opc_PathLineEdit)
+                                                      stw::opensyde_gui_elements::C_OgeLeFilePathBase * const opc_PathLineEdit)
 {
    if (orc_Path != "")
    {

@@ -49,24 +49,27 @@
         <property name="verticalSpacing">
          <number>10</number>
         </property>
-        <item row="0" column="4">
-         <widget class="stw::opensyde_gui_elements::C_CamOgePubDarkBrowse" name="pc_PubBrowse">
-          <property name="minimumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
+         <item row="0" column="4">
+          <widget class="stw::opensyde_gui_elements::C_OgePubBase" name="pc_PubBrowse">
+           <property name="objectName">
+            <string notr="true">buttonDarkBrowse</string>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
         </item>
         <item row="1" column="0">
          <widget class="stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins" name="pc_LabFile">
@@ -76,7 +79,7 @@
          </widget>
         </item>
         <item row="0" column="2">
-         <widget class="stw::opensyde_gui_elements::C_CamOgeLeFilePath" name="pc_LeFolder">
+         <widget class="stw::opensyde_gui_elements::C_OgeLeFilePathBase" name="pc_LeFolder">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -91,37 +94,43 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="2" colspan="3">
-         <widget class="stw::opensyde_gui_elements::C_CamOgeCbxDark" name="pc_CbxFormat">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
+         <item row="3" column="2" colspan="3">
+          <widget class="stw::opensyde_gui_elements::C_OgeCbxBase" name="pc_CbxFormat">
+           <property name="objectName">
+            <string notr="true">comboBoxDark</string>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
          </widget>
         </item>
-        <item row="2" column="2" colspan="3">
-         <widget class="stw::opensyde_gui_elements::C_CamOgeCbxDark" name="pc_CbxOverwrite">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-         </widget>
+         <item row="2" column="2" colspan="3">
+          <widget class="stw::opensyde_gui_elements::C_OgeCbxBase" name="pc_CbxOverwrite">
+           <property name="objectName">
+            <string notr="true">comboBoxDark</string>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+          </widget>
         </item>
         <item row="0" column="0">
          <widget class="stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins" name="pc_LabFolder">
@@ -218,20 +227,20 @@
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgePubDarkBrowse</class>
+   <class>stw::opensyde_gui_elements::C_OgePubBase</class>
    <extends>QPushButton</extends>
-   <header>C_CamOgePubDarkBrowse.hpp</header>
+   <header>C_OgePubBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeStyled</class>
    <extends>QLineEdit</extends>
    <header>C_OgeLeStyled.hpp</header>
   </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgeCbxDark</class>
-   <extends>QComboBox</extends>
-   <header>C_CamOgeCbxDark.hpp</header>
-  </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeCbxBase</class>
+    <extends>QComboBox</extends>
+    <header>C_OgeCbxBase.hpp</header>
+   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_CamOgePubPathVariables</class>
    <extends>QPushButton</extends>
@@ -240,7 +249,12 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_CamOgeLeFilePath</class>
    <extends>QLineEdit</extends>
-   <header>C_CamOgeLeFilePath.hpp</header>
+   <header>C_OgeLeFilePathBase.hpp</header>
+  </customwidget>
+   <customwidget>
+   <class>stw::opensyde_gui_elements::C_OgeLeFilePathBase</class>
+   <extends>QLineEdit</extends>
+   <header>C_OgeLeFilePathBase.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>

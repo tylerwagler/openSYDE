@@ -43,10 +43,10 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubToolBar::C_OgePubToolBar(QWidget * const opc_Parent, const uint32_t ou32_Index) :
-   C_OgePubStandard(opc_Parent),
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eSTANDARD),
    mu32_Index(ou32_Index)
 {
-   connect(this, &C_OgePubToolBar::clicked, this, &C_OgePubToolBar::m_ButtonClicked);
+   this->setIconSize(QSize(24, 24));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

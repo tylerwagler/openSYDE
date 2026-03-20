@@ -99,9 +99,9 @@ C_SdNdeDpSelectorWidget::C_SdNdeDpSelectorWidget(QWidget * const opc_Parent) :
 
    this->m_SetupContextMenu();
 
-   connect(this->mpc_Ui->pc_PushButtonScrollLeft, &stw::opensyde_gui_elements::C_OgePubIconOnly::clicked,
+   connect(this->mpc_Ui->pc_PushButtonScrollLeft, &stw::opensyde_gui_elements::C_OgePubUnified::clicked,
            this, &C_SdNdeDpSelectorWidget::m_ButtonLeftClicked);
-   connect(this->mpc_Ui->pc_PushButtonScrollRight, &stw::opensyde_gui_elements::C_OgePubIconOnly::clicked,
+   connect(this->mpc_Ui->pc_PushButtonScrollRight, &stw::opensyde_gui_elements::C_OgePubUnified::clicked,
            this, &C_SdNdeDpSelectorWidget::m_ButtonRightClicked);
    connect(this->mpc_Ui->pc_ListWidget, &C_SdNdeDpSelectorListWidget::SigListChanged,
            this, &C_SdNdeDpSelectorWidget::m_UpdateWidget);
@@ -118,13 +118,13 @@ C_SdNdeDpSelectorWidget::C_SdNdeDpSelectorWidget(QWidget * const opc_Parent) :
    connect(this->mpc_Ui->pc_ListWidget, &C_SdNdeDpSelectorListWidget::SigDataPoolHoverStateChanged,
            this, &C_SdNdeDpSelectorWidget::SigDataPoolHoverStateChanged);
 
-   connect(this->mpc_Ui->pc_PushButtonAdd, &stw::opensyde_gui_elements::C_OgePubIconOnly::clicked,
+   connect(this->mpc_Ui->pc_PushButtonAdd, &stw::opensyde_gui_elements::C_OgePubUnified::clicked,
            this, &C_SdNdeDpSelectorWidget::m_AddNewDatapool);
    connect(this->mpc_Ui->pc_ListWidget, &C_SdNdeDpSelectorListWidget::SigHideOtherToolTips, this,
            &C_SdNdeDpSelectorWidget::HideToolTip);
    connect(this->mpc_LabelStateImg, &C_OgeLabToolTipBase::SigHideOtherToolTips, this,
            &C_SdNdeDpSelectorWidget::HideToolTip);
-   connect(this->mpc_Ui->pc_PushButtonAdd, &C_OgePubIconOnly::SigHideOtherToolTips, this,
+   connect(this->mpc_Ui->pc_PushButtonAdd, &C_OgePubUnified::SigHideOtherToolTips, this,
            &C_SdNdeDpSelectorWidget::HideToolTip);
    connect(this->mpc_LabelStateImg, &C_OgeLabToolTipBase::SigLastChanceToUpdateToolTip, this,
            &C_SdNdeDpSelectorWidget::m_UpdateErrorToolTip);

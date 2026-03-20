@@ -44,14 +44,18 @@ using namespace stw::opensyde_gui_logic;
    \param[in,out]  opc_Parent    Optional pointer to parent
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OgeWiSpinBoxGroup::C_OgeWiSpinBoxGroup(QWidget * const opc_Parent) :
+C_OgeWiSpinBoxGroup::C_OgeWiSpinBoxGroup(QWidget * const opc_Parent, const E_Mode e_Mode) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_OgeWiSpinBoxGroup),
-   mq_DoubleMode(true)
+   mq_DoubleMode(true),
+   me_Mode(e_Mode)
 {
    mpc_Ui->setupUi(this);
 
    m_InitDefault();
+
+   // Apply mode-specific styling
+   this->m_ApplyModeStyle();
 
    //Necessary for table edit focus
    this->setFocusPolicy(Qt::StrongFocus);
@@ -538,5 +542,54 @@ void C_OgeWiSpinBoxGroup::m_DeactivateConnections(void) const
    {
       disconnect(this->mpc_Ui->pc_SpinBox64, &C_OgeSpxInt64AutoFix::SigValueChanged, this,
                  &C_OgeWiSpinBoxGroup::SigValueChanged);
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set the mode of the spin box group
+
+   \param[in]  e_Mode   Mode to set
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OgeWiSpinBoxGroup::SetMode(const E_Mode e_Mode)
+{
+   this->me_Mode = e_Mode;
+   this->m_ApplyModeStyle();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get the current mode
+
+   \return   Current mode
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_OgeWiSpinBoxGroup::E_Mode C_OgeWiSpinBoxGroup::GetMode(void) const
+{
+   return this->me_Mode;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Apply mode-specific styling
+
+   Sets object name for stylesheet targeting based on mode.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OgeWiSpinBoxGroup::m_ApplyModeStyle(void)
+{
+   switch (this->me_Mode)
+   {
+      case eDASHBOARD:
+         this->setObjectName("C_OgeWiDashboardSpinBoxGroup");
+         break;
+      case ePARAM:
+         this->setObjectName("C_OgeWiParamSpinBoxGroup");
+         break;
+      case eTABLE:
+         this->setObjectName("C_OgeWiTableSpinBoxGroup");
+         break;
+      case eSTANDARD:
+      default:
+         this->setObjectName("C_OgeWiSpinBoxGroup");
+         break;
    }
 }

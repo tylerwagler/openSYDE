@@ -417,7 +417,7 @@ void C_SdBueMessageRxEntry::SetSpecificToolTip(const QString & orc_Tooltip)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageRxEntry::SetExclusiveMode(const bool oq_Active)
 {
-   disconnect(this->mpc_Ui->pc_RadioButtonActive, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled,
+   disconnect(this->mpc_Ui->pc_RadioButtonActive, &stw::opensyde_gui_elements::C_OgeRabBase::toggled,
               this, &C_SdBueMessageRxEntry::m_OnRadioButtonStateChanged);
 
    this->mq_ExclusiveMode = oq_Active;
@@ -427,7 +427,7 @@ void C_SdBueMessageRxEntry::SetExclusiveMode(const bool oq_Active)
 
    if (this->mq_ExclusiveMode == true)
    {
-      connect(this->mpc_Ui->pc_RadioButtonActive, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled,
+      connect(this->mpc_Ui->pc_RadioButtonActive, &stw::opensyde_gui_elements::C_OgeRabBase::toggled,
               this, &C_SdBueMessageRxEntry::m_OnRadioButtonStateChanged);
    }
 }
@@ -709,7 +709,7 @@ void C_SdBueMessageRxEntry::m_AdaptParentCheckBoxState(void) const
                  this, &C_SdBueMessageRxEntry::m_OnCheckBoxStateChanged);
       if (this->mq_ExclusiveMode == true)
       {
-         disconnect(this->mpc_Ui->pc_RadioButtonActive, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled,
+         disconnect(this->mpc_Ui->pc_RadioButtonActive, &stw::opensyde_gui_elements::C_OgeRabBase::toggled,
                     this, &C_SdBueMessageRxEntry::m_OnRadioButtonStateChanged);
       }
 
@@ -745,7 +745,7 @@ void C_SdBueMessageRxEntry::m_AdaptParentCheckBoxState(void) const
 
       if (this->mq_ExclusiveMode == true)
       {
-         connect(this->mpc_Ui->pc_RadioButtonActive, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled,
+         connect(this->mpc_Ui->pc_RadioButtonActive, &stw::opensyde_gui_elements::C_OgeRabBase::toggled,
                  this, &C_SdBueMessageRxEntry::m_OnRadioButtonStateChanged);
       }
       connect(this->mpc_Ui->pc_CheckBoxActive, &stw::opensyde_gui_elements::C_OgeChxDefaultSmall::stateChanged,

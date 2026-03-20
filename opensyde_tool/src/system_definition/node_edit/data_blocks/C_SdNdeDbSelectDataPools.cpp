@@ -90,7 +90,7 @@ C_SdNdeDbSelectDataPools::C_SdNdeDbSelectDataPools(const uint32_t ou32_NodeIndex
    connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_SdNdeDbSelectDataPools::m_CancelClicked);
    connect(this->mpc_Ui->pc_TreeView, &C_TblTreDataElementView::SigAccept, this,
            &C_SdNdeDbSelectDataPools::m_OkClicked);
-   connect(this->mpc_Ui->pc_LineEditSearch, &C_OgeLeProperties::textChanged, this,
+   connect(this->mpc_Ui->pc_LineEditSearch, &C_OgeLeBase::textChanged, this,
            &C_SdNdeDbSelectDataPools::m_OnSearch);
    connect(this->mpc_Ui->pc_TreeView, &C_TblTreDataElementView::SigSelectionChanged, this,
            &C_SdNdeDbSelectDataPools::m_UpdateSelection);

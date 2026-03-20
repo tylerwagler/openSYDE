@@ -83,12 +83,15 @@
           </property>
          </spacer>
         </item>
-        <item>
-         <widget class="stw::opensyde_gui_elements::C_CamOgePubSettingsAdd" name="pc_BtnAdd">
-          <property name="text">
-           <string>Add btn</string>
-          </property>
-         </widget>
+         <item>
+          <widget class="stw::opensyde_gui_elements::C_OgePubBase" name="pc_BtnAdd">
+           <property name="objectName">
+            <string notr="true">buttonAddSettings</string>
+           </property>
+           <property name="text">
+            <string>Add btn</string>
+           </property>
+          </widget>
         </item>
        </layout>
       </item>
@@ -282,9 +285,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgePubSettingsAdd</class>
+   <class>stw::opensyde_gui_elements::C_OgePubBase</class>
    <extends>QPushButton</extends>
-   <header>C_CamOgePubSettingsAdd.hpp</header>
+   <header>C_OgePubBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiOnlyBackground</class>

@@ -85,7 +85,7 @@ C_SdNodeToNodeConnectionSetupWidget::C_SdNodeToNodeConnectionSetupWidget(
            &C_SdNodeToNodeConnectionSetupWidget::m_OkClicked);
    connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
            this, &C_SdNodeToNodeConnectionSetupWidget::m_CancelClicked);
-   connect(this->mpc_Ui->pc_RadioButtonCreateNew, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled, this,
+   connect(this->mpc_Ui->pc_RadioButtonCreateNew, &stw::opensyde_gui_elements::C_OgeRabBase::toggled, this,
            &C_SdNodeToNodeConnectionSetupWidget::m_OnNewOrExistingChange);
    //lint -e{929}  Qt interface
    connect(this->mpc_Ui->pc_ComboBoxBusType, static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged),
@@ -94,7 +94,7 @@ C_SdNodeToNodeConnectionSetupWidget::C_SdNodeToNodeConnectionSetupWidget(
    connect(this->mpc_Ui->pc_ComboBoxExistingBus,
            static_cast<void (QComboBox::*)(int32_t)>(&QComboBox::currentIndexChanged), this,
            &C_SdNodeToNodeConnectionSetupWidget::m_OnExistingBusChange);
-   connect(this->mpc_Ui->pc_LineEditBusName, &stw::opensyde_gui_elements::C_OgeLeProperties::textChanged, this,
+   connect(this->mpc_Ui->pc_LineEditBusName, &stw::opensyde_gui_elements::C_OgeLeBase::textChanged, this,
            &C_SdNodeToNodeConnectionSetupWidget::m_OnBusNameChange);
 }
 

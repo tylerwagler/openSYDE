@@ -40,7 +40,7 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubNavigationHover::C_OgePubNavigationHover(QWidget * const opc_Parent) :
-   C_OgePubToolTipBase(opc_Parent)
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eNAVIGATION)
 {
    C_OgeWiUtil::h_ApplyStylesheetProperty(this, "Active", false);
 }

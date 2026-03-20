@@ -96,25 +96,25 @@ C_SyvUpPacWidget::C_SyvUpPacWidget(QWidget *const opc_Parent)
   this->mpc_Ui->pc_PushButtonCreatePackage->setEnabled(!q_ServiceModeActive);
 
   connect(this->mpc_Ui->pc_PushButtonScrollLeft,
-          &stw::opensyde_gui_elements::C_OgePubIconOnly::clicked, this,
+          &stw::opensyde_gui_elements::C_OgePubUnified::clicked, this,
           &C_SyvUpPacWidget::m_ButtonLeftClicked);
   connect(this->mpc_Ui->pc_PushButtonScrollRight,
-          &stw::opensyde_gui_elements::C_OgePubIconOnly::clicked, this,
+          &stw::opensyde_gui_elements::C_OgePubUnified::clicked, this,
           &C_SyvUpPacWidget::m_ButtonRightClicked);
   connect(this->mpc_Ui->pc_ListWidget, &C_SyvUpPacListWidget::SigListChanged,
           this, &C_SyvUpPacWidget::m_UpdateWidget);
 
   connect(this->mpc_Ui->pc_PushButtonClearAll,
-          &stw::opensyde_gui_elements::C_OgePubIconText::clicked, this,
+          &stw::opensyde_gui_elements::C_OgePubUnified::clicked, this,
           &C_SyvUpPacWidget::m_ButtonClearAll);
   connect(this->mpc_Ui->pc_PushButtonExport,
-          &stw::opensyde_gui_elements::C_OgePubIconText::clicked, this,
+          &stw::opensyde_gui_elements::C_OgePubUnified::clicked, this,
           &C_SyvUpPacWidget::m_ButtonExport);
   connect(this->mpc_Ui->pc_PushButtonImport,
-          &stw::opensyde_gui_elements::C_OgePubIconText::clicked, this,
+          &stw::opensyde_gui_elements::C_OgePubUnified::clicked, this,
           &C_SyvUpPacWidget::m_ButtonImport);
   connect(this->mpc_Ui->pc_PushButtonCreatePackage,
-          &stw::opensyde_gui_elements::C_OgePubIconText::clicked, this,
+          &stw::opensyde_gui_elements::C_OgePubUnified::clicked, this,
           &C_SyvUpPacWidget::m_ButtonCreatePackage);
 
   connect(this->mpc_Ui->pc_ListWidget, &C_SyvUpPacListWidget::SigStartCheck,

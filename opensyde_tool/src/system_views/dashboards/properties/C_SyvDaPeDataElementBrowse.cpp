@@ -158,7 +158,7 @@ C_SyvDaPeDataElementBrowse::C_SyvDaPeDataElementBrowse(C_OgePopUpDialog & orc_Pa
    connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SyvDaPeDataElementBrowse::m_OkClicked);
    connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
            &C_SyvDaPeDataElementBrowse::m_CancelClicked);
-   connect(this->mpc_Ui->pc_LineEditSearch, &C_OgeLeProperties::textChanged, this,
+   connect(this->mpc_Ui->pc_LineEditSearch, &C_OgeLeBase::textChanged, this,
            &C_SyvDaPeDataElementBrowse::m_OnSearch);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_ComboBoxType, static_cast<void (QComboBox::*)(

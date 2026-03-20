@@ -11,9 +11,8 @@
 #define C_OGEPUBUSECASENAV_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-
 #include "precomp_headers.hpp"
-#include "C_OgePubStandard.hpp"
+#include "C_OgePubUnified.hpp"
 #include <QWidget>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -27,17 +26,17 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubUseCaseNav :
-   public C_OgePubStandard
+    public C_OgePubUnified
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   explicit C_OgePubUseCaseNav(QWidget * const opc_Parent = NULL);
+    explicit C_OgePubUseCaseNav(QWidget * const opc_Parent = NULL);
 
-   bool q_LastButton;
+    bool q_LastButton;
 
 protected:
-   void paintEvent(QPaintEvent * const opc_Event) override;
+    void paintEvent(QPaintEvent * const opc_Event) override;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

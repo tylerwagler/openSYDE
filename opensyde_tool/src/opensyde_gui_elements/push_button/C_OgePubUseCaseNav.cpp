@@ -39,7 +39,7 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubUseCaseNav::C_OgePubUseCaseNav(QWidget * const opc_Parent) :
-   C_OgePubStandard(opc_Parent),
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eSTANDARD),
    q_LastButton(false)
 {
    this->setCheckable(true);

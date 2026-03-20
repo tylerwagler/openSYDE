@@ -174,7 +174,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLePropertiesName" name="pc_LineEditName">
+             <widget class="stw::opensyde_gui_elements::C_OgeLeBase" name="pc_LineEditName">
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -763,7 +763,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="7" column="4">
-          <widget class="stw::opensyde_gui_elements::C_OgeLeProperties" name="pc_LineEditUnit">
+          <widget class="stw::opensyde_gui_elements::C_OgeLeBase" name="pc_LineEditUnit">
            <property name="sizePolicy">
             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
              <horstretch>0</horstretch>
@@ -1299,7 +1299,7 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLePropertiesName</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLePropertiesName.hpp</header>
+   <header>C_OgeLeBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
@@ -1309,7 +1309,7 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeProperties</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLeProperties.hpp</header>
+   <header>C_OgeLeBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeSpxDoubleStyled</class>

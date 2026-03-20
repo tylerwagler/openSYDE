@@ -323,40 +323,109 @@
      return C_NO_ERR;
  }
 
- //----------------------------------------------------------------------------------------------------------------------
- /*! \brief   Load system definition file (legacy compatibility)
 
-    \see h_LoadFile
- */
- //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile(
-     C_OscSystemDefinition &orc_SystemDefinition,
-     const QString &orc_PathSystemDefinition,
-     const QString &orc_PathDeviceDefinitions,
-     const bool oq_UseDeviceDefinitions, uint16_t *const opu16_ReadFileVersion,
-     const QByteArray *const opc_NodesToLoad, const bool oq_SkipContent,
-     const QString *const opc_ExpectedNodeName,
-     QStringList *const opc_ErrorDetailsMissingDevices) {
-     // Ignore optional parameters not supported in new API
-     Q_UNUSED(opc_NodesToLoad);
-     Q_UNUSED(oq_SkipContent);
-     Q_UNUSED(opc_ExpectedNodeName);
-     Q_UNUSED(opc_ErrorDetailsMissingDevices);
 
-     return h_LoadFile(orc_SystemDefinition, orc_PathSystemDefinition,
-                       orc_PathDeviceDefinitions, oq_UseDeviceDefinitions,
-                       opu16_ReadFileVersion);
- }
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Split device type string into main and sub type
 
- //----------------------------------------------------------------------------------------------------------------------
- /*! \brief   Save system definition file (legacy compatibility)
+   \param[in]      orc_CompleteType   Complete device type string
+   \param[out]     orc_MainType       Main type (output)
+   \param[out]     orc_SubType        Sub type (output)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscSystemDefinitionFiler_New::h_SplitDeviceType(const QString &orc_CompleteType,
+                                                       QString &orc_MainType,
+                                                       QString &orc_SubType) {
+    const int32_t s32_Pos = orc_CompleteType.indexOf(C_OscNodeSquad::hc_SEPARATOR);
 
-    \see h_SaveFile
- */
- //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSystemDefinitionFiler_New::h_SaveSystemDefinitionFile(
-     const C_OscSystemDefinition &orc_SystemDefinition,
-     const QString &orc_Path,
-     QStringList *const opc_CreatedFiles) {
-     return h_SaveFile(orc_SystemDefinition, orc_Path, opc_CreatedFiles);
- }
+    if (s32_Pos != -1) {
+        orc_MainType = orc_CompleteType.left(s32_Pos);
+        orc_SubType = orc_CompleteType.mid(s32_Pos + C_OscNodeSquad::hc_SEPARATOR.length());
+    } else {
+        orc_MainType = "";
+        orc_SubType = orc_CompleteType;
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load nodes from XML parser (clipboard support)
+
+   \param[out]     orc_Nodes                Node list
+   \param[in]      orc_XmlParser            XML parser
+   \param[in]      orc_DeviceDefinitions    Device definitions
+   \param[in]      orc_BasePath             Base path
+   \param[in]      oq_UseDeviceDefinitions  Use device definitions
+   \param[in]      oq_UseFileInterface      Use file interface
+   \param[in]      opc_NodesToLoad          Nodes to load
+   \param[in]      oq_SkipContent           Skip content
+   \param[in]      opc_ExpectedNodeName     Expected node name
+   \param[out]     opc_ErrorDetailsMissingDevices  Error details
+
+   \return
+   C_NO_ERR   data read
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscSystemDefinitionFiler_New::h_LoadNodes(QList<C_OscNode> &orc_Nodes,
+                                                    C_OscXmlParserBase &orc_XmlParser,
+                                                    const C_OscDeviceManager &orc_DeviceDefinitions,
+                                                    const QString &orc_BasePath,
+                                                    const bool oq_UseDeviceDefinitions,
+                                                    const bool oq_UseFileInterface,
+                                                    const QByteArray *const opc_NodesToLoad,
+                                                    const bool oq_SkipContent,
+                                                    const QString *const opc_ExpectedNodeName,
+                                                    QStringList *const opc_ErrorDetailsMissingDevices) {
+    // Delegate to legacy filer for clipboard operations
+    return C_OscSystemDefinitionFiler::h_LoadNodes(orc_Nodes, orc_XmlParser,
+                                                    orc_DeviceDefinitions, orc_BasePath,
+                                                    oq_UseDeviceDefinitions, oq_UseFileInterface,
+                                                    opc_NodesToLoad, oq_SkipContent,
+                                                    opc_ExpectedNodeName, opc_ErrorDetailsMissingDevices);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load buses from XML parser (clipboard support)
+
+   \param[out]     orc_Buses      Bus list
+   \param[in]      orc_XmlParser  XML parser
+
+   \return
+   C_NO_ERR   data read
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscSystemDefinitionFiler_New::h_LoadBuses(QList<C_OscSystemBus> &orc_Buses,
+                                                    C_OscXmlParserBase &orc_XmlParser) {
+    // Delegate to legacy filer for clipboard operations
+    return C_OscSystemDefinitionFiler::h_LoadBuses(orc_Buses, orc_XmlParser);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save nodes to XML parser (clipboard support)
+
+   \param[in]      orc_Nodes          Node list
+   \param[in]      orc_XmlParser      XML parser
+   \param[in]      orc_BasePath       Base path
+   \param[out]     opc_CreatedFiles   Created files
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscSystemDefinitionFiler_New::h_SaveNodes(const QList<C_OscNode> &orc_Nodes,
+                                                    C_OscXmlParserBase &orc_XmlParser,
+                                                    const QString &orc_BasePath,
+                                                    QStringList *const opc_CreatedFiles) {
+    // Delegate to legacy filer for clipboard operations
+    C_OscSystemDefinitionFiler::h_SaveNodes(orc_Nodes, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
+    return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save buses to XML parser (clipboard support)
+
+   \param[in]      orc_Buses      Bus list
+   \param[in]      orc_XmlParser  XML parser
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscSystemDefinitionFiler_New::h_SaveBuses(const QList<C_OscSystemBus> &orc_Buses,
+                                                 C_OscXmlParserBase &orc_XmlParser) {
+    // Delegate to legacy filer for clipboard operations
+    C_OscSystemDefinitionFiler::h_SaveBuses(orc_Buses, orc_XmlParser);
+}

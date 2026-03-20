@@ -269,7 +269,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(
   const QString c_SysDefPath = orc_UsedTempPath + orc_SystemDefinitionFileName;
 
   QStringList c_AdditionalFiles;
-  int32_t s32_Return = C_OscSystemDefinitionFiler_New::h_SaveSystemDefinitionFile(
+  int32_t s32_Return = C_OscSystemDefinitionFiler_New::h_SaveFile(
       orc_SystemDefinition, c_SysDefPath, &c_AdditionalFiles);
   if (s32_Return == C_NO_ERR) {
     // Add files to pack

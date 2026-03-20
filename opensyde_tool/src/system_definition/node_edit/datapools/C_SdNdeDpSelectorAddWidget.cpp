@@ -75,11 +75,11 @@ C_SdNdeDpSelectorAddWidget::C_SdNdeDpSelectorAddWidget(stw::opensyde_gui_element
    connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdNdeDpSelectorAddWidget::m_CancelClicked);
 
-   connect(this->mpc_Ui->pc_RadioButtonStandAlone, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled, this,
+   connect(this->mpc_Ui->pc_RadioButtonStandAlone, &stw::opensyde_gui_elements::C_OgeRabBase::toggled, this,
            &C_SdNdeDpSelectorAddWidget::m_DisableSharedSection);
-   connect(this->mpc_Ui->pc_RadioButtonShared, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled, this,
+   connect(this->mpc_Ui->pc_RadioButtonShared, &stw::opensyde_gui_elements::C_OgeRabBase::toggled, this,
            &C_SdNdeDpSelectorAddWidget::m_EnableSharedSection);
-   connect(this->mpc_Ui->pc_RadiButtonRamViewImport, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled, this,
+   connect(this->mpc_Ui->pc_RadiButtonRamViewImport, &stw::opensyde_gui_elements::C_OgeRabBase::toggled, this,
            &C_SdNdeDpSelectorAddWidget::m_DisableSharedSection);
 
    //lint -e{929}  Qt interface

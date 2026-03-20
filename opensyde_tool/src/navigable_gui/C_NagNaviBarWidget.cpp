@@ -129,8 +129,8 @@ C_NagNaviBarWidget::C_NagNaviBarWidget(QWidget * const opc_Parent) :
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_PushButtonCanMonitor, "CanMonitorButton", true);
 
    //Handle scroll area styling issues
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ScrollArea, "C_OgeSaNaviBar", true);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ScrollAreaWidgetContents, "C_OgeSaNaviBar", true);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ScrollArea, "C_OgeSaBase", true);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ScrollAreaWidgetContents, "C_OgeSaBase", true);
 
    // connect the buttons signals
    connect(this->mpc_Ui->pc_BtnMain, &QPushButton::clicked, this, &C_NagNaviBarWidget::m_StartViewClicked);

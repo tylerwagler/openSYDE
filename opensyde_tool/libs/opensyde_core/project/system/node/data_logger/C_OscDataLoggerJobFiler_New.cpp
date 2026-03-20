@@ -15,19 +15,16 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
-
 #include "C_OscDataLoggerJobFiler_New.hpp"
-#include "stwerrors.hpp"
-#include "stwtypes.hpp"
+#include "C_OscFilerUtil.hpp"
+#include "C_OscSystemFilerUtil.hpp"
+#include <QFile>
+#include <QFileInfo>
+#include <QDomDocument>
 
-#include "C_OscLoggingHandler.hpp"
-
-/* -- Used Namespaces
- * -----------------------------------------------------------------------------------------------
- */
 using namespace stw::opensyde_core;
-
 using namespace stw::errors;
+using namespace stw::scl;
 
 /* -- Module Global Constants
  * ---------------------------------------------------------------------------------------
@@ -486,23 +483,177 @@ void C_OscDataLoggerJobFiler_New::h_SaveJob(const C_OscDataLoggerJob &orc_Job,
    C_NO_ERR   data read
    C_CONFIG   content of file is invalid
 */
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::mh_DetectAndLoad(C_OscDataLoggerJob &orc_Job,
-                                                      const QString &orc_Path) {
-   const QString c_Extension = orc_Path.right(4).toLower();
+  //----------------------------------------------------------------------------------------------------------------------
+  int32_t C_OscDataLoggerJobFiler_New::mh_DetectAndLoad(C_OscDataLoggerJob &orc_Job,
+                                                        const QString &orc_Path) {
+     const QString c_Extension = orc_Path.right(4).toLower();
 
-   if (c_Extension == ".bin") {
-      return h_LoadBinary(orc_Job, orc_Path);
-   } else if (c_Extension == ".json") {
-      return h_LoadJson(orc_Job, orc_Path);
-   } else if (c_Extension == ".xml") {
-      return h_LoadXml(orc_Job, orc_Path);
-   } else {
-      // Default to XML for backward compatibility
-      osc_write_log_warning("File I/O",
-                            QString("Unknown file extension \"%1\" for \"%2\". "
-                                    "Defaulting to XML format.")
-                            .arg(c_Extension, orc_Path));
-      return h_LoadXml(orc_Job, orc_Path);
-   }
-}
+     if (c_Extension == ".bin") {
+        return h_LoadBinary(orc_Job, orc_Path);
+     } else if (c_Extension == ".json") {
+        return h_LoadJson(orc_Job, orc_Path);
+     } else if (c_Extension == ".xml") {
+        return h_LoadXml(orc_Job, orc_Path);
+     } else {
+        // Default to XML for backward compatibility
+        osc_write_log_warning("File I/O",
+                              QString("Unknown file extension \"%1\" for \"%2\". "
+                                      "Defaulting to XML format.")
+                              .arg(c_Extension, orc_Path));
+        return h_LoadXml(orc_Job, orc_Path);
+     }
+  }
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /*! \brief   Load data logger jobs from XML parser (clipboard support)
+
+     \param[out]     orc_Config       Job configuration list
+     \param[in]      orc_XmlParser    XML parser
+
+     \return
+     C_NO_ERR   data read
+     C_CONFIG   content of file is invalid
+  */
+  //----------------------------------------------------------------------------------------------------------------------
+  int32_t C_OscDataLoggerJobFiler_New::h_LoadData(QList<C_OscDataLoggerJob> &orc_Config,
+                                                  C_OscXmlParserBase &orc_XmlParser) {
+     // Implementation copied from legacy filer
+     int32_t s32_Retval = C_NO_ERR;
+     uint16_t u16_Version;
+     
+     s32_Retval = C_OscSystemFilerUtil::h_CheckVersion(orc_XmlParser, 1U, "file-version",
+                                                        "Loading data loggers data");
+     if (s32_Retval == C_NO_ERR) {
+        if (orc_XmlParser.SelectNodeChild("data-loggers") == "data-loggers") {
+           uint32_t u32_JobCount = orc_XmlParser.GetNumChildren();
+           for (uint32_t u32_Job = 0U; u32_Job < u32_JobCount; u32_Job++) {
+              C_OscDataLoggerJob c_Job;
+              if (h_LoadJob(c_Job, orc_XmlParser) == C_NO_ERR) {
+                 orc_Config.append(c_Job);
+              }
+           }
+           orc_XmlParser.SelectNodeParent();
+        } else {
+           s32_Retval = C_CONFIG;
+        }
+     }
+     return s32_Retval;
+  }
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /*! \brief   Save data logger jobs to XML parser (clipboard support)
+
+     \param[in]      orc_Config       Job configuration list
+     \param[in]      orc_XmlParser    XML parser
+  */
+  //----------------------------------------------------------------------------------------------------------------------
+  void C_OscDataLoggerJobFiler_New::h_SaveData(const QList<C_OscDataLoggerJob> &orc_Config,
+                                               C_OscXmlParserBase &orc_XmlParser) {
+     // Implementation copied from legacy filer
+     Q_ASSERT(orc_XmlParser.CreateAndNodeChild("file-version") == "file-version");
+     orc_XmlParser.SetAttribute("version", "1");
+     orc_XmlParser.SelectNodeParent();
+     
+     Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("data-loggers") == "data-loggers");
+     for (QList<C_OscDataLoggerJob>::ConstIterator c_It = orc_Config.constBegin();
+          c_It != orc_Config.constEnd(); ++c_It) {
+        h_SaveJob(*c_It, orc_XmlParser);
+     }
+     orc_XmlParser.SelectNodeParent();
+  }
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /*! \brief   Load data element ID from XML parser
+
+     \param[out]     orc_Config       Data element ID
+     \param[in]      orc_XmlParser    XML parser
+
+     \return
+     C_NO_ERR   data read
+     C_CONFIG   content of file is invalid
+  */
+  //----------------------------------------------------------------------------------------------------------------------
+  int32_t C_OscDataLoggerJobFiler_New::h_LoadDataElementId(C_OscNodeDataPoolListElementId &orc_Config,
+                                                           C_OscXmlParserBase &orc_XmlParser) {
+     int32_t s32_Retval = C_NO_ERR;
+     
+     if (orc_XmlParser.SelectNodeChild("data-pool") == "data-pool") {
+        orc_Config.c_NodeName = orc_XmlParser.GetNodeContent();
+        orc_XmlParser.SelectNodeParent();
+     }
+     
+     if (orc_XmlParser.SelectNodeChild("data-pool-list") == "data-pool-list") {
+        orc_Config.c_ListName = orc_XmlParser.GetNodeContent();
+        orc_XmlParser.SelectNodeParent();
+     }
+     
+     if (orc_XmlParser.SelectNodeChild("data-pool-list-element") == "data-pool-list-element") {
+        orc_Config.c_ElementName = orc_XmlParser.GetNodeContent();
+        orc_XmlParser.SelectNodeParent();
+     }
+     
+     return s32_Retval;
+  }
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /*! \brief   Save data element ID to XML parser
+
+     \param[in]      orc_Config       Data element ID
+     \param[in]      orc_XmlParser    XML parser
+  */
+  //----------------------------------------------------------------------------------------------------------------------
+  void C_OscDataLoggerJobFiler_New::h_SaveDataElementId(
+      const C_OscNodeDataPoolListElementId &orc_Config, C_OscXmlParserBase &orc_XmlParser) {
+     Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("data-pool") == "data-pool");
+     orc_XmlParser.SetNodeContent(orc_Config.c_NodeName);
+     orc_XmlParser.SelectNodeParent();
+     
+     Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("data-pool-list") == "data-pool-list");
+     orc_XmlParser.SetNodeContent(orc_Config.c_ListName);
+     orc_XmlParser.SelectNodeParent();
+     
+     Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("data-pool-list-element") == "data-pool-list-element");
+     orc_XmlParser.SetNodeContent(orc_Config.c_ElementName);
+     orc_XmlParser.SelectNodeParent();
+  }
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /*! \brief   Load data element optional array ID from XML parser
+
+     \param[out]     orc_Config       Data element optional array ID
+     \param[in]      orc_XmlParser    XML parser
+
+     \return
+     C_NO_ERR   data read
+     C_CONFIG   content of file is invalid
+  */
+  //----------------------------------------------------------------------------------------------------------------------
+  int32_t C_OscDataLoggerJobFiler_New::h_LoadDataElementOptArrayId(
+      C_OscNodeDataPoolListElementOptArrayId &orc_Config, C_OscXmlParserBase &orc_XmlParser) {
+     int32_t s32_Retval = h_LoadDataElementId(orc_Config.c_Id, orc_XmlParser);
+     
+     if (s32_Retval == C_NO_ERR) {
+        if (orc_XmlParser.SelectNodeChild("array-id") == "array-id") {
+           orc_Config.c_ArrayId = static_cast<uint32_t>(orc_XmlParser.GetAttributeContent("index").toUInt());
+           orc_XmlParser.SelectNodeParent();
+        }
+     }
+     
+     return s32_Retval;
+  }
+
+  //----------------------------------------------------------------------------------------------------------------------
+  /*! \brief   Save data element optional array ID to XML parser
+
+     \param[in]      orc_Config       Data element optional array ID
+     \param[in]      orc_XmlParser    XML parser
+  */
+  //----------------------------------------------------------------------------------------------------------------------
+  void C_OscDataLoggerJobFiler_New::h_SaveDataElementOptArrayId(
+      const C_OscNodeDataPoolListElementOptArrayId &orc_Config, C_OscXmlParserBase &orc_XmlParser) {
+     h_SaveDataElementId(orc_Config.c_Id, orc_XmlParser);
+     
+     Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("array-id") == "array-id");
+     orc_XmlParser.SetAttribute("index", QString::number(orc_Config.c_ArrayId));
+     orc_XmlParser.SelectNodeParent();
+  }

@@ -95,7 +95,7 @@ C_CamMosDatabaseSelectionPopup::C_CamMosDatabaseSelectionPopup(
            &C_CamMosDatabaseSelectionPopup::m_OkClicked);
    connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_CamMosDatabaseSelectionPopup::m_CancelClicked);
-   connect(this->mpc_Ui->pc_LineEditSearch, &C_OgeLeProperties::textChanged, this,
+   connect(this->mpc_Ui->pc_LineEditSearch, &C_OgeLeBase::textChanged, this,
            &C_CamMosDatabaseSelectionPopup::m_OnSearch);
    connect(this->mpc_Ui->pc_TreeView, &C_CamMosDatabaseSelectionView::SigAccept, this,
            &C_CamMosDatabaseSelectionPopup::m_OkClicked);

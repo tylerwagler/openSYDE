@@ -44,7 +44,7 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubUseCase::C_OgePubUseCase(QWidget * const opc_Parent) :
-   C_OgePubStandard(opc_Parent)
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eSTANDARD)
 {
 }
 

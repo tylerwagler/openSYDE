@@ -280,10 +280,8 @@ C_OscComMessageLogger::AddOsySysDef(const QString &orc_PathSystemDefinition,
   if (c_FileExtension == ".syde_sysdef") {
     C_OscSystemDefinition c_SysDef;
     // Load without device definitions
-    // Optional parameters to skip contents of h_LoadSystemDefinitionFile are
-    // not used, because we are not in SYDEsup or SYDE Coder C context (#61996)
-    // and we want all system definition data here.
-    s32_Return = C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile(
+    // We want all system definition data here.
+    s32_Return = C_OscSystemDefinitionFiler_New::h_LoadFile(
         c_SysDef, orc_PathSystemDefinition, "", false);
     if (s32_Return == C_NO_ERR) {
       uint32_t u32_BusCounter;

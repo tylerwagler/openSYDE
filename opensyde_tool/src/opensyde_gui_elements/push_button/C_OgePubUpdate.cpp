@@ -43,7 +43,7 @@ using namespace stw::opensyde_gui;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubUpdate::C_OgePubUpdate(QWidget * const opc_Parent) :
-   C_OgePubStandard(opc_Parent)
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eSTANDARD)
 {
    this->setIconSize(QSize(16, 16));
 }

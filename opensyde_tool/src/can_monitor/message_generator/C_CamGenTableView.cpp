@@ -111,7 +111,7 @@ C_CamGenTableView::C_CamGenTableView(QWidget *const opc_Parent)
 
   // Buttons
   this->mpc_PushButtonScrollTop =
-      new C_OgePubIconOnly(this->verticalScrollBar());
+      new C_OgePubUnified(this->verticalScrollBar());
   // Size is necessary for correct drawing of the images
   this->mpc_PushButtonScrollTop->setGeometry(0, 0, 25, 27);
   this->mpc_PushButtonScrollTop->SetCustomIcons("://images/HeadingPart.svg", "",

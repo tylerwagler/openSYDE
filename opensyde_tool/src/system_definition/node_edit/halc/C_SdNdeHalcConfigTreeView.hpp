@@ -13,7 +13,7 @@
 #include "C_OgeTreeViewToolTipBase.hpp"
 #include "C_SdNdeHalcConfigTreeModel.hpp"
 #include "C_SdNdeHalcConfigTreeDelegate.hpp"
-#include "C_OgePubIconOnly.hpp"
+#include "C_OgePubUnified.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -42,7 +42,7 @@ public:
 private:
    stw::opensyde_gui_logic::C_SdNdeHalcConfigTreeDelegate mc_Delegate;
    stw::opensyde_gui_logic::C_SdNdeHalcConfigTreeModel mc_Model;
-   stw::opensyde_gui_elements::C_OgePubIconOnly * mpc_PushButtonScrollTop;
+   stw::opensyde_gui_elements::C_OgePubUnified * mpc_PushButtonScrollTop;
 
    void m_InitColumnWidths(void);
 

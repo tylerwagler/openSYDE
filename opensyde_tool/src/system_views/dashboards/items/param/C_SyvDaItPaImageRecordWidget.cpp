@@ -125,7 +125,7 @@ C_SyvDaItPaImageRecordWidget::C_SyvDaItPaImageRecordWidget(stw::opensyde_gui_ele
 
    connect(this->mpc_Ui->pc_CbConfirm, &C_OgeChxStyled::stateChanged,
            this, &C_SyvDaItPaImageRecordWidget::m_ConfirmCheckBoxChanged);
-   connect(this->mpc_Ui->pc_LineEditPath, &C_OgeLeFilePath::editingFinished,
+   connect(this->mpc_Ui->pc_LineEditPath, &C_OgeLeFilePathBase::editingFinished,
            this, &C_SyvDaItPaImageRecordWidget::m_FilePathChanged);
 
    connect(&this->mc_Timer, &QTimer::timeout, this, &C_SyvDaItPaImageRecordWidget::m_Timer);

@@ -69,7 +69,7 @@ void C_CamOgeWiSettingsBase::moveEvent(QMoveEvent * const opc_Event)
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_CamMosSectionPopup * C_CamOgeWiSettingsBase::mh_GetPopUp(const QPair<C_CamMosSectionPopup *,
-                                                                       C_CamOgePubSettingsAdd *> & orc_Pair)
+                                                                       C_OgePubBase *> & orc_Pair)
 {
    return orc_Pair.first;
 }
@@ -83,8 +83,8 @@ C_CamMosSectionPopup * C_CamOgeWiSettingsBase::mh_GetPopUp(const QPair<C_CamMosS
    Button
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_CamOgePubSettingsAdd * C_CamOgeWiSettingsBase::mh_GetButton(const QPair<C_CamMosSectionPopup *,
-                                                                          C_CamOgePubSettingsAdd *> & orc_Pair)
+C_OgePubBase * C_CamOgeWiSettingsBase::mh_GetButton(const QPair<C_CamMosSectionPopup *,
+                                                                          C_OgePubBase *> & orc_Pair)
 {
    return orc_Pair.second;
 }
@@ -96,7 +96,7 @@ C_CamOgePubSettingsAdd * C_CamOgeWiSettingsBase::mh_GetButton(const QPair<C_CamM
 void C_CamOgeWiSettingsBase::m_PrepareMove() const
 {
    for (QList<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
-                          opensyde_gui_elements::C_CamOgePubSettingsAdd *> >::const_iterator c_ItPair =
+                          opensyde_gui_elements::C_OgePubBase *> >::const_iterator c_ItPair =
            this->mc_Settings.cbegin();
         c_ItPair != this->mc_Settings.cend(); ++c_ItPair)
    {
@@ -118,11 +118,11 @@ void C_CamOgeWiSettingsBase::m_PrepareMove() const
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamOgeWiSettingsBase::m_InitSettingsSection(C_CamMosSectionPopup * const opc_PopUp,
-                                                   C_CamOgePubSettingsAdd * const opc_Button,
+                                                   C_OgePubBase * const opc_Button,
                                                    const QWidget * const opc_Parent, const QString & orc_Icon)
 {
    const QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
-               opensyde_gui_elements::C_CamOgePubSettingsAdd *> c_Pair(opc_PopUp, opc_Button);
+               opensyde_gui_elements::C_OgePubBase *> c_Pair(opc_PopUp, opc_Button);
 
    // set parents here
    // opc_Parent is a layout and would try to integrate the popup, so we better use its parent.
@@ -133,7 +133,7 @@ void C_CamOgeWiSettingsBase::m_InitSettingsSection(C_CamMosSectionPopup * const 
    this->mc_Settings.push_back(c_Pair);
 
    // connect buttons to section popups
-   connect(opc_Button, &C_CamOgePubSettingsAdd::toggled, this, &C_CamOgeWiSettingsBase::m_ShowAnyPopup);
+   connect(opc_Button, &C_OgePubBase::toggled, this, &C_CamOgeWiSettingsBase::m_ShowAnyPopup);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ void C_CamOgeWiSettingsBase::m_InitSettingsSection(C_CamMosSectionPopup * const 
    \param[in]      orc_Icon      Icon
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_CamOgeWiSettingsBase::mh_InitSettingsButton(C_CamOgePubSettingsAdd & orc_Button, const QString & orc_Icon)
+void C_CamOgeWiSettingsBase::mh_InitSettingsButton(C_OgePubBase & orc_Button, const QString & orc_Icon)
 {
    orc_Button.setIconSize(QSize(16, 16));
    orc_Button.setIcon(QIcon(orc_Icon));
@@ -164,7 +164,7 @@ void C_CamOgeWiSettingsBase::m_ShowAnyPopup(const bool oq_Checked)
    if (oq_Checked == true)
    {
       for (QList<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
-                             opensyde_gui_elements::C_CamOgePubSettingsAdd *> >::const_iterator c_ItPair =
+                             opensyde_gui_elements::C_OgePubBase *> >::const_iterator c_ItPair =
               this->mc_Settings.cbegin();
            c_ItPair != this->mc_Settings.cend(); ++c_ItPair)
       {
@@ -182,7 +182,7 @@ void C_CamOgeWiSettingsBase::m_ShowAnyPopup(const bool oq_Checked)
    else
    {
       for (QList<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
-                             opensyde_gui_elements::C_CamOgePubSettingsAdd *> >::const_iterator c_ItPair =
+                             opensyde_gui_elements::C_OgePubBase *> >::const_iterator c_ItPair =
               this->mc_Settings.cbegin();
            c_ItPair != this->mc_Settings.cend(); ++c_ItPair)
       {
@@ -202,7 +202,7 @@ void C_CamOgeWiSettingsBase::m_ShowAnyPopup(const bool oq_Checked)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamOgeWiSettingsBase::m_ShowPopup(C_CamMosSectionPopup * const opc_Popup,
-                                         const C_CamOgePubSettingsAdd * const opc_Button) const
+                                         const C_OgePubBase * const opc_Button) const
 {
    const QPoint c_Point = this->m_GetPopupMovePoint(opc_Button);
 
@@ -219,7 +219,7 @@ void C_CamOgeWiSettingsBase::m_ShowPopup(C_CamMosSectionPopup * const opc_Popup,
    Point for DoMove function on parent of splitter widget
 */
 //----------------------------------------------------------------------------------------------------------------------
-QPoint C_CamOgeWiSettingsBase::m_GetPopupMovePoint(const C_CamOgePubSettingsAdd * const opc_Button) const
+QPoint C_CamOgeWiSettingsBase::m_GetPopupMovePoint(const C_OgePubBase * const opc_Button) const
 {
    // Position of button in C_CamMosWidget widget
    const QPoint c_Settings = opc_Button->mapToParent(opc_Button->rect().topLeft());

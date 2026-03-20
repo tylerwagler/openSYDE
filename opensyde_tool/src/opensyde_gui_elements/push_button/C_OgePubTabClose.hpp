@@ -12,7 +12,7 @@
 #define C_OGEPUBTABCLOSE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_OgePubToolTipBase.hpp"
+#include "C_OgePubUnified.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -24,27 +24,27 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubTabClose :
-   public C_OgePubToolTipBase
+    public C_OgePubUnified
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   C_OgePubTabClose(QWidget * const opc_Parent = NULL);
-   void SetDarkMode(const bool oq_Active);
+    C_OgePubTabClose(QWidget * const opc_Parent = NULL);
+    void SetDarkMode(const bool oq_Active);
 
 protected:
-   bool event(QEvent * const opc_Event) override;
-   void mousePressEvent(QMouseEvent * const opc_Event) override;
-   void mouseReleaseEvent(QMouseEvent * const opc_Event) override;
+    bool event(QEvent * const opc_Event) override;
+    void mousePressEvent(QMouseEvent * const opc_Event) override;
+    void mouseReleaseEvent(QMouseEvent * const opc_Event) override;
 
 private:
-   QIcon mc_Default;
-   QIcon mc_Hovered;
-   QIcon mc_Clicked;
-   QIcon mc_DefaultDark;
-   QIcon mc_HoveredDark;
-   QIcon mc_ClickedDark;
-   bool mq_DarkMode;
+    QIcon mc_Default;
+    QIcon mc_Hovered;
+    QIcon mc_Clicked;
+    QIcon mc_DefaultDark;
+    QIcon mc_HoveredDark;
+    QIcon mc_ClickedDark;
+    bool mq_DarkMode;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

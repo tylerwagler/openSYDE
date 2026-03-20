@@ -1,8 +1,157 @@
 /* --------------------------------------------------------------------- */
+/* Base QComboBox styling */
 QComboBox
 {
 border-width:1px;
 border-style:solid;
+}
+
+QComboBox QAbstractItemView
+{
+outline:none;
+}
+
+QComboBox::down-arrow
+{
+border-image:url(://images/IconGroupBoxDownArrow.svg) 0 0 0 0 stretch stretch;
+}
+
+QComboBox::down-arrow:!enabled
+{
+border-image:url(:/images/GroupBoxDownArrowDisabled.png) 0 0 0 0 stretch stretch;
+}
+
+QComboBox::drop-down:button
+{
+border-width:0px;
+}
+
+/* Drop down menu */
+QComboBox QListView
+{
+border-width:1px;
+border-style:solid;
+}
+
+QComboBox
+{
+padding-right:0px;
+padding-left:6px;
+padding-bottom:5px;
+padding-top:4px;
+}
+
+/* --------------------------------------------------------------------- */
+/* Consolidated combobox variants using objectName */
+/* C_OgeCbxBase with objectName="comboBoxDark" (replaces C_CamOgeCbxDark) */
+QComboBox#comboBoxDark
+{
+padding-right:0px;
+padding-left:6px;
+padding-bottom:5px;
+padding-top:4px;
+}
+
+QComboBox#comboBoxDark QListView::item
+{
+padding:5px;
+}
+
+QComboBox#comboBoxDark::down-arrow
+{
+border-image:url(://images/IconArrowDown.svg);
+margin-bottom:1px;
+margin-top:1px;
+margin-left:-4px;
+margin-right:6px;
+}
+
+QComboBox#comboBoxDark::down-arrow:!enabled
+{
+border-image:url(://images/IconArrowDownDisabled.svg);
+margin-bottom:1px;
+margin-top:1px;
+margin-left:-4px;
+margin-right:6px;
+}
+
+/* --------------------------------------------------------------------- */
+/* C_OgeCbxBase with objectName="comboBoxWhite" (replaces C_CamOgeCbxWhite) */
+QComboBox#comboBoxWhite::down-arrow
+{
+border-image:url(://images/IconArrowDownBright.svg) 0 0 0 0 stretch stretch;
+}
+
+QComboBox#comboBoxWhite QAbstractItemView::item
+{
+padding-top:5px;
+padding-bottom:5px;
+}
+
+/*drop down button style*/
+QComboBox#comboBoxWhite::drop-down
+{
+width:28px;
+}
+
+/* --------------------------------------------------------------------- */
+/* C_OgeCbxBase with objectName="comboBoxTable" (replaces C_CamOgeCbxTable) */
+QComboBox#comboBoxTable
+{
+padding-right:0px;
+padding-left:6px;
+padding-bottom:0px;
+padding-top:0px;
+}
+
+QComboBox#comboBoxTable QAbstractItemView::item
+{
+padding-top:5px;
+padding-bottom:5px;
+}
+
+QComboBox#comboBoxTable QAbstractItemView
+{
+margin-left:0px;
+margin-right:0px;
+}
+
+/* --------------------------------------------------------------------- */
+/* C_OgeCbxBase with objectName="comboBoxTableSmall" (replaces C_CamOgeCbxTableSmall) */
+QComboBox#comboBoxTableSmall
+{
+padding-right:0px;
+padding-left:8px;
+padding-bottom:0px;
+padding-top:0px;
+}
+
+QComboBox#comboBoxTableSmall QAbstractItemView::item
+{
+padding-top:1px;
+padding-bottom:1px;
+}
+
+QComboBox#comboBoxTableSmall QAbstractItemView
+{
+margin-left:0px;
+margin-right:0px;
+}
+
+/* --------------------------------------------------------------------- */
+/* Legacy support for C_OgeCbxText (not being consolidated in this phase) */
+stw--opensyde_gui_elements--C_OgeCbxText
+{
+padding-right:0px;
+padding-left:8px;
+padding-bottom:0px;
+padding-top:0px;
+}
+
+stw--opensyde_gui_elements--C_OgeCbxText QAbstractItemView::item
+{
+padding-top:2px;
+padding-bottom:2px;
 }
 
 QComboBox QAbstractItemView

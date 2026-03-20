@@ -9,7 +9,7 @@
 #define C_OGEPUBGENERICTEXTWITHBACKGROUND_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_OgePubToolTipBase.hpp"
+#include "C_OgePubUnified.hpp"
 
 #include "stwtypes.hpp"
 
@@ -23,7 +23,7 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubGenericTextWithBackground :
-   public C_OgePubToolTipBase
+   public C_OgePubUnified
 {
    Q_OBJECT
 

@@ -49,7 +49,7 @@ C_SdNdeHalcConfigTreeView::C_SdNdeHalcConfigTreeView(QWidget * const opc_Parent)
    this->setSelectionMode(QAbstractItemView::NoSelection);
 
    //Hack for scroll bar below header
-   this->mpc_PushButtonScrollTop = new C_OgePubIconOnly(this->verticalScrollBar());
+   this->mpc_PushButtonScrollTop = new C_OgePubUnified(this->verticalScrollBar());
    this->mpc_PushButtonScrollTop->setGeometry(0, 0, 25, 27); // necessary for correct drawing of the images
    this->mpc_PushButtonScrollTop->SetCustomIcons("://images/system_definition/NodeEdit/halc/HeadingPart.svg", "", "",
                                                  "");

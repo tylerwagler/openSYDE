@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_OgeLeToolTipBase.hpp"
+#include <functional>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -29,15 +30,21 @@ class C_OgeLeFilePathBase :
    Q_OBJECT
 
 public:
+   using VariableResolver = std::function<QString(const QString &)>;
+
    explicit C_OgeLeFilePathBase(QWidget * const opc_Parent = NULL);
+   ~C_OgeLeFilePathBase(void) override;
 
    void SetPath(const QString & orc_New, const QString & orc_RelativeTo = "");
    void SetDragAndDropActiveForFolder(const bool oq_Active);
    void SetDragAndDropActiveForFile(const QString & orc_FileExtension);
-   void SetDragAndDropActiveForFile(const bool oq_Active, const QStringList * const opc_FileExtensions);
+   void SetDragAndDropActiveForFile(const bool oq_Active,
+                                    const QStringList * const opc_FileExtensions);
    QString GetPath(void) const;
    void InsertVariable(const QString & orc_Variable);
    void UpdateText(void);
+
+   void SetVariableResolver(const VariableResolver & orc_Resolver);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
@@ -54,7 +61,7 @@ protected:
    void resizeEvent(QResizeEvent * const opc_Event) override;
    void dragEnterEvent(QDragEnterEvent * const opc_Event) override;
    void dropEvent(QDropEvent * const opc_Event) override;
-   virtual QString m_ResolveVariables(const QString & orc_Path);
+   QString m_ResolveVariables(const QString & orc_Path);
 
 private:
    QString mc_Path;
@@ -62,6 +69,7 @@ private:
    int32_t ms32_LastKnownCursorPos;
    bool mq_DragAndDropFolderActive;
    QStringList mc_DragAndDropFileExtensions;
+   VariableResolver mc_VariableResolver;
 
    void m_UpdateMinimizing(void);
 };

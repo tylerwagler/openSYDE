@@ -14,7 +14,7 @@
 
 #include "C_CamTblDelegate.hpp"
 #include "C_CamOgeLeTableEdit.hpp"
-#include "C_CamOgeCbxTableSmall.hpp"
+#include "C_OgeCbxBase.hpp"
 #include "C_CamOgeWiSpinBoxGroupTable.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -55,7 +55,9 @@ C_CamTblDelegate::C_CamTblDelegate(QObject * const opc_Parent) :
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeCbxTableBase * C_CamTblDelegate::m_CreateComboBox(QWidget * const opc_Parent) const
 {
-   return new C_CamOgeCbxTableSmall(opc_Parent);
+   C_OgeCbxTableBase * const pc_Combobox = new C_OgeCbxTableBase(opc_Parent);
+   pc_Combobox->setObjectName("comboBoxTableSmall");
+   return pc_Combobox;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -40,7 +40,7 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubOptions::C_OgePubOptions(QWidget * const opc_Parent) :
-   C_OgePubToolTipBase(opc_Parent)
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eSTANDARD)
 {
 }
 

@@ -39,7 +39,7 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubTabClose::C_OgePubTabClose(QWidget * const opc_Parent) :
-   C_OgePubToolTipBase(opc_Parent),
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eTAB_CLOSE),
    mc_Default("://images/system_views/IconTabClose.svg"),
    mc_Hovered("://images/system_views/IconTabCloseHover.svg"),
    mc_Clicked("://images/system_views/IconTabCloseClicked.svg"),
@@ -109,7 +109,7 @@ bool C_OgePubTabClose::event(QEvent * const opc_Event)
          this->setIcon(this->mc_Default);
       }
    }
-   return C_OgePubToolTipBase::event(opc_Event);
+   return C_OgePubUnified::event(opc_Event);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

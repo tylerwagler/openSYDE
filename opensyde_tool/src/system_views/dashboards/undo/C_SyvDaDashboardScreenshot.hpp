@@ -25,7 +25,7 @@
 #include <QDesktopServices>
 
 #include "stwtypes.hpp"
-#include "C_OgePubIconText.hpp"
+#include "C_OgePubUnified.hpp"
 #include "C_OgePubIconEvents.hpp"
 #include "C_UsHandler.hpp"
 

@@ -40,7 +40,7 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubSvgIconOnly::C_OgePubSvgIconOnly(QWidget * const opc_Parent) :
-   C_OgePubToolTipBase(opc_Parent),
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eSVG_ICON),
    mq_Hovered(false),
    mq_Pressed(false),
    mpc_SvgRendererEnabled(NULL),
@@ -231,7 +231,7 @@ void C_OgePubSvgIconOnly::paintEvent(QPaintEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 bool C_OgePubSvgIconOnly::event(QEvent * const opc_Event)
 {
-   const bool q_Retval = C_OgePubToolTipBase::event(opc_Event);
+   const bool q_Retval = C_OgePubUnified::event(opc_Event);
 
    if (opc_Event->type() == QEvent::HoverLeave)
    {

@@ -183,7 +183,7 @@ C_SyvUpPacNodeWidget::C_SyvUpPacNodeWidget(const uint32_t ou32_ViewIndex,
   this->mpc_Ui->pc_FrameSepTop->setVisible(false);
 
   connect(this->mpc_Ui->pc_PbAddSecurityPackage,
-          &stw::opensyde_gui_elements::C_OgePubIconOnly::clicked, this,
+          &stw::opensyde_gui_elements::C_OgePubUnified::clicked, this,
           &C_SyvUpPacNodeWidget::AddSecurityCertificatePackage);
 }
 

@@ -112,7 +112,7 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
            this, &C_CamMosFilterPopup::m_OnRowChanged);
    connect(this->mpc_Ui->pc_TableView, &C_CamMosFilterTableView::SigDeleteKeyPressed,
            this, &C_CamMosFilterPopup::m_OnDeleteKeyPressed);
-   connect(this->mpc_Ui->pc_RabPass, &C_OgeRabProperties::toggled, this, &C_CamMosFilterPopup::m_OnRadioButtonToggle);
+   connect(this->mpc_Ui->pc_RabPass, &C_OgeRabBase::toggled, this, &C_CamMosFilterPopup::m_OnRadioButtonToggle);
    connect(this->mpc_Ui->pc_LeCanIdStart, &C_CamOgeLeIdPopUp::editingFinished, this,
            &C_CamMosFilterPopup::m_OnStartIdEdited);
    connect(this->mpc_Ui->pc_LeCanIdEnd, &C_CamOgeLeIdPopUp::editingFinished, this,

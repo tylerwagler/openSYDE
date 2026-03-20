@@ -135,7 +135,7 @@ C_SdNdeDpListHeaderWidget::C_SdNdeDpListHeaderWidget(QWidget * const opc_Parent,
                                                        "://images/system_definition/NodeEdit/lists/FullscreenExitDisabled.svg");
 
    this->mpc_Ui->pc_PushButtonCollapse->hide();
-   connect(this->mpc_Ui->pc_PushButtonCollapse, &C_OgePubIconOnly::clicked, this, &C_SdNdeDpListHeaderWidget::m_OnOk);
+   connect(this->mpc_Ui->pc_PushButtonCollapse, &C_OgePubUnified::clicked, this, &C_SdNdeDpListHeaderWidget::m_OnOk);
 
    //signals & slots
    connect(this->mpc_Ui->pc_PushButtonExpand, &QPushButton::toggled, this,
@@ -160,9 +160,9 @@ C_SdNdeDpListHeaderWidget::C_SdNdeDpListHeaderWidget(QWidget * const opc_Parent,
            &C_SdNdeDpListHeaderWidget::m_HandleFocus);
    connect(this->mpc_Ui->pc_SpinBoxSize, &stw::opensyde_gui_elements::C_OgeSpxEditProperties::SigFocus, this,
            &C_SdNdeDpListHeaderWidget::m_HandleFocus);
-   connect(this->mpc_Ui->pc_PushButtonExpand, &stw::opensyde_gui_elements::C_OgePubIconOnly::pressed, this,
+   connect(this->mpc_Ui->pc_PushButtonExpand, &stw::opensyde_gui_elements::C_OgePubUnified::pressed, this,
            &C_SdNdeDpListHeaderWidget::m_HandleFocus);
-   connect(this->mpc_Ui->pc_PushButtonFullScreen, &stw::opensyde_gui_elements::C_OgePubIconOnly::pressed, this,
+   connect(this->mpc_Ui->pc_PushButtonFullScreen, &stw::opensyde_gui_elements::C_OgePubUnified::pressed, this,
            &C_SdNdeDpListHeaderWidget::m_HandleFocus);
    connect(this->mpc_Ui->pc_PushButtonComment, &C_OgePubSvgIconOnly::pressed,
            this, &C_SdNdeDpListHeaderWidget::m_HandleFocus);

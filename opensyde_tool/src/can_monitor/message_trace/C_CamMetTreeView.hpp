@@ -26,7 +26,7 @@
 #include "C_CamMetTreeModel.hpp"
 #include "C_CamMetTreeDelegate.hpp"
 #include "C_CamMetTreeGuiBuffer.hpp"
-#include "C_OgePubIconOnly.hpp"
+#include "C_OgePubUnified.hpp"
 #include "C_SyvComMessageMonitor.hpp"
 #include "C_CamMetTreeLoggerData.hpp"
 #include "C_OgeTreeViewToolTipBase.hpp"
@@ -95,8 +95,8 @@ private:
    stw::opensyde_gui_logic::C_CamMetTreeModel mc_Model;
    stw::opensyde_gui_logic::C_CamMetTreeDelegate mc_Delegate;
    stw::opensyde_gui_logic::C_CamMetTreeGuiBuffer mc_GuiBuffer;
-   stw::opensyde_gui_elements::C_OgePubIconOnly * mpc_PushButtonScrollTop;
-   stw::opensyde_gui_elements::C_OgePubIconOnly * mpc_PushButtonScrollBottom;
+   stw::opensyde_gui_elements::C_OgePubUnified * mpc_PushButtonScrollTop;
+   stw::opensyde_gui_elements::C_OgePubUnified * mpc_PushButtonScrollBottom;
    stw::opensyde_gui_elements::C_OgeContextMenu * mpc_ContextMenu;
    QAction * mpc_ActionCopy;
    QAction * mpc_ActionExpandAll;

@@ -763,7 +763,7 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLeProperties" name="pc_LineEditDataElement">
+              <widget class="stw::opensyde_gui_elements::C_OgeLeBase" name="pc_LineEditDataElement">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -900,7 +900,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLeProperties" name="pc_LineEditDataElementDisplayName">
+                <widget class="stw::opensyde_gui_elements::C_OgeLeBase" name="pc_LineEditDataElementDisplayName">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -1303,7 +1303,7 @@
              </widget>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLeProperties" name="pc_LineEditUnit">
+             <widget class="stw::opensyde_gui_elements::C_OgeLeBase" name="pc_LineEditUnit">
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1449,7 +1449,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLeProperties" name="pc_LineEditFormatterString">
+                <widget class="stw::opensyde_gui_elements::C_OgeLeBase" name="pc_LineEditFormatterString">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -1914,7 +1914,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeProperties</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLeProperties.hpp</header>
+   <header>C_OgeLeBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeChxTristateStyled</class>

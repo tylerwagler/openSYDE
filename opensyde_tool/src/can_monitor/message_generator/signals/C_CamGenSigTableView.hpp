@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QList>
 #include <QSortFilterProxyModel>
-#include "C_OgePubIconOnly.hpp"
+#include "C_OgePubUnified.hpp"
 #include "C_TblViewToolTipBase.hpp"
 #include "C_CamGenSigTableModel.hpp"
 #include "C_CamGenSigTableDelegate.hpp"
@@ -64,7 +64,7 @@ private:
    C_CamGenSigTableDelegate mc_Delegate;
    QSortFilterProxyModel mc_SortProxyModel;
    stw::opensyde_gui_logic::C_CamGenSigTableModel mc_Model;
-   stw::opensyde_gui_elements::C_OgePubIconOnly * mpc_PushButtonScrollTop;
+   stw::opensyde_gui_elements::C_OgePubUnified * mpc_PushButtonScrollTop;
 
    void m_RepositionButtons(void);
    void m_SetPersistentEditorWidgets(void);

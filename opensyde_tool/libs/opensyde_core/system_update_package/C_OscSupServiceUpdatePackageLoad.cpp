@@ -275,10 +275,8 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(
           const QString c_SysDefPath = c_TargetUnzipPath + mhc_SUP_SYSDEF;
           const QString c_DevIniPath = c_TargetUnzipPath + mhc_INI_DEV;
 
-          s32_Return = C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile(
-              orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, NULL,
-              &orc_ActiveNodes,
-              true); // skip content
+          s32_Return = C_OscSystemDefinitionFiler_New::h_LoadFile(
+              orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, NULL);
           if (s32_Return == C_NO_ERR) {
             s32_Return = mh_UnpackAndLoadNodes(
                 orc_SystemDefinition, c_PackageFiles, c_TargetUnzipPath,

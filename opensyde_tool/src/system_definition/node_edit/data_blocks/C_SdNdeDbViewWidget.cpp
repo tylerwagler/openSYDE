@@ -70,7 +70,7 @@ C_SdNdeDbViewWidget::C_SdNdeDbViewWidget(QWidget * const opc_Parent) :
            &C_SdNdeDbViewWidget::SigErrorChange);
    connect(this->mpc_Ui->pc_ListWidget, &C_SdNdeDbListWidget::SigAppDisplay, this,
            &C_SdNdeDbViewWidget::m_OnAppDisplay);
-   connect(this->mpc_Ui->pc_PushButtonAdd, &stw::opensyde_gui_elements::C_OgePubIconOnly::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonAdd, &stw::opensyde_gui_elements::C_OgePubUnified::clicked, this,
            &C_SdNdeDbViewWidget::AddApp);
    connect(this->mpc_Ui->pc_ListWidget, &C_SdNdeDbListWidget::SigOwnedDataPoolsChanged, this,
            &C_SdNdeDbViewWidget::SigOwnedDataPoolsChanged);

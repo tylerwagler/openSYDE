@@ -20,6 +20,9 @@
 using namespace stw::opensyde_core;
 using namespace stw::errors;
 
+// Define file name constant
+const QString C_OscXceManifestFiler_New::hc_FILE_NAME = "manifest.syde_pkg";
+
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscXceManifestFiler_New::h_LoadXceManifestFile(C_OscXceManifest &orc_Manifest,
                                                          const QString &orc_FilePath,

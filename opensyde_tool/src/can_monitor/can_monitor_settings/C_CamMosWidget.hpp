@@ -16,7 +16,7 @@
 #include "C_CamOgeWiSettingsBase.hpp"
 #include "C_CamProFilterData.hpp"
 #include "C_CamMosSectionPopup.hpp"
-#include "C_CamOgePubSettingsAdd.hpp"
+#include "C_OgePubBase.hpp"
 #include "C_UsHandler.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

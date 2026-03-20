@@ -11,7 +11,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
-#include "C_OgePubIconText.hpp"
+#include "C_OgePubUnified.hpp"
 #include "stwtypes.hpp"
 #include "C_Uti.hpp"
 #include <QMouseEvent>
@@ -26,7 +26,7 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubIconEvents :
-   public C_OgePubIconText
+   public C_OgePubUnified
 {
    Q_OBJECT
 

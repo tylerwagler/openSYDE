@@ -12,7 +12,7 @@
 #define C_OGEPUBOPTIONS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_OgePubToolTipBase.hpp"
+#include "C_OgePubUnified.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -24,19 +24,19 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubOptions :
-   public C_OgePubToolTipBase
+    public C_OgePubUnified
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   C_OgePubOptions(QWidget * const opc_Parent = NULL);
-   void SetCustomIcon(const QString & orc_IconPathEnabled, const QString & orc_IconPathDisabled);
+    C_OgePubOptions(QWidget * const opc_Parent = NULL);
+    void SetCustomIcon(const QString & orc_IconPathEnabled, const QString & orc_IconPathDisabled);
 
 protected:
-   void paintEvent(QPaintEvent * const opc_Event) override;
+    void paintEvent(QPaintEvent * const opc_Event) override;
 
-   QIcon mc_IconEnabled;
-   QIcon mc_IconDisabled;
+    QIcon mc_IconEnabled;
+    QIcon mc_IconDisabled;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

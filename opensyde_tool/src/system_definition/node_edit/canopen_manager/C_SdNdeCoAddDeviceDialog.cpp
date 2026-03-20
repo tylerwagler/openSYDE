@@ -111,7 +111,7 @@ C_SdNdeCoAddDeviceDialog::C_SdNdeCoAddDeviceDialog(stw::opensyde_gui_elements::C
    connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_SdNdeCoAddDeviceDialog::m_CancelClicked);
    connect(this->mpc_Ui->pc_PushButtonEDSPath, &QPushButton::clicked, this,
            &C_SdNdeCoAddDeviceDialog::m_EdsPathButtonClicked);
-   connect(this->mpc_Ui->pc_LineEditEDSPath, &C_OgeLeFilePath::editingFinished,
+   connect(this->mpc_Ui->pc_LineEditEDSPath, &C_OgeLeFilePathBase::editingFinished,
            this, &C_SdNdeCoAddDeviceDialog::m_OnLoadEds);
 }
 

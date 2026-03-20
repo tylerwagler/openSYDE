@@ -101,9 +101,9 @@ C_SdNdeDbAddNewProject::C_SdNdeDbAddNewProject(const uint32_t ou32_NodeIndex,
            &C_SdNdeDbAddNewProject::m_TspButtonClicked);
    connect(this->mpc_Ui->pc_PushButtonCreateIn, &QPushButton::clicked, this,
            &C_SdNdeDbAddNewProject::m_CreateInButtonClicked);
-   connect(this->mpc_Ui->pc_LineEditTSP, &C_OgeLeFilePath::editingFinished,
+   connect(this->mpc_Ui->pc_LineEditTSP, &C_OgeLeFilePathBase::editingFinished,
            this, &C_SdNdeDbAddNewProject::m_OnLoadTsp);
-   connect(this->mpc_Ui->pc_LineEditCreateIn, &C_OgeLeFilePath::SigPathDropped,
+   connect(this->mpc_Ui->pc_LineEditCreateIn, &C_OgeLeFilePathBase::SigPathDropped,
            this, &C_SdNdeDbAddNewProject::m_OnDroppedCreatinPath);
 }
 

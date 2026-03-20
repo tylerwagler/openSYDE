@@ -74,7 +74,7 @@ const QStringList C_UtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
    "stw--opensyde_gui--C_SdBueMlvGraphicsView",
    "stw--opensyde_gui_elements--C_OgeDarkScrollArea",
    "stw--opensyde_gui_logic--C_PopFileTableView",
-   "stw--opensyde_gui_elements--C_OgeSaNaviBar",
+   "stw--opensyde_gui_elements--C_OgeSaBase",
    "stw--opensyde_gui--C_SdNdeDpSelectorAddListWidget",
    "stw--opensyde_gui--C_SdNdeDalLogJobDataSelectionTableView",
    "stw--opensyde_gui--C_SdNdeDalLogJobsListView"
@@ -238,7 +238,7 @@ const QList<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_
 const QStringList C_UtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_MAIN_NAVI(
 {
    "stw--opensyde_gui_logic--C_PopFileTableView QScrollBar",
-   "stw--opensyde_gui_elements--C_OgeSaNaviBar QScrollBar"
+   "stw--opensyde_gui_elements--C_OgeSaBase QScrollBar"
 }
    );
 const QList<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_MAIN_NAVI(

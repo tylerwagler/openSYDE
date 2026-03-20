@@ -53,7 +53,16 @@ C_OgeLeFilePathBase::C_OgeLeFilePathBase(QWidget * const opc_Parent) :
    mc_Path(""),
    mc_RelativeTo(""),
    ms32_LastKnownCursorPos(-1),
-   mq_DragAndDropFolderActive(false)
+   mq_DragAndDropFolderActive(false),
+   mc_VariableResolver(nullptr)
+{
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Default destructor
+*/
+//----------------------------------------------------------------------------------------------------------------------
+C_OgeLeFilePathBase::~C_OgeLeFilePathBase(void)
 {
 }
 
@@ -385,7 +394,21 @@ void C_OgeLeFilePathBase::dropEvent(QDropEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 QString C_OgeLeFilePathBase::m_ResolveVariables(const QString & orc_Path)
 {
+   if (this->mc_VariableResolver)
+   {
+      return this->mc_VariableResolver(orc_Path);
+   }
    return orc_Path;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set custom variable resolver function
+   \param[in]  orc_Resolver  Function to resolve variables
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OgeLeFilePathBase::SetVariableResolver(const VariableResolver & orc_Resolver)
+{
+   this->mc_VariableResolver = orc_Resolver;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

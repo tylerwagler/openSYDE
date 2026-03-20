@@ -158,13 +158,13 @@ C_OgeFraStyled * C_SebToolboxUtil::h_AddNewHeading(const QString & orc_Name, QVB
    Pointer to svg icon button (add node and clear-all-nodes)
 */
 //----------------------------------------------------------------------------------------------------------------------
-QList<C_OgePubIconOnly *> C_SebToolboxUtil::h_AddNewUserHeading(const QString & orc_Name,
+QList<C_OgePubUnified *> C_SebToolboxUtil::h_AddNewUserHeading(const QString & orc_Name,
                                                                       QVBoxLayout * const opc_Layout,
                                                                       QWidget * const opc_Parent)
 {
-   QList<C_OgePubIconOnly *> c_Icons;
-   C_OgePubIconOnly * pc_IconButton = NULL;
-   C_OgePubIconOnly * pc_ClearAllUserNodesButton = NULL;
+   QList<C_OgePubUnified *> c_Icons;
+   C_OgePubUnified * pc_IconButton = NULL;
+   C_OgePubUnified * pc_ClearAllUserNodesButton = NULL;
 
    if (opc_Layout != NULL)
    {
@@ -174,8 +174,8 @@ QList<C_OgePubIconOnly *> C_SebToolboxUtil::h_AddNewUserHeading(const QString & 
       C_OgeFraStyled * const pc_FrameSeparator = new C_OgeFraStyled("Separator", opc_Parent);
       QVBoxLayout * const pc_FrameLayout = new QVBoxLayout();
       QHBoxLayout * const pc_HorizontalLayout = new QHBoxLayout();
-      pc_IconButton = new C_OgePubIconOnly(opc_Parent);
-      pc_ClearAllUserNodesButton = new C_OgePubIconOnly(opc_Parent);
+      pc_IconButton = new C_OgePubUnified(opc_Parent, C_OgePubUnified::eICON_ONLY);
+      pc_ClearAllUserNodesButton = new C_OgePubUnified(opc_Parent, C_OgePubUnified::eICON_ONLY);
 
       int32_t s32_Index;
 

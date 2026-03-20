@@ -80,6 +80,10 @@ C_CamMosLoggingWidget::C_CamMosLoggingWidget(QWidget *const opc_Parent)
       mq_Online(false) {
   this->mpc_Ui->setupUi(this);
 
+  // Set variable resolver for path
+  this->mpc_Ui->pc_LeFolder->SetVariableResolver(
+      [](const QString & orc_Path) { return C_CamUti::h_ResolvePlaceholderVariables(orc_Path); });
+
   // Activate drag and drop for path line edit
   this->mpc_Ui->pc_LeFolder->SetDragAndDropActiveForFolder(true);
 
@@ -144,9 +148,9 @@ C_CamMosLoggingWidget::C_CamMosLoggingWidget(QWidget *const opc_Parent)
   connect(C_CamProHandler::h_GetInstance(),
           &C_CamProHandler::SigNewConfiguration, this,
           &C_CamMosLoggingWidget::m_LoadConfig);
-  connect(this->mpc_Ui->pc_LeFolder, &C_CamOgeLeFilePath::editingFinished, this,
+  connect(this->mpc_Ui->pc_LeFolder, &C_OgeLeFilePathBase::editingFinished, this,
           &C_CamMosLoggingWidget::m_OnFolderEdited);
-  connect(this->mpc_Ui->pc_LeFolder, &C_CamOgeLeFilePath::SigPathDropped, this,
+  connect(this->mpc_Ui->pc_LeFolder, &C_OgeLeFilePathBase::SigPathDropped, this,
           &C_CamMosLoggingWidget::m_OnDroppedPath);
   connect(this->mpc_Ui->pc_LeFile, &C_OgeLeStyled::editingFinished, this,
           &C_CamMosLoggingWidget::m_OnFileNameEdited);
@@ -158,7 +162,7 @@ C_CamMosLoggingWidget::C_CamMosLoggingWidget(QWidget *const opc_Parent)
           static_cast<void (QComboBox::*)(int32_t)>(
               &QComboBox::currentIndexChanged),
           this, &C_CamMosLoggingWidget::m_OnFormatSelected);
-  connect(this->mpc_Ui->pc_PubBrowse, &C_CamOgePubDarkBrowse::clicked, this,
+  connect(this->mpc_Ui->pc_PubBrowse, &C_OgePubBase::clicked, this,
           &C_CamMosLoggingWidget::m_OnBrowse);
   connect(this->mpc_Ui->pc_PubVariables,
           &C_CamOgePubPathVariables::SigVariableSelected, this,

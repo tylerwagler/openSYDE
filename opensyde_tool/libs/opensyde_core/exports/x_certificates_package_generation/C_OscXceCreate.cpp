@@ -161,7 +161,7 @@ int32_t C_OscXceCreate::h_CreatePackage(
         mh_CreateManifest(c_UpdatePackageParameters);
     const QString c_ManifestPath =
         c_PackagePathTmp + C_OscXceManifestFiler_New::hc_FILE_NAME;
-    s32_Return = C_OscXceManifestFiler_New::h_SaveFile(c_Manifest, c_ManifestPath);
+    s32_Return = C_OscXceManifestFiler_New::h_SaveXceManifestFile(c_Manifest, c_ManifestPath, c_PackagePathTmp);
     if (s32_Return != C_NO_ERR) {
       // very strange! normally the precondition check should
       // guarantee a correct behavior of h_SaveFile

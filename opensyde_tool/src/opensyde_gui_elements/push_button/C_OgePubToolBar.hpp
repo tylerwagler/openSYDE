@@ -10,9 +10,8 @@
 #define C_OGEPUBTOOLBAR_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-
 #include "precomp_headers.hpp"
-#include "C_OgePubStandard.hpp"
+#include "C_OgePubUnified.hpp"
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -26,24 +25,24 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubToolBar :
-   public C_OgePubStandard
+    public C_OgePubUnified
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   explicit C_OgePubToolBar(QWidget * const opc_Parent = NULL, const uint32_t ou32_Index = 0UL);
+    explicit C_OgePubToolBar(QWidget * const opc_Parent = NULL, const uint32_t ou32_Index = 0UL);
 
-   //The signals keyword is necessary for Qt signal slot functionality
-   //lint -save -e1736
+    //The signals keyword is necessary for Qt signal slot functionality
+    //lint -save -e1736
 
 Q_SIGNALS:
-   //lint -restore
-   void SigClickedWithIndex(const uint32_t ou32_Index);
+    //lint -restore
+    void SigClickedWithIndex(const uint32_t ou32_Index);
 
 private:
-   void m_ButtonClicked(void);
+    void m_ButtonClicked(void);
 
-   const uint32_t mu32_Index;
+    const uint32_t mu32_Index;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

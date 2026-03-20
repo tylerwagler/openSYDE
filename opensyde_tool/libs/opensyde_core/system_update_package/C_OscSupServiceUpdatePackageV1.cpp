@@ -297,9 +297,8 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
           orc_SystemDefinition, c_SysDefPath);
     } else {
       QStringList c_AdditionalFiles;
-      s32_Return = C_OscSystemDefinitionFiler_New::h_SaveSystemDefinitionFile(
-          orc_SystemDefinition, c_SysDefPath.toLocal8Bit().constData(),
-          &c_AdditionalFiles);
+      s32_Return = C_OscSystemDefinitionFiler_New::h_SaveFile(
+          orc_SystemDefinition, c_SysDefPath, &c_AdditionalFiles);
       if (s32_Return == C_NO_ERR) {
         // Add files to pack
         for (uint32_t u32_ItFile = 0UL; u32_ItFile < c_AdditionalFiles.size();
@@ -660,10 +659,8 @@ int32_t C_OscSupServiceUpdatePackageV1::h_ProcessPackage(
       c_DevIniPath = c_PackagePath + mc_INI_DEV;
     }
 
-    s32_Return = C_OscSystemDefinitionFiler_New::h_LoadSystemDefinitionFile(
-        orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, NULL,
-        &orc_ActiveNodes,
-        true); // skip content
+    s32_Return = C_OscSystemDefinitionFiler_New::h_LoadFile(
+        orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, NULL);
   }
 
   // get "other accepted names" for active nodes

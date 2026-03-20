@@ -94,13 +94,16 @@
      </property>
     </spacer>
    </item>
-   <item>
-    <widget class="stw::opensyde_gui_elements::C_CamOgePubAbout" name="pc_PushButtonAbout">
-     <property name="text">
-      <string>About</string>
-     </property>
-    </widget>
-   </item>
+    <item>
+     <widget class="stw::opensyde_gui_elements::C_OgePubBase" name="pc_PushButtonAbout">
+      <property name="objectName">
+       <string notr="true">buttonAbout</string>
+      </property>
+      <property name="text">
+       <string>About</string>
+      </property>
+     </widget>
+    </item>
    <item>
     <widget class="stw::opensyde_gui_elements::C_CamOgePubProjOp" name="pc_PushButtonHelp">
      <property name="minimumSize">
@@ -165,9 +168,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgePubAbout</class>
+   <class>stw::opensyde_gui_elements::C_OgePubBase</class>
    <extends>QPushButton</extends>
-   <header>C_CamOgePubAbout.hpp</header>
+   <header>C_OgePubBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_CamOgePubProjOp</class>

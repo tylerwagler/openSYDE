@@ -43,7 +43,7 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgePubGenericTextWithBackground::C_OgePubGenericTextWithBackground(QWidget * const opc_Parent) :
-   C_OgePubToolTipBase(opc_Parent)
+   C_OgePubUnified(opc_Parent, C_OgePubUnified::eSTANDARD)
 {
 }
 

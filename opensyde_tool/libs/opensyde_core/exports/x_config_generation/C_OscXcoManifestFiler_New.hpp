@@ -63,23 +63,16 @@ public:
    static int32_t h_SaveJson(const QList<C_OscXcoManifest> &orc_Manifests,
                              const QString &orc_FilePath);
 
-   // --------------------------------------------------------------------------
-   // XML Format
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadXml(QList<C_OscXcoManifest> &orc_Manifests,
-                            const QString &orc_FilePath);
-   static int32_t h_SaveXml(const QList<C_OscXcoManifest> &orc_Manifests,
-                            const QString &orc_FilePath);
+    // --------------------------------------------------------------------------
+    // XML Format
+    // --------------------------------------------------------------------------
+    static int32_t h_LoadXml(QList<C_OscXcoManifest> &orc_Manifests,
+                             const QString &orc_FilePath);
+    static int32_t h_SaveXml(const QList<C_OscXcoManifest> &orc_Manifests,
+                             const QString &orc_FilePath);
 
-   // --------------------------------------------------------------------------
-   // Legacy Compatibility (deprecated)
-   // --------------------------------------------------------------------------
-   [[deprecated("Use format-specific methods")]]
-   static int32_t h_LoadFile(QList<C_OscXcoManifest> &orc_Manifests,
-                             const QString &orc_Path);
-   [[deprecated("Use format-specific methods")]]
-   static int32_t h_SaveFile(const QList<C_OscXcoManifest> &orc_Manifests,
-                             const QString &orc_Path);
+    // File name constant
+    static const QString hc_FILE_NAME;
 
 private:
    static int32_t mh_DetectAndLoad(QList<C_OscXcoManifest> &orc_Manifests,

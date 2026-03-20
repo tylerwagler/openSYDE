@@ -105,7 +105,7 @@ C_SdNdeHalcChannelWidget::C_SdNdeHalcChannelWidget(QWidget * const opc_Parent) :
    this->mpc_Ui->pc_TreeConfig->setTabKeyNavigation(true);
 
    // connects
-   connect(this->mpc_Ui->pc_LeName, &C_OgeLePropertiesName::textChanged,
+   connect(this->mpc_Ui->pc_LeName, &C_OgeLeBase::textChanged,
            this, &C_SdNdeHalcChannelWidget::m_CheckName);
 
    this->m_ConnectWidgets(true); // special handling of widgets that write to data handling
@@ -649,7 +649,7 @@ void C_SdNdeHalcChannelWidget::m_ConnectWidgets(const bool oq_Connect) const
 {
    if (oq_Connect == true)
    {
-      connect(this->mpc_Ui->pc_LeName, &C_OgeLePropertiesName::editingFinished,
+      connect(this->mpc_Ui->pc_LeName, &C_OgeLeBase::editingFinished,
               this, &C_SdNdeHalcChannelWidget::m_OnNameEdited);
       connect(this->mpc_Ui->pc_TedComment, &C_OgeTedPropertiesComment::SigEditingFinished,
               this, &C_SdNdeHalcChannelWidget::m_OnCommentEdited);
@@ -666,7 +666,7 @@ void C_SdNdeHalcChannelWidget::m_ConnectWidgets(const bool oq_Connect) const
    }
    else
    {
-      disconnect(this->mpc_Ui->pc_LeName, &C_OgeLePropertiesName::editingFinished,
+      disconnect(this->mpc_Ui->pc_LeName, &C_OgeLeBase::editingFinished,
                  this, &C_SdNdeHalcChannelWidget::m_OnNameEdited);
       disconnect(this->mpc_Ui->pc_TedComment, &C_OgeTedPropertiesComment::SigEditingFinished,
                  this, &C_SdNdeHalcChannelWidget::m_OnCommentEdited);

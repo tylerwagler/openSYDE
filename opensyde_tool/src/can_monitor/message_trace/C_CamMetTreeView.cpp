@@ -88,8 +88,8 @@ C_CamMetTreeView::C_CamMetTreeView(QWidget * const opc_Parent) :
    this->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
    //Buttons
-   this->mpc_PushButtonScrollTop = new C_OgePubIconOnly(this->verticalScrollBar());
-   this->mpc_PushButtonScrollBottom = new C_OgePubIconOnly(this->verticalScrollBar());
+   this->mpc_PushButtonScrollTop = new C_OgePubUnified(this->verticalScrollBar());
+   this->mpc_PushButtonScrollBottom = new C_OgePubUnified(this->verticalScrollBar());
 
    this->header()->setFixedHeight(27);
 

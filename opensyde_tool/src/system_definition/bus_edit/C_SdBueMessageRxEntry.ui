@@ -54,7 +54,7 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeRabProperties" name="pc_RadioButtonActive">
+      <widget class="stw::opensyde_gui_elements::C_OgeRabBase" name="pc_RadioButtonActive">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -198,7 +198,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeRabProperties</class>
    <extends>QRadioButton</extends>
-   <header>C_OgeRabProperties.hpp</header>
+   <header>C_OgeRabBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

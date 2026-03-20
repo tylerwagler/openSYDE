@@ -53,9 +53,9 @@ C_SdBueMessageSignalTableWidget::C_SdBueMessageSignalTableWidget(QWidget * const
    this->mpc_Ui->pc_LabelNoMessages->setVisible(false);
    this->mpc_Ui->pc_LabelNoSignals->setVisible(false);
 
-   connect(this->mpc_Ui->pc_RadioButtonMessages, &stw::opensyde_gui_elements::C_OgeRabCheckBox::toggled, this,
+   connect(this->mpc_Ui->pc_RadioButtonMessages, &stw::opensyde_gui_elements::C_OgeRabBase::toggled, this,
            &C_SdBueMessageSignalTableWidget::m_OnMessagesToggle);
-   connect(this->mpc_Ui->pc_RadioButtonSignals, &stw::opensyde_gui_elements::C_OgeRabCheckBox::toggled, this,
+   connect(this->mpc_Ui->pc_RadioButtonSignals, &stw::opensyde_gui_elements::C_OgeRabBase::toggled, this,
            &C_SdBueMessageSignalTableWidget::m_OnSignalsToggle);
    //Selection
    connect(this->mpc_Ui->pc_TableViewMessages, &C_SdBueMessageTableView::SigMessageSelected, this,

@@ -77,7 +77,7 @@ C_SdBueCoAddSignalsDialog::C_SdBueCoAddSignalsDialog(stw::opensyde_gui_elements:
    // connects
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdBueCoAddSignalsDialog::m_OkClicked);
    connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_SdBueCoAddSignalsDialog::m_CancelClicked);
-   connect(this->mpc_Ui->pc_LineEditSearch, &C_OgeLeProperties::textChanged, this,
+   connect(this->mpc_Ui->pc_LineEditSearch, &C_OgeLeBase::textChanged, this,
            &C_SdBueCoAddSignalsDialog::m_OnSearch);
    connect(this->mpc_Ui->pc_TreeView, &C_SdBueCoAddSignalsView::SigSelectionChanged, this,
            &C_SdBueCoAddSignalsDialog::m_UpdateSelection);

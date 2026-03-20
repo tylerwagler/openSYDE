@@ -12,7 +12,7 @@
 #define C_OGEPUBPROJACTION_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_OgePubToolTipBase.hpp"
+#include "C_OgePubUnified.hpp"
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -25,23 +25,23 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubProjAction :
-   public C_OgePubToolTipBase
+    public C_OgePubUnified
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   explicit C_OgePubProjAction(QWidget * const opc_Parent = NULL);
+    explicit C_OgePubProjAction(QWidget * const opc_Parent = NULL);
 
-   void SetCustomIcon(const QString & orc_IconPathEnabled, const QString & orc_IconPathDisabled);
-   void SetIconPaddingLeft(const int32_t os32_Value);
+    void SetCustomIcon(const QString & orc_IconPathEnabled, const QString & orc_IconPathDisabled);
+    void SetIconPaddingLeft(const int32_t os32_Value);
 
 protected:
-   void paintEvent(QPaintEvent * const opc_Event) override;
+    void paintEvent(QPaintEvent * const opc_Event) override;
 
 private:
-   QIcon mc_IconEnabled;
-   QIcon mc_IconDisabled;
-   int32_t ms32_IconPaddingLeft;
+    QIcon mc_IconEnabled;
+    QIcon mc_IconDisabled;
+    int32_t ms32_IconPaddingLeft;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

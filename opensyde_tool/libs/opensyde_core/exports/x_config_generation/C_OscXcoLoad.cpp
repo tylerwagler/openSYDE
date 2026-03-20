@@ -136,7 +136,7 @@ int32_t C_OscXcoLoad::h_ProcessPackage(const QString &orc_PackagePath,
     const QString c_ManifestPath =
         c_TargetUnzipPath + C_OscXcoManifestFiler_New::hc_FILE_NAME;
     s32_Return =
-        C_OscXcoManifestFiler_New::h_LoadFile(orc_Manifest, c_ManifestPath);
+        C_OscXcoManifestFiler_New::h_LoadXcoManifestFile(orc_Manifest, c_ManifestPath, c_TargetUnzipPath);
   }
 
   mh_GetWarningsAndErrors(orc_WarningMessages, orc_ErrorMessage);

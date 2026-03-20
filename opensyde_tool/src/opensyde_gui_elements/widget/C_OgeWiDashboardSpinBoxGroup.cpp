@@ -41,7 +41,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeWiDashboardSpinBoxGroup::C_OgeWiDashboardSpinBoxGroup(QWidget * const opc_Parent) :
-   C_OgeWiSpinBoxGroup(opc_Parent),
+   C_OgeWiSpinBoxGroup(opc_Parent, C_OgeWiSpinBoxGroup::eDASHBOARD),
    mc_Unit(""),
    mq_ShowUnit(false)
 {

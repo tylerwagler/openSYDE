@@ -55,31 +55,24 @@ public:
    static int32_t h_SaveBinary(const C_OscXceManifest &orc_Manifest,
                                const QString &orc_FilePath);
 
-   // --------------------------------------------------------------------------
-   // JSON Format
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadJson(C_OscXceManifest &orc_Manifest,
+    // --------------------------------------------------------------------------
+    // JSON Format
+    // --------------------------------------------------------------------------
+    static int32_t h_LoadJson(C_OscXceManifest &orc_Manifest,
+                              const QString &orc_FilePath);
+    static int32_t h_SaveJson(const C_OscXceManifest &orc_Manifest,
+                              const QString &orc_FilePath);
+
+    // --------------------------------------------------------------------------
+    // XML Format
+    // --------------------------------------------------------------------------
+    static int32_t h_LoadXml(C_OscXceManifest &orc_Manifest,
                              const QString &orc_FilePath);
-   static int32_t h_SaveJson(const C_OscXceManifest &orc_Manifest,
+    static int32_t h_SaveXml(const C_OscXceManifest &orc_Manifest,
                              const QString &orc_FilePath);
 
-   // --------------------------------------------------------------------------
-   // XML Format
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadXml(C_OscXceManifest &orc_Manifest,
-                            const QString &orc_FilePath);
-   static int32_t h_SaveXml(const C_OscXceManifest &orc_Manifest,
-                            const QString &orc_FilePath);
-
-   // --------------------------------------------------------------------------
-   // Legacy Compatibility (deprecated)
-   // --------------------------------------------------------------------------
-   [[deprecated("Use format-specific methods")]]
-   static int32_t h_LoadFile(C_OscXceManifest &orc_Manifest,
-                             const QString &orc_Path);
-   [[deprecated("Use format-specific methods")]]
-   static int32_t h_SaveFile(const C_OscXceManifest &orc_Manifest,
-                             const QString &orc_Path);
+    // File name constant
+    static const QString hc_FILE_NAME;
 
 private:
    static int32_t mh_DetectAndLoad(C_OscXceManifest &orc_Manifest,

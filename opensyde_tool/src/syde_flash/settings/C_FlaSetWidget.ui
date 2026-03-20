@@ -50,9 +50,34 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <item>
-       <widget class="stw::opensyde_gui_elements::C_CamOgePubSettingsAdd" name="pc_PbDll">
-        <property name="minimumSize">
+       <item>
+        <widget class="stw::opensyde_gui_elements::C_OgePubBase" name="pc_PbDll">
+         <property name="objectName">
+          <string notr="true">buttonAddSettings</string>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>35</width>
+           <height>29</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>35</width>
+           <height>29</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>PushButton</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="stw::opensyde_gui_elements::C_OgePubBase" name="pc_PbAdvSett">
+         <property name="objectName">
+          <string notr="true">buttonAddSettings</string>
+         </property>
+         <property name="minimumSize">
          <size>
           <width>35</width>
           <height>29</height>
@@ -67,50 +92,31 @@
         <property name="text">
          <string>PushButton</string>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="stw::opensyde_gui_elements::C_CamOgePubSettingsAdd" name="pc_PbAdvSett">
-        <property name="minimumSize">
-         <size>
-          <width>35</width>
-          <height>29</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>35</width>
-          <height>29</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>PushButton</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="stw::opensyde_gui_elements::C_CamOgePubSettingsAdd" name="pc_PbProgress">
-        <property name="minimumSize">
-         <size>
-          <width>35</width>
-          <height>29</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>35</width>
-          <height>29</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>PushButton</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeWiOnlyBackground" name="pc_WiEmpty" native="true"/>
-      </item>
-     </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="stw::opensyde_gui_elements::C_OgePubBase" name="pc_PbProgress">
+         <property name="objectName">
+          <string notr="true">buttonAddSettings</string>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>35</width>
+           <height>29</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>35</width>
+           <height>29</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>PushButton</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
     </widget>
    </item>
    <item>
@@ -177,9 +183,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgePubSettingsAdd</class>
+   <class>stw::opensyde_gui_elements::C_OgePubBase</class>
    <extends>QPushButton</extends>
-   <header>C_CamOgePubSettingsAdd.hpp</header>
+   <header>C_OgePubBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

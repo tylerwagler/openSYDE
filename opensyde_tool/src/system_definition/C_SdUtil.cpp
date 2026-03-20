@@ -23,7 +23,7 @@
 #include "stwerrors.hpp"
 
 
-#include "C_OgeRabProperties.hpp"
+#include "C_OgeRabBase.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscNodeDataPoolContentUtil.hpp"

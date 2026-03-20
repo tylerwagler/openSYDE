@@ -17,7 +17,7 @@
 #include "C_SyvDaDashboardWidget.hpp"
 #include "C_OgeWiDashboardTab.hpp"
 #include "C_SyvComDriverDiag.hpp"
-#include "C_OgePubIconText.hpp"
+#include "C_OgePubUnified.hpp"
 #include "C_SyvDaDashboardScreenshot.hpp"
 #include "C_OgePubIconEvents.hpp"
 

@@ -16,7 +16,7 @@
 #include "C_SyvDaItUtil.hpp"
 #include "C_SyvDaItDashboardSliderWidget.hpp"
 #include "ui_C_SyvDaItDashboardSliderWidget.h"
-#include "C_OgeLabDashboardDefault.hpp"
+#include "C_OgeLabBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -253,7 +253,7 @@ void C_SyvDaItDashboardSliderWidget::resizeEvent(QResizeEvent * const opc_Event)
    \param[in]   ou32_MinimumFontSize   Minimum font size (default value is 15)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItDashboardSliderWidget::m_SetLabelSize(opensyde_gui_elements::C_OgeLabDashboardDefault * const opc_Label,
+void C_SyvDaItDashboardSliderWidget::m_SetLabelSize(opensyde_gui_elements::C_OgeLabBase * const opc_Label,
                                                     const uint32_t & oru32_LabelFontSize,
                                                     const uint32_t ou32_MinimumFontSize)
 {
@@ -286,7 +286,7 @@ void C_SyvDaItDashboardSliderWidget::m_SetLabelSize(opensyde_gui_elements::C_Oge
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItDashboardSliderWidget::m_SetLabelFontSize(
-   opensyde_gui_elements::C_OgeLabDashboardDefault * const opc_Label, const uint32_t & oru32_LabelFontSize,
+   opensyde_gui_elements::C_OgeLabBase * const opc_Label, const uint32_t & oru32_LabelFontSize,
    QFont & orc_Font, const QString & orc_Text)
 {
    // Constants
@@ -334,7 +334,7 @@ void C_SyvDaItDashboardSliderWidget::m_UpdateLabels(void) const
 */
 //----------------------------------------------------------------------------------------------------------------------
 QFontMetrics C_SyvDaItDashboardSliderWidget::m_GetNewLabelFontMetrics(
-   stw::opensyde_gui_elements::C_OgeLabDashboardDefault * const opc_Label, QFont & orc_Font,
+   stw::opensyde_gui_elements::C_OgeLabBase * const opc_Label, QFont & orc_Font,
    const uint32_t & oru32_NewFontSize)
 {
    QFontMetrics c_TextFontMetric(orc_Font);

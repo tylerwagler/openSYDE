@@ -1,26 +1,26 @@
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeLePropertiesName,
-stw--opensyde_gui_elements--C_OgeLeNavigation,
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Dark"],
-stw--opensyde_gui_elements--C_OgeLeProperties
+QLineEdit#lineEditProperties,
+QLineEdit#lineEditPropertiesName,
+QLineEdit#lineEditNavigation,
+QLineEdit#lineEditStyled[variant="Dark"]
 {
 border-style: solid;
 border-width: 1px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Dark"],
-stw--opensyde_gui_elements--C_OgeLeNavigation,
-stw--opensyde_gui_elements--C_OgeLePropertiesName
+QLineEdit#lineEditStyled[variant="Dark"],
+QLineEdit#lineEditNavigation,
+QLineEdit#lineEditPropertiesName
 {
 padding-left: 10px;
 padding-right: 10px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeLeProperties,
-stw--opensyde_gui_elements--C_OgeLeFilePath,
-stw--opensyde_gui_elements--C_OgeLePlaceholderVar
+QLineEdit#lineEditProperties,
+QLineEdit#lineEditFilePath,
+QLineEdit#lineEditPlaceholderVar
 {
 padding-left: 6px;
 padding-right: 6px;
@@ -28,7 +28,7 @@ padding-bottom: 1px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeLeListHeader
+QLineEdit#lineEditListHeader
 {
 border-style: solid;
 border-width: 1px;
@@ -37,14 +37,14 @@ border-width: 1px;
 /* --------------------------------------------------------------------- */
 QTextEdit#pc_TextEditDpName,
 QTextEdit#pc_TextEditDpComment,
-stw--opensyde_gui_elements--C_OgeLeIpAddress
+QLineEdit#lineEditIpAddress
 {
 border-style: none;
 border-width: 0px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Table"]
+QLineEdit#lineEditStyled[variant="Table"]
 {
 border-style: solid;
 border-width: 1px;
@@ -54,7 +54,7 @@ margin-bottom: 3px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Param"]
+QLineEdit#lineEditStyled[variant="Param"]
 {
 border-style: solid;
 border-width: 1px;
@@ -64,9 +64,9 @@ margin-bottom: 0px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeLeFilePath,
-stw--opensyde_gui_elements--C_OgeLePlaceholderVar,
-stw--opensyde_gui_elements--C_OgeLeProperties[NoRightBorder="true"]
+QLineEdit#lineEditFilePath,
+QLineEdit#lineEditPlaceholderVar,
+QLineEdit#lineEditProperties[NoRightBorder="true"]
 {
 border-style:solid;
 border-width:1px;
@@ -74,7 +74,7 @@ border-right-width:0px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Table"]Halc
+QLineEdit#lineEditStyled[variant="Table"]Halc
 {
 border-style: solid;
 border-width: 1px;

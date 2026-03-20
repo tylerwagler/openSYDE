@@ -70,7 +70,7 @@ C_SyvDaDashboardSelectorTabWidget::C_SyvDaDashboardSelectorTabWidget(QWidget * c
    const bool q_ServiceModeActive = C_PuiSvHandler::h_GetInstance()->GetServiceModeActive();
 
    //Add button
-   mpc_PushButton = new C_OgePubIconText(this);
+   mpc_PushButton = new C_OgePubUnified(this, C_OgePubUnified::eICON_TEXT);
    this->mpc_PushButton->SetIconSize(24);
    //lint -e{1938}  static const is guaranteed preinitialized before main
    this->mpc_PushButton->setIcon(QIcon(C_SyvDaDashboardSelectorTabWidget::mhc_ADD_ICON_LIGHT));

@@ -11,9 +11,8 @@
 #define C_OGEPUBUSECASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-
 #include "precomp_headers.hpp"
-#include "C_OgePubStandard.hpp"
+#include "C_OgePubUnified.hpp"
 #include <QWidget>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -27,20 +26,20 @@ namespace opensyde_gui_elements
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_OgePubUseCase :
-   public C_OgePubStandard
+    public C_OgePubUnified
 {
-   Q_OBJECT
+    Q_OBJECT
 
 public:
-   explicit C_OgePubUseCase(QWidget * const opc_Parent = NULL);
+    explicit C_OgePubUseCase(QWidget * const opc_Parent = NULL);
 
-   void SetDisabledIcon(const QString & orc_Path);
+    void SetDisabledIcon(const QString & orc_Path);
 
 protected:
-   void paintEvent(QPaintEvent * const opc_Event) override;
+    void paintEvent(QPaintEvent * const opc_Event) override;
 
 private:
-   QString mc_DisabledIconPath;
+    QString mc_DisabledIconPath;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

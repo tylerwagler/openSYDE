@@ -291,7 +291,7 @@ int32_t C_PuiSdHandlerData::SaveToFile(const QString & orc_Path, const bool oq_U
       }
       else
       {
-         s32_Return = C_OscSystemDefinitionFiler_New::h_SaveSystemDefinitionFile(this->mc_CoreDefinition, orc_Path);
+          s32_Return = C_OscSystemDefinitionFiler_New::h_SaveFile(this->mc_CoreDefinition, orc_Path);
          if (s32_Return == C_NO_ERR)
          {
             QString c_FilePath = C_PuiSdHandlerFiler::h_GetSystemDefinitionUiFilePath(orc_Path);

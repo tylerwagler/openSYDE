@@ -12,7 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "C_CamOgeCbxTable.hpp"
+#include "C_OgeCbxBase.hpp"
 #include "C_CamGenSigTableDelegate.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -80,8 +80,8 @@ void C_CamGenSigTableDelegate::setEditorData(QWidget * const opc_Editor, const Q
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeCbxTableBase * C_CamGenSigTableDelegate::m_CreateComboBox(QWidget * const opc_Parent) const
 {
-   C_CamOgeCbxTable * const pc_Combobox = new C_CamOgeCbxTable(opc_Parent);
-
+   C_OgeCbxTableBase * const pc_Combobox = new C_OgeCbxTableBase(opc_Parent);
+   pc_Combobox->setObjectName("comboBoxTable");
    return pc_Combobox;
 }
 

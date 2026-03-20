@@ -30,13 +30,25 @@ namespace opensyde_gui_elements
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_OgeWiSpinBoxGroup :
-   public QWidget
+    public QWidget
 {
-   Q_OBJECT
+    Q_OBJECT
+    Q_ENUMS(E_Mode)
 
 public:
-   explicit C_OgeWiSpinBoxGroup(QWidget * const opc_Parent = NULL);
-   ~C_OgeWiSpinBoxGroup(void) override;
+    enum E_Mode
+    {
+        eSTANDARD = 0,  ///< Standard mode (default)
+        eDASHBOARD,     ///< Dashboard mode with special styling
+        ePARAM,         ///< Parameter widget mode
+        eTABLE          ///< Table mode
+    };
+
+    explicit C_OgeWiSpinBoxGroup(QWidget * const opc_Parent = NULL, const E_Mode e_Mode = eSTANDARD);
+    ~C_OgeWiSpinBoxGroup(void) override;
+
+    void SetMode(const E_Mode e_Mode);
+    E_Mode GetMode(void) const;
 
    QString GetText(void) const;
    void Init(const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Min,
@@ -70,12 +82,14 @@ protected:
    int32_t m_GetSpinButtonWidth(void) const;
 
 private:
-   Ui::C_OgeWiSpinBoxGroup * mpc_Ui;
-   bool mq_DoubleMode;
+    Ui::C_OgeWiSpinBoxGroup * mpc_Ui;
+    bool mq_DoubleMode;
+    E_Mode me_Mode;
 
-   void m_InitDefault(void);
-   void m_InitConnections(void) const;
-   void m_DeactivateConnections(void) const;
+    void m_InitDefault(void);
+    void m_InitConnections(void) const;
+    void m_DeactivateConnections(void) const;
+    void m_ApplyModeStyle(void);
 
    //Avoid call
    C_OgeWiSpinBoxGroup(const C_OgeWiSpinBoxGroup &);

@@ -162,7 +162,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeRabProperties" name="pc_RadioButtonStandAlone">
+         <widget class="stw::opensyde_gui_elements::C_OgeRabBase" name="pc_RadioButtonStandAlone">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -187,7 +187,7 @@
          </widget>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeRabProperties" name="pc_RadioButtonShared">
+         <widget class="stw::opensyde_gui_elements::C_OgeRabBase" name="pc_RadioButtonShared">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -308,7 +308,7 @@
          </layout>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeRabProperties" name="pc_RadiButtonRamViewImport">
+         <widget class="stw::opensyde_gui_elements::C_OgeRabBase" name="pc_RadiButtonRamViewImport">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -493,7 +493,7 @@
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeRabProperties</class>
    <extends>QRadioButton</extends>
-   <header>C_OgeRabProperties.hpp</header>
+   <header>C_OgeRabBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdNdeDpSelectorAddListWidget</class>

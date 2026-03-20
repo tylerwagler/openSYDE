@@ -40,7 +40,7 @@ const QStringList C_CamUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
    "stw--opensyde_gui_elements--C_OgeTebStyled[variant=\"MessageDetails\"] QScrollBar",
    "stw--opensyde_gui_elements--C_OgeTransparentScrollArea QScrollBar",
    "stw--opensyde_gui--C_CamMetWidget QScrollBar",
-   "stw--opensyde_gui_elements--C_CamOgeCbxTable QAbstractItemView QScrollBar"
+   "QComboBox#comboBoxTable QAbstractItemView QScrollBar"
 }
    );
 const QList<C_CamUtiStyleSheets::C_PropertyValueColorConfig> C_CamUtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_BRIGHT(

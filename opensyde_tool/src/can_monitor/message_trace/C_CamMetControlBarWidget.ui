@@ -259,14 +259,17 @@
        </property>
       </spacer>
      </item>
-     <item>
-      <widget class="stw::opensyde_gui_elements::C_CamOgeCbxWhite" name="pc_ComboBoxProtocol">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+      <item>
+       <widget class="stw::opensyde_gui_elements::C_OgeCbxBase" name="pc_ComboBoxProtocol">
+        <property name="objectName">
+         <string notr="true">comboBoxWhite</string>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
        <property name="minimumSize">
         <size>
          <width>50</width>
@@ -335,14 +338,17 @@
        </property>
       </spacer>
      </item>
-     <item>
-      <widget class="stw::opensyde_gui_elements::C_CamOgeCbxWhite" name="pc_ComboBoxSearch">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+      <item>
+       <widget class="stw::opensyde_gui_elements::C_OgeCbxBase" name="pc_ComboBoxSearch">
+        <property name="objectName">
+         <string notr="true">comboBoxWhite</string>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
        <property name="minimumSize">
         <size>
          <width>50</width>
@@ -561,12 +567,12 @@
    <extends>QPushButton</extends>
    <header>C_OgePubSvgIconOnly.hpp</header>
   </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgeCbxWhite</class>
-   <extends>QComboBox</extends>
-   <header>C_CamOgeCbxWhite.hpp</header>
-  </customwidget>
- </customwidgets>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeCbxBase</class>
+    <extends>QComboBox</extends>
+    <header>C_OgeCbxBase.hpp</header>
+   </customwidget>
+  </customwidgets>
  <resources/>
  <connections/>
 </ui>
