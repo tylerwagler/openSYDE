@@ -17,7 +17,7 @@
 #include "ui_C_SdNdeIpAddressConfigurationWidget.h"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_OgeLeIpAddress.hpp"
+#include "C_OgeLeUnified.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -78,16 +78,16 @@ C_SdNdeIpAddressConfigurationWidget::C_SdNdeIpAddressConfigurationWidget(
    QList<QLineEdit *> c_LeIpAddress =  this->mpc_Ui->pc_WidgetIpAddress->GetLineEdits();
    for (QList<QLineEdit *>::iterator c_Iter = c_LeIpAddress.begin(); c_Iter != c_LeIpAddress.end(); ++c_Iter)
    {
-      connect(dynamic_cast<C_OgeLeIpAddress *>(*c_Iter),
-              &C_OgeLeIpAddress::SignalTabKey,
+      connect(dynamic_cast<C_OgeLeUnified *>(*c_Iter),
+              &C_OgeLeUnified::SignalTabKey,
               this, &C_SdNdeIpAddressConfigurationWidget::SlotTabKey);
    }
 
    QList<QLineEdit *> c_LeSubNetMask =  this->mpc_Ui->pc_WidgetSubNetMask->GetLineEdits();
    for (QList<QLineEdit *>::iterator c_Iter = c_LeSubNetMask.begin(); c_Iter != c_LeSubNetMask.end(); ++c_Iter)
    {
-      connect(dynamic_cast<C_OgeLeIpAddress *>(*c_Iter),
-              &C_OgeLeIpAddress::SignalTabKey,
+      connect(dynamic_cast<C_OgeLeUnified *>(*c_Iter),
+              &C_OgeLeUnified::SignalTabKey,
               this, &C_SdNdeIpAddressConfigurationWidget::SlotTabKey);
    }
 
@@ -95,8 +95,8 @@ C_SdNdeIpAddressConfigurationWidget::C_SdNdeIpAddressConfigurationWidget(
    for (QList<QLineEdit *>::iterator c_Iter = c_LeDefaultGateway.begin(); c_Iter != c_LeDefaultGateway.end();
         ++c_Iter)
    {
-      connect(dynamic_cast<C_OgeLeIpAddress *>(*c_Iter),
-              &C_OgeLeIpAddress::SignalTabKey,
+      connect(dynamic_cast<C_OgeLeUnified *>(*c_Iter),
+              &C_OgeLeUnified::SignalTabKey,
               this, &C_SdNdeIpAddressConfigurationWidget::SlotTabKey);
    }
 }

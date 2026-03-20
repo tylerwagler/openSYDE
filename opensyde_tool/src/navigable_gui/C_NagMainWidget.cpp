@@ -93,7 +93,7 @@ C_NagMainWidget::C_NagMainWidget(QWidget * const opc_Parent) :
            &C_NagMainWidget::m_OnCreateServiceProj);
    connect(this->mpc_Ui->pc_BtnEdit, &C_OgePubUnified::clicked, this, &C_NagMainWidget::m_OnEdit);
    connect(this->mpc_Ui->pc_LabelVersion, &C_OgeLabUnified::SigDoubleClicked, this, &C_NagMainWidget::m_OnEdit);
-   connect(this->mpc_Ui->pc_LineEditVersion, &C_OgeLeStyled::editingFinished, this, &C_NagMainWidget::m_OnEditFinished);
+   connect(this->mpc_Ui->pc_LineEditVersion, &C_OgeLeUnified::editingFinished, this, &C_NagMainWidget::m_OnEditFinished);
    connect(this->mpc_Ui->pc_BtnClear, &C_OgePubUnified::clicked, this, &C_NagMainWidget::m_OnClear);
    connect(this->mpc_Ui->pc_TableView, &C_PopFileTableView::clicked, this, &C_NagMainWidget::m_OnIndexClicked);
    connect(this->mpc_Ui->pc_BtnNameMaxCharLengthSettings, &QPushButton::clicked, this,

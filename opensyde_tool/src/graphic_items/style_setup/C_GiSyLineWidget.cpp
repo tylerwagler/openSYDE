@@ -556,7 +556,7 @@ void C_GiSyLineWidget::m_ValueChanged(void)
    \param[in]     orq_Rotate   Flag if content should be rotated 180 degrees
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_GiSyLineWidget::mh_InitArrow(C_OgeCbxIconOnly * const opc_ComboBox, const bool & orq_Rotate)
+void C_GiSyLineWidget::mh_InitArrow(C_OgeCbxUnified * const opc_ComboBox, const bool & orq_Rotate)
 {
    if (opc_ComboBox != NULL)
    {

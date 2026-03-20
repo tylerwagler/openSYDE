@@ -175,7 +175,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxSelectAll">
+          <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxSelectAll">
           <property name="variant" stdset="0">
            <string>SystemCommisioningEdit</string>
           </property>
@@ -468,9 +468,9 @@
    <header>C_OgePubSystemCommissioningEdit.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxUnified</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxStyled.hpp</header>
+   <header>C_OgeChxUnified.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

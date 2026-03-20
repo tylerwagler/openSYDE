@@ -17,7 +17,7 @@
 
 
 #include "constants.hpp"
-#include "C_OgeCbxParam.hpp"
+#include "C_OgeCbxUnified.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_TblTreDelegateUtil.hpp"
@@ -111,7 +111,7 @@ QWidget * C_SyvDaItPaTreeDelegate::createEditor(QWidget * const opc_Parent, cons
                   c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex, c_Id.u32_ListIndex);
                if (pc_List != NULL)
                {
-                  pc_ComboBox = new C_OgeCbxParam(opc_Parent);
+                  pc_ComboBox = new C_OgeCbxUnified(C_OgeCbxUnified::ePARAM, opc_Parent);
                   pc_ComboBox->addItem("Custom values");
                   for (uint32_t u32_ItDataSet = 0UL; u32_ItDataSet < pc_List->c_DataSets.size(); ++u32_ItDataSet)
                   {
@@ -362,7 +362,7 @@ int32_t C_SyvDaItPaTreeDelegate::h_GetTableItemHeight()
 //----------------------------------------------------------------------------------------------------------------------
 bool C_SyvDaItPaTreeDelegate::eventFilter(QObject * const opc_Object, QEvent * const opc_Event)
 {
-   C_OgeCbxParam * const pc_ComboBox = dynamic_cast<C_OgeCbxParam *>(opc_Object);
+   C_OgeCbxUnified * const pc_ComboBox = dynamic_cast<C_OgeCbxUnified *>(opc_Object);
    bool q_Return = false;
 
    if (pc_ComboBox != NULL)

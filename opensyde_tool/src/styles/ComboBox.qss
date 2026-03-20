@@ -35,7 +35,7 @@ border-style: solid;
 /* --------------------------------------------------------------------- */
 /*Setup style specific*/
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeCbxStyled[variant="Line"]
+stw--opensyde_gui_elements--C_OgeCbxUnified[variant="Line"]
 {
 padding-right: 0px;
 padding-left: 5px;
@@ -43,20 +43,20 @@ padding-bottom: 0px;
 padding-top: 1px;
 }
 
-stw--opensyde_gui_elements--C_OgeCbxStyled[variant="Line"] QAbstractItemView
+stw--opensyde_gui_elements--C_OgeCbxUnified[variant="Line"] QAbstractItemView
 {
 margin-left: 0px;
 margin-right: 0px;
 }
 
-stw--opensyde_gui_elements--C_OgeCbxStyled[variant="Line"] QAbstractItemView::item
+stw--opensyde_gui_elements--C_OgeCbxUnified[variant="Line"] QAbstractItemView::item
 {
 padding-top: 12px;
 padding-bottom: 12px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeCbxStyled[variant="Arrow"]
+stw--opensyde_gui_elements--C_OgeCbxUnified[variant="Arrow"]
 {
 padding-right: 0px;
 padding-left: 5px;
@@ -64,20 +64,20 @@ padding-bottom: 0px;
 padding-top: 1px;
 }
 
-stw--opensyde_gui_elements--C_OgeCbxStyled[variant="Arrow"] QAbstractItemView
+stw--opensyde_gui_elements--C_OgeCbxUnified[variant="Arrow"] QAbstractItemView
 {
 margin-left: 0px;
 margin-right: 0px;
 }
 
-stw--opensyde_gui_elements--C_OgeCbxStyled[variant="Arrow"] QAbstractItemView::item
+stw--opensyde_gui_elements--C_OgeCbxUnified[variant="Arrow"] QAbstractItemView::item
 {
 padding-top: 5px;
 padding-bottom: 5px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeCbxFontProperties,
+stw--opensyde_gui_elements--C_OgeCbxUnified,
 stw--opensyde_gui_elements--C_OgeCbxTable,
 stw--opensyde_gui_elements--C_OgeCbxText,
 stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc,
@@ -89,7 +89,7 @@ padding-bottom: 2px;
 padding-top: 0px;
 }
 
-stw--opensyde_gui_elements--C_OgeCbxParam
+stw--opensyde_gui_elements--C_OgeCbxUnified
 {
 padding-right: 0px;
 padding-left: 2px;
@@ -108,8 +108,8 @@ border-width: 1px;
 max-height: 24px;
 }
 
-stw--opensyde_gui_elements--C_OgeCbxParam QAbstractItemView,
-stw--opensyde_gui_elements--C_OgeCbxFontProperties QAbstractItemView,
+stw--opensyde_gui_elements--C_OgeCbxUnified QAbstractItemView,
+stw--opensyde_gui_elements--C_OgeCbxUnified QAbstractItemView,
 stw--opensyde_gui_elements--C_OgeCbxTable QAbstractItemView,
 stw--opensyde_gui_elements--C_OgeCbxText QAbstractItemView,
 stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc QAbstractItemView,
@@ -119,7 +119,7 @@ margin-left: 0px;
 margin-right: 0px;
 }
 
-stw--opensyde_gui_elements--C_OgeCbxFontProperties QAbstractItemView::item,
+stw--opensyde_gui_elements--C_OgeCbxUnified QAbstractItemView::item,
 stw--opensyde_gui_elements--C_OgeCbxTable QAbstractItemView::item,
 stw--opensyde_gui_elements--C_OgeCbxText QAbstractItemView::item,
 stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc QAbstractItemView::item,
@@ -129,7 +129,7 @@ padding-top: 4px;
 padding-bottom: 5px;
 }
 
-stw--opensyde_gui_elements--C_OgeCbxParam QAbstractItemView::item
+stw--opensyde_gui_elements--C_OgeCbxUnified QAbstractItemView::item
 {
 padding-top: 1px;
 padding-bottom: 1px;

@@ -1203,7 +1203,7 @@
            </layout>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxDefaultScaling">
+           <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxDefaultScaling">
           <property name="variant" stdset="0">
            <string>Properties</string>
           </property>
@@ -1427,7 +1427,7 @@
               </layout>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxFormatterActive">
+              <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxFormatterActive">
           <property name="variant" stdset="0">
            <string>Properties</string>
           </property>
@@ -1687,7 +1687,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeChxTristateStyled" name="pc_ToggleInitialValue">
+                 <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_ToggleInitialValue">
      <property name="variant" stdset="0">
       <string notr="true">TransparentToggle</string>
      </property>
@@ -1729,7 +1729,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_34" stretch="0,1">
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxDashboardConnectWrite">
+              <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxDashboardConnectWrite">
           <property name="variant" stdset="0">
            <string>Properties</string>
           </property>
@@ -1917,9 +1917,9 @@
    <header>C_OgeLeBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxTristateStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxUnified</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxTristateStyled.hpp</header>
+   <header>C_OgeChxUnified.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubStyledToolTip</class>
@@ -1927,9 +1927,9 @@
    <header>C_OgePubStyledToolTip.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxUnified</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxStyled.hpp</header>
+   <header>C_OgeChxUnified.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubOpen</class>

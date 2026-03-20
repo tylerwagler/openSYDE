@@ -109,9 +109,9 @@ C_NagViewItem::C_NagViewItem(QWidget * const opc_Parent) :
    this->mpc_Ui->pc_LineEditHeading->setVisible(false);
 
    //Connects
-   connect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeNavigation::editingFinished, this,
+   connect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeUnified::editingFinished, this,
            &C_NagViewItem::m_OnNameEditFinished);
-   connect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeNavigation::SigEscape, this,
+   connect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeUnified::SigEscape, this,
            &C_NagViewItem::m_OnNameEditCancelled);
    mc_Conn = connect(this->mpc_Ui->pc_WidgetTopButton, &stw::opensyde_gui_elements::C_OgePubNavigationHover::toggled,
                      this,
@@ -530,13 +530,13 @@ void C_NagViewItem::m_OnNameEditFinished(void)
    bool q_Found = false;
 
    // avoid second "editingFinished" signal when line edit looses focus (occurs on enter key press)
-   disconnect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeNavigation::editingFinished, this,
+   disconnect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeUnified::editingFinished, this,
               &C_NagViewItem::m_OnNameEditFinished);
 
    this->mpc_Ui->pc_LabelHeading->setVisible(true);
    this->mpc_Ui->pc_LineEditHeading->setVisible(false);
 
-   connect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeNavigation::editingFinished, this,
+   connect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeUnified::editingFinished, this,
            &C_NagViewItem::m_OnNameEditFinished);
 
    //Check new name
@@ -579,12 +579,12 @@ void C_NagViewItem::m_OnNameEditFinished(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_NagViewItem::m_OnNameEditCancelled(void)
 {
-   disconnect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeNavigation::editingFinished, this,
+   disconnect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeUnified::editingFinished, this,
               &C_NagViewItem::m_OnNameEditFinished);
    this->mpc_Ui->pc_LabelHeading->setVisible(true);
    this->mpc_Ui->pc_LineEditHeading->setVisible(false);
    //Don't allow accepting the current input
-   connect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeNavigation::editingFinished, this,
+   connect(this->mpc_Ui->pc_LineEditHeading, &stw::opensyde_gui_elements::C_OgeLeUnified::editingFinished, this,
            &C_NagViewItem::m_OnNameEditFinished);
 }
 

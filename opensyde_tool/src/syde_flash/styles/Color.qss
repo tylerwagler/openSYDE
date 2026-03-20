@@ -51,7 +51,7 @@ stw--opensyde_gui_elements--C_FlaOgeTebProgressLog,
 stw--opensyde_gui_elements--C_FlaOgeSpxDark,
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Foreground="0"],
 stw--opensyde_gui_elements--C_OgeRabProperties[DarkBackground="true"],
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Dark"],
+stw--opensyde_gui_elements--C_OgeLeUnified[variant="Dark"],
 stw--opensyde_gui_elements--C_CamOgeCbxDark QListView::item,
 stw--opensyde_gui_elements--C_CamOgeCbxDark,
 stw--opensyde_gui_elements--C_FlaOgeLeFilePath,
@@ -169,7 +169,7 @@ stw--opensyde_gui_elements--C_OgePubStyled[variant="MessageCancel"]:enabled
 border-color:rgb(42, 42, 91);
 }
 
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Dark"],
+stw--opensyde_gui_elements--C_OgeLeUnified[variant="Dark"],
 stw--opensyde_gui_elements--C_CamOgeCbxTable,
 stw--opensyde_gui_elements--C_CamOgeCbxWhite,
 stw--opensyde_gui_elements--C_CamOgeLeTableEdit,
@@ -243,7 +243,7 @@ color:rgb(86, 86, 104);
 
 stw--opensyde_gui_elements--C_FlaOgeTebProgressLog,
 stw--opensyde_gui_elements--C_FlaOgeSpxDark,
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Dark"],
+stw--opensyde_gui_elements--C_OgeLeUnified[variant="Dark"],
 stw--opensyde_gui_elements--C_CamOgePubDarkBrowse,
 stw--opensyde_gui_elements--C_OgeMuSections,
 stw--opensyde_gui_elements--C_CamOgeCbxDark,
@@ -545,7 +545,7 @@ stw--opensyde_gui_elements--C_CamOgeMuRecentProjects::item:selected
 background-color:rgb(195, 186, 221);
 }
 
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Dark"],
+stw--opensyde_gui_elements--C_OgeLeUnified[variant="Dark"],
 stw--opensyde_gui_elements--C_CamOgeCbxTable,
 stw--opensyde_gui_elements--C_CamOgeCbxWhite,
 stw--opensyde_gui_elements--C_CamOgeLeTableEdit,
@@ -609,7 +609,7 @@ background-color: rgb(217, 217, 226);
 /* NON-STYLE-GUIDE-COLORS (can monitor specific)
 /* --------------------------------------------------------------------- */
 /* CAN Monitor specific color 67 */
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Dark"]:disabled,
+stw--opensyde_gui_elements--C_OgeLeUnified[variant="Dark"]:disabled,
 stw--opensyde_gui_elements--C_FlaOgeSpxDark:disabled,
 stw--opensyde_gui_elements--C_FlaOgeLeFilePath:disabled,
 stw--opensyde_gui_elements--C_CamOgePubDarkBrowse:disabled,
@@ -621,7 +621,7 @@ background-color: rgb(67, 67, 94);
 
 /* --------------------------------------------------------------------- */
 /* CAN Monitor specific color 75 */
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Dark"]:disabled,
+stw--opensyde_gui_elements--C_OgeLeUnified[variant="Dark"]:disabled,
 stw--opensyde_gui_elements--C_FlaOgeSpxDark:disabled,
 stw--opensyde_gui_elements--C_FlaOgeLeFilePath:disabled,
 stw--opensyde_gui_elements--C_FlaOgePubPathVariables:disabled,
@@ -657,7 +657,7 @@ background-color:rgb(32, 31, 67);
 /* --------------------------------------------------------------------- */
 /* CAN Monitor specific color 101 */
 stw--opensyde_gui_elements--C_FlaOgeTebProgressLog,
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Dark"],
+stw--opensyde_gui_elements--C_OgeLeUnified[variant="Dark"],
 stw--opensyde_gui_elements--C_FlaOgeSpxDark,
 stw--opensyde_gui_elements--C_CamOgePubDarkBrowse,
 stw--opensyde_gui_elements--C_OgeMuSections,
@@ -674,7 +674,7 @@ background-color:rgb(59, 59, 81);
 /* CAN Monitor specific color 102 */
 stw--opensyde_gui_elements--C_CamOgePubSettingsAdd:disabled,
 stw--opensyde_gui_elements--C_CamOgeChxSettings:disabled,
-stw--opensyde_gui_elements--C_OgeLeStyled[variant="Dark"]:disabled,
+stw--opensyde_gui_elements--C_OgeLeUnified[variant="Dark"]:disabled,
 stw--opensyde_gui_elements--C_FlaOgeSpxDark:disabled,
 stw--opensyde_gui_elements--C_CamOgePubDarkBrowse:disabled,
 stw--opensyde_gui_elements--C_FlaOgePubPathVariables:disabled,

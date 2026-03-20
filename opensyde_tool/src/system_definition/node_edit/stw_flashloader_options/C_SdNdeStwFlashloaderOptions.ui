@@ -159,7 +159,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxUseResetMessage">
+         <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxUseResetMessage">
           <property name="variant" stdset="0">
            <string>Properties</string>
           </property>
@@ -436,9 +436,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxUnified</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxStyled.hpp</header>
+   <header>C_OgeChxUnified.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupItemValue</class>

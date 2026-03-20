@@ -2128,7 +2128,7 @@ void C_SdBueSignalPropertiesWidget::m_ConnectAll(void) const
    connect(this->mpc_Ui->pc_SpinBoxMuxValue, static_cast<void (QSpinBox::*)(
                                                             int32_t)>(&C_OgeSpxStyled::valueChanged), this,
            &C_SdBueSignalPropertiesWidget::m_HandleMuxValueChange);
-   connect(this->mpc_Ui->pc_CheckBoxAutoMinMax, &C_OgeChxStyled::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxAutoMinMax, &C_OgeChxUnified::toggled, this,
            &C_SdBueSignalPropertiesWidget::m_HandleAutoMinMaxCheckBoxChange);
    connect(this->mpc_Ui->pc_WidgetMin, &C_OgeWiSpinBoxGroup::SigValueChanged, this,
            &C_SdBueSignalPropertiesWidget::m_HandleMinChange);
@@ -2190,7 +2190,7 @@ void C_SdBueSignalPropertiesWidget::m_DisconnectAll(void) const
    disconnect(this->mpc_Ui->pc_SpinBoxMuxValue, static_cast<void (QSpinBox::*)(
                                                                int32_t)>(&C_OgeSpxStyled::valueChanged), this,
               &C_SdBueSignalPropertiesWidget::m_HandleMuxValueChange);
-   disconnect(this->mpc_Ui->pc_CheckBoxAutoMinMax, &C_OgeChxStyled::toggled, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxAutoMinMax, &C_OgeChxUnified::toggled, this,
               &C_SdBueSignalPropertiesWidget::m_HandleAutoMinMaxCheckBoxChange);
    disconnect(this->mpc_Ui->pc_WidgetMin, &C_OgeWiSpinBoxGroup::SigValueChanged, this,
               &C_SdBueSignalPropertiesWidget::m_HandleMinChange);

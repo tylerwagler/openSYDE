@@ -890,7 +890,7 @@ void C_GiSyColorSelectWidget::m_PushButtonRgba(void) const
                                            QString::number(c_HtmlColor.green()) + "/" +
                                            QString::number(c_HtmlColor.blue()) + "/" +
                                            QString::number(c_HtmlColor.alpha()));
-   // set validator for RGBA input (source: C_OgeLeIpAddress)
+   // set validator for RGBA input (source: C_OgeLeUnified IP address mode)
    const QString c_Range =
       "(([ 0]+)|"                                     // only spaces or zeros
       "([ 0]*[0-9] *)|"                               // one digit, e.g. "9  " or " 08" or " 1 "; but not " 10"

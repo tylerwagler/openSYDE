@@ -221,7 +221,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxSameAsOpensyde">
+         <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxSameAsOpensyde">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -377,7 +377,7 @@
                 <number>10</number>
                </property>
                <item row="0" column="0">
-                <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxAutostart">
+                <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxAutostart">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -387,7 +387,7 @@
                 </widget>
                </item>
                <item row="1" column="0">
-                <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxStartDevices">
+                <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxStartDevices">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -573,7 +573,7 @@
                   </spacer>
                  </item>
                  <item>
-                  <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxNMTStartAll">
+                  <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxNMTStartAll">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -849,7 +849,7 @@
                 </layout>
                </item>
                <item row="0" column="0">
-                <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxSYNCProduceEnabled">
+                <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxSYNCProduceEnabled">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -1121,7 +1121,7 @@
                 </spacer>
                </item>
                <item row="0" column="0">
-                <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxEnableHeartbeatProducing">
+                <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxEnableHeartbeatProducing">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -1207,9 +1207,9 @@
    <header>C_OgeSpxStyled.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxUnified</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxStyled.hpp</header>
+   <header>C_OgeChxUnified.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

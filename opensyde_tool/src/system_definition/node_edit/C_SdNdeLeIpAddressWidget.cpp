@@ -76,10 +76,10 @@ C_SdNdeLeIpAddressWidget::C_SdNdeLeIpAddressWidget(QWidget * const opc_Parent) :
       this->mapc_LineEdit[u32_Pos]->setValidator(this->mapc_Validator[u32_Pos]);
 
       // signal connects
-      connect(dynamic_cast<C_OgeLeIpAddress *>(this->mapc_LineEdit[u32_Pos]),
-              &C_OgeLeIpAddress::SignalFocusIn,
+      connect(dynamic_cast<C_OgeLeUnified *>(this->mapc_LineEdit[u32_Pos]),
+              &C_OgeLeUnified::SignalFocusIn,
               this, &C_SdNdeLeIpAddressWidget::m_FocusInSlot);
-      connect(dynamic_cast<C_OgeLeIpAddress *>(this->mapc_LineEdit[u32_Pos]), &C_OgeLeIpAddress::SignalFocusOut,
+      connect(dynamic_cast<C_OgeLeUnified *>(this->mapc_LineEdit[u32_Pos]), &C_OgeLeUnified::SignalFocusOut,
               this, &C_SdNdeLeIpAddressWidget::m_FocusOutSlot);
    }
 

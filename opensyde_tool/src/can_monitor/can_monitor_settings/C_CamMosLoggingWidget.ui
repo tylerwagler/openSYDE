@@ -170,7 +170,7 @@
          </widget>
         </item>
         <item row="1" column="2" colspan="3">
-         <widget class="stw::opensyde_gui_elements::C_OgeLeStyled" name="pc_LeFile">
+         <widget class="stw::opensyde_gui_elements::C_OgeLeUnified" name="pc_LeFile">
           <property name="variant" stdset="0">
            <string>Dark</string>
           </property>
@@ -232,9 +232,9 @@
    <header>C_OgePubBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLeStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeLeUnified</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLeStyled.hpp</header>
+   <header>C_OgeLeUnified.hpp</header>
   </customwidget>
    <customwidget>
     <class>stw::opensyde_gui_elements::C_OgeCbxBase</class>

@@ -20,7 +20,7 @@
 #include "constants.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OgeWiSpinBoxGroup.hpp"
-#include "C_OgeLeStyled.hpp"
+#include "C_OgeLeUnified.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
 #include "C_PuiSdSharedDatapools.hpp"
 
@@ -440,11 +440,11 @@ QWidget * C_SdNdeDpUtil::h_CreateGenericEditor(QWidget * const opc_Parent, const
          QLineEdit * pc_LineEdit;
          if (oq_UseParamVariant == false)
          {
-            pc_LineEdit = new C_OgeLeStyled("Table", opc_Parent);
+            pc_LineEdit = new C_OgeLeUnified("Table", opc_Parent);
          }
          else
          {
-            pc_LineEdit = new C_OgeLeStyled("Param", opc_Parent);
+            pc_LineEdit = new C_OgeLeUnified("Param", opc_Parent);
          }
          //Restrict count
          pc_LineEdit->setMaxLength(static_cast<int32_t>(orc_Min.GetArraySize()) - 1);

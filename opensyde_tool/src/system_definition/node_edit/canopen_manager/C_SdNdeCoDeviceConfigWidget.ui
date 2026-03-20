@@ -221,7 +221,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxSameAsOpensyde">
+         <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxSameAsOpensyde">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -364,7 +364,7 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxFactorySettings">
+               <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxFactorySettings">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -376,7 +376,7 @@
              </layout>
             </item>
             <item row="1" column="0">
-             <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxNoInitialization">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxNoInitialization">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -386,7 +386,7 @@
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxOptionalDevice">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxOptionalDevice">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -786,7 +786,7 @@
              </spacer>
             </item>
             <item row="2" column="0" colspan="7">
-             <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxEnableHeartbeatConsuming">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxEnableHeartbeatConsuming">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -812,7 +812,7 @@
              </spacer>
             </item>
             <item row="3" column="5">
-             <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxConsumerTimeAuto">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxConsumerTimeAuto">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -866,7 +866,7 @@
              </spacer>
             </item>
             <item row="0" column="0" colspan="7">
-             <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxEnableHeartbeatProducing">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxEnableHeartbeatProducing">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -949,9 +949,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxUnified</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxStyled.hpp</header>
+   <header>C_OgeChxUnified.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -30,7 +30,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_ChkBoxAdditionalTrigger">
+    <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_ChkBoxAdditionalTrigger">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -261,9 +261,9 @@
    <header>C_OgeLeBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxUnified</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxStyled.hpp</header>
+   <header>C_OgeChxUnified.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiSpinBoxGroupProperties</class>

@@ -355,7 +355,7 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
    connect(this->mpc_Ui->pc_ComboBoxProtocol, static_cast<void (QComboBox::*)(
                                                              int32_t)>(&C_OgeCbxText::currentIndexChanged), this,
            &C_SdNdeDpProperties::m_OnComTypeChange);
-   connect(this->mpc_Ui->pc_CheckBoxSafety, &C_OgeChxTristateStyled::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxSafety, &C_OgeChxUnified::toggled, this,
            &C_SdNdeDpProperties::m_OnSafetyChange);
    connect(this->mpc_Ui->pc_BushButtonBreakRelation, &C_OgePubStyledToolTip::clicked, this,
            &C_SdNdeDpProperties::m_BreakSharedRelation);

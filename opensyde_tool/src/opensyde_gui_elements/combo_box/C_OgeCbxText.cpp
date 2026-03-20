@@ -54,7 +54,7 @@ C_OgeCbxTextLineEdit::C_OgeCbxTextLineEdit(QWidget * const opc_Parent) :
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_OgeCbxText::C_OgeCbxText(QWidget * const opc_Parent) :
-   C_OgeCbxIconOnly(opc_Parent),
+   C_OgeCbxUnified(opc_Parent),
    mc_TemporaryText(""),
    ms32_TemporaryIndex(-1),
    mq_Error(false),

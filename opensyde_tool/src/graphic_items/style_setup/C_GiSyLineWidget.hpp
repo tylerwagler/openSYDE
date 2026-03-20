@@ -18,7 +18,7 @@
 
 #include "C_GiSyBaseWidget.hpp"
 #include "C_PuiBsLineArrow.hpp"
-#include "C_OgeCbxIconOnly.hpp"
+#include "C_OgeCbxUnified.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -82,7 +82,7 @@ private:
    void m_ColorClicked(void);
    void m_ColorInnerClicked(void);
    void m_ValueChanged(void);
-   static void mh_InitArrow(stw::opensyde_gui_elements::C_OgeCbxIconOnly * const opc_ComboBox,
+   static void mh_InitArrow(stw::opensyde_gui_elements::C_OgeCbxUnified * const opc_ComboBox,
                             const bool & orq_Rotate = false);
 
    Ui::C_GiSyLineWidget * mpc_Ui;

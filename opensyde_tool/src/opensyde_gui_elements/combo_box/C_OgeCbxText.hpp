@@ -14,7 +14,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
 
-#include "C_OgeCbxIconOnly.hpp"
+#include "C_OgeCbxUnified.hpp"
 #include "C_OgeLeContextMenuBase.hpp"
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -35,7 +35,7 @@ public:
 };
 
 class C_OgeCbxText :
-   public C_OgeCbxIconOnly
+   public C_OgeCbxUnified
 {
    Q_OBJECT
 

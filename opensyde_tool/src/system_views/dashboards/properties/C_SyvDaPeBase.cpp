@@ -192,9 +192,9 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    connect(this->mpc_Ui->pc_PushButtonDataElement, &QPushButton::clicked, this, &C_SyvDaPeBase::m_Browse);
    connect(this->mpc_Ui->pc_PushButtonUpdateModeConfigure, &QPushButton::clicked, this,
            &C_SyvDaPeBase::m_Configuration);
-   connect(this->mpc_Ui->pc_CheckBoxDefaultScaling, &C_OgeChxStyled::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxDefaultScaling, &C_OgeChxUnified::toggled, this,
            &C_SyvDaPeBase::m_OnUseDefaultScalingChange);
-   connect(this->mpc_Ui->pc_CheckBoxFormatterActive, &C_OgeChxStyled::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxFormatterActive, &C_OgeChxUnified::toggled, this,
            &C_SyvDaPeBase::m_OnFormatterActiveChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_ComboBoxTheme,
@@ -206,7 +206,7 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    connect(this->mpc_Ui->pc_ComboBoxInitialValueMode,
            static_cast<void (QComboBox::*)(int32_t)>(&C_OgeCbxText::currentIndexChanged),
            this, &C_SyvDaPeBase::m_OnInitialValueModeChange);
-   connect(this->mpc_Ui->pc_CheckBoxDefaultScaling, &C_OgeChxStyled::toggled,
+   connect(this->mpc_Ui->pc_CheckBoxDefaultScaling, &C_OgeChxUnified::toggled,
            this, &C_SyvDaPeBase::m_UpdateSpinboxMetaData);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_DoubleSpinBoxFactor,

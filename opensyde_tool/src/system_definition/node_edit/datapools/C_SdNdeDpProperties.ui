@@ -797,7 +797,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeChxTristateStyled" name="pc_CheckBoxSafety">
+           <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxSafety">
      <property name="variant" stdset="0">
       <string notr="true">TransparentToggle</string>
      </property>
@@ -1469,9 +1469,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLabStyled.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxTristateStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxUnified</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxTristateStyled.hpp</header>
+   <header>C_OgeChxUnified.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGroupSubItem</class>

@@ -57,7 +57,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeLeIpAddress" name="pc_LineEditIpPart1">
+       <widget class="stw::opensyde_gui_elements::C_OgeLeUnified" name="pc_LineEditIpPart1">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -107,7 +107,7 @@
        </widget>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeLeIpAddress" name="pc_LineEditIpPart2">
+       <widget class="stw::opensyde_gui_elements::C_OgeLeUnified" name="pc_LineEditIpPart2">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -154,7 +154,7 @@
        </widget>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeLeIpAddress" name="pc_LineEditIpPart3">
+       <widget class="stw::opensyde_gui_elements::C_OgeLeUnified" name="pc_LineEditIpPart3">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -201,7 +201,7 @@
        </widget>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeLeIpAddress" name="pc_LineEditIpPart4">
+       <widget class="stw::opensyde_gui_elements::C_OgeLeUnified" name="pc_LineEditIpPart4">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -229,9 +229,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLeIpAddress</class>
+   <class>stw::opensyde_gui_elements::C_OgeLeUnified</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLeIpAddress.hpp</header>
+   <header>C_OgeLeUnified.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>

@@ -228,7 +228,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeCbxStyled" name="pc_ComboBoxLineStyle">
+        <widget class="stw::opensyde_gui_elements::C_OgeCbxUnified" name="pc_ComboBoxLineStyle">
      <property name="variant" stdset="0">
       <string notr="true">Line</string>
      </property>
@@ -331,7 +331,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeCbxStyled" name="pc_ComboBoxStartArrow">
+        <widget class="stw::opensyde_gui_elements::C_OgeCbxUnified" name="pc_ComboBoxStartArrow">
      <property name="variant" stdset="0">
       <string notr="true">Arrow</string>
      </property>
@@ -449,7 +449,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeCbxStyled" name="pc_ComboBoxEndArrow">
+        <widget class="stw::opensyde_gui_elements::C_OgeCbxUnified" name="pc_ComboBoxEndArrow">
      <property name="variant" stdset="0">
       <string notr="true">Arrow</string>
      </property>
@@ -575,9 +575,9 @@
    <header>C_OgePubStyled.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeCbxStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeCbxUnified</class>
    <extends>QComboBox</extends>
-   <header>C_OgeCbxStyled.hpp</header>
+   <header>C_OgeCbxUnified.hpp</header>
   </customwidget>
  </customwidgets>
  <resources>

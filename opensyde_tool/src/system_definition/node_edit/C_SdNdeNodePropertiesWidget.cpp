@@ -30,7 +30,7 @@
 #include "ui_C_SdNdeNodePropertiesWidget.h"
 
 
-#include "C_OgeChxTristateStyled.hpp"
+#include "C_OgeChxUnified.hpp"
 #include "C_OgeLabUnified.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OgeWiUtil.hpp"
@@ -731,9 +731,12 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
 
           /**********************************************************************************************************/
           // INTERFACE
-          this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(
-              u8_ComIfCnt, s32_COL_INTERFACE,
-              new C_OgeChxTristateStyled("TransparentError", this));
+           {
+              C_OgeChxUnified * pc_CheckBox = new C_OgeChxUnified(this);
+              pc_CheckBox->SetCheckBoxVariant("TransparentError");
+              this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(
+                  u8_ComIfCnt, s32_COL_INTERFACE, pc_CheckBox);
+           }
           // disable
           this->mpc_Ui->pc_TableWidgetComIfSettings
               ->cellWidget(u8_ComIfCnt, s32_COL_INTERFACE)
@@ -753,7 +756,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
                     static_cast<int32_t>(pc_DevDef->u8_NumCanBusses)));
           }
 
-          dynamic_cast<C_OgeChxTristateStyled *>(
+          dynamic_cast<C_OgeChxUnified *>(
               this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                   u8_ComIfCnt, s32_COL_INTERFACE))
               ->setText(c_ComIfName);
@@ -893,7 +896,8 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
           /**********************************************************************************************************/
           // UPDATE
           this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(
-              u8_ComIfCnt, s32_COL_UPDATE, new C_OgeChxTristateStyled("Tristate", this));
+              u8_ComIfCnt, s32_COL_UPDATE, ([]new C_OgeChxUnified(this)
+    ->SetCheckBoxVariant("Tristate"), []0));
           // set node value
           if (q_IsUpdateAvailable == true) {
             // defensive move
@@ -906,12 +910,12 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
                     ->cellWidget(u8_ComIfCnt, s32_COL_UPDATE)
                     ->setEnabled(false);
 
-                dynamic_cast<C_OgeChxTristateStyled *>(
+                dynamic_cast<C_OgeChxUnified *>(
                     this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                         u8_ComIfCnt, s32_COL_UPDATE))
                     ->setChecked(false);
               } else {
-                dynamic_cast<C_OgeChxTristateStyled *>(
+                dynamic_cast<C_OgeChxUnified *>(
                     this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                         u8_ComIfCnt, s32_COL_UPDATE))
                     ->setChecked(
@@ -928,7 +932,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
                 ->setEnabled(false);
           }
           // connect to RegisterChange
-          connect(dynamic_cast<C_OgeChxTristateStyled *>(
+          connect(dynamic_cast<C_OgeChxUnified *>(
                       this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                           u8_ComIfCnt, s32_COL_UPDATE)),
                   &QCheckBox::stateChanged, this,
@@ -937,11 +941,12 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
           /**********************************************************************************************************/
           // ROUTING
           this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(
-              u8_ComIfCnt, s32_COL_ROUTING, new C_OgeChxTristateStyled("Tristate", this));
+              u8_ComIfCnt, s32_COL_ROUTING, ([]new C_OgeChxUnified(this)
+    ->SetCheckBoxVariant("Tristate"), []0));
 
           if (q_IsRoutingAvailable == true) {
             // set node value
-            dynamic_cast<C_OgeChxTristateStyled *>(
+            dynamic_cast<C_OgeChxUnified *>(
                 this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                     u8_ComIfCnt, s32_COL_ROUTING))
                 ->setChecked(pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt]
@@ -963,7 +968,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
           }
 
           // connect to RegisterChange
-          connect(dynamic_cast<C_OgeChxTristateStyled *>(
+          connect(dynamic_cast<C_OgeChxUnified *>(
                       this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                           u8_ComIfCnt, s32_COL_ROUTING)),
                   &QCheckBox::stateChanged, this,
@@ -972,11 +977,12 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
           /**********************************************************************************************************/
           // DIAGNOSTIC
           this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(
-              u8_ComIfCnt, s32_COL_DIAGNOSTIC, new C_OgeChxTristateStyled("Tristate", this));
+              u8_ComIfCnt, s32_COL_DIAGNOSTIC, ([]new C_OgeChxUnified(this)
+    ->SetCheckBoxVariant("Tristate"), []0));
 
           if (q_IsDiagnosisAvailable == true) {
             // set node value
-            dynamic_cast<C_OgeChxTristateStyled *>(
+            dynamic_cast<C_OgeChxUnified *>(
                 this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                     u8_ComIfCnt, s32_COL_DIAGNOSTIC))
                 ->setChecked(pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt]
@@ -989,7 +995,7 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void) {
           }
 
           // connect to RegisterChange
-          connect(dynamic_cast<C_OgeChxTristateStyled *>(
+          connect(dynamic_cast<C_OgeChxUnified *>(
                       this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                           u8_ComIfCnt, s32_COL_DIAGNOSTIC)),
                   &QCheckBox::stateChanged, this,
@@ -1162,7 +1168,7 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void) {
                     ->cellWidget(u16_ComIfCnt, s32_COL_UPDATE)
                     ->isEnabled() == true) {
               q_NewValue =
-                  dynamic_cast<C_OgeChxTristateStyled *>(
+                  dynamic_cast<C_OgeChxUnified *>(
                       this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                           u16_ComIfCnt, s32_COL_UPDATE))
                       ->isChecked();
@@ -1181,7 +1187,7 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void) {
                     ->cellWidget(u16_ComIfCnt, s32_COL_ROUTING)
                     ->isEnabled() == true) {
               q_NewValue =
-                  dynamic_cast<C_OgeChxTristateStyled *>(
+                  dynamic_cast<C_OgeChxUnified *>(
                       this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                           u16_ComIfCnt, s32_COL_ROUTING))
                       ->isChecked();
@@ -1200,7 +1206,7 @@ void C_SdNdeNodePropertiesWidget::SaveToData(void) {
                     ->cellWidget(u16_ComIfCnt, s32_COL_DIAGNOSTIC)
                     ->isEnabled() == true) {
               q_NewValue =
-                  dynamic_cast<C_OgeChxTristateStyled *>(
+                  dynamic_cast<C_OgeChxUnified *>(
                       this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                           u16_ComIfCnt, s32_COL_DIAGNOSTIC))
                       ->isChecked();
@@ -1264,11 +1270,11 @@ void C_SdNdeNodePropertiesWidget::m_SupportedProtocolChange(void) {
         const bool q_IsRoutingAvailable =
             pc_Node->IsRoutingAvailable(rc_CurInterface.e_InterfaceType);
 
-        C_OgeChxTristateStyled *const pc_Tristate = dynamic_cast<C_OgeChxTristateStyled *>(
+        C_OgeChxUnified *const pc_Tristate = dynamic_cast<C_OgeChxUnified *>(
             this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                 u16_ComIfCnt, s32_COL_ROUTING));
-        C_OgeChxTristateStyled *const pc_TristateUpdate =
-            dynamic_cast<C_OgeChxTristateStyled *>(
+        C_OgeChxUnified *const pc_TristateUpdate =
+            dynamic_cast<C_OgeChxUnified *>(
                 this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(
                     u16_ComIfCnt, s32_COL_UPDATE));
 

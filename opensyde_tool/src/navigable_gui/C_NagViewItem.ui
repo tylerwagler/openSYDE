@@ -183,9 +183,13 @@
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLeNavigation" name="pc_LineEditHeading"/>
-              </item>
+               <item>
+                <widget class="stw::opensyde_gui_elements::C_OgeLeUnified" name="pc_LineEditHeading">
+                 <property name="lineEditMode" stdset="0">
+                  <string>NAVIGATION</string>
+                 </property>
+                </widget>
+               </item>
               <item>
                <widget class="stw::opensyde_gui_elements::C_OgeGbxStyled" name="pc_GroupBoxHoverButtons">
      <property name="variant" stdset="0">
@@ -378,11 +382,11 @@
    <header>C_OgePubNavigationHover.hpp</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLeNavigation</class>
-   <extends>QLineEdit</extends>
-   <header>C_OgeLeNavigation.hpp</header>
-  </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeLeUnified</class>
+    <extends>QLineEdit</extends>
+    <header>C_OgeLeUnified.hpp</header>
+   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxNavigationSectionSelected</class>
    <extends>QGroupBox</extends>

@@ -363,7 +363,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item row="0" column="0" colspan="3">
-            <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxUsableForRouting">
+            <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxUsableForRouting">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -781,7 +781,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="0" column="0" colspan="3">
-        <widget class="stw::opensyde_gui_elements::C_OgeChxStyled" name="pc_CheckBoxEnableCANFD">
+        <widget class="stw::opensyde_gui_elements::C_OgeChxUnified" name="pc_CheckBoxEnableCANFD">
           <property name="variant" stdset="0">
            <string>PropertiesSmall</string>
           </property>
@@ -875,9 +875,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLeBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxStyled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxUnified</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxStyled.hpp</header>
+   <header>C_OgeChxUnified.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabSvgOnly</class>
