@@ -69,23 +69,6 @@ public:
    static int32_t h_LoadFromMemoryXml(C_OscDataLoggerJob &orc_Job, const QDomElement &orc_Element);
    static QDomElement h_SaveToMemoryXml(const C_OscDataLoggerJob &orc_Job, QDomDocument &orc_Doc);
 
-    // --------------------------------------------------------------------------
-    // Clipboard Support Methods (XML Parser Interface)
-    // --------------------------------------------------------------------------
-    static int32_t h_LoadData(QList<C_OscDataLoggerJob> &orc_Config,
-                              C_OscXmlParserBase &orc_XmlParser);
-    static void h_SaveData(const QList<C_OscDataLoggerJob> &orc_Config,
-                           C_OscXmlParserBase &orc_XmlParser);
-    static int32_t h_LoadDataElementId(C_OscNodeDataPoolListElementId &orc_Config,
-                                       C_OscXmlParserBase &orc_XmlParser);
-    static void h_SaveDataElementId(const C_OscNodeDataPoolListElementId &orc_Config,
-                                    C_OscXmlParserBase &orc_XmlParser);
-    static int32_t h_LoadDataElementOptArrayId(
-        C_OscNodeDataPoolListElementOptArrayId &orc_Config,
-        C_OscXmlParserBase &orc_XmlParser);
-    static void h_SaveDataElementOptArrayId(
-        const C_OscNodeDataPoolListElementOptArrayId &orc_Config,
-        C_OscXmlParserBase &orc_XmlParser);
 
 private:
    static int32_t mh_DetectAndLoad(C_OscDataLoggerJob &orc_Job, const QString &orc_Path);

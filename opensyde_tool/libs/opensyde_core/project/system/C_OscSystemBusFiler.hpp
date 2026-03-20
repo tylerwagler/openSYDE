@@ -65,14 +65,6 @@ public:
    static int32_t h_LoadFromMemoryXml(C_OscSystemBus &orc_Bus, const QDomElement &orc_Element);
    static QDomElement h_SaveToMemoryXml(const C_OscSystemBus &orc_Bus, QDomDocument &orc_Doc);
 
-   // --------------------------------------------------------------------------
-   // Legacy Compatibility (deprecated - for backward compatibility only)
-   // --------------------------------------------------------------------------
-   [[deprecated("Use h_LoadFile/h_SaveFile with format detection, or format-specific methods")]]
-   static int32_t h_LoadBus(C_OscSystemBus &orc_Bus, C_OscXmlParserBase &orc_XmlParser);
-   [[deprecated("Use h_LoadFile/h_SaveFile with format detection, or format-specific methods")]]
-   static void h_SaveBus(const C_OscSystemBus &orc_Bus, C_OscXmlParserBase &orc_XmlParser);
-
 private:
    // Helper for format detection
    static int32_t mh_DetectAndLoad(C_OscSystemBus &orc_Bus, const QString &orc_Path);

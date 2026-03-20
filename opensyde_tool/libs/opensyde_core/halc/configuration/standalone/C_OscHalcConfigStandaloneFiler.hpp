@@ -65,14 +65,6 @@ public:
     static int32_t h_LoadFromMemoryXml(C_OscHalcConfigStandalone &orc_Config, const QDomElement &orc_Element);
     static QDomElement h_SaveToMemoryXml(const C_OscHalcConfigStandalone &orc_Config, QDomDocument &orc_Doc);
 
-    // --------------------------------------------------------------------------
-    // Clipboard Support Methods (XML Parser Interface)
-    // --------------------------------------------------------------------------
-    static int32_t h_LoadDataStandalone(C_OscHalcConfigStandalone &orc_IoData,
-                                        C_OscXmlParserBase &orc_XmlParser);
-    static int32_t h_SaveDataStandalone(const C_OscHalcConfigStandalone &orc_IoData,
-                                        C_OscXmlParserBase &orc_XmlParser);
-
 private:
    static int32_t mh_DetectAndLoad(C_OscHalcConfigStandalone &orc_Config, const QString &orc_Path);
 };

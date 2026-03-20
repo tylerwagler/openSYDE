@@ -100,11 +100,7 @@ int32_t h_LoadListBinary(QList<T> & orc_List, const QString & orc_Path,
    for (uint32_t u32_I = 0U; u32_I < u32_Count; ++u32_I)
    {
       T c_Item;
-      const int32_t s32_Err = c_Item.FromQDataStream(c_Stream);
-      if (s32_Err != C_NO_ERR)
-      {
-         return s32_Err;
-      }
+      c_Item.FromQDataStream(c_Stream);
       orc_List.append(c_Item);
    }
 
@@ -152,11 +148,7 @@ int32_t h_SaveListBinary(const QList<T> & orc_List, const QString & orc_Path,
 
    for (const T & rc_Item : orc_List)
    {
-      const int32_t s32_Err = rc_Item.ToQDataStream(c_Stream);
-      if (s32_Err != C_NO_ERR)
-      {
-         return s32_Err;
-      }
+      rc_Item.ToQDataStream(c_Stream);
    }
 
    if (c_Stream.status() != QDataStream::Ok)

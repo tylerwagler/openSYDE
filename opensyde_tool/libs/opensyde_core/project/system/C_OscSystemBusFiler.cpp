@@ -458,24 +458,6 @@ QDomElement C_OscSystemBusFiler_New::h_SaveToMemoryXml(
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_LoadBus(C_OscSystemBus &orc_Bus,
-                                           C_OscXmlParserBase &orc_XmlParser) {
-   // Delegate to original implementation for backward compatibility
-   return C_OscSystemBusFiler::h_LoadBus(orc_Bus, orc_XmlParser);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save bus (legacy XML compatibility)
-
-   \param[in]      orc_Bus          Bus data to store
-   \param[in,out]  orc_XmlParser    XML parser
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemBusFiler_New::h_SaveBus(const C_OscSystemBus &orc_Bus,
-                                        C_OscXmlParserBase &orc_XmlParser) {
-   // Delegate to original implementation for backward compatibility
-   C_OscSystemBusFiler::h_SaveBus(orc_Bus, orc_XmlParser);
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Detect format and load from file

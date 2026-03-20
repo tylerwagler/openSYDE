@@ -11,11 +11,13 @@
  /* -- Includes
   * ------------------------------------------------------------------------------------------------------
   */
- #include "precomp_headers.hpp"
- #include <QDateTime>
- #include <QFile>
- #include <QFileInfo>
- #include <fstream>
+#include "precomp_headers.hpp"
+#include <QDateTime>
+#include <QFile>
+#include <QFileInfo>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <fstream>
 
  #include "C_OscProjectFiler.hpp"
  #include "C_OscLoggingHandler.hpp"

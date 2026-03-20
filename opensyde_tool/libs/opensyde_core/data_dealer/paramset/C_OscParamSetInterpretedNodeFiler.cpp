@@ -457,27 +457,3 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::mh_DetectAndLoad(C_OscParamSetInt
    \param[in]      orc_XmlParser         XML parser
    \param[out]     orq_MissingOptionalContent  Flag for missing optional content
 
-   \return
-   C_NO_ERR   data loaded
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadInterpretedNode(C_OscParamSetInterpretedNode &orc_Node,
-                                                                      C_OscXmlParserBase &orc_XmlParser,
-                                                                      bool &orq_MissingOptionalContent) {
-   // Delegate to original implementation for backward compatibility
-   return C_OscParamSetInterpretedNodeFiler::h_LoadInterpretedNode(orc_Node, orc_XmlParser, orq_MissingOptionalContent);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Save interpreted node (deprecated)
-
-   \param[in]      orc_Node              Node data
-   \param[in]      orc_XmlParser         XML parser
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscParamSetInterpretedNodeFiler_New::h_SaveInterpretedNode(const C_OscParamSetInterpretedNode &orc_Node,
-                                                                   C_OscXmlParserBase &orc_XmlParser) {
-   // Delegate to original implementation for backward compatibility
-   C_OscParamSetInterpretedNodeFiler::h_SaveInterpretedNode(orc_Node, orc_XmlParser);
-}

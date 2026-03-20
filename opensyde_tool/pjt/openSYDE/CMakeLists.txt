@@ -180,7 +180,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableModel.cpp
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericWithContextMenu.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeIpAddress.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconEvents.cpp
    
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerCanOpenLogic.cpp
@@ -281,13 +280,13 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/user_settings/C_UsFiler.cpp
    ${PROJECT_ROOT}/src/project_operations/C_PopListItem.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeContextMenu.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStandard.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToolBar.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUseCase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUseCaseNav.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubBase.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubGenericTextWithBackground.cpp
    ${PROJECT_ROOT}/src/system_definition/C_SdTopologyToolbox.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiPort.cpp
@@ -321,7 +320,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomMouseItem.cpp
    ${PROJECT_ROOT}/src/system_definition/C_SdContextMenuEntry.cpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomToolTip.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.cpp
    ${PROJECT_ROOT}/src/project_operations/C_PopErrorHandling.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBaseWidget.cpp
@@ -331,12 +329,10 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/C_GiNodeBoundary.cpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiSizeableItem.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiRect.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBoundaryWidget.cpp
    ${PROJECT_ROOT}/src/help_engine/C_HeHandler.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiText.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyTextElementWidget.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyLineWidget.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiImage.cpp
    ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyManager.cpp
@@ -392,8 +388,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableModel.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoUtil.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxStyled.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeListHeader.cpp
 
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeSearch.cpp
@@ -409,7 +403,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiBopperle.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableView.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateStyled.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTableWidgetComIf.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeComIfSettingsTableDelegate.cpp
@@ -618,7 +611,6 @@ ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.cpp
    ${PROJECT_ROOT}/src/system_views/C_SyvClipBoardHelper.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoSetupStyleCommand.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFontConfig.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxFontProperties.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebToolboxUtil.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaLabelBase.cpp
@@ -628,7 +620,6 @@ ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbLabel.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabAdaptiveSize.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItUtil.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardLabelValue.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbSpinBox.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaSpinBoxBase.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardSliderWidget.cpp
@@ -643,7 +634,6 @@ ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeDashboardProgressBar.cpp
 ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
     ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDataDealer.cpp
-    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardProgressBarMaximum.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementContent.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementHandler.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparentDashboard.cpp
@@ -697,7 +687,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64AutoFix.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFix.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxAutoFixBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiTableSpinBoxGroup.cpp
    ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverDiag.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeDarkScrollArea.cpp
    ${PROJECT_ROOT}/src/system_views/communication/C_SyvComPollingThreadDiag.cpp
@@ -737,7 +726,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpPieChart.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiSvgGraphicsItem.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxStyled.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64ToolTipBase.cpp
@@ -755,9 +743,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxList.cpp
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxEntry.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/tab_widget/C_OgeTawToolTipBase.cpp
    ${PROJECT_ROOT}/src/table_base/C_TblViewToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.cpp
@@ -775,7 +760,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
    ${PROJECT_ROOT}/src/user_settings/C_UsNodeDatapoolList.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedContextMenuBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeStyled.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/slider/C_OgeSliToolTipBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleDynamicDecimalsBase.cpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieExportDbc.cpp
@@ -834,9 +818,7 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiStandard.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubNavigationHover.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebStyle.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeNavigation.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDashboard.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDoubleClick.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListDelegate.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListWidget.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.cpp
@@ -852,8 +834,6 @@ ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProje
    ${PROJECT_ROOT}/src/implementation/C_ImpCodeGenerationReportWidget.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconWithText.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxParam.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiParamSpinBoxGroup.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaValuePairs.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeDelegate.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvCanBus.cpp
@@ -917,7 +897,6 @@ ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProje
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFixPosition.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelWidget.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLePlaceholderVar.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportDialog.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportView.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportModel.cpp
@@ -931,7 +910,6 @@ ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbAddNewProje
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableHalc.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxTableHalc.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelectTableHalc.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeTableHalc.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListEditWidget.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubBackNavigation.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelDpPreviewPopUp.cpp
@@ -981,7 +959,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableModel.hpp
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericWithContextMenu.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeIpAddress.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconEvents.hpp
    
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerCanOpenLogic.hpp
@@ -1082,10 +1059,8 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/user_settings/C_UsFiler.hpp
    ${PROJECT_ROOT}/src/project_operations/C_PopListItem.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeContextMenu.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStandard.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToolBar.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUseCase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUseCaseNav.hpp
@@ -1123,7 +1098,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomMouseItem.hpp
    ${PROJECT_ROOT}/src/system_definition/C_SdContextMenuEntry.hpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomToolTip.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.hpp
    ${PROJECT_ROOT}/src/project_operations/C_PopErrorHandling.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBaseWidget.hpp
@@ -1133,12 +1107,10 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/C_GiNodeBoundary.hpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiSizeableItem.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiRect.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBoundaryWidget.hpp
    ${PROJECT_ROOT}/src/help_engine/C_HeHandler.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiText.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyTextElementWidget.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyLineWidget.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiImage.hpp
    ${PROJECT_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyManager.hpp
@@ -1194,8 +1166,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableDelegate.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableModel.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoUtil.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxStyled.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeListHeader.hpp
 
@@ -1212,7 +1182,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiBopperle.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableView.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateStyled.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTableWidgetComIf.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeComIfSettingsTableDelegate.hpp
@@ -1421,7 +1390,6 @@ ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiWithToolTip.hpp
    ${PROJECT_ROOT}/src/system_views/C_SyvClipBoardHelper.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoSetupStyleCommand.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFontConfig.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxFontProperties.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebToolboxUtil.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaLabelBase.hpp
@@ -1431,7 +1399,6 @@ ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiWithToolTip.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbLabel.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabAdaptiveSize.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItUtil.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardLabelValue.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbSpinBox.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaSpinBoxBase.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardSliderWidget.hpp
@@ -1446,7 +1413,6 @@ ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiWithToolTip.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeDashboardProgressBar.hpp
 ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
     ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDataDealer.hpp
-    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardProgressBarMaximum.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementContent.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementHandler.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparentDashboard.hpp
@@ -1500,7 +1466,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64AutoFix.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleAutoFix.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxAutoFixBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiTableSpinBoxGroup.hpp
    ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverDiag.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeDarkScrollArea.hpp
    ${PROJECT_ROOT}/src/system_views/communication/C_SyvComPollingThreadDiag.hpp
@@ -1540,7 +1505,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
    ${PROJECT_ROOT}/src/system_views/system_update/C_SyvUpPieChart.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiSvgGraphicsItem.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxStyled.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64ToolTipBase.hpp
@@ -1558,9 +1522,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxEntry.hpp
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxList.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/tab_widget/C_OgeTawToolTipBase.hpp
    ${PROJECT_ROOT}/src/table_base/C_TblViewToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.hpp
@@ -1607,7 +1568,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
    ${PROJECT_ROOT}/src/user_settings/C_UsNodeDatapoolList.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedContextMenuBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeStyled.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/slider/C_OgeSliToolTipBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleDynamicDecimalsBase.hpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieExportDbc.hpp
@@ -1652,9 +1612,7 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/splitter/C_OgeSpiStandard.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubNavigationHover.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebStyle.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeNavigation.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDashboard.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDoubleClick.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListDelegate.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListWidget.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.hpp
@@ -1670,8 +1628,6 @@ ${PROJECT_ROOT}/src/implementation/C_ImpUtil.hpp
     ${PROJECT_ROOT}/src/implementation/C_ImpCodeGenerationReportWidget.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaImportReport.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconWithText.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxParam.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiParamSpinBoxGroup.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaValuePairs.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListsTreeDelegate.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvCanBus.hpp
@@ -1735,7 +1691,6 @@ ${PROJECT_ROOT}/src/implementation/C_ImpUtil.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFixPosition.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelWidget.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLePlaceholderVar.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportDialog.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportView.hpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigImportModel.hpp

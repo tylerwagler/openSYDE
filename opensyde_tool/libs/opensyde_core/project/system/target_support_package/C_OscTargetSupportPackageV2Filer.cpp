@@ -135,7 +135,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadBinary(
    if (c_File.open(QIODevice::ReadOnly)) {
       QDataStream c_Stream(&c_File);
       c_Stream.setVersion(QDataStream::Qt_6_0);
-      s32_Result = orc_Package.FromQDataStream(c_Stream);
+      orc_Package.FromQDataStream(c_Stream);
       c_File.close();
    }
    else {
@@ -198,7 +198,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFromMemoryBinary(
    int32_t s32_Result = C_NO_ERR;
    QDataStream c_Stream(orc_Data);
    c_Stream.setVersion(QDataStream::Qt_6_0);
-   s32_Result = orc_Package.FromQDataStream(c_Stream);
+   orc_Package.FromQDataStream(c_Stream);
    return s32_Result;
 }
 
@@ -248,7 +248,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadJson(
 
       if (c_ParseError.error == QJsonParseError::NoError) {
          if (c_Doc.isObject()) {
-            s32_Result = orc_Package.FromJsonObject(c_Doc.object());
+            orc_Package.FromJsonObject(c_Doc.object());
          }
          else {
             osc_write_log_error("Loading target support package V2 (JSON)",
@@ -319,7 +319,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_SaveJson(
 int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFromMemoryJson(
    C_OscTargetSupportPackageV2 &orc_Package, const QJsonObject &orc_Object)
 {
-   return orc_Package.FromJsonObject(orc_Object);
+   orc_Package.FromJsonObject(orc_Object); return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -365,7 +365,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadXml(
 
       if (c_Doc.setContent(c_File.readAll(), &c_ErrorMsg, &i_ErrorLine, &i_ErrorColumn)) {
          QDomElement c_Root = c_Doc.documentElement();
-         s32_Result = orc_Package.FromQDomDocument(c_Root);
+         orc_Package.FromQDomDocument(c_Root);
       }
       else {
          osc_write_log_error("Loading target support package V2 (XML)",
@@ -437,7 +437,8 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_SaveXml(
 int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFromMemoryXml(
    C_OscTargetSupportPackageV2 &orc_Package, const QDomElement &orc_Element)
 {
-   return orc_Package.FromQDomDocument(orc_Element);
+   orc_Package.FromQDomDocument(orc_Element);
+   return C_NO_ERR;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -468,16 +469,6 @@ QDomElement C_OscTargetSupportPackageV2Filer_New::h_SaveToMemoryXml(
    C_CONFIG    XML structure invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-[[deprecated("Use h_LoadFile/h_SaveFile with format detection")]]
-int32_t C_OscTargetSupportPackageV2Filer_New::h_Load(
-   C_OscTargetSupportPackageV2 &orc_Package, C_OscXmlParserBase &orc_XmlParser)
-{
-   // This is a legacy wrapper - delegate to the original Filer
-   // For now, return error to indicate this should be migrated
-   osc_write_log_warning("Loading target support package V2 (legacy)",
-      "Legacy XML parser interface is deprecated. Use h_LoadXml instead.");
-   return C_NOACT;
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*!

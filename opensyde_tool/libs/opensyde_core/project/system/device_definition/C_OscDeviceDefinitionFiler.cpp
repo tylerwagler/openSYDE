@@ -423,35 +423,4 @@ int32_t C_OscDeviceDefinitionFiler_New::mh_DetectAndLoad(C_OscDeviceDefinition &
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Load device definition (deprecated)
 
-   \param[out]     orc_DeviceDefinition    Device definition data
-   \param[in]      orc_Path                File path
-
-   \return
-   C_NO_ERR   data loaded
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler_New::h_Load(C_OscDeviceDefinition &orc_DeviceDefinition,
-                                                const QString &orc_Path) {
-   // Delegate to original implementation for backward compatibility
-   return C_OscDeviceDefinitionFiler::h_Load(orc_DeviceDefinition, orc_Path);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Save device definition (deprecated)
-
-   \param[in]      orc_DeviceDefinition    Device definition data
-   \param[in]      orc_Path                File path
-
-   \return
-   C_NO_ERR   data saved
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDeviceDefinitionFiler_New::h_Save(const C_OscDeviceDefinition &orc_DeviceDefinition,
-                                                const QString &orc_Path) {
-   // Delegate to original implementation for backward compatibility
-   return C_OscDeviceDefinitionFiler::h_Save(orc_DeviceDefinition, orc_Path);
-}

@@ -65,14 +65,6 @@ public:
    static int32_t h_LoadFromMemoryXml(C_OscTargetSupportPackage &orc_Package, const QDomElement &orc_Element);
    static QDomElement h_SaveToMemoryXml(const C_OscTargetSupportPackage &orc_Package, QDomDocument &orc_Doc);
 
-   // --------------------------------------------------------------------------
-   // Legacy Compatibility (deprecated)
-   // --------------------------------------------------------------------------
-   [[deprecated("Use h_LoadFile/h_SaveFile with format detection")]]
-   static int32_t h_LoadPackage(C_OscTargetSupportPackage &orc_Package, C_OscXmlParserBase &orc_XmlParser);
-   [[deprecated("Use h_LoadFile/h_SaveFile with format detection")]]
-   static void h_SavePackage(const C_OscTargetSupportPackage &orc_Package, C_OscXmlParserBase &orc_XmlParser);
-
 private:
    static int32_t mh_DetectAndLoad(C_OscTargetSupportPackage &orc_Package, const QString &orc_Path);
 };

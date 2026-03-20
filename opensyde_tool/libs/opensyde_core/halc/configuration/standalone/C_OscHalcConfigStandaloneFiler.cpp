@@ -172,7 +172,7 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadXml(
       int i_Line, i_Column;
 
       if (c_Doc.setContent(c_File.readAll(), &c_Error, &i_Line, &i_Column)) {
-         orc_Config.FromQDomDocument(c_Doc.documentElement());
+         orc_Config.FromQDomElement(c_Doc.documentElement());
       }
       else {
          osc_write_log_error("Loading HALC config standalone (XML)",
@@ -197,7 +197,7 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveXml(
 
    if (c_File.open(QIODevice::WriteOnly | QIODevice::Text)) {
       QDomDocument c_Doc;
-      QDomElement c_Element = orc_Config.ToQDomDocument(c_Doc, "halc-config-standalone");
+      QDomElement c_Element = orc_Config.ToQDomElement(c_Doc, "halc-config-standalone");
       c_Doc.appendChild(c_Element);
       c_File.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
                    + c_Doc.toString(3).toUtf8());
@@ -214,13 +214,13 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveXml(
 int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadFromMemoryXml(
    C_OscHalcConfigStandalone &orc_Config, const QDomElement &orc_Element)
 {
-   return orc_Config.FromQDomDocument(orc_Element);
+   return orc_Config.FromQDomElement(orc_Element);
 }
 
 QDomElement C_OscHalcConfigStandaloneFiler_New::h_SaveToMemoryXml(
    const C_OscHalcConfigStandalone &orc_Config, QDomDocument &orc_Doc)
 {
-   return orc_Config.ToQDomDocument(orc_Doc, "halc-config-standalone");
+   return orc_Config.ToQDomElement(orc_Doc, "halc-config-standalone");
 }
 
 int32_t C_OscHalcConfigStandaloneFiler_New::mh_DetectAndLoad(
@@ -257,26 +257,4 @@ int32_t C_OscHalcConfigStandaloneFiler_New::mh_DetectAndLoad(
    \return
    C_NO_ERR   data read
 */
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadDataStandalone(C_OscHalcConfigStandalone &orc_IoData,
-                                                                 C_OscXmlParserBase &orc_XmlParser) {
-    // Delegate to legacy filer for clipboard operations
-    return C_OscHalcConfigStandaloneFiler::h_LoadDataStandalone(orc_IoData, orc_XmlParser);
-}
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save HALC config standalone to XML parser (clipboard support)
-
-   \param[in]      orc_IoData       HALC config data
-   \param[in]      orc_XmlParser    XML parser
-
-   \return
-   C_NO_ERR   data saved
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveDataStandalone(const C_OscHalcConfigStandalone &orc_IoData,
-                                                                 C_OscXmlParserBase &orc_XmlParser) {
-    // Delegate to legacy filer for clipboard operations
-    C_OscHalcConfigStandaloneFiler::h_SaveDataStandalone(orc_IoData, orc_XmlParser);
-    return C_NO_ERR;
-}
