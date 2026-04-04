@@ -17,6 +17,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscSystemBusFiler.hpp"
+#include "C_OscSystemBusFilerV2.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
@@ -448,16 +449,46 @@ QDomElement C_OscSystemBusFiler::h_SaveToMemoryXml(
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load bus (legacy XML compatibility)
+/*! \brief   Load bus from legacy XML parser
+
+   Delegates to C_OscSystemBusFilerV2 for parsing bus data from a C_OscXmlParserBase context.
+   This is used by C_OscSystemDefinitionFiler where buses are embedded inline in the system definition XML.
+
+   pre-condition: the passed XML parser has the active node set to "bus"
+   post-condition: the passed XML parser has the active node set to the same "bus"
 
    \param[out]     orc_Bus          Bus data
-   \param[in,out]  orc_XmlParser    XML parser
+   \param[in,out]  orc_XmlParser    XML parser with "bus" node active
 
    \return
    C_NO_ERR   data read
-   C_CONFIG   content of file is invalid
+   C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus &orc_Bus,
+                                       C_OscXmlParserBase &orc_XmlParser)
+{
+   return C_OscSystemBusFilerV2::h_LoadBus(orc_Bus, orc_XmlParser);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save bus to legacy XML parser
+
+   Delegates to C_OscSystemBusFilerV2 for writing bus data into a C_OscXmlParserBase context.
+   This is used by C_OscSystemDefinitionFiler where buses are embedded inline in the system definition XML.
+
+   pre-condition: the passed XML parser has the active node set to "bus"
+   post-condition: the passed XML parser has the active node set to the same "bus"
+
+   \param[in]      orc_Bus          Bus data to store
+   \param[in,out]  orc_XmlParser    XML parser with "bus" node active
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscSystemBusFiler::h_SaveBus(const C_OscSystemBus &orc_Bus,
+                                    C_OscXmlParserBase &orc_XmlParser)
+{
+   C_OscSystemBusFilerV2::h_SaveBus(orc_Bus, orc_XmlParser);
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Detect format and load from file

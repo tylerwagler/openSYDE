@@ -10,8 +10,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCDATALOGGERJOBFILER_NEW_HPP
-#define C_OSCDATALOGGERJOBFILER_NEW_HPP
+#ifndef C_OSCDATALOGGERJOBFILER_HPP
+#define C_OSCDATALOGGERJOBFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
@@ -88,16 +88,3 @@ private:
 } // namespace stw
 
 #endif
-
-// Alias for backward compatibility
-namespace stw {
-namespace opensyde_core {
-class C_OscDataLoggerJobFiler_New : public C_OscDataLoggerJobFiler {
-public:
-    using C_OscDataLoggerJobFiler::h_SaveData;
-    using C_OscDataLoggerJobFiler::h_LoadData;
-    using C_OscDataLoggerJobFiler::h_SaveDataElementOptArrayId;
-    using C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId;
-};
-}
-}

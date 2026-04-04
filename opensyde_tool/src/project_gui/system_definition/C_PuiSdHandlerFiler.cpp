@@ -1886,7 +1886,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadLastKnownHalcCrcs(QMap<C_OscNodeDataPoolListE
          do
          {
             C_OscNodeDataPoolListElementOptArrayId c_Id;
-            s32_Retval = C_OscDataLoggerJobFiler_New::h_LoadDataElementOptArrayId(c_Id, orc_XmlParser);
+            s32_Retval = C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId(c_Id, orc_XmlParser);
             if (s32_Retval == C_NO_ERR)
             {
                if (orc_XmlParser.AttributeExists("crc"))
@@ -1946,7 +1946,7 @@ void C_PuiSdHandlerFiler::h_SaveLastKnownHalcCrcs(const QMap<C_OscNodeDataPoolLi
         c_It != orc_Crcs.end(); ++c_It)
    {
       orc_XmlParser.CreateAndSelectNodeChild("last-known-halc-crc");
-      C_OscDataLoggerJobFiler_New::h_SaveDataElementOptArrayId(c_It.key(), orc_XmlParser);
+      C_OscDataLoggerJobFiler::h_SaveDataElementOptArrayId(c_It.key(), orc_XmlParser);
       orc_XmlParser.SetAttributeUint32("crc", c_It.value().u32_Crc);
       orc_XmlParser.CreateNodeChild("hal-data-pool-name", c_It.value().c_HalDpName);
 

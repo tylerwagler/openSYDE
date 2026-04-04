@@ -10,8 +10,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCPARAMSETRAWNODEFILER_NEW_HPP
-#define C_OSCPARAMSETRAWNODEFILER_NEW_HPP
+#ifndef C_OSCPARAMSETRAWNODEFILER_HPP
+#define C_OSCPARAMSETRAWNODEFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------

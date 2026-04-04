@@ -405,7 +405,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadBuses(QList<C_OscSystemBus> & orc_Buse
       do
       {
          C_OscSystemBus c_Item;
-         s32_Retval = C_OscSystemBusFilerV2::h_LoadBus(c_Item, orc_XmlParser);
+         s32_Retval = C_OscSystemBusFiler::h_LoadBus(c_Item, orc_XmlParser);
          if (s32_Retval == C_NO_ERR)
          {
             orc_Buses.append(c_Item);
@@ -519,7 +519,7 @@ void C_OscSystemDefinitionFiler::h_SaveBuses(const QList<C_OscSystemBus> & orc_B
    for (uint32_t u32_Index = 0U; u32_Index < orc_Buses.size(); u32_Index++)
    {
       Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("bus") == "bus");
-      C_OscSystemBusFilerV2::h_SaveBus(orc_Buses[u32_Index], orc_XmlParser);
+      C_OscSystemBusFiler::h_SaveBus(orc_Buses[u32_Index], orc_XmlParser);
       //Return (don't check to allow reuse)
       orc_XmlParser.SelectNodeParent();
    }

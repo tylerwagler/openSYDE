@@ -10,8 +10,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSXXCEMANIFESTFILER_NEW_HPP
-#define C_OSXXCEMANIFESTFILER_NEW_HPP
+#ifndef C_OSCXCEMANIFESTFILER_HPP
+#define C_OSCXCEMANIFESTFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------

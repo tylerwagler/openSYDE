@@ -10,14 +10,15 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCSYSTEMBUSFILER_NEW_HPP
-#define C_OSCSYSTEMBUSFILER_NEW_HPP
+#ifndef C_OSCSYSTEMBUSFILER_HPP
+#define C_OSCSYSTEMBUSFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
  */
 #include "C_OscSystemBus.hpp"
 #include "C_OscFilerUtil.hpp"
+#include "C_OscXmlParser.hpp"
 #include "stwtypes.hpp"
 
 /* -- Namespace
@@ -64,6 +65,12 @@ public:
    static int32_t h_SaveXml(const C_OscSystemBus &orc_Bus, const QString &orc_Path);
    static int32_t h_LoadFromMemoryXml(C_OscSystemBus &orc_Bus, const QDomElement &orc_Element);
    static QDomElement h_SaveToMemoryXml(const C_OscSystemBus &orc_Bus, QDomDocument &orc_Doc);
+
+   // --------------------------------------------------------------------------
+   // Legacy XML Parser (C_OscXmlParserBase) - for system definition filer
+   // --------------------------------------------------------------------------
+   static int32_t h_LoadBus(C_OscSystemBus &orc_Bus, C_OscXmlParserBase &orc_XmlParser);
+   static void h_SaveBus(const C_OscSystemBus &orc_Bus, C_OscXmlParserBase &orc_XmlParser);
 
 private:
    // Helper for format detection

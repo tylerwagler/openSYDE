@@ -3,7 +3,8 @@
    \file
    \brief       Filer for comm description files (header)
 
-   See cpp file for detailed description
+   Multi-format filer supporting binary, JSON, and XML serialization of CAN
+   communication protocol data, plus legacy XML element-level helpers.
 
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
@@ -18,6 +19,13 @@
 #include "C_OscCanProtocol.hpp"
 #include "C_OscXmlParser.hpp"
 #include "stwtypes.hpp"
+#include <QByteArray>
+#include <QDataStream>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QList>
 
 /* -- Namespace
@@ -35,6 +43,65 @@ namespace opensyde_core {
 
 class C_OscNodeCommFiler {
 public:
+  // --------------------------------------------------------------------------
+  // Multi-format file I/O (auto-detect format from extension)
+  // --------------------------------------------------------------------------
+  static int32_t h_LoadProtocolFile(C_OscCanProtocol &orc_Protocol,
+                                    const QString &orc_FilePath,
+                                    const QList<C_OscNodeDataPool> &orc_NodeDataPools);
+  static int32_t h_SaveProtocolFile(const C_OscCanProtocol &orc_Protocol,
+                                    const QString &orc_FilePath,
+                                    const QString &orc_DatapoolName);
+
+  // --------------------------------------------------------------------------
+  // Binary Format
+  // --------------------------------------------------------------------------
+  static int32_t h_LoadBinary(C_OscCanProtocol &orc_Protocol,
+                              const QString &orc_FilePath,
+                              const QList<C_OscNodeDataPool> &orc_NodeDataPools);
+  static int32_t h_SaveBinary(const C_OscCanProtocol &orc_Protocol,
+                              const QString &orc_FilePath,
+                              const QString &orc_DatapoolName);
+  static int32_t h_LoadFromMemoryBinary(C_OscCanProtocol &orc_Protocol,
+                                        const QByteArray &orc_Data,
+                                        const QList<C_OscNodeDataPool> &orc_NodeDataPools);
+  QByteArray h_SaveToMemoryBinary(const C_OscCanProtocol &orc_Protocol,
+                                  const QString &orc_DatapoolName) const;
+
+  // --------------------------------------------------------------------------
+  // JSON Format
+  // --------------------------------------------------------------------------
+  static int32_t h_LoadJson(C_OscCanProtocol &orc_Protocol,
+                            const QString &orc_FilePath,
+                            const QList<C_OscNodeDataPool> &orc_NodeDataPools);
+  static int32_t h_SaveJson(const C_OscCanProtocol &orc_Protocol,
+                            const QString &orc_FilePath,
+                            const QString &orc_DatapoolName);
+  static int32_t h_LoadFromMemoryJson(C_OscCanProtocol &orc_Protocol,
+                                      const QJsonObject &orc_Object,
+                                      const QList<C_OscNodeDataPool> &orc_NodeDataPools);
+  QJsonObject h_SaveToMemoryJson(const C_OscCanProtocol &orc_Protocol,
+                                 const QString &orc_DatapoolName) const;
+
+  // --------------------------------------------------------------------------
+  // XML Format (QDom-based)
+  // --------------------------------------------------------------------------
+  static int32_t h_LoadXml(C_OscCanProtocol &orc_Protocol,
+                           const QString &orc_FilePath,
+                           const QList<C_OscNodeDataPool> &orc_NodeDataPools);
+  static int32_t h_SaveXml(const C_OscCanProtocol &orc_Protocol,
+                           const QString &orc_FilePath,
+                           const QString &orc_DatapoolName);
+  static int32_t h_LoadFromMemoryXml(C_OscCanProtocol &orc_Protocol,
+                                     const QDomElement &orc_Element,
+                                     const QList<C_OscNodeDataPool> &orc_NodeDataPools);
+  QDomElement h_SaveToMemoryXml(const C_OscCanProtocol &orc_Protocol,
+                                QDomDocument &ro_Doc,
+                                const QString &orc_DatapoolName) const;
+
+  // --------------------------------------------------------------------------
+  // Legacy XML element-level methods (TinyXML parser-based)
+  // --------------------------------------------------------------------------
   static int32_t
   h_LoadNodeComProtocolFile(C_OscCanProtocol &orc_NodeComProtocol,
                             const QString &orc_FilePath,
@@ -103,6 +170,12 @@ public:
                                       const C_OscXmlParserBase &orc_XmlParser);
 
 private:
+  // Multi-format helpers
+  static int32_t mh_DetectAndLoad(C_OscCanProtocol &orc_Protocol,
+                                  const QString &orc_FilePath,
+                                  const QList<C_OscNodeDataPool> &orc_NodeDataPools);
+
+  // Legacy XML helpers
   static void
   mh_SaveMessageCanOpenPart(const C_OscCanMessage &orc_NodeCommMessage,
                             C_OscXmlParserBase &orc_XmlParser);
