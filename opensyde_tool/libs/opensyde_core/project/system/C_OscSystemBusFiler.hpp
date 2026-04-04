@@ -33,7 +33,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscSystemBusFiler_New {
+class C_OscSystemBusFiler {
 public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)

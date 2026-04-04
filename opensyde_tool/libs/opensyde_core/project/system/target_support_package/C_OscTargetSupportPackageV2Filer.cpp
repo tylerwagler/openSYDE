@@ -70,7 +70,7 @@ using namespace stw::opensyde_core;
    C_CONFIG    XML/JSON node or attribute missing
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFile(
+int32_t C_OscTargetSupportPackageV2Filer::h_LoadFile(
    C_OscTargetSupportPackageV2 &orc_Package, const QString &orc_Path)
 {
    return mh_DetectAndLoad(orc_Package, orc_Path);
@@ -88,7 +88,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFile(
    C_RD_WR     error writing to file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_SaveFile(
+int32_t C_OscTargetSupportPackageV2Filer::h_SaveFile(
    const C_OscTargetSupportPackageV2 &orc_Package, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -126,7 +126,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_SaveFile(
    C_RD_WR     error reading file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadBinary(
+int32_t C_OscTargetSupportPackageV2Filer::h_LoadBinary(
    C_OscTargetSupportPackageV2 &orc_Package, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -159,7 +159,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadBinary(
    C_RD_WR     error writing file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_SaveBinary(
+int32_t C_OscTargetSupportPackageV2Filer::h_SaveBinary(
    const C_OscTargetSupportPackageV2 &orc_Package, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -192,7 +192,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_SaveBinary(
    C_CONFIG    invalid data format
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFromMemoryBinary(
+int32_t C_OscTargetSupportPackageV2Filer::h_LoadFromMemoryBinary(
    C_OscTargetSupportPackageV2 &orc_Package, const QByteArray &orc_Data)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -211,7 +211,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFromMemoryBinary(
    \return   Binary data
 */
 //----------------------------------------------------------------------------------------------------------------------
-QByteArray C_OscTargetSupportPackageV2Filer_New::h_SaveToMemoryBinary(
+QByteArray C_OscTargetSupportPackageV2Filer::h_SaveToMemoryBinary(
    const C_OscTargetSupportPackageV2 &orc_Package)
 {
    QByteArray c_Data;
@@ -235,7 +235,7 @@ QByteArray C_OscTargetSupportPackageV2Filer_New::h_SaveToMemoryBinary(
    C_CONFIG    JSON structure invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadJson(
+int32_t C_OscTargetSupportPackageV2Filer::h_LoadJson(
    C_OscTargetSupportPackageV2 &orc_Package, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -283,7 +283,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadJson(
    C_RD_WR     error writing file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_SaveJson(
+int32_t C_OscTargetSupportPackageV2Filer::h_SaveJson(
    const C_OscTargetSupportPackageV2 &orc_Package, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -316,7 +316,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_SaveJson(
    C_CONFIG    invalid JSON structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFromMemoryJson(
+int32_t C_OscTargetSupportPackageV2Filer::h_LoadFromMemoryJson(
    C_OscTargetSupportPackageV2 &orc_Package, const QJsonObject &orc_Object)
 {
    orc_Package.FromJsonObject(orc_Object); return C_NO_ERR;
@@ -331,7 +331,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFromMemoryJson(
    \return   JSON object
 */
 //----------------------------------------------------------------------------------------------------------------------
-QJsonObject C_OscTargetSupportPackageV2Filer_New::h_SaveToMemoryJson(
+QJsonObject C_OscTargetSupportPackageV2Filer::h_SaveToMemoryJson(
    const C_OscTargetSupportPackageV2 &orc_Package)
 {
    return orc_Package.ToJsonObject();
@@ -351,7 +351,7 @@ QJsonObject C_OscTargetSupportPackageV2Filer_New::h_SaveToMemoryJson(
    C_CONFIG    XML structure invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadXml(
+int32_t C_OscTargetSupportPackageV2Filer::h_LoadXml(
    C_OscTargetSupportPackageV2 &orc_Package, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -396,7 +396,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadXml(
    C_RD_WR     error writing file
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_SaveXml(
+int32_t C_OscTargetSupportPackageV2Filer::h_SaveXml(
    const C_OscTargetSupportPackageV2 &orc_Package, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -434,7 +434,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_SaveXml(
    C_CONFIG    invalid XML structure
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFromMemoryXml(
+int32_t C_OscTargetSupportPackageV2Filer::h_LoadFromMemoryXml(
    C_OscTargetSupportPackageV2 &orc_Package, const QDomElement &orc_Element)
 {
    orc_Package.FromQDomDocument(orc_Element);
@@ -451,7 +451,7 @@ int32_t C_OscTargetSupportPackageV2Filer_New::h_LoadFromMemoryXml(
    \return   XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscTargetSupportPackageV2Filer_New::h_SaveToMemoryXml(
+QDomElement C_OscTargetSupportPackageV2Filer::h_SaveToMemoryXml(
    const C_OscTargetSupportPackageV2 &orc_Package, QDomDocument &orc_Doc)
 {
    return orc_Package.ToQDomDocument(orc_Doc, "opensyde-target-support-package");
@@ -483,7 +483,7 @@ QDomElement C_OscTargetSupportPackageV2Filer_New::h_SaveToMemoryXml(
    C_NOACT     unsupported format
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageV2Filer_New::mh_DetectAndLoad(
+int32_t C_OscTargetSupportPackageV2Filer::mh_DetectAndLoad(
    C_OscTargetSupportPackageV2 &orc_Package, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;

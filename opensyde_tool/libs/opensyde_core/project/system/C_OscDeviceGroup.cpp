@@ -73,18 +73,18 @@ C_OscDeviceGroup::C_OscDeviceGroup(void) {}
    \param[out]  oru32_SubDeviceIndex   Sub device index
 
    \return
-   != NULL:   pointer to found device
-   NULL:      define not found
+   != nullptr:   pointer to found device
+   nullptr:      define not found
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscDeviceDefinition *
 C_OscDeviceGroup::LookForDevice(const QString &orc_Name,
                                 const QString &orc_MainDeviceName,
                                 uint32_t &oru32_SubDeviceIndex) const {
-  const C_OscDeviceDefinition *pc_Device = NULL;
+  const C_OscDeviceDefinition *pc_Device = nullptr;
 
   for (uint32_t u32_ItDevice = 0U;
-       (u32_ItDevice < this->mc_Devices.size()) && (pc_Device == NULL);
+       (u32_ItDevice < this->mc_Devices.size()) && (pc_Device == nullptr);
        ++u32_ItDevice) {
     if (orc_MainDeviceName.isEmpty()) {
       oru32_SubDeviceIndex = 0UL;
@@ -209,7 +209,7 @@ int32_t C_OscDeviceGroup::LoadGroup(QSettings &orc_Ini,
           c_FullDevicePath = c_DevicePath;
         }
 
-        if (C_OscDeviceDefinitionFiler_New::h_Load(c_DeviceDefinition,
+        if (C_OscDeviceDefinitionFiler::h_LoadDeviceDefinitionFile(c_DeviceDefinition,
                                                c_FullDevicePath) == C_NO_ERR) {
           this->mc_Devices.push_back(c_DeviceDefinition);
         } else {

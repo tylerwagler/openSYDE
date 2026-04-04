@@ -10,8 +10,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCHALCCONFIGSTANDALONEFILER_NEW_HPP
-#define C_OSCHALCCONFIGSTANDALONEFILER_NEW_HPP
+#ifndef C_OSCHALCCONFIGSTANDALONEFILER_HPP
+#define C_OSCHALCCONFIGSTANDALONEFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscHalcConfigStandaloneFiler_New {
+class C_OscHalcConfigStandaloneFiler {
 public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)

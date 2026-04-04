@@ -6,8 +6,8 @@
    reserved.
 */
  //----------------------------------------------------------------------------------------------------------------------
- #ifndef C_OSCSUPNODEDEFINITIONFILER_NEW_HPP
- #define C_OSCSUPNODEDEFINITIONFILER_NEW_HPP
+ #ifndef C_OSCSUPNODEDEFINITIONFILER_HPP
+ #define C_OSCSUPNODEDEFINITIONFILER_HPP
 
  /* -- Includes
   * ------------------------------------------------------------------------------------------------------

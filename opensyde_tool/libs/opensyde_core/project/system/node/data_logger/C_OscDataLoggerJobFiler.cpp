@@ -61,7 +61,7 @@ using namespace stw::scl;
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadFile(C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_LoadFile(C_OscDataLoggerJob &orc_Job,
                                                 const QString &orc_Path) {
    return mh_DetectAndLoad(orc_Job, orc_Path);
 }
@@ -76,7 +76,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadFile(C_OscDataLoggerJob &orc_Job,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_SaveFile(const C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_SaveFile(const C_OscDataLoggerJob &orc_Job,
                                                 const QString &orc_Path) {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -112,7 +112,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_SaveFile(const C_OscDataLoggerJob &orc_Jo
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadBinary(C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_LoadBinary(C_OscDataLoggerJob &orc_Job,
                                                   const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::ReadOnly)) {
@@ -146,7 +146,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadBinary(C_OscDataLoggerJob &orc_Job,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_SaveBinary(const C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_SaveBinary(const C_OscDataLoggerJob &orc_Job,
                                                   const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -181,7 +181,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_SaveBinary(const C_OscDataLoggerJob &orc_
    C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadFromMemoryBinary(C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_LoadFromMemoryBinary(C_OscDataLoggerJob &orc_Job,
                                                             const QByteArray &orc_Data) {
    QDataStream in(orc_Data);
    in.setVersion(QDataStream::Qt_6_0);
@@ -205,7 +205,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadFromMemoryBinary(C_OscDataLoggerJob &
    QByteArray     Binary data
 */
 //----------------------------------------------------------------------------------------------------------------------
-QByteArray C_OscDataLoggerJobFiler_New::h_SaveToMemoryBinary(
+QByteArray C_OscDataLoggerJobFiler::h_SaveToMemoryBinary(
    const C_OscDataLoggerJob &orc_Job) {
    QByteArray c_Data;
    QDataStream out(&c_Data, QIODevice::WriteOnly);
@@ -227,7 +227,7 @@ QByteArray C_OscDataLoggerJobFiler_New::h_SaveToMemoryBinary(
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadJson(C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_LoadJson(C_OscDataLoggerJob &orc_Job,
                                                 const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::ReadOnly)) {
@@ -273,7 +273,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadJson(C_OscDataLoggerJob &orc_Job,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_SaveJson(const C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_SaveJson(const C_OscDataLoggerJob &orc_Job,
                                                 const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -302,7 +302,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_SaveJson(const C_OscDataLoggerJob &orc_Jo
    C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadFromMemoryJson(C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_LoadFromMemoryJson(C_OscDataLoggerJob &orc_Job,
                                                           const QJsonObject &orc_Object) {
    int32_t s32_Result = orc_Job.FromJsonObject(orc_Object);
 
@@ -323,7 +323,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadFromMemoryJson(C_OscDataLoggerJob &or
    QJsonObject    JSON object
 */
 //----------------------------------------------------------------------------------------------------------------------
-QJsonObject C_OscDataLoggerJobFiler_New::h_SaveToMemoryJson(
+QJsonObject C_OscDataLoggerJobFiler::h_SaveToMemoryJson(
    const C_OscDataLoggerJob &orc_Job) {
    return orc_Job.ToJsonObject();
 }
@@ -339,7 +339,7 @@ QJsonObject C_OscDataLoggerJobFiler_New::h_SaveToMemoryJson(
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadXml(C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_LoadXml(C_OscDataLoggerJob &orc_Job,
                                                const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::ReadOnly)) {
@@ -383,7 +383,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadXml(C_OscDataLoggerJob &orc_Job,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_SaveXml(const C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_SaveXml(const C_OscDataLoggerJob &orc_Job,
                                                const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -416,7 +416,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_SaveXml(const C_OscDataLoggerJob &orc_Job
    C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscDataLoggerJobFiler_New::h_LoadFromMemoryXml(C_OscDataLoggerJob &orc_Job,
+int32_t C_OscDataLoggerJobFiler::h_LoadFromMemoryXml(C_OscDataLoggerJob &orc_Job,
                                                          const QDomElement &orc_Element) {
    int32_t s32_Result = orc_Job.FromQDomElement(orc_Element);
 
@@ -438,7 +438,7 @@ int32_t C_OscDataLoggerJobFiler_New::h_LoadFromMemoryXml(C_OscDataLoggerJob &orc
    QDomElement    XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscDataLoggerJobFiler_New::h_SaveToMemoryXml(
+QDomElement C_OscDataLoggerJobFiler::h_SaveToMemoryXml(
    const C_OscDataLoggerJob &orc_Job, QDomDocument &orc_Doc) {
    return orc_Job.ToQDomDocument(orc_Doc, "job");
 }

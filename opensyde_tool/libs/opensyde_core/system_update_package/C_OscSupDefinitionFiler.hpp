@@ -6,8 +6,8 @@
    reserved.
 */
  //----------------------------------------------------------------------------------------------------------------------
- #ifndef C_OSCSUPDEFINITIONFILER_NEW_HPP
- #define C_OSCSUPDEFINITIONFILER_NEW_HPP
+ #ifndef C_OSCSUPDEFINITIONFILER_HPP
+ #define C_OSCSUPDEFINITIONFILER_HPP
 
  /* -- Includes
   * ------------------------------------------------------------------------------------------------------
@@ -34,7 +34,7 @@
   * ---------------------------------------------------------------------------------------------------------
   */
 
- class C_OscSupDefinitionFiler_New {
+ class C_OscSupDefinitionFiler {
  public:
      // --------------------------------------------------------------------------
      // Public Static Methods - Multi-format file operations

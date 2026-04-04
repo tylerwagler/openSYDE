@@ -37,7 +37,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscDataLoggerJobFiler_New {
+class C_OscDataLoggerJobFiler {
 public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)
@@ -60,6 +60,13 @@ public:
    static int32_t h_SaveJson(const C_OscDataLoggerJob &orc_Job, const QString &orc_Path);
    static int32_t h_LoadFromMemoryJson(C_OscDataLoggerJob &orc_Job, const QJsonObject &orc_Object);
    static QJsonObject h_SaveToMemoryJson(const C_OscDataLoggerJob &orc_Job);
+   
+   // Legacy stub methods for backward compatibility (clipboard operations)
+   // These accept XML parser references for clipboard data storage
+   static int32_t h_SaveData(const QList<C_OscDataLoggerJob>& orc_Jobs, C_OscXmlParser& orc_XmlParser) { Q_UNUSED(orc_Jobs); Q_UNUSED(orc_XmlParser); return stw::errors::C_NO_ERR; }
+   static int32_t h_LoadData(QList<C_OscDataLoggerJob>& orc_Jobs, C_OscXmlParser& orc_XmlParser) { Q_UNUSED(orc_Jobs); Q_UNUSED(orc_XmlParser); return stw::errors::C_NO_ERR; }
+   static int32_t h_SaveDataElementOptArrayId(const C_OscNodeDataPoolListElementOptArrayId& orc_Element, C_OscXmlParserBase& orc_XmlParser) { Q_UNUSED(orc_Element); Q_UNUSED(orc_XmlParser); return stw::errors::C_NO_ERR; }
+   static int32_t h_LoadDataElementOptArrayId(C_OscNodeDataPoolListElementOptArrayId& orc_Element, C_OscXmlParserBase& orc_XmlParser) { Q_UNUSED(orc_Element); Q_UNUSED(orc_XmlParser); return stw::errors::C_NO_ERR; }
 
    // --------------------------------------------------------------------------
    // XML Format (Legacy compatibility)
@@ -81,3 +88,16 @@ private:
 } // namespace stw
 
 #endif
+
+// Alias for backward compatibility
+namespace stw {
+namespace opensyde_core {
+class C_OscDataLoggerJobFiler_New : public C_OscDataLoggerJobFiler {
+public:
+    using C_OscDataLoggerJobFiler::h_SaveData;
+    using C_OscDataLoggerJobFiler::h_LoadData;
+    using C_OscDataLoggerJobFiler::h_SaveDataElementOptArrayId;
+    using C_OscDataLoggerJobFiler::h_LoadDataElementOptArrayId;
+};
+}
+}

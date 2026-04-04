@@ -19,8 +19,9 @@
 #include "C_OscSystemFilerUtil.hpp"
 #include "C_OscSystemDefinitionFilerV2.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
-#include "TglFile.hpp"
-#include "TglUtils.hpp"
+#include <QDir>
+#include <QFileInfo>
+#include "C_OscSystemBusFiler.hpp"
 #include "C_OscNodeSquadFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
 
@@ -28,9 +29,6 @@
 using namespace stw::opensyde_core;
 
 using namespace stw::errors;
-using namespace stw::tgl;
-using namespace stw::scl;
-
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -80,17 +78,18 @@ using namespace stw::scl;
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(C_OscSystemDefinition & orc_SystemDefinition,
-                                                               const stw::scl::C_SclString & orc_PathSystemDefinition,
-                                                               const stw::scl::C_SclString & orc_PathDeviceDefinitions,
-                                                               const bool oq_UseDeviceDefinitions,
-                                                               uint16_t * const opu16_ReadFileVersion,
-                                                               const std::vector<uint8_t> * const opc_NodesToLoad,
-                                                               const bool oq_SkipContent,
-                                                               const stw::scl::C_SclString * const opc_ExpectedNodeName)
+                                                                const QString & orc_PathSystemDefinition,
+                                                                const QString & orc_PathDeviceDefinitions,
+                                                                const bool oq_UseDeviceDefinitions,
+                                                                uint16_t * const opu16_ReadFileVersion,
+                                                                const QList<uint8_t> * const opc_NodesToLoad,
+                                                                const bool oq_SkipContent,
+                                                                const QString * const opc_ExpectedNodeName)
+
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (TglFileExists(orc_PathSystemDefinition) == true)
+   if (QFileInfo::exists(orc_PathSystemDefinition) == true)
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading System Definition");
@@ -135,16 +134,16 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(C_OscSystemDefini
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                               const stw::scl::C_SclString & orc_Path,
-                                                               std::vector<C_SclString> * const opc_CreatedFiles)
+                                                               const QString & orc_Path,
+                                                               QStringList * const opc_CreatedFiles)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (TglFileExists(orc_Path) == true)
+   if (QFileInfo::exists(orc_Path) == true)
    {
       //erase it:
       int x_Return; //lint !e970 !e8080  //using type to match library interface
-      x_Return = std::remove(orc_Path.c_str());
+      x_Return = std::remove(orc_Path.toStdString().c_str());
       if (x_Return != 0)
       {
          osc_write_log_error("Saving System Definition", "Could not erase pre-existing file \"" + orc_Path + "\".");
@@ -153,10 +152,10 @@ int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(const C_OscSystem
    }
    if (s32_Return == C_NO_ERR)
    {
-      const C_SclString c_Folder = TglExtractFilePath(orc_Path);
-      if (TglDirectoryExists(c_Folder) == false)
+      const QString c_Folder = QFileInfo(orc_Path).absolutePath();
+      if (QDir(c_Folder).exists() == false)
       {
-         if (TglCreateDirectory(c_Folder) != 0)
+         if (QDir().mkpath(c_Folder) == false)
          {
             osc_write_log_error("Saving System Definition", "Could not create folder \"" + c_Folder + "\".");
             s32_Return = C_RD_WR;
@@ -214,20 +213,20 @@ int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(const C_OscSystem
    C_OVERFLOW  node in system definition references a device not part of the device definitions
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
+int32_t C_OscSystemDefinitionFiler::h_LoadNodes(QList<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
                                                 const C_OscDeviceManager & orc_DeviceDefinitions,
-                                                const stw::scl::C_SclString & orc_BasePath,
+                                                const QString & orc_BasePath,
                                                 const bool oq_UseDeviceDefinitions, const bool oq_UseFileInterface,
-                                                const std::vector<uint8_t> * const opc_NodesToLoad,
+                                                const QList<uint8_t> * const opc_NodesToLoad,
                                                 const bool oq_SkipContent,
-                                                const stw::scl::C_SclString * const opc_ExpectedNodeName)
+                                                const QString * const opc_ExpectedNodeName)
 
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_SelectedNode;
+   QString c_SelectedNode;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
-   const C_SclString c_UnloadedNode = "UnloadedNodeWithNodeIndex";
+   const QString c_UnloadedNode = "UnloadedNodeWithNodeIndex";
 
    //Check optional length
    if (q_ExpectedSizeHere == true)
@@ -249,66 +248,66 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
          C_OscNode c_Item;
          bool q_SkipNode = false;
 
-         if ((opc_NodesToLoad == NULL) || (opc_NodesToLoad->size() == 0) || ((*opc_NodesToLoad)[u8_NodeIndex] == 1U))
+         if ((opc_NodesToLoad == nullptr) || (opc_NodesToLoad->size() == 0) || ((*opc_NodesToLoad)[u8_NodeIndex] == 1U))
          {
             if (oq_UseFileInterface)
             {
-               const C_SclString c_FileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
-                                                                                   orc_XmlParser.GetNodeContent());
-               if ((opc_ExpectedNodeName != NULL) && ((*opc_ExpectedNodeName) != ""))
-               {
-                  // get current node and compare with expected node name
-                  const uint32_t u32_BasePathLength = TglExtractFilePath(orc_BasePath).Length();
-                  C_SclString c_LastFolderName = TglExtractFilePath(c_FileName);
-                  c_LastFolderName = c_LastFolderName.Delete(1, u32_BasePathLength);
-                  c_LastFolderName = c_LastFolderName.Delete(c_LastFolderName.Length(), 1); // remove trailing delim
-                  C_SclString c_ExpectedFolder = "node_" + (*opc_ExpectedNodeName);
-                  // special handling for squad nodes necessary since the separator can't be used for folder names
-                  const uint32_t u32_Pos = c_ExpectedFolder.Pos(C_OscNodeSquad::hc_SEPARATOR);
-                  if (u32_Pos > 0)
-                  {
-                     // Squad nodes have '5858' in folder name for '::'
-                     const uint32_t u32_SubstituteLength = (C_OscNodeSquad::hc_SEPARATOR).Length();
-                     c_ExpectedFolder = c_ExpectedFolder.Delete(u32_Pos, u32_SubstituteLength);
-                     C_SclString c_Substitute = "";
-                     for (uint32_t u32_Iter = 1; u32_Iter <= u32_SubstituteLength; u32_Iter++)
-                     {
-                        c_Substitute += static_cast<uint8_t>((C_OscNodeSquad::hc_SEPARATOR)[u32_Iter]);
-                     }
-                     c_ExpectedFolder = c_ExpectedFolder.Insert(c_Substitute, u32_Pos);
-                  }
+             const QString c_FileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath,
+                                                                                    orc_XmlParser.GetNodeContent());
+                if ((opc_ExpectedNodeName != nullptr) && ((*opc_ExpectedNodeName) != ""))
+                {
+                   // get current node and compare with expected node name
+                   const uint32_t u32_BasePathLength = QFileInfo(orc_BasePath).absolutePath().length();
+                   QString c_LastFolderName = QFileInfo(c_FileName).absolutePath();
+                   c_LastFolderName = c_LastFolderName.remove(0, u32_BasePathLength);
+                   c_LastFolderName = c_LastFolderName.chopped(1); // remove trailing delim
+                   QString c_ExpectedFolder = "node_" + (*opc_ExpectedNodeName);
+                   // special handling for squad nodes necessary since the separator can't be used for folder names
+                   const uint32_t u32_Pos = c_ExpectedFolder.indexOf(C_OscNodeSquad::hc_SEPARATOR);
+                   if (u32_Pos > 0)
+                   {
+                      // Squad nodes have '5858' in folder name for '::'
+                      const uint32_t u32_SubstituteLength = (C_OscNodeSquad::hc_SEPARATOR).length();
+                      c_ExpectedFolder = c_ExpectedFolder.remove(u32_Pos, u32_SubstituteLength);
+                      QString c_Substitute = "";
+                      for (uint32_t u32_Iter = 0; u32_Iter < u32_SubstituteLength; ++u32_Iter)
+                      {
+                         c_Substitute += QString::number((C_OscNodeSquad::hc_SEPARATOR)[u32_Iter].toLatin1());
+                      }
+                      c_ExpectedFolder = c_ExpectedFolder.insert(u32_Pos, c_Substitute);
+                   }
 
-                  if (c_LastFolderName.AnsiCompareIc(c_ExpectedFolder) != 0)
-                  {
-                     q_SkipNode = true;
-                  }
-               }
-               if (q_SkipNode == false)
-               {
-                  s32_Retval = C_OscNodeFiler::h_LoadNodeFile(c_Item, c_FileName, oq_SkipContent);
-               }
-            }
-            else
-            {
-               s32_Retval = C_OscNodeFiler::h_LoadNode(c_Item, orc_XmlParser, "", oq_SkipContent);
-            }
-            if (s32_Retval != C_NO_ERR)
-            {
-               break;
-            }
-         }
-         else
-         {
-            q_SkipNode = true;
-         }
+                   if (c_LastFolderName.compare(c_ExpectedFolder, Qt::CaseInsensitive) != 0)
+                   {
+                      q_SkipNode = true;
+                   }
+                }
+                if (q_SkipNode == false)
+                {
+                   s32_Retval = C_OscNodeFiler::h_LoadNodeFile(c_Item, c_FileName, oq_SkipContent);
+                }
+             }
+             else
+             {
+                s32_Retval = C_OscNodeFiler::h_LoadNode_Legacy(c_Item, orc_XmlParser, "", oq_SkipContent);
+             }
+             if (s32_Retval != C_NO_ERR)
+             {
+                break;
+             }
+          }
+          else
+          {
+             q_SkipNode = true;
+          }
 
-         if (q_SkipNode == true)
-         {
-            //don't load; node will have default values
-            c_Item.c_Properties.c_Name = c_UnloadedNode + C_SclString::IntToStr(u8_NodeIndex);
-         }
+          if (q_SkipNode == true)
+          {
+             //don't load; node will have default values
+             c_Item.c_Properties.c_Name = c_UnloadedNode + QString::number(u8_NodeIndex);
+          }
 
-         orc_Nodes.push_back(c_Item);
+          orc_Nodes.append(c_Item);
          u8_NodeIndex++;
          //Next
          c_SelectedNode = orc_XmlParser.SelectNodeNext("node");
@@ -325,10 +324,9 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
    {
       if (u32_ExpectedSize != orc_Nodes.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected nodes count, expected: %i, got %i", u32_ExpectedSize,
-                              orc_Nodes.size());
-         osc_write_log_warning("Load file", c_Tmp.c_str());
+         QString c_Tmp;
+         c_Tmp = QString("Unexpected nodes count, expected: %1, got %2").arg(u32_ExpectedSize).arg(orc_Nodes.size());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
 
@@ -339,17 +337,17 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
       for (uint32_t u32_NodeIndex = 0U; u32_NodeIndex < orc_Nodes.size(); u32_NodeIndex++)
       {
          // check if we have an active node
-         if (orc_Nodes[u32_NodeIndex].c_Properties.c_Name.Pos(c_UnloadedNode) == 0)
+         if (orc_Nodes[u32_NodeIndex].c_Properties.c_Name.indexOf(c_UnloadedNode) == 0)
          {
-            stw::scl::C_SclString c_SubDeviceName = "";
-            stw::scl::C_SclString c_MainDeviceName = "";
+            QString c_SubDeviceName = "";
+            QString c_MainDeviceName = "";
             C_OscSystemDefinitionFiler::h_SplitDeviceType(orc_Nodes[u32_NodeIndex].c_DeviceType, c_MainDeviceName,
                                                           c_SubDeviceName);
             {
                const C_OscDeviceDefinition * const pc_Device =
                   orc_DeviceDefinitions.LookForDevice(c_SubDeviceName, c_MainDeviceName,
                                                       orc_Nodes[u32_NodeIndex].u32_SubDeviceIndex);
-               if (pc_Device == NULL)
+               if (pc_Device == nullptr)
                {
                   s32_Retval = C_OVERFLOW;
                   osc_write_log_error("Loading System Definition",
@@ -384,11 +382,11 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(std::vector<C_OscNode> & orc_Nod
    C_CONFIG   content is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> & orc_Buses,
-                                                C_OscXmlParserBase & orc_XmlParser)
+int32_t C_OscSystemDefinitionFiler::h_LoadBuses(QList<C_OscSystemBus> & orc_Buses,
+                                                 C_OscXmlParserBase & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
-   C_SclString c_SelectedNode;
+   QString c_SelectedNode;
    uint32_t u32_ExpectedSize = 0UL;
    const bool q_ExpectedSizeHere = orc_XmlParser.AttributeExists("length");
 
@@ -407,10 +405,10 @@ int32_t C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> & or
       do
       {
          C_OscSystemBus c_Item;
-         s32_Retval = C_OscSystemBusFiler::h_LoadBus(c_Item, orc_XmlParser);
+         s32_Retval = C_OscSystemBusFilerV2::h_LoadBus(c_Item, orc_XmlParser);
          if (s32_Retval == C_NO_ERR)
          {
-            orc_Buses.push_back(c_Item);
+            orc_Buses.append(c_Item);
          }
 
          //Next
@@ -425,10 +423,9 @@ int32_t C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> & or
    {
       if (u32_ExpectedSize != orc_Buses.size())
       {
-         C_SclString c_Tmp;
-         c_Tmp.PrintFormatted("Unexpected bus count, expected: %i, got %i", u32_ExpectedSize,
-                              orc_Buses.size());
-         osc_write_log_warning("Load file", c_Tmp.c_str());
+         QString c_Tmp;
+         c_Tmp = QString("Unexpected bus count, expected: %1, got %2").arg(u32_ExpectedSize).arg(orc_Buses.size());
+         osc_write_log_warning("Load file", c_Tmp.toStdString().c_str());
       }
    }
    return s32_Retval;
@@ -450,51 +447,50 @@ int32_t C_OscSystemDefinitionFiler::h_LoadBuses(std::vector<C_OscSystemBus> & or
    C_CONFIG   file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemDefinitionFiler::h_SaveNodes(const std::vector<C_OscNode> & orc_Nodes,
-                                                C_OscXmlParserBase & orc_XmlParser,
-                                                const stw::scl::C_SclString & orc_BasePath,
-                                                std::vector<C_SclString> * const opc_CreatedFiles)
+int32_t C_OscSystemDefinitionFiler::h_SaveNodes(const QList<C_OscNode> & orc_Nodes,
+                                                 C_OscXmlParserBase & orc_XmlParser,
+                                                 const QString & orc_BasePath,
+                                                 QStringList * const opc_CreatedFiles)
 {
    int32_t s32_Retval = C_NO_ERR;
-   const std::map<uint32_t,
-                  C_SclString> c_NodeIndicesToNameMap = C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(orc_Nodes);
+   const QHash<uint32_t, QString> c_NodeIndicesToNameMap = C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(orc_Nodes);
 
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_Nodes.size()));
    for (uint32_t u32_Index = 0U; (u32_Index < orc_Nodes.size()) && (s32_Retval == C_NO_ERR); u32_Index++)
    {
       const C_OscNode & rc_Node = orc_Nodes[u32_Index];
-      tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("node") == "node");
-      if (orc_BasePath.IsEmpty())
+      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("node") == "node");
+      if (orc_BasePath.isEmpty())
       {
          //To string
-         s32_Retval = C_OscNodeFiler::h_SaveNode(rc_Node, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
-                                                 c_NodeIndicesToNameMap);
+         s32_Retval = C_OscNodeFiler::h_SaveNode_Legacy(rc_Node, orc_XmlParser, orc_BasePath, opc_CreatedFiles,
+                                                        c_NodeIndicesToNameMap);
       }
       else
       {
-         std::vector<C_SclString> c_CreatedFiles;
-         const C_SclString c_FolderName = C_OscNodeFiler::h_GetFolderName(rc_Node.c_Properties.c_Name);
-         const C_SclString c_FileName = c_FolderName + "/" + C_OscNodeFiler::h_GetFileName();
-         const C_SclString c_CombinedFolderName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FolderName);
-         const C_SclString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
+         QStringList c_CreatedFiles;
+         const QString c_FolderName = C_OscNodeFiler::h_GetFolderName(rc_Node.c_Properties.c_Name);
+         const QString c_FileName = c_FolderName + "/" + C_OscNodeFiler::h_GetFileName();
+         const QString c_CombinedFolderName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FolderName);
+         const QString c_CombinedFileName = C_OscSystemFilerUtil::h_CombinePaths(orc_BasePath, c_FileName);
          //Create folder
-         if (TglCreateDirectory(c_CombinedFolderName) != 0)
+         if (QDir().mkpath(c_CombinedFolderName) == false)
          {
             osc_write_log_error("Saving node definition",
                                 "Could not create directory \"" + c_CombinedFolderName + "\"");
          }
          //Save node file
          s32_Retval = C_OscNodeFiler::h_SaveNodeFile(rc_Node, c_CombinedFileName,
-                                                     (opc_CreatedFiles != NULL) ? &c_CreatedFiles : NULL,
+                                                     (opc_CreatedFiles != nullptr) ? &c_CreatedFiles : nullptr,
                                                      c_NodeIndicesToNameMap);
          //Store if necessary
-         if (opc_CreatedFiles != NULL)
+         if (opc_CreatedFiles != nullptr)
          {
-            opc_CreatedFiles->push_back(c_FileName);
+            opc_CreatedFiles->append(c_FileName);
             for (uint32_t u32_ItSubFile = 0UL; u32_ItSubFile < c_CreatedFiles.size(); ++u32_ItSubFile)
             {
-               const C_SclString c_FileNameWithFolder = c_FolderName + "/" + c_CreatedFiles[u32_ItSubFile];
-               opc_CreatedFiles->push_back(c_FileNameWithFolder);
+               const QString c_FileNameWithFolder = c_FolderName + "/" + c_CreatedFiles[u32_ItSubFile];
+               opc_CreatedFiles->append(c_FileNameWithFolder);
             }
          }
          //Set file reference
@@ -516,14 +512,14 @@ int32_t C_OscSystemDefinitionFiler::h_SaveNodes(const std::vector<C_OscNode> & o
    \param[in,out]  orc_XmlParser    XML with "buses" active
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinitionFiler::h_SaveBuses(const std::vector<C_OscSystemBus> & orc_Buses,
-                                             C_OscXmlParserBase & orc_XmlParser)
+void C_OscSystemDefinitionFiler::h_SaveBuses(const QList<C_OscSystemBus> & orc_Buses,
+                                              C_OscXmlParserBase & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeUint32("length", static_cast<uint32_t>(orc_Buses.size()));
    for (uint32_t u32_Index = 0U; u32_Index < orc_Buses.size(); u32_Index++)
    {
-      tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("bus") == "bus");
-      C_OscSystemBusFiler::h_SaveBus(orc_Buses[u32_Index], orc_XmlParser);
+      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("bus") == "bus");
+      C_OscSystemBusFilerV2::h_SaveBus(orc_Buses[u32_Index], orc_XmlParser);
       //Return (don't check to allow reuse)
       orc_XmlParser.SelectNodeParent();
    }
@@ -557,14 +553,15 @@ void C_OscSystemDefinitionFiler::h_SaveBuses(const std::vector<C_OscSystemBus> &
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition & orc_SystemDefinition,
-                                                           C_OscXmlParserBase & orc_XmlParser,
-                                                           const stw::scl::C_SclString & orc_PathDeviceDefinitions,
-                                                           const stw::scl::C_SclString & orc_BasePath,
-                                                           const bool oq_UseDeviceDefinitions,
-                                                           uint16_t * const opu16_ReadFileVersion,
-                                                           const std::vector<uint8_t> * const opc_NodesToLoad,
-                                                           const bool oq_SkipContent,
-                                                           const stw::scl::C_SclString * const opc_ExpectedNodeName)
+                                                            C_OscXmlParserBase & orc_XmlParser,
+                                                            const QString & orc_PathDeviceDefinitions,
+                                                            const QString & orc_BasePath,
+                                                            const bool oq_UseDeviceDefinitions,
+                                                            uint16_t * const opu16_ReadFileVersion,
+                                                            const QList<uint8_t> * const opc_NodesToLoad,
+                                                            const bool oq_SkipContent,
+                                                            const QString * const opc_ExpectedNodeName)
+
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -572,7 +569,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
    if ((oq_UseDeviceDefinitions == true) &&
        (C_OscSystemDefinition::hc_Devices.WasLoaded() == false))
    {
-      s32_Retval = C_OscSystemDefinition::hc_Devices.LoadFromFile(orc_PathDeviceDefinitions, false, NULL);
+      s32_Retval = C_OscSystemDefinition::hc_Devices.LoadFromFile(orc_PathDeviceDefinitions, false, nullptr);
       if (s32_Retval != C_NO_ERR)
       {
          osc_write_log_error("Loading System Definition", "Could not load Device definitions.");
@@ -590,8 +587,8 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
          uint16_t u16_FileVersion = 0U;
          try
          {
-            u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().ToInt());
-            if (opu16_ReadFileVersion != NULL)
+            u16_FileVersion = static_cast<uint16_t>(orc_XmlParser.GetNodeContent().toInt());
+            if (opu16_ReadFileVersion != nullptr)
             {
                *opu16_ReadFileVersion = u16_FileVersion;
             }
@@ -605,8 +602,8 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
          //is the file version one we know ?
          if (s32_Retval == C_NO_ERR)
          {
-            osc_write_log_info("Loading System Definition", "Value of \"file-version\": " +
-                               C_SclString::IntToStr(u16_FileVersion));
+             osc_write_log_info("Loading System Definition", "Value of \"file-version\": " +
+                                QString::number(u16_FileVersion));
             //Check which loader needs to be used
             if ((u16_FileVersion == hu16_FILE_VERSION_1) || (u16_FileVersion == hu16_FILE_VERSION_2))
             {
@@ -625,7 +622,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
          }
 
          //Return
-         tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
+         Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
       }
       else
       {
@@ -638,7 +635,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
          if (q_UseV2Filer)
          {
             //Unselect root
-            tgl_assert(orc_XmlParser.SelectNodeParent() == "");
+            Q_ASSERT(orc_XmlParser.SelectNodeParent() == "");
             //Completely rely on V2 loader
             s32_Retval = C_OscSystemDefinitionFilerV2::h_LoadSystemDefinition(orc_SystemDefinition, orc_XmlParser,
                                                                               orc_PathDeviceDefinitions,
@@ -666,7 +663,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
                   if (s32_Retval == C_NO_ERR)
                   {
                      //Return
-                     tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
+                     Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
                   }
                }
                else
@@ -686,7 +683,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
                   if (s32_Retval == C_NO_ERR)
                   {
                      //Return
-                     tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
+                     Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
                   }
                }
                else
@@ -723,33 +720,33 @@ int32_t C_OscSystemDefinitionFiler::h_LoadSystemDefinition(C_OscSystemDefinition
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
-                                                           C_OscXmlParserBase & orc_XmlParser,
-                                                           const stw::scl::C_SclString & orc_BasePath,
-                                                           std::vector<C_SclString> * const opc_CreatedFiles)
+                                                            C_OscXmlParserBase & orc_XmlParser,
+                                                            const QString & orc_BasePath,
+                                                            QStringList * const opc_CreatedFiles)
 {
    int32_t s32_Return;
 
    orc_XmlParser.CreateNodeChild("opensyde-system-definition");
-   tgl_assert(orc_XmlParser.SelectRoot() == "opensyde-system-definition");
+   Q_ASSERT(orc_XmlParser.SelectRoot() == "opensyde-system-definition");
    //File version
-   tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
-   orc_XmlParser.SetNodeContent(C_SclString::IntToStr(hu16_FILE_VERSION_LATEST));
+   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("file-version") == "file-version");
+   orc_XmlParser.SetNodeContent(QString::number(hu16_FILE_VERSION_LATEST));
    //Return
-   tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
+   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
    C_OscNodeSquadFiler::h_SaveNodeGroups(orc_SystemDefinition.c_NodeSquads, orc_XmlParser);
    //Node
-   tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("nodes") == "nodes");
+   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("nodes") == "nodes");
    s32_Return = h_SaveNodes(orc_SystemDefinition.c_Nodes, orc_XmlParser, orc_BasePath, opc_CreatedFiles);
    if (s32_Return == C_NO_ERR)
    {
       //Return
-      tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
 
       //Bus
-      tgl_assert(orc_XmlParser.CreateAndSelectNodeChild("buses") == "buses");
+      Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("buses") == "buses");
       h_SaveBuses(orc_SystemDefinition.c_Buses, orc_XmlParser);
       //Return
-      tgl_assert(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-definition");
    }
    return s32_Return;
 }
@@ -762,17 +759,17 @@ int32_t C_OscSystemDefinitionFiler::h_SaveSystemDefinition(const C_OscSystemDefi
    \param[in,out]  orc_SubType         Sub type
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscSystemDefinitionFiler::h_SplitDeviceType(const C_SclString & orc_CompleteType, C_SclString & orc_MainType,
-                                                   C_SclString & orc_SubType)
+void C_OscSystemDefinitionFiler::h_SplitDeviceType(const QString & orc_CompleteType, QString & orc_MainType,
+                                                    QString & orc_SubType)
 {
-   const std::string c_Tmp = *orc_CompleteType.AsStdString();
-   const uint32_t u32_Pos = static_cast<uint32_t>(c_Tmp.find(C_OscNodeSquad::hc_SEPARATOR.c_str()));
+   const std::string c_Tmp = orc_CompleteType.toStdString();
+   const uint32_t u32_Pos = static_cast<uint32_t>(c_Tmp.find(C_OscNodeSquad::hc_SEPARATOR.toStdString().c_str()));
 
    if (u32_Pos < c_Tmp.size())
    {
-      orc_MainType = c_Tmp.substr(0, u32_Pos);
+      orc_MainType = QString::fromStdString(c_Tmp.substr(0, u32_Pos));
       //lint -e{9114} kept for readability
-      orc_SubType = c_Tmp.substr(u32_Pos + C_OscNodeSquad::hc_SEPARATOR.Length(), c_Tmp.size());
+      orc_SubType = QString::fromStdString(c_Tmp.substr(u32_Pos + C_OscNodeSquad::hc_SEPARATOR.length(), c_Tmp.size()));
    }
    else
    {
@@ -790,10 +787,10 @@ void C_OscSystemDefinitionFiler::h_SplitDeviceType(const C_SclString & orc_Compl
    Mapping of node indices to name
 */
 //----------------------------------------------------------------------------------------------------------------------
-std::map<uint32_t, C_SclString> C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(
-   const std::vector<C_OscNode> & orc_Nodes)
+QHash<uint32_t, QString> C_OscSystemDefinitionFiler::mh_MapNodeIndicesToName(
+   const QList<C_OscNode> & orc_Nodes)
 {
-   std::map<uint32_t, C_SclString> c_Retval;
+   QHash<uint32_t, QString> c_Retval;
    for (uint32_t u32_It = 0UL; u32_It < orc_Nodes.size(); ++u32_It)
    {
       const C_OscNode & rc_Node = orc_Nodes[u32_It];

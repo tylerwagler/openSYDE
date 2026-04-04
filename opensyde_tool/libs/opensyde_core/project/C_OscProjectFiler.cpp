@@ -79,7 +79,7 @@
     C_RANGE    orc_Path is empty
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::h_Save(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::h_Save(C_OscProject &orc_Project,
                                        const QString &orc_Path,
                                        const QString &orc_OpenSydeVersion) {
      int32_t s32_Retval = C_NO_ERR;
@@ -177,7 +177,7 @@
     C_CONFIG   content of file is invalid or incomplete
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::h_Load(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::h_Load(C_OscProject &orc_Project,
                                        const QString &orc_Path) {
      int32_t s32_Retval;
 
@@ -250,7 +250,7 @@
     C_CONFIG   invalid format
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::h_LoadBinary(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::h_LoadBinary(C_OscProject &orc_Project,
                                              QDataStream &orc_Stream) {
      // Read all fields
      orc_Stream >> orc_Project.c_Author;
@@ -282,7 +282,7 @@
     C_CONFIG   invalid format
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::h_LoadJson(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::h_LoadJson(C_OscProject &orc_Project,
                                            const QJsonObject &orc_Object) {
      if (!orc_Object.contains("author") || !orc_Object.contains("editor") ||
          !orc_Object.contains("version") || !orc_Object.contains("openSYDE_version")) {
@@ -319,7 +319,7 @@
     C_CONFIG   invalid format
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::h_LoadXml(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::h_LoadXml(C_OscProject &orc_Project,
                                           C_OscXmlParserBase &orc_XmlParser) {
      QString c_Tmp;
 
@@ -379,7 +379,7 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::h_SaveBinary(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::h_SaveBinary(C_OscProject &orc_Project,
                                              const QString &orc_Path,
                                              const QString &orc_OpenSydeVersion,
                                              QDataStream &orc_Stream) {
@@ -416,7 +416,7 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::h_SaveJson(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::h_SaveJson(C_OscProject &orc_Project,
                                            const QString &orc_Path,
                                            const QString &orc_OpenSydeVersion,
                                            QJsonObject &orc_Object) {
@@ -451,7 +451,7 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::h_SaveXml(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::h_SaveXml(C_OscProject &orc_Project,
                                           const QString &orc_Path,
                                           const QString &orc_OpenSydeVersion,
                                           C_OscXmlParserBase &orc_XmlParser) {
@@ -500,7 +500,7 @@
     \see h_Save
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::h_SaveLegacy(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::h_SaveLegacy(C_OscProject &orc_Project,
                                              const QString &orc_Path,
                                              const QString &orc_OpenSydeVersion) {
      return mh_SaveInternal(orc_Project, orc_Path, orc_OpenSydeVersion, false);
@@ -512,7 +512,7 @@
     \see h_Load
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::h_LoadLegacy(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::h_LoadLegacy(C_OscProject &orc_Project,
                                              const QString &orc_Path) {
      C_OscXmlParser c_Xml;
      const int32_t s32_Result = c_Xml.LoadFromFile(orc_Path);
@@ -537,7 +537,7 @@
     C_NOACT    could not write to file
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscProjectFiler_New::mh_SaveInternal(C_OscProject &orc_Project,
+ int32_t C_OscProjectFiler::mh_SaveInternal(C_OscProject &orc_Project,
                                                 const QString &orc_Path,
                                                 const QString &orc_OpenSydeVersion,
                                                 const bool oq_New) {

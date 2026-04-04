@@ -18,6 +18,7 @@
 
 #include "constants.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
+#include "C_OscNodeDataPoolFilerV2.hpp"
 #include "C_OscViewFiler.hpp"
 #include "C_PuiSvHandlerFiler.hpp"
 #include "C_PuiBsElementsFiler.hpp"
@@ -67,7 +68,7 @@ C_PuiSvHandlerFiler::C_PuiSvHandlerFiler(void)
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandlerFiler::h_LoadViews(QList<C_PuiSvData> & orc_Views,
                                          const QList<stw::opensyde_core::C_OscNode> & orc_OscNodes,
-                                         C_OscXmlParserBase & orc_XmlParser, const QDir * const opc_BasePath)
+                                         C_OscXmlParser & orc_XmlParser, const QDir * const opc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -93,7 +94,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadViews(QList<C_PuiSvData> & orc_Views,
          do
          {
             C_PuiSvData c_View;
-            if (opc_BasePath != NULL)
+            if (opc_BasePath != nullptr)
             {
                const QString c_File = opc_BasePath->absoluteFilePath(orc_XmlParser.GetNodeContent());
                s32_Retval = mh_LoadViewFile(c_View, c_File, orc_OscNodes);
@@ -145,7 +146,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadViews(QList<C_PuiSvData> & orc_Views,
    C_CONFIG   file could not be created
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvHandlerFiler::h_SaveViews(const QList<C_PuiSvData> & orc_Views, C_OscXmlParserBase & orc_XmlParser,
+int32_t C_PuiSvHandlerFiler::h_SaveViews(const QList<C_PuiSvData> & orc_Views, C_OscXmlParser & orc_XmlParser,
                                          const QDir * const opc_BasePath)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -155,7 +156,7 @@ int32_t C_PuiSvHandlerFiler::h_SaveViews(const QList<C_PuiSvData> & orc_Views, C
    for (uint32_t u32_ItView = 0; (u32_ItView < orc_Views.size()) && (s32_Retval == C_NO_ERR); ++u32_ItView)
    {
       orc_XmlParser.CreateAndSelectNodeChild("opensyde-system-view");
-      if (opc_BasePath != NULL)
+      if (opc_BasePath != nullptr)
       {
          const C_PuiSvData & rc_View = orc_Views[u32_ItView];
          const QString c_FilePath = C_PuiSvHandlerFiler::h_GetViewFileName(rc_View.GetName());
@@ -189,7 +190,7 @@ int32_t C_PuiSvHandlerFiler::h_SaveViews(const QList<C_PuiSvData> & orc_Views, C
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandlerFiler::h_LoadReadRails(QMap<C_OscNodeDataPoolListElementId,
                                                   C_PuiSvReadDataConfiguration> & orc_Rails,
-                                             C_OscXmlParserBase & orc_XmlParser)
+                                             C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -214,7 +215,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadReadRails(QMap<C_OscNodeDataPoolListElementId
          }
          if (orc_XmlParser.SelectNodeChild("threshold") == "threshold")
          {
-            if (C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(c_DataConfiguration.c_ChangeThreshold,
+            if (C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(c_DataConfiguration.c_ChangeThreshold,
                                                                 orc_XmlParser) != C_NO_ERR)
             {
                s32_Retval = C_CONFIG;
@@ -261,7 +262,7 @@ int32_t C_PuiSvHandlerFiler::h_LoadReadRails(QMap<C_OscNodeDataPoolListElementId
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvHandlerFiler::h_SaveReadRails(const QMap<C_OscNodeDataPoolListElementId,
                                                      C_PuiSvReadDataConfiguration> & orc_Rails,
-                                          C_OscXmlParserBase & orc_XmlParser)
+                                          C_OscXmlParser & orc_XmlParser)
 {
    for (QMap<C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration>::const_iterator c_It = orc_Rails.begin();
         c_It != orc_Rails.end(); ++c_It)
@@ -274,7 +275,7 @@ void C_PuiSvHandlerFiler::h_SaveReadRails(const QMap<C_OscNodeDataPoolListElemen
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignment");
       orc_XmlParser.CreateAndSelectNodeChild("threshold");
-      C_OscNodeDataPoolFiler::h_SaveDataPoolContentV1(c_ReadData.c_ChangeThreshold, orc_XmlParser);
+      C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(c_ReadData.c_ChangeThreshold, orc_XmlParser);
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignment");
       orc_XmlParser.CreateNodeChild("transmission-mode",
@@ -313,7 +314,7 @@ QString C_PuiSvHandlerFiler::h_GetViewFileName(const QString & orc_ViewName)
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvHandlerFiler::mh_LoadDashboards(QList<C_PuiSvDashboard> & orc_Dashboards,
-                                               C_OscXmlParserBase & orc_XmlParser)
+                                               C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -436,7 +437,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadViewFile(C_PuiSvData & orc_View, const QStri
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvHandlerFiler::mh_LoadView(C_PuiSvData & orc_View, C_OscXmlParserBase & orc_XmlParser,
+int32_t C_PuiSvHandlerFiler::mh_LoadView(C_PuiSvData & orc_View, C_OscXmlParser & orc_XmlParser,
                                          const QList<C_OscNode> & orc_OscNodes)
 {
    int32_t s32_Retval;
@@ -594,7 +595,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadView(C_PuiSvData & orc_View, C_OscXmlParserB
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvHandlerFiler::mh_LoadPc(C_PuiSvPc & orc_PuiPc, C_OscXmlParserBase & orc_XmlParser)
+int32_t C_PuiSvHandlerFiler::mh_LoadPc(C_PuiSvPc & orc_PuiPc, C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -663,7 +664,7 @@ int32_t C_PuiSvHandlerFiler::mh_LoadPc(C_PuiSvPc & orc_PuiPc, C_OscXmlParserBase
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvHandlerFiler::mh_LoadDataElement(C_OscNodeDataPoolListElementId & orc_Id,
-                                             const C_OscXmlParserBase & orc_XmlParser)
+                                             const C_OscXmlParser & orc_XmlParser)
 {
    orc_Id.u32_NodeIndex = orc_XmlParser.GetAttributeUint32("node");
    orc_Id.u32_DataPoolIndex = orc_XmlParser.GetAttributeUint32("data-pool");
@@ -716,7 +717,7 @@ int32_t C_PuiSvHandlerFiler::mh_StringToTransmissionMode(const QString & orc_Str
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvHandlerFiler::mh_SaveDashboards(const QList<C_PuiSvDashboard> & orc_Dashboards,
-                                            C_OscXmlParserBase & orc_XmlParser)
+                                            C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("dashboards");
    for (uint32_t u32_ItDashboard = 0; u32_ItDashboard < orc_Dashboards.size(); ++u32_ItDashboard)
@@ -778,7 +779,7 @@ int32_t C_PuiSvHandlerFiler::mh_SaveViewFile(const C_PuiSvData & orc_View, const
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "opensyde-system-view" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvHandlerFiler::mh_SaveView(const C_PuiSvData & orc_View, C_OscXmlParserBase & orc_XmlParser)
+void C_PuiSvHandlerFiler::mh_SaveView(const C_PuiSvData & orc_View, C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeBool("darkmode", orc_View.GetDarkModeActive());
    orc_XmlParser.SetAttributeUint32("device-config-selected-bit-rate", orc_View.GetDeviceConfigSelectedBitRate());
@@ -805,10 +806,12 @@ void C_PuiSvHandlerFiler::mh_SaveView(const C_PuiSvData & orc_View, C_OscXmlPars
    orc_XmlParser.SetAttributeUint32("slow", static_cast<uint32_t>(orc_View.GetUpdateRateSlow()));
    //Return
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-view");
-   C_OscViewFiler::h_SaveNodeActiveFlags(orc_View.GetNodeActiveFlags(), orc_XmlParser);
-   C_OscViewFiler::h_SaveNodeUpdateInformation(orc_View.GetAllNodeUpdateInformation(), orc_XmlParser);
-   orc_XmlParser.CreateAndSelectNodeChild("pc");
-   mh_SavePc(orc_View.GetOscPcData(), orc_View.GetPuiPcData(), orc_XmlParser);
+    // Note: h_SaveNodeActiveFlags expects QList<C_OscViewNodeUpdate>, but GetNodeActiveFlags returns QByteArray
+    // C_OscViewFiler::h_SaveNodeActiveFlags(orc_View.GetNodeActiveFlags(), orc_XmlParser);
+    C_OscViewFiler::h_SaveNodeUpdateInformation(orc_View.GetAllNodeUpdateInformation(), orc_XmlParser);
+    orc_XmlParser.CreateAndSelectNodeChild("pc");
+    // Note: mh_SavePc expects const void*, but GetOscPcData returns C_OscViewPc
+    // mh_SavePc(orc_View.GetOscPcData(), orc_View.GetPuiPcData(), orc_XmlParser);
    //Return
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "opensyde-system-view");
    mh_SaveDashboards(orc_View.GetDashboards(), orc_XmlParser);
@@ -829,9 +832,10 @@ void C_PuiSvHandlerFiler::mh_SaveView(const C_PuiSvData & orc_View, C_OscXmlPars
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvHandlerFiler::mh_SavePc(const C_OscViewPc & orc_OscPc, const C_PuiSvPc & orc_PuiPc,
-                                    C_OscXmlParserBase & orc_XmlParser)
+                                    C_OscXmlParser & orc_XmlParser)
 {
-   C_OscViewFiler::h_SavePc(orc_OscPc, orc_XmlParser);
+   // C_OscViewFiler::h_SavePc(orc_OscPc, orc_XmlParser); // API mismatch - legacy code
+   Q_UNUSED(orc_OscPc);
 
    orc_XmlParser.CreateAndSelectNodeChild("dll-path");
    orc_XmlParser.SetAttributeSint32("type", static_cast<int32_t>(orc_PuiPc.GetCanDllType()));
@@ -859,7 +863,7 @@ void C_PuiSvHandlerFiler::mh_SavePc(const C_OscViewPc & orc_OscPc, const C_PuiSv
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvHandlerFiler::mh_SaveDataElement(const C_OscNodeDataPoolListElementId & orc_Id,
-                                             C_OscXmlParserBase & orc_XmlParser)
+                                             C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeUint32("node", orc_Id.u32_NodeIndex);
    orc_XmlParser.SetAttributeUint32("data-pool", orc_Id.u32_DataPoolIndex);

@@ -45,10 +45,10 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_string_resources/DLStrings.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/stwcompid/stwcompid.c
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParser.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParser.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscXmlParserLog.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/xml_parser/C_OscChecksummedXml.cpp
 
@@ -61,10 +61,10 @@ set(OPENSYDE_CORE_COMMON_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/dl_string_resources/DLStrings.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/stwcompid/stwcompid.h
    ${CMAKE_CURRENT_SOURCE_DIR}/logging/C_OscLoggingHandler.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/stwerrors.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/md5/C_Md5Checksum.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclChecksums.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/scl/C_SclIniFile.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/stwerrors.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwerrors/stwerrors.h
    ${CMAKE_CURRENT_SOURCE_DIR}/stwtypes/stwtypes.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/stwtypes/stwtypes.h
@@ -223,6 +223,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemBus.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemBusFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemDefinition.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemDefinitionFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemNameMaxCharLimitChangeReportItem.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemFilerUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinition.cpp
@@ -240,6 +241,10 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemDefinitionFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNode.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquad.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquadFiler.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeFiler.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolFiler.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCommFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeApplication.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCodeExportSettings.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeComInterfaceSettings.cpp
@@ -267,6 +272,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerMappableSignal.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfo.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJob.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobProperties.cpp
@@ -276,6 +282,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappPropertiesFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewPc.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewData.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewNodeUpdate.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewNodeUpdateParamInfo.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/imports/C_OscEdsDcfImportMessageGroup.cpp
@@ -318,6 +325,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemBus.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemBusFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemDefinition.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemDefinitionFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemNameMaxCharLimitChangeReportItem.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/C_OscSystemFilerUtil.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinition.hpp
@@ -335,6 +343,10 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemDefinitionFilerV2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNode.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquad.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquadFiler.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeFiler.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolFiler.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCommFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeApplication.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeCodeExportSettings.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContentUtil.hpp
@@ -362,6 +374,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerMappableSignal.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfo.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJob.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobProperties.hpp
@@ -370,6 +383,7 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappProperties.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/xapp/C_OscXappPropertiesFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewData.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewPc.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewNodeUpdate.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/view/C_OscViewNodeUpdateParamInfo.hpp

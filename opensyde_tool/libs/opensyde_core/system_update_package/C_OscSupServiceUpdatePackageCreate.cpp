@@ -268,7 +268,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::h_CreatePackage(
   // fill with constant file names
   c_SupFiles.insert(mhc_INI_DEV);
   c_SupFiles.insert(mhc_SUP_SYSDEF);
-  c_SupFiles.insert(C_OscSupDefinitionFiler_New::hc_PACKAGE_UPDATE_DEF);
+  c_SupFiles.insert(C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF);
 
   // precondition checks
   s32_Return = mh_CheckParamsToCreatePackage(
@@ -889,7 +889,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_CreateDefFilesAndZipSecureFiles(
   for (const QString &rc_File : c_SecPackageFilesRel) {
     c_SecPackageFilesRelSCL.push_back(rc_File);
   }
-  s32_Return = C_OscSupDefinitionFiler_New::h_CreateUpdatePackageDefFile(
+  s32_Return = C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(
       orc_PackagePathTmp, orc_SupDefContent, c_SecPackageFilesRelSCL);
   if (s32_Return == C_NO_ERR) {
     s32_Return = mh_HandleNodeDefCreation(
@@ -1051,7 +1051,7 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleNodeDefCreation(
           orc_SupDefNodes[u32_File].u8_SignaturePresent =
               C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE;
           orc_SupDefNodes[u32_File].c_SignatureFile =
-              C_OscSupSignatureFiler_New::h_GetSignatureFileName();
+              C_OscSupSignatureFiler::h_GetSignatureFileName();
         }
       }
     }
@@ -1129,12 +1129,12 @@ int32_t C_OscSupServiceUpdatePackageCreate::mh_HandleSignatureCreation(
           if (s32_Retval == C_NO_ERR) {
             const QString c_SignatureFilePath =
                 orc_NodeFoldersAbs[u32_File] +
-                C_OscSupSignatureFiler_New::h_GetSignatureFileName();
-            s32_Retval = C_OscSupSignatureFiler_New::h_CreateSignatureFile(
+                C_OscSupSignatureFiler::h_GetSignatureFileName();
+            s32_Retval = C_OscSupSignatureFiler::h_CreateSignatureFile(
                 c_SignatureFilePath, c_Signature);
             if (s32_Retval == C_NO_ERR) {
               orc_SecFiles[u32_File].insert(
-                  C_OscSupSignatureFiler_New::h_GetSignatureFileName());
+                  C_OscSupSignatureFiler::h_GetSignatureFileName());
             }
           }
         }

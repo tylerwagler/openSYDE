@@ -10,8 +10,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSXXAPPPROPERTIESFILER_NEW_HPP
-#define C_OSXXAPPPROPERTIESFILER_NEW_HPP
+#ifndef C_OSXXAPPPROPERTIESFILER_HPP
+#define C_OSXXAPPPROPERTIESFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscXappPropertiesFiler_New {
+class C_OscXappPropertiesFiler {
 public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)

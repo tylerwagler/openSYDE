@@ -296,14 +296,13 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
       s32_Return = C_OscSystemDefinitionFilerV2::h_SaveSystemDefinitionFile(
           orc_SystemDefinition, c_SysDefPath);
     } else {
-      std::vector<stw::scl::C_SclString> c_AdditionalFiles;
+      QStringList c_AdditionalFiles;
       s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
           orc_SystemDefinition, c_SysDefPath, &c_AdditionalFiles);
       if (s32_Return == C_NO_ERR) {
         // Add files to pack
-        for (uint32_t u32_ItFile = 0UL; u32_ItFile < static_cast<uint32_t>(c_AdditionalFiles.size());
-             ++u32_ItFile) {
-          c_SupFiles.insert(c_AdditionalFiles[u32_ItFile].c_str());
+        for (const QString &rc_File : c_AdditionalFiles) {
+          c_SupFiles.insert(rc_File);
         }
       }
     }
@@ -326,8 +325,8 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
          u32_Pos++) {
       const C_OscDeviceDefinition *const pc_DeviceDefinition =
           orc_SystemDefinition.c_Nodes[u32_Pos].pc_DeviceDefinition;
-      Q_ASSERT(pc_DeviceDefinition != NULL);
-      if (pc_DeviceDefinition != NULL) {
+      Q_ASSERT(pc_DeviceDefinition != nullptr);
+      if (pc_DeviceDefinition != nullptr) {
         const QString c_DevDefPath = pc_DeviceDefinition->c_FilePath;
         c_DeviceDefinitionFiles.insert(c_DevDefPath);
       }
@@ -350,7 +349,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_CreatePackage(
       const QString c_TargetFileName = QFileInfo(c_CurrentFile).fileName();
       c_SupFiles.insert(c_TargetFileName);
       const QString c_TargetFilePath = c_PackagePathTmp + c_TargetFileName;
-      s32_Return = C_OscUtils::h_CopyFile(c_CurrentFile, c_TargetFilePath, NULL,
+      s32_Return = C_OscUtils::h_CopyFile(c_CurrentFile, c_TargetFilePath, nullptr,
                                           &mhc_ErrorMessage);
       if (s32_Return != C_NO_ERR) {
         mhc_ErrorMessage = "Could not save device definition file \"" +
@@ -660,7 +659,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_ProcessPackage(
     }
 
     s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
-        orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, NULL);
+        orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, nullptr);
   }
 
   // get "other accepted names" for active nodes
@@ -668,7 +667,7 @@ int32_t C_OscSupServiceUpdatePackageV1::h_ProcessPackage(
     for (uint8_t u8_Node = 0U; u8_Node < orc_SystemDefinition.c_Nodes.size();
          u8_Node++) {
       if ((orc_ActiveNodes[u8_Node] == 1U) &&
-          (orc_SystemDefinition.c_Nodes[u8_Node].pc_DeviceDefinition != NULL)) {
+          (orc_SystemDefinition.c_Nodes[u8_Node].pc_DeviceDefinition != nullptr)) {
         const C_OscNode &rc_CurNode = orc_SystemDefinition.c_Nodes[u8_Node];
         Q_ASSERT(rc_CurNode.u32_SubDeviceIndex <
                  rc_CurNode.pc_DeviceDefinition->c_SubDevices.size());

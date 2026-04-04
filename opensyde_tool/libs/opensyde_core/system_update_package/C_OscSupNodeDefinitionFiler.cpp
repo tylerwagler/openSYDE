@@ -24,6 +24,8 @@
 using namespace stw::opensyde_core;
 using namespace stw::errors;
 
+const uint8_t C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE = 1U;
+
 // Stub implementation - TODO: Complete implementation
 int32_t C_OscSupNodeDefinitionFiler::h_SaveNodes(const QStringList &orc_Files,
                                                  const QList<C_OscSupNodeDefinition> &orc_Nodes) {

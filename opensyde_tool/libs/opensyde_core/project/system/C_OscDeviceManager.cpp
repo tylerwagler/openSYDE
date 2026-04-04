@@ -67,21 +67,21 @@ using namespace stw::opensyde_core;
    \param[out]  oru32_SubDeviceIndex   Sub device index
 
    \return
-   != NULL:  pointer to device definition
-   NULL:     device definition not found
+   != nullptr:  pointer to device definition
+   nullptr:     device definition not found
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_OscDeviceDefinition *
 C_OscDeviceManager::LookForDevice(const QString &orc_Name,
                                   const QString &orc_MainDeviceName,
                                   uint32_t &oru32_SubDeviceIndex) const {
-  const C_OscDeviceDefinition *pc_Device = NULL;
+  const C_OscDeviceDefinition *pc_Device = nullptr;
 
   for (uint32_t u32_ItDevice = 0U; u32_ItDevice < this->mc_DeviceGroups.size();
        ++u32_ItDevice) {
     pc_Device = this->mc_DeviceGroups[u32_ItDevice].LookForDevice(
         orc_Name, orc_MainDeviceName, oru32_SubDeviceIndex);
-    if (pc_Device != NULL) {
+    if (pc_Device != nullptr) {
       break;
     }
   }
@@ -129,7 +129,7 @@ int32_t C_OscDeviceManager::AddDevice(const QString &orc_DeviceDefinitionFile,
   }
 
   // Load device definition for name checking
-  s32_Return = C_OscDeviceDefinitionFiler_New::h_Load(c_DeviceDefinition,
+  s32_Return = C_OscDeviceDefinitionFiler::h_LoadDeviceDefinitionFile(c_DeviceDefinition,
                                                   orc_DeviceDefinitionFile);
   if (s32_Return == C_NO_ERR) {
     // Compare new device definition file with existing
@@ -359,7 +359,7 @@ int32_t C_OscDeviceManager::LoadFromFile(const QString &orc_File,
       }
       // optional parameter (see above): sends number of files listed in ini to
       // GUI layer for user feedback.
-      if (ops32_DeviceCount != NULL) {
+      if (ops32_DeviceCount != nullptr) {
         *ops32_DeviceCount += c_Ini.value("User Nodes/DeviceCount", 0).toInt();
       }
     }

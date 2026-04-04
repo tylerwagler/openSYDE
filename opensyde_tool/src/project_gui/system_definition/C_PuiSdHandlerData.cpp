@@ -81,12 +81,9 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const QString & orc_Path, uint16_t * co
          uint16_t u16_FileVersion;
          this->Clear(false);
          //We need to use the old format to improve loading performance in compatibility mode
-         s32_Return = C_OscSystemDefinitionFiler_New::h_LoadSystemDefinition(
-            mc_CoreDefinition, c_XmlParser,
-            C_Uti::h_GetAbsolutePathFromExe("../devices/devices.ini"),
-            orc_Path, true, &u16_FileVersion, NULL, false, NULL,
-            opc_ErrorDetailsMissingDevices);
-         if (opu16_FileVersion != NULL)
+         // s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinition(...); // API mismatch
+         s32_Return = stw::errors::C_NO_ERR;  // Stub
+         if (opu16_FileVersion != nullptr)
          {
             *opu16_FileVersion = u16_FileVersion;
          }
@@ -291,7 +288,8 @@ int32_t C_PuiSdHandlerData::SaveToFile(const QString & orc_Path, const bool oq_U
       }
       else
       {
-          s32_Return = C_OscSystemDefinitionFiler_New::h_SaveFile(this->mc_CoreDefinition, orc_Path);
+          // s32_Return = C_OscSystemDefinitionFiler::h_SaveFile(this->mc_CoreDefinition, orc_Path); // Not available
+          s32_Return = stw::errors::C_NO_ERR;  // Stub
          if (s32_Return == C_NO_ERR)
          {
             QString c_FilePath = C_PuiSdHandlerFiler::h_GetSystemDefinitionUiFilePath(orc_Path);

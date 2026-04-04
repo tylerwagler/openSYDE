@@ -19,13 +19,13 @@
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadFile(
+int32_t C_OscHalcConfigStandaloneFiler::h_LoadFile(
    C_OscHalcConfigStandalone &orc_Config, const QString &orc_Path)
 {
    return mh_DetectAndLoad(orc_Config, orc_Path);
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveFile(
+int32_t C_OscHalcConfigStandaloneFiler::h_SaveFile(
    const C_OscHalcConfigStandalone &orc_Config, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -43,7 +43,7 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveFile(
    return s32_Result;
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadBinary(
+int32_t C_OscHalcConfigStandaloneFiler::h_LoadBinary(
    C_OscHalcConfigStandalone &orc_Config, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -63,7 +63,7 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadBinary(
    return s32_Result;
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveBinary(
+int32_t C_OscHalcConfigStandaloneFiler::h_SaveBinary(
    const C_OscHalcConfigStandalone &orc_Config, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -83,7 +83,7 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveBinary(
    return s32_Result;
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadFromMemoryBinary(
+int32_t C_OscHalcConfigStandaloneFiler::h_LoadFromMemoryBinary(
    C_OscHalcConfigStandalone &orc_Config, const QByteArray &orc_Data)
 {
    QDataStream c_Stream(orc_Data);
@@ -91,7 +91,7 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadFromMemoryBinary(
    return orc_Config.FromQDataStream(c_Stream);
 }
 
-QByteArray C_OscHalcConfigStandaloneFiler_New::h_SaveToMemoryBinary(
+QByteArray C_OscHalcConfigStandaloneFiler::h_SaveToMemoryBinary(
    const C_OscHalcConfigStandalone &orc_Config)
 {
    QByteArray c_Data;
@@ -101,7 +101,7 @@ QByteArray C_OscHalcConfigStandaloneFiler_New::h_SaveToMemoryBinary(
    return c_Data;
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadJson(
+int32_t C_OscHalcConfigStandaloneFiler::h_LoadJson(
    C_OscHalcConfigStandalone &orc_Config, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -129,7 +129,7 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadJson(
    return s32_Result;
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveJson(
+int32_t C_OscHalcConfigStandaloneFiler::h_SaveJson(
    const C_OscHalcConfigStandalone &orc_Config, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -148,19 +148,19 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveJson(
    return s32_Result;
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadFromMemoryJson(
+int32_t C_OscHalcConfigStandaloneFiler::h_LoadFromMemoryJson(
    C_OscHalcConfigStandalone &orc_Config, const QJsonObject &orc_Object)
 {
    return orc_Config.FromJsonObject(orc_Object);
 }
 
-QJsonObject C_OscHalcConfigStandaloneFiler_New::h_SaveToMemoryJson(
+QJsonObject C_OscHalcConfigStandaloneFiler::h_SaveToMemoryJson(
    const C_OscHalcConfigStandalone &orc_Config)
 {
    return orc_Config.ToJsonObject();
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadXml(
+int32_t C_OscHalcConfigStandaloneFiler::h_LoadXml(
    C_OscHalcConfigStandalone &orc_Config, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -189,7 +189,7 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadXml(
    return s32_Result;
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveXml(
+int32_t C_OscHalcConfigStandaloneFiler::h_SaveXml(
    const C_OscHalcConfigStandalone &orc_Config, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;
@@ -211,19 +211,19 @@ int32_t C_OscHalcConfigStandaloneFiler_New::h_SaveXml(
    return s32_Result;
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::h_LoadFromMemoryXml(
+int32_t C_OscHalcConfigStandaloneFiler::h_LoadFromMemoryXml(
    C_OscHalcConfigStandalone &orc_Config, const QDomElement &orc_Element)
 {
    return orc_Config.FromQDomElement(orc_Element);
 }
 
-QDomElement C_OscHalcConfigStandaloneFiler_New::h_SaveToMemoryXml(
+QDomElement C_OscHalcConfigStandaloneFiler::h_SaveToMemoryXml(
    const C_OscHalcConfigStandalone &orc_Config, QDomDocument &orc_Doc)
 {
    return orc_Config.ToQDomElement(orc_Doc, "halc-config-standalone");
 }
 
-int32_t C_OscHalcConfigStandaloneFiler_New::mh_DetectAndLoad(
+int32_t C_OscHalcConfigStandaloneFiler::mh_DetectAndLoad(
    C_OscHalcConfigStandalone &orc_Config, const QString &orc_Path)
 {
    int32_t s32_Result = C_NO_ERR;

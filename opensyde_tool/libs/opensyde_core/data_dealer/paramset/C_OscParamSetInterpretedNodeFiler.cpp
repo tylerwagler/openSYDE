@@ -64,7 +64,7 @@ using namespace stw::errors;
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadInterpretedNodeFile(
+int32_t C_OscParamSetInterpretedNodeFiler::h_LoadInterpretedNodeFile(
   C_OscParamSetInterpretedNode &orc_Node, const QString &orc_FilePath, bool &orq_MissingOptionalContent) {
    orq_MissingOptionalContent = false;
    return mh_DetectAndLoad(orc_Node, orc_FilePath, orq_MissingOptionalContent);
@@ -80,7 +80,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadInterpretedNodeFile(
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_SaveInterpretedNodeFile(const C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::h_SaveInterpretedNodeFile(const C_OscParamSetInterpretedNode &orc_Node,
                                                                           const QString &orc_FilePath) {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -117,7 +117,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_SaveInterpretedNodeFile(const C
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadBinary(C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::h_LoadBinary(C_OscParamSetInterpretedNode &orc_Node,
                                                              const QString &orc_FilePath,
                                                              bool &orq_MissingOptionalContent) {
    Q_UNUSED(orq_MissingOptionalContent);
@@ -148,7 +148,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadBinary(C_OscParamSetInterpr
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_SaveBinary(const C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::h_SaveBinary(const C_OscParamSetInterpretedNode &orc_Node,
                                                              const QString &orc_FilePath) {
    QFile file(orc_FilePath);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -179,7 +179,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_SaveBinary(const C_OscParamSetI
    C_CONFIG   data format is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadFromMemoryBinary(C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::h_LoadFromMemoryBinary(C_OscParamSetInterpretedNode &orc_Node,
                                                                        const QByteArray &orc_Data,
                                                                        bool &orq_MissingOptionalContent) {
    Q_UNUSED(orq_MissingOptionalContent);
@@ -200,7 +200,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadFromMemoryBinary(C_OscParam
    QByteArray containing serialized data
 */
 //----------------------------------------------------------------------------------------------------------------------
-QByteArray C_OscParamSetInterpretedNodeFiler_New::h_SaveToMemoryBinary(const C_OscParamSetInterpretedNode &orc_Node)
+QByteArray C_OscParamSetInterpretedNodeFiler::h_SaveToMemoryBinary(const C_OscParamSetInterpretedNode &orc_Node)
   const {
    QByteArray data;
    QDataStream out(&data, QIODevice::WriteOnly);
@@ -222,7 +222,7 @@ QByteArray C_OscParamSetInterpretedNodeFiler_New::h_SaveToMemoryBinary(const C_O
    C_CONFIG   JSON parse error or invalid format
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadJson(C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::h_LoadJson(C_OscParamSetInterpretedNode &orc_Node,
                                                            const QString &orc_FilePath,
                                                            bool &orq_MissingOptionalContent) {
    Q_UNUSED(orq_MissingOptionalContent);
@@ -258,7 +258,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadJson(C_OscParamSetInterpret
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_SaveJson(const C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::h_SaveJson(const C_OscParamSetInterpretedNode &orc_Node,
                                                            const QString &orc_FilePath) {
    QJsonObject json = const_cast<C_OscParamSetInterpretedNode &>(orc_Node).ToJsonObject();
    QJsonDocument doc(json);
@@ -288,7 +288,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_SaveJson(const C_OscParamSetInt
    C_CONFIG   invalid format
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadFromMemoryJson(C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::h_LoadFromMemoryJson(C_OscParamSetInterpretedNode &orc_Node,
                                                                      const QJsonObject &orc_Object,
                                                                      bool &orq_MissingOptionalContent) {
    Q_UNUSED(orq_MissingOptionalContent);
@@ -305,7 +305,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadFromMemoryJson(C_OscParamSe
    QJsonObject containing serialized data
 */
 //----------------------------------------------------------------------------------------------------------------------
-QJsonObject C_OscParamSetInterpretedNodeFiler_New::h_SaveToMemoryJson(const C_OscParamSetInterpretedNode &orc_Node)
+QJsonObject C_OscParamSetInterpretedNodeFiler::h_SaveToMemoryJson(const C_OscParamSetInterpretedNode &orc_Node)
   const {
    return const_cast<C_OscParamSetInterpretedNode &>(orc_Node).ToJsonObject();
 }
@@ -322,7 +322,7 @@ QJsonObject C_OscParamSetInterpretedNodeFiler_New::h_SaveToMemoryJson(const C_Os
    C_CONFIG   XML parse error or invalid format
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadXml(C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::h_LoadXml(C_OscParamSetInterpretedNode &orc_Node,
                                                           const QString &orc_FilePath,
                                                           bool &orq_MissingOptionalContent) {
    Q_UNUSED(orq_MissingOptionalContent);
@@ -364,7 +364,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadXml(C_OscParamSetInterprete
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_SaveXml(const C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::h_SaveXml(const C_OscParamSetInterpretedNode &orc_Node,
                                                           const QString &orc_FilePath) {
    QDomDocument doc;
    QDomElement rootElement = const_cast<C_OscParamSetInterpretedNode &>(orc_Node).ToQDomDocument(doc, "node");
@@ -395,7 +395,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_SaveXml(const C_OscParamSetInte
    C_CONFIG   invalid format
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadFromMemoryXml(C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::h_LoadFromMemoryXml(C_OscParamSetInterpretedNode &orc_Node,
                                                                     const QDomElement &orc_Element,
                                                                     bool &orq_MissingOptionalContent) {
    Q_UNUSED(orq_MissingOptionalContent);
@@ -413,7 +413,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadFromMemoryXml(C_OscParamSet
    QDomElement containing serialized data
 */
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscParamSetInterpretedNodeFiler_New::h_SaveToMemoryXml(const C_OscParamSetInterpretedNode &orc_Node,
+QDomElement C_OscParamSetInterpretedNodeFiler::h_SaveToMemoryXml(const C_OscParamSetInterpretedNode &orc_Node,
                                                                       QDomDocument &ro_Doc) const {
    return const_cast<C_OscParamSetInterpretedNode &>(orc_Node).ToQDomDocument(ro_Doc, "node");
 }
@@ -430,7 +430,7 @@ QDomElement C_OscParamSetInterpretedNodeFiler_New::h_SaveToMemoryXml(const C_Osc
    C_CONFIG   file format not supported or parse error
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::mh_DetectAndLoad(C_OscParamSetInterpretedNode &orc_Node,
+int32_t C_OscParamSetInterpretedNodeFiler::mh_DetectAndLoad(C_OscParamSetInterpretedNode &orc_Node,
                                                                  const QString &orc_FilePath,
                                                                  bool &orq_MissingOptionalContent) {
    const QString c_Extension = orc_FilePath.right(4).toLower();
@@ -452,7 +452,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::mh_DetectAndLoad(C_OscParamSetInt
 
 //----------------------------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadInterpretedNode(
+int32_t C_OscParamSetInterpretedNodeFiler::h_LoadInterpretedNode(
   C_OscParamSetInterpretedNode &orc_Node, C_OscXmlParserBase &orc_XmlParser,
   bool &orq_MissingOptionalContent) {
   Q_UNUSED(orc_XmlParser);
@@ -461,7 +461,7 @@ int32_t C_OscParamSetInterpretedNodeFiler_New::h_LoadInterpretedNode(
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void C_OscParamSetInterpretedNodeFiler_New::h_SaveInterpretedNode(
+void C_OscParamSetInterpretedNodeFiler::h_SaveInterpretedNode(
   const C_OscParamSetInterpretedNode &orc_Node, C_OscXmlParserBase &orc_XmlParser) {
   Q_UNUSED(orc_XmlParser);
 }

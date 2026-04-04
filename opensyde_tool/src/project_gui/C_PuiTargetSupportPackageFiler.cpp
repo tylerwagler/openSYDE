@@ -60,13 +60,12 @@ int32_t C_PuiTargetSupportPackageFiler::h_LoadTspV3(const QString & orc_TspPath,
                                                     stw::opensyde_core::C_OscNode & orc_OscNode,
                                                     C_PuiSdNode & orc_UiNode)
 {
-   QString c_NodePath;
-   int32_t s32_Retval = C_OscTargetSupportPackageFiler::h_LoadFile(orc_Tsp, c_NodePath, orc_TspPath);
+   int32_t s32_Retval = C_OscTargetSupportPackageFiler::h_LoadFile(orc_Tsp, orc_TspPath);
    if (s32_Retval == C_NO_ERR)
    {
       QString c_FolderPath;
       const QString c_ZipFilePath =
-         C_PuiTargetSupportPackageFiler::mh_GetNodeFilePath(orc_TspPath, c_NodePath);
+         C_PuiTargetSupportPackageFiler::mh_GetNodeFilePath(orc_TspPath, orc_Tsp.c_TemplatePath);
       if (mh_DoUnzip(c_ZipFilePath, c_FolderPath) == C_NO_ERR)
       {
          const QString c_OscXmlPath = C_PuiTargetSupportPackageFiler::mh_GetOscNodeXmlPath(c_FolderPath);

@@ -10,8 +10,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCPARAMSETINTERPRETEDNODEFILER_NEW_HPP
-#define C_OSCPARAMSETINTERPRETEDNODEFILER_NEW_HPP
+#ifndef C_OSCPARAMSETINTERPRETEDNODEFILER_HPP
+#define C_OSCPARAMSETINTERPRETEDNODEFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscParamSetInterpretedNodeFiler_New {
+class C_OscParamSetInterpretedNodeFiler {
 public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)

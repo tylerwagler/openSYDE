@@ -10,8 +10,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCVIEWDATAFILER_NEW_HPP
-#define C_OSCVIEWDATAFILER_NEW_HPP
+#ifndef C_OSCVIEWDATAFILER_HPP
+#define C_OSCVIEWDATAFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscViewDataFiler_New {
+class C_OscViewDataFiler {
 public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)

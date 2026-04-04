@@ -10,8 +10,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCTARGETSUPPORTPACKAGEV2FILER_NEW_HPP
-#define C_OSCTARGETSUPPORTPACKAGEV2FILER_NEW_HPP
+#ifndef C_OSCTARGETSUPPORTPACKAGEV2FILER_HPP
+#define C_OSCTARGETSUPPORTPACKAGEV2FILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscTargetSupportPackageV2Filer_New {
+class C_OscTargetSupportPackageV2Filer {
 public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)

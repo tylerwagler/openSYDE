@@ -21,7 +21,7 @@ using namespace stw::opensyde_core;
 using namespace stw::errors;
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler_New::h_LoadHalcDefStructFile(C_OscHalcDefStruct &orc_Struct,
+int32_t C_OscHalcDefStructFiler::h_LoadHalcDefStructFile(C_OscHalcDefStruct &orc_Struct,
                                                              const QString &orc_FilePath,
                                                              const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -29,7 +29,7 @@ int32_t C_OscHalcDefStructFiler_New::h_LoadHalcDefStructFile(C_OscHalcDefStruct 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler_New::h_SaveHalcDefStructFile(const C_OscHalcDefStruct &orc_Struct,
+int32_t C_OscHalcDefStructFiler::h_SaveHalcDefStructFile(const C_OscHalcDefStruct &orc_Struct,
                                                              const QString &orc_FilePath,
                                                              const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -49,7 +49,7 @@ int32_t C_OscHalcDefStructFiler_New::h_SaveHalcDefStructFile(const C_OscHalcDefS
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler_New::h_LoadBinary(C_OscHalcDefStruct &orc_Struct,
+int32_t C_OscHalcDefStructFiler::h_LoadBinary(C_OscHalcDefStruct &orc_Struct,
                                                   const QString &orc_FilePath) {
    QList<C_OscHalcDefStruct> c_List;
    int32_t s32_Retval = C_OscFilerUtil::h_LoadListBinary<C_OscHalcDefStruct>(c_List, orc_FilePath);
@@ -62,7 +62,7 @@ int32_t C_OscHalcDefStructFiler_New::h_LoadBinary(C_OscHalcDefStruct &orc_Struct
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler_New::h_SaveBinary(const C_OscHalcDefStruct &orc_Struct,
+int32_t C_OscHalcDefStructFiler::h_SaveBinary(const C_OscHalcDefStruct &orc_Struct,
                                                   const QString &orc_FilePath) {
    QList<C_OscHalcDefStruct> c_List;
    c_List.append(orc_Struct);
@@ -70,7 +70,7 @@ int32_t C_OscHalcDefStructFiler_New::h_SaveBinary(const C_OscHalcDefStruct &orc_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler_New::h_LoadJson(C_OscHalcDefStruct &orc_Struct,
+int32_t C_OscHalcDefStructFiler::h_LoadJson(C_OscHalcDefStruct &orc_Struct,
                                                 const QString &orc_FilePath) {
    QList<C_OscHalcDefStruct> c_List;
    int32_t s32_Retval = C_OscFilerUtil::h_LoadListJson<C_OscHalcDefStruct>(c_List, orc_FilePath);
@@ -83,7 +83,7 @@ int32_t C_OscHalcDefStructFiler_New::h_LoadJson(C_OscHalcDefStruct &orc_Struct,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler_New::h_SaveJson(const C_OscHalcDefStruct &orc_Struct,
+int32_t C_OscHalcDefStructFiler::h_SaveJson(const C_OscHalcDefStruct &orc_Struct,
                                                 const QString &orc_FilePath) {
    QList<C_OscHalcDefStruct> c_List;
    c_List.append(orc_Struct);
@@ -91,7 +91,7 @@ int32_t C_OscHalcDefStructFiler_New::h_SaveJson(const C_OscHalcDefStruct &orc_St
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler_New::h_LoadXml(C_OscHalcDefStruct &orc_Struct,
+int32_t C_OscHalcDefStructFiler::h_LoadXml(C_OscHalcDefStruct &orc_Struct,
                                                const QString &orc_FilePath) {
    QList<C_OscHalcDefStruct> c_List;
    int32_t s32_Retval = C_OscFilerUtil::h_LoadListXml<C_OscHalcDefStruct>(c_List, orc_FilePath, "halcDefStruct", "struct");
@@ -104,7 +104,7 @@ int32_t C_OscHalcDefStructFiler_New::h_LoadXml(C_OscHalcDefStruct &orc_Struct,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler_New::h_SaveXml(const C_OscHalcDefStruct &orc_Struct,
+int32_t C_OscHalcDefStructFiler::h_SaveXml(const C_OscHalcDefStruct &orc_Struct,
                                                const QString &orc_FilePath) {
    QList<C_OscHalcDefStruct> c_List;
    c_List.append(orc_Struct);
@@ -112,7 +112,7 @@ int32_t C_OscHalcDefStructFiler_New::h_SaveXml(const C_OscHalcDefStruct &orc_Str
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler_New::mh_DetectAndLoad(C_OscHalcDefStruct &orc_Struct,
+int32_t C_OscHalcDefStructFiler::mh_DetectAndLoad(C_OscHalcDefStruct &orc_Struct,
                                                       const QString &orc_FilePath) {
    QFileInfo c_FileInfo(orc_FilePath);
    const QString c_Extension = c_FileInfo.suffix().toLower();
@@ -130,7 +130,7 @@ int32_t C_OscHalcDefStructFiler_New::mh_DetectAndLoad(C_OscHalcDefStruct &orc_St
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscHalcDefStructFiler_New::h_LoadFile(C_OscHalcDefStruct &orc_IoData,
+int32_t C_OscHalcDefStructFiler::h_LoadFile(C_OscHalcDefStruct &orc_IoData,
                                                 const QString &orc_Path,
                                                 const QString &orc_BasePath) {
    return h_LoadHalcDefStructFile(orc_IoData, orc_Path, orc_BasePath);
@@ -138,7 +138,7 @@ int32_t C_OscHalcDefStructFiler_New::h_LoadFile(C_OscHalcDefStruct &orc_IoData,
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscHalcDefStructFiler_New::h_SaveFile(const C_OscHalcDefStruct &orc_IoData,
+int32_t C_OscHalcDefStructFiler::h_SaveFile(const C_OscHalcDefStruct &orc_IoData,
                                                 const QString &orc_Path,
                                                 const QString &orc_BasePath,
                                                 QStringList *const opc_CreatedFiles) {

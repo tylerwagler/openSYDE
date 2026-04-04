@@ -25,6 +25,7 @@
 
 #include "C_OscNodeDataPoolContentUtil.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
+#include "C_OscNodeDataPoolFilerV2.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
@@ -2755,7 +2756,7 @@ QString C_SdNdeDpContentUtil::h_GetAllContentAsString(
   QString c_Retval;
   C_OscXmlParser c_Xml;
   c_Xml.CreateAndSelectNodeChild("opensyde-content");
-  C_OscNodeDataPoolFiler::h_SaveDataPoolContentV1(orc_Input, c_Xml);
+  C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(orc_Input, c_Xml);
   c_Xml.SaveToString(c_Retval);
   return c_Retval;
 }
@@ -2780,7 +2781,7 @@ int32_t C_SdNdeDpContentUtil::h_SetAllContentFromString(
 
   c_Xml.LoadFromString(orc_Input);
   c_Xml.SelectRoot();
-  return C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Output, c_Xml);
+  return C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(orc_Output, c_Xml);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -10,8 +10,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCHALCDEFFILER_NEW_HPP
-#define C_OSCHALCDEFFILER_NEW_HPP
+#ifndef C_OSCHALCDEFFILER_HPP
+#define C_OSCHALCDEFFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscHalcDefFiler_New {
+class C_OscHalcDefFiler {
 public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)

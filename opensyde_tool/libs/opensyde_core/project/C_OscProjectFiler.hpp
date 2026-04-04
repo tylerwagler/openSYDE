@@ -7,8 +7,8 @@
    reserved.
 */
  //----------------------------------------------------------------------------------------------------------------------
- #ifndef C_OSCPROJECTFILER_NEW_HPP
- #define C_OSCPROJECTFILER_NEW_HPP
+ #ifndef C_OSCPROJECTFILER_HPP
+ #define C_OSCPROJECTFILER_HPP
 
  /* -- Includes
   * ------------------------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@
   * ---------------------------------------------------------------------------------------------------------
   */
 
- class C_OscProjectFiler_New {
+ class C_OscProjectFiler {
  public:
      // --------------------------------------------------------------------------
      // Public Static Methods - Multi-format file operations

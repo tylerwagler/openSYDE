@@ -65,7 +65,7 @@ using namespace stw::errors;
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_LoadFile(C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_LoadFile(C_OscSystemBus &orc_Bus,
                                             const QString &orc_Path) {
    return mh_DetectAndLoad(orc_Bus, orc_Path);
 }
@@ -80,7 +80,7 @@ int32_t C_OscSystemBusFiler_New::h_LoadFile(C_OscSystemBus &orc_Bus,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_SaveFile(const C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_SaveFile(const C_OscSystemBus &orc_Bus,
                                             const QString &orc_Path) {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -116,7 +116,7 @@ int32_t C_OscSystemBusFiler_New::h_SaveFile(const C_OscSystemBus &orc_Bus,
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_LoadBinary(C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_LoadBinary(C_OscSystemBus &orc_Bus,
                                               const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::ReadOnly)) {
@@ -150,7 +150,7 @@ int32_t C_OscSystemBusFiler_New::h_LoadBinary(C_OscSystemBus &orc_Bus,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_SaveBinary(const C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_SaveBinary(const C_OscSystemBus &orc_Bus,
                                               const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -185,7 +185,7 @@ int32_t C_OscSystemBusFiler_New::h_SaveBinary(const C_OscSystemBus &orc_Bus,
    C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_LoadFromMemoryBinary(C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_LoadFromMemoryBinary(C_OscSystemBus &orc_Bus,
                                                         const QByteArray &orc_Data) {
    QDataStream in(orc_Data);
    in.setVersion(QDataStream::Qt_6_0);
@@ -209,7 +209,7 @@ int32_t C_OscSystemBusFiler_New::h_LoadFromMemoryBinary(C_OscSystemBus &orc_Bus,
    QByteArray    Binary data
 */
 //----------------------------------------------------------------------------------------------------------------------
-QByteArray C_OscSystemBusFiler_New::h_SaveToMemoryBinary(
+QByteArray C_OscSystemBusFiler::h_SaveToMemoryBinary(
    const C_OscSystemBus &orc_Bus) {
    QByteArray c_Data;
    QDataStream out(&c_Data, QIODevice::WriteOnly);
@@ -231,7 +231,7 @@ QByteArray C_OscSystemBusFiler_New::h_SaveToMemoryBinary(
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_LoadJson(C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_LoadJson(C_OscSystemBus &orc_Bus,
                                             const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::ReadOnly)) {
@@ -277,7 +277,7 @@ int32_t C_OscSystemBusFiler_New::h_LoadJson(C_OscSystemBus &orc_Bus,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_SaveJson(const C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_SaveJson(const C_OscSystemBus &orc_Bus,
                                             const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -306,7 +306,7 @@ int32_t C_OscSystemBusFiler_New::h_SaveJson(const C_OscSystemBus &orc_Bus,
    C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_LoadFromMemoryJson(C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_LoadFromMemoryJson(C_OscSystemBus &orc_Bus,
                                                       const QJsonObject &orc_Object) {
    int32_t s32_Result = orc_Bus.FromJsonObject(orc_Object);
 
@@ -327,7 +327,7 @@ int32_t C_OscSystemBusFiler_New::h_LoadFromMemoryJson(C_OscSystemBus &orc_Bus,
    QJsonObject    JSON object
 */
 //----------------------------------------------------------------------------------------------------------------------
-QJsonObject C_OscSystemBusFiler_New::h_SaveToMemoryJson(
+QJsonObject C_OscSystemBusFiler::h_SaveToMemoryJson(
    const C_OscSystemBus &orc_Bus) {
    return orc_Bus.ToJsonObject();
 }
@@ -343,7 +343,7 @@ QJsonObject C_OscSystemBusFiler_New::h_SaveToMemoryJson(
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_LoadXml(C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_LoadXml(C_OscSystemBus &orc_Bus,
                                            const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::ReadOnly)) {
@@ -387,7 +387,7 @@ int32_t C_OscSystemBusFiler_New::h_LoadXml(C_OscSystemBus &orc_Bus,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_SaveXml(const C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_SaveXml(const C_OscSystemBus &orc_Bus,
                                            const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -420,7 +420,7 @@ int32_t C_OscSystemBusFiler_New::h_SaveXml(const C_OscSystemBus &orc_Bus,
    C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::h_LoadFromMemoryXml(C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::h_LoadFromMemoryXml(C_OscSystemBus &orc_Bus,
                                                      const QDomElement &orc_Element) {
    int32_t s32_Result = orc_Bus.FromQDomElement(orc_Element);
 
@@ -442,7 +442,7 @@ int32_t C_OscSystemBusFiler_New::h_LoadFromMemoryXml(C_OscSystemBus &orc_Bus,
    QDomElement    XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscSystemBusFiler_New::h_SaveToMemoryXml(
+QDomElement C_OscSystemBusFiler::h_SaveToMemoryXml(
    const C_OscSystemBus &orc_Bus, QDomDocument &orc_Doc) {
    return orc_Bus.ToQDomDocument(orc_Doc, "bus");
 }
@@ -470,7 +470,7 @@ QDomElement C_OscSystemBusFiler_New::h_SaveToMemoryXml(
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscSystemBusFiler_New::mh_DetectAndLoad(C_OscSystemBus &orc_Bus,
+int32_t C_OscSystemBusFiler::mh_DetectAndLoad(C_OscSystemBus &orc_Bus,
                                                   const QString &orc_Path) {
    const QString c_Extension = orc_Path.right(4).toLower();
 

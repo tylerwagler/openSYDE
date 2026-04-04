@@ -10,8 +10,8 @@
    reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSXXCOMANIFESTFILER_NEW_HPP
-#define C_OSXXCOMANIFESTFILER_NEW_HPP
+#ifndef C_OSXXCOMANIFESTFILER_HPP
+#define C_OSXXCOMANIFESTFILER_HPP
 
 /* -- Includes
  * ------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ namespace opensyde_core {
  * ---------------------------------------------------------------------------------------------------------
  */
 
-class C_OscXcoManifestFiler_New {
+class C_OscXcoManifestFiler {
 public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)

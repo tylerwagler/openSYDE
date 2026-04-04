@@ -6,8 +6,8 @@
    reserved.
 */
  //----------------------------------------------------------------------------------------------------------------------
- #ifndef C_OSCSUPSIGNATUREFILER_NEW_HPP
- #define C_OSCSUPSIGNATUREFILER_NEW_HPP
+ #ifndef C_OSCSUPSIGNATUREFILER_HPP
+ #define C_OSCSUPSIGNATUREFILER_HPP
 
  #include <QString>
  #include <QDataStream>
@@ -28,7 +28,7 @@
   * ---------------------------------------------------------------------------------------------------------
   */
 
- class C_OscSupSignatureFiler_New {
+ class C_OscSupSignatureFiler {
  public:
      // --------------------------------------------------------------------------
      // Public Static Methods - Multi-format file operations

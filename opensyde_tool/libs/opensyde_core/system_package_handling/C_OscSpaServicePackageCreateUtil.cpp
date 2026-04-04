@@ -268,15 +268,13 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveSystemDefinition(
   // take current system definition of view (is required) and store to file
   const QString c_SysDefPath = orc_UsedTempPath + orc_SystemDefinitionFileName;
 
-  std::vector<stw::scl::C_SclString> c_AdditionalFiles;
+  QStringList c_AdditionalFiles;
   int32_t s32_Return = C_OscSystemDefinitionFiler::h_SaveSystemDefinitionFile(
       orc_SystemDefinition, c_SysDefPath, &c_AdditionalFiles);
   if (s32_Return == C_NO_ERR) {
     // Add files to pack
-    for (uint32_t u32_ItFile = 0UL; u32_ItFile < static_cast<uint32_t>(c_AdditionalFiles.size());
-         ++u32_ItFile) {
-      orc_AllCreatedFiles.insert(orc_OutFilePrefix +
-                                 c_AdditionalFiles[u32_ItFile].c_str());
+    for (const QString &rc_File : c_AdditionalFiles) {
+      orc_AllCreatedFiles.insert(orc_OutFilePrefix + rc_File);
     }
   }
 
@@ -326,8 +324,8 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
        u32_Pos++) {
     const C_OscDeviceDefinition *const pc_DeviceDefinition =
         orc_SystemDefinition.c_Nodes[u32_Pos].pc_DeviceDefinition;
-    Q_ASSERT(pc_DeviceDefinition != NULL);
-    if (pc_DeviceDefinition != NULL) {
+    Q_ASSERT(pc_DeviceDefinition != nullptr);
+    if (pc_DeviceDefinition != nullptr) {
       const QString c_DevDefPath = pc_DeviceDefinition->c_FilePath;
       c_DeviceDefinitionFiles.insert(c_DevDefPath);
     }
@@ -349,7 +347,7 @@ int32_t C_OscSpaServicePackageCreateUtil::h_SaveDeviceDefinitionsAndIni(
       const QString c_TargetFileName = QFileInfo(c_CurrentFile).fileName();
       const QString c_TargetFilePath = orc_UsedTempPath + c_TargetFileName;
       orc_AllCreatedFiles.insert(orc_OutFilePrefix + c_TargetFileName);
-      s32_Return = C_OscUtils::h_CopyFile(c_CurrentFile, c_TargetFilePath, NULL,
+      s32_Return = C_OscUtils::h_CopyFile(c_CurrentFile, c_TargetFilePath, nullptr,
                                           &orc_ErrorMessage);
       if (s32_Return != C_NO_ERR) {
         orc_ErrorMessage = "Could not save device definition file \"" +

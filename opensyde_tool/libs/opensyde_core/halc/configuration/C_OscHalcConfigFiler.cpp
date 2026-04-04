@@ -21,7 +21,7 @@ using namespace stw::opensyde_core;
 using namespace stw::errors;
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler_New::h_LoadHalcConfigFile(C_OscHalcConfig &orc_Config,
+int32_t C_OscHalcConfigFiler::h_LoadHalcConfigFile(C_OscHalcConfig &orc_Config,
                                                        const QString &orc_FilePath,
                                                        const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -29,7 +29,7 @@ int32_t C_OscHalcConfigFiler_New::h_LoadHalcConfigFile(C_OscHalcConfig &orc_Conf
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler_New::h_SaveHalcConfigFile(const C_OscHalcConfig &orc_Config,
+int32_t C_OscHalcConfigFiler::h_SaveHalcConfigFile(const C_OscHalcConfig &orc_Config,
                                                        const QString &orc_FilePath,
                                                        const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -49,7 +49,7 @@ int32_t C_OscHalcConfigFiler_New::h_SaveHalcConfigFile(const C_OscHalcConfig &or
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler_New::h_LoadBinary(C_OscHalcConfig &orc_Config,
+int32_t C_OscHalcConfigFiler::h_LoadBinary(C_OscHalcConfig &orc_Config,
                                                const QString &orc_FilePath) {
    QList<C_OscHalcConfig> c_List;
    int32_t s32_Retval = C_OscFilerUtil::h_LoadListBinary<C_OscHalcConfig>(c_List, orc_FilePath);
@@ -62,7 +62,7 @@ int32_t C_OscHalcConfigFiler_New::h_LoadBinary(C_OscHalcConfig &orc_Config,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler_New::h_SaveBinary(const C_OscHalcConfig &orc_Config,
+int32_t C_OscHalcConfigFiler::h_SaveBinary(const C_OscHalcConfig &orc_Config,
                                                const QString &orc_FilePath) {
    QList<C_OscHalcConfig> c_List;
    c_List.append(orc_Config);
@@ -70,7 +70,7 @@ int32_t C_OscHalcConfigFiler_New::h_SaveBinary(const C_OscHalcConfig &orc_Config
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler_New::h_LoadJson(C_OscHalcConfig &orc_Config,
+int32_t C_OscHalcConfigFiler::h_LoadJson(C_OscHalcConfig &orc_Config,
                                              const QString &orc_FilePath) {
    QList<C_OscHalcConfig> c_List;
    int32_t s32_Retval = C_OscFilerUtil::h_LoadListJson<C_OscHalcConfig>(c_List, orc_FilePath);
@@ -83,7 +83,7 @@ int32_t C_OscHalcConfigFiler_New::h_LoadJson(C_OscHalcConfig &orc_Config,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler_New::h_SaveJson(const C_OscHalcConfig &orc_Config,
+int32_t C_OscHalcConfigFiler::h_SaveJson(const C_OscHalcConfig &orc_Config,
                                              const QString &orc_FilePath) {
    QList<C_OscHalcConfig> c_List;
    c_List.append(orc_Config);
@@ -91,7 +91,7 @@ int32_t C_OscHalcConfigFiler_New::h_SaveJson(const C_OscHalcConfig &orc_Config,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler_New::h_LoadXml(C_OscHalcConfig &orc_Config,
+int32_t C_OscHalcConfigFiler::h_LoadXml(C_OscHalcConfig &orc_Config,
                                             const QString &orc_FilePath) {
    QList<C_OscHalcConfig> c_List;
    int32_t s32_Retval = C_OscFilerUtil::h_LoadListXml<C_OscHalcConfig>(c_List, orc_FilePath, "halcConfig", "config");
@@ -104,7 +104,7 @@ int32_t C_OscHalcConfigFiler_New::h_LoadXml(C_OscHalcConfig &orc_Config,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler_New::h_SaveXml(const C_OscHalcConfig &orc_Config,
+int32_t C_OscHalcConfigFiler::h_SaveXml(const C_OscHalcConfig &orc_Config,
                                             const QString &orc_FilePath) {
    QList<C_OscHalcConfig> c_List;
    c_List.append(orc_Config);
@@ -112,7 +112,7 @@ int32_t C_OscHalcConfigFiler_New::h_SaveXml(const C_OscHalcConfig &orc_Config,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcConfigFiler_New::mh_DetectAndLoad(C_OscHalcConfig &orc_Config,
+int32_t C_OscHalcConfigFiler::mh_DetectAndLoad(C_OscHalcConfig &orc_Config,
                                                    const QString &orc_FilePath) {
    QFileInfo c_FileInfo(orc_FilePath);
    const QString c_Extension = c_FileInfo.suffix().toLower();
@@ -130,7 +130,7 @@ int32_t C_OscHalcConfigFiler_New::mh_DetectAndLoad(C_OscHalcConfig &orc_Config,
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscHalcConfigFiler_New::h_LoadFile(C_OscHalcConfig &orc_IoData,
+int32_t C_OscHalcConfigFiler::h_LoadFile(C_OscHalcConfig &orc_IoData,
                                              const QString &orc_Path,
                                              const QString &orc_BasePath) {
    return h_LoadHalcConfigFile(orc_IoData, orc_Path, orc_BasePath);
@@ -138,7 +138,7 @@ int32_t C_OscHalcConfigFiler_New::h_LoadFile(C_OscHalcConfig &orc_IoData,
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscHalcConfigFiler_New::h_SaveFile(const C_OscHalcConfig &orc_IoData,
+int32_t C_OscHalcConfigFiler::h_SaveFile(const C_OscHalcConfig &orc_IoData,
                                              const QString &orc_Path,
                                              const QString &orc_BasePath,
                                              QStringList *const opc_CreatedFiles) {

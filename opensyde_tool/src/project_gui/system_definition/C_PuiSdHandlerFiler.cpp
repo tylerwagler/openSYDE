@@ -94,7 +94,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPools(QList<C_PuiSdNodeDataPool> & orc_Da
          {
             C_OscNodeDataPool * const pc_OscDp = mh_GetArrayElemIfAvailable(opc_OscDataPools, u32_ItDp);
             C_PuiSdNodeDataPool c_Datapool;
-            if (opc_BasePath != NULL)
+            if (opc_BasePath != nullptr)
             {
                const QString c_FilePath = opc_BasePath->absoluteFilePath(orc_XmlParser.GetNodeContent());
                s32_Retval = mh_LoadDatapoolFile(c_Datapool, c_FilePath, pc_OscDp);
@@ -155,8 +155,8 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPool(C_PuiSdNodeDataPool & orc_DataPool, 
 
    if (orc_XmlParser.SelectNodeChild("lists") == "lists")
    {
-      QList<C_OscNodeDataPoolList> * pc_OscLists = NULL;
-      if (opc_OscDataPool != NULL)
+      QList<C_OscNodeDataPoolList> * pc_OscLists = nullptr;
+      if (opc_OscDataPool != nullptr)
       {
          pc_OscLists = &opc_OscDataPool->c_Lists;
       }
@@ -260,8 +260,8 @@ int32_t C_PuiSdHandlerFiler::h_LoadDataPoolList(C_PuiSdNodeDataPoolList & orc_Da
 
    if (orc_XmlParser.SelectNodeChild("data-elements") == "data-elements")
    {
-      QList<C_OscNodeDataPoolListElement> * pc_OscElements = NULL;
-      if (opc_OscList != NULL)
+      QList<C_OscNodeDataPoolListElement> * pc_OscElements = nullptr;
+      if (opc_OscList != nullptr)
       {
          pc_OscElements = &opc_OscList->c_Elements;
       }
@@ -351,7 +351,7 @@ void C_PuiSdHandlerFiler::h_LoadDataPoolListElement(C_PuiSdNodeDataPoolListEleme
                                                     C_OscNodeDataPoolListElement * const opc_OscElement)
 {
    orc_DataPoolListElement.q_AutoMinMaxActive = orc_XmlParser.GetAttributeBool("auto_min_max_active");
-   if ((opc_OscElement != NULL) && (orc_XmlParser.AttributeExists("interpret_as_string")))
+   if ((opc_OscElement != nullptr) && (orc_XmlParser.AttributeExists("interpret_as_string")))
    {
       opc_OscElement->q_InterpretAsString = orc_XmlParser.GetAttributeBool("interpret_as_string");
    }
@@ -376,7 +376,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveDataPools(const QList<C_PuiSdNodeDataPool> & 
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if ((opc_OscDataPools != NULL) && (opc_BasePath != NULL))
+   if ((opc_OscDataPools != nullptr) && (opc_BasePath != nullptr))
    {
       if (orc_UiDataPools.size() == opc_OscDataPools->size())
       {
@@ -865,7 +865,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadCanProtocols(QList<C_PuiSdNodeCanProtocol> & 
          do
          {
             C_PuiSdNodeCanProtocol c_CanProtocol;
-            if (opc_BasePath != NULL)
+            if (opc_BasePath != nullptr)
             {
                const QString c_FilePath = opc_BasePath->absoluteFilePath(orc_XmlParser.GetNodeContent());
                s32_Retval = mh_LoadCommFile(c_CanProtocol, c_FilePath);
@@ -1252,7 +1252,7 @@ int32_t C_PuiSdHandlerFiler::h_SaveCanProtocols(const QList<C_PuiSdNodeCanProtoc
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (((opc_OscCanProtocols != NULL) && (opc_OscDatapools != NULL)) && (opc_BasePath != NULL))
+   if (((opc_OscCanProtocols != nullptr) && (opc_OscDatapools != nullptr)) && (opc_BasePath != nullptr))
    {
       if (orc_UiCanProtocols.size() == opc_OscCanProtocols->size())
       {
@@ -1547,7 +1547,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadNodes(QList<C_PuiSdNode> & orc_Nodes, C_OscXm
       {
          C_OscNode * const pc_OscNode = mh_GetArrayElemIfAvailable(opc_OscNodes, u32_ItNode);
          C_PuiSdNode c_Node;
-         if (opc_BasePath != NULL)
+         if (opc_BasePath != nullptr)
          {
             const QString c_FilePath = orc_XmlParser.GetNodeContent();
             const QString c_FilePathCombined = opc_BasePath->absoluteFilePath(c_FilePath);
@@ -1683,7 +1683,7 @@ void C_PuiSdHandlerFiler::h_SaveNodes(const QList<C_PuiSdNode> & orc_Nodes, C_Os
       for (uint32_t u32_Index = 0U; u32_Index < orc_Nodes.size(); u32_Index++)
       {
          orc_XmlParser.CreateAndSelectNodeChild("node");
-         Q_ASSERT(C_PuiSdHandlerFiler::mh_SaveNode(orc_Nodes[u32_Index], NULL, NULL, orc_XmlParser) == C_NO_ERR);
+         Q_ASSERT(C_PuiSdHandlerFiler::mh_SaveNode(orc_Nodes[u32_Index], nullptr, nullptr, orc_XmlParser) == C_NO_ERR);
          //Back up (don't check to allow reuse)
          orc_XmlParser.SelectNodeParent();
       }
@@ -1903,7 +1903,7 @@ int32_t C_PuiSdHandlerFiler::h_LoadLastKnownHalcCrcs(QMap<C_OscNodeDataPoolListE
                   {
                      const C_OscNodeDataPool * const pc_Dp = C_PuiSdHandler::h_GetInstance()->GetOscDataPool(
                         c_Id.u32_NodeIndex, c_Id.u32_DataPoolIndex);
-                     if (pc_Dp != NULL)
+                     if (pc_Dp != nullptr)
                      {
                         c_DpName = pc_Dp->c_Name;
                      }
@@ -2441,8 +2441,8 @@ int32_t C_PuiSdHandlerFiler::mh_LoadNode(C_PuiSdNode & orc_Node, C_OscXmlParserB
       s32_Return = h_LoadCanProtocols(orc_Node.c_UiCanProtocols, orc_XmlParser, opc_BasePath);
       if (s32_Return == C_NO_ERR)
       {
-         QList<C_OscNodeDataPool> * pc_OscDataPools = NULL;
-         if (opc_OscNode != NULL)
+         QList<C_OscNodeDataPool> * pc_OscDataPools = nullptr;
+         if (opc_OscNode != nullptr)
          {
             pc_OscDataPools = &opc_OscNode->c_DataPools;
          }
@@ -2600,24 +2600,24 @@ int32_t C_PuiSdHandlerFiler::mh_SaveNode(const C_PuiSdNode & orc_UiNode, const C
 {
    int32_t s32_Retval;
 
-   if (opc_OscNode != NULL)
+   if (opc_OscNode != nullptr)
    {
       s32_Retval = h_SaveCanProtocols(orc_UiNode.c_UiCanProtocols, &opc_OscNode->c_ComProtocols,
                                       &opc_OscNode->c_DataPools, opc_BasePath, orc_XmlParser);
    }
    else
    {
-      s32_Retval = h_SaveCanProtocols(orc_UiNode.c_UiCanProtocols, NULL, NULL, opc_BasePath, orc_XmlParser);
+      s32_Retval = h_SaveCanProtocols(orc_UiNode.c_UiCanProtocols, nullptr, nullptr, opc_BasePath, orc_XmlParser);
    }
    if (s32_Retval == C_NO_ERR)
    {
-      if (opc_OscNode != NULL)
+      if (opc_OscNode != nullptr)
       {
          s32_Retval = h_SaveDataPools(orc_UiNode.c_UiDataPools, &opc_OscNode->c_DataPools, opc_BasePath, orc_XmlParser);
       }
       else
       {
-         s32_Retval = h_SaveDataPools(orc_UiNode.c_UiDataPools, NULL, opc_BasePath, orc_XmlParser);
+         s32_Retval = h_SaveDataPools(orc_UiNode.c_UiDataPools, nullptr, opc_BasePath, orc_XmlParser);
       }
       if (s32_Retval == C_NO_ERR)
       {
@@ -2751,7 +2751,7 @@ int32_t C_PuiSdHandlerFiler::mh_LoadTextElement(C_PuiBsTextElement * const opc_T
 
    s32_Return = C_PuiBsElementsFiler::h_LoadTextElement(opc_TextElement, orc_XmlParser);
    //Check bus
-   if (opc_BusTextElement != NULL)
+   if (opc_BusTextElement != nullptr)
    {
       opc_BusTextElement->u32_BusIndex = orc_XmlParser.GetAttributeUint32("bus-index");
    }
@@ -2773,7 +2773,7 @@ void C_PuiSdHandlerFiler::mh_SaveTextElement(const C_PuiBsTextElement * const op
 
    C_PuiBsElementsFiler::h_SaveTextElement(opc_TextElement, orc_XmlParser);
    //Check bus
-   if (opc_BusTextElement != NULL)
+   if (opc_BusTextElement != nullptr)
    {
       orc_XmlParser.SetAttributeUint32("bus-index", opc_BusTextElement->u32_BusIndex);
    }
@@ -2792,9 +2792,9 @@ void C_PuiSdHandlerFiler::mh_SaveTextElement(const C_PuiBsTextElement * const op
 template <typename T>
 T * C_PuiSdHandlerFiler::mh_GetArrayElemIfAvailable(QList<T> * const opc_Vector, const uint32_t ou32_Index)
 {
-   T * pc_El = NULL;
+   T * pc_El = nullptr;
 
-   if (opc_Vector != NULL)
+   if (opc_Vector != nullptr)
    {
       if (ou32_Index < opc_Vector->size())
       {

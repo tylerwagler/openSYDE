@@ -254,7 +254,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(
     QStringList c_PackageFiles;
     QList<uint32_t> c_UpdatePosition;
 
-    s32_Return = C_OscSupDefinitionFiler_New::h_LoadUpdatePackageDefFile(
+    s32_Return = C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(
         c_TargetUnzipPath, oq_IsZip, orc_PackagePath, u32_FileVersion,
         c_FilePackagePath, oru32_ActiveBusIndex, orc_ActiveNodes,
         c_UpdatePosition, c_PackageFiles);
@@ -276,7 +276,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(
           const QString c_DevIniPath = c_TargetUnzipPath + mhc_INI_DEV;
 
           s32_Return = C_OscSystemDefinitionFiler::h_LoadSystemDefinitionFile(
-              orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, NULL);
+              orc_SystemDefinition, c_SysDefPath, c_DevIniPath, true, nullptr);
           if (s32_Return == C_NO_ERR) {
             s32_Return = mh_UnpackAndLoadNodes(
                 orc_SystemDefinition, c_PackageFiles, c_TargetUnzipPath,
@@ -309,7 +309,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::h_ProcessPackage(
          u8_Node++) {
       if ((orc_ActiveNodes[u8_Node] ==
            C_OscSupNodeDefinitionFiler::hu8_ACTIVE_NODE) &&
-          (orc_SystemDefinition.c_Nodes[u8_Node].pc_DeviceDefinition != NULL)) {
+          (orc_SystemDefinition.c_Nodes[u8_Node].pc_DeviceDefinition != nullptr)) {
         const C_OscNode &rc_CurNode = orc_SystemDefinition.c_Nodes[u8_Node];
         Q_ASSERT(rc_CurNode.u32_SubDeviceIndex <
                  rc_CurNode.pc_DeviceDefinition->c_SubDevices.size());
@@ -365,7 +365,7 @@ int32_t C_OscSupServiceUpdatePackageLoad::mh_CheckSupFiles(
   QStringList c_NecessaryFiles; // those are the files we look for
 
   c_NecessaryFiles.push_back(
-      C_OscSupDefinitionFiler_New::hc_PACKAGE_UPDATE_DEF); //".syde_supdef"
+      C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF); //".syde_supdef"
   c_NecessaryFiles.push_back(mhc_SUP_SYSDEF);          //".syde_sysdef"
   c_NecessaryFiles.push_back(mhc_INI_DEV);             //"devices.ini"
 

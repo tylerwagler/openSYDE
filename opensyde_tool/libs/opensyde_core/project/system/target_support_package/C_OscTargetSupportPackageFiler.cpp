@@ -64,7 +64,7 @@ using namespace stw::errors;
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadFile(C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_LoadFile(C_OscTargetSupportPackage &orc_Package,
                                                        const QString &orc_Path) {
    return mh_DetectAndLoad(orc_Package, orc_Path);
 }
@@ -79,7 +79,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadFile(C_OscTargetSupportPackage
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveFile(const C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_SaveFile(const C_OscTargetSupportPackage &orc_Package,
                                                        const QString &orc_Path) {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -115,7 +115,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveFile(const C_OscTargetSupportP
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadBinary(C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_LoadBinary(C_OscTargetSupportPackage &orc_Package,
                                                          const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::ReadOnly)) {
@@ -149,7 +149,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadBinary(C_OscTargetSupportPacka
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveBinary(const C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_SaveBinary(const C_OscTargetSupportPackage &orc_Package,
                                                          const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -184,7 +184,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveBinary(const C_OscTargetSuppor
    C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadFromMemoryBinary(C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_LoadFromMemoryBinary(C_OscTargetSupportPackage &orc_Package,
                                                                    const QByteArray &orc_Data) {
    QDataStream in(orc_Data);
    in.setVersion(QDataStream::Qt_6_0);
@@ -208,7 +208,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadFromMemoryBinary(C_OscTargetSu
    QByteArray     Binary data
 */
 //----------------------------------------------------------------------------------------------------------------------
-QByteArray C_OscTargetSupportPackageFiler_New::h_SaveToMemoryBinary(
+QByteArray C_OscTargetSupportPackageFiler::h_SaveToMemoryBinary(
    const C_OscTargetSupportPackage &orc_Package) {
    QByteArray c_Data;
    QDataStream out(&c_Data, QIODevice::WriteOnly);
@@ -230,7 +230,7 @@ QByteArray C_OscTargetSupportPackageFiler_New::h_SaveToMemoryBinary(
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadJson(C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_LoadJson(C_OscTargetSupportPackage &orc_Package,
                                                        const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::ReadOnly)) {
@@ -276,7 +276,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadJson(C_OscTargetSupportPackage
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveJson(const C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_SaveJson(const C_OscTargetSupportPackage &orc_Package,
                                                        const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -305,7 +305,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveJson(const C_OscTargetSupportP
    C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadFromMemoryJson(C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_LoadFromMemoryJson(C_OscTargetSupportPackage &orc_Package,
                                                                  const QJsonObject &orc_Object) {
    int32_t s32_Result = orc_Package.FromJsonObject(orc_Object);
 
@@ -326,7 +326,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadFromMemoryJson(C_OscTargetSupp
    QJsonObject    JSON object
 */
 //----------------------------------------------------------------------------------------------------------------------
-QJsonObject C_OscTargetSupportPackageFiler_New::h_SaveToMemoryJson(
+QJsonObject C_OscTargetSupportPackageFiler::h_SaveToMemoryJson(
    const C_OscTargetSupportPackage &orc_Package) {
    return orc_Package.ToJsonObject();
 }
@@ -342,7 +342,7 @@ QJsonObject C_OscTargetSupportPackageFiler_New::h_SaveToMemoryJson(
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadXml(C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_LoadXml(C_OscTargetSupportPackage &orc_Package,
                                                       const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::ReadOnly)) {
@@ -386,7 +386,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadXml(C_OscTargetSupportPackage 
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_SaveXml(const C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_SaveXml(const C_OscTargetSupportPackage &orc_Package,
                                                       const QString &orc_Path) {
    QFile file(orc_Path);
    if (!file.open(QIODevice::WriteOnly)) {
@@ -419,7 +419,7 @@ int32_t C_OscTargetSupportPackageFiler_New::h_SaveXml(const C_OscTargetSupportPa
    C_CONFIG   content is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscTargetSupportPackageFiler_New::h_LoadFromMemoryXml(C_OscTargetSupportPackage &orc_Package,
+int32_t C_OscTargetSupportPackageFiler::h_LoadFromMemoryXml(C_OscTargetSupportPackage &orc_Package,
                                                                 const QDomElement &orc_Element) {
    int32_t s32_Result = orc_Package.FromQDomElement(orc_Element);
 
@@ -441,19 +441,44 @@ int32_t C_OscTargetSupportPackageFiler_New::h_LoadFromMemoryXml(C_OscTargetSuppo
    QDomElement    XML element
 */
 //----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscTargetSupportPackageFiler_New::h_SaveToMemoryXml(
+QDomElement C_OscTargetSupportPackageFiler::h_SaveToMemoryXml(
    const C_OscTargetSupportPackage &orc_Package, QDomDocument &orc_Doc) {
    return orc_Package.ToQDomDocument(orc_Doc, "target-support-package");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load package (legacy XML compatibility)
+/*! \brief   Detect file format and load accordingly
 
    \param[out]     orc_Package      Package data
-   \param[in,out]  orc_XmlParser    XML parser
+   \param[in]      orc_Path         File path
 
    \return
    C_NO_ERR   data read
+   C_RANGE    file does not exist
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscTargetSupportPackageFiler::mh_DetectAndLoad(C_OscTargetSupportPackage &orc_Package,
+                                                         const QString &orc_Path) {
+   int32_t s32_Retval = C_NO_ERR;
+
+   // Detect format from file extension
+   const QString c_Extension = orc_Path.right(4).toLower();
+
+   if (c_Extension == ".bin") {
+      s32_Retval = h_LoadBinary(orc_Package, orc_Path);
+   } else if (c_Extension == ".json") {
+      s32_Retval = h_LoadJson(orc_Package, orc_Path);
+   } else if (c_Extension == ".xml") {
+      s32_Retval = h_LoadXml(orc_Package, orc_Path);
+   } else {
+      // Default to XML for backward compatibility
+      osc_write_log_warning("File I/O",
+                            QString("Unknown file extension \"%1\" for \"%2\". "
+                                    "Defaulting to XML format.")
+                            .arg(c_Extension, orc_Path));
+      s32_Retval = h_LoadXml(orc_Package, orc_Path);
+   }
+
+   return s32_Retval;
+}

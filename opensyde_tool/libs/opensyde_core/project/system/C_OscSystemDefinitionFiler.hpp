@@ -13,7 +13,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "stwtypes.hpp"
-#include "C_SclString.hpp"
+#include <QString>
+#include <QList>
+#include <QHash>
 #include "C_OscNode.hpp"
 #include "C_OscNodeFiler.hpp"
 #include "C_OscSystemBus.hpp"
@@ -34,43 +36,43 @@ class C_OscSystemDefinitionFiler
 {
 public:
    static int32_t h_LoadSystemDefinitionFile(C_OscSystemDefinition & orc_SystemDefinition,
-                                             const stw::scl::C_SclString & orc_PathSystemDefinition,
-                                             const stw::scl::C_SclString & orc_PathDeviceDefinitions,
+                                             const QString & orc_PathSystemDefinition,
+                                             const QString & orc_PathDeviceDefinitions,
                                              const bool oq_UseDeviceDefinitions = true,
-                                             uint16_t * const opu16_ReadFileVersion = NULL,
-                                             const std::vector<uint8_t> * const opc_NodesToLoad = NULL,
+                                             uint16_t * const opu16_ReadFileVersion = nullptr,
+                                             const QList<uint8_t> * const opc_NodesToLoad = nullptr,
                                              const bool oq_SkipContent = false,
-                                             const stw::scl::C_SclString * const opc_ExpectedNodeName = NULL);
+                                             const QString * const opc_ExpectedNodeName = nullptr);
    static int32_t h_SaveSystemDefinitionFile(const C_OscSystemDefinition & orc_SystemDefinition,
-                                             const stw::scl::C_SclString & orc_Path,
-                                             std::vector<stw::scl::C_SclString> * const opc_CreatedFiles = NULL);
-   static int32_t h_LoadNodes(std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
+                                             const QString & orc_Path,
+                                             QStringList * const opc_CreatedFiles = nullptr);
+   static int32_t h_LoadNodes(QList<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
                               const C_OscDeviceManager & orc_DeviceDefinitions,
-                              const stw::scl::C_SclString & orc_BasePath, const bool oq_UseDeviceDefinitions = true,
+                              const QString & orc_BasePath, const bool oq_UseDeviceDefinitions = true,
                               const bool oq_UseFileInterface = true,
-                              const std::vector<uint8_t> * const opc_NodesToLoad = NULL,
+                              const QList<uint8_t> * const opc_NodesToLoad = nullptr,
                               const bool oq_SkipContent = false,
-                              const stw::scl::C_SclString * const opc_ExpectedNodeName = NULL);
-   static int32_t h_LoadBuses(std::vector<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
-   static int32_t h_SaveNodes(const std::vector<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
-                              const stw::scl::C_SclString & orc_BasePath,
-                              std::vector<stw::scl::C_SclString> * const opc_CreatedFiles);
-   static void h_SaveBuses(const std::vector<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
+                              const QString * const opc_ExpectedNodeName = nullptr);
+   static int32_t h_LoadBuses(QList<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
+   static int32_t h_SaveNodes(const QList<C_OscNode> & orc_Nodes, C_OscXmlParserBase & orc_XmlParser,
+                              const QString & orc_BasePath,
+                              QStringList * const opc_CreatedFiles);
+   static void h_SaveBuses(const QList<C_OscSystemBus> & orc_Buses, C_OscXmlParserBase & orc_XmlParser);
    static int32_t h_LoadSystemDefinition(C_OscSystemDefinition & orc_SystemDefinition,
                                          C_OscXmlParserBase & orc_XmlParser,
-                                         const stw::scl::C_SclString & orc_PathDeviceDefinitions,
-                                         const stw::scl::C_SclString & orc_BasePath,
+                                         const QString & orc_PathDeviceDefinitions,
+                                         const QString & orc_BasePath,
                                          const bool oq_UseDeviceDefinitions = true,
-                                         uint16_t * const opu16_ReadFileVersion = NULL,
-                                         const std::vector<uint8_t> * const opc_NodesToLoad = NULL,
+                                         uint16_t * const opu16_ReadFileVersion = nullptr,
+                                         const QList<uint8_t> * const opc_NodesToLoad = nullptr,
                                          const bool oq_SkipContent = false,
-                                         const stw::scl::C_SclString * const opc_ExpectedNodeName = NULL);
+                                         const QString * const opc_ExpectedNodeName = nullptr);
    static int32_t h_SaveSystemDefinition(const C_OscSystemDefinition & orc_SystemDefinition,
-                                         C_OscXmlParserBase & orc_XmlParser, const stw::scl::C_SclString & orc_BasePath,
-                                         std::vector<stw::scl::C_SclString> * const opc_CreatedFiles);
+                                         C_OscXmlParserBase & orc_XmlParser, const QString & orc_BasePath,
+                                         QStringList * const opc_CreatedFiles);
 
-   static void h_SplitDeviceType(const stw::scl::C_SclString & orc_CompleteType, stw::scl::C_SclString & orc_MainType,
-                                 stw::scl::C_SclString & orc_SubType);
+   static void h_SplitDeviceType(const QString & orc_CompleteType, QString & orc_MainType,
+                                 QString & orc_SubType);
 
    ///known file versions
    static const uint16_t hu16_FILE_VERSION_1 = 1U;
@@ -79,8 +81,14 @@ public:
    static const uint16_t hu16_FILE_VERSION_LATEST = hu16_FILE_VERSION_3;
 
 private:
-   static std::map<uint32_t, stw::scl::C_SclString> mh_MapNodeIndicesToName(const std::vector<C_OscNode> & orc_Nodes);
+   static QHash<uint32_t, QString> mh_MapNodeIndicesToName(const QList<C_OscNode> & orc_Nodes);
+   static int32_t mh_LoadSystemDefinitionProperties(C_OscSystemDefinition & orc_SystemDefinition,
+                                                    C_OscXmlParserBase & orc_XmlParser);
+   static void mh_SaveSystemDefinitionProperties(const C_OscSystemDefinition & orc_SystemDefinition,
+                                                 C_OscXmlParserBase & orc_XmlParser);
 };
+
+/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
 }

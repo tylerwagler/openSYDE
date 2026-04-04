@@ -71,7 +71,7 @@
     \retval   C_RD_WR    File not created
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupSignatureFiler_New::h_CreateSignatureFile(const QString &orc_Path,
+ int32_t C_OscSupSignatureFiler::h_CreateSignatureFile(const QString &orc_Path,
                                                            const QString &orc_Signature) {
      const QString c_Extension = QFileInfo(orc_Path).suffix().toLower();
 
@@ -127,7 +127,7 @@
     \retval   C_RD_WR    File not read
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupSignatureFiler_New::h_LoadSignatureFile(const QString &orc_Path,
+ int32_t C_OscSupSignatureFiler::h_LoadSignatureFile(const QString &orc_Path,
                                                          QString &orc_Signature) {
      const QString c_Extension = QFileInfo(orc_Path).suffix().toLower();
 
@@ -178,7 +178,7 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupSignatureFiler_New::h_LoadBinary(QString &orc_Signature,
+ int32_t C_OscSupSignatureFiler::h_LoadBinary(QString &orc_Signature,
                                                   QDataStream &orc_Stream) {
      // Read signature string
      orc_Stream >> orc_Signature;
@@ -196,7 +196,7 @@
     C_CONFIG   invalid format
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupSignatureFiler_New::h_LoadJson(QString &orc_Signature,
+ int32_t C_OscSupSignatureFiler::h_LoadJson(QString &orc_Signature,
                                                 const QJsonObject &orc_Object) {
      if (!orc_Object.contains("signature") || !orc_Object["signature"].isString()) {
          return C_CONFIG;
@@ -216,7 +216,7 @@
     C_CONFIG   invalid format
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupSignatureFiler_New::h_LoadXml(QString &orc_Signature,
+ int32_t C_OscSupSignatureFiler::h_LoadXml(QString &orc_Signature,
                                                C_OscXmlParserBase &orc_XmlParser) {
      // Verify root element
      if (orc_XmlParser.SelectRoot() != mc_ROOT_NAME) {
@@ -259,7 +259,7 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupSignatureFiler_New::h_SaveBinary(const QString &orc_Signature,
+ int32_t C_OscSupSignatureFiler::h_SaveBinary(const QString &orc_Signature,
                                                   QDataStream &orc_Stream) {
      orc_Stream << orc_Signature;
      return (orc_Stream.status() == QDataStream::Ok) ? C_NO_ERR : C_RD_WR;
@@ -275,7 +275,7 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupSignatureFiler_New::h_SaveJson(const QString &orc_Signature,
+ int32_t C_OscSupSignatureFiler::h_SaveJson(const QString &orc_Signature,
                                                 QJsonObject &orc_Object) {
      QJsonObject c_SigObject;
      c_SigObject["type"] = mc_SIG_TYPE;
@@ -294,7 +294,7 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupSignatureFiler_New::h_SaveXml(const QString &orc_Signature,
+ int32_t C_OscSupSignatureFiler::h_SaveXml(const QString &orc_Signature,
                                                C_OscXmlParserBase &orc_XmlParser) {
      // Root Node
      orc_XmlParser.CreateAndSelectNodeChild(mc_ROOT_NAME);
@@ -320,7 +320,7 @@
     Signature file name
  */
  //----------------------------------------------------------------------------------------------------------------------
- QString C_OscSupSignatureFiler_New::h_GetSignatureFileName() {
+ QString C_OscSupSignatureFiler::h_GetSignatureFileName() {
      return "signature.syde_sucsig";
  }
 
@@ -330,7 +330,7 @@
     \see h_CreateSignatureFile
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupSignatureFiler_New::h_CreateSignatureFileLegacy(const QString &orc_Path,
+ int32_t C_OscSupSignatureFiler::h_CreateSignatureFileLegacy(const QString &orc_Path,
                                                                  const QString &orc_Signature) {
      C_OscXmlParser c_XmlParser;
      c_XmlParser.CreateAndSelectNodeChild(mc_ROOT_NAME);
@@ -352,7 +352,7 @@
     \see h_LoadSignatureFile
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupSignatureFiler_New::h_LoadSignatureFileLegacy(const QString &orc_Path,
+ int32_t C_OscSupSignatureFiler::h_LoadSignatureFileLegacy(const QString &orc_Path,
                                                                QString &orc_Signature) {
      C_OscXmlParser c_XmlParser;
      const int32_t s32_Result = c_XmlParser.LoadFromFile(orc_Path);

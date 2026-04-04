@@ -35,7 +35,7 @@
  /* -- Module Global Constants
   * ---------------------------------------------------------------------------------------
   */
- const QString C_OscSupDefinitionFiler_New::hc_PACKAGE_UPDATE_DEF =
+ const QString C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF =
      "service_update_package.syde_supdef";
  static const uint16_t mu16_FILE_VERSION = 2U;
  static const QString mc_FILE_VERSION = "file-version";
@@ -80,7 +80,7 @@
     C_RD_WR     read/write error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupDefinitionFiler_New::h_CreateUpdatePackageDefFile(
+ int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFile(
      const QString &orc_Path,
      const C_OscSupDefinition &orc_SupDefContent,
      const QStringList &orc_Files) {
@@ -116,7 +116,7 @@
     STW error codes
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupDefinitionFiler_New::h_LoadUpdatePackageDefFile(
+ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFile(
      const QString &orc_TargetUnzipPath,
      const bool oq_IsZip,
      const QString &orc_PackagePath,
@@ -128,11 +128,11 @@
      QStringList &orc_PackageFiles) {
      QString c_Path;
      if (oq_IsZip) {
-         c_Path = orc_TargetUnzipPath + C_OscSupDefinitionFiler_New::hc_PACKAGE_UPDATE_DEF;
+         c_Path = orc_TargetUnzipPath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF;
      } else {
          orc_FilePackagePath =
              stw::opensyde_core::C_OscUtils::h_IncludeTrailingDelimiter(orc_PackagePath);
-         c_Path = orc_FilePackagePath + C_OscSupDefinitionFiler_New::hc_PACKAGE_UPDATE_DEF;
+         c_Path = orc_FilePackagePath + C_OscSupDefinitionFiler::hc_PACKAGE_UPDATE_DEF;
      }
 
      const QString c_Extension = QFileInfo(c_Path).suffix().toLower();
@@ -169,7 +169,7 @@
     C_CONFIG   invalid format
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupDefinitionFiler_New::h_LoadBinary(
+ int32_t C_OscSupDefinitionFiler::h_LoadBinary(
      const QString &orc_Path,
      uint32_t &oru32_FileVersion,
      QString &orc_FilePackagePath,
@@ -247,7 +247,7 @@
     C_CONFIG   invalid format
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupDefinitionFiler_New::h_LoadJson(
+ int32_t C_OscSupDefinitionFiler::h_LoadJson(
      const QString &orc_Path,
      uint32_t &oru32_FileVersion,
      QString &orc_FilePackagePath,
@@ -334,7 +334,7 @@
     C_CONFIG   invalid format
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupDefinitionFiler_New::h_LoadXml(
+ int32_t C_OscSupDefinitionFiler::h_LoadXml(
      const QString &orc_Path,
      uint32_t &oru32_FileVersion,
      QString &orc_FilePackagePath,
@@ -390,7 +390,7 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupDefinitionFiler_New::h_SaveBinary(
+ int32_t C_OscSupDefinitionFiler::h_SaveBinary(
      const QString &orc_Path,
      const C_OscSupDefinition &orc_SupDefContent,
      const QStringList &orc_Files) {
@@ -442,7 +442,7 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupDefinitionFiler_New::h_SaveJson(
+ int32_t C_OscSupDefinitionFiler::h_SaveJson(
      const QString &orc_Path,
      const C_OscSupDefinition &orc_SupDefContent,
      const QStringList &orc_Files) {
@@ -495,7 +495,7 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupDefinitionFiler_New::h_SaveXml(
+ int32_t C_OscSupDefinitionFiler::h_SaveXml(
      const QString &orc_Path,
      const C_OscSupDefinition &orc_SupDefContent,
      const QStringList &orc_Files) {
@@ -530,7 +530,7 @@
     \param[in]      orc_Files        Files
  */
  //----------------------------------------------------------------------------------------------------------------------
- void C_OscSupDefinitionFiler_New::mh_SaveNodes(
+ void C_OscSupDefinitionFiler::mh_SaveNodes(
      C_OscXmlParserBase &orc_XmlParser,
      const QList<C_OscSupNodeDefinition> &orc_Nodes,
      const QStringList &orc_Files) {
@@ -573,7 +573,7 @@
     \param[in,out]  orc_PackageFiles    Package files
  */
  //----------------------------------------------------------------------------------------------------------------------
- void C_OscSupDefinitionFiler_New::mh_LoadNodes(C_OscXmlParserBase &orc_XmlParser,
+ void C_OscSupDefinitionFiler::mh_LoadNodes(C_OscXmlParserBase &orc_XmlParser,
                                                 QByteArray &orc_ActiveNodes,
                                                 QList<uint32_t> &orc_UpdatePosition,
                                                 QStringList &orc_PackageFiles) {
@@ -609,7 +609,7 @@
     \see h_CreateUpdatePackageDefFile
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupDefinitionFiler_New::h_CreateUpdatePackageDefFileLegacy(
+ int32_t C_OscSupDefinitionFiler::h_CreateUpdatePackageDefFileLegacy(
      const QString &orc_Path,
      const C_OscSupDefinition &orc_SupDefContent,
      const QStringList &orc_Files) {
@@ -623,7 +623,7 @@
     \see h_LoadUpdatePackageDefFile
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscSupDefinitionFiler_New::h_LoadUpdatePackageDefFileLegacy(
+ int32_t C_OscSupDefinitionFiler::h_LoadUpdatePackageDefFileLegacy(
      const QString &orc_TargetUnzipPath,
      const bool oq_IsZip,
      const QString &orc_PackagePath,

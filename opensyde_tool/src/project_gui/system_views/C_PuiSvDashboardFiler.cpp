@@ -20,6 +20,7 @@
 #include "C_PuiBsElementsFiler.hpp"
 #include "C_PuiSvDashboardFiler.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
+#include "C_OscNodeDataPoolFilerV2.hpp"
 #include "C_OscNodeDataPoolContentUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -59,7 +60,7 @@ C_PuiSvDashboardFiler::C_PuiSvDashboardFiler()
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard, C_OscXmlParserBase & orc_XmlParser,
+int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard, C_OscXmlParser & orc_XmlParser,
                                                const bool oq_IgnoreMostErrorCases)
 {
    int32_t s32_Retval = C_NO_ERR;
@@ -225,7 +226,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadDashboard(C_PuiSvDashboard & orc_Dashboard,
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::h_SaveDashboard(const C_PuiSvDashboard & orc_Dashboard, C_OscXmlParserBase & orc_XmlParser)
+void C_PuiSvDashboardFiler::h_SaveDashboard(const C_PuiSvDashboard & orc_Dashboard, C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeBool("active", orc_Dashboard.GetActive());
    orc_XmlParser.SetAttributeSint32("tab-index", orc_Dashboard.GetTabIndex());
@@ -257,7 +258,7 @@ void C_PuiSvDashboardFiler::h_SaveDashboard(const C_PuiSvDashboard & orc_Dashboa
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::h_LoadUiIndex(C_PuiSvDbNodeDataPoolListElementId & orc_Id,
-                                          C_OscXmlParserBase & orc_XmlParser)
+                                          C_OscXmlParser & orc_XmlParser)
 {
    const bool q_IsValid = orc_XmlParser.GetAttributeBool("is-valid");
 
@@ -288,12 +289,12 @@ void C_PuiSvDashboardFiler::h_LoadUiIndex(C_PuiSvDbNodeDataPoolListElementId & o
          //Save default for previous projects
          e_SourceType = C_PuiSvDbNodeDataPoolListElementId::eDATAPOOL_ELEMENT;
       }
-      if (orc_XmlParser.SelectNodeChild("invalid-type-placeholder") == "invalid-type-placeholder")
-      {
-         C_OscNodeDataPoolFiler::h_StringToDataPool(orc_XmlParser.GetNodeContent(), e_InvalidTypePlaceholder);
-         //Return
-         orc_XmlParser.SelectNodeParent();
-      }
+       if (orc_XmlParser.SelectNodeChild("invalid-type-placeholder") == "invalid-type-placeholder")
+       {
+          C_OscNodeDataPoolFilerV2::h_StringToDataPool(orc_XmlParser.GetNodeContent(), e_InvalidTypePlaceholder);
+          //Return
+          orc_XmlParser.SelectNodeParent();
+       }
       if (orc_XmlParser.SelectNodeChild("invalid-name-placeholder") == "invalid-name-placeholder")
       {
          c_InvalidNamePlaceholder = orc_XmlParser.GetNodeContent();
@@ -340,7 +341,7 @@ void C_PuiSvDashboardFiler::h_LoadUiIndex(C_PuiSvDbNodeDataPoolListElementId & o
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::h_SaveUiIndex(const C_PuiSvDbNodeDataPoolListElementId & orc_Id,
-                                          C_OscXmlParserBase & orc_XmlParser)
+                                          C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.SetAttributeBool("is-valid", orc_Id.GetIsValid());
    orc_XmlParser.SetAttributeBool("use-array-element-index", orc_Id.GetUseArrayElementIndex());
@@ -354,8 +355,8 @@ void C_PuiSvDashboardFiler::h_SaveUiIndex(const C_PuiSvDbNodeDataPoolListElement
    orc_XmlParser.SelectNodeParent();
    orc_XmlParser.CreateNodeChild("source-type",
                                  C_PuiSvDashboardFiler::mh_SourceTypeToString(orc_Id.GetType()));
-   orc_XmlParser.CreateNodeChild("invalid-type-placeholder",
-                                 C_OscNodeDataPoolFiler::h_DataPoolToString(orc_Id.GetInvalidTypePlaceholder()));
+    orc_XmlParser.CreateNodeChild("invalid-type-placeholder",
+                                  C_OscNodeDataPoolFilerV2::h_DataPoolToString(orc_Id.GetInvalidTypePlaceholder()));
    orc_XmlParser.CreateNodeChild("invalid-name-placeholder", orc_Id.GetInvalidNamePlaceholder());
    orc_XmlParser.CreateNodeChild("hal-channel-name", orc_Id.GetHalChannelName());
 }
@@ -371,7 +372,7 @@ void C_PuiSvDashboardFiler::h_SaveUiIndex(const C_PuiSvDbNodeDataPoolListElement
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::h_LoadSliderValue(C_PuiSvDbSlider & orc_Slider, C_OscXmlParserBase & orc_XmlParser)
+int32_t C_PuiSvDashboardFiler::h_LoadSliderValue(C_PuiSvDbSlider & orc_Slider, C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -383,7 +384,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadSliderValue(C_PuiSvDbSlider & orc_Slider, C
    {
       if (orc_XmlParser.SelectNodeChild("content") == "content")
       {
-         if (C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_Slider.c_Value, orc_XmlParser) != C_NO_ERR)
+         if (C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(orc_Slider.c_Value, orc_XmlParser) != C_NO_ERR)
          {
             s32_Retval = C_CONFIG;
          }
@@ -410,7 +411,7 @@ int32_t C_PuiSvDashboardFiler::h_LoadSliderValue(C_PuiSvDbSlider & orc_Slider, C
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadCharts(QList<C_PuiSvDbChart> & orc_Widgets,
-                                             C_OscXmlParserBase & orc_XmlParser)
+                                             C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -500,7 +501,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadCharts(QList<C_PuiSvDbChart> & orc_Widgets
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadTabChart(C_PuiSvDbTabChart & orc_Widget, C_OscXmlParserBase & orc_XmlParser)
+int32_t C_PuiSvDashboardFiler::mh_LoadTabChart(C_PuiSvDbTabChart & orc_Widget, C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -673,7 +674,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChart(C_PuiSvDbTabChart & orc_Widget, C
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadLabels(QList<C_PuiSvDbLabel> & orc_Widgets,
-                                             C_OscXmlParserBase & orc_XmlParser)
+                                             C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -740,7 +741,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadLabels(QList<C_PuiSvDbLabel> & orc_Widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadParams(QList<C_PuiSvDbParam> & orc_Widgets,
-                                             C_OscXmlParserBase & orc_XmlParser)
+                                             C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -805,7 +806,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParams(QList<C_PuiSvDbParam> & orc_Widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_LoadParamExpandedItems(QList<C_PuiSvDbExpandedTreeIndex> & orc_Items,
-                                                      C_OscXmlParserBase & orc_XmlParser)
+                                                      C_OscXmlParser & orc_XmlParser)
 {
    orc_Items.clear();
    if (orc_XmlParser.SelectNodeChild("expanded-tree-items") == "expanded-tree-items")
@@ -846,7 +847,7 @@ void C_PuiSvDashboardFiler::mh_LoadParamExpandedItems(QList<C_PuiSvDbExpandedTre
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_LoadParamColumnPositionIndices(QList<int32_t> & orc_Items,
-                                                              C_OscXmlParserBase & orc_XmlParser)
+                                                              C_OscXmlParser & orc_XmlParser)
 {
    orc_Items.clear();
    if (orc_XmlParser.SelectNodeChild("column-position-indices") == "column-position-indices")
@@ -890,7 +891,7 @@ void C_PuiSvDashboardFiler::mh_LoadParamColumnPositionIndices(QList<int32_t> & o
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadPieCharts(QList<C_PuiSvDbPieChart> & orc_Widgets,
-                                                C_OscXmlParserBase & orc_XmlParser)
+                                                C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -938,7 +939,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadPieCharts(QList<C_PuiSvDbPieChart> & orc_W
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadSpinBoxes(QList<C_PuiSvDbSpinBox> & orc_Widgets,
-                                                C_OscXmlParserBase & orc_XmlParser)
+                                                C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -969,7 +970,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadSpinBoxes(QList<C_PuiSvDbSpinBox> & orc_Wi
             }
             if (orc_XmlParser.SelectNodeChild("content") == "content")
             {
-               if (C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(c_Box.c_Value, orc_XmlParser) != C_NO_ERR)
+               if (C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(c_Box.c_Value, orc_XmlParser) != C_NO_ERR)
                {
                   s32_Retval = C_CONFIG;
                }
@@ -1007,7 +1008,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadSpinBoxes(QList<C_PuiSvDbSpinBox> & orc_Wi
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadTables(QList<C_PuiSvDbTable> & orc_Widgets,
-                                             C_OscXmlParserBase & orc_XmlParser)
+                                             C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1081,7 +1082,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTables(QList<C_PuiSvDbTable> & orc_Widgets
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadSliders(QList<C_PuiSvDbSlider> & orc_Widgets,
-                                              C_OscXmlParserBase & orc_XmlParser)
+                                              C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1151,7 +1152,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadSliders(QList<C_PuiSvDbSlider> & orc_Widge
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadProgressBars(QList<C_PuiSvDbProgressBar> & orc_Widgets,
-                                                   C_OscXmlParserBase & orc_XmlParser)
+                                                   C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1240,7 +1241,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadProgressBars(QList<C_PuiSvDbProgressBar> &
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadToggles(QList<C_PuiSvDbToggle> & orc_Widgets,
-                                              C_OscXmlParserBase & orc_XmlParser)
+                                              C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1308,7 +1309,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadToggles(QList<C_PuiSvDbToggle> & orc_Widge
    C_CONFIG    error loading information
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvDashboardFiler::mh_LoadWidgetBase(C_PuiSvDbWidgetBase & orc_Widget, C_OscXmlParserBase & orc_XmlParser)
+int32_t C_PuiSvDashboardFiler::mh_LoadWidgetBase(C_PuiSvDbWidgetBase & orc_Widget, C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1366,7 +1367,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadWidgetBase(C_PuiSvDbWidgetBase & orc_Widge
       if (s32_Retval == C_NO_ERR)
       {
          C_PuiSvDbWriteWidgetBase * const pc_WriteBase = dynamic_cast<C_PuiSvDbWriteWidgetBase * const>(&orc_Widget);
-         if (pc_WriteBase != NULL)
+         if (pc_WriteBase != nullptr)
          {
             s32_Retval = C_PuiSvDashboardFiler::mh_LoadWriteWidgetBase(*pc_WriteBase, orc_XmlParser);
          }
@@ -1394,7 +1395,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadWidgetBase(C_PuiSvDbWidgetBase & orc_Widge
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadWriteWidgetBase(C_PuiSvDbWriteWidgetBase & orc_WriteWidget,
-                                                      C_OscXmlParserBase & orc_XmlParser)
+                                                      C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1435,7 +1436,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadWriteWidgetBase(C_PuiSvDbWriteWidgetBase &
          }
          if (orc_XmlParser.SelectNodeChild("value") == "value")
          {
-            if (C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(orc_WriteWidget.c_InitialValue,
+            if (C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(orc_WriteWidget.c_InitialValue,
                                                                 orc_XmlParser) != C_NO_ERR)
             {
                s32_Retval = C_CONFIG;
@@ -1473,7 +1474,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadWriteWidgetBase(C_PuiSvDbWriteWidgetBase &
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadDataElementConfig(C_PuiSvDbNodeDataElementConfig & orc_Config,
-                                                        C_OscXmlParserBase & orc_XmlParser)
+                                                        C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval;
 
@@ -1511,7 +1512,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadDataElementConfig(C_PuiSvDbNodeDataElement
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadDataScalingConfig(C_PuiSvDbDataElementScaling & orc_Config,
-                                                        C_OscXmlParserBase & orc_XmlParser)
+                                                        C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1548,7 +1549,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadDataScalingConfig(C_PuiSvDbDataElementScal
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadDataFormatterConfig(C_PuiSvDbDataElementDisplayFormatter & orc_Config,
-                                                          C_OscXmlParserBase & orc_XmlParser)
+                                                          C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1583,7 +1584,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadDataFormatterConfig(C_PuiSvDbDataElementDi
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadParamDataSetIndices(QList<int32_t> & orc_Values,
-                                                          C_OscXmlParserBase & orc_XmlParser)
+                                                          C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1633,7 +1634,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamDataSetIndices(QList<int32_t> & orc_V
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadParamValues(QList<C_OscNodeDataPoolContent> & orc_Values,
-                                                  C_OscXmlParserBase & orc_XmlParser)
+                                                  C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1646,7 +1647,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamValues(QList<C_OscNodeDataPoolContent
          do
          {
             C_OscNodeDataPoolContent c_Value;
-            s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPoolContentV1(c_Value, orc_XmlParser);
+            s32_Retval = C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(c_Value, orc_XmlParser);
             orc_Values.push_back(c_Value);
             //Next
             c_CurrentValueNode = orc_XmlParser.SelectNodeNext("value");
@@ -1677,7 +1678,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamValues(QList<C_OscNodeDataPoolContent
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadParamTables(QList<QList<int32_t> > & orc_Values,
-                                                  C_OscXmlParserBase & orc_XmlParser)
+                                                  C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1724,7 +1725,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamTables(QList<QList<int32_t> > & orc_V
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadParamColumns(QList<int32_t> & orc_Values,
-                                                   C_OscXmlParserBase & orc_XmlParser)
+                                                   C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1774,7 +1775,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamColumns(QList<int32_t> & orc_Values,
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_PuiSvDashboardFiler::mh_LoadTabChartScreenRegion(QList<std::array<float64_t, 4> > & orc_ScreenRegion,
-                                                           C_OscXmlParserBase & orc_XmlParser)
+                                                           C_OscXmlParser & orc_XmlParser)
 {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -1830,7 +1831,7 @@ int32_t C_PuiSvDashboardFiler::mh_LoadTabChartScreenRegion(QList<std::array<floa
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveCharts(const QList<C_PuiSvDbChart> & orc_Widgets,
-                                          C_OscXmlParserBase & orc_XmlParser)
+                                          C_OscXmlParser & orc_XmlParser)
 {
    Q_UNUSED(orc_Widgets)
 
@@ -1846,7 +1847,7 @@ void C_PuiSvDashboardFiler::mh_SaveCharts(const QList<C_PuiSvDbChart> & orc_Widg
    \param[in,out]  orc_XmlParser    XML parser with the "current" element set to the "dashboard" element
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvDashboardFiler::mh_SaveTabChart(const C_PuiSvDbTabChart & orc_Widget, C_OscXmlParserBase & orc_XmlParser)
+void C_PuiSvDashboardFiler::mh_SaveTabChart(const C_PuiSvDbTabChart & orc_Widget, C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("tab-chart");
    C_PuiSvDashboardFiler::mh_SaveWidgetBase(orc_Widget, orc_XmlParser);
@@ -1898,7 +1899,7 @@ void C_PuiSvDashboardFiler::mh_SaveTabChart(const C_PuiSvDbTabChart & orc_Widget
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveLabels(const QList<C_PuiSvDbLabel> & orc_Widgets,
-                                          C_OscXmlParserBase & orc_XmlParser)
+                                          C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("labels");
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < orc_Widgets.size(); ++u32_ItWidget)
@@ -1925,7 +1926,7 @@ void C_PuiSvDashboardFiler::mh_SaveLabels(const QList<C_PuiSvDbLabel> & orc_Widg
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveParams(const QList<C_PuiSvDbParam> & orc_Widgets,
-                                          C_OscXmlParserBase & orc_XmlParser)
+                                          C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("params");
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < orc_Widgets.size(); ++u32_ItWidget)
@@ -1949,7 +1950,7 @@ void C_PuiSvDashboardFiler::mh_SaveParams(const QList<C_PuiSvDbParam> & orc_Widg
       for (uint32_t u32_ItValue = 0; u32_ItValue < rc_Param.c_ListValues.size(); ++u32_ItValue)
       {
          orc_XmlParser.CreateAndSelectNodeChild("value");
-         C_OscNodeDataPoolFiler::h_SaveDataPoolContentV1(rc_Param.c_ListValues[u32_ItValue], orc_XmlParser);
+         C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(rc_Param.c_ListValues[u32_ItValue], orc_XmlParser);
          //Return
          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "values");
       }
@@ -1993,7 +1994,7 @@ void C_PuiSvDashboardFiler::mh_SaveParams(const QList<C_PuiSvDbParam> & orc_Widg
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveParamExpandedItems(const QList<C_PuiSvDbExpandedTreeIndex> & orc_Items,
-                                                      C_OscXmlParserBase & orc_XmlParser)
+                                                      C_OscXmlParser & orc_XmlParser)
 {
    //Columns
    orc_XmlParser.CreateAndSelectNodeChild("expanded-tree-items");
@@ -2018,7 +2019,7 @@ void C_PuiSvDashboardFiler::mh_SaveParamExpandedItems(const QList<C_PuiSvDbExpan
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveParamColumnPositionIndices(const QList<int32_t> & orc_Items,
-                                                              C_OscXmlParserBase & orc_XmlParser)
+                                                              C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("column-position-indices");
    for (uint32_t u32_ItTable = 0; u32_ItTable < orc_Items.size(); ++u32_ItTable)
@@ -2040,7 +2041,7 @@ void C_PuiSvDashboardFiler::mh_SaveParamColumnPositionIndices(const QList<int32_
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SavePieCharts(const QList<C_PuiSvDbPieChart> & orc_Widgets,
-                                             C_OscXmlParserBase & orc_XmlParser)
+                                             C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("pie-charts");
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < orc_Widgets.size(); ++u32_ItWidget)
@@ -2066,7 +2067,7 @@ void C_PuiSvDashboardFiler::mh_SavePieCharts(const QList<C_PuiSvDbPieChart> & or
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveSpinBoxes(const QList<C_PuiSvDbSpinBox> & orc_Widgets,
-                                             C_OscXmlParserBase & orc_XmlParser)
+                                             C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("spin-boxes");
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < orc_Widgets.size(); ++u32_ItWidget)
@@ -2081,7 +2082,7 @@ void C_PuiSvDashboardFiler::mh_SaveSpinBoxes(const QList<C_PuiSvDbSpinBox> & orc
       orc_XmlParser.CreateNodeChild("type", C_PuiSvDashboardFiler::mh_SpinBoxTypeToString(
                                        rc_SpinBox.e_Type));
       orc_XmlParser.CreateAndSelectNodeChild("content");
-      C_OscNodeDataPoolFiler::h_SaveDataPoolContentV1(rc_SpinBox.c_Value, orc_XmlParser);
+      C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(rc_SpinBox.c_Value, orc_XmlParser);
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "spin-box");
       //Return
@@ -2099,7 +2100,7 @@ void C_PuiSvDashboardFiler::mh_SaveSpinBoxes(const QList<C_PuiSvDbSpinBox> & orc
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveTables(const QList<C_PuiSvDbTable> & orc_Widgets,
-                                          C_OscXmlParserBase & orc_XmlParser)
+                                          C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("tables");
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < orc_Widgets.size(); ++u32_ItWidget)
@@ -2136,7 +2137,7 @@ void C_PuiSvDashboardFiler::mh_SaveTables(const QList<C_PuiSvDbTable> & orc_Widg
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveSliders(const QList<C_PuiSvDbSlider> & orc_Widgets,
-                                           C_OscXmlParserBase & orc_XmlParser)
+                                           C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("sliders");
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < orc_Widgets.size(); ++u32_ItWidget)
@@ -2148,7 +2149,7 @@ void C_PuiSvDashboardFiler::mh_SaveSliders(const QList<C_PuiSvDbSlider> & orc_Wi
                                        rc_Slider.e_Type));
       orc_XmlParser.SetAttributeBool("show-min-max", rc_Slider.q_ShowMinMax);
       orc_XmlParser.CreateAndSelectNodeChild("content");
-      C_OscNodeDataPoolFiler::h_SaveDataPoolContentV1(rc_Slider.c_Value, orc_XmlParser);
+      C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(rc_Slider.c_Value, orc_XmlParser);
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "slider");
       //Return
@@ -2166,7 +2167,7 @@ void C_PuiSvDashboardFiler::mh_SaveSliders(const QList<C_PuiSvDbSlider> & orc_Wi
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveProgressBars(const QList<C_PuiSvDbProgressBar> & orc_Widgets,
-                                                C_OscXmlParserBase & orc_XmlParser)
+                                                C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("progress-bars");
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < orc_Widgets.size(); ++u32_ItWidget)
@@ -2196,7 +2197,7 @@ void C_PuiSvDashboardFiler::mh_SaveProgressBars(const QList<C_PuiSvDbProgressBar
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveToggles(const QList<C_PuiSvDbToggle> & orc_Widgets,
-                                           C_OscXmlParserBase & orc_XmlParser)
+                                           C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("toggles");
    for (uint32_t u32_ItWidget = 0; u32_ItWidget < orc_Widgets.size(); ++u32_ItWidget)
@@ -2227,7 +2228,7 @@ void C_PuiSvDashboardFiler::mh_SaveToggles(const QList<C_PuiSvDbToggle> & orc_Wi
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveWidgetBase(const C_PuiSvDbWidgetBase & orc_Widget,
-                                              C_OscXmlParserBase & orc_XmlParser)
+                                              C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("base");
    orc_XmlParser.CreateAndSelectNodeChild("box");
@@ -2253,7 +2254,7 @@ void C_PuiSvDashboardFiler::mh_SaveWidgetBase(const C_PuiSvDbWidgetBase & orc_Wi
    {
       const C_PuiSvDbWriteWidgetBase * const pc_WriteWidget =
          dynamic_cast<const C_PuiSvDbWriteWidgetBase * const>(&orc_Widget);
-      if (pc_WriteWidget != NULL)
+      if (pc_WriteWidget != nullptr)
       {
          C_PuiSvDashboardFiler::mh_SaveWriteWidgetBase(*pc_WriteWidget, orc_XmlParser);
       }
@@ -2270,7 +2271,7 @@ void C_PuiSvDashboardFiler::mh_SaveWidgetBase(const C_PuiSvDbWidgetBase & orc_Wi
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveWriteWidgetBase(const C_PuiSvDbWriteWidgetBase & orc_WriteWidget,
-                                                   C_OscXmlParserBase & orc_XmlParser)
+                                                   C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateNodeChild("write-mode", C_PuiSvDashboardFiler::mh_WriteModeToString(
                                     orc_WriteWidget.e_ElementWriteMode));
@@ -2280,7 +2281,7 @@ void C_PuiSvDashboardFiler::mh_SaveWriteWidgetBase(const C_PuiSvDbWriteWidgetBas
    orc_XmlParser.CreateNodeChild("mode", C_PuiSvDashboardFiler::mh_InitialValueModeTypeToString(
                                     orc_WriteWidget.e_InitialValueMode));
    orc_XmlParser.CreateAndSelectNodeChild("value");
-   C_OscNodeDataPoolFiler::h_SaveDataPoolContentV1(orc_WriteWidget.c_InitialValue, orc_XmlParser);
+   C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(orc_WriteWidget.c_InitialValue, orc_XmlParser);
    //Return
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "connect-init-handling");
    //Return
@@ -2297,7 +2298,7 @@ void C_PuiSvDashboardFiler::mh_SaveWriteWidgetBase(const C_PuiSvDbWriteWidgetBas
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveDataElementConfig(const C_PuiSvDbNodeDataElementConfig & orc_Config,
-                                                     C_OscXmlParserBase & orc_XmlParser)
+                                                     C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("data-pool-element");
    h_SaveUiIndex(orc_Config.c_ElementId, orc_XmlParser);
@@ -2318,7 +2319,7 @@ void C_PuiSvDashboardFiler::mh_SaveDataElementConfig(const C_PuiSvDbNodeDataElem
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveDataScalingConfig(const C_PuiSvDbDataElementScaling & orc_Config,
-                                                     C_OscXmlParserBase & orc_XmlParser)
+                                                     C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("scaling");
    orc_XmlParser.SetAttributeBool("use-default", orc_Config.q_UseDefault);
@@ -2337,7 +2338,7 @@ void C_PuiSvDashboardFiler::mh_SaveDataScalingConfig(const C_PuiSvDbDataElementS
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveDataFormatterConfig(const C_PuiSvDbDataElementDisplayFormatter & orc_Config,
-                                                       C_OscXmlParserBase & orc_XmlParser)
+                                                       C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("display-formatter");
    orc_XmlParser.SetAttributeBool("is-active", orc_Config.q_IsActive);
@@ -2354,7 +2355,7 @@ void C_PuiSvDashboardFiler::mh_SaveDataFormatterConfig(const C_PuiSvDbDataElemen
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDashboardFiler::mh_SaveTabChartScreenRegion(const QList<std::array<float64_t, 4> > & orc_ScreenRegion,
-                                                        C_OscXmlParserBase & orc_XmlParser)
+                                                        C_OscXmlParser & orc_XmlParser)
 {
    orc_XmlParser.CreateAndSelectNodeChild("screen-regions");
    for (QList<std::array<float64_t, 4> >::const_iterator c_It = orc_ScreenRegion.begin();
@@ -2393,7 +2394,7 @@ void C_PuiSvDashboardFiler::mh_HandlePreviousSliderValue(const int32_t os32_Prev
                                                                        rc_Config.c_ElementId.u32_DataPoolIndex,
                                                                        rc_Config.c_ElementId.u32_ListIndex,
                                                                        rc_Config.c_ElementId.u32_ElementIndex);
-         if (pc_Element != NULL)
+         if (pc_Element != nullptr)
          {
             uint64_t u64_Steps;
             float64_t f64_UnscaledValue;

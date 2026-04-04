@@ -21,7 +21,7 @@ using namespace stw::opensyde_core;
 using namespace stw::errors;
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler_New::h_LoadXappPropertiesFile(QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::h_LoadXappPropertiesFile(QList<C_OscXappProperties> &orc_Properties,
                                                                const QString &orc_FilePath,
                                                                const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -29,7 +29,7 @@ int32_t C_OscXappPropertiesFiler_New::h_LoadXappPropertiesFile(QList<C_OscXappPr
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler_New::h_SaveXappPropertiesFile(const QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::h_SaveXappPropertiesFile(const QList<C_OscXappProperties> &orc_Properties,
                                                                const QString &orc_FilePath,
                                                                const QString &orc_BasePath) {
    Q_UNUSED(orc_BasePath); // Not used in new framework
@@ -49,43 +49,43 @@ int32_t C_OscXappPropertiesFiler_New::h_SaveXappPropertiesFile(const QList<C_Osc
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler_New::h_LoadBinary(QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::h_LoadBinary(QList<C_OscXappProperties> &orc_Properties,
                                                    const QString &orc_FilePath) {
    return C_OscFilerUtil::h_LoadListBinary<C_OscXappProperties>(orc_Properties, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler_New::h_SaveBinary(const QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::h_SaveBinary(const QList<C_OscXappProperties> &orc_Properties,
                                                    const QString &orc_FilePath) {
    return C_OscFilerUtil::h_SaveListBinary<C_OscXappProperties>(orc_Properties, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler_New::h_LoadJson(QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::h_LoadJson(QList<C_OscXappProperties> &orc_Properties,
                                                  const QString &orc_FilePath) {
    return C_OscFilerUtil::h_LoadListJson<C_OscXappProperties>(orc_Properties, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler_New::h_SaveJson(const QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::h_SaveJson(const QList<C_OscXappProperties> &orc_Properties,
                                                  const QString &orc_FilePath) {
    return C_OscFilerUtil::h_SaveListJson<C_OscXappProperties>(orc_Properties, orc_FilePath);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler_New::h_LoadXml(QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::h_LoadXml(QList<C_OscXappProperties> &orc_Properties,
                                                 const QString &orc_FilePath) {
    return C_OscFilerUtil::h_LoadListXml<C_OscXappProperties>(orc_Properties, orc_FilePath, "xappProperties", "property");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler_New::h_SaveXml(const QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::h_SaveXml(const QList<C_OscXappProperties> &orc_Properties,
                                                 const QString &orc_FilePath) {
    return C_OscFilerUtil::h_SaveListXml<C_OscXappProperties>(orc_Properties, orc_FilePath, "xappProperties", "property");
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscXappPropertiesFiler_New::mh_DetectAndLoad(QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::mh_DetectAndLoad(QList<C_OscXappProperties> &orc_Properties,
                                                        const QString &orc_FilePath) {
    QFileInfo c_FileInfo(orc_FilePath);
    const QString c_Extension = c_FileInfo.suffix().toLower();
@@ -103,14 +103,14 @@ int32_t C_OscXappPropertiesFiler_New::mh_DetectAndLoad(QList<C_OscXappProperties
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscXappPropertiesFiler_New::h_LoadFile(QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::h_LoadFile(QList<C_OscXappProperties> &orc_Properties,
                                                  const QString &orc_Path) {
    return h_LoadXappPropertiesFile(orc_Properties, orc_Path, QString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 [[deprecated("Use format-specific methods")]]
-int32_t C_OscXappPropertiesFiler_New::h_SaveFile(const QList<C_OscXappProperties> &orc_Properties,
+int32_t C_OscXappPropertiesFiler::h_SaveFile(const QList<C_OscXappProperties> &orc_Properties,
                                                  const QString &orc_Path) {
    return h_SaveXappPropertiesFile(orc_Properties, orc_Path, QString());
 }
