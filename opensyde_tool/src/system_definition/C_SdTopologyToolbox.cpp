@@ -18,7 +18,6 @@
 #include <QDebug>
 
 #include "constants.hpp"
-#include "C_SclIniFile.hpp"
 #include "C_SdTopologyToolbox.hpp"
 #include "ui_C_SdTopologyToolbox.h"
 #include "C_SebToolboxUtil.hpp"
@@ -42,7 +41,6 @@ using namespace stw::opensyde_gui_elements;
 using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 
-using namespace stw::scl;
 using namespace stw::errors;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -68,7 +66,7 @@ using namespace stw::errors;
 C_SdTopologyToolbox::C_SdTopologyToolbox(QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SdTopologyToolbox),
-   mpc_List(NULL),
+   mpc_List(nullptr),
    mpc_Spacer(new QSpacerItem(20, 10, QSizePolicy::Expanding)),
    mpc_Label(new C_OgeLabUnified("TopologyToolboxUserNodes", this))
 {
@@ -321,7 +319,7 @@ void C_SdTopologyToolbox::m_FillToolboxDynamic(void)
             c_DeviceGroups[u32_ItDeviceGroup].GetGroupName(),
             this->mpc_Ui->pc_VerticalLayout1, this->mc_ListWidgets, this);
 
-         if (this->mpc_List != NULL)
+         if (this->mpc_List != nullptr)
          {
             for (uint32_t u32_ItDevice = 0U; u32_ItDevice < c_Devices.size(); ++u32_ItDevice)
             {
@@ -432,7 +430,7 @@ void C_SdTopologyToolbox::m_FillToolboxWithDynamicNodes(const C_OscDeviceDefinit
    // Tooltip
    const QString c_DeviceDescription = orc_Device.c_DeviceDescription;
 
-   if (this->mpc_List != NULL)
+   if (this->mpc_List != nullptr)
    {
       QListWidgetItem * pc_Item;
       this->mpc_List->addItem(orc_Device.GetDisplayName());
@@ -694,7 +692,7 @@ int32_t C_SdTopologyToolbox::m_AddUserNodesToIni(const QStringList & orc_UserDev
 void C_SdTopologyToolbox::m_AddUserNodesToToolbox(void)
 {
    // get names of all nodes, which already are in toolbox
-   if (this->mpc_List != NULL)
+   if (this->mpc_List != nullptr)
    {
       QList<C_OscDeviceDefinition> c_UserDevices;
       const QList<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
@@ -717,7 +715,7 @@ void C_SdTopologyToolbox::m_AddUserNodesToToolbox(void)
       }
 
       // set label invisible and remove spacer
-      if (this->mpc_Label != NULL)
+      if (this->mpc_Label != nullptr)
       {
          this->mpc_Label->setVisible(false);
          this->mpc_Ui->pc_VerticalLayout1->removeItem(this->mpc_Spacer);
@@ -750,7 +748,7 @@ int32_t C_SdTopologyToolbox::m_DeleteUserNode(const QPoint & orc_Pos)
    int32_t s32_Return = C_NO_ERR;
    int32_t s32_Result = C_NO_ERR;
 
-   if (this->mpc_List != NULL)
+   if (this->mpc_List != nullptr)
    {
       QListWidgetItem * const pc_Item = this->mpc_List->itemAt(orc_Pos);
 
@@ -774,7 +772,7 @@ int32_t C_SdTopologyToolbox::m_DeleteUserNode(const QPoint & orc_Pos)
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNode(u32_ItNode);
 
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             // check if the Node to be deleted is used in Network Topology. If so, no delete!
             if (pc_Node->c_DeviceType == (*c_ItEraseDevice).GetDisplayName())
@@ -808,7 +806,7 @@ int32_t C_SdTopologyToolbox::m_DeleteUserNode(const QPoint & orc_Pos)
          delete pc_Item;
          if (s32_Return == C_WARN)
          {
-            if (this->mpc_Label != NULL)
+            if (this->mpc_Label != nullptr)
             {
                this->mpc_Label->setVisible(true);
                // Add spacer after label
@@ -835,7 +833,7 @@ int32_t C_SdTopologyToolbox::m_ClearAllUserNodes()
    int32_t s32_Return = C_NO_ERR;
    int32_t s32_Result = C_NO_ERR;
 
-   if (this->mpc_List != NULL)
+   if (this->mpc_List != nullptr)
    {
       QList<C_OscDeviceDefinition> c_Devices;
       QList<C_OscDeviceGroup> c_DeviceGroups = C_OscSystemDefinition::hc_Devices.GetDeviceGroups();
@@ -846,7 +844,7 @@ int32_t C_SdTopologyToolbox::m_ClearAllUserNodes()
       {
          const C_OscNode * const pc_Node = C_PuiSdHandler::h_GetInstance()->GetOscNode(u32_ItNode);
 
-         if (pc_Node != NULL)
+         if (pc_Node != nullptr)
          {
             for (uint32_t u32_ItDevice = 0U; u32_ItDevice < c_Devices.size(); ++u32_ItDevice)
             {
@@ -883,7 +881,7 @@ int32_t C_SdTopologyToolbox::m_ClearAllUserNodes()
 
          if (s32_Return == C_WARN)
          {
-            if (this->mpc_Label != NULL)
+            if (this->mpc_Label != nullptr)
             {
                this->mpc_Label->setVisible(true);
                //Add spacer after label

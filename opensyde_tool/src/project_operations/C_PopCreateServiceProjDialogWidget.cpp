@@ -24,7 +24,6 @@
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_OscUtils.hpp"
 
-#include "C_SclIniFile.hpp"
 #include "C_UsFiler.hpp"
 #include "C_UsHandler.hpp"
 
@@ -40,7 +39,6 @@ using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_elements;
 using namespace stw::opensyde_core;
-using namespace stw::scl;
 
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -426,7 +424,7 @@ void C_PopCreateServiceProjDialogWidget::m_InitPwdLineEdit(void)
    this->mpc_Ui->pc_LineEditPassword->setEchoMode(QLineEdit::Password);
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_LineEditPassword, "NoRightBorder", true);
    this->mpc_Ui->pc_PubTogglePwd->setIcon(QIcon("://images/main_page_and_navi_bar/Icon_password_show.svg"));
-   this->mpc_Ui->pc_PubTogglePwd->setMenu(NULL);
+   this->mpc_Ui->pc_PubTogglePwd->setMenu(nullptr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -518,7 +516,7 @@ void C_PopCreateServiceProjDialogWidget::m_SavePermissionsToUserSettings(QList<s
       for (uint32_t u32_ItView = 0; u32_ItView < u32_ViewCnt; ++u32_ItView)
       {
          const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(u32_ItView);
-         if (pc_View != NULL)
+         if (pc_View != nullptr)
          {
             const QString c_Name = pc_View->GetName();
             C_UsHandler::h_GetInstance()->SetViewPermission(c_Name, orc_ViewConfigs[u32_ItView]);

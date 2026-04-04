@@ -30,7 +30,6 @@
 
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
-using namespace stw::scl;
 using namespace stw::errors;
 
 /* -- Module Global Constants
@@ -96,12 +95,6 @@ int32_t C_UsFiler::h_Save(const C_UsHandler &orc_UserSettings,
     try {
       // Parse ini
       QSettings c_Ini(orc_Path, QSettings::IniFormat);
-      // Ensure we might want to clear if we are saving fresh?
-      // But h_Save usually updates.
-      // Original code created C_SclIniFile c_Ini(path).
-      // If C_SclIniFile reads the existing file by default, then QSettings is
-      // fine. If C_SclIniFile creates a NEW file, we might need to clear.
-      // Assuming it loads existing.
 
       mh_SaveCommon(orc_UserSettings, c_Ini);
       mh_SaveEnvironment(orc_UserSettings, c_Ini);

@@ -31,7 +31,6 @@
 #include "C_OscCanOpenObjectDictionary.hpp"
 #include "C_OscCanOpenManagerInfo.hpp"
 #include "C_OscImportEdsDcf.hpp"
-#include "C_SclIniFile.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -429,7 +428,7 @@ bool C_SdNdeCoAddDeviceDialog::m_CheckIfNodeHasCanOpenManager(const uint32_t ou3
          const C_OscNode * const pc_ManagerNodeToCheck =
             C_PuiSdHandler::h_GetInstance()->GetCanOpenManagerNodeOnBus(
                c_ComInterfacesIter->u32_BusIndex);
-         if (pc_ManagerNodeToCheck != NULL)
+         if (pc_ManagerNodeToCheck != nullptr)
          {
             // Ok, we found a manager on this bus, let's check if the manager has our current device.
             // An additional check if current device is a manager device is not needed here because of
@@ -472,20 +471,20 @@ void C_SdNdeCoAddDeviceDialog::m_OnLoadEds(void)
       C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_LineEditEDSPath->GetPath());
    const QFileInfo c_FileInfo(c_File);
 
-   if (c_CanOpenObjDictionary.LoadFromFile(c_File) == C_NO_ERR)
-   {
-      stw::scl::C_SclIniFile c_IniFile(c_File);
+    if (c_CanOpenObjDictionary.LoadFromFile(c_File) == C_NO_ERR)
+    {
+       QSettings c_IniFile(c_File, QSettings::IniFormat);
 
-      if ((c_IniFile.SectionExists("FileInfo") == true) && (c_IniFile.SectionExists("DeviceInfo") == true))
-      {
-         this->mpc_Ui->pc_TedHtmlReport->setText(C_SdUtil::h_GetEdsFileDetails(c_CanOpenObjDictionary));
-      }
-      else
-      {
-         q_Invalid = true;
-         this->mpc_Ui->pc_TedHtmlReport->setPlainText("<No readable file>");
-      }
-   }
+       if ((c_IniFile.childGroups().contains("FileInfo") == true) && (c_IniFile.childGroups().contains("DeviceInfo") == true))
+       {
+          this->mpc_Ui->pc_TedHtmlReport->setText(C_SdUtil::h_GetEdsFileDetails(c_CanOpenObjDictionary));
+       }
+       else
+       {
+          q_Invalid = true;
+          this->mpc_Ui->pc_TedHtmlReport->setPlainText("<No readable file>");
+       }
+    }
    else
    {
       q_Invalid = true;
