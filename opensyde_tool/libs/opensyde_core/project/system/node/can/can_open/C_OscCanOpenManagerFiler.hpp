@@ -14,6 +14,9 @@
  */
 #include "C_OscCanOpenManagerInfo.hpp"
 #include "C_OscXmlParser.hpp"
+#include <QByteArray>
+#include <QDomDocument>
+#include <QJsonObject>
 #include <QList>
 #include <QStringList>
 
@@ -34,6 +37,9 @@ class C_OscCanOpenManagerFiler {
 public:
   C_OscCanOpenManagerFiler();
 
+   // --------------------------------------------------------------------------
+   // Unified File Operations (Auto-detect format from extension)
+   // --------------------------------------------------------------------------
    static int32_t
    h_LoadFile(QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
               const QString &orc_Path, const QString &orc_BasePath);
@@ -42,6 +48,44 @@ public:
               const QString &orc_Path, const QString &orc_BasePath,
               QStringList *const opc_CreatedFiles,
               const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap);
+
+   // --------------------------------------------------------------------------
+   // Binary Format (Fastest, compact)
+   // --------------------------------------------------------------------------
+   static int32_t h_LoadBinary(QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                               const QString &orc_Path);
+   static int32_t h_SaveBinary(const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                               const QString &orc_Path);
+   static int32_t h_LoadFromMemoryBinary(QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                                         const QByteArray &orc_Data);
+   static QByteArray h_SaveToMemoryBinary(const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config);
+
+   // --------------------------------------------------------------------------
+   // JSON Format (Human-readable, debugging)
+   // --------------------------------------------------------------------------
+   static int32_t h_LoadJson(QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                             const QString &orc_Path);
+   static int32_t h_SaveJson(const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                             const QString &orc_Path);
+   static int32_t h_LoadFromMemoryJson(QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                                       const QJsonObject &orc_Object);
+   static QJsonObject h_SaveToMemoryJson(const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config);
+
+   // --------------------------------------------------------------------------
+   // XML Format (QDom-based, legacy compatibility)
+   // --------------------------------------------------------------------------
+   static int32_t h_LoadXml(QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                            const QString &orc_Path);
+   static int32_t h_SaveXml(const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                            const QString &orc_Path);
+   static int32_t h_LoadFromMemoryXml(QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                                      const QDomElement &orc_Element);
+   static QDomElement h_SaveToMemoryXml(const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                                        QDomDocument &orc_Doc);
+
+   // --------------------------------------------------------------------------
+   // Legacy XML Parser (C_OscXmlParserBase) - element-level parsing
+   // --------------------------------------------------------------------------
    static int32_t
    h_LoadData(QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
               C_OscXmlParserBase &orc_XmlParser, const QString &orc_BasePath);
@@ -51,8 +95,12 @@ public:
               QStringList *const opc_CreatedFiles,
               const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap);
 
-public:
+private:
    static const uint16_t mhu16_FILE_VERSION_1;
+
+   // Helper for format detection
+   static int32_t mh_DetectAndLoad(QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+                                   const QString &orc_Path);
 
    static int32_t mh_LoadManagerData(C_OscCanOpenManagerInfo &orc_Config,
                                    C_OscXmlParserBase &orc_XmlParser,

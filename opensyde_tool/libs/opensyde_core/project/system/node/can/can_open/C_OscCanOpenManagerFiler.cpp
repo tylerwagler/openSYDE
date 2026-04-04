@@ -15,6 +15,12 @@
  */
 #include "precomp_headers.hpp"
 #include <QFileInfo>
+#include <QFile>
+#include <QDataStream>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QDomDocument>
 
 #include "C_OscCanOpenManagerFiler.hpp"
 #include "C_OscFilerUtil.hpp"
@@ -92,32 +98,39 @@ C_OscCanOpenManagerFiler::C_OscCanOpenManagerFiler() {}
 int32_t C_OscCanOpenManagerFiler::h_LoadFile(
     QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
     const QString &orc_Path, const QString &orc_BasePath) {
-  int32_t s32_Retval = C_NO_ERR;
+   // Use format auto-detection for non-legacy XML formats
+   const QString c_Extension = orc_Path.right(5).toLower();
+   if (c_Extension.endsWith(".bin") || c_Extension.endsWith(".json")) {
+      return mh_DetectAndLoad(orc_Config, orc_Path);
+   }
 
-  if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile()) {
-    C_OscXmlParserLog c_XmlParser;
-    c_XmlParser.SetLogHeading("Loading CANopen manager data");
-    s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
-    if (s32_Retval == C_NO_ERR) {
-      if (c_XmlParser.SelectRoot() == "opensyde-can-open-managers-config") {
-        s32_Retval = h_LoadData(orc_Config, c_XmlParser, orc_BasePath);
+   // Legacy XML path: use C_OscXmlParserBase for backward compatibility
+   int32_t s32_Retval = C_NO_ERR;
+
+   if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile()) {
+      C_OscXmlParserLog c_XmlParser;
+      c_XmlParser.SetLogHeading("Loading CANopen manager data");
+      s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
+      if (s32_Retval == C_NO_ERR) {
+         if (c_XmlParser.SelectRoot() == "opensyde-can-open-managers-config") {
+            s32_Retval = h_LoadData(orc_Config, c_XmlParser, orc_BasePath);
+         } else {
+            osc_write_log_error(
+               "Loading CANopen manager data",
+               "Could not find \"opensyde-can-open-managers-config\" node.");
+            s32_Retval = C_CONFIG;
+         }
       } else {
-        osc_write_log_error(
-            "Loading CANopen manager data",
-            "Could not find \"opensyde-can-open-managers-config\" node.");
-        s32_Retval = C_CONFIG;
+         osc_write_log_error("Loading CANopen manager data",
+                             "File \"" + orc_Path + "\" could not be opened.");
+         s32_Retval = C_NOACT;
       }
-    } else {
+   } else {
       osc_write_log_error("Loading CANopen manager data",
-                          "File \"" + orc_Path + "\" could not be opened.");
-      s32_Retval = C_NOACT;
-    }
-  } else {
-    osc_write_log_error("Loading CANopen manager data",
-                        "File \"" + orc_Path + "\" does not exist.");
-    s32_Retval = C_RANGE;
-  }
-  return s32_Retval;
+                          "File \"" + orc_Path + "\" does not exist.");
+      s32_Retval = C_RANGE;
+   }
+   return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -142,28 +155,464 @@ int32_t C_OscCanOpenManagerFiler::h_SaveFile(
     const QString &orc_Path, const QString &orc_BasePath,
     QStringList *const opc_CreatedFiles,
     const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
-  C_OscXmlParser c_XmlParser;
-  int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
+   // Detect format from file extension
+   const QString c_Extension = orc_Path.right(5).toLower();
+
+   if (c_Extension.endsWith(".bin")) {
+      return h_SaveBinary(orc_Config, orc_Path);
+   } else if (c_Extension.endsWith(".json")) {
+      return h_SaveJson(orc_Config, orc_Path);
+   }
+
+   // Legacy XML path: use C_OscXmlParserBase for backward compatibility
+   C_OscXmlParser c_XmlParser;
+   int32_t s32_Retval = C_OscSystemFilerUtil::h_GetParserForNewFile(
       c_XmlParser, orc_Path, "opensyde-can-open-managers-config");
 
-  if (s32_Retval == C_NO_ERR) {
-    // node
-    s32_Retval = C_OscCanOpenManagerFiler::h_SaveData(
-        orc_Config, c_XmlParser, orc_BasePath, opc_CreatedFiles,
-        orc_NodeIndicesToNameMap);
-    if (s32_Retval == C_NO_ERR) {
-      // Don't forget to save!
-      if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR) {
-        osc_write_log_error("Saving CANopen manager data",
-                            "Could not create file for node.");
-        s32_Retval = C_CONFIG;
+   if (s32_Retval == C_NO_ERR) {
+      // node
+      s32_Retval = C_OscCanOpenManagerFiler::h_SaveData(
+         orc_Config, c_XmlParser, orc_BasePath, opc_CreatedFiles,
+         orc_NodeIndicesToNameMap);
+      if (s32_Retval == C_NO_ERR) {
+         // Don't forget to save!
+         if (c_XmlParser.SaveToFile(orc_Path) != C_NO_ERR) {
+            osc_write_log_error("Saving CANopen manager data",
+                                "Could not create file for node.");
+            s32_Retval = C_CONFIG;
+         }
       }
-    }
-  } else {
-    // More details are in log
-    s32_Retval = C_CONFIG;
-  }
-  return s32_Retval;
+   } else {
+      // More details are in log
+      s32_Retval = C_CONFIG;
+   }
+   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load CANopen manager configs from binary file
+
+   \param[out]     orc_Config       Config data
+   \param[in]      orc_Path         File path
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content of file is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscCanOpenManagerFiler::h_LoadBinary(
+   QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   const QString &orc_Path)
+{
+   QFile c_File(orc_Path);
+
+   if (!c_File.open(QIODevice::ReadOnly)) {
+      osc_write_log_error("Loading CANopen manager data",
+                          QString("Could not open file \"%1\" for reading.").arg(orc_Path));
+      return C_CONFIG;
+   }
+
+   const QByteArray c_Data = c_File.readAll();
+   c_File.close();
+
+   return h_LoadFromMemoryBinary(orc_Config, c_Data);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save CANopen manager configs to binary file
+
+   \param[in]      orc_Config       Config data to store
+   \param[in]      orc_Path         File path
+
+   \return
+   C_NO_ERR   data saved
+   C_CONFIG   could not open file for writing
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscCanOpenManagerFiler::h_SaveBinary(
+   const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   const QString &orc_Path)
+{
+   QFile c_File(orc_Path);
+
+   if (!c_File.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Saving CANopen manager data",
+                          QString("Could not open file \"%1\" for writing.").arg(orc_Path));
+      return C_CONFIG;
+   }
+
+   const QByteArray c_Data = h_SaveToMemoryBinary(orc_Config);
+   c_File.write(c_Data);
+   c_File.close();
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load CANopen manager configs from memory (binary)
+
+   \param[out]     orc_Config       Config data
+   \param[in]      orc_Data         Binary data
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscCanOpenManagerFiler::h_LoadFromMemoryBinary(
+   QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   const QByteArray &orc_Data)
+{
+   QDataStream c_In(orc_Data);
+   c_In.setVersion(QDataStream::Qt_6_0);
+
+   int32_t s32_Count;
+   c_In >> s32_Count;
+
+   orc_Config.clear();
+   for (int32_t s32_It = 0; s32_It < s32_Count; ++s32_It) {
+      uint32_t u32_Interface;
+      c_In >> u32_Interface;
+      C_OscCanOpenManagerInfo c_Info;
+      c_Info.FromQDataStream(c_In);
+      orc_Config.insert(static_cast<uint8_t>(u32_Interface), c_Info);
+   }
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save CANopen manager configs to memory (binary)
+
+   \param[in]      orc_Config       Config data to store
+
+   \return
+   QByteArray    Binary data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QByteArray C_OscCanOpenManagerFiler::h_SaveToMemoryBinary(
+   const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config)
+{
+   QByteArray c_Data;
+   QDataStream c_Out(&c_Data, QIODevice::WriteOnly);
+   c_Out.setVersion(QDataStream::Qt_6_0);
+
+   c_Out << static_cast<int32_t>(orc_Config.size());
+   for (auto c_Iter = orc_Config.constBegin(); c_Iter != orc_Config.constEnd(); ++c_Iter) {
+      c_Out << static_cast<uint32_t>(c_Iter.key());
+      c_Iter.value().ToQDataStream(c_Out);
+   }
+
+   return c_Data;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load CANopen manager configs from JSON file
+
+   \param[out]     orc_Config       Config data
+   \param[in]      orc_Path         File path
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content of file is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscCanOpenManagerFiler::h_LoadJson(
+   QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   const QString &orc_Path)
+{
+   QFile c_File(orc_Path);
+
+   if (!c_File.open(QIODevice::ReadOnly)) {
+      osc_write_log_error("Loading CANopen manager data",
+                          QString("Could not open file \"%1\" for reading.").arg(orc_Path));
+      return C_CONFIG;
+   }
+
+   QJsonParseError c_ParseError;
+   QJsonDocument c_Doc = QJsonDocument::fromJson(c_File.readAll(), &c_ParseError);
+   c_File.close();
+
+   if (c_ParseError.error != QJsonParseError::NoError) {
+      osc_write_log_error("Loading CANopen manager data",
+                          QString("JSON parse error: %1").arg(c_ParseError.errorString()));
+      return C_CONFIG;
+   }
+
+   if (!c_Doc.isObject()) {
+      osc_write_log_error("Loading CANopen manager data",
+                          "JSON root element is not an object.");
+      return C_CONFIG;
+   }
+
+   return h_LoadFromMemoryJson(orc_Config, c_Doc.object());
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save CANopen manager configs to JSON file
+
+   \param[in]      orc_Config       Config data to store
+   \param[in]      orc_Path         File path
+
+   \return
+   C_NO_ERR   data saved
+   C_CONFIG   could not open file for writing
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscCanOpenManagerFiler::h_SaveJson(
+   const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   const QString &orc_Path)
+{
+   QFile c_File(orc_Path);
+
+   if (!c_File.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Saving CANopen manager data",
+                          QString("Could not open file \"%1\" for writing.").arg(orc_Path));
+      return C_CONFIG;
+   }
+
+   const QJsonObject c_Json = h_SaveToMemoryJson(orc_Config);
+   QJsonDocument c_Doc(c_Json);
+   c_File.write(c_Doc.toJson(QJsonDocument::Indented));
+   c_File.close();
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load CANopen manager configs from memory (JSON)
+
+   \param[out]     orc_Config       Config data
+   \param[in]      orc_Object       JSON object
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscCanOpenManagerFiler::h_LoadFromMemoryJson(
+   QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   const QJsonObject &orc_Object)
+{
+   orc_Config.clear();
+
+   if (orc_Object.contains("canOpenManagers")) {
+      const QJsonArray c_Array = orc_Object["canOpenManagers"].toArray();
+      for (const QJsonValue &c_Value : c_Array) {
+         const QJsonObject c_Entry = c_Value.toObject();
+         const uint8_t u8_Interface = static_cast<uint8_t>(c_Entry["interface"].toInt());
+         C_OscCanOpenManagerInfo c_Info;
+         if (c_Entry.contains("managerInfo")) {
+            c_Info.FromJsonObject(c_Entry["managerInfo"].toObject());
+         }
+         orc_Config.insert(u8_Interface, c_Info);
+      }
+   }
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save CANopen manager configs to memory (JSON)
+
+   \param[in]      orc_Config       Config data to store
+
+   \return
+   QJsonObject    JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscCanOpenManagerFiler::h_SaveToMemoryJson(
+   const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config)
+{
+   QJsonObject c_Root;
+   QJsonArray c_Array;
+
+   for (auto c_Iter = orc_Config.constBegin(); c_Iter != orc_Config.constEnd(); ++c_Iter) {
+      QJsonObject c_Entry;
+      c_Entry["interface"] = static_cast<int32_t>(c_Iter.key());
+      c_Entry["managerInfo"] = c_Iter.value().ToJsonObject();
+      c_Array.append(c_Entry);
+   }
+
+   c_Root["canOpenManagers"] = c_Array;
+   return c_Root;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load CANopen manager configs from XML file (QDom-based)
+
+   \param[out]     orc_Config       Config data
+   \param[in]      orc_Path         File path
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content of file is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscCanOpenManagerFiler::h_LoadXml(
+   QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   const QString &orc_Path)
+{
+   QFile c_File(orc_Path);
+
+   if (!c_File.open(QIODevice::ReadOnly)) {
+      osc_write_log_error("Loading CANopen manager data",
+                          QString("Could not open file \"%1\" for reading.").arg(orc_Path));
+      return C_CONFIG;
+   }
+
+   QDomDocument c_Doc;
+   QString c_Error;
+   int i_Line, i_Column;
+
+   if (!c_Doc.setContent(c_File.readAll(), &c_Error, &i_Line, &i_Column)) {
+      osc_write_log_error("Loading CANopen manager data",
+                          QString("XML parse error at line %1, column %2: %3")
+                          .arg(i_Line).arg(i_Column).arg(c_Error));
+      c_File.close();
+      return C_CONFIG;
+   }
+   c_File.close();
+
+   QDomElement c_Root = c_Doc.documentElement();
+   return h_LoadFromMemoryXml(orc_Config, c_Root);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save CANopen manager configs to XML file (QDom-based)
+
+   \param[in]      orc_Config       Config data to store
+   \param[in]      orc_Path         File path
+
+   \return
+   C_NO_ERR   data saved
+   C_CONFIG   could not open file for writing
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscCanOpenManagerFiler::h_SaveXml(
+   const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   const QString &orc_Path)
+{
+   QFile c_File(orc_Path);
+
+   if (!c_File.open(QIODevice::WriteOnly)) {
+      osc_write_log_error("Saving CANopen manager data",
+                          QString("Could not open file \"%1\" for writing.").arg(orc_Path));
+      return C_CONFIG;
+   }
+
+   QDomDocument c_Doc;
+   QDomElement c_Element = h_SaveToMemoryXml(orc_Config, c_Doc);
+   c_Doc.appendChild(c_Element);
+
+   // Write with XML declaration
+   c_File.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+   c_File.write(c_Doc.toString().toUtf8());
+   c_File.close();
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load CANopen manager configs from memory (XML)
+
+   \param[out]     orc_Config       Config data
+   \param[in]      orc_Element      XML element
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscCanOpenManagerFiler::h_LoadFromMemoryXml(
+   QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   const QDomElement &orc_Element)
+{
+   orc_Config.clear();
+
+   QDomNode c_Node = orc_Element.firstChild();
+   while (!c_Node.isNull()) {
+      QDomElement c_Elem = c_Node.toElement();
+      if (!c_Elem.isNull() && c_Elem.tagName() == "canOpenManager") {
+         const uint8_t u8_Interface = static_cast<uint8_t>(
+            c_Elem.attribute("interface", "0").toUInt());
+         C_OscCanOpenManagerInfo c_Info;
+
+         // Find the managerInfo child element
+         QDomNode c_InfoNode = c_Elem.firstChild();
+         while (!c_InfoNode.isNull()) {
+            QDomElement c_InfoElem = c_InfoNode.toElement();
+            if (!c_InfoElem.isNull() && c_InfoElem.tagName() == "canOpenManagerInfo") {
+               c_Info.FromQDomElement(c_InfoElem);
+               break;
+            }
+            c_InfoNode = c_InfoNode.nextSibling();
+         }
+
+         orc_Config.insert(u8_Interface, c_Info);
+      }
+      c_Node = c_Node.nextSibling();
+   }
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save CANopen manager configs to memory (XML)
+
+   \param[in]      orc_Config       Config data to store
+   \param[in,out]  orc_Doc          DOM document
+
+   \return
+   QDomElement    XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscCanOpenManagerFiler::h_SaveToMemoryXml(
+   const QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   QDomDocument &orc_Doc)
+{
+   QDomElement c_Root = orc_Doc.createElement("opensyde-can-open-managers-config");
+
+   for (auto c_Iter = orc_Config.constBegin(); c_Iter != orc_Config.constEnd(); ++c_Iter) {
+      QDomElement c_ManagerElement = orc_Doc.createElement("canOpenManager");
+      c_ManagerElement.setAttribute("interface", QString::number(c_Iter.key()));
+      c_ManagerElement.appendChild(c_Iter.value().ToQDomElement(orc_Doc));
+      c_Root.appendChild(c_ManagerElement);
+   }
+
+   return c_Root;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Detect format and load from file
+
+   \param[out]     orc_Config       Config data
+   \param[in]      orc_Path         File path
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content of file is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscCanOpenManagerFiler::mh_DetectAndLoad(
+   QHash<uint8_t, C_OscCanOpenManagerInfo> &orc_Config,
+   const QString &orc_Path)
+{
+   const QString c_Extension = orc_Path.right(5).toLower();
+
+   if (c_Extension.endsWith(".bin")) {
+      return h_LoadBinary(orc_Config, orc_Path);
+   } else if (c_Extension.endsWith(".json")) {
+      return h_LoadJson(orc_Config, orc_Path);
+   } else if (c_Extension.endsWith(".xml")) {
+      return h_LoadXml(orc_Config, orc_Path);
+   } else {
+      // Default to QDom-based XML for backward compatibility
+      osc_write_log_warning("File I/O",
+                            QString("Unknown file extension for \"%1\". "
+                                    "Defaulting to XML format.").arg(orc_Path));
+      return h_LoadXml(orc_Config, orc_Path);
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
