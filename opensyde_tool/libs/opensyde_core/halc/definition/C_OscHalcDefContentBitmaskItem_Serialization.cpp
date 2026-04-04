@@ -22,16 +22,18 @@ void C_OscHalcDefContentBitmaskItem::ToQDataStream(QDataStream &ro_DataStream) c
    ro_DataStream << c_Display;
    ro_DataStream << c_Comment;
    ro_DataStream << q_ApplyValueSetting;
-   ro_DataStream << u64_Value;
+   ro_DataStream << static_cast<quint64>(u64_Value);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcDefContentBitmaskItem::FromQDataStream(QDataStream &ro_DataStream) {
    // Deserialize basic fields
+   quint64 u64_Temp;
    ro_DataStream >> c_Display;
    ro_DataStream >> c_Comment;
    ro_DataStream >> q_ApplyValueSetting;
-   ro_DataStream >> u64_Value;
+   ro_DataStream >> u64_Temp;
+   u64_Value = static_cast<uint64_t>(u64_Temp);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

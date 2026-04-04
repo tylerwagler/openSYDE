@@ -13,13 +13,11 @@
 #include <QJsonValue>
 
 using namespace stw::opensyde_core;
-using namespace stw::errors;
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcConfigParameterStruct::ToQDataStream(QDataStream &ro_DataStream) const {
    // Serialize base class (C_OscHalcConfigParameter)
    // Note: C_OscHalcConfigParameter serialization would need to be added separately
-   ro_DataStream << c_Name;
    ro_DataStream << c_Comment;
    
    // Serialize parameter elements
@@ -31,7 +29,6 @@ void C_OscHalcConfigParameterStruct::ToQDataStream(QDataStream &ro_DataStream) c
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcConfigParameterStruct::FromQDataStream(QDataStream &ro_DataStream) {
-   ro_DataStream >> c_Name;
    ro_DataStream >> c_Comment;
    
    // Deserialize parameter elements
@@ -48,7 +45,6 @@ void C_OscHalcConfigParameterStruct::FromQDataStream(QDataStream &ro_DataStream)
 //----------------------------------------------------------------------------------------------------------------------
 QJsonObject C_OscHalcConfigParameterStruct::ToJsonObject() const {
    QJsonObject c_Obj;
-   c_Obj["name"] = c_Name;
    c_Obj["comment"] = c_Comment;
    
    // Serialize parameter elements
@@ -63,7 +59,6 @@ QJsonObject C_OscHalcConfigParameterStruct::ToJsonObject() const {
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcConfigParameterStruct::FromJsonObject(const QJsonObject &orc_Object) {
-   if (orc_Object.contains("name")) c_Name = orc_Object["name"].toString();
    if (orc_Object.contains("comment")) c_Comment = orc_Object["comment"].toString();
    
    // Deserialize parameter elements
@@ -81,7 +76,6 @@ void C_OscHalcConfigParameterStruct::FromJsonObject(const QJsonObject &orc_Objec
 //----------------------------------------------------------------------------------------------------------------------
 QDomElement C_OscHalcConfigParameterStruct::ToQDomElement(QDomDocument &orc_Doc, const QString &orc_ElementName) const {
    QDomElement c_Element = orc_Doc.createElement(orc_ElementName);
-   c_Element.setAttribute("name", c_Name);
    c_Element.setAttribute("comment", c_Comment);
    
    // Serialize parameter elements
@@ -95,7 +89,6 @@ QDomElement C_OscHalcConfigParameterStruct::ToQDomElement(QDomDocument &orc_Doc,
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcConfigParameterStruct::FromQDomElement(const QDomElement &orc_Element) {
-   if (orc_Element.hasAttribute("name")) c_Name = orc_Element.attribute("name");
    if (orc_Element.hasAttribute("comment")) c_Comment = orc_Element.attribute("comment");
    
    // Deserialize parameter elements

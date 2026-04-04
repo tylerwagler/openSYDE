@@ -196,22 +196,33 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneDomain.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/standalone/C_OscHalcConfigStandaloneFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfig_Serialization.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigDomain_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigParameter_Serialization.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigChannel_Serialization.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/configuration/C_OscHalcConfigParameterStruct_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/base/C_OscHalcDefBase.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/base/C_OscHalcDefBase_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDef.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDef_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContent_Serialization.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContentBitmaskItem_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelAvailability.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelAvailability_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelDef.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelDef_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelUseCase.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelUseCase_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelValues.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelValues_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContent.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContentBitmaskItem.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefDomain.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefDomain_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefElement.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefElement_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStruct.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStruct_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStructFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianDatapoolListHandler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianGenerator.cpp
@@ -270,8 +281,11 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanInterfaceId.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerMappableSignal.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerMappableSignal_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfo.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfo_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJob.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler.cpp
@@ -425,6 +439,7 @@ else()
    set(OPENSYDE_CORE_PARAM_SET_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetDataPoolInfo.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetFilerBase.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetFilerBase_New.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetHandler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedData.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedDataPool.cpp
@@ -439,6 +454,7 @@ else()
 
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetDataPoolInfo.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetFilerBase.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetFilerBase_New.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetHandler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedData.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/data_dealer/paramset/C_OscParamSetInterpretedDataPool.hpp

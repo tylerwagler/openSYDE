@@ -11,6 +11,7 @@
 #include "precomp_headers.hpp"
 #include "C_OscCanOpenManagerDeviceInfo.hpp"
 #include "C_OscCanOpenObjectDictionary.hpp"
+#include <QJsonArray>
 
 using namespace stw::opensyde_core;
 

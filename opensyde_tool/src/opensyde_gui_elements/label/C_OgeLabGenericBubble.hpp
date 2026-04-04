@@ -1,19 +1,15 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Label to display SVGs (header)
-
-   See cpp file for detailed description
-
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \brief       Generic label styled via setters with a bubble background
+   \copyright   Copyright 2020 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OGELABSVGONLY_HPP
-#define C_OGELABSVGONLY_HPP
+#ifndef C_OGELABGENERICBUBBLE_HPP
+#define C_OGELABGENERICBUBBLE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QSvgRenderer>
-#include "C_OgeLabToolTipBase.hpp"
+#include "C_OgeLabGenericNoPaddingNoMargins.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -24,20 +20,13 @@ namespace opensyde_gui_elements
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_OgeLabSvgOnly :
-   public C_OgeLabToolTipBase
+class C_OgeLabGenericBubble :
+   public C_OgeLabGenericNoPaddingNoMargins
 {
+   Q_OBJECT
+
 public:
-   C_OgeLabSvgOnly(QWidget * const opc_Parent = NULL);
-   ~C_OgeLabSvgOnly(void) override;
-
-   void SetSvg(const QString & orc_SvgPath);
-
-protected:
-   void paintEvent(QPaintEvent * const opc_Event) override;
-
-private:
-   QSvgRenderer * mpc_Renderer;
+   explicit C_OgeLabGenericBubble(QWidget * const opc_Parent = NULL);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

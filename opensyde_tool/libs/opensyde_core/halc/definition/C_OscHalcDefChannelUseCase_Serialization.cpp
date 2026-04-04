@@ -152,7 +152,7 @@ QDomElement C_OscHalcDefChannelUseCase::ToQDomElement(QDomDocument &orc_Doc, con
    }
 
    // Serialize value
-   QDomElement c_ValueElem = c_Value.ToQDomElement(orc_Doc, "value");
+   QDomElement c_ValueElem = c_Value.ToQDomDocument(orc_Doc, "value");
    c_Element.appendChild(c_ValueElem);
 
    // Serialize availability
@@ -191,7 +191,7 @@ int32_t C_OscHalcDefChannelUseCase::FromQDomElement(const QDomElement &orc_Eleme
    // Deserialize value
    QDomNodeList c_List = orc_Element.elementsByTagName("value");
    if (!c_List.isEmpty()) {
-      c_Value.FromQDomElement(c_List.item(0).toElement());
+      c_Value.FromQDomDocument(c_List.item(0).toElement());
    }
 
    // Deserialize availability

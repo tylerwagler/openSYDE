@@ -19,6 +19,7 @@
 
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscParamSetHandler.hpp"
+#include "C_OscParamSetFilerBase.hpp"
 #include "C_OscParamSetFilerBase_New.hpp"
 #include "C_OscParamSetRawNodeFiler.hpp"
 #include "C_OscParamSetInterpretedNodeFiler.hpp"
@@ -192,12 +193,12 @@ int32_t C_OscParamSetHandler::ReadFile(const QString &orc_FilePath,
           // Load nodes
           s32_Retval = this->m_LoadNodes(c_Stream, oq_InterpretedDataOnly, q_MissingOptionalContent);
           
-          if ((opu16_FileCrc != NULL) && (s32_Retval == C_NO_ERR)) {
+          if ((opu16_FileCrc != nullptr) && (s32_Retval == C_NO_ERR)) {
             // CRC is now embedded in the file format
             *opu16_FileCrc = 0; // Placeholder - CRC handling depends on specific format
           }
           
-          if (opq_MissingOptionalContent != NULL) {
+          if (opq_MissingOptionalContent != nullptr) {
             *opq_MissingOptionalContent = q_MissingOptionalContent;
           }
         }
@@ -218,6 +219,172 @@ int32_t C_OscParamSetHandler::ReadFile(const QString &orc_FilePath,
   }
 
   return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Update/add CRC for provided file
+
+   \param[in] orc_FilePath Parameter file path
+
+   \return
+   C_NO_ERR CRC updated
+   C_CONFIG Unexpected XML format
+   C_RD_WR  Error accessing file system
+   C_RANGE  File does not exist
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscParamSetHandler::h_UpdateCrcForFile(const QString &orc_FilePath) {
+  return C_OscParamSetFilerBase::h_AddCrc(orc_FilePath);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Clear internally stored content
+ */
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscParamSetHandler::ClearContent(void) {
+  this->mc_RawNodes.clear();
+  this->mc_Data.Clear();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Add raw data for node (Node name used as ID)
+
+   \param[in] orc_Content Raw data for node (Node name used as ID)
+
+   \return
+   C_NO_ERR Operation success
+   C_RANGE  Operation failure: parameter invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscParamSetHandler::AddRawDataForNode(
+    const C_OscParamSetRawNode &orc_Content) {
+  int32_t s32_Retval = C_NO_ERR;
+
+  for (uint32_t u32_ItRawNode = 0; u32_ItRawNode < this->mc_RawNodes.size();
+       ++u32_ItRawNode) {
+    const C_OscParamSetRawNode &rc_CurRawNode =
+        this->mc_RawNodes[u32_ItRawNode];
+    if (rc_CurRawNode.c_Name == orc_Content.c_Name) {
+      s32_Retval = C_RANGE;
+    }
+  }
+  if (s32_Retval == C_NO_ERR) {
+    this->mc_RawNodes.push_back(orc_Content);
+  }
+  return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Add some general information for one param set file
+
+   \param[in] orc_FileInfo Optional general file information
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OscParamSetHandler::AddInterpretedFileData(
+    const C_OscParamSetInterpretedFileInfoData &orc_FileInfo) {
+  this->mc_Data.AddInterpretedFileData(orc_FileInfo);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Add interpreted data for node (Node name used as ID)
+
+   \param[in] orc_Content Interpreted data for node (Node name used as ID)
+
+   \return
+   C_NO_ERR Operation success
+   C_RANGE  Operation failure: parameter invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscParamSetHandler::AddInterpretedDataForNode(
+    const C_OscParamSetInterpretedNode &orc_Content) {
+  int32_t s32_Retval = C_NO_ERR;
+
+  for (uint32_t u32_ItInterpretedNode = 0;
+       u32_ItInterpretedNode < this->mc_Data.c_InterpretedNodes.size();
+       ++u32_ItInterpretedNode) {
+    const C_OscParamSetInterpretedNode &rc_CurInterpretedNode =
+        this->mc_Data.c_InterpretedNodes[u32_ItInterpretedNode];
+    if (rc_CurInterpretedNode.c_Name == orc_Content.c_Name) {
+      s32_Retval = C_RANGE;
+    }
+  }
+  if (s32_Retval == C_NO_ERR) {
+    this->mc_Data.c_InterpretedNodes.push_back(orc_Content);
+  }
+  return s32_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get raw node data for specified node
+
+   \param[in] orc_NodeName Node name to look for
+
+   \return
+   NULL Raw node data not found
+   Else Valid raw node data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+const C_OscParamSetRawNode *
+C_OscParamSetHandler::GetRawDataForNode(const QString &orc_NodeName) const {
+  const C_OscParamSetRawNode *pc_Retval = NULL;
+
+  for (uint32_t u32_ItRawNode = 0; u32_ItRawNode < this->mc_RawNodes.size();
+       ++u32_ItRawNode) {
+    const C_OscParamSetRawNode &rc_CurRawNode =
+        this->mc_RawNodes[u32_ItRawNode];
+    if (rc_CurRawNode.c_Name == orc_NodeName) {
+      pc_Retval = &this->mc_RawNodes[u32_ItRawNode];
+    }
+  }
+
+  return pc_Retval;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get interpreted data
+
+   \return
+   Pointer to vector with interpreted data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+const C_OscParamSetInterpretedData &
+C_OscParamSetHandler::GetInterpretedData(void) const {
+  return this->mc_Data;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get number of nodes
+
+   Get number of nodes that the file contains data for
+
+   \return
+   Number of nodes
+*/
+//----------------------------------------------------------------------------------------------------------------------
+uint32_t C_OscParamSetHandler::GetNumberOfNodes(void) const {
+  return static_cast<uint32_t>(this->mc_RawNodes.size());
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Get raw data for one node
+
+   Get raw data for specified node.
+
+   \param[in]  ou32_NodeIndex   index of node
+
+   \return
+   NULL  Raw node data not found
+   Else  Valid raw node data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+const C_OscParamSetRawNode *
+C_OscParamSetHandler::GetRawDataForNode(const uint32_t ou32_NodeIndex) const {
+  const C_OscParamSetRawNode *pc_Result = NULL;
+
+  if (ou32_NodeIndex < this->mc_RawNodes.size()) {
+    pc_Result = &this->mc_RawNodes[ou32_NodeIndex];
+  }
+  return pc_Result;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

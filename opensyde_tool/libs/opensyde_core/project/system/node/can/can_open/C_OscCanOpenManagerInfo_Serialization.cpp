@@ -37,7 +37,7 @@ void C_OscCanOpenManagerInfo::ToQDataStream(QDataStream &ro_DataStream) const {
    // Serialize CANopen devices
    ro_DataStream << static_cast<int32_t>(c_CanOpenDevices.size());
    for (auto c_Iter = c_CanOpenDevices.constBegin(); c_Iter != c_CanOpenDevices.constEnd(); ++c_Iter) {
-      ro_DataStream << c_Iter.key();
+      c_Iter.key().ToQDataStream(ro_DataStream);
       c_Iter.value().ToQDataStream(ro_DataStream);
    }
 }
@@ -68,7 +68,7 @@ void C_OscCanOpenManagerInfo::FromQDataStream(QDataStream &ro_DataStream) {
    for (int32_t s32_It = 0; s32_It < s32_DeviceCount; ++s32_It) {
       C_OscCanInterfaceId c_InterfaceId;
       C_OscCanOpenManagerDeviceInfo c_Device;
-      ro_DataStream >> c_InterfaceId;
+      c_InterfaceId.FromQDataStream(ro_DataStream);
       c_Device.FromQDataStream(ro_DataStream);
       c_CanOpenDevices.insert(c_InterfaceId, c_Device);
    }
@@ -88,8 +88,8 @@ QJsonObject C_OscCanOpenManagerInfo::ToJsonObject() const {
    c_Obj["enableHeartbeatProducing"] = q_EnableHeartbeatProducing;
    c_Obj["heartbeatProducerTimeMs"] = static_cast<int32_t>(u16_HeartbeatProducerTimeMs);
    c_Obj["produceSyncMessage"] = q_ProduceSyncMessage;
-   c_Obj["syncCyclePeriodUs"] = static_cast<int64_t>(u32_SyncCyclePeriodUs);
-   c_Obj["syncWindowLengthUs"] = static_cast<int64_t>(u32_SyncWindowLengthUs);
+   c_Obj["syncCyclePeriodUs"] = static_cast<double>(u32_SyncCyclePeriodUs);
+   c_Obj["syncWindowLengthUs"] = static_cast<double>(u32_SyncWindowLengthUs);
 
    // Serialize CANopen devices
    QJsonArray c_DeviceArray;
@@ -237,7 +237,7 @@ QDomElement C_OscCanOpenManagerInfo::ToQDomElement(QDomDocument &orc_Doc,
    QDomElement c_DevicesElement = orc_Doc.createElement("canOpenDevices");
    for (auto c_Iter = c_CanOpenDevices.constBegin(); c_Iter != c_CanOpenDevices.constEnd(); ++c_Iter) {
       QDomElement c_DeviceElement = c_Iter.value().ToQDomElement(orc_Doc, "device");
-      QDomElement c_InterfaceElement = c_Iter.key().ToQDomElement(orc_Doc, "interfaceId");
+      QDomElement c_InterfaceElement = c_Iter.key().ToQDomDocument(orc_Doc, "interfaceId");
       c_DeviceElement.appendChild(c_InterfaceElement);
       c_DevicesElement.appendChild(c_DeviceElement);
    }
@@ -296,7 +296,7 @@ int32_t C_OscCanOpenManagerInfo::FromQDomElement(const QDomElement &orc_Element)
                   while (!c_InterfaceNode.isNull()) {
                      QDomElement c_InterfaceElem = c_InterfaceNode.toElement();
                      if (!c_InterfaceElem.isNull() && c_InterfaceElem.tagName() == "interfaceId") {
-                        c_InterfaceId.FromQDomElement(c_InterfaceElem);
+                        c_InterfaceId.FromQDomDocument(c_InterfaceElem);
                         break;
                      }
                      c_InterfaceNode = c_InterfaceNode.nextSibling();

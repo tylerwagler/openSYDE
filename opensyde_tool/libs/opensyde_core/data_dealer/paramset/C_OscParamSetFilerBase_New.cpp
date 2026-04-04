@@ -120,10 +120,13 @@ void C_OscParamSetFilerBase_New::h_SaveFileInfo(QIODevice &orc_Device,
                                                  const C_OscParamSetInterpretedFileInfoData &orc_FileInfo) {
    QDataStream out(&orc_Device);
    out.setVersion(QDataStream::Qt_6_0);
-   out << static_cast<qint32>(orc_FileInfo.c_FileInfo.size());
-   for (const auto &c_Info : orc_FileInfo.c_FileInfo) {
-      out << c_Info;
-   }
+   out << orc_FileInfo.c_DateTime;
+   out << orc_FileInfo.c_Creator;
+   out << orc_FileInfo.c_ToolName;
+   out << orc_FileInfo.c_ToolVersion;
+   out << orc_FileInfo.c_ProjectName;
+   out << orc_FileInfo.c_ProjectVersion;
+   out << orc_FileInfo.c_UserComment;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -145,17 +148,15 @@ int32_t C_OscParamSetFilerBase_New::h_LoadFileInfo(QIODevice &orc_Device,
    
    QDataStream in(&orc_Device);
    in.setVersion(QDataStream::Qt_6_0);
-   
-   qint32 s_Size;
-   in >> s_Size;
-   
-   orc_FileInfo.c_FileInfo.clear();
-   for (qint32 s_I = 0; s_I < s_Size; ++s_I) {
-      QString c_Info;
-      in >> c_Info;
-      orc_FileInfo.c_FileInfo.append(c_Info);
-   }
-   
+
+   in >> orc_FileInfo.c_DateTime;
+   in >> orc_FileInfo.c_Creator;
+   in >> orc_FileInfo.c_ToolName;
+   in >> orc_FileInfo.c_ToolVersion;
+   in >> orc_FileInfo.c_ProjectName;
+   in >> orc_FileInfo.c_ProjectVersion;
+   in >> orc_FileInfo.c_UserComment;
+
    return (in.status() == QDataStream::Ok) ? C_NO_ERR : C_CONFIG;
 }
 
@@ -227,7 +228,9 @@ int32_t C_OscParamSetFilerBase_New::h_LoadDataPoolInfo(C_OscParamSetDataPoolInfo
                                                         bool &orq_MissingOptionalContent) {
    Q_UNUSED(orq_MissingOptionalContent);
    
-   orc_DataPoolInfo.FromQDataStream(QDataStream(&orc_Device));
+   QDataStream c_Stream(&orc_Device);
+   c_Stream.setVersion(QDataStream::Qt_6_0);
+   orc_DataPoolInfo.FromQDataStream(c_Stream);
    return C_NO_ERR;
 }
 
@@ -240,88 +243,8 @@ int32_t C_OscParamSetFilerBase_New::h_LoadDataPoolInfo(C_OscParamSetDataPoolInfo
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscParamSetFilerBase_New::h_SaveDataPoolInfo(const C_OscParamSetDataPoolInfo &orc_DataPoolInfo,
                                                      QIODevice &orc_Device) {
-   const_cast<C_OscParamSetDataPoolInfo &>(orc_DataPoolInfo).ToQDataStream(QDataStream(&orc_Device));
+   QDataStream c_Stream(&orc_Device);
+   c_Stream.setVersion(QDataStream::Qt_6_0);
+   orc_DataPoolInfo.ToQDataStream(c_Stream);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Load node name (deprecated)
-
-   \param[out]     orc_Name              Node name
-   \param[in]      orc_XmlParser         XML parser
-
-   \return
-   C_NO_ERR   name loaded
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase_New::mh_LoadNodeName(QString &orc_Name, C_OscXmlParserBase &orc_XmlParser) {
-   return C_OscParamSetFilerBase::mh_LoadNodeName(orc_Name, orc_XmlParser);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Save node name (deprecated)
-
-   \param[in]      orc_Name              Node name
-   \param[in]      orc_XmlParser         XML parser
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscParamSetFilerBase_New::mh_SaveNodeName(const QString &orc_Name, C_OscXmlParserBase &orc_XmlParser) {
-   C_OscParamSetFilerBase::mh_SaveNodeName(orc_Name, orc_XmlParser);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Load data pool infos (deprecated)
-
-   \param[out]     orc_DataPoolInfos     Data pool infos
-   \param[in]      orc_XmlParser         XML parser
-   \param[out]     orq_MissingOptionalContent  Flag for missing optional content
-
-   \return
-   C_NO_ERR   data loaded
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase_New::mh_LoadDataPoolInfos(QList<C_OscParamSetDataPoolInfo> &orc_DataPoolInfos,
-                                                          C_OscXmlParserBase &orc_XmlParser,
-                                                          bool &orq_MissingOptionalContent) {
-   return C_OscParamSetFilerBase::mh_LoadDataPoolInfos(orc_DataPoolInfos, orc_XmlParser, orq_MissingOptionalContent);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Save data pool infos (deprecated)
-
-   \param[in]      orc_DataPoolInfos     Data pool infos
-   \param[in]      orc_XmlParser         XML parser
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscParamSetFilerBase_New::mh_SaveDataPoolInfos(const QList<C_OscParamSetDataPoolInfo> &orc_DataPoolInfos,
-                                                       C_OscXmlParserBase &orc_XmlParser) {
-   C_OscParamSetFilerBase::mh_SaveDataPoolInfos(orc_DataPoolInfos, orc_XmlParser);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Load data pool info (deprecated)
-
-   \param[out]     orc_DataPoolInfo      Data pool info
-   \param[in]      orc_XmlParser         XML parser
-   \param[out]     orq_MissingOptionalContent  Flag for missing optional content
-
-   \return
-   C_NO_ERR   data loaded
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscParamSetFilerBase_New::mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo &orc_DataPoolInfo,
-                                                         C_OscXmlParserBase &orc_XmlParser,
-                                                         bool &orq_MissingOptionalContent) {
-   return C_OscParamSetFilerBase::mh_LoadDataPoolInfo(orc_DataPoolInfo, orc_XmlParser, orq_MissingOptionalContent);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Save data pool info (deprecated)
-
-   \param[in]      orc_DataPoolInfo      Data pool info
-   \param[in]      orc_XmlParser         XML parser
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscParamSetFilerBase_New::mh_SaveDataPoolInfo(const C_OscParamSetDataPoolInfo &orc_DataPoolInfo,
-                                                      C_OscXmlParserBase &orc_XmlParser) {
-   C_OscParamSetFilerBase::mh_SaveDataPoolInfo(orc_DataPoolInfo, orc_XmlParser);
-}

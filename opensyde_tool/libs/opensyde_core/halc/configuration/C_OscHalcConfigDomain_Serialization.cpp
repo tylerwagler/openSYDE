@@ -9,11 +9,11 @@
 
 #include "precomp_headers.hpp"
 #include "C_OscHalcConfigDomain.hpp"
+#include <QDomDocument>
 #include <QJsonArray>
 #include <QJsonValue>
 
 using namespace stw::opensyde_core;
-using namespace stw::errors;
 
 //----------------------------------------------------------------------------------------------------------------------
 void C_OscHalcConfigDomain::ToQDataStream(QDataStream &ro_DataStream) const {

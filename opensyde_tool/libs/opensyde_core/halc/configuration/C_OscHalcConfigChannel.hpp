@@ -17,6 +17,7 @@
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
 #include "stwtypes.hpp"
 #include <QDataStream>
+#include <QDomDocument>
 #include <QDomElement>
 #include <QJsonObject>
 #include <QList>

@@ -63,28 +63,6 @@ public:
    static void h_SaveDataPoolInfo(const C_OscParamSetDataPoolInfo &orc_DataPoolInfo,
                                   QIODevice &orc_Device);
 
-   // --------------------------------------------------------------------------
-   // Legacy Compatibility (deprecated)
-   // --------------------------------------------------------------------------
-   [[deprecated("Use Qt-native serialization methods instead")]]
-   static int32_t mh_LoadNodeName(QString &orc_Name, C_OscXmlParserBase &orc_XmlParser);
-   [[deprecated("Use Qt-native serialization methods instead")]]
-   static void mh_SaveNodeName(const QString &orc_Name, C_OscXmlParserBase &orc_XmlParser);
-   [[deprecated("Use Qt-native serialization methods instead")]]
-   static int32_t mh_LoadDataPoolInfos(QList<C_OscParamSetDataPoolInfo> &orc_DataPoolInfos,
-                                       C_OscXmlParserBase &orc_XmlParser,
-                                       bool &orq_MissingOptionalContent);
-   [[deprecated("Use Qt-native serialization methods instead")]]
-   static void mh_SaveDataPoolInfos(const QList<C_OscParamSetDataPoolInfo> &orc_DataPoolInfos,
-                                    C_OscXmlParserBase &orc_XmlParser);
-   [[deprecated("Use Qt-native serialization methods instead")]]
-   static int32_t mh_LoadDataPoolInfo(C_OscParamSetDataPoolInfo &orc_DataPoolInfo,
-                                      C_OscXmlParserBase &orc_XmlParser,
-                                      bool &orq_MissingOptionalContent);
-   [[deprecated("Use Qt-native serialization methods instead")]]
-   static void mh_SaveDataPoolInfo(const C_OscParamSetDataPoolInfo &orc_DataPoolInfo,
-                                   C_OscXmlParserBase &orc_XmlParser);
-
 protected:
    C_OscParamSetFilerBase_New(void);
 

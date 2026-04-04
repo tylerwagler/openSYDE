@@ -39,11 +39,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
-find_package(Qt6 REQUIRED COMPONENTS Svg)
-find_package(Qt6 REQUIRED COMPONENTS SvgWidgets)
+find_package(Qt6 COMPONENTS Svg QUIET)
+find_package(Qt6 COMPONENTS SvgWidgets QUIET)
 find_package(Qt6 REQUIRED COMPONENTS PrintSupport)
 find_package(Qt6 REQUIRED COMPONENTS Xml)
-find_package(Qt6 REQUIRED COMPONENTS SerialBus Network)
+find_package(Qt6 COMPONENTS SerialPort Network QUIET)
 
 # --- PROJECT INCLUDE PATHS --------------------------------------------------------------------------------------------
 
@@ -146,7 +146,12 @@ set (OPENSYDE_GUI_LIB_INCLUDES
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    # Use system-installed QCustomPlot and OpenSSL on Linux
    # Keep bundled qcustomplot header (patched for QT_NO_KEYWORDS compatibility)
-   find_package(QCustomPlotQt6 REQUIRED)
+   find_package(QCustomPlotQt6 QUIET)
+   if(NOT QCustomPlotQt6_FOUND)
+      # Fall back to pkg-config (e.g., openSUSE packages qcustomplot-qt6)
+      find_package(PkgConfig REQUIRED)
+      pkg_check_modules(QCUSTOMPLOT REQUIRED qcustomplot-qt6)
+   endif()
    find_package(OpenSSL REQUIRED)
    list(APPEND OPENSYDE_GUI_LIB_INCLUDES
       ${PROJECT_ROOT}/libs/qcustomplot
@@ -180,6 +185,32 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableModel.cpp
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericWithContextMenu.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardDefault.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardLabelValue.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardLabelCaption.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUnified.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDoubleClick.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePath.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeUnified.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.cpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUnified.cpp
+   ${PROJECT_ROOT}/src/graphic_items/C_GiImageGroupWithoutData.cpp
+   ${PROJECT_ROOT}/src/graphic_items/C_GiSvgGraphicsItem.cpp
+   ${PROJECT_ROOT}/src/graphic_items/C_GiPointInteraction.cpp
+   ${PROJECT_ROOT}/src/graphic_items/C_GiImage.cpp
+   ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiImageGroup.cpp
+   ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiRectBaseGroup.cpp
+   ${PROJECT_ROOT}/src/graphic_items/system_definition_items/C_GiSdImageGroup.cpp
+   ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvPc.cpp
+   ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaImageGroup.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconEvents.cpp
    
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerCanOpenLogic.cpp
@@ -402,8 +433,11 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiUtil.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiBopperle.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableView.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateBase.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxUnified.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxUnified.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxBase.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTableWidgetComIf.cpp
    ${PROJECT_ROOT}/src/system_definition/node_edit/C_SdNdeComIfSettingsTableDelegate.cpp
    ${PROJECT_ROOT}/src/util/C_Uti.cpp
@@ -465,8 +499,13 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTreeWidgetRoot.cpp
    ${PROJECT_ROOT}/src/system_definition/bus_edit/C_SdBueNodeSelectorCheckBoxListWidget.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiBorder.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultSmall.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64Properties.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultSmall.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeBase.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabBase.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabBase.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaBase.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64Properties.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleProperties.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64Table.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactorTable.cpp
@@ -557,7 +596,6 @@ ${PROJECT_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiDashboardTab.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiCheckBox.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiRectPixmap.cpp
-   ${PROJECT_ROOT}/src/graphic_items/C_GiImageGroupWithoutData.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiBusConnectorBase.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/topology/C_SebUnoTopBaseManager.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/topology/C_SebUnoTopBusConnectorMoveCommand.cpp
@@ -776,7 +814,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWidgetNew.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeDelegate.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipContent.cpp
    ${PROJECT_ROOT}/libs/dbc_driver_library/src/Vector/DBC/Scanner.cpp
    ${PROJECT_ROOT}/libs/dbc_driver_library/src/Vector/DBC/AttributeDefinition.cpp
@@ -798,7 +835,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxStyled.cpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.cpp
    
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.cpp
@@ -959,6 +995,32 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableModel.hpp
    ${PROJECT_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericWithContextMenu.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardDefault.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardLabelValue.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardLabelCaption.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUnified.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDoubleClick.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePath.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeUnified.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.hpp
+   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUnified.hpp
+   ${PROJECT_ROOT}/src/graphic_items/C_GiImageGroupWithoutData.hpp
+   ${PROJECT_ROOT}/src/graphic_items/C_GiSvgGraphicsItem.hpp
+   ${PROJECT_ROOT}/src/graphic_items/C_GiPointInteraction.hpp
+   ${PROJECT_ROOT}/src/graphic_items/C_GiImage.hpp
+   ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiImageGroup.hpp
+   ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiRectBaseGroup.hpp
+   ${PROJECT_ROOT}/src/graphic_items/system_definition_items/C_GiSdImageGroup.hpp
+   ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvPc.hpp
+   ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaImageGroup.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconEvents.hpp
    
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerCanOpenLogic.hpp
@@ -1336,7 +1398,6 @@ ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiWithToolTip.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiDashboardTab.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiCheckBox.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiRectPixmap.hpp
-   ${PROJECT_ROOT}/src/graphic_items/C_GiImageGroupWithoutData.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiBusConnectorBase.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/topology/C_SebUnoTopBusConnectorMoveCommand.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/topology/C_SebUnoTopBaseManager.hpp
@@ -1584,7 +1645,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaWidgetNew.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/items/param/C_SyvDaItPaTreeDelegate.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipContent.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebStyled.hpp
@@ -1592,7 +1652,6 @@ ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxStyled.hpp
    ${PROJECT_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.hpp
    
    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.hpp
@@ -1945,16 +2004,39 @@ set(OPENSYDE_LINK_LIBRARIES
    Qt6::Core
    Qt6::Gui
    Qt6::Widgets
-   Qt6::Svg
-   Qt6::SvgWidgets
    Qt6::PrintSupport
    opensyde_core
 )
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(Qt6Svg_FOUND)
    list(APPEND OPENSYDE_LINK_LIBRARIES
-      QCustomPlotQt6
-      OpenSSL::SSL
-      OpenSSL::Crypto
+      Qt6::Svg
+      Qt6::SvgWidgets
+   )
+else()
+   # Fallback: link directly to SVG libraries if CMake targets not available
+   find_library(QT6_SVG_LIBRARY Qt6Svg PATHS /usr/lib64 /usr/lib/x86_64-linux-gnu)
+   find_library(QT6_SVGWIDGETS_LIBRARY Qt6SvgWidgets PATHS /usr/lib64 /usr/lib/x86_64-linux-gnu)
+   if(QT6_SVG_LIBRARY AND QT6_SVGWIDGETS_LIBRARY)
+      list(APPEND OPENSYDE_LINK_LIBRARIES
+         ${QT6_SVG_LIBRARY}
+         ${QT6_SVGWIDGETS_LIBRARY}
+      )
+      # Add include path for SVG headers
+      find_path(QT6_SVG_INCLUDE_DIR QSvgRenderer PATHS /usr/include/qt6 /usr/include)
+      if(QT6_SVG_INCLUDE_DIR)
+         include_directories(${QT6_SVG_INCLUDE_DIR})
+      endif()
+   endif()
+endif()
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   if(QCustomPlotQt6_FOUND)
+      list(APPEND OPENSYDE_LINK_LIBRARIES QCustomPlotQt6)
+   else()
+      list(APPEND OPENSYDE_LINK_LIBRARIES ${QCUSTOMPLOT_LIBRARIES})
+   endif()
+   list(APPEND OPENSYDE_LINK_LIBRARIES
+      ${OPENSSL_SSL_LIBRARIES}
+      ${OPENSSL_CRYPTO_LIBRARIES}
    )
 else()
    list(PREPEND OPENSYDE_LINK_LIBRARIES

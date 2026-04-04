@@ -19,6 +19,7 @@
 #include "C_OscHalcDefBase.hpp"
 #include "C_OscHalcDefDomain.hpp"
 #include <QDataStream>
+#include <QDomDocument>
 #include <QDomElement>
 #include <QJsonObject>
 #include <QString>
