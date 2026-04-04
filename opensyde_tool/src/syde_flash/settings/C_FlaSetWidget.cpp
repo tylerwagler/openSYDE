@@ -81,7 +81,6 @@ C_FlaSetWidget::C_FlaSetWidget(QWidget *const opc_Parent)
                               this->mpc_Ui->pc_PbProgress, opc_Parent,
                               "://images/IconProgressLog.svg");
   this->mpc_Ui->pc_WiCollapsed->SetBackgroundColor(1);
-  this->mpc_Ui->pc_WiEmpty->SetBackgroundColor(5);
   this->mpc_Ui->pc_WiExpanded->SetBackgroundColor(1);
 
   // connect hide signal of widgets

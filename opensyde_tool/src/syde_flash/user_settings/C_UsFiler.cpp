@@ -323,13 +323,6 @@ void C_UsFiler::mh_LoadProjectIndependentSection(C_UsHandler &orc_UserSettings,
   c_Tmp = orc_Settings.value("Update/LastKnownHexFileLocation", "").toString();
   orc_UserSettings.SetLastKnownUpdateHexFileLocation(c_Tmp);
 }
-  orc_UserSettings.SetLastKnownUpdateHexFilePaths(c_HexFilePaths);
-  orc_UserSettings.SetHexFilePathsAsRelativeOrAbsolute(
-      c_HexFilePathsAsRelativeOrAbsolute);
-
-  c_Tmp = orc_Ini.ReadString("Update", "LastKnownHexFileLocation", "");
-  orc_UserSettings.SetLastKnownUpdateHexFileLocation(c_Tmp);
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Get DLL type from string

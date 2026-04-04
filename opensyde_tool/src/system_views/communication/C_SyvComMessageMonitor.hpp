@@ -79,7 +79,6 @@ public:
   // Logging handling
   int32_t AddLogFileAsc(const QString &orc_FilePath, const bool oq_HexActive,
                         const bool oq_RelativeTimeStampActive) override;
-  virtual int32_t AddLogFileBlf(const QString &orc_FilePath);
   int32_t RemoveLogFile(const QString &orc_FilePath) override;
   void RemoveAllLogFiles(void) override;
 

@@ -81,7 +81,7 @@ C_FlaConNodeConfigPopup::C_FlaConNodeConfigPopup(
     const uint8_t ou8_NodeId, const uint32_t ou32_Bitrate,
     const uint32_t ou32_FlashloaderResetWaitTime, const QString &orc_CanDllPath)
     : QWidget(&orc_Parent), mpc_Ui(new Ui::C_FlaConNodeConfigPopup),
-      mrc_ParentDialog(orc_Parent), mpc_DcSequences(NULL),
+      mrc_ParentDialog(orc_Parent), mpc_DcSequences(nullptr),
       ms32_SequenceResult(C_NO_ERR), mu8_CurrentNodeId(ou8_NodeId),
       mu32_CurrentBitrate(ou32_Bitrate),
       mu32_FlashloaderResetWaitTime(ou32_FlashloaderResetWaitTime),
@@ -285,7 +285,7 @@ void C_FlaConNodeConfigPopup::m_InitStaticGuiElements() const {
 int32_t C_FlaConNodeConfigPopup::m_InitDcSequence(void) {
   int32_t s32_Return;
 
-  if (this->mpc_DcSequences == NULL) {
+  if (this->mpc_DcSequences == nullptr) {
     this->mpc_DcSequences = new C_FlaSenDcBasicSequences();
 
     connect(this->mpc_DcSequences, &C_FlaSenDcBasicSequences::SigReportProgress,
@@ -324,7 +324,7 @@ int32_t C_FlaConNodeConfigPopup::m_InitDcSequence(void) {
  */
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaConNodeConfigPopup::m_CleanUpDcSequence(void) {
-  if (this->mpc_DcSequences != NULL) {
+  if (this->mpc_DcSequences != nullptr) {
     disconnect(mpc_DcSequences, &C_FlaSenDcBasicSequences::SigReportProgress,
                this, &C_FlaConNodeConfigPopup::SigReportProgress);
     disconnect(this->mpc_DcSequences,
@@ -334,7 +334,7 @@ void C_FlaConNodeConfigPopup::m_CleanUpDcSequence(void) {
   }
 
   delete this->mpc_DcSequences;
-  this->mpc_DcSequences = NULL;
+  this->mpc_DcSequences = nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -382,7 +382,7 @@ void C_FlaConNodeConfigPopup::m_MonitorSequence() {
   int32_t s32_ThreadResult = C_CONFIG;
   int32_t s32_SequenceResult = C_UNKNOWN_ERR;
 
-  if (this->mpc_DcSequences != NULL) {
+  if (this->mpc_DcSequences != nullptr) {
     s32_ThreadResult = this->mpc_DcSequences->GetResults(s32_SequenceResult);
   }
 

@@ -89,7 +89,7 @@ void C_CamMosSectionPopup::Show(const QPoint & orc_Pos)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosSectionPopup::SetWidget(QWidget * const opc_Widget)
 {
-   if (opc_Widget != NULL)
+   if (opc_Widget != nullptr)
    {
       this->mpc_Layout->addWidget(opc_Widget);
    }

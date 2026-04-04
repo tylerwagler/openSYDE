@@ -29,7 +29,7 @@ class C_CamOgeMuRecentProjects :
    Q_OBJECT
 
 public:
-   explicit C_CamOgeMuRecentProjects(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeMuRecentProjects(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

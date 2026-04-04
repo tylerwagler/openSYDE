@@ -332,14 +332,14 @@ const QStringList C_CamDbDbc::GetFoundMessages(void) const
    \param[in]  ou32_Hash      Hash
 
    \return
-   NULL DBC message not found
+   nullptr DBC message not found
    Else Valid DBC message
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_CieConverter::C_CieCanMessage * C_CamDbDbc::GetDbcMessage(const QString & orc_Message, const bool oq_UseHash,
                                                                   const uint32_t ou32_Hash) const
 {
-   const C_CieConverter::C_CieCanMessage * pc_Retval = NULL;
+   const C_CieConverter::C_CieCanMessage * pc_Retval = nullptr;
 
    //Don't allow access to inactive file
    if (this->mq_Active)

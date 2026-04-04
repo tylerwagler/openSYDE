@@ -29,7 +29,7 @@ class C_CamOgeTobRecentProjects :
    Q_OBJECT
 
 public:
-   explicit C_CamOgeTobRecentProjects(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeTobRecentProjects(QWidget * const opc_Parent = nullptr);
 
    void SetSvg(const QString & orc_Path);
 

@@ -26,7 +26,7 @@ class C_FlaOgeLeFilePath :
    Q_OBJECT
 
 public:
-   C_FlaOgeLeFilePath(QWidget * const opc_Parent = NULL);
+   C_FlaOgeLeFilePath(QWidget * const opc_Parent = nullptr);
 
 protected:
    QString m_ResolveVariables(const QString & orc_Path) override;

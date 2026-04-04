@@ -352,7 +352,7 @@ QVariant C_CamGenTableModel::data(const QModelIndex &orc_Index,
     const uint32_t u32_Index = static_cast<uint32_t>(orc_Index.row());
     const C_CamProMessageData *const pc_Message =
         C_CamProHandler::h_GetInstance()->GetMessageConst(u32_Index);
-    if (pc_Message != NULL) {
+    if (pc_Message != nullptr) {
       const C_CamGenTableModel::E_Columns e_Col =
           h_ColumnToEnum(orc_Index.column());
       if (((os32_Role == static_cast<int32_t>(Qt::DisplayRole)) ||
@@ -841,7 +841,7 @@ Qt::ItemFlags C_CamGenTableModel::flags(const QModelIndex &orc_Index) const {
         const C_CamProMessageData *const pc_Message =
             C_CamProHandler::h_GetInstance()->GetMessageConst(
                 static_cast<uint32_t>(orc_Index.row()));
-        if ((pc_Message != NULL) &&
+        if ((pc_Message != nullptr) &&
             (pc_Message->c_DataBaseFilePath.isEmpty() == true)) {
           c_Retval = c_Retval | Qt::ItemIsEditable | Qt::ItemIsEnabled;
         } else {
@@ -863,7 +863,7 @@ Qt::ItemFlags C_CamGenTableModel::flags(const QModelIndex &orc_Index) const {
         const C_CamProMessageData *const pc_Message =
             C_CamProHandler::h_GetInstance()->GetMessageConst(
                 static_cast<uint32_t>(orc_Index.row()));
-        if ((pc_Message != NULL) &&
+        if ((pc_Message != nullptr) &&
             (pc_Message->c_DataBaseFilePath.isEmpty() == true)) {
           c_Retval = c_Retval | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
         }
@@ -903,7 +903,7 @@ void C_CamGenTableModel::CopySelectedItems(
     const C_CamProMessageData *const pc_Message =
         C_CamProHandler::h_GetInstance()->GetMessageConst(
             orc_SelectedIndices[u32_It]);
-    if (pc_Message != NULL) {
+    if (pc_Message != nullptr) {
       c_Messages.push_back(*pc_Message);
     }
   }
@@ -1218,7 +1218,7 @@ void C_CamGenTableModel::m_CheckAndHandleRegisterCyclicMessage(
       C_CamProHandler::h_GetInstance()->GetMessageConst(ou32_MessageIndex);
 
   // Only send this signal if the message is currently cyclic
-  if ((pc_Message != NULL) && (pc_Message->q_DoCyclicTrigger == true) &&
+  if ((pc_Message != nullptr) && (pc_Message->q_DoCyclicTrigger == true) &&
       ((C_CamProHandler::h_GetInstance()->GetCyclicMessageTransmitActive() ==
         true))) {
     Q_EMIT(this->SigRegisterCyclicMessage(ou32_MessageIndex, oq_Active));
@@ -1282,13 +1282,13 @@ C_OscCanProtocol::E_Type C_CamGenTableModel::m_GetCurrentMessageProtocolType(
       C_CamProHandler::h_GetInstance()->GetMessageConst(ou32_MessageIndex);
 
   C_OscCanProtocol::E_Type e_ProtocolType = C_OscCanProtocol::eCAN_OPEN;
-  if (pc_Message != NULL) {
+  if (pc_Message != nullptr) {
     if (C_CamDbHandler::h_GetInstance()->FindOsyMessage(
             pc_Message->c_DataBaseFilePath, pc_Message->c_Name) == C_NO_ERR) {
       if (C_CamDbHandler::h_GetInstance()->GetOscMessage(
               pc_Message->c_DataBaseFilePath, pc_Message->c_Name,
               pc_Message->q_ContainsValidHash, pc_Message->u32_Hash,
-              &e_ProtocolType) == NULL) {
+              &e_ProtocolType) == nullptr) {
         // Db engine is not ready yet to get the current message protocol
         // It is totally fine to be failed at this point, as still the DB file
         // is in loading process

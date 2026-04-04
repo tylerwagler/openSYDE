@@ -1,45 +1,47 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Consolidated label with objectName/variant-based styling (header)
-   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+   \brief       Base class for dashboard labels with font adaptation
+   \copyright   Copyright Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OGELABBASE_HPP
-#define C_OGELABBASE_HPP
+#ifndef C_OGE_LAB_BASE_HPP
+#define C_OGE_LAB_BASE_HPP
 
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QLabel>
-#include "C_OgeLabToolTipBase.hpp"
+#include <QString>
+#include <QFont>
 
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_gui_elements
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
+namespace stw {
+namespace opensyde_gui_elements {
 
-/* -- Types --------------------------------------------------------------------------------------------------------- */
-
-class C_OgeLabBase :
-   public C_OgeLabToolTipBase
+class C_OgeLabBase : public QLabel
 {
-   Q_OBJECT
-   Q_PROPERTY(QString labelVariant READ GetLabelVariant WRITE SetLabelVariant)
+    Q_OBJECT
 
 public:
-   explicit C_OgeLabBase(QWidget * const opc_Parent = NULL);
-   ~C_OgeLabBase(void) override;
+    explicit C_OgeLabBase(QWidget * opc_Parent = nullptr);
+    ~C_OgeLabBase() override = default;
 
-   void SetLabelVariant(const QString & orc_Variant);
-   QString GetLabelVariant(void) const;
+    void SetAllowAutomatedAdaptation(const bool oq_Allow);
+    bool GetAllowAutomatedAdaptation(void) const;
+    void ResetFont(void);
+    void AdjustFontToSpecificSize(const uint32_t ou32_TargetWidth);
+    void SetToolTipInformation(const QString & orc_Heading, const QString & orc_Content);
+
+protected:
+    void paintEvent(QPaintEvent * const opc_Event) override;
 
 private:
-   QString mc_LabelVariant;
+    void m_AdjustFont(void);
+    void m_UpdateTextWidth(void);
+
+    bool mq_AllowAutomatedAdaptation;
+    QFont mc_OriginalFont;
+    uint32_t mu32_TargetWidth;
 };
 
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
+} // namespace opensyde_gui_elements
+} // namespace stw
 
 #endif

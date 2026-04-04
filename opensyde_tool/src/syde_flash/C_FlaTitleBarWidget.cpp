@@ -181,7 +181,7 @@ void C_FlaTitleBarWidget::m_ShowAbout(void) {
 
   c_New->exec();
 
-  if (c_New != NULL) {
+  if (c_New != nullptr) {
     c_New->HideOverlay();
   }
 } // lint !e429  no memory leak because of the parent of pc_Dialog and the Qt

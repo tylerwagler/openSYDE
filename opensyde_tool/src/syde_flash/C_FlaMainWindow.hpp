@@ -36,7 +36,7 @@ class C_FlaMainWindow :
    Q_OBJECT
 
 public:
-   explicit C_FlaMainWindow(QWidget * const opc_Parent = NULL);
+   explicit C_FlaMainWindow(QWidget * const opc_Parent = nullptr);
    ~C_FlaMainWindow(void) override;
 
 protected:

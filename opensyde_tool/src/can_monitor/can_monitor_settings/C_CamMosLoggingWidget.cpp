@@ -115,7 +115,7 @@ C_CamMosLoggingWidget::C_CamMosLoggingWidget(QWidget *const opc_Parent)
       "Directory", "Path of directory where log file(s) get saved at.");
   this->mpc_Ui->pc_LabFormat->setText("Format");
   this->mpc_Ui->pc_LabFormat->SetToolTipInformation(
-      "Format", "File format of log file (*.asc or *.blf).");
+      "Format", "File format of log file (*.asc).");
   this->mpc_Ui->pc_LabOverwrite->setText("File Options");
   this->mpc_Ui->pc_LabOverwrite->SetToolTipInformation(
       "File Options",
@@ -127,7 +127,6 @@ C_CamMosLoggingWidget::C_CamMosLoggingWidget(QWidget *const opc_Parent)
 
   // initialize combo boxes
   this->mpc_Ui->pc_CbxFormat->addItem("ASC");
-  this->mpc_Ui->pc_CbxFormat->addItem("BLF");
 
   this->mpc_Ui->pc_CbxOverwrite->addItem("Add timestamp suffix");
   this->mpc_Ui->pc_CbxOverwrite->addItem("Warn before overwriting");
@@ -545,11 +544,7 @@ void C_CamMosLoggingWidget::m_CheckAndStartLogging() {
 
   if (q_Continue == true) {
     // start logging
-    if (rc_LoggingData.e_FileFormat == C_CamProLoggingData::eBLF) {
-      Q_EMIT(this->SigAddLogFileBlf(c_FileInfo.absoluteFilePath()));
-    } else {
-      Q_EMIT(this->SigAddLogFileAsc(c_FileInfo.absoluteFilePath()));
-    }
+    Q_EMIT(this->SigAddLogFileAsc(c_FileInfo.absoluteFilePath()));
   } else {
     // set logging off
     this->mpc_Ui->pc_WiHeader->SetToggleState(false);

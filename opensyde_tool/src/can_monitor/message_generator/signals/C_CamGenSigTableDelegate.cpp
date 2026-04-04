@@ -62,7 +62,7 @@ void C_CamGenSigTableDelegate::setEditorData(QWidget * const opc_Editor, const Q
    C_CamTblDelegate::setEditorData(opc_Editor, orc_Index);
 
    pc_LineEdit = dynamic_cast<C_TblEditLineEditBase *>(opc_Editor);
-   if (pc_LineEdit != NULL)
+   if (pc_LineEdit != nullptr)
    {
       //Delayed selection handling
       Q_EMIT (this->SigAfterSetEditorData(pc_LineEdit));

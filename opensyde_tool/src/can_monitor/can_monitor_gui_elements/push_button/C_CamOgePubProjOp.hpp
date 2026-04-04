@@ -29,7 +29,7 @@ class C_CamOgePubProjOp :
    Q_OBJECT
 
 public:
-   explicit C_CamOgePubProjOp(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgePubProjOp(QWidget * const opc_Parent = nullptr);
 
    void SetSvg(const QString & orc_Path, const QString orc_PathDisable = "");
    void SetIconOnly(const bool oq_IconOnly);

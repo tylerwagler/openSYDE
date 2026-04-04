@@ -45,7 +45,7 @@ class C_CamMetWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamMetWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamMetWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamMetWidget(void) override;
 
    void LoadUserSettings(void);
@@ -76,7 +76,6 @@ public:
 
    // Logging configuration
    void AddLogFileAsc(const QString & orc_FilePath);
-   void AddLogFileBlf(const QString & orc_FilePath);
    void RemoveAllLogFiles(void) const;
 
    stw::opensyde_gui_logic::C_SyvComMessageMonitor * GetMessageMonitor(void) const;

@@ -373,7 +373,7 @@ void C_CamTitleBarWidget::m_ShowAbout(void)
 
    c_New->exec();
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }

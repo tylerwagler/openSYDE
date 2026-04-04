@@ -353,19 +353,6 @@ void C_CamMetWidget::AddLogFileAsc(const QString & orc_FilePath)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Add new BLF file logging.
-
-   \param[in]  orc_FilePath   file path to log file
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CamMetWidget::AddLogFileBlf(const QString & orc_FilePath)
-{
-   const int32_t s32_Result = this->mpc_Ui->pc_TraceView->AddLogFileBlf(orc_FilePath);
-
-   Q_EMIT (this->SigLogFileAddResult(s32_Result));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Remove all configured log files.
 */
 //----------------------------------------------------------------------------------------------------------------------

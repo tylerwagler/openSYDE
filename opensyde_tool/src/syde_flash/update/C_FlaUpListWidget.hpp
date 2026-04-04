@@ -34,7 +34,7 @@ class C_FlaUpListWidget :
    Q_OBJECT
 
 public:
-   explicit C_FlaUpListWidget(QWidget * const opc_Parent = NULL);
+   explicit C_FlaUpListWidget(QWidget * const opc_Parent = nullptr);
    ~C_FlaUpListWidget(void) override;
 
    void AddFileAction(const bool oq_IsActionForExistingFile, const int32_t os32_CurrentHexFileIndex,

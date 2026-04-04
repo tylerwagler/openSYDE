@@ -36,7 +36,7 @@ class C_CamMosLoggingWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamMosLoggingWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamMosLoggingWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamMosLoggingWidget(void) override;
 
    void LoadUserSettings(void) const;
@@ -50,7 +50,6 @@ public:
 Q_SIGNALS:
    //lint -restore
    void SigAddLogFileAsc(const QString & orc_FilePath);
-   void SigAddLogFileBlf(const QString & orc_FilePath);
    void SigRemoveAllLogFiles(void);
    void SigHide(void);
 

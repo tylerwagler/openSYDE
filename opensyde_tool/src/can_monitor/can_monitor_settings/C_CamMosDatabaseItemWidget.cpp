@@ -434,7 +434,7 @@ QString C_CamMosDatabaseItemWidget::h_BrowseForDatabasePath(QWidget * const opc_
    QFileDialog c_Dialog(opc_Parent, "Select Database", c_Folder, c_Filter);
 
    // favorite location: actual database path if browse was clicked
-   if (pc_DatabaseItemWidget != NULL)
+   if (pc_DatabaseItemWidget != nullptr)
    {
       c_Folder =
          static_cast<QFileInfo>(C_CamUti::h_GetAbsPathFromProj(pc_DatabaseItemWidget->GetDatabaseData().c_Name)).dir().
@@ -578,7 +578,7 @@ void C_CamMosDatabaseItemWidget::h_AppendMessageWarningIfNecessary(const QString
    QStringList c_Messages;
 
    //Handle messages section
-   C_CamProHandler::h_GetInstance()->GetAllMessagesFromDatabase(orc_File, &c_Messages, NULL);
+   C_CamProHandler::h_GetInstance()->GetAllMessagesFromDatabase(orc_File, &c_Messages, nullptr);
    //Only add special handling if there are any affected messages
    if (c_Messages.isEmpty() == false)
    {
@@ -616,7 +616,7 @@ void C_CamMosDatabaseItemWidget::m_OnSelectBus()
       Q_EMIT (this->SigUpdateDatabaseOsySysdefBus(this, this->mc_Database.s32_BusIndex));
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }
@@ -637,7 +637,7 @@ void C_CamMosDatabaseItemWidget::m_OnBrowse()
       QStringList c_Messages;
       //Ask for user confirmation, only if necessary
       C_CamProHandler::h_GetInstance()->GetAllMessagesFromDatabase(
-         C_CamUti::h_GetAbsPathFromProj(this->mc_Database.c_Name), &c_Messages, NULL);
+         C_CamUti::h_GetAbsPathFromProj(this->mc_Database.c_Name), &c_Messages, nullptr);
       if (c_Messages.size() > 0)
       {
          QString c_Details;

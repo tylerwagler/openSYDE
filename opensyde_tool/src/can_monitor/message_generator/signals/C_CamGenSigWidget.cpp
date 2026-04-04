@@ -181,11 +181,11 @@ void C_CamGenSigWidget::UpdateSelection(const uint32_t ou32_NumSelectedItems,
         if (((C_CamDbHandler::h_GetInstance()->GetOscMessage(
                   rc_Message.c_DataBaseFilePath, rc_Message.c_Name,
                   rc_Message.q_ContainsValidHash,
-                  rc_Message.u32_Hash) != NULL)) ||
+                  rc_Message.u32_Hash) != nullptr)) ||
             (C_CamDbHandler::h_GetInstance()->GetDbcMessage(
                  rc_Message.c_DataBaseFilePath, rc_Message.c_Name,
                  rc_Message.q_ContainsValidHash,
-                 rc_Message.u32_Hash) != NULL)) {
+                 rc_Message.u32_Hash) != nullptr)) {
           // Case: database and message found
           this->mpc_Ui->pc_GroupBoxNoDatabase->setVisible(false);
           this->mpc_Ui->pc_TableView->setVisible(true);

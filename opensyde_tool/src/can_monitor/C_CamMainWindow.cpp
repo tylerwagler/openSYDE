@@ -85,7 +85,7 @@ const int32_t C_CamMainWindow::mhs32_MESSAGE_GEN_SPLITTER_MAX = 120;
 //----------------------------------------------------------------------------------------------------------------------
 C_CamMainWindow::C_CamMainWindow(QWidget *const opc_Parent)
     : QMainWindow(opc_Parent), mpc_Ui(new Ui::C_CamMainWindow),
-      mpc_CanDllDispatcher(NULL), mq_LoggingStarted(false) {
+      mpc_CanDllDispatcher(nullptr), mq_LoggingStarted(false) {
   this->mpc_Ui->setupUi(this);
 
   // set stretch factor to have the splitter at real user settings position on
@@ -207,8 +207,6 @@ C_CamMainWindow::C_CamMainWindow(QWidget *const opc_Parent)
   // Logging configuration
   connect(this->mpc_Ui->pc_SettingsWidget, &C_CamMosWidget::SigAddLogFileAsc,
           this->mpc_Ui->pc_TraceWidget, &C_CamMetWidget::AddLogFileAsc);
-  connect(this->mpc_Ui->pc_SettingsWidget, &C_CamMosWidget::SigAddLogFileBlf,
-          this->mpc_Ui->pc_TraceWidget, &C_CamMetWidget::AddLogFileBlf);
   connect(this->mpc_Ui->pc_SettingsWidget,
           &C_CamMosWidget::SigRemoveAllLogFiles, this->mpc_Ui->pc_TraceWidget,
           &C_CamMetWidget::RemoveAllLogFiles);
@@ -286,13 +284,13 @@ C_CamMainWindow::~C_CamMainWindow() {
              &C_CamMainWindow::m_CheckMessagesForLoadedDatabase);
 
   delete mpc_CanThread;
-  mpc_CanThread = NULL;
+  mpc_CanThread = nullptr;
 
-  if (mpc_CanDllDispatcher != NULL) {
+  if (mpc_CanDllDispatcher != nullptr) {
     this->m_CloseCan();
 
     delete mpc_CanDllDispatcher;
-    mpc_CanDllDispatcher = NULL;
+    mpc_CanDllDispatcher = nullptr;
   }
 
   delete this->mpc_Ui;
@@ -342,7 +340,7 @@ void C_CamMainWindow::m_UpdateAutoSupportProtocol(
   const C_CamProMessageData *const pc_Message =
       C_CamProHandler::h_GetInstance()->GetMessageConst(ou32_MessageIndex);
 
-  if (pc_Message != NULL) {
+  if (pc_Message != nullptr) {
     C_OscCanProtocol::E_Type e_ProtocolType = C_OscCanProtocol::eCAN_OPEN;
     C_CamDbHandler::h_GetInstance()->GetOscMessage(
         pc_Message->c_DataBaseFilePath, pc_Message->c_Name,
@@ -639,7 +637,7 @@ int32_t C_CamMainWindow::m_InitCan(int32_t &ors32_Bitrate) {
   ors32_Bitrate = 0;
 
   // Safety check
-  if (this->mpc_CanDllDispatcher == NULL) {
+  if (this->mpc_CanDllDispatcher == nullptr) {
     return C_CONFIG;
   }
 
@@ -678,7 +676,7 @@ int32_t C_CamMainWindow::m_InitCan(int32_t &ors32_Bitrate) {
  */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMainWindow::m_CloseCan(void) {
-  if (this->mpc_CanDllDispatcher != NULL) {
+  if (this->mpc_CanDllDispatcher != nullptr) {
     this->mpc_CanDllDispatcher->CAN_Exit();
     this->mpc_CanDllDispatcher->DLL_Close();
   }
@@ -819,7 +817,7 @@ bool C_CamMainWindow::mh_CheckMime(const QMimeData *const opc_Mime,
                                    QString *const opc_FilePath) {
   bool q_Retval = false;
 
-  if (opc_Mime != NULL) {
+  if (opc_Mime != nullptr) {
     if (opc_Mime->hasUrls() == true) {
       QStringList c_PathList;
       const QList<QUrl> c_UrlList = opc_Mime->urls();
@@ -838,7 +836,7 @@ bool C_CamMainWindow::mh_CheckMime(const QMimeData *const opc_Mime,
               (c_File.suffix().compare("syde", Qt::CaseInsensitive) == 0) ||
               (c_File.suffix().compare("dbc", Qt::CaseInsensitive) == 0)) {
             q_Retval = true;
-            if (opc_FilePath != NULL) {
+            if (opc_FilePath != nullptr) {
               *opc_FilePath = c_PathList[0];
             }
           }
@@ -859,8 +857,8 @@ void C_CamMainWindow::mh_ThreadFunc(void *const opv_Instance) {
   C_CamMainWindow *const pc_Instance =
       reinterpret_cast<C_CamMainWindow *>(opv_Instance);
 
-  Q_ASSERT(pc_Instance != NULL);
-  if (pc_Instance != NULL) {
+  Q_ASSERT(pc_Instance != nullptr);
+  if (pc_Instance != nullptr) {
     pc_Instance->m_ThreadFunc();
   }
 }
@@ -1079,7 +1077,7 @@ void C_CamMainWindow::m_RegisterCyclicMessage(const uint32_t ou32_MessageIndex,
   const C_CamProMessageData *const pc_Message =
       C_CamProHandler::h_GetInstance()->GetMessageConst(ou32_MessageIndex);
 
-  if (pc_Message != NULL) {
+  if (pc_Message != nullptr) {
     C_OscCanProtocol::E_Type e_ProtocolType = C_OscCanProtocol::eCAN_OPEN;
     C_CamDbHandler::h_GetInstance()->GetOscMessage(
         pc_Message->c_DataBaseFilePath, pc_Message->c_Name,
@@ -1113,7 +1111,7 @@ void C_CamMainWindow::m_SendMessage(const uint32_t ou32_MessageIndex,
   const C_CamProMessageData *const pc_Message =
       C_CamProHandler::h_GetInstance()->GetMessageConst(ou32_MessageIndex);
 
-  if (pc_Message != NULL) {
+  if (pc_Message != nullptr) {
     C_OscCanProtocol::E_Type e_ProtocolType = C_OscCanProtocol::eCAN_OPEN;
     C_CamDbHandler::h_GetInstance()->GetOscMessage(
         pc_Message->c_DataBaseFilePath, pc_Message->c_Name,
@@ -1196,7 +1194,7 @@ void C_CamMainWindow::m_OnDatabaseLoadFinished(const int32_t os32_Result) {
       stw::opensyde_gui_logic::C_SyvComMessageMonitor *const pc_MessageMonitor =
           this->mpc_Ui->pc_TraceWidget->GetMessageMonitor();
 
-      if (pc_MessageMonitor != NULL) {
+      if (pc_MessageMonitor != nullptr) {
         const QFileInfo c_FileInfo(this->mc_CurrentLoadedFile);
         if (c_FileInfo.suffix().compare("dbc", Qt::CaseInsensitive) == 0) {
           // Check if already known
@@ -1380,7 +1378,7 @@ void C_CamMainWindow::m_DisplayCheckMessagesDialog(
       const C_CamProMessageData *const pc_Message =
           C_CamProHandler::h_GetInstance()->GetMessageConst(
               orc_Indices[u32_It]);
-      if (pc_Message != NULL) {
+      if (pc_Message != nullptr) {
         const QString c_MessageName =
             C_CamProHandler::h_GetCompleteMessageName(*pc_Message);
         c_Entry = static_cast<QString>("%1 (%2)\n")

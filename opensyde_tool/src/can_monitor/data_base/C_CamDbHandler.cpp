@@ -254,7 +254,7 @@ int32_t C_CamDbHandler::FindDbcMessage(const QString & orc_File, const QString &
    \param[out]  ope_ProtocolType    Protocol type
 
    \return
-   NULL OSC CAN message not found
+   nullptr OSC CAN message not found
    Else Valid OSC CAN message
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -265,7 +265,7 @@ const stw::opensyde_core::C_OscCanMessage * C_CamDbHandler::GetOscMessage(const 
                                                                           C_OscCanProtocol::E_Type * const ope_ProtocolType)
 const
 {
-   const stw::opensyde_core::C_OscCanMessage * pc_Retval = NULL;
+   const stw::opensyde_core::C_OscCanMessage * pc_Retval = nullptr;
    const QMap<QString, C_CamDbOsy>::const_iterator c_It = this->mc_OsyFiles.find(orc_File);
 
    if (c_It != this->mc_OsyFiles.end())
@@ -286,7 +286,7 @@ const
    \param[in]  ou32_Hash      Hash
 
    \return
-   NULL OSC list not found
+   nullptr OSC list not found
    Else Valid OSC list
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -295,7 +295,7 @@ const stw::opensyde_core::C_OscNodeDataPoolList * C_CamDbHandler::GetOscList(con
                                                                              const bool oq_UseHash,
                                                                              const uint32_t ou32_Hash) const
 {
-   const stw::opensyde_core::C_OscNodeDataPoolList * pc_Retval = NULL;
+   const stw::opensyde_core::C_OscNodeDataPoolList * pc_Retval = nullptr;
    const QMap<QString, C_CamDbOsy>::const_iterator c_It = this->mc_OsyFiles.find(orc_File);
 
    if (c_It != this->mc_OsyFiles.end())
@@ -316,7 +316,7 @@ const stw::opensyde_core::C_OscNodeDataPoolList * C_CamDbHandler::GetOscList(con
    \param[in]  ou32_Hash      Hash
 
    \return
-   NULL ODBC message not found
+   nullptr ODBC message not found
    Else Valid DBC message
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -325,7 +325,7 @@ const C_CieConverter::C_CieCanMessage * C_CamDbHandler::GetDbcMessage(const QStr
                                                                       const bool oq_UseHash,
                                                                       const uint32_t ou32_Hash) const
 {
-   const C_CieConverter::C_CieCanMessage * pc_Retval = NULL;
+   const C_CieConverter::C_CieCanMessage * pc_Retval = nullptr;
    const QMap<QString, C_CamDbDbc>::const_iterator c_It = this->mc_DbcFiles.find(orc_File);
 
    if (c_It != this->mc_DbcFiles.end())

@@ -34,7 +34,7 @@ class C_CamMosBitrateWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamMosBitrateWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamMosBitrateWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamMosBitrateWidget(void) override;
 
    void LoadUserSettings(void);

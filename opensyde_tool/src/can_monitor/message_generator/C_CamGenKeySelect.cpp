@@ -181,7 +181,7 @@ void C_CamGenKeySelect::m_LoadData(void) const
    const C_CamProMessageData * const pc_Message = C_CamProHandler::h_GetInstance()->GetMessageConst(
       this->mu32_MessageIndex);
 
-   if (pc_Message != NULL)
+   if (pc_Message != nullptr)
    {
       this->mpc_Ui->pc_LineEditKey->setText(pc_Message->c_Key);
       this->mpc_Ui->pc_SpinBoxOffset->setValue(pc_Message->u32_KeyPressOffset);

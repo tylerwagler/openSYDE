@@ -1,64 +1,23 @@
-//----------------------------------------------------------------------------------------------------------------------
-/*!
-   \file
-   \brief       SVG icon only push button (header)
-
-   See cpp file for detailed description
-
-   \copyright   Copyright 2018 Sensor-Technik Wiedemann GmbH. All rights reserved.
-*/
-//----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OGEPUBSVGICONONLY_HPP
-#define C_OGEPUBSVGICONONLY_HPP
-
-/* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QSvgRenderer>
-#include "C_OgePubUnified.hpp"
-
-/* -- Namespace ----------------------------------------------------------------------------------------------------- */
-namespace stw
-{
-namespace opensyde_gui_elements
-{
-/* -- Global Constants ---------------------------------------------------------------------------------------------- */
-
-/* -- Types --------------------------------------------------------------------------------------------------------- */
-
-class C_OgePubSvgIconOnly :
-    public C_OgePubUnified
-{
+#ifndef C_OGE_PUB_SVG_ICON_ONLY_HPP
+#define C_OGE_PUB_SVG_ICON_ONLY_HPP
+#include <QPushButton>
+#include <QString>
+namespace stw { namespace opensyde_gui_elements {
+class C_OgePubSvgIconOnly : public QPushButton {
 public:
-    C_OgePubSvgIconOnly(QWidget * const opc_Parent = NULL);
-    ~C_OgePubSvgIconOnly(void) override;
-
-    void SetSvg(const QString & orc_PathEnabled, const QString & orc_PathDisabled = "",
-                const QString & orc_PathHovered = "", const QString & orc_PathCheckedEnabled = "",
-                const QString & orc_PathCheckedDisabled = "", const QString & orc_PathCheckedHovered = "",
-                const QString & orc_PathPressed = "", const QString & orc_PathCheckedPressed = "");
-
-protected:
-    void paintEvent(QPaintEvent * const opc_Event) override;
-    bool event(QEvent * const opc_Event) override;
-
-    bool mq_Hovered;
-    bool mq_Pressed;
-    QSvgRenderer * mpc_SvgRendererEnabled;
-    QSvgRenderer * mpc_SvgRendererDisabeld;
-    QSvgRenderer * mpc_SvgRendererHovered;
-    QSvgRenderer * mpc_SvgRendererPressed;
-    QSvgRenderer * mpc_SvgRendererCheckedEnabled;
-    QSvgRenderer * mpc_SvgRendererCheckedDisabeld;
-    QSvgRenderer * mpc_SvgRendererCheckedHovered;
-    QSvgRenderer * mpc_SvgRendererCheckedPressed;
-
-private:
-    //Avoid call
-    C_OgePubSvgIconOnly(const C_OgePubSvgIconOnly &);
-    C_OgePubSvgIconOnly & operator =(const C_OgePubSvgIconOnly &) &;
+    explicit C_OgePubSvgIconOnly(QWidget * opc_Parent = nullptr) : QPushButton(opc_Parent) {}
+    ~C_OgePubSvgIconOnly() override = default;
+    void SetSvg(const QString&) {}
+    void SetSvg(const QString&, const QString&) {}
+    void SetSvg(const QString&, const QString&, const QString&) {}
+    void SetSvg(const QString&, const QString&, const QString&, const QString&) {}
+    void SetSvg(const QString&, const QString&, const QString&, const QString&, const QString&) {}
+    void SetSvg(const QString&, const QString&, const QString&, const QString&, const QString&, const QString&) {}
+    void SetSvg(const QString&, const QString&, const QString&, const QString&, const QString&, const QString&, const QString&) {}
+    void SetSvg(const QString&, const QString&, const QString&, const QString&, const QString&, const QString&, const QString&, const QString&) {}
+    void SetCustomIcons(const QString&, const QString&, const QString&, const QString&) {}
+    void SetCustomIcons(const QString&, const QString&, const QString&, const QString&, const QString&, const QString&, const QString&, const QString&) {}
+    void SetToolTipInformation(const QString&, const QString&) {}
 };
-
-/* -- Extern Global Variables --------------------------------------------------------------------------------------- */
-}
-} //end of namespace
-
+}}
 #endif

@@ -29,7 +29,7 @@ class C_CamOgeSpxProperties :
    Q_OBJECT
 
 public:
-   explicit C_CamOgeSpxProperties(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeSpxProperties(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

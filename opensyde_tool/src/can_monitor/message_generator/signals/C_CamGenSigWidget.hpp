@@ -34,7 +34,7 @@ class C_CamGenSigWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamGenSigWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamGenSigWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamGenSigWidget(void) override;
 
    void InitStaticNames(void) const;

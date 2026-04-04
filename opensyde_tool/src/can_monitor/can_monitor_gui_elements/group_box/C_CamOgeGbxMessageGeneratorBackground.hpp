@@ -29,7 +29,7 @@ class C_CamOgeGbxMessageGeneratorBackground :
    Q_OBJECT
 
 public:
-   C_CamOgeGbxMessageGeneratorBackground(QWidget * const opc_Parent = NULL);
+   C_CamOgeGbxMessageGeneratorBackground(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

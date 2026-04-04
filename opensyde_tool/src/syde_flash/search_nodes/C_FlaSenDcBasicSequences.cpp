@@ -67,7 +67,7 @@ C_FlaSenDcBasicSequences::C_FlaSenDcBasicSequences(void)
  */
 //----------------------------------------------------------------------------------------------------------------------
 C_FlaSenDcBasicSequences::~C_FlaSenDcBasicSequences(void) noexcept {
-  if (this->mpc_Thread != NULL) {
+  if (this->mpc_Thread != nullptr) {
     if (this->mpc_Thread->isRunning() == true) {
       this->mpc_Thread->requestInterruption();
 
@@ -79,7 +79,7 @@ C_FlaSenDcBasicSequences::~C_FlaSenDcBasicSequences(void) noexcept {
       }
     }
     delete mpc_Thread;
-    mpc_Thread = NULL;
+    mpc_Thread = nullptr;
   }
 
   this->PrepareForDestruction();
@@ -345,8 +345,8 @@ void C_FlaSenDcBasicSequences::mh_ThreadFunc(void *const opv_Instance) {
   C_FlaSenDcBasicSequences *const pc_Sequences =
       reinterpret_cast<C_FlaSenDcBasicSequences *>(opv_Instance);
 
-  Q_ASSERT(pc_Sequences != NULL);
-  if (pc_Sequences != NULL) {
+  Q_ASSERT(pc_Sequences != nullptr);
+  if (pc_Sequences != nullptr) {
     pc_Sequences->m_ThreadFunc();
   }
 }

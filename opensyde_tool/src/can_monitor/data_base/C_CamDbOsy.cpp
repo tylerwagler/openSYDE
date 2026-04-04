@@ -447,14 +447,14 @@ C_CamDbOsy::GetFoundMessages(void) const {
    \param[out]  ope_ProtocolType    Protocol type
 
    \return
-   NULL OSC CAN message not found
+   nullptr OSC CAN message not found
    Else Valid OSC CAN message
 */
 //----------------------------------------------------------------------------------------------------------------------
 const stw::opensyde_core::C_OscCanMessage *C_CamDbOsy::GetOscMessage(
     const QString &orc_Message, const bool oq_UseHash, const uint32_t ou32_Hash,
     C_OscCanProtocol::E_Type *const ope_ProtocolType) const {
-  const stw::opensyde_core::C_OscCanMessage *pc_Retval = NULL;
+  const stw::opensyde_core::C_OscCanMessage *pc_Retval = nullptr;
 
   // Don't allow access to inactive file
   if (this->mq_Active) {
@@ -470,7 +470,7 @@ const stw::opensyde_core::C_OscCanMessage *C_CamDbOsy::GetOscMessage(
           const C_OscCanProtocol *const pc_Protocol =
               rc_Node.GetCanProtocolConst(c_It->c_Id.e_ComProtocol,
                                           c_It->c_Id.u32_DatapoolIndex);
-          if (pc_Protocol != NULL) {
+          if (pc_Protocol != nullptr) {
             if (c_It->c_Id.u32_InterfaceIndex <
                 pc_Protocol->c_ComMessages.size()) {
               const C_OscCanMessageContainer &rc_Container =
@@ -479,7 +479,7 @@ const stw::opensyde_core::C_OscCanMessage *C_CamDbOsy::GetOscMessage(
                   rc_Container.GetMessagesConst(c_It->c_Id.q_MessageIsTx);
               if (c_It->c_Id.u32_MessageIndex < rc_Messages.size()) {
                 pc_Retval = &rc_Messages[c_It->c_Id.u32_MessageIndex];
-                if (ope_ProtocolType != NULL) {
+                if (ope_ProtocolType != nullptr) {
                   *ope_ProtocolType = c_It->c_Id.e_ComProtocol;
                 }
               }
@@ -503,14 +503,14 @@ const stw::opensyde_core::C_OscCanMessage *C_CamDbOsy::GetOscMessage(
    \param[in]  ou32_Hash      Hash
 
    \return
-   NULL OSC list not found
+   nullptr OSC list not found
    Else Valid OSC list
 */
 //----------------------------------------------------------------------------------------------------------------------
 const stw::opensyde_core::C_OscNodeDataPoolList *
 C_CamDbOsy::GetOscList(const QString &orc_Message, const bool oq_UseHash,
                        const uint32_t ou32_Hash) const {
-  const stw::opensyde_core::C_OscNodeDataPoolList *pc_Retval = NULL;
+  const stw::opensyde_core::C_OscNodeDataPoolList *pc_Retval = nullptr;
 
   // Don't allow access to inactive file
   if (this->mq_Active) {

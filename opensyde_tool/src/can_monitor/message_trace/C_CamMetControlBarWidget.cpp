@@ -81,22 +81,22 @@ C_CamMetControlBarWidget::C_CamMetControlBarWidget(QWidget * const opc_Parent) :
    this->mpc_Ui->pc_PushButtonStop->setEnabled(false);
    this->mpc_Ui->pc_PushButtonStop->SetSvg("://images/IconStopEnabled.svg", "://images/IconStopDisabled.svg",
                                            "://images/IconStopEnabledHover.svg", "", "", "",
-                                           "://images/IconStopEnabledPressed.svg");
+                                           "://images/IconStopEnabledPressed.svg", "");
    this->mpc_Ui->pc_PushButtoneSearchNext->SetSvg("://images/IconSearchDownEnabled.svg", "",
                                                   "://images/IconSearchDownHover.svg",
                                                   "", "", "",
-                                                  "://images/IconSearchDownPressed.svg");
+                                                  "://images/IconSearchDownPressed.svg", "");
    this->mpc_Ui->pc_PushButtoneSearchPrev->SetSvg("://images/IconSearchUpEnabled.svg", "",
                                                   "://images/IconSearchUpHover.svg",
                                                   "", "", "",
-                                                  "://images/IconSearchUpPressed.svg");
+                                                  "://images/IconSearchUpPressed.svg", "");
    this->mpc_Ui->pc_PushButtonClear->SetSvg("://images/IconWipeAwayEnabled.svg", "", "://images/IconWipeAwayHover.svg",
                                             "", "", "",
-                                            "://images/IconWipeAwayPressed.svg");
+                                            "://images/IconWipeAwayPressed.svg", "");
    this->mpc_Ui->pc_PushButtonTraceSettings->SetSvg("://images/IconSettingsEnabled.svg", "",
                                                     "://images/IconSettingsHover.svg",
                                                     "", "", "",
-                                                    "://images/IconSettingsPressed.svg");
+                                                    "://images/IconSettingsPressed.svg", "");
    this->mpc_Ui->pc_PushButtonToggleHex->SetSvg("://images/IconNumberFormatHex.svg", "",
                                                 "://images/IconNumberFormatHexHover.svg",
                                                 "://images/IconNumberFormatDec.svg", "",
@@ -541,7 +541,7 @@ void C_CamMetControlBarWidget::m_OpenTraceSettings(void)
       Q_EMIT (this->SigTraceBufferSize(this->mu32_TraceBufferSize));
    }
 
-   if (c_New != NULL)
+   if (c_New != nullptr)
    {
       c_New->HideOverlay();
    }

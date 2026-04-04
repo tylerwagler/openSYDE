@@ -401,7 +401,7 @@ void C_CamMosFilterWidget::m_LoadConfig(void) {
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMosFilterWidget::m_RemoveFilterWidget(
     C_CamMosFilterItemWidget *const opc_ItemWidget) const {
-  if (opc_ItemWidget != NULL) {
+  if (opc_ItemWidget != nullptr) {
     // disconnect everything
     opc_ItemWidget->disconnect();
 
@@ -528,7 +528,7 @@ void C_CamMosFilterWidget::m_OnAddClicked() {
     }
   }
 
-  if (c_New != NULL) {
+  if (c_New != nullptr) {
     c_New->HideOverlay();
   }
 } // lint !e429  no memory leak because of the parent of pc_Dialog and the Qt
@@ -614,7 +614,7 @@ void C_CamMosFilterWidget::m_OnAddFilterFromContextmenu(
     }
   }
 
-  if (c_New != NULL) {
+  if (c_New != nullptr) {
     c_New->HideOverlay();
   }
 } // lint !e429  no memory leak because of the parent of pc_Dialog and the Qt
@@ -674,7 +674,7 @@ void C_CamMosFilterWidget::m_RemoveFilter(
   c_Message.SetNoButtonText("Keep");
 
   if (c_Message.Execute() == C_OgeWiCustomMessage::eOK) {
-    if (opc_ItemWidget != NULL) {
+    if (opc_ItemWidget != nullptr) {
       int32_t s32_IndexToRemove = 0;
 
       // remove widget from list
@@ -740,7 +740,7 @@ void C_CamMosFilterWidget::m_ActivateFilter(
   const int32_t s32_IndexToActivate =
       this->m_GetIndexFromWidget(opc_ItemWidget);
 
-  // index is -1 if item widget is NULL which can not happen
+  // index is -1 if item widget is nullptr which can not happen
   Q_ASSERT(s32_IndexToActivate >= 0);
   if (s32_IndexToActivate >= 0) {
     // update data handling
@@ -785,7 +785,7 @@ void C_CamMosFilterWidget::m_UpdateFilterConfiguration(
   QList<C_CamProFilterItemData> c_FilterItems;
   const int32_t s32_Index = this->m_GetIndexFromWidget(opc_ItemWidget);
 
-  // index is -1 if item widget is NULL which can not happen
+  // index is -1 if item widget is nullptr which can not happen
   Q_ASSERT(s32_Index >= 0);
   if (s32_Index >= 0) {
     C_CamProHandler::h_GetInstance()->SetFilter(s32_Index, orc_FilterNew);
@@ -843,7 +843,7 @@ int32_t C_CamMosFilterWidget::m_GetIndexFromWidget(
     const C_CamMosFilterItemWidget *const opc_ItemWidget) {
   int32_t s32_Return = 0;
 
-  if (opc_ItemWidget != NULL) {
+  if (opc_ItemWidget != nullptr) {
     // get index from opc_Item
     for (QList<C_CamMosFilterItemWidget *>::iterator c_It =
              mc_Entries.begin();

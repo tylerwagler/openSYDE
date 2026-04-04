@@ -39,7 +39,7 @@ class C_CamMosWidget :
    Q_OBJECT
 
 public:
-   explicit C_CamMosWidget(QWidget * const opc_Parent = NULL);
+   explicit C_CamMosWidget(QWidget * const opc_Parent = nullptr);
    ~C_CamMosWidget(void) override;
 
    void LoadUserSettings(void);
@@ -76,7 +76,6 @@ Q_SIGNALS:
    void SigSetDatabaseOsySysDefBus(const QString & orc_PathSystemDefinition, const QString & orc_OrgPath,
                                    const uint32_t ou32_BusIndex);
    void SigAddLogFileAsc(const QString & orc_FilePath);
-   void SigAddLogFileBlf(const QString & orc_FilePath);
    void SigRemoveAllLogFiles(void);
    void SigCanBitrateConfigured(void);
    void SigNotifyMissingDataBase(const QString & orc_Path);

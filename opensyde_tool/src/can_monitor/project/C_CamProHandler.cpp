@@ -83,13 +83,13 @@ C_CamProHandler::GetMessages(void) const {
    \param[in]  ou32_Index  Message index
 
    \return
-   NULL Message not found
+   nullptr Message not found
    Else Valid message
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_CamProMessageData *
 C_CamProHandler::GetMessageConst(const uint32_t ou32_Index) const {
-  const C_CamProMessageData *pc_Retval = NULL;
+  const C_CamProMessageData *pc_Retval = nullptr;
 
   if (ou32_Index < this->mc_Messages.size()) {
     pc_Retval = &this->mc_Messages[ou32_Index];
@@ -542,7 +542,7 @@ void C_CamProHandler::SetLoggingOverwriteMode(
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Set logging file format.
 
-   \param[in]  oe_NewFormat   logging file format (ASC/BLF)
+   \param[in]  oe_NewFormat   logging file format (ASC)
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamProHandler::SetLoggingFormat(
@@ -732,12 +732,12 @@ void C_CamProHandler::GetAllMessagesFromDatabase(
     if (orc_File.compare(rc_Message.c_DataBaseFilePath) == 0) {
       // Match
       // Add
-      if (opc_CompleteMessageNames != NULL) {
+      if (opc_CompleteMessageNames != nullptr) {
         const QString c_CompleteName =
             C_CamProHandler::h_GetCompleteMessageName(rc_Message);
         opc_CompleteMessageNames->append(c_CompleteName);
       }
-      if (opc_MessageIndices != NULL) {
+      if (opc_MessageIndices != nullptr) {
         opc_MessageIndices->push_back(u32_ItMessage);
       }
     }

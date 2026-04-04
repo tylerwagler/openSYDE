@@ -80,7 +80,7 @@ void C_CamMetClipBoardHelper::h_StoreCanMessages(const bool oq_DisplayAsHex, con
    {
       const C_OscComMessageLoggerData * const pc_Data = orc_MessageData[u32_CounterMessage].pc_MessageData;
 
-      if (pc_Data != NULL)
+      if (pc_Data != nullptr)
       {
          C_CamMetClipBoardHelper::mh_AddMessage(c_Text, *pc_Data, orc_MessageData[u32_CounterMessage].q_Extended,
                                                 oq_DisplayAsHex, oq_DisplayTimestampRelative,

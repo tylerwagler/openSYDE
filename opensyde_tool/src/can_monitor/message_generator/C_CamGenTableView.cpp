@@ -163,7 +163,7 @@ void C_CamGenTableView::AddMessageFromDatabase(void) {
     QApplication::restoreOverrideCursor();
   }
 
-  if (c_New != NULL) {
+  if (c_New != nullptr) {
     pc_Dialog->SaveUserSettings();
     c_New->HideOverlay();
   }
@@ -358,10 +358,10 @@ void C_CamGenTableView::RemoveMessagesForFile(
     const QString &orc_File, const QList<uint32_t> *const opc_Indices) {
   QList<uint32_t> c_Indices;
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  if (opc_Indices != NULL) {
+  if (opc_Indices != nullptr) {
     c_Indices = *opc_Indices;
   } else {
-    C_CamProHandler::h_GetInstance()->GetAllMessagesFromDatabase(orc_File, NULL,
+    C_CamProHandler::h_GetInstance()->GetAllMessagesFromDatabase(orc_File, nullptr,
                                                                  &c_Indices);
   }
   this->m_StopCyclicCommunication(c_Indices);
@@ -438,7 +438,7 @@ bool C_CamGenTableView::CheckAndHandleKey(const QString &orc_Input) {
          ++u32_ItMessage) {
       const C_CamProMessageData *const pc_Message =
           C_CamProHandler::h_GetInstance()->GetMessageConst(u32_ItMessage);
-      if (pc_Message != NULL) {
+      if (pc_Message != nullptr) {
         // Only check non empty keys
         if (pc_Message->c_Key.isEmpty() == false) {
           // Compare key, case sensitive!
@@ -533,8 +533,8 @@ void C_CamGenTableView::keyPressEvent(QKeyEvent *const opc_Event) {
           dynamic_cast<const QLineEdit *const>(this->focusWidget());
       const QComboBox *const pc_ComboBox =
           dynamic_cast<const QComboBox *const>(this->focusWidget());
-      if (((pc_SpinBox == NULL) && (pc_LineEdit == NULL)) &&
-          (pc_ComboBox == NULL)) {
+      if (((pc_SpinBox == nullptr) && (pc_LineEdit == nullptr)) &&
+          (pc_ComboBox == nullptr)) {
         // If no editor check current index
         bool q_Ignore = false;
         const QModelIndex c_Current =
@@ -848,7 +848,7 @@ void C_CamGenTableView::m_HandleLinkClicked(const QModelIndex &orc_Index) {
         Q_UNUSED(pc_Dialog)
         this->mc_Model.UpdateMessageKey(static_cast<uint32_t>(s32_Row));
       }
-      if (c_New != NULL) {
+      if (c_New != nullptr) {
         c_New->HideOverlay();
       }
     } // lint !e429  no memory leak because of the parent pc_Dialog and the Qt
@@ -875,7 +875,7 @@ void C_CamGenTableView::m_StopCyclicCommunication(
     for (uint32_t u32_It = 0UL; u32_It < orc_Items.size(); ++u32_It) {
       const C_CamProMessageData *const pc_Message =
           C_CamProHandler::h_GetInstance()->GetMessageConst(orc_Items[u32_It]);
-      if (pc_Message != NULL) {
+      if (pc_Message != nullptr) {
         // Only deactivate if currently active
         if (pc_Message->q_DoCyclicTrigger == true) {
           Q_EMIT(this->SigRegisterCyclicMessage(orc_Items[u32_It], false));
@@ -945,7 +945,7 @@ void C_CamGenTableView::m_AddMessageFromDatabase(
             C_CamDbHandler::h_GetInstance()->GetDbcMessage(
                 orc_NewItems[u32_ItNewItem][0UL],
                 orc_NewItems[u32_ItNewItem][1UL], false, 0UL);
-        if (pc_Message != NULL) {
+        if (pc_Message != nullptr) {
           // Copy values
           c_NewMessage.SetMessageBoolValue(C_CamProMessageData::eGBODS_EXTENDED,
                                            pc_Message->q_IsExtended);
@@ -1015,7 +1015,7 @@ void C_CamGenTableView::m_AddMessageFromDatabase(
             C_CamDbHandler::h_GetInstance()->GetOscList(
                 orc_NewItems[u32_ItNewItem][0UL],
                 orc_NewItems[u32_ItNewItem][1UL], false, 0UL);
-        if ((pc_Message != NULL) && (pc_List != NULL)) {
+        if ((pc_Message != nullptr) && (pc_List != nullptr)) {
           QList<C_OscNodeDataPoolListElement> c_DatapoolPart;
 
           // Copy values
@@ -1120,7 +1120,7 @@ void C_CamGenTableView::m_HandleNewItemScrollingAndSelection(
     for (uint32_t u32_It = 0UL; u32_It < c_Items.size(); ++u32_It) {
       const C_CamProMessageData *const pc_Message =
           C_CamProHandler::h_GetInstance()->GetMessageConst(c_Items[u32_It]);
-      if (pc_Message != NULL) {
+      if (pc_Message != nullptr) {
         // Only activate if it should be active
         if (pc_Message->q_DoCyclicTrigger == true) {
           Q_EMIT(this->SigRegisterCyclicMessage(c_Items[u32_It], true));
@@ -1211,7 +1211,7 @@ void C_CamGenTableView::m_RegisterAllCyclicMessages(void) {
          ++u32_ItMessage) {
       const C_CamProMessageData *const pc_Message =
           C_CamProHandler::h_GetInstance()->GetMessageConst(u32_ItMessage);
-      if (pc_Message != NULL) {
+      if (pc_Message != nullptr) {
         if (pc_Message->q_DoCyclicTrigger == true) {
           // Trigger sending
           Q_EMIT(this->SigRegisterCyclicMessage(u32_ItMessage, true));

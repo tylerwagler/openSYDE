@@ -29,7 +29,7 @@ class C_CamOgeGbxMessageSignalsBorder :
    Q_OBJECT
 
 public:
-   explicit C_CamOgeGbxMessageSignalsBorder(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeGbxMessageSignalsBorder(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

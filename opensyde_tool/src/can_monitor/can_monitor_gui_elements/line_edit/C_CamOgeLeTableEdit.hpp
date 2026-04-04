@@ -29,7 +29,7 @@ class C_CamOgeLeTableEdit :
    Q_OBJECT
 
 public:
-   C_CamOgeLeTableEdit(QWidget * const opc_Parent = NULL);
+   C_CamOgeLeTableEdit(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

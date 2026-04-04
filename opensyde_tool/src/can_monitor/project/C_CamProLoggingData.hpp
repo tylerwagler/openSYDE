@@ -37,8 +37,7 @@ public:
 
    enum E_Format
    {
-      eASC = 0,
-      eBLF
+      eASC = 0
    };
 
    C_CamProLoggingData(void);

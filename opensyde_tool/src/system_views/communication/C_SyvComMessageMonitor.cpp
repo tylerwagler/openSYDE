@@ -19,7 +19,6 @@
 
 #include "C_CieImportDbc.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_SyvComMessageLoggerFileBlf.hpp"
 #include "C_SyvComMessageMonitor.hpp"
 
 /* -- Used Namespaces
@@ -72,7 +71,7 @@ C_SyvComMessageMonitor::C_SyvComMessageMonitor(void)
  */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvComMessageMonitor::~C_SyvComMessageMonitor(void) noexcept {
-  if (this->mpc_LoadingThread != NULL) {
+  if (this->mpc_LoadingThread != nullptr) {
     try {
       if (this->mpc_LoadingThread->isRunning() == true) {
         this->mpc_LoadingThread->requestInterruption();
@@ -88,7 +87,7 @@ C_SyvComMessageMonitor::~C_SyvComMessageMonitor(void) noexcept {
       // not much we can do here ...
     }
     delete mpc_LoadingThread;
-    mpc_LoadingThread = NULL;
+    mpc_LoadingThread = nullptr;
   }
 }
 
@@ -370,32 +369,6 @@ C_SyvComMessageMonitor::AddLogFileAsc(const QString &orc_FilePath,
                                                     oq_RelativeTimeStampActive);
   this->mc_CriticalSectionConfig.unlock();
 
-  return s32_Return;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Adds an BLF log file
-
-   \param[in]  orc_FilePath   Path with file name. File extension must be .blf
-
-   \return
-   C_NO_ERR    File added successfully
-   C_RD_WR     Error on creating file, folders or deleting old file
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_SyvComMessageMonitor::AddLogFileBlf(const QString &orc_FilePath) {
-  int32_t s32_Return;
-  C_SyvComMessageLoggerFileBlf *const pc_File =
-      new C_SyvComMessageLoggerFileBlf(orc_FilePath);
-
-  s32_Return = pc_File->OpenFile();
-
-  this->mc_CriticalSectionConfig.lock();
-  this->mc_LoggingFiles.insert(orc_FilePath, pc_File);
-  this->mc_CriticalSectionConfig.unlock();
-
-  // lint -e{429}  no memory leak of pc_File because of handling of instance in
-  // map mc_LoggingFiles
   return s32_Return;
 }
 
@@ -862,7 +835,7 @@ bool C_SyvComMessageMonitor::m_CheckInterpretation(
   const C_CieConverter::C_CieCanMessage *const pc_DbcMessage =
       this->m_CheckDbcFile(orc_MessageData.c_CanMsg);
 
-  if (pc_DbcMessage != NULL) {
+  if (pc_DbcMessage != nullptr) {
     q_Return = this->m_InterpretDbcFile(pc_DbcMessage, orc_MessageData);
   }
   return q_Return;
@@ -946,12 +919,12 @@ int32_t C_SyvComMessageMonitor::m_AddDbcFile(const QString &orc_PathDbc) {
 
    \return
    Pointer     Matching CAN message found and pointer to message is returned
-   NULL        No matching CAN message found
+   nullptr        No matching CAN message found
 */
 //----------------------------------------------------------------------------------------------------------------------
 const C_CieConverter::C_CieCanMessage *
 C_SyvComMessageMonitor::m_CheckDbcFile(const T_STWCAN_Msg_RX &orc_Msg) {
-   const C_CieConverter::C_CieCanMessage *pc_DbcMessage = NULL;
+   const C_CieConverter::C_CieCanMessage *pc_DbcMessage = nullptr;
 
    QHash<QString, C_CieConverter::C_CieCommDefinition>::const_iterator
        c_ItDbc;
@@ -987,7 +960,7 @@ C_SyvComMessageMonitor::m_CheckDbcFile(const T_STWCAN_Msg_RX &orc_Msg) {
           }
         }
 
-        if (pc_DbcMessage == NULL) {
+        if (pc_DbcMessage == nullptr) {
           // Not found yet, search in Rx messages
           for (u32_MsgCounter = 0U;
                u32_MsgCounter < rc_Node.c_RxMessages.size(); ++u32_MsgCounter) {
@@ -1004,13 +977,13 @@ C_SyvComMessageMonitor::m_CheckDbcFile(const T_STWCAN_Msg_RX &orc_Msg) {
           }
         }
 
-        if (pc_DbcMessage != NULL) {
+        if (pc_DbcMessage != nullptr) {
           break;
         }
       }
 
       // Unmapped messages
-      if (pc_DbcMessage == NULL) {
+      if (pc_DbcMessage == nullptr) {
         for (uint32_t u32_ItMessage = 0U;
              u32_ItMessage < c_ItDbc.value().c_UnmappedMessages.size();
              ++u32_ItMessage) {
@@ -1055,7 +1028,7 @@ bool C_SyvComMessageMonitor::m_InterpretDbcFile(
 
   this->mc_CriticalSectionConfig.lock();
 
-  if (opc_DbcMessage != NULL) {
+  if (opc_DbcMessage != nullptr) {
     uint32_t u32_Counter;
     bool q_MultiplexerFound = false;
     uint32_t u32_MultiplexerIndex = 0U;
@@ -1184,8 +1157,8 @@ void C_SyvComMessageMonitor::mh_ThreadFunc(void *const opv_Instance) {
   C_SyvComMessageMonitor *const pc_Instance =
       reinterpret_cast<C_SyvComMessageMonitor *>(opv_Instance);
 
-  Q_ASSERT(pc_Instance != NULL);
-  if (pc_Instance != NULL) {
+  Q_ASSERT(pc_Instance != nullptr);
+  if (pc_Instance != nullptr) {
     pc_Instance->m_ThreadFunc();
   }
 }

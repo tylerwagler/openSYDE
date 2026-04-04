@@ -34,7 +34,7 @@ class C_CamMetTreeDelegate :
    Q_OBJECT
 
 public:
-   C_CamMetTreeDelegate(QObject * const opc_Parent = NULL);
+   C_CamMetTreeDelegate(QObject * const opc_Parent = nullptr);
    ~C_CamMetTreeDelegate(void) override;
 
    void paint(QPainter * const opc_Painter, const QStyleOptionViewItem & orc_Option,

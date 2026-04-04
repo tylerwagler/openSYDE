@@ -56,7 +56,7 @@ public:
         eSVG             ///< SVG icon
     };
 
-    explicit C_OgePubUnified(QWidget * const opc_Parent = NULL,
+    explicit C_OgePubUnified(QWidget * const opc_Parent = nullptr,
                              const E_ButtonType e_Type = eSTANDARD);
     ~C_OgePubUnified(void) override;
 
@@ -80,6 +80,10 @@ public:
                  const QString & orc_IconPathDisabled = QString());
 
     void SetSvgIcon(const QString & orc_PathEnable, const QString & orc_PathDisable = QString());
+    void SetCustomIcons(const QString & orc_IconPathNormal,
+                        const QString & orc_IconPathHovered = QString(),
+                        const QString & orc_IconPathClicked = QString(),
+                        const QString & orc_IconPathDisabled = QString());
 
     void SetIconSize(const int32_t os32_IconSize);
     int32_t GetIconSize(void) const;

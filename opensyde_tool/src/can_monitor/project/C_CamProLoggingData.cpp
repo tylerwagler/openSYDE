@@ -86,14 +86,8 @@ QString C_CamProLoggingData::h_FormatEnumToString(const C_CamProLoggingData::E_F
 {
    QString c_Return;
 
-   if (oe_Format == eBLF)
-   {
-      c_Return = "blf";
-   }
-   else
-   {
-      c_Return = "asc";
-   }
+   Q_UNUSED(oe_Format)
+   c_Return = "asc";
 
    return c_Return;
 }
@@ -111,14 +105,8 @@ C_CamProLoggingData::E_Format C_CamProLoggingData::h_FormatStringToEnum(const QS
 {
    E_Format e_Return;
 
-   if (orc_Format == "blf")
-   {
-      e_Return = eBLF;
-   }
-   else
-   {
-      e_Return = eASC;
-   }
+   Q_UNUSED(orc_Format)
+   e_Return = eASC;
 
    return e_Return;
 }

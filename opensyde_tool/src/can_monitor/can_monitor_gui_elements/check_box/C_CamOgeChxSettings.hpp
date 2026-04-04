@@ -29,7 +29,7 @@ class C_CamOgeChxSettings :
    Q_OBJECT
 
 public:
-   explicit C_CamOgeChxSettings(QWidget * const opc_Parent = NULL);
+   explicit C_CamOgeChxSettings(QWidget * const opc_Parent = nullptr);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

@@ -34,7 +34,7 @@ class C_CamMosDatabaseSelectionModel :
    public C_TblTreModel
 {
 public:
-   C_CamMosDatabaseSelectionModel(QObject * const opc_Parent = NULL);
+   C_CamMosDatabaseSelectionModel(QObject * const opc_Parent = nullptr);
    ~C_CamMosDatabaseSelectionModel(void) override;
 
    void Init(void);

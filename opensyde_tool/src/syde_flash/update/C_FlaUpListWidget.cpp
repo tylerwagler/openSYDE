@@ -64,7 +64,7 @@ using namespace stw::opensyde_gui_logic;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_FlaUpListWidget::C_FlaUpListWidget(QWidget *const opc_Parent)
-    : QListWidget(opc_Parent), mpc_ContextMenu(NULL), mq_EnableSettings(true) {
+    : QListWidget(opc_Parent), mpc_ContextMenu(nullptr), mq_EnableSettings(true) {
   this->setFrameShape(QFrame::NoFrame);
   this->m_LoadLastKnownHexFilePaths();
   this->setSelectionMode(QAbstractItemView::MultiSelection);
@@ -105,12 +105,12 @@ void C_FlaUpListWidget::AddFileAction(const bool oq_IsActionForExistingFile,
   else {
     QListWidgetItem *const pc_CurrentItem =
         this->item(os32_CurrentHexFileIndex);
-    if (pc_CurrentItem != NULL) {
+    if (pc_CurrentItem != nullptr) {
       C_FlaUpListItemWidget *const pc_ItemWidget =
           dynamic_cast<C_FlaUpListItemWidget *>(
               this->itemWidget(pc_CurrentItem));
 
-      if ((pc_ItemWidget != NULL) && (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+      if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
         const QFileInfo c_FileInfo(
             pc_ItemWidget->pc_HexFileInfo->c_HexFileInfo.c_FilePath);
 
@@ -152,11 +152,11 @@ QStringList C_FlaUpListWidget::GetHexFilePaths(void) const {
 
   for (int32_t s32_It = 0; s32_It < this->count(); ++s32_It) {
     QListWidgetItem *const pc_CurrentItem = this->item(s32_It);
-    if (pc_CurrentItem != NULL) {
+    if (pc_CurrentItem != nullptr) {
       C_FlaUpListItemWidget *const pc_ItemWidget =
           dynamic_cast<C_FlaUpListItemWidget *>(
               this->itemWidget(pc_CurrentItem));
-      if ((pc_ItemWidget != NULL) && (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+      if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
         c_HexFilePaths.append(
             pc_ItemWidget->pc_HexFileInfo->c_HexFileInfo.c_FilePath);
       }
@@ -178,11 +178,11 @@ QStringList C_FlaUpListWidget::GetHexFileDeviceNames(void) const {
 
   for (int32_t s32_It = 0; s32_It < this->count(); ++s32_It) {
     QListWidgetItem *const pc_CurrentItem = this->item(s32_It);
-    if (pc_CurrentItem != NULL) {
+    if (pc_CurrentItem != nullptr) {
       C_FlaUpListItemWidget *const pc_ItemWidget =
           dynamic_cast<C_FlaUpListItemWidget *>(
               this->itemWidget(pc_CurrentItem));
-      if ((pc_ItemWidget != NULL) && (pc_ItemWidget->pc_HexFileInfo != NULL) &&
+      if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->pc_HexFileInfo != nullptr) &&
           (pc_ItemWidget->GetApplicationBlockIndex() <
            static_cast<int32_t>(
                pc_ItemWidget->pc_HexFileInfo->c_BlockInfo.size()))) {
@@ -209,11 +209,11 @@ bool C_FlaUpListWidget::AreAllFilesValid(void) const {
 
   for (int32_t s32_It = 0; s32_It < this->count(); ++s32_It) {
     QListWidgetItem *const pc_CurrentItem = this->item(s32_It);
-    if (pc_CurrentItem != NULL) {
+    if (pc_CurrentItem != nullptr) {
       const C_FlaUpListItemWidget *const pc_ItemWidget =
           dynamic_cast<C_FlaUpListItemWidget *>(
               this->itemWidget(pc_CurrentItem));
-      if (pc_ItemWidget != NULL) {
+      if (pc_ItemWidget != nullptr) {
         if (pc_ItemWidget->IsFileExistingAndValid() == false) {
           q_Return = false;
           break;
@@ -235,11 +235,11 @@ void C_FlaUpListWidget::EnableSettings(const bool oq_Enabled) {
   this->mq_EnableSettings = oq_Enabled;
   for (int32_t s32_It = 0; s32_It < this->count(); ++s32_It) {
     QListWidgetItem *const pc_CurrentItem = this->item(s32_It);
-    if (pc_CurrentItem != NULL) {
+    if (pc_CurrentItem != nullptr) {
       C_FlaUpListItemWidget *const pc_ItemWidget =
           dynamic_cast<C_FlaUpListItemWidget *>(
               this->itemWidget(pc_CurrentItem));
-      if (pc_ItemWidget != NULL) {
+      if (pc_ItemWidget != nullptr) {
         pc_ItemWidget->EnableSettings(oq_Enabled);
       }
     }
@@ -264,10 +264,10 @@ void C_FlaUpListWidget::DropEvent(QDropEvent *const opc_Event) {
     QListWidgetItem *pc_DropItem;
     c_DropPos.setY(opc_Event->pos().y() - 56);
     pc_DropItem = this->itemAt(c_DropPos);
-    if (pc_DropItem != NULL) {
+    if (pc_DropItem != nullptr) {
       C_FlaUpListItemWidget *const pc_ItemWidget =
           dynamic_cast<C_FlaUpListItemWidget *>(this->itemWidget(pc_DropItem));
-      if ((pc_ItemWidget != NULL) && (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+      if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
         s32_DroppedItemAtIndex =
             pc_ItemWidget->pc_HexFileInfo->s32_CurrentHexFileIndex;
       }
@@ -283,12 +283,12 @@ void C_FlaUpListWidget::DropEvent(QDropEvent *const opc_Event) {
             (s32_DroppedItemAtIndex < this->count())) {
           QListWidgetItem *const pc_CurrentItem =
               this->item(s32_DroppedItemAtIndex);
-          if (pc_CurrentItem != NULL) {
+          if (pc_CurrentItem != nullptr) {
             C_FlaUpListItemWidget *const pc_ItemWidget =
                 dynamic_cast<C_FlaUpListItemWidget *>(
                     this->itemWidget(pc_CurrentItem));
-            if ((pc_ItemWidget != NULL) &&
-                (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+            if ((pc_ItemWidget != nullptr) &&
+                (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
               if ((s32_UrlsCount > 1) &&
                   (s32_It ==
                    (s32_UrlsCount - 1))) // Show warning message box only
@@ -410,10 +410,10 @@ C_FlaUpListWidget::GetHexFileSize(const uint32_t &oru32_HexFileIndex) const {
   QListWidgetItem *const pc_CurrentItem = this->item(oru32_HexFileIndex);
   uint32_t u32_SizeInBytes = 0;
 
-  if (pc_CurrentItem != NULL) {
+  if (pc_CurrentItem != nullptr) {
     C_FlaUpListItemWidget *const pc_ItemWidget =
         dynamic_cast<C_FlaUpListItemWidget *>(this->itemWidget(pc_CurrentItem));
-    if ((pc_ItemWidget != NULL) && (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+    if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
       const QString c_BYTES_STR = " bytes";
       const QString c_NumberOfBytesStr =
           pc_ItemWidget->pc_HexFileInfo->c_HexFileInfo.c_Size;
@@ -437,11 +437,11 @@ void C_FlaUpListWidget::SetStatusIcon(const int32_t &ors32_FileIndex,
                                       const uint8_t &oru8_State) {
   QListWidgetItem *const pc_Item = this->item(ors32_FileIndex);
 
-  if (pc_Item != NULL) {
+  if (pc_Item != nullptr) {
     C_FlaUpListItemWidget *const pc_ItemWidget =
         dynamic_cast<C_FlaUpListItemWidget *>(this->itemWidget(pc_Item));
 
-    if ((pc_ItemWidget != NULL) && (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+    if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
       pc_ItemWidget->SetState(oru8_State);
     }
   }
@@ -457,11 +457,11 @@ void C_FlaUpListWidget::ResetStatusIcons(void) {
 
   for (int32_t s32_It = 0; s32_It < this->count(); ++s32_It) {
     QListWidgetItem *const pc_CurrentItem = this->item(s32_It);
-    if (pc_CurrentItem != NULL) {
+    if (pc_CurrentItem != nullptr) {
       const C_FlaUpListItemWidget *const pc_ItemWidget =
           dynamic_cast<C_FlaUpListItemWidget *>(
               this->itemWidget(pc_CurrentItem));
-      if ((pc_ItemWidget != NULL) && (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+      if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
         SetStatusIcon(s32_It, u8_DISABLE_ICON);
       }
     }
@@ -514,12 +514,12 @@ void C_FlaUpListWidget::m_AddFile(const QString &orc_File,
     bool q_FileAlreadyExists = false;
     for (int32_t s32_It = 0; s32_It < this->count(); ++s32_It) {
       QListWidgetItem *const pc_CurrentItem = this->item(s32_It);
-      if (pc_CurrentItem != NULL) {
+      if (pc_CurrentItem != nullptr) {
         C_FlaUpListItemWidget *const pc_ItemWidget =
             dynamic_cast<C_FlaUpListItemWidget *>(
                 this->itemWidget(pc_CurrentItem));
-        if ((pc_ItemWidget != NULL) &&
-            (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+        if ((pc_ItemWidget != nullptr) &&
+            (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
           const QString c_FilePath =
               pc_ItemWidget->pc_HexFileInfo->c_HexFileInfo.c_FilePath;
           if (c_FilePath == orc_File) {
@@ -632,11 +632,11 @@ void C_FlaUpListWidget::m_UpdateHexFileWidgetIndex(
   for (int32_t s32_It = os32_CurrentHexFileIndex; s32_It < this->count();
        ++s32_It) {
     QListWidgetItem *const pc_CurrentItem = this->item(s32_It);
-    if (pc_CurrentItem != NULL) {
+    if (pc_CurrentItem != nullptr) {
       C_FlaUpListItemWidget *const pc_ItemWidget =
           dynamic_cast<C_FlaUpListItemWidget *>(
               this->itemWidget(pc_CurrentItem));
-      if ((pc_ItemWidget != NULL) && (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+      if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
         if (pc_ItemWidget->pc_HexFileInfo->s32_CurrentHexFileIndex <= 0) {
           pc_ItemWidget->pc_HexFileInfo->s32_CurrentHexFileIndex = 0;
         } else {
@@ -679,7 +679,7 @@ void C_FlaUpListWidget::m_SetupContextMenu() {
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaUpListWidget::m_OnCustomContextMenuRequested(const QPoint &orc_Pos) {
-  if (this->mpc_ContextMenu != NULL) {
+  if (this->mpc_ContextMenu != nullptr) {
     this->mpc_ContextMenu->popup(this->mapToGlobal(orc_Pos));
   }
 }
@@ -795,11 +795,11 @@ QStringList C_FlaUpListWidget::m_GetHexFilePathsAsRelativeOrAbsolute() const {
 
   for (int32_t s32_It = 0; s32_It < this->count(); ++s32_It) {
     QListWidgetItem *const pc_CurrentItem = this->item(s32_It);
-    if (pc_CurrentItem != NULL) {
+    if (pc_CurrentItem != nullptr) {
       const C_FlaUpListItemWidget *const pc_ItemWidget =
           dynamic_cast<C_FlaUpListItemWidget *>(
               this->itemWidget(pc_CurrentItem));
-      if ((pc_ItemWidget != NULL) && (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+      if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
         if (pc_ItemWidget->q_IsRelativePathToAdd == true) {
           c_HexFilePathsAsRelativeOrAbsolute.append("Relative");
         } else {
@@ -846,11 +846,11 @@ void C_FlaUpListWidget::m_DeleteItem(const int32_t os32_CurrentHexFileIndex,
                                      const bool oq_NeedToUpdateListIndex) {
   QListWidgetItem *const pc_CurrentItem = this->item(os32_CurrentHexFileIndex);
 
-  if (pc_CurrentItem != NULL) {
+  if (pc_CurrentItem != nullptr) {
     C_FlaUpListItemWidget *pc_ItemWidget =
         dynamic_cast<C_FlaUpListItemWidget *>(this->itemWidget(pc_CurrentItem));
 
-    if ((pc_ItemWidget != NULL) && (pc_ItemWidget->pc_HexFileInfo != NULL)) {
+    if ((pc_ItemWidget != nullptr) && (pc_ItemWidget->pc_HexFileInfo != nullptr)) {
       if (oq_NeedToUpdateListIndex) {
         C_OgeWiCustomMessage c_MessageBox(this,
                                           C_OgeWiCustomMessage::eQUESTION);

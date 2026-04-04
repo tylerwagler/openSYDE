@@ -188,6 +188,24 @@ void C_OgePubUnified::SetSvgIcon(const QString & orc_PathEnable, const QString &
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Set custom icons by path (convenience wrapper for SetIcon)
+
+   \param[in]  orc_IconPathNormal    Path for normal state icon
+   \param[in]  orc_IconPathHovered   Path for hovered state icon
+   \param[in]  orc_IconPathClicked   Path for clicked state icon
+   \param[in]  orc_IconPathDisabled  Path for disabled state icon
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_OgePubUnified::SetCustomIcons(const QString & orc_IconPathNormal,
+                                     const QString & orc_IconPathHovered,
+                                     const QString & orc_IconPathClicked,
+                                     const QString & orc_IconPathDisabled)
+{
+   this->SetIcon(QIcon(orc_IconPathNormal), orc_IconPathNormal,
+                 orc_IconPathHovered, orc_IconPathClicked, orc_IconPathDisabled);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set icon size
 
    \param[in]  os32_IconSize   Icon size in pixels
@@ -343,7 +361,7 @@ bool C_OgePubUnified::event(QEvent * const opc_Event)
 {
    const bool q_Retval = C_OgePubToolTipBase::event(opc_Event);
 
-   if ((opc_Event != NULL) && ((opc_Event->type() == QEvent::HoverLeave) ||
+   if ((opc_Event != nullptr) && ((opc_Event->type() == QEvent::HoverLeave) ||
                                (opc_Event->type() == QEvent::Hide) ||
                                (opc_Event->type() == QEvent::Show)))
    {
@@ -525,13 +543,14 @@ void C_OgePubUnified::m_PaintIconOnlyButton(QPainter & orc_Painter)
    else
    {
       c_Icon = this->mc_PixmapNormal;
-   }
+    }
 
-   if (c_Icon.isNull() == false)
-   {
-      const QRect c_IconRect = c_Rect.center() - QRect(0, 0, s32_IconSize, s32_IconSize);
-      orc_Painter.drawPixmap(c_IconRect, c_Icon);
-   }
+    if (c_Icon.isNull() == false)
+    {
+       const QRect c_IconRect(c_Rect.center().x() - s32_IconSize / 2, c_Rect.center().y() - s32_IconSize / 2,
+                              static_cast<int>(s32_IconSize), static_cast<int>(s32_IconSize));
+       orc_Painter.drawPixmap(c_IconRect, c_Icon);
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

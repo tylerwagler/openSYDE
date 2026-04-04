@@ -38,8 +38,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Xml)
 find_package(Qt6 REQUIRED COMPONENTS Gui)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
-find_package(Qt6 REQUIRED COMPONENTS Svg)
-find_package(Qt6 REQUIRED COMPONENTS SvgWidgets)
+find_package(Qt6 COMPONENTS Svg QUIET)
+find_package(Qt6 COMPONENTS SvgWidgets QUIET)
 find_package(Qt6 REQUIRED COMPONENTS SerialBus Network)
 
 # --- PROJECT INCLUDE PATHS --------------------------------------------------------------------------------------------
@@ -100,12 +100,8 @@ set (OPENSYDE_INCLUDES
    ${PROJECT_ROOT}/libs/dbc_driver_library/src
    ${PROJECT_ROOT}/libs/dbc_driver_library/src/Vector
 )
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   # Use system-installed Vector BLF library headers on Linux
-   list(APPEND OPENSYDE_INCLUDES /usr/include/Vector)
-else()
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
    list(APPEND OPENSYDE_INCLUDES
-      ${PROJECT_ROOT}/libs/blf_driver_library
       ${PROJECT_ROOT}/libs/zlib
    )
 endif()
@@ -124,7 +120,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/can_monitor/util/C_CamUtiGeneric.cpp
    ${PROJECT_ROOT}/src/util/C_Uti.cpp
    ${PROJECT_ROOT}/src/system_views/communication/C_SyvComMessageMonitor.cpp
-   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComMessageLoggerFileBlf.cpp
    ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.cpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieImportDbc.cpp
    ${PROJECT_ROOT}/src/com_import_export/C_CieConverter.cpp
@@ -150,14 +145,12 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.cpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolTip.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiUtil.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.cpp
    ${PROJECT_ROOT}/src/help_engine/C_HeHandler.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStandard.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebStyled.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
@@ -177,8 +170,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetTreeView.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreItem.cpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreModel.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
    ${PROJECT_ROOT}/src/can_monitor/user_settings/C_UsHandler.cpp
    ${PROJECT_ROOT}/src/can_monitor/user_settings/C_UsFiler.cpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagAboutDialog.cpp
@@ -188,9 +179,13 @@ ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardDefault.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePath.cpp
-    ${PROJECT_ROOT}/src/opensyde_gui_elements/public/C_OgePubIconOnly.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyled.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUnified.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxUnified.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeUnified.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledToolTip.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabStyledContextMenu.cpp
    ${PROJECT_ROOT}/src/can_monitor/C_CamComDriverBase.cpp
@@ -216,12 +211,13 @@ ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSectio
     ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabToolTipBase.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubBase.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUnified.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxBase.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxToolTipBase.cpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxUnified.cpp
     ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenTableView.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenTableModel.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeStyled.cpp
    ${PROJECT_ROOT}/src/util/C_UtiFindNameHelper.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenMessagesWidget.cpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProHandler.cpp
@@ -234,7 +230,6 @@ ${PROJECT_ROOT}/src/can_monitor/project/C_CamProMessageData.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.cpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/check_box/C_CamOgeChxSettings.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxStyled.cpp
    ${PROJECT_ROOT}/src/table_base/C_TblViewScroll.cpp
 ${PROJECT_ROOT}/src/table_base/C_TblViewToolTipBase.cpp
     ${PROJECT_ROOT}/src/table_base/C_TblDelegate.cpp
@@ -252,9 +247,7 @@ ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeBase.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedContextMenuBase.cpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeIdPopUp.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.cpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProFilterData.cpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/public/C_OgePubIconOnly.cpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaBase.cpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.cpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableView.cpp
@@ -328,7 +321,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/can_monitor/util/C_CamUtiGeneric.hpp
    ${PROJECT_ROOT}/src/util/C_Uti.hpp
    ${PROJECT_ROOT}/src/system_views/communication/C_SyvComMessageMonitor.hpp
-   ${PROJECT_ROOT}/src/system_views/communication/C_SyvComMessageLoggerFileBlf.hpp
    ${PROJECT_ROOT}/src/system_views/communication/C_SyvComDriverThread.hpp
    ${PROJECT_ROOT}/libs/flexlexer/FlexLexer.h
    ${PROJECT_ROOT}/libs/dbc_driver_library/src/Vector/DBC.h
@@ -367,14 +359,12 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.hpp
    ${PROJECT_ROOT}/src/navigable_gui/C_NagToolTip.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiUtil.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.hpp
    ${PROJECT_ROOT}/src/help_engine/C_HeHandler.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubStandard.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebStyled.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.hpp
@@ -394,8 +384,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetTreeView.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreItem.hpp
    ${PROJECT_ROOT}/src/table_base/tree_base/C_TblTreModel.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.hpp
    ${PROJECT_ROOT}/src/can_monitor/cam_constants.hpp
    ${PROJECT_ROOT}/src/can_monitor/user_settings/C_UsHandler.hpp
    ${PROJECT_ROOT}/src/can_monitor/user_settings/C_UsFiler.hpp
@@ -429,12 +417,13 @@ ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSectio
     ${PROJECT_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabToolTipBase.hpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubBase.hpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.hpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubUnified.hpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxBase.hpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxToolTipBase.hpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxUnified.hpp
     ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenTableView.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenTableModel.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeStyled.hpp
    ${PROJECT_ROOT}/src/util/C_UtiFindNameHelper.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenMessagesWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProHandler.hpp
@@ -447,7 +436,6 @@ ${PROJECT_ROOT}/src/can_monitor/project/C_CamProHandlerFiler.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/check_box/C_CamOgeChxSettings.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxStyled.hpp
 ${PROJECT_ROOT}/src/table_base/C_TblViewScroll.hpp
     ${PROJECT_ROOT}/src/table_base/C_TblViewToolTipBase.hpp
     ${PROJECT_ROOT}/src/table_base/C_TblDelegate.hpp
@@ -465,9 +453,8 @@ ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeTab
     ${PROJECT_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedContextMenuBase.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeIdPopUp.hpp
    ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxText.hpp
-   ${PROJECT_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.hpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProFilterData.hpp
-${PROJECT_ROOT}/src/opensyde_gui_elements/public/C_OgePubIconOnly.hpp
+    ${PROJECT_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaBase.hpp
     ${PROJECT_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaMain.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosFilterTableView.hpp
@@ -481,120 +468,6 @@ ${PROJECT_ROOT}/src/opensyde_gui_elements/public/C_OgePubIconOnly.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProDatabaseData.hpp
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.hpp
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/AbstractFile.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/AfdxFrame.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/AfdxStatistic.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/AppText.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/AppTrigger.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanDriverError.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanDriverErrorExt.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanDriverHwSync.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanDriverStatistic.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanErrorFrame.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanErrorFrameExt.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanFdErrorFrame64.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanFdMessage.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanFdMessage64.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanMessage.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanMessage2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CanOverloadFrame.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/CompressedFile.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/config.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/Doxygen.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/DriverOverrun.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/EnvironmentVariable.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/EthernetFrame.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/EthernetRxError.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/EthernetStatus.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/EventComment.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/Exceptions.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/File.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FileStatistics.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FlexRayData.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FlexRayStatusEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FlexRaySync.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FlexRayV6Message.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FlexRayV6StartCycleEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FlexRayVFrError.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FlexRayVFrReceiveMsg.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FlexRayVFrReceiveMsgEx.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FlexRayVFrStartCycle.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/FlexRayVFrStatus.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/GlobalMarker.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/GpsEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/J1708Message.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/KLineStatusEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinBaudrateEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinBusEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinChecksumInfo.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinCrcError.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinCrcError2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinDatabyteTimestampEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinDisturbanceEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinDlcInfo.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinLongDomSignalEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinLongDomSignalEvent2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinMessage.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinMessage2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinMessageDescriptor.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinReceiveError.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinReceiveError2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinSchedulerModeChange.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinSendError.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinSendError2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinShortOrSlowResponse.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinSlaveTimeout.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinSleepModeEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinSpikeEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinSpikeEvent2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinStatisticEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinSyncError.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinSyncError2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinSynchFieldEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinUnexpectedWakeup.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinWakeupEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LinWakeupEvent2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/LogContainer.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/Most50Message.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/Most50Pkt.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/Most150AllocTab.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/Most150Message.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/Most150MessageFragment.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/Most150Pkt.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/Most150PktFragment.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostAllocTab.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostCtrl.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostDataLost.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostEcl.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostEthernetPkt.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostEthernetPktFragment.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostGenReg.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostHwMode.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostLightLock.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostNetState.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostPkt.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostPkt2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostReg.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostSpy.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostStatistic.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostStatisticEx.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostStress.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostSystemEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostTrigger.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/MostTxLight.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/ObjectHeader.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/ObjectHeader2.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/ObjectHeaderBase.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/platform.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/RealtimeClock.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/SerialEvent.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/SystemVariable.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/UncompressedFile.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/vector_blf_export.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/VectorTypes.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/WlanFrame.h
-   ${PROJECT_ROOT}/libs/blf_driver_library/BLF/WlanStatistic.h
    ${PROJECT_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableDelegate.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenKeySelect.hpp
@@ -714,18 +587,17 @@ set(OPENSYDE_LINK_LIBRARIES
    Qt6::Widgets
    Qt6::Svg
    Qt6::SvgWidgets
+   Qt6::SerialBus
+   Qt6::Network
    opensyde_core
 )
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-   find_library(VECTOR_BLF_LIBRARY NAMES Vector_BLF)
    find_package(ZLIB REQUIRED)
    list(APPEND OPENSYDE_LINK_LIBRARIES
-      ${VECTOR_BLF_LIBRARY}
       ZLIB::ZLIB
    )
 else()
    list(APPEND OPENSYDE_LINK_LIBRARIES
-      ${PROJECT_ROOT}/libs/blf_driver_library/libvector_blf.a
       ${PROJECT_ROOT}/libs/zlib/libzlibstatic.a
       version
       ws2_32   #WinSock

@@ -38,7 +38,7 @@ public:
       eREMOVE
    };
 
-   C_CamMosFilterTableModel(QObject * const opc_Parent = NULL);
+   C_CamMosFilterTableModel(QObject * const opc_Parent = nullptr);
 
    QVariant headerData(const int32_t os32_Section, const Qt::Orientation oe_Orientation,
                        const int32_t os32_Role = static_cast<int32_t>(Qt::DisplayRole))

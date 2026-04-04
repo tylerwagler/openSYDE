@@ -31,7 +31,7 @@ class C_FlaTitleBarWidget :
    Q_OBJECT
 
 public:
-   explicit C_FlaTitleBarWidget(QWidget * const opc_Parent = NULL);
+   explicit C_FlaTitleBarWidget(QWidget * const opc_Parent = nullptr);
    ~C_FlaTitleBarWidget(void) override;
 
    void InitStaticNames(void) const;

@@ -104,8 +104,6 @@ C_CamMosWidget::C_CamMosWidget(QWidget * const opc_Parent) :
            this, &C_CamMosWidget::SigNotifyMissingDataBase);
    connect(this->mpc_Ui->pc_WiLogging, &C_CamMosLoggingWidget::SigAddLogFileAsc,
            this, &C_CamMosWidget::SigAddLogFileAsc);
-   connect(this->mpc_Ui->pc_WiLogging, &C_CamMosLoggingWidget::SigAddLogFileBlf,
-           this, &C_CamMosWidget::SigAddLogFileBlf);
    connect(this->mpc_Ui->pc_WiLogging, &C_CamMosLoggingWidget::SigRemoveAllLogFiles,
            this, &C_CamMosWidget::SigRemoveAllLogFiles);
    connect(this->mpc_Ui->pc_WiBitrate, &C_CamMosBitrateWidget::SigCanBitrateConfigured,

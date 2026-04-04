@@ -32,7 +32,7 @@ class C_OgeLeFilePathBase :
 public:
    using VariableResolver = std::function<QString(const QString &)>;
 
-   explicit C_OgeLeFilePathBase(QWidget * const opc_Parent = NULL);
+   explicit C_OgeLeFilePathBase(QWidget * const opc_Parent = nullptr);
    ~C_OgeLeFilePathBase(void) override;
 
    void SetPath(const QString & orc_New, const QString & orc_RelativeTo = "");
@@ -45,6 +45,7 @@ public:
    void UpdateText(void);
 
    void SetVariableResolver(const VariableResolver & orc_Resolver);
+   void SetDbProjectPath(const QString & orc_Path) { Q_UNUSED(orc_Path) }
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
@@ -61,7 +62,7 @@ protected:
    void resizeEvent(QResizeEvent * const opc_Event) override;
    void dragEnterEvent(QDragEnterEvent * const opc_Event) override;
    void dropEvent(QDropEvent * const opc_Event) override;
-   QString m_ResolveVariables(const QString & orc_Path);
+   virtual QString m_ResolveVariables(const QString & orc_Path);
 
 private:
    QString mc_Path;
