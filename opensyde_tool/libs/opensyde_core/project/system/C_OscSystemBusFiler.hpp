@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Bus reader/writer (Multi-Format)
+   \brief       System bus reader/writer (multi-format)
 
    Load / save bus data from / to binary, JSON, or XML files using the
    Qt-native serialization framework.

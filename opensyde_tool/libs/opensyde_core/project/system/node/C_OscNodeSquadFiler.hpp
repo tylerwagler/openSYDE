@@ -1,7 +1,7 @@
  //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       NodeSquad reader/writer with multi-format support
+   \brief       Node squad reader/writer (multi-format)
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
 */
@@ -33,7 +33,7 @@
  class C_OscNodeSquadFiler {
  public:
      // --------------------------------------------------------------------------
-     // Public Static Methods - Multi-format file operations
+     // File-path-based operations (auto-detect format)
      // --------------------------------------------------------------------------
      static int32_t h_LoadFile(QList<C_OscNodeSquad> &orc_NodeGroups,
                                const QString &orc_Path);
@@ -41,24 +41,36 @@
                                const QString &orc_Path);
 
      // --------------------------------------------------------------------------
-     // Format-specific loading methods
+     // File-path-based operations (format-specific)
      // --------------------------------------------------------------------------
      static int32_t h_LoadBinary(QList<C_OscNodeSquad> &orc_NodeGroups,
-                                 QDataStream &orc_Stream);
+                                 const QString &orc_Path);
+     static int32_t h_SaveBinary(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                                 const QString &orc_Path);
      static int32_t h_LoadJson(QList<C_OscNodeSquad> &orc_NodeGroups,
-                               const QJsonObject &orc_Object);
+                               const QString &orc_Path);
+     static int32_t h_SaveJson(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                               const QString &orc_Path);
      static int32_t h_LoadXml(QList<C_OscNodeSquad> &orc_NodeGroups,
-                              C_OscXmlParserBase &orc_XmlParser);
+                              const QString &orc_Path);
+     static int32_t h_SaveXml(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                              const QString &orc_Path);
 
      // --------------------------------------------------------------------------
-     // Format-specific saving methods
+     // In-memory operations (stream/object-based)
      // --------------------------------------------------------------------------
-     static int32_t h_SaveBinary(const QList<C_OscNodeSquad> &orc_NodeGroups,
-                                 QDataStream &orc_Stream);
-     static int32_t h_SaveJson(const QList<C_OscNodeSquad> &orc_NodeGroups,
-                               QJsonObject &orc_Object);
-     static int32_t h_SaveXml(const QList<C_OscNodeSquad> &orc_NodeGroups,
-                              C_OscXmlParserBase &orc_XmlParser);
+     static int32_t h_LoadFromMemoryBinary(QList<C_OscNodeSquad> &orc_NodeGroups,
+                                           QDataStream &orc_Stream);
+     static int32_t h_SaveToMemoryBinary(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                                         QDataStream &orc_Stream);
+     static int32_t h_LoadFromMemoryJson(QList<C_OscNodeSquad> &orc_NodeGroups,
+                                         const QJsonObject &orc_Object);
+     static int32_t h_SaveToMemoryJson(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                                       QJsonObject &orc_Object);
+     static int32_t h_LoadFromMemoryXml(QList<C_OscNodeSquad> &orc_NodeGroups,
+                                        C_OscXmlParserBase &orc_XmlParser);
+     static int32_t h_SaveToMemoryXml(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                                      C_OscXmlParserBase &orc_XmlParser);
 
      // --------------------------------------------------------------------------
      // Single item operations

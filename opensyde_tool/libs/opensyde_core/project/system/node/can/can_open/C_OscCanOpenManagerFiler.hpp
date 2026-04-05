@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Filer for CANopen data classes
+   \brief       CANopen manager reader/writer (multi-format)
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
 */

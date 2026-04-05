@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Filer for comm description files (Multi-Format Implementation)
+   \brief       Communication protocol reader/writer (multi-format)
 
    Multi-format filer supporting binary, JSON, and XML serialization of CAN
    communication protocol data, plus legacy XML element-level helpers.
@@ -1391,9 +1391,9 @@ void C_OscNodeCommFiler::mh_StringToNodeComMessageTxMethod(
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeCommFiler::h_LoadProtocolFile(C_OscCanProtocol &orc_Protocol,
-                                                const QString &orc_FilePath,
-                                                const QList<C_OscNodeDataPool> &orc_NodeDataPools) {
+int32_t C_OscNodeCommFiler::h_LoadFile(C_OscCanProtocol &orc_Protocol,
+                                       const QString &orc_FilePath,
+                                       const QList<C_OscNodeDataPool> &orc_NodeDataPools) {
    Q_UNUSED(orc_NodeDataPools);
    return mh_DetectAndLoad(orc_Protocol, orc_FilePath, orc_NodeDataPools);
 }
@@ -1409,9 +1409,9 @@ int32_t C_OscNodeCommFiler::h_LoadProtocolFile(C_OscCanProtocol &orc_Protocol,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeCommFiler::h_SaveProtocolFile(const C_OscCanProtocol &orc_Protocol,
-                                                const QString &orc_FilePath,
-                                                const QString &orc_DatapoolName) {
+int32_t C_OscNodeCommFiler::h_SaveFile(const C_OscCanProtocol &orc_Protocol,
+                                       const QString &orc_FilePath,
+                                       const QString &orc_DatapoolName) {
    int32_t s32_Retval = C_NO_ERR;
 
    // Detect format from file extension
@@ -1539,7 +1539,7 @@ int32_t C_OscNodeCommFiler::h_LoadFromMemoryBinary(C_OscCanProtocol &orc_Protoco
 */
 //----------------------------------------------------------------------------------------------------------------------
 QByteArray C_OscNodeCommFiler::h_SaveToMemoryBinary(const C_OscCanProtocol &orc_Protocol,
-                                                     const QString &orc_DatapoolName) const {
+                                                     const QString &orc_DatapoolName) {
    Q_UNUSED(orc_DatapoolName);
 
    QByteArray data;
@@ -1654,7 +1654,7 @@ int32_t C_OscNodeCommFiler::h_LoadFromMemoryJson(C_OscCanProtocol &orc_Protocol,
 */
 //----------------------------------------------------------------------------------------------------------------------
 QJsonObject C_OscNodeCommFiler::h_SaveToMemoryJson(const C_OscCanProtocol &orc_Protocol,
-                                                    const QString &orc_DatapoolName) const {
+                                                    const QString &orc_DatapoolName) {
    Q_UNUSED(orc_DatapoolName);
 
    return const_cast<C_OscCanProtocol&>(orc_Protocol).ToJsonObject();
@@ -1769,7 +1769,7 @@ int32_t C_OscNodeCommFiler::h_LoadFromMemoryXml(C_OscCanProtocol &orc_Protocol,
 //----------------------------------------------------------------------------------------------------------------------
 QDomElement C_OscNodeCommFiler::h_SaveToMemoryXml(const C_OscCanProtocol &orc_Protocol,
                                                    QDomDocument &ro_Doc,
-                                                   const QString &orc_DatapoolName) const {
+                                                   const QString &orc_DatapoolName) {
    Q_UNUSED(orc_DatapoolName);
 
    return const_cast<C_OscCanProtocol&>(orc_Protocol).ToQDomDocument(ro_Doc, "protocol");

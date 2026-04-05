@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Node reader/writer (Multi-Format)
+   \brief       Node reader/writer (multi-format)
 
    Load / save node data from / to binary, JSON, or XML files using the
    Qt-native serialization framework.
@@ -41,11 +41,11 @@ public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)
    // --------------------------------------------------------------------------
-   static int32_t h_LoadNodeFile(C_OscNode &orc_Node, const QString &orc_FilePath,
-                                 const bool oq_SkipContent = false);
-   static int32_t h_SaveNodeFile(const C_OscNode &orc_Node, const QString &orc_FilePath,
-                                 QStringList *const opc_CreatedFiles,
-                                 const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap);
+   static int32_t h_LoadFile(C_OscNode &orc_Node, const QString &orc_FilePath,
+                             const bool oq_SkipContent = false);
+   static int32_t h_SaveFile(const C_OscNode &orc_Node, const QString &orc_FilePath,
+                             QStringList *const opc_CreatedFiles,
+                             const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap);
 
    // --------------------------------------------------------------------------
    // Binary Format (Fastest, compact)
@@ -82,13 +82,13 @@ public:
    // --------------------------------------------------------------------------
    // Legacy Compatibility (deprecated - for backward compatibility only)
    // --------------------------------------------------------------------------
-   [[deprecated("Use h_LoadNodeFile/h_SaveNodeFile with format detection")]]
-   static int32_t h_LoadNodeFile_Legacy(C_OscNode &orc_Node, const QString &orc_FilePath,
-                                        const bool oq_SkipContent);
-   [[deprecated("Use h_LoadNodeFile/h_SaveNodeFile with format detection")]]
-   static int32_t h_SaveNodeFile_Legacy(const C_OscNode &orc_Node, const QString &orc_FilePath,
-                                        QStringList *const opc_CreatedFiles,
-                                        const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap);
+   [[deprecated("Use h_LoadFile/h_SaveFile with format detection")]]
+   static int32_t h_LoadFile_Legacy(C_OscNode &orc_Node, const QString &orc_FilePath,
+                                    const bool oq_SkipContent);
+   [[deprecated("Use h_LoadFile/h_SaveFile with format detection")]]
+   static int32_t h_SaveFile_Legacy(const C_OscNode &orc_Node, const QString &orc_FilePath,
+                                    QStringList *const opc_CreatedFiles,
+                                    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap);
    [[deprecated("Use h_LoadNode/h_SaveNode with format detection")]]
    static int32_t h_LoadNode_Legacy(C_OscNode &orc_Node, C_OscXmlParserBase &orc_XmlParser,
                                     const QString &orc_BasePath, const bool oq_SkipContent);

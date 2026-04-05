@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Filer for comm description files (header)
+   \brief       Communication protocol reader/writer (multi-format)
 
    Multi-format filer supporting binary, JSON, and XML serialization of CAN
    communication protocol data, plus legacy XML element-level helpers.
@@ -46,12 +46,12 @@ public:
   // --------------------------------------------------------------------------
   // Multi-format file I/O (auto-detect format from extension)
   // --------------------------------------------------------------------------
-  static int32_t h_LoadProtocolFile(C_OscCanProtocol &orc_Protocol,
-                                    const QString &orc_FilePath,
-                                    const QList<C_OscNodeDataPool> &orc_NodeDataPools);
-  static int32_t h_SaveProtocolFile(const C_OscCanProtocol &orc_Protocol,
-                                    const QString &orc_FilePath,
-                                    const QString &orc_DatapoolName);
+  static int32_t h_LoadFile(C_OscCanProtocol &orc_Protocol,
+                            const QString &orc_FilePath,
+                            const QList<C_OscNodeDataPool> &orc_NodeDataPools);
+  static int32_t h_SaveFile(const C_OscCanProtocol &orc_Protocol,
+                            const QString &orc_FilePath,
+                            const QString &orc_DatapoolName);
 
   // --------------------------------------------------------------------------
   // Binary Format
@@ -65,8 +65,8 @@ public:
   static int32_t h_LoadFromMemoryBinary(C_OscCanProtocol &orc_Protocol,
                                         const QByteArray &orc_Data,
                                         const QList<C_OscNodeDataPool> &orc_NodeDataPools);
-  QByteArray h_SaveToMemoryBinary(const C_OscCanProtocol &orc_Protocol,
-                                  const QString &orc_DatapoolName) const;
+  static QByteArray h_SaveToMemoryBinary(const C_OscCanProtocol &orc_Protocol,
+                                         const QString &orc_DatapoolName);
 
   // --------------------------------------------------------------------------
   // JSON Format
@@ -80,8 +80,8 @@ public:
   static int32_t h_LoadFromMemoryJson(C_OscCanProtocol &orc_Protocol,
                                       const QJsonObject &orc_Object,
                                       const QList<C_OscNodeDataPool> &orc_NodeDataPools);
-  QJsonObject h_SaveToMemoryJson(const C_OscCanProtocol &orc_Protocol,
-                                 const QString &orc_DatapoolName) const;
+  static QJsonObject h_SaveToMemoryJson(const C_OscCanProtocol &orc_Protocol,
+                                        const QString &orc_DatapoolName);
 
   // --------------------------------------------------------------------------
   // XML Format (QDom-based)
@@ -95,9 +95,9 @@ public:
   static int32_t h_LoadFromMemoryXml(C_OscCanProtocol &orc_Protocol,
                                      const QDomElement &orc_Element,
                                      const QList<C_OscNodeDataPool> &orc_NodeDataPools);
-  QDomElement h_SaveToMemoryXml(const C_OscCanProtocol &orc_Protocol,
-                                QDomDocument &ro_Doc,
-                                const QString &orc_DatapoolName) const;
+  static QDomElement h_SaveToMemoryXml(const C_OscCanProtocol &orc_Protocol,
+                                       QDomDocument &ro_Doc,
+                                       const QString &orc_DatapoolName);
 
   // --------------------------------------------------------------------------
   // Legacy XML element-level methods (TinyXML parser-based)

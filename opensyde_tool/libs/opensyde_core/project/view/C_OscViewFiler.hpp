@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       View filer (core parts)
+   \brief       View reader/writer (multi-format)
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
 */
@@ -15,6 +15,9 @@
 #include "C_OscNode.hpp"
 #include "C_OscViewData.hpp"
 #include "C_OscXmlParser.hpp"
+#include <QByteArray>
+#include <QDomDocument>
+#include <QJsonObject>
 #include <QList>
 
 /* -- Namespace
@@ -49,6 +52,9 @@ public:
   static int32_t h_SaveBinary(const QList<C_OscViewData> &orc_Views,
                               const QString &orc_Path,
                               const QList<C_OscNode> &orc_OscNodes);
+  static int32_t h_LoadFromMemoryBinary(QList<C_OscViewData> &orc_Views,
+                                        const QByteArray &orc_Data);
+  static QByteArray h_SaveToMemoryBinary(const QList<C_OscViewData> &orc_Views);
 
   // JSON format
   static int32_t h_LoadJson(QList<C_OscViewData> &orc_Views,
@@ -57,6 +63,9 @@ public:
   static int32_t h_SaveJson(const QList<C_OscViewData> &orc_Views,
                             const QString &orc_Path,
                             const QList<C_OscNode> &orc_OscNodes);
+  static int32_t h_LoadFromMemoryJson(QList<C_OscViewData> &orc_Views,
+                                      const QJsonObject &orc_Object);
+  static QJsonObject h_SaveToMemoryJson(const QList<C_OscViewData> &orc_Views);
 
   // XML format (legacy compatibility)
   static int32_t h_LoadXml(QList<C_OscViewData> &orc_Views,
@@ -65,6 +74,10 @@ public:
   static int32_t h_SaveXml(const QList<C_OscViewData> &orc_Views,
                            const QString &orc_Path,
                            const QList<C_OscNode> &orc_OscNodes);
+  static int32_t h_LoadFromMemoryXml(QList<C_OscViewData> &orc_Views,
+                                     const QDomElement &orc_Element);
+  static QDomElement h_SaveToMemoryXml(const QList<C_OscViewData> &orc_Views,
+                                       QDomDocument &orc_Doc);
 
   // Original XML methods (for backward compatibility)
   static int32_t h_LoadSystemViewsFile(QList<C_OscViewData> &orc_Views,

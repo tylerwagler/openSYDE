@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       View filer (core parts)
+   \brief       View reader/writer (multi-format)
 
    \copyright   Copyright 2022 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
@@ -12,6 +12,7 @@
  * ------------------------------------------------------------------------------------------------------
  */
 #include "precomp_headers.hpp"
+#include <QDataStream>
 #include <QFileInfo>
 #include <QList>
 #include <QJsonArray>
@@ -1153,6 +1154,65 @@ int32_t C_OscViewFiler::h_SaveBinary(const QList<C_OscViewData> &orc_Views,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load views from memory (binary)
+
+   \param[out]     orc_Views        View data
+   \param[in]      orc_Data         Binary data
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_LoadFromMemoryBinary(QList<C_OscViewData> &orc_Views,
+                                               const QByteArray &orc_Data)
+{
+   QDataStream c_In(orc_Data);
+   c_In.setVersion(QDataStream::Qt_6_0);
+
+   int32_t s32_Count;
+   c_In >> s32_Count;
+
+   orc_Views.clear();
+   orc_Views.reserve(s32_Count);
+   for (int32_t s32_It = 0; s32_It < s32_Count; ++s32_It) {
+      C_OscViewData c_View;
+      const int32_t s32_Result = c_View.FromQDataStream(c_In);
+      if (s32_Result != C_NO_ERR) {
+         osc_write_log_error("Loading view data",
+                             QString("Failed to deserialize view %1 from memory buffer.").arg(s32_It));
+         return s32_Result;
+      }
+      orc_Views.append(c_View);
+   }
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save views to memory (binary)
+
+   \param[in]      orc_Views        View data to store
+
+   \return
+   QByteArray    Binary data
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QByteArray C_OscViewFiler::h_SaveToMemoryBinary(const QList<C_OscViewData> &orc_Views)
+{
+   QByteArray c_Data;
+   QDataStream c_Out(&c_Data, QIODevice::WriteOnly);
+   c_Out.setVersion(QDataStream::Qt_6_0);
+
+   c_Out << static_cast<int32_t>(orc_Views.size());
+   for (const C_OscViewData &rc_View : orc_Views) {
+      rc_View.ToQDataStream(c_Out);
+   }
+
+   return c_Data;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscViewFiler::h_LoadJson(QList<C_OscViewData> &orc_Views,
                                    const QString &orc_Path,
                                    const QList<C_OscNode> &orc_OscNodes) {
@@ -1166,6 +1226,62 @@ int32_t C_OscViewFiler::h_SaveJson(const QList<C_OscViewData> &orc_Views,
                                    const QList<C_OscNode> &orc_OscNodes) {
    Q_UNUSED(orc_OscNodes)
    return C_OscFilerUtil::h_SaveListJson(orc_Views, orc_Path);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load views from memory (JSON)
+
+   \param[out]     orc_Views        View data
+   \param[in]      orc_Object       JSON object
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_LoadFromMemoryJson(QList<C_OscViewData> &orc_Views,
+                                             const QJsonObject &orc_Object)
+{
+   orc_Views.clear();
+
+   if (orc_Object.contains("opensyde-system-views")) {
+      const QJsonArray c_Array = orc_Object["opensyde-system-views"].toArray();
+      orc_Views.reserve(c_Array.size());
+      for (const QJsonValue &c_Value : c_Array) {
+         C_OscViewData c_View;
+         const int32_t s32_Result = c_View.FromJsonObject(c_Value.toObject());
+         if (s32_Result != C_NO_ERR) {
+            osc_write_log_error("Loading view data",
+                                "Failed to deserialize view data from JSON object.");
+            return s32_Result;
+         }
+         orc_Views.append(c_View);
+      }
+   }
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save views to memory (JSON)
+
+   \param[in]      orc_Views        View data to store
+
+   \return
+   QJsonObject    JSON object
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QJsonObject C_OscViewFiler::h_SaveToMemoryJson(const QList<C_OscViewData> &orc_Views)
+{
+   QJsonObject c_Root;
+   QJsonArray c_Array;
+
+   for (const C_OscViewData &rc_View : orc_Views) {
+      c_Array.append(rc_View.ToJsonObject());
+   }
+
+   c_Root["opensyde-system-views"] = c_Array;
+   return c_Root;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1184,4 +1300,61 @@ int32_t C_OscViewFiler::h_SaveXml(const QList<C_OscViewData> &orc_Views,
    Q_UNUSED(orc_OscNodes)
    return C_OscFilerUtil::h_SaveListXml(orc_Views, orc_Path,
                                         "opensyde-system-views", "opensyde-system-view");
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Load views from memory (XML)
+
+   \param[out]     orc_Views        View data
+   \param[in]      orc_Element      XML element
+
+   \return
+   C_NO_ERR   data read
+   C_CONFIG   content is invalid
+*/
+//----------------------------------------------------------------------------------------------------------------------
+int32_t C_OscViewFiler::h_LoadFromMemoryXml(QList<C_OscViewData> &orc_Views,
+                                            const QDomElement &orc_Element)
+{
+   orc_Views.clear();
+
+   QDomNode c_Node = orc_Element.firstChild();
+   while (!c_Node.isNull()) {
+      QDomElement c_Elem = c_Node.toElement();
+      if (!c_Elem.isNull() && c_Elem.tagName() == "opensyde-system-view") {
+         C_OscViewData c_View;
+         const int32_t s32_Result = c_View.FromQDomElement(c_Elem);
+         if (s32_Result != C_NO_ERR) {
+            osc_write_log_error("Loading view data",
+                                "Failed to deserialize view data from XML element.");
+            return s32_Result;
+         }
+         orc_Views.append(c_View);
+      }
+      c_Node = c_Node.nextSibling();
+   }
+
+   return C_NO_ERR;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Save views to memory (XML)
+
+   \param[in]      orc_Views        View data to store
+   \param[in,out]  orc_Doc          DOM document
+
+   \return
+   QDomElement    XML element
+*/
+//----------------------------------------------------------------------------------------------------------------------
+QDomElement C_OscViewFiler::h_SaveToMemoryXml(const QList<C_OscViewData> &orc_Views,
+                                              QDomDocument &orc_Doc)
+{
+   QDomElement c_Root = orc_Doc.createElement("opensyde-system-views");
+
+   for (const C_OscViewData &rc_View : orc_Views) {
+      c_Root.appendChild(rc_View.ToQDomDocument(orc_Doc, "opensyde-system-view"));
+   }
+
+   return c_Root;
 }

@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Filer for data pool files (Multi-Format Implementation)
+   \brief       Data pool reader/writer (multi-format)
 
    Load / save data pool data from / to binary, JSON, or XML
    files using the Qt-native serialization framework.
@@ -62,7 +62,7 @@ using namespace stw::errors;
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool &orc_DataPool,
+int32_t C_OscNodeDataPoolFiler::h_LoadFile(C_OscNodeDataPool &orc_DataPool,
                                                         const QString &orc_FilePath) {
    return mh_DetectAndLoad(orc_DataPool, orc_FilePath);
 }
@@ -77,7 +77,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolFile(C_OscNodeDataPool &orc_DataPo
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_SaveDataPoolFile(const C_OscNodeDataPool &orc_DataPool,
+int32_t C_OscNodeDataPoolFiler::h_SaveFile(const C_OscNodeDataPool &orc_DataPool,
                                                         const QString &orc_FilePath) {
    int32_t s32_Retval = C_NO_ERR;
 
@@ -190,7 +190,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadFromMemoryBinary(C_OscNodeDataPool &orc_Da
    QByteArray containing serialized data
 */
 //----------------------------------------------------------------------------------------------------------------------
-QByteArray C_OscNodeDataPoolFiler::h_SaveToMemoryBinary(const C_OscNodeDataPool &orc_DataPool) const {
+QByteArray C_OscNodeDataPoolFiler::h_SaveToMemoryBinary(const C_OscNodeDataPool &orc_DataPool) {
    QByteArray data;
    QDataStream out(&data, QIODevice::WriteOnly);
    out.setVersion(QDataStream::Qt_6_0);
@@ -287,7 +287,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadFromMemoryJson(C_OscNodeDataPool &orc_Data
    QJsonObject containing serialized data
 */
 //----------------------------------------------------------------------------------------------------------------------
-QJsonObject C_OscNodeDataPoolFiler::h_SaveToMemoryJson(const C_OscNodeDataPool &orc_DataPool) const {
+QJsonObject C_OscNodeDataPoolFiler::h_SaveToMemoryJson(const C_OscNodeDataPool &orc_DataPool) {
    return const_cast<C_OscNodeDataPool &>(orc_DataPool).ToJsonObject();
 }
 
@@ -388,7 +388,7 @@ int32_t C_OscNodeDataPoolFiler::h_LoadFromMemoryXml(C_OscNodeDataPool &orc_DataP
 */
 //----------------------------------------------------------------------------------------------------------------------
 QDomElement C_OscNodeDataPoolFiler::h_SaveToMemoryXml(const C_OscNodeDataPool &orc_DataPool,
-                                                           QDomDocument &ro_Doc) const {
+                                                           QDomDocument &ro_Doc) {
    return const_cast<C_OscNodeDataPool &>(orc_DataPool).ToQDomDocument(ro_Doc, "data-pool");
 }
 

@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Node reader/writer (Multi-Format Implementation)
+   \brief       Node reader/writer (multi-format)
 
    Load / save node data from / to binary, JSON, or XML files using the
    Qt-native serialization framework.
@@ -66,7 +66,7 @@ using namespace stw::errors;
    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode &orc_Node,
+int32_t C_OscNodeFiler::h_LoadFile(C_OscNode &orc_Node,
                                            const QString &orc_FilePath,
                                            const bool oq_SkipContent) {
    return mh_DetectAndLoad(orc_Node, orc_FilePath, oq_SkipContent);
@@ -84,7 +84,7 @@ int32_t C_OscNodeFiler::h_LoadNodeFile(C_OscNode &orc_Node,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_SaveNodeFile(
+int32_t C_OscNodeFiler::h_SaveFile(
    const C_OscNode &orc_Node, const QString &orc_FilePath,
    QStringList *const opc_CreatedFiles,
    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
@@ -502,11 +502,11 @@ QDomElement C_OscNodeFiler::h_SaveToMemoryXml(const C_OscNode &orc_Node,
    C_CONFIG   content of file is invalid
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_LoadNodeFile_Legacy(C_OscNode &orc_Node,
+int32_t C_OscNodeFiler::h_LoadFile_Legacy(C_OscNode &orc_Node,
                                                   const QString &orc_FilePath,
                                                   const bool oq_SkipContent) {
    // Delegate to original implementation for backward compatibility
-   return C_OscNodeFiler::h_LoadNodeFile(orc_Node, orc_FilePath, oq_SkipContent);
+   return C_OscNodeFiler::h_LoadFile(orc_Node, orc_FilePath, oq_SkipContent);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -521,13 +521,13 @@ int32_t C_OscNodeFiler::h_LoadNodeFile_Legacy(C_OscNode &orc_Node,
    C_NO_ERR   data saved
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeFiler::h_SaveNodeFile_Legacy(
+int32_t C_OscNodeFiler::h_SaveFile_Legacy(
    const C_OscNode &orc_Node, const QString &orc_FilePath,
    QStringList *const opc_CreatedFiles,
    const QHash<uint32_t, QString> &orc_NodeIndicesToNameMap) {
    
    // Delegate to original implementation for backward compatibility
-   return C_OscNodeFiler::h_SaveNodeFile(orc_Node, orc_FilePath, opc_CreatedFiles,
+   return C_OscNodeFiler::h_SaveFile(orc_Node, orc_FilePath, opc_CreatedFiles,
                                              orc_NodeIndicesToNameMap);
 }
 

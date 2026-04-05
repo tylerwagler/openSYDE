@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Filer for data pool files (Multi-Format)
+   \brief       Data pool reader/writer (multi-format)
 
    Load / save data pool data from / to binary, JSON, or XML
    files using the Qt-native serialization framework.
@@ -40,10 +40,10 @@ public:
    // --------------------------------------------------------------------------
    // Unified File Operations (Auto-detect format from extension)
    // --------------------------------------------------------------------------
-   static int32_t h_LoadDataPoolFile(C_OscNodeDataPool &orc_DataPool,
-                                     const QString &orc_FilePath);
-   static int32_t h_SaveDataPoolFile(const C_OscNodeDataPool &orc_DataPool,
-                                     const QString &orc_FilePath);
+   static int32_t h_LoadFile(C_OscNodeDataPool &orc_DataPool,
+                             const QString &orc_FilePath);
+   static int32_t h_SaveFile(const C_OscNodeDataPool &orc_DataPool,
+                             const QString &orc_FilePath);
 
    // --------------------------------------------------------------------------
    // Binary Format (Fastest, compact)
@@ -54,7 +54,7 @@ public:
                                const QString &orc_FilePath);
    static int32_t h_LoadFromMemoryBinary(C_OscNodeDataPool &orc_DataPool,
                                          const QByteArray &orc_Data);
-   QByteArray h_SaveToMemoryBinary(const C_OscNodeDataPool &orc_DataPool) const;
+   static QByteArray h_SaveToMemoryBinary(const C_OscNodeDataPool &orc_DataPool);
 
    // --------------------------------------------------------------------------
    // JSON Format (Human-readable, debugging)
@@ -65,7 +65,7 @@ public:
                              const QString &orc_FilePath);
    static int32_t h_LoadFromMemoryJson(C_OscNodeDataPool &orc_DataPool,
                                        const QJsonObject &orc_Object);
-   QJsonObject h_SaveToMemoryJson(const C_OscNodeDataPool &orc_DataPool) const;
+   static QJsonObject h_SaveToMemoryJson(const C_OscNodeDataPool &orc_DataPool);
 
    // --------------------------------------------------------------------------
    // XML Format (Legacy compatibility)
@@ -76,16 +76,16 @@ public:
                             const QString &orc_FilePath);
    static int32_t h_LoadFromMemoryXml(C_OscNodeDataPool &orc_DataPool,
                                       const QDomElement &orc_Element);
-   QDomElement h_SaveToMemoryXml(const C_OscNodeDataPool &orc_DataPool,
-                                 QDomDocument &ro_Doc) const;
+   static QDomElement h_SaveToMemoryXml(const C_OscNodeDataPool &orc_DataPool,
+                                       QDomDocument &ro_Doc);
 
    // --------------------------------------------------------------------------
    // Legacy Compatibility (deprecated - for backward compatibility only)
    // --------------------------------------------------------------------------
-   [[deprecated("Use h_LoadDataPoolFile/h_SaveDataPoolFile with format detection, or format-specific methods")]]
+   [[deprecated("Use h_LoadFile/h_SaveFile with format detection, or format-specific methods")]]
    static int32_t h_LoadDataPool(C_OscNodeDataPool &orc_DataPool,
                                  C_OscXmlParserBase &orc_XmlParser);
-   [[deprecated("Use h_LoadDataPoolFile/h_SaveDataPoolFile with format detection, or format-specific methods")]]
+   [[deprecated("Use h_LoadFile/h_SaveFile with format detection, or format-specific methods")]]
    static void h_SaveDataPool(const C_OscNodeDataPool &orc_DataPool,
                               C_OscXmlParserBase &orc_XmlParser);
 

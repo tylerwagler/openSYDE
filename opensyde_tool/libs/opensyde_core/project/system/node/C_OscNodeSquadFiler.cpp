@@ -1,7 +1,7 @@
  //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       NodeSquad reader/writer with multi-format support
+   \brief       Node squad reader/writer (multi-format)
 
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights
    reserved.
@@ -63,65 +63,20 @@
     C_NO_ERR   no error
     C_CONFIG   content is invalid or incomplete
     C_RANGE    file does not exist
+    C_NOACT    file could not be opened
  */
  //----------------------------------------------------------------------------------------------------------------------
  int32_t C_OscNodeSquadFiler::h_LoadFile(QList<C_OscNodeSquad> &orc_NodeGroups,
                                              const QString &orc_Path) {
-     int32_t s32_Retval = C_NO_ERR;
+     const QString c_Extension = QFileInfo(orc_Path).suffix().toLower();
 
-     if (QFileInfo(orc_Path).exists() && QFileInfo(orc_Path).isFile()) {
-         const QString c_Extension = QFileInfo(orc_Path).suffix().toLower();
-
-         if (c_Extension == "bin") {
-             // Binary format
-             QFile c_File(orc_Path);
-             if (c_File.open(QIODevice::ReadOnly)) {
-                 QDataStream c_Stream(&c_File);
-                 c_Stream.setVersion(QDataStream::Qt_5_12);
-                 s32_Retval = h_LoadBinary(orc_NodeGroups, c_Stream);
-                 c_File.close();
-             } else {
-                 osc_write_log_error("Loading node groups",
-                                     "File \"" + orc_Path + "\" could not be opened for binary reading.");
-                 s32_Retval = C_NOACT;
-             }
-         } else if (c_Extension == "json") {
-             // JSON format
-             QFile c_File(orc_Path);
-             if (c_File.open(QIODevice::ReadOnly | QIODevice::Text)) {
-                 QJsonDocument c_Doc = QJsonDocument::fromJson(c_File.readAll());
-                 c_File.close();
-                 if (c_Doc.isObject()) {
-                     s32_Retval = h_LoadJson(orc_NodeGroups, c_Doc.object());
-                 } else {
-                     osc_write_log_error("Loading node groups",
-                                         "JSON file \"" + orc_Path + "\" does not contain a valid object.");
-                     s32_Retval = C_CONFIG;
-                 }
-             } else {
-                 osc_write_log_error("Loading node groups",
-                                     "File \"" + orc_Path + "\" could not be opened for JSON reading.");
-                 s32_Retval = C_NOACT;
-             }
-         } else {
-             // XML format (default)
-             C_OscXmlParserLog c_XmlParser;
-             s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
-             if (s32_Retval == C_NO_ERR) {
-                 s32_Retval = h_LoadXml(orc_NodeGroups, c_XmlParser);
-             } else {
-                 osc_write_log_error("Loading node groups",
-                                     "File \"" + orc_Path + "\" could not be parsed as XML.");
-                 s32_Retval = C_NOACT;
-             }
-         }
+     if (c_Extension == "bin") {
+         return h_LoadBinary(orc_NodeGroups, orc_Path);
+     } else if (c_Extension == "json") {
+         return h_LoadJson(orc_NodeGroups, orc_Path);
      } else {
-         osc_write_log_error("Loading node groups",
-                             "File \"" + orc_Path + "\" does not exist.");
-         s32_Retval = C_RANGE;
+         return h_LoadXml(orc_NodeGroups, orc_Path);
      }
-
-     return s32_Retval;
  }
 
  //----------------------------------------------------------------------------------------------------------------------
@@ -140,52 +95,206 @@
      const QString c_Extension = QFileInfo(orc_Path).suffix().toLower();
 
      if (c_Extension == "bin") {
-         // Binary format
-         QFile c_File(orc_Path);
-         if (c_File.open(QIODevice::WriteOnly)) {
-             QDataStream c_Stream(&c_File);
-             c_Stream.setVersion(QDataStream::Qt_5_12);
-             const int32_t s32_Result = h_SaveBinary(orc_NodeGroups, c_Stream);
-             c_File.close();
-             return s32_Result;
-         } else {
-             osc_write_log_error("Saving node groups",
-                                 "File \"" + orc_Path + "\" could not be opened for binary writing.");
-             return C_RD_WR;
-         }
+         return h_SaveBinary(orc_NodeGroups, orc_Path);
      } else if (c_Extension == "json") {
-         // JSON format
-         QJsonObject c_Object;
-         const int32_t s32_Result = h_SaveJson(orc_NodeGroups, c_Object);
-         if (s32_Result == C_NO_ERR) {
-             QJsonDocument c_Doc(c_Object);
-             QFile c_File(orc_Path);
-             if (c_File.open(QIODevice::WriteOnly | QIODevice::Text)) {
-                 c_File.write(c_Doc.toJson(QJsonDocument::Indented));
-                 c_File.close();
-             } else {
-                 osc_write_log_error("Saving node groups",
-                                     "File \"" + orc_Path + "\" could not be opened for JSON writing.");
-                 return C_RD_WR;
-             }
-         }
-         return s32_Result;
+         return h_SaveJson(orc_NodeGroups, orc_Path);
      } else {
-         // XML format (default)
-         C_OscXmlParserLog c_XmlParser;
-         const int32_t s32_Result = h_SaveXml(orc_NodeGroups, c_XmlParser);
-         if (s32_Result == C_NO_ERR) {
-             QString c_XmlContent;
-             c_XmlParser.SaveToString(c_XmlContent);
-             return C_OscSystemFilerUtil::h_SaveStringToFile(
-                 c_XmlContent, orc_Path, "Saving node groups");
-         }
-         return s32_Result;
+         return h_SaveXml(orc_NodeGroups, orc_Path);
      }
  }
 
  //----------------------------------------------------------------------------------------------------------------------
- /*! \brief  Load node groups from binary stream
+ /*! \brief  Load node groups from binary file
+
+    \param[out]     orc_NodeGroups   Node groups
+    \param[in]      orc_Path         Path to binary file
+
+    \return
+    C_NO_ERR   no error
+    C_CONFIG   content is invalid or incomplete
+    C_RANGE    file does not exist
+    C_NOACT    file could not be opened
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscNodeSquadFiler::h_LoadBinary(QList<C_OscNodeSquad> &orc_NodeGroups,
+                                               const QString &orc_Path) {
+     if (!QFileInfo(orc_Path).exists() || !QFileInfo(orc_Path).isFile()) {
+         osc_write_log_error("Loading node groups",
+                             "File \"" + orc_Path + "\" does not exist.");
+         return C_RANGE;
+     }
+
+     QFile c_File(orc_Path);
+     if (!c_File.open(QIODevice::ReadOnly)) {
+         osc_write_log_error("Loading node groups",
+                             "File \"" + orc_Path + "\" could not be opened for binary reading.");
+         return C_NOACT;
+     }
+
+     QDataStream c_Stream(&c_File);
+     c_Stream.setVersion(QDataStream::Qt_5_12);
+     const int32_t s32_Retval = h_LoadFromMemoryBinary(orc_NodeGroups, c_Stream);
+     c_File.close();
+     return s32_Retval;
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief  Save node groups to binary file
+
+    \param[in]      orc_NodeGroups   Node groups
+    \param[in]      orc_Path         Path to binary file
+
+    \return
+    C_NO_ERR   data saved
+    C_RD_WR    could not write to file
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscNodeSquadFiler::h_SaveBinary(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                                               const QString &orc_Path) {
+     QFile c_File(orc_Path);
+     if (!c_File.open(QIODevice::WriteOnly)) {
+         osc_write_log_error("Saving node groups",
+                             "File \"" + orc_Path + "\" could not be opened for binary writing.");
+         return C_RD_WR;
+     }
+
+     QDataStream c_Stream(&c_File);
+     c_Stream.setVersion(QDataStream::Qt_5_12);
+     const int32_t s32_Retval = h_SaveToMemoryBinary(orc_NodeGroups, c_Stream);
+     c_File.close();
+     return s32_Retval;
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief  Load node groups from JSON file
+
+    \param[out]     orc_NodeGroups   Node groups
+    \param[in]      orc_Path         Path to JSON file
+
+    \return
+    C_NO_ERR   no error
+    C_CONFIG   content is invalid or incomplete
+    C_RANGE    file does not exist
+    C_NOACT    file could not be opened
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscNodeSquadFiler::h_LoadJson(QList<C_OscNodeSquad> &orc_NodeGroups,
+                                             const QString &orc_Path) {
+     if (!QFileInfo(orc_Path).exists() || !QFileInfo(orc_Path).isFile()) {
+         osc_write_log_error("Loading node groups",
+                             "File \"" + orc_Path + "\" does not exist.");
+         return C_RANGE;
+     }
+
+     QFile c_File(orc_Path);
+     if (!c_File.open(QIODevice::ReadOnly | QIODevice::Text)) {
+         osc_write_log_error("Loading node groups",
+                             "File \"" + orc_Path + "\" could not be opened for JSON reading.");
+         return C_NOACT;
+     }
+
+     QJsonDocument c_Doc = QJsonDocument::fromJson(c_File.readAll());
+     c_File.close();
+     if (!c_Doc.isObject()) {
+         osc_write_log_error("Loading node groups",
+                             "JSON file \"" + orc_Path + "\" does not contain a valid object.");
+         return C_CONFIG;
+     }
+
+     return h_LoadFromMemoryJson(orc_NodeGroups, c_Doc.object());
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief  Save node groups to JSON file
+
+    \param[in]      orc_NodeGroups   Node groups
+    \param[in]      orc_Path         Path to JSON file
+
+    \return
+    C_NO_ERR   data saved
+    C_RD_WR    could not write to file
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscNodeSquadFiler::h_SaveJson(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                                             const QString &orc_Path) {
+     QJsonObject c_Object;
+     const int32_t s32_Result = h_SaveToMemoryJson(orc_NodeGroups, c_Object);
+     if (s32_Result != C_NO_ERR) {
+         return s32_Result;
+     }
+
+     QJsonDocument c_Doc(c_Object);
+     QFile c_File(orc_Path);
+     if (!c_File.open(QIODevice::WriteOnly | QIODevice::Text)) {
+         osc_write_log_error("Saving node groups",
+                             "File \"" + orc_Path + "\" could not be opened for JSON writing.");
+         return C_RD_WR;
+     }
+
+     c_File.write(c_Doc.toJson(QJsonDocument::Indented));
+     c_File.close();
+     return C_NO_ERR;
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief  Load node groups from XML file
+
+    \param[out]     orc_NodeGroups   Node groups
+    \param[in]      orc_Path         Path to XML file
+
+    \return
+    C_NO_ERR   no error
+    C_CONFIG   content is invalid or incomplete
+    C_RANGE    file does not exist
+    C_NOACT    file could not be opened/parsed
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscNodeSquadFiler::h_LoadXml(QList<C_OscNodeSquad> &orc_NodeGroups,
+                                            const QString &orc_Path) {
+     if (!QFileInfo(orc_Path).exists() || !QFileInfo(orc_Path).isFile()) {
+         osc_write_log_error("Loading node groups",
+                             "File \"" + orc_Path + "\" does not exist.");
+         return C_RANGE;
+     }
+
+     C_OscXmlParserLog c_XmlParser;
+     int32_t s32_Retval = c_XmlParser.LoadFromFile(orc_Path);
+     if (s32_Retval != C_NO_ERR) {
+         osc_write_log_error("Loading node groups",
+                             "File \"" + orc_Path + "\" could not be parsed as XML.");
+         return C_NOACT;
+     }
+
+     return h_LoadFromMemoryXml(orc_NodeGroups, c_XmlParser);
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief  Save node groups to XML file
+
+    \param[in]      orc_NodeGroups   Node groups
+    \param[in]      orc_Path         Path to XML file
+
+    \return
+    C_NO_ERR   data saved
+    C_RD_WR    could not write to file
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscNodeSquadFiler::h_SaveXml(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                                            const QString &orc_Path) {
+     C_OscXmlParserLog c_XmlParser;
+     const int32_t s32_Result = h_SaveToMemoryXml(orc_NodeGroups, c_XmlParser);
+     if (s32_Result != C_NO_ERR) {
+         return s32_Result;
+     }
+
+     QString c_XmlContent;
+     c_XmlParser.SaveToString(c_XmlContent);
+     return C_OscSystemFilerUtil::h_SaveStringToFile(
+         c_XmlContent, orc_Path, "Saving node groups");
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief  Load node groups from binary stream (in-memory)
 
     \param[out]     orc_NodeGroups   Node groups
     \param[in,out]  orc_Stream       Binary stream
@@ -195,8 +304,8 @@
     C_CONFIG   content is invalid or incomplete
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscNodeSquadFiler::h_LoadBinary(QList<C_OscNodeSquad> &orc_NodeGroups,
-                                               QDataStream &orc_Stream) {
+ int32_t C_OscNodeSquadFiler::h_LoadFromMemoryBinary(QList<C_OscNodeSquad> &orc_NodeGroups,
+                                                         QDataStream &orc_Stream) {
      orc_NodeGroups.clear();
 
      // Read count
@@ -224,7 +333,33 @@
  }
 
  //----------------------------------------------------------------------------------------------------------------------
- /*! \brief  Load node groups from JSON object
+ /*! \brief  Save node groups to binary stream (in-memory)
+
+    \param[in]      orc_NodeGroups   Node groups
+    \param[in,out]  orc_Stream       Binary stream
+
+    \return
+    C_NO_ERR   no error
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscNodeSquadFiler::h_SaveToMemoryBinary(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                                                       QDataStream &orc_Stream) {
+     // Write count
+     orc_Stream << static_cast<uint32_t>(orc_NodeGroups.size());
+
+     // Write each node group
+     for (const C_OscNodeSquad &rc_NodeGroup : orc_NodeGroups) {
+         const int32_t s32_Result = rc_NodeGroup.ToQDataStream(orc_Stream);
+         if (s32_Result != C_NO_ERR) {
+             return s32_Result;
+         }
+     }
+
+     return C_NO_ERR;
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief  Load node groups from JSON object (in-memory)
 
     \param[out]     orc_NodeGroups   Node groups
     \param[in]      orc_Object       JSON object
@@ -234,8 +369,8 @@
     C_CONFIG   content is invalid or incomplete
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscNodeSquadFiler::h_LoadJson(QList<C_OscNodeSquad> &orc_NodeGroups,
-                                             const QJsonObject &orc_Object) {
+ int32_t C_OscNodeSquadFiler::h_LoadFromMemoryJson(QList<C_OscNodeSquad> &orc_NodeGroups,
+                                                       const QJsonObject &orc_Object) {
      orc_NodeGroups.clear();
 
      // Get array from JSON
@@ -266,7 +401,31 @@
  }
 
  //----------------------------------------------------------------------------------------------------------------------
- /*! \brief  Load node groups from XML parser
+ /*! \brief  Save node groups to JSON object (in-memory)
+
+    \param[in]      orc_NodeGroups   Node groups
+    \param[out]     orc_Object       JSON object
+
+    \return
+    C_NO_ERR   no error
+ */
+ //----------------------------------------------------------------------------------------------------------------------
+ int32_t C_OscNodeSquadFiler::h_SaveToMemoryJson(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                                                     QJsonObject &orc_Object) {
+     QJsonArray c_Array;
+
+     // Convert each node group to JSON
+     for (const C_OscNodeSquad &rc_NodeGroup : orc_NodeGroups) {
+         c_Array.append(rc_NodeGroup.ToJsonObject());
+     }
+
+     orc_Object["node-groups"] = c_Array;
+
+     return C_NO_ERR;
+ }
+
+ //----------------------------------------------------------------------------------------------------------------------
+ /*! \brief  Load node groups from XML parser (in-memory)
 
     \param[out]     orc_NodeGroups   Node groups
     \param[in,out]  orc_XmlParser    XML parser
@@ -276,8 +435,8 @@
     C_CONFIG   content is invalid or incomplete
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscNodeSquadFiler::h_LoadXml(QList<C_OscNodeSquad> &orc_NodeGroups,
-                                            C_OscXmlParserBase &orc_XmlParser) {
+ int32_t C_OscNodeSquadFiler::h_LoadFromMemoryXml(QList<C_OscNodeSquad> &orc_NodeGroups,
+                                                      C_OscXmlParserBase &orc_XmlParser) {
      int32_t s32_Retval = C_NO_ERR;
 
      orc_NodeGroups.clear();
@@ -323,57 +482,7 @@
  }
 
  //----------------------------------------------------------------------------------------------------------------------
- /*! \brief  Save node groups to binary stream
-
-    \param[in]      orc_NodeGroups   Node groups
-    \param[in,out]  orc_Stream       Binary stream
-
-    \return
-    C_NO_ERR   no error
- */
- //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscNodeSquadFiler::h_SaveBinary(const QList<C_OscNodeSquad> &orc_NodeGroups,
-                                               QDataStream &orc_Stream) {
-     // Write count
-     orc_Stream << static_cast<uint32_t>(orc_NodeGroups.size());
-
-     // Write each node group
-     for (const C_OscNodeSquad &rc_NodeGroup : orc_NodeGroups) {
-         const int32_t s32_Result = rc_NodeGroup.ToQDataStream(orc_Stream);
-         if (s32_Result != C_NO_ERR) {
-             return s32_Result;
-         }
-     }
-
-     return C_NO_ERR;
- }
-
- //----------------------------------------------------------------------------------------------------------------------
- /*! \brief  Save node groups to JSON object
-
-    \param[in]      orc_NodeGroups   Node groups
-    \param[out]     orc_Object       JSON object
-
-    \return
-    C_NO_ERR   no error
- */
- //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscNodeSquadFiler::h_SaveJson(const QList<C_OscNodeSquad> &orc_NodeGroups,
-                                             QJsonObject &orc_Object) {
-     QJsonArray c_Array;
-
-     // Convert each node group to JSON
-     for (const C_OscNodeSquad &rc_NodeGroup : orc_NodeGroups) {
-         c_Array.append(rc_NodeGroup.ToJsonObject());
-     }
-
-     orc_Object["node-groups"] = c_Array;
-
-     return C_NO_ERR;
- }
-
- //----------------------------------------------------------------------------------------------------------------------
- /*! \brief  Save node groups to XML parser
+ /*! \brief  Save node groups to XML parser (in-memory)
 
     \param[in]      orc_NodeGroups   Node groups
     \param[in,out]  orc_XmlParser    XML parser
@@ -382,8 +491,8 @@
     C_NO_ERR   no error
  */
  //----------------------------------------------------------------------------------------------------------------------
- int32_t C_OscNodeSquadFiler::h_SaveXml(const QList<C_OscNodeSquad> &orc_NodeGroups,
-                                            C_OscXmlParserBase &orc_XmlParser) {
+ int32_t C_OscNodeSquadFiler::h_SaveToMemoryXml(const QList<C_OscNodeSquad> &orc_NodeGroups,
+                                                    C_OscXmlParserBase &orc_XmlParser) {
      orc_XmlParser.CreateAndSelectNodeChild("node-groups");
      orc_XmlParser.SetAttributeUint32(
          "length", static_cast<uint32_t>(orc_NodeGroups.size()));
@@ -498,7 +607,7 @@
  //----------------------------------------------------------------------------------------------------------------------
  int32_t C_OscNodeSquadFiler::h_LoadNodeGroups(QList<C_OscNodeSquad> &orc_NodeGroups,
                                                    C_OscXmlParserBase &orc_XmlParser) {
-     return h_LoadXml(orc_NodeGroups, orc_XmlParser);
+     return h_LoadFromMemoryXml(orc_NodeGroups, orc_XmlParser);
  }
 
  //----------------------------------------------------------------------------------------------------------------------
@@ -510,6 +619,5 @@
  //----------------------------------------------------------------------------------------------------------------------
  void C_OscNodeSquadFiler::h_SaveNodeGroups(const QList<C_OscNodeSquad> &orc_NodeGroups,
                                                 C_OscXmlParserBase &orc_XmlParser) {
-     h_SaveXml(orc_NodeGroups, orc_XmlParser);
+     h_SaveToMemoryXml(orc_NodeGroups, orc_XmlParser);
  }
-

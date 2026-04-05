@@ -284,7 +284,7 @@ int32_t C_OscSystemDefinitionFiler::h_LoadNodes(QList<C_OscNode> & orc_Nodes, C_
                 }
                 if (q_SkipNode == false)
                 {
-                   s32_Retval = C_OscNodeFiler::h_LoadNodeFile(c_Item, c_FileName, oq_SkipContent);
+                   s32_Retval = C_OscNodeFiler::h_LoadFile(c_Item, c_FileName, oq_SkipContent);
                 }
              }
              else
@@ -480,7 +480,7 @@ int32_t C_OscSystemDefinitionFiler::h_SaveNodes(const QList<C_OscNode> & orc_Nod
                                 "Could not create directory \"" + c_CombinedFolderName + "\"");
          }
          //Save node file
-         s32_Retval = C_OscNodeFiler::h_SaveNodeFile(rc_Node, c_CombinedFileName,
+         s32_Retval = C_OscNodeFiler::h_SaveFile(rc_Node, c_CombinedFileName,
                                                      (opc_CreatedFiles != nullptr) ? &c_CreatedFiles : nullptr,
                                                      c_NodeIndicesToNameMap);
          //Store if necessary
