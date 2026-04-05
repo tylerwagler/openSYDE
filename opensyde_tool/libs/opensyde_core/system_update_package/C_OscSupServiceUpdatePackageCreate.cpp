@@ -31,7 +31,6 @@
 #include "C_OscSupSignatureFiler.hpp"
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
-#include "C_OscSystemDefinitionFilerV2.hpp"
 #include "C_OscUtils.hpp"
 #include "C_OscZipFile.hpp"
 #include "stwerrors.hpp"

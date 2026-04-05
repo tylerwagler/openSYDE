@@ -310,7 +310,7 @@ int32_t C_OscSystemDefinitionFilerV2::h_LoadNodes(
           orc_DeviceDefinitions.LookForDevice(
               orc_Nodes[u32_NodeIndex].c_DeviceType, "",
               orc_Nodes[u32_NodeIndex].u32_SubDeviceIndex);
-      if (pc_Device == NULL) {
+      if (pc_Device == nullptr) {
         s32_Retval = C_OVERFLOW;
         osc_write_log_error("Loading System Definition",
                             "System Definition contains node \"" +
@@ -318,7 +318,7 @@ int32_t C_OscSystemDefinitionFilerV2::h_LoadNodes(
                                 "\" of device type \"" +
                                 orc_Nodes[u32_NodeIndex].c_DeviceType +
                                 "\" which is not a known device.");
-        if (opc_ErrorDetailsMissingDevices == NULL) {
+        if (opc_ErrorDetailsMissingDevices == nullptr) {
           break;
         } else {
           opc_ErrorDetailsMissingDevices->push_back(
@@ -368,7 +368,7 @@ C_OscSystemDefinitionFilerV2::h_LoadBuses(QList<C_OscSystemBus> &orc_Buses,
   if (c_SelectedNode == "bus") {
     do {
       C_OscSystemBus c_Item;
-      s32_Retval = C_OscSystemBusFilerV2::h_LoadBus(c_Item, orc_XmlParser);
+      s32_Retval = C_OscSystemBusFiler::h_LoadBus(c_Item, orc_XmlParser);
       if (s32_Retval == C_NO_ERR) {
         orc_Buses.push_back(c_Item);
       }
@@ -430,7 +430,7 @@ void C_OscSystemDefinitionFilerV2::h_SaveBuses(
                                    static_cast<uint32_t>(orc_Buses.size()));
   for (uint32_t u32_Index = 0U; u32_Index < orc_Buses.size(); u32_Index++) {
     Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("bus") == "bus");
-    C_OscSystemBusFilerV2::h_SaveBus(orc_Buses[u32_Index], orc_XmlParser);
+    C_OscSystemBusFiler::h_SaveBus(orc_Buses[u32_Index], orc_XmlParser);
     // Return
     Q_ASSERT(orc_XmlParser.SelectNodeParent() == "buses");
   }
@@ -472,7 +472,7 @@ int32_t C_OscSystemDefinitionFilerV2::h_LoadSystemDefinition(
   if ((oq_UseDeviceDefinitions == true) &&
       (C_OscSystemDefinition::hc_Devices.WasLoaded() == false)) {
     s32_Retval = C_OscSystemDefinition::hc_Devices.LoadFromFile(
-        orc_PathDeviceDefinitions, false, NULL);
+        orc_PathDeviceDefinitions, false, nullptr);
     if (s32_Retval != C_NO_ERR) {
       osc_write_log_error("Loading System Definition",
                           "Could not load Device definitions.");

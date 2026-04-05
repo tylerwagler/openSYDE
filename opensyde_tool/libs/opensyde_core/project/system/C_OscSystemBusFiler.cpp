@@ -17,7 +17,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_OscSystemBusFiler.hpp"
-#include "C_OscSystemBusFilerV2.hpp"
+#include "C_OscSystemFilerUtil.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
 
@@ -451,7 +451,7 @@ QDomElement C_OscSystemBusFiler::h_SaveToMemoryXml(
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Load bus from legacy XML parser
 
-   Delegates to C_OscSystemBusFilerV2 for parsing bus data from a C_OscXmlParserBase context.
+   Parses bus data from a C_OscXmlParserBase context (legacy V2 XML format).
    This is used by C_OscSystemDefinitionFiler where buses are embedded inline in the system definition XML.
 
    pre-condition: the passed XML parser has the active node set to "bus"
@@ -468,13 +468,103 @@ QDomElement C_OscSystemBusFiler::h_SaveToMemoryXml(
 int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus &orc_Bus,
                                        C_OscXmlParserBase &orc_XmlParser)
 {
-   return C_OscSystemBusFilerV2::h_LoadBus(orc_Bus, orc_XmlParser);
+   int32_t s32_Retval = C_NO_ERR;
+
+   if (orc_XmlParser.SelectNodeChild("core") == "core") {
+      if (orc_XmlParser.SelectNodeChild("name") == "name") {
+         orc_Bus.c_Name = orc_XmlParser.GetNodeContent();
+         Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+      } else {
+         osc_write_log_error("Loading bus definition",
+                             "Could not find \"core\".\"name\" node.");
+         s32_Retval = C_CONFIG;
+      }
+      if (s32_Retval == C_NO_ERR) {
+         if (orc_XmlParser.SelectNodeChild("comment") == "comment") {
+            orc_Bus.c_Comment = orc_XmlParser.GetNodeContent();
+            Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+         }
+         if (orc_XmlParser.SelectNodeChild("type") == "type") {
+            s32_Retval = C_OscSystemFilerUtil::h_BusTypeStringToEnum(
+                orc_XmlParser.GetNodeContent(), orc_Bus.e_Type);
+            if (s32_Retval != C_NO_ERR) {
+               osc_write_log_error("Loading bus definition",
+                                   "Invalid value for \"core\".\"type\" node.");
+               s32_Retval = C_CONFIG;
+            }
+            Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+         } else {
+            osc_write_log_error("Loading bus definition",
+                                "Could not find \"core\".\"type\" node.");
+            s32_Retval = C_CONFIG;
+         }
+      }
+      if (s32_Retval == C_NO_ERR) {
+         if (orc_XmlParser.SelectNodeChild("bitrate") == "bitrate") {
+            try {
+               orc_Bus.u64_BitRate = orc_XmlParser.GetAttributeSint64("number");
+            } catch (...) {
+               osc_write_log_error("Loading bus definition",
+                                   "Invalid value for \"bitrate\".\"number\".");
+               orc_Bus.u64_BitRate = 0ULL;
+               s32_Retval = C_CONFIG;
+            }
+            Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+         } else {
+            osc_write_log_error("Loading bus definition",
+                                "Could not find \"core\".\"bitrate\" node.");
+            s32_Retval = C_CONFIG;
+         }
+      }
+      if (s32_Retval == C_NO_ERR) {
+         if (orc_XmlParser.SelectNodeChild("bus-id") == "bus-id") {
+            try {
+               orc_Bus.u8_BusId =
+                   static_cast<uint8_t>(orc_XmlParser.GetAttributeUint32("number"));
+            } catch (...) {
+               osc_write_log_error("Loading bus definition",
+                                   "Invalid value for \"bus-id\".\"number\".");
+               orc_Bus.u8_BusId = 0;
+               s32_Retval = C_CONFIG;
+            }
+            Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+         } else {
+            osc_write_log_error("Loading bus definition",
+                                "Could not find \"core\".\"bus-id\" node.");
+            s32_Retval = C_CONFIG;
+         }
+      }
+      if (s32_Retval == C_NO_ERR) {
+         if (orc_XmlParser.SelectNodeChild("rx-delta-time") == "rx-delta-time") {
+            try {
+               orc_Bus.u16_RxTimeoutOffsetMs =
+                   static_cast<uint16_t>(orc_XmlParser.GetAttributeUint32("number"));
+            } catch (...) {
+               osc_write_log_error("Loading bus definition",
+                                   "Invalid value for \"rx-delta-time\".\"number\".");
+               orc_Bus.u16_RxTimeoutOffsetMs = 0U;
+               s32_Retval = C_CONFIG;
+            }
+            Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+         } else {
+            osc_write_log_error("Loading bus definition",
+                                "Could not find \"core\".\"rx-delta-time\" node.");
+            s32_Retval = C_CONFIG;
+         }
+      }
+      Q_ASSERT(orc_XmlParser.SelectNodeParent() == "bus");
+   } else {
+      osc_write_log_error("Loading bus definition",
+                          "Could not find \"core\" node.");
+      s32_Retval = C_CONFIG;
+   }
+   return s32_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Save bus to legacy XML parser
 
-   Delegates to C_OscSystemBusFilerV2 for writing bus data into a C_OscXmlParserBase context.
+   Writes bus data into a C_OscXmlParserBase context (legacy V2 XML format).
    This is used by C_OscSystemDefinitionFiler where buses are embedded inline in the system definition XML.
 
    pre-condition: the passed XML parser has the active node set to "bus"
@@ -487,7 +577,28 @@ int32_t C_OscSystemBusFiler::h_LoadBus(C_OscSystemBus &orc_Bus,
 void C_OscSystemBusFiler::h_SaveBus(const C_OscSystemBus &orc_Bus,
                                     C_OscXmlParserBase &orc_XmlParser)
 {
-   C_OscSystemBusFilerV2::h_SaveBus(orc_Bus, orc_XmlParser);
+   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("core") == "core");
+   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("name") == "name");
+   orc_XmlParser.SetNodeContent(orc_Bus.c_Name);
+   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+   orc_XmlParser.CreateNodeChild("comment", orc_Bus.c_Comment);
+   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("type") == "type");
+   orc_XmlParser.SetNodeContent(
+       C_OscSystemFilerUtil::h_BusTypeEnumToString(orc_Bus.e_Type));
+   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("bitrate") == "bitrate");
+   orc_XmlParser.SetAttributeString("number",
+                                    QString::number(orc_Bus.u64_BitRate));
+   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("bus-id") == "bus-id");
+   orc_XmlParser.SetAttributeUint32("number", orc_Bus.u8_BusId);
+   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+   Q_ASSERT(orc_XmlParser.CreateAndSelectNodeChild("rx-delta-time") ==
+            "rx-delta-time");
+   orc_XmlParser.SetAttributeString(
+       "number", QString::number(orc_Bus.u16_RxTimeoutOffsetMs));
+   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "core");
+   Q_ASSERT(orc_XmlParser.SelectNodeParent() == "bus");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

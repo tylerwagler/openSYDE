@@ -248,7 +248,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2Filer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeDataPoolFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeFilerV2.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemBusFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemDefinitionFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNode.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquad.cpp
@@ -353,7 +352,6 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2Filer.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeDataPoolFilerV2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeFilerV2.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemBusFilerV2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemDefinitionFilerV2.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNode.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquad.hpp
