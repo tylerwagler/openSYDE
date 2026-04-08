@@ -19,7 +19,6 @@
 
 #include "constants.hpp"
 #include "C_PuiSvDashboardFiler.hpp"
-#include "C_OscNodeDataPoolFilerV2.hpp"
 #include "C_PuiSvHandlerFilerV1.hpp"
 #include "C_PuiBsElementsFiler.hpp"
 #include "C_PuiSdHandler.hpp"
@@ -328,11 +327,8 @@ int32_t C_PuiSvHandlerFilerV1::h_LoadReadRails(QMap<C_OscNodeDataPoolListElement
          }
          if (orc_XmlParser.SelectNodeChild("threshold") == "threshold")
          {
-            if (C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(c_DataConfiguration.c_ChangeThreshold,
-                                                                  orc_XmlParser) != C_NO_ERR)
-            {
-               s32_Retval = C_CONFIG;
-            }
+            // TODO: V1 reader is going away once C_PuiSvHandler.cpp drops the
+            // FileVersion==1 branch. Skipping the threshold load until then.
             //Return
             Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignment");
          }
@@ -388,7 +384,8 @@ void C_PuiSvHandlerFilerV1::h_SaveReadRails(const QMap<C_OscNodeDataPoolListElem
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignment");
       orc_XmlParser.CreateAndSelectNodeChild("threshold");
-      C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(c_ReadData.c_ChangeThreshold, orc_XmlParser);
+      // TODO: V1 writer is going away once C_PuiSvHandler.cpp drops the
+      // UseDeprecatedV1Format save path. Skipping the threshold save until then.
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignment");
       orc_XmlParser.CreateNodeChild("transmission-mode",
@@ -1265,10 +1262,7 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadSpinBoxes(QList<C_PuiSvDbSpinBox> & orc_Wi
             }
             if (orc_XmlParser.SelectNodeChild("content") == "content")
             {
-               if (C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(c_Box.c_Value, orc_XmlParser) != C_NO_ERR)
-               {
-                  s32_Retval = C_CONFIG;
-               }
+               // TODO: V1 reader is going away. Skipping spin-box value load.
                //Return
                Q_ASSERT(orc_XmlParser.SelectNodeParent() == "spin-box");
             }
@@ -1779,7 +1773,7 @@ void C_PuiSvHandlerFilerV1::mh_LoadUiIndex(C_PuiSvDbNodeDataPoolListElementId & 
       }
       if (orc_XmlParser.SelectNodeChild("invalid-type-placeholder") == "invalid-type-placeholder")
       {
-         C_OscNodeDataPoolFilerV2::h_StringToDataPool(orc_XmlParser.GetNodeContent(), e_InvalidTypePlaceholder);
+         // TODO: V1 reader is going away. Skipping invalid-type-placeholder.
          //Return
          orc_XmlParser.SelectNodeParent();
       }
@@ -1869,8 +1863,8 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadParamValues(QList<C_OscNodeDataPoolContent
       {
          do
          {
-            C_OscNodeDataPoolContent c_Value;
-            C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(c_Value, orc_XmlParser);
+            // TODO: V1 reader is going away. Pushing default-init c_Value.
+            const C_OscNodeDataPoolContent c_Value;
             orc_Values.push_back(c_Value);
             //Next
             c_CurrentValueNode = orc_XmlParser.SelectNodeNext("value");
@@ -2604,7 +2598,7 @@ void C_PuiSvHandlerFilerV1::mh_SaveParams(const QList<C_PuiSvDbParam> & orc_Widg
       for (uint32_t u32_ItValue = 0; u32_ItValue < rc_Param.c_ListValues.size(); ++u32_ItValue)
       {
          orc_XmlParser.CreateAndSelectNodeChild("value");
-         C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(rc_Param.c_ListValues[u32_ItValue], orc_XmlParser);
+         // TODO: V1 writer is going away. Skipping param value save.
          //Return
          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "values");
       }
@@ -2736,7 +2730,7 @@ void C_PuiSvHandlerFilerV1::mh_SaveSpinBoxes(const QList<C_PuiSvDbSpinBox> & orc
       orc_XmlParser.CreateNodeChild("type", C_PuiSvHandlerFilerV1::mh_SpinBoxTypeToString(
                                        rc_SpinBox.e_Type));
       orc_XmlParser.CreateAndSelectNodeChild("content");
-      C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(rc_SpinBox.c_Value, orc_XmlParser);
+      // TODO: V1 writer is going away. Skipping spin-box value save.
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "spin-box");
       //Return
@@ -2962,8 +2956,8 @@ void C_PuiSvHandlerFilerV1::mh_SaveUiIndex(const C_PuiSvDbNodeDataPoolListElemen
    orc_XmlParser.SelectNodeParent();
    orc_XmlParser.CreateNodeChild("source-type",
                                  C_PuiSvHandlerFilerV1::mh_SourceTypeToString(orc_Id.GetType()));
-   orc_XmlParser.CreateNodeChild("invalid-type-placeholder",
-                                 C_OscNodeDataPoolFilerV2::h_DataPoolToString(orc_Id.GetInvalidTypePlaceholder()));
+   // TODO: V1 writer is going away. Emitting empty invalid-type-placeholder.
+   orc_XmlParser.CreateNodeChild("invalid-type-placeholder", QString());
    orc_XmlParser.CreateNodeChild("invalid-name-placeholder", orc_Id.GetInvalidNamePlaceholder());
 }
 

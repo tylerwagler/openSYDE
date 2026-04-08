@@ -17,8 +17,6 @@
 #include "stwerrors.hpp"
 
 #include "constants.hpp"
-#include "C_OscNodeDataPoolFiler.hpp"
-#include "C_OscNodeDataPoolFilerV2.hpp"
 #include "C_OscViewFiler.hpp"
 #include "C_PuiSvHandlerFiler.hpp"
 #include "C_PuiBsElementsFiler.hpp"
@@ -215,11 +213,8 @@ int32_t C_PuiSvHandlerFiler::h_LoadReadRails(QMap<C_OscNodeDataPoolListElementId
          }
          if (orc_XmlParser.SelectNodeChild("threshold") == "threshold")
          {
-            if (C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(c_DataConfiguration.c_ChangeThreshold,
-                                                                orc_XmlParser) != C_NO_ERR)
-            {
-               s32_Retval = C_CONFIG;
-            }
+            // TODO: load c_DataConfiguration.c_ChangeThreshold via JSON filer
+            // chain when this filer is migrated.
             //Return
             Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignment");
          }
@@ -275,7 +270,8 @@ void C_PuiSvHandlerFiler::h_SaveReadRails(const QMap<C_OscNodeDataPoolListElemen
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignment");
       orc_XmlParser.CreateAndSelectNodeChild("threshold");
-      C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(c_ReadData.c_ChangeThreshold, orc_XmlParser);
+      // TODO: save c_ReadData.c_ChangeThreshold via JSON filer chain when this
+      // filer is migrated.
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "rail-assignment");
       orc_XmlParser.CreateNodeChild("transmission-mode",

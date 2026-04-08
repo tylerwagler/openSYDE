@@ -242,14 +242,14 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscDeviceDefinitionFilerV1.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSupportedCanInterfaceFeatures.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/device_definition/C_OscSubDeviceDefinition.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackage.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageFiler.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2Filer.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackage.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/target_support_package/C_OscTargetSupportPackageV2Filer.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeDataPoolFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscNodeFilerV2.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/FileLoadersV2/C_OscSystemDefinitionFilerV2.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNode.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNode.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquad.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeSquadFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeFiler.cpp
@@ -260,10 +260,15 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeComInterfaceSettings.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPool.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContent.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContentFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContentUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolDataSet.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolDataSetFiler.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolList.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElement.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementId.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementOptArrayId.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListId.cpp
@@ -272,19 +277,26 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeStwFlashloaderSettings.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolId.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessage.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageUniqueId.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageContainer.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageContainerFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageIdentificationIndices.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanProtocol.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanProtocolFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanSignal.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanSignalFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanUtil.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanInterfaceId.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerMappableSignal.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerMappableSignal_Serialization.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerMappableSignalFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfo.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfo_Serialization.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfoFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo_Serialization.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfoFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJob.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler.cpp
@@ -366,9 +378,13 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeComInterfaceSettings.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPool.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContent.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolContentFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolDataSet.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolDataSetFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolList.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElement.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementId.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListElementOptArrayId.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeDataPoolListId.hpp
@@ -376,16 +392,23 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeProperties.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/C_OscNodeStwFlashloaderSettings.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessage.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageUniqueId.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageContainer.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageContainerFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanMessageIdentificationIndices.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanProtocol.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanProtocolFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanSignal.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanSignalFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanUtil.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/C_OscCanInterfaceId.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerMappableSignal.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerMappableSignalFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfo.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerDeviceInfoFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfo.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerInfoFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/can/can_open/C_OscCanOpenManagerFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJob.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/project/system/node/data_logger/C_OscDataLoggerJobFiler.hpp
@@ -830,6 +853,8 @@ else()
 
    set(OPENSYDE_CORE_SERIALIZATION_SOURCES
       ${CMAKE_CURRENT_SOURCE_DIR}/serialization/C_OscFilerUtil.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/serialization/C_OscJsonUtil.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/serialization/C_OscJsonUtil.hpp
    )
 
    set(OPENSYDE_CORE_SERIALIZATION_INCLUDE_DIRECTORIES

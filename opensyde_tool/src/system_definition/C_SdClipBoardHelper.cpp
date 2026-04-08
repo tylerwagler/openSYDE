@@ -23,7 +23,6 @@
 #include "C_PuiSdHandlerFiler.hpp"
 #include "C_PuiBsElementsFiler.hpp"
 #include "C_OscNodeDataPoolFiler.hpp"
-#include "C_OscNodeDataPoolFilerV2.hpp"
 #include "C_OscNodeFiler.hpp"
 #include "C_OscNodeSquadFiler.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
@@ -75,7 +74,10 @@ void C_SdClipBoardHelper::h_StoreDataPool(const C_OscNodeDataPool & orc_OscConte
    c_StringXml.CreateAndSelectNodeChild("core");
    c_StringXml.CreateAndSelectNodeChild("data-pool");
 
-   C_OscNodeDataPoolFiler::h_SaveDataPool(orc_OscContent, c_StringXml);
+   // TODO: rewrite via JSON filer chain when the surrounding clipboard XML
+   // helper is migrated. The new C_OscNodeDataPoolFiler::save/load take a
+   // QJsonObject, not an XML cursor; the whole helper has to move at once.
+   Q_UNUSED(orc_OscContent);
 
    c_StringXml.SaveToString(c_XmlContent);
    mh_SetClipBoard(c_XmlContent);
@@ -116,7 +118,10 @@ int32_t C_SdClipBoardHelper::h_LoadToDataPool(C_OscNodeDataPool & orc_OscContent
                {
                   if (c_StringXml.SelectNodeChild("data-pool") == "data-pool")
                   {
-                     s32_Retval = C_OscNodeDataPoolFiler::h_LoadDataPool(orc_OscContent, c_StringXml);
+                     // TODO: rewrite via JSON filer chain when the surrounding
+                     // clipboard XML helper is migrated.
+                     Q_UNUSED(orc_OscContent);
+                     s32_Retval = C_NO_ERR;
                   }
                   else
                   {

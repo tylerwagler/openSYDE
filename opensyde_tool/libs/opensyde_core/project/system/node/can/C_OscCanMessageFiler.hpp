@@ -1,23 +1,22 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       JSON filer for the CANopen managers attached to a node (header)
+   \brief       JSON filer for C_OscCanMessage (header)
 
-   The unit serialized here is the per-node QHash that maps a CAN interface
-   number to one CANopen manager.  Composes the manager-info filer.
+   Composes the signal filer.  Embeds the CANopen owner-node interface id
+   inline as a small sub-object.
 
    \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
                 Copyright 2026 Elytron Defense. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_OSCCANOPENMANAGERFILER_HPP
-#define C_OSCCANOPENMANAGERFILER_HPP
+#ifndef C_OSCCANMESSAGEFILER_HPP
+#define C_OSCCANMESSAGEFILER_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_OscCanOpenManagerInfo.hpp"
+#include "C_OscCanMessage.hpp"
 #include "stwtypes.hpp"
 
-#include <QHash>
 #include <QJsonObject>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -27,14 +26,14 @@ namespace opensyde_core
 {
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_OscCanOpenManagerFiler
+class C_OscCanMessageFiler
 {
 public:
-   static QJsonObject save(const QHash<uint8_t, C_OscCanOpenManagerInfo> & orc_Managers);
-   static int32_t load(const QJsonObject & orc_Json, QHash<uint8_t, C_OscCanOpenManagerInfo> & orc_Managers);
+   static QJsonObject save(const C_OscCanMessage & orc_Message);
+   static int32_t load(const QJsonObject & orc_Json, C_OscCanMessage & orc_Message);
 };
 
 } // namespace opensyde_core
 } // namespace stw
 
-#endif // C_OSCCANOPENMANAGERFILER_HPP
+#endif // C_OSCCANMESSAGEFILER_HPP

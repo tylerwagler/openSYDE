@@ -23,14 +23,15 @@
 #include <limits>
 
 
+#include "C_OscNodeDataPoolContentFiler.hpp"
 #include "C_OscNodeDataPoolContentUtil.hpp"
-#include "C_OscNodeDataPoolFiler.hpp"
-#include "C_OscNodeDataPoolFilerV2.hpp"
 #include "C_OscUtils.hpp"
-#include "C_OscXmlParser.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
 #include "stwerrors.hpp"
 #include "stwtypes.hpp"
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonParseError>
 
 
 /* -- Used Namespaces
@@ -2742,46 +2743,47 @@ int32_t C_SdNdeDpContentUtil::h_SetDataVariableFromGenericWithScaling(
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Store current content as string
 
-   Use case: store to string to later use the same string to restore the same
-   content
+    Use case: store to string to later use the same string to restore the same
+    content
 
-   \param[in]  orc_Input   Content to store
+    \param[in]  orc_Input   Content to store
 
-   \return
-   Current content encoded as string
+    \return
+    Current content encoded as string
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString C_SdNdeDpContentUtil::h_GetAllContentAsString(
     const C_OscNodeDataPoolContent &orc_Input) {
-  QString c_Retval;
-  C_OscXmlParser c_Xml;
-  c_Xml.CreateAndSelectNodeChild("opensyde-content");
-  C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(orc_Input, c_Xml);
-  c_Xml.SaveToString(c_Retval);
-  return c_Retval;
+  const QJsonDocument c_Doc(C_OscNodeDataPoolContentFiler::save(orc_Input));
+
+  return QString::fromUtf8(c_Doc.toJson(QJsonDocument::Indented));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Restore content from string
 
-   Use case: store to string to later use the same string to restore the same
-   content
+    Use case: store to string to later use the same string to restore the same
+    content
 
-   \param[in]   orc_Input     String to base restoration on
-   \param[out]  orc_Output    Output of restoration
+    \param[in]   orc_Input     String to base restoration on
+    \param[out]  orc_Output    Output of restoration
 
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
+    \return
+    C_NO_ERR   data read
+    C_CONFIG   content of file is invalid or incomplete
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_SdNdeDpContentUtil::h_SetAllContentFromString(
     const QString &orc_Input, C_OscNodeDataPoolContent &orc_Output) {
-  C_OscXmlParser c_Xml;
+  QJsonParseError c_ParseErr;
+  const QJsonDocument c_Doc =
+      QJsonDocument::fromJson(orc_Input.toUtf8(), &c_ParseErr);
 
-  c_Xml.LoadFromString(orc_Input);
-  c_Xml.SelectRoot();
-  return C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(orc_Output, c_Xml);
+  if ((c_ParseErr.error != QJsonParseError::NoError) || (!c_Doc.isObject())) {
+    return C_CONFIG;
+  }
+
+  return C_OscNodeDataPoolContentFiler::load(c_Doc.object(), orc_Output);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

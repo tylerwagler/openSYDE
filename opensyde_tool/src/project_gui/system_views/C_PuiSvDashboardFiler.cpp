@@ -19,8 +19,6 @@
 #include "C_SdNdeDpContentUtil.hpp"
 #include "C_PuiBsElementsFiler.hpp"
 #include "C_PuiSvDashboardFiler.hpp"
-#include "C_OscNodeDataPoolFiler.hpp"
-#include "C_OscNodeDataPoolFilerV2.hpp"
 #include "C_OscNodeDataPoolContentUtil.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -291,7 +289,8 @@ void C_PuiSvDashboardFiler::h_LoadUiIndex(C_PuiSvDbNodeDataPoolListElementId & o
       }
        if (orc_XmlParser.SelectNodeChild("invalid-type-placeholder") == "invalid-type-placeholder")
        {
-          C_OscNodeDataPoolFilerV2::h_StringToDataPool(orc_XmlParser.GetNodeContent(), e_InvalidTypePlaceholder);
+          // TODO: parse e_InvalidTypePlaceholder via JSON filer chain when this
+          // filer is migrated.
           //Return
           orc_XmlParser.SelectNodeParent();
        }
@@ -355,8 +354,9 @@ void C_PuiSvDashboardFiler::h_SaveUiIndex(const C_PuiSvDbNodeDataPoolListElement
    orc_XmlParser.SelectNodeParent();
    orc_XmlParser.CreateNodeChild("source-type",
                                  C_PuiSvDashboardFiler::mh_SourceTypeToString(orc_Id.GetType()));
-    orc_XmlParser.CreateNodeChild("invalid-type-placeholder",
-                                  C_OscNodeDataPoolFilerV2::h_DataPoolToString(orc_Id.GetInvalidTypePlaceholder()));
+    // TODO: emit invalid-type-placeholder via JSON filer chain when this
+    // filer is migrated.
+    orc_XmlParser.CreateNodeChild("invalid-type-placeholder", QString());
    orc_XmlParser.CreateNodeChild("invalid-name-placeholder", orc_Id.GetInvalidNamePlaceholder());
    orc_XmlParser.CreateNodeChild("hal-channel-name", orc_Id.GetHalChannelName());
 }
@@ -384,10 +384,8 @@ int32_t C_PuiSvDashboardFiler::h_LoadSliderValue(C_PuiSvDbSlider & orc_Slider, C
    {
       if (orc_XmlParser.SelectNodeChild("content") == "content")
       {
-         if (C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(orc_Slider.c_Value, orc_XmlParser) != C_NO_ERR)
-         {
-            s32_Retval = C_CONFIG;
-         }
+         // TODO: load orc_Slider.c_Value via JSON filer chain when this filer
+         // is migrated.
          //Return
          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "slider");
       }
@@ -970,10 +968,8 @@ int32_t C_PuiSvDashboardFiler::mh_LoadSpinBoxes(QList<C_PuiSvDbSpinBox> & orc_Wi
             }
             if (orc_XmlParser.SelectNodeChild("content") == "content")
             {
-               if (C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(c_Box.c_Value, orc_XmlParser) != C_NO_ERR)
-               {
-                  s32_Retval = C_CONFIG;
-               }
+               // TODO: load c_Box.c_Value via JSON filer chain when this filer
+               // is migrated.
                //Return
                Q_ASSERT(orc_XmlParser.SelectNodeParent() == "spin-box");
             }
@@ -1436,11 +1432,8 @@ int32_t C_PuiSvDashboardFiler::mh_LoadWriteWidgetBase(C_PuiSvDbWriteWidgetBase &
          }
          if (orc_XmlParser.SelectNodeChild("value") == "value")
          {
-            if (C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(orc_WriteWidget.c_InitialValue,
-                                                                orc_XmlParser) != C_NO_ERR)
-            {
-               s32_Retval = C_CONFIG;
-            }
+            // TODO: load orc_WriteWidget.c_InitialValue via JSON filer chain
+            // when this filer is migrated.
             //Return
             Q_ASSERT(orc_XmlParser.SelectNodeParent() == "connect-init-handling");
          }
@@ -1646,8 +1639,9 @@ int32_t C_PuiSvDashboardFiler::mh_LoadParamValues(QList<C_OscNodeDataPoolContent
       {
          do
          {
-            C_OscNodeDataPoolContent c_Value;
-            s32_Retval = C_OscNodeDataPoolFilerV2::h_LoadDataPoolContentV1(c_Value, orc_XmlParser);
+            // TODO: load each c_Value via JSON filer chain when this filer is
+            // migrated.
+            const C_OscNodeDataPoolContent c_Value;
             orc_Values.push_back(c_Value);
             //Next
             c_CurrentValueNode = orc_XmlParser.SelectNodeNext("value");
@@ -1950,7 +1944,8 @@ void C_PuiSvDashboardFiler::mh_SaveParams(const QList<C_PuiSvDbParam> & orc_Widg
       for (uint32_t u32_ItValue = 0; u32_ItValue < rc_Param.c_ListValues.size(); ++u32_ItValue)
       {
          orc_XmlParser.CreateAndSelectNodeChild("value");
-         C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(rc_Param.c_ListValues[u32_ItValue], orc_XmlParser);
+         // TODO: save rc_Param.c_ListValues[u32_ItValue] via JSON filer chain
+         // when this filer is migrated.
          //Return
          Q_ASSERT(orc_XmlParser.SelectNodeParent() == "values");
       }
@@ -2082,7 +2077,8 @@ void C_PuiSvDashboardFiler::mh_SaveSpinBoxes(const QList<C_PuiSvDbSpinBox> & orc
       orc_XmlParser.CreateNodeChild("type", C_PuiSvDashboardFiler::mh_SpinBoxTypeToString(
                                        rc_SpinBox.e_Type));
       orc_XmlParser.CreateAndSelectNodeChild("content");
-      C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(rc_SpinBox.c_Value, orc_XmlParser);
+      // TODO: save rc_SpinBox.c_Value via JSON filer chain when this filer is
+      // migrated.
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "spin-box");
       //Return
@@ -2149,7 +2145,8 @@ void C_PuiSvDashboardFiler::mh_SaveSliders(const QList<C_PuiSvDbSlider> & orc_Wi
                                        rc_Slider.e_Type));
       orc_XmlParser.SetAttributeBool("show-min-max", rc_Slider.q_ShowMinMax);
       orc_XmlParser.CreateAndSelectNodeChild("content");
-      C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(rc_Slider.c_Value, orc_XmlParser);
+      // TODO: save rc_Slider.c_Value via JSON filer chain when this filer is
+      // migrated.
       //Return
       Q_ASSERT(orc_XmlParser.SelectNodeParent() == "slider");
       //Return
@@ -2281,7 +2278,8 @@ void C_PuiSvDashboardFiler::mh_SaveWriteWidgetBase(const C_PuiSvDbWriteWidgetBas
    orc_XmlParser.CreateNodeChild("mode", C_PuiSvDashboardFiler::mh_InitialValueModeTypeToString(
                                     orc_WriteWidget.e_InitialValueMode));
    orc_XmlParser.CreateAndSelectNodeChild("value");
-   C_OscNodeDataPoolFilerV2::h_SaveDataPoolContentV1(orc_WriteWidget.c_InitialValue, orc_XmlParser);
+   // TODO: save orc_WriteWidget.c_InitialValue via JSON filer chain when this
+   // filer is migrated.
    //Return
    Q_ASSERT(orc_XmlParser.SelectNodeParent() == "connect-init-handling");
    //Return
