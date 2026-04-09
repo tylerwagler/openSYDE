@@ -1,104 +1,38 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Data pool reader/writer (multi-format)
+   \brief       JSON filer for C_OscNodeDataPool (header)
 
-   Load / save data pool data from / to binary, JSON, or XML
-   files using the Qt-native serialization framework.
+   Composes the List filer.
 
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
-   reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Defense. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCNODEDATAPOOLFILER_HPP
 #define C_OSCNODEDATAPOOLFILER_HPP
 
-/* -- Includes
- * ------------------------------------------------------------------------------------------------------
- */
-#include "C_OscFilerUtil.hpp"
+/* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_OscNodeDataPool.hpp"
-#include "C_OscXmlParser.hpp"
 #include "stwtypes.hpp"
-#include <QList>
 
-/* -- Namespace
- * -----------------------------------------------------------------------------------------------------
- */
-namespace stw {
-namespace opensyde_core {
-/* -- Global Constants
- * ----------------------------------------------------------------------------------------------
- */
+#include <QJsonObject>
 
-/* -- Types
- * ---------------------------------------------------------------------------------------------------------
- */
+/* -- Namespace ----------------------------------------------------------------------------------------------------- */
+namespace stw
+{
+namespace opensyde_core
+{
+/* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_OscNodeDataPoolFiler {
+class C_OscNodeDataPoolFiler
+{
 public:
-   // --------------------------------------------------------------------------
-   // Unified File Operations (Auto-detect format from extension)
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadFile(C_OscNodeDataPool &orc_DataPool,
-                             const QString &orc_FilePath);
-   static int32_t h_SaveFile(const C_OscNodeDataPool &orc_DataPool,
-                             const QString &orc_FilePath);
-
-   // --------------------------------------------------------------------------
-   // Binary Format (Fastest, compact)
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadBinary(C_OscNodeDataPool &orc_DataPool,
-                               const QString &orc_FilePath);
-   static int32_t h_SaveBinary(const C_OscNodeDataPool &orc_DataPool,
-                               const QString &orc_FilePath);
-   static int32_t h_LoadFromMemoryBinary(C_OscNodeDataPool &orc_DataPool,
-                                         const QByteArray &orc_Data);
-   static QByteArray h_SaveToMemoryBinary(const C_OscNodeDataPool &orc_DataPool);
-
-   // --------------------------------------------------------------------------
-   // JSON Format (Human-readable, debugging)
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadJson(C_OscNodeDataPool &orc_DataPool,
-                             const QString &orc_FilePath);
-   static int32_t h_SaveJson(const C_OscNodeDataPool &orc_DataPool,
-                             const QString &orc_FilePath);
-   static int32_t h_LoadFromMemoryJson(C_OscNodeDataPool &orc_DataPool,
-                                       const QJsonObject &orc_Object);
-   static QJsonObject h_SaveToMemoryJson(const C_OscNodeDataPool &orc_DataPool);
-
-   // --------------------------------------------------------------------------
-   // XML Format (Legacy compatibility)
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadXml(C_OscNodeDataPool &orc_DataPool,
-                            const QString &orc_FilePath);
-   static int32_t h_SaveXml(const C_OscNodeDataPool &orc_DataPool,
-                            const QString &orc_FilePath);
-   static int32_t h_LoadFromMemoryXml(C_OscNodeDataPool &orc_DataPool,
-                                      const QDomElement &orc_Element);
-   static QDomElement h_SaveToMemoryXml(const C_OscNodeDataPool &orc_DataPool,
-                                       QDomDocument &ro_Doc);
-
-   // --------------------------------------------------------------------------
-   // Legacy Compatibility (deprecated - for backward compatibility only)
-   // --------------------------------------------------------------------------
-   [[deprecated("Use h_LoadFile/h_SaveFile with format detection, or format-specific methods")]]
-   static int32_t h_LoadDataPool(C_OscNodeDataPool &orc_DataPool,
-                                 C_OscXmlParserBase &orc_XmlParser);
-   [[deprecated("Use h_LoadFile/h_SaveFile with format detection, or format-specific methods")]]
-   static void h_SaveDataPool(const C_OscNodeDataPool &orc_DataPool,
-                              C_OscXmlParserBase &orc_XmlParser);
-
-private:
-   // Helper for format detection
-   static int32_t mh_DetectAndLoad(C_OscNodeDataPool &orc_DataPool,
-                                   const QString &orc_FilePath);
+   static QJsonObject save(const C_OscNodeDataPool & orc_DataPool);
+   static int32_t load(const QJsonObject & orc_Json, C_OscNodeDataPool & orc_DataPool);
 };
 
-/* -- Extern Global Variables
- * ---------------------------------------------------------------------------------------
- */
 } // namespace opensyde_core
 } // namespace stw
 
-#endif
+#endif // C_OSCNODEDATAPOOLFILER_HPP

@@ -1,453 +1,150 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Data pool reader/writer (multi-format)
+   \brief       JSON filer for C_OscNodeDataPool (impl)
 
-   Load / save data pool data from / to binary, JSON, or XML
-   files using the Qt-native serialization framework.
-
-   \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights
-   reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+                Copyright 2026 Elytron Defense. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-/* -- Includes
- * ------------------------------------------------------------------------------------------------------
- */
-#include "precomp_headers.hpp"
-
+/* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_OscNodeDataPoolFiler.hpp"
-#include "C_OscLoggingHandler.hpp"
+#include "C_OscJsonUtil.hpp"
+#include "C_OscNodeDataPoolListFiler.hpp"
 #include "stwerrors.hpp"
-#include "stwtypes.hpp"
 
-/* -- Used Namespaces
- * -----------------------------------------------------------------------------------------------------
- */
+#include <QJsonArray>
+
+/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
 using namespace stw::errors;
 
-/* -- Module Global Constants
- * ---------------------------------------------------------------------------------------
- */
+/* -- Module Globals ------------------------------------------------------------------------------------------------ */
 
-/* -- Types
- * ---------------------------------------------------------------------------------------------------------
- */
+namespace
+{
+const C_OscJsonUtil::T_EnumEntry<C_OscNodeDataPool::E_Type> hac_TypeTable[] = {
+   { C_OscNodeDataPool::eDIAG,     "diag"     },
+   { C_OscNodeDataPool::eNVM,      "nvm"      },
+   { C_OscNodeDataPool::eCOM,      "com"      },
+   { C_OscNodeDataPool::eHALC,     "halc"     },
+   { C_OscNodeDataPool::eHALC_NVM, "halc_nvm" }
+};
+} // namespace
 
-/* -- Global Variables
- * -------------------------------------------------------------------------------------------------------
- */
-
-/* -- Module Global Variables
- * ---------------------------------------------------------------------------------------
- */
-
-/* -- Module Global Function Prototypes
- * -----------------------------------------------------------------------------
- */
-
-/* -- Implementation
- * ------------------------------------------------------------------------------------------------
- */
+/* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load data pool from file (auto-detect format)
+QJsonObject C_OscNodeDataPoolFiler::save(const C_OscNodeDataPool & orc_DataPool)
+{
+   QJsonObject c_Json;
+   c_Json["type"] = C_OscJsonUtil::h_EnumToString(orc_DataPool.e_Type, hac_TypeTable);
+   c_Json["name"] = orc_DataPool.c_Name;
+   c_Json["comment"] = orc_DataPool.c_Comment;
 
-   \param[out]     orc_DataPool         Data pool data
-   \param[in]      orc_FilePath         File path
+   QJsonArray c_Version;
+   c_Version.append(static_cast<qint64>(orc_DataPool.au8_Version[0]));
+   c_Version.append(static_cast<qint64>(orc_DataPool.au8_Version[1]));
+   c_Version.append(static_cast<qint64>(orc_DataPool.au8_Version[2]));
+   c_Json["version"] = c_Version;
 
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadFile(C_OscNodeDataPool &orc_DataPool,
-                                                        const QString &orc_FilePath) {
-   return mh_DetectAndLoad(orc_DataPool, orc_FilePath);
+   c_Json["definition_crc_version"] = static_cast<qint64>(orc_DataPool.u16_DefinitionCrcVersion);
+   c_Json["related_data_block_index"] = static_cast<qint64>(orc_DataPool.s32_RelatedDataBlockIndex);
+   c_Json["is_safety"] = orc_DataPool.q_IsSafety;
+   c_Json["scope_is_private"] = orc_DataPool.q_ScopeIsPrivate;
+   c_Json["nvm_start_address"] = static_cast<qint64>(orc_DataPool.u32_NvmStartAddress);
+   c_Json["nvm_size"] = static_cast<qint64>(orc_DataPool.u32_NvmSize);
+
+   QJsonArray c_Lists;
+   for (const C_OscNodeDataPoolList & rc_List : orc_DataPool.c_Lists)
+   {
+      c_Lists.append(C_OscNodeDataPoolListFiler::save(rc_List));
+   }
+   c_Json["lists"] = c_Lists;
+
+   return c_Json;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save data pool to file (auto-detect format from extension)
-
-   \param[in]      orc_DataPool         Data pool data to store
-   \param[in]      orc_FilePath         File path
-
-   \return
-   C_NO_ERR   data saved
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_SaveFile(const C_OscNodeDataPool &orc_DataPool,
-                                                        const QString &orc_FilePath) {
-   int32_t s32_Retval = C_NO_ERR;
-
-   // Detect format from file extension
-   const QString c_Extension = orc_FilePath.right(4).toLower();
-
-   if (c_Extension == ".bin") {
-      s32_Retval = h_SaveBinary(orc_DataPool, orc_FilePath);
-   } else if (c_Extension == ".json") {
-      s32_Retval = h_SaveJson(orc_DataPool, orc_FilePath);
-   } else if (c_Extension == ".xml") {
-      s32_Retval = h_SaveXml(orc_DataPool, orc_FilePath);
-   } else {
-      // Default to XML for backward compatibility
-      osc_write_log_warning("File I/O",
-                            QString("Unknown file extension \"%1\" for \"%2\". "
-                                    "Defaulting to XML format.")
-                              .arg(c_Extension, orc_FilePath));
-      s32_Retval = h_SaveXml(orc_DataPool, orc_FilePath);
+int32_t C_OscNodeDataPoolFiler::load(const QJsonObject & orc_Json, C_OscNodeDataPool & orc_DataPool)
+{
+   QString c_TypeStr;
+   int32_t s32_Result = C_OscJsonUtil::h_GetString(orc_Json, "type", c_TypeStr);
+   if (s32_Result != C_NO_ERR)
+   {
+      return s32_Result;
+   }
+   s32_Result = C_OscJsonUtil::h_StringToEnum(c_TypeStr, hac_TypeTable, orc_DataPool.e_Type);
+   if (s32_Result != C_NO_ERR)
+   {
+      return s32_Result;
    }
 
-   return s32_Retval;
-}
+   s32_Result = C_OscJsonUtil::h_GetString(orc_Json, "name", orc_DataPool.c_Name);
+   if (s32_Result != C_NO_ERR)
+   {
+      return s32_Result;
+   }
+   C_OscJsonUtil::h_GetStringOr(orc_Json, "comment", QString(), orc_DataPool.c_Comment);
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load data pool from binary file
-
-   \param[out]     orc_DataPool         Data pool data
-   \param[in]      orc_FilePath         File path
-
-   \return
-   C_NO_ERR   data read
-   C_CONFIG   content of file is invalid
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadBinary(C_OscNodeDataPool &orc_DataPool,
-                                                  const QString &orc_FilePath) {
-   QFile file(orc_FilePath);
-   if (!file.open(QIODevice::ReadOnly)) {
-      osc_write_log_error("Loading data pool",
-                          QString("Could not open file \"%1\" for reading.").arg(orc_FilePath));
+   QJsonArray c_Version;
+   if (C_OscJsonUtil::h_GetArray(orc_Json, "version", c_Version) != C_NO_ERR)
+   {
       return C_CONFIG;
    }
-
-   QDataStream in(&file);
-   in.setVersion(QDataStream::Qt_6_0);
-
-   orc_DataPool.FromQDataStream(in);
-   file.close();
-
-   return C_NO_ERR;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save data pool to binary file
-
-   \param[in]      orc_DataPool         Data pool data to store
-   \param[in]      orc_FilePath         File path
-
-   \return
-   C_NO_ERR   data saved
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_SaveBinary(const C_OscNodeDataPool &orc_DataPool,
-                                                  const QString &orc_FilePath) {
-   QFile file(orc_FilePath);
-   if (!file.open(QIODevice::WriteOnly)) {
-      osc_write_log_error("Saving data pool",
-                          QString("Could not open file \"%1\" for writing.").arg(orc_FilePath));
-      return C_RD_WR;
-   }
-
-   QDataStream out(&file);
-   out.setVersion(QDataStream::Qt_6_0);
-   out.setByteOrder(QDataStream::LittleEndian);
-
-   const_cast<C_OscNodeDataPool &>(orc_DataPool).ToQDataStream(out);
-   file.close();
-
-   return C_NO_ERR;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load data pool from memory (binary)
-
-   \param[out]     orc_DataPool         Data pool data
-   \param[in]      orc_Data             Serialized data
-
-   \return
-   C_NO_ERR   data loaded
-   C_CONFIG   data format is invalid
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadFromMemoryBinary(C_OscNodeDataPool &orc_DataPool,
-                                                            const QByteArray &orc_Data) {
-   QDataStream in(orc_Data);
-   in.setVersion(QDataStream::Qt_6_0);
-
-   orc_DataPool.FromQDataStream(in);
-
-   return (in.status() == QDataStream::Ok) ? C_NO_ERR : C_CONFIG;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save data pool to memory (binary)
-
-   \param[in]      orc_DataPool         Data pool data
-
-   \return
-   QByteArray containing serialized data
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QByteArray C_OscNodeDataPoolFiler::h_SaveToMemoryBinary(const C_OscNodeDataPool &orc_DataPool) {
-   QByteArray data;
-   QDataStream out(&data, QIODevice::WriteOnly);
-   out.setVersion(QDataStream::Qt_6_0);
-   out.setByteOrder(QDataStream::LittleEndian);
-   const_cast<C_OscNodeDataPool &>(orc_DataPool).ToQDataStream(out);
-   return data;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load data pool from JSON file
-
-   \param[out]     orc_DataPool         Data pool data
-   \param[in]      orc_FilePath         File path
-
-   \return
-   C_NO_ERR   data loaded
-   C_CONFIG   JSON parse error or invalid format
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadJson(C_OscNodeDataPool &orc_DataPool,
-                                                const QString &orc_FilePath) {
-   QFile file(orc_FilePath);
-   if (!file.open(QIODevice::ReadOnly)) {
-      osc_write_log_error("Loading data pool",
-                          QString("Could not open file \"%1\" for reading.").arg(orc_FilePath));
+   if (c_Version.size() != 3)
+   {
       return C_CONFIG;
    }
-
-   QJsonParseError parseError;
-   QJsonDocument doc = QJsonDocument::fromJson(file.readAll(), &parseError);
-   file.close();
-
-   if (parseError.error != QJsonParseError::NoError) {
-      osc_write_log_error("Loading data pool",
-                          QString("JSON parse error: %1").arg(parseError.errorString()));
-      return C_CONFIG;
+   for (int32_t s32_Index = 0; s32_Index < 3; ++s32_Index)
+   {
+      if (!c_Version.at(s32_Index).isDouble())
+      {
+         return C_CONFIG;
+      }
+      orc_DataPool.au8_Version[s32_Index] = static_cast<uint8_t>(c_Version.at(s32_Index).toInteger());
    }
 
-   orc_DataPool.FromJsonObject(doc.object());
-   return C_NO_ERR;
-}
+   uint32_t u32_DefCrcVersion = 0U;
+   C_OscJsonUtil::h_GetU32Or(orc_Json, "definition_crc_version", 1U, u32_DefCrcVersion);
+   orc_DataPool.u16_DefinitionCrcVersion = static_cast<uint16_t>(u32_DefCrcVersion);
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save data pool to JSON file
-
-   \param[in]      orc_DataPool         Data pool data to store
-   \param[in]      orc_FilePath         File path
-
-   \return
-   C_NO_ERR   data saved
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_SaveJson(const C_OscNodeDataPool &orc_DataPool,
-                                                const QString &orc_FilePath) {
-   QJsonObject json = const_cast<C_OscNodeDataPool &>(orc_DataPool).ToJsonObject();
-   QJsonDocument doc(json);
-
-   QFile file(orc_FilePath);
-   if (!file.open(QIODevice::WriteOnly)) {
-      osc_write_log_error("Saving data pool",
-                          QString("Could not open file \"%1\" for writing.").arg(orc_FilePath));
-      return C_RD_WR;
+   int32_t s32_RelatedDataBlockIndex = -1;
+   if (C_OscJsonUtil::h_GetS32(orc_Json, "related_data_block_index", s32_RelatedDataBlockIndex) == C_NO_ERR)
+   {
+      orc_DataPool.s32_RelatedDataBlockIndex = s32_RelatedDataBlockIndex;
+   }
+   else
+   {
+      orc_DataPool.s32_RelatedDataBlockIndex = -1;
    }
 
-   file.write(doc.toJson(QJsonDocument::Indented));
-   file.close();
+   C_OscJsonUtil::h_GetBoolOr(orc_Json, "is_safety", false, orc_DataPool.q_IsSafety);
+   C_OscJsonUtil::h_GetBoolOr(orc_Json, "scope_is_private", false, orc_DataPool.q_ScopeIsPrivate);
+   C_OscJsonUtil::h_GetU32Or(orc_Json, "nvm_start_address", 0U, orc_DataPool.u32_NvmStartAddress);
+   C_OscJsonUtil::h_GetU32Or(orc_Json, "nvm_size", 0U, orc_DataPool.u32_NvmSize);
 
-   return C_NO_ERR;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load data pool from memory (JSON)
-
-   \param[out]     orc_DataPool         Data pool data
-   \param[in]      orc_Object           JSON object
-
-   \return
-   C_NO_ERR   data loaded
-   C_CONFIG   invalid format
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadFromMemoryJson(C_OscNodeDataPool &orc_DataPool,
-                                                          const QJsonObject &orc_Object) {
-   orc_DataPool.FromJsonObject(orc_Object);
-   return C_NO_ERR;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save data pool to memory (JSON)
-
-   \param[in]      orc_DataPool         Data pool data
-
-   \return
-   QJsonObject containing serialized data
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QJsonObject C_OscNodeDataPoolFiler::h_SaveToMemoryJson(const C_OscNodeDataPool &orc_DataPool) {
-   return const_cast<C_OscNodeDataPool &>(orc_DataPool).ToJsonObject();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load data pool from XML file
-
-   \param[out]     orc_DataPool         Data pool data
-   \param[in]      orc_FilePath         File path
-
-   \return
-   C_NO_ERR   data loaded
-   C_CONFIG   XML parse error or invalid format
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadXml(C_OscNodeDataPool &orc_DataPool,
-                                               const QString &orc_FilePath) {
-   QFile file(orc_FilePath);
-   if (!file.open(QIODevice::ReadOnly)) {
-      osc_write_log_error("Loading data pool",
-                          QString("Could not open file \"%1\" for reading.").arg(orc_FilePath));
-      return C_CONFIG;
+   QJsonArray c_Lists;
+   if (C_OscJsonUtil::h_GetArray(orc_Json, "lists", c_Lists) == C_NO_ERR)
+   {
+      orc_DataPool.c_Lists.clear();
+      orc_DataPool.c_Lists.reserve(c_Lists.size());
+      for (const QJsonValue & rc_Value : c_Lists)
+      {
+         if (!rc_Value.isObject())
+         {
+            return C_CONFIG;
+         }
+         C_OscNodeDataPoolList c_List;
+         s32_Result = C_OscNodeDataPoolListFiler::load(rc_Value.toObject(), c_List);
+         if (s32_Result != C_NO_ERR)
+         {
+            return s32_Result;
+         }
+         orc_DataPool.c_Lists.append(c_List);
+      }
    }
 
-   QDomDocument doc;
-   QString errorMessage;
-   int errorLine, errorColumn;
-
-   if (!doc.setContent(file.readAll(), &errorMessage, &errorLine, &errorColumn)) {
-      osc_write_log_error("Loading data pool",
-                          QString("XML parse error at line %1, column %2: %3")
-                            .arg(errorLine)
-                            .arg(errorColumn)
-                            .arg(errorMessage));
-      file.close();
-      return C_CONFIG;
-   }
-   file.close();
-
-   QDomElement rootElement = doc.documentElement();
-   orc_DataPool.FromQDomDocument(rootElement);
    return C_NO_ERR;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save data pool to XML file
-
-   \param[in]      orc_DataPool         Data pool data to store
-   \param[in]      orc_FilePath         File path
-
-   \return
-   C_NO_ERR   data saved
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_SaveXml(const C_OscNodeDataPool &orc_DataPool,
-                                               const QString &orc_FilePath) {
-   QDomDocument doc;
-   QDomElement rootElement = const_cast<C_OscNodeDataPool &>(orc_DataPool).ToQDomDocument(doc, "data-pool");
-   doc.appendChild(rootElement);
-
-   QFile file(orc_FilePath);
-   if (!file.open(QIODevice::WriteOnly)) {
-      osc_write_log_error("Saving data pool",
-                          QString("Could not open file \"%1\" for writing.").arg(orc_FilePath));
-      return C_RD_WR;
-   }
-
-   file.write(doc.toString(2).toUtf8());
-   file.close();
-
-   return C_NO_ERR;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load data pool from memory (XML)
-
-   \param[out]     orc_DataPool         Data pool data
-   \param[in]      orc_Element          XML element
-
-   \return
-   C_NO_ERR   data loaded
-   C_CONFIG   invalid format
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadFromMemoryXml(C_OscNodeDataPool &orc_DataPool,
-                                                         const QDomElement &orc_Element) {
-   orc_DataPool.FromQDomDocument(orc_Element);
-   return C_NO_ERR;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save data pool to memory (XML)
-
-   \param[in]      orc_DataPool         Data pool data
-   \param[in]      ro_Doc               DOM document
-
-   \return
-   QDomElement containing serialized data
-*/
-//----------------------------------------------------------------------------------------------------------------------
-QDomElement C_OscNodeDataPoolFiler::h_SaveToMemoryXml(const C_OscNodeDataPool &orc_DataPool,
-                                                           QDomDocument &ro_Doc) {
-   return const_cast<C_OscNodeDataPool &>(orc_DataPool).ToQDomDocument(ro_Doc, "data-pool");
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Helper for format detection and loading
-
-   \param[out]     orc_DataPool         Data pool data
-   \param[in]      orc_FilePath         File path
-
-   \return
-   C_NO_ERR   data loaded
-   C_CONFIG   file format not supported or parse error
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::mh_DetectAndLoad(C_OscNodeDataPool &orc_DataPool,
-                                                      const QString &orc_FilePath) {
-   const QString c_Extension = orc_FilePath.right(4).toLower();
-
-   if (c_Extension == ".bin") {
-      return h_LoadBinary(orc_DataPool, orc_FilePath);
-   } else if (c_Extension == ".json") {
-      return h_LoadJson(orc_DataPool, orc_FilePath);
-   } else if (c_Extension == ".xml") {
-      return h_LoadXml(orc_DataPool, orc_FilePath);
-   } else {
-      osc_write_log_warning("File I/O",
-                            QString("Unknown file extension \"%1\" for \"%2\". "
-                                    "Attempting XML format as fallback.")
-                              .arg(c_Extension, orc_FilePath));
-      return h_LoadXml(orc_DataPool, orc_FilePath);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Load data pool (deprecated)
-
-   \param[out]     orc_DataPool         Data pool data
-   \param[in]      orc_XmlParser        XML parser
-
-   \return
-   C_NO_ERR   data loaded
-   C_CONFIG   content of file is invalid or incomplete
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscNodeDataPoolFiler::h_LoadDataPool(C_OscNodeDataPool &orc_DataPool,
-                                                    C_OscXmlParserBase &orc_XmlParser) {
-   // Delegate to original implementation for backward compatibility
-   return C_OscNodeDataPoolFiler::h_LoadDataPool(orc_DataPool, orc_XmlParser);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Legacy compatibility - Save data pool (deprecated)
-
-   \param[in]      orc_DataPool         Data pool data
-   \param[in]      orc_XmlParser        XML parser
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OscNodeDataPoolFiler::h_SaveDataPool(const C_OscNodeDataPool &orc_DataPool,
-                                                 C_OscXmlParserBase &orc_XmlParser) {
-   // Delegate to original implementation for backward compatibility
-   C_OscNodeDataPoolFiler::h_SaveDataPool(orc_DataPool, orc_XmlParser);
 }
