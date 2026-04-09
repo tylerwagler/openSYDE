@@ -128,6 +128,7 @@ venv/
 
 # AGENTS.md files (generated context files)
 **/AGENTS.md
+.sisyphus/
 
 # Tool-specific caches
 .cache/
