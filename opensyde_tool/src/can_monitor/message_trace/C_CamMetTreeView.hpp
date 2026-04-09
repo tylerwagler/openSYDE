@@ -103,7 +103,9 @@ private:
    QAction * mpc_AddFilter;
    bool mq_UniqueMessageMode;
    bool mq_IsRunning;
-   const bool mq_AllowSorting;
+   bool mq_AllowSorting;
+   int32_t ms32_LastValidSortColumn;
+   Qt::SortOrder me_LastValidSortOrder;
 
    void m_SetupContextMenu(void);
    void m_OnCustomContextMenuRequested(const QPoint & orc_Pos);
@@ -126,6 +128,7 @@ private:
    void m_SetColumnPositionIndices(const std::vector<int32_t> & orc_NewColPositionIndices);
    bool m_ColumnsSortedAsExpected(const std::vector<int32_t> & orc_NewColPositionIndices) const;
    void m_HandleSorting(void);
+   void m_OnHeaderSortClicked(const int32_t os32_LogicalIndex);
    static void mh_DrawEl(QPainter * const opc_Painter, const QPoint & orc_TopLeft, const int32_t os32_Offset);
    static void mh_DrawPlus(QPainter * const opc_Painter, const QPoint & orc_TopLeft, const int32_t os32_Offset);
    static void mh_DrawVerticalLine(QPainter * const opc_Painter, const QPoint & orc_TopLeft, const int32_t os32_Offset);

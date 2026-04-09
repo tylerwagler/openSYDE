@@ -72,7 +72,9 @@ C_CamMetTreeView::C_CamMetTreeView(QWidget * const opc_Parent) :
    C_SyvComMessageMonitor(),
    mq_UniqueMessageMode(false),
    mq_IsRunning(false),
-   mq_AllowSorting(false)
+   mq_AllowSorting(false), // Will be enabled dynamically when in unique message mode
+   ms32_LastValidSortColumn(C_CamMetTreeModel::h_EnumToColumn(C_CamMetTreeModel::eCAN_ID)),
+   me_LastValidSortOrder(Qt::AscendingOrder)
 {
    QItemSelectionModel * const pc_LastSelectionModel = this->selectionModel();
 
@@ -106,17 +108,11 @@ C_CamMetTreeView::C_CamMetTreeView(QWidget * const opc_Parent) :
    this->verticalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
    this->horizontalScrollBar()->setContextMenuPolicy(Qt::NoContextMenu);
 
-   //Deactivate trace sorting as there are some known issues (not allowed while active, signals cut off)
-   if (mq_AllowSorting)
-   {
-      this->setSortingEnabled(true);
-      this->mc_SortProxyModel.setDynamicSortFilter(true);
-   }
-   else
-   {
-      this->setSortingEnabled(false);
-      this->mc_SortProxyModel.setDynamicSortFilter(false);
-   }
+   // Sorting starts disabled (continuous mode is default). It will be enabled
+   // dynamically when the user switches to unique message mode via m_HandleSorting().
+   // dynamicSortFilter is always kept OFF to avoid QTBUG-27289; we sort explicitly instead.
+   this->setSortingEnabled(false);
+   this->mc_SortProxyModel.setDynamicSortFilter(false);
 
    this->m_SetupContextMenu();
 
@@ -143,6 +139,7 @@ C_CamMetTreeView::C_CamMetTreeView(QWidget * const opc_Parent) :
       &C_CamMetTreeView::m_RestoreUserSettings);
 
    connect(this, &C_CamMetTreeView::SigEmitAddFilter, this, &C_CamMetTreeView::m_AddFilter);
+   connect(this->header(), &QHeaderView::sectionClicked, this, &C_CamMetTreeView::m_OnHeaderSortClicked);
 
    this->setDropIndicatorShown(true);
    this->setDragEnabled(true);
@@ -992,6 +989,17 @@ void C_CamMetTreeView::m_UpdateUi(const std::list<C_CamMetTreeLoggerData> & orc_
       // It is possible that already existing messages got a signal interpretation
       // TODO: Is there a more efficient way?
       this->m_SetAllChildren();
+
+      // Explicitly re-sort after the batch update. dynamicSortFilter is kept OFF to avoid
+      // QTBUG-27289, so we trigger the sort manually here after all inserts are complete.
+      // Use sort() instead of invalidate() to avoid a full layout rebuild which can crash
+      // when the view holds persistent indices or expanded state.
+      if (this->mq_AllowSorting == true)
+      {
+         this->mc_SortProxyModel.sort(this->header()->sortIndicatorSection(),
+                                      this->header()->sortIndicatorOrder());
+      }
+
       //update style (necessary so stylesheet sees changes -> necessary for expand and collapse icon update)
       this->style()->unpolish(this);
       this->style()->polish(this);
@@ -1315,27 +1323,65 @@ bool C_CamMetTreeView::m_ColumnsSortedAsExpected(const std::vector<int32_t> & or
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamMetTreeView::m_HandleSorting(void)
 {
-   //Deactivate trace sorting as there are some known issues (not allowed while active, signals cut off)
-   if (mq_AllowSorting)
+   if (this->mq_UniqueMessageMode == true)
    {
-      //Don't allow sorting while in unique mode as long as this bug is not resolved:
-      // https://bugreports.qt.io/browse/QTBUG-27289 (can happen if items were inserted and sorting was active)
+      // In unique message mode, allow sorting even while running.
+      // We keep dynamicSortFilter OFF to avoid QTBUG-27289 (proxy re-sorting during
+      // beginInsertRows/endInsertRows). Instead, we trigger an explicit sort after each
+      // update batch in m_UpdateUi().
+      this->mq_AllowSorting = true;
+      // Default to CAN ID ascending — timestamp sorting is not meaningful in static mode
+      this->header()->setSortIndicator(
+         C_CamMetTreeModel::h_EnumToColumn(C_CamMetTreeModel::eCAN_ID), Qt::AscendingOrder);
+      this->setSortingEnabled(true);
+      this->mc_SortProxyModel.setDynamicSortFilter(false);
+      // Disable sorting on the timestamp column (not meaningful in unique message mode)
+      this->header()->setSortIndicatorShown(true);
+      this->mc_SortProxyModel.sort(
+         C_CamMetTreeModel::h_EnumToColumn(C_CamMetTreeModel::eCAN_ID), Qt::AscendingOrder);
+   }
+   else
+   {
+      // In continuous mode, disable sorting while running (high-frequency inserts make
+      // sorting impractical and the append-at-bottom behavior is expected).
       if (this->mq_IsRunning == true)
       {
-         //Required sort to allow handling as before (append at bottom) -> before internal deactivate!
-         //Overwrite last user sort behavior to avoid jumping back to last sorting behavior on pausing
+         this->mq_AllowSorting = false;
          this->header()->setSortIndicator(0, Qt::AscendingOrder);
-         //User
          this->setSortingEnabled(false);
-         //Internal
          this->mc_SortProxyModel.setDynamicSortFilter(false);
       }
       else
       {
-         //User
+         // When paused/stopped in continuous mode, allow sorting
+         this->mq_AllowSorting = true;
          this->setSortingEnabled(true);
-         //Internal
-         this->mc_SortProxyModel.setDynamicSortFilter(true);
+         this->mc_SortProxyModel.setDynamicSortFilter(false);
+      }
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Handle header section click for sorting — block timestamp column in unique mode
+
+   \param[in]  os32_LogicalIndex   Column that was clicked
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamMetTreeView::m_OnHeaderSortClicked(const int32_t os32_LogicalIndex)
+{
+   if (this->mq_UniqueMessageMode == true)
+   {
+      const int32_t s32_TimeStampCol = C_CamMetTreeModel::h_EnumToColumn(C_CamMetTreeModel::eTIME_STAMP);
+      if (os32_LogicalIndex == s32_TimeStampCol)
+      {
+         // Revert — timestamp sorting is not meaningful in static mode
+         this->header()->setSortIndicator(this->ms32_LastValidSortColumn, this->me_LastValidSortOrder);
+      }
+      else
+      {
+         // Remember this as the last valid sort choice
+         this->ms32_LastValidSortColumn = os32_LogicalIndex;
+         this->me_LastValidSortOrder = this->header()->sortIndicatorOrder();
       }
    }
 }

@@ -778,7 +778,12 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
                switch (e_Col)
                {
                case eTIME_STAMP:
-                  if (this->mq_DisplayTimestampRelative == true)
+                  if (os32_Role == ms32_USER_ROLE_SORT)
+                  {
+                     //Sort numerically by absolute timestamp to get correct ordering
+                     c_Retval = static_cast<qulonglong>(pc_CurMessage->u64_TimeStampAbsoluteStart);
+                  }
+                  else if (this->mq_DisplayTimestampRelative == true)
                   {
                      c_Retval = pc_CurMessage->c_TimeStampRelative.c_str();
                   }
@@ -794,8 +799,8 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
                case eCAN_ID:
                   if (os32_Role == ms32_USER_ROLE_SORT)
                   {
-                     //For number the display style is irrelevant
-                     c_Retval = pc_CurMessage->c_CanIdDec.ToInt();
+                     //Use the numeric CAN ID directly instead of parsing the string
+                     c_Retval = static_cast<quint32>(pc_CurMessage->c_CanMsg.u32_ID);
                   }
                   else
                   {
@@ -864,7 +869,14 @@ QVariant C_CamMetTreeModel::data(const QModelIndex & orc_Index, const int32_t os
                case eCAN_COUNTER:
                   if (os32_Role == ms32_USER_ROLE_SORT)
                   {
-                     c_Retval = static_cast<qlonglong>(pc_CurMessage->c_Counter.ToInt64());
+                     try
+                     {
+                        c_Retval = static_cast<qlonglong>(pc_CurMessage->c_Counter.ToInt64());
+                     }
+                     catch (...)
+                     {
+                        c_Retval = static_cast<qlonglong>(0);
+                     }
                   }
                   else
                   {
@@ -1289,13 +1301,20 @@ const C_CamMetTreeLoggerData * C_CamMetTreeModel::GetMessageData(const int32_t o
    else
    {
       //If unique messages: look in map
-      const QMap<C_SclString, C_SclString>::const_iterator c_ItOrder =
-         this->mc_UniqueMessagesOrdering.begin() + os32_Row;
-      const QMap<C_SclString, C_CamMetTreeLoggerData>::const_iterator c_It =
-         this->mc_UniqueMessages.find(c_ItOrder.value());
-      if (c_It != this->mc_UniqueMessages.end())
+      if (os32_Row >= 0 && os32_Row < this->mc_UniqueMessagesOrdering.size())
       {
-         pc_Retval = &c_It.value();
+         const QMap<C_SclString, C_SclString>::const_iterator c_ItOrder =
+            this->mc_UniqueMessagesOrdering.begin() + os32_Row;
+         const QMap<C_SclString, C_CamMetTreeLoggerData>::const_iterator c_It =
+            this->mc_UniqueMessages.find(c_ItOrder.value());
+         if (c_It != this->mc_UniqueMessages.end())
+         {
+            pc_Retval = &c_It.value();
+         }
+      }
+      else
+      {
+         //Row out of range — can happen transiently during proxy model sort
       }
    }
    return pc_Retval;
