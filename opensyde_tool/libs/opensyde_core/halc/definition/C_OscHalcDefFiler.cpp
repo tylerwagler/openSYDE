@@ -1,148 +1,153 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Filer for HALC definition files (Multi-Format - Framework)
+   \brief       JSON filer for C_OscHalcDef (impl)
 
-   Load / save HALC definition data from / to binary, JSON, or XML
-   files using the Qt-native serialization framework.
-
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
-   reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+               Copyright 2026 Elytron Defense. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "precomp_headers.hpp"
 #include "C_OscHalcDefFiler.hpp"
-#include "C_OscFilerUtil.hpp"
-#include <QFile>
-#include <QFileInfo>
+#include "C_OscJsonUtil.hpp"
+#include "C_OscHalcDefDomainFiler.hpp"
+#include "stwerrors.hpp"
+
+#include <QJsonArray>
+#include <QJsonValue>
 
 using namespace stw::opensyde_core;
 using namespace stw::errors;
 
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefFiler::h_LoadHalcDefFile(C_OscHalcDef &orc_Definition,
-                                                 const QString &orc_FilePath,
-                                                 const QString &orc_BasePath) {
-   Q_UNUSED(orc_BasePath); // Not used in new framework
-   return mh_DetectAndLoad(orc_Definition, orc_FilePath);
+namespace
+{
+const C_OscJsonUtil::T_EnumEntry<C_OscHalcDefBase::E_SafetyMode> hac_SafetyModeTable[] = {
+   { C_OscHalcDefBase::eTWO_LEVELS_WITH_DROPPING,       "two_levels_with_dropping"       },
+   { C_OscHalcDefBase::eTWO_LEVELS_WITHOUT_DROPPING,    "two_levels_without_dropping"    },
+   { C_OscHalcDefBase::eONE_LEVEL_ALL_SAFE,             "one_level_all_safe"             },
+   { C_OscHalcDefBase::eONE_LEVEL_ALL_NON_SAFE,         "one_level_all_non_safe"         }
+};
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefFiler::h_SaveHalcDefFile(const C_OscHalcDef &orc_Definition,
-                                                 const QString &orc_FilePath,
-                                                 const QString &orc_BasePath) {
-   Q_UNUSED(orc_BasePath); // Not used in new framework
+QJsonObject C_OscHalcDefFiler::save(const C_OscHalcDef & orc_Definition)
+{
+   QJsonObject c_Json;
 
-   QFileInfo c_FileInfo(orc_FilePath);
-   const QString c_Extension = c_FileInfo.suffix().toLower();
+   c_Json["content_version"] = static_cast<qint64>(orc_Definition.u32_ContentVersion);
+   c_Json["device_name"] = orc_Definition.c_DeviceName;
+   c_Json["file_string"] = orc_Definition.c_FileString;
+   c_Json["original_file_name"] = orc_Definition.c_OriginalFileName;
+   c_Json["safety_mode"] = C_OscJsonUtil::h_EnumToString(orc_Definition.e_SafetyMode, hac_SafetyModeTable);
+   c_Json["num_config_copies"] = static_cast<qint64>(orc_Definition.u8_NumConfigCopies);
+   c_Json["nvm_based_config"] = orc_Definition.q_NvmBasedConfig;
 
-   if (c_Extension == "bin") {
-      return h_SaveBinary(orc_Definition, orc_FilePath);
-   } else if (c_Extension == "json") {
-      return h_SaveJson(orc_Definition, orc_FilePath);
-   } else if (c_Extension == "xml") {
-      return h_SaveXml(orc_Definition, orc_FilePath);
-   } else {
-      return C_CONFIG; // Invalid file extension
+   QJsonArray c_NvmSafeArray;
+   for (uint32_t u32_Addr : orc_Definition.c_NvmSafeAddressOffset)
+   {
+      c_NvmSafeArray.append(static_cast<qint64>(u32_Addr));
    }
+   c_Json["nvm_safe_address_offset"] = c_NvmSafeArray;
+
+   QJsonArray c_NvmNonSafeArray;
+   for (uint32_t u32_Addr : orc_Definition.c_NvmNonSafeAddressOffset)
+   {
+      c_NvmNonSafeArray.append(static_cast<qint64>(u32_Addr));
+   }
+   c_Json["nvm_non_safe_address_offset"] = c_NvmNonSafeArray;
+
+   c_Json["nvm_reserved_list_size_parameters"] = static_cast<qint64>(orc_Definition.u32_NvmReservedListSizeParameters);
+   c_Json["nvm_reserved_list_size_input_values"] = static_cast<qint64>(orc_Definition.u32_NvmReservedListSizeInputValues);
+   c_Json["nvm_reserved_list_size_output_values"] = static_cast<qint64>(orc_Definition.u32_NvmReservedListSizeOutputValues);
+   c_Json["nvm_reserved_list_size_status_values"] = static_cast<qint64>(orc_Definition.u32_NvmReservedListSizeStatusValues);
+
+    QJsonArray c_Domains;
+    uint32_t u32_DomainCount = orc_Definition.GetDomainSize();
+    for (uint32_t u32_Index = 0; u32_Index < u32_DomainCount; ++u32_Index)
+    {
+       const C_OscHalcDefDomain *opc_Domain = orc_Definition.GetDomainDefDataConst(u32_Index);
+       if (opc_Domain != nullptr)
+       {
+          c_Domains.append(C_OscHalcDefDomainFiler::save(*opc_Domain));
+       }
+    }
+    c_Json["domains"] = c_Domains;
+
+   return c_Json;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefFiler::h_LoadBinary(C_OscHalcDef &orc_Definition,
-                                            const QString &orc_FilePath) {
-   QList<C_OscHalcDef> c_List;
-   int32_t s32_Retval = C_OscFilerUtil::h_LoadListBinary<C_OscHalcDef>(c_List, orc_FilePath);
-   if (s32_Retval == stw::errors::C_NO_ERR) {
-      if (c_List.size() > 0) {
-         orc_Definition = c_List.first();
+int32_t C_OscHalcDefFiler::load(const QJsonObject & orc_Json, C_OscHalcDef & orc_Definition)
+{
+   int32_t s32_Result;
+
+   s32_Result = C_OscJsonUtil::h_GetU32(orc_Json, "content_version", orc_Definition.u32_ContentVersion);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+
+   s32_Result = C_OscJsonUtil::h_GetString(orc_Json, "device_name", orc_Definition.c_DeviceName);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+
+   s32_Result = C_OscJsonUtil::h_GetString(orc_Json, "file_string", orc_Definition.c_FileString);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+
+   s32_Result = C_OscJsonUtil::h_GetString(orc_Json, "original_file_name", orc_Definition.c_OriginalFileName);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+
+   QString c_SafetyModeStr;
+   s32_Result = C_OscJsonUtil::h_GetString(orc_Json, "safety_mode", c_SafetyModeStr);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+   s32_Result = C_OscJsonUtil::h_StringToEnum(c_SafetyModeStr, hac_SafetyModeTable, orc_Definition.e_SafetyMode);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+
+   s32_Result = C_OscJsonUtil::h_GetU8(orc_Json, "num_config_copies", orc_Definition.u8_NumConfigCopies);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+
+   s32_Result = C_OscJsonUtil::h_GetBool(orc_Json, "nvm_based_config", orc_Definition.q_NvmBasedConfig);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+
+   if (orc_Json.contains("nvm_safe_address_offset"))
+   {
+      const QJsonArray c_Array = orc_Json["nvm_safe_address_offset"].toArray();
+      for (const QJsonValue & rc_Item : c_Array)
+      {
+         if (!rc_Item.isDouble()) return C_CONFIG;
+         orc_Definition.c_NvmSafeAddressOffset.append(static_cast<uint32_t>(rc_Item.toInteger()));
       }
    }
-   return s32_Retval;
-}
 
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefFiler::h_SaveBinary(const C_OscHalcDef &orc_Definition,
-                                            const QString &orc_FilePath) {
-   QList<C_OscHalcDef> c_List;
-   c_List.append(orc_Definition);
-   return C_OscFilerUtil::h_SaveListBinary<C_OscHalcDef>(c_List, orc_FilePath);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefFiler::h_LoadJson(C_OscHalcDef &orc_Definition,
-                                          const QString &orc_FilePath) {
-   QList<C_OscHalcDef> c_List;
-   int32_t s32_Retval = C_OscFilerUtil::h_LoadListJson<C_OscHalcDef>(c_List, orc_FilePath);
-   if (s32_Retval == stw::errors::C_NO_ERR) {
-      if (c_List.size() > 0) {
-         orc_Definition = c_List.first();
+   if (orc_Json.contains("nvm_non_safe_address_offset"))
+   {
+      const QJsonArray c_Array = orc_Json["nvm_non_safe_address_offset"].toArray();
+      for (const QJsonValue & rc_Item : c_Array)
+      {
+         if (!rc_Item.isDouble()) return C_CONFIG;
+         orc_Definition.c_NvmNonSafeAddressOffset.append(static_cast<uint32_t>(rc_Item.toInteger()));
       }
    }
-   return s32_Retval;
-}
 
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefFiler::h_SaveJson(const C_OscHalcDef &orc_Definition,
-                                          const QString &orc_FilePath) {
-   QList<C_OscHalcDef> c_List;
-   c_List.append(orc_Definition);
-   return C_OscFilerUtil::h_SaveListJson<C_OscHalcDef>(c_List, orc_FilePath);
-}
+   s32_Result = C_OscJsonUtil::h_GetU32(orc_Json, "nvm_reserved_list_size_parameters", orc_Definition.u32_NvmReservedListSizeParameters);
+   if (s32_Result != C_NO_ERR) return s32_Result;
 
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefFiler::h_LoadXml(C_OscHalcDef &orc_Definition,
-                                         const QString &orc_FilePath) {
-   QList<C_OscHalcDef> c_List;
-   int32_t s32_Retval = C_OscFilerUtil::h_LoadListXml<C_OscHalcDef>(c_List, orc_FilePath, "halcDef", "definition");
-   if (s32_Retval == stw::errors::C_NO_ERR) {
-      if (c_List.size() > 0) {
-         orc_Definition = c_List.first();
+   s32_Result = C_OscJsonUtil::h_GetU32(orc_Json, "nvm_reserved_list_size_input_values", orc_Definition.u32_NvmReservedListSizeInputValues);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+
+   s32_Result = C_OscJsonUtil::h_GetU32(orc_Json, "nvm_reserved_list_size_output_values", orc_Definition.u32_NvmReservedListSizeOutputValues);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+
+   s32_Result = C_OscJsonUtil::h_GetU32(orc_Json, "nvm_reserved_list_size_status_values", orc_Definition.u32_NvmReservedListSizeStatusValues);
+   if (s32_Result != C_NO_ERR) return s32_Result;
+
+   if (orc_Json.contains("domains"))
+   {
+      const QJsonArray c_Array = orc_Json["domains"].toArray();
+      for (const QJsonValue & rc_Item : c_Array)
+      {
+         C_OscHalcDefDomain c_Domain;
+         s32_Result = C_OscHalcDefDomainFiler::load(rc_Item.toObject(), c_Domain);
+         if (s32_Result != C_NO_ERR) return s32_Result;
+         orc_Definition.AddDomain(c_Domain);
       }
    }
-   return s32_Retval;
-}
 
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefFiler::h_SaveXml(const C_OscHalcDef &orc_Definition,
-                                         const QString &orc_FilePath) {
-   QList<C_OscHalcDef> c_List;
-   c_List.append(orc_Definition);
-   return C_OscFilerUtil::h_SaveListXml<C_OscHalcDef>(c_List, orc_FilePath, "halcDef", "definition");
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefFiler::mh_DetectAndLoad(C_OscHalcDef &orc_Definition,
-                                                const QString &orc_FilePath) {
-   QFileInfo c_FileInfo(orc_FilePath);
-   const QString c_Extension = c_FileInfo.suffix().toLower();
-
-   if (c_Extension == "bin") {
-      return h_LoadBinary(orc_Definition, orc_FilePath);
-   } else if (c_Extension == "json") {
-      return h_LoadJson(orc_Definition, orc_FilePath);
-   } else if (c_Extension == "xml") {
-      return h_LoadXml(orc_Definition, orc_FilePath);
-   } else {
-      return C_CONFIG; // Invalid file extension
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-[[deprecated("Use format-specific methods")]]
-int32_t C_OscHalcDefFiler::h_LoadFile(C_OscHalcDef &orc_IoData,
-                                          const QString &orc_Path,
-                                          const QString &orc_BasePath) {
-   return h_LoadHalcDefFile(orc_IoData, orc_Path, orc_BasePath);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-[[deprecated("Use format-specific methods")]]
-int32_t C_OscHalcDefFiler::h_SaveFile(const C_OscHalcDef &orc_IoData,
-                                          const QString &orc_Path,
-                                          const QString &orc_BasePath,
-                                          QStringList *const opc_CreatedFiles) {
-   Q_UNUSED(orc_BasePath);
-   Q_UNUSED(opc_CreatedFiles);
-   return h_SaveHalcDefFile(orc_IoData, orc_Path, orc_BasePath);
+   return C_NO_ERR;
 }

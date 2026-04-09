@@ -220,10 +220,18 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefDomain_Serialization.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefElement.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefElement_Serialization.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefFiler.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStruct.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStruct_Serialization.cpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStructFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelAvailabilityFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelDefFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelUseCaseFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelValuesFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContentBitmaskItemFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContentFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefDomainFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefElementFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefFiler.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStruct.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStruct_Serialization.cpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStructFiler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianDatapoolListHandler.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianGenerator.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianUtil.cpp
@@ -337,9 +345,17 @@ else()
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContentBitmaskItem.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefDomain.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefElement.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefFiler.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStruct.hpp
-      ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStructFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelAvailabilityFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelDefFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelUseCaseFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefChannelValuesFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContentBitmaskItemFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefContentFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefDomainFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefElementFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefFiler.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStruct.hpp
+       ${CMAKE_CURRENT_SOURCE_DIR}/halc/definition/C_OscHalcDefStructFiler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianDatapoolListHandler.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianGenerator.hpp
       ${CMAKE_CURRENT_SOURCE_DIR}/halc/magician/C_OscHalcMagicianUtil.hpp

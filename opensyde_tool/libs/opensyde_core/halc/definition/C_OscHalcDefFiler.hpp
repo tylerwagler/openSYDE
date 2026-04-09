@@ -1,98 +1,59 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Filer for HALC definition files (Multi-Format - Framework)
+   \brief       JSON filer for C_OscHalcDef (header)
 
-   Load / save HALC definition data from / to binary, JSON, or XML
-   files using the Qt-native serialization framework.
+   Serializes the top-level HALC definition including base fields and domains.
 
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
-   reserved.
+   JSON shape:
+     {
+       // Base C_OscHalcDefBase fields
+       "content_version":       <uint32_t>,
+       "device_name":           <string>,
+       "file_string":           <string>,
+       "original_file_name":    <string>,
+       "safety_mode":           <string - enum from E_SafetyMode>,
+       "num_config_copies":     <uint8_t>,
+       "nvm_based_config":      <bool>,
+       "nvm_safe_address_offset":      [<array of uint32_t>],
+       "nvm_non_safe_address_offset":  [<array of uint32_t>],
+       "nvm_reserved_list_size_parameters":       <uint32_t>,
+       "nvm_reserved_list_size_input_values":     <uint32_t>,
+       "nvm_reserved_list_size_output_values":    <uint32_t>,
+       "nvm_reserved_list_size_status_values":    <uint32_t>,
+
+       // Domain-specific
+       "domains": [<array of domain objects>]
+     }
+
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+               Copyright 2026 Elytron Defense. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 #ifndef C_OSCHALCDEFFILER_HPP
 #define C_OSCHALCDEFFILER_HPP
 
-/* -- Includes
- * ------------------------------------------------------------------------------------------------------
- */
+/* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_OscHalcDef.hpp"
-#include "C_OscFilerUtil.hpp"
 #include "stwtypes.hpp"
-#include <QList>
-#include <QString>
 
-/* -- Namespace
- * -----------------------------------------------------------------------------------------------------
- */
-namespace stw {
-namespace opensyde_core {
-/* -- Global Constants
- * ----------------------------------------------------------------------------------------------
- */
+#include <QJsonObject>
 
-/* -- Types
- * ---------------------------------------------------------------------------------------------------------
- */
+/* -- Namespace ----------------------------------------------------------------------------------------------------- */
+namespace stw
+{
+namespace opensyde_core
+{
+/* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_OscHalcDefFiler {
+class C_OscHalcDefFiler
+{
 public:
-   // --------------------------------------------------------------------------
-   // Unified File Operations (Auto-detect format from extension)
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadHalcDefFile(C_OscHalcDef &orc_Definition,
-                                    const QString &orc_FilePath,
-                                    const QString &orc_BasePath);
-   static int32_t h_SaveHalcDefFile(const C_OscHalcDef &orc_Definition,
-                                    const QString &orc_FilePath,
-                                    const QString &orc_BasePath);
-
-   // --------------------------------------------------------------------------
-   // Binary Format
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadBinary(C_OscHalcDef &orc_Definition,
-                               const QString &orc_FilePath);
-   static int32_t h_SaveBinary(const C_OscHalcDef &orc_Definition,
-                               const QString &orc_FilePath);
-
-   // --------------------------------------------------------------------------
-   // JSON Format
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadJson(C_OscHalcDef &orc_Definition,
-                             const QString &orc_FilePath);
-   static int32_t h_SaveJson(const C_OscHalcDef &orc_Definition,
-                             const QString &orc_FilePath);
-
-   // --------------------------------------------------------------------------
-   // XML Format
-   // --------------------------------------------------------------------------
-   static int32_t h_LoadXml(C_OscHalcDef &orc_Definition,
-                            const QString &orc_FilePath);
-   static int32_t h_SaveXml(const C_OscHalcDef &orc_Definition,
-                            const QString &orc_FilePath);
-
-   // --------------------------------------------------------------------------
-   // Legacy Compatibility (deprecated)
-   // --------------------------------------------------------------------------
-   [[deprecated("Use format-specific methods")]]
-   static int32_t h_LoadFile(C_OscHalcDef &orc_IoData,
-                             const QString &orc_Path,
-                             const QString &orc_BasePath);
-   [[deprecated("Use format-specific methods")]]
-   static int32_t h_SaveFile(const C_OscHalcDef &orc_IoData,
-                             const QString &orc_Path,
-                             const QString &orc_BasePath,
-                             QStringList *const opc_CreatedFiles);
-
-private:
-   static int32_t mh_DetectAndLoad(C_OscHalcDef &orc_Definition,
-                                   const QString &orc_FilePath);
+   static QJsonObject save(const C_OscHalcDef & orc_Definition);
+   static int32_t     load(const QJsonObject & orc_Json, C_OscHalcDef & orc_Definition);
 };
 
-/* -- Extern Global Variables
- * ---------------------------------------------------------------------------------------
- */
 } // namespace opensyde_core
 } // namespace stw
 
-#endif
+#endif // C_OSCHALCDEFFILER_HPP

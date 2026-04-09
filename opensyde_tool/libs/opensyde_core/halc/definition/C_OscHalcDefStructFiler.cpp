@@ -1,148 +1,73 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Filer for HALC definition struct files (Multi-Format - Framework)
+   \brief       JSON filer for C_OscHalcDefStruct (impl)
 
-   Load / save HALC definition struct data from / to binary, JSON, or XML
-   files using the Qt-native serialization framework.
-
-   \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights
-   reserved.
+   \copyright   Copyright 2026 Sensor-Technik Wiedemann GmbH. All rights reserved.
+               Copyright 2026 Elytron Defense. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
 
-#include "precomp_headers.hpp"
+/* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_OscHalcDefStructFiler.hpp"
-#include "C_OscFilerUtil.hpp"
-#include <QFile>
-#include <QFileInfo>
+#include "C_OscJsonUtil.hpp"
+#include "C_OscHalcDefElementFiler.hpp"
+#include "stwerrors.hpp"
 
+#include <QJsonArray>
+#include <QJsonValue>
+
+/* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_core;
 using namespace stw::errors;
 
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::h_LoadHalcDefStructFile(C_OscHalcDefStruct &orc_Struct,
-                                                             const QString &orc_FilePath,
-                                                             const QString &orc_BasePath) {
-   Q_UNUSED(orc_BasePath); // Not used in new framework
-   return mh_DetectAndLoad(orc_Struct, orc_FilePath);
-}
+/* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::h_SaveHalcDefStructFile(const C_OscHalcDefStruct &orc_Struct,
-                                                             const QString &orc_FilePath,
-                                                             const QString &orc_BasePath) {
-   Q_UNUSED(orc_BasePath); // Not used in new framework
+QJsonObject C_OscHalcDefStructFiler::save(const C_OscHalcDefStruct & orc_Struct)
+{
+   QJsonObject c_Json = C_OscHalcDefElementFiler::save(orc_Struct);
 
-   QFileInfo c_FileInfo(orc_FilePath);
-   const QString c_Extension = c_FileInfo.suffix().toLower();
-
-   if (c_Extension == "bin") {
-      return h_SaveBinary(orc_Struct, orc_FilePath);
-   } else if (c_Extension == "json") {
-      return h_SaveJson(orc_Struct, orc_FilePath);
-   } else if (c_Extension == "xml") {
-      return h_SaveXml(orc_Struct, orc_FilePath);
-   } else {
-      return C_CONFIG; // Invalid file extension
+   // Save struct-specific: nested elements
+   QJsonArray c_StructElementsArray;
+   for (const C_OscHalcDefElement & rc_Element : orc_Struct.c_StructElements)
+   {
+      c_StructElementsArray.append(C_OscHalcDefElementFiler::save(rc_Element));
    }
+   c_Json["struct_elements"] = c_StructElementsArray;
+
+   return c_Json;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::h_LoadBinary(C_OscHalcDefStruct &orc_Struct,
-                                                  const QString &orc_FilePath) {
-   QList<C_OscHalcDefStruct> c_List;
-   int32_t s32_Retval = C_OscFilerUtil::h_LoadListBinary<C_OscHalcDefStruct>(c_List, orc_FilePath);
-   if (s32_Retval == stw::errors::C_NO_ERR) {
-      if (c_List.size() > 0) {
-         orc_Struct = c_List.first();
+int32_t C_OscHalcDefStructFiler::load(const QJsonObject & orc_Json, C_OscHalcDefStruct & orc_Struct)
+{
+   // Load base C_OscHalcDefElement fields
+   int32_t s32_Result = C_OscHalcDefElementFiler::load(orc_Json, orc_Struct);
+   if (s32_Result != C_NO_ERR)
+   {
+      return s32_Result;
+   }
+
+   // Load struct-specific: nested elements
+   if (orc_Json.contains("struct_elements"))
+   {
+      const QJsonArray c_StructElementsArray = orc_Json["struct_elements"].toArray();
+      for (const QJsonValue & rc_Item : c_StructElementsArray)
+      {
+         if (!rc_Item.isObject())
+         {
+            return C_CONFIG;
+         }
+         C_OscHalcDefElement c_Element;
+         s32_Result = C_OscHalcDefElementFiler::load(rc_Item.toObject(), c_Element);
+         if (s32_Result != C_NO_ERR)
+         {
+            return s32_Result;
+         }
+         orc_Struct.c_StructElements.append(c_Element);
       }
    }
-   return s32_Retval;
-}
 
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::h_SaveBinary(const C_OscHalcDefStruct &orc_Struct,
-                                                  const QString &orc_FilePath) {
-   QList<C_OscHalcDefStruct> c_List;
-   c_List.append(orc_Struct);
-   return C_OscFilerUtil::h_SaveListBinary<C_OscHalcDefStruct>(c_List, orc_FilePath);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::h_LoadJson(C_OscHalcDefStruct &orc_Struct,
-                                                const QString &orc_FilePath) {
-   QList<C_OscHalcDefStruct> c_List;
-   int32_t s32_Retval = C_OscFilerUtil::h_LoadListJson<C_OscHalcDefStruct>(c_List, orc_FilePath);
-   if (s32_Retval == stw::errors::C_NO_ERR) {
-      if (c_List.size() > 0) {
-         orc_Struct = c_List.first();
-      }
-   }
-   return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::h_SaveJson(const C_OscHalcDefStruct &orc_Struct,
-                                                const QString &orc_FilePath) {
-   QList<C_OscHalcDefStruct> c_List;
-   c_List.append(orc_Struct);
-   return C_OscFilerUtil::h_SaveListJson<C_OscHalcDefStruct>(c_List, orc_FilePath);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::h_LoadXml(C_OscHalcDefStruct &orc_Struct,
-                                               const QString &orc_FilePath) {
-   QList<C_OscHalcDefStruct> c_List;
-   int32_t s32_Retval = C_OscFilerUtil::h_LoadListXml<C_OscHalcDefStruct>(c_List, orc_FilePath, "halcDefStruct", "struct");
-   if (s32_Retval == stw::errors::C_NO_ERR) {
-      if (c_List.size() > 0) {
-         orc_Struct = c_List.first();
-      }
-   }
-   return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::h_SaveXml(const C_OscHalcDefStruct &orc_Struct,
-                                               const QString &orc_FilePath) {
-   QList<C_OscHalcDefStruct> c_List;
-   c_List.append(orc_Struct);
-   return C_OscFilerUtil::h_SaveListXml<C_OscHalcDefStruct>(c_List, orc_FilePath, "halcDefStruct", "struct");
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_OscHalcDefStructFiler::mh_DetectAndLoad(C_OscHalcDefStruct &orc_Struct,
-                                                      const QString &orc_FilePath) {
-   QFileInfo c_FileInfo(orc_FilePath);
-   const QString c_Extension = c_FileInfo.suffix().toLower();
-
-   if (c_Extension == "bin") {
-      return h_LoadBinary(orc_Struct, orc_FilePath);
-   } else if (c_Extension == "json") {
-      return h_LoadJson(orc_Struct, orc_FilePath);
-   } else if (c_Extension == "xml") {
-      return h_LoadXml(orc_Struct, orc_FilePath);
-   } else {
-      return C_CONFIG; // Invalid file extension
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-[[deprecated("Use format-specific methods")]]
-int32_t C_OscHalcDefStructFiler::h_LoadFile(C_OscHalcDefStruct &orc_IoData,
-                                                const QString &orc_Path,
-                                                const QString &orc_BasePath) {
-   return h_LoadHalcDefStructFile(orc_IoData, orc_Path, orc_BasePath);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-[[deprecated("Use format-specific methods")]]
-int32_t C_OscHalcDefStructFiler::h_SaveFile(const C_OscHalcDefStruct &orc_IoData,
-                                                const QString &orc_Path,
-                                                const QString &orc_BasePath,
-                                                QStringList *const opc_CreatedFiles) {
-   Q_UNUSED(orc_BasePath);
-   Q_UNUSED(opc_CreatedFiles);
-   return h_SaveHalcDefStructFile(orc_IoData, orc_Path, orc_BasePath);
+   return C_NO_ERR;
 }
