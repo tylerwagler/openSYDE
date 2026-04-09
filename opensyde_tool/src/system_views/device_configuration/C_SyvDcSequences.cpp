@@ -150,13 +150,12 @@ C_SyvDcSequences::~C_SyvDcSequences(void)
       this->mpc_ComDriver->PrepareForDestructionFlash();
    }
 
-   if (this->mpc_CanDllDispatcher != NULL)
-   {
-      this->mpc_CanDllDispatcher->CAN_Exit();
-      this->mpc_CanDllDispatcher->DLL_Close();
-      delete mpc_CanDllDispatcher;
-      mpc_CanDllDispatcher = NULL;
-   }
+    if (this->mpc_CanDllDispatcher != NULL)
+    {
+       this->mpc_CanDllDispatcher->CAN_Exit();
+       delete mpc_CanDllDispatcher;
+       mpc_CanDllDispatcher = NULL;
+    }
 
    delete mpc_EthernetDispatcher;
    mpc_EthernetDispatcher = NULL;

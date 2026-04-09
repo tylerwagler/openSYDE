@@ -11,8 +11,10 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 //Html help
+#ifdef _WIN32
 #include <windows.h>
 #include <htmlhelp.h>
+#endif
 #include <QProcess>
 #include <QKeyEvent>
 #include "C_HeHandler.hpp"
@@ -56,6 +58,7 @@ C_HeHandler & C_HeHandler::h_GetInstance(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_HeHandler::CallSpecificHelpPage(const QString & orc_ClassName)
 {
+#ifdef _WIN32
    QString c_PageSearchName = "";
 
    const QString c_PageName = orc_ClassName;
@@ -104,6 +107,10 @@ void C_HeHandler::CallSpecificHelpPage(const QString & orc_ClassName)
          delete[] (pcn_Text);
       }
    }
+#else
+   (void)orc_ClassName;
+   // HTML Help (.chm) is not available on Linux — no-op for now
+#endif
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -152,6 +159,7 @@ C_HeHandler::C_HeHandler() :
 {
    m_InitSpecialHelpPages();
 
+#ifdef _WIN32
    //Load DLL
    this->mpc_InstHtmlHelp = LoadLibraryA("HHCtrl.ocx");
    if (this->mpc_InstHtmlHelp != NULL)
@@ -164,6 +172,7 @@ C_HeHandler::C_HeHandler() :
    {
       this->mpr_HtmlHelp = NULL;
    }
+#endif
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -173,11 +182,13 @@ C_HeHandler::C_HeHandler() :
 //lint -e{1540}  DLL freed by function call
 C_HeHandler::~C_HeHandler()
 {
+#ifdef _WIN32
    //Free DLL
    if (this->mpc_InstHtmlHelp != NULL)
    {
       FreeLibrary(this->mpc_InstHtmlHelp);
    }
+#endif
 }
 
 //----------------------------------------------------------------------------------------------------------------------

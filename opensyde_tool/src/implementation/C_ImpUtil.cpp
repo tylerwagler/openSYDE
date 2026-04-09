@@ -12,8 +12,10 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#ifdef _WIN32
 #include <windows.h> //tlhelp32 does not do this by itself ...
 #include <tlhelp32.h>
+#endif
 #include <QDir>
 #include <QProcess>
 #include <QTextStream>
@@ -495,6 +497,7 @@ int32_t C_ImpUtil::h_OpenIde(const QString & orc_IdeExeCall)
       const QFileInfo c_ExeFile(c_ExeOnly);
       if (c_ExeFile.exists() == true)
       {
+#ifdef _WIN32
          std::vector<HWND> c_Windows;
          c_ExeOnly = c_ExeFile.fileName();
 
@@ -516,6 +519,10 @@ int32_t C_ImpUtil::h_OpenIde(const QString & orc_IdeExeCall)
          {
             q_ContinueWithExeOpening = true;
          }
+#else
+         // On Linux, just try to open it (no window-focus management available)
+         q_ContinueWithExeOpening = true;
+#endif
       }
       // we could not extract valid executable name, but want to try to open it anyway (maybe results in a second
       // instance of already opened program or in an error because user inserted invalid path)
@@ -1004,6 +1011,7 @@ void C_ImpUtil::mh_CheckNodeDatapoolsAssignmentForExportCode(const uint32_t ou32
    }
 }
 
+#ifdef _WIN32
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Get active window handle if already existing
 
@@ -1093,6 +1101,7 @@ WINBOOL CALLBACK C_ImpUtil::mh_EnumWindowsCallback(HWND opc_Handle, const LPARAM
    }
    return x_Result;
 }
+#endif // _WIN32
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Call external file generation tool.

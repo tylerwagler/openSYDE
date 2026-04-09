@@ -14,6 +14,10 @@
 
 #include <QFileInfo>
 #include <QScreen>
+#ifndef _WIN32
+#include <QProcess>
+#include <QRegularExpression>
+#endif
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -619,12 +623,14 @@ void C_CamMainWindow::m_ClearData()
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
 {
-   QString c_DllPath;
    int32_t s32_Return = C_RD_WR;
-   QFileInfo c_File;
 
    // Initialize
    ors32_Bitrate = 0;
+
+#ifdef _WIN32
+   QString c_DllPath;
+   QFileInfo c_File;
 
    // Get absolute DLL path (resolve variables and make absolute if it is relative ant not empty)
    c_DllPath = C_CamProHandler::h_GetInstance()->GetCanDllPath();
@@ -674,6 +680,51 @@ int32_t C_CamMainWindow::m_InitCan(int32_t & ors32_Bitrate)
          s32_Return = C_CONFIG;
       }
    }
+#else
+   // On Linux, use SocketCAN. The "DLL path" field is repurposed as the interface name (e.g. "can0", "vcan0").
+   QString c_IfName = C_CamProHandler::h_GetInstance()->GetCanDllPath();
+   if (c_IfName.isEmpty())
+   {
+      c_IfName = "can0"; // default SocketCAN interface
+   }
+
+   s32_Return = this->mpc_CanDllDispatcher->CAN_Init(
+      stw::scl::C_SclString(c_IfName.toStdString().c_str()));
+
+   if (s32_Return == C_NO_ERR)
+   {
+      // Read bitrate from SocketCAN interface via 'ip' command
+      QProcess c_Process;
+      c_Process.start("ip", QStringList() << "-details" << "link" << "show" << c_IfName);
+      if (c_Process.waitForFinished(1000))
+      {
+         const QString c_Output = QString::fromUtf8(c_Process.readAllStandardOutput());
+         // Parse "bitrate 500000" from ip output
+         const QRegularExpression c_Regex("bitrate\\s+(\\d+)");
+         const QRegularExpressionMatch c_Match = c_Regex.match(c_Output);
+         if (c_Match.hasMatch())
+         {
+            ors32_Bitrate = c_Match.captured(1).toInt();
+            s32_Return = C_NO_ERR;
+         }
+         else
+         {
+            // vcan interfaces don't have a bitrate — that's OK
+            s32_Return = C_WARN;
+            ors32_Bitrate = 0;
+         }
+      }
+      else
+      {
+         s32_Return = C_WARN;
+         ors32_Bitrate = 0;
+      }
+   }
+   else
+   {
+      s32_Return = C_COM;
+   }
+#endif
 
    return s32_Return;
 }

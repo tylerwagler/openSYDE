@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.5)
 
 find_package(ZLIB)
 
@@ -237,7 +237,7 @@ set(private_header_files
 
 add_compiler_export_flags()
 
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} STATIC
     ${source_files} ${public_header_files} ${private_header_files})
 
 if(OPTION_USE_GCOV_LCOV)

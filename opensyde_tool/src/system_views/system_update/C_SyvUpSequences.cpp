@@ -99,12 +99,11 @@ C_SyvUpSequences::~C_SyvUpSequences(void)
 
    delete mpc_Lock;
 
-   if (this->mpc_CanDllDispatcher != NULL)
-   {
-      this->mpc_CanDllDispatcher->CAN_Exit();
-      this->mpc_CanDllDispatcher->DLL_Close();
-      delete mpc_CanDllDispatcher;
-   }
+    if (this->mpc_CanDllDispatcher != NULL)
+    {
+       this->mpc_CanDllDispatcher->CAN_Exit();
+       delete mpc_CanDllDispatcher;
+    }
 
    delete mpc_EthernetDispatcher;
 }

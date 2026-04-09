@@ -110,14 +110,13 @@ C_SyvComDriverDiag::~C_SyvComDriverDiag(void)
       this->mc_DataDealers[u32_DealerIndex] = NULL;
    }
 
-   if (mpc_CanDllDispatcher != NULL)
-   {
-      this->mpc_CanDllDispatcher->CAN_Exit();
-      this->mpc_CanDllDispatcher->DLL_Close();
+    if (mpc_CanDllDispatcher != NULL)
+    {
+       this->mpc_CanDllDispatcher->CAN_Exit();
 
-      delete mpc_CanDllDispatcher;
-      mpc_CanDllDispatcher = NULL;
-   }
+       delete mpc_CanDllDispatcher;
+       mpc_CanDllDispatcher = NULL;
+    }
 
    delete this->mpc_EthernetDispatcher;
    //lint -e{1579}  no memory leak because mpc_AsyncThread is deleted here which is not detected by lint

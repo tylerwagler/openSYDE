@@ -17,7 +17,7 @@
 #include "TglTasks.hpp"
 #include "C_OscSuSequences.hpp"
 #include "C_SyvComDriverThread.hpp"
-#include "C_OscIpDispatcherWinSock.hpp"
+#include "C_OscIpDispatcherPlatform.hpp"
 #include "C_OscSecurityPemDatabase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

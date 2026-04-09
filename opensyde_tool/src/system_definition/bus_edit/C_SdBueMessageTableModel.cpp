@@ -862,10 +862,10 @@ QVariant C_SdBueMessageTableModel::m_GetCobId(const C_OscCanMessage & orc_Messag
 {
    QVariant c_Retval;
 
-   if (os32_Role == static_cast<int32_t>(Qt::EditRole))
-   {
-      c_Retval = static_cast<int64_t>(orc_Message.u32_CanId);
-   }
+    if (os32_Role == static_cast<int32_t>(Qt::EditRole))
+    {
+       c_Retval = QVariant::fromValue<qint64>(static_cast<qint64>(orc_Message.u32_CanId));
+    }
    else
    {
       const QString c_CanId = "0x" + QString::number(orc_Message.u32_CanId, 16).toUpper();
@@ -921,12 +921,12 @@ QVariant C_SdBueMessageTableModel::m_GetNotLaterThanValue(const C_OscCanMessage 
 {
    QVariant c_Retval;
 
-   if ((orc_Message.e_TxMethod == C_OscCanMessage::eTX_METHOD_ON_CHANGE) ||
-       ((this->mpc_SyncManager != NULL) &&
-        (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN)))
-   {
-      c_Retval = static_cast<uint64_t>(orc_Message.u32_CycleTimeMs);
-   }
+    if ((orc_Message.e_TxMethod == C_OscCanMessage::eTX_METHOD_ON_CHANGE) ||
+        ((this->mpc_SyncManager != NULL) &&
+         (this->mpc_SyncManager->GetCurrentComProtocol() == C_OscCanProtocol::eCAN_OPEN)))
+    {
+       c_Retval = QVariant::fromValue<quint64>(static_cast<quint64>(orc_Message.u32_CycleTimeMs));
+    }
    else
    {
       c_Retval = "-";
