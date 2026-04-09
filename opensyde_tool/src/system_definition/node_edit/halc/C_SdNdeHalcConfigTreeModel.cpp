@@ -222,14 +222,14 @@ QVariant C_SdNdeHalcConfigTreeModel::data(const QModelIndex & orc_Index, const i
                      if (c_It->second == pc_ParameterElement->c_Value)
                      {
                         if (os32_Role == static_cast<int32_t>(Qt::DisplayRole))
-                        {
-                           c_Retval = c_It->first.c_str();
-                        }
-                        else
-                        {
-                           c_Retval = static_cast<int64_t>(u32_Counter);
-                        }
-                        break;
+                         {
+                            c_Retval = c_It->first.c_str();
+                         }
+                         else
+                         {
+                            c_Retval = static_cast<quint64>(u32_Counter);
+                         }
+                         break;
                      }
                      u32_Counter++;
                   }

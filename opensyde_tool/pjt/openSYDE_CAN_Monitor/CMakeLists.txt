@@ -11,22 +11,24 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-# For supporting windows .rc files
-enable_language("RC")
-# Special configuration of RC file compiling with windres necessary. Without change, the command line call is to long
-# for windres with all include paths forwarded by CMake
-set(CMAKE_RC_INCLUDE_PATH
-   ${PROJECT_ROOT}/src/can_monitor
-)
-set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
+# For supporting windows .rc files - only enable on Windows
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+   enable_language("RC")
+   set(CMAKE_RC_INCLUDE_PATH
+      ${PROJECT_ROOT}/src/can_monitor
+   )
+   set(CMAKE_RC_COMPILE_OBJECT "${CMAKE_RC_COMPILER} -O coff -I${CMAKE_RC_INCLUDE_PATH} <SOURCE> <OBJECT>")
+endif()
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_PCH_INSTANTIATE_TEMPLATES ON)
 
 #signals emit etc. are in conflict with the DBC library
 add_definitions(-DQT_NO_KEYWORDS)
-add_definitions(-DUNICODE -D_UNICODE)
-add_definitions(-DQT_STATICPLUGIN)
+if(WIN32)
+   add_definitions(-DUNICODE -D_UNICODE)
+   add_definitions(-DQT_STATICPLUGIN)
+endif()
 
 set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/../..)
 
@@ -95,7 +97,6 @@ set (OPENSYDE_INCLUDES
    ${PROJECT_ROOT}/src/gettext
    ${PROJECT_ROOT}/src/util
    ${PROJECT_ROOT}/src/precompiled_headers/can_monitor
-   ${PROJECT_ROOT}/libs/gettext
    ${PROJECT_ROOT}/libs/flexlexer
    ${PROJECT_ROOT}/libs/dbc_driver_library/src
    ${PROJECT_ROOT}/libs/dbc_driver_library/src/Vector
@@ -105,9 +106,11 @@ set (OPENSYDE_INCLUDES
 
 # Include path with library modules
 set (OPENSYDE_LIB_INCLUDES
-   ${PROJECT_ROOT}/libs/gettext
    ${PROJECT_ROOT}/libs/flexlexer
 )
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   list(APPEND OPENSYDE_LIB_INCLUDES ${PROJECT_ROOT}/libs/gettext)
+endif()
 
 # --- PROJECT SOURCE FILE PATHS ----------------------------------------------------------------------------------------
 
@@ -718,8 +721,13 @@ set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING            0)
 set(OPENSYDE_CORE_SKIP_X_CONFIG_GENERATION         1)
 set(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION   1)
 set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     1)
-set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS             0)
-set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET              0)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          1)
+   set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           1)
+else()
+   set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          0)
+   set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           0)
+endif()
 set(OPENSYDE_CORE_SKIP_SECURITY                    1)
 
 add_subdirectory(${PROJECT_ROOT}/libs/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
@@ -732,13 +740,26 @@ set(OPENSYDE_LINK_LIBRARIES
    Qt6::Svg
    Qt6::SvgWidgets
    opensyde_core
-   version
-   ws2_32   #WinSock
-   Iphlpapi #IP helper API
-   ${PROJECT_ROOT}/libs/gettext/libintl.a
-   ${PROJECT_ROOT}/libs/blf_driver_library/libvector_blf.a
-   ${PROJECT_ROOT}/libs/zlib/libzlibstatic.a
 )
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   find_package(PkgConfig REQUIRED)
+   find_package(ZLIB REQUIRED)
+   # Build vector_blf from source
+   add_subdirectory(${PROJECT_ROOT}/../libraries/vector_blf-1.0.0 ${CMAKE_BINARY_DIR}/vector_blf EXCLUDE_FROM_ALL)
+   list(APPEND OPENSYDE_LINK_LIBRARIES
+      Vector_BLF
+      ZLIB::ZLIB
+   )
+else()
+   list(APPEND OPENSYDE_LINK_LIBRARIES
+      version
+      ws2_32   #WinSock
+      Iphlpapi #IP helper API
+      ${PROJECT_ROOT}/libs/gettext/libintl.a
+      ${PROJECT_ROOT}/libs/blf_driver_library/libvector_blf.a
+      ${PROJECT_ROOT}/libs/zlib/libzlibstatic.a
+   )
+endif()
 
 # COMPILER SWITCHES
 # use same compiler switches that gcc uses when compiling openSYDE core from osc_moduletest.pro file
@@ -755,9 +776,14 @@ set_source_files_properties(${PROJECT_ROOT}/libs/opensyde_core/miniz/miniz.c PRO
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 
 # WIN32 is necessary to suppress console opening in background
+if(WIN32)
+   set(PLATFORM_RC_FILE ${PROJECT_ROOT}/src/can_monitor/cam_resources.rc)
+else()
+   set(PLATFORM_RC_FILE "")
+endif()
 qt_add_executable(openSYDE_CAN_Monitor
    WIN32
-   ${PROJECT_ROOT}/src/can_monitor/cam_resources.rc
+   ${PLATFORM_RC_FILE}
    ${PROJECT_ROOT}/src/can_monitor/cam_application.qrc
    ${OPENSYDE_SOURCES} ${OPENSYDE_HEADERS} ${OPENSYDE_FORMS})
 

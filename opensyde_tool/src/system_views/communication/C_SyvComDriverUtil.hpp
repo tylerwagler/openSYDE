@@ -16,7 +16,7 @@
 #include "C_OscSystemDefinition.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_Can.hpp"
-#include "C_OscIpDispatcherWinSock.hpp"
+#include "C_OscIpDispatcherPlatform.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw

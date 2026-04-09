@@ -25,7 +25,7 @@
 #include "C_OscDcDeviceInformation.hpp"
 #include "C_SyvComDriverThread.hpp"
 #include "C_OscNodeComInterfaceSettings.hpp"
-#include "C_OscIpDispatcherWinSock.hpp"
+#include "C_OscIpDispatcherPlatform.hpp"
 #include "C_OscSecurityPemDatabase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

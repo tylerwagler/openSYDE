@@ -243,24 +243,24 @@ void C_OgeSpxInt64AutoFix::m_Init(void)
          if (this->GetIsUnsigned() == true)
          {
             u64_ScaledMin = static_cast<uint64_t>(f64_Tmp);
-            c_ScaledMin = static_cast<QVariant>(u64_ScaledMin);
+            c_ScaledMin = QVariant::fromValue<quint64>(u64_ScaledMin);
          }
          else
          {
             s64_ScaledMin = static_cast<int64_t>(f64_Tmp);
-            c_ScaledMin = static_cast<QVariant>(s64_ScaledMin);
+            c_ScaledMin = QVariant::fromValue<qint64>(s64_ScaledMin);
          }
          this->mc_UnscaledMax.GetAnyValueAsFloat64(f64_Tmp, this->mu32_Index);
          f64_Tmp = C_OscUtils::h_GetValueScaled(f64_Tmp, this->mf64_Factor, this->mf64_Offset);
          if (this->GetIsUnsigned() == true)
          {
             u64_ScaledMax = static_cast<uint64_t>(f64_Tmp);
-            c_ScaledMax = static_cast<QVariant>(u64_ScaledMax);
+            c_ScaledMax = QVariant::fromValue<quint64>(u64_ScaledMax);
          }
          else
          {
             s64_ScaledMax = static_cast<int64_t>(f64_Tmp);
-            c_ScaledMax = static_cast<QVariant>(s64_ScaledMax);
+            c_ScaledMax = QVariant::fromValue<qint64>(s64_ScaledMax);
          }
       }
       else
@@ -269,15 +269,15 @@ void C_OgeSpxInt64AutoFix::m_Init(void)
          {
             C_SdNdeDpContentUtil::h_GetAnyValueAsUint64(this->mc_UnscaledMin, u64_ScaledMin, this->mu32_Index);
             C_SdNdeDpContentUtil::h_GetAnyValueAsUint64(this->mc_UnscaledMax, u64_ScaledMax, this->mu32_Index);
-            c_ScaledMin = static_cast<QVariant>(u64_ScaledMin);
-            c_ScaledMax = static_cast<QVariant>(u64_ScaledMax);
+            c_ScaledMin = QVariant::fromValue<quint64>(u64_ScaledMin);
+            c_ScaledMax = QVariant::fromValue<quint64>(u64_ScaledMax);
          }
          else
          {
             C_SdNdeDpContentUtil::h_GetAnyValueAsSint64(this->mc_UnscaledMin, s64_ScaledMin, this->mu32_Index);
             C_SdNdeDpContentUtil::h_GetAnyValueAsSint64(this->mc_UnscaledMax, s64_ScaledMax, this->mu32_Index);
-            c_ScaledMin = static_cast<QVariant>(s64_ScaledMin);
-            c_ScaledMax = static_cast<QVariant>(s64_ScaledMax);
+            c_ScaledMin = QVariant::fromValue<qint64>(s64_ScaledMin);
+            c_ScaledMax = QVariant::fromValue<qint64>(s64_ScaledMax);
          }
       }
       this->SetMinimum(c_ScaledMin);

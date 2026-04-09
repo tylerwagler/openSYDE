@@ -69,6 +69,19 @@ public:
    //additional functions for Linux socket CAN driver
    int32_t CAN_Init(const stw::scl::C_SclString & orc_InterfaceName, const int32_t os32_RxTimeout = 0);
 
+   // Windows API compatibility stubs — map DLL_Open/DLL_Close to CAN_Init/CAN_Exit
+   int32_t DLL_Open(void) { return CAN_Init(); }
+   int32_t DLL_Open(const stw::scl::C_SclString & orc_InterfaceName) { return CAN_Init(orc_InterfaceName); }
+   int32_t DLL_Close(void) { return CAN_Exit(); }
+   int32_t CAN_Status(T_STWCAN_Status & orc_Status) const
+   {
+      (void)orc_Status;
+      return 0; // not available on Linux SocketCAN
+   }
+   int32_t CAN_InteractiveSetup(void) { return -1; } // not available on Linux
+   void SetDLLName(const stw::scl::C_SclString & orc_Name) { mc_CanIfName = orc_Name; }
+   stw::scl::C_SclString GetDLLName(void) const { return mc_CanIfName; }
+
    //lint -e{8001} //keep name so this class can serve as a stand-in replacement for pre-existing Windows applications
    void SetLimitRXID(const uint32_t ou32_LimitRxId);
    //lint -e{8001} //keep name so this class can serve as a stand-in replacement for pre-existing Windows applications

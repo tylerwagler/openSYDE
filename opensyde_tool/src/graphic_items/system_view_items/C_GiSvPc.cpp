@@ -11,7 +11,9 @@
 #include "precomp_headers.hpp"
 
 #include <cmath>
+#ifdef _WIN32
 #include <windows.h>
+#endif
 
 #include <QGraphicsView>
 
@@ -474,16 +476,18 @@ void C_GiSvPc::hoverLeaveEvent(QGraphicsSceneHoverEvent * const opc_Event)
 //----------------------------------------------------------------------------------------------------------------------
 bool C_GiSvPc::m_OpenCanDllDialog(void) const
 {
-   bool q_Retval = false;
-   const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
+    bool q_Retval = false;
 
-   if (pc_View != NULL)
-   {
-      const C_OscViewPc & rc_OscPcData = pc_View->GetOscPcData();
-      const C_PuiSvPc & rc_PcData = pc_View->GetPuiPcData();
-      QGraphicsView * const pc_GraphicsView = this->scene()->views().at(0);
-      const QPointer<C_OgePopUpDialog> c_DllDialog = new C_OgePopUpDialog(pc_GraphicsView, pc_GraphicsView);
-      C_SyvSeDllConfigurationDialog * const pc_DllWidget = new C_SyvSeDllConfigurationDialog(*c_DllDialog);
+#ifdef _WIN32
+    // TODO: Implement Linux SocketCAN configuration UI
+    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
+    if (pc_View != NULL)
+    {
+        const C_OscViewPc & rc_OscPcData = pc_View->GetOscPcData();
+        const C_PuiSvPc & rc_PcData = pc_View->GetPuiPcData();
+        QGraphicsView * const pc_GraphicsView = this->scene()->views().at(0);
+        const QPointer<C_OgePopUpDialog> c_DllDialog = new C_OgePopUpDialog(pc_GraphicsView, pc_GraphicsView);
+        C_SyvSeDllConfigurationDialog * const pc_DllWidget = new C_SyvSeDllConfigurationDialog(*c_DllDialog);
 
       // Resize
       const QSize c_SIZE(700, 490);
@@ -511,13 +515,21 @@ bool C_GiSvPc::m_OpenCanDllDialog(void) const
          q_Retval = true;
       }
 
-      if (c_DllDialog != NULL)
-      {
-         c_DllDialog->HideOverlay();
-         c_DllDialog->deleteLater();
-      }
-   } //lint !e429  //no memory leak because of the parent of pc_DllWidget and the Qt memory management
-   return q_Retval;
+    if (c_DllDialog != NULL)
+    {
+        c_DllDialog->HideOverlay();
+        c_DllDialog->deleteLater();
+    }
+ } //lint !e429  //no memory leak because of the parent of pc_DllWidget and the Qt memory management
+#else
+    // Linux: Show message that DLL configuration is Windows-only
+    C_OgeWiCustomMessage c_Message(this->scene()->views().at(0));
+    c_Message.SetHeading(C_GtGetText::h_GetText("Configure PC CAN Interface"));
+    c_Message.SetDescription(C_GtGetText::h_GetText("DLL configuration is only available on Windows.\n\n"
+                                                    "On Linux, configure SocketCAN interfaces using system tools."));
+    c_Message.Execute();
+#endif
+    return q_Retval;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -530,6 +542,7 @@ bool C_GiSvPc::m_OpenCanDllDialog(void) const
 //----------------------------------------------------------------------------------------------------------------------
 bool C_GiSvPc::mh_GetIsLaptop(void)
 {
+#ifdef _WIN32
    SYSTEM_POWER_STATUS c_PowerStatus;
    const int32_t s32_Success = GetSystemPowerStatus(&c_PowerStatus);
    bool q_Return = false;
@@ -542,8 +555,11 @@ bool C_GiSvPc::mh_GetIsLaptop(void)
          q_Return = true;
       }
    }
-
    return q_Return;
+#else
+    // Linux: Return false (assume not a laptop)
+    return false;
+#endif
 }
 
 //----------------------------------------------------------------------------------------------------------------------

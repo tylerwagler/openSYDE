@@ -112,17 +112,19 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
 
                   c_File.setFileName(c_FilePath);
 
-                  if (c_File.exists() == true)
-                  {
-                     *oppc_CanDispatcher = new stw::can::C_Can();
+                   if (c_File.exists() == true)
+                   {
+                      *oppc_CanDispatcher = new stw::can::C_Can();
 
-                     s32_Retval = (*oppc_CanDispatcher)->DLL_Open(c_FilePath.toStdString().c_str());
-                     if ((s32_Retval == C_NO_ERR) &&
-                         (oq_InitCan == true))
-                     {
-                        s32_Retval =
-                           (*oppc_CanDispatcher)->CAN_Init(static_cast<int32_t>(pc_Bus->u64_BitRate / 1000ULL));
-                     }
+                      if (oq_InitCan == true)
+                      {
+                         s32_Retval =
+                            (*oppc_CanDispatcher)->CAN_Init(static_cast<int32_t>(pc_Bus->u64_BitRate / 1000ULL));
+                      }
+                      else
+                      {
+                         s32_Retval = C_NO_ERR;
+                      }
 
                      if (s32_Retval != C_NO_ERR)
                      {
@@ -136,16 +138,10 @@ int32_t C_SyvComDriverUtil::h_GetOscComDriverParamFromView(const uint32_t ou32_V
                }
                else
                {
-                  //No CAN
+                   //No CAN
 
-                  // Set optional Ethernet configuration file path
-                  const QString c_EthFilePath = stw::opensyde_gui_logic::C_Uti::h_GetAbsolutePathFromExe(
-                     "User/eth_config.ini");
-
-                  *oppc_CanDispatcher = NULL;
-                  *oppc_IpDispatcher = new C_OscIpDispatcherWinSock();
-
-                  (*oppc_IpDispatcher)->LoadConfigFile(c_EthFilePath.toStdString().c_str());
+                   *oppc_CanDispatcher = NULL;
+                   *oppc_IpDispatcher = new C_OscIpDispatcherWinSock();
                }
             }
             else

@@ -11,6 +11,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QMainWindow>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include "C_Can.hpp"
 #include "C_FlaSenDcBasicSequences.hpp"

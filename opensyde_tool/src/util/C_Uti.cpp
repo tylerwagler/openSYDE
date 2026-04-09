@@ -577,14 +577,15 @@ QString C_Uti::h_GetPemDbPath()
 //----------------------------------------------------------------------------------------------------------------------
 QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat)
 {
+   C_SclString c_Version;
+   c_Version = "V?.\?\?r?";
+
+#ifdef _WIN32
    const QFileInfo c_FileInfo(QApplication::applicationFilePath());
    const QString c_FileName = c_FileInfo.fileName();
    VS_FIXEDFILEINFO * pc_Info;
    uint32_t u32_ValSize;
    int32_t s32_InfoSize;
-   C_SclString c_Version;
-
-   c_Version = "V?.\?\?r?";
 
    s32_InfoSize = GetFileVersionInfoSizeA(c_FileName.toStdString().c_str(), NULL);
    if (s32_InfoSize != 0)
@@ -614,6 +615,11 @@ QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat)
       }
       delete[] pu8_Buffer;
    }
+#else
+   // On Linux, version info is not embedded in the ELF binary the way Windows PE resources work.
+   // Use a compile-time version string or read from a version file.
+   (void)oq_UseStwFormat;
+#endif
    return c_Version.c_str();
 }
 

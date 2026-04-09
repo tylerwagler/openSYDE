@@ -816,6 +816,44 @@ else()
    )
 endif()
 
+# linux target drivers: CAN (socket CAN) and Ethernet (Linux sockets) dispatchers
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   message("Linux detected ... dragging in Linux drivers")
+
+   set(OPENSYDE_CORE_LINUX_DRIVERS_SOURCES
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can/C_Can.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can/C_Can.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.hpp
+   )
+
+   set(OPENSYDE_CORE_LINUX_DRIVERS_INCLUDE_DIRECTORIES
+      ${CMAKE_CURRENT_SOURCE_DIR}/can_dispatcher/target_linux_socket_can
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher
+      ${CMAKE_CURRENT_SOURCE_DIR}/ip_dispatcher/target_linux_sock
+   )
+endif()
+
+# linux target glue layer
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   message("Linux detected ... dragging in Linux target layer")
+
+   set(OPENSYDE_CORE_LINUX_TARGET_SOURCES
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglFile.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglTasks.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglTime.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglUtils.cpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglFile.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglTasks.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglTime.hpp
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux/TglUtils.hpp
+   )
+
+   set(OPENSYDE_CORE_LINUX_TARGET_INCLUDE_DIRECTORIES
+      ${CMAKE_CURRENT_SOURCE_DIR}/kefex_diaglib/tgl_linux
+   )
+endif()
+
 # security features like authentification, secure update, secure communication
 if(OPENSYDE_CORE_SKIP_SECURITY)
    message("OPENSYDE_CORE_SKIP_SECURITY detected ... skipping package")
@@ -874,6 +912,8 @@ set(OPENSYDE_CORE_SOURCES
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_MONITOR_SOURCES}
    ${OPENSYDE_CORE_WINDOWS_DRIVERS_SOURCES}
    ${OPENSYDE_CORE_WINDOWS_TARGET_SOURCES}
+   ${OPENSYDE_CORE_LINUX_DRIVERS_SOURCES}
+   ${OPENSYDE_CORE_LINUX_TARGET_SOURCES}
    ${OPENSYDE_CORE_PROTOCOL_LOGGING_SOURCES}
    ${OPENSYDE_CORE_SECURITY_SOURCES}
 )
@@ -895,6 +935,8 @@ set(OPENSYDE_CORE_INCLUDE_DIRECTORIES
    ${OPENSYDE_CORE_PROTOCOL_DRIVERS_MONITOR_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_WINDOWS_DRIVERS_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_WINDOWS_TARGET_INCLUDE_DIRECTORIES}
+   ${OPENSYDE_CORE_LINUX_DRIVERS_INCLUDE_DIRECTORIES}
+   ${OPENSYDE_CORE_LINUX_TARGET_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_PROTOCOL_LOGGING_INCLUDE_DIRECTORIES}
    ${OPENSYDE_CORE_SECURITY_INCLUDE_DIRECTORIES}
 )

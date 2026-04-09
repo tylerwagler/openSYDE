@@ -294,29 +294,36 @@ void C_SyvSeDllConfigurationDialog::m_ConfigureDllClicked(void) const
    {
       const QString c_Path = this->m_GetAbsoluteDllPath();
 
-      if (QFile::exists(c_Path) == true)
-      {
-         C_Can c_Can;
-         const int32_t s32_Return = c_Can.DLL_Open(c_Path.toStdString().c_str());
+       if (QFile::exists(c_Path) == true)
+       {
+#ifdef _WIN32
+          // TODO: Implement Linux SocketCAN equivalent for DLL_Open
+          C_Can c_Can;
+          const int32_t s32_Return = c_Can.DLL_Open(c_Path.toStdString().c_str());
 
-         if (s32_Return == C_NO_ERR)
-         {
-            // let the user configure the DLL
-            c_Can.CAN_InteractiveSetup();
-         }
-         else
-         {
-            const uint32_t u32_BITNESS = 8 * sizeof(size_t);
-            C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eWARNING);
-            c_MessageBox.SetHeading(C_GtGetText::h_GetText("PC CAN Interface configuration"));
-            c_MessageBox.SetDescription(
-               static_cast<QString>(C_GtGetText::h_GetText("CAN DLL initialization not successful. "
-                                                           "Make sure to use a %1-bit DLL.")).arg(u32_BITNESS));
-            c_MessageBox.SetCustomMinHeight(180, 180);
-            c_MessageBox.Execute();
-         }
-         (void)c_Can.DLL_Close();
-      }
+          if (s32_Return == C_NO_ERR)
+          {
+             // let the user configure the DLL
+             // TODO: Implement Linux SocketCAN equivalent for CAN_InteractiveSetup
+             c_Can.CAN_InteractiveSetup();
+          }
+          else
+          {
+             const uint32_t u32_BITNESS = 8 * sizeof(size_t);
+             C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eWARNING);
+             c_MessageBox.SetHeading(C_GtGetText::h_GetText("PC CAN Interface configuration"));
+             c_MessageBox.SetDescription(
+                static_cast<QString>(C_GtGetText::h_GetText("CAN DLL initialization not successful. "
+                                                            "Make sure to use a %1-bit DLL.")).arg(u32_BITNESS));
+             c_MessageBox.SetCustomMinHeight(180, 180);
+             c_MessageBox.Execute();
+          }
+          // TODO: Implement Linux SocketCAN equivalent for DLL_Close
+          (void)c_Can.DLL_Close();
+#else
+          // TODO: Implement Linux SocketCAN equivalent for DLL configuration
+#endif
+       }
       else
       {
          C_OgeWiCustomMessage c_MessageBox(this->parentWidget(), C_OgeWiCustomMessage::E_Type::eWARNING);
@@ -340,44 +347,50 @@ void C_SyvSeDllConfigurationDialog::m_TestConnectionClicked(void) const
       const QString c_Path = this->m_GetAbsoluteDllPath();
       const QString c_Heading = C_GtGetText::h_GetText("PC CAN Interface configuration");
 
-      if (QFile::exists(c_Path) == true)
-      {
-         C_Can c_Can;
-         int32_t s32_Return = c_Can.DLL_Open(c_Path.toStdString().c_str());
-         if (s32_Return == C_NO_ERR)
-         {
-            // Test the CAN
-            if (this->mu64_Bitrate > 0U)
-            {
-               const uint64_t u64_BitrateKbit = this->mu64_Bitrate / 1000U;
-               s32_Return = c_Can.CAN_Init(static_cast<int32_t>(u64_BitrateKbit));
-            }
-            else
-            {
-               s32_Return = c_Can.CAN_Init();
-            }
+       if (QFile::exists(c_Path) == true)
+       {
+#ifdef _WIN32
+          // TODO: Implement Linux SocketCAN equivalent for DLL_Open
+          C_Can c_Can;
+          int32_t s32_Return = c_Can.DLL_Open(c_Path.toStdString().c_str());
+          if (s32_Return == C_NO_ERR)
+          {
+             // Test the CAN
+             if (this->mu64_Bitrate > 0U)
+             {
+                const uint64_t u64_BitrateKbit = this->mu64_Bitrate / 1000U;
+                s32_Return = c_Can.CAN_Init(static_cast<int32_t>(u64_BitrateKbit));
+             }
+             else
+             {
+                s32_Return = c_Can.CAN_Init();
+             }
 
-            if (s32_Return == C_NO_ERR)
-            {
-               c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eINFORMATION);
-               c_Description = C_GtGetText::h_GetText("Connection test successful. CAN Interface is ready for use.");
-            }
-            else
-            {
-               c_Description =
-                  C_GtGetText::h_GetText("CAN bus initialization not successful: could not initialize bus.");
-            }
-            (void)c_Can.CAN_Exit();
-         }
-         else
-         {
-            const uint32_t u32_BITNESS = 8 * sizeof(size_t);
-            c_Description = static_cast<QString>(
-               C_GtGetText::h_GetText("CAN DLL initialization not successful. Make sure to use a %1-bit DLL.")).
-                            arg(u32_BITNESS);
-         }
-         (void)c_Can.DLL_Close();
-      }
+             if (s32_Return == C_NO_ERR)
+             {
+                c_MessageBox.SetType(C_OgeWiCustomMessage::E_Type::eINFORMATION);
+                c_Description = C_GtGetText::h_GetText("Connection test successful. CAN Interface is ready for use.");
+             }
+             else
+             {
+                c_Description =
+                   C_GtGetText::h_GetText("CAN bus initialization not successful: could not initialize bus.");
+             }
+             (void)c_Can.CAN_Exit();
+          }
+          else
+          {
+             const uint32_t u32_BITNESS = 8 * sizeof(size_t);
+             c_Description = static_cast<QString>(
+                C_GtGetText::h_GetText("CAN DLL initialization not successful. Make sure to use a %1-bit DLL.")).
+                             arg(u32_BITNESS);
+          }
+          // TODO: Implement Linux SocketCAN equivalent for DLL_Close
+          (void)c_Can.DLL_Close();
+#else
+          // TODO: Implement Linux SocketCAN equivalent for DLL configuration
+#endif
+       }
       else
       {
          c_Description = C_GtGetText::h_GetText("CAN DLL not found.");

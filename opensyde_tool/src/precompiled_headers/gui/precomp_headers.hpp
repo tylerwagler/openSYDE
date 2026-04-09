@@ -32,8 +32,10 @@
 #include <cstddef>
 #include <cstring>
 #include <iostream>
+#ifdef _WIN32
 #include <winsock2.h>
 #include <windows.h>
+#endif
 
 // Qt includes
 #include <QAction>

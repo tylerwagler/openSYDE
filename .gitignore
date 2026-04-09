@@ -1,0 +1,149 @@
+# CMake build artifacts
+build/
+cmake-build-*/
+cmake-build-debug/
+cmake-build-release/
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# Compiled binaries and executables
+openSYDE
+openSYDE.exe
+*.exe
+*.dll
+*.so
+*.so.*
+*.a
+
+# Object files and intermediate build files
+*.o
+*.obj
+*.i
+*.ii
+*.lo
+*.la
+*.a
+*.o
+*.d
+*.gcno
+*.gcda
+*.gcov
+
+# Qt-specific generated files
+moc_*.cpp
+moc_*.cpp.dep
+qrc_*.cpp
+ui_*.h
+*.qrc.dep
+
+# Qt Creator IDE
+*.user
+*.user.ini
+.qtc/
+.qtc-clazy/
+
+# Visual Studio / CLion / VS Code
+*.sln
+*.vcxproj
+*.vcxproj.filters
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+temp/
+temp_*/
+opensyde_tool/temp_*/
+opensyde_tool/result/
+
+# Coverage reports
+coverage/
+*.info
+*.lcov
+htmlcov/
+*.coverage
+
+# Testing artifacts
+CTestTestfile.cmake
+Testing/
+Testing/
+nosetests.xml
+*.coverage
+htmlcov/
+
+# Generated documentation
+doc/
+docs/
+Doxyfile
+Doxyfile.out
+doxygen_sqlite3.db
+xml/
+html/
+latex/
+
+# Language server / IDE caches
+.clangd
+.clang-format-cache
+.compile_commands.json
+
+# Package manager artifacts
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Python (if any scripts used)
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.pytest_cache/
+.venv/
+env/
+venv/
+
+# Git-related (but not this .gitignore itself)
+.gitignore
+
+# AGENTS.md files (generated context files)
+**/AGENTS.md
+
+# Tool-specific caches
+.cache/
+.npm/
+.yarn/
+
+# Local configuration (if any)
+.env
+.env.local
+*.local
+
+# Backup files
+*.bak
+*.backup
+*.orig
+
+# OS-generated files
+.Spotlight-V100
+.Trashes

@@ -22,7 +22,7 @@
 #include "C_SyvComPollingThreadDiag.hpp"
 #include "C_SyvComDriverThread.hpp"
 #include "C_Can.hpp"
-#include "C_OscIpDispatcherWinSock.hpp"
+#include "C_OscIpDispatcherPlatform.hpp"
 #include "C_OscCanSignal.hpp"
 #include "C_OscSecurityPemDatabase.hpp"
 #include "C_OscDiagProtocolOsy.hpp"

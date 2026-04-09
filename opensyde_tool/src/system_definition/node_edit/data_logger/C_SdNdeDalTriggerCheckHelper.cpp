@@ -13,12 +13,34 @@
 #include "precomp_headers.hpp"
 
 #include "stwtypes.hpp"
+#include "C_SdNdeDalTriggerCheckHelper.hpp"
+
+#ifndef _WIN32
+// On Linux the osy_git_data_model_monitor library is not available.
+// Stub h_Check to always return true (trigger validation still happens on device).
+using namespace stw::opensyde_gui_logic;
+
+bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t /*ou32_NodeIndex*/,
+                                           const uint32_t /*ou32_DataLoggerIndex*/,
+                                           const stw::scl::C_SclString & /*orc_Expression*/,
+                                           std::string * const /*opc_ErrorDetails*/,
+                                           bool * const opq_AreVariablesValid,
+                                           bool * const opq_IsSyntaxValid)
+{
+   if (opq_AreVariablesValid != NULL) { *opq_AreVariablesValid = true; }
+   if (opq_IsSyntaxValid != NULL)     { *opq_IsSyntaxValid = true; }
+   return true;
+}
+
+C_SdNdeDalTriggerCheckHelper::C_SdNdeDalTriggerCheckHelper() {}
+
+#else // _WIN32
+
 #include "TglUtils.hpp"
 #include "C_GtGetText.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_OscHalcMagicianUtil.hpp"
-#include "C_SdNdeDalTriggerCheckHelper.hpp"
 #include "C_OscHalcMagicianDatapoolListHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -901,3 +923,5 @@ bool C_SdNdeDalTriggerCheckHelper::mh_CheckChannelElementArray(
 
    return q_IsValid;
 }
+
+#endif // _WIN32
