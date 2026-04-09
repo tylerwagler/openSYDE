@@ -105,5 +105,9 @@ opensyde_tool/doc/c_gtgettext_removal_walkthrough.md
 fix_orphaned_namespaces.py
 .aider*
 
+# Claude Code harness state (user-local)
+.claude/projects/
+.claude/settings.local.json
+
 # Build results
 opensyde_tool/result/
