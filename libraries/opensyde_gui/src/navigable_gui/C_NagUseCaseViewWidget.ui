@@ -191,7 +191,10 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingWidgetTitle" name="pc_LabelMode">
+        <widget class="QLabel" name="pc_LabelMode">
+         <property name="styleRole" stdset="0">
+          <string>heading-widget-title</string>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -292,7 +295,10 @@
            </spacer>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingWidgetSubTitle" name="pc_LabelMidSection">
+           <widget class="QLabel" name="pc_LabelMidSection">
+            <property name="styleRole" stdset="0">
+             <string>heading-widget-sub-title</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -377,7 +383,10 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingWidgetSubSubTitle" name="pc_LabelSubmode">
+        <widget class="QLabel" name="pc_LabelSubmode">
+         <property name="styleRole" stdset="0">
+          <string>heading-widget-sub-sub-title</string>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -436,21 +445,6 @@
    <extends>QFrame</extends>
    <header>C_OgeFraSeparator.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingWidgetSubTitle</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabHeadingWidgetSubTitle.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingWidgetTitle</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabHeadingWidgetTitle.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingWidgetSubSubTitle</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabHeadingWidgetSubSubTitle.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

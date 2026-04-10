@@ -317,8 +317,8 @@ font-weight: normal;
 }
 
 /* STYLE_GUIDE_FONT_SEMIBOLD_18 */
-stw--opensyde_gui_elements--C_OgeLabHeadingWidgetSubTitle,
-stw--opensyde_gui_elements--C_OgeLabHeadingWidgetSubSubTitle,
+QLabel[styleRole="heading-widget-sub-title"],
+QLabel[styleRole="heading-widget-sub-sub-title"],
 stw--opensyde_gui_elements--C_OgeTawSelector QTabBar::tab,
 stw--opensyde_gui_elements--C_OgePubIconText,
 stw--opensyde_gui_elements--C_OgePubUseCase,
@@ -376,9 +376,7 @@ font-weight: 600; /*semibold*/
 }
 
 /* STYLE_GUIDE_FONT_BOLD_22 */
-stw--opensyde_gui_elements--C_OgeLabHeadingWidgetTitle,
-stw--opensyde_gui_elements--C_OgeLabHeadingWidget,
-stw--opensyde_gui_elements--C_OgeLabHeadingWidgetDark,
+QLabel[styleRole="heading-widget-title"],
 /* the "." in front is for only styling C_OgeLabPopUpTitle, and not its subclasses (here: C_OgeLabPopUpSubTitle)
 (see https://doc.qt.io/qt-5/stylesheet-syntax.html#selector-types) */
 .stw--opensyde_gui_elements--C_OgeLabPopUpTitle,
