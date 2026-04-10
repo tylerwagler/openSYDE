@@ -78,8 +78,8 @@ fi
 # Each tool: name|pjt_dir|toolchain|needs_qt
 TOOL_DEFS=(
     "opensyde|opensyde_tool/pjt/openSYDE|opensyde_tool/pjt/toolchain_linux.cmake|yes"
-    "canmonitor|opensyde_tool/pjt/openSYDE_CAN_Monitor|opensyde_tool/pjt/toolchain_linux.cmake|yes"
-    "sydeflash|opensyde_tool/pjt/SYDEflash|opensyde_tool/pjt/toolchain_linux.cmake|yes"
+    "canmonitor|opensyde_can_monitor/pjt|opensyde_can_monitor/pjt/toolchain_linux.cmake|yes"
+    "sydeflash|opensyde_syde_flash/pjt|opensyde_syde_flash/pjt/toolchain_linux.cmake|yes"
     "sydesup|opensyde_syde_sup/pjt|opensyde_syde_sup/pjt/toolchain_ubuntu.cmake|no"
     "syde_x_gen|opensyde_syde_x_gen/pjt||no"
     "syde_coder_c|opensyde_syde_coder_c/pjt||no"
