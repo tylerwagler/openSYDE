@@ -27,7 +27,7 @@ if (WIN32)
    set(SYDESUP_COMMON_INCLUDE_DIRECTORIES
       ${SYDESUP_COMMON_INCLUDE_DIRECTORIES}
       #/libs/openssl/include needed only on Windows
-     ${PROJECT_ROOT}/libs/openssl/openssl/include
+     ${PROJECT_ROOT}/../libraries/openssl/openssl32/include
       )
 endif()
 
@@ -148,7 +148,7 @@ endif()
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 if(WIN32)
    link_directories(
-       ../libs/openssl/openssl
+       ${PROJECT_ROOT}/../libraries/openssl/openssl32
    )
    add_executable(SYDEsup ${SYDESUP_COMMON_SOURCES} ${SYDESUP_WINDOWS_SOURCES} ${PROJECT_ROOT}/src/WindowsMain.cpp)
    target_link_libraries(SYDEsup ${SYDESUP_LINK_LIBRARIES_WINDOWS})
