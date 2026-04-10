@@ -140,11 +140,11 @@ set (OPENSYDE_GUI_INCLUDES
 # Include path with library modules
 set (OPENSYDE_GUI_LIB_INCLUDES
    ${PROJECT_ROOT}/../libraries/flexlexer
-   ${PROJECT_ROOT}/libs/qcustomplot
+   ${PROJECT_ROOT}/../libraries/qcustomplot
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC
-   ${PROJECT_ROOT}/libs/osy_git_data_model_monitor/includes
+   ${PROJECT_ROOT}/../libraries/osy_git_data_model_monitor/includes
 )
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    find_package(OpenSSL REQUIRED)
@@ -152,7 +152,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 else()
    list(APPEND OPENSYDE_GUI_LIB_INCLUDES
       ${PROJECT_ROOT}/../libraries/gettext
-      ${PROJECT_ROOT}/libs/openssl/include
+      ${PROJECT_ROOT}/../libraries/openssl/openssl64/include
    )
 endif()
 
@@ -2203,16 +2203,16 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    )
 else()
    list(PREPEND OPENSYDE_LINK_LIBRARIES
-      ${PROJECT_ROOT}/libs/qcustomplot/libqcustomplot.a
+      ${PROJECT_ROOT}/../libraries/qcustomplot/libqcustomplot.a
    )
    list(APPEND OPENSYDE_LINK_LIBRARIES
       version
       ws2_32   #WinSock
       Iphlpapi #IP helper API
-      ${PROJECT_ROOT}/libs/openssl/libssl.a
-      ${PROJECT_ROOT}/libs/openssl/libcrypto.a
+      ${PROJECT_ROOT}/../libraries/openssl/openssl64/libssl.a
+      ${PROJECT_ROOT}/../libraries/openssl/openssl64/libcrypto.a
       ${PROJECT_ROOT}/../libraries/gettext/libintl.a
-      ${PROJECT_ROOT}/libs/osy_git_data_model_monitor/libosy_git_data_model_monitor.a
+      ${PROJECT_ROOT}/../libraries/osy_git_data_model_monitor/libosy_git_data_model_monitor.a
    )
 endif()
 
@@ -2248,7 +2248,7 @@ target_include_directories(openSYDE SYSTEM PRIVATE ${OPENSYDE_GUI_LIB_INCLUDES})
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    target_include_directories(opensyde_core PRIVATE ${OPENSSL_INCLUDE_DIR})
 else()
-   target_include_directories(opensyde_core PRIVATE ${PROJECT_ROOT}/libs/openssl/include)
+   target_include_directories(opensyde_core PRIVATE ${PROJECT_ROOT}/../libraries/openssl/openssl64/include)
 endif()
 
 target_link_libraries(openSYDE PRIVATE ${OPENSYDE_LINK_LIBRARIES})
