@@ -52,6 +52,7 @@ set(OPENSYDE_CORE_SKIP_X_CONFIG_GENERATION         0)
 set(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION   1)
 set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     0)
 set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS             1)
+set(OPENSYDE_CORE_SKIP_LINUX_DRIVERS               1)
 set(OPENSYDE_CORE_SKIP_SECURITY                    1)
 
 if(WIN32)
@@ -60,13 +61,19 @@ else()
    set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET   1)
 endif()
 
-add_subdirectory(${PROJECT_ROOT}/libs/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
+add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
 
 # SET LIBRARIES
-set(SYDE_X_GEN_LINK_LIBRARIES_WINDOWS
-   version
-   opensyde_core
-)
+if(WIN32)
+   set(SYDE_X_GEN_LINK_LIBRARIES
+      version
+      opensyde_core
+   )
+else()
+   set(SYDE_X_GEN_LINK_LIBRARIES
+      opensyde_core
+   )
+endif()
 
 # COMPILER SWITCHES
 # use same compiler switches that gcc uses when compiling openSYDE core from osc_moduletest.pro file
@@ -75,13 +82,15 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 
 # do not warn about unused parameters in miniz.c; this library is not owned by us
-set_source_files_properties(../libs/opensyde_core/miniz/miniz.c PROPERTIES COMPILE_FLAGS -Wno-unused-parameter)
+set_source_files_properties(../../libraries/opensyde_core/miniz/miniz.c PROPERTIES COMPILE_FLAGS -Wno-unused-parameter)
 
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 if(WIN32)
    add_executable(syde_x_gen ${SYDE_X_GEN_COMMON_SOURCES} ${SYDE_X_GEN_WINDOWS_SOURCES})
-   target_link_libraries(syde_x_gen ${SYDE_X_GEN_LINK_LIBRARIES_WINDOWS})
+else()
+   add_executable(syde_x_gen ${SYDE_X_GEN_COMMON_SOURCES})
 endif()
+target_link_libraries(syde_x_gen ${SYDE_X_GEN_LINK_LIBRARIES})
 
 # common include directories
 target_include_directories(syde_x_gen PRIVATE ${SYDE_X_GEN_COMMON_INCLUDE_DIRECTORIES})
@@ -97,4 +106,5 @@ if(COMMAND add_pc_lint)
 endif(COMMAND add_pc_lint)
 
 # --- INSTALL RESULTS --------------------------------------------------------------------------------------------------
-install(TARGETS syde_x_gen DESTINATION ${PROJECT_ROOT}/result/${INSTALL_SUBDIR})
+set(REPO_ROOT ${PROJECT_ROOT}/..)
+install(TARGETS syde_x_gen DESTINATION ${REPO_ROOT}/result/${CMAKE_BUILD_TYPE}/syde_x_gen)

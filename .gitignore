@@ -10,8 +10,6 @@ cmake_install.cmake
 Makefile
 
 # Compiled binaries and executables
-openSYDE
-openSYDE.exe
 *.exe
 *.dll
 *.so
@@ -73,9 +71,10 @@ $RECYCLE.BIN/
 *.tmp
 *.temp
 temp/
+# Standardized build and result directories
+result/
+# Legacy temp directories (in case any remain)
 temp_*/
-opensyde_tool/temp_*/
-opensyde_tool/result/
 
 # Coverage reports
 coverage/

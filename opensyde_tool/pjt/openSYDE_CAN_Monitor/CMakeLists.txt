@@ -730,7 +730,7 @@ else()
 endif()
 set(OPENSYDE_CORE_SKIP_SECURITY                    1)
 
-add_subdirectory(${PROJECT_ROOT}/libs/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
+add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
 
 # SET LIBRARIES
 set(OPENSYDE_LINK_LIBRARIES
@@ -769,7 +769,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 
 # do not warn about unused parameters in miniz.c; this library is not owned by us
-set_source_files_properties(${PROJECT_ROOT}/libs/opensyde_core/miniz/miniz.c PROPERTIES COMPILE_FLAGS -Wno-unused-parameter)
+set_source_files_properties(${PROJECT_ROOT}/../libraries/opensyde_core/miniz/miniz.c PROPERTIES COMPILE_FLAGS -Wno-unused-parameter)
 #TODO
 #set_source_files_properties(${PROJECT_ROOT}/libs/dbc_driver_library/src/Vector/DBC/Scanner.cpp PROPERTIES COMPILE_FLAGS -Wno-unused-parameter)
 
@@ -804,4 +804,5 @@ if(COMMAND add_pc_lint)
 endif(COMMAND add_pc_lint)
 
 # --- INSTALL RESULTS --------------------------------------------------------------------------------------------------
-install(TARGETS openSYDE_CAN_Monitor DESTINATION ${PROJECT_ROOT}/result/tool/CAN_Monitor)
+set(REPO_ROOT ${PROJECT_ROOT}/..)
+install(TARGETS openSYDE_CAN_Monitor DESTINATION ${REPO_ROOT}/result/${CMAKE_BUILD_TYPE}/openSYDE_CAN_Monitor)

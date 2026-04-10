@@ -29,7 +29,7 @@ set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_COMMON     0)
 set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS             0)
 set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET              0)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING            1)
-add_subdirectory(${PROJECT_ROOT}/libs/osy_core ${CMAKE_BINARY_DIR}/osy_core)
+add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/osy_core)
 
 # warn a lot
 # Unfortunately forcing C90 by using "-Wc90-c99-compat" or "-std=c89" would (correctly) also prohibit
@@ -78,4 +78,5 @@ if(COMMAND add_pc_lint)
 endif(COMMAND add_pc_lint)
 
 # --- INSTALL RESULTS --------------------------------------------------------------------------------------------------
-install(TARGETS osy_cmd_line_flash_tool DESTINATION ${PROJECT_ROOT}/result)
+set(REPO_ROOT ${PROJECT_ROOT}/..)
+install(TARGETS osy_cmd_line_flash_tool DESTINATION ${REPO_ROOT}/result/${CMAKE_BUILD_TYPE}/cmd_line_flash_tool)

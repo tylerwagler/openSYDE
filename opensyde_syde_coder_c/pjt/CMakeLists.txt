@@ -11,7 +11,7 @@ include_directories(
    ../src
 
    ../src/osy_code_exporter
-   ../libs/osy_core/protocol_drivers   #just one header
+   ../../libraries/opensyde_core/protocol_drivers   #just one header
 )
 
 # Drag in openSYDE core base (files, include paths)
@@ -30,7 +30,7 @@ set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_COMMON     1)
 set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS             1)
 set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET              0)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING            1)
-add_subdirectory(../libs/osy_core ${CMAKE_BINARY_DIR}/osy_core)
+add_subdirectory(../../libraries/opensyde_core ${CMAKE_BINARY_DIR}/osy_core)
 
 # --- Project source file ----------------------------------------------------------------------------------------------
 set(OPENSYDE_SYDE_CODER_C_SOURCES
@@ -76,4 +76,5 @@ set(CMAKE_CXX_FLAGS "-std=c++98 -Wall -Wextra -Wunused -Wuninitialized -Wmaybe-u
 set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
 
 # Install results
-install(TARGETS osy_syde_coder_c DESTINATION ${CMAKE_BINARY_DIR}/../result)
+set(REPO_ROOT ${PROJECT_SOURCE_DIR}/../..)
+install(TARGETS osy_syde_coder_c DESTINATION ${REPO_ROOT}/result/${CMAKE_BUILD_TYPE}/syde_coder_c)

@@ -35,9 +35,9 @@ endif()
 include_directories(${SYDESUP_COMMON_INCLUDE_DIRECTORIES})
 
 set(SYDESUP_LINUX_INCLUDE_DIRECTORIES
-   ${PROJECT_ROOT}/libs/opensyde_core/kefex_diaglib/tgl_linux
-   ${PROJECT_ROOT}/libs/opensyde_core/can_dispatcher/target_linux_socket_can
-   ${PROJECT_ROOT}/libs/opensyde_core/ip_dispatcher/target_linux_sock
+   ${PROJECT_ROOT}/../libraries/opensyde_core/kefex_diaglib/tgl_linux
+   ${PROJECT_ROOT}/../libraries/opensyde_core/can_dispatcher/target_linux_socket_can
+   ${PROJECT_ROOT}/../libraries/opensyde_core/ip_dispatcher/target_linux_sock
    )
 
 # --- PROJECT SOURCE FILE PATHS ----------------------------------------------------------------------------------------
@@ -58,24 +58,24 @@ set(SYDESUP_LINUX_SOURCES
    )
 
 set(SYDESUP_LINUX_LIB_SOURCES
-   ${PROJECT_ROOT}/libs/opensyde_core/kefex_diaglib/tgl_linux/TglFile.cpp
-   ${PROJECT_ROOT}/libs/opensyde_core/kefex_diaglib/tgl_linux/TglTasks.cpp
-   ${PROJECT_ROOT}/libs/opensyde_core/kefex_diaglib/tgl_linux/TglTime.cpp
-   ${PROJECT_ROOT}/libs/opensyde_core/kefex_diaglib/tgl_linux/TglUtils.cpp
-   ${PROJECT_ROOT}/libs/opensyde_core/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.cpp
-   ${PROJECT_ROOT}/libs/opensyde_core/can_dispatcher/target_linux_socket_can/C_Can.cpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/kefex_diaglib/tgl_linux/TglFile.cpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/kefex_diaglib/tgl_linux/TglTasks.cpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/kefex_diaglib/tgl_linux/TglTime.cpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/kefex_diaglib/tgl_linux/TglUtils.cpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/ip_dispatcher/target_linux_sock/C_OscIpDispatcherLinuxSock.cpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/can_dispatcher/target_linux_socket_can/C_Can.cpp
    )
 
 # for Linux shared library only:
 set(SYDESUP_API_HEADERS
-   ${PROJECT_ROOT}/libs/opensyde_core/scl/C_SclString.hpp
-   ${PROJECT_ROOT}/libs/opensyde_core/scl/C_SclDynamicArray.hpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/scl/C_SclString.hpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/scl/C_SclDynamicArray.hpp
    ${PROJECT_ROOT}/src/C_SydeSup.hpp
    ${PROJECT_ROOT}/src/C_SydeSupLinux.hpp
 )
 
 set(SYDESUP_API_HEADERS_STWTYPES
-   ${PROJECT_ROOT}/libs/opensyde_core/stwtypes/stwtypes.hpp
+   ${PROJECT_ROOT}/../libraries/opensyde_core/stwtypes/stwtypes.hpp
 )
 
 # --- COMPILER FLAGS AND LIBRARIES -------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ else()
    set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET   1)
 endif()
 
-add_subdirectory(${PROJECT_ROOT}/libs/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
+add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/opensyde_core)
 
 # SET LIBRARIES
 set(SYDESUP_LINK_LIBRARIES_WINDOWS
@@ -130,7 +130,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-deprecated-declarations")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 
 # do not warn about unused parameters in miniz.c; this library is not owned by us
-set_source_files_properties(../libs/opensyde_core/miniz/miniz.c PROPERTIES COMPILE_FLAGS -Wno-unused-parameter)
+set_source_files_properties(../../libraries/opensyde_core/miniz/miniz.c PROPERTIES COMPILE_FLAGS -Wno-unused-parameter)
 
 # --- BUILD LIBRARY (LINUX ONLY) ---------------------------------------------------------------------------------------
 if (NOT WIN32)
@@ -179,9 +179,11 @@ if(COMMAND add_pc_lint)
 endif(COMMAND add_pc_lint)
 
 # --- INSTALL RESULTS --------------------------------------------------------------------------------------------------
-install(TARGETS SYDEsup DESTINATION ${CMAKE_INSTALL_BINDIR})
+set(REPO_ROOT ${PROJECT_ROOT}/..)
+set(INSTALL_DIR ${REPO_ROOT}/result/${CMAKE_BUILD_TYPE}/SYDEsup)
+install(TARGETS SYDEsup DESTINATION ${INSTALL_DIR})
 if (${INSTALL_SYDESUP_LIB})
-   install(TARGETS sydesuplib DESTINATION ${CMAKE_INSTALL_BINDIR}/sydesup_lib)
-   install(FILES ${SYDESUP_API_HEADERS} DESTINATION ${CMAKE_INSTALL_BINDIR}/sydesup_lib)
-   install(FILES ${SYDESUP_API_HEADERS_STWTYPES} DESTINATION ${CMAKE_INSTALL_BINDIR}/sydesup_lib/stwtypes)
+   install(TARGETS sydesuplib DESTINATION ${INSTALL_DIR}/sydesup_lib)
+   install(FILES ${SYDESUP_API_HEADERS} DESTINATION ${INSTALL_DIR}/sydesup_lib)
+   install(FILES ${SYDESUP_API_HEADERS_STWTYPES} DESTINATION ${INSTALL_DIR}/sydesup_lib/stwtypes)
 endif()
