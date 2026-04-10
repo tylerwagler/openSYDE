@@ -1,6 +1,13 @@
 # minimum 3.16 for precompiled headers
 cmake_minimum_required(VERSION 3.16)
 
+if(POLICY CMP0177)
+   cmake_policy(SET CMP0177 NEW)
+endif()
+if(POLICY CMP0100)
+   cmake_policy(SET CMP0100 NEW)
+endif()
+
 project(openSYDE_CAN_Monitor LANGUAGES CXX)
 
 #include script to generate PC-lint configuration files
@@ -101,8 +108,7 @@ set (OPENSYDE_INCLUDES
    ${PROJECT_ROOT}/../libraries/flexlexer
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector
-   ${PROJECT_ROOT}/../libraries/blf_driver_library
-   ${PROJECT_ROOT}/../libraries/zlib
+   ${PROJECT_ROOT}/../libraries/vector_blf/src/Vector
 )
 
 # Include path with library modules
@@ -500,120 +506,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProDatabaseData.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.hpp
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/AbstractFile.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/AfdxFrame.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/AfdxStatistic.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/AppText.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/AppTrigger.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanDriverError.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanDriverErrorExt.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanDriverHwSync.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanDriverStatistic.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanErrorFrame.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanErrorFrameExt.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanFdErrorFrame64.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanFdMessage.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanFdMessage64.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanMessage.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanMessage2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CanOverloadFrame.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/CompressedFile.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/config.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/Doxygen.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/DriverOverrun.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/EnvironmentVariable.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/EthernetFrame.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/EthernetRxError.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/EthernetStatus.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/EventComment.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/Exceptions.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/File.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FileStatistics.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FlexRayData.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FlexRayStatusEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FlexRaySync.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FlexRayV6Message.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FlexRayV6StartCycleEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FlexRayVFrError.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FlexRayVFrReceiveMsg.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FlexRayVFrReceiveMsgEx.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FlexRayVFrStartCycle.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/FlexRayVFrStatus.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/GlobalMarker.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/GpsEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/J1708Message.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/KLineStatusEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinBaudrateEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinBusEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinChecksumInfo.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinCrcError.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinCrcError2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinDatabyteTimestampEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinDisturbanceEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinDlcInfo.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinLongDomSignalEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinLongDomSignalEvent2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinMessage.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinMessage2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinMessageDescriptor.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinReceiveError.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinReceiveError2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinSchedulerModeChange.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinSendError.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinSendError2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinShortOrSlowResponse.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinSlaveTimeout.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinSleepModeEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinSpikeEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinSpikeEvent2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinStatisticEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinSyncError.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinSyncError2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinSynchFieldEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinUnexpectedWakeup.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinWakeupEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LinWakeupEvent2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/LogContainer.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/Most50Message.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/Most50Pkt.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/Most150AllocTab.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/Most150Message.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/Most150MessageFragment.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/Most150Pkt.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/Most150PktFragment.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostAllocTab.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostCtrl.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostDataLost.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostEcl.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostEthernetPkt.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostEthernetPktFragment.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostGenReg.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostHwMode.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostLightLock.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostNetState.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostPkt.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostPkt2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostReg.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostSpy.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostStatistic.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostStatisticEx.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostStress.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostSystemEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostTrigger.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/MostTxLight.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/ObjectHeader.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/ObjectHeader2.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/ObjectHeaderBase.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/platform.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/RealtimeClock.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/SerialEvent.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/SystemVariable.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/UncompressedFile.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/vector_blf_export.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/VectorTypes.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/WlanFrame.h
-   ${PROJECT_ROOT}/../libraries/blf_driver_library/BLF/WlanStatistic.h
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableDelegate.hpp
@@ -745,8 +637,8 @@ set(OPENSYDE_LINK_LIBRARIES
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    find_package(PkgConfig REQUIRED)
    find_package(ZLIB REQUIRED)
-   # Build vector_blf from source
-   add_subdirectory(${PROJECT_ROOT}/../libraries/vector_blf-1.0.0 ${CMAKE_BINARY_DIR}/vector_blf EXCLUDE_FROM_ALL)
+   # Build vector_blf as a static library (upstream hardcodes SHARED)
+   add_subdirectory(${PROJECT_ROOT}/../cmake/vector_blf_static ${CMAKE_BINARY_DIR}/vector_blf EXCLUDE_FROM_ALL)
    list(APPEND OPENSYDE_LINK_LIBRARIES
       Vector_BLF
       ZLIB::ZLIB

@@ -118,6 +118,7 @@ find_qt6() {
     [[ -n "$lib_dir" ]] && candidates+=("/usr/lib/$lib_dir/cmake/Qt6")
     candidates+=(
         "/usr/lib/cmake/Qt6"
+        "/usr/lib64/cmake/Qt6"
         "/usr/local/lib/cmake/Qt6"
     )
 

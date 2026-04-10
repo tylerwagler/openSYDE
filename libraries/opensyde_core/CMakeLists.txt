@@ -955,7 +955,16 @@ endif()
 # define library target including all sources
 add_library(opensyde_core ${OPENSYDE_CORE_SOURCES})
 
+# Enable large file support on Linux (required by miniz for 64-bit file I/O)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   target_compile_definitions(opensyde_core PRIVATE _LARGEFILE64_SOURCE)
+endif()
+
 # add all include directories to library target and make public
 target_include_directories(opensyde_core PUBLIC ${OPENSYDE_CORE_INCLUDE_DIRECTORIES})
 
 target_precompile_headers(opensyde_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/precompiled_headers/precomp_headers.hpp)
+
+# Skip precompiled headers for C source files (the PCH only has C++ content)
+file(GLOB_RECURSE OPENSYDE_CORE_C_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.c")
+set_source_files_properties(${OPENSYDE_CORE_C_SOURCES} PROPERTIES SKIP_PRECOMPILE_HEADERS ON)

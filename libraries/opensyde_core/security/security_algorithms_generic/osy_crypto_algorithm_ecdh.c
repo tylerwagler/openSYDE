@@ -27,6 +27,7 @@
 /* PRQA L:L1 */
 #include <openssl/ec.h>
 #include <openssl/core_names.h>
+#include <openssl/param_build.h>
 #include <openssl/sha.h>
 
 #include "stwtypes.h"
@@ -94,47 +95,44 @@ static sint16 m_extract_compressed_public_key(const EVP_PKEY * const opt_Key)
 static sint16 m_extract_private_key(const EVP_PKEY * const opt_Key)
 {
    sint16 s16_Result = C_NOACT;
+   BIGNUM * pt_PrivateKeyBn = NULL;
 
-   //Using deprecated API as the new EVP_PKEY_get_bn_param API does not support extraction of the private key (yet?)
-   //See https://github.com/openssl/openssl/issues/16081
-   const EC_KEY * const pt_EcKey = EVP_PKEY_get0_EC_KEY(opt_Key);
+   //Extract private key as BIGNUM using OpenSSL 3.0+ API
+   //Note: EVP_PKEY_get_bn_param allocates a new BIGNUM; caller must free
+   const sintn sn_GetResult = EVP_PKEY_get_bn_param(opt_Key, OSSL_PKEY_PARAM_PRIV_KEY, &pt_PrivateKeyBn);
 
-   if (pt_EcKey != NULL)
+   if ((sn_GetResult == 1) && (pt_PrivateKeyBn != NULL))
    {
-      //We did configure compressed format in osy_udc_trg_sec_get_ec_keys already. So just grab the data.
-      const BIGNUM * const pt_PrivateKeyBn = EC_KEY_get0_private_key(pt_EcKey);
-      if (pt_PrivateKeyBn != NULL)
-      {
-         //The key can occasionally be smaller than 32 bytes (due to leading zeroes).
-         //In this case BN_bn2bin will only copy over the bytes that are occupied.
-         //Storage is big endian. So we need the leading zeroes on the left.
-         //So fill in values "to the right" of the leading zeroes, memset leading zeroes explicitly
+      //The key can occasionally be smaller than 32 bytes (due to leading zeroes).
+      //In this case BN_bn2bin will only copy over the bytes that are occupied.
+      //Storage is big endian. So we need the leading zeroes on the left.
+      //So fill in values "to the right" of the leading zeroes, memset leading zeroes explicitly
 
-         /*STW Deviation Coding Rules v4*/
-         /*Violated Rule: no explicit rule*/
-         /*Circumstances: Using macro that does integer division*/
-         /*Reason: macro is documented approach to using API*/
-         /*Potential risks: Undefined behavior*/
-         /*Prevention of risks: Macro is implemented with consideration of UB*/
-         /*PRQA S 3103 1*/
-         const sintn sn_NumBytes = BN_num_bytes(pt_PrivateKeyBn);
-         //sanity check:
-         if (sn_NumBytes <= (sintn)OSY_CRY_ALG_ECDH_SIZE_PRIVATE_KEY)
+      /*STW Deviation Coding Rules v4*/
+      /*Violated Rule: no explicit rule*/
+      /*Circumstances: Using macro that does integer division*/
+      /*Reason: macro is documented approach to using API*/
+      /*Potential risks: Undefined behavior*/
+      /*Prevention of risks: Macro is implemented with consideration of UB*/
+      /*PRQA S 3103 1*/
+      const sintn sn_NumBytes = BN_num_bytes(pt_PrivateKeyBn);
+      //sanity check:
+      if (sn_NumBytes <= (sintn)OSY_CRY_ALG_ECDH_SIZE_PRIVATE_KEY)
+      {
+         const sintn sn_OffsetToWriteTo = ((sintn)OSY_CRY_ALG_ECDH_SIZE_PRIVATE_KEY - sn_NumBytes);
+         const sintn sn_CopiedLength = BN_bn2bin(pt_PrivateKeyBn, &mau8_PrivateKey[sn_OffsetToWriteTo]);
+         if (sn_CopiedLength == sn_NumBytes)
          {
-            const sintn sn_OffsetToWriteTo = ((sintn)OSY_CRY_ALG_ECDH_SIZE_PRIVATE_KEY - sn_NumBytes);
-            const sintn sn_CopiedLength = BN_bn2bin(pt_PrivateKeyBn, &mau8_PrivateKey[sn_OffsetToWriteTo]);
-            if (sn_CopiedLength == sn_NumBytes)
+            sintn sn_LeadingZeroIndex;
+            //set leading zeroes to zero:
+            for (sn_LeadingZeroIndex = 0; sn_LeadingZeroIndex < sn_OffsetToWriteTo; sn_LeadingZeroIndex++)
             {
-               sintn sn_LeadingZeroIndex;
-               //set leading zeroes to zero:
-               for (sn_LeadingZeroIndex = 0; sn_LeadingZeroIndex < sn_OffsetToWriteTo; sn_LeadingZeroIndex++)
-               {
-                  mau8_PrivateKey[sn_LeadingZeroIndex] = 0U;
-               }
-               s16_Result = C_NO_ERR;
+               mau8_PrivateKey[sn_LeadingZeroIndex] = 0U;
             }
+            s16_Result = C_NO_ERR;
          }
       }
+      BN_clear_free(pt_PrivateKeyBn);
    }
    return s16_Result;
 }
@@ -255,121 +253,122 @@ sint16 osy_cry_alg_ecdh_get_ec_keys(const uint8 ou8_ForceCreation,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Create OpenSSL EVP_PKEY from raw RC public key
+/*! \brief   Create OpenSSL EVP_PKEY from raw EC public key
 
-   Note on usage of deprecated OpenSSL functions:
-   The new approach would be to use the "EVP_PKEY_fromdata" API.
-   This fails with "error:03000096:digital envelope routines::operation not supported for this keytype"
-    (same with public and private keys).
-   So constructing an EC key from binary data using this API is not supported with our version of OpenSSL (and possibly
-    also versions targets might use).
-   So better to use the "old" API until we can rely on OpenSSL providing the functionality with the new API.
+   Constructs an EVP_PKEY from a compressed public key using the OpenSSL 3.0+ OSSL_PARAM_BLD API.
 
    \param[in]    opu8_PublicKey      Public key in compressed format (33 bytes of buffer)
 
    \retval  NULL     could not create key
-   \retval  C_NOACT  created key (needs to be EVP_PKEY_free's by caller)
+   \retval  else     created key (needs to be EVP_PKEY_free'd by caller)
 */
 //----------------------------------------------------------------------------------------------------------------------
 static EVP_PKEY * m_create_evp_pkey_from_raw_pubkey(const uint8 opu8_PublicKey[OSY_CRY_ALG_ECDH_SIZE_PUBLIC_KEY])
 {
    EVP_PKEY * pt_Pkey = NULL;
-   EC_KEY * pt_EcKey = NULL;
-   EC_POINT * pt_Point = NULL;
+   OSSL_PARAM_BLD * pt_Bld = NULL;
+   OSSL_PARAM * pt_Params = NULL;
+   EVP_PKEY_CTX * pt_PkeyCtx = NULL;
    sintn sn_Result = -1;
 
-   // Create group for prime256v1
-   EC_GROUP * const pt_Group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
-
-   if (pt_Group != NULL)
+   pt_Bld = OSSL_PARAM_BLD_new();
+   if (pt_Bld != NULL)
    {
-      pt_EcKey = EC_KEY_new();
-   }
-   if (pt_EcKey != NULL)
-   {
-      sn_Result = EC_KEY_set_group(pt_EcKey, pt_Group);
+      sn_Result = OSSL_PARAM_BLD_push_utf8_string(pt_Bld, OSSL_PKEY_PARAM_GROUP_NAME, "prime256v1", 0);
    }
    if (sn_Result == 1)
    {
-      // Create EC_POINT for public key
-      pt_Point = EC_POINT_new(pt_Group);
-   }
-   if (pt_Point != NULL)
-   {
-      sn_Result = EC_POINT_oct2point(pt_Group, pt_Point, opu8_PublicKey, OSY_CRY_ALG_ECDH_SIZE_PUBLIC_KEY, NULL);
+      sn_Result = OSSL_PARAM_BLD_push_octet_string(pt_Bld, OSSL_PKEY_PARAM_PUB_KEY,
+                                                     opu8_PublicKey, OSY_CRY_ALG_ECDH_SIZE_PUBLIC_KEY);
    }
    if (sn_Result == 1)
    {
-      sn_Result = EC_KEY_set_public_key(pt_EcKey, pt_Point);
+      pt_Params = OSSL_PARAM_BLD_to_param(pt_Bld);
+   }
+   if (pt_Params != NULL)
+   {
+      pt_PkeyCtx = EVP_PKEY_CTX_new_from_name(NULL, "EC", NULL);
+   }
+   if (pt_PkeyCtx != NULL)
+   {
+      sn_Result = EVP_PKEY_fromdata_init(pt_PkeyCtx);
    }
    if (sn_Result == 1)
    {
-      // Create EVP_PKEY and assign EC_KEY
-      pt_Pkey = EVP_PKEY_new();
-   }
-   if (pt_Pkey != NULL)
-   {
-      sn_Result = EVP_PKEY_set1_EC_KEY(pt_Pkey, pt_EcKey);
+      sn_Result = EVP_PKEY_fromdata(pt_PkeyCtx, &pt_Pkey, EVP_PKEY_PUBLIC_KEY, pt_Params);
       if (sn_Result != 1)
       {
-         EVP_PKEY_free(pt_Pkey);
          pt_Pkey = NULL;
       }
    }
 
    //no action if parameters are NULL
-   EC_POINT_free(pt_Point);
-   EC_KEY_free(pt_EcKey);
-   EC_GROUP_free(pt_Group);
+   EVP_PKEY_CTX_free(pt_PkeyCtx);
+   OSSL_PARAM_free(pt_Params);
+   OSSL_PARAM_BLD_free(pt_Bld);
 
    return pt_Pkey;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Create OpenSSL EVP_PKEY from raw RC private key
+/*! \brief   Create OpenSSL EVP_PKEY from raw EC private key
 
-   See comment at m_create_evp_pkey_from_raw_pubkey regarding usage of deprecated functions.
+   Constructs an EVP_PKEY from a raw private key using the OpenSSL 3.0+ OSSL_PARAM_BLD API.
 
    \param[in]    opu8_PrivateKey      Private key in binary format (32 bytes of buffer)
 
    \retval  NULL     could not create key
-   \retval  C_NOACT  created key (needs to be EVP_PKEY_free's by caller)
+   \retval  else     created key (needs to be EVP_PKEY_free'd by caller)
 */
 //----------------------------------------------------------------------------------------------------------------------
 static EVP_PKEY * m_create_evp_pkey_from_raw_private_key(const uint8 opu8_PrivateKey[OSY_CRY_ALG_ECDH_SIZE_PRIVATE_KEY])
 {
    EVP_PKEY * pt_Pkey = NULL;
+   OSSL_PARAM_BLD * pt_Bld = NULL;
+   OSSL_PARAM * pt_Params = NULL;
+   EVP_PKEY_CTX * pt_PkeyCtx = NULL;
    BIGNUM * pt_TheBigNum = NULL;
    sintn sn_Result = -1;
 
-   // create group for prime256v1
-   EC_KEY * const pt_EcKey = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
-
-   if (pt_EcKey != NULL)
-   {
-      pt_TheBigNum = BN_bin2bn(opu8_PrivateKey, (sintn)OSY_CRY_ALG_ECDH_SIZE_PRIVATE_KEY, NULL);
-   }
+   pt_TheBigNum = BN_bin2bn(opu8_PrivateKey, (sintn)OSY_CRY_ALG_ECDH_SIZE_PRIVATE_KEY, NULL);
    if (pt_TheBigNum != NULL)
    {
-      sn_Result = EC_KEY_set_private_key(pt_EcKey, pt_TheBigNum);
-      BN_clear_free(pt_TheBigNum);
+      pt_Bld = OSSL_PARAM_BLD_new();
+   }
+   if (pt_Bld != NULL)
+   {
+      sn_Result = OSSL_PARAM_BLD_push_utf8_string(pt_Bld, OSSL_PKEY_PARAM_GROUP_NAME, "prime256v1", 0);
    }
    if (sn_Result == 1)
    {
-      // create EVP_PKEY and assign EC_KEY
-      pt_Pkey = EVP_PKEY_new();
+      sn_Result = OSSL_PARAM_BLD_push_BN(pt_Bld, OSSL_PKEY_PARAM_PRIV_KEY, pt_TheBigNum);
    }
-   if (pt_Pkey != NULL)
+   if (sn_Result == 1)
    {
-      sn_Result = EVP_PKEY_set1_EC_KEY(pt_Pkey, pt_EcKey);
+      pt_Params = OSSL_PARAM_BLD_to_param(pt_Bld);
+   }
+   if (pt_Params != NULL)
+   {
+      pt_PkeyCtx = EVP_PKEY_CTX_new_from_name(NULL, "EC", NULL);
+   }
+   if (pt_PkeyCtx != NULL)
+   {
+      sn_Result = EVP_PKEY_fromdata_init(pt_PkeyCtx);
+   }
+   if (sn_Result == 1)
+   {
+      sn_Result = EVP_PKEY_fromdata(pt_PkeyCtx, &pt_Pkey, EVP_PKEY_KEYPAIR, pt_Params);
       if (sn_Result != 1)
       {
-         EVP_PKEY_free(pt_Pkey);
          pt_Pkey = NULL;
       }
    }
+
    //no action if parameters are NULL
-   EC_KEY_free(pt_EcKey);
+   EVP_PKEY_CTX_free(pt_PkeyCtx);
+   OSSL_PARAM_free(pt_Params);
+   OSSL_PARAM_BLD_free(pt_Bld);
+   BN_clear_free(pt_TheBigNum);
 
    return pt_Pkey;
 }
