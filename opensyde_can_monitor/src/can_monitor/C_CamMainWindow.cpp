@@ -1430,7 +1430,7 @@ void C_CamMainWindow::m_OnCanDllConfigChange(void)
    {
       int32_t s32_Result;
 
-      stw::can::T_STWCAN_Status c_Status;
+      stw::can::T_STWCAN_Status c_Status = {};
       int32_t s32_Bitrate;
 
       // Get the bitrate of the CAN DLL
