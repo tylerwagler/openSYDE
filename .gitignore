@@ -93,7 +93,6 @@ htmlcov/
 
 # Generated documentation
 doc/
-docs/
 Doxyfile
 Doxyfile.out
 doxygen_sqlite3.db
