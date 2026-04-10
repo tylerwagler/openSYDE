@@ -1,0 +1,255 @@
+#!/bin/bash
+# openSYDE Unified Build Script (Linux)
+#
+# Usage: ./build.sh [options] [tool ...]
+#
+# Tools:
+#   opensyde        Main openSYDE GUI application
+#   canmonitor      CAN Monitor application
+#   sydeflash       SYDEflash application
+#   sydesup         SYDEsup system updater
+#   syde_x_gen      X-config generator
+#   syde_coder_c    C code generator
+#   flash_tool      Command-line flash tool
+#   all             Build all tools (default)
+#
+# Options:
+#   -b, --build-type <Release|Debug>   Build type (default: Release)
+#   -c, --clean                        Clean build directory before building
+#   -j, --jobs <N>                     Parallel jobs (default: nproc)
+#   -h, --help                         Show this help
+#
+# Examples:
+#   ./build.sh                         # Build all tools (Release)
+#   ./build.sh opensyde canmonitor     # Build only openSYDE and CAN Monitor
+#   ./build.sh -b Debug sydesup        # Debug build of SYDEsup
+#   ./build.sh -c all                  # Clean rebuild of everything
+
+set -euo pipefail
+
+# --- Configuration ---
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$SCRIPT_DIR"
+
+BUILD_TYPE="Release"
+CLEAN=false
+JOBS="$(nproc)"
+TOOLS=()
+
+# --- Helper functions ---
+write_header() {
+    echo ""
+    echo "========================================"
+    echo "  $1"
+    echo "========================================"
+}
+
+write_step() {
+    echo "[BUILD] $1"
+}
+
+write_error() {
+    echo "[ERROR] $1" >&2
+}
+
+usage() {
+    sed -n '2,/^$/{ s/^# \?//; p }' "$0"
+    exit 0
+}
+
+# --- Parse arguments ---
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -b|--build-type) BUILD_TYPE="$2"; shift 2 ;;
+        -c|--clean)      CLEAN=true; shift ;;
+        -j|--jobs)       JOBS="$2"; shift 2 ;;
+        -h|--help)       usage ;;
+        -*)              write_error "Unknown option: $1"; usage ;;
+        *)               TOOLS+=("$1"); shift ;;
+    esac
+done
+
+# Default to all if no tools specified
+if [[ ${#TOOLS[@]} -eq 0 ]]; then
+    TOOLS=("all")
+fi
+
+# --- Tool definitions ---
+# Each tool: name|pjt_dir|toolchain|needs_qt
+TOOL_DEFS=(
+    "opensyde|opensyde_tool/pjt/openSYDE|opensyde_tool/pjt/toolchain_linux.cmake|yes"
+    "canmonitor|opensyde_tool/pjt/openSYDE_CAN_Monitor|opensyde_tool/pjt/toolchain_linux.cmake|yes"
+    "sydeflash|opensyde_tool/pjt/SYDEflash|opensyde_tool/pjt/toolchain_linux.cmake|yes"
+    "sydesup|opensyde_syde_sup/pjt|opensyde_syde_sup/pjt/toolchain_ubuntu.cmake|no"
+    "syde_x_gen|opensyde_syde_x_gen/pjt||no"
+    "syde_coder_c|opensyde_syde_coder_c/pjt||no"
+    "flash_tool|opensyde_cmd_line_flash_tool/pjt||no"
+)
+
+ALL_TOOL_NAMES=()
+for def in "${TOOL_DEFS[@]}"; do
+    IFS='|' read -r name _ _ _ <<< "$def"
+    ALL_TOOL_NAMES+=("$name")
+done
+
+# Expand "all"
+RESOLVED_TOOLS=()
+for t in "${TOOLS[@]}"; do
+    t_lower="$(echo "$t" | tr '[:upper:]' '[:lower:]')"
+    if [[ "$t_lower" == "all" ]]; then
+        RESOLVED_TOOLS=("${ALL_TOOL_NAMES[@]}")
+        break
+    else
+        RESOLVED_TOOLS+=("$t_lower")
+    fi
+done
+
+# --- Detect Qt6 ---
+find_qt6() {
+    local arch lib_dir
+    arch="$(uname -m)"
+    case "$arch" in
+        x86_64)  lib_dir="x86_64-linux-gnu" ;;
+        aarch64) lib_dir="aarch64-linux-gnu" ;;
+        *)       lib_dir="" ;;
+    esac
+
+    local candidates=()
+    [[ -n "$lib_dir" ]] && candidates+=("/usr/lib/$lib_dir/cmake/Qt6")
+    candidates+=(
+        "/usr/lib/cmake/Qt6"
+        "/usr/local/lib/cmake/Qt6"
+    )
+
+    for dir in "${candidates[@]}"; do
+        if [[ -f "$dir/Qt6Config.cmake" ]]; then
+            export Qt6_DIR="$dir"
+            write_step "Qt6 found: $dir"
+            return 0
+        fi
+    done
+    write_step "Qt6 not found in known paths; relying on CMake to locate it"
+    return 0
+}
+
+# --- Check prerequisites ---
+check_prerequisites() {
+    write_step "Checking prerequisites..."
+    local missing=false
+
+    for cmd in cmake ninja g++; do
+        if ! command -v "$cmd" &>/dev/null; then
+            write_error "$cmd not found"
+            missing=true
+        fi
+    done
+
+    if [[ "$missing" == "true" ]]; then
+        exit 1
+    fi
+
+    echo "  CMake: $(cmake --version | head -1)"
+    echo "  Ninja: $(ninja --version)"
+    echo "  GCC:   $(g++ --version | head -1)"
+}
+
+# --- Build a single tool ---
+build_tool() {
+    local tool_name="$1"
+
+    # Find tool definition
+    local pjt_dir toolchain needs_qt
+    local found=false
+    for def in "${TOOL_DEFS[@]}"; do
+        IFS='|' read -r name pjt tc qt <<< "$def"
+        if [[ "$name" == "$tool_name" ]]; then
+            pjt_dir="$pjt"
+            toolchain="$tc"
+            needs_qt="$qt"
+            found=true
+            break
+        fi
+    done
+
+    if [[ "$found" != "true" ]]; then
+        write_error "Unknown tool: $tool_name"
+        write_error "Available: ${ALL_TOOL_NAMES[*]}"
+        return 1
+    fi
+
+    local build_dir="$REPO_ROOT/build/$BUILD_TYPE/$tool_name"
+    local source_dir="$REPO_ROOT/$pjt_dir"
+
+    write_header "Building $tool_name ($BUILD_TYPE)"
+
+    # Clean if requested
+    if [[ "$CLEAN" == "true" ]] && [[ -d "$build_dir" ]]; then
+        write_step "Cleaning $build_dir..."
+        rm -rf "$build_dir"
+    fi
+    mkdir -p "$build_dir"
+
+    # Configure
+    if [[ ! -f "$build_dir/build.ninja" ]]; then
+        write_step "Configuring..."
+        local cmake_args=(
+            -S "$source_dir" -B "$build_dir" -G Ninja
+            "-DCMAKE_BUILD_TYPE=$BUILD_TYPE"
+        )
+        if [[ -n "$toolchain" ]]; then
+            cmake_args+=("-DCMAKE_TOOLCHAIN_FILE=$REPO_ROOT/$toolchain")
+        fi
+        if [[ "$needs_qt" == "yes" ]] && [[ -n "${Qt6_DIR:-}" ]]; then
+            cmake_args+=("-DQt6_DIR=$Qt6_DIR")
+        fi
+        cmake "${cmake_args[@]}"
+    else
+        write_step "Using existing configuration (use -c to reconfigure)"
+    fi
+
+    # Build
+    write_step "Building (jobs=$JOBS)..."
+    cmake --build "$build_dir" -j"$JOBS"
+
+    # Install
+    write_step "Installing..."
+    cmake --install "$build_dir"
+
+    write_step "$tool_name built successfully"
+}
+
+# --- Main ---
+write_header "openSYDE Build System"
+echo "  Tools:      ${RESOLVED_TOOLS[*]}"
+echo "  Build type: $BUILD_TYPE"
+echo "  Clean:      $CLEAN"
+echo "  Jobs:       $JOBS"
+
+check_prerequisites
+
+# Detect Qt6 if any GUI tool is being built
+for t in "${RESOLVED_TOOLS[@]}"; do
+    if [[ "$t" == "opensyde" || "$t" == "canmonitor" || "$t" == "sydeflash" ]]; then
+        find_qt6
+        break
+    fi
+done
+
+# Build each tool
+FAILED=()
+for tool in "${RESOLVED_TOOLS[@]}"; do
+    if ! build_tool "$tool"; then
+        FAILED+=("$tool")
+    fi
+done
+
+# Summary
+write_header "Build Summary"
+echo "  Build type: $BUILD_TYPE"
+echo "  Results:    $REPO_ROOT/result/$BUILD_TYPE/"
+if [[ ${#FAILED[@]} -gt 0 ]]; then
+    echo "  FAILED:     ${FAILED[*]}"
+    exit 1
+else
+    echo "  Status:     All tools built successfully"
+fi

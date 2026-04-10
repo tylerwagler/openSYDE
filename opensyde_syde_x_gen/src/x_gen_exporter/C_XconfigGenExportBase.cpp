@@ -14,7 +14,12 @@
 
 #include <iostream>
 #include <getopt.h> //note: as we use getopt.h this application is not portable to all compilers
+#ifndef _WIN32
+#include <climits>
+#include <unistd.h>
+#endif
 
+#include "version_config.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscProjectFiler.hpp"
@@ -95,13 +100,15 @@ void C_XconfigGenExportBase::m_PrintCommandLineParameters(void) const
 //----------------------------------------------------------------------------------------------------------------------
 C_SclString C_XconfigGenExportBase::h_GetApplicationVersion(const C_SclString & orc_FileName)
 {
+   C_SclString c_Version;
+
+   c_Version = "V?.\?\?r?";
+
+#ifdef _WIN32
    VS_FIXEDFILEINFO * pc_Info;
    uint32_t u32_ValSize;
    int32_t s32_InfoSize;
    uint8_t * pu8_Buffer;
-   C_SclString c_Version;
-
-   c_Version = "V?.\?\?r?";
 
    s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), NULL);
    if (s32_InfoSize != 0)
@@ -121,6 +128,11 @@ C_SclString C_XconfigGenExportBase::h_GetApplicationVersion(const C_SclString & 
       }
       delete[] pu8_Buffer;
    }
+#else
+   (void)orc_FileName;
+   c_Version.PrintFormatted("V%d.%02dr%d", PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR, PROJECT_VERSION_RELEASE);
+#endif
+
    return c_Version;
 }
 
@@ -148,10 +160,16 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::Init(const int32_t 
                                                                   char_t * const * const oppcn_Argv)
 {
    E_ResultCode e_Return = eRESULT_OK;
+#ifdef _WIN32
    char_t acn_ApplicationName[MAX_PATH + 1];
    uint32_t u32_Return = GetModuleFileNameA(NULL, &acn_ApplicationName[0], MAX_PATH + 1);
-
    tgl_assert(u32_Return != 0);
+#else
+   char_t acn_ApplicationName[PATH_MAX + 1];
+   const ssize_t x_Count = readlink("/proc/self/exe", &acn_ApplicationName[0], PATH_MAX);
+   tgl_assert(x_Count > 0);
+   acn_ApplicationName[(x_Count < PATH_MAX) ? x_Count : PATH_MAX] = '\0';
+#endif
 
    mq_EraseTargetFolder = false;
 
@@ -181,8 +199,8 @@ C_XconfigGenExportBase::E_ResultCode C_XconfigGenExportBase::Init(const int32_t 
    if (stw::tgl::TglFileExists(mc_ListOfFilesFileName) == true)
    {
       //file does exist -> erase it
-      u32_Return = remove(mc_ListOfFilesFileName.c_str());
-      if (u32_Return != 0)
+      const int s32_RemoveResult = remove(mc_ListOfFilesFileName.c_str());
+      if (s32_RemoveResult != 0)
       {
          e_Return = eRESULT_ERASE_FILE_LIST_ERROR;
       }
