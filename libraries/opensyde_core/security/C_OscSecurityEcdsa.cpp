@@ -16,9 +16,10 @@
 
 #include "openssl/x509.h"
 #include "openssl/evp.h"
-#include "openssl/ecdsa.h"
+#include "openssl/ec.h"
 #include "openssl/pem.h"
 #include "openssl/core_names.h"
+#include "openssl/param_build.h"
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -381,59 +382,111 @@ int32_t C_OscSecurityEcdsa::h_CalcEcdsaSecp256r1Signature(const uint8_t (&orau8_
 
    if (pc_BigNum != NULL)
    {
-      //the key parameter for EC_KEY_set_private_key shall not be NULL so we first need a "dummy" key
+      //Build EVP_PKEY from raw private key using OpenSSL 3.0+ OSSL_PARAM_BLD API
       //the prime256v1 curve is equivalent to secp256r1, that has no specific NID in openssl library. See:
       //https://stackoverflow.com/questions/41950056/openssl1-1-0-b-is-not-support-secp256r1openssl-ecparam-list-curves
-      EC_KEY * const pc_EcdsaKey = EC_KEY_new_by_curve_name(NID_X9_62_prime256v1);
-      if (pc_EcdsaKey != NULL)
+      OSSL_PARAM_BLD * const pc_Bld = OSSL_PARAM_BLD_new();
+      if (pc_Bld != NULL)
       {
-         int x_Result = EC_KEY_set_private_key(pc_EcdsaKey, pc_BigNum); //lint !e970 !e8080 //using type to
+         int x_Result = OSSL_PARAM_BLD_push_utf8_string(pc_Bld, OSSL_PKEY_PARAM_GROUP_NAME,
+                                                         "prime256v1", 0); //lint !e970 !e8080
          if (x_Result == 1)
          {
-            //Checking for the validity of the private key is not so simple.
-            //EC_KEY_check_key will fail as we have not explicitly set a public key.
-            //Technically the private key must be in a certain range, but this is rather broad.
-            //So we will not perform an additional check for validity.
+            x_Result = OSSL_PARAM_BLD_push_BN(pc_Bld, OSSL_PKEY_PARAM_PRIV_KEY, pc_BigNum);
+         }
+
+         OSSL_PARAM * pc_Params = NULL;
+         if (x_Result == 1)
+         {
+            pc_Params = OSSL_PARAM_BLD_to_param(pc_Bld);
+         }
+         OSSL_PARAM_BLD_free(pc_Bld);
+         BN_clear_free(pc_BigNum);
+
+         EVP_PKEY * pc_EvpKey = NULL;
+         if (pc_Params != NULL)
+         {
+            EVP_PKEY_CTX * const pc_KeyCtx = EVP_PKEY_CTX_new_from_name(NULL, "EC", NULL);
+            if (pc_KeyCtx != NULL)
+            {
+               if ((EVP_PKEY_fromdata_init(pc_KeyCtx) == 1) &&
+                   (EVP_PKEY_fromdata(pc_KeyCtx, &pc_EvpKey, EVP_PKEY_KEYPAIR, pc_Params) != 1))
+               {
+                  pc_EvpKey = NULL;
+               }
+               EVP_PKEY_CTX_free(pc_KeyCtx);
+            }
+            OSSL_PARAM_free(pc_Params);
+         }
+
+         if (pc_EvpKey != NULL)
+         {
             s32_Return = C_NOACT;
 
-            BN_clear_free(pc_BigNum);
+            //Sign the digest using EVP_PKEY_sign (produces DER-encoded ECDSA signature)
+            EVP_PKEY_CTX * const pc_SignCtx = EVP_PKEY_CTX_new(pc_EvpKey, NULL);
+            EVP_PKEY_free(pc_EvpKey);
 
-            //sign the digest
-            ECDSA_SIG * const pc_Signature = ECDSA_do_sign(orau8_Digest, hu32_SHA256_FINAL_LENGTH, pc_EcdsaKey);
-            EC_KEY_set_private_key(pc_EcdsaKey, NULL);
-            EC_KEY_free(pc_EcdsaKey);
-
-            if (pc_Signature != NULL)
+            if (pc_SignCtx != NULL)
             {
-               const BIGNUM * const pc_SignatureRpart = ECDSA_SIG_get0_r(pc_Signature);
-               const BIGNUM * const pc_SignatureSpart = ECDSA_SIG_get0_s(pc_Signature);
-
-               if ((pc_SignatureRpart == NULL) || (pc_SignatureSpart == NULL) ||
-                   (BN_num_bytes(pc_SignatureRpart) > 32) || (BN_num_bytes(pc_SignatureSpart) > 32))
+               x_Result = EVP_PKEY_sign_init(pc_SignCtx);
+               if (x_Result == 1)
                {
-                  orc_ErrorMessage = "ECDSA signature size is greater than the expected maximum size.";
-               }
-               else
-               {
-                  //operation successful -> place signature into output array
+                  //Determine DER signature size
+                  size_t un_DerSigLen = 0;
+                  x_Result = EVP_PKEY_sign(pc_SignCtx, NULL, &un_DerSigLen,
+                                           orau8_Digest, hu32_SHA256_FINAL_LENGTH);
+                  if (x_Result == 1)
+                  {
+                     std::vector<uint8_t> c_DerSig(un_DerSigLen);
+                     x_Result = EVP_PKEY_sign(pc_SignCtx, &c_DerSig[0], &un_DerSigLen,
+                                              orau8_Digest, hu32_SHA256_FINAL_LENGTH);
+                     if (x_Result == 1)
+                     {
+                        //Decode DER signature to extract R and S parts
+                        const uint8_t * pu8_DerPtr = &c_DerSig[0];
+                        ECDSA_SIG * const pc_Signature = d2i_ECDSA_SIG(
+                           NULL, &pu8_DerPtr,
+                           static_cast<long>(un_DerSigLen)); //lint !e970
+                        if (pc_Signature != NULL)
+                        {
+                           const BIGNUM * const pc_SignatureRpart = ECDSA_SIG_get0_r(pc_Signature);
+                           const BIGNUM * const pc_SignatureSpart = ECDSA_SIG_get0_s(pc_Signature);
 
-                  x_Result = BN_bn2bin(pc_SignatureRpart, &orc_Signature.au8_Rpart[0]);
-                  tgl_assert(x_Result == BN_num_bytes(pc_SignatureRpart)); //we already checked size above; this would
-                                                                           // be unexpected
-                  orc_Signature.u8_NumBytesUsedRpart = static_cast<uint8_t>(x_Result);
+                           if ((pc_SignatureRpart == NULL) || (pc_SignatureSpart == NULL) ||
+                               (BN_num_bytes(pc_SignatureRpart) > 32) || (BN_num_bytes(pc_SignatureSpart) > 32))
+                           {
+                              orc_ErrorMessage =
+                                 "ECDSA signature size is greater than the expected maximum size.";
+                           }
+                           else
+                           {
+                              //operation successful -> place signature into output array
+                              x_Result = BN_bn2bin(pc_SignatureRpart, &orc_Signature.au8_Rpart[0]);
+                              tgl_assert(x_Result == BN_num_bytes(pc_SignatureRpart));
+                              orc_Signature.u8_NumBytesUsedRpart = static_cast<uint8_t>(x_Result);
 
-                  x_Result = BN_bn2bin(pc_SignatureSpart, &orc_Signature.au8_Spart[0]);
-                  tgl_assert(x_Result == BN_num_bytes(pc_SignatureSpart)); //we already checked size above; this would
-                                                                           // be unexpected
-                  orc_Signature.u8_NumBytesUsedSpart = static_cast<uint8_t>(x_Result);
-                  s32_Return = C_NO_ERR;
+                              x_Result = BN_bn2bin(pc_SignatureSpart, &orc_Signature.au8_Spart[0]);
+                              tgl_assert(x_Result == BN_num_bytes(pc_SignatureSpart));
+                              orc_Signature.u8_NumBytesUsedSpart = static_cast<uint8_t>(x_Result);
+                              s32_Return = C_NO_ERR;
+                           }
+                           ECDSA_SIG_free(pc_Signature);
+                        }
+                        else
+                        {
+                           orc_ErrorMessage =
+                              "openSSL unable to decode ECDSA signature. Internal error.";
+                        }
+                     }
+                     else
+                     {
+                        orc_ErrorMessage =
+                           "openSSL unable to sign the data. Check inputs: digest and private key.";
+                     }
+                  }
                }
-               ECDSA_SIG_free(pc_Signature);
-            }
-            else
-            {
-               //could not sign the digest
-               orc_ErrorMessage = "openSSL unable to sign the data. Check inputs: digest and private key.";
+               EVP_PKEY_CTX_free(pc_SignCtx);
             }
          }
       }
@@ -483,61 +536,102 @@ int32_t C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(
 
    if ((orc_Signature.u8_NumBytesUsedRpart > 0U) && (orc_Signature.u8_NumBytesUsedSpart > 0U))
    {
-      //convert binary signature data back to openSSL structure
+      //Convert R||S signature to DER format for EVP_PKEY_verify
       BIGNUM * const pc_Rpart = BN_bin2bn(&orc_Signature.au8_Rpart[0], orc_Signature.u8_NumBytesUsedRpart, NULL);
       BIGNUM * const pc_Spart = BN_bin2bn(&orc_Signature.au8_Spart[0], orc_Signature.u8_NumBytesUsedSpart, NULL);
-      BIGNUM * const pc_Xpart = BN_bin2bn(&orau8_PublicKey[0], 32, NULL);
-      BIGNUM * const pc_Ypart = BN_bin2bn(&orau8_PublicKey[32], 32, NULL);
 
-      if ((pc_Rpart != NULL) && (pc_Spart != NULL) && (pc_Xpart != NULL) && (pc_Ypart != NULL))
+      if ((pc_Rpart != NULL) && (pc_Spart != NULL))
       {
          ECDSA_SIG * const pc_Signature = ECDSA_SIG_new();
          if (pc_Signature != NULL)
          {
+            //ECDSA_SIG_set0 takes ownership of pc_Rpart and pc_Spart
             int x_Result = ECDSA_SIG_set0(pc_Signature, pc_Rpart, pc_Spart); //lint !e970 !e8080 //using type to
-                                                                             // match library interface
+                                                                              // match library interface
             if (x_Result == 1)
             {
-               //create EC KEY object
-               EC_KEY * const pc_EcdsaKey = EC_KEY_new();
+               //Encode signature as DER
+               uint8_t * pu8_DerSig = NULL;
+               const int x_DerLen = i2d_ECDSA_SIG(pc_Signature, &pu8_DerSig); //lint !e970 !e8080
 
-               if (pc_EcdsaKey != NULL)
+               if ((x_DerLen > 0) && (pu8_DerSig != NULL))
                {
-                  EC_GROUP * const pc_EcGroup = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
-                  if (pc_EcGroup != NULL)
+                  //Build EVP_PKEY from raw public key (x||y affine coordinates) as uncompressed point
+                  //Uncompressed point format: 0x04 || x (32 bytes) || y (32 bytes)
+                  uint8_t au8_UncompressedPubKey[1 + hu32_SECP256R1_PUBLIC_KEY_LENGTH];
+                  au8_UncompressedPubKey[0] = 0x04U; //uncompressed point prefix
+                  (void)std::memcpy(&au8_UncompressedPubKey[1], &orau8_PublicKey[0],
+                                    hu32_SECP256R1_PUBLIC_KEY_LENGTH);
+
+                  OSSL_PARAM_BLD * const pc_Bld = OSSL_PARAM_BLD_new();
+                  if (pc_Bld != NULL)
                   {
-                     x_Result = EC_KEY_set_group(pc_EcdsaKey, pc_EcGroup);
+                     x_Result = OSSL_PARAM_BLD_push_utf8_string(pc_Bld, OSSL_PKEY_PARAM_GROUP_NAME,
+                                                                 "prime256v1", 0);
                      if (x_Result == 1)
                      {
-                        //set public key from bignum data:
-                        x_Result = EC_KEY_set_public_key_affine_coordinates(pc_EcdsaKey, pc_Xpart, pc_Ypart);
+                        x_Result = OSSL_PARAM_BLD_push_octet_string(pc_Bld, OSSL_PKEY_PARAM_PUB_KEY,
+                                                                     au8_UncompressedPubKey,
+                                                                     sizeof(au8_UncompressedPubKey));
                      }
+
+                     OSSL_PARAM * pc_Params = NULL;
                      if (x_Result == 1)
                      {
-                        //verify signature
-                        x_Result = ECDSA_do_verify(&orau8_Digest[0],
-                                                   hu32_SHA256_FINAL_LENGTH,
-                                                   pc_Signature,
-                                                   pc_EcdsaKey);
-                        switch (x_Result)
+                        pc_Params = OSSL_PARAM_BLD_to_param(pc_Bld);
+                     }
+                     OSSL_PARAM_BLD_free(pc_Bld);
+
+                     EVP_PKEY * pc_EvpKey = NULL;
+                     if (pc_Params != NULL)
+                     {
+                        EVP_PKEY_CTX * const pc_KeyCtx = EVP_PKEY_CTX_new_from_name(NULL, "EC", NULL);
+                        if (pc_KeyCtx != NULL)
                         {
-                        case 0: //check done; result stays "false"
-                           s32_Return = C_NO_ERR;
-                           break;
-                        case 1: //check done; result becomes "true"
-                           s32_Return = C_NO_ERR;
-                           orq_Valid = true;
-                           break;
-                        case -1: //function reports an error
-                        default: //undefined function result
-                           s32_Return = C_NOACT;
-                           break;
+                           if ((EVP_PKEY_fromdata_init(pc_KeyCtx) == 1) &&
+                               (EVP_PKEY_fromdata(pc_KeyCtx, &pc_EvpKey, EVP_PKEY_PUBLIC_KEY, pc_Params) != 1))
+                           {
+                              pc_EvpKey = NULL;
+                           }
+                           EVP_PKEY_CTX_free(pc_KeyCtx);
+                        }
+                        OSSL_PARAM_free(pc_Params);
+                     }
+
+                     if (pc_EvpKey != NULL)
+                     {
+                        //Verify the DER-encoded signature using EVP_PKEY_verify
+                        EVP_PKEY_CTX * const pc_VerifyCtx = EVP_PKEY_CTX_new(pc_EvpKey, NULL);
+                        EVP_PKEY_free(pc_EvpKey);
+
+                        if (pc_VerifyCtx != NULL)
+                        {
+                           x_Result = EVP_PKEY_verify_init(pc_VerifyCtx);
+                           if (x_Result == 1)
+                           {
+                              x_Result = EVP_PKEY_verify(pc_VerifyCtx, pu8_DerSig,
+                                                          static_cast<size_t>(x_DerLen),
+                                                          &orau8_Digest[0], hu32_SHA256_FINAL_LENGTH);
+                              switch (x_Result)
+                              {
+                              case 0: //check done; result stays "false"
+                                 s32_Return = C_NO_ERR;
+                                 break;
+                              case 1: //check done; result becomes "true"
+                                 s32_Return = C_NO_ERR;
+                                 orq_Valid = true;
+                                 break;
+                              case -1: //function reports an error
+                              default: //undefined function result
+                                 s32_Return = C_NOACT;
+                                 break;
+                              }
+                           }
+                           EVP_PKEY_CTX_free(pc_VerifyCtx);
                         }
                      }
-                     EC_GROUP_free(pc_EcGroup);
                   }
-                  EC_KEY_set_private_key(pc_EcdsaKey, NULL);
-                  EC_KEY_free(pc_EcdsaKey);
+                  OPENSSL_free(pu8_DerSig);
                }
             }
             ECDSA_SIG_free(pc_Signature);
@@ -548,8 +642,6 @@ int32_t C_OscSecurityEcdsa::h_VerifyEcdsaSecp256r1Signature(
             BN_clear_free(pc_Rpart);
             BN_clear_free(pc_Spart);
          }
-         BN_clear_free(pc_Xpart);
-         BN_clear_free(pc_Ypart);
       }
    }
    return s32_Return;

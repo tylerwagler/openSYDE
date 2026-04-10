@@ -98,7 +98,7 @@ int32_t C_SyvComMessageLoggerFileBlf::OpenFile(void)
 
    if (s32_Return == C_NO_ERR)
    {
-      this->mc_File.open(this->mc_FilePath.c_str(), File::OpenMode::Write);
+      this->mc_File.open(this->mc_FilePath.c_str(), std::ios_base::out);
 
       if (this->mc_File.is_open() == false)
       {
