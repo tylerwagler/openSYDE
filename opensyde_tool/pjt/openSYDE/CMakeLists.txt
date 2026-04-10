@@ -336,10 +336,8 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubColorOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraFrame.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingWidgetSubTitle.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.cpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopErrorHandling.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBaseWidget.cpp
@@ -689,7 +687,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToggle.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebToolboxUtil.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingWidgetDark.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxHover.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraBorder.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaLabelBase.cpp
@@ -922,8 +919,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeNavigation.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDashboard.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDoubleClick.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingWidgetTitle.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingWidgetSubSubTitle.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.cpp
@@ -1237,10 +1232,8 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubColorOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraFrame.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingWidgetSubTitle.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.hpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopErrorHandling.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBaseWidget.hpp
@@ -1590,7 +1583,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToggle.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebToolboxUtil.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingWidgetDark.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxHover.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraBorder.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaLabelBase.hpp
@@ -1838,8 +1830,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeNavigation.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDashboard.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDoubleClick.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingWidgetTitle.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingWidgetSubSubTitle.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbListWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/data_blocks/C_SdNdeDbViewWidget.hpp
