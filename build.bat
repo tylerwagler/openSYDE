@@ -126,13 +126,13 @@ if /i "%TOOL_NAME%"=="opensyde" (
     set BUILD_SUBDIR=openSYDE
 )
 if /i "%TOOL_NAME%"=="canmonitor" (
-    set PJT_DIR=opensyde_tool\pjt\openSYDE_CAN_Monitor
-    set TOOLCHAIN=opensyde_tool\pjt\toolchain_windows.cmake
+    set PJT_DIR=opensyde_can_monitor\pjt
+    set TOOLCHAIN=opensyde_can_monitor\pjt\toolchain_windows.cmake
     set BUILD_SUBDIR=openSYDE_CAN_Monitor
 )
 if /i "%TOOL_NAME%"=="sydeflash" (
-    set PJT_DIR=opensyde_tool\pjt\SYDEflash
-    set TOOLCHAIN=opensyde_tool\pjt\toolchain_windows.cmake
+    set PJT_DIR=opensyde_syde_flash\pjt
+    set TOOLCHAIN=opensyde_syde_flash\pjt\toolchain_windows.cmake
     set BUILD_SUBDIR=SYDEflash
 )
 if /i "%TOOL_NAME%"=="sydesup" (
