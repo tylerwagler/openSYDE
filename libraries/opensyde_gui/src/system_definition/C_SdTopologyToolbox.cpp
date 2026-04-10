@@ -398,7 +398,10 @@ void C_SdTopologyToolbox::m_FillToolboxDynamic(void)
       C_SebToolboxUtil::h_AddFinalSpacer(this->mpc_Ui->pc_VerticalLayout1, this->mpc_List);
    }
 
-   connect(this->mpc_List, &C_SdTopologyListWidget::SigDelete, this, &C_SdTopologyToolbox::m_DeleteUserNode);
+   if (this->mpc_List != NULL)
+   {
+      connect(this->mpc_List, &C_SdTopologyListWidget::SigDelete, this, &C_SdTopologyToolbox::m_DeleteUserNode);
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
