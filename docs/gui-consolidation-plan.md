@@ -8,10 +8,79 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 
 ---
 
+## Status Summary (as of 2026-04-11)
+
+| Phase | Status | Notes |
+|-------|--------|-------|
+| Phase 1 (Labels) | ✅ **Complete** | 58/58 stylesheet-only label classes removed |
+| Phase 1 (Push Buttons) | ⏳ Not started | ~26 classes |
+| Phase 1 (Spin Boxes) | ⏳ Not started | ~15 classes |
+| Phase 1 (Group Boxes) | ⏳ Not started | ~12 classes |
+| Phase 1 (Combo Boxes) | ⏳ Not started | ~10 classes |
+| Phase 1 (Check Boxes) | ⏳ Not started | ~8 classes |
+| Phase 1 (Line Edits) | ⏳ Not started | ~8 classes |
+| Phase 1 (Other types) | ⏳ Not started | ~15 classes (frame, scroll_area, tab_widget, text_browser, radio_button, slider, splitter, menu, widget) |
+| Phase 2 | ⏳ Not started | Dashboard property panels |
+| Phase 3 | ⏳ Not started | Popup dialog boilerplate |
+| Phase 4 | ⏳ Not started | Title bar unification |
+| Phase 5 | ⏳ Not started | CAN Monitor element dedup |
+| Phase 6 | ⏳ Not started | MVD triplication in dashboard items |
+
+### Phase 1 Label Portion — Completion Details
+
+**Started:** 70 label classes (58 stylesheet-only)
+**Now:** 14 label classes (all with real functionality)
+
+**Functional labels kept:**
+`C_OgeLabAdaptiveSize`, `C_OgeLabContextMenuBase`, `C_OgeLabDashboardDefault`, `C_OgeLabDashboardLabelValue`, `C_OgeLabDashboardProgressBarMaximum`, `C_OgeLabDoubleClick`, `C_OgeLabElided`, `C_OgeLabExternalLink`, `C_OgeLabFrameError`, `C_OgeLabGenericNoPaddingNoMargins`, `C_OgeLabGenericWithContextMenu`, `C_OgeLabPopUpTitle`, `C_OgeLabSvgOnly`, `C_OgeLabToolTipBase`
+
+**styleRole values introduced** (the list of dynamic-property values the stylesheets now match against):
+`heading-widget-title`, `heading-widget-sub-title`, `heading-widget-sub-sub-title`, `update-app-path`, `update-app-version`, `update-heading`, `update-node-title`, `update-time`, `toolbar-no-search-result`, `toolbar-search-result-title`, `toolbar-search-result-subtitle`, `toolbox-heading-group`, `toolbox-heading-group-big`, `bus-type`, `category-sub-heading`, `color-only`, `heading-properties`, `heading-tool-tip`, `list-header`, `list-header-heading`, `navigation-sub-heading`, `node-type`, `properties-sub-heading`, `node-data-pool-selected-items`, `node-prop-com-if-table`, `progress-log-heading`, `progress-text`, `topology-toolbox-user-nodes`, `dashboard-tab`, `list-header-highlighted`, `status-information`, `status-information-small`, `category-heading`, `com-list-header`, `state-info`, `progress-log-item`, `dashboard-label-caption`, `heading-message`, `description-message`, `generic-bubble`, `popup-title`, `popup-sub-title`, `dashboard-chart`, `group-item-value`, `group-sub-item`, `group-item`, `heading-group-bold`
+
+**Promoted base classes used in .ui files** (instead of deleted stylesheet-only subclasses):
+- `QLabel` — for classes that inherited `QLabel` directly
+- `C_OgeLabToolTipBase` — for classes that inherited `C_OgeLabToolTipBase` (preserves tooltip)
+- `C_OgeLabContextMenuBase` — for classes that inherited `C_OgeLabContextMenuBase` (preserves tooltip + context menu)
+- `C_OgeLabGenericNoPaddingNoMargins` — for classes that inherited this (preserves property setters)
+- `C_OgeLabPopUpTitle` — for PopUpSubTitle (preserves mouse signals)
+
+**Commits (in order on `gui-consolidation` branch):**
+- `4998a37a` — Batch 1: 5 HeadingWidget classes
+- `2832f8e0` — Build fix: restore osy_git_data_model_monitor, QCustomPlot keyword wrapper
+- `3a711db6` — Batches 2-7: 52 label classes in bulk
+- `d470ec40` — Fix syde_coder_c Linux build (separate from GUI work)
+- `37d4cedc` — Final 6 label classes (DashboardChart, GroupItemValue, GroupSubItem, GroupItem, HeadingGroupBold; also PopUpSubTitle from earlier)
+
+**Aggregate footprint:**
+- ~112 source files deleted (56 classes × 2)
+- 240+ widget references migrated across ~150 .ui files
+- ~50 .qss rule updates across 6 .qss files in 3 applications
+- 3 `CMakeLists.txt` files cleaned up
+- A handful of C++ files updated where classes were instantiated programmatically (`C_SebToolboxUtil.cpp`, `C_SdNdeNodePropertiesWidget.cpp`, `C_SdTopologyToolbox.hpp/cpp`, `C_SyvUpProgressLog.cpp`) — all now construct the appropriate base class and call `setProperty("styleRole", ...)`
+- Dynamic stylesheet strings in `C_UtiStyleSheets.cpp` updated for `dashboard-chart` transparency rules
+
+### Lessons Learned for Future Phase 1 Batches
+
+1. **Substring collision is the biggest footgun** — e.g., `C_OgeLabListHeader` matched inside `C_OgeLabListHeaderHeading` and `C_OgeLabListHeaderHighlighted`. Always check for name prefix collisions before bulk replacement. The safer pattern for exact-match is to include the trailing `"` or `.hpp` in the search string.
+
+2. **Manual Edit tool for small batches, Python script for large ones is OK once collisions are verified absent.** Don't use Python for the first batch of a new class family — always do a few manual ones first to understand the variant shapes, then script the tail.
+
+3. **For classes used in C++ code** (instantiated programmatically): the class's base type may also need to be updated in header member declarations, not just the .cpp construction site.
+
+4. **For classes whose parent class is used as a promoted widget elsewhere** (e.g., `C_OgeLabToolTipBase` itself): the customwidget declaration for the parent is often already present in files that used the subclass, so scan first — we can just remove the child's customwidget entry rather than updating it.
+
+5. **Check the dynamic stylesheet builder** (`C_UtiStyleSheets.cpp`) for any runtime-built selectors that reference the class. These are compiled C++ strings and easy to miss in grep if you only look at `.qss`.
+
+6. **The `.` prefix in Qt QSS selectors** (`.C_OgeLabPopUpTitle`) means "exact class match, no subclasses". When removing a subclass that was distinguished this way, update the rule to use the `styleRole` attribute instead of class-exact matching.
+
+---
+
 ## Phase 1: Eliminate Stylesheet-Only Classes via Qt Dynamic Properties
 
 **Impact: ~148 classes -> 0 | ~296 files removed**
 **Risk: Medium-High (touches every .ui file and all .qss files)**
+
+**Progress: ~58/148 classes done (label portion complete)**
 
 ### Problem
 Every styling variation requires a dedicated C++ class:
