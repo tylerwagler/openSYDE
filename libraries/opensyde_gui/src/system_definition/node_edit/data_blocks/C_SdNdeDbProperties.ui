@@ -67,7 +67,10 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelName">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelName">
+            <property name="styleRole" stdset="0">
+             <string>heading-group-bold</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -183,7 +186,10 @@
              <number>6</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelComment">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelComment">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -405,7 +411,10 @@ p, li { white-space: pre-wrap; }
        </layout>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelFileGenerationDisabled">
+       <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelFileGenerationDisabled">
+        <property name="styleRole" stdset="0">
+         <string>group-item</string>
+        </property>
         <property name="text">
          <string>File Generation disabled.</string>
         </property>
@@ -445,7 +454,10 @@ p, li { white-space: pre-wrap; }
                 <number>6</number>
                </property>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingProject_2">
+                <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingProject_2">
+                 <property name="styleRole" stdset="0">
+                  <string>heading-group-bold</string>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -591,7 +603,10 @@ p, li { white-space: pre-wrap; }
                    </spacer>
                   </item>
                   <item row="1" column="0">
-                   <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelSafeFile">
+                   <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelSafeFile">
+                    <property name="styleRole" stdset="0">
+                     <string>group-item</string>
+                    </property>
                     <property name="text">
                      <string>Safe File Name</string>
                     </property>
@@ -600,7 +615,10 @@ p, li { white-space: pre-wrap; }
                   <item row="1" column="2">
                    <layout class="QHBoxLayout" name="horizontalLayout_12">
                     <item>
-                     <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItemValue" name="pc_LabelSafeFileValue">
+                     <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelSafeFileValue">
+                      <property name="styleRole" stdset="0">
+                       <string>group-item-value</string>
+                      </property>
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -619,7 +637,10 @@ p, li { white-space: pre-wrap; }
                      </widget>
                     </item>
                     <item>
-                     <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItemValue" name="pc_LabelSafeFileNone">
+                     <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelSafeFileNone">
+                      <property name="styleRole" stdset="0">
+                       <string>group-item-value</string>
+                      </property>
                       <property name="text">
                        <string>&lt;not available&gt;</string>
                       </property>
@@ -644,7 +665,10 @@ p, li { white-space: pre-wrap; }
                    </widget>
                   </item>
                   <item row="0" column="0">
-                   <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelFileGenerate">
+                   <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelFileGenerate">
+                    <property name="styleRole" stdset="0">
+                     <string>group-item</string>
+                    </property>
                     <property name="minimumSize">
                      <size>
                       <width>85</width>
@@ -692,7 +716,10 @@ p, li { white-space: pre-wrap; }
                    </spacer>
                   </item>
                   <item row="2" column="0">
-                   <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNonSafeFile">
+                   <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelNonSafeFile">
+                    <property name="styleRole" stdset="0">
+                     <string>group-item</string>
+                    </property>
                     <property name="text">
                      <string>Non Safe File Name</string>
                     </property>
@@ -720,7 +747,10 @@ p, li { white-space: pre-wrap; }
                   <item row="2" column="2">
                    <layout class="QHBoxLayout" name="horizontalLayout_13">
                     <item>
-                     <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItemValue" name="pc_LabelNonSafeFileValue">
+                     <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelNonSafeFileValue">
+                      <property name="styleRole" stdset="0">
+                       <string>group-item-value</string>
+                      </property>
                       <property name="minimumSize">
                        <size>
                         <width>0</width>
@@ -739,7 +769,10 @@ p, li { white-space: pre-wrap; }
                      </widget>
                     </item>
                     <item>
-                     <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItemValue" name="pc_LabelNonSafeFileNone">
+                     <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelNonSafeFileNone">
+                      <property name="styleRole" stdset="0">
+                       <string>group-item-value</string>
+                      </property>
                       <property name="text">
                        <string>&lt;not available&gt;</string>
                       </property>
@@ -823,7 +856,10 @@ p, li { white-space: pre-wrap; }
                    <number>12</number>
                   </property>
                   <item row="2" column="0">
-                   <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelCodeGenerate">
+                   <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelCodeGenerate">
+                    <property name="styleRole" stdset="0">
+                     <string>group-item</string>
+                    </property>
                     <property name="minimumSize">
                      <size>
                       <width>85</width>
@@ -931,7 +967,10 @@ p, li { white-space: pre-wrap; }
                    </widget>
                   </item>
                   <item row="1" column="0">
-                   <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelProcessID">
+                   <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelProcessID">
+                    <property name="styleRole" stdset="0">
+                     <string>group-item</string>
+                    </property>
                     <property name="minimumSize">
                      <size>
                       <width>85</width>
@@ -966,7 +1005,10 @@ p, li { white-space: pre-wrap; }
                    </widget>
                   </item>
                   <item row="0" column="0">
-                   <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelCodeStructure">
+                   <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelCodeStructure">
+                    <property name="styleRole" stdset="0">
+                     <string>group-item</string>
+                    </property>
                     <property name="minimumSize">
                      <size>
                       <width>85</width>
@@ -1067,7 +1109,10 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelCodeGenerator">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelCodeGenerator">
+               <property name="styleRole" stdset="0">
+                <string>group-item</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>85</width>
@@ -1113,7 +1158,10 @@ p, li { white-space: pre-wrap; }
               <number>6</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingDatapools">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingDatapools">
+               <property name="styleRole" stdset="0">
+                <string>heading-group-bold</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1284,7 +1332,10 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelDataPoolsEmpty">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelDataPoolsEmpty">
+             <property name="styleRole" stdset="0">
+              <string>group-item</string>
+             </property>
              <property name="text">
               <string>No Datapools</string>
              </property>
@@ -1365,7 +1416,10 @@ p, li { white-space: pre-wrap; }
            <number>6</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingProject">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingProject">
+            <property name="styleRole" stdset="0">
+             <string>heading-group-bold</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -1551,14 +1605,20 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelOutputFile">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelOutputFile">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="text">
            <string>Output File</string>
           </property>
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelIDE">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelIDE">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="text">
            <string>IDE Call</string>
           </property>
@@ -1663,7 +1723,10 @@ p, li { white-space: pre-wrap; }
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelProject">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelProject">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>85</width>
@@ -1836,11 +1899,6 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeChxDefaultCheckedDisabled.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
    <extends>QFrame</extends>
    <header>C_OgeFraSeparator.hpp</header>
@@ -1868,9 +1926,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgePubCancel.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeFilePath</class>
@@ -1899,9 +1957,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLePropertiesName.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItemValue</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItemValue.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubSvgIconOnly</class>

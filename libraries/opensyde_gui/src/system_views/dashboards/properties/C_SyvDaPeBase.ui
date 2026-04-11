@@ -78,7 +78,10 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelDesign">
+                <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelDesign">
+                 <property name="styleRole" stdset="0">
+                  <string>heading-group-bold</string>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -170,7 +173,10 @@
                <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_23">
                  <item>
-                  <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelTheme">
+                  <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelTheme">
+                   <property name="styleRole" stdset="0">
+                    <string>group-item</string>
+                   </property>
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -272,7 +278,10 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelPreview">
+                <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelPreview">
+                 <property name="styleRole" stdset="0">
+                  <string>heading-group-bold</string>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -610,7 +619,10 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelDataElement">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelDataElement">
+            <property name="styleRole" stdset="0">
+             <string>heading-group-bold</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -795,7 +807,10 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_24" stretch="0,0,0,1">
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNamespaceDescription">
+                <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelNamespaceDescription">
+                 <property name="styleRole" stdset="0">
+                  <string>group-item</string>
+                 </property>
                  <property name="text">
                   <string>TextLabel</string>
                  </property>
@@ -815,7 +830,10 @@
                 </spacer>
                </item>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItemValue" name="pc_LabelNamespaceValue">
+                <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelNamespaceValue">
+                 <property name="styleRole" stdset="0">
+                  <string>group-item-value</string>
+                 </property>
                  <property name="text">
                   <string>TextLabel</string>
                  </property>
@@ -839,7 +857,10 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_25">
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelDisplayName">
+                <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelDisplayName">
+                 <property name="styleRole" stdset="0">
+                  <string>group-item</string>
+                 </property>
                  <property name="text">
                   <string>TextLabel</string>
                  </property>
@@ -877,7 +898,10 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelUpdateModeHeading">
+               <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelUpdateModeHeading">
+                <property name="styleRole" stdset="0">
+                 <string>heading-group-bold</string>
+                </property>
                 <property name="text">
                  <string>Value type</string>
                 </property>
@@ -959,7 +983,10 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_14">
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelUpdateMode">
+                <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelUpdateMode">
+                 <property name="styleRole" stdset="0">
+                  <string>group-item</string>
+                 </property>
                  <property name="text">
                   <string>TextLabel</string>
                  </property>
@@ -1063,7 +1090,10 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelScaling">
+               <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelScaling">
+                <property name="styleRole" stdset="0">
+                 <string>heading-group-bold</string>
+                </property>
                 <property name="text">
                  <string>Value type</string>
                 </property>
@@ -1134,7 +1164,10 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="0,0,0,0,0,0,0,0,1">
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelFactor">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelFactor">
+              <property name="styleRole" stdset="0">
+               <string>group-item</string>
+              </property>
               <property name="text">
                <string>TextLabel</string>
               </property>
@@ -1170,7 +1203,10 @@
              </spacer>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelOffset">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelOffset">
+              <property name="styleRole" stdset="0">
+               <string>group-item</string>
+              </property>
               <property name="text">
                <string>TextLabel</string>
               </property>
@@ -1206,7 +1242,10 @@
              </spacer>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelUnit">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelUnit">
+              <property name="styleRole" stdset="0">
+               <string>group-item</string>
+              </property>
               <property name="text">
                <string>TextLabel</string>
               </property>
@@ -1269,7 +1308,10 @@
                   <number>6</number>
                  </property>
                  <item>
-                  <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelFormatter">
+                  <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelFormatter">
+                   <property name="styleRole" stdset="0">
+                    <string>heading-group-bold</string>
+                   </property>
                    <property name="text">
                     <string>Value type</string>
                    </property>
@@ -1340,7 +1382,10 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_26" stretch="0,1">
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelFormatterString">
+                <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelFormatterString">
+                 <property name="styleRole" stdset="0">
+                  <string>group-item</string>
+                 </property>
                  <property name="text">
                   <string>TextLabel</string>
                  </property>
@@ -1429,7 +1474,10 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelDashboardConnectHandling">
+                <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelDashboardConnectHandling">
+                 <property name="styleRole" stdset="0">
+                  <string>heading-group-bold</string>
+                 </property>
                  <property name="text">
                   <string>Dashboard Connect</string>
                  </property>
@@ -1493,7 +1541,10 @@
               <enum>QLayout::SetDefaultConstraint</enum>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelInitialValueMode">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelInitialValueMode">
+               <property name="styleRole" stdset="0">
+                <string>group-item</string>
+               </property>
                <property name="text">
                 <string>Initial</string>
                </property>
@@ -1547,7 +1598,10 @@
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelInitialValue">
+                 <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelInitialValue">
+                  <property name="styleRole" stdset="0">
+                   <string>group-item</string>
+                  </property>
                   <property name="text">
                    <string>Value</string>
                   </property>
@@ -1763,14 +1817,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
@@ -1825,9 +1874,9 @@
    <header>C_OgePubOpen.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItemValue</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItemValue.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubPathVariables</class>

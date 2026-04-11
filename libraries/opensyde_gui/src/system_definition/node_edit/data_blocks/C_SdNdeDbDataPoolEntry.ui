@@ -30,7 +30,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItemValue" name="pc_LabelName">
+    <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelName">
+     <property name="styleRole" stdset="0">
+      <string>group-item-value</string>
+     </property>
      <property name="text">
       <string>Datapool</string>
      </property>
@@ -77,9 +80,9 @@
    <header>C_OgePubSvgIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItemValue</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItemValue.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

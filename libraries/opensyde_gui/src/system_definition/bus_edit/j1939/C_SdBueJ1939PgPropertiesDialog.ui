@@ -50,7 +50,10 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingPreview">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingPreview">
+          <property name="styleRole" stdset="0">
+           <string>heading-group-bold</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -152,7 +155,10 @@
          <number>10</number>
         </property>
         <item row="0" column="0">
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelPgn">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelPgn">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -184,14 +190,20 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelPriority">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelPriority">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="text">
            <string>Priority</string>
           </property>
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelDestinationAddress">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelDestinationAddress">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -204,7 +216,10 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelSourceAddress">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelSourceAddress">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="text">
            <string>Source Address</string>
           </property>
@@ -273,7 +288,10 @@
             <number>0</number>
            </property>
            <item alignment="Qt::AlignRight">
-            <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelDestinationAddressBroadcast">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelDestinationAddressBroadcast">
+             <property name="styleRole" stdset="0">
+              <string>group-item</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -456,9 +474,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
@@ -487,9 +505,9 @@
    <header>C_OgeSpxNumber.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>

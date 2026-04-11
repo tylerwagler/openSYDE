@@ -813,7 +813,10 @@
               <number>6</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingSelectFile">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingSelectFile">
+               <property name="styleRole" stdset="0">
+                <string>heading-group-bold</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -890,7 +893,10 @@
           </layout>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelStepDescription">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelStepDescription">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>StepDescription</string>
            </property>
@@ -969,7 +975,10 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMultipleNodes">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMultipleNodes">
+              <property name="styleRole" stdset="0">
+               <string>group-item</string>
+              </property>
               <property name="text">
                <string>Attention: ...</string>
               </property>
@@ -981,7 +990,10 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelComment">
+               <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelComment">
+                <property name="styleRole" stdset="0">
+                 <string>group-item</string>
+                </property>
                 <property name="font">
                  <font>
                   <family>Calibri</family>
@@ -1083,7 +1095,10 @@ p, li { white-space: pre-wrap; }
               <number>6</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingConfirm">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingConfirm">
+               <property name="styleRole" stdset="0">
+                <string>heading-group-bold</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1333,9 +1348,9 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
@@ -1360,9 +1375,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgePubDialog.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTebReport</class>

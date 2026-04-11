@@ -189,8 +189,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/can_monitor/user_settings/C_UsFiler.cpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbx.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItem.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItemValue.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.cpp
    ${PROJECT_ROOT}/src/can_monitor/C_CamComDriverBase.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetWidget.cpp
@@ -271,7 +269,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.cpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProDatabaseData.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableDelegate.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenKeySelect.cpp
@@ -415,8 +412,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/can_monitor/user_settings/C_UsFiler.hpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbx.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItem.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItemValue.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.hpp
    ${PROJECT_ROOT}/src/can_monitor/C_CamComDriverBase.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetWidget.hpp
@@ -498,7 +493,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseItemWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProDatabaseData.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosDatabaseBusSelectionPopup.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosSectionPopup.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/signals/C_CamGenSigTableDelegate.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenKeySelect.hpp

@@ -57,7 +57,10 @@
              <number>6</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelDataElement">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelDataElement">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -139,14 +142,20 @@
            <number>20</number>
           </property>
           <item row="1" column="0">
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelSubNetMask">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelSubNetMask">
+            <property name="styleRole" stdset="0">
+             <string>group-item</string>
+            </property>
             <property name="text">
              <string>SubNetMask</string>
             </property>
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelIpAddress">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelIpAddress">
+            <property name="styleRole" stdset="0">
+             <string>group-item</string>
+            </property>
             <property name="text">
              <string>IpAddress</string>
             </property>
@@ -166,7 +175,10 @@
            </spacer>
           </item>
           <item row="2" column="0">
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelDefaultGateway">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelDefaultGateway">
+            <property name="styleRole" stdset="0">
+             <string>group-item</string>
+            </property>
             <property name="text">
              <string>GateWay</string>
             </property>
@@ -359,14 +371,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>

@@ -336,7 +336,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubColorOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraFrame.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.cpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopErrorHandling.cpp
@@ -376,8 +375,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologySetupStyleCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyChangeInterfaceCommand.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItem.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupSubItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpProperties.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeConnectionId.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeDataPool.cpp
@@ -449,7 +446,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateTransparentError.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItemValue.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactor.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTable.cpp
@@ -700,7 +696,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbPieChart.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaPieChartBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiDashboardPieChart.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardChart.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbTable.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaTableBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaView.cpp
@@ -1186,7 +1181,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubColorOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraFrame.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.hpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopErrorHandling.hpp
@@ -1226,8 +1220,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologySetupStyleCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/gettext/C_GtGetText.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyChangeInterfaceCommand.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItem.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupSubItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpProperties.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeConnectionId.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/node/C_PuiSdNodeDataPool.hpp
@@ -1299,7 +1291,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateTransparentError.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItemValue.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactor.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTable.hpp
@@ -1550,7 +1541,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbPieChart.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaPieChartBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiDashboardPieChart.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDashboardChart.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbTable.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaTableBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/table/C_SyvDaItTaView.hpp

@@ -105,28 +105,28 @@ const std::vector<C_UtiStyleSheets::C_ElementColorConfig> C_UtiStyleSheets::mhc_
    C_UtiStyleSheets::C_ElementColorConfig(
       "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"SKEUOMORPH_DARK\"]", mc_STYLE_GUIDE_COLOR_0),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_BRIGHT\"][Selected=\"true\"][Active=\"true\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_BRIGHT\"][Selected=\"true\"][Active=\"true\"]",
       mc_STYLE_GUIDE_COLOR_4),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_DARK\"][Selected=\"true\"][Active=\"true\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_DARK\"][Selected=\"true\"][Active=\"true\"]",
       mc_STYLE_GUIDE_COLOR_0),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_BRIGHT\"][Selected=\"false\"][Active=\"true\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_BRIGHT\"][Selected=\"false\"][Active=\"true\"]",
       mc_STYLE_GUIDE_COLOR_34),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_DARK\"][Selected=\"false\"][Active=\"true\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_DARK\"][Selected=\"false\"][Active=\"true\"]",
       mc_STYLE_GUIDE_COLOR_10),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_BRIGHT\"][Selected=\"true\"][Active=\"false\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_BRIGHT\"][Selected=\"true\"][Active=\"false\"]",
       mc_STYLE_GUIDE_COLOR_8),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_DARK\"][Selected=\"true\"][Active=\"false\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_DARK\"][Selected=\"true\"][Active=\"false\"]",
       mc_STYLE_GUIDE_COLOR_8),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_BRIGHT\"][Selected=\"false\"][Active=\"false\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_BRIGHT\"][Selected=\"false\"][Active=\"false\"]",
       mc_STYLE_GUIDE_COLOR_8),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_DARK\"][Selected=\"false\"][Active=\"false\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_DARK\"][Selected=\"false\"][Active=\"false\"]",
       mc_STYLE_GUIDE_COLOR_8)
 }
    );

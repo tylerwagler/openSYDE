@@ -60,7 +60,10 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelSettings">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelSettings">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -130,7 +133,10 @@
          </layout>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelSample">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelSample">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="text">
            <string>Syntax info</string>
           </property>
@@ -150,7 +156,10 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelTriggerCondition">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelTriggerCondition">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -254,7 +263,10 @@
         <item>
          <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,1">
           <item row="1" column="0">
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelSyntaxCheck">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelSyntaxCheck">
+            <property name="styleRole" stdset="0">
+             <string>group-item</string>
+            </property>
             <property name="text">
              <string>Condition syntax check</string>
             </property>
@@ -277,21 +289,30 @@
            </spacer>
           </item>
           <item row="0" column="2">
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItemValue" name="pc_LabelNamingCheckResult">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelNamingCheckResult">
+            <property name="styleRole" stdset="0">
+             <string>group-item-value</string>
+            </property>
             <property name="text">
              <string>PASS / FAIL</string>
             </property>
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItemValue" name="pc_LabelSyntaxCheckResult">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelSyntaxCheckResult">
+            <property name="styleRole" stdset="0">
+             <string>group-item-value</string>
+            </property>
             <property name="text">
              <string>PASS / FAIL</string>
             </property>
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNamingCheck">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelNamingCheck">
+            <property name="styleRole" stdset="0">
+             <string>group-item</string>
+            </property>
             <property name="text">
              <string>Data elements naming check</string>
             </property>
@@ -408,20 +429,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
    <extends>QFrame</extends>
    <header>C_OgeFraSeparator.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
@@ -450,9 +466,9 @@
    <header>C_OgePubOptions.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItemValue</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItemValue.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>

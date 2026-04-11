@@ -107,7 +107,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLogJobUseCase">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLogJobUseCase">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -179,7 +182,10 @@
       </widget>
      </item>
      <item row="21" column="0">
-      <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelLogTriggerConditions">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelLogTriggerConditions">
+       <property name="styleRole" stdset="0">
+        <string>heading-group-bold</string>
+       </property>
        <property name="text">
         <string>Log Trigger Conditions</string>
        </property>
@@ -207,7 +213,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLoggingInterval">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLoggingInterval">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>105</width>
@@ -401,7 +410,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLogFileFormat">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLogFileFormat">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -511,7 +523,10 @@
            <number>7</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLogDestination">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLogDestination">
+            <property name="styleRole" stdset="0">
+             <string>group-item</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>93</width>
@@ -586,7 +601,10 @@
       </spacer>
      </item>
      <item row="0" column="0" colspan="3">
-      <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelName">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelName">
+       <property name="styleRole" stdset="0">
+        <string>heading-group-bold</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -626,7 +644,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMaxLogEntries">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMaxLogEntries">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>105</width>
@@ -716,7 +737,10 @@
       </widget>
      </item>
      <item row="13" column="0" colspan="2">
-      <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelGeneral">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelGeneral">
+       <property name="styleRole" stdset="0">
+        <string>heading-group-bold</string>
+       </property>
        <property name="text">
         <string>General</string>
        </property>
@@ -744,7 +768,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMode">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMode">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -831,7 +858,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLogDuration">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLogDuration">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>105</width>
@@ -912,7 +942,10 @@
       </widget>
      </item>
      <item row="6" column="0" colspan="2">
-      <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelComment">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelComment">
+       <property name="styleRole" stdset="0">
+        <string>heading-group-bold</string>
+       </property>
        <property name="text">
         <string>Comment</string>
        </property>
@@ -1094,14 +1127,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
