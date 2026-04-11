@@ -19,7 +19,7 @@
 #include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_OgeFraSeparator.hpp"
-#include "C_OgeLabProgressLogItem.hpp"
+#include "C_OgeLabToolTipBase.hpp"
 
 #include "C_SyvUpProgressLog.hpp"
 #include "ui_C_SyvUpProgressLog.h"
@@ -158,8 +158,9 @@ void C_SyvUpProgressLog::SetHeading(const QString & orc_Value) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvUpProgressLog::AddSubHeading(const QString & orc_Value)
 {
-   QLabel * const pc_Entry = new C_OgeLabProgressLogItem(this);
+   QLabel * const pc_Entry = new C_OgeLabToolTipBase(this);
 
+   pc_Entry->setProperty("styleRole", "progress-log-item");
    pc_Entry->setText(orc_Value);
 
    this->mc_ProcessEntries.push_back(pc_Entry);
@@ -274,7 +275,8 @@ void C_SyvUpProgressLog::AddLogHyperlink(void)
       this->AddSpacer();
 
       //Hyperlink
-      this->mpc_LogHyperlink = new C_OgeLabProgressLogItem(this);
+      this->mpc_LogHyperlink = new C_OgeLabToolTipBase(this);
+      this->mpc_LogHyperlink->setProperty("styleRole", "progress-log-item");
 
       //Update log file
       C_OscLoggingHandler::h_Flush();

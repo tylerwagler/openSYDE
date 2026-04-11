@@ -46,7 +46,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeLabColorOnly" name="pc_LabelColor">
+    <widget class="QLabel" name="pc_LabelColor">
+     <property name="styleRole" stdset="0">
+      <string>color-only</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>18</width>
@@ -104,11 +107,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabDashboardChart</class>
    <extends>QLabel</extends>
    <header>C_OgeLabDashboardChart.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabColorOnly</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabColorOnly.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeChxTiny</class>

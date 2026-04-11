@@ -247,7 +247,10 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="stw::opensyde_gui_elements::C_OgeLabGenericBubble" name="pc_LabSubNodeName">
+                  <widget class="stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins" name="pc_LabSubNodeName">
+                   <property name="styleRole" stdset="0">
+                    <string>generic-bubble</string>
+                   </property>
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
@@ -1049,7 +1052,10 @@
                 </spacer>
                </item>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabNodeType" name="pc_LabelNodeType">
+                <widget class="QLabel" name="pc_LabelNodeType">
+     <property name="styleRole" stdset="0">
+      <string>node-type</string>
+     </property>
                  <property name="text">
                   <string>Node-Type</string>
                  </property>
@@ -1343,16 +1349,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>
    <extends>QLabel</extends>
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGenericBubble</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabGenericBubble.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabNodeType</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabNodeType.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTableWidgetComIf</class>

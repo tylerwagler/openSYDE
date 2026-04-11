@@ -418,7 +418,10 @@
                                 </spacer>
                                </item>
                                <item>
-                                <widget class="stw::opensyde_gui_elements::C_OgeLabNavigationSubHeading" name="pc_LabelNodes">
+                                <widget class="QLabel" name="pc_LabelNodes">
+     <property name="styleRole" stdset="0">
+      <string>navigation-sub-heading</string>
+     </property>
                                  <property name="minimumSize">
                                   <size>
                                    <width>0</width>
@@ -606,7 +609,10 @@
                                 </spacer>
                                </item>
                                <item>
-                                <widget class="stw::opensyde_gui_elements::C_OgeLabNavigationSubHeading" name="pc_LabelBuses">
+                                <widget class="QLabel" name="pc_LabelBuses">
+     <property name="styleRole" stdset="0">
+      <string>navigation-sub-heading</string>
+     </property>
                                  <property name="text">
                                   <string>TextLabel</string>
                                  </property>
@@ -1066,11 +1072,6 @@
    <extends>QGroupBox</extends>
    <header>C_OgeGbxNavigationSection2.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabNavigationSubHeading</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabNavigationSubHeading.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxNavigationHeadingBackground</class>

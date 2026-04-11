@@ -72,8 +72,9 @@ C_SdTopologyToolbox::C_SdTopologyToolbox(QWidget * const opc_Parent) :
    mpc_Ui(new Ui::C_SdTopologyToolbox),
    mpc_List(NULL),
    mpc_Spacer(new QSpacerItem(20, 10, QSizePolicy::Expanding)),
-   mpc_Label(new C_OgeLabTopologyToolboxUserNodes(this))
+   mpc_Label(new QLabel(this))
 {
+   this->mpc_Label->setProperty("styleRole", "topology-toolbox-user-nodes");
    this->mpc_Ui->setupUi(this);
    this->setAcceptDrops(true);
    this->mpc_Ui->pc_ScrollAreaSearch->setVisible(false);

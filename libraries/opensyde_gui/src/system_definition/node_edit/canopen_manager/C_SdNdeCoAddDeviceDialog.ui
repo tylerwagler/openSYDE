@@ -447,7 +447,10 @@
                 </spacer>
                </item>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabNodeType" name="pc_LabelFileName">
+                <widget class="QLabel" name="pc_LabelFileName">
+     <property name="styleRole" stdset="0">
+      <string>node-type</string>
+     </property>
                  <property name="text">
                   <string>FileName</string>
                  </property>
@@ -656,11 +659,6 @@
    <extends>QGroupBox</extends>
    <header>C_OgeGbxGrayed.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabNodeType</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabNodeType.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

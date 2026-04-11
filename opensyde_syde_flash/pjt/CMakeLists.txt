@@ -178,23 +178,15 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparent.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDescriptionMessage.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItemValue.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupSubItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingMessage.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingToolTip.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPropertiesSubHeading.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUpdateAppPath.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUpdateAppVersion.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeDark.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.cpp
@@ -348,23 +340,15 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparent.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabContextMenuBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabDescriptionMessage.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabElided.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericBubble.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupItemValue.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGroupSubItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingGroupBold.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingMessage.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabHeadingToolTip.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpSubTitle.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPropertiesSubHeading.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabToolTipBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUpdateAppPath.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabUpdateAppVersion.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeDark.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeFilePathBase.hpp
