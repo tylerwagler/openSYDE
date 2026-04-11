@@ -4,16 +4,16 @@
 set(CMAKE_SYSTEM_NAME Linux)
 set(CMAKE_SYSTEM_PROCESSOR amd64)
 
-# use gcc-9 and g++-9 explicitly; that was what SYDEsup was originally tested with
-# change to "gcc" and "g++" to use default compilers
-set(CMAKE_C_COMPILER gcc-9)
+set(CMAKE_C_COMPILER gcc)
 set(CMAKE_C_FLAGS "-m64 -Wno-deprecated-declarations -fPIC")
-set(CMAKE_CXX_COMPILER g++-9)
+set(CMAKE_CXX_COMPILER g++)
 set(CMAKE_CXX_FLAGS "-m64 -Wno-deprecated-declarations -fPIC")
 
 set(CMAKE_SHARED_LINKER_FLAGS "-m64")
 
-set(LNX_LINK_OPENSSL_STATIC ON CACHE BOOL "Linking the openSSL library static")
+# Dynamically link OpenSSL — openSUSE and most modern distros don't ship
+# static libcrypto/libssl by default.
+set(LNX_LINK_OPENSSL_STATIC OFF CACHE BOOL "Linking the openSSL library static")
 set(INSTALL_SYDESUP_LIB ON CACHE BOOL "Installing SYDEsup lib to the result")
 
 # install paths

@@ -14,14 +14,32 @@
 #include "precomp_headers.hpp"
 
 #include <getopt.h> //note: as we use getopt.h this application is not portable to all compilers
+#ifdef _WIN32
 #include <conio.h>
+#else
+#include <sys/select.h>
+#include <unistd.h>
+
+// Linux equivalent of the Windows kbhit(): returns >0 if a byte is available on stdin.
+static int kbhit(void)
+{
+   struct timeval c_Timeout;
+   fd_set c_ReadFds;
+   c_Timeout.tv_sec = 0;
+   c_Timeout.tv_usec = 0;
+   FD_ZERO(&c_ReadFds);
+   FD_SET(STDIN_FILENO, &c_ReadFds);
+   return select(STDIN_FILENO + 1, &c_ReadFds, NULL, NULL, &c_Timeout) > 0 ? 1 : 0;
+}
+#endif
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "TglFile.hpp"
 #include "TglTime.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_OscBinaryHash.hpp"
+#include "C_OscUtilBinaryHash.hpp"
+#include "C_Can.hpp"
 #include "C_BasicUpdateSequence.hpp"
 #include "C_BasicFlashTool.hpp"
 
@@ -84,7 +102,7 @@ void C_BasicFlashTool::Init(void)
 
    std::cout << "This is a very simple openSYDE tool for updating one device with one hex file." << std::endl;
    std::cout << "Version: " << mh_GetApplicationVersion(TglGetExePath()).c_str() << std::endl;
-   std::cout << "MD5-Checksum: " << C_OscBinaryHash::h_CreateBinaryHash().c_str() << std::endl;
+   std::cout << "MD5-Checksum: " << C_OscUtilBinaryHash::h_CreateBinaryHash().c_str() << std::endl;
 
    // setup logging
    TglGetDateTimeNow(c_DateTime);
@@ -302,12 +320,28 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 {
    E_Result e_Result = eRESULT_OK;
    C_BasicUpdateSequence c_TheSequence;
+   stw::can::C_Can c_CanDispatcher;
    int32_t s32_Return;
 
-   s32_Return = c_TheSequence.Init(mc_CanDriver, ms32_CanBitrate, mu8_NodeId);
+#ifdef _WIN32
+   // On Windows, mc_CanDriver is a path to a STW CAN DLL.
+   c_CanDispatcher.SetDLLName(mc_CanDriver);
+   s32_Return = c_CanDispatcher.DLL_Open();
+#else
+   // On Linux, mc_CanDriver is a SocketCAN interface name (e.g. "can0").
+   s32_Return = c_CanDispatcher.CAN_Init(mc_CanDriver, 0);
+#endif
    if (s32_Return != C_NO_ERR)
    {
       e_Result = eERR_INITIALIZATION_FAILED;
+   }
+   else
+   {
+      s32_Return = c_TheSequence.Init(&c_CanDispatcher, ms32_CanBitrate, mu8_NodeId);
+      if (s32_Return != C_NO_ERR)
+      {
+         e_Result = eERR_INITIALIZATION_FAILED;
+      }
    }
 
    if (e_Result == eRESULT_OK)
@@ -383,13 +417,13 @@ C_BasicFlashTool::E_Result C_BasicFlashTool::Flash(void)
 //----------------------------------------------------------------------------------------------------------------------
 C_SclString C_BasicFlashTool::mh_GetApplicationVersion(const stw::scl::C_SclString & orc_FileName)
 {
+   C_SclString c_Version = "V?.\?\?r?";
+
+#ifdef _WIN32
    VS_FIXEDFILEINFO * pc_Info;
    uint32_t u32_ValSize;
    int32_t s32_InfoSize;
    uint8_t * pu8_Buffer;
-   C_SclString c_Version;
-
-   c_Version = "V?.\?\?r?";
 
    s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), NULL);
    if (s32_InfoSize != 0)
@@ -409,6 +443,9 @@ C_SclString C_BasicFlashTool::mh_GetApplicationVersion(const stw::scl::C_SclStri
       }
       delete[] pu8_Buffer;
    }
+#else
+   (void)orc_FileName;
+#endif
    return c_Version;
 }
 

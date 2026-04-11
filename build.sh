@@ -224,18 +224,27 @@ build_tool() {
         if [[ "$needs_qt" == "yes" ]] && [[ -n "${Qt6_DIR:-}" ]]; then
             cmake_args+=("-DQt6_DIR=$Qt6_DIR")
         fi
-        cmake "${cmake_args[@]}"
+        if ! cmake "${cmake_args[@]}"; then
+            write_error "$tool_name: configuration failed"
+            return 1
+        fi
     else
         write_step "Using existing configuration (use -c to reconfigure)"
     fi
 
     # Build
     write_step "Building (jobs=$JOBS)..."
-    cmake --build "$build_dir" -j"$JOBS"
+    if ! cmake --build "$build_dir" -j"$JOBS"; then
+        write_error "$tool_name: build failed"
+        return 1
+    fi
 
     # Install
     write_step "Installing..."
-    cmake --install "$build_dir"
+    if ! cmake --install "$build_dir"; then
+        write_error "$tool_name: install failed"
+        return 1
+    fi
 
     # Optional deploy to $INSTALL_DIR
     if [[ "$DEPLOY" == "true" ]]; then
