@@ -12,6 +12,7 @@
 #include "precomp_headers.hpp"
 
 #include <QApplication>
+#include <QIcon>
 
 #include "stwtypes.hpp"
 #include "C_Uti.hpp"
@@ -57,6 +58,8 @@ int32_t main(int32_t os32_Argc, char_t * opacn_Argv[])
    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 
    QApplication c_Appl(os32_Argc, opacn_Argv);
+   QApplication::setWindowIcon(QIcon(":/images/CAN_Monitor_logo.png"));
+   QGuiApplication::setDesktopFileName("openSYDE_CAN_Monitor");
    {
       const QString c_BinaryHash = stw::opensyde_gui_logic::C_Uti::h_GetHashValueAsQtString();
       const QString c_FilePath = stw::opensyde_gui_logic::C_Uti::h_GetCompleteLogFileLocation(".syde_cam_log");
