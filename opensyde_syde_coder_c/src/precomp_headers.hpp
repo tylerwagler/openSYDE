@@ -25,7 +25,9 @@
 #if defined __cplusplus
 /* Add C++ includes here */
 
+#ifdef _WIN32
 #include <windows.h>
+#endif
 #include <cstdio>
 #include <cstring>
 #include <vector>

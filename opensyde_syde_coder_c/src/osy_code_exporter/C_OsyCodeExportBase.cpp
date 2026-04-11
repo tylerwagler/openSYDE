@@ -23,10 +23,10 @@
 #include "C_OscSystemDefinition.hpp"
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "TGLFile.hpp"
+#include "TglFile.hpp"
 #include "C_OsyCodeExportBase.hpp"
 #include "C_OscUtils.hpp"
-#include "C_OscBinaryHash.hpp"
+#include "C_OscUtilBinaryHash.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -93,13 +93,13 @@ void C_OsyCodeExportBase::m_PrintCommandLineParameters(void) const
 //----------------------------------------------------------------------------------------------------------------------
 C_SclString C_OsyCodeExportBase::h_GetApplicationVersion(const C_SclString & orc_FileName)
 {
+   C_SclString c_Version = "V?.\?\?r?";
+
+#ifdef _WIN32
    VS_FIXEDFILEINFO * pc_Info;
    uint32_t u32_ValSize;
    int32_t s32_InfoSize;
    uint8_t * pu8_Buffer;
-   C_SclString c_Version;
-
-   c_Version = "V?.\?\?r?";
 
    s32_InfoSize = GetFileVersionInfoSizeA(orc_FileName.c_str(), NULL);
    if (s32_InfoSize != 0)
@@ -119,6 +119,9 @@ C_SclString C_OsyCodeExportBase::h_GetApplicationVersion(const C_SclString & orc
       }
       delete[] pu8_Buffer;
    }
+#else
+   (void)orc_FileName;
+#endif
    return c_Version;
 }
 
@@ -142,16 +145,12 @@ C_OsyCodeExportBase::~C_OsyCodeExportBase(void)
 C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::Init(void)
 {
    E_ResultCode e_Return = eRESULT_OK;
-   char_t acn_ApplicationName[MAX_PATH + 1];
-   uint32_t u32_Return = GetModuleFileNameA(NULL, &acn_ApplicationName[0], MAX_PATH + 1);
-
-   tgl_assert(u32_Return != 0);
 
    mq_EraseTargetFolder = false;
 
-   mc_ExeName = acn_ApplicationName;
+   mc_ExeName = stw::tgl::TglGetExePath();
    mc_ExeVersion = h_GetApplicationVersion(mc_ExeName);
-   mc_BinaryHash = stw::opensyde_core::C_OscBinaryHash::h_CreateBinaryHash();
+   mc_BinaryHash = stw::opensyde_core::C_OscUtilBinaryHash::h_CreateBinaryHash();
 
    mc_LogFileName = TglChangeFileExtension(mc_ExeName, ".log");
    mc_ListOfFilesFileName = TglChangeFileExtension(mc_ExeName, "") + "_file_list.txt";
@@ -173,8 +172,8 @@ C_OsyCodeExportBase::E_ResultCode C_OsyCodeExportBase::Init(void)
    if (stw::tgl::TglFileExists(mc_ListOfFilesFileName) == true)
    {
       //file does exist -> erase it
-      u32_Return = remove(mc_ListOfFilesFileName.c_str());
-      if (u32_Return != 0)
+      const int32_t s32_Return = remove(mc_ListOfFilesFileName.c_str());
+      if (s32_Return != 0)
       {
          e_Return = eRESULT_ERASE_FILE_LIST_ERROR;
       }
