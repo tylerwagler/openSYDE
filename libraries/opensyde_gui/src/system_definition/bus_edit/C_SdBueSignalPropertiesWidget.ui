@@ -47,7 +47,10 @@
             <number>6</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelName">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelName">
+             <property name="styleRole" stdset="0">
+              <string>heading-group-bold</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -286,7 +289,10 @@
             <number>6</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelComment">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelComment">
+             <property name="styleRole" stdset="0">
+              <string>heading-group-bold</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -390,7 +396,10 @@ p, li { white-space: pre-wrap; }
           <number>10</number>
          </property>
          <item row="12" column="3">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMuxType">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMuxType">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Muxtype</string>
            </property>
@@ -441,7 +450,10 @@ p, li { white-space: pre-wrap; }
                  <number>6</number>
                 </property>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelJ1939">
+                 <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelJ1939">
+                  <property name="styleRole" stdset="0">
+                   <string>heading-group-bold</string>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -521,7 +533,10 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="13" column="3">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMuxValue">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMuxValue">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Muxvalue</string>
            </property>
@@ -550,7 +565,10 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="6" column="0">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelFactor">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelFactor">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Factor</string>
            </property>
@@ -573,7 +591,10 @@ p, li { white-space: pre-wrap; }
           </spacer>
          </item>
          <item row="11" column="0">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelByteOrder">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelByteOrder">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Byte order</string>
            </property>
@@ -602,7 +623,10 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="12" column="0">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelType">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelType">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Type</string>
            </property>
@@ -669,7 +693,10 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="11" column="3">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelStartBit">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelStartBit">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Start bit</string>
            </property>
@@ -720,7 +747,10 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="7" column="0">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelInitValue">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelInitValue">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Init value</string>
            </property>
@@ -793,7 +823,10 @@ p, li { white-space: pre-wrap; }
           </spacer>
          </item>
          <item row="5" column="3">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMax">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMax">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Max</string>
            </property>
@@ -868,7 +901,10 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="13" column="0">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLength">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLength">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Length</string>
            </property>
@@ -880,7 +916,10 @@ p, li { white-space: pre-wrap; }
             <number>6</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelValueType">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelValueType">
+             <property name="styleRole" stdset="0">
+              <string>heading-group-bold</string>
+             </property>
              <property name="text">
               <string>Value type</string>
              </property>
@@ -951,7 +990,10 @@ p, li { white-space: pre-wrap; }
             <number>6</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelLayout">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelLayout">
+             <property name="styleRole" stdset="0">
+              <string>heading-group-bold</string>
+             </property>
              <property name="text">
               <string>Layout</string>
              </property>
@@ -1011,14 +1053,20 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item row="7" column="3">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelUnit">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelUnit">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Unit</string>
            </property>
           </widget>
          </item>
          <item row="6" column="3">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelOffset">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelOffset">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Offset</string>
            </property>
@@ -1032,7 +1080,10 @@ p, li { white-space: pre-wrap; }
               <number>6</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelValue">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelValue">
+               <property name="styleRole" stdset="0">
+                <string>heading-group-bold</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1112,14 +1163,20 @@ p, li { white-space: pre-wrap; }
           </layout>
          </item>
          <item row="1" column="0">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelJ1939Spn">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelJ1939Spn">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>SPN</string>
            </property>
           </widget>
          </item>
          <item row="5" column="0">
-          <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMin">
+          <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMin">
+           <property name="styleRole" stdset="0">
+            <string>group-item</string>
+           </property>
            <property name="text">
             <string>Min</string>
            </property>
@@ -1197,9 +1254,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
@@ -1212,9 +1269,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeSpxNumber.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTedPropertiesComment</class>

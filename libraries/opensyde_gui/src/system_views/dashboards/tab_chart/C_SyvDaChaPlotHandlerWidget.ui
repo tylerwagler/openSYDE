@@ -342,21 +342,30 @@
               <widget class="stw::opensyde_gui_elements::C_OgeWiOnlyBackground" name="pc_WiInfoContent" native="true">
                <layout class="QVBoxLayout" name="verticalLayout_6">
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLabDashboardChart" name="pc_LabelMeasCursor1">
+                 <widget class="QLabel" name="pc_LabelMeasCursor1">
+                  <property name="styleRole" stdset="0">
+                   <string>dashboard-chart</string>
+                  </property>
                   <property name="text">
                    <string>t0 =</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLabDashboardChart" name="pc_LabelMeasCursor2">
+                 <widget class="QLabel" name="pc_LabelMeasCursor2">
+                  <property name="styleRole" stdset="0">
+                   <string>dashboard-chart</string>
+                  </property>
                   <property name="text">
                    <string>t1 =</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLabDashboardChart" name="pc_LabelMeasDiff">
+                 <widget class="QLabel" name="pc_LabelMeasDiff">
+                  <property name="styleRole" stdset="0">
+                   <string>dashboard-chart</string>
+                  </property>
                   <property name="text">
                    <string>dt =</string>
                   </property>
@@ -1030,11 +1039,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabDashboardChart</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabDashboardChart.hpp</header>
-  </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeSpiStandard</class>
    <extends>QSplitter</extends>

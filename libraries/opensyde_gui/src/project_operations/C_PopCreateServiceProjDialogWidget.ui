@@ -52,7 +52,10 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingPreview">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingPreview">
+            <property name="styleRole" stdset="0">
+             <string>heading-group-bold</string>
+            </property>
             <property name="font">
              <font>
               <family>Segoe UI</family>
@@ -143,14 +146,20 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabPath">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabPath">
+            <property name="styleRole" stdset="0">
+             <string>group-item</string>
+            </property>
             <property name="text">
              <string>Path</string>
             </property>
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabPassword">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabPassword">
+            <property name="styleRole" stdset="0">
+             <string>group-item</string>
+            </property>
             <property name="text">
              <string>Passwd</string>
             </property>
@@ -279,7 +288,10 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabPermissions">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabPermissions">
+            <property name="styleRole" stdset="0">
+             <string>heading-group-bold</string>
+            </property>
             <property name="font">
              <font>
               <family>Segoe UI</family>
@@ -454,14 +466,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>

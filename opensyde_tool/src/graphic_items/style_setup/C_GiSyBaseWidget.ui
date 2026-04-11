@@ -75,7 +75,10 @@
              <number>6</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelStyle">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelStyle">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -229,7 +232,10 @@
              <number>6</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelPreview">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelPreview">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -678,9 +684,9 @@
    <header>C_OgePubDialog.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbx</class>

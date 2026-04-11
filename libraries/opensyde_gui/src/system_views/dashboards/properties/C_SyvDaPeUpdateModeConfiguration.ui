@@ -57,7 +57,10 @@
              <number>6</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelDataElament">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelDataElament">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -192,7 +195,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNoElements">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelNoElements">
+               <property name="styleRole" stdset="0">
+                <string>group-item</string>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -373,9 +379,9 @@
    <header>C_OgePubConfigure.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
@@ -405,9 +411,9 @@
    <header>C_SyvDaPeUpdateModeTreeWidget.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

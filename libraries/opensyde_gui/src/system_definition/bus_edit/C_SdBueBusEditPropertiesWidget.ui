@@ -28,7 +28,10 @@
         <number>6</number>
        </property>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelName">
+        <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelName">
+         <property name="styleRole" stdset="0">
+          <string>heading-group-bold</string>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -159,7 +162,10 @@
             <number>6</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelComment">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelComment">
+             <property name="styleRole" stdset="0">
+              <string>heading-group-bold</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -246,7 +252,10 @@ p, li { white-space: pre-wrap; }
             <number>20</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelConfiguration">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelConfiguration">
+             <property name="styleRole" stdset="0">
+              <string>heading-group-bold</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -361,7 +370,10 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item row="2" column="0">
-            <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelBitRate">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelBitRate">
+             <property name="styleRole" stdset="0">
+              <string>group-item</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -401,7 +413,10 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNotRelevant">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelNotRelevant">
+               <property name="styleRole" stdset="0">
+                <string>group-item</string>
+               </property>
                <property name="text">
                 <string>(not relevant)</string>
                </property>
@@ -426,7 +441,10 @@ p, li { white-space: pre-wrap; }
             </layout>
            </item>
            <item row="1" column="0">
-            <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelBusId">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelBusId">
+             <property name="styleRole" stdset="0">
+              <string>group-item</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -639,7 +657,10 @@ p, li { white-space: pre-wrap; }
         <number>5</number>
        </property>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelCANFD">
+        <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelCANFD">
+         <property name="styleRole" stdset="0">
+          <string>heading-group-bold</string>
+         </property>
          <property name="text">
           <string>CAN FD</string>
          </property>
@@ -707,7 +728,10 @@ p, li { white-space: pre-wrap; }
         <number>10</number>
        </property>
        <item row="1" column="0">
-        <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelCANFDBitRate">
+        <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelCANFDBitRate">
+         <property name="styleRole" stdset="0">
+          <string>group-item</string>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -791,9 +815,9 @@ p, li { white-space: pre-wrap; }
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
@@ -802,9 +826,9 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>

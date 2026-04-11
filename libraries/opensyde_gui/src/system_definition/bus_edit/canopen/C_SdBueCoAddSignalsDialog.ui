@@ -57,7 +57,10 @@
              <number>6</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingPreview">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingPreview">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -189,7 +192,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelSelection">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelSelection">
+               <property name="styleRole" stdset="0">
+                <string>group-item</string>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -235,7 +241,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelSearchNoElementsFound">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelSearchNoElementsFound">
+               <property name="styleRole" stdset="0">
+                <string>group-item</string>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -307,7 +316,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelInitialSignalNoElements">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelInitialSignalNoElements">
+               <property name="styleRole" stdset="0">
+                <string>group-item</string>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -490,14 +502,14 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>

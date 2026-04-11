@@ -57,7 +57,10 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMultiplexer">
+       <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMultiplexer">
+        <property name="styleRole" stdset="0">
+         <string>group-item</string>
+        </property>
         <property name="text">
          <string>TextLabel</string>
         </property>
@@ -107,9 +110,9 @@
    <header>C_SdBueMlvGraphicsView.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>

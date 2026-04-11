@@ -42,7 +42,10 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelClientInterface">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelClientInterface">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>90</width>
@@ -109,7 +112,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelPollingInterval">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelPollingInterval">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>90</width>
@@ -185,7 +191,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelRemoteDataRequestInterval">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelRemoteDataRequestInterval">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>90</width>
@@ -256,9 +265,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>

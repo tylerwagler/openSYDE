@@ -351,7 +351,10 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_HintNoUsageLabel">
+                       <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_HintNoUsageLabel">
+                        <property name="styleRole" stdset="0">
+                         <string>group-item</string>
+                        </property>
                         <property name="text">
                          <string>TextLabel</string>
                         </property>
@@ -411,7 +414,10 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_HintToBusLabel">
+                       <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_HintToBusLabel">
+                        <property name="styleRole" stdset="0">
+                         <string>group-item</string>
+                        </property>
                         <property name="text">
                          <string>TextLabel</string>
                         </property>
@@ -421,7 +427,10 @@
                        </widget>
                       </item>
                       <item>
-                       <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LinkToBusLabel">
+                       <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LinkToBusLabel">
+                        <property name="styleRole" stdset="0">
+                         <string>group-item</string>
+                        </property>
                         <property name="text">
                          <string>TextLabel</string>
                         </property>
@@ -521,9 +530,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>

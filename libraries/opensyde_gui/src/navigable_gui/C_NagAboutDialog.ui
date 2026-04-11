@@ -148,7 +148,10 @@
                    <number>6</number>
                   </property>
                   <item>
-                   <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelValOpenSYDEVersion">
+                   <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelValOpenSYDEVersion">
+                    <property name="styleRole" stdset="0">
+                     <string>heading-group-bold</string>
+                    </property>
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -193,7 +196,10 @@
                 <item>
                  <layout class="QHBoxLayout" name="horizontalLayout">
                   <item>
-                   <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItemValue" name="pc_LabelValOpenSYDEHash">
+                   <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelValOpenSYDEHash">
+                    <property name="styleRole" stdset="0">
+                     <string>group-item-value</string>
+                    </property>
                     <property name="text">
                      <string>Hash</string>
                     </property>
@@ -223,7 +229,10 @@
                    <number>2</number>
                   </property>
                   <item>
-                   <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItemValue" name="pc_LabelValCopyright">
+                   <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelValCopyright">
+                    <property name="styleRole" stdset="0">
+                     <string>group-item-value</string>
+                    </property>
                     <property name="text">
                      <string>Copyright Text</string>
                     </property>
@@ -354,11 +363,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
    <extends>QPushButton</extends>
    <header>C_OgePubDialog.hpp</header>
@@ -370,9 +374,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItemValue</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItemValue.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>
