@@ -32,7 +32,7 @@
 #include "C_OgeChxTristate.hpp"
 #include "C_OscNodeComInterfaceSettings.hpp"
 #include "C_SdNdeIpAddressConfigurationWidget.hpp"
-#include "C_OgeLabNodePropComIfTable.hpp"
+#include <QLabel>
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_SdNdeNodeEditWidget.hpp"
 
@@ -705,8 +705,12 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
 
                /**********************************************************************************************************/
                //CONNECTED TO
-               this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(u8_ComIfCnt, s32_COL_CONNECTION,
-                                                                        new C_OgeLabNodePropComIfTable(this));
+               {
+                  QLabel * const pc_LabelConn = new QLabel(this);
+                  pc_LabelConn->setProperty("styleRole", "node-prop-com-if-table");
+                  this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(u8_ComIfCnt, s32_COL_CONNECTION,
+                                                                           pc_LabelConn);
+               }
 
                //set bus name
                if (pc_Node->c_Properties.c_ComInterfaces[u8_ComIfCnt].GetBusConnected() == true)
@@ -766,8 +770,12 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                   Qt::ItemIsEnabled | Qt::ItemIsEditable);
                /**********************************************************************************************************/
                //IP Address
-               this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(u8_ComIfCnt, s32_COL_IP_ADDRESS,
-                                                                        new C_OgeLabNodePropComIfTable(this));
+               {
+                  QLabel * const pc_LabelIp = new QLabel(this);
+                  pc_LabelIp->setProperty("styleRole", "node-prop-com-if-table");
+                  this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(u8_ComIfCnt, s32_COL_IP_ADDRESS,
+                                                                           pc_LabelIp);
+               }
 
                //set IP Address
                if (u8_ComIfCnt >= static_cast<int32_t> (pc_DevDef->u8_NumCanBusses))

@@ -107,7 +107,7 @@ font-weight:600; /*semibold*/
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_FONT_REGULAR_14 */
 stw--opensyde_gui_elements--C_CamOgeLabStatusBar,
-stw--opensyde_gui_elements--C_OgeLabDescriptionMessage,
+stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="description-message"],
 stw--opensyde_gui_elements--C_OgeLabHeadingGroupBold,
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Font="14"][SemiBold="false"][Bold="false"]
 {
@@ -121,7 +121,7 @@ stw--opensyde_gui--C_CamGenSigTableView QHeaderView,
 stw--opensyde_gui--C_CamGenTableView QHeaderView,
 stw--opensyde_gui--C_CamMosFilterTableView QHeaderView,
 stw--opensyde_gui--C_CamMetTreeView QHeaderView,
-stw--opensyde_gui_elements--C_OgeLabHeadingToolTip,
+QLabel[styleRole="heading-tool-tip"],
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Font="14"][SemiBold="true"][Bold="false"]
 {
 font-family:"Segoe UI";
@@ -149,7 +149,7 @@ font-weight:600; /*semibold*/
 }
 
 /* STYLE_GUIDE_FONT_BOLD_16 */
-stw--opensyde_gui_elements--C_OgeLabHeadingMessage
+stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="heading-message"]
 {
 font-family:"Segoe UI";
 font-size: 16px;
@@ -166,10 +166,8 @@ font-weight:600; /*semibold*/
 }
 
 /* --------------------------------------------------------------------- */
-/* Order distorted: first C_OgeLabPopUpTitle, then C_OgeLabPopUpSubTitle (see GUI project)
 /* STYLE_GUIDE_FONT_BOLD_20 */
-/* C_OgeLabPopUpTitle before (!) C_OgeLabPopUpSubTitle */
-stw--opensyde_gui_elements--C_OgeLabPopUpTitle
+stw--opensyde_gui_elements--C_OgeLabPopUpTitle[styleRole="popup-title"]
 {
 font-family:"Segoe UI";
 font-size:20px;
@@ -177,8 +175,7 @@ font-weight:bold;
 }
 
 /* STYLE_GUIDE_FONT_NORMAL_20 */
-/* C_OgeLabPopUpSubTitle after (!) C_OgeLabPopUpTitle */
-stw--opensyde_gui_elements--C_OgeLabPopUpSubTitle
+stw--opensyde_gui_elements--C_OgeLabPopUpTitle[styleRole="popup-sub-title"]
 {
 font-family:"Segoe UI";
 font-size:20px;

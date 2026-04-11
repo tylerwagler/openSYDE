@@ -61,7 +61,7 @@ stw--opensyde_gui_elements--C_OgePubDialog:enabled,
 stw--opensyde_gui_elements--C_OgePubMessageOk:enabled,
 stw--opensyde_gui_elements--C_CamOgeChxSettings:enabled,
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="ERROR"],
-stw--opensyde_gui_elements--C_OgeLabHeadingToolTip[Type="ERROR"],
+QLabel[styleRole="heading-tool-tip"][Type="ERROR"],
 stw--opensyde_gui_elements--C_OgePubConfigure:enabled
 {
 color:rgb(255, 255, 255);
@@ -138,15 +138,14 @@ stw--opensyde_gui_elements--C_OgeContextMenu::item,
 stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled,
 stw--opensyde_gui_elements--C_OgePubCancel:enabled,
 stw--opensyde_gui_elements--C_OgePubMessageCancel:enabled,
-stw--opensyde_gui_elements--C_OgeLabHeadingMessage,
+stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="heading-message"],
 stw--opensyde_gui_elements--C_OgeTebMessageDetails,
 stw--opensyde_gui_elements--C_OgeGbxToolTip[Type="DEFAULT"],
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="DEFAULT"],
-stw--opensyde_gui_elements--C_OgeLabHeadingToolTip[Type="DEFAULT"],
+QLabel[styleRole="heading-tool-tip"][Type="DEFAULT"],
 stw--opensyde_gui_elements--C_OgeLabPopUpTitle,
-stw--opensyde_gui_elements--C_OgeLabPopUpSubTitle,
 stw--opensyde_gui_elements--C_OgeCbxText QListView::item:selected,
-stw--opensyde_gui_elements--C_OgeLabPropertiesSubHeading
+QLabel[styleRole="properties-sub-heading"]
 {
 color:rgb(42, 42, 91);
 }
@@ -178,8 +177,8 @@ stw--opensyde_gui_elements--C_CamOgeCbxTableSmall,
 stw--opensyde_gui_elements--C_CamOgeSpxProperties,
 stw--opensyde_gui_elements--C_FlaOgeSpxDark,
 stw--opensyde_gui_elements--C_CamOgeWiSpinBoxGroupTable QAbstractSpinBox,
-stw--opensyde_gui_elements--C_OgeLabHeadingMessage,
-stw--opensyde_gui_elements--C_OgeLabDescriptionMessage,
+stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="heading-message"],
+stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="description-message"],
 stw--opensyde_gui_elements--C_OgeTebMessageDetails,
 stw--opensyde_gui_elements--C_OgeLePropertiesName,
 stw--opensyde_gui_elements--C_OgeLabGroupItemValue,
@@ -194,7 +193,7 @@ selection-color:rgb(42, 42, 91);
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_4 */
-stw--opensyde_gui_elements--C_OgeLabDescriptionMessage,
+stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="description-message"],
 stw--opensyde_gui_elements--C_OgeLabHeadingGroupBold,
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Foreground="4"]
 {
@@ -208,7 +207,7 @@ background-color:rgb(57, 57, 109);
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_5 */
-stw--opensyde_gui_elements--C_OgeLabUpdateAppVersion,
+QLabel[styleRole="update-app-version"],
 stw--opensyde_gui_elements--C_CamOgeLabStatusBar,
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Foreground="5"]
 {
@@ -228,7 +227,7 @@ stw--opensyde_gui_elements--C_CamOgeLeTableEdit,
 stw--opensyde_gui_elements--C_CamOgeLeIdPopUp,
 stw--opensyde_gui_elements--C_CamOgeSpxProperties,
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="WARNING"],
-stw--opensyde_gui_elements--C_OgeLabHeadingToolTip[Type="WARNING"],
+QLabel[styleRole="heading-tool-tip"][Type="WARNING"],
 stw--opensyde_gui_elements--C_OgeLePropertiesName,
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment,
 stw--opensyde_gui_elements--C_OgeLabGroupItemValue,
@@ -305,7 +304,7 @@ border-color:rgb(130, 130, 143);
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_9 */
-stw--opensyde_gui_elements--C_OgeLabUpdateAppPath,
+QLabel[styleRole="update-app-path"],
 stw--opensyde_gui_elements--C_OgeContextMenu::item:disabled
 {
 color:rgb(155, 155, 170);
@@ -344,7 +343,7 @@ stw--opensyde_gui_elements--C_CamOgePubDarkBrowse,
 stw--opensyde_gui_elements--C_OgeLeProperties:!enabled,
 stw--opensyde_gui_elements--C_FlaOgePubPathVariables,
 stw--opensyde_gui--C_SyvDcConnectedNodeWidget,
-stw--opensyde_gui_elements--C_OgeLabPropertiesSubHeading:!enabled
+QLabel[styleRole="properties-sub-heading"]:!enabled
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment:disabled
 {
 color:rgb(206, 206, 217);
@@ -470,7 +469,7 @@ stw--opensyde_gui_elements--C_CamOgeLabStatusBar[Error="true"]
 color:rgb(255, 0, 0);
 }
 
-stw--opensyde_gui_elements--C_OgeLabGenericBubble[Background="18"]
+stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[styleRole="generic-bubble"][Background="18"]
 {
 background-color:rgb(255, 0, 0);
 }
@@ -515,14 +514,14 @@ color: rgb(230, 58, 63);
 
 stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="24"],
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="ERROR"],
-stw--opensyde_gui_elements--C_OgeLabHeadingToolTip[Type="ERROR"],
+QLabel[styleRole="heading-tool-tip"][Type="ERROR"],
 stw--opensyde_gui_elements--C_OgeGbxToolTip[Type="ERROR"]
 {
 background-color: rgb(230, 58, 63);
 }
 
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="ERROR"],
-stw--opensyde_gui_elements--C_OgeLabHeadingToolTip[Type="ERROR"],
+QLabel[styleRole="heading-tool-tip"][Type="ERROR"],
 stw--opensyde_gui_elements--C_OgeGbxToolTip[Type="ERROR"],
 stw--opensyde_gui_elements--C_OgeGbxMouseMove[Type="ERROR"]
 {
@@ -554,9 +553,9 @@ stw--opensyde_gui_elements--C_FlaOgeLeFilePath,
 stw--opensyde_gui_elements--C_CamOgeCbxTableSmall,
 stw--opensyde_gui_elements--C_CamOgeSpxProperties,
 stw--opensyde_gui_elements--C_CamOgeWiSpinBoxGroupTable QAbstractSpinBox,
-stw--opensyde_gui_elements--C_OgeLabHeadingMessage,
+stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="heading-message"],
 stw--opensyde_gui_elements--C_OgeTebMessageDetails,
-stw--opensyde_gui_elements--C_OgeLabDescriptionMessage,
+stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="description-message"],
 stw--opensyde_gui_elements--C_OgeLePropertiesName,
 stw--opensyde_gui_elements--C_OgeLabGroupItemValue,
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment,
@@ -600,7 +599,7 @@ border-color: rgb(177, 177, 177);
 /* STYLE_GUIDE_COLOR_38 */
 stw--opensyde_gui_elements--C_OgeGbxToolTip[Type="DEFAULT"],
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="DEFAULT"],
-stw--opensyde_gui_elements--C_OgeLabHeadingToolTip[Type="DEFAULT"]
+QLabel[styleRole="heading-tool-tip"][Type="DEFAULT"]
 {
 background-color: rgb(217, 217, 226);
 }
@@ -777,14 +776,14 @@ background-color:rgb(57, 181, 98);
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_222 */
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="WARNING"],
-stw--opensyde_gui_elements--C_OgeLabHeadingToolTip[Type="WARNING"],
+QLabel[styleRole="heading-tool-tip"][Type="WARNING"],
 stw--opensyde_gui_elements--C_OgeGbxToolTip[Type="WARNING"]
 {
 background-color:rgb(222, 202, 69);
 }
 
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="WARNING"],
-stw--opensyde_gui_elements--C_OgeLabHeadingToolTip[Type="WARNING"],
+QLabel[styleRole="heading-tool-tip"][Type="WARNING"],
 stw--opensyde_gui_elements--C_OgeGbxToolTip[Type="WARNING"]
 {
 border-color:rgb(222, 202, 69);

@@ -105,7 +105,10 @@
            <number>2</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabListHeaderHeading" name="pc_LabelListNamePrefix">
+           <widget class="QLabel" name="pc_LabelListNamePrefix">
+     <property name="styleRole" stdset="0">
+      <string>list-header-heading</string>
+     </property>
             <property name="text">
              <string>List</string>
             </property>
@@ -177,7 +180,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabListHeaderHighlighted" name="pc_LabelSize">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelSize">
+          <property name="styleRole" stdset="0">
+           <string>list-header-highlighted</string>
+          </property>
           <property name="text">
            <string>Size</string>
           </property>
@@ -255,7 +261,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabComListHeader" name="pc_LabelUsage">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelUsage">
+          <property name="styleRole" stdset="0">
+           <string>com-list-header</string>
+          </property>
           <property name="text">
            <string>Usage: x%</string>
           </property>
@@ -399,16 +408,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabListHeaderHeading</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabListHeaderHeading.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabComListHeader</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabComListHeader.hpp</header>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui::C_SdNdeDpListHeaderUsageWidget</class>
    <extends>QWidget</extends>
    <header>C_SdNdeDpListHeaderUsageWidget.hpp</header>
@@ -423,11 +422,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLeListHeader</class>
    <extends>QLineEdit</extends>
    <header>C_OgeLeListHeader.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabListHeaderHighlighted</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabListHeaderHighlighted.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>

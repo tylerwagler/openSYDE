@@ -125,7 +125,10 @@
            </spacer>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabStatusInformation" name="pc_LabelAutoStartAddress">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelAutoStartAddress">
+            <property name="styleRole" stdset="0">
+             <string>status-information</string>
+            </property>
             <property name="text">
              <string>TextLabel</string>
             </property>
@@ -194,9 +197,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabStatusInformation</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabStatusInformation.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubSvgIconOnly</class>

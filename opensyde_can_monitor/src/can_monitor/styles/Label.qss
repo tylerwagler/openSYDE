@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeLabPopUpTitle
+stw--opensyde_gui_elements--C_OgeLabPopUpTitle[styleRole="popup-title"]
 {
 padding-left:20px;
 padding-top:15px;
@@ -7,7 +7,7 @@ padding-right:0px;
 padding-bottom:15px;
 }
 
-stw--opensyde_gui_elements--C_OgeLabPopUpSubTitle
+stw--opensyde_gui_elements--C_OgeLabPopUpTitle[styleRole="popup-sub-title"]
 {
 padding-left:0px;
 padding-top:15px;

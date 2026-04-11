@@ -38,7 +38,10 @@
       <number>0</number>
      </property>
      <item row="0" column="0">
-      <widget class="stw::opensyde_gui_elements::C_OgeLabDashboardLabelCaption" name="pc_LabelCaption">
+      <widget class="QLabel" name="pc_LabelCaption">
+       <property name="styleRole" stdset="0">
+        <string>dashboard-label-caption</string>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -82,11 +85,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabDashboardLabelValue</class>
    <extends>QLabel</extends>
    <header>C_OgeLabDashboardLabelValue.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabDashboardLabelCaption</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabDashboardLabelCaption.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

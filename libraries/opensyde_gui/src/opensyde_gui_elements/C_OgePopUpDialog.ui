@@ -95,6 +95,9 @@
                <layout class="QHBoxLayout" name="pc_HorizontalLayout2" stretch="0,0,1">
                 <item>
                  <widget class="stw::opensyde_gui_elements::C_OgeLabPopUpTitle" name="pc_LabelTitle">
+                  <property name="styleRole" stdset="0">
+                   <string>popup-title</string>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -113,7 +116,10 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLabPopUpSubTitle" name="pc_LabelTitleSpacer">
+                 <widget class="stw::opensyde_gui_elements::C_OgeLabPopUpTitle" name="pc_LabelTitleSpacer">
+                  <property name="styleRole" stdset="0">
+                   <string>popup-sub-title</string>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>20</width>
@@ -135,7 +141,10 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLabPopUpSubTitle" name="pc_LabelSubTitle">
+                 <widget class="stw::opensyde_gui_elements::C_OgeLabPopUpTitle" name="pc_LabelSubTitle">
+                  <property name="styleRole" stdset="0">
+                   <string>popup-sub-title</string>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -241,11 +250,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabPopUpTitle</class>
    <extends>QLabel</extends>
    <header>C_OgeLabPopUpTitle.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabPopUpSubTitle</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabPopUpSubTitle.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxHover</class>

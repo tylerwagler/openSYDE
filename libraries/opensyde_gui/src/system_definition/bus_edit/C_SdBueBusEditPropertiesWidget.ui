@@ -601,7 +601,10 @@ p, li { white-space: pre-wrap; }
              </spacer>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabBusType" name="pc_BusType">
+             <widget class="QLabel" name="pc_BusType">
+     <property name="styleRole" stdset="0">
+      <string>bus-type</string>
+     </property>
               <property name="text">
                <string>Bus type</string>
               </property>
@@ -838,11 +841,6 @@ p, li { white-space: pre-wrap; }
    <class>stw::opensyde_gui_elements::C_OgeLabSvgOnly</class>
    <extends>QLabel</extends>
    <header>C_OgeLabSvgOnly.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabBusType</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabBusType.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>

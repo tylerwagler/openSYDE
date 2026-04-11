@@ -517,7 +517,10 @@
       <number>10</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelSelectFile">
+      <widget class="QLabel" name="pc_LabelSelectFile">
+       <property name="styleRole" stdset="0">
+        <string>progress-text</string>
+       </property>
        <property name="text">
         <string>Select File</string>
        </property>
@@ -574,7 +577,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelRead">
+         <widget class="QLabel" name="pc_LabelRead">
+          <property name="styleRole" stdset="0">
+           <string>progress-text</string>
+          </property>
           <property name="text">
            <string>Read</string>
           </property>
@@ -631,7 +637,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelConfirm">
+         <widget class="QLabel" name="pc_LabelConfirm">
+          <property name="styleRole" stdset="0">
+           <string>progress-text</string>
+          </property>
           <property name="text">
            <string>Confirm</string>
           </property>
@@ -688,7 +697,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelValidateFile">
+         <widget class="QLabel" name="pc_LabelValidateFile">
+          <property name="styleRole" stdset="0">
+           <string>progress-text</string>
+          </property>
           <property name="text">
            <string>Validate File</string>
           </property>
@@ -727,7 +739,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelFinished">
+      <widget class="QLabel" name="pc_LabelFinished">
+       <property name="styleRole" stdset="0">
+        <string>progress-text</string>
+       </property>
        <property name="text">
         <string>Finished</string>
        </property>
@@ -1365,11 +1380,6 @@ p, li { white-space: pre-wrap; }
    <extends>QWidget</extends>
    <header>C_OgeWiProgressBar.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabProgressText</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabProgressText.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTedPropertiesComment</class>

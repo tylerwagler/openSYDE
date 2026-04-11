@@ -64,7 +64,10 @@
            <number>1</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabProgressLogHeading" name="pc_LabelPreview">
+           <widget class="QLabel" name="pc_LabelPreview">
+            <property name="styleRole" stdset="0">
+             <string>progress-log-heading</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -230,11 +233,6 @@
    <extends>QGroupBox</extends>
    <header>C_OgeGbx.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabProgressLogHeading</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabProgressLogHeading.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

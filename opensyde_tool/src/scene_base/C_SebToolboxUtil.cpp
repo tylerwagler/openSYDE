@@ -15,8 +15,7 @@
 #include "constants.hpp"
 #include "C_GtGetText.hpp"
 #include "C_SebToolboxUtil.hpp"
-#include "C_OgeLabToolboxHeadingGroup.hpp"
-#include "C_OgeLabToolboxHeadingGroupBig.hpp"
+#include <QLabel>
 #include "C_SdUtil.hpp"
 #include "C_SdTopologyListWidget.hpp"
 
@@ -64,7 +63,8 @@ C_SdTopologyListWidget * C_SebToolboxUtil::h_AddNewList(const QString & orc_Name
 
       if (orc_Name != "")
       {
-         C_OgeLabToolboxHeadingGroup * const pc_Heading = new C_OgeLabToolboxHeadingGroup(opc_Parent);
+         QLabel * const pc_Heading = new QLabel(opc_Parent);
+         pc_Heading->setProperty("styleRole", "toolbox-heading-group");
          pc_Heading->setText(orc_Name);
          pc_Retval->SetGroupName(orc_Name);
 
@@ -115,7 +115,8 @@ C_OgeFraSeparator * C_SebToolboxUtil::h_AddNewHeading(const QString & orc_Name, 
 
    if (opc_Layout != NULL)
    {
-      C_OgeLabToolboxHeadingGroupBig * const pc_Heading = new C_OgeLabToolboxHeadingGroupBig(opc_Parent);
+      QLabel * const pc_Heading = new QLabel(opc_Parent);
+      pc_Heading->setProperty("styleRole", "toolbox-heading-group-big");
       pc_FrameSeparator = new C_OgeFraSeparator(opc_Parent);
       QVBoxLayout * const pc_FrameLayout = new QVBoxLayout();
       int32_t s32_Index;
@@ -172,7 +173,8 @@ std::vector<C_OgePubIconOnly *> C_SebToolboxUtil::h_AddNewUserHeading(const QStr
    {
       //lint -e429  no memory leak because of the parent of the call of addSpacerItem and the Qt
       // memory management
-      C_OgeLabToolboxHeadingGroup * const pc_Heading = new C_OgeLabToolboxHeadingGroup(opc_Parent);
+      QLabel * const pc_Heading = new QLabel(opc_Parent);
+      pc_Heading->setProperty("styleRole", "toolbox-heading-group");
       C_OgeFraSeparator * const pc_FrameSeparator = new C_OgeFraSeparator(opc_Parent);
       QVBoxLayout * const pc_FrameLayout = new QVBoxLayout();
       QHBoxLayout * const pc_HorizontalLayout = new QHBoxLayout();

@@ -575,7 +575,10 @@ p, li { white-space: pre-wrap; }
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabBusType" name="pc_LabDatapoolType">
+              <widget class="QLabel" name="pc_LabDatapoolType">
+     <property name="styleRole" stdset="0">
+      <string>bus-type</string>
+     </property>
                <property name="text">
                 <string>Datapool type</string>
                </property>
@@ -1389,11 +1392,6 @@ p, li { white-space: pre-wrap; }
    <extends>QGroupBox</extends>
    <header>C_OgeGbxGrayed.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabBusType</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabBusType.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeChxTristateTransparentToggle</class>
