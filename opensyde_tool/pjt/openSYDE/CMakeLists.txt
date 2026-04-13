@@ -331,7 +331,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomMouseItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdContextMenuEntry.cpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomToolTip.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubZoomNotification.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubCancel.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
@@ -586,8 +585,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpOverviewWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabFrameError.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiEditBackground.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTextOnlyEdit.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTextWithBorderEdit.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandler.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvPc.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvData.cpp
@@ -655,8 +652,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoSetupStyleCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFontConfig.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxFontProperties.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToggleBold.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToggle.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebToolboxUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxHover.cpp
@@ -1170,7 +1165,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomMouseItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdContextMenuEntry.hpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomToolTip.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubZoomNotification.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubCancel.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
@@ -1425,8 +1419,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpOverviewWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabFrameError.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiEditBackground.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTextOnlyEdit.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTextWithBorderEdit.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvHandler.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvPc.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvData.hpp
@@ -1494,8 +1486,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoSetupStyleCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiFontConfig.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxFontProperties.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToggleBold.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubToggle.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebToolboxUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxHover.hpp

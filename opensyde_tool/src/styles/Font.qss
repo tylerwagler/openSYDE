@@ -112,7 +112,7 @@ stw--opensyde_gui--C_SyvDaItPaTreeView QHeaderView,
 QLabel[styleRole="properties-sub-heading"],
 stw--opensyde_gui_elements--C_OgeRabProperties,
 stw--opensyde_gui_elements--C_OgeTebLabel,
-stw--opensyde_gui_elements--C_OgePubToggle,
+QPushButton[styleRole="toggle"],
 stw--opensyde_gui_elements--C_OgeLabToolTipBase[styleRole="group-item"],
 stw--opensyde_gui_elements--C_OgeChxProperties,
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="group-item-value"],
@@ -195,7 +195,7 @@ font-weight: 600; /*semibold*/
 }
 
 /* STYLE_GUIDE_FONT_BOLD_13 */
-stw--opensyde_gui_elements--C_OgePubToggleBold,
+QPushButton[styleRole="toggle-bold"],
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Font="13"][SemiBold="false"][Bold="true"]
 {
 font-family: "Segoe UI";
@@ -269,7 +269,7 @@ stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled[Font="16"][SemiBold="
 stw--opensyde_gui_elements--C_OgeLabToolTipBase[styleRole="status-information"],
 stw--opensyde_gui_elements--C_OgeRabCheckBox,
 QLabel[styleRole="list-header"],
-stw--opensyde_gui_elements--C_OgePubZoomNotification,
+QPushButton[styleRole="zoom-notification"],
 QLabel[styleRole="progress-text"],
 QLabel[styleRole="list-header-heading"],
 stw--opensyde_gui_elements--C_OgeLeListHeader,
@@ -282,8 +282,8 @@ font-weight: normal;
 }
 
 /* STYLE_GUIDE_FONT_SEMIBOLD_16 */
-stw--opensyde_gui_elements--C_OgePubTextOnlyEdit,
-stw--opensyde_gui_elements--C_OgePubTextWithBorderEdit,
+QPushButton[styleRole="text-only-edit"],
+QPushButton[styleRole="text-with-border-edit"],
 stw--opensyde_gui_elements--C_OgePubUseCaseNav,
 stw--opensyde_gui_elements--C_OgePubProjAction,
 QLabel[styleRole="update-node-title"],
