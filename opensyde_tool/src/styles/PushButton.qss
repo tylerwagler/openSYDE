@@ -7,8 +7,8 @@ outline: none;
 
 /* --------------------------------------------------------------------- */
 stw--opensyde_gui_elements--C_OgePubIconOnly,
-stw--opensyde_gui_elements--C_OgePubToggleBold,
-stw--opensyde_gui_elements--C_OgePubToggle
+QPushButton[styleRole="toggle-bold"],
+QPushButton[styleRole="toggle"]
 {
 border-style: solid;
 text-align: center;
@@ -129,7 +129,7 @@ QPushButton[styleRole="text-only"]
 border-style: none;
 }
 
-stw--opensyde_gui_elements--C_OgePubTextWithBorderEdit
+QPushButton[styleRole="text-with-border-edit"]
 {
 border-style: solid;
 border-radius: 0px;
@@ -139,7 +139,7 @@ padding-bottom: 1px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubZoomNotification
+QPushButton[styleRole="zoom-notification"]
 {
 border-radius: 20px;
 border-width: 0px;
