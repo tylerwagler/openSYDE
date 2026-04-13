@@ -97,7 +97,10 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgePubDataLoggerJobsOverview" name="pc_PbLogJobsOverview">
+              <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PbLogJobsOverview">
+               <property name="styleRole" stdset="0">
+                <string>data-logger-jobs-overview</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>300</width>
@@ -190,9 +193,9 @@
    <header>C_OgePubSvgIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDataLoggerJobsOverview</class>
+   <class>stw::opensyde_gui_elements::C_OgePubToolTipBase</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubDataLoggerJobsOverview.hpp</header>
+   <header>C_OgePubToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -63,7 +63,7 @@ border-radius: 4px;
 border-width: 1px;
 }
 
-stw--opensyde_gui_elements--C_OgePubConfigure:enabled,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:enabled,
 stw--opensyde_gui_elements--C_OgePubGenericTextWithBackground
 {
 border-style: none;
@@ -76,14 +76,14 @@ border-width: 1px;
 }
 
 
-stw--opensyde_gui_elements--C_OgePubConfigure:!enabled
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:!enabled
 {
 border-style: solid;
 border-width: 1px;
 }
 
 stw--opensyde_gui_elements--C_OgePubDialog,
-stw--opensyde_gui_elements--C_OgePubConfigure
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]
 {
 padding: 5px;
 text-align: center;
@@ -225,7 +225,7 @@ padding-right: 15px;
 
 QPushButton[styleRole="message-ok"]:focus,
 QPushButton[styleRole="message-cancel"]:focus,
-stw--opensyde_gui_elements--C_OgePubHalcPanel:focus
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"]:focus
 {
 text-decoration: underline;
 }
@@ -248,21 +248,21 @@ border-radius: 14px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubHalcOverview
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-overview"]
 {
 text-align: left;
 padding-left: 19px;
 padding-right: 19px;
 }
 
-stw--opensyde_gui_elements--C_OgePubHalcOverview
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-overview"]
 {
 border-style: solid;
 border-width: 1px;
 border-bottom-width: 0px;
 }
 
-stw--opensyde_gui_elements--C_OgePubDataLoggerJobsOverview
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="data-logger-jobs-overview"]
 {
 border-style: none;
 border-width: 0px;
@@ -270,7 +270,7 @@ border-bottom-width: 0px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubHalcPanel
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"]
 {
 border-style: solid;
 border-width: 1px;

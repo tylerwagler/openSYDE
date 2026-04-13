@@ -106,7 +106,7 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
    connect(this->mpc_Ui->pc_ComboBoxType,
            static_cast<void (C_OgeCbxText::*)(int32_t)>(&C_OgeCbxText::currentIndexChanged),
            this, &C_CamMosFilterPopup::m_OnTypeChanged);
-   connect(this->mpc_Ui->pc_PubAddFromDatabase, &C_OgePubConfigure::clicked, this,
+   connect(this->mpc_Ui->pc_PubAddFromDatabase, &C_OgePubToolTipBase::clicked, this,
            &C_CamMosFilterPopup::m_OnAddFromDatabase);
    connect(this->mpc_Ui->pc_TableView, &C_CamMosFilterTableView::clicked, this, &C_CamMosFilterPopup::m_OnIndexClicked);
    connect(this->mpc_Ui->pc_TableView->selectionModel(), &QItemSelectionModel::currentRowChanged,

@@ -7,7 +7,7 @@ outline: none;
 
 /* --------------------------------------------------------------------- */
 stw--opensyde_gui_elements--C_CamOgePubSettingsAdd,
-stw--opensyde_gui_elements--C_OgePubConfigure
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]
 {
 border-style: none;
 }

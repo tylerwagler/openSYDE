@@ -185,7 +185,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericWithContextMenu.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeIpAddress.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDataLoggerJobsOverview.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconEvents.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebLabel.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedDbComment.cpp
@@ -602,7 +601,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/scene_base/C_SebTopologyBaseContextMenuManager.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeDllConfigurationDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxRead.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubConfigure.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxGrayedEdit.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTabClose.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsSystemView.cpp
@@ -957,8 +955,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelCopyPaste.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcDefUpdateDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelect.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubHalcPanel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubHalcOverview.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableView.cpp
@@ -1018,7 +1014,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/unused_project_files/C_NagUnUsedProjectFilesTableView.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericWithContextMenu.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeIpAddress.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDataLoggerJobsOverview.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconEvents.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebLabel.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedDbComment.hpp
@@ -1436,7 +1431,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/scene_base/C_SebTopologyBaseContextMenuManager.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeDllConfigurationDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxRead.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubConfigure.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxGrayedEdit.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTabClose.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsSystemView.hpp
@@ -1806,8 +1800,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcChannelCopyPaste.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcDefUpdateDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxMultiSelect.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubHalcPanel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubHalcOverview.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/overview/C_SdNdeHalcOvTableView.hpp
