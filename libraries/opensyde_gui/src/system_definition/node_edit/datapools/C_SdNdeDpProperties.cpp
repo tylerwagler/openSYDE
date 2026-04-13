@@ -359,7 +359,7 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
            &C_SdNdeDpProperties::m_OnComTypeChange);
    connect(this->mpc_Ui->pc_CheckBoxSafety, &C_OgeChxTristateTransparentToggle::toggled, this,
            &C_SdNdeDpProperties::m_OnSafetyChange);
-   connect(this->mpc_Ui->pc_BushButtonBreakRelation, &C_OgePubConfigure::clicked, this,
+   connect(this->mpc_Ui->pc_BushButtonBreakRelation, &C_OgePubToolTipBase::clicked, this,
            &C_SdNdeDpProperties::m_BreakSharedRelation);
 }
 

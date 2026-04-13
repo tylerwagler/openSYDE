@@ -290,7 +290,7 @@ stw--opensyde_gui--C_SyvDaItTaView[Style="OPENSYDE_DARK"] QHeaderView,
 stw--opensyde_gui_elements--C_OgeLabDashboardDefault[Style="OPENSYDE_DARK"],
 stw--opensyde_gui_elements--C_OgeLabDashboardProgressBarMaximum[Style="OPENSYDE_DARK"],
 stw--opensyde_gui_elements--C_OgePubUpdate:enabled,
-stw--opensyde_gui_elements--C_OgePubConfigure:enabled,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:enabled,
 stw--opensyde_gui_elements--C_OgeChxSystemCommisioningEdit,
 stw--opensyde_gui_elements--C_OgeTawSelector QTabBar::tab:selected,
 stw--opensyde_gui_elements--C_OgeTawSelector QTabBar::tab:selected:!hover,
@@ -452,7 +452,7 @@ stw--opensyde_gui_elements--C_OgeSpxInt64Properties::up-button,
 stw--opensyde_gui_elements--C_OgeSpxFactorProperties::up-button,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::up-button,
 stw--opensyde_gui_elements--C_OgePubUpdate:enabled,
-stw--opensyde_gui_elements--C_OgePubConfigure:enabled
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:enabled
 {
 border-color: rgb(255, 255, 255);
 }
@@ -513,7 +513,7 @@ stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style=
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_DARK"][Type="1"]::down-button,
 QPushButton[styleRole="text-with-border-edit"]:enabled:hover:pressed,
 stw--opensyde_gui_elements--C_OgePubUpdate:enabled:hover:pressed,
-stw--opensyde_gui_elements--C_OgePubConfigure:enabled:hover:pressed,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:enabled:hover:pressed,
 stw--opensyde_gui_elements--C_OgePubProjAction:enabled:hover:pressed
 {
 background-color: rgb(27, 27, 68);
@@ -524,7 +524,7 @@ stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style=
 stw--opensyde_gui--C_SyvDaItDashboardLabelWidget[Style="OPENSYDE_DARK"][Type="DEFAULT"],
 stw--opensyde_gui--C_SyvDaItPaWidget[Style="OPENSYDE_DARK"],
 stw--opensyde_gui_elements--C_OgePubUpdate:enabled:hover:pressed,
-stw--opensyde_gui_elements--C_OgePubConfigure:enabled:hover:pressed,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:enabled:hover:pressed,
 stw--opensyde_gui_elements--C_OgePubProjAction:enabled:hover:pressed
 {
 border-color: rgb(27, 27, 68);
@@ -578,8 +578,8 @@ stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled,
 stw--opensyde_gui_elements--C_OgeLabFrameError[Foreground="3"],
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Foreground="3"],
 stw--opensyde_gui_elements--C_OgePubGenericTextWithBackground[Foreground="3"],
-stw--opensyde_gui_elements--C_OgePubHalcOverview,
-stw--opensyde_gui_elements--C_OgePubDataLoggerJobsOverview
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-overview"],
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="data-logger-jobs-overview"]
 {
 color: rgb(42, 42, 91);
 }
@@ -589,7 +589,7 @@ QPushButton[styleRole="navigation"][Active="false"]:hover,
 QPushButton[styleRole="navigation"]Hover[Active="false"]:hover,
 QPushButton[styleRole="text-with-border-edit"]:enabled:hover,
 stw--opensyde_gui_elements--C_OgePubUpdate:enabled:hover,
-stw--opensyde_gui_elements--C_OgePubConfigure:enabled:hover,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:enabled:hover,
 stw--opensyde_gui_elements--C_OgePubProjAction:enabled:hover
 {
 background-color: rgb(42, 42, 91);
@@ -599,7 +599,7 @@ background-color: rgb(42, 42, 91);
 stw--opensyde_gui_elements--C_OgePubCancel:enabled,
 QPushButton[styleRole="message-cancel"]:enabled,
 stw--opensyde_gui_elements--C_OgePubUpdate:enabled:hover,
-stw--opensyde_gui_elements--C_OgePubConfigure:enabled:hover,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:enabled:hover,
 stw--opensyde_gui_elements--C_OgePubProjAction:enabled:hover
 {
 border-color: rgb(42, 42, 91);
@@ -702,7 +702,7 @@ stw--opensyde_gui--C_SdNdeDbViewWidget QListView,
 stw--opensyde_gui--C_SdNdeDpViewWidget QListView,
 stw--opensyde_gui--C_SyvUpPacListWidget,
 QLabel[styleRole="dashboard-chart"][Style="OPENSYDE_BRIGHT"][Selected="true"][Active="true"],
-stw--opensyde_gui_elements--C_OgePubHalcPanel,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"],
 stw--opensyde_gui--C_SdNdeHalcChannelTreeView::item:selected,
 stw--opensyde_gui--C_SdNdeHalcConfigTreeView QHeaderView::section,
 stw--opensyde_gui--C_SdBueCoAddSignalsView QHeaderView::section,
@@ -730,7 +730,7 @@ background-color: rgb(57, 57, 109);
 }
 
 /* border-color */
-stw--opensyde_gui_elements--C_OgePubHalcPanel
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"]
 {
 border-color: rgb(57, 57, 109);
 }
@@ -1035,7 +1035,7 @@ stw--opensyde_gui_elements--C_OgeRabProperties:!enabled,
 stw--opensyde_gui_elements--C_OgeLabToolTipBase[styleRole="group-sub-item"]:!enabled,
 stw--opensyde_gui_elements--C_OgeTreeViewCheckable:!enabled,
 stw--opensyde_gui_elements--C_OgeSpxNumber:!enabled,
-stw--opensyde_gui_elements--C_OgePubConfigure:!enabled,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:!enabled,
 stw--opensyde_gui_elements--C_OgeSpxDoubleProperties:!enabled,
 stw--opensyde_gui_elements--C_OgeSpxInt64Properties:!enabled,
 stw--opensyde_gui--C_TblTreDataElementView::item:!enabled,
@@ -1058,7 +1058,7 @@ QPushButton[styleRole="message-cancel"]:!enabled,
 stw--opensyde_gui_elements--C_OgeTawSelector QTabBar::tab:!enabled,
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Foreground="10"],
 stw--opensyde_gui--C_SdNdeDpSelectorAddListWidget::item:!enabled,
-stw--opensyde_gui_elements--C_OgePubHalcPanel:disabled,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"]:disabled,
 QLabel[styleRole="dashboard-chart"][Style="OPENSYDE_DARK"],
 QLabel[styleRole="dashboard-chart"][Style="OPENSYDE_DARK"][Selected="false"][Active="true"],
 stw--opensyde_gui_elements--C_OgePubAddChartDataElement:disabled[Style="OPENSYDE_BRIGHT"],
@@ -1111,10 +1111,10 @@ stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled:selected,
 stw--opensyde_gui_elements--C_OgePubOpen:hover:pressed,
 stw--opensyde_gui_elements--C_OgePubPathVariables:open,
 stw--opensyde_gui_elements--C_OgePubPathVariables:enabled:hover:pressed,
-stw--opensyde_gui_elements--C_OgePubHalcOverview:checked,
-stw--opensyde_gui_elements--C_OgePubDataLoggerJobsOverview:checked,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-overview"]:checked,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="data-logger-jobs-overview"]:checked,
 stw--opensyde_gui_elements--C_OgePubGenericTextWithBackground:checked[CheckedBackground="10"],
-stw--opensyde_gui_elements--C_OgePubHalcPanel:enabled:hover:pressed,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"]:enabled:hover:pressed,
 stw--opensyde_gui_elements--C_OgePubAddChartDataElement:hover:pressed[Style="OPENSYDE_BRIGHT"],
 stw--opensyde_gui_elements--C_OgePubIconChart:hover:pressed[Style="OPENSYDE_BRIGHT"],
 stw--opensyde_gui_elements--C_OgePubIconChart:hover:pressed[Style="OPENSYDE_BRIGHT"][BackgroundChecked="false"],
@@ -1127,7 +1127,7 @@ background-color: rgb(206, 206, 217);
 
 /* border-color */
 QFrame#pc_FrameApplicationWidget,
-stw--opensyde_gui_elements--C_OgePubConfigure:!enabled,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:!enabled,
 stw--opensyde_gui--C_SyvDcExistingNodeWidget,
 stw--opensyde_gui--C_SyvDcConnectedNodeWidget,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_BRIGHT"],
@@ -1188,8 +1188,8 @@ QPushButton[styleRole="message-cancel"]:!enabled,
 stw--opensyde_gui--C_SdNdeDpSelectorAddListWidget,
 stw--opensyde_gui--C_SdNdeHalcChannelTreeView,
 stw--opensyde_gui--C_SdNdeCoConfigTreeView,
-stw--opensyde_gui_elements--C_OgePubHalcOverview,
-stw--opensyde_gui_elements--C_OgePubDataLoggerJobsOverview,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-overview"],
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="data-logger-jobs-overview"],
 stw--opensyde_gui_elements--C_OgeCbxTableHalc,
 stw--opensyde_gui_elements--C_OgeCbxTableHalc QListView,
 stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc,
@@ -1199,7 +1199,7 @@ stw--opensyde_gui_elements--C_OgeTreeViewCheckable,
 stw--opensyde_gui_elements--C_OgeSpxEditProperties::down-button,
 stw--opensyde_gui_elements--C_OgeSpxEditProperties::up-button,
 stw--opensyde_gui_elements--C_OgeSpxEditProperties,
-stw--opensyde_gui_elements--C_OgePubHalcPanel:disabled,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"]:disabled,
 stw--opensyde_gui_elements--C_OgeFraGeneric[Border="10"],
 stw--opensyde_gui_elements--C_OgeChxTiny::indicator:enabled:!checked,
 stw--opensyde_gui_elements--C_OgePubAddChartDataElement:disabled[Style="OPENSYDE_BRIGHT"],
@@ -1260,7 +1260,7 @@ stw--opensyde_gui--C_SyvDcExistingNodeDropAreaWidget[Hovered="true"][Assigned="f
 stw--opensyde_gui--C_SyvDcExistingNodeDropAreaWidget[Assigned="true"],
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_BRIGHT"][Type="1"]::up-button,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_BRIGHT"][Type="1"]::down-button,
-stw--opensyde_gui_elements--C_OgePubConfigure:!enabled,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:!enabled,
 stw--opensyde_gui_elements--C_OgeGbxListHeader,
 stw--opensyde_gui--C_SyvDaPeUpdateModeTreeWidget::item:has-children,
 stw--opensyde_gui--C_SdNdeDpListsTreeWidget::item:has-children,
@@ -1340,10 +1340,10 @@ stw--opensyde_gui_elements--C_OgePubOpen:hover:!open,
 stw--opensyde_gui_elements--C_OgePubPathVariables:enabled:hover,
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Background="11"],
 stw--opensyde_gui_elements--C_OgeMuSections QLabel,
-stw--opensyde_gui_elements--C_OgePubHalcOverview,
-stw--opensyde_gui_elements--C_OgePubDataLoggerJobsOverview,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-overview"],
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="data-logger-jobs-overview"],
 stw--opensyde_gui_elements--C_OgePubGenericTextWithBackground[Background="11"],
-stw--opensyde_gui_elements--C_OgePubHalcPanel,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"],
 stw--opensyde_gui_elements--C_OgeSpxEditProperties:enabled,
 stw--opensyde_gui--C_SdNdeHalcConfigTreeView QHeaderView::section,
 stw--opensyde_gui--C_SdBueCoAddSignalsView QHeaderView::section,
@@ -2033,7 +2033,7 @@ stw--opensyde_gui_elements--C_OgeGbxToolTip[Type="DEFAULT"],
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="DEFAULT"],
 QLabel[styleRole="heading-tool-tip"][Type="DEFAULT"],
 stw--opensyde_gui--C_SyvDaItDashboardLabelWidget[Style="FLAT_BRIGHT"][Type="DEFAULT"],
-stw--opensyde_gui_elements--C_OgePubHalcPanel:hover,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"]:hover,
 stw--opensyde_gui_elements--C_OgePubGenericTextWithBackground[Clicked="38"]:enabled:hover:pressed
 {
 background-color: rgb(217, 217, 226);
@@ -2419,7 +2419,7 @@ border-color: rgb(22, 22, 44);
 /* STYLE_GUIDE_COLOR_3001 */
 /* background-color */
 stw--opensyde_gui_elements--C_OgePubUpdate:enabled,
-stw--opensyde_gui_elements--C_OgePubConfigure:enabled,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:enabled,
 stw--opensyde_gui_elements--C_OgeWiEditBackground[EditMode="true"],
 stw--opensyde_gui_elements--C_OgeChxSystemCommisioningEdit::indicator:!checked,
 stw--opensyde_gui_elements--C_OgeTawSelector QTabBar::tab:selected
@@ -2428,7 +2428,7 @@ background-color: rgb(73, 73, 133);
 }
 /* border-color */
 stw--opensyde_gui_elements--C_OgePubUpdate:enabled,
-stw--opensyde_gui_elements--C_OgePubConfigure:enabled
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:enabled
 {
 border-color: rgb(73, 73, 133);
 }

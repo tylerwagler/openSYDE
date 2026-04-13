@@ -993,7 +993,10 @@
                 </widget>
                </item>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgePubConfigure" name="pc_PushButtonUpdateModeConfigure">
+                <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PushButtonUpdateModeConfigure">
+                 <property name="styleRole" stdset="0">
+                  <string>configure</string>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>100</width>
@@ -1853,9 +1856,9 @@
    <header>C_OgeChxTristateTransparentToggle.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubConfigure</class>
+   <class>stw::opensyde_gui_elements::C_OgePubToolTipBase</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubConfigure.hpp</header>
+   <header>C_OgePubToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
