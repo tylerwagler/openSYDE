@@ -16,7 +16,7 @@
 #include "ui_C_GiSyTextElementWidget.h"
 
 #include "C_GtGetText.hpp"
-#include "C_OgePubColorOnly.hpp"
+#include <QPushButton>
 #include "C_UtiStyleSheets.hpp"
 #include "C_GiBiTextElement.hpp"
 #include "C_SdTopologyScene.hpp"
@@ -79,7 +79,7 @@ C_GiSyTextElementWidget::C_GiSyTextElementWidget(C_GiSyBaseWidget & orc_Parent) 
 
    InitStaticNames();
 
-   connect(this->mpc_Ui->pc_BushButtonFontColor, &C_OgePubColorOnly::clicked,
+   connect(this->mpc_Ui->pc_BushButtonFontColor, &QPushButton::clicked,
            this, &C_GiSyTextElementWidget::m_FontColorClicked);
 
    connect(this->mpc_Ui->pc_WidgetFont, &C_OgeWiFontConfig::SigFontUpdate, this,
