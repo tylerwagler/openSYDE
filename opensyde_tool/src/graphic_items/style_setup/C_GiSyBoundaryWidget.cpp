@@ -15,7 +15,7 @@
 
 #include "C_HeHandler.hpp"
 #include "C_GtGetText.hpp"
-#include "C_OgePubColorOnly.hpp"
+#include <QPushButton>
 #include "C_UtiStyleSheets.hpp"
 #include "C_GiBiBoundary.hpp"
 #include "C_SdTopologyScene.hpp"
@@ -87,9 +87,9 @@ C_GiSyBoundaryWidget::C_GiSyBoundaryWidget(C_GiSyBaseWidget & orc_Parent) :
 
    InitStaticNames();
 
-   connect(this->mpc_Ui->pc_BushButtonBorderColor, &C_OgePubColorOnly::clicked, this,
+   connect(this->mpc_Ui->pc_BushButtonBorderColor, &QPushButton::clicked, this,
            &C_GiSyBoundaryWidget::m_BorderColorClicked);
-   connect(this->mpc_Ui->pc_BushButtonBackgroundColor, &C_OgePubColorOnly::clicked,
+   connect(this->mpc_Ui->pc_BushButtonBackgroundColor, &QPushButton::clicked,
            this, &C_GiSyBoundaryWidget::m_BackgroundColorClicked);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_SpinBoxWidth, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged),

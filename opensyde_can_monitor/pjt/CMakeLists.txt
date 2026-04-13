@@ -315,8 +315,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableBase.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetTreeLoggerDataGreyOutInformation.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubMessageCancel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubMessageOk.cpp
    ${PROJECT_ROOT}/src/can_monitor/table_base/C_CamTblDelegate.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetUtil.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetSettingsPopup.cpp
@@ -539,8 +537,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTableBase.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetTreeLoggerDataGreyOutInformation.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubMessageCancel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubMessageOk.hpp
    ${PROJECT_ROOT}/src/can_monitor/table_base/C_CamTblDelegate.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetUtil.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetSettingsPopup.hpp

@@ -319,7 +319,10 @@
              </spacer>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgePubMessageCancel" name="pc_ButtonCancel">
+             <widget class="QPushButton" name="pc_ButtonCancel">
+              <property name="styleRole" stdset="0">
+               <string>message-cancel</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>120</width>
@@ -338,7 +341,10 @@
              </widget>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgePubMessageCancel" name="pc_ButtonNo">
+             <widget class="QPushButton" name="pc_ButtonNo">
+              <property name="styleRole" stdset="0">
+               <string>message-cancel</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>120</width>
@@ -357,7 +363,10 @@
              </widget>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgePubMessageOk" name="pc_ButtonOk">
+             <widget class="QPushButton" name="pc_ButtonOk">
+              <property name="styleRole" stdset="0">
+               <string>message-ok</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>120</width>
@@ -433,16 +442,6 @@
    <class>stw::opensyde_gui_elements::C_OgePubSvgIconOnly</class>
    <extends>QPushButton</extends>
    <header>C_OgePubSvgIconOnly.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubMessageOk</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubMessageOk.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubMessageCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubMessageCancel.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeChxDefaultCheckedDisabled</class>
