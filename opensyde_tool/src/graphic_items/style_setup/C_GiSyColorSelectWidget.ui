@@ -522,7 +522,10 @@
          <number>3</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgePubTextOnly" name="pc_PushButtonHtml">
+         <widget class="QPushButton" name="pc_PushButtonHtml">
+          <property name="styleRole" stdset="0">
+           <string>text-only</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -557,7 +560,10 @@
          </widget>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgePubTextOnly" name="pc_PushButtonRgba">
+         <widget class="QPushButton" name="pc_PushButtonRgba">
+          <property name="styleRole" stdset="0">
+           <string>text-only</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -863,11 +869,6 @@
    <class>stw::opensyde_gui::C_GiSyColorShower</class>
    <extends>QPushButton</extends>
    <header>C_GiSyColorShower.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubTextOnly</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubTextOnly.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>

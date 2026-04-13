@@ -82,7 +82,10 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgePubTextOnlyUnderline" name="pc_BtnMain">
+        <widget class="QPushButton" name="pc_BtnMain">
+         <property name="styleRole" stdset="0">
+          <string>text-only-underline</string>
+         </property>
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -261,7 +264,10 @@
                    <number>0</number>
                   </property>
                   <item>
-                   <widget class="stw::opensyde_gui_elements::C_OgePubNavigation" name="pc_PushButtonTopology">
+                   <widget class="QPushButton" name="pc_PushButtonTopology">
+                    <property name="styleRole" stdset="0">
+                     <string>navigation</string>
+                    </property>
                     <property name="minimumSize">
                      <size>
                       <width>0</width>
@@ -1029,11 +1035,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubTextOnlyUnderline</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubTextOnlyUnderline.hpp</header>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeSaNaviBar</class>
    <extends>QScrollArea</extends>
    <header>C_OgeSaNaviBar.hpp</header>
@@ -1050,11 +1051,6 @@
    <extends>QGroupBox</extends>
    <header>C_OgeGbxNavigationSection.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubNavigation</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubNavigation.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_NagViewList</class>

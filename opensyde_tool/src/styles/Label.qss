@@ -31,7 +31,7 @@ padding-left: 10px;
 
 /* --------------------------------------------------------------------- */
 QLabel[styleRole="node-prop-com-if-table"][COMIF_TableCell_Hyperlink="true"]:enabled,
-stw--opensyde_gui_elements--C_OgePubTextOnly[Edit_Hyperlink="true"]:enabled
+QPushButton[styleRole="text-only"][Edit_Hyperlink="true"]:enabled
 {
 text-decoration: underline;
 }
