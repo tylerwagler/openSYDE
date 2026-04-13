@@ -477,7 +477,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgePubTextOnly" name="pc_PubEdit">
+         <widget class="QPushButton" name="pc_PubEdit">
+          <property name="styleRole" stdset="0">
+           <string>text-only</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -564,11 +567,6 @@
    <extends>QWidget</extends>
    <header>C_OgeWiSpinBoxGroupProperties.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubTextOnly</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubTextOnly.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>

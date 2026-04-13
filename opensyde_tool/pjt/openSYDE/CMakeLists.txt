@@ -339,7 +339,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.cpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopErrorHandling.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBaseWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTextOnlyUnderline.cpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiLineBounding.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeSmoothScrollArea.cpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTip.cpp
@@ -859,7 +858,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationTab.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSection.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubNavigation.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeListViewToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopFileTableDelegate.cpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewListModel.cpp
@@ -949,7 +947,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyColorShower.cpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieDbcImportNodeAssignmentWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieDbcImportNodeAssignmentItemWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTextOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubColor.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerHalc.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeDelegate.cpp
@@ -1181,7 +1178,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.hpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopErrorHandling.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBaseWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTextOnlyUnderline.hpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiLineBounding.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeSmoothScrollArea.hpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTip.hpp
@@ -1716,7 +1712,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagAboutDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationTab.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSection.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubNavigation.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeListViewToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopFileTableDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewListModel.hpp
@@ -1806,7 +1801,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyColorShower.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieDbcImportNodeAssignmentWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieDbcImportNodeAssignmentItemWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubTextOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubColor.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerHalc.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/halc/C_SdNdeHalcConfigTreeDelegate.hpp
