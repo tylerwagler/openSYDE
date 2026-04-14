@@ -1611,7 +1611,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonConfigure">
+      <widget class="QPushButton" name="pc_PushButtonConfigure">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>150</width>
@@ -1630,7 +1633,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonScan">
+      <widget class="QPushButton" name="pc_PushButtonScan">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>150</width>
@@ -1677,7 +1683,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_BushButtonOk">
+      <widget class="QPushButton" name="pc_BushButtonOk">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>150</width>
@@ -1747,11 +1756,6 @@
   </customwidget>
   <customwidget>
 
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>

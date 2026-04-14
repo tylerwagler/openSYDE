@@ -88,9 +88,9 @@ C_CieDcfEdsImportNodeSelectWidget::C_CieDcfEdsImportNodeSelectWidget(
    this->m_FillUpComboBox(ou32_BusIndex);
 
    //Connects
-   connect(this->mpc_Ui->pc_PushButtonOk, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_CieDcfEdsImportNodeSelectWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_CieDcfEdsImportNodeSelectWidget::m_CancelClicked);
 }
 

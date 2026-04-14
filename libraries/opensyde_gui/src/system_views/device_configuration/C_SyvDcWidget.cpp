@@ -153,9 +153,9 @@ C_SyvDcWidget::C_SyvDcWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_
            &C_SyvDcWidget::m_AssignmentConnect);
    connect(this->mpc_Ui->pc_ListWidgetExistingNodesAssignment, &C_SyvDcExistingNodeList::SigDisconnect, this,
            &C_SyvDcWidget::m_AssignmentDisconnect);
-   connect(this->mpc_Ui->pc_PushButtonScan, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonScan, &QPushButton::clicked, this,
            &C_SyvDcWidget::m_StartSearchProper);
-   connect(this->mpc_Ui->pc_PushButtonConfigure, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonConfigure, &QPushButton::clicked, this,
            &C_SyvDcWidget::m_StartConfigProper);
    connect(this->mpc_Ui->pc_PbBackToScan, &QPushButton::clicked, this,
            &C_SyvDcWidget::m_BackToScan);
