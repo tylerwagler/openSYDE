@@ -98,7 +98,7 @@ font-weight:normal;
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Font="13"][SemiBold="true"][Bold="false"],
 stw--opensyde_gui_elements--C_OgePubProjAction,
 QPushButton[styleRole="cancel"],
-stw--opensyde_gui_elements--C_OgePubDialog,
+QPushButton[styleRole="dialog"],
 QPushButton[styleRole="message-ok"],
 QPushButton[styleRole="message-cancel"]
 {

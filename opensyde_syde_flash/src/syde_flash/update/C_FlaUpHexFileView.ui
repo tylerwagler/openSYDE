@@ -180,7 +180,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonOk">
+      <widget class="QPushButton" name="pc_PushButtonOk">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -251,11 +254,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
    <header>C_OgeLabContextMenuBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

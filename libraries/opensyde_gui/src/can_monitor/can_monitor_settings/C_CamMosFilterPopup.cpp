@@ -101,7 +101,7 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
    this->m_InitStaticGuiElements();
 
    // connects
-   connect(this->mpc_Ui->pc_PushButtonSave, &C_OgePubDialog::clicked, this, &C_CamMosFilterPopup::m_OnOk);
+   connect(this->mpc_Ui->pc_PushButtonSave, &QPushButton::clicked, this, &C_CamMosFilterPopup::m_OnOk);
    connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_CamMosFilterPopup::m_OnCancel);
    connect(this->mpc_Ui->pc_ComboBoxType,
            static_cast<void (C_OgeCbxText::*)(int32_t)>(&C_OgeCbxText::currentIndexChanged),

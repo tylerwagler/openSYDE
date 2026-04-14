@@ -1851,7 +1851,10 @@ p, li { white-space: pre-wrap; }
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonOk">
+      <widget class="QPushButton" name="pc_PushButtonOk">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -1906,11 +1909,6 @@ p, li { white-space: pre-wrap; }
    <extends>QFrame</extends>
    <header>C_OgeFraSeparator.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbx</class>

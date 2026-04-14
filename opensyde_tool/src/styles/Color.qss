@@ -319,7 +319,7 @@ stw--opensyde_gui--C_SyvDaItTaView QHeaderView[Style="FLAT_BRIGHT"],
 stw--opensyde_gui--C_SyvDaItTaView QHeaderView[Style="FLAT_DARK"],
 stw--opensyde_gui--C_SyvDaItTaView QHeaderView[Style="SKEUOMORPH_BRIGHT"],
 stw--opensyde_gui--C_SyvDaItTaView QHeaderView[Style="SKEUOMORPH_DARK"],
-stw--opensyde_gui_elements--C_OgePubDialog:enabled,
+QPushButton[styleRole="dialog"]:enabled,
 QPushButton[styleRole="message-ok"]:enabled,
 stw--opensyde_gui_elements--C_OgePubToolBar[Background="true"],
 QPushButton[styleRole="text-only"]Edit:enabled,
@@ -1051,7 +1051,7 @@ stw--opensyde_gui_elements--C_OgeCbxArrow:!enabled,
 stw--opensyde_gui_elements--C_OgeSpxFactorProperties:!enabled,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox:!enabled,
 stw--opensyde_gui_elements--C_OgePubUpdate:!enabled,
-stw--opensyde_gui_elements--C_OgePubDialog:!enabled,
+QPushButton[styleRole="dialog"]:!enabled,
 QPushButton[styleRole="cancel"]:!enabled,
 QPushButton[styleRole="message-ok"]:!enabled,
 QPushButton[styleRole="message-cancel"]:!enabled,
@@ -1181,7 +1181,7 @@ stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox,
 stw--opensyde_gui_elements--C_OgeLeTableHalc,
 stw--opensyde_gui_elements--C_OgeWiBorder,
 stw--opensyde_gui_elements--C_OgePubUpdate:!enabled,
-stw--opensyde_gui_elements--C_OgePubDialog:!enabled,
+QPushButton[styleRole="dialog"]:!enabled,
 QPushButton[styleRole="cancel"]:!enabled,
 QPushButton[styleRole="message-ok"]:!enabled,
 QPushButton[styleRole="message-cancel"]:!enabled,
@@ -1311,7 +1311,7 @@ stw--opensyde_gui--C_SdBueNodeSelectorWidget QWidget#pc_BueNodeSelectorHeaderWid
 stw--opensyde_gui--C_SdBueComIfDescriptionWidget QWidget#pc_InterfaceSelectorHeaderWidget,
 stw--opensyde_gui_elements--C_OgeTawSelector QTabBar::tab:!selected,
 stw--opensyde_gui_elements--C_OgeTawSelector QTabBar::tab:!enabled,
-stw--opensyde_gui_elements--C_OgePubDialog:!enabled,
+QPushButton[styleRole="dialog"]:!enabled,
 QPushButton[styleRole="message-ok"]:!enabled,
 stw--opensyde_gui_elements--C_OgePubUpdate:!enabled,
 stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="11"],
@@ -1477,7 +1477,7 @@ stw--opensyde_gui_elements--C_OgeChxProperties::indicator:disabled,
 stw--opensyde_gui_elements--C_OgeRabProperties::indicator:!enabled:!checked,
 stw--opensyde_gui--C_SebGraphicsView[STYLE_GUIDE_COLOR_12="true"][DarkMode="false"],
 stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="12"],
-stw--opensyde_gui_elements--C_OgePubDialog:!enabled,
+QPushButton[styleRole="dialog"]:!enabled,
 QPushButton[styleRole="cancel"]:!enabled,
 QPushButton[styleRole="message-ok"]:!enabled,
 QPushButton[styleRole="message-cancel"]:!enabled,
@@ -1519,7 +1519,7 @@ color: rgb(126, 199, 98);
 }
 
 /* background-color */
-stw--opensyde_gui_elements--C_OgePubDialog:enabled,
+QPushButton[styleRole="dialog"]:enabled,
 QPushButton[styleRole="message-ok"]:enabled
 {
 background-color: rgb(126, 199, 98);
@@ -1551,7 +1551,7 @@ color: rgb(94, 163, 67);
 /* background-color */
 QPushButton[styleRole="navigation"]Hover[Active="true"],
 QPushButton[styleRole="navigation"][Active="true"],
-stw--opensyde_gui_elements--C_OgePubDialog:enabled:hover,
+QPushButton[styleRole="dialog"]:enabled:hover,
 QPushButton[styleRole="message-ok"]:enabled:hover
 {
 background-color: rgb(94, 163, 67);
@@ -1560,7 +1560,7 @@ background-color: rgb(94, 163, 67);
 /* border-color */
 stw--opensyde_gui_elements--C_OgeGbxNavigationSectionSelected[Active="true"],
 QPushButton[styleRole="text-only-underline"]:hover:!pressed,
-stw--opensyde_gui_elements--C_OgePubDialog:enabled,
+QPushButton[styleRole="dialog"]:enabled,
 QPushButton[styleRole="message-ok"]:enabled,
 stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled:selected,
 stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled:pressed
@@ -2339,7 +2339,7 @@ background-color: rgb(248, 179, 27);
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_181 */
 /* background-color */
-stw--opensyde_gui_elements--C_OgePubDialog:enabled:pressed,
+QPushButton[styleRole="dialog"]:enabled:pressed,
 QPushButton[styleRole="message-ok"]:enabled:pressed
 {
 background-color: rgb(57, 181, 98);
