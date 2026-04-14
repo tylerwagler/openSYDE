@@ -63,7 +63,7 @@ C_CamMetSettingsPopup::C_CamMetSettingsPopup(stw::opensyde_gui_elements::C_OgePo
 
    // connects
    connect(this->mpc_Ui->pc_PushButtonSave, &C_OgePubDialog::clicked, this, &C_CamMetSettingsPopup::m_OnOk);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this, &C_CamMetSettingsPopup::m_OnCancel);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_CamMetSettingsPopup::m_OnCancel);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

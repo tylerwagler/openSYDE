@@ -330,7 +330,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomMouseItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdContextMenuEntry.cpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomToolTip.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubCancel.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraFrame.cpp
@@ -1160,7 +1159,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomMouseItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdContextMenuEntry.hpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomToolTip.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubCancel.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubDialog.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraFrame.hpp

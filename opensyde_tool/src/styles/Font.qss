@@ -229,7 +229,7 @@ font-weight: normal;
 
 /* STYLE_GUIDE_FONT_SEMIBOLD_14 */
 QLabel[styleRole="heading-tool-tip"],
-stw--opensyde_gui_elements--C_OgePubCancel,
+QPushButton[styleRole="cancel"],
 stw--opensyde_gui_elements--C_OgePubDialog,
 QPushButton[styleRole="text-only-underline"],
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Font="14"][SemiBold="true"][Bold="false"],
