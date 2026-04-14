@@ -62,7 +62,7 @@ C_SdCodeGenerationDialog::C_SdCodeGenerationDialog(stw::opensyde_gui_elements::C
    this->mrc_ParentDialog.SetWidget(this);
 
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdCodeGenerationDialog::m_OkClicked);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdCodeGenerationDialog::m_OnCancel);
    connect(this->mpc_Ui->pc_TreeView, &C_OgeTreeViewCheckable::SigSelectionChanged, this,
            &C_SdCodeGenerationDialog::m_UpdateSelection);

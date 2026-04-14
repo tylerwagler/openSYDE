@@ -24,7 +24,7 @@ text-align: center;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubCancel
+QPushButton[styleRole="cancel"]
 {
 border-style: solid;
 border-radius:  4px;
@@ -36,7 +36,7 @@ padding: 0px;
 text-align: center;
 }
 
-stw--opensyde_gui_elements--C_OgePubCancel:focus
+QPushButton[styleRole="cancel"]:focus
 {
 text-decoration: underline;
 }

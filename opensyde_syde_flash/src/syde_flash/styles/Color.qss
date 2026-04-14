@@ -72,7 +72,7 @@ stw--opensyde_gui_elements--C_CamOgeCbxTable,
 stw--opensyde_gui_elements--C_CamOgeCbxWhite,
 stw--opensyde_gui_elements--C_CamOgeLeTableEdit,
 stw--opensyde_gui_elements--C_CamOgeCbxTableSmall,
-stw--opensyde_gui_elements--C_OgePubCancel:enabled,
+QPushButton[styleRole="cancel"]:enabled,
 QPushButton[styleRole="message-cancel"]:enabled,
 stw--opensyde_gui_elements--C_OgeTebMessageDetails,
 stw--opensyde_gui_elements--C_CamOgeCbxTable QListView,
@@ -136,7 +136,7 @@ background-color:rgb(27, 27, 68);
 /* STYLE_GUIDE_COLOR_3 */
 stw--opensyde_gui_elements--C_OgeContextMenu::item,
 stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled,
-stw--opensyde_gui_elements--C_OgePubCancel:enabled,
+QPushButton[styleRole="cancel"]:enabled,
 QPushButton[styleRole="message-cancel"]:enabled,
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="heading-message"],
 stw--opensyde_gui_elements--C_OgeTebMessageDetails,
@@ -162,7 +162,7 @@ background-color:rgb(42, 42, 91);
 
 stw--opensyde_gui_elements--C_OgeMuSections::item:selected,
 stw--opensyde_gui_elements--C_CamOgeCbxDark QListView::item:selected:!hover,
-stw--opensyde_gui_elements--C_OgePubCancel:enabled,
+QPushButton[styleRole="cancel"]:enabled,
 QPushButton[styleRole="message-cancel"]:enabled
 {
 border-color:rgb(42, 42, 91);
@@ -326,7 +326,7 @@ border-color:rgb(155, 155, 170);
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_10 */
-stw--opensyde_gui_elements--C_OgePubCancel:!enabled,
+QPushButton[styleRole="cancel"]:!enabled,
 stw--opensyde_gui_elements--C_OgePubDialog:!enabled,
 QPushButton[styleRole="message-cancel"]:!enabled,
 QPushButton[styleRole="message-ok"]:!enabled,
@@ -351,7 +351,7 @@ color:rgb(206, 206, 217);
 
 stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="10"],
 stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled:selected,
-stw--opensyde_gui_elements--C_OgePubCancel:enabled:hover:pressed,
+QPushButton[styleRole="cancel"]:enabled:hover:pressed,
 QPushButton[styleRole="message-cancel"]:enabled:hover:pressed,
 stw--opensyde_gui_elements--C_OgeFraSeparator,
 stw--opensyde_gui--C_SyvDcConnectedNodeList::item:selected,
@@ -368,7 +368,7 @@ stw--opensyde_gui_elements--C_CamOgeCbxTable QListView,
 stw--opensyde_gui_elements--C_CamOgeCbxWhite QListView,
 stw--opensyde_gui_elements--C_CamOgeCbxTableSmall QListView,
 stw--opensyde_gui_elements--C_OgeTebMessageDetails,
-stw--opensyde_gui_elements--C_OgePubCancel:!enabled,
+QPushButton[styleRole="cancel"]:!enabled,
 stw--opensyde_gui_elements--C_OgePubDialog:!enabled,
 QPushButton[styleRole="message-cancel"]:!enabled,
 QPushButton[styleRole="message-ok"]:!enabled,
@@ -398,7 +398,7 @@ color:rgb(237, 237, 242);
 stw--opensyde_gui_elements--C_CamOgeSpxProperties::up-button,
 stw--opensyde_gui_elements--C_CamOgeSpxProperties::down-button,
 stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="11"],
-stw--opensyde_gui_elements--C_OgePubCancel:enabled:hover,
+QPushButton[styleRole="cancel"]:enabled:hover,
 QPushButton[styleRole="message-cancel"]:enabled:hover,
 stw--opensyde_gui_elements--C_OgePubDialog:!enabled,
 QPushButton[styleRole="message-ok"]:!enabled,
@@ -423,7 +423,7 @@ color:rgb(250, 250, 250);
 }
 
 stw--opensyde_gui_elements--C_OgeGbxMouseMove,
-stw--opensyde_gui_elements--C_OgePubCancel:!enabled,
+QPushButton[styleRole="cancel"]:!enabled,
 stw--opensyde_gui_elements--C_OgePubDialog:!enabled,
 QPushButton[styleRole="message-ok"]:!enabled,
 QPushButton[styleRole="message-cancel"]:!enabled,

@@ -284,7 +284,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubCancel" name="pc_BushButtonCancel">
+      <widget class="QPushButton" name="pc_BushButtonCancel">
+       <property name="styleRole" stdset="0">
+        <string>cancel</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -387,9 +390,7 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubCancel.hpp</header>
+
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
