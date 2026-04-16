@@ -1,7 +1,6 @@
 # Phase 1 Progress — Spin Boxes
 
 ## TODO
-- [ ] C_OgeSpxNumber (inherits C_OgeSpxToolTipBase) -> replace with C_OgeSpxToolTipBase + styleRole="number"
 - [ ] C_OgeSpxTable (inherits C_OgeSpxToolTipBase) -> replace with C_OgeSpxToolTipBase + styleRole="table"
 - [ ] C_OgeSpxTableComIf (inherits C_OgeSpxToolTipBase) -> replace with C_OgeSpxToolTipBase + styleRole="table-com-if"
 - [ ] C_OgeSpxTableDouble (inherits C_OgeSpxDoubleToolTipBase) -> replace with C_OgeSpxDoubleToolTipBase + styleRole="table-double"
@@ -29,4 +28,7 @@
 - C_OgeSpxToolTipBase — base class with tooltip and context menu
 
 ## Done
-(none yet)
+- [x] C_OgeSpxNumber (inherits C_OgeSpxToolTipBase) -> replaced with C_OgeSpxToolTipBase + styleRole="number" (commit: ba5ee9e7)
+  - QSS selectors updated to use `stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="number"]`
+  - CMakeLists.txt updated (4-space indentation preserved)
+  - Partial .ui migration: C_SdBueSignalPropertiesWidget.ui (1 of 16 files)
