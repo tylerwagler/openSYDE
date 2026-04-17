@@ -328,7 +328,10 @@
          </widget>
         </item>
         <item row="2" column="2">
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxNBR">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxNBR">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
           <property name="minimumSize">
            <size>
             <width>160</width>
@@ -344,7 +347,10 @@
          </widget>
         </item>
         <item row="3" column="2">
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxParallelTransmissions">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxParallelTransmissions">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
           <property name="minimumSize">
            <size>
             <width>160</width>
@@ -396,7 +402,10 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxNBT">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxNBT">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
           <property name="minimumSize">
            <size>
             <width>160</width>
@@ -587,9 +596,9 @@
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>
