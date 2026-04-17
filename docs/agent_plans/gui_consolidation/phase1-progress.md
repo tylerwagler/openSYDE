@@ -28,7 +28,7 @@
 - C_OgeSpxAllBase — has overrides (m_IsEnabled, m_GetMinimumString, etc.), member variables (mc_UserMinValString, mc_UserMaxValString, etc.)
 
 ## Done
-- [x] C_OgeSpxNumber (Task B: a074fa88, Task C: pending) — migrated to C_OgeSpxToolTipBase + styleRole, class deleted
+- [x] C_OgeSpxNumber (Task B: a074fa88, Task C: bf26b8b9) — migrated to C_OgeSpxToolTipBase + styleRole, class deleted
 
 ---
 

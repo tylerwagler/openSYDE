@@ -280,7 +280,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/spin_box/C_OgeSpxTableDouble.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/check_box/C_OgeChxTristateTransparentToggle.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/spin_box/C_OgeSpxNumber.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/spin_box/C_OgeSpxTableComIf.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDataChangeCommand.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/datapools/C_SdNdeDpListTableHeaderView.cpp
