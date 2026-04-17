@@ -285,9 +285,13 @@ Goal: remove the now-unused class and its build system entries.
       ```bash
       grep -rn "C_OgeFoo" --include="*.ui" --include="*.qss" \
            --include="*.cpp" --include="*.hpp" \
-           --include="CMakeLists.txt" .
+           --include="CMakeLists.txt" --include="*.txt" .
       ```
-      Expected output: hits only in `docs/` files. Paste the grep output.
+      Expected output: hits only in `docs/` files. **Also check:**
+      - `build_test/pclint_config/openSYDE/openSYDE_lint_sources.txt` (or similar lint sources files)
+      - Any other tracked text files that list source files
+      
+      Paste the grep output.
 
    b. Run the build:
       ```bash
@@ -349,7 +353,11 @@ Goal: remove the now-unused class and its build system entries.
 10. **Watch for substring collisions** when grepping. `C_OgeSpxFoo` will match
     inside `C_OgeSpxFooBar`. Use `C_OgeSpxFoo["\.]` or similar patterns.
 
-11. **DO NOT combine widget families in one session.** Finish all candidates
+11. **DO NOT forget lint sources files.** Check `build_test/pclint_config/*/openSYDE_lint_sources.txt`
+    (or similar) for references to deleted files. These are tracked files that must be updated
+    whenever a source file is removed, otherwise PC-Lint will fail.
+
+12. **DO NOT combine widget families in one session.** Finish all candidates
     of one type (e.g., all spin boxes) before starting another type.
 
 ---
