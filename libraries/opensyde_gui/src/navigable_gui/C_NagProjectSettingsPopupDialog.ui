@@ -177,8 +177,11 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBox">
-          <property name="minimumSize">
+          <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBox">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
+           <property name="minimumSize">
            <size>
             <width>120</width>
             <height>30</height>
@@ -624,11 +627,11 @@
    <extends>QLabel</extends>
    <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
-   <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
-  </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
+    <extends>QSpinBox</extends>
+    <header>C_OgeSpxToolTipBase.hpp</header>
+   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbx</class>
    <extends>QGroupBox</extends>

@@ -259,7 +259,10 @@
             </spacer>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxTimeout">
+            <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxTimeout">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
              <property name="minimumSize">
               <size>
                <width>120</width>
@@ -443,9 +446,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>
