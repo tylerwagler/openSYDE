@@ -1,7 +1,6 @@
 # Phase 1 Progress — Spin Box
 
 ## TODO
-- [ ] C_OgeSpxNumber (inherits C_OgeSpxToolTipBase) -> replace with C_OgeSpxToolTipBase + styleRole="spx-number"
 - [ ] C_OgeSpxInt64Properties (inherits C_OgeSpxInt64ToolTipBase) -> replace with C_OgeSpxInt64ToolTipBase + styleRole="spx-int64-properties"
 - [ ] C_OgeSpxFactorProperties (inherits C_OgeSpxFactor) -> replace with C_OgeSpxFactor + styleRole="spx-factor-properties"
 - [ ] C_OgeSpxInt64Table (inherits C_OgeSpxInt64ToolTipBase) -> replace with C_OgeSpxInt64ToolTipBase + styleRole="spx-int64-table"
@@ -29,7 +28,7 @@
 - C_OgeSpxAllBase — has overrides (m_IsEnabled, m_GetMinimumString, etc.), member variables (mc_UserMinValString, mc_UserMaxValString, etc.)
 
 ## Done
-(none yet)
+- [x] C_OgeSpxNumber (Task B: a074fa88, Task C: pending) — migrated to C_OgeSpxToolTipBase + styleRole, class deleted
 
 ---
 
