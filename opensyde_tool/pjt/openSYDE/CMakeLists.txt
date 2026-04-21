@@ -496,7 +496,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiBorder.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultSmall.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleProperties.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64Table.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactorTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectDisconnectBaseCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvGraphicsView.cpp
@@ -1321,7 +1320,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiBorder.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultSmall.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxDoubleProperties.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64Table.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactorTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/undo/C_SdBueUnoBusProtNodeConnectDisconnectBaseCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/message_layout_viewer/C_SdBueMlvGraphicsView.hpp
