@@ -741,7 +741,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpSequences.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64Factor.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeContextMenuManager.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultCheckedDisabled.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsNode.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsNodeDatapool.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvUtil.cpp
@@ -1558,7 +1557,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpSequences.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64Factor.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_setup/C_SyvSeContextMenuManager.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultCheckedDisabled.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsNode.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsNodeDatapool.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/C_SyvUtil.hpp
