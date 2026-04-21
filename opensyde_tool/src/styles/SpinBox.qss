@@ -24,7 +24,7 @@ margin: 0px;
 
 /* --------------------------------------------------------------------- */
 /* Down button border */
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::down-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::down-button,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_BRIGHT"]::down-button,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_DARK"]::down-button,
 stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::down-button,
@@ -68,7 +68,7 @@ QSpinBox::down-button
 width: 21px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::down-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::down-button,
 stw--opensyde_gui_elements--C_OgeSpxFactorTable::down-button,
 stw--opensyde_gui_elements--C_OgeSpxTable::down-button,
 stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::down-button,
@@ -90,7 +90,7 @@ width: 42px;
 
 /* --------------------------------------------------------------------- */
 /* Up button border */
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::up-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::up-button,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_BRIGHT"]::up-button,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_DARK"]::up-button,
 stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::up-button,
@@ -135,7 +135,7 @@ QSpinBox::up-button
 width: 21px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::up-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::up-button,
 stw--opensyde_gui_elements--C_OgeSpxFactorTable::up-button,
 stw--opensyde_gui_elements--C_OgeSpxTable::up-button,
 stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::up-button,
@@ -182,7 +182,7 @@ border-style: none;
 
 /* --------------------------------------------------------------------- */
 /* Default spin box icons */
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::down-arrow,
 stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::down-arrow,
 stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::down-arrow,
 stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::down-arrow,
@@ -197,7 +197,7 @@ QSpinBox::down-arrow
 image: url(:/images/GroupBoxDownArrow.png);
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::down-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::down-arrow:!enabled,
 stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::down-arrow:!enabled,
 stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::down-arrow:!enabled,
 stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::down-arrow:!enabled,
@@ -212,7 +212,7 @@ QSpinBox::down-arrow:!enabled
 image: url(:/images/GroupBoxDownArrowDisabled.png);
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::up-arrow,
 stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::up-arrow,
 stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::up-arrow,
 stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::up-arrow,
@@ -227,7 +227,7 @@ QSpinBox::up-arrow
 image: url(:/images/SpinBoxUpArrow.png);
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::up-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::up-arrow:!enabled,
 
 stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::up-arrow:!enabled,
 stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::up-arrow:!enabled,
@@ -256,7 +256,7 @@ width: 19px;
 height: 11px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::down-arrow,
 stw--opensyde_gui_elements--C_OgeSpxFactorTable::down-arrow,
 stw--opensyde_gui_elements--C_OgeSpxTable::down-arrow,
 stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::down-arrow,
@@ -284,7 +284,7 @@ width: 19px;
 height: 11px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::up-arrow,
 stw--opensyde_gui_elements--C_OgeSpxFactorTable::up-arrow,
 stw--opensyde_gui_elements--C_OgeSpxTable::up-arrow,
 stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::up-arrow,
@@ -413,7 +413,7 @@ border-style: none;
 
 /* --------------------------------------------------------------------- */
 /* Custom table style */
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"],
 stw--opensyde_gui_elements--C_OgeSpxFactorTable,
 stw--opensyde_gui_elements--C_OgeSpxTable,
 stw--opensyde_gui_elements--C_OgeSpxTableComIf,
