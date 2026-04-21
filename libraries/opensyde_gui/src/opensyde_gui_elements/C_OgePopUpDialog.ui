@@ -165,7 +165,10 @@
                </layout>
               </item>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeFraBorder" name="pc_FramSperator1">
+               <widget class="QFrame" name="pc_FramSperator1">
+                <property name="styleRole" stdset="0">
+                 <string>fra-border</string>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -255,12 +258,6 @@
    <class>stw::opensyde_gui_elements::C_OgeGbxHover</class>
    <extends>QGroupBox</extends>
    <header>C_OgeGbxHover.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraBorder</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraBorder.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

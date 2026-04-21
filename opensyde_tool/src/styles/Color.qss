@@ -1980,7 +1980,7 @@ stw--opensyde_gui--C_SyvDaItPaTableView[DarkMode="true"],
 stw--opensyde_gui--C_SyvDaItPaTableView[DarkMode="true"]::item:alternate:!selected,
 stw--opensyde_gui--C_SyvDaItDashboardLabelWidget[Style="OPENSYDE_DARK"][Type="DEFAULT"],
 stw--opensyde_gui--C_SyvDaItPaWidget[Style="OPENSYDE_DARK"],
-stw--opensyde_gui_elements--C_OgeFraBorder
+QFrame[styleRole="fra-border"]
 {
 background-color: rgb(177, 177, 177);
 }
