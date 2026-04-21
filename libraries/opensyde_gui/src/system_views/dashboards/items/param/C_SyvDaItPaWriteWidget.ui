@@ -763,7 +763,10 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_12">
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeChxProperties" name="pc_CbConfirm">
+            <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CbConfirm">
+             <property name="styleRole" stdset="0">
+              <string>chx-properties</string>
+             </property>
              <property name="text">
               <string>Parameters are valid</string>
              </property>
@@ -896,7 +899,10 @@
           </layout>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgeChxProperties" name="pc_CbNotifiction">
+          <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CbNotifiction">
+           <property name="styleRole" stdset="0">
+            <string>chx-properties</string>
+           </property>
            <property name="text">
             <string>Trigger Application Notification</string>
            </property>
@@ -1103,9 +1109,9 @@
    <header>C_OgeTedPropertiesComment.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxProperties</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxProperties.hpp</header>
+   <header>C_OgeChxToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

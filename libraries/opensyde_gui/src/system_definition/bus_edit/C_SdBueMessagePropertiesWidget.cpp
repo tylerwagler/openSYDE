@@ -171,7 +171,7 @@ C_SdBueMessagePropertiesWidget::C_SdBueMessagePropertiesWidget(QWidget * const o
 
    // connects
    // These elements have multiple connects to different slots
-   connect(this->mpc_Ui->pc_CheckBoxExtendedType, &C_OgeChxProperties::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxExtendedType, &C_OgeChxToolTipBase::toggled, this,
            &C_SdBueMessagePropertiesWidget::m_OnExtendedChangeWithoutDataAccess);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_ComboBoxTxMethod, static_cast<void (QComboBox::*)(
@@ -1589,11 +1589,11 @@ void C_SdBueMessagePropertiesWidget::m_ConnectProtocolSpecificFields(void) const
       connect(this->mpc_Ui->pc_SpinBoxCobId, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged),
               this,
               &C_SdBueMessagePropertiesWidget::m_OnCobIdChanged);
-      connect(this->mpc_Ui->pc_CheckBoxCobIdWithNodeId, &C_OgeChxProperties::toggled, this,
+      connect(this->mpc_Ui->pc_CheckBoxCobIdWithNodeId, &C_OgeChxToolTipBase::toggled, this,
               &C_SdBueMessagePropertiesWidget::m_OnCobIdChanged);
    }
 
-   connect(this->mpc_Ui->pc_CheckBoxExtendedType, &C_OgeChxProperties::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxExtendedType, &C_OgeChxToolTipBase::toggled, this,
            &C_SdBueMessagePropertiesWidget::m_OnExtendedChanged);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_SpinBoxDlc, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
@@ -1623,11 +1623,11 @@ void C_SdBueMessagePropertiesWidget::m_DisconnectProtocolSpecificFields(void) co
       disconnect(this->mpc_Ui->pc_SpinBoxCobId, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged),
                  this,
                  &C_SdBueMessagePropertiesWidget::m_OnCobIdChanged);
-      disconnect(this->mpc_Ui->pc_CheckBoxCobIdWithNodeId, &C_OgeChxProperties::toggled, this,
+      disconnect(this->mpc_Ui->pc_CheckBoxCobIdWithNodeId, &C_OgeChxToolTipBase::toggled, this,
                  &C_SdBueMessagePropertiesWidget::m_OnCobIdChanged);
    }
 
-   disconnect(this->mpc_Ui->pc_CheckBoxExtendedType, &C_OgeChxProperties::toggled, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxExtendedType, &C_OgeChxToolTipBase::toggled, this,
               &C_SdBueMessagePropertiesWidget::m_OnExtendedChanged);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    disconnect(this->mpc_Ui->pc_SpinBoxDlc, static_cast<void (QSpinBox::*)(int32_t)>(&C_OgeSpxToolTipBase::valueChanged),
