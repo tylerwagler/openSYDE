@@ -19,7 +19,7 @@
 #include "C_SdNdeDpUtil.hpp"
 #include "C_OgeSpxFactorTable.hpp"
 #include "C_TblTreDelegateUtil.hpp"
-#include "C_OgeSpxInt64FactorTable.hpp"
+#include "C_OgeSpxInt64Factor.hpp"
 #include "C_SyvDaPeUpdateModeTableModel.hpp"
 #include "C_SyvDaPeUpdateModeTableDelegate.hpp"
 
@@ -122,7 +122,8 @@ QWidget * C_SyvDaPeUpdateModeTableDelegate::createEditor(QWidget * const opc_Par
             }
             else if ((c_Data.type() == QVariant::Type::Int) || (c_Data.type() == QVariant::Type::LongLong))
             {
-               C_OgeSpxInt64FactorTable * const pc_SpinBox = new C_OgeSpxInt64FactorTable(opc_Parent, false);
+               C_OgeSpxInt64Factor * const pc_SpinBox = new C_OgeSpxInt64Factor(opc_Parent, false);
+               pc_SpinBox->setProperty("styleRole", "spx-int64-factor-table");
                if (c_Max.type() == QVariant::Type::LongLong)
                {
                   const QVariant c_Min(1LL);
@@ -133,7 +134,8 @@ QWidget * C_SyvDaPeUpdateModeTableDelegate::createEditor(QWidget * const opc_Par
             }
             else if ((c_Data.type() == QVariant::Type::UInt) || (c_Data.type() == QVariant::Type::ULongLong))
             {
-               C_OgeSpxInt64FactorTable * const pc_SpinBox = new C_OgeSpxInt64FactorTable(opc_Parent, true);
+               C_OgeSpxInt64Factor * const pc_SpinBox = new C_OgeSpxInt64Factor(opc_Parent, true);
+               pc_SpinBox->setProperty("styleRole", "spx-int64-factor-table");
                if (c_Max.type() == QVariant::Type::ULongLong)
                {
                   const QVariant c_Min(1ULL);
