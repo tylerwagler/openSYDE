@@ -189,7 +189,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSaNaviBar" name="pc_ScrollArea">
+         <widget class="QScrollArea" name="pc_ScrollArea">
+          <property name="styleRole" stdset="0">
+           <string>sa-navi-bar</string>
+          </property>
           <property name="sizeAdjustPolicy">
            <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
           </property>
@@ -1032,12 +1035,6 @@
    <class>stw::opensyde_gui_elements::C_OgeGbxNavigationTab</class>
    <extends>QGroupBox</extends>
    <header>C_OgeGbxNavigationTab.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSaNaviBar</class>
-   <extends>QScrollArea</extends>
-   <header>C_OgeSaNaviBar.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
