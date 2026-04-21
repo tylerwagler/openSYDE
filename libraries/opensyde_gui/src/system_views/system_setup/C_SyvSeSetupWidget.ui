@@ -166,7 +166,10 @@
           </spacer>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgeChxSystemCommisioningEdit" name="pc_CheckBoxSelectAll">
+          <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxSelectAll">
+           <property name="styleRole" stdset="0">
+            <string>chx-system-commisioning-edit</string>
+           </property>
            <property name="text">
             <string>CheckBox</string>
            </property>
@@ -453,9 +456,9 @@
    <header>C_OgePubSystemCommissioningEdit.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxSystemCommisioningEdit</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxSystemCommisioningEdit.hpp</header>
+   <header>C_OgeChxToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>
