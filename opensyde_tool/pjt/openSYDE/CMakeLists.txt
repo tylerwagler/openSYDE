@@ -824,7 +824,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaNaviBar.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.cpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewList.cpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewListDelegate.cpp
@@ -1648,7 +1647,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/scroll_area/C_OgeSaNaviBar.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubProjAction.hpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewList.hpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagViewListDelegate.hpp
