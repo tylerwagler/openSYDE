@@ -971,7 +971,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlot.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubAddChartDataElement.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraGeneric.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTiny.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconChart.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBaseCheckable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewCheckable.cpp
@@ -1799,7 +1798,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlot.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubAddChartDataElement.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraGeneric.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTiny.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconChart.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewToolTipBaseCheckable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTreeViewCheckable.hpp
