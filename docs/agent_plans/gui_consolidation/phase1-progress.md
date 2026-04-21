@@ -1,7 +1,6 @@
 # Phase 1 Progress — Spin Box
 
 ## TODO
-- [ ] C_OgeSpxTableDouble (inherits C_OgeSpxDoubleToolTipBase) -> replace with C_OgeSpxDoubleToolTipBase + styleRole="spx-table-double"
 - [ ] C_OgeSpxTableComIf (inherits C_OgeSpxToolTipBase) -> replace with C_OgeSpxToolTipBase + styleRole="spx-table-com-if"
 - [ ] C_OgeSpxTable (inherits C_OgeSpxToolTipBase) -> replace with C_OgeSpxToolTipBase + styleRole="spx-table"
 - [ ] C_OgeSpxFactorTable (inherits C_OgeSpxFactor) -> replace with C_OgeSpxFactor + styleRole="spx-factor-table"
@@ -29,6 +28,7 @@
 - [x] C_OgeSpxInt64Table (single commit: 9b3388e8) — class was unused; deleted class + 21 dead .qss rules outright, no migration needed
 - [x] C_OgeSpxInt64FactorTable (Task B: e2a2bdaa, Task C: 8ed5a7aa) — migrated to C_OgeSpxInt64Factor + styleRole, class deleted (0 .ui, 20 .qss selectors, 2 programmatic sites with bool parameter)
 - [x] C_OgeSpxDoubleProperties (Task B: bb2bb769, Task C: 9697b1ad) — migrated to C_OgeSpxDoubleToolTipBase + styleRole, class deleted (2 .ui files, 27 .qss selectors)
+- [x] C_OgeSpxTableDouble (Task B: bd771254, Task C: 63f4d158) — migrated to C_OgeSpxDoubleToolTipBase + styleRole, class deleted (0 .ui, 21 .qss selectors, 1 programmatic delegate site)
 
 ---
 
