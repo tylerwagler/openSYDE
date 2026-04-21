@@ -18,7 +18,7 @@
 #include "C_SdNdeDpListTableDelegate.hpp"
 #include "C_OgeTedTable.hpp"
 #include "C_OgeLeTable.hpp"
-#include "C_OgeSpxTable.hpp"
+#include "C_OgeSpxToolTipBase.hpp"
 #include "C_OgeSpxDoubleToolTipBase.hpp"
 #include "C_OgeCbxTable.hpp"
 #include "C_OgeSpxFactorTable.hpp"
@@ -101,7 +101,7 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
       C_OgeSpxFactorTable * pc_SpinBoxFactor;
       C_OgeLeTable * pc_LineEdit;
       C_OgeSpxDoubleToolTipBase * pc_DoubleSpinBox;
-      C_OgeSpxTable * pc_SpinBox;
+      C_OgeSpxToolTipBase * pc_SpinBox;
       C_OgeCbxTable * pc_ComboBox;
       const C_SdNdeDpListTableModel::E_Columns e_Col = this->mpc_Model->ColumnToEnum(orc_Index.column());
       switch (e_Col)
@@ -143,7 +143,8 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
          pc_Retval = pc_ComboBox;
          break;
       case C_SdNdeDpListTableModel::eARRAY_SIZE:
-         pc_SpinBox = new C_OgeSpxTable(opc_Parent);
+         pc_SpinBox = new C_OgeSpxToolTipBase(opc_Parent);
+         pc_SpinBox->setProperty("styleRole", "spx-table");
          //Special string handling
          if (this->mpc_Model->IsString(orc_Index) == true)
          {
