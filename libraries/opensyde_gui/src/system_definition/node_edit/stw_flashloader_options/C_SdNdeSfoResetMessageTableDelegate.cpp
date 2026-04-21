@@ -16,7 +16,7 @@
 #include "constants.hpp"
 #include "C_GtGetText.hpp"
 #include "C_OgeCbxTable.hpp"
-#include "C_OgeSpxTable.hpp"
+#include "C_OgeSpxToolTipBase.hpp"
 #include "C_SdNdeSfoResetMessageTableModel.hpp"
 #include "C_SdNdeSfoResetMessageTableDelegate.hpp"
 
@@ -72,14 +72,15 @@ QWidget * C_SdNdeSfoResetMessageTableDelegate::createEditor(QWidget * const opc_
    Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
    {
-      C_OgeSpxTable * pc_SpinBox;
+      C_OgeSpxToolTipBase * pc_SpinBox;
       C_OgeCbxTable * pc_ComboBox;
       const C_SdNdeSfoResetMessageTableModel::E_Columns e_Col = C_SdNdeSfoResetMessageTableModel::h_ColumnToEnum(
          orc_Index.column());
       switch (e_Col)
       {
       case C_SdNdeSfoResetMessageTableModel::eID:
-         pc_SpinBox = new C_OgeSpxTable(opc_Parent);
+         pc_SpinBox = new C_OgeSpxToolTipBase(opc_Parent);
+         pc_SpinBox->setProperty("styleRole", "spx-table");
          pc_SpinBox->setPrefix(C_GtGetText::h_GetText("0x"));
          pc_SpinBox->setDisplayIntegerBase(16);
          pc_SpinBox->SetMinimumCustom(0);
@@ -94,7 +95,8 @@ QWidget * C_SdNdeSfoResetMessageTableDelegate::createEditor(QWidget * const opc_
          pc_Retval = pc_SpinBox;
          break;
       case C_SdNdeSfoResetMessageTableModel::eDLC:
-         pc_SpinBox = new C_OgeSpxTable(opc_Parent);
+         pc_SpinBox = new C_OgeSpxToolTipBase(opc_Parent);
+         pc_SpinBox->setProperty("styleRole", "spx-table");
          pc_SpinBox->SetMinimumCustom(0);
          pc_SpinBox->SetMaximumCustom(8);
          pc_Retval = pc_SpinBox;
@@ -107,7 +109,8 @@ QWidget * C_SdNdeSfoResetMessageTableDelegate::createEditor(QWidget * const opc_
       case C_SdNdeSfoResetMessageTableModel::eBYTE6:
       case C_SdNdeSfoResetMessageTableModel::eBYTE7:
       case C_SdNdeSfoResetMessageTableModel::eBYTE8:
-         pc_SpinBox = new C_OgeSpxTable(opc_Parent);
+         pc_SpinBox = new C_OgeSpxToolTipBase(opc_Parent);
+         pc_SpinBox->setProperty("styleRole", "spx-table");
          pc_SpinBox->setPrefix(C_GtGetText::h_GetText("0x"));
          pc_SpinBox->setDisplayIntegerBase(16);
          pc_SpinBox->SetMinimumCustom(0);
