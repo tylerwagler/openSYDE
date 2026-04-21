@@ -1,6 +1,6 @@
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeSaNaviBar[C_OgeSaNaviBar="true"],
-stw--opensyde_gui_elements--C_OgeSaNaviBar QWidget[C_OgeSaNaviBar="true"],
+QScrollArea[styleRole="sa-navi-bar"][saNaviBarMark="true"],
+QScrollArea[styleRole="sa-navi-bar"] QWidget[saNaviBarMark="true"],
 stw--opensyde_gui_elements--C_OgeSaMain,
 stw--opensyde_gui_elements--C_OgeDarkScrollArea,
 stw--opensyde_gui_elements--C_OgeTransparentScrollArea
