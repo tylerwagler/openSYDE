@@ -782,7 +782,10 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeChxTristateTransparentToggle" name="pc_CheckBoxSafety">
+           <widget class="stw::opensyde_gui_elements::C_OgeChxTristateBase" name="pc_CheckBoxSafety">
+            <property name="styleRole" stdset="0">
+             <string>chx-tristate-transparent-toggle</string>
+            </property>
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -1445,9 +1448,9 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxTristateTransparentToggle</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxTristateBase</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxTristateTransparentToggle.hpp</header>
+   <header>C_OgeChxTristateBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>

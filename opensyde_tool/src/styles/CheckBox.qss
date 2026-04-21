@@ -98,7 +98,7 @@ stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::ind
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator,
 stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate"]::indicator,
 QCheckBox[styleRole="chx-tristate-transparent-error"]::indicator,
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentToggle::indicator,
+stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate-transparent-toggle"]::indicator,
 stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc QListView::indicator,
 stw--opensyde_gui--C_SdNdeHalcConfigImportView::indicator,
 stw--opensyde_gui--C_SdNdeCoConfigTreeView::indicator,
@@ -216,20 +216,20 @@ stw--opensyde_gui--C_SdNdeDalLogJobsListView::indicator::disabled::checked
 image: url(://images/CheckBoxActiveDisabledWithoutBackground.svg);
 }
 
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentToggle::indicator:checked:enabled
+stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate-transparent-toggle"]::indicator:checked:enabled
 {
 image: url(://images/system_views/dashboards/icons/ToggleStwOnT1Bright.svg);
 }
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentToggle::indicator:checked:disabled
+stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate-transparent-toggle"]::indicator:checked:disabled
 {
 image: url(://images/system_views/dashboards/icons/ToggleStwOnT1Bright_Disabled.svg);
 }
 
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentToggle::indicator:!checked:enabled
+stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate-transparent-toggle"]::indicator:!checked:enabled
 {
 image: url(://images/system_views/dashboards/icons/ToggleStwOffT1Bright.svg);
 }
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentToggle::indicator:!checked:disabled
+stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate-transparent-toggle"]::indicator:!checked:disabled
 {
 image: url(://images/system_views/dashboards/icons/ToggleStwOffT1Bright_Disabled.svg);
 }
