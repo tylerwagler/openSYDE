@@ -684,7 +684,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbNodeDataPoolListElementId.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeLabel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxProperties.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvReadDataConfiguration.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementScaling.cpp
@@ -1500,7 +1499,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbNodeDataPoolListElementId.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeLabel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxProperties.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/C_PuiSvReadDataConfiguration.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementScaling.hpp
