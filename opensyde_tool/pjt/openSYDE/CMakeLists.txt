@@ -638,7 +638,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebToolboxUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxHover.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraBorder.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaLabelBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardBaseWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardLabelWidget.cpp
@@ -1445,7 +1444,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSettings.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebToolboxUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxHover.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraBorder.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/dashboard/C_GiSvDaLabelBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardBaseWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItDashboardLabelWidget.hpp
