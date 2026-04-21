@@ -163,7 +163,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/C_SdContextMenuEntry.cpp
 /home/tyler/Projects/Crane/openSYDE/opensyde_tool/src/graphic_items/base_items/C_GiBiCustomToolTip.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/frame/C_OgeFraFrame.cpp
 /home/tyler/Projects/Crane/openSYDE/opensyde_tool/src/graphic_items/line_items/C_GiLiLineGroup.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/project_operations/C_PopErrorHandling.cpp
 /home/tyler/Projects/Crane/openSYDE/opensyde_tool/src/graphic_items/style_setup/C_GiSyBaseWidget.cpp
