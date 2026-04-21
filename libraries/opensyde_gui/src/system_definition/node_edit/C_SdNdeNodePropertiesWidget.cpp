@@ -27,7 +27,7 @@
 #include "TglUtils.hpp"
 #include "C_SdUtil.hpp"
 #include "C_OscNodeProperties.hpp"
-#include "C_OgeChxTristateTransparentError.hpp"
+#include <QCheckBox>
 #include "C_OgeWiUtil.hpp"
 #include "C_OgeChxTristateBase.hpp"
 #include "C_OscNodeComInterfaceSettings.hpp"
@@ -675,8 +675,11 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
 
                /**********************************************************************************************************/
                //INTERFACE
-               this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(
-                  u8_ComIfCnt, s32_COL_INTERFACE, new C_OgeChxTristateTransparentError(this));
+               {
+                  QCheckBox * const pc_ChkIf = new QCheckBox(this);
+                  pc_ChkIf->setProperty("styleRole", "chx-tristate-transparent-error");
+                  this->mpc_Ui->pc_TableWidgetComIfSettings->setCellWidget(u8_ComIfCnt, s32_COL_INTERFACE, pc_ChkIf);
+               }
                //disable
                this->mpc_Ui->pc_TableWidgetComIfSettings->cellWidget(u8_ComIfCnt,
                                                                      s32_COL_INTERFACE)->setEnabled(false);
@@ -698,10 +701,8 @@ void C_SdNdeNodePropertiesWidget::m_LoadFromData(void)
                                                                                                 u8_NumCanBusses)));
                }
 
-               dynamic_cast<C_OgeChxTristateTransparentError *> (this->mpc_Ui->pc_TableWidgetComIfSettings->
-                                                                 cellWidget(
-                                                                    u8_ComIfCnt,
-                                                                    s32_COL_INTERFACE))->setText(c_ComIfName);
+               dynamic_cast<QCheckBox *> (this->mpc_Ui->pc_TableWidgetComIfSettings->
+                                          cellWidget(u8_ComIfCnt, s32_COL_INTERFACE))->setText(c_ComIfName);
 
                /**********************************************************************************************************/
                //CONNECTED TO
