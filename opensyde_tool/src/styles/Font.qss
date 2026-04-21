@@ -45,7 +45,7 @@ font-weight: normal;
 /* STYLE_GUIDE_FONT_REGULAR_12 */
 stw--opensyde_gui--C_NagTopTreeView,
 stw--opensyde_gui_elements--C_OgeTedToolTipContent,
-QPushButton[styleRole="navigation"]Hover,
+stw--opensyde_gui_elements--C_OgePubNavigationHover,
 QLabel[styleRole="update-app-version"],
 stw--opensyde_gui--C_SdTopologyListWidget::item:selected,
 stw--opensyde_gui--C_SdTopologyListWidget::item:hover,
