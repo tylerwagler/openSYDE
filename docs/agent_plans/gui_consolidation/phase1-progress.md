@@ -1,7 +1,6 @@
 # Phase 1 Progress — Spin Box
 
 ## TODO
-- [ ] C_OgeSpxTable (inherits C_OgeSpxToolTipBase) -> replace with C_OgeSpxToolTipBase + styleRole="spx-table"
 - [ ] C_OgeSpxFactorTable (inherits C_OgeSpxFactor) -> replace with C_OgeSpxFactor + styleRole="spx-factor-table"
 
 ## Skipped (has logic — do NOT migrate)
@@ -29,6 +28,7 @@
 - [x] C_OgeSpxDoubleProperties (Task B: bb2bb769, Task C: 9697b1ad) — migrated to C_OgeSpxDoubleToolTipBase + styleRole, class deleted (2 .ui files, 27 .qss selectors)
 - [x] C_OgeSpxTableDouble (Task B: bd771254, Task C: 63f4d158) — migrated to C_OgeSpxDoubleToolTipBase + styleRole, class deleted (0 .ui, 21 .qss selectors, 1 programmatic delegate site)
 - [x] C_OgeSpxTableComIf (Task B: f97e1bb1, Task C: c83af7f0) — migrated to C_OgeSpxToolTipBase + styleRole, class deleted (0 .ui, 15 .qss selectors, 1 programmatic delegate site)
+- [x] C_OgeSpxTable (Task B: 9d0fd538, Task C: 6a4c716f) — migrated to C_OgeSpxToolTipBase + styleRole, class deleted (0 .ui, 12 .qss selectors, 2 delegate files, 4 programmatic new sites)
 
 ---
 
