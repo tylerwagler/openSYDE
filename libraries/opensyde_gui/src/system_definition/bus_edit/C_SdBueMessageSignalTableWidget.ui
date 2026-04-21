@@ -43,7 +43,10 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeRabCheckBox" name="pc_RadioButtonMessages">
+        <widget class="QRadioButton" name="pc_RadioButtonMessages">
+         <property name="styleRole" stdset="0">
+          <string>rab-check-box</string>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -70,7 +73,10 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeRabCheckBox" name="pc_RadioButtonSignals">
+        <widget class="QRadioButton" name="pc_RadioButtonSignals">
+         <property name="styleRole" stdset="0">
+          <string>rab-check-box</string>
+         </property>
          <property name="text">
           <string/>
          </property>
@@ -164,11 +170,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
    <header>C_OgeLabToolTipBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeRabCheckBox</class>
-   <extends>QRadioButton</extends>
-   <header>C_OgeRabCheckBox.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdBueMessageTableView</class>
