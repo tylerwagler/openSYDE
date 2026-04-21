@@ -20,7 +20,7 @@ stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties-small"
 min-width: 22px;
 }
 
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator
 {
 width: 24px;
 height: 24px;
@@ -93,7 +93,7 @@ border: none;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator,
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator,
 stw--opensyde_gui_elements--C_OgeChxProperties::indicator,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator,
@@ -153,9 +153,9 @@ height: 24px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator:enabled:checked,
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:enabled:checked,
 stw--opensyde_gui_elements--C_OgeChxProperties::indicator:enabled:checked,
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator:disabled:checked,
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator:checked,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator:enabled:checked,
 stw--opensyde_gui--C_SdBueSignalTableView::indicator:enabled:checked,
@@ -193,14 +193,14 @@ stw--opensyde_gui--C_SdNdeDalLogJobsListView::indicator::indeterminate
 image: url(://images/CheckBoxIndeterminate.svg);
 }
 
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator:disabled:!checked,
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:disabled:!checked,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator:disabled:!checked,
 stw--opensyde_gui_elements--C_OgeChxProperties::indicator:disabled:!checked
 {
 image: url(://images/CheckBoxDisabledNotChecked.svg);
 }
 
-stw--opensyde_gui_elements--C_OgeChxDefaultCheckedDisabled::indicator:disabled:checked,
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxProperties::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator:disabled:checked,
