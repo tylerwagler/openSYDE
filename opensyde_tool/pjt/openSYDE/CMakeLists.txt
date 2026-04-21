@@ -331,7 +331,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdContextMenuEntry.cpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomToolTip.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraFrame.cpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.cpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopErrorHandling.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBaseWidget.cpp
@@ -1137,7 +1136,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdContextMenuEntry.hpp
    ${PROJECT_ROOT}/src/graphic_items/base_items/C_GiBiCustomToolTip.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconOnly.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraFrame.hpp
    ${PROJECT_ROOT}/src/graphic_items/line_items/C_GiLiLineGroup.hpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopErrorHandling.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyBaseWidget.hpp
