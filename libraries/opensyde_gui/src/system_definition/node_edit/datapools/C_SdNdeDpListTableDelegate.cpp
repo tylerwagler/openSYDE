@@ -21,7 +21,7 @@
 #include "C_OgeSpxToolTipBase.hpp"
 #include "C_OgeSpxDoubleToolTipBase.hpp"
 #include "C_OgeCbxTable.hpp"
-#include "C_OgeSpxFactorTable.hpp"
+#include "C_OgeSpxFactor.hpp"
 #include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_TblTreDelegateUtil.hpp"
@@ -98,7 +98,7 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
    Q_UNUSED(orc_Option)
    if ((orc_Index.isValid() == true) && (this->mpc_Model != NULL))
    {
-      C_OgeSpxFactorTable * pc_SpinBoxFactor;
+      C_OgeSpxFactor * pc_SpinBoxFactor;
       C_OgeLeTable * pc_LineEdit;
       C_OgeSpxDoubleToolTipBase * pc_DoubleSpinBox;
       C_OgeSpxToolTipBase * pc_SpinBox;
@@ -172,7 +172,8 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
          pc_Retval = m_CreateEditor(opc_Parent, orc_Index, e_Col);
          break;
       case C_SdNdeDpListTableModel::eFACTOR:
-         pc_SpinBoxFactor = new C_OgeSpxFactorTable(opc_Parent);
+         pc_SpinBoxFactor = new C_OgeSpxFactor(opc_Parent);
+         pc_SpinBoxFactor->setProperty("styleRole", "spx-factor-table");
          //Factor needs to be above 0
          pc_SpinBoxFactor->SetMinimumCustom(C_OgeSpxFactor::mhf64_FACTOR_MIN);
          pc_Retval = pc_SpinBoxFactor;
