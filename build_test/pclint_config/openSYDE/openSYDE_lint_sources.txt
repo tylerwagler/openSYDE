@@ -656,7 +656,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/label/C_OgeLabSvgOnly.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/label/C_OgeLabGenericNoPaddingNoMargins.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/scroll_area/C_OgeSaNaviBar.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/push_button/C_OgePubProjAction.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/navigable_gui/C_NagViewList.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/navigable_gui/C_NagViewListDelegate.cpp
