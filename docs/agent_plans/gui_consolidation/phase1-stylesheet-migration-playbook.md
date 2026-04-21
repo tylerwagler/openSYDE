@@ -350,8 +350,25 @@ Goal: remove the now-unused class and its build system entries.
 9. **DO NOT run clean builds.** `./build.sh -c` takes over an hour. Use
    incremental builds only.
 
-10. **Watch for substring collisions** when grepping. `C_OgeSpxFoo` will match
-    inside `C_OgeSpxFooBar`. Use `C_OgeSpxFoo["\.]` or similar patterns.
+10. **Watch for substring collisions** when grepping AND when replacing.
+    `C_OgeSpxFoo` will match inside `C_OgeSpxFooBar`. Use `C_OgeSpxFoo["\.]`
+    or similar patterns for grep.
+
+    For replacements this is even more dangerous. A bulk
+    `C_OgePubNavigation` -> `QPushButton[styleRole="navigation"]` mangled
+    `C_OgePubNavigationHover` into `QPushButton[styleRole="navigation"]Hover`,
+    which is broken CSS Qt silently ignored — leaving the app partially
+    unstyled (regression: c8a3e1b9, fix: 50b502d2). Always check whether
+    your target class name is a prefix of another still-present class
+    BEFORE using a replace_all on .qss files. If it is, disambiguate by
+    including the trailing character in the match (e.g., `C_OgePubNavigation,`,
+    `C_OgePubNavigation:`, `C_OgePubNavigation ` — each ending character
+    that appears in .qss after the class name — and handle each variant
+    explicitly).
+
+    After a QSS migration, always grep for the pattern
+    `\[styleRole="[^"]*"\][A-Za-z]` to catch any accidental
+    suffix-concatenation. Result must be empty.
 
 11. **DO NOT forget lint sources files.** Check `build_test/pclint_config/*/openSYDE_lint_sources.txt`
     (or similar) for references to deleted files. These are tracked files that must be updated
