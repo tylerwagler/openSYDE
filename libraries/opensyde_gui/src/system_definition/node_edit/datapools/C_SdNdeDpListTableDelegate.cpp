@@ -19,7 +19,7 @@
 #include "C_OgeTedTable.hpp"
 #include "C_OgeLeTable.hpp"
 #include "C_OgeSpxTable.hpp"
-#include "C_OgeSpxTableDouble.hpp"
+#include "C_OgeSpxDoubleToolTipBase.hpp"
 #include "C_OgeCbxTable.hpp"
 #include "C_OgeSpxFactorTable.hpp"
 #include "C_GtGetText.hpp"
@@ -100,7 +100,7 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
    {
       C_OgeSpxFactorTable * pc_SpinBoxFactor;
       C_OgeLeTable * pc_LineEdit;
-      C_OgeSpxTableDouble * pc_DoubleSpinBox;
+      C_OgeSpxDoubleToolTipBase * pc_DoubleSpinBox;
       C_OgeSpxTable * pc_SpinBox;
       C_OgeCbxTable * pc_ComboBox;
       const C_SdNdeDpListTableModel::E_Columns e_Col = this->mpc_Model->ColumnToEnum(orc_Index.column());
@@ -177,7 +177,8 @@ QWidget * C_SdNdeDpListTableDelegate::createEditor(QWidget * const opc_Parent, c
          pc_Retval = pc_SpinBoxFactor;
          break;
       case C_SdNdeDpListTableModel::eOFFSET:
-         pc_DoubleSpinBox = new C_OgeSpxTableDouble(opc_Parent);
+         pc_DoubleSpinBox = new C_OgeSpxDoubleToolTipBase(opc_Parent);
+         pc_DoubleSpinBox->setProperty("styleRole", "spx-table-double");
          pc_DoubleSpinBox->SetMinimumCustom(static_cast<float64_t>(std::numeric_limits<float64_t>::lowest()));
          pc_DoubleSpinBox->SetMaximumCustom(static_cast<float64_t>(std::numeric_limits<float64_t>::max()));
          pc_Retval = pc_DoubleSpinBox;
