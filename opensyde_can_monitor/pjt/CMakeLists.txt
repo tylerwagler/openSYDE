@@ -232,7 +232,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/check_box/C_CamOgeChxSettings.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultCheckedDisabled.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewScroll.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblDelegate.cpp
@@ -451,7 +450,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTransparentScrollArea.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/check_box/C_CamOgeChxSettings.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxToolTipBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxDefaultCheckedDisabled.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewScroll.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblViewToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblDelegate.hpp

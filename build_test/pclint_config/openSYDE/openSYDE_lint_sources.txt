@@ -573,7 +573,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_views/system_update/C_SyvUpSequences.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64Factor.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_views/system_setup/C_SyvSeContextMenuManager.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/check_box/C_OgeChxDefaultCheckedDisabled.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/user_settings/C_UsNode.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/user_settings/C_UsNodeDatapool.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_views/C_SyvUtil.cpp
