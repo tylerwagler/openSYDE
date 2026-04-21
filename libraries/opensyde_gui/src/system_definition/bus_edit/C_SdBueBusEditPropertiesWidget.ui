@@ -357,7 +357,10 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item row="0" column="0" colspan="3">
-            <widget class="stw::opensyde_gui_elements::C_OgeChxPropertiesSmall" name="pc_CheckBoxUsableForRouting">
+            <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxUsableForRouting">
+             <property name="styleRole" stdset="0">
+              <string>chx-properties-small</string>
+             </property>
              <property name="maximumSize">
               <size>
                <width>200</width>
@@ -769,7 +772,10 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="0" column="0" colspan="3">
-        <widget class="stw::opensyde_gui_elements::C_OgeChxPropertiesSmall" name="pc_CheckBoxEnableCANFD">
+        <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxEnableCANFD">
+         <property name="styleRole" stdset="0">
+          <string>chx-properties-small</string>
+         </property>
          <property name="maximumSize">
           <size>
            <width>200</width>
@@ -860,9 +866,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLePropertiesName.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxPropertiesSmall</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxPropertiesSmall.hpp</header>
+   <header>C_OgeChxToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabSvgOnly</class>
