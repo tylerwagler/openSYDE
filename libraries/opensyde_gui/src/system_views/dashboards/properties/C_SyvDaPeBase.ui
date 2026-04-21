@@ -1219,7 +1219,10 @@
              </widget>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeSpxDoubleProperties" name="pc_DoubleSpinBoxOffset">
+             <widget class="stw::opensyde_gui_elements::C_OgeSpxDoubleToolTipBase" name="pc_DoubleSpinBoxOffset">
+              <property name="styleRole" stdset="0">
+               <string>spx-double-properties</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1906,9 +1909,9 @@
    <header>C_SebGraphicsView.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxDoubleProperties</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxDoubleToolTipBase</class>
    <extends>QDoubleSpinBox</extends>
-   <header>C_OgeSpxDoubleProperties.hpp</header>
+   <header>C_OgeSpxDoubleToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeSpxFactor</class>
