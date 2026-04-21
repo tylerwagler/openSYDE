@@ -585,7 +585,7 @@ border-color:rgb(127, 127, 187);
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_36 */
-stw--opensyde_gui_elements--C_OgeFraBorder
+QFrame[styleRole="fra-border"]
 {
 background-color: rgb(177, 177, 177);
 }
