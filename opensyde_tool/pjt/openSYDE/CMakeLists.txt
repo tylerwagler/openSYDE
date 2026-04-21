@@ -443,7 +443,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactor.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTable.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateTransparentToggle.cpp
@@ -1263,7 +1262,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactor.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTable.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxTristateTransparentToggle.hpp
