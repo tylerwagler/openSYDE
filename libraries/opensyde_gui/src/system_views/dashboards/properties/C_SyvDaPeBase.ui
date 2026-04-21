@@ -1177,7 +1177,10 @@
              </widget>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeSpxFactorProperties" name="pc_DoubleSpinBoxFactor">
+             <widget class="stw::opensyde_gui_elements::C_OgeSpxFactor" name="pc_DoubleSpinBoxFactor">
+              <property name="styleRole" stdset="0">
+               <string>spx-factor-properties</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>100</width>
@@ -1908,9 +1911,9 @@
    <header>C_OgeSpxDoubleProperties.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxFactorProperties</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxFactor</class>
    <extends>QDoubleSpinBox</extends>
-   <header>C_OgeSpxFactorProperties.hpp</header>
+   <header>C_OgeSpxFactor.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiSpinBoxGroupProperties</class>
