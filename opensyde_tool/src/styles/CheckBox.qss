@@ -96,7 +96,7 @@ border: none;
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator,
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::indicator,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator,
-stw--opensyde_gui_elements--C_OgeChxTristate::indicator,
+stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate"]::indicator,
 stw--opensyde_gui_elements--C_OgeChxTristateTransparentError::indicator,
 stw--opensyde_gui_elements--C_OgeChxTristateTransparentToggle::indicator,
 stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc QListView::indicator,
@@ -157,7 +157,7 @@ stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-d
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::indicator:enabled:checked,
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator:checked,
-stw--opensyde_gui_elements--C_OgeChxTristate::indicator:enabled:checked,
+stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate"]::indicator:enabled:checked,
 stw--opensyde_gui--C_SdBueSignalTableView::indicator:enabled:checked,
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-system-commisioning-edit"]::indicator:checked,
 stw--opensyde_gui--C_SdNdeCoPdoTableView::indicator:enabled:checked,
@@ -194,14 +194,14 @@ image: url(://images/CheckBoxIndeterminate.svg);
 }
 
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:disabled:!checked,
-stw--opensyde_gui_elements--C_OgeChxTristate::indicator:disabled:!checked,
+stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate"]::indicator:disabled:!checked,
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::indicator:disabled:!checked
 {
 image: url(://images/CheckBoxDisabledNotChecked.svg);
 }
 
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:disabled:checked,
-stw--opensyde_gui_elements--C_OgeChxTristate::indicator:disabled:checked,
+stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc QListView::indicator:disabled:checked,
