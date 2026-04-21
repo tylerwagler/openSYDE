@@ -516,7 +516,6 @@
 /home/tyler/Projects/Crane/openSYDE/opensyde_tool/src/project_gui/system_views/dashboard/C_PuiSvDbNodeDataPoolListElementId.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_views/dashboards/properties/C_SyvDaPeBase.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_views/dashboards/properties/C_SyvDaPeLabel.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/check_box/C_OgeChxProperties.cpp
 /home/tyler/Projects/Crane/openSYDE/opensyde_tool/src/project_gui/system_views/C_PuiSvReadDataConfiguration.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_views/dashboards/properties/C_SyvDaPeDataElementBrowse.cpp
 /home/tyler/Projects/Crane/openSYDE/opensyde_tool/src/project_gui/system_views/dashboard/C_PuiSvDbDataElementScaling.cpp
