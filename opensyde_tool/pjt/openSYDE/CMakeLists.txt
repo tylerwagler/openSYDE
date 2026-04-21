@@ -886,7 +886,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSystemCommissioningEdit.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconWithTextBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxSystemCommisioningEdit.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardInteraction.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverDiagConnect.cpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerBusLogic.cpp
@@ -1716,7 +1715,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/C_SyvUpInformationWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSystemCommissioningEdit.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconWithTextBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/check_box/C_OgeChxSystemCommisioningEdit.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardInteraction.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/communication/C_SyvComDriverDiagConnect.hpp
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdHandlerBusLogic.hpp
