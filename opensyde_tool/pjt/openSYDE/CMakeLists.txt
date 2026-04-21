@@ -964,7 +964,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlotHandlerWidget.cpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbTabChart.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tool_button/C_OgeTobToolTipBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/menu/C_OgeMuTabChartFit.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlot.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubAddChartDataElement.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraGeneric.cpp
@@ -1788,7 +1787,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlotHandlerWidget.hpp
    ${PROJECT_ROOT}/src/project_gui/system_views/dashboard/C_PuiSvDbTabChart.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tool_button/C_OgeTobToolTipBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/menu/C_OgeMuTabChartFit.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/tab_chart/C_SyvDaChaPlot.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubAddChartDataElement.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraGeneric.hpp
