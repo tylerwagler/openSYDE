@@ -536,7 +536,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabBar.cpp
    ${PROJECT_ROOT}/src/graphic_items/widgets/C_GiWiProxyBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabCheckBox.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableView.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableModel.cpp
@@ -1344,7 +1343,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardSelectorTabBar.hpp
    ${PROJECT_ROOT}/src/graphic_items/widgets/C_GiWiProxyBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/radio_button/C_OgeRabCheckBox.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageTableView.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSignalTableModel.hpp
