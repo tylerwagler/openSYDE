@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeFraFrame,
+QFrame[styleRole="fra-frame"],
 stw--opensyde_gui_elements--C_OgeFraGeneric
 {
 border-width: 1px;
@@ -13,12 +13,12 @@ border-style: solid;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeFraFrame[OpenRight="true"]
+QFrame[styleRole="fra-frame"][OpenRight="true"]
 {
 border-right-width: 0px;
 }
 
-stw--opensyde_gui_elements--C_OgeFraFrame[NoBorder="true"]
+QFrame[styleRole="fra-frame"][NoBorder="true"]
 {
 border-width: 0px;
 }
