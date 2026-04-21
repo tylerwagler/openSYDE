@@ -18,7 +18,6 @@
 #include "C_OgeWiSpinBoxGroup.hpp"
 #include "C_OscCanMessageIdentificationIndices.hpp"
 #include "C_PuiSdNodeCanMessageSyncManager.hpp"
-#include "C_OgeSpxInt64Properties.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
