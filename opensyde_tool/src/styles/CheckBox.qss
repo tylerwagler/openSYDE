@@ -54,7 +54,7 @@ stw--opensyde_gui_elements--C_OgeChxDefaultSmall
 margin-bottom: 4px;
 }
 
-stw--opensyde_gui_elements--C_OgeChxTiny::indicator
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-tiny"]::indicator
 {
 width: 16px;
 height: 16px;
@@ -176,7 +176,7 @@ stw--opensyde_gui--C_SdNdeDalLogJobsListView::indicator::enabled::checked
 image: url(://images/CheckBoxActiveWithoutBackground.svg);
 }
 
-stw--opensyde_gui_elements--C_OgeChxTiny::indicator:checked
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-tiny"]::indicator:checked
 {
 image: url(://images/CheckBoxTinyActive.svg);
 }
