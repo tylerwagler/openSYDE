@@ -56,7 +56,7 @@ min-height: 0px;
 /* Scroll areas */
 stw--opensyde_gui_elements--C_OgeSmoothScrollArea QScrollBar:vertical,
 stw--opensyde_gui--C_SebGraphicsView QScrollBar:vertical,
-stw--opensyde_gui_elements--C_OgeFraFrame QScrollBar:vertical
+QFrame[styleRole="fra-frame"] QScrollBar:vertical
 {
 width: 11px; /*real width of scroll bar is 5px; Real width = width - padding-right/left */
 padding-right: 6px;
@@ -67,7 +67,7 @@ padding-bottom: 15px;
 stw--opensyde_gui_elements--C_OgeDarkScrollArea QScrollBar:horizontal,
 stw--opensyde_gui_elements--C_OgeSmoothScrollArea QScrollBar:horizontal,
 stw--opensyde_gui--C_SebGraphicsView QScrollBar:horizontal,
-stw--opensyde_gui_elements--C_OgeFraFrame QScrollBar:horizontal
+QFrame[styleRole="fra-frame"] QScrollBar:horizontal
 {
 height: 11px; /*real height of scroll bar is 5px; Real height = height - padding-bottom/top */
 padding-bottom: 6px;

@@ -267,7 +267,10 @@
         <number>15</number>
        </property>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeFraFrame" name="pc_DrawFrame">
+        <widget class="QFrame" name="pc_DrawFrame">
+         <property name="styleRole" stdset="0">
+          <string>fra-frame</string>
+         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -432,12 +435,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraFrame</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraFrame.hpp</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SebGraphicsView</class>
    <extends>QGraphicsView</extends>
