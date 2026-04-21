@@ -368,7 +368,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/C_SdUtil.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_views/dashboards/C_SyvDaDashboardSelectorTabBar.cpp
 /home/tyler/Projects/Crane/openSYDE/opensyde_tool/src/graphic_items/widgets/C_GiWiProxyBase.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/radio_button/C_OgeRabCheckBox.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/bus_edit/C_SdBueMessageTableModel.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/bus_edit/C_SdBueMessageTableView.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/bus_edit/C_SdBueSignalTableModel.cpp
