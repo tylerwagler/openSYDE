@@ -1,7 +1,6 @@
 # Phase 1 Progress — Spin Box
 
 ## TODO
-- [ ] C_OgeSpxFactorProperties (inherits C_OgeSpxFactor) -> replace with C_OgeSpxFactor + styleRole="spx-factor-properties"
 - [ ] C_OgeSpxInt64Table (inherits C_OgeSpxInt64ToolTipBase) -> replace with C_OgeSpxInt64ToolTipBase + styleRole="spx-int64-table"
 - [ ] C_OgeSpxInt64FactorTable (inherits C_OgeSpxInt64Factor) -> replace with C_OgeSpxInt64Factor + styleRole="spx-int64-factor-table"
 - [ ] C_OgeSpxDoubleProperties (inherits C_OgeSpxDoubleToolTipBase) -> replace with C_OgeSpxDoubleToolTipBase + styleRole="spx-double-properties"
@@ -29,6 +28,7 @@
 ## Done
 - [x] C_OgeSpxNumber (Task B: a074fa88, Task C: bf26b8b9) — migrated to C_OgeSpxToolTipBase + styleRole, class deleted
 - [x] C_OgeSpxInt64Properties (Task B: ffd399df, Task C: c7d9ac2b) — migrated to C_OgeSpxInt64ToolTipBase + styleRole, class deleted (no .ui references, 24 .qss selectors, 1 dead include removed)
+- [x] C_OgeSpxFactorProperties (Task B: b00554d0, Task C: 2c34ad58) — migrated to C_OgeSpxFactor + styleRole, class deleted (2 .ui files, 26 .qss selectors)
 
 ---
 
