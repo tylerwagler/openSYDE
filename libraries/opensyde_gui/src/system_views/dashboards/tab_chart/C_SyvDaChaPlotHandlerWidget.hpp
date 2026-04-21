@@ -25,7 +25,7 @@
 #include "C_PuiSvDbDataElementDisplayFormatterConfig.hpp"
 #include "C_PuiSvDbTabChart.hpp"
 #include "C_SyvDaChaPlot.hpp"
-#include "C_OgeMuTabChartFit.hpp"
+#include <QMenu>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -117,9 +117,9 @@ private:
    Ui::C_SyvDaChaPlotHandlerWidget * mpc_Ui;
 
    // Menus
-   stw::opensyde_gui_elements::C_OgeMuTabChartFit * mpc_MenuZoomMode;
-   stw::opensyde_gui_elements::C_OgeMuTabChartFit * mpc_MenuCursorMode;
-   stw::opensyde_gui_elements::C_OgeMuTabChartFit * mpc_MenuOptions;
+   QMenu * mpc_MenuZoomMode;
+   QMenu * mpc_MenuCursorMode;
+   QMenu * mpc_MenuOptions;
 
    // Menu actions for zoom mode
    QAction * mpc_ActionZoomSettingHorizontalVertical;

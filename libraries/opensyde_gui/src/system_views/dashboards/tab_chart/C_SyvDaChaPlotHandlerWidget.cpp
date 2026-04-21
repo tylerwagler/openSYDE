@@ -146,9 +146,12 @@ C_SyvDaChaPlotHandlerWidget::C_SyvDaChaPlotHandlerWidget(QWidget * const opc_Par
    const bool q_ServiceModeActive = C_PuiSvHandler::h_GetInstance()->GetServiceModeActive();
 
    //Menus
-   this->mpc_MenuZoomMode = new C_OgeMuTabChartFit(this);
-   this->mpc_MenuCursorMode = new C_OgeMuTabChartFit(this);
-   this->mpc_MenuOptions = new C_OgeMuTabChartFit(this);
+   this->mpc_MenuZoomMode = new QMenu(this);
+   this->mpc_MenuZoomMode->setProperty("styleRole", "mu-tab-chart-fit");
+   this->mpc_MenuCursorMode = new QMenu(this);
+   this->mpc_MenuCursorMode->setProperty("styleRole", "mu-tab-chart-fit");
+   this->mpc_MenuOptions = new QMenu(this);
+   this->mpc_MenuOptions->setProperty("styleRole", "mu-tab-chart-fit");
 
    this->mpc_Ui->setupUi(this);
 
