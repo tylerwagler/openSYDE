@@ -38,7 +38,7 @@ stw--opensyde_gui--C_SdNdeDalLogJobsOvTableView::indicator,
 stw--opensyde_gui--C_SdNdeCoOverviewTableView::indicator,
 stw--opensyde_gui--C_SdNdeCoPdoTableView::indicator,
 stw--opensyde_gui--C_SdNdeDpListTableView::indicator,
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentError,
+QCheckBox[styleRole="chx-tristate-transparent-error"],
 stw--opensyde_gui_elements--C_OgeChxTristateTransparentToggle,
 stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate"],
 QTextEdit#pc_TextEditDpName,
@@ -896,7 +896,7 @@ border-color: rgb(87, 87, 170);
 /* STYLE_GUIDE_COLOR_8 */
 /* color */
 QLabel[styleRole="update-time"][Error="false"],
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentError[Disabled="false"],
+QCheckBox[styleRole="chx-tristate-transparent-error"][Disabled="false"],
 QLabel[styleRole="node-prop-com-if-table"]:enabled,
 stw--opensyde_gui--C_SdTopologyListWidget[DarkMode="false"],
 stw--opensyde_gui--C_SdTopologyListWidget[DarkMode="false"]::item:selected,
@@ -1013,7 +1013,7 @@ border-color: rgb(155, 155, 170);
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_10 */
 /* color */
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentError[Disabled="true"],
+QCheckBox[styleRole="chx-tristate-transparent-error"][Disabled="true"],
 QLabel[styleRole="node-prop-com-if-table"]:disabled,
 stw--opensyde_gui_elements--C_OgeLePropertiesName:!enabled,
 stw--opensyde_gui_elements--C_OgeLeProperties:!enabled,

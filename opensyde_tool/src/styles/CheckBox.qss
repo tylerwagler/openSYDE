@@ -97,7 +97,7 @@ stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-d
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::indicator,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator,
 stw--opensyde_gui_elements--C_OgeChxTristateBase[styleRole="chx-tristate"]::indicator,
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentError::indicator,
+QCheckBox[styleRole="chx-tristate-transparent-error"]::indicator,
 stw--opensyde_gui_elements--C_OgeChxTristateTransparentToggle::indicator,
 stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc QListView::indicator,
 stw--opensyde_gui--C_SdNdeHalcConfigImportView::indicator,
@@ -133,19 +133,19 @@ border-width: 1px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentError:!checked
+QCheckBox[styleRole="chx-tristate-transparent-error"]:!checked
 {
 padding-left: 22px;
 padding-right: 3px;
 }
 
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentError::indicator:checked
+QCheckBox[styleRole="chx-tristate-transparent-error"]::indicator:checked
 {
 padding-left: 8px;
 padding-right: 3px;
 }
 
-stw--opensyde_gui_elements--C_OgeChxTristateTransparentError::indicator:checked
+QCheckBox[styleRole="chx-tristate-transparent-error"]::indicator:checked
 {
 image: url(://images/Error_iconV2.svg);
 width: 24px;
