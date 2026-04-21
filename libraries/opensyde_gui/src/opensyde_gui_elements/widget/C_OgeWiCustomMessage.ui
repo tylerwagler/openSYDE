@@ -287,7 +287,10 @@
              <number>6</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeChxDefaultCheckedDisabled" name="pc_ChxRememberSelection">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_ChxRememberSelection">
+              <property name="styleRole" stdset="0">
+               <string>chx-default-checked-disabled</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -444,9 +447,9 @@
    <header>C_OgePubSvgIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxDefaultCheckedDisabled</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxDefaultCheckedDisabled.hpp</header>
+   <header>C_OgeChxToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>
