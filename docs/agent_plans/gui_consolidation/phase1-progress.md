@@ -1,7 +1,7 @@
 # Phase 1 Progress — Spin Box
 
 ## TODO
-- [ ] C_OgeSpxFactorTable (inherits C_OgeSpxFactor) -> replace with C_OgeSpxFactor + styleRole="spx-factor-table"
+(all stylesheet-only spin box classes migrated — phase complete)
 
 ## Skipped (has logic — do NOT migrate)
 - C_OgeSpxEditProperties — has Q_SIGNALS, overrides focusInEvent and mousePressEvent, has private member mq_JustGotFocus
@@ -29,10 +29,11 @@
 - [x] C_OgeSpxTableDouble (Task B: bd771254, Task C: 63f4d158) — migrated to C_OgeSpxDoubleToolTipBase + styleRole, class deleted (0 .ui, 21 .qss selectors, 1 programmatic delegate site)
 - [x] C_OgeSpxTableComIf (Task B: f97e1bb1, Task C: c83af7f0) — migrated to C_OgeSpxToolTipBase + styleRole, class deleted (0 .ui, 15 .qss selectors, 1 programmatic delegate site)
 - [x] C_OgeSpxTable (Task B: 9d0fd538, Task C: 6a4c716f) — migrated to C_OgeSpxToolTipBase + styleRole, class deleted (0 .ui, 12 .qss selectors, 2 delegate files, 4 programmatic new sites)
+- [x] C_OgeSpxFactorTable (Task B: b8dbefd9, Task C: 35698a1d) — migrated to C_OgeSpxFactor + styleRole, class deleted (0 .ui, 21 .qss selectors, 2 delegate files)
 
 ---
 
 ## Survey Summary
 - **Total classes surveyed:** 24
-- **Migratable (stylesheet-only):** 10
+- **Migratable (stylesheet-only):** 10 — all complete ✓
 - **Skipped (has logic):** 14
