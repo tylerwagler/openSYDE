@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeChxProperties::indicator
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::indicator
 {
 width: 30px;
 height: 30px;
@@ -94,7 +94,7 @@ border: none;
 
 /* --------------------------------------------------------------------- */
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator,
-stw--opensyde_gui_elements--C_OgeChxProperties::indicator,
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::indicator,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator,
 stw--opensyde_gui_elements--C_OgeChxTristateTransparentError::indicator,
@@ -154,7 +154,7 @@ height: 24px;
 
 /* --------------------------------------------------------------------- */
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:enabled:checked,
-stw--opensyde_gui_elements--C_OgeChxProperties::indicator:enabled:checked,
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::indicator:enabled:checked,
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator:checked,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator:enabled:checked,
@@ -195,14 +195,14 @@ image: url(://images/CheckBoxIndeterminate.svg);
 
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:disabled:!checked,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator:disabled:!checked,
-stw--opensyde_gui_elements--C_OgeChxProperties::indicator:disabled:!checked
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::indicator:disabled:!checked
 {
 image: url(://images/CheckBoxDisabledNotChecked.svg);
 }
 
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-default-checked-disabled"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxTristate::indicator:disabled:checked,
-stw--opensyde_gui_elements--C_OgeChxProperties::indicator:disabled:checked,
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeChxDefaultSmall::indicator:disabled:checked,
 stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc QListView::indicator:disabled:checked,
 stw--opensyde_gui--C_SdNdeHalcConfigImportView::indicator:disabled:checked,

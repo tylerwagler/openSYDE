@@ -118,7 +118,7 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
            &C_CamMosFilterPopup::m_OnStartIdEdited);
    connect(this->mpc_Ui->pc_LeCanIdEnd, &C_CamOgeLeIdPopUp::editingFinished, this,
            &C_CamMosFilterPopup::m_OnEndIdEdited);
-   connect(this->mpc_Ui->pc_CheckBoxExtended, &C_OgeChxProperties::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxExtended, &C_OgeChxToolTipBase::toggled, this,
            &C_CamMosFilterPopup::m_OnExtendedToggled);
    connect(this->mpc_Ui->pc_PubAddItem, &C_OgePubSvgIconOnly::clicked, this, &C_CamMosFilterPopup::m_OnAddFilterItem);
 }

@@ -358,7 +358,10 @@ p, li { white-space: pre-wrap; }
           </layout>
          </item>
          <item row="1" column="0" colspan="6">
-          <widget class="stw::opensyde_gui_elements::C_OgeChxProperties" name="pc_CheckBoxExtendedType">
+          <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxExtendedType">
+           <property name="styleRole" stdset="0">
+            <string>chx-properties</string>
+           </property>
            <property name="text">
             <string>Extended type</string>
            </property>
@@ -1333,11 +1336,6 @@ p, li { white-space: pre-wrap; }
    <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
    <header>C_OgeChxToolTipBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxProperties</class>
-   <extends>QCheckBox</extends>
-   <header>C_OgeChxProperties.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdBueMessageRxList</class>
