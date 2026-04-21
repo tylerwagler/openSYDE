@@ -15,9 +15,9 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Labels) | ✅ **Complete** | 58/58 stylesheet-only label classes removed |
 | Phase 1 (Push Buttons) | ✅ **Complete** | 17 stylesheet-only classes removed; ~27 remaining all have real logic |
 | Phase 1 (Spin Boxes) | ✅ **Complete** | 10/10 stylesheet-only spin box classes migrated; 14 have real logic |
+| Phase 1 (Check Boxes) | ✅ **Complete** | 8/8 stylesheet-only check box classes migrated; 3 have real logic |
 | Phase 1 (Group Boxes) | ⏳ Not started | ~12 classes |
 | Phase 1 (Combo Boxes) | ⏳ Not started | ~10 classes |
-| Phase 1 (Check Boxes) | ⏳ Not started | ~8 classes |
 | Phase 1 (Line Edits) | ⏳ Not started | ~8 classes |
 | Phase 1 (Other types) | ⏳ Not started | ~15 classes (frame, scroll_area, tab_widget, text_browser, radio_button, slider, splitter, menu, widget) |
 | Phase 2 | ⏳ Not started | Dashboard property panels |
