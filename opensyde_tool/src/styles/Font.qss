@@ -380,7 +380,7 @@ font-weight: bold;
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_FONT_REGULAR_24 */
-stw--opensyde_gui_elements--C_OgeLeDark,
+stw--opensyde_gui_elements--C_OgeLeContextMenuBase[styleRole="le-dark"],
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Font="24"][SemiBold="false"][Bold="false"]
 {
 font-family: "Segoe UI";
