@@ -436,7 +436,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactor.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.cpp
@@ -1234,7 +1233,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/project_gui/system_definition/C_PuiSdUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueBusEditWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxFactor.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.hpp
