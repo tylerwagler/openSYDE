@@ -216,7 +216,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenTableView.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenTableModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeDark.cpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_UtiFindNameHelper.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenMessagesWidget.cpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProHandler.cpp
@@ -431,7 +430,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenTableView.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenTableModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeContextMenuBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeDark.hpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_UtiFindNameHelper.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_generator/C_CamGenMessagesWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/project/C_CamProHandler.hpp
