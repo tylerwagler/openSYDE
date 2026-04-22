@@ -247,7 +247,10 @@
            </layout>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeTebMessageDetails" name="pc_TebDetails">
+           <widget class="stw::opensyde_gui_elements::C_OgeTebContextMenuBase" name="pc_TebDetails">
+            <property name="styleRole" stdset="0">
+             <string>teb-message-details</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>350</width>
@@ -426,9 +429,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeTebMessageDetails</class>
+   <class>stw::opensyde_gui_elements::C_OgeTebContextMenuBase</class>
    <extends>QTextBrowser</extends>
-   <header>C_OgeTebMessageDetails.hpp</header>
+   <header>C_OgeTebContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
