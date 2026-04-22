@@ -88,7 +88,7 @@ C_SdNdeDalLogJobPropertiesWidget::C_SdNdeDalLogJobPropertiesWidget(QWidget * con
    this->mpc_Ui->pc_SpxBoxMaxLogEntries->SetMinimumCustom(0);
    this->mpc_Ui->pc_SpxBoxMaxLogEntries->SetMaximumCustom(0x7FFFFFFF);
 
-   connect(this->mpc_Ui->pc_LineEditName, &C_OgeLePropertiesName::editingFinished,
+   connect(this->mpc_Ui->pc_LineEditName, &QLineEdit::editingFinished,
            this, &C_SdNdeDalLogJobPropertiesWidget::m_TrimLogJobName);
 
    connect(this->mpc_Ui->pc_LineEditLogDestination, &QLineEdit::editingFinished,
@@ -507,9 +507,9 @@ void C_SdNdeDalLogJobPropertiesWidget::m_CheckDataLoggerName()
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobPropertiesWidget::m_DisconnectChangeTriggers() const
 {
-   disconnect(this->mpc_Ui->pc_LineEditName, &C_OgeLePropertiesName::textChanged,
+   disconnect(this->mpc_Ui->pc_LineEditName, &QLineEdit::textChanged,
               this, &C_SdNdeDalLogJobPropertiesWidget::m_CheckDataLoggerName);
-   disconnect(this->mpc_Ui->pc_LineEditName, &C_OgeLePropertiesName::editingFinished,
+   disconnect(this->mpc_Ui->pc_LineEditName, &QLineEdit::editingFinished,
               this, &C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished);
    disconnect(this->mpc_Ui->pc_TextEditComment, &C_OgeTedPropertiesComment::SigEditingFinished,
               this, &C_SdNdeDalLogJobPropertiesWidget::m_OnXappSettingsChanged);
@@ -543,9 +543,9 @@ void C_SdNdeDalLogJobPropertiesWidget::m_DisconnectChangeTriggers() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDalLogJobPropertiesWidget::m_ReconnectChangeTriggers() const
 {
-   connect(this->mpc_Ui->pc_LineEditName, &C_OgeLePropertiesName::textChanged,
+   connect(this->mpc_Ui->pc_LineEditName, &QLineEdit::textChanged,
            this, &C_SdNdeDalLogJobPropertiesWidget::m_CheckDataLoggerName);
-   connect(this->mpc_Ui->pc_LineEditName, &C_OgeLePropertiesName::editingFinished,
+   connect(this->mpc_Ui->pc_LineEditName, &QLineEdit::editingFinished,
            this, &C_SdNdeDalLogJobPropertiesWidget::m_OnNameEditingFinished);
    connect(this->mpc_Ui->pc_TextEditComment, &C_OgeTedPropertiesComment::SigEditingFinished,
            this, &C_SdNdeDalLogJobPropertiesWidget::m_OnXappSettingsChanged);

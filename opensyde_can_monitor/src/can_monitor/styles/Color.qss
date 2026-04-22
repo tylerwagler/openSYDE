@@ -203,7 +203,7 @@ stw--opensyde_gui_elements--C_CamOgeWiSpinBoxGroupTable QAbstractSpinBox,
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="heading-message"],
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="description-message"],
 stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole="teb-message-details"],
-stw--opensyde_gui_elements--C_OgeLePropertiesName,
+stw--opensyde_gui_elements--C_OgeLeToolTipBase[styleRole="le-properties-name"],
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="group-item-value"],
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment,
 stw--opensyde_gui_elements--C_OgeLeProperties
@@ -254,7 +254,7 @@ stw--opensyde_gui_elements--C_CamOgeLeIdPopUp,
 stw--opensyde_gui_elements--C_CamOgeSpxProperties,
 stw--opensyde_gui_elements--C_OgeTedToolTipContent[Type="WARNING"],
 QLabel[styleRole="heading-tool-tip"][Type="WARNING"],
-stw--opensyde_gui_elements--C_OgeLePropertiesName,
+stw--opensyde_gui_elements--C_OgeLeToolTipBase[styleRole="le-properties-name"],
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment,
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="group-item-value"],
 stw--opensyde_gui_elements--C_OgeCbxText,
@@ -356,7 +356,7 @@ QPushButton[styleRole="message-ok"]:!enabled,
 stw--opensyde_gui_elements--C_CamOgeCbxTable:!enabled,
 stw--opensyde_gui_elements--C_CamOgeCbxTableSmall:!enabled,
 stw--opensyde_gui--C_CamMosDatabaseSelectionView::item:!enabled,
-stw--opensyde_gui_elements--C_OgeLePropertiesName:!enabled,
+stw--opensyde_gui_elements--C_OgeLeToolTipBase[styleRole="le-properties-name"]:!enabled,
 stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:!enabled,
 stw--opensyde_gui_elements--C_OgeRabProperties[BrightBackground="true"]:!enabled,
 stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]:!enabled,
@@ -396,7 +396,7 @@ QPushButton[styleRole="dialog"]:!enabled,
 QPushButton[styleRole="message-cancel"]:!enabled,
 QPushButton[styleRole="message-ok"]:!enabled,
 stw--opensyde_gui--C_CamMetTreeView,
-stw--opensyde_gui_elements--C_OgeLePropertiesName,
+stw--opensyde_gui_elements--C_OgeLeToolTipBase[styleRole="le-properties-name"],
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment,
 stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:!enabled,
 stw--opensyde_gui_elements--C_CamOgeLeIdPopUp,
@@ -456,7 +456,7 @@ QPushButton[styleRole="cancel"]:!enabled,
 QPushButton[styleRole="dialog"]:!enabled,
 QPushButton[styleRole="message-ok"]:!enabled,
 QPushButton[styleRole="message-cancel"]:!enabled,
-stw--opensyde_gui_elements--C_OgeLePropertiesName,
+stw--opensyde_gui_elements--C_OgeLeToolTipBase[styleRole="le-properties-name"],
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment,
 stw--opensyde_gui_elements--C_CamOgeLeIdPopUp,
 stw--opensyde_gui_elements--C_CamOgeSpxProperties,
@@ -529,7 +529,7 @@ border-color:rgb(203, 235, 193);
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_24 */
-stw--opensyde_gui_elements--C_OgeLePropertiesName[Valid="false"]
+stw--opensyde_gui_elements--C_OgeLeToolTipBase[styleRole="le-properties-name"][Valid="false"]
 {
 color: rgb(230, 58, 63);
 }
@@ -550,7 +550,7 @@ stw--opensyde_gui_elements--C_OgeGbxMouseMove[Type="ERROR"]
 border-color: rgb(230, 58, 63);
 }
 
-stw--opensyde_gui_elements--C_OgeLePropertiesName[Valid="false"]
+stw--opensyde_gui_elements--C_OgeLeToolTipBase[styleRole="le-properties-name"][Valid="false"]
 {
 selection-color: rgb(230, 58, 63);
 }
@@ -578,7 +578,7 @@ stw--opensyde_gui_elements--C_CamOgeWiSpinBoxGroupTable QAbstractSpinBox,
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="heading-message"],
 stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole="teb-message-details"],
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="description-message"],
-stw--opensyde_gui_elements--C_OgeLePropertiesName,
+stw--opensyde_gui_elements--C_OgeLeToolTipBase[styleRole="le-properties-name"],
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="group-item-value"],
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment,
 stw--opensyde_gui_elements--C_OgeLeProperties

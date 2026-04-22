@@ -171,7 +171,10 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLePropertiesName" name="pc_LineEditName">
+             <widget class="stw::opensyde_gui_elements::C_OgeLeToolTipBase" name="pc_LineEditName">
+              <property name="styleRole" stdset="0">
+               <string>le-properties-name</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1300,9 +1303,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeTedPropertiesComment.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLePropertiesName</class>
+   <class>stw::opensyde_gui_elements::C_OgeLeToolTipBase</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLePropertiesName.hpp</header>
+   <header>C_OgeLeToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>

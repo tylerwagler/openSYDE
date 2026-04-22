@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeLePropertiesName,
+stw--opensyde_gui_elements--C_OgeLeToolTipBase[styleRole="le-properties-name"],
 stw--opensyde_gui_elements--C_OgeLeNavigation,
 stw--opensyde_gui_elements--C_OgeLeContextMenuBase[styleRole="le-dark"],
 stw--opensyde_gui_elements--C_OgeLeProperties
@@ -11,7 +11,7 @@ border-width: 1px;
 /* --------------------------------------------------------------------- */
 stw--opensyde_gui_elements--C_OgeLeContextMenuBase[styleRole="le-dark"],
 stw--opensyde_gui_elements--C_OgeLeNavigation,
-stw--opensyde_gui_elements--C_OgeLePropertiesName
+stw--opensyde_gui_elements--C_OgeLeToolTipBase[styleRole="le-properties-name"]
 {
 padding-left: 10px;
 padding-right: 10px;
