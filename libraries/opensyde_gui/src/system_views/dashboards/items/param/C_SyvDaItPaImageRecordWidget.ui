@@ -1175,7 +1175,10 @@ p, li { white-space: pre-wrap; }
           </layout>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgeTebReport" name="pc_TextBrowserConfirm">
+          <widget class="stw::opensyde_gui_elements::C_OgeTebContextMenuBase" name="pc_TextBrowserConfirm">
+           <property name="styleRole" stdset="0">
+            <string>teb-report</string>
+           </property>
            <property name="readOnly">
             <bool>true</bool>
            </property>
@@ -1385,9 +1388,9 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeTebReport</class>
+   <class>stw::opensyde_gui_elements::C_OgeTebContextMenuBase</class>
    <extends>QTextBrowser</extends>
-   <header>C_OgeTebReport.hpp</header>
+   <header>C_OgeTebContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiProgressBopperle</class>
