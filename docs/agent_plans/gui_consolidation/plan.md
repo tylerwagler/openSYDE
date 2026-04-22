@@ -19,7 +19,13 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Group Boxes) | ⏳ Not started | ~12 classes |
 | Phase 1 (Combo Boxes) | ⏳ Not started | ~10 classes |
 | Phase 1 (Line Edits) | ⏳ Not started | ~8 classes |
-| Phase 1 (Other types) | ⏳ Not started | ~15 classes (frame, scroll_area, tab_widget, text_browser, radio_button, slider, splitter, menu, widget) |
+| Phase 1 (Menu) | ✅ **Complete** | 1/2 migrated (TabChartFit); Sections kept (has logic) |
+| Phase 1 (Scroll Area) | ✅ **Complete** | 1/2 migrated (NaviBar); Main kept (has logic) |
+| Phase 1 (Slider) | ✅ **Complete** | 0/2 migrated (both have logic) |
+| Phase 1 (Radio Button) | ✅ **Complete** | 1/3 migrated (CheckBox); Properties/ToolTipBase kept |
+| Phase 1 (Frame) | ⚠ **3/4 done; Separator deferred** | Border/Frame/Generic done; FraSeparator deferred (168 widgets, 96 .ui files) |
+| Phase 1 (Text Browser) | ✅ **Complete** | 2/4 migrated (MessageDetails, Report); ContextMenuBase/Label kept |
+| Phase 1 (Other types remaining) | ⏳ Not started | tab_widget (~5), widget (~23) |
 | Phase 2 | ⏳ Not started | Dashboard property panels |
 | Phase 3 | ⏳ Not started | Popup dialog boilerplate |
 | Phase 4 | ⏳ Not started | Title bar unification |
