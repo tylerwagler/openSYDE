@@ -646,7 +646,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/dbc_driver_library/src/Vector/DBC/ValueTable.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/dbc_driver_library/src/Vector/DBC/platform.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/text_browser/C_OgeTebReport.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_views/dashboards/C_SyvDaDashboardTabProperties.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.cpp
