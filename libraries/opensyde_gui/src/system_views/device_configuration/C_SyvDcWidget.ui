@@ -641,7 +641,11 @@
        </layout>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeTebReport" name="pc_TextBrowserReport"/>
+       <widget class="stw::opensyde_gui_elements::C_OgeTebContextMenuBase" name="pc_TextBrowserReport">
+        <property name="styleRole" stdset="0">
+         <string>teb-report</string>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer name="verticalSpacer_12">
@@ -1768,9 +1772,9 @@
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeTebReport</class>
+   <class>stw::opensyde_gui_elements::C_OgeTebContextMenuBase</class>
    <extends>QTextBrowser</extends>
-   <header>C_OgeTebReport.hpp</header>
+   <header>C_OgeTebContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiProgressBopperle</class>
