@@ -241,7 +241,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbxToolTip.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/line_edit/C_OgeLeListHeader.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/line_edit/C_OgeLeProperties.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/line_edit/C_OgeLePropertiesName.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/line_edit/C_OgeLeSearch.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/tab_widget/C_OgeTawAlternative.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/tab_widget/C_OgeTawToolBox.cpp
