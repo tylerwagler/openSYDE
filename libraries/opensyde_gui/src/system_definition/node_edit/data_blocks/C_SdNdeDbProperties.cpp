@@ -143,7 +143,7 @@ C_SdNdeDbProperties::C_SdNdeDbProperties(const uint32_t ou32_NodeIndex, const in
    // general connects
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeDbProperties::m_OkClicked);
    connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_SdNdeDbProperties::m_CancelClicked);
-   connect(this->mpc_Ui->pc_LineEditName, &C_OgeLePropertiesName::textChanged,
+   connect(this->mpc_Ui->pc_LineEditName, &QLineEdit::textChanged,
            this, &C_SdNdeDbProperties::m_OnNameEdited);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_SpinBoxProcessID, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged), this,
