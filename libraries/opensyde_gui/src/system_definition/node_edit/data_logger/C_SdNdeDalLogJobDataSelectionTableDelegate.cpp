@@ -15,7 +15,7 @@
 
 #include "C_SdNdeDalLogJobDataSelectionTableDelegate.hpp"
 #include "C_SdNdeDalLogJobDataSelectionTableModel.hpp"
-#include "C_OgeLeTable.hpp"
+#include "C_OgeLeContextMenuBase.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::opensyde_gui;
@@ -64,7 +64,7 @@ QWidget * C_SdNdeDalLogJobDataSelectionTableDelegate::createEditor(QWidget * con
                                                                    const QModelIndex & orc_Index) const
 {
    QWidget * pc_Retval = NULL;
-   C_OgeLeTable * pc_LineEdit = NULL;
+   C_OgeLeContextMenuBase * pc_LineEdit = NULL;
 
    Q_UNUSED(orc_Option)
 
@@ -78,7 +78,8 @@ QWidget * C_SdNdeDalLogJobDataSelectionTableDelegate::createEditor(QWidget * con
       // Line edit for "Logging Name" column
       if (e_Col == C_SdNdeDalLogJobDataSelectionTableModel::eLOGGING_NAME)
       {
-         pc_LineEdit = new C_OgeLeTable(opc_Parent);
+         pc_LineEdit = new C_OgeLeContextMenuBase(opc_Parent);
+         pc_LineEdit->setProperty("styleRole", "le-table");
          pc_LineEdit->setTextMargins(0, 1, 0, 2);
          pc_Retval = pc_LineEdit;
       }

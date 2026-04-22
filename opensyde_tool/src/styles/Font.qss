@@ -56,7 +56,7 @@ QLabel[styleRole="toolbar-no-search-result"],
 stw--opensyde_gui_elements--C_OgeLeContextMenuBase[styleRole="le-toolbar-search"],
 stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole="teb-message-details"],
 stw--opensyde_gui--C_SdNdeHalcConfigTreeView
-stw--opensyde_gui_elements--C_OgeLeTable,
+stw--opensyde_gui_elements--C_OgeLeContextMenuBase[styleRole="le-table"],
 stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table"],
 stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"],
 stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"],
