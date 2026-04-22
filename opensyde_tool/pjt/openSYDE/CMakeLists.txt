@@ -814,7 +814,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/ValueTable.cpp
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/platform.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebReport.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.cpp
@@ -1633,7 +1632,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubSvgIconOnly.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_edit/C_OgeTedToolTipContent.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebContextMenuBase.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebReport.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTipBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaDashboardTabProperties.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiNavigationTab.hpp
