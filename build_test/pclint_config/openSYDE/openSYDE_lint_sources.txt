@@ -602,7 +602,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/C_SdNdeProgrammingOptions.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/com_import_export/C_CieImportDbc.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/widget/C_OgeWiCustomMessage.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/text_browser/C_OgeTebMessageDetails.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroupProperties.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/user_settings/C_UsCommunication.cpp

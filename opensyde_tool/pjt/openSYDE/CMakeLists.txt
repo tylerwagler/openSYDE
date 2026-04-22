@@ -770,7 +770,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeProgrammingOptions.cpp
    ${OPENSYDE_GUI_ROOT}/src/com_import_export/C_CieImportDbc.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiCustomMessage.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebMessageDetails.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroupProperties.cpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsCommunication.cpp
@@ -1603,7 +1602,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/stack.hh
    ${PROJECT_ROOT}/../libraries/dbc_driver_library/src/Vector/DBC/vector_dbc_export.h
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiCustomMessage.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebMessageDetails.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiSpinBoxGroupProperties.hpp
    ${OPENSYDE_GUI_ROOT}/src/user_settings/C_UsCommunication.hpp
