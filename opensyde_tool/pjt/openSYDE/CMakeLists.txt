@@ -409,7 +409,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxToolTip.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeListHeader.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeProperties.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLePropertiesName.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeSearch.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tab_widget/C_OgeTawAlternative.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tab_widget/C_OgeTawToolBox.cpp
@@ -1206,7 +1205,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeListHeader.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeProperties.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLePropertiesName.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/line_edit/C_OgeLeSearch.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tab_widget/C_OgeTawAlternative.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/tab_widget/C_OgeTawToolBox.hpp
