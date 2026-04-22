@@ -155,7 +155,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebMessageDetails.cpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTip.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.cpp
@@ -369,7 +368,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/text_browser/C_OgeTebMessageDetails.hpp
    ${OPENSYDE_GUI_ROOT}/src/navigable_gui/C_NagToolTip.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/label/C_OgeLabPopUpTitle.hpp
