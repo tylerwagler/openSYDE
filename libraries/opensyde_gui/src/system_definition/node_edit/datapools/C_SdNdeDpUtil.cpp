@@ -20,7 +20,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_OgeWiTableSpinBoxGroup.hpp"
 #include "C_OgeWiParamSpinBoxGroup.hpp"
-#include "C_OgeLeTable.hpp"
 #include "C_OgeLeContextMenuBase.hpp"
 #include "C_GtGetText.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
@@ -442,7 +441,8 @@ QWidget * C_SdNdeDpUtil::h_CreateGenericEditor(QWidget * const opc_Parent, const
          QLineEdit * pc_LineEdit;
          if (oq_UseParamVariant == false)
          {
-            pc_LineEdit = new C_OgeLeTable(opc_Parent);
+            pc_LineEdit = new C_OgeLeContextMenuBase(opc_Parent);
+            pc_LineEdit->setProperty("styleRole", "le-table");
          }
          else
          {
