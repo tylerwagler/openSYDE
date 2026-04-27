@@ -238,7 +238,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbx.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbxGrayed.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbxTransparent.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbxToolTip.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/line_edit/C_OgeLeListHeader.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/line_edit/C_OgeLeProperties.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/line_edit/C_OgeLeSearch.cpp
@@ -383,7 +382,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/datapools/C_SdNdeDpListHeaderUsageWidget.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/widget/C_OgeWiWithToolTip.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/datapools/C_SdNdeDpListPopUp.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbxListHeader.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/C_SdNodeComIfSetupWidget.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/C_SdNodeToNodeConnectionSetupWidget.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/radio_button/C_OgeRabProperties.cpp
@@ -411,7 +409,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_views/dashboards/C_SyvDaTearOffWidget.cpp
 /home/tyler/Projects/Crane/openSYDE/opensyde_tool/src/scene_base/C_SebTopologyBaseContextMenuManager.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_views/system_setup/C_SyvSeDllConfigurationDialog.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbxRead.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbxGrayedEdit.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/push_button/C_OgePubTabClose.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/user_settings/C_UsSystemView.cpp
