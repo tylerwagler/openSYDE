@@ -50,7 +50,10 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,0,1">
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral">
+         <widget class="QGroupBox" name="pc_GroupBoxGeneral">
+          <property name="styleRole" stdset="0">
+           <string>default</string>
+          </property>
           <property name="title">
            <string/>
           </property>
@@ -250,7 +253,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral_2">
+         <widget class="QGroupBox" name="pc_GroupBoxGeneral_2">
+          <property name="styleRole" stdset="0">
+           <string>default</string>
+          </property>
           <property name="title">
            <string/>
           </property>
@@ -591,7 +597,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral_3">
+    <widget class="QGroupBox" name="pc_GroupBoxGeneral_3">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -1850,12 +1859,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
    <header>C_OgeLabToolTipBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
 

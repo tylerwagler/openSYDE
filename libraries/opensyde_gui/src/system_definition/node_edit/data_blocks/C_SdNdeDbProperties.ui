@@ -33,7 +33,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral">
+    <widget class="QGroupBox" name="pc_GroupBoxGeneral">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="maximumSize">
       <size>
        <width>16777215</width>
@@ -306,7 +309,10 @@ p, li { white-space: pre-wrap; }
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxFileGen">
+    <widget class="QGroupBox" name="pc_GroupBoxFileGen">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -1397,7 +1403,10 @@ p, li { white-space: pre-wrap; }
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxProject">
+    <widget class="QGroupBox" name="pc_GroupBoxProject">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -1917,12 +1926,6 @@ p, li { white-space: pre-wrap; }
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
    <extends>QFrame</extends>
    <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

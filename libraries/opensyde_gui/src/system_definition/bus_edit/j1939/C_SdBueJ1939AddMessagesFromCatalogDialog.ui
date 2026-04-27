@@ -33,7 +33,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral_5">
+    <widget class="QGroupBox" name="pc_GroupBoxGeneral_5">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -295,7 +298,10 @@
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral">
+    <widget class="QGroupBox" name="pc_GroupBoxGeneral">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -735,12 +741,6 @@
    <class>stw::opensyde_gui_elements::C_OgePubOpen</class>
    <extends>QPushButton</extends>
    <header>C_OgePubOpen.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
 

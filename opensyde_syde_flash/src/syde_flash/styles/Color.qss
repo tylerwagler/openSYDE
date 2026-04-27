@@ -83,7 +83,7 @@ stw--opensyde_gui_elements--C_CamOgeCbxTableSmall QListView,
 stw--opensyde_gui_elements--C_CamOgeCbxTableSmall QListView::item,
 stw--opensyde_gui_elements--C_CamOgeGbxMessageGeneratorBackground,
 stw--opensyde_gui_elements--C_CamOgeWiSpinBoxGroupTable QAbstractSpinBox,
-stw--opensyde_gui_elements--C_OgeGbx,
+QGroupBox[styleRole="default"],
 stw--opensyde_gui_elements--C_CamOgeMuRecentProjects,
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment
 {
@@ -590,7 +590,7 @@ QFrame[styleRole="fra-border"]
 background-color: rgb(177, 177, 177);
 }
 
-stw--opensyde_gui_elements--C_OgeGbx
+QGroupBox[styleRole="default"]
 {
 border-color: rgb(177, 177, 177);
 }
