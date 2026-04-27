@@ -168,7 +168,10 @@
       </layout>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxNavigationSection2" name="groupBox_10">
+      <widget class="QGroupBox" name="groupBox_10">
+       <property name="styleRole" stdset="0">
+        <string>navigation-section-2</string>
+       </property>
        <property name="title">
         <string/>
        </property>
@@ -381,7 +384,10 @@
                              </spacer>
                             </item>
                             <item>
-                             <widget class="stw::opensyde_gui_elements::C_OgeGbxNavigationHeadingBackground" name="groupBox_13">
+                             <widget class="QGroupBox" name="groupBox_13">
+                              <property name="styleRole" stdset="0">
+                               <string>navigation-heading-background</string>
+                              </property>
                               <property name="minimumSize">
                                <size>
                                 <width>89</width>
@@ -572,7 +578,10 @@
                              </spacer>
                             </item>
                             <item>
-                             <widget class="stw::opensyde_gui_elements::C_OgeGbxNavigationHeadingBackground" name="groupBox_14">
+                             <widget class="QGroupBox" name="groupBox_14">
+                              <property name="styleRole" stdset="0">
+                               <string>navigation-heading-background</string>
+                              </property>
                               <property name="minimumSize">
                                <size>
                                 <width>89</width>
@@ -1058,18 +1067,6 @@
    <class>stw::opensyde_gui_elements::C_OgeSpiHorizontalNavigation</class>
    <extends>QSplitter</extends>
    <header>C_OgeSpiHorizontalNavigation.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxNavigationSection2</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxNavigationSection2.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxNavigationHeadingBackground</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxNavigationHeadingBackground.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

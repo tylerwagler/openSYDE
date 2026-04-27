@@ -31,7 +31,7 @@ border-left-width: 0px;
 
 /* --------------------------------------------------------------------- */
 
-stw--opensyde_gui_elements--C_OgeGbxNavigationSection2
+QGroupBox[styleRole="navigation-section-2"]
 {
 border-left-width: 1px;
 border-bottom-width: 0px;
@@ -55,7 +55,7 @@ border-radius: 0px;
 
 /* --------------------------------------------------------------------- */
 QGroupBox[styleRole="grayed"],
-stw--opensyde_gui_elements--C_OgeGbxTransparentToolBarSearch,
+QGroupBox[styleRole="transparent-toolbar-search"],
 stw--opensyde_gui_elements--C_OgeGbxHover,
 QGroupBox[styleRole="list-header"]
 {
@@ -75,7 +75,7 @@ border-radius: 0px;
 /* --------------------------------------------------------------------- */
 stw--opensyde_gui_elements--C_OgeGbxTransparent,
 stw--opensyde_gui_elements--C_OgeGbxTransparentDashboard,
-stw--opensyde_gui_elements--C_OgeGbxNavigationHeadingBackground
+QGroupBox[styleRole="navigation-heading-background"]
 {
 border-style: solid;
 border-width: 0px;
