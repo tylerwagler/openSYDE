@@ -235,7 +235,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/undo/C_SdNdeUnoUtil.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/combo_box/C_OgeCbxIconDelegate.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/combo_box/C_OgeCbxIconOnly.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbx.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/group_box/C_OgeGbxTransparent.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/line_edit/C_OgeLeListHeader.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/line_edit/C_OgeLeProperties.cpp
