@@ -47,7 +47,10 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxGrayed" name="pc_GroupBox">
+      <widget class="QGroupBox" name="pc_GroupBox">
+       <property name="styleRole" stdset="0">
+        <string>grayed</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>350</width>
@@ -150,12 +153,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxGrayed</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxGrayed.hpp</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdSearchTreeWidget</class>
    <extends>QTreeWidget</extends>

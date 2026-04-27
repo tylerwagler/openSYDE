@@ -980,7 +980,10 @@
       </spacer>
      </item>
      <item row="3" column="2" rowspan="17">
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxGrayed" name="pc_GroupBoxIcon">
+      <widget class="QGroupBox" name="pc_GroupBoxIcon">
+       <property name="styleRole" stdset="0">
+        <string>grayed</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>270</width>
@@ -1183,12 +1186,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLeToolTipBase</class>
    <extends>QLineEdit</extends>
    <header>C_OgeLeToolTipBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxGrayed</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxGrayed.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabSvgOnly</class>

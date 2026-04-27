@@ -7,15 +7,18 @@ Directory: `libraries/opensyde_gui/src/opensyde_gui_elements/group_box/`
 
 ## TODO (stylesheet-only — safe to migrate)
 
-- [ ] **C_OgeGbx** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="default"`
-- [ ] **C_OgeGbxGrayed** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="grayed"`
-- [ ] **C_OgeGbxListHeader** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="list-header"`
+- [ ] **C_OgeGbx** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="default"` *(71 .ui files — own session)*
+- [ ] **C_OgeGbxGrayed** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="grayed"` *(10 .ui files)*
 - [ ] **C_OgeGbxNavigationHeadingBackground** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="navigation-heading-background"`
 - [ ] **C_OgeGbxNavigationSection2** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="navigation-section-2"`
-- [ ] **C_OgeGbxRead** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="read"`
-- [ ] **C_OgeGbxToolTip** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="tooltip"`
 - [ ] **C_OgeGbxTransparent** (inherits `C_OgeGbxToolTipBase`) -> replace with `C_OgeGbxToolTipBase` + `styleRole="transparent"` *(NOT QGroupBox — parent has tooltip event handling)*
 - [ ] **C_OgeGbxTransparentToolBarSearch** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="transparent-toolbar-search"`
+
+## Done
+
+- [x] **C_OgeGbxRead** -> dropped unused QSS rules; class deleted (no .ui or C++ refs anywhere) — `5037f7ac` (migrate), `f916617c` (delete)
+- [x] **C_OgeGbxListHeader** -> `QGroupBox[styleRole="list-header"]` — `5037f7ac` (migrate), `f916617c` (delete)
+- [x] **C_OgeGbxToolTip** -> `QGroupBox[styleRole="tooltip"]` — `5037f7ac` (migrate), `f916617c` (delete)
 
 ## Skipped (has logic — do NOT migrate)
 
@@ -27,10 +30,6 @@ Directory: `libraries/opensyde_gui/src/opensyde_gui_elements/group_box/`
 - **C_OgeGbxNavigationTab** — has public `SetIncludeLeftBorder` method; constructor sets stylesheet property
 - **C_OgeGbxToolTipBase** — multiple inheritance from `C_OgeToolTipBase` mixin; overrides `event()` for tooltip dispatch
 - **C_OgeGbxTransparentDashboard** — declares `SigResized` signal; overrides `resizeEvent`
-
-## Done
-
-(none yet)
 
 ## Notes
 
