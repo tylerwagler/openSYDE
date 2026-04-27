@@ -402,9 +402,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui::C_SyvDaPeUpdateModeTreeWidget</class>
    <extends>QTreeWidget</extends>
    <header>C_SyvDaPeUpdateModeTreeWidget.hpp</header>

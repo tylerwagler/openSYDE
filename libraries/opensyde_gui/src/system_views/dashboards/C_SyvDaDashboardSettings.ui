@@ -511,9 +511,6 @@
    <extends>QSpinBox</extends>
    <header>C_OgeSpxToolTipBase.hpp</header>
   </customwidget>
-  <customwidget>
-
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

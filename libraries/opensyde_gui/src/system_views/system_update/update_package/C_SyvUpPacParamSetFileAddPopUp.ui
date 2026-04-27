@@ -299,9 +299,6 @@
    <extends>QTextEdit</extends>
    <header>C_OgeTedPropertiesComment.hpp</header>
   </customwidget>
-  <customwidget>
-
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>

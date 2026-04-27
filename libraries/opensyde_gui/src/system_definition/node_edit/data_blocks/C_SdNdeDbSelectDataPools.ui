@@ -503,9 +503,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui::C_TblTreDataElementView</class>
    <extends>QTreeView</extends>
    <header>C_TblTreDataElementView.hpp</header>

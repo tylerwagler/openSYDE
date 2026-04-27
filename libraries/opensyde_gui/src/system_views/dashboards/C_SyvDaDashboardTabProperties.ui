@@ -693,9 +693,6 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeTedPropertiesComment.hpp</header>
   </customwidget>
   <customwidget>
-
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeToolTipBase</class>
    <extends>QLineEdit</extends>
    <header>C_OgeLeToolTipBase.hpp</header>
