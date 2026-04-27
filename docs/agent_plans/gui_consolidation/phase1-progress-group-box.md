@@ -7,8 +7,8 @@ Directory: `libraries/opensyde_gui/src/opensyde_gui_elements/group_box/`
 
 ## TODO (stylesheet-only — safe to migrate)
 
-- [ ] **C_OgeGbx** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="default"` *(71 .ui files — own session)*
-- [ ] **C_OgeGbxTransparent** (inherits `C_OgeGbxToolTipBase`) -> replace with `C_OgeGbxToolTipBase` + `styleRole="transparent"` *(NOT QGroupBox — parent has tooltip event handling; 49 .ui files + programmatic uses, own session)*
+- [ ] **C_OgeGbx** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="default"` *(71 .ui files, 91 widget instances, zero programmatic uses — large but mechanical)*
+- [ ] **C_OgeGbxTransparent** -> replace with **plain `QGroupBox`** + `styleRole="transparent"` *(49 .ui files, 93 widget instances; 5 programmatic uses across 4 .cpp/.hpp; tooltip feature not used on these widgets per `SetToolTipInformation` audit, so plain QGroupBox is safe and avoids the parent-Q_OBJECT issue.)*
 
 ## Done
 
