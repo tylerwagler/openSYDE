@@ -86,7 +86,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparentToolBarSearch" name="pc_GroupBoxSearch">
+      <widget class="QGroupBox" name="pc_GroupBoxSearch">
+       <property name="styleRole" stdset="0">
+        <string>transparent-toolbar-search</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>350</width>
@@ -297,12 +300,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabSvgOnly</class>
    <extends>QLabel</extends>
    <header>C_OgeLabSvgOnly.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparentToolBarSearch</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparentToolBarSearch.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeContextMenuBase</class>
