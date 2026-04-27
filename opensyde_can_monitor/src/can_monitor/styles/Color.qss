@@ -101,7 +101,7 @@ stw--opensyde_gui--C_CamGenSigTableView::indicator,
 stw--opensyde_gui--C_CamMosFilterTableView::indicator:unchecked,
 stw--opensyde_gui_elements--C_CamOgeGbxMessageGeneratorBackground,
 stw--opensyde_gui_elements--C_CamOgeWiSpinBoxGroupTable QAbstractSpinBox,
-stw--opensyde_gui_elements--C_OgeGbx,
+QGroupBox[styleRole="default"],
 stw--opensyde_gui_elements--C_CamOgeMuRecentProjects
 {
 background-color:rgb(255, 255, 255);
@@ -615,7 +615,7 @@ QFrame[styleRole="fra-border"]
 background-color: rgb(177, 177, 177);
 }
 
-stw--opensyde_gui_elements--C_OgeGbx
+QGroupBox[styleRole="default"]
 {
 border-color: rgb(177, 177, 177);
 }

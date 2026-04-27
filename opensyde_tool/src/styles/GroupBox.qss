@@ -1,5 +1,5 @@
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeGbx
+QGroupBox[styleRole="default"]
 {
 border-width: 1px;
 border-style: solid;

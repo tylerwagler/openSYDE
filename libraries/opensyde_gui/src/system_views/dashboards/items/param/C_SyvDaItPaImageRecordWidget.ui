@@ -767,7 +767,10 @@
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxHeading">
+    <widget class="QGroupBox" name="pc_GroupBoxHeading">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,1,0">
       <property name="spacing">
        <number>12</number>
@@ -1356,12 +1359,6 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>

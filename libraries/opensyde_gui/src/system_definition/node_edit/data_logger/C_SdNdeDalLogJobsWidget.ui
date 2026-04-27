@@ -30,7 +30,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBox_Transparent">
+    <widget class="QGroupBox" name="pc_GroupBox_Transparent">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -174,12 +177,6 @@
    <class>stw::opensyde_gui_elements::C_OgeWiOnlyBackground</class>
    <extends>QWidget</extends>
    <header>C_OgeWiOnlyBackground.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -27,7 +27,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxMapped_2">
+    <widget class="QGroupBox" name="pc_GroupBoxMapped_2">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -206,7 +209,10 @@
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxMapped">
+    <widget class="QGroupBox" name="pc_GroupBoxMapped">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -594,7 +600,10 @@
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxUnmapped">
+    <widget class="QGroupBox" name="pc_GroupBoxUnmapped">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -1029,12 +1038,6 @@
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
    <extends>QFrame</extends>
    <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
