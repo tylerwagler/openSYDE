@@ -10,7 +10,7 @@ Directory: `libraries/opensyde_gui/src/opensyde_gui_elements/group_box/`
 
 ## Done
 
-- [x] **C_OgeGbx** (inherits `QGroupBox`) -> `QGroupBox` + `styleRole="default"` (71 .ui files, 91 widget instances) — `00407b83` (migrate), `1d8b4468` (delete)
+- [x] **C_OgeGbx** (inherits `QGroupBox`) -> `QGroupBox` + `styleRole="default"` (71 .ui files, 91 widget instances) — `00407b83` (migrate), `63bbfd20` (delete), `f03a22d6` (cleanup empty customwidget blocks left by remote agent)
 - [x] **C_OgeGbxRead** -> dropped unused QSS rules; class deleted (no .ui or C++ refs anywhere) — `5037f7ac` (migrate), `f916617c` (delete)
 - [x] **C_OgeGbxListHeader** -> `QGroupBox[styleRole="list-header"]` — `5037f7ac` (migrate), `f916617c` (delete)
 - [x] **C_OgeGbxToolTip** -> `QGroupBox[styleRole="tooltip"]` — `5037f7ac` (migrate), `f916617c` (delete)
@@ -32,7 +32,7 @@ Directory: `libraries/opensyde_gui/src/opensyde_gui_elements/group_box/`
 
 ## Notes
 
-- **Parent gotcha (C_OgeGbxTransparent):** This class inherits `C_OgeGbxToolTipBase`, which provides tooltip event handling via the `C_OgeToolTipBase` mixin. The replacement type in .ui files must be `C_OgeGbxToolTipBase`, not the grandparent `QGroupBox` — otherwise tooltip behavior would be lost. (Same lesson as C_OgeLePropertiesName from line_edit family.)
+- **C_OgeGbxTransparent migration target — superseded:** Earlier I assumed the replacement had to be `C_OgeGbxToolTipBase` to preserve tooltip behavior. After auditing, no caller invokes `SetToolTipInformation` on any of the 93 widget instances — only push-button tooltips are wired. Combined with the fact that `C_OgeGbxToolTipBase` lacks `Q_OBJECT` (so `stw--opensyde_gui_elements--C_OgeGbxToolTipBase[styleRole=...]` selectors don't match at runtime), the correct target is plain `QGroupBox` + `styleRole="transparent"`. The `QGroupBox[styleRole=...]` selector matches reliably regardless of leaf-class metaobject.
 
 - **Most candidates inherit QGroupBox directly**, so the .ui replacement is straightforward `<widget class="QGroupBox" ...>` with the styleRole property — no customwidget block needed for QGroupBox.
 
