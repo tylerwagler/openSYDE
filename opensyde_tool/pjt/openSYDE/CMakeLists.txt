@@ -438,7 +438,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDataChangeCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableHeaderView.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparentToolBarSearch.cpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopUtil.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListDataChangeCommand.cpp
@@ -886,8 +885,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItTableHeaderView.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSection2.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationHeadingBackground.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSectionSelected.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxDatapoolEntry.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxTimeoutConfig.cpp
@@ -1230,7 +1227,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/spin_box/C_OgeSpxInt64.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementDataChangeCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListTableHeaderView.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxTransparentToolBarSearch.hpp
    ${OPENSYDE_GUI_ROOT}/src/project_operations/C_PopUtil.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpListDataSetWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/C_SdNdeUnoDataPoolListDataChangeCommand.hpp
@@ -1693,8 +1689,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/items/C_SyvDaItTableHeaderView.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleItem.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSection2.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationHeadingBackground.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxNavigationSectionSelected.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxDatapoolEntry.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueMessageRxTimeoutConfig.hpp

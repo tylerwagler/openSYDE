@@ -8,17 +8,17 @@ Directory: `libraries/opensyde_gui/src/opensyde_gui_elements/group_box/`
 ## TODO (stylesheet-only — safe to migrate)
 
 - [ ] **C_OgeGbx** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="default"` *(71 .ui files — own session)*
-- [ ] **C_OgeGbxNavigationHeadingBackground** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="navigation-heading-background"`
-- [ ] **C_OgeGbxNavigationSection2** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="navigation-section-2"`
-- [ ] **C_OgeGbxTransparent** (inherits `C_OgeGbxToolTipBase`) -> replace with `C_OgeGbxToolTipBase` + `styleRole="transparent"` *(NOT QGroupBox — parent has tooltip event handling)*
-- [ ] **C_OgeGbxTransparentToolBarSearch** (inherits `QGroupBox`) -> replace with `QGroupBox` + `styleRole="transparent-toolbar-search"`
+- [ ] **C_OgeGbxTransparent** (inherits `C_OgeGbxToolTipBase`) -> replace with `C_OgeGbxToolTipBase` + `styleRole="transparent"` *(NOT QGroupBox — parent has tooltip event handling; 49 .ui files + programmatic uses, own session)*
 
 ## Done
 
 - [x] **C_OgeGbxRead** -> dropped unused QSS rules; class deleted (no .ui or C++ refs anywhere) — `5037f7ac` (migrate), `f916617c` (delete)
 - [x] **C_OgeGbxListHeader** -> `QGroupBox[styleRole="list-header"]` — `5037f7ac` (migrate), `f916617c` (delete)
 - [x] **C_OgeGbxToolTip** -> `QGroupBox[styleRole="tooltip"]` — `5037f7ac` (migrate), `f916617c` (delete)
-- [x] **C_OgeGbxGrayed** -> `QGroupBox[styleRole="grayed"]` (10 .ui files) — `dfd4adfa` (migrate), `(next commit)` (delete)
+- [x] **C_OgeGbxGrayed** -> `QGroupBox[styleRole="grayed"]` (10 .ui files) — `dfd4adfa` (migrate), `ac380e57` (delete)
+- [x] **C_OgeGbxNavigationHeadingBackground** -> `QGroupBox[styleRole="navigation-heading-background"]` — `4434fedb` (migrate), pending delete
+- [x] **C_OgeGbxNavigationSection2** -> `QGroupBox[styleRole="navigation-section-2"]` — `4434fedb` (migrate), pending delete
+- [x] **C_OgeGbxTransparentToolBarSearch** -> `QGroupBox[styleRole="transparent-toolbar-search"]` — `4434fedb` (migrate), pending delete
 
 ## Skipped (has logic — do NOT migrate)
 
