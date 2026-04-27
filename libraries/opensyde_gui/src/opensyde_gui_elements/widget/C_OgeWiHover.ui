@@ -170,7 +170,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbxGrayed" name="pc_GroupBoxSearch">
+         <widget class="QGroupBox" name="pc_GroupBoxSearch">
+          <property name="styleRole" stdset="0">
+           <string>grayed</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -344,12 +347,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLeContextMenuBase</class>
    <extends>QLineEdit</extends>
    <header>C_OgeLeContextMenuBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxGrayed</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxGrayed.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabDoubleClick</class>
