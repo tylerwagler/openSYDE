@@ -396,9 +396,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui::C_SdNdeLeIpAddressWidget</class>
    <extends>QWidget</extends>
    <header>C_SdNdeLeIpAddressWidget.hpp</header>

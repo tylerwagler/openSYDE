@@ -292,9 +292,6 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui::C_SyvDcConnectedNodeList</class>
    <extends>QListWidget</extends>
    <header>C_SyvDcConnectedNodeList.hpp</header>
