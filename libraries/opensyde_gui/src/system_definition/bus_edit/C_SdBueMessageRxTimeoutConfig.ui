@@ -155,7 +155,10 @@
          <number>9</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxMode">
+         <widget class="QGroupBox" name="pc_GroupBoxMode">
+          <property name="styleRole" stdset="0">
+           <string>transparent</string>
+          </property>
           <property name="title">
            <string/>
           </property>
@@ -218,7 +221,10 @@
          </widget>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxValue">
+         <widget class="QGroupBox" name="pc_GroupBoxValue">
+          <property name="styleRole" stdset="0">
+           <string>transparent</string>
+          </property>
           <property name="title">
            <string/>
           </property>
@@ -432,12 +438,6 @@
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
    <extends>QComboBox</extends>
    <header>C_OgeCbxText.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>

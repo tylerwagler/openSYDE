@@ -36,7 +36,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxMultiplexer">
+    <widget class="QGroupBox" name="pc_GroupBoxMultiplexer">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -118,12 +121,6 @@
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
    <extends>QComboBox</extends>
    <header>C_OgeCbxText.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

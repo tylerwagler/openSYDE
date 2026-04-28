@@ -960,7 +960,10 @@
            </layout>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNoExistingNodes">
+           <widget class="QGroupBox" name="pc_GroupBoxNoExistingNodes">
+            <property name="styleRole" stdset="0">
+             <string>transparent</string>
+            </property>
             <property name="title">
              <string>No existing nodes</string>
             </property>
@@ -1114,7 +1117,10 @@
            </layout>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxStartScan">
+           <widget class="QGroupBox" name="pc_GroupBoxStartScan">
+            <property name="styleRole" stdset="0">
+             <string>transparent</string>
+            </property>
             <property name="title">
              <string>Scan label</string>
             </property>
@@ -1753,12 +1759,6 @@
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
    <extends>QFrame</extends>
    <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

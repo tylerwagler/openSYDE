@@ -411,7 +411,10 @@
          </layout>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="groupBox">
+         <widget class="QGroupBox" name="groupBox">
+          <property name="styleRole" stdset="0">
+           <string>transparent</string>
+          </property>
           <property name="title">
            <string/>
           </property>
@@ -730,12 +733,6 @@
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
    <extends>QComboBox</extends>
    <header>C_OgeCbxText.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubOpen</class>

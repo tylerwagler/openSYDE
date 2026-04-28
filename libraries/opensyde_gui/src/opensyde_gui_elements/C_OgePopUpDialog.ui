@@ -71,7 +71,10 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxTitle">
+            <widget class="QGroupBox" name="pc_GroupBoxTitle">
+             <property name="styleRole" stdset="0">
+              <string>transparent</string>
+             </property>
              <property name="title">
               <string>TitleBar</string>
              </property>
@@ -243,12 +246,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabPopUpTitle</class>
    <extends>QLabel</extends>

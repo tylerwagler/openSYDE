@@ -193,7 +193,10 @@
        </layout>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxInitialSignalNoElements">
+       <widget class="QGroupBox" name="pc_GroupBoxInitialSignalNoElements">
+        <property name="styleRole" stdset="0">
+         <string>transparent</string>
+        </property>
         <property name="title">
          <string>Initial - Signal - No element case:</string>
         </property>
@@ -265,7 +268,10 @@
        </widget>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxSearchNoElementsFound">
+       <widget class="QGroupBox" name="pc_GroupBoxSearchNoElementsFound">
+        <property name="styleRole" stdset="0">
+         <string>transparent</string>
+        </property>
         <property name="title">
          <string>Search - No element case:</string>
         </property>
@@ -470,12 +476,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>
    <extends>QLabel</extends>
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>

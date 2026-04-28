@@ -571,7 +571,10 @@
              </layout>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxInterfaces1">
+             <widget class="QGroupBox" name="pc_GroupBoxInterfaces1">
+              <property name="styleRole" stdset="0">
+               <string>transparent</string>
+              </property>
               <property name="title">
                <string>Interfaces1</string>
               </property>
@@ -726,7 +729,10 @@
              </layout>
             </item>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxInterfaces2">
+             <widget class="QGroupBox" name="pc_GroupBoxInterfaces2">
+              <property name="styleRole" stdset="0">
+               <string>transparent</string>
+              </property>
               <property name="title">
                <string>Interfaces2</string>
               </property>
@@ -995,12 +1001,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLeProperties</class>
    <extends>QLineEdit</extends>
    <header>C_OgeLeProperties.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeRabProperties</class>

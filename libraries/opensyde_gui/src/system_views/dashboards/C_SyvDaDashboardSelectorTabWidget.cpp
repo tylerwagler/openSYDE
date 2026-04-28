@@ -10,6 +10,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QGroupBox>
+
 #include "stwerrors.hpp"
 #include "TglUtils.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -17,7 +19,6 @@
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "C_GtGetText.hpp"
-#include "C_OgeGbxTransparent.hpp"
 #include "C_UsHandler.hpp"
 #include "C_PuiProject.hpp"
 #include "C_SyvClipBoardHelper.hpp"
@@ -759,7 +760,8 @@ void C_SyvDaDashboardSelectorTabWidget::m_InitTabStyle(const uint32_t ou32_Index
                                                        const bool oq_Dark)
 {
    C_OgeWiDashboardTab * const pc_DrawingWidget = new C_OgeWiDashboardTab(NULL, true);
-   C_OgeGbxTransparent * const pc_GroupBox = new C_OgeGbxTransparent();
+   QGroupBox * const pc_GroupBox = new QGroupBox();
+   pc_GroupBox->setProperty("styleRole", "transparent");
 
    switch (this->me_DashboardTabType)
    {

@@ -115,7 +115,10 @@
        </widget>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNoElements">
+       <widget class="QGroupBox" name="pc_GroupBoxNoElements">
+        <property name="styleRole" stdset="0">
+         <string>transparent</string>
+        </property>
         <property name="title">
          <string/>
         </property>
@@ -305,12 +308,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>
    <extends>QLabel</extends>
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

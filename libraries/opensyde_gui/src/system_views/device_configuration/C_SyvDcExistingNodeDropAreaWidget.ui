@@ -21,7 +21,10 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxValid">
+    <widget class="QGroupBox" name="pc_GroupBoxValid">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="title">
       <string>Valid</string>
      </property>
@@ -78,7 +81,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxEmpty">
+    <widget class="QGroupBox" name="pc_GroupBoxEmpty">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="title">
       <string>Empty</string>
      </property>
@@ -137,12 +143,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>

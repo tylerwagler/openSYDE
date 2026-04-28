@@ -30,7 +30,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxEmpty">
+    <widget class="QGroupBox" name="pc_GroupBoxEmpty">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="title">
       <string>GroupBox</string>
      </property>
@@ -104,7 +107,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNotEmpty">
+    <widget class="QGroupBox" name="pc_GroupBoxNotEmpty">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="title">
       <string>GroupBox</string>
      </property>
@@ -141,12 +147,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
    <header>C_OgeLabToolTipBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
