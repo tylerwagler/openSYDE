@@ -21,7 +21,6 @@
 #include <QSpinBox>
 #include <QHBoxLayout>
 
-#include "C_OgeGbxTransparent.hpp"
 #include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */

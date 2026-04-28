@@ -121,7 +121,10 @@
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNoMessages">
+    <widget class="QGroupBox" name="pc_GroupBoxNoMessages">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="title">
       <string>No messages</string>
      </property>
@@ -190,7 +193,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNoMessagesFromCatalog">
+    <widget class="QGroupBox" name="pc_GroupBoxNoMessagesFromCatalog">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="title">
       <string>No messages</string>
      </property>
@@ -350,12 +356,6 @@
    <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
    <extends>QFrame</extends>
    <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>

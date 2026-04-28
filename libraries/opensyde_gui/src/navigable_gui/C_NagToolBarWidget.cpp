@@ -15,6 +15,7 @@
 
 #include <QEvent>
 #include <QFontMetrics>
+#include <QGroupBox>
 #include <QKeyEvent>
 
 #include "stwtypes.hpp"
@@ -154,7 +155,8 @@ void stw::opensyde_gui::C_NagToolBarWidget::ConfigureButtons(C_NagUseCaseWidget 
    for (pc_ItFuncName = c_VecFuncs.begin(); pc_ItFuncName != c_VecFuncs.end(); ++pc_ItFuncName)
    {
       // create all necessary elements
-      C_OgeGbxTransparent * const pc_GroupBox = new C_OgeGbxTransparent(this);
+      QGroupBox * const pc_GroupBox = new QGroupBox(this);
+      pc_GroupBox->setProperty("styleRole", "transparent");
       QHBoxLayout * const pc_GroupBoxLayout = new QHBoxLayout();
       C_OgePubToolBar * const pc_Button = new C_OgePubToolBar(NULL, static_cast<uint32_t>(this->mc_VecButtons.count()));
 

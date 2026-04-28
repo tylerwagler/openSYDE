@@ -187,7 +187,10 @@
                <widget class="stw::opensyde_gui_elements::C_OgeLeNavigation" name="pc_LineEditHeading"/>
               </item>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxHoverButtons">
+               <widget class="QGroupBox" name="pc_GroupBoxHoverButtons">
+                <property name="styleRole" stdset="0">
+                 <string>transparent</string>
+                </property>
                 <property name="title">
                  <string/>
                 </property>
@@ -342,12 +345,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeGbxNavigationTab</class>
    <extends>QGroupBox</extends>

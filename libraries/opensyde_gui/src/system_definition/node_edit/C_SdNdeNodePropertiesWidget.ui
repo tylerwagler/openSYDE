@@ -36,7 +36,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBox_2">
+    <widget class="QGroupBox" name="pc_GroupBox_2">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -1117,7 +1120,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBox">
+    <widget class="QGroupBox" name="pc_GroupBox">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -1220,7 +1226,10 @@
     </layout>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="groupBox_2">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -1362,12 +1371,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLeToolTipBase</class>
    <extends>QLineEdit</extends>
    <header>C_OgeLeToolTipBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>

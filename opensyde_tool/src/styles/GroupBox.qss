@@ -73,7 +73,7 @@ border-radius: 0px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgeGbxTransparent,
+QGroupBox[styleRole="transparent"],
 stw--opensyde_gui_elements--C_OgeGbxTransparentDashboard,
 QGroupBox[styleRole="navigation-heading-background"]
 {
