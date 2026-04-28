@@ -6,10 +6,12 @@ Directory: `libraries/opensyde_gui/src/opensyde_gui_elements/group_box/`
 17 classes total: 9 stylesheet-only, 8 with logic.
 
 ## TODO (stylesheet-only — safe to migrate)
-- [ ] **C_OgeGbxTransparent** -> replace with **plain `QGroupBox`** + `styleRole="transparent"` *(49 .ui files, 93 widget instances; 5 programmatic uses across 4 .cpp/.hpp; tooltip feature not used on these widgets per `SetToolTipInformation` audit, so plain QGroupBox is safe and avoids the parent-Q_OBJECT issue.)*
+
+(none — group_box family stylesheet-only classes all migrated)
 
 ## Done
 
+- [x] **C_OgeGbxTransparent** -> `QGroupBox` + `styleRole="transparent"` (49 .ui files; 5 programmatic uses) — `5575cf2c` (migrate), pending delete
 - [x] **C_OgeGbx** (inherits `QGroupBox`) -> `QGroupBox` + `styleRole="default"` (71 .ui files, 91 widget instances) — `00407b83` (migrate), `63bbfd20` (delete), `f03a22d6` (cleanup empty customwidget blocks left by remote agent)
 - [x] **C_OgeGbxRead** -> dropped unused QSS rules; class deleted (no .ui or C++ refs anywhere) — `5037f7ac` (migrate), `f916617c` (delete)
 - [x] **C_OgeGbxListHeader** -> `QGroupBox[styleRole="list-header"]` — `5037f7ac` (migrate), `f916617c` (delete)
