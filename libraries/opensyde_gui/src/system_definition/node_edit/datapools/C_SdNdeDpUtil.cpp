@@ -18,8 +18,7 @@
 #include "C_SdNdeDpUtil.hpp"
 #include "constants.hpp"
 #include "C_PuiSdHandler.hpp"
-#include "C_OgeWiTableSpinBoxGroup.hpp"
-#include "C_OgeWiParamSpinBoxGroup.hpp"
+#include "C_OgeWiSpinBoxGroup.hpp"
 #include "C_OgeLeContextMenuBase.hpp"
 #include "C_GtGetText.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
@@ -466,14 +465,14 @@ QWidget * C_SdNdeDpUtil::h_CreateGenericEditor(QWidget * const opc_Parent, const
          {
             if (c_Min.GetType() == c_Max.GetType())
             {
-               C_OgeWiSpinBoxGroup * pc_SpinBoxGroup;
+               C_OgeWiSpinBoxGroup * const pc_SpinBoxGroup = new C_OgeWiSpinBoxGroup(opc_Parent);
                if (oq_UseParamVariant == false)
                {
-                  pc_SpinBoxGroup = new C_OgeWiTableSpinBoxGroup(opc_Parent);
+                  pc_SpinBoxGroup->setProperty("styleRole", "table-spinbox");
                }
                else
                {
-                  pc_SpinBoxGroup = new C_OgeWiParamSpinBoxGroup(opc_Parent);
+                  pc_SpinBoxGroup->setProperty("styleRole", "param-spinbox");
                }
                pc_SpinBoxGroup->Init(orc_Min, orc_Max, of64_Factor, of64_Offset, oru32_ArrayIndex);
                pc_Retval = pc_SpinBoxGroup;
