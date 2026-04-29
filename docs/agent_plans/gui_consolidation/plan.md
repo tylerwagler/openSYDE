@@ -8,7 +8,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 
 ---
 
-## Status Summary (as of 2026-04-21)
+## Status Summary (as of 2026-04-28)
 
 | Phase | Status | Notes |
 |-------|--------|-------|
@@ -16,16 +16,18 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Push Buttons) | ✅ **Complete** | 17 stylesheet-only classes removed; ~27 remaining all have real logic |
 | Phase 1 (Spin Boxes) | ✅ **Complete** | 10/10 stylesheet-only spin box classes migrated; 14 have real logic |
 | Phase 1 (Check Boxes) | ✅ **Complete** | 8/8 stylesheet-only check box classes migrated; 3 have real logic |
-| Phase 1 (Group Boxes) | ⏳ Not started | ~12 classes |
-| Phase 1 (Combo Boxes) | ⏳ Not started | ~10 classes |
-| Phase 1 (Line Edits) | ⏳ Not started | ~8 classes |
+| Phase 1 (Group Boxes) | ✅ **Complete** | 9/9 stylesheet-only classes migrated; 8 with logic kept |
+| Phase 1 (Combo Boxes) | ⏳ Not started | ~10 classes; survey shows candidates have ctor side-effects (set delegate, height); needs case-by-case review |
+| Phase 1 (Line Edits) | ⚠ **Partially done** | C_OgeLeProperties{Name}, C_OgeLeTable, C_OgeLeListHeader migrated; remaining classes all have logic or runtime API |
 | Phase 1 (Menu) | ✅ **Complete** | 1/2 migrated (TabChartFit); Sections kept (has logic) |
 | Phase 1 (Scroll Area) | ✅ **Complete** | 1/2 migrated (NaviBar); Main kept (has logic) |
 | Phase 1 (Slider) | ✅ **Complete** | 0/2 migrated (both have logic) |
 | Phase 1 (Radio Button) | ✅ **Complete** | 1/3 migrated (CheckBox); Properties/ToolTipBase kept |
 | Phase 1 (Frame) | ⚠ **3/4 done; Separator deferred** | Border/Frame/Generic done; FraSeparator deferred (168 widgets, 96 .ui files) |
 | Phase 1 (Text Browser) | ✅ **Complete** | 2/4 migrated (MessageDetails, Report); ContextMenuBase/Label kept |
-| Phase 1 (Other types remaining) | ⏳ Not started | tab_widget (~5), widget (~23) |
+| Phase 1 (Tab Widget) | ⏳ Not started | 4 candidates; all have non-trivial ctors (setUsesScrollButtons, setExpanding, custom tabBar); needs ctor-equivalent strategy |
+| Phase 1 (Widget) | ⚠ **Partially done** | C_OgeWi{Param,Table}SpinBoxGroup migrated; 13 with logic kept; remaining "stylesheet-only" candidates all override paintEvent (skipped per migration bar) |
+| Phase 1 (Splitter / Tool Button) | ✅ **No candidates** | All splitter classes have logic; tool_button has only the tooltip base |
 | Phase 2 | ⏳ Not started | Dashboard property panels |
 | Phase 3 | ⏳ Not started | Popup dialog boilerplate |
 | Phase 4 | ⏳ Not started | Title bar unification |
