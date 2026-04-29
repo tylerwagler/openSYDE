@@ -11,15 +11,15 @@ Directory: `libraries/opensyde_gui/src/opensyde_gui_elements/group_box/`
 
 ## Done
 
-- [x] **C_OgeGbxTransparent** -> `QGroupBox` + `styleRole="transparent"` (49 .ui files; 5 programmatic uses) — `5575cf2c` (migrate), pending delete
+- [x] **C_OgeGbxTransparent** -> `QGroupBox` + `styleRole="transparent"` (49 .ui files; 5 programmatic uses) — `5575cf2c` (migrate), `c4b8da1e` (delete)
 - [x] **C_OgeGbx** (inherits `QGroupBox`) -> `QGroupBox` + `styleRole="default"` (71 .ui files, 91 widget instances) — `00407b83` (migrate), `63bbfd20` (delete), `f03a22d6` (cleanup empty customwidget blocks left by remote agent)
 - [x] **C_OgeGbxRead** -> dropped unused QSS rules; class deleted (no .ui or C++ refs anywhere) — `5037f7ac` (migrate), `f916617c` (delete)
 - [x] **C_OgeGbxListHeader** -> `QGroupBox[styleRole="list-header"]` — `5037f7ac` (migrate), `f916617c` (delete)
 - [x] **C_OgeGbxToolTip** -> `QGroupBox[styleRole="tooltip"]` — `5037f7ac` (migrate), `f916617c` (delete)
 - [x] **C_OgeGbxGrayed** -> `QGroupBox[styleRole="grayed"]` (10 .ui files) — `dfd4adfa` (migrate), `ac380e57` (delete)
-- [x] **C_OgeGbxNavigationHeadingBackground** -> `QGroupBox[styleRole="navigation-heading-background"]` — `4434fedb` (migrate), pending delete
-- [x] **C_OgeGbxNavigationSection2** -> `QGroupBox[styleRole="navigation-section-2"]` — `4434fedb` (migrate), pending delete
-- [x] **C_OgeGbxTransparentToolBarSearch** -> `QGroupBox[styleRole="transparent-toolbar-search"]` — `4434fedb` (migrate), pending delete
+- [x] **C_OgeGbxNavigationHeadingBackground** -> `QGroupBox[styleRole="navigation-heading-background"]` — `4434fedb` (migrate), `491990e8` (delete)
+- [x] **C_OgeGbxNavigationSection2** -> `QGroupBox[styleRole="navigation-section-2"]` — `4434fedb` (migrate), `491990e8` (delete)
+- [x] **C_OgeGbxTransparentToolBarSearch** -> `QGroupBox[styleRole="transparent-toolbar-search"]` — `4434fedb` (migrate), `491990e8` (delete)
 
 ## Skipped (has logic — do NOT migrate)
 
