@@ -8,7 +8,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 
 ---
 
-## Status Summary (as of 2026-04-28)
+## Status Summary (as of 2026-05-01)
 
 | Phase | Status | Notes |
 |-------|--------|-------|
@@ -23,7 +23,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Scroll Area) | ✅ **Complete** | 1/2 migrated (NaviBar); Main kept (has logic) |
 | Phase 1 (Slider) | ✅ **Complete** | 0/2 migrated (both have logic) |
 | Phase 1 (Radio Button) | ✅ **Complete** | 1/3 migrated (CheckBox); Properties/ToolTipBase kept |
-| Phase 1 (Frame) | ✅ **Complete** | Border/Frame/Generic done earlier; FraSeparator migrated B1–C (168 widgets across 96 .ui files, factory in C_SebToolboxUtil rewritten, ~14 qss selectors converted, class deleted). |
+| Phase 1 (Frame) | ✅ **Complete** | 3/4 deleted: Border, Frame (earlier), Separator (B1–C: 168 widgets across 96 .ui files, factory in C_SebToolboxUtil rewritten, 14 qss selectors converted). C_OgeFraGeneric kept (functional `SetBorderColor`/`SetBackgroundColor` API). |
 | Phase 1 (Text Browser) | ✅ **Complete** | 2/4 migrated (MessageDetails, Report); ContextMenuBase/Label kept |
 | Phase 1 (Tab Widget) | ✅ **No candidates** | All 5 classes have ctor logic (setUsesScrollButtons / setExpanding / custom tabBar / font) or real overrides (ToolTipBase). See phase1-progress-tab-widget.md. |
 | Phase 1 (Widget) | ⚠ **Partially done** | C_OgeWi{Param,Table}SpinBoxGroup migrated; 13 with logic kept; remaining "stylesheet-only" candidates all override paintEvent (skipped per migration bar) |
@@ -88,7 +88,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 **Impact: ~148 classes -> 0 | ~296 files removed**
 **Risk: Medium-High (touches every .ui file and all .qss files)**
 
-**Progress: ~58/148 classes done (label portion complete)**
+**Progress: ~117/148 stylesheet-only classes migrated. The remaining ~31 candidates from the original 148 either turned out to have ctor side-effects, real overrides, or public API beyond the ctor — those are documented as "no candidates" or "kept" per family in the status table above and the per-family progress docs.**
 
 ### Problem
 Every styling variation requires a dedicated C++ class:
