@@ -125,7 +125,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1">
+         <widget class="QFrame" name="pc_FramSperator1">
+          <property name="styleRole" stdset="0">
+           <string>fra-separator</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -437,7 +440,10 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_3">
+             <widget class="QFrame" name="pc_FramSperator1_3">
+              <property name="styleRole" stdset="0">
+               <string>fra-separator</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -1202,7 +1208,10 @@
       <number>10</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_2">
+      <widget class="QFrame" name="pc_FramSperator1_2">
+       <property name="styleRole" stdset="0">
+        <string>fra-separator</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -1350,12 +1359,6 @@
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
    <extends>QComboBox</extends>
    <header>C_OgeCbxText.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
