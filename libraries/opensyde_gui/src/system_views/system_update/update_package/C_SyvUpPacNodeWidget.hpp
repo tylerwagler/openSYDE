@@ -24,7 +24,7 @@
 #include "C_SyvUpPacSectionNodeDatablockWidget.hpp"
 #include "C_SyvUpPacSectionNodeFilesWidget.hpp"
 #include "C_SyvUpPacListNodeItemWidget.hpp"
-#include "C_OgeFraSeparator.hpp"
+#include <QFrame>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -124,7 +124,7 @@ private:
 
    QVector<C_SyvUpPacSectionNodeDatablockWidget *> mc_DatablockWidgets;
    C_SyvUpPacSectionNodeFilesWidget * mpc_FilesWidget;
-   stw::opensyde_gui_elements::C_OgeFraSeparator * mpc_FilesWidgetSeparator;
+   QFrame * mpc_FilesWidgetSeparator;
 
    //Avoid call
    C_SyvUpPacNodeWidget(const C_SyvUpPacNodeWidget &);

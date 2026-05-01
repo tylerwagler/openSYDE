@@ -18,7 +18,6 @@
 #include "constants.hpp"
 #include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "C_OgeFraSeparator.hpp"
 #include "C_OgeLabToolTipBase.hpp"
 
 #include "C_SyvUpProgressLog.hpp"

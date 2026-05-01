@@ -108,16 +108,17 @@ C_SdTopologyListWidget * C_SebToolboxUtil::h_AddNewList(const QString & orc_Name
    Pointer to frame separator item
 */
 //----------------------------------------------------------------------------------------------------------------------
-C_OgeFraSeparator * C_SebToolboxUtil::h_AddNewHeading(const QString & orc_Name, QVBoxLayout * const opc_Layout,
-                                                      QWidget * const opc_Parent, const bool oq_AddSpacerBefore)
+QFrame * C_SebToolboxUtil::h_AddNewHeading(const QString & orc_Name, QVBoxLayout * const opc_Layout,
+                                           QWidget * const opc_Parent, const bool oq_AddSpacerBefore)
 {
-   C_OgeFraSeparator * pc_FrameSeparator = NULL;
+   QFrame * pc_FrameSeparator = NULL;
 
    if (opc_Layout != NULL)
    {
       QLabel * const pc_Heading = new QLabel(opc_Parent);
       pc_Heading->setProperty("styleRole", "toolbox-heading-group-big");
-      pc_FrameSeparator = new C_OgeFraSeparator(opc_Parent);
+      pc_FrameSeparator = new QFrame(opc_Parent);
+      pc_FrameSeparator->setProperty("styleRole", "fra-separator");
       QVBoxLayout * const pc_FrameLayout = new QVBoxLayout();
       int32_t s32_Index;
 
@@ -175,9 +176,10 @@ std::vector<C_OgePubIconOnly *> C_SebToolboxUtil::h_AddNewUserHeading(const QStr
       // memory management
       QLabel * const pc_Heading = new QLabel(opc_Parent);
       pc_Heading->setProperty("styleRole", "toolbox-heading-group");
-      C_OgeFraSeparator * const pc_FrameSeparator = new C_OgeFraSeparator(opc_Parent);
+      QFrame * const pc_FrameSeparator = new QFrame(opc_Parent);
       QVBoxLayout * const pc_FrameLayout = new QVBoxLayout();
       QHBoxLayout * const pc_HorizontalLayout = new QHBoxLayout();
+      pc_FrameSeparator->setProperty("styleRole", "fra-separator");
       pc_IconButton = new C_OgePubIconOnly(opc_Parent);
       pc_ClearAllUserNodesButton = new C_OgePubIconOnly(opc_Parent);
 
