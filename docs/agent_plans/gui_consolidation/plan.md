@@ -18,7 +18,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Check Boxes) | ✅ **Complete** | 8/8 stylesheet-only check box classes migrated; 3 have real logic |
 | Phase 1 (Group Boxes) | ✅ **Complete** | 9/9 stylesheet-only classes migrated; 8 with logic kept |
 | Phase 1 (Combo Boxes) | ✅ **No candidates** | All 12 classes have ctor logic (font/halc/icon-only set delegate or fixed height), real overrides, public API, or member state. See phase1-progress-combo-box.md. |
-| Phase 1 (Line Edits) | ⚠ **Partially done** | C_OgeLeProperties{Name}, C_OgeLeTable, C_OgeLeListHeader migrated; remaining classes all have logic or runtime API |
+| Phase 1 (Line Edits) | ✅ **No further candidates** | All 12 remaining classes have real logic (overrides, signals, members, public API like `SetBackgroundColor` / `SetDarkTheme`, multiple inheritance); `C_OgeLeTableHalc` has ctor side-effects (set min/max height). See phase1-progress-line-edit.md. |
 | Phase 1 (Menu) | ✅ **Complete** | 1/2 migrated (TabChartFit); Sections kept (has logic) |
 | Phase 1 (Scroll Area) | ✅ **Complete** | 1/2 migrated (NaviBar); Main kept (has logic) |
 | Phase 1 (Slider) | ✅ **Complete** | 0/2 migrated (both have logic) |
@@ -26,7 +26,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Frame) | ✅ **Complete** | 3/4 deleted: Border, Frame (earlier), Separator (B1–C: 168 widgets across 96 .ui files, factory in C_SebToolboxUtil rewritten, 14 qss selectors converted). C_OgeFraGeneric kept (functional `SetBorderColor`/`SetBackgroundColor` API). |
 | Phase 1 (Text Browser) | ✅ **Complete** | 2/4 migrated (MessageDetails, Report); ContextMenuBase/Label kept |
 | Phase 1 (Tab Widget) | ✅ **No candidates** | All 5 classes have ctor logic (setUsesScrollButtons / setExpanding / custom tabBar / font) or real overrides (ToolTipBase). See phase1-progress-tab-widget.md. |
-| Phase 1 (Widget) | ⚠ **Partially done** | C_OgeWi{Param,Table}SpinBoxGroup migrated; 13 with logic kept; remaining "stylesheet-only" candidates all override paintEvent (skipped per migration bar) |
+| Phase 1 (Widget) | ✅ **Complete** | C_OgeWi{Param,Table}SpinBoxGroup migrated earlier into C_OgeWiSpinBoxGroup + styleRole. All 20 remaining classes have paintEvent / event overrides, members, or .ui setup — none qualify by the playbook bar. See phase1-progress-widget.md. |
 | Phase 1 (Splitter / Tool Button) | ✅ **No candidates** | All splitter classes have logic; tool_button has only the tooltip base |
 | Phase 2 | ⏳ Not started | Dashboard property panels |
 | Phase 3 | ⏳ Not started | Popup dialog boilerplate |
