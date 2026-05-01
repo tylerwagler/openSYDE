@@ -261,7 +261,10 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FrameSeperatorTop">
+              <widget class="QFrame" name="pc_FrameSeperatorTop">
+               <property name="styleRole" stdset="0">
+                <string>fra-separator</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -317,7 +320,10 @@
               </widget>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FrameSeperatorBottom">
+              <widget class="QFrame" name="pc_FrameSeperatorBottom">
+               <property name="styleRole" stdset="0">
+                <string>fra-separator</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -512,7 +518,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Seperator1">
+              <widget class="QFrame" name="pc_Seperator1">
+               <property name="styleRole" stdset="0">
+                <string>fra-separator</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>1</width>
@@ -693,7 +702,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Seperator2">
+              <widget class="QFrame" name="pc_Seperator2">
+               <property name="styleRole" stdset="0">
+                <string>fra-separator</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>1</width>
@@ -836,7 +848,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Seperator3">
+              <widget class="QFrame" name="pc_Seperator3">
+               <property name="styleRole" stdset="0">
+                <string>fra-separator</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>1</width>
@@ -909,7 +924,10 @@
               </spacer>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Seperator4">
+              <widget class="QFrame" name="pc_Seperator4">
+               <property name="styleRole" stdset="0">
+                <string>fra-separator</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>1</width>
@@ -1077,12 +1095,6 @@
    <class>stw::opensyde_gui_elements::C_OgeFraGeneric</class>
    <extends>QFrame</extends>
    <header>C_OgeFraGeneric.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
    <container>1</container>
   </customwidget>
   <customwidget>
