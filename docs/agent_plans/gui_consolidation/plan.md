@@ -25,7 +25,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Radio Button) | ✅ **Complete** | 1/3 migrated (CheckBox); Properties/ToolTipBase kept |
 | Phase 1 (Frame) | ⚠ **3/4 done; Separator deferred** | Border/Frame/Generic done; FraSeparator deferred (168 widgets, 96 .ui files) |
 | Phase 1 (Text Browser) | ✅ **Complete** | 2/4 migrated (MessageDetails, Report); ContextMenuBase/Label kept |
-| Phase 1 (Tab Widget) | ⏳ Not started | 4 candidates; all have non-trivial ctors (setUsesScrollButtons, setExpanding, custom tabBar); needs ctor-equivalent strategy |
+| Phase 1 (Tab Widget) | ✅ **No candidates** | All 5 classes have ctor logic (setUsesScrollButtons / setExpanding / custom tabBar / font) or real overrides (ToolTipBase). See phase1-progress-tab-widget.md. |
 | Phase 1 (Widget) | ⚠ **Partially done** | C_OgeWi{Param,Table}SpinBoxGroup migrated; 13 with logic kept; remaining "stylesheet-only" candidates all override paintEvent (skipped per migration bar) |
 | Phase 1 (Splitter / Tool Button) | ✅ **No candidates** | All splitter classes have logic; tool_button has only the tooltip base |
 | Phase 2 | ⏳ Not started | Dashboard property panels |
