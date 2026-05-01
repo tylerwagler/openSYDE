@@ -109,7 +109,7 @@ font-weight:600; /*semibold*/
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_FONT_REGULAR_14 */
-stw--opensyde_gui_elements--C_CamOgeLabStatusBar,
+stw--opensyde_gui_elements--C_OgeLabToolTipBase[styleRole="cam-lab-status-bar"],
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="description-message"],
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="heading-group-bold"],
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Font="14"][SemiBold="false"][Bold="false"]

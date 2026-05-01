@@ -234,7 +234,7 @@ background-color:rgb(57, 57, 109);
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_5 */
-stw--opensyde_gui_elements--C_CamOgeLabStatusBar
+stw--opensyde_gui_elements--C_OgeLabToolTipBase[styleRole="cam-lab-status-bar"]
 {
 color:rgb(71, 71, 99);
 }
@@ -488,7 +488,7 @@ background-color:rgb(126, 199, 98);
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_18 */
-stw--opensyde_gui_elements--C_CamOgeLabStatusBar[Error="true"]
+stw--opensyde_gui_elements--C_OgeLabToolTipBase[styleRole="cam-lab-status-bar"][Error="true"]
 {
 color:rgb(255, 0, 0);
 }
