@@ -13,7 +13,7 @@
 #include <QWidget>
 #include "stwtypes.hpp"
 #include "C_SdTopologyListWidget.hpp"
-#include "C_OgeFraSeparator.hpp"
+#include <QFrame>
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -53,8 +53,8 @@ private:
 
    Ui::C_SyvDaDashboardToolbox * mpc_Ui;
    QVector<C_SdTopologyListWidget *> mc_ListWidgets;
-   stw::opensyde_gui_elements::C_OgeFraSeparator * mpc_FrameSeparatorReadingWidgets;
-   stw::opensyde_gui_elements::C_OgeFraSeparator * mpc_FrameSeparatorWritingWidgets;
+   QFrame * mpc_FrameSeparatorReadingWidgets;
+   QFrame * mpc_FrameSeparatorWritingWidgets;
 
    void m_FillToolboxStatic(void);
    void m_AddWidgetItems(void);
