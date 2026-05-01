@@ -289,7 +289,7 @@ stw--opensyde_gui_elements--C_OgeLabToolTipBase[styleRole="group-sub-item"]
 color:rgb(130, 130, 143);
 }
 
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor8Background="true"],
+QFrame[styleRole="fra-separator"][HasColor8Background="true"],
 stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="8"]
 {
 background-color:rgb(130, 130, 143);
@@ -313,7 +313,7 @@ color:rgb(155, 155, 170);
 stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled:selected:pressed,
 stw--opensyde_gui_elements--C_FlaOgeTebProgressLog QScrollBar:vertical,
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Background="9"],
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor9Background="true"]
+QFrame[styleRole="fra-separator"][HasColor9Background="true"]
 {
 background-color:rgb(155, 155, 170);
 }
@@ -353,7 +353,7 @@ stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="10"],
 stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled:selected,
 QPushButton[styleRole="cancel"]:enabled:hover:pressed,
 QPushButton[styleRole="message-cancel"]:enabled:hover:pressed,
-stw--opensyde_gui_elements--C_OgeFraSeparator,
+QFrame[styleRole="fra-separator"],
 stw--opensyde_gui--C_SyvDcConnectedNodeList::item:selected,
 stw--opensyde_gui--C_SyvDcConnectedNodeList::item::alternate:selected,
 stw--opensyde_gui_elements--C_OgeLabToolTipBase[styleRole="group-sub-item"]:!enabled

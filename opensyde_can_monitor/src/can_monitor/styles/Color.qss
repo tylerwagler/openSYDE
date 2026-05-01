@@ -305,7 +305,7 @@ stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="chx-properties"]
 color:rgb(130, 130, 143);
 }
 
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor8Background="true"],
+QFrame[styleRole="fra-separator"][HasColor8Background="true"],
 stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="8"]
 {
 background-color:rgb(130, 130, 143);
@@ -376,7 +376,7 @@ stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="10"],
 stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled:selected,
 QPushButton[styleRole="cancel"]:enabled:hover:pressed,
 QPushButton[styleRole="message-cancel"]:enabled:hover:pressed,
-stw--opensyde_gui_elements--C_OgeFraSeparator
+QFrame[styleRole="fra-separator"]
 {
 background-color:rgb(206, 206, 217);
 }

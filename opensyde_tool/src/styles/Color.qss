@@ -854,7 +854,7 @@ color: rgb(87, 87, 170);
 /* background-color */
 stw--opensyde_gui--C_SyvDaItPaTreeView[DarkMode="false"] QHeaderView,
 stw--opensyde_gui--C_SyvDaItTaView[Style="OPENSYDE_BRIGHT"] QHeaderView,
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor7Background="true"],
+QFrame[styleRole="fra-separator"][HasColor7Background="true"],
 stw--opensyde_gui_elements--C_OgeContextMenu::separator
 {
 background-color: rgb(87, 87, 170);
@@ -945,7 +945,7 @@ stw--opensyde_gui--C_SdNdeDpListTableView::item:focus,
 stw--opensyde_gui--C_SyvDaItPaTreeView[DarkMode="true"]::item,
 stw--opensyde_gui--C_SyvDaItPaTreeView[DarkMode="true"]::branch,
 stw--opensyde_gui--C_SyvDaItTaView[Style="OPENSYDE_DARK"]::item,
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor8Background="true"],
+QFrame[styleRole="fra-separator"][HasColor8Background="true"],
 stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="8"]
 {
 background-color: rgb(130, 130, 143);
@@ -988,7 +988,7 @@ color: rgb(155, 155, 170);
 }
 
 /* background-color */
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor9Background="true"],
+QFrame[styleRole="fra-separator"][HasColor9Background="true"],
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Background="9"],
 stw--opensyde_gui_elements--C_OgeContextMenu::item:enabled:selected:pressed
 {
@@ -1085,8 +1085,8 @@ stw--opensyde_gui--C_SyvDaItPaArView::item:selected:!focus,
 stw--opensyde_gui--C_SdNdeDpListArrayEditView::item:selected:!focus,
 stw--opensyde_gui--C_SdNdeDpListDataSetView::item:selected:!focus,
 QFrame#pc_FrameSdNdeDpSelectorItem,
-stw--opensyde_gui_elements--C_OgeFraSeparator,
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor10Background="true"],
+QFrame[styleRole="fra-separator"],
+QFrame[styleRole="fra-separator"][HasColor10Background="true"],
 QPushButton[styleRole="toggle-bold"]:checked,
 QPushButton[styleRole="toggle"]:checked,
 stw--opensyde_gui--C_SdBueMessageSelectorWidget QWidget#pc_MessagesPbWidget[Selected="true"],
@@ -1782,7 +1782,7 @@ color: rgb(127, 127, 187);
 
 /* background-color */
 stw--opensyde_gui_elements--C_OgeWiOnlyBackground[Background="27"],
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor27Background="true"],
+QFrame[styleRole="fra-separator"][HasColor27Background="true"],
 stw--opensyde_gui--C_NagViewItem[Dragged="true"],
 QMenu[styleRole="mu-tab-chart-fit"]::item:selected:pressed
 {
@@ -1927,7 +1927,7 @@ stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style=
 stw--opensyde_gui--C_SyvDaItDashboardLabelWidget[Style="SKEUOMORPH_DARK"][Type="DEFAULT"],
 stw--opensyde_gui--C_SyvDaItTaView QHeaderView[Style="SKEUOMORPH_BRIGHT"],
 stw--opensyde_gui--C_SyvDaItDashboardLabelWidget[Style="SKEUOMORPH_BRIGHT"][Type="DEFAULT"] QLabel[styleRole="dashboard-label-caption"],
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor34Background="true"]
+QFrame[styleRole="fra-separator"][HasColor34Background="true"]
 {
 background-color: rgb(91, 91, 91);
 }
@@ -2038,7 +2038,7 @@ border-color: rgb(217, 217, 226);
 /* STYLE_GUIDE_COLOR_39 */
 /* background-color */
 stw--opensyde_gui--C_SyvDaItDashboardLabelWidget[Style="FLAT_DARK"][Type="DEFAULT"],
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor39Background="true"]
+QFrame[styleRole="fra-separator"][HasColor39Background="true"]
 {
 background-color: rgb(116, 116, 116);
 }
@@ -2429,7 +2429,7 @@ color: rgb(242, 242, 245);
 
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_1000 */
-stw--opensyde_gui_elements--C_OgeFraSeparator[HasColor1000Background="true"]
+QFrame[styleRole="fra-separator"][HasColor1000Background="true"]
 {
 background-color: rgb(0, 0, 0);
 }
