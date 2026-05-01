@@ -14,7 +14,7 @@ methods beyond the ctor — passes the playbook bar.
 - [ ] `check_box/C_CamOgeChxSettings` (parent `C_OgeChxToolTipBase`) → replace with `C_OgeChxToolTipBase` + `styleRole="cam-chx-settings"`
 - [ ] `group_box/C_CamOgeGbxMessageGeneratorBackground` (parent `QGroupBox`) → `QGroupBox` + `styleRole="cam-gbx-message-generator-background"`
 - [ ] `group_box/C_CamOgeGbxMessageSignalsBorder` (parent `QGroupBox`) → `QGroupBox` + `styleRole="cam-gbx-message-signals-border"`
-- [ ] `label/C_CamOgeLabStatusBar` (parent `C_OgeLabToolTipBase`) → `C_OgeLabToolTipBase` + `styleRole="cam-lab-status-bar"`
+- [x] `label/C_CamOgeLabStatusBar` → `C_OgeLabToolTipBase` + `styleRole="cam-lab-status-bar"` (B: `150c1586`, C: this commit)
 - [ ] `line_edit/C_CamOgeLeIdPopUp` (parent `stw::opensyde_gui::C_TblEditLineEditBase`) → `C_TblEditLineEditBase` + `styleRole="cam-le-id-popup"`
 - [ ] `line_edit/C_CamOgeLeTableEdit` (parent `stw::opensyde_gui::C_TblEditLineEditBase`) → `C_TblEditLineEditBase` + `styleRole="cam-le-table-edit"`
 - [ ] `menu/C_CamOgeMuRecentProjects` (parent `QMenu`) → `QMenu` + `styleRole="cam-mu-recent-projects"`

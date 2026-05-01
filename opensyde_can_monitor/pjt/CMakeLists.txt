@@ -195,7 +195,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosLoggingWidget.cpp
    ${PROJECT_ROOT}/src/can_monitor/C_CamTitleBarWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiStyleSheets.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/label/C_CamOgeLabStatusBar.cpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_UtiClipBoardHelper.cpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetClipBoardHelper.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/splitter/C_CamOgeSpi.cpp
@@ -403,7 +402,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings/C_CamMosLoggingWidget.hpp
    ${PROJECT_ROOT}/src/can_monitor/C_CamTitleBarWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/util/C_CamUtiStyleSheets.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/label/C_CamOgeLabStatusBar.hpp
    ${OPENSYDE_GUI_ROOT}/src/constants.hpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_UtiClipBoardHelper.hpp
    ${PROJECT_ROOT}/src/can_monitor/message_trace/C_CamMetClipBoardHelper.hpp
