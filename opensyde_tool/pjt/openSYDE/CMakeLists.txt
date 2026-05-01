@@ -390,7 +390,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesWidget.cpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraSeparator.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementBaseCommand.cpp
@@ -1175,7 +1174,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpViewWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/C_SdNdeNodePropertiesWidget.hpp
-   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/frame/C_OgeFraSeparator.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementBaseCommand.hpp

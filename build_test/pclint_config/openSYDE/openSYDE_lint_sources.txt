@@ -222,7 +222,6 @@
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/datapools/C_SdNdeDpViewWidget.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/datapools/C_SdNdeDpSelectorItemWidget.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/C_SdNdeNodePropertiesWidget.cpp
-/home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/opensyde_gui_elements/frame/C_OgeFraSeparator.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddCommand.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementAddDeleteBaseCommand.cpp
 /home/tyler/Projects/Crane/openSYDE/libraries/opensyde_gui/src/system_definition/node_edit/undo/list_element/C_SdNdeUnoLeDataPoolListElementBaseCommand.cpp
