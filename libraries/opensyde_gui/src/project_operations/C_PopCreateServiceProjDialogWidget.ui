@@ -91,7 +91,10 @@
            <number>1</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+           <widget class="QFrame" name="frame">
+            <property name="styleRole" stdset="0">
+             <string>fra-separator</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -327,7 +330,10 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_2">
+           <widget class="QFrame" name="frame_2">
+            <property name="styleRole" stdset="0">
+             <string>fra-separator</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -486,12 +492,6 @@
    <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
    <header>C_OgeLabContextMenuBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeFilePath</class>
