@@ -17,7 +17,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Spin Boxes) | ✅ **Complete** | 10/10 stylesheet-only spin box classes migrated; 14 have real logic |
 | Phase 1 (Check Boxes) | ✅ **Complete** | 8/8 stylesheet-only check box classes migrated; 3 have real logic |
 | Phase 1 (Group Boxes) | ✅ **Complete** | 9/9 stylesheet-only classes migrated; 8 with logic kept |
-| Phase 1 (Combo Boxes) | ⏳ Not started | ~10 classes; survey shows candidates have ctor side-effects (set delegate, height); needs case-by-case review |
+| Phase 1 (Combo Boxes) | ✅ **No candidates** | All 12 classes have ctor logic (font/halc/icon-only set delegate or fixed height), real overrides, public API, or member state. See phase1-progress-combo-box.md. |
 | Phase 1 (Line Edits) | ⚠ **Partially done** | C_OgeLeProperties{Name}, C_OgeLeTable, C_OgeLeListHeader migrated; remaining classes all have logic or runtime API |
 | Phase 1 (Menu) | ✅ **Complete** | 1/2 migrated (TabChartFit); Sections kept (has logic) |
 | Phase 1 (Scroll Area) | ✅ **Complete** | 1/2 migrated (NaviBar); Main kept (has logic) |
