@@ -98,7 +98,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame">
+         <widget class="QFrame" name="pc_Frame">
+          <property name="styleRole" stdset="0">
+           <string>fra-separator</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -393,12 +396,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
