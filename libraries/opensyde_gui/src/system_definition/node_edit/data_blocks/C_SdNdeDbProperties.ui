@@ -124,7 +124,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+           <widget class="QFrame" name="frame">
+            <property name="styleRole" stdset="0">
+             <string>fra-separator</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -397,7 +400,10 @@ p, li { white-space: pre-wrap; }
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame_2">
+           <widget class="QFrame" name="pc_Frame_2">
+            <property name="styleRole" stdset="0">
+             <string>fra-separator</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -523,7 +529,10 @@ p, li { white-space: pre-wrap; }
                 <number>0</number>
                </property>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame_4">
+                <widget class="QFrame" name="pc_Frame_4">
+                 <property name="styleRole" stdset="0">
+                  <string>fra-separator</string>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -1249,7 +1258,10 @@ p, li { white-space: pre-wrap; }
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame_3">
+              <widget class="QFrame" name="pc_Frame_3">
+               <property name="styleRole" stdset="0">
+                <string>fra-separator</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1494,7 +1506,10 @@ p, li { white-space: pre-wrap; }
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame">
+           <widget class="QFrame" name="pc_Frame">
+            <property name="styleRole" stdset="0">
+             <string>fra-separator</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -1924,12 +1939,6 @@ p, li { white-space: pre-wrap; }
    <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
    <header>C_OgeChxToolTipBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTedPropertiesComment</class>

@@ -82,7 +82,10 @@
         <number>1</number>
        </property>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1">
+        <widget class="QFrame" name="pc_FramSperator1">
+         <property name="styleRole" stdset="0">
+          <string>fra-separator</string>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -309,7 +312,10 @@ p, li { white-space: pre-wrap; }
             <number>1</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_3">
+            <widget class="QFrame" name="pc_FramSperator1_3">
+             <property name="styleRole" stdset="0">
+              <string>fra-separator</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -705,7 +711,10 @@ p, li { white-space: pre-wrap; }
         <number>0</number>
        </property>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+        <widget class="QFrame" name="frame">
+         <property name="styleRole" stdset="0">
+          <string>fra-separator</string>
+         </property>
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -833,12 +842,6 @@ p, li { white-space: pre-wrap; }
    <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
    <header>C_OgeLabContextMenuBase.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>

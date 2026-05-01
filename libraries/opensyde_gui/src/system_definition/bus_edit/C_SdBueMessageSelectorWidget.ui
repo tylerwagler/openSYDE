@@ -26,7 +26,10 @@
       <number>20</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperatorUp">
+      <widget class="QFrame" name="pc_FramSperatorUp">
+       <property name="styleRole" stdset="0">
+        <string>fra-separator</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -300,7 +303,10 @@
       <number>20</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperatorBottom">
+      <widget class="QFrame" name="pc_FramSperatorBottom">
+       <property name="styleRole" stdset="0">
+        <string>fra-separator</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -352,12 +358,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubOptions</class>
    <extends>QPushButton</extends>
