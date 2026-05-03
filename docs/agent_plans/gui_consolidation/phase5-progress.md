@@ -11,16 +11,16 @@ Total: **25 classes across 11 widget-type subdirectories**. Plan estimate:
 Each one has empty ctor body, no overrides, no member variables, no public
 methods beyond the ctor — passes the playbook bar.
 
-- [ ] `check_box/C_CamOgeChxSettings` (parent `C_OgeChxToolTipBase`) → replace with `C_OgeChxToolTipBase` + `styleRole="cam-chx-settings"`
-- [ ] `group_box/C_CamOgeGbxMessageGeneratorBackground` (parent `QGroupBox`) → `QGroupBox` + `styleRole="cam-gbx-message-generator-background"`
-- [ ] `group_box/C_CamOgeGbxMessageSignalsBorder` (parent `QGroupBox`) → `QGroupBox` + `styleRole="cam-gbx-message-signals-border"`
+- [x] `check_box/C_CamOgeChxSettings` → `C_OgeChxToolTipBase` + `styleRole="cam-chx-settings"` (B: this commit, C: this commit)
+- [x] `group_box/C_CamOgeGbxMessageGeneratorBackground` → `QGroupBox` + `styleRole="cam-gbx-message-generator-background"` (B: this commit, C: this commit)
+- [x] `group_box/C_CamOgeGbxMessageSignalsBorder` → `QGroupBox` + `styleRole="cam-gbx-message-signals-border"` (B: this commit, C: this commit)
 - [x] `label/C_CamOgeLabStatusBar` → `C_OgeLabToolTipBase` + `styleRole="cam-lab-status-bar"` (B: `150c1586`, C: this commit)
-- [ ] `line_edit/C_CamOgeLeIdPopUp` (parent `stw::opensyde_gui::C_TblEditLineEditBase`) → `C_TblEditLineEditBase` + `styleRole="cam-le-id-popup"`
-- [ ] `line_edit/C_CamOgeLeTableEdit` (parent `stw::opensyde_gui::C_TblEditLineEditBase`) → `C_TblEditLineEditBase` + `styleRole="cam-le-table-edit"`
-- [ ] `menu/C_CamOgeMuRecentProjects` (parent `QMenu`) → `QMenu` + `styleRole="cam-mu-recent-projects"`
-- [ ] `push_button/C_CamOgePubAbout` (parent `C_OgePubToolTipBase`) → `C_OgePubToolTipBase` + `styleRole="cam-pub-about"`
-- [ ] `push_button/C_CamOgePubSettingsAdd` (parent `C_OgePubToolTipBase`) → `C_OgePubToolTipBase` + `styleRole="cam-pub-settings-add"`
-- [ ] `spin_box/C_CamOgeSpxProperties` (parent `C_OgeSpxToolTipBase`) → `C_OgeSpxToolTipBase` + `styleRole="cam-spx-properties"`
+- [x] `line_edit/C_CamOgeLeIdPopUp` → `C_TblEditLineEditBase` + `styleRole="cam-le-id-popup"` (B: this commit, C: this commit)
+- [x] `line_edit/C_CamOgeLeTableEdit` → `C_TblEditLineEditBase` + `styleRole="cam-le-table-edit"` (B: this commit, C: this commit)
+- [x] `menu/C_CamOgeMuRecentProjects` → `QMenu` + `styleRole="cam-mu-recent-projects"` (B: this commit, C: this commit)
+- [x] `push_button/C_CamOgePubAbout` → `C_OgePubToolTipBase` + `styleRole="cam-pub-about"` (B: this commit, C: this commit)
+- [x] `push_button/C_CamOgePubSettingsAdd` → `C_OgePubToolTipBase` + `styleRole="cam-pub-settings-add"` (B: this commit, C: this commit)
+- [x] `spin_box/C_CamOgeSpxProperties` → `C_OgeSpxToolTipBase` + `styleRole="cam-spx-properties"` (B: this commit, C: this commit)
 
 The `cam-` prefix on `styleRole` values namespaces them away from any
 existing Phase 1 styleRoles. Verify against existing `.qss` selectors during

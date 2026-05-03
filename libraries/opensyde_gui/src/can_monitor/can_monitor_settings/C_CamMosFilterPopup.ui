@@ -691,7 +691,10 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item row="2" column="2" colspan="2">
-            <widget class="stw::opensyde_gui_elements::C_CamOgeLeIdPopUp" name="pc_LeCanIdStart">
+            <widget class="stw::opensyde_gui::C_TblEditLineEditBase" name="pc_LeCanIdStart">
+             <property name="styleRole" stdset="0">
+              <string>cam-le-id-popup</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>150</width>
@@ -734,7 +737,10 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_CamOgeLeIdPopUp" name="pc_LeCanIdEnd">
+              <widget class="stw::opensyde_gui::C_TblEditLineEditBase" name="pc_LeCanIdEnd">
+               <property name="styleRole" stdset="0">
+                <string>cam-le-id-popup</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>150</width>
@@ -954,11 +960,6 @@ p, li { white-space: pre-wrap; }
    <header>C_OgePubToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgeLeIdPopUp</class>
-   <extends>QLineEdit</extends>
-   <header>C_CamOgeLeIdPopUp.hpp</header>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
    <header>C_OgeChxToolTipBase.hpp</header>
@@ -972,6 +973,11 @@ p, li { white-space: pre-wrap; }
    <class>stw::opensyde_gui::C_CamMosFilterTableView</class>
    <extends>QTableView</extends>
    <header>C_CamMosFilterTableView.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>stw::opensyde_gui::C_TblEditLineEditBase</class>
+   <extends>QLineEdit</extends>
+   <header>C_TblEditLineEditBase.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -51,7 +51,10 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_CamOgePubSettingsAdd" name="pc_PbDll">
+       <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PbDll">
+        <property name="styleRole" stdset="0">
+         <string>cam-pub-settings-add</string>
+        </property>
         <property name="minimumSize">
          <size>
           <width>35</width>
@@ -70,7 +73,10 @@
        </widget>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_CamOgePubSettingsAdd" name="pc_PbAdvSett">
+       <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PbAdvSett">
+        <property name="styleRole" stdset="0">
+         <string>cam-pub-settings-add</string>
+        </property>
         <property name="minimumSize">
          <size>
           <width>35</width>
@@ -89,7 +95,10 @@
        </widget>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_CamOgePubSettingsAdd" name="pc_PbProgress">
+       <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PbProgress">
+        <property name="styleRole" stdset="0">
+         <string>cam-pub-settings-add</string>
+        </property>
         <property name="minimumSize">
          <size>
           <width>35</width>
@@ -177,9 +186,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgePubSettingsAdd</class>
+   <class>stw::opensyde_gui_elements::C_OgePubToolTipBase</class>
    <extends>QPushButton</extends>
-   <header>C_CamOgePubSettingsAdd.hpp</header>
+   <header>C_OgePubToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

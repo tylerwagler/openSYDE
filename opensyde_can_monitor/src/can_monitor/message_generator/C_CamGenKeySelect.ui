@@ -166,7 +166,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_CamOgeLeIdPopUp" name="pc_LineEditKey">
+         <widget class="stw::opensyde_gui::C_TblEditLineEditBase" name="pc_LineEditKey">
+          <property name="styleRole" stdset="0">
+           <string>cam-le-id-popup</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>150</width>
@@ -238,7 +241,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_CamOgeSpxProperties" name="pc_SpinBoxOffset">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxOffset">
+          <property name="styleRole" stdset="0">
+           <string>cam-spx-properties</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>150</width>
@@ -414,14 +420,14 @@
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgeLeIdPopUp</class>
+   <class>stw::opensyde_gui::C_TblEditLineEditBase</class>
    <extends>QLineEdit</extends>
-   <header>C_CamOgeLeIdPopUp.hpp</header>
+   <header>C_TblEditLineEditBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgeSpxProperties</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
    <extends>QSpinBox</extends>
-   <header>C_CamOgeSpxProperties.hpp</header>
+   <header>C_OgeSpxToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>
