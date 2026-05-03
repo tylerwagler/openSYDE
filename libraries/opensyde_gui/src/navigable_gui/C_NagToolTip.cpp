@@ -15,7 +15,6 @@
 #include <QScreen>
 #include <QGuiApplication>
 #include <QAbstractTextDocumentLayout>
-#include <QGraphicsDropShadowEffect>
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 #include "constants.hpp"
@@ -60,20 +59,10 @@ C_NagToolTip::C_NagToolTip(const QString & orc_Heading, const QString & orc_Cont
 
    this->setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint);
    this->setAttribute(Qt::WA_TranslucentBackground);
-
-   //shadow
-   {
-      QColor c_Color;
-      QGraphicsDropShadowEffect * pc_Shadow;
-
-      pc_Shadow = new QGraphicsDropShadowEffect(this->mpc_Ui->mpc_GroupBox);
-      pc_Shadow->setBlurRadius(10.0);
-      pc_Shadow->setOffset(4.0);
-      c_Color = mc_STYLE_GUIDE_COLOR_31;
-      c_Color.setAlpha(110);
-      pc_Shadow->setColor(c_Color);
-      this->mpc_Ui->mpc_GroupBox->setGraphicsEffect(pc_Shadow);
-   } //lint !e429  //no memory leak because of the parent of pc_Shadow and the Qt memory management
+   // The window manager already renders a system tooltip shadow around Qt::ToolTip windows;
+   // the .ui ships an outer mpc_GroupBoxInklShadow that historically reserved space for an
+   // additional QGraphicsDropShadowEffect. Stacking both produces a visible double-card on
+   // some compositors, so the programmatic shadow is intentionally omitted here.
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -173,26 +162,29 @@ void C_NagToolTip::DoMove(const QPoint & orc_GlobalPos)
       const int32_t s32_DISTANCE_TO_BORDER = 20; //space between tooltip and boarder
 
       this->updateGeometry();
+      // The .ui defines a fixed 400x339 placeholder geometry; shrink to actual content so the
+      // unused area doesn't paint opaque on compositors that don't honor WA_TranslucentBackground.
+      this->adjustSize();
 
       // x coordinate out of monitor
-      if ((s32_NewHorizontal + this->mpc_Ui->mpc_GroupBoxInklShadow->sizeHint().width()) >
+      if ((s32_NewHorizontal + this->sizeHint().width()) >
           (c_RectMonitor.x() + c_RectMonitor.width()))
       {
          // max of left border of monitor and right border of monitor minus tool-tip-width
          s32_NewHorizontal = std::max(c_RectMonitor.x() + s32_DISTANCE_TO_BORDER,
                                       (c_RectMonitor.x() + c_RectMonitor.width()) -
-                                      (this->mpc_Ui->mpc_GroupBoxInklShadow->sizeHint().width() +
+                                      (this->sizeHint().width() +
                                        s32_DISTANCE_TO_BORDER));
       }
 
       // y coordinate out of monitor
-      if ((s32_NewVertical + this->mpc_Ui->mpc_GroupBoxInklShadow->sizeHint().height()) >
+      if ((s32_NewVertical + this->sizeHint().height()) >
           (c_RectMonitor.y() + c_RectMonitor.height()))
       {
          //display tooltip above global pos (otheriwse the global pos is inside the tooltip
          // which usally means the mouse is inside the tooltip which then will trigger the tooltip to instantly hide
          // Also include the distance to the border so the mouse does not even touch the tooltip
-         s32_NewVertical = (orc_GlobalPos.y() - this->mpc_Ui->mpc_GroupBoxInklShadow->sizeHint().height()) -
+         s32_NewVertical = (orc_GlobalPos.y() - this->sizeHint().height()) -
                            s32_DISTANCE_TO_BORDER;
       }
 
