@@ -57,9 +57,8 @@ C_SyvUpPacPemFileOptionsPopUp::C_SyvUpPacPemFileOptionsPopUp(stw::opensyde_gui_e
                                                              const opensyde_core::C_OscViewNodeUpdate::E_StateSecurity oe_StateSecurity,
                                                              const opensyde_core::C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger)
    :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_SyvUpPacPemFileOptionsPopUp),
-   mrc_ParentDialog(orc_Parent)
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
+   mpc_Ui(new Ui::C_SyvUpPacPemFileOptionsPopUp)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -175,39 +174,6 @@ C_OscViewNodeUpdate::E_StateDebugger C_SyvUpPacPemFileOptionsPopUp::GetComboBoxD
       break;
    }
    return e_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvUpPacPemFileOptionsPopUp::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
