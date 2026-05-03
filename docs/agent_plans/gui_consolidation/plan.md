@@ -8,7 +8,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 
 ---
 
-## Status Summary (as of 2026-05-01)
+## Status Summary (as of 2026-05-03)
 
 | Phase | Status | Notes |
 |-------|--------|-------|
@@ -31,7 +31,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 2 | ⏳ Not started | Dashboard property panels |
 | Phase 3 | ⏳ Not started | Popup dialog boilerplate |
 | Phase 4 | ⏳ Not started | Title bar unification |
-| Phase 5 | 🔍 **Survey complete** | CAN Monitor element dedup. 25 classes audited; 10 stylesheet-only candidates identified, 15 with logic kept. See phase5-progress.md. Ready for per-class Task A. |
+| Phase 5 | ✅ **Complete** | CAN Monitor element dedup. 25 classes audited; all 10 stylesheet-only candidates migrated (commits `150c1586`, `3dcca288`, `3298ba6e`); 15 with real logic kept. See phase5-progress.md. |
 | Phase 6 | ⏳ Not started | MVD triplication in dashboard items |
 
 ### Phase 1 Label Portion — Completion Details
