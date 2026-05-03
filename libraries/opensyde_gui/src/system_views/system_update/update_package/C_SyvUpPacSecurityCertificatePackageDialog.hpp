@@ -9,9 +9,8 @@
 #define C_SYVUPPACSECURITYCERTIFICATEPACKAGEDIALOG_H
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include <QVBoxLayout>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_SyvUpPacPemFilesListWidget.hpp"
 #include "C_SclString.hpp"
 
@@ -30,7 +29,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SyvUpPacSecurityCertificatePackageDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -44,17 +43,12 @@ public:
    bool GetOptionAddPemFiles(void) const;
    bool GetOptionAddSecureAuthentification(void) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
-
 private:
    //Avoid call
    C_SyvUpPacSecurityCertificatePackageDialog(const C_SyvUpPacSecurityCertificatePackageDialog &);
    C_SyvUpPacSecurityCertificatePackageDialog & operator =(const C_SyvUpPacSecurityCertificatePackageDialog &) &;
 
    Ui::C_SyvUpPacSecurityCertificatePackageDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
 
    void m_InitStaticNames(void) const;
    void m_OkClicked(void);

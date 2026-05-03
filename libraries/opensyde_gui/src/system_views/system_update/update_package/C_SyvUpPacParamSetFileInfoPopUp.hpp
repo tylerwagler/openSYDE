@@ -12,9 +12,8 @@
 #define C_SYVUPPACPARAMSETFILEINFOPOPUP_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_SyvUpPacParamSetFileInfo.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -32,7 +31,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SyvUpPacParamSetFileInfoPopUp :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -43,13 +42,8 @@ public:
 
    void InitStaticNames(void) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
-
 private:
    Ui::C_SyvUpPacParamSetFileInfoPopUp * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    stw::opensyde_gui_logic::C_SyvUpPacParamSetFileInfo mc_FileInfo;
 
    int32_t m_ReadFile(void);
