@@ -13,8 +13,8 @@
 #define C_CAMTITLEBARWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
+#include <QMenu>
 #include "C_OgeWiOnlyBackground.hpp"
-#include "C_CamOgeMuRecentProjects.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -58,7 +58,7 @@ protected:
 
 private:
    Ui::C_CamTitleBarWidget * mpc_Ui;
-   stw::opensyde_gui_elements::C_CamOgeMuRecentProjects * mpc_Menu;
+   QMenu * mpc_Menu;
    static const QString mhc_FILTER;
    static const QString mhc_NORECENTPROJECT;
 

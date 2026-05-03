@@ -114,9 +114,9 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
    connect(this->mpc_Ui->pc_TableView, &C_CamMosFilterTableView::SigDeleteKeyPressed,
            this, &C_CamMosFilterPopup::m_OnDeleteKeyPressed);
    connect(this->mpc_Ui->pc_RabPass, &C_OgeRabProperties::toggled, this, &C_CamMosFilterPopup::m_OnRadioButtonToggle);
-   connect(this->mpc_Ui->pc_LeCanIdStart, &C_CamOgeLeIdPopUp::editingFinished, this,
+   connect(this->mpc_Ui->pc_LeCanIdStart, &C_TblEditLineEditBase::editingFinished, this,
            &C_CamMosFilterPopup::m_OnStartIdEdited);
-   connect(this->mpc_Ui->pc_LeCanIdEnd, &C_CamOgeLeIdPopUp::editingFinished, this,
+   connect(this->mpc_Ui->pc_LeCanIdEnd, &C_TblEditLineEditBase::editingFinished, this,
            &C_CamMosFilterPopup::m_OnEndIdEdited);
    connect(this->mpc_Ui->pc_CheckBoxExtended, &C_OgeChxToolTipBase::toggled, this,
            &C_CamMosFilterPopup::m_OnExtendedToggled);
@@ -844,12 +844,12 @@ void C_CamMosFilterPopup::m_OnStartIdEdited(void)
       else
       {
          // disconnect to ignore editingFinished signal on focus lose because of popup
-         disconnect(this->mpc_Ui->pc_LeCanIdStart, &C_CamOgeLeIdPopUp::editingFinished, this,
+         disconnect(this->mpc_Ui->pc_LeCanIdStart, &C_TblEditLineEditBase::editingFinished, this,
                     &C_CamMosFilterPopup::m_OnStartIdEdited);
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING, c_ErrorDescription);
          c_Message.SetHeading(C_GtGetText::h_GetText("Invalid input"));
          c_Message.Execute();
-         connect(this->mpc_Ui->pc_LeCanIdStart, &C_CamOgeLeIdPopUp::editingFinished, this,
+         connect(this->mpc_Ui->pc_LeCanIdStart, &C_TblEditLineEditBase::editingFinished, this,
                  &C_CamMosFilterPopup::m_OnStartIdEdited);
       }
 
@@ -896,12 +896,12 @@ void C_CamMosFilterPopup::m_OnEndIdEdited(void)
       else
       {
          // disconnect to ignore editingFinished signal on focus lose because of popup
-         disconnect(this->mpc_Ui->pc_LeCanIdEnd, &C_CamOgeLeIdPopUp::editingFinished, this,
+         disconnect(this->mpc_Ui->pc_LeCanIdEnd, &C_TblEditLineEditBase::editingFinished, this,
                     &C_CamMosFilterPopup::m_OnEndIdEdited);
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING, c_ErrorDescription);
          c_Message.SetHeading(C_GtGetText::h_GetText("Invalid input"));
          c_Message.Execute();
-         connect(this->mpc_Ui->pc_LeCanIdEnd, &C_CamOgeLeIdPopUp::editingFinished, this,
+         connect(this->mpc_Ui->pc_LeCanIdEnd, &C_TblEditLineEditBase::editingFinished, this,
                  &C_CamMosFilterPopup::m_OnEndIdEdited);
       }
 

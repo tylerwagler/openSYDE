@@ -84,7 +84,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_CamOgePubSettingsAdd" name="pc_BtnAdd">
+         <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_BtnAdd">
+          <property name="styleRole" stdset="0">
+           <string>cam-pub-settings-add</string>
+          </property>
           <property name="text">
            <string>Add filter btn</string>
           </property>
@@ -282,15 +285,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgePubSettingsAdd</class>
-   <extends>QPushButton</extends>
-   <header>C_CamOgePubSettingsAdd.hpp</header>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiOnlyBackground</class>
    <extends>QWidget</extends>
    <header>C_OgeWiOnlyBackground.hpp</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>stw::opensyde_gui_elements::C_OgePubToolTipBase</class>
+   <extends>QPushButton</extends>
+   <header>C_OgePubToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_CamOgeWiSettingSubSection</class>

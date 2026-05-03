@@ -29,8 +29,8 @@ font-weight:bold;
 stw--opensyde_gui_elements--C_OgeLabGenericNoPaddingNoMargins[Font="11"][SemiBold="false"][Bold="false"],
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment,
 stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole="teb-message-details"],
-stw--opensyde_gui_elements--C_CamOgeSpxProperties,
-stw--opensyde_gui_elements--C_CamOgeLeIdPopUp,
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="cam-spx-properties"],
+stw--opensyde_gui--C_TblEditLineEditBase[styleRole="cam-le-id-popup"],
 stw--opensyde_gui_elements--C_OgeLeProperties
 {
 font-family:"Segoe UI";
@@ -45,7 +45,7 @@ stw--opensyde_gui--C_CamMosFilterTableView,
 stw--opensyde_gui--C_CamGenSigTableView,
 stw--opensyde_gui_elements--C_CamOgeCbxTable,
 stw--opensyde_gui_elements--C_CamOgeWiSpinBoxGroupTable QAbstractSpinBox,
-stw--opensyde_gui_elements--C_CamOgeLeTableEdit,
+stw--opensyde_gui--C_TblEditLineEditBase[styleRole="cam-le-table-edit"],
 stw--opensyde_gui_elements--C_CamOgeCbxTableSmall,
 stw--opensyde_gui_elements--C_CamOgeCbxTable QAbstractItemView,
 stw--opensyde_gui_elements--C_CamOgeCbxTableSmall QAbstractItemView,
@@ -58,7 +58,7 @@ stw--opensyde_gui_elements--C_OgeTedToolTipContent,
 stw--opensyde_gui_elements--C_OgeContextMenu,
 stw--opensyde_gui_elements--C_OgeLabContextMenuBase[styleRole="group-item-value"],
 stw--opensyde_gui_elements--C_OgeCbxText,
-stw--opensyde_gui_elements--C_CamOgeMuRecentProjects::item,
+QMenu[styleRole="cam-mu-recent-projects"]::item,
 stw--opensyde_gui_elements--C_OgeMuSections::item,
 stw--opensyde_gui_elements--C_OgeMuSections QLabel
 {
@@ -82,8 +82,8 @@ stw--opensyde_gui_elements--C_OgeLeContextMenuBase[styleRole="le-dark"],
 stw--opensyde_gui_elements--C_CamOgeLeFilePath,
 stw--opensyde_gui_elements--C_CamOgeCbxDark,
 stw--opensyde_gui_elements--C_CamOgeCbxDark QListView,
-stw--opensyde_gui_elements--C_CamOgePubSettingsAdd,
-stw--opensyde_gui_elements--C_CamOgeChxSettings,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="cam-pub-settings-add"],
+stw--opensyde_gui_elements--C_OgeChxToolTipBase[styleRole="cam-chx-settings"],
 stw--opensyde_gui_elements--C_OgeRabProperties[DarkBackground="true"]
 {
 font-family:"Segoe UI";
@@ -139,7 +139,7 @@ font-weight:normal;
 }
 
 /* STYLE_GUIDE_FONT_SEMIBOLD_16 */
-stw--opensyde_gui_elements--C_CamOgePubAbout,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="cam-pub-about"],
 stw--opensyde_gui_elements--C_CamOgePubProjOp,
 stw--opensyde_gui_elements--C_CamOgeTobRecentProjects
 {

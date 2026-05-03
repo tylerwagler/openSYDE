@@ -67,10 +67,11 @@ const QString C_CamTitleBarWidget::mhc_NORECENTPROJECT = "No recent project foun
 C_CamTitleBarWidget::C_CamTitleBarWidget(QWidget * const opc_Parent) :
    C_OgeWiOnlyBackground(opc_Parent),
    mpc_Ui(new Ui::C_CamTitleBarWidget),
-   mpc_Menu(new C_CamOgeMuRecentProjects)
+   mpc_Menu(new QMenu)
 {
    QPixmap c_ImgLogo;
 
+   this->mpc_Menu->setProperty("styleRole", "cam-mu-recent-projects");
    this->mpc_Ui->setupUi(this);
    this->SetBackgroundColor(10);
 

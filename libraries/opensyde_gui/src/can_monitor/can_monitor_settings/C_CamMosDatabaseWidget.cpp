@@ -417,7 +417,7 @@ void C_CamMosDatabaseWidget::m_InitUi(void)
            this, &C_CamMosDatabaseWidget::m_OnExpand);
    connect(this->mpc_Ui->pc_WiHeader, &C_CamOgeWiSettingSubSection::SigHide,
            this, &C_CamMosDatabaseWidget::SigHide);
-   connect(this->mpc_Ui->pc_BtnAdd, &C_CamOgePubSettingsAdd::clicked, this, &C_CamMosDatabaseWidget::m_OnAddClicked);
+   connect(this->mpc_Ui->pc_BtnAdd, &C_OgePubToolTipBase::clicked, this, &C_CamMosDatabaseWidget::m_OnAddClicked);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

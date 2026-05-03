@@ -122,22 +122,13 @@ endif()
 # --- PROJECT SOURCE FILE PATHS ----------------------------------------------------------------------------------------
 
 set(OPENSYDE_SOURCES
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/check_box/C_CamOgeChxSettings.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxDark.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTable.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTableSmall.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxWhite.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/group_box/C_CamOgeGbxMessageGeneratorBackground.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/group_box/C_CamOgeGbxMessageSignalsBorder.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeIdPopUp.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeTableEdit.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/menu/C_CamOgeMuRecentProjects.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubAbout.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubDarkBrowse.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariablesBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubProjOp.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubSettingsAdd.cpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/spin_box/C_CamOgeSpxProperties.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/splitter/C_CamOgeSpi.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/tool_button/C_CamOgeTobRecentProjects.cpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSectionHeader.cpp
@@ -263,22 +254,13 @@ set(OPENSYDE_SOURCES
 
 set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/precompiled_headers/precomp_headers.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/check_box/C_CamOgeChxSettings.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxDark.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTable.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxTableSmall.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/combo_box/C_CamOgeCbxWhite.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/group_box/C_CamOgeGbxMessageGeneratorBackground.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/group_box/C_CamOgeGbxMessageSignalsBorder.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeIdPopUp.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/line_edit/C_CamOgeLeTableEdit.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/menu/C_CamOgeMuRecentProjects.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubAbout.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubDarkBrowse.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubPathVariablesBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubProjOp.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/push_button/C_CamOgePubSettingsAdd.hpp
-   ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/spin_box/C_CamOgeSpxProperties.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/splitter/C_CamOgeSpi.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/tool_button/C_CamOgeTobRecentProjects.hpp
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_gui_elements/widget/C_CamOgeWiSectionHeader.hpp

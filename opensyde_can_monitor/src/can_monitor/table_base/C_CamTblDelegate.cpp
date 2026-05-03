@@ -13,7 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_CamTblDelegate.hpp"
-#include "C_CamOgeLeTableEdit.hpp"
+#include "C_TblEditLineEditBase.hpp"
 #include "C_CamOgeCbxTableSmall.hpp"
 #include "C_CamOgeWiSpinBoxGroupTable.hpp"
 
@@ -83,7 +83,9 @@ C_OgeCbxMultiSelect * C_CamTblDelegate::m_CreateMultiSelectComboBox(QWidget * co
 //----------------------------------------------------------------------------------------------------------------------
 C_TblEditLineEditBase * C_CamTblDelegate::m_CreateLineEdit(QWidget * const opc_Parent) const
 {
-   return new C_CamOgeLeTableEdit(opc_Parent);
+   C_TblEditLineEditBase * const pc_LineEdit = new C_TblEditLineEditBase(opc_Parent);
+   pc_LineEdit->setProperty("styleRole", "cam-le-table-edit");
+   return pc_LineEdit;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
