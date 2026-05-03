@@ -9,10 +9,9 @@
 #define C_SDCODEGENERATIONDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscNode.hpp"
 #include "C_SdCodeGenerationModel.hpp"
 
@@ -31,7 +30,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdCodeGenerationDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -44,13 +43,12 @@ public:
    void GetCheckedItems(std::vector<uint32_t> & orc_NodeIndices,
                         std::vector<std::vector<uint32_t> > & orc_AppIndicesPerNode) const;
 
+
 protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
+   void m_OnEnterAccept(void) override;
 
 private:
    Ui::C_SdCodeGenerationDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    stw::opensyde_gui_logic::C_SdCodeGenerationModel mc_Model;
 
    void m_OkClicked(void);

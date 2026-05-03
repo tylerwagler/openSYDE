@@ -10,6 +10,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
+#include "C_OgePopUpContentBase.hpp"
 
 #include <limits>
 #include <fstream>
@@ -53,7 +54,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdBueImportCommMessagesWidget :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -71,8 +72,6 @@ Q_SIGNALS:
    //lint -restore
    void SigContinue(const stw::opensyde_core::C_OscCanProtocol::E_Type oe_SelectedProtocol);
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    /*************Functions*****************/
@@ -83,7 +82,6 @@ private:
 
    /*************Variables*****************/
    Ui::C_SdImportCommMessagesWidget * mpc_Ui;
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
 
    stw::opensyde_core::C_OscCanProtocol::E_Type me_SelectedCommProtocol;
    //Avoid call

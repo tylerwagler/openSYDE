@@ -9,9 +9,8 @@
 #define C_SDNDECOADDDEVICEDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include <QFileInfo>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "stwtypes.hpp"
 #include "TglUtils.hpp"
 
@@ -30,7 +29,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdNdeCoAddDeviceDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -44,13 +43,9 @@ public:
    stw::scl::C_SclString GetEdsFile(void);
    static QString h_AskForCanOpenPath(QWidget * const opc_BaseWidget);
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdNdeCoAddDeviceDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
 
    uint32_t mu32_BusIndex;
    uint32_t mu32_NodeIndex;

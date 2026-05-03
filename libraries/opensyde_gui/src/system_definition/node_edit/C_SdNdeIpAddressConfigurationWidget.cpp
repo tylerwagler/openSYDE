@@ -50,9 +50,8 @@ using namespace stw::opensyde_gui_elements;
 C_SdNdeIpAddressConfigurationWidget::C_SdNdeIpAddressConfigurationWidget(
    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent, const uint32_t ou32_NodeIndex,
    const uint32_t ou32_ComIf) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeIpAddressConfigurationWidget),
-   mrc_ParentDialog(orc_Parent),
    mu32_NodeIndex(ou32_NodeIndex),
    mu32_ComIf(ou32_ComIf)
 {
@@ -152,38 +151,6 @@ void C_SdNdeIpAddressConfigurationWidget::SlotTabKey(const QLineEdit * const opc
       }
    }
 }
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeIpAddressConfigurationWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Trigger load data
@@ -261,4 +228,13 @@ void C_SdNdeIpAddressConfigurationWidget::m_OkClicked(void)
 void C_SdNdeIpAddressConfigurationWidget::m_CancelClicked(void)
 {
    this->mrc_ParentDialog.reject();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdNdeIpAddressConfigurationWidget::m_OnEnterAccept(void)
+{
+   m_OkClicked();
 }

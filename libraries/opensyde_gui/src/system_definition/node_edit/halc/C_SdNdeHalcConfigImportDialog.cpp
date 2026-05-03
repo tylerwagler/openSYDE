@@ -59,9 +59,8 @@ using namespace stw::opensyde_gui_elements;
 C_SdNdeHalcConfigImportDialog::C_SdNdeHalcConfigImportDialog(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                              const uint32_t ou32_NodeIndex,
                                                              const QString & orc_ImportFileName) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeHalcConfigImportDialog),
-   mrc_ParentDialog(orc_Parent),
    mu32_NodeIndex(ou32_NodeIndex),
    mc_ImportFileName(orc_ImportFileName),
    ms32_Result(C_NOACT)
@@ -245,39 +244,6 @@ int32_t C_SdNdeHalcConfigImportDialog::GetResult(QString & orc_ErrorDetails) con
    }
 
    return this->ms32_Result;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeHalcConfigImportDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -555,4 +521,13 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistencyEl(const C_OscHalcConfigP
          .arg(orc_CheckAddendum).arg(c_Type).arg(orc_Domain).arg(orc_Channel).arg(c_Ref).arg(c_New);
    }
    return q_Consistent;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdNdeHalcConfigImportDialog::m_OnEnterAccept(void)
+{
+   this->m_OkClicked();
 }

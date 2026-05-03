@@ -9,8 +9,7 @@
 #define C_SDBUEJ1939PGPROPERTIESDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscCanUtil.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,7 +27,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdBueJ1939PgPropertiesDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -42,13 +41,9 @@ public:
 
    uint32_t GetNewCanId(void) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdBueJ1939PgPropertiesDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    stw::opensyde_core::C_OscCanUtilJ1939PgInfo mc_PgInfo;
    QString mc_MessageName;
 

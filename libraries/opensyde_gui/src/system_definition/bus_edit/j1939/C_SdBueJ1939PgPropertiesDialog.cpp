@@ -47,9 +47,8 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueJ1939PgPropertiesDialog::C_SdBueJ1939PgPropertiesDialog(const uint32_t ou32_CanId, C_OgePopUpDialog & orc_Parent,
                                                                const QString & orc_MessageName) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdBueJ1939PgPropertiesDialog),
-   mrc_ParentDialog(orc_Parent),
    mc_MessageName(orc_MessageName)
 {
    this->mpc_Ui->setupUi(this);
@@ -152,39 +151,6 @@ uint32_t C_SdBueJ1939PgPropertiesDialog::GetNewCanId(void) const
    C_OscCanUtil::h_GetCanIdFromJ1939PgInfo(c_PgInfo, u32_CanId);
 
    return u32_CanId;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdBueJ1939PgPropertiesDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

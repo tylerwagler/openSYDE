@@ -9,8 +9,7 @@
 #define C_SDNDEDALLOGJOBADDITIONALTRIGGERDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscDataLoggerDataElementReference.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -28,7 +27,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdNdeDalLogJobAdditionalTriggerDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -40,8 +39,9 @@ public:
    void InitStaticNames(void) const;
    void SetNodeDataLoggerJob(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataLoggerJobIndex);
 
+
 protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
+   void m_OnEnterAccept(void) override;
 
 private:
    void m_CancelClicked(void);
@@ -52,8 +52,6 @@ private:
    bool m_SaveTriggerCondition(void);
 
    Ui::C_SdNdeDalLogJobAdditionalTriggerDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    QString mc_LogJobName;
    QString mc_TriggerCondition;
 

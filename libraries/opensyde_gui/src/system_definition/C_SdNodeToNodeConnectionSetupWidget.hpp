@@ -10,11 +10,10 @@
 #define C_SDNODETONODECONNECTIONSETUPWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include <QRadioButton>
 
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscSystemBus.hpp"
 #include "C_OscNodeComInterfaceSettings.hpp"
 
@@ -32,7 +31,7 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_SdNodeToNodeConnectionSetupWidget :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -50,8 +49,9 @@ public:
    bool CheckIfCreateNew(void) const;
    bool GetInteractionPossible(void) const;
 
+
 protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
+   void m_OnEnterAccept(void) override;
 
 private:
    //Avoid call
@@ -59,8 +59,6 @@ private:
    C_SdNodeToNodeConnectionSetupWidget & operator =(const C_SdNodeToNodeConnectionSetupWidget &) &;
 
    Ui::C_SdNodeToNodeConnectionSetupWidget * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    const uint32_t mu32_Node1Index;
    const uint32_t mu32_Node2Index;
    uint32_t mu32_NodeId1;

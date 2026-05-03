@@ -54,9 +54,8 @@ using namespace stw::opensyde_core;
 C_SdNdeDpSelectorAddWidget::C_SdNdeDpSelectorAddWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                        const uint32_t ou32_NodeIndex,
                                                        C_OscNodeDataPool & orc_OscDataPool) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeDpSelectorAddWidget),
-   mrc_ParentDialog(orc_Parent),
    mu32_NodeIndex(ou32_NodeIndex),
    mrc_OscDataPool(orc_OscDataPool),
    mc_RamViewFilePath("")
@@ -179,39 +178,6 @@ C_SdNdeDpSelectorAddWidget::E_SelectionResult C_SdNdeDpSelectorAddWidget::GetDia
    }
 
    return e_Result;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpSelectorAddWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -418,4 +384,13 @@ void C_SdNdeDpSelectorAddWidget::m_GetSelectedSharedDatapool(C_OscNodeDataPoolId
          orc_SharedDatapoolId = c_ItDatapool->second;
       }
    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdNdeDpSelectorAddWidget::m_OnEnterAccept(void)
+{
+   this->m_OkClicked();
 }

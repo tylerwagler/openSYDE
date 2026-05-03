@@ -47,9 +47,8 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueImportCommMessagesWidget::C_SdBueImportCommMessagesWidget(C_OgePopUpDialog & orc_Parent,
                                                                  const C_SclString & orc_Name) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdImportCommMessagesWidget),
-   mrc_ParentDialog(orc_Parent),
    me_SelectedCommProtocol(C_OscCanProtocol::E_Type::eLAYER2)
 {
    const uint8_t u8_DEFAULT_COMBOBOX_ENTRY = 0;
@@ -153,39 +152,6 @@ void C_SdBueImportCommMessagesWidget::SetDefaultCommunicationProtocol(const C_Os
 C_OscCanProtocol::E_Type C_SdBueImportCommMessagesWidget::GetSelectedCommunicationProtocol(void) const
 {
    return me_SelectedCommProtocol;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdBueImportCommMessagesWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

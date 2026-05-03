@@ -50,9 +50,8 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SdCodeGenerationDialog::C_SdCodeGenerationDialog(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_SdCodeGenerationDialog),
-   mrc_ParentDialog(orc_Parent)
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
+   mpc_Ui(new Ui::C_SdCodeGenerationDialog)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -119,39 +118,6 @@ void C_SdCodeGenerationDialog::GetCheckedItems(std::vector<uint32_t> & orc_NodeI
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdCodeGenerationDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot of Ok button click
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -189,4 +155,13 @@ void C_SdCodeGenerationDialog::m_UpdateSelection(const int32_t os32_SelectionCou
       this->mpc_Ui->pc_SelectionLabel->setText(static_cast<QString>(C_GtGetText::h_GetText("No Data Block(s) selected")));
       this->mpc_Ui->pc_PushButtonOk->setDisabled(true);
    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdCodeGenerationDialog::m_OnEnterAccept(void)
+{
+   this->m_OkClicked();
 }
