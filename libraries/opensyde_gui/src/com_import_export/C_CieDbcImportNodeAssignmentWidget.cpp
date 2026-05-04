@@ -378,11 +378,3 @@ void C_CieDbcImportNodeAssignmentWidget::m_UpdateComboboxEntries(const uint32_t 
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CieDbcImportNodeAssignmentWidget::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

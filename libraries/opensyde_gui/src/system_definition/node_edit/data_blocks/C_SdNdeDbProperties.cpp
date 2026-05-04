@@ -1962,11 +1962,3 @@ void C_SdNdeDbProperties::m_AskUserToSaveRelativePath(const QString & orc_Path,
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbProperties::m_OnEnterAccept(void)
-{
-   m_OkClicked();
-}

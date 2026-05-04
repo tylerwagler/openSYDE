@@ -46,9 +46,6 @@ public:
    stw::opensyde_gui_logic::C_PuiSvDashboard::E_TabType GetDashboardTabType() const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    //Avoid call
    C_SyvDaDashboardTabProperties(const C_SyvDaDashboardTabProperties &);

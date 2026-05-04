@@ -46,9 +46,6 @@ public:
    int32_t SaveCurrentProjectForServiceMode(void);
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_PopCreateServiceProjDialogWidget * mpc_Ui;
 

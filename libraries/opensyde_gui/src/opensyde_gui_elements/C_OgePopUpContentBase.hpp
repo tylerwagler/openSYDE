@@ -14,7 +14,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
 #include <QWidget>
-#include <QKeyEvent>
 #include "C_OgePopUpDialog.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -35,10 +34,6 @@ public:
    explicit C_OgePopUpContentBase(C_OgePopUpDialog & orc_Parent, QWidget * const opc_Parent = NULL);
 
 protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
-
-   virtual void m_OnEnterAccept(void);
-
    //lint -e{1725} Reference member intentionally retained as the parent dialog outlives the content widget.
    C_OgePopUpDialog & mrc_ParentDialog;
 

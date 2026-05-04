@@ -203,11 +203,3 @@ void C_SdNdeDpImportRamViewReport::m_FillReport(const QString & orc_ProjectPath,
    this->mpc_Ui->pc_TextBrowser->setHtml(c_Text);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpImportRamViewReport::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

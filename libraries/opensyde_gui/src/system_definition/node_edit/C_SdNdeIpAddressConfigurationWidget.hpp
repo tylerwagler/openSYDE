@@ -45,9 +45,6 @@ public:
    void SlotTabKey(const QLineEdit * const opc_LineEdit);
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdNdeIpAddressConfigurationWidget * mpc_Ui;
    const uint32_t mu32_NodeIndex;

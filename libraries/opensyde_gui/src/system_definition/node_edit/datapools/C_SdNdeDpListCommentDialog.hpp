@@ -44,9 +44,6 @@ public:
    void SetTitle(const QString oc_Title);
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdNdeDpListCommentDialog * mpc_Ui;
    const uint32_t mu32_NodeIndex;

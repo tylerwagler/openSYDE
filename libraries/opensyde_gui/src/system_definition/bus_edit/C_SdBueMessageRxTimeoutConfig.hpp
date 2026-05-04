@@ -46,9 +46,6 @@ public:
    uint32_t GetReceiveTimeoutValue(void) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdBueMessageRxTimeoutConfig * mpc_Ui;
 

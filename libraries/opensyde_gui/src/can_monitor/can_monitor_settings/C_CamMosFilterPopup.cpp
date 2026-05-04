@@ -1031,11 +1031,3 @@ void C_CamMosFilterPopup::m_SetMessageDataFromDatabase(const uint32_t ou32_CanId
    this->m_OnStartIdEdited();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CamMosFilterPopup::m_OnEnterAccept(void)
-{
-   this->m_OnOk();
-}

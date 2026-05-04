@@ -205,7 +205,7 @@ void C_SdNdeDpListDataSetWidget::keyPressEvent(QKeyEvent * const opc_Event)
        (opc_Event->key() == static_cast<int32_t>(Qt::Key_Return)))
    {
       // Let the base handle Ctrl+Enter accept (and swallow non-Ctrl Enter).
-      C_OgePopUpContentBase::keyPressEvent(opc_Event);
+      QWidget::keyPressEvent(opc_Event);
    }
    else if (this->mpc_Ui->pc_GroupBoxGeneral->isAncestorOf(this->focusWidget()) == true)
    {

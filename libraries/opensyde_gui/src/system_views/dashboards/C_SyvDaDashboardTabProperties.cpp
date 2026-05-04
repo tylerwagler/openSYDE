@@ -311,11 +311,3 @@ void C_SyvDaDashboardTabProperties::m_SetChartDashboardType(const bool oq_IsChec
    this->mpc_Ui->pc_RbChartDashboard->setChecked(oq_IsChecked);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardTabProperties::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

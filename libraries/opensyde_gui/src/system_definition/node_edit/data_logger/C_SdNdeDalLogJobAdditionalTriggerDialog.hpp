@@ -40,9 +40,6 @@ public:
    void SetNodeDataLoggerJob(const uint32_t ou32_NodeIndex, const uint32_t ou32_DataLoggerJobIndex);
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    void m_CancelClicked(void);
    void m_OkClicked(void);

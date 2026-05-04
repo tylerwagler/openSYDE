@@ -8,7 +8,6 @@
    node update.
    Once the node is selected, the Node ID is fetched in the MainWindow and updated in the Report Widget.
 
-
    \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -159,17 +158,8 @@ void C_FlaSenSearchNodePopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
    }
    else
    {
-      C_OgePopUpContentBase::keyPressEvent(opc_KeyEvent);
+      QWidget::keyPressEvent(opc_KeyEvent);
    }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the Apply click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_FlaSenSearchNodePopup::m_OnEnterAccept(void)
-{
-   this->m_ApplyClicked();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

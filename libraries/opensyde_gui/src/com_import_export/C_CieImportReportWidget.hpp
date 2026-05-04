@@ -65,9 +65,6 @@ public:
    static const QString hc_HTML_TABLE_DATA_START;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_CieImportReportWidget * mpc_Ui;
    const QString mc_FilePath;

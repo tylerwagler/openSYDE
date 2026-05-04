@@ -158,17 +158,8 @@ void C_FlaConNodeConfigPopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
    }
    else
    {
-      C_OgePopUpContentBase::keyPressEvent(opc_KeyEvent);
+      QWidget::keyPressEvent(opc_KeyEvent);
    }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_FlaConNodeConfigPopup::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

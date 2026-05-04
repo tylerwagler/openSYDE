@@ -45,9 +45,6 @@ public:
    uint32_t GetTraceBufferSize(void) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_CamMetSettingsPopup * mpc_Ui;
 

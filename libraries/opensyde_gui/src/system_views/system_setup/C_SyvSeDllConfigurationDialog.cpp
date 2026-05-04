@@ -511,11 +511,3 @@ QString C_SyvSeDllConfigurationDialog::m_GetAbsoluteDllPath(void) const
    return c_Return;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

@@ -1016,11 +1016,3 @@ bool C_CieImportReportWidget::mh_IsEdsOrDcfImport(const QString & orc_Suffix)
    return (orc_Suffix.toUpper() == "EDS") || (orc_Suffix.toUpper() == "DCF");
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CieImportReportWidget::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

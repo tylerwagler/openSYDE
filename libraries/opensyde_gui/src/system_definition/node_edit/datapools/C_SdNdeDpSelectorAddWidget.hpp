@@ -57,9 +57,6 @@ public:
                                      QString & orc_RamViewFilePath) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdNdeDpSelectorAddWidget * mpc_Ui;
 

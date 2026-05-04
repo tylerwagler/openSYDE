@@ -338,11 +338,3 @@ void C_PopSaveAsDialogWidget::m_OnCancel(void)
    this->mrc_ParentDialog.reject();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_PopSaveAsDialogWidget::m_OnEnterAccept(void)
-{
-   this->m_OnSave();
-}

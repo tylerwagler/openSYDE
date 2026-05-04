@@ -50,9 +50,6 @@ public:
    bool GetInteractionPossible(void) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    //Avoid call
    C_SdNodeToNodeConnectionSetupWidget(const C_SdNodeToNodeConnectionSetupWidget &);

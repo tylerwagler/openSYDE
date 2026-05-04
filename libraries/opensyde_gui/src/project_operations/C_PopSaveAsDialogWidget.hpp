@@ -42,9 +42,6 @@ public:
    void SaveUserSettings(void) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_PopSaveAsDialogWidget * mpc_Ui;
    static const int32_t mhs32_VERSION_INDEX_V2;

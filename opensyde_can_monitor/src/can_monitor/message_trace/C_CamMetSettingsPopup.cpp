@@ -204,11 +204,3 @@ void C_CamMetSettingsPopup::m_OnOk(void)
    this->mrc_ParentDialog.accept();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CamMetSettingsPopup::m_OnEnterAccept(void)
-{
-   this->m_OnOk();
-}

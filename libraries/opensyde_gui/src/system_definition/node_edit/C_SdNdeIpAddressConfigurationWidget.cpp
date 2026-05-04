@@ -230,11 +230,3 @@ void C_SdNdeIpAddressConfigurationWidget::m_CancelClicked(void)
    this->mrc_ParentDialog.reject();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeIpAddressConfigurationWidget::m_OnEnterAccept(void)
-{
-   m_OkClicked();
-}

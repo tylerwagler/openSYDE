@@ -153,11 +153,3 @@ void C_SdNdeDpListCommentDialog::m_CancelClicked(void)
    this->mrc_ParentDialog.reject();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListCommentDialog::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

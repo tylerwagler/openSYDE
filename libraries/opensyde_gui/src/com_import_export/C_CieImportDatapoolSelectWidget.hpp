@@ -41,9 +41,6 @@ public:
    uint32_t GetSelectedDatapoolIndex(void) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_CieImportDatapoolSelectWidget * mpc_Ui;
    const uint32_t mu32_NodeIndex;

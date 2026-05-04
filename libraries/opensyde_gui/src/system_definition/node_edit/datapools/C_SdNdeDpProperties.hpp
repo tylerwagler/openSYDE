@@ -52,9 +52,6 @@ public:
    void SetIsDatapoolShared(const bool o_IsShared);
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    //Avoid call
    C_SdNdeDpProperties(const C_SdNdeDpProperties &);
