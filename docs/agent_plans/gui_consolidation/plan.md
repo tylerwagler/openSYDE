@@ -38,7 +38,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Tab Widget) | ✅ **No candidates** | All 5 classes have ctor logic (setUsesScrollButtons / setExpanding / custom tabBar / font) or real overrides (ToolTipBase). See phase1-progress-tab-widget.md. |
 | Phase 1 (Widget) | ✅ **Complete** | C_OgeWi{Param,Table}SpinBoxGroup migrated earlier into C_OgeWiSpinBoxGroup + styleRole. All 20 remaining classes have paintEvent / event overrides, members, or .ui setup — none qualify by the playbook bar. See phase1-progress-widget.md. |
 | Phase 1 (Splitter / Tool Button) | ✅ **No candidates** | All splitter classes have logic; tool_button has only the tooltip base |
-| Phase 2 | ⏳ Not started | Dashboard property panels |
+| Phase 2 | ✅ **Complete** | `C_SyvDaPePanelBase` extracted as shared base for the six `C_SyvDaPe{Label, PieChart, ProgressBar, Slider, SpinBox, Toggle}` panels (commit `ac94e891`). Holds mrc_ParentDialog + mq_DarkMode, provides the `m_PublishPreviewItem` helper for the scene-publish bookend. .ui files and per-type Get/Set stay separate. |
 | Phase 3 | ✅ **Complete** | 60/62 popup-content widgets now share `C_OgePopUpContentBase`. Main pass: `51dfacea`/`bc920d5c`/`c67f33bd`/`ad50054a`/`8b22bac0`. Follow-up (Batches A–C): `0e992ac7`/`87ef4701`/`34daa88a`. Batch D (2 QDialog popups) closed as won't-fix — see Phase 3 detail section. |
 | Phase 4 | ✅ **Complete** | `C_OgeTitleBarWidget` extracted as a thin shared base for `C_CamTitleBarWidget` / `C_FlaTitleBarWidget` (commit `2a34cd31`). Holds the About slot, help-trigger slot, and STW-logo loader; subclasses override 2-3 metadata getters. .ui files stay separate (the button sets are entirely different per app). |
 | Phase 5 | ✅ **Complete** | CAN Monitor element dedup. 25 classes audited; all 10 stylesheet-only candidates migrated (commits `150c1586`, `3dcca288`, `3298ba6e`); 15 with real logic kept. See phase5-progress.md. |
@@ -168,20 +168,46 @@ QLabel[styleRole="heading-widget"] { font: 18px "Segoe UI"; }
 
 ## Phase 2: Consolidate Dashboard Property Panels
 
-**Impact: 6 classes -> 1 parameterized base | ~12 files reduced to ~2**
+**Status: ✅ Complete (commit `ac94e891`).**
 
-### Problem
-`C_SyvDaPeLabel`, `C_SyvDaPePieChart`, `C_SyvDaPeProgressBar`, `C_SyvDaPeSlider`, `C_SyvDaPeSpinBox`, `C_SyvDaPeToggle` all follow an identical pattern:
-- Same constructor signature
-- Same `InitStaticNames()` + `m_UpdatePreview()` interface
-- Same signal wiring boilerplate
+### Original framing (kept for context)
+`C_SyvDaPe{Label, PieChart, ProgressBar, Slider, SpinBox, Toggle}` all
+follow an identical pattern: same ctor signature, same InitStaticNames /
+m_UpdatePreview interface, same signal-wiring boilerplate. The plan
+suggested a "parameterized base with per-type configuration via a
+strategy or variant" — i.e. eliminate the six classes entirely.
 
-### Solution
-Extract a generic `C_SyvDaPeWidgetType` base that takes the widget type as a parameter/template, with per-type configuration via a strategy or variant rather than separate classes.
+### Reality found on close inspection
+The shared shell is small once you look at it: a four-line ctor init
+list, two member declarations, and a three-line scene-publish bookend
+at the end of m_UpdatePreview. The middle of m_UpdatePreview is
+genuinely per-type (different graphics-item class, different size/pos
+math, different per-type Set* calls). The Get/Set methods wrap entirely
+different per-type config structs (`C_PuiSvDbLabel` vs
+`C_PuiSvDbToggle` etc.). The .ui layouts are entirely different.
 
-### Critical files:
-- `libraries/opensyde_gui/src/system_views/dashboards/properties/C_SyvDaPeBase.hpp` (1543 lines)
-- `libraries/opensyde_gui/src/system_views/dashboards/properties/C_SyvDaPe{Label,PieChart,ProgressBar,Slider,SpinBox,Toggle}.hpp/cpp/ui`
+A full strategy/variant collapse would mean threading those differences
+through type tags, which is more invasive than the duplication is
+costly.
+
+### Solution (landed)
+`C_SyvDaPePanelBase` (in the same `dashboards/properties/` directory):
+- Inherits QWidget, holds `mrc_ParentDialog` (`C_SyvDaPeBase &`) and
+  `mq_DarkMode` as protected members.
+- Provides protected helper `m_PublishPreviewItem(QGraphicsItem *)` that
+  performs the standard clear / addItem / clearSelection on the parent's
+  preview scene.
+
+Each subclass loses the duplicate parent/dark-mode declarations, drops
+two ctor init-list lines, and replaces three lines of scene plumbing in
+m_UpdatePreview with one helper call.
+
+### What stayed per-type
+- The `.ui` file (different controls per widget type).
+- `m_UpdatePreview` middle (graphics-item construction, size/pos math,
+  type-specific config calls).
+- All `InitStaticNames` / Get / Set methods (per-type config struct
+  access).
 
 ---
 
