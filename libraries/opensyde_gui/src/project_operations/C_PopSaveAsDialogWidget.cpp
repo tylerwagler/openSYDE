@@ -72,6 +72,9 @@ C_PopSaveAsDialogWidget::C_PopSaveAsDialogWidget(stw::opensyde_gui_elements::C_O
    // register the widget for showing
    this->mrc_ParentDialog.SetWidget(this);
 
+   // make Enter activate Save (the accept button for this popup)
+   this->mpc_Ui->pc_PushButtonSave->setDefault(true);
+
    //Default input
    m_InitDefaultProjectName();
 
