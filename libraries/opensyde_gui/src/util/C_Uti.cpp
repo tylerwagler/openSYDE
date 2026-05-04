@@ -617,8 +617,33 @@ QString C_Uti::h_GetApplicationVersion(const bool oq_UseStwFormat)
    }
 #else
    // On Linux, version info is not embedded in the ELF binary the way Windows PE resources work.
-   // Use a compile-time version string or read from a version file.
-   (void)oq_UseStwFormat;
+   // Each app's main() calls QCoreApplication::setApplicationVersion("MAJOR.MINOR.RELEASE") with
+   // values from its own version_config.hpp; pull that string back out and reformat per the flag.
+   const QString c_QtAppVersion = QCoreApplication::applicationVersion();
+   if (c_QtAppVersion.isEmpty() == false)
+   {
+      const QStringList c_Parts = c_QtAppVersion.split('.');
+      if (c_Parts.size() >= 3)
+      {
+         bool q_OkMajor = false;
+         bool q_OkMinor = false;
+         bool q_OkRelease = false;
+         const uint32_t u32_Major = c_Parts[0].toUInt(&q_OkMajor);
+         const uint32_t u32_Minor = c_Parts[1].toUInt(&q_OkMinor);
+         const uint32_t u32_Release = c_Parts[2].toUInt(&q_OkRelease);
+         if ((q_OkMajor == true) && (q_OkMinor == true) && (q_OkRelease == true))
+         {
+            if (oq_UseStwFormat == true)
+            {
+               c_Version.PrintFormatted("V%u.%02ur%u", u32_Major, u32_Minor, u32_Release);
+            }
+            else
+            {
+               c_Version.PrintFormatted("%u.%02u.%u", u32_Major, u32_Minor, u32_Release);
+            }
+         }
+      }
+   }
 #endif
    return c_Version.c_str();
 }
