@@ -133,7 +133,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pc_BushButtonBorderColor">
+        <widget class="QPushButton" name="pc_PushButtonBorderColor">
          <property name="styleRole" stdset="0">
           <string>color-only</string>
          </property>
@@ -188,7 +188,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pc_BushButtonBackgroundColor">
+        <widget class="QPushButton" name="pc_PushButtonBackgroundColor">
          <property name="styleRole" stdset="0">
           <string>color-only</string>
          </property>

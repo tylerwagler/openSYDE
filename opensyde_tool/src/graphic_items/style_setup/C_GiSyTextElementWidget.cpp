@@ -66,20 +66,20 @@ C_GiSyTextElementWidget::C_GiSyTextElementWidget(C_GiSyBaseWidget & orc_Parent) 
 
    //font color
 
-   this->mpc_LabelColorFont = new QLabel(dynamic_cast<QWidget *>(this->mpc_Ui->pc_BushButtonFontColor->parent()));
+   this->mpc_LabelColorFont = new QLabel(dynamic_cast<QWidget *>(this->mpc_Ui->pc_PushButtonFontColor->parent()));
    this->mpc_LabelColorFont->setPixmap(c_Pic);
    this->mpc_LabelColorFont->lower();
 
    // register the widget for showing
    this->mpc_ParentDialog->SetWidget(this);
 
-   this->mc_FontColor = C_UtiStyleSheets::h_GetStyleSheetColor(this->mpc_Ui->pc_BushButtonFontColor->styleSheet());
+   this->mc_FontColor = C_UtiStyleSheets::h_GetStyleSheetColor(this->mpc_Ui->pc_PushButtonFontColor->styleSheet());
 
    this->m_UpdatePreview();
 
    InitStaticNames();
 
-   connect(this->mpc_Ui->pc_BushButtonFontColor, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonFontColor, &QPushButton::clicked,
            this, &C_GiSyTextElementWidget::m_FontColorClicked);
 
    connect(this->mpc_Ui->pc_WidgetFont, &C_OgeWiFontConfig::SigFontUpdate, this,
@@ -118,8 +118,8 @@ void C_GiSyTextElementWidget::InitStaticNames(void) const
 void C_GiSyTextElementWidget::showEvent(QShowEvent * const opc_Event)
 {
    //font color
-   this->mpc_LabelColorFont->resize(this->mpc_Ui->pc_BushButtonFontColor->size());
-   this->mpc_LabelColorFont->move(this->mpc_Ui->pc_BushButtonFontColor->pos());
+   this->mpc_LabelColorFont->resize(this->mpc_Ui->pc_PushButtonFontColor->size());
+   this->mpc_LabelColorFont->move(this->mpc_Ui->pc_PushButtonFontColor->pos());
 
    QWidget::showEvent(opc_Event);
 }
@@ -168,13 +168,13 @@ QColor C_GiSyTextElementWidget::GetFontColor(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyTextElementWidget::SetFontColor(const QColor & orc_Value)
 {
-   QString c_Style = this->mpc_Ui->pc_BushButtonFontColor->styleSheet();
+   QString c_Style = this->mpc_Ui->pc_PushButtonFontColor->styleSheet();
 
    this->mc_FontColor = orc_Value;
 
    // set the color of the button
    C_UtiStyleSheets::h_SetStyleSheetBackgroundColor(c_Style, orc_Value);
-   this->mpc_Ui->pc_BushButtonFontColor->setStyleSheet(c_Style);
+   this->mpc_Ui->pc_PushButtonFontColor->setStyleSheet(c_Style);
    this->m_UpdatePreview();
 }
 
@@ -242,7 +242,7 @@ void C_GiSyTextElementWidget::m_UpdatePreview(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyTextElementWidget::m_FontColorClicked(void)
 {
-   QString c_Style = this->mpc_Ui->pc_BushButtonFontColor->styleSheet();
+   QString c_Style = this->mpc_Ui->pc_PushButtonFontColor->styleSheet();
    // get the old color as initial color
    QColor c_Color = C_UtiStyleSheets::h_GetStyleSheetColor(c_Style);
 
@@ -265,7 +265,7 @@ void C_GiSyTextElementWidget::m_FontColorClicked(void)
 
          // update the button
          C_UtiStyleSheets::h_SetStyleSheetBackgroundColor(c_Style, c_Color);
-         this->mpc_Ui->pc_BushButtonFontColor->setStyleSheet(c_Style);
+         this->mpc_Ui->pc_PushButtonFontColor->setStyleSheet(c_Style);
 
          this->m_UpdatePreview();
       }

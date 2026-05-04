@@ -114,8 +114,8 @@ C_SdNdeCoDeviceUpdateEdsDialog::C_SdNdeCoDeviceUpdateEdsDialog(
    //content
    this->m_ShowReport();
 
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SdNdeCoDeviceUpdateEdsDialog::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeCoDeviceUpdateEdsDialog::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdNdeCoDeviceUpdateEdsDialog::m_CancelClicked);
 }
 
@@ -158,8 +158,8 @@ void C_SdNdeCoDeviceUpdateEdsDialog::DoApplyData(void) const
 void C_SdNdeCoDeviceUpdateEdsDialog::InitStaticNames(void) const
 {
    this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

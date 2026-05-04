@@ -93,7 +93,7 @@ C_SyvDaItPaImageRecordWidget::C_SyvDaItPaImageRecordWidget(stw::opensyde_gui_ele
    this->mpc_Ui->pc_WiConfirm->setEnabled(true);
    this->mpc_Ui->pc_CbConfirm->setEnabled(false);
    this->mpc_Ui->pc_CbConfirm->setVisible(false);
-   this->mpc_Ui->pc_BushButtonOk->setVisible(false);
+   this->mpc_Ui->pc_PushButtonOk->setVisible(false);
    this->mpc_Ui->pc_WiConfirm->setVisible(false);
 
    //Register close
@@ -115,8 +115,8 @@ C_SyvDaItPaImageRecordWidget::C_SyvDaItPaImageRecordWidget(stw::opensyde_gui_ele
    this->mpc_Ui->pc_PushButtonBrowse->setText("");
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SyvDaItPaImageRecordWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SyvDaItPaImageRecordWidget::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SyvDaItPaImageRecordWidget::m_OnCancel);
    connect(this->mpc_ParentDialog, &C_OgePopUpDialog::SigCloseIgnored,
            this, &C_SyvDaItPaImageRecordWidget::m_OnCancel);
@@ -967,9 +967,9 @@ void C_SyvDaItPaImageRecordWidget::m_WriteCrcOfNodeToFile(void)
    if (s32_Return == C_NO_ERR)
    {
       this->mpc_Ui->pc_LabelFinished->setEnabled(true);
-      this->mpc_Ui->pc_BushButtonOk->setVisible(true);
-      this->mpc_Ui->pc_BushButtonOk->setFocus();
-      this->mpc_Ui->pc_BushButtonCancel->setVisible(false);
+      this->mpc_Ui->pc_PushButtonOk->setVisible(true);
+      this->mpc_Ui->pc_PushButtonOk->setFocus();
+      this->mpc_Ui->pc_PushButtonCancel->setVisible(false);
       this->mpc_Ui->pc_ProgressValidateFile->SetProgress(100);
       this->mpc_Ui->pc_BopperleFinished->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21, mc_STYLE_GUIDE_COLOR_13);
       this->mpc_Ui->pc_LabelHeadingSelectFile->setText(C_GtGetText::h_GetText("Finished"));

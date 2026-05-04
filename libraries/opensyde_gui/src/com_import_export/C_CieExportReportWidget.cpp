@@ -75,7 +75,7 @@ C_CieExportReportWidget::C_CieExportReportWidget(stw::opensyde_gui_elements::C_O
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Report"));
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_CieExportReportWidget::m_OkClicked);
 }
 
@@ -97,7 +97,7 @@ C_CieExportReportWidget::~C_CieExportReportWidget(void)
 void C_CieExportReportWidget::InitStaticNames(void) const
 {
    this->mpc_Ui->pc_LabelHeadingReport->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

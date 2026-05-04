@@ -299,7 +299,7 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
       }
 
       // New shared Datapool. Deactivate the break relation button
-      this->mpc_Ui->pc_BushButtonBreakRelation->setEnabled(false);
+      this->mpc_Ui->pc_PushButtonBreakRelation->setEnabled(false);
 
       q_IsShared = true;
       SetIsDatapoolShared(q_IsShared);
@@ -344,8 +344,8 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
    }
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SdNdeDpProperties::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeDpProperties::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SdNdeDpProperties::m_CancelClicked);
    connect(this->mpc_Ui->pc_LineEditDatapoolName, &QLineEdit::textChanged, this,
            &C_SdNdeDpProperties::m_CheckDatapoolName);
@@ -358,7 +358,7 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
            &C_SdNdeDpProperties::m_OnComTypeChange);
    connect(this->mpc_Ui->pc_CheckBoxSafety, &C_OgeChxTristateBase::toggled, this,
            &C_SdNdeDpProperties::m_OnSafetyChange);
-   connect(this->mpc_Ui->pc_BushButtonBreakRelation, &C_OgePubToolTipBase::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonBreakRelation, &C_OgePubToolTipBase::clicked, this,
            &C_SdNdeDpProperties::m_BreakSharedRelation);
 }
 
@@ -382,8 +382,8 @@ void C_SdNdeDpProperties::InitStaticNames(void)
 {
    this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Datapool"));
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_CommentText->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
    this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
    this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
@@ -401,7 +401,7 @@ void C_SdNdeDpProperties::InitStaticNames(void)
    this->mpc_Ui->pc_LabelDataPoolReservation->setText(C_GtGetText::h_GetText("Resulting Node NVM Reservation"));
    this->mpc_Ui->pc_LabelDatapoolShareConfiguration->setText(C_GtGetText::h_GetText(
                                                                 "Share Configuration with other Datapools:"));
-   this->mpc_Ui->pc_BushButtonBreakRelation->setText(C_GtGetText::h_GetText("Break Relation"));
+   this->mpc_Ui->pc_PushButtonBreakRelation->setText(C_GtGetText::h_GetText("Break Relation"));
    this->mpc_Ui->pc_LabelCrcVersion->setText(C_GtGetText::h_GetText("CRC Version"));
 
    //Tool tips
@@ -752,7 +752,7 @@ void C_SdNdeDpProperties::m_ApplyType(const bool oq_SharedDatapool)
    this->mpc_Ui->pc_LabDatapoolImage->SetSvg(c_Pic);
 
    // Shared configuration visibility
-   this->mpc_Ui->pc_BushButtonBreakRelation->setVisible(oq_SharedDatapool);
+   this->mpc_Ui->pc_PushButtonBreakRelation->setVisible(oq_SharedDatapool);
    this->mpc_Ui->pc_LabelDatapoolShareConfiguration->setVisible(oq_SharedDatapool);
    this->mpc_Ui->pc_ListWidgetSharedDatapoolInfo->setVisible(oq_SharedDatapool);
 
@@ -1195,7 +1195,7 @@ void C_SdNdeDpProperties::m_BreakSharedRelation(void)
          rc_SharedDatapools.RemoveSharedDatapool(C_OscNodeDataPoolId(this->mu32_NodeIndex,
                                                                      static_cast<uint32_t>(this->ms32_DataPoolIndex)));
 
-         this->mpc_Ui->pc_BushButtonBreakRelation->setEnabled(false);
+         this->mpc_Ui->pc_PushButtonBreakRelation->setEnabled(false);
          this->mpc_Ui->pc_ListWidgetSharedDatapoolInfo->clear();
 
          // Reinit the labels and the ui

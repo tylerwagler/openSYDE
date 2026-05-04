@@ -1796,7 +1796,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pc_BushButtonCancel">
+      <widget class="QPushButton" name="pc_PushButtonCancel">
        <property name="styleRole" stdset="0">
         <string>cancel</string>
        </property>
@@ -1840,7 +1840,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pc_BushButtonOk">
+      <widget class="QPushButton" name="pc_PushButtonOk">
        <property name="styleRole" stdset="0">
         <string>dialog</string>
        </property>

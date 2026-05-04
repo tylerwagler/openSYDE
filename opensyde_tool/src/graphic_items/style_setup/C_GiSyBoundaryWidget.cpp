@@ -61,13 +61,13 @@ C_GiSyBoundaryWidget::C_GiSyBoundaryWidget(C_GiSyBaseWidget & orc_Parent) :
    mpc_Ui->setupUi(this);
 
    //border
-   this->mpc_LabelBorder = new QLabel(dynamic_cast<QWidget *>(this->mpc_Ui->pc_BushButtonBorderColor->parent()));
+   this->mpc_LabelBorder = new QLabel(dynamic_cast<QWidget *>(this->mpc_Ui->pc_PushButtonBorderColor->parent()));
    this->mpc_LabelBorder->setPixmap(c_Pic);
    this->mpc_LabelBorder->lower();
 
    //background
    this->mpc_LabelBackground =
-      new QLabel(dynamic_cast<QWidget *>(this->mpc_Ui->pc_BushButtonBackgroundColor->parent()));
+      new QLabel(dynamic_cast<QWidget *>(this->mpc_Ui->pc_PushButtonBackgroundColor->parent()));
    this->mpc_LabelBackground->setPixmap(c_Pic);
    this->mpc_LabelBackground->lower();
 
@@ -79,17 +79,17 @@ C_GiSyBoundaryWidget::C_GiSyBoundaryWidget(C_GiSyBaseWidget & orc_Parent) :
    this->mpc_ParentDialog->SetWidget(this);
 
    this->mc_BorderColor = C_UtiStyleSheets::h_GetStyleSheetColor(
-      this->mpc_Ui->pc_BushButtonBorderColor->styleSheet());
+      this->mpc_Ui->pc_PushButtonBorderColor->styleSheet());
    this->mc_BackgroundColor = C_UtiStyleSheets::h_GetStyleSheetColor(
-      this->mpc_Ui->pc_BushButtonBackgroundColor->styleSheet());
+      this->mpc_Ui->pc_PushButtonBackgroundColor->styleSheet());
 
    this->m_UpdatePreview();
 
    InitStaticNames();
 
-   connect(this->mpc_Ui->pc_BushButtonBorderColor, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonBorderColor, &QPushButton::clicked, this,
            &C_GiSyBoundaryWidget::m_BorderColorClicked);
-   connect(this->mpc_Ui->pc_BushButtonBackgroundColor, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonBackgroundColor, &QPushButton::clicked,
            this, &C_GiSyBoundaryWidget::m_BackgroundColorClicked);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_SpinBoxWidth, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged),
@@ -129,12 +129,12 @@ void C_GiSyBoundaryWidget::InitStaticNames(void) const
 void C_GiSyBoundaryWidget::showEvent(QShowEvent * const opc_Event)
 {
    //border
-   this->mpc_LabelBorder->resize(this->mpc_Ui->pc_BushButtonBorderColor->size());
-   this->mpc_LabelBorder->move(this->mpc_Ui->pc_BushButtonBorderColor->pos());
+   this->mpc_LabelBorder->resize(this->mpc_Ui->pc_PushButtonBorderColor->size());
+   this->mpc_LabelBorder->move(this->mpc_Ui->pc_PushButtonBorderColor->pos());
 
    //background
-   this->mpc_LabelBackground->resize(this->mpc_Ui->pc_BushButtonBackgroundColor->size());
-   this->mpc_LabelBackground->move(this->mpc_Ui->pc_BushButtonBackgroundColor->pos());
+   this->mpc_LabelBackground->resize(this->mpc_Ui->pc_PushButtonBackgroundColor->size());
+   this->mpc_LabelBackground->move(this->mpc_Ui->pc_PushButtonBackgroundColor->pos());
 
    QWidget::showEvent(opc_Event);
 }
@@ -180,13 +180,13 @@ QColor C_GiSyBoundaryWidget::GetBorderColor(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyBoundaryWidget::SetBorderColor(const QColor & orc_Value)
 {
-   QString c_Style = this->mpc_Ui->pc_BushButtonBorderColor->styleSheet();
+   QString c_Style = this->mpc_Ui->pc_PushButtonBorderColor->styleSheet();
 
    this->mc_BorderColor = orc_Value;
 
    // set the color of the button
    C_UtiStyleSheets::h_SetStyleSheetBackgroundColor(c_Style, orc_Value);
-   this->mpc_Ui->pc_BushButtonBorderColor->setStyleSheet(c_Style);
+   this->mpc_Ui->pc_PushButtonBorderColor->setStyleSheet(c_Style);
    this->m_UpdatePreview();
 }
 
@@ -209,13 +209,13 @@ QColor C_GiSyBoundaryWidget::GetBackgroundColor(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyBoundaryWidget::SetBackgroundColor(const QColor & orc_Value)
 {
-   QString c_Style = this->mpc_Ui->pc_BushButtonBackgroundColor->styleSheet();
+   QString c_Style = this->mpc_Ui->pc_PushButtonBackgroundColor->styleSheet();
 
    this->mc_BackgroundColor = orc_Value;
 
    // set the color of the button
    C_UtiStyleSheets::h_SetStyleSheetBackgroundColor(c_Style, orc_Value);
-   this->mpc_Ui->pc_BushButtonBackgroundColor->setStyleSheet(c_Style);
+   this->mpc_Ui->pc_PushButtonBackgroundColor->setStyleSheet(c_Style);
    m_UpdatePreview();
 }
 
@@ -252,7 +252,7 @@ void C_GiSyBoundaryWidget::m_UpdatePreview(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyBoundaryWidget::m_BorderColorClicked(void)
 {
-   QString c_Style = this->mpc_Ui->pc_BushButtonBorderColor->styleSheet();
+   QString c_Style = this->mpc_Ui->pc_PushButtonBorderColor->styleSheet();
    // get the old color as initial color
    QColor c_Color = C_UtiStyleSheets::h_GetStyleSheetColor(c_Style);
 
@@ -275,7 +275,7 @@ void C_GiSyBoundaryWidget::m_BorderColorClicked(void)
 
          // update the button
          C_UtiStyleSheets::h_SetStyleSheetBackgroundColor(c_Style, c_Color);
-         this->mpc_Ui->pc_BushButtonBorderColor->setStyleSheet(c_Style);
+         this->mpc_Ui->pc_PushButtonBorderColor->setStyleSheet(c_Style);
 
          this->m_UpdatePreview();
       }
@@ -296,7 +296,7 @@ void C_GiSyBoundaryWidget::m_BorderColorClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyBoundaryWidget::m_BackgroundColorClicked(void)
 {
-   QString c_Style = this->mpc_Ui->pc_BushButtonBackgroundColor->styleSheet();
+   QString c_Style = this->mpc_Ui->pc_PushButtonBackgroundColor->styleSheet();
    // get the old color as initial color
    QColor c_Color = C_UtiStyleSheets::h_GetStyleSheetColor(c_Style);
 
@@ -317,7 +317,7 @@ void C_GiSyBoundaryWidget::m_BackgroundColorClicked(void)
 
          // update the button
          C_UtiStyleSheets::h_SetStyleSheetBackgroundColor(c_Style, c_Color);
-         this->mpc_Ui->pc_BushButtonBackgroundColor->setStyleSheet(c_Style);
+         this->mpc_Ui->pc_PushButtonBackgroundColor->setStyleSheet(c_Style);
 
          this->m_UpdatePreview();
       }

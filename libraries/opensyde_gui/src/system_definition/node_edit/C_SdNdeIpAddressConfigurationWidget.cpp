@@ -69,9 +69,9 @@ C_SdNdeIpAddressConfigurationWidget::C_SdNdeIpAddressConfigurationWidget(
    m_LoadData();
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_SdNdeIpAddressConfigurationWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdNdeIpAddressConfigurationWidget::m_CancelClicked);
 
    std::vector<QLineEdit *> c_LeIpAddress =  this->mpc_Ui->pc_WidgetIpAddress->GetLineEdits();
@@ -117,8 +117,8 @@ C_SdNdeIpAddressConfigurationWidget::~C_SdNdeIpAddressConfigurationWidget(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeIpAddressConfigurationWidget::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_LabelDataElement->setText(C_GtGetText::h_GetText("IP Address Settings"));
    this->mpc_Ui->pc_LabelIpAddress->setText(C_GtGetText::h_GetText("IP Address"));
    this->mpc_Ui->pc_LabelSubNetMask->setText(C_GtGetText::h_GetText("Sub Net Mask"));
@@ -147,7 +147,7 @@ void C_SdNdeIpAddressConfigurationWidget::SlotTabKey(const QLineEdit * const opc
    {
       if (this->mpc_Ui->pc_WidgetDefaultGateway->IsLineEditPartOfWidget(opc_LineEdit) == true)
       {
-         this->mpc_Ui->pc_BushButtonCancel->setFocus();
+         this->mpc_Ui->pc_PushButtonCancel->setFocus();
       }
    }
 }

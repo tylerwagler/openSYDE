@@ -155,8 +155,8 @@ C_SyvDaPeDataElementBrowse::C_SyvDaPeDataElementBrowse(C_OgePopUpDialog & orc_Pa
    this->m_SetupContextMenu(oq_MultiSelect);
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SyvDaPeDataElementBrowse::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SyvDaPeDataElementBrowse::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SyvDaPeDataElementBrowse::m_CancelClicked);
    connect(this->mpc_Ui->pc_LineEditSearch, &C_OgeLeProperties::textChanged, this,
            &C_SyvDaPeDataElementBrowse::m_OnSearch);
@@ -188,8 +188,8 @@ C_SyvDaPeDataElementBrowse::~C_SyvDaPeDataElementBrowse(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeDataElementBrowse::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Datapool Element"));
    this->mpc_Ui->pc_ComboBoxType->addItem(C_GtGetText::h_GetText("Bus Signal"));
    this->mpc_Ui->pc_LineEditSearch->setPlaceholderText(C_GtGetText::h_GetText("Filter"));
