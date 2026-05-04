@@ -10,11 +10,10 @@
 #define C_SDNDEDPPROPERTIES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 
 #include "stwtypes.hpp"
 
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscNodeDataPool.hpp"
 #include "C_OscNodeDataPoolId.hpp"
 #include "C_OscCanProtocol.hpp"
@@ -34,7 +33,7 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_SdNdeDpProperties :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -52,8 +51,9 @@ public:
    bool GetIsDatapoolShared() const;
    void SetIsDatapoolShared(const bool o_IsShared);
 
+
 protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
+   void m_OnEnterAccept(void) override;
 
 private:
    //Avoid call
@@ -64,7 +64,6 @@ private:
    static const int32_t mhs32_INDEX_PUBLIC;
 
    Ui::C_SdNdeDpProperties * mpc_Ui;
-   stw::opensyde_gui_elements::C_OgePopUpDialog * mpc_ParentDialog;
    stw::opensyde_core::C_OscNodeDataPool * const mpc_OscDataPool;
    stw::opensyde_gui_logic::C_PuiSdNodeDataPool * const mpc_UiDataPool;
    stw::opensyde_core::C_OscCanProtocol::E_Type * const mpe_ComProtocolType;
