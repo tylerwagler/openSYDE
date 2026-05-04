@@ -785,13 +785,20 @@ void C_NagMainWidget::m_OnOpenProj(void)
    if (C_PopUtil::h_AskUserToContinue(this) == true)
    {
       QString c_Folder = "";
-      const QString c_Suffix = "*.syde;*.syde_sp";
-      const QString c_Filter = static_cast<QString>(C_GtGetText::h_GetText("openSYDE project")) + " (" + c_Suffix + ")";
+      // Use ;;-separated filter list (Qt's standard form for multiple filters) and add an
+      // "All files" escape hatch so users on platforms whose native dialogs misparse name
+      // filters (notably some KDE Plasma versions) can still see and pick .syde[_sp] files.
+      const QString c_Filter =
+         static_cast<QString>(C_GtGetText::h_GetText("openSYDE project (*.syde)")) +
+         ";;" +
+         static_cast<QString>(C_GtGetText::h_GetText("openSYDE service project (*.syde_sp)")) +
+         ";;" +
+         static_cast<QString>(C_GtGetText::h_GetText("All files (*)"));
 
       C_UsHandler::h_GetInstance()->GetMostRecentFolder(c_Folder);
 
       const QString c_File = C_OgeWiUtil::h_GetOpenFileName(this, C_GtGetText::h_GetText("Open openSYDE Project"),
-                                                            c_Folder, c_Filter, c_Suffix);
+                                                            c_Folder, c_Filter, "");
       if (c_File.isEmpty() == false)
       {
          LoadProject(c_File);
