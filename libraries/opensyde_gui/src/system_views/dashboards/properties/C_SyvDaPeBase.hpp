@@ -12,8 +12,7 @@
 #define C_SYVDAPEBASE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_PuiSvReadDataConfiguration.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
 #include "C_PuiSvDbDataElementScaling.hpp"
@@ -34,7 +33,7 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_SyvDaPeBase :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -88,8 +87,6 @@ Q_SIGNALS:
    //lint -restore
    void SigRefresh(void);
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    //Avoid call
@@ -97,7 +94,6 @@ private:
    C_SyvDaPeBase & operator =(const C_SyvDaPeBase &) &;
 
    Ui::C_SyvDaPeBase * mpc_Ui;
-   stw::opensyde_gui_elements::C_OgePopUpDialog * mpc_ParentDialog;
    C_SyvDaDashboardScene * mpc_Scene;
    stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId mc_DataElement;
    const stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId mc_InitialDataElement;
