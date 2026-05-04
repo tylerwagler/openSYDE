@@ -46,3 +46,32 @@ Lower-priority code-simplification candidates from the audit:
 - The bespoke title-bar machinery (Phase 4 of the GUI consolidation
   plan) is the next big candidate for "does this earn its keep?"
   scrutiny.
+
+## Fix application version on Linux ("V?.??r?" placeholder)
+
+The About dialog of all three GUI apps (openSYDE, CAN Monitor,
+SYDEflash) shows the literal string `V?.??r?` on Linux instead of a
+real version. Root cause:
+`libraries/opensyde_gui/src/util/C_Uti.cpp::h_GetApplicationVersion`
+initialises the local string to that placeholder and only overwrites
+it inside `#ifdef _WIN32`, where it reads `VS_FIXEDFILEINFO` from the
+Win32 file version resource. The Linux branch was never wired up.
+
+The CLI tools (`opensyde_syde_sup`, `opensyde_syde_x_gen`) already use a
+different pattern: a hand-edited `version_config.hpp` with
+`PROJECT_VERSION_MAJOR/MINOR/RELEASE/BUILD` macros, included directly.
+
+Two viable fixes:
+
+1. **Adopt the `version_config.hpp` pattern for the GUI apps too** — add
+   the file (or share one across apps), reference its macros from
+   `C_Uti::h_GetApplicationVersion` in a `#else` branch. Closest to the
+   existing pattern; manual bumps on each release.
+2. **Inject via CMake** — `project(... VERSION x.y.z)` plus
+   `target_compile_definitions` in each app's CMakeLists, then
+   `QApplication::setApplicationVersion(...)` in `main()` and read
+   `QApplication::applicationVersion()` from `C_Uti`. Cleaner, single
+   source of truth, but a wider edit.
+
+Either way, also update each app's `*resources.rc` so the Windows
+build keeps the same string the Linux build emits.
