@@ -123,7 +123,7 @@ int32_t main(const int32_t os32_Argc, char_t * const opacn_Argv[])
 
    C_CodeExport::E_ResultCode e_Result;
 
-   e_Result = c_TheCodeExport.Init();
+   e_Result = c_TheCodeExport.Init(os32_Argc, opacn_Argv);
 
    if (e_Result == C_OsyCodeExportBase::eRESULT_OK)
    {

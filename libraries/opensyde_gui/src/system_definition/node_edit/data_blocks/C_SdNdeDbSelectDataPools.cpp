@@ -193,7 +193,7 @@ void C_SdNdeDbSelectDataPools::m_OnSearch(const QString & orc_Text) const
    if (orc_Text.isEmpty() == true)
    {
       m_HandleHiding();
-      m_UpdateSelection(this->mpc_Ui->pc_TreeView->GetSelectedDataElements().size());
+      m_UpdateSelection(static_cast<int32_t>(this->mpc_Ui->pc_TreeView->GetSelectedDataElements().size()));
    }
    else
    {
@@ -204,7 +204,7 @@ void C_SdNdeDbSelectDataPools::m_OnSearch(const QString & orc_Text) const
       }
       else
       {
-         m_UpdateSelection(this->mpc_Ui->pc_TreeView->GetSelectedDataElements().size());
+         m_UpdateSelection(static_cast<int32_t>(this->mpc_Ui->pc_TreeView->GetSelectedDataElements().size()));
       }
       this->mpc_Ui->pc_GroupBoxInitialDataElementNoElements->setVisible(false);
    }
