@@ -15,7 +15,7 @@
 
 /* -- Global Constants ---------------------------------------------------------------------------------------------- */
 #define PROJECT_VERSION_MAJOR 1
-#define PROJECT_VERSION_MINOR 83
+#define PROJECT_VERSION_MINOR 86
 #define PROJECT_VERSION_RELEASE 0
 #define PROJECT_VERSION_BUILD 0
 
