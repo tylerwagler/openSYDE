@@ -110,8 +110,8 @@ C_SyvDaDashboardTabProperties::C_SyvDaDashboardTabProperties(C_OgePopUpDialog & 
    }
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SyvDaDashboardTabProperties::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SyvDaDashboardTabProperties::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SyvDaDashboardTabProperties::m_CancelClicked);
    connect(this->mpc_Ui->pc_LineEditName, &QLineEdit::textChanged, this,
            &C_SyvDaDashboardTabProperties::m_CheckDashboardTabName);
@@ -140,8 +140,8 @@ C_SyvDaDashboardTabProperties::~C_SyvDaDashboardTabProperties(void)
 void C_SyvDaDashboardTabProperties::InitStaticNames(void)
 {
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_TedComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
    this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
    this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));

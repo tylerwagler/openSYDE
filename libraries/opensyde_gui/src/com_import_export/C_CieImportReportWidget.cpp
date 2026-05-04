@@ -111,8 +111,8 @@ C_CieImportReportWidget::C_CieImportReportWidget(C_OgePopUpDialog & orc_Parent, 
                            toUpper(), oq_IsCanOpen) == C_NO_ERR);
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_CieImportReportWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this, &C_CieImportReportWidget::m_CancelClicked);
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_CieImportReportWidget::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_CieImportReportWidget::m_CancelClicked);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -133,8 +133,8 @@ C_CieImportReportWidget::~C_CieImportReportWidget(void)
 void C_CieImportReportWidget::InitStaticNames(void) const
 {
    this->mpc_Ui->pc_LabelHeadingReport->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("Import"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Import"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

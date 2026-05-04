@@ -59,9 +59,9 @@ C_SyvDaItPaArWidget::C_SyvDaItPaArWidget(stw::opensyde_gui_elements::C_OgePopUpD
    this->mpc_Ui->pc_TableView->SetElement(oru32_ElementIndex, opc_DataWidget, oq_EcuValues);
 
    //Connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_SyvDaItPaArWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SyvDaItPaArWidget::m_CancelClicked);
 }
 

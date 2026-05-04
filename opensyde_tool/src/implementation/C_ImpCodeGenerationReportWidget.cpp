@@ -63,7 +63,7 @@ C_ImpCodeGenerationReportWidget::C_ImpCodeGenerationReportWidget(
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Report"));
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_ImpCodeGenerationReportWidget::m_OkClicked);
 }
 
@@ -85,7 +85,7 @@ C_ImpCodeGenerationReportWidget::~C_ImpCodeGenerationReportWidget(void)
 void C_ImpCodeGenerationReportWidget::InitStaticNames(void) const
 {
    this->mpc_Ui->pc_LabelHeadingReport->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

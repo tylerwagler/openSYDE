@@ -81,9 +81,9 @@ C_SdNodeToNodeConnectionSetupWidget::C_SdNodeToNodeConnectionSetupWidget(
    this->mpc_Ui->pc_GroupBoxInterfaces2->setTitle("");
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_SdNodeToNodeConnectionSetupWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SdNodeToNodeConnectionSetupWidget::m_CancelClicked);
    connect(this->mpc_Ui->pc_RadioButtonCreateNew, &stw::opensyde_gui_elements::C_OgeRabProperties::toggled, this,
            &C_SdNodeToNodeConnectionSetupWidget::m_OnNewOrExistingChange);
@@ -117,8 +117,8 @@ void C_SdNodeToNodeConnectionSetupWidget::InitStaticNames(void) const
 {
    this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Node to Node"));
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Link Setup"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_LabelInterfaceHeading->setText(C_GtGetText::h_GetText("2. Select COMM Interface"));
    this->mpc_Ui->pc_LabelBusHeading->setText(C_GtGetText::h_GetText("1. Select Bus"));
    this->mpc_Ui->pc_LabelBusType->setText(C_GtGetText::h_GetText("Type"));

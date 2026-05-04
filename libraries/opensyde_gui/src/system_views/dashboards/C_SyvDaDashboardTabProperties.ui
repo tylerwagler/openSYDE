@@ -590,7 +590,7 @@ p, li { white-space: pre-wrap; }
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pc_BushButtonCancel">
+      <widget class="QPushButton" name="pc_PushButtonCancel">
        <property name="styleRole" stdset="0">
         <string>cancel</string>
        </property>
@@ -634,7 +634,7 @@ p, li { white-space: pre-wrap; }
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pc_BushButtonOk">
+      <widget class="QPushButton" name="pc_PushButtonOk">
        <property name="styleRole" stdset="0">
         <string>dialog</string>
        </property>
@@ -713,8 +713,8 @@ p, li { white-space: pre-wrap; }
   <tabstop>pc_TedComment</tabstop>
   <tabstop>pc_RbCommonDashboard</tabstop>
   <tabstop>pc_RbChartDashboard</tabstop>
-  <tabstop>pc_BushButtonCancel</tabstop>
-  <tabstop>pc_BushButtonOk</tabstop>
+  <tabstop>pc_PushButtonCancel</tabstop>
+  <tabstop>pc_PushButtonOk</tabstop>
  </tabstops>
  <resources/>
  <connections/>

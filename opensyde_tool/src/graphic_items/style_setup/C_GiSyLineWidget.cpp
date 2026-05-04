@@ -65,12 +65,12 @@ C_GiSyLineWidget::C_GiSyLineWidget(const E_Type oe_Mode, C_GiSyBaseWidget & orc_
    mpc_Ui->setupUi(this);
 
    //color
-   this->mpc_LabelColor = new QLabel(dynamic_cast<QWidget *>(this->mpc_Ui->pc_BushButtonColor->parent()));
+   this->mpc_LabelColor = new QLabel(dynamic_cast<QWidget *>(this->mpc_Ui->pc_PushButtonColor->parent()));
    this->mpc_LabelColor->setPixmap(c_Pic);
    this->mpc_LabelColor->lower();
 
    //color innerline
-   this->mpc_LabelColorInner = new QLabel(dynamic_cast<QWidget *>(this->mpc_Ui->pc_BushButtonColorInner->parent()));
+   this->mpc_LabelColorInner = new QLabel(dynamic_cast<QWidget *>(this->mpc_Ui->pc_PushButtonColorInner->parent()));
    this->mpc_LabelColorInner->setPixmap(c_Pic);
    this->mpc_LabelColorInner->lower();
 
@@ -99,12 +99,12 @@ C_GiSyLineWidget::C_GiSyLineWidget(const E_Type oe_Mode, C_GiSyBaseWidget & orc_
       this->mpc_Ui->pc_ComboBoxStartArrow->setVisible(false);
       this->mpc_Ui->pc_ComboBoxEndArrow->setVisible(false);
 
-      this->mpc_Ui->pc_BushButtonColorInner->setVisible(false);
+      this->mpc_Ui->pc_PushButtonColorInner->setVisible(false);
       this->mpc_LabelColorInner->setVisible(false);
       this->mpc_Ui->pc_LabelColorInner->setVisible(false);
       break;
    case eLINE:
-      this->mpc_Ui->pc_BushButtonColorInner->setVisible(false);
+      this->mpc_Ui->pc_PushButtonColorInner->setVisible(false);
       this->mpc_LabelColorInner->setVisible(false);
       this->mpc_Ui->pc_LabelColorInner->setVisible(false);
 
@@ -120,17 +120,17 @@ C_GiSyLineWidget::C_GiSyLineWidget(const E_Type oe_Mode, C_GiSyBaseWidget & orc_
       break;
    }
 
-   this->mc_Color = C_UtiStyleSheets::h_GetStyleSheetColor(this->mpc_Ui->pc_BushButtonColor->styleSheet());
+   this->mc_Color = C_UtiStyleSheets::h_GetStyleSheetColor(this->mpc_Ui->pc_PushButtonColor->styleSheet());
    this->mc_InnerLineColor = C_UtiStyleSheets::h_GetStyleSheetColor(
-      this->mpc_Ui->pc_BushButtonColorInner->styleSheet());
+      this->mpc_Ui->pc_PushButtonColorInner->styleSheet());
 
    this->m_UpdatePreview();
 
    InitStaticNames();
 
-   connect(this->mpc_Ui->pc_BushButtonColor, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonColor, &QPushButton::clicked, this,
            &C_GiSyLineWidget::m_ColorClicked);
-   connect(this->mpc_Ui->pc_BushButtonColorInner, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonColorInner, &QPushButton::clicked,
            this, &C_GiSyLineWidget::m_ColorInnerClicked);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_SpinBoxWidth, static_cast<void (QSpinBox::*)(int32_t)>(&QSpinBox::valueChanged),
@@ -187,12 +187,12 @@ void C_GiSyLineWidget::InitStaticNames(void) const
 void C_GiSyLineWidget::showEvent(QShowEvent * const opc_Event)
 {
    //color
-   this->mpc_LabelColor->resize(this->mpc_Ui->pc_BushButtonColor->size());
-   this->mpc_LabelColor->move(this->mpc_Ui->pc_BushButtonColor->pos());
+   this->mpc_LabelColor->resize(this->mpc_Ui->pc_PushButtonColor->size());
+   this->mpc_LabelColor->move(this->mpc_Ui->pc_PushButtonColor->pos());
 
    //color innerline
-   this->mpc_LabelColorInner->resize(this->mpc_Ui->pc_BushButtonColorInner->size());
-   this->mpc_LabelColorInner->move(this->mpc_Ui->pc_BushButtonColorInner->pos());
+   this->mpc_LabelColorInner->resize(this->mpc_Ui->pc_PushButtonColorInner->size());
+   this->mpc_LabelColorInner->move(this->mpc_Ui->pc_PushButtonColorInner->pos());
 
    QWidget::showEvent(opc_Event);
 }
@@ -239,13 +239,13 @@ QColor C_GiSyLineWidget::GetLineColor(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyLineWidget::SetLineColor(const QColor & orc_Value)
 {
-   QString c_Style = this->mpc_Ui->pc_BushButtonColor->styleSheet();
+   QString c_Style = this->mpc_Ui->pc_PushButtonColor->styleSheet();
 
    this->mc_Color = orc_Value;
 
    // set the color of the button
    C_UtiStyleSheets::h_SetStyleSheetBackgroundColor(c_Style, orc_Value);
-   this->mpc_Ui->pc_BushButtonColor->setStyleSheet(c_Style);
+   this->mpc_Ui->pc_PushButtonColor->setStyleSheet(c_Style);
    this->m_UpdatePreview();
 }
 
@@ -268,13 +268,13 @@ QColor C_GiSyLineWidget::GetInnerLineColor(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyLineWidget::SetInnerLineColor(const QColor & orc_Value)
 {
-   QString c_Style = this->mpc_Ui->pc_BushButtonColorInner->styleSheet();
+   QString c_Style = this->mpc_Ui->pc_PushButtonColorInner->styleSheet();
 
    this->mc_InnerLineColor = orc_Value;
 
    // set the color of the button
    C_UtiStyleSheets::h_SetStyleSheetBackgroundColor(c_Style, orc_Value);
-   this->mpc_Ui->pc_BushButtonColorInner->setStyleSheet(c_Style);
+   this->mpc_Ui->pc_PushButtonColorInner->setStyleSheet(c_Style);
    m_UpdatePreview();
 }
 
@@ -464,7 +464,7 @@ void C_GiSyLineWidget::m_UpdatePreview(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyLineWidget::m_ColorClicked(void)
 {
-   QString c_Style = this->mpc_Ui->pc_BushButtonColor->styleSheet();
+   QString c_Style = this->mpc_Ui->pc_PushButtonColor->styleSheet();
    // get the old color as initial color
    QColor c_Color = C_UtiStyleSheets::h_GetStyleSheetColor(c_Style);
 
@@ -486,7 +486,7 @@ void C_GiSyLineWidget::m_ColorClicked(void)
 
          // update the button
          C_UtiStyleSheets::h_SetStyleSheetBackgroundColor(c_Style, c_Color);
-         this->mpc_Ui->pc_BushButtonColor->setStyleSheet(c_Style);
+         this->mpc_Ui->pc_PushButtonColor->setStyleSheet(c_Style);
 
          this->m_UpdatePreview();
       }
@@ -507,7 +507,7 @@ void C_GiSyLineWidget::m_ColorClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_GiSyLineWidget::m_ColorInnerClicked(void)
 {
-   QString c_Style = this->mpc_Ui->pc_BushButtonColorInner->styleSheet();
+   QString c_Style = this->mpc_Ui->pc_PushButtonColorInner->styleSheet();
    // get the old color as initial color
    QColor c_Color = C_UtiStyleSheets::h_GetStyleSheetColor(c_Style);
 
@@ -528,7 +528,7 @@ void C_GiSyLineWidget::m_ColorInnerClicked(void)
 
          // update the button
          C_UtiStyleSheets::h_SetStyleSheetBackgroundColor(c_Style, c_Color);
-         this->mpc_Ui->pc_BushButtonColorInner->setStyleSheet(c_Style);
+         this->mpc_Ui->pc_PushButtonColorInner->setStyleSheet(c_Style);
 
          this->m_UpdatePreview();
       }

@@ -82,8 +82,8 @@ C_GiSyBaseWidget::C_GiSyBaseWidget(C_OgePopUpDialog & orc_Parent, const QString 
    InitStaticNames();
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_GiSyBaseWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_GiSyBaseWidget::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_GiSyBaseWidget::m_CancelClicked);
 }
 
@@ -107,8 +107,8 @@ C_GiSyBaseWidget::~C_GiSyBaseWidget(void)
 void C_GiSyBaseWidget::InitStaticNames(void)
 {
    this->mpc_ParentDialog->SetSubTitle(C_GtGetText::h_GetText("Setup Style"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_LabelStyle->setText(C_GtGetText::h_GetText("Style"));
    this->mpc_Ui->pc_LabelPreview->setText(C_GtGetText::h_GetText("Example Preview"));
 }

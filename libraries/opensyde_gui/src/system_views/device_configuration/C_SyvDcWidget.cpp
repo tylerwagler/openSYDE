@@ -93,7 +93,7 @@ C_SyvDcWidget::C_SyvDcWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_
 
    // init the gui
    this->mpc_Ui->pc_PbBackToScan->setEnabled(false);
-   this->mpc_Ui->pc_BushButtonOk->setVisible(false);
+   this->mpc_Ui->pc_PushButtonOk->setVisible(false);
 
    this->InitText();
 
@@ -138,8 +138,8 @@ C_SyvDcWidget::C_SyvDcWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_
    this->mpc_Ui->pc_PbBackToScan->setVisible(false);
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SyvDcWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SyvDcWidget::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SyvDcWidget::m_CancelClicked);
    connect(&this->mc_Timer, &QTimer::timeout, this, &C_SyvDcWidget::m_Timer);
    // Progress signals
@@ -247,8 +247,8 @@ void C_SyvDcWidget::InitText(void)
    this->mpc_Ui->pc_LabelProgressFinished->setText(static_cast<QString>(C_GtGetText::h_GetText("Finished")));
    this->mpc_Ui->pc_ComboBoxConfigurationMode->clear();
 
-   this->mpc_Ui->pc_BushButtonCancel->setText(static_cast<QString>(C_GtGetText::h_GetText("Cancel")));
-   this->mpc_Ui->pc_BushButtonOk->setText(static_cast<QString>(C_GtGetText::h_GetText("OK")));
+   this->mpc_Ui->pc_PushButtonCancel->setText(static_cast<QString>(C_GtGetText::h_GetText("Cancel")));
+   this->mpc_Ui->pc_PushButtonOk->setText(static_cast<QString>(C_GtGetText::h_GetText("OK")));
 
    // Order is important!
    // Index 0 = all connected interfaces in the system.
@@ -475,7 +475,7 @@ void C_SyvDcWidget::m_StartSearchProper(void)
    QApplication::setOverrideCursor(Qt::WaitCursor);
 
    //Prepare UI
-   this->mpc_Ui->pc_BushButtonCancel->setEnabled(false);
+   this->mpc_Ui->pc_PushButtonCancel->setEnabled(false);
    this->mpc_Ui->pc_ComboBoxBitRate->setEnabled(false);
    this->mpc_Ui->pc_ComboBoxConfigurationMode->setEnabled(false);
    this->mpc_Ui->pc_PushButtonScan->setEnabled(false);
@@ -563,7 +563,7 @@ void C_SyvDcWidget::m_StartSearchProper(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcWidget::m_CleanUpScan(void) const
 {
-   this->mpc_Ui->pc_BushButtonCancel->setEnabled(true);
+   this->mpc_Ui->pc_PushButtonCancel->setEnabled(true);
    this->mpc_Ui->pc_ComboBoxBitRate->setEnabled(this->me_BusType == C_OscSystemBus::eCAN);
    this->mpc_Ui->pc_ComboBoxConfigurationMode->setEnabled(true);
    this->mpc_Ui->pc_PushButtonScan->setEnabled(true);
@@ -1009,8 +1009,8 @@ void C_SyvDcWidget::m_ShowConfigResult(void)
 void C_SyvDcWidget::m_BackToScan(void)
 {
    this->mpc_Ui->pc_PbBackToScan->setEnabled(false);
-   this->mpc_Ui->pc_BushButtonCancel->setVisible(true);
-   this->mpc_Ui->pc_BushButtonOk->setVisible(false);
+   this->mpc_Ui->pc_PushButtonCancel->setVisible(true);
+   this->mpc_Ui->pc_PushButtonOk->setVisible(false);
 
    this->mpc_Ui->pc_GroupBoxScan->setVisible(true);
    this->mpc_Ui->pc_PushButtonScan->setVisible(true);
@@ -2758,10 +2758,10 @@ void C_SyvDcWidget::m_Timer(void)
          case eREADBACKETH: // Same implementation for showing the read info
             this->mpc_Ui->pc_PbBackToScan->setEnabled(true);
             this->mpc_Ui->pc_PbBackToScan->setVisible(true);
-            this->mpc_Ui->pc_BushButtonOk->setFocus();
+            this->mpc_Ui->pc_PushButtonOk->setFocus();
             this->m_ShowReadInfo(s32_SequenceResult);
-            this->mpc_Ui->pc_BushButtonOk->setVisible(true);
-            this->mpc_Ui->pc_BushButtonCancel->setVisible(false);
+            this->mpc_Ui->pc_PushButtonOk->setVisible(true);
+            this->mpc_Ui->pc_PushButtonCancel->setVisible(false);
             this->mpc_Ui->pc_BopperleFinished->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21, mc_STYLE_GUIDE_COLOR_13);
 
             this->m_UpdateReportText(c_Text);

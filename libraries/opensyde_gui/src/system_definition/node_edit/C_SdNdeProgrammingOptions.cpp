@@ -85,8 +85,8 @@ C_SdNdeProgrammingOptions::C_SdNdeProgrammingOptions(stw::opensyde_gui_elements:
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Settings"));
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SdNdeProgrammingOptions::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this, &C_SdNdeProgrammingOptions::m_CancelClicked);
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeProgrammingOptions::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_SdNdeProgrammingOptions::m_CancelClicked);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -106,8 +106,8 @@ C_SdNdeProgrammingOptions::~C_SdNdeProgrammingOptions(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeProgrammingOptions::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
 
    this->mpc_Ui->pc_LabelGeneral->setText(C_GtGetText::h_GetText("General"));
    this->mpc_Ui->pc_LabelScaling->setText(C_GtGetText::h_GetText("Scaling values data type"));

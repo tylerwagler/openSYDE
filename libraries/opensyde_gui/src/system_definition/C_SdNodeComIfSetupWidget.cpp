@@ -68,8 +68,8 @@ C_SdNodeComIfSetupWidget::C_SdNodeComIfSetupWidget(stw::opensyde_gui_elements::C
    m_InitFromData();
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SdNodeComIfSetupWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNodeComIfSetupWidget::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SdNodeComIfSetupWidget::m_CancelClicked);
 }
 
@@ -91,8 +91,8 @@ C_SdNodeComIfSetupWidget::~C_SdNodeComIfSetupWidget()
 void C_SdNodeComIfSetupWidget::InitStaticNames(void) const
 {
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Communication Interface Setup"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_LabelComInterfaceHeading->setText(C_GtGetText::h_GetText("Select COMM Interface"));
 }
 

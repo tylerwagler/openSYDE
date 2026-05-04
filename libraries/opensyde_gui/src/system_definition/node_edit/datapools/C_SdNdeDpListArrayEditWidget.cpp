@@ -69,9 +69,9 @@ C_SdNdeDpListArrayEditWidget::C_SdNdeDpListArrayEditWidget(stw::opensyde_gui_ele
                                           ore_ArrayEditType, oru32_DataSetIndex);
 
    //Connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_SdNdeDpListArrayEditWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdNdeDpListArrayEditWidget::m_CancelClicked);
 }
 

@@ -93,9 +93,9 @@ C_SdNdeDpListDataSetWidget::C_SdNdeDpListDataSetWidget(stw::opensyde_gui_element
    m_OnDataSetSelectionChange(0);
 
    //Connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_SdNdeDpListDataSetWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdNdeDpListDataSetWidget::m_CancelClicked);
    connect(this->mpc_Ui->pc_TableView, &C_SdNdeDpListDataSetView::SigColumnCountChange, this,
            &C_SdNdeDpListDataSetWidget::m_OnDataSetCountChange);

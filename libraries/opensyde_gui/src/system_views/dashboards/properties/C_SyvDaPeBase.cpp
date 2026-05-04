@@ -185,8 +185,8 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    this->mpc_Ui->pc_DoubleSpinBoxOffset->SetMaximumCustom(std::numeric_limits<float64_t>::max());
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SyvDaPeBase::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SyvDaPeBase::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SyvDaPeBase::m_CancelClicked);
    connect(this->mpc_Ui->pc_PushButtonClearDataElement, &QPushButton::clicked, this, &C_SyvDaPeBase::m_Clear);
    connect(this->mpc_Ui->pc_PushButtonDataElement, &QPushButton::clicked, this, &C_SyvDaPeBase::m_Browse);
@@ -237,8 +237,8 @@ C_SyvDaPeBase::~C_SyvDaPeBase(void) noexcept
 void C_SyvDaPeBase::InitStaticNames(void)
 {
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_LabelDesign->setText(C_GtGetText::h_GetText("Design"));
    this->mpc_Ui->pc_LabelPreview->setText(C_GtGetText::h_GetText("Example Preview"));
    this->mpc_Ui->pc_LabelDataElement->setText(C_GtGetText::h_GetText("Data Element"));
