@@ -61,10 +61,9 @@ C_SyvDaPeDataElementBrowse::C_SyvDaPeDataElementBrowse(C_OgePopUpDialog & orc_Pa
                                                        const bool oq_Show64BitValues, const bool oq_ShowNvmLists,
                                                        const std::vector<C_PuiSvDbNodeDataPoolListElementId> * const opc_AlreasyUsedElements, const bool oq_UseInSysViews,
                                                        const uint32_t ou32_SdDataLoggerUseCaseNodeIndex) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeDataElementBrowse),
-   mpc_ContextMenu(NULL),
-   mrc_ParentDialog(orc_Parent)
+   mpc_ContextMenu(NULL)
 {
    bool q_TreeFilled = false;
 
@@ -232,39 +231,6 @@ std::vector<C_PuiSvDbNodeDataPoolListElementId> C_SyvDaPeDataElementBrowse::GetS
 void C_SyvDaPeDataElementBrowse::PrepareCleanUp(void)
 {
    this->mpc_Ui->pc_TreeView->CleanUpLastView();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaPeDataElementBrowse::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

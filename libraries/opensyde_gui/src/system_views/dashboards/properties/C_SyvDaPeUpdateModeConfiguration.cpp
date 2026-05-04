@@ -43,10 +43,9 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaPeUpdateModeConfiguration::C_SyvDaPeUpdateModeConfiguration(C_OgePopUpDialog & orc_Parent,
                                                                    const uint32_t ou32_ViewIndex) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeUpdateModeConfiguration),
-   mu32_ViewIndex(ou32_ViewIndex),
-   mrc_ParentDialog(orc_Parent)
+   mu32_ViewIndex(ou32_ViewIndex)
 {
    mpc_Ui->setupUi(this);
 
@@ -121,39 +120,6 @@ void C_SyvDaPeUpdateModeConfiguration::InitStaticNames(void) const
 void C_SyvDaPeUpdateModeConfiguration::Select(const C_PuiSvDbNodeDataPoolListElementId & orc_Id) const
 {
    this->mpc_Ui->pc_TreeWidget->Select(orc_Id);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaPeUpdateModeConfiguration::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
