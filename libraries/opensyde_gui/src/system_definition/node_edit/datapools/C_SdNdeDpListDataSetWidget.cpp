@@ -52,7 +52,7 @@ C_SdNdeDpListDataSetWidget::C_SdNdeDpListDataSetWidget(stw::opensyde_gui_element
                                                        const uint32_t & oru32_NodeIndex,
                                                        const uint32_t & oru32_DataPoolIndex,
                                                        const uint32_t & oru32_ListIndex) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeDpListDataSetWidget),
    mpc_ContextMenu(NULL),
    mpc_ActionAdd(NULL),
@@ -62,7 +62,6 @@ C_SdNdeDpListDataSetWidget::C_SdNdeDpListDataSetWidget(stw::opensyde_gui_element
    mpc_ActionCut(NULL),
    mpc_ActionMoveLeft(NULL),
    mpc_ActionMoveRight(NULL),
-   mrc_Parent(orc_Parent),
    mu32_NodeIndex(oru32_NodeIndex),
    mu32_DataPoolIndex(oru32_DataPoolIndex),
    mu32_ListIndex(oru32_ListIndex)
@@ -73,7 +72,7 @@ C_SdNdeDpListDataSetWidget::C_SdNdeDpListDataSetWidget(stw::opensyde_gui_element
                                                           oru32_ListIndex);
 
    this->mpc_Ui->setupUi(this);
-   this->mrc_Parent.SetWidget(this);
+   this->mrc_ParentDialog.SetWidget(this);
    InitStaticNames();
    this->mpc_Ui->pc_TableView->SetList(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex);
 
@@ -145,9 +144,9 @@ void C_SdNdeDpListDataSetWidget::InitStaticNames(void) const
 
    if (pc_List != NULL)
    {
-      mrc_Parent.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("List %1")).arg(pc_List->c_Name.c_str()));
+      mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("List %1")).arg(pc_List->c_Name.c_str()));
    }
-   mrc_Parent.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Dataset Configuration")));
+   mrc_ParentDialog.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Dataset Configuration")));
    this->mpc_Ui->pc_LabelReplacement->setText(C_GtGetText::h_GetText(
                                                  "No Dataset is declared, add any via the '+' button"));
    this->mpc_Ui->pc_PushButtonAdd->SetToolTipInformation(C_GtGetText::h_GetText("Add"),
@@ -202,91 +201,82 @@ void C_SdNdeDpListDataSetWidget::SetModelViewManager(C_SdNdeDpListModelViewManag
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListDataSetWidget::keyPressEvent(QKeyEvent * const opc_Event)
 {
-   bool q_CallOrig = true;
-
-   //Handle all enter key cases manually
    if ((opc_Event->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
        (opc_Event->key() == static_cast<int32_t>(Qt::Key_Return)))
    {
-      if (((opc_Event->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_Event->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_Event->modifiers().testFlag(Qt::ShiftModifier) == false))
+      // Let the base handle Ctrl+Enter accept (and swallow non-Ctrl Enter).
+      C_OgePopUpContentBase::keyPressEvent(opc_Event);
+   }
+   else if (this->mpc_Ui->pc_GroupBoxGeneral->isAncestorOf(this->focusWidget()) == true)
+   {
+      bool q_Handled = false;
+      const int32_t s32_Key = opc_Event->key();
+      switch (s32_Key)
       {
-         this->mrc_Parent.accept();
+      case Qt::Key_C:
+         if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
+         {
+            q_Handled = true;
+            this->mpc_Ui->pc_TableView->Copy();
+            opc_Event->accept();
+         }
+         break;
+      case Qt::Key_X:
+         if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
+         {
+            q_Handled = true;
+            this->mpc_Ui->pc_TableView->Cut();
+            opc_Event->accept();
+         }
+         break;
+      case Qt::Key_V:
+         if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
+         {
+            q_Handled = true;
+            this->m_DoPaste();
+            opc_Event->accept();
+         }
+         break;
+      case Qt::Key_Delete:
+         q_Handled = true;
+         this->mpc_Ui->pc_TableView->Delete();
+         opc_Event->accept();
+         break;
+      case Qt::Key_BracketRight: // Qt::Key_BracketRight matches the "Not-Num-Plus"-Key
+      case Qt::Key_Plus:
+         if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
+         {
+            q_Handled = true;
+            this->m_DoInsert();
+            opc_Event->accept();
+         }
+         break;
+      case Qt::Key_Left:
+         if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
+         {
+            q_Handled = true;
+            this->mpc_Ui->pc_TableView->DoMoveLeft();
+            opc_Event->accept();
+         }
+         break;
+      case Qt::Key_Right:
+         if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
+         {
+            q_Handled = true;
+            this->mpc_Ui->pc_TableView->DoMoveRight();
+            opc_Event->accept();
+         }
+         break;
+      default:
+         //Nothing to do
+         break;
       }
-      else
+      if (q_Handled == false)
       {
-         q_CallOrig = false;
+         QWidget::keyPressEvent(opc_Event);
       }
    }
    else
-   {
-      if (this->mpc_Ui->pc_GroupBoxGeneral->isAncestorOf(this->focusWidget()) == true)
-      {
-         const int32_t s32_Key = opc_Event->key();
-         switch (s32_Key)
-         {
-         case Qt::Key_C:
-            if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
-            {
-               q_CallOrig = false;
-               this->mpc_Ui->pc_TableView->Copy();
-               opc_Event->accept();
-            }
-            break;
-         case Qt::Key_X:
-            if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
-            {
-               q_CallOrig = false;
-               this->mpc_Ui->pc_TableView->Cut();
-               opc_Event->accept();
-            }
-            break;
-         case Qt::Key_V:
-            if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
-            {
-               q_CallOrig = false;
-               this->m_DoPaste();
-               opc_Event->accept();
-            }
-            break;
-         case Qt::Key_Delete:
-            q_CallOrig = false;
-            this->mpc_Ui->pc_TableView->Delete();
-            opc_Event->accept();
-            break;
-         case Qt::Key_BracketRight: // Qt::Key_BracketRight matches the "Not-Num-Plus"-Key
-         case Qt::Key_Plus:
-            if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
-            {
-               q_CallOrig = false;
-               this->m_DoInsert();
-               opc_Event->accept();
-            }
-            break;
-         case Qt::Key_Left:
-            if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
-            {
-               q_CallOrig = false;
-               this->mpc_Ui->pc_TableView->DoMoveLeft();
-               opc_Event->accept();
-            }
-            break;
-         case Qt::Key_Right:
-            if (opc_Event->modifiers().testFlag(Qt::ControlModifier) == true)
-            {
-               q_CallOrig = false;
-               this->mpc_Ui->pc_TableView->DoMoveRight();
-               opc_Event->accept();
-            }
-            break;
-         default:
-            //Nothing to do
-            break;
-         }
-      }
-   }
-   if (q_CallOrig == true)
    {
       QWidget::keyPressEvent(opc_Event);
    }
@@ -366,7 +356,7 @@ void C_SdNdeDpListDataSetWidget::m_InitButtonIcons(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListDataSetWidget::m_OkClicked(void)
 {
-   this->mrc_Parent.accept();
+   this->mrc_ParentDialog.accept();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -375,7 +365,7 @@ void C_SdNdeDpListDataSetWidget::m_OkClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListDataSetWidget::m_CancelClicked(void)
 {
-   this->mrc_Parent.reject();
+   this->mrc_ParentDialog.reject();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
