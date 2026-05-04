@@ -12,6 +12,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QtGlobal>
+
 #include "stwtypes.hpp"
 #include "C_GtGetText.hpp"
 #include "C_NagAboutDialog.hpp"
@@ -97,7 +99,7 @@ void C_NagAboutDialog::InitStaticNames(void) const
    c_Text += C_GtGetText::h_GetText("\n");
    c_Text += this->mc_ProductName;
    c_Text += C_GtGetText::h_GetText(" uses the following open source libraries:\n");
-   c_Text += C_GtGetText::h_GetText("    - Qt 6.8.3 by The Qt Company\n");
+   c_Text += static_cast<QString>(C_GtGetText::h_GetText("    - Qt %1 by The Qt Company\n")).arg(qVersion());
    c_Text += C_GtGetText::h_GetText("    - gettext by the Free Software Foundation\n");
    c_Text += C_GtGetText::h_GetText("    - TinyXML-2 by Lee Thomason and others\n");
    c_Text += C_GtGetText::h_GetText("    - The MinGW Runtime\n");
