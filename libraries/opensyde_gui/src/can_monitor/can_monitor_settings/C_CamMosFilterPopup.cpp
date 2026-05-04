@@ -55,9 +55,8 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamProFilterData & orc_FilterData,
                                          stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_CamMosFilterPopup),
-   mrc_ParentDialog(orc_Parent),
    mpc_TableModel(new stw::opensyde_gui_logic::C_CamMosFilterTableModel),
    mc_UneditedName(orc_FilterData.c_Name)
 {
@@ -220,39 +219,6 @@ void C_CamMosFilterPopup::SetAddFilterItem(const QList<int32_t> oc_CanMsgId,  co
       C_CamMosFilterPopup::m_OnAddFilterItemFromContextmenu(oc_FilteredCanMsgIdList.at(
                                                                s32_It), oc_FilteredCanMsgXtdList.at(
                                                                s32_It), q_IsLastItemInList);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CamMosFilterPopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OnOk();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
    }
 }
 
@@ -1063,4 +1029,13 @@ void C_CamMosFilterPopup::m_SetMessageDataFromDatabase(const uint32_t ou32_CanId
 
    // trigger change
    this->m_OnStartIdEdited();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CamMosFilterPopup::m_OnEnterAccept(void)
+{
+   this->m_OnOk();
 }

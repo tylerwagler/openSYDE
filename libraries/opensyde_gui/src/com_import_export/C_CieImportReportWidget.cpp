@@ -77,9 +77,8 @@ C_CieImportReportWidget::C_CieImportReportWidget(C_OgePopUpDialog & orc_Parent, 
                                                  const std::vector<C_CieImportDataAssignment> & orc_ImportDataAssigned,
                                                  const std::vector<C_CieImportDataAssignment> & orc_SkippedImportDataAssigned, const stw::scl::C_SclString * const opc_NodeNameReplacement, const bool oq_IsCanOpen,
                                                  const bool oq_UniqueAddRequested) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_CieImportReportWidget),
-   mrc_ParentDialog(orc_Parent),
    mc_FilePath(orc_FilePath),
    mu32_BusIndex(ou32_BusIndex),
    me_ProtocolType(oe_ProtocolType),
@@ -276,39 +275,6 @@ int32_t C_CieImportReportWidget::h_GetMessageTableContent(QString & orc_ImportTa
       orc_ImportTable = "";
    }
    return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CieImportReportWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1048,4 +1014,13 @@ QString C_CieImportReportWidget::mh_GetMessageEntry(const uint32_t ou32_Index, c
 bool C_CieImportReportWidget::mh_IsEdsOrDcfImport(const QString & orc_Suffix)
 {
    return (orc_Suffix.toUpper() == "EDS") || (orc_Suffix.toUpper() == "DCF");
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_CieImportReportWidget::m_OnEnterAccept(void)
+{
+   this->m_OkClicked();
 }

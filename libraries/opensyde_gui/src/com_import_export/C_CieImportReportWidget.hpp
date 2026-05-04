@@ -11,11 +11,10 @@
 #ifndef C_CIEIMPORTREPORTWIDGET_HPP
 #define C_CIEIMPORTREPORTWIDGET_HPP
 
-#include <QWidget>
 #include "stwtypes.hpp"
 #include "C_OscNode.hpp"
 #include "C_OscCanMessage.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscCanProtocol.hpp"
 #include "C_PuiSdNodeCanMessage.hpp"
 #include "C_CieImportDataAssignment.hpp"
@@ -37,7 +36,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_CieImportReportWidget :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -65,13 +64,12 @@ public:
    static const QString hc_HTML_TABLE_HEADER_START;
    static const QString hc_HTML_TABLE_DATA_START;
 
+
 protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
+   void m_OnEnterAccept(void) override;
 
 private:
    Ui::C_CieImportReportWidget * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    const QString mc_FilePath;
    const uint32_t mu32_BusIndex;
    const stw::opensyde_core::C_OscCanProtocol::E_Type me_ProtocolType;

@@ -9,10 +9,9 @@
 #define C_FLAUPHEXFILEVIEW_H
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 
 #include "C_FlaUpHexFileInfo.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -29,7 +28,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_FlaUpHexFileView :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -38,14 +37,11 @@ public:
                                const C_FlaUpHexFileInfo & orc_HexFileInfo);
    ~C_FlaUpHexFileView(void) override;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_FlaUpHexFileView * mpc_Ui;
    void m_OkClicked(void);
    void m_LoadInfo(const C_FlaUpHexFileInfo * const opc_HexFileInfo) const;
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    static const QString mhc_START_TD;
    static const QString mhc_CONTINUE_TD;
 };
