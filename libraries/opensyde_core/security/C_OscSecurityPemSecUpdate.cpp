@@ -97,7 +97,7 @@ int32_t C_OscSecurityPemSecUpdate::LoadFromFile(const std::string & orc_FileName
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Read private key
 
-   Here: we expect an elliptic curve private key
+   Here: we extract an elliptic curve private key and store it in mc_KeyInfo.
 
    \param[in]      orc_FileContent     File content
    \param[in,out]  orc_ErrorMessage    Error message
@@ -122,7 +122,7 @@ int32_t C_OscSecurityPemSecUpdate::m_ReadPrivateKey(const std::vector<uint8_t> &
       EVP_PKEY * const pc_PrivKey = PEM_read_bio_PrivateKey(pc_PrivKeyFile, NULL, NULL, NULL);
 
       BIO_free(pc_PrivKeyFile);
-      if (pc_PrivKey != NULL)
+      if ((pc_PrivKey != NULL) && (EVP_PKEY_is_a(pc_PrivKey, "EC") == 1))
       {
          //extract the private key as BIGNUM directly from EVP_PKEY (OpenSSL 3.0+ API)
          BIGNUM * pc_PrivBigNum = NULL;

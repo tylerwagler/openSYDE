@@ -22,12 +22,10 @@
 #include "C_OscSecurityRsa.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-
 using namespace stw::errors;
 using namespace stw::opensyde_core;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const uint32_t C_OscSecurityRsa::mhu32_DEFAULT_BUFFER_SIZE = 1024;
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
@@ -40,42 +38,35 @@ const uint32_t C_OscSecurityRsa::mhu32_DEFAULT_BUFFER_SIZE = 1024;
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Default constructor
-*/
-//----------------------------------------------------------------------------------------------------------------------
-C_OscSecurityRsa::C_OscSecurityRsa()
-{
-}
+/*! \brief  Create signature
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Sign signature
+   Create signature over message data using private key.
 
    Formats:
    Key:
    * binary in PKCS#8 format
    Message:
-   * stream of binary data
-   EncryptedMessage:
-   * <TBC>
+   * binary data
+   Signature:
+   * binary data
 
-   \param[in]      orc_PrivateKey         Private key in PKCS#8 format
-   \param[in]      orc_Message            Message
-   \param[out]     orc_EncryptedMessage   Encrypted message
+   \param[in]      orc_PrivateKey     Private key in PKCS#8 format
+   \param[in]      orc_Message        Message
+   \param[out]     orc_Signature      Created signature
 
    \return
    STW error codes
 
    \retval   C_NO_ERR   Message encrypted
-   \retval   C_RANGE    Invalid key
+   \retval   C_RANGE    Invalid key; key or message have zero length
    \retval   C_NOACT    Could not encrypt message
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSecurityRsa::h_SignSignature(const std::vector<uint8_t> & orc_PrivateKey,
                                           const std::vector<uint8_t> & orc_Message,
-                                          std::vector<uint8_t> & orc_EncryptedMessage)
+                                          std::vector<uint8_t> & orc_Signature)
 {
    int32_t s32_Retval = C_RANGE;
-   const uint8_t * pu8_Data = &orc_PrivateKey[0];
 
    //Get private key information from PKCS#8 dump:
    PKCS8_PRIV_KEY_INFO * const pc_Key = d2i_PKCS8_PRIV_KEY_INFO(
@@ -83,11 +74,13 @@ int32_t C_OscSecurityRsa::h_SignSignature(const std::vector<uint8_t> & orc_Priva
       static_cast<long>(orc_PrivateKey.size())); //lint !e970 //using type to match library interface
    if (pc_Key != NULL)
    {
-      //Convert PKCS#8 key to EVP_PKEY:
-      EVP_PKEY * const pc_EvpKey = EVP_PKCS82PKEY(pc_Key);
-      PKCS8_PRIV_KEY_INFO_free(pc_Key);
+      const uint8_t * pu8_Data = &orc_PrivateKey[0];
 
-      if (pc_EvpKey != NULL)
+      //Get private key information from PKCS#8 dump:
+      PKCS8_PRIV_KEY_INFO * const pc_Key = d2i_PKCS8_PRIV_KEY_INFO(
+         NULL, &pu8_Data,
+         static_cast<long>(orc_PrivateKey.size())); //lint !e970 //using type to match library interface
+      if (pc_Key != NULL)
       {
          //Use EVP_PKEY_sign API (OpenSSL 3.0+) instead of deprecated RSA_private_encrypt
          EVP_PKEY_CTX * const pc_Ctx = EVP_PKEY_CTX_new(pc_EvpKey, NULL);
@@ -130,54 +123,51 @@ int32_t C_OscSecurityRsa::h_SignSignature(const std::vector<uint8_t> & orc_Priva
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Verify signature
 
-   Checks whether an encrypted messages, decrypted with a public key matches an expected message.
+   Extracts data from specified signature using a public key.
+   Compares extracted data to provided original data.
 
    Formats:
    Key:
    * is expected to be provided in X.509 format.
    * When looking at a .PEM file:
    ** effectively everything between the "BEGIN CERTIFICATE" and "END CERTIFICATE" lines converted from base64 to binary.
-   Message:
-   * stream of binary data
-   Encrypted message:
-   * <tbd>
+   ExpectedMessage:
+   * binary data
+   Signature:
+   * binary data
 
    \param[in]   orc_PublicKey          Public key in X509 format
-   \param[in]   orc_Message            Expected message
-   \param[in]   orc_EncryptedMessage   Encrypted message
-   \param[out]  orq_Valid              true: signature valid
-                                       false: signature not valid
+   \param[in]   orc_ExpectedMessage    Expected message to compare against
+   \param[in]   orc_Signature          Signature to parse
+   \param[out]  orq_Valid              true: expected message identical to data extracted from orc_EncryptedMessage
+                                       false: not the thing above
 
    \return
    STW error codes
 
-   \retval   C_NO_ERR   Message decrypted
-   \retval   C_RANGE    Invalid key
+   \retval   C_NO_ERR   Operation done; check for result
+   \retval   C_RANGE    Invalid key; key, message or encrypted message have zero length
    \retval   C_NOACT    Could not decrypt message
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_OscSecurityRsa::h_VerifySignature(const std::vector<uint8_t> & orc_PublicKey,
-                                            const std::vector<uint8_t> & orc_Message,
-                                            const std::vector<uint8_t> & orc_EncryptedMessage, bool & orq_Valid)
+                                            const std::vector<uint8_t> & orc_ExpectedMessage,
+                                            const std::vector<uint8_t> & orc_Signature, bool & orq_Valid)
 {
    int32_t s32_Retval = C_RANGE;
 
-   //get RSA structure from binary key:
-   const uint8_t * pu8_Data = &orc_PublicKey[0];
-
    orq_Valid = false;
 
-   //Extract X509 data from binary key data:
-   X509 * const pc_X509Data = d2i_X509(
-      NULL, &pu8_Data,
-      static_cast<long>(orc_PublicKey.size())); //lint !e970 //using type to match library interface
-   if (pc_X509Data != NULL)
+   if ((orc_PublicKey.size() > 0) && (orc_ExpectedMessage.size() > 0) && (orc_Signature.size() > 0))
    {
-      //Get key in EVP_PKEY format:
-      EVP_PKEY * const pc_EvpKey = X509_get_pubkey(pc_X509Data);
-      X509_free(pc_X509Data);
+      //get RSA structure from binary key:
+      const uint8_t * pu8_Data = &orc_PublicKey[0];
 
-      if (pc_EvpKey != NULL)
+      //Extract X509 data from binary key data:
+      X509 * const pc_X509Data = d2i_X509(
+         NULL, &pu8_Data,
+         static_cast<long>(orc_PublicKey.size())); //lint !e970 //using type to match library interface
+      if (pc_X509Data != NULL)
       {
          //Use EVP_PKEY_verify_recover API (OpenSSL 3.0+) instead of deprecated RSA_public_decrypt
          EVP_PKEY_CTX * const pc_Ctx = EVP_PKEY_CTX_new(pc_EvpKey, NULL);
@@ -224,6 +214,7 @@ int32_t C_OscSecurityRsa::h_VerifySignature(const std::vector<uint8_t> & orc_Pub
                      }
                   }
                }
+               EVP_PKEY_CTX_free(pc_VerifyCtx);
             }
             EVP_PKEY_CTX_free(pc_Ctx);
          }
