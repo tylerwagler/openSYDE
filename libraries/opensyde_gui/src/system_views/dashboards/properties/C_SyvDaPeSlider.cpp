@@ -48,10 +48,8 @@ const int32_t C_SyvDaPeSlider::mhs32_INDEX_STYLE_TYPE2 = 1;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaPeSlider::C_SyvDaPeSlider(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_SyvDaPeSlider),
-   mrc_ParentDialog(orc_Parent),
-   mq_DarkMode(oq_DarkMode)
+   C_SyvDaPePanelBase(orc_Parent, oq_DarkMode),
+   mpc_Ui(new Ui::C_SyvDaPeSlider)
 {
    mpc_Ui->setupUi(this);
 
@@ -229,10 +227,5 @@ void C_SyvDaPeSlider::m_UpdatePreview(void)
    pc_Item->UpdateTypePe(this->GetType(), this->GetShowMinMax());
    pc_Item->SetValuePe(75, 0, 100);
 
-   // clear old scene
-   this->mrc_ParentDialog.GetPreviewScene()->clear();
-
-   // add item
-   this->mrc_ParentDialog.GetPreviewScene()->addItem(pc_Item);
-   this->mrc_ParentDialog.GetPreviewScene()->clearSelection();
+   this->m_PublishPreviewItem(pc_Item);
 } //lint !e429  //no memory leak because of the parent of pc_Item, the call of addItem and the Qt memory management
