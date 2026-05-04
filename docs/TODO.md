@@ -78,25 +78,28 @@ build keeps the same string the Linux build emits.
 
 ## Show actually-linked library versions in About
 
-The About body in `C_NagAboutDialog::InitDynamicNames` lists open-source
-dependencies as hardcoded strings: `"Qt 6.8.3 by The Qt Company"`,
-`"gettext by the Free Software Foundation"`, etc. These will drift from
-the actually-linked versions over time, and silently lie when the
-dependency gets bumped without updating the string.
+The About body in `C_NagAboutDialog::InitDynamicNames` originally
+listed open-source dependencies as hardcoded strings, including
+`"Qt 6.8.3 by The Qt Company"`. The Qt line is now dynamic
+(commit `45c8b9be` — uses `qVersion()`). The remaining lines
+(`gettext`, `TinyXML-2`, `The MinGW Runtime`) currently show no
+version, so there's no rot risk today, but adding versions would make
+the dialog more useful.
 
-Replace with runtime queries / build-time-injected versions:
+Future passes if/when they become valuable:
 
-- **Qt** — use `qVersion()` (declared in `<QtGlobal>`); always returns
-  the runtime Qt version.
-- **OpenSSL** — `OpenSSL_version(OPENSSL_VERSION)` from `<openssl/crypto.h>`.
-- **gettext** — call `libintl_version()` if available, or read
-  `gettext_VERSION` from CMake / `pkg-config` and inject as a
-  `target_compile_definitions` macro.
-- **TinyXML-2 / Vector::DBC / Miniz** — these are vendored or
-  header-only with their own version macros (e.g. `TINYXML2_MAJOR_VERSION`).
-  Compose a string from them at compile time.
-
-Pairs naturally with the Linux app-version fix above (same neighborhood
-in the About dialog). Recommend doing both passes together so the whole
-About text becomes "what's actually here" rather than aspirational
-documentation.
+- **OpenSSL** — would have to be conditional. `opensyde_tool` links
+  OpenSSL for security features; CAN Monitor and SYDEflash do not
+  (`OPENSYDE_CORE_SKIP_SECURITY` for SYDEflash). The OpenSSL line in
+  `C_NagAboutDialog.cpp` is currently commented out for the same
+  reason. If exposed, query via `OpenSSL_version(OPENSSL_VERSION)`.
+- **TinyXML-2** — `tinyxml2.h` lives in `libraries/opensyde_core/`
+  and isn't currently included by `opensyde_gui`. Adding the include
+  would create a new (small) dependency just to print a version.
+  `TIXML2_MAJOR_VERSION` etc. macros are header-only.
+- **gettext** — runtime version API isn't portable across all
+  gettext implementations. Easiest path is a CMake-injected version
+  macro from `pkg-config` / `find_package(Intl)`.
+- **MinGW Runtime** — Windows-only. `__MINGW32_MAJOR_VERSION` is
+  available at compile time inside `#ifdef __MINGW32__`. Linux builds
+  shouldn't show this line at all.
