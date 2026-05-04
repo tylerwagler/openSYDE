@@ -12,9 +12,8 @@
 #define C_SDNDEDBPROPERTIES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OgeLeFilePath.hpp"
 #include "C_OscNodeApplication.hpp"
 #include "C_SdNdeDbDataPoolEntry.hpp"
@@ -34,7 +33,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdNdeDbProperties :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -49,8 +48,9 @@ public:
    void ApplyNewData(stw::opensyde_core::C_OscNodeApplication & orc_Application) const;
    void HandleDataPools(const uint32_t ou32_ApplicationIndex) const;
 
+
 protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
+   void m_OnEnterAccept(void) override;
 
 private:
    Ui::C_SdNdeDbProperties * mpc_Ui;
@@ -59,8 +59,6 @@ private:
    stw::opensyde_core::C_OscNodeApplication::E_Type me_Type;
    std::vector<C_SdNdeDbDataPoolEntry *> mc_DataPoolWidgets;
    std::set<uint32_t> mc_SelectedDataPools;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    static const int32_t mhs32_VERSION_INDEX_V1;
    static const int32_t mhs32_VERSION_INDEX_V2;
    static const int32_t mhs32_VERSION_INDEX_V3;

@@ -9,10 +9,9 @@
 #define C_SDBUEJ1939ADDMESSAGESFROMCATALOGDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 
 #include "stwerrors.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_CieConverter.hpp"
 #include "C_OgeContextMenu.hpp"
 
@@ -31,7 +30,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdBueJ1939AddMessagesFromCatalogDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -50,8 +49,9 @@ public:
    std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> GetMessagesImportedFromCatalog(void) const;
    const QString GetCatalogFilePath() const;
 
+
 protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
+   void m_OnEnterAccept(void) override;
 
 private:
    void m_AddClicked(void);
@@ -84,8 +84,6 @@ private:
 
    Ui::C_SdBueJ1939AddMessagesFromCatalogDialog * mpc_Ui;
    stw::opensyde_gui_elements::C_OgeContextMenu * mpc_ContextMenu;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    QString mc_CatalogFilePath;
    int32_t ms32_ImportCatalogReturn;
    std::vector<stw::opensyde_gui_logic::C_CieConverter::C_CieNodeMessage> mc_MessagesImportedFromCatalog;
