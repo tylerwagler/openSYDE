@@ -56,9 +56,8 @@ using namespace stw::scl;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdNdeDalLogJobAdditionalTriggerDialog::C_SdNdeDalLogJobAdditionalTriggerDialog(
    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent, const QString & orc_LogJobName) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeDalLogJobAdditionalTriggerDialog),
-   mrc_ParentDialog(orc_Parent),
    mu32_NodeIndex(0),
    mu32_DataLoggerJobIndex(0),
    mq_TriggerConditionValid(false)
@@ -376,36 +375,12 @@ void C_SdNdeDalLogJobAdditionalTriggerDialog::m_GetAdditionalTriggerCondition()
            &C_SdNdeDalLogJobAdditionalTriggerDialog::m_ValidateTriggerCondition);
 }
 
+
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobAdditionalTriggerDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent)
+void C_SdNdeDalLogJobAdditionalTriggerDialog::m_OnEnterAccept(void)
 {
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
+   this->m_OkClicked();
 }

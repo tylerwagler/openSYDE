@@ -52,9 +52,8 @@ using namespace stw::scl;
 C_SdNodeComIfSetupWidget::C_SdNodeComIfSetupWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_BusIndex,
                                                    const int32_t & ors32_SpecialInterface) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNodeComIfSetupWidget),
-   mrc_ParentDialog(orc_Parent),
    mu32_NodeIndex(oru32_NodeIndex),
    mu32_BusIndex(oru32_BusIndex),
    ms32_SpecialInterface(ors32_SpecialInterface),
@@ -131,39 +130,6 @@ bool C_SdNodeComIfSetupWidget::GetInteractionPossible(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNodeComIfSetupWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot of Ok button click
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -200,4 +166,13 @@ void C_SdNodeComIfSetupWidget::m_InitFromData(void)
       //Node name
       this->mrc_ParentDialog.SetTitle(C_PuiSdUtil::h_GetNodeBaseNameOrName(this->mu32_NodeIndex));
    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdNodeComIfSetupWidget::m_OnEnterAccept(void)
+{
+   this->m_OkClicked();
 }
