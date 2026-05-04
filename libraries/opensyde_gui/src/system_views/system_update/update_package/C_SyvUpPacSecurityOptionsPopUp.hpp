@@ -1,12 +1,12 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Screen for pem file options
+   \brief       Popup dialog for security options
    \copyright   Copyright 2021 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
-#ifndef C_SYVUPPACPEMFILEOPTIONSPOPUP_HPP
-#define C_SYVUPPACPEMFILEOPTIONSPOPUP_HPP
+#ifndef C_SYVUPPACSECURITYOPTIONSPOPUP_HPP
+#define C_SYVUPPACSECURITYOPTIONSPOPUP_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "C_OgePopUpContentBase.hpp"
@@ -15,7 +15,7 @@
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
 {
-class C_SyvUpPacPemFileOptionsPopUp;
+class C_SyvUpPacSecurityOptionsPopUp;
 }
 
 namespace stw
@@ -26,23 +26,25 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
-class C_SyvUpPacPemFileOptionsPopUp :
+class C_SyvUpPacSecurityOptionsPopUp :
    public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
 public:
-   explicit C_SyvUpPacPemFileOptionsPopUp(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
-                                          const stw::opensyde_core::C_OscViewNodeUpdate::E_StateSecurity oe_StateSecurity,
-                                          const stw::opensyde_core::C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger);
-   ~C_SyvUpPacPemFileOptionsPopUp(void) override;
+   explicit C_SyvUpPacSecurityOptionsPopUp(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
+                                           const stw::opensyde_core::C_OscViewNodeUpdate::E_StateSecureAuthentication oe_StateSecureAuthentication, const stw::opensyde_core::C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger, const stw::opensyde_core::C_OscViewNodeUpdate::E_StateTrafficEncryption oe_StateTrafficEncryption,
+                                           const QString & orc_NodeName);
+   ~C_SyvUpPacSecurityOptionsPopUp(void) override;
 
    void InitStaticNames(void) const;
-   stw::opensyde_core::C_OscViewNodeUpdate::E_StateSecurity GetComboBoxSecState(void) const;
+   stw::opensyde_core::C_OscViewNodeUpdate::E_StateSecureAuthentication GetComboBoxSecState(void) const;
    stw::opensyde_core::C_OscViewNodeUpdate::E_StateDebugger GetComboBoxDebState(void) const;
+   stw::opensyde_core::C_OscViewNodeUpdate::E_StateTrafficEncryption GetComboBoxTenState(void) const;
 
 private:
-   Ui::C_SyvUpPacPemFileOptionsPopUp * mpc_Ui;
+   Ui::C_SyvUpPacSecurityOptionsPopUp * mpc_Ui;
+   const QString mc_NodeName;
 
    static const int32_t mhs32_SEC_INDEX_NO_CHANGE;
    static const int32_t mhs32_SEC_INDEX_ACTIVATE;
@@ -50,16 +52,22 @@ private:
    static const int32_t mhs32_DEB_INDEX_NO_CHANGE;
    static const int32_t mhs32_DEB_INDEX_ACTIVATE;
    static const int32_t mhs32_DEB_INDEX_DEACTIVATE;
+   static const int32_t mhs32_TEN_INDEX_NO_CHANGE;
+   static const int32_t mhs32_TEN_INDEX_ACTIVATE;
+   static const int32_t mhs32_TEN_INDEX_DEACTIVATE;
 
    void m_OkClicked(void);
    void m_CancelClicked(void);
 
-   void m_InitComboBoxSec(const stw::opensyde_core::C_OscViewNodeUpdate::E_StateSecurity oe_StateSecurity);
+   void m_InitComboBoxSec(
+      const stw::opensyde_core::C_OscViewNodeUpdate::E_StateSecureAuthentication oe_StateSecureAuthentication);
    void m_InitComboBoxDeb(const stw::opensyde_core::C_OscViewNodeUpdate::E_StateDebugger oe_StateDebugger);
+   void m_InitComboBoxTen(
+      const stw::opensyde_core::C_OscViewNodeUpdate::E_StateTrafficEncryption oe_StateTrafficEncryption);
 
    //Avoid call
-   C_SyvUpPacPemFileOptionsPopUp(const C_SyvUpPacPemFileOptionsPopUp &);
-   C_SyvUpPacPemFileOptionsPopUp & operator =(const C_SyvUpPacPemFileOptionsPopUp &) &;
+   C_SyvUpPacSecurityOptionsPopUp(const C_SyvUpPacSecurityOptionsPopUp &);
+   C_SyvUpPacSecurityOptionsPopUp & operator =(const C_SyvUpPacSecurityOptionsPopUp &) &;
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
