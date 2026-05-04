@@ -12,9 +12,7 @@
 #define C_SYVDAPEPROGRESSBAR_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-
-#include "C_SyvDaPeBase.hpp"
+#include "C_SyvDaPePanelBase.hpp"
 
 #include "C_PuiSvDbProgressBar.hpp"
 
@@ -33,7 +31,7 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_SyvDaPeProgressBar :
-   public QWidget
+   public C_SyvDaPePanelBase
 {
    Q_OBJECT
 
@@ -66,9 +64,6 @@ private:
    Ui::C_SyvDaPeProgressBar * mpc_Ui;
 
    //----Variables------------------------------------------------------------------------------------------------------
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   C_SyvDaPeBase & mrc_ParentDialog;
-   const bool mq_DarkMode;
 
    //----Constants------------------------------------------------------------------------------------------------------
    static const int32_t mhs32_INDEX_STYLE_TYPE1;

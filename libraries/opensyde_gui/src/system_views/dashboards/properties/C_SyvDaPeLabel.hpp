@@ -12,8 +12,7 @@
 #define C_SYVDAPELABEL_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-#include "C_SyvDaPeBase.hpp"
+#include "C_SyvDaPePanelBase.hpp"
 #include "C_PuiSvDbLabel.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -30,7 +29,7 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_SyvDaPeLabel :
-   public QWidget
+   public C_SyvDaPePanelBase
 {
    Q_OBJECT
 
@@ -56,9 +55,6 @@ private:
    void m_UpdatePreview(void);
 
    Ui::C_SyvDaPeLabel * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   C_SyvDaPeBase & mrc_ParentDialog;
-   const bool mq_DarkMode;
    static const int32_t mhs32_INDEX_STYLE_TYPE_DEFAULT;
    static const int32_t mhs32_INDEX_STYLE_TYPE_TRANSPARENT;
 };
