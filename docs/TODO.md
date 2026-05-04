@@ -19,3 +19,17 @@ an in-app toggle). Notes:
   of the fix.
 - Touches all three apps; should land behind a single toggle so we don't
   diverge per-app.
+
+## Audit "low-value" UX features for removal
+
+Phase 3 consolidated the Ctrl+Enter→accept handler into
+`C_OgePopUpContentBase`, but it's worth asking whether the feature pays
+its keep at all. A standard Qt pop-up already accepts on the OK button;
+forcing users to learn Ctrl+Enter (vs plain Enter, which the existing
+code suppresses) is a quirky shortcut that probably no one uses.
+
+When time permits, audit similar features across the apps for
+"do-we-need-this?" candidates and rip out the ones that aren't earning
+their complexity. Likely candidates beyond Ctrl+Enter: the bespoke title
+bar machinery (Phase 4 territory), custom tooltip plumbing, anywhere
+else there's a 20+-line custom override for a behavior Qt already does.
