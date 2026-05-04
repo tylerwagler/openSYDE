@@ -10,6 +10,13 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 
 ## Status Summary (as of 2026-05-03)
 
+> Phase 3 update — popup-content boilerplate now consolidated under
+> `C_OgePopUpContentBase`. 51 of 62 widgets migrated across commits
+> `51dfacea`, `bc920d5c`, `c67f33bd`, `ad50054a`, `8b22bac0`. Twelve
+> excluded for follow-up (sibling-base / field-rename / Escape-key
+> variants).
+
+
 | Phase | Status | Notes |
 |-------|--------|-------|
 | Phase 1 (Labels) | ✅ **Complete** | 58/58 stylesheet-only label classes removed |
@@ -29,7 +36,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Widget) | ✅ **Complete** | C_OgeWi{Param,Table}SpinBoxGroup migrated earlier into C_OgeWiSpinBoxGroup + styleRole. All 20 remaining classes have paintEvent / event overrides, members, or .ui setup — none qualify by the playbook bar. See phase1-progress-widget.md. |
 | Phase 1 (Splitter / Tool Button) | ✅ **No candidates** | All splitter classes have logic; tool_button has only the tooltip base |
 | Phase 2 | ⏳ Not started | Dashboard property panels |
-| Phase 3 | ⏳ Not started | Popup dialog boilerplate |
+| Phase 3 | ✅ **Complete (main pass)** | 51/62 popup-content widgets now share `C_OgePopUpContentBase`. Five commits: `51dfacea` (base class), `bc920d5c` (update_package), `c67f33bd` (system_definition), `ad50054a` (system_views), `8b22bac0` (remaining buckets). 12 excluded variants tracked as Phase 3 follow-up. See phase3-brief.md. |
 | Phase 4 | ⏳ Not started | Title bar unification |
 | Phase 5 | ✅ **Complete** | CAN Monitor element dedup. 25 classes audited; all 10 stylesheet-only candidates migrated (commits `150c1586`, `3dcca288`, `3298ba6e`); 15 with real logic kept. See phase5-progress.md. |
 | Phase 6 | ⏳ Not started | MVD triplication in dashboard items |
@@ -177,20 +184,35 @@ Extract a generic `C_SyvDaPeWidgetType` base that takes the widget type as a par
 
 ## Phase 3: Consolidate Popup Dialog Boilerplate
 
-**Impact: ~7 dialog classes simplified | ~70% boilerplate reduction per class**
+**Status: ✅ Main pass complete (51/62 widgets migrated). See phase3-brief.md
+for the full landed scope and the 12-file follow-up list.**
 
 ### Problem
-All popup/info dialogs in `system_views/system_update/update_package/` repeat:
+Popup content widgets across the repo repeat:
 - Constructor storing `C_OgePopUpDialog & mrc_ParentDialog`
-- Identical `keyPressEvent()` override
-- Identical `m_OkClicked()` / `m_CancelClicked()` slots
+- Identical `keyPressEvent()` Ctrl+Enter override
+- A class-defined `m_OkClicked()` slot that wraps validation/save before accept
 
-### Solution
-Create `C_OgePopUpContentBase` — a base class for popup content widgets that handles the `C_OgePopUpDialog` lifecycle boilerplate. Subclasses only implement their unique content.
+The original scope was ~7 dialogs in `update_package/`; survey expanded the
+scope to 62 files repo-wide, of which 51 fit the byte-for-byte-identical
+pattern.
 
-### Critical files:
-- `libraries/opensyde_gui/src/system_views/system_update/update_package/C_SyvUpPac*PopUp.hpp/cpp`
-- `libraries/opensyde_gui/src/system_views/system_update/update_package/C_SyvUpPac*Dialog.hpp/cpp`
+### Solution (landed)
+`C_OgePopUpContentBase` (in `opensyde_gui_elements/`) holds the parent-dialog
+reference and the shared keyPressEvent. Variant A subclasses inherit the
+default `m_OnEnterAccept()` (calls `mrc_ParentDialog.accept()` directly);
+Variant B subclasses override it to route through their existing
+validation/save slot first.
+
+### Follow-up scope (12 files)
+- 2 `QDialog`-based popups (`C_OgeWiCustomMessage`, `C_PopPasswordDialogWidget`)
+  — would need a sibling `C_OgePopUpDialogContentBase`.
+- 8 widgets that use a different parent-dialog field name (`mrc_Parent`,
+  `mpc_ParentDialog` pointer) — mostly in `dashboards/` and a few datapool
+  dialogs. Pure rename + migrate.
+- 2 SYDEflash popups (`C_FlaConNodeConfigPopup`, `C_FlaSenSearchNodePopup`)
+  with extra Escape-key handling — need a custom `keyPressEvent` that
+  delegates to the base for Enter and adds Escape locally.
 
 ---
 
