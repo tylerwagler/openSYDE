@@ -34,7 +34,6 @@ public:
 
 protected:
    void mouseMoveEvent(QMouseEvent * const opc_Event) override;
-   void keyPressEvent(QKeyEvent * const opc_Event) override;
    bool event(QEvent * const opc_Event) override;
 
    virtual void m_HideToolTip(void);
