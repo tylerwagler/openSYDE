@@ -12,10 +12,9 @@
 #define C_SYVUPNODEPROPERTIESDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include "stwtypes.hpp"
 #include "C_SyvUtil.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_SyvUpDeviceInfo.hpp"
 #include "C_GiSvNodeData.hpp"
 #include "C_OscViewNodeUpdateParamInfo.hpp"
@@ -34,7 +33,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SyvUpNodePropertiesDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -51,13 +50,9 @@ public:
    void CopyOpenSydeDeviceInfo(C_GiSvNodeData & orc_NodeData) const;
    void CopyDiscardedStatus(C_GiSvNodeData & orc_NodeData) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SyvUpNodePropertiesDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    const uint32_t mu32_NodeIndex;
 
    C_GiSvNodeData mc_NodeData;

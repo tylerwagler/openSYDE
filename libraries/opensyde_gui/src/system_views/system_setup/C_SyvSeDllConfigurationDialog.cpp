@@ -57,9 +57,8 @@ using namespace stw::can;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvSeDllConfigurationDialog::C_SyvSeDllConfigurationDialog(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent)
    :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvSeDllConfigurationDialog),
-   mrc_ParentDialog(orc_Parent),
    mu64_Bitrate(0U)
 {
    mpc_Ui->setupUi(this);
@@ -230,39 +229,6 @@ QString C_SyvSeDllConfigurationDialog::GetCustomDllPath(void) const
    c_Path = this->mpc_Ui->pc_LineEditCustomDllPath->GetPath();
 
    return c_Path;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -543,4 +509,13 @@ QString C_SyvSeDllConfigurationDialog::m_GetAbsoluteDllPath(void) const
       c_Return = C_PuiUtil::h_GetResolvedAbsPathFromExe(c_Return);
    }
    return c_Return;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SyvSeDllConfigurationDialog::m_OnEnterAccept(void)
+{
+   this->m_OkClicked();
 }
