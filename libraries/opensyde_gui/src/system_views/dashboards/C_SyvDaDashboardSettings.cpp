@@ -49,13 +49,12 @@ const int32_t C_SyvDaDashboardSettings::mhs32_MIN_DISTANCE_BETWEEN = 10;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaDashboardSettings::C_SyvDaDashboardSettings(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_ViewIndex) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvDaDashboardSettings),
-   mrc_Parent(orc_Parent),
    mu32_ViewIndex(ou32_ViewIndex)
 {
    mpc_Ui->setupUi(this);
-   this->mrc_Parent.SetWidget(this);
+   this->mrc_ParentDialog.SetWidget(this);
    InitStaticNames();
 
    //Min
@@ -128,8 +127,8 @@ C_SyvDaDashboardSettings::~C_SyvDaDashboardSettings(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSettings::InitStaticNames(void) const
 {
-   this->mrc_Parent.SetTitle(C_GtGetText::h_GetText("Data Transmission"));
-   this->mrc_Parent.SetSubTitle(C_GtGetText::h_GetText("Settings"));
+   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Data Transmission"));
+   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Settings"));
    this->mpc_Ui->pc_LabelHeading->setText(C_GtGetText::h_GetText("Cyclic Transmission Intervals"));
    this->mpc_Ui->pc_LabelFast->setText(C_GtGetText::h_GetText("Fast"));
    this->mpc_Ui->pc_LabelMedium->setText(C_GtGetText::h_GetText("Medium"));
@@ -174,39 +173,6 @@ void C_SyvDaDashboardSettings::Save(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardSettings::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_Parent.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Handle load from data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -228,7 +194,7 @@ void C_SyvDaDashboardSettings::m_Load(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSettings::m_OkClicked(void)
 {
-   this->mrc_Parent.accept();
+   this->mrc_ParentDialog.accept();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -237,7 +203,7 @@ void C_SyvDaDashboardSettings::m_OkClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardSettings::m_CancelClicked(void)
 {
-   this->mrc_Parent.reject();
+   this->mrc_ParentDialog.reject();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

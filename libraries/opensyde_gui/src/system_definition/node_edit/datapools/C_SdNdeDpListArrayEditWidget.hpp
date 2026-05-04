@@ -13,10 +13,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include <QWidget>
 #include <QUndoCommand>
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_SdNdeDpUtil.hpp"
 #include "C_SdNdeDpListModelViewManager.hpp"
 
@@ -36,7 +35,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdNdeDpListArrayEditWidget :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -51,13 +50,9 @@ public:
    QUndoCommand * TakeUndoCommand(void) const;
    void SetModelViewManager(stw::opensyde_gui_logic::C_SdNdeDpListModelViewManager * const opc_Value) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdNdeDpListArrayEditWidget * const mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_Parent;
    const uint32_t mu32_NodeIndex;
    const uint32_t mu32_DataPoolIndex;
    const uint32_t mu32_ListIndex;
