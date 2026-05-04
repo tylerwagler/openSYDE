@@ -40,7 +40,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Splitter / Tool Button) | ✅ **No candidates** | All splitter classes have logic; tool_button has only the tooltip base |
 | Phase 2 | ⏳ Not started | Dashboard property panels |
 | Phase 3 | ✅ **Complete** | 60/62 popup-content widgets now share `C_OgePopUpContentBase`. Main pass: `51dfacea`/`bc920d5c`/`c67f33bd`/`ad50054a`/`8b22bac0`. Follow-up (Batches A–C): `0e992ac7`/`87ef4701`/`34daa88a`. Batch D (2 QDialog popups) closed as won't-fix — see Phase 3 detail section. |
-| Phase 4 | ⏳ Not started | Title bar unification |
+| Phase 4 | ✅ **Complete** | `C_OgeTitleBarWidget` extracted as a thin shared base for `C_CamTitleBarWidget` / `C_FlaTitleBarWidget` (commit `2a34cd31`). Holds the About slot, help-trigger slot, and STW-logo loader; subclasses override 2-3 metadata getters. .ui files stay separate (the button sets are entirely different per app). |
 | Phase 5 | ✅ **Complete** | CAN Monitor element dedup. 25 classes audited; all 10 stylesheet-only candidates migrated (commits `150c1586`, `3dcca288`, `3298ba6e`); 15 with real logic kept. See phase5-progress.md. |
 | Phase 6 | ⏳ Not started | MVD triplication in dashboard items |
 
@@ -245,17 +245,38 @@ around it.
 
 ## Phase 4: Unify Title Bar Widgets
 
-**Impact: 2 parallel implementations -> 1 shared base + 2 thin subclasses**
+**Status: ✅ Complete (commit `2a34cd31`).**
 
-### Problem
-`C_CamTitleBarWidget` and `C_FlaTitleBarWidget` are independent implementations of the same concept.
+### Problem (as scoped on entry)
+`C_CamTitleBarWidget` and `C_FlaTitleBarWidget` were independent
+implementations of the same concept.
 
-### Solution
-Extract shared title bar logic into `C_OgeTitleBarWidget` in the shared library. CAN Monitor and SydeFlash subclass it for app-specific branding only.
+### Reality found on close inspection
+The two were *less* duplicate than the plan-level framing suggested —
+615 lines (Cam, project save/load) vs 216 lines (Fla, node flash actions).
+Their .ui layouts and action sets had nothing in common. The truly
+shared surface was ~30-40 lines of utility: About-dialog launching,
+help-handler trigger, STW-logo loading, plus the `m_SetButtonsText` /
+`resizeEvent` *pattern* (different button sets, so the body couldn't
+share).
 
-### Critical files:
-- `opensyde_can_monitor/src/can_monitor/C_CamTitleBarWidget.hpp/cpp/ui`
-- `opensyde_syde_flash/src/syde_flash/C_FlaTitleBarWidget.hpp/cpp/ui`
+### Solution (landed)
+`C_OgeTitleBarWidget` (in `opensyde_gui_elements/`) inherits
+`C_OgeWiOnlyBackground` and provides:
+- `m_ShowAbout()` slot using protected virtual hooks (`m_GetAppName`,
+  `m_GetLogoPath`, `m_GetAboutExtraCredits`).
+- `m_TriggerHelp()` slot.
+- `m_LoadStwLogo(QLabel *)` helper for STW-logo loading.
+
+Subclasses override 2-3 trivial metadata getters and otherwise keep all
+their app-specific public API and signals.
+
+### What stayed separate
+- Each app's `.ui` file (entirely different button sets).
+- `m_SetButtonsText` and `resizeEvent` (called per-app with per-app
+  thresholds and per-app buttons).
+- All app-specific actions (Cam: SaveConfig / NewConfig / etc.;
+  Fla: EnableActions / SigUpdateNode / etc.).
 
 ---
 
