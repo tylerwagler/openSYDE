@@ -9,16 +9,54 @@ openSYDE, CAN Monitor, and SYDEflash all render with their built-in light
 palette regardless of the system theme. When the host desktop is in dark
 mode the apps stay bright, which is jarring at night.
 
-Implement dark-mode support so the apps respect the system theme (or expose
-an in-app toggle). Notes:
+### Scout findings (so we don't re-discover next time)
 
-- Some widget classes already have a `SetDarkTheme` hook (e.g. line edits) —
-  start by auditing what's already wired up before adding a new mechanism.
-- The Qt stylesheets in `libraries/opensyde_gui/src/styles/` define the
-  current light palette; a dark variant + a runtime swap is the likely shape
-  of the fix.
-- Touches all three apps; should land behind a single toggle so we don't
-  diverge per-app.
+Existing `SetDarkTheme` / `mq_DarkMode` hooks are **not** a partial
+implementation of app-wide dark mode — they're a per-dashboard-widget
+render toggle for runtime visualisation (gauges, charts, tables in a
+running dashboard). 30 of the 52 `mq_DarkMode` uses live in
+`libraries/opensyde_gui/src/system_views/dashboards/`; the rest are
+support for that. The application chrome (menus, dialogs, navigation,
+toolbars) doesn't honour this flag at all.
+
+The chrome lives in:
+
+- **9,741 lines of `.qss`** across 63 files (split: 2,462 in
+  `opensyde_tool/src/styles/Color.qss`, ~815 in each of CAN Monitor /
+  SYDEflash, plus per-widget-class qss).
+- **~50 named `QColor` constants** in `libraries/opensyde_gui/src/constants.hpp`,
+  defined as concrete RGB tuples (no semantic role tagging — `COLOR_4`
+  is `(57,57,109)` always).
+- **89 files** referencing those constants in C++ (paint events, dynamic
+  widget construction).
+
+### Realistic scope
+
+Full dark mode = re-tag palette by semantic role + provide dark
+variants + add runtime theme switch (`QStyleHints::colorScheme()` in
+Qt 6.5+, plus in-app override) + audit all 9,741 qss lines + every
+`paintEvent` and `setBackgroundColor(QColor(...))` call in C++.
+Multi-thousand-line diff, manual screen-by-screen visual QA, **2-4
+weeks of focused work**.
+
+### Less-awful intermediate options
+
+If the night-bright pain is real but a multi-week project is out of
+scope, three smaller fallbacks:
+
+1. **System palette inversion only** (~1 day): set
+   `QApplication::setPalette()` from the system palette so the
+   un-styled bits Qt manages itself (some menus, scrollbars where qss
+   doesn't override) follow the OS. Most chrome stays bright but the
+   unstyled gaps stop clashing.
+2. **Chrome only, leave dashboards** (~1 week): re-skin the main
+   window / nav / dialogs but leave the dashboard widget rendering on
+   its existing per-widget OPENSYDE_BRIGHT/DARK toggle. Smaller surface
+   than full dark mode, still significant.
+3. **Pick a less-bright default palette** (~half day): drop the
+   #FFFFFF / #FAFAFA backgrounds to something readable in daylight but
+   less harsh at night. Compromise — never matches OS dark mode, but
+   no per-screen audit needed.
 
 ## Audit "low-value" UX features for removal
 
