@@ -51,6 +51,9 @@ C_CamMetSettingsPopup::C_CamMetSettingsPopup(stw::opensyde_gui_elements::C_OgePo
    // register the widget for showing
    this->mrc_ParentDialog.SetWidget(this);
 
+   // make Enter activate Save (the accept button for this popup)
+   this->mpc_Ui->pc_PushButtonSave->setDefault(true);
+
    // initialize static names
    this->m_InitStaticNames();
 

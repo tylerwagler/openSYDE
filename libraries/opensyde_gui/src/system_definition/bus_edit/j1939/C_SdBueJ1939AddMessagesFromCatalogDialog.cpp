@@ -72,6 +72,9 @@ C_SdBueJ1939AddMessagesFromCatalogDialog::C_SdBueJ1939AddMessagesFromCatalogDial
    // register the widget for display
    this->mrc_ParentDialog.SetWidget(this);
 
+   // make Enter activate Add (the accept button for this popup)
+   this->mpc_Ui->pc_PushButtonAdd->setDefault(true);
+
    m_SetupContextMenu();
    m_UpdateUi();
    m_UpdateSelection(0);

@@ -67,6 +67,9 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
    // register the widget for showing
    this->mrc_ParentDialog.SetWidget(this);
 
+   // make Enter activate Save (the accept button for this popup)
+   this->mpc_Ui->pc_PushButtonSave->setDefault(true);
+
    // set model for view (important!)
    this->mpc_Ui->pc_TableView->setModel(mpc_TableModel);
 
