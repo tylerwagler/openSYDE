@@ -12,6 +12,7 @@ set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 # Set include directories before dragging in core; the core needs the "precomp_headers.hpp" and files included by it
 include_directories(
    ${PROJECT_ROOT}/src
+   ${PROJECT_ROOT}/libs/openssl/openssl/include
 )
 
 # --- COMPILER FLAGS AND LIBRARIES -------------------------------------------------------------------------------------
@@ -25,7 +26,9 @@ set(OPENSYDE_CORE_SKIP_PROJECT_HANDLING            1)
 set(OPENSYDE_CORE_SKIP_PARAM_SET                   1)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_BASIC      0)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_SYSTEM     1)
+set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_MONITOR    1)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_COMMON     0)
+<<<<<<< opensyde_cmd_line_flash_tool/pjt/CMakeLists.txt
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_MONITOR    1)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING            1)
 set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     1)
@@ -39,17 +42,29 @@ else()
    set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           0)
 endif()
 add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/osy_core)
+=======
+set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING            1)
+set(OPENSYDE_CORE_SKIP_X_CONFIG_GENERATION         1)
+set(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION   1)
+set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     1)
+set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS             0)
+set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET              0)
+set(OPENSYDE_CORE_SKIP_SECURITY                    1)
+>>>>>>> /tmp/tmp.Wk83MlM6Tf
 
 # warn a lot
 # Unfortunately forcing C90 by using "-Wc90-c99-compat" or "-std=c89" would (correctly) also prohibit
 #  C++ style comments and there's no switch to explicitly suppress this warning
-set(CMAKE_C_FLAGS "-Wall -Wextra -Wc99-c11-compat -Wunused -Wuninitialized -Wmaybe-uninitialized \
+set(CMAKE_C_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized \
    -Wdeclaration-after-statement -Wsign-compare -Wstrict-prototypes -Wmissing-prototypes \
    -Wdouble-promotion -Wfloat-equal -Wmissing-include-dirs -Wshadow -Wundef \
-   -Wunused-macros -Wcast-align -Wlogical-op -Wno-multichar -Wredundant-decls -Wnested-externs")
+   -Wunused-macros -Wcast-align -Wlogical-op -Wno-multichar -Wredundant-decls -Wnested-externs \
+   -Wno-deprecated-declarations")
 # For C++ do not add "-Wdouble-promotion" as it causes a warning in tinyxml.cpp which we do not want to modify
 set(CMAKE_CXX_FLAGS "-std=c++98 -Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
-   -Wmissing-include-dirs -Wshadow -Wlogical-op -Wno-multichar -Wredundant-decls")
+   -Wmissing-include-dirs -Wshadow -Wlogical-op -Wno-multichar -Wredundant-decls -Wno-deprecated-declarations")
+
+add_subdirectory(${PROJECT_ROOT}/libs/osy_core ${CMAKE_BINARY_DIR}/osy_core)
 
 # link standard libraries statically (fully static only on Windows)
 if(WIN32)
@@ -70,6 +85,10 @@ set(OSY_CMD_LINE_FLASH_TOOL_SOURCES
    ../src/resources.rc
 )
 
+link_directories(
+    ../libs/openssl/openssl
+)
+
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 
 # define binary name and sources
@@ -78,6 +97,11 @@ add_executable(osy_cmd_line_flash_tool ${OSY_CMD_LINE_FLASH_TOOL_SOURCES})
 # add required libraries
 target_link_libraries(osy_cmd_line_flash_tool
    opensyde_core
+<<<<<<< opensyde_cmd_line_flash_tool/pjt/CMakeLists.txt
+=======
+   version
+   crypto
+>>>>>>> /tmp/tmp.Wk83MlM6Tf
 )
 if(WIN32)
    target_link_libraries(osy_cmd_line_flash_tool version)
