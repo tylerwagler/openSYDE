@@ -13,7 +13,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include <QPixmap>
 #include <QApplication>
 
 #include "C_Uti.hpp"
@@ -21,11 +20,8 @@
 
 #include "C_GtGetText.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_OgePopUpDialog.hpp"
-#include "C_NagAboutDialog.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_CamMosFilterPopup.hpp"
-#include "C_HeHandler.hpp"
 #include "C_CamProHandler.hpp"
 #include "C_CamTitleBarWidget.hpp"
 #include "C_OgeWiCustomMessage.hpp"
@@ -65,12 +61,10 @@ const QString C_CamTitleBarWidget::mhc_NORECENTPROJECT = "No recent project foun
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_CamTitleBarWidget::C_CamTitleBarWidget(QWidget * const opc_Parent) :
-   C_OgeWiOnlyBackground(opc_Parent),
+   C_OgeTitleBarWidget(opc_Parent),
    mpc_Ui(new Ui::C_CamTitleBarWidget),
    mpc_Menu(new QMenu)
 {
-   QPixmap c_ImgLogo;
-
    this->mpc_Menu->setProperty("styleRole", "cam-mu-recent-projects");
    this->mpc_Ui->setupUi(this);
    this->SetBackgroundColor(10);
@@ -80,12 +74,7 @@ C_CamTitleBarWidget::C_CamTitleBarWidget(QWidget * const opc_Parent) :
    // initialize static names
    this->InitStaticNames();
 
-   //load STW logo
-   c_ImgLogo.load("://images/STW_Logo_Dark.png");
-   c_ImgLogo = c_ImgLogo.scaled((c_ImgLogo.width() / 18), (c_ImgLogo.height() / 18),
-                                Qt::KeepAspectRatio,
-                                Qt::SmoothTransformation);
-   this->mpc_Ui->pc_LogoLabel->setPixmap(c_ImgLogo);
+   this->m_LoadStwLogo(this->mpc_Ui->pc_LogoLabel);
 
    // button icons
    this->mpc_Ui->pc_PushButtonNew->setIconSize(QSize(22, 22));
@@ -120,6 +109,7 @@ C_CamTitleBarWidget::C_CamTitleBarWidget(QWidget * const opc_Parent) :
    connect(this->mpc_Ui->pc_PushButtonSave, &QPushButton::clicked, this, &C_CamTitleBarWidget::SaveConfig);
    connect(this->mpc_Ui->pc_PushButtonAbout, &QPushButton::clicked, this, &C_CamTitleBarWidget::m_ShowAbout);
    connect(this->mpc_Ui->pc_PushButtonHelp, &QPushButton::clicked, this, &C_CamTitleBarWidget::m_TriggerHelp);
+   // m_ShowAbout / m_TriggerHelp resolve to slots inherited from C_OgeTitleBarWidget.
    connect(this->mpc_Ui->pc_ToolButtonLoad, &QToolButton::clicked, this, &C_CamTitleBarWidget::m_OnOpenProjectClicked);
 }
 
@@ -355,41 +345,27 @@ int32_t C_CamTitleBarWidget::LoadConfig(const QString & orc_FilePath)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamTitleBarWidget::resizeEvent(QResizeEvent * const opc_Event)
 {
-   C_OgeWiOnlyBackground::resizeEvent(opc_Event);
+   C_OgeTitleBarWidget::resizeEvent(opc_Event);
    this->m_SetButtonsText(this->width() < 1100);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Show about screen
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CamTitleBarWidget::m_ShowAbout(void)
+QString C_CamTitleBarWidget::m_GetAppName(void) const
 {
-   const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
-
-   new C_NagAboutDialog(*c_New, "openSYDE CAN Monitor", ":/images/CAN_Monitor_logo.png", 20,
-                        C_GtGetText::h_GetText("Vector::DBC Module by Tobias Lorenz;Bison;Flex")); //Default +
-                                                                                                   //Vector DBC
-
-   //Resize
-   const QSize c_SIZE(650, 500);
-   c_New->SetSize(c_SIZE);
-
-   c_New->exec();
-
-   if (c_New != NULL)
-   {
-      c_New->HideOverlay();
-   }
-} //lint !e429  no memory leak because of the parent of pc_Dialog and the Qt memory management
+   return "openSYDE CAN Monitor";
+}
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Trigger help
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CamTitleBarWidget::m_TriggerHelp(void)
+QString C_CamTitleBarWidget::m_GetLogoPath(void) const
 {
-   stw::opensyde_gui_logic::C_HeHandler::h_GetInstance().CallSpecificHelpPage(this->metaObject()->className());
+   return ":/images/CAN_Monitor_logo.png";
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+QString C_CamTitleBarWidget::m_GetAboutExtraCredits(void) const
+{
+   //Default + Vector DBC attribution
+   return C_GtGetText::h_GetText("Vector::DBC Module by Tobias Lorenz;Bison;Flex");
 }
 
 //----------------------------------------------------------------------------------------------------------------------

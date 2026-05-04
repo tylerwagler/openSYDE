@@ -14,7 +14,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QMenu>
-#include "C_OgeWiOnlyBackground.hpp"
+#include "C_OgeTitleBarWidget.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -31,7 +31,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_CamTitleBarWidget :
-   public stw::opensyde_gui_elements::C_OgeWiOnlyBackground
+   public stw::opensyde_gui_elements::C_OgeTitleBarWidget
 {
    Q_OBJECT
 
@@ -55,6 +55,9 @@ Q_SIGNALS:
 
 protected:
    void resizeEvent(QResizeEvent * const opc_Event) override;
+   QString m_GetAppName(void) const override;
+   QString m_GetLogoPath(void) const override;
+   QString m_GetAboutExtraCredits(void) const override;
 
 private:
    Ui::C_CamTitleBarWidget * mpc_Ui;
@@ -66,8 +69,6 @@ private:
    C_CamTitleBarWidget(const C_CamTitleBarWidget &);
    C_CamTitleBarWidget & operator =(const C_CamTitleBarWidget &) &;
 
-   void m_ShowAbout(void);
-   void m_TriggerHelp(void);
    void m_NewConfig(void);
    bool m_DoSaveToFileAction(const QString & orc_File);
    void m_OnOpenProjectClicked(void);

@@ -153,6 +153,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiError.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpContentBase.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.cpp
+   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTitleBarWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.cpp
@@ -351,6 +352,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/widget/C_OgeWiError.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpContentBase.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgePopUpDialog.hpp
+   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeTitleBarWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/C_OgeOverlay.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/group_box/C_OgeGbxMouseMove.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.hpp
