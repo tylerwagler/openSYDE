@@ -22,14 +22,27 @@ an in-app toggle). Notes:
 
 ## Audit "low-value" UX features for removal
 
-Phase 3 consolidated the Ctrl+Enter→accept handler into
-`C_OgePopUpContentBase`, but it's worth asking whether the feature pays
-its keep at all. A standard Qt pop-up already accepts on the OK button;
-forcing users to learn Ctrl+Enter (vs plain Enter, which the existing
-code suppresses) is a quirky shortcut that probably no one uses.
+Done so far (commit `ebe6c6b0`): the Ctrl+Enter→accept handler from
+`C_OgePopUpContentBase` and 28 subclass overrides got ripped out. The
+handler was actively bad — it swallowed plain Enter, suppressing Qt's
+standard "Enter activates the default button" and replacing it with an
+undiscoverable shortcut. Stock Qt behaviour now works on all 60
+migrated popups.
 
-When time permits, audit similar features across the apps for
-"do-we-need-this?" candidates and rip out the ones that aren't earning
-their complexity. Likely candidates beyond Ctrl+Enter: the bespoke title
-bar machinery (Phase 4 territory), custom tooltip plumbing, anywhere
-else there's a 20+-line custom override for a behavior Qt already does.
+A quick `grep` of the rest of the codebase didn't surface another case
+with the same pathology (taking away a default Qt behaviour and
+replacing it with worse). The 8 other files that use the same
+`q_CallOrg`/`q_CallOrig` pattern are all *adding* keyboard shortcuts to
+table/tree views (Delete, `+`, arrows, Enter-to-edit) — feature
+additions, not regressions.
+
+Lower-priority code-simplification candidates from the audit:
+
+- `C_TblViewToolTipBase::keyPressEvent` reimplements "Enter to begin
+  editing" and "Enter to toggle checkbox" by hand. Both are expressible
+  declaratively via `setEditTriggers(QAbstractItemView::EditKeyPressed)`
+  and Qt's built-in checkable-item handling — would simplify the code
+  without changing behaviour.
+- The bespoke title-bar machinery (Phase 4 of the GUI consolidation
+  plan) is the next big candidate for "does this earn its keep?"
+  scrutiny.
