@@ -13,10 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include "C_GtGetText.hpp"
-#include "C_HeHandler.hpp"
 #include "C_OgeWiUtil.hpp"
-#include "C_NagAboutDialog.hpp"
-#include "C_OgePopUpDialog.hpp"
 #include "C_FlaConNodeConfigPopup.hpp"
 
 #include "C_FlaTitleBarWidget.hpp"
@@ -48,11 +45,9 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_FlaTitleBarWidget::C_FlaTitleBarWidget(QWidget * const opc_Parent) :
-   C_OgeWiOnlyBackground(opc_Parent),
+   C_OgeTitleBarWidget(opc_Parent),
    mpc_Ui(new Ui::C_FlaTitleBarWidget)
 {
-   QPixmap c_ImgLogo;
-
    this->mpc_Ui->setupUi(this);
    this->SetBackgroundColor(10);
 
@@ -61,12 +56,7 @@ C_FlaTitleBarWidget::C_FlaTitleBarWidget(QWidget * const opc_Parent) :
    // initialize static names
    this->InitStaticNames();
 
-   //load STW logo
-   c_ImgLogo.load("://images/STW_Logo_Dark.png");
-   c_ImgLogo = c_ImgLogo.scaled((c_ImgLogo.width() / 18), (c_ImgLogo.height() / 18),
-                                Qt::KeepAspectRatio,
-                                Qt::SmoothTransformation);
-   this->mpc_Ui->pc_LogoLabel->setPixmap(c_ImgLogo);
+   this->m_LoadStwLogo(this->mpc_Ui->pc_LogoLabel);
 
    // button icons
    this->mpc_Ui->pc_PushButtonUpdate->setIconSize(QSize(22, 22));
@@ -146,40 +136,23 @@ void C_FlaTitleBarWidget::EnableActions(const bool oq_Enabled)
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaTitleBarWidget::resizeEvent(QResizeEvent * const opc_Event)
 {
-   C_OgeWiOnlyBackground::resizeEvent(opc_Event);
+   C_OgeTitleBarWidget::resizeEvent(opc_Event);
    this->m_SetButtonsText(this->width() < 910);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Show about screen
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_FlaTitleBarWidget::m_ShowAbout(void)
+QString C_FlaTitleBarWidget::m_GetAppName(void) const
 {
-   const QPointer<C_OgePopUpDialog> c_New = new C_OgePopUpDialog(this, this);
-
-   new C_NagAboutDialog(*c_New, "SYDEflash", ":/images/SYDEflash_logo.png", 20);
-
-   //Resize
-   const QSize c_SIZE(650, 500);
-   c_New->SetSize(c_SIZE);
-
-   c_New->exec();
-
-   if (c_New != NULL)
-   {
-      c_New->HideOverlay();
-   }
-} //lint !e429  no memory leak because of the parent of pc_Dialog and the Qt memory management
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Trigger help
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_FlaTitleBarWidget::m_TriggerHelp(void)
-{
-   stw::opensyde_gui_logic::C_HeHandler::h_GetInstance().CallSpecificHelpPage(this->metaObject()->className());
+   return "SYDEflash";
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+QString C_FlaTitleBarWidget::m_GetLogoPath(void) const
+{
+   return ":/images/SYDEflash_logo.png";
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Set buttons text or remove them if only icon should be visible (in small width mode)
 
    \param[in]  oq_IconOnly    Flag to indicate icon only vs icon with text
