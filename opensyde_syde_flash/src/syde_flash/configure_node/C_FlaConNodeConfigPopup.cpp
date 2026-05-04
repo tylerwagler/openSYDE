@@ -58,9 +58,8 @@ C_FlaConNodeConfigPopup::C_FlaConNodeConfigPopup(stw::opensyde_gui_elements::C_O
                                                  const uint8_t ou8_NodeId, const uint32_t ou32_Bitrate,
                                                  const uint32_t ou32_FlashloaderResetWaitTime,
                                                  const QString & orc_CanDllPath) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_FlaConNodeConfigPopup),
-   mrc_ParentDialog(orc_Parent),
    mpc_DcSequences(NULL),
    ms32_SequenceResult(C_NO_ERR),
    mu8_CurrentNodeId(ou8_NodeId),
@@ -149,44 +148,27 @@ uint32_t C_FlaConNodeConfigPopup::GetBitrate() const
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaConNodeConfigPopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
 {
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
+   if (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Escape))
    {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
+      // prohibit close on ESC when process is running, allow otherwise
+      if (this->mc_Timer.isActive() == false)
       {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   // Handle escape key manually
-   else if (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Escape))
-   {
-      //prohibit close on ESC when process is running, allow otherwise
-      if (this->mc_Timer.isActive())
-      {
-         q_CallOrg = false;
-      }
-      else
-      {
-         q_CallOrg = true;
+         QWidget::keyPressEvent(opc_KeyEvent);
       }
    }
    else
    {
-      // no special handling for other buttons
+      C_OgePopUpContentBase::keyPressEvent(opc_KeyEvent);
    }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_FlaConNodeConfigPopup::m_OnEnterAccept(void)
+{
+   this->m_OkClicked();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -9,10 +9,9 @@
 #define C_FLACONNODECONFIGPOPUP_H
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include <QTimer>
 
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_FlaSenDcBasicSequences.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -30,7 +29,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_FlaConNodeConfigPopup :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -51,11 +50,10 @@ Q_SIGNALS:
 
 protected:
    void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
+   void m_OnEnterAccept(void) override;
 
 private:
    Ui::C_FlaConNodeConfigPopup * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    stw::opensyde_gui_logic::C_FlaSenDcBasicSequences * mpc_DcSequences;
 
    stw::opensyde_core::C_OscProtocolSerialNumber mc_SnrToConfigureNode;

@@ -13,10 +13,9 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include <QWidget>
 #include <QUndoCommand>
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_SdNdeDpListModelViewManager.hpp"
 #include "C_OgeContextMenu.hpp"
 
@@ -36,7 +35,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdNdeDpListDataSetWidget :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -62,8 +61,6 @@ private:
    QAction * mpc_ActionCut;
    QAction * mpc_ActionMoveLeft;
    QAction * mpc_ActionMoveRight;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_Parent;
    const uint32_t mu32_NodeIndex;
    const uint32_t mu32_DataPoolIndex;
    const uint32_t mu32_ListIndex;
