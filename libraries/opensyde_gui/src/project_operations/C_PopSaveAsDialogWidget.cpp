@@ -59,9 +59,8 @@ const int32_t C_PopSaveAsDialogWidget::mhs32_VERSION_INDEX_V3 = 0;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_PopSaveAsDialogWidget::C_PopSaveAsDialogWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_PopSaveAsDialogWidget),
-   mrc_ParentDialog(orc_Parent)
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
+   mpc_Ui(new Ui::C_PopSaveAsDialogWidget)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -135,40 +134,6 @@ void C_PopSaveAsDialogWidget::InitStaticNames(void) const
 void C_PopSaveAsDialogWidget::SaveUserSettings() const
 {
    C_UsHandler::h_GetInstance()->SetCurrentSaveAsPath(this->mpc_Ui->pc_LineEditPath->GetPath());
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_PopSaveAsDialogWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         // behave like ok click
-         this->m_OnSave();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -371,4 +336,13 @@ void C_PopSaveAsDialogWidget::m_OnSave(void)
 void C_PopSaveAsDialogWidget::m_OnCancel(void)
 {
    this->mrc_ParentDialog.reject();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_PopSaveAsDialogWidget::m_OnEnterAccept(void)
+{
+   this->m_OnSave();
 }

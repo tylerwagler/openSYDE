@@ -49,9 +49,8 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_CamGenKeySelect::C_CamGenKeySelect(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                      const uint32_t ou32_MessageIndex) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_CamGenKeySelect),
-   mrc_ParentDialog(orc_Parent),
    mu32_MessageIndex(ou32_MessageIndex)
 {
    QRegularExpressionValidator * pc_Validator;
@@ -117,39 +116,6 @@ void C_CamGenKeySelect::InitStaticNames(void) const
    this->mpc_Ui->pc_SpinBoxOffset->setSuffix(C_GtGetText::h_GetText(" ms"));
    this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
    this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CamGenKeySelect::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

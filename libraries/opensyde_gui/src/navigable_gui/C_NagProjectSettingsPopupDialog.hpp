@@ -9,9 +9,8 @@
 #define C_NAGPROJECTSETTINGSPOPUPDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -29,7 +28,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_NagProjectSettingsPopupDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -40,13 +39,9 @@ public:
    void InitStaticNames(void) const;
    bool ApplyMaxCharLimitSettings(void);
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_NagProjectSettingsPopupDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    uint32_t mu32_CurrentSpinBoxValue;
 
    void m_OkClicked(void);

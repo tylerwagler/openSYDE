@@ -9,9 +9,8 @@
 #ifndef C_RTFEXPORTWIDGET_HPP
 #define C_RTFEXPORTWIDGET_HPP
 
-#include <QWidget>
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_SclString.hpp"
 #include "C_SclStringList.hpp"
 #include "C_SdTopologyWidget.hpp"
@@ -29,7 +28,7 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_RtfExportWidget :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -52,7 +51,6 @@ public:
    void InitStaticNames(void) const;
 
 protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
    class C_ExportXmlStructure
    {
@@ -78,8 +76,6 @@ protected:
 
 private:
    Ui::C_RtfExportWidget * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    std::map<stw::scl::C_SclString, stw::scl::C_SclString> mc_NodeMapping;
    stw::scl::C_SclStringList mc_Warnings;
    stw::scl::C_SclString mc_Error;

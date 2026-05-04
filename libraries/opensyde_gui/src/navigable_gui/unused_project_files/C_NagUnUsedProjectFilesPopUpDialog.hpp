@@ -9,8 +9,7 @@
 #define C_NAGUNUSEDPROJECTFILESPOPUPDIALOG_H
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -27,7 +26,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_NagUnUsedProjectFilesPopUpDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -39,13 +38,9 @@ public:
    void ShowAllUnusedFiles(void);
    void CancelDialog(void);
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_NagUnUsedProjectFilesPopUpDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    QStringList mc_UnUsedFilesList;
    QStringList mc_EmptyFolders;
 

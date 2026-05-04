@@ -44,10 +44,9 @@ using namespace stw::opensyde_gui_elements;
 //----------------------------------------------------------------------------------------------------------------------
 C_CamMosDatabaseSelectionPopup::C_CamMosDatabaseSelectionPopup(
    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent, const bool oq_AllowMultiSelect) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_CamMosDatabaseSelectionPopup),
-   mpc_ContextMenu(NULL),
-   mrc_ParentDialog(orc_Parent)
+   mpc_ContextMenu(NULL)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -166,39 +165,6 @@ std::vector<std::array<QString, 2> > C_CamMosDatabaseSelectionPopup::GetSelected
 const
 {
    return this->mpc_Ui->pc_TreeView->GetSelectedDataElements();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CamMosDatabaseSelectionPopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

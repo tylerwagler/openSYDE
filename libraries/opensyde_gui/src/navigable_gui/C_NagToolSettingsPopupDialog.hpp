@@ -9,9 +9,8 @@
 #define C_NAGTOOLSETTINGSPOPUPDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscSystemNameMaxCharLimitChangeReportItem.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -29,7 +28,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_NagToolSettingsPopupDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -39,13 +38,9 @@ public:
 
    void InitStaticNames(void) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_NagToolSettingsPopupDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
 
    void m_OkClicked(void);
    void m_CancelClicked(void);
