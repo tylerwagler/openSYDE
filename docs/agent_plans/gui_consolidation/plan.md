@@ -42,7 +42,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 3 | ✅ **Complete** | 60/62 popup-content widgets now share `C_OgePopUpContentBase`. Main pass: `51dfacea`/`bc920d5c`/`c67f33bd`/`ad50054a`/`8b22bac0`. Follow-up (Batches A–C): `0e992ac7`/`87ef4701`/`34daa88a`. Batch D (2 QDialog popups) closed as won't-fix — see Phase 3 detail section. |
 | Phase 4 | ✅ **Complete** | `C_OgeTitleBarWidget` extracted as a thin shared base for `C_CamTitleBarWidget` / `C_FlaTitleBarWidget` (commit `2a34cd31`). Holds the About slot, help-trigger slot, and STW-logo loader; subclasses override 2-3 metadata getters. .ui files stay separate (the button sets are entirely different per app). |
 | Phase 5 | ✅ **Complete** | CAN Monitor element dedup. 25 classes audited; all 10 stylesheet-only candidates migrated (commits `150c1586`, `3dcca288`, `3298ba6e`); 15 with real logic kept. See phase5-progress.md. |
-| Phase 6 | ⏳ Not started | MVD triplication in dashboard items |
+| Phase 6 | 🚫 **Won't fix** | Scouted and closed: the three MVDs (param tree, array editor, table) inherit from three different model bases and solve structurally different problems (hierarchy vs fixed array vs dynamic table). Not parallel implementations. See Phase 6 detail. |
 
 ### Phase 1 Label Portion — Completion Details
 
@@ -323,21 +323,39 @@ After Phase 1, audit remaining CAN Monitor element classes. Those that only add 
 
 ## Phase 6: Reduce MVD (Model-View-Delegate) Triplication
 
-**Impact: 9 files -> 3-4 with shared base classes**
+**Status: 🚫 Won't fix.** Scouted in this branch and declined.
 
-### Problem
-Three separate Model-View-Delegate implementations for very similar table/tree patterns:
-1. Parameter Tree (C_SyvDaItPaTree{Model,View,Delegate})
-2. Array Editor (C_SyvDaItPaAr{Model,View,Delegate})
-3. Dashboard Table (C_SyvDaItTa{Model,View,Delegate})
+### Original framing (kept for context)
+Three separate Model-View-Delegate implementations for similar table/tree patterns:
+1. Parameter Tree (`C_SyvDaItPaTree{Model,View,Delegate}`)
+2. Array Editor (`C_SyvDaItPaAr{Model,View,Delegate}`)
+3. Dashboard Table (`C_SyvDaItTa{Model,View,Delegate}`)
 
-### Solution
-Extract common base classes for the Model and Delegate where the data-access pattern is shared. Views may already share enough via Qt's built-in view classes.
+### Why we skipped
+The three MVDs aren't parallel implementations of the same thing — they
+solve structurally different problems and inherit from different bases:
 
-### Critical files:
-- `libraries/opensyde_gui/src/system_views/dashboards/items/param/`
-- `libraries/opensyde_gui/src/system_views/dashboards/items/param/array_editor/`
-- `libraries/opensyde_gui/src/system_views/dashboards/items/table/`
+| | Tree (param) | Array Editor | Dashboard Table |
+|---|---|---|---|
+| Model | `C_TblTreModel` (tree) | `QAbstractTableModel` | `C_TblModelAction` |
+| View | `C_OgeTreeViewToolTipBase` | `C_TblViewScroll` | `C_TblViewScroll` |
+| Model size | 3569 lines | 526 lines | 1855 lines |
+
+The 7× size disparity (526 vs 3569) and the divergent model bases are
+the giveaway: tree-of-datapool-elements, fixed-size value array, and
+dynamic action-driven table are three legitimately different data
+shapes. A "common Model base" would have to be the lowest common
+denominator and wouldn't actually share data-access code.
+
+The Delegates have more surface in common (all `QStyledItemDelegate`)
+but each paints different cell types and edits different value types —
+maybe 40-60 lines could be lifted if someone really pushed, against the
+cost of a new shared header. Not worth the abstraction for the savings.
+
+### What stayed
+The 9 MVD files as-is. If a future change to one starts requiring the
+same modification to another, that's the moment to revisit and extract
+exactly what's actually shared.
 
 ---
 
