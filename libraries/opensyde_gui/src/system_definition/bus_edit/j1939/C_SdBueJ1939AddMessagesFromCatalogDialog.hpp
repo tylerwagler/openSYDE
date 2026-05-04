@@ -50,9 +50,6 @@ public:
    const QString GetCatalogFilePath() const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    void m_AddClicked(void);
    void m_CancelClicked(void);

@@ -523,11 +523,3 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistencyEl(const C_OscHalcConfigP
    return q_Consistent;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeHalcConfigImportDialog::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

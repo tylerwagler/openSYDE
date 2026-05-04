@@ -42,9 +42,6 @@ public:
    std::vector<C_CieDbcOsyNodeAssignment> GetNodeAssignments(void) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_CieDbcImportNodeAssignmentWidget * mpc_Ui;
    std::vector<stw::opensyde_gui::C_CieDbcImportNodeAssignmentItemWidget *> mc_Entries;

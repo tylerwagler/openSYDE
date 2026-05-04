@@ -168,11 +168,3 @@ void C_SdNodeComIfSetupWidget::m_InitFromData(void)
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNodeComIfSetupWidget::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

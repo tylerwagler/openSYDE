@@ -49,9 +49,6 @@ public:
    QString GetCustomDllPath(void) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    //Avoid call
    C_SyvSeDllConfigurationDialog(const C_SyvSeDllConfigurationDialog &);

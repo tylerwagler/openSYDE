@@ -45,9 +45,6 @@ public:
    std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> GetSelectedDataPools(void) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdNdeDbSelectDataPools * mpc_Ui;
    const uint32_t mu32_NodeIndex;

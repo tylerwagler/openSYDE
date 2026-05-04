@@ -41,9 +41,6 @@ public:
    void Save(void) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdNdeProgrammingOptions * mpc_Ui;
    const uint32_t mu32_NodeIndex;

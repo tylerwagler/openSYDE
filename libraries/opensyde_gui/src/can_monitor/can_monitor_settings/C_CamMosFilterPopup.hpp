@@ -45,9 +45,6 @@ public:
    void SetAddFilterItem(const QList<int32_t> oc_CanMsgId, const QList<uint8_t> oc_CanMsgXtd);
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_CamMosFilterPopup * mpc_Ui;
    // usually the table model is a member of the view, but because most access is from this popup class we put it here

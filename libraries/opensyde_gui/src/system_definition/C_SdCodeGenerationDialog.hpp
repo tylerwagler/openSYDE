@@ -44,9 +44,6 @@ public:
                         std::vector<std::vector<uint32_t> > & orc_AppIndicesPerNode) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdCodeGenerationDialog * mpc_Ui;
    stw::opensyde_gui_logic::C_SdCodeGenerationModel mc_Model;

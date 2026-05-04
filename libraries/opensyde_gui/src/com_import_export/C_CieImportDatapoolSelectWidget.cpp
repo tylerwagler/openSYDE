@@ -184,11 +184,3 @@ void C_CieImportDatapoolSelectWidget::m_InitComboBox(void) const
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CieImportDatapoolSelectWidget::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

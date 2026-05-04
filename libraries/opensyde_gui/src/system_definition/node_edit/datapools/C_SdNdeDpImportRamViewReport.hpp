@@ -43,9 +43,6 @@ public:
    void InitStaticNames(void) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdNdeDpImportRamViewReport * mpc_Ui;
 

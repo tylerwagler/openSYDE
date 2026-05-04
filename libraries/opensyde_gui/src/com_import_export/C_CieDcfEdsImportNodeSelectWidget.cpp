@@ -211,11 +211,3 @@ void C_CieDcfEdsImportNodeSelectWidget::NodeIdToBeChanged(const uint32_t ou32_No
    C_SdUtil::h_NodeIdToBeChanged(ou32_NodeIndex, ou32_InterfaceIndex, this);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CieDcfEdsImportNodeSelectWidget::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

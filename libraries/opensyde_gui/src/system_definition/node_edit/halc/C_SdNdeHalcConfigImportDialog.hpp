@@ -46,9 +46,6 @@ public:
    int32_t GetResult(QString & orc_ErrorDetails) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdNdeHalcConfigImportDialog * mpc_Ui;
 

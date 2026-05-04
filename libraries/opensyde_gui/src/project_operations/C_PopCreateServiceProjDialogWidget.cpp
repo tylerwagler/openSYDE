@@ -505,11 +505,3 @@ void C_PopCreateServiceProjDialogWidget::m_SavePermissionsToUserSettings(std::ve
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_PopCreateServiceProjDialogWidget::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

@@ -290,11 +290,3 @@ void C_SdBueMessageRxTimeoutConfig::m_UpdateAutoReceiveTimeoutValue(void) const
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMessageRxTimeoutConfig::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

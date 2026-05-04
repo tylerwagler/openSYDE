@@ -1009,11 +1009,3 @@ void C_SdNdeDbAddNewProject::m_ApplyV2PathAdaptationToV3()
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbAddNewProject::m_OnEnterAccept(void)
-{
-   m_OkClicked();
-}

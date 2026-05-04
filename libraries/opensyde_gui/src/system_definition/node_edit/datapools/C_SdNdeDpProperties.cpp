@@ -1365,11 +1365,3 @@ void C_SdNdeDpProperties::m_GetCrcVersion() const
    this->mpc_OscDataPool->u16_DefinitionCrcVersion = u16_CrcVersion;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpProperties::m_OnEnterAccept(void)
-{
-   m_OkClicked();
-}

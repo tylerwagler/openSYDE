@@ -50,7 +50,6 @@ Q_SIGNALS:
 
 protected:
    void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
-   void m_OnEnterAccept(void) override;
 
 private:
    Ui::C_FlaSenSearchNodePopup * mpc_Ui;

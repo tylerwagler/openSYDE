@@ -626,11 +626,3 @@ void C_SdNodeToNodeConnectionSetupWidget::m_CheckTypeRestrictions(bool & orq_New
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNodeToNodeConnectionSetupWidget::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

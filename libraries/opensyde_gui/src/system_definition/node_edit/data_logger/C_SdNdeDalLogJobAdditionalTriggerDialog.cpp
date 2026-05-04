@@ -375,12 +375,3 @@ void C_SdNdeDalLogJobAdditionalTriggerDialog::m_GetAdditionalTriggerCondition()
            &C_SdNdeDalLogJobAdditionalTriggerDialog::m_ValidateTriggerCondition);
 }
 
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDalLogJobAdditionalTriggerDialog::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

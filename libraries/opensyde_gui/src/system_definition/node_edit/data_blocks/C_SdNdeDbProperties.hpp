@@ -49,9 +49,6 @@ public:
    void HandleDataPools(const uint32_t ou32_ApplicationIndex) const;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdNdeDbProperties * mpc_Ui;
    const uint32_t mu32_NodeIndex;

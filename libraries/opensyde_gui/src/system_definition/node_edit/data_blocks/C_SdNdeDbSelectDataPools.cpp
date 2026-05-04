@@ -315,11 +315,3 @@ bool C_SdNdeDbSelectDataPools::m_IsCommDatapoolSelectionValid(void)
    return q_Return;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbSelectDataPools::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

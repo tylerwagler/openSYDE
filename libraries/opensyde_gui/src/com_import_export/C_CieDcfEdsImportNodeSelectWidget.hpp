@@ -44,9 +44,6 @@ public:
    void NodeIdToBeChanged(const uint32_t ou32_NodeIndex, const uint32_t ou32_InterfaceIndex);
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    //Avoid call
    C_CieDcfEdsImportNodeSelectWidget & operator =(const C_CieDcfEdsImportNodeSelectWidget &) &;

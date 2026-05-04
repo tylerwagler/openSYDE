@@ -157,11 +157,3 @@ void C_SdCodeGenerationDialog::m_UpdateSelection(const int32_t os32_SelectionCou
    }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle Ctrl+Enter accept by routing through the OK click slot
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdCodeGenerationDialog::m_OnEnterAccept(void)
-{
-   this->m_OkClicked();
-}

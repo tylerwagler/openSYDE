@@ -58,9 +58,6 @@ public:
    bool q_IsVersion3;
 
 
-protected:
-   void m_OnEnterAccept(void) override;
-
 private:
    Ui::C_SdNdeDbAddNewProject * mpc_Ui;
    int32_t ms32_TspReadResult;
