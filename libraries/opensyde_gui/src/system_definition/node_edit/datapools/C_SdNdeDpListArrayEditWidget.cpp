@@ -53,9 +53,8 @@ C_SdNdeDpListArrayEditWidget::C_SdNdeDpListArrayEditWidget(stw::opensyde_gui_ele
                                                            const uint32_t & oru32_ElementIndex,
                                                            const C_SdNdeDpUtil::E_ArrayEditType & ore_ArrayEditType,
                                                            const uint32_t & oru32_DataSetIndex) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeDpListArrayEditWidget),
-   mrc_Parent(orc_Parent),
    mu32_NodeIndex(oru32_NodeIndex),
    mu32_DataPoolIndex(oru32_DataPoolIndex),
    mu32_ListIndex(oru32_ListIndex),
@@ -64,7 +63,7 @@ C_SdNdeDpListArrayEditWidget::C_SdNdeDpListArrayEditWidget(stw::opensyde_gui_ele
    mu32_DataSetIndex(oru32_DataSetIndex)
 {
    this->mpc_Ui->setupUi(this);
-   this->mrc_Parent.SetWidget(this);
+   this->mrc_ParentDialog.SetWidget(this);
    InitStaticNames();
    this->mpc_Ui->pc_TableView->SetElement(oru32_NodeIndex, oru32_DataPoolIndex, oru32_ListIndex, oru32_ElementIndex,
                                           ore_ArrayEditType, oru32_DataSetIndex);
@@ -129,11 +128,11 @@ void C_SdNdeDpListArrayEditWidget::InitStaticNames(void) const
       }
 
       //Translation: 1: Data element type, 2: Data element name, 3: Value type
-      this->mrc_Parent.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("%1 %2 (%3)")).arg(c_Type).arg(
+      this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("%1 %2 (%3)")).arg(c_Type).arg(
                                    pc_Element->c_Name.c_str()).arg(c_EditType));
    }
 
-   this->mrc_Parent.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Array Editor")));
+   this->mrc_ParentDialog.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Array Editor")));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -164,45 +163,12 @@ const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpListArrayEditWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_Parent.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   On ok clicked
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListArrayEditWidget::m_OkClicked(void)
 {
-   mrc_Parent.accept();
+   mrc_ParentDialog.accept();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -211,5 +177,5 @@ void C_SdNdeDpListArrayEditWidget::m_OkClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpListArrayEditWidget::m_CancelClicked(void)
 {
-   mrc_Parent.reject();
+   mrc_ParentDialog.reject();
 }
