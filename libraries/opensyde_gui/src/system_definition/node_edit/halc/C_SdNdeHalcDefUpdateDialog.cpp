@@ -57,9 +57,8 @@ C_SdNdeHalcDefUpdateDialog::C_SdNdeHalcDefUpdateDialog(stw::opensyde_gui_element
                                                        const uint32_t ou32_NodeIndex,
                                                        const C_OscHalcConfig & orc_LoadedHalcConfig,
                                                        const QString & orc_FilePath) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeHalcDefUpdateDialog),
-   mrc_ParentDialog(orc_Parent),
    mu32_NodeIndex(ou32_NodeIndex),
    mrc_LoadedHalcConfig(orc_LoadedHalcConfig),
    ms32_Result(C_NOACT),
@@ -78,7 +77,7 @@ C_SdNdeHalcDefUpdateDialog::C_SdNdeHalcDefUpdateDialog(stw::opensyde_gui_element
    this->mpc_Ui->pc_TextEditFlash->setReadOnly(true);
 
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeHalcDefUpdateDialog::m_OkClicked);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdNdeHalcDefUpdateDialog::m_OnCancel);
 
    this->m_UpdateHalcConfiguration();
@@ -139,39 +138,6 @@ int32_t C_SdNdeHalcDefUpdateDialog::GetResult(C_OscHalcConfig & orc_UpdatedHalcC
    }
 
    return this->ms32_Result;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeHalcDefUpdateDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

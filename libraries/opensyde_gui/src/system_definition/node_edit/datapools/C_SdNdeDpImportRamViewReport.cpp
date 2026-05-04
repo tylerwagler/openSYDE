@@ -57,9 +57,8 @@ C_SdNdeDpImportRamViewReport::C_SdNdeDpImportRamViewReport(C_OgePopUpDialog & or
                                                            const QString & orc_ProjectPath,
                                                            const C_OscNodeDataPool & orc_DataPool,
                                                            const C_SclStringList & orc_ImportInformation) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_SdNdeDpImportRamViewReport),
-   mrc_ParentDialog(orc_Parent)
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
+   mpc_Ui(new Ui::C_SdNdeDpImportRamViewReport)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -95,39 +94,6 @@ void C_SdNdeDpImportRamViewReport::InitStaticNames(void) const
    this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Details"));
    this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Continue"));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpImportRamViewReport::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -236,3 +202,4 @@ void C_SdNdeDpImportRamViewReport::m_FillReport(const QString & orc_ProjectPath,
    C_OscLoggingHandler::h_Flush(); // update log file
    this->mpc_Ui->pc_TextBrowser->setHtml(c_Text);
 }
+

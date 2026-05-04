@@ -12,7 +12,6 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include "stwtypes.hpp"
-#include "C_OgeLabGroupItem.hpp"
 #include "C_OscNodeApplication.hpp"
 
 namespace Ui

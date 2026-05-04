@@ -52,9 +52,8 @@ using namespace stw::scl;
 C_SdNodeComIfSetupWidget::C_SdNodeComIfSetupWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                    const uint32_t & oru32_NodeIndex, const uint32_t & oru32_BusIndex,
                                                    const int32_t & ors32_SpecialInterface) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNodeComIfSetupWidget),
-   mrc_ParentDialog(orc_Parent),
    mu32_NodeIndex(oru32_NodeIndex),
    mu32_BusIndex(oru32_BusIndex),
    ms32_SpecialInterface(ors32_SpecialInterface),
@@ -69,8 +68,8 @@ C_SdNodeComIfSetupWidget::C_SdNodeComIfSetupWidget(stw::opensyde_gui_elements::C
    m_InitFromData();
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SdNodeComIfSetupWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNodeComIfSetupWidget::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SdNodeComIfSetupWidget::m_CancelClicked);
 }
 
@@ -92,8 +91,8 @@ C_SdNodeComIfSetupWidget::~C_SdNodeComIfSetupWidget()
 void C_SdNodeComIfSetupWidget::InitStaticNames(void) const
 {
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Communication Interface Setup"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_LabelComInterfaceHeading->setText(C_GtGetText::h_GetText("Select COMM Interface"));
 }
 
@@ -128,39 +127,6 @@ uint8_t C_SdNodeComIfSetupWidget::GetSelectedInterface(void) const
 bool C_SdNodeComIfSetupWidget::GetInteractionPossible(void) const
 {
    return this->mq_InteractionPossible;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNodeComIfSetupWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -201,3 +167,4 @@ void C_SdNodeComIfSetupWidget::m_InitFromData(void)
       this->mrc_ParentDialog.SetTitle(C_PuiSdUtil::h_GetNodeBaseNameOrName(this->mu32_NodeIndex));
    }
 }
+

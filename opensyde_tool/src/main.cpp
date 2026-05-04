@@ -13,6 +13,7 @@
 
 #include <QString>
 #include <QApplication>
+#include <QIcon>
 #include "C_Uti.hpp"
 #include "C_UtiStyleSheets.hpp"
 #include "C_NagMainWindow.hpp"
@@ -23,6 +24,7 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_SdUtil.hpp"
+#include "version_config.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
@@ -61,6 +63,12 @@ int32_t main(int32_t os32_Argc, char_t * opacn_Argv[])
    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
 
    QApplication c_Appl(os32_Argc, opacn_Argv);
+   c_Appl.setApplicationVersion(QString("%1.%2.%3")
+                                .arg(PROJECT_VERSION_MAJOR)
+                                .arg(PROJECT_VERSION_MINOR)
+                                .arg(PROJECT_VERSION_RELEASE));
+   QApplication::setWindowIcon(QIcon(":/images/LogoOpensyde_XXL.png"));
+   QGuiApplication::setDesktopFileName("openSYDE");
 
    //If the binary is called with a current directory differing from the exe directory this can cause
    // unexpected issues, e.g. win CAN DLL .ini search paths. Make sure the paths are identical.

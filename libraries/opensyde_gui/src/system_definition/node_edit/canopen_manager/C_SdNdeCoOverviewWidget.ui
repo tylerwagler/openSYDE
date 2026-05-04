@@ -51,7 +51,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNoChannels">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelNoChannels">
+       <property name="styleRole" stdset="0">
+        <string>group-item</string>
+       </property>
        <property name="text">
         <string>Overview Table</string>
        </property>
@@ -85,9 +88,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdNdeCoOverviewTableView</class>

@@ -69,9 +69,8 @@ using namespace stw::tgl;
 //----------------------------------------------------------------------------------------------------------------------
 C_PopCreateServiceProjDialogWidget::C_PopCreateServiceProjDialogWidget(
    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_PopCreateServiceProjDialogWidget),
-   mrc_ParentDialog(orc_Parent)
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
+   mpc_Ui(new Ui::C_PopCreateServiceProjDialogWidget)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -255,39 +254,6 @@ int32_t C_PopCreateServiceProjDialogWidget::SaveCurrentProjectForServiceMode(voi
    }
 
    return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_PopCreateServiceProjDialogWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -538,3 +504,4 @@ void C_PopCreateServiceProjDialogWidget::m_SavePermissionsToUserSettings(std::ve
       }
    }
 }
+

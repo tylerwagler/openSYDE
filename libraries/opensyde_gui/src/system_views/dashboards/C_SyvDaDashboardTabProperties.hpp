@@ -10,11 +10,10 @@
 #define C_SYVDADASHBOARDTABPROPERTIES_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 
 #include "stwtypes.hpp"
 
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_PuiSvDashboard.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -31,7 +30,7 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_SyvDaDashboardTabProperties :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -46,8 +45,6 @@ public:
    QString GetDashboardTabComment() const;
    stw::opensyde_gui_logic::C_PuiSvDashboard::E_TabType GetDashboardTabType() const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    //Avoid call
@@ -55,7 +52,6 @@ private:
    C_SyvDaDashboardTabProperties & operator =(const C_SyvDaDashboardTabProperties &) &;
 
    Ui::C_SyvDaDashboardTabProperties * mpc_Ui;
-   stw::opensyde_gui_elements::C_OgePopUpDialog * mpc_ParentDialog;
 
    const uint32_t mu32_DashboardIndex;
    const uint32_t mu32_ViewIndex;

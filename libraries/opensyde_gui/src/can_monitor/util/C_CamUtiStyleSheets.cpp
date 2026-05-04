@@ -37,7 +37,7 @@ const std::vector<QString> C_CamUtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
 {
    "stw--opensyde_gui--C_CamGenTableView QScrollBar",
    "stw--opensyde_gui--C_CamGenSigTableView QScrollBar",
-   "stw--opensyde_gui_elements--C_OgeTebMessageDetails QScrollBar",
+   "stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole=\"teb-message-details\"] QScrollBar",
    "stw--opensyde_gui_elements--C_OgeTransparentScrollArea QScrollBar",
    "stw--opensyde_gui--C_CamMetWidget QScrollBar",
    "stw--opensyde_gui_elements--C_CamOgeCbxTable QAbstractItemView QScrollBar"
@@ -161,8 +161,10 @@ void C_CamUtiStyleSheets::mh_AppendStylesheet(const QString & orc_File, QString 
 {
    QFile c_File(orc_File);
 
-   c_File.open(QFile::ReadOnly);
-   orc_Stylesheet += QLatin1String(c_File.readAll());
+   if (c_File.open(QFile::ReadOnly))
+   {
+      orc_Stylesheet += QLatin1String(c_File.readAll());
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

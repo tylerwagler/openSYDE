@@ -11,12 +11,11 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
-#include <QWidget>
 
 #include "stwtypes.hpp"
 
 #include "C_PuiSvPc.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 
@@ -34,7 +33,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SyvSeDllConfigurationDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -49,8 +48,6 @@ public:
    stw::opensyde_gui_logic::C_PuiSvPc::E_CanDllType GetDllType(void) const;
    QString GetCustomDllPath(void) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    //Avoid call
@@ -72,8 +69,6 @@ private:
    QString m_GetAbsoluteDllPath(void) const;
 
    Ui::C_SyvSeDllConfigurationDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
 
    uint64_t mu64_Bitrate;
 };

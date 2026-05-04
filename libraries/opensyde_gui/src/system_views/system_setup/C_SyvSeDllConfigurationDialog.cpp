@@ -57,9 +57,8 @@ using namespace stw::can;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvSeDllConfigurationDialog::C_SyvSeDllConfigurationDialog(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent)
    :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvSeDllConfigurationDialog),
-   mrc_ParentDialog(orc_Parent),
    mu64_Bitrate(0U)
 {
    mpc_Ui->setupUi(this);
@@ -77,13 +76,13 @@ C_SyvSeDllConfigurationDialog::C_SyvSeDllConfigurationDialog(stw::opensyde_gui_e
    this->mpc_Ui->pc_PushButtonVariables->setText("");
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked,
            this, &C_SyvSeDllConfigurationDialog::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SyvSeDllConfigurationDialog::m_CancelClicked);
-   connect(this->mpc_Ui->pc_BushButtonTestConnection, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonTestConnection, &QPushButton::clicked,
            this, &C_SyvSeDllConfigurationDialog::m_TestConnectionClicked);
-   connect(this->mpc_Ui->pc_BushButtonConfigureDll, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonConfigureDll, &QPushButton::clicked,
            this, &C_SyvSeDllConfigurationDialog::m_ConfigureDllClicked);
    connect(this->mpc_Ui->pc_RadioButtonPeak, &stw::opensyde_gui_elements::C_OgeRabProperties::clicked,
            this, &C_SyvSeDllConfigurationDialog::m_ConcretDllClicked);
@@ -120,10 +119,10 @@ void C_SyvSeDllConfigurationDialog::InitText(void) const
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Configuration"));
 
    this->mpc_Ui->pc_LabelBusHeading->setText(C_GtGetText::h_GetText("Select Interface"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_BushButtonConfigureDll->setText(C_GtGetText::h_GetText("Configure"));
-   this->mpc_Ui->pc_BushButtonTestConnection->setText(C_GtGetText::h_GetText("Test Connection"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonConfigureDll->setText(C_GtGetText::h_GetText("Configure"));
+   this->mpc_Ui->pc_PushButtonTestConnection->setText(C_GtGetText::h_GetText("Test Connection"));
    this->mpc_Ui->pc_LabelCustomDllPath->setText(C_GtGetText::h_GetText("DLL path"));
    this->mpc_Ui->pc_LabelBitrateInfo->setText(C_GtGetText::h_GetText(
                                                  "CAN bitrate will be applied automatically."));
@@ -230,39 +229,6 @@ QString C_SyvSeDllConfigurationDialog::GetCustomDllPath(void) const
    c_Path = this->mpc_Ui->pc_LineEditCustomDllPath->GetPath();
 
    return c_Path;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvSeDllConfigurationDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -544,3 +510,4 @@ QString C_SyvSeDllConfigurationDialog::m_GetAbsoluteDllPath(void) const
    }
    return c_Return;
 }
+

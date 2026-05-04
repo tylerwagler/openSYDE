@@ -57,8 +57,8 @@ const std::vector<QString> C_UtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
    "stw--opensyde_gui_elements--C_OgeCbxTableHalc QAbstractItemView QScrollBar",
    "stw--opensyde_gui_elements--C_OgeCbxMultiSelectTableHalc QAbstractItemView QScrollBar",
    "stw--opensyde_gui_elements--C_OgeTedPropertiesComment",
-   "stw--opensyde_gui_elements--C_OgeTebMessageDetails",
-   "stw--opensyde_gui_elements--C_OgeTebReport",
+   "stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole=\"teb-message-details\"]",
+   "stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole=\"teb-report\"]",
    "stw--opensyde_gui--C_SebGraphicsView",
    "stw--opensyde_gui--C_SyvUpPacListWidget",
    "stw--opensyde_gui--C_SyvUpPacSectionNodeWidget",
@@ -74,7 +74,7 @@ const std::vector<QString> C_UtiStyleSheets::mhc_SCROLL_AREA_ELEMENTS(
    "stw--opensyde_gui--C_SdBueMlvGraphicsView",
    "stw--opensyde_gui_elements--C_OgeDarkScrollArea",
    "stw--opensyde_gui_logic--C_PopFileTableView",
-   "stw--opensyde_gui_elements--C_OgeSaNaviBar",
+   "QScrollArea[styleRole=\"sa-navi-bar\"]",
    "stw--opensyde_gui--C_SdNdeDpSelectorAddListWidget",
    "stw--opensyde_gui--C_SdNdeDalLogJobDataSelectionTableView",
    "stw--opensyde_gui--C_SdNdeDalLogJobsListView"
@@ -105,28 +105,28 @@ const std::vector<C_UtiStyleSheets::C_ElementColorConfig> C_UtiStyleSheets::mhc_
    C_UtiStyleSheets::C_ElementColorConfig(
       "stw--opensyde_gui_elements--C_OgeLabDashboardLabelValue[Style=\"SKEUOMORPH_DARK\"]", mc_STYLE_GUIDE_COLOR_0),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_BRIGHT\"][Selected=\"true\"][Active=\"true\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_BRIGHT\"][Selected=\"true\"][Active=\"true\"]",
       mc_STYLE_GUIDE_COLOR_4),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_DARK\"][Selected=\"true\"][Active=\"true\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_DARK\"][Selected=\"true\"][Active=\"true\"]",
       mc_STYLE_GUIDE_COLOR_0),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_BRIGHT\"][Selected=\"false\"][Active=\"true\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_BRIGHT\"][Selected=\"false\"][Active=\"true\"]",
       mc_STYLE_GUIDE_COLOR_34),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_DARK\"][Selected=\"false\"][Active=\"true\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_DARK\"][Selected=\"false\"][Active=\"true\"]",
       mc_STYLE_GUIDE_COLOR_10),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_BRIGHT\"][Selected=\"true\"][Active=\"false\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_BRIGHT\"][Selected=\"true\"][Active=\"false\"]",
       mc_STYLE_GUIDE_COLOR_8),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_DARK\"][Selected=\"true\"][Active=\"false\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_DARK\"][Selected=\"true\"][Active=\"false\"]",
       mc_STYLE_GUIDE_COLOR_8),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_BRIGHT\"][Selected=\"false\"][Active=\"false\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_BRIGHT\"][Selected=\"false\"][Active=\"false\"]",
       mc_STYLE_GUIDE_COLOR_8),
    C_UtiStyleSheets::C_ElementColorConfig(
-      "stw--opensyde_gui_elements--C_OgeLabDashboardChart#pc_LabelValue[Style=\"OPENSYDE_DARK\"][Selected=\"false\"][Active=\"false\"]",
+      "QLabel#pc_LabelValue[styleRole=\"dashboard-chart\"][Style=\"OPENSYDE_DARK\"][Selected=\"false\"][Active=\"false\"]",
       mc_STYLE_GUIDE_COLOR_8)
 }
    );
@@ -165,8 +165,8 @@ const std::vector<QString> C_UtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_BRIGHT(
    "stw--opensyde_gui--C_SyvDaItPaTreeView QScrollBar[DarkMode=\"false\"]",
    "stw--opensyde_gui--C_SyvDaItTaView QScrollBar[DarkMode=\"false\"]",
    "stw--opensyde_gui_elements--C_OgeTedPropertiesComment QScrollBar",
-   "stw--opensyde_gui_elements--C_OgeTebMessageDetails QScrollBar",
-   "stw--opensyde_gui_elements--C_OgeTebReport QScrollBar",
+   "stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole=\"teb-message-details\"] QScrollBar",
+   "stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole=\"teb-report\"] QScrollBar",
    "stw--opensyde_gui--C_SebGraphicsView QScrollBar[DarkMode=\"false\"]",
    "stw--opensyde_gui--C_SdBueNodeSelectorCheckBoxListWidget QScrollBar",
    "stw--opensyde_gui--C_SyvUpPacSectionNodeWidget QScrollBar",
@@ -238,7 +238,7 @@ const std::vector<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets
 const std::vector<QString> C_UtiStyleSheets::mhc_SCROLL_BAR_ELEMENTS_MAIN_NAVI(
 {
    "stw--opensyde_gui_logic--C_PopFileTableView QScrollBar",
-   "stw--opensyde_gui_elements--C_OgeSaNaviBar QScrollBar"
+   "QScrollArea[styleRole=\"sa-navi-bar\"] QScrollBar"
 }
    );
 const std::vector<C_UtiStyleSheets::C_PropertyValueColorConfig> C_UtiStyleSheets::mhc_SCROLL_BAR_PROPERTIES_MAIN_NAVI(

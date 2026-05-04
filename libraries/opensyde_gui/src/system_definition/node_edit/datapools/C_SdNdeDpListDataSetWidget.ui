@@ -24,7 +24,10 @@
     <number>27</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral">
+    <widget class="QGroupBox" name="pc_GroupBoxGeneral">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="focusPolicy">
       <enum>Qt::ClickFocus</enum>
      </property>
@@ -63,7 +66,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabNodeDataPoolSelectedItems" name="pc_SelectionLabel">
+         <widget class="QLabel" name="pc_SelectionLabel">
+          <property name="styleRole" stdset="0">
+           <string>node-data-pool-selected-items</string>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::StrongFocus</enum>
           </property>
@@ -248,7 +254,10 @@
        </layout>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxEmpty">
+       <widget class="QGroupBox" name="pc_GroupBoxEmpty">
+        <property name="styleRole" stdset="0">
+         <string>transparent</string>
+        </property>
         <property name="title">
          <string>Empty</string>
         </property>
@@ -282,7 +291,10 @@
             </spacer>
            </item>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelReplacement">
+            <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelReplacement">
+             <property name="styleRole" stdset="0">
+              <string>group-item</string>
+             </property>
              <property name="text">
               <string>TextLabel</string>
              </property>
@@ -364,7 +376,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubCancel" name="pc_BushButtonCancel">
+      <widget class="QPushButton" name="pc_PushButtonCancel">
+       <property name="styleRole" stdset="0">
+        <string>cancel</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -408,7 +423,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_BushButtonOk">
+      <widget class="QPushButton" name="pc_PushButtonOk">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -457,41 +475,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubCancel.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubIconOnly</class>
    <extends>QPushButton</extends>
    <header>C_OgePubIconOnly.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabNodeDataPoolSelectedItems</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabNodeDataPoolSelectedItems.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdNdeDpListDataSetView</class>
@@ -502,8 +493,8 @@
  <tabstops>
   <tabstop>pc_SelectionLabel</tabstop>
   <tabstop>pc_TableView</tabstop>
-  <tabstop>pc_BushButtonCancel</tabstop>
-  <tabstop>pc_BushButtonOk</tabstop>
+  <tabstop>pc_PushButtonCancel</tabstop>
+  <tabstop>pc_PushButtonOk</tabstop>
  </tabstops>
  <resources/>
  <connections/>

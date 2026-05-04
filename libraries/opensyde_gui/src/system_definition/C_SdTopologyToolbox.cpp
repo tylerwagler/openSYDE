@@ -72,8 +72,9 @@ C_SdTopologyToolbox::C_SdTopologyToolbox(QWidget * const opc_Parent) :
    mpc_Ui(new Ui::C_SdTopologyToolbox),
    mpc_List(NULL),
    mpc_Spacer(new QSpacerItem(20, 10, QSizePolicy::Expanding)),
-   mpc_Label(new C_OgeLabTopologyToolboxUserNodes(this))
+   mpc_Label(new QLabel(this))
 {
+   this->mpc_Label->setProperty("styleRole", "topology-toolbox-user-nodes");
    this->mpc_Ui->setupUi(this);
    this->setAcceptDrops(true);
    this->mpc_Ui->pc_ScrollAreaSearch->setVisible(false);
@@ -398,7 +399,10 @@ void C_SdTopologyToolbox::m_FillToolboxDynamic(void)
       C_SebToolboxUtil::h_AddFinalSpacer(this->mpc_Ui->pc_VerticalLayout1, this->mpc_List);
    }
 
-   connect(this->mpc_List, &C_SdTopologyListWidget::SigDelete, this, &C_SdTopologyToolbox::m_DeleteUserNode);
+   if (this->mpc_List != NULL)
+   {
+      connect(this->mpc_List, &C_SdTopologyListWidget::SigDelete, this, &C_SdTopologyToolbox::m_DeleteUserNode);
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

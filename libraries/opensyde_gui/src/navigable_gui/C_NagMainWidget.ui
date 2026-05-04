@@ -229,7 +229,10 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FrameCurrProj">
+            <widget class="QFrame" name="pc_FrameCurrProj">
+             <property name="styleRole" stdset="0">
+              <string>fra-separator</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -342,7 +345,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLeDark" name="pc_LineEditVersion"/>
+                 <widget class="stw::opensyde_gui_elements::C_OgeLeContextMenuBase" name="pc_LineEditVersion">
+                  <property name="styleRole" stdset="0">
+                   <string>le-dark</string>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="stw::opensyde_gui_elements::C_OgePubIconOnly" name="pc_BtnEdit">
@@ -369,7 +376,10 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_5">
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FrameVersion">
+                <widget class="QFrame" name="pc_FrameVersion">
+                 <property name="styleRole" stdset="0">
+                  <string>fra-separator</string>
+                 </property>
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -577,7 +587,10 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_10">
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FrameRecentProjects">
+            <widget class="QFrame" name="pc_FrameRecentProjects">
+             <property name="styleRole" stdset="0">
+              <string>fra-separator</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -603,7 +616,10 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,1">
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNoRecentProj">
+            <widget class="QGroupBox" name="pc_GroupBoxNoRecentProj">
+             <property name="styleRole" stdset="0">
+              <string>transparent</string>
+             </property>
              <property name="title">
               <string>Empty</string>
              </property>
@@ -729,21 +745,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubIconOnly</class>
    <extends>QPushButton</extends>
    <header>C_OgePubIconOnly.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubProjAction</class>
@@ -766,9 +770,9 @@
    <header>C_OgePubUseCase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLeDark</class>
+   <class>stw::opensyde_gui_elements::C_OgeLeContextMenuBase</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLeDark.hpp</header>
+   <header>C_OgeLeContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabDoubleClick</class>

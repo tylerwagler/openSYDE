@@ -9,8 +9,7 @@
 #define C_POPCREATESERVICEPROJDIALOGWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 
 #include "C_PopServiceProjSettingsModel.hpp"
 
@@ -29,7 +28,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_PopCreateServiceProjDialogWidget :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -46,13 +45,9 @@ public:
    void SetSpPath(const QString & orc_SpPath) const;
    int32_t SaveCurrentProjectForServiceMode(void);
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_PopCreateServiceProjDialogWidget * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
 
    int32_t m_CheckPath(void);
    void m_OkClicked(void);

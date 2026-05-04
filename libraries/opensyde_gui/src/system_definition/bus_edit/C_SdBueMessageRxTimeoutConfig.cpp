@@ -55,17 +55,16 @@ const int32_t C_SdBueMessageRxTimeoutConfig::mhs32_INDEX_DISABLED = 2;
 C_SdBueMessageRxTimeoutConfig::C_SdBueMessageRxTimeoutConfig(C_OgePopUpDialog & orc_Parent,
                                                              const C_PuiSdNodeCanMessage::E_RxTimeoutMode oe_ReceiveTimeoutMode, const bool oq_TxMethodOnEvent, const bool oq_DisablePossible, const uint32_t ou32_ReceiveTimeoutValue, const uint32_t ou32_LastKnownCycleTimeValue, const uint32_t ou32_AutoReceiveTimeoutValue,
                                                              const QString & orc_NameForTitle) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdBueMessageRxTimeoutConfig),
-   mpc_ParentDialog(&orc_Parent),
    mu32_AutoReceiveTimeoutValue(ou32_AutoReceiveTimeoutValue)
 {
    this->mpc_Ui->setupUi(this);
 
    // register the widget for showing
-   this->mpc_ParentDialog->SetWidget(this);
+   this->mrc_ParentDialog.SetWidget(this);
    //Register close
-   this->mpc_ParentDialog->SetNotifyAndBlockClose(true);
+   this->mrc_ParentDialog.SetNotifyAndBlockClose(true);
 
    this->InitStaticNames();
 
@@ -108,8 +107,8 @@ C_SdBueMessageRxTimeoutConfig::C_SdBueMessageRxTimeoutConfig(C_OgePopUpDialog & 
    }
 
    //Title
-   this->mpc_ParentDialog->SetTitle(orc_NameForTitle);
-   this->mpc_ParentDialog->SetSubTitle(C_GtGetText::h_GetText("Receive Timeout"));
+   this->mrc_ParentDialog.SetTitle(orc_NameForTitle);
+   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Receive Timeout"));
 
    if ((oe_ReceiveTimeoutMode == C_PuiSdNodeCanMessage::eRX_TIMEOUT_MODE_DISABLED) &&
        (oq_DisablePossible == true))
@@ -134,9 +133,9 @@ C_SdBueMessageRxTimeoutConfig::C_SdBueMessageRxTimeoutConfig(C_OgePopUpDialog & 
    this->m_HandleInactiveStates();
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_SdBueMessageRxTimeoutConfig::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdBueMessageRxTimeoutConfig::m_CancelClicked);
 
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
@@ -237,45 +236,12 @@ uint32_t C_SdBueMessageRxTimeoutConfig::GetReceiveTimeoutValue(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdBueMessageRxTimeoutConfig::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot of Ok button click
 */
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageRxTimeoutConfig::m_OkClicked(void)
 {
-   this->mpc_ParentDialog->accept();
+   this->mrc_ParentDialog.accept();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -284,7 +250,7 @@ void C_SdBueMessageRxTimeoutConfig::m_OkClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdBueMessageRxTimeoutConfig::m_CancelClicked(void)
 {
-   this->mpc_ParentDialog->reject();
+   this->mrc_ParentDialog.reject();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -323,3 +289,4 @@ void C_SdBueMessageRxTimeoutConfig::m_UpdateAutoReceiveTimeoutValue(void) const
       this->mpc_Ui->pc_SpinBoxTimeout->setValue(static_cast<int32_t>(this->mu32_AutoReceiveTimeoutValue));
    }
 }
+

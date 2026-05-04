@@ -53,9 +53,8 @@ using namespace stw::opensyde_gui_elements;
 C_CieDcfEdsImportNodeSelectWidget::C_CieDcfEdsImportNodeSelectWidget(
    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent, const QString & orc_FilePath,
    const uint32_t ou32_BusIndex) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_CieDcfEdsImportNodeSelectWidget),
-   mrc_ParentDialog(orc_Parent)
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
+   mpc_Ui(new Ui::C_CieDcfEdsImportNodeSelectWidget)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -88,9 +87,9 @@ C_CieDcfEdsImportNodeSelectWidget::C_CieDcfEdsImportNodeSelectWidget(
    this->m_FillUpComboBox(ou32_BusIndex);
 
    //Connects
-   connect(this->mpc_Ui->pc_PushButtonOk, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_CieDcfEdsImportNodeSelectWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_CieDcfEdsImportNodeSelectWidget::m_CancelClicked);
 }
 
@@ -158,39 +157,6 @@ int32_t C_CieDcfEdsImportNodeSelectWidget::GetNodeSelection(uint32_t & oru32_Nod
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CieDcfEdsImportNodeSelectWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   User clicked on ok button.
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -244,3 +210,4 @@ void C_CieDcfEdsImportNodeSelectWidget::NodeIdToBeChanged(const uint32_t ou32_No
 {
    C_SdUtil::h_NodeIdToBeChanged(ou32_NodeIndex, ou32_InterfaceIndex, this);
 }
+

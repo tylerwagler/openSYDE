@@ -9,9 +9,8 @@
 #ifndef C_CIEEXPORTREPORTWIDGET_HPP
 #define C_CIEEXPORTREPORTWIDGET_HPP
 
-#include <QWidget>
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_CieExportDbc.hpp"
 
 namespace Ui
@@ -27,7 +26,7 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_CieExportReportWidget :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -41,13 +40,9 @@ public:
                        const stw::opensyde_gui_logic::C_CieExportDbc::C_ExportStatistic & orc_ExportStatistic,
                        const stw::scl::C_SclStringList & orc_Warnings);
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_CieExportReportWidget * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    std::map<stw::scl::C_SclString, stw::scl::C_SclString> mc_NodeMapping;
    stw::opensyde_gui_logic::C_CieExportDbc::C_ExportStatistic mc_ExportStatistic;
    stw::scl::C_SclStringList mc_Warnings;

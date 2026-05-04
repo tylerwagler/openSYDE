@@ -27,7 +27,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral">
+    <widget class="QGroupBox" name="pc_GroupBoxGeneral">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -124,7 +127,10 @@
            </spacer>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgePubConfigure" name="pc_PushButtonDiscard">
+           <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PushButtonDiscard">
+            <property name="styleRole" stdset="0">
+             <string>configure</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>150</width>
@@ -155,7 +161,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame">
+         <widget class="QFrame" name="pc_Frame">
+          <property name="styleRole" stdset="0">
+           <string>fra-separator</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -239,7 +248,11 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeTebReport" name="pc_ProgressLog"/>
+           <widget class="stw::opensyde_gui_elements::C_OgeTebContextMenuBase" name="pc_ProgressLog">
+            <property name="styleRole" stdset="0">
+             <string>teb-report</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -305,7 +318,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonOk">
+      <widget class="QPushButton" name="pc_PushButtonOk">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -351,31 +367,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTedPropertiesComment</class>
    <extends>QTextEdit</extends>
    <header>C_OgeTedPropertiesComment.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubConfigure</class>
+   <class>stw::opensyde_gui_elements::C_OgePubToolTipBase</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubConfigure.hpp</header>
+   <header>C_OgePubToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>
@@ -389,9 +388,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeTebReport</class>
+   <class>stw::opensyde_gui_elements::C_OgeTebContextMenuBase</class>
    <extends>QTextBrowser</extends>
-   <header>C_OgeTebReport.hpp</header>
+   <header>C_OgeTebContextMenuBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

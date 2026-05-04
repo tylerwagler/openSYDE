@@ -1,7 +1,9 @@
 #include <windows.h>
+#include "version_config.hpp"
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION     1,87,0,0
+// use version as defined in version_config.hpp:
+FILEVERSION PROJECT_VERSION_MAJOR, PROJECT_VERSION_MINOR, PROJECT_VERSION_RELEASE, PROJECT_VERSION_BUILD
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN

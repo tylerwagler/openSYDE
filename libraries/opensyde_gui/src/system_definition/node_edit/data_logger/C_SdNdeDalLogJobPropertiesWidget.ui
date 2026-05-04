@@ -86,7 +86,10 @@
       </spacer>
      </item>
      <item row="18" column="0">
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxUseCase">
+      <widget class="QGroupBox" name="pc_GbxUseCase">
+       <property name="styleRole" stdset="0">
+        <string>transparent</string>
+       </property>
        <property name="title">
         <string/>
        </property>
@@ -107,7 +110,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLogJobUseCase">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLogJobUseCase">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -157,7 +163,10 @@
       </widget>
      </item>
      <item row="23" column="0">
-      <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_5">
+      <widget class="QFrame" name="frame_5">
+       <property name="styleRole" stdset="0">
+        <string>fra-separator</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -179,14 +188,20 @@
       </widget>
      </item>
      <item row="21" column="0">
-      <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelLogTriggerConditions">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelLogTriggerConditions">
+       <property name="styleRole" stdset="0">
+        <string>heading-group-bold</string>
+       </property>
        <property name="text">
         <string>Log Trigger Conditions</string>
        </property>
       </widget>
      </item>
      <item row="25" column="0">
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxLoggingInterval">
+      <widget class="QGroupBox" name="pc_GbxLoggingInterval">
+       <property name="styleRole" stdset="0">
+        <string>transparent</string>
+       </property>
        <property name="title">
         <string/>
        </property>
@@ -207,7 +222,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLoggingInterval">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLoggingInterval">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>105</width>
@@ -244,7 +262,10 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxLoggingInterval">
+            <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxLoggingInterval">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -336,7 +357,10 @@
       </spacer>
      </item>
      <item row="3" column="0" colspan="2">
-      <widget class="stw::opensyde_gui_elements::C_OgeLePropertiesName" name="pc_LineEditName">
+      <widget class="stw::opensyde_gui_elements::C_OgeLeToolTipBase" name="pc_LineEditName">
+       <property name="styleRole" stdset="0">
+        <string>le-properties-name</string>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -358,7 +382,10 @@
       </widget>
      </item>
      <item row="1" column="0" colspan="3">
-      <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_3">
+      <widget class="QFrame" name="frame_3">
+       <property name="styleRole" stdset="0">
+        <string>fra-separator</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -380,7 +407,10 @@
       </widget>
      </item>
      <item row="19" column="0">
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxFileFormat">
+      <widget class="QGroupBox" name="pc_GbxFileFormat">
+       <property name="styleRole" stdset="0">
+        <string>transparent</string>
+       </property>
        <property name="title">
         <string/>
        </property>
@@ -401,7 +431,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLogFileFormat">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLogFileFormat">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -451,7 +484,10 @@
       </widget>
      </item>
      <item row="17" column="0" colspan="2">
-      <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_4">
+      <widget class="QFrame" name="frame_4">
+       <property name="styleRole" stdset="0">
+        <string>fra-separator</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -473,7 +509,10 @@
       </widget>
      </item>
      <item row="18" column="1">
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxLogDestination">
+      <widget class="QGroupBox" name="pc_GbxLogDestination">
+       <property name="styleRole" stdset="0">
+        <string>transparent</string>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -511,7 +550,10 @@
            <number>7</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLogDestination">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLogDestination">
+            <property name="styleRole" stdset="0">
+             <string>group-item</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>93</width>
@@ -586,7 +628,10 @@
       </spacer>
      </item>
      <item row="0" column="0" colspan="3">
-      <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelName">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelName">
+       <property name="styleRole" stdset="0">
+        <string>heading-group-bold</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -605,7 +650,10 @@
       </widget>
      </item>
      <item row="27" column="0">
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxMaxLogEntries">
+      <widget class="QGroupBox" name="pc_GbxMaxLogEntries">
+       <property name="styleRole" stdset="0">
+        <string>transparent</string>
+       </property>
        <property name="title">
         <string/>
        </property>
@@ -626,7 +674,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMaxLogEntries">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMaxLogEntries">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>105</width>
@@ -669,7 +720,10 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpxBoxMaxLogEntries">
+            <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpxBoxMaxLogEntries">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -716,14 +770,20 @@
       </widget>
      </item>
      <item row="13" column="0" colspan="2">
-      <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelGeneral">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelGeneral">
+       <property name="styleRole" stdset="0">
+        <string>heading-group-bold</string>
+       </property>
        <property name="text">
         <string>General</string>
        </property>
       </widget>
      </item>
      <item row="24" column="0">
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxMode">
+      <widget class="QGroupBox" name="pc_GbxMode">
+       <property name="styleRole" stdset="0">
+        <string>transparent</string>
+       </property>
        <property name="title">
         <string/>
        </property>
@@ -744,7 +804,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMode">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMode">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -810,7 +873,10 @@
       </widget>
      </item>
      <item row="26" column="0">
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GbxLogDuration">
+      <widget class="QGroupBox" name="pc_GbxLogDuration">
+       <property name="styleRole" stdset="0">
+        <string>transparent</string>
+       </property>
        <property name="title">
         <string/>
        </property>
@@ -831,7 +897,10 @@
          <number>7</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelLogDuration">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelLogDuration">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>105</width>
@@ -868,7 +937,10 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxLogDuration">
+            <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxLogDuration">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -912,7 +984,10 @@
       </widget>
      </item>
      <item row="6" column="0" colspan="2">
-      <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelComment">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelComment">
+       <property name="styleRole" stdset="0">
+        <string>heading-group-bold</string>
+       </property>
        <property name="text">
         <string>Comment</string>
        </property>
@@ -935,7 +1010,10 @@
       </spacer>
      </item>
      <item row="3" column="2" rowspan="17">
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxGrayed" name="pc_GroupBoxIcon">
+      <widget class="QGroupBox" name="pc_GroupBoxIcon">
+       <property name="styleRole" stdset="0">
+        <string>grayed</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>270</width>
@@ -1094,20 +1172,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLeProperties</class>
@@ -1125,9 +1197,9 @@
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTedPropertiesComment</class>
@@ -1135,15 +1207,9 @@
    <header>C_OgeTedPropertiesComment.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLePropertiesName</class>
+   <class>stw::opensyde_gui_elements::C_OgeLeToolTipBase</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLePropertiesName.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxGrayed</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxGrayed.hpp</header>
-   <container>1</container>
+   <header>C_OgeLeToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabSvgOnly</class>
@@ -1154,12 +1220,6 @@
    <class>stw::opensyde_gui::C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget</class>
    <extends>QWidget</extends>
    <header>C_SdNdeDalLogJobAdditionalTriggerPropertiesWidget.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

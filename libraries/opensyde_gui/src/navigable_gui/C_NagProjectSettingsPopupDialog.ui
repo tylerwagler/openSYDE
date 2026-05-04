@@ -30,7 +30,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral_5">
+    <widget class="QGroupBox" name="pc_GroupBoxGeneral_5">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -70,7 +73,10 @@
            <number>1</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingPreview">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingPreview">
+            <property name="styleRole" stdset="0">
+             <string>heading-group-bold</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -110,7 +116,10 @@
          </layout>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame">
+         <widget class="QFrame" name="pc_Frame">
+          <property name="styleRole" stdset="0">
+           <string>fra-separator</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -139,7 +148,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_SetMaxLengthLabel">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_SetMaxLengthLabel">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -171,8 +183,11 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBox">
-          <property name="minimumSize">
+          <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBox">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
+           <property name="minimumSize">
            <size>
             <width>120</width>
             <height>30</height>
@@ -222,7 +237,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupSubItem" name="pc_ResultLengthOfDIAGorNVM">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_ResultLengthOfDIAGorNVM">
+          <property name="styleRole" stdset="0">
+           <string>group-sub-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -267,7 +285,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupSubItem" name="pc_ResultLengthOfCOMMSignal">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_ResultLengthOfCOMMSignal">
+          <property name="styleRole" stdset="0">
+           <string>group-sub-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -307,7 +328,10 @@
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GbxUnusedFiles">
+    <widget class="QGroupBox" name="pc_GbxUnusedFiles">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -344,7 +368,10 @@
            <number>1</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelProjectFiles">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelProjectFiles">
+            <property name="styleRole" stdset="0">
+             <string>heading-group-bold</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -384,7 +411,10 @@
          </layout>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FilesUnUsedSeperator">
+         <widget class="QFrame" name="pc_FilesUnUsedSeperator">
+          <property name="styleRole" stdset="0">
+           <string>fra-separator</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -414,7 +444,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelFilesUnUsed">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelFilesUnUsed">
+            <property name="styleRole" stdset="0">
+             <string>group-item</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -446,7 +479,10 @@
            </spacer>
           </item>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgePubConfigure" name="pc_ButtonShow">
+           <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_ButtonShow">
+            <property name="styleRole" stdset="0">
+             <string>configure</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>100</width>
@@ -506,7 +542,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubCancel" name="pc_PushButtonCancel">
+      <widget class="QPushButton" name="pc_PushButtonCancel">
+       <property name="styleRole" stdset="0">
+        <string>cancel</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -541,7 +580,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonOk">
+      <widget class="QPushButton" name="pc_PushButtonOk">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -587,51 +629,25 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
+   <customwidget>
+    <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
+    <extends>QSpinBox</extends>
+    <header>C_OgeSpxToolTipBase.hpp</header>
+   </customwidget>
+
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
-   <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
+   <class>stw::opensyde_gui_elements::C_OgePubToolTipBase</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubCancel.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupSubItem</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabGroupSubItem.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubConfigure</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubConfigure.hpp</header>
+   <header>C_OgePubToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

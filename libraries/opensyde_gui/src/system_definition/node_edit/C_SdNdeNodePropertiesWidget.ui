@@ -36,7 +36,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBox_2">
+    <widget class="QGroupBox" name="pc_GroupBox_2">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -65,7 +68,10 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelName">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelName">
+          <property name="styleRole" stdset="0">
+           <string>heading-group-bold</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -119,7 +125,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1">
+         <widget class="QFrame" name="pc_FramSperator1">
+          <property name="styleRole" stdset="0">
+           <string>fra-separator</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -161,7 +170,10 @@
              <number>6</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLePropertiesName" name="pc_LineEditNodeName">
+             <widget class="stw::opensyde_gui_elements::C_OgeLeToolTipBase" name="pc_LineEditNodeName">
+              <property name="styleRole" stdset="0">
+               <string>le-properties-name</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>311</width>
@@ -247,7 +259,10 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="stw::opensyde_gui_elements::C_OgeLabGenericBubble" name="pc_LabSubNodeName">
+                  <widget class="stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins" name="pc_LabSubNodeName">
+                   <property name="styleRole" stdset="0">
+                    <string>generic-bubble</string>
+                   </property>
                    <property name="minimumSize">
                     <size>
                      <width>0</width>
@@ -285,7 +300,10 @@
              <number>6</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelComment">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelComment">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -365,7 +383,10 @@
              <number>20</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelConfiguration">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelConfiguration">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -419,7 +440,10 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_3">
+             <widget class="QFrame" name="pc_FramSperator1_3">
+              <property name="styleRole" stdset="0">
+               <string>fra-separator</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -464,7 +488,10 @@
                  <number>4</number>
                 </property>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelProtocol">
+                 <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelProtocol">
+                  <property name="styleRole" stdset="0">
+                   <string>group-item</string>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -509,7 +536,10 @@
                  <number>5</number>
                 </property>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelProgramming">
+                 <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelProgramming">
+                  <property name="styleRole" stdset="0">
+                   <string>group-item</string>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -554,7 +584,10 @@
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelXAppSupport">
+                 <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelXAppSupport">
+                  <property name="styleRole" stdset="0">
+                   <string>group-item</string>
+                  </property>
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -844,7 +877,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeGbxGrayed" name="groupBox">
+           <widget class="QGroupBox" name="groupBox">
+            <property name="styleRole" stdset="0">
+             <string>grayed</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>310</width>
@@ -1012,7 +1048,10 @@
               </widget>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNoImageAvailable">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelNoImageAvailable">
+               <property name="styleRole" stdset="0">
+                <string>group-item</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -1049,7 +1088,10 @@
                 </spacer>
                </item>
                <item>
-                <widget class="stw::opensyde_gui_elements::C_OgeLabNodeType" name="pc_LabelNodeType">
+                <widget class="QLabel" name="pc_LabelNodeType">
+     <property name="styleRole" stdset="0">
+      <string>node-type</string>
+     </property>
                  <property name="text">
                   <string>Node-Type</string>
                  </property>
@@ -1084,7 +1126,10 @@
     </widget>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBox">
+    <widget class="QGroupBox" name="pc_GroupBox">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -1105,7 +1150,10 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelComIfSettings">
+       <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelComIfSettings">
+        <property name="styleRole" stdset="0">
+         <string>heading-group-bold</string>
+        </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -1160,7 +1208,10 @@
       <number>10</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_2">
+      <widget class="QFrame" name="pc_FramSperator1_2">
+       <property name="styleRole" stdset="0">
+        <string>fra-separator</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -1184,7 +1235,10 @@
     </layout>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="groupBox_2">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -1297,9 +1351,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
@@ -1307,15 +1361,9 @@
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTedPropertiesComment</class>
@@ -1323,36 +1371,14 @@
    <header>C_OgeTedPropertiesComment.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLePropertiesName</class>
+   <class>stw::opensyde_gui_elements::C_OgeLeToolTipBase</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLePropertiesName.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxGrayed</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxGrayed.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
+   <header>C_OgeLeToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>
    <extends>QLabel</extends>
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGenericBubble</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabGenericBubble.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabNodeType</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabNodeType.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTableWidgetComIf</class>

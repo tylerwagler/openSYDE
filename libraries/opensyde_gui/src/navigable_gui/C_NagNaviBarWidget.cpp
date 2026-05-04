@@ -130,8 +130,8 @@ C_NagNaviBarWidget::C_NagNaviBarWidget(QWidget * const opc_Parent) :
    C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_PushButtonCanMonitor, "CanMonitorButton", true);
 
    //Handle scroll area styling issues
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ScrollArea, "C_OgeSaNaviBar", true);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ScrollAreaWidgetContents, "C_OgeSaNaviBar", true);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ScrollArea, "saNaviBarMark", true);
+   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_ScrollAreaWidgetContents, "saNaviBarMark", true);
 
    // connect the buttons signals
    connect(this->mpc_Ui->pc_BtnMain, &QPushButton::clicked, this, &C_NagNaviBarWidget::m_StartViewClicked);
@@ -143,7 +143,7 @@ C_NagNaviBarWidget::C_NagNaviBarWidget(QWidget * const opc_Parent) :
    connect(this->mpc_Ui->pc_WidgetTabSd, &C_OgeWiNavigationTab::released, this, &C_NagNaviBarWidget::m_TabSdClicked);
 
    // Tree for topology and its nodes and busses
-   connect(this->mpc_Ui->pc_PushButtonTopology, &C_OgePubNavigation::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonTopology, &QPushButton::clicked, this,
            &C_NagNaviBarWidget::m_PbTopologyClick);
    connect(this->mpc_Ui->pc_TreeViewNodes, &C_NagTopTreeView::SigClicked, this, &C_NagNaviBarWidget::m_OnClickNode);
    connect(this->mpc_Ui->pc_TreeViewBuses, &C_NagTopTreeView::SigClicked, this, &C_NagNaviBarWidget::m_OnClickBus);

@@ -9,8 +9,7 @@
 #define C_CIEDBCIMPORTNODEASSIGNMENTWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_CieConverter.hpp"
 #include "C_CieDbcImportNodeAssignmentItemWidget.hpp"
 
@@ -29,7 +28,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_CieDbcImportNodeAssignmentWidget :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -42,13 +41,9 @@ public:
    void InitStaticNames(void) const;
    std::vector<C_CieDbcOsyNodeAssignment> GetNodeAssignments(void) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_CieDbcImportNodeAssignmentWidget * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    std::vector<stw::opensyde_gui::C_CieDbcImportNodeAssignmentItemWidget *> mc_Entries;
    std::vector<uint32_t> mc_NodeIndexes;
    std::vector<uint32_t> mc_InterfaceIndexes;

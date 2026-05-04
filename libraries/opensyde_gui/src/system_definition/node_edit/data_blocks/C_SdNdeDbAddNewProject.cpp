@@ -71,12 +71,11 @@ const QString C_SdNdeDbAddNewProject::mhc_SUFFIX = "syde_tsp";
 C_SdNdeDbAddNewProject::C_SdNdeDbAddNewProject(const uint32_t ou32_NodeIndex,
                                                stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                const bool oq_IsCurrentNodeNew) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    q_IsVersion3(false),
    mpc_Ui(new Ui::C_SdNdeDbAddNewProject),
    ms32_TspReadResult(-1),
    mu32_NodeIndex(ou32_NodeIndex),
-   mrc_ParentDialog(orc_Parent),
    mq_IsCurrentNodeNew(oq_IsCurrentNodeNew)
 {
    this->mpc_Ui->setupUi(this);
@@ -331,39 +330,6 @@ void C_SdNdeDbAddNewProject::ApplyV3Content()
          C_PuiSdHandler::h_GetInstance()->ReplaceNode(this->mu32_NodeIndex, this->mc_OscNode,
                                                       this->mc_UiNode);
       }
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbAddNewProject::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
    }
 }
 
@@ -1042,3 +1008,4 @@ void C_SdNdeDbAddNewProject::m_ApplyV2PathAdaptationToV3()
       rc_App.c_ProjectPath = c_ProjectPath.toStdString().c_str();
    }
 }
+

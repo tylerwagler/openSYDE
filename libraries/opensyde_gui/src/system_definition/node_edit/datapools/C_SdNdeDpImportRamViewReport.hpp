@@ -9,8 +9,7 @@
 #define C_SDNDEDPIMPORTRAMVIEWREPORT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_SclStringList.hpp"
 #include "C_OscNodeDataPool.hpp"
 #include "C_PuiSdNodeDataPool.hpp"
@@ -30,7 +29,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdNdeDpImportRamViewReport :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -43,13 +42,9 @@ public:
 
    void InitStaticNames(void) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdNdeDpImportRamViewReport * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
 
    void m_OkClicked(void);
    void m_CancelClicked(void);

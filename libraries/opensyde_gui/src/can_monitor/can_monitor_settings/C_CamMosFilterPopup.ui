@@ -24,7 +24,10 @@
     <number>20</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBox">
+    <widget class="QGroupBox" name="pc_GroupBox">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -100,7 +103,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+           <widget class="QFrame" name="frame">
+            <property name="styleRole" stdset="0">
+             <string>fra-separator</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -139,7 +145,10 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLePropertiesName" name="pc_LineEditName">
+               <widget class="stw::opensyde_gui_elements::C_OgeLeToolTipBase" name="pc_LineEditName">
+                <property name="styleRole" stdset="0">
+                 <string>le-properties-name</string>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -275,7 +284,10 @@ p, li { white-space: pre-wrap; }
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBox_2">
+    <widget class="QGroupBox" name="pc_GroupBox_2">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -367,7 +379,10 @@ p, li { white-space: pre-wrap; }
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_2">
+           <widget class="QFrame" name="frame_2">
+            <property name="styleRole" stdset="0">
+             <string>fra-separator</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -399,7 +414,10 @@ p, li { white-space: pre-wrap; }
            <number>6</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNoElements">
+           <widget class="QGroupBox" name="pc_GroupBoxNoElements">
+            <property name="styleRole" stdset="0">
+             <string>transparent</string>
+            </property>
             <property name="title">
              <string/>
             </property>
@@ -569,7 +587,10 @@ p, li { white-space: pre-wrap; }
             <number>0</number>
            </property>
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_3">
+            <widget class="QFrame" name="frame_3">
+             <property name="styleRole" stdset="0">
+              <string>fra-separator</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -670,7 +691,10 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item row="2" column="2" colspan="2">
-            <widget class="stw::opensyde_gui_elements::C_CamOgeLeIdPopUp" name="pc_LeCanIdStart">
+            <widget class="stw::opensyde_gui::C_TblEditLineEditBase" name="pc_LeCanIdStart">
+             <property name="styleRole" stdset="0">
+              <string>cam-le-id-popup</string>
+             </property>
              <property name="minimumSize">
               <size>
                <width>150</width>
@@ -691,7 +715,10 @@ p, li { white-space: pre-wrap; }
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgePubConfigure" name="pc_PubAddFromDatabase">
+              <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PubAddFromDatabase">
+               <property name="styleRole" stdset="0">
+                <string>configure</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>150</width>
@@ -710,7 +737,10 @@ p, li { white-space: pre-wrap; }
               </widget>
              </item>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_CamOgeLeIdPopUp" name="pc_LeCanIdEnd">
+              <widget class="stw::opensyde_gui::C_TblEditLineEditBase" name="pc_LeCanIdEnd">
+               <property name="styleRole" stdset="0">
+                <string>cam-le-id-popup</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>150</width>
@@ -728,7 +758,10 @@ p, li { white-space: pre-wrap; }
             </layout>
            </item>
            <item row="2" column="4">
-            <widget class="stw::opensyde_gui_elements::C_OgeChxProperties" name="pc_CheckBoxExtended">
+            <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxExtended">
+             <property name="styleRole" stdset="0">
+              <string>chx-properties</string>
+             </property>
              <property name="text">
               <string>Extended TRANSLATE</string>
              </property>
@@ -816,7 +849,10 @@ p, li { white-space: pre-wrap; }
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubCancel" name="pc_PushButtonCancel">
+      <widget class="QPushButton" name="pc_PushButtonCancel">
+       <property name="styleRole" stdset="0">
+        <string>cancel</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -851,7 +887,10 @@ p, li { white-space: pre-wrap; }
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonSave">
+      <widget class="QPushButton" name="pc_PushButtonSave">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -901,28 +940,6 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubCancel.hpp</header>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeRabProperties</class>
    <extends>QRadioButton</extends>
    <header>C_OgeRabProperties.hpp</header>
@@ -933,30 +950,19 @@ p, li { white-space: pre-wrap; }
    <header>C_OgeTedPropertiesComment.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLePropertiesName</class>
+   <class>stw::opensyde_gui_elements::C_OgeLeToolTipBase</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLePropertiesName.hpp</header>
+   <header>C_OgeLeToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubConfigure</class>
+   <class>stw::opensyde_gui_elements::C_OgePubToolTipBase</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubConfigure.hpp</header>
+   <header>C_OgePubToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgeLeIdPopUp</class>
-   <extends>QLineEdit</extends>
-   <header>C_CamOgeLeIdPopUp.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxProperties</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxProperties.hpp</header>
+   <header>C_OgeChxToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
@@ -967,6 +973,11 @@ p, li { white-space: pre-wrap; }
    <class>stw::opensyde_gui::C_CamMosFilterTableView</class>
    <extends>QTableView</extends>
    <header>C_CamMosFilterTableView.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>stw::opensyde_gui::C_TblEditLineEditBase</class>
+   <extends>QLineEdit</extends>
+   <header>C_TblEditLineEditBase.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>

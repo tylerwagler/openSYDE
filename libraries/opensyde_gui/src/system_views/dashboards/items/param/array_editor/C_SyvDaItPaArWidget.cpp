@@ -47,22 +47,21 @@ using namespace stw::opensyde_core;
 C_SyvDaItPaArWidget::C_SyvDaItPaArWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                          const uint32_t & oru32_ElementIndex,
                                          C_PuiSvDbDataElementHandler * const opc_DataWidget, const bool oq_EcuValues) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvDaItPaArWidget),
-   mrc_Parent(orc_Parent),
    mq_EcuValues(oq_EcuValues),
    mu32_ElementIndex(oru32_ElementIndex),
    mpc_DataWidget(opc_DataWidget)
 {
    this->mpc_Ui->setupUi(this);
-   this->mrc_Parent.SetWidget(this);
+   this->mrc_ParentDialog.SetWidget(this);
    InitStaticNames();
    this->mpc_Ui->pc_TableView->SetElement(oru32_ElementIndex, opc_DataWidget, oq_EcuValues);
 
    //Connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_SyvDaItPaArWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &stw::opensyde_gui_elements::C_OgePubDialog::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SyvDaItPaArWidget::m_CancelClicked);
 }
 
@@ -128,51 +127,18 @@ void C_SyvDaItPaArWidget::InitStaticNames(void)
          }
 
          //Translation: 1: Data element type, 2: Data element name, 3: Value type
-         this->mrc_Parent.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("%1 %2 (%3)")).arg(c_Type).arg(
+         this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("%1 %2 (%3)")).arg(c_Type).arg(
                                       pc_Element->c_Name.c_str()).arg(c_EditType));
       }
    }
 
    if ((this->mq_EcuValues == true) || (s32_DataSetIndex >= 0L))
    {
-      this->mrc_Parent.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Array Editor (Read Only)")));
+      this->mrc_ParentDialog.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Array Editor (Read Only)")));
    }
    else
    {
-      this->mrc_Parent.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Array Editor")));
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaItPaArWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_Parent.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
+      this->mrc_ParentDialog.SetSubTitle(static_cast<QString>(C_GtGetText::h_GetText("Array Editor")));
    }
 }
 
@@ -182,7 +148,7 @@ void C_SyvDaItPaArWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaArWidget::m_OkClicked(void)
 {
-   mrc_Parent.accept();
+   mrc_ParentDialog.accept();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -191,5 +157,5 @@ void C_SyvDaItPaArWidget::m_OkClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaItPaArWidget::m_CancelClicked(void)
 {
-   mrc_Parent.reject();
+   mrc_ParentDialog.reject();
 }

@@ -63,9 +63,8 @@ C_SdNdeCoDeviceUpdateEdsDialog::C_SdNdeCoDeviceUpdateEdsDialog(
    const uint8_t ou8_ManagerInterfaceId, const C_OscCanInterfaceId & orc_DeviceNodeId, const QString & orc_FilePath,
    const C_OscCanOpenManagerDeviceInfo & orc_NewConfig, const C_CieImportDataAssignment & orc_NodeAssignment,
    const C_CieImportDataAssignment & orc_InvalidNodeAssignment) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeCoDeviceUpdateEdsDialog),
-   mrc_ParentDialog(orc_Parent),
    mu32_ManagerNodeIndex(ou32_ManagerNodeIndex),
    mu8_ManagerInterfaceId(ou8_ManagerInterfaceId),
    mc_DeviceNodeId(orc_DeviceNodeId),
@@ -115,8 +114,8 @@ C_SdNdeCoDeviceUpdateEdsDialog::C_SdNdeCoDeviceUpdateEdsDialog(
    //content
    this->m_ShowReport();
 
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SdNdeCoDeviceUpdateEdsDialog::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeCoDeviceUpdateEdsDialog::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdNdeCoDeviceUpdateEdsDialog::m_CancelClicked);
 }
 
@@ -159,41 +158,8 @@ void C_SdNdeCoDeviceUpdateEdsDialog::DoApplyData(void) const
 void C_SdNdeCoDeviceUpdateEdsDialog::InitStaticNames(void) const
 {
    this->mpc_Ui->pc_LabelHeadingPreview->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeCoDeviceUpdateEdsDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

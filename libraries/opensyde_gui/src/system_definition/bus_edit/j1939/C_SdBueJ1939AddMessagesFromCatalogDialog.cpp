@@ -58,10 +58,9 @@ using namespace stw::errors;
 //----------------------------------------------------------------------------------------------------------------------
 C_SdBueJ1939AddMessagesFromCatalogDialog::C_SdBueJ1939AddMessagesFromCatalogDialog(
    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdBueJ1939AddMessagesFromCatalogDialog),
    mpc_ContextMenu(NULL),
-   mrc_ParentDialog(orc_Parent),
    ms32_ImportCatalogReturn(0UL),
    me_Mode(E_MessageMode::eALL_MESSAGES)
 
@@ -72,6 +71,9 @@ C_SdBueJ1939AddMessagesFromCatalogDialog::C_SdBueJ1939AddMessagesFromCatalogDial
 
    // register the widget for display
    this->mrc_ParentDialog.SetWidget(this);
+
+   // make Enter activate Add (the accept button for this popup)
+   this->mpc_Ui->pc_PushButtonAdd->setDefault(true);
 
    m_SetupContextMenu();
    m_UpdateUi();
@@ -160,7 +162,6 @@ const
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Get the J1939 catalog file path (DBC file)
 
-
    \return
    File path
 */
@@ -168,40 +169,6 @@ const
 const QString C_SdBueJ1939AddMessagesFromCatalogDialog::GetCatalogFilePath() const
 {
    return this->mc_CatalogFilePath;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdBueJ1939AddMessagesFromCatalogDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_AddClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -734,3 +701,4 @@ void C_SdBueJ1939AddMessagesFromCatalogDialog::m_OnCustomContextMenuRequested(co
       this->mpc_ContextMenu->popup(c_PosGlobal);
    }
 }
+

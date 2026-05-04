@@ -86,7 +86,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparentToolBarSearch" name="pc_GroupBoxSearch">
+      <widget class="QGroupBox" name="pc_GroupBoxSearch">
+       <property name="styleRole" stdset="0">
+        <string>transparent-toolbar-search</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>350</width>
@@ -144,7 +147,10 @@
          </widget>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLeToolBarSearch" name="pc_LineEditSearch">
+         <widget class="stw::opensyde_gui_elements::C_OgeLeContextMenuBase" name="pc_LineEditSearch">
+          <property name="styleRole" stdset="0">
+           <string>le-toolbar-search</string>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -296,15 +302,9 @@
    <header>C_OgeLabSvgOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparentToolBarSearch</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparentToolBarSearch.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLeToolBarSearch</class>
+   <class>stw::opensyde_gui_elements::C_OgeLeContextMenuBase</class>
    <extends>QLineEdit</extends>
-   <header>C_OgeLeToolBarSearch.hpp</header>
+   <header>C_OgeLeContextMenuBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

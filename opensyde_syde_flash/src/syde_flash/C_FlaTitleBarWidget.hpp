@@ -9,7 +9,7 @@
 #define C_FLATITLEBARWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_OgeWiOnlyBackground.hpp"
+#include "C_OgeTitleBarWidget.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace Ui
@@ -26,7 +26,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_FlaTitleBarWidget :
-   public stw::opensyde_gui_elements::C_OgeWiOnlyBackground
+   public stw::opensyde_gui_elements::C_OgeTitleBarWidget
 {
    Q_OBJECT
 
@@ -47,6 +47,8 @@ Q_SIGNALS:
 
 protected:
    void resizeEvent(QResizeEvent * const opc_Event) override;
+   QString m_GetAppName(void) const override;
+   QString m_GetLogoPath(void) const override;
 
 private:
    Ui::C_FlaTitleBarWidget * mpc_Ui;
@@ -55,8 +57,6 @@ private:
    C_FlaTitleBarWidget(const C_FlaTitleBarWidget &);
    C_FlaTitleBarWidget & operator =(const C_FlaTitleBarWidget &) &;
 
-   void m_ShowAbout(void);
-   void m_TriggerHelp(void);
    void m_SetButtonsText(const bool oq_IconOnly) const;
 };
 

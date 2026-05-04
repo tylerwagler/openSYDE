@@ -9,11 +9,10 @@
 #define C_SDBUEMESSAGERXTIMEOUTCONFIG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 
 #include "stwtypes.hpp"
 
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_PuiSdNodeCanMessage.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -31,7 +30,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdBueMessageRxTimeoutConfig :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -46,13 +45,10 @@ public:
    stw::opensyde_gui_logic::C_PuiSdNodeCanMessage::E_RxTimeoutMode GetReceiveTimeoutMode(void) const;
    uint32_t GetReceiveTimeoutValue(void) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdBueMessageRxTimeoutConfig * mpc_Ui;
 
-   stw::opensyde_gui_elements::C_OgePopUpDialog * const mpc_ParentDialog;
 
    const uint32_t mu32_AutoReceiveTimeoutValue;
 

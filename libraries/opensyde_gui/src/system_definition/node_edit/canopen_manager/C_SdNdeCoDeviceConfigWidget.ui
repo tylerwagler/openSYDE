@@ -27,7 +27,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBox_2">
+    <widget class="QGroupBox" name="pc_GroupBox_2">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -56,7 +59,10 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelCanOpenIdCaption">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelCanOpenIdCaption">
+          <property name="styleRole" stdset="0">
+           <string>heading-group-bold</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -110,7 +116,10 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1">
+         <widget class="QFrame" name="pc_FramSperator1">
+          <property name="styleRole" stdset="0">
+           <string>fra-separator</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -142,7 +151,10 @@
          <number>5</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelCanOpenId">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelCanOpenId">
+          <property name="styleRole" stdset="0">
+           <string>group-item</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -177,7 +189,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxCanOpenId">
+         <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxCanOpenId">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
           <property name="minimumSize">
            <size>
             <width>120</width>
@@ -209,7 +224,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeChxPropertiesSmall" name="pc_CheckBoxSameAsOpensyde">
+         <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxSameAsOpensyde">
+          <property name="styleRole" stdset="0">
+           <string>chx-properties-small</string>
+          </property>
           <property name="text">
            <string>CheckBox</string>
           </property>
@@ -252,7 +270,10 @@
              <number>20</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelSettingsCaption">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelSettingsCaption">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -303,7 +324,10 @@
              <number>1</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_3">
+             <widget class="QFrame" name="pc_FramSperator1_3">
+              <property name="styleRole" stdset="0">
+               <string>fra-separator</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -343,7 +367,10 @@
                <number>6</number>
               </property>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeChxPropertiesSmall" name="pc_CheckBoxFactorySettings">
+               <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxFactorySettings">
+                <property name="styleRole" stdset="0">
+                 <string>chx-properties-small</string>
+                </property>
                 <property name="text">
                  <string>_Factory Settings</string>
                 </property>
@@ -352,14 +379,20 @@
              </layout>
             </item>
             <item row="1" column="0">
-             <widget class="stw::opensyde_gui_elements::C_OgeChxPropertiesSmall" name="pc_CheckBoxNoInitialization">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxNoInitialization">
+              <property name="styleRole" stdset="0">
+               <string>chx-properties-small</string>
+              </property>
               <property name="text">
                <string>_No Init</string>
               </property>
              </widget>
             </item>
             <item row="0" column="0">
-             <widget class="stw::opensyde_gui_elements::C_OgeChxPropertiesSmall" name="pc_CheckBoxOptionalDevice">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxOptionalDevice">
+              <property name="styleRole" stdset="0">
+               <string>chx-properties-small</string>
+              </property>
               <property name="text">
                <string>_Optional Device</string>
               </property>
@@ -387,7 +420,10 @@
                </spacer>
               </item>
               <item>
-               <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelOption">
+               <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelOption">
+                <property name="styleRole" stdset="0">
+                 <string>group-item</string>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
@@ -505,7 +541,10 @@
              <number>20</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeartbeatCaption">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeartbeatCaption">
+              <property name="styleRole" stdset="0">
+               <string>heading-group-bold</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -556,7 +595,10 @@
              <number>1</number>
             </property>
             <item>
-             <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_FramSperator1_4">
+             <widget class="QFrame" name="pc_FramSperator1_4">
+              <property name="styleRole" stdset="0">
+               <string>fra-separator</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -630,7 +672,10 @@
              </spacer>
             </item>
             <item row="1" column="3">
-             <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxProducerTime">
+             <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxProducerTime">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
               <property name="minimumSize">
                <size>
                 <width>120</width>
@@ -665,7 +710,10 @@
              </spacer>
             </item>
             <item row="3" column="3">
-             <widget class="stw::opensyde_gui_elements::C_OgeSpxNumber" name="pc_SpinBoxConsumerTime">
+             <widget class="stw::opensyde_gui_elements::C_OgeSpxToolTipBase" name="pc_SpinBoxConsumerTime">
+           <property name="styleRole" stdset="0">
+            <string>spx-number</string>
+           </property>
               <property name="minimumSize">
                <size>
                 <width>120</width>
@@ -681,7 +729,10 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelProducerTime">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelProducerTime">
+              <property name="styleRole" stdset="0">
+               <string>group-item</string>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>0</width>
@@ -700,7 +751,10 @@
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelConsumerTime">
+             <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelConsumerTime">
+              <property name="styleRole" stdset="0">
+               <string>group-item</string>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -741,7 +795,10 @@
              </spacer>
             </item>
             <item row="2" column="0" colspan="7">
-             <widget class="stw::opensyde_gui_elements::C_OgeChxPropertiesSmall" name="pc_CheckBoxEnableHeartbeatConsuming">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxEnableHeartbeatConsuming">
+              <property name="styleRole" stdset="0">
+               <string>chx-properties-small</string>
+              </property>
               <property name="text">
                <string>Enable Heartbeat Consuming_</string>
               </property>
@@ -764,7 +821,10 @@
              </spacer>
             </item>
             <item row="3" column="5">
-             <widget class="stw::opensyde_gui_elements::C_OgeChxPropertiesSmall" name="pc_CheckBoxConsumerTimeAuto">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxConsumerTimeAuto">
+              <property name="styleRole" stdset="0">
+               <string>chx-properties-small</string>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
                 <horstretch>0</horstretch>
@@ -815,7 +875,10 @@
              </spacer>
             </item>
             <item row="0" column="0" colspan="7">
-             <widget class="stw::opensyde_gui_elements::C_OgeChxPropertiesSmall" name="pc_CheckBoxEnableHeartbeatProducing">
+             <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBoxEnableHeartbeatProducing">
+              <property name="styleRole" stdset="0">
+               <string>chx-properties-small</string>
+              </property>
               <property name="text">
                <string>Enable Heartbeat Producing</string>
               </property>
@@ -863,15 +926,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
@@ -879,25 +936,19 @@
    <header>C_OgeCbxText.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeSpxNumber</class>
+   <class>stw::opensyde_gui_elements::C_OgeSpxToolTipBase</class>
    <extends>QSpinBox</extends>
-   <header>C_OgeSpxNumber.hpp</header>
+   <header>C_OgeSpxToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxPropertiesSmall</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxPropertiesSmall.hpp</header>
+   <header>C_OgeChxToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

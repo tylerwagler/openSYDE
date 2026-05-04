@@ -59,9 +59,8 @@ const uint8_t C_CieDbcImportNodeAssignmentWidget::mhu8_INDEX_RECEIVE = 1;
 C_CieDbcImportNodeAssignmentWidget::C_CieDbcImportNodeAssignmentWidget(
    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,  const QString & orc_FilePath,
    const uint32_t ou32_BusIndex, const C_CieConverter::C_CieCommDefinition & orc_CieCommDef) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_CieDbcImportNodeAssignmentWidget),
-   mrc_ParentDialog(orc_Parent)
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
+   mpc_Ui(new Ui::C_CieDbcImportNodeAssignmentWidget)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -228,39 +227,6 @@ std::vector<C_CieDbcOsyNodeAssignment> C_CieDbcImportNodeAssignmentWidget::GetNo
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CieDbcImportNodeAssignmentWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot of Ok button click
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -411,3 +377,4 @@ void C_CieDbcImportNodeAssignmentWidget::m_UpdateComboboxEntries(const uint32_t 
       }
    }
 }
+

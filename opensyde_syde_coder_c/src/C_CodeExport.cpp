@@ -23,10 +23,10 @@
 #include "C_OscSystemDefinitionFiler.hpp"
 #include "C_OscExportNode.hpp"
 #include "C_OscLoggingHandler.hpp"
-#include "TGLFile.hpp"
+#include "TglFile.hpp"
 #include "C_OsyCodeExportBase.hpp"
 
-#include "C_OscBinaryHash.hpp"
+#include "C_OscUtilBinaryHash.hpp"
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::errors;
@@ -80,7 +80,7 @@ C_OsyCodeExportBase::E_ResultCode C_CodeExport::m_CreateApplicationCode(const C_
                                                                         std::vector<C_SclString> & orc_CreatedFiles)
 {
    const C_SclString c_SYDE_CODER_C_VERSION = mc_ExeVersion + ", MD5-Checksum: " +
-                                              stw::opensyde_core::C_OscBinaryHash::h_CreateBinaryHash();
+                                              stw::opensyde_core::C_OscUtilBinaryHash::h_CreateBinaryHash();
    const int32_t s32_Return =
       C_OscExportNode::h_CreateSourceCode(orc_Node, ou16_ApplicationIndex, orc_OutputPath, orc_CreatedFiles,
                                           stw::tgl::TglExtractFileName(mc_ExeName), c_SYDE_CODER_C_VERSION);

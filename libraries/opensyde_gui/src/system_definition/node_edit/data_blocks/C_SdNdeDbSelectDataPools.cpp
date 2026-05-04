@@ -56,9 +56,8 @@ C_SdNdeDbSelectDataPools::C_SdNdeDbSelectDataPools(const uint32_t ou32_NodeIndex
                                                    const int32_t os32_SkipApplicationIndex,
                                                    const std::vector<uint32_t> & orc_UsedDataPoolIndicesIndex,
                                                    stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeDbSelectDataPools),
-   mrc_ParentDialog(orc_Parent),
    mu32_NodeIndex(ou32_NodeIndex),
    mc_UsedDataPoolIndices(orc_UsedDataPoolIndicesIndex)
 {
@@ -130,39 +129,6 @@ void C_SdNdeDbSelectDataPools::InitStaticNames(void) const
 std::vector<C_PuiSvDbNodeDataPoolListElementId> C_SdNdeDbSelectDataPools::GetSelectedDataPools(void) const
 {
    return this->mpc_Ui->pc_TreeView->GetSelectedDataElements();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDbSelectDataPools::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -348,3 +314,4 @@ bool C_SdNdeDbSelectDataPools::m_IsCommDatapoolSelectionValid(void)
 
    return q_Return;
 }
+

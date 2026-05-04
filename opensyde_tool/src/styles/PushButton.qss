@@ -7,15 +7,15 @@ outline: none;
 
 /* --------------------------------------------------------------------- */
 stw--opensyde_gui_elements--C_OgePubIconOnly,
-stw--opensyde_gui_elements--C_OgePubToggleBold,
-stw--opensyde_gui_elements--C_OgePubToggle
+QPushButton[styleRole="toggle-bold"],
+QPushButton[styleRole="toggle"]
 {
 border-style: solid;
 text-align: center;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubColorOnly
+QPushButton[styleRole="color-only"]
 {
 border-style: solid;
 border-width: 1px;
@@ -24,7 +24,7 @@ text-align: center;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubCancel
+QPushButton[styleRole="cancel"]
 {
 border-style: solid;
 border-radius:  4px;
@@ -36,7 +36,7 @@ padding: 0px;
 text-align: center;
 }
 
-stw--opensyde_gui_elements--C_OgePubCancel:focus
+QPushButton[styleRole="cancel"]:focus
 {
 text-decoration: underline;
 }
@@ -56,14 +56,14 @@ width: 126px; /* 126 (width) + 22 (padding) + 2x1 (Border) = 150 (real width) */
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubDialog
+QPushButton[styleRole="dialog"]
 {
 border-style: solid;
 border-radius: 4px;
 border-width: 1px;
 }
 
-stw--opensyde_gui_elements--C_OgePubConfigure:enabled,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:enabled,
 stw--opensyde_gui_elements--C_OgePubGenericTextWithBackground
 {
 border-style: none;
@@ -76,20 +76,20 @@ border-width: 1px;
 }
 
 
-stw--opensyde_gui_elements--C_OgePubConfigure:!enabled
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]:!enabled
 {
 border-style: solid;
 border-width: 1px;
 }
 
-stw--opensyde_gui_elements--C_OgePubDialog,
-stw--opensyde_gui_elements--C_OgePubConfigure
+QPushButton[styleRole="dialog"],
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="configure"]
 {
 padding: 5px;
 text-align: center;
 }
 
-stw--opensyde_gui_elements--C_OgePubDialog:focus
+QPushButton[styleRole="dialog"]:focus
 {
 text-decoration: underline;
 }
@@ -121,15 +121,14 @@ width: 0px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubNavigation,
+QPushButton[styleRole="navigation"],
 stw--opensyde_gui_elements--C_OgePubNavigationHover,
-stw--opensyde_gui_elements--C_OgePubTextOnlyEdit,
-stw--opensyde_gui_elements--C_OgePubTextOnly
+QPushButton[styleRole="text-only"]
 {
 border-style: none;
 }
 
-stw--opensyde_gui_elements--C_OgePubTextWithBorderEdit
+QPushButton[styleRole="text-with-border-edit"]
 {
 border-style: solid;
 border-radius: 0px;
@@ -139,7 +138,7 @@ padding-bottom: 1px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubZoomNotification
+QPushButton[styleRole="zoom-notification"]
 {
 border-radius: 20px;
 border-width: 0px;
@@ -163,7 +162,7 @@ padding-left: 40px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubTextOnlyUnderline
+QPushButton[styleRole="text-only-underline"]
 {
 border-style: solid;
 border-width: 0px;
@@ -197,7 +196,7 @@ stw--opensyde_gui_elements--C_OgePubProjAction[NoIcon="true"]
 padding: 10px;
 }
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubNavigation
+QPushButton[styleRole="navigation"]
 {
 padding-left: 26px;
 text-align: left;
@@ -210,8 +209,8 @@ text-align: left;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubMessageOk,
-stw--opensyde_gui_elements--C_OgePubMessageCancel
+QPushButton[styleRole="message-ok"],
+QPushButton[styleRole="message-cancel"]
 {
 border-style: solid;
 border-radius: 2px;
@@ -223,9 +222,9 @@ padding-left: 15px;
 padding-right: 15px;
 }
 
-stw--opensyde_gui_elements--C_OgePubMessageOk:focus,
-stw--opensyde_gui_elements--C_OgePubMessageCancel:focus,
-stw--opensyde_gui_elements--C_OgePubHalcPanel:focus
+QPushButton[styleRole="message-ok"]:focus,
+QPushButton[styleRole="message-cancel"]:focus,
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"]:focus
 {
 text-decoration: underline;
 }
@@ -248,21 +247,21 @@ border-radius: 14px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubHalcOverview
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-overview"]
 {
 text-align: left;
 padding-left: 19px;
 padding-right: 19px;
 }
 
-stw--opensyde_gui_elements--C_OgePubHalcOverview
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-overview"]
 {
 border-style: solid;
 border-width: 1px;
 border-bottom-width: 0px;
 }
 
-stw--opensyde_gui_elements--C_OgePubDataLoggerJobsOverview
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="data-logger-jobs-overview"]
 {
 border-style: none;
 border-width: 0px;
@@ -270,7 +269,7 @@ border-bottom-width: 0px;
 }
 
 /* --------------------------------------------------------------------- */
-stw--opensyde_gui_elements--C_OgePubHalcPanel
+stw--opensyde_gui_elements--C_OgePubToolTipBase[styleRole="halc-panel"]
 {
 border-style: solid;
 border-width: 1px;

@@ -62,8 +62,8 @@ C_SdNdeStwFlashloaderOptions::C_SdNdeStwFlashloaderOptions(stw::opensyde_gui_ele
    m_LoadData();
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SdNdeStwFlashloaderOptions::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeStwFlashloaderOptions::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdNdeStwFlashloaderOptions::m_CancelClicked);
    connect(this->mpc_Ui->pc_CheckBoxUseResetMessage, &QCheckBox::toggled, this,
            &C_SdNdeStwFlashloaderOptions::m_OnUseResetMessageChanged);
@@ -86,8 +86,8 @@ C_SdNdeStwFlashloaderOptions::~C_SdNdeStwFlashloaderOptions(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeStwFlashloaderOptions::InitStaticNames(void) const
 {
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_LabelDataElement->setText(C_GtGetText::h_GetText("STW Flashloader Settings"));
    this->mpc_Ui->pc_CheckBoxUseResetMessage->setText(C_GtGetText::h_GetText("Use reset message"));
    this->mpc_Ui->pc_LabelSendId->setText(C_GtGetText::h_GetText("Send ID"));

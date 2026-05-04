@@ -8,7 +8,6 @@
    node update.
    Once the node is selected, the Node ID is fetched in the MainWindow and updated in the Report Widget.
 
-
    \copyright   Copyright 2023 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -55,9 +54,8 @@ using namespace stw::errors;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_FlaSenSearchNodePopup::C_FlaSenSearchNodePopup(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_FlaSenSearchNodePopup),
-   mrc_ParentDialog(orc_Parent),
    mpc_DcSequences(NULL)
 {
    this->mpc_Ui->setupUi(this);
@@ -152,34 +150,13 @@ int32_t C_FlaSenSearchNodePopup::StartSearch(const QString & orc_CanDllPath, con
 //----------------------------------------------------------------------------------------------------------------------
 void C_FlaSenSearchNodePopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
 {
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
+   if (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Escape))
    {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_ApplyClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   // Handle escape key manually: do not close on escape if currently searching and make sure to reset else
-   else if (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Escape))
-   {
-      q_CallOrg = true;
+      // do not close on escape if currently searching and make sure to reset else
       this->m_OnCancel();
+      QWidget::keyPressEvent(opc_KeyEvent);
    }
    else
-   {
-      // no special handling for other buttons
-   }
-   if (q_CallOrg == true)
    {
       QWidget::keyPressEvent(opc_KeyEvent);
    }

@@ -20,7 +20,6 @@
 
 #include "C_PuiSdHandler.hpp"
 #include "C_OgePopUpDialog.hpp"
-#include "C_OgeLabGroupItem.hpp"
 #include "C_SdBueMessageRxTimeoutConfig.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */

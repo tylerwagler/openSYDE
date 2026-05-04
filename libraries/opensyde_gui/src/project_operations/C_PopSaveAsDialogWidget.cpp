@@ -59,9 +59,8 @@ const int32_t C_PopSaveAsDialogWidget::mhs32_VERSION_INDEX_V3 = 0;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_PopSaveAsDialogWidget::C_PopSaveAsDialogWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_PopSaveAsDialogWidget),
-   mrc_ParentDialog(orc_Parent)
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
+   mpc_Ui(new Ui::C_PopSaveAsDialogWidget)
 {
    this->mpc_Ui->setupUi(this);
 
@@ -72,6 +71,9 @@ C_PopSaveAsDialogWidget::C_PopSaveAsDialogWidget(stw::opensyde_gui_elements::C_O
 
    // register the widget for showing
    this->mrc_ParentDialog.SetWidget(this);
+
+   // make Enter activate Save (the accept button for this popup)
+   this->mpc_Ui->pc_PushButtonSave->setDefault(true);
 
    //Default input
    m_InitDefaultProjectName();
@@ -84,7 +86,7 @@ C_PopSaveAsDialogWidget::C_PopSaveAsDialogWidget(stw::opensyde_gui_elements::C_O
 
    connect(this->mpc_Ui->pc_PushButtonBrowse, &QPushButton::clicked, this, &C_PopSaveAsDialogWidget::m_OnBrowse);
    connect(this->mpc_Ui->pc_PushButtonSave, &QPushButton::clicked, this, &C_PopSaveAsDialogWidget::m_OnSave);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this, &C_PopSaveAsDialogWidget::m_OnCancel);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_PopSaveAsDialogWidget::m_OnCancel);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -135,40 +137,6 @@ void C_PopSaveAsDialogWidget::InitStaticNames(void) const
 void C_PopSaveAsDialogWidget::SaveUserSettings() const
 {
    C_UsHandler::h_GetInstance()->SetCurrentSaveAsPath(this->mpc_Ui->pc_LineEditPath->GetPath());
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_PopSaveAsDialogWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         // behave like ok click
-         this->m_OnSave();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -372,3 +340,4 @@ void C_PopSaveAsDialogWidget::m_OnCancel(void)
 {
    this->mrc_ParentDialog.reject();
 }
+

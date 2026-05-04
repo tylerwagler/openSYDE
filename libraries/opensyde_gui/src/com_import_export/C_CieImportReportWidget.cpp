@@ -77,9 +77,8 @@ C_CieImportReportWidget::C_CieImportReportWidget(C_OgePopUpDialog & orc_Parent, 
                                                  const std::vector<C_CieImportDataAssignment> & orc_ImportDataAssigned,
                                                  const std::vector<C_CieImportDataAssignment> & orc_SkippedImportDataAssigned, const stw::scl::C_SclString * const opc_NodeNameReplacement, const bool oq_IsCanOpen,
                                                  const bool oq_UniqueAddRequested) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_CieImportReportWidget),
-   mrc_ParentDialog(orc_Parent),
    mc_FilePath(orc_FilePath),
    mu32_BusIndex(ou32_BusIndex),
    me_ProtocolType(oe_ProtocolType),
@@ -112,8 +111,8 @@ C_CieImportReportWidget::C_CieImportReportWidget(C_OgePopUpDialog & orc_Parent, 
                            toUpper(), oq_IsCanOpen) == C_NO_ERR);
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_CieImportReportWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked, this, &C_CieImportReportWidget::m_CancelClicked);
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_CieImportReportWidget::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_CieImportReportWidget::m_CancelClicked);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -134,8 +133,8 @@ C_CieImportReportWidget::~C_CieImportReportWidget(void)
 void C_CieImportReportWidget::InitStaticNames(void) const
 {
    this->mpc_Ui->pc_LabelHeadingReport->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("Import"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("Import"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -276,39 +275,6 @@ int32_t C_CieImportReportWidget::h_GetMessageTableContent(QString & orc_ImportTa
       orc_ImportTable = "";
    }
    return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CieImportReportWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1049,3 +1015,4 @@ bool C_CieImportReportWidget::mh_IsEdsOrDcfImport(const QString & orc_Suffix)
 {
    return (orc_Suffix.toUpper() == "EDS") || (orc_Suffix.toUpper() == "DCF");
 }
+

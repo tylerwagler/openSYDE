@@ -12,8 +12,7 @@
 #define C_SDNDEDBADDNEWPROJECT_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscNodeApplication.hpp"
 #include "C_OscTargetSupportPackageV2.hpp"
 #include "C_OscNode.hpp"
@@ -36,7 +35,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdNdeDbAddNewProject :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -58,8 +57,6 @@ public:
    void ApplyV3Content(void);
    bool q_IsVersion3;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdNdeDbAddNewProject * mpc_Ui;
@@ -68,7 +65,6 @@ private:
    stw::opensyde_core::C_OscTargetSupportPackageV2 mc_Package;
    //lint -e{1725} Only problematic if copy or assignment is allowed
    stw::opensyde_core::C_OscTargetSupportPackage mc_Tsp;
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    static const QString mhc_START_TD;
    static const QString mhc_CONTINUE_TD;
    static const QString mhc_SUFFIX;

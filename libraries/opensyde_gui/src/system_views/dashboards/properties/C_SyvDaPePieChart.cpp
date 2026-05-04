@@ -45,10 +45,8 @@ using namespace stw::opensyde_gui_elements;
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvDaPePieChart::C_SyvDaPePieChart(C_SyvDaPeBase & orc_Parent, const bool oq_DarkMode) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_SyvDaPePieChart),
-   mrc_ParentDialog(orc_Parent),
-   mq_DarkMode(oq_DarkMode)
+   C_SyvDaPePanelBase(orc_Parent, oq_DarkMode),
+   mpc_Ui(new Ui::C_SyvDaPePieChart)
 {
    mpc_Ui->setupUi(this);
 
@@ -165,10 +163,5 @@ void C_SyvDaPePieChart::m_UpdatePreview(void)
 
    pc_Item->ApplySizeChange(c_ItemPos, c_ItemSize);
 
-   // clear old scene
-   this->mrc_ParentDialog.GetPreviewScene()->clear();
-
-   // add item
-   this->mrc_ParentDialog.GetPreviewScene()->addItem(pc_Item);
-   this->mrc_ParentDialog.GetPreviewScene()->clearSelection();
+   this->m_PublishPreviewItem(pc_Item);
 } //lint !e429  //no memory leak because of the parent of pc_Item, the call of addItem and the Qt memory management

@@ -84,9 +84,8 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
                              const C_PuiSvDbDataElementDisplayFormatter & orc_FormatterConfig,
                              const bool oq_ReadElement, const bool oq_DarkMode, const bool oq_ShowWidgetSpecificPart,
                              const bool oq_AllowChangeOfDataElement, const QString & orc_DisplayName) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvDaPeBase),
-   mpc_ParentDialog(&orc_Parent),
    mc_DataElement(orc_Id),
    mc_InitialDataElement(orc_Id),
    mu32_ViewIndex(ou32_ViewIndex),
@@ -101,10 +100,10 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    mpc_Ui->setupUi(this);
 
    // register the widget for showing
-   this->mpc_ParentDialog->SetWidget(this);
+   this->mrc_ParentDialog.SetWidget(this);
 
    // init static names
-   this->mpc_ParentDialog->SetTitle(static_cast<QString>(C_GtGetText::h_GetText("%1 Widget")).arg(orc_Name));
+   this->mrc_ParentDialog.SetTitle(static_cast<QString>(C_GtGetText::h_GetText("%1 Widget")).arg(orc_Name));
    this->InitStaticNames();
 
    //Factor needs to be above zero
@@ -186,16 +185,16 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    this->mpc_Ui->pc_DoubleSpinBoxOffset->SetMaximumCustom(std::numeric_limits<float64_t>::max());
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SyvDaPeBase::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SyvDaPeBase::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SyvDaPeBase::m_CancelClicked);
    connect(this->mpc_Ui->pc_PushButtonClearDataElement, &QPushButton::clicked, this, &C_SyvDaPeBase::m_Clear);
    connect(this->mpc_Ui->pc_PushButtonDataElement, &QPushButton::clicked, this, &C_SyvDaPeBase::m_Browse);
    connect(this->mpc_Ui->pc_PushButtonUpdateModeConfigure, &QPushButton::clicked, this,
            &C_SyvDaPeBase::m_Configuration);
-   connect(this->mpc_Ui->pc_CheckBoxDefaultScaling, &C_OgeChxProperties::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxDefaultScaling, &C_OgeChxToolTipBase::toggled, this,
            &C_SyvDaPeBase::m_OnUseDefaultScalingChange);
-   connect(this->mpc_Ui->pc_CheckBoxFormatterActive, &C_OgeChxProperties::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxFormatterActive, &C_OgeChxToolTipBase::toggled, this,
            &C_SyvDaPeBase::m_OnFormatterActiveChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_ComboBoxTheme,
@@ -207,7 +206,7 @@ C_SyvDaPeBase::C_SyvDaPeBase(C_OgePopUpDialog & orc_Parent, const uint32_t ou32_
    connect(this->mpc_Ui->pc_ComboBoxInitialValueMode,
            static_cast<void (QComboBox::*)(int32_t)>(&C_OgeCbxText::currentIndexChanged),
            this, &C_SyvDaPeBase::m_OnInitialValueModeChange);
-   connect(this->mpc_Ui->pc_CheckBoxDefaultScaling, &C_OgeChxProperties::toggled,
+   connect(this->mpc_Ui->pc_CheckBoxDefaultScaling, &C_OgeChxToolTipBase::toggled,
            this, &C_SyvDaPeBase::m_UpdateSpinboxMetaData);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_DoubleSpinBoxFactor,
@@ -237,9 +236,9 @@ C_SyvDaPeBase::~C_SyvDaPeBase(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaPeBase::InitStaticNames(void)
 {
-   this->mpc_ParentDialog->SetSubTitle(C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Properties"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_LabelDesign->setText(C_GtGetText::h_GetText("Design"));
    this->mpc_Ui->pc_LabelPreview->setText(C_GtGetText::h_GetText("Example Preview"));
    this->mpc_Ui->pc_LabelDataElement->setText(C_GtGetText::h_GetText("Data Element"));
@@ -839,42 +838,6 @@ bool C_SyvDaPeBase::GetAutoWriteOnConnect() const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaPeBase::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         if (this->mpc_ParentDialog != NULL)
-         {
-            this->mpc_ParentDialog->accept();
-         }
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot of Ok button click
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -919,10 +882,9 @@ void C_SyvDaPeBase::m_OkClicked(void)
       }
    }
 
-   if ((this->mpc_ParentDialog != NULL) &&
-       (q_Continue == true))
+   if (q_Continue == true)
    {
-      this->mpc_ParentDialog->accept();
+      this->mrc_ParentDialog.accept();
    }
 }
 
@@ -944,10 +906,7 @@ void C_SyvDaPeBase::m_CancelClicked(void)
       tgl_assert(C_PuiSvHandler::h_GetInstance()->AddViewReadRailItem(this->mu32_ViewIndex, this->mc_OriginalConfigId,
                                                                       this->mc_OriginalConfigData) == C_NO_ERR);
    }
-   if (this->mpc_ParentDialog != NULL)
-   {
-      this->mpc_ParentDialog->reject();
-   }
+   this->mrc_ParentDialog.reject();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -45,9 +45,8 @@ const QString C_FlaUpHexFileView::mhc_CONTINUE_TD = "<td style=\"padding: 0 9px 
 //----------------------------------------------------------------------------------------------------------------------
 C_FlaUpHexFileView::C_FlaUpHexFileView(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                        const C_FlaUpHexFileInfo & orc_HexFileInfo) :
-   QWidget(&orc_Parent),
-   mpc_Ui(new Ui::C_FlaUpHexFileView),
-   mrc_ParentDialog(orc_Parent)
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
+   mpc_Ui(new Ui::C_FlaUpHexFileView)
 {
    this->mpc_Ui->setupUi(this);
    this->mrc_ParentDialog.SetWidget(this);
@@ -279,35 +278,3 @@ C_FlaUpHexFileView::~C_FlaUpHexFileView()
    delete this->mpc_Ui;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_FlaUpHexFileView::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}

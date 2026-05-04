@@ -30,7 +30,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxListHeader" name="pc_GroupBoxHeader">
+    <widget class="QGroupBox" name="pc_GroupBoxHeader">
+     <property name="styleRole" stdset="0">
+      <string>list-header</string>
+     </property>
      <property name="title">
       <string>Header style</string>
      </property>
@@ -78,7 +81,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabNodeDataPoolSelectedItems" name="pc_SelectionLabel">
+      <widget class="QLabel" name="pc_SelectionLabel">
+       <property name="styleRole" stdset="0">
+        <string>node-data-pool-selected-items</string>
+       </property>
        <property name="text">
         <string>Selection</string>
        </property>
@@ -253,11 +259,6 @@
    <header>C_OgePubIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabNodeDataPoolSelectedItems</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabNodeDataPoolSelectedItems.hpp</header>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui::C_SdNdeDpListHeaderWidget</class>
    <extends>QWidget</extends>
    <header>C_SdNdeDpListHeaderWidget.hpp</header>
@@ -267,12 +268,6 @@
    <class>stw::opensyde_gui::C_SdNdeDpListTableWidget</class>
    <extends>QWidget</extends>
    <header>C_SdNdeDpListTableWidget.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxListHeader</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxListHeader.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

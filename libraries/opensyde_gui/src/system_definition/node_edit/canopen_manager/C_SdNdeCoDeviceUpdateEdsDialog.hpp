@@ -9,12 +9,11 @@
 #define C_SDNDECODEVICEUPDATEEDSDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include <QFileInfo>
 
 #include "stwtypes.hpp"
 #include "C_OscNode.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscCanInterfaceId.hpp"
 #include "C_CieImportDataAssignment.hpp"
 #include "C_OscCanOpenManagerDeviceInfo.hpp"
@@ -34,7 +33,7 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_SdNdeCoDeviceUpdateEdsDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -51,13 +50,9 @@ public:
    void DoApplyData(void) const;
    void InitStaticNames(void) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdNdeCoDeviceUpdateEdsDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    const uint32_t mu32_ManagerNodeIndex;
    const uint8_t mu8_ManagerInterfaceId;
    const stw::opensyde_core::C_OscCanInterfaceId mc_DeviceNodeId;

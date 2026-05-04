@@ -12,9 +12,8 @@
 #define C_SDNDEDBSELECTDATAPOOLS_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
@@ -32,7 +31,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdNdeDbSelectDataPools :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -45,13 +44,9 @@ public:
    void InitStaticNames(void) const;
    std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> GetSelectedDataPools(void) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdNdeDbSelectDataPools * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    const uint32_t mu32_NodeIndex;
    const std::vector<uint32_t> mc_UsedDataPoolIndices;
 

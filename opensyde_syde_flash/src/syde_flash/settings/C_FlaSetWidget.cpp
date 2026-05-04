@@ -239,7 +239,7 @@ void C_FlaSetWidget::showEvent(QShowEvent * const opc_Event)
 void C_FlaSetWidget::m_PrepareInitialShow() const
 {
    for (std::vector<QPair<stw::opensyde_gui::C_CamMosSectionPopup *,
-                          opensyde_gui_elements::C_CamOgePubSettingsAdd *> >::const_iterator c_ItPair =
+                          opensyde_gui_elements::C_OgePubToolTipBase *> >::const_iterator c_ItPair =
            this->mc_Settings.cbegin();
         c_ItPair != this->mc_Settings.cend(); ++c_ItPair)
    {

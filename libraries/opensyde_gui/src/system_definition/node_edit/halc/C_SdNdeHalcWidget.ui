@@ -138,7 +138,10 @@
          </spacer>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgePubHalcPanel" name="pc_PubSelect">
+         <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PubSelect">
+          <property name="styleRole" stdset="0">
+           <string>halc-panel</string>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
@@ -148,7 +151,10 @@
          </widget>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgePubHalcPanel" name="pc_PubUpdate">
+         <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PubUpdate">
+          <property name="styleRole" stdset="0">
+           <string>halc-panel</string>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
@@ -158,7 +164,10 @@
          </widget>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgePubHalcPanel" name="pc_PubCleanUp">
+         <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PubCleanUp">
+          <property name="styleRole" stdset="0">
+           <string>halc-panel</string>
+          </property>
           <property name="focusPolicy">
            <enum>Qt::FocusPolicy::NoFocus</enum>
           </property>
@@ -216,7 +225,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgePubHalcOverview" name="pc_PubOverview">
+           <widget class="stw::opensyde_gui_elements::C_OgePubToolTipBase" name="pc_PubOverview">
+            <property name="styleRole" stdset="0">
+             <string>halc-overview</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>300</width>
@@ -298,20 +310,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubHalcPanel</class>
+   <class>stw::opensyde_gui_elements::C_OgePubToolTipBase</class>
    <extends>QPushButton</extends>
-   <header>C_OgePubHalcPanel.hpp</header>
+   <header>C_OgePubToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdNdeHalcOvWidget</class>
    <extends>QWidget</extends>
    <header>C_SdNdeHalcOvWidget.hpp</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubHalcOverview</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubHalcOverview.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubUpdate</class>

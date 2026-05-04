@@ -55,9 +55,8 @@ using namespace stw::opensyde_core;
 //----------------------------------------------------------------------------------------------------------------------
 C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamProFilterData & orc_FilterData,
                                          stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_CamMosFilterPopup),
-   mrc_ParentDialog(orc_Parent),
    mpc_TableModel(new stw::opensyde_gui_logic::C_CamMosFilterTableModel),
    mc_UneditedName(orc_FilterData.c_Name)
 {
@@ -67,6 +66,9 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
 
    // register the widget for showing
    this->mrc_ParentDialog.SetWidget(this);
+
+   // make Enter activate Save (the accept button for this popup)
+   this->mpc_Ui->pc_PushButtonSave->setDefault(true);
 
    // set model for view (important!)
    this->mpc_Ui->pc_TableView->setModel(mpc_TableModel);
@@ -101,12 +103,12 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
    this->m_InitStaticGuiElements();
 
    // connects
-   connect(this->mpc_Ui->pc_PushButtonSave, &C_OgePubDialog::clicked, this, &C_CamMosFilterPopup::m_OnOk);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this, &C_CamMosFilterPopup::m_OnCancel);
+   connect(this->mpc_Ui->pc_PushButtonSave, &QPushButton::clicked, this, &C_CamMosFilterPopup::m_OnOk);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this, &C_CamMosFilterPopup::m_OnCancel);
    connect(this->mpc_Ui->pc_ComboBoxType,
            static_cast<void (C_OgeCbxText::*)(int32_t)>(&C_OgeCbxText::currentIndexChanged),
            this, &C_CamMosFilterPopup::m_OnTypeChanged);
-   connect(this->mpc_Ui->pc_PubAddFromDatabase, &C_OgePubConfigure::clicked, this,
+   connect(this->mpc_Ui->pc_PubAddFromDatabase, &C_OgePubToolTipBase::clicked, this,
            &C_CamMosFilterPopup::m_OnAddFromDatabase);
    connect(this->mpc_Ui->pc_TableView, &C_CamMosFilterTableView::clicked, this, &C_CamMosFilterPopup::m_OnIndexClicked);
    connect(this->mpc_Ui->pc_TableView->selectionModel(), &QItemSelectionModel::currentRowChanged,
@@ -114,11 +116,11 @@ C_CamMosFilterPopup::C_CamMosFilterPopup(const stw::opensyde_gui_logic::C_CamPro
    connect(this->mpc_Ui->pc_TableView, &C_CamMosFilterTableView::SigDeleteKeyPressed,
            this, &C_CamMosFilterPopup::m_OnDeleteKeyPressed);
    connect(this->mpc_Ui->pc_RabPass, &C_OgeRabProperties::toggled, this, &C_CamMosFilterPopup::m_OnRadioButtonToggle);
-   connect(this->mpc_Ui->pc_LeCanIdStart, &C_CamOgeLeIdPopUp::editingFinished, this,
+   connect(this->mpc_Ui->pc_LeCanIdStart, &C_TblEditLineEditBase::editingFinished, this,
            &C_CamMosFilterPopup::m_OnStartIdEdited);
-   connect(this->mpc_Ui->pc_LeCanIdEnd, &C_CamOgeLeIdPopUp::editingFinished, this,
+   connect(this->mpc_Ui->pc_LeCanIdEnd, &C_TblEditLineEditBase::editingFinished, this,
            &C_CamMosFilterPopup::m_OnEndIdEdited);
-   connect(this->mpc_Ui->pc_CheckBoxExtended, &C_OgeChxProperties::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxExtended, &C_OgeChxToolTipBase::toggled, this,
            &C_CamMosFilterPopup::m_OnExtendedToggled);
    connect(this->mpc_Ui->pc_PubAddItem, &C_OgePubSvgIconOnly::clicked, this, &C_CamMosFilterPopup::m_OnAddFilterItem);
 }
@@ -220,39 +222,6 @@ void C_CamMosFilterPopup::SetAddFilterItem(const QList<int32_t> oc_CanMsgId,  co
       C_CamMosFilterPopup::m_OnAddFilterItemFromContextmenu(oc_FilteredCanMsgIdList.at(
                                                                s32_It), oc_FilteredCanMsgXtdList.at(
                                                                s32_It), q_IsLastItemInList);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CamMosFilterPopup::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OnOk();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
    }
 }
 
@@ -844,12 +813,12 @@ void C_CamMosFilterPopup::m_OnStartIdEdited(void)
       else
       {
          // disconnect to ignore editingFinished signal on focus lose because of popup
-         disconnect(this->mpc_Ui->pc_LeCanIdStart, &C_CamOgeLeIdPopUp::editingFinished, this,
+         disconnect(this->mpc_Ui->pc_LeCanIdStart, &C_TblEditLineEditBase::editingFinished, this,
                     &C_CamMosFilterPopup::m_OnStartIdEdited);
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING, c_ErrorDescription);
          c_Message.SetHeading(C_GtGetText::h_GetText("Invalid input"));
          c_Message.Execute();
-         connect(this->mpc_Ui->pc_LeCanIdStart, &C_CamOgeLeIdPopUp::editingFinished, this,
+         connect(this->mpc_Ui->pc_LeCanIdStart, &C_TblEditLineEditBase::editingFinished, this,
                  &C_CamMosFilterPopup::m_OnStartIdEdited);
       }
 
@@ -896,12 +865,12 @@ void C_CamMosFilterPopup::m_OnEndIdEdited(void)
       else
       {
          // disconnect to ignore editingFinished signal on focus lose because of popup
-         disconnect(this->mpc_Ui->pc_LeCanIdEnd, &C_CamOgeLeIdPopUp::editingFinished, this,
+         disconnect(this->mpc_Ui->pc_LeCanIdEnd, &C_TblEditLineEditBase::editingFinished, this,
                     &C_CamMosFilterPopup::m_OnEndIdEdited);
          C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eWARNING, c_ErrorDescription);
          c_Message.SetHeading(C_GtGetText::h_GetText("Invalid input"));
          c_Message.Execute();
-         connect(this->mpc_Ui->pc_LeCanIdEnd, &C_CamOgeLeIdPopUp::editingFinished, this,
+         connect(this->mpc_Ui->pc_LeCanIdEnd, &C_TblEditLineEditBase::editingFinished, this,
                  &C_CamMosFilterPopup::m_OnEndIdEdited);
       }
 
@@ -1064,3 +1033,4 @@ void C_CamMosFilterPopup::m_SetMessageDataFromDatabase(const uint32_t ou32_CanId
    // trigger change
    this->m_OnStartIdEdited();
 }
+

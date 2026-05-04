@@ -543,6 +543,20 @@ QString C_OgeWiUtil::mh_GetFileName(QWidget * const opc_Parent, const QString & 
    bool q_Stop = false;
    QFileDialog c_FileDialog(opc_Parent, orc_Heading, orc_StartingFolder, orc_Filter);
 
+   // Re-set the filters via the QStringList overload. Qt's filter-string parser treats this
+   // identically to the constructor's filter argument, but some platform plugins (notably the
+   // KDE Plasma native-dialog plugin) handle the list path more reliably than the combined
+   // string they'd otherwise have to re-parse. Empty parts from leading/trailing ";;" are
+   // skipped so callers don't have to worry about edge cases.
+   if (orc_Filter.isEmpty() == false)
+   {
+      const QStringList c_NameFilters = orc_Filter.split(";;", Qt::SkipEmptyParts);
+      if (c_NameFilters.isEmpty() == false)
+      {
+         c_FileDialog.setNameFilters(c_NameFilters);
+      }
+   }
+
    c_FileDialog.setFileMode(QFileDialog::AnyFile);
    c_FileDialog.setAcceptMode(ore_SaveOrOpen);
    c_FileDialog.setOptions(orc_Option);

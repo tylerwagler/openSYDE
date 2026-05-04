@@ -17,7 +17,7 @@
 #include "stwtypes.hpp"
 #include "C_SdNdeDpListDataSetDelegate.hpp"
 #include "C_OgeTedTable.hpp"
-#include "C_OgeLeTable.hpp"
+#include "C_OgeLeContextMenuBase.hpp"
 #include "C_OgeWiUtil.hpp"
 #include "C_PuiSdHandler.hpp"
 
@@ -76,17 +76,18 @@ QWidget * C_SdNdeDpListDataSetDelegate::createEditor(QWidget * const opc_Parent,
    Q_UNUSED(orc_Option)
    if (orc_Index.isValid() == true)
    {
-      C_OgeLeTable * pc_LineEdit;
+      C_OgeLeContextMenuBase * pc_LineEdit;
       const C_SdNdeDpListDataSetModel::E_Rows e_Row = C_SdNdeDpListDataSetModel::h_RowToEnum(
          orc_Index.row());
       switch (e_Row)
       {
       case C_SdNdeDpListDataSetModel::E_Rows::eNAME:
-         pc_LineEdit = new C_OgeLeTable(opc_Parent);
+         pc_LineEdit = new C_OgeLeContextMenuBase(opc_Parent);
+         pc_LineEdit->setProperty("styleRole", "le-table");
          //Ui restriction
          pc_LineEdit->setMaxLength(C_PuiSdHandler::h_GetInstance()->GetNameMaxCharLimit());
          pc_Retval = pc_LineEdit;
-         connect(pc_LineEdit, &C_OgeLeTable::textChanged, this, &C_SdNdeDpListDataSetDelegate::m_OnNameChange);
+         connect(pc_LineEdit, &QLineEdit::textChanged, this, &C_SdNdeDpListDataSetDelegate::m_OnNameChange);
          break;
       case C_SdNdeDpListDataSetModel::E_Rows::eCOMMENT:
          pc_Retval = new C_OgeTedTable(opc_Parent);

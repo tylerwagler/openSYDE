@@ -12,11 +12,10 @@
 #define C_SDNDEDPSELECTORADDWIDGET_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 #include <map>
 #include "stwtypes.hpp"
 
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OscNodeDataPool.hpp"
 #include "C_OscNodeDataPoolId.hpp"
 
@@ -35,7 +34,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdNdeDpSelectorAddWidget :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -57,13 +56,9 @@ public:
    E_SelectionResult GetDialogResult(stw::opensyde_core::C_OscNodeDataPoolId & orc_SharedDatapoolId,
                                      QString & orc_RamViewFilePath) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdNdeDpSelectorAddWidget * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
 
    const uint32_t mu32_NodeIndex;
    //lint -e{1725} Only problematic if copy or assignment is allowed

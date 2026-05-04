@@ -87,18 +87,18 @@ C_SyvDaItPaWriteWidget::C_SyvDaItPaWriteWidget(stw::opensyde_gui_elements::C_Oge
    this->mpc_Ui->pc_CbConfirm->setVisible(false);
    this->mpc_Ui->pc_WiNotification->setEnabled(false);
    this->mpc_Ui->pc_WiNotification->setVisible(false);
-   this->mpc_Ui->pc_BushButtonOk->setVisible(false);
+   this->mpc_Ui->pc_PushButtonOk->setVisible(false);
 
    this->InitText();
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SyvDaItPaWriteWidget::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SyvDaItPaWriteWidget::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SyvDaItPaWriteWidget::m_OnCancel);
    connect(this->mpc_Ui->pc_PbConfirm, &QPushButton::clicked, this, &C_SyvDaItPaWriteWidget::m_ConfirmClicked);
    connect(this->mpc_ParentDialog, &C_OgePopUpDialog::SigCloseIgnored, this,
            &C_SyvDaItPaWriteWidget::m_OnCancel);
-   connect(this->mpc_Ui->pc_CbConfirm, &stw::opensyde_gui_elements::C_OgeChxProperties::stateChanged, this,
+   connect(this->mpc_Ui->pc_CbConfirm, &stw::opensyde_gui_elements::C_OgeChxToolTipBase::stateChanged, this,
            &C_SyvDaItPaWriteWidget::m_ConfirmCheckBoxChanged);
    connect(&this->mc_Timer, &QTimer::timeout, this, &C_SyvDaItPaWriteWidget::m_Timer);
    this->mc_Timer.setInterval(10);
@@ -817,8 +817,8 @@ void C_SyvDaItPaWriteWidget::m_WriteCrcOfNode(void)
                         "Option 1: Use the following application notification (This option "
                         "needs an implemented hook function \"osy_app_nvm_data_was_changed_event\").\n"
                         "Option 2: Reset your System."));
-                  this->mpc_Ui->pc_BushButtonOk->setVisible(true);
-                  this->mpc_Ui->pc_BushButtonCancel->setVisible(false);
+                  this->mpc_Ui->pc_PushButtonOk->setVisible(true);
+                  this->mpc_Ui->pc_PushButtonCancel->setVisible(false);
                   this->mpc_Ui->pc_BopperleFinished->SetMainBopperleColor(mc_STYLE_GUIDE_COLOR_21,
                                                                           mc_STYLE_GUIDE_COLOR_13);
                }

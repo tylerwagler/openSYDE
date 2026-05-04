@@ -27,7 +27,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBoxGeneral">
+    <widget class="QGroupBox" name="pc_GroupBoxGeneral">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <property name="minimumSize">
       <size>
        <width>356</width>
@@ -50,7 +53,10 @@
          <number>2</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingPreviewStandardColors">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingPreviewStandardColors">
+          <property name="styleRole" stdset="0">
+           <string>heading-group-bold</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -102,7 +108,10 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_1">
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="pc_Frame_3">
+         <widget class="QFrame" name="pc_Frame_3">
+          <property name="styleRole" stdset="0">
+           <string>fra-separator</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -301,7 +310,10 @@
          <number>1</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingPreviewRecentColors">
+         <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingPreviewRecentColors">
+          <property name="styleRole" stdset="0">
+           <string>heading-group-bold</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -454,7 +466,10 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame">
+         <widget class="QFrame" name="frame">
+          <property name="styleRole" stdset="0">
+           <string>fra-separator</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -516,7 +531,10 @@
          <number>3</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgePubTextOnly" name="pc_PushButtonHtml">
+         <widget class="QPushButton" name="pc_PushButtonHtml">
+          <property name="styleRole" stdset="0">
+           <string>text-only</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -551,7 +569,10 @@
          </widget>
         </item>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgePubTextOnly" name="pc_PushButtonRgba">
+         <widget class="QPushButton" name="pc_PushButtonRgba">
+          <property name="styleRole" stdset="0">
+           <string>text-only</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>30</width>
@@ -602,7 +623,10 @@
          <number>2</number>
         </property>
         <item>
-         <widget class="stw::opensyde_gui_elements::C_OgeGbxGrayed" name="pc_GroupBoxEditColorPicker">
+         <widget class="QGroupBox" name="pc_GroupBoxEditColorPicker">
+          <property name="styleRole" stdset="0">
+           <string>grayed</string>
+          </property>
           <property name="minimumSize">
            <size>
             <width>291</width>
@@ -713,7 +737,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubCancel" name="pc_PushButtonCancel">
+      <widget class="QPushButton" name="pc_PushButtonCancel">
+       <property name="styleRole" stdset="0">
+        <string>cancel</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -754,7 +781,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PushButtonOk">
+      <widget class="QPushButton" name="pc_PushButtonOk">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -816,31 +846,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubCancel.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgePubIconOnly</class>
@@ -848,20 +856,9 @@
    <header>C_OgePubIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxGrayed</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxGrayed.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui::C_GiSyColorShower</class>
    <extends>QPushButton</extends>
    <header>C_GiSyColorShower.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubTextOnly</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubTextOnly.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabGenericNoPaddingNoMargins</class>

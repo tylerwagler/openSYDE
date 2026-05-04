@@ -36,7 +36,10 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxMultiplexer">
+    <widget class="QGroupBox" name="pc_GroupBoxMultiplexer">
+     <property name="styleRole" stdset="0">
+      <string>transparent</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -57,7 +60,10 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelMultiplexer">
+       <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelMultiplexer">
+        <property name="styleRole" stdset="0">
+         <string>group-item</string>
+        </property>
         <property name="text">
          <string>TextLabel</string>
         </property>
@@ -107,20 +113,14 @@
    <header>C_SdBueMlvGraphicsView.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeCbxText</class>
    <extends>QComboBox</extends>
    <header>C_OgeCbxText.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

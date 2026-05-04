@@ -1,9 +1,9 @@
 /* --------------------------------------------------------------------- */
 QSpinBox,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox,
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"],
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"],
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"],
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox
 {
@@ -24,18 +24,17 @@ margin: 0px;
 
 /* --------------------------------------------------------------------- */
 /* Down button border */
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::down-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::down-button,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_BRIGHT"]::down-button,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_DARK"]::down-button,
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::down-button,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties::down-button,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties::down-button,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"]::down-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::down-button,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::down-button,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::down-button,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table::down-button,
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::down-button,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::down-button,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble::down-button,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable::down-button,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::down-button,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox::down-button,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]::down-button,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"]::down-button,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox::down-button,
 QSpinBox::down-button
 {
@@ -59,28 +58,27 @@ border-style: solid;
 
 /* --------------------------------------------------------------------- */
 /* Down button width */
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::down-button,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties::down-button,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties::down-button,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"]::down-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::down-button,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::down-button,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::down-button,
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::down-button,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::down-button,
 QSpinBox::down-button
 {
 width: 21px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::down-button,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table::down-button,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable::down-button,
-stw--opensyde_gui_elements--C_OgeSpxTable::down-button,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::down-button,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble::down-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::down-button,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"]::down-button,
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table"]::down-button,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox::down-button,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]::down-button,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox::down-button
 {
 width: 19px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxTableComIf::down-button
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table-com-if"]::down-button
 {
 width: 27px;
 }
@@ -92,18 +90,17 @@ width: 42px;
 
 /* --------------------------------------------------------------------- */
 /* Up button border */
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::up-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::up-button,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_BRIGHT"]::up-button,
 stw--opensyde_gui_elements--C_OgeWiDashboardSpinBoxGroup QAbstractSpinBox[Style="OPENSYDE_DARK"]::up-button,
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::up-button,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties::up-button,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties::up-button,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"]::up-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::up-button,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::up-button,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::up-button,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table::up-button,
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::up-button,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::up-button,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble::up-button,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable::up-button,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::up-button,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox::up-button,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]::up-button,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"]::up-button,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox::up-button,
 QSpinBox::up-button
 {
@@ -128,28 +125,27 @@ border-style: solid;
 
 /* --------------------------------------------------------------------- */
 /* Up button width */
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::up-button,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties::up-button,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties::up-button,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"]::up-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::up-button,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::up-button,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::up-button,
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::up-button,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::up-button,
 QSpinBox::up-button
 {
 width: 21px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::up-button,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table::up-button,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable::up-button,
-stw--opensyde_gui_elements--C_OgeSpxTable::up-button,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::up-button,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble::up-button,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::up-button,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"]::up-button,
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table"]::up-button,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox::up-button,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]::up-button,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox::up-button
 {
 width: 19px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxTableComIf::up-button
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table-com-if"]::up-button
 {
 width: 27px;
 }
@@ -186,65 +182,61 @@ border-style: none;
 
 /* --------------------------------------------------------------------- */
 /* Default spin box icons */
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"]::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::down-arrow,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table::down-arrow,
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::down-arrow,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable::down-arrow,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::down-arrow,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"]::down-arrow,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox::down-arrow,
 QSpinBox::down-arrow
 {
 image: url(:/images/GroupBoxDownArrow.png);
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::down-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::down-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties::down-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties::down-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::down-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"]::down-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::down-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::down-arrow:!enabled,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::down-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table::down-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::down-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::down-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble::down-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable::down-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::down-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox::down-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]::down-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"]::down-arrow:!enabled,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox::down-arrow:!enabled,
 QSpinBox::down-arrow:!enabled
 {
 image: url(:/images/GroupBoxDownArrowDisabled.png);
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"]::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::up-arrow,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table::up-arrow,
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::up-arrow,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable::up-arrow,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::up-arrow,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"]::up-arrow,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox::up-arrow,
 QSpinBox::up-arrow
 {
 image: url(:/images/SpinBoxUpArrow.png);
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::up-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::up-arrow:!enabled,
 
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::up-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties::up-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties::up-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"]::up-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::up-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::up-arrow:!enabled,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::up-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table::up-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::up-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::up-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble::up-arrow:!enabled,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable::up-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::up-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox::up-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]::up-arrow:!enabled,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"]::up-arrow:!enabled,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox::up-arrow:!enabled,
 QSpinBox::up-arrow:!enabled
 {
@@ -253,59 +245,57 @@ image: url(:/images/SpinBoxUpArrowDisabled.png);
 
 /* --------------------------------------------------------------------- */
 /* Arrow sizes */
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"]::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::down-arrow,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::down-arrow,
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::down-arrow,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::down-arrow,
 QSpinBox::down-arrow
 {
 width: 19px;
 height: 11px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxTable::down-arrow,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::down-arrow,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"]::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table"]::down-arrow,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox::down-arrow,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]::down-arrow,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox::down-arrow
 {
 width: 16px;
 height: 9px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxTableComIf::down-arrow
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table-com-if"]::down-arrow
 {
 width: 24px;
 height: 14px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxDoubleProperties::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxInt64Properties::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxFactorProperties::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-double-properties"]::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64ToolTipBase[styleRole="spx-int64-properties"]::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-properties"]::up-arrow,
 stw--opensyde_gui_elements--C_OgeWiSpinBoxGroupProperties QAbstractSpinBox::up-arrow,
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::up-arrow,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::up-arrow,
 QSpinBox::up-arrow
 {
 width: 19px;
 height: 11px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxTable::up-arrow,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox::up-arrow,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"]::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"]::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table"]::up-arrow,
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox::up-arrow,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]::up-arrow,
 stw--opensyde_gui_elements--C_OgeSpxTableHalc QAbstractSpinBox::up-arrow
 {
 width: 16px;
 height: 9px;
 }
 
-stw--opensyde_gui_elements--C_OgeSpxTableComIf::up-arrow
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table-com-if"]::up-arrow
 {
 width: 24px;
 height: 14px;
@@ -423,13 +413,12 @@ border-style: none;
 
 /* --------------------------------------------------------------------- */
 /* Custom table style */
-stw--opensyde_gui_elements--C_OgeSpxInt64FactorTable,
-stw--opensyde_gui_elements--C_OgeSpxInt64Table,
-stw--opensyde_gui_elements--C_OgeSpxFactorTable,
-stw--opensyde_gui_elements--C_OgeSpxTable,
-stw--opensyde_gui_elements--C_OgeSpxTableComIf,
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox,
-stw--opensyde_gui_elements--C_OgeSpxTableDouble
+stw--opensyde_gui_elements--C_OgeSpxInt64Factor[styleRole="spx-int64-factor-table"],
+stw--opensyde_gui_elements--C_OgeSpxFactor[styleRole="spx-factor-table"],
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table"],
+stw--opensyde_gui_elements--C_OgeSpxToolTipBase[styleRole="spx-table-com-if"],
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox,
+stw--opensyde_gui_elements--C_OgeSpxDoubleToolTipBase[styleRole="spx-table-double"]
 {
 border-style: solid;
 border-width: 1px;
@@ -441,20 +430,20 @@ margin-bottom: 3px;
 }
 
 /* Size necessary for table usage */
-stw--opensyde_gui_elements--C_OgeWiTableSpinBoxGroup QAbstractSpinBox
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="table-spinbox"] QAbstractSpinBox
 {
 max-height:30px;
 }
 
 /* --------------------------------------------------------------------- */
 /* Custom param widget style */
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox::down-button
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox::down-button
 {
 border-width: 0px;
 border-left-width: 1px;
 border-style: solid;
 }
-stw--opensyde_gui_elements--C_OgeWiParamSpinBoxGroup QAbstractSpinBox
+stw--opensyde_gui_elements--C_OgeWiSpinBoxGroup[styleRole="param-spinbox"] QAbstractSpinBox
 {
 border-style: solid;
 border-width: 1px;

@@ -2136,11 +2136,11 @@ void C_SdBueSignalPropertiesWidget::m_ConnectAll(void) const
    connect(this->mpc_Ui->pc_ComboBoxMuxType, static_cast<void (QComboBox::*)(
                                                             int32_t)>(&QComboBox::currentIndexChanged), this,
            &C_SdBueSignalPropertiesWidget::m_HandleMuxTypeChange);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_SpinBoxMuxValue, static_cast<void (QSpinBox::*)(
-                                                            int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-           &C_SdBueSignalPropertiesWidget::m_HandleMuxValueChange);
-   connect(this->mpc_Ui->pc_CheckBoxAutoMinMax, &C_OgeChxProperties::toggled, this,
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    connect(this->mpc_Ui->pc_SpinBoxMuxValue, static_cast<void (QSpinBox::*)(
+                                                             int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+            &C_SdBueSignalPropertiesWidget::m_HandleMuxValueChange);
+   connect(this->mpc_Ui->pc_CheckBoxAutoMinMax, &C_OgeChxToolTipBase::toggled, this,
            &C_SdBueSignalPropertiesWidget::m_HandleAutoMinMaxCheckBoxChange);
    connect(this->mpc_Ui->pc_WidgetMin, &C_OgeWiSpinBoxGroup::SigValueChanged, this,
            &C_SdBueSignalPropertiesWidget::m_HandleMinChange);
@@ -2156,10 +2156,10 @@ void C_SdBueSignalPropertiesWidget::m_ConnectAll(void) const
    connect(this->mpc_Ui->pc_SpinBoxLength, static_cast<void (QSpinBox::*)(
                                                           int32_t)>(&QSpinBox::valueChanged), this,
            &C_SdBueSignalPropertiesWidget::m_HandleValueLengthChange);
-   //lint -e{929} Cast required to avoid ambiguous signal of qt interface
-   connect(this->mpc_Ui->pc_SpinBoxStartBit, static_cast<void (QSpinBox::*)(
-                                                            int32_t)>(&C_OgeSpxNumber::valueChanged), this,
-           &C_SdBueSignalPropertiesWidget::m_HandleStartBitChange);
+    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
+    connect(this->mpc_Ui->pc_SpinBoxStartBit, static_cast<void (QSpinBox::*)(
+                                                             int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
+            &C_SdBueSignalPropertiesWidget::m_HandleStartBitChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    connect(this->mpc_Ui->pc_SpinBoxJ1939Spn, static_cast<void (QSpinBox::*)(
                                                             int32_t)>(&QSpinBox::valueChanged), this,
@@ -2200,9 +2200,9 @@ void C_SdBueSignalPropertiesWidget::m_DisconnectAll(void) const
               &C_SdBueSignalPropertiesWidget::m_HandleMuxTypeChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    disconnect(this->mpc_Ui->pc_SpinBoxMuxValue, static_cast<void (QSpinBox::*)(
-                                                               int32_t)>(&C_OgeSpxNumber::valueChanged), this,
+                                                               int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
               &C_SdBueSignalPropertiesWidget::m_HandleMuxValueChange);
-   disconnect(this->mpc_Ui->pc_CheckBoxAutoMinMax, &C_OgeChxProperties::toggled, this,
+   disconnect(this->mpc_Ui->pc_CheckBoxAutoMinMax, &C_OgeChxToolTipBase::toggled, this,
               &C_SdBueSignalPropertiesWidget::m_HandleAutoMinMaxCheckBoxChange);
    disconnect(this->mpc_Ui->pc_WidgetMin, &C_OgeWiSpinBoxGroup::SigValueChanged, this,
               &C_SdBueSignalPropertiesWidget::m_HandleMinChange);
@@ -2220,7 +2220,7 @@ void C_SdBueSignalPropertiesWidget::m_DisconnectAll(void) const
               &C_SdBueSignalPropertiesWidget::m_HandleValueLengthChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    disconnect(this->mpc_Ui->pc_SpinBoxStartBit, static_cast<void (QSpinBox::*)(
-                                                               int32_t)>(&C_OgeSpxNumber::valueChanged), this,
+                                                               int32_t)>(&C_OgeSpxToolTipBase::valueChanged), this,
               &C_SdBueSignalPropertiesWidget::m_HandleStartBitChange);
    //lint -e{929} Cast required to avoid ambiguous signal of qt interface
    disconnect(this->mpc_Ui->pc_SpinBoxJ1939Spn, static_cast<void (QSpinBox::*)(

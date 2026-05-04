@@ -17,6 +17,9 @@
 #   -b, --build-type <Release|Debug>   Build type (default: Release)
 #   -c, --clean                        Clean build directory before building
 #   -j, --jobs <N>                     Parallel jobs (default: nproc)
+#   -d, --deploy                       Also deploy binaries to $INSTALL_DIR
+#                                      (default: ~/.local/opt/openSYDE; override
+#                                      via INSTALL_DIR env var)
 #   -h, --help                         Show this help
 #
 # Examples:
@@ -24,6 +27,7 @@
 #   ./build.sh opensyde canmonitor     # Build only openSYDE and CAN Monitor
 #   ./build.sh -b Debug sydesup        # Debug build of SYDEsup
 #   ./build.sh -c all                  # Clean rebuild of everything
+#   ./build.sh -d opensyde             # Build openSYDE and deploy it
 
 set -euo pipefail
 
@@ -34,6 +38,8 @@ REPO_ROOT="$SCRIPT_DIR"
 BUILD_TYPE="Release"
 CLEAN=false
 JOBS="$(nproc)"
+DEPLOY=false
+INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/opt/openSYDE}"
 TOOLS=()
 
 # --- Helper functions ---
@@ -63,6 +69,7 @@ while [[ "$#" -gt 0 ]]; do
         -b|--build-type) BUILD_TYPE="$2"; shift 2 ;;
         -c|--clean)      CLEAN=true; shift ;;
         -j|--jobs)       JOBS="$2"; shift 2 ;;
+        -d|--deploy)     DEPLOY=true; shift ;;
         -h|--help)       usage ;;
         -*)              write_error "Unknown option: $1"; usage ;;
         *)               TOOLS+=("$1"); shift ;;
@@ -75,22 +82,34 @@ if [[ ${#TOOLS[@]} -eq 0 ]]; then
 fi
 
 # --- Tool definitions ---
-# Each tool: name|pjt_dir|toolchain|needs_qt
+# Each tool: name|pjt_dir|toolchain|needs_qt|deploy_src|deploy_dst
+#   deploy_src: path under result/$BUILD_TYPE/ of the built binary
+#   deploy_dst: path under $INSTALL_DIR where it should land
 TOOL_DEFS=(
-    "opensyde|opensyde_tool/pjt/openSYDE|opensyde_tool/pjt/toolchain_linux.cmake|yes"
-    "canmonitor|opensyde_can_monitor/pjt|opensyde_can_monitor/pjt/toolchain_linux.cmake|yes"
-    "sydeflash|opensyde_syde_flash/pjt|opensyde_syde_flash/pjt/toolchain_linux.cmake|yes"
-    "sydesup|opensyde_syde_sup/pjt|opensyde_syde_sup/pjt/toolchain_ubuntu.cmake|no"
-    "syde_x_gen|opensyde_syde_x_gen/pjt||no"
-    "syde_coder_c|opensyde_syde_coder_c/pjt||no"
-    "flash_tool|opensyde_cmd_line_flash_tool/pjt||no"
+    "opensyde|opensyde_tool/pjt/openSYDE|opensyde_tool/pjt/toolchain_linux.cmake|yes|openSYDE/openSYDE|tool/openSYDE"
+    "canmonitor|opensyde_can_monitor/pjt|opensyde_can_monitor/pjt/toolchain_linux.cmake|yes|openSYDE_CAN_Monitor/openSYDE_CAN_Monitor|tool/CAN_Monitor/openSYDE_CAN_Monitor"
+    "sydeflash|opensyde_syde_flash/pjt|opensyde_syde_flash/pjt/toolchain_linux.cmake|yes|SYDEflash/SYDEflash|utilities/SYDEflash/SYDEflash"
+    "sydesup|opensyde_syde_sup/pjt|opensyde_syde_sup/pjt/toolchain_ubuntu.cmake|no|SYDEsup/SYDEsup|utilities/SYDEsup/SYDEsup"
+    "syde_x_gen|opensyde_syde_x_gen/pjt||no|syde_x_gen/syde_x_gen|connectors/syde_x_gen/syde_x_gen"
+    "syde_coder_c|opensyde_syde_coder_c/pjt||no|syde_coder_c/osy_syde_coder_c|connectors/syde_coder_c/osy_syde_coder_c"
+    "flash_tool|opensyde_cmd_line_flash_tool/pjt||no|cmd_line_flash_tool/osy_cmd_line_flash_tool|utilities/cmd_line_flash_tool/osy_cmd_line_flash_tool"
 )
 
 ALL_TOOL_NAMES=()
 for def in "${TOOL_DEFS[@]}"; do
-    IFS='|' read -r name _ _ _ <<< "$def"
+    IFS='|' read -r name _ _ _ _ _ <<< "$def"
     ALL_TOOL_NAMES+=("$name")
 done
+
+# --- Desktop entries (only for GUI tools that ship a logo) ---
+# Each: tool_name|desktop_basename|display_name|icon_src|comment
+#   desktop_basename: filename of the .desktop file (without extension), and
+#                     also the value baked into setDesktopFileName() in main.cpp
+DESKTOP_ENTRIES=(
+    "opensyde|openSYDE|openSYDE|opensyde_tool/src/images/LogoOpensyde_XXL.png|System development and configuration tool"
+    "canmonitor|openSYDE_CAN_Monitor|openSYDE CAN Monitor|opensyde_can_monitor/src/can_monitor/images/CAN_Monitor_logo.png|CAN bus traffic analysis"
+    "sydeflash|SYDEflash|SYDEflash|opensyde_syde_flash/src/syde_flash/images/SYDEflash_logo.png|Firmware flashing tool"
+)
 
 # Expand "all"
 RESOLVED_TOOLS=()
@@ -159,14 +178,16 @@ build_tool() {
     local tool_name="$1"
 
     # Find tool definition
-    local pjt_dir toolchain needs_qt
+    local pjt_dir toolchain needs_qt deploy_src deploy_dst
     local found=false
     for def in "${TOOL_DEFS[@]}"; do
-        IFS='|' read -r name pjt tc qt <<< "$def"
+        IFS='|' read -r name pjt tc qt dsrc ddst <<< "$def"
         if [[ "$name" == "$tool_name" ]]; then
             pjt_dir="$pjt"
             toolchain="$tc"
             needs_qt="$qt"
+            deploy_src="$dsrc"
+            deploy_dst="$ddst"
             found=true
             break
         fi
@@ -203,20 +224,90 @@ build_tool() {
         if [[ "$needs_qt" == "yes" ]] && [[ -n "${Qt6_DIR:-}" ]]; then
             cmake_args+=("-DQt6_DIR=$Qt6_DIR")
         fi
-        cmake "${cmake_args[@]}"
+        if ! cmake "${cmake_args[@]}"; then
+            write_error "$tool_name: configuration failed"
+            return 1
+        fi
     else
         write_step "Using existing configuration (use -c to reconfigure)"
     fi
 
     # Build
     write_step "Building (jobs=$JOBS)..."
-    cmake --build "$build_dir" -j"$JOBS"
+    if ! cmake --build "$build_dir" -j"$JOBS"; then
+        write_error "$tool_name: build failed"
+        return 1
+    fi
 
     # Install
     write_step "Installing..."
-    cmake --install "$build_dir"
+    if ! cmake --install "$build_dir"; then
+        write_error "$tool_name: install failed"
+        return 1
+    fi
+
+    # Optional deploy to $INSTALL_DIR
+    if [[ "$DEPLOY" == "true" ]]; then
+        local src="$REPO_ROOT/result/$BUILD_TYPE/$deploy_src"
+        local dst="$INSTALL_DIR/$deploy_dst"
+        if [[ ! -f "$src" ]]; then
+            write_error "Deploy source not found: $src"
+            return 1
+        fi
+        write_step "Deploying to $dst"
+        mkdir -p "$(dirname "$dst")"
+        cp "$src" "$dst"
+        deploy_desktop_entry "$tool_name" "$dst"
+    fi
 
     write_step "$tool_name built successfully"
+}
+
+# --- Deploy a freedesktop .desktop file + icon for GUI tools ---
+deploy_desktop_entry() {
+    local tool_name="$1"
+    local exec_path="$2"
+
+    local entry desktop_basename display_name icon_src comment
+    local found=false
+    for entry in "${DESKTOP_ENTRIES[@]}"; do
+        IFS='|' read -r ename dbase dname isrc cmt <<< "$entry"
+        if [[ "$ename" == "$tool_name" ]]; then
+            desktop_basename="$dbase"
+            display_name="$dname"
+            icon_src="$REPO_ROOT/$isrc"
+            comment="$cmt"
+            found=true
+            break
+        fi
+    done
+    [[ "$found" == "true" ]] || return 0  # Not a GUI tool with an icon
+
+    if [[ ! -f "$icon_src" ]]; then
+        write_error "Icon source not found: $icon_src"
+        return 1
+    fi
+
+    local icon_dst="$(dirname "$exec_path")/$(basename "$icon_src")"
+    local apps_dir="$HOME/.local/share/applications"
+    local desktop_file="$apps_dir/$desktop_basename.desktop"
+
+    write_step "Deploying icon to $icon_dst"
+    cp "$icon_src" "$icon_dst"
+
+    write_step "Writing desktop entry $desktop_file"
+    mkdir -p "$apps_dir"
+    cat > "$desktop_file" <<EOF
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=$display_name
+Comment=$comment
+Exec=$exec_path
+Icon=$icon_dst
+Terminal=false
+Categories=Development;
+EOF
 }
 
 # --- Main ---
@@ -225,6 +316,10 @@ echo "  Tools:      ${RESOLVED_TOOLS[*]}"
 echo "  Build type: $BUILD_TYPE"
 echo "  Clean:      $CLEAN"
 echo "  Jobs:       $JOBS"
+echo "  Deploy:     $DEPLOY"
+if [[ "$DEPLOY" == "true" ]]; then
+    echo "  Install:    $INSTALL_DIR"
+fi
 
 check_prerequisites
 
@@ -248,6 +343,9 @@ done
 write_header "Build Summary"
 echo "  Build type: $BUILD_TYPE"
 echo "  Results:    $REPO_ROOT/result/$BUILD_TYPE/"
+if [[ "$DEPLOY" == "true" ]]; then
+    echo "  Deployed:   $INSTALL_DIR"
+fi
 if [[ ${#FAILED[@]} -gt 0 ]]; then
     echo "  FAILED:     ${FAILED[*]}"
     exit 1

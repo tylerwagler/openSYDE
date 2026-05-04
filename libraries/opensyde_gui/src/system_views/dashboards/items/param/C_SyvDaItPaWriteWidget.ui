@@ -501,7 +501,10 @@
       <number>10</number>
      </property>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelWrite">
+      <widget class="QLabel" name="pc_LabelWrite">
+       <property name="styleRole" stdset="0">
+        <string>progress-text</string>
+       </property>
        <property name="text">
         <string>Write</string>
        </property>
@@ -521,7 +524,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelRead">
+      <widget class="QLabel" name="pc_LabelRead">
+       <property name="styleRole" stdset="0">
+        <string>progress-text</string>
+       </property>
        <property name="text">
         <string>Read back</string>
        </property>
@@ -541,7 +547,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelConfirm">
+      <widget class="QLabel" name="pc_LabelConfirm">
+       <property name="styleRole" stdset="0">
+        <string>progress-text</string>
+       </property>
        <property name="text">
         <string>Confirm</string>
        </property>
@@ -561,7 +570,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelCrc">
+      <widget class="QLabel" name="pc_LabelCrc">
+       <property name="styleRole" stdset="0">
+        <string>progress-text</string>
+       </property>
        <property name="text">
         <string>Write CRC</string>
        </property>
@@ -581,7 +593,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabProgressText" name="pc_LabelFinished">
+      <widget class="QLabel" name="pc_LabelFinished">
+       <property name="styleRole" stdset="0">
+        <string>progress-text</string>
+       </property>
        <property name="text">
         <string>Finished</string>
        </property>
@@ -606,7 +621,10 @@
     </spacer>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_OgeGbx" name="pc_GroupBox">
+    <widget class="QGroupBox" name="pc_GroupBox">
+     <property name="styleRole" stdset="0">
+      <string>default</string>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="spacing">
        <number>9</number>
@@ -628,7 +646,10 @@
            <number>6</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingSteps">
+           <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingSteps">
+            <property name="styleRole" stdset="0">
+             <string>heading-group-bold</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -679,7 +700,10 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_6">
+           <widget class="QFrame" name="frame_6">
+            <property name="styleRole" stdset="0">
+             <string>fra-separator</string>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -705,7 +729,10 @@
        </layout>
       </item>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelStepDescription">
+       <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelStepDescription">
+        <property name="styleRole" stdset="0">
+         <string>group-item</string>
+        </property>
         <property name="text">
          <string>StepDescription</string>
         </property>
@@ -742,7 +769,10 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_12">
            <item>
-            <widget class="stw::opensyde_gui_elements::C_OgeChxProperties" name="pc_CbConfirm">
+            <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CbConfirm">
+             <property name="styleRole" stdset="0">
+              <string>chx-properties</string>
+             </property>
              <property name="text">
               <string>Parameters are valid</string>
              </property>
@@ -795,7 +825,10 @@
               <number>6</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold" name="pc_LabelHeadingNotification">
+              <widget class="stw::opensyde_gui_elements::C_OgeLabContextMenuBase" name="pc_LabelHeadingNotification">
+               <property name="styleRole" stdset="0">
+                <string>heading-group-bold</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -846,7 +879,10 @@
               <number>0</number>
              </property>
              <item>
-              <widget class="stw::opensyde_gui_elements::C_OgeFraSeparator" name="frame_5">
+              <widget class="QFrame" name="frame_5">
+               <property name="styleRole" stdset="0">
+                <string>fra-separator</string>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -872,7 +908,10 @@
           </layout>
          </item>
          <item>
-          <widget class="stw::opensyde_gui_elements::C_OgeChxProperties" name="pc_CbNotifiction">
+          <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CbNotifiction">
+           <property name="styleRole" stdset="0">
+            <string>chx-properties</string>
+           </property>
            <property name="text">
             <string>Trigger Application Notification</string>
            </property>
@@ -932,7 +971,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubCancel" name="pc_BushButtonCancel">
+      <widget class="QPushButton" name="pc_PushButtonCancel">
+       <property name="styleRole" stdset="0">
+        <string>cancel</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -957,7 +999,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_PbConfirm">
+      <widget class="QPushButton" name="pc_PbConfirm">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -982,7 +1027,10 @@
       </widget>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgePubDialog" name="pc_BushButtonOk">
+      <widget class="QPushButton" name="pc_PushButtonOk">
+       <property name="styleRole" stdset="0">
+        <string>dialog</string>
+       </property>
        <property name="minimumSize">
         <size>
          <width>120</width>
@@ -1028,36 +1076,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbx</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbx.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabHeadingGroupBold</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabContextMenuBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabHeadingGroupBold.hpp</header>
+   <header>C_OgeLabContextMenuBase.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeFraSeparator</class>
-   <extends>QFrame</extends>
-   <header>C_OgeFraSeparator.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubCancel</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubCancel.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgePubDialog</class>
-   <extends>QPushButton</extends>
-   <header>C_OgePubDialog.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeWiProgressBopperle</class>
@@ -1072,19 +1098,14 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabProgressText</class>
-   <extends>QLabel</extends>
-   <header>C_OgeLabProgressText.hpp</header>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeTedPropertiesComment</class>
    <extends>QTextEdit</extends>
    <header>C_OgeTedPropertiesComment.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeChxProperties</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
-   <header>C_OgeChxProperties.hpp</header>
+   <header>C_OgeChxToolTipBase.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

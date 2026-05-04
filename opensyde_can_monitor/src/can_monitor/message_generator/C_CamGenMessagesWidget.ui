@@ -289,7 +289,10 @@
     </layout>
    </item>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_CamOgeGbxMessageGeneratorBackground" name="pc_GroupBoxMessages">
+    <widget class="QGroupBox" name="pc_GroupBoxMessages">
+     <property name="styleRole" stdset="0">
+      <string>cam-gbx-message-generator-background</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -310,7 +313,10 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="stw::opensyde_gui_elements::C_OgeGbxTransparent" name="pc_GroupBoxNoMessages">
+       <widget class="QGroupBox" name="pc_GroupBoxNoMessages">
+        <property name="styleRole" stdset="0">
+         <string>transparent</string>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="spacing">
           <number>0</number>
@@ -416,21 +422,9 @@
    <header>C_OgeLabGenericNoPaddingNoMargins.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeGbxTransparent</class>
-   <extends>QGroupBox</extends>
-   <header>C_OgeGbxTransparent.hpp</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>stw::opensyde_gui::C_CamGenTableView</class>
    <extends>QTableView</extends>
    <header>C_CamGenTableView.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgeGbxMessageGeneratorBackground</class>
-   <extends>QGroupBox</extends>
-   <header>C_CamOgeGbxMessageGeneratorBackground.hpp</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

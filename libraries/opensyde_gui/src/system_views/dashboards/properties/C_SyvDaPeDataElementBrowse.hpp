@@ -12,8 +12,7 @@
 #define C_SYVDAPEDATAELEMENTBROWSE_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_TblTreDataElementModel.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
 #include "C_OgeContextMenu.hpp"
@@ -32,7 +31,7 @@ namespace opensyde_gui
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 class C_SyvDaPeDataElementBrowse :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -52,8 +51,6 @@ public:
    std::vector<stw::opensyde_gui_logic::C_PuiSvDbNodeDataPoolListElementId> GetSelectedDataElements(void) const;
    void PrepareCleanUp(void);
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    //Avoid call
@@ -62,8 +59,6 @@ private:
 
    Ui::C_SyvDaPeDataElementBrowse * mpc_Ui;
    stw::opensyde_gui_elements::C_OgeContextMenu * mpc_ContextMenu;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
    static const int32_t mhs32_INDEX_DATAPOOL_ELEMENT;
    static const int32_t mhs32_INDEX_BUS_SIGNAL;
    static int32_t mhs32_LastSelectedComboBoxIndex;

@@ -56,9 +56,8 @@ const QString C_CieExportReportWidget::mhc_HTML_TABLE_DATA_START =
 //----------------------------------------------------------------------------------------------------------------------
 C_CieExportReportWidget::C_CieExportReportWidget(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                  const QString & orc_FilePath) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_CieExportReportWidget),
-   mrc_ParentDialog(orc_Parent),
    mc_FilePath(orc_FilePath)
 {
    const QFileInfo c_FileInfo(orc_FilePath);
@@ -76,7 +75,7 @@ C_CieExportReportWidget::C_CieExportReportWidget(stw::opensyde_gui_elements::C_O
    this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Report"));
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this,
            &C_CieExportReportWidget::m_OkClicked);
 }
 
@@ -98,7 +97,7 @@ C_CieExportReportWidget::~C_CieExportReportWidget(void)
 void C_CieExportReportWidget::InitStaticNames(void) const
 {
    this->mpc_Ui->pc_LabelHeadingReport->setText(C_GtGetText::h_GetText("Details"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -121,39 +120,6 @@ void C_CieExportReportWidget::SetMessageData(const std::map<C_SclString,
 
    // build up report in message dialog field
    this->m_BuildReport();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out] opc_KeyEvent Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_CieExportReportWidget::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->mrc_ParentDialog.accept();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

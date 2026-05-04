@@ -47,7 +47,10 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_HintToBusLabel">
+        <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_HintToBusLabel">
+         <property name="styleRole" stdset="0">
+          <string>group-item</string>
+         </property>
          <property name="text">
           <string>Edit PDO Configuration:</string>
          </property>
@@ -70,7 +73,10 @@
         </spacer>
        </item>
        <item>
-        <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LinkToBusLabel">
+        <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LinkToBusLabel">
+         <property name="styleRole" stdset="0">
+          <string>group-item</string>
+         </property>
          <property name="text">
           <string>TextLabel</string>
          </property>
@@ -108,7 +114,10 @@
       </spacer>
      </item>
      <item>
-      <widget class="stw::opensyde_gui_elements::C_OgeLabGroupItem" name="pc_LabelNoChannels">
+      <widget class="stw::opensyde_gui_elements::C_OgeLabToolTipBase" name="pc_LabelNoChannels">
+       <property name="styleRole" stdset="0">
+        <string>group-item</string>
+       </property>
        <property name="text">
         <string>PDO Table</string>
        </property>
@@ -142,9 +151,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_OgeLabGroupItem</class>
+   <class>stw::opensyde_gui_elements::C_OgeLabToolTipBase</class>
    <extends>QLabel</extends>
-   <header>C_OgeLabGroupItem.hpp</header>
+   <header>C_OgeLabToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui::C_SdNdeCoPdoTableView</class>

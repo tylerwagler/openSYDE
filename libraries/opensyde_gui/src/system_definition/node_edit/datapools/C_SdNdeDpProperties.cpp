@@ -79,9 +79,8 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
                                          const int32_t os32_DataPoolIndex, const uint32_t & oru32_NodeIndex,
                                          const bool oq_SelectName, const bool oq_NodeProgrammingSupport,
                                          const C_OscNodeDataPoolId * const opc_SharedDatapoolId) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeDpProperties()),
-   mpc_ParentDialog(&orc_Parent),
    mpc_OscDataPool(opc_OscDataPool),
    mpc_UiDataPool(opc_UiDataPool),
    mpe_ComProtocolType(ope_ComProtocolType),
@@ -112,7 +111,7 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
    }
 
    // register the widget for showing
-   this->mpc_ParentDialog->SetWidget(this);
+   this->mrc_ParentDialog.SetWidget(this);
 
    //BEFORE load
    InitStaticNames();
@@ -300,7 +299,7 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
       }
 
       // New shared Datapool. Deactivate the break relation button
-      this->mpc_Ui->pc_BushButtonBreakRelation->setEnabled(false);
+      this->mpc_Ui->pc_PushButtonBreakRelation->setEnabled(false);
 
       q_IsShared = true;
       SetIsDatapoolShared(q_IsShared);
@@ -345,8 +344,8 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
    }
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SdNdeDpProperties::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeDpProperties::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SdNdeDpProperties::m_CancelClicked);
    connect(this->mpc_Ui->pc_LineEditDatapoolName, &QLineEdit::textChanged, this,
            &C_SdNdeDpProperties::m_CheckDatapoolName);
@@ -357,9 +356,9 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
    connect(this->mpc_Ui->pc_ComboBoxProtocol, static_cast<void (QComboBox::*)(
                                                              int32_t)>(&C_OgeCbxText::currentIndexChanged), this,
            &C_SdNdeDpProperties::m_OnComTypeChange);
-   connect(this->mpc_Ui->pc_CheckBoxSafety, &C_OgeChxTristateTransparentToggle::toggled, this,
+   connect(this->mpc_Ui->pc_CheckBoxSafety, &C_OgeChxTristateBase::toggled, this,
            &C_SdNdeDpProperties::m_OnSafetyChange);
-   connect(this->mpc_Ui->pc_BushButtonBreakRelation, &C_OgePubConfigure::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonBreakRelation, &C_OgePubToolTipBase::clicked, this,
            &C_SdNdeDpProperties::m_BreakSharedRelation);
 }
 
@@ -369,7 +368,7 @@ C_SdNdeDpProperties::C_SdNdeDpProperties(C_OgePopUpDialog & orc_Parent, C_OscNod
    Clean up.
 */
 //----------------------------------------------------------------------------------------------------------------------
-//lint -e{1540}  no memory leak because of the parent of mpc_ParentDialog and the Qt memory management
+//lint -e{1540}  no memory leak because of the parent of mrc_ParentDialog and the Qt memory management
 C_SdNdeDpProperties::~C_SdNdeDpProperties(void)
 {
    delete mpc_Ui;
@@ -381,10 +380,10 @@ C_SdNdeDpProperties::~C_SdNdeDpProperties(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpProperties::InitStaticNames(void)
 {
-   this->mpc_ParentDialog->SetTitle(C_GtGetText::h_GetText("Datapool"));
-   this->mpc_ParentDialog->SetSubTitle(C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetTitle(C_GtGetText::h_GetText("Datapool"));
+   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Properties"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_CommentText->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
    this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
    this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
@@ -402,7 +401,7 @@ void C_SdNdeDpProperties::InitStaticNames(void)
    this->mpc_Ui->pc_LabelDataPoolReservation->setText(C_GtGetText::h_GetText("Resulting Node NVM Reservation"));
    this->mpc_Ui->pc_LabelDatapoolShareConfiguration->setText(C_GtGetText::h_GetText(
                                                                 "Share Configuration with other Datapools:"));
-   this->mpc_Ui->pc_BushButtonBreakRelation->setText(C_GtGetText::h_GetText("Break Relation"));
+   this->mpc_Ui->pc_PushButtonBreakRelation->setText(C_GtGetText::h_GetText("Break Relation"));
    this->mpc_Ui->pc_LabelCrcVersion->setText(C_GtGetText::h_GetText("CRC Version"));
 
    //Tool tips
@@ -536,39 +535,6 @@ void C_SdNdeDpProperties::SetIsDatapoolShared(const bool o_IsShared)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeDpProperties::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot of Ok button click
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -690,10 +656,7 @@ void C_SdNdeDpProperties::m_OkClicked(void)
          // CRC version
          this->m_GetCrcVersion();
 
-         if (this->mpc_ParentDialog != NULL)
-         {
-            this->mpc_ParentDialog->accept();
-         }
+         this->mrc_ParentDialog.accept();
       }
    }
 }
@@ -704,10 +667,7 @@ void C_SdNdeDpProperties::m_OkClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SdNdeDpProperties::m_CancelClicked(void)
 {
-   if (this->mpc_ParentDialog != NULL)
-   {
-      this->mpc_ParentDialog->reject();
-   }
+   this->mrc_ParentDialog.reject();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -792,7 +752,7 @@ void C_SdNdeDpProperties::m_ApplyType(const bool oq_SharedDatapool)
    this->mpc_Ui->pc_LabDatapoolImage->SetSvg(c_Pic);
 
    // Shared configuration visibility
-   this->mpc_Ui->pc_BushButtonBreakRelation->setVisible(oq_SharedDatapool);
+   this->mpc_Ui->pc_PushButtonBreakRelation->setVisible(oq_SharedDatapool);
    this->mpc_Ui->pc_LabelDatapoolShareConfiguration->setVisible(oq_SharedDatapool);
    this->mpc_Ui->pc_ListWidgetSharedDatapoolInfo->setVisible(oq_SharedDatapool);
 
@@ -1235,7 +1195,7 @@ void C_SdNdeDpProperties::m_BreakSharedRelation(void)
          rc_SharedDatapools.RemoveSharedDatapool(C_OscNodeDataPoolId(this->mu32_NodeIndex,
                                                                      static_cast<uint32_t>(this->ms32_DataPoolIndex)));
 
-         this->mpc_Ui->pc_BushButtonBreakRelation->setEnabled(false);
+         this->mpc_Ui->pc_PushButtonBreakRelation->setEnabled(false);
          this->mpc_Ui->pc_ListWidgetSharedDatapoolInfo->clear();
 
          // Reinit the labels and the ui
@@ -1248,12 +1208,12 @@ void C_SdNdeDpProperties::m_BreakSharedRelation(void)
          if (this->mpc_OscDataPool->e_Type == C_OscNodeDataPool::eDIAG)
          {
             const QSize c_SIZE(892, 800);
-            this->mpc_ParentDialog->SetSize(c_SIZE);
+            this->mrc_ParentDialog.SetSize(c_SIZE);
          }
          else //For C_OscNodeDataPool::eNVM
          {
             const QSize c_SIZE(892, 932);
-            this->mpc_ParentDialog->SetSize(c_SIZE);
+            this->mrc_ParentDialog.SetSize(c_SIZE);
          }
          // we can not change Qt constant but it is still better than using the hard coded magic number 16777215
       }
@@ -1404,3 +1364,4 @@ void C_SdNdeDpProperties::m_GetCrcVersion() const
 
    this->mpc_OscDataPool->u16_DefinitionCrcVersion = u16_CrcVersion;
 }
+

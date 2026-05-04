@@ -56,7 +56,7 @@ min-height: 0px;
 /* Scroll areas */
 stw--opensyde_gui_elements--C_OgeSmoothScrollArea QScrollBar:vertical,
 stw--opensyde_gui--C_SebGraphicsView QScrollBar:vertical,
-stw--opensyde_gui_elements--C_OgeFraFrame QScrollBar:vertical
+QFrame[styleRole="fra-frame"] QScrollBar:vertical
 {
 width: 11px; /*real width of scroll bar is 5px; Real width = width - padding-right/left */
 padding-right: 6px;
@@ -67,7 +67,7 @@ padding-bottom: 15px;
 stw--opensyde_gui_elements--C_OgeDarkScrollArea QScrollBar:horizontal,
 stw--opensyde_gui_elements--C_OgeSmoothScrollArea QScrollBar:horizontal,
 stw--opensyde_gui--C_SebGraphicsView QScrollBar:horizontal,
-stw--opensyde_gui_elements--C_OgeFraFrame QScrollBar:horizontal
+QFrame[styleRole="fra-frame"] QScrollBar:horizontal
 {
 height: 11px; /*real height of scroll bar is 5px; Real height = height - padding-bottom/top */
 padding-bottom: 6px;
@@ -75,7 +75,7 @@ padding-left: 15px;
 padding-right: 15px;
 }
 
-stw--opensyde_gui_elements--C_OgeSaNaviBar QScrollBar:vertical
+QScrollArea[styleRole="sa-navi-bar"] QScrollBar:vertical
 {
 width: 10px; /*real width of scroll bar is 5px; Real width = width - padding-right/left */
 padding-left: 0px;
@@ -84,7 +84,7 @@ padding-bottom: 4px;
 padding-top: 3px;
 }
 
-stw--opensyde_gui_elements--C_OgeSaNaviBar QScrollBar:horizontal
+QScrollArea[styleRole="sa-navi-bar"] QScrollBar:horizontal
 {
 height: 5px; /*real height of scroll bar is 5px; Real height = height - padding-bottom/top */
 padding-top: 0px;
@@ -290,7 +290,7 @@ padding-right: 0px;
 /* --------------------------------------------------------------------- */
 /*Textedit scrollbar */
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment QScrollBar:vertical,
-stw--opensyde_gui_elements--C_OgeTebReport QScrollBar:vertical,
+stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole="teb-report"] QScrollBar:vertical,
 stw--opensyde_gui_elements--C_OgeTedDbComment QScrollBar:vertical
 {
 width: 5px; /*real width of scroll bar is 5px; Real width = width - padding-right/left */
@@ -300,7 +300,7 @@ padding-bottom: 3px;
 }
 /*--------- horizontal not tested/used yet*/
 stw--opensyde_gui_elements--C_OgeTedPropertiesComment QScrollBar:horizontal,
-stw--opensyde_gui_elements--C_OgeTebReport QScrollBar:horizontal,
+stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole="teb-report"] QScrollBar:horizontal,
 stw--opensyde_gui_elements--C_OgeTedDbComment QScrollBar:horizontal
 {
 height: 5px; /*real width of scroll bar is 5px; Real height = height - padding-bottom/top */
@@ -311,7 +311,7 @@ padding-right: 3px;
 
 /* --------------------------------------------------------------------- */
 /* Message box details scrollbar */
-stw--opensyde_gui_elements--C_OgeTebMessageDetails QScrollBar:vertical
+stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole="teb-message-details"] QScrollBar:vertical
 {
 width:10px; /*real width of scroll bar is 5px; Real width = width - padding-right/left */
 padding-right:5px;
@@ -319,7 +319,7 @@ padding-top:6px;
 padding-bottom:6px;
 }
 /*--------- horizontal not tested/used yet*/
-stw--opensyde_gui_elements--C_OgeTebMessageDetails QScrollBar:horizontal
+stw--opensyde_gui_elements--C_OgeTebContextMenuBase[styleRole="teb-message-details"] QScrollBar:horizontal
 {
 height: 5px; /*real height of scroll bar is 5px; Real height = height - padding-bottom/top */
 padding-bottom: 0px;

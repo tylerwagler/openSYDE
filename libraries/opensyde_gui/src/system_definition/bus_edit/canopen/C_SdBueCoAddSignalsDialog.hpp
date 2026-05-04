@@ -9,10 +9,9 @@
 #define C_SDBUECOADDSIGNALSDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 
 #include "stwtypes.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 #include "C_OgeContextMenu.hpp"
 #include "C_OscCanOpenManagerMappableSignal.hpp"
 #include "C_PuiSvDbNodeDataPoolListElementId.hpp"
@@ -33,7 +32,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdBueCoAddSignalsDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -46,14 +45,10 @@ public:
    std::vector<stw::opensyde_core::C_OscCanOpenManagerMappableSignal> GetSelectedSignals(void) const;
    void PrepareCleanUp(void);
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdBueCoAddSignalsDialog * mpc_Ui;
    stw::opensyde_gui_elements::C_OgeContextMenu * mpc_ContextMenu;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
 
    void m_OkClicked(void);
    void m_CancelClicked(void);

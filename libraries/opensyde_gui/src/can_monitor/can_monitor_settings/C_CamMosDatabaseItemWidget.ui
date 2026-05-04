@@ -30,7 +30,10 @@
     <number>3</number>
    </property>
    <item>
-    <widget class="stw::opensyde_gui_elements::C_CamOgeChxSettings" name="pc_CheckBox">
+    <widget class="stw::opensyde_gui_elements::C_OgeChxToolTipBase" name="pc_CheckBox">
+     <property name="styleRole" stdset="0">
+      <string>cam-chx-settings</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -171,9 +174,9 @@
    <header>C_OgePubSvgIconOnly.hpp</header>
   </customwidget>
   <customwidget>
-   <class>stw::opensyde_gui_elements::C_CamOgeChxSettings</class>
+   <class>stw::opensyde_gui_elements::C_OgeChxToolTipBase</class>
    <extends>QCheckBox</extends>
-   <header>C_CamOgeChxSettings.hpp</header>
+   <header>C_OgeChxToolTipBase.hpp</header>
   </customwidget>
   <customwidget>
    <class>stw::opensyde_gui_elements::C_OgeLabSvgOnly</class>

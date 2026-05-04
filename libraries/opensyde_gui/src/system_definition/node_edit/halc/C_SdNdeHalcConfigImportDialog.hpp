@@ -9,11 +9,10 @@
 #define C_SDNDEHALCCONFIGIMPORTDIALOG_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include <QWidget>
 
 #include "stwtypes.hpp"
 #include "C_OscHalcConfig.hpp"
-#include "C_OgePopUpDialog.hpp"
+#include "C_OgePopUpContentBase.hpp"
 
 #include "C_OscHalcConfigStandalone.hpp"
 
@@ -32,7 +31,7 @@ namespace opensyde_gui
 /* -- Types --------------------------------------------------------------------------------------------------------- */
 
 class C_SdNdeHalcConfigImportDialog :
-   public QWidget
+   public stw::opensyde_gui_elements::C_OgePopUpContentBase
 {
    Q_OBJECT
 
@@ -46,13 +45,9 @@ public:
    int32_t PrepareDialog(QString & orc_ErrorDetails);
    int32_t GetResult(QString & orc_ErrorDetails) const;
 
-protected:
-   void keyPressEvent(QKeyEvent * const opc_KeyEvent) override;
 
 private:
    Ui::C_SdNdeHalcConfigImportDialog * mpc_Ui;
-   //lint -e{1725} Only problematic if copy or assignment is allowed
-   stw::opensyde_gui_elements::C_OgePopUpDialog & mrc_ParentDialog;
 
    const uint32_t mu32_NodeIndex;
    const QString mc_ImportFileName;

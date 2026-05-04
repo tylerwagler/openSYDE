@@ -59,9 +59,8 @@ using namespace stw::opensyde_gui_elements;
 C_SdNdeHalcConfigImportDialog::C_SdNdeHalcConfigImportDialog(stw::opensyde_gui_elements::C_OgePopUpDialog & orc_Parent,
                                                              const uint32_t ou32_NodeIndex,
                                                              const QString & orc_ImportFileName) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SdNdeHalcConfigImportDialog),
-   mrc_ParentDialog(orc_Parent),
    mu32_NodeIndex(ou32_NodeIndex),
    mc_ImportFileName(orc_ImportFileName),
    ms32_Result(C_NOACT)
@@ -74,7 +73,7 @@ C_SdNdeHalcConfigImportDialog::C_SdNdeHalcConfigImportDialog(stw::opensyde_gui_e
    this->mrc_ParentDialog.SetWidget(this);
 
    connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SdNdeHalcConfigImportDialog::m_OkClicked);
-   connect(this->mpc_Ui->pc_PushButtonCancel, &C_OgePubCancel::clicked, this,
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked, this,
            &C_SdNdeHalcConfigImportDialog::m_OnCancel);
 }
 
@@ -245,39 +244,6 @@ int32_t C_SdNdeHalcConfigImportDialog::GetResult(QString & orc_ErrorDetails) con
    }
 
    return this->ms32_Result;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdNdeHalcConfigImportDialog::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         this->m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -556,3 +522,4 @@ bool C_SdNdeHalcConfigImportDialog::mh_CheckConsistencyEl(const C_OscHalcConfigP
    }
    return q_Consistent;
 }
+

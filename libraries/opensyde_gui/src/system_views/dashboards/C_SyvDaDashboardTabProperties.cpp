@@ -54,9 +54,8 @@ C_SyvDaDashboardTabProperties::C_SyvDaDashboardTabProperties(C_OgePopUpDialog & 
                                                              const uint32_t ou32_DashboardIndex,
                                                              const uint32_t ou32_ViewIndex,
                                                              const bool oq_NewDashboard) :
-   QWidget(&orc_Parent),
+   C_OgePopUpContentBase(orc_Parent, &orc_Parent),
    mpc_Ui(new Ui::C_SyvDaDashboardTabProperties()),
-   mpc_ParentDialog(&orc_Parent),
    mu32_DashboardIndex(ou32_DashboardIndex),
    mu32_ViewIndex(ou32_ViewIndex),
    mq_NewDashboard(oq_NewDashboard)
@@ -65,10 +64,10 @@ C_SyvDaDashboardTabProperties::C_SyvDaDashboardTabProperties(C_OgePopUpDialog & 
    mpc_Ui->setupUi(this);
 
    // register the widget for showing
-   this->mpc_ParentDialog->SetWidget(this);
+   this->mrc_ParentDialog.SetWidget(this);
 
    // set main title
-   this->mpc_ParentDialog->SetTitle(orc_Name);
+   this->mrc_ParentDialog.SetTitle(orc_Name);
 
    //BEFORE load
    InitStaticNames();
@@ -111,8 +110,8 @@ C_SyvDaDashboardTabProperties::C_SyvDaDashboardTabProperties(C_OgePopUpDialog & 
    }
 
    // connects
-   connect(this->mpc_Ui->pc_BushButtonOk, &QPushButton::clicked, this, &C_SyvDaDashboardTabProperties::m_OkClicked);
-   connect(this->mpc_Ui->pc_BushButtonCancel, &QPushButton::clicked,
+   connect(this->mpc_Ui->pc_PushButtonOk, &QPushButton::clicked, this, &C_SyvDaDashboardTabProperties::m_OkClicked);
+   connect(this->mpc_Ui->pc_PushButtonCancel, &QPushButton::clicked,
            this, &C_SyvDaDashboardTabProperties::m_CancelClicked);
    connect(this->mpc_Ui->pc_LineEditName, &QLineEdit::textChanged, this,
            &C_SyvDaDashboardTabProperties::m_CheckDashboardTabName);
@@ -128,7 +127,7 @@ C_SyvDaDashboardTabProperties::C_SyvDaDashboardTabProperties(C_OgePopUpDialog & 
    Clean up.
 */
 //----------------------------------------------------------------------------------------------------------------------
-//lint -e{1540}  no memory leak because of the parent of mpc_ParentDialog and the Qt memory management
+//lint -e{1540}  no memory leak because of the parent of mrc_ParentDialog and the Qt memory management
 C_SyvDaDashboardTabProperties::~C_SyvDaDashboardTabProperties(void)
 {
    delete mpc_Ui;
@@ -140,9 +139,9 @@ C_SyvDaDashboardTabProperties::~C_SyvDaDashboardTabProperties(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardTabProperties::InitStaticNames(void)
 {
-   this->mpc_ParentDialog->SetSubTitle(C_GtGetText::h_GetText("Properties"));
-   this->mpc_Ui->pc_BushButtonOk->setText(C_GtGetText::h_GetText("OK"));
-   this->mpc_Ui->pc_BushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
+   this->mrc_ParentDialog.SetSubTitle(C_GtGetText::h_GetText("Properties"));
+   this->mpc_Ui->pc_PushButtonOk->setText(C_GtGetText::h_GetText("OK"));
+   this->mpc_Ui->pc_PushButtonCancel->setText(C_GtGetText::h_GetText("Cancel"));
    this->mpc_Ui->pc_TedComment->setPlaceholderText(C_GtGetText::h_GetText("Add your comment here ..."));
    this->mpc_Ui->pc_LabelName->setText(C_GtGetText::h_GetText("Name"));
    this->mpc_Ui->pc_LabelComment->setText(C_GtGetText::h_GetText("Comment"));
@@ -209,39 +208,6 @@ C_PuiSvDashboard::E_TabType C_SyvDaDashboardTabProperties::GetDashboardTabType()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Overwritten key press event slot
-
-   Here: Handle specific enter key cases
-
-   \param[in,out]  opc_KeyEvent  Event identification and information
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardTabProperties::keyPressEvent(QKeyEvent * const opc_KeyEvent)
-{
-   bool q_CallOrg = true;
-
-   //Handle all enter key cases manually
-   if ((opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Enter)) ||
-       (opc_KeyEvent->key() == static_cast<int32_t>(Qt::Key_Return)))
-   {
-      if (((opc_KeyEvent->modifiers().testFlag(Qt::ControlModifier) == true) &&
-           (opc_KeyEvent->modifiers().testFlag(Qt::AltModifier) == false)) &&
-          (opc_KeyEvent->modifiers().testFlag(Qt::ShiftModifier) == false))
-      {
-         m_OkClicked();
-      }
-      else
-      {
-         q_CallOrg = false;
-      }
-   }
-   if (q_CallOrg == true)
-   {
-      QWidget::keyPressEvent(opc_KeyEvent);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot of Ok button click
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -249,10 +215,7 @@ void C_SyvDaDashboardTabProperties::m_OkClicked(void)
 {
    if (this->m_CheckDashboardTabName() == true)
    {
-      if (this->mpc_ParentDialog != NULL)
-      {
-         this->mpc_ParentDialog->accept();
-      }
+      this->mrc_ParentDialog.accept();
    }
    else
    {
@@ -271,10 +234,7 @@ void C_SyvDaDashboardTabProperties::m_OkClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardTabProperties::m_CancelClicked(void)
 {
-   if (this->mpc_ParentDialog != NULL)
-   {
-      this->mpc_ParentDialog->reject();
-   }
+   this->mrc_ParentDialog.reject();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -350,3 +310,4 @@ void C_SyvDaDashboardTabProperties::m_SetChartDashboardType(const bool oq_IsChec
 {
    this->mpc_Ui->pc_RbChartDashboard->setChecked(oq_IsChecked);
 }
+
