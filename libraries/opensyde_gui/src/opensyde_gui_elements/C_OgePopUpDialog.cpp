@@ -13,6 +13,7 @@
 #include "precomp_headers.hpp"
 
 #include <QPainter>
+#include <QPushButton>
 #include <QGraphicsColorizeEffect>
 #include <QGraphicsDropShadowEffect>
 #include <QApplication>
@@ -154,6 +155,15 @@ void C_OgePopUpDialog::SetWidget(QWidget * const opc_Widget)
       this->mpc_Ui->pc_VerticalLayout->setStretch(s32_Index, 1);
       opc_Widget->setAutoFillBackground(true);
       this->mpc_Ui->pc_ScrollAreaWidgetContents->SetBackgroundColor(11);
+
+      // Make Enter activate the OK button when the popup follows the
+      // pc_PushButtonOk naming convention. Popups using a different button name
+      // should call setDefault(true) themselves in their ctor.
+      QPushButton * const pc_OkButton = opc_Widget->findChild<QPushButton *>("pc_PushButtonOk");
+      if (pc_OkButton != NULL)
+      {
+         pc_OkButton->setDefault(true);
+      }
    }
 }
 
