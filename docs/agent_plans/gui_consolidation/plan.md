@@ -8,13 +8,16 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 
 ---
 
-## Status Summary (as of 2026-05-03)
+## Status Summary (as of 2026-05-04)
 
-> Phase 3 update — popup-content boilerplate now consolidated under
-> `C_OgePopUpContentBase`. 51 of 62 widgets migrated across commits
-> `51dfacea`, `bc920d5c`, `c67f33bd`, `ad50054a`, `8b22bac0`. Twelve
-> excluded for follow-up (sibling-base / field-rename / Escape-key
-> variants).
+> Phase 3 closed out. Main pass landed `C_OgePopUpContentBase` (commits
+> `51dfacea`, `bc920d5c`, `c67f33bd`, `ad50054a`, `8b22bac0`). Follow-up
+> picked off ten more widgets across commits `0e992ac7` (Batch A,
+> mrc_Parent renames), `87ef4701` (Batch B, pointer→ref), and
+> `34daa88a` (Batch C, custom keyPressEvent). Final tally: **60 of 62
+> widgets migrated**. Two QDialog-based popups (`C_OgeWiCustomMessage`,
+> `C_PopPasswordDialogWidget`) deliberately left alone — see Batch D
+> rationale below.
 
 
 | Phase | Status | Notes |
@@ -36,7 +39,7 @@ The openSYDE GUI layer contains **~275 custom widget classes** across `opensyde_
 | Phase 1 (Widget) | ✅ **Complete** | C_OgeWi{Param,Table}SpinBoxGroup migrated earlier into C_OgeWiSpinBoxGroup + styleRole. All 20 remaining classes have paintEvent / event overrides, members, or .ui setup — none qualify by the playbook bar. See phase1-progress-widget.md. |
 | Phase 1 (Splitter / Tool Button) | ✅ **No candidates** | All splitter classes have logic; tool_button has only the tooltip base |
 | Phase 2 | ⏳ Not started | Dashboard property panels |
-| Phase 3 | ✅ **Complete (main pass)** | 51/62 popup-content widgets now share `C_OgePopUpContentBase`. Five commits: `51dfacea` (base class), `bc920d5c` (update_package), `c67f33bd` (system_definition), `ad50054a` (system_views), `8b22bac0` (remaining buckets). 12 excluded variants tracked as Phase 3 follow-up. See phase3-brief.md. |
+| Phase 3 | ✅ **Complete** | 60/62 popup-content widgets now share `C_OgePopUpContentBase`. Main pass: `51dfacea`/`bc920d5c`/`c67f33bd`/`ad50054a`/`8b22bac0`. Follow-up (Batches A–C): `0e992ac7`/`87ef4701`/`34daa88a`. Batch D (2 QDialog popups) closed as won't-fix — see Phase 3 detail section. |
 | Phase 4 | ⏳ Not started | Title bar unification |
 | Phase 5 | ✅ **Complete** | CAN Monitor element dedup. 25 classes audited; all 10 stylesheet-only candidates migrated (commits `150c1586`, `3dcca288`, `3298ba6e`); 15 with real logic kept. See phase5-progress.md. |
 | Phase 6 | ⏳ Not started | MVD triplication in dashboard items |
@@ -184,8 +187,10 @@ Extract a generic `C_SyvDaPeWidgetType` base that takes the widget type as a par
 
 ## Phase 3: Consolidate Popup Dialog Boilerplate
 
-**Status: ✅ Main pass complete (51/62 widgets migrated). See phase3-brief.md
-for the full landed scope and the 12-file follow-up list.**
+**Status: ✅ Closed (60/62 widgets migrated). See phase3-brief.md for the
+main-pass scope; the follow-up batches landed in commits `0e992ac7`,
+`87ef4701`, `34daa88a`. The remaining 2 are deliberately not migrated —
+see Batch D below.**
 
 ### Problem
 Popup content widgets across the repo repeat:
@@ -204,15 +209,37 @@ default `m_OnEnterAccept()` (calls `mrc_ParentDialog.accept()` directly);
 Variant B subclasses override it to route through their existing
 validation/save slot first.
 
-### Follow-up scope (12 files)
-- 2 `QDialog`-based popups (`C_OgeWiCustomMessage`, `C_PopPasswordDialogWidget`)
-  — would need a sibling `C_OgePopUpDialogContentBase`.
-- 8 widgets that use a different parent-dialog field name (`mrc_Parent`,
-  `mpc_ParentDialog` pointer) — mostly in `dashboards/` and a few datapool
-  dialogs. Pure rename + migrate.
-- 2 SYDEflash popups (`C_FlaConNodeConfigPopup`, `C_FlaSenSearchNodePopup`)
-  with extra Escape-key handling — need a custom `keyPressEvent` that
-  delegates to the base for Enter and adds Escape locally.
+### Follow-up batches (landed)
+- **Batch A** — `0e992ac7`: 3 `mrc_Parent` renames
+  (`C_SdNdeDpListArrayEditWidget`, `C_SyvDaDashboardSettings`,
+  `C_SyvDaItPaArWidget`).
+- **Batch B** — `87ef4701`: 4 `mpc_ParentDialog` pointer→reference
+  conversions, unwrapping always-true NULL guards
+  (`C_SdBueMessageRxTimeoutConfig`, `C_SdNdeDpProperties`,
+  `C_SyvDaDashboardTabProperties`, `C_SyvDaPeBase`).
+- **Batch C** — `34daa88a`: 3 popups with custom `keyPressEvent` logic
+  beyond Ctrl+Enter (`C_FlaConNodeConfigPopup`, `C_FlaSenSearchNodePopup`,
+  `C_SdNdeDpListDataSetWidget`). Each kept a thin override delegating to
+  the base for Enter while handling Escape / focus-aware shortcuts
+  locally.
+
+### Batch D (won't fix)
+The two `QDialog`-based popups stay on their own implementations:
+
+- `C_OgeWiCustomMessage` — accepts on Ctrl+Enter, but the body also
+  mutates `me_Output = E_Outputs::eOK` and runs a separate Escape
+  branch. The "shared" body has class-specific state, so a sibling base
+  buys nothing.
+- `C_PopPasswordDialogWidget` — triggers on **plain Enter** (no Ctrl),
+  not Ctrl+Enter. Genuinely different UX from every other migrated
+  popup, so it can't share the base's keyPressEvent semantics.
+
+Building a `C_OgePopUpDialogContentBase` for two callers with no shared
+behavior produces a base class whose body each subclass overrides
+entirely — net savings ≈ 0 lines, plus an unnecessary abstraction. See
+also docs/TODO.md "Audit low-value UX features": the Ctrl+Enter accept
+shortcut is itself worth questioning before pouring more scaffolding
+around it.
 
 ---
 
