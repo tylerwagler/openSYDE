@@ -41,7 +41,7 @@ public:
    C_SyvComDriverDiagConnect(QObject * const opc_Parent = NULL);
 
    E_ConnectState GetStep(void) const;
-   void SetWaitingStepParameters(const uint32_t ou32_DisconnectTime);
+   void SetWaitingStepParameters(const qint64 os64_RemainingWaitMs);
    void SetSetDiagnosticModeParameters(C_SyvComDriverDiag * const opc_ComDriver);
    void SetSetUpCyclicTransmissionsParameters(C_SyvComDriverDiag * const opc_ComDriver);
    void GetLastOperationResult(int32_t & ors32_Result, QString & orc_Message, QString & orc_MessageDetails) const;
@@ -50,7 +50,7 @@ protected:
    void run(void) override;
 
 private:
-   uint32_t mu32_DisconnectTime;
+   qint64 ms64_RemainingWaitMs;
    E_ConnectState me_ConnectState;
    C_SyvComDriverDiag * mpc_ComDriverDiag;
    int32_t ms32_OperationResult;

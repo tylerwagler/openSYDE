@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include <QWidget>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include "stwtypes.hpp"
 #include "C_OgeWiHover.hpp"
@@ -150,7 +151,7 @@ private:
    std::set<stw::opensyde_core::C_OscNodeDataPoolListElementId> mc_MissedWriteOperations;
    E_ConnectState me_ConnectState;
    int32_t ms32_InitToolboxCounter;
-   static uint32_t mhu32_DisconnectTime;
+   static QElapsedTimer mhc_DisconnectTimer;
    static const QString mhc_DARK_MODE_ENABLED_ICON_PATH;
    static const QString mhc_DARK_MODE_DISABLED_ICON_PATH;
    static const int32_t mhs32_WIDGET_BORDER;

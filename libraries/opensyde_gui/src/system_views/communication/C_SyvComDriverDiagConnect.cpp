@@ -13,7 +13,6 @@
 #include "precomp_headers.hpp"
 
 #include "C_Uti.hpp"
-#include "TglTime.hpp"
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_GtGetText.hpp"
@@ -23,7 +22,6 @@
 #include "C_OscLoggingHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::tgl;
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
@@ -49,7 +47,7 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_SyvComDriverDiagConnect::C_SyvComDriverDiagConnect(QObject * const opc_Parent) :
    QThread(opc_Parent),
-   mu32_DisconnectTime(0UL),
+   ms64_RemainingWaitMs(0),
    me_ConnectState(eCDCS_UNINITIALIZED),
    mpc_ComDriverDiag(NULL),
    ms32_OperationResult(0)
@@ -71,12 +69,12 @@ C_SyvComDriverDiagConnect::E_ConnectState C_SyvComDriverDiagConnect::GetStep(voi
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief  Set parameters for waiting step
 
-   \param[in] ou32_DisconnectTime Last known disconnect time
+   \param[in] os64_RemainingWaitMs Remaining post-disconnect wait time in ms (0 means skip the wait)
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_SyvComDriverDiagConnect::SetWaitingStepParameters(const uint32_t ou32_DisconnectTime)
+void C_SyvComDriverDiagConnect::SetWaitingStepParameters(const qint64 os64_RemainingWaitMs)
 {
-   this->mu32_DisconnectTime = ou32_DisconnectTime;
+   this->ms64_RemainingWaitMs = os64_RemainingWaitMs;
    //Update status
    this->me_ConnectState = eCDCS_WAITING;
 }
@@ -164,11 +162,9 @@ void C_SyvComDriverDiagConnect::m_RunWaitingStep(void)
    this->mc_ErrorMessageDetails = "";
    this->ms32_OperationResult = C_NO_ERR;
 
-   const uint32_t u32_Deadline = this->mu32_DisconnectTime + 5100U;
-   const uint32_t u32_Now = TglGetTickCount();
-   if (u32_Deadline > u32_Now)
+   if (this->ms64_RemainingWaitMs > 0)
    {
-      QThread::msleep(u32_Deadline - u32_Now);
+      QThread::msleep(static_cast<unsigned long>(this->ms64_RemainingWaitMs));
    }
 }
 
