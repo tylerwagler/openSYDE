@@ -11,6 +11,8 @@
 #include "precomp_headers.hpp"
 
 #include <QApplication>
+#include <QElapsedTimer>
+#include <QThread>
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -26,7 +28,6 @@
 #include "C_PuiSdHandler.hpp"
 #include "C_PuiSvHandler.hpp"
 #include "TglUtils.hpp"
-#include "TglTime.hpp"
 #include "C_SclString.hpp"
 #include "C_PuiSdUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -1552,7 +1553,7 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
 
          //Before reinitializing the bus wait a little to make sure the CAN reset request broadcast(s) had the chance to
          // really be sent out on the bus
-         stw::tgl::TglSleep(50U);
+         QThread::msleep(50U);
 
          // Set the new bitrate for the new active configuration if the bitrate was changed
          s32_Return = this->mpc_DcSequences->InitCanAndSetCanBitrate(u32_NewBitrate);
@@ -1574,7 +1575,8 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
          }
          else
          {
-            const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
+            QElapsedTimer c_Timer;
+            c_Timer.start();
             // Get the minimum wait time
             u32_WaitTime = this->mpc_DcSequences->GetMinimumFlashloaderResetWaitTime(
                C_OscComDriverFlash::eFUNDAMENTAL_COM_CHANGES_ETHERNET);
@@ -1584,7 +1586,7 @@ void C_SyvDcWidget::m_ResetFlashloaderAfterConfig(const bool oq_SameBitrate)
                //In case it takes longer do process events to handle cursor and proper show of message box
                QApplication::processEvents(QEventLoop::AllEvents, 50);
             }
-            while (stw::tgl::TglGetTickCount() < (u32_WaitTime + u32_StartTime));
+            while (c_Timer.elapsed() < u32_WaitTime);
          }
       }
       else
@@ -2826,7 +2828,7 @@ void C_SyvDcWidget::m_Timer(void)
             {
                //Before closing the bus wait a little to make sure the CAN reset request broadcast(s) had the chance to
                // really be sent out on the bus
-               stw::tgl::TglSleep(50U);
+               QThread::msleep(50U);
             }
 
             break;
@@ -3079,7 +3081,7 @@ void C_SyvDcWidget::m_DoCompleteDisconnect(void)
 
                //Before closing the bus wait a little to make sure the CAN reset request broadcast(s) had the chance to
                // really be sent out on the bus
-               stw::tgl::TglSleep(50U);
+               QThread::msleep(50U);
 
                q_StartedAnything = true;
             }

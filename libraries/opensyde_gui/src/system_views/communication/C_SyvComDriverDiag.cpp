@@ -14,6 +14,9 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QElapsedTimer>
+#include <QThread>
+
 #include "stwerrors.hpp"
 
 #include "C_SyvComDriverDiag.hpp"
@@ -2603,28 +2606,28 @@ void C_SyvComDriverDiag::mh_ThreadFunc(void * const opv_Instance)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComDriverDiag::m_ThreadFunc(void)
 {
-   static uint32_t hu32_LastSentTesterPresent = 0U;
-   static uint32_t hu32_LastSentDebugTest = 0U;
-   uint32_t u32_CurrentTime;
+   static QElapsedTimer hc_Timer;
+   static qint64 hs64_LastSentTesterPresent = 0;
+   static qint64 hs64_LastSentDebugTest = 0;
+   qint64 s64_CurrentTime;
 
-   if (hu32_LastSentTesterPresent == 0U)
+   if (!hc_Timer.isValid())
    {
       // Initialize the time scheduling
-      hu32_LastSentTesterPresent = stw::tgl::TglGetTickCount();
-      hu32_LastSentDebugTest = hu32_LastSentTesterPresent;
+      hc_Timer.start();
    }
 
-   u32_CurrentTime = stw::tgl::TglGetTickCount();
+   s64_CurrentTime = hc_Timer.elapsed();
 
-   if (u32_CurrentTime > (hu32_LastSentTesterPresent + 1000U))
+   if (s64_CurrentTime > (hs64_LastSentTesterPresent + 1000))
    {
-      hu32_LastSentTesterPresent = u32_CurrentTime;
+      hs64_LastSentTesterPresent = s64_CurrentTime;
       this->SendTesterPresent(this->mc_ActiveCommunicatingNodes);
    }
-   else if (u32_CurrentTime > (hu32_LastSentDebugTest + 200U))
+   else if (s64_CurrentTime > (hs64_LastSentDebugTest + 200))
    {
       // For testing
-      hu32_LastSentDebugTest = u32_CurrentTime;
+      hs64_LastSentDebugTest = s64_CurrentTime;
    }
    else
    {
@@ -2638,7 +2641,7 @@ void C_SyvComDriverDiag::m_ThreadFunc(void)
    this->DistributeMessages();
 
    //rescind CPU time to other threads ...
-   stw::tgl::TglSleep(1);
+   QThread::msleep(1);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
