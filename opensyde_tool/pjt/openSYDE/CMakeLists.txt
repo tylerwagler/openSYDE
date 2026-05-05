@@ -275,7 +275,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoPopUp.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileEntry.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileInfoPopUp.cpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileOptionsPopUp.cpp
+   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityOptionsPopUp.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesListWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeDatablockWidget.cpp
@@ -347,6 +347,7 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/C_GiText.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyTextElementWidget.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.cpp
+   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconMenu.cpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyLineWidget.cpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiImage.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyManager.cpp
@@ -520,6 +521,7 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoManager.cpp
    ${PROJECT_ROOT}/src/scene_base/C_SebBaseContextMenuManager.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaContextMenuManager.cpp
+   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaTrafficEncryptionStatusHelper.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdClipBoardHelper.cpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoZetOrderCommand.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSortHelper.cpp
@@ -1060,7 +1062,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoPopUp.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileEntry.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileInfoPopUp.hpp
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileOptionsPopUp.hpp
+   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityOptionsPopUp.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesListWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeDatablockWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeFilesWidget.hpp
@@ -1133,6 +1135,7 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/C_GiText.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyTextElementWidget.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconText.hpp
+   ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/push_button/C_OgePubIconMenu.hpp
    ${PROJECT_ROOT}/src/graphic_items/style_setup/C_GiSyLineWidget.hpp
    ${PROJECT_ROOT}/src/graphic_items/C_GiImage.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/managers/undo/C_SdManUnoTopologyManager.hpp
@@ -1306,6 +1309,7 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/undo/C_SyvDaUnoManager.hpp
    ${PROJECT_ROOT}/src/scene_base/C_SebBaseContextMenuManager.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaContextMenuManager.hpp
+   ${OPENSYDE_GUI_ROOT}/src/system_views/dashboards/C_SyvDaTrafficEncryptionStatusHelper.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdClipBoardHelper.hpp
    ${PROJECT_ROOT}/src/scene_base/undo/C_SebUnoZetOrderCommand.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/bus_edit/C_SdBueSortHelper.hpp
@@ -1923,7 +1927,7 @@ set(OPENSYDE_FORMS
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacParamSetFileInfoPopUp.ui
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileEntry.ui
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileInfoPopUp.ui
-   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFileOptionsPopUp.ui
+   ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecurityOptionsPopUp.ui
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacPemFilesWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSectionNodeWidget.ui
    ${OPENSYDE_GUI_ROOT}/src/system_views/system_update/update_package/C_SyvUpPacSecureArchiveDialog.ui
