@@ -12,6 +12,7 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QFile>
 #include <QFileInfo>
 #include <QDir>
 #include <QSet>
@@ -20,6 +21,7 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_Uti.hpp"
+#include "C_OscLoggingHandler.hpp"
 #include "C_UsFiler.hpp"
 #include "C_UsFilerHelpers.hpp"
 
@@ -39,6 +41,74 @@ using namespace stw::errors;
 /* -- Module Global Variables --------------------------------------------------------------------------------------- */
 
 /* -- Module Global Function Prototypes ----------------------------------------------------------------------------- */
+
+namespace
+{
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief   Detect a pre-Phase-1 (C_SclIniFile-format) user settings file and archive it.
+
+   Pre-Phase-1 saves used absolute project file paths as INI section names, which QSettings
+   parses as nested groups, leaving recognizable cruft at the top level (e.g., a [home] group
+   from /home/<user>/...). The new schema uses a fixed set of top-level groups; any other
+   top-level group is a sign of legacy data.
+
+   Backwards compatibility is intentionally not preserved (per project policy): on detection,
+   the file is renamed to <path>.legacy.ini and the caller proceeds with default settings.
+
+   \param[in]  orc_Path   User settings file path
+
+   \return true if the file was detected as legacy and archived (caller should apply defaults);
+           false if the file is absent or already in the new format.
+*/
+//----------------------------------------------------------------------------------------------------------------------
+bool mh_DetectAndArchiveLegacy(const QString & orc_Path)
+{
+   if (QFile::exists(orc_Path) == false)
+   {
+      return false;
+   }
+
+   bool q_IsLegacy = false;
+   {
+      const QSet<QString> c_KnownSections = {
+         "Common", "Environment", "RecentColors", "RecentProjects",
+         "Screen", "SdTopologyToolbox", "SdNodeEdit", "SdBusEdit",
+         "Projects", "Update"
+      };
+      QSettings c_Probe(orc_Path, QSettings::IniFormat);
+      const QStringList c_TopLevelGroups = c_Probe.childGroups();
+      for (const QString & rc_Group : c_TopLevelGroups)
+      {
+         if (c_KnownSections.contains(rc_Group) == false)
+         {
+            q_IsLegacy = true;
+            break;
+         }
+      }
+   } // QSettings closes here, releasing any file handles before rename
+
+   if (q_IsLegacy == true)
+   {
+      const QString c_LegacyPath = orc_Path + ".legacy.ini";
+      QFile::remove(c_LegacyPath); // discard any prior archive
+      if (QFile::rename(orc_Path, c_LegacyPath) == true)
+      {
+         osc_write_log_info("Loading user settings",
+                            "Pre-Phase-1 INI format detected; archived to \"" +
+                            c_LegacyPath.toStdString() + "\" and starting with defaults.");
+      }
+      else
+      {
+         osc_write_log_warning("Loading user settings",
+                               "Pre-Phase-1 INI format detected at \"" + orc_Path.toStdString() +
+                               "\" but archive rename failed; will start with defaults anyway.");
+         QFile::remove(orc_Path);
+      }
+   }
+
+   return q_IsLegacy;
+}
+} // namespace
 
 /* -- Implementation ------------------------------------------------------------------------------------------------ */
 
@@ -150,6 +220,13 @@ int32_t C_UsFiler::h_Load(C_UsHandler & orc_UserSettings, const QString & orc_Pa
 
    if (orc_Path.compare("") != 0)
    {
+      // One-shot legacy detector: pre-Phase-1 files get archived and we proceed with defaults.
+      if (mh_DetectAndArchiveLegacy(orc_Path) == true)
+      {
+         orc_UserSettings.SetDefault();
+         return C_NO_ERR;
+      }
+
       try
       {
          QSettings c_Ini(orc_Path, QSettings::IniFormat);
