@@ -961,8 +961,9 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
             {
                const QFileInfo c_RefFile(c_SystemDefintionPath);
                const QDir c_Dir = c_RefFile.dir();
-               //Create path (if necessary)
-               if ((c_Dir.mkdir(".") == true) || (c_Dir.exists() == true))
+               //Create path (if necessary). mkpath creates all intermediate dirs and returns true if the path
+               //already exists; mkdir(".") would always fail because "." can't be created.
+               if (c_Dir.mkpath(".") == true)
                {
                   s32_Retval =
                      C_PuiSdHandler::h_GetInstance()->SaveToFile(
@@ -971,6 +972,9 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
                }
                else
                {
+                  osc_write_log_error("Saving project",
+                                      "Could not create system definition directory \"" +
+                                      c_Dir.absolutePath().toStdString() + "\".");
                   s32_Retval = C_RD_WR;
                }
             }
@@ -994,14 +998,17 @@ int32_t C_PuiProject::m_SaveAs(const QString & orc_FilePath, const bool oq_Force
                {
                   const QFileInfo c_RefFile(c_SystemViewsPath);
                   const QDir c_Dir = c_RefFile.dir();
-                  //Create path (if necessary)
-                  if ((c_Dir.mkdir(".") == true) || (c_Dir.exists() == true))
+                  //Create path (if necessary). See mkpath note above for the system definition path.
+                  if (c_Dir.mkpath(".") == true)
                   {
                      s32_Retval = C_PuiSvHandler::h_GetInstance()->SaveToFile(
                         c_SystemViewsPath.toStdString().c_str(), oq_UseDeprecatedFileFormatV2, oq_UpdateInternalState);
                   }
                   else
                   {
+                     osc_write_log_error("Saving project",
+                                         "Could not create system views directory \"" +
+                                         c_Dir.absolutePath().toStdString() + "\".");
                      s32_Retval = C_RD_WR;
                   }
                }
