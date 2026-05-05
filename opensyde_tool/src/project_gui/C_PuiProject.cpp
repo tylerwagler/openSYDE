@@ -26,7 +26,6 @@
 #include "C_OscProjectFiler.hpp"
 #include "C_PuiSdHandler.hpp"
 #include "C_SclString.hpp"
-#include "TglFile.hpp"
 #include "stwerrors.hpp"
 #include "C_Uti.hpp"
 #include "C_UsHandler.hpp"
@@ -39,7 +38,6 @@
 using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
 using namespace stw::errors;
-using namespace stw::tgl;
 using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -308,7 +306,7 @@ QString C_PuiProject::GetPath(void) const
 //----------------------------------------------------------------------------------------------------------------------
 QString C_PuiProject::GetFolderPath(void) const
 {
-   const QString c_Path = TglExtractFilePath(this->mc_Path.toStdString().c_str()).c_str();
+   const QString c_Path = QFileInfo(this->mc_Path).path() + "/";
 
    return c_Path;
 }
@@ -726,7 +724,7 @@ int32_t C_PuiProject::m_SaveServiceModeProject(const QString & orc_FilePath, con
    }
 
    //erase temporary folder:
-   if (stw::tgl::TglRemoveDirectory(c_TemporaryPath.toStdString().c_str(), false) != 0)
+   if (QDir(c_TemporaryPath).removeRecursively() == false)
    {
       // Do not overwrite any other error
       if (s32_Retval == C_NO_ERR)
@@ -877,7 +875,7 @@ int32_t C_PuiProject::m_LoadServiceModeProject(const QString & orc_Password, uin
    }
 
    //erase temporary folder in any case:
-   if (stw::tgl::TglRemoveDirectory(c_TemporaryPath.toStdString().c_str(), false) != 0)
+   if (QDir(c_TemporaryPath).removeRecursively() == false)
    {
       // Do not overwrite any other error
       if (s32_Retval == C_NO_ERR)

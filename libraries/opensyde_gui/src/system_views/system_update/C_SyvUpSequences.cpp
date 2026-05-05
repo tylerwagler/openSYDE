@@ -21,9 +21,10 @@
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 
+#include <QThread>
+
 #include "C_SclString.hpp"
 #include "TglUtils.hpp"
-#include "TglTime.hpp"
 #include "C_Uti.hpp"
 #include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -1122,7 +1123,7 @@ void C_SyvUpSequences::m_ThreadFunc(void)
       case eRESET_SYSTEM:
          this->ms32_Result = this->ResetSystem();
          //Wait until every device is restarted
-         stw::tgl::TglSleep(2000);
+         QThread::msleep(2000);
          break;
       default:
          tgl_assert(false);

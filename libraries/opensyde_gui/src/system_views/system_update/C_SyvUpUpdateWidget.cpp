@@ -15,8 +15,7 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_SclString.hpp"
-#include "TglTime.hpp"
-#include "TglFile.hpp"
+#include "TglUtils.hpp"
 #include "C_Uti.hpp"
 #include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -33,7 +32,6 @@
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 using namespace stw::errors;
-using namespace stw::tgl;
 using namespace stw::scl;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
@@ -84,9 +82,7 @@ C_SyvUpUpdateWidget::C_SyvUpUpdateWidget(const uint32_t ou32_ViewIndex, QWidget 
    mq_StartUpdateAfterConnect(false),
    mq_ConnectFailed(false),
    mq_ErrorDetected(false),
-   mq_NodesPreconditionError(false),
-   mu32_DisconnectTime(0U),
-   mu32_UpdateTime(0U)
+   mq_NodesPreconditionError(false)
 {
    const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
    QString c_Name;
@@ -1308,7 +1304,8 @@ void C_SyvUpUpdateWidget::m_Connect(void)
    }
 
    // Is a new connect already possible
-   while ((this->mu32_DisconnectTime + mhu32_WAIT_TIME) > TglGetTickCount())
+   while (this->mc_DisconnectTimer.isValid() &&
+          (this->mc_DisconnectTimer.elapsed() < mhu32_WAIT_TIME))
    {
       // Wait till it is possible
    }
@@ -1587,7 +1584,8 @@ void C_SyvUpUpdateWidget::m_Update(void)
                this->m_UpdateReportText(C_GtGetText::h_GetText("Update System started"));
 
                // Is a new update already possible
-               while ((this->mu32_UpdateTime + mhu32_WAIT_TIME) > TglGetTickCount())
+               while (this->mc_UpdateTimer.isValid() &&
+                      (this->mc_UpdateTimer.elapsed() < mhu32_WAIT_TIME))
                {
                   // Wait till it is possible
                }
@@ -2152,7 +2150,7 @@ void C_SyvUpUpdateWidget::m_Timer(void)
          this->m_UpdateUpdatePackageStatus();
 
          // Save the time of update
-         this->mu32_UpdateTime = TglGetTickCount();
+         this->mc_UpdateTimer.start();
 
          break;
       case C_SyvUpSequences::eRESET_SYSTEM:
@@ -2174,7 +2172,7 @@ void C_SyvUpUpdateWidget::m_Timer(void)
          Q_EMIT (this->SigBlockDragAndDrop(false));
 
          // Save the time of disconnect
-         this->mu32_DisconnectTime = TglGetTickCount();
+         this->mc_DisconnectTimer.start();
 
          // Close sequence
          this->m_CleanUpSequence();

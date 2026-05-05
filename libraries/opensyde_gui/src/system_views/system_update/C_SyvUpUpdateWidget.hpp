@@ -15,6 +15,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QElapsedTimer>
 
 #include "C_OgeWiHover.hpp"
 #include "C_SyvUpScene.hpp"
@@ -164,8 +165,8 @@ private:
    bool mq_NodesPreconditionError;
    C_GiSvNodeData::C_GiSvNodeDataPreconditionErrors mc_NodePreconditionErrors;
 
-   uint32_t mu32_DisconnectTime;
-   uint32_t mu32_UpdateTime;
+   QElapsedTimer mc_DisconnectTimer;
+   QElapsedTimer mc_UpdateTimer;
 
    static const QString mhc_TEMP_FOLDER;
    static const int32_t mhs32_WIDGET_BORDER;
