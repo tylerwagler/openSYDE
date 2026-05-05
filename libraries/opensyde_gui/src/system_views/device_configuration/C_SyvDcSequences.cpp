@@ -20,10 +20,12 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
+#include <QElapsedTimer>
+#include <QThread>
+
 #include "stwerrors.hpp"
 #include "C_SclString.hpp"
 #include "TglUtils.hpp"
-#include "TglTime.hpp"
 #include "C_Uti.hpp"
 #include "C_SyvDcSequences.hpp"
 #include "C_OscProtocolDriverOsyTpCan.hpp"
@@ -1316,9 +1318,11 @@ int32_t C_SyvDcSequences::m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBi
 int32_t C_SyvDcSequences::m_RunScanCanSendFlashloaderRequest(const uint32_t ou32_ScanTime)
 {
    int32_t s32_Return = C_NO_ERR;
-   const uint32_t u32_StartTime = stw::tgl::TglGetTickCount();
-   uint32_t u32_CurTime;
+   QElapsedTimer c_Timer;
+   qint64 s64_Elapsed = 0;
    bool q_RunEndless;
+
+   c_Timer.start();
 
    do
    {
@@ -1342,14 +1346,14 @@ int32_t C_SyvDcSequences::m_RunScanCanSendFlashloaderRequest(const uint32_t ou32
                              "STW send flash failed with error: " + C_SclString::IntToStr(s32_Return));
       }
 
-      stw::tgl::TglSleep(5);
+      QThread::msleep(5);
 
       // Possible answers are not necessary and can disturb next services
       this->mpc_ComDriver->ClearDispatcherQueue();
 
       if (s32_Return == C_NO_ERR)
       {
-         u32_CurTime = stw::tgl::TglGetTickCount();
+         s64_Elapsed = c_Timer.elapsed();
       }
       else
       {
@@ -1365,7 +1369,7 @@ int32_t C_SyvDcSequences::m_RunScanCanSendFlashloaderRequest(const uint32_t ou32
       this->mc_CriticalSectionRequestEndless.Release();
    }
    while ((q_RunEndless == true) ||
-          (u32_CurTime < (ou32_ScanTime + u32_StartTime)));
+          (s64_Elapsed < ou32_ScanTime));
 
    return s32_Return;
 }
@@ -1777,7 +1781,7 @@ int32_t C_SyvDcSequences::m_RunScanEthGetInfoFromOpenSydeDevices(void)
          c_ReadDeviceInfoExtendedResults;
 
          //wait the minimum wait time (all nodes should now be in the default session of the flashloader)
-         stw::tgl::TglSleep(this->GetMinimumFlashloaderResetWaitTime(C_OscComDriverFlash::eNO_CHANGES_ETHERNET));
+         QThread::msleep(this->GetMinimumFlashloaderResetWaitTime(C_OscComDriverFlash::eNO_CHANGES_ETHERNET));
 
          //broadcast: "get device info" (returns serial number and device name)
          s32_Return = this->mpc_ComDriver->SendOsyEthBroadcastGetDeviceInformation(c_ReadDeviceInfoResults,
@@ -2415,15 +2419,15 @@ int32_t C_SyvDcSequences::m_ConfigureNodes(const bool oq_ViaCan,
       {
          // The CAN broadcast does not change the CAN bitrate and so no fundamental changes were made
          // when using CAN
-         stw::tgl::TglSleep(this->GetMinimumFlashloaderResetWaitTime(C_OscComDriverFlash::
-                                                                     eNO_FUNDAMENTAL_COM_CHANGES_CAN));
+         QThread::msleep(this->GetMinimumFlashloaderResetWaitTime(C_OscComDriverFlash::
+                                                                  eNO_FUNDAMENTAL_COM_CHANGES_CAN));
       }
       else
       {
          // The Ethernet broadcast does change the IP address and so fundamental changes were made
          // when using Ethernet
-         stw::tgl::TglSleep(this->GetMinimumFlashloaderResetWaitTime(C_OscComDriverFlash::
-                                                                     eFUNDAMENTAL_COM_CHANGES_ETHERNET));
+         QThread::msleep(this->GetMinimumFlashloaderResetWaitTime(C_OscComDriverFlash::
+                                                                  eFUNDAMENTAL_COM_CHANGES_ETHERNET));
       }
 
       // Bring all nodes into the necessary state before changing the bitrate.
