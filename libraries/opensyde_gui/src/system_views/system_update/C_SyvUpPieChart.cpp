@@ -15,7 +15,6 @@
 #include <QPainter>
 #include <QFileInfo>
 #include "constants.hpp"
-#include "C_SclString.hpp"
 #include "C_SyvUpPieChart.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -143,7 +142,7 @@ void C_SyvUpPieChart::paintEvent(QPaintEvent * const opc_Event)
       float32_t f32_SpanAngle;
       const float32_t f32_InnerCircleOffset = ((f32_Height * 12.0F) / 180.0F) / 2.0F;
       const int32_t s32_InnerCircleOffset = static_cast<int32_t>(f32_InnerCircleOffset);
-      stw::scl::C_SclString c_String;
+      QString c_String;
 
       c_Painter.save();
 
@@ -177,9 +176,8 @@ void C_SyvUpPieChart::paintEvent(QPaintEvent * const opc_Event)
       //text
       c_Painter.setPen(c_Pen);
       c_Painter.setFont(c_Font);
-      c_String = stw::scl::C_SclString::IntToStr(mu16_ValueInPercent);
-      c_String += "%";
-      c_Painter.drawText(c_Rect, static_cast<int32_t>(Qt::AlignCenter), c_String.c_str());
+      c_String = QString::number(mu16_ValueInPercent) + "%";
+      c_Painter.drawText(c_Rect, static_cast<int32_t>(Qt::AlignCenter), c_String);
 
       c_Painter.restore();
    }
