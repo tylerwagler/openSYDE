@@ -19,12 +19,12 @@
 #include <ctime>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QRandomGenerator>
 
 #include "stwtypes.hpp"
 #include "constants.hpp"
 
 #include "TglUtils.hpp"
-#include "TglTime.hpp"
 #include "C_SdBueMlvGraphicsScene.hpp"
 
 #include "C_SdBueMlvBaseItem.hpp"
@@ -34,7 +34,6 @@
 #include "C_OscCanMessage.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::tgl;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
 using namespace stw::opensyde_gui_logic;
@@ -1278,7 +1277,7 @@ C_SdBueMlvSignalManager::C_SignalItemColors C_SdBueMlvGraphicsScene::m_GetNextNo
 
    C_SdBueMlvSignalManager::C_SignalItemColors c_ColorConfig;
 
-   srand(stw::tgl::TglGetTickCount());
+   srand(QRandomGenerator::global()->generate());
 
    // Check for a free color in the already existing sections
    // Use the oldest section, if a free color is available

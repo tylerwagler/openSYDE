@@ -25,8 +25,9 @@
 #include "C_CamMainWindow.hpp"
 #include "ui_C_CamMainWindow.h"
 
+#include <QThread>
+
 #include "TglUtils.hpp"
-#include "TglTime.hpp"
 #include "C_OscUtils.hpp"
 #include "C_Uti.hpp"
 #include "C_OgeWiUtil.hpp"
@@ -936,7 +937,7 @@ void C_CamMainWindow::m_ThreadFunc(void)
    this->mc_ComDriver.DistributeMessages();
 
    //rescind CPU time to other threads ...
-   stw::tgl::TglSleep(1);
+   QThread::msleep(1);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

@@ -33,7 +33,6 @@
 #include "C_OscLoggingHandler.hpp"
 #include "C_OscSupServiceUpdatePackageV1.hpp"
 #include "C_OscSupServiceUpdatePackageCreate.hpp"
-#include "TglFile.hpp"
 #include "C_OgeWiCustomMessage.hpp"
 #include "C_ImpUtil.hpp"
 #include "C_UsHandler.hpp"
@@ -44,7 +43,6 @@ using namespace stw::scl;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_core;
-using namespace stw::tgl;
 using namespace std;
 using namespace stw::opensyde_gui_elements;
 
@@ -536,7 +534,7 @@ void C_SyvUpPacListWidget::ExportConfig(void)
       bool q_Continue = true;
       int32_t s32_Result;
 
-      this->mc_LastPath = TglExtractFilePath(c_FileName.toStdString().c_str()).c_str();
+      this->mc_LastPath = QFileInfo(c_FileName).path() + "/";
 
       // Remove old file
       c_File.setFileName(c_FileName);
@@ -613,7 +611,7 @@ void C_SyvUpPacListWidget::ImportConfig(void)
       C_OgeWiCustomMessage::E_Outputs e_ReturnMessageBox;
       C_OgeWiCustomMessage c_MessageBox(this, C_OgeWiCustomMessage::E_Type::eQUESTION);
 
-      this->mc_LastPath = TglExtractFilePath(c_FileName.toStdString().c_str()).c_str();
+      this->mc_LastPath = QFileInfo(c_FileName).path() + "/";
 
       c_MessageBox.SetHeading(C_GtGetText::h_GetText("Update Package configuration import"));
       c_MessageBox.SetDescription(C_GtGetText::h_GetText("Do you really want to overwrite the current Update "
@@ -775,10 +773,10 @@ void C_SyvUpPacListWidget::CreateServiceUpdatePackage(const bool oq_SaveAsFile, 
    {
       int32_t s32_Return = C_NO_ERR;
 
-      this->mc_LastPath = TglExtractFilePath(c_FullPackagePath.toStdString().c_str()).c_str();
+      this->mc_LastPath = QFileInfo(c_FullPackagePath).path() + "/";
 
       // check for old zip archive
-      if (TglFileExists(c_FullPackagePath.toStdString().c_str()) == true)
+      if (QFileInfo::exists(c_FullPackagePath) == true)
       {
          // delete old zip archive
          if (remove(c_FullPackagePath.toStdString().c_str()) != 0)
@@ -1583,7 +1581,7 @@ void C_SyvUpPacListWidget::m_AddNewFile(const QString & orc_DialogCaption, const
             }
 
             // remember last path
-            this->mc_LastPath = TglExtractFilePath(c_Files.last().toStdString().c_str()).c_str();
+            this->mc_LastPath = QFileInfo(c_Files.last()).path() + "/";
          }
       }
    }
@@ -1644,7 +1642,7 @@ void C_SyvUpPacListWidget::m_SelectFile(void)
             if (c_File != "")
             {
                // remember path
-               this->mc_LastPath = TglExtractFilePath(c_File.toStdString().c_str()).c_str();
+               this->mc_LastPath = QFileInfo(c_File).path() + "/";
 
                // check if relative path is possible and appreciated
                c_File = C_ImpUtil::h_AskUserToSaveRelativePath(this, c_File,
@@ -1863,8 +1861,7 @@ QString C_SyvUpPacListWidget::m_GetDialogPath(void)
    // first favorite: path of selected app
    if (this->mpc_SelectedApp != NULL)
    {
-      this->mc_LastPath =
-         TglExtractFilePath(this->mpc_SelectedApp->GetAppAbsoluteFilePath().toStdString().c_str()).c_str();
+      this->mc_LastPath = QFileInfo(this->mpc_SelectedApp->GetAppAbsoluteFilePath()).path() + "/";
    }
 
    c_File.setFile(this->mc_LastPath);

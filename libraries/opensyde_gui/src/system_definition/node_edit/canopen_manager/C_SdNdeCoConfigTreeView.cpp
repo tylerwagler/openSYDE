@@ -15,7 +15,6 @@
 #include <QScrollBar>
 
 #include "C_Uti.hpp"
-#include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
@@ -37,7 +36,6 @@
 #include "C_UsHandler.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::tgl;
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
@@ -584,7 +582,7 @@ C_OscCanOpenManagerDeviceInfo C_SdNdeCoConfigTreeView::h_CreateNewDevice(const Q
    C_OscCanOpenManagerDeviceInfo c_Config;
    const QFileInfo c_FileInfo(orc_EdsPath);
 
-   c_Config.c_OriginalEdsFileName = TglExtractFileName(orc_EdsPath.toStdString());
+   c_Config.c_OriginalEdsFileName = QFileInfo(orc_EdsPath).fileName().toStdString().c_str();
    c_Config.c_ProjectEdsFilePath = orc_EdsPath.toStdString();
    tgl_assert(c_FileInfo.exists());
    C_SdNdeCoConfigTreeView::mh_InitMappableSignals(c_Config.c_EdsFileMappableSignals, c_Config.GetEdsFileContent(),
@@ -810,7 +808,7 @@ void C_SdNdeCoConfigTreeView::m_OnAddDevice(void)
             c_Message.SetCustomMinHeight(180, 250);
             c_Message.Execute();
          }
-         else if (!TglFileExists(pc_AddDialog->GetEdsFile()))
+         else if (!QFileInfo::exists(QString::fromLocal8Bit(pc_AddDialog->GetEdsFile().c_str())))
          {
             C_OgeWiCustomMessage c_Message(this, C_OgeWiCustomMessage::eERROR);
             c_Message.SetHeading(C_GtGetText::h_GetText("EDS File"));

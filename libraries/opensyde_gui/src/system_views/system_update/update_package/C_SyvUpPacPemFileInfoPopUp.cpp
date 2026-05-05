@@ -12,7 +12,8 @@
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 #include "precomp_headers.hpp"
 
-#include "TglFile.hpp"
+#include <QFileInfo>
+
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_GtGetText.hpp"
@@ -21,7 +22,6 @@
 #include "ui_C_SyvUpPacPemFileInfoPopUp.h"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::tgl;
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
@@ -64,7 +64,7 @@ C_SyvUpPacPemFileInfoPopUp::C_SyvUpPacPemFileInfoPopUp(stw::opensyde_gui_element
 
    InitStaticNames();
 
-   this->mrc_ParentDialog.SetSubTitle(TglExtractFileName(orc_Path.toStdString().c_str()).c_str());
+   this->mrc_ParentDialog.SetSubTitle(QFileInfo(orc_Path).fileName());
 
    if (s32_Result == C_NO_ERR)
    {
