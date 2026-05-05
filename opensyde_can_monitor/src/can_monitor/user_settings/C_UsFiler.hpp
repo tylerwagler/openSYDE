@@ -13,9 +13,10 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QSettings>
+
 #include "C_UsHandler.hpp"
 #include "stwtypes.hpp"
-#include "C_SclIniFile.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -36,24 +37,19 @@ public:
 private:
    C_UsFiler(void);
 
-   static void mh_SaveRecentProjects(const C_UsHandler & orc_UserSettings, stw::scl::C_SclIniFile & orc_Ini);
-   static void mh_SaveProjectIndependentSection(const C_UsHandler & orc_UserSettings, stw::scl::C_SclIniFile & orc_Ini);
-   static void mh_SaveProjectDependentSection(const C_UsHandler & orc_UserSettings, stw::scl::C_SclIniFile & orc_Ini,
+   static void mh_SaveRecentProjects(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings);
+   static void mh_SaveProjectIndependentSection(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings);
+   static void mh_SaveProjectDependentSection(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings,
                                               const QString & orc_ActiveProject);
-   static void mh_LoadRecentProjects(C_UsHandler & orc_UserSettings, stw::scl::C_SclIniFile & orc_Ini);
-   static void mh_LoadProjectIndependentSection(C_UsHandler & orc_UserSettings, stw::scl::C_SclIniFile & orc_Ini);
-   static void mh_LoadProjectDependentSection(C_UsHandler & orc_UserSettings, stw::scl::C_SclIniFile & orc_Ini,
-                                              const QString & orc_ActiveProject);
-   static void mh_SaveColumns(stw::scl::C_SclIniFile & orc_Ini, const stw::scl::C_SclString & orc_SectionName,
-                              const std::string & orc_IdentifierBaseName, const std::vector<int32_t> & orc_Columns);
-   static void mh_LoadColumns(stw::scl::C_SclIniFile & orc_Ini, const stw::scl::C_SclString & orc_SectionName,
-                              const std::string & orc_IdentifierBaseName, std::vector<int32_t> & orc_Columns);
+   static void mh_SaveColumns(QSettings & orc_Ini, const QString & orc_ArrayName,
+                              const std::vector<int32_t> & orc_Columns);
 
-   static const std::string mhc_TRACE_COL_WIDTH_IDENTIFIER;
-   static const std::string mhc_TRACE_COL_POSITION_IDENTIFIER;
-   static const std::string mhc_MESSAGE_GENERATOR_IDENTIFIER;
-   static const std::string mhc_MESSAGE_GENERATOR_SIGNALS_IDENTIFIER;
-   static const std::string mhc_MESSAGE_GENERATOR_SELECTION_IDENTIFIER;
+   static void mh_LoadRecentProjects(C_UsHandler & orc_UserSettings, QSettings & orc_Ini);
+   static void mh_LoadProjectIndependentSection(C_UsHandler & orc_UserSettings, QSettings & orc_Ini);
+   static void mh_LoadProjectDependentSection(C_UsHandler & orc_UserSettings, QSettings & orc_Ini,
+                                              const QString & orc_ActiveProject);
+   static void mh_LoadColumns(QSettings & orc_Ini, const QString & orc_ArrayName,
+                              std::vector<int32_t> & orc_Columns);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

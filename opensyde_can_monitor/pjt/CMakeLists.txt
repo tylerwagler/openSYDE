@@ -58,6 +58,7 @@ set (OPENSYDE_INCLUDES
    ${PROJECT_ROOT}/src/can_monitor/data_base
    ${PROJECT_ROOT}/src/can_monitor/project
    ${PROJECT_ROOT}/src/can_monitor/user_settings
+   ${OPENSYDE_GUI_ROOT}/src/user_settings
    ${PROJECT_ROOT}/src/can_monitor/message_trace
    ${OPENSYDE_GUI_ROOT}/src/can_monitor/can_monitor_settings
    ${PROJECT_ROOT}/src/can_monitor/message_generator
