@@ -19,7 +19,6 @@
 
 #include "TglFile.hpp"
 #include "constants.hpp"
-#include "C_SclIniFile.hpp"
 #include "C_SdTopologyToolbox.hpp"
 #include "C_GtGetText.hpp"
 #include "ui_C_SdTopologyToolbox.h"

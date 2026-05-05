@@ -28,7 +28,6 @@
 #include "C_OgeWiUtil.hpp"
 
 #include "C_SclString.hpp"
-#include "C_SclIniFile.hpp"
 #include "C_UsFiler.hpp"
 #include "C_UsHandler.hpp"
 
