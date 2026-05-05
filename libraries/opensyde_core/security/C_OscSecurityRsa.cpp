@@ -15,8 +15,8 @@
 #include <cstring>
 
 #include "openssl/x509.h"
+#include "openssl/rsa.h"
 #include "openssl/pem.h"
-#include "openssl/evp.h"
 
 #include "stwerrors.hpp"
 #include "C_OscSecurityRsa.hpp"
@@ -68,11 +68,7 @@ int32_t C_OscSecurityRsa::h_SignSignature(const std::vector<uint8_t> & orc_Priva
 {
    int32_t s32_Retval = C_RANGE;
 
-   //Get private key information from PKCS#8 dump:
-   PKCS8_PRIV_KEY_INFO * const pc_Key = d2i_PKCS8_PRIV_KEY_INFO(
-      NULL, &pu8_Data,
-      static_cast<long>(orc_PrivateKey.size())); //lint !e970 //using type to match library interface
-   if (pc_Key != NULL)
+   if ((orc_PrivateKey.size() > 0) && (orc_Message.size() > 0))
    {
       const uint8_t * pu8_Data = &orc_PrivateKey[0];
 
@@ -82,37 +78,54 @@ int32_t C_OscSecurityRsa::h_SignSignature(const std::vector<uint8_t> & orc_Priva
          static_cast<long>(orc_PrivateKey.size())); //lint !e970 //using type to match library interface
       if (pc_Key != NULL)
       {
-         //Use EVP_PKEY_sign API (OpenSSL 3.0+) instead of deprecated RSA_private_encrypt
-         EVP_PKEY_CTX * const pc_Ctx = EVP_PKEY_CTX_new(pc_EvpKey, NULL);
-         EVP_PKEY_free(pc_EvpKey);
-         s32_Retval = C_NOACT;
+         //Convert PKCS#8 key to EVP_PKEY:
+         EVP_PKEY * const pc_EvpKey = EVP_PKCS82PKEY(pc_Key);
+         PKCS8_PRIV_KEY_INFO_free(pc_Key);
 
-         if (pc_Ctx != NULL)
+         if (pc_EvpKey != NULL)
          {
-            int x_Result = EVP_PKEY_sign_init(pc_Ctx); //lint !e970 !e8080 //using type to match library interface
-            if (x_Result == 1)
+            s32_Retval = C_NOACT;
+            EVP_PKEY_CTX * const pc_SignCtx = EVP_PKEY_CTX_new(pc_EvpKey, NULL);
+            EVP_PKEY_free(pc_EvpKey);
+
+            if (pc_SignCtx != NULL)
             {
-               x_Result = EVP_PKEY_CTX_set_rsa_padding(pc_Ctx, RSA_PKCS1_PADDING);
-            }
-            if (x_Result == 1)
-            {
-               //Determine output size:
-               size_t un_OutLen = 0;
-               x_Result = EVP_PKEY_sign(pc_Ctx, NULL, &un_OutLen, &orc_Message[0], orc_Message.size());
-               if (x_Result == 1)
+               int x_Result; //lint !e970 !e8080 //using type to match library interface
+
+               x_Result = EVP_PKEY_sign_init(pc_SignCtx);
+               if (x_Result > 0)
                {
-                  orc_EncryptedMessage.resize(un_OutLen);
-                  //Perform the actual signing:
-                  x_Result = EVP_PKEY_sign(pc_Ctx, &orc_EncryptedMessage[0], &un_OutLen,
-                                           &orc_Message[0], orc_Message.size());
-                  if (x_Result == 1)
+                  // Raw RSA PKCS#1 v1.5 operation on the passed message)
+                  x_Result = EVP_PKEY_CTX_set_rsa_padding(pc_SignCtx, RSA_PKCS1_PADDING);
+                  if (x_Result > 0)
                   {
-                     orc_EncryptedMessage.resize(un_OutLen);
-                     s32_Retval = C_NO_ERR;
+                     size_t x_SignatureSize = 0; //lint !e8080  //using type to match library interface
+
+                     //first call without output buffer to get size of required buffer:
+                     x_Result = EVP_PKEY_sign(pc_SignCtx, NULL, &x_SignatureSize, &orc_Message[0], orc_Message.size());
+                     if ((x_Result > 0) && (x_SignatureSize > 0))
+                     {
+                        //dimension buffer based on result of first call
+                        orc_Signature.resize(x_SignatureSize);
+
+                        //second call: compute the signature:
+                        x_Result = EVP_PKEY_sign(pc_SignCtx, &orc_Signature[0], &x_SignatureSize,
+                                                 &orc_Message[0], orc_Message.size());
+                        if (x_Result > 0)
+                        {
+                           //this should really be the same value as before, but let's be defensive
+                           orc_Signature.resize(x_SignatureSize);
+                           s32_Retval = C_NO_ERR;
+                        }
+                        else
+                        {
+                           orc_Signature.clear();
+                        }
+                     }
                   }
                }
+               EVP_PKEY_CTX_free(pc_SignCtx);
             }
-            EVP_PKEY_CTX_free(pc_Ctx);
          }
       }
    }
@@ -169,54 +182,66 @@ int32_t C_OscSecurityRsa::h_VerifySignature(const std::vector<uint8_t> & orc_Pub
          static_cast<long>(orc_PublicKey.size())); //lint !e970 //using type to match library interface
       if (pc_X509Data != NULL)
       {
-         //Use EVP_PKEY_verify_recover API (OpenSSL 3.0+) instead of deprecated RSA_public_decrypt
-         EVP_PKEY_CTX * const pc_Ctx = EVP_PKEY_CTX_new(pc_EvpKey, NULL);
-         EVP_PKEY_free(pc_EvpKey);
-         s32_Retval = C_NOACT;
+         //Get key in EVP_PKEY format:
+         EVP_PKEY * const pc_EvpKey = X509_get_pubkey(pc_X509Data);
+         X509_free(pc_X509Data);
 
-         if (pc_Ctx != NULL)
+         if (pc_EvpKey != NULL)
          {
-            int x_Result = EVP_PKEY_verify_recover_init(pc_Ctx); //lint !e970 !e8080 //using type to match library
-                                                                  // interface
-            if (x_Result == 1)
+            EVP_PKEY_CTX * const pc_VerifyCtx = EVP_PKEY_CTX_new(pc_EvpKey, NULL);
+            EVP_PKEY_free(pc_EvpKey);
+            s32_Retval = C_NOACT;
+
+            if (pc_VerifyCtx != NULL)
             {
-               x_Result = EVP_PKEY_CTX_set_rsa_padding(pc_Ctx, RSA_PKCS1_PADDING);
-            }
-            if (x_Result == 1)
-            {
-               //Determine output size:
-               size_t un_OutLen = 0;
-               x_Result = EVP_PKEY_verify_recover(pc_Ctx, NULL, &un_OutLen,
-                                                   &orc_EncryptedMessage[0], orc_EncryptedMessage.size());
-               if (x_Result == 1)
+               int x_Result; //lint !e970 !e8080 //using type to match library interface
+               x_Result = EVP_PKEY_verify_recover_init(pc_VerifyCtx);
+               if (x_Result > 0)
                {
-                  std::vector<uint8_t> c_DecryptedMessage;
-                  c_DecryptedMessage.resize(un_OutLen);
-
-                  //Perform the actual recovery (decryption with public key):
-                  x_Result = EVP_PKEY_verify_recover(pc_Ctx, &c_DecryptedMessage[0], &un_OutLen,
-                                                      &orc_EncryptedMessage[0], orc_EncryptedMessage.size());
-                  if (x_Result == 1)
+                  // Raw RSA PKCS#1 v1.5 operation on the passed message
+                  x_Result = EVP_PKEY_CTX_set_rsa_padding(pc_VerifyCtx, RSA_PKCS1_PADDING);
+                  if (x_Result > 0)
                   {
-                     s32_Retval = C_NO_ERR;
-                     c_DecryptedMessage.resize(un_OutLen);
+                     //get original data from signed data
+                     size_t x_DecryptedSize = 0; //lint !e8080  //using type to match library interface
 
-                     //compare decrypted messages with expected message:
-                     if (c_DecryptedMessage.size() == orc_Message.size())
+                     //first call: get buffer size needed for result
+                     x_Result = EVP_PKEY_verify_recover(pc_VerifyCtx, NULL, &x_DecryptedSize, &orc_Signature[0],
+                                                        orc_Signature.size());
+                     if (x_Result > 0)
                      {
-                        const int x_DiffResult = //lint !e970 !e8080 //using type to match library interface
-                                                 std::memcmp(&c_DecryptedMessage[0], &orc_Message[0],
-                                                             orc_Message.size());
-                        if (x_DiffResult == 0)
+                        std::vector<uint8_t> c_DecryptedMessage;
+
+                        if (x_DecryptedSize > 0)
                         {
-                           orq_Valid = true; //we have a winner
+                           c_DecryptedMessage.resize(x_DecryptedSize);
+                           //second call: get original data
+                           x_Result = EVP_PKEY_verify_recover(pc_VerifyCtx, &c_DecryptedMessage[0], &x_DecryptedSize,
+                                                              &orc_Signature[0], orc_Signature.size());
+                           if (x_Result > 0)
+                           {
+                              s32_Retval = C_NO_ERR;
+                              //this should really be the same value as before, but let's be defensive
+                              c_DecryptedMessage.resize(x_DecryptedSize);
+
+                              //compare original data with expected message:
+                              if (c_DecryptedMessage.size() == orc_ExpectedMessage.size())
+                              {
+                                 const int x_DiffResult = //lint !e970 !e8080 //using type to match library interface
+                                                          std::memcmp(&c_DecryptedMessage[0], &orc_ExpectedMessage[0],
+                                                                      orc_ExpectedMessage.size());
+                                 if (x_DiffResult == 0)
+                                 {
+                                    orq_Valid = true; //we have a winner
+                                 }
+                              }
+                           }
                         }
                      }
                   }
                }
                EVP_PKEY_CTX_free(pc_VerifyCtx);
             }
-            EVP_PKEY_CTX_free(pc_Ctx);
          }
       }
    }
