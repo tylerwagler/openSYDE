@@ -12,8 +12,13 @@ set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 # Set include directories before dragging in core; the core needs the "precomp_headers.hpp" and files included by it
 include_directories(
    ${PROJECT_ROOT}/src
-   ${PROJECT_ROOT}/libs/openssl/openssl/include
 )
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   find_package(OpenSSL REQUIRED)
+   include_directories(${OPENSSL_INCLUDE_DIR})
+else()
+   include_directories(${PROJECT_ROOT}/libs/openssl/openssl/include)
+endif()
 
 # --- COMPILER FLAGS AND LIBRARIES -------------------------------------------------------------------------------------
 
@@ -55,8 +60,6 @@ set(CMAKE_C_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized 
 set(CMAKE_CXX_FLAGS "-std=c++98 -Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
    -Wmissing-include-dirs -Wshadow -Wlogical-op -Wno-multichar -Wredundant-decls -Wno-deprecated-declarations")
 
-add_subdirectory(${PROJECT_ROOT}/libs/osy_core ${CMAKE_BINARY_DIR}/osy_core)
-
 # link standard libraries statically (fully static only on Windows)
 if(WIN32)
    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
@@ -76,9 +79,11 @@ set(OSY_CMD_LINE_FLASH_TOOL_SOURCES
    ../src/resources.rc
 )
 
-link_directories(
-    ../libs/openssl/openssl
-)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   link_directories(
+       ../libs/openssl/openssl
+   )
+endif()
 
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 
@@ -89,7 +94,9 @@ add_executable(osy_cmd_line_flash_tool ${OSY_CMD_LINE_FLASH_TOOL_SOURCES})
 target_link_libraries(osy_cmd_line_flash_tool
    opensyde_core
 )
-if(WIN32)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   target_link_libraries(osy_cmd_line_flash_tool OpenSSL::SSL OpenSSL::Crypto)
+else()
    target_link_libraries(osy_cmd_line_flash_tool version)
 endif()
 
