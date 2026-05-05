@@ -12,7 +12,9 @@
 #define C_GTGETTEX_HPP
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
-#include "C_SclString.hpp"
+#include <QString>
+
+#include "stwtypes.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -29,9 +31,8 @@ private:
    static bool mhq_Initialized;
 
 public:
-   static int32_t h_Initialize(const stw::scl::C_SclString & orc_BasePath,
-                               const stw::scl::C_SclString & orc_MoFileName);
-   static int32_t h_SetLanguage(const stw::scl::C_SclString & orc_Language);
+   static int32_t h_Initialize(const QString & orc_BasePath, const QString & orc_MoFileName);
+   static int32_t h_SetLanguage(const QString & orc_Language);
    static const char_t * h_GetText(const char_t * const opcn_MessageId);
 };
 

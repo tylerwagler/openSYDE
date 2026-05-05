@@ -14,14 +14,10 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
-#include "C_SclString.hpp"
 #include "C_GtGetText.hpp"
-#include "TglFile.hpp"
-#include "TglUtils.hpp"
 #include "libintl.h" //gettext header
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::scl;
 using namespace stw::opensyde_gui_logic;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -64,30 +60,32 @@ bool C_GtGetText::mhq_Initialized = false;
    C_NOACT     internal error in gettext library
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_GtGetText::h_Initialize(const C_SclString & orc_BasePath, const C_SclString & orc_MoFileName)
+int32_t C_GtGetText::h_Initialize(const QString & orc_BasePath, const QString & orc_MoFileName)
 {
    int32_t s32_Return;
 
    s32_Return = stw::errors::C_NO_ERR;
 
-   if ((orc_BasePath == "") || (orc_MoFileName == ""))
+   if (orc_BasePath.isEmpty() || orc_MoFileName.isEmpty())
    {
       s32_Return = stw::errors::C_RANGE;
    }
    else
    {
+      const QByteArray c_BasePath = orc_BasePath.toUtf8();
+      const QByteArray c_MoFileName = orc_MoFileName.toUtf8();
       const char_t * pcn_Return;
-      pcn_Return = bindtextdomain(orc_MoFileName.c_str(), orc_BasePath.c_str());
+      pcn_Return = bindtextdomain(c_MoFileName.constData(), c_BasePath.constData());
       if (pcn_Return != NULL)
       {
          //set UTF-8 encoding
-         pcn_Return = bind_textdomain_codeset(orc_MoFileName.c_str(), "UTF-8");
+         pcn_Return = bind_textdomain_codeset(c_MoFileName.constData(), "UTF-8");
       }
 
       if (pcn_Return != NULL)
       {
          //set desired .mo file as active:
-         pcn_Return = textdomain(orc_MoFileName.c_str());
+         pcn_Return = textdomain(c_MoFileName.constData());
       }
       if (pcn_Return == NULL)
       {
@@ -125,18 +123,17 @@ int32_t C_GtGetText::h_Initialize(const C_SclString & orc_BasePath, const C_SclS
    C_NOACT     could not set language
 */
 //----------------------------------------------------------------------------------------------------------------------
-int32_t C_GtGetText::h_SetLanguage(const C_SclString & orc_Language)
+int32_t C_GtGetText::h_SetLanguage(const QString & orc_Language)
 {
    int32_t s32_Return;
 
-   s32_Return = stw::tgl::TglSetEnvironmentVariable("LANG", orc_Language);
-   if (s32_Return == -1)
+   if (qputenv("LANG", orc_Language.toLocal8Bit()))
    {
-      s32_Return = stw::errors::C_NOACT;
+      s32_Return = stw::errors::C_NO_ERR;
    }
    else
    {
-      s32_Return = stw::errors::C_NO_ERR;
+      s32_Return = stw::errors::C_NOACT;
    }
 
    return s32_Return;
