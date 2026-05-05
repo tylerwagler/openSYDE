@@ -14,6 +14,7 @@
 
 #include <QFileInfo>
 #include <QDir>
+#include <QSet>
 #include <QSettings>
 
 #include "stwerrors.hpp"
@@ -84,6 +85,28 @@ int32_t C_UsFiler::h_Save(const C_UsHandler & orc_UserSettings, const QString & 
       try
       {
          QSettings c_Ini(orc_Path, QSettings::IniFormat);
+
+         // Drop any top-level groups that aren't part of the new schema. This scrubs
+         // legacy [/path/to/project.syde] sections written by C_SclIniFile (which
+         // QSettings reads as nested groups and would otherwise rewrite as a mangled
+         // [home] section with backslash key paths). Anything not in our schema is
+         // assumed to be pre-Phase-1 cruft and removed.
+         {
+            const QSet<QString> c_KnownSections = {
+               "Common", "Environment", "RecentColors", "RecentProjects",
+               "Screen", "SdTopologyToolbox", "SdNodeEdit", "SdBusEdit",
+               "Projects", "Update"
+            };
+            const QStringList c_TopLevelGroups = c_Ini.childGroups();
+            for (const QString & rc_Group : c_TopLevelGroups)
+            {
+               if (!c_KnownSections.contains(rc_Group))
+               {
+                  c_Ini.remove(rc_Group);
+               }
+            }
+         }
+
          mh_SaveCommon(c_Ini, orc_UserSettings);
          mh_SaveEnvironment(c_Ini, orc_UserSettings);
          mh_SaveColors(c_Ini, orc_UserSettings);
@@ -436,6 +459,7 @@ void C_UsFiler::mh_SaveDashboard(QSettings & orc_Ini, const C_UsSystemViewDashbo
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_SaveCommon(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings)
 {
+   orc_Ini.remove("Common");
    orc_Ini.beginGroup("Common");
    orc_Ini.setValue("Language", orc_UserSettings.GetLanguage());
    orc_Ini.setValue("SaveAsLocation", orc_UserSettings.GetCurrentSaveAsPath());
@@ -452,6 +476,7 @@ void C_UsFiler::mh_SaveCommon(QSettings & orc_Ini, const C_UsHandler & orc_UserS
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_SaveEnvironment(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings)
 {
+   orc_Ini.remove("Environment");
    orc_Ini.beginGroup("Environment");
    orc_Ini.setValue("PathHandlingSelection", orc_UserSettings.GetPathHandlingSelection());
    orc_Ini.setValue("SkipTspImportSelection", orc_UserSettings.GetSkipTspSelection());
@@ -469,6 +494,9 @@ void C_UsFiler::mh_SaveColors(QSettings & orc_Ini, const C_UsHandler & orc_UserS
 {
    const QVector<QColor> c_RecentColors = orc_UserSettings.GetRecentColors();
 
+   // Clear the section to drop any legacy ColorNr<N>_Red etc. keys before rewriting.
+   // mh_SaveNextRecentColorButtonNumber runs after this and adds the remaining key.
+   orc_Ini.remove("RecentColors");
    orc_Ini.beginGroup("RecentColors");
    h_SaveArray(orc_Ini, "Colors", c_RecentColors, [&orc_Ini] (auto c_It)
    {
@@ -527,6 +555,7 @@ void C_UsFiler::mh_SaveRecentProjects(QSettings & orc_Ini, const C_UsHandler & o
 //----------------------------------------------------------------------------------------------------------------------
 void C_UsFiler::mh_SaveProjectIndependentSection(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings)
 {
+   orc_Ini.remove("Screen");
    orc_Ini.beginGroup("Screen");
    orc_Ini.setValue("Position", orc_UserSettings.GetScreenPos());
    orc_Ini.setValue("Size", orc_UserSettings.GetAppSize());
@@ -534,12 +563,14 @@ void C_UsFiler::mh_SaveProjectIndependentSection(QSettings & orc_Ini, const C_Us
    orc_Ini.setValue("ScreenIndex", static_cast<int32_t>(orc_UserSettings.GetAppScreenIndex()));
    orc_Ini.endGroup();
 
+   orc_Ini.remove("SdTopologyToolbox");
    orc_Ini.beginGroup("SdTopologyToolbox");
    orc_Ini.setValue("Position", orc_UserSettings.GetSdTopologyToolboxPos());
    orc_Ini.setValue("Size", orc_UserSettings.GetSdTopologyToolboxSize());
    orc_Ini.setValue("Maximized", orc_UserSettings.GetSdTopologyToolboxMaximized());
    orc_Ini.endGroup();
 
+   orc_Ini.remove("SdNodeEdit");
    orc_Ini.beginGroup("SdNodeEdit");
    orc_Ini.setValue("SplitterX", orc_UserSettings.GetSdNodeEditSplitterHorizontal());
    orc_Ini.setValue("HalcSplitterX", orc_UserSettings.GetSdNodeEditHalcSplitterHorizontal());
@@ -547,6 +578,7 @@ void C_UsFiler::mh_SaveProjectIndependentSection(QSettings & orc_Ini, const C_Us
    orc_Ini.setValue("DataLoggerSplitterX", orc_UserSettings.GetSdNodeEditDataLoggerSplitterHorizontal());
    orc_Ini.endGroup();
 
+   orc_Ini.remove("SdBusEdit");
    orc_Ini.beginGroup("SdBusEdit");
    orc_Ini.setValue("TreeSplitterX", orc_UserSettings.GetSdBusEditTreeSplitterHorizontal());
    orc_Ini.setValue("TreeSplitterX2", orc_UserSettings.GetSdBusEditTreeSplitterHorizontal2());
@@ -556,6 +588,13 @@ void C_UsFiler::mh_SaveProjectIndependentSection(QSettings & orc_Ini, const C_Us
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Save project dependent part of user settings
+
+   The active project's settings are persisted as one entry in the top-level
+   "Projects" QSettings array, keyed by the project file path stored as
+   "Path" inside the array slot. Other projects' entries (slots not matching
+   the active path) are preserved unchanged. The project path is NOT used as
+   a QSettings group name because QSettings interprets '/' as group nesting,
+   which would mangle absolute Unix paths.
 
    \param[in,out]  orc_Ini             Open QSettings instance
    \param[in]      orc_UserSettings    User settings
@@ -581,8 +620,33 @@ void C_UsFiler::mh_SaveProjectDependentSection(QSettings & orc_Ini, const C_UsHa
       orc_UserSettings.GetProjLastScreenMode(s32_SysDefSubMode, u32_SysDefIndex, u32_SysDefFlag,
                                              s32_SysViewSubMode, u32_SysViewIndex, u32_SysViewFlag);
 
-      orc_Ini.beginGroup(orc_ActiveProject);
+      // Locate active project's existing slot in the Projects array, or allocate a new one at the end.
+      int32_t s32_ActiveIndex = -1;
+      const int32_t s32_ExistingSize = orc_Ini.beginReadArray("Projects");
+      for (int32_t s32_It = 0; s32_It < s32_ExistingSize; ++s32_It)
+      {
+         orc_Ini.setArrayIndex(s32_It);
+         if (orc_Ini.value("Path").toString() == orc_ActiveProject)
+         {
+            s32_ActiveIndex = s32_It;
+            break;
+         }
+      }
+      orc_Ini.endArray();
 
+      const int32_t s32_NewSize = (s32_ActiveIndex == -1) ? (s32_ExistingSize + 1) : s32_ExistingSize;
+      if (s32_ActiveIndex == -1)
+      {
+         s32_ActiveIndex = s32_ExistingSize;
+      }
+
+      orc_Ini.beginWriteArray("Projects", s32_NewSize);
+      orc_Ini.setArrayIndex(s32_ActiveIndex);
+
+      // Clear stale fields from a prior save of this slot, then rewrite from scratch.
+      orc_Ini.remove("");
+
+      orc_Ini.setValue("Path", orc_ActiveProject);
       orc_Ini.setValue("ProjMode", orc_UserSettings.GetProjLastMode());
 
       orc_Ini.setValue("navigation-width", orc_UserSettings.GetNaviBarSize());
@@ -656,9 +720,10 @@ void C_UsFiler::mh_SaveProjectDependentSection(QSettings & orc_Ini, const C_UsHa
       orc_Ini.setValue("ProjSd_last_known_secure_update_config_state",
                        orc_UserSettings.GetLastKnownSecureUpdateConfigState());
 
-      orc_Ini.endGroup();
+      orc_Ini.endArray();
 
       // Update widget settings live in their own top-level section, not under the project group
+      orc_Ini.remove("Update");
       orc_Ini.beginGroup("Update");
       h_SaveArray(orc_Ini, "PemFiles", c_PemFilePaths, [&orc_Ini] (auto c_It)
       {
