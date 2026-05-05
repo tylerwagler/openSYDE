@@ -27,7 +27,6 @@
 #include "C_GtGetText.hpp"
 #include "C_OscLoggingHandler.hpp"
 #include "C_RtfExportWidget.hpp"
-#include "TglFile.hpp"
 #include "C_OscXmlParser.hpp"
 #include "C_OscProject.hpp"
 #include "C_PuiProject.hpp"
@@ -38,7 +37,6 @@
 #include "ui_C_RtfExportWidget.h"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
-using namespace stw::tgl;
 using namespace stw::errors;
 using namespace stw::opensyde_gui;
 using namespace stw::opensyde_core;
@@ -175,16 +173,15 @@ int32_t C_RtfExportWidget::GetRtfPath(C_SclString & orc_RtfPath) const
    if (C_OscUtils::h_CheckValidFilePath(orc_RtfPath) == true)
    {
       // check if directory exists
-      if (TglDirectoryExists(TglExtractFilePath(orc_RtfPath)) == true)
+      const QFileInfo c_Info(orc_RtfPath.c_str());
+      if (c_Info.dir().exists() == true)
       {
          // check if file name is valid
-         const C_SclString c_FileExtAct = TglExtractFileExtension(orc_RtfPath);
-         if (c_FileExtAct.LowerCase() == ".rtf")
+         if (c_Info.suffix().toLower() == "rtf")
          {
-            const QFileInfo c_Info(orc_RtfPath.c_str());
             if (C_OscUtils::h_CheckValidFileName(c_Info.completeBaseName().toStdString().c_str()))
             {
-               if (TglFileExists(orc_RtfPath) == true)
+               if (c_Info.exists() == true)
                {
                   s32_Return = C_WARN;
                }
@@ -261,11 +258,12 @@ int32_t C_RtfExportWidget::GetCompanyLogoPath(C_SclString & orc_CompanyLogoPath)
             C_PuiUtil::h_GetAbsolutePathFromProject(orc_CompanyLogoPath.c_str()).toStdString().c_str();
 
          // check if file exists
-         if (TglFileExists(orc_CompanyLogoPath) == true)
+         const QFileInfo c_Info(orc_CompanyLogoPath.c_str());
+         if (c_Info.exists() == true)
          {
             // check if file name is valid
-            const C_SclString c_FileExtAct = TglExtractFileExtension(orc_CompanyLogoPath);
-            if ((c_FileExtAct.LowerCase() == ".jpg") || (c_FileExtAct.LowerCase() == ".png"))
+            const QString c_FileExtAct = c_Info.suffix().toLower();
+            if ((c_FileExtAct == "jpg") || (c_FileExtAct == "png"))
             {
                s32_Return = C_NO_ERR;
             }
@@ -366,7 +364,7 @@ int32_t C_RtfExportWidget::ExportToRtf(const C_SclString & orc_RtfPath, const C_
    osc_write_log_info("RTF File Export", "Look for DocuCreator at path \"" + c_SclStringDocuCreatorPath + "\".");
 
    // check for path of external 'DocuCreator' tool
-   if (TglFileExists(c_SclStringDocuCreatorPath) == false)
+   if (QFileInfo::exists(c_SclStringDocuCreatorPath.c_str()) == false)
    {
       this->mc_Error = "Can't find external tool 'DocuCreator' for RTF File Export at path \"" +
                        c_SclStringDocuCreatorPath + "\".";
@@ -648,9 +646,10 @@ void C_RtfExportWidget::m_RtfPathClicked(void)
    const C_SclString c_Tmp =
       C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditRtfPath->GetPath()).toStdString().c_str();
 
-   if (TglDirectoryExists(TglExtractFilePath(c_Tmp)) == true)
+   const QFileInfo c_TmpInfo(c_Tmp.c_str());
+   if (c_TmpInfo.dir().exists() == true)
    {
-      c_Folder = TglExtractFilePath(c_Tmp).c_str();
+      c_Folder = c_TmpInfo.path() + "/";
    }
    else
    {
@@ -683,9 +682,10 @@ void C_RtfExportWidget::m_LogoPathClicked(void) const
    const C_SclString c_Tmp =
       C_PuiUtil::h_GetAbsolutePathFromProject(this->mpc_Ui->pc_EditLogoPath->GetPath()).toStdString().c_str();
 
-   if (TglDirectoryExists(TglExtractFilePath(c_Tmp)) == true)
+   const QFileInfo c_TmpInfo(c_Tmp.c_str());
+   if (c_TmpInfo.dir().exists() == true)
    {
-      c_Folder = TglExtractFilePath(c_Tmp).c_str();
+      c_Folder = c_TmpInfo.path() + "/";
    }
    else
    {
