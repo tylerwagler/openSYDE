@@ -851,7 +851,6 @@ set(OPENSYDE_SOURCES
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvCanBus.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvEthernetBus.cpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvTextElementBus.cpp
-   ${OPENSYDE_GUI_ROOT}/src/util/C_UtiFindNameHelper.cpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxResizingView.cpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblModelAction.cpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTooltipUtil.cpp
@@ -1654,7 +1653,6 @@ set(OPENSYDE_HEADERS
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvCanBus.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvEthernetBus.hpp
    ${PROJECT_ROOT}/src/graphic_items/system_view_items/C_GiSvTextElementBus.hpp
-   ${OPENSYDE_GUI_ROOT}/src/util/C_UtiFindNameHelper.hpp
    ${OPENSYDE_GUI_ROOT}/src/opensyde_gui_elements/combo_box/C_OgeCbxResizingView.hpp
    ${OPENSYDE_GUI_ROOT}/src/table_base/C_TblModelAction.hpp
    ${OPENSYDE_GUI_ROOT}/src/system_definition/C_SdTooltipUtil.hpp

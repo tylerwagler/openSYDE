@@ -252,7 +252,6 @@ set(OPENSYDE_SOURCES
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.cpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_Uti.cpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_UtiClipBoardHelper.cpp
-   ${OPENSYDE_GUI_ROOT}/src/util/C_UtiFindNameHelper.cpp
 )
 
 set(OPENSYDE_HEADERS
@@ -387,7 +386,6 @@ set(OPENSYDE_HEADERS
    ${OPENSYDE_GUI_ROOT}/src/table_base/tree_base/C_TblTreSimpleModel.hpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_Uti.hpp
    ${OPENSYDE_GUI_ROOT}/src/util/C_UtiClipBoardHelper.hpp
-   ${OPENSYDE_GUI_ROOT}/src/util/C_UtiFindNameHelper.hpp
 )
 
 set(OPENSYDE_FORMS
