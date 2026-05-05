@@ -13,11 +13,8 @@
 
 #include <QString>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wtemplate-body"
 #include "expression.hpp"
 #include <data/monitor/lexer.hpp>
-#pragma GCC diagnostic pop
 
 #include "C_OscNode.hpp"
 #include "C_SclString.hpp"
