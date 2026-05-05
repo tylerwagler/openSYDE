@@ -451,12 +451,20 @@ set(OPENSYDE_LINK_LIBRARIES
    Qt6::SvgWidgets
    opensyde_core
 )
-if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   find_package(OpenSSL REQUIRED)
+   list(APPEND OPENSYDE_LINK_LIBRARIES
+      OpenSSL::SSL
+      OpenSSL::Crypto
+   )
+else()
    list(APPEND OPENSYDE_LINK_LIBRARIES
       version
       ws2_32   #WinSock
       Iphlpapi #IP helper API
       ${PROJECT_ROOT}/../libraries/gettext/libintl.a
+      ${PROJECT_ROOT}/../libraries/openssl/openssl64/libssl.a
+      ${PROJECT_ROOT}/../libraries/openssl/openssl64/libcrypto.a
    )
 endif()
 

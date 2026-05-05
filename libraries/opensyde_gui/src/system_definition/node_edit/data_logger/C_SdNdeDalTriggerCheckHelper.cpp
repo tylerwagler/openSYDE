@@ -21,7 +21,6 @@
 using namespace stw::opensyde_gui_logic;
 
 bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t /*ou32_NodeIndex*/,
-                                           const uint32_t /*ou32_DataLoggerIndex*/,
                                            const stw::scl::C_SclString & /*orc_Expression*/,
                                            std::string * const /*opc_ErrorDetails*/,
                                            bool * const opq_AreVariablesValid,
@@ -30,6 +29,12 @@ bool C_SdNdeDalTriggerCheckHelper::h_Check(const uint32_t /*ou32_NodeIndex*/,
    if (opq_AreVariablesValid != NULL) { *opq_AreVariablesValid = true; }
    if (opq_IsSyntaxValid != NULL)     { *opq_IsSyntaxValid = true; }
    return true;
+}
+
+std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId>
+C_SdNdeDalTriggerCheckHelper::h_ParseDataElements(const stw::scl::C_SclString & /*orc_Condition*/)
+{
+   return std::vector<stw::opensyde_core::C_OscNodeDataPoolListElementOptArrayId>();
 }
 
 C_SdNdeDalTriggerCheckHelper::C_SdNdeDalTriggerCheckHelper() {}
@@ -1160,4 +1165,5 @@ bool C_SdNdeDalTriggerCheckHelper::mh_TranslateDataElementStringToId(const C_Scl
    }
    return q_IsValid;
 }
+
 #endif // _WIN32

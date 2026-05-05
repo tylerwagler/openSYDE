@@ -113,17 +113,21 @@ C_BasicFlashTool::~C_BasicFlashTool()
 //----------------------------------------------------------------------------------------------------------------------
 void C_BasicFlashTool::Init(const int32_t os32_Argc, char_t * const * const oppcn_Argv)
 {
-   char_t acn_ApplicationName[MAX_PATH + 1];
    C_SclString c_LogFile;
    C_TglDateTime c_DateTime;
    C_SclString c_ExeName;
    const C_SclString c_ExeVersion = mh_GetApplicationVersion(TglGetExePath());
    const C_SclString c_BinaryHash = C_OscUtilBinaryHash::h_CreateBinaryHash();
-   const uint32_t u32_Return = GetModuleFileNameA(NULL, &acn_ApplicationName[0], MAX_PATH + 1);
-
-   tgl_assert(u32_Return != 0);
-
-   c_ExeName = acn_ApplicationName;
+#ifdef _WIN32
+   {
+      char_t acn_ApplicationName[MAX_PATH + 1];
+      const uint32_t u32_Return = GetModuleFileNameA(NULL, &acn_ApplicationName[0], MAX_PATH + 1);
+      tgl_assert(u32_Return != 0);
+      c_ExeName = acn_ApplicationName;
+   }
+#else
+   c_ExeName = TglGetExePath();
+#endif
 
    std::cout << "This is a very simple openSYDE tool for updating one device with one hex file." << std::endl;
    std::cout << "Version: " << c_ExeVersion.c_str() << std::endl;
