@@ -27,12 +27,17 @@
 #include "C_CieConverter.hpp"
 #include "C_OscCanSignal.hpp"
 #include "C_OscNodeDataPoolContent.hpp"
-#include "TglFile.hpp"
 #include "TglUtils.hpp"
 #include "C_SdNdeDpContentUtil.hpp"
 #include "C_OscLoggingHandler.hpp"
 
+#include <QDir>
+#include <QFileInfo>
+#include <QSaveFile>
+#include <QString>
+
 #include <algorithm>
+#include <sstream>
 #include <unordered_set>
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
@@ -109,7 +114,8 @@ int32_t C_CieExportDbc::h_ExportNetwork(const stw::scl::C_SclString & orc_File,
    mhc_ExportStatistic.u32_NumOfSignals = 0;
 
    // check file path
-   if (TglDirectoryExists(TglExtractFilePath(orc_File)) == false)
+   const QString c_QtPath = QString::fromLocal8Bit(orc_File.c_str());
+   if (QFileInfo(c_QtPath).dir().exists() == false)
    {
       orc_ErrorMessage = "Path \"" + orc_File + "\" does not exist.";
       osc_write_log_warning("DBC file export", orc_ErrorMessage);
@@ -160,16 +166,29 @@ int32_t C_CieExportDbc::h_ExportNetwork(const stw::scl::C_SclString & orc_File,
    // save DBC export to file
    if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN))
    {
-      std::ofstream c_File(orc_File.c_str());
+      QSaveFile c_File(c_QtPath);
+      c_File.setDirectWriteFallback(true);
 
-      if (c_File.is_open())
+      if (c_File.open(QIODevice::WriteOnly))
       {
          c_Message = "Saving network to file ...";
          osc_write_log_info("DBC file export", c_Message);
-         c_File << c_DbcNetwork;
 
-         // set status flag of this export
-         mhq_ValidDbcExport = true;
+         std::ostringstream c_Buffer;
+         c_Buffer << c_DbcNetwork;
+         const std::string c_Content = c_Buffer.str();
+         const qint64 s64_Written = c_File.write(c_Content.data(), static_cast<qint64>(c_Content.size()));
+
+         if ((s64_Written == static_cast<qint64>(c_Content.size())) && c_File.commit())
+         {
+            mhq_ValidDbcExport = true;
+         }
+         else
+         {
+            orc_ErrorMessage = "Writing to \"" + orc_File + "\" failed.";
+            osc_write_log_warning("DBC file export", orc_ErrorMessage);
+            s32_Return = C_BUSY;
+         }
       }
       else
       {

@@ -20,8 +20,12 @@
 
 #include "C_CieImportDbc.hpp"
 
-#include "TglFile.hpp"
-#include "TglUtils.hpp"
+#include <QByteArray>
+#include <QFile>
+#include <QFileInfo>
+#include <QString>
+
+#include <sstream>
 
 #include "C_OscNodeDataPoolContent.hpp"
 #include "C_OscLoggingHandler.hpp"
@@ -99,8 +103,8 @@ int32_t C_CieImportDbc::h_ImportNetwork(const C_SclString & orc_File,
    if ((s32_Return == C_NO_ERR) || (s32_Return == C_WARN))
    {
       uint32_t u32_Nodes = 0U;
-      stw::scl::C_SclString c_FileName = stw::tgl::TglExtractFileName(orc_File);
-      c_FileName.SetLength(c_FileName.Length() - 4U); //no extension
+      const QFileInfo c_FileInfo(QString::fromLocal8Bit(orc_File.c_str()));
+      const C_SclString c_FileName(c_FileInfo.completeBaseName().toLocal8Bit().constData());
 
       // add bus information
       orc_Definition.c_Bus.c_Name = c_FileName; // file name means network name
@@ -214,12 +218,13 @@ int32_t C_CieImportDbc::h_ImportNetwork(const C_SclString & orc_File,
 int32_t C_CieImportDbc::mh_ReadFile(const C_SclString & orc_File, Vector::DBC::Network & orc_Network)
 {
    int32_t s32_Return = C_NO_ERR;
+   const QString c_QtPath = QString::fromLocal8Bit(orc_File.c_str());
 
    if (orc_File == "")
    {
       s32_Return = C_RANGE;
    }
-   else if (stw::tgl::TglFileExists(orc_File) == false)
+   else if (QFileInfo(c_QtPath).isFile() == false)
    {
       mhc_ErrorMessage = "DBC file \"" + orc_File + "\" does not exist.";
       osc_write_log_error("DBC file import", mhc_ErrorMessage);
@@ -234,11 +239,13 @@ int32_t C_CieImportDbc::mh_ReadFile(const C_SclString & orc_File, Vector::DBC::N
       // content
       try
       {
-         std::ifstream c_InputFile(orc_File.c_str());
-         if (c_InputFile.is_open())
+         QFile c_QtFile(c_QtPath);
+         if (c_QtFile.open(QIODevice::ReadOnly))
          {
-            c_InputFile >> orc_Network;
-            c_InputFile.close();
+            const QByteArray c_Bytes = c_QtFile.readAll();
+            c_QtFile.close();
+            std::istringstream c_Stream(std::string(c_Bytes.constData(), static_cast<size_t>(c_Bytes.size())));
+            c_Stream >> orc_Network;
             if (orc_Network.successfullyParsed == false)
             {
                q_ReadError = true;

@@ -3334,10 +3334,8 @@ void C_SyvDaChaPlotHandlerWidget::m_SaveState(bool & orq_IsPaused, int32_t & ors
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaChaPlotHandlerWidget::m_ExtractDataToCsv(void)
 {
-   if (mc_File.open(QIODevice::ReadWrite  | QIODevice::Truncate))
+   if (mc_File.open(QIODevice::WriteOnly | QIODevice::Truncate))
    {
-      mc_File.resize(0); //Truncate the file
-      QString c_DataElements;
       const uint32_t u32_DataElementSize = static_cast<uint32_t>(this->mc_Data.c_DataPoolElementsConfig.size());
       const auto pc_Plot = this->mpc_Ui->pc_Plot;
       const auto pc_ChartSelectorWidget = this->mpc_Ui->pc_ChartSelectorWidget;
@@ -3347,6 +3345,7 @@ void C_SyvDaChaPlotHandlerWidget::m_ExtractDataToCsv(void)
          s32_MaxDataElement = pc_Plot->graph(0)->dataCount();
       }
 
+      QStringList c_HeaderCells;
       for (uint32_t u32_DataElementCounter = 0U; u32_DataElementCounter < u32_DataElementSize; ++u32_DataElementCounter)
       {
          const QCPGraph * const pc_Graph = pc_Plot->graph(u32_DataElementCounter);
@@ -3356,23 +3355,18 @@ void C_SyvDaChaPlotHandlerWidget::m_ExtractDataToCsv(void)
             {
                s32_MaxDataElement = pc_Graph->dataCount();
             }
-            //Creating here headings for all data elements and units
-            c_DataElements += "Timestamp (ms);" + pc_ChartSelectorWidget->GetDataElementName(
-               u32_DataElementCounter) + " (" +
-                              pc_ChartSelectorWidget->GetDataElementUnit(u32_DataElementCounter) + ")";
-            if (u32_DataElementCounter < (u32_DataElementSize - 1))
-            {
-               c_DataElements += ";";
-            }
+            c_HeaderCells << QStringLiteral("Timestamp (ms)");
+            c_HeaderCells << QStringLiteral("%1 (%2)").arg(
+               pc_ChartSelectorWidget->GetDataElementName(u32_DataElementCounter),
+               pc_ChartSelectorWidget->GetDataElementUnit(u32_DataElementCounter));
          }
       }
 
-      //Writing created data elements and units headings to .csv file
-      mc_Out << c_DataElements + "\n";
+      mc_Out << c_HeaderCells.join(';') << '\n';
 
-      for (int32_t s32_GraphDataCounter = 0U; s32_GraphDataCounter < s32_MaxDataElement;
-           ++s32_GraphDataCounter)
+      for (int32_t s32_GraphDataCounter = 0; s32_GraphDataCounter < s32_MaxDataElement; ++s32_GraphDataCounter)
       {
+         QStringList c_RowCells;
          for (uint32_t u32_DataElementCounter = 0U; u32_DataElementCounter < u32_DataElementSize;
               ++u32_DataElementCounter)
          {
@@ -3381,20 +3375,17 @@ void C_SyvDaChaPlotHandlerWidget::m_ExtractDataToCsv(void)
             {
                if (s32_GraphDataCounter < pc_Graph->dataCount())
                {
-                  mc_Out << pc_Graph->data()->at(s32_GraphDataCounter)->key << ";" << pc_Graph->data()->at(
-                     s32_GraphDataCounter)->mainValue();
+                  const auto pc_Point = pc_Graph->data()->at(s32_GraphDataCounter);
+                  c_RowCells << QString::number(pc_Point->key);
+                  c_RowCells << QString::number(pc_Point->mainValue());
                }
                else
                {
-                  mc_Out << ";";
-               }
-               if (u32_DataElementCounter < (u32_DataElementSize - 1))
-               {
-                  mc_Out << ";";
+                  c_RowCells << QString() << QString();
                }
             }
          }
-         mc_Out << "\n";
+         mc_Out << c_RowCells.join(';') << '\n';
       }
 
       mc_File.close();

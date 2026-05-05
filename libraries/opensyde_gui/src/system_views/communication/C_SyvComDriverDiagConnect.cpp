@@ -160,18 +160,15 @@ void C_SyvComDriverDiagConnect::run(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComDriverDiagConnect::m_RunWaitingStep(void)
 {
-   //If someone requests the results of this step...
    this->mc_ErrorMessage = "";
    this->mc_ErrorMessageDetails = "";
    this->ms32_OperationResult = C_NO_ERR;
-   // Is a new connect already possible
-   if ((this->mu32_DisconnectTime + 5100U) > TglGetTickCount())
+
+   const uint32_t u32_Deadline = this->mu32_DisconnectTime + 5100U;
+   const uint32_t u32_Now = TglGetTickCount();
+   if (u32_Deadline > u32_Now)
    {
-      QThread::usleep(static_cast<uint32_t>((this->mu32_DisconnectTime + 5100U) - TglGetTickCount()));
-   }
-   while ((this->mu32_DisconnectTime + 5100U) > TglGetTickCount())
-   {
-      // Wait till it is possible
+      QThread::msleep(u32_Deadline - u32_Now);
    }
 }
 
