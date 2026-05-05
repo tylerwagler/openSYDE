@@ -20,6 +20,7 @@
 #include "constants.hpp"
 #include "C_Uti.hpp"
 #include "C_UsFiler.hpp"
+#include "C_UsFilerHelpers.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
