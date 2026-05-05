@@ -3,7 +3,9 @@
    \file
    \brief       Handle save'n load for user settings (implementation)
 
-   Handle save'n load for user settings
+   QSettings-based persistence for SYDEflash's user settings. SYDEflash has only project-
+   independent state (no per-project section); a single beginGroup-per-section save and load
+   is enough. Helpers come from the shared C_UsFilerHelpers.hpp.
 
    \copyright   Copyright 2016 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
@@ -14,14 +16,17 @@
 
 #include <QFileInfo>
 #include <QDir>
+#include <QSet>
+#include <QSettings>
+
 #include "stwerrors.hpp"
 #include "C_Uti.hpp"
 #include "C_UsFiler.hpp"
+#include "C_UsFilerHelpers.hpp"
 
 /* -- Used Namespaces ----------------------------------------------------------------------------------------------- */
 
 using namespace stw::opensyde_gui_logic;
-using namespace stw::scl;
 using namespace stw::errors;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
@@ -45,15 +50,15 @@ C_UsFiler::C_UsFiler(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save all user setting to default ini file
+/*! \brief   Save all user settings to default ini file.
 
-   \param[in]  orc_UserSettings  User settings to save
-   \param[in]  orc_Path          File path
+   \param[in]  orc_UserSettings    User settings to save
+   \param[in]  orc_Path            File path
 
    \return
-   C_NO_ERR: OK
-   C_RANGE:  Parameter invalid
-   C_NOACT:  File open failed
+   C_NO_ERR  OK
+   C_RANGE   Empty path
+   C_NOACT   File open failed
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_UsFiler::h_Save(const C_UsHandler & orc_UserSettings, const QString & orc_Path)
@@ -64,9 +69,7 @@ int32_t C_UsFiler::h_Save(const C_UsHandler & orc_UserSettings, const QString & 
    {
       s32_Retval = C_NO_ERR;
       {
-         //Helper to seperate path and file name
          const QFileInfo c_File(orc_Path);
-         //Check if directory exists
          const QDir c_Dir(c_File.path());
          if (c_Dir.exists() == false)
          {
@@ -75,9 +78,27 @@ int32_t C_UsFiler::h_Save(const C_UsHandler & orc_UserSettings, const QString & 
       }
       try
       {
-         //Parse ini
-         C_SclIniFile c_Ini(orc_Path.toStdString().c_str());
-         mh_SaveProjectIndependentSection(orc_UserSettings, c_Ini);
+         QSettings c_Ini(orc_Path, QSettings::IniFormat);
+
+         // Drop any top-level groups that aren't part of the new schema. SYDEflash's pre-Phase-5
+         // INI files don't have project-as-section issues (no project save), but the scrub
+         // catches any unexpected legacy keys and keeps the file tidy after format changes.
+         {
+            const QSet<QString> c_KnownSections = {
+               "Screen", "Layout", "Settings", "Properties", "Advanced_Properties", "Update"
+            };
+            const QStringList c_TopLevelGroups = c_Ini.childGroups();
+            for (const QString & rc_Group : c_TopLevelGroups)
+            {
+               if (c_KnownSections.contains(rc_Group) == false)
+               {
+                  c_Ini.remove(rc_Group);
+               }
+            }
+         }
+
+         mh_SaveProjectIndependentSection(c_Ini, orc_UserSettings);
+         c_Ini.sync();
       }
       catch (...)
       {
@@ -92,17 +113,15 @@ int32_t C_UsFiler::h_Save(const C_UsHandler & orc_UserSettings, const QString & 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load all values of ini file
+/*! \brief   Load user settings from file.
 
-   If ini not existing set default values.
-
-   \param[in,out]  orc_UserSettings    User settings to load
+   \param[in,out]  orc_UserSettings    User settings to load into
    \param[in]      orc_Path            File path
 
    \return
-   C_NO_ERR: OK
-   C_RANGE:  Parameter invalid
-   C_NOACT:  File open failed
+   C_NO_ERR  OK
+   C_RANGE   Empty path
+   C_NOACT   File open failed
 */
 //----------------------------------------------------------------------------------------------------------------------
 int32_t C_UsFiler::h_Load(C_UsHandler & orc_UserSettings, const QString & orc_Path)
@@ -113,7 +132,7 @@ int32_t C_UsFiler::h_Load(C_UsHandler & orc_UserSettings, const QString & orc_Pa
    {
       try
       {
-         C_SclIniFile c_Ini(orc_Path.toStdString().c_str());
+         QSettings c_Ini(orc_Path, QSettings::IniFormat);
          s32_Retval = C_NO_ERR;
 
          orc_UserSettings.SetDefault();
@@ -132,178 +151,150 @@ int32_t C_UsFiler::h_Load(C_UsHandler & orc_UserSettings, const QString & orc_Pa
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Save project independent part of user settings
+/*! \brief   Save project-independent (only) part of user settings.
 
+   \param[in,out]  orc_Ini             Open QSettings instance
    \param[in]      orc_UserSettings    User settings
-   \param[in,out]  orc_Ini             Ini handler
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsFiler::mh_SaveProjectIndependentSection(const C_UsHandler & orc_UserSettings, C_SclIniFile & orc_Ini)
+void C_UsFiler::mh_SaveProjectIndependentSection(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings)
 {
    const QStringList c_HexFilePaths = orc_UserSettings.GetLastKnownUpdateHexFilePaths();
    const QStringList c_HexFilePathsAsRelativeOrAbsolute = orc_UserSettings.GetHexFilePathsAsRelativeOrAbsolute();
 
-   //Screen position
-   orc_Ini.WriteInteger("Screen", "Position_x", orc_UserSettings.GetScreenPos().x());
-   orc_Ini.WriteInteger("Screen", "Position_y", orc_UserSettings.GetScreenPos().y());
+   orc_Ini.remove("Screen");
+   orc_Ini.beginGroup("Screen");
+   orc_Ini.setValue("Position", orc_UserSettings.GetScreenPos());
+   orc_Ini.setValue("Size", orc_UserSettings.GetAppSize());
+   orc_Ini.setValue("Maximized", orc_UserSettings.GetAppMaximized());
+   orc_Ini.setValue("ScreenIndex", static_cast<int32_t>(orc_UserSettings.GetAppScreenIndex()));
+   orc_Ini.endGroup();
 
-   // Application size
-   orc_Ini.WriteInteger("Screen", "Size_width", orc_UserSettings.GetAppSize().width());
-   orc_Ini.WriteInteger("Screen", "Size_height", orc_UserSettings.GetAppSize().height());
+   orc_Ini.remove("Layout");
+   orc_Ini.beginGroup("Layout");
+   orc_Ini.setValue("SettingsSplitter_x", orc_UserSettings.GetSplitterSettingsHorizontal());
+   orc_Ini.setValue("Settings_expanded", orc_UserSettings.GetSettingsAreExpanded());
+   orc_Ini.endGroup();
 
-   // Application maximizing flag
-   orc_Ini.WriteBool("Screen", "Size_maximized", orc_UserSettings.GetAppMaximized());
+   orc_Ini.remove("Settings");
+   orc_Ini.beginGroup("Settings");
+   orc_Ini.setValue("ProgressExpanded", orc_UserSettings.GetWiProgressExpanded());
+   orc_Ini.setValue("AdvSettExpanded", orc_UserSettings.GetWiAdvSettExpanded());
+   orc_Ini.setValue("DllExpanded", orc_UserSettings.GetWiDllConfigExpanded());
+   orc_Ini.setValue("PopOpenSection", static_cast<int32_t>(orc_UserSettings.GetPopOpenSection()));
+   orc_Ini.setValue("CustomCanDllPath", orc_UserSettings.GetCustomCanDllPath());
+   orc_Ini.setValue("CanDllType", mh_GetStringFromDllType(orc_UserSettings.GetCanDllType()));
+   orc_Ini.endGroup();
 
-   // Application screen index
-   orc_Ini.WriteInteger("Screen", "Screen_index", orc_UserSettings.GetAppScreenIndex());
+   orc_Ini.remove("Properties");
+   orc_Ini.beginGroup("Properties");
+   orc_Ini.setValue("NodeId", orc_UserSettings.GetPropNodeId());
+   orc_Ini.setValue("Bitrate", orc_UserSettings.GetPropBitrate());
+   orc_Ini.setValue("InterfaceIndex", orc_UserSettings.GetNodeCfgInterfaceIndex());
+   orc_Ini.endGroup();
 
-   // Settings splitter
-   orc_Ini.WriteInteger("Layout", "SettingsSplitter_x", orc_UserSettings.GetSplitterSettingsHorizontal());
-   orc_Ini.WriteBool("Layout", "Settings_expanded", orc_UserSettings.GetSettingsAreExpanded());
+   orc_Ini.remove("Advanced_Properties");
+   orc_Ini.beginGroup("Advanced_Properties");
+   orc_Ini.setValue("FlashloaderResetWaitTime", orc_UserSettings.GetFlashloaderResetWaitTime());
+   orc_Ini.setValue("RequestDownloadTimeout", orc_UserSettings.GetRequestDownloadTimeout());
+   orc_Ini.setValue("TransferDataTimeout", orc_UserSettings.GetTransferDataTimeout());
+   orc_Ini.endGroup();
 
-   // Settings expanded collapsed
-   orc_Ini.WriteBool("Settings", "ProgressExpanded", orc_UserSettings.GetWiProgressExpanded());
-   orc_Ini.WriteBool("Settings", "AdvSettExpanded", orc_UserSettings.GetWiAdvSettExpanded());
-   orc_Ini.WriteBool("Settings", "DllExpanded", orc_UserSettings.GetWiDllConfigExpanded());
-   orc_Ini.WriteInteger("Settings", "PopOpenSection", static_cast<int32_t>(orc_UserSettings.GetPopOpenSection()));
-   orc_Ini.WriteString("Settings", "CustomCanDllPath", orc_UserSettings.GetCustomCanDllPath().toStdString().c_str());
-   orc_Ini.WriteString("Settings", "CanDllType", C_UsFiler::mh_GetStringFromDllType(
-                          orc_UserSettings.GetCanDllType()).toStdString().c_str());
-
-   // Values of Property widget
-   orc_Ini.WriteInteger("Properties", "NodeId", orc_UserSettings.GetPropNodeId());
-   orc_Ini.WriteInteger("Properties", "Bitrate", orc_UserSettings.GetPropBitrate());
-
-   // Values of Node Configuration Dialog
-   orc_Ini.WriteInteger("Properties", "InterfaceIndex", orc_UserSettings.GetNodeCfgInterfaceIndex());
-
-   // Advanced Properties values
-   orc_Ini.WriteInteger("Advanced_Properties", "FlashloaderResetWaitTime",
-                        orc_UserSettings.GetFlashloaderResetWaitTime());
-   orc_Ini.WriteInteger("Advanced_Properties", "RequestDownloadTimeout", orc_UserSettings.GetRequestDownloadTimeout());
-   orc_Ini.WriteInteger("Advanced_Properties", "TransferDataTimeout", orc_UserSettings.GetTransferDataTimeout());
-
-   // Values from Update widget
-   orc_Ini.WriteInteger("Update", "HexFileCount", static_cast<int32_t>(c_HexFilePaths.size()));
-   for (int32_t s32_SectionCounter = 0; s32_SectionCounter < static_cast<int32_t>(c_HexFilePaths.size());
-        ++s32_SectionCounter)
+   orc_Ini.remove("Update");
+   orc_Ini.beginGroup("Update");
+   const int32_t s32_HexCount = static_cast<int32_t>(c_HexFilePaths.size());
+   orc_Ini.beginWriteArray("HexFiles", s32_HexCount);
+   for (int32_t s32_It = 0; s32_It < s32_HexCount; ++s32_It)
    {
-      const std::string c_HexFilePath = c_HexFilePaths[s32_SectionCounter].toStdString();
-      orc_Ini.WriteString("Update", "HexFiles[" + std::to_string(s32_SectionCounter) + "]",
-                          c_HexFilePath);
-      const std::string c_HexFilePathAsRelativeOrAbsolute =
-         c_HexFilePathsAsRelativeOrAbsolute[s32_SectionCounter].toStdString();
-      orc_Ini.WriteString("Update", "HexFilesAsRelativeOrAbsolute[" + std::to_string(s32_SectionCounter) + "]",
-                          c_HexFilePathAsRelativeOrAbsolute);
+      orc_Ini.setArrayIndex(s32_It);
+      orc_Ini.setValue("Path", c_HexFilePaths[s32_It]);
+      // The legacy format stored these in parallel arrays of equal length. Preserve that
+      // invariant by writing the sibling value when present; default to empty otherwise.
+      const QString c_RelOrAbs = (s32_It < c_HexFilePathsAsRelativeOrAbsolute.size())
+                                 ? c_HexFilePathsAsRelativeOrAbsolute[s32_It]
+                                 : QString("");
+      orc_Ini.setValue("RelativeOrAbsolute", c_RelOrAbs);
    }
-
-   orc_Ini.WriteString("Update", "LastKnownHexFileLocation",
-                       orc_UserSettings.GetLastKnownUpdateHexFileLocation().toStdString().c_str());
+   orc_Ini.endArray();
+   orc_Ini.setValue("LastKnownHexFileLocation", orc_UserSettings.GetLastKnownUpdateHexFileLocation());
+   orc_Ini.endGroup();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Load INI project independent section
+/*! \brief   Load project-independent (only) part of user settings.
 
-   \param[in,out]  orc_UserSettings    User settings
-   \param[in,out]  orc_Ini             Current ini
+   \param[in,out]  orc_UserSettings    User settings to load into
+   \param[in,out]  orc_Ini             Open QSettings instance
 */
 //----------------------------------------------------------------------------------------------------------------------
-void C_UsFiler::mh_LoadProjectIndependentSection(C_UsHandler & orc_UserSettings, C_SclIniFile & orc_Ini)
+void C_UsFiler::mh_LoadProjectIndependentSection(C_UsHandler & orc_UserSettings, QSettings & orc_Ini)
 {
-   QPoint c_Pos;
-   QSize c_Size;
-   bool q_Flag;
-   int32_t s32_Value;
-   QString c_Tmp;
+   orc_Ini.beginGroup("Screen");
+   orc_UserSettings.SetScreenPos(orc_Ini.value("Position", QPoint(50, 50)).toPoint());
+   orc_UserSettings.SetAppSize(orc_Ini.value("Size", QSize(1000, 700)).toSize());
+   orc_UserSettings.SetAppMaximized(orc_Ini.value("Maximized", true).toBool());
+   orc_UserSettings.SetAppScreenIndex(static_cast<uint32_t>(orc_Ini.value("ScreenIndex", 0).toInt()));
+   orc_Ini.endGroup();
+
+   orc_Ini.beginGroup("Layout");
+   orc_UserSettings.SetSplitterSettingsHorizontal(orc_Ini.value("SettingsSplitter_x", 0).toInt());
+   orc_UserSettings.SetSettingsAreExpanded(orc_Ini.value("Settings_expanded", true).toBool());
+   orc_Ini.endGroup();
+
+   orc_Ini.beginGroup("Settings");
+   orc_UserSettings.SetWiProgressExpanded(orc_Ini.value("ProgressExpanded", true).toBool());
+   orc_UserSettings.SetWiAdvSettExpanded(orc_Ini.value("AdvSettExpanded", true).toBool());
+   orc_UserSettings.SetWiDllConfigExpanded(orc_Ini.value("DllExpanded", true).toBool());
+   orc_UserSettings.SetPopOpenSection(static_cast<C_UsHandler::E_SettingsSubSection>(
+                                         orc_Ini.value("PopOpenSection",
+                                                       static_cast<int32_t>(C_UsHandler::E_SettingsSubSection::eNONE)).
+                                         toInt()));
+   orc_UserSettings.SetCustomCanDllPath(orc_Ini.value("CustomCanDllPath", "").toString());
+   orc_UserSettings.SetCanDllType(mh_GetDllTypeFromString(orc_Ini.value("CanDllType", "").toString()));
+   orc_Ini.endGroup();
+
+   orc_Ini.beginGroup("Properties");
+   orc_UserSettings.SetPropNodeId(orc_Ini.value("NodeId", 0).toInt());
+   orc_UserSettings.SetPropBitrate(orc_Ini.value("Bitrate", 0).toInt());
+   orc_UserSettings.SetNodeCfgInterfaceIndex(orc_Ini.value("InterfaceIndex", 1).toInt());
+   orc_Ini.endGroup();
+
+   orc_Ini.beginGroup("Advanced_Properties");
+   orc_UserSettings.SetFlashloaderResetWaitTime(orc_Ini.value("FlashloaderResetWaitTime", 1000).toInt());
+   orc_UserSettings.SetRequestDownloadTimeout(orc_Ini.value("RequestDownloadTimeout", 40000).toInt());
+   orc_UserSettings.SetTransferDataTimeout(orc_Ini.value("TransferDataTimeout", 1000).toInt());
+   orc_Ini.endGroup();
+
    QStringList c_HexFilePaths;
    QStringList c_HexFilePathsAsRelativeOrAbsolute;
-
-   // Screen position
-   c_Pos.setX(orc_Ini.ReadInteger("Screen", "Position_x", 50));
-   c_Pos.setY(orc_Ini.ReadInteger("Screen", "Position_y", 50));
-   orc_UserSettings.SetScreenPos(c_Pos);
-
-   // Application size
-   c_Size.setWidth(orc_Ini.ReadInteger("Screen", "Size_width", 1000));
-   c_Size.setHeight(orc_Ini.ReadInteger("Screen", "Size_height", 700));
-   orc_UserSettings.SetAppSize(c_Size);
-
-   // Application maximizing flag
-   q_Flag = orc_Ini.ReadBool("Screen", "Size_maximized", true);
-   orc_UserSettings.SetAppMaximized(q_Flag);
-
-   // Application screen index
-   s32_Value = orc_Ini.ReadInteger("Screen", "Screen_index", 0);
-   orc_UserSettings.SetAppScreenIndex(static_cast<uint32_t>(s32_Value));
-
-   // Settings splitter
-   s32_Value = orc_Ini.ReadInteger("Layout", "SettingsSplitter_x", 0);
-   orc_UserSettings.SetSplitterSettingsHorizontal(s32_Value);
-   q_Flag = orc_Ini.ReadBool("Layout", "Settings_expanded", true);
-   orc_UserSettings.SetSettingsAreExpanded(q_Flag);
-
-   // Settings expanded collapsed
-   q_Flag = orc_Ini.ReadBool("Settings", "ProgressExpanded", true);
-   orc_UserSettings.SetWiProgressExpanded(q_Flag);
-   q_Flag = orc_Ini.ReadBool("Settings", "AdvSettExpanded", true);
-   orc_UserSettings.SetWiAdvSettExpanded(q_Flag);
-   q_Flag = orc_Ini.ReadBool("Settings", "DllExpanded", true);
-   orc_UserSettings.SetWiDllConfigExpanded(q_Flag);
-   s32_Value = orc_Ini.ReadInteger("Settings", "PopOpenSection",
-                                   static_cast<int32_t>(C_UsHandler::E_SettingsSubSection::eNONE));
-   orc_UserSettings.SetPopOpenSection(static_cast< C_UsHandler::E_SettingsSubSection>(s32_Value));
-   c_Tmp = orc_Ini.ReadString("Settings", "CustomCanDllPath", "").c_str();
-   orc_UserSettings.SetCustomCanDllPath(c_Tmp);
-   c_Tmp = orc_Ini.ReadString("Settings", "CanDllType", "").c_str();
-   orc_UserSettings.SetCanDllType(C_UsFiler::mh_GetDllTypeFromString(c_Tmp));
-
-   // Values from Properties widget
-   s32_Value = orc_Ini.ReadInteger("Properties", "NodeId", 0);
-   orc_UserSettings.SetPropNodeId(s32_Value);
-   s32_Value = orc_Ini.ReadInteger("Properties", "Bitrate", 0);
-   orc_UserSettings.SetPropBitrate(s32_Value);
-
-   // Values from Node Configuration Dialog
-   s32_Value = orc_Ini.ReadInteger("Properties", "InterfaceIndex", 1);
-   orc_UserSettings.SetNodeCfgInterfaceIndex(s32_Value);
-
-   // Advanced Properties values
-   s32_Value = orc_Ini.ReadInteger("Advanced_Properties", "FlashloaderResetWaitTime", 1000);
-   orc_UserSettings.SetFlashloaderResetWaitTime(s32_Value);
-   s32_Value = orc_Ini.ReadInteger("Advanced_Properties", "RequestDownloadTimeout", 40000);
-   orc_UserSettings.SetRequestDownloadTimeout(s32_Value);
-   s32_Value = orc_Ini.ReadInteger("Advanced_Properties", "TransferDataTimeout", 1000);
-   orc_UserSettings.SetTransferDataTimeout(s32_Value);
-
-   // Values from Update widget
-   s32_Value = orc_Ini.ReadInteger("Update", "HexFileCount", 0);
-   for (int32_t s32_SectionCounter = 0; s32_SectionCounter < s32_Value; ++s32_SectionCounter)
+   orc_Ini.beginGroup("Update");
+   const int32_t s32_HexCount = orc_Ini.beginReadArray("HexFiles");
+   for (int32_t s32_It = 0; s32_It < s32_HexCount; ++s32_It)
    {
-      c_HexFilePaths.append(
-         orc_Ini.ReadString("Update", "HexFiles[" + C_SclString::IntToStr(s32_SectionCounter) + "]", "").c_str());
-      c_HexFilePathsAsRelativeOrAbsolute.append(
-         orc_Ini.ReadString("Update", "HexFilesAsRelativeOrAbsolute[" + C_SclString::IntToStr(s32_SectionCounter) + "]",
-                            "").c_str());
+      orc_Ini.setArrayIndex(s32_It);
+      c_HexFilePaths.append(orc_Ini.value("Path", "").toString());
+      c_HexFilePathsAsRelativeOrAbsolute.append(orc_Ini.value("RelativeOrAbsolute", "").toString());
    }
+   orc_Ini.endArray();
    orc_UserSettings.SetLastKnownUpdateHexFilePaths(c_HexFilePaths);
    orc_UserSettings.SetHexFilePathsAsRelativeOrAbsolute(c_HexFilePathsAsRelativeOrAbsolute);
-
-   c_Tmp = orc_Ini.ReadString("Update", "LastKnownHexFileLocation", "").c_str();
-   orc_UserSettings.SetLastKnownUpdateHexFileLocation(c_Tmp);
+   orc_UserSettings.SetLastKnownUpdateHexFileLocation(orc_Ini.value("LastKnownHexFileLocation", "").toString());
+   orc_Ini.endGroup();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get DLL type from string
+/*! \brief  Get DLL type from string.
 
    \param[in]  orc_Value   Value
 
    \return
-   DLL type from string
+   DLL type from string (defaults to ePEAK on unknown input)
 */
 //----------------------------------------------------------------------------------------------------------------------
 C_UsHandler::E_CanDllType C_UsFiler::mh_GetDllTypeFromString(const QString & orc_Value)
 {
    C_UsHandler::E_CanDllType e_Retval;
+
    if (orc_Value == "peak")
    {
       e_Retval = C_UsHandler::ePEAK;
@@ -324,12 +315,12 @@ C_UsHandler::E_CanDllType C_UsFiler::mh_GetDllTypeFromString(const QString & orc
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Get string from DLL type
+/*! \brief  Get string from DLL type.
 
    \param[in]  oe_Value    Value
 
    \return
-   String from DLL type
+   String from DLL type (empty string on unknown enum)
 */
 //----------------------------------------------------------------------------------------------------------------------
 QString C_UsFiler::mh_GetStringFromDllType(const C_UsHandler::E_CanDllType oe_Value)

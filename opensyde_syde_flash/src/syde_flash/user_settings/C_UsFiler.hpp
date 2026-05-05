@@ -13,9 +13,10 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <QSettings>
+
 #include "C_UsHandler.hpp"
 #include "stwtypes.hpp"
-#include "C_SclIniFile.hpp"
 
 /* -- Namespace ----------------------------------------------------------------------------------------------------- */
 namespace stw
@@ -35,8 +36,8 @@ public:
 private:
    C_UsFiler(void);
 
-   static void mh_SaveProjectIndependentSection(const C_UsHandler & orc_UserSettings, stw::scl::C_SclIniFile & orc_Ini);
-   static void mh_LoadProjectIndependentSection(C_UsHandler & orc_UserSettings, stw::scl::C_SclIniFile & orc_Ini);
+   static void mh_SaveProjectIndependentSection(QSettings & orc_Ini, const C_UsHandler & orc_UserSettings);
+   static void mh_LoadProjectIndependentSection(C_UsHandler & orc_UserSettings, QSettings & orc_Ini);
 
    static C_UsHandler::E_CanDllType mh_GetDllTypeFromString(const QString & orc_Value);
    static QString mh_GetStringFromDllType(const C_UsHandler::E_CanDllType oe_Value);

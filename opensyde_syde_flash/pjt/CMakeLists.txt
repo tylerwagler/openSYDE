@@ -101,6 +101,7 @@ set (OPENSYDE_INCLUDES
    ${PROJECT_ROOT}/src/syde_flash/settings
    ${PROJECT_ROOT}/src/syde_flash/update
    ${PROJECT_ROOT}/src/syde_flash/user_settings
+   ${OPENSYDE_GUI_ROOT}/src/user_settings
    ${PROJECT_ROOT}/src/syde_flash/util
    ${OPENSYDE_GUI_ROOT}/src/system_definition
    ${OPENSYDE_GUI_ROOT}/src/system_definition/node_edit/datapools
