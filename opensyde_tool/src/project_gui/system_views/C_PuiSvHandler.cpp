@@ -20,7 +20,8 @@
 #include "stwerrors.hpp"
 #include "constants.hpp"
 #include "C_Uti.hpp"
-#include "TglFile.hpp"
+#include <QFileInfo>
+
 #include "TglUtils.hpp"
 #include "C_GtGetText.hpp"
 #include "C_SclChecksums.hpp"
@@ -98,7 +99,7 @@ int32_t C_PuiSvHandler::SaveToFile(const QString & orc_Path, const bool oq_UseDe
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (TglFileExists(orc_Path.toStdString().c_str()) == true)
+   if (QFileInfo::exists(orc_Path) == true)
    {
       //erase it:
       s32_Return = std::remove(orc_Path.toStdString().c_str());
@@ -3357,7 +3358,7 @@ int32_t C_PuiSvHandler::m_LoadFromFile(const QString & orc_Path,
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (TglFileExists(orc_Path.toStdString().c_str()) == true)
+   if (QFileInfo::exists(orc_Path) == true)
    {
       C_OscXmlParserLog c_XmlParser;
       c_XmlParser.SetLogHeading("Loading views");

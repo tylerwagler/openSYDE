@@ -13,7 +13,8 @@
 #include "precomp_headers.hpp"
 
 #include "C_Uti.hpp"
-#include "TglFile.hpp"
+#include <QFileInfo>
+
 #include "TglUtils.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
@@ -72,7 +73,7 @@ int32_t C_PuiSdHandlerData::LoadFromFile(const stw::scl::C_SclString & orc_Path,
 
    const uint16_t u16_TimerId = osc_write_log_performance_start();
 
-   if (TglFileExists(orc_Path) == true)
+   if (QFileInfo::exists(QString::fromLocal8Bit(orc_Path.c_str())) == true)
    {
       C_OscXmlParser c_XmlParser;
       s32_Return = c_XmlParser.LoadFromFile(orc_Path);
@@ -241,7 +242,7 @@ int32_t C_PuiSdHandlerData::SaveToFile(const stw::scl::C_SclString & orc_Path, c
 
    const uint16_t u16_TimerId = osc_write_log_performance_start();
 
-   if (TglFileExists(orc_Path) == true)
+   if (QFileInfo::exists(QString::fromLocal8Bit(orc_Path.c_str())) == true)
    {
       //erase it:
       int32_t s32_ReturnRemove;

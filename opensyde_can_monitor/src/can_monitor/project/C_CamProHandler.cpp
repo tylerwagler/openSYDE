@@ -14,7 +14,9 @@
 
 #include <QDir>
 
-#include "TglFile.hpp"
+#include <QFileInfo>
+
+#include "TglUtils.hpp"
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
 #include "C_OscUtils.hpp"
@@ -983,7 +985,7 @@ int32_t C_CamProHandler::LoadFromFile(const stw::scl::C_SclString & orc_Path)
 {
    int32_t s32_Return = C_NO_ERR;
 
-   if (TglFileExists(orc_Path) == true)
+   if (QFileInfo::exists(QString::fromLocal8Bit(orc_Path.c_str())) == true)
    {
       C_OscXmlParser c_XmlParser;
 
@@ -1061,7 +1063,7 @@ int32_t C_CamProHandler::SaveToFile(const stw::scl::C_SclString & orc_Path)
    }
    if (s32_Return == C_NO_ERR)
    {
-      if (TglFileExists(orc_Path) == true)
+      if (QFileInfo::exists(QString::fromLocal8Bit(orc_Path.c_str())) == true)
       {
          //erase it:
          int32_t s32_ReturnRemove;

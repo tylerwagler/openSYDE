@@ -14,7 +14,8 @@
 
 #include "C_SyvUpPacConfigFiler.hpp"
 
-#include "TglFile.hpp"
+#include <QFileInfo>
+
 #include "TglUtils.hpp"
 #include "C_SclString.hpp"
 #include "C_OscXmlParserLog.hpp"
@@ -56,7 +57,7 @@ int32_t C_SyvUpPacConfigFiler::h_LoadConfig(const QString & orc_FilePath, C_SyvU
 {
    int32_t s32_Return = C_RD_WR;
 
-   if (stw::tgl::TglFileExists(orc_FilePath.toStdString().c_str()) == true)
+   if (QFileInfo::exists(orc_FilePath) == true)
    {
       C_OscXmlParserLog c_XmlParser;
 
@@ -144,7 +145,7 @@ int32_t C_SyvUpPacConfigFiler::h_SaveConfig(const QString & orc_FilePath, const 
    int32_t s32_Return = C_RANGE;
    C_OscXmlParser c_XmlParser;
 
-   if (stw::tgl::TglFileExists(orc_FilePath.toStdString().c_str()) == false)
+   if (QFileInfo::exists(orc_FilePath) == false)
    {
       bool q_Success;
 
