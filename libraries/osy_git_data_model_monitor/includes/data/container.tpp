@@ -56,7 +56,7 @@ namespace data::container
     template <typename T>
     const size_t Scalar<T>::size() const
     {
-        return sizeof(T) + this->byteOffset;
+        return sizeof(T);
     }
 
     template <typename T>

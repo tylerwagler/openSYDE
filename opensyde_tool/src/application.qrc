@@ -66,6 +66,13 @@
         <file>images/BtnWidgetHor.png</file>
         <file>images/system_views/Laptop.svg</file>
         <file>images/system_views/Rechner.svg</file>
+        <file>images/system_views/IconSecurityStatus_0_0_1.svg</file>
+        <file>images/system_views/IconSecurityStatus_0_1_0.svg</file>
+        <file>images/system_views/IconSecurityStatus_0_1_1.svg</file>
+        <file>images/system_views/IconSecurityStatus_1_0_0.svg</file>
+        <file>images/system_views/IconSecurityStatus_1_0_1.svg</file>
+        <file>images/system_views/IconSecurityStatus_1_1_0.svg</file>
+        <file>images/system_views/IconSecurityStatus_1_1_1.svg</file>
         <file>images/IconEditActive.svg</file>
         <file>images/IconSave.svg</file>
         <file>images/system_views/IconTabClose.svg</file>
@@ -696,5 +703,12 @@
         <file>images/system_views/IconAddKeyDisabled.svg</file>
         <file>images/ToggleOffMsgTransmission.svg</file>
         <file>images/ToggleOnMsgTransmission.svg</file>
+        <file>images/system_views/IconSecurityStatus_0_0_1.svg</file>
+        <file>images/system_views/IconSecurityStatus_0_1_0.svg</file>
+        <file>images/system_views/IconSecurityStatus_0_1_1.svg</file>
+        <file>images/system_views/IconSecurityStatus_1_0_0.svg</file>
+        <file>images/system_views/IconSecurityStatus_1_0_1.svg</file>
+        <file>images/system_views/IconSecurityStatus_1_1_0.svg</file>
+        <file>images/system_views/IconSecurityStatus_1_1_1.svg</file>
     </qresource>
 </RCC>

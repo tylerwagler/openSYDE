@@ -13,6 +13,12 @@ set(PROJECT_ROOT ${PROJECT_SOURCE_DIR}/..)
 include_directories(
    ${PROJECT_ROOT}/src
 )
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   find_package(OpenSSL REQUIRED)
+   include_directories(${OPENSSL_INCLUDE_DIR})
+else()
+   include_directories(${PROJECT_ROOT}/libs/openssl/openssl/include)
+endif()
 
 # --- COMPILER FLAGS AND LIBRARIES -------------------------------------------------------------------------------------
 
@@ -25,12 +31,14 @@ set(OPENSYDE_CORE_SKIP_PROJECT_HANDLING            1)
 set(OPENSYDE_CORE_SKIP_PARAM_SET                   1)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_BASIC      0)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_SYSTEM     1)
+set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_MONITOR    1)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_COMMON     0)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_DRIVERS_MONITOR    1)
 set(OPENSYDE_CORE_SKIP_PROTOCOL_LOGGING            1)
 set(OPENSYDE_CORE_SKIP_SYSTEM_PACKAGE_HANDLING     1)
 set(OPENSYDE_CORE_SKIP_X_CERTIFICATES_GENERATION   1)
 set(OPENSYDE_CORE_SKIP_X_CONFIG_GENERATION         1)
+set(OPENSYDE_CORE_SKIP_SECURITY                    1)
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
    set(OPENSYDE_CORE_SKIP_WINDOWS_DRIVERS          1)
    set(OPENSYDE_CORE_SKIP_WINDOWS_TARGET           1)
@@ -43,13 +51,14 @@ add_subdirectory(${PROJECT_ROOT}/../libraries/opensyde_core ${CMAKE_BINARY_DIR}/
 # warn a lot
 # Unfortunately forcing C90 by using "-Wc90-c99-compat" or "-std=c89" would (correctly) also prohibit
 #  C++ style comments and there's no switch to explicitly suppress this warning
-set(CMAKE_C_FLAGS "-Wall -Wextra -Wc99-c11-compat -Wunused -Wuninitialized -Wmaybe-uninitialized \
+set(CMAKE_C_FLAGS "-Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized \
    -Wdeclaration-after-statement -Wsign-compare -Wstrict-prototypes -Wmissing-prototypes \
    -Wdouble-promotion -Wfloat-equal -Wmissing-include-dirs -Wshadow -Wundef \
-   -Wunused-macros -Wcast-align -Wlogical-op -Wno-multichar -Wredundant-decls -Wnested-externs")
+   -Wunused-macros -Wcast-align -Wlogical-op -Wno-multichar -Wredundant-decls -Wnested-externs \
+   -Wno-deprecated-declarations")
 # For C++ do not add "-Wdouble-promotion" as it causes a warning in tinyxml.cpp which we do not want to modify
 set(CMAKE_CXX_FLAGS "-std=c++98 -Wall -Wextra -Wunused -Wuninitialized -Wmaybe-uninitialized -Wsign-compare  \
-   -Wmissing-include-dirs -Wshadow -Wlogical-op -Wno-multichar -Wredundant-decls")
+   -Wmissing-include-dirs -Wshadow -Wlogical-op -Wno-multichar -Wredundant-decls -Wno-deprecated-declarations")
 
 # link standard libraries statically (fully static only on Windows)
 if(WIN32)
@@ -70,6 +79,12 @@ set(OSY_CMD_LINE_FLASH_TOOL_SOURCES
    ../src/resources.rc
 )
 
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   link_directories(
+       ../libs/openssl/openssl
+   )
+endif()
+
 # --- BUILD EXECUTABLE -------------------------------------------------------------------------------------------------
 
 # define binary name and sources
@@ -79,7 +94,9 @@ add_executable(osy_cmd_line_flash_tool ${OSY_CMD_LINE_FLASH_TOOL_SOURCES})
 target_link_libraries(osy_cmd_line_flash_tool
    opensyde_core
 )
-if(WIN32)
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+   target_link_libraries(osy_cmd_line_flash_tool OpenSSL::SSL OpenSSL::Crypto)
+else()
    target_link_libraries(osy_cmd_line_flash_tool version)
 endif()
 

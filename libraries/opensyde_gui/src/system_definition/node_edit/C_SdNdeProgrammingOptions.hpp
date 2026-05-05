@@ -45,10 +45,12 @@ private:
    Ui::C_SdNdeProgrammingOptions * mpc_Ui;
    const uint32_t mu32_NodeIndex;
 
-   void m_Load(void) const;
+   void m_Load(void);
 
    void m_OkClicked(void);
    void m_CancelClicked(void);
+   void m_OnServiceModeChangedSlot(const int32_t os32_NewIndex) const;
+   void m_OnServiceModeChanged(const int32_t os32_NewIndex, const bool oq_IsFromInitialLoad) const;
    //Avoid call
    C_SdNdeProgrammingOptions(const C_SdNdeProgrammingOptions &);
    C_SdNdeProgrammingOptions & operator =(const C_SdNdeProgrammingOptions &) &;
