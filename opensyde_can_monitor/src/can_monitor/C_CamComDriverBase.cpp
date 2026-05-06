@@ -62,9 +62,9 @@ int32_t C_CamComDriverBase::StartLogging(const int32_t os32_Bitrate)
 {
    int32_t s32_Return;
 
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    s32_Return = C_OscComDriverBase::StartLogging(os32_Bitrate);
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 
    return s32_Return;
 }
@@ -77,9 +77,9 @@ int32_t C_CamComDriverBase::StartLogging(const int32_t os32_Bitrate)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamComDriverBase::StopLogging(void)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::StopLogging();
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -90,9 +90,9 @@ void C_CamComDriverBase::StopLogging(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamComDriverBase::ContinueLogging(void)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::ContinueLogging();
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -103,9 +103,9 @@ void C_CamComDriverBase::ContinueLogging(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamComDriverBase::PauseLogging(void)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::PauseLogging();
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -116,9 +116,9 @@ void C_CamComDriverBase::PauseLogging(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamComDriverBase::UpdateBitrate(const int32_t os32_Bitrate)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::UpdateBitrate(os32_Bitrate);
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -127,9 +127,9 @@ void C_CamComDriverBase::UpdateBitrate(const int32_t os32_Bitrate)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamComDriverBase::ClearRxMessages()
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::ClearRxMessages();
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -140,9 +140,9 @@ void C_CamComDriverBase::ClearRxMessages()
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamComDriverBase::DistributeMessages(void)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::DistributeMessages();
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -155,9 +155,9 @@ void C_CamComDriverBase::DistributeMessages(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamComDriverBase::SendCanMessageQueued(const stw::can::T_STWCAN_Msg_TX & orc_Msg)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::SendCanMessageQueued(orc_Msg);
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -174,9 +174,9 @@ void C_CamComDriverBase::SendCanMessageQueued(const stw::can::T_STWCAN_Msg_TX & 
 void C_CamComDriverBase::SendCanMessage(C_OscComDriverBaseCanMessage & orc_MsgCfg, const bool oq_SetAutoSupportMode,
                                         const stw::opensyde_core::C_OscCanProtocol::E_Type oe_ProtocolType)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::SendCanMessage(orc_MsgCfg, oq_SetAutoSupportMode, oe_ProtocolType);
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -191,9 +191,9 @@ void C_CamComDriverBase::AddCyclicCanMessage(const C_OscComDriverBaseCanMessage 
                                              const bool oq_SetAutoSupportMode,
                                              const C_OscCanProtocol::E_Type oe_ProtocolType)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::AddCyclicCanMessage(orc_MsgCfg, oq_SetAutoSupportMode, oe_ProtocolType);
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -208,9 +208,9 @@ void C_CamComDriverBase::RemoveCyclicCanMessage(const C_OscComDriverBaseCanMessa
                                                 const bool oq_SetAutoSupportMode,
                                                 const C_OscCanProtocol::E_Type oe_ProtocolType)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::RemoveCyclicCanMessage(orc_MsgCfg, oq_SetAutoSupportMode, oe_ProtocolType);
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -219,9 +219,9 @@ void C_CamComDriverBase::RemoveCyclicCanMessage(const C_OscComDriverBaseCanMessa
 //----------------------------------------------------------------------------------------------------------------------
 void C_CamComDriverBase::RemoveAllCyclicCanMessages(void)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::RemoveAllCyclicCanMessages();
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -244,7 +244,7 @@ void C_CamComDriverBase::ClearData()
 void C_CamComDriverBase::UpdateAutoSupportProtocol(const int32_t os32_CanId, const bool oq_SetAutoSupportMode,
                                                    const C_OscCanProtocol::E_Type oe_ProtocolType)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    C_OscComDriverBase::UpdateAutoSupportProtocol(os32_CanId, oq_SetAutoSupportMode, oe_ProtocolType);
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 }

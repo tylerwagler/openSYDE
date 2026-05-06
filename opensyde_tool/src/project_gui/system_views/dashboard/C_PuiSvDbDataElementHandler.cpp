@@ -101,7 +101,7 @@ int32_t C_PuiSvDbDataElementHandler::RegisterDataPoolElement(
 
       c_ItItem = this->mc_MappingDpElementToDataSerie.find(orc_WidgetDataPoolElementId);
 
-      this->mc_CriticalSection.Acquire();
+      this->mc_CriticalSection.lock();
 
       if (c_ItItem == this->mc_MappingDpElementToDataSerie.end())
       {
@@ -136,7 +136,7 @@ int32_t C_PuiSvDbDataElementHandler::RegisterDataPoolElement(
          s32_Return = C_NOACT;
       }
 
-      this->mc_CriticalSection.Release();
+      this->mc_CriticalSection.unlock();
    }
 
    return s32_Return;
@@ -173,7 +173,7 @@ void C_PuiSvDbDataElementHandler::RemoveDataPoolElement(
    QMap<C_PuiSvDbNodeDataPoolListElementId, uint32_t>::iterator c_ItItemDataSerie;
    QMap<C_PuiSvDbNodeDataPoolListElementId, C_DpElementConfig>::iterator c_ItItemScaling;
 
-   this->mc_CriticalSection.Acquire();
+   this->mc_CriticalSection.lock();
 
    c_ItItemDataSerie = this->mc_MappingDpElementToDataSerie.find(orc_WidgetDataPoolElementId);
 
@@ -215,7 +215,7 @@ void C_PuiSvDbDataElementHandler::RemoveDataPoolElement(
       this->mc_MappingDpElementToConfig.erase(c_ItItemScaling);
    }
 
-   this->mc_CriticalSection.Release();
+   this->mc_CriticalSection.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -226,11 +226,11 @@ void C_PuiSvDbDataElementHandler::RemoveDataPoolElement(
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvDbDataElementHandler::ClearDataPoolElements(void)
 {
-   this->mc_CriticalSection.Acquire();
+   this->mc_CriticalSection.lock();
    this->mc_MappingDpElementToDataSerie.clear();
    this->mc_MappingDpElementToConfig.clear();
    this->m_SetWidgetDataPoolElementCount(static_cast<uint32_t>(this->mc_MappingDpElementToDataSerie.size()));
-   this->mc_CriticalSection.Release();
+   this->mc_CriticalSection.unlock();
 
    this->m_DataPoolElementsChanged();
 }
@@ -509,9 +509,9 @@ void C_PuiSvDbDataElementHandler::InsertNewValueIntoQueue(
          const uint32_t u32_DataSerieIndex = c_ItItem.value();
          if (static_cast<int32_t>(u32_DataSerieIndex) < this->mc_VecDataValues.size())
          {
-            this->mc_CriticalSection.Acquire();
+            this->mc_CriticalSection.lock();
             this->mc_VecDataValues[u32_DataSerieIndex].push_back(orc_NewValue);
-            this->mc_CriticalSection.Release();
+            this->mc_CriticalSection.unlock();
          }
          //Don't stop as there might be multiple matches
       }
@@ -543,10 +543,10 @@ void C_PuiSvDbDataElementHandler::AddNewNvmValueIntoQueue(
       if ((static_cast<int32_t>(u32_DataSerieIndex) < this->mc_VecNvmValue.size()) &&
           (static_cast<int32_t>(u32_DataSerieIndex) < this->mc_VecNvmValueReceived.size()))
       {
-         this->mc_CriticalSection.Acquire();
+         this->mc_CriticalSection.lock();
          this->mc_VecNvmValue[u32_DataSerieIndex] = orc_NewValue;
          this->mc_VecNvmValueReceived[u32_DataSerieIndex] = true;
-         this->mc_CriticalSection.Release();
+         this->mc_CriticalSection.unlock();
       }
    }
 }
@@ -695,7 +695,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
         (ou32_WidgetDataPoolElementIndex < this->mc_UsedConfig.size())) && (
           this->GetDataPoolElementIndex(ou32_WidgetDataPoolElementIndex, c_Id) == C_NO_ERR))
    {
-      this->mc_CriticalSection.Acquire();
+      this->mc_CriticalSection.lock();
       if (this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() > 0)
       {
          const int32_t s32_LastIndex = this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() - 1;
@@ -715,7 +715,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
       {
          s32_Return = C_NOACT;
       }
-      this->mc_CriticalSection.Release();
+      this->mc_CriticalSection.unlock();
    }
 
    return s32_Return;
@@ -757,7 +757,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
    if ((static_cast<int32_t>(ou32_WidgetDataPoolElementIndex) < this->mc_VecDataValues.size()) &&
        (ou32_WidgetDataPoolElementIndex < this->mc_UsedConfig.size()))
    {
-      this->mc_CriticalSection.Acquire();
+      this->mc_CriticalSection.lock();
       if (this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() > 0)
       {
          const int32_t s32_LastIndex = this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() - 1;
@@ -777,7 +777,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
       {
          s32_Return = C_NOACT;
       }
-      this->mc_CriticalSection.Release();
+      this->mc_CriticalSection.unlock();
    }
 
    return s32_Return;
@@ -814,7 +814,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
    if ((static_cast<int32_t>(ou32_WidgetDataPoolElementIndex) < this->mc_VecDataValues.size()) &&
        ((ou32_WidgetDataPoolElementIndex < this->mc_UsedConfig.size()) || (oq_UseScaling == false)))
    {
-      this->mc_CriticalSection.Acquire();
+      this->mc_CriticalSection.lock();
       if (this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() > 0)
       {
          const int32_t s32_LastIndex = this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() - 1;
@@ -848,7 +848,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastValue(const uint32_t ou32_WidgetDa
       {
          s32_Return = C_NOACT;
       }
-      this->mc_CriticalSection.Release();
+      this->mc_CriticalSection.unlock();
    }
 
    return s32_Return;
@@ -882,7 +882,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetAllValues(const uint32_t ou32_WidgetDa
        (ou32_WidgetDataPoolElementIndex < this->mc_UsedConfig.size()) &&
        (this->GetDataPoolElementIndex(ou32_WidgetDataPoolElementIndex, c_Id) == C_NO_ERR))
    {
-      this->mc_CriticalSection.Acquire();
+      this->mc_CriticalSection.lock();
       if (this->mc_VecDataValues[ou32_WidgetDataPoolElementIndex].size() > 0)
       {
          uint32_t u32_Counter = 0U;
@@ -935,7 +935,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetAllValues(const uint32_t ou32_WidgetDa
       {
          s32_Return = C_NOACT;
       }
-      this->mc_CriticalSection.Release();
+      this->mc_CriticalSection.unlock();
    }
    return s32_Return;
 }
@@ -968,7 +968,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastNvmValue(const uint32_t ou32_Widge
        (static_cast<int32_t>(ou32_WidgetDataPoolElementIndex) < this->mc_VecNvmValueReceived.size()) &&
        (ou32_WidgetDataPoolElementIndex < this->mc_UsedConfig.size()))
    {
-      this->mc_CriticalSection.Acquire();
+      this->mc_CriticalSection.lock();
 
       if (this->mc_VecNvmValueReceived[ou32_WidgetDataPoolElementIndex] == true)
       {
@@ -984,7 +984,7 @@ int32_t C_PuiSvDbDataElementHandler::m_GetLastNvmValue(const uint32_t ou32_Widge
          s32_Return = C_NOACT;
       }
 
-      this->mc_CriticalSection.Release();
+      this->mc_CriticalSection.unlock();
    }
 
    return s32_Return;

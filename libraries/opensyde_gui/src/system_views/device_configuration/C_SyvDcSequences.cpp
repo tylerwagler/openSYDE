@@ -421,9 +421,9 @@ int32_t C_SyvDcSequences::ScanCanSendFlashloaderRequest(const uint32_t ou32_Scan
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDcSequences::StopScanCanSendFlashloaderRequest(void)
 {
-   this->mc_CriticalSectionRequestEndless.Acquire();
+   this->mc_CriticalSectionRequestEndless.lock();
    this->mq_RunScanSendFlashloaderRequestEndless = false;
-   this->mc_CriticalSectionRequestEndless.Release();
+   this->mc_CriticalSectionRequestEndless.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -947,9 +947,9 @@ bool C_SyvDcSequences::GetCanInitializationResult(void) const
 {
    bool q_Return;
 
-   this->mc_CriticalSectionCanInitialization.Acquire();
+   this->mc_CriticalSectionCanInitialization.lock();
    q_Return = this->mq_CanInitialized;
-   this->mc_CriticalSectionCanInitialization.Release();
+   this->mc_CriticalSectionCanInitialization.unlock();
 
    return q_Return;
 }
@@ -1213,9 +1213,9 @@ int32_t C_SyvDcSequences::m_RunScanCanEnterFlashloader(const uint32_t ou32_CanBi
       {
          bool q_RequestNotAccepted = false;
 
-         this->mc_CriticalSectionCanInitialization.Acquire();
+         this->mc_CriticalSectionCanInitialization.lock();
          this->mq_CanInitialized = true;
-         this->mc_CriticalSectionCanInitialization.Release();
+         this->mc_CriticalSectionCanInitialization.unlock();
 
          if (this->mq_OpenSydeDevicesActive == true)
          {
@@ -1363,10 +1363,10 @@ int32_t C_SyvDcSequences::m_RunScanCanSendFlashloaderRequest(const uint32_t ou32
          break;
       }
 
-      this->mc_CriticalSectionRequestEndless.Acquire();
+      this->mc_CriticalSectionRequestEndless.lock();
       // Check flag, which can be set by other thread at any time
       q_RunEndless = this->mq_RunScanSendFlashloaderRequestEndless;
-      this->mc_CriticalSectionRequestEndless.Release();
+      this->mc_CriticalSectionRequestEndless.unlock();
    }
    while ((q_RunEndless == true) ||
           (s64_Elapsed < ou32_ScanTime));

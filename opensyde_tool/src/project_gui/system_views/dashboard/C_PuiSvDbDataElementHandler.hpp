@@ -15,10 +15,9 @@
 #include <QVector>
 #include <QList>
 #include <QMap>
+#include <QMutex>
 
 #include "stwtypes.hpp"
-
-#include "TglTasks.hpp"
 
 #include "C_PuiSvDbDataElement.hpp"
 #include "C_PuiSvDbWidgetBase.hpp"
@@ -168,7 +167,7 @@ private:
 
    // It is mutable because of the constness of the getter functions. Without the keyword mutable the getter functions
    // must be non const and that is not wanted.
-   mutable stw::tgl::C_TglCriticalSection mc_CriticalSection;
+   mutable QMutex mc_CriticalSection;
 
    void m_SetWidgetDataPoolElementCount(const uint32_t ou32_Count);
    static QString mh_GetStringForScaledValue(const float64_t of64_Value,

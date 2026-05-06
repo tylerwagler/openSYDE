@@ -15,11 +15,10 @@
 #include <QString>
 #include <QList>
 #include <QVector>
+#include <QMutex>
 
 #include "stwtypes.hpp"
 #include "stw_can.hpp"
-
-#include "TglTasks.hpp"
 
 #include "C_OscComMessageLogger.hpp"
 #include "C_OscComMessageLoggerData.hpp"
@@ -145,10 +144,10 @@ private:
 
    // It is mutable because of the constness of the getter functions. Without the keyword mutable the getter functions
    // must be non const and that is not wanted.
-   mutable stw::tgl::C_TglCriticalSection mc_CriticalSectionMsg;
-   mutable stw::tgl::C_TglCriticalSection mc_CriticalSectionConfig;
-   mutable stw::tgl::C_TglCriticalSection mc_CriticalSectionMeta;
-   mutable stw::tgl::C_TglCriticalSection mc_CriticalSectionCounter;
+   mutable QMutex mc_CriticalSectionMsg;
+   mutable QMutex mc_CriticalSectionConfig;
+   mutable QMutex mc_CriticalSectionMeta;
+   mutable QMutex mc_CriticalSectionCounter;
 
    QList<stw::opensyde_core::C_OscComMessageLoggerData> mc_ReceivedMessages;
 

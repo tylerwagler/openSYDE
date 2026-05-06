@@ -95,15 +95,15 @@ C_SyvComMessageMonitor::~C_SyvComMessageMonitor(void) noexcept
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::Start(void)
 {
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    // Erase queue in case of old messages
    this->mc_ReceivedMessages.clear();
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    // Accessing to message filter counter. Need synchronization
    C_OscComMessageLogger::Start();
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -114,9 +114,9 @@ void C_SyvComMessageMonitor::Start(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::Stop(void)
 {
-   this->mc_CriticalSectionCounter.Acquire();
+   this->mc_CriticalSectionCounter.lock();
    C_OscComMessageLogger::Stop();
-   this->mc_CriticalSectionCounter.Release();
+   this->mc_CriticalSectionCounter.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -197,9 +197,9 @@ int32_t C_SyvComMessageMonitor::SetOsySysDefBus(const C_SclString & orc_PathSyst
 {
    int32_t s32_Return;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    s32_Return = C_OscComMessageLogger::SetOsySysDefBus(orc_PathSystemDefinition, ou32_BusIndex);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return s32_Return;
 }
@@ -220,9 +220,9 @@ int32_t C_SyvComMessageMonitor::GetOsySysDef(const C_SclString & orc_PathSystemD
 {
    int32_t s32_Return;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    s32_Return = C_OscComMessageLogger::GetOsySysDef(orc_PathSystemDefinition, orc_SystemDefinition);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return s32_Return;
 }
@@ -272,7 +272,7 @@ int32_t C_SyvComMessageMonitor::GetDbcFile(const C_SclString & orc_PathDbc,
 
    std::map<stw::scl::C_SclString, C_CieConverter::C_CieCommDefinition>::iterator c_ItDbc;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
 
    c_ItDbc = this->mc_DbcFiles.find(orc_PathDbc);
    if (c_ItDbc != this->mc_DbcFiles.end())
@@ -282,7 +282,7 @@ int32_t C_SyvComMessageMonitor::GetDbcFile(const C_SclString & orc_PathDbc,
       s32_Return = C_NO_ERR;
    }
 
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return s32_Return;
 }
@@ -305,7 +305,7 @@ int32_t C_SyvComMessageMonitor::RemoveDatabase(const C_SclString & orc_Path)
 
    std::map<stw::scl::C_SclString, C_CieConverter::C_CieCommDefinition>::iterator c_ItDbc;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    c_ItDbc = this->mc_DbcFiles.find(orc_Path);
    if (c_ItDbc != this->mc_DbcFiles.end())
    {
@@ -320,7 +320,7 @@ int32_t C_SyvComMessageMonitor::RemoveDatabase(const C_SclString & orc_Path)
       // No DBC file found, let try the base class
       s32_Return = C_OscComMessageLogger::RemoveDatabase(orc_Path);
    }
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return s32_Return;
 }
@@ -341,9 +341,9 @@ int32_t C_SyvComMessageMonitor::ActivateDatabase(const C_SclString & orc_Path, c
    int32_t s32_Return;
 
    //Logger handling
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    s32_Return = C_OscComMessageLogger::ActivateDatabase(orc_Path, oq_Active);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return s32_Return;
 }
@@ -365,9 +365,9 @@ int32_t C_SyvComMessageMonitor::AddLogFileAsc(const C_SclString & orc_FilePath, 
 {
    int32_t s32_Return;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    s32_Return = C_OscComMessageLogger::AddLogFileAsc(orc_FilePath, oq_HexActive, oq_RelativeTimeStampActive);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return s32_Return;
 }
@@ -389,10 +389,10 @@ int32_t C_SyvComMessageMonitor::AddLogFileBlf(const C_SclString & orc_FilePath)
 
    s32_Return = pc_File->OpenFile();
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    this->mc_LoggingFiles.emplace(std::pair<C_SclString,
                                            C_OscComMessageLoggerFileBase * const>(orc_FilePath, pc_File));
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    //lint -e{429}  no memory leak of pc_File because of handling of instance in map mc_LoggingFiles
    return s32_Return;
@@ -414,9 +414,9 @@ int32_t C_SyvComMessageMonitor::RemoveLogFile(const C_SclString & orc_FilePath)
 {
    int32_t s32_Return;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    s32_Return = C_OscComMessageLogger::RemoveLogFile(orc_FilePath);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return s32_Return;
 }
@@ -429,9 +429,9 @@ int32_t C_SyvComMessageMonitor::RemoveLogFile(const C_SclString & orc_FilePath)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::RemoveAllLogFiles(void)
 {
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    C_OscComMessageLogger::RemoveAllLogFiles();
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -444,9 +444,9 @@ void C_SyvComMessageMonitor::RemoveAllLogFiles(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::AddFilter(const C_OscComMessageLoggerFilter & orc_Filter)
 {
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    C_OscComMessageLogger::AddFilter(orc_Filter);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -459,9 +459,9 @@ void C_SyvComMessageMonitor::AddFilter(const C_OscComMessageLoggerFilter & orc_F
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::RemoveFilter(const C_OscComMessageLoggerFilter & orc_Filter)
 {
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    C_OscComMessageLogger::RemoveFilter(orc_Filter);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -470,9 +470,9 @@ void C_SyvComMessageMonitor::RemoveFilter(const C_OscComMessageLoggerFilter & or
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::RemoveAllFilter(void)
 {
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    C_OscComMessageLogger::RemoveAllFilter();
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -488,9 +488,9 @@ uint32_t C_SyvComMessageMonitor::GetFilteredMessages(void) const
 {
    uint32_t u32_FilteredMessages;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    u32_FilteredMessages = C_OscComMessageLogger::GetFilteredMessages();
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return u32_FilteredMessages;
 }
@@ -513,16 +513,16 @@ int32_t C_SyvComMessageMonitor::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg
 {
    int32_t s32_Return;
 
-   this->mc_CriticalSectionCounter.Acquire();
+   this->mc_CriticalSectionCounter.lock();
    s32_Return = C_OscComMessageLogger::HandleCanMessage(orc_Msg, oq_IsTx);
-   this->mc_CriticalSectionCounter.Release();
+   this->mc_CriticalSectionCounter.unlock();
 
    if (s32_Return == C_NO_ERR)
    {
       // Add the interpreted data to the list
-      this->mc_CriticalSectionMsg.Acquire();
+      this->mc_CriticalSectionMsg.lock();
       this->mc_ReceivedMessages.push_back(this->m_GetHandledCanMessage());
-      this->mc_CriticalSectionMsg.Release();
+      this->mc_CriticalSectionMsg.unlock();
    }
 
    return s32_Return;
@@ -534,9 +534,9 @@ int32_t C_SyvComMessageMonitor::HandleCanMessage(const T_STWCAN_Msg_RX & orc_Msg
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::ResetCounter(void)
 {
-   this->mc_CriticalSectionCounter.Acquire();
+   this->mc_CriticalSectionCounter.lock();
    C_OscComMessageLogger::ResetCounter();
-   this->mc_CriticalSectionCounter.Release();
+   this->mc_CriticalSectionCounter.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -549,9 +549,9 @@ void C_SyvComMessageMonitor::ResetCounter(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::UpdateBusLoad(const uint8_t ou8_BusLoad)
 {
-   this->mc_CriticalSectionMeta.Acquire();
+   this->mc_CriticalSectionMeta.lock();
    this->mu8_BusLoad = ou8_BusLoad;
-   this->mc_CriticalSectionMeta.Release();
+   this->mc_CriticalSectionMeta.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -564,9 +564,9 @@ void C_SyvComMessageMonitor::UpdateBusLoad(const uint8_t ou8_BusLoad)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::UpdateTxCounter(const uint32_t ou32_TxCount)
 {
-   this->mc_CriticalSectionMeta.Acquire();
+   this->mc_CriticalSectionMeta.lock();
    this->mu32_TxMessages = ou32_TxCount;
-   this->mc_CriticalSectionMeta.Release();
+   this->mc_CriticalSectionMeta.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -579,9 +579,9 @@ void C_SyvComMessageMonitor::UpdateTxCounter(const uint32_t ou32_TxCount)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::UpdateTxErrors(const uint32_t ou32_TxErrors)
 {
-   this->mc_CriticalSectionMeta.Acquire();
+   this->mc_CriticalSectionMeta.lock();
    this->mu32_TxErrors = ou32_TxErrors;
-   this->mc_CriticalSectionMeta.Release();
+   this->mc_CriticalSectionMeta.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -590,9 +590,9 @@ void C_SyvComMessageMonitor::UpdateTxErrors(const uint32_t ou32_TxErrors)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvComMessageMonitor::ResetEcesMessages(void)
 {
-   this->mc_CriticalSectionCounter.Acquire();
+   this->mc_CriticalSectionCounter.lock();
    C_OscComMessageLogger::ResetEcesMessages();
-   this->mc_CriticalSectionCounter.Release();
+   this->mc_CriticalSectionCounter.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -608,9 +608,9 @@ uint8_t C_SyvComMessageMonitor::GetBusLoad(void) const
 {
    uint8_t u8_BusLoad;
 
-   this->mc_CriticalSectionMeta.Acquire();
+   this->mc_CriticalSectionMeta.lock();
    u8_BusLoad = this->mu8_BusLoad;
-   this->mc_CriticalSectionMeta.Release();
+   this->mc_CriticalSectionMeta.unlock();
 
    return u8_BusLoad;
 }
@@ -628,9 +628,9 @@ uint32_t C_SyvComMessageMonitor::GetTxCount() const
 {
    uint32_t u32_TxCount;
 
-   this->mc_CriticalSectionMeta.Acquire();
+   this->mc_CriticalSectionMeta.lock();
    u32_TxCount = this->mu32_TxMessages;
-   this->mc_CriticalSectionMeta.Release();
+   this->mc_CriticalSectionMeta.unlock();
 
    return u32_TxCount;
 }
@@ -648,9 +648,9 @@ uint32_t C_SyvComMessageMonitor::GetTxErrors(void) const
 {
    uint32_t u32_TxErrors;
 
-   this->mc_CriticalSectionMeta.Acquire();
+   this->mc_CriticalSectionMeta.lock();
    u32_TxErrors = this->mu32_TxErrors;
-   this->mc_CriticalSectionMeta.Release();
+   this->mc_CriticalSectionMeta.unlock();
 
    return u32_TxErrors;
 }
@@ -727,7 +727,7 @@ int32_t C_SyvComMessageMonitor::m_GetCanMessage(C_OscComMessageLoggerData & orc_
 {
    int32_t s32_Return = C_NOACT;
 
-   this->mc_CriticalSectionMsg.Acquire();
+   this->mc_CriticalSectionMsg.lock();
    if (this->mc_ReceivedMessages.size() > 0)
    {
       // Get oldest message in the list and remove it from the list
@@ -736,7 +736,7 @@ int32_t C_SyvComMessageMonitor::m_GetCanMessage(C_OscComMessageLoggerData & orc_
 
       s32_Return = C_NO_ERR;
    }
-   this->mc_CriticalSectionMsg.Release();
+   this->mc_CriticalSectionMsg.unlock();
 
    return s32_Return;
 }
@@ -784,9 +784,9 @@ bool C_SyvComMessageMonitor::m_CheckFilter(const T_STWCAN_Msg_RX & orc_Msg)
 {
    bool q_Return;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    q_Return = C_OscComMessageLogger::m_CheckFilter(orc_Msg);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return q_Return;
 }
@@ -805,9 +805,9 @@ void C_SyvComMessageMonitor::m_InsertOsySysDef(const C_SclString & orc_PathSyste
                                                const C_OscSystemDefinition & orc_OsySysDef,
                                                const uint32_t ou32_BusIndex)
 {
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    C_OscComMessageLogger::m_InsertOsySysDef(orc_PathSystemDefinition, orc_OsySysDef, ou32_BusIndex);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -826,9 +826,9 @@ bool C_SyvComMessageMonitor::m_CheckSysDef(const T_STWCAN_Msg_RX & orc_Msg)
 {
    bool q_Return;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    q_Return = C_OscComMessageLogger::m_CheckSysDef(orc_Msg);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return q_Return;
 }
@@ -849,9 +849,9 @@ bool C_SyvComMessageMonitor::m_InterpretSysDef(C_OscComMessageLoggerData & orc_M
 {
    bool q_Return;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
    q_Return = C_OscComMessageLogger::m_InterpretSysDef(orc_MessageData);
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return q_Return;
 }
@@ -940,14 +940,14 @@ int32_t C_SyvComMessageMonitor::m_AddDbcFile(const C_SclString & orc_PathDbc)
       if ((s32_Return == C_NO_ERR) ||
           (s32_Return == C_WARN))
       {
-         this->mc_CriticalSectionConfig.Acquire();
+         this->mc_CriticalSectionConfig.lock();
          this->mc_DbcFiles.emplace(std::pair<C_SclString, C_CieConverter::C_CieCommDefinition>(orc_PathDbc,
                                                                                                c_DbcDefinition));
 
          // Register the database in the activation flag map
          this->mc_DatabaseActiveFlags.emplace(std::pair<C_SclString, bool>(orc_PathDbc, true));
 
-         this->mc_CriticalSectionConfig.Release();
+         this->mc_CriticalSectionConfig.unlock();
       }
    }
 
@@ -972,7 +972,7 @@ const C_CieConverter::C_CieCanMessage * C_SyvComMessageMonitor::m_CheckDbcFile(c
 
    std::map<stw::scl::C_SclString, C_CieConverter::C_CieCommDefinition>::const_iterator c_ItDbc;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
 
    // Search for CAN message in all DBC files
    for (c_ItDbc = this->mc_DbcFiles.begin(); c_ItDbc != this->mc_DbcFiles.end(); ++c_ItDbc)
@@ -1048,7 +1048,7 @@ const C_CieConverter::C_CieCanMessage * C_SyvComMessageMonitor::m_CheckDbcFile(c
       }
    }
 
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return pc_DbcMessage;
 }
@@ -1071,7 +1071,7 @@ bool C_SyvComMessageMonitor::m_InterpretDbcFile(const C_CieConverter::C_CieCanMe
 {
    bool q_Return = false;
 
-   this->mc_CriticalSectionConfig.Acquire();
+   this->mc_CriticalSectionConfig.lock();
 
    if (opc_DbcMessage != NULL)
    {
@@ -1144,7 +1144,7 @@ bool C_SyvComMessageMonitor::m_InterpretDbcFile(const C_CieConverter::C_CieCanMe
       q_Return = true;
    }
 
-   this->mc_CriticalSectionConfig.Release();
+   this->mc_CriticalSectionConfig.unlock();
 
    return q_Return;
 }
