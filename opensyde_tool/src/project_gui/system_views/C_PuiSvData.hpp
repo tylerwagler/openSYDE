@@ -73,9 +73,6 @@ public:
    uint32_t GetDeviceConfigSelectedBitRate(void) const;
    void SetDeviceConfigMode(const E_DeviceConfigurationMode oe_Value);
    E_DeviceConfigurationMode GetDeviceConfigMode(void) const;
-   bool GetDarkModeActive(void) const;
-   void SetDarkModeActive(
-      const bool oq_Value);
    const QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration> & GetReadRailAssignments(
       void) const;
    const std::set<stw::opensyde_core::C_OscNodeDataPoolListElementId> GetWriteAssignments(void) const;
@@ -238,7 +235,6 @@ private:
    E_DeviceConfigurationMode me_DeviceConfigMode;
 
    QMap<stw::opensyde_core::C_OscNodeDataPoolListElementId, C_PuiSvReadDataConfiguration> mc_ReadRailAssignments;
-   bool mq_DarkModeActive;
 
    bool mq_IsServiceModeActive;
    bool mq_IsServiceModeSetupActive;

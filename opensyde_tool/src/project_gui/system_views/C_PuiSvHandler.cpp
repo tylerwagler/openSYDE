@@ -1118,33 +1118,6 @@ int32_t C_PuiSvHandler::SetViewDeviceConfigMode(const uint32_t ou32_ViewIndex,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set dark mode active flag
-
-   \param[in]  ou32_ViewIndex    View index
-   \param[in]  oq_Value          New dark mode active flag
-
-   \return
-   C_NO_ERR Operation success
-   C_RANGE  Operation failure: parameter invalid
-*/
-//----------------------------------------------------------------------------------------------------------------------
-int32_t C_PuiSvHandler::SetViewDarkModeActive(const uint32_t ou32_ViewIndex, const bool oq_Value)
-{
-   int32_t s32_Retval = C_NO_ERR;
-
-   if (ou32_ViewIndex < this->mc_Views.size())
-   {
-      C_PuiSvData & rc_View = this->mc_Views[ou32_ViewIndex];
-      rc_View.SetDarkModeActive(oq_Value);
-   }
-   else
-   {
-      s32_Retval = C_RANGE;
-   }
-   return s32_Retval;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set view read rail assignment
 
    \param[in]  ou32_ViewIndex    View index

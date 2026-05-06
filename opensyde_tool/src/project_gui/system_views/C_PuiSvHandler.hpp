@@ -88,7 +88,6 @@ public:
    int32_t SetViewDeviceConfigSelectedBitRate(const uint32_t ou32_ViewIndex, const uint32_t ou32_Value);
    int32_t SetViewDeviceConfigMode(const uint32_t ou32_ViewIndex,
                                    const C_PuiSvData::E_DeviceConfigurationMode oe_Value);
-   int32_t SetViewDarkModeActive(const uint32_t ou32_ViewIndex, const bool oq_Value);
    int32_t SetViewReadRailAssignment(const uint32_t ou32_ViewIndex,
                                      const stw::opensyde_core::C_OscNodeDataPoolListElementId & orc_Id,
                                      const C_PuiSvReadDataConfiguration & orc_Config);

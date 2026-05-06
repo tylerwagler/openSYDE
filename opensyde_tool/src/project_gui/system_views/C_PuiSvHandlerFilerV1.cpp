@@ -687,15 +687,6 @@ int32_t C_PuiSvHandlerFilerV1::mh_LoadView(C_PuiSvData & orc_View, C_OscXmlParse
 {
    int32_t s32_Retval = C_NO_ERR;
 
-   if (orc_XmlParser.AttributeExists("darkmode") == true)
-   {
-      orc_View.SetDarkModeActive(orc_XmlParser.GetAttributeBool("darkmode"));
-   }
-   else
-   {
-      //Default
-      orc_View.SetDarkModeActive(false);
-   }
    if (orc_XmlParser.AttributeExists("device-config-selected-bit-rate") == true)
    {
       orc_View.SetDeviceConfigSelectedBitRate(orc_XmlParser.GetAttributeUint32("device-config-selected-bit-rate"));
@@ -2461,7 +2452,6 @@ void C_PuiSvHandlerFilerV1::mh_SaveDashboards(const std::vector<C_PuiSvDashboard
 //----------------------------------------------------------------------------------------------------------------------
 void C_PuiSvHandlerFilerV1::mh_SaveView(const C_PuiSvData & orc_View, C_OscXmlParserBase & orc_XmlParser)
 {
-   orc_XmlParser.SetAttributeBool("darkmode", orc_View.GetDarkModeActive());
    orc_XmlParser.SetAttributeUint32("device-config-selected-bit-rate", orc_View.GetDeviceConfigSelectedBitRate());
    orc_XmlParser.CreateAndSelectNodeChild("name");
    orc_XmlParser.SetNodeContent(orc_View.GetName());

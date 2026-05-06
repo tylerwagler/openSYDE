@@ -55,7 +55,6 @@ C_PuiSvData::C_PuiSvData(void) :
    mu16_UpdateRateSlow(1000U),
    mu32_DeviceConfigSelectedBitRate(125U),
    me_DeviceConfigMode(eDCM_ALL_CONNECTED_INTERFACES),
-   mq_DarkModeActive(false),
    mq_IsServiceModeActive(false),
    mq_IsServiceModeSetupActive(false),
    mq_IsServiceModeUpdateActive(false),
@@ -76,7 +75,6 @@ void C_PuiSvData::CalcHash(uint32_t & oru32_HashValue) const
    stw::scl::C_SclChecksums::CalcCRC32(&this->mu32_DeviceConfigSelectedBitRate,
                                        sizeof(this->mu32_DeviceConfigSelectedBitRate), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->me_DeviceConfigMode, sizeof(this->me_DeviceConfigMode), oru32_HashValue);
-   stw::scl::C_SclChecksums::CalcCRC32(&this->mq_DarkModeActive, sizeof(this->mq_DarkModeActive), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->mu16_UpdateRateFast, sizeof(this->mu16_UpdateRateFast), oru32_HashValue);
    stw::scl::C_SclChecksums::CalcCRC32(&this->mu16_UpdateRateMedium, sizeof(this->mu16_UpdateRateMedium),
                                        oru32_HashValue);
@@ -464,29 +462,6 @@ void C_PuiSvData::SetDeviceConfigMode(const C_PuiSvData::E_DeviceConfigurationMo
 C_PuiSvData::E_DeviceConfigurationMode C_PuiSvData::GetDeviceConfigMode(void) const
 {
    return this->me_DeviceConfigMode;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Get dark mode active flag
-
-   \return
-   Current dark mode active flag
-*/
-//----------------------------------------------------------------------------------------------------------------------
-bool C_PuiSvData::GetDarkModeActive(void) const
-{
-   return this->mq_DarkModeActive;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Set dark mode active flag
-
-   \param[in]  oq_Value    New dark mode active flag
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_PuiSvData::SetDarkModeActive(const bool oq_Value)
-{
-   this->mq_DarkModeActive = oq_Value;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
