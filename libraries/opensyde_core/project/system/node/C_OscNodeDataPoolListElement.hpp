@@ -13,6 +13,7 @@
 
 /* -- Includes ------------------------------------------------------------------------------------------------------ */
 
+#include <map>
 #include <vector>
 #include "stwtypes.hpp"
 #include "C_SclString.hpp"
@@ -51,6 +52,7 @@ public:
    float64_t f64_Factor;                                  ///< Adaptation factor for display
    float64_t f64_Offset;                                  ///< Offset factor for display
    stw::scl::C_SclString c_Unit;                          ///< Variable unit
+   std::map<int64_t, stw::scl::C_SclString> c_ValueDescription; ///< Optional named value table (raw value -> display name)
    E_Access e_Access;                                     ///< Defined access level
    bool q_InterpretAsString;                              ///< Flag if data type should be interpreted as string
    bool q_DiagEventCall;                                  ///< Flag if there is an event call

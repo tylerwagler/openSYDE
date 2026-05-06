@@ -264,6 +264,7 @@ void C_CieDataPoolListAdapter::mh_FillUpCoreStructureByDbcValues(
          c_DataPoolListElement.c_Unit = pc_Element->c_Unit;
          c_DataPoolListElement.f64_Factor = pc_Element->f64_Factor;
          c_DataPoolListElement.f64_Offset = pc_Element->f64_Offset;
+         c_DataPoolListElement.c_ValueDescription = c_CanMessageSignalsIter->c_ValueDescription;
          // set initial value which is the first and only element of c_DataSetValues
          c_DataPoolListElement.c_DataSetValues.push_back(pc_Element->c_DataSetValues.at(0));
 
