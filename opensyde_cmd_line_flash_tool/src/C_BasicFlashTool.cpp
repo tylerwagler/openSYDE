@@ -145,7 +145,7 @@ void C_BasicFlashTool::Init(const int32_t os32_Argc, char_t * const * const oppc
    c_LogFile = c_LogFile.Insert("-", 17); //second ":"
    c_LogFile = c_LogFile.Delete(18, 1);
    c_LogFile = c_LogFile.Delete(20, 4); // remove ".123"
-   c_LogFile = ".\\Logs\\" + c_LogFile + ".syde_log";
+   c_LogFile = "./Logs/" + c_LogFile + ".syde_log";
 
    C_OscLoggingHandler::h_SetCompleteLogFileLocation(c_LogFile);
    C_OscLoggingHandler::h_SetWriteToFileActive(true);

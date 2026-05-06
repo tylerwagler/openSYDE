@@ -68,9 +68,11 @@ $RECYCLE.BIN/
 
 # Logs and temp files
 *.log
+*.syde_log
 *.tmp
 *.temp
 temp/
+Logs/
 # Standardized build and result directories
 result/
 # Legacy temp directories (in case any remain)
