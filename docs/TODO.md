@@ -2,6 +2,8 @@
 
 Cross-cutting follow-ups that aren't tied to a specific consolidation phase.
 For phase-specific work, see `docs/agent_plans/`.
+For in-code `TODO` / `FIXME` / `HACK` comments tracked individually,
+see `docs/code-comment-todos.md`.
 
 ## Dark Mode
 
