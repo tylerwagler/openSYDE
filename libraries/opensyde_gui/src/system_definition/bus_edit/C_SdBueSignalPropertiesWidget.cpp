@@ -17,6 +17,9 @@
 #include <QFlags>
 #include <QSpinBox>
 #include <QAbstractItemView>
+#include <QPushButton>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 
 #include "TglUtils.hpp"
 #include "C_SdUtil.hpp"
@@ -474,6 +477,7 @@ void C_SdBueSignalPropertiesWidget::m_LoadFromData(void)
          m_UpdateUiForChange(eCHA_MUX_TYPE);
          m_UpdateUiForChange(eCHA_MUX_VALUE);
          m_UpdateUiForChange(eCHA_J1939_SPN);
+         m_UpdateUiForChange(eCHA_VALUE_DESCRIPTIONS);
 
          this->m_CoLoadEdsRestricitions();
       }
@@ -640,6 +644,58 @@ void C_SdBueSignalPropertiesWidget::m_HandleMuxValueChange(void)
 void C_SdBueSignalPropertiesWidget::m_HandleJ1939SpnChange(void)
 {
    this->m_HandleAnyChange(eCHA_J1939_SPN);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Append a new row with an unused integer key
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionAdd(void)
+{
+   QTableWidget * const pc_Table = this->mpc_Ui->pc_TableValueDescriptions;
+   //Pick max(existing keys) + 1 so the new row never collides with an existing entry
+   int64_t s64_NewKey = 0;
+   for (int32_t s32_Row = 0; s32_Row < pc_Table->rowCount(); ++s32_Row)
+   {
+      const QTableWidgetItem * const pc_Item = pc_Table->item(s32_Row, 0);
+      if (pc_Item != NULL)
+      {
+         const int64_t s64_Existing = pc_Item->text().toLongLong();
+         if (s64_Existing >= s64_NewKey)
+         {
+            s64_NewKey = s64_Existing + 1;
+         }
+      }
+   }
+   const int32_t s32_NewRow = pc_Table->rowCount();
+   pc_Table->insertRow(s32_NewRow);
+   pc_Table->setItem(s32_NewRow, 0, new QTableWidgetItem(QString::number(static_cast<qlonglong>(s64_NewKey))));
+   pc_Table->setItem(s32_NewRow, 1, new QTableWidgetItem(""));
+   this->m_HandleAnyChange(eCHA_VALUE_DESCRIPTIONS);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Remove the currently selected row
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionRemove(void)
+{
+   QTableWidget * const pc_Table = this->mpc_Ui->pc_TableValueDescriptions;
+   const int32_t s32_CurrentRow = pc_Table->currentRow();
+   if (s32_CurrentRow >= 0)
+   {
+      pc_Table->removeRow(s32_CurrentRow);
+      this->m_HandleAnyChange(eCHA_VALUE_DESCRIPTIONS);
+   }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Persist a cell edit to the data model
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionCellChange(void)
+{
+   this->m_HandleAnyChange(eCHA_VALUE_DESCRIPTIONS);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -1287,6 +1343,27 @@ void C_SdBueSignalPropertiesWidget::m_ApplyNewValueFromUi(const C_SdBueSignalPro
    case eCHA_UNIT:
       this->mc_DataOscSignalCommon.c_Unit = this->mpc_Ui->pc_LineEditUnit->text().toStdString().c_str();
       break;
+   case eCHA_VALUE_DESCRIPTIONS:
+   {
+      this->mc_DataOscSignalCommon.c_ValueDescription.clear();
+      const QTableWidget * const pc_Table = this->mpc_Ui->pc_TableValueDescriptions;
+      for (int32_t s32_Row = 0; s32_Row < pc_Table->rowCount(); ++s32_Row)
+      {
+         const QTableWidgetItem * const pc_ValueItem = pc_Table->item(s32_Row, 0);
+         const QTableWidgetItem * const pc_DescItem = pc_Table->item(s32_Row, 1);
+         if ((pc_ValueItem != NULL) && (pc_DescItem != NULL))
+         {
+            bool q_Ok = false;
+            const int64_t s64_Value = pc_ValueItem->text().toLongLong(&q_Ok);
+            if (q_Ok)
+            {
+               this->mc_DataOscSignalCommon.c_ValueDescription[s64_Value] =
+                  pc_DescItem->text().toStdString().c_str();
+            }
+         }
+      }
+   }
+   break;
    case eCHA_BYTE_ORDER:
       switch (this->mpc_Ui->pc_ComboBoxByteOrder->currentIndex())
       {
@@ -1373,6 +1450,7 @@ void C_SdBueSignalPropertiesWidget::m_AdaptOtherValues(const C_SdBueSignalProper
    case eCHA_UNIT:
    case eCHA_COMMENT:
    case eCHA_J1939_SPN:
+   case eCHA_VALUE_DESCRIPTIONS:
       //No other elements affected
       break;
    case eCHA_START_BIT:
@@ -1714,6 +1792,7 @@ void C_SdBueSignalPropertiesWidget::m_UpdateOtherSignalsForChange(
    case eCHA_FACTOR:
    case eCHA_OFFSET:
    case eCHA_J1939_SPN:
+   case eCHA_VALUE_DESCRIPTIONS:
       //No change necessary
       break;
    default:
@@ -1991,6 +2070,21 @@ void C_SdBueSignalPropertiesWidget::m_UpdateUiForChange(const E_Change oe_Change
          this->mpc_Ui->pc_SpinBoxJ1939Spn->setValue(this->mc_DataOscSignal.u32_J1939SuspectParameterNumber);
       }
       break;
+   case eCHA_VALUE_DESCRIPTIONS:
+   {
+      QTableWidget * const pc_Table = this->mpc_Ui->pc_TableValueDescriptions;
+      pc_Table->setRowCount(0);
+      for (std::map<int64_t, stw::scl::C_SclString>::const_iterator c_It =
+              this->mc_DataOscSignalCommon.c_ValueDescription.begin();
+           c_It != this->mc_DataOscSignalCommon.c_ValueDescription.end(); ++c_It)
+      {
+         const int32_t s32_Row = pc_Table->rowCount();
+         pc_Table->insertRow(s32_Row);
+         pc_Table->setItem(s32_Row, 0, new QTableWidgetItem(QString::number(static_cast<qlonglong>(c_It->first))));
+         pc_Table->setItem(s32_Row, 1, new QTableWidgetItem(c_It->second.c_str()));
+      }
+   }
+   break;
    default:
       break;
    }
@@ -2093,6 +2187,7 @@ void C_SdBueSignalPropertiesWidget::m_SendSignalForChange(const C_SdBueSignalPro
    case eCHA_AUTO_MIN_MAX:
    case eCHA_FACTOR:
    case eCHA_OFFSET:
+   case eCHA_VALUE_DESCRIPTIONS:
       //No signal necessary
       break;
    case eCHA_MLV:
@@ -2164,6 +2259,12 @@ void C_SdBueSignalPropertiesWidget::m_ConnectAll(void) const
    connect(this->mpc_Ui->pc_SpinBoxJ1939Spn, static_cast<void (QSpinBox::*)(
                                                             int32_t)>(&QSpinBox::valueChanged), this,
            &C_SdBueSignalPropertiesWidget::m_HandleJ1939SpnChange);
+   connect(this->mpc_Ui->pc_TableValueDescriptions, &QTableWidget::itemChanged, this,
+           &C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionCellChange);
+   connect(this->mpc_Ui->pc_PbValueDescriptionAdd, &QPushButton::clicked, this,
+           &C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionAdd);
+   connect(this->mpc_Ui->pc_PbValueDescriptionRemove, &QPushButton::clicked, this,
+           &C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionRemove);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -2226,4 +2327,10 @@ void C_SdBueSignalPropertiesWidget::m_DisconnectAll(void) const
    disconnect(this->mpc_Ui->pc_SpinBoxJ1939Spn, static_cast<void (QSpinBox::*)(
                                                                int32_t)>(&QSpinBox::valueChanged), this,
               &C_SdBueSignalPropertiesWidget::m_HandleJ1939SpnChange);
+   disconnect(this->mpc_Ui->pc_TableValueDescriptions, &QTableWidget::itemChanged, this,
+              &C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionCellChange);
+   disconnect(this->mpc_Ui->pc_PbValueDescriptionAdd, &QPushButton::clicked, this,
+              &C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionAdd);
+   disconnect(this->mpc_Ui->pc_PbValueDescriptionRemove, &QPushButton::clicked, this,
+              &C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionRemove);
 }
