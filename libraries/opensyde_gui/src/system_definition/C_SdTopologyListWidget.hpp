@@ -32,7 +32,6 @@ public:
    ~C_SdTopologyListWidget() override;
 
    void SetMaximumHeightAdaption(const bool oq_Active);
-   void ApplyDarkMode(const bool oq_Active) const;
    void SetGroupName(const QString & orc_Name);
    void UpdateSize(void);
 

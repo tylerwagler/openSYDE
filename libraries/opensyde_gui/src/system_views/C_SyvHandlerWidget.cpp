@@ -224,8 +224,6 @@ void C_SyvHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t o
                     &C_SyvHandlerWidget::m_DataChanged);
          disconnect(this->mpc_DashboardsWidget, &C_SyvDaDashboardsWidget::SigNumberDashboardsChanged, this,
                     &C_SyvHandlerWidget::m_DashboardCountChanged);
-         disconnect(this->mpc_DashboardsWidget, &C_SyvDaDashboardsWidget::SigSetDarkModePushButtonIcon,
-                    this, &C_SyvHandlerWidget::m_SetPushButtonDarkIconSvg);
          disconnect(this->mpc_DashboardsWidget, &C_SyvDaDashboardsWidget::SigSetConnectPushButtonIcon,
                     this, &C_SyvHandlerWidget::m_SetConnectPushButtonIcon);
          disconnect(this->mpc_DashboardsWidget, &C_SyvDaDashboardsWidget::SigSetConfigurationAvailable,
@@ -292,8 +290,6 @@ void C_SyvHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t o
          const bool q_ServiceModeActive = C_PuiSvHandler::h_GetInstance()->GetServiceModeActive();
          this->mc_Interaction = new C_SyvDaDashboardInteraction();
          this->mc_Interaction->SetPushButtonConnectSvg("://images/system_views/IconDisconnected.svg", false);
-         connect(this->mc_Interaction, &C_SyvDaDashboardInteraction::SigPushButtonDarkModePressed, this,
-                 &C_SyvHandlerWidget::OnPushButtonIconPress);
          connect(this->mc_Interaction, &C_SyvDaDashboardInteraction::SigPushButtonConnectPressed, this,
                  &C_SyvHandlerWidget::m_OnPushButtonConnectPress);
          Q_EMIT (this->SigSetInteractionWidget(this->mc_Interaction));
@@ -309,8 +305,6 @@ void C_SyvHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t o
                  &C_SyvHandlerWidget::m_DataChanged);
          connect(this->mpc_DashboardsWidget, &C_SyvDaDashboardsWidget::SigNumberDashboardsChanged, this,
                  &C_SyvHandlerWidget::m_DashboardCountChanged);
-         connect(this->mpc_DashboardsWidget, &C_SyvDaDashboardsWidget::SigSetDarkModePushButtonIcon,
-                 this, &C_SyvHandlerWidget::m_SetPushButtonDarkIconSvg);
          connect(this->mpc_DashboardsWidget, &C_SyvDaDashboardsWidget::SigSetConnectPushButtonIcon,
                  this, &C_SyvHandlerWidget::m_SetConnectPushButtonIcon);
          connect(this->mpc_DashboardsWidget, &C_SyvDaDashboardsWidget::SigSetConfigurationAvailable,
@@ -322,7 +316,6 @@ void C_SyvHandlerWidget::SetSubMode(const int32_t os32_SubMode, const uint32_t o
          s32_Index = this->mpc_Ui->pc_VerticalLayout->indexOf(this->mpc_DashboardsWidget);
          this->mpc_Ui->pc_VerticalLayout->setStretch(s32_Index, 1);
 
-         this->mpc_DashboardsWidget->LoadDarkMode();
          //Do error check AFTER connections are up
          this->mpc_DashboardsWidget->CheckError();
          this->mpc_DashboardsWidget->show();
@@ -479,18 +472,6 @@ bool C_SyvHandlerWidget::GlobalUserKeyPress(QKeyEvent * const opc_Event)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle generic push button icon press
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvHandlerWidget::OnPushButtonIconPress(void)
-{
-   if (this->mpc_DashboardsWidget != NULL)
-   {
-      this->mpc_DashboardsWidget->ToggleDarkMode();
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 void C_SyvHandlerWidget::m_DataChanged(void)
 {
    this->mq_DataChanged = true;
@@ -520,20 +501,6 @@ void C_SyvHandlerWidget::m_ErrorChanged(const uint32_t ou32_Index)
 void C_SyvHandlerWidget::m_EnableConfiguration(const bool oq_State)
 {
    Q_EMIT this->SigEnableUserInputFunc(mhu32_USER_INPUT_FUNC_DEVICECONFIG, oq_State);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set icon path for dark mode push button
-
-   \param[in] orc_Path Push button icon path
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvHandlerWidget::m_SetPushButtonDarkIconSvg(const QString & orc_Path)
-{
-   if (this->mc_Interaction.isNull() == false)
-   {
-      this->mc_Interaction->SetPushButtonDarkSvg(orc_Path);
-   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------

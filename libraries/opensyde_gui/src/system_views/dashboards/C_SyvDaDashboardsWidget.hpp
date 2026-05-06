@@ -47,10 +47,8 @@ public:
    ~C_SyvDaDashboardsWidget(void) override;
 
    void InitText() const;
-   void LoadDarkMode(void);
    void Save(void) const;
    void OpenSettings(void);
-   void ToggleDarkMode(void);
 
    void SetEditMode(const bool oq_Active);
    bool GetEditMode(void) const;
@@ -70,7 +68,6 @@ Q_SIGNALS:
    void SigChanged(void);
    void SigNumberDashboardsChanged(void);
    void SigSetConfigurationAvailable(const bool oq_State);
-   void SigSetDarkModePushButtonIcon(const QString & orc_IconPath);
    void SigSetConnectPushButtonIcon(const QString & orc_IconPath, const bool oq_DisplayAnimation);
    void SigBlockDragAndDrop(const bool oq_Block);
 
@@ -85,7 +82,6 @@ private:
 
    void m_ConfirmClicked(void);
    void m_CancelClicked(void);
-   void m_ApplyDarkMode(const bool oq_Active);
    void m_InitToolBox(void);
    void m_CleanUpToolBox(void) const;
    void m_UpdateShowValues(void) const;
@@ -144,7 +140,6 @@ private:
    QTimer mc_Timer;
    uint32_t mu32_ViewIndex;
    bool mq_EditModeActive;
-   bool mq_DarkModeActive;
    bool mq_ConnectActive;
    std::set<stw::opensyde_core::C_OscNodeDataPoolListId> mc_MissedReadNvmOperations;
    std::set<C_MissedReadOperation> mc_MissedReadOperations;
@@ -152,8 +147,6 @@ private:
    E_ConnectState me_ConnectState;
    int32_t ms32_InitToolboxCounter;
    static QElapsedTimer mhc_DisconnectTimer;
-   static const QString mhc_DARK_MODE_ENABLED_ICON_PATH;
-   static const QString mhc_DARK_MODE_DISABLED_ICON_PATH;
    static const int32_t mhs32_WIDGET_BORDER;
    static const int32_t mhs32_TOOLBOX_INIT_POS_Y;
 };

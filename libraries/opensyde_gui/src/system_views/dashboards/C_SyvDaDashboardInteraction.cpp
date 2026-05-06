@@ -1,9 +1,9 @@
 //----------------------------------------------------------------------------------------------------------------------
 /*!
    \file
-   \brief       Widget for dashboard interactions (connect and dark mode)
+   \brief       Widget for dashboard interactions (connect)
 
-   Widget for dashboard interactions (connect and dark mode)
+   Widget for dashboard interactions (connect)
 
    \copyright   Copyright 2019 Sensor-Technik Wiedemann GmbH. All rights reserved.
 */
@@ -63,8 +63,6 @@ C_SyvDaDashboardInteraction::C_SyvDaDashboardInteraction(QWidget * const opc_Par
 
    InitStaticNames();
 
-   connect(this->mpc_Ui->pc_PushButtonDarkMode, &QPushButton::clicked, this,
-           &C_SyvDaDashboardInteraction::SigPushButtonDarkModePressed);
    connect(this->mpc_Ui->pc_PushButtonConnect, &QPushButton::clicked, this,
            &C_SyvDaDashboardInteraction::SigPushButtonConnectPressed);
    connect(this->mpc_Movie, &QMovie::finished, this, &C_SyvDaDashboardInteraction::m_RestartMovie);
@@ -86,9 +84,6 @@ C_SyvDaDashboardInteraction::~C_SyvDaDashboardInteraction(void)
 void C_SyvDaDashboardInteraction::InitStaticNames(void) const
 {
    this->mpc_Ui->pc_LabelConnectText->setText(C_GtGetText::h_GetText("Online"));
-   this->mpc_Ui->pc_PushButtonDarkMode->SetToolTipInformation(C_GtGetText::h_GetText("Switch Mode"),
-                                                              C_GtGetText::h_GetText(
-                                                                 "Switch between dark and bright mode."));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -112,18 +107,6 @@ void C_SyvDaDashboardInteraction::SetPushButtonConnectSvg(const QString & orc_Ic
    {
       this->mpc_Movie->stop();
    }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief  Set push button dark mode SVG icon path
-
-   \param[in] orc_IconPath Push button dark mode SVG icon path
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardInteraction::SetPushButtonDarkSvg(const QString & orc_IconPath) const
-{
-   this->mpc_Ui->pc_PushButtonDarkMode->SetSvg(orc_IconPath);
-   this->mpc_Ui->pc_PushButtonDarkMode->update();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

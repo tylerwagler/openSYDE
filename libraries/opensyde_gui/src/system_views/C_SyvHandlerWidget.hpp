@@ -48,8 +48,6 @@ public:
    void Save(void) override;
    bool PrepareToClose(void) override;
    bool GlobalUserKeyPress(QKeyEvent * const opc_Event) override;
-   //Generic push button
-   void OnPushButtonIconPress(void) override;
    void CallHelp(void) override;
 
 private:
@@ -61,7 +59,6 @@ private:
    void m_DashboardCountChanged(void);
    void m_ErrorChanged(const uint32_t ou32_Index);
    void m_EnableConfiguration(const bool oq_State);
-   void m_SetPushButtonDarkIconSvg(const QString & orc_Path);
    void m_SetConnectPushButtonIcon(const QString & orc_IconPath, const bool oq_DisplayAnimation);
    void m_OnPushButtonConnectPress(void);
    void m_SetConfigurationAvailable(const bool oq_State);

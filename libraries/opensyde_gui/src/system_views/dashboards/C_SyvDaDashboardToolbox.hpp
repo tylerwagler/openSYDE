@@ -40,7 +40,6 @@ public:
    ~C_SyvDaDashboardToolbox() override;
 
    void InitStaticNames(void) const;
-   void ApplyDarkMode(const bool oq_Active);
 
 protected:
    void enterEvent(QEnterEvent * const opc_Event) override;

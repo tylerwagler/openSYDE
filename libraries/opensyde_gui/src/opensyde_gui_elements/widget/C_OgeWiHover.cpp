@@ -91,8 +91,7 @@ C_OgeWiHover::C_OgeWiHover(QWidget & orc_Widget, const QString & orc_Title, cons
    mq_SearchActive(oq_Search),
    ms32_OffsetHorizontal(0),
    ms32_OffsetVertical(0),
-   ms32_OffsetHorizontalRight(0),
-   mq_DarkMode(false)
+   ms32_OffsetHorizontalRight(0)
 {
    QImage c_Icon;
    int32_t s32_Index;
@@ -133,8 +132,22 @@ C_OgeWiHover::C_OgeWiHover(QWidget & orc_Widget, const QString & orc_Title, cons
    s32_Index = this->mpc_Ui->pc_VerticalLayout->indexOf(this->mpc_Widget);
    this->mpc_Ui->pc_VerticalLayout->setStretch(s32_Index, 1);
 
-   //Deactivate dark mode
-   this->ApplyDarkMode(false);
+   //Apply bright-mode style + drop shadow
+   C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this, "DarkMode", false);
+   {
+      QImage c_BtnMinImage;
+      QGraphicsDropShadowEffect * const pc_Shadow = new QGraphicsDropShadowEffect(this->mpc_Ui->pc_GroupBox);
+      QColor c_ShadowColor = mc_STYLE_GUIDE_COLOR_33;
+
+      c_BtnMinImage.load(":images/IconDoubleArrowRight.svg");
+      this->mpc_Ui->pc_BtnMin->setIcon(QPixmap::fromImage(c_BtnMinImage));
+
+      pc_Shadow->setBlurRadius(15.0);
+      pc_Shadow->setOffset(0.0);
+      c_ShadowColor.setAlpha(128);
+      pc_Shadow->setColor(c_ShadowColor);
+      this->mpc_Ui->pc_GroupBox->setGraphicsEffect(pc_Shadow);
+   }
 
    this->setAttribute(Qt::WA_TranslucentBackground);
 
@@ -217,54 +230,6 @@ void C_OgeWiHover::SetMaximizedHeight(const int32_t os32_Height)
 {
    this->ms32_Height = os32_Height;
 }
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Apply current dark mode setting
-
-   \param[in] oq_Active Dark mode active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_OgeWiHover::ApplyDarkMode(const bool oq_Active)
-{
-   QImage c_Icon;
-   QImage c_Image;
-   QColor c_Color;
-   QGraphicsDropShadowEffect * pc_Shadow;
-
-   this->mq_DarkMode = oq_Active;
-
-   C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(this, "DarkMode", oq_Active);
-
-   pc_Shadow = new QGraphicsDropShadowEffect(this->mpc_Ui->pc_GroupBox);
-   pc_Shadow->setBlurRadius(15.0);
-   pc_Shadow->setOffset(0.0);
-   if (oq_Active == true)
-   {
-      c_Color = mc_STYLE_GUIDE_COLOR_32;
-      c_Image.load(":images/IconDoubleArrowRightDark.svg");
-      if (this->mc_IconPath.contains("IconToolbox") == true)
-      {
-         this->mc_IconPath = ":images/IconToolboxDark.svg";
-      }
-      this->mpc_Ui->pc_LabelTitle->SetForegroundColor(32);
-   }
-   else
-   {
-      c_Color = mc_STYLE_GUIDE_COLOR_33;
-      c_Image.load(":images/IconDoubleArrowRight.svg");
-      if (this->mc_IconPath.contains("IconToolbox") == true)
-      {
-         this->mc_IconPath = ":images/IconToolbox.svg";
-      }
-      this->mpc_Ui->pc_LabelTitle->SetForegroundColor(3);
-   }
-   c_Icon.load(this->mc_IconPath);
-   this->mpc_Ui->pc_LabelIcon->setPixmap(QPixmap::fromImage(c_Icon));
-   this->mpc_Ui->pc_BtnMin->setIcon(QPixmap::fromImage(c_Image));
-   c_Color.setAlpha(128);
-   pc_Shadow->setColor(c_Color);
-   this->mpc_Ui->pc_GroupBox->setGraphicsEffect(pc_Shadow);
-} //lint !e429  //no memory leak because of the parent of pc_Shadow and the Qt memory management
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Slot function for animation timer

@@ -47,7 +47,6 @@ public:
    void SetMaximized(const bool oq_Maximized);
    int32_t GetMaximizedHeight(void) const;
    void SetMaximizedHeight(const int32_t os32_Height);
-   void ApplyDarkMode(const bool oq_Active);
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
@@ -75,7 +74,6 @@ private:
    int32_t ms32_OffsetHorizontal;
    int32_t ms32_OffsetVertical;
    int32_t ms32_OffsetHorizontalRight;
-   bool mq_DarkMode;
 
    void m_MoveWidget(const QMouseEvent * const opc_Event);
    void m_ResizeWidget(const QMouseEvent * const opc_Event);

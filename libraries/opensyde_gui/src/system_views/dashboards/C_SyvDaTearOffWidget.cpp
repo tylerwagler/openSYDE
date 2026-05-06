@@ -67,8 +67,7 @@ C_SyvDaTearOffWidget::C_SyvDaTearOffWidget(const uint32_t ou32_ViewIndex, const 
                                            QWidget * const opc_Parent) :
    QWidget(opc_Parent),
    mpc_Ui(new Ui::C_SyvDaTearOffWidget),
-   mq_EditModeActive(false),
-   mq_DarkModeActive(false)
+   mq_EditModeActive(false)
 {
    const C_PuiSvData * pc_View;
    QHBoxLayout * pc_Layout;
@@ -302,8 +301,6 @@ void C_SyvDaTearOffWidget::SetEditMode(const bool oq_Active)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::SetDarkMode(const bool oq_Active)
 {
-   this->mq_DarkModeActive = oq_Active;
-
    if (this->mpc_Dashboard != NULL)
    {
       this->mpc_Dashboard->SetDarkMode(oq_Active);
@@ -614,12 +611,5 @@ void C_SyvDaTearOffWidget::m_CheckError(void) const
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaTearOffWidget::m_AdaptSpaceHolderWidgetColor(void) const
 {
-   if ((this->mq_EditModeActive == true) && (this->mq_DarkModeActive == true))
-   {
-      this->mpc_Ui->pc_WidgetWhite->SetBackgroundColor(52);
-   }
-   else
-   {
-      this->mpc_Ui->pc_WidgetWhite->SetBackgroundColor(0);
-   }
+   this->mpc_Ui->pc_WidgetWhite->SetBackgroundColor(0);
 }

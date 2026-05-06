@@ -105,7 +105,6 @@ private:
    Ui::C_SyvDaTearOffWidget * mpc_Ui;
    C_SyvDaDashboardWidget * mpc_Dashboard;
    bool mq_EditModeActive;
-   bool mq_DarkModeActive;
 
    C_SyvDaDashboardScreenshot * mpc_ScreenshotDashboardTab;
    void m_PerformScreenshot(const bool oq_IsControlButtonPressed);

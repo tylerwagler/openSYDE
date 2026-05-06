@@ -53,7 +53,6 @@ public:
    void SetViewIndex(const uint32_t ou32_Value);
 
    void Save(void);
-   void ApplyDarkMode(const bool oq_Active);
 
    void RegisterWidgets(stw::opensyde_gui_logic::C_SyvComDriverDiag & orc_ComDriver) const;
    void ConnectionActiveChanged(const bool oq_Active);
@@ -136,7 +135,6 @@ private:
    bool mq_Connected;
    uint32_t mu32_ViewIndex;
    static const QTabBar::ButtonPosition mhe_TAB_CONTENT_POSITION;
-   static const QString mhc_ADD_ICON_DARK;
    static const QString mhc_ADD_ICON_LIGHT;
 
    stw::opensyde_gui_logic::C_PuiSvDashboard::E_TabType me_DashboardTabType;

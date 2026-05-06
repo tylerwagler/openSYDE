@@ -43,7 +43,6 @@ using namespace stw::scl;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
 const QTabBar::ButtonPosition C_SyvDaDashboardSelectorTabWidget::mhe_TAB_CONTENT_POSITION = QTabBar::LeftSide;
-const QString C_SyvDaDashboardSelectorTabWidget::mhc_ADD_ICON_DARK = "://images/IconAddDisabled.svg";
 const QString C_SyvDaDashboardSelectorTabWidget::mhc_ADD_ICON_LIGHT = "://images/IconAddEnabled.svg";
 
 /* -- Types --------------------------------------------------------------------------------------------------------- */
@@ -345,69 +344,6 @@ void C_SyvDaDashboardSelectorTabWidget::Save(void)
          pc_Widget->Save();
       }
    }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Apply current dark mode setting
-
-   \param[in]  oq_Active   Dark mode active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardSelectorTabWidget::ApplyDarkMode(const bool oq_Active)
-{
-   int32_t s32_Counter;
-
-   QList<C_SyvDaTearOffWidget *>::const_iterator c_ItItem;
-
-   C_SyvDaDashboardSelectorTabBar * const pc_TabBar =
-      dynamic_cast<C_SyvDaDashboardSelectorTabBar * const>(this->tabBar());
-
-   for (s32_Counter = 0; s32_Counter < this->count(); ++s32_Counter)
-   {
-      C_SyvDaDashboardWidget * const pc_WidgetRef =
-         dynamic_cast<C_SyvDaDashboardWidget * const>(this->widget(s32_Counter));
-
-      if (pc_WidgetRef != NULL)
-      {
-         pc_WidgetRef->SetDarkMode(oq_Active);
-      }
-   }
-
-   for (s32_Counter = 0; s32_Counter < this->count(); ++s32_Counter)
-   {
-      C_OgeWiDashboardTab * const pc_DrawingWidget =
-         dynamic_cast<C_OgeWiDashboardTab * const>(this->tabBar()->tabButton(s32_Counter,
-                                                                             C_SyvDaDashboardSelectorTabWidget::
-                                                                             mhe_TAB_CONTENT_POSITION));
-      if (pc_DrawingWidget != NULL)
-      {
-         pc_DrawingWidget->SetDarkMode(oq_Active);
-      }
-   }
-
-   for (c_ItItem = this->mc_TearedOffWidgets.begin(); c_ItItem != this->mc_TearedOffWidgets.end(); ++c_ItItem)
-   {
-      (*c_ItItem)->SetDarkMode(oq_Active);
-   }
-
-   if (pc_TabBar != NULL)
-   {
-      C_OgeWiUtil::h_ApplyStylesheetPropertyToItselfAndAllChildren(pc_TabBar, "DarkMode", oq_Active);
-   }
-
-   if (this->mpc_PushButton != NULL)
-   {
-      if (oq_Active == true)
-      {
-         this->mpc_PushButton->setIcon(QIcon(C_SyvDaDashboardSelectorTabWidget::mhc_ADD_ICON_DARK));
-      }
-      else
-      {
-         this->mpc_PushButton->setIcon(QIcon(C_SyvDaDashboardSelectorTabWidget::mhc_ADD_ICON_LIGHT));
-      }
-   }
-
-   mpc_ScreenshotDashboardTab->SetDarkModeActive(oq_Active);
 }
 
 //----------------------------------------------------------------------------------------------------------------------

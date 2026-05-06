@@ -107,39 +107,6 @@ void C_SdTopologyListWidget::SetMaximumHeightAdaption(const bool oq_Active)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sets the dark mode
-
-   \param[in] oq_Active Dark mode active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SdTopologyListWidget::ApplyDarkMode(const bool oq_Active) const
-{
-   for (int32_t s32_ItItem = 0; s32_ItItem < this->count(); ++s32_ItItem)
-   {
-      QListWidgetItem * const pc_Item = this->item(s32_ItItem);
-      if (pc_Item != NULL)
-      {
-         QPixmap c_Pixmap;
-         if (oq_Active == false)
-         {
-            c_Pixmap = pc_Item->data(ms32_USER_ROLE_PIXMAP_BRIGHT_MODE).value<QPixmap>();
-         }
-         else
-         {
-            c_Pixmap = pc_Item->data(ms32_USER_ROLE_PIXMAP_DARK_MODE).value<QPixmap>();
-         }
-         if (c_Pixmap.isNull() == false)
-         {
-            QIcon c_Icon;
-            c_Icon.addPixmap(c_Pixmap, QIcon::Normal);
-            c_Icon.addPixmap(c_Pixmap, QIcon::Selected);
-            pc_Item->setIcon(c_Icon);
-         }
-      }
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Set group name
 
    \param[in] orc_Name Group name

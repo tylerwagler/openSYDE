@@ -88,34 +88,6 @@ void C_SyvDaDashboardToolbox::InitStaticNames(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Sets the dark mode
-
-   \param[in] oq_Active Dark mode active
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardToolbox::ApplyDarkMode(const bool oq_Active)
-{
-   for (uint32_t u32_ItList = 0; u32_ItList < static_cast<uint32_t>(this->mc_ListWidgets.size()); ++u32_ItList)
-   {
-      C_SdTopologyListWidget * const pc_ListWidget = this->mc_ListWidgets[u32_ItList];
-      if (pc_ListWidget != NULL)
-      {
-         pc_ListWidget->ApplyDarkMode(oq_Active);
-      }
-   }
-
-   if (this->mpc_FrameSeparatorReadingWidgets != NULL)
-   {
-      C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_FrameSeparatorReadingWidgets, "HasColor39Background", oq_Active);
-   }
-
-   if (this->mpc_FrameSeparatorWritingWidgets != NULL)
-   {
-      C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_FrameSeparatorWritingWidgets, "HasColor39Background", oq_Active);
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Overwritten enter event slot
 
    To get the correct cursor back from the resizing implementation of

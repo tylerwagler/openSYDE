@@ -38,14 +38,12 @@ public:
    void InitStaticNames(void) const;
 
    void SetPushButtonConnectSvg(const QString & orc_IconPath, const bool oq_ShowAnimation);
-   void SetPushButtonDarkSvg(const QString & orc_IconPath) const;
 
    //The signals keyword is necessary for Qt signal slot functionality
    //lint -save -e1736
 
 Q_SIGNALS:
    //lint -restore
-   void SigPushButtonDarkModePressed(void);
    void SigPushButtonConnectPressed(void);
 
 private:

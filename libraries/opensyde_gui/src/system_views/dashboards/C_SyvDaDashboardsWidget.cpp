@@ -37,8 +37,6 @@ using namespace stw::opensyde_gui_logic;
 using namespace stw::opensyde_gui_elements;
 
 /* -- Module Global Constants --------------------------------------------------------------------------------------- */
-const QString C_SyvDaDashboardsWidget::mhc_DARK_MODE_ENABLED_ICON_PATH = "://images/system_views/Darkmode_Disable.svg";
-const QString C_SyvDaDashboardsWidget::mhc_DARK_MODE_DISABLED_ICON_PATH = "://images/system_views/Darkmode_Enable.svg";
 const int32_t C_SyvDaDashboardsWidget::mhs32_WIDGET_BORDER = 11;
 const int32_t C_SyvDaDashboardsWidget::mhs32_TOOLBOX_INIT_POS_Y = 150;
 QElapsedTimer C_SyvDaDashboardsWidget::mhc_DisconnectTimer;
@@ -74,7 +72,6 @@ C_SyvDaDashboardsWidget::C_SyvDaDashboardsWidget(const uint32_t ou32_ViewIndex, 
    mpc_ToolboxParent(opc_ToolboxParent),
    mu32_ViewIndex(ou32_ViewIndex),
    mq_EditModeActive(false),
-   mq_DarkModeActive(false),
    mq_ConnectActive(false),
    me_ConnectState(eCS_DISCONNECTED),
    ms32_InitToolboxCounter(0)
@@ -191,29 +188,6 @@ void C_SyvDaDashboardsWidget::InitText(void) const
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle initial dark mode
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardsWidget::LoadDarkMode(void)
-{
-   const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-
-   if (pc_View != NULL)
-   {
-      if (pc_View->GetDarkModeActive() == true)
-      {
-         Q_EMIT (this->SigSetDarkModePushButtonIcon(C_SyvDaDashboardsWidget::mhc_DARK_MODE_ENABLED_ICON_PATH));
-         m_ApplyDarkMode(true);
-      }
-      else
-      {
-         Q_EMIT (this->SigSetDarkModePushButtonIcon(C_SyvDaDashboardsWidget::mhc_DARK_MODE_DISABLED_ICON_PATH));
-         m_ApplyDarkMode(false);
-      }
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Save data
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -252,28 +226,6 @@ void C_SyvDaDashboardsWidget::OpenSettings(void)
       c_New->deleteLater();
    }
 } //lint !e429  //no memory leak because of the parent of pc_Dialog and the Qt memory management
-
-//----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Handle dark mode toggle
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardsWidget::ToggleDarkMode(void)
-{
-   const C_PuiSvData * const pc_View = C_PuiSvHandler::h_GetInstance()->GetView(this->mu32_ViewIndex);
-
-   if (pc_View != NULL)
-   {
-      if (pc_View->GetDarkModeActive() == true)
-      {
-         C_PuiSvHandler::h_GetInstance()->SetViewDarkModeActive(this->mu32_ViewIndex, false);
-      }
-      else
-      {
-         C_PuiSvHandler::h_GetInstance()->SetViewDarkModeActive(this->mu32_ViewIndex, true);
-      }
-   }
-   this->LoadDarkMode();
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Sets the edit mode
@@ -612,29 +564,6 @@ void C_SyvDaDashboardsWidget::m_CancelClicked(void)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-/*! \brief   Apply dark mode setting
-
-   \param[in]  oq_Active   Dark mode value
-*/
-//----------------------------------------------------------------------------------------------------------------------
-void C_SyvDaDashboardsWidget::m_ApplyDarkMode(const bool oq_Active)
-{
-   this->mq_DarkModeActive = oq_Active;
-   this->mpc_Ui->pc_TabWidget->ApplyDarkMode(oq_Active);
-   C_OgeWiUtil::h_ApplyStylesheetProperty(this->mpc_Ui->pc_GroupBox, "DarkMode", oq_Active);
-   this->m_AdaptSpaceHolderWidgetColor();
-
-   if (this->mpc_Toolbox != NULL)
-   {
-      this->mpc_Toolbox->ApplyDarkMode(oq_Active);
-      if (this->mpc_ToolboxContent != NULL)
-      {
-         this->mpc_ToolboxContent->ApplyDarkMode(oq_Active);
-      }
-   }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
 /*! \brief   Init toolbox widget
 */
 //----------------------------------------------------------------------------------------------------------------------
@@ -653,24 +582,6 @@ void C_SyvDaDashboardsWidget::m_InitToolBox(void)
 
    if (this->mpc_Toolbox != NULL)
    {
-      //Dark mode
-      if (pc_View != NULL)
-      {
-         this->mpc_Toolbox->ApplyDarkMode(pc_View->GetDarkModeActive());
-         if (this->mpc_ToolboxContent != NULL)
-         {
-            this->mpc_ToolboxContent->ApplyDarkMode(pc_View->GetDarkModeActive());
-         }
-      }
-      else
-      {
-         this->mpc_Toolbox->ApplyDarkMode(false);
-         if (this->mpc_ToolboxContent != NULL)
-         {
-            this->mpc_ToolboxContent->ApplyDarkMode(false);
-         }
-      }
-
       // check for saved default values for toolbox
       if (c_ViewSettings.GetDashboardToolboxPos().x() < 0)
       {
@@ -1261,14 +1172,7 @@ void C_SyvDaDashboardsWidget::m_WiHoverMinBtnClicked(void)
 //----------------------------------------------------------------------------------------------------------------------
 void C_SyvDaDashboardsWidget::m_AdaptSpaceHolderWidgetColor(void) const
 {
-   if ((this->mq_EditModeActive == true) && (this->mq_DarkModeActive == true))
-   {
-      this->mpc_Ui->pc_WidgetWhite->SetBackgroundColor(52);
-   }
-   else
-   {
-      this->mpc_Ui->pc_WidgetWhite->SetBackgroundColor(0);
-   }
+   this->mpc_Ui->pc_WidgetWhite->SetBackgroundColor(0);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
