@@ -17,6 +17,7 @@
 #include <QFlags>
 #include <QSpinBox>
 #include <QAbstractItemView>
+#include <QHeaderView>
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
@@ -88,6 +89,8 @@ C_SdBueSignalPropertiesWidget::C_SdBueSignalPropertiesWidget(QWidget * const opc
    this->mpc_Ui->pc_LabelObjectDictValue->SetForegroundColor(1);
    this->mpc_Ui->pc_LabelObjectDictValue->SetMarginsPadding(1);
    this->mpc_Ui->pc_ComboBoxType->view()->setTextElideMode(Qt::ElideRight);
+
+   this->m_InitValueDescriptionsTable();
 
    InitStaticNames();
 }
@@ -696,6 +699,40 @@ void C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionRemove(void)
 void C_SdBueSignalPropertiesWidget::m_HandleValueDescriptionCellChange(void)
 {
    this->m_HandleAnyChange(eCHA_VALUE_DESCRIPTIONS);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+/*! \brief  Apply the canonical openSYDE table look (mirrors C_SdBueSignalTableView)
+*/
+//----------------------------------------------------------------------------------------------------------------------
+void C_SdBueSignalPropertiesWidget::m_InitValueDescriptionsTable(void) const
+{
+   QTableWidget * const pc_Table = this->mpc_Ui->pc_TableValueDescriptions;
+
+   pc_Table->setCornerButtonEnabled(false);
+   pc_Table->setSortingEnabled(false);
+   pc_Table->setShowGrid(false);
+   pc_Table->setGridStyle(Qt::NoPen);
+   pc_Table->setSelectionBehavior(QAbstractItemView::SelectionBehavior::SelectRows);
+   pc_Table->setSelectionMode(QAbstractItemView::SelectionMode::SingleSelection);
+   pc_Table->setAlternatingRowColors(true);
+   pc_Table->setDragDropMode(QAbstractItemView::DragDropMode::NoDragDrop);
+   pc_Table->setDragEnabled(false);
+   pc_Table->setLineWidth(0);
+   pc_Table->setFrameShadow(QAbstractItemView::Shadow::Plain);
+   pc_Table->setFrameShape(QAbstractItemView::Shape::NoFrame);
+   pc_Table->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed |
+                             QAbstractItemView::AnyKeyPressed);
+
+   pc_Table->horizontalHeader()->setStretchLastSection(true);
+   pc_Table->horizontalHeader()->setFixedHeight(35);
+   pc_Table->horizontalHeader()->resizeSection(0, 120);
+
+   pc_Table->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+   pc_Table->verticalHeader()->setMinimumSectionSize(25);
+   pc_Table->verticalHeader()->setMaximumSectionSize(25);
+   pc_Table->verticalHeader()->setDefaultSectionSize(25);
+   pc_Table->verticalHeader()->hide();
 }
 
 //----------------------------------------------------------------------------------------------------------------------

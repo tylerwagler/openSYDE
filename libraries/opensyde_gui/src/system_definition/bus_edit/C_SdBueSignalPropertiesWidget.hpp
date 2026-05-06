@@ -121,6 +121,7 @@ private:
    void m_HandleValueDescriptionAdd(void);
    void m_HandleValueDescriptionRemove(void);
    void m_HandleValueDescriptionCellChange(void);
+   void m_InitValueDescriptionsTable(void) const;
    int32_t m_LoadGeneric(stw::opensyde_gui_elements::C_OgeWiSpinBoxGroup * const opc_Widget,
                          const stw::opensyde_core::C_OscNodeDataPoolContent & orc_Content, const float64_t of64_Factor,
                          const float64_t of64_Offset, const uint16_t ou16_BitLength,
