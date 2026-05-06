@@ -106,13 +106,13 @@ void C_OgePubDashboard::paintEvent(QPaintEvent * const opc_Event)
    if ((this->isChecked() == true) && (this->mpc_RendererActivated != NULL))
    {
       QPainter c_Painter(this);
-      const QRectF c_Tmp = mh_AdaptToAspcetRatio(this->mpc_RendererActivated->viewBox(), this->rect());
+      const QRectF c_Tmp = mh_AdaptToAspectRatio(this->mpc_RendererActivated->viewBox(), this->rect());
       this->mpc_RendererActivated->render(&c_Painter, c_Tmp);
    }
    else if (this->mpc_RendererDeactivated != NULL)
    {
       QPainter c_Painter(this);
-      const QRectF c_Tmp = mh_AdaptToAspcetRatio(this->mpc_RendererDeactivated->viewBox(), this->rect());
+      const QRectF c_Tmp = mh_AdaptToAspectRatio(this->mpc_RendererDeactivated->viewBox(), this->rect());
       this->mpc_RendererDeactivated->render(&c_Painter, c_Tmp);
    }
    else
@@ -131,7 +131,7 @@ void C_OgePubDashboard::paintEvent(QPaintEvent * const opc_Event)
    Adapted rect with new aspect ratio
 */
 //----------------------------------------------------------------------------------------------------------------------
-QRectF C_OgePubDashboard::mh_AdaptToAspcetRatio(const QRect & orc_Target, const QRect & orc_Rect)
+QRectF C_OgePubDashboard::mh_AdaptToAspectRatio(const QRect & orc_Target, const QRect & orc_Rect)
 {
    QRectF c_Retval = orc_Rect;
    const float64_t f64_IdealAspectRatio = static_cast<float64_t>(orc_Target.height()) /

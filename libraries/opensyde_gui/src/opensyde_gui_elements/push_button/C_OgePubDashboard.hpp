@@ -42,7 +42,7 @@ private:
    QSvgRenderer * mpc_RendererActivated;
    QSvgRenderer * mpc_RendererDeactivated;
 
-   static QRectF mh_AdaptToAspcetRatio(const QRect & orc_Target, const QRect & orc_Rect);
+   static QRectF mh_AdaptToAspectRatio(const QRect & orc_Target, const QRect & orc_Rect);
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */
