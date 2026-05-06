@@ -72,9 +72,11 @@ C_SyvComMessageMonitor::~C_SyvComMessageMonitor(void) noexcept
 
             if (this->mpc_LoadingThread->wait(2000U) == false)
             {
-               // Not finished yet
+               // Not finished yet — escalate to terminate so the subsequent delete is safe
                osc_write_log_warning("Closing message monitor",
                                      "Waiting time for stopping loading thread was not enough");
+               this->mpc_LoadingThread->terminate();
+               this->mpc_LoadingThread->wait(2000U);
             }
          }
       }

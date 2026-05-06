@@ -138,9 +138,11 @@ C_SyvDcSequences::~C_SyvDcSequences(void)
          this->mpc_Thread->requestInterruption();
          if (this->mpc_Thread->wait(2000U) == false)
          {
-            // Not finished yet
+            // Not finished yet — escalate to terminate so the subsequent delete is safe
             osc_write_log_warning("Closing device configuration sequences",
                                   "Waiting time for stopping thread was not enough");
+            this->mpc_Thread->terminate();
+            this->mpc_Thread->wait(2000U);
          }
       }
       delete mpc_Thread;

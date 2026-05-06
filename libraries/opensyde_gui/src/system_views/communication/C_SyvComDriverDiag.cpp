@@ -93,8 +93,10 @@ C_SyvComDriverDiag::~C_SyvComDriverDiag(void)
 
       if (this->mc_PollingThread.wait(2000U) == false)
       {
-         // Not finished yet
+         // Not finished yet — escalate to terminate so the destructor of mc_PollingThread runs on a stopped thread
          osc_write_log_warning("Closing diagnostic driver", "Waiting time for stopping polling thread was not enough");
+         this->mc_PollingThread.terminate();
+         this->mc_PollingThread.wait(2000U);
       }
    }
 
@@ -731,8 +733,10 @@ void C_SyvComDriverDiag::StopCycling(void)
       this->mpc_AsyncThread->requestInterruption();
       if (this->mpc_AsyncThread->wait(2000U) == false)
       {
-         // Not finished yet
+         // Not finished yet — escalate to terminate so subsequent driver state stays consistent
          osc_write_log_warning("Stopping diagnostic cycling", "Waiting time for stopping thread was not enough");
+         this->mpc_AsyncThread->terminate();
+         this->mpc_AsyncThread->wait(2000U);
       }
    }
 }

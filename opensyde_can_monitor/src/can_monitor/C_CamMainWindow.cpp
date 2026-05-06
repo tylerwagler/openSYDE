@@ -21,6 +21,7 @@
 
 #include "stwtypes.hpp"
 #include "stwerrors.hpp"
+#include "C_OscLoggingHandler.hpp"
 
 #include "C_CamMainWindow.hpp"
 #include "ui_C_CamMainWindow.h"
@@ -232,7 +233,14 @@ C_CamMainWindow::~C_CamMainWindow()
    if (mpc_CanThread->isRunning() == true)
    {
       this->mpc_CanThread->requestInterruption();
-      this->mpc_CanThread->wait(2000U);
+      if (this->mpc_CanThread->wait(2000U) == false)
+      {
+         // Not finished yet — escalate to terminate so the subsequent delete is safe
+         osc_write_log_warning("Closing CAN monitor",
+                               "Waiting time for stopping CAN thread was not enough");
+         this->mpc_CanThread->terminate();
+         this->mpc_CanThread->wait(2000U);
+      }
    }
 
    //Disconnect database remove (otherwise the signal will be handled by a destroyed main window
@@ -576,7 +584,14 @@ void C_CamMainWindow::m_StopLogging(void)
    //Stop playing
    this->mq_LoggingStarted = false;
    this->mpc_CanThread->requestInterruption();
-   this->mpc_CanThread->wait();
+   if (this->mpc_CanThread->wait(2000U) == false)
+   {
+      // Not finished yet — escalate to terminate so we don't block the UI thread indefinitely
+      osc_write_log_warning("Stopping CAN logging",
+                            "Waiting time for stopping CAN thread was not enough");
+      this->mpc_CanThread->terminate();
+      this->mpc_CanThread->wait(2000U);
+   }
    this->mc_ComDriver.StopLogging();
    this->m_CloseCan();
    this->mpc_Ui->pc_GeneratorWidget->SetCommunicationStarted(false);
