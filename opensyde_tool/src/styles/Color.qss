@@ -9,6 +9,16 @@
 /*       - selection-color        */
 /*       - miscellaneous          */
 
+/* Defensive fallback for form widgets not covered by class-specific rules.
+   Stops the OS dark QPalette from leaking through orphan widgets while the
+   app is still pinned to a fixed light theme. Class selectors below win. */
+QLineEdit, QTextEdit, QPlainTextEdit, QAbstractSpinBox, QComboBox,
+QAbstractItemView, QHeaderView::section
+{
+color: rgb(86, 86, 104);
+background-color: rgb(255, 255, 255);
+}
+
 /* --------------------------------------------------------------------- */
 /* STYLE_GUIDE_COLOR_TRANSPARENT */
 /* background-color */
