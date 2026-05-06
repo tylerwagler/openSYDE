@@ -542,6 +542,28 @@ int32_t C_OscNodeDataPoolFiler::h_LoadDataPoolElement(C_OscNodeDataPoolListEleme
       }
    }
 
+   //Optional: value descriptions (DBC value tables). Absent in pre-feature projects -> empty map, no error.
+   if (s32_Retval == C_NO_ERR)
+   {
+      if (orc_XmlParser.SelectNodeChild("value-descriptions") == "value-descriptions")
+      {
+         C_SclString c_CurValueDesc = orc_XmlParser.SelectNodeChild("value-description");
+         if (c_CurValueDesc == "value-description")
+         {
+            do
+            {
+               const int64_t s64_Value = orc_XmlParser.GetAttributeSint64("value");
+               orc_NodeDataPoolListElement.c_ValueDescription[s64_Value] = orc_XmlParser.GetNodeContent();
+               c_CurValueDesc = orc_XmlParser.SelectNodeNext("value-description");
+            }
+            while (c_CurValueDesc == "value-description");
+            //Return
+            tgl_assert(orc_XmlParser.SelectNodeParent() == "value-descriptions");
+         }
+         tgl_assert(orc_XmlParser.SelectNodeParent() == "data-element");
+      }
+   }
+
    return s32_Retval;
 }
 
@@ -587,6 +609,22 @@ void C_OscNodeDataPoolFiler::h_SaveDataPoolElement(const C_OscNodeDataPoolListEl
    h_SaveDataPoolListElementDataSetValues(orc_NodeDataPoolListElement.c_DataSetValues, orc_XmlParser);
    //Return to parent
    tgl_assert(orc_XmlParser.SelectNodeParent() == "data-element");
+
+   //Only emit value-descriptions when present, to avoid churn in old projects
+   if (orc_NodeDataPoolListElement.c_ValueDescription.empty() == false)
+   {
+      orc_XmlParser.CreateAndSelectNodeChild("value-descriptions");
+      for (std::map<int64_t, stw::scl::C_SclString>::const_iterator c_It =
+              orc_NodeDataPoolListElement.c_ValueDescription.begin();
+           c_It != orc_NodeDataPoolListElement.c_ValueDescription.end(); ++c_It)
+      {
+         orc_XmlParser.CreateAndSelectNodeChild("value-description");
+         orc_XmlParser.SetAttributeSint64("value", c_It->first);
+         orc_XmlParser.SetNodeContent(c_It->second);
+         tgl_assert(orc_XmlParser.SelectNodeParent() == "value-descriptions");
+      }
+      tgl_assert(orc_XmlParser.SelectNodeParent() == "data-element");
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
