@@ -215,14 +215,7 @@ C_NagMainWindow::C_NagMainWindow(const uint16_t ou16_Timer) :
 //lint -e{1579}  no memory leak because of the parent all elements and the Qt memory management
 C_NagMainWindow::~C_NagMainWindow()
 {
-   // save position
-   this->m_SaveScreenProperties();
-   // store (only if useful!)
-   if ((this->mpc_MainWidget == NULL) || (this->mpc_MainWidget->isVisible() == false))
-   {
-      this->mpc_Ui->pc_Splitter->StoreUserSettings();
-      this->mpc_Ui->pc_NaviBar->SaveUserSettings();
-   }
+   this->m_SaveUserSettings();
 
    // deactivate use case view widget
    this->m_RemoveUseCaseWidget();
@@ -535,6 +528,8 @@ void C_NagMainWindow::closeEvent(QCloseEvent * const opc_Event)
       C_UsHandler::h_GetInstance()->SetProjLastScreenMode(this->ms32_SdSubMode, this->mu32_SdIndex, this->mu32_SdFlag,
                                                           this->ms32_SvSubMode, this->mu32_SvIndex, this->mu32_SvFlag);
       C_UsHandler::h_GetInstance()->SetProjLastMode(this->ms32_Mode);
+      this->m_SaveUserSettings();
+      C_UsHandler::h_GetInstance()->Save();
       QMainWindow::closeEvent(opc_Event);
    }
 }
@@ -990,6 +985,19 @@ void C_NagMainWindow::m_SaveScreenProperties(void) const
    C_UsHandler::h_GetInstance()->SetAppSize(this->normalGeometry().size());
    C_UsHandler::h_GetInstance()->SetAppMaximized(this->isMaximized());
    C_UsHandler::h_GetInstance()->SetAppScreenIndex(QGuiApplication::screens().indexOf(this->screen()));
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void C_NagMainWindow::m_SaveUserSettings(void)
+{
+   this->m_SaveScreenProperties();
+   // splitter / navi state are only meaningful when a use case view is active;
+   // skip the push when the start view is showing so we don't overwrite with defaults
+   if ((this->mpc_MainWidget == NULL) || (this->mpc_MainWidget->isVisible() == false))
+   {
+      this->mpc_Ui->pc_Splitter->StoreUserSettings();
+      this->mpc_Ui->pc_NaviBar->SaveUserSettings();
+   }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
