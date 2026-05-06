@@ -592,16 +592,7 @@ int32_t C_PuiBsElementsFiler::h_LoadTextElement(C_PuiBsTextElement * const opc_T
       {
          if (orc_XmlParser.SelectNodeChild("bright") == "bright")
          {
-            h_LoadColor(opc_TextElement->c_UiFontColorBright, orc_XmlParser);
-            tgl_assert(orc_XmlParser.SelectNodeParent() == "font-color");
-         }
-         else
-         {
-            s32_Return = C_CONFIG;
-         }
-         if (orc_XmlParser.SelectNodeChild("dark") == "dark")
-         {
-            h_LoadColor(opc_TextElement->c_UiFontColorDark, orc_XmlParser);
+            h_LoadColor(opc_TextElement->c_UiFontColor, orc_XmlParser);
             tgl_assert(orc_XmlParser.SelectNodeParent() == "font-color");
          }
          else
@@ -652,10 +643,7 @@ void C_PuiBsElementsFiler::h_SaveTextElement(const C_PuiBsTextElement * const op
       orc_XmlParser.SelectNodeParent(); //back to "text-element"
       orc_XmlParser.CreateAndSelectNodeChild("font-color");
       orc_XmlParser.CreateAndSelectNodeChild("bright");
-      h_SaveColor(opc_TextElement->c_UiFontColorBright, orc_XmlParser);
-      orc_XmlParser.SelectNodeParent(); //back to "font-color"
-      orc_XmlParser.CreateAndSelectNodeChild("dark");
-      h_SaveColor(opc_TextElement->c_UiFontColorDark, orc_XmlParser);
+      h_SaveColor(opc_TextElement->c_UiFontColor, orc_XmlParser);
       orc_XmlParser.SelectNodeParent(); //back to "font-color"
       orc_XmlParser.SelectNodeParent(); //back to "text-element"
       orc_XmlParser.CreateAndSelectNodeChild("text-content");
@@ -724,16 +712,7 @@ int32_t C_PuiBsElementsFiler::mh_LoadBoundary(C_PuiBsBoundary & orc_Boundary,
    {
       if (orc_XmlParser.SelectNodeChild("bright") == "bright")
       {
-         h_LoadColor(orc_Boundary.c_UiBorderColorBright, orc_XmlParser);
-         tgl_assert(orc_XmlParser.SelectNodeParent() == "border-color");
-      }
-      else
-      {
-         s32_Return = C_CONFIG;
-      }
-      if (orc_XmlParser.SelectNodeChild("dark") == "dark")
-      {
-         h_LoadColor(orc_Boundary.c_UiBorderColorDark, orc_XmlParser);
+         h_LoadColor(orc_Boundary.c_UiBorderColor, orc_XmlParser);
          tgl_assert(orc_XmlParser.SelectNodeParent() == "border-color");
       }
       else
@@ -761,16 +740,7 @@ int32_t C_PuiBsElementsFiler::mh_LoadBoundary(C_PuiBsBoundary & orc_Boundary,
    {
       if (orc_XmlParser.SelectNodeChild("bright") == "bright")
       {
-         h_LoadColor(orc_Boundary.c_UiBackgroundColorBright, orc_XmlParser);
-         tgl_assert(orc_XmlParser.SelectNodeParent() == "background-color");
-      }
-      else
-      {
-         s32_Return = C_CONFIG;
-      }
-      if (orc_XmlParser.SelectNodeChild("dark") == "dark")
-      {
-         h_LoadColor(orc_Boundary.c_UiBackgroundColorDark, orc_XmlParser);
+         h_LoadColor(orc_Boundary.c_UiBackgroundColor, orc_XmlParser);
          tgl_assert(orc_XmlParser.SelectNodeParent() == "background-color");
       }
       else
@@ -801,10 +771,7 @@ void C_PuiBsElementsFiler::mh_SaveBoundary(const C_PuiBsBoundary & orc_Boundary,
    orc_XmlParser.SelectNodeParent(); //back to "boundary"
    orc_XmlParser.CreateAndSelectNodeChild("border-color");
    orc_XmlParser.CreateAndSelectNodeChild("bright");
-   h_SaveColor(orc_Boundary.c_UiBorderColorBright, orc_XmlParser);
-   orc_XmlParser.SelectNodeParent(); //back to "border-color"
-   orc_XmlParser.CreateAndSelectNodeChild("dark");
-   h_SaveColor(orc_Boundary.c_UiBorderColorDark, orc_XmlParser);
+   h_SaveColor(orc_Boundary.c_UiBorderColor, orc_XmlParser);
    orc_XmlParser.SelectNodeParent(); //back to "border-color"
    orc_XmlParser.SelectNodeParent(); //back to "boundary"
    orc_XmlParser.CreateAndSelectNodeChild("border-width");
@@ -812,10 +779,7 @@ void C_PuiBsElementsFiler::mh_SaveBoundary(const C_PuiBsBoundary & orc_Boundary,
    orc_XmlParser.SelectNodeParent(); //back to "boundary"
    orc_XmlParser.CreateAndSelectNodeChild("background-color");
    orc_XmlParser.CreateAndSelectNodeChild("bright");
-   h_SaveColor(orc_Boundary.c_UiBackgroundColorBright, orc_XmlParser);
-   orc_XmlParser.SelectNodeParent(); //back to "background-color"
-   orc_XmlParser.CreateAndSelectNodeChild("dark");
-   h_SaveColor(orc_Boundary.c_UiBackgroundColorDark, orc_XmlParser);
+   h_SaveColor(orc_Boundary.c_UiBackgroundColor, orc_XmlParser);
    orc_XmlParser.SelectNodeParent(); //back to "background-color"
    orc_XmlParser.SelectNodeParent(); //back to "boundary"
 }
@@ -948,15 +912,6 @@ int32_t C_PuiBsElementsFiler::mh_LoadLineArrow(C_PuiBsLineArrow & orc_LineArrow,
       s32_Return = C_CONFIG;
    }
    orc_XmlParser.SelectNodeParent(); //back to line-arrow
-   if (orc_XmlParser.SelectNodeChild("dark-color") == "dark-color")
-   {
-      h_LoadColor(orc_LineArrow.c_UiColorDark, orc_XmlParser);
-   }
-   else
-   {
-      s32_Return = C_CONFIG;
-   }
-   orc_XmlParser.SelectNodeParent(); //back to line-arrow
    return s32_Return;
 }
 
@@ -981,9 +936,6 @@ void C_PuiBsElementsFiler::mh_SaveLineArrow(const C_PuiBsLineArrow & orc_LineArr
    orc_XmlParser.SelectNodeParent(); //back to "image"
    orc_XmlParser.CreateAndSelectNodeChild("line-type");
    orc_XmlParser.SetNodeContent(C_PuiBsLineArrow::h_LineTypeToString(orc_LineArrow.e_LineType));
-   orc_XmlParser.SelectNodeParent(); //back to "image"
-   orc_XmlParser.CreateAndSelectNodeChild("dark-color");
-   h_SaveColor(orc_LineArrow.c_UiColorDark, orc_XmlParser);
    orc_XmlParser.SelectNodeParent(); //back to "image"
 }
 

@@ -34,11 +34,9 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const override;
 
-   QColor c_UiBorderColorBright;     ///< color of border line in bright mode
-   QColor c_UiBorderColorDark;       ///< color of border line in dark mode
-   QColor c_UiBackgroundColorBright; ///< color of background in bright mode
-   QColor c_UiBackgroundColorDark;   ///< color of background in dark mode
-   int32_t s32_UiBorderWidth;        ///< width of border line
+   QColor c_UiBorderColor;     ///< color of border line
+   QColor c_UiBackgroundColor; ///< color of background
+   int32_t s32_UiBorderWidth;  ///< width of border line
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

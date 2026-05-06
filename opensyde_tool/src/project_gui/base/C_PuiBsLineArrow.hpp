@@ -54,7 +54,6 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const override;
 
-   QColor c_UiColorDark;
    E_ArrowHeadType e_StartArrowHeadType;
    E_ArrowHeadType e_EndArrowHeadType;
    E_LineType e_LineType;

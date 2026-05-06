@@ -282,8 +282,8 @@ void C_GiBiBoundary::m_ResizeUpdateItems(const float64_t of64_DiffWidth, const f
 void C_GiBiBoundary::m_LoadFromData(const C_PuiBsBoundary & orc_Data)
 {
    this->LoadBasicData(orc_Data);
-   this->SetBackgroundColor(orc_Data.c_UiBackgroundColorBright);
-   this->SetBorderColor(orc_Data.c_UiBorderColorBright);
+   this->SetBackgroundColor(orc_Data.c_UiBackgroundColor);
+   this->SetBorderColor(orc_Data.c_UiBorderColor);
    this->SetBorderWidth(orc_Data.s32_UiBorderWidth);
 }
 
@@ -297,7 +297,7 @@ void C_GiBiBoundary::m_UpdateData(C_PuiBsBoundary & orc_Data) const
 {
    this->UpdateBasicData(orc_Data);
 
-   orc_Data.c_UiBorderColorBright = this->GetBorderColor();
-   orc_Data.c_UiBackgroundColorBright = this->GetBackgroundColor();
+   orc_Data.c_UiBorderColor = this->GetBorderColor();
+   orc_Data.c_UiBackgroundColor = this->GetBackgroundColor();
    orc_Data.s32_UiBorderWidth = this->GetBorderWidth();
 }

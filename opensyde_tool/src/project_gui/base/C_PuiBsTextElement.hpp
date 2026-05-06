@@ -37,10 +37,9 @@ public:
 
    void CalcHash(uint32_t & oru32_HashValue) const override;
 
-   QFont c_UiFontStyle;        ///< font style of text element
-   QColor c_UiFontColorBright; ///< font color of text element in bright mode
-   QColor c_UiFontColorDark;   ///< font color of text element in dark mode
-   QString c_UiText;           ///< shown text of text element
+   QFont c_UiFontStyle;  ///< font style of text element
+   QColor c_UiFontColor; ///< font color of text element
+   QString c_UiText;     ///< shown text of text element
 };
 
 /* -- Extern Global Variables --------------------------------------------------------------------------------------- */

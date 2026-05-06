@@ -157,8 +157,8 @@ void C_SebUnoSetupStyleCommand::m_Restore(const QMap<uint64_t, C_PuiBsTemporaryD
                //Content
                {
                   const C_PuiBsBoundary & rc_UiBoundary = opc_Snapshot->c_Boundaries[c_Entry.value().u32_Index];
-                  pc_Boundary->SetBorderColor(rc_UiBoundary.c_UiBorderColorBright);
-                  pc_Boundary->SetBackgroundColor(rc_UiBoundary.c_UiBackgroundColorBright);
+                  pc_Boundary->SetBorderColor(rc_UiBoundary.c_UiBorderColor);
+                  pc_Boundary->SetBackgroundColor(rc_UiBoundary.c_UiBackgroundColor);
                   pc_Boundary->SetBorderWidth(rc_UiBoundary.s32_UiBorderWidth);
                }
             }
@@ -174,7 +174,7 @@ void C_SebUnoSetupStyleCommand::m_Restore(const QMap<uint64_t, C_PuiBsTemporaryD
                //Content
                {
                   const C_PuiBsTextElement & rc_UiTextElement = opc_Snapshot->c_TextElements[c_Entry.value().u32_Index];
-                  pc_TextElement->ApplyStyle(rc_UiTextElement.c_UiFontStyle, rc_UiTextElement.c_UiFontColorBright);
+                  pc_TextElement->ApplyStyle(rc_UiTextElement.c_UiFontStyle, rc_UiTextElement.c_UiFontColor);
                }
             }
          }
@@ -237,8 +237,8 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
             //Content
             {
                C_PuiBsBoundary & rc_UiBoundary = opc_Snapshot->c_Boundaries[u32_Index];
-               rc_UiBoundary.c_UiBackgroundColorBright = pc_Boundary->GetBackgroundColor();
-               rc_UiBoundary.c_UiBorderColorBright = pc_Boundary->GetBorderColor();
+               rc_UiBoundary.c_UiBackgroundColor = pc_Boundary->GetBackgroundColor();
+               rc_UiBoundary.c_UiBorderColor = pc_Boundary->GetBorderColor();
                rc_UiBoundary.s32_UiBorderWidth = pc_Boundary->GetBorderWidth();
             }
          }
@@ -256,7 +256,7 @@ void C_SebUnoSetupStyleCommand::m_CreateMapAndSaveState(const std::vector<QGraph
             //Content
             {
                C_PuiBsTextElement & rc_UiTextElement = opc_Snapshot->c_TextElements[u32_Index];
-               rc_UiTextElement.c_UiFontColorBright = pc_TextElement->GetFontColor();
+               rc_UiTextElement.c_UiFontColor = pc_TextElement->GetFontColor();
                rc_UiTextElement.c_UiFontStyle = pc_TextElement->GetFontStyle();
             }
          }

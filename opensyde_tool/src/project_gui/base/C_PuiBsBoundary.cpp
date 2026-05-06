@@ -39,10 +39,8 @@ using namespace stw::opensyde_gui_logic;
 //----------------------------------------------------------------------------------------------------------------------
 C_PuiBsBoundary::C_PuiBsBoundary() :
    C_PuiBsBox(),
-   c_UiBorderColorBright(mc_STYLE_GUIDE_COLOR_7),
-   c_UiBorderColorDark(mc_STYLE_GUIDE_COLOR_2),
-   c_UiBackgroundColorBright(mc_STYLE_GUIDE_COLOR_12),
-   c_UiBackgroundColorDark(mc_STYLE_GUIDE_COLOR_36),
+   c_UiBorderColor(mc_STYLE_GUIDE_COLOR_7),
+   c_UiBackgroundColor(mc_STYLE_GUIDE_COLOR_12),
    s32_UiBorderWidth(1)
 {
 }
@@ -59,40 +57,22 @@ void C_PuiBsBoundary::CalcHash(uint32_t & oru32_HashValue) const
 {
    int32_t s32_Value;
 
-   s32_Value = this->c_UiBorderColorBright.red();
+   s32_Value = this->c_UiBorderColor.red();
    stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBorderColorBright.green();
+   s32_Value = this->c_UiBorderColor.green();
    stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBorderColorBright.blue();
+   s32_Value = this->c_UiBorderColor.blue();
    stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBorderColorBright.alpha();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-
-   s32_Value = this->c_UiBorderColorDark.red();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBorderColorDark.green();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBorderColorDark.blue();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBorderColorDark.alpha();
+   s32_Value = this->c_UiBorderColor.alpha();
    stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
 
-   s32_Value = this->c_UiBackgroundColorBright.red();
+   s32_Value = this->c_UiBackgroundColor.red();
    stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBackgroundColorBright.green();
+   s32_Value = this->c_UiBackgroundColor.green();
    stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBackgroundColorBright.blue();
+   s32_Value = this->c_UiBackgroundColor.blue();
    stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBackgroundColorBright.alpha();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-
-   s32_Value = this->c_UiBackgroundColorDark.red();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBackgroundColorDark.green();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBackgroundColorDark.blue();
-   stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
-   s32_Value = this->c_UiBackgroundColorDark.alpha();
+   s32_Value = this->c_UiBackgroundColor.alpha();
    stw::scl::C_SclChecksums::CalcCRC32(&s32_Value, sizeof(s32_Value), oru32_HashValue);
 
    stw::scl::C_SclChecksums::CalcCRC32(&this->s32_UiBorderWidth, sizeof(this->s32_UiBorderWidth), oru32_HashValue);

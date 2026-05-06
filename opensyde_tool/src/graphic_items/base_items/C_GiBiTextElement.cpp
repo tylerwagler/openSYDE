@@ -339,7 +339,7 @@ void C_GiBiTextElement::m_LoadTextElementData(const C_PuiBsTextElement * const o
 {
    this->LoadBasicData(*opc_Data);
 
-   this->SetFontColor(opc_Data->c_UiFontColorBright);
+   this->SetFontColor(opc_Data->c_UiFontColor);
    this->SetFontStyle(opc_Data->c_UiFontStyle);
    this->SetText(opc_Data->c_UiText);
    this->ApplySizeChange(opc_Data->c_UiPosition, QSizeF(opc_Data->f64_Width, opc_Data->f64_Height));
@@ -355,7 +355,7 @@ void C_GiBiTextElement::m_UpdateTextElementData(C_PuiBsTextElement * const opc_D
 {
    this->UpdateBasicData(*opc_Data);
 
-   opc_Data->c_UiFontColorBright = this->GetFontColor();
+   opc_Data->c_UiFontColor = this->GetFontColor();
    opc_Data->c_UiFontStyle = this->GetFontStyle();
    opc_Data->c_UiText = this->GetText();
 }
